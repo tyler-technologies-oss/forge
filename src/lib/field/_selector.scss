@@ -1,0 +1,529 @@
+@use 'sass:list';
+@use './base';
+
+@mixin field($component-name: 'forge-field', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    @include base.field-core;
+  }
+  // Background Color
+  @if list.index($exclude, background-color) == null {
+    &.forge-field--disabled {
+      @include base.field-background-color(disabled);
+    }
+  }
+  // Height
+  @if list.index($exclude, height) == null {
+    &:not(.forge-field--dense):not(.forge-field--roomy) {
+      @include base.field-height(default, --#{$component-name}-height);
+    }
+    &.forge-field--roomy:not(.forge-field--dense) {
+      @include base.field-height(roomy, --#{$component-name}-height);
+    }
+    &.forge-field--dense:not(.forge-field--roomy) {
+      @include base.field-height(dense, --#{$component-name}-height);
+    }
+  }
+  // Margin Top
+  @if list.index($exclude, margin-top) == null {
+    @include base.field-margin-top(--#{$component-name}-margin-top);
+  }
+}
+
+@mixin outline($component-selector: 'forge-field', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    &::before {
+      content: '';
+      @include base.outline-core(--#{$component-selector}-background);
+    }
+  }
+  // Border Color
+  @if list.index($exclude, border-color) == null {
+    &:not(.forge-field--disabled):not(.forge-field--invalid):not(.forge-field--focused) {
+      &::before {
+        @include base.outline-border-color(default);
+      }
+      &:hover::before {
+        @include base.outline-border-color(hover);
+      }
+    }
+    &--focused:not(.forge-field--invalid):not(.forge-field--disabled) {
+      &::before {
+        @include base.outline-border-color(focused);
+      }
+    }
+    &--invalid:not(.forge-field--disabled) {
+      &::before {
+        @include base.outline-border-color(invalid);
+      }
+      &:not(.forge-field--focused):hover::before {
+        @include base.outline-border-color(invalid-hover);
+      }
+    }
+    &--disabled::before {
+      @include base.outline-border-color(disabled);
+    }
+  }
+  // Border Radius
+  @if list.index($exclude, border-radius) == null {
+    &:not(.forge-field--shape-rounded) {
+      @include base.outline-border-radius(default);
+      &::before {
+        @include base.outline-border-radius(default);
+      }
+    }
+    &--shape-rounded {
+      @include base.outline-border-radius(shape-rounded);
+      &::before {
+        @include base.outline-border-radius(shape-rounded);
+      }
+    }
+  }
+  // Background Color
+  @if list.index($exclude, background-color) == null {
+    &--disabled::before {
+      @include base.outline-background-color(disabled);
+    }
+  }
+  // Border Width
+  @if list.index($exclude, border-width) == null {
+    &--focused::before {
+      @include base.outline-border-width(focused);
+    }
+  }
+}
+
+@mixin label-input-container {
+  &__label-input-container {
+    @include base.label-input-container-core;
+  }
+}
+
+@mixin label($label-selector: '::slotted(label)', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    #{$label-selector} {
+      @include base.label-core;
+    }
+  }
+  @if list.index($exclude, display) == null {
+    &--dense:not(.forge-field--roomy) {
+      #{$label-selector} {
+        @include base.label-display(dense);
+      }
+    }
+  }
+  // Required Asterisk
+  @if list.index($exclude, required-asterisk) == null {
+    &--required {
+      #{$label-selector} {
+        @include base.label-asterisk;
+      }
+    }
+  }
+  // Font size
+  @if list.index($exclude, font-size) == null {
+    &:not(.forge-field--dense):not(.forge-field--roomy) {
+      #{$label-selector} {
+        @include base.label-font-size(default);
+      }
+    }
+    &--roomy:not(.forge-field--dense) {
+      #{$label-selector} {
+        @include base.label-font-size(roomy);
+      }
+    }
+    &--dense:not(.forge-field--roomy) {
+      #{$label-selector} {
+        @include base.label-font-size(dense);
+      }
+    }
+  }
+  // Color
+  @if list.index($exclude, color) == null {
+    &--disabled {
+      #{$label-selector} {
+        @include base.label-color(disabled);
+      }
+    }
+    &--invalid:not(.forge-field--disabled) {
+      #{$label-selector} {
+        @include base.label-color(invalid);
+      }
+    }
+    &--focused:not(.forge-field--invalid):not(.forge-field--disabled) {
+      #{$label-selector} {
+        @include base.label-color(focused);
+      }
+    }
+  }
+  // Top
+  @if list.index($exclude, top) == null {
+    &:not(.forge-field--dense):not(.forge-field--roomy) {
+      #{$label-selector} {
+        @include base.label-top(default);
+      }
+    }
+    &--roomy:not(.forge-field--dense) {
+      #{$label-selector} {
+        @include base.label-top(roomy);
+      }
+    }
+  }
+  // Left
+  @if list.index($exclude, left) == null {
+    &:not(.forge-field--shape-rounded):not(.forge-field--leading) {
+      #{$label-selector} {
+        @include base.label-left(default, default);
+      }
+    }
+    &--shape-rounded:not(.forge-field--leading) {
+      #{$label-selector} {
+        @include base.label-left(shape-rounded, default);
+      }
+    }
+  }
+  // Padding Right
+  @if list.index($exclude, padding-right) == null {
+    &:not(.forge-field--trailing):not(.forge-field--addon-end) {
+      &:not(.forge-field--shape-rounded) {
+        #{$label-selector} {
+          @include base.label-padding-right(default, default);
+        }
+      }
+      &.forge-field--shape-rounded {
+        #{$label-selector} {
+          @include base.label-padding-right(shape-rounded, default);
+        }
+      }
+    }
+  }
+}
+
+@mixin floating-label($floating-label-selector: '::slotted(label.forge-floating-label--float)', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    #{$floating-label-selector} {
+      @include base.floating-label-core;
+    }
+  }
+  // Theme
+  @if list.index($exclude, color) == null {
+    &--disabled {
+      #{$floating-label-selector} {
+        @include base.floating-label-color(disabled);
+      }
+    }
+    &--invalid:not(.forge-field--disabled) {
+      #{$floating-label-selector} {
+        @include base.floating-label-color(invalid);
+      }
+    }
+    &--focused:not(.forge-field--invalid):not(.forge-field--disabled) {
+      #{$floating-label-selector} {
+        @include base.floating-label-color(focused);
+      }
+    }
+  }
+  // Float
+  @if list.index($exclude, float) == null {
+    &:not(.forge-field--dense):not(.forge-field--roomy) {
+      #{$floating-label-selector} {
+        @include base.floating-label-float(default);
+      }
+    }
+    &--roomy:not(.forge-field--dense) {
+      #{$floating-label-selector} {
+        @include base.floating-label-float(roomy);
+      }
+    }
+  }
+}
+
+@mixin input($input-selector: '::slotted(input)', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    #{$input-selector} {
+      @include base.input-core;
+    }
+  }
+  // Color
+  @if list.index($exclude, color) == null {
+    &:not(.forge-field--disabled) {
+      #{$input-selector} {
+        @include base.input-color(default);
+      }
+    }
+    &--disabled {
+      #{$input-selector} {
+        @include base.input-color(disabled);
+      }
+    }
+  }
+  // Font Size
+  @if list.index($exclude, font-size) == null {
+    &:not(.forge-field--dense):not(.forge-field--roomy) {
+      #{$input-selector} {
+        @include base.input-font-size(default);
+      }
+    }
+    &--roomy:not(.forge-field--dense) {
+      #{$input-selector} {
+        @include base.input-font-size(roomy);
+      }
+    }
+    &--dense:not(.forge-field--roomy) {
+      #{$input-selector} {
+        @include base.input-font-size(dense);
+      }
+    }
+  }
+  // Padding
+  @if list.index($exclude, padding) == null {
+    #{$input-selector} {
+      @include base.input-padding;
+    }
+  }
+  // Padding Top
+  @if list.index($exclude, padding-top) == null {
+    &--label #{$input-selector} {
+      @include base.input-padding-top(default, label);
+    }
+    &--roomy.forge-field--label #{$input-selector} {
+      @include base.input-padding-top(roomy, label);
+    }
+  }
+  // Padding Left
+  @if list.index($exclude, padding-left) == null {
+    &--shape-rounded:not(.forge-field--leading) {
+      #{$input-selector} {
+        @include base.input-padding-left(shape-rounded, default);
+      }
+    }
+    &--leading {
+      #{$input-selector} {
+        @include base.input-padding-left(default, leading);
+      }
+    }
+  }
+  // Padding Bottom
+  @if list.index($exclude, padding-bottom) == null {
+    &--label #{$input-selector} {
+      @include base.input-padding-bottom(default, label);
+    }
+    &--roomy.forge-field--label #{$input-selector} {
+      @include base.input-padding-bottom(roomy, label);
+    }
+  }
+  // Padding Right
+  @if list.index($exclude, padding-right) == null {
+    &--shape-rounded:not(.forge-field--trailing):not(.forge-field--addon-end) {
+      #{$input-selector} {
+        @include base.input-padding-right(shape-rounded, default);
+      }
+    }
+    &--trailing,
+    &--addon-end {
+      #{$input-selector} {
+        @include base.input-padding-right(default, trailing);
+      }
+    }
+  }
+}
+
+@mixin helper-text($helper-text-selector: '~ ::slotted([slot=\'helper-text\'])', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    #{$helper-text-selector} {
+      @include base.helper-text-core;
+    }
+  }
+  // Font Size
+  @if list.index($exclude, font-size) == null {
+    &:not(.forge-field--dense):not(.forge-field--roomy) {
+      #{$helper-text-selector} {
+        @include base.helper-text-font-size(default);
+      }
+    }
+    &--roomy:not(.forge-field--dense) {
+      #{$helper-text-selector} {
+        @include base.helper-text-font-size(roomy);
+      }
+    }
+    &--dense:not(.forge-field--roomy) {
+      #{$helper-text-selector} {
+        @include base.helper-text-font-size(dense);
+      }
+    }
+  }
+  // Theme
+  @if list.index($exclude, color) == null {
+    #{$helper-text-selector} {
+      @include base.helper-text-color(default);
+    }
+    &--invalid:not(.forge-field--disabled) {
+      #{$helper-text-selector} {
+        @include base.helper-text-color(invalid);
+      }
+    }
+  }
+  // Margin Left
+  @if list.index($exclude, margin-left) == null {
+    &:not(.forge-field--shape-rounded) {
+      #{$helper-text-selector} {
+        @include base.helper-text-margin-left(default);
+      }
+    }
+    &--shape-rounded {
+      #{$helper-text-selector} {
+        @include base.helper-text-margin-left(shape-rounded);
+      }
+    }
+  }
+}
+
+@mixin leading($leading-selector: '::slotted([slot=\'leading\'])', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    #{$leading-selector} {
+      @include base.leading-core;
+    }
+  }
+  // Color
+  @if list.index($exclude, color) == null {
+    &:not(.forge-field--disabled):not(.forge-field--invalid) {
+      #{$leading-selector} {
+        @include base.icon-color(default);
+      }
+    }
+    &--invalid:not(.forge-field--disabled) {
+      #{$leading-selector} {
+        @include base.icon-color(invalid);
+      }
+    }
+    &--disabled {
+      #{$leading-selector} {
+        @include base.icon-color(disabled);
+      }
+    }
+  }
+  // Margin
+  @if list.index($exclude, margin) == null {
+    #{$leading-selector} {
+      @include base.leading-margin;
+    }
+  }
+}
+
+@mixin leading-font-icon($leading-selector: '::slotted([slot=\'leading\']:not(forge-icon-button))') {
+  // Padding
+  #{$leading-selector} {
+    @include base.leading-padding;
+  }
+}
+
+@mixin trailing($trailing-selector: '::slotted([slot=\'trailing\'])', $exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    #{$trailing-selector} {
+      @include base.trailing-core;
+    }
+  }
+  // Color
+  @if list.index($exclude, color) == null {
+    &:not(.forge-field--disabled):not(.forge-field--invalid) {
+      #{$trailing-selector} {
+        @include base.icon-color(default);
+      }
+    }
+    &--invalid:not(.forge-field--disabled) {
+      #{$trailing-selector} {
+        @include base.icon-color(invalid);
+      }
+    }
+    &--disabled {
+      #{$trailing-selector} {
+        @include base.icon-color(disabled);
+      }
+    }
+  }
+  // Margin
+  @if list.index($exclude, margin) == null {
+    #{$trailing-selector} {
+      @include base.trailing-margin;
+    }
+  }
+}
+
+@mixin trailing-font-icon($trailing-selector: '::slotted([slot=\'trailing\']:not(forge-icon-button))') {
+  // Padding
+  #{$trailing-selector} {
+    @include base.trailing-padding;
+  }
+}
+
+@mixin addon-end($exclude: ()) {
+  // Core
+  @if list.index($exclude, core) == null {
+    &__addon-end-container {
+      @include base.addon-end-no-content;
+    }
+
+    &--addon-end .forge-field__addon-end-container {
+      @include base.addon-end-core;
+    }
+  }
+  // Border Left Color
+  @if list.index($exclude, border-left-color) == null {
+    &:not(.forge-field--disabled):not(.forge-field--focused):not(.forge-field--invalid) {
+      .forge-field__addon-end-container {
+        @include base.addon-end-border-left-color(default);
+        &:hover {
+          @include base.addon-end-border-left-color(hover);
+        }
+      }
+    }
+    &.forge-field--focused:not(.forge-field--invalid):not(.forge-field--disabled) {
+      .forge-field__addon-end-container {
+        @include base.addon-end-border-left-color(focused);
+      }
+    }
+    &.forge-field--invalid:not(.forge-field--disabled) {
+      .forge-field__addon-end-container {
+        @include base.addon-end-border-left-color(invalid);
+      }
+    }
+    &.forge-field--invalid:not(.forge-field--focused):not(.forge-field--disabled) {
+      .forge-field__addon-end-container {
+        &:hover {
+          @include base.addon-end-border-left-color(invalid-hover);
+        }
+      }
+    }
+    &.forge-field--disabled {
+      .forge-field__addon-end-container {
+        @include base.addon-end-border-left-color(disabled);
+      }
+    }
+  }
+  // Color
+  @if list.index($exclude, color) == null {
+    &:not(.forge-field--disabled):not(.forge-field--invalid) {
+      ::slotted([slot='addon-end']) {
+        @include base.icon-color(default);
+      }
+    }
+    &--invalid:not(.forge-field--disabled) {
+      ::slotted([slot='addon-end']) {
+        @include base.icon-color(invalid);
+      }
+    }
+    &--disabled {
+      ::slotted([slot='addon-end']) {
+        @include base.icon-color(disabled);
+      }
+    }
+  }
+}
+

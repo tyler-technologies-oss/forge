@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../node_modules/@tylertech/forge-cli/build-schema.json",
+  "extends": "../build.json",
+  "compile": false,
+  "stylesheets": [
+    "./forge-typography.scss",
+    "./forge-form.scss"
+  ]
+}

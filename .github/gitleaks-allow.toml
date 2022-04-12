@@ -1,0 +1,9 @@
+[AllowList]
+  Files = []
+Paths = []
+Regexes = [
+  "TOKEN\": \"\\$\\{localEnv:GITHUB_TOKEN\\}\"",
+  "TOKEN\": \"\\$\\{localEnv:GITHUB_TOKEN\\}\"",
+  "TOKEN\": \"\\$\\{localEnv:ARTIFACTORY_TOKEN\\}\"",
+  "KeyCombinations \\} from '\\./keyboard-shortcut-utils'",
+]

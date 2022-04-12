@@ -1,0 +1,296 @@
+import { DefaultTemplate as DateRangePickerDemo } from './templates/default';
+import { DateRangePickerDefaultCodeHtml } from './code/date-range-picker-default';
+
+<PageSection>
+
+## Usage
+
+The date range picker is very similar to the usage of the standard [datepicker component](?path=/story/components-date-picker--default), the
+only difference is that it allows for the selection of two dates that define a start and end range. This means that when setting up the component, you must
+provide it two `<input>` elements, one for the start date and one for the end date.
+
+There are many configuration options available through the component API, along with date masking options that force the dates to be entered using a specific
+format.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+<LiveDemo layout="column" codeHtml={DateRangePickerDefaultCodeHtml()}>
+  <DateRangePickerDemo />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+
+<PageSection>
+
+## Properties/Attributes
+
+> **Note:** When used in a form where you want the date to be required, you must set the `required` property on the
+> embedded `<forge-text-field>` element, rather than the `<forge-date-range-picker>` element.  This also applies to the `invalid` property.
+
+<PropertyDef name="from" type="Date | string | null" defaultValue="null">
+
+Sets the selected from value. Accepts multiple formats such as `Date` object, `string`, ISO-8601 string... etc.
+
+</PropertyDef>
+
+<PropertyDef name="to" type="Date | string | null" defaultValue="null">
+
+Sets the selected to value. Accepts multiple formats such as `Date` object, `string`, ISO-8601 string... etc.
+
+</PropertyDef>
+
+<PropertyDef name="value" type="IDatePickerRange" defaultValue="{}">
+
+Sets the value object. Date properties, "to" and "from", accept multiple formats such as `Date` object, `string`, ISO-8601 string... etc.
+
+</PropertyDef>
+
+<PropertyDef name="min" type="Date | string | null" defaultValue="null">
+
+Sets the minimum date value that can be selected.
+
+</PropertyDef>
+
+<PropertyDef name="max" type="Date | string | null" defaultValue="null">
+
+Sets the maximum date value that can be selected.
+
+</PropertyDef>
+
+<PropertyDef name="disabledDates" type="Date | Date[] | null" attr={false} defaultValue="null">
+
+A date, or array of dates that cannot be selected.
+
+</PropertyDef>
+
+<PropertyDef name="open" type="boolean" defaultValue="false">
+
+Toggles the popup open (`true`) or closed (`false`). This allows you to manually open/close the popup calendar if desired.
+
+</PropertyDef>
+
+<PropertyDef name="popupClasses" type="string | string[]" attr={false} defaultValue="[]">
+
+An array of classes to apply to the date-range-picker popup.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+Gets/sets the disabled state. Note: this will also set the `<input>` element disabled automatically.
+
+</PropertyDef>
+
+<PropertyDef name="masked" type="boolean" defaultValue="true">
+
+Sets an input mask on the `<input>` element with a default format. The format can be overriden by setting the `maskFormat` property.
+
+</PropertyDef>
+
+<PropertyDef name="maskFormat" type="string" defaultValue="&quot;MM/DD/YYYY&quot;">
+
+Sets the input mask format.
+
+</PropertyDef>
+
+<PropertyDef name="showMaskFormat" type="boolean" defaultValue="false">
+
+Sets whether the input mask characters are displayed in the input. Ex. `__/__/____`
+
+</PropertyDef>
+
+<PropertyDef name="valueMode" type="DatepickerValueMode" defaultValue="&quot;object&quot;">
+
+Gets/sets the type of value that is being used with the date-range-picker as a model value. Valid options are: `object` (default), `string`, or `iso-string`.
+
+You will use this to change what type/format the selected value is when it is retrieved from the date-range-picker. It's common to use `"iso-string"` for example
+because it's compatible with a how `Date` objects come across the wire in JSON format.
+
+</PropertyDef>
+
+<PropertyDef name="notifyInputValueChanges" attr={false} type="boolean" defaultValue="true">
+
+Controls whether the `input` event will be dispatched on the `<input>` element when the date-range-picker value changes.
+
+</PropertyDef>
+
+<PropertyDef name="allowInvalidDate" type="boolean" defaultValue="false">
+
+Gets/sets whether to allow invalid date text to be entered. When true, the date picker will **not** clear out the value of the input if the date value was invalid (i.e. could not be parsed).
+
+</PropertyDef>
+
+<PropertyDef name="showToday" type="boolean" defaultValue="false">
+
+Controls the visibility of the "Today" button in the dropdown calendar, which is used to set the date value to the current date when clicked.
+
+</PropertyDef>
+
+<PropertyDef name="showClear" type="boolean" defaultValue="false">
+
+Controls the visibility of the "Clear" button in the dropdown calendar, which is used to clear the date value when clicked.
+
+</PropertyDef>
+
+<PropertyDef name="disabledDaysOfWeek" type="DayOfWeek[]" defaultValue="[]">
+
+Disables days of the week for every month.
+
+</PropertyDef>
+
+<PropertyDef name="formatCallback" type="DatepickerFormatCallback" attr={false} defaultValue="undefined">
+
+Sets a callback that will be executed when the date-range-picker needs to be format the date value to a string to be displayed to the user in the `<input>`.
+
+It's common to use provide a custom format callback when you want the date string that is displayed to the user to be in a custom format. It's common to use
+this together with the `parseCallback` to teach the date-range-picker how to parse your custom format to a `Date` object that it can use internally.
+
+</PropertyDef>
+
+<PropertyDef name="parseCallback" type="DatepickerParseCallback" attr={false} defaultValue="null">
+
+Sets a callback that will be executed when the date-range-picker needs to be parse a `string` date value to a `Date` object.
+
+You will typically use this if you have a `formatCallback` in place and you need to tell the date-range-picker how to parse it to a `Date` object.
+
+</PropertyDef>
+
+<PropertyDef name="prepareMaskCallback" type="DatepickerPrepareMaskCallback" attr={false} defaultValue="null">
+
+Sets the callback to use when altering default mask entry.
+
+</PropertyDef>
+
+<PropertyDef name="disableDayCallback" type="(date: Date) => boolean" attr={false} defaultValue="undefined">
+
+Sets a callback that will be executed on every date in the calendar and input. Return true to disable the day.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                               | Description
+| :----------------------------------| :---------------------
+| `input`                            | Emits when the user is typing in the input.
+| `change`                           | Emits when the value changes by selecting a value in the dropdown.
+| `forge-date-range-picker-open`       | Emits when the popup is opened.
+| `forge-date-range-picker-close`      | Emits when the popup is closed.
+| `forge-date-range-picker-change`     | Emits when the value changes from the date-range-picker element.
+| `forge-date-range-picker-input`      | Emits from the `<forge-date-range-picker>` element when the input value changes. Use this if using a mask to be notified after the mask is applied.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slot
+
+| Name                        | Description
+| :---------------------------| :---------------------
+| `default`                   | The default (unnamed) slot must contain two `<input>` elements.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+The date-range-picker component itself does not provide any CSS custom properties because it just orchestrates multiple components together. See the
+[text-field component](?path=/docs/components-text-field--default#css-custom-properties) or [calendar component](?path=/docs/components-calendar--default#css-custom-properties) components for
+theming and CSS custom property information.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### DatePickerParseCallback
+
+```ts
+type DatePickerParseCallback = (value: string) => Date | null;
+```
+
+### DatePickerFormatCallback
+
+```ts
+type DatePickerFormatCallback = (value: Date | null) => string;
+```
+
+### DatepickerPrepareMaskCallback
+
+```ts
+type DatepickerPrepareMaskCallback = (value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.MaskedPatternOptions>) => string;
+```
+
+### DatepickerValueMode
+
+```ts
+type DatePickerValueMode = 'object' | 'string' | 'iso-string';
+```
+
+### IDatePickerRangeCalendarDropdownConfig
+
+```ts expanded
+interface IDatePickerRangeCalendarDropdownConfig {
+  value: DateRange | null;
+  min: Date | null;
+  max: Date | null;
+  disabledDates: Date | Date[] | null;
+  popupClasses: string | string[];
+  closeCallback: () => void;
+  selectCallback: (value: ICalendarDateRangeSelectEvent) => void;
+  activeChangeCallback: (id: string) => void;
+  showToday: boolean;
+  showClear: boolean;
+  todayCallback: () => void;
+  clearCallback: () => void;
+  disableDayCallback: (date: Date) => boolean;
+  disabledDaysOfWeek: DayOfWeek[] | null;
+}
+```
+
+### IDatePickerRange
+
+```ts expanded
+interface IDatePickerRange {
+  from?: Date | string | null;
+  to?: Date | string | null;
+}
+```
+
+### DayOfWeek
+
+```ts
+enum DayOfWeek {
+  Sunday = 0,
+  Monday = 1,
+  Tuesday = 2,
+  Wednesday = 3,
+  Thursday = 4,
+  Friday = 5,
+  Saturday = 6
+}
+```
+
+</PageSection>

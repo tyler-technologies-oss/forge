@@ -1,0 +1,40 @@
+@use 'sass:map';
+
+@mixin position-abs-zero($position: absolute) {
+  position: $position;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+@mixin overflow($overflow: auto) {
+  @if ($overflow == hidden) {
+    overflow: hidden;
+  }
+  @if ($overflow == auto) {
+    overflow: auto;
+  }
+  @if ($overflow == overflow-x) {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  @if ($overflow == overflow-y) {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+@mixin visually-hidden() {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  outline: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}

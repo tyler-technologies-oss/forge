@@ -1,0 +1,44 @@
+@use '../theme/theme';
+@use './variables';
+
+@mixin core-styles() {
+  .forge-view-switcher {
+    @include base;
+  
+    ::slotted(.forge-view-switcher__view--hidden) {
+      @include view-hidden;
+    }
+  }
+}
+
+@mixin host() {
+  @include theme.css-custom-property(height, --forge-view-switcher-height, auto);
+
+  display: block;
+}
+
+@mixin base() {
+  @include theme.css-custom-property(height, --forge-view-switcher-height, auto);
+
+  position: relative;
+  overflow: hidden;
+  transition: height variables.$animation-duration cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+@mixin view-slidable() {
+  transition: transform variables.$animation-duration cubic-bezier(0.35, 0, 0.25, 1);
+  will-change: transform;
+}
+
+@mixin view-fadeable() {
+  transition: opacity variables.$animation-duration cubic-bezier(0.35, 0, 0.25, 1);
+  will-change: opacity;
+}
+
+@mixin view-hidden() {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

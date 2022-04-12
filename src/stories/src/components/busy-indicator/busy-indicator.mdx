@@ -1,0 +1,216 @@
+import { DefaultTemplate as BusyIndicatorDemo } from './templates/default';
+import { BusyIndicatorDefaultCodeTs } from './code/busy-indicator-default';
+import { BusyIndicatorProgressCodeTs } from './code/busy-indicator-progress';
+
+<PageSection>
+
+## Usage
+
+The busy indicator component is a composite component that solves the common pattern of displaying a notification to the user that the system is doing some work
+that they should wait for. It is presented as a dialog, but has built-in facilities for showing various progress indicators (linear/circular), as well as messaging
+to let the user know what is happening.
+
+You can think of this component as a configurable, pre-defined dialog that uses a strict style to ensure consistency for designs that make use of this pattern.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+A common usage of this component in a vanilla JavaScript application would be to do something like the following:
+
+<LiveDemo 
+dense 
+codeTs={BusyIndicatorDefaultCodeTs()}>
+  <BusyIndicatorDemo/>
+</LiveDemo>
+
+### Progress
+
+You can also easily display progress to users by using the built-in linear progress indicator:
+
+<LiveDemo 
+dense 
+codeTs={BusyIndicatorProgressCodeTs()}>
+  <BusyIndicatorDemo
+  titleText={'Uploading'}
+  message={'Your document is being uploaded...'}
+  cancel={true}
+  spinner={false}
+  progressBar={true}
+  progressBarDeterminate={true}
+  progress={0.5}
+  buffer={1}
+  width={400}
+  direction={'row'}/>
+</LiveDemo>
+
+### Angular
+
+The `@tylertech/forge-angular` adapter library provides an easy-to-use service that can be injected into any component to show a busy indicator:
+
+```typescript expanded
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { BusyIndicatorService } from '@tylertech/forge-angular';
+import { BUSY_INDICATOR_CONSTANTS } from '@tylertech/forge';
+
+@Component({
+  selector: 'app-busy-indicator',
+  templateUrl: './busy-indicator.component.html',
+  styleUrls: ['./busy-indicator.component.scss']
+})
+export class BusyIndicatorExampleComponent {
+  constructor(private _busyIndicatorService: BusyIndicatorService) {}
+
+  public showBusyIndicator(): void {
+    const busyIndicator = this._busyIndicatorService.show({
+      titleText: 'Title',
+      message: 'Message...',
+      cancel: true,
+      spinner: true,
+      progressBar: true,
+      progressBarDeterminate: true,
+      progress: 0.5,
+      buffer: 0.75
+    });
+
+    busyIndicator.addEventListener(BUSY_INDICATOR_CONSTANTS.events.CANCEL, () => {
+      console.log('Busy indicator cancelled.');
+    });
+  }
+
+  public hideBusyIndicator(): void {
+    this._busyIndicatorService.hide();
+  }
+}
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="titleText" type="string" defaultValue="null">
+
+Gets/sets the title text.
+  
+</PropertyDef>
+
+<PropertyDef name="message" type="string" defaultValue="null">
+
+Gets/sets the message text.
+  
+</PropertyDef>
+
+<PropertyDef name="cancel" type="boolean" defaultValue="false">
+
+Controls the visibility of the cancel button.
+  
+</PropertyDef>
+
+<PropertyDef name="spinner" type="boolean" attr={false} defaultValue="true">
+
+Controls the visibility of the progress spinner.
+  
+</PropertyDef>
+
+<PropertyDef name="progressBar" type="boolean" attr={false} defaultValue="false">
+
+Controls the visibility of the progress spinner.
+  
+</PropertyDef>
+
+<PropertyDef name="progressBarDeterminate" type="boolean" attr={false} defaultValue="false">
+
+Controls whether the progress bar is determinate or not.
+  
+</PropertyDef>
+
+<PropertyDef name="progress" type="number" attr={false} defaultValue="0">
+
+Gets/sets the progress percentage of the progress bar.
+  
+</PropertyDef>
+
+<PropertyDef name="buffer" type="number" attr={false} defaultValue="0">
+
+Gets/sets the buffer percentage of the progress bar.
+  
+</PropertyDef>
+
+<PropertyDef name="width" type="number | 'auto'" attr={false} defaultValue="auto">
+
+Sets the width of the surface element.
+  
+</PropertyDef>
+
+<PropertyDef name="direction" type="Direction" defaultValue="'row'">
+
+Controls the layout of the busy indicator.
+  
+</PropertyDef>
+
+<PropertyDef name="manageFocus" type="boolean" defaultValue="true">
+
+Controls whether the component will manage capturing and relasing focus when opened/closed.
+  
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="hide(force?: boolean): void;">
+
+Starts removal process from the DOM.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                           | Description
+| :------------------------------| :------------------
+| `forge-busy-indicator-cancel`    | Emits when the cancel button is clicked.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IBusyIndicatorMessage
+
+```typescript
+interface IBusyIndicatorMessage {
+  id?: string | number;
+  text: string;
+}
+```
+
+### Direction
+
+```ts
+type Direction = 'row' | 'column' | undefined;
+```
+
+</PageSection>

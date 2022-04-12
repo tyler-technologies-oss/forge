@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["es2015", "dom", "es2017"],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noImplicitThis": true,
+    "baseUrl": ".",
+    "paths": {
+      "@tylertech/forge": ["src/lib"],
+      "@tylertech/forge/*": ["src/lib/*"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "auto.config.ts",
+    "docs"
+  ]
+}

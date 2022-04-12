@@ -1,0 +1,21 @@
+@use './selector';
+@use '../field/selector' as field-selector;
+
+@mixin core-styles {
+  .forge-chip-field {
+    @include field-selector.field(forge-chip-field, $exclude: (height));
+    @include selector.field;
+  }
+
+  .forge-field {
+    @include selector.label-input-container;
+    @include selector.input-container;
+    @include selector.label;
+    @include selector.member;
+    @include selector.input;
+    @include selector.leading;
+    @include selector.trailing;
+    @include selector.addon-end;
+    @include selector.icon-button;
+  }
+}

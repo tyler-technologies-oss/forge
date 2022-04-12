@@ -1,0 +1,272 @@
+@use '@material/button/button-outlined-theme' as mdc-button-outlined-theme;
+@use '@material/chips/chip-theme' as mdc-chip-theme;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '@material/animation/animation' as mdc-animation;
+@use '@material/theme/theme' as mdc-theme;
+@use '../../button/mixins' as button-mixins;
+@use '@material/checkbox/checkbox' as mdc-checkbox;
+@use '../../theme/theme';
+@use './variables';
+
+@mixin core-styles() {
+  .forge-chip {
+    @include base;
+
+    &:disabled {
+      @include button-mixins.outlined-disabled;
+
+      .forge-chip__delete-button {
+        opacity: 0.54;
+      }
+    }
+
+    &__leading {
+      &--hidden {
+        display: none;
+      }
+    }
+
+    &__content {
+      flex-grow: 1;
+    }
+
+    ::slotted([slot='leading']) {
+      @include leading;
+    }
+
+    ::slotted(forge-avatar[slot]) {
+      --forge-avatar-size: 24px;
+    }
+
+    ::slotted([slot='trailing']) {
+      @include trailing;
+    }
+
+    &__checkmark {
+      @include checkmark;
+    }
+
+    &__delete-button {
+      @include delete-button;
+
+      border-radius: 50%;
+
+      &:focus,
+      &:hover {
+        @include mdc-theme.property(color, text-primary-on-background);
+      }
+
+      &:active {
+        opacity: 0.75;
+      }
+
+      &__touch-target {
+        position: absolute;
+        top: -6px;
+        left: -6px;
+        width: calc(100% + 12px);
+        height: calc(100% + 12px);
+      }
+    }
+
+    &--filter,
+    &--input,
+    &--choice {
+      &.forge-chip--selected {
+        &:not(:disabled) {
+          @include selected;
+        }
+
+        &:disabled {
+          @include selected-disabled;
+        }
+
+        ::slotted([slot='leading']) {
+          @include mdc-theme.property(color, on-primary);
+        }
+
+        ::slotted([slot='trailing']) {
+          @include mdc-theme.property(color, on-primary);
+        }
+
+        .forge-chip__delete-button {
+          @include mdc-theme.property(color, on-primary);
+        }
+
+        &.forge-chip--filter {
+          .forge-chip__checkmark {
+            @include checkmark-selected;
+          }
+        }
+      }
+    }
+
+    &--field {
+      .forge-chip__delete-button {
+        @include mdc-theme.property(color, primary);
+
+        &:focus,
+        &:hover {
+          @include mdc-theme.property(color, text-primary-on-background);
+        }
+      }
+
+      &.forge-chip--invalid:not(:disabled) {
+        .forge-chip__delete-button {
+          @include mdc-theme.property(color, error);
+
+          &:focus,
+          &:hover {
+            @include mdc-theme.property(color, text-primary-on-background);
+          }
+        }
+      }
+
+      &:disabled {
+        .forge-chip__delete-button {
+          @include mdc-theme.property(color, text-secondary-on-background);
+        }
+      }
+    }
+
+    &--dense {
+      @include dense;
+
+      &.forge-chip--field {
+        @include theme.css-custom-property(height, --forge-chip-height, 20px);
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+
+        ::slotted([slot='leading']) {
+          margin: 0 0 0 2px;
+          font-size: 18px !important;
+        }
+
+        .forge-chip__content {
+          font-size: 12px;
+          padding: 0 8px;
+        }
+
+        ::slotted([slot='trailing']) {
+          font-size: 18px !important;
+        }
+
+        .forge-chip__delete-button {
+          margin: 0 2px 0 0;
+          font-size: 18px;
+        }
+      }
+    }
+
+    &--invalid:not(:disabled) {
+      @include invalid;
+
+      .forge-chip__delete-button {
+        @include mdc-theme.property(color, error);
+      }
+
+      &.forge-chip--selected {
+        @include invalid-selected;
+
+        .forge-chip__delete-button {
+          @include mdc-theme.property(color, on-primary);
+        }
+      }
+    }
+  }
+}
+
+@mixin host() {
+  display: inline-block;
+}
+
+@mixin base() {
+  @include button-mixins.base;
+  @include button-mixins.outlined;
+  @include mdc-chip-theme.shape-radius(50%);
+  @include theme.css-custom-property(width, --forge-chip-width, auto);
+  @include theme.css-custom-property(height, --forge-chip-height, variables.$height);
+
+  box-sizing: border-box;
+  transition: mdc-animation.enter(background-color, 150ms);
+}
+
+@mixin invalid() {
+  @include mdc-ripple-theme.states(error, false);
+  @include mdc-button-outlined-theme.outline-color(error);
+  @include mdc-theme.property(color, error);
+}
+
+@mixin invalid-selected() {
+  @include mdc-theme.property(background-color, error);
+}
+
+@mixin selected() {
+  @include mdc-ripple-theme.states(on-primary, false);
+  @include mdc-theme.property(background-color, primary);
+  @include mdc-theme.property(color, text-primary-on-dark);
+}
+
+@mixin selected-disabled() {
+  @include selected;
+
+  opacity: 0.37;
+}
+
+@mixin leading() {
+  margin-left: -6px;
+  margin-right: 4px;
+}
+
+@mixin trailing() {
+  margin-left: 4px;
+  margin-right: -8px;
+}
+
+@mixin delete-button() {
+  @include mdc-theme.property(color, text-secondary-on-background);
+  @include trailing;
+
+  transition: color 150ms linear;
+  outline: none;
+  line-height: inherit;
+  position: relative;
+}
+
+@mixin checkmark() {
+  height: 24px;
+
+  &-svg {
+    width: 0;
+    height: 24px;
+    transition: width 150ms mdc-animation.$standard-curve-timing-function;
+  }
+
+  &-path {
+    @include mdc-theme.property(stroke, on-primary);
+
+    transition: mdc-checkbox.transition-exit(stroke-dashoffset, 0, 150ms);
+    stroke-width: 2px;
+    stroke-dashoffset: mdc-checkbox.$mark-path-length_;
+    stroke-dasharray: mdc-checkbox.$mark-path-length_;
+  }
+}
+
+@mixin checkmark-selected() {
+  @include leading;
+
+  &-svg {
+    width: 24px;
+  }
+
+  &-path {
+    transition: mdc-checkbox.transition-exit(stroke-dashoffset, 50ms, 150ms);
+    stroke-dashoffset: 0;
+  }
+}
+
+@mixin dense() {
+  @include theme.css-custom-property(height, --forge-chip-height, variables.$dense-height);
+}

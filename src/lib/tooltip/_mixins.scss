@@ -1,0 +1,93 @@
+@use '../theme/theme';
+@use '../utils/mixins' as utils;
+@use './variables';
+
+@mixin provide-theme($theme) {
+  @include theme.theme-properties(tooltip, $theme, variables.$theme-values);
+}
+
+@mixin core-styles() {
+  .forge-tooltip {
+    @include base;
+  
+    &--open {
+      @include open;
+    }
+  
+    &--top {
+      @include top;
+    }
+  
+    &--right {
+      @include right;
+    }
+    
+    &--bottom {
+      @include bottom;
+    }
+    
+    &--left {
+      @include left;
+    }
+  }
+  
+  .forge-tooltip-host {
+    @include parent;
+  }
+}
+
+@mixin host() {
+  @include utils.visually-hidden;
+  
+  transform: translateX(-9999px) translateY(-9999px);
+}
+
+@mixin base() {
+  @include theme.css-custom-property(background-color, --forge-tooltip-theme-background, variables.$background);
+  @include theme.css-custom-property(color, --forge-tooltip-theme-on-background, variables.$on-background);
+  @include theme.css-custom-property(font-size, --forge-tooltip-font-size, variables.$font-size);
+  @include theme.css-custom-property(max-width, --forge-tooltip-max-width, variables.$max-width);
+  @include theme.z-index(tooltip);
+  
+  position: absolute;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  box-sizing: border-box;
+  outline: none;
+  border-radius: variables.$border-radius;
+  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: variables.$padding-top-bottom variables.$padding-left-right;
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity variables.$transition-duration variables.$transition-timing-function, transform variables.$transition-duration variables.$transition-timing-function;
+  will-change: opacity transform;
+}
+
+@mixin open() {
+  transform: scale(1);
+  opacity: 1;
+}
+
+@mixin top() {
+  transform-origin: bottom;
+}
+@mixin right() {
+  transform-origin: left;
+}
+
+@mixin bottom() {
+  transform-origin: top;
+}
+
+@mixin left() {
+  transform-origin: right;
+}
+
+@mixin parent() {
+  position: relative;
+}

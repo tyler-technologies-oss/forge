@@ -1,0 +1,11 @@
+$size: 40px !default;
+$font-size: 1rem !default;
+$font-weight: 400 !default;
+$background: none;
+$on-background: #ffffff !default;
+$transition-duration: 200ms !default;
+$border-radius: 50% !default;
+$theme-values: (
+  background: $background,
+  on-background: $on-background
+);

@@ -1,0 +1,73 @@
+@use 'sass:map';
+@use '@material/animation/animation' as mdc-animation;
+@use '@material/theme' as mdc-theme;
+@use '@material/typography' as mdc-typography;
+@use '@material/select/select-theme' as mdc-select-theme;
+@use '../../field/variables' as field-variables;
+@use '../../field/utils' as field-utils;
+
+@mixin selected-text-core() {
+  @include mdc-typography.typography(body1, $exclude-props: (line-height, font-size));
+  @include mdc-theme.property(color, text-primary-on-background);
+
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-self: flex-end;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+  transition: mdc-animation.standard(opacity, 150ms);
+  border: none;
+  background: none;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  line-height: normal;
+  min-width: 0;
+  font-size: var(--forge-select-font-size, map.get(field-variables.$input, font-size, default));
+  padding: map.get(field-variables.$input, padding, default);
+  padding-right: 0;
+}
+
+@mixin select-text-line-height($layout-state, $slot-state) {
+  @if $slot-state == default or $slot-state == helper-text {
+    // No Label
+    @if $layout-state == default or $layout-state == shape-rounded {
+      line-height: var(--forge-select-height, map.get(field-variables.$field, height, default));
+    }
+    // No Label Roomy
+    @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+      line-height: var(--forge-select-height-roomy, map.get(field-variables.$field, height, roomy));
+    }
+    // No Label Dense
+    @else if $layout-state == dense or $layout-state == shape-rounded-dense {
+      line-height: var(--forge-select-height-dense, map.get(field-variables.$field, height, dense));
+    }
+  }
+  @include field-utils.error-y-axis-slot-state(select-text-line-height, $slot-state);
+  @include field-utils.error-layout-state(select-text-line-height, $layout-state);
+}
+
+@mixin dropdown-icon-core {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 100%;
+  flex: none;
+  transition: transform mdc-select-theme.$dropdown-transition-duration mdc-animation.$standard-curve-timing-function;
+  pointer-events: none;
+  margin: 0 10px;
+
+  .forge-select--opened & {
+    transform: rotate(180deg);
+    transition: transform mdc-select-theme.$dropdown-transition-duration mdc-animation.$standard-curve-timing-function;
+  }
+}
+
+@mixin dropdown-icon-opened {
+  transform: rotate(180deg);
+  transition: transform mdc-select-theme.$dropdown-transition-duration mdc-animation.$standard-curve-timing-function;
+}

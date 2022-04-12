@@ -1,0 +1,20 @@
+/// The default height for a single line list item.
+$single-line-height: 48px !default;
+
+/// The default height for a two-line list item.
+$two-line-height: 72px !default;
+
+/// The default height for a three-line list item.
+$three-line-height: 88px !default;
+
+/// The default height for the dense single-line list item
+$dense-height: 32px !default;
+
+/// The default margin for list items when placed in a drawer
+$margin-drawer: 8px !default;
+
+/// The default margin-left for indented list items
+$indent: 56px !default;
+
+/// The default margin-left for indented list items when placed in a drawer
+$indent-drawer: $indent + $margin-drawer !default;

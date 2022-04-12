@@ -1,0 +1,42 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+    
+concurrency: auto-release-${{ github.ref	}}
+
+jobs:
+  wf-config:
+    name: Workflow Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Package Repo Selection
+        id: pkg-repo
+        run: |
+          if [ "${GITHUB_REF}" == 'refs/heads/master' ]; then
+            echo "::set-output name=repo-name::FORGE"
+          else
+            echo "::set-output name=repo-name::SCRATCH"
+          fi
+    outputs:
+      pkg-repo-name: ${{ steps.pkg-repo.outputs.repo-name }}
+          
+  release:
+    name: Build and Release
+    needs: wf-config
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.1.0
+    with:
+      PRODUCTION_RELEASE: ${{ github.ref == 'refs/heads/master' && contains(fromJson('["push", "workflow_dispatch"]'), github.event_name) }}
+      NODE_VERSION: "14"
+    secrets:
+      GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
+      GITHUB_APP_KEY: ${{ secrets.TCP_AUTOMATION_APP_KEY }}
+      ARTIFACTORY_TOKEN: ${{ secrets[format('{0}_ARTIFACTORY_TOKEN', needs.wf-config.outputs.pkg-repo-name)] }}
+      ARTIFACTORY_USERNAME: ${{ secrets[format('{0}_ARTIFACTORY_USERNAME', needs.wf-config.outputs.pkg-repo-name)] }}
+      ARTIFACTORY_REGISTRY: ${{ secrets[format('{0}_ARTIFACTORY_NPM_REGISTRY', needs.wf-config.outputs.pkg-repo-name)] }}

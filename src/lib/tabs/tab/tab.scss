@@ -1,0 +1,25 @@
+@use '../../theme/theme-values';
+@use './mixins';
+@use '../../ripple/forge-ripple';
+@use '@material/tab-indicator/mdc-tab-indicator';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([stretch]) {
+  @include mixins.host-stretch;
+}
+
+@include mixins.host-theme(primary, theme-values.$mdc-property-values);
+@include mixins.host-theme(secondary, theme-values.$mdc-property-values);
+@include mixins.host-theme(warning, theme-values.$property-values);
+@include mixins.host-theme(success, theme-values.$property-values);
+@include mixins.host-theme(danger, theme-values.$property-values);
+@include mixins.host-theme(info, theme-values.$property-values);

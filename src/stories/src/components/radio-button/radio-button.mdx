@@ -1,0 +1,89 @@
+import { DefaultTemplate as RadioButtonDemo } from './templates/default';
+import { RadioButtonHtml} from './code/radio-button-default';
+
+<PageSection>
+
+## Usage
+
+The radio component is a simple wrapper around the native `<input type="radio">` element. It provides some minor functionality, but its primary
+purpose is to handle the styling of the element.
+
+While this component can be used on its own, it's typically part of a radio group, and care should be taken to account for accessibility concerns
+when creating a radio group. See the [Accessibility tab](https://forge.tylertech.com/components/radio-button/accessibility) for more information.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+The `<input>` element is left exposed to you so that all typical communication such as setting checked state, or setting the value can happen just
+as it has in the past. The `<forge-radio>` component is only used to facilitate checked state synchronization, and styling.
+
+<LiveDemo 
+layout={"column"} 
+codeHtml={RadioButtonHtml()}>
+  <RadioButtonDemo/>
+</LiveDemo>
+
+> **Important:** always provide a wrapper element with a `role="radiogroup"` attribute alongside an `aria-label` for accessibility concerns.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="dense" type="boolean" defaultValue="false">
+
+  Gets/sets the dense state.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+
+<MethodDef name="syncCheckedState(): void">
+
+Manually syncs the checked state in the component.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name                 | Description
+| :--------------------| :-----------------
+| `input`              | The slot reserved for the **required** `<input>` element.
+| `label`              | The slot reserved for the optional `<label>` element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :---------------
+| `--mdc-theme-tertiary`                          | Controls the theme color.
+| `--mdc-theme-text-primary-on-background`        | Controls the font color.
+| `--mdc-theme-text-hint-on-background`           | Controls the disabled font color.
+
+</PageSection>

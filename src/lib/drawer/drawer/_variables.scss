@@ -1,0 +1,7 @@
+@use '@material/drawer/variables' as mdc-drawer-variables;
+
+$border-width: 1px !default;
+$width: mdc-drawer-variables.$width !default;
+$mini-width: 56px !default;
+$mini-transition-delay: 300ms !default;
+$transition-duration: 300ms !default;

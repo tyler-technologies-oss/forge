@@ -1,0 +1,13 @@
+@use './mixins';
+
+@include mixins.core-styles;
+@include mixins.default-theme();
+@include mixins.theme('danger');
+@include mixins.theme('warning');
+@include mixins.theme('success');
+@include mixins.theme('info-primary');
+@include mixins.theme('info-secondary');
+
+:host([hidden]) {
+  display: none;
+}

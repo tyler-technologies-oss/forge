@@ -1,0 +1,15 @@
+<template>
+  <div class="forge-checkbox-wrapper forge-form-field" part="root">
+    <div class="mdc-checkbox" part="container">
+      <slot name="input"></slot>
+      <div class="mdc-checkbox__background" part="background">
+        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24" part="checkmark-svg">
+          <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" part="checkmark-path"></path>
+        </svg>
+        <div class="mdc-checkbox__mixedmark" part="mixedmark"></div>
+      </div>
+      <div class="mdc-checkbox__ripple" part="ripple-container"></div>
+    </div>
+    <slot name="label"></slot>
+  </div>
+</template>

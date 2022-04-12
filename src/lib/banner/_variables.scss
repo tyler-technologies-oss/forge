@@ -1,0 +1,83 @@
+@use '@material/theme/color-palette' as mdc-color-palette;
+@use '../theme/theme-values';
+
+// There must be an explicit max height in order for the animation to function.
+//   600px _should_ be more than plenty.
+$max-height: 600px !default;
+
+$padding-top: 14px !default;
+$padding-bottom: $padding-top !default;
+$padding-right: 24px !default;
+$padding-left: $padding-right !default;
+
+$padding-top-narrow: 16px !default;
+$padding-bottom-narrow: $padding-top-narrow !default;
+$padding-right-narrow: 12px !default;
+$padding-left-narrow: $padding-right-narrow !default;
+
+$width-breakpoint: 600px !default;
+$transition: max-height 300ms ease-in-out !default;
+
+$theme-values: (
+  // default theme
+  default-background: mdc-color-palette.$indigo-50,
+  default-font-color: theme-values.$text-primary-color,
+  default-icon-color: theme-values.$text-secondary-color,
+
+  // success theme
+  success-background: #a5d6a7,
+  success-font-color: theme-values.$text-primary-color,
+  success-icon-color: theme-values.$text-secondary-color,
+
+  // warning theme
+  warning-background: #ffdba6,
+  warning-font-color: theme-values.$text-primary-color,
+  warning-icon-color: theme-values.$text-secondary-color,
+
+  // danger theme
+  danger-background: #ffcdd2,
+  danger-font-color: theme-values.$text-primary-color,
+  danger-icon-color: theme-values.$text-secondary-color,
+
+  // info-primary theme
+  info-primary-background: #bbdefb,
+  info-primary-font-color: theme-values.$text-primary-color,
+  info-primary-icon-color: theme-values.$text-secondary-color,
+
+  // info-secondary theme
+  info-secondary-background: #e0e0e0,
+  info-secondary-font-color: theme-values.$text-primary-color,
+  info-secondary-icon-color: theme-values.$text-secondary-color
+) !default;
+
+$theme-values-dark: (
+  // default theme
+  default-background: #3f51b5,
+  default-font-color: #ffffff,
+  default-icon-color: #ffffff,
+
+  // success theme
+  success-background: #175a2a,
+  success-font-color: #ffffff,
+  success-icon-color: #ffffff,
+
+  // warning theme
+  warning-background: #933600,
+  warning-font-color: #ffffff,
+  warning-icon-color: #ffffff,
+
+  // danger theme
+  danger-background: #810022,
+  danger-font-color: #ffffff,
+  danger-icon-color: #ffffff,
+
+  // info-primary theme
+  info-primary-background: #0a3b71,
+  info-primary-font-color: #ffffff,
+  info-primary-icon-color: #ffffff,
+
+  // info-secondary theme
+  info-secondary-background: #424242,
+  info-secondary-font-color: #ffffff,
+  info-secondary-icon-color: #ffffff
+) !default;

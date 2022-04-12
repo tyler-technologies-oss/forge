@@ -1,0 +1,40 @@
+@use 'sass:map';
+@use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
+@use '@material/typography/typography' as mdc-typography;
+@use '../../theme/theme';
+
+@mixin core-styles() {
+  .forge-list {
+    @include base;
+  }
+}
+
+@mixin host() {
+  display: block;
+  contain: content;
+}
+
+@mixin base($query: mdc-feature-targeting.all()) {
+  $feat-color: mdc-feature-targeting.create-target($query, color);
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+  $feat-typography: mdc-feature-targeting.create-target($query, typography);
+
+  @include mdc-typography.typography(subtitle1, $query);
+  @include mdc-feature-targeting.targets($feat-typography) {
+    // According to the mocks and stickersheet, the line-height is
+    // adjusted to 24px for text content, same as for body1.
+    /* @alternate */
+    line-height: map.get(map.get(mdc-typography.$styles, body1), line-height);
+  }
+  @include mdc-feature-targeting.targets($feat-structure) {
+    @include theme.css-custom-property(padding-top, --forge-list-padding, 8px);
+    @include theme.css-custom-property(padding-bottom, --forge-list-padding, 8px);
+
+    margin: 0;
+    list-style-type: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

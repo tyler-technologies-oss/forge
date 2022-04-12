@@ -1,0 +1,25 @@
+<template>
+  <div class="forge-banner" part="root">
+    <div class="forge-banner__container" part="container">
+      <div class="forge-banner__container-wrapper" part="wrapper">
+        <div class="forge-banner__container-wrapper-icon" part="icon-container">
+          <slot name="icon"></slot>
+        </div>
+        <div class="forge-banner__container-wrapper-subsection" part="subsection-wrapper">
+          <div class="forge-banner__container-wrapper-subsection-text forge-typography--body1">
+            <slot></slot>
+          </div>
+          <div class="forge-banner__container-wrapper-subsection-action" part="action-subsection">
+            <slot name="button"></slot>
+          </div>
+        </div>
+      </div>
+      <forge-icon-button class="forge-banner__container-dismiss" part="dismiss-icon-button">
+        <button type="button" aria-label="Dismiss this banner" part="dismiss-button">
+          <forge-icon name="cancel" part="dismiss-button-icon"></forge-icon>
+        </button>
+        <forge-tooltip>Dismiss</forge-tooltip>
+      </forge-icon-button>
+    </div>
+  </div>
+</template>

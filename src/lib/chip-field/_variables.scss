@@ -1,0 +1,71 @@
+@use '../field/variables';
+
+$input-container: (
+  padding: (
+    default: 2px 12px,
+    top: (
+      roomy: 22px,
+      default: 20px
+    ),
+    left: (
+      leading: 0,
+      shape-rounded: 32px,
+    ),
+    bottom: (
+      roomy: 2px,
+      default: 2px
+    ),
+    right: (
+      trailing: 0,
+      shape-rounded: 32px,
+    )
+  )
+) !default;
+
+$member: (
+  height: (
+    default: 20px,
+    dense: 16px
+  ),
+  padding: (
+    roomy: 6px 12px 6px 0,
+    default: 2px 8px 2px 0,
+    dense: 2px 6px 2px 0
+  )
+) !default;
+
+$input: (
+  height: (
+    roomy: 1.25rem,
+    default: 1rem, // was dense
+    dense: 1rem,
+  ),
+  line-height: (
+    roomy: 1.25rem,
+    default: 1rem,
+    dense: 1rem,
+  ),
+  margin: (
+    roomy: 6px 0,
+    default: 4px 0,
+    dense: 2px 0
+  ),
+  min-width: (
+    default: 40px
+  )
+) !default;
+
+$icon: (
+  margin: (
+    y: (
+      roomy: 10px,
+      default: 5px,
+      dense: 0 // TODO
+    )
+  ),
+  padding: (
+    y: (
+      dense: 0
+    )
+  )
+) !default;

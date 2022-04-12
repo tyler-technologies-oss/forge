@@ -1,0 +1,239 @@
+import { DefaultTemplate as PopupDemo } from './templates/default';
+import { PopupDefaultTs } from './code/popup-default';
+
+<PageSection>
+
+## Usage
+
+The popup component is a generic component that is intended to contain developer-provider content to render. It contains smart positioning logic to ensure that it is
+always visible on-screen, as well as to allow for adjusting the desired position around the element that it is attached to.
+
+Popups are almost always triggered by another element on the page, and will likely be positioned around that element when open.
+
+> The popup component will be added to the bottom of the `<body>` element by default, and use absolute positioning to attach it to its target element.
+>
+> **Note:** you can adjust where the popup is placed in the DOM by adding a `forge-popup-host` attribute to any parent element of the target element.
+
+This component is typically used as an internal utility for other components such as the select, autocomplete, menu... etc. but you can use it on its own
+to show your own content in a small floating element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+Popups typically aren't created in the DOM directly, but they can be created dynamically using JavaScript:
+
+<LiveDemo fullWidth layout="column" codeTs={PopupDefaultTs()}>
+  <PopupDemo />
+</LiveDemo>
+
+
+> **Note:** setting the `open` property to `true` will append the `<forge-popup>` element to the DOM for you.
+
+Once in the DOM, the popup will look something like the following (and will appear at the bottom of the `<body>` by default):
+
+```html
+<forge-popup>Popup content</forge-popup>
+```
+
+If you'd like to adjust which element the a popup will be attached to, just add a `forge-popup-host` attribute or `forge-popup-host` class to any parent element
+of the target element. Just be sure to add `position: relative;` to the same element to ensure that the popup can be positioned relative to the new host.
+
+### Angular
+
+The `@tylertech/forge-angular` adapter library offers an easy-to-use Angular directive for showing popups. This makes it extremely easy to show
+your own custom popups and it's highly recommended that you use to to make your life easier.
+
+The following example shows how to use a popup all through Angular's template syntax using `<ng-template>`:
+
+```html
+<forge-button type="raised">
+  <!-- Use the forgePopup directive and set its value equal to the name of the template specified below -->
+  <button #popup="forgePopup" [forgePopup]="popupTemplate" (click)="popup.open()" forgePopupCloseOnBlur="true">Show popup</button>
+</forge-button>
+
+<!-- Use ng-template to allow for embedding this template in the dynamically generated popup -->
+<ng-template #popupTemplate>
+  <div>
+    <div>Popup Content</div>
+    <forge-button>
+      <button (click)="popup.close()">Close</button>
+    </forge-button>
+  </div>
+</ng-template>
+```
+
+> The directive is responsible for dynamically creating an embedded view to place in the popup, while preserving the binding context of the location where the template is defined.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="targetElement" type="HTMLElement" attr={false} defaultValue="undefined">
+
+Sets the HTML element that the popup will be positioned around.
+
+</PropertyDef>
+
+<PropertyDef name="placement" type="PopupPlacement" defaultValue="&quot;bottom-start&quot;">
+
+The placement of the popup around the target element.
+
+See the [PopupPlacement](#popupplacement) type below for information about other acceptable values.
+
+</PropertyDef>
+
+<PropertyDef name="open" type="boolean" defaultValue="false">
+
+Controls the visibility of the popup.
+
+</PropertyDef>
+
+<PropertyDef name="manageFocus" type="boolean" defaultValue="false">
+
+Controls whether the popup will capture and restore focus automatically or not.
+
+</PropertyDef>
+
+<PropertyDef name="animationType" type="PopupAnimationType" defaultValue="&quot;none&quot;">
+
+Controls what style of animation the popup will use as it opens/closes.
+
+</PropertyDef>
+
+<PropertyDef name="static" type="boolean" defaultValue="false">
+
+Controls how the popup will emit and listen for focus/blur events. If set to `true`, the popup will stay open until explicitly told to close.
+
+</PropertyDef>
+
+<PropertyDef name="offset" type="IPopupPosition" defaultValue="{ x: 0, y: 0 }">
+
+Controls the exact positioning of the popup.
+
+</PropertyDef>
+
+<PropertyDef name="openCallback" type="() => void | Promise<void>" defaultValue="undefined">
+
+Sets a callback that will be exceuted just prior to the popup opening.
+
+By using this callback, you can get notified and control whether the popup can open or not.
+
+</PropertyDef>
+
+<PropertyDef name="closeCallback" type="() => void | Promise<void>" defaultValue="undefined">
+
+Sets a callback that will be exceuted just prior to the popup closing after it has been opened.
+
+By using this callback, you can get notified and control whether the popup can close or not.
+
+</PropertyDef>
+
+<PropertyDef name="hideWhenClipped" type="boolean" defaultValue="false">
+
+Gets/sets whether the popup will automatically hide itself when the target element is scrolled out of view.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+
+<MethodDef name="position(): void">
+
+Manually tells the popup to execute its positioning logic.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                    | Description
+| :-----------------------| :-----------------
+| `forge-popup-position`    | Emits when the popup is re-positioned.
+
+The following events are emitted from the targetElement, **NOT** the `<forge-popup>` element.
+
+| Name                    | Description
+| :-----------------------| :-----------------
+| `forge-popup-open`        | Emits when the popup is opened.
+| `forge-popup-close`       | Emits when the popup is closed.
+| `forge-popup-blur`        | Emits when the popup is closed.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name                            | Description
+| :-------------------------------| :------------------
+| `default`                       | The default (unnamed) slot is where all provided content will be rendered.
+
+</PageSection>
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                          | Description
+| :---------------------------------------------| :------------------
+| `--forge-popup-min-width`                       | Controls the `min-width` of the internal container element.
+| `--forge-z-index-popup`                         | Controls the z-index.
+| `--forge-theme-elevated-surface`                | Controls the elevated surface (background) color.
+| `--mdc-theme-popup-elevation`                 | Controls the box-shadow of the popup.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### PopupPlacement
+
+```ts expanded
+type PopupPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
+```
+
+### PopupAnimationType
+
+```ts
+enum PopupAnimationType {
+  None = 'none',
+  Menu = 'menu',
+  Dropdown = 'dropdown'
+}
+```
+
+### IPopupPosition 
+
+```ts
+interface IPopupPosition {
+  x: number;
+  y: number;
+}
+```
+
+</PageSection>

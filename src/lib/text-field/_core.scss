@@ -1,0 +1,14 @@
+@use './selector';
+@use '../field/selector' as field-selector;
+
+@mixin core-styles {
+  .forge-text-field {
+    @include field-selector.field(forge-text-field, $exclude: (height));
+    &:not(.forge-text-field--textarea) {
+      @include field-selector.field(forge-text-field, $exclude: (core, background-color, margin-top));
+    }
+    @include selector.leading-container;
+    @include selector.multi-input;
+    @include selector.textarea;
+  }
+}

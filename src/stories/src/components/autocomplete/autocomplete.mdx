@@ -1,0 +1,278 @@
+import { DefaultTemplate as AutocompleteDemo } from './templates/default';
+import { AutocompleteDefaultCodeHtml, AutocompleteDefaultCodeTs } from './code/autocomplete-default';
+
+<PageSection>
+
+## Usage
+
+The autocomplete is considered an add-on component that allows you to wrap a `<forge-autocomplete>` element around any HTML that contains an `<input>`
+element. This allows the autocomplete to bind to that input and show suggestions in a popup as the user types.
+
+It is expected that the consuming application provide a filter callback that the component can call when it needs to update the list of available
+options or suggestions. There are many variations of using an autocomplete, and while it's most commonly used together with a web service to
+provide suggestions asynchronously, it's up to the consuming application to choose how to fetch and return the options based on the current text
+the user has typed into the `<input>` element.
+
+> For text fields, we recommend using a debounce of 500ms. [Read more](https://stackoverflow.com/questions/42361485/how-long-should-you-debounce-text-input)
+
+> This component requires the use of JavaScript to be able to provide a callback function to the `filter` property.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+The following code snippet demonstrates a common usage in the HTML:
+
+<LiveDemo 
+layout="column" 
+codeHtml={AutocompleteDefaultCodeHtml()} 
+codeTs={AutocompleteDefaultCodeTs()}>
+  <AutocompleteDemo/>
+</LiveDemo>
+
+The only requirement in the HTML is to provide a child `<input>` element. While a Forge [text-field component](?path=/story/components-text-field--default) will typically be used, you
+can attach autocomplete functionality to any `<input>` element. This allows for flexibility in the styling of the input, while allowing the autocomplete to provide
+suggestions in the form of a floating popup anchored to that input.
+
+> The `forge-dropdown-icon` class being applied to the trailing icon is **optional**. It controls the rotation of the icon when the input is focused. This class is available through the Forge theme CSS.
+
+The only requirement is that you provide a filter callback function via JavaScript (note: this may be different based on your framework of choice):
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="allowUnmatched" type="boolean" defaultValue="false">
+
+  Sets whether the text entered within the input will be unchanged when a matching option is not found.
+
+</PropertyDef>
+
+<PropertyDef name="debounce" type="number" defaultValue="500">
+
+  Controls the keypress debounce delay threshold when calling the provided filter function.
+
+</PropertyDef>
+
+<PropertyDef name="filter" type="AutocompleteFilterCallback" attr={false} defaultValue="undefined">
+
+  Sets the filter function. **Required.**
+
+  The filter function is used by the component whenever it needs to retrieved options/suggestions to display. You can return the options
+  as an array of `IOption` objects, or you can also return a `Promise` that will be resolved with an array of objects at some later time.
+
+</PropertyDef>
+
+<PropertyDef name="filterOnFocus" type="boolean" defaultValue="true">
+
+  Controls whether the filter callback and dropdown will be shown automatically when the component receives focus.
+
+</PropertyDef>
+
+<PropertyDef name="mode" type="AutocompleteMode" defaultValue="&quot;default&quot;">
+
+  Gets/sets the interaction mode. Valid values: `"default"` (default), `"stateless"`.
+
+  When using stateless mode, the component will **not** track selected values. It will simply provide suggestions, and let you know when
+  the user has chosen one of the suggestions. It is up to you to decide what to do with that selection. This is typically used in cases
+  where choosing a value from the suggestion list will result in a custom action.
+  
+</PropertyDef>
+
+<PropertyDef name="multiple" type="boolean" defaultValue="false">
+
+Controls whether multiple selections are allowed.
+  
+</PropertyDef>
+
+<PropertyDef name="observeScroll" type="boolean" defaultValue="false">
+
+Controls whether scroll events are emitted from the dropdown.
+  
+</PropertyDef>
+
+<PropertyDef name="observeScrollThreshold" type="number" defaultValue="0">
+
+A pixel amount that controls when scroll events are emitted when scrolling within the popup.
+  
+</PropertyDef>
+
+<PropertyDef name="optionLimit" type="number" defaultValue="0">
+
+Gets/sets the maximum number of options to display in the popup.
+  
+</PropertyDef>
+
+<PropertyDef name="popupTarget" type="string" defaultValue="input">
+
+Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element.
+  
+</PropertyDef>
+
+<PropertyDef name="popupClasses" type="string | string[]" defaultValue="[]">
+
+Gets/sets the list of classes to apply to the popup element. Can be a string of space-separated classes.
+  
+</PropertyDef>
+
+<PropertyDef name="value" type="string | string[] | IOption | IOption[] | null" defaultValue="null">
+
+Gets/sets the selected value(s).
+  
+</PropertyDef>
+
+<PropertyDef name="beforeValueChange" attr={false} type="(value: any) => boolean | Promise<boolean>" defaultValue="undefined">
+
+Sets the callback that will be executed when a user selects an option. This will allow you to cancel or validate the selection prior to the UI being updated.
+  
+</PropertyDef>
+ 
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;">
+
+  Dynamically adds options to the end of the option list while the popup is open.
+
+  This is typically used when a scroll observer is attached to know when the user scrolls to the bottom of the popup.
+
+</MethodDef>
+
+<MethodDef name="openDropdown(): void;">
+
+Opens the dropdown.
+
+</MethodDef>
+
+<MethodDef name="closeDropdown(): void;">
+
+Closes the dropdown.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                               | Description
+| :----------------------------------| :----------------
+| `forge-autocomplete-change`          | Emits when the user selects an option from the suggestions. **Only emits in "default" mode.**
+| `forge-autocomplete-select`          | Emits when the user selects an option from the suggestions. **Only emits in "stateless" mode.**
+| `forge-autocomplete-scrolled-bottom` | Emits when the user scrolls to the bottom of the dropdown. Only if observeScroll is true.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+> A default (unnamed) slot exists, and it is intended that an `<input>` or `<textarea>` element will be placed in this slot.
+
+| Name               | Values
+| :------------------| :-----------------
+| `default`          | The default (unnamed) slot is the text input. Projects the input into the correct location.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+Below you will find the API for all custom public type declarations that you will need when using this component.
+
+### AutocompleteOptionBuilder
+
+```ts
+type AutocompleteOptionBuilder<T = any> = (option: IOption<T>, filterText: string, parentElement: IListItemComponent) => HTMLElement;
+```
+
+### AutocompleteOptionGroupBuilder
+
+```ts
+type AutocompleteOptionGroupBuilder<T = any> = (option: IAutocompleteOptionGroup<T>) => HTMLElement;
+```
+
+### AutocompleteFilterCallback
+
+```ts
+type AutocompleteFilterCallback<T = any> = (filterText: string, value: T | null) => Array<IOption<T>> | IAutocompleteOptionGroup[] | Promise<Array<IOption<T>> | IAutocompleteOptionGroup[]>;
+```
+
+### AutocompleteOptionComparator
+
+```ts
+type AutocompleteOptionComparator<T = any> = (optionA: IOption<T>, optionB: IOption<T>) => number;
+```
+
+### AutocompleteSelectedTextBuilder
+
+```ts
+type AutocompleteSelectedTextBuilder<T = any> = (selectedOptions: Array<IOption<T>>) => string;
+```
+
+### AutocompleteMode
+
+```ts
+enum AutocompleteMode {
+  Default = 'default',
+  Stateless = 'stateless'
+}
+```
+
+### IOption
+
+```ts
+interface IOption<T = any>  {
+  value: T;
+  label: string;
+  disabled?: boolean;
+}
+```
+
+### IAutocompleteOptionGroup
+
+```ts
+interface IAutocompleteOptionGroup<T = any> {
+  text?: string;
+  builder?: AutocompleteOptionGroupBuilder;
+  options: Array<IOption<T>>;
+}
+```
+
+### IAutocompletePopupConfiguration
+
+```ts
+interface IAutocompletePopupConfiguration {
+  filterText: string;
+  popupTarget: string;
+  dropdownConfig: IListDropdownConfig;
+  popupClasses: string[];
+  popupOffset: IPopupPosition;
+  syncPopupWidth: boolean;
+  listener: (value: string) => void;
+  scrollEndListener: () => void;
+}
+```
+
+</PageSection>

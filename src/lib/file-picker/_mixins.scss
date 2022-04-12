@@ -1,0 +1,146 @@
+@use '@material/theme/color-palette' as mdc-color-palette;
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/theme/theme-color' as mdc-theme-color;
+@use '../theme/theme';
+@use '../theme/theme-values';
+@use '../typography/mixins' as typography-mixins;
+@use '../field/base' as field-base;
+@use './variables';
+
+
+@mixin styles() {
+  .forge-file-picker {
+    @include base;
+
+    &__primary {
+      @include primary;
+    }
+
+    &__secondary {
+      @include secondary;
+    }
+
+    &__input {
+      @include input;
+    }
+
+    &__helper-text {
+      @include helper-text;
+    }
+
+    &[disabled] {
+      @include base-disabled;
+    }
+
+    &.compact {
+      @include base-compact;
+
+      .forge-file-picker__primary,
+      .forge-file-picker__secondary {
+        display: none;
+      }
+
+      .forge-file-picker__button > button {
+        @include button-compact;
+      }
+    }
+
+    &:not(.compact).highlight {
+      @include base-highlight;
+    }
+
+    &.borderless {
+      @include base-borderless;
+
+      &:not(.compact).highlight {
+        border: none;
+      }
+
+      + .forge-file-picker__helper-text {
+        display: none;
+      }
+    }
+  }
+}
+
+@mixin host() {
+  @include theme.css-custom-property(width, --forge-file-picker-width, variables.$width);
+  @include theme.css-custom-property(height, --forge-file-picker-height, variables.$height);
+
+  display: inline-block;
+}
+
+@mixin base() {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(mdc-color-palette.$grey-400, 0.12);
+  border: 1px dashed theme-values.$border-color;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  gap: 16px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+}
+
+@mixin base-disabled() {
+  @include mdc-theme.property(background-color, background);
+  @include theme.property(border-color, border-color);
+
+  opacity: 0.38;
+  cursor: unset;
+}
+
+@mixin base-compact() {
+  height: fit-content;
+  width: fit-content;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+@mixin base-borderless() {
+  --forge-file-picker-width: 100%;
+  border: none;
+}
+
+@mixin base-highlight() {
+  @include mdc-theme.property(border-color, primary);
+
+  background-color: rgba(mdc-theme-color.prop-value(primary), 0.12);
+  border-width: 1px;
+  border-style: solid;
+}
+
+@mixin primary() {
+  @include mdc-typography.typography(subtitle1);
+  @include mdc-theme.property(color, text-primary-on-background);
+  @include theme.css-custom-property(max-width, --forge-file-picker-max-content-width, variables.$max-content-width);
+}
+
+@mixin button-compact() {
+  @include theme.css-custom-property(width, --forge-file-picker-width, auto);
+
+  background-color: transparent;
+}
+
+@mixin secondary() {
+  @include typography-mixins.typography(subtitle2-secondary);
+  @include mdc-theme.property(color, text-primary-on-background);
+  @include theme.css-custom-property(max-width, --forge-file-picker-max-content-width, variables.$max-content-width);
+
+}
+
+@mixin input() {
+  display: none;
+}
+
+@mixin helper-text() {
+  @include field-base.helper-text-core;
+  @include field-base.helper-text-color(default);
+  @include field-base.helper-text-margin-left(default);
+  text-align: start;
+}

@@ -1,0 +1,11 @@
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}

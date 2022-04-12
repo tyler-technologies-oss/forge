@@ -1,0 +1,25 @@
+@use './mixins-flex';
+
+.forge-flex-container--row {
+  @include mixins-flex.container(flex, row, nowrap, center);
+}
+
+.forge-flex-container--col {
+  @include mixins-flex.container(flex, column, nowrap, center);
+}
+
+.forge-flex-item--stretch {
+  @include mixins-flex.item(1, 1);
+}
+
+.forge-flex-item--left {
+  margin-right: auto;
+}
+
+.forge-flex-item--right {
+  margin-left: auto;
+}
+
+.forge-flex-item--overflow {
+  @include mixins-flex.overflow;
+}

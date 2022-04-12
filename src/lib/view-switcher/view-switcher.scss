@@ -1,0 +1,27 @@
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host(.forge-view-switcher--slide) {
+  ::slotted(forge-view) {
+    @include mixins.view-slidable;
+  }
+}
+
+:host(.forge-view-switcher--fade) {
+  ::slotted(forge-view) {
+    @include mixins.view-fadeable;
+  }
+
+  ::slotted(.forge-view-switcher__view--hidden) {
+    opacity: 0;
+  }
+}

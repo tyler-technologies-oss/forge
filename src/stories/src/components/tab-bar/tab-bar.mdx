@@ -1,0 +1,313 @@
+import { DefaultTemplate as TabBarDemo } from './templates/default';
+import { TabBarDefaultHtml, TabBarDefaultTs} from './code/tab-bar-default';
+
+<PageSection>
+
+## Usage
+
+The tab bar component allows for navigation controls using `<forge-tab-bar>` and `<forge-tab>`.
+
+Tab bar can be paired with [view switcher component](?path=/story/components-view-switcher--default) to switch between views on a page.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+### Basic
+
+<LiveDemo 
+fullWidth 
+layout={"column"} 
+codeHtml={TabBarDefaultHtml()} 
+codeTs={TabBarDefaultTs()}>
+  <TabBarDemo/>
+</LiveDemo>
+
+### With View switcher
+
+See the [View Switcher](?path=/story/components-view-switcher--default)
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Bar Properties/Attributes
+
+<PropertyDef name="activeTab" type="number" defaultValue="-1">
+
+  Gets/sets the active tab index.
+
+</PropertyDef>
+
+<PropertyDef name="layoutMode" type="TabBarLayoutMode" defaultValue="fixed">
+
+  Gets/sets the layout mode that controls how the tabs are sized and rendered.
+
+  Valid values: `fixed`, `clustered`.
+
+</PropertyDef>
+
+<PropertyDef name="layoutAlign" type="TabBarLayoutAlign" defaultValue="start">
+
+  Gets/sets the layout alignment.
+
+  Valid values: `start`, `center`, `end`.
+
+  > Only pertains to non-full width layout modes.
+
+</PropertyDef>
+
+<PropertyDef name="underline" type="boolean" defaultValue="false">
+
+  Gets/sets whether the component displays an underline or not.
+
+</PropertyDef>
+
+<PropertyDef name="autoActivate" type="boolean" defaultValue="false">
+
+  Gets/sets whether tabs are auto-activated when using arrow keys.
+
+  Keys which auto activate: `ArrowLeft`, `ArrowRight`, `End`.
+
+</PropertyDef>
+
+<PropertyDef name="stacked" type="boolean" defaultValue="false">
+
+  Gets/sets whether the tabs are displayed with as their stacked variant.
+
+</PropertyDef>
+
+<PropertyDef name="scrollButtons" type="boolean" defaultValue="true">
+
+  Gets/sets whether the scroll buttons can be displayed or not.
+
+  The component handles visibility automatically.
+
+  > *Note: scroll buttons will only be added on mobile devices
+
+</PropertyDef>
+
+<PropertyDef name="forceScrollButtons" type="boolean" defaultValue="false">
+
+  Gets/sets whether the scroll buttons are visible indefinitely or not.
+
+  > *Note: scroll buttons will be added on all devices
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Properties/Attributes
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+  Gets/sets whether the tab is disabled or not.
+
+</PropertyDef>
+
+<PropertyDef name="active" type="boolean" defaultValue="false">
+
+  Gets/sets whether the tab is active or not.
+
+</PropertyDef>
+
+<PropertyDef name="stretch" type="boolean" defaultValue="false">
+
+  Gets/sets whether the tab will stretch or not.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Bar Methods
+
+<MethodDef name="activateTab(index: number): void">
+
+  Activates the tab at the given index.
+
+</MethodDef>
+
+<MethodDef name="scrollTabIntoView(index: number): void">
+
+  * Scrolls the tab at the given index into view.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Methods
+
+<MethodDef name="activate(previousIndicatorClientRect?: DOMRect): void">
+
+  Activates the tab and moves the tab indicator.
+
+</MethodDef>
+
+<MethodDef name="deactivate(): void">
+
+  Deactivates the tab.
+
+</MethodDef>
+
+<MethodDef name="computeIndicatorBounds(): DOMRect | undefined">
+
+  Computes the bounding rect of the tab indicator.
+
+</MethodDef>
+
+<MethodDef name="computeDimensions(): ITabDimensions">
+
+  Compute dimensions of tab.
+
+</MethodDef>
+
+<MethodDef name="setTabIndex(value: number): void">
+
+  Sets the index of the tab.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Bar Events
+
+| Name                            | Description
+| :-------------------------------| :----------------
+| `forge-tab-bar-activate`          | Emits when the user activates a new tab.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Events
+
+| Name                            | Description
+| :-------------------------------| :----------------
+| `forge-tab-interacted`            | Emits when the user interacts with a tab.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Bar Slots
+
+| Name                          | Description
+| :-----------------------------| :----------------------
+| `default`                     | The default (unnamed) slot where the tab will be rendered.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Slots
+
+| Name                          | Description
+| :-----------------------------| :----------------------
+| `top`                         | The top slot for content to render above the default slot. This is typically an icon element.
+| `default`                     | The default (unnamed) slot where the tab text or icon will be rendered.
+| `leading`                     | The leading slot for content to render before the default slot. This is typically an icon element.
+| `trailing`                    | The trailing slot for content to render after the default slot. This is typically an icon element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Bar CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :--------------------
+| `--mdc-theme-border-color`                      | Controls the color of tab bar underline.
+| `--forge-tab-bar-height`                          | Controls the height.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :--------------------
+| `--mdc-theme-primary`                           | Controls the font color of active tab.
+| `--mdc-theme-text-secondary-on-light`           | Controls the font color of tab.
+| `--mdc-theme-text-disabled-on-background`       | Controls the font color of disabled tab.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Bar Types
+
+### ITabBarActivateEventData
+
+```ts
+interface ITabBarActivateEventData {
+  index: number;
+}
+```
+
+### TabBarLayoutMode
+
+```ts
+type TabBarLayoutMode = 'fixed' | 'clustered';
+```
+
+### TabBarLayoutAlign
+
+```ts
+type TabBarLayoutAlign = 'start' | 'center' | 'end';
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Types
+
+### ITabDimensions
+
+```ts
+interface ITabDimensions {
+  rootLeft: number;
+  rootRight: number;
+  contentLeft: number;
+  contentRight: number;
+}
+```
+
+</PageSection>

@@ -1,0 +1,17 @@
+<template>
+  <div class="forge-scaffold" part="root">
+    <slot name="left"></slot>
+    <div class="forge-scaffold__header" part="header-container">
+      <slot name="header"></slot>
+    </div>
+    <div class="forge-scaffold__body" part="body-container">
+      <slot name="body-left"></slot>
+      <slot name="body-header"></slot>
+      <slot name="body"></slot>      
+      <slot name="body-footer"></slot>
+      <slot name="body-right"></slot>
+    </div>
+    <slot name="footer"></slot>
+    <slot name="right"></slot>
+  </div>
+</template>

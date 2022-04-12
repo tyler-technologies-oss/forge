@@ -1,0 +1,17 @@
+$transition-duration: 150ms !default;
+
+$padding: 24px !default;
+
+$surface-width: calc(100% - 30px) !default;
+$surface-min-width: 280px !default;
+$surface-max-width: 865px !default;
+$surface-transform: scale(0.8) !default;
+$surface-border-radius: 4px !default;
+
+$header-padding: 24px 24px 0 !default;
+$body-padding: 0 24px 24px !default;
+$footer-padding: 8px !default;
+
+$body-margin-top: 20px !default;
+
+$scrollable-max-height: 195px !default;

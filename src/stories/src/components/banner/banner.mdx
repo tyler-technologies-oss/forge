@@ -1,0 +1,123 @@
+import { DefaultTemplate as BannerDemo } from './templates/default';
+import { ThemedTemplate as ThemedDemo } from './templates/themed';
+import { BannerDefaultCodeHtml } from './code/banner-default';
+import { BannerThemedCodeHtml } from './code/banner-themed';
+import { BannerCombinedFullCodeHtml } from './code/banner-combined-full';
+
+<PageSection>
+
+## Usage
+
+The banner component is intended to be used as a way to deliver a short but important message to the user. It has a high degree of emphasis and should not be used for general messaging.
+If you need to show less important messages, or messages scoped to a more specific section of your page, you should consider using the [inline message component](?path=/story/components-inline-message--default). instead.
+
+This component supports built-in predefined themes. It can be configured to be either static or dismissable. It can contain a button to trigger whatever action you need.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+Below is the most basic usage of the banner for displaying a short, dismissible message:
+
+<LiveDemo 
+layout="column" 
+fullWidth 
+codeHtml={BannerDefaultCodeHtml()}>
+  <BannerDemo/>
+</LiveDemo>
+
+### Themed
+
+You can use the built-in themes via attribute. If you need a custom color, see the CSS custom properties section below.
+
+<LiveDemo 
+layout="column" 
+fullWidth 
+codeHtml={BannerThemedCodeHtml()}>
+  <ThemedDemo/>
+</LiveDemo>
+
+### Combined with a button and icon
+
+Here is an example usage combined with a forge-button component:
+
+<LiveDemo 
+layout="column" 
+fullWidth 
+codeHtml={BannerCombinedFullCodeHtml()}>
+  <BannerDemo hasIcon={true} hasButton={true}/>
+</LiveDemo>
+
+> **Note:** The design for the banner specifically requests that the button's background be white. Due to limitations in how deep a css selector can drill into a slotted element, you will need to add that background color yourself.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="dismissed" type="boolean" defaultValue="false">
+
+Sets the banner to either the dismissed state or the undismissed state.
+
+</PropertyDef>
+
+<PropertyDef name="canDismiss" type="boolean" defaultValue="true">
+
+Controls the visibility of the dismiss icon-button.
+
+</PropertyDef>
+
+<PropertyDef name="theme" type="string" prop={false} defaultValue="&quot;&quot; (none)">
+
+Allows for easily setting the theme color to use. Valid values: `danger`, `warning`, `success`, `info-primary`, `info-secondary`.
+Note: Not assigning one of the mentioned themes will set the banner to use it's default colors.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                               | Description
+| :----------------------------------| :---------------------
+| `forge-banner-dismissed`             | Emits when the banner is dismissed.
+| `forge-banner-undismissed`           | Emits when the banner is undismissed (shown again after being dismissed).
+
+</PageSection>
+
+<PageSection>
+
+## Slots
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `default`                      | The default (unnamed) slot will render its content as the main text body.
+| `icon`                         | The icon slot will render its content as the leading icon.
+| `button`                       | The button slot will render its content after the main text body.
+
+</PageSection>
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                         | Description
+| :--------------------------------------------| :----------------
+| `--forge-banner-theme-background`              | Sets the banner's background color.
+| `--forge-banner-theme-on-background`           | Sets the banner's font color.
+| `--forge-banner-theme-icon`                    | Sets the banner's icon color.
+
+</PageSection>

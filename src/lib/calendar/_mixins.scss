@@ -1,0 +1,435 @@
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '@material/typography/typography' as mdc-typography;
+@use '../theme/theme';
+@use '../utils/mixins' as utils;
+@use './variables';
+
+@mixin provide-theme($theme) {
+  @include theme.theme-properties(calendar, $theme, variables.$theme-values);
+}
+
+@mixin core-styles() {
+  .forge-calendar {
+    @include base;
+
+    &__header {
+      @include header;
+    }
+
+    &__footer {
+      @include footer;
+    }
+
+    &__view {
+      @include view;
+    }
+
+    &__date-view {
+      @include date-view;
+
+      &__row {
+        @include date-view-row;
+      }
+    }
+
+    &__date-grid {
+      @include date-grid;
+    }
+
+    &__day {
+      @include day;
+    }
+
+    &__date {
+      @include date;
+
+      &__inner {
+        @include date-inner;
+      }
+
+      .forge-calendar--show-today &--today {
+          @include date-today;
+      }
+
+      .forge-calendar:not(.forge-calendar--readonly) &:not([disabled]) {
+        @include date-selectable;
+      }
+
+      &--selected {
+        @include date-selected;
+      }
+
+      &[disabled] {
+        @include date-disabled;
+      }
+
+      &-spacer {
+        @include date-spacer;
+
+        .forge-calendar--fixed-height & {
+          @include date-spacer-expanded;
+        }
+      }
+    }
+
+    &__range {
+      &:not(.forge-calendar__date-spacer) {
+        @include range;
+
+        &.forge-calendar__range--start {
+          @include range-start;
+        }
+  
+        &.forge-calendar__range--end {
+          @include range-end;
+        }
+      }
+
+      // This is dependent on dates being divs and date spacers being spans
+      &:not(.forge-calendar__range--start):first-of-type {
+        @include range-row-start;
+      }
+
+      // This is dependent on dates being divs and date spacers being spans
+      &:not(.forge-calendar__range--end):last-of-type {
+        @include range-row-end;
+      }
+
+      .forge-calendar--allow-single-date-range &--start#{&}--end {
+        @include range-single-date;
+      }
+    }
+
+    &__event {
+      @include event;
+      
+      .forge-calendar__date[disabled] & {
+        @include event-disabled;
+      }
+
+      &--overflow {
+        @include event-overflow;
+      }
+      
+      &__wrapper {
+        @include event-wrapper;
+  
+        .forge-calendar__date-spacer & {
+          display: none;
+        }
+      }
+    }
+
+    &--rtl {
+      .forge-calendar__header forge-icon-button forge-icon {
+        @include arrow-rtl;
+      }
+    }
+  }
+
+  #accessible-header {
+    @include utils.visually-hidden;
+  }
+
+  #month-button forge-icon {
+    @include menu-button-icon;
+
+    .forge-calendar--month-menu-open & {
+      @include menu-button-icon-open;
+    }
+  }
+
+  #year-button forge-icon {
+    @include menu-button-icon;
+    
+    .forge-calendar--year-menu-open & {
+      @include menu-button-icon-open;
+    }
+  }
+}
+
+@mixin popup-context-styles() {
+  @include theme.property(--forge-calendar-event-stroke-color, elevated-surface);
+}
+
+@mixin host() {
+  @include theme.property(--forge-calendar-event-stroke-color, surface);
+
+  display: inline-block;
+}
+
+@mixin base() {
+  @include theme.css-custom-property(width, --forge-calendar-width, variables.$width);
+
+  height: fit-content;
+  position: relative;
+}
+
+@mixin header() {
+  @include theme.css-custom-property(padding, --forge-calendar-controls-padding, 0);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin arrow-rtl() {
+  transform: rotate(180deg);
+}
+
+@mixin menu-button-icon() {
+  transition: transform 200ms;
+}
+
+@mixin menu-button-icon-open() {
+  transform: rotate(180deg);
+}
+
+@mixin footer() {
+  @include theme.css-custom-property(padding, --forge-calendar-controls-padding, 0);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Views
+
+@mixin view() {
+  position: relative;
+}
+
+@mixin date-view() {
+  display: block;
+}
+
+// Dates
+
+@mixin date-view-row() {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+@mixin date-grid() {
+  display: grid;
+}
+
+@mixin day() {
+  @include mdc-typography.typography(caption);
+  @include square-aspect-ratio;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  padding: 0;
+  font-weight: bold;
+  user-select: none;
+}
+
+@mixin date() {
+  @include square-aspect-ratio;
+  @include date-view-row-gap;
+
+  min-width: 0;
+  padding: 0;
+  border-radius: 50%;
+  position: relative;
+  outline: none;
+  cursor: default;
+  user-select: none;
+
+  .mdc-ripple-surface {
+    border-radius: inherit;
+
+    &::before, &::after {
+      @include date-inner-gap($force: true);
+
+      border-radius: inherit !important; // Override ripple value to match the parent
+    }
+  }
+}
+
+@mixin date-inner() {
+  @include mdc-typography.typography(body2);
+  @include date-inner-gap;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: inherit;
+  box-sizing: border-box;
+}
+
+@mixin date-today() {
+  &:not([disabled]) {
+    @include theme.property(color, primary);
+    @include theme.property(border-color, primary);
+  }
+
+  .forge-calendar__date__inner {
+    border-color: inherit;
+    border-width: variables.$today-border-width;
+    border-style: solid;
+    font-weight: bold;
+  }
+
+  // Override the color when also selected
+  &.forge-calendar__date--selected {
+    @include theme.property(color, on-primary);
+  }
+}
+
+@mixin date-selectable() {
+  @include mdc-ripple.surface($ripple-target: '.mdc-ripple-surface', $include-will-change: false);
+  @include mdc-ripple.radius-unbounded($ripple-target: '.mdc-ripple-surface');
+  @include mdc-ripple-theme.states($color: on-surface, $ripple-target: '.mdc-ripple-surface');
+
+  cursor: pointer;
+}
+
+@mixin date-selected() {
+  &:not([disabled]) .forge-calendar__date__inner {
+    @include theme.property(background-color, primary);
+    @include theme.property(color, on-primary);
+  }
+
+  &[disabled] .forge-calendar__date__inner {
+    @include theme.property(background-color, form-field-disabled-on-background);
+    @include theme.property(color, text-disabled-on-background);
+  }
+  
+  .forge-calendar:not(.forge-calendar--readonly) &:hover .forge-calendar__date__inner {
+    opacity: 0.87;
+  }
+
+  &:focus, &.mdc-ripple-upgraded--background-focused {
+    .forge-calendar__date__inner {
+      opacity: 0.54;
+    }
+  }
+}
+
+@mixin date-disabled() {
+  @include theme.property(color, text-disabled-on-background);
+}
+
+@mixin date-spacer {
+  pointer-events: none;
+}
+
+@mixin date-spacer-expanded() {
+  @include square-aspect-ratio;
+  @include date-view-row-gap;
+}
+
+// Range
+
+@mixin range() {
+  .forge-calendar__range__target {
+    @include theme.property(background-color, primary);
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.14;
+    border-radius: 0;
+  }
+}
+
+@mixin range-start() {
+  .forge-calendar__range__target {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+}
+
+@mixin range-end() {
+  .forge-calendar__range__target {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+  }
+}
+
+@mixin range-row-start() {
+  .forge-calendar__range__target {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+}
+
+@mixin range-row-end() {
+  .forge-calendar__range__target {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+}
+
+@mixin range-single-date() {
+  .forge-calendar__range__target {
+    transition: transform 200ms;
+    transform: scale(1.15);
+    transform-origin: center;
+  }
+}
+
+// Events
+
+@mixin event() {
+  @include event-color;
+  @include theme.css-custom-property(font-size, --forge-calendar-event-dot-size, variables.$event-dot-size);
+}
+
+@mixin event-overflow() {
+  @include theme.property(color, on-surface);
+  @include theme.css-custom-property(background-color, --mdc-theme-surface);
+
+  border-radius: 50%;
+}
+
+@mixin event-disabled() {
+  opacity: 0.14;
+}
+
+@mixin event-wrapper() {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 2px;
+  pointer-events: none; // Prevents interference with the date click target
+}
+
+@mixin event-color() {
+  @each $color in variables.$theme-base-strings {
+    &[data-event-theme=#{"" + $color}] {
+      @include theme.css-custom-property(color, --forge-calendar-theme-event-#{$color}-accent, map-get(variables.$theme-values, event-#{$color}-accent));
+    }
+  }
+}
+
+// Utilities
+
+@mixin square-aspect-ratio() {
+  &::after {
+    float: left;
+    padding-top: 100%;
+    content: '';
+  }
+}
+
+@mixin date-view-row-gap() {
+  @include theme.css-custom-property(margin-top, --forge-calendar-row-gap, variables.$row-gap);
+}
+
+@mixin date-inner-gap($force: false) {
+  position: absolute;
+  width: calc(100% - #{variables.$date-gap}) #{if($force, '!important', '')};
+  height: calc(100% - #{variables.$date-gap}) #{if($force, '!important', '')};
+  top: calc(#{variables.$date-gap} / 2) #{if($force, '!important', '')};
+  left: calc(#{variables.$date-gap} / 2) #{if($force, '!important', '')};
+}

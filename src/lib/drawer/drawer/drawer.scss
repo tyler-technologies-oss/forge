@@ -1,0 +1,20 @@
+@use './mixins';
+@use '../base/mixins' as base-mixins;
+
+@include mixins.core-styles;
+
+:host {
+  @include base-mixins.host;
+}
+
+/// 
+/// Safari fix for triggering reflow after transition completes (as of Safari 14)
+///
+// stylelint-disable-next-line unit-whitelist
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance:none) and (stroke-color: transparent) {
+    :host([open]) {
+      transform: translateZ(0);
+    }
+  }
+}

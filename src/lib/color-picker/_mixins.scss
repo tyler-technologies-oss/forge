@@ -1,0 +1,226 @@
+@use '@material/animation/animation' as mdc-animation;
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '../theme/theme';
+@use '../theme/theme-values';
+@use './variables';
+
+@mixin styles() {
+  * {
+    box-sizing: border-box;
+  }
+  
+  .forge-color-picker {
+    @include base;    
+
+    &__input {
+      @include input;
+    }
+
+    &__gradient {
+      @include gradient;
+
+      &-color {
+        @include gradient-color;
+      }
+      
+      &-thumb {
+        @include gradient-thumb;
+      }
+    }
+
+    &__control-preview {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 16px;
+    }
+
+    &__controls {
+      flex: 1;
+      margin-right: 16px;
+    }
+
+    &__slider {
+      position: relative;
+      
+      &-thumb {
+        outline: none;
+        height: 16px;
+        width: 16px;
+        background-color: white;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        position: absolute;
+        border-radius: 50%;
+        top: calc(50% - 8px);
+        margin-left: -8px;
+        transition: left 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+        
+        &--active {
+          transition: none;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    &__color-preview-container {
+      border-radius: 50%;
+      box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.54) inset, 0 0 2px 0 rgba(0, 0, 0, 0.54);
+      overflow: hidden;
+    }
+    
+    &__color-preview {
+      height: 32px;
+      width: 32px;
+      transition: background-color 200ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    &__value {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      padding: 0 8px 16px 16px;
+      font-size: 12px;
+    }
+
+    &__color-types {
+      flex: 1;
+
+      label {
+        @include mdc-typography.typography(caption);
+        @include mdc-theme.property(color, text-secondary-on-light);
+      }
+
+      input {
+        @include mdc-typography.typography(caption);
+
+        &[type=number],
+        &[type=text] {
+          @include mdc-theme.property(color, on-surface);
+          @include theme.property(border-color, border-color);
+
+          background-color: transparent;
+          padding: 4px 8px;
+          border-width: 1px;
+          border-style: solid;
+          border-radius: 4px;
+          box-sizing: border-box;
+          outline: none;
+          transition: mdc-animation.enter(box-shadow, 200ms),
+                      mdc-animation.enter(border-color, 200ms);
+
+          &:hover {
+            @include mdc-theme.property(border-color, text-primary-on-background);
+          }
+
+          &:focus {
+            @include mdc-theme.property(border-color, primary);
+
+            box-shadow: 0 0 0 1px inset theme-values.$primary;
+            box-shadow: 0 0 0 1px inset var(--mdc-theme-primary, theme-values.$primary);
+          }
+        }
+
+        &[type=number] {
+          text-align: center;
+
+          &::-webkit-inner-spin-button,
+          &::-webkit-outer-spin-button {
+            appearance: none;
+            margin: 0;
+          }
+
+          -moz-appearance: textfield;
+        }
+      }
+    }
+
+    &__color-hex {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: space-between;
+    }
+
+    &__canvas {
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNnB4IiBoZWlnaHQ9IjZweCIgdmlld0JveD0iMCAwIDYgNiIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggNTAgKDU0OTgzKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5Hcm91cCA5PC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgaWQ9Ikdyb3VwLTkiPgogICAgICAgICAgICA8cmVjdCBpZD0iUmVjdGFuZ2xlLTExIiBmaWxsPSIjRTBFMEUwIiB4PSIwIiB5PSIwIiB3aWR0aD0iMyIgaGVpZ2h0PSIzIj48L3JlY3Q+CiAgICAgICAgICAgIDxyZWN0IGlkPSJSZWN0YW5nbGUtMTEtQ29weS0yIiBmaWxsPSIjRkZGRkZGIiB4PSIwIiB5PSIzIiB3aWR0aD0iMyIgaGVpZ2h0PSIzIj48L3JlY3Q+CiAgICAgICAgICAgIDxyZWN0IGlkPSJSZWN0YW5nbGUtMTEtQ29weSIgZmlsbD0iI0ZGRkZGRiIgeD0iMyIgeT0iMCIgd2lkdGg9IjMiIGhlaWdodD0iMyI+PC9yZWN0PgogICAgICAgICAgICA8cmVjdCBpZD0iUmVjdGFuZ2xlLTExLUNvcHktMyIgZmlsbD0iI0UwRTBFMCIgeD0iMyIgeT0iMyIgd2lkdGg9IjMiIGhlaWdodD0iMyI+PC9yZWN0PgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+');
+    }
+
+    &__hue-slider {
+      height: 8px;
+      background: linear-gradient(to right, #f00 0, #ff0 16%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 84%, #ff0004 100%);
+    }
+    
+    &__opacity-slider {
+      height: 8px;
+      margin-top: 16px;
+      background: linear-gradient(to right, rgba(255, 0, 0, 0) 0%, rgb(255, 0, 0) 100%);
+    }
+
+    &__color-rgba,
+    &__color-hsva {
+      display: flex;
+
+      div {
+        margin-right: 4px;
+      }
+
+      label {
+        display: block;
+        text-align: center;
+      }
+
+      input {
+        width: 44px;
+      }
+    }
+  }
+}
+
+@mixin host() {
+  display: inline-block;
+}
+
+@mixin base() {
+  @include theme.css-custom-property(width, --forge-color-picker-width, variables.$width);
+
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+@mixin input() {
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+
+@mixin gradient() {
+  position: relative;
+  outline: none;
+}
+
+@mixin gradient-color() {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, #000 100%), linear-gradient(to right, #fff 0, rgba(255, 255, 255, 0) 100%);
+  height: 152px;
+}
+
+@mixin gradient-thumb() {
+  border: 1px solid #fff;
+  border-radius: 50%;
+  // box-shadow: 0 0 3px rgba(0, 0, 0, 0.7), inset 0 0 2px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  position: absolute;
+  touch-action: none;
+  user-select: none;
+  transition: left 200ms cubic-bezier(0.25, 0.8, 0.25, 1) 0s, top 200ms cubic-bezier(0.25, 0.8, 0.25, 1) 0s;
+}

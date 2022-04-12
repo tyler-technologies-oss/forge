@@ -1,0 +1,20 @@
+<template>
+  <div class="mdc-slider mdc-slider--discrete mdc-slider--tick-marks" part="root">
+    <input class="mdc-slider__input" id="value-input" type="range" min="0" max="100" value="0" name="slider" step="10" aria-label="Choose value">
+    <div class="mdc-slider__track" part="track">
+      <div class="mdc-slider__track--inactive" part="track-inactive"></div>
+      <div class="mdc-slider__track--active" part="track-active">
+        <div class="mdc-slider__track--active_fill" part="track-active-fill"></div>
+      </div>
+      <div class="mdc-slider__tick-marks" part="tick-marks-container"></div>
+    </div>
+    <div class="mdc-slider__thumb" part="thumb">
+      <div class="mdc-slider__value-indicator-container" part="value-indicator-container">
+        <div class="mdc-slider__value-indicator" part="value-indicator">
+          <span class="mdc-slider__value-indicator-text" part="value-indicator-text">0</span>
+        </div>
+      </div>
+      <div class="mdc-slider__thumb-knob" part="thumb-knob"></div>
+    </div>
+  </div>
+</template>

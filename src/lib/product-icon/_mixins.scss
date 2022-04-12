@@ -1,0 +1,44 @@
+@use '../theme/theme';
+@use './variables';
+
+@mixin core-styles() {
+  .forge-product-icon {
+    &__background {
+      @include background;
+    }
+    &__container {
+      @include container;
+    }
+    &__icon,
+    &__text {
+      ::slotted(*) {
+        @include icon;
+      }
+    }
+  }
+}
+
+@mixin host() {
+  display: inline-block;
+}
+
+@mixin background() {
+  @include theme.css-custom-property(border-radius, --forge-product-icon-border-radius, 50%);
+  height: variables.$size;
+  width: variables.$size;
+  overflow: hidden;
+}
+
+@mixin container() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin icon() {
+  display: flex !important;
+  color: #ffffff !important;
+  font-size: var(--forge-product-icon-font-size, variables.$font-size) !important;
+}

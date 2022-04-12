@@ -1,0 +1,189 @@
+@use '../theme/theme';
+
+@mixin core-styles() {
+  .forge-scaffold {
+    @include base;
+  
+    &__header {
+      @include header;
+    }
+  
+    &__body {
+      @include body;
+  
+      // These next 3 selectors are needed for IE 11 support
+      ::slotted([slot=left]) {
+        @include body-aside;
+        @include left;
+      }
+  
+      ::slotted([slot=right]) {
+        @include body-aside;
+        @include right;
+      }
+
+      ::slotted([slot=body-left]) {
+        @include body-aside;
+        @include body-left-aside;
+      }
+  
+      ::slotted([slot=body-right]) {
+        @include body-aside;
+        @include body-right-aside;
+      }
+  
+      ::slotted([slot=body-header]) {
+        @include body-header;
+      }
+  
+      ::slotted([slot=body]) {
+        @include body-main;
+      }
+  
+      ::slotted([slot=body-footer]) {
+        @include body-footer;
+      }
+    }
+  
+    // These are the proper selectors to use for native Shadow DOM, but don't work in
+    // IE 11 (see above duplicate selectors for IE support)
+    ::slotted([slot=left]),
+    ::slotted([slot=right]),
+    ::slotted([slot=body-left]),
+    ::slotted([slot=body-right]) {
+      @include body-aside;
+    }
+  
+    ::slotted([slot=body-left]) {
+      @include body-left-aside;
+    }
+  
+    ::slotted([slot=body-right]) {
+      @include body-right-aside;
+    }
+  
+    ::slotted([slot=footer]) {
+      @include footer;
+    }
+
+    ::slotted([slot=left]) {
+      @include left;
+    }
+
+    ::slotted([slot=right]) {
+      @include right;
+    }
+  }
+}
+
+@mixin viewport-styles() {
+  @include theme.css-custom-property(width, --forge-scaffold-width, 100vw);
+  @include theme.css-custom-property(height, --forge-scaffold-height, 100vh);
+
+  --forge-scaffold-height: 100vh;
+  --forge-scaffold-width: 100vw;
+  
+  .forge-scaffold {
+    @include theme.css-custom-property(height, --forge-scaffold-height, 100vh);
+
+    --forge-scaffold-height: 100vh;
+
+    &__body {
+      @include theme.css-custom-property(width, --forge-scaffold-width, 100vw);
+
+      --forge-scaffold-width: 100vw;
+    }
+  }
+}
+
+@mixin host() {
+  @include theme.css-custom-property(width, --forge-scaffold-width, 100%);
+  @include theme.css-custom-property(height, --forge-scaffold-height, 100%);
+
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+}
+
+@mixin base() {
+  @include theme.css-custom-property(height, --forge-scaffold-height, 100%);
+  @include theme.css-custom-property(position, --forge-scaffold-position, relative);
+  @include theme.css-custom-property(overflow, --forge-scaffold-overflow, hidden);
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
+}
+
+@mixin header() {
+  grid-row: 1;
+  grid-column: 2;
+  min-width: 0;
+}
+
+@mixin body() {
+  @include theme.css-custom-property(width, --forge-scaffold-width, 100%);
+  @include theme.css-custom-property(position, --forge-scaffold-body-position, relative);
+  
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
+  grid-row: 2;
+  grid-column: 2;
+  overflow: hidden;
+}
+
+@mixin body-header() {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+@mixin body-main() {
+  overflow: auto;
+  grid-row: 2;
+  grid-column: 2;
+}
+
+@mixin body-footer() {
+  grid-row: 3;
+  grid-column: 2;
+}
+
+@mixin footer() {
+  grid-row: 3;
+  grid-column: 2;
+}
+
+@mixin body-aside() {
+  overflow: auto;
+}
+
+@mixin body-left-aside() {
+  grid-column: 1;
+
+  // When specifying a body-left slot, this allows the aside to span the last row
+  grid-row: 1/4;
+}
+
+@mixin body-right-aside() {
+  grid-column: 3;
+
+  // When specifying a body-left slot, this allows the aside to span the last row
+  grid-row: 1/4;
+}
+
+@mixin left() {
+  grid-column: 1;
+  grid-row: 1/5;
+}
+
+@mixin right() {
+  grid-column: 3;
+  grid-row: 1/5;
+}
+
+@mixin host() {
+  display: block;
+  height: 100%;
+  width: 100%;
+}

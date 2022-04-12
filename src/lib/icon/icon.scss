@@ -1,0 +1,21 @@
+@use './mixins';
+
+:host {
+  @include mixins.host;
+
+  > svg {
+    @include mixins.svg;
+  }
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@include mixins.theme('primary');
+@include mixins.theme('secondary');
+@include mixins.theme('warning');
+@include mixins.theme('danger');
+@include mixins.theme('success');
+@include mixins.theme('info');
+@include mixins.theme('tertiary');

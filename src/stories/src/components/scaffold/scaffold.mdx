@@ -1,0 +1,93 @@
+import { DefaultTemplate as ScaffoldDemo } from './templates/default';
+import { ScaffoldDefaultHtml, ScaffoldDefaultScss } from './code/scaffold-default';
+
+<PageSection>
+
+## Usage
+
+The scaffold component is intended to be used as a layout tool. You can use it for your full application layout, or even nest scaffolds within other scaffolds. Think of this component as a structural tool (it uses CSS grid under the hood) with named locations that allow you render any element you want in those named locations.
+
+> **Note:** The scaffold handles common page layouts, but it’s simply a wrapper around native CSS `grid` styles to aid in common application layouts. We recommend that you become familiar with `flexbox` and `grid` for scenarios where you cannot use the scaffold. Suggested learning resources:
+> - [CSS Tricks: A complete guide to CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+> - [Layout Land: CSS grid basics](https://www.youtube.com/watch?v=FEnRpy9Xfes&t=6s)
+> - [CSS Tricks: Flexbox basics](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+> - [MDN: Basics of Flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)
+
+Using a scaffold will help you place elements in pre-defined locations within a layout. This makes it very easy to spin up common layouts without having
+to write any CSS at all. For instance, by placing content within the built-in slots the component will handle overflowing content for you.
+
+> **Note:** It is recommended that you use a single container element for each slot within the scaffold. This
+> is because the scaffold applies specific CSS grid styles to the slotted elements, and this can cause unwanted
+> side-effects to your elements if you place things like buttons directly into the slots themselves.
+
+> **Note:** If you encounter rendering issues where content is stacked on the z-index, ensure that each named slot is used only once.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic application layout
+
+<LiveDemo layout="column" fullWidth  codeHtml={ScaffoldDefaultHtml()} codeScss={ScaffoldDefaultScss()}>
+  <ScaffoldDemo />
+</LiveDemo>
+
+> The Forge website itself uses the scaffold to help with the overall page layout. View the source to see it in action!
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="viewport" prop={false} type="string" defaultValue="false">
+
+Sets the `--forge-scaffold-height` and `--forge-scaffold-width` CSS custom properties to a value of `100vh` and `100vw` respectively.
+
+> By default, the scaffold will use `100%` height and width to stretch to fill its container.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name               | Description
+| :------------------| :-----------------
+| `left`            | Render content to the left of the body at the left of the scaffold.
+| `header`           | Renders content at the top of the scaffold.
+| `body`             | Render content below the header slot and expands to the bottom of the scaffold, or to the footer if specified.
+| `body-header`      | Render content above the scrollable body slot.
+| `body-left`        | Render content to the left of the body.
+| `body-right`       | Render content to the right of the body.
+| `body-footer`      | Render content at the bottom of the body.
+| `footer`           | Render content below the body at the bottom of the scaffold.
+| `right`            | Render content to the right of the body at the right of the scaffold.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                             | Description
+| :--------------------------------| :----------------
+| `--forge-scaffold-height`          | Controls the height of the root element. Default value is `100%`.
+| `--forge-scaffold-width`           | Controls the width of the root element. Default value is `100%`.
+| `--forge-scaffold-position`        | Controls the position of the root element. Default value is `relative`.
+| `--forge-scaffold-body-position`   | Controls the body position of the body element. Default value is `relative`.
+| `--forge-scaffold-overflow`        | Controls the overflow of the root element. Default value is `hidden`.
+
+</PageSection>

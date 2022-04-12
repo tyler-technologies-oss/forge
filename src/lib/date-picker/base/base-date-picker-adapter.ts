@@ -1,0 +1,222 @@
+import { getShadowElement } from '@tylertech/forge-core';
+import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent, ICalendarDateSelectEventData } from '../../calendar';
+import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
+import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions, randomChars } from '../../core';
+import { BaseComponent } from '../../core/base/base-component';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
+import { BASE_DATE_PICKER_CONSTANTS } from './base-date-picker-constants';
+import { createToggleElement } from './base-date-picker-utils';
+import { TEXT_FIELD_CONSTANTS } from '../../text-field';
+
+export interface IBaseDatePickerAdapter extends IBaseAdapter {
+  initialize(): void;
+  initializeAccessibility(): void;
+  destroy(): void;
+  setActiveDescendant(id: string): void;
+
+  // Mask
+  initializeMask(options: IDateInputMaskOptions): void;
+  destroyMask(): void;
+
+  // Toggle
+  tryCreateToggle(): void;
+  addToggleListener(type: string, listener: (event: Event) => void): void;
+  removeToggleListener(type: string, listener: (event: Event) => void): void;
+  
+  // Input
+  addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
+  removeInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
+  setInputValueChangedListener(context: any, listener: (value: any) => void): void;
+  hasInputElement(): boolean;
+  tryFocusInput(): void;
+  tryBlurInput(): void;
+  isInputDisabled(): boolean;
+  isInputFocused(): boolean;
+  setDisabled(value: boolean): void;
+  getInputValue(): string;
+  setInputValue(value: string, emitEvents: boolean): void;
+  selectInputText(): void;
+  emitInputEvent(type: string, data?: any): void;
+  
+  // Calendar
+  attachCalendar(calendarConfig: Partial<ICalendarComponent>, dropdownConfig?: ICalendarDropdownPopupConfig): void;
+  detachCalendar(): void;
+  goToCalendarDate(date: Date): void;
+  addDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void;
+  removeDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void;
+  setCalendarValue(value: Date | DateRange | null): void;
+  setCalendarMinDate(value: Date | null): void;
+  setCalendarMaxDate(value: Date | null): void;
+  setCalendarDisabledDates(value: Date | Date[] | null): void;
+  setCalendarDisabledDaysOfWeek(value: DayOfWeek[]): void;
+  setCalendarDisableDayCallback(disableDayCallback: (date: Date) => boolean): void;
+  setCalendarActiveDate(date: Date): void;
+  propagateCalendarKey(evt: KeyboardEvent): void;
+}
+
+export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends BaseAdapter<T> implements IBaseDatePickerAdapter {
+  protected _identifier: string;
+  protected _calendarDropdown?: ICalendarDropdown;
+  protected _toggleElement?: HTMLElement;
+
+  constructor(component: T) {
+    super(component);
+    this._identifier = randomChars();
+  }
+
+  // Initialization
+  public abstract initializeAccessibility(): void;
+  protected abstract _initializeInput(): void;
+  protected abstract _initializeCalendarDropdown(): void;
+  
+  // Mask
+  public abstract initializeMask(options: IDateInputMaskOptions): void;
+  public abstract destroyMask(): void;
+
+  // Calendar
+  public abstract setActiveDescendant(id: string): void;
+  
+  // Input
+  public abstract hasInputElement(): boolean;
+  public abstract hasInputElement(): boolean;
+  public abstract tryFocusInput(): void;
+  public abstract tryBlurInput(): void;
+  public abstract isInputDisabled(): boolean;
+  public abstract isInputFocused(): boolean;
+  public abstract setDisabled(value: boolean): void;
+  public abstract addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
+  public abstract removeInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
+  public abstract setInputValueChangedListener(context: any, listener: (value: any) => void): void;
+  public abstract getInputValue(): string;
+  public abstract setInputValue(value: string, emitEvents: boolean): void;
+  public abstract selectInputText(): void;
+  public abstract emitInputEvent(type: string, data?: any): void;
+
+  public initialize(): void {
+    this._initializeInput();
+  }
+
+  public destroy(): void {
+    this._calendarDropdown?.destroy();
+  }
+
+  public addToggleListener(type: string, listener: (event: Event) => void): void {
+    this._toggleElement?.addEventListener(type, listener);
+  }
+
+  public removeToggleListener(type: string, listener: (event: Event) => void): void {
+    this._toggleElement?.removeEventListener(type, listener);
+  }
+
+  public attachCalendar(calendarConfig: Partial<ICalendarComponent>, dropdownConfig?: ICalendarDropdownPopupConfig): void {
+    this._initializeCalendarDropdown();
+    if (!this._calendarDropdown) {
+      throw new Error('CalendarDropdown was not initialized.');
+    }
+    if (dropdownConfig) {
+      Object.assign(this._calendarDropdown, dropdownConfig);
+    }
+    this._calendarDropdown.open(calendarConfig);
+    this._calendarDropdown.dropdownElement?.style.setProperty('--forge-calendar-width', '320px');
+    this._calendarDropdown.calendar?.style.setProperty('margin', '8px');
+  }
+
+  public detachCalendar(): void {
+    if (this._calendarDropdown && this._calendarDropdown.isOpen) {
+      this._calendarDropdown.close();
+    }
+  }
+
+  public goToCalendarDate(date: Date): void {
+    this._calendarDropdown?.calendar?.goToDate(date, true);
+  }
+
+  public addDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void {
+    this._calendarDropdown?.calendar?.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, listener);
+  }
+
+  public removeDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void {
+    this._calendarDropdown?.calendar?.removeEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, listener);
+  }
+
+  public setCalendarValue(value: Date | DateRange | null): void {
+    if (this._calendarDropdown?.calendar) {
+      this._calendarDropdown.calendar.value = value;
+    }
+  }
+
+  public setCalendarMinDate(value: Date | null): void {
+    if (this._calendarDropdown?.calendar) {
+      this._calendarDropdown.calendar.min = value;
+    }
+  }
+
+  public setCalendarMaxDate(value: Date | null): void {
+    if (this._calendarDropdown?.calendar) {
+      this._calendarDropdown.calendar.max = value;
+    }
+  }
+
+  public setCalendarDisabledDates(value: Date | Date[] | null): void {
+    if (this._calendarDropdown?.calendar) {
+      this._calendarDropdown.calendar.disabledDates = value;
+    }
+  }
+
+  public setCalendarDisabledDaysOfWeek(value: DayOfWeek[]): void {
+    if (this._calendarDropdown?.calendar) {
+      this._calendarDropdown.calendar.disabledDaysOfWeek = value;
+    }
+  }
+
+  public setCalendarDisableDayCallback(disableDayCallback: (date: Date) => boolean): void {
+    if (this._calendarDropdown?.calendar) {
+      this._calendarDropdown.calendar.disabledDateBuilder = disableDayCallback;
+    }
+  }
+
+  public setCalendarActiveDate(date: Date): void {
+    this._calendarDropdown?.calendar?.setActiveDate(date);
+  }
+
+  public propagateCalendarKey(evt: KeyboardEvent): void {
+    console.log(evt);
+    this._calendarDropdown?.calendar?.handleKey(evt);
+  }
+
+  public tryCreateToggle(): void {
+    const textField = this._component.querySelector('forge-text-field');
+    const toggleElement = this._component.querySelector(BASE_DATE_PICKER_CONSTANTS.selectors.TOGGLE);
+    if (textField) {
+      const existingIconButton = textField.querySelector(`${ICON_BUTTON_CONSTANTS.elementName}[slot=trailing]`);
+      if (existingIconButton || toggleElement) {
+        this._toggleElement = (existingIconButton || toggleElement) as IIconButtonComponent;
+        return;
+      }
+
+      const iconButtonElement = this._createToggleElement();
+      textField.appendChild(iconButtonElement);
+      this._toggleElement = iconButtonElement;
+    } else if (toggleElement) {
+      this._toggleElement = toggleElement as HTMLElement;
+    }
+  }
+
+  protected _createToggleElement(): HTMLElement {
+    return createToggleElement('insert_invitation');
+  }
+
+  protected _getDefaultTargetElement(): HTMLElement {
+    // This component is often used with the Forge text-field, if so, let's target our popup around
+    // one if its internal elements for best alignnment
+    const textField = this._component.querySelector('forge-text-field');
+    if (textField && textField.shadowRoot) {
+      const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
+      if (textFieldRoot) {
+        return textFieldRoot;
+      }
+    }
+
+    return this._component.querySelector('input') || this._component;
+  }
+}

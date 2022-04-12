@@ -1,0 +1,116 @@
+import { DefaultTemplate as BackdropDemo } from './templates/default';
+import { BackdropCodeHtml, BackdropCodeTs } from './code/backdrop';
+
+<PageSection>
+
+## Usage
+
+The backdrop component is intended to be used as a background behind modal elements, such as the dialog for example. You will
+almost always use this component as part of the composition that makes up other larger components, but it's exposed from the library
+for cases where another library or application needs to make use of it.
+
+You typically would use a backdrop when you want to prevent access to elements behind the modal element, as well as draw focus from
+the user to a specific modal surface area of the screen.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+<LiveDemo 
+dense={true} 
+codeHtml={BackdropCodeHtml()} 
+codeTs={BackdropCodeTs()}>
+  <BackdropDemo/>
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="delay" type="number" defaultValue="0">
+
+Sets the delay (in milliseconds) before the fade-in animation occurs.
+
+</PropertyDef>
+
+<PropertyDef name="maxOpacity" type="number" defaultValue="0.54">
+
+Sets the maximum opacity that the element will fade-in to.
+
+</PropertyDef>
+
+<PropertyDef name="appearance" type="BackdropAppearance" defaultValue="undefined">
+
+Gets/sets the theme style to use. Valid values: "light", "dark".
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="fadeIn()">
+
+Starts the fade in animation.
+
+</MethodDef>
+
+<MethodDef name="fadeOut()">
+
+Starts the fade out animation.
+
+</MethodDef>
+
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                     | Description
+| :----------------------- | :-----------------
+| `forge-backdrop-click`     | Emits when the backdrop receives a click event.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                    | Description
+| :---------------------------------------| :-----------------
+| `--forge-backdrop-theme-background`       | Controls the overlay color.
+| `--forge-z-index-backdrop`                | Controls the z-index.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### BackdropAppearance
+
+```ts
+type BackdropAppearance = 'light' | 'dark' | undefined;
+```
+
+</PageSection>

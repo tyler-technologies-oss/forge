@@ -1,0 +1,202 @@
+import { DefaultTemplate as ViewSwitcherDemo } from './templates/default';
+import { ViewSwitcherDefaultCodeHtml, ViewSwitcherDefaultCodeTs } from './code/view-switcher-default';
+
+<PageSection>
+
+## Usage
+
+The view switcher component allows you to wrap a `<forge-view>` element around any HTML content to control transitions between adjecent content.
+By default the view switcher is set to no transition, with options to either `fade` or `slide` as a transition.
+
+> **Note:** Content hidden by this component is still present (hidden) in the DOM.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+The following code snippet demonstrates a common usage in the HTML:
+
+```html
+<forge-view-switcher>
+  <forge-view>View one</forge-view>
+  <forge-view>View two</forge-view>
+  <forge-view>View three</forge-view>
+</forge-view-switcher>
+```
+
+The view switcher can be controlled through javascript using pagination style methods.
+
+```js
+const viewSwitcher = document.querySelector('forge-view-switcher');
+viewSwitcher.next();
+viewSwitcher.previous();
+viewSwitcher.goToStart();
+viewSwitcher.goToEnd();
+```
+
+### With Tab Bar
+
+The switcher can be paired with [forge-tab](?path=/story/components-tab-bar--default) to control view switching via tab controls.
+
+```html
+<div role="tablist">
+  <h4>Controlled by Tab Bar</h4>
+  <forge-tab-bar>
+    <forge-tab>View one</forge-tab>
+    <forge-tab>View two</forge-tab>
+    <forge-tab>View three</forge-tab>
+  </forge-tab-bar>
+  <forge-divider></forge-divider>
+  <br/>
+  <forge-view-switcher>
+    <forge-view role="tabpanel">
+      <div>View one</div>
+    </forge-view>
+    <forge-view role="tabpanel">
+      <div style="height: 300px;">View two</div>
+    </forge-view>
+    <forge-view role="tabpanel">
+      <div style="height: 500px;">View three</div>
+    </forge-view>
+  </forge-view-switcher>
+</div>
+```
+
+```js
+const tabBar = document.querySelector('forge-tab-bar');
+const viewSwitcher = document.querySelector('forge-view-switcher');
+tabBar.addEventListener('forge-tab-bar-activate', function(evt) {
+  viewSwitcher.index = evt.detail.index;
+});
+```
+
+> **Note:** This component does not add and remove the non-visible views from the DOM. It will toggle their visibility based on the animation type. If `none` is used, the `display` will be set to `none`, but if you're using `slide` or `fade` then the views are still rendered, but hidden with `visibility: hidden`. This is important to note when using this component in Angular because binding will still occur on the non-visible views.
+
+<LiveDemo 
+layout={'column'} 
+codeHtml={ViewSwitcherDefaultCodeHtml()} 
+codeTs={ViewSwitcherDefaultCodeTs()}>
+  <ViewSwitcherDemo/>
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="index" type="number" defaultValue="0">
+
+  Gets/sets the currently displayed view index.
+
+</PropertyDef>
+
+<PropertyDef name="animationType" type="string" defaultValue="none">
+
+  Gets/sets the animation type to use.
+
+  Valid values: `none`, `slide`, or `fade`
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="next(): void">
+
+  Switches to the next view.
+
+</MethodDef>
+
+<MethodDef name="previous(): void">
+
+  Switches to the previous view.
+
+</MethodDef>
+
+<MethodDef name="goToStart(): void">
+
+  Switches to the first view.
+
+</MethodDef>
+
+<MethodDef name="goToEnd(): void">
+
+  Switches to the last view.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name               | Description
+| :------------------| :--------------------
+| `default`          | The default (unnamed) slot will override any content set by the component.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                   | Description
+| :--------------------------------------| :-----------------
+| `--forge-view-switcher-height`             | Controls the height of the internal root element. Default is `auto`.
+| `--forge-view-switcher-animation-duration` | Controls the animation duration of a view transition. Default is `500ms`.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IViewSwitcherView
+
+```ts
+interface IViewSwitcherView {
+  element: HTMLElement;
+}
+```
+
+### ViewAnimationDirection
+
+```ts
+enum ViewAnimationDirection {
+  Left = 'left',
+  Right = 'right'
+}
+```
+
+### ViewSwitcherAnimationType
+
+```ts
+enum ViewSwitcherAnimationType {
+  None = 'none',
+  Slide = 'slide',
+  Fade = 'fade'
+}
+```
+
+
+</PageSection>

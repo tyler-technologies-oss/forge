@@ -1,0 +1,23 @@
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  display: block;
+  contain: layout;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+/// Remove margin from all commonly used native elements that have default margin
+.forge-toolbar {
+  ::slotted(h1) { margin: 0; }
+  ::slotted(h2) { margin: 0; }
+  ::slotted(h3) { margin: 0; }
+  ::slotted(h4) { margin: 0; }
+  ::slotted(h5) { margin: 0; }
+  ::slotted(h6) { margin: 0; }
+  ::slotted(p)  { margin: 0; }
+}

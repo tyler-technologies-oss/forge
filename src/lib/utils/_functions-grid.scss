@@ -1,0 +1,3 @@
+@function cell-size($span: 1, $size: 256, $gap: 16) {
+  @return (($span - 1) * $gap) + ($span * $size);
+}

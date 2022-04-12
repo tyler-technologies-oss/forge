@@ -1,0 +1,155 @@
+import { DefaultTemplate as TooltipDemo } from './templates/default';
+import { TooltipDefaultHtml } from './code/tooltip-default';
+
+<PageSection>
+
+## Usage
+
+The tooltip is a component that attaches to another HTML element. By placing `<forge-tooltip>` as a sibling, after an element it will position itself around the attached element.
+
+You can also attach to none sibling elements with the `target` attribute which takes a css selector.
+
+The tooltip opens based on mouse interactions.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+The following code snippet demonstrates a common usage:
+
+```html
+<div>
+  <forge-icon name="inbox"></forge-icon>
+  <forge-tooltip>Inbox</forge-tooltip>
+</div>
+```
+
+<LiveDemo layout="column" codeHtml={TooltipDefaultHtml()}>
+  <TooltipDemo />
+</LiveDemo>
+
+
+### Targeting a different host element
+
+Tooltip can also target a specific element using the `target` attribute:
+
+```html
+<div id="tooltip-host">...</div>
+<forge-tooltip target="tooltip-host">Tooltip text</forge-tooltip>
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+
+<PropertyDef name="text" type="string" defaultValue="''">
+
+  The text to display in the tooltip.
+
+</PropertyDef>
+
+<PropertyDef name="target" type="string" defaultValue="''">
+
+  A CSS selector to use for finding the target element.
+
+</PropertyDef>
+
+
+<PropertyDef name="delay" type="number" defaultValue="500">
+
+  A delay value (in milliseconds) to wait before display the tooltip when interacting with the target element.
+
+</PropertyDef>
+
+<PropertyDef name="position" type="PopupPlacement" defaultValue="right">
+
+  The tooltip position around the target element.
+
+  Valid values: `top`, `right`, `bottom`, `left`.
+
+</PropertyDef>
+
+<PropertyDef name="open" type="boolean">
+
+  The state of the tooltip whether its open or closed.
+
+</PropertyDef>
+
+<PropertyDef name="tooltipElement" type="HTMLElement | null">
+
+  Gets the internal tooltip element.
+
+</PropertyDef>
+
+<PropertyDef name="builder" type="TooltipBuilder" defaultValue="undefined">
+
+  A builder function that returns a string or HTML element to render inside the tooltip dynamically.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="hide(): void">
+
+  Hides the tooltip if it is open.
+
+</MethodDef>
+
+> **Tip:** Call `hide()` at the beginning of a drag and drop operations on the target element.
+
+</PageSection>
+
+---
+<PageSection>
+
+## CSS custom properties
+
+| Name                                          | Description
+| :---------------------------------------------| :----------------
+| `--forge-tooltip-theme-background`              | Controls the background-color of the tooltip.
+| `--forge-tooltip-theme-on-background`           | Controls the font color of the tooltip.
+| `--forge-tooltip-font-size`                     | Controls the font-size of the tooltip.
+| `--forge-tooltip-max-width`                     | Controls the max-width of the tooltip.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+Below you will find the API for all custom public type declarations that you will need when using this component.
+
+### PopupPlacement
+
+```ts
+type PopupPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
+```
+
+### TooltipBuilder
+
+```ts
+type TooltipBuilder = () => HTMLElement;
+```
+
+</PageSection>
+
+---

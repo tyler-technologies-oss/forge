@@ -1,0 +1,19 @@
+<template>
+  <button class="forge-tab" type="button" part="button">
+    <slot name="top"></slot>
+    
+    <span class="forge-tab__content" part="content">
+      <slot name="leading"></slot>
+      <span class="forge-tab__text" part="text">
+        <slot></slot>
+      </span>
+      <slot name="trailing"></slot>
+    </span>
+
+    <span class="mdc-tab-indicator" part="indicator-container">
+      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline" part="indicator"></span>
+    </span>
+
+    <span class="forge-tab__ripple" part="ripple-container"></span>
+  </button>
+</template>

@@ -1,0 +1,76 @@
+import { DefaultTemplate as CheckboxDemo } from './templates/default';
+import { CheckboxDefaultCodeHtml } from './code/checkbox-default';
+import { CheckboxLabelCodeHtml } from './code/checkbox-label';
+
+<PageSection>
+
+## Usage
+
+This component is purely used for styling purposes. The native `<input type="checkbox">` element is left exposed, and you are to interact with that element as
+you would any other native `<input type="checkbox">`.
+
+> If you are using a framework such as Angular, React, Vue... etc. be sure that all bindings are placed on the `<input>` element. Do NOT
+> place any bindings on the `<forge-checkbox>` element as those will not be propagated through to the `<input>`.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+<LiveDemo dense codeHtml={CheckboxDefaultCodeHtml()}>
+  <CheckboxDemo />
+</LiveDemo>
+
+### With label
+
+<LiveDemo dense codeHtml={CheckboxLabelCodeHtml()}>
+  <CheckboxDemo hasLabel />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="dense" type="boolean" defaultValue="false">
+
+Controls dense state which renders the component using a smaller container and ripple size.
+  
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name               | Description
+| :------------------| :----------------
+| `input`            | Reserved for the required `<input>` element.
+| `label`            | Reserved for a label element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :----------------
+| `--mdc-theme-tertiary`                          | Controls the checked theme color.
+| `--mdc-theme-text-primary-on-background`        | Controls the unchecked theme color.
+| `--mdc-theme-text-primary-on-dark`              | Controls the disabled checked color.
+
+</PageSection>

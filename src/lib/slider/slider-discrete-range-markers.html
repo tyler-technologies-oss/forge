@@ -1,0 +1,35 @@
+<template>
+  <div class="mdc-slider mdc-slider--range mdc-slider--discrete mdc-slider--tick-marks" part="root">
+    <input class="mdc-slider__input" id="value-input" type="range" min="0" max="100" value="0" step="10" name="rangeStart" aria-label="Choose start range value">
+    <input class="mdc-slider__input" id="value-input-start" type="range" min="0" max="100" value="0" step="10" name="rangeEnd" aria-label="Choose end range value">
+
+    <!-- Track -->
+    <div class="mdc-slider__track" part="track">
+      <div class="mdc-slider__track--inactive" part="track-inactive"></div>
+      <div class="mdc-slider__track--active" part="track-active">
+        <div class="mdc-slider__track--active_fill" part="track-active-fill"></div>
+      </div>
+      <div class="mdc-slider__tick-marks" part="tick-marks-container"></div>
+    </div>
+
+    <!-- Start thumb -->
+    <div class="mdc-slider__thumb" part="thumb-start">
+      <div class="mdc-slider__value-indicator-container" part="thumb-start-value-indicator-container">
+        <div class="mdc-slider__value-indicator" part="thumb-start-value-indicator">
+          <span class="mdc-slider__value-indicator-text" part="thumb-start-value-indicator-text">0</span>
+        </div>
+      </div>
+      <div class="mdc-slider__thumb-knob" part="thumb-start-knob"></div>
+    </div>
+
+    <!-- End thumb -->
+    <div class="mdc-slider__thumb" part="thumb-end">
+      <div class="mdc-slider__value-indicator-container" part="thumb-end-value-indicator-container">
+        <div class="mdc-slider__value-indicator" part="thumb-end-value-indicator">
+          <span class="mdc-slider__value-indicator-text" part="thumb-end-value-indicator-text">100</span>
+        </div>
+      </div>
+      <div class="mdc-slider__thumb-knob" part="thumb-end-knob"></div>
+    </div>
+  </div>
+</template>

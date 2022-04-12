@@ -1,0 +1,153 @@
+import { DefaultTemplate as AppBarProfileDemo } from './templates/default';
+import { AppBarProfileButtonDefaultCodeHtml, AppBarProfileButtonDefaultCodeTs } from './code/app-bar-profile-default';
+
+<PageSection>
+
+## Usage
+
+For convenience Forge provides the `<forge-profile-button>` component. This component uses an icon-button
+(with a predefined avatar), and is responsible for displaying profile information within a popup. The power of
+this component is that it will ensure a consistent experience for users across all applications that consume it.
+
+If necessary, you can use the `profileCardBuilder` API to provide custom content within the profile card popup.
+
+> It is expected that you place this component in the `end` slot of the app-bar for consistency and familiarity for users.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Common
+
+A common usage of the profile button will require you to provide some basic information about the user so that it can properly display the data
+in a familiar location for users. This information needs to be available prior to the user opening the popup.
+
+<LiveDemo layout="column" fullWidth  codeHtml={AppBarProfileButtonDefaultCodeHtml()} codeTs={AppBarProfileButtonDefaultCodeTs()}>
+  <AppBarProfileDemo />
+</LiveDemo>
+
+> Always place the `<forge-app-bar-profile-button>` element within the `profile` slot of the app-bar.
+
+### Custom content
+
+The profile card allows for custom content to be placed within its template. This is provided in the form of a callback that you can use to generate DOM
+that the component will render for you. You will need to use JavaScript to accomplish this.
+
+The following snippet demonstrates basic usage in vanilla JavaScript. You could alternatively dynamically created an Angular component for instance and return
+a reference to its host element to render within the profile card. Don't forget to clean up the element to avoid memory leaks in this scenario.
+
+```js
+profileButton.profileCardBuilder = () => {
+  const list = document.createElement('forge-list');
+  // ...
+  return list;
+};
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="fullName" type="string" defaultValue="undefined">
+
+  The users full name. This will be used for the `avatarText` by default as well.
+
+</PropertyDef>
+
+<PropertyDef name="email" type="string" defaultValue="undefined">
+
+  The users email address.
+
+</PropertyDef>
+
+<PropertyDef name="avatarImageUrl" type="string" defaultValue="undefined">
+
+  A URL to use for the user profile avatar image. This propagates to the internal avatar component.
+
+</PropertyDef>
+
+<PropertyDef name="avatarLetterCount" type="number" defaultValue="2">
+
+  The number of characters to show in the avatar. This propagates to the internal avatar component.
+
+</PropertyDef>
+
+<PropertyDef name="avatarText" type="string" defaultValue="undefined">
+
+  If different than the `fullName`, this will be the text used for the avatar instead. This propagates to the internal avatar component.
+
+</PropertyDef>
+
+<PropertyDef name="signOutButton" type="boolean" defaultValue="true">
+
+  Gets/sets the visibility of the "Sign out" button.
+
+</PropertyDef>
+
+<PropertyDef name="profileButton" type="boolean" defaultValue="false">
+
+  Gets/sets the visbility of the "Profile" button.
+
+</PropertyDef>
+
+<PropertyDef name="profileCardBuilder" type="AppBarProfileButtonProfileCardBuilder" defaultValue="undefined">
+
+  The callback that can be used to provide custom content within the profile card.
+
+  It's expected that you will bind a callback to this property that the component can use to fetch custom content that you want to render
+  within the profile card. It's expected that you will return a reference to a single HTML that can be rendered in the slot.
+
+  If you choose to use a dynamic Angular component for instance, you will want to ensure that you properly clean it up to avoid memory leaks.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                            | Description
+| :-------------------------------| :-------------------
+| `forge-profile-card-sign-out`     | Emits when the "Sign out" button is clicked.
+| `forge-profile-card-profile`      | Emits when the "Profile" button is clicked.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IProfileCardConfig
+
+```ts
+interface IAppBarProfileCardConfig {
+  fullName: string;
+  email: string;
+  signOut: boolean;
+  profile: boolean;
+  avatarText: string;
+  avatarImageUrl: string;
+  avatarLetterCount: number;
+}
+```
+
+### AppBarProfileButtonProfileCardBuilder
+
+```ts
+type AppBarProfileButtonProfileCardBuilder = () => HTMLElement;
+```
+
+</PageSection>

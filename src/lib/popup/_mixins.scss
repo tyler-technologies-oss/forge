@@ -1,0 +1,81 @@
+@use '@material/animation/animation' as mdc-animation;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/menu-surface/mixins' as mdc-menu-surface-mixins;
+@use '../theme/theme';
+@use './variables';
+
+@mixin host() {
+  @include theme.z-index(popup);
+  @include mdc-menu-surface-mixins.shape-radius(medium, false);
+
+  display: inline-block;
+  box-sizing: border-box;
+  outline: none;
+  position: absolute;
+  overflow: visible;
+}
+
+@mixin base() {
+  @include theme.css-custom-property(min-width, --min-width, variables.$min-width);
+  @include theme.property(background-color, elevated-surface);
+  @include theme.property(box-shadow, popup-elevation);
+  @include mdc-menu-surface-mixins.ink-color(on-surface);
+  @include mdc-menu-surface-mixins.shape-radius(medium, false);
+
+  display: none;
+  box-sizing: border-box;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  transform: scale(1);
+  transform-origin: 50% 24px 0;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+      opacity variables.$animation-duration linear,
+      transform variables.$animation-duration mdc-animation.$deceleration-curve-timing-function;
+}
+
+@mixin opening() {
+  display: block;
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+@mixin closed() {
+  display: block;
+  opacity: 0;
+  transition: opacity variables.$animation-duration linear;
+}
+
+@mixin open() {
+  display: block;
+  transform: scale(1);
+  opacity: 1;
+}
+
+@mixin core-styles() {
+  .forge-popup {
+    @include base;
+    @include theme.scrollbar;
+
+    &--opening {
+      @include opening;
+    }
+
+    &--closed {
+      @include closed;
+    }
+
+    &--open {
+      @include open;
+    }
+    
+    &--select {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      max-height: 256px;
+      overflow-y: auto;
+    }
+  }
+}

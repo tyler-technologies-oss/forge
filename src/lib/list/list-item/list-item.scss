@@ -1,0 +1,25 @@
+@use '@material/typography' as mdc-typography;
+@use '../../theme/theme';
+@use './mixins';
+@use '../../ripple/forge-ripple';
+@use '../../typography/mixins' as typography-mixins;
+@use './variables';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+// This is here until Firefox supports :host-context()...
+:host([forge-drawer-context=true]) {
+  @include mixins.drawer-context-styles;
+}
+
+:host([dense]) {
+  @include mdc-typography.typography(body2);
+}

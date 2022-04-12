@@ -1,0 +1,10 @@
+.badge-display {
+  display: flex;
+  width: inherit;
+  flex-wrap: wrap;
+
+  forge-badge {
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
+}

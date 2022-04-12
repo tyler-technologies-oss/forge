@@ -1,0 +1,73 @@
+@use '../../theme/theme';
+@use '../tab/variables';
+
+@mixin core-styles() {
+  .forge-tab-bar {
+    @include base;
+
+    &--underlined {
+      &::after {
+        @include theme.property(border-bottom-color, border-color);
+  
+        content: '';
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        box-sizing: border-box;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    }
+
+    &--align-center {
+      .mdc-tab-scroller__scroll-content {
+        justify-content: center;
+      }
+    }
+
+    &--align-end {
+      .mdc-tab-scroller__scroll-content {
+        justify-content: flex-end;
+      }
+    }
+
+    &--stacked {
+      @include stacked;
+
+      .mdc-tab-scroller {
+        height: 100%;
+      }
+    }
+  }
+
+  .mdc-tab-scroller {
+    z-index: 1;
+    width: 100%;
+
+    &__scroll-area {
+      height: 100%;
+      overflow-x: auto;
+      scrollbar-width: none; // Hide scrollbar in Firefox
+    }
+  }
+}
+
+@mixin host() {
+  display: block;
+  overflow: hidden;
+}
+
+@mixin base() {
+  @include theme.css-custom-property(height, --forge-tab-bar-height, variables.$height);
+
+  display: flex;
+  position: relative;
+}
+
+@mixin stacked() {
+  @include theme.css-custom-property(height, --forge-tab-bar-height, variables.$height-stacked);
+
+  align-items: center;
+}

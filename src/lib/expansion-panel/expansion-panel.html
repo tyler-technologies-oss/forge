@@ -1,0 +1,10 @@
+<template>
+  <div class="forge-expansion-panel" part="root">
+    <div class="forge-expansion-panel__header" role="button" aria-controls="content" aria-expanded="false" part="header">
+      <slot name="header"></slot>
+    </div>
+    <div id="content" role="group" class="forge-expansion-panel__content" style="height: 0; opacity: 0;" part="content">
+      <slot></slot>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,35 @@
+@use '../theme/theme';
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([positioned]) {
+  @include mixins.host-positioned;
+}
+
+:host([dot]) {
+  top: 0.5rem;
+  
+  .forge-badge > slot {
+    display: none;
+  }
+}
+
+:host([static]) {
+  @include mixins.static;
+}
+
+@include mixins.default-theme();
+@include mixins.theme('danger');
+@include mixins.theme('warning');
+@include mixins.theme('success');
+@include mixins.theme('info-primary');
+@include mixins.theme('info-secondary');

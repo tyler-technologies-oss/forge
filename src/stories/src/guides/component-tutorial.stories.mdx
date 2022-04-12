@@ -1,0 +1,427 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Guides/Component tutorial" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Guide' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Guide: Component tutorial
+
+In the following guide we will create a new Forge Web Component using the CLI utility, and add some functionality to it to
+make it do something interesting. This component will be a simple component that doesn't do anything spectacular, but it will
+introduce you to the Forge component development process, architecture, and all of the various patterns that you'll need to
+use when developing more complex components or modifying an existing component.
+
+> **Important:** The following commands must be run within a Forge Web Component project. It assumes that you have either 
+> already installed the Forge CLI tool on your machine (for which you will use to generate a new blank Forge project) or you
+> have cloned the existing Forge repository (recommended).
+
+It is **recommended** that you read the [component architecture](?path=/story/guides-component-architecture--page) page before continuing
+to make sure that you are up to speed on terminology and archicture best practices.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tutorial (optional)
+
+If you are working directly in the standard Forge repository, then you can continue on to step 1. If you'd like to 
+create a new empty Forge project, please run the following command and follow the prompts:
+
+```bash
+forge new
+```
+
+> This command requires that you have installed the `forge` CLI on your machine globally:
+> `npm install -g @tylertech/forge-cli --registry https://tylertech.jfrog.io/artifactory/api/npm/npm/`
+
+### Step 1: Generate the component
+
+The component we are going to create is simply going to be a square that allows the user to click on it, causing the
+square to choose a random color for itself. It will emit an event to the consumer letting them know when that happens.
+
+This simple component will expose you to most of the necessary patterns that you'll need to follow in larger, more
+complex components going forward. Let's dive in!
+
+> Tip: run the command `forge help` for info about all of the commands available in the CLI.
+
+The first thing we're going to do is generate a new Web Component using the Forge CLI tool:
+
+```bash
+npx forge generate component color-square
+```
+
+> **Note:** we're using `npx` here because the Forge CLI is installed as a dependency within each Forge project, and this
+> will ensure that you're using the compatible CLI version for your project.
+
+At this point, you should see a new directory within the `src/lib` directory called `color-square`.
+
+Let's get to know the files that were just created for us:
+
+* **color-square.ts**
+  * This is the custom element class.
+  * Instantiates the foundation and adapter
+  * Imports your HTML template and CSS styles.
+  * Uses Shadow DOM by default.
+* **color-square-foundation.ts**
+  * This is the class for controlling the business logic of your web component.
+  * Should only contain state and component logic, and should **never** communicate directly with the DOM.
+* **color-square-adapter.ts**
+  * This is the DOM adapter. The only responsibility of this class is to communicate with the DOM of your component for read/write operations.
+  * It's best practice to allocate references to the elements you communicate with often from your template within the constructor of this class.
+* **color-square-constants.ts**
+  * Contains all constant values used across the component.
+  * Defines the custom element name.
+  * Put all constant strings, numbers, selectors, class names, event names... etc. here for easy access within your component classes, as well as by consumers of your library.
+* **color-square.html**
+  * This is the component template that will be placed in the Shadow DOM.
+  * It is required to wrap all content in `<template>` tags.
+* **color-square.scss**
+  * This is the Sass stylesheet for defining the selectors that your component will use to style its template.
+  * Where possible, use variables, mixins, and functions for style content so that it is reusable.
+  * **Note:** use Sass modules (`@use` instead of `@import`) for better separation and organization of your styles.
+* **_mixins.scss**
+  * The Sass partial that contains all mixins.
+  * Imported in `color-square.scss`.
+* **_variables.scss**
+  * The Sass partial that contains all variables.
+  * Imported in `_mixins.scss`.
+* **index.ts**
+  * This is the main entry point that defines the public members for this module.
+  * Exports a component definition function that can be used to register this specific custom element with the browser.
+
+### Step 2: Add state to the foundation
+
+We need to allow for setting the color of our component. This will be done by adding a state property to our foundation class.
+  
+Add a getter/setter property and backing field to the `ColorSquareFoundation` class to hold the color state value:
+
+```ts expanded
+private _color: string;
+
+public get color(): string {
+  return this._color;
+}
+
+public set color(value: string) {
+  if (this._color !== value) {
+    this._color = value;
+  }
+}
+```
+
+> Note: It's important that you check for value equality in the setter to ensure that when we mirror this value to an attribute
+> later on in the tutorial, that we don't cause an infinite loop.
+
+### Step 3: Add a property to the public API of the component
+
+Add a property to the `ColorSquareComponent` class to expose a public API on the component that can be used to set the color via JavaScript.
+
+```ts expanded
+// Always define all public properties in the component interface as well
+interface IColorSquareComponent {
+  color: string;
+}
+
+public get color(): string {
+  return this._foundation.color;
+}
+
+public set color(value: string) {
+  this._foundation.color = value;
+}
+```
+
+> You'll notice that the component will just get/set properties within the foundation. This is an important pattern to
+> allow for the ability to reuse the foundation class if necessary. The custom element class should **never** hold state.
+
+### Step 4: Accept input via HTML attributes
+
+Modify the `observedAttributes` property of the `ColorSquareComponent` class to add a `color` value to the array. It will
+accept a string value for the color to display.
+
+> Properties that contain primitive types of data should always have a corresponding attribute available. Any complex types
+> such as arrays or objects, should NOT have a corresponding attribute to avoid losing the reference to those objects.
+>
+> Complex types should only be set via the public JavaScript API for the component.
+
+```ts
+public static get observedAttributes() {
+  return [COLOR_SQUARE_CONSTANTS.attributes.COLOR];
+}
+```
+
+Notice the use of the constants to access the name of the color attribute. Always reference all strings as constants.
+
+### Step 5: React to changing attribute values
+
+Modify the `attributeChangedCallback` lifecycle method to react to the changing of the `color` attribute.
+
+```ts expanded
+public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  switch(name) {
+    case COLOR_SQUARE_CONSTANTS.attributes.COLOR:
+      this.color = newValue;
+      break;
+  }
+} 
+```
+
+### Step 6: Use the adapter to communicate with the DOM
+
+Add code to the `ColorSquareAdapter` class to adjust the color of the square in the DOM.
+
+```ts expanded
+import { getShadowElement } from '@tylertech/forge-core';
+
+export interface IColorSquareAdapter {
+  setColor(color: string): void;
+}
+
+export class ColorSquareAdapter implements IColorSquareAdapter {
+  private _container: HTMLElement;
+
+  constructor(private _component: IColorSquareComponent) {
+    this._container = getShadowElement(_component, COLOR_SQUARE_CONSTANTS.selectors.CONTAINER);
+  }
+
+  public setColor(color: string): void {
+    this._container.style.backgroundColor = color;
+  }
+} 
+```
+
+> Take note of the `constructor` and how it finds the element within the template. This element reference is used for
+> convenience when accessing that element in the future. The use of the `getShadowElement` from `@tylertech/forge-core`
+> is used as a convenience method for finding elements within a components' Shadow DOM.
+
+### Step 7: Call adapter method from foundation
+
+Adjust the `color` setter property in the `ColorSquareFoundation` class to call the new `setColor` method on the adapter.
+
+```ts expanded
+public set color(value: string) {
+  if (this._color !== value) {
+    this._color = value;
+    this._adapter.setColor(this._color);
+  }
+}
+```
+
+> The default adapter is useful when writing unit tests for the foundation.
+
+### Step 8: Set up component template
+
+Update the HTML template (`color-square.html`) with the container element.
+
+```html
+<template>
+  <div class="forge-color-square"></div>
+</template>
+```
+
+### Step 9: Create reusable Sass variables
+
+Update the `_variables.scss` file to contain variables that define anything you'd like to be reusable or available
+externally for consumers.
+
+```scss
+$height: 100px;
+$width: 100px;
+```
+
+> It's not necessary to make Sass variables for every value, but the general rule of thumb is that if you were to reuse
+> that value anywhere, or if you want to allow for the value to be imported by a consumer of your library, then you should
+> make it a variable.
+
+### Step 10: Create reusable Sass mixin
+
+Update the `_mixins.scss` file to contain a new mixin that you will use as the base for creating a styled color-square component.
+
+We will consume this mixin in the `color-square.scss` file next.
+
+```scss
+@mixin base() {
+  display: inline-block;
+  height: $forge-color-square-height;
+  width: $forge-color-square-height;
+}
+```
+
+### Step 11: Create component styles
+
+Add a selector for your main container `<div>` using the mixin you just created. Do this in your `color-square.scss` file.
+This file defines the styles that are scoped to the Shadow DOM of your component only.
+
+```scss
+.forge-color-square {
+  @include base;
+}
+```
+
+> It is best practice to name all classes, mixins, and variables with a prefix of `forge-` for consistency, as well as
+> knowing that they belong to the Tyler namespace.
+
+### Step 12: Define your component with the library
+
+Open the `src/lib/index.ts` file, and adjust the array passed to `defineCustomElements`. This will allow for your
+component to be registered with the browser when the consumer wants to register the library as whole.
+
+```ts expanded
+import { ColorSquareComponent } from './color-square';
+
+...
+
+const CUSTOM_ELEMENTS = [
+  // Custom element classes to register
+  ColorSquareComponent
+];
+
+export function defineComponents(): void {
+  defineCustomElements(CUSTOM_ELEMENTS);
+}
+```
+
+### Step 13: Use custom element in the demo app
+
+Open the `src/demo/index.html` file, and add a tag for your custom element:
+
+```html
+<forge-color-square color="red"></forge-color-square>
+```
+
+> If you chose to use a different element prefix (you can always refer to the `src/lib/constants.ts` file to view your
+> prefix) then you will want to replace the `forge-` with your own prefix in the previous example.
+
+### Step 14: Serve the demo app
+
+To serve the demo app, run the following command and the site will be displayed in your default browser. If you have any
+errors those will be displayed during the build in your command line at this time.
+
+#### Next steps
+  * Add a `click` listener to the component that will randomly generate and set a new color when the user clicks on the square.
+  * Emit a `CustomEvent` from the component that contains the new randomly generated color.
+  * Create a listener within the demo app that can listen for the `CustomEvent` from the component, and display the random color in the console.
+
+### Step 15: Add a click listener
+
+Typically you will want to register any event listeners within the `constructor` of your foundation class. As long as your
+template has been created before the instantiation of your foundation class, then this is a safe place to access the template.
+
+The following code will ask our adapter to create a `click` listener on our color-square root elemnent `<div>`.
+
+```ts
+constructor(private _adapter: IColorSquareComponent) {
+  this._adapter.addClickListener(evt => this._onClick(evt));
+}
+```
+
+Now we will create our `_onClick` method where we can generate and set a new random color.
+
+```ts expanded
+private _onClick(evt: Event): void {
+  const color = this._generateRandomColor();
+  this._adapter.setColor(color);
+}
+
+private _generateRandomColor(): string {
+  return '#' + Math.random().toString(16).slice(2, 8).toUpperCase();
+}
+```
+
+Finally we can implement the `addClickListener` method on our adapter.
+
+```ts
+public addClickListener(callback: (evt: Event) =&gt; void): void {
+  this._container.addEventListener('click', callback);
+}
+```
+
+At this point once all of your files are saved, the demo app should refresh. You can click the colored square and watch it
+randomly change colors.
+
+### Step 16: Emit a `CustomEvent`
+
+In this step we will emit a `CustomEvent` that contains the randomly generated color from the previous step when clicked.
+
+First we will add a new constant value that contains the name of our `CustomEvent` type:
+
+```ts expanded
+// Create a new variable that will hold a map of our event names
+const events = {
+  COLOR: `${COMPONENT_NAME_PREFIX}color`
+};
+
+// Ensure that the propery is exported in the constants variable
+export const COLOR_SQUARE_CONSTANTS = {
+  ...
+  events
+};
+```
+
+Now add a call to our adapter to emit the event from our `_onClick` method:
+
+```ts
+private _onClick(evt: Event): void {
+  const color = this._generateRandomColor();
+  this._adapter.setColor(color);
+  this._adapter.emitEvent(COLOR_SQUARE_CONSTANTS.events.COLOR, color);
+}
+```
+
+Implement the `emitEvent` method within the adapter class.
+
+> Don't forget to add the method to the `IColorSquareAdapter` interface.
+
+```ts
+import { emitEvent } from '@tylertech/forge-core';
+
+public emitEvent(type: string, data: any): void {
+  emitEvent(this._component, type, data);
+}
+```
+
+> Note the use of a convenience method called `emitEvent` from the `@tylertech/forge-core` package. This encapsulates
+> the logic for creating a `CustomEvent`, and provides cross-browser compatibility.
+
+### Step 17: Listen for the event
+
+Now we can add an event listener to the `<forge-color-square>` element in the demo app.
+
+Add a new `<script>` tag to the bottom of the body (anywhere after the color square element). This will find our color
+`<forge-square-element>`, listen for the `forge-color-square-color` event, and print out the value of the new random color to the browser 
+dev console.
+
+```html
+<script type="text/javascript">
+  const colorSquare = document.querySelector('forge-color-square');
+  colorSquare.addEventListener('forge-color-square-color', evt => {
+    console.log('[forge-color-square] forge-color-square-color event:', evt.detail);
+  });
+</script>
+```
+
+> Note: If you changed from the default element prefix, be sure to update the event name and element name to match the
+> prefix you chose for your library.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tutorial Complete!
+
+At this point you should have a good understanding of the component structure, and how to make a component interactive.
+Feel free to expand upon any of the ideas noted within this tutorial to extend this component with more functionality.
+
+As always, please reach out to the Forge team with any questions/comments you may have during this tutorial!
+
+</PageSection>

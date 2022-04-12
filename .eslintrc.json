@@ -1,0 +1,53 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "dist/**/*",
+    "docs/**/*",
+    "src/demo/**/*",
+    "src/stories/**/*",
+    "*.spec.ts"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ],
+        "tsconfigRootDir": ".",
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@tylertech-eslint/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/indent": ["error", 2, {
+            "SwitchCase": 1,
+            "MemberExpression": "off",
+            "ignoredNodes": [
+                "ArrowFunctionExpression Identifier",
+                "ArrowFunctionExpression BlockStatement",
+                "TSTypeParameterInstantiation"
+            ]
+        }],
+        "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }],
+        "no-trailing-spaces": ["error", { "ignoreComments": true, "skipBlankLines": true }],
+        "quote-props": ["error", "as-needed", { "unnecessary": false }],
+        "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
+        "comma-dangle": "error",
+        "@typescript-eslint/comma-dangle": ["error"],
+        "comma-spacing": "off",
+        "@typescript-eslint/comma-spacing": ["error"],
+        "no-extra-parens": "off",
+        "@typescript-eslint/no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
+        "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { "constructors": "no-public" } }],
+        "max-len": "off",
+        "arrow-body-style": "off",
+        "@typescript-eslint/arrow-body-style": "off",
+        "@typescript-eslint/no-require-imports": "error"
+      }
+    }
+  ]
+}

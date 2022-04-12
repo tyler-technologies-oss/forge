@@ -1,0 +1,57 @@
+@mixin icon-base() {
+  font-family: 'TylerIcons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+}
+
+@mixin icon($icon-name: null) {
+  @include icon-base();
+
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+
+  @if $icon-name != null {
+    &::before {
+      content: '#{$icon-name}';
+    }
+  }
+}
+
+@mixin icon-ext-base() {
+  font-family: 'TylerIconsExtended';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+}
+
+@mixin icon-ext($icon-name: null) {
+  @include icon-ext-base();
+  
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+
+  @if $icon-name != null {
+    &::before {
+      content: '#{$icon-name}';
+    }
+  }
+}

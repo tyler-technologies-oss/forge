@@ -1,0 +1,179 @@
+@use '@material/typography/typography';
+@use '@material/feature-targeting/feature-targeting';
+@use '@material/button/button-base';
+@use '@material/button/button-filled';
+@use '@material/button/button-protected';
+@use '@material/button/button-outlined';
+@use '@material/button/button-outlined-theme';
+@use '@material/button/button-shared-theme';
+@use '@material/ripple/ripple';
+@use '@material/ripple/ripple-theme';
+@use '@material/theme/theme';
+@use '@material/theme/color-palette';
+
+@use '../theme/theme' as forge-theme;
+
+@mixin core-styles() {
+  .forge-button {
+    @include base;
+    
+    &__icon {
+      @include icon;
+    }
+
+    &__label {
+      @include label;
+    }
+    
+    &__label + &__icon {
+      @include icon-trailing;
+    }
+
+    svg.forge-button__icon {
+      @include icon-svg;
+    }
+    
+    &--raised,
+    &--unelevated,
+    &--outlined {
+      .forge-button__icon {
+        @include icon-contained;
+      }
+      
+      .forge-button__label + .forge-button__icon {
+        @include icon-contained-trailing;
+      }
+    }
+    
+    &--raised,
+    &--unelevated {
+      @include raised-elevated;
+    }
+    
+    &--raised {
+      @include raised;
+    }
+    
+    &--outlined {
+      @include outlined;
+
+      &:disabled {
+        @include outlined-disabled;
+      }
+    }
+    
+    &--dense {
+      @include dense;
+    }
+  }
+}
+
+@mixin host() {
+  display: inline-block;
+}
+
+@mixin base() {
+  @include ripple.surface();
+  @include ripple.radius-bounded();
+  @include ripple-theme.states(primary, false);
+  @include button-base.base(feature-targeting.all());
+  @include button-shared-theme.shape-radius(small);
+  @include button-shared-theme.container-fill-color(transparent);
+  @include button-shared-theme.ink-color(primary);
+  @include button-shared-theme.density(0);
+  
+  text-transform: none;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@mixin label() {
+  @include typography.overflow-ellipsis();
+}
+
+@mixin icon() {
+  @include button-base.icon;
+}
+
+@mixin icon-svg() {
+  @include button-base.icon-svg;
+}
+
+@mixin icon-trailing() {
+  @include button-base.icon-trailing;
+}
+
+@mixin icon-contained() {
+  @include button-base.icon-contained;
+}
+
+@mixin icon-contained-trailing() {
+  @include button-base.icon-contained-trailing;
+}
+
+@mixin outlined() {
+  @include button-outlined.outlined(feature-targeting.all());
+  @include button-outlined-theme.outline-width(button-outlined-theme.$outlined-border-width);
+  @include button-outlined-theme.outline-color(primary);
+}
+
+@mixin outlined-disabled() {
+  @include theme.property(border-color, border-color);
+  @include theme.prop(color, text-disabled-on-light);
+}
+
+@mixin raised() {
+  @include button-protected.raised(feature-targeting.all());
+}
+
+@mixin dense() {
+  @include button-shared-theme.density(-3);
+
+  height: 1.5rem;
+}
+
+@mixin raised-elevated() {
+  @include ripple-theme.states(on-primary, false);
+  @include button-filled.filled(feature-targeting.all());
+  @include button-shared-theme.container-fill-color(primary);
+  @include button-shared-theme.ink-color(on-primary);
+}
+
+@mixin link() {
+  cursor: pointer;
+  border: none;
+  color: color-palette.$indigo-500;
+  background-color: transparent;
+  font-size: inherit;
+  padding: 0;
+  outline: none;
+  text-align: left;
+
+  &[disabled] {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &:hover:not([disabled]) {
+    text-decoration: underline;
+  }
+}
+
+@mixin anchor-link() {
+  text-decoration: none;
+  color: color-palette.$indigo-500;
+  
+  &:visited {
+    color: color-palette.$indigo-500;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &:focus,
+  &:hover:not([disabled]) {
+    text-decoration: underline;
+  }
+}

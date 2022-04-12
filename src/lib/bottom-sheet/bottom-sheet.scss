@@ -1,0 +1,16 @@
+@use './mixins';
+@use '../icon-button/forge-icon-button';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+
+  forge-backdrop {
+    @include mixins.backdrop;
+  }
+}
+
+:host([hidden]) {
+  display: none;
+}

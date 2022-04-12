@@ -1,0 +1,18 @@
+@use './mixins';
+@use '../button/forge-button';
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([direction=row]) {
+  @include mixins.core-styles-row;
+}
+
+:host([direction=column]) {
+  @include mixins.core-styles-column;
+}

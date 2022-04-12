@@ -1,0 +1,21 @@
+@use './mixins';
+@use './variables';
+
+// Sub-component styles
+@use '../button/forge-button';
+@use '../icon-button/forge-icon-button';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+// This is here until Firefox supports :host-context()...
+:host([forge-popup-context=true]) {
+  @include mixins.popup-context-styles;
+}

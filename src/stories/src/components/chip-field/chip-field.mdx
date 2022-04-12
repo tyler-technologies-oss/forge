@@ -1,0 +1,160 @@
+import { DefaultTemplate as ChipFieldDemo } from './templates/default';
+import {
+  ChipFieldDefaultHtml,
+  ChipFieldDefaultTs,
+} from './code/chip-field-default';
+
+<PageSection>
+
+## Usage
+
+The chip field wraps a label, input and a collection of chips (or other elements if desired) with a set of exposed events you'll use for managing your
+collection. It is used to provide users with an easy way to manage collections of simple data, like managing emails, or users by name.
+
+It should not be used for data that is too complex to provide a simple short descriptor for. If you cannot create a short, 1-2 word descriptor for your
+data or it requires more than one field to provide the context to the user, consider managing your collection through the [list component](?path=/story/components-list--default)
+instead.
+
+The chip field component can be composed together with the [autocomplete component](?path=/story/components-autocomplete--default) to
+provide additional type ahead functionality.
+
+> Use a debounce when actions can occur after a user stops typing. In cases where an HTTP request is fired, or some other long running task occurs, avoid executing those expensive tasks until the user has completed what they are searching for. Forge recommends a debounce of 500ms.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+The main idea to keep in mind when using this component is that the chip-field will let you know via its events that a chip is to be added/removed. It's up
+to you to handle creating the chips that display within the field itself. This allows for flexibility in how these are managed, while also leaving it up to
+you to provide the content for the chips as well as the accessibility.
+
+### Simple
+
+<LiveDemo layout="column" fullWidth codeHtml={ChipFieldDefaultHtml()} codeTs={ChipFieldDefaultTs()}>
+  <ChipFieldDemo />
+</LiveDemo>
+
+> **Note:** The `type="field"` attribute added to the chip in the JavaScript. This is a special variant of the `<forge-chip>` component made specifically to be
+> used with the `<forge-chip-field>` component. It has a slimmer `dense` profile as well as a few other internal differences that allow it to work well with form fields.
+
+### Autocomplete
+
+The chip-field can be composed together with the autocomplete to provide suggestions to the user as they type. This allows for a great user experience,
+while also still allowing for flexibility based on your requirements.
+
+Please see the [with autocomplete](?path=/story/components-chip-field--with-autocomplete) demo to see this in action!
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="invalid" type="boolean" defaultValue="false">
+
+Controls the invalid state. When set to `true`, the label and border will change to the error theme color.
+
+</PropertyDef>
+
+<PropertyDef name="required" type="boolean" defaultValue="false">
+
+Controls the presence of an asterisk after the label to signify that the field is required.
+
+</PropertyDef>
+
+<PropertyDef name="floatLabelType" type="ChipFieldFloatLabelType" defaultValue="auto">
+
+The type of floating label to use.
+
+Valid values: `auto` (default), `always`.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="floatLabel(): void">
+
+Controls the floating state of the label. Call this to manually float the label.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                           | Description
+| :---------------------------   | :---------------------
+| `input`                        | Native event emits from the input when the user is typing in the input.
+| `change`                       | Native event emits from the input when its value changes.
+| `forge-chip-field-member-added`  | Emits when the user presses Enter after typing into the input to add a member to the collection.
+| `forge-chip-field-member-removed`| Emits when the the user presses Backspace to remove the last member from the collection.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `label`                        | Projects the label element into the correct location with the proper typography.
+| `member`                       | Projects each element with this slot to the collection area of the component. This slot will be present on each element comprising your collection.
+| `default`                      | The default (unnamed) slot is the input. Projects the input into the correct location.
+| `helper-text`                  | Places content below the component with the proper typography.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom Properties
+
+| Name                                                       | Description
+| :----------------------------------------------------------| :---------------
+| `--mdc-theme-primary`                                      | Controls the focus color throughout the component.
+| `--mdc-theme-error`                                        | Controls the invalid color throughout the component.
+| `--mdc-theme-form-field-disabled-on-background`            | Controls the background-color of the field component.
+| `--mdc-theme-form-field-text-disabled-on-background`       | Controls the label and helper text color.
+| `--mdc-theme-text-secondary-on-light`                      | Controls button color.
+| `--mdc-theme-text-icon-on-background`                      | Controls border-color of the outline.
+| `--mdc-theme-text-hint-on-background`                      | Controls disabled color of the label.
+| `--mdc-theme-text-primary-on-background`                   | Controls hover color throughout the component.
+| `--mdc-theme-text-secondary-on-background`                 | Controls color of the label.
+| `--mdc-theme-text-disabled-on-background`                  | Controls disabled border-color of the outline.
+| `--forge-chip-field-height`                                  | Controls the height of the root element. Default value is `3.5rem`.
+| `--forge-chip-field-theme-background`                        | Controls the background-color of the field element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### ChipFieldFloatLabelType
+
+```ts
+type ChipFieldFloatLabelType = 'always' | 'auto';
+```
+
+</PageSection>

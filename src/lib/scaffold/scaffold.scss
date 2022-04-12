@@ -1,0 +1,16 @@
+@use '../theme/theme';
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([viewport]) {
+  @include mixins.viewport-styles;
+}

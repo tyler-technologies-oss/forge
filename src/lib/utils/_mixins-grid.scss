@@ -1,0 +1,24 @@
+@use './functions-grid';
+@use './variables-grid';
+
+@mixin auto-fr-auto($direction: row) {
+  display: grid;
+
+  @if ($direction == row) {
+    grid-template-rows: auto 1fr auto;
+  }
+  @if ($direction == column) {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
+@mixin form-cell($columns: 1) {
+  overflow: hidden;
+  word-break: break-all;
+
+  @if ($columns > 1) {
+    grid-column: span $columns;
+  }
+
+  width: #{functions-grid.cell-size($columns, variables-grid.$form-column-width, variables-grid.$form-gap)}px;
+}

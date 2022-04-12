@@ -1,0 +1,16 @@
+<template>
+  <forge-backdrop part="backdrop" fixed></forge-backdrop>
+  <aside class="forge-busy-indicator__surface" role="alertdialog" aria-modal="true" part="surface" tabindex="0">
+    <h3 class="forge-busy-indicator__title" part="title">Loading</h3>
+    <div class="forge-busy-indicator__message-container" part="message-container">
+      <forge-circular-progress class="forge-busy-indicator__spinner" part="spinner"></forge-circular-progress>
+      <span class="forge-busy-indicator__message" part="message"></span>
+      <forge-button class="forge-busy-indicator__forge-cancel-button" part="cancel-button">
+        <button class="forge-busy-indicator__cancel-button" part="cancel-button-element">Cancel</button>
+      </forge-button>
+    </div>
+    <div class="forge-busy-indicator__progress-container" part="progress-bar-container">
+      <forge-linear-progress part="progress-bar"></forge-linear-progress>
+    </div>
+  </aside>
+</template>

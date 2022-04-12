@@ -1,0 +1,23 @@
+@use '@material/animation/animation' as mdc-animation;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/theme/theme-color' as mdc-theme-color;
+@use '@material/typography' as mdc-typography;
+@use '../theme/theme';
+@use '../field/core' as field-core;
+@use './core';
+@use '../field/variables' as field-variables;
+
+@mixin provide-theme($theme) {
+  @include theme.theme-properties(text-field, $theme, field-variables.$theme-values);
+}
+
+@mixin host() {
+  display: block;
+  contain: layout;
+}
+
+@mixin core-styles() {
+  // we include the field-selector.field in the text-field-selector.field mixin
+  @include field-core.core-styles(forge-text-field, $exclude: (field));
+  @include core.core-styles;
+}

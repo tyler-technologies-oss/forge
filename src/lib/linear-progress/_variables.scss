@@ -1,0 +1,10 @@
+$buffer-color: #ced5f7 !default;
+$buffer-dots-color: none;
+$theme-values: (
+  buffer: $buffer-color,
+  buffer-dots: $buffer-dots-color
+);
+$theme-values-dark: (
+  buffer: #7c704c,
+  buffer-dots: opacity(0.5)
+) !default;

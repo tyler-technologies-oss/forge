@@ -1,0 +1,131 @@
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '../typography/mixins' as typography-mixins;
+@use './variables';
+
+@mixin core-styles() {
+  .forge-paginator {
+    @include base;
+
+    &--alternative {
+      @include base-alternative;
+
+      .forge-paginator {
+        &__range-label,
+        &__page-size-options,
+        &__label {
+          display: none;
+        }
+
+        &__range-label--alternative {
+          @include range-label-alternative;
+        }
+      }
+    }
+
+    &__range-label--alternative {
+      display: none;
+    }
+
+    &__container {
+      @include container;
+    }
+
+    &__label {
+      @include label;
+    }
+
+    &__page-size-options {
+      @include page-size-options;
+    }
+
+    &__range-label {
+      @include range-label;
+    }
+
+    &__first-page,
+    &__previous-page,
+    &__next-page,
+    &__last-page {
+      @include button;
+    }
+  }
+}
+
+@mixin base() {
+  display: inline-block;
+}
+
+@mixin base-alternative {
+  display: flex;
+}
+
+@mixin container() {
+  display: flex;
+  align-items: center;
+}
+
+@mixin container-alternative() {
+  display: flex;
+  align-items: center;
+}
+
+@mixin label-base() {
+  @include mdc-typography.typography(caption);
+}
+
+@mixin label-alternative-base() {
+  display: inline-block;
+  @include mdc-typography.typography(body2);
+}
+
+@mixin label() {
+  @include label-base;
+  margin-right: variables.$margin-right - 16px;
+}
+
+@mixin page-size-options() {
+  margin-right: variables.$margin-right - 16px;
+}
+
+@mixin range-label() {
+  @include label-base;
+  margin-right: variables.$margin-right - 24px;
+}
+
+@mixin range-label-alternative {
+  @include label-alternative-base;
+  margin: 0 12px;
+}
+
+@mixin button() {
+  @include mdc-theme.property(color, text-primary-on-background);
+}
+
+@mixin alternative-alignment {
+  .forge-paginator {
+    &--alignment-center {
+      .forge-paginator__container {
+        justify-content: center;
+      }
+
+      .forge-paginator__range-label--alternative {
+        margin: 0 auto;
+      }
+    }
+    &--alignment-start {
+      .forge-paginator__container {
+        justify-content: flex-start;
+      }
+    }
+    &--alignment-end {
+      .forge-paginator__container {
+        justify-content: flex-end;
+      }
+    }
+
+    .forge-paginator__container {
+      flex: 1;
+    }
+  }
+}

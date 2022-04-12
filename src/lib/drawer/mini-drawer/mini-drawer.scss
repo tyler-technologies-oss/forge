@@ -1,0 +1,35 @@
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([direction=right]) {
+  @include mixins.host-right;
+
+  .forge-drawer__root {
+    position: relative;
+  }
+}
+
+:host(:not([open])) {
+  display: none;
+}
+
+:host([hover]) {
+  .forge-drawer--right {
+    position: absolute;
+    right: 0;
+  }
+
+  .forge-drawer:hover {
+    @include mixins.hover;
+
+    .forge-drawer__content {
+      overflow: auto;
+      overflow: overlay; // Only supported by Chrome, Safari, Opera
+    }
+  }
+}

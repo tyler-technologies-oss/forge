@@ -1,0 +1,52 @@
+@use '@material/theme/color-palette' as mdc-color-palette;
+@use '../theme/theme-values';
+
+/// The default row height within the table body.
+$tbody-row-height: 48px !default;
+
+/// The default row height within the table head.
+$thead-row-height: 48px !default;
+
+/// The default row height within the table head.
+$thead-dense-row-height: 36px !default;
+
+/// The roomy row height within the table head.
+$thead-roomy-row-height: 56px !default;
+
+/// The height of the table head cells when the filter row is applied
+$thead-filter-row-height: 32px !default;
+
+/// The padding for each table row.
+$row-padding: 0 24px !default;
+
+/// The border style for the table cells.
+$border: 1px solid theme-values.$border-color !default;
+
+/// The width of the table filter inputs.
+$filter-input-width: 80px !default;
+
+/// The default font size for the table cell data.
+$cell-font-size: 14px !default;
+
+/// Theme values
+$row-hover-background: rgba(0, 0, 0, 0.04) !default;
+$row-active-background: rgba(0, 0, 0, 0.08) !default;
+$row-selected-background: rgba(theme-values.$primary, 0.08) !default;
+$row-selected-hover-background: rgba(theme-values.$primary, 0.12) !default;
+$row-selected-active-background: rgba(theme-values.$primary, 0.16) !default;
+
+$theme-values: (
+  row-hover-background: $row-hover-background,
+  row-active-background: $row-active-background,
+  row-selected-background: $row-selected-background,
+  row-selected-hover-background: $row-selected-hover-background,
+  row-selected-active-background: $row-selected-active-background
+) !default;
+
+$theme-values-dark: (
+  row-hover-background: rgba(255, 255, 255, 0.04),
+  row-active-background: rgba(255, 255, 255, 0.08),
+  row-selected-background: rgba(mdc-color-palette.$indigo-a100, 0.16),
+  row-selected-hover-background: rgba(mdc-color-palette.$indigo-a100, 0.24),
+  row-selected-active-background: rgba(mdc-color-palette.$indigo-a100, 0.32)
+) !default;

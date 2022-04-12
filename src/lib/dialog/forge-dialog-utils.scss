@@ -1,0 +1,26 @@
+@use './mixins';
+
+.forge-dialog {
+  &--scrollable {
+    .forge-dialog__title,
+    .forge-dialog__footer {
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &__header {
+    @include mixins.header;
+  }
+
+  &__title {
+    @include mixins.title;
+  }
+
+  &__body {
+    @include mixins.body;
+  }
+
+  &__footer {
+    @include mixins.footer;
+  }
+}

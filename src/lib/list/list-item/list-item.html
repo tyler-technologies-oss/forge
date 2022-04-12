@@ -1,0 +1,14 @@
+<template>
+  <div class="forge-list-item" tabindex="0" part="root">
+    <slot name="leading"></slot>
+    <slot name="avatar"></slot>
+    <div class="forge-list-item__text" part="text-container">
+      <slot></slot>
+      <slot name="title"></slot>
+      <slot name="subtitle"></slot>
+      <slot name="tertiary-title"></slot>
+      <slot></slot>
+    </div>
+    <slot name="trailing"></slot>
+  </div>
+</template>

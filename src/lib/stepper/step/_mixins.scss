@@ -1,0 +1,411 @@
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '../../theme/theme';
+@use './variables';
+
+@mixin core-styles() {
+  .forge-step {
+    @include base();
+    @include forge-interactable();
+
+    &__container {
+      display: contents;
+    }
+
+    &__expansion-panel {
+      display: none;
+    }
+
+    &__expanded-icon {
+      @include theme.property(color, icon-color);
+
+      display: none;
+      margin-left: auto;
+    }
+
+    &__title {
+      @include label();
+    }
+
+    &__subtitle {
+      @include optional-label-slot-wrapper;
+
+      ::slotted(*) {
+        @include optional-label();
+      }
+    }
+
+    &__icon-container {
+      .forge-step-icon-content {
+        @include icon-content;
+      }
+    }
+
+    &:not(.forge-step--disabled) {
+      .forge-step-icon-content {
+        @include icon-content-color;
+      }
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &.forge-step {
+        .forge-step__icon-container {
+          .forge-step-icon-content {
+            @include icon-content-disabled;
+          }
+        }
+      }
+
+      @include theme.property(color, form-field-text-disabled-on-background);
+      .forge-step__text-container {
+        .forge-step__title {
+          @include theme.property(color, form-field-text-disabled-on-background);
+        }
+
+        .forge-step__subtitle {
+          ::slotted(*) {
+            @include theme.property(color, form-field-text-disabled-on-background);
+          }
+        }
+      }
+    }
+
+    &--alternative {
+      flex-direction: column;
+
+      .forge-step__icon-container {
+        .forge-step-icon-content {
+          margin: 0;
+        }
+      }
+      .forge-step__text-container {
+        @include text-container-alternative;
+
+        place-items: center;
+      }
+    }
+
+    &:not(.forge-step--selected):not(.forge-step--disabled) {
+      &:not(.forge-step--editable):not(.forge-step--completed),
+      &.forge-step--editable:not(.forge-step--completed) {
+        &:not(.forge-step--error) {
+          .forge-step-icon-content {
+            @include icon-content-default-theme;
+            
+            .forge-step-index {
+              @include mdc-theme.property(color, primary);
+            }
+          }
+        }
+      }
+    }
+
+    &--selected {
+      &.forge-step--disabled {
+        .forge-step-icon-content {
+          @include icon-content-disabled();
+        }
+      }
+
+      &:not(.forge-step--disabled) {
+        .forge-step__icon-container {
+          .forge-step-icon-content {
+            @include icon-content-selected();
+          }
+        }
+      }
+
+      &:not(.forge-step--disabled) {
+        .forge-step__title {
+          @include label-selected();
+        }
+
+        .forge-step__subtitle {
+          ::slotted(*) {
+            @include optional-label-selected();
+          }
+        }
+      }
+    }
+
+    &--error {
+      &:not(.forge-step--disabled) {
+        .forge-step__title {
+          @include label-error();
+        }
+
+        .forge-step__subtitle {
+          ::slotted(*) {
+            @include optional-label-error();
+          }
+        }
+
+        .forge-step__icon-container {
+          .forge-step-icon-content {
+            @include icon-content-error();
+          }
+        }
+      }
+    }
+
+    &--completed {
+      &:not(.forge-step--disabled) {
+        &:not(.forge-step--error) {
+          &:not(.forge-step--editable) {
+            .forge-step-icon-content {
+              @include icon-content-completed();
+            }
+          }
+          &.forge-step--editable {
+            .forge-step-icon-content {
+              @include icon-content-completed();
+            }
+          }
+        }
+      }
+    }
+
+    &--expandable {
+      .forge-step__expanded-icon {
+        display: inline-block;
+        transition: transform 300ms ease-in-out;
+      }
+
+      &.forge-step--expanded {
+        .forge-step__expanded-icon {
+          transform: rotate(180deg);
+        }
+      }
+
+      .forge-step__icon-container {
+        .forge-step-icon-content {
+          margin: variables.$vertical-icon-margin;
+        }
+      }
+    }
+
+    &__text-container {
+      @include text-container();
+    }
+  }
+}
+
+@mixin base() {
+  padding: 12px 16px;
+  outline: none;
+  background: none;
+  border: none;
+  border-radius: 14px;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  z-index: 1;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-moz-focus-inner,
+  &::-moz-focus-outer {
+    padding: 0;
+    border: 0;
+  }
+}
+
+@mixin forge-interactable() {
+  @include mdc-ripple.surface;
+  @include mdc-ripple.radius-bounded;
+  @include mdc-ripple-theme.states;
+  @include mdc-ripple-theme.states-selected(primary);
+
+  cursor: pointer;
+
+  &.forge-step--error.forge-step {
+    @include mdc-ripple-theme.states-selected(error);
+  }
+
+  &--selected {
+    @include mdc-theme.property(color, primary);
+  }
+
+  &--disabled {
+    &::before,
+    &::after {
+      background-color: transparent;
+    }
+  }
+}
+
+@mixin icon-content-color {
+  @include mdc-theme.property(color, text-primary-on-background);
+}
+
+@mixin icon-content-default-theme {
+  @include mdc-theme.property(border-color, primary);
+}
+
+@mixin icon-content() {
+  border-style: solid;
+  border-width: 2px;
+  border-color: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height: variables.$icon-size;
+  width: variables.$icon-size;
+  font-size: variables.$icon-font-size;
+  transition: background-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin: variables.$icon-margin;
+  flex: none;
+
+  forge-icon {
+    font-size: 14px;
+  }
+}
+
+@mixin icon-content-selected() {
+  @include mdc-theme.property(background-color, primary);
+  @include mdc-theme.property(color, on-primary);
+}
+
+@mixin icon-content-completed() {
+  @include icon-content-selected();
+}
+
+@mixin icon-content-error {
+  @include mdc-theme.property(background-color, error);
+  @include mdc-theme.property(color, on-error);
+}
+
+@mixin icon-content-disabled {
+  @include mdc-theme.property(color, text-disabled-on-light);
+  @include theme.property(background-color, form-field-disabled-on-background);
+}
+
+@mixin line() {
+  @include theme.property(border-top-color, border-color);
+
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-radius: 1px 0 0 1px;
+}
+
+@mixin step-line() {
+  @include theme.property(border-top-color, border-color);
+
+  content: '';
+  position: relative;
+  height: 0;
+  min-width: 10px;
+  flex: 1;
+  flex-basis: 0.000000001px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-radius: 1px 0 0 1px;
+}
+
+@mixin text-container() {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-container-alternative {
+  margin-top: 8px;
+}
+
+@mixin label {
+  @include mdc-theme.property(color, text-primary-on-background);
+  @include mdc-typography.typography(body2);
+
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin label-selected {
+  @include mdc-theme.property(color, primary);
+
+  font-weight: 500;
+}
+
+@mixin label-error {
+  @include mdc-theme.property(color, error);
+}
+
+@mixin optional-label {
+  @include mdc-theme.property(color, text-secondary-on-background);
+  @include mdc-typography.typography(caption);
+}
+
+@mixin optional-label-slot-wrapper {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin optional-label-selected {
+  @include mdc-theme.property(color, primary);
+  font-weight: 500;
+}
+
+@mixin optional-label-error {
+  @include mdc-theme.property(color, error);
+}
+
+@mixin border-psudo-styles($host-selector) {
+  :host(:not(:last-child)#{$host-selector}) {
+    &::after {
+      @content;
+    }
+  }
+
+  :host(:last-child#{$host-selector}) {
+    &::before {
+      @content;
+    }
+  }
+
+  :host(:not(:first-child):not(:last-child)#{$host-selector}) {
+    &::before,
+    &::after {
+      @content;
+    }
+  }
+}
+
+@mixin vertical-base {
+  width: 100%;
+  border-radius: 4px;
+  min-height: 52px;
+}
+
+@mixin vertical-host {
+  flex-direction: column;
+}
+
+@mixin expansion-panel-styles {
+  border-left-style: solid;
+  @include theme.property(border-color, border-color);
+  @include theme.css-custom-property(border-left-width, --forge-step-expansion-panel-border-left-width, variables.$expansion-panel-border-left-width);
+  @include theme.css-custom-property(margin-left, --forge-step-expansion-panel-margin-left, variables.$expansion-panel-margin-left);
+  @include theme.css-custom-property(margin-top, --forge-step-expansion-panel-margin-top, variables.$expansion-panel-margin-top);
+  @include theme.css-custom-property(margin-bottom, --forge-step-expansion-panel-margin-bottom, variables.$expansion-panel-margin-bottom);
+}
+
+@mixin forge-ignore-user-expansion {
+  .forge-step {
+    &__expanded-icon {
+      display: none;
+    }
+  }
+}

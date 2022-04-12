@@ -1,0 +1,13 @@
+@use './mixins';
+@use '../button/forge-button';
+@use '../icon-button/forge-icon-button';
+
+@include mixins.core-styles;
+
+:host {
+  display: inline-block;
+}
+
+:host([hidden]) {
+  display: none;
+}

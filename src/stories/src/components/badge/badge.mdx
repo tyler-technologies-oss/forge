@@ -1,0 +1,123 @@
+import { BadgeBasicDemoCodeHtml } from './code/badge-basic-demo';
+import { BadgeThemedDemoCodeHtml } from './code/badge-themed-demo';
+import { DefaultTemplate as BadgeDemo } from './templates/default';
+
+<PageSection>
+
+## Usage
+
+The badge component is intended to be used as a static, non-interactive element on the page for displaying labels. If you need to 
+make the element interactive you should consider using the [chip component](?path=/story/components-chips--default) instead.
+
+This component supports built-in predefined themes, as well as common positioning utilities when used with other components such as 
+the [icon button component](?path=/story/components-icon-button--default).
+
+> **Dot and numeric badges** should use `--forge-badge-background-color: var(--mdc-theme-secondary)` when placed on an **indigo background** and `--forge-badge-background-color: var(--mdc-theme-tertiary)` when placed on a **white background.**
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+Below is the most basic usage of the badge for displaying a count of records:
+
+<LiveDemo dense={true} codeHtml={BadgeBasicDemoCodeHtml()}>
+  <BadgeDemo text={'3'} />
+</LiveDemo>
+
+</PageSection>
+
+<PageSection>
+
+### Themed
+
+You can use the built-in themes via attribute. If you need a custom color, see the CSS custom properties section below.
+
+</PageSection>
+
+<PageSection>
+
+<LiveDemo dense={true} codeHtml={BadgeThemedDemoCodeHtml()}>
+  <BadgeDemo theme="danger" text="Danger" />
+  <BadgeDemo theme="warning" text="Warning" />
+  <BadgeDemo theme="success" text="Success" />
+  <BadgeDemo theme="info-primary" text="Info (primary)" />
+  <BadgeDemo theme="info-secondary" text="Info (secondary)" />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="dot" type="boolean" defaultValue="false">
+
+  Sets the badge to a smaller height/width when no text content is to be displayed. Default is `false`.
+
+</PropertyDef>
+
+<PropertyDef name="open" type="boolean" defaultValue="true">
+
+  Controls the visibility of the badge, while leaving it in the DOM. This applys a scale transition to hide/show the component.
+
+</PropertyDef>
+
+<PropertyDef name="theme" type="string" prop={false} defaultValue="&quot;danger&quot;">
+
+  Allows for easily setting the theme color to use. Valid values: `danger` (default), `warning`, `success`, `info-primary`, `info-secondary`.
+
+</PropertyDef>
+
+<PropertyDef name="positioned" type="boolean" prop={false} defaultValue="false">
+
+  Sets the position of the host element to absolute to allow for custom positioning.
+
+</PropertyDef>
+
+<PropertyDef name="strong" type="boolean" prop={false} defaultValue="false">
+
+  Uses the "strong" theme instead of the default "muted" theme.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `default`                      | The default (unnamed) slot will render any content that is placed within the badge component element directly.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                          | Description
+| :---------------------------------------------| :----------------
+| `--forge-badge-height`                          | Sets the badge to a smaller height/width when no text content is to be displayed. Default value is `false`.
+| `--forge-badge-line-height`                     | Controls the line-height of the font.
+| `--forge-badge-min-width`                       | Controls the minimum width of the container element.
+| `--forge-badge-max-width`                       | Controls the maximum width of the internal container element.
+| `--forge-badge-theme-default-muted-background`  | Controls the background color when using the muted themes.
+| `--forge-badge-theme-default-strong-background` | Controls the background color when using the strong themes.
+| `--forge-badge-theme-default-muted-color`       | Controls the font-color when using the muted themes.
+| `--forge-badge-theme-default-strong-color`      | Controls the font-color when using the strong themes.
+| `--forge-badge-border`                          | Controls the border style of the internal container element.
+
+</PageSection>

@@ -1,0 +1,49 @@
+.forge-grid--horizontal {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+.forge-grid-auto-1fr--horizontal {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.forge-grid-auto-1fr-auto--horizontal {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+
+.forge-grid-1fr-auto--horizontal {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.forge-grid--vertical {
+  display: grid;
+  grid-template-rows: 1fr;
+  align-items: center;
+}
+
+.forge-grid-auto-1fr--vertical {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.forge-grid-auto-1fr-auto--vertical {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.forge-grid-1fr-auto--vertical {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.forge-grid-item--left {
+  margin-right: auto;
+}
+
+.forge-grid-item--right {
+  margin-left: auto;
+}

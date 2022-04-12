@@ -1,0 +1,414 @@
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '@material/typography/typography' as mdc-typography;
+@use '../../theme/theme';
+@use '../../theme/theme-values';
+@use '../../list/list-item/mixins' as list-item;
+@use './variables';
+
+@mixin core-styles() {
+  .forge-calendar-menu {
+    @include base;
+
+    &__view {
+      @include view;
+    }
+
+    &__grid {
+      @include grid;
+
+      &--three-col {
+        @include grid-three-col;
+      }
+
+      &--four-col {
+        @include grid-four-col;
+      }
+    }
+
+    &__list {
+      @include list;
+
+      &__wrapper {
+        @include list-wrapper;
+      }
+    }
+
+    &__item {
+      &--grid {
+        @include grid-item;
+
+        &:not([disabled]) {
+          @include grid-item-enabled;
+        }
+
+        &[disabled] {
+          @include grid-item-disabled;
+        }
+
+        &.forge-calendar-menu__item--selected {
+          @include grid-item-selected;
+        }
+      }
+
+      &--list {
+        @include list-item;
+
+        &.forge-calendar-menu__item--selected {
+          @include list-item-selected;
+        }
+      }
+
+      &--focused, &:focus, .mdc-ripple-upgraded--background-focused {
+        @include item-focused;
+      }
+    }
+
+    &--open {
+      @include opening-animation;
+    }
+
+    &--closing {
+      @include closing-animation;
+    }
+
+    &--slide-right {
+      .forge-calendar-menu__view:first-child {
+        @include view-animation-out($to-right: true);
+      }
+
+      .forge-calendar-menu__view:last-child {
+        @include view-animation-in($from-left: true);
+      }
+    }
+
+    &--slide-left {
+      .forge-calendar-menu__view:first-child {
+        @include view-animation-out($to-right: false);
+      }
+
+      .forge-calendar-menu__view:last-child {
+        @include view-animation-in($from-left: false);
+      }
+    }
+
+    &--replacing-view {
+      .forge-calendar-menu__view:first-child {
+        @include view-animation-fade-out;
+      }
+
+      .forge-calendar-menu__view:last-child {
+        @include view-animation-fade-in;
+      }
+    }
+  }
+
+  #scroll-spy {
+    &-bottom {
+      @include scroll-spy(bottom);
+    }
+
+    &-top {
+      @include scroll-spy(top);
+    }
+  }
+}
+
+@mixin popup-context-styles() {
+  .forge-calendar-menu {
+    @include popup-context-base;
+  }
+}
+
+@mixin host() {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin base() {
+  @include theme.property(background-color, surface);
+
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+@mixin popup-context-base() {
+  @include theme.property(background-color, elevated-surface);
+}
+
+@mixin view() {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: inherit;
+}
+
+@mixin grid() {
+  @include theme.css-custom-property(max-height, --forge-calendar-menu-max-height, variables.$max-height);
+
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  align-items: center;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+@mixin grid-three-col() {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@mixin grid-four-col() {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@mixin grid-item() {
+  @include mdc-typography.typography(body2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  font-weight: 500;
+  user-select: none;
+}
+
+@mixin grid-item-enabled {
+  @include mdc-ripple.surface($include-will-change: false);
+  @include mdc-ripple.radius-bounded();
+  @include mdc-ripple-theme.states($color: primary);
+
+  border: theme-values.$border;
+  cursor: pointer;
+}
+
+@mixin grid-item-disabled() {
+  @include theme.property(color, text-disabled-on-background);
+}
+
+@mixin grid-item-selected() {
+  @include theme.property(color, on-primary);
+  @include theme.property(background-color, primary);
+
+  &:hover {
+    opacity: 0.87;
+  }
+
+  &:focus, &.mdc-ripple-upgraded--background-focused {
+    opacity: 0.54;
+  }
+}
+
+@mixin list() {
+  position: relative;
+  background-color: inherit;
+}
+
+@mixin list-wrapper() {
+  @include theme.scrollbar;
+
+  position: relative;
+  height: 100%;
+  overflow: auto;
+}
+
+@mixin list-item() {
+  @include list-item.interactable;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 variables.$list-item-horizontal-margin;
+  width: calc(100% - #{variables.$list-item-horizontal-margin * 2});
+  height: 48px;
+  border-radius: 4px;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+}
+
+@mixin list-item-selected() {
+  @include theme.property(background-color, primary);
+  @include theme.property(color, on-primary);
+
+  &:hover {
+    opacity: 0.87;
+  }
+
+  &:focus, &.mdc-ripple-upgraded--background-focused {
+    opacity: 0.54;
+  }
+}
+
+@mixin item-focused() {
+  outline: none;
+}
+
+@mixin scroll-spy($top-or-bottom) {
+  position: absolute;
+  #{$top-or-bottom}: 0;
+  height: 48px;
+  pointer-events: none;
+}
+
+@mixin opening-animation() {
+  animation-duration: variables.$animation-duration;
+  animation-name: scale-open;
+  transform-origin: top center;
+
+  &[data-animation=fade] {
+    animation-name: fade-in;
+  }
+
+  &[data-animation=none] {
+    animation-duration: 1ms;
+  }
+
+  @media (prefers-reduced-motion) {
+    animation-name: fade-in;
+  }
+}
+
+@mixin closing-animation() {
+  animation-duration: variables.$animation-duration;
+  animation-name: scale-closed;
+  transform-origin: top center;
+
+  &[data-animation=fade] {
+    animation-name: fade-out;
+  }
+
+  &[data-animation=none] {
+    animation-duration: 1ms;
+  }
+
+  @media (prefers-reduced-motion) {
+    animation-name: fade-out;
+  }
+}
+
+@mixin view-animation-in($from-left: true) {
+  animation-duration: variables.$animation-duration;
+  animation-name: slide-in-#{if($from-left, 'from-left', 'from-right')};
+
+  @media (prefers-reduced-motion) {
+    animation-name: fade-in;
+  }
+}
+
+@mixin view-animation-out($to-right: true) {
+  animation-duration: variables.$animation-duration;
+  animation-name: slide-out-#{if($to-right, 'to-right', 'to-left')};
+
+  @media (prefers-reduced-motion) {
+    animation-name: fade-out;
+  }
+}
+
+@mixin view-animation-fade-out() {
+  animation-duration: variables.$animation-duration;
+  animation-name: fade-out;
+}
+
+@mixin view-animation-fade-in() {
+  animation-duration: variables.$animation-duration;
+  animation-name: fade-in;
+}
+
+@mixin keyframes {
+  @keyframes scale-open {
+    from {
+      opacity: 0;
+      transform: scale(variables.$initial-scale);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes scale-closed {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    to {
+      opacity: 0;
+      transform: scale(variables.$initial-scale);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  } 
+
+  @keyframes slide-in-from-left {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slide-in-from-right {
+    from {
+      transform: translateX(100%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out-to-left {
+    from {
+      transform: translateX(0%);
+    }
+
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  
+  @keyframes slide-out-to-right {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(100%);
+    }
+  }
+}

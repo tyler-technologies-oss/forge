@@ -1,0 +1,25 @@
+$displays: (
+  flex: flex,
+  inline-flex: inline-flex
+) !default;
+
+$directions: (
+  row: row,
+  row-reverse: row-reverse,
+  column: column,
+  column-reverse: column-reverse
+) !default;
+
+$wraps: (
+  nowrap: nowrap,
+  wrap: wrap,
+  wrap-reverse: wrap-reverse
+) !default;
+
+$alignments: (
+  flex-start: flex-start,
+  flex-end: flex-end,
+  center: center,
+  baseline: baseline,
+  stretch: stretch
+) !default;

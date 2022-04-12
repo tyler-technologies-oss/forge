@@ -1,0 +1,4 @@
+@use 'mixins';
+@use '../theme/theme';
+
+@include mixins.core-styles;

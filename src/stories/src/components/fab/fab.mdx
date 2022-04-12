@@ -1,0 +1,103 @@
+import { DefaultTemplate as FabDemo } from './templates/default';
+import { FabDefaultCodeHtml } from './code/fab-default';
+import { FabExtendedCodeHtml } from './code/fab-extended';
+import { FabMiniCodeHtml } from './code/fab-mini';
+
+<PageSection>
+
+## Usage
+
+Use floating action buttons to represent the primary action on a screen within an application. It's recommended to only use **one** floating action button
+per screen.
+
+Floating action buttons are static by default, and should be positioned properly above content by consumers. See below for an example
+about how to position these elements in your application.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+Typically you will position these buttons manually on the screen, for example to apply a fixed position in the bottom-right you could use this CSS:
+
+```css
+.fab--bottom-right {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+```
+
+### Default
+
+The following is an example of the default usage of a floating action button. Take note of the `aria-label` to ensure that icon-only buttons are accessible.
+
+<LiveDemo dense codeHtml={FabDefaultCodeHtml()}>
+  <FabDemo />
+</LiveDemo>
+
+### Mini
+
+The following is an example of the mini usage of a floating action button. Take note of the `aria-label` to ensure that icon-only buttons are accessible.
+
+<LiveDemo dense codeHtml={FabMiniCodeHtml()}>
+  <FabDemo mini />
+</LiveDemo>
+
+### Extended
+
+Use extended floating action buttons to give more meaning and context to the action. This example shows an icon and text together.
+
+<LiveDemo dense codeHtml={FabExtendedCodeHtml()}>
+  <FabDemo extended />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="theme" type="string" prop={false} defaultValue="&quot;secondary&quot;">
+
+The theme type to apply. Allowed values: `primary`, `secondary` (default), `success`, `warning`, `danger`, `info`.
+  
+</PropertyDef>
+
+<PropertyDef name="mini" type="boolean" defaultValue="false">
+
+Displays the floating action button in its "mini" state.
+  
+</PropertyDef>
+
+<PropertyDef name="extended" type="boolean" defaultValue="false">
+
+Allows for a label to be used alongside the icon.
+  
+</PropertyDef>
+
+<PropertyDef name="exited" type="boolean" defaultValue="false">
+
+Controls the exited state. This animates the FAB in/out with a transition while leaving it in the DOM.
+  
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                | Description
+| :-----------------------------------| :----------------------
+| `--mdc-theme-secondary`             | Controls the background color.
+| `--mdc-theme-text-primary-on-light` | Controls the font color.
+
+</PageSection>

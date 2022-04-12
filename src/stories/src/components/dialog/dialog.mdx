@@ -1,0 +1,314 @@
+import { SimpleTemplate as SimpleDemo } from './templates/simple';
+import { ComplexTemplate as ComplexDemo } from './templates/complex';
+import { DialogSimpleCodeHtml, DialogSimpleCodeTs } from './code/dialog-simple';
+import { DialogComplexCodeHtml, DialogComplexCodeTs } from './code/dialog-complex';
+
+<PageSection>
+
+## Usage
+
+The dialog component is designed to be a modal dialog that acts as a container element for you to provide content that will render within the dialog surface.
+It provides a built-in scrim (backdrop), and a material styled surface area for your content. The surface element is sized based on the content you provide to it.
+
+The dialog can simple be placed in the DOM, and it will not be visible until it is told to open. It contains all of the open/close animations per Forge guidance,
+and provides a few properties/attributes for customizing the dialog.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Simple
+The dialog component is typically created on the fly using JavaScript. Below is an example of how to create and
+configure a dialog on the fly using vanilla JavaScript:
+
+<LiveDemo layout="column" codeHtml={DialogSimpleCodeHtml()} codeTs={DialogSimpleCodeTs()} >
+  <SimpleDemo />
+</LiveDemo>
+
+### Complex
+<LiveDemo layout="column" codeHtml={DialogComplexCodeHtml()} codeTs={DialogComplexCodeTs()}>
+  <ComplexDemo />
+</LiveDemo>
+
+> **Note:** To allow the dialog to automatically set focus to a specific element when opened, set the `forge-dialog-focus` attribute on it.
+
+### Angular
+
+To make using the dialog component easier and more seamless within an Angular application, use the `@tylertech/forge-angular` Angular adapter library.
+
+This library provides a `DialogService` provider that can be injected, and used to easily render a dynamic Angular component within the Forge dialog.
+
+As an example, say we want to render a dynamically created confirmation dialog component that offers the ability to change the title and message. We could create
+a component like the following:
+
+```typescript
+import { Component } from '@angular/core';
+import { DialogConfig, DialogRef } from '@tylertech/forge-angular';
+
+@Component({
+  selector: 'app-confirm-dialog',
+  templateUrl: './confirm-dialog.component.html',
+  styleUrls: ['./confirm-dialog.component.scss']
+})
+export class ConfirmDialogComponent {
+  public title: string;
+  public message: string;
+
+  constructor(public dialogConfig: DialogConfig, private _dialogRef: DialogRef) {
+    this.title = dialogConfig.data.title;
+    this.message = dialogConfig.data.message;
+  }
+
+  public onCancel(): void {
+    this._dialogRef.close(false);
+  }
+
+  public onConfirm(): void {
+    this._dialogRef.close(true);
+  }
+}
+```
+
+We could then inject the `DialogService` from the Forge adapter library, and show the dynamic component like this:
+
+```typescript
+import { Component } from '@angular/core';
+import { DialogService } from '@tylertech/forge-angular';
+
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+
+@Component({
+  selector: 'app-dialog',
+  templateUrl: './dialog.component.html'
+})
+export class DialogExampleComponent {
+  constructor(private _dialogService: DialogService) {}
+
+  public showConfirmDialog(): void {
+    // Set any options to be applied to the <forge-dialog> component
+    const dialogOptions = { 
+      backdropClose: true, 
+      escapeClose: false 
+    };
+
+    // Set up any data that can be injected into the dynamic component
+    const dialogConfig = { 
+      data: { 
+        title: 'Confirm', 
+        message: 'Are you sure you want to close the modal?' 
+      } 
+    };
+
+    // Show the dialog
+    const dialogRef = this._dialogService.show(ConfirmDialogComponent, dialogOptions, dialogConfig);
+
+    // Subscribe to the afterClosed observable to know when the dialog is closed
+    const sub = dialogRef.afterClosed.subscribe(result => {
+      console.log('Dialog result:', result);
+      sub.unsubscribe();
+    });
+  }
+}
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="backdropClose" type="boolean" defaultValue="true">
+
+Controls whether the dialog will close automatically when the backdrop element is clicked.
+  
+</PropertyDef>
+
+<PropertyDef name="closeCallback" type="() => void | Promise<void>" attr={false} defaultValue="undefined">
+
+Sets the callback function that will be executed before closing the dialog. This is a good place to perform validation.
+  
+</PropertyDef>
+
+<PropertyDef name="escapeClose" type="boolean" defaultValue="true">
+
+Controls whether the dialog will close automatically when the escape key is pressed.
+  
+</PropertyDef>
+
+<PropertyDef name="fullscreen" type="boolean" defaultValue="false">
+
+Controls whether the dialog is full screen or not. Default is `false`.
+  
+</PropertyDef>
+
+<PropertyDef name="moveable" type="boolean" defaultValue="false">
+
+Enables the dialog surface to be moveable with the mouse.
+
+**Note:** You must set the "forge-dialog-move-target" attribute on an element within your content for this to work. The dialog component needs to know which element
+the user can click on to drag and will attempt to get a reference to it when it initializes. The move functionality will not work without this.
+  
+</PropertyDef>
+
+<PropertyDef name="moveTarget" type="string" defaultValue="&quot;forge-dialog-move-target&quot;">
+
+Overrides the default selector that is used to find the element that will be used for controlling the move functionality.
+Defaults to an element with the attribute of `forge-dialog-move-target`.
+  
+</PropertyDef>
+
+<PropertyDef name="open" type="boolean" defaultValue="false">
+
+Gets/sets whether the dialog is open or not. When setting this property to `true`, the component will automatically be appended to the DOM.
+  
+</PropertyDef>
+
+<PropertyDef name="openCallback" type="() => void | Promise<void>" defaultValue="undefined">
+
+Gets/sets whether the dialog is open or not. When setting this property to `true`, the component will automatically be appended to the DOM.
+  
+</PropertyDef>
+
+<PropertyDef name="positionX" type="number | string | null" defaultValue="null">
+
+Sets the x position of the dialog.
+  
+</PropertyDef>
+
+<PropertyDef name="positionY" type="number | string | null" defaultValue="null">
+
+Sets the y position of the dialog.
+  
+</PropertyDef>
+
+<PropertyDef name="positionType" type="DialogPositionType" defaultValue="absolute">
+
+The type of positioning to apply. This affects what the `positionX` and `positionY` value are relative to.
+  
+</PropertyDef>
+
+<PropertyDef name="beforeCloseCallback" type="() => boolean | Promise<boolean>" defaultValue="undefined">
+
+A reference to a callback that will be called when the dialog is about to close. This allows you to handle any validation
+and return whether the dialog should continue to close or not.
+  
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="initializeMoveTarget(): void;">
+
+Manually initializes the move target element.
+
+This is useful if you have dynamic elements within your dialog and you need to re-initialize the move target element dynamically.
+
+</MethodDef>
+
+<MethodDef name="resetPosition(): void;">
+
+Resets the dialog surface position to its original `positionX` and `positionY` values.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                        | Description
+| :---------------------------| :----------------
+| `forge-dialog-before-close`   | Emits before the dialog is will close.
+| `forge-dialog-open`           | Emits when the dialog is opened.
+| `forge-dialog-close`          | Emits when the dialog is closed.
+| `forge-dialog-ready`          | Emits when the dialog has finished animating open and is ready for interaction.
+| `forge-dialog-move-start`     | Emits when the user has started moving the dialog surface. Type is `CustomEvent<IDialogMoveStartEventData>`.
+| `forge-dialog-moved`          | Emits when the user is currently moving the dialog surface. Type is `CustomEvent<IDialogMoveEventData>`.
+| `forge-dialog-move-end`       | Emits when the user has finished moving the dialog surface.
+
+</PageSection>
+
+<PageSection>
+
+## Slots
+
+| Name               | Description
+| :------------------| :---------------
+| `default`          | The default (unnamed) slot will accept any DOM you provide to it. This is the body that are contents displayed in the dialog surface element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                         | Description
+| :----------------------------| :----------------
+| `--mdc-theme-surface`        | Controls the background-color of the dialog surface.
+| `--forge-dialog-min-width`     | Minimum width of the dialog being rendered. Default is `280px`.
+| `--forge-dialog-max-width`     | Maximum width of the dialog being rendered. Default is `100%`.
+| `--forge-dialog-max-height`    | Minimum height of the dialog being rendered. Default is `100%`.
+| `--forge-dialog-border-radius` | Border radius of the dialog being rendered. Default is `4px`.
+| `--forge-dialog-width`         | The width of the dialog surface. Default is `auto`.
+| `--forge-dialog-height`        | The height of the dialog surface. Default is `auto`.
+| `--forge-dialog-padding`       | Controls the padding of the dialog surface.
+| `--forge-dialog-top`           | Controls the position from the top of the container the dialog is placed in.
+| `--forge-dialog-align-items`   | Controls the alignment cross-axis alignment of the flex items within the dialog surface.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IDialogMoveEventData
+
+```typescript
+interface IDialogMoveEventData {
+  x: number;
+  y: number;
+}
+```
+
+### IDialogMoveContext
+
+```typescript
+interface IDialogMoveContext { 
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+}
+```
+
+### IDialogMoveStartEventData
+
+```typescript
+interface IDialogMoveStartEventData extends IDialogMoveEventData {}
+```
+
+### DialogPositionType
+
+```typescript
+type DialogPositionType = 'absolute' | 'relative';
+```
+
+</PageSection>

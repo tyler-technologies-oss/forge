@@ -1,0 +1,159 @@
+@use '../../theme/theme';
+@use './mixins';
+@use './variables';
+@use '@material/ripple/mdc-ripple';
+
+@include mixins.core-styles;
+
+:host(:first-child[alternative]) {
+  &::after {
+    align-self: flex-start;
+    top: 22px;
+    margin: 0;
+  }
+}
+:host(:last-child[alternative]) {
+  &::before {
+    align-self: flex-start;
+    top: 22px;
+    margin: 0;
+  }
+}
+
+:host(:not(:first-child):not(:last-child)[alternative]) {
+  &::before,
+  &::after {
+    align-self: flex-start;
+    top: 22px;
+    min-width: 7px;
+    margin: 0;
+  }
+}
+
+:host(:not(:last-child)[alternative]) {
+  .after {
+    align-self: flex-start;
+    top: 22px;
+    position: absolute;
+    width: calc(50% - 18px);
+    left: calc(50% + 18px);
+    height: 0;
+    right: 0;
+    
+    &::after {
+      content: '';
+      flex: 1;
+      flex-basis: 0.000000001px;
+      position: absolute;
+      right: 0;
+      left: 0;
+      min-width: 0;
+      width: 100%;
+
+      @include mixins.line();
+    }
+  }
+}
+
+:host(:not(:first-child)[alternative]) {
+  .before {
+    align-self: flex-start;
+    top: 22px;
+    position: absolute;
+    left: 0;
+    width: calc(50% - 18px);
+    height: 0;
+
+    &::before {
+      content: '';
+      left: 0;
+      min-width: 0;
+      width: 100%;
+      flex: 1;
+      flex-basis: 0.000000001px;
+      position: absolute;
+
+      @include mixins.line();
+    }
+  }
+}
+
+:host(:not(:first-child):not(:last-child)):host(:not([vertical])) {
+  &::before,
+  &::after {
+    @include mixins.step-line;
+    
+    margin: 0 -10px;
+  }
+}
+
+:host(:last-child):host(:not([vertical])) {
+  &::before {
+    @include mixins.step-line;
+    
+    margin: 0 -10px 0 0;
+  }
+}
+
+:host(:not(:last-child)):host(:not([vertical])) {
+  &::after {
+    @include mixins.step-line;
+    
+    margin: 0 0 0 -10px;
+  }
+}
+
+:host(:focus) {
+  outline: none;
+}
+
+:host([vertical]) {
+  @include mixins.vertical-host;
+  
+  &::after {
+    content: none;
+  }
+
+  &::before {
+    content: none;
+  }
+
+  .forge-step {
+    @include mixins.vertical-base;
+
+    &__text-container {
+      white-space: normal;
+    }
+  }
+
+  .forge-step__icon-container {
+    .forge-step-icon-content {
+      margin: variables.$vertical-icon-margin;
+    }
+  }
+}
+
+:host([vertical][expandable]) {
+  .forge-step__expansion-panel {
+    display: block;
+  }
+}
+
+:host([ignore-user-expansion]) {
+  @include mixins.forge-ignore-user-expansion;
+}
+
+forge-expansion-panel {
+  &::part(root) {
+    @include mixins.expansion-panel-styles;
+  }
+}
+
+@include mixins.border-psudo-styles('[clustered]') {
+  min-width: variables.$clusetered-border-min-width;
+}
+
+@include mixins.border-psudo-styles('[safari][alternative]') {
+  top: 24px;
+  margin: 0 -5px;
+}

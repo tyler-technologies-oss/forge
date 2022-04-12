@@ -1,0 +1,15 @@
+@use '../../field/selector' as field-selector;
+@use './selector';
+
+@mixin core-styles {
+  .forge-select {
+    @include selector.leading-container;
+  }
+
+  .forge-field {
+    @include field-selector.label('label');
+    @include field-selector.floating-label('label.forge-floating-label--float');
+    @include selector.selected-text;
+    @include selector.dropdown-icon;
+  }
+}

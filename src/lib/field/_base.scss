@@ -1,0 +1,576 @@
+@use 'sass:map';
+@use '@material/animation/animation' as mdc-animation;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/typography' as mdc-typography;
+@use '@material/rtl/rtl' as mdc-rtl;
+@use '../theme/theme';
+@use './variables';
+@use './utils';
+@use '../floating-label/mixins' as floating-label-mixins;
+
+// Field
+@mixin field-core {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  position: relative;
+  @include theme.z-index(surface);
+}
+
+@mixin field-background-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include theme.property(background-color, form-field-disabled-on-background);
+    cursor: not-allowed;
+  }
+  @include utils.error-theme-state(field-background-color, $theme-state);
+}
+
+@mixin field-height($layout-state, $custom-prop-height) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    @include theme.css-custom-property(
+      height,
+      $custom-prop-height,
+      map.get(variables.$field, height, default)
+    );
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    @include theme.css-custom-property(
+      height,
+      $custom-prop-height,
+      map.get(variables.$field, height, roomy)
+    );
+  }
+  // Dense
+  @else if $layout-state == dense or $layout-state == shape-rounded-dense {
+    @include theme.css-custom-property(
+      height,
+      $custom-prop-height,
+      map.get(variables.$field, height, dense)
+    );
+  }
+  @include utils.error-layout-state(field-height, $layout-state);
+}
+
+@mixin field-margin-top($custom-prop-margin-top) {
+  @include theme.css-custom-property(margin-top, $custom-prop-margin-top, 0);
+}
+
+// Outline
+@mixin outline-core($custom-prop-text-field-background) {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: -1;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-style: solid;
+  border-width: map.get(variables.$outline, border-width, default);
+  transition: mdc-animation.enter(border-color, 200ms);
+  @include theme.css-custom-property(
+    background-color,
+    $custom-prop-text-field-background,
+    map.get(variables.$outline, background-color, default)
+  );
+  @include mdc-rtl.ignore-next-line();
+  text-align: left;
+
+  @include mdc-rtl.rtl {
+    @include mdc-rtl.ignore-next-line();
+    text-align: right;
+  }
+}
+
+@mixin outline-border-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include mdc-theme.property(border-color, text-disabled-on-background);
+  }
+  // Invalid Hover
+  @else if $theme-state == invalid-hover {
+    @include theme.property(border-color, error-hover);
+  }
+  // Invalid
+  @else if $theme-state == invalid {
+    @include mdc-theme.property(border-color, error);
+  }
+  // Focused
+  @else if $theme-state == focused {
+    @include mdc-theme.property(border-color, primary);
+  }
+  // Hover
+  @else if $theme-state == hover {
+    @include mdc-theme.property(border-color, text-primary-on-background);
+  }
+  // Default
+  @else if $theme-state == default {
+    @include mdc-theme.property(border-color, text-icon-on-background);
+  }
+  @include utils.error-theme-state(outline-border-color, $theme-state);
+}
+
+@mixin outline-background-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include theme.property(background-color, form-field-disabled-on-background);
+  }
+  @include utils.error-theme-state(outline-background-color, $theme-state);
+}
+
+@mixin outline-border-width($theme-state) {
+  // Focused
+  @if $theme-state == focused or $theme-state == focused-hover {
+    @include mdc-theme.property(border-color, primary);
+    border-width: map.get(variables.$outline, border-width, focused);
+  }
+  @include utils.error-theme-state(outline-border-width, $theme-state);
+}
+
+@mixin outline-border-radius($layout-state) {
+  // Shape Rounded
+  @if $layout-state == shape-rounded or $layout-state == shape-rounded-dense {
+    border-radius: map.get(variables.$outline, border-radius, shape-rounded);
+  }
+  // Default
+  @else if $layout-state == default or $layout-state == dense {
+    border-radius: map.get(variables.$outline, border-radius, default);
+  }
+  @include utils.error-layout-state(outline-border-radius, $layout-state);
+}
+
+// Label Input Container
+@mixin label-input-container-core {
+  position: relative;
+  flex: 1 1 0.0001px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 0;
+}
+
+// Label
+@mixin label-core {
+  @include theme.property(color, form-field-label-on-background);
+  pointer-events: none;
+  right: 0;
+  @include floating-label-mixins.base;
+}
+
+@mixin label-display($layout-state) {
+  // Dense
+  @if $layout-state == dense or $layout-state == shape-rounded-dense {
+    display: none;
+  }
+  @include utils.error-layout-state(label-display, $layout-state);
+}
+
+@mixin label-asterisk {
+  &::after {
+    content: none;
+  }
+  &::before {
+    @include mdc-theme.property(color, error);
+
+    content: '*';
+    margin-right: variables.$required-asterisk-margin;
+  }
+}
+
+@mixin label-font-size($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    font-size: map.get(variables.$label, font-size, default);
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    font-size: map.get(variables.$label, font-size, roomy);
+  }
+  // Dense
+  @else if $layout-state == dense or $layout-state == shape-rounded-dense {
+    font-size: map.get(variables.$label, font-size, dense);
+  }
+  @include utils.error-layout-state(label-font-size, $layout-state);
+}
+
+@mixin label-top($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    top: map.get(variables.$label, top, default);
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    top: map.get(variables.$label, top, roomy);
+  }
+  @include utils.error-layout-state(label-top, $layout-state);
+}
+
+@mixin label-left($layout-state, $slot-state) {
+  // Check slot state first because leading slot state always overrides the layout state for label.
+  // Leading
+  @if $slot-state == leading or $slot-state == leading-trailing or $slot-state == leading-addon-end {
+    left: map.get(variables.$label, left, leading) !important;
+  }
+  @else if $slot-state == default or $slot-state == trailing or $slot-state == addon-end {
+    // Default
+    @if $layout-state == default or $layout-state == dense {
+      left: map.get(variables.$label, left, default) !important;
+    }
+    // Shape-Rounded
+    @else if $layout-state == shape-rounded or $layout-state == shape-rounded-dense {
+      left: map.get(variables.$label, left, shape-rounded) !important;
+    }
+  }
+  @include utils.error-x-axis-slot-state(label-left, $slot-state);
+  @include utils.error-layout-state(label-left, $layout-state);
+}
+
+@mixin label-padding-right($layout-state, $slot-state) {
+  @if $slot-state == default or $slot-state == leading {
+    // Default
+    @if $layout-state == default or $layout-state == dense {
+      padding-right: map.get(variables.$label, padding, right, default);
+    }
+    // Shape-Rounded
+    @else if $layout-state == shape-rounded or $layout-state == shape-rounded-dense {
+      padding-right: map.get(variables.$label, padding, right, shape-rounded);
+    }
+  }
+  @include utils.error-x-axis-slot-state(label-padding-right, $slot-state);
+  @include utils.error-layout-state(label-padding-right, $layout-state);
+}
+
+@mixin label-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include theme.property(color, label-disabled-on-background);
+  }
+  // Invalid
+  @else if $theme-state == invalid {
+    @include mdc-theme.property(color, error);
+  }
+  // Focused
+  @else if $theme-state == focused {
+    @include mdc-theme.property(color, primary);
+  }
+  @include utils.error-theme-state(label-color, $theme-state);
+}
+
+// Floating Label
+@mixin floating-label-core {
+  @include theme.property(color, form-field-label-on-background);
+}
+
+@mixin floating-label-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include theme.property(color, form-field-text-disabled-on-background);
+  }
+  // Invalid
+  @else if $theme-state == invalid {
+    @include mdc-theme.property(color, error);
+  }
+  // Focused
+  @else if $theme-state == focused {
+    @include mdc-theme.property(color, primary);
+  }
+  @include utils.error-theme-state(floating-label-color, $theme-state);
+}
+
+@mixin floating-label-float($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    @include floating-label-mixins.float(
+      $positionY: map.get(variables.$label, float-y, default),
+      $scale: map.get(variables.$label, float-scale, default)
+    );
+    right: -14%;
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    @include floating-label-mixins.float(
+      $positionY: map.get(variables.$label, float-y, roomy),
+      $scale: map.get(variables.$label, float-scale, default)
+    );
+    right: -14%;
+  }
+  @include utils.error-layout-state(floating-label-float, $layout-state);
+}
+
+// Input
+@mixin input-core {
+  @include mdc-typography.typography(body1, $exclude-props: (font-size, line-height));
+  align-self: flex-end;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  transition: mdc-animation.standard(opacity, 150ms);
+  border: none;
+  background: none;
+  appearance: none;
+  outline: none;
+  line-height: normal;
+  min-width: 0;
+  @include placeholder;
+}
+
+@mixin input-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include theme.property(color, form-field-text-disabled-on-background);
+    cursor: not-allowed;
+  }
+  // Default
+  @else if $theme-state == default {
+    @include mdc-theme.property(color, text-primary-on-background);
+  }
+  @include utils.error-theme-state(input-color, $theme-state);
+}
+
+@mixin input-font-size($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    font-size: map.get(variables.$input, font-size, default);
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    font-size: map.get(variables.$input, font-size, roomy);
+  }
+  // Dense
+  @else if $layout-state == dense or $layout-state == shape-rounded-dense {
+    font-size: map.get(variables.$input, font-size, dense);
+  }
+  @include utils.error-layout-state(input-font-size, $layout-state);
+}
+
+@mixin input-padding {
+  padding: map.get(variables.$input, padding, default);
+}
+
+@mixin input-padding-top($layout-state, $slot-state) {
+  // With Label
+  @if $slot-state == label or $slot-state == label-helper-text {
+    // Default
+    @if $layout-state == default or $layout-state == shape-rounded {
+      padding-top: map.get(variables.$input, padding, top, default);
+    }
+    // Roomy
+    @if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+      padding-top: map.get(variables.$input, padding, top, roomy);
+    }
+  }
+  @include utils.error-layout-state(input-padding-top, $layout-state);
+  @include utils.error-y-axis-slot-state(input-padding-top, $slot-state);
+}
+
+@mixin input-padding-left($layout-state, $slot-state) {
+  // Check slot state first because leading slot state always overrides the layout state for input.
+  // Leading
+  @if $slot-state == leading or $slot-state == leading-trailing or $slot-state == leading-addon-end {
+    padding-left: map.get(variables.$input, padding, left, leading);
+  }
+  @else if $slot-state == default or $slot-state == trailing or $slot-state == addon-end {
+    // Shape Rounded
+    @if $layout-state == shape-rounded {
+      padding-left: map.get(variables.$input, padding, left, shape-rounded);
+    }
+  }
+  @include utils.error-x-axis-slot-state(input-padding-left, $slot-state);
+  @include utils.error-layout-state(input-padding-left, $layout-state);
+}
+
+@mixin input-padding-bottom($layout-state, $slot-state) {
+  // With Label
+  @if $slot-state == label or $slot-state == label-helper-text {
+    // Default
+    @if $layout-state == default or $layout-state == shape-rounded {
+      padding-bottom: map.get(variables.$input, padding, bottom, default);
+    }
+    // Roomy
+    @if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+      padding-bottom: map.get(variables.$input, padding, bottom, roomy);
+    }
+  }
+  @include utils.error-layout-state(input-padding-bottom, $layout-state);
+  @include utils.error-y-axis-slot-state(input-padding-bottom, $slot-state);
+}
+
+@mixin input-padding-right($layout-state, $slot-state) {
+  // Check slot state first because leading slot state always overrides the layout state for input.
+  @if $slot-state == trailing or $slot-state == addon-end or $slot-state == leading-trailing or $slot-state == leading-addon-end {
+    // Trailing
+    padding-right: map.get(variables.$input, padding, right, trailing);
+  }
+  @else if $slot-state == default or $slot-state == leading {
+    // Shape Rounded
+    @if $layout-state == shape-rounded {
+      padding-right: map.get(variables.$input, padding, right, shape-rounded);
+    }
+  }
+  @include utils.error-x-axis-slot-state(input-padding-right, $slot-state);
+  @include utils.error-layout-state(input-padding-right, $layout-state);
+}
+
+// Helper Text
+@mixin helper-text-core {
+  @include mdc-typography.typography(caption, $exclude-props: (font-size));
+  @include mdc-typography.baseline-top(map.get(variables.$helper-text, text-baseline, default));
+  display: block;
+  height: auto;
+}
+
+@mixin helper-text-font-size($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    font-size: map.get(variables.$helper-text, font-size, default);
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    font-size: map.get(variables.$helper-text, font-size, roomy);
+  }
+  // Dense
+  @else if $layout-state == dense or $layout-state == shape-rounded-dense {
+    font-size: map.get(variables.$helper-text, font-size, dense);
+  }
+  @include utils.error-layout-state(helper-text-font-size, $layout-state);
+}
+
+@mixin helper-text-color($theme-state) {
+  // Invalid
+  @if $theme-state == invalid {
+    @include mdc-theme.property(color, error);
+  }
+  // Default
+  @else if $theme-state == default {
+    @include theme.property(color, text-secondary-on-background);
+  }
+  @include utils.error-theme-state(helper-text-color, $theme-state);
+}
+
+@mixin helper-text-margin-left($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == dense {
+    margin-left: map.get(variables.$helper-text, margin-left, default);
+  }
+  // Shape-Rounded
+  @else if $layout-state == shape-rounded or $layout-state == shape-rounded-dense {
+    margin-left: map.get(variables.$helper-text, margin-left, shape-rounded);
+  }
+  @include utils.error-layout-state(helper-text-margin-left, $layout-state);
+}
+
+// Leading
+@mixin leading-core {
+  display: flex;
+  align-self: center;
+}
+
+@mixin leading-padding {
+  padding: map.get(variables.$leading, padding, default);
+}
+
+@mixin leading-margin {
+  margin: map.get(variables.$leading, margin, default);
+}
+
+// Trailing
+@mixin trailing-core {
+  align-self: center;
+}
+
+@mixin trailing-padding {
+  padding: map.get(variables.$trailing, padding, default);
+}
+
+@mixin trailing-margin {
+  margin: map.get(variables.$trailing, margin, default);
+}
+
+// Addon End Container
+@mixin addon-end-no-content {
+  display: none;
+}
+
+@mixin addon-end-core {
+  height: 100%;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 4px;
+  border-left-width: map.get(variables.$outline, border-width, default);
+  border-left-style: solid;
+  transition: mdc-animation.enter(border-left-color, 200ms);
+}
+
+@mixin addon-end-border-left-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include mdc-theme.property(border-left-color, text-disabled-on-background);
+  }
+  // Invalid Hover
+  @else if $theme-state == invalid-hover {
+    @include theme.property(border-left-color, error-hover);
+  }
+  // Invalid
+  @else if $theme-state == invalid {
+    @include mdc-theme.property(border-left-color, error);
+  }
+  // Focused
+  @else if $theme-state == focused {
+    @include mdc-theme.property(border-left-color, primary);
+  }
+  // Hover
+  @else if $theme-state == hover {
+    @include mdc-theme.property(border-left-color, text-primary-on-background);
+  }
+  // Default
+  @else if $theme-state == default {
+    @include mdc-theme.property(border-left-color, text-secondary-on-background);
+  }
+  @include utils.error-theme-state(addon-end-border-left-color, $theme-state);
+}
+
+// Icon
+@mixin icon-color($theme-state) {
+  // Disabled
+  @if $theme-state == disabled {
+    @include mdc-theme.property(color, text-disabled-on-light);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  // Invalid
+  @else if $theme-state == invalid {
+    @include mdc-theme.property(color, error);
+  }
+  // Default
+  @else if $theme-state == default {
+    @include mdc-theme.property(color, text-secondary-on-background);
+  }
+  @include utils.error-theme-state(icon-color, $theme-state);
+}
+
+// Placeholder
+@mixin placeholder {
+  &::placeholder {
+    @include mdc-theme.property(color, text-secondary-on-background);
+    font-size: 0.875rem;
+  }
+
+  &:invalid {
+    box-shadow: none;
+  }
+
+  &:-webkit-autofill {
+    z-index: auto !important;
+  }
+}
+
+

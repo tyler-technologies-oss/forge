@@ -1,0 +1,304 @@
+import { DefaultTemplate as StepperDemo } from './templates/default';
+import { ConfigurationTemplate as ConfigurationDemo } from './templates/configuration';
+import { StepperDefaultHtml } from './code/stepper-default';
+import { StepperConfigurationHtml, StepperConfigurationTs } from './code/stepper-configuration';
+
+<PageSection>
+
+## Usage
+
+The stepper is a component that provides a series of views that can be controlled by `<forge-stepper` via mouse clicks.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+### Basic
+
+The following example demonstrates using the stepper with various step states. Typically you will have configuration behind
+this that is tied to each `<forge-step>` element so that you can control its state, but it can certainly be used in a static
+format like shown below.
+
+
+<LiveDemo 
+fullWidth 
+layout={"column"} 
+codeHtml={StepperDefaultHtml()}>
+  <StepperDemo/>
+</LiveDemo>
+
+
+## Configuration
+
+If you prefer, you can configure the stepper with an array of objects (instead of declaratively specifying it in
+the HTML), and it will render itself based on that configuration.
+
+<LiveDemo 
+fullWidth 
+layout={"column"} 
+codeHtml={StepperConfigurationHtml()} 
+codeTs={StepperConfigurationTs()}>
+  <ConfigurationDemo/>
+</LiveDemo>
+
+</PageSection>
+
+
+<PageSection>
+
+## Properties/Attributes
+
+### Stepper
+
+<PropertyDef name="steps" type="IStepConfiguration[]" defaultValue="[]" attr={false}>
+
+  The step configurations.
+
+  This controls the state of the stepper.
+
+</PropertyDef>
+
+<PropertyDef name="selectedIndex" type="number" defaultValue="0">
+
+  The active step index.
+
+</PropertyDef>
+
+<PropertyDef name="linear" type="boolean" defaultValue="false">
+
+  Whether the stepper is linear or non-linear.
+
+</PropertyDef>
+
+<PropertyDef name="alternative" type="boolean" defaultValue="false">
+
+  Whether the stepper uses the default or alternative label layout mode.
+
+</PropertyDef>
+
+<PropertyDef name="layoutMode" type="StepperLayoutMode" defaultValue="stretched">
+
+  The layout mode of the stepper.
+
+</PropertyDef>
+
+<PropertyDef name="layoutAlign" type="StepperLayoutAlign" defaultValue="center">
+
+  The layout alignment of the stepper.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+  Controls the disabled state of all steps.
+
+</PropertyDef>
+
+<PropertyDef name="vertical" type="boolean" defaultValue="false">
+
+  Gets/sets whether the stepper will render in a vertical orientation or not.
+
+</PropertyDef>
+
+
+
+### Step
+
+<PropertyDef name="index" type="number" defaultValue="undefined">
+
+  The number that is displayed in the step indicator.
+
+</PropertyDef>
+
+<PropertyDef name="editable" type="boolean" defaultValue="false">
+
+  Controls whether the step displays the "edit" icon to denote that the step content can be edited.
+
+</PropertyDef>
+
+<PropertyDef name="completed" type="boolean" defaultValue="false">
+
+  Controls whether the step displays the "completed" icon to denote that the step has been finished.
+
+</PropertyDef>
+
+<PropertyDef name="error" type="boolean" defaultValue="false">
+
+  Controls the error state of the step.
+
+</PropertyDef>
+
+<PropertyDef name="selected" type="boolean" defaultValue="false">
+
+  Controls the selected state of the step.
+
+</PropertyDef>
+
+<PropertyDef name="alternative" type="boolean" defaultValue="false">
+
+  Controls whether the step indicator and label are stacked vertically or not.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+  Controls the disabled state of the step
+
+</PropertyDef>
+
+<PropertyDef name="vertical" type="boolean" defaultValue="false">
+
+  Gets/sets whether the step will render in a vertical orientation or not.
+
+</PropertyDef>
+
+<PropertyDef name="expanded" type="boolean" defaultValue="false">
+
+  Controls the expanded state of the step.
+
+</PropertyDef>
+
+<PropertyDef name="ignoreUserExpansion" type="boolean" defaultValue="false">
+
+  Prevents the expanded state from changing.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+### Step
+
+<MethodDef name="setStepTabIndex(index: number): void">
+
+Sets the tab index on the step
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                                  | Description
+| :-------------------------------------| :----------------
+| `forge-step-selected`                   | Emits when the user selects a step. **Emits from the `<forge-stepper>` element only.**
+| `forge-step-expanded-content-focusin`   | Emits when the user focus enters the expanded content in a step. **Emits from the `<forge-stepper>` element only.**
+| `forge-step-expanded-content-focusout`  | Emits when the user focus exits the expanded content in a step. **Emits from the `<forge-stepper>` element only.**
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+### Stepper
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `default`                      | The default (unnamed) slot expects child elements `<forge-step>`.
+
+### Step
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `default`                      | The default (unnamed) slot renders the title for the step.
+| `optional`                     | The optional slot renders a subtitle for the step.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                                                    | Description
+| :-----------------------------------------------------------------------| :----------------
+| `--mdc-theme-text-disabled-on-background`                               | Controls the background-color of the stepper when hovering.
+| `--mdc-theme-text-disabled-on-light`                                    | Controls the color of the icon when disabled.
+| `--mdc-theme-text-secondary-on-background`                              | Controls the color of the step label.
+| `--mdc-theme-text-primary-on-background`                                | Controls the color of the step icon.
+| `--mdc-theme-primary`                                                   | Controls the background-color of the step icon when selected.
+| `--mdc-theme-error`                                                     | Controls the color of the error state.
+| `--mdc-theme-on-primary`                                                | Controls the color of the step icon when selected.
+| `--mdc-theme-on-error`                                                  | Controls the color of the step icon when in an error state.
+| `--mdc-theme-border-color`                                              | Controls the border-color of the step line.
+| `--mdc-theme-icon-color`                                                | Controls the font color of the expanded icon.
+| `--mdc-theme-form-field-text-disabled-on-background`                    | Controls the disabled color throughout the component.
+| `--forge-step-expansion-panel-border-left-width`                          | Controls the left border width of the expansion panel.
+| `--forge-step-expansion-panel-margin-left`                                | Controls the left margin of the expansion panel.
+| `--forge-step-expansion-panel-margin-top`                                 | Controls the top margin of the expansion panel.
+| `--forge-step-expansion-panel-margin-bottom`                              | Controls the bottom margin of the expansion panel.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IStepConfiguration
+
+```ts
+interface IStepConfiguration {
+  label: string;
+  optionalLabel?: string;
+  editable?: boolean;
+  completed?: boolean;
+  error?: boolean;
+  disabled?: boolean;
+  vertical?: boolean;
+  expanded?: boolean;
+  ignoreUserExpansion?: boolean;
+}
+```
+
+### IStepperConfiguration
+
+```ts
+interface IStepperConfiguration {
+  steps: IStepConfiguration[];
+  selectedIndex: number;
+  linear: boolean;
+  alternative: boolean;
+  layoutMode: StepperLayoutMode;
+  layoutAlign: StepperLayoutAlign;
+  vertical?: boolean;
+}
+```
+
+### StepperLayoutMode
+
+```ts
+type StepperLayoutMode = 'fixed' | 'clustered';
+```
+
+### StepperLayoutAlign
+
+```ts
+type StepperLayoutAlign = 'left' | 'center' | 'right';
+```
+
+### StepIcons
+
+```ts
+export type StepIcons = 'check' | 'block' | 'mode_edit' | 'warning' | '';
+```
+
+</PageSection>

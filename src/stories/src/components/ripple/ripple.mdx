@@ -1,0 +1,86 @@
+import { DefaultTemplate as RippleDemo } from './templates/default';
+import { CardRecipeTemplate as CardRecipeDemo } from './templates/card-recipe';
+import { RippleDefaultHtml } from './code/ripple-default';
+import { RippleCardRecipeHtml } from './code/ripple-card-recipe';
+
+<PageSection>
+
+## Usage
+
+The ripple component is a simple component that allows for you to easily attach a Material-styled "ripple" effect to any arbitrary element.
+This component encapsulates the management of the effect, as well as its visual styles into an easy-to-use Web Component. 
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+The `<forge-ripple>` component can attach to any element. Here we show it attached to a simple `<div>` element via the `target` attribute:
+
+<LiveDemo layout="column" codeHtml={RippleDefaultHtml()}>
+  <RippleDemo />
+</LiveDemo>
+
+> **Note:** This component will automatically attach to its direct parent element if no `target` attribute is specified.
+
+### Card
+
+It's common that this component is used together with the [card component](?path=/story/components-card--default) to provide an interactive card.
+
+<LiveDemo layout="column" codeHtml={RippleCardRecipeHtml()}>
+  <CardRecipeDemo />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="target" type="string" defaultValue="undefined">
+
+A CSS selector that matches an element that the ripple will attach to. By default the component will attach to its direct parent element if no `target` is specified.
+
+</PropertyDef>
+
+<PropertyDef name="unbounded" type="boolean" defaultValue="false">
+
+Sets whether the ripple is bounded to an icon circle or whether its unbounded and fills the entire container.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="layout(): void">
+
+Forces a re-render of the component attach the ripple on demand. Can be useful in progressive rendering situtations where render timing is difficult to maintain.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                          | Description
+| :---------------------------------------------| :----------------
+| `--mdc-ripple-fg-size`                        | Controls the size of the ripple effect (should match the target element width).
+| `--mdc-ripple-fg-opacity`                     | Controls the opacity of the ripple effect.
+
+</PageSection>

@@ -1,0 +1,181 @@
+import { DefaultTemplate as TextFieldDemo } from './templates/default';
+import {
+  TextFieldDefaultHtml,
+} from './code/text-field-default';
+
+<PageSection>
+
+## Usage
+
+The text field component supports many different variants, patterns, and configuration options.
+
+The `<forge-text-field>` element is a block-level element by default and will take up 100% of the available space within its parent container.
+
+See below for examples and code snippets regarding the most common use cases.
+
+> Use a debounce when actions can occur after a user stops typing. In cases where an HTTP request is fired, or some other long running task occurs, avoid executing those expensive tasks until the user has completed what they are searching for. Forge recommends a debounce of 500ms.
+
+> Masking functionality is not built-in to the component, it’s expected that you’ll use standard third-party mask libraries with it.
+> If your team is using Angular, we recommend <a href="https://www.npmjs.com/package/ngx-mask">ngx-mask</a>; otherwise we recommend
+> the <a href="https://www.npmjs.com/package/imask">imask package</a>; both available from npm.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+### Default
+
+The `default` variant is intended to be used in desktop applications.
+
+<LiveDemo 
+codeHtml={TextFieldDefaultHtml()}>
+  <TextFieldDemo/>
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+> **Note:** When using `type="number"` on the `<input>` element, `maxlength` is ignored.  Use the `min`, `max`, and `step` properties to constrain the input.
+
+<PropertyDef name="dense" type="boolean" defaultValue="false">
+
+  Gets/sets the dense state.
+
+</PropertyDef>
+
+<PropertyDef name="floatLabelType" type="TextFieldFloatingLabelType" defaultValue="auto">
+
+  The type of floating label to use.
+
+  Valid values: `auto` (default), `always`.
+
+</PropertyDef>
+
+<PropertyDef name="shape" type="TextFieldShapeType" defaultValue="default">
+
+  The outline shape type to use.
+
+  Valid values: `default`, `rounded`.
+
+</PropertyDef>
+
+<PropertyDef name="invalid" type="boolean" defaultValue="false">
+
+  Controls the invalid state. When set to `true`, the label and border will change to the error theme color.
+
+> If you are using this for form validation, be sure to also update the property on the embedded `<input>` element.
+
+</PropertyDef>
+
+<PropertyDef name="required" type="boolean" defaultValue="false">
+
+  Controls the presence of an asterisk after the label to signify that the field is required.
+
+> If you are using this for form validation, be sure to also update the property on the embedded `<input>` element.
+
+</PropertyDef>
+
+<PropertyDef name="inset" type="boolean" defaultValue="false">
+
+  Sets the style of the floating label to be inside the outline.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="floatLabel(): void">
+
+  Controls the floating state of the label. Call this to manually float the label.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+> A default (unnamed) slot exists, and it is intended that an `<input>` or `<textarea>` element will be placed in this slot.
+
+| Name               | Values
+| :------------------| :-----------------
+| `label`            | Projects the label element into the correct location. If not specified on the `<label>` element then a slot attribute will be added automatically when connected to the DOM.
+| `leading`          | Places content such as icons before the input.
+| `default`          | The default (unnamed) slot is the text input. Projects the input into the correct location.
+| `trailing`         | Places content such as icons after the input.
+| `helper-text`      | Places content below the component with the proper typography.
+| `addon-end`        | Places an action such as icon-button after the input.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                                      | Description
+| :---------------------------------------------------------| :----------------
+| `--mdc-theme-text-primary-on-background`                  | Controls the font color of the input.
+| `--mdc-theme-text-secondary-on-background`                | Controls the font color for label, icons, helper text, and placeholder.
+| `--mdc-theme-text-secondary-alternative-on-background`    | Controls the floating label color.
+| `--mdc-theme-text-icon-on-background`                     | Controls the border color of the icons.
+| `--mdc-theme-label-disabled-on-background`                | Controls the disabled color of the label.
+| `--mdc-theme-text-disabled-on-light`                      | Controls the disabled font color of the icon.
+| `--mdc-theme-text-disabled-on-background`                 | Controls the disabled color of the outline.
+| `--mdc-theme-form-field-required-on-background`           | Controls the required background-color of the field element.
+| `--mdc-theme-form-field-invalid-on-background`            | Controls the invalid background-color of the field element.
+| `--mdc-theme-form-field-text-disabled-on-background`      | Controls the disabled font color of the floating label element.
+| `--mdc-theme-form-field-disabled-on-background`           | Controls the disabled background-color of the field element.
+| `--mdc-theme-primary`                                     | Controls the focused color throughout the component.
+| `--mdc-theme-error`                                       | Controls the error color throughout the component.
+| `--mdc-theme-error-hover`                                 | Controls the error hover color for the outline.
+| `--mdc-theme-on-surface`                                  | Controls the color of the placeholder.
+| `--forge-text-field-height`                                 | Controls the height of the root element. Default value is `3.5rem`.
+| `--forge-text-field-theme-background`                       | Controls the background-color of the field element.
+
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### TextFieldDensityType
+
+```ts
+type TextFieldDensityType = 'roomy' | 'default' | 'dense';
+```
+
+### TextFieldFloatLabelType
+
+```ts
+type TextFieldFloatLabelType = 'always' | 'auto';
+```
+
+### TextFieldShapeType
+
+```ts
+type TextFieldShapeType = 'default' | 'rounded';
+```
+
+</PageSection>

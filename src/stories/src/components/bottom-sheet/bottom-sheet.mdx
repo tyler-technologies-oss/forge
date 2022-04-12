@@ -1,0 +1,251 @@
+import { DefaultTemplate as BottomSheetDemo } from './templates/default';
+import {
+  BottomSheetDefaultHtml,
+  BottomSheetDefaultTs,
+} from './code/bottom-sheet-default';
+
+<PageSection>
+
+## Usage
+
+The bottom sheet component acts as a container element for you to provide content that will render within the bottom sheet surface.
+It provides a built-in scrim (backdrop), and a material styled surface area for your content. The surface element is sized based on the content you provide to it.
+
+The bottom sheet can simply be placed in the DOM, and it will not be visible until it is told to open. It contains all of the open/close animations per Forge guidance,
+and provides a few properties/attributes for customizing the bottom sheet.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+The bottom sheet component is typically created on the fly using JavaScript. Below is an example of how to create and
+configure a bottom sheet on the fly using vanilla JavaScript:
+
+<LiveDemo
+layout="column"
+codeHtml={BottomSheetDefaultHtml()}
+codeTs={BottomSheetDefaultTs()}>
+  <BottomSheetDemo/>
+</LiveDemo>
+
+> **Note:** To allow the bottom sheet to automatically set focus to a specific element when opened, set the `forge-bottom-sheet-focus` attribute on it.
+
+### Angular
+
+To make using the bottom sheet component easier and more seamless within an Angular application, use the `@tylertech/forge-angular` Angular adapter library.
+
+This library provides a `BottomSheetService` provider that can be injected, and used to easily render a dynamic Angular component within the Forge bottom sheet.
+
+As an example, say we want to render a dynamically created confirmation bottom sheet component that offers the ability to change the title and message. We could create
+a component like the following:
+
+```ts
+import { Component } from '@angular/core';
+import { BottomSheetConfig, BottomSheetRef } from '@tylertech/forge-angular';
+
+@Component({
+  selector: 'app-confirm-bottom-sheet',
+  templateUrl: './confirm-bottom-sheet.component.html',
+  styleUrls: ['./confirm-bottom-sheet.component.scss']
+})
+export class ConfirmBottomSheetComponent {
+  public title: string;
+  public message: string;
+
+  constructor(public bottomSheetConfig: BottomSheetConfig, private _bottomSheetRef: BottomSheetRef) {
+    this.title = bottomSheetConfig.data.title;
+    this.message = bottomSheetConfig.data.message;
+  }
+
+  public onCancel(): void {
+    this._bottomSheetRef.close(false);
+  }
+
+  public onConfirm(): void {
+    this._bottomSheetRef.close(true);
+  }
+}
+```
+
+We could then inject the `BottomSheetService` from the Forge adapter library, and show the dynamic component like this:
+
+```ts
+import { Component } from '@angular/core';
+import { BottomSheetService } from '@tylertech/forge-angular';
+
+import { ConfirmBottomSheetComponent } from './confirm-bottom-sheet/confirm-bottom-sheet.component';
+
+@Component({
+  selector: 'app-bottom-sheet',
+  templateUrl: './bottom-sheet.component.html'
+})
+export class BottomSheetExampleComponent {
+  constructor(private _bottomSheetService: BottomSheetService) {}
+
+  public showConfirmBottomSheet(): void {
+    // Set any options to be applied to the <forge-bottom-sheet> component
+    const bottomSheetOptions = { 
+      backdropClose: true, 
+      escapeClose: false 
+    };
+
+    // Set up any data that can be injected into the dynamic component
+    const bottomSheetConfig = { 
+      data: { 
+        title: 'Confirm', 
+        message: 'Are you sure you want to close the bottom sheet?' 
+      } 
+    };
+
+    // Show the bottom sheet
+    const bottomSheetRef = this._bottomSheetService.show(ConfirmBottomSheetComponent, bottomSheetOptions, bottomSheetConfig);
+
+    // Subscribe to the afterClosed observable to know when the bottom sheet is closed
+    const sub = bottomSheetRef.afterClosed.subscribe(result => {
+      console.log('Bottom sheet result:', result);
+      sub.unsubscribe();
+    });
+  }
+}
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="open" type="boolean" defaultValue="false">
+
+Gets/sets whether the bottom sheet is open or not. When setting this property to `true`, the component will automatically be appended to the DOM.
+  
+</PropertyDef>
+
+<PropertyDef name="showBackdrop" type="boolean" defaultValue="false">
+
+Controls whether the bottom sheet will display a backdrop (scrim).
+  
+</PropertyDef>
+
+<PropertyDef name="backdropClose" type="boolean" defaultValue="true">
+
+Controls whether the bottom sheet will close automatically when the backdrop element is clicked.
+  
+</PropertyDef>
+
+<PropertyDef name="escapeClose" type="boolean" defaultValue="true">
+
+Controls whether the bottom sheet will close automatically when the escape key is pressed.
+  
+</PropertyDef>
+
+<PropertyDef name="fullscreen" type="boolean" defaultValue="false">
+
+Controls whether the bottom sheet is full screen or not. Default is `false`.
+  
+</PropertyDef>
+
+<PropertyDef name="openCallback" attr={false} type="() => void | Promise<void>" defaultValue="undefined">
+
+Gets/sets whether the bottom sheet is open or not. When setting this property to `true`, the component will automatically be appended to the DOM.
+  
+</PropertyDef>
+
+<PropertyDef name="closeCallback" attr={false} type="() => void | Promise<void>" attr={false} defaultValue="undefined">
+
+Sets the callback function that will be executed before closing the bottom sheet. This is a good place to perform validation.
+  
+</PropertyDef>
+
+<PropertyDef name="beforeCloseCallback" attr={false} type="() => boolean | Promise<boolean>" defaultValue="undefined">
+
+A reference to a callback that will be called when the bottom sheet is about to close. This allows you to handle any validation
+and return whether the bottom sheet should continue to close or not.
+  
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                              | Description
+| :---------------------------------| :----------------
+| `forge-bottom-sheet-open`           | Emits when the bottom sheet is opened.
+| `forge-bottom-sheet-close`          | Emits when the bottom sheet is closed.
+| `forge-bottom-sheet-before-open`    | Emits when the bottom sheet is closed.
+| `forge-bottom-sheet-before-close`   | Emits when the bottom sheet is closed.
+| `forge-bottom-sheet-ready`          | Emits when the bottom sheet has finished animating open and is ready for interaction.
+| `forge-bottom-sheet-drag-start`     | Emits when the user has started dragging the bottom sheet surface. Type is `CustomEvent<IBottomSheetDragStartEventData>`.
+| `forge-bottom-sheet-dragged`        | Emits when the user is currently dragging the bottom sheet surface. Type is `CustomEvent<IBottomSheetDragEventData>`.
+| `forge-bottom-sheet-drag-end`       | Emits when the user has finished dragging the bottom sheet surface.
+| `forge-bottom-sheet-drag-cancel`    | Emits when the user has canceled dragging the bottom sheet surface.
+| `forge-bottom-sheet-fullscreen`     | Emits when the bottom sheet is automatically expanded to full screen.
+
+</PageSection>
+
+<PageSection>
+
+## Slots
+
+| Name               | Description
+| :------------------| :---------------
+| `default`          | The default (unnamed) slot will accept any DOM you provide to it. This is the body that are contents displayed in the bottom sheet surface element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :----------------
+| `--mdc-theme-surface`                           | Controls the `background-color` of the bottom sheet surface.
+| `--forge-bottom-sheet-border-radius`              | Controls the `border-radius` of the bottom sheet surface.
+| `--forge-bottom-sheet-desktop-max-width`          | Controls the `max-width` used on desktop viewports.
+| `--forge-bottom-sheet-transition-duration`        | The open transition duration.
+| `--forge-bottom-sheet-transition-duration-close`  | The close transition duration.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IBottomSheetDragEventData
+
+```typescript
+interface IBottomSheetDragEventData {
+  y: number;
+}
+```
+
+### IBottomSheetDragContext
+
+```typescript
+interface IBottomSheetDragContext { 
+  top: number;
+  height: number;
+}
+```
+
+### IBottomSheetDragStartEventData
+
+```typescript
+interface IBottomSheetDragStartEventData extends IBottomSheetDragEventData {}
+```
+
+</PageSection>

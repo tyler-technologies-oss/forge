@@ -1,0 +1,346 @@
+// Copyright 2016 Google Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+// stylelint-disable selector-class-pattern --
+// Selector '.forge-*' should only be used in this project.
+
+@use 'sass:math';
+@use 'sass:list';
+@use '@material/animation/functions' as mdc-animation-functions;
+@use '@material/elevation/mixins' as mdc-elevation-mixins;
+@use '@material/elevation/variables' as mdc-elevation-variables;
+@use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
+@use '@material/dom/mixins' as mdc-dom-mixins;
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '@material/theme/custom-properties' as mdc-custom-properties;
+@use '@material/typography/typography' as mdc-typography;
+@use './fab-custom-properties';
+@use './extended-fab-theme';
+@use './fab-theme';
+@use '../theme/theme-values';
+
+@mixin core-styles($query: mdc-feature-targeting.all()) {
+  @include without-ripple($query);
+  @include ripple($query);
+
+  // FORGE (new): forge-specific styles
+  @include host;
+}
+
+@mixin without-ripple($query: mdc-feature-targeting.all()) {
+  // postcss-bem-linter: define fab
+
+  // prettier-ignore
+  @include mdc-elevation-mixins.overlay-common($query); // COPYBARA_COMMENT_THIS_LINE
+
+  .forge-fab {
+    @include base_($query: $query);
+    @include fab-theme.container-color(secondary, $query: $query);
+    @include fab-theme.icon-size(24px, $query: $query);
+    @include fab-theme.ink-color(on-secondary, $query: $query);
+    @include fab-theme.shape-radius(fab-theme.$shape-radius, $query: $query);
+    @include mdc-elevation-mixins.elevation(6, $query: $query);
+  }
+
+  .forge-fab--mini {
+    @include mini_($query: $query);
+  }
+
+  .forge-fab--extended {
+    @include extended_($query: $query);
+  }
+
+  .forge-fab::before {
+    @include mdc-dom-mixins.transparent-border($query: $query);
+  }
+
+  .forge-fab__label {
+    @include label_($query: $query);
+  }
+
+  .forge-fab__icon {
+    @include icon_($query: $query);
+  }
+
+  // Increase specificity for FAB icon styles that need to override styles defined for .material-icons
+  // (which is loaded separately so the order of CSS definitions is not guaranteed)
+  .forge-fab .forge-fab__icon {
+    @include icon-overrides_($query: $query);
+  }
+
+  .forge-fab--exited {
+    @include exited_($query: $query);
+  }
+
+  // postcss-bem-linter: end
+}
+
+@mixin ripple($query: mdc-feature-targeting.all()) {
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-ripple.common($query); // COPYBARA_COMMENT_THIS_LINE
+
+  .forge-fab {
+    @include mdc-ripple.surface(
+      $query: $query,
+      $ripple-target: fab-theme.$ripple-target
+    );
+    @include mdc-ripple.radius-bounded(
+      $query: $query,
+      $ripple-target: fab-theme.$ripple-target
+    );
+    @include fab-theme.ripple-color(on-secondary, $query: $query);
+
+    #{fab-theme.$ripple-target} {
+      @include mdc-ripple.target-common($query: $query);
+
+      @include mdc-feature-targeting.targets($feat-structure) {
+        overflow: hidden;
+      }
+    }
+    @include mdc-ripple-theme.behind-content(
+      fab-theme.$ripple-target,
+      $query: $query
+    );
+  }
+}
+
+$icon-enter-delay_: 90ms;
+$icon-enter-duration_: 180ms;
+
+@mixin base_($query: mdc-feature-targeting.all()) {
+  @include mdc-elevation-mixins.overlay-surface-position($query: $query);
+  @include mdc-elevation-mixins.overlay-dimensions(100%, $query: $query);
+
+  $feat-animation: mdc-feature-targeting.create-target($query, animation);
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-feature-targeting.targets($feat-structure) {
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: fab-theme.$height;
+    height: fab-theme.$height;
+    padding: 0;
+    border: none;
+    fill: currentColor;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    // Even though `visible` is the default, IE 11 computes the property as
+    // `hidden` in some cases, unless it's explicitly defined here.
+    overflow: visible;
+  }
+
+  @include mdc-feature-targeting.targets($feat-animation) {
+    transition: box-shadow mdc-elevation-variables.$transition-duration mdc-elevation-variables.$transition-timing-function, opacity 15ms linear 30ms,
+      mdc-animation-functions.enter(transform, $icon-enter-duration_ + $icon-enter-delay_);
+  }
+
+  &::-moz-focus-inner {
+    @include mdc-feature-targeting.targets($feat-structure) {
+      padding: 0;
+      border: 0;
+    }
+  }
+
+  &:hover {
+    @include mdc-elevation-mixins.elevation(8, $query: $query);
+  }
+
+  @include mdc-ripple-theme.focus() {
+    @include mdc-elevation-mixins.elevation(8, $query: $query);
+  }
+
+  // Increase active state specificity due to mdc-ripple-theme.focus().
+  &:active,
+  &:focus:active {
+    @include mdc-elevation-mixins.elevation(12, $query: $query);
+  }
+
+  &:active,
+  &:focus {
+    // TODO(acdvorak): Should this be paired with states and/or ripple? We don't want to disable outline
+    // (an accessibility/usability feature) unless we're confident that there is also a visual indication that the
+    // element has focus. If the client has customized the DOM in some unexpected way, and is certain that another
+    // element will receive focus instead, they can always override this property manually in their CSS.
+    @include mdc-feature-targeting.targets($feat-structure) {
+      outline: none;
+    }
+  }
+
+  &:hover {
+    @include mdc-feature-targeting.targets($feat-structure) {
+      cursor: pointer;
+    }
+  }
+
+  // This allows for using SVGs within them to align properly in all browsers.
+  // Can remove once: https://bugzilla.mozilla.org/show_bug.cgi?id=1294515 is resolved.
+
+  // stylelint-disable selector-max-type
+  // postcss-bem-linter: ignore
+  > svg {
+    @include mdc-feature-targeting.targets($feat-structure) {
+      width: 100%;
+    }
+  }
+  // stylelint-enable selector-max-type
+}
+
+@mixin mini_($query: mdc-feature-targeting.all()) {
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-feature-targeting.targets($feat-structure) {
+    width: fab-theme.$mini-height;
+    height: fab-theme.$mini-height;
+  }
+}
+
+@mixin extended_($query: mdc-feature-targeting.all()) {
+  @include mdc-typography.typography(button, $query: $query);
+  @include extended-fab-theme.extended-shape-radius(
+    fab-theme.$shape-radius,
+    $query: $query
+  );
+  $extended-icon-padding: mdc-custom-properties.create(
+    fab-custom-properties.$extended-icon-padding,
+    extended-fab-theme.$extended-icon-padding
+  );
+  $extended-label-padding: mdc-custom-properties.create(
+    fab-custom-properties.$extended-label-padding,
+    extended-fab-theme.$extended-label-padding
+  );
+  @include extended-fab-theme.extended-padding(
+    extended-fab-theme.$extended-icon-padding,
+    extended-fab-theme.$extended-label-padding,
+    $query: $query
+  );
+
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-feature-targeting.targets($feat-structure) {
+    width: auto;
+    max-width: 100%;
+    height: extended-fab-theme.$extended-height;
+    // This allows the text within the extended fab to be centered for varying font sizes.
+    /* @alternate */
+    line-height: normal;
+  }
+}
+
+@mixin icon_($query: mdc-feature-targeting.all()) {
+  $feat-animation: mdc-feature-targeting.create-target($query, animation);
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-feature-targeting.targets($feat-animation) {
+    transition: mdc-animation-functions.enter(
+      transform,
+      $icon-enter-duration_,
+      $icon-enter-delay_
+    );
+  }
+
+  @include mdc-feature-targeting.targets($feat-structure) {
+    fill: currentColor;
+    will-change: transform;
+  }
+}
+
+@mixin label_($query: mdc-feature-targeting.all()) {
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-feature-targeting.targets($feat-structure) {
+    justify-content: flex-start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+}
+
+@mixin icon-overrides_($query: mdc-feature-targeting.all()) {
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-feature-targeting.targets($feat-structure) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@mixin exited_($query: mdc-feature-targeting.all()) {
+  $feat-animation: mdc-feature-targeting.create-target($query, animation);
+  $feat-structure: mdc-feature-targeting.create-target($query, structure);
+
+  @include mdc-feature-targeting.targets($feat-structure) {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  @include mdc-feature-targeting.targets($feat-animation) {
+    transition: opacity 15ms linear 150ms, mdc-animation-functions.exit-permanent(transform, 180ms);
+  }
+
+  .forge-fab__icon {
+    @include mdc-feature-targeting.targets($feat-structure) {
+      transform: scale(0);
+    }
+
+    @include mdc-feature-targeting.targets($feat-animation) {
+      transition: mdc-animation-functions.exit-permanent(transform, 135ms);
+    }
+  }
+}
+
+///
+/// FORGE (new): forge-specific mixins
+///
+
+@mixin host() {
+  forge-fab {
+    display: inline-block;
+  }
+}
+
+@mixin host-theme($theme) {
+  forge-fab[theme='#{$theme}'] .forge-fab {
+    @include theme($theme);
+  }
+}
+
+@mixin theme($theme) {
+  $defaultValue: map-get(theme-values.$background-colors, $theme);
+  $contrastValue: map-get(map-get(theme-values.$background-colors, contrast), $theme);
+
+  --mdc-theme-secondary: var(--mdc-theme-#{$theme}, #{$defaultValue});
+  --mdc-theme-on-secondary: #{$contrastValue};
+
+  // IE support
+  .forge-fab {
+    background-color: #{$defaultValue};
+    color: #{$contrastValue};
+  }
+}

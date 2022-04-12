@@ -1,0 +1,66 @@
+import { DefaultTemplate as OpenIconDemo } from './templates/default';
+import { ExpansionPanelTemplate as ExpansionPanelDemo } from './templates/expansion-panel';
+import { OpenIconDefaultHtml } from './code/open-icon-default';
+import { OpenIconHorizontalHtml } from './code/open-icon-horizontal';
+import { OpenIconExpansionPanelHtml } from './code/open-icon-expansion-panel';
+
+<PageSection>
+
+## Usage
+
+This is a very simple component, and its only responsibility is to provide automatic rotation of the built-in chevron icon.
+
+It works very well with other components (such as the expansion-panel) that need to display a rotating icon to denote the "open" or "closed" state of the component.
+The open-icon will listen for specific events to be dispatched and update its state automatically.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Vertical
+
+<LiveDemo dense codeHtml={OpenIconDefaultHtml()}>
+  <OpenIconDemo />
+</LiveDemo>
+
+### Horizontal
+
+<LiveDemo dense codeHtml={OpenIconHorizontalHtml()}>
+  <OpenIconDemo orientation="horizontal" />
+</LiveDemo>
+
+### With expansion panel
+
+<LiveDemo dense={false} padded={false} fullWidth layout="column" codeHtml={OpenIconExpansionPanelHtml()}>
+  <ExpansionPanelDemo />
+</LiveDemo>
+
+
+It's common to use the open-icon with an [expansion-panel](?path=/story/components-expansion-panel--default) to have an indicator automatically rotate when the expansion-panel is toggled.
+
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="open" type="boolean" defaultValue="false">
+
+  Gets/sets the open state.
+
+</PropertyDef>
+
+<PropertyDef name="orientation" type="string" defaultValue="&quot;vertical&quot;">
+
+  Controls the animation rotation direction. Valid values: `vertical` (default) or `horizontal`.
+
+</PropertyDef>
+
+</PageSection>

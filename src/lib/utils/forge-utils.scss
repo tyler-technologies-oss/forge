@@ -1,0 +1,41 @@
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/elevation/elevation-theme' as mdc-elevation-theme;
+@use '../theme/theme';
+@use '../theme/theme-values';
+@use './mixins';
+
+.forge--hidden {
+  display: none !important;
+}
+
+.forge--outlined {
+  @include theme.property(border-color, border-color);
+}
+
+.forge--raised {
+  @include mdc-elevation-theme.elevation(2);
+}
+
+.forge-text--right {
+  text-align: right;
+}
+
+.forge-text--center {
+  text-align: center;
+}
+
+.forge-text--caption {
+  @include mdc-typography.typography(caption);
+  @include mdc-theme.property(color, text-secondary-on-background);
+}
+
+.forge-text--clipped {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.forge-position-abs-zero {
+  @include mixins.position-abs-zero();
+}

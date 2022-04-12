@@ -1,0 +1,113 @@
+import { DefaultTemplate as SwitchDemo } from './templates/default';
+import { SwitchDefaultHtml } from './code/switch-default';
+import { SwitchNoLabelHtml } from './code/switch-no-label';
+
+<PageSection>
+
+## Usage
+
+Switches toggle the state of a single setting on or off. 
+
+Use switches to:
+
+  - Toggle a single item on or off, on mobile and tablet
+  - Immediately activate or deactivate something
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+### Basic
+
+<LiveDemo dense codeHtml={SwitchDefaultHtml()}>
+  <SwitchDemo />
+</LiveDemo>
+
+### No label
+
+<LiveDemo dense codeHtml={SwitchNoLabelHtml()}>
+  <SwitchDemo hasLabel={false} />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="dense" type="boolean" defaultValue="false">
+
+  Gets/sets the dense state.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+  Gets/sets the disables state.
+
+</PropertyDef>
+
+<PropertyDef name="selected" type="boolean" defaultValue="false">
+
+  Gets/sets the selected state.
+
+</PropertyDef>
+
+<PropertyDef name="labelPosition" type="SwitchLabelPosition" defaultValue="'end'">
+
+  Gets/sets the logical side of the switch that the label should be positioned on.
+
+</PropertyDef>
+
+<PropertyDef name="button-aria-label" prop={false} type="string" defaultValue="undefined">
+
+  Sets the `aria-label` on the internal `<button>` element.
+
+  Only apply this attribute if you aren't using a label element, or need to specify an alternate label.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name               | Description
+| :------------------| :--------------------
+| `default`          | The default (unnamed) slot where label text will be placed.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                              | Description
+| :---------------------------------| :-----------------
+| `forge-switch-select`               | Emits when the switch has changed. 
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :--------------------
+| `--mdc-theme-tertiary`                          | Controls the color of thumb track when switch is checked.
+| `--mdc-theme-text-hint-on-background`           | Controls the font-color of label when switch is disabled.
+
+</PageSection>

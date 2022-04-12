@@ -1,0 +1,11 @@
+@use './mixins';
+
+.forge-expansion-panel {
+  &__button {
+    @include mixins.slotted-button;
+  }
+
+  &__content {
+    @include mixins.slotted-content;
+  }
+}

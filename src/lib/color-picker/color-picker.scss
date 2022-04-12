@@ -1,0 +1,16 @@
+@use '../theme/theme';
+@use './mixins';
+
+// Required component styles
+@use '../icon-button/forge-icon-button';
+
+@include mixins.styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+

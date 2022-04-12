@@ -1,0 +1,10 @@
+@use './core';
+
+@mixin host() {
+  display: block;
+  min-width: 0;
+}
+
+@mixin core-styles() {
+  @include core.core-styles;
+}

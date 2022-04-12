@@ -1,0 +1,215 @@
+import { DefaultTemplate as MenuDemo } from './templates/default';
+import { MenuDefaultCodeHtml, MenuDefaultCodeTs } from './code/menu-default';
+
+<PageSection>
+
+## Usage
+
+The menu component is a wrapper component that can be placed around any content. It will listen for a click event on its children, and toggle a popup menu
+around the target element.
+
+The popup menu is simply a list of items that allows a user to choose an option to perform a task.
+
+This component supports a cascading menus by adding child options to a specific menu item.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+<LiveDemo dense={true} codeHtml={MenuDefaultCodeHtml()} codeTs={MenuDefaultCodeTs()}>
+  <MenuDemo />
+</LiveDemo>
+
+> Menu options must be set via JavaScript (or through property binding if using a framework like Angular):
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="open" type="boolean" defaultValue="false">
+
+Controls the open state of the popup menu.
+  
+</PropertyDef>
+
+<PropertyDef name="options" type="Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory" attr={false} defaultValue="[]">
+
+Sets the `IMenuOption` items to display. If an `MenuOptionFactory` is provided as the value instead, then that will be used to fetch the options asynchronously.
+  
+</PropertyDef>
+
+<PropertyDef name="selectedIndex" type="number" defaultValue="undefined">
+
+Gets/sets the selected option to the index. Does not support cascading menus.
+  
+</PropertyDef>
+
+<PropertyDef name="selectedValue" type="any" defaultValue="undefined">
+
+Gets/sets the value of the option to select.
+  
+</PropertyDef>
+
+<PropertyDef name="placement" type="PopupPlacement" defaultValue="&quot;bottom-start&quot;">
+
+Gets/sets the popup placement around the child element.
+  
+</PropertyDef>
+
+<PropertyDef name="dense" type="boolean" defaultValue="false">
+
+Controls dense state of the list options in the dropdown.
+  
+</PropertyDef>
+
+<PropertyDef name="iconClass" type="string" defaultValue="&quot;tyler-icons&quot;">
+
+Sets the class to apply to the menu options when a leading icon is being used. Default to `tyler-icons`.
+  
+</PropertyDef>
+
+<PropertyDef name="persistSelection" type="boolean" defaultValue="false">
+
+When true, options that are selected will have a highlighted "selected" class applied that persists between the menu closing and opening.
+  
+</PropertyDef>
+
+<PropertyDef name="mode" type="MenuMode" defaultValue="'click'">
+
+Gets/sets the mode that this menu is using.
+  
+</PropertyDef>
+
+<PropertyDef name="popupOffset" type="IPopupPosition" defaultValue="undefined">
+
+Sets the position adustment on the internal popup element.
+  
+</PropertyDef>
+
+<PropertyDef name="popupElement" type="HTMLElement | undefined" defaultValue="undefined">
+
+Gets/sets whether selection of menu items is persisted.
+  
+</PropertyDef>
+
+<PropertyDef name="optionBuilder" type="MenuOptionBuilder | undefined" defaultValue="undefined">
+
+Sets the callback that will be executed for each option in the dropdown for producing custom option templates.
+  
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="propagateKeyEvent(evt: KeyboardEvent): void;">
+
+Force propagates the key event from another element this component.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                          | Description
+| :-----------------------------| :-----------------
+| `forge-menu-select`             | Emits when a menu item is selected from the dropdown. The data can be accessed via the `event.detail` property, and is of type `IMenuSelectEventData`.
+| `forge-menu-open`               | Emits when a menu is opened.
+| `forge-menu-close`              | Emits when a menu is closed.
+| `forge-menu-active-change`      | Emits when the active menu item is changed. The data can be accessed via the 'event.detail' property, and is of type `IMenuActiveChangeEventData`.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `default`                      | The default (unnamed) slot is where the child `<forge-button>` element will be placed.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IMenuOption
+
+```typescript
+interface IMenuOption<T = any> extends IListDropdownOption<T> {
+  icon?: string;
+  selected?: boolean;
+}
+```
+
+### IMenuOptionGroup
+
+```typescript
+export interface IMenuOptionGroup extends IListDropdownOptionGroup {}
+```
+
+### IMenuSelectEventData
+
+```typescript
+interface IMenuSelectEventData<T = any, K = any> {
+  index: number;
+  value?: T;
+  parentValue?: K;
+}
+```
+
+### IMenuActiveChangeEventData
+
+```typescript
+interface IMenuActiveChangeEventData {
+  id: string;
+}
+```
+
+### MenuOptionBuilder
+
+```typescript
+type MenuOptionBuilder = (option: IMenuOption, parentElement: HTMLElement) => HTMLElement | string | void;
+```
+
+### MenuOptionFactory
+
+```typescript
+type MenuOptionFactory = (() => IMenuOption[]) | (() => Promise<IMenuOption[]>);
+```
+
+### MenuMode
+
+```typescript
+type MenuMode = 'click' | 'cascade';
+```
+
+### PopupPlacement
+
+```typescript
+type PopupPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
+```
+
+</PageSection>

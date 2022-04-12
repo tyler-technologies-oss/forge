@@ -1,0 +1,62 @@
+@use '../theme/theme-values';
+
+$default-color: theme-values.$text-primary-color !default;
+$padding-top: 8px !default;
+$padding-right: 16px !default;
+$padding-bottom: 8px !default;
+$padding-left: 12px !default;
+$padding: $padding-top $padding-right $padding-bottom $padding-left !default;
+
+$theme-values: (
+  // success theme
+  success-background: rgba(165, 214, 167, 0.3),
+  success-font-color: theme-values.$text-primary-color,
+  success-icon-color: #1b5e20,
+
+  // warning theme
+  warning-background: rgba(255, 219, 166, 0.3),
+  warning-font-color: theme-values.$text-primary-color,
+  warning-icon-color: #a03a03,
+
+  // danger theme
+  danger-background: rgba(255, 205, 210, 0.3),
+  danger-font-color: theme-values.$text-primary-color,
+  danger-icon-color: #a22d0e,
+
+  // info-primary theme
+  info-primary-background: rgba(187, 222, 251, 0.3),
+  info-primary-font-color: theme-values.$text-primary-color,
+  info-primary-icon-color: #1a237e,
+
+  // info-secondary theme
+  info-secondary-background: rgba(224, 224, 224, 0.4),
+  info-secondary-font-color: theme-values.$text-primary-color,
+  info-secondary-icon-color: #000000
+) !default;
+
+$theme-values-dark: (
+  // success theme
+  success-background: #175a2a,
+  success-font-color: #ffffff,
+  success-icon-color: #ffffff,
+
+  // warning theme
+  warning-background: #933600,
+  warning-font-color: #ffffff,
+  warning-icon-color: #ffffff,
+
+  // danger theme
+  danger-background: #810022,
+  danger-font-color: #ffffff,
+  danger-icon-color: #ffffff,
+
+  // info-primary theme
+  info-primary-background: #0a3b71,
+  info-primary-font-color: #ffffff,
+  info-primary-icon-color: #ffffff,
+
+  // info-secondary theme
+  info-secondary-background: #424242,
+  info-secondary-font-color: #ffffff,
+  info-secondary-icon-color: #ffffff
+);

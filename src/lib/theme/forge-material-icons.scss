@@ -1,0 +1,14 @@
+@use './icon-mixins';
+
+.tyler-icons {
+  @include icon-mixins.icon;
+}
+
+.tyler-icons.tyler-icons--dense,
+.tyler-icons-ext.tyler-icons--dense {
+  font-size: 20px;
+}
+
+.tyler-icons-ext {
+  @include icon-mixins.icon-ext;
+}

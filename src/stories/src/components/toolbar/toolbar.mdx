@@ -1,0 +1,78 @@
+import { DefaultTemplate as ToolbarDemo } from './templates/default';
+import { ToolbarDefaultHtml } from './code/toolbar-default';
+
+
+<PageSection>
+
+## Usage
+
+The toolbar component allows you to place titles and actions within the `<forge-toolbar>` and align them to the `start`, `center`, or `end` of the toolbar.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+<LiveDemo
+fullWidth 
+layout={'column'} 
+codeHtml={ToolbarDefaultHtml()}>
+  <ToolbarDemo/>
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+
+<PropertyDef name="inverted" type="boolean" defaultValue="false">
+
+  Controls whether a border bottom (default) or top (true) is used.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name                              | Description
+| :---------------------------------| :----------------
+| start                             | Places content at the beginning of the toolbar.
+| center                            | Places content at the center of the toolbar.
+| end                               | Places content at the end of the toolbar.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                          | Description
+| :---------------------------------------------| :----------------
+| `--mdc-theme-surface`                         | Controls the background-color of the toolbar.
+| `--mdc-theme-border-color`                    | Controls the border-color of the toolbar.
+| `--forge-toolbar-height`                        | Controls the height.
+| `--forge-toolbar-min-height`                    | Controls the minimum height.
+| `--forge-toolbar-padding`                       | Controls the left and right padding.
+| `--forge-toolbar-border-bottom`                 | Controls the style for the bottom border. Can be set to "none" for no border.
+| `--forge-toolbar-border-top-left-radius`        | Sets the top left border radius.
+| `--forge-toolbar-border-top-right-radius`       | Sets the top right border radius.
+| `--forge-toolbar-border-bottom-left-radius`     | Sets the bottom left border radius.
+| `--forge-toolbar-border-bottom-right-radius`    | Sets the bottom right border radius.
+
+> **Tip:** If you need the toolbar to expand vertically when its contents wrap, set: `--forge-toolbar-height: 'auto'`
+
+</PageSection>

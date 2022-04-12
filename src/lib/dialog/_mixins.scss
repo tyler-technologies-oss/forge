@@ -1,0 +1,194 @@
+@use '@material/animation/animation' as mdc-animation;
+@use '@material/elevation/elevation-theme';
+@use '@material/shape/shape';
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/typography/typography' as mdc-typography;
+@use '../typography/mixins' as typography;
+@use '../utils/mixins' as utils;
+@use '../theme/theme';
+@use '../utils/mixins-media';
+@use './variables';
+
+@mixin core-styles() {
+  .forge-dialog {
+    @include base;
+  
+    &--moveable:not(.forge-dialog--fullscreen) {
+      ::slotted([forge-dialog-move-target]) {
+        cursor: move;
+      }
+    }
+  
+    &--animating {
+      @include animating;
+  
+      .forge-dialog--open .forge-dialog__surface {
+        @include surface-open-animating;
+      }
+  
+      .forge-dialog__surface {
+        @include surface-animating;
+      }
+    }
+  
+    &--scrollable {
+      .forge-dialog__title,
+      .forge-dialog__footer {
+        border-color: rgba(0, 0, 0, 0.12);
+      }
+    }
+  
+    &--open {
+      @include open;
+  
+      .forge-dialog__surface {
+        @include surface-open;
+      }
+    }
+  
+    &__surface {
+      @include surface;
+    }
+  
+    &__header {
+      @include header;
+    }
+  
+    &__title {
+      @include title;
+    }
+  
+    &__body {
+      @include body;
+  
+      &--scrollable {
+        @include body-scrollable;
+      }
+    }
+  
+    &__footer {
+      @include footer;
+    }
+  
+    &--fullscreen {
+      @include fullscreen;
+  
+      .forge-dialog__surface {
+        @include surface-fullscreen;
+      }
+    }
+  }
+}
+
+@mixin base() {
+  @include utils.position-abs-zero(fixed);
+  @include theme.z-index(dialog);
+  @include theme.css-custom-property(align-items, --forge-dialog-align-items, center);
+  @include theme.css-custom-property(top, --forge-dialog-top, 0);
+  @include theme.css-custom-property(padding, --forge-dialog-padding, variables.$padding);
+
+  display: flex;
+  justify-content: center;
+  visibility: hidden;
+
+  @include mixins-media.phone-only {
+    @include fullscreen;
+  }
+}
+
+@mixin fullscreen() {
+  padding: 0;
+}
+
+@mixin surface() {
+  @include elevation-theme.elevation(24);
+  @include mdc-theme.property(background-color, surface);
+  @include theme.css-custom-property(width, --forge-dialog-width, auto);
+  @include theme.css-custom-property(height, --forge-dialog-height, auto);
+  @include theme.css-custom-property(min-width, --forge-dialog-min-width, variables.$surface-min-width);
+  @include theme.css-custom-property(max-width, --forge-dialog-max-width, 100%);
+  @include theme.css-custom-property(max-height, --forge-dialog-max-height, 100%);
+  @include theme.css-custom-property(border-radius, --forge-dialog-border-radius, shape.resolve-radius(medium));
+  
+  display: inline-flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transform: variables.$surface-transform;
+  opacity: 0;
+  overflow: hidden;
+  z-index: inherit;
+}
+
+@mixin surface-fullscreen() {
+  height: 100%;
+  width: 100%;
+  min-width: auto;
+  max-width: 100%;
+  border-radius: 0;
+}
+
+@mixin animating() {
+  visibility: visible;
+}
+
+@mixin surface-open-animating() {
+  transition: mdc-animation.enter(transform, variables.$transition-duration);
+}
+
+@mixin surface-animating() {
+  transition: mdc-animation.enter(transform, variables.$transition-duration);
+}
+
+@mixin open() {
+  visibility: visible !important;
+}
+
+@mixin surface-open() {
+  transform: scale(1);
+  opacity: 1;
+}
+
+@mixin header() {
+  margin: 0;
+  padding: 0 24px 9px;
+  border-bottom: 1px solid transparent;
+}
+
+@mixin title() {
+  @include mdc-typography.baseline-top(40px);
+  @include typography.typography(title);
+
+  box-sizing: border-box;
+  margin: 0;
+}
+
+@mixin body() {
+  @include mdc-typography.typography(body1);
+
+  padding-top: variables.$body-margin-top;
+  padding: variables.$body-padding;
+  overflow: auto;
+}
+
+@mixin body-scrollable() {
+  max-height: variables.$scrollable-max-height;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin footer() {
+  display: flex;
+  position: relative;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  min-height: 52px;
+  margin: 0;
+  padding: variables.$footer-padding;
+  border-top: 1px solid transparent;
+}

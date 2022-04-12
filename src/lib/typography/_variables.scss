@@ -1,0 +1,83 @@
+@use 'sass:map';
+@use '@material/typography/typography';
+
+$styles: (
+  headline5-secondary: (
+    font-size: typography.px-to-rem(20px),
+    line-height: typography.px-to-rem(32px),
+    font-weight: map.get(typography.$font-weight-values, regular),
+    letter-spacing: typography.get-letter-spacing_(0.25, 1.25),
+    text-decoration: inherit,
+    text-transform: inherit
+  ),
+  title: (
+    font-size: typography.px-to-rem(20px),
+    line-height: typography.px-to-rem(32px),
+    font-weight: map.get(typography.$font-weight-values, regular),
+    letter-spacing: typography.get-letter-spacing_(0.25, 1.25),
+    text-decoration: inherit,
+    text-transform: inherit
+  ),
+  subtitle1-secondary: (
+    font-size: typography.px-to-rem(16px),
+    line-height: typography.px-to-rem(28px),
+    font-weight: map.get(typography.$font-weight-values, medium),
+    letter-spacing: typography.get-letter-spacing_(0.15, 0.9375),
+    text-decoration: inherit,
+    text-transform: inherit
+  ),
+  subtitle2-secondary: (
+    font-size: typography.px-to-rem(14px),
+    line-height: typography.px-to-rem(22px),
+    font-weight: map.get(typography.$font-weight-values, regular),
+    letter-spacing: typography.get-letter-spacing_(0.1, 0.71428571),
+    text-decoration: inherit,
+    text-transform: inherit
+  )
+) !default;
+
+$additional-styles: (
+  subtitle2-secondary: (
+    color: var(--mdc-theme-text-secondary-on-background)
+  )
+) !default;
+
+$mdc-typography-overrides: (
+  headline1: (
+    font-size: typography.px-to-rem(48px),
+    line-height: typography.px-to-rem(48px),
+    letter-spacing: typography.get-letter-spacing_(-1.5, 3)
+  ),
+  headline2: (
+    font-size: typography.px-to-rem(48px),
+    line-height: typography.px-to-rem(48px),
+    font-weight: map.get(typography.$font-weight-values, regular),
+    letter-spacing: typography.get-letter-spacing_(-1.5, 3)
+  ),
+  headline3: (
+    font-size: typography.px-to-rem(34px),
+    line-height: typography.px-to-rem(34px),
+    letter-spacing: typography.get-letter-spacing_(-1.5, 2.125)
+  ),
+  headline4: (
+    line-height: typography.px-to-rem(34px),
+    letter-spacing: typography.get-letter-spacing_(0.25, 1.5)
+  ),
+  headline5: (
+    font-size: typography.px-to-rem(20px),
+    font-weight: map.get(typography.$font-weight-values, medium),
+    letter-spacing: typography.get-letter-spacing_(0.25, 2)
+  ),
+  button: (
+    text-transform: none
+  )
+) !default;
+
+$mdc-typography-additional-styles: (
+  subtitle1: (
+    color: var(--mdc-theme-text-secondary-on-background)
+  ),
+  subtitle2: (
+    color: var(--mdc-theme-text-secondary-on-background)
+  )
+) !default;

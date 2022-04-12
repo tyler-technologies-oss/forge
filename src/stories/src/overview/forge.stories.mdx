@@ -1,0 +1,30 @@
+import { Meta } from '@storybook/addon-docs';
+import { VERSION } from '@tylertech/forge';
+
+<Meta title="Forge" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Guide' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Forge Components
+
+<>{`Version: ${VERSION}`}</>
+
+Forge is a project that produces framework-agnostic Web Components for the browser. The components adhere to the standard W3C Web Components
+spec, and work seamlessly with the various front-end frameworks such as Angular, Vue, and React, as well as no framework at all.
+
+The goal of this project is to create a set of high quality UI components for the browser platform that implement the [Tyler Forge](https://forge.tylertech.com/)
+design system. The components can be shared across products and applications without requiring a specific version of a framework. This will help
+applications present themselves and function consistently, regardless of underlying architecture/technology.
+
+The components within this library derive from Google's Material design system, but are optimized for a more dense design by default. They are highly
+customizable and themeable, as well as provide a vast amount of configuration through the components APIs.
+
+To get started using Forge within your application, please check out our [getting started](?path=/story/overview-getting-started--page) guide.
+
+</PageSection>

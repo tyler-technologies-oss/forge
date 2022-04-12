@@ -1,0 +1,5 @@
+@use './theme/theme-dark';
+
+:root {
+  @include theme-dark.theme-properties;
+}

@@ -1,0 +1,21 @@
+html,
+body,
+.app-shell {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.app-body {
+  display: grid;
+  grid-auto-flow: column;
+
+  /* grid-template-columns: repeat(auto-fit, minmax(296px, auto)); */
+
+  grid-gap: 24px;
+  padding: 24px;
+  overflow: hidden;
+  background: #efefef;
+}

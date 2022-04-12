@@ -1,0 +1,42 @@
+@use '../theme/theme';
+@use './variables';
+
+@mixin core-styles() {
+  .forge-divider {
+    @include base;
+  }
+}
+
+@mixin host() {
+  display: block;
+  contain: content;
+}
+
+@mixin base() {
+  border: none;
+
+  @include theme.property(border-bottom-color, border-color);
+  @include theme.css-custom-property(border-bottom-width, --forge-divider-width, variables.$width);
+  @include theme.css-custom-property(margin, --forge-divider-margin, variables.$margin);
+
+  height: 0;
+  border-bottom-style: solid;
+}
+
+@mixin vertical-base() {
+  border: none;
+
+  @include theme.property(border-right-color, border-color);
+  @include theme.css-custom-property(border-right-width, --forge-divider-width, variables.$width);
+  @include theme.css-custom-property(margin, --forge-divider-margin, variables.$margin);
+
+  height: 100%;
+  width: 0;
+  border-right-style: solid;
+}
+
+@mixin vertical-host {
+  display: inline-block;
+  // needed for non-flex areas
+  height: 100%;
+}

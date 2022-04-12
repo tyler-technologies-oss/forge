@@ -1,0 +1,214 @@
+@use 'sass:map';
+@use '../theme/theme';
+@use './variables';
+
+@mixin provide-theme($theme) {
+  @include theme.theme-properties(banner, $theme, variables.$theme-values);
+}
+
+@mixin width-above-breakpoint {
+  @media (min-width: variables.$width-breakpoint) {
+    @content;
+  }
+}
+
+@mixin width-below-breakpoint {
+  @media (max-width: variables.$width-breakpoint - 1) {
+    @content;
+  }
+}
+
+@mixin height-transition($new-height) {
+  transition: variables.$transition;
+  overflow: hidden;
+  max-height: $new-height;
+}
+
+@mixin theme-property($property, $theme, $overriding-css-custom-property) {
+  $light-theme-value: map.get(variables.$theme-values, $theme + '-' + $property);
+  $dark-theme-css-custom-property: --forge-banner-theme-#{$theme}-#{$property};
+
+  // map the properties for 'color' back to 'color'. The differentiation between icon and font is required for the theme handling above.
+  $styleName: $property;
+  @if $styleName == 'font-color' or $styleName == 'icon-color' {
+    $styleName: color;
+  }
+
+  $primary-override: $overriding-css-custom-property;
+  $secondary-override: $dark-theme-css-custom-property;
+  $default: $light-theme-value;
+
+  #{$styleName}: $default;
+  #{$styleName}: var($primary-override, var($secondary-override, $default));
+}
+
+@mixin theme-base($theme) {
+  .forge-banner {
+    @include theme-property('background', $theme, --forge-banner-theme-background);
+    @include theme-property('font-color', $theme, --forge-banner-theme-on-background);
+
+    .forge-banner__container-wrapper-icon {
+      @include theme-property('icon-color', $theme, --forge-banner-theme-icon);
+    }
+
+    .forge-banner__container-dismiss {
+      @include theme-property('icon-color', $theme, --forge-banner-theme-icon);
+    }
+  }
+}
+
+@mixin default-theme() {
+  :host(:not([theme])),
+  :host([theme='']),
+  :host([theme=default]) {
+    @include theme-base('default');
+  }
+}
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]) {
+    @include theme-base($theme);
+  }
+}
+
+@mixin base {
+  @include height-transition(variables.$max-height);
+
+  max-height: variables.$max-height;
+}
+
+@mixin container-base {
+  @include theme.property(border-bottom-color, border-color);
+
+  display: flex;
+  flex-direction: row;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  min-height: 48px;
+}
+
+@mixin container-wrapper-base {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin container-wrapper-icon-base {
+  margin-right: 16px;
+}
+
+@mixin container-wrapper-subsection-base {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin container-dismiss-base {
+  &[hidden] {
+    display: none;
+  }
+}
+
+@mixin wide-styles {
+  @include width-above-breakpoint {
+    .forge-banner {
+      @include base;
+
+      &.forge-banner--dismissed {
+        @include height-transition(0);
+      }
+
+      &__container {
+        @include container-base;
+
+        align-items: center;
+        padding: 0 variables.$padding-right 0 variables.$padding-left;
+
+        &-wrapper {
+          @include container-wrapper-base;
+
+          justify-content: center;
+          align-items: center;
+
+          &-icon {
+            @include container-wrapper-icon-base;
+          }
+
+          &-subsection {
+            @include container-wrapper-subsection-base;
+
+            flex-direction: row;
+            align-items: center;
+
+            &-text {
+              padding: variables.$padding-top 0 variables.$padding-bottom 0;
+              margin-right: 24px;
+            }
+
+            &-action {
+              ::slotted(forge-button) {
+                margin-right: 16px;
+              }
+            }
+          }
+        }
+
+        &-dismiss {
+          @include container-dismiss-base;
+        }
+      }
+    }
+  }
+}
+
+@mixin narrow-styles {
+  @include width-below-breakpoint {
+    .forge-banner {
+      @include base;
+
+      &.forge-banner--dismissed {
+        @include height-transition(0);
+      }
+
+      &__container {
+        @include container-base;
+
+        padding: variables.$padding-top-narrow
+                 variables.$padding-right-narrow
+                 variables.$padding-bottom-narrow
+                 variables.$padding-left-narrow;
+
+        &-wrapper {
+          @include container-wrapper-base;
+
+          &-icon {
+            @include container-wrapper-icon-base;
+          }
+
+          &-subsection {
+            @include container-wrapper-subsection-base;
+
+            flex-direction: column;
+
+            &-action {
+              ::slotted(forge-button) {
+                margin-top: 12px;
+              }
+            }
+          }
+        }
+
+        &-dismiss {
+          @include container-dismiss-base;
+
+          margin-top: -12px;
+          margin-right: -12px;
+        }
+      }
+    }
+  }
+}
+
+@mixin core-styles() {
+  @include wide-styles;
+  @include narrow-styles;
+}

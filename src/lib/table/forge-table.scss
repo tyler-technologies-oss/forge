@@ -1,0 +1,7 @@
+@use './mixins';
+
+forge-table {
+  @include mixins.host;
+}
+
+@include mixins.core-styles;

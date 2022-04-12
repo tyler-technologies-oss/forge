@@ -1,0 +1,78 @@
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '../typography/mixins' as typography-mixins;
+@use '../utils/mixins-media';
+
+@mixin base() {
+  min-width: 360px;
+  border-radius: 4px;
+
+  @include mixins-media.phone-small-only() {
+    width: 100vw;
+    min-width: unset;
+    overflow: auto;
+  }
+}
+
+@mixin info() {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+}
+
+@mixin avatar() {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin-right: 16px;
+}
+
+@mixin text() {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@mixin full-name() {
+  @include typography-mixins.typography(subtitle1-secondary);
+
+  line-height: 1.25rem;
+}
+
+@mixin email() {
+  @include mdc-typography.typography(subtitle2);
+  @include mdc-theme.property(color, text-secondary-on-background);
+}
+
+@mixin core-styles() {
+  .forge-profile-card {
+    @include base;
+
+    &__info {
+      @include info;
+
+      &-avatar {
+        @include avatar;
+
+        --forge-avatar-size: 56px;
+      }
+
+      &-text {
+        @include text;
+      }
+    }
+
+    &__full-name {
+      @include full-name;
+    }
+
+    &__email {
+      @include email;
+    }
+  }
+
+  forge-toolbar#action-toolbar::part(root) {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+}

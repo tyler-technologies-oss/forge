@@ -1,0 +1,201 @@
+import { DefaultTemplate as ToastDemo } from './templates/default';
+import { ToastDefaultHtml, ToastDefaultTs } from './code/toast-default';
+
+<PageSection>
+
+## Usage
+
+This component will typically be created on the fly in JavaScript, and it will automatically be disposed and removed from the DOM when its duration has been reached.
+
+However, the toast element can be created using static HTML if desired.
+
+> **Note:** Avoid using this component within a dialog.  Use a [banner component](?path=/story/components-banner--default) instead.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+### Static HTML
+
+```html
+<forge-toast message="Save successful."></forge-toast>
+```
+
+<LiveDemo layout="column" codeHtml={ToastDefaultHtml()} codeTs={ToastDefaultTs()}>
+  <ToastDemo />
+</LiveDemo>
+
+> **Note: **Pass the JavaScript value of `Infinity` to the `duration` property/attribute to force the toast element to NOT automatically close.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Angular Examples
+
+Usage within Angular is slightly different, and can be made easier by installing the `@tylertech/forge-angular` adapter package.
+
+After doing so, there is an Angular provider available called `ToastService` that can be injected and used to show a toast on demand:
+
+```typescript
+import { ToastService } from '@tylertech/forge-angular';
+import { PopupPlacement } from '@tylertech/forge';
+
+@Component({
+  selector: 'app-toast-example',
+  templateUrl: './toast-example.component.html'
+})
+export class ToastExampleComponent {
+  constructor(private _toastService: ToastService) {}
+
+  public onShowToast(): void {
+    const toast = this._toastService.show({
+      message: 'Save successful.',
+      actionText: 'UNDO',
+      actionHandler: () => toast.hide(),
+      placement: PopupPlacement.Bottom,
+      duration: 2000
+    });
+  }
+}
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="message" type="string" defaultValue="''">
+
+  The message text.
+
+</PropertyDef>
+
+<PropertyDef name="actionText" type="string" defaultValue="''">
+
+  The action button text.
+
+  > Controls the visibility of the action button as well.
+
+</PropertyDef>
+
+<PropertyDef name="duration" type="number" defaultValue="2750">
+
+  The length of time in milliseconds to show the toast. Pass `Infinity` to cause the toast to stay open indefinitely.
+
+</PropertyDef>
+
+<PropertyDef name="placement" type="ToastPlacement" defaultValue="bottom">
+
+  Sets the placement of the toast around the screen.
+
+  Valid values: `bottom`, `bottom-start`, `bottom-end`, `top`, `top-start`, `top-end`.
+
+</PropertyDef>
+
+<PropertyDef name="showClose" type="boolean" defaultValue="true">
+
+  Controls the visibility of the close button. Default is `true`.
+
+</PropertyDef>
+
+<PropertyDef name="builder" type="ToastBuilder" defaultValue="undefined" attr={false}>
+
+  Sets the builder function that will be called in place of the message text to allow for providing a custom HTML template.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="hide(): void">
+
+  Hides the toast and removes it from the DOM.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                            | Description
+| :-------------------------------| :----------------
+| `forge-toast-action`              | Emits when the action button is clicked.
+| `forge-toast-close`               | Emits when close button is clicked.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+> A default (unnamed) slot exists, and it is intended that an `<input>` or `<textarea>` element will be placed in this slot.
+
+| Name               | Values
+| :------------------| :-----------------
+| `default`          | The default (unnamed) slot is additional content.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+</PageSection>
+
+| Name                                                                    | Description
+| :-----------------------------------------------------------------------| :----------------------
+| `--forge-toast-theme-background`                                          | Controls the `background-color` style.
+| `--forge-toast-theme-on-background`                                       | Controls the font color of the message, close button, and slotted content.
+| `--forge-toast-theme-action`                                              | Controls the font color of the action button.
+| `--forge-z-index-notification`                                            | Controls the `z-index` style.
+| `--forge-toast-bottom-left-margin-bottom`                                 | Controls the `margin-bottom` when using the "bottom-start" placement.
+| `--forge-toast-bottom-left-margin-left`                                   | Controls the `margin-left` when using the "bottom-start" placement.
+| `--forge-toast-bottom-right-margin-bottom`                                | Controls the `margin-bottom` when using the "bottom-end" placement.
+| `--forge-toast-bottom-right-margin-right`                                 | Controls the `margin-right` when using the "bottom-end" placement.
+| `--forge-toast-top-left-margin-top`                                       | Controls the `margin-top` when using the "top-start" placement.
+| `--forge-toast-top-left-margin-left`                                      | Controls the `margin-left` when using the "top-start" placement.
+| `--forge-toast-top-right-margin-top`                                      | Controls the `margin-top` when using the "top-end" placement.
+| `--forge-toast-top-right-margin-right`                                    | Controls the `margin-right` when using the "top-end" placement.
+| `--forge-toast-top-margin-top`                                            | Controls the `margin-top` when using the "top" placement.
+| `--forge-toast-bottom-margin-bottom`                                      | Controls the `margin-bottom` when using the "bottom" placement.
+
+<PageSection>
+
+## Types
+
+### ToastPlacement
+
+```ts
+type ToastPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
+```
+
+### ToastBuilder
+
+```ts
+type ToastBuilder = () => HTMLElement | string;
+```
+
+</PageSection>

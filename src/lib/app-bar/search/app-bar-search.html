@@ -1,0 +1,24 @@
+<template>
+  <div class="forge-app-bar-search" part="root">
+    <div class="forge-app-bar-search__container" part="container">
+      <div class="forge-app-bar-search__search-icon-container" part="icon-container">
+        <forge-icon name="search" class="forge-app-bar-search__icon" part="icon"></forge-icon>
+      </div>
+      <slot></slot>
+      <div class="forge-app-bar-search__context" part="context">
+        <div class="forge-app-bar-search__vertical-divider" part="context-divider"></div>
+        <button type="button" class="forge-app-bar-search__context-button" part="context-button">
+          <span class="forge-app-bar-search__context-button-text" part="context-button-text">in this application</span>
+          <forge-icon name="arrow_drop_down" class="forge-app-bar-search__context-button-icon" part="context-button-icon"></forge-icon>
+        </button>
+      </div>
+      <div class="forge-app-bar-search__global-icon-container" part="global-icon-container">
+        <forge-icon slot="trailing" name="language" id="app-bar-global-context" part="global-icon"></forge-icon>
+        <forge-tooltip delay="500" position="bottom" target="#app-bar-global-context">Global search</forge-tooltip>
+      </div>
+    </div>
+    <div class="forge-app-bar-search__actions" part="actions-container">
+      <slot name="action"></slot>
+    </div>
+  </div>
+</template>

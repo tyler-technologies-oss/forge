@@ -1,0 +1,22 @@
+<template>
+  <header class="forge-app-bar" part="root">
+    <div class="forge-app-bar__row" part="row">
+      <section class="forge-app-bar__section forge-app-bar__section--align-start" part="section-start">
+        <slot name="start"></slot>
+        <slot name="logo"></slot>
+        <slot name="title">
+          <h1 class="forge-app-bar__title" part="title"></h1>
+        </slot>
+      </section>
+      <section id="center-section" class="forge-app-bar__section forge-app-bar__section--align-center" part="section-center">
+        <slot name="center"></slot>
+      </section>
+      <section class="forge-app-bar__section forge-app-bar__section--align-end" part="section-end">      
+        <slot name="end"></slot>
+      </section>
+    </div>
+    <div class="forge-app-bar__bottom" part="bottom">
+      <slot name="bottom"></slot>
+    </div>
+  </header>
+</template>

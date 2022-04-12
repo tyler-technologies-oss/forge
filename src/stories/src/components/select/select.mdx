@@ -1,0 +1,367 @@
+import { DefaultTemplate as SelectDemo } from './templates/default';
+import { SelectDefaultHtml } from './code/select-default';
+import { SelectAlwaysFloatHtml } from './code/select-always-float';
+import { SelectHelperTextHtml } from './code/select-helper-text';
+import { SelectMultipleHtml } from './code/select-multiple';
+import { SelectLeadingIconHtml } from './code/select-leading-icon';
+import { SelectRoomyHtml } from './code/select-roomy';
+
+<PageSection>
+
+## Usage
+
+The select component is a form field that provides the user the ability to choose a value from a pre-defined set of options via a dropdown list.
+
+The select component works best when you have a finite set of options. If you need to load options dynamically, or provide filtering, you should opt
+for the [autocomplete component](?path=/story/components-autocomplete--default) instead (the two look the same and are very closely related).
+
+The select component options can be configured via HTML or JavaScript. When setting up the options via HTML, you can use the `<forge-option>` element
+to configure the label and value for each option.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+<LiveDemo 
+dense 
+fullWidth 
+codeHtml={SelectDefaultHtml()}>
+  <SelectDemo hasHelperText={true}/>
+</LiveDemo>
+
+### Roomy
+
+Use the `roomy` variant on mobile to allow for a larger touch target.
+
+<LiveDemo 
+dense 
+fullWidth 
+codeHtml={SelectRoomyHtml()}>
+  <SelectDemo density={'roomy'}/>
+</LiveDemo>
+
+### Always float
+
+The component can be configured to keep the label floating at all times by setting the `float-label-type` attribute (or `floatLabelType` property in JavaScript) to `always`.
+
+<LiveDemo
+dense 
+fullWidth 
+codeHtml={SelectAlwaysFloatHtml()}>
+  <SelectDemo floatLabelType={'always'}/>
+</LiveDemo>
+
+### Leading icon
+
+The component supports the ability to provide a custom leading icon via the `leading` slot:
+
+<LiveDemo 
+dense 
+fullWidth 
+codeHtml={SelectLeadingIconHtml()}>
+  <SelectDemo hasLeadingIcon={true}/>
+</LiveDemo>
+
+### Multiple
+
+You can configure the component to allow for specifying multiple selections by adding the `multiple` attribute:
+
+<LiveDemo 
+dense 
+fullWidth 
+codeHtml={SelectMultipleHtml()}>
+  <SelectDemo multiple={true}/>
+</LiveDemo>
+
+### Helper text
+
+If you need to provide helper text to add more information or show an error message, you can use the `helper-text` slot:
+
+<LiveDemo 
+dense 
+fullWidth 
+codeHtml={SelectHelperTextHtml()}>
+  <SelectDemo hasHelperText={true}/>
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="value" type="string | string[]" defaultValue="undefined">
+
+Gets/set the selected value
+
+</PropertyDef>
+
+<PropertyDef name="selectedIndex" type="number | number[]" attr={false} defaultValue="undefined">
+
+Gets/set the selected index.
+
+</PropertyDef>
+
+<PropertyDef name="options" type="ISelectOption[] | ISelectOptionGroup[]" attr={false} defaultValue="undefined">
+
+Sets the options programatically if not using the template-based syntax.
+
+</PropertyDef>
+
+<PropertyDef name="multiple" type="boolean" defaultValue="false">
+
+Gets/sets multi-select state.
+
+</PropertyDef>
+
+<PropertyDef name="open" type="boolean" attr={false} defaultValue="false">
+
+Gets the open status of the dropdown.
+
+</PropertyDef>
+
+<PropertyDef name="optionBuilder" type="SelectOptionBuilder" attr={false} defaultValue="undefined">
+
+Sets the option builder callback that will be executed when building the option list in the dropdown.
+
+</PropertyDef>
+
+<PropertyDef name="selectedTextBuilder" type="SelectSelectedTextBuilder" attr={false} defaultValue="undefined">
+
+Sets the option builder callback that will be executed when building the option list in the dropdown.
+
+</PropertyDef>
+
+<PropertyDef name="popupElement" type="IPopupComponent | undefined" defaultValue="undefined">
+
+Gets the popup element when open.
+
+</PropertyDef>
+
+<PropertyDef name="beforeValueChange" type="SelectBeforeValueChangeCallback<any>" defaultValue="undefined">
+
+Sets the callback that will be executed when a user selects an option. This will allow you to cancel or validate the selection prior to the UI being updated.
+
+</PropertyDef>
+
+<PropertyDef name="label" type="string" defaultValue="undefined">
+
+Gets/sets the label text.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+Gets/sets the disabled state.
+
+</PropertyDef>
+
+<PropertyDef name="invalid" type="boolean" defaultValue="false">
+
+Gets/sets the invalid state. Setting this to `true` will style the component using its error theme.
+
+</PropertyDef>
+
+<PropertyDef name="required" type="boolean" defaultValue="false">
+
+Gets/sets whether this component is marked as required or not. Setting to `true` will display an asterisk in the label.
+
+</PropertyDef>
+
+<PropertyDef name="density" type="SelectDensityType" defaultValue="&quot;default&quot;">
+
+Controls the density type. Valid values: `default`, `roomy`, `dense`.
+
+> **Note:** Use `roomy` for mobile, and do not use the `label` attribute with the `dense` type.
+
+</PropertyDef>
+
+<PropertyDef name="floatLabelType" type="SelectFloatLabelType" defaultValue="&quot;auto&quot;">
+
+The type of floating label to use. Valid values: `auto` (default), `always`.
+
+</PropertyDef>
+
+<PropertyDef name="placeholder" type="string" defaultValue="undefined">
+
+Gets/sets the placeholder text for when no values are selected. This only applies when no label is provided.
+
+</PropertyDef>
+
+<PropertyDef name="inset" type="boolean" defaultValue="false">
+
+Gets/sets whether the inset label style is used or not.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void">
+
+Adds additional options to the end of the select options.
+
+</MethodDef>
+
+<MethodDef name="selectAll(): void">
+
+Selects all options.
+
+</MethodDef>
+
+<MethodDef name="deselectAll(): void">
+
+Deselects all options.
+
+</MethodDef>
+
+<MethodDef name="focus(): void">
+
+Sets focus to the internal button element.
+
+</MethodDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                                    | Values
+| :---------------------------------------| :-----------------
+| `change`                                | Emits when the user chooses a different value. This is a `CustomEvent` that contains the selected value in the events' `detail` property.
+| `forge-select-scrolled-bottom`            | Emits when the user scrolls to the bottom of the options.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name                 | Values
+| :--------------------| :-----------------
+| `leading`            | Places content such as icons before the text.
+| `addon-end`          | Places content such as icon buttons after the text with a divider.
+| `helper-text`        | Places content below the component with the proper typography.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                                      | Description
+| :---------------------------------------------------------| :----------------
+| `--mdc-theme-form-field-required-on-background`           | Controls the required background-color of the field element.
+| `--mdc-theme-form-field-invalid-on-background`            | Controls the invalid background-color of the field element.
+| `--mdc-theme-form-field-text-disabled-on-background`      | Controls the disabled font color of the floating label element.
+| `--mdc-theme-form-field-disabled-on-background`           | Controls the disabled background-color of the field element.
+| `--mdc-theme-text-primary-on-background`                  | Controls the selected option font color.
+| `--mdc-theme-text-secondary-on-background`                | Controls the inset font color for icons and helper text.
+| `--mdc-theme-text-secondary-alternative-on-background`    | Controls the floating label color.
+| `--mdc-theme-text-icon-on-background`                     | Controls the icon color.
+| `--mdc-theme-label-disabled-on-background`                | Controls the label color when disabled.
+| `--mdc-theme-text-disabled-on-light`                      | Controls the placeholder font color.
+| `--mdc-theme-text-disabled-on-background`                 | Controls the disabled color of the outline.
+| `--mdc-theme-primary`                                     | Controls the primary font color.
+| `--mdc-theme-error`                                       | Controls the error color throughout the component.
+| `--mdc-theme-error-hover`                                 | Controls the error hover color for the outline.
+| `--forge-select-height`                                     | Controls the height of the root element. Default value is `3.5rem`.
+| `--forge-select-font-size`                                  | Controls the font-size of the selected text. Default value is `3.5rem`.
+| `--forge-select-margin-top`                                 | Controls the margin top of the wrapper element. Default value is `0`.
+| `--forge-select-margin-bottom`                              | Controls the margin bottom of the wrapper element. Default value is `0`.
+| `--forge-select-theme-background`                           | Controls the background-color of the field element.
+| `--forge-select-border-display`                             | Controls the display of the outline element.
+
+> **Note:** To hide the border, add the following CSS declaration: `--forge-select-border-display: none;`
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IOption
+
+```ts
+interface IOption<T = any> {
+  value: T;
+  label: string;
+  disabled?: boolean;
+  divider?: boolean;
+  optionClass?: string | string[];
+  leadingIcon?: string;
+  leadingIconClass?: string;
+  leadingIconType?: ListDropdownIconType;
+  trailingIcon?: string;
+  trailingIconClass?: string;
+  trailingIconType?: ListDropdownIconType;
+  leadingBuilder?: () => HTMLElement;
+  trailingBuilder?: () => HTMLElement;
+  options?: Array<IListDropdownOption | IListDropdownOptionGroup>;
+  elementAttributes?: Map<string, string>;
+}
+```
+
+### IOptionGroup
+
+```ts
+interface IOptionGroup {
+  options: IListDropdownOption[];
+  text?: string;
+  builder?: ListDropdownOptionGroupBuilder;
+}
+```
+
+### ListDropdownOptionBuilder
+
+```ts
+type ListDropdownOptionBuilder<T = HTMLElement> = (option: IListDropdownOption, parentElement: T) => HTMLElement | string | void;
+```
+
+### ListDropdownIconType
+
+```ts
+export type ListDropdownIconType = 'font' | 'component';
+```
+
+### SelectDensityType
+
+```ts
+type SelectDensityType = 'default' | 'roomy' | 'dense';
+```
+
+### SelectFloatLabelType
+
+```ts
+type SelectFloatLabelType = 'default' | 'always';
+```
+
+### SelectBeforeValueChangeCallback
+
+```ts
+type SelectBeforeValueChangeCallback<T> = (value: T | T[]) => boolean | Promise<boolean>;
+```
+
+</PageSection>

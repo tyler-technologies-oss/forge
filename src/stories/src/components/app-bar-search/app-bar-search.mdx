@@ -1,0 +1,148 @@
+import { DefaultTemplate as AppBarSearchDemo } from './templates/default';
+import { AppBarSearchDefaultCodeHtml, AppBarSearchDefaultCodeTs } from './code/app-bar-search-default';
+
+<PageSection>
+
+## Usage
+
+The app-bar search component is essentially just a strictly-styled `<input>` element that fits in with the app-bar ecosystem. It provides some additional functionality
+through its public API, but at the very least it gives a common component to use for a familiar search experience for users.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+<LiveDemo layout="column" fullWidth codeHtml={AppBarSearchDefaultCodeHtml()} codeTs={AppBarSearchDefaultCodeTs()}>
+  <AppBarSearchDemo />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+  Gets/sets the disabled state.
+
+</PropertyDef>
+
+<PropertyDef name="value" type="string" defaultValue="&quot;&quot;">
+
+  Gets/sets the `value` property on the `<input>` element.
+
+</PropertyDef>
+
+<PropertyDef name="placeholder" type="string" defaultValue="null">
+
+  Gets/sets the `placeholder` property on the `<input>` element.
+
+</PropertyDef>
+
+<PropertyDef name="combined" type="boolean" defaultValue="false">
+
+  Toggles the visibility of the combined search dropdown select.
+
+  The combined variant allows users to choose which context their search pertains to. See the `combinedOptions` property for information about how to customize the context options.
+
+</PropertyDef>
+
+<PropertyDef name="combinedOptions" type="IOption[]" attr={false} defaultValue="[]">
+
+  Gets/sets the combined options that are available for the user to select.
+
+</PropertyDef>
+
+<PropertyDef name="selectedCombinedOption" type="string" attr={false} defaultValue="null">
+
+  Gets/sets the selected option from the `combinedOptions` array.
+
+</PropertyDef>
+
+<PropertyDef name="global" type="boolean" defaultValue="false">
+
+  Gets/sets whether the "global" icon is displayed at the end of the input.
+
+  Turning this on will denote to users that the search will pertain to the global context of the system.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+| Name                      | Description
+| :-------------------------| :-------------------
+| forge-app-bar-search-input  | Emits when the users executes the search via pressing the `Enter` key while the `<input>` has focus.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name               | Description
+| :------------------| :------------------
+| `default`          | The default (unnamed) slot is where child `<input>` elements will be placed.
+| `action`           | Places actions at the end of the input.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                              | Description
+| :-------------------------------------------------| :-----------------
+| `--mdc-theme-on-primary`                          | Controls the border-color of the container outline, the font-color, and icon color.
+| `--mdc-theme-on-surface`                          | Controls the font color of the buttons.
+| `--mdc-theme-text-secondary-on-background`        | Controls the placeholder font color.
+| `--forge-app-bar-search-theme-background`           | Controls the background-color of the container.
+| `--forge-app-bar-search-theme-background-focused`   | Controls the focused background-color of the container.
+| `--forge-app-bar-search-theme-hover-opacity`        | Controls the hover opacity of the outline.
+| `--forge-app-bar-search-theme-disabled-opacity`     | Controls the disabled opacity of the component.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IAppBarSearchEventData
+
+```ts
+interface IAppBarSearchEventData {
+  value: string;
+  combined: boolean;
+  context: string;
+}
+```
+
+### IOption
+
+```ts
+interface IOption<T = any>  {
+  value: T;
+  label: string;
+  disabled?: boolean;
+}
+```
+
+</PageSection>

@@ -1,0 +1,80 @@
+import { DefaultTemplate as CircularProgressDemo } from './templates/default'; 
+import { CustomTemplate as CustomDemo } from './templates/custom'; 
+import { CircularProgressDefaultHtml } from './code/circular-progress-default';
+import { CircularProgressCustomHtml, CircularProgressCustomScss } from './code/circular-progress-custom';
+
+<PageSection>
+
+## Usage
+
+The circular progress is a configurable component that can be used for both determinate and indeterminate busy states. It renders as an svg,
+and the properties can be controlled dynamically through the component and CSS custom properties.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+<LiveDemo dense codeHtml={CircularProgressDefaultHtml()}>
+  <CircularProgressDemo />
+</LiveDemo>
+
+### Custom
+
+The following example shows how easy it is to customize the theme, diameter, and stroke-width.
+
+<LiveDemo dense codeHtml={CircularProgressCustomHtml()} codeScss={CircularProgressCustomScss()}>
+  <CustomDemo determinate progress="0.66" />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="open" type="boolean" defaultValue="true">
+
+Controls the visibility of the circular progress.
+
+</PropertyDef>
+
+<PropertyDef name="determinate" type="boolean" defaultValue="false">
+
+Gets/sets determinate.
+
+**false:** continuous animation.
+
+**true:** allows for setting specific progress percentage amount to be controlled manually.
+
+</PropertyDef>
+
+<PropertyDef name="progress" type="number" defaultValue="0">
+
+Gets/sets the progress percentage. Valid values are between 0 and 1.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :----------
+| `--forge-theme-tertiary`                          | Sets the stroke color.
+| `--forge-circular-progress-track-color`           | Sets the track (background) color.
+| `--forge-circular-progress-size`                  | Sets the diameter of the circle. Default is `72px`.
+| `--forge-circular-progress-stroke-width`          | Sets the stroke width of the outline. Default is `4`.
+
+</PageSection>

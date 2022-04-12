@@ -1,0 +1,48 @@
+@use 'sass:map';
+@use './mixins';
+@use './variables-flex';
+
+@mixin container($display, $direction: row, $wrap: null, $alignment: null) {
+  @if (not map.has-key($map: variables-flex.$displays, $key: $display)) {
+    @error 'Invalid flex display specified! Choose one of #{map.keys(variables-flex.$displays)}';
+  }
+  display: map.get($map: variables-flex.$displays, $key: $display);
+
+  @if (not map.has-key(variables-flex.$directions, $direction)) {
+    @error 'Invalid flex direction specified! Choose one of #{map.keys(variables-flex.$directions)}';
+  }
+  flex-direction: map.get($map: variables-flex.$directions, $key: $direction);
+
+  @if ($wrap != null) {
+    @if (not map.has-key(variables-flex.$wraps, $wrap)) {
+      @error 'Invalid flex wrap specified! Choose one of #{map.keys(variables-flex.$wraps)}';
+    }
+    flex-wrap: map.get($map: variables-flex.$wraps, $key: $wrap);
+  }
+
+  @if ($alignment != null) {
+    @if (not map.has-key(variables-flex.$alignments, $alignment)) {
+      @error 'Invalid flex alignment specified! Choose one of #{map.keys(variables-flex.$alignments)}';
+    }
+    align-items: map.get($map: variables-flex.$alignments, $key: $alignment);
+  }
+}
+
+@mixin item($shrink: 0, $grow: 0, $basis: auto, $alignment: null) {
+  flex: #{$shrink} #{$grow} #{$basis};
+
+  @if ($alignment != null) {
+    @if (not map.has-key(variables-flex.$alignments, $alignment)) {
+      @error 'Invalid flex alignment specified! Choose one of #{map.keys(variables-flex.$alignments)}';
+    }
+    align-self: map.get($map: variables-flex.$alignments, $key: $alignment);
+  }
+}
+
+@mixin overflow($overflow: auto) {
+  @include mixins.overflow($overflow);
+  @include item(1, 1);
+
+  min-height: 0;
+  min-width: 0;
+}

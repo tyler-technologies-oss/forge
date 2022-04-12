@@ -1,0 +1,19 @@
+<template>
+  <div class="forge-chip-field__wrapper" part="root">
+    <div class="forge-chip-field forge-field" part="container">
+      <slot name="leading"></slot>
+      <div class="forge-field__label-input-container">
+        <slot name="label"></slot>
+        <div class="forge-field__input-container">
+          <slot name="member"></slot>
+          <slot></slot>
+        </div>
+      </div>
+      <slot name="trailing"></slot>
+      <div class="forge-field__addon-end-container" part="addon-end-container">
+        <slot name="addon-end"></slot>
+      </div>
+    </div>
+    <slot name="helper-text"></slot>
+  </div>
+</template>

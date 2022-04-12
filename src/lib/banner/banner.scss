@@ -1,0 +1,19 @@
+@use './mixins';
+@use '../icon-button/forge-icon-button';
+
+@include mixins.core-styles;
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@include mixins.default-theme();
+@include mixins.theme('danger');
+@include mixins.theme('warning');
+@include mixins.theme('success');
+@include mixins.theme('info-primary');
+@include mixins.theme('info-secondary');

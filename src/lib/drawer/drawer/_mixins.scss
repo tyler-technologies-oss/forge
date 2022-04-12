@@ -1,0 +1,5 @@
+@use '../base/mixins' as base-mixins;
+
+@mixin core-styles() {
+  @include base-mixins.core-styles;
+}

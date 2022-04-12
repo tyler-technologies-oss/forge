@@ -1,0 +1,161 @@
+import { DrawerTemplate as DrawerDemo } from './templates/drawer';
+import { MiniTemplate as MiniDemo } from './templates/mini';
+import { ModalTemplate as ModalDemo } from './templates/modal';
+import { DrawerCodeHtml } from './code/drawer';
+import { DrawerModalCodeHtml, DrawerModalCodeTs } from './code/drawer-modal';
+import { DrawerMiniCodeHtml } from './code/drawer-mini';
+import { DrawerMiniHoverCodeHtml } from './code/drawer-mini-hover';
+
+<PageSection>
+
+## Usage
+
+The drawer component facilitates the open/close animation of content on either the left or right side of the screen. It does not restrict
+you to any specific content, but is most commonly used together with a `<forge-list>` to create a navigation drawer.
+
+You can use the drawer component as a material side-sheet, and there are various built-in drawer types that are available for use to achieve this pattern.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Drawer
+
+It's common to use a drawer in applications to provide navigation. The following example shows using a [list](/components/list/guidance) component within the
+drawer to provide navigation menu items.
+
+<LiveDemo fullWidth padded={false} layout="column" codeHtml={DrawerCodeHtml()}>
+  <DrawerDemo />
+</LiveDemo>
+
+> **Note:** the use of the `direction="right"` attribute causes the drawer to open from the right.
+
+### Modal
+
+<LiveDemo fullWidth padded={false} layout="column" codeHtml={DrawerModalCodeHtml()} codeTs={DrawerModalCodeTs()}>
+  <ModalDemo />
+</LiveDemo>
+
+### Mini
+
+<LiveDemo fullWidth padded={false} layout="column" codeHtml={DrawerMiniCodeHtml()}>
+  <MiniDemo />
+</LiveDemo>
+
+### Mini hover
+
+<LiveDemo fullWidth padded={false} layout="column" codeHtml={DrawerMiniHoverCodeHtml()}>
+  <MiniDemo hover />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+### All Drawers
+
+<PropertyDef name="open" type="boolean" defaultValue="true">
+
+  Toggles the open state of the drawer when using the `dismissible` or `modal` type.
+
+</PropertyDef>
+
+<PropertyDef name="direction" type="DrawerDirection" defaultValue="&quot;left&quot;">
+
+  Controls the animation direction of the drawer for positioning on the left vs. right side of the screen.
+
+</PropertyDef>
+
+### Mini
+
+<PropertyDef name="hover" type="boolean" defaultValue="null">
+
+  Controls the hover mode on the mini drawer. Allowing the mini drawer to expand when hovered over.
+
+</PropertyDef>
+
+> **Note**: If you're using Angular and need to initialize your drawer with values _other_ than the defaults listed above, you will need to also provide the matching attributes as follows.
+```html
+<forge-drawer open="false" [open]="isOpen"
+  direction="right" [direction]="drawerDirection">
+  <!-- custom content -->
+</forge-drawer>
+```
+> This is needed due to how Angular bindings work. Angular bindings do not initialize immediately and take a short amount of time to pass the bound values to the component. During that short period of time, the drawer will initialize using its internal defaults instead. As an example, this difference in timing can cause the drawer to flash open and then closed, as first the internal defaults are applied and _then_ the values of the Angular bindings are applied some short time later. However, the unbound attributes are read immediately. So we use those to "fill in the gap" until Angular's bindings are ready. Once the Angular bindings have initialized, they overwrite the unbound attributes you initialized with. That allows them to function as defaults.  
+> While this is true for all components, it's most noticeable on large components like the drawer.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+| Name               | Values
+| :------------------| :-----------------
+| `default`          | Places content within the default (unnamed) slot (main body of the component).
+| header             | Places content fixed at the top of the drawer.
+| footer             | Places content fixed at the bottom of the drawer.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+### All drawers
+
+| Name                      | Values
+| :-------------------------| :-----------------
+| `forge-drawer-after-open`   | Emits after the drawer is opened only when the `modal` or `dismissible` type is used.
+| `forge-drawer-after-close`  | Emits after the drawer is closed only when the `modal` or `dismissible` type is used.
+
+### Modal
+
+| Name                      | Values
+| :-------------------------| :-----------------
+| `forge-modal-drawer-close`  | Emits when the backdrop is clicked only when the `modal` type is used.
+
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                           | Values
+| :----------------------------------------------| :-----------------
+| `--mdc-theme-surface`                          | Controls the background-color of the drawer content.
+| `--mdc-theme-border-color`                     | Controls the built-in border color.
+| `--forge-drawer-width`                           | Controls the width of the drawer. Recommended widths: 256 or 320px.
+| `--forge-drawer-mini-width`                      | Controls the width of the mini drawer when resting.
+| `--forge-drawer-mini-width-hover`                | Controls the width of the mini drawer when hovering.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### DrawerDirection
+
+```ts
+type DrawerDirection = 'left' | 'right';
+```
+
+</PageSection>

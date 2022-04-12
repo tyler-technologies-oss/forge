@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../node_modules/@tylertech/forge-cli/build-schema.json",
+  "extends": "../build.json",
+  "stylesheets": [
+    "./forge-flex.scss",
+    "./forge-grid.scss",
+    "./forge-utils.scss"
+  ]
+}

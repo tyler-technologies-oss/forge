@@ -1,0 +1,30 @@
+@use './mixins';
+@use '../../ripple/forge-ripple';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([stretch]) {
+  width: 100%;
+  flex: 1;
+}
+
+:host([selected-adjacent]) {
+  .forge-button-toggle {
+    border-left-color: var(--mdc-theme-text-primary-on-dark);
+  }
+}
+
+:host([selected-adjacent-vertical]) {
+  .forge-button-toggle {
+    border-top-color: var(--mdc-theme-text-primary-on-dark);
+  }
+}
+

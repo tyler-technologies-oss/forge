@@ -1,0 +1,27 @@
+<template>
+  <div class="forge-tab-bar" part="root">
+    <div class="forge-tab-bar__scroll-prev-container" part="previous-container">
+      <forge-icon-button part="previous-button">
+        <button type="button" tabindex="-1" aria-label="Scroll left" id="scroll-prev-btn" part="previous-button-element">
+          <forge-icon name="keyboard_arrow_left" part="previous-button-icon"></forge-icon>
+        </button>
+      </forge-icon-button>
+    </div>
+    
+    <div class="mdc-tab-scroller" part="tab-scroller">
+      <div class="mdc-tab-scroller__scroll-area" part="scroll-area">
+        <div class="mdc-tab-scroller__scroll-content" part="scroll-content">
+          <slot></slot>
+        </div>
+      </div>
+    </div>
+
+    <div class="forge-tab-bar__scroll-next-container" part="next-container">
+      <forge-icon-button part="next-button">
+        <button type="button" tabindex="-1" aria-label="Scroll right" id="scroll-next-btn" part="next-button-element">
+          <forge-icon name="keyboard_arrow_right" part="next-button-icon"></forge-icon>
+        </button>
+      </forge-icon-button>
+    </div>
+  </div>
+</template>

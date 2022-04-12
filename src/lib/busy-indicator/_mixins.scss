@@ -1,0 +1,179 @@
+@use '@material/button/button-shared-theme' as mdc-button-shared-theme;
+@use '@material/elevation/elevation-theme' as mdc-elevation-theme;
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/animation/functions' as mdc-animation;
+@use '../theme/theme';
+@use './variables';
+
+@mixin host() {
+  outline: none;
+  contain: content;
+}
+
+@mixin core-styles-row() {
+  .forge-busy-indicator {
+    
+    &__surface {
+      @include surface;
+
+      &--fixed {
+        @include surface-fixed;
+      }
+
+      &--invisible {
+        @include surface-invisible;
+      }
+    }
+
+    &__title {
+      @include title;
+    }
+
+    &__message-container {
+      @include message-container;
+    }
+
+    &__message {
+      @include message;
+    }
+
+    &__cancel-button {
+      @include cancel-button;
+    }
+
+    &__progress-container {
+      @include progress-container;
+    }
+  }
+}
+
+@mixin core-styles-column() {
+  .forge-busy-indicator {
+    &__surface {
+      @include surface($direction: 'column');
+
+      &--invisible {
+        @include surface-invisible;
+      }
+    }
+
+    &__title {
+      @include title;
+    }
+
+    &__message-container {
+      @include column-layout;
+    }
+
+    &__message {
+      @include row-layout-message;
+    }
+
+    &__forge-cancel-button {
+      @include row-layout-cancel-button;
+    }
+
+    &__progress-container {
+      @include progress-container;
+    }
+
+    &__spinner {
+      margin-bottom: 32px;
+    }
+  }
+}
+
+@mixin surface($direction: 'row') {
+  @include mdc-elevation-theme.elevation(24);
+  @include mdc-theme.property(background-color, surface);
+  @include mdc-button-shared-theme.shape-radius(medium, false);
+  @include theme.z-index(dialog);
+
+  position: absolute;
+  padding: 48px;
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  transition: mdc-animation.enter(opacity, 120ms);
+  outline: none;
+  opacity: 0;
+
+  @if $direction == 'row' {
+    min-width: variables.$surface-min-width-row;
+    max-width: variables.$surface-max-width-row;
+  } @else {
+    min-width: variables.$surface-min-width;
+    max-width: variables.$surface-max-width;
+  }
+}
+
+@mixin surface-fixed() {
+  position: fixed;
+}
+
+@mixin surface-invisible() {
+  background: transparent;
+  box-shadow: none;
+  min-width: auto;
+}
+
+@mixin title() {
+  @include mdc-typography.typography(headline5);
+
+  margin-top: -24px;
+  margin-left: -24px;
+}
+
+@mixin message-container() {
+  display: flex;
+  align-items: center;
+}
+
+@mixin message() {
+  @include mdc-typography.typography(body1);
+  @include mdc-theme.property(color, text-secondary-on-background);
+
+  flex: 1 auto;
+
+  &:nth-child(2) {
+    margin-left: 16px;
+  }
+}
+
+@mixin cancel-button() {
+  margin-left: 16px;
+}
+
+@mixin progress-container() {
+  min-width: 244px;
+  margin-top: 24px;
+}
+
+@mixin row-layout {
+  flex-direction: row;
+  display: flex;
+}
+
+@mixin column-layout {
+  flex-direction: column;
+  display: flex;
+  place-items: center;
+}
+
+@mixin row-layout-cancel-button {
+  margin-top: 16px;
+  margin-bottom: -36px;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+@mixin row-layout-message() {
+  @include mdc-typography.typography(body1);
+  @include mdc-theme.property(color, text-secondary-on-background);
+
+  flex: 1 auto;
+  text-align: center;
+  margin: 0;
+}

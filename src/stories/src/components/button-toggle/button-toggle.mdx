@@ -1,0 +1,234 @@
+import { DefaultTemplate as ButtonGroupDemo } from './templates/default';
+import { ButtonToggleDefaultCodeHtml } from './code/button-toggle-default';
+import { ButtonToggleLeadingCodeHtml, ButtonToggleTrailingCodeHtml } from './code/button-toggle-icons';
+
+<PageSection>
+
+## Usage
+
+The button toggle component can be used as simple buttons, or as an alternative to radio and checkbox elements to help provide users with a choice of options.
+They offer a group of interactive button-style elements that are related to each other.
+
+Each button toggle has an "on" or "off" state, and while they can be used as a standalone `<forge-button-toggle>` component, they are typically used as part 
+of a group contained by a `<forge-button-toggle-group>` parent element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Basic
+
+<LiveDemo
+layout={'column'}
+codeHtml={ButtonToggleDefaultCodeHtml()}>
+  <ButtonGroupDemo/>
+</LiveDemo>
+
+### With leading icons
+
+<LiveDemo 
+layout={'column'}
+codeHtml={ButtonToggleLeadingCodeHtml()}>
+  <ButtonGroupDemo hasLeading={true}/>
+</LiveDemo>
+
+### With trailing icons
+
+<LiveDemo 
+layout={'column'}
+codeHtml={ButtonToggleTrailingCodeHtml()}>
+  <ButtonGroupDemo hasTrailing={true}/>
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Button toggle group
+
+### Properties/Attributes
+
+<PropertyDef name="value" type="any" defaultValue="null">
+
+Gets/sets the selected value.
+
+</PropertyDef>
+
+<PropertyDef name="multiple" type="boolean" defaultValue="false">
+
+Controls whether multiple buttons can be selected at the same time.
+
+</PropertyDef>
+
+<PropertyDef name="stretch" type="boolean" defaultValue="false">
+
+Controls whether the child button-toggle elements will stretch to fill the available space.
+
+</PropertyDef>
+
+<PropertyDef name="mandatory" type="boolean" defaultValue="false">
+
+Gets/sets whether a selection must be made at all times.
+
+</PropertyDef>
+
+<PropertyDef name="vertical" type="boolean" defaultValue="false">
+
+Controls whether the layout is vertical.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+Gets/sets the disabled state of the component as a whole.
+
+</PropertyDef>
+
+<PropertyDef name="dense" type="boolean" defaultValue="false">
+
+Applies the dense style to each child button-toggle component.
+
+</PropertyDef>
+
+<PropertyDef name="options" type="IButtonToggleOption[]" attr={false} defaultValue="[]">
+
+Allows for button-toggle components to be created and rendered via configuration instead of static HTML.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Button toggle
+
+### Properties/Attributes
+
+<PropertyDef name="value" type="any" defaultValue="undefined">
+
+Gets/sets the value that is associated with this button.
+
+</PropertyDef>
+
+<PropertyDef name="selected" type="boolean" defaultValue="false">
+
+Gets/sets the selected state.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+Gets/sets the disabled state.
+
+</PropertyDef>
+
+<PropertyDef name="dense" type="boolean" defaultValue="false">
+
+Gets/sets the dense state.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Events
+
+### Button Toggle
+
+| Name                               | Description
+| :----------------------------------| :----------------
+| `forge-button-toggle-select`         | Emits when the selected state is changed by toggling an individual button.
+
+### Button Toggle Group
+
+| Name                               | Description
+| :----------------------------------| :----------------
+| `forge-button-toggle-group-change`   | Emits when the selected state of the gruop is changed.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Slots
+
+### Button toggle group
+
+| Name                         | Description
+| :----------------------------| :----------------
+| `default`                    | The default (unnamed) slot is used for rendering child `<forge-button-toggle>` elements.
+
+### Button toggle
+
+| Name                         | Description
+| :----------------------------| :----------------
+| leading                      | Projects content to the left of the label content.
+| `default`                    | The default (unnamed) slot is used for rendering child `<forge-button>` elements.
+| trailing                     | Projects content to the right of the label content.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                               | Description
+| :--------------------------------------------------| :----------------
+| `--mdc-theme-primary`                              | Controls the primary theme color.
+| `--mdc-theme-on-primary`                           | Controls the on-primary theme color.
+| `--mdc-theme-text-primary-on-dark`                 | Controls the primary text theme color.
+| `--forge-button-toggle-border-right-width`           | Controls the border-right width for horizontal adjacent toggles.
+| `--forge-button-toggle-border-bottom-width`          | Controls the border-bottom width for vertical adjacent toggles.
+| `--forge-button-toggle-border-top-left-radius`       | Controls the border-top-left-radius.
+| `--forge-button-toggle-border-bottom-left-radius`    | Controls the border-bottom-left-radius.
+| `--forge-button-toggle-border-top-right-radius`      | Controls the border-top-right-radius.
+| `--forge-button-toggle-border-bottom-right-radius`   | Controls the border-bottom-right-radius.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### IButtonToggleSelectEventData
+
+```ts
+interface IButtonToggleSelectEventData {
+  value: string;
+  selected: boolean;
+}
+```
+
+```ts
+type IButtonToggleGroupChangeEventData<T> = T;
+```
+
+### IButtonToggleOption
+
+```ts
+export interface IButtonToggleOption {
+  label?: string;
+  icon?: string;
+  value: any;
+  leadingIcon?: string;
+  trailingIcon?: string;
+}
+```
+
+</PageSection>

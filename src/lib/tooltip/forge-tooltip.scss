@@ -1,0 +1,7 @@
+@use './mixins';
+
+forge-tooltip {
+  @include mixins.host;
+}
+
+@include mixins.core-styles;

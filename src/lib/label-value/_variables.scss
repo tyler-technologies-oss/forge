@@ -1,0 +1,32 @@
+$root: (
+  padding: (
+    top: ( // adjusts label position from top of field, in raster space
+      default: 5px,
+      roomy: 7px
+    )
+  )
+) !default;
+
+$label: (
+  transform: (
+    translate: (
+      x: ( // moves label back to keyline after scaling, in vector space
+        default: -6.8%,
+        roomy: -7.2%
+      ),
+      y: ( // moves label back to baseline after scaling, in vector space
+        default: -2%,
+        roomy: 1%
+      )
+    )
+  ),
+  margin: (
+    right: (
+      single-line: 8px
+    ),
+    bottom: ( // adjust value position from bottom of label, in raster space
+      default: -1px,
+      roomy: 5px
+    )
+  )
+) !default;

@@ -1,0 +1,17 @@
+@use './mixins';
+@use '../ripple/forge-ripple';
+@use '../button/forge-button';
+
+@include mixins.core-styles;
+
+:host {
+  display: inline;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+forge-toolbar {
+  --mdc-theme-surface: var(--forge-theme-elevated-surface);
+}

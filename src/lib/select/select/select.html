@@ -1,0 +1,18 @@
+<template>
+  <div class="forge-select__wrapper" part="root">
+    <div class="forge-select forge-field" part="container">
+      <div class="forge-select__leading-container" part="leading-container">
+        <slot name="leading"></slot>
+      </div>
+      <div class="forge-field__label-input-container">
+        <div id="selected-text" class="forge-select__selected-text" tabindex="0" part="text"></div>
+        <label id="select-label" part="label"></label>
+      </div>
+      <forge-icon class="forge-select__dropdown-icon" name="arrow_drop_down" part="icon"></forge-icon>
+      <div class="forge-field__addon-end-container" part="addon-end-container">
+        <slot name="addon-end"></slot>
+      </div>
+    </div>
+    <slot name="helper-text"></slot>
+  </div>
+</template>

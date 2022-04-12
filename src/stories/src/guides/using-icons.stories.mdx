@@ -1,0 +1,186 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Guides/Using icons" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Guide' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Guide: Using icons
+
+The icons provided by Tyler Forge are available in multiple formats. It's important to know the difference between all
+available formats, and when/how to use each.
+
+We distribute the icons using both an npm package, and via static files hosted on our CDN.
+
+> It's important to note that we follow a "never delete" principle when it comes to hosting icons in the CDN. You can safely assume 
+> that those icons will always be available under the same static URL.
+
+### NPM
+
+The recommended way to consume icons is through the npm package. This allows the icons to be exported as a JavaScript
+module that can allow applications to take advantage of techniques such as tree shaking to import only the icons they need
+to use, and leave out the rest. The other main benefits of this are that versioning becomes easier, and the icons are distributed
+in the more flexible SVG format.
+
+See the [implementation details](#cdn-1) below for more information about using this approach.
+
+> This method requires that your application supports ES modules, or the addition of a custom build process may be required.
+
+### CDN
+
+An alternative option to leverage the icon libraries available in Forge is to use the CDN (Content Delivery Network). The Forge
+CDN is a publicly accessible, static asset server that allows you to reference icons (and many other types of assets) without
+hosting them yourself in each application. This makes file access very fast, as well as aiding in caching of the assets on a
+users machine as they navigate across products and applications that utilize the same assets.
+
+There are two formats that you can choose to consume icons in your application when using the CDN, font-based and SVG-based.
+
+* **SVG** (recommended)
+
+  The full set of icons are available through the use of individual SVG files. This format offers the ability to reference each icon that
+  your application needs on a case-by-case basis. This improves processing time dramatically to help speed up loading times for your app.
+
+* **Font**
+
+  The font files contain **every** icon in the library, but are distributed as three separate files, one for each icon set.
+
+  Font-based icons are easier to use, but they come at a **cost**. Large font icon files take longer to process by the browser which can cause
+  a noticeable delay when rendering your application. We have chosen to **deprecate** the font files, and our recommended approach is SVG.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Implementation
+
+Below you'll find examples and information regarding the implementation of consuming the icons using your desired format.
+
+### NPM
+
+To get started using this format, install the `@tylertech/tyler-icons` npm package.
+
+This package only contains SVG icons that are distributed as importable JavaScript constants. It's expected that you will use these
+icons with the [icon component](?path=/docs/components-icon--default) to easily render them. This means you can define
+each component with the Forge icon registry to easily choose the icons that your application is using, the rest will be ignored and tree
+shaken away!
+
+After installing the `@tylertech/tyler-icons` package into your project, you can then import and define the icons you want to use with
+the Forge icon registry.
+
+> **Important:** the icons are separated out by the following directories in the package:
+>
+> * standard: The official Google Material icons.
+> * extended: The community-based Material icons.
+> * custom: Tyler-owned custom icons.
+>
+> Be sure to import icons from the corresponding directory within the package.
+
+```ts expanded
+import { tylIconAccountCircle, tylIconFace } from '@tylertech/tyler-icons/standard';
+import { tylIconAccountDetails } from '@tylertech/tyler-icons/extended';
+import { tylIconActionLauncher } from '@tylertech/tyler-icons/custom';
+import { IconRegistry } from '@tylertech/forge';
+
+constructor() {
+  IconRegistry.define([
+    tylIconAccountCircle,
+    tylIconFace,
+    tylIconAccountDetails,
+    tylIconActionLauncher
+  ]);
+}
+```
+
+Now you can use this icon name with the `<forge-icon>` component, and the icon data will be loaded from the registry:
+
+```html
+<forge-icon name="face"></forge-icon>
+```
+
+> **Note:** A common location to when using JavaScript classes is to define the icons in your constructor. This ensures that minifiers don't inadvertantly
+> assume this is dead code. Just be sure to define your icons as early as you can when rendering your application.
+
+You can also load icons dynamically (without defining them locally) by using the external CDN. Just set the `external`
+attribute to enable the component to make a request to the CDN to fetch the icon data dynamically (if not exists in the
+local registry):
+
+```html
+<forge-icon name="face" external external-type="standard"></forge-icon>
+```
+
+> If not using the standard icon set, be sure to specify an icon set name in the value of the `external-type` attribute. Valid values: "standard" (default), "extended", "custom".
+
+A property by the name of `externalUrlBuilder` exists on the component which can be set to a callback that will be executed when the
+component is creating the URL to fetch the icon from. This gives you control over hosting the icons yourself elsewhere from the public
+CDN if desired.
+
+### CDN
+
+There are two options for consumption when it comes to the CDN. You can choose to reference the SVG files, or the CSS stylesheets for loading the font-based icons.
+
+* **CSS**
+
+  To include the font-based icons in your application, you must load a stylesheet from the CDN and use the proper CSS class for each set.
+
+  * **Standard**: https://cdn.forge.tylertech.com/v1/css/tyler-icons-standard.css
+    * Use the `tyler-icons` class: ex. `<i class="tyler-icons">alarm</i>`
+  * **Extended**: https://cdn.forge.tylertech.com/v1/css/tyler-icons-extended.css
+    * Use the `tyler-icons-ext` class: ex. `<i class="tyler-icons-ext">account</i>`
+  * **Custom**: https://cdn.forge.tylertech.com/v1/css/tyler-icons-custom.css
+    * Use the `tyler-icons-custom` class: ex. `<i class="tyler-icons-custom">decision_tree</i>`
+
+  > It's important to differentiate which icon set your icon is coming from. Pay close attention to which set it belongs to, and use the proper CSS class to reference it.
+
+
+* **SVG**
+
+  The same icons that are available in the `@tylertech/tyler-icons` npm package are also available in the CDN in the same directory structure. The `<forge-icon>` component 
+  uses these files with its `external` attribute to fetch the icons dynamically, and you can also choose to use the files much the same way to render them using any means
+  you desire.
+
+  There are typically two options when it comes to rendering SVG files directly in your application:
+
+  * Referencing the files via the `src` attribute on a standard `<img>` element.
+  * Fetching the SVG content as a string and rendering it directly in the HTML as an `<svg>` element.
+
+  > The URL format for accessing the icons is as follows: `https://cdn.forge.tylertech.com/v1/icons/svg/<set>/<name>.svg` where
+  > `<set>` is one of "standard", "extended", "custom" and `<name>` is the name of the icon.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Icon sets
+
+The Tyler icon library is comprised of multiple icon sets. Each set serves its own purpose and provides different icons to choose from. Below you will
+find information about when to use each icon set, and where the icons are derived from.
+
+> Please let us know if your team needs a specific icon and you are having trouble finding it, or you need a custom icon created!
+
+### Standard
+
+The standard icon set is an alias for the official Google Material icons. Refer to this set as often as possible for consistency across applications.
+
+### Extended
+
+The extended icons are an alias for the community-based Material icons. These are not endorsed by Google, but they offer many more icons to use
+and follow the same standard design that the offical icons do. If you are unable to find an icon in the standard set, you'll most likely find
+what you're looking for here.
+
+### Custom
+
+Icons within the custom set are created by Tyler on an as-needed basis when an icon from either of the two previous sets can't be used.
+
+> **Note:** The SVG versions of the icons are the most up-to-date as they are compiled directly from their sources. The font-based icons are
+> trimmed down to reduce their overall size to improve loading performance and are **deprecated**.
+
+</PageSection>

@@ -1,0 +1,66 @@
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/form-field/mixins' as mdc-form-field;
+@use '@material/form-field/variables' as mdc-form-field-variables;
+@use '../typography/mixins' as typography-mixins;
+
+@mixin shadow-styles {
+  .forge-form-field {
+    @include base;
+
+    ::slotted([slot='label']) {
+      @include label;
+    }
+
+    forge-switch ~ ::slotted([slot='label']) {
+      padding-left: 8px;
+    }
+  }
+
+  .forge-form-field--align-end {
+    ::slotted([slot='label']) {
+      @include align-end;
+    }
+  }
+}
+
+@mixin core-styles() {
+  .forge-form-field {
+    @include base;
+
+    > label {
+      @include label;
+    }
+
+    forge-switch ~ label {
+      padding-left: 8px;
+    }
+  }
+
+  .forge-form-field--align-end {
+    > label {
+      @include align-end;
+    }
+  }
+}
+
+@mixin base() {
+  @include mdc-typography.typography(body2);
+  @include mdc-theme.property(color, text-primary-on-background);
+
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+@mixin label() {
+  order: 0;
+  margin-right: auto;
+  padding-left: mdc-form-field-variables.$item-spacing;
+}
+
+@mixin align-end() {
+  order: -1;
+  margin-left: auto;
+  padding-right: mdc-form-field-variables.$item-spacing;
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/@tylertech/forge-cli/schema.json",
+  "packageOrg": "@tylertech",
+  "packageName": "forge",
+  "registry": "https://tylertech.jfrog.io/tylertech/api/npm/forge-npm-loca/",
+  "license": {
+    "header": "/**\n * @license\n * Copyright 2022 Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
+  },
+  "externalDependencies": {
+    "@material/ripple": "@material/ripple",
+    "@material/slider": "@material/slider",
+    "@material/linear-progress": "@material/linear-progress",
+    "@material/switch": "@material/switch",
+    "@material/tab-indicator": "@material/tab-indicator",
+    "@material/tab-scroller": "@material/tab-scroller",
+    "@material/circular-progress": "@material/circular-progress",
+    "@tylertech/tyler-icons/standard": "@tylertech/tyler-icons/standard",
+    "@tylertech/tyler-icons/extended": "@tylertech/tyler-icons/extended",
+    "@tylertech/tyler-icons/custom": "@tylertech/tyler-icons/custom",
+    "@tylertech/forge-core": "Forge.core",
+    "imask": "IMask",
+    "tslib": "tslib"
+  },
+  "karma": {
+    "stylesheets": [
+      "src/lib/forge.scss"
+    ],
+    "frameworks": [
+      "fixture"
+    ],
+    "plugins": [
+      "karma-fixture"
+    ]
+  },
+  "build": {
+    "webpack": {
+      "devtool": {
+        "development": "source-map"
+      }
+    },
+    "static": {
+      "distPath": "cdn/v1/libs/"
+    }
+  }
+}

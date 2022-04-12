@@ -1,0 +1,17 @@
+@use '../../theme/theme';
+@use './mixins';
+@use '../../ripple/forge-ripple';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([theme=error]) {
+  --mdc-theme-primary: var(--mdc-theme-error);
+}

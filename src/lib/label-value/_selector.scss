@@ -1,0 +1,162 @@
+@use './base';
+
+@mixin root {
+  // Core
+  .forge-label-value {
+    @include base.root-core;
+  }
+  // Min Height
+  :host(:not([single-line])) .forge-label-value {
+    &:not(.forge-label-value--dense):not(.forge-label-value--roomy) {
+      @include base.root-min-height(default, default);
+    }
+    &--roomy:not(.forge-label-value--dense) {
+      @include base.root-min-height(roomy, default);
+    }
+    &--dense:not(.forge-label-value--roomy) {
+      @include base.root-min-height(dense, default);
+    }
+  }
+  :host([single-line]) .forge-label-value {
+    @include base.root-min-height(default, single-line);
+  }
+  // Padding Top
+  :host(:not([single-line])) .forge-label-value {
+    &:not(.forge-label-value--roomy) {
+      @include base.root-padding-top(default);
+    }
+    &--roomy {
+      @include base.root-padding-top(roomy);
+    }
+  }
+}
+
+@mixin icon-container {
+  // Core
+  .forge-label-value__icon-container {
+    @include base.icon-container-core;
+  }
+}
+
+@mixin container {
+  // Orientation
+  :host(:not([single-line])) .forge-label-value__container {
+    @include base.container-orientation(default);
+  }
+  :host([single-line]) .forge-label-value__container {
+    @include base.container-orientation(single-line);
+  }
+  // Align
+  :host(:not([single-line])) .forge-label-value {
+    &--align-center {
+      .forge-label-value__container {
+        @include base.container-align(center);
+      }
+    }
+    &--align-right {
+      .forge-label-value__container {
+        @include base.container-align(right);
+      }
+    }
+  }
+  // Ellipsis
+  .forge-label-value--ellipsis .forge-label-value__container {
+    @include base.container-ellipsis;
+  }
+}
+
+@mixin icon {
+  // Core
+  ::slotted([slot='icon']) {
+    @include base.icon-core;
+  }
+}
+
+@mixin label {
+  // Core
+  .forge-label-value__label {
+    @include base.label-core;
+  }
+  // Font Size
+  :host(:not([single-line])) .forge-label-value {
+    &:not(.forge-label-value--roomy):not(.forge-label-value--dense) .forge-label-value__label {
+      @include base.label-font-size(default, default);
+    }
+    &--roomy:not(.forge-label-value--dense) .forge-label-value__label {
+      @include base.label-font-size(roomy, default);
+    }
+    &--dense:not(.forge-label-value--roomy) .forge-label-value__label {
+      @include base.label-font-size(dense, default);
+    }
+  }
+  :host([single-line]) .forge-label-value__label {
+    @include base.label-font-size(default, single-line);
+  }
+  // Transform
+  :host(:not([single-line])) .forge-label-value {
+    &:not(.forge-label-value--roomy) .forge-label-value__label {
+      @include base.label-transform(default);
+    }
+    &--roomy .forge-label-value__label {
+      @include base.label-transform(roomy);
+    }
+  }
+  // Margin Right
+  :host([single-line]) .forge-label-value__label {
+    @include base.label-margin-right(single-line);
+  }
+  // Margin Bottom
+  :host(:not([single-line])) .forge-label-value {
+    &:not(.forge-label-value--roomy) .forge-label-value__label {
+      @include base.label-margin-bottom(default);
+    }
+    &--roomy .forge-label-value__label {
+      @include base.label-margin-bottom(roomy);
+    }
+  }
+  // Width
+  :host(:not([single-line])) .forge-label-value__label {
+    @include base.label-width(default);
+  }
+  :host([single-line]) .forge-label-value__label {
+    @include base.label-width(single-line);
+  }
+  // Ellipsis
+  .forge-label-value--ellipsis .forge-label-value__label {
+    @include base.label-ellipsis;
+  }
+}
+
+@mixin value {
+  // Core
+  .forge-label-value__value {
+    @include base.value-core;
+  }
+  // Font Size
+  :host(:not([single-line])) .forge-label-value {
+    &:not(.forge-label-value--dense):not(.forge-label-value--roomy) .forge-label-value__value {
+      @include base.value-font-size(default);
+    }
+    &--roomy:not(.forge-label-value--dense) .forge-label-value__value {
+      @include base.value-font-size(roomy);
+    }
+    &--dense:not(.forge-label-value--roomy) .forge-label-value__value {
+      @include base.value-font-size(dense);
+    }
+  }
+  // Width
+  :host(:not([single-line])) .forge-label-value__value {
+    @include base.value-width(default);
+  }
+  :host([single-line]) .forge-label-value__value {
+    @include base.value-width(single-line);
+  }
+  // Empty
+  .forge-label-value--empty .forge-label-value__value {
+    @include base.value-empty;
+  }
+  // Ellipsis
+  .forge-label-value--ellipsis .forge-label-value__value {
+    @include base.value-ellipsis;
+  }
+}

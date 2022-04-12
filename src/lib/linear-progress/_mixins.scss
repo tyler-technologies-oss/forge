@@ -1,0 +1,6 @@
+@use '../theme/theme';
+@use './variables';
+
+@mixin provide-theme($theme) {
+  @include theme.theme-properties(linear-progress, $theme, variables.$theme-values);
+}

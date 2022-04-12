@@ -1,0 +1,47 @@
+@use 'sass:list';
+@use './selector';
+
+@mixin core-styles($component-name, $exclude: ()) {
+
+  @if list.index($exclude, field) == null {
+    .#{$component-name} {
+      @include selector.field($component-name);
+    }
+  }
+
+  .forge-field {
+    @if list.index($exclude, outline) == null {
+      @include selector.outline($component-name);
+    }
+    @if list.index($exclude, label-input-container) == null {
+      @include selector.label-input-container;
+    }
+    @if list.index($exclude, label) == null {
+      @include selector.label;
+    }
+    @if list.index($exclude, floating-label) == null {
+      @include selector.floating-label;
+    }
+    @if list.index($exclude, input) == null {
+      @include selector.input;
+    }
+    @if list.index($exclude, helper-text) == null {
+      @include selector.helper-text;
+    }
+    @if list.index($exclude, leading) == null {
+      @include selector.leading;
+    }
+    @if list.index($exclude, leading-font-icon) == null {
+      @include selector.leading-font-icon;
+    }
+    @if list.index($exclude, trailing) == null {
+      @include selector.trailing;
+    }
+    @if list.index($exclude, trailing-font-icon) == null {
+      @include selector.trailing-font-icon;
+    }
+    @if list.index($exclude, addon-end) == null {
+      @include selector.addon-end;
+    }
+  }
+}

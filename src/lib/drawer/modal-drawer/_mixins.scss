@@ -1,0 +1,64 @@
+@use '@material/elevation/elevation-theme' as mdc-elevation-theme;
+@use '@material/drawer/mixins' as mdc-drawer-mixins;
+@use '@material/drawer/variables' as mdc-drawer-variables;
+@use '../base/mixins' as base-mixins;
+@use '../../theme/theme';
+
+@mixin core-styles() {
+  @include base-mixins.core-styles;
+
+  .forge-drawer {
+    &--modal {
+      @include base;
+
+      &.forge-drawer--closing,
+      &.forge-drawer--closed {
+        @include closed;
+      }
+
+      &.forge-drawer--closing {
+        &.forge-drawer--right {
+          transform: translateX(100%);
+        }
+      }
+    }
+    
+    &__scrim {
+      @include scrim;
+
+      &--closed {
+        display: none;
+      }
+    }
+    
+    &.forge-drawer--right {
+      @include right;
+    }
+
+    &--display-none {
+      display: none !important;
+    }
+  }
+}
+
+@mixin base() {
+  @include mdc-drawer-mixins.scrim-fill-color(mdc-drawer-variables.$modal-scrim-color);
+  @include mdc-elevation-theme.elevation(24);
+  @include theme.z-index(dialog);
+
+  position: absolute;
+  top: 0;
+  max-width: 80%;
+}
+
+@mixin right() {
+  right: 0;
+}
+
+@mixin closed() {
+  box-shadow: none;
+}
+
+@mixin scrim() {
+  @include theme.z-index(dialog);
+}

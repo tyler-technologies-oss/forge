@@ -1,0 +1,75 @@
+@use 'sass:map';
+@use '../form-field/mixins' as form-field-mixins;
+@use '@material/dom/dom' as mdc-dom;
+@use '@material/typography/typography' as mdc-typography;
+@use '@material/theme/theme' as mdc-theme;
+@use '../theme/theme';
+@use '../theme/theme-values';
+@use './switch-theme';
+@use './switch-mixins' as switch;
+
+@include switch.static-styles();
+
+.mdc-switch {
+  @include switch-theme.theme-styles(switch-theme.$light-theme);
+}
+
+@include mdc-dom.forced-colors-mode {
+  .mdc-switch {
+    @include switch-theme.theme-styles(switch-theme.$forced-colors-theme);
+  }
+}
+
+@include form-field-mixins.core-styles;
+
+.forge-switch__container {
+  display: flex;
+  align-items: center;
+
+  &.forge-switch--label-position-start {
+    flex-flow: row-reverse;
+
+    .forge-switch__label {
+      margin-left: auto;
+      padding-right: 8px;
+    }
+  }
+}
+
+:host {
+  display: inline-block;
+
+  * {
+    cursor: pointer;
+  }
+  
+  .forge-switch__label {
+    @include mdc-typography.typography(caption);
+
+    padding-left: 8px;
+  }
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([dense]) {
+  .mdc-switch__ripple {
+    $density: switch-theme.density(minimum);
+    $size: map.get($density, state-layer-size);
+
+    @include mdc-theme.property(height, $size);
+    @include mdc-theme.property(width, $size);
+  }
+}
+
+:host([disabled]) {
+  * {
+    cursor: not-allowed;
+  }
+
+  .forge-switch__label {
+    @include theme.property(color, label-disabled-on-background);
+  }
+}

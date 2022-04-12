@@ -1,0 +1,17 @@
+@use './mixins';
+
+@include mixins.core-styles;
+@include mixins.keyframes;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+// This is here until Firefox supports :host-context()...
+:host([forge-popup-context=true]) {
+  @include mixins.popup-context-styles;
+}

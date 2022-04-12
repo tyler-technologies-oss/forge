@@ -1,0 +1,4 @@
+@use './theme';
+
+@include theme.theme-styles;
+@include theme.scrollbar-theme-styles;
