@@ -1,0 +1,11 @@
+<template>
+  <div class="forge-split-view-pane" id="root" part="root">
+    <div class="forge-split-view-pane__handle" id="handle" part="handle" role="separator" tabindex="0">
+      <forge-icon class="forge-split-view-pane__icon" id="icon" part="icon"></forge-icon>
+      <forge-ripple></forge-ripple>
+    </div>
+    <div class="forge-split-view-pane__content" id="content" part="content">
+      <slot></slot>
+    </div>
+  </div>
+</template>

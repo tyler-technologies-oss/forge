@@ -1,0 +1,1 @@
+export const SplitViewDefaultHtml = () => '<forge-split-view></forge-split-view>';

@@ -1,0 +1,246 @@
+@use '@material/animation/variables' as mdc-animation-variables;
+@use './variables';
+@use '../../theme/theme';
+
+@mixin forge-split-view-pane-styles() {
+  .forge-split-view-pane {
+    @include base;
+
+    &__handle {
+      @include handle;
+
+      &:focus,
+      &:active {
+        @include handle-active;
+      }
+    }
+
+    &__content {
+      @include content;
+    }
+
+    &--closed {
+      @include closed;
+    }
+  }
+}
+
+@mixin forge-split-view-pane-horizontal-styles() {
+  .forge-split-view-pane[orientation=horizontal] {
+    @include base-horizontal;
+
+    .forge-split-view-pane {
+      &__handle {
+        @include handle-orientation(horizontal);
+        @include cursor(horizontal);
+      }
+    }
+
+    &.forge-split-view-pane--closing {
+      &[direction=start] {
+        @include closing($direction: left);
+      }
+
+      &[direction=end] {
+        @include closing($direction: right);
+      }
+    }
+
+    &.forge-split-view-pane--opening {
+      &[direction=start] {
+        @include opening($direction: left);
+      }
+
+      &[direction=end] {
+        @include opening($direction: right);
+      }
+    }
+  }
+}
+
+@mixin forge-split-view-pane-vertical-styles() {
+  .forge-split-view-pane[orientation=vertical] {
+    @include base-vertical;
+
+    .forge-split-view-pane {
+      &__handle {
+        @include handle-orientation(vertical);
+        @include cursor(vertical);
+      }
+    }
+
+    &.forge-split-view-pane--closing {
+      &[direction=start] {
+        @include closing($direction: top);
+      }
+
+      &[direction=end] {
+        @include closing($direction: bottom);
+      }
+    }
+
+    &.forge-split-view-pane--opening {
+      &[direction=start] {
+        @include opening($direction: top);
+      }
+
+      &[direction=end] {
+        @include opening($direction: bottom);
+      }
+    }
+  }
+}
+
+@mixin forge-split-view-pane-static-styles() {
+  @include host-static;
+
+  .forge-split-view-pane {
+    @include base-static;
+
+    &__handle {
+      @include handle-static;
+    }
+  }
+}
+
+@mixin host() {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  flex: 0;
+}
+
+@mixin host-static() {
+  flex: 1;
+}
+
+@mixin base() {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  contain: paint;
+}
+
+@mixin base-horizontal() {
+  // @include theme.css-custom-property(width, --forge-split-view-pane-size, unset);
+  @include theme.css-custom-property(min-width, --forge-split-view-handle-width, variables.$handle-width);
+
+  width: calc(var(--forge-split-view-pane-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
+  flex-direction: row;
+}
+
+@mixin base-vertical() {
+  // @include theme.css-custom-property(height, --forge-split-view-pane-size, unset);
+  @include theme.css-custom-property(min-height, --forge-split-view-handle-width, variables.$handle-width);
+
+  height: calc(var(--forge-split-view-pane-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
+  flex-direction: column;
+}
+
+@mixin base-static() {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+@mixin base-closed() {
+  display: none;
+}
+
+@mixin handle() {
+  @include theme.property(color, text-secondary-on-light);
+  @include theme.property(background-color, border-color);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+}
+
+@mixin handle-orientation($orientation: horizontal) {
+  @if $orientation == horizontal {
+    @include theme.css-custom-property(width, --forge-split-view-handle-width, variables.$handle-width);
+  } @else {
+    @include theme.css-custom-property(height, --forge-split-view-handle-width, variables.$handle-width);
+  }
+}
+
+@mixin handle-active() {
+  @include theme.property(color, text-primary-on-light);
+}
+
+@mixin handle-static() {
+  display: none;
+}
+
+@mixin content() {
+  flex: 1;
+}
+
+@mixin cursor($orientation: horizontal) {
+  cursor: if($orientation == horizontal, col-resize, row-resize);
+}
+
+@mixin closed($direction: right) {
+  display: none;
+}
+
+@mixin closing($direction: right) {
+  @include closing-animation($direction);
+}
+
+@mixin opening($direction: right) {
+  @include closing-animation($direction);
+
+  animation-direction: reverse;
+}
+
+@mixin closing-animation($direction: right) {
+  @include animating-position($direction);
+
+  $animation-name: unique-id();
+
+  animation-name: $animation-name;
+  animation-duration: variables.$animation-duration;
+  animation-timing-function: mdc-animation-variables.$standard-curve-timing-function;
+
+  @keyframes #{$animation-name} {
+    from {
+      transform: none;
+    }
+  
+    to {
+      @if ($direction == right) {
+        transform: translateX(100%);
+      } @else if ($direction == left) {
+        transform: translateX(-100%);
+      } @else if ($direction == top) {
+        transform: translateY(-100%);
+      } @else {
+        transform: translateY(100%);
+      }
+    }
+  }
+}
+
+@mixin animating-position($direction: right) {
+  @include theme.z-index(surface);
+
+  position: absolute;
+
+  @if ($direction == right) {
+    top: 0;
+    right: 0;
+  } @else if ($direction == left) {
+    top: 0;
+    left: 0;
+  } @else if ($direction == top) {
+    top: 0;
+    left: 0;
+  } @else {
+    bottom: 0;
+    left: 0;
+  }
+}
