@@ -1,6 +1,6 @@
 import { getShadowElement } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { ISplitViewComponent } from './split-view';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 import { ISplitViewPaneComponent } from '../split-view-pane';

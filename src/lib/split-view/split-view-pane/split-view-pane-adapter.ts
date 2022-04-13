@@ -1,7 +1,7 @@
-import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
+import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tylertech/forge-core';
 
-import { toggleAttribute } from '../../core/utils';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters';
+import {  } from '../../core/utils';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { getCursor, getHandleIcon } from '../core/split-view-core-utils';
 import { ISplitViewPaneComponent } from './split-view-pane';
 import { SplitViewPaneDirection, SPLIT_VIEW_PANE_CONSTANTS } from './split-view-pane-constants';
