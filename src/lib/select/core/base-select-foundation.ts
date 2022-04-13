@@ -1,6 +1,5 @@
-import { isDefined } from '@tylertech/forge-core';
+import { isDefined, isDeepEqual, randomChars } from '@tylertech/forge-core';
 import { OptionListenerDestructor } from '../select/select-adapter';
-import { isDeepEqual, randomChars } from '../../core';
 import { ISelectOption, ISelectOptionGroup, SelectSelectedTextBuilder, SelectOptionBuilder, BASE_SELECT_CONSTANTS, SelectBeforeValueChangeCallback } from './base-select-constants';
 import { isSelectOptionType, SelectOptionType } from './select-utils';
 import { IListDropdownConfig, ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from '../../list-dropdown/list-dropdown-constants';

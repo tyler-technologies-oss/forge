@@ -1,8 +1,7 @@
 import { MDCRipple } from '@material/ripple';
-import { addClass, getShadowElement, removeClass, removeElement, walkUpUntil } from '@tylertech/forge-core';
+import { addClass, getShadowElement, removeClass, removeElement, walkUpUntil, elementFromHTML, toggleClass } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
-import { elementFromHTML, toggleClass } from '../../core/utils';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IChipSetComponent } from '../chip-set/chip-set';
 import { CHIP_SET_CONSTANTS } from '../chip-set/chip-set-constants';
 import { IChipComponent } from './chip';

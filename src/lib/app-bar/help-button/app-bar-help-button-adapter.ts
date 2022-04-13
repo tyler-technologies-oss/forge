@@ -1,5 +1,5 @@
 import { getLightElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IMenuComponent, IMenuOption, MENU_CONSTANTS } from '../../menu';
 import { IAppBarHelpButtonComponent } from './app-bar-help-button';
 

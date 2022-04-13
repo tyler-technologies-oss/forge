@@ -1,5 +1,5 @@
 import { matchesSelectors } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core';
+import { BaseAdapter, IBaseAdapter } from '../core/base';
 import { IKeyboardShortcutComponent } from './keyboard-shortcut';
 import { KEYBOARD_SHORTCUT_CONSTANTS } from './keyboard-shortcut-constants';
 

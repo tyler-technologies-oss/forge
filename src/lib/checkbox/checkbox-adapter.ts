@@ -1,6 +1,6 @@
 import { MDCRipple, MDCRippleAdapter, MDCRippleFoundation, MDCRippleCapableSurface } from '@material/ripple';
 import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ICheckboxComponent } from './checkbox';
 import { CHECKBOX_CONSTANTS } from './checkbox-constants';
 

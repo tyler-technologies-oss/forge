@@ -1,6 +1,5 @@
 import { MDCRipple } from '@material/ripple';
-import { coerceBoolean, coerceNumber, CustomElement, emitEvent, ensureChild } from '@tylertech/forge-core';
-import { toggleClass } from '../core';
+import { coerceBoolean, coerceNumber, CustomElement, emitEvent, ensureChild, toggleClass } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
 

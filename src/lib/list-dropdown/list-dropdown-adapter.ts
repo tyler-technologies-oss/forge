@@ -2,9 +2,8 @@ import { IListDropdownOption, IListDropdownOpenConfig, IListDropdownOptionGroup,
 import { createDropdown, createList, createListItems, createAsyncElement, createBusyElement, createCheckboxElement } from './list-dropdown-utils';
 import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
 import { IListComponent } from '../list/list';
-import { createVisuallyHiddenElement, isDeepEqual, tryScrollIntoView } from '../core';
 import { LIST_ITEM_CONSTANTS, IListItemComponent, IListItemSelectEventData } from '../list/list-item';
-import { ScrollEvents, getShadowElement, IScrollObserverConfiguration, ScrollAxisObserver, removeAllChildren, isFunction, removeElement, replaceElement } from '@tylertech/forge-core';
+import { ScrollEvents, getShadowElement, IScrollObserverConfiguration, ScrollAxisObserver, removeAllChildren, isFunction, removeElement, replaceElement, createVisuallyHiddenElement, isDeepEqual, tryScrollIntoView } from '@tylertech/forge-core';
 import { ILinearProgressComponent } from '../linear-progress';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
 

@@ -1,10 +1,9 @@
-import { addClass, getShadowElement, removeElement, replaceElement, getActiveElement } from '@tylertech/forge-core';
+import { addClass, getShadowElement, removeElement, replaceElement, getActiveElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
 import { BackdropAppearance, BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ILinearProgressComponent } from '../linear-progress';
 import { IBusyIndicatorComponent } from './busy-indicator';
 import { BUSY_INDICATOR_CONSTANTS } from './busy-indicator-constants';
-import { toggleAttribute, toggleClass } from '../core/utils';
 
 export interface IBusyIndicatorAdapter extends IBaseAdapter {
   setContainerInvisible(): void;

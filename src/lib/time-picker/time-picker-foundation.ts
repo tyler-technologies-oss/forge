@@ -1,8 +1,7 @@
-import { ICustomElementFoundation, Platform, debounce } from '@tylertech/forge-core';
+import { ICustomElementFoundation, Platform, debounce, randomChars } from '@tylertech/forge-core';
 import { ITimePickerAdapter } from './time-picker-adapter';
-import { randomChars } from '../core';
 import { ITimeInputMaskOptions } from '../core/mask/time-input-mask';
-import { isSupportedTimeFormat, TWENTY_FOUR_HOUR_TIME_REGEX, tryCoerceTimeString } from '../core/time-utils';
+import { isSupportedTimeFormat, TWENTY_FOUR_HOUR_TIME_REGEX, tryCoerceTimeString } from '../core/utils/time-utils';
 import {
   TIME_PICKER_CONSTANTS,
   ITimePickerOptionValue,

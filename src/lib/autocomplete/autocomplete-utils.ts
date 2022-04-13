@@ -1,7 +1,6 @@
 import { IOption } from '../select';
 import { IAutocompleteOptionGroup } from './autocomplete-constants';
-import { isDefined, isObject } from '@tylertech/forge-core';
-import { isDeepEqual } from '../core';
+import { isDefined, isObject, isDeepEqual } from '@tylertech/forge-core';
 
 /** The available option types. */
 export enum OptionType { Option, Group }

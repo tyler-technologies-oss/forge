@@ -1,6 +1,6 @@
 import { getLightElement } from '@tylertech/forge-core';
 import { BADGE_CONSTANTS, IBadgeComponent } from '../../badge';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IAppBarNotificationButtonComponent } from './app-bar-notification-button';
 
 export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {

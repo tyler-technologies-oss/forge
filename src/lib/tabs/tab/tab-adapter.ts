@@ -1,9 +1,8 @@
-import { getShadowElement } from '@tylertech/forge-core';
+import { getShadowElement, toggleClass } from '@tylertech/forge-core';
 import { MDCRipple, MDCRippleFoundation, MDCRippleCapableSurface } from '@material/ripple';
 import { MDCTabIndicator } from '@material/tab-indicator';
 
-import { toggleClass } from '../../core/utils';
-import { IBaseAdapter, BaseAdapter } from '../../core/adapters/base-adapter';
+import { IBaseAdapter, BaseAdapter } from '../../core/base/base-adapter';
 import { ITabComponent } from './tab';
 import { TAB_CONSTANTS } from './tab-constants';
 

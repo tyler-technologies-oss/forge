@@ -1,6 +1,6 @@
 import { getLightElement, notChildEventListener, getActiveElement } from '@tylertech/forge-core';
 import { AVATAR_CONSTANTS, IAvatarComponent } from '../../avatar';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IPopupComponent, PopupAnimationType, PopupPlacement, POPUP_CONSTANTS } from '../../popup';
 import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card';
 import { IAppBarProfileButtonComponent } from './app-bar-profile-button';

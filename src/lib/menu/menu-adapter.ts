@@ -1,4 +1,4 @@
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IMenuOption } from './index';
 import { IMenuComponent } from './menu';
 import { MENU_CONSTANTS, IMenuSelectEventData } from './menu-constants';

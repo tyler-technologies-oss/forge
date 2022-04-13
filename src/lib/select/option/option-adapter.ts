@@ -1,4 +1,4 @@
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IOptionComponent } from './option';
 
 export interface IOptionAdapter extends IBaseAdapter {

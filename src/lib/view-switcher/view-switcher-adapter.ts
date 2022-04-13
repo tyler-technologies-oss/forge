@@ -1,5 +1,5 @@
 import { getShadowElement, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IViewSwitcherComponent } from './view-switcher';
 import { ViewAnimationDirection, ViewSwitcherAnimationType, VIEW_SWITCHER_CONSTANTS } from './view-switcher-constants';
 

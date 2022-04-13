@@ -1,8 +1,7 @@
-import { addClass, getShadowElement, isDefined, removeClass, toggleElementPlaceholder, deepQuerySelectorAll } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { addClass, getShadowElement, isDefined, removeClass, toggleElementPlaceholder, deepQuerySelectorAll, toggleAttribute, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IAppBarSearchComponent } from './app-bar-search';
 import { APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
-import { toggleAttribute, toggleClass } from '../../core';
 
 export interface IAppBarSearchAdapter extends IBaseAdapter {
   initialize(): void;

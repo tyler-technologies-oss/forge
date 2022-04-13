@@ -13,10 +13,10 @@ import {
   removeClass,
   removeElement,
   replaceElement,
-  safeCssWidth
+  safeCssWidth,
+  toggleClass
 } from '@tylertech/forge-core';
 import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '../checkbox';
-import { toggleClass } from '../core';
 import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel';
 import { TooltipComponent, TOOLTIP_CONSTANTS } from '../tooltip';
 import { TABLE_CONSTANTS } from './table-constants';

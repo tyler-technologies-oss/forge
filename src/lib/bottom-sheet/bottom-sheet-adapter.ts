@@ -1,8 +1,7 @@
-import { getShadowElement, removeElement, deepQuerySelectorAll } from '@tylertech/forge-core';
+import { getShadowElement, removeElement, deepQuerySelectorAll, toggleClass } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { CHECKBOX_CONSTANTS } from '../checkbox';
-import { toggleClass } from '../core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ICON_BUTTON_CONSTANTS } from '../icon-button';
 import { RADIO_CONSTANTS } from '../radio';
 import { SWITCH_CONSTANTS } from '../switch';

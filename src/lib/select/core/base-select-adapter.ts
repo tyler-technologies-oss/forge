@@ -1,5 +1,5 @@
 import { isDefined, removeElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IBaseSelectComponent } from './base-select';
 import { ListDropdown, IListDropdown } from '../../list-dropdown';
 import { IListDropdownConfig, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';

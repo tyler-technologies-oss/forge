@@ -1,5 +1,5 @@
-import { debounce, isDefined, isString, Platform } from '@tylertech/forge-core';
-import { highlightTextHTML, isDeepEqual, randomChars } from '../core';
+import { debounce, isDefined, isString, Platform, isDeepEqual, randomChars } from '@tylertech/forge-core';
+import { highlightTextHTML } from '../core';
 import { IListItemComponent } from '../list';
 import { IListDropdownConfig, IListDropdownOption, ListDropdownAsyncStyle, ListDropdownFooterBuilder, ListDropdownHeaderBuilder } from '../list-dropdown';
 import { IListDropdownAwareFoundation, ListDropdownAwareFoundation } from '../list-dropdown/list-dropdown-aware-foundation';

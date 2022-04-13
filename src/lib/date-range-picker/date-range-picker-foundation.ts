@@ -1,6 +1,6 @@
 import { isDate, isValidDate, Platform } from '@tylertech/forge-core';
 import { CalendarMode, DateRange, ICalendarDateSelectEventData } from '../calendar';
-import { isSameDate } from '../core/date-utils';
+import { isSameDate } from '../core/utils/date-utils';
 import { IDateInputMaskOptions } from '../core/mask/date-input-mask';
 import { BaseDatePickerFoundation, IBaseDatePickerFoundation } from '../date-picker/base/base-date-picker-foundation';
 import { IDateRangePickerAdapter } from './date-range-picker-adapter';

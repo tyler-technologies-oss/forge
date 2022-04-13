@@ -1,5 +1,5 @@
 import { removeAllChildren, removeElement, matchesSelectors } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { PopupPlacement } from '../popup';
 import { ITooltipComponent } from './tooltip';
 import { attachTooltip } from './tooltip-utils';

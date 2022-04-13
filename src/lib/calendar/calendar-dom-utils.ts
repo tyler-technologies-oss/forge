@@ -1,6 +1,5 @@
-import { getEventPath } from '@tylertech/forge-core';
+import { getEventPath, appendToAttribute, toggleOnAttribute } from '@tylertech/forge-core';
 
-import { appendToAttribute, toggleOnAttribute } from '../core';
 import { IIconComponent } from '../icon';
 import { ITooltipComponent } from '../tooltip';
 import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateConfig, ICalendarDateOptions, ICalendarEvent } from './calendar-constants';

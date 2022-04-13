@@ -1,7 +1,6 @@
-import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
+import { getShadowElement, removeAllChildren, appendToAttribute, toggleAttribute, toggleOnAttribute } from '@tylertech/forge-core';
 
-import { appendToAttribute, toggleAttribute, toggleOnAttribute  } from '../core/utils';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters';
+import { BaseAdapter, IBaseAdapter } from '../core/base';
 import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateOptions, ICalendarDayOptions, ICalendarEvent } from './calendar-constants';
 import { ICalendarComponent } from './calendar';
 import { splitIntoWeeks } from './calendar-utils';

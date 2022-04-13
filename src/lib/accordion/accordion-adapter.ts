@@ -1,4 +1,4 @@
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base';
 import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel';
 import { IAccordionComponent } from './accordion';
 import { elementParents } from '@tylertech/forge-core';

@@ -1,5 +1,5 @@
 import IMask, { InputMask, createMask, MaskedEnum, Masked } from 'imask';
-import { isNumeric } from '../utils';
+import { isNumeric } from '@tylertech/forge-core';
 
 export interface ITimeInputMaskOptions {
   showMaskFormat?: boolean;

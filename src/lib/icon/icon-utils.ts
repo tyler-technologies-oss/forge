@@ -1,6 +1,6 @@
 import { IconRegistry } from './icon-registry';
 import { ICON_CONSTANTS } from './icon-constants';
-import { createSvgFromString } from '../core/svg-utils';
+import { createSvgFromString } from '../core/utils/svg-utils';
 
 const _activeIconRequests = new Map<string, Promise<any>>();
 

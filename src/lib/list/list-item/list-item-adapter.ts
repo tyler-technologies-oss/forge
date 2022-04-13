@@ -1,7 +1,6 @@
 import { MDCRipple } from '@material/ripple';
-import { addClass, getShadowElement, removeClass, requireParent } from '@tylertech/forge-core';
-import { isDeepEqual, toggleClass } from '../../core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { addClass, getShadowElement, removeClass, requireParent, isDeepEqual, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IListComponent } from '../list/list';
 import { LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';

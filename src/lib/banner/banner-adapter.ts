@@ -1,6 +1,6 @@
 import { getShadowElement } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IIconButtonComponent } from '../icon-button';
 import { IBannerComponent } from './banner';
 import { BANNER_CONSTANTS } from './banner-constants';

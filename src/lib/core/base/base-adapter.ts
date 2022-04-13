@@ -1,6 +1,5 @@
-import { emitEvent } from '@tylertech/forge-core';
-import { IBaseComponent } from '../base/base-component';
-import { toggleAttribute } from '../utils';
+import { emitEvent, toggleAttribute } from '@tylertech/forge-core';
+import { IBaseComponent } from './base-component';
 
 export interface IBaseAdapter {
   readonly isConnected: boolean;

@@ -1,8 +1,7 @@
-import { addClass, calculateFontWidth, getShadowElement, IFontInfo, listenOwnProperty, Platform, removeClass, getActiveElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { addClass, calculateFontWidth, getShadowElement, IFontInfo, listenOwnProperty, Platform, removeClass, getActiveElement, createElementAttributeObserver, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { FloatingLabel, IFloatingLabel } from '../floating-label/floating-label';
 import { IFieldComponent } from './field';
-import { createElementAttributeObserver, toggleClass } from '../core/utils';
 import { FIELD_CONSTANTS } from './field-constants';
 
 export interface IFieldAdapter extends IBaseAdapter {

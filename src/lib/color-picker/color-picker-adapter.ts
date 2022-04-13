@@ -1,5 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IColorPickerComponent } from './color-picker';
 import { ColorPickerValueType, COLOR_PICKER_CONSTANTS, IHSVA, IRGBA } from './color-picker-constants';
 

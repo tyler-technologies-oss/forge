@@ -1,5 +1,5 @@
 import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IBaseDrawerComponent } from './base-drawer';
 import { DrawerDirection, BASE_DRAWER_CONSTANTS } from './base-drawer-constants';
 

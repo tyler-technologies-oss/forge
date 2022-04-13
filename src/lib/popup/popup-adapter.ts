@@ -1,5 +1,5 @@
 import { addClass, closestElement, emitEvent, getShadowElement, IPositionElementConfig, notChildEventListener, positionElementAsync, removeClass, removeElement, deepQuerySelectorAll, getActiveElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IPopupComponent } from './popup';
 import { IPopupPositionEventData, POPUP_CONSTANTS } from './popup-constants';
 

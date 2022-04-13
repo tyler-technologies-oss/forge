@@ -1,6 +1,4 @@
-import { calcSizeUnattached } from '@tylertech/forge-core';
-
-import { toggleClass } from '../core/utils';
+import { calcSizeUnattached, toggleClass } from '@tylertech/forge-core';
 import { FLOATING_LABEL_CONSTANTS } from './floating-label-constants';
 
 export interface IFloatingLabel {

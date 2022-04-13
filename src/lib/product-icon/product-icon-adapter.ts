@@ -1,5 +1,5 @@
 import { addClass, generateTextShadow, getShadowElement, Platform, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IProductIconComponent } from './product-icon';
 import { PRODUCT_ICON_CONSTANTS } from './product-icon-constants';
 
