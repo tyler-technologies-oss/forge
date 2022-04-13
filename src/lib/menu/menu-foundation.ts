@@ -1,6 +1,5 @@
-import { ICustomElementFoundation, isArray } from '@tylertech/forge-core';
+import { ICustomElementFoundation, isArray, randomChars } from '@tylertech/forge-core';
 import { ICON_CLASS_NAME } from '../constants';
-import { randomChars } from '../core';
 import { CascadingListDropdownAwareFoundation, IListDropdownCascadingElementFactoryConfig, IListDropdownConfig, ListDropdownAsyncStyle, ListDropdownType } from '../list-dropdown';
 import { isListDropdownOptionType, ListDropdownOptionType } from '../list-dropdown/list-dropdown-utils';
 import { IPopupPosition, PopupPlacement } from '../popup';

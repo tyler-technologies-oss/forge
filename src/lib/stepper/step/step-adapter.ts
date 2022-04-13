@@ -1,7 +1,6 @@
 import { MDCRipple, MDCRippleAdapter, MDCRippleFoundation, MDCRippleCapableSurface } from '@material/ripple';
-import { addClass, getShadowElement } from '@tylertech/forge-core';
-import { toggleAttribute, toggleClass } from '../../core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters';
+import { addClass, getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base';
 import { IStepComponent } from './step';
 import { StepIcons, STEP_CONSTANTS } from './step-constants';
 import { IIconComponent } from '../../icon';

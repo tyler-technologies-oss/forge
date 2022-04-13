@@ -1,5 +1,5 @@
 import { getShadowElement, isString, removeAllChildren, removeClass, removeElement, toggleElementPlaceholder } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { PopupPlacement } from '../popup';
 import { IToastComponent } from './toast';
 import { TOAST_CONSTANTS } from './toast-constants';

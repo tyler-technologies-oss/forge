@@ -1,9 +1,8 @@
-import { addClass, listenOwnProperty, getActiveElement } from '@tylertech/forge-core';
+import { addClass, listenOwnProperty, getActiveElement, createElementAttributeObserver } from '@tylertech/forge-core';
 import { ITextFieldComponent } from './text-field';
 import { FieldAdapter, IFieldAdapter } from '../field/field-adapter';
 import { TEXT_FIELD_CONSTANTS } from './text-field-constants';
 import { FIELD_CONSTANTS } from '../field/field-constants';
-import { createElementAttributeObserver } from '../core/utils';
 
 export interface ITextFieldAdapter extends IFieldAdapter {
   detectTextarea(): void;

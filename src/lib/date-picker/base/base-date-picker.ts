@@ -1,5 +1,4 @@
-import { coerceBoolean, ensureChild, FoundationProperty } from '@tylertech/forge-core';
-import { coerceNumberArray } from '../../core';
+import { coerceBoolean, ensureChild, FoundationProperty, coerceNumberArray } from '@tylertech/forge-core';
 import { DayOfWeek } from '../../calendar/calendar-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { BASE_DATE_PICKER_CONSTANTS, DatePickerFormatCallback, DatePickerParseCallback, DatePickerPrepareMaskCallback, DatePickerValueMode } from './base-date-picker-constants';

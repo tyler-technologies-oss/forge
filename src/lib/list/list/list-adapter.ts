@@ -1,5 +1,5 @@
 import { emitEvent, deepQuerySelectorAll, getActiveElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list-item';
 import { IListComponent } from './list';
 import { LIST_CONSTANTS } from './list-constants';

@@ -2,7 +2,7 @@ import { ICustomElementFoundation, isValidDate, Platform } from '@tylertech/forg
 import { ICalendarComponent, ICalendarDropdownPopupConfig } from '../../calendar';
 import { CalendarMode, DayOfWeek, ICalendarDateSelectEventData } from '../../calendar/calendar-constants';
 import { DateRange } from '../../calendar/core/date-range';
-import { formatDate, parseDateString } from '../../core/date-utils';
+import { formatDate, parseDateString } from '../../core/utils/date-utils';
 import { DEFAULT_DATE_MASK, IDateInputMaskOptions } from '../../core/mask/date-input-mask';
 import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 import { BASE_DATE_PICKER_CONSTANTS, DatePickerFormatCallback, DatePickerParseCallback, DatePickerPrepareMaskCallback, DatePickerValueMode } from './base-date-picker-constants';

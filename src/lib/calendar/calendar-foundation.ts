@@ -8,7 +8,7 @@ import { ICalendarAdapter } from './calendar-adapter';
 import { DateRange } from './core/date-range';
 import { ICalendarBase } from './core/calendar-base';
 import { CalendarMenuAnimationType, ICalendarMenuOption } from './calendar-menu';
-import { getLastDateOfMonth, getMonthLength, isSameDate } from '../core/date-utils';
+import { getLastDateOfMonth, getMonthLength, isSameDate } from '../core/utils/date-utils';
 
 export interface ICalendarFoundation extends ICalendarBase, ICustomElementFoundation {
   mode: CalendarMode;

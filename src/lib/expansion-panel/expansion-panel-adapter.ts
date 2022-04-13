@@ -1,5 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { OpenIconComponent } from '../open-icon';
 import { IExpansionPanelComponent } from './expansion-panel';
 import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';

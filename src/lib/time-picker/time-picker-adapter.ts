@@ -1,6 +1,6 @@
-import { getShadowElement, emitEvent, getActiveElement } from '@tylertech/forge-core';
+import { getShadowElement, emitEvent, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { ITimePickerComponent } from './time-picker';
-import { BaseAdapter, toggleAttribute } from '../core';
+import { BaseAdapter } from '../core';
 import { TIME_PICKER_CONSTANTS } from './time-picker-constants';
 import { ITimeInputMaskOptions, TimeInputMask } from '../core/mask/time-input-mask';
 import { TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field';

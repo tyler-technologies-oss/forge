@@ -1,6 +1,5 @@
 import IMask, { InputMask, createMask, Masked, MaskedRange } from 'imask';
-
-import { isNumeric } from '../utils';
+import { isNumeric } from '@tylertech/forge-core';
 
 export interface IDateInputMaskOptions {
   showMaskFormat?: boolean;

@@ -1,6 +1,6 @@
 import { getEventPath, isArray, isValidDate } from '@tylertech/forge-core';
 
-import { isSameDate } from '../core/date-utils';
+import { isSameDate } from '../core/utils/date-utils';
 import { ICalendarMenuOption } from './calendar-menu/calendar-menu-constants';
 import { CALENDAR_CONSTANTS, CalendarEventBuilder, DayOfWeek, ICalendarEvent, ICalendarNumberRange, ICalendarMenuMonthConfig, ICalendarMenuYearConfig, ICalendarDisabledDateParams, CalendarView } from './calendar-constants';
 import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';

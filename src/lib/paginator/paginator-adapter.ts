@@ -1,6 +1,5 @@
-import { addClass, getShadowElement, removeAllChildren, removeClass, toggleElementPlaceholder } from '@tylertech/forge-core';
-import { toggleClass } from '../core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { addClass, getShadowElement, removeAllChildren, removeClass, toggleElementPlaceholder, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IIconButtonComponent } from '../icon-button';
 import { ISelectComponent, ISelectOption } from '../select';
 import { IPaginatorComponent } from './paginator';

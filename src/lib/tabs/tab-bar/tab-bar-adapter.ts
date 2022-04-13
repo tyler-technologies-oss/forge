@@ -1,8 +1,7 @@
 import { MDCTabScroller } from '@material/tab-scroller';
-import { getShadowElement, removeClass, isFunction, getActiveElement } from '@tylertech/forge-core';
+import { getShadowElement, removeClass, isFunction, getActiveElement, toggleClass } from '@tylertech/forge-core';
 
-import { toggleClass } from '../../core/utils';
-import { IBaseAdapter, BaseAdapter } from '../../core/adapters/base-adapter';
+import { IBaseAdapter, BaseAdapter } from '../../core/base/base-adapter';
 import { ITabBarComponent } from './tab-bar';
 import { TAB_BAR_CONSTANTS, TabBarLayoutMode, TabBarLayoutAlign } from './tab-bar-constants';
 import { ITabComponent } from '../tab/tab';

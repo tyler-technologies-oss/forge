@@ -1,4 +1,4 @@
-import { tokenize24HourTimeString, tokenize12HourTimeString, TWENTY_FOUR_HOUR_TIME_REGEX, TWELVE_HOUR_TIME_REGEX } from '../core/time-utils';
+import { tokenize24HourTimeString, tokenize12HourTimeString, TWENTY_FOUR_HOUR_TIME_REGEX, TWELVE_HOUR_TIME_REGEX } from '../core/utils/time-utils';
 
 export function timeStringToMillis(time: string | null, use24HourTime: boolean, allowSeconds: boolean): number | null {
   if (!time || /^\s*$/.test(time)) {

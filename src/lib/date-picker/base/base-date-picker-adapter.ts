@@ -1,7 +1,7 @@
-import { getShadowElement } from '@tylertech/forge-core';
+import { getShadowElement, randomChars } from '@tylertech/forge-core';
 import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent, ICalendarDateSelectEventData } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
-import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions, randomChars } from '../../core';
+import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
 import { BaseComponent } from '../../core/base/base-component';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { BASE_DATE_PICKER_CONSTANTS } from './base-date-picker-constants';
@@ -109,13 +109,20 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   }
 
   public attachCalendar(calendarConfig: Partial<ICalendarComponent>, dropdownConfig?: ICalendarDropdownPopupConfig): void {
+    if (this._calendarDropdown) {
+      this._calendarDropdown?.destroy();
+    }
+
     this._initializeCalendarDropdown();
+
     if (!this._calendarDropdown) {
       throw new Error('CalendarDropdown was not initialized.');
     }
+
     if (dropdownConfig) {
       Object.assign(this._calendarDropdown, dropdownConfig);
     }
+
     this._calendarDropdown.open(calendarConfig);
     this._calendarDropdown.dropdownElement?.style.setProperty('--forge-calendar-width', '320px');
     this._calendarDropdown.calendar?.style.setProperty('margin', '8px');
@@ -180,7 +187,6 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   }
 
   public propagateCalendarKey(evt: KeyboardEvent): void {
-    console.log(evt);
     this._calendarDropdown?.calendar?.handleKey(evt);
   }
 

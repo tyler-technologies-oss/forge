@@ -1,5 +1,5 @@
 import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IAvatarComponent } from './avatar';
 import { AVATAR_CONSTANTS } from './avatar-constants';
 

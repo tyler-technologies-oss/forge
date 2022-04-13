@@ -1,5 +1,5 @@
 import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IBadgeComponent } from './badge';
 import { BADGE_CONSTANTS } from './badge-constants';
 

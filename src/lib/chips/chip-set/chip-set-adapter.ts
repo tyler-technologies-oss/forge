@@ -1,6 +1,5 @@
-import { getShadowElement } from '@tylertech/forge-core';
-import { toggleClass } from '../..//core/utils';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { getShadowElement, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IChipComponent } from '../chip/chip';
 import { ChipType, CHIP_CONSTANTS } from '../chip/chip-constants';
 import { IChipSetComponent } from './chip-set';

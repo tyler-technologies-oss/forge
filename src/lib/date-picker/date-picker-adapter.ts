@@ -1,4 +1,5 @@
 import { emitEvent, listenOwnProperty, getActiveElement } from '@tylertech/forge-core';
+import { ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown';
 import { CalendarDropdown } from '../calendar/calendar-dropdown/calendar-dropdown';
 import { DateInputMask, IDateInputMaskOptions } from '../core/mask/date-input-mask';
 import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from './base/base-date-picker-adapter';
@@ -24,7 +25,6 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
 
   protected _initializeCalendarDropdown(): void {
     const targetElement = this._getDefaultTargetElement();
-    console.log('targetElement', targetElement);
     this._calendarDropdown = new CalendarDropdown(targetElement, this._dropdownIdentifier);
   }
 
@@ -74,8 +74,8 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
     return !!this._inputElement;
   }
 
-  public override attachCalendar(calendarConfig: IDatePickerCalendarDropdownConfig<Date | null>): void {
-    super.attachCalendar(calendarConfig);
+  public override attachCalendar(calendarConfig: IDatePickerCalendarDropdownConfig<Date | null>, dropdownConfig?: ICalendarDropdownPopupConfig): void {
+    super.attachCalendar(calendarConfig, dropdownConfig);
     this._inputElement.setAttribute('aria-expanded', 'true');
   }
 

@@ -17,8 +17,7 @@ import {
   ITextFieldComponent,
   parseDateString,
   POPUP_CONSTANTS,
-  TEXT_FIELD_CONSTANTS,
-  VIEW_SWITCHER_CONSTANTS
+  TEXT_FIELD_CONSTANTS
 } from '@tylertech/forge';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
 import { tryCleanupPopups } from '../../utils';

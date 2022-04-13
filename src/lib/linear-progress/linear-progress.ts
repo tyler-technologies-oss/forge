@@ -1,6 +1,5 @@
 import { MDCLinearProgress } from '@material/linear-progress';
-import { CustomElement, coerceBoolean, coerceNumber, attachShadowTemplate, getShadowElement } from '@tylertech/forge-core';
-import { toggleAttribute } from '../core';
+import { CustomElement, coerceBoolean, coerceNumber, attachShadowTemplate, getShadowElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 

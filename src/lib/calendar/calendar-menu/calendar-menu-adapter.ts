@@ -1,6 +1,6 @@
-import { getShadowElement, playKeyframeAnimation, removeAllChildren } from '@tylertech/forge-core';
+import { getShadowElement, playKeyframeAnimation, removeAllChildren, tryScrollIntoView } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter, tryScrollIntoView } from '../../core';
+import { BaseAdapter, IBaseAdapter } from '../../core';
 import { CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
 import { ICalendarMenuComponent } from './calendar-menu';
 import { getGrid, getList, getListItems, removeAllExceptLastChild } from './calendar-menu-utils';

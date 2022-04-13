@@ -1,8 +1,7 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, getShadowElement, emitEvent } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, coerceBoolean, getShadowElement, emitEvent, toggleAttribute, toggleClass } from '@tylertech/forge-core';
 import { MDCSwitch } from '@material/switch';
 import { SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { toggleAttribute, toggleClass } from '../core';
 
 import template from './switch.html';
 import styles from './switch.scss';

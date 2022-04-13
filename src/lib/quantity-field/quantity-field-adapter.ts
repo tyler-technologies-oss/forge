@@ -1,4 +1,4 @@
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IQuantityFieldComponent } from './quantity-field';
 import { getShadowElement, Platform } from '@tylertech/forge-core';
 import { QUANTITY_FIELD_CONSTANTS } from './quantity-field-constants';

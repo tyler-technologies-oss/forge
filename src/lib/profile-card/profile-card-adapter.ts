@@ -1,6 +1,6 @@
 import { emitEvent, getShadowElement } from '@tylertech/forge-core';
 import { IAvatarComponent } from '../avatar';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IToolbarComponent } from '../toolbar';
 import { IProfileCardComponent } from './profile-card';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';

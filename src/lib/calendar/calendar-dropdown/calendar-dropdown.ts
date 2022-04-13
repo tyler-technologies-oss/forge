@@ -1,6 +1,5 @@
-import { addClass, isArray } from '@tylertech/forge-core';
+import { addClass, isArray, createVisuallyHiddenElement } from '@tylertech/forge-core';
 
-import { createVisuallyHiddenElement } from '../../core';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../../popup';
 import { ICalendarComponent } from '../calendar';
 import { CALENDAR_CONSTANTS, ICalendarFocusChangeEventData } from '../calendar-constants';

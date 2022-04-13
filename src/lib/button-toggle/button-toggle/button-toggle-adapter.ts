@@ -1,6 +1,6 @@
 import { MDCRipple } from '@material/ripple';
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IButtonToggleGroupComponent } from '../button-toggle-group';
 import { IButtonToggleComponent } from './button-toggle';
 import { BUTTON_TOGGLE_CONSTANTS } from './button-toggle-constants';

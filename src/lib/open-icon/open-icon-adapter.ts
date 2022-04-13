@@ -1,9 +1,8 @@
-import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { getShadowElement, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IOpenIconComponent } from './open-icon';
 import { OPEN_ICON_CONSTANTS } from './open-icon-constants';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
-import { toggleClass } from '../core';
 
 export interface IOpenIconAdapter extends IBaseAdapter {
   setOrientation: (orientation: string) => void;

@@ -1,5 +1,4 @@
-import { getShadowElement } from '@tylertech/forge-core';
-import { toggleClass } from '../../core';
+import { getShadowElement, toggleClass } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../../backdrop';
 import { BaseDrawerAdapter, IBaseDrawerAdapter } from '../base';
 import { IModalDrawerComponent } from './modal-drawer';

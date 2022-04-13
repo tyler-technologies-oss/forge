@@ -1,5 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IBackdropComponent } from './backdrop';
 import { BACKDROP_CONSTANTS } from './backdrop-constants';
 

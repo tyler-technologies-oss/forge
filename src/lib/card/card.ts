@@ -1,5 +1,4 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, getShadowElement } from '@tylertech/forge-core';
-import { toggleAttribute, toggleClass } from '../core';
+import { CustomElement, attachShadowTemplate, coerceBoolean, getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import { CARD_CONSTANTS } from './card-constants';

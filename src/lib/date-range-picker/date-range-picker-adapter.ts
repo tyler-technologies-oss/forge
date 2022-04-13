@@ -1,5 +1,5 @@
 import { emitEvent, listenOwnProperty, getActiveElement } from '@tylertech/forge-core';
-import { CalendarDropdown } from '../calendar/calendar-dropdown';
+import { CalendarDropdown, ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown';
 import { DateInputMask, IDateInputMaskOptions } from '../core';
 import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from '../date-picker/base/base-date-picker-adapter';
 import { IDatePickerCalendarDropdownConfig } from '../date-picker/base/base-date-picker-constants';
@@ -119,8 +119,8 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     return !!this._fromInputElement && !!this._toInputElement;
   }
 
-  public override attachCalendar(calendarConfig: IDatePickerCalendarDropdownConfig<Date | null>): void {
-    super.attachCalendar(calendarConfig);
+  public override attachCalendar(calendarConfig: IDatePickerCalendarDropdownConfig<Date | null>, dropdownConfig?: ICalendarDropdownPopupConfig): void {
+    super.attachCalendar(calendarConfig, dropdownConfig);
     this._fromInputElement.setAttribute('aria-expanded', 'true');
   }
 

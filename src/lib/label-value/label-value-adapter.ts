@@ -1,6 +1,5 @@
-import { getShadowElement, removeClass } from '@tylertech/forge-core';
-import { toggleClass } from '../core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ILabelValueComponent } from './label-value';
 import { LabelValueAlignment, LABEL_VALUE_CONSTANTS } from './label-value-constants';
 

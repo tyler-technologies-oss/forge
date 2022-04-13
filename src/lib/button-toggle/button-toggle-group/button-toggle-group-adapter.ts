@@ -1,6 +1,6 @@
 import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
 import { ICON_CLASS_NAME } from '../../constants';
-import { BaseAdapter, IBaseAdapter } from '../../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IButtonToggleComponent } from '../button-toggle/button-toggle';
 import { BUTTON_TOGGLE_CONSTANTS } from '../button-toggle/button-toggle-constants';
 import { IButtonToggleGroupComponent } from './button-toggle-group';

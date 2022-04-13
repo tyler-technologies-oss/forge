@@ -1,5 +1,5 @@
 import { addClass, removeAllChildren, removeClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core/adapters/base-adapter';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ITableComponent } from './table';
 import { TABLE_CONSTANTS } from './table-constants';
 import { TableUtils } from './table-utils';

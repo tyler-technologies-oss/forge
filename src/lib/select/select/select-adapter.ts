@@ -1,5 +1,4 @@
-import { calculateFontWidth, getShadowElement, IFontInfo } from '@tylertech/forge-core';
-import { toggleClass, toggleAttribute } from '../../core/utils';
+import { calculateFontWidth, getShadowElement, IFontInfo, toggleClass, toggleAttribute } from '@tylertech/forge-core';
 import { FloatingLabel, IFloatingLabel } from '../../floating-label/floating-label';
 import { ISelectComponent } from './select';
 import { SELECT_CONSTANTS } from './select-constants';
