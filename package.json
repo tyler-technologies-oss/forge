@@ -32,7 +32,7 @@
     "@auto-it/first-time-contributor": "^10.36.5",
     "@auto-it/npm": "^10.36.5",
     "@auto-it/pr-body-labels": "^10.36.5",
-    "@tylertech/forge-cli": "^1.0.0-dev.1",
+    "@tylertech/forge-cli": "^1.0.0-dev.2",
     "@tylertech/forge-testing": "^1.0.0-dev.0",
     "@tylertech-eslint/eslint-plugin": "^1.0.8",
     "@tylertech/stylelint-rules": "^2.0.0",
