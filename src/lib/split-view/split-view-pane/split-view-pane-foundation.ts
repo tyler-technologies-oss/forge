@@ -9,6 +9,10 @@ export interface ISplitViewPaneFoundation extends ICustomElementFoundation {
   label: string;
   open: boolean;
   disabled: boolean;
+  getContentSize(): number;
+  getCollapsibleSize(): number;
+  setContentSize(size: number): void;
+  setOrientation(value: SplitViewOrientation): void;
 }
 
 export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
@@ -28,6 +32,7 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
   private _startSize: number | undefined; // Set when dragging begins
   private _currentSize: number | undefined;
   private _availableSpace: number | undefined;
+  private _siblingSize: number | undefined;
   private _isInitialized = false;
 
   // Listeners
@@ -46,11 +51,11 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
 
   public initialize(): void {
     this._adapter.initialize();
-    this._matchParentProperties();
     this._adapter.setMousedownListener(this._mousedownListener);
     this._adapter.setMouseupListener(this._mouseupListener);
     this._adapter.setMousemoveListener(this._mousemoveListener);
     this._adapter.setKeydownListener(this._keydownListener);
+    this._matchParentProperties();
     this._applyDirection();
     this._applySize();
     this._applyLabel();
@@ -134,6 +139,7 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     }
 
     // TODO: get and cap at available space when using keyboard, could be a performance drain when repeated
+    // TODO: set sibling pane size when using keyboard, also a possible performance drain
     let newSize = this._adapter.getContentSize(this._orientation);
     newSize = this._clampSize(newSize + increment);
     this._adapter.setContentSize(newSize);
@@ -148,6 +154,7 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     this._startPoint = this._orientation === 'horizontal' ? evt.clientX : evt.clientY;
     this._startSize = this._adapter.getContentSize(this._orientation);
     this._availableSpace = this._adapter.getAvailableSpace(this._orientation, this._direction);
+    this._siblingSize = this._adapter.getSiblingContentSize();
 
     this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.DRAG_START, this._startSize);
   }
@@ -161,6 +168,7 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     this._startSize = undefined;
     this._currentSize = undefined;
     this._availableSpace = undefined;
+    this._siblingSize = undefined;
   }
 
   private _resize(evt: MouseEvent): void {
@@ -168,14 +176,26 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
       return;
     }
 
-    let newSize = 0;
     const mousePoint = this._orientation === 'horizontal' ? evt.clientX : evt.clientY;
-    newSize = this._direction === 'end' ? this._startSize + this._startPoint - mousePoint : this._startSize - (this._startPoint - mousePoint);
-    newSize = this._clampSize(newSize);
-    this._adapter.setContentSize(newSize);
-    this._currentSize = newSize;
+    let delta = this._startPoint - mousePoint;
+    if (this._direction === 'end') {
+      delta *= -1;
+    }
+    const newSize = this._startSize - delta;
+    this._currentSize = this._clampSize(newSize);
+    this._adapter.setContentSize(this._currentSize);
 
     this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, this._currentSize);
+
+    this._resizeSibling(newSize, delta);
+  }
+
+  private _resizeSibling(newSize: number, delta: number): void {
+    if (this._siblingSize) {
+      const minSizeAdjustment = Math.max(0, this._min - newSize);
+      const maxSizeAdjustment = this._max ? Math.min(0, (this._max ?? 0) - newSize) : 0;
+      this._adapter.setSiblingContentSize(this._siblingSize + delta - minSizeAdjustment - maxSizeAdjustment);
+    }
   }
 
   private _clampSize(size: number): number {
@@ -277,5 +297,26 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
 
   private _applyDisabled(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_PANE_CONSTANTS.attributes.DISABLED, this._disabled);
+  }
+
+  public getContentSize(): number {
+    return this._adapter.getContentSize(this._orientation);
+  }
+
+  public getCollapsibleSize(): number {
+    return this._adapter.getContentSize(this._orientation) - this._min;
+  }
+
+  public setContentSize(size: number): void {
+    if (this._direction !== 'none') {
+      const newSize = this._clampSize(size);
+      this._adapter.setContentSize(newSize);
+      this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, newSize);
+    }
+  }
+
+  public setOrientation(value: SplitViewOrientation): void {
+    this._orientation = value;
+    this._applyOrientation();
   }
 }

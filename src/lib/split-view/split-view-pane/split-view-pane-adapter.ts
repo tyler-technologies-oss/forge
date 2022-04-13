@@ -2,7 +2,7 @@ import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tyler
 
 import {  } from '../../core/utils';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { getCursor, getHandleIcon } from '../core/split-view-core-utils';
+import { getCursor, getHandleIcon, getSplitViewPaneSibling } from '../core/split-view-core-utils';
 import { ISplitViewPaneComponent } from './split-view-pane';
 import { SplitViewPaneDirection, SPLIT_VIEW_PANE_CONSTANTS } from './split-view-pane-constants';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
@@ -28,6 +28,8 @@ export interface ISplitViewPaneAdapter extends IBaseAdapter {
   getContentSize(orientation: SplitViewOrientation): number;
   setContentSize(value: number): void;
   getAvailableSpace(orientation: SplitViewOrientation, direction: SplitViewPaneDirection): number;
+  getSiblingContentSize(): number;
+  setSiblingContentSize(value: number): void;
 }
 
 export class SplitViewPaneAdapter extends BaseAdapter<ISplitViewPaneComponent> implements ISplitViewPaneAdapter {
@@ -151,24 +153,32 @@ export class SplitViewPaneAdapter extends BaseAdapter<ISplitViewPaneComponent> i
   }
 
   public setContentSize(value: number): void {
-    // TODO: prompt sibling panes to update their size
     this._component.style.setProperty('--forge-split-view-pane-size', `${value}px`);
     this._handle?.setAttribute('aria-valuenow', value.toString());
   }
 
   public getAvailableSpace(orientation: SplitViewOrientation, direction: SplitViewPaneDirection): number {
     if (direction === 'none') {
-      // Return -1 if the pane is static (i.e. can't be resized)
+      // Return -1 if the pane is static (i.e. can't be user resized)
       return -1;
     }
-    const sibling = direction === 'start' ? this._component.nextElementSibling : this._component.previousElementSibling;
+    const sibling = getSplitViewPaneSibling(this._component);
     if (sibling) {
-      // TODO: subtract min size and handle width of sibling
-      const siblingSize = orientation === 'horizontal' ? sibling.clientWidth : sibling.clientHeight;
+      const siblingSize = sibling.getCollapsibleSize();
       return siblingSize + this.getContentSize(orientation);
     } else {
       const parentSize = orientation === 'horizontal' ? this._parent?.clientWidth : this._parent?.clientHeight;
       return parentSize ?? 0;
     }
+  }
+
+  public getSiblingContentSize(): number {
+    const sibling = getSplitViewPaneSibling(this._component);
+    return sibling?.getContentSize() ?? 0;
+  }
+
+  public setSiblingContentSize(value: number): void {
+    const sibling = getSplitViewPaneSibling(this._component);
+    sibling?.setContentSize(value);
   }
 }

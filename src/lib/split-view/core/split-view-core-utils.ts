@@ -1,3 +1,4 @@
+import { ISplitViewPaneComponent, SplitViewPaneComponent } from '../split-view-pane';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
 
 export function getCursor(orientation: SplitViewOrientation): string {
@@ -28,4 +29,17 @@ export function mapSizeToValue(size: number, min: number, max: number): number {
     return 0;
   }
   return size * 100 / range;
+}
+
+export function getSplitViewPaneSibling(el: ISplitViewPaneComponent): SplitViewPaneComponent | undefined {
+  const direction = el.direction;
+  if (direction === 'none') {
+    return undefined;
+  }
+  const sibling = direction === 'start' ? el.nextElementSibling : el.previousElementSibling;
+  if (sibling instanceof SplitViewPaneComponent) {
+    return sibling;
+  } else {
+    return undefined;
+  }
 }

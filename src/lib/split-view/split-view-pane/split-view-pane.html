@@ -1,6 +1,7 @@
 <template>
   <div class="forge-split-view-pane" id="root" part="root">
-    <div class="forge-split-view-pane__handle" id="handle" part="handle" role="separator" tabindex="0">
+    <!-- The content div isn't exposed to the accessibility tree so aria-controls doesn't do much here - is there a better role for the content? -->
+    <div class="forge-split-view-pane__handle" id="handle" part="handle" role="separator" aria-controls="content" tabindex="0">
       <forge-icon class="forge-split-view-pane__icon" id="icon" part="icon"></forge-icon>
       <forge-ripple></forge-ripple>
     </div>

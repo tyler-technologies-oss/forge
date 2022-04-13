@@ -5,6 +5,7 @@ import { tylIconDragHandle } from '@tylertech/tyler-icons/standard';
 import { SplitViewPaneDirection, SPLIT_VIEW_PANE_CONSTANTS } from './split-view-pane-constants';
 import { SplitViewPaneFoundation } from './split-view-pane-foundation';
 import { SplitViewPaneAdapter } from './split-view-pane-adapter';
+import { SplitViewOrientation } from '../split-view/split-view-constants';
 import { IconComponent, IconRegistry } from '../../icon';
 import { RippleComponent } from '../../ripple';
 
@@ -16,6 +17,10 @@ export interface ISplitViewPaneComponent extends ICustomElement {
   label: string;
   open: boolean;
   disabled: boolean;
+  getContentSize(): number;
+  getCollapsibleSize(): number;
+  setContentSize(size: number): void;
+  setOrientation(value: SplitViewOrientation): void;
 }
 
 declare global {
@@ -98,4 +103,20 @@ export class SplitViewPaneComponent extends HTMLElement implements ISplitViewPan
 
   @FoundationProperty()
   public disabled: boolean;
+
+  public getContentSize(): number {
+    return this._foundation.getContentSize();
+  }
+
+  public getCollapsibleSize(): number {
+    return this._foundation.getCollapsibleSize();
+  }
+
+  public setContentSize(size: number): void {
+    this._foundation.setContentSize(size);
+  }
+
+  public setOrientation(value: SplitViewOrientation): void {
+    this._foundation.setOrientation(value);
+  }
 }

@@ -13,11 +13,11 @@ export const MultipleTemplate: Story<ISplitViewProps> = ({
   const ForgeSplitViewPane = createElementProxy('forge-split-view-pane');
   return (
     <ForgeSplitView style={{ height: '400px' }} {...splitViewProps}>
-      <ForgeSplitViewPane direction="start">
-        <div style={{ height: '100%', width: '100%', backgroundColor: 'darkseagreen' }}></div>
-      </ForgeSplitViewPane>
       <ForgeSplitViewPane>
         <div style={{ height: '100%', width: '100%', backgroundColor: 'lightskyblue' }}></div>
+      </ForgeSplitViewPane>
+      <ForgeSplitViewPane direction="end">
+        <div style={{ height: '100%', width: '100%', backgroundColor: 'darkseagreen' }}></div>
       </ForgeSplitViewPane>
       <ForgeSplitViewPane direction="end">
         <div style={{ height: '100%', width: '100%', backgroundColor: 'salmon' }}></div>

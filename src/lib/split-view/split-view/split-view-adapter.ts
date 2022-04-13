@@ -21,8 +21,7 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   public setOrientation(value: SplitViewOrientation): void {
     this.getSlottedPanes().forEach(pane => {
-      // TODO: don't access private members
-      (pane as any)._foundation._matchParentProperties();
+      pane.setOrientation(value);
     });
   }
 
