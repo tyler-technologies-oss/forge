@@ -3,6 +3,10 @@
   "version": "1.0.0-dev.5",
   "description": "Forge Web Components library",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tyler-technologies/forge.git"
+  },
   "scripts": {
     "postinstall": "cd src/stories && npm install",
     "build": "forge build",
@@ -13,7 +17,7 @@
     "test": "forge test",
     "test:once": "npm run test -- --once",
     "test:container": "forge test --once --no-sandbox",
-    "test:ci": "forge test --once --ci --no-coverage",
+    "ci:test": "forge test --once --ci --no-coverage",
     "serve:demo": "forge serve",
     "serve:coverage": "http-server -c 1 -o -p 9875 dist/coverage/html",
     "changelog": "auto changelog",
@@ -32,10 +36,10 @@
     "@auto-it/first-time-contributor": "^10.36.5",
     "@auto-it/npm": "^10.36.5",
     "@auto-it/pr-body-labels": "^10.36.5",
-    "@tylertech/forge-cli": "^1.0.0-dev.2",
+    "@tylertech/forge-cli": "^1.0.0-dev.3",
     "@tylertech/forge-testing": "^1.0.0-dev.0",
     "@tylertech-eslint/eslint-plugin": "^1.0.8",
-    "@tylertech/stylelint-rules": "^2.0.0",
+    "@tylertech/stylelint-rules": "^3.0.0-dev.1",
     "@types/jasmine": "^3.10.3",
     "@types/karma": "^6.3.3",
     "@types/karma-fixture": "^0.2.5",
@@ -45,7 +49,7 @@
     "http-server": "^14.1.0",
     "karma-fixture": "^0.2.6",
     "standard-changelog": "^2.0.27",
-    "stylelint": "^13.12.0",
+    "stylelint": "^14.6.1",
     "typescript": "~4.6.3"
   }
 }

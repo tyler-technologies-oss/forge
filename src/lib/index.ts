@@ -92,7 +92,7 @@ export * from './chips';
 export * from './chip-field';
 export * from './circular-progress';
 export * from './color-picker';
-export { VERSION } from './constants';
+export * from './constants';
 export * from './core';
 export * from './date-range-picker';
 export * from './date-picker';

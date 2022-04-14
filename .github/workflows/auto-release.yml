@@ -30,8 +30,9 @@ jobs:
   release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.1.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.3.6
     with:
+      TESTS_ENABLED: true
       PRODUCTION_RELEASE: ${{ github.ref == 'refs/heads/master' && contains(fromJson('["push", "workflow_dispatch"]'), github.event_name) }}
       NODE_VERSION: "14"
     secrets:
