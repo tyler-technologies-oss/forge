@@ -23,7 +23,8 @@
   display: block;
   height: 100%;
   width: 100%;
-  contain: paint;
+  overflow: hidden;
+  contain: paint size;
 }
 
 @mixin base() {

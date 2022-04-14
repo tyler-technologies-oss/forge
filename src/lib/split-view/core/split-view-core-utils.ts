@@ -25,10 +25,17 @@ export function pixelsToPercent(amount: number, containerSize: number): number {
 
 export function mapSizeToValue(size: number, min: number, max: number): number {
   const range = max - min;
-  if (range === 0) {
+  const adjustedSize = size - min;
+  if (!range || !adjustedSize) {
     return 0;
   }
-  return size * 100 / range;
+  return adjustedSize * 100 / range;
+}
+
+export function getActualMax(max: number | undefined, availableSpace: number | undefined): number {
+  console.log({max, availableSpace});
+  // Default to Infinity to ignore undefined arguments
+  return Math.min(max ?? Infinity, availableSpace ?? Infinity);
 }
 
 export function getSplitViewPaneSibling(el: ISplitViewPaneComponent): SplitViewPaneComponent | undefined {

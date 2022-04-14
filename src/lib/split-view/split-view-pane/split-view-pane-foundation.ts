@@ -3,6 +3,7 @@ import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { SplitViewPaneDirection, SPLIT_VIEW_PANE_CONSTANTS } from './split-view-pane-constants';
 import { ISplitViewPaneAdapter } from './split-view-pane-adapter';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
+import { getActualMax, mapSizeToValue } from '../core/split-view-core-utils';
 
 export interface ISplitViewPaneFoundation extends ICustomElementFoundation {
   direction: SplitViewPaneDirection;
@@ -30,9 +31,9 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
   private _isGrabbed = false;
   private _startPoint: number | undefined; // Set when dragging begins
   private _startSize: number | undefined; // Set when dragging begins
-  private _currentSize: number | undefined;
-  private _availableSpace: number | undefined;
-  private _siblingSize: number | undefined;
+  private _currentSize: number | undefined; // Set when dragging begins
+  private _availableSpace: number | undefined; // Set when dragging begins
+  private _siblingSize: number | undefined; // Set when dragging begins
   private _isInitialized = false;
 
   // Listeners
@@ -98,12 +99,19 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
 
   private _onKeydown(evt: KeyboardEvent): void {
     if (evt.key === 'Enter') {
-      evt.preventDefault();
-      this._open = !this._open;
-      this._applyOpen();
-      return;
+      this._handleEnterKey(evt);
+    } else {
+      this._tryHandleArrowKey(evt);
     }
+  }
 
+  private _handleEnterKey(evt: KeyboardEvent): void {
+    evt.preventDefault();
+    this._open = !this._open;
+    this._applyOpen();
+  }
+
+  private _tryHandleArrowKey(evt: KeyboardEvent): void {
     let increment = 0;
     if (this._orientation === 'horizontal') {
       switch (evt.key) {
@@ -185,6 +193,12 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     this._currentSize = this._clampSize(newSize);
     this._adapter.setContentSize(this._currentSize);
 
+    if (this._availableSpace || this._max) {
+      this._setValue(this._currentSize, getActualMax(this._max, this._availableSpace));
+    } else {
+      this._setValue(this._currentSize, this._currentSize);
+    }
+
     this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, this._currentSize);
 
     this._resizeSibling(newSize, delta);
@@ -200,9 +214,13 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
 
   private _clampSize(size: number): number {
     size = Math.max(size, this._min);
-    // Default to Infinity to ignore undefined arguments
-    size = Math.min(size, this._max ?? Infinity, this._availableSpace ?? Infinity);
+    size = Math.min(size, getActualMax(this._max, this._availableSpace));
     return size;
+  }
+
+  private _setValue(size: number, maxSize: number): void {
+    const value = mapSizeToValue(size, this._min, maxSize);
+    this._adapter.setValue(value);
   }
 
   private _matchParentProperties(): void {
@@ -253,6 +271,10 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
   private _applySize(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_PANE_CONSTANTS.attributes.SIZE, this._size.toString());
     this._adapter.setContentSize(this._size);
+    // Wait for the DOM to render to get available space
+    window.requestAnimationFrame(() => {
+      this._adapter.setValue(mapSizeToValue(this._size, this._min, getActualMax(this._max, this._adapter.getAvailableSpace(this._orientation, this._direction))));
+    });
   }
 
   public get label(): string {

@@ -14,14 +14,14 @@ const attributes = {
 };
 
 const classes = {
-  ROOT: 'tyl-split-view-pane',
-  GRABBED: 'tyl-split-view-pane--grabbed',
-  HANDLE: 'tyl-split-view-pane__handle',
-  ICON: 'tyl-split-view-pane__icon',
-  CONTENT: 'tyl-split-view-pane__content',
-  CLOSED: 'tyl-split-view-pane--closed',
-  CLOSING: 'tyl-split-view-pane--closing',
-  OPENING: 'tyl-split-view-pane--opening'
+  ROOT: 'forge-split-view-pane',
+  GRABBED: 'forge-split-view-pane--grabbed',
+  HANDLE: 'forge-split-view-pane__handle',
+  ICON: 'forge-split-view-pane__icon',
+  CONTENT: 'forge-split-view-pane__content',
+  CLOSED: 'forge-split-view-pane--closed',
+  CLOSING: 'forge-split-view-pane--closing',
+  OPENING: 'forge-split-view-pane--opening'
 };
 
 const ids = {

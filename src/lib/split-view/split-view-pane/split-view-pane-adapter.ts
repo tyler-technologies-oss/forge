@@ -27,6 +27,7 @@ export interface ISplitViewPaneAdapter extends IBaseAdapter {
   setGrabbed(value: boolean, orientation: SplitViewOrientation): void;
   getContentSize(orientation: SplitViewOrientation): number;
   setContentSize(value: number): void;
+  setValue(value: number): void;
   getAvailableSpace(orientation: SplitViewOrientation, direction: SplitViewPaneDirection): number;
   getSiblingContentSize(): number;
   setSiblingContentSize(value: number): void;
@@ -154,6 +155,9 @@ export class SplitViewPaneAdapter extends BaseAdapter<ISplitViewPaneComponent> i
 
   public setContentSize(value: number): void {
     this._component.style.setProperty('--forge-split-view-pane-size', `${value}px`);
+  }
+
+  public setValue(value: number): void {
     this._handle?.setAttribute('aria-valuenow', value.toString());
   }
 
