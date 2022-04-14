@@ -33,7 +33,6 @@ export function mapSizeToValue(size: number, min: number, max: number): number {
 }
 
 export function getActualMax(max: number | undefined, availableSpace: number | undefined): number {
-  console.log({max, availableSpace});
   // Default to Infinity to ignore undefined arguments
   return Math.min(max ?? Infinity, availableSpace ?? Infinity);
 }

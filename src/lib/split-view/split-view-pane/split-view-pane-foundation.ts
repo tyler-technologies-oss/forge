@@ -205,7 +205,7 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
   }
 
   private _resizeSibling(newSize: number, delta: number): void {
-    if (this._siblingSize) {
+    if (this._siblingSize !== undefined) {
       const minSizeAdjustment = Math.max(0, this._min - newSize);
       const maxSizeAdjustment = this._max ? Math.min(0, (this._max ?? 0) - newSize) : 0;
       this._adapter.setSiblingContentSize(this._siblingSize + delta - minSizeAdjustment - maxSizeAdjustment);
