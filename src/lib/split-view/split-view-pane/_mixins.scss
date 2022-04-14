@@ -22,6 +22,13 @@
     &--closed {
       @include closed;
     }
+
+    &--disabled {
+      // Use an id selector to increase specificity
+      #handle {
+        @include handle-disabled;
+      }
+    }
   }
 }
 
@@ -169,7 +176,14 @@
 }
 
 @mixin handle-active() {
-  @include theme.property(color, text-primary-on-light);
+  @include theme.property(color, text-primary-on-background);
+}
+
+@mixin handle-disabled() {
+  // TODO: find disabled colors more distinct from the enabled colors
+  @include theme.property(color, text-disabled-on-light);
+
+  pointer-events: none;
 }
 
 @mixin handle-static() {

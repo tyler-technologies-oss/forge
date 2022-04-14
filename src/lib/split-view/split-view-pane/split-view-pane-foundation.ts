@@ -71,11 +71,19 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
   }
 
   private _onMousedown(evt: MouseEvent): void {
+    if (this._disabled) {
+      return;
+    }
+
     evt.preventDefault();
     this._grab(evt);
   }
 
   private _onMouseup(evt: MouseEvent): void {
+    if (this._disabled) {
+      return;
+    }
+
     if (this._isGrabbed) {
       evt.preventDefault();
       this._release();
@@ -83,6 +91,10 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
   }
 
   private _onMousemove(evt: MouseEvent): void {
+    if (this._disabled) {
+      return;
+    }
+
     if (!this._isGrabbed) {
       return;
     }
@@ -98,8 +110,16 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
+    if (this._disabled) {
+      return;
+    }
+
     if (evt.key === 'Enter') {
       this._handleEnterKey(evt);
+    } else if (evt.key === 'Home') {
+      this._handleHomeKey(evt);
+    } else if (evt.key === 'End') {
+      this._handleEndKey(evt);
     } else {
       this._tryHandleArrowKey(evt);
     }
@@ -109,6 +129,19 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     evt.preventDefault();
     this._open = !this._open;
     this._applyOpen();
+  }
+
+  private _handleHomeKey(evt: KeyboardEvent): void {
+    evt.preventDefault();
+    this._adapter.setContentSize(this._min);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, this._adapter.getContentSize(this._orientation));
+  }
+
+  private _handleEndKey(evt: KeyboardEvent): void {
+    evt.preventDefault();
+    console.log({ max: this._max, availableSpace: this._adapter.getAvailableSpace(this._orientation, this._direction) });
+    this._adapter.setContentSize(getActualMax(this._max, this._adapter.getAvailableSpace(this._orientation, this._direction)));
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, this._adapter.getContentSize(this._orientation));
   }
 
   private _tryHandleArrowKey(evt: KeyboardEvent): void {
@@ -319,6 +352,7 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
 
   private _applyDisabled(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_PANE_CONSTANTS.attributes.DISABLED, this._disabled);
+    this._adapter.setDisabled(this._disabled);
   }
 
   public getContentSize(): number {

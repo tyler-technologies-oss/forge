@@ -4,15 +4,17 @@ import React from "react";
 import { ISplitViewProps } from "../split-view-args";
 
 export const MultipleTemplate: Story<ISplitViewProps> = ({
-  orientation = 'horizontal'
+  orientation = 'horizontal',
+  disabled = false
 }) => {
   const splitViewProps = {
-    orientation
+    orientation,
+    disabled
   };
   const ForgeSplitView = createElementProxy('forge-split-view');
   const ForgeSplitViewPane = createElementProxy('forge-split-view-pane');
   return (
-    <ForgeSplitView style={{ height: '400px' }} {...splitViewProps}>
+    <ForgeSplitView style={{ height: '400px' }} orientation={splitViewProps.orientation} disabled={splitViewProps.disabled}>
       <ForgeSplitViewPane>
         <div style={{ height: '100%', width: '100%', backgroundColor: 'lightskyblue' }}></div>
       </ForgeSplitViewPane>

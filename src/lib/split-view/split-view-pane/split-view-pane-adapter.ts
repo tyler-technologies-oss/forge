@@ -21,6 +21,7 @@ export interface ISplitViewPaneAdapter extends IBaseAdapter {
   removeKeydownListener(listener: (evt: KeyboardEvent) => void): void;
   getParentProperty(name: string): unknown;
   setLabel(value: string): void;
+  setDisabled(value: boolean): void;
   setDirection(value: SplitViewPaneDirection): void;
   setOrientation(value: SplitViewOrientation): void;
   setOpen(value: boolean): void;
@@ -96,6 +97,14 @@ export class SplitViewPaneAdapter extends BaseAdapter<ISplitViewPaneComponent> i
     this._handle?.setAttribute('aria-label', value);
   }
 
+  public setDisabled(value: boolean): void {
+    this._root?.classList.toggle(SPLIT_VIEW_PANE_CONSTANTS.classes.DISABLED, value);
+    if (this._handle) {
+      this._handle.setAttribute('tabindex', value ? '-1' : '0');
+      toggleAttribute(this._handle, value, 'aria-disabled', 'true');
+    }
+  }
+
   public setDirection(value: SplitViewPaneDirection): void {
     this._root.setAttribute(SPLIT_VIEW_PANE_CONSTANTS.attributes.DIRECTION, value.toString());
     toggleAttribute(this._handle, value !== 'none', 'aria-valuemin', '0');
@@ -158,7 +167,8 @@ export class SplitViewPaneAdapter extends BaseAdapter<ISplitViewPaneComponent> i
   }
 
   public setValue(value: number): void {
-    this._handle?.setAttribute('aria-valuenow', value.toString());
+    // this._handle?.setAttribute('aria-valuenow', (+value.toFixed(2)).toString());
+    this._handle?.setAttribute('aria-valuenow', value.toFixed(2));
   }
 
   public getAvailableSpace(orientation: SplitViewOrientation, direction: SplitViewPaneDirection): number {
