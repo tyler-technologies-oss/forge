@@ -1,5 +1,5 @@
-import { MDCRipple } from '@material/ripple';
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { ForgeRipple } from '../../ripple';
 import { IChipAdapter } from './chip-adapter';
 import { ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } from './chip-constants';
 
@@ -23,7 +23,7 @@ export class ChipFoundation implements IChipFoundation {
   private _dense = false;
   private _emulateFocus = false;
   private _isInitialized = false;
-  private _rippleInstance: MDCRipple | undefined;
+  private _rippleInstance: ForgeRipple | undefined;
   private _clickListener: (evt: MouseEvent) => void;
   private _keydownListener: (evt: KeyboardEvent) => void;
   private _deleteKeydownListener: (evt: KeyboardEvent) => void;

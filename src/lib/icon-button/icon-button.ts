@@ -1,6 +1,6 @@
-import { MDCRipple } from '@material/ripple';
 import { coerceBoolean, coerceNumber, CustomElement, emitEvent, ensureChild, toggleClass } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { ForgeRipple } from '../ripple';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
 
 export interface IIconButtonComponent extends IBaseComponent {
@@ -37,7 +37,7 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
     ];
   }
 
-  private _mdcRipple: MDCRipple;
+  private _rippleInstance: ForgeRipple;
   private _buttonElement: HTMLButtonElement;
   private _toggle = false;
   private _isOn = false;
@@ -58,8 +58,8 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
   }
 
   public disconnectedCallback(): void {
-    if (this._mdcRipple) {
-      this._mdcRipple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
   }
 
@@ -154,12 +154,12 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
       this._initializeToggle();
     }
 
-    if (this._mdcRipple) {
-      this._mdcRipple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
 
-    this._mdcRipple = new MDCRipple(this._buttonElement);
-    this._mdcRipple.unbounded = true;
+    this._rippleInstance = new ForgeRipple(this._buttonElement);
+    this._rippleInstance.unbounded = true;
   }
 
   private _toggleValue(): void {
@@ -202,8 +202,8 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
     }
 
     // re-layout the ripple for cases where dense was changed after initial layout
-    if (this._mdcRipple) {
-      this._mdcRipple.layout();
+    if (this._rippleInstance) {
+      this._rippleInstance.layout();
     }
   }
 
@@ -251,8 +251,8 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
   }
 
   public layout(): void {
-    if (this._mdcRipple) {
-      this._mdcRipple.layout();
+    if (this._rippleInstance) {
+      this._rippleInstance.layout();
     }
   }
 }

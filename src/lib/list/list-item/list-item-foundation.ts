@@ -1,5 +1,5 @@
-import { MDCRipple } from '@material/ripple';
 import { ICustomElementFoundation, matchesSelectors } from '@tylertech/forge-core';
+import { ForgeRipple } from '../../ripple';
 import { IListItemAdapter } from './list-item-adapter';
 import { LIST_ITEM_CONSTANTS, IListItemSelectEventData } from './list-item-constants';
 
@@ -24,7 +24,7 @@ export interface IListItemFoundation extends ICustomElementFoundation {
  */
 export class ListItemFoundation implements IListItemFoundation {
   private _ripple = true;
-  private _rippleInstance: MDCRipple;
+  private _rippleInstance: ForgeRipple;
   private _static = false;
   private _twoLine = false;
   private _threeLine = false;

@@ -1,7 +1,7 @@
-import { MDCRipple } from '@material/ripple';
 import { CustomElement, ensureChildren, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { BUTTON_CONSTANTS } from './button-constants';
+import { ForgeRipple } from '../ripple';
 
 export interface IButtonComponent extends IBaseComponent {
   type: string;
@@ -24,7 +24,7 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
     return [BUTTON_CONSTANTS.attributes.TYPE];
   }
 
-  private _mdcRipple: MDCRipple;
+  private _rippleInstance: ForgeRipple;
   private _buttonElement: HTMLButtonElement;
   private _type: string;
   private _mutationObserver: MutationObserver;
@@ -51,8 +51,8 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
   }
 
   public disconnectedCallback(): void {
-    if (this._mdcRipple) {
-      this._mdcRipple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
     if (this._mutationObserver) {
       this._mutationObserver.disconnect();
@@ -120,10 +120,10 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
     this._syncDisabledState();
     this._initializeButtonChildren();
 
-    if (this._mdcRipple) {
-      this._mdcRipple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
-    this._mdcRipple = new MDCRipple(this._buttonElement);
+    this._rippleInstance = new ForgeRipple(this._buttonElement);
   }
 
   private _initializeButtonChildren(): void {

@@ -1,17 +1,16 @@
-import { MDCRipple } from '@material/ripple';
 import { addClass, getShadowElement, removeClass, removeElement, walkUpUntil, elementFromHTML, toggleClass } from '@tylertech/forge-core';
-
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IChipSetComponent } from '../chip-set/chip-set';
 import { CHIP_SET_CONSTANTS } from '../chip-set/chip-set-constants';
 import { IChipComponent } from './chip';
 import { CHIP_CONSTANTS, IChipState } from './chip-constants';
 import { ICON_CONSTANTS, IIconComponent } from '../../icon';
+import { ForgeRipple } from '../../ripple';
 
 export interface IChipAdapter extends IBaseAdapter {
   addButtonListener(type: string, listener: (evt: Event) => void): void;
   removeButtonListener(type: string, listener: (evt: Event) => void): void;
-  initializeRipple(): MDCRipple;
+  initializeRipple(): ForgeRipple;
   clearTypeClass(): void;
   addRootClass(className: string): void;
   removeRootClass(name: string): void;
@@ -49,8 +48,8 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     this._buttonElement.removeEventListener(type, listener);
   }
 
-  public initializeRipple(): MDCRipple {
-    return new MDCRipple(this._buttonElement);
+  public initializeRipple(): ForgeRipple {
+    return new ForgeRipple(this._buttonElement);
   }
 
   public clearTypeClass(): void {

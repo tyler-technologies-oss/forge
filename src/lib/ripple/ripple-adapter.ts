@@ -2,7 +2,7 @@ import { addClass, removeClass } from '@tylertech/forge-core';
 
 import { IRippleComponent } from './ripple';
 import { RIPPLE_CONSTANTS } from './ripple-constants';
-import { TylRipple } from './tyl-ripple';
+import { ForgeRipple } from './forge-ripple';
 
 export interface IRippleAdapter {
   initialize(target: string, unbounded: boolean): void;
@@ -11,7 +11,7 @@ export interface IRippleAdapter {
 
 export class RippleAdapter implements IRippleAdapter {
   private _target: HTMLElement | undefined;
-  private _ripple: TylRipple | undefined;
+  private _ripple: ForgeRipple | undefined;
 
   constructor(private _component: IRippleComponent) {}
 
@@ -29,7 +29,7 @@ export class RippleAdapter implements IRippleAdapter {
     }
 
     if (this._target) {
-      this._ripple = new TylRipple(this._target);
+      this._ripple = new ForgeRipple(this._target);
       this._ripple.unbounded = unbounded;
       addClass(RIPPLE_CONSTANTS.classes.SURFACE, this._target);
     }

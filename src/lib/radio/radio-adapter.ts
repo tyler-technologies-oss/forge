@@ -1,8 +1,7 @@
 import { addClass, getShadowElement, removeClass, getActiveElement } from '@tylertech/forge-core';
-import { MDCRipple, MDCRippleAdapter, MDCRippleFoundation, MDCRippleCapableSurface } from '@material/ripple';
-
 import { IRadioComponent } from './radio';
 import { RADIO_CONSTANTS } from './radio-constants';
+import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
 
 export interface IRadioAdapter {
   connect(): void;
@@ -26,19 +25,19 @@ export interface IRadioAdapter {
   syncRadiogroupCheckStyles(): void;
 }
 
-export class RadioAdapter implements IRadioAdapter, MDCRippleCapableSurface {
+export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
   private _shadowRoot: HTMLElement;
   private _containerElement: HTMLElement;
   private _nativeInputElement: HTMLInputElement | null;
   private _inputAttributeMutationObserver?: MutationObserver;
-  private _ripple: MDCRipple;
+  private _rippleInstance: ForgeRipple;
 
   constructor(private _component: IRadioComponent) {
     this._shadowRoot = getShadowElement(this._component, RADIO_CONSTANTS.selectors.RADIO);
     this._containerElement = getShadowElement(this._component, RADIO_CONSTANTS.selectors.WRAPPER);
   }
 
-  // MDCRippleCapableSurface
+  // ForgeRippleCapableSurface
   public get root(): Element {
     return this._shadowRoot;
   }
@@ -59,18 +58,18 @@ export class RadioAdapter implements IRadioAdapter, MDCRippleCapableSurface {
   }
 
   public initializeRipple(): void {
-    this._ripple = this._createRipple();
+    this._rippleInstance = this._createRipple();
 
     requestAnimationFrame(() => {
-      if (this._ripple) {
-        this._ripple.layout();
+      if (this._rippleInstance) {
+        this._rippleInstance.layout();
       }
     });
   }
 
   public destroyRipple(): void {
-    if (this._ripple) {
-      this._ripple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
   }
 
@@ -303,9 +302,9 @@ export class RadioAdapter implements IRadioAdapter, MDCRippleCapableSurface {
     return this._inputElement ? this._inputElement.disabled : false;
   }
 
-  private _createRipple(): MDCRipple {
-    const adapter: MDCRippleAdapter = {
-      ...MDCRipple.createAdapter(this),
+  private _createRipple(): ForgeRipple {
+    const adapter: ForgeRippleAdapter = {
+      ...ForgeRipple.createAdapter(this),
       deregisterInteractionHandler: (evtType, handler) => {
         if (this._inputElement) {
           this._inputElement.removeEventListener(evtType, handler, { passive: true } as AddEventListenerOptions);
@@ -323,6 +322,6 @@ export class RadioAdapter implements IRadioAdapter, MDCRippleCapableSurface {
       removeClass: (className: string) => removeClass(className, this._shadowRoot),
       updateCssVariable: (varName: string, value: string | null) => this._shadowRoot.style.setProperty(varName, value)
     };
-    return new MDCRipple(this._shadowRoot, new MDCRippleFoundation(adapter));
+    return new ForgeRipple(this._shadowRoot, new ForgeRippleFoundation(adapter));
   }
 }

@@ -1,4 +1,4 @@
-import { MDCRippleFoundation } from '@material/ripple';
+import { ForgeRippleFoundation } from '@tylertech/forge/ripple';
 import { getShadowElement, removeAllChildren, removeElement, getActiveElement } from '@tylertech/forge-core';
 import { dispatchKeyEvent, dispatchNativeEvent, tick, timer } from '@tylertech/forge-testing';
 import { defineTabBarComponent, defineTabComponent, ITabBarComponent, ITabComponent, TabBarComponent, TAB_BAR_CONSTANTS, TAB_CONSTANTS } from '@tylertech/forge/tabs';
@@ -932,7 +932,7 @@ describe('TabBarComponent', function(this: ITestContext) {
 
   function _expectHighlightedTab(tab: ITabComponent, isHighlighted: boolean, expectFailureResult = ''): void {
     const ripple = _getTabRipple(tab);
-    expect(ripple.classList.contains(MDCRippleFoundation.cssClasses.BG_FOCUSED)).withContext(expectFailureResult).toBe(isHighlighted);
+    expect(ripple.classList.contains(ForgeRippleFoundation.cssClasses.BG_FOCUSED)).withContext(expectFailureResult).toBe(isHighlighted);
   }
 
   function _getTabs(component: ITabBarComponent): ITabComponent[] {

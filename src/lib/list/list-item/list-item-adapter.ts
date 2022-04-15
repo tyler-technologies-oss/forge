@@ -1,10 +1,10 @@
-import { MDCRipple } from '@material/ripple';
 import { addClass, getShadowElement, removeClass, requireParent, isDeepEqual, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IListComponent } from '../list/list';
 import { LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
 import { LIST_ITEM_CONSTANTS } from './list-item-constants';
+import { ForgeRipple } from '../../ripple';
 
 export interface IListItemAdapter extends IBaseAdapter {
   initializeAccessibility(): void;
@@ -73,10 +73,10 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
 
   /**
    * Creates a ripple instance on the list item.
-   * @returns {MDCRipple}
+   * @returns {ForgeRipple}
    */
   public createRipple(): any {
-    return new MDCRipple(this._listItemElement);
+    return new ForgeRipple(this._listItemElement);
   }
 
   /**

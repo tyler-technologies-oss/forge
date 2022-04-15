@@ -64,10 +64,10 @@ describe('FloatingActionButtonComponent', function(this: ITestContext) {
   it('should wait until button element is present to initialize', async function(this: ITestContext) {
     this.context = setupTestContext(true, false);
     await tick();
-    expect(this.context.component['_mdcRipple']).toBeUndefined();
+    expect(this.context.component['_rippleInstance']).toBeUndefined();
     this.context.addButtonElement();
     await tick();
-    expect(this.context.component['_mdcRipple']).toBeDefined();
+    expect(this.context.component['_rippleInstance']).toBeDefined();
     expect(this.context.getButtonElement().classList.contains(FLOATING_ACTION_BUTTON_CONSTANTS.classes.BUTTON)).toBe(true);
   });
 
@@ -76,7 +76,7 @@ describe('FloatingActionButtonComponent', function(this: ITestContext) {
     await tick();
     this.context.component.appendChild(document.createElement('div'));
     await tick();
-    expect(this.context.component['_mdcRipple']).toBeUndefined();
+    expect(this.context.component['_rippleInstance']).toBeUndefined();
   });
 
   it('should set mini class via attribute', function(this: ITestContext) {

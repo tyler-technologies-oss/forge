@@ -1,10 +1,9 @@
 import { getShadowElement, toggleClass } from '@tylertech/forge-core';
-import { MDCRipple, MDCRippleFoundation, MDCRippleCapableSurface } from '@material/ripple';
 import { MDCTabIndicator } from '@material/tab-indicator';
-
 import { IBaseAdapter, BaseAdapter } from '../../core/base/base-adapter';
 import { ITabComponent } from './tab';
 import { TAB_CONSTANTS } from './tab-constants';
+import { ForgeRipple, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../../ripple';
 
 export interface ITabAdapter extends IBaseAdapter {
   initialize(): void;
@@ -27,7 +26,7 @@ export interface ITabAdapter extends IBaseAdapter {
   setTabIndex(value: number): void;
 }
 
-class TabRippleSurface implements MDCRippleCapableSurface {
+class TabRippleSurface implements ForgeRippleCapableSurface {
   constructor(private _root: HTMLButtonElement) {}
 
   public get root(): Element {
@@ -47,7 +46,7 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
   private _buttonElement: HTMLButtonElement;
   private _content: HTMLElement;
   private _rippleElement: HTMLElement;
-  private _rippleInstance: MDCRipple | undefined;
+  private _rippleInstance: ForgeRipple | undefined;
   private _tabIndicatorElement: HTMLElement;
   private _tabIndicator: MDCTabIndicator | undefined;
 
@@ -66,13 +65,13 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
   public initializeRipple(): void {
     const rippleCapableSurface = new TabRippleSurface(this._buttonElement);
     const rippleAdapter = {
-      ...MDCRipple.createAdapter(rippleCapableSurface),
+      ...ForgeRipple.createAdapter(rippleCapableSurface),
       addClass: (className: string) => this._rippleElement.classList.add(className),
       removeClass: (className: string) => this._rippleElement.classList.remove(className),
       updateCssVariable: (varName: string, value: string) => this._rippleElement.style.setProperty(varName, value)
     };
-    const rippleFoundation = new MDCRippleFoundation(rippleAdapter);
-    this._rippleInstance = new MDCRipple(this._buttonElement, rippleFoundation);
+    const rippleFoundation = new ForgeRippleFoundation(rippleAdapter);
+    this._rippleInstance = new ForgeRipple(this._buttonElement, rippleFoundation);
   }
 
   public destroyRipple(): void {
