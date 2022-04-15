@@ -4,9 +4,9 @@
 ARG VARIANT="16-bullseye"
 FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
 
-# Add vscode-tcw-snippets
+# Add forge-vscode
 ARG GITHUB_TOKEN
-RUN git clone https://${GITHUB_TOKEN}@github.com/tyler-technologies/vscode-tcw-snippets.git /home/node/.vscode-server/extensions/vscode-tcw-snippets
+RUN git clone https://${GITHUB_TOKEN}@github.com/tyler-technologies/forge-vscode.git /home/node/.vscode-server/extensions/forge-vscode
 
 # Install Google Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
