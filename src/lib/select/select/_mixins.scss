@@ -15,6 +15,6 @@
 @mixin core-styles() {
   // We override field-core.label and field-core.floating-label in select-core
   // We exclude input, trailing, and trailing-font-icon since select does not use these.
-  @include field-core.core-styles(forge-select, $exclude: (label, floating-label, input, trailing, trailing-font-icon));
+  @include field-core.core-styles(tyl-select, $exclude: (label, floating-label, floating-label-float-above, floating-label-float-above-end-keyframe, floating-label-unfloat-above-start-keyframe, input, trailing, trailing-font-icon));
   @include core.core-styles;
 }

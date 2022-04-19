@@ -10,7 +10,7 @@ import {
   IChipFieldComponentDelegateOptions,
 } from '@tylertech/forge/chip-field';
 import { tick, timer } from '@tylertech/forge-testing';
-import { ChipComponent, defineChipComponent, FLOATING_LABEL_CONSTANTS } from '@tylertech/forge';
+import { ChipComponent, defineChipComponent } from '@tylertech/forge';
 import { expectFloatingLabelState, testFloatingLabelState } from '../../utils/text-field';
 import { FIELD_CONSTANTS } from '@tylertech/forge/field/field-constants';
 

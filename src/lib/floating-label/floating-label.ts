@@ -1,5 +1,5 @@
-import { calcSizeUnattached, toggleClass } from '@tylertech/forge-core';
-import { FLOATING_LABEL_CONSTANTS } from './floating-label-constants';
+import { FloatingLabelAdapter } from './floating-label-adapter';
+import { FloatingLabelFoundation } from './floating-label-foundation';
 
 export interface IFloatingLabel {
   isFloating: boolean;
@@ -9,37 +9,33 @@ export interface IFloatingLabel {
 }
 
 export class FloatingLabel implements IFloatingLabel {
+  private _foundation: FloatingLabelFoundation;
+
   constructor(private _labelElement: HTMLLabelElement) {
-    this._labelElement.classList.add(FLOATING_LABEL_CONSTANTS.classes.FLOATING_LABEL);
+    this._foundation = new FloatingLabelFoundation(new FloatingLabelAdapter(this._labelElement));
+    this._foundation.initialize();
   }
 
   /** Returns the current label floating state. */
   public get isFloating(): boolean {
-    return this._hasFloatClass();
+    return this._foundation.isFloating;
   }
 
   public destroy(): void {
-    this._labelElement.classList.remove(FLOATING_LABEL_CONSTANTS.classes.FLOATING_LABEL);
+    this._foundation.disconnect();
     this._labelElement = undefined as any;
   }
 
   /**
    * Sets the floating state of the label element.
-   * @param float If true, sets the label to float, otherwise un-float.
+   * @param shouldFloat If true, sets the label to float, otherwise un-float.
    */
-  public float(float: boolean): void {
-    toggleClass(this._labelElement, float, FLOATING_LABEL_CONSTANTS.classes.FLOAT);
+  public float(shouldFloat: boolean): void {
+    this._foundation.float(shouldFloat);
   }
 
   /** Returns the scroll width of the label element. */
   public getWidth(): number {
-    if (this._labelElement.offsetParent !== null) {
-      return this._labelElement.scrollWidth;
-    }
-    return calcSizeUnattached(this._labelElement).width;
-  }
-
-  private _hasFloatClass(): boolean {
-    return this._labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT);
+    return this._foundation.getWidth();
   }
 }
