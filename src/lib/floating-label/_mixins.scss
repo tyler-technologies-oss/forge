@@ -23,7 +23,7 @@
 // Selector '.forge-*' should only be used in this project.
 // stylelint-disable selector-class-pattern
 
-@use '@material/rtl/mixins' as mdc-rtl-mixins;
+@use '@material/rtl' as mdc-rtl-mixins;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
 @use '@material/animation/variables' as mdc-animation-variables;
