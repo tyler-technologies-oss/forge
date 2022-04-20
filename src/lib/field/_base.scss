@@ -289,7 +289,7 @@
   // Default
   @if $layout-state == default or $layout-state == shape-rounded {
     @include floating-label-mixins.float(
-      map.get(variables.$label, float-y, default),
+      map.get(variables.$label, float-y, scale-default),
       0%,
       map.get(variables.$label, float-scale, default)
     );
@@ -297,7 +297,7 @@
   // Roomy
   @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
     @include floating-label-mixins.float(
-      map.get(variables.$label, float-y, roomy),
+      map.get(variables.$label, float-y, scale-roomy),
       0%,
       map.get(variables.$label, float-scale, default)
     );

@@ -49,10 +49,12 @@ $label: (
   ),
   float-y: (
     roomy: 0.8rem,
-    default: 0.62rem
+    default: 0.62rem,
+    scale-roomy: 0.76rem,
+    scale-default: 0.58rem
   ),
   float-scale: (
-    default: 0.875,
+    default: 0.875
   )
 ) !default;
 
@@ -74,18 +76,18 @@ $input: (
     ),
     left: (
       leading: 0,
-      shape-rounded: 32px,
+      shape-rounded: 32px
     ),
     right: (
       trailing: 0,
-      shape-rounded: 32px,
+      shape-rounded: 32px
     ),
   )
 ) !default;
 
 $leading: (
   margin: (
-    default: 0 4px,
+    default: 0 4px
   ),
   padding: (
     default: 6px
@@ -94,7 +96,7 @@ $leading: (
 
 $trailing: (
   margin: (
-    default: 0 4px,
+    default: 0 4px
   ),
   padding: (
     default: 6px
@@ -104,7 +106,7 @@ $trailing: (
 $helper-text: (
   margin-left: (
     default: 12px,
-    shape-rounded: 32px,
+    shape-rounded: 32px
   ),
   font-size: (
     roomy: 0.875rem,
