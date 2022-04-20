@@ -193,7 +193,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
       value = true;
     }
 
-    this._floatingLabelInstance.float(value);
+    this._floatingLabelInstance.float(value, this._floatLabelType === 'always');
   }
 
   /** Handles losing focus on the selected text element. */

@@ -13,6 +13,7 @@ export class FloatingLabelFoundation {
 
   public disconnect(): void {
     this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOATING_LABEL);
+    this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
     this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME);
     this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME);
     if (this._floatAnimationEndHandler) {
@@ -20,12 +21,15 @@ export class FloatingLabelFoundation {
     }
   }
 
-  public float(shouldFloat: boolean): void {
+  public float(shouldFloat: boolean, alwaysFloat = false): void {
     if (shouldFloat) {
       if (this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME)) {
         this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME);
       }
       this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
+      if (alwaysFloat) {
+        this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME);
+      }
     } else {
       this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
       if (this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)) {

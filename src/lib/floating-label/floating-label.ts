@@ -3,7 +3,7 @@ import { FloatingLabelFoundation } from './floating-label-foundation';
 
 export interface IFloatingLabel {
   isFloating: boolean;
-  float(float: boolean): void;
+  float(float: boolean, alwaysFloat?: boolean): void;
   getWidth(): number;
   destroy(): void;
 }
@@ -29,9 +29,10 @@ export class FloatingLabel implements IFloatingLabel {
   /**
    * Sets the floating state of the label element.
    * @param shouldFloat If true, sets the label to float, otherwise un-float.
+   * @param alwaysFloat If true, sets the label to always float, defaults to: `false`.
    */
-  public float(shouldFloat: boolean): void {
-    this._foundation.float(shouldFloat);
+  public float(shouldFloat: boolean, alwaysFloat = false): void {
+    this._foundation.float(shouldFloat, alwaysFloat);
   }
 
   /** Returns the scroll width of the label element. */
