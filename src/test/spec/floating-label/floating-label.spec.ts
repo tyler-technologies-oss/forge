@@ -27,9 +27,9 @@ describe('FloatingLabelComponent', function(this: ITestContext) {
     it('should set floating via property', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.floatingLabel.float(true);
-      expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(true);
+      expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
       this.context.floatingLabel.float(false);
-      expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(false);
+      expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(false);
     });
   
     it('should get scroll width of label', function(this: ITestContext) {

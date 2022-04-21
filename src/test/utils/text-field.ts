@@ -15,5 +15,5 @@ export function testFloatingLabelState(
   labelElement: HTMLLabelElement, 
   isFloating: boolean
 ): void {
-  expect(labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(isFloating);
+  expect(labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(isFloating);
 }

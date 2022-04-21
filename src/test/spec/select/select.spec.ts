@@ -250,7 +250,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       dispatchNativeEvent(this.context.selectedTextElement, 'focus');
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.FOCUSED)).toBe(true);
-      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(true);
+      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
     });
 
     it('should not open popup when options aren\'t defined', async function(this: ITestContext) {
@@ -1472,7 +1472,7 @@ describe('SelectComponent', function(this: ITestContext) {
 
   function _expectLabelFloatState(selectElement: ISelectComponent, isFloating: boolean): void {
     const labelElement = getShadowElement(selectElement, SELECT_CONSTANTS.selectors.LABEL);
-    expect(labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(isFloating);
+    expect(labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(isFloating);
   }
 
   function _popupAnimation(): Promise<void> {
