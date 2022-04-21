@@ -205,6 +205,7 @@ export class FieldFoundation {
         this._adapter.setInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
         this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
       } else {
+        console.log('remove host');
         this._adapter.removeInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
         this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
       }
@@ -293,6 +294,7 @@ export class FieldFoundation {
     this._adapter.removeLabelClass(FIELD_CONSTANTS.classes.LABEL_FOCUSED);
 
     if (!this._adapter.fieldHasValue() && !this._adapter.hasPlaceholder()) {
+      this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
       this.floatLabel(false);
     }
   }
