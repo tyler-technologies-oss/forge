@@ -296,6 +296,13 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
           this._closeCalendar(true);
         }
         break;
+      case 'PageUp':
+      case 'PageDown':
+        if (this._open) {
+          evt.preventDefault();
+          this._adapter.propagateCalendarKey(evt);
+        }
+        break;
     }
   }
 
