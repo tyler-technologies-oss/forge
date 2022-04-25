@@ -31,12 +31,14 @@ jobs:
   build-and-release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.7.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.8.0
     with:
       PRODUCTION_RELEASE: ${{ needs.wf-config.outputs.prod-release == 'true' }}
       NODE_VERSION: "14"
       TESTS_ENABLED: true
       RELEASE_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+      BUILD_RELEASE_NPM_SCRIPT: "build:all"
+      PACKAGE_ASSETS_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'true' }}
     secrets:
       GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
       GITHUB_APP_KEY: ${{ secrets.TCP_AUTOMATION_APP_KEY }}
@@ -45,10 +47,23 @@ jobs:
       ARTIFACTORY_REGISTRY: ${{ secrets[format('{0}_ARTIFACTORY_NPM_REGISTRY', needs.wf-config.outputs.pkg-repo-name)] }}
       CANARY_PULL_ARTIFACTORY_REGISTRY: ${{ secrets.SCRATCH_ARTIFACTORY_NPM_VIRTUAL }}
 
+  publish-cdn:
+    name: Publish Components to CDN
+    needs: [wf-config, build-and-release]
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.8.0
+    if: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+    with:
+      PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
+      AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
+      AWS_REGION: "us-east-1"
+      AWS_S3_BUCKET_NAME: "tylerforge-s3assets51e60022-1ols9p4m4dr5y"
+      AWS_CLOUDFRONT_DISTRIBUTION_ID: "EDE7DVFI1X60B"
+      MAX_CLOUDFRONT_INVALIDATIONS: 25
+
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.7.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
     with:
       PRODUCTION_RELEASE: ${{ needs.wf-config.outputs.prod-release == 'true' }}
       BUILD_DIRECTORY: dist/storybook
