@@ -38,6 +38,7 @@ jobs:
       TESTS_ENABLED: true
       RELEASE_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'true' }}
       BUILD_RELEASE_NPM_SCRIPT: "build:all"
+      PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
       PACKAGE_ASSETS_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'true' }}
     secrets:
       GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
@@ -53,7 +54,6 @@ jobs:
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.8.0
     if: ${{ needs.wf-config.outputs.prod-release == 'true' }}
     with:
-      PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
       AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
       AWS_REGION: "us-east-1"
       AWS_S3_BUCKET_NAME: "tylerforge-s3assets51e60022-1ols9p4m4dr5y"
