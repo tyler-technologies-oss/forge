@@ -3,6 +3,7 @@
   "ignorePatterns": [
     "dist/**/*",
     "docs/**/*",
+    "plugins/**/*",
     "src/demo/**/*",
     "src/stories/**/*",
     "*.spec.ts"
