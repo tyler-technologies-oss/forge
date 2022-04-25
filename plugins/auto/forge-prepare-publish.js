@@ -19,7 +19,7 @@ module.exports = class ForgePreparePublishPlugin {
 
       // Build and ensure the deployment path exists
       const deploymentPath = path.join(forgeConfig.build.static.distPath, forgeConfig.packageOrg, forgeConfig.packageName);
-      if (!existsSync(deploymentPath)) {
+      if (!existsSync(path.join(DIST_PATH, deploymentPath))) {
         console.error(`[ForgePreparePublishPlugin] Deployment path doesn't exist: ${deploymentPath}`);
         return;
       }
