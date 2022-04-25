@@ -31,7 +31,7 @@ jobs:
   build-and-release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.8.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.8.1
     with:
       PRODUCTION_RELEASE: ${{ needs.wf-config.outputs.prod-release == 'true' }}
       NODE_VERSION: "14"
