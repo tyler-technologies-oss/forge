@@ -1,0 +1,61 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency: build-release-${{ github.ref }}
+
+jobs:
+  wf-config:
+    name: Workflow Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Package Repo Selection
+        id: pkg-repo
+        run: |
+          if [ "${GITHUB_REF}" == 'refs/heads/master' ]; then
+            echo "::set-output name=repo-name::FORGE"
+          else
+            echo "::set-output name=repo-name::SCRATCH"
+          fi
+    outputs:
+      pkg-repo-name: ${{ steps.pkg-repo.outputs.repo-name }}
+      prod-release: ${{ github.ref == 'refs/heads/master' && contains(fromJson('["push", "workflow_dispatch"]'), github.event_name) }}
+
+  build-and-release:
+    name: Build and Release
+    needs: wf-config
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.7.0
+    with:
+      PRODUCTION_RELEASE: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+      NODE_VERSION: "14"
+      TESTS_ENABLED: true
+      RELEASE_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+    secrets:
+      GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
+      GITHUB_APP_KEY: ${{ secrets.TCP_AUTOMATION_APP_KEY }}
+      ARTIFACTORY_TOKEN: ${{ secrets[format('{0}_ARTIFACTORY_TOKEN', needs.wf-config.outputs.pkg-repo-name)] }}
+      ARTIFACTORY_USERNAME: ${{ secrets[format('{0}_ARTIFACTORY_USERNAME', needs.wf-config.outputs.pkg-repo-name)] }}
+      ARTIFACTORY_REGISTRY: ${{ secrets[format('{0}_ARTIFACTORY_NPM_REGISTRY', needs.wf-config.outputs.pkg-repo-name)] }}
+      CANARY_PULL_ARTIFACTORY_REGISTRY: ${{ secrets.SCRATCH_ARTIFACTORY_NPM_VIRTUAL }}
+
+  deploy-storybook:
+    name: Deploy Storybook
+    needs: wf-config
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.7.0
+    with:
+      PRODUCTION_RELEASE: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+      BUILD_DIRECTORY: dist/storybook
+      BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
+      BUILD_NPM_SCRIPT: "ci:build-storybook"
+      PR_COMMENT_HEADER: "View Storybook Deployment"
+    secrets:
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.CORPDEV_GITHUB_ACCESS_TOKEN }}
+      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}

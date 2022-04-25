@@ -1,21 +1,12 @@
-# Forge Web Components
+# Forge Components
 
 Forge is a project that produces framework-agnostic Web Components for the browser. The components adhere to the standard W3C Web Components spec, and work seamlessly with the various front-end frameworks such as Angular, Vue, and React, as well as no framework at all.
 
 The goal of this project is to create a set of high quality UI components for the browser platform that implement the Forge design system. The components can be shared across products and applications without requiring a specific version of a framework. This will help applications present themselves and function consistently, regardless of underlying architecture/technology.
 
-The components within this library derive from Google's [Material Components Web](https://material-components.github.io/material-components-web-catalog/) project. This ensures that we are strictly following material guidelines while allowing us the flexibility to design for the specific needs of Tyler.
+The components within this library derive from Google's [Material Components Web](https://material-components.github.io/material-components-web-catalog/) project. This ensures that we are strictly following material guidelines while allowing us the flexibility to design for the specific needs of Tyler. With that being said, theming is built-in to the core of the library to make it easy to adapt design customizations, as well as use with other design systems as a whole.
 
 To view more detailed information about the project, as well as the components that are currently available, please visit the [Forge design system website](https://forge.tylertech.com/).
-
-## Development
-
-This project uses Artifactory for its dependencies. You must first configure your system to create environment variables that will allow the npm dependencies to be installed. If you haven't already done so, please follow the [local dev setup guide](https://github.com/tyler-technologies/artifactory-github-migration/tree/master/01-local-dev-setup).
-
-- `npm install`
-- `npm start`
-
-The dev site will be opened automatically in your default browser.
 
 ### Developing inside a container
 

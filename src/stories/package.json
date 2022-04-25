@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "start-storybook -p 6006 -c ./",
+    "start": "start-storybook -p 6006 -c ./ -s ./src/assets -o ./dist/storybook",
     "build": "build-storybook -c ./",
-    "debug": "cross-env NODE_OPTIONS=--inspect-brk STORYBOOK_DISPLAY_WARNING=true DISPLAY_WARNING=true start-storybook -p 6006 -c ./"
+    "debug": "cross-env NODE_OPTIONS=--inspect-brk STORYBOOK_DISPLAY_WARNING=true DISPLAY_WARNING=true start-storybook -p 6006 -c ./",
+    "ci:build": "build-storybook --quiet -c ./ -s ./src/assets -o ../../dist/storybook"
   },
   "dependencies": {
     "@storybook/addon-a11y": "^6.4.19",
