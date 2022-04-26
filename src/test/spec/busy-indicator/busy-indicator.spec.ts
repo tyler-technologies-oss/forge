@@ -219,11 +219,11 @@ describe('BusyIndicatorComponent', function(this: ITestContext) {
     this.context.component.progressBarDeterminate = true;
     this.context.component.buffer = 0.5;
     this.context.append();
-    // const progressBar = getShadowElement(this.context.component, BUSY_INDICATOR_CONSTANTS.selectors.PROGRESS_BAR) as ILinearProgressComponent;
+    const progressBar = getShadowElement(this.context.component, BUSY_INDICATOR_CONSTANTS.selectors.PROGRESS_BAR) as ILinearProgressComponent;
   
     expect(this.context.component.buffer).toBe(0.5);
     expect(this.context.component.getAttribute(BUSY_INDICATOR_CONSTANTS.attributes.BUFFER)).toBe('0.5');
-    // expect(progressBar.buffer).toBe(0.5); // logs show this is actualy 0.5 even though this expect is failing with 0
+    expect(progressBar.buffer).toBe(0.5); // logs show this is actualy 0.5 even though this expect is failing with 0
   });
 
   it('should set focus back to previously focused element when closed', async function(this: ITestContext) {

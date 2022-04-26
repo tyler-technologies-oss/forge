@@ -3,6 +3,8 @@ import { ILinearProgressComponent } from "./linear-progress";
 import { ILinearProgressResizeObserver, LinearProgressResizeObserverCallback, IWithLinearProgressResizeObserver, LINEAR_PROGRESS_CONSTANTS } from "./linear-progress-constants";
 
 export interface ILinearProgressAdapter {
+  setHostAttribute(name: string, value: string): void;
+  removeHostAttribute(name: string): void;
   addClass(name: string): void;
   attachResizeObserver(callback: LinearProgressResizeObserverCallback): ILinearProgressResizeObserver | null;
   forceLayout(): void;
@@ -21,6 +23,14 @@ export class LinearProgressAdapter implements ILinearProgressAdapter {
 
   constructor(private _component: ILinearProgressComponent) {
     this._rootElement = getShadowElement(this._component, LINEAR_PROGRESS_CONSTANTS.selectors.ROOT);
+  }
+
+  public setHostAttribute(name: string, value: string): void {
+    this._component.setAttribute(name, value);
+  }
+
+  public removeHostAttribute(name: string): void {
+      this._component.removeAttribute(name);
   }
 
   public addClass(name: string): void {

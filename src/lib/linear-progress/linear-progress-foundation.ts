@@ -15,7 +15,7 @@ export class LinearProgressFoundation implements ILinearProgressFoundation {
   private _open = true;
   private _determinate = false;
   private _progress = 0;
-  private _buffer = 1;
+  private _buffer = 0;
   private _observer: ILinearProgressResizeObserver | null = null;
 
   constructor(private _adapter: ILinearProgressAdapter) {}
@@ -81,7 +81,7 @@ export class LinearProgressFoundation implements ILinearProgressFoundation {
   }
 
   public get buffer(): number {
-    return this._progress;
+    return this._buffer;
   }
   public set buffer(value: number) {
     if (this._buffer !== value) {
@@ -120,10 +120,10 @@ export class LinearProgressFoundation implements ILinearProgressFoundation {
   private _applyDeterminate(): void {
     if (this._determinate) {
       this._adapter.removeClass(LINEAR_PROGRESS_CONSTANTS.classes.INDETERMINATE);
-      this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUENOW, this.progress.toString());
+      this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUENOW, this._progress.toString());
       this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUEMAX, '1');
       this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUEMIN, '0');
-      this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE, this._determinate.toString());
+      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE, this._determinate.toString());
       this._applyPrimaryBarProgress(this._progress);
       this._applyBufferBarProgress(this._buffer);
 
@@ -146,14 +146,14 @@ export class LinearProgressFoundation implements ILinearProgressFoundation {
     if (this._determinate) {
       this._applyPrimaryBarProgress(this._progress);
       this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUENOW, this._progress.toString());
-      this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS, this._progress.toString());
+      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS, this._progress.toString());
     }
   }
 
   private _applyBuffer(): void {
     if (this._determinate) {
       this._applyBufferBarProgress(this._buffer);
-      this._adapter.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER, this._buffer.toString());
+      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER, this._buffer.toString());
     }
   }
 
