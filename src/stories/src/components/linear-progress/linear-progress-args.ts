@@ -1,11 +1,18 @@
 export interface ILinearProgressProps {
+  open: boolean;
   determinate: boolean;
   progress: number;
   buffer: number;
-  visible: boolean;
 }
 
 export const argTypes = {
+  open: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
   determinate: {
     control: 'boolean',
     description: '',
@@ -22,13 +29,6 @@ export const argTypes = {
   },
   buffer: {
     control: 'number',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  visible: {
-    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',

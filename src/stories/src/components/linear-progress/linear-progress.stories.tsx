@@ -15,8 +15,8 @@ export default {
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {
+  open: true,
   determinate: false,
   progress: 0.5,
-  buffer: 1,
-  visible: true
+  buffer: 1
 } as ILinearProgressProps;
