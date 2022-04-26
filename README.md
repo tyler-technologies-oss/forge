@@ -84,6 +84,14 @@ supplemental global styles required by certain components.
 @use '@tylertech/forge/dist/forge.css';
 ```
 
+Additionally, you will want to apply the `forge-typography` class to a root element of your choosing (typically the `<body>`):
+
+```html
+<body class="forge-typography">
+```
+
+That's it! You should be ready to start using Forge.
+
 ## Need help?
 
 Please feel free to reach out to us at any time, or create a GitHub issue with a question and we'll be glad to help!
