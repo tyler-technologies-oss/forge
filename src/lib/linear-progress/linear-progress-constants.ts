@@ -2,7 +2,7 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName = `${COMPONENT_NAME_PREFIX}linear-progress`;
 
-export const classes = {
+const classes = {
   CLOSED: 'mdc-linear-progress--closed',
   CLOSED_ANIMATION_OFF: 'mdc-linear-progress--closed-animation-off',
   INDETERMINATE: 'mdc-linear-progress--indeterminate',
