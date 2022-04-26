@@ -223,7 +223,7 @@ describe('BusyIndicatorComponent', function(this: ITestContext) {
   
     expect(this.context.component.buffer).toBe(0.5);
     expect(this.context.component.getAttribute(BUSY_INDICATOR_CONSTANTS.attributes.BUFFER)).toBe('0.5');
-    expect(progressBar.buffer).toBe(0.5); // logs show this is actualy 0.5 even though this expect is failing with 0
+    expect(progressBar.buffer).toBe(0.5);
   });
 
   it('should set focus back to previously focused element when closed', async function(this: ITestContext) {
