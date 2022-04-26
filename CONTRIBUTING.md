@@ -1,9 +1,9 @@
 # Contributing to Forge
 
 We are very open to contributions to the Forge component library! There are many forms of
-contribution, from documentation updates and creating issues to bug fixes and features. No
-matter what your contribution is, we only ask that you follow our contribution guidelines
-defined below. Thank you for considering a contribution!
+contribution, from documentation updates and creating issues to bug fixes and features. 
+No matter your contribution, we only ask that you follow our contribution guidelines defined below. 
+Thank you for helping to move this project forward!
 
 - [Contributing to Forge](#contributing-to-forge)
   - [General Contributing Guidelines](#general-contributing-guidelines)
@@ -25,7 +25,7 @@ defined below. Thank you for considering a contribution!
 
 Forge is an open source project that accepts contributions from community members.
 
-Want to contribute? Great! First, plase read the rest of this document.
+Want to contribute? Great! Please read on for more details.
 
 > If you’ve never contributed to an open source project before, take a look at GitHub’s
 [Contributing to Open Source on GitHub](https://docs.github.com/en) to learn some of the basics.
@@ -57,17 +57,17 @@ Navigate to the project root, and install dependencies:
 npm install
 ```
 
-We use [Storybook](https://storybook.js.org/) for development locally. This helps us build and
-maintain component demos (stories), as well as the corresponding documentation for each component.
+We use [Storybook](https://storybook.js.org/) for local development. This helps us build and
+maintain component demos (stories) and the corresponding documentation for each component.
 To start up the Storybook environment locally, run the following command:
 
 ```bash
 npm start
 ```
 
-> We deploy the Storybook build on pull requests to help reviewers easily validate changes, as well
-> as when we merge changes to `master` to allow for us to embed Forge component documentation in our
-> design system website.
+> New Storybook versions are deployed for every pull request to help reviewers easily validate changes. The main
+> Storybook deployment is updated when changes are merged to `master`.  Storybook is linked in the main Forge
+> documentation site to help keep documentation up to date.
 
 ### Building the library
 
@@ -79,19 +79,15 @@ npm run build
 
 > This project uses the `forge` CLI to build and manage your project. The equivalent command is `forge build`
 
-You will find the output of the command in the `dist/release/@tylertech/forge` directory if the build is successful.
+A successful build-command output is found in the `dist/release/@tylertech/forge` directory.
 
 > Please validate that your build runs locally before pushing changes to remote to avoid iterating on build errors in the CI environment.
 
 ### Linting
 
-We use ESLint in this project to lint the JavaScript/TypeScript, and stylelint to lint the CSS/Sass. Linting is executed when running the
-build command as well as from a precommit hook, but if you'd like to run the linter at any time just run the `npm run lint` command.
-
-We run ESLint fixers automatically during the linting process to help ensure proper code style and formatting. We also recommend that you
-install an ESLint and StyleLint plugin within your editor to provide instant linting feedback as you write code.
-
-> We do not use Prettier in this project due to its opinionated nature. Linting provides the necessary code style validation for us.
+To ensure proper code style and formatting, we use ESLint and stylelint in this project for linting javascript/TypeScript 
+and CSS/Sass respectively. Linting is executed when running the build command and as a precommit hook. The linter can be 
+run at any time with the `npm run lint` command.
 
 ### Running unit tests
 
@@ -175,13 +171,13 @@ for more information.
 If you find a bug in the source code or a mistake in the documentation, you can help us by submitting
 an issue to the GitHub repository.
 
-Even better: propose a fix with a pull request and link it to the issue!
+Pull requests are even better! Propose a fix with a pull request, and link it to the issue!
 
 ## Feature or Component Requests
 
-We are always looking at ways that we can improve the Forge library, whether that be a new feature on a
-component to make developers lives easier, or a new component that solves a problem to help encapsulate
-a design and speed up development time.
+We are always interested in improving the Forge library. Whether it's a new feature for a component, 
+an improvement to the developer experience, or an entirely new component, we look forward to your 
+engagement.
 
 > The Forge team uses a governance model to discuss enhancements to the library. This is where we will
 > discuss the feature or new component and make sure it aligns with our overall vision.
@@ -192,7 +188,7 @@ proposal and then determine timeline and resources needed to implement the featu
 
 ## Submitting Pull Requests
 
-The best way to make an impact is by creating code submissions called pull requests. Pull requests should
+The best way to make an impact is by creating code submissions. Pull requests should
 be "solutions" to GitHub issues. If there is not an existing GitHub issue, please start by creating one
 before submitting a pull request.
 
