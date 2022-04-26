@@ -1,12 +1,12 @@
-import { getShadowElement } from "@tylertech/forge-core";
-import { ILinearProgressComponent } from "./linear-progress";
-import { ILinearProgressResizeObserver, LinearProgressResizeObserverCallback, IWithLinearProgressResizeObserver, LINEAR_PROGRESS_CONSTANTS } from "./linear-progress-constants";
+import { getShadowElement } from '@tylertech/forge-core';
+import { ILinearProgressComponent } from './linear-progress';
+import { IWithLinearProgressResizeObserver, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 
 export interface ILinearProgressAdapter {
   setHostAttribute(name: string, value: string): void;
   removeHostAttribute(name: string): void;
   addClass(name: string): void;
-  attachResizeObserver(callback: LinearProgressResizeObserverCallback): ILinearProgressResizeObserver | null;
+  attachResizeObserver(callback: ResizeObserverCallback): ResizeObserver | null;
   forceLayout(): void;
   setBufferBarStyle(property: string, value: string): void;
   setPrimaryBarStyle(property: string, value: string): void;
@@ -30,7 +30,7 @@ export class LinearProgressAdapter implements ILinearProgressAdapter {
   }
 
   public removeHostAttribute(name: string): void {
-      this._component.removeAttribute(name);
+    this._component.removeAttribute(name);
   }
 
   public addClass(name: string): void {
@@ -42,16 +42,14 @@ export class LinearProgressAdapter implements ILinearProgressAdapter {
   }
 
   public setBufferBarStyle(property: string, value: string): void {
-    const bufferBar = this._rootElement.querySelector<HTMLElement>(
-        LINEAR_PROGRESS_CONSTANTS.selectors.BUFFER_BAR_SELECTOR);
+    const bufferBar = this._rootElement.querySelector<HTMLElement>(LINEAR_PROGRESS_CONSTANTS.selectors.BUFFER_BAR_SELECTOR);
     if (bufferBar) {
       bufferBar.style.setProperty(property, value);
     }
   }
 
   public setPrimaryBarStyle(property: string, value: string): void {
-    const primaryBar = this._rootElement.querySelector<HTMLElement>(
-        LINEAR_PROGRESS_CONSTANTS.selectors.PRIMARY_BAR_SELECTOR);
+    const primaryBar = this._rootElement.querySelector<HTMLElement>(LINEAR_PROGRESS_CONSTANTS.selectors.PRIMARY_BAR_SELECTOR);
     if (primaryBar) {
       primaryBar.style.setProperty(property, value);
     }
@@ -77,10 +75,10 @@ export class LinearProgressAdapter implements ILinearProgressAdapter {
     (this._rootElement as HTMLElement).style.setProperty(name, value);
   }
 
-  public attachResizeObserver(callback: LinearProgressResizeObserverCallback): ILinearProgressResizeObserver | null {
+  public attachResizeObserver(callback: ResizeObserverCallback): ResizeObserver | null {
     const RO = (window as unknown as IWithLinearProgressResizeObserver).ResizeObserver;
     if (RO) {
-      const ro = new RO(callback);
+      const ro = new ResizeObserver(callback);
       ro.observe(this._rootElement);
       return ro;
     }

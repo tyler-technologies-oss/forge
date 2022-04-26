@@ -7,7 +7,7 @@ const classes = {
   CLOSED_ANIMATION_OFF: 'mdc-linear-progress--closed-animation-off',
   INDETERMINATE: 'mdc-linear-progress--indeterminate',
   REVERSED: 'mdc-linear-progress--reversed',
-  ANIMATION_READY: 'mdc-linear-progress--animation-ready',
+  ANIMATION_READY: 'mdc-linear-progress--animation-ready'
 };
 
 const selectors = {
@@ -31,14 +31,14 @@ const attributes = {
 
 const styleProperties = {
   FLEX_BASIS: 'flex-basis'
-}
+};
 
 const animationDimensionPercentages = {
   PRIMARY_HALF: .8367142,
   PRIMARY_FULL: 2.00611057,
   SECONDARY_QUARTER: .37651913,
   SECONDARY_HALF: .84386165,
-  SECONDARY_FULL: 1.60277782,
+  SECONDARY_FULL: 1.60277782
 };
 
 export const LINEAR_PROGRESS_CONSTANTS = {
@@ -50,18 +50,6 @@ export const LINEAR_PROGRESS_CONSTANTS = {
   animationDimensionPercentages
 };
 
-export interface ILinearProgressResizeObserverEntry {
-  contentRect: DOMRectReadOnly;
-}
-
-export interface ILinearProgressResizeObserver {
-  new(callback: LinearProgressResizeObserverCallback): ILinearProgressResizeObserver;
-  disconnect(): void;
-  observe(target: Element): void;
-}
-
 export interface IWithLinearProgressResizeObserver {
-  ResizeObserver: ILinearProgressResizeObserver;
+  ResizeObserver: ResizeObserver;
 }
-
-export type LinearProgressResizeObserverCallback = (entries: ILinearProgressResizeObserverEntry[], observer: ILinearProgressResizeObserver) => void;

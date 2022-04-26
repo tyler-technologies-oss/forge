@@ -11,24 +11,23 @@ export type CssVendorPropertyMap = { [K in StandardCssPropertyName]: CssVendorPr
 const cssPropertyNameMap: CssVendorPropertyMap = {
   animation: {
     prefixed: '-webkit-animation',
-    standard: 'animation',
+    standard: 'animation'
   },
   transform: {
     prefixed: '-webkit-transform',
-    standard: 'transform',
+    standard: 'transform'
   },
   transition: {
     prefixed: '-webkit-transition',
-    standard: 'transition',
-  },
+    standard: 'transition'
+  }
 };
 
 function isWindow(windowObj: Window): boolean {
   return Boolean(windowObj.document) && typeof windowObj.document.createElement === 'function';
 }
 
-export function getCorrectPropertyName(windowObj: Window, cssProperty: StandardCssPropertyName):
-    StandardCssPropertyName | PrefixedCssPropertyName {
+export function getCorrectPropertyName(windowObj: Window, cssProperty: StandardCssPropertyName): StandardCssPropertyName | PrefixedCssPropertyName {
   if (isWindow(windowObj) && cssProperty in cssPropertyNameMap) {
     const el = windowObj.document.createElement('div');
     const {standard, prefixed} = cssPropertyNameMap[cssProperty];
