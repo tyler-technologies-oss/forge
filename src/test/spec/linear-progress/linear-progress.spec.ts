@@ -51,7 +51,7 @@ describe('LinearProgressComponent', function(this:ITestContext) {
 
   it('should be open by default', function(this:ITestContext) {
     this.context = setupTestContext(true);
-    expect(this.context.component.visible).toBeTrue();
+    expect(this.context.component.open).toBeTrue();
     expect(this.context.getRootElement().classList.contains('mdc-linear-progress--closed')).toBe(false);
   });
 
@@ -69,16 +69,16 @@ describe('LinearProgressComponent', function(this:ITestContext) {
 
   it('should close', function(this:ITestContext) {
     this.context = setupTestContext(true);
-    this.context.component.close();
+    this.context.component.open = false;
     expect(this.context.getRootElement().classList.contains('mdc-linear-progress--closed')).toBe(true);
   });
 
   it('should close and reopen', async function(this:ITestContext) {
     this.context = setupTestContext(true);
-    this.context.component.close();
+    this.context.component.open = false;
     expect(this.context.getRootElement().classList.contains('mdc-linear-progress--closed')).toBe(true);
     await tick();
-    this.context.component.open();
+    this.context.component.open = true;
     expect(this.context.getRootElement().classList.contains('mdc-linear-progress--closed')).toBe(false);
   });
 
@@ -114,25 +114,25 @@ describe('LinearProgressComponent', function(this:ITestContext) {
     expect(this.context.getBufferBar().style.flexBasis).toBe('100%');
   });
 
-  it('should set closed via visible property', function(this:ITestContext) {
+  it('should set closed via open property', function(this:ITestContext) {
     this.context = setupTestContext(true);
-    this.context.component.visible = false;
-    expect(this.context.component.visible).toBe(false);
+    this.context.component.open = false;
+    expect(this.context.component.open).toBe(false);
     expect(this.context.getRootElement().classList.contains('mdc-linear-progress--closed')).toBeTrue();
   });
 
-  it('should set closed via visible attribute', function(this:ITestContext) {
+  it('should set closed via open attribute', function(this:ITestContext) {
     this.context = setupTestContext(true);
-    this.context.component.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.VISIBLE, 'false');
-    expect(this.context.component.visible).toBe(false);
+    this.context.component.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.OPEN, 'false');
+    expect(this.context.component.open).toBe(false);
     expect(this.context.getRootElement().classList.contains('mdc-linear-progress--closed')).toBeTrue();
   });
 
-  it('should set closed via visible property', async function(this:ITestContext) {
+  it('should set closed via open property', async function(this:ITestContext) {
     this.context = setupTestContext(true);
-    this.context.component.visible = false;
+    this.context.component.open = false;
     await tick();
-    this.context.component.visible = true;
+    this.context.component.open = true;
     
     expect(this.context.getRootElement().classList.contains('mdc-linear-progress--closed')).toBeFalse();
   });
@@ -140,7 +140,7 @@ describe('LinearProgressComponent', function(this:ITestContext) {
   it('should set closed by default', async function(this:ITestContext) {
     this.context = setupTestContext();   
     await tick();
-    this.context.component.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.VISIBLE, 'false');
+    this.context.component.setAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.OPEN, 'false');
     this.context.append();
     await tick();
     

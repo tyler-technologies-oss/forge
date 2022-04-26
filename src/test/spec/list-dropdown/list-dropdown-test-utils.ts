@@ -108,7 +108,7 @@ export function getBusyVisibility(context: IListDropdownTestContext): boolean {
     return false;
   }
 
-  return !!linearProgress.visible && linearProgress.style.display !== 'none';
+  return !!linearProgress.open && linearProgress.style.display !== 'none';
 }
 
 export function generateScrollableOptions(num = 100): IListDropdownOption[] {

@@ -64,7 +64,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
         this._headerElement.setAttribute(LIST_DROPDOWN_CONSTANTS.attributes.DATA_ALLOW_FOCUS, '');
       }
     }
-    
+
     // Create the footer element if a builder exists
     if (config.footerBuilder) {
       this._footerElement = config.footerBuilder();
@@ -183,7 +183,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       const activeListItems = listItems.filter(li => li.active);
       activeListItems.forEach(li => li.active = false);
     }
-    
+
     const listItem = this._getSelectedListItem();
     if (listItem) {
       this._activateListOption(listItem, config.activeChangeCallback);
@@ -241,12 +241,12 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       removeElement(this._asyncElement);
     }
     if (this._busyElement) {
-      this._busyElement.close();
+      this._busyElement.open = false;
     }
     if (!this._listElement.isConnected) {
       this._dropdownElement.appendChild(this._listElement);
     }
-    
+
     removeAllChildren(this._listElement);
     createListItems(config, this._listElement);
 
@@ -274,9 +274,9 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     }
     if (isVisible) {
       this._busyElement.style.removeProperty('display');
-      this._busyElement.open();
+      this._busyElement.open = true;
     } else {
-      this._busyElement.close();
+      this._busyElement.open = false;
     }
   }
 

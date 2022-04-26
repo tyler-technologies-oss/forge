@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceNumber, CustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, CustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { BackdropComponent } from '../backdrop';
 import { ButtonComponent } from '../button';
 import { CircularProgressComponent } from '../circular-progress';
