@@ -1,9 +1,9 @@
 # Contributing to Forge
 
-We are very open to contributions to the Forge component library! There are many forms of contribution, 
-from documentation updates, creating issues, bug fixes, and features. No matter your contribution, we 
-only ask that you follow our contribution guidelines defined below. Thank you for helping to move this 
-project forward!
+We are very open to contributions to the Forge component library! There are many forms of
+contribution, from documentation updates and creating issues to bug fixes and features. 
+No matter your contribution, we only ask that you follow our contribution guidelines defined below. 
+Thank you for helping to move this project forward!
 
 - [Contributing to Forge](#contributing-to-forge)
   - [General Contributing Guidelines](#general-contributing-guidelines)
