@@ -8,59 +8,82 @@ The components within this library derive from Google's [Material Components Web
 
 To view more detailed information about the project, as well as the components that are currently available, please visit the [Forge design system website](https://forge.tylertech.com/).
 
-**[Storybook](https://tyler-technologies.github.io/forge/master/)**
+## Important links
 
-## Developing inside a container
+- [Storybook](https://tyler-technologies.github.io/forge/master/)
+- [Contributing](https://github.com/tyler-technologies/forge/blob/master/CONTRIBUTING.md)
+- [Changelog](https://github.com/tyler-technologies/forge/blob/master/CHANGELOG.md)
+- [Forge design system](https://forge.tylertech.com)
 
-This project supports vscode DevContainers to help streamline and standardize the local development process. To get started with DevContainers you'll need to ensure you're running the following on your local machine:
+## Getting started
 
-- Docker
-- Visual Studio Code
-- VSCode Remote Development extension pack.
-- GITHUB_TOKEN environmental variable configured.
+The component library is distributed on npm and as static assets on the Forge CDN.
 
-See these [getting-started](https://code.visualstudio.com/docs/remote/containers#_installation) instructions for additional details.
+### Using via NPM
 
-Once setup, VSCode should prompt with a notification that a DevContainer config file is recognized and suggest re-opening within a container.
+To install the library from npm:
 
-You can create a new token `GITHUB_TOKEN` at https://github.com/settings/tokens with the `read:packages`. This needs to be added to your environment through your .bashrc, .zshrc or windows path environment settings. 
+```bash
+npm install @tylertech/forge
+```
 
-![devcontainer_notification](docs/img/devcontainer_notification.png)
+> The package supports ES modules to ensure you only pull in the components you need within your application bundles.
 
-### Manually open current project in container
-1. open project folder in vscode
-1. open in container
-1. wait for devcontainer to build (~5 minutes)
-1. Serve the demo site to test the icons: `npm run start`
-1. To build the npm package, run the following: `npm run build`
+You can then import the component definition functions to register them with the browser:
 
-![Alt text](/docs/gifs/open_in_container.gif "open project in container")
+```typescript
+import { defineTextFieldComponent, defineButtonComponent } from '@tylertech/forge';
 
-For more information on starting a development environment within a container see [Developing inside a Container](https://code.visualstudio.com/docs/remote/containers)
+defineTextFieldComponent();
+defineButtonComponent();
+```
 
-### DevContainers Performance Notes
+### Using via CDN
 
-When opening this project in a DevContainer on a Windows or Mac operating system, you may experience poor disk performance due to their use of bind mounts. See the following article for additional information and tips on how you might [improve disk performance](https://code.visualstudio.com/remote/advancedcontainers/improve-performance).
+If you need to use the library on a static website, or you do not have a build pipeline in place, you can also access the files from our Forge CDN.
 
-In situations where you're unable to make use of the WSL2 filesystem (Windows), or where you're using macOS, you'll experience the best performance by making use of the **Remote-Containers: Clone Repository in Container Volume** command within VSCode. See this [article](https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-clone-repository-in-container-volume) for more information.
+For example, if you wanted to just load the text-field component, you could do so like this:
 
-### Clone in containers
-1. open vscode
-1. clone repository in container
-1. wait for devcontainer to build (~5 minutes)
-1. Serve the demo site to test the icons: `npm run start`
-1. To build the npm package, run the following: `npm run build`
+```html
+<!-- Some components (such as button) require the use of a global stylesheet -->
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/button/forge-button.css">
 
-![Alt text](/docs/gifs/clone_in_containers.gif "clone repository in container")
+<!-- Load the JavaScript bundle for each component you need. -->
+<script src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/text-field/text-field.js"></script>
+<script src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/button/button.js"></script>
 
-> note: if you make any package changes and want them to persist you may need to rebuild the container
+<!-- Register the components with the browser. -->
+<script>
+  // All components are added under the `window.Forge.<componentName>` global variable
+  window.Forge.textField.defineTextFieldComponent();
+  window.Forge.button.defineButtonComponent();
+</script>
+```
 
-## Testing
+### HTML
 
-To run tests over the whole project, use command: `npm run test`.
-To run tests over a single component, use command: `forge test component <component name> [--browser chrome] [--port <port number>]`
+Now you can use the elements anywhere in your application:
 
-### Testing in a container
-To run tests over the whole project, use command: `npm run test:container`.
-To run tests over a single component, use command: `forge test component <component name> --no-sandbox [--browser chrome] [--port <port number>]`
-To connect via chrome visit `chrome://inspect/#devices` and select the correct instance
+```html
+<forge-text-field>
+  <input type="text" id="input" />
+  <label for="input">Label</label>
+</forge-text-field>
+
+<forge-button type="raised">
+  <button type="button">Button</button>
+</forge-button>
+```
+
+### CSS
+
+Forge expects a global stylesheet to be loaded to configure the theme and typography globally across your application, as well as set up any
+supplemental global styles required by certain components.
+
+```scss
+@use '@tylertech/forge/dist/forge.css';
+```
+
+## Need help?
+
+Please feel free to reach out to us at any time, or create a GitHub issue with a question and we'll be glad to help!
