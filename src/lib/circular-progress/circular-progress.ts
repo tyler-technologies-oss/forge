@@ -45,10 +45,6 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
     this._foundation.initialize();
   }
 
-  public disconnectedCallback(): void {
-    this._foundation.disconnect();
-  }
-
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case CIRCULAR_PROGRESS_CONSTANTS.attributes.OPEN:

@@ -1,56 +1,51 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { MDCCircularProgress } from '@material/circular-progress';
-
 import { ICircularProgressComponent } from './circular-progress';
 import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 
 export interface ICircularProgressAdapter {
-  initialize(): void;
-  destroy(): void;
-  open(): void;
-  close(): void;
-  setDeterminate(value: boolean): void;
-  setProgress(value: number): void;
-  setAriaLabel(value: string): void;
+  addClass(name: string): void;
+  getDeterminateCircleAttribute(name: string): string|null;
+  hasClass(name: string): boolean;
+  removeClass(name: string): void;
+  removeAttribute(name: string): void;
+  setAttribute(name: string, value: string): void;
+  setDeterminateCircleAttribute(name: string, value: string): void;
 }
 
 export class CircularProgressAdapter implements ICircularProgressAdapter {
   private _rootElement: HTMLElement;
-  private _mdcCircularProgress: MDCCircularProgress;
+  private _determinateCircle: HTMLElement;
 
   constructor(private _component: ICircularProgressComponent) {
     this._rootElement = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
+    this._determinateCircle = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_CIRCLE);
   }
 
-  public initialize(): void {
-    this._mdcCircularProgress = new MDCCircularProgress(this._rootElement);
+  public addClass(name: string): void {
+    this._rootElement.classList.add(name);
   }
 
-  public destroy(): void {
-    this._mdcCircularProgress?.destroy();
+  public getDeterminateCircleAttribute(name: string): string | null {
+    return this._determinateCircle.getAttribute(name);
   }
 
-  public setDeterminate(value: boolean): void {
-    if (this._mdcCircularProgress) {
-      this._mdcCircularProgress.determinate = value;
-    }
+  public hasClass(name: string): boolean {
+    return this._rootElement.classList.contains(name);
   }
 
-  public setProgress(value: number): void {
-    if (this._mdcCircularProgress) {
-      this._mdcCircularProgress.progress = value;
-    }
+  public removeClass(name: string): void {
+    this._rootElement.classList.remove(name);
   }
 
-  public open(): void {
-    this._mdcCircularProgress?.open();
+  public removeAttribute(name: string): void {
+    this._rootElement.removeAttribute(name);
   }
 
-  public close(): void {
-    this._mdcCircularProgress?.close();
+  public setAttribute(name: string, value: string): void {
+    this._rootElement.setAttribute(name, value);
   }
 
-  public setAriaLabel(value: string): void {
-    this._rootElement.setAttribute('aria-label', value);
+  public setDeterminateCircleAttribute(name: string, value: string): void {
+    this._determinateCircle.setAttribute(name, value);
   }
 }

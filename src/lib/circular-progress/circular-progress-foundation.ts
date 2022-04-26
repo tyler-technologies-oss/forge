@@ -1,5 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-
+import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 import { ICircularProgressAdapter } from './circular-progress-adapter';
 
 export interface ICircularProgressFoundation extends ICustomElementFoundation {
@@ -13,35 +13,22 @@ export class CircularProgressFoundation implements ICircularProgressFoundation {
   private _open = true;
   private _determinate = false;
   private _progress = 0;
+  private _radius!: number;
 
   constructor(private _adapter: ICircularProgressAdapter) {}
 
   public initialize(): void {
-    this._adapter.initialize();
-    this._applyOpen();
-    this._applyDeterminate();
-    this._applyProgress();
-  }
+    this._open = !this._adapter.hasClass(CIRCULAR_PROGRESS_CONSTANTS.classes.CLOSED);
+    this._determinate = !this._adapter.hasClass(CIRCULAR_PROGRESS_CONSTANTS.classes.INDETERMINATE);
 
-  public disconnect(): void {
-    this._adapter.destroy();
-  }
-
-  private _applyOpen(): void {
-    if (this._open) {
-      this._adapter.open();
-    } else {
-      this._adapter.close();
+    if (this._determinate) {
+      this._adapter.setAttribute(
+        CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUENOW,
+        this._progress.toString()
+      );
     }
-  }
 
-  private _applyDeterminate(): void {
-    this._adapter.setDeterminate(this._determinate);
-  }
-
-
-  private _applyProgress(): void {
-    this._adapter.setProgress(this._progress);
+    this._radius = Number(this._adapter.getDeterminateCircleAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.RADIUS));
   }
 
   public get open(): boolean {
@@ -75,6 +62,41 @@ export class CircularProgressFoundation implements ICircularProgressFoundation {
   }
 
   public set ariaLabel(value: string) {
-    this._adapter.setAriaLabel(value);
+    this._adapter.setAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL, value);
+  }
+
+  private _applyOpen(): void {
+    if (this._open) {
+      this._adapter.removeClass(CIRCULAR_PROGRESS_CONSTANTS.classes.CLOSED);
+      this._adapter.removeAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_HIDDEN);
+    } else {
+      this._adapter.addClass(CIRCULAR_PROGRESS_CONSTANTS.classes.CLOSED);
+      this._adapter.setAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_HIDDEN, 'true');
+    }
+  }
+
+  private _applyDeterminate(): void {
+    if (this._determinate) {
+      this._adapter.removeClass(CIRCULAR_PROGRESS_CONSTANTS.classes.INDETERMINATE);
+      this._applyProgress();
+    } else {
+      this._adapter.addClass(CIRCULAR_PROGRESS_CONSTANTS.classes.INDETERMINATE);
+      this._adapter.removeAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUENOW);
+    }
+  }
+
+  private _applyProgress(): void {
+    if (this.determinate) {
+      const unfilledArcLength =
+          (1 - this.progress) * (2 * Math.PI * this._radius);
+
+      this._adapter.setDeterminateCircleAttribute(
+        CIRCULAR_PROGRESS_CONSTANTS.attributes.STROKE_DASHOFFSET, `${unfilledArcLength}`
+      );
+      this._adapter.setAttribute(
+        CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_VALUENOW,
+        this.progress.toString()
+      );
+    }
   }
 }
