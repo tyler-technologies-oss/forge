@@ -50,6 +50,12 @@
   @include field-utils.error-layout-state(select-text-line-height, $layout-state);
 }
 
+@mixin select-text-placeholder {
+  content: attr(placeholder);
+  @include mdc-theme.property(color, text-secondary-on-background);
+  font-size: 1rem;
+}
+
 @mixin dropdown-icon-core {
   display: flex;
   justify-content: center;
