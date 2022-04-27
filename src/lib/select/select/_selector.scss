@@ -28,6 +28,12 @@
       @include base.select-text-line-height(dense, default);
     }
   }
+  // Placeholder
+  .forge-select__selected-text {
+    &:empty::before {
+      @include base.select-text-placeholder;
+    }
+  }
 }
 
 @mixin dropdown-icon {
