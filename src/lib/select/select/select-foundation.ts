@@ -231,7 +231,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   /** Updates the state of the component to not contain focus. */
   private _setBlurred(): void {
     this._adapter.removeRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-    if (!this._selectedValues.length && !this._placeholder.length) {
+    if (!this._selectedValues.length && !this._placeholder?.length) {
       this._floatLabel(false);
     }
   }
@@ -240,7 +240,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   protected _reset(): void {
     super._reset();
     this._adapter.setSelectedText('');
-    this._floatLabel(!this._placeholder.length);
+    this._floatLabel(!this._placeholder?.length);
   }
 
   private _updateLabel(): void {
