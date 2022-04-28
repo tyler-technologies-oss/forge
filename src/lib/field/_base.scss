@@ -602,7 +602,7 @@
 @mixin placeholder {
   &::placeholder {
     @include mdc-theme.property(color, text-secondary-on-background);
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 
   &:invalid {
