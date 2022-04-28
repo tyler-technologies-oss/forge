@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 
 @mixin provide-theme($theme) {

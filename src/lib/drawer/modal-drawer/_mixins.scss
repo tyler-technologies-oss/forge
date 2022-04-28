@@ -2,7 +2,7 @@
 @use '@material/drawer/mixins' as mdc-drawer-mixins;
 @use '@material/drawer/variables' as mdc-drawer-variables;
 @use '../base/mixins' as base-mixins;
-@use '../../theme/theme';
+@use '../../theme';
 
 @mixin core-styles() {
   @include base-mixins.core-styles;

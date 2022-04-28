@@ -3,7 +3,7 @@
 @use '@material/typography/typography' as mdc-typography;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/animation/functions' as mdc-animation;
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 
 @mixin host() {

@@ -3,7 +3,7 @@
 @use '@material/elevation/elevation-theme' as mdc-elevation-theme;
 @use '@material/typography/typography' as mdc-typography;
 @use '../utils/mixins-media';
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 
 @mixin provide-theme($theme) {

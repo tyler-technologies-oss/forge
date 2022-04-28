@@ -5,7 +5,7 @@
 @use '@material/typography/typography' as mdc-typography;
 @use '../typography/mixins' as typography;
 @use '../utils/mixins' as utils;
-@use '../theme/theme';
+@use '../theme';
 @use '../utils/mixins-media';
 @use './variables';
 

@@ -7,9 +7,8 @@
 @use '@material/icon-button/mixins' as mdc-icon-button-mixins;
 @use '@material/top-app-bar/mixins' as mdc-top-app-bar-mixins;
 @use '@material/top-app-bar/variables' as mdc-top-app-bar-variables;
-@use '../theme/theme';
-@use '../theme/theme-values';
-@use './variables';;
+@use '../theme';
+@use './variables';
 
 @mixin provide-theme($theme) {
   @include theme.theme-properties(app-bar, $theme, variables.$theme-values);

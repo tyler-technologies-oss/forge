@@ -35,7 +35,7 @@
 @use './checkbox-custom-properties' as checkbox-custom-properties;
 @use '../theme/custom-properties' as custom-properties;
 @use '../theme/theme-values' as theme-values;
-@use '../theme/theme' as theme;
+@use '../theme' as theme;
 
 $baseline-theme-color: tertiary !default; // FORGE(modify): use forge-specific theme style
 $mark-color: text-primary-on-dark !default; // FORGE(modify): use MDC theme style instead of static color

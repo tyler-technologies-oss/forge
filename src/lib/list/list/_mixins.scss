@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
 @use '@material/typography/typography' as mdc-typography;
-@use '../../theme/theme';
+@use '../../theme';
 
 @mixin core-styles() {
   .forge-list {

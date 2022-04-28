@@ -31,7 +31,7 @@
 @use './button-text';
 @use './button-text-theme';
 @use './button-shared-theme';
-@use '../theme/theme';
+@use '../theme';
 
 @mixin styles($query: mdc-feature-targeting.all()) {
   @include static-styles($query: $query);

@@ -2,7 +2,7 @@
 @use '@material/card/mixins' as mdc-card-mixins;
 @use '@material/card/variables' as mdc-card-variables;
 @use '../utils/variables-grid';
-@use '../theme/theme';
+@use '../theme';
 @use '../utils/functions-grid';
 @use '../utils/mixins-flex';
 @use './variables';

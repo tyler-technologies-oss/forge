@@ -1,6 +1,6 @@
 @use '@material/animation/functions' as mdc-animation;
 @use '../utils/mixins' as utils-mixins;
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 
 @mixin provide-theme($theme) {

@@ -2,7 +2,7 @@
 @use '@material/elevation/elevation-theme' as mdc-elevation-theme;
 @use '@material/typography/typography' as mdc-typography;
 @use './variables';
-@use '../theme/theme';
+@use '../theme';
 
 @mixin provide-theme($theme) {
   @include theme.theme-properties(badge, $theme, variables.$theme-values);
