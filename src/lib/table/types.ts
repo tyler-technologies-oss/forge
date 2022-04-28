@@ -62,7 +62,7 @@ export interface IColumnConfiguration {
   headerCellStyle?: Partial<CSSStyleDeclaration>;
   resizable?: boolean;
   columnSpan?: 'all' | number;
-  propagateCellTemplateClick?: boolean;
+  stopCellTemplateClickPropagation?: boolean;
 }
 
 export interface ITableSelectEventData<T = any> {
@@ -170,5 +170,5 @@ export interface ITableResizeEventDescriptor {
 
 export interface ITableTemplateBuilderResult {
   content: HTMLElement | string;
-  propagateClick?: boolean;
+  stopClickPropagation?: boolean;
 }

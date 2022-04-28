@@ -726,17 +726,14 @@ export class TableFoundation implements ITableFoundation {
     const composedPath = getEventPath(evt);
     const composedElements = composedPath.filter(node => node.nodeType === 1);
     const customCellTemplateElement = composedElements.find(el => el.hasAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE));
-    const stopClickPropagation = customCellTemplateElement && !customCellTemplateElement.hasAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE_PROPAGATE);
+    const stopClickPropagation = customCellTemplateElement && customCellTemplateElement.hasAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION);
     if (stopClickPropagation) {
-      return; // We ignore click events that bubble from custom templates, unless configured to allow
+      return; // We ignore click events that bubble from custom templates if they were configured to stop propagation
     }
 
-    const rowSelectedInfo = this._getSelectedRowFromEvent(evt);
-    const data: ITableRowClickEventData = {
-      index: rowSelectedInfo.index,
-      data: rowSelectedInfo.data
-    };
-    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.ROW_CLICK, data, true, false);
+    const { index, data } = this._getSelectedRowFromEvent(evt);
+    const evtData: ITableRowClickEventData = { index, data };
+    this._adapter.emitHostEvent(TABLE_CONSTANTS.events.ROW_CLICK, evtData, true, false);
   }
 
   /** Handles a row being double clicked. */
