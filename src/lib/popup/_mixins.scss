@@ -1,7 +1,7 @@
 @use '@material/animation/animation' as mdc-animation;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/menu-surface/mixins' as mdc-menu-surface-mixins;
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 
 @mixin host() {

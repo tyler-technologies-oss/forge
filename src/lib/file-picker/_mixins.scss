@@ -2,7 +2,7 @@
 @use '@material/typography/typography' as mdc-typography;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/theme/theme-color' as mdc-theme-color;
-@use '../theme/theme';
+@use '../theme';
 @use '../theme/theme-values';
 @use '../typography/mixins' as typography-mixins;
 @use '../field/base' as field-base;

@@ -3,7 +3,7 @@
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/typography' as mdc-typography;
 @use '@material/rtl/rtl' as mdc-rtl;
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 @use './utils';
 @use '../floating-label/mixins' as floating-label-mixins;

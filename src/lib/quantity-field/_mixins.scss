@@ -1,6 +1,6 @@
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/typography/typography' as mdc-typography;
-@use '../theme/theme';
+@use '../theme';
 
 @mixin core-styles() {
   .forge-quantity-field {

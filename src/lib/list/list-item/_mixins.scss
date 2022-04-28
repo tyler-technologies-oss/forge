@@ -2,7 +2,7 @@
 @use '@material/rtl/rtl' as mdc-rtl;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/typography' as mdc-typography;
-@use '../../theme/theme';
+@use '../../theme';
 @use '@material/ripple/ripple' as mdc-ripple;
 @use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '../../typography/mixins' as typography-mixins;
