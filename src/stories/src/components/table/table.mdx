@@ -32,25 +32,21 @@ Using the component in the HTML markup is simple. Just add the following HTML:
 
 This alone won't render anything, but with a little configuration from JavaScript we can setup a table with data easily.
 
-In the example code below, we are getting a reference to the `forge-table` custom element, and then we set the `data` and
-`columnConfigurations` properties.
+In the example code below, we are getting a reference to the `forge-table` custom element, and then we set the `data` and
+`columnConfigurations` properties.
 
 When those two properties are both set, the table will render the rows of data.
 
-<LiveDemo 
-fullWidth 
-layout={"column"} 
-codeHtml={TableDefaultHtml()} 
-codeTs={TableDefaultTs()}>
-  <TableDemo/>
+<LiveDemo fullWidth layout="column" codeHtml={TableDefaultHtml()} codeTs={TableDefaultTs()}>
+  <TableDemo />
 </LiveDemo>
 
 
 ### Using column filters
 
-To add column filters you will need to specify a `filterDelegate` for each column that needs it. You can use the built-in component delegate classes (see example below) for the common filter input types, or you can build your own delegate class that represents the component you would like to render in the filter cell.
+To add column filters you will need to specify a `filterDelegate` for each column that needs it. You can use the built-in component delegate classes (see example below) for the common filter input types, or you can build your own delegate class that represents the component you would like to render in the filter cell.
 
-A component delegate is a flexible API that allows you to define a class that extends an `AbstractComponentDelegate`. This class defines a common interface to use for dynamic components that require the ability to get/set values, set invalid, disabled, required... etc. You can then communicate with your component through this delegate instance.
+A component delegate is a flexible API that allows you to define a class that extends an `AbstractComponentDelegate`. This class defines a common interface to use for dynamic components that require the ability to get/set values, set invalid, disabled, required... etc. You can then communicate with your component through this delegate instance.
 
 ```ts
 import { TextFieldComponentDelegate, SelectComponentDelegate } from '@tylertech/forge';
@@ -539,7 +535,7 @@ interface IColumnConfiguration {
   headerCellStyle?: Partial<CSSStyleDeclaration>;
   resizable?: boolean;
   columnSpan?: 'all' | number;
-  propagateCellTemplateClick?: boolean;
+  stopCellTemplateClickPropagation?: boolean;
 }
 ```
 
@@ -733,10 +729,9 @@ interface ITableResizeEventDescriptor {
 ```ts
 interface ITableTemplateBuilderResult {
   content: HTMLElement | string;
-  propagateClick?: boolean;
+  stopClickPropagation?: boolean;
 }
 ```
-
 
 </PageSection>
 

@@ -373,7 +373,7 @@ export class TableUtils {
       if (columnConfig.template && typeof columnConfig.template === 'function') {
         const rowData = configuration.data[rowIndex] ? configuration.data[rowIndex].data : undefined;
         Promise.resolve(columnConfig.template(rowIndex, div, rowData)).then(result => {
-          const config = isTemplateResultObject(result) ? result : { content: result, propagateClick: columnConfig.propagateCellTemplateClick } as ITableTemplateBuilderResult;
+          const config = isTemplateResultObject(result) ? result : { content: result, stopClickPropagation: columnConfig.stopCellTemplateClickPropagation } as ITableTemplateBuilderResult;
           
           if (!config.content) {
             return;
@@ -387,8 +387,8 @@ export class TableUtils {
 
           div.setAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE, '');
 
-          if (config.propagateClick) {
-            div.setAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE_PROPAGATE, '');
+          if (config.stopClickPropagation) {
+            div.setAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION, '');
           }
         });
       } else if (columnConfig.property) {

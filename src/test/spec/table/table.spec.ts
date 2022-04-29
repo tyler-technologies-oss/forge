@@ -449,12 +449,36 @@ describe('TableComponent', function(this: ITestContext) {
       expect(clickListener).not.toHaveBeenCalled();
     });
 
-    it('should not emit click event on a row when a cell is clicked with a custom template', async function(this: ITestContext) {
+    it('should emit click event on a row when a cell is clicked with a custom template', async function(this: ITestContext) {
       this.context = setupTestContext();
       const button = document.createElement('button');
       button.textContent = 'Test';
 
       columns.push({ template: () => button });
+
+      this.context.component.allowRowClick = true;
+      this.context.component.data = data;
+      this.context.component.columnConfigurations = columns;
+      const tableFoundation = this.context.component['_foundation'];
+
+      const clickListener = jasmine.createSpy('callback');
+      const rowClickSpy = spyOn(tableFoundation, '_onRowClick').and.callThrough();
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.ROW_CLICK, clickListener);
+
+      await tick();
+
+      button.dispatchEvent(new Event('click', { bubbles: true }));
+
+      expect(rowClickSpy).toHaveBeenCalledTimes(1);
+      expect(clickListener).toHaveBeenCalled();
+    });
+
+    it('should not emit row click event when custom template is configured to stop click propagation', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      const button = document.createElement('button');
+      button.textContent = 'Test';
+
+      columns.push({ template: () => button, stopCellTemplateClickPropagation: true });
 
       this.context.component.allowRowClick = true;
       this.context.component.data = data;
