@@ -9,7 +9,7 @@ export interface IFieldFoundation extends ICustomElementFoundation {
   shape: FieldShapeType;
   invalid: boolean;
   required: boolean;
-  floatLabel(value: boolean): void;
+  floatLabel(value: boolean, alwaysFloat?: boolean): void;
 }
 
 export class FieldFoundation {
