@@ -67,7 +67,7 @@ jobs:
         id: detect-release
         run: |
           ## We use `auto version` to calculate whether this is a release build or not
-          result=`npx auto version`
+          result=`npx auto version -vv`
 
           if [[ "$result" =~ ^(major|minor|patch|release)$ ]];
           then
@@ -79,64 +79,64 @@ jobs:
       is-release: ${{ steps.detect-release.outputs.release }}
 
   ## This job will run on non-release builds for general CI validation
-  build:
-    name: Build and Test
-    needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.9.0
-    if: ${{ needs.wf-config.outputs.is-release == 'false' }}
-    with:
-      TESTS_ENABLED: true ## We always run tests on general CI validation build
-    secrets:
-      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
-      ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
+  # build:
+  #   name: Build and Test
+  #   needs: wf-config
+  #   uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.9.0
+  #   if: ${{ needs.wf-config.outputs.is-release == 'false' }}
+  #   with:
+  #     TESTS_ENABLED: true ## We always run tests on general CI validation build
+  #   secrets:
+  #     ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
+  #     ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
 
-  ## This job will run on release builds when publishing a new version
-  build-and-release:
-    name: Build and Release
-    needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.9.0
-    if: ${{ needs.wf-config.outputs.is-release == 'true' }}
-    with:
-      PRODUCTION_RELEASE: true
-      NODE_VERSION: "14"
-      TESTS_ENABLED: false ## We do not run tests on production builds since the tests were required to pass when merged from PRs
-      RELEASE_ENABLED: true
-      BUILD_NPM_SCRIPT: "ci:build:all" ## We build the npm package and ALL static component bundles (this can take some time)
-      PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
-      PACKAGE_ASSETS_ENABLED: ${{ needs.wf-config.outputs.is-release == 'true' }}
-    secrets:
-      GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
-      GITHUB_APP_KEY: ${{ secrets.TCP_AUTOMATION_APP_KEY }}
-      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
-      ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
+  # ## This job will run on release builds when publishing a new version
+  # build-and-release:
+  #   name: Build and Release
+  #   needs: wf-config
+  #   uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.9.0
+  #   if: ${{ needs.wf-config.outputs.is-release == 'true' }}
+  #   with:
+  #     PRODUCTION_RELEASE: true
+  #     NODE_VERSION: "14"
+  #     TESTS_ENABLED: false ## We do not run tests on production builds since the tests were required to pass when merged from PRs
+  #     RELEASE_ENABLED: true
+  #     BUILD_NPM_SCRIPT: "ci:build:all" ## We build the npm package and ALL static component bundles (this can take some time)
+  #     PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
+  #     PACKAGE_ASSETS_ENABLED: ${{ needs.wf-config.outputs.is-release == 'true' }}
+  #   secrets:
+  #     GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
+  #     GITHUB_APP_KEY: ${{ secrets.TCP_AUTOMATION_APP_KEY }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
+  #     ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
 
-  ## This job will run only on release builds
-  publish-cdn:
-    name: Publish Components to CDN
-    needs: [wf-config, build-and-release]
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.9.0
-    if: ${{ needs.wf-config.outputs.is-release == 'true' }}
-    with:
-      AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
-      AWS_REGION: "us-east-1"
-      AWS_S3_BUCKET_NAME: "tylerforge-s3assets51e60022-1ols9p4m4dr5y"
-      AWS_CLOUDFRONT_DISTRIBUTION_ID: "EDE7DVFI1X60B"
-      MAX_CLOUDFRONT_INVALIDATIONS: 25
+  # ## This job will run only on release builds
+  # publish-cdn:
+  #   name: Publish Components to CDN
+  #   needs: [wf-config, build-and-release]
+  #   uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.9.0
+  #   if: ${{ needs.wf-config.outputs.is-release == 'true' }}
+  #   with:
+  #     AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
+  #     AWS_REGION: "us-east-1"
+  #     AWS_S3_BUCKET_NAME: "tylerforge-s3assets51e60022-1ols9p4m4dr5y"
+  #     AWS_CLOUDFRONT_DISTRIBUTION_ID: "EDE7DVFI1X60B"
+  #     MAX_CLOUDFRONT_INVALIDATIONS: 25
 
-  ## We run this job on every build regardless of release status
-  deploy-storybook:
-    name: Deploy Storybook
-    needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
-    with:
-      PRODUCTION_RELEASE: true
-      BUILD_DIRECTORY: dist/storybook
-      BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
-      BUILD_NPM_SCRIPT: "ci:build-storybook"
-      PR_COMMENT_HEADER: "View Storybook Deployment"
-    secrets:
-      GITHUB_DEPLOY_TOKEN: ${{ secrets.CORPDEV_GITHUB_ACCESS_TOKEN }}
-      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
+  # ## We run this job on every build regardless of release status
+  # deploy-storybook:
+  #   name: Deploy Storybook
+  #   needs: wf-config
+  #   uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
+  #   with:
+  #     PRODUCTION_RELEASE: true
+  #     BUILD_DIRECTORY: dist/storybook
+  #     BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
+  #     BUILD_NPM_SCRIPT: "ci:build-storybook"
+  #     PR_COMMENT_HEADER: "View Storybook Deployment"
+  #   secrets:
+  #     GITHUB_DEPLOY_TOKEN: ${{ secrets.CORPDEV_GITHUB_ACCESS_TOKEN }}
+  #     ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+  #     ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
