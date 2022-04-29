@@ -52,7 +52,6 @@ jobs:
   ## This job will run on release builds when publishing a new version
   build-and-release:
     name: Build and Release
-    id: build-and-release
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.9.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
