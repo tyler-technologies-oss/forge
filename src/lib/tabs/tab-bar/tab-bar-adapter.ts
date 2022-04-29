@@ -207,8 +207,8 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   }
 
   public isScrolledEnd(): boolean {
-    const position = this._tabScrollAreaElement.scrollLeft;
-    const scrollWidth = this._tabScrollContentElement.scrollWidth - this._tabScrollElement.offsetWidth;
+    const position = Math.round(this._tabScrollAreaElement.scrollLeft);
+    const scrollWidth = Math.round(this._tabScrollContentElement.scrollWidth - this._tabScrollElement.offsetWidth);
     return position >= scrollWidth;
   }
 
