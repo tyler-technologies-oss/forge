@@ -10,6 +10,11 @@ on:
     branches:
       - master
     paths:
+      - 'forge.json'
+      - '.eslintrc.json'
+      - '.stylelintrc'
+      - 'auto.config.json'
+      - '.github/workflows/**/*'
       - 'src/**/*'
 
 concurrency: build-release-${{ github.ref }}
