@@ -20,6 +20,40 @@ jobs:
     name: Workflow Configuration
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Cache Dependencies
+        id: cache
+        if: ${{ inputs.CACHE_ENABLED }}
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        env:
+          ARTIFACTORY_TOKEN: "${{ secrets.ARTIFACTORY_TOKEN }}"
+          ARTIFACTORY_USERNAME: "${{ secrets.ARTIFACTORY_USERNAME }}"
+        with:
+          node-version: ${{ inputs.NODE_VERSION }}
+
+      - name: Install
+        id: install
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+          ARTIFACTORY_TOKEN: "${{ secrets.ARTIFACTORY_TOKEN }}"
+          ARTIFACTORY_USERNAME: "${{ secrets.ARTIFACTORY_USERNAME }}"
+        run: npm ci
+
       ## Determine if this is a release build or not, which will affect which dependent jobs run below
       - name: Detect release status
         id: detect-release
