@@ -78,7 +78,7 @@ const attributes = {
   // Internal
   CHECKBOX_TYPE: 'forge-checkbox-type',
   CUSTOM_CELL_TEMPLATE: 'data-cell-template',
-  CUSTOM_CELL_TEMPLATE_PROPAGATE: 'data-cell-template-propagate'
+  CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION: 'data-cell-template-stop-propagation'
 };
 
 const events = {

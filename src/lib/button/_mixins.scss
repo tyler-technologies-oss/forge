@@ -11,7 +11,7 @@
 @use '@material/theme/theme';
 @use '@material/theme/color-palette';
 
-@use '../theme/theme' as forge-theme;
+@use '../theme' as forge-theme;
 
 @mixin core-styles() {
   .forge-button {

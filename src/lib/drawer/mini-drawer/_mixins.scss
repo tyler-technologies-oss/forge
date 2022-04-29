@@ -2,7 +2,7 @@
 @use './variables';
 @use '../base/mixins' as base-mixins;
 @use '../base/variables' as base-variables;
-@use '../../theme/theme';
+@use '../../theme';
 
 @mixin core-styles() {
   @include base-mixins.core-styles;

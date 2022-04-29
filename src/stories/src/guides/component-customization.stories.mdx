@@ -16,9 +16,8 @@ There are many ways that Forge components can be customized. Whether you are loo
 within the Shadow DOM, or looking to extend a component with new functionality you will find information about how to go
 about that within this guide.
 
-Certain aspects of this level of customization may require you to use Forge as a library itself
-to base your own component library from, and others will be supported natively within the library to allow for customization
-within your application.
+Certain aspects of this level of customization may require you to use Forge as a library itself to base your own component
+library from, and others will be supported natively within the library to allow for customization within your application.
 
 > Before reading this guide, it may be worthwhile to familiarize yourself with the [component architecture](?path=/story/guides-component-architecture--page).
 
@@ -40,10 +39,51 @@ All components within Forge support theming at the core. To view detailed inform
 
 ## Structural customization
 
+Forge is a Web Component-based project, and therfore provides HTML slots and CSS hooks for customizing how components are rendered.
+
 ### CSS
 
+When attempting to customize a component via CSS, you will be using either [CSS Custom Properties][mdn-css-vars] or [CSS Shadow Parts][mdn-css-shadow-parts].
+Both of these CSS-based solutions will give you access to changing how the internals of a component are rendered without adjusting any functionality. This
+is the preferred approach for customization at the time of writing because it is the least intrusive and the least likely to cause adverse side effects.
+
+For example, Forge provides many CSS custom properties from within specific components to help declaritively adjust certain internal styles:
+
+```scss
+forge-text-field {
+  --forge-text-field-height: 100px;
+}
+```
+
+If you want to have complete control over any of the internal styles within a component, that's where CSS Shadow Parts come in. This feature allows you to target
+any named "part" of a component (any element within the components' Shadow DOM that has a `part` attribute applied) and set any CSS styles on it that you wish:
+
+```scss
+forge-text-field::part(root) {
+  height: 100px;
+  background-color: red;
+  display: grid;
+}
+```
 
 ### HTML
+
+You can also customize components via HTML using the provided HTML [slot][mdn-slots] elements within the Shadow DOM of a component. This allows for you to project
+your own content into specifically named locations within the internal template of a component. Typically a component will expect certain elements to be applied
+within these slots, but this also allows for you to potentially customize the usage to your needs if you see fit.
+
+```html
+<forge-text-field>
+  <label for="input">Label</label>
+  <input type="text" id="input" />
+
+  <!-- Render a custom element into a slot if desired -->
+  <forge-badge slot="helper-text">Custom helper text</forge-badge>
+</forge-text-field>
+```
+
+So as you can see, you can customize anything you want. Now, would you typically want to do that? Probably not since it doesn't follow proper design guidance, but
+these examples show you how you might be able to customize things and how easy that can be achieved.
 
 </PageSection>
 
@@ -53,8 +93,89 @@ All components within Forge support theming at the core. To view detailed inform
 
 ## Functional customization
 
+Forge does not provide a well defined extension API or plugin system at this time. It is definitely something that is on our roadmap to improve the
+library as a whole in the future though.
+
+That doesn't mean you can't start hacking away now though! As seen in the [component architecture][forge-component-arch] docs, the component library
+is separated into many different classes that are inteneded to allow for downstream consumers to build on top of. The component classes we provide
+for [custom elements](mdn-custom-elements) currently already consume the foundation and adapter classes. This is a great example of how you could
+provide your own custom element classes that utilize and extend the existing foundation and adapter classes to override and provide your own
+custom functionality!
+
 ### Extending components
+
+When extending a component, it's expected that you provide a component class with your own public API instead of extending ours. From there you can
+instantiate an instance of a custom foundation and custom adapter to take over the logic. This would also allow you to potentially even write
+framework-specific components that reuse/override the existing foundation logic by providing a custom framework-specific component wrapper and a custom
+adapter class that knows how to interact with the framework itself to read/write from/to the DOM.
+
+Below is an example of how you might provide your own custom element class:
+
+```typescript
+class MyCustomForgeComponent extends HTMLElement {
+  private _foundation: MyCustomForgeComponentFoundation;
+
+  constructor() {
+    this._foundation = new MyCustomForgeComponentFoundation(new MyCustomForgeComponentAdapter(this));
+  }
+
+  public get size(): number {
+    return this._foundation.size;
+  }
+  public set size(value: number) {
+    this._foundation.size = value;
+  }
+}
+```
+
+Now you can define a foundation that potentially extends an existing Forge foundation:
+
+```typescript
+class MyCustomAvatarFoundation extends AvatarFoundation {
+  private _size: number;
+
+  constructor(private _adapter: MyCustomAvatarAdapter) {
+    super(_adapter);
+  }
+
+  public get size(): number {
+    return this._size;
+  }
+  public set size(value: number) {
+    if (this._size !== value) {
+      this._size = value;
+      this._adapter.setSize(this._size);
+    }
+  }
+}
+```
+
+> As you can see, we extended the Forge `AvatarFoundation` keep all of the existing functionality, but we added a new `size` property.
+
+and finally a custom adapter class:
+
+```typescript
+class MyCustomAvatarFoundation extends AvatarAdapter {
+  constructor(private _element: MyCustomAvatar) {
+    super(_element);
+  }
+
+  public setSize(value: number): void {
+    // Update the "size" within the DOM template
+  }
+}
+```
+
+Currently we feel that this pattern is great for adding new functionality, but when it comes modifying existing functionality, we think we can improve
+this pattern by structuring our code differently and by providing a utility API to make this easier and more straighforward. We will be introducing this
+in the future.
 
 </PageSection>
 
 --- 
+
+[mdn-css-vars]: https://developer.mozilla.org/en-US/docs/Web/CSS/--*
+[mdn-css-shadow-parts]: https://developer.mozilla.org/en-US/docs/Web/CSS/--*
+[mdn-slots]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot
+[mdn-custom-elements]: https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
+[forge-component-arch]: ?path=/story/guides-component-architecture--page

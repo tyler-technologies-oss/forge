@@ -135,7 +135,7 @@
   var columnConfigurations = [
     {
       header: 'Player Name',
-      property: 'Name',
+      template: (index, parent, { Name }) => Name,
       sortable: true,
       initialSort: { direction: 'DESC', sortOrder: 1 },
       headerTemplate: function () { return Promise.resolve('<span>Playa Names</span>') },
@@ -164,7 +164,7 @@
       filterDebounceTime: false,
       filterDelegate: new forge.SelectComponentDelegate({ props: { options: positionOptions, placeholder: 'Filter position...' }})
     },
-    { template: getMenuColumnTemplate, resizable: false, align: forge.CellAlign.Center, headerCellStyle: { width: '50px' } },
+    { template: getMenuColumnTemplate, resizable: false, align: forge.CellAlign.Center, headerCellStyle: { width: '50px' }, stopCellTemplateClickPropagation: true },
     { template: getExpandRowColumnTemplate, resizable: false, align: forge.CellAlign.Center, headerCellStyle: { width: '50px' } }
   ];
 
@@ -320,7 +320,10 @@
       }
     });
 
-    return iconButton;
+    return { 
+      content: iconButton,
+      stopClickPropagation: true
+    };
   }
 
   function buildRowTemplate(rowIndex) {

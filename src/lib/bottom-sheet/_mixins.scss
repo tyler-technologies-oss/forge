@@ -2,7 +2,7 @@
 @use '@material/elevation/elevation-theme' as mdc-elevation-theme;
 @use '@material/animation/variables' as mdc-animation-variables;
 @use '@material/shape/shape' as mdc-shape;
-@use '../theme/theme';
+@use '../theme';
 @use '../typography/mixins' as typopgraphy-mixins;
 @use '../utils/mixins-media' as media-mixins;
 @use './variables';

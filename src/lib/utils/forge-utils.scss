@@ -1,8 +1,7 @@
 @use '@material/typography/typography' as mdc-typography;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/elevation/elevation-theme' as mdc-elevation-theme;
-@use '../theme/theme';
-@use '../theme/theme-values';
+@use '../theme';
 @use './mixins';
 
 .forge--hidden {

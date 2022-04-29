@@ -28,7 +28,7 @@
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/density/variables' as mdc-density-variables;
 @use '@material/theme/theme-color' as mdc-theme-color;
-@use '../theme/theme';
+@use '../theme';
 
 $ripple-size: 40px !default;
 $icon-size: 20px !default;

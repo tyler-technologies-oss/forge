@@ -114,7 +114,7 @@ Forge exposes a mixin called `provide-theme`, and this allows you to pass in the
 In the example below, you will see that we are overriding the `primary`, `secondary`, and `tertiary` theme entries with our custom color values.
 
 ```sass
-@use '@tylertech/forge/styles/theme/theme' as forge-theme;
+@use '@tylertech/forge/styles/theme' as forge-theme;
 
 :root {
   @include forge-theme.provide-theme((
@@ -231,8 +231,7 @@ If we dig down a bit deeper into the `theme-properties` mixin within the `_theme
 mixins ourselves to generate this theme automatically by providing our preset dark color values via maps:
 
 ```scss
-@use '@tylertech/forge/styles/theme/theme';
-@use '@tylertech/forge/styles/theme/theme-values';
+@use '@tylertech/forge/styles/theme';
 @use '@tylertech/forge/styles/app-bar/mixins' as app-bar-mixins;
 @use '@tylertech/forge/styles/app-bar/variables' as app-bar-variables;
 @use '@tylertech/forge/styles/backdrop/mixins' as backdrop-mixins;
@@ -259,7 +258,7 @@ mixins ourselves to generate this theme automatically by providing our preset da
 ///
 @mixin theme-properties() {
   /// Global MDC and Forge theme properties
-  @include theme.provide-theme(theme-values.$property-values-dark);
+  @include theme.provide-theme(theme.$property-values-dark);
 
   /// Component-specific Forge theme properties
   @include app-bar-mixins.provide-theme(app-bar-variables.$theme-values-dark);

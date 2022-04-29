@@ -1,66 +1,95 @@
 # Forge Components
 
-Forge is a project that produces framework-agnostic Web Components for the browser. The components adhere to the standard W3C Web Components spec, and work seamlessly with the various front-end frameworks such as Angular, Vue, and React, as well as no framework at all.
+Forge is a framework-agnostic library of Web Components adhering to [W3C Web Component Spec][2] and the [Forge Design System][1]. Originally derived from Google's [Material Components Web][3] project, this project aims to create a consistent UI/UX across applications regardless of choice in front-end frameworks. Theming is a core part of the library such that competing design objectives can be achieved while still providing UI/UX cohesion across product catalogs. Please visit the [Forge Design System website][1] for additional guidance and documentation.
 
-The goal of this project is to create a set of high quality UI components for the browser platform that implement the Forge design system. The components can be shared across products and applications without requiring a specific version of a framework. This will help applications present themselves and function consistently, regardless of underlying architecture/technology.
+## Important links
 
-The components within this library derive from Google's [Material Components Web](https://material-components.github.io/material-components-web-catalog/) project. This ensures that we are strictly following material guidelines while allowing us the flexibility to design for the specific needs of Tyler. With that being said, theming is built-in to the core of the library to make it easy to adapt design customizations, as well as use with other design systems as a whole.
+- [Storybook][4]
+- [Contributing][5]
+- [Changelog][6]
+- [Forge design system][1]
 
-To view more detailed information about the project, as well as the components that are currently available, please visit the [Forge design system website](https://forge.tylertech.com/).
+## Getting started
 
-**[Storybook](https://tyler-technologies.github.io/forge/master/)**
+The component library is distributed on npm and as static assets on the Forge CDN.
 
-## Developing inside a container
+### Using via NPM
 
-This project supports vscode DevContainers to help streamline and standardize the local development process. To get started with DevContainers you'll need to ensure you're running the following on your local machine:
+To install the library from npm:
 
-- Docker
-- Visual Studio Code
-- VSCode Remote Development extension pack.
-- GITHUB_TOKEN environmental variable configured.
+```bash
+npm install @tylertech/forge
+```
 
-See these [getting-started](https://code.visualstudio.com/docs/remote/containers#_installation) instructions for additional details.
+> This package supports ES modules to ensure minimal application bundles.
 
-Once setup, VSCode should prompt with a notification that a DevContainer config file is recognized and suggest re-opening within a container.
+You can then import the component definition functions to register them with the browser:
 
-You can create a new token `GITHUB_TOKEN` at https://github.com/settings/tokens with the `read:packages`. This needs to be added to your environment through your .bashrc, .zshrc or windows path environment settings. 
+```typescript
+import { defineTextFieldComponent, defineButtonComponent } from '@tylertech/forge';
 
-![devcontainer_notification](docs/img/devcontainer_notification.png)
+defineTextFieldComponent();
+defineButtonComponent();
+```
 
-### Manually open current project in container
-1. open project folder in vscode
-1. open in container
-1. wait for devcontainer to build (~5 minutes)
-1. Serve the demo site to test the icons: `npm run start`
-1. To build the npm package, run the following: `npm run build`
+### Using via CDN
 
-![Alt text](/docs/gifs/open_in_container.gif "open project in container")
+The Forge CDN can provide components directly.
 
-For more information on starting a development environment within a container see [Developing inside a Container](https://code.visualstudio.com/docs/remote/containers)
+As an example, the text-field component can be loaded directly like this:
 
-### DevContainers Performance Notes
+```html
+<!-- Some components (such as button) require the use of a global stylesheet -->
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/button/forge-button.css">
 
-When opening this project in a DevContainer on a Windows or Mac operating system, you may experience poor disk performance due to their use of bind mounts. See the following article for additional information and tips on how you might [improve disk performance](https://code.visualstudio.com/remote/advancedcontainers/improve-performance).
+<!-- Load the JavaScript bundle for each component you need. -->
+<script src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/text-field/text-field.js"></script>
+<script src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/button/button.js"></script>
 
-In situations where you're unable to make use of the WSL2 filesystem (Windows), or where you're using macOS, you'll experience the best performance by making use of the **Remote-Containers: Clone Repository in Container Volume** command within VSCode. See this [article](https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-clone-repository-in-container-volume) for more information.
+<!-- Register the components with the browser. -->
+<script>
+  // All components are added under the `window.Forge.<componentName>` global variable
+  window.Forge.textField.defineTextFieldComponent();
+  window.Forge.button.defineButtonComponent();
+</script>
+```
 
-### Clone in containers
-1. open vscode
-1. clone repository in container
-1. wait for devcontainer to build (~5 minutes)
-1. Serve the demo site to test the icons: `npm run start`
-1. To build the npm package, run the following: `npm run build`
+### HTML
 
-![Alt text](/docs/gifs/clone_in_containers.gif "clone repository in container")
+Now the text-field component can be used anywhere in the html:
 
-> note: if you make any package changes and want them to persist you may need to rebuild the container
+```html
+<forge-text-field>
+  <input type="text" id="input" />
+  <label for="input">Label</label>
+</forge-text-field>
 
-## Testing
+<forge-button type="raised">
+  <button type="button">Button</button>
+</forge-button>
+```
 
-To run tests over the whole project, use command: `npm run test`.
-To run tests over a single component, use command: `forge test component <component name> [--browser chrome] [--port <port number>]`
+### CSS
 
-### Testing in a container
-To run tests over the whole project, use command: `npm run test:container`.
-To run tests over a single component, use command: `forge test component <component name> --no-sandbox [--browser chrome] [--port <port number>]`
-To connect via chrome visit `chrome://inspect/#devices` and select the correct instance
+Forge expects a global stylesheet to be loaded to configure the theme and typography globally across your application, and some components may require additional css.
+
+```scss
+@use '@tylertech/forge/dist/forge.css';
+```
+
+Additionally apply the `forge-typography` class to a root element (typically the `<body>`):
+
+```html
+<body class="forge-typography">
+```
+
+## Need help?
+
+Please create a GitHub issue with any questions.
+
+[1]: https://forge.tylertech.com/
+[2]: https://www.w3.org/wiki/WebComponents/
+[3]: https://material-components.github.io/material-components-web-catalog/
+[4]: https://tyler-technologies.github.io/forge/master/
+[5]: https://github.com/tyler-technologies/forge/blob/master/CONTRIBUTING.md
+[6]: https://github.com/tyler-technologies/forge/blob/master/CHANGELOG.md
