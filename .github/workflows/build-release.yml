@@ -29,7 +29,6 @@ jobs:
 
       - name: Cache Dependencies
         id: cache
-        if: ${{ inputs.CACHE_ENABLED }}
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -47,7 +46,7 @@ jobs:
           ARTIFACTORY_TOKEN: "${{ secrets.ARTIFACTORY_TOKEN }}"
           ARTIFACTORY_USERNAME: "${{ secrets.ARTIFACTORY_USERNAME }}"
         with:
-          node-version: ${{ inputs.NODE_VERSION }}
+          node-version: "14"
 
       - name: Install
         id: install
