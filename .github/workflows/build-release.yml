@@ -1,58 +1,82 @@
+## We only run this workflow on pushes to the master branch. This workflow will
+## first determine if a release is to be published, and if so, build and publish.
+## Otherwise, if not a release, we just perform CI build validation and deploy our
+## storybook build to GH Pages.
+
 name: Build and Release
 
 on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
-  workflow_dispatch:
+    paths:
+      - 'src/**/*'
 
 concurrency: build-release-${{ github.ref }}
 
 jobs:
+  ## Gather configuration required by other jobs
   wf-config:
     name: Workflow Configuration
     runs-on: ubuntu-latest
     steps:
-      - name: Package Repo Selection
-        id: pkg-repo
+      ## Determine if this is a release build or not, which will affect which dependent jobs run below
+      - name: Detect release status
+        id: detect-release
         run: |
-          if [ "${GITHUB_REF}" == 'refs/heads/master' ]; then
-            echo "::set-output name=repo-name::FORGE"
+          ## We use `auto version` to calculate whether this is a release build or not
+          result=`npx auto version`
+
+          if [[ "$result" =~ ^(major|minor|patch|release)$ ]];
+          then
+            echo "::set-output name=release::true"
           else
-            echo "::set-output name=repo-name::SCRATCH"
+            echo "::set-output name=release::false"
           fi
     outputs:
-      pkg-repo-name: ${{ steps.pkg-repo.outputs.repo-name }}
-      prod-release: ${{ github.ref == 'refs/heads/master' && contains(fromJson('["push", "workflow_dispatch"]'), github.event_name) }}
+      is-release: ${{ steps.detect-release.outputs.release }}
 
+  ## This job will run on non-release builds for general CI validation
+  build:
+    name: Build and Test
+    needs: wf-config
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.9.0
+    if: ${{ needs.wf-config.outputs.is-release == 'false' }}
+    with:
+      TESTS_ENABLED: true ## We always run tests on general CI validation build
+    secrets:
+      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
+      ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
+
+  ## This job will run on release builds when publishing a new version
   build-and-release:
     name: Build and Release
+    id: build-and-release
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.8.2
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.9.0
+    if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
-      PRODUCTION_RELEASE: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+      PRODUCTION_RELEASE: true
       NODE_VERSION: "14"
-      TESTS_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'false' }} # tests will have already been validated by the time we reach master
-      RELEASE_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'true' }} # we don't release on PRs in this repo
-      BUILD_RELEASE_NPM_SCRIPT: "ci:build:all"
+      TESTS_ENABLED: false ## We do not run tests on production builds since the tests were required to pass when merged from PRs
+      RELEASE_ENABLED: true
+      BUILD_NPM_SCRIPT: "ci:build:all" ## We build the npm package and ALL static component bundles (this can take some time)
       PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
-      PACKAGE_ASSETS_ENABLED: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+      PACKAGE_ASSETS_ENABLED: ${{ needs.wf-config.outputs.is-release == 'true' }}
     secrets:
       GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
       GITHUB_APP_KEY: ${{ secrets.TCP_AUTOMATION_APP_KEY }}
-      ARTIFACTORY_TOKEN: ${{ secrets[format('{0}_ARTIFACTORY_TOKEN', needs.wf-config.outputs.pkg-repo-name)] }}
-      ARTIFACTORY_USERNAME: ${{ secrets[format('{0}_ARTIFACTORY_USERNAME', needs.wf-config.outputs.pkg-repo-name)] }}
-      ARTIFACTORY_REGISTRY: ${{ secrets[format('{0}_ARTIFACTORY_NPM_REGISTRY', needs.wf-config.outputs.pkg-repo-name)] }}
-      CANARY_PULL_ARTIFACTORY_REGISTRY: ${{ secrets.SCRATCH_ARTIFACTORY_NPM_VIRTUAL }}
+      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
+      ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
 
+  ## This job will run only on release builds
   publish-cdn:
     name: Publish Components to CDN
     needs: [wf-config, build-and-release]
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.8.0
-    if: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.9.0
+    if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
       AWS_REGION: "us-east-1"
@@ -60,12 +84,13 @@ jobs:
       AWS_CLOUDFRONT_DISTRIBUTION_ID: "EDE7DVFI1X60B"
       MAX_CLOUDFRONT_INVALIDATIONS: 25
 
+  ## We run this job on every build regardless of release status
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
     with:
-      PRODUCTION_RELEASE: ${{ needs.wf-config.outputs.prod-release == 'true' }}
+      PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
       BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
       BUILD_NPM_SCRIPT: "ci:build-storybook"
