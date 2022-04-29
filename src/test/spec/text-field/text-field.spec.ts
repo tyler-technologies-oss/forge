@@ -482,7 +482,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context.input.value = 'test';
       await tick();
 
-      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(true);
+      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
     });
 
     it('should not show addon-end content by default', async function(this: ITestContext) {

@@ -7,6 +7,7 @@
 @use './variables';
 @use './utils';
 @use '../floating-label/mixins' as floating-label-mixins;
+@use '../floating-label/variables' as floating-label-variables;
 
 // Field
 @mixin field-core {
@@ -284,24 +285,64 @@
   @include utils.error-theme-state(floating-label-color, $theme-state);
 }
 
-@mixin floating-label-float($layout-state) {
+@mixin floating-label-float-above($layout-state) {
   // Default
   @if $layout-state == default or $layout-state == shape-rounded {
     @include floating-label-mixins.float(
-      $positionY: map.get(variables.$label, float-y, default),
-      $scale: map.get(variables.$label, float-scale, default)
+      map.get(variables.$label, float-y, scale-default),
+      0%,
+      map.get(variables.$label, float-scale, default)
     );
-    right: -14%;
   }
   // Roomy
   @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
     @include floating-label-mixins.float(
-      $positionY: map.get(variables.$label, float-y, roomy),
-      $scale: map.get(variables.$label, float-scale, default)
+      map.get(variables.$label, float-y, scale-roomy),
+      0%,
+      map.get(variables.$label, float-scale, default)
     );
-    right: -14%;
   }
-  @include utils.error-layout-state(floating-label-float, $layout-state);
+  @include utils.error-layout-state(floating-label-float-above, $layout-state);
+}
+
+@mixin floating-label-float-above-end-keyframe($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    transition: none;
+    font-size: floating-label-variables.$font-size * floating-label-variables.$float-scale;
+    @include floating-label-mixins.float(map.get(variables.$label, float-y, default), 0%, 1);
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    transition: none;
+    font-size: floating-label-variables.$font-size * floating-label-variables.$float-scale;
+    @include floating-label-mixins.float(map.get(variables.$label, float-y, roomy), 0%, 1);
+  }
+  @include utils.error-layout-state(floating-label-float-above-end-keyframe, $layout-state);
+}
+
+@mixin floating-label-unfloat-above-start-keyframe($layout-state) {
+  // Default
+  @if $layout-state == default or $layout-state == shape-rounded {
+    transition: none;
+    font-size: floating-label-variables.$font-size;
+    @include floating-label-mixins.float(
+      map.get(variables.$label, float-y, default),
+      0%,
+      map.get(variables.$label, float-scale, default)
+    );
+  }
+  // Roomy
+  @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
+    transition: none;
+    font-size: floating-label-variables.$font-size;
+    @include floating-label-mixins.float(
+      map.get(variables.$label, float-y, roomy),
+      0%,
+      map.get(variables.$label, float-scale, default)
+    );
+  }
+  @include utils.error-layout-state(floating-label-unfloat-above-start-keyframe, $layout-state);
 }
 
 // Input

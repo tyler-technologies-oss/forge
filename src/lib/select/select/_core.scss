@@ -8,7 +8,10 @@
 
   .forge-field {
     @include field-selector.label('label');
-    @include field-selector.floating-label('label.forge-floating-label--float');
+    @include field-selector.floating-label('label.forge-floating-label--float-above');
+    @include field-selector.floating-label-float-above('label.forge-floating-label--float-above');
+    @include field-selector.floating-label-float-above-end-keyframe('label.forge-floating-label--float-above.forge-floating-label--float-above-end-keyframe');
+    @include field-selector.floating-label-unfloat-above-start-keyframe('label.forge-floating-label--unfloat-above-start-keyframe');
     @include selector.selected-text;
     @include selector.dropdown-icon;
   }

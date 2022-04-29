@@ -201,7 +201,7 @@
   }
 }
 
-@mixin floating-label($floating-label-selector: '::slotted(label.forge-floating-label--float)', $exclude: ()) {
+@mixin floating-label($floating-label-selector: '::slotted(label.forge-floating-label--float-above)', $exclude: ()) {
   // Core
   @if list.index($exclude, core) == null {
     #{$floating-label-selector} {
@@ -226,17 +226,43 @@
       }
     }
   }
-  // Float
-  @if list.index($exclude, float) == null {
-    &:not(.forge-field--dense):not(.forge-field--roomy) {
-      #{$floating-label-selector} {
-        @include base.floating-label-float(default);
-      }
+}
+
+@mixin floating-label-float-above($floating-label-selector: '::slotted(label.forge-floating-label--float-above)') {
+  &:not(.forge-field--dense):not(.forge-field--roomy) {
+    #{$floating-label-selector} {
+      @include base.floating-label-float-above(default);
     }
-    &--roomy:not(.forge-field--dense) {
-      #{$floating-label-selector} {
-        @include base.floating-label-float(roomy);
-      }
+  }
+  &--roomy:not(.forge-field--dense) {
+    #{$floating-label-selector} {
+      @include base.floating-label-float-above(roomy);
+    }
+  }
+}
+
+@mixin floating-label-float-above-end-keyframe($floating-label-selector: '::slotted(label.forge-floating-label--float-above.forge-floating-label--float-above-end-keyframe)') {
+  &:not(.forge-field--dense):not(.forge-field--roomy) {
+    #{$floating-label-selector} {
+      @include base.floating-label-float-above-end-keyframe(default);
+    }
+  }
+  &--roomy:not(.forge-field--dense) {
+    #{$floating-label-selector} {
+      @include base.floating-label-float-above-end-keyframe(roomy);
+    }
+  }
+}
+
+@mixin floating-label-unfloat-above-start-keyframe($floating-label-selector: '::slotted(label.forge-floating-label--unfloat-above-start-keyframe)') {
+  &:not(.forge-field--dense):not(.forge-field--roomy) {
+    #{$floating-label-selector} {
+      @include base.floating-label-unfloat-above-start-keyframe(default);
+    }
+  }
+  &--roomy:not(.forge-field--dense) {
+    #{$floating-label-selector} {
+      @include base.floating-label-unfloat-above-start-keyframe(roomy);
     }
   }
 }
