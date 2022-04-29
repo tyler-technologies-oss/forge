@@ -21,7 +21,6 @@ export const parameters = {
     storySort: {
       order: [
         'Forge',
-        'Overview',
         [
           'Getting started',
           'Components'
@@ -31,9 +30,7 @@ export const parameters = {
           'Component architecture',
           'Theming',
           'Using icons',
-          'Development',
           'Component customization',
-          'Shadow DOM',
           'Sass library',
           'Component tutorial'
         ],
