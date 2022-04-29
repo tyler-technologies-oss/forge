@@ -192,7 +192,7 @@ $base-theme: (
 
   $checkbox-padding: ($ripple-size - $icon-size) * 0.5;
   $ripple-size: mdc-custom-properties.create(checkbox-custom-properties.$ripple-size, $ripple-size);
-  $checkbox-padding: calc((_ripple-size - _icon-size) / 2);
+  $checkbox-padding: 'calc((_ripple-size - _icon-size) / 2)';
   $replace: (
     _ripple-size: $ripple-size,
     _icon-size: $icon-size,
@@ -401,7 +401,7 @@ $base-theme: (
 @mixin touch-target($touch-target-size, $ripple-size, $query: mdc-feature-targeting.all()) {
   $feat-structure: mdc-feature-targeting.create-target($query, structure);
 
-  $margin: calc((_touch-target-size - _ripple-size) / 2);
+  $margin: 'calc((_touch-target-size - _ripple-size) / 2)';
   $replace: (
     _touch-target-size: $touch-target-size,
     _ripple-size: $ripple-size,
@@ -411,7 +411,7 @@ $base-theme: (
     @include mdc-theme.property(margin, $margin, $replace: $replace);
   }
 
-  $offset: calc((_ripple-size - _touch-target-size) / 2);
+  $offset: 'calc((_ripple-size - _touch-target-size) / 2)';
 
   @include mdc-feature-targeting.targets($feat-structure) {
     // FORGE (modify): using class-based state selector due to Shadow DOM
