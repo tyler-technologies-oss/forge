@@ -23,6 +23,10 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
+      - name: Prepare Repository
+        # Fetch full git history and tags
+        run: git fetch --unshallow --tags
+
       - name: Cache Dependencies
         id: cache
         if: ${{ inputs.CACHE_ENABLED }}
