@@ -67,7 +67,7 @@ jobs:
         id: detect-release
         run: |
           ## We use `auto version` to calculate whether this is a release build or not
-          result=`npx auto version -vv`
+          result=$(npx auto version)
 
           if [[ "$result" =~ ^(major|minor|patch|release)$ ]];
           then
