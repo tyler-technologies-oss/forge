@@ -63,7 +63,7 @@ jobs:
         run: npm ci
 
       ## Determine if this is a release build or not, which will affect which dependent jobs run below
-      - name: Detect release status
+      - name: Detect Release Status
         id: detect-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,23 +73,31 @@ jobs:
         run: |
           ## We use `auto version` to calculate whether this is a release build or not
           VERSION_RESULT=$(npx auto version)
-
           if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
             echo "::set-output name=release::true"
           else
             echo "::set-output name=release::false"
           fi
+
+      - name: Check "src/*" Changes
+        uses: dorny/paths-filter@v2
+        id: src-filter
+        with:
+          filters: |
+            src:
+              - 'src/**'
     outputs:
       is-release: ${{ steps.detect-release.outputs.release }}
+      src-files-changed: ${{ steps.src-filter.outputs.src == 'true' }}
 
   # This job will run on non-release builds for general CI validation
   build:
     name: Build and Test
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.9.0
-    if: ${{ needs.wf-config.outputs.is-release == 'false' }}
+    if: ${{ needs.wf-config.outputs.is-release == 'false' && needs.wf-config.outputs.src-files-changed == 'true' }}
     with:
-      TESTS_ENABLED: true ## We always run tests on general CI validation build
+      TESTS_ENABLED: true
     secrets:
       ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
@@ -134,6 +142,7 @@ jobs:
     name: Deploy Storybook
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
+    if: ${{ needs.wf-config.outputs.src-files-changed == 'true' }}
     with:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
