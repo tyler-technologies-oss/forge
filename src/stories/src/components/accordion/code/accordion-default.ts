@@ -1,5 +1,5 @@
 export const AccordionDefaultDemoCodeHtml = () => {
-  return `<forge-accordion panel-selector="forge-expansion-panel">
+  return `<forge-accordion>
   <forge-expansion-panel>
     <div role="button" tabindex="0" slot="header">
       <div>Panel One</div>
