@@ -79,23 +79,32 @@ jobs:
             echo "::set-output name=release::false"
           fi
 
-      - name: Check "src/*" Changes
+      ## Detect if any specific files we care about have changed to help us know if we need to execute a CI build or Storybook deployment at all or not
+      - name: Check File Changes
         uses: dorny/paths-filter@v2
-        id: src-filter
+        id: file-filter
         with:
           filters: |
-            src:
+            build:
+              - 'forge.json'
+              - '.eslintrc.json'
+              - '.stylelintrc'
+              - 'auto.config.json'
+              - '.github/workflows/**'
+              - 'src/**'
+            storybook:
               - 'src/**'
     outputs:
       is-release: ${{ steps.detect-release.outputs.release }}
-      src-files-changed: ${{ steps.src-filter.outputs.src == 'true' }}
+      build-files-changed: ${{ steps.file-filter.outputs.build == 'true' }}
+      deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
 
   # This job will run on non-release builds for general CI validation
   build:
     name: Build and Test
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.9.0
-    if: ${{ needs.wf-config.outputs.is-release == 'false' && needs.wf-config.outputs.src-files-changed == 'true' }}
+    if: ${{ needs.wf-config.outputs.is-release == 'false' && needs.wf-config.outputs.build-files-changed == 'true' }}
     with:
       TESTS_ENABLED: true
     secrets:
@@ -142,7 +151,7 @@ jobs:
     name: Deploy Storybook
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
-    if: ${{ needs.wf-config.outputs.src-files-changed == 'true' }}
+    if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
