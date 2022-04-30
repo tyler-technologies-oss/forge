@@ -104,7 +104,7 @@ jobs:
       test-files-changed: ${{ steps.file-filter.outputs.test == 'true' }}
       deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
 
-  # This job will run on non-release builds for general CI validation
+  # This job will run on non-release builds for general CI validation only if files are changed that need to be built or tested
   build:
     name: Build and Test
     needs: wf-config
@@ -152,7 +152,7 @@ jobs:
       AWS_CLOUDFRONT_DISTRIBUTION_ID: "***REMOVED***"
       MAX_CLOUDFRONT_INVALIDATIONS: 25
 
-  ## We run this job on every build regardless of release status
+  ## We run this job only when files that effect Storybook are found in the changed files
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
