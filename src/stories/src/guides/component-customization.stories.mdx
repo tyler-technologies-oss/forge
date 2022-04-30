@@ -111,7 +111,7 @@ adapter class that knows how to interact with the framework itself to read/write
 
 Below is an example of how you might provide your own custom element class:
 
-```typescript
+```typescript expanded
 class MyCustomForgeComponent extends HTMLElement {
   private _foundation: MyCustomForgeComponentFoundation;
 
@@ -130,7 +130,7 @@ class MyCustomForgeComponent extends HTMLElement {
 
 Now you can define a foundation that potentially extends an existing Forge foundation:
 
-```typescript
+```typescript expanded
 class MyCustomAvatarFoundation extends AvatarFoundation {
   private _size: number;
 
@@ -154,14 +154,14 @@ class MyCustomAvatarFoundation extends AvatarFoundation {
 
 and finally a custom adapter class:
 
-```typescript
+```typescript expanded
 class MyCustomAvatarFoundation extends AvatarAdapter {
   constructor(private _element: MyCustomAvatar) {
     super(_element);
   }
 
   public setSize(value: number): void {
-    // Update the "size" within the DOM template
+    // Update the "size" within the DOM template...
   }
 }
 ```
