@@ -20,7 +20,7 @@ export class SelectComponentDelegate extends FormFieldComponentDelegate<ISelectC
     return document.createElement(SELECT_CONSTANTS.elementName);
   }
 
-  protected override _elementReady(): void {
+  protected override _configure(): void {
     if (typeof this._config.options?.helperText === 'string') {
       this.setHelperText(this._config.options.helperText);
     }

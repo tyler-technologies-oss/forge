@@ -80,7 +80,7 @@ export class CheckboxComponentDelegate extends FormFieldComponentDelegate<ICheck
     return checkbox;
   }
 
-  protected override _elementReady(): void {
+  protected override _configure(): void {
     if (typeof this._config.options?.label === 'string') {
       this._createLabel(this._config.options.label);
     }
