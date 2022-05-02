@@ -221,6 +221,7 @@ describe('ExpansionPanelComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.open = true;
       await tick();
+      await tick();
       expect(this.context.headerElement.getAttribute('aria-expanded')).toBe('true');
     });
 
