@@ -43,7 +43,7 @@ export class ChipFieldComponentDelegate extends FormFieldComponentDelegate<IChip
     return chipField;
   }
 
-  protected override _elementReady(): void {
+  protected override _configure(): void {
     if (this._config.options?.helperText) {
       this.setHelperText(this._config.options.helperText);
     }

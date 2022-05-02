@@ -1,5 +1,5 @@
 import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, definePaginatorComponent } from '@tylertech/forge/paginator';
-import { BASE_SELECT_CONSTANTS, ISelectComponent, SELECT_CONSTANTS } from '@tylertech/forge/select';
+import { BASE_SELECT_CONSTANTS, ISelectComponent } from '@tylertech/forge/select';
 import { IIconButtonComponent } from '@tylertech/forge/icon-button';
 import { getShadowElement, removeElement, emitEvent } from '@tylertech/forge-core';
 

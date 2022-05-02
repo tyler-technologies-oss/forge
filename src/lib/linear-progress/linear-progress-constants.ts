@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}linear-progress`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}linear-progress`;
 
 const selectors = {
   ROOT: '.mdc-linear-progress'

@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}tab`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab`;
 
 const attributes = {
   DISABLED: 'disabled',

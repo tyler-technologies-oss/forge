@@ -6,6 +6,7 @@ export * from './label-value-adapter';
 export * from './label-value-constants';
 export * from './label-value-foundation';
 export * from './label-value';
+export * from './label-value-component-delegate';
 
 export function defineLabelValueComponent(): void {
   defineCustomElement(LabelValueComponent);

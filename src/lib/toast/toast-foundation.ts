@@ -1,7 +1,6 @@
 import { ICustomElementFoundation, isFunction } from '@tylertech/forge-core';
-import { ToastPlacement } from '.';
 import { IToastAdapter } from './toast-adapter';
-import { ToastBuilder, TOAST_CONSTANTS } from './toast-constants';
+import { ToastBuilder, TOAST_CONSTANTS, ToastPlacement } from './toast-constants';
 
 export interface IToastFoundation extends ICustomElementFoundation {
   message: string;

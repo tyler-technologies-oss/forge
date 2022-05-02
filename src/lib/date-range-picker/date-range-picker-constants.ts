@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}date-range-picker`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}date-range-picker`;
 
 export class DatePickerRange implements IDatePickerRange {
   public from?: Date | string | null;

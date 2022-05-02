@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { OPEN_ICON_CONSTANTS } from '../open-icon';
 
-const elementName = `${COMPONENT_NAME_PREFIX}expansion-panel`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}expansion-panel`;
 
 const classes = {
   CONTAINER: 'forge-expansion-panel',

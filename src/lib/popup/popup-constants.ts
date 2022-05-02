@@ -1,7 +1,7 @@
 import { PositionPlacement } from '@tylertech/forge-core';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}popup`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}popup`;
 
 const attributes = {
   CONTAINER: 'forge-popup',

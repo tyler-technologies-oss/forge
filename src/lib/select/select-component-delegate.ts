@@ -20,7 +20,7 @@ export class SelectComponentDelegate extends FormFieldComponentDelegate<ISelectC
     return document.createElement(SELECT_CONSTANTS.elementName);
   }
 
-  protected override _elementReady(): void {
+  protected override _configure(): void {
     if (typeof this._config.options?.helperText === 'string') {
       this.setHelperText(this._config.options.helperText);
     }
@@ -48,7 +48,7 @@ export class SelectComponentDelegate extends FormFieldComponentDelegate<ISelectC
   }
 
   public onChange(listener: (value: string) => void): void {
-    this._element.addEventListener('change', (evt: CustomEvent) => listener(evt.detail));
+    this._element.addEventListener('change', (evt: CustomEvent<string>) => listener(evt.detail));
   }
 
   public onFocus(listener: (evt: Event) => void): void {

@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { PopupPlacement } from '../popup';
 
-const elementName = `${COMPONENT_NAME_PREFIX}tooltip`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tooltip`;
 
 const attributes = {
   TEXT: 'text',

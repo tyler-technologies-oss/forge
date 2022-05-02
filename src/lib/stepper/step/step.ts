@@ -4,7 +4,6 @@ import { StepAdapter } from './step-adapter';
 import { STEP_CONSTANTS } from './step-constants';
 import { StepFoundation } from './step-foundation';
 import { IconRegistry, IconComponent } from '../../icon';
-import { IStepperComponent } from '../stepper';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './step.html';
@@ -26,7 +25,7 @@ export interface IStepComponent extends IBaseComponent {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-step': IStepperComponent;
+    'forge-step': IStepComponent;
   }
 
   interface HTMLElementEventMap {

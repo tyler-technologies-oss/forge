@@ -1,11 +1,12 @@
-import { removeElement } from '@tylertech/forge-core';
+import { removeAllChildren, removeElement } from '@tylertech/forge-core';
 
 export type BaseComponentDelegateProps<T extends HTMLElement> = Partial<T>;
 
 export interface IBaseComponentDelegateOptions {
-  style?: Partial<CSSStyleDeclaration>;
+  style?: Partial<CSSStyleDeclaration> | { [key: string]: string };
   attributes?: { [key: string]: string } | Map<string, string>;
   parent?: HTMLElement;
+  children?: HTMLElement | string;
 }
 
 export interface IBaseComponentDelegateConfig<T extends HTMLElement, K extends IBaseComponentDelegateOptions> {
@@ -51,8 +52,14 @@ export abstract class BaseComponentDelegate<T extends HTMLElement, K extends IBa
     this._applyProps();
     this._applyStyle();
     this._applyAttrs();
+
     this._config.options?.parent?.append(this._element);
-    this._elementReady?.();
+    
+    if (this._config.options?.children) {
+      this._applyChildren();
+    }
+
+    this._configure?.();
   }
 
   private _applyProps(): void {
@@ -63,7 +70,10 @@ export abstract class BaseComponentDelegate<T extends HTMLElement, K extends IBa
 
   private _applyStyle(): void {
     if (this._config.options?.style) {
-      Object.assign(this._element.style, this._config.options.style);
+      const keys = Object.keys(this._config.options.style);
+      for (const key of keys) {
+        this._element?.style.setProperty(key, this._config.options.style[key]);
+      }
     }
   }
 
@@ -82,6 +92,20 @@ export abstract class BaseComponentDelegate<T extends HTMLElement, K extends IBa
     }
   }
 
+  private _applyChildren(): void {
+    if (this._element.hasChildNodes()) {
+      removeAllChildren(this._element);
+    }
+    if (!this._config.options?.children) {
+      return;
+    }
+    if (typeof this._config.options.children === 'string') {
+      this._element.innerHTML = this._config.options.children;
+    } else {
+      this._element.appendChild(this._config.options.children);
+    }
+  }
+
   protected abstract _build(): T;
-  protected _elementReady?(): void;
+  protected _configure?(): void;
 }

@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { COLOR_CONSTANTS } from '../theme/color-constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}product-icon`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}product-icon`;
 
 const classes = {
   PRODUCT_ICON_BACKGROUND: 'forge-product-icon__background',

@@ -2,7 +2,7 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 import { IListDropdownOption } from '../list-dropdown/list-dropdown-constants';
 import IMask, { Masked, InputMask } from 'imask';
 
-const elementName = `${COMPONENT_NAME_PREFIX}time-picker`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}time-picker`;
 
 const attributes = {
   TOGGLE: 'forge-time-picker-toggle',

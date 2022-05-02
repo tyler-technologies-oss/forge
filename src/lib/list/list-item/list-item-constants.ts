@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 import { IListItemComponent } from './list-item';
 
-const elementName = `${COMPONENT_NAME_PREFIX}list-item`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}list-item`;
 
 const attributes = {
   STATIC: 'static',

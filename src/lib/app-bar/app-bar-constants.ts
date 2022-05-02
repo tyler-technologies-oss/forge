@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-export const elementName = `${COMPONENT_NAME_PREFIX}app-bar`;
+export const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}app-bar`;
 
 const classes = {
   DENSE: 'forge-app-bar--dense',
