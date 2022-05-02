@@ -7,7 +7,6 @@ export interface IBaseComponentDelegateOptions {
   attributes?: { [key: string]: string } | Map<string, string>;
   parent?: HTMLElement;
   children?: HTMLElement | string;
-
 }
 
 export interface IBaseComponentDelegateConfig<T extends HTMLElement, K extends IBaseComponentDelegateOptions> {
