@@ -48,7 +48,7 @@ export class SelectComponentDelegate extends FormFieldComponentDelegate<ISelectC
   }
 
   public onChange(listener: (value: string) => void): void {
-    this._element.addEventListener('change', (evt: CustomEvent) => listener(evt.detail));
+    this._element.addEventListener('change', (evt: CustomEvent<string>) => listener(evt.detail));
   }
 
   public onFocus(listener: (evt: Event) => void): void {
