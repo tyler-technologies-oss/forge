@@ -66,15 +66,15 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
     const openIconElement = this._component.querySelector(EXPANSION_PANEL_CONSTANTS.selectors.OPEN_ICON) as OpenIconComponent;
 
     if (animate && assignedNodes && assignedNodes.length && assignedNodes[0]) {
-      const transitionEndListener = (evt: TransitionEvent): void => {
+      const transitionEndListener = ({ propertyName }: TransitionEvent): void => {
         // If the state has changed since it started, then ignore the transition
         if (this._component.open !== opening) {
           this._contentElement.removeEventListener('transitionend', transitionEndListener);
           return;
         }
-        if (evt.propertyName === 'height' || evt.propertyName === 'width') {
+        if (propertyName === 'height' || propertyName === 'width') {
           this._contentElement.removeEventListener('transitionend', transitionEndListener);
-          this._contentElement.style.transition = null as any;
+          this._contentElement.style.removeProperty('transition');
           if (opening) {
             if (orientation === EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_HORIZONTAL) {
               this._contentElement.style.width = '';
@@ -113,30 +113,32 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         this._contentElement.style.transition = EXPANSION_PANEL_CONSTANTS.strings.EXPANSION_VERTICAL_TRANSITION;
       }
 
-      requestAnimationFrame(() => {
-        if (opening) {
-          if (orientation === EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_HORIZONTAL) {
-            this._contentElement.style.width = `${this._contentElement.scrollWidth}px`;
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          if (opening) {
+            if (orientation === EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_HORIZONTAL) {
+              this._contentElement.style.width = `${this._contentElement.scrollWidth}px`;
+            } else {
+              this._contentElement.style.height = `${this._contentElement.scrollHeight}px`;
+            }
+            this._contentElement.style.opacity = '1';
+            this._headerElement.setAttribute('aria-expanded', 'true');
+            if (openIconElement) {
+              openIconElement.open = true;
+            }
           } else {
-            this._contentElement.style.height = `${this._contentElement.scrollHeight}px`;
+            if (orientation === EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_HORIZONTAL) {
+              this._contentElement.style.width = '0px';
+            } else {
+              this._contentElement.style.height = '0px';
+            }
+            this._contentElement.style.opacity = '0';
+            this._headerElement.setAttribute('aria-expanded', 'false');
+            if (openIconElement) {
+              openIconElement.open = false;
+            }
           }
-          this._contentElement.style.opacity = '1';
-          this._headerElement.setAttribute('aria-expanded', 'true');
-          if (openIconElement) {
-            openIconElement.open = true;
-          }
-        } else {
-          if (orientation === EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_HORIZONTAL) {
-            this._contentElement.style.width = '0px';
-          } else {
-            this._contentElement.style.height = '0px';
-          }
-          this._contentElement.style.opacity = '0';
-          this._headerElement.setAttribute('aria-expanded', 'false');
-          if (openIconElement) {
-            openIconElement.open = false;
-          }
-        }
+        });
       });
     } else {
       this._contentElement.style.removeProperty('transition');
