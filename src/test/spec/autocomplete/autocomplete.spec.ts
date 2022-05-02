@@ -711,6 +711,25 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(activeListItemIndex).toBe(0);
     });
 
+    it('should not activate first option when clearing filter text', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.value = DEFAULT_FILTER_OPTIONS[2].value;
+
+      await tick();
+
+      this.context.input.focus();
+      this.context.input.value = '';
+      this.context.input.dispatchEvent(new Event('input'));
+
+      await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+
+      const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
+      expect(activeListItemIndex).toBe(-1);
+    });
+
     it('should set CSS class on popup', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
