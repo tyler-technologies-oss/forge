@@ -26,10 +26,13 @@ export class FloatingLabelFoundation {
       if (this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME)) {
         this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME);
       }
-      this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
-      if (alwaysFloat) {
-        this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME);
-      }
+      window.requestAnimationFrame(() => {
+        if (alwaysFloat || this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)) {
+          console.log('floating-label-foundation:float:add-end-keyframe');
+          this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME);
+        }
+        this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
+      });
     } else {
       this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
       if (this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)) {
