@@ -100,10 +100,11 @@ describe('SelectComponent', function(this: ITestContext) {
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.INVALID)).toBe(true);
     });
 
-    it('should float label if connected with always set', function(this: ITestContext) {
+    it('should float label if connected with always set', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.floatLabelType = 'always';
       document.body.appendChild(this.context.component);
+      await timer(150);
 
       _expectLabelFloatState(this.context.component, true);
     });
@@ -116,6 +117,7 @@ describe('SelectComponent', function(this: ITestContext) {
 
       this.context.component.label = 'Test';
       this.context.component.value = DEFAULT_OPTIONS[0].value;
+      await timer(150);
 
       expect(this.context.foundation['_floatingLabelInstance']).not.toBeUndefined();
       expect(this.context.label.textContent).toBe('Test');
@@ -162,6 +164,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
 
       this.context.component.floatLabelType = 'always';
+      await timer(150);
       
       expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).toBe('always');
       expect(this.context.component.floatLabelType).toBe('always');
@@ -173,6 +176,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
 
       this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'always');
+      await timer(150);
       
       expect(this.context.component.floatLabelType).toBe('always');
       _expectLabelFloatState(this.context.component, true);
@@ -249,6 +253,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await tick();
       dispatchNativeEvent(this.context.selectedTextElement, 'focus');
+      await timer(150);
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.FOCUSED)).toBe(true);
       expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
     });
@@ -1161,7 +1166,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(false);
       this.context.component.setAttribute(SELECT_CONSTANTS.attributes.VALUE, 'one');
       document.body.appendChild(this.context.fixture);
-      await tick();
+      await timer(150);
 
       _expectLabelFloatState(this.context.component, true);
     }); 

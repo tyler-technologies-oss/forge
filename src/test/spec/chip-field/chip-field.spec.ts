@@ -86,7 +86,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       this.context.input.value = 'text';
       document.body.appendChild(this.context.component);
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -95,7 +95,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext(false);
       this.context.component.floatLabelType = 'always';
       document.body.appendChild(this.context.component);
-      await tick();
+      await timer(150);
 
       expect(this.context.component.floatLabelType).toBe('always');
       expectFloatingLabelState(this.context, true);
@@ -107,7 +107,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       document.body.appendChild(this.context.component);
       await tick();
       this.context.component.floatLabelType = 'always';
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -117,7 +117,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       this.context.input.placeholder = 'placeholder text';
       document.body.appendChild(this.context.component);
-      await tick();
+      await timer(150);
 
       expect(this.context.component.floatLabelType).toBe('always');
       expectFloatingLabelState(this.context, true);
@@ -177,7 +177,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.input.value = 'test';
-      await tick();
+      await timer(150);
       
       expectFloatingLabelState(this.context, true);
     });
@@ -187,7 +187,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.component.floatLabel(true);
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -197,9 +197,9 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.component.floatLabel(true);
-      await tick();
+      await timer(150);
       this.context.component.floatLabel(false);
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, false);
     });
@@ -207,7 +207,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should float label when value is set by default', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.input.value = 'test';
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -216,7 +216,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       await tick();
       this.context.input.dispatchEvent(new Event('focus'));
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -237,9 +237,11 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       await tick();
 
       this.context.input.dispatchEvent(new Event('focus'));
+      await timer(150);
       expectFloatingLabelState(this.context, true);
 
       this.context.input.dispatchEvent(new Event('blur'));
+      await timer(150);
       expectFloatingLabelState(this.context, false);
     });
 
@@ -444,10 +446,10 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext();
 
       this.context.input.value = 'test';
-      await tick();
+      await timer(150);
       expectFloatingLabelState(this.context, true);
       this.context.input.value = '';
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, false);
     });
@@ -456,12 +458,12 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext();
 
       this.context.input.setAttribute('value', 'test');
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
 
       this.context.input.setAttribute('value', '');
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, false);
     });
@@ -714,7 +716,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.delegate.floatLabel(true);
-      await tick();
+      await timer(150);
 
       testFloatingLabelState(this.context.delegate.labelElement as HTMLLabelElement, true);
     });
@@ -724,9 +726,9 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.delegate.floatLabel(true);
-      await tick();
+      await timer(150);
       this.context.delegate.floatLabel(false);
-      await tick();
+      await timer(150);
 
       testFloatingLabelState(this.context.delegate.labelElement as HTMLLabelElement, false);
     });
@@ -922,10 +924,10 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       it('should not float the label when floatLabelType property is set from "always" to auto (while input has no value)', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { label: 'Test' });
         this.context.component.floatLabelType = 'always';
-        await tick();
+        await timer(150);
 
         this.context.component.floatLabelType = 'auto';
-        await tick();
+        await timer(150);
 
         expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
         expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).withContext('float-label-type attribute should be "auto"').toBe('auto');
@@ -950,10 +952,10 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       it('should not float the label when float-label-type attribute is set from "always" to auto (while input has no value)', async function(this: ITestContext) {
         this.context = setupTestContext();
         this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'always');
-        await tick();
+        await timer(150);
 
         this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'auto');
-        await tick();
+        await timer(150);
 
         expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
         expect(this.context.component.floatLabelType).withContext('floatLabelType property should be "auto"').toBe('auto');
@@ -1020,6 +1022,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         this.context = setupTestContext();
         await tick();
         getNativeInput(this.context.component).focus();
+        await timer(150);
         expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should be present when label is floating').toBeTrue();
       });
 

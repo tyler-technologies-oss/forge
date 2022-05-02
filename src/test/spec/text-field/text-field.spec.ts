@@ -83,7 +83,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       this.context.input.value = 'text';
       document.body.appendChild(this.context.component);
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -92,7 +92,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext(false);
       this.context.component.floatLabelType = 'always';
       document.body.appendChild(this.context.component);
-      await tick();
+      await timer(150);
 
       expect(this.context.component.floatLabelType).toBe('always');
       expectFloatingLabelState(this.context, true);
@@ -104,7 +104,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       document.body.appendChild(this.context.component);
       await tick();
       this.context.component.floatLabelType = 'always';
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -114,7 +114,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       this.context.input.placeholder = 'placeholder text';
       document.body.appendChild(this.context.component);
-      await tick();
+      await timer(150);
 
       expect(this.context.component.floatLabelType).toBe('always');
       expectFloatingLabelState(this.context, true);
@@ -186,7 +186,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.input.value = 'test';
-      await tick();
+      await timer(150);
       
       expectFloatingLabelState(this.context, true);
     });
@@ -196,7 +196,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.component.floatLabel(true);
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -206,9 +206,9 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       await tick();
       this.context.component.floatLabel(true);
-      await tick();
+      await timer(150);
       this.context.component.floatLabel(false);
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, false);
     });
@@ -216,7 +216,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should float label when value is set by default', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.input.value = 'test';
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -225,7 +225,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       await tick();
       this.context.input.dispatchEvent(new Event('focus'));
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
     });
@@ -246,9 +246,11 @@ describe('TextFieldComponent', function(this: ITestContext) {
       await tick();
 
       this.context.input.dispatchEvent(new Event('focus'));
+      await timer(150);
       expectFloatingLabelState(this.context, true);
 
       this.context.input.dispatchEvent(new Event('blur'));
+      await timer(150);
       expectFloatingLabelState(this.context, false);
     });
 
@@ -453,10 +455,10 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext();
 
       this.context.input.value = 'test';
-      await tick();
+      await timer(150);
       expectFloatingLabelState(this.context, true);
       this.context.input.value = '';
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, false);
     });
@@ -465,12 +467,12 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext();
 
       this.context.input.setAttribute('value', 'test');
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, true);
 
       this.context.input.setAttribute('value', '');
-      await tick();
+      await timer(150);
 
       expectFloatingLabelState(this.context, false);
     });
@@ -480,7 +482,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       this.context.label.textContent = '';
       this.context.input.value = 'test';
-      await tick();
+      await timer(150);
 
       expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
     });
@@ -760,7 +762,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
         await tick();
         this.context.delegate.floatLabel(true);
-        await tick();
+        await timer(150);
 
         testFloatingLabelState(this.context.delegate.labelElement as HTMLLabelElement, true);
       });
@@ -770,9 +772,9 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
         await tick();
         this.context.delegate.floatLabel(true);
-        await tick();
+        await timer(150);
         this.context.delegate.floatLabel(false);
-        await tick();
+        await timer(150);
 
         testFloatingLabelState(this.context.delegate.labelElement as HTMLLabelElement, false);
       });
