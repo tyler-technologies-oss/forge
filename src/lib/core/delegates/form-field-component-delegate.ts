@@ -7,7 +7,6 @@ export interface IFormFieldComponentDelegateOptions extends IBaseComponentDelega
 export interface IFormFieldComponentDelegate<T extends HTMLElement> extends IBaseComponentDelegate<T> {
   value: unknown;
   disabled: boolean;
-  invalid: boolean;
   onChange(cb: (value: unknown) => void): void;
   onFocus(cb: (evt: Event) => void): void;
   onBlur(cb: (evt: Event) => void): void;
@@ -16,7 +15,6 @@ export interface IFormFieldComponentDelegate<T extends HTMLElement> extends IBas
 export abstract class FormFieldComponentDelegate<T extends HTMLElement, K extends IFormFieldComponentDelegateOptions> extends BaseComponentDelegate<T, K> implements IFormFieldComponentDelegate<T> {
   public abstract value: unknown;
   public abstract disabled: boolean;
-  public abstract invalid: boolean;
 
   constructor(config?: IBaseComponentDelegateConfig<T, K>) {
     super(config);
