@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}open-icon`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}open-icon`;
 
 const classes = {
   ICON: 'forge-open-icon',

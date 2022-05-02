@@ -1,13 +1,12 @@
 import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
 import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons/standard';
-import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS } from './paginator-constants';
+import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent } from './paginator-constants';
 import { PaginatorFoundation } from './paginator-foundation';
 import { PaginatorAdapter } from './paginator-adapter';
 import { IconButtonComponent } from '../icon-button';
 import { SelectComponent } from '../select';
 import { IconComponent, IconRegistry } from '../icon';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { IPaginatorChangeEvent } from '.';
 
 import template from './paginator.html';
 import styles from './paginator.scss';

@@ -1,7 +1,7 @@
 import { BACKDROP_CONSTANTS } from '../backdrop';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}bottom-sheet`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}bottom-sheet`;
 
 const classes = {
   DRAGGING: 'forge-bottom-sheet--dragging',

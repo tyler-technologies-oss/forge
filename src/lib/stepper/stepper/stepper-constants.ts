@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}stepper`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}stepper`;
 
 const classes = {
   STEPPER: 'forge-stepper',

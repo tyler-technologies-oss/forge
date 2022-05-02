@@ -1,9 +1,8 @@
-import { IDateRangePickerChangeEventData } from '.';
 import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions, IBaseComponentDelegateConfig } from '../core/delegates';
 import { FieldDensityType } from '../field/field-constants';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IDateRangePickerComponent } from './date-range-picker';
-import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants';
+import { DATE_RANGE_PICKER_CONSTANTS, IDateRangePickerChangeEventData } from './date-range-picker-constants';
 
 export type DateRangePickerComponentDelegateProps = Partial<IDateRangePickerComponent>;
 export interface IDateRangePickerComponentDelegateOptions extends IFormFieldComponentDelegateOptions {

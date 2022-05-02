@@ -1,7 +1,7 @@
 import { PopupPlacement } from '../popup/popup-constants';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}toast`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}toast`;
 
 const customCssPositionProperties = {
   TOP_MARGIN_TOP: '--forge-toast-top-margin-top',

@@ -391,7 +391,7 @@ describe('QuantityFieldComponent', function(this: ITestContext) {
       getNativeIncrementButton: () => component.querySelector(QUANTITY_FIELD_CONSTANTS.selectors.INCREMENT_BUTTON) as HTMLButtonElement,
       requiredAsteriskIsDisplayed: () => {
         const labelElement = component.querySelector(QUANTITY_FIELD_CONSTANTS.selectors.LABEL) as HTMLLabelElement;
-        const asteriskIsPresent = getComputedStyle(labelElement, ':after').getPropertyValue('content').includes('*');
+        const asteriskIsPresent = getComputedStyle(labelElement, ':before').getPropertyValue('content').includes('*');
         return asteriskIsPresent;
       },
       invalidStyleIsDisplayedOnLabel: (): boolean => {

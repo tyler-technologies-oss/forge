@@ -10,10 +10,3 @@ export * from './paginator';
 export function definePaginatorComponent(): void {
   defineCustomElement(PaginatorComponent);
 }
-
-export interface IPaginatorChangeEvent {
-  type: string;
-  pageSize: number;
-  pageIndex: number;
-  offset: number;
-}

@@ -1,8 +1,6 @@
 import { coerceNumber, ICustomElementFoundation, isArray, isDefined } from '@tylertech/forge-core';
-
-import { IPaginatorChangeEvent } from './index';
 import { IPaginatorAdapter } from './paginator-adapter';
-import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS } from './paginator-constants';
+import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent } from './paginator-constants';
 import { ISelectOption, ISelectComponent } from '../select';
 
 

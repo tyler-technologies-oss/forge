@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}radio`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}radio`;
 
 const classes = {
   RADIO: 'mdc-radio',
