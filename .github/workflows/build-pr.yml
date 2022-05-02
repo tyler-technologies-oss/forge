@@ -6,7 +6,6 @@ on:
       - 'forge.json'
       - '.eslintrc.json'
       - '.stylelintrc'
-      - 'auto.config.json'
       - '.github/workflows/**/*'
       - 'src/**/*'
 

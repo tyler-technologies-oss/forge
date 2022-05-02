@@ -13,7 +13,7 @@ on:
       - 'forge.json'
       - '.eslintrc.json'
       - '.stylelintrc'
-      - 'auto.config.json'
+      - 'auto.config.ts'
       - '.github/workflows/**/*'
       - 'src/**/*'
 
@@ -89,7 +89,7 @@ jobs:
               - 'forge.json'
               - '.eslintrc.json'
               - '.stylelintrc'
-              - 'auto.config.json'
+              - 'auto.config.ts'
               - '.github/workflows/**'
               - 'src/lib/**'
             test:
@@ -131,7 +131,7 @@ jobs:
       RELEASE_ENABLED: true
       BUILD_NPM_SCRIPT: "ci:build:all" ## We build the npm package and ALL static component bundles (this can take some time)
       PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
-      PACKAGE_ASSETS_ENABLED: ${{ needs.wf-config.outputs.is-release == 'true' }}
+      PACKAGE_ASSETS_ENABLED: true
     secrets:
       GITHUB_APP_ID: ${{ secrets.TCP_AUTOMATION_APP_ID }}
       GITHUB_APP_KEY: ${{ secrets.TCP_AUTOMATION_APP_KEY }}
