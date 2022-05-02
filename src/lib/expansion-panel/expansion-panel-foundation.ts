@@ -54,42 +54,47 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
     }
   }
 
+  private _applyOpen(value: boolean): void {
+    if (!this._isInitialized) {
+      this._open = value;
+      return;
+    }
+
+    if (value) {
+      if (this._openCallback) {
+        Promise.resolve(this._openCallback())
+          .then(() => {
+            this._open = value;
+            this._openPanel(this._useAnimations);
+          })
+          .catch(() => {});
+      } else {
+        this._open = value;
+        this._openPanel(this._useAnimations);
+      }
+    } else {
+      if (this._closeCallback) {
+        Promise.resolve(this._closeCallback())
+          .then(() => {
+            this._open = value;
+            this._closePanel(this._useAnimations);
+          })
+          .catch(() => {});
+      } else {
+        this._open = value;
+        this._closePanel(this._useAnimations);
+      }
+    }
+  }
+
   /** Controls the open state of the panel. */
   public get open(): boolean {
     return this._open;
   }
   public set open(value: boolean) {
     value = Boolean(value);
-    if (value !== this._open) {
-      if (this._isInitialized) {
-        if (value) {
-          if (this._openCallback) {
-            Promise.resolve(this._openCallback())
-              .then(() => {
-                this._open = value;
-                this._openPanel(this._useAnimations);
-              })
-              .catch(() => {});
-          } else {
-            this._open = value;
-            this._openPanel(this._useAnimations);
-          }
-        } else {
-          if (this._closeCallback) {
-            Promise.resolve(this._closeCallback())
-              .then(() => {
-                this._open = value;
-                this._closePanel(this._useAnimations);
-              })
-              .catch(() => {});
-          } else {
-            this._open = value;
-            this._closePanel(this._useAnimations);
-          }
-        }
-      } else {
-        this._open = value;
-      }
+    if (this._open !== value) {
+      this._applyOpen(value);
     }
   }
 
@@ -152,9 +157,6 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
     this._adapter.emitHostEvent(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, this._open);
   }
 
-  /**
-   * Toggles the collapsed state of the panel.
-   */
   private _toggle(): void {
     this.open = !this.open;
   }
