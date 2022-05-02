@@ -90,6 +90,6 @@ Please create a GitHub issue with any questions.
 [1]: https://forge.tylertech.com/
 [2]: https://www.w3.org/wiki/WebComponents/
 [3]: https://material-components.github.io/material-components-web-catalog/
-[4]: https://tyler-technologies.github.io/forge/master/
+[4]: https://forge.tylerdev.io/
 [5]: https://github.com/tyler-technologies/forge/blob/master/CONTRIBUTING.md
 [6]: https://github.com/tyler-technologies/forge/blob/master/CHANGELOG.md
