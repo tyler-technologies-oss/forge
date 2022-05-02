@@ -374,6 +374,9 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     if (this._options.length) {
       const sendFilterText = this._allowUnmatched && !this._selectedOptions.length;
       this._dropdownReady({ userTriggered: sendFilterText });
+      if (this._filterText) {
+        this._adapter.activateFirstOption();
+      }
     } else {
       this._closeDropdown();
     }
