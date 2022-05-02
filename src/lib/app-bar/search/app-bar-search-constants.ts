@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 import { IOption } from '../../select';
 
-const elementName = `${COMPONENT_NAME_PREFIX}app-bar-search`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}app-bar-search`;
 
 const classes = {
   FOCUSED: 'forge-app-bar-search--focused',

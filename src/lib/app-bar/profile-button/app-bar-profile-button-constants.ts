@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}app-bar-profile-button`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}app-bar-profile-button`;
 
 const attributes = {
   FULL_NAME: 'full-name',

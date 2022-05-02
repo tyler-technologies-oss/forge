@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 
-const elementName = `${COMPONENT_NAME_PREFIX}button-toggle-group`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}button-toggle-group`;
 
 const attributes = {
   VALUE: 'value',

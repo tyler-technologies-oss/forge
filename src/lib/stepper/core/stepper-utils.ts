@@ -10,7 +10,7 @@ export class StepperUtils {
    * @param {boolean} linear Whether the stepper is in linear mode or not.
    */
   public static createStepElement(step: IStepConfiguration, index: number, stepperConfig: IStepperConfiguration): IStepComponent {
-    const stepElement = document.createElement(STEP_CONSTANTS.elementName) as IStepComponent;
+    const stepElement = document.createElement(STEP_CONSTANTS.elementName);
 
     stepElement.index = index;
     stepElement.completed = step.completed || false;

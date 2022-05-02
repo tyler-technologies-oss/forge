@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { BACKDROP_CONSTANTS } from '../backdrop';
 
-const elementName = `${COMPONENT_NAME_PREFIX}dialog`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}dialog`;
 
 const classes = {
   ANIMATING: 'forge-dialog--animating',
