@@ -69,10 +69,10 @@
 }
 
 @mixin required-label() {
-  &::after {
+  &::before {
     @include mdc-theme.property(color, error);
     content: '*';
-    margin-left: 1px;
+    margin-right: 1px;
   }
 }
 

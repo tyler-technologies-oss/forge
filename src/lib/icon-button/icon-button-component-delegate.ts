@@ -23,7 +23,6 @@ export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButt
 
   protected _build(): IIconButtonComponent {
     const component = document.createElement(ICON_BUTTON_CONSTANTS.elementName);
-
     this._buttonElement = document.createElement('button');
     this._buttonElement.type = 'button';
     component.appendChild(this._buttonElement);
