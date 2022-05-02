@@ -78,3 +78,9 @@ export const PAGINATOR_CONSTANTS = {
 };
 
 export type PaginatorAlternativeAlignment = 'start' | 'space-between' | 'end';
+export interface IPaginatorChangeEvent {
+  type: string;
+  pageSize: number;
+  pageIndex: number;
+  offset: number;
+}

@@ -1,8 +1,7 @@
-import { IFilePickerChangeEventData } from '.';
-import { ButtonComponentDelegate } from '..';
+import { ButtonComponentDelegate } from '../button/button-component-delegate';
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
 import { IFilePickerComponent } from './file-picker';
-import { FILE_PICKER_CONSTANTS } from './file-picker-constants';
+import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
 
 export type FilePickerComponentDelegateProps = Partial<IFilePickerComponent>;
 export interface IFilePickerComponentDelegateOptions extends IBaseComponentDelegateOptions {

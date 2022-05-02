@@ -1,13 +1,12 @@
 import { getShadowElement, removeAllChildren, appendToAttribute, toggleAttribute, toggleOnAttribute } from '@tylertech/forge-core';
 
 import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateOptions, ICalendarDayOptions, ICalendarEvent } from './calendar-constants';
+import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateOptions, ICalendarDayOptions, ICalendarEvent, ICalendarDateConfig } from './calendar-constants';
 import { ICalendarComponent } from './calendar';
 import { splitIntoWeeks } from './calendar-utils';
 import { getAccessibleHeader, getClearButton, getDateElement, getDateId, getDateRow, getDateSpacerElement, getDayElement, getEventElement, getEventWrapperElement, getEventWrapperId, getFooter, getHeader, getMonthButtonContent, getTodayButton, getTooltip, getYearButtonContent, setTabindexOnElement } from './calendar-dom-utils';
 import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
 import { CalendarDirection, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption, ICalendarMenuComponent, CalendarMenuAnimationType } from './calendar-menu';
-import { ICalendarDateConfig } from '..';
 
 export interface ICalendarAdapter extends IBaseAdapter {
   animateIntoSelectionMenu(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus: boolean): void;
