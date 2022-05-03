@@ -11,7 +11,6 @@ on:
       - master
     paths:
       - 'forge.json'
-      - 'tsconfig.json'
       - '.eslintrc.json'
       - '.stylelintrc'
       - 'auto.config.ts'
@@ -21,46 +20,97 @@ on:
 concurrency: build-release-${{ github.ref }}
 
 jobs:
-  ## Initialize the workflow to gather configuration for subsequent jobs
+  ## Gather configuration required by other jobs
   wf-config:
     name: Workflow Configuration
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-configuration.yml@v0.10.1
-    with:
-      FILE_FILTERS: |
-        build:
-          - 'forge.json'
-          - 'tsconfig.json'
-          - '.eslintrc.json'
-          - '.stylelintrc'
-          - 'auto.config.ts'
-          - '.github/workflows/**'
-          - 'src/lib/**'
-        test:
-          - 'src/lib/**'
-          - 'src/test/**'
-        storybook:
-          - 'src/lib/**'
-          - 'src/stories/**'
-    secrets:
-      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Prepare Repository
+        # Fetch full git history and tags
+        run: git fetch --unshallow --tags
+
+      - name: Cache Dependencies
+        id: cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        env:
+          ARTIFACTORY_TOKEN: "${{ secrets.FORGE_ARTIFACTORY_TOKEN }}"
+          ARTIFACTORY_USERNAME: "${{ secrets.FORGE_ARTIFACTORY_USERNAME }}"
+        with:
+          node-version: "14"
+
+      - name: Install
+        id: install
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+          ARTIFACTORY_TOKEN: "${{ secrets.FORGE_ARTIFACTORY_TOKEN }}"
+          ARTIFACTORY_USERNAME: "${{ secrets.FORGE_ARTIFACTORY_USERNAME }}"
+        run: npm ci
+
+      ## Determine if this is a release build or not, which will affect which dependent jobs run below
+      - name: Detect Release Status
+        id: detect-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
+          ARTIFACTORY_TOKEN: "${{ secrets.FORGE_ARTIFACTORY_TOKEN }}"
+          ARTIFACTORY_USERNAME: "${{ secrets.FORGE_ARTIFACTORY_USERNAME }}"
+        run: |
+          ## We use `auto version` to calculate whether this is a release build or not
+          VERSION_RESULT=$(npx auto version)
+          if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
+            echo "::set-output name=release::true"
+          else
+            echo "::set-output name=release::false"
+          fi
+      ## Detect if any specific files we care about have changed to help us know if we need to execute a CI build or Storybook deployment at all or not
+      - name: Check File Changes
+        uses: dorny/paths-filter@v2
+        id: file-filter
+        with:
+          filters: |
+            build:
+              - 'forge.json'
+              - '.eslintrc.json'
+              - '.stylelintrc'
+              - 'auto.config.ts'
+              - '.github/workflows/**'
+              - 'src/lib/**'
+            test:
+              - 'src/lib/**'
+              - 'src/test/**'
+            storybook:
+              - 'src/lib/**'
+              - 'src/stories/**'
+    outputs:
+      is-release: ${{ steps.detect-release.outputs.release }}
+      build-files-changed: ${{ steps.file-filter.outputs.build == 'true' }}
+      test-files-changed: ${{ steps.file-filter.outputs.test == 'true' }}
+      deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
 
   # This job will run on non-release builds for general CI validation only if files are changed that need to be built or tested
   build:
     name: Build and Test
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.10.0
-    if: |
-      ${{
-        needs.wf-config.outputs.is-release == 'false' &&
-        (
-          contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'build') ||
-          contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'test')
-        )
-      }}
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.9.0
+    if: ${{ needs.wf-config.outputs.is-release == 'false' && (needs.wf-config.outputs.build-files-changed == 'true' || needs.wf-config.outputs.test-files-changed == 'true') }}
     with:
-      BUILD_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'build') }}
-      TESTS_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'test') }}
+      BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}
+      TESTS_ENABLED: ${{ needs.wf-config.outputs.test-files-changed == 'true' }}
     secrets:
       ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
@@ -70,7 +120,7 @@ jobs:
   build-and-release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.10.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.9.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       PRODUCTION_RELEASE: true
@@ -91,7 +141,7 @@ jobs:
   publish-cdn:
     name: Publish Components to CDN
     needs: [wf-config, build-and-release]
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.10.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.9.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       AWS_IAM_ROLE: "***REMOVED***"
@@ -105,7 +155,7 @@ jobs:
     name: Deploy Storybook
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
-    if: ${{ contains(fromJson(needs.wf-config.outputs.file-changes) || '', 'storybook') }}
+    if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
