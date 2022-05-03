@@ -24,7 +24,7 @@ jobs:
   ## Initialize the workflow to gather configuration for subsequent jobs
   wf-config:
     name: Workflow Configuration
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-configuration.yml@v0.10.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-configuration.yml@v0.10.1
     with:
       FILE_FILTERS: |
         build:
@@ -50,10 +50,10 @@ jobs:
     name: Build and Test
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.10.0
-    if: ${{ needs.wf-config.outputs.is-release == 'false' && (needs.wf-config.outputs.file-filter.build == 'true' || needs.wf-config.outputs.file-filter.test == 'true') }}
+    if: ${{ needs.wf-config.outputs.is-release == 'false' && (contains(needs.wf-config.outputs.file-changes, 'build') || contains(needs.wf-config.outputs.file-changes, 'test')) }}
     with:
-      BUILD_ENABLED: ${{ needs.wf-config.outputs.file-filter.build == 'true' }}
-      TESTS_ENABLED: ${{ needs.wf-config.outputs.file-filter.test == 'true' }}
+      BUILD_ENABLED: ${{ contains(needs.wf-config.outputs.file-changes, 'build') }}
+      TESTS_ENABLED: ${{ contains(needs.wf-config.outputs.file-changes, 'test') }}
     secrets:
       ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
@@ -98,7 +98,7 @@ jobs:
     name: Deploy Storybook
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
-    if: ${{ needs.wf-config.outputs.file-filter.test == 'true' }}
+    if: ${{ contains(needs.wf-config.outputs.file-changes, 'storybook') }}
     with:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
