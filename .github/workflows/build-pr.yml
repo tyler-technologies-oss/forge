@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     name: Build and Test
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.9.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.10.0
     with:
       TESTS_ENABLED: true
     secrets:
@@ -22,7 +22,7 @@ jobs:
 
   deploy-storybook:
     name: Deploy Storybook
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.9.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.10.0
     with:
       PRODUCTION_RELEASE: false
       BUILD_DIRECTORY: dist/storybook
