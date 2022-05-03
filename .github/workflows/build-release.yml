@@ -11,6 +11,7 @@ on:
       - master
     paths:
       - 'forge.json'
+      - 'tsconfig.json'
       - '.eslintrc.json'
       - '.stylelintrc'
       - 'auto.config.ts'
@@ -85,6 +86,7 @@ jobs:
           filters: |
             build:
               - 'forge.json'
+              - 'tsconfig.json'
               - '.eslintrc.json'
               - '.stylelintrc'
               - 'auto.config.ts'
