@@ -54,13 +54,13 @@ jobs:
       ${{
         needs.wf-config.outputs.is-release == 'false' &&
         (
-          (needs.wf-config.outputs.file-changes && contains(fromJson(needs.wf-config.outputs.file-changes), 'build')) ||
-          (needs.wf-config.outputs.file-changes && contains(fromJson(needs.wf-config.outputs.file-changes), 'test'))
+          contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'build') ||
+          contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'test')
         )
       }}
     with:
-      BUILD_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes), 'build') }}
-      TESTS_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes), 'test') }}
+      BUILD_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'build') }}
+      TESTS_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes || ''), 'test') }}
     secrets:
       ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
@@ -105,7 +105,7 @@ jobs:
     name: Deploy Storybook
     needs: wf-config
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
-    if: ${{ needs.wf-config.outputs.file-changes && contains(fromJson(needs.wf-config.outputs.file-changes), 'storybook') }}
+    if: ${{ contains(fromJson(needs.wf-config.outputs.file-changes) || '', 'storybook') }}
     with:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
