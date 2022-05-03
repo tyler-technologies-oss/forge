@@ -49,6 +49,14 @@ jobs:
   wf-context:
     name: Workflow Context
     needs: wf-config
+    steps:
+      - name: Log Context
+        run: |
+          echo "::debug::IS_RELEASE: $IS_RELEASE"
+          echo "::debug::FILE_CHANGES: $FILE_CHANGES"
+        env:
+          IS_RELEASE: ${{ needs.wf-config.outputs.is-release }}
+          FILE_CHANGSE: ${{ needs.wf-config.outputs.file-changes }}
     outputs:
       is-release: ${{ needs.wf-config.outputs.is-release }}
       execute-build: ${{ needs.wf-config.outputs.file-changes && contains(fromJson(needs.wf-config.outputs.file-changes), 'build') }}
