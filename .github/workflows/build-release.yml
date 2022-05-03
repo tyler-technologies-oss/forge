@@ -48,6 +48,7 @@ jobs:
   ## Calculates declarative context variables from our workflow configuration job for use with downstream jobs
   wf-context:
     name: Workflow Context
+    runs-on: ubuntu-latest
     needs: wf-config
     steps:
       - name: Log Context
