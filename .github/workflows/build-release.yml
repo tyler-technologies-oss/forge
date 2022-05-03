@@ -24,7 +24,7 @@ jobs:
   ## Initialize the workflow to gather configuration for subsequent jobs
   wf-config:
     name: Workflow Configuration
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/w~f-configuration.yml@v0.10.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-configuration.yml@v0.10.0
     with:
       FILE_FILTERS: |
         build:
@@ -44,7 +44,6 @@ jobs:
     secrets:
       ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
-      ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
 
   # This job will run on non-release builds for general CI validation only if files are changed that need to be built or tested
   build:
