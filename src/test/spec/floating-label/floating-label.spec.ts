@@ -1,6 +1,7 @@
 import { IFloatingLabel, FloatingLabel, FLOATING_LABEL_CONSTANTS } from '@tylertech/forge/floating-label';
 import { tick, timer } from '@tylertech/forge-testing';
 import { removeElement } from '@tylertech/forge-core';
+import { floatTick } from '../../utils/floating-label-utils';
 
 interface ITestContext {
   context: ITestFloatingLabelContext;
@@ -27,17 +28,17 @@ describe('FloatingLabelComponent', function(this: ITestContext) {
     it('should set floating via method', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.floatingLabel.float(true);
-      await timer(150);
+      await floatTick();
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
       this.context.floatingLabel.float(false);
-      await timer(150);
+      await floatTick();
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(false);
     });
 
     it('should get floating state via property', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.floatingLabel.float(true);
-      await timer(150);
+      await floatTick();
       expect(this.context.floatingLabel.isFloating).toBeTrue();
     });
   
@@ -61,12 +62,12 @@ describe('FloatingLabelComponent', function(this: ITestContext) {
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)).toBeFalse();
       await tick();
       this.context.floatingLabel.float(true);
-      await timer(150);
+      await floatTick();
       this.context.labelElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform'}));
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)).toBeTrue();
       await tick();
       this.context.floatingLabel.float(false);
-      await timer(150);
+      await floatTick();
       this.context.labelElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform'}));
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)).toBeFalse();
       await tick();
