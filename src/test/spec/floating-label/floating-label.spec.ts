@@ -1,6 +1,7 @@
 import { IFloatingLabel, FloatingLabel, FLOATING_LABEL_CONSTANTS } from '@tylertech/forge/floating-label';
-import { tick } from '@tylertech/forge-testing';
+import { tick, timer } from '@tylertech/forge-testing';
 import { removeElement } from '@tylertech/forge-core';
+import { floatTick } from '../../utils/floating-label-utils';
 
 interface ITestContext {
   context: ITestFloatingLabelContext;
@@ -24,12 +25,21 @@ describe('FloatingLabelComponent', function(this: ITestContext) {
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOATING_LABEL)).toBe(true);
     });
   
-    it('should set floating via property', function(this: ITestContext) {
+    it('should set floating via method', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.floatingLabel.float(true);
+      await floatTick();
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
       this.context.floatingLabel.float(false);
+      await floatTick();
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(false);
+    });
+
+    it('should get floating state via property', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.floatingLabel.float(true);
+      await floatTick();
+      expect(this.context.floatingLabel.isFloating).toBeTrue();
     });
   
     it('should get scroll width of label', function(this: ITestContext) {
@@ -42,7 +52,28 @@ describe('FloatingLabelComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.floatingLabel.destroy();
       expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOATING_LABEL)).toBe(false);
-    })
+    });
+
+    it('should listen for transitionend events', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      
+      const afterFloatSpy = jasmine.createSpy('after float');
+      this.context.labelElement.addEventListener('transitionend', afterFloatSpy);
+      expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)).toBeFalse();
+      await tick();
+      this.context.floatingLabel.float(true);
+      await floatTick();
+      this.context.labelElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform'}));
+      expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)).toBeTrue();
+      await tick();
+      this.context.floatingLabel.float(false);
+      await floatTick();
+      this.context.labelElement.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'transform'}));
+      expect(this.context.labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)).toBeFalse();
+      await tick();
+      expect(afterFloatSpy).toHaveBeenCalledTimes(2);
+
+    });
   });
 
   describe('when label is unattached', function(this: ITestContext) {
