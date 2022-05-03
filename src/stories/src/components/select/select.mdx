@@ -28,66 +28,48 @@ to configure the label and value for each option.
 
 ### Basic
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectDefaultHtml()}>
-  <SelectDemo hasHelperText={true}/>
+<LiveDemo fullWidth codeHtml={SelectDefaultHtml()}>
+  <SelectDemo hasHelperText={true} />
 </LiveDemo>
 
 ### Roomy
 
 Use the `roomy` variant on mobile to allow for a larger touch target.
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectRoomyHtml()}>
-  <SelectDemo density={'roomy'}/>
+<LiveDemo fullWidth codeHtml={SelectRoomyHtml()}>
+  <SelectDemo density="roomy" />
 </LiveDemo>
 
 ### Always float
 
 The component can be configured to keep the label floating at all times by setting the `float-label-type` attribute (or `floatLabelType` property in JavaScript) to `always`.
 
-<LiveDemo
-dense 
-fullWidth 
-codeHtml={SelectAlwaysFloatHtml()}>
-  <SelectDemo floatLabelType={'always'}/>
+<LiveDemo fullWidth  codeHtml={SelectAlwaysFloatHtml()}>
+  <SelectDemo floatLabelType="always" />
 </LiveDemo>
 
 ### Leading icon
 
 The component supports the ability to provide a custom leading icon via the `leading` slot:
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectLeadingIconHtml()}>
-  <SelectDemo hasLeadingIcon={true}/>
+<LiveDemo fullWidth codeHtml={SelectLeadingIconHtml()}>
+  <SelectDemo hasLeadingIcon={true} />
 </LiveDemo>
 
 ### Multiple
 
 You can configure the component to allow for specifying multiple selections by adding the `multiple` attribute:
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectMultipleHtml()}>
-  <SelectDemo multiple={true}/>
+<LiveDemo fullWidth codeHtml={SelectMultipleHtml()}>
+  <SelectDemo multiple={true} />
 </LiveDemo>
 
 ### Helper text
 
 If you need to provide helper text to add more information or show an error message, you can use the `helper-text` slot:
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectHelperTextHtml()}>
-  <SelectDemo hasHelperText={true}/>
+<LiveDemo fullWidth codeHtml={SelectHelperTextHtml()}>
+  <SelectDemo hasHelperText={true} />
 </LiveDemo>
 
 </PageSection>
