@@ -45,15 +45,25 @@ jobs:
       ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
 
+  ## Calculates declarative context variables from our workflow configuration job for use with downstream jobs
+  wf-context:
+    name: Workflow Context
+    needs: wf-config
+    outputs:
+      is-release: ${{ needs.wf-config.outputs.is-release }}
+      execute-build: ${{ needs.wf-config.outputs.file-changes && contains(fromJson(needs.wf-config.outputs.file-changes), 'build') }}
+      execute-tests: ${{ needs.wf-config.outputs.file-changes && contains(fromJson(needs.wf-config.outputs.file-changes), 'test') }}
+      deploy-storybook: ${{ needs.wf-config.outputs.file-changes && contains(fromJson(needs.wf-config.outputs.file-changes), 'storybook') }}
+
   # This job will run on non-release builds for general CI validation only if files are changed that need to be built or tested
   build:
     name: Build and Test
-    needs: wf-config
+    needs: wf-context
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.10.0
-    if: ${{ needs.wf-config.outputs.is-release == 'false' && (contains(fromJson(needs.wf-config.outputs.file-changes), 'build') || contains(fromJson(needs.wf-config.outputs.file-changes), 'test')) }}
+    if: ${{ needs.wf-context.outputs.is-release == 'false' && (needs.wf-context.outputs.execute-build == 'true' || needs.wf-context.outputs.execute-tests == 'true') }}
     with:
-      BUILD_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes), 'build') }}
-      TESTS_ENABLED: ${{ contains(fromJson(needs.wf-config.outputs.file-changes), 'test') }}
+      BUILD_ENABLED: ${{ needs.wf-context.outputs.execute-build == 'true' }}
+      TESTS_ENABLED: ${{ needs.wf-context.outputs.execute-tests == 'true' }}
     secrets:
       ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
       ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
@@ -62,9 +72,9 @@ jobs:
   ## This job will run on release builds when publishing a new version
   build-and-release:
     name: Build and Release
-    needs: wf-config
+    needs: wf-context
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.10.0
-    if: ${{ needs.wf-config.outputs.is-release == 'true' }}
+    if: ${{ needs.wf-context.outputs.is-release == 'true' }}
     with:
       PRODUCTION_RELEASE: true
       NODE_VERSION: "14"
@@ -83,9 +93,9 @@ jobs:
   ## This job will run only on release builds
   publish-cdn:
     name: Publish Components to CDN
-    needs: [wf-config, build-and-release]
+    needs: [wf-context, build-and-release]
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.10.0
-    if: ${{ needs.wf-config.outputs.is-release == 'true' }}
+    if: ${{ needs.wf-context.outputs.is-release == 'true' }}
     with:
       AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
       AWS_REGION: "us-east-1"
@@ -96,9 +106,9 @@ jobs:
   ## We run this job only when files that effect Storybook are found in the changed files
   deploy-storybook:
     name: Deploy Storybook
-    needs: wf-config
+    needs: wf-context
     uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.8.0
-    if: ${{ contains(fromJson(needs.wf-config.outputs.file-changes), 'storybook') }}
+    if: ${{ needs.wf-context.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
