@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge",
-  "version": "1.0.0-rc.0",
+  "version": "2.0.0-rc.0",
   "description": "Forge Web Components library",
   "license": "Apache-2.0",
   "main": "esm/index.js",
@@ -15,7 +15,7 @@
     "url": "https://github.com/tyler-technologies/forge.git"
   },
   "dependencies": {
-    "@tylertech/forge-core": "^1.0.0-dev.4",
+    "@tylertech/forge-core": "^2.0.0-rc.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "imask": "^6.4.2",
     "material-components-web": "^14.0.0",

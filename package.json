@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge",
-  "version": "1.0.0-dev.5",
+  "version": "2.0.0-rc.0",
   "description": "Forge Web Components library",
   "license": "Apache-2.0",
   "repository": {
@@ -29,7 +29,7 @@
     "postversion": "cd dist/release/@tylertech/forge && npm version $npm_package_version --no-git-tag-version --no-commit-hooks --ignore-scripts"
   },
   "dependencies": {
-    "@tylertech/forge-core": "^1.0.0-dev.4",
+    "@tylertech/forge-core": "^2.0.0-rc.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "imask": "^6.4.2",
     "material-components-web": "^14.0.0",
@@ -42,9 +42,9 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@tylertech-eslint/eslint-plugin": "^1.0.8",
-    "@tylertech/forge-cli": "^1.0.0-rc.1",
-    "@tylertech/forge-testing": "^1.0.0-dev.0",
-    "@tylertech/stylelint-rules": "^3.0.0-dev.1",
+    "@tylertech/forge-cli": "^2.0.0-rc.0",
+    "@tylertech/forge-testing": "^2.0.0-rc.0",
+    "@tylertech/stylelint-rules": "^4.0.0",
     "@types/jasmine": "^3.10.3",
     "@types/karma": "^6.3.3",
     "@types/karma-fixture": "^0.2.5",
