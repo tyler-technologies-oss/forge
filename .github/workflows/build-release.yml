@@ -1,4 +1,4 @@
-## We only run this workflow on pushes to the master branch. This workflow will
+## We only run this workflow on pushes to the main branch. This workflow will
 ## first determine if a release is to be published, and if so, build and publish.
 ## Otherwise, if not a release, we just perform CI build validation and deploy our
 ## storybook build to GH Pages.
@@ -8,7 +8,7 @@ name: Build and Release
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'forge.json'
       - 'tsconfig.json'
