@@ -38,8 +38,10 @@ export class ModalDrawerFoundation extends BaseDrawerFoundation implements IModa
   }
 
   private _onBackdropClick(evt: Event): void {
-    this.open = false;
-    this._adapter.emitHostEvent(MODAL_DRAWER_CONSTANTS.events.CLOSE);
+    const canClose = this._adapter.emitHostEvent(MODAL_DRAWER_CONSTANTS.events.CLOSE, undefined, true, true);
+    if (canClose) {
+      this.open = false;
+    }
   }
 
   private _setBackdrop(open: boolean): void {
