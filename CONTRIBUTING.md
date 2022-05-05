@@ -66,7 +66,7 @@ npm start
 ```
 
 > New Storybook versions are deployed for every pull request to help reviewers easily validate changes. The main
-> Storybook deployment is updated when changes are merged to `master`.  Storybook is linked in the main Forge
+> Storybook deployment is updated when changes are merged to `main`.  Storybook is linked in the main Forge
 > documentation site to help keep documentation up to date.
 
 ### Building the library
