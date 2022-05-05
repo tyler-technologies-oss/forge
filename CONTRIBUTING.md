@@ -194,3 +194,6 @@ before submitting a pull request.
 
 When creating a new pull request, please provide as much information as you can by filling out the pull
 request template. This will help speed up the process of getting your changes reviewed and merged.
+
+> This project uses [Auto](https://intuit.github.io/auto/) for its CI/CD automation. Please familiarize
+> yourself with Auto. Release versions are controlled by labels on Pull Requests.
