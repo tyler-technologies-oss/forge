@@ -68,6 +68,53 @@ describe('ExpansionPanelComponent', function(this: ITestContext) {
       await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
       expect(getInternalPanelContent(this.context.component).clientWidth).toBeGreaterThan(0);
     });
+
+    it('should set hidden visibility style by default', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.append();
+      await tick();
+
+      expect(getInternalPanelContent(this.context.component).style.visibility).toBe('hidden');
+    });
+
+    it('should remove hidden visibility style when expanded', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.append();
+      await tick();
+
+      this.context.component.open = true;
+      await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+      await tick();
+
+      expect(getInternalPanelContent(this.context.component).style.visibility).not.toBe('hidden');
+    });
+
+    it('should remove visibility style if open by default', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, '');
+      this.context.append();
+      await tick();
+
+      expect(getInternalPanelContent(this.context.component).style.visibility).not.toBe('hidden');
+    });
+
+    it('should set hidden visibility style when collapsed after being expanded', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.append();
+      await tick();
+
+      this.context.component.open = true;
+      await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+      await tick();
+
+      expect(getInternalPanelContent(this.context.component).style.visibility).not.toBe('hidden');
+
+      this.context.component.open = false;
+      await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+      await tick();
+
+      expect(getInternalPanelContent(this.context.component).style.visibility).toBe('hidden');
+    });
   });
 
   describe('interaction with component in DOM already', function(this: ITestContext) {
