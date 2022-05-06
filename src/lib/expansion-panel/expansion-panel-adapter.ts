@@ -44,6 +44,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         this._contentElement.style.width = '';
       }
       this._contentElement.style.removeProperty('opacity');
+      this._contentElement.style.removeProperty('visibility');
       const openIconElement = this._component.querySelector(EXPANSION_PANEL_CONSTANTS.selectors.OPEN_ICON) as OpenIconComponent;
       if (openIconElement) {
         openIconElement.open = true;
