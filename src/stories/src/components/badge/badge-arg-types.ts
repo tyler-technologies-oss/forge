@@ -66,7 +66,7 @@ export const argTypes = {
     name: '--forge-badge-theme-muted-background',
     control: 'select',
     options: ['--mdc-theme-secondary', '--forge-theme-tertiary'],
-    description: 'Dot and Numeric badges should use --forge-badge-theme-muted-background: var(--mdc-theme-secondary) when placed on an indigo background and --forge-badge-theme-muted-background: var(--mdc-theme-tertiary) when placed on a white background.',
+    description: 'Dot and Numeric badges should use --forge-badge-theme-muted-background: var(--mdc-theme-secondary) when placed on an indigo background and --forge-badge-theme-muted-background: var(--forge-theme-tertiary) when placed on a white background.',
     table: {
       category: 'CSS Custom Properties'
     },
