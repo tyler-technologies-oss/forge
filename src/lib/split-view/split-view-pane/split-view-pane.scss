@@ -1,14 +1,14 @@
 @use './mixins';
 @use '../../ripple/forge-ripple.scss';
 
-@include mixins.forge-split-view-pane-styles;
-@include mixins.forge-split-view-pane-horizontal-styles;
-@include mixins.forge-split-view-pane-vertical-styles;
+@include mixins.core-styles;
+@include mixins.horizontal-styles;
+@include mixins.vertical-styles;
 
 :host {
   @include mixins.host;
 }
 
 :host([direction=none]) {
-  @include mixins.forge-split-view-pane-static-styles;
+  @include mixins.static-styles;
 }

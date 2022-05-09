@@ -133,15 +133,22 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
 
   private _handleHomeKey(evt: KeyboardEvent): void {
     evt.preventDefault();
+
     this._adapter.setContentSize(this._min);
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, this._adapter.getContentSize(this._orientation));
+
+    const contentSize = this._adapter.getContentSize(this._orientation);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, contentSize);
   }
 
   private _handleEndKey(evt: KeyboardEvent): void {
     evt.preventDefault();
-    console.log({ max: this._max, availableSpace: this._adapter.getAvailableSpace(this._orientation, this._direction) });
-    this._adapter.setContentSize(getActualMax(this._max, this._adapter.getAvailableSpace(this._orientation, this._direction)));
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, this._adapter.getContentSize(this._orientation));
+
+    const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._direction);
+    const maxSize = getActualMax(this._max, availableSpace);
+    this._adapter.setContentSize(maxSize);
+
+    const contentSize = this._adapter.getContentSize(this._orientation);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANE_CONSTANTS.events.RESIZE, contentSize);
   }
 
   private _tryHandleArrowKey(evt: KeyboardEvent): void {
@@ -227,7 +234,8 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     this._adapter.setContentSize(this._currentSize);
 
     if (this._availableSpace || this._max) {
-      this._setValue(this._currentSize, getActualMax(this._max, this._availableSpace));
+      const maxSize = getActualMax(this._max, this._availableSpace);
+      this._setValue(this._currentSize, maxSize);
     } else {
       this._setValue(this._currentSize, this._currentSize);
     }
@@ -241,7 +249,8 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     if (this._siblingSize !== undefined) {
       const minSizeAdjustment = Math.max(0, this._min - newSize);
       const maxSizeAdjustment = this._max ? Math.min(0, (this._max ?? 0) - newSize) : 0;
-      this._adapter.setSiblingContentSize(this._siblingSize + delta - minSizeAdjustment - maxSizeAdjustment);
+      const newSiblingContentSize = this._siblingSize + delta - minSizeAdjustment - maxSizeAdjustment;
+      this._adapter.setSiblingContentSize(newSiblingContentSize);
     }
   }
 
@@ -264,7 +273,7 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
       this._applyOrientation();
     }
 
-    // Match parent disabled status
+    // Match parent disabled state
     const parentDisabled = this._adapter.getParentProperty('disabled') as boolean;
     if (!this._isInitialized || this._disabled !== parentDisabled) {
       this._disabled = parentDisabled;
@@ -306,7 +315,10 @@ export class SplitViewPaneFoundation implements ISplitViewPaneFoundation {
     this._adapter.setContentSize(this._size);
     // Wait for the DOM to render to get available space
     window.requestAnimationFrame(() => {
-      this._adapter.setValue(mapSizeToValue(this._size, this._min, getActualMax(this._max, this._adapter.getAvailableSpace(this._orientation, this._direction))));
+      const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._direction);
+      const maxSize = getActualMax(this._max, availableSpace);
+      const newValue = mapSizeToValue(this._size, this._min, maxSize);
+      this._adapter.setValue(newValue);
     });
   }
 

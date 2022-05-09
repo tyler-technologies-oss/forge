@@ -63,10 +63,6 @@ export class SplitViewPaneComponent extends HTMLElement implements ISplitViewPan
     this._foundation = new SplitViewPaneFoundation(new SplitViewPaneAdapter(this));
   }
 
-  public initializedCallback(): void {
-    // TODO: Upgrade all public properties here
-  }
-
   public connectedCallback(): void {
     this._foundation.initialize();
   }

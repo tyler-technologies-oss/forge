@@ -18,8 +18,6 @@ export class SplitViewFoundation implements ISplitViewFoundation {
     this._applyOrientation();
   }
 
-  public disconnect(): void {}
-
   public get orientation(): SplitViewOrientation {
     return this._orientation;
   }

@@ -2,7 +2,7 @@
 @use './variables';
 @use '../../theme/theme';
 
-@mixin forge-split-view-pane-styles() {
+@mixin core-styles() {
   .forge-split-view-pane {
     @include base;
 
@@ -32,7 +32,7 @@
   }
 }
 
-@mixin forge-split-view-pane-horizontal-styles() {
+@mixin horizontal-styles() {
   .forge-split-view-pane[orientation=horizontal] {
     @include base-horizontal;
 
@@ -65,7 +65,7 @@
   }
 }
 
-@mixin forge-split-view-pane-vertical-styles() {
+@mixin vertical-styles() {
   .forge-split-view-pane[orientation=vertical] {
     @include base-vertical;
 
@@ -98,7 +98,7 @@
   }
 }
 
-@mixin forge-split-view-pane-static-styles() {
+@mixin static-styles() {
   @include host-static;
 
   .forge-split-view-pane {

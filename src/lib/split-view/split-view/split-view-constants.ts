@@ -9,7 +9,7 @@ const attributes = {
 };
 
 const classes = {
-  ROOT: 'tyl-split-view'
+  ROOT: 'forge-split-view'
 };
 
 const ids = {

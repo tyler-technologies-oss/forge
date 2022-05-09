@@ -1,2 +1,3 @@
-export * from './split-view';
+export * from './core';
 export * from './split-view-pane';
+export * from './split-view';

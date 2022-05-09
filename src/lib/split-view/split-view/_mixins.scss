@@ -1,19 +1,19 @@
 @use './variables';
 @use '../../theme/theme';
 
-@mixin forge-split-view-styles() {
+@mixin core-styles() {
   .forge-split-view {
     @include base;
   }
 }
 
-@mixin forge-split-view-horizontal-styles() {
+@mixin horizontal-styles() {
   .forge-split-view {
     @include base-horizontal;
   }
 }
 
-@mixin forge-split-view-vertical-styles() {
+@mixin vertical-styles() {
   .forge-split-view {
     @include base-vertical;
   }

@@ -1,7 +1,7 @@
 @use './mixins';
 @use '../../ripple/forge-ripple.scss';
 
-@include mixins.forge-split-view-styles;
+@include mixins.core-styles;
 
 :host {
   @include mixins.host;
@@ -10,9 +10,9 @@
 }
 
 :host([orientation=horizontal]) {
-  @include mixins.forge-split-view-horizontal-styles;
+  @include mixins.horizontal-styles;
 }
 
 :host([orientation=vertical]) {
-  @include mixins.forge-split-view-vertical-styles;
+  @include mixins.vertical-styles;
 }

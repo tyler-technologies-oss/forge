@@ -3,6 +3,7 @@ import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty
 import { SplitViewAdapter } from './split-view-adapter';
 import { SplitViewFoundation } from './split-view-foundation';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
+import { SplitViewPaneComponent } from '../split-view-pane';
 
 import template from './split-view.html';
 import styles from './split-view.scss';
@@ -19,7 +20,8 @@ declare global {
 }
 
 @CustomElement({
-  name: SPLIT_VIEW_CONSTANTS.elementName
+  name: SPLIT_VIEW_CONSTANTS.elementName,
+  dependencies: [SplitViewPaneComponent]
 })
 export class SplitViewComponent extends HTMLElement implements ISplitViewComponent {
   public static get observedAttributes(): string[] {
@@ -37,16 +39,8 @@ export class SplitViewComponent extends HTMLElement implements ISplitViewCompone
     this._foundation = new SplitViewFoundation(new SplitViewAdapter(this));
   }
 
-  public initializedCallback(): void {
-    // TODO: Upgrade all public properties here
-  }
-
   public connectedCallback(): void {
     this._foundation.initialize();
-  }
-
-  public disconnectedCallback(): void {
-    this._foundation.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
