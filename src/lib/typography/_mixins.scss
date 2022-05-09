@@ -15,11 +15,10 @@
   }
 
   // Create custom classes for built-in MDC typography styles
-  $all-styles: map.merge(mdc-typography.$styles, variables.$mdc-typography-overrides);
-  @each $style in map.keys($all-styles) {
+  @each $style in map.keys(mdc-typography.$styles) {
     .forge-typography--#{$style} {
       @include mdc-typography.typography($style);
-      @include addon-styles(variables.$mdc-typography-additional-styles, $style);
+      @include apply-additional-styles(variables.$mdc-typography-additional-styles, $style);
     }
   }
   
@@ -27,7 +26,6 @@
   @each $style in map.keys(variables.$styles) {
     .forge-typography--#{$style} {
       @include typography($style);
-      @include addon-styles(variables.$additional-styles, $style);
     }
   }
   
@@ -41,7 +39,7 @@
   }
 }
 
-@mixin addon-styles($styles, $style) {
+@mixin apply-additional-styles($styles, $style) {
   @if map.has-key($styles, $style) {
     $additional-styles: map.get($styles, $style);
     @each $additional-style in map.keys($additional-styles) {

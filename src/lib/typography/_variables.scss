@@ -32,12 +32,7 @@ $styles: (
     font-weight: map.get(typography.$font-weight-values, regular),
     letter-spacing: typography.get-letter-spacing_(0.1, 0.71428571),
     text-decoration: inherit,
-    text-transform: inherit
-  )
-) !default;
-
-$additional-styles: (
-  subtitle2-secondary: (
+    text-transform: inherit,
     color: var(--mdc-theme-text-secondary-on-background)
   )
 ) !default;
@@ -60,13 +55,30 @@ $mdc-typography-overrides: (
     letter-spacing: typography.get-letter-spacing_(-1.5, 2.125)
   ),
   headline4: (
-    line-height: typography.px-to-rem(34px),
+    font-size: typography.px-to-rem(24px),
+    line-height: typography.px-to-rem(24px),
     letter-spacing: typography.get-letter-spacing_(0.25, 1.5)
   ),
   headline5: (
     font-size: typography.px-to-rem(20px),
+    line-height: typography.px-to-rem(32px),
     font-weight: map.get(typography.$font-weight-values, medium),
     letter-spacing: typography.get-letter-spacing_(0.25, 2)
+  ),
+  headline6: (
+    font-size: typography.px-to-rem(16px),
+    line-height: normal,
+    font-weight: 400,
+    letter-spacing: normal
+  ),
+  subtitle1: (
+    letter-spacing: typography.get-letter-spacing_(0.15, 0.9375)
+  ),
+  subtitle2: (
+    letter-spacing: typography.get-letter-spacing_(0.1, 0.71428571)
+  ),
+  overline: (
+    text-transform: none
   ),
   button: (
     text-transform: none

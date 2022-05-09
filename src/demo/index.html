@@ -91,9 +91,6 @@
             <forge-list-item role="listitem" href="#ViewSwitcher">View Switcher</forge-list-item>
           </forge-list>
         </aside>
-        <forge-toolbar inverted slot="footer">
-          <h2 slot="start" class="forge-typography--subtitle2" id="app-version-identifier">N/A</h2>
-        </forge-toolbar>
       </forge-drawer>
       <forge-toolbar slot="body-header">
         <h1 slot="start" class="forge-typography--title" style="white-space: nowrap;">Component Examples</h1>
@@ -4957,10 +4954,6 @@
         }
       }
       darkModeSwitch.addEventListener('forge-switch-select', evt => toggleDarkTheme(evt.detail));
-
-      // Set the version identifier in the drawer
-      var versionIdentifierElement = document.getElementById('app-version-identifier');
-      versionIdentifierElement.textContent = 'v' + Forge.lib.VERSION;
 
       var appBar = document.querySelector('#app-bar');
       appBar.addEventListener('forge-profile-card-sign-out', function() {
