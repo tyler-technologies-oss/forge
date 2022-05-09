@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { IListDropdownOption, IListDropdownOptionGroup } from '../list-dropdown';
 
-const elementName = `${COMPONENT_NAME_PREFIX}menu`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}menu`;
 
 const classes = {
   POPUP: 'forge-menu__popup',

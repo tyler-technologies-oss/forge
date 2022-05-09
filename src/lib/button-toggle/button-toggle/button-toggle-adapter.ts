@@ -1,5 +1,5 @@
-import { MDCRipple } from '@material/ripple';
 import { getShadowElement } from '@tylertech/forge-core';
+import { ForgeRipple } from '../../ripple';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IButtonToggleGroupComponent } from '../button-toggle-group';
 import { IButtonToggleComponent } from './button-toggle';
@@ -9,7 +9,7 @@ export interface IButtonToggleAdapter extends IBaseAdapter {
   setSelected(value: boolean): void;
   addEventListener(type: string, listener: (evt: Event) => void): void;
   removeEventListener(type: string, listener: (evt: Event) => void): void;
-  initializeRipple(): MDCRipple;
+  initializeRipple(): ForgeRipple;
   setDisabled(value: boolean): void;
   setDense(value: boolean): void;
   requestFocus(): void;
@@ -41,8 +41,8 @@ export class ButtonToggleAdapter extends BaseAdapter<IButtonToggleComponent> imp
     this._buttonElement.removeEventListener(type, listener);
   }
 
-  public initializeRipple(): MDCRipple {
-    return new MDCRipple(this._buttonElement);
+  public initializeRipple(): ForgeRipple {
+    return new ForgeRipple(this._buttonElement);
   }
 
   public setDisabled(value: boolean): void {

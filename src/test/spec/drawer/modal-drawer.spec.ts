@@ -63,6 +63,22 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
+  it('should not close backdrop when clicked if close event is cancelled', async function (this: ITestContext) {
+    this.context = setupTestContext();
+    this.context.component.open = true;
+    this.context.append();
+    this.context.component.addEventListener(MODAL_DRAWER_CONSTANTS.events.CLOSE, evt => evt.preventDefault());
+    await timer(100);
+    await tick();
+
+    const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
+    const backdropElement = getShadowElement(backdrop, BACKDROP_CONSTANTS.selectors.CONTAINER);
+    dispatchNativeEvent(backdropElement, 'click');
+    await tick();
+
+    expect(this.context.component.open).toBe(true);
+  });
+
   it('should not show backdrop when open is set to false by default', async function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.append();

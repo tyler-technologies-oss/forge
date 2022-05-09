@@ -27,11 +27,8 @@ the user has typed into the `<input>` element.
 
 The following code snippet demonstrates a common usage in the HTML:
 
-<LiveDemo 
-layout="column" 
-codeHtml={AutocompleteDefaultCodeHtml()} 
-codeTs={AutocompleteDefaultCodeTs()}>
-  <AutocompleteDemo/>
+<LiveDemo layout="column" codeHtml={AutocompleteDefaultCodeHtml()} codeTs={AutocompleteDefaultCodeTs()}>
+  <AutocompleteDemo />
 </LiveDemo>
 
 The only requirement in the HTML is to provide a child `<input>` element. While a Forge [text-field component](?path=/story/components-text-field--default) will typically be used, you
@@ -176,6 +173,30 @@ Closes the dropdown.
 | `forge-autocomplete-change`          | Emits when the user selects an option from the suggestions. **Only emits in "default" mode.**
 | `forge-autocomplete-select`          | Emits when the user selects an option from the suggestions. **Only emits in "stateless" mode.**
 | `forge-autocomplete-scrolled-bottom` | Emits when the user scrolls to the bottom of the dropdown. Only if observeScroll is true.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Keyboard shortcuts
+
+| Name                          | Description
+| :-----------------------------| :----------------
+| **Dropdown closed**           |
+| `down / arrow down`           | Opens the dropdown and activates the first option
+| **Dropdown opened**           |
+| `tab`                         | **Single select:** Select the active option
+| `escape`                      | Close the dropdown when the dropdown is open
+| `down / arrow down`           | [List keyboard shortcuts](?path=/docs/components-list--default#keyboard-shortcuts)
+| `up / arrow up`               | [List keyboard shortcuts](?path=/docs/components-list--default#keyboard-shortcuts)
+| `enter / home / end`          | [List keyboard shortcuts](?path=/docs/components-list--default#keyboard-shortcuts)
+| **Dropdown opened or closed** |
+| `backspace`                   | **Two or more `input.value.length`:** Removes the end character in the `input.value`
+| `backspace`                   | **One `input.value.length` and Single select and not a chipfield:** Clears the `input.value`
+| `delete`                      | **Two or more `input.value.length`:** Removes the start character in the `input.value`
+| `delete`                      | **One `input.value.length` and Single select and not a chipfield:** Clears the input.value
 
 </PageSection>
 

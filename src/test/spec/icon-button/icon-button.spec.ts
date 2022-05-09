@@ -1,7 +1,7 @@
-import { defineIconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '@tylertech/forge/icon-button';
+import { ForgeRipple } from '@tylertech/forge/ripple';
 import { removeElement } from '@tylertech/forge-core';
-import { tick, dispatchNativeEvent } from '@tylertech/forge-testing';
-import { MDCRipple } from '@material/ripple';
+import { tick } from '@tylertech/forge-testing';
+import { defineIconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '@tylertech/forge/icon-button';
 
 interface ITestContext {
   context: ITestIconButtonContext
@@ -37,7 +37,7 @@ describe('IconButtonComponent', function(this: ITestContext) {
 
     it('should not intialize if no button element is provided', function(this: ITestContext) {
       this.context = setupTestContext(false, false, false);
-      expect(this.context.component['mdcRipple']).toBeUndefined();
+      expect(this.context.component['rippleInstance']).toBeUndefined();
     });
 
     it('should receive correct class', async function(this: ITestContext) {
@@ -312,7 +312,7 @@ describe('IconButtonComponent', function(this: ITestContext) {
     it('should reset ripple when initializing', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
-      const ripple: MDCRipple = this.context.component['_mdcRipple'];
+      const ripple: ForgeRipple = this.context.component['_rippleInstance'];
       const rippleDestroySpy = spyOn(ripple, 'destroy');
       expect(rippleDestroySpy.calls.count()).toBe(0);
       this.context.component['_initialize']();
@@ -322,7 +322,7 @@ describe('IconButtonComponent', function(this: ITestContext) {
     it('should layout the ripple via component', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
-      const ripple: MDCRipple = this.context.component['_mdcRipple'];
+      const ripple: ForgeRipple = this.context.component['_rippleInstance'];
       const rippleLayoutSpy = spyOn(ripple, 'layout');
       expect(rippleLayoutSpy.calls.count()).toBe(0);
       this.context.component.layout();

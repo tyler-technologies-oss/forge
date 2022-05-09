@@ -1,5 +1,5 @@
-import { MDCRipple } from '@material/ripple';
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { ForgeRipple } from '../../ripple';
 import { IButtonToggleAdapter } from './button-toggle-adapter';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';
 
@@ -18,7 +18,7 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
   private _disabled = false;
   private _dense = false;
   private _clickListener: (evt: MouseEvent) => void;
-  private _rippleInstance: MDCRipple;
+  private _rippleInstance: ForgeRipple;
 
   constructor(private _adapter: IButtonToggleAdapter) {
     this._clickListener = evt => this._onClick(evt);

@@ -1,10 +1,10 @@
-import { MDCRipple, MDCRippleAdapter, MDCRippleFoundation, MDCRippleCapableSurface } from '@material/ripple';
 import { addClass, getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base';
 import { IStepComponent } from './step';
 import { StepIcons, STEP_CONSTANTS } from './step-constants';
 import { IIconComponent } from '../../icon';
 import { IExpansionPanelComponent } from '../../expansion-panel';
+import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../../ripple';
 
 export interface IStepAdapter extends IBaseAdapter {
   component: IStepComponent;
@@ -34,10 +34,10 @@ export interface IStepAdapter extends IBaseAdapter {
   isExpandedContentInFocus(checkElement?: HTMLElement): boolean;
 }
 
-export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAdapter, MDCRippleCapableSurface {
+export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAdapter, ForgeRippleCapableSurface {
   private _buttonElement: HTMLButtonElement;
   private _container: HTMLElement;
-  private _ripple: MDCRipple;
+  private _rippleInstance: ForgeRipple;
   private _expansionSlot: HTMLSlotElement;
   private _expansionPanel: IExpansionPanelComponent;
 
@@ -47,7 +47,7 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
     this._container = getShadowElement(_component, STEP_CONSTANTS.selectors.STEP_CONTAINER) as HTMLElement;
   }
 
-  // MDCRippleCapableSurface interface
+  // ForgeRippleCapableSurface
   public get root(): HTMLElement {
     return this._buttonElement;
   }
@@ -69,16 +69,16 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
   }
 
   public attachRipple(): void {
-    this._ripple = this.initializeRipple();
+    this._rippleInstance = this.initializeRipple();
   }
 
   public detatchRipple(): void {
-    if (this._ripple) {
-      this._ripple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
   }
 
-  public initializeRipple(): MDCRipple {
+  public initializeRipple(): ForgeRipple {
     return this._createRipple();
   }
 
@@ -204,12 +204,12 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
     return this._expansionSlot.assignedElements().some(element => element.contains(checkElement || document.activeElement));
   }
 
-  private _createRipple(): MDCRipple {
-    const adapter: MDCRippleAdapter = {
-      ...MDCRipple.createAdapter(this),
+  private _createRipple(): ForgeRipple {
+    const adapter: ForgeRippleAdapter = {
+      ...ForgeRipple.createAdapter(this),
       isSurfaceDisabled: () => this._buttonElement.disabled
     };
-    const ripple = new MDCRipple(this._buttonElement, new MDCRippleFoundation(adapter));
+    const ripple = new ForgeRipple(this._buttonElement, new ForgeRippleFoundation(adapter));
     return ripple;
   }
 

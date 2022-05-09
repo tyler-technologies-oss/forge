@@ -1,6 +1,6 @@
 import { removeElement } from '@tylertech/forge-core';
 import { defineRippleComponent, IRippleComponent, RIPPLE_CONSTANTS } from '@tylertech/forge/ripple';
-import { TylRipple } from '@tylertech/forge/ripple/tyl-ripple';
+import { ForgeRipple } from '@tylertech/forge/ripple/forge-ripple';
 
 interface ITestContext {
   context: ITestRippleContext;
@@ -9,7 +9,7 @@ interface ITestContext {
 interface ITestRippleContext {
   component: IRippleComponent;
   rippleSurface: HTMLElement;
-  getRippleInstance(): TylRipple;
+  getRippleInstance(): ForgeRipple;
   append(): void;
   destroy(): void;
 }
@@ -92,7 +92,7 @@ describe('RippleComponent', function(this: ITestContext) {
     return {
       component,
       rippleSurface,
-      getRippleInstance: () => component['_foundation']['_adapter']['_ripple'] as TylRipple,
+      getRippleInstance: () => component['_foundation']['_adapter']['_ripple'] as ForgeRipple,
       append: () => document.body.appendChild(fixture),
       destroy: () => removeElement(fixture)
     };

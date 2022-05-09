@@ -23,7 +23,7 @@
 // Selector '.forge-*' should only be used in this project.
 // stylelint-disable selector-class-pattern
 
-@use '@material/rtl/mixins' as mdc-rtl-mixins;
+@use '@material/rtl' as mdc-rtl-mixins;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
 @use '@material/animation/variables' as mdc-animation-variables;
@@ -34,8 +34,20 @@
   .forge-floating-label {
     @include base($query: $query);
 
-    &--float {
+    &--float-above {
       @include float($query: $query);
+    }
+
+    &--float-above-end-keyframe {
+      transition: none;
+      font-size: variables.$font-size * variables.$float-scale;
+      @include float(variables.$position-y, 0%, 1);
+    }
+
+    &--unfloat-above-start-keyframe {
+      transition: none;
+      font-size: variables.$font-size;
+      @include float(variables.$position-y, 0%, variables.$float-scale);
     }
 
     &--required {
@@ -55,8 +67,7 @@
   $feat-animation: mdc-feature-targeting.create-target($query, animation);
 
   @include mdc-typography.typography(subtitle1, $exclude-props: (line-height, font-size), $query: $query);
-  font-size: 1rem;
-  font-size: var(--mdc-typography-subtitle1-font-size, 1rem);
+  font-size: var(--mdc-typography-subtitle1-font-size, variables.$font-size);
 
   @include mdc-feature-targeting.targets($feat-structure) {
     position: absolute;
@@ -95,8 +106,7 @@
 
   @include mdc-feature-targeting.targets($feat-animation) {
     transition: transform variables.$transition-duration mdc-animation-variables.$standard-curve-timing-function,
-                color variables.$transition-duration mdc-animation-variables.$standard-curve-timing-function,
-                right variables.$transition-duration mdc-animation-variables.$standard-curve-timing-function;
+                color variables.$transition-duration mdc-animation-variables.$standard-curve-timing-function;
   }
 }
 
@@ -151,14 +161,18 @@
   @include mdc-feature-targeting.targets($feat-animation) {
     @keyframes mdc-floating-label-shake-float-above-#{$modifier} {
       0% {
+        @include mdc-rtl-mixins.ignore-next-line();
         transform: translateX(calc(0 - #{$positionX}))
-          translateY(-#{$positionY}) scale(#{$scale});
+          translateY(-#{$positionY}) 
+          scale(#{$scale});
       }
 
       33% {
         animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
+        @include mdc-rtl-mixins.ignore-next-line();
         transform: translateX(calc(4% - #{$positionX}))
-          translateY(-#{$positionY}) scale(#{$scale});
+          translateY(-#{$positionY}) 
+          scale(#{$scale});
       }
 
       66% {
@@ -168,13 +182,17 @@
           0.55,
           0.956352
         );
+        @include mdc-rtl-mixins.ignore-next-line();
         transform: translateX(calc(-4% - #{$positionX}))
-          translateY(-#{$positionY}) scale(#{$scale});
+          translateY(-#{$positionY})
+          scale(#{$scale});
       }
 
       100% {
+        @include mdc-rtl-mixins.ignore-next-line();
         transform: translateX(calc(0 - #{$positionX}))
-          translateY(-#{$positionY}) scale(#{$scale});
+          translateY(-#{$positionY})
+          scale(#{$scale});
       }
     }
   }
@@ -190,12 +208,15 @@
 
   @include mdc-feature-targeting.targets($feat-structure) {
     @if $positionX > 0 or $positionX < 0 {
+      @include mdc-rtl-mixins.ignore-next-line();
       transform: translateY(-1 * $positionY)
         translateX(-1 * $positionX)
         scale($scale);
 
       @include mdc-rtl-mixins.rtl {
-        transform: translateY(-1 * $positionY) translateX($positionX)
+        @include mdc-rtl-mixins.ignore-next-line();
+        transform: translateY(-1 * $positionY)
+          translateX($positionX)
           scale($scale);
       }
     } @else {
@@ -228,7 +249,7 @@
 ///
 @mixin float-transition(
   $duration-ms,
-  $timing-function: mdc-mdc-animation-variables.$standard-curve-timing-function,
+  $timing-function: mdc-animation-variables.$standard-curve-timing-function,
   $query: mdc-feature-targeting.all()
 ) {
   $feat-animation: mdc-feature-targeting.create-target($query, animation);
@@ -243,9 +264,9 @@
   $feat-structure: mdc-feature-targeting.create-target($query, structure);
 
   @include mdc-feature-targeting.targets($feat-structure) {
-    /* @noflip */
+    @include mdc-rtl-mixins.ignore-next-line();
     margin-left: 1px;
-    /* @noflip */
+    @include mdc-rtl-mixins.ignore-next-line();
     margin-right: 0;
     content: '*';
   }
@@ -257,9 +278,9 @@
   $feat-structure: mdc-feature-targeting.create-target($query, structure);
 
   @include mdc-feature-targeting.targets($feat-structure) {
-    /* @noflip */
+    @include mdc-rtl-mixins.ignore-next-line();
     margin-left: 0;
-    /* @noflip */
+    @include mdc-rtl-mixins.ignore-next-line();
     margin-right: 1px;
   }
 }

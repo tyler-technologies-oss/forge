@@ -34,7 +34,7 @@
 @use '@material/theme/custom-properties' as mdc-custom-properties;
 @use './checkbox-custom-properties';
 @use './checkbox-theme';
-@use '../theme/theme';
+@use '../theme';
 
 ///
 /// Checkbox and ripple styles.

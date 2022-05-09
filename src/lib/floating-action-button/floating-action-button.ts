@@ -1,6 +1,6 @@
-import { MDCRipple } from '@material/ripple';
 import { coerceBoolean, CustomElement, ensureChildren, toggleClass } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { ForgeRipple } from '../ripple';
 import { FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
 
 export interface IFloatingActionButtonComponent extends IBaseComponent {
@@ -28,7 +28,7 @@ export class FloatingActionButton extends BaseComponent implements IFloatingActi
     ];
   }
 
-  private _mdcRipple: MDCRipple;
+  private _rippleInstance: ForgeRipple;
   private _isExtended = false;
   private _isMini = false;
   private _isExited = false;
@@ -47,8 +47,8 @@ export class FloatingActionButton extends BaseComponent implements IFloatingActi
   }
 
   public disconnectedCallback(): void {
-    if (this._mdcRipple) {
-      this._mdcRipple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
   }
 
@@ -80,11 +80,11 @@ export class FloatingActionButton extends BaseComponent implements IFloatingActi
     this._buttonElement.insertAdjacentElement('afterbegin', rippleElement);
     this._sync();
 
-    if (this._mdcRipple) {
-      this._mdcRipple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
 
-    this._mdcRipple = new MDCRipple(this._buttonElement);
+    this._rippleInstance = new ForgeRipple(this._buttonElement);
   }
 
   private _sync(): void {

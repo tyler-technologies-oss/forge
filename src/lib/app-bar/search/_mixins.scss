@@ -1,6 +1,6 @@
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/theme/theme-color' as mdc-theme-color;
-@use '../../theme/theme';
+@use '../../theme';
 @use './variables';
 
 @mixin provide-theme($theme) {

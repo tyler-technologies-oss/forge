@@ -88,7 +88,8 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
       this._floatLabel(true);
     } else {
       const hasText = !!this._getSelectedText();
-      this._floatLabel(hasText);
+      const hasPlaceholder = !!this._placeholder;
+      this._floatLabel(hasText || hasPlaceholder);
     }
   }
 
@@ -193,7 +194,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
       value = true;
     }
 
-    this._floatingLabelInstance.float(value);
+    this._floatingLabelInstance.float(value, this._floatLabelType === 'always');
   }
 
   /** Handles losing focus on the selected text element. */
@@ -230,7 +231,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   /** Updates the state of the component to not contain focus. */
   private _setBlurred(): void {
     this._adapter.removeRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-    if (!this._selectedValues.length) {
+    if (!this._selectedValues.length && !this._placeholder?.length) {
       this._floatLabel(false);
     }
   }
@@ -239,7 +240,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   protected _reset(): void {
     super._reset();
     this._adapter.setSelectedText('');
-    this._floatLabel(false);
+    this._floatLabel(!this._placeholder?.length);
   }
 
   private _updateLabel(): void {
@@ -260,7 +261,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     const text = this._getSelectedText();
     this._adapter.setSelectedText(text);
     if (!this._open) {
-      this._floatLabel(!!text);
+      this._floatLabel(!!text || !!this._placeholder);
     }
   }
 
@@ -323,6 +324,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     if (this._disabled !== value) {
       this._disabled = value;
       this._adapter.setDisabled(this._disabled);
+      this._initializeLabel();
     }
   }
 
@@ -369,7 +371,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   public set floatLabelType(value: FieldFloatLabelType) {
     if (this._floatLabelType !== value) {
       this._floatLabelType = value;
-      this._floatLabel(this._floatLabelType === 'always');
+      this._floatLabel(this._floatLabelType === 'always' || !!this._placeholder);
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, isDefined(this._floatLabelType) ? this._floatLabelType.toString() : '');
     }
   }
@@ -382,6 +384,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     if (this._placeholder !== value) {
       this._placeholder = value;
       this._adapter.setPlaceholderText(this._placeholder);
+      this._initializeLabel();
     }
   }
 }

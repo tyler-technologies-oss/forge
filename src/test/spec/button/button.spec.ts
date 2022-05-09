@@ -37,7 +37,7 @@ describe('ButtonComponent', function(this: ITestContext) {
       const buttonElement = (this.context as ITestButtonContext).buttonElement;
       expect(buttonElement.classList.contains(BUTTON_CONSTANTS.classes.BUTTON)).toBe(true, 'Expected the default button class');
 
-      // Waiting a frame because MDCRipple doesn't set its classes until the next cycle
+      // Waiting a frame because ForgeRipple doesn't set its classes until the next cycle
       await tick();
       expect(buttonElement.classList.contains('mdc-ripple-upgraded')).toBe(true, 'Expected the mdc-ripple-upgraded class');
     });

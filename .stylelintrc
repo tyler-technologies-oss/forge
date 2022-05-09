@@ -1,14 +1,3 @@
 {
-  "extends": "@tylertech/stylelint-rules",
-  "rules": {
-    "block-closing-brace-newline-after": null,
-    "selector-pseudo-element-no-unknown": [
-      true,
-      {
-        "ignorePseudoElements": ["/part/", "part"]
-      }
-    ],
-    "selector-max-id": null,
-    "number-no-trailing-zeros": null
-  }
+  "extends": "@tylertech/stylelint-rules"
 }

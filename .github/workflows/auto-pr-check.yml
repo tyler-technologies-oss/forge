@@ -3,14 +3,14 @@ name: Pull Request Validation
 on:
   pull_request:
     branches:
-      - master
+      - main
     types: [opened, synchronize, reopened, labeled, unlabeled]
   workflow_dispatch:
     
 jobs:
   release:
     name: Pull Request Validation
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-auto-pr-check.yml@v0.1.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-auto-pr-check.yml@v0.10.0
     with:
       NODE_VERSION: "14"
     secrets:

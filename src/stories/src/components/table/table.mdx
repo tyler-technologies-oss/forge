@@ -32,25 +32,21 @@ Using the component in the HTML markup is simple. Just add the following HTML:
 
 This alone won't render anything, but with a little configuration from JavaScript we can setup a table with data easily.
 
-In the example code below, we are getting a reference to the `forge-table` custom element, and then we set the `data` and
-`columnConfigurations` properties.
+In the example code below, we are getting a reference to the `forge-table` custom element, and then we set the `data` and
+`columnConfigurations` properties.
 
 When those two properties are both set, the table will render the rows of data.
 
-<LiveDemo 
-fullWidth 
-layout={"column"} 
-codeHtml={TableDefaultHtml()} 
-codeTs={TableDefaultTs()}>
-  <TableDemo/>
+<LiveDemo fullWidth layout="column" codeHtml={TableDefaultHtml()} codeTs={TableDefaultTs()}>
+  <TableDemo />
 </LiveDemo>
 
 
 ### Using column filters
 
-To add column filters you will need to specify a `filterDelegate` for each column that needs it. You can use the built-in component delegate classes (see example below) for the common filter input types, or you can build your own delegate class that represents the component you would like to render in the filter cell.
+To add column filters you will need to specify a `filterDelegate` for each column that needs it. You can use the built-in component delegate classes (see example below) for the common filter input types, or you can build your own delegate class that represents the component you would like to render in the filter cell.
 
-A component delegate is a flexible API that allows you to define a class that extends an `AbstractComponentDelegate`. This class defines a common interface to use for dynamic components that require the ability to get/set values, set invalid, disabled, required... etc. You can then communicate with your component through this delegate instance.
+A component delegate is a flexible API that allows you to define a class that extends an `AbstractComponentDelegate`. This class defines a common interface to use for dynamic components that require the ability to get/set values, set invalid, disabled, required... etc. You can then communicate with your component through this delegate instance.
 
 ```ts
 import { TextFieldComponentDelegate, SelectComponentDelegate } from '@tylertech/forge';
@@ -405,20 +401,35 @@ export class TableExampleComponent implements OnInit {
 
 <PageSection>
 
+## Keyboard shortcuts
+
+| Name                                | Description
+| :-----------------------------------| :----------------
+| **Mutli column sort**               |
+| `ctrl + click`                      | Will add an additional column to sort by to the sorted columns.
+| **Multiselect**                     |
+| `shift + click`                     | Will select a range of list items if a previusly selected item exist.
+
+</PageSection>
+
+---
+
+<PageSection>
+
 ## CSS custom properties
 
 | Name                                                    | Description
 | :-------------------------------------------------------| :------------------
-| `--forge-table-theme-row-hover-background`                | Controls the hover background color of a body row.
-| `--forge-table-theme-row-selected-hover-background`       | Controls the selected hover background color of a body row.
-| `--forge-table-theme-row-selected-background`             | Controls the selected background color of a body row.
-| `--forge-table-theme-row-active-background`               | Controls the active background color of a body row.
-| `--forge-table-theme-row-selected-active-background`      | Controls the selected active background color of a body row.
-| `--forge-z-index-surface`                                 | Controls the z-index of a fixed head cell.
+| `--forge-table-theme-row-hover-background`              | Controls the hover background color of a body row.
+| `--forge-table-theme-row-selected-hover-background`     | Controls the selected hover background color of a body row.
+| `--forge-table-theme-row-selected-background`           | Controls the selected background color of a body row.
+| `--forge-table-theme-row-active-background`             | Controls the active background color of a body row.
+| `--forge-table-theme-row-selected-active-background`    | Controls the selected active background color of a body row.
+| `--forge-z-index-surface`                               | Controls the z-index of a fixed head cell.
+| `--forge-theme-border-color`                            | Controls the border-color of the table.
 | `--mdc-theme-primary`                                   | Controls the border-color of the resize handle.
 | `--mdc-theme-surface`                                   | Controls the background-color of the table.
 | `--mdc-theme-on-surface`                                | Controls the font-color of the table.
-| `--mdc-theme-border-color`                              | Controls the border-color of the table.
 | `--mdc-theme-text-secondary-on-background`              | Controls the font-color of the head cells.
 | `--mdc-theme-text-primary-on-background`                | Controls the font-color of the sorted head cells.
 | `--mdc-theme-text-icon-on-background`                   | Controls the font-color of the icon in sortable head cells.
@@ -539,7 +550,7 @@ interface IColumnConfiguration {
   headerCellStyle?: Partial<CSSStyleDeclaration>;
   resizable?: boolean;
   columnSpan?: 'all' | number;
-  propagateCellTemplateClick?: boolean;
+  stopCellTemplateClickPropagation?: boolean;
 }
 ```
 
@@ -733,10 +744,9 @@ interface ITableResizeEventDescriptor {
 ```ts
 interface ITableTemplateBuilderResult {
   content: HTMLElement | string;
-  propagateClick?: boolean;
+  stopClickPropagation?: boolean;
 }
 ```
-
 
 </PageSection>
 

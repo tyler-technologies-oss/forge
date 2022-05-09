@@ -9,7 +9,7 @@ export interface IFieldFoundation extends ICustomElementFoundation {
   shape: FieldShapeType;
   invalid: boolean;
   required: boolean;
-  floatLabel(value: boolean): void;
+  floatLabel(value: boolean, alwaysFloat?: boolean): void;
 }
 
 export class FieldFoundation {
@@ -192,14 +192,14 @@ export class FieldFoundation {
 
     if (!value && this._floatLabelType === 'always') {
       if (this._floatingLabel) {
-        this._floatingLabel.float(true);
+        this._floatingLabel.float(true, true);
       }
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
       return;
     }
 
     if (this._floatingLabel) {
-      this._floatingLabel.float(value);
+      this._floatingLabel.float(value, this._floatLabelType === 'always');
 
       if (value) {
         this._adapter.setInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
@@ -239,7 +239,7 @@ export class FieldFoundation {
     if (this._adapter.hasLabel() && this._density !== 'dense') {
       this._floatingLabel = this._adapter.initializeFloatingLabel();
       this._adapter.ensureLabelOrder();
-      this.floatLabel(this._adapter.fieldHasValue() || this._adapter.hasPlaceholder());
+      this.floatLabel(this._floatLabelType === 'always' || this._adapter.fieldHasValue() || this._adapter.hasPlaceholder());
       this._adapter.setRootClass(FIELD_CONSTANTS.classes.LABEL);
     } else {
       this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
@@ -293,6 +293,7 @@ export class FieldFoundation {
     this._adapter.removeLabelClass(FIELD_CONSTANTS.classes.LABEL_FOCUSED);
 
     if (!this._adapter.fieldHasValue() && !this._adapter.hasPlaceholder()) {
+      this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
       this.floatLabel(false);
     }
   }

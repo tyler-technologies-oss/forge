@@ -31,7 +31,7 @@
 @use '@material/rtl/mixins' as mdc-rtl;
 @use '@material/theme/theme' as mdc-theme;
 @use './variables';
-@use '../theme/theme';
+@use '../theme';
 @use '../theme/theme-values';
 @use '../app-bar/variables' as app-bar-variables;
 

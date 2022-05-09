@@ -1,6 +1,6 @@
 @use '@material/linear-progress/mdc-linear-progress';
 @use '@material/linear-progress/mixins' as mdc-linear-progress-mixins;
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 
 :host {

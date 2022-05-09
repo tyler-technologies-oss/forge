@@ -22,6 +22,15 @@
     @if list.index($exclude, floating-label) == null {
       @include selector.floating-label;
     }
+    @if list.index($exclude, floating-label-float-above) == null {
+      @include selector.floating-label-float-above;
+    }
+    @if list.index($exclude, floating-label-float-above-end-keyframe) == null {
+      @include selector.floating-label-float-above-end-keyframe;
+    }
+    @if list.index($exclude, floating-label-unfloat-above-start-keyframe) == null {
+      @include selector.floating-label-unfloat-above-start-keyframe;
+    }
     @if list.index($exclude, input) == null {
       @include selector.input;
     }

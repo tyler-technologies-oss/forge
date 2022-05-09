@@ -110,15 +110,15 @@
             <div style="padding: 8px;">
               <forge-accordion id="accordion" panel-selector="forge-expansion-panel">
                 <forge-expansion-panel>
-                  <div role="button" slot="header" class="app-flex">
+                  <div role="button" tabindex="0" slot="header" class="app-flex">
                     <div>Panel One</div>
                     <forge-open-icon></forge-open-icon>
                   </div>
-                  <div>Content for panel one.</div>
+                  <div>Content for panel one.<button type="button" id="the-accordion-button">Button</button></div>
                 </forge-expansion-panel>
 
                 <forge-expansion-panel>
-                  <div role="button" slot="header" class="app-flex">
+                  <div role="button" tabindex="0" slot="header" class="app-flex">
                     <div>Panel Two</div>
                     <forge-open-icon></forge-open-icon>
                   </div>
@@ -126,7 +126,7 @@
                 </forge-expansion-panel>
 
                 <forge-expansion-panel>
-                  <div role="button" slot="header" class="app-flex">
+                  <div role="button" tabindex="0" slot="header" class="app-flex">
                     <div>Panel Three</div>
                     <forge-open-icon></forge-open-icon>
                   </div>
@@ -134,6 +134,12 @@
                 </forge-expansion-panel>
               </forge-accordion>
             </div>
+
+            <script>
+              const button = document.querySelector('#the-accordion-button');
+              button.addEventListener('focus', () => console.log('focus'));
+              button.addEventListener('blur', () => console.log('blur'));
+            </script>
           </forge-card>
 
           <!-- forge-app-bar -->

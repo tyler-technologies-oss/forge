@@ -17,7 +17,7 @@ import {
 } from '@tylertech/forge/autocomplete';
 import { POPUP_CONSTANTS } from '@tylertech/forge/popup';
 import { LIST_ITEM_CONSTANTS, IListItemComponent, LIST_CONSTANTS } from '@tylertech/forge/list';
-import { IOption, IOptionComponent } from '@tylertech/forge/select';
+import { IOption, IOptionComponent, OPTION_CONSTANTS } from '@tylertech/forge/select';
 import { SKELETON_CONSTANTS, ISkeletonComponent } from '@tylertech/forge/skeleton';
 import { LINEAR_PROGRESS_CONSTANTS, ILinearProgressComponent } from '@tylertech/forge/linear-progress';
 import { TEXT_FIELD_CONSTANTS, ITextFieldComponent, ITextFieldComponentDelegateOptions } from '@tylertech/forge/text-field';
@@ -709,6 +709,25 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(0);
+    });
+
+    it('should not activate first option when clearing filter text', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.value = DEFAULT_FILTER_OPTIONS[2].value;
+
+      await tick();
+
+      this.context.input.focus();
+      this.context.input.value = '';
+      this.context.input.dispatchEvent(new Event('input'));
+
+      await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+
+      const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
+      expect(activeListItemIndex).toBe(-1);
     });
 
     it('should set CSS class on popup', async function(this: ITestContext) {
@@ -1481,7 +1500,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     const optionElements: IOptionComponent[] = [];
     DEFAULT_FILTER_OPTIONS.forEach(o => {
       const list = document.createElement(LIST_CONSTANTS.elementName) as HTMLElement;
-      const option = document.createElement(LIST_ITEM_CONSTANTS.elementName) as IOptionComponent;
+      const option = document.createElement(OPTION_CONSTANTS.elementName);
       option.setAttribute(LIST_ITEM_CONSTANTS.attributes.VALUE, o.value.toString());
       option.textContent = o.label;
       optionElements.push(option);

@@ -28,66 +28,48 @@ to configure the label and value for each option.
 
 ### Basic
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectDefaultHtml()}>
-  <SelectDemo hasHelperText={true}/>
+<LiveDemo fullWidth codeHtml={SelectDefaultHtml()}>
+  <SelectDemo hasHelperText={true} />
 </LiveDemo>
 
 ### Roomy
 
 Use the `roomy` variant on mobile to allow for a larger touch target.
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectRoomyHtml()}>
-  <SelectDemo density={'roomy'}/>
+<LiveDemo fullWidth codeHtml={SelectRoomyHtml()}>
+  <SelectDemo density="roomy" />
 </LiveDemo>
 
 ### Always float
 
 The component can be configured to keep the label floating at all times by setting the `float-label-type` attribute (or `floatLabelType` property in JavaScript) to `always`.
 
-<LiveDemo
-dense 
-fullWidth 
-codeHtml={SelectAlwaysFloatHtml()}>
-  <SelectDemo floatLabelType={'always'}/>
+<LiveDemo fullWidth  codeHtml={SelectAlwaysFloatHtml()}>
+  <SelectDemo floatLabelType="always" />
 </LiveDemo>
 
 ### Leading icon
 
 The component supports the ability to provide a custom leading icon via the `leading` slot:
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectLeadingIconHtml()}>
-  <SelectDemo hasLeadingIcon={true}/>
+<LiveDemo fullWidth codeHtml={SelectLeadingIconHtml()}>
+  <SelectDemo hasLeadingIcon={true} />
 </LiveDemo>
 
 ### Multiple
 
 You can configure the component to allow for specifying multiple selections by adding the `multiple` attribute:
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectMultipleHtml()}>
-  <SelectDemo multiple={true}/>
+<LiveDemo fullWidth codeHtml={SelectMultipleHtml()}>
+  <SelectDemo multiple={true} />
 </LiveDemo>
 
 ### Helper text
 
 If you need to provide helper text to add more information or show an error message, you can use the `helper-text` slot:
 
-<LiveDemo 
-dense 
-fullWidth 
-codeHtml={SelectHelperTextHtml()}>
-  <SelectDemo hasHelperText={true}/>
+<LiveDemo fullWidth codeHtml={SelectHelperTextHtml()}>
+  <SelectDemo hasHelperText={true} />
 </LiveDemo>
 
 </PageSection>
@@ -253,6 +235,30 @@ Sets focus to the internal button element.
 
 <PageSection>
 
+## Keyboard shortcuts
+
+| Name                                | Description
+| :-----------------------------------| :----------------
+| **Select Opened**                   |
+| `escape / space`                    | Closes the select.
+| `tab / enter`                       | Selects the focused option and closes the select.
+| `arrow down`                        | Highlights the next option if an option is selected, otherwise highlights the first option.
+| `arrow up`                          | Highlights the previous option if an option is selected, otherwise highlights the first option.
+| `home`                              | Highlights the first option that is not disabled.
+| `end`                               | Highlights the last option that is not disabled.
+| **Select Closed**                   |
+| `space / enter`                     | Opens the select.
+| `arrow down`                        | Selects the next option if an option is selected, otherwise selects the first option.
+| `arrow up`                          | Selects the previous option if an option is selected, otherwise selects the first option.
+| **Select Closed and Multiple**      |
+| `arrow down / arrow up`             | Opens the select and selects the first option
+
+</PageSection>
+
+---
+
+<PageSection>
+
 ## Slots
 
 | Name                 | Values
@@ -271,26 +277,26 @@ Sets focus to the internal button element.
 
 | Name                                                      | Description
 | :---------------------------------------------------------| :----------------
-| `--mdc-theme-form-field-required-on-background`           | Controls the required background-color of the field element.
-| `--mdc-theme-form-field-invalid-on-background`            | Controls the invalid background-color of the field element.
-| `--mdc-theme-form-field-text-disabled-on-background`      | Controls the disabled font color of the floating label element.
-| `--mdc-theme-form-field-disabled-on-background`           | Controls the disabled background-color of the field element.
 | `--mdc-theme-text-primary-on-background`                  | Controls the selected option font color.
 | `--mdc-theme-text-secondary-on-background`                | Controls the inset font color for icons and helper text.
-| `--mdc-theme-text-secondary-alternative-on-background`    | Controls the floating label color.
 | `--mdc-theme-text-icon-on-background`                     | Controls the icon color.
 | `--mdc-theme-label-disabled-on-background`                | Controls the label color when disabled.
 | `--mdc-theme-text-disabled-on-light`                      | Controls the placeholder font color.
 | `--mdc-theme-text-disabled-on-background`                 | Controls the disabled color of the outline.
 | `--mdc-theme-primary`                                     | Controls the primary font color.
 | `--mdc-theme-error`                                       | Controls the error color throughout the component.
-| `--mdc-theme-error-hover`                                 | Controls the error hover color for the outline.
-| `--forge-select-height`                                     | Controls the height of the root element. Default value is `3.5rem`.
-| `--forge-select-font-size`                                  | Controls the font-size of the selected text. Default value is `3.5rem`.
-| `--forge-select-margin-top`                                 | Controls the margin top of the wrapper element. Default value is `0`.
-| `--forge-select-margin-bottom`                              | Controls the margin bottom of the wrapper element. Default value is `0`.
-| `--forge-select-theme-background`                           | Controls the background-color of the field element.
-| `--forge-select-border-display`                             | Controls the display of the outline element.
+| `--forge-theme-text-secondary-alternative-on-background`  | Controls the floating label color.
+| `--forge-theme-form-field-required-on-background`         | Controls the required background-color of the field element.
+| `--forge-theme-form-field-invalid-on-background`          | Controls the invalid background-color of the field element.
+| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled font color of the floating label element.
+| `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the field element.
+| `--forge-theme-error-hover`                               | Controls the error hover color for the outline.
+| `--forge-select-height`                                   | Controls the height of the root element. Default value is `3.5rem`.
+| `--forge-select-font-size`                                | Controls the font-size of the selected text. Default value is `3.5rem`.
+| `--forge-select-margin-top`                               | Controls the margin top of the wrapper element. Default value is `0`.
+| `--forge-select-margin-bottom`                            | Controls the margin bottom of the wrapper element. Default value is `0`.
+| `--forge-select-theme-background`                         | Controls the background-color of the field element.
+| `--forge-select-border-display`                           | Controls the display of the outline element.
 
 > **Note:** To hide the border, add the following CSS declaration: `--forge-select-border-display: none;`
 

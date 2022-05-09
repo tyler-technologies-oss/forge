@@ -1,7 +1,7 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { COLOR_CONSTANTS } from '../theme';
 
-const elementName = `${COMPONENT_NAME_PREFIX}avatar`;
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}avatar`;
 
 const attributes = {
   IMAGE_URL: 'image-url',

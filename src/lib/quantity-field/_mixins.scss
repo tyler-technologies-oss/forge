@@ -1,6 +1,6 @@
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/typography/typography' as mdc-typography;
-@use '../theme/theme';
+@use '../theme';
 
 @mixin core-styles() {
   .forge-quantity-field {
@@ -69,10 +69,10 @@
 }
 
 @mixin required-label() {
-  &::after {
+  &::before {
     @include mdc-theme.property(color, error);
     content: '*';
-    margin-left: 1px;
+    margin-right: 1px;
   }
 }
 

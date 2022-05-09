@@ -1,5 +1,5 @@
 @use '../theme/theme-values';
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 
 @mixin provide-theme($theme) {

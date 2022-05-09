@@ -10,7 +10,7 @@ import {
 import { removeElement, getShadowElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
 import { FLOATING_LABEL_CONSTANTS } from '@tylertech/forge/floating-label';
-import { expectFloatingLabelState, testFloatingLabelState } from '../../utils/text-field';
+import { expectFloatingLabelState, floatTick, testFloatingLabelState } from '../../utils/floating-label-utils';
 import { FIELD_CONSTANTS } from '@tylertech/forge/field/field-constants';
 
 interface ITestContext {
@@ -80,11 +80,9 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
     it('should float label if value is set before adding to DOM', async function(this: ITestContext) {
       this.context = setupTestContext(false);
-
       this.context.input.value = 'text';
       document.body.appendChild(this.context.component);
-      await tick();
-
+      await floatTick();
       expectFloatingLabelState(this.context, true);
     });
 
@@ -92,30 +90,25 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext(false);
       this.context.component.floatLabelType = 'always';
       document.body.appendChild(this.context.component);
-      await tick();
-
+      await floatTick();
       expect(this.context.component.floatLabelType).toBe('always');
       expectFloatingLabelState(this.context, true);
     });
 
     it('should float label if float label type is changed to "always" after initial render', async function(this: ITestContext) {
       this.context = setupTestContext(false);
-
       document.body.appendChild(this.context.component);
       await tick();
       this.context.component.floatLabelType = 'always';
-      await tick();
-
+      await floatTick();
       expectFloatingLabelState(this.context, true);
     });
 
     it('should float label always if placeholder is set', async function(this: ITestContext) {
       this.context = setupTestContext(false);
-
       this.context.input.placeholder = 'placeholder text';
       document.body.appendChild(this.context.component);
-      await tick();
-
+      await floatTick();
       expect(this.context.component.floatLabelType).toBe('always');
       expectFloatingLabelState(this.context, true);
     });
@@ -183,41 +176,34 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
     it('should float label when value is set', async function(this: ITestContext) {
       this.context = setupTestContext();
-
       await tick();
       this.context.input.value = 'test';
-      await tick();
-      
+      await floatTick();
       expectFloatingLabelState(this.context, true);
     });
 
     it('should float label when invoked programmatically', async function(this: ITestContext) {
       this.context = setupTestContext();
-
       await tick();
       this.context.component.floatLabel(true);
-      await tick();
-
+      await floatTick();
       expectFloatingLabelState(this.context, true);
     });
 
     it('should un-float label when invoked programmatically', async function(this: ITestContext) {
       this.context = setupTestContext();
-
       await tick();
       this.context.component.floatLabel(true);
-      await tick();
+      await floatTick();
       this.context.component.floatLabel(false);
       await tick();
-
       expectFloatingLabelState(this.context, false);
     });
 
     it('should float label when value is set by default', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.input.value = 'test';
-      await tick();
-
+      await floatTick();
       expectFloatingLabelState(this.context, true);
     });
 
@@ -225,8 +211,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       await tick();
       this.context.input.dispatchEvent(new Event('focus'));
-      await tick();
-
+      await floatTick();
       expectFloatingLabelState(this.context, true);
     });
 
@@ -244,11 +229,11 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should not float label when blurred', async function(this: ITestContext) {
       this.context = setupTestContext();
       await tick();
-
       this.context.input.dispatchEvent(new Event('focus'));
+      await floatTick();
       expectFloatingLabelState(this.context, true);
-
       this.context.input.dispatchEvent(new Event('blur'));
+      await tick();
       expectFloatingLabelState(this.context, false);
     });
 
@@ -451,27 +436,23 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
     it('should un-float label if value is removed when input is not focused', async function(this: ITestContext) {
       this.context = setupTestContext();
-
       this.context.input.value = 'test';
       await tick();
+      await floatTick();
       expectFloatingLabelState(this.context, true);
       this.context.input.value = '';
       await tick();
-
       expectFloatingLabelState(this.context, false);
     });
 
     it('should set floating label state when input attribute value changes', async function(this: ITestContext) {
       this.context = setupTestContext();
-
       this.context.input.setAttribute('value', 'test');
       await tick();
-
+      await floatTick();
       expectFloatingLabelState(this.context, true);
-
       this.context.input.setAttribute('value', '');
       await tick();
-
       expectFloatingLabelState(this.context, false);
     });
 
@@ -480,9 +461,9 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       this.context.label.textContent = '';
       this.context.input.value = 'test';
-      await tick();
+      await floatTick();
 
-      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(true);
+      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
     });
 
     it('should not show addon-end content by default', async function(this: ITestContext) {
@@ -757,23 +738,19 @@ describe('TextFieldComponent', function(this: ITestContext) {
 
       it('should float label', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { label: 'Test' });
-
         await tick();
         this.context.delegate.floatLabel(true);
-        await tick();
-
+        await floatTick();
         testFloatingLabelState(this.context.delegate.labelElement as HTMLLabelElement, true);
       });
 
       it('should un-float label', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { label: 'Test' });
-
         await tick();
         this.context.delegate.floatLabel(true);
-        await tick();
+        await floatTick();
         this.context.delegate.floatLabel(false);
         await tick();
-
         testFloatingLabelState(this.context.delegate.labelElement as HTMLLabelElement, false);
       });
 

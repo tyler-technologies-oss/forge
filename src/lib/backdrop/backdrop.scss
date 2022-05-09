@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use './mixins';
-@use '../theme/theme-values';
+@use '../theme';
 
 @include mixins.core-styles;
 
@@ -19,9 +19,9 @@
 }
 
 :host([appearance='light']) {
-  --forge-backdrop-theme-background: #{map.get(map.get(theme-values.$text-colors, light), secondary-alternative)};
+  --forge-backdrop-theme-background: #{map.get(map.get(theme.$text-colors, light), secondary-alternative)};
 }
 
 :host([appearance='dark']) {
-  --forge-backdrop-theme-background: #{map.get(map.get(theme-values.$text-colors, dark), secondary)};
+  --forge-backdrop-theme-background: #{map.get(map.get(theme.$text-colors, dark), secondary)};
 }

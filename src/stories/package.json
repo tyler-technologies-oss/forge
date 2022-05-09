@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "start-storybook -p 6006 -c ./",
-    "build": "build-storybook -c ./",
-    "debug": "cross-env NODE_OPTIONS=--inspect-brk STORYBOOK_DISPLAY_WARNING=true DISPLAY_WARNING=true start-storybook -p 6006 -c ./"
+    "start": "start-storybook -p 6006 -c ./ -s ./src/assets",
+    "build": "build-storybook -c ./ -o ./dist/storybook",
+    "debug": "cross-env NODE_OPTIONS=--inspect-brk STORYBOOK_DISPLAY_WARNING=true DISPLAY_WARNING=true start-storybook -p 6006 -c ./",
+    "ci:build": "build-storybook --quiet -c ./ -s ./src/assets -o ../../dist/storybook"
   },
   "dependencies": {
     "@storybook/addon-a11y": "^6.4.19",
@@ -21,8 +22,8 @@
     "@storybook/preset-scss": "^1.0.3",
     "@storybook/react": "^6.4.19",
     "@storybook/theming": "^6.4.19",
-    "@tylertech/forge-docs-core": "^1.0.0-dev.1",
-    "@tylertech/forge-react": "^1.0.0-dev.0",
+    "@tylertech/forge-docs-core": "^2.0.0-rc.0",
+    "@tylertech/forge-react": "^2.0.0-rc.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
@@ -39,7 +40,7 @@
     "cross-env": "^7.0.3",
     "css-to-string-loader": "^0.1.3",
     "html-loader": "^1.3.2",
-    "sass": "~1.38.1",
+    "sass": "^1.51.0",
     "sass-loader": "^9.0.3",
     "ts-loader": "~8.2.0",
     "typescript": "~4.5.5",

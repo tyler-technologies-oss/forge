@@ -31,7 +31,7 @@
 @use '@material/typography/typography' as mdc-typography;
 @use './variables';
 @use './keyframes';
-@use '../theme/theme';
+@use '../theme';
 @use '../theme/custom-properties';
 
 @mixin core-styles($query: mdc-feature-targeting.all()) {

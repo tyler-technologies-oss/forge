@@ -20,6 +20,7 @@ import { FLOATING_LABEL_CONSTANTS } from '@tylertech/forge/floating-label';
 import { LIST_DROPDOWN_CONSTANTS, ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from '@tylertech/forge/list-dropdown/list-dropdown-constants';
 import { tryCleanupPopups } from '../../utils';
 import { FIELD_CONSTANTS } from '@tylertech/forge/field/field-constants';
+import { floatTick } from '../../utils/floating-label-utils';
 
 const DEFAULT_OPTIONS: IOption[] = [
   { value: 'one', label: 'One' },
@@ -100,10 +101,11 @@ describe('SelectComponent', function(this: ITestContext) {
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.INVALID)).toBe(true);
     });
 
-    it('should float label if connected with always set', function(this: ITestContext) {
+    it('should float label if connected with always set', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.floatLabelType = 'always';
       document.body.appendChild(this.context.component);
+      await floatTick();
 
       _expectLabelFloatState(this.context.component, true);
     });
@@ -116,6 +118,7 @@ describe('SelectComponent', function(this: ITestContext) {
 
       this.context.component.label = 'Test';
       this.context.component.value = DEFAULT_OPTIONS[0].value;
+      await floatTick();
 
       expect(this.context.foundation['_floatingLabelInstance']).not.toBeUndefined();
       expect(this.context.label.textContent).toBe('Test');
@@ -162,6 +165,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
 
       this.context.component.floatLabelType = 'always';
+      await floatTick();
       
       expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).toBe('always');
       expect(this.context.component.floatLabelType).toBe('always');
@@ -173,6 +177,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
 
       this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'always');
+      await floatTick();
       
       expect(this.context.component.floatLabelType).toBe('always');
       _expectLabelFloatState(this.context.component, true);
@@ -249,8 +254,9 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await tick();
       dispatchNativeEvent(this.context.selectedTextElement, 'focus');
+      await floatTick();
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.FOCUSED)).toBe(true);
-      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(true);
+      expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
     });
 
     it('should not open popup when options aren\'t defined', async function(this: ITestContext) {
@@ -1161,7 +1167,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(false);
       this.context.component.setAttribute(SELECT_CONSTANTS.attributes.VALUE, 'one');
       document.body.appendChild(this.context.fixture);
-      await tick();
+      await floatTick();
 
       _expectLabelFloatState(this.context.component, true);
     }); 
@@ -1472,7 +1478,7 @@ describe('SelectComponent', function(this: ITestContext) {
 
   function _expectLabelFloatState(selectElement: ISelectComponent, isFloating: boolean): void {
     const labelElement = getShadowElement(selectElement, SELECT_CONSTANTS.selectors.LABEL);
-    expect(labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT)).toBe(isFloating);
+    expect(labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(isFloating);
   }
 
   function _popupAnimation(): Promise<void> {

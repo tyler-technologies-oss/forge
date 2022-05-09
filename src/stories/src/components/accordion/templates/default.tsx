@@ -15,7 +15,7 @@ export const DefaultTemplate: Story<IAccordionProps> = ({panelSelector = 'forge-
   return (
     <ForgeAccordion {...accordionProps} style={{ display: 'block', maxWidth: '256px' }}>
       <ForgeExpansionPanel>
-        <div role="button" slot="header" style={buttonStyles}>
+        <div role="button" tabIndex={0} slot="header" style={buttonStyles}>
           <div>Panel One</div>
           <ForgeOpenIcon />
         </div>
@@ -23,7 +23,7 @@ export const DefaultTemplate: Story<IAccordionProps> = ({panelSelector = 'forge-
       </ForgeExpansionPanel>
       <ForgeDivider />
       <ForgeExpansionPanel>
-        <div role="button" slot="header" style={buttonStyles}>
+        <div role="button" tabIndex={0} slot="header" style={buttonStyles}>
           <div>Panel Two</div>
           <ForgeOpenIcon />
         </div>
@@ -31,7 +31,7 @@ export const DefaultTemplate: Story<IAccordionProps> = ({panelSelector = 'forge-
       </ForgeExpansionPanel>
       <ForgeDivider />
       <ForgeExpansionPanel>
-        <div role="button" slot="header" style={buttonStyles}>
+        <div role="button" tabIndex={0} slot="header" style={buttonStyles}>
           <div>Panel Three</div>
           <ForgeOpenIcon />
         </div>

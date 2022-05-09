@@ -4,7 +4,7 @@
 @use '@material/theme/theme-color' as mdc-theme-color;
 @use '@material/typography/typography' as mdc-typography;
 @use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
-@use '../theme/theme';
+@use '../theme';
 @use './variables';
 @use '../theme/custom-properties';
 
@@ -52,32 +52,38 @@
 
 /// Generates all styles for a specific typography style.
 @mixin typography($style, $query: mdc-feature-targeting.all(), $exclude-props: ()) {
-  $feat-typography: mdc-feature-targeting.create-target($query, typography);
-  $style-props: map.get(variables.$styles, $style);
-
-  @if not map.has-key(variables.$styles, $style) {
-    @error "Invalid style specified! #{$style} doesn't exist. Choose one of #{map-keys(variables.$styles)}";
-  }
-
-  @include mdc-typography.smooth-font($query: $query);
-  @include mdc-feature-targeting.targets($feat-typography) {
-    @each $key, $value in $style-props {
-      @if list.index($exclude-props, $key) == null {
-        $fallback: $value;
-        @if $key == 'font-family' {
-          // Each style has its own font-family custom property, but should
-          // fallback to a generic font-family property. This allows
-          // customizing the font-family for all styles or only specific ones.
-          $fallback: (
-            varname: --forge-typography-font-family,
+  // We first check if the style exists in the MDC typography styles map and pass to MDC if so,
+  // otherwise we handle it and assumed it's a Forge-specfic style
+  @if map.has-key(mdc-typography.$styles, $style) {
+    @include mdc-typography.typography($style);
+  } @else {
+    $feat-typography: mdc-feature-targeting.create-target($query, typography);
+    $style-props: map.get(variables.$styles, $style);
+  
+    @if not map.has-key(variables.$styles, $style) {
+      @error "Invalid style specified! #{$style} doesn't exist. Choose one of #{map-keys(variables.$styles)}";
+    }
+  
+    @include mdc-typography.smooth-font($query: $query);
+    @include mdc-feature-targeting.targets($feat-typography) {
+      @each $key, $value in $style-props {
+        @if list.index($exclude-props, $key) == null {
+          $fallback: $value;
+          @if $key == 'font-family' {
+            // Each style has its own font-family custom property, but should
+            // fallback to a generic font-family property. This allows
+            // customizing the font-family for all styles or only specific ones.
+            $fallback: (
+              varname: --forge-typography-font-family,
+              fallback: $fallback
+            );
+          }
+  
+          @include theme.property($key, (
+            varname: --forge-typography-#{$style}-#{$key},
             fallback: $fallback
-          );
+          ));
         }
-
-        @include theme.property($key, (
-          varname: --forge-typography-#{$style}-#{$key},
-          fallback: $fallback
-        ));
       }
     }
   }

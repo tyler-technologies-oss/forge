@@ -1,6 +1,6 @@
-import { MDCRipple, MDCRippleAdapter, MDCRippleFoundation, MDCRippleCapableSurface } from '@material/ripple';
 import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
 import { ICheckboxComponent } from './checkbox';
 import { CHECKBOX_CONSTANTS } from './checkbox-constants';
 
@@ -29,7 +29,7 @@ export interface ICheckboxAdapter extends IBaseAdapter {
   setInputAttributeObserver(listener: (name: string, value: string) => void): void;
 }
 
-export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements ICheckboxAdapter, MDCRippleCapableSurface {
+export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements ICheckboxAdapter, ForgeRippleCapableSurface {
   private _wrapperElement: HTMLElement;
   private _rootElement: HTMLElement;
   private _inputElement: HTMLInputElement;
@@ -37,12 +37,13 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private _inputFocusHandler: () => void;
   private _inputBlurHandler: () => void;
   private _inputMutationObserver: MutationObserver;
-  private _ripple: MDCRipple;
+  private _rippleInstance: ForgeRipple;
 
   constructor(component: ICheckboxComponent) {
     super(component);
   }
-  // MDCRippleCapableSurface
+
+  // ForgeRippleCapableSurface
   public get root(): Element {
     return this._rootElement;
   }
@@ -58,11 +59,11 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   public initialize(): void {
     this._configureElements();
     this._attachInternalInputListeners();
-    this._ripple = this._createRipple();
+    this._rippleInstance = this._createRipple();
 
     requestAnimationFrame(() => {
-      if (this._ripple) {
-        this._ripple.layout();
+      if (this._rippleInstance) {
+        this._rippleInstance.layout();
       }
     });
   }
@@ -78,7 +79,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   }
 
   public forceLayout(): void {
-    this._ripple.layout();
+    this._rippleInstance.layout();
   }
 
   public isAttachedToDOM(): boolean {
@@ -123,8 +124,8 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
 
     this._detachInternalInputListeners();
 
-    if (this._ripple) {
-      this._ripple.destroy();
+    if (this._rippleInstance) {
+      this._rippleInstance.destroy();
     }
   }
 
@@ -276,9 +277,9 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     removeClass(CHECKBOX_CONSTANTS.classes.FOCUSED, this._rootElement);
   }
 
-  private _createRipple(): MDCRipple {
-    const adapter: MDCRippleAdapter = {
-      ...MDCRipple.createAdapter(this),
+  private _createRipple(): ForgeRipple {
+    const adapter: ForgeRippleAdapter = {
+      ...ForgeRipple.createAdapter(this),
       deregisterInteractionHandler: (evtType, handler) => this._inputElement.removeEventListener(evtType, handler, { passive: true } as AddEventListenerOptions),
       isSurfaceActive: () => this._inputElement.matches(':active'),
       isUnbounded: () => Boolean(this.unbounded),
@@ -288,7 +289,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
       removeClass: (className: string) => removeClass(className, this._rootElement),
       updateCssVariable: (varName: string, value: string | null) => this._rootElement.style.setProperty(varName, value)
     };
-    const ripple = new MDCRipple(this._rootElement, new MDCRippleFoundation(adapter));
+    const ripple = new ForgeRipple(this._rootElement, new ForgeRippleFoundation(adapter));
     return ripple;
   }
 }

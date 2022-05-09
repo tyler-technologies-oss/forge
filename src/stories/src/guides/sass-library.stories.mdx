@@ -12,7 +12,96 @@ import { Meta } from '@storybook/addon-docs';
 
 # Guide: Sass library
 
-Coming soon!
+As you already know, Forge provides a vast library of Web Components. These components have built-in styles and functionality, and often times
+it's useful to also reference those same styles in your libraries and applications to ensure that there is cohesion, and to reduce the need for
+you to reinvent something that has already been built.
+
+Forge exposes all of the internal Sass files as a library so that you can easily reference them. These files are separate out into Sass mixins
+and variables that you can import and build from.
+
+Along with component-specific styles, we also provide globally used Sass mixins/variables for things like typography, theme, layouts... etc. and
+these can be useful to consume in your libraries and applications as well.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Component-specific styles
+
+Let's say you want to build a custom component similar to the Forge [Avatar](?path=/story/components-avatar--image). To reference the Sass library,
+you would start by importing the mixins like so:
+
+```scss
+@use '@tylertech/forge/styles/avatar/mixins' as forge-avatar-mixins;
+```
+
+Now you can create your own classes that build on top of the mixins that separated out in a granular fashion:
+
+```scss
+.my-custom-avatar {
+  @include forge-avatar-mixins.base;
+
+  display: grid; // Override the default `flex` styling to `grid` for example if you'd like
+}
+```
+
+We don't have documentation for the Sass files/mixins/variables that are available in the library, but if you're interested in this level of usage,
+please feel free to browse the source code to what is available to you. It should be organized and named in a way that is clear to you, and the 
+import syntax (with `@use` above) should show the correct path `@tylertech/forge/styles/*` to reference these files from the npm package.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Global styles
+
+Much like how you would import and use the component-specific styles, you will often find it useful to reference specific theme values or typography
+styles within your applications to ensure a cohesive look-and-feel with Forge. This is especially useful when working with a dark theme so that your
+application will automatically update when a dark theme is applied, much like the Forge component library does.
+
+Now let's say we want to create a custom `<div>` in our app that uses the same typography and theme as Forge:
+
+```html
+<div class="my-custom-container">
+  <h2 class="my-custom-header-typography">Header text</h2>
+  <p class="my-custom-body-text">My custom body text</p>
+</div>
+```
+
+The import syntax and usage is much the same as the component-specific approach noted above:
+
+```scss expanded
+@use '@tylertech/forge/styles/theme' as forge-theme;
+@use '@tylertech/forge/styles/typography' as forge-typography;
+
+.my-custom {
+  &-container {
+    @include forge-theme.property(background-color, surface); // Use the default "surface" theme for compatibility with dark mode!
+  }
+
+  &-header-typography {
+    @include forge-typography.typography(title);
+
+    font-size: 72px; // override the default font-size if you need
+  }
+
+  &-body-text {
+    @include forge-typography.typography(body1);
+
+    font-size: 32px; // override the default font-size if you need
+  }
+}
+
+```
+
+Using Forge as a Sass library within your applications is very important to avoid you having to reinvent the wheel, but it also allows for you to easily
+inherit existing styles that are defined by Forge and get you back to focusing on building your application without worrying about the design details.
+
+Please let us know if you run into any issues with any of this and we're always glad to help!
 
 </PageSection>
 
