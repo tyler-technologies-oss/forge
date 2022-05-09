@@ -1,4 +1,4 @@
-import { SplitViewComponent, SPLIT_VIEW_CONSTANTS, defineSplitViewComponent } from '@tylertech/tyler-components-web';
+import { SplitViewComponent, SPLIT_VIEW_CONSTANTS, defineSplitViewComponent } from '@tylertech/forge/split-view';
 
 describe('SplitViewComponent', () => {
   let componentInstance: SplitViewComponent;
