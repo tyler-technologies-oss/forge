@@ -12,6 +12,24 @@ Forge is a framework-agnostic library of Web Components adhering to [W3C Web Com
 - [Changelog][6]
 - [Forge design system][1]
 
+## Using with a framework?
+
+As noted above, Forge components are framework-agnostic. If you haven't used Web Components before just think of them as new HTML elements that the browser knows
+about, just like any old `<div>`, `<button>`, `<input>`... etc. This means that any framework can already work with them natively without any work on your end.
+
+The caveat to this is that many custom Web Components are enhanced to allow for more complex data (arrays and objects) to be provided, as well as custom event names
+to get notified about changes within the element. It's also handy for dynamic elements such as dialogs and popups. This is where framework adapter libraries can help
+to make the usage more seamless.
+
+Forge provides the following framework adapters:
+
+- [Angular](https://github.com/tyler-technologies/forge-angular)
+- [React](https://github.com/tyler-technologies/forge-react)
+- Svelte (coming soon)
+
+> Keep in mind that these adapter libraries are **not** required by any means. They are only provided to make usage for certain components feel more native for
+> developers using these frameworks.
+
 ## Getting started
 
 The component library is distributed on npm and as static assets on the Forge CDN.
@@ -23,8 +41,6 @@ To install the library from npm:
 ```bash
 npm install @tylertech/forge
 ```
-
-> This package supports ES modules to ensure minimal application bundles.
 
 You can then import the component definition functions to register them with the browser:
 
@@ -39,7 +55,7 @@ defineButtonComponent();
 
 The Forge CDN can provide components directly.
 
-As an example, the text-field component can be loaded directly like this:
+As an example, the text-field and button components can be loaded directly like this:
 
 ```html
 <!-- Some components (such as button) require the use of a global stylesheet -->
@@ -59,7 +75,7 @@ As an example, the text-field component can be loaded directly like this:
 
 ### HTML
 
-Now the text-field component can be used anywhere in the html:
+Now the text-field and button components can be used anywhere in the html:
 
 ```html
 <forge-text-field>
