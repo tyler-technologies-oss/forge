@@ -303,6 +303,18 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
           this._adapter.propagateCalendarKey(evt);
         }
         break;
+      case 'Tab':
+        if (this._open) {
+          const activeDate = this._adapter.getCalendarActiveDate();
+          if (activeDate) {
+            this._onDateSelected({
+              date: activeDate,
+              selected: true,
+              type: 'date'
+            });
+          }
+        }
+        break;
     }
   }
 
