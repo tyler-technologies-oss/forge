@@ -288,7 +288,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    switch (evt.code) {
+    switch (evt.key) {
       case 'Tab':
         if (this._isDropdownOpen && !this._multiple) {
           this._selectActiveOption(false);
@@ -307,25 +307,25 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
         if (!this._isDropdownOpen) {
           this._showDropdown({ activateFirst: true });
         } else {
-          this._adapter.propagateKey(evt.code);
+          this._adapter.propagateKey(evt.key);
         }
         break;
       case 'Up':
       case 'ArrowUp':
         evt.preventDefault();
         if (this._isDropdownOpen) {
-          this._adapter.propagateKey(evt.code);
+          this._adapter.propagateKey(evt.key);
         }
         break;
       case 'Enter':
       case 'Home':
       case 'End':
         if (this._isDropdownOpen) {
-          if (evt.code === 'Enter') {
+          if (evt.key === 'Enter') {
             evt.stopPropagation();
           }
           evt.preventDefault();
-          this._adapter.propagateKey(evt.code);
+          this._adapter.propagateKey(evt.key);
         }
         break;
       case 'Backspace':
