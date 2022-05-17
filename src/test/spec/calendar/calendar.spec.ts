@@ -1,4 +1,4 @@
-import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalendarEvent, CALENDAR_MENU_CONSTANTS } from '@tylertech/forge/calendar';
+import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalendarEvent, CALENDAR_MENU_CONSTANTS, CalendarView, ICalendarDateSelectEventData } from '@tylertech/forge/calendar';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { timer, tick } from '@tylertech/forge-testing';
 import { getDateId } from '@tylertech/forge/calendar/calendar-dom-utils';
@@ -570,6 +570,31 @@ describe('CalendarComponent', function(this: ITestContext) {
 
       expect(activeDay).not.toBeNull();
       context.destroy();
+    });
+
+    it('should emit event with type date when a date is selected', function(this: ITestContext) {
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, (e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('date');
+      });
+      getFirstDate(this.context.component).click();
+    });
+
+    it('should emit event with type month when a month is selected', function(this: ITestContext) {
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, (e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('month');
+      });
+      getMonthButton(this.context.component).click();
+      const menu = getMenu(this.context.component).shadowRoot as ShadowRoot;
+      (menu.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();
+    });
+
+    it('should emit event with type year when a year is selected', function(this: ITestContext) {
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, (e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('year');
+      });
+      getYearButton(this.context.component).click();
+      const menu = getMenu(this.context.component).shadowRoot as ShadowRoot;
+      (menu.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();
     });
 
     it('should emit event when active date changes via handling external key events and prevent focus is enabled', function(this: ITestContext) {
