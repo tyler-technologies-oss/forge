@@ -900,7 +900,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(keydownSpy).not.toHaveBeenCalled();
     });
 
-    fit ('should select the active date when tab key is pressed when open', function(this: ITestContext) {
+    it ('should select the active date when tab key is pressed when open', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.valueMode = 'object';
       openPopup(this.context.component);
