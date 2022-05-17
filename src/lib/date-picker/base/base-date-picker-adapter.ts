@@ -51,6 +51,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   setCalendarDisabledDaysOfWeek(value: DayOfWeek[]): void;
   setCalendarDisableDayCallback(disableDayCallback: (date: Date) => boolean): void;
   setCalendarActiveDate(date: Date): void;
+  getCalendarActiveDate(): Date | undefined;
   propagateCalendarKey(evt: KeyboardEvent): void;
 }
 
@@ -184,6 +185,10 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
 
   public setCalendarActiveDate(date: Date): void {
     this._calendarDropdown?.calendar?.setActiveDate(date);
+  }
+
+  public getCalendarActiveDate(): Date | undefined {
+    return this._calendarDropdown?.calendar?.activeDate;
   }
 
   public propagateCalendarKey(evt: KeyboardEvent): void {

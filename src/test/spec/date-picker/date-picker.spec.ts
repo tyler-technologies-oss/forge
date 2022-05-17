@@ -4,7 +4,7 @@ import {
   DATE_PICKER_CONSTANTS,
   IDatePickerFoundation
 } from '@tylertech/forge/date-picker';
-import { DEFAULT_DATE_MASK, parseDateString, formatDate } from '@tylertech/forge/core';
+import { DEFAULT_DATE_MASK, parseDateString, formatDate, isSameDate } from '@tylertech/forge/core';
 import { defineTextFieldComponent, TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '@tylertech/forge/text-field';
 import { IPopupComponent, POPUP_CONSTANTS } from '@tylertech/forge/popup';
 import { ICalendarComponent, CALENDAR_CONSTANTS } from '@tylertech/forge/calendar';
@@ -898,6 +898,18 @@ describe('DatePickerComponent', function(this: ITestContext) {
       getInputElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
 
       expect(keydownSpy).not.toHaveBeenCalled();
+    });
+
+    it ('should select the active date when tab key is pressed when open', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.valueMode = 'object';
+      openPopup(this.context.component);
+
+      getInputElement(this.context.component).focus();
+      getInputElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+
+      const value = this.context.component.value as Date;
+      expect(isSameDate(value, new Date())).toBeTrue();
     });
 
     it('should set min date when open', function(this: ITestContext) {

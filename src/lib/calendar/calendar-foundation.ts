@@ -1886,6 +1886,11 @@ export class CalendarFoundation implements ICalendarFoundation {
     }
   }
 
+  /** Get the currently focused date */
+  public get activeDate(): Date {
+    return new Date(this._focusedDate);
+  }
+
   /** Get/set whether single date ranges are allowed */
   public get allowSingleDateRange(): boolean {
     return this._allowSingleDateRange;

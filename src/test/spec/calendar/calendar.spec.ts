@@ -2,6 +2,7 @@ import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalen
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { timer, tick } from '@tylertech/forge-testing';
 import { getDateId } from '@tylertech/forge/calendar/calendar-dom-utils';
+import { isSameDate } from '@tylertech/forge';
 
 interface ITestContext {
   context: ITestCalendarContext;
@@ -384,6 +385,13 @@ describe('CalendarComponent', function(this: ITestContext) {
       this.context.component.setActiveDate(today);
       const todayCell = getDateGrid(this.context.component).querySelector(`.${CALENDAR_CONSTANTS.classes.DATE_TODAY}`);
       expect(todayCell && todayCell.getAttribute('tabindex')).toBe('0');
+    });
+
+    it('should return the active date', function(this: ITestContext) {
+      const today = new Date();
+      this.context.component.setActiveDate(today);
+      const activeDate = this.context.component.activeDate;
+      expect(isSameDate(today, activeDate)).toBeTrue();
     });
   });
 
