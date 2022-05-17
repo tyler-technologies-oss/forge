@@ -514,10 +514,12 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     // If we are in stateless mode, then we need to just emit an event when selecting an option. The
     // selected values are not tracked in stateless mode
     if (this._mode === AutocompleteMode.Stateless) {
-      this._filterText = '';
-      this._closeDropdown();
       const data: IAutocompleteSelectEventData = { value: selectedValue };
-      this._adapter.emitHostEvent(AUTOCOMPLETE_CONSTANTS.events.SELECT, data, true);
+      const result = this._adapter.emitHostEvent(AUTOCOMPLETE_CONSTANTS.events.SELECT, data, true, true);
+      if (result) {
+        this._filterText = '';
+        this._closeDropdown();
+      }
       return;
     }
 

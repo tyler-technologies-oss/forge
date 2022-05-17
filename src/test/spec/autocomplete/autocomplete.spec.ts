@@ -325,6 +325,25 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(selectSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('should not close dropdown if select event is canceled in stateless mode', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const selectSpy = jasmine.createSpy('select event', evt => evt.preventDefault()).and.callThrough();
+      this.context.component.mode = AutocompleteMode.Stateless;
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.SELECT, selectSpy);
+      this.context.component.open = true;
+
+      const filterText = 'o';
+      _sendInputValue(this.context.input, filterText);
+      await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+
+      await tick();
+      _clickListItem(0, this.context.component.popupElement);
+
+      expect(this.context.input.value).toBe(filterText);
+      expect(this.context.component.open).toBeTrue();
+    });
+
     it('should set value', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
