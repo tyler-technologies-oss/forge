@@ -204,7 +204,7 @@ export class ListDropdownFoundation implements IListDropdownFoundation {
       case 'Enter':
         const activeOptionIndex = this.getActiveOptionIndex();
         const activeOption = this._nonDividerOptions[activeOptionIndex];
-        if (activeOption) {
+        if (this._canSelectOption(activeOption)) {
           const id = this._adapter.getActiveOptionIdByIndex(activeOptionIndex);
           if (id) {
             this._onSelect(activeOption.value, id);
@@ -215,6 +215,10 @@ export class ListDropdownFoundation implements IListDropdownFoundation {
       case 'ArrowUp':
       case 'Down':
       case 'ArrowDown':
+        const options = this._nonDividerOptions;
+        if (options.length && options.every(o => !this._canSelectOption(o))) {
+          return;
+        }
         const index = this._getNextActiveOptionIndex(key);
         this.activateOption(index);
         break;
@@ -225,6 +229,10 @@ export class ListDropdownFoundation implements IListDropdownFoundation {
         this.activateLastOption();
         break;
     }
+  }
+
+  private _canSelectOption(option: IListDropdownOption): boolean {
+    return option && !option.disabled && !option.divider;
   }
 
   private _getNextActiveOptionIndex(key: string): number {
