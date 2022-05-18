@@ -53,7 +53,7 @@
 @mixin select-text-placeholder {
   content: attr(placeholder);
   @include mdc-theme.property(color, text-secondary-on-background);
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 @mixin dropdown-icon-core {
@@ -65,7 +65,7 @@
   flex: none;
   transition: transform mdc-select-theme.$dropdown-transition-duration mdc-animation.$standard-curve-timing-function;
   pointer-events: none;
-  margin: 0 10px;
+  margin-right: 8px;
 
   .forge-select--opened & {
     transform: rotate(180deg);
