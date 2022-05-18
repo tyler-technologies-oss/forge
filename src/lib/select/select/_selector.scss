@@ -28,6 +28,12 @@
       @include base.select-text-line-height(dense, default);
     }
   }
+
+  // Dense
+  &.forge-field--dense:not(.forge-field--roomy) .forge-select__selected-text {
+    padding: 0 8px;
+  }
+
   // Placeholder
   .forge-select__selected-text {
     &:empty::before {
@@ -45,6 +51,7 @@
       @include base.dropdown-icon-opened;
     }
   }
+
   // Color
   &:not(.forge-field--disabled):not(.forge-field--invalid) {
     .forge-select__dropdown-icon {
@@ -60,5 +67,10 @@
     .forge-select__dropdown-icon {
       @include field-base.icon-color(disabled);
     }
+  }
+
+  // Dense
+  &.forge-field--dense:not(.forge-field--roomy) .forge-select__dropdown-icon {
+    margin-right: 4px;
   }
 }
