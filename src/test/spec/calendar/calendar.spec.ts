@@ -1,7 +1,8 @@
-import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalendarEvent, CALENDAR_MENU_CONSTANTS } from '@tylertech/forge/calendar';
+import { CALENDAR_CONSTANTS, defineCalendarComponent, ICalendarComponent, ICalendarEvent, CALENDAR_MENU_CONSTANTS, CalendarView, ICalendarDateSelectEventData } from '@tylertech/forge/calendar';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { timer, tick } from '@tylertech/forge-testing';
 import { getDateId } from '@tylertech/forge/calendar/calendar-dom-utils';
+import { isSameDate } from '@tylertech/forge';
 
 interface ITestContext {
   context: ITestCalendarContext;
@@ -385,6 +386,13 @@ describe('CalendarComponent', function(this: ITestContext) {
       const todayCell = getDateGrid(this.context.component).querySelector(`.${CALENDAR_CONSTANTS.classes.DATE_TODAY}`);
       expect(todayCell && todayCell.getAttribute('tabindex')).toBe('0');
     });
+
+    it('should return the active date', function(this: ITestContext) {
+      const today = new Date();
+      this.context.component.setActiveDate(today);
+      const activeDate = this.context.component.activeDate;
+      expect(isSameDate(today, activeDate)).toBeTrue();
+    });
   });
 
   describe('events', function(this: ITestContext) {
@@ -570,6 +578,31 @@ describe('CalendarComponent', function(this: ITestContext) {
 
       expect(activeDay).not.toBeNull();
       context.destroy();
+    });
+
+    it('should emit event with type date when a date is selected', function(this: ITestContext) {
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, (e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('date');
+      });
+      getFirstDate(this.context.component).click();
+    });
+
+    it('should emit event with type month when a month is selected', function(this: ITestContext) {
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, (e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('month');
+      });
+      getMonthButton(this.context.component).click();
+      const menu = getMenu(this.context.component).shadowRoot as ShadowRoot;
+      (menu.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();
+    });
+
+    it('should emit event with type year when a year is selected', function(this: ITestContext) {
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, (e: CustomEvent<ICalendarDateSelectEventData>) => {
+        expect(e.detail.type).toBe('year');
+      });
+      getYearButton(this.context.component).click();
+      const menu = getMenu(this.context.component).shadowRoot as ShadowRoot;
+      (menu.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();
     });
 
     it('should emit event when active date changes via handling external key events and prevent focus is enabled', function(this: ITestContext) {

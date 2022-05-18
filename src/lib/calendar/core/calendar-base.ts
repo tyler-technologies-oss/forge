@@ -2,6 +2,7 @@ import { CalendarDateBuilder, CalendarDateSelectCallback, CalendarDayBuilder, Ca
 import { DateRange } from './date-range';
 
 export interface ICalendarBase {
+  readonly activeDate: Date;
   allowSingleDateRange: boolean;
   constrainToEnabled: boolean;
   disabledDates: Date | Date[] | null;
