@@ -1,4 +1,9 @@
 {
   "$schema": "../../node_modules/@tylertech/forge-cli/build-schema.json",
-  "entry": "./index.ts"
+  "entry": "./index.ts",
+  "stylesheets": [
+    "./forge.scss",
+    "./forge-dark.scss",
+    "./forge-core.scss"
+  ]
 }

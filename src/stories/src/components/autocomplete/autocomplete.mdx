@@ -15,8 +15,6 @@ the user has typed into the `<input>` element.
 
 > For text fields, we recommend using a debounce of 500ms. [Read more](https://stackoverflow.com/questions/42361485/how-long-should-you-debounce-text-input)
 
-> This component requires the use of JavaScript to be able to provide a callback function to the `filter` property.
-
 </PageSection>
 
 ---
@@ -35,9 +33,11 @@ The only requirement in the HTML is to provide a child `<input>` element. While 
 can attach autocomplete functionality to any `<input>` element. This allows for flexibility in the styling of the input, while allowing the autocomplete to provide
 suggestions in the form of a floating popup anchored to that input.
 
-> The `forge-dropdown-icon` class being applied to the trailing icon is **optional**. It controls the rotation of the icon when the input is focused. This class is available through the Forge theme CSS.
+The only requirement for integration via JavaScript is that you provide a callback function to the `filter` property to provide options based on the current filter text.
 
-The only requirement is that you provide a filter callback function via JavaScript (note: this may be different based on your framework of choice):
+> **Note:** the `data-forge-dropdown-icon` attribute being applied to the trailing icon allows the autocomplete to provide the necessary styling to control open state rotation
+
+
 
 </PageSection>
 
