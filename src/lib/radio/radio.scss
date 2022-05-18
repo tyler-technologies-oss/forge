@@ -1,9 +1,9 @@
-@use '../form-field/mixins' as form-field-mixins;
 @use './mixins';
 @use './radio-theme';
+@use '../form-field/mixins' as form-field-mixins;
 
 @include mixins.core-styles;
-@include form-field-mixins.core-styles;
+@include form-field-mixins.shadow-styles;
 
 :host {
   display: inline-block;
