@@ -3,7 +3,16 @@ export const AutocompleteDefaultCodeHtml = () => {
   <forge-text-field>
     <input type="text" id="state" />
     <label for="state">Choose state</label>
-    <forge-icon slot="trailing" name="arrow_drop_down" data-forge-dropdown-icon></forge-icon
+    
+    <!-- You can optionally provide a clear button with a data-forge-autocomplete-clear attribute that will be detected automatically. -->
+    <forge-icon-button data-forge-autocomplete-clear slot="trailing" dense density="3">
+      <button type="button">
+        <forge-icon name="close"></forge-icon>
+      </button>
+    </forge-icon-button>
+
+    <!-- The existence of the data-forge-dropdown-icon attribute controls the open state rotation automatically. -->
+    <forge-icon slot="trailing" name="arrow_drop_down" data-forge-dropdown-icon></forge-icon>
   </forge-text-field>
 </forge-autocomplete>`;
 };
