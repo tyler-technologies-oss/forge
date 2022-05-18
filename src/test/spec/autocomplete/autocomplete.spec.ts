@@ -325,6 +325,25 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(selectSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('should not close dropdown if select event is canceled in stateless mode', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const selectSpy = jasmine.createSpy('select event', evt => evt.preventDefault()).and.callThrough();
+      this.context.component.mode = AutocompleteMode.Stateless;
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.SELECT, selectSpy);
+      this.context.component.open = true;
+
+      const filterText = 'o';
+      _sendInputValue(this.context.input, filterText);
+      await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+
+      await tick();
+      _clickListItem(0, this.context.component.popupElement);
+
+      expect(this.context.input.value).toBe(filterText);
+      expect(this.context.component.open).toBeTrue();
+    });
+
     it('should set value', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
@@ -389,7 +408,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       _triggerDropdownClick(this.context.input);
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(0);
@@ -403,9 +422,9 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' })); // 0
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' })); // 1
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' })); // 0
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // 0
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // 1
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' })); // 0
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(0);
@@ -418,7 +437,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       _triggerDropdownClick(this.context.input);
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(2);
@@ -433,10 +452,10 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
       // We have 3 options
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' })); // Index 0
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' })); // Index 1
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' })); // Index 2
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' })); // Index 0
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // Index 0
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // Index 1
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // Index 2
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // Index 0
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(0);
@@ -449,7 +468,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       _triggerDropdownClick(this.context.input);
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'End' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(2);
@@ -463,8 +482,8 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Home' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(0);
@@ -478,7 +497,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Escape' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
       expect(this.context.component.popupElement).toBeNull();
@@ -493,7 +512,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       await timer();
       this.context.input.value = '';
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Backspace' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(changeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: null }));
@@ -540,13 +559,40 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       _triggerDropdownClick(this.context.input);
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(changeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: DEFAULT_FILTER_OPTIONS[0].value }));
       expect(this.context.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
       expect(this.context.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
+    });
+
+    it('should not emit change event if enter key is pressed in multiple mode when only one disabled option exists in the filtered options', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.multiple = true;
+      function filter(filterText: string, value: any): Promise<IOption[]> {
+        return new Promise<IOption[]>(resolve => {
+          resolve([{ label: 'No results', value: undefined, disabled: true }]);
+        });
+      }
+      const filterSpy = jasmine.createSpy('filter callback', filter).and.callThrough();
+      this.context.component.filter = filterSpy;
+      const changeSpy = jasmine.createSpy('change event');
+      this.context.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.CHANGE, changeSpy);
+
+      _triggerDropdownClick(this.context.input);
+      await tick();
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+
+      _sendInputValue(this.context.input, 'other');
+      await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+      await tick();
+
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(filterSpy).toHaveBeenCalled();
+      expect(changeSpy).not.toHaveBeenCalled();
     });
 
     it('should not select active option if input is blurred', async function(this: ITestContext) {
@@ -574,9 +620,9 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       _triggerDropdownClick(this.context.input);
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       await tick();
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Tab' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(changeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: DEFAULT_FILTER_OPTIONS[0].value }));
@@ -611,12 +657,12 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
       await tick();
 
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
       await tick();
 
       const listItems = _getListItems(this.context.component.popupElement);
@@ -662,7 +708,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.addEventListener(AUTOCOMPLETE_CONSTANTS.events.CHANGE, changeSpy);
 
       await timer();
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
       expect(changeSpy).toHaveBeenCalledTimes(0);
       expect(this.context.component.value).toBeNull();
@@ -674,7 +720,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       this.context.input.focus();
 
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
@@ -686,7 +732,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       this.context.input.focus();
 
-      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
       await tick();
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
