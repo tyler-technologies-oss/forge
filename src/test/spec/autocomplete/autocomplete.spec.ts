@@ -1257,10 +1257,13 @@ describe('AutocompleteComponent', function(this: ITestContext) {
   });
 
   describe('with dynamic <input> element', function(this: ITestContext) {
-    it('should not initialize if input element is not provided', async function(this: ITestContext) {
+    it('should wait for input element to initialize', async function(this: ITestContext) {
       this.context = setupDynamicTestContext(true);
+      await timer(100);
+      this.context.component.appendChild(this.context.input);
       await tick();
-      expect(this.context.component.isInitialized).toBe(false);
+
+      expect(this.context.component.isInitialized).toBe(true);
     });
 
     it('should initialize if input is provided', async function(this: ITestContext) {

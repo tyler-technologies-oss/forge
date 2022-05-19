@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, ensureChildren, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, ensureChild, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { DividerComponent } from '../divider';
 import { IconComponent, IconRegistry } from '../icon';
@@ -94,12 +94,10 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   }
 
   public connectedCallback(): void {
-    if (this.children.length) {
+    if (this.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.INPUT)) {
       this._foundation.initialize();
     } else {
-      ensureChildren(this)
-        .then(() => this._foundation.initialize())
-        .catch(e => console.error(e));
+      ensureChild(this, AUTOCOMPLETE_CONSTANTS.selectors.INPUT).then(() => this._foundation.initialize());
     }
   }
 
