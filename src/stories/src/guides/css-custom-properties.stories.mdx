@@ -1,0 +1,112 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Guides/CSS custom properties" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Guide' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Guide: CSS custom properties
+
+Forge makes heavy use of CSS custom properties to allow for customization when it comes to theming, typography, layering... etc.
+
+You will want to familiarize yourself with the custom properties that are available to you so that you can begin customizing things
+to your needs, as well as knowing where to look when things go wrong.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Theming
+
+For in-depth information on theming, please see the [theming guide](?path=/docs/guides-theming--page).
+
+| Name                                                  | Description
+| ------------------------------------------------------| -----
+| `--mdc-theme-primary`                                 | The primary theme color.
+| `--mdc-theme-secondary`                               | The secondary theme color.
+| `--forge-theme-tertiary`                              | The tertiary theme color.
+| `--mdc-theme-surface`                                 | The surface theme color where content is displayed on. For example, cards use this theme for their background color.
+| `--mdc-theme-background`                              | The background theme color. Designed for use as your page background behind the surface.
+| `--mdc-theme-text-primary-on-background`              | The font color for the primary text.
+| `--mdc-theme-text-secondary-on-background`            | The font color for the secondary (muted) text.
+| `--mdc-theme-on-primary`                              | The theme color for usage on top of the primary theme color.
+| `--mdc-theme-on-secondary`                            | The theme color for usage on top of the secondary theme color.
+| `--forge-theme-on-tertiary`                           | The theme color for usage on top of the tertiary theme color.
+| `--forge-theme-border-color`                          | The theme color for borders and dividers.
+| `--forge-theme-icon-color`                            | The theme color for icons.
+| `--forge-theme-danger`                                | The theme color error states.
+| `--forge-theme-warning`                               | The theme color warning states.
+| `--forge-theme-success`                               | The theme color success state.
+| `--forge-theme-info`                                  | The theme color info state.
+| `--forge-theme-elevated-surface`                      | The theme color for floating element backgrounds. For example, popup dropdowns.
+| `--forge-theme-on-elevated-surface`                   | The theme color for usage on top of the elevated-surface theme.
+| `--forge-theme-popup-elevation`                       | The box-shadow for floating elements.
+| `--forge-theme-scrollbar-thumb`                       | The scrollbar thumb color.
+| `--forge-theme-scrollbar-thumb-hover`                 | The scrollbar thumb color when hovering.
+| `--forge-theme-scrollbar-track`                       | The scrollbar track color.
+| `--forge-theme-scrollbar-track-hover`                 | The scrollbar track color when hovering.
+
+> This is only a subset of the available theme styles to highlight the most commonly used variables. To view the rest, inspect your page
+> after loading the `forge-theme.css` StyleSheet (included within `forge.css`) and inspect the `<html>` element to view the `:root` selector.
+>
+> individual component documentation will specify which CSS custom properties they make use of.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Typography
+
+| Name                                                  | Description
+| ------------------------------------------------------| -----
+| `--mdc-typography-font-family`                        | Controls the `font-family` for the page.
+| `--mdc-typography-<style name>-font-family`           | Controls the `font-family` for the typography style represented by `<style name>`.
+| `--mdc-typography-<style name>-font-weight`           | Controls the `font-weight` for the typography style represented by `<style name>`.
+| `--mdc-typography-<style name>-letter-spacing`        | Controls the `letter-spacing` for the typography style represented by `<style name>`.
+| `--mdc-typography-<style name>-font-size`             | Controls the `font-size` for the typography style represented by `<style name>`.
+
+Each font style uses its own CSS custom properties to allow for fine-grained control on per-style and per-type basis. See the [typography](?path=/docs/guides-typography--page)
+for information about which typography styles are available.
+
+For example, to override the `font-size` of all "title" typography styles you could use this:
+```scss
+.forge-typography--title {
+  --forge-typography-title-font-size: 72px;
+}
+```
+
+> If you're ever curious, or something is not documented on this page, just inspect the element and review the styes applied to that element. You will
+> see all `var()` references being used and that means you can override that value!
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Layering
+
+Forge uses CSS custom properties to define `z-index` ranges for specific types of elements. This helps ensure that these elements are properly
+stacked on top of each other, while allowing for customization if these conflict with your application or any third-party libraries you may be
+using.
+
+| Name                                                  | Value
+| ------------------------------------------------------| -----
+| `--forge-z-index-surface`                             | 1
+| `--forge-z-index-header`                              | 4
+| `--forge-z-index-backdrop`                            | 7
+| `--forge-z-index-dialog`                              | 8
+| `--forge-z-index-notification`                        | 9
+| `--forge-z-index-popup`                               | 10
+| `--forge-z-index-tooltip`                             | 11
+
+</PageSection>
