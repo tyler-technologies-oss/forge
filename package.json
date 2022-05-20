@@ -45,7 +45,7 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@tylertech-eslint/eslint-plugin": "^1.0.8",
-    "@tylertech/forge-cli": "^2.0.0-rc.2",
+    "@tylertech/forge-cli": "^2.0.0-rc.3",
     "@tylertech/forge-testing": "^2.0.0-rc.0",
     "@tylertech/stylelint-rules": "^4.0.0",
     "@types/jasmine": "^3.10.3",
