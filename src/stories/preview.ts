@@ -21,20 +21,19 @@ export const parameters = {
     storySort: {
       order: [
         'Forge',
-        [
-          'Getting started',
-          'Components'
-        ],
         'Guides',
         [
-          'Component architecture',
+          'Getting started',
           'Theming',
+          'Typography',
           'Using icons',
           'Component customization',
           'Sass library',
+          'Component architecture',
           'Component tutorial'
         ],
-        'Components'
+        'Components',
+        'About'
       ],
       method: 'alphabetical'
     },

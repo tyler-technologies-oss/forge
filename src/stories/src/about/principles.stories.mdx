@@ -1,0 +1,63 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="About/Guiding Principles" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Overview' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Forge Guiding Principles
+
+Forge components follow a strict set of guiding principles when it comes to building and distributing a library of Web Components. These principles help
+us maintain a level of consistency, as well as ensure that our consumers are aware of **how** and **why** we do things the way we do. Some of the following
+principles are general best practices when it comes to Web Components, and others are conscious decisions that we have made as a result of what we have
+learned over the years by building and maintaining this library.
+
+> If you have a question about any of our principles, or would like to propose an improved alternative (as we all know, things are constantly changing in the web world),
+> please [open a GitHub issue](https://github.com/tyler-technologies/forge/issues). We always welcome these discussions to help you understand as well as help us improve!
+
+</PageSection>
+
+<PageSection>
+
+## Component design & architecture
+
+- Components should always prefer that developers provide the native HTML elements (ex. `<input>` and `<button>`) through slots where possible.
+  - Hiding the native elements within the Shadow DOM, especially for form-related elements, causes an unnecessary abstraction, more overhead, and forces you to proxy/expose hooks to native properties/attributes.
+  - We understand there are times where it makes sense to provide this level of abstraction, and we do this on occasion, but typically it's a better developers experience to
+    leave those native elements exposed for direct communication and let the component handle the heavy lifting.
+- Zero abstractions from third-party Web Component frameworks/libraries (ex. Lit, Stencil... etc.)
+  - This is to ensure we own and control any/all abstractions, and we ensure longevity by using just vanilla JavaScript (TypeScript), HTML, Sass/CSS.
+  - We also strongly feel that it's easy enough to write Web Components without those tools.
+- All JavaScript properties that represent primitive values should mirror their values to HTML attributes on the host element and vice versa.
+- Components should prefer using Shadow DOM to encapsulate CSS styles and template structure vs rendering in the light DOM and relying on global styles.
+  - This is a tough balance sometimes, particularly around styling grandchildren as well as strict element relationships such as a `<table>`.
+- Icon usage should be registered by the component within its constructor to ensure that icon is available during upgrade and cannot be tree-shaken away.
+- Components should always ensure their JavaScript properties are upgraded (currently handled automatically by the `@CustomElement()` decorator in Forge).
+- Components should expose getters and setters for **all** public API properties.
+- Components should follow native element patterns by using getter/setter properties for controlling state vs. using methods.
+  - This is to help ensure that the component properties can easily be set via framework bindings (instead of having to get an element instance reference to call a method).
+- If a component is being built in place of a native HTML element, ensure that similar patterns/usage and accessibility are followed for familiarity.
+- Components should provide CSS Custom Properties for commonly modified styles, especially when related to theming.
+  - Avoid creating state-driven CSS custom properties unless that state cannot be determined from the host element.
+- Components should always annotate internal Shadow DOM elements using the HTML `part` attribute for complete customization by consumers.
+  - Components should also use `exportparts` where necessary if nesting Web Components.
+- The [BEM][BEM] naming convention is preferred, even within Shadow DOM.
+- All component templates are required to be contained within `<template>` tags.
+
+## Distribution
+
+- We always ship ES modules via npm (with bare module specifiers) to support tree-shaking and shared dependencies.
+- ES module files are also distributed via the Forge CDN. These files do not include bare module specifiers (dependencies are bundled), but they do support code splitting.
+  - In the future once import maps are mode widely supported, we will likely alter this to use bare module specifiers and provide an import map.
+- Typings are always provided within the npm package.
+- Pre-built global CSS stylesheets are always provided in the npm package.
+- The entire Sass library is included within the package for consumers to import and build on top of.
+
+</PageSection>
+
+[BEM]: http://getbem.com/naming/
