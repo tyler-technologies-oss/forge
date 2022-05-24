@@ -28,12 +28,15 @@ export const parameters = {
           'Typography',
           'Using icons',
           'Component customization',
-          'Sass library',
-          'Component architecture',
-          'Component tutorial'
+          'Sass library'
         ],
         'Components',
-        'About'
+        'Contributing',
+        [
+          'Guiding principles',
+          'Component architecture',
+          'Component tutorial'
+        ]
       ],
       method: 'alphabetical'
     },

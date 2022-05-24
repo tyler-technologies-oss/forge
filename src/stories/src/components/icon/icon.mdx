@@ -88,11 +88,8 @@ This component can be used with the local icon registry, or by loading the icons
 
 This is the most common, and expected usage of this component. Import the icons your application needs, and reference them by name:
 
-<LiveDemo 
-layout="column" 
-codeHtml={IconRegistryCodeHtml()} 
-codeTs={IconRegistryCodeTs()}>
-   <RegistryDemo/>
+<LiveDemo layout="column" codeHtml={IconRegistryCodeHtml()} codeTs={IconRegistryCodeTs()}>
+  <RegistryDemo />
 </LiveDemo>
 
 The above example shows how to include an icon from each set and define within the registry.
@@ -104,10 +101,8 @@ The above example shows how to include an icon from each set and define within t
 If your application cannot statically determine the name of the icon to use at build time, you may need to use the CDN as a fallback to load the icons dynamically. Just
 set the `external` attribute to toggle this mode on:
 
-<LiveDemo 
-layout="column" 
-codeHtml={IconExternalCodeHtml()}>
-  <ExternalDemo/>
+<LiveDemo layout="column" codeHtml={IconExternalCodeHtml()}>
+  <ExternalDemo />
 </LiveDemo>
 
 > **Important:** the default icon set that the component will load icons from is the **"standard"** set. If you need to load an icon from the "external" or "custom" sets,
@@ -132,12 +127,8 @@ iconElement.externalUrlBuilder = (name, type) => {
 
 The SVG icons can still be styled as if they were any other normal font on the page:
 
-<LiveDemo 
-layout="column" 
-codeHtml={IconStylesCodeHtml()} 
-codeScss={IconStylesCodeScss()} 
-codeTs={IconStylesCodeTs()}>
-   <StylesDemo/>
+<LiveDemo layout="column" codeHtml={IconStylesCodeHtml()} codeScss={IconStylesCodeScss()} codeTs={IconStylesCodeTs()}>
+  <StylesDemo />
 </LiveDemo>
 
 
