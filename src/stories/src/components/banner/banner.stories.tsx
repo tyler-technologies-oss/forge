@@ -2,8 +2,6 @@ import { Meta } from '@storybook/react';
 const MDX = require('./banner.mdx').default;
 import { argTypes, IBannerProps } from './banner-args';
 import { DefaultTemplate } from './templates/default';
-import { MobileTemplate } from './templates/mobile';
-import { ThemedTemplate } from './templates/themed';
 
 export default {
   title: 'Components/Banner',
@@ -20,25 +18,6 @@ Default.args = {
   dismissed: false,
   canDismiss: true,
   theme: 'default',
-  hasIcon: false,
-  hasButton: false,
-} as IBannerProps;
-
-export const Mobile = MobileTemplate.bind({});
-Mobile.args = {
-  dismissed: false,
-  canDismiss: true,
-  theme: 'default',
-  hasIcon: false,
-  hasButton: false,
-} as IBannerProps;
-
-
-export const Themed = ThemedTemplate.bind({});
-Themed.args = {
-  dismissed: false,
-  canDismiss: true,
-  theme: 'default',
-  hasIcon: false,
+  hasIcon: true,
   hasButton: false,
 } as IBannerProps;

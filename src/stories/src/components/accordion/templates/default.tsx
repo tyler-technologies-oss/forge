@@ -3,17 +3,14 @@ import { ForgeAccordion, ForgeDivider, ForgeExpansionPanel, ForgeOpenIcon } from
 import React from 'react';
 import { IAccordionProps } from '../accordion-args';
 
-export const DefaultTemplate: Story<IAccordionProps> = ({panelSelector = 'forge-expansion-panel'}) => {
-  const accordionProps = {
-    panelSelector: panelSelector
-  };
+export const DefaultTemplate: Story<IAccordionProps> = () => {
   const buttonStyles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
   };
   return (
-    <ForgeAccordion {...accordionProps} style={{ display: 'block', maxWidth: '256px' }}>
+    <ForgeAccordion style={{ display: 'block', maxWidth: '256px' }}>
       <ForgeExpansionPanel>
         <div role="button" tabIndex={0} slot="header" style={buttonStyles}>
           <div>Panel One</div>

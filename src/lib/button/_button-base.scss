@@ -56,7 +56,7 @@
     }
   }
 
-  .forge-button__label + .forge-button__icon {
+  .forge-button__label ~ .forge-button__icon {
     @include mdc-feature-targeting.targets($feat-structure) {
       @include icon-trailing;
     }
@@ -79,7 +79,7 @@
       }
     }
 
-    .forge-button__label + .forge-button__icon {
+    .forge-button__label ~ .forge-button__icon {
       @include mdc-feature-targeting.targets($feat-structure) {
         @include icon-contained-trailing;
       }
