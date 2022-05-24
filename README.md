@@ -51,6 +51,9 @@ defineTextFieldComponent();
 defineButtonComponent();
 ```
 
+> **Note:** the components are actually self-defining, but without something in your application referencing those components, they will be left out.
+> These definition functions ensure that the components are bundled within your application.
+
 ### Using via CDN
 
 The Forge CDN can provide components directly.
@@ -58,20 +61,18 @@ The Forge CDN can provide components directly.
 As an example, the text-field and button components can be loaded directly like this:
 
 ```html
-<!-- Some components (such as button) require the use of a global stylesheet -->
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/button/forge-button.css">
+<!-- Always include the theme and typography styles -->
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/forge-core.css">
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/forge.css">
 
-<!-- Load the JavaScript bundle for each component you need. -->
-<script src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/text-field/text-field.js"></script>
-<script src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge/1.0.0/button/button.js"></script>
+<!-- Some components (such as button) require the use of a global stylesheet (for now) -->
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/forge-button.css">
 
-<!-- Register the components with the browser. -->
-<script>
-  // All components are added under the `window.Forge.<componentName>` global variable
-  window.Forge.textField.defineTextFieldComponent();
-  window.Forge.button.defineButtonComponent();
-</script>
-```
+<!-- Load the ES modules JavaScript for each component you need -->
+<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/text-field/text-field.js"></script>
+<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/button.js"></script>
+
+> **Note:** the components will automatically be registered with the custom element registry in the browser.
 
 ### HTML
 
@@ -86,6 +87,12 @@ Now the text-field and button components can be used anywhere in the html:
 <forge-button type="raised">
   <button type="button">Button</button>
 </forge-button>
+```
+
+Don't forget to also add the `forge-typography` class to the `<body>` element to ensure your application inherits the default typography styles:
+
+```html
+<body class="forge-typography">
 ```
 
 ### CSS

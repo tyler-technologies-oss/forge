@@ -1,5 +1,4 @@
 import { DefaultTemplate as BannerDemo } from './templates/default';
-import { ThemedTemplate as ThemedDemo } from './templates/themed';
 import { BannerDefaultCodeHtml } from './code/banner-default';
 import { BannerThemedCodeHtml } from './code/banner-themed';
 import { BannerCombinedFullCodeHtml } from './code/banner-combined-full';
@@ -25,33 +24,32 @@ This component supports built-in predefined themes. It can be configured to be e
 
 Below is the most basic usage of the banner for displaying a short, dismissible message:
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={BannerDefaultCodeHtml()}>
-  <BannerDemo/>
+<LiveDemo layout="column" fullWidth codeHtml={BannerDefaultCodeHtml()}>
+  <BannerDemo />
 </LiveDemo>
 
 ### Themed
 
 You can use the built-in themes via attribute. If you need a custom color, see the CSS custom properties section below.
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={BannerThemedCodeHtml()}>
-  <ThemedDemo/>
+<LiveDemo layout="column" fullWidth codeHtml={BannerThemedCodeHtml()}>
+  <BannerDemo theme="danger" />
+  <br/>
+  <BannerDemo theme="warning" />
+  <br/>
+  <BannerDemo theme="success" />
+  <br/>
+  <BannerDemo theme="info-primary" />
+  <br/>
+  <BannerDemo theme="info-secondary" />
 </LiveDemo>
 
 ### Combined with a button and icon
 
 Here is an example usage combined with a forge-button component:
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={BannerCombinedFullCodeHtml()}>
-  <BannerDemo hasIcon={true} hasButton={true}/>
+<LiveDemo layout="column" fullWidth codeHtml={BannerCombinedFullCodeHtml()}>
+  <BannerDemo hasIcon={true} hasButton={true} />
 </LiveDemo>
 
 > **Note:** The design for the banner specifically requests that the button's background be white. Due to limitations in how deep a css selector can drill into a slotted element, you will need to add that background color yourself.

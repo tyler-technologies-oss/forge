@@ -37,8 +37,6 @@ The only requirement for integration via JavaScript is that you provide a callba
 
 > **Note:** the `data-forge-dropdown-icon` attribute being applied to the trailing icon allows the autocomplete to provide the necessary styling to control open state rotation
 
-
-
 </PageSection>
 
 ---
@@ -176,8 +174,6 @@ Closes the dropdown.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -200,8 +196,6 @@ Closes the dropdown.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -210,11 +204,9 @@ Closes the dropdown.
 
 | Name               | Values
 | :------------------| :-----------------
-| `default`          | The default (unnamed) slot is the text input. Projects the input into the correct location.
+| (default)          | The default (unnamed) slot is the text input. Projects the input into the correct location.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -283,7 +275,7 @@ interface IAutocompleteOptionGroup<T = any> {
 
 ### IAutocompletePopupConfiguration
 
-```ts
+```ts expanded
 interface IAutocompletePopupConfiguration {
   filterText: string;
   popupTarget: string;

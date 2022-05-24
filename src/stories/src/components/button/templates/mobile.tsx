@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
-import { Story } from "@storybook/react";
-import { ForgeButton } from "@tylertech/forge-react";
+import React, { useEffect } from 'react';
+import { Story } from '@storybook/react';
+import { IconRegistry } from '@tylertech/forge';
+import { ForgeButton, ForgeIcon } from '@tylertech/forge-react';
+import { tylIconAssignment } from '@tylertech/tyler-icons/standard';
 import { MobilePreview } from '../../shared/mobile-preview';
 import { IButtonMobileProps } from '../button-args';
 
@@ -8,16 +10,10 @@ export const MobileTemplate: Story<IButtonMobileProps> = ({
   type = 'raised',
   hasLeadingIcon = false,
   hasTrailingIcon = false,
-}) => {   
-  const LeadingIcon: FC = () => hasLeadingIcon
-    ? (<i className="tyler-icons" aria-hidden="true" style={{paddingRight: '16px'}}>assignment</i>)
-    : null;
-  const TrailingIcon: FC = () => hasTrailingIcon
-    ? (<i className="tyler-icons" aria-hidden="true" style={{paddingLeft: '16px'}}>assignment</i>)
-    : null;
-  const buttonProps = {
-    type
-  };
+}) => {
+  useEffect(() => {
+    IconRegistry.define(tylIconAssignment);
+  }, []);
   return (
     <MobilePreview>
       <div style={{
@@ -29,17 +25,11 @@ export const MobileTemplate: Story<IButtonMobileProps> = ({
         height: '100%'
       }}>
         <p>Using a button in a mobile layout.</p>
-        <ForgeButton 
-        {...buttonProps}
-        style={{
-          width: '100%', 
-          display: 'flex', 
-          flexDirection: 'column',
-        }}>        
-          <button>
-            <LeadingIcon/>
+        <ForgeButton type={type} style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+          <button type="button">
+            {hasLeadingIcon && <ForgeIcon name="assignment" />}
             <span>Button</span>
-            <TrailingIcon/>
+            {hasTrailingIcon && <ForgeIcon name="assignment" />}
           </button>
         </ForgeButton>
       </div>

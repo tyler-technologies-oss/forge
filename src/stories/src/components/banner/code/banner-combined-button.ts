@@ -6,9 +6,3 @@ export const BannerCombinedButtonCodeHtml = () => `
   </forge-button>
 </forge-banner>
 `;
-
-export const BannerCombinedButtonCodeBlazor = () => `
-<ForgeBanner Text="Minim sunt eu laborum labore minim.">
-  <ForgeButton Type="@ButtonType.Outlined" Slot="button">Learn more...</ForgeButton>
-</ForgeBanner>
-`;

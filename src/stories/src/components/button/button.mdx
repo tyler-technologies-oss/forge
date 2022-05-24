@@ -21,11 +21,12 @@ adjusting native properties/attributes as needed.
 
 ### Default
 
-<LiveDemo 
-dense={true} 
-codeHtml={ButtonDefaultCodeHtml()}>
-  <ButtonDemo/>
+<LiveDemo dense codeHtml={ButtonDefaultCodeHtml()}>
+  <ButtonDemo />
 </LiveDemo>
+
+> **Note:** To make a button fill 100% of its available width, put the `<forge-button>` inside a block element and set
+> the width of both the `<forge-button>` component and its embedded `<button>` element to 100%.
 
 </PageSection>
 
@@ -57,8 +58,5 @@ Gets/sets the button type. Valid values: `raised`, `unelevated`, `outlined`, `de
 | `--mdc-theme-on-primary`                | Sets the font color.
 | `--forge-theme-border-color`            | Sets the border color.
 | `--mdc-theme-text-disabled-on-light`    | Sets the disabled color.
-
-> **Note:** To make a button fill 100% of its available width, put the `<forge-button>` inside a block element and set
-> the width of both the `<forge-button>` component and its embedded `<button>` element to 100%.
 
 </PageSection>

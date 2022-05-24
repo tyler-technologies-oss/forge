@@ -19,15 +19,3 @@ export const BannerThemedCodeHtml = () => `
   <div>Minim sunt eu laborum labore minim.</div>
 </forge-banner>
 `;
-
-export const BannerThemedCodeBlazor = () => `
-<ForgeBanner Theme="@Theme.Danger" Text="Minim sunt eu laborum labore minim." />
-
-<ForgeBanner Theme="@Theme.Warning" Text="Minim sunt eu laborum labore minim." />
-
-<ForgeBanner Theme="@Theme.Success" Text="Minim sunt eu laborum labore minim." />
-
-<ForgeBanner Theme="@Theme.InfoPrimary" Text="Minim sunt eu laborum labore minim." />
-
-<ForgeBanner Theme="@Theme.InfoSecondary" Text="Minim sunt eu laborum labore minim." />
-`;
