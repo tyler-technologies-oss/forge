@@ -27,6 +27,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
   private _toInputMask: DateInputMask | undefined;
   private _fromInputMask: DateInputMask | undefined;
   private _dropdownIdentifier: string;
+  private _toValueChangeListener: (() => void) | undefined;
 
   constructor(component: DateRangePickerComponent) {
     super(component);
@@ -61,6 +62,11 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     this._toInputMask = new DateInputMask(this._toInputElement, toOptions);
   }
 
+  public destroy(): void {
+    super.destroy();
+    this._destroyToValueChangeListener();
+  }
+
   public destroyMask(): void {
     if (this._fromInputMask) {
       this._fromInputMask.destroy();
@@ -69,6 +75,12 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     if (this._toInputMask) {
       this._toInputMask.destroy();
       this._toInputMask = undefined;
+    }
+  }
+
+  private _destroyToValueChangeListener(): void {
+    if (typeof this._toValueChangeListener === 'function') {
+      this._toValueChangeListener();
     }
   }
 
@@ -102,17 +114,16 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
   }
 
   public setInputValueChangedListener(context: any, listener: (value: any) => void): void {
-    if (this._fromInputElement.hasOwnProperty('value')) {
-      return;
+    if (this._valueChangeListeners.length) {
+      this.destroyValueChangeListener();
     }
-    listenOwnProperty(context, this._fromInputElement, 'value', listener);
+    const destroyListenerCb = listenOwnProperty(context, this._fromInputElement, 'value', listener);
+    this._valueChangeListeners.push(destroyListenerCb);
   }
 
   public setToInputValueChangedListener(context: any, listener: (value: any) => void): void {
-    if (this._toInputElement.hasOwnProperty('value')) {
-      return;
-    }
-    listenOwnProperty(context, this._toInputElement, 'value', listener);
+    this._destroyToValueChangeListener();
+    this._toValueChangeListener = listenOwnProperty(context, this._toInputElement, 'value', listener);
   }
 
   public hasInputElement(): boolean {
