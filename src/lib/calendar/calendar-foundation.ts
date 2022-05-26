@@ -935,8 +935,8 @@ export class CalendarFoundation implements ICalendarFoundation {
    * @returns An array of ICalendarMenuOptions containing years
    */
   private _getYearsForMenu(): ICalendarMenuOption[] {
-    const min = this._min ? Math.max(this._min.getFullYear(), this._minYear) : this._minYear;
-    const max = this._max ? Math.min(this._max.getFullYear(), this._maxYear) : this._maxYear;
+    const min = this._min ? this._min.getFullYear() : this._minYear;
+    const max = this._max ? this._max.getFullYear() : this._maxYear;
 
     const config: ICalendarMenuYearConfig = {
       locale: this._locale,
