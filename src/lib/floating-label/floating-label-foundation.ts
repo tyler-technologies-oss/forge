@@ -1,14 +1,22 @@
 import { FLOATING_LABEL_CONSTANTS } from './floating-label-constants';
 import { IFloatingLabelAdapter } from './floating-label-adapter';
+import { Platform } from '@tylertech/forge-core';
 
 export class FloatingLabelFoundation {
-  private _floatAnimationEndHandler?: () => void;
-  constructor(protected _adapter: IFloatingLabelAdapter) {}
+  private _floatAnimationEndHandler: () => void;
+
+  constructor(protected _adapter: IFloatingLabelAdapter) {
+    this._floatAnimationEndHandler = () => this._handleFloatAnimationEnd();
+  }
 
   public initialize(): void {
     this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOATING_LABEL);
-    this._floatAnimationEndHandler = () => this._handleFloatAnimationEnd();
-    this._adapter.addLabelListener('transitionend', this._floatAnimationEndHandler);
+    
+    if (Platform.BLINK) {
+      // Chromium has a bug where the label renders blurry due to a scale transform
+      // so we only provide a fix for that when the Blink engine is used
+      this._adapter.addLabelListener('transitionend', this._floatAnimationEndHandler);
+    }
   }
 
   public disconnect(): void {
