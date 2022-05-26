@@ -210,6 +210,23 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       expectFloatingLabelState(this.context, true);
     });
 
+
+    it('should not un-float label when blurred if placeholder exists', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.input.placeholder = 'Some placeholder text...';
+      await tick();
+
+      this.context.input.focus();
+      await floatTick();
+
+      expectFloatingLabelState(this.context, true);
+
+      this.context.input.blur();
+      await floatTick();
+
+      expectFloatingLabelState(this.context, true);
+    });
+
     it('should set proper state when focused', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.input.dispatchEvent(new Event('focus'));
