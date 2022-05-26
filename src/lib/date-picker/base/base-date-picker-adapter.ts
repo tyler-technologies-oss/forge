@@ -52,6 +52,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   setCalendarDisableDayCallback(disableDayCallback: (date: Date) => boolean): void;
   setCalendarActiveDate(date: Date): void;
   getCalendarActiveDate(): Date | undefined;
+  setCalendarYearRange(value: string): void;
   propagateCalendarKey(evt: KeyboardEvent): void;
 }
 
@@ -195,6 +196,12 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
 
   public getCalendarActiveDate(): Date | undefined {
     return this._calendarDropdown?.calendar?.activeDate;
+  }
+
+  public setCalendarYearRange(value: string): void {
+    if (this._calendarDropdown?.calendar?.yearRange) {
+      this._calendarDropdown.calendar.yearRange = value;
+    }
   }
 
   public propagateCalendarKey(evt: KeyboardEvent): void {

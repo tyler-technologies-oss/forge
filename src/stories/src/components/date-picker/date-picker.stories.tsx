@@ -25,5 +25,6 @@ Default.args = {
   allowInvalidDate: false,
   showToday: false,
   showClear: false,
-  disabledDaysOfWeek: []
+  disabledDaysOfWeek: [],
+  yearRange: '-50:+50'
 } as IDatePickerProps;

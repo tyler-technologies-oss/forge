@@ -37,7 +37,8 @@ const observedAttributes = {
   ALLOW_INVALID_DATE: 'allow-invalid-date',
   SHOW_TODAY: 'show-today',
   SHOW_CLEAR: 'show-clear',
-  DISABLED_DAYS_OF_WEEK: 'disabled-days-of-week'
+  DISABLED_DAYS_OF_WEEK: 'disabled-days-of-week',
+  YEAR_RANGE: 'year-range'
 };
 
 const attributes = {
