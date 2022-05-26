@@ -7,22 +7,22 @@ export interface IChipFieldFoundation extends IFieldFoundation {}
 
 export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFoundation {
   private _memberSlotListener: () => void;
-  private _focusInput: () => void;
-  private _handleRootKeyDown: (event: Event) => void;
-  private _handleKeyDown: (event: Event) => void;
+  private _inputContainerMouseDownListener: (evt: MouseEvent) => void;
+  private _handleRootKeyDown: (event: KeyboardEvent) => void;
+  private _handleKeyDown: (event: KeyboardEvent) => void;
 
   constructor(protected _adapter: IChipFieldAdapter) {
     super(_adapter);
     this._memberSlotListener = () => this._onMemberSlotChanged();
-    this._focusInput = () => this._adapter.focusInput();
-    this._handleRootKeyDown = (event: KeyboardEvent) => this._onRootKeyDown(event);
-    this._handleKeyDown = (event: KeyboardEvent) => this._onKeyDown(event);
+    this._inputContainerMouseDownListener = evt => this._onInputContainerMouseDown(evt);
+    this._handleRootKeyDown = evt => this._onRootKeyDown(evt);
+    this._handleKeyDown = evt => this._onKeyDown(evt);
   }
 
   public initialize(): void {
     super.initialize();
     this._adapter.addMemberSlotListener(this._memberSlotListener);
-    this._adapter.addInputContainerListener('click', this._focusInput);
+    this._adapter.addInputContainerListener('mousedown', this._inputContainerMouseDownListener);
     this._adapter.addRootListener('keydown', this._handleRootKeyDown);
     this._adapter.addInputListener('keydown', this._handleKeyDown);
   }
@@ -30,9 +30,14 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
   public disconnect(): void {
     super.disconnect();
     this._adapter.removeMemberSlotListener(this._memberSlotListener);
-    this._adapter.removeInputContainerListener('click', this._focusInput);
+    this._adapter.removeInputContainerListener('mousedown', this._inputContainerMouseDownListener);
     this._adapter.removeRootListener('keydown', this._handleRootKeyDown);
     this._adapter.removeInputListener('keydown', this._handleKeyDown);
+  }
+
+  private _onInputContainerMouseDown(evt: MouseEvent): void {
+    evt.preventDefault();
+    this._adapter.focusInput();
   }
 
   protected _onBlur(event: Event): void {
