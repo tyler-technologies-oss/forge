@@ -301,7 +301,7 @@ export class FieldFoundation {
   protected _onValueChanged(value: any): void {
     if (this._adapter.fieldHasValue()) {
       this.floatLabel(true);
-    } else if (!this._adapter.inputHasFocus()) {
+    } else if (!this._adapter.inputHasFocus() && !this._adapter.hasPlaceholder()) {
       this.floatLabel(false);
     }
   }
