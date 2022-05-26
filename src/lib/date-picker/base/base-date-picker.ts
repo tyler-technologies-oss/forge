@@ -26,6 +26,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   showToday: boolean;
   showClear: boolean;
   disabledDaysOfWeek: DayOfWeek[];
+  yearRange: string;
 }
 
 export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoundation extends BaseDatePickerFoundation<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>> extends BaseComponent implements IBaseDatePickerComponent<TPublicValue> {
@@ -88,6 +89,9 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
         break;
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.DISABLED_DAYS_OF_WEEK:
         this.disabledDaysOfWeek = coerceNumberArray(newValue);
+        break;
+      case BASE_DATE_PICKER_CONSTANTS.observedAttributes.YEAR_RANGE:
+        this.yearRange = newValue;
         break;
     }
   }
@@ -171,4 +175,8 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
   /** Sets the callback to use for testing whether a specific date should be disabled or not. */
   @FoundationProperty()
   public disableDayCallback: (date: Date) => boolean;
+
+  /** Sets the year range. */
+  @FoundationProperty()
+  public yearRange: string;
 }
