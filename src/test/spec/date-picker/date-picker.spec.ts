@@ -1290,6 +1290,24 @@ describe('DatePickerComponent', function(this: ITestContext) {
       inputElement.dispatchEvent(new KeyboardEvent('input'));
       expect(inputElement.value).toEqual('01/01/202_');
     });
+
+    it('should set year range via attribute', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const yearRange = '-5:+5';
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.YEAR_RANGE, yearRange);
+
+      expect(this.context.component.yearRange).toEqual(yearRange);
+    });
+
+    it('should set year range', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const yearRange = '-5:+5';
+      this.context.component.yearRange = yearRange;
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      expect(calendar.yearRange).toEqual(yearRange);
+    });
   });
 
   function setupTestContext(append = false, hasInput = true, hasToggle = true): ITestDatePickerContext {
