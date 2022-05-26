@@ -161,11 +161,11 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   public setValueChangedListener(context: any, listener: (value: any) => void): void {
     this.destroyValueChangeListener();
     const destroyListener = listenOwnProperty(context, this._inputElement, 'value', listener);
-    this._valueChangeListeners.push(destroyListener); // TODO
+    this._valueChangeListeners.push(destroyListener);
   }
 
   public destroyValueChangeListener(): void {
-    this._valueChangeListeners.forEach(cb => cb()); // TODO
+    this._valueChangeListeners.forEach(cb => cb());
   }
 
   public detectLabel(required: boolean): void {

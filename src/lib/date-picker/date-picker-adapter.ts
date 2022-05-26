@@ -64,10 +64,9 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
   }
 
   public setInputValueChangedListener(context: any, listener: (value: any) => void): void {
-    if (this._inputElement.hasOwnProperty('value')) {
-      return;
-    }
-    listenOwnProperty(context, this._inputElement, 'value', listener);
+    this.destroyValueChangeListener();
+    const destroyListenerCb = listenOwnProperty(context, this._inputElement, 'value', listener);
+    this._valueChangeListeners.push(destroyListenerCb);
   }
 
   public hasInputElement(): boolean {

@@ -22,25 +22,23 @@ export const DefaultTemplate: Story<IDatePickerProps> = ({
   if (max) {
     max = new Date(max);
   }
-
-  const datepickerProps = {
-    disabled,
-    min,
-    max,
-    open,
-    masked,
-    maskFormat,
-    showMaskFormat,
-    allowInvalidDate,
-    showToday,
-    showClear,
-    disabledDaysOfWeek
-  };
   return (
-    <ForgeDatePicker {...datepickerProps} style={{ maxWidth: '256px' }}>
+    <ForgeDatePicker
+      disabled={disabled}
+      min={min}
+      max={max}
+      open={open}
+      masked={masked}
+      maskFormat={maskFormat}
+      showMaskFormat={showMaskFormat}
+      allowInvalidDate={allowInvalidDate}
+      showToday={showToday}
+      showClear={showClear}
+      disabledDaysOfWeek={disabledDaysOfWeek}
+      style={{ maxWidth: '256px' }}>
       <ForgeTextField>
-        <input type="text" id="input-datepicker"/>
-        <label htmlFor="input-datepicker">Choose date</label>
+        <input type="text" id="input-date-picker" />
+        <label htmlFor="input-date-picker">Choose date</label>
       </ForgeTextField>
     </ForgeDatePicker>
   );

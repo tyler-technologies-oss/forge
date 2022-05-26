@@ -63,7 +63,7 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
     this.destroyValueChangeListener();
     this._applyToInputs(input => {
       const destroyListener = listenOwnProperty(context, input, 'value', listener);
-      this._valueChangeListeners.push(destroyListener); // TODO
+      this._valueChangeListeners.push(destroyListener);
     });
   }
 
