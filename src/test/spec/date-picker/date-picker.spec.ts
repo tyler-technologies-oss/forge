@@ -1269,6 +1269,27 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       expect(inputElement.value).toBe(`01/01/${currentCentury - 1}${year}`);
     });
+
+    it('should clear the value when the input is cleared programmatically', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date();
+
+      getInputElement(this.context.component).value = '';
+
+      expect(this.context.component.value).toBeNull();
+    });
+
+    it('should update value properly when backspacing', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date('01/01/2021');
+      this.context.component.masked = true;
+      this.context.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(this.context.component);
+      inputElement.value = inputElement.value.slice(0,-1);
+      inputElement.dispatchEvent(new KeyboardEvent('input'));
+      expect(inputElement.value).toEqual('01/01/202_');
+    });
   });
 
   function setupTestContext(append = false, hasInput = true, hasToggle = true): ITestDatePickerContext {
