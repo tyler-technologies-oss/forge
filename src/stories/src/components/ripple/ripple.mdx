@@ -1,5 +1,4 @@
-import { DefaultTemplate as RippleDemo } from './templates/default';
-import { CardRecipeTemplate as CardRecipeDemo } from './templates/card-recipe';
+import { Default as RippleDemo, WithCard as WithCardDemo } from './ripple.stories';
 import { RippleDefaultHtml } from './code/ripple-default';
 import { RippleCardRecipeHtml } from './code/ripple-card-recipe';
 
@@ -33,7 +32,7 @@ The `<forge-ripple>` component can attach to any element. Here we show it attach
 It's common that this component is used together with the [card component](?path=/story/components-card--default) to provide an interactive card.
 
 <LiveDemo layout="column" codeHtml={RippleCardRecipeHtml()}>
-  <CardRecipeDemo />
+  <WithCardDemo />
 </LiveDemo>
 
 </PageSection>
@@ -67,6 +66,18 @@ Sets whether the ripple is bounded to an icon circle or whether its unbounded an
 <MethodDef name="layout(): void">
 
 Forces a re-render of the component attach the ripple on demand. Can be useful in progressive rendering situtations where render timing is difficult to maintain.
+
+</MethodDef>
+
+<MethodDef name="activate(): void">
+
+Manually activates the ripple state.
+
+</MethodDef>
+
+<MethodDef name="deactive(): void">
+
+Manually deactivates the ripple state.
 
 </MethodDef>
 

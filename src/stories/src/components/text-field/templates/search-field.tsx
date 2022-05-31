@@ -1,32 +1,49 @@
 import React, { MutableRefObject, useEffect, useRef } from 'react';
 import { Story } from "@storybook/react";
-import { ForgeIconButton, ForgeTextField } from "@tylertech/forge-react";
+import { ForgeIcon, ForgeIconButton, ForgeTextField } from "@tylertech/forge-react";
 import { ITextFieldProps } from "../text-field-args";
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconClose, tylIconSearch } from '@tylertech/tyler-icons/standard';
 
-export const SearchFieldTemplate: Story<ITextFieldProps> = props => {
-  const textfieldProps = {
-    density: props.density,
-    floatLabelType: props.floatLabelType,
-    shape: props.shape,
-    invalid: props.invalid,
-    required: props.required,
-    disabled: props.disabled,
-  };
+export const SearchFieldTemplate: Story<ITextFieldProps> = ({
+  density,
+  floatLabelType,
+  shape,
+  invalid,
+  required,
+  disabled
+}) => {
   const inputRef = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>;
+
+  useEffect(() => {
+    IconRegistry.define([tylIconSearch, tylIconClose]);
+  }, []);
+
   useEffect(() => {
     const input = inputRef.current as HTMLInputElement;
-    input.disabled = props.disabled;
-    input.required = props.required;
+    input.disabled = disabled;
+    input.required = required;
     input.placeholder = 'Search...';
   });
+
   return (
-    <ForgeTextField {...textfieldProps}>
+    <ForgeTextField
+      density={density}
+      floatLabelType={floatLabelType}
+      shape={shape}
+      invalid={invalid}
+      required={required}
+      disabled={disabled}>
       <ForgeIconButton slot="leading" dense="true">
-        <button className="tyler-icons">search</button>
+        <button type="button">
+          <ForgeIcon name="search" />
+        </button>
       </ForgeIconButton>
       <input ref={inputRef} type="text" id="search-field" />
       <ForgeIconButton slot="trailing" dense="true">
-        <button className="tyler-icons">close</button>
+        <button type="button">
+          <ForgeIcon name="close" />
+        </button>
       </ForgeIconButton>
     </ForgeTextField>
   );

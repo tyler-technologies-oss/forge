@@ -19,11 +19,12 @@ export const argTypes = {
     control: {
       type: 'select',
       labels: {
+        'auto': 'Auto',
         'light': 'Light',
         'dark': 'Dark',
       }
     },
-    options: ['light', 'dark'],
+    options: ['auto', 'light', 'dark'],
     table: {
       category: 'Properties'
     },
@@ -33,5 +34,5 @@ export const argTypes = {
 export interface IBackdropProps {
   delay: number;
   maxOpacity: number;
-  appearance: BackdropAppearance;
+  appearance: BackdropAppearance | 'auto';
 }

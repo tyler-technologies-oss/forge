@@ -1,6 +1,8 @@
 import { Story } from '@storybook/react';
-import { ForgeButtonToggle, ForgeButtonToggleGroup } from '@tylertech/forge-react';
-import React from 'react';
+import { ForgeButtonToggle, ForgeButtonToggleGroup, ForgeIcon } from '@tylertech/forge-react';
+import { tylIconEmail, tylIconPhone } from '@tylertech/tyler-icons/standard';
+import React, { useEffect } from 'react';
+import { IconRegistry } from '@tylertech/forge';
 import { IButtonToggleGroupProps } from '../button-toggle-args';
 
 export const DefaultTemplate: Story<IButtonToggleGroupProps> = ({
@@ -13,29 +15,29 @@ export const DefaultTemplate: Story<IButtonToggleGroupProps> = ({
   hasLeading = false,
   hasTrailing = false,
 }) => {
-  const buttonToggleGroupProps = {
-    multiple, 
-    stretch, 
-    mandatory, 
-    vertical, 
-    dense, 
-    disabled,
-  };
-  const Icon = ({children, slotName, show}) => show ? (<i className="tyler-icons" slot={slotName} aria-hidden="true">{children}</i>) : null;
+  useEffect(() => {
+    IconRegistry.define([tylIconEmail, tylIconPhone])
+  }, []);
   return (
-    <ForgeButtonToggleGroup {...buttonToggleGroupProps}>
-      <ForgeButtonToggle value="email" button-aria-label="By email">        
-        <Icon show={hasLeading} slotName={'leading'}>email</Icon>
+    <ForgeButtonToggleGroup
+      multiple={multiple} 
+      stretch={stretch} 
+      mandatory={mandatory} 
+      vertical={vertical} 
+      dense={dense} 
+      disabled={disabled}>
+      <ForgeButtonToggle value="email" button-aria-label="By email">
+        {hasLeading && <ForgeIcon slot="leading" name="email" />}
         By email
-        <Icon show={hasTrailing} slotName={'trailing'}>email</Icon>
+        {hasTrailing && <ForgeIcon slot="trailing" name="email" />}
       </ForgeButtonToggle>
       <ForgeButtonToggle value="mail" button-aria-label="By mail">
         By mail
       </ForgeButtonToggle>
       <ForgeButtonToggle value="phone" button-aria-label="By phone">
-        <Icon show={hasLeading} slotName={'leading'}>phone</Icon>
+        {hasLeading && <ForgeIcon slot="leading" name="email" />}
         By phone
-        <Icon show={hasTrailing} slotName={'trailing'}>phone</Icon>
+        {hasTrailing && <ForgeIcon slot="trailing" name="phone" />}
       </ForgeButtonToggle>
     </ForgeButtonToggleGroup>
   );

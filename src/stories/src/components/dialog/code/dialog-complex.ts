@@ -3,11 +3,9 @@ export const DialogComplexCodeHtml = () => `
   <forge-toolbar forge-dialog-move-target>
     <h2 class="forge-dialog__title">Discard draft?</h2>
     <forge-icon-button slot="end">
-      <button 
-        id="complex-dialog-close-button"
-        type="button" 
-        aria-label="Close complex dialog" 
-        class="tyler-icons">close</button>
+      <button id="complex-dialog-close-button" type="button" aria-label="Close complex dialog">
+        <forge-icon name="close"></forge-icon>
+      </button>
     </forge-icon-button>
   </forge-toolbar>
   <section class="forge-dialog__body" style="width: 500px">
@@ -25,6 +23,8 @@ export const DialogComplexCodeHtml = () => `
 `;
 
 export const DialogComplexCodeTs = () => `
+IconRegistry.define(tylIconClose);
+
 const dialog = document.createElement('forge-dialog');
 const dialogTemplate = document.getElementById('dialog-content');
 dialog.appendChild(dialogTemplate.content.cloneNode(true));

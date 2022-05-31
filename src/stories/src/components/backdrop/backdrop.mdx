@@ -1,4 +1,4 @@
-import { DefaultTemplate as BackdropDemo } from './templates/default';
+import { Default as BackdropDemo } from './backdrop.stories';
 import { BackdropCodeHtml, BackdropCodeTs } from './code/backdrop';
 
 <PageSection>
@@ -20,11 +20,8 @@ the user to a specific modal surface area of the screen.
 
 ## Example
 
-<LiveDemo 
-dense={true} 
-codeHtml={BackdropCodeHtml()} 
-codeTs={BackdropCodeTs()}>
-  <BackdropDemo/>
+<LiveDemo dense codeHtml={BackdropCodeHtml()} codeTs={BackdropCodeTs()}>
+  <BackdropDemo />
 </LiveDemo>
 
 </PageSection>
@@ -88,7 +85,15 @@ Starts the fade out animation.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                      | Description
+| :-----------------------------------------| :-----------------
+| `root`                                    | The root container element.
+
+</PageSection>
 
 <PageSection>
 
@@ -100,8 +105,6 @@ Starts the fade out animation.
 | `--forge-z-index-backdrop`                | Controls the z-index.
 
 </PageSection>
-
----
 
 <PageSection>
 

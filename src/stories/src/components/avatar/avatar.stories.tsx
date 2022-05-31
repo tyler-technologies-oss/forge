@@ -1,7 +1,10 @@
 import { Meta } from '@storybook/react';
-const MDX = require('./avatar.mdx').default;
-import { DefaultTemplate } from './templates/default';
+import { Story } from '@storybook/react';
+import { ForgeAvatar } from '@tylertech/forge-react';
+import React from 'react';
 import { argTypes, IAvatarProps } from './avatar-args';
+
+const MDX = require('./avatar.mdx').default;
 
 export default {
   title: 'Components/Avatar',
@@ -13,18 +16,21 @@ export default {
   },
 } as Meta;
 
-export const Image = DefaultTemplate.bind({});
-Image.args = {
+export const Default: Story<IAvatarProps> = ({
+  autoColor = false,
+  imageUrl = '',
+  letterCount = 2,
+  text = 'First Last',
+}) => (
+  <ForgeAvatar
+    autoColor={autoColor}
+    imageUrl={imageUrl}
+    letterCount={letterCount}
+    text={text} />
+);
+Default.args = {
   autoColor: false,
-  imageUrl: 'https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg',
-  letterCount: 2,
-  text: '',
-} as IAvatarProps;
-
-export const Letter = DefaultTemplate.bind({});
-Letter.args = {
-  autoColor: false,
-  imageUrl : '',
+  imageUrl: '',
   letterCount: 2,
   text: 'First Last',
 } as IAvatarProps;

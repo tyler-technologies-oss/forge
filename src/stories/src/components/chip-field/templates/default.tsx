@@ -1,8 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Story } from '@storybook/react';
-import { ForgeChipField, ForgeIconButton } from '@tylertech/forge-react';
+import { ForgeChipField, ForgeIcon, ForgeIconButton } from '@tylertech/forge-react';
 import { IChipFieldProps } from '../chip-field-args';
 import { IChipFieldComponent } from '@tylertech/forge';
+import { tylIconEvent, tylIconMoreVert, tylIconSend } from '@tylertech/tyler-icons/standard';
+import { IconRegistry } from '@tylertech/forge';
 
 export const DefaultTemplate: Story<IChipFieldProps> = ({
   density = 'default',
@@ -42,31 +44,43 @@ export const DefaultTemplate: Story<IChipFieldProps> = ({
       member.remove();
     }
   };
+
+  useEffect(() => {
+    IconRegistry.define([tylIconEvent, tylIconSend, tylIconMoreVert])
+  }, []);
+
   return (
     <ForgeChipField
       ref={chipFieldRef}
       on-forge-chip-field-member-added={evt => addMember(evt)}
       on-forge-chip-field-member-removed={evt => removeMember(evt)}
-      {...{density, floatLabelType, shape, invalid, required}}
+      density={density}
+      floatLabelType={floatLabelType}
+      shape={shape}
+      invalid={invalid}
+      required={required}
       style={{width: '559px'}}>
 
-      {hasLeading && <i className="tyler-icons" slot="leading">event</i>}
+      {hasLeading && <ForgeIcon slot="leading" name="event" />}
       {hasLabel && <label htmlFor="input-text" slot="label">{label}</label>}
 
       <input required={required} disabled={disabled} autoComplete={'off'} type="text" id="input-text" placeholder={hasPlaceholder ? 'Enter fruits...' : undefined} />
 
       {hasTrailing &&
         <ForgeIconButton slot="trailing" dense densityLevel={density === 'dense' ? 6 : 3}>
-          <button className="tyler-icons">send</button>
+          <button type="button">
+            <ForgeIcon name="send" />
+          </button>
         </ForgeIconButton>}
 
       {hasAddonEnd &&
         <ForgeIconButton slot="addon-end" dense densityLevel={density === 'dense' ? 6 : 3}>
-          <button type="button" className="tyler-icons">more_vert</button>
+          <button type="button">
+            <ForgeIcon name="more_vert" />
+          </button>
         </ForgeIconButton>}
 
       {hasHelperText && <span slot="helper-text">Please enter the names of fruits</span>}
-
     </ForgeChipField>
   );
 };

@@ -1,5 +1,5 @@
-import { DefaultTemplate as ButtonDemo } from './templates/default';
-import { ButtonDefaultCodeHtml } from './code/button-default';
+import { Default as ButtonDemo } from './button.stories';
+import { ButtonDefaultCodeHtml, ButtonWithIconCodeHtml } from './code/button-default';
 
 <PageSection>
 
@@ -23,6 +23,14 @@ adjusting native properties/attributes as needed.
 
 <LiveDemo dense codeHtml={ButtonDefaultCodeHtml()}>
   <ButtonDemo />
+</LiveDemo>
+
+### With icon
+
+Make note of the `<span>` used around the button text, this is required to properly space out the icons since this component does not use shadow DOM (yet).
+
+<LiveDemo dense codeHtml={ButtonWithIconCodeHtml()}>
+  <ButtonDemo type="outlined" hasTrailingIcon />
 </LiveDemo>
 
 > **Note:** To make a button fill 100% of its available width, put the `<forge-button>` inside a block element and set

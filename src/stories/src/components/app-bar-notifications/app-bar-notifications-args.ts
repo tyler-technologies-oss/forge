@@ -31,8 +31,7 @@ export const argTypes = {
     control: {
       type: 'select',
       labels: {
-        'primary': 'Primary',
-        'secondary': 'Secondary',
+        'default': 'Default (Secondary)',
         'danger': 'Danger',
         'warning': 'Warning',
         'success': 'Success',
@@ -40,7 +39,7 @@ export const argTypes = {
         'info-secondary': 'Info (secondary)',
       },
     },
-    options: ['primary', 'secondary', 'danger', 'warning', 'success', 'info-primary', 'info-secondary'],
+    options: ['default', 'danger', 'warning', 'success', 'info-primary', 'info-secondary'],
     description: '',
     table: {
       category: 'Properties',

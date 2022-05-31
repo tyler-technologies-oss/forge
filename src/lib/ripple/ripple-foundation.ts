@@ -5,6 +5,8 @@ export interface IRippleFoundation extends ICustomElementFoundation {
   target: string;
   unbounded: boolean;
   layout(): void;
+  activate(): void;
+  deactivate(): void;
 }
 
 export class RippleFoundation implements IRippleFoundation {
@@ -23,6 +25,14 @@ export class RippleFoundation implements IRippleFoundation {
 
   public layout(): void {
     this._applyTarget();
+  }
+
+  public activate(): void {
+    this._adapter.activate();
+  }
+
+  public deactivate(): void {
+    this._adapter.deactivate();
   }
 
   private _applyTarget(): void {

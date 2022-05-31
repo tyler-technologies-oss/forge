@@ -1,4 +1,4 @@
-import { DefaultTemplate as AppBarDemo } from './templates/default';
+import { Default as AppBarDemo } from './app-bar.stories';
 import { AppBarDefaultCodeHtml } from './code/app-bar-default';
 import { AppBarMenuCodeHtml, AppBarMenuCodeTs } from './code/app-bar-menu';
 import { AppBarSearchCodeHtml, AppBarSearchCodeTs } from './code/app-bar-search';
@@ -50,7 +50,7 @@ The menu toggle button should always be placed in the `menu` slot. You can add a
 `<forge-app-bar-menu-button>` element to know when it is interacted with.
 
 <LiveDemo layout="column" fullWidth codeHtml={AppBarMenuCodeHtml()} codeTs={AppBarMenuCodeTs()}>
-  <AppBarDemo hasMenu={true} />
+  <AppBarDemo hasMenu />
 </LiveDemo>
 
 
@@ -59,7 +59,7 @@ The menu toggle button should always be placed in the `menu` slot. You can add a
 Always place the search input within the `center` slot so that it's familiar for users to find.
 
 <LiveDemo layout="column" fullWidth codeHtml={AppBarSearchCodeHtml()} codeTs={AppBarSearchCodeTs()}>
-  <AppBarDemo hasSearch={true} />
+  <AppBarDemo hasSearch />
 </LiveDemo>
 
 ### Full
@@ -67,14 +67,7 @@ Always place the search input within the `center` slot so that it's familiar for
 The following example shows the usage of all of the common app-bar elements placed in their corresponding slots.
 
 <LiveDemo layout="column" fullWidth codeHtml={AppBarFullCodeHtml()}>
-  <AppBarDemo
-    title={'Full'}
-    hasMenu={true}
-    hasSearch={true}
-    hasHelp={true}
-    hasNotifications={true}
-    hasAppLauncher={true}
-    hasProfile={true} />
+  <AppBarDemo title="Full" hasMenu hasSearch hasHelp hasNotifications hasAppLauncher hasProfile />
 </LiveDemo>
 
 </PageSection>
@@ -117,8 +110,6 @@ The following example shows the usage of all of the common app-bar elements plac
 
 </PropertyDef>
 
----
-
 </PageSection>
 
 ---
@@ -138,7 +129,21 @@ The following example shows the usage of all of the common app-bar elements plac
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                   | Description
+| :----------------------| :----------------
+| `root`                 | The root element.
+| `row`                  | The container element for the layout.
+| `title`                | The built-in `<h1>` title element.
+| `section-start`        | The container for the `start` slot.
+| `section-center`       | The container for the `center` slot.
+| `section-end`          | The container for the `end` slot.
+| `bottom`               | The container for the `bottom` slot.
+
+</PageSection>
 
 <PageSection>
 

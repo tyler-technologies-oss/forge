@@ -1,6 +1,8 @@
 import { Story } from '@storybook/react';
-import { ForgeButton, ForgeCard, ForgeIconButton } from '@tylertech/forge-react';
-import React from 'react';
+import { ForgeButton, ForgeCard, ForgeIcon, ForgeIconButton } from '@tylertech/forge-react';
+import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import React, { useEffect } from 'react';
+import { IconRegistry } from '@tylertech/forge';
 import { LOREM_IPSUM } from '../../../mock/lorem-ipsum';
 import { ICardProps } from '../card-args';
 
@@ -18,17 +20,24 @@ export const StyledTemplate: Story<ICardProps> = ({
     display: 'flex',
     justifyContent: 'flex-end'
   };
+
+  useEffect(() => {
+    IconRegistry.define(tylIconMoreVert);
+  }, []);
+
   return (
     <div style={containerStyle}>
-      <ForgeCard {...{ outlined }}>
+      <ForgeCard outlined={outlined}>
         <div style={headerStyle}>
-          <h3 className={"forge-typography--headline6"}>This is the card title</h3>
+          <h3 className="forge-typography--headline6">This is the card title</h3>
           <ForgeIconButton>
-            <button className={"tyler-icons"}>more_vert</button>
+            <button type="button">
+              <ForgeIcon name="more_vert" />
+            </button>
           </ForgeIconButton>
         </div>
         <div>
-          <p className={"forge-typography--body2"}>{LOREM_IPSUM.p1}</p>
+          <p className="forge-typography--body2">{LOREM_IPSUM.p1}</p>
         </div>
         <div style={footerStyle}>
           <div>

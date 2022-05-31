@@ -1,4 +1,4 @@
-import { DefaultTemplate as AvatarDemo } from './templates/default';
+import { Default as AvatarDemo } from './avatar.stories';
 import { AvatarImageCodeHtml, AvatarImageCodeBlazor } from './code/avatar-image';
 import { AvatarLetterCodeHtml, AvatarLetterCodeBlazor } from './code/avatar-letter';
 
@@ -18,24 +18,16 @@ on the URL provided to it.
 
 ## Example
 
-### Avatar (image)
-
-<LiveDemo 
-dense={true} 
-codeHtml={AvatarImageCodeHtml()} 
-codeBlazor={AvatarImageCodeBlazor()}>
-  <AvatarDemo 
-  imageUrl={'https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg'}
-  text={''}/>
-</LiveDemo>
-
 ### Avatar (letter)
 
-<LiveDemo 
-dense={true} 
-codeHtml={AvatarLetterCodeHtml()} 
-codeBlazor={AvatarLetterCodeBlazor()}>
-  <AvatarDemo/>
+<LiveDemo dense codeHtml={AvatarLetterCodeHtml()}>
+  <AvatarDemo />
+</LiveDemo>
+
+### Avatar (image)
+
+<LiveDemo dense codeHtml={AvatarImageCodeHtml()}>
+  <AvatarDemo imageUrl={'https://cdn.forge.tylertech.com/v1/icons/svg/custom/forge_logo.svg'} />
 </LiveDemo>
 
 </PageSection>
@@ -84,7 +76,15 @@ Gets/set the text to display as characters. If spaces exist, the first letter of
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                   | Description
+| :----------------------| :--------------------
+| `root`                 | The root container element.
+
+</PageSection>
 
 <PageSection>
 
