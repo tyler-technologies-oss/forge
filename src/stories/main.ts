@@ -4,6 +4,9 @@ module.exports = {
   },
   stories: ['./src/**/*.stories.*'],
   logLevel: 'debug',
+  core: {
+    disableTelemetry: true
+  },
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-viewport',
