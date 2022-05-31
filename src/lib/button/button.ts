@@ -64,7 +64,7 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
 
   /**
    * Sets the type of button decoration.
-   * Possbile values are: raised, elevated, outlined, and dense.
+   * Possible values are: raised, elevated, outlined, and dense.
    * Can be combined as: outlined-dense.
    */
   public get type(): string {
