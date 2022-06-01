@@ -1,8 +1,5 @@
-import { DefaultTemplate as BottomSheetDemo } from './templates/default';
-import {
-  BottomSheetDefaultHtml,
-  BottomSheetDefaultTs,
-} from './code/bottom-sheet-default';
+import { Default as BottomSheetDemo } from './bottom-sheet.stories';
+import { BottomSheetDefaultHtml, BottomSheetDefaultTs, } from './code/bottom-sheet-default';
 
 <PageSection>
 
@@ -25,11 +22,8 @@ and provides a few properties/attributes for customizing the bottom sheet.
 The bottom sheet component is typically created on the fly using JavaScript. Below is an example of how to create and
 configure a bottom sheet on the fly using vanilla JavaScript:
 
-<LiveDemo
-layout="column"
-codeHtml={BottomSheetDefaultHtml()}
-codeTs={BottomSheetDefaultTs()}>
-  <BottomSheetDemo/>
+<LiveDemo layout="column" codeHtml={BottomSheetDefaultHtml()} codeTs={BottomSheetDefaultTs()}>
+  <BottomSheetDemo />
 </LiveDemo>
 
 > **Note:** To allow the bottom sheet to automatically set focus to a specific element when opened, set the `forge-bottom-sheet-focus` attribute on it.
@@ -205,8 +199,6 @@ and return whether the bottom sheet should continue to close or not.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -217,7 +209,16 @@ and return whether the bottom sheet should continue to close or not.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                 | Description
+| :------------------------------------| :----------------
+| `backdrop`                           | The `<forge-backdrop>` element.
+| `root`                               | The root element.
+
+</PageSection>
 
 <PageSection>
 
@@ -232,8 +233,6 @@ and return whether the bottom sheet should continue to close or not.
 | `--forge-bottom-sheet-transition-duration-close`  | The close transition duration.
 
 </PageSection>
-
----
 
 <PageSection>
 
