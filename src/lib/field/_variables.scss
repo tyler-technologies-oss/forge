@@ -7,7 +7,7 @@ $theme-values: (
 $field: (
   height: (
     roomy: 3.5rem,
-    default: 2.75rem,
+    default: 3rem,
     dense: 1.5rem
   )
 ) !default;
@@ -34,7 +34,7 @@ $label: (
   ),
   top: (
     roomy: 1.285rem,
-    default: 0.9rem
+    default: 1rem
   ),
   left: (
     default: 12px,
@@ -54,7 +54,7 @@ $label: (
     scale-default: 0.54rem
   ),
   float-scale: (
-    default: 0.875
+    default: 0.8125
   )
 ) !default;
 
@@ -68,7 +68,7 @@ $input: (
     default: 0 12px,
     top: (
       roomy: 29px,
-      default: 22px
+      default: 24px
     ),
     bottom: (
       roomy: 8px,

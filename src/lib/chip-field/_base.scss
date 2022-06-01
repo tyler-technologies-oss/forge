@@ -125,14 +125,6 @@
   @include field-utils.error-layout-state(input-container-padding-right, $layout-state);
 }
 
-// Label
-@mixin label-top($layout-state) {
-  @if $layout-state == default {
-    // override the field-base.label-top at default because chip-field is 46px height and field is 44px
-    top: 0.95rem;
-  }
-}
-
 // Member
 @mixin member-core {
   display: block;

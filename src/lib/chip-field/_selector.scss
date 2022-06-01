@@ -77,16 +77,6 @@
   }
 }
 
-@mixin label {
-  // Top
-  &:not(.forge-field--dense):not(.forge-field--roomy) {
-    ::slotted(label) {
-      @include base.label-top(default);
-    }
-  }
-}
-
-
 @mixin member {
   // Core
   ::slotted([slot='member']) {
