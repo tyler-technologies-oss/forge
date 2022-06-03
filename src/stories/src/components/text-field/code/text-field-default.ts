@@ -4,7 +4,3 @@ export const TextFieldDefaultHtml = () => `
   <label for="input-text-01" slot="label">Text field</label>
 </forge-text-field>
 `;
-
-export const TextFieldDefaultBlazor = () => `
-<ForgeTextField Label="Text field" />
-`;

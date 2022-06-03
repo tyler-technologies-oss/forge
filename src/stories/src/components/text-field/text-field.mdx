@@ -1,21 +1,14 @@
-import { DefaultTemplate as TextFieldDemo } from './templates/default';
-import {
-  TextFieldDefaultHtml,
-} from './code/text-field-default';
+import { Default as TextFieldDemo } from './text-field.stories';
+import { TextFieldDefaultHtml, } from './code/text-field-default';
 
 <PageSection>
 
 # Text field
 
-The text field component supports many different variants, patterns, and configuration options.
+The text field component supports many different variants, patterns, and configuration options. The `<forge-text-field>` element is a
+block-level element by default and will take up 100% of the available width within its parent container.
 
-The `<forge-text-field>` element is a block-level element by default and will take up 100% of the available space within its parent container.
-
-See below for examples and code snippets regarding the most common use cases.
-
-> Use a debounce when actions can occur after a user stops typing. In cases where an HTTP request is fired, or some other long running task occurs, avoid executing those expensive tasks until the user has completed what they are searching for. Forge recommends a debounce of 500ms.
-
-> Masking functionality is not built-in to the component, it’s expected that you’ll use standard third-party mask libraries with it.
+> Masking functionality is not built-in to the component, it's expected that you'll use standard third-party mask libraries with it.
 > If your team is using Angular, we recommend <a href="https://www.npmjs.com/package/ngx-mask">ngx-mask</a>; otherwise we recommend
 > the <a href="https://www.npmjs.com/package/imask">imask package</a>; both available from npm.
 
@@ -31,14 +24,15 @@ See below for examples and code snippets regarding the most common use cases.
 
 The `default` variant is intended to be used in desktop applications.
 
-<LiveDemo 
-codeHtml={TextFieldDefaultHtml()}>
-  <TextFieldDemo/>
+<LiveDemo codeHtml={TextFieldDefaultHtml()}>
+  <TextFieldDemo />
 </LiveDemo>
 
-</PageSection>
+> Use a debounce when actions can occur after a user stops typing. In cases where an HTTP request is fired, or some other long running
+> task occurs, avoid executing those expensive tasks until the user has completed what they are searching for. Forge recommends a debounce
+> of 500ms.
 
----
+</PageSection>
 
 <PageSection>
 
@@ -92,8 +86,6 @@ codeHtml={TextFieldDefaultHtml()}>
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -105,8 +97,6 @@ codeHtml={TextFieldDefaultHtml()}>
 </MethodDef>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -125,7 +115,19 @@ codeHtml={TextFieldDefaultHtml()}>
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS custom properties
+
+| Name                              | Description
+| :---------------------------------| :----------------
+| `root`                            | The root element.
+| `container`                       | The container layout element.
+| `leading-container`               | The container around the `leading` slot.
+| `label-input-container`           | The container element around the label and input slots.
+| `addon-end-container`             | The container element around the addon-end slot.
+
+</PageSection>
 
 <PageSection>
 
