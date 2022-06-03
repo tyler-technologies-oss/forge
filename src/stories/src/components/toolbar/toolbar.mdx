@@ -1,4 +1,4 @@
-import { DefaultTemplate as ToolbarDemo } from './templates/default';
+import { Default as ToolbarDemo } from './toolbar.stories';
 import { ToolbarDefaultHtml } from './code/toolbar-default';
 
 
@@ -6,7 +6,11 @@ import { ToolbarDefaultHtml } from './code/toolbar-default';
 
 # Toolbar
 
-The toolbar component allows you to place titles and actions within the `<forge-toolbar>` and align them to the `start`, `center`, or `end` of the toolbar.
+The toolbar component allows you to place titles and actions within a container and align them to the `start`, `center`, or `end` of the toolbar.
+
+This component is useful headers and footers within pages, dialogs, sections... etc. to ensure consistent spacing and positioning.
+
+> **Note**: You can use the `inverted` attribute for footers to move the border to the top.
 
 </PageSection>
 
@@ -16,31 +20,23 @@ The toolbar component allows you to place titles and actions within the `<forge-
 
 ## Examples
 
-<LiveDemo
-fullWidth 
-layout={'column'} 
-codeHtml={ToolbarDefaultHtml()}>
-  <ToolbarDemo/>
+<LiveDemo fullWidth layout="column" codeHtml={ToolbarDefaultHtml()}>
+  <ToolbarDemo />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
 ## Properties/Attributes
 
-
 <PropertyDef name="inverted" type="boolean" defaultValue="false">
 
-  Controls whether a border bottom (default) or top (true) is used.
+Controls whether a border bottom (default) or top (true) is used.
 
 </PropertyDef>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -48,13 +44,24 @@ codeHtml={ToolbarDefaultHtml()}>
 
 | Name                              | Description
 | :---------------------------------| :----------------
-| start                             | Places content at the beginning of the toolbar.
-| center                            | Places content at the center of the toolbar.
-| end                               | Places content at the end of the toolbar.
+| `start`                             | Places content at the beginning of the toolbar.
+| `center`                            | Places content at the center of the toolbar.
+| `end`                               | Places content at the end of the toolbar.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `root`                         | The root container element.
+| `section-start`                | The container around the `start` slot.
+| `section-center`               | The container around the `center` slot.
+| `section-end`                  | The container around the `end` slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -73,6 +80,6 @@ codeHtml={ToolbarDefaultHtml()}>
 | `--forge-toolbar-border-bottom-left-radius`   | Sets the bottom left border radius.
 | `--forge-toolbar-border-bottom-right-radius`  | Sets the bottom right border radius.
 
-> **Tip:** If you need the toolbar to expand vertically when its contents wrap, set: `--forge-toolbar-height: 'auto'`
+> **Tip:** If you need the toolbar to expand vertically when its contents wrap, set: `--forge-toolbar-height: 'auto'` to disable the fixed height.
 
 </PageSection>
