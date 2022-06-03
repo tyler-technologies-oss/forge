@@ -4,11 +4,8 @@ export interface ITabBarProps {
   layoutMode: TabBarLayoutMode;
   layoutAlign: TabBarLayoutAlign;
   underline: boolean;
-  autoActivate: boolean;
   stacked: boolean;
-  scrollButtons: boolean;
   disabled: boolean;
-  stretch: boolean;
 }
 
 export const argTypes = {
@@ -48,13 +45,6 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  autoActivate: {
-    control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
   stacked: {
     control: 'boolean',
     description: '',
@@ -62,21 +52,7 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  scrollButtons: {
-    control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
   disabled: {
-    control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  stretch: {
     control: 'boolean',
     description: '',
     table: {
