@@ -1,6 +1,5 @@
-export const ProductIconCustomShadowHtml = () =>
-  `
+export const ProductIconCustomShadowHtml = () => `
 <forge-product-icon iterations="8">
-    <span slot="text">FB</span>
+  <span slot="text">FB</span>
 </forge-product-icon>
 `;
