@@ -1,21 +1,9 @@
-export const OpenIconExpansionPanelHtml = () =>
-`
+export const OpenIconExpansionPanelHtml = () => `
 <forge-expansion-panel>
-  <div slot="header">
+  <div role="button" tabindex="0" slot="header" style="display: flex; justify-content: space-between; align-items: center;">
     <div>Expansion panel</div>
     <forge-open-icon></forge-open-icon>
   </div>
-  <div>Content for panel one.</div>
+  <div>Panel content</div>
 </forge-expansion-panel>
-`;
-
-export const OpenIconExpansionPanelBlazor = () =>
-`
-<ForgeExpansionPanel>
-<div slot="header" class="forge-flex-container--row">
-  <div>Expansion panel</div>
-  <ForgeOpenIcon />
-</div>
-<div>Content for panel one.</div>
-</ForgeExpansionPanel>
 `;

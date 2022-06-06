@@ -1,5 +1,4 @@
-import { DefaultTemplate as OpenIconDemo } from './templates/default';
-import { ExpansionPanelTemplate as ExpansionPanelDemo } from './templates/expansion-panel';
+import { Default as OpenIconDemo, WithExpansionPanel as ExpansionPanelDemo } from './open-icon.stories';
 import { OpenIconDefaultHtml } from './code/open-icon-default';
 import { OpenIconHorizontalHtml } from './code/open-icon-horizontal';
 import { OpenIconExpansionPanelHtml } from './code/open-icon-expansion-panel';
@@ -39,13 +38,9 @@ The open-icon will listen for specific events to be dispatched and update its st
   <ExpansionPanelDemo />
 </LiveDemo>
 
-
-It's common to use the open-icon with an [expansion-panel](?path=/story/components-expansion-panel--default) to have an indicator automatically rotate when the expansion-panel is toggled.
-
+> It's common to use the open-icon with an [expansion-panel](?path=/story/components-expansion-panel--default) to have an indicator automatically rotate when the expansion-panel is toggled.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -62,5 +57,16 @@ It's common to use the open-icon with an [expansion-panel](?path=/story/componen
   Controls the animation rotation direction. Valid values: `vertical` (default) or `horizontal`.
 
 </PropertyDef>
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                  | Description
+| :---------------------| :------------
+| `root`                | The root element.
+| `icon`                | The `<forge-icon>` element.
 
 </PageSection>
