@@ -1,5 +1,4 @@
-export const RadioButtonHtml = () =>
-  `
+export const RadioButtonHtml = () => `
 <div role="radiogroup" aria-label="Choose radio option">
   <forge-radio>
     <input type="radio" id="radio-1" name="radios" value="one" />
@@ -14,13 +13,4 @@ export const RadioButtonHtml = () =>
     <label for="radio-3">Option 3</label>
   </forge-radio>
 </div>
-`;
-
-export const RadioButtonBlazor = () =>
-  `
-<ForgeRadioGroup GroupName="radios" AriaLabel="Choose radio option">
-  <ForgeRadio Label="Option 1" Value="one" />
-  <ForgeRadio Label="Option 2" Value="two" />
-  <ForgeRadio Label="Option 3" Value="three" />
-</ForgeRadioGroup>
 `;
