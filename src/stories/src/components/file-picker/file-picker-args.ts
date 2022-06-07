@@ -5,6 +5,7 @@ export interface IFilePickerProps {
   disabled: boolean;
   compact: boolean;
   borderless: boolean;
+  hasHelperText: boolean;
 }
 
 export const argTypes = {
@@ -48,6 +49,13 @@ export const argTypes = {
     description: '',
     table: {
       category: 'Properties',
+    },
+  },
+  hasHelperText: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Slots',
     },
   },
 };
