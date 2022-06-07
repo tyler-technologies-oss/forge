@@ -2,7 +2,6 @@ import React, { CSSProperties } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { ForgeCard, ForgeExpansionPanel, ForgeOpenIcon } from '@tylertech/forge-react';
 import { argTypes, IOpenIconProps } from './open-icon-args';
-import { ExpansionPanelTemplate } from './templates/expansion-panel';
 
 const MDX = require('./open-icon.mdx').default;
 
