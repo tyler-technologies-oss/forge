@@ -1,4 +1,4 @@
-import { DefaultTemplate as CalendarDemo } from './templates/default';
+import { Default as CalendarDemo } from './calendar.stories';
 import { CalendarDefaultCodeHtml } from './code/calendar-default';
 
 <PageSection>
@@ -21,7 +21,7 @@ alongside other content or within your forms for display and selecting various d
 The calendar is typically configured via its public JavaScript API, or through HTML attributes. Its markup usage is simple:
 
 <LiveDemo codeHtml={CalendarDefaultCodeHtml()}>
-  <CalendarDemo/>
+  <CalendarDemo />
 </LiveDemo>
 
 </PageSection>
@@ -321,8 +321,6 @@ If `setFocus` is `true` the date will receive focus.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -335,8 +333,6 @@ If `setFocus` is `true` the date will receive focus.
 | `forge-calendar-view-change`                    | Emits when the month or year menu opens or closes. This event is of type `CustomEvent<CalendarView>`.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -384,7 +380,49 @@ If `setFocus` is `true` the date will receive focus.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                             | Description
+| :--------------------------------| :----------
+| `root`                           | The root element.
+| `view`                           | The view element.
+| `date-view`                      | The date view element.
+| `date-view-container`            | The date view container element.
+| `date-view-row`                  | The date view row element.
+| `date-grid-container`            | The container element for the date grid.
+| `calendar-menu`                  | The `<forge-calendar-menu>` element.
+| `sunday`                         | The sunday day container element.
+| `monday`                         | The monday day container element.
+| `tuesday`                        | The tuesday day container element.
+| `wednesday`                      | The wednesday day container element.
+| `thursday`                       | The thursday day container element.
+| `friday`                         | The friday day container element.
+| `saturday`                       | The saturday day container element.
+| `clear-button`                   | The clear button element.
+| `date`                           | The date container element.
+| `date-other-month`               | The other month date element.
+| `date-wrapper`                   | The date wrapper element.
+| `day`                            | The day element.
+| `event`                          | The event element.
+| `event-wrapper`                  | The event wrapper element.
+| `footer`                         | The footer container element.
+| `header`                         | The header container element.
+| `month-button`                   | The month button container element.
+| `month-button-element`           | The month `<button>` element.
+| `next-button`                    | The next button container element.
+| `previous-button`                | The previous button container element.
+| `range`                          | The range element.
+| `range-end`                      | The range-ene element.
+| `range-start`                    | The range-start element.
+| `today`                          | The today container element.
+| `today-button`                   | The today button element.
+| `weekend`                        | The weekend element.
+| `year-button`                    | The year button container element.
+| `year-button-element`            | The year `<button>` element.
+
+</PageSection>
 
 <PageSection>
 
@@ -424,7 +462,6 @@ If `setFocus` is `true` the date will receive focus.
 | `--forge-calendar-theme-event-yellow-accent`      | Controls the color of yellow theme for events.
 | `--forge-calendar-theme-event-brown-accent`       | Controls the color of brown theme for events.
 | `--forge-calendar-theme-event-deep-orange-accent` | Controls the color of deep orange theme for events.
-
 
 </PageSection>
 

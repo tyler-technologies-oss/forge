@@ -25,6 +25,7 @@ Forge provides the following framework adapters:
 
 - [Angular](https://github.com/tyler-technologies/forge-angular)
 - [React](https://github.com/tyler-technologies/forge-react)
+- [Blazor](https://github.com/tyler-technologies/tyler-forge-blazor)
 - Svelte (coming soon)
 
 > Keep in mind that these adapter libraries are **not** required by any means. They are only provided to make usage for certain components feel more native for

@@ -1,30 +1,22 @@
 export const ListTrailingIconCodeHtml = () => {
-  return `<forge-list>
+  return `
+<forge-list>
   <forge-list-item>
-    <span class="forge-list-item__text">List Item</span>
-    <i class="tyler-icons" slot="trailing">info</i>
+    <span slot="title">List Item One</span>
+    <forge-icon slot="trailing" name="info"></forge-icon>
   </forge-list-item>
   <forge-list-item>
-    <span class="forge-list-item__text">List Item</span>
-    <i class="tyler-icons" slot="trailing">info</i>
+    <span slot="title">List Item Two</span>
+    <forge-icon slot="trailing" name="info"></forge-icon>
   </forge-list-item>
   <forge-list-item>
-    <span class="forge-list-item__text">List Item</span>
-    <i class="tyler-icons" slot="trailing">info</i>
+    <span slot="title">List Item Three</span>
+    <forge-icon slot="trailing" name="info"></forge-icon>
   </forge-list-item>
-</forge-list>`;
-};
-
-export const ListTrailingIconCodeBlazor = () => {
-  return `<ForgeList>
-  <ForgeListItem TrailingIcon="info">
-    <span class="forge-list-item__text">List Item</span>
-  </ForgeListItem>
-  <ForgeListItem TrailingIcon="info">
-    <span class="forge-list-item__text">List Item</span>
-  </ForgeListItem>
-  <ForgeListItem TrailingIcon="info">
-    <span class="forge-list-item__text">List Item</span>
-  </ForgeListItem>
-</ForgeList>`;
+  <forge-list-item>
+    <span slot="title">List Item Four</span>
+    <forge-icon slot="trailing" name="info"></forge-icon>
+  </forge-list-item>
+</forge-list>
+  `;
 };

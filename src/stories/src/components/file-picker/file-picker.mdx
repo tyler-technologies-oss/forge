@@ -1,4 +1,4 @@
-import { DefaultTemplate as FilePickerDemo } from './templates/default';
+import { Default as FilePickerDemo } from './file-picker.stories';
 import { FilePickerDefaultCodeHtml, FilePickerDefaultCodeTs } from './code/file-picker-default';
 import { FilePickerCompactCodeHtml, FilePickerCompactCodeTs } from './code/file-picker-compact';
 
@@ -14,7 +14,8 @@ legal and/or illegal based on the parameters set on the component.
 The expectation of this component is that it will be used as a familiar element on the page that will let users upload
 files, while providing that visual and functional consistency.
 
-> This component does not display the files the user is attempting to upload. **To see examples of how this is implemented, check out our [file picker recipes page.](https://forge.tylertech.com/recipes/file-picker);
+> This component does not display the files the user is attempting to upload. **To see examples of how this is implemented,
+> check out our [file picker recipes page](https://forge.tylertech.com/recipes/file-picker).
 
 </PageSection>
 
@@ -26,23 +27,17 @@ files, while providing that visual and functional consistency.
 
 ### Default
 
-<LiveDemo
-  codeHtml={FilePickerDefaultCodeHtml()}
-  codeTs={FilePickerDefaultCodeTs()}>
-  <FilePickerDemo/>
+<LiveDemo codeHtml={FilePickerDefaultCodeHtml()} codeTs={FilePickerDefaultCodeTs()}>
+  <FilePickerDemo hasHelperText />
 </LiveDemo>
 
 ### Compact
 
-<LiveDemo
-  codeHtml={FilePickerCompactCodeHtml()}
-  codeTs={FilePickerCompactCodeTs()}>
-  <FilePickerDemo compact={true} borderless={true}/>
+<LiveDemo codeHtml={FilePickerCompactCodeHtml()} codeTs={FilePickerCompactCodeTs()}>
+  <FilePickerDemo compact borderless />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -92,8 +87,6 @@ Gets and sets whether the file picker is borderless.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -114,6 +107,20 @@ Gets and sets whether the file picker is borderless.
 | Name                               | Description
 | :----------------------------------| :----------------
 | `forge-file-picker-change`           | Emits when files are either chose from the system dialog, or when a drag-and-drop action is initiated. The type will be `CustomEvent<IFilePickerChangeEventData>`.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                                 | Description
+| :------------------------------------| :-----------------------
+| `form`                               | The `<form>` element at the root.
+| `primary`                            | The container element around the `primary` slot.
+| `secondary`                          | The container element around the `secondary` slot.
+| `input`                              | The `<input type="file">` element.
+| `helper-text-container`              | The container around the `helper-text` slot.
 
 </PageSection>
 

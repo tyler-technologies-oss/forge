@@ -1,7 +1,7 @@
 export const AppBarProfileButtonDefaultCodeHtml = () => `
 <forge-app-bar title-text="Title text">
   <forge-app-bar-profile-button
-    slot="profile"
+    slot="end"
     profile-button="true"
     avatar-text="First Last"
     full-name="First Last"
@@ -19,7 +19,7 @@ profileButton.addEventListener('forge-profile-card-profile', () => {
   showToast('Profile button clicked');
 });
 
-function showToast(msg) {
+function showToast(msg: string): void {
   const toast = document.createElement('forge-toast');
   toast.message = msg;
   document.body.appendChild(toast);

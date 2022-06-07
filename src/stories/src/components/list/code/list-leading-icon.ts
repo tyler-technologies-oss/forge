@@ -1,24 +1,22 @@
 export const ListLeadingIconCodeHtml = () => {
-  return `<forge-list>
+  return `
+<forge-list>
   <forge-list-item>
-    <i class="tyler-icons" slot="leading">wifi</i>
-    <span class="forge-list-item__text">List Item</span>
+    <forge-icon slot="leading" name="wifi"></forge-icon>
+    <span slot="title">List Item One</span>
   </forge-list-item>
   <forge-list-item>
-    <i class="tyler-icons" slot="leading">bluetooth</i>
-    <span class="forge-list-item__text">List Item</span>
+    <forge-icon slot="leading" name="bluetooth"></forge-icon>
+    <span slot="title">List Item Two</span>
   </forge-list-item>
   <forge-list-item>
-    <i class="tyler-icons" slot="leading">data_usage</i>
-    <span class="forge-list-item__text">List Item</span>
+    <forge-icon slot="leading" name="data_usage"></forge-icon>
+    <span slot="title">List Item Three</span>
   </forge-list-item>
-</forge-list>`;
-};
-
-export const ListLeadingIconCodeBlazor = () => {
-  return `<ForgeList>
-  <ForgeListItem LeadingIcon="wifi">List Item</ForgeListItem>
-  <ForgeListItem LeadingIcon="bluetooth">List Item</ForgeListItem>
-  <ForgeListItem LeadingIcon="data_usage">List Item</ForgeListItem>
-</ForgeList>`;
+  <forge-list-item>
+    <forge-icon slot="leading" name="cloud_download"></forge-icon>
+    <span slot="title">List Item Four</span>
+  </forge-list-item>
+</forge-list>
+  `;
 };

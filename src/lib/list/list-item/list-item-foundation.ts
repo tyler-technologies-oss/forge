@@ -114,7 +114,7 @@ export class ListItemFoundation implements IListItemFoundation {
       value: this._value,
       listItem: this._adapter.getListItem()
     };
-    this._adapter.emitHostEvent(LIST_ITEM_CONSTANTS.events.SELECT, data || {});
+    this._adapter.emitHostEvent(LIST_ITEM_CONSTANTS.events.SELECT, data);
   }
 
   /** Gets/sets whether the list item has a ripple or not. */

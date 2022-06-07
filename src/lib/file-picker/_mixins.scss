@@ -142,5 +142,7 @@
   @include field-base.helper-text-core;
   @include field-base.helper-text-color(default);
   @include field-base.helper-text-margin-left(default);
+  @include typography-mixins.typography(caption);
+
   text-align: start;
 }

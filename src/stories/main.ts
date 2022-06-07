@@ -4,9 +4,11 @@ module.exports = {
   },
   stories: ['./src/**/*.stories.*'],
   logLevel: 'debug',
+  core: {
+    disableTelemetry: true
+  },
   addons: [
     '@storybook/addon-links',
-    '@storybook/addon-actions',
     '@storybook/addon-viewport',
     '@storybook/addon-toolbars',
     '@storybook/addon-measure',
@@ -23,6 +25,8 @@ module.exports = {
     },
     '@storybook/addon-controls',
     '@storybook/addon-a11y',
+    '@storybook/addon-storysource',
+    '@storybook/addon-actions',
     'storybook-dark-mode'
   ],
   typescript: {

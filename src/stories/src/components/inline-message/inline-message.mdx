@@ -1,8 +1,6 @@
-import { DefaultTemplate as InlineMessageDemo } from './templates/default';
+import { Default as InlineMessageDemo } from './inline-message.stories';
 import { InlineMessageDefaultCodeHtml } from './code/inline-message-default';
 import { InlineMessageThemeCodeHtml } from './code/inline-message-theme';
-import { InlineMessageIconCodeHtml } from './code/inline-message-icon';
-import { InlineMessageTitleCodeHtml } from './code/inline-message-title';
 import { InlineMessageIconTitleCodeHtml } from './code/inline-message-icon-title';
 
 <PageSection>
@@ -27,7 +25,7 @@ This component supports built-in predefined themes.
 Below is the most basic usage of the inline message for displaying a static message:
 
 <LiveDemo codeHtml={InlineMessageDefaultCodeHtml()}>
-  <InlineMessageDemo />
+  <InlineMessageDemo hasIcon={false} hasTitle={false} />
 </LiveDemo>
 
 ### Themed
@@ -35,48 +33,26 @@ Below is the most basic usage of the inline message for displaying a static mess
 You can use the built-in themes via attribute. If you need a custom color, see the CSS custom properties section below.
 
 <LiveDemo layout="column" codeHtml={InlineMessageThemeCodeHtml()}>
-  <InlineMessageDemo theme="danger" />
+  <InlineMessageDemo theme="danger" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="warning" />
+  <InlineMessageDemo theme="warning" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="success" />
+  <InlineMessageDemo theme="success" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="info-primary" />
+  <InlineMessageDemo theme="info-primary" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="info-secondary" />
+  <InlineMessageDemo theme="info-secondary" hasIcon={false} hasTitle={false} />
 </LiveDemo>
-
-### Combined with an icon
-
-Here is an example usage combined with the an icon:
-
-
-<LiveDemo codeHtml={InlineMessageIconCodeHtml()}>
-  <InlineMessageDemo hasIcon={true}/>
-</LiveDemo>
-
-### Combined with a title
-
-Here is an example usage combined with a title:
-
-
-<LiveDemo codeHtml={InlineMessageTitleCodeHtml()}>
-  <InlineMessageDemo hasTitle={true}/>
-</LiveDemo>
-
 
 ### Combined with both an icon and a title
 
 Here is an example usage combined with both an icon and a title:
 
-
 <LiveDemo codeHtml={InlineMessageIconTitleCodeHtml()}>
-  <InlineMessageDemo hasIcon={true} hasTitle={true}/>
+  <InlineMessageDemo />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -90,8 +66,6 @@ Allows for easily setting the theme color to use. Valid values: `danger`, `warni
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -101,6 +75,17 @@ Allows for easily setting the theme color to use. Valid values: `danger`, `warni
 | `default`                      | The default (unnamed) slot will render its content as the main text body.
 | `icon`                         | The icon slot will render its content as the leading icon.
 | `title`                        | The title slot will render its content above the main text body.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                       | Description
+| :--------------------------| :----------------
+| `root`                     | The root element.
+| `container`                | The layout container element.
 
 </PageSection>
 

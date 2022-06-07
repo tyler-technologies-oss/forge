@@ -1,4 +1,4 @@
-import { DefaultTemplate as QuantityFieldDemo } from './templates/default';
+import { Default as QuantityFieldDemo } from './quantity-field.stories';
 import { QuantityFieldDefaultHtml } from './code/quantity-field-default';
 
 <PageSection>
@@ -29,8 +29,6 @@ If the user is unlikely to use the increment and decrement buttons to get to the
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes
@@ -43,13 +41,11 @@ Controls the invalid state. When set to `true`, the label and border will change
 
 <PropertyDef name="required" type="boolean" defaultValue="false">
 
-  Controls the presence of an asterisk after the label to signify that the field is required.
+Controls the presence of an asterisk after the label to signify that the field is required.
 
 </PropertyDef>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -65,8 +61,6 @@ Controls the invalid state. When set to `true`, the label and border will change
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -76,7 +70,16 @@ after clicking either increment or decrement button.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                   | Description
+| :--------------------------------------| :---------------
+| `root`                                 | The root element.
+| `row`                                  | The container element around the `increment-button`, `decrement-button`, and `default` slots.
+
+</PageSection>
 
 <PageSection>
 

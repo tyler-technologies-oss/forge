@@ -1,6 +1,8 @@
-import { Meta } from '@storybook/react';
+import React from 'react';
+import { Meta, Story } from '@storybook/react';
 import { argTypes, ICalendarProps } from './calendar-args';
-import { DefaultTemplate } from './templates/default';
+import { ForgeCalendar } from '@tylertech/forge-react';
+
 const MDX = require('./calendar.mdx').default;
 
 export default {
@@ -9,11 +11,71 @@ export default {
   parameters: { 
     docs: { 
       page: MDX
-    },
-  },
+    }
+  }
 } as Meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: Story<ICalendarProps> = ({
+  allowSingleDateRange = true,
+  clearButton = false,
+  constrainToEnabled = true,
+  disabledDates = null,
+  disabledDaysOfWeek = null,
+  events = null,
+  firstDayOfWeek = undefined,
+  fixedHeight = false,
+  listYears = true,
+  locale = undefined,
+  max = null,
+  menuAnimation = 'scale',
+  min = null,
+  mode = 'single',
+  month = undefined,
+  preventFocus = false,
+  readonly = false,
+  selectionFollowsMonth = false,
+  showHeader = true,
+  showOtherMonths = false,
+  showToday = true,
+  todayButton = false,
+  view,
+  weekendDays = null,
+  year = undefined,
+  yearRange = '-50:+50',
+}) => {
+  const style = {
+    width: '400px',
+    maxWidth: '100%'
+  }
+  return <ForgeCalendar
+    style={style}
+    allowSingleDateRange={allowSingleDateRange}
+    clearButton={clearButton}
+    constrainToEnabled={constrainToEnabled}
+    disabledDates={disabledDates}
+    disabledDaysOfWeek={disabledDaysOfWeek}
+    events={events}
+    firstDayOfWeek={firstDayOfWeek}
+    fixedHeight={fixedHeight}
+    listYears={listYears}
+    locale={locale}
+    max={max}
+    menuAnimation={menuAnimation}
+    min={min}
+    mode={mode}
+    month={month}
+    preventFocus={preventFocus}
+    readonly={readonly}
+    selectionFollowsMonth={selectionFollowsMonth}
+    showHeader={showHeader}
+    showOtherMonths={showOtherMonths}
+    showToday={showToday}
+    todayButton={todayButton}
+    view={view}
+    weekendDays={weekendDays}
+    year={year}
+    yearRange={yearRange} />;
+}
 Default.args = {
   month: undefined,
   year: undefined,

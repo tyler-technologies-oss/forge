@@ -1,6 +1,4 @@
-import { ExternalTemplate as ExternalDemo } from './templates/external';
-import { RegistryTemplate as RegistryDemo } from './templates/registry';
-import { StylesTemplate as StylesDemo } from './templates/styles';
+import { Styles as StylesDemo, Registry as RegistryDemo, External as ExternalDemo } from './icon.stories';
 import { IconRegistryCodeHtml, IconRegistryCodeTs } from './code/icon-registry';
 import { IconExternalCodeHtml } from './code/icon-external';
 import { IconStylesCodeHtml, IconStylesCodeScss, IconStylesCodeTs } from './code/icon-styles';
@@ -73,6 +71,8 @@ correctly you will notice no difference between the two once complete.
 
    > **Note:** this should be done as early in your application bootstrapping process as possible. Make sure all icons are defined, prior to the page rendering or else the
    > component will not be able to find the icon data when it is instantiated.
+   > 
+   > A good place to define icons is within component constructors to ensure they aren't removed from bundles during production builds.
 
 </PageSection>
 
@@ -109,7 +109,7 @@ set the `external` attribute to toggle this mode on:
 > just set the `external-type` attribute to the corresponding icon set name:
 >
 > ```html
-> <forge-icon name="action_launcher" external-type="custom"></forge-icon>
+> <forge-icon name="action_launcher" external external-type="custom"></forge-icon>
 > ```
 
 ### External (self-hosted)
@@ -131,12 +131,9 @@ The SVG icons can still be styled as if they were any other normal font on the p
   <StylesDemo />
 </LiveDemo>
 
-
-> The icons are also themeable by default and will continue to work seamlessly with the standard CSS custom properties used within Forge.
+> The icons are also themeable by default and can be styled as if they are font via `font-size` and `color` styles.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -188,8 +185,6 @@ A custom value to apply to the `viewBox` attribute on the internal `<svg>` eleme
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -202,7 +197,16 @@ Forces a reload of the icon. This method can be useful if you need to manually t
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :--------------------
+| `svg`                          | The `<svg>` element holding the icon data.
+| `path`                         | The SVG `<path>` elements within the icon data.
+
+</PageSection>
 
 <PageSection>
 
@@ -214,8 +218,6 @@ Forces a reload of the icon. This method can be useful if you need to manually t
 | `--forge-icon-font-size`                          | Controls the font size. The standard `font-size` style can be set directly on the `<forge-icon>` element, but use this custom property to apply to multiple icons if desired.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -234,5 +236,3 @@ declare type IconExternalType = '' | 'custom' | 'standard' | 'extended';
 ```
 
 </PageSection>
-
----

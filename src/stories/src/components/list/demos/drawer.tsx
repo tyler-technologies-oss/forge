@@ -2,7 +2,7 @@ import { Story } from '@storybook/react';
 import { ForgeDrawer, ForgeList, ForgeListItem } from '@tylertech/forge-react';
 import React from 'react';
 
-export const DrawerTemplate: Story = () => (
+export const DrawerDemo: Story = () => (
   <ForgeDrawer>
     <ForgeList>
       <ForgeListItem>List Item One</ForgeListItem>

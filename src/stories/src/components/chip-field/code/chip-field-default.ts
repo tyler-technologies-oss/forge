@@ -1,13 +1,16 @@
 export const ChipFieldDefaultHtml = () => {
-  return `<forge-chip-field>
+  return `
+<forge-chip-field>
   <label slot="label" for="tag-input">Tags</label>
   <input type="text" id="tag-input" />
   <div slot="helper-text">Press enter to create a tag</div>
-</forge-chip-field>`;
+</forge-chip-field>
+  `;
 }
 
 export const ChipFieldDefaultTs = () => {
-  return `function onMemberAdded(event) {
+  return `
+function onMemberAdded(event) {
   const name = event.detail;
   const newChip = document.createElement('forge-chip');
   newChip.setAttribute('slot', 'member');
@@ -29,5 +32,6 @@ function onChipRemoveButtonClicked (event) {
 }
 
 chipField.addEventListener('forge-chip-field-member-added', onMemberAdded);
-chipField.addEventListener('forge-chip-field-member-removed', onMemberRemoved);`;
+chipField.addEventListener('forge-chip-field-member-removed', onMemberRemoved);
+  `;
 }

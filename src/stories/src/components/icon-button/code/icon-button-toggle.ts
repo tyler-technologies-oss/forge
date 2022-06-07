@@ -1,8 +1,8 @@
 export const IconButtonToggleCodeHtml = () => `
-<forge-icon-button toggle="true">
+<forge-icon-button toggle>
   <button type="button" aria-label="Toggle favorite">
-    <i class="tyler-icons" aria-hidden="true" forge-icon-button-on>favorite</i>
-    <i class="tyler-icons" aria-hidden="true">favorite_outline</i>
+    <forge-icon name="favorite" forge-icon-button-on></forge-icon>
+    <forge-icon name="favorite_outline"></forge-icon>
   </button>
 </forge-icon-button>
 `;

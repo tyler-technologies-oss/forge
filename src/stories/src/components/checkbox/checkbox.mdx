@@ -1,6 +1,5 @@
-import { DefaultTemplate as CheckboxDemo } from './templates/default';
+import { Default as CheckboxDemo } from './checkbox.stories';
 import { CheckboxDefaultCodeHtml } from './code/checkbox-default';
-import { CheckboxLabelCodeHtml } from './code/checkbox-label';
 
 <PageSection>
 
@@ -23,18 +22,10 @@ you would any other native `<input type="checkbox">`.
 ### Basic
 
 <LiveDemo dense codeHtml={CheckboxDefaultCodeHtml()}>
-  <CheckboxDemo />
-</LiveDemo>
-
-### With label
-
-<LiveDemo dense codeHtml={CheckboxLabelCodeHtml()}>
   <CheckboxDemo hasLabel />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -48,8 +39,6 @@ Controls dense state which renders the component using a smaller container and r
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -60,8 +49,6 @@ Controls dense state which renders the component using a smaller container and r
 
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -74,7 +61,21 @@ Controls dense state which renders the component using a smaller container and r
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                          | Description
+| :-----------------------------| :----------------
+| `root`                        | The root element.
+| `container`                   | The cntainer element.
+| `background`                  | The background container element.
+| `checkmark-svg`               | The `<svg>` element.
+| `checkmark-path`              | The SVG `<path>` element.
+| `mixedmark`                   | The indeterminate container element.
+| `ripple-container`            | The ripple sentinel element.
+
+</PageSection>
 
 <PageSection>
 

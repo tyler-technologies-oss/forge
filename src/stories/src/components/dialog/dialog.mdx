@@ -1,5 +1,4 @@
-import { SimpleTemplate as SimpleDemo } from './templates/simple';
-import { ComplexTemplate as ComplexDemo } from './templates/complex';
+import { Simple as SimpleDemo, Complex as ComplexDemo } from './dialog.stories';
 import { DialogSimpleCodeHtml, DialogSimpleCodeTs } from './code/dialog-simple';
 import { DialogComplexCodeHtml, DialogComplexCodeTs } from './code/dialog-complex';
 
@@ -117,8 +116,6 @@ export class DialogExampleComponent {
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes
@@ -202,8 +199,6 @@ and return whether the dialog should continue to close or not.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -224,8 +219,6 @@ Resets the dialog surface position to its original `positionX` and `positionY` v
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -242,8 +235,6 @@ Resets the dialog surface position to its original `positionX` and `positionY` v
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -253,8 +244,6 @@ Resets the dialog surface position to its original `positionX` and `positionY` v
 | `escape`                            | Closes the dialog.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -266,7 +255,17 @@ Resets the dialog surface position to its original `positionX` and `positionY` v
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                         | Description
+| :----------------------------| :----------------
+| `root`                       | The root element.
+| `scrim`                      | The `<forge-backdrop>` element.
+| `surface`                    | The surface element that contains the slotted content.
+
+</PageSection>
 
 <PageSection>
 
@@ -286,8 +285,6 @@ Resets the dialog surface position to its original `positionX` and `positionY` v
 | `--forge-dialog-align-items`   | Controls the alignment cross-axis alignment of the flex items within the dialog surface.
 
 </PageSection>
-
----
 
 <PageSection>
 

@@ -1,5 +1,7 @@
-import { DefaultTemplate as ExpansionPanelDemo } from './templates/default';
+import { Default as ExpansionPanelDemo } from './expansion-panel.stories';
+import { CardRecipeTemplate as ExpansionPanelCardDemo } from './templates/card-recipe.tsx';
 import { ExpansionPanelDefaultCodeHtml } from './code/expansion-panel-default';
+import { ExpansionPanelCardRecipeCodeHtml } from './code/expansion-panel-card-recipe.ts';
 
 <PageSection>
 
@@ -28,9 +30,15 @@ This following is a simple example demonstrating the most basic usage of this co
   <ExpansionPanelDemo />
 </LiveDemo>
 
-</PageSection>
+### Card
 
----
+Expansion panels can be composed with many other elements such as cards for example:
+
+<LiveDemo codeHtml={ExpansionPanelCardRecipeCodeHtml()}>
+  <ExpansionPanelCardDemo />
+</LiveDemo>
+
+</PageSection>
 
 <PageSection>
 
@@ -90,8 +98,6 @@ Forces the expansion panel to expand/collapse immediately **without** transition
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -102,8 +108,6 @@ Forces the expansion panel to expand/collapse immediately **without** transition
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -113,8 +117,6 @@ Forces the expansion panel to expand/collapse immediately **without** transition
 | `space / enter`                     | Opens and closes the expansion panel.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -127,7 +129,17 @@ Forces the expansion panel to expand/collapse immediately **without** transition
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                   | Description
+| :----------------------| :----------------------
+| `root`                 | The root container element.
+| `header`               | The container around the `header` slot.
+| `content`              | The container around the `default` content slot.
+
+</PageSection>
 
 <PageSection>
 

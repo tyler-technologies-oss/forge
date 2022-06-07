@@ -6,6 +6,7 @@ busyElement.spinner = false;
 busyElement.progressBar = true;
 busyElement.progressBarDeterminate = true;
 busyElement.buffer = 1;
+busyElement.cancel = true;
 
 document.body.appendChild(busyElement);
 
