@@ -1,11 +1,8 @@
 export const LabelValueIconCodeHtml = () => {
-  return `<forge-label-value>
-  <i class="tyler-icons" slot="icon">person</i>
-  <span slot="label">Name</span>
-  <span slot="value">John Doe</span>
+  return `
+<forge-label-value>
+  <forge-icon slot="icon" name="person"></forge-icon>
+  <span slot="label">Label</span>
+  <span slot="value">Value</span>
 </forge-label-value>`;
-};
-
-export const LabelValueIconCodeBlazor = () => {
-  return `<ForgeLabelvalue Label="Name" Value="John Doe" Icon="person" />`;
 };
