@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Meta } from '@storybook/react';
-import { Story } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { ForgeButton, ForgeDialog, ForgeDivider, ForgeIconButton, ForgeToolbar } from '@tylertech/forge-react';
 import { DialogPositionType } from '@tylertech/forge';
-const MDX = require('./dialog.mdx').default;
 import { argTypes, IDialogProps } from './dialog-args';
 import { LOREM_IPSUM } from "../../mock/lorem-ipsum";
+
+const MDX = require('./dialog.mdx').default;
 
 export default {
   title: 'Components/Dialog',
@@ -13,8 +13,8 @@ export default {
   parameters: { 
     docs: { 
       page: MDX
-    },
-  },
+    }
+  }
 } as Meta;
 
 export const Simple: Story<IDialogProps> = ({
@@ -25,7 +25,7 @@ export const Simple: Story<IDialogProps> = ({
   customPosition = false,
   positionX = 0,
   positionY = 0,
-  positionType = 'absolute' as DialogPositionType,
+  positionType = 'absolute' as DialogPositionType
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);  
   const hide = () => setIsOpen(false);
@@ -44,7 +44,7 @@ export const Simple: Story<IDialogProps> = ({
   return (
     <>
       <ForgeButton type="raised">
-        <button onClick={show}>Show dialog</button>
+        <button type="button" onClick={show}>Show dialog</button>
       </ForgeButton>
       <ForgeDialog open={isOpen} options={dialogProps} onDismiss={hide}>
         <header className="forge-dialog__header" forge-dialog-move-target="">
@@ -55,10 +55,10 @@ export const Simple: Story<IDialogProps> = ({
         </section>
         <footer className="forge-dialog__footer">
           <ForgeButton type="outlined" style={{ marginRight: 16 }}>
-            <button onClick={hide}>Cancel</button>
+            <button type="button" onClick={hide}>Cancel</button>
           </ForgeButton>
           <ForgeButton type="raised">
-            <button onClick={hide} forge-dialog-focus="true">Discard</button>
+            <button type="button" onClick={hide} forge-dialog-focus="true">Discard</button>
           </ForgeButton>
         </footer>
       </ForgeDialog>
@@ -73,7 +73,7 @@ Simple.args = {
   customPosition: false,
   positionX: 0,
   positionY: 0,
-  positionType: 'absolute',
+  positionType: 'absolute'
 } as IDialogProps;
 
 export const Complex: Story<IDialogProps> = ({
@@ -84,7 +84,7 @@ export const Complex: Story<IDialogProps> = ({
   customPosition = false,
   positionX = 0,
   positionY = 0,
-  positionType = 'absolute',
+  positionType = 'absolute'
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const hide = () => setIsOpen(false);
@@ -103,7 +103,7 @@ export const Complex: Story<IDialogProps> = ({
   return (
     <>
       <ForgeButton type="raised">
-        <button onClick={show}>Show complex dialog</button>
+        <button type="button" onClick={show}>Show complex dialog</button>
       </ForgeButton>
       <ForgeDialog open={isOpen} options={dialogProps} onDismiss={hide}>
         <ForgeToolbar forge-dialog-move-target="">
@@ -118,10 +118,10 @@ export const Complex: Story<IDialogProps> = ({
         <ForgeDivider />
         <ForgeToolbar>
           <ForgeButton type="outlined" style={{ marginRight: 16 }} slot="end">
-            <button onClick={hide}>Cancel</button>
+            <button type="button" onClick={hide}>Cancel</button>
           </ForgeButton>
           <ForgeButton type="raised" slot="end">
-            <button onClick={hide} forge-dialog-focus="true">Discard</button>
+            <button type="button" onClick={hide} forge-dialog-focus="true">Discard</button>
           </ForgeButton>
         </ForgeToolbar>
       </ForgeDialog>
@@ -136,5 +136,5 @@ Complex.args = {
   customPosition: false,
   positionX: 0,
   positionY: 0,
-  positionType: 'absolute',
+  positionType: 'absolute'
 } as IDialogProps;

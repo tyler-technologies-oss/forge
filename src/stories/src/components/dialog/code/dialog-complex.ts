@@ -13,10 +13,10 @@ export const DialogComplexCodeHtml = () => `
   </section>
   <forge-toolbar>
     <forge-button type="outlined" style="margin-right: 16px" slot="end">
-      <button id="cancel-button">Cancel</button>
+      <button type="button" id="cancel-button">Cancel</button>
     </forge-button>
     <forge-button type="raised" slot="end">
-      <button id="accept-button" forge-dialog-focus>Discard</button>
+      <button type="button" id="accept-button" forge-dialog-focus>Discard</button>
     </forge-button>
   </forge-toolbar>
 </template>
