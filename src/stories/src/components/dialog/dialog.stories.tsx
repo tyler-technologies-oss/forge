@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { ForgeButton, ForgeDialog, ForgeDivider, ForgeIconButton, ForgeToolbar } from '@tylertech/forge-react';
-import { DialogPositionType } from '@tylertech/forge';
+import { ForgeButton, ForgeDialog, ForgeDivider, ForgeIcon, ForgeIconButton, ForgeToolbar } from '@tylertech/forge-react';
+import { DialogPositionType, IconRegistry } from '@tylertech/forge';
 import { argTypes, IDialogProps } from './dialog-args';
 import { LOREM_IPSUM } from "../../mock/lorem-ipsum";
+import { tylIconClose } from '@tylertech/tyler-icons/standard';
 
 const MDX = require('./dialog.mdx').default;
 
@@ -86,6 +87,9 @@ export const Complex: Story<IDialogProps> = ({
   positionY = 0,
   positionType = 'absolute'
 }) => {
+  useEffect(() => {
+    IconRegistry.define(tylIconClose);
+  }, []);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const hide = () => setIsOpen(false);
   const show = () => setIsOpen(true);
@@ -109,7 +113,9 @@ export const Complex: Story<IDialogProps> = ({
         <ForgeToolbar forge-dialog-move-target="">
           <h2 slot="start">Discard draft?</h2>
           <ForgeIconButton slot="end">
-            <button onClick={hide} type="button" aria-label="Close complex dialog" className="tyler-icons">close</button>
+            <button onClick={hide} type="button" aria-label="Close complex dialog">
+              <ForgeIcon name="close" />
+            </button>
           </ForgeIconButton>
         </ForgeToolbar>
         <section className="forge-dialog__body" style={{ width: '500px' }}>

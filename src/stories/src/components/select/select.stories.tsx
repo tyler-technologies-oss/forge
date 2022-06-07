@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { ForgeIcon, ForgeIconButton, ForgeOption, ForgeSelect } from '@tylertech/forge-react';
 import { IconRegistry } from '@tylertech/forge';
-import { tylIconFastfood } from '@tylertech/tyler-icons/standard';
+import { tylIconFastfood, tylIconMoreVert } from '@tylertech/tyler-icons/standard';
 import { ISelectProps, argTypes } from './select-args';
 
 const MDX = require('./select.mdx').default;
@@ -33,7 +33,7 @@ export const Default: Story<ISelectProps> = ({
   hasAddonEnd = false
 }) => {
   useEffect(() => {
-    IconRegistry.define(tylIconFastfood)
+    IconRegistry.define([tylIconFastfood, tylIconMoreVert]);
   }, []);
 
   return (
@@ -56,7 +56,9 @@ export const Default: Story<ISelectProps> = ({
       {hasHelperText && <span slot="helper-text">Food group is required</span>}
       {hasAddonEnd &&
         <ForgeIconButton slot="addon-end" dense density-level={density === 'dense' ? 6 : 3}>
-          <button type="button" className="tyler-icons">more_vert</button>
+          <button type="button">
+            <ForgeIcon name="more_vert" />
+          </button>
         </ForgeIconButton>}
     </ForgeSelect>
   );
