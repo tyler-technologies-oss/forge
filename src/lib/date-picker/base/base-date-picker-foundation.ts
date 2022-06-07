@@ -421,8 +421,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
       return true;
     }
 
-    const passesMinDate = (): boolean => this._min ? this._min.getTime() <= value.getTime() : true;
-    const passesMaxDate = (): boolean => this._max ? this._max.getTime() >= value.getTime() : true;
+    const passesMinDate = (): boolean => this._min && !this._allowInvalidDate ? this._min.getTime() <= value.getTime() : true;
+    const passesMaxDate = (): boolean => this._max && !this._allowInvalidDate ? this._max.getTime() >= value.getTime() : true;
     const disabledDates = (): Date[] => Array.isArray(this._disabledDates) ? this._disabledDates : this._disabledDates ? [this._disabledDates] : [];
     const isNotDisabled = (): boolean => !disabledDates().some(bd => bd.getTime() === value.getTime());
     const dayNotDisabled = (): boolean => !(this._disabledDaysOfWeek && this._disabledDaysOfWeek.includes(value.getDay()));
