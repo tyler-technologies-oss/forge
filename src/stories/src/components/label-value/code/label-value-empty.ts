@@ -1,10 +1,8 @@
 export const LabelValueEmptyCodeHtml = () => {
-  return `<forge-label-value empty>
+  return `
+<forge-label-value empty>
   <span slot="label">Label</span>
   <span slot="value">n/a</span>
-</forge-label-value>`;
-};
-
-export const LabelValueEmptyCodeBlazor = () => {
-  return `<ForgeLabelValue Empty="@true" Label="Label" Value="n/a" />`;
+</forge-label-value>
+  `;
 };

@@ -5,7 +5,6 @@ export interface IBadgeProps {
   positioned: boolean;
   strong: boolean;
   text: string;
-  badgeBackgroundColor?: string;
 }
 
 export const argTypes = {
@@ -60,15 +59,6 @@ export const argTypes = {
     description: 'Use a numeric badge for numeric counts. Use a text status badge to communicate status or description.',
     table: {
       category: 'Slots'
-    },
-  },
-  badgeBackgroundColor: {
-    name: '--forge-badge-theme-muted-background',
-    control: 'select',
-    options: ['--mdc-theme-secondary', '--forge-theme-tertiary'],
-    description: 'Dot and Numeric badges should use --forge-badge-theme-muted-background: var(--mdc-theme-secondary) when placed on an indigo background and --forge-badge-theme-muted-background: var(--forge-theme-tertiary) when placed on a white background.',
-    table: {
-      category: 'CSS Custom Properties'
     },
   }
 };

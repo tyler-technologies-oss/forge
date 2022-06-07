@@ -13,7 +13,6 @@ export interface ITableProps {
   minResizeWidth: number;
   allowRowClick: boolean;
   multiColumnSort: boolean;
-  selectCheckboxAlignment: CellAlign;
 }
 
 export const argTypes = {
@@ -103,21 +102,6 @@ export const argTypes = {
   },
   multiColumnSort: {
     control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  selectCheckboxAlignment: {
-    control: {
-      type: 'select',
-      labels: {
-        'left': 'Left',
-        'center': 'Center',
-        'right': 'Right',
-      },
-    },
-    options: ['left', 'center', 'right'],
     description: '',
     table: {
       category: 'Properties',

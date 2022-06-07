@@ -1,4 +1,4 @@
-import { DefaultTemplate as BannerDemo } from './templates/default';
+import { Default as BannerDemo } from './banner.stories';
 import { BannerDefaultCodeHtml } from './code/banner-default';
 import { BannerThemedCodeHtml } from './code/banner-themed';
 import { BannerCombinedFullCodeHtml } from './code/banner-combined-full';
@@ -105,6 +105,25 @@ Note: Not assigning one of the mentioned themes will set the banner to use it's 
 | `default`                      | The default (unnamed) slot will render its content as the main text body.
 | `icon`                         | The icon slot will render its content as the leading icon.
 | `button`                       | The button slot will render its content after the main text body.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                  | Description
+| :---------------------| :----------------
+| `root`                | The root element.
+| `container`           | The container layout element.
+| `wrapper`             | The element used to control layout within the container.
+| `icon-container`      | The element around the icon slot.
+| `subsection-wrapper`  | The wrapper around the subsection text.
+| `subsection-text`     | The element containing the text for the default slot.
+| `action-subsection`   | The element containing the action for the button slot.
+| `dismiss-icon-button` | The `<forge-icon-button>` element for the dismiss action.
+| `dismiss-button`      | The `<button>` element within the `<forge-icon-button>` dismiss part.
+| `dismiss-button-icon` | The `<forge-icon>` element for the dismiss action.
 
 </PageSection>
 

@@ -5,16 +5,3 @@ export const SelectRoomyHtml = () => `
   <forge-option value="fruit">Fruit</forge-option>
 </forge-select>
 `;
-
-export const SelectRoomyBlazor = () => `
-<ForgeSelect Label="Food group" Options="MyOptions" Density="@SelectDensityType.Roomy" />
-
-@code {
-  List<Option<string>> MyOptions { get; set; } = new List<Option<string>>()
-  {
-      new Option<string>() { Value = "grains", Label = "Bread, Cereal, Rice, and Pasta" },
-      new Option<string>() { Value = "vegetables", Label = "Vegetables" },
-      new Option<string>() { Value = "fruit", Label = "Fruit" }
-  };
-}
-`;

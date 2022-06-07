@@ -1,4 +1,4 @@
-import { DefaultTemplate as ChipFieldDemo } from './templates/default';
+import { Default as ChipFieldDemo } from './chip-field.stories';
 import {
   ChipFieldDefaultHtml,
   ChipFieldDefaultTs,
@@ -50,8 +50,6 @@ Please see the [with autocomplete](?path=/story/components-chip-field--with-auto
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes
@@ -92,8 +90,6 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -106,8 +102,6 @@ Controls the floating state of the label. Call this to manually float the label.
 | `forge-chip-field-member-removed`| Emits when the the user presses Backspace to remove the last member from the collection.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -123,8 +117,6 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -138,7 +130,19 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `root`                         | The root element.
+| `container`                    | The container layout element.
+| `label-input-container`        | The container element around the label and input slot.
+| `input-container`              | The container element around the input slot only.
+| `addon-end-container`          | The container element for the `addon-end` slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -188,8 +192,6 @@ Controls the floating state of the label. Call this to manually float the label.
 | `--mdc-theme-text-secondary-on-background`                | Controls the color of the placeholder element.
 
 </PageSection>
-
----
 
 <PageSection>
 

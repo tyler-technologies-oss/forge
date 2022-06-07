@@ -1,4 +1,4 @@
-import { DefaultTemplate as PageStateDemo } from './templates/default';
+import { Default as PageStateDemo } from './page-state.stories';
 import { PageStateDefaultHtml } from './code/page-state-default';
 
 <PageSection>
@@ -25,15 +25,11 @@ reaches the state.
 
 The following example is a typical empty state implementation with a couple of action buttons.
 
-<LiveDemo 
-layout={"column"} 
-codeHtml={PageStateDefaultHtml()}>
-  <PageStateDemo/>
+<LiveDemo layout="column" codeHtml={PageStateDefaultHtml()}>
+  <PageStateDemo />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -48,7 +44,20 @@ codeHtml={PageStateDefaultHtml()}>
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                        | Description
+| :---------------------------| :----------------
+| `root`                      | The root element.
+| `graphic-container`         | The container element around the `graphic` slot.
+| `title-container`           | The container element around the `title` slot.
+| `message-container`         | The container element around the `message` slot.
+| `actions-container`         | The container element around the `action` slot.
+
+
+</PageSection>
 
 <PageSection>
 

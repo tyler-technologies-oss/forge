@@ -9,7 +9,7 @@ export interface IBusyIndicatorProps {
   progressBarDeterminate: boolean;
   progress: number;
   buffer: number;
-  width: number;
+  width: number | 'auto';
   direction: Direction;
 }
 

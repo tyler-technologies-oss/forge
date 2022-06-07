@@ -1,6 +1,8 @@
-import { Meta } from '@storybook/react';
+import React, { useState } from 'react';
+import { Meta, Story } from '@storybook/react';
 import { IToastProps, argTypes } from './toast-args';
-import { DefaultTemplate } from './templates/default';
+import { ForgeButton, ForgeToast, ForgeToastOptions } from '@tylertech/forge-react';
+import { TOAST_CONSTANTS } from '@tylertech/forge';
 const MDX = require('./toast.mdx').default;
 
 export default {
@@ -9,15 +11,41 @@ export default {
   parameters: { 
     docs: { 
       page: MDX
-    },
-  },
+    }
+  }
 } as Meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: Story<IToastProps> = ({
+  message = 'Save successful',
+  actionText = '',
+  duration = 2750,
+  placement = 'bottom',
+  showClose = true
+}) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const options: ForgeToastOptions = {
+    message,
+    actionText,
+    duration,
+    placement,
+    showClose,
+    actionHandler: () => {
+      console.log('Toast action clicked');
+    }
+  }
+  return (
+    <>
+      <ForgeButton type="raised">
+        <button type="button" onClick={() => setIsOpen(true)}>Show toast</button>
+      </ForgeButton>
+      <ForgeToast options={options} open={isOpen} onDismiss={() => setIsOpen(false)} />
+    </>
+  );
+};
 Default.args = {
-  message: 'Save successful.',
+  message: 'Save successful',
   actionText: '',
-  duration: 2750,
-  placement: 'bottom',
-  showClose: true,
+  duration: TOAST_CONSTANTS.defaults.DURATION,
+  placement: TOAST_CONSTANTS.defaults.PLACEMENT,
+  showClose: true
 } as IToastProps;

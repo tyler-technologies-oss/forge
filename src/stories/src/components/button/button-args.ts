@@ -1,6 +1,9 @@
 export interface IButtonProps {
   type: string;
   text: string;
+  disabled: boolean;
+  hasLeadingIcon: boolean;
+  hasTrailingIcon: boolean;
 }
 
 export interface IButtonMobileProps {
@@ -59,6 +62,27 @@ export const buttonArgTypes = {
     description: '',
     table: {
       category: 'Properties',
+    },
+  },
+  disabled: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  hasLeadingIcon: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Slots',
+    },
+  },
+  hasTrailingIcon: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Slots',
     },
   },
 };

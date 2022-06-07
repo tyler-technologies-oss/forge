@@ -1,4 +1,4 @@
-import { DefaultTemplate as ViewSwitcherDemo } from './templates/default';
+import { Default as ViewSwitcherDemo } from './view-switcher.stories';
 import { ViewSwitcherDefaultCodeHtml, ViewSwitcherDefaultCodeTs } from './code/view-switcher-default';
 
 <PageSection>
@@ -8,7 +8,7 @@ import { ViewSwitcherDefaultCodeHtml, ViewSwitcherDefaultCodeTs } from './code/v
 The view switcher component allows you to wrap a `<forge-view>` element around any HTML content to control transitions between adjecent content.
 By default the view switcher is set to no transition, with options to either `fade` or `slide` as a transition.
 
-> **Note:** Content hidden by this component is still present (hidden) in the DOM.
+> **Note:** Content hidden by this component is still present in the DOM unless you control it manually.
 
 </PageSection>
 
@@ -45,23 +45,21 @@ The switcher can be paired with [forge-tab](?path=/story/components-tab-bar--def
 
 ```html
 <div role="tablist">
-  <h4>Controlled by Tab Bar</h4>
   <forge-tab-bar>
     <forge-tab>View one</forge-tab>
     <forge-tab>View two</forge-tab>
     <forge-tab>View three</forge-tab>
   </forge-tab-bar>
-  <forge-divider></forge-divider>
-  <br/>
+
   <forge-view-switcher>
     <forge-view role="tabpanel">
       <div>View one</div>
     </forge-view>
     <forge-view role="tabpanel">
-      <div style="height: 300px;">View two</div>
+      <div>View two</div>
     </forge-view>
     <forge-view role="tabpanel">
-      <div style="height: 500px;">View three</div>
+      <div>View three</div>
     </forge-view>
   </forge-view-switcher>
 </div>
@@ -77,11 +75,8 @@ tabBar.addEventListener('forge-tab-bar-activate', function(evt) {
 
 > **Note:** This component does not add and remove the non-visible views from the DOM. It will toggle their visibility based on the animation type. If `none` is used, the `display` will be set to `none`, but if you're using `slide` or `fade` then the views are still rendered, but hidden with `visibility: hidden`. This is important to note when using this component in Angular because binding will still occur on the non-visible views.
 
-<LiveDemo 
-layout={'column'} 
-codeHtml={ViewSwitcherDefaultCodeHtml()} 
-codeTs={ViewSwitcherDefaultCodeTs()}>
-  <ViewSwitcherDemo/>
+<LiveDemo layout="column" codeHtml={ViewSwitcherDefaultCodeHtml()} codeTs={ViewSwitcherDefaultCodeTs()}>
+  <ViewSwitcherDemo />
 </LiveDemo>
 
 </PageSection>
@@ -140,8 +135,6 @@ codeTs={ViewSwitcherDefaultCodeTs()}>
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -152,7 +145,17 @@ codeTs={ViewSwitcherDefaultCodeTs()}>
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+### View switcher
+
+| Name               | Description
+| :------------------| :-----------------
+| `root`             | The root element.
+
+</PageSection>
 
 <PageSection>
 
@@ -164,8 +167,6 @@ codeTs={ViewSwitcherDefaultCodeTs()}>
 | `--forge-view-switcher-animation-duration` | Controls the animation duration of a view transition. Default is `500ms`.
 
 </PageSection>
-
----
 
 <PageSection>
 

@@ -1,9 +1,12 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
+import { IconRegistry } from '@tylertech/forge';
+import { ForgeIcon } from '@tylertech/forge-react';
+import { tylIconActionLauncher } from '@tylertech/tyler-icons/custom';
+import { tylIconAccountCircleOutline } from '@tylertech/tyler-icons/extended';
+import { tylIconFace } from '@tylertech/tyler-icons/standard';
+import React, { useEffect } from 'react';
+
 const MDX = require('./icon.mdx').default;
-import { DefaultTemplate } from './templates/default';
-import { ExternalTemplate } from './templates/external';
-import { RegistryTemplate } from './templates/registry';
-import { StylesTemplate } from './templates/styles';
 
 export default {
   title: 'Components/Icon',
@@ -17,7 +20,25 @@ export default {
   },
 } as Meta;
 
-export const Default = DefaultTemplate.bind({});
-export const External = ExternalTemplate.bind({});
-export const Registry = RegistryTemplate.bind({});
-export const Styles = StylesTemplate.bind({});
+export const Default: Story = () => <ForgeIcon src={tylIconFace.data} />;
+export const External: Story = () => <ForgeIcon name="account_circle" external />;
+export const Registry: Story = () => {
+  useEffect(() => {
+    IconRegistry.define([tylIconFace, tylIconAccountCircleOutline, tylIconActionLauncher ]);
+  }, []);
+
+  return (
+    <>
+      <ForgeIcon name="face" />
+      <ForgeIcon name="account_circle_outline" />
+      <ForgeIcon name="action_launcher" />
+    </>
+  );
+};
+export const Styles: Story = () => {
+  const styles = {
+    fontSize: '48px',
+    color: 'var(--mdc-theme-primary)'
+  }
+  return <ForgeIcon src={tylIconFace.data} style={styles} />;
+};

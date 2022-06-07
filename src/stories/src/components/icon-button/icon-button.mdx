@@ -1,4 +1,4 @@
-import { DefaultTemplate as IconButtonDemo } from './templates/default';
+import { Default as IconButtonDemo } from './icon-button.stories';
 import { IconButtonDefaultCodeHtml } from './code/icon-button-default';
 import { IconButtonToggleCodeHtml } from './code/icon-button-toggle';
 
@@ -6,7 +6,8 @@ import { IconButtonToggleCodeHtml } from './code/icon-button-toggle';
 
 # Icon button
 
-The icon-button component is nothing more than a standard HTML `<button>` with custom styling provided. Use this component to display an interactive button that renders **only an icon**. You can also use this component to toggle between an "on" and "off" state as well.
+The icon-button component is nothing more than a standard HTML `<button>` with custom styling provided. Use this component to display an
+interactive button that renders **only an icon**. You can also use this component to toggle between an "on" and "off" state as well.
 
 > Ensure that you add an `aria-label` attribute to the `<button>` element to ensure that the action is announced properly to screen readers.
 >
@@ -22,27 +23,21 @@ The icon-button component is nothing more than a standard HTML `<button>` with c
 
 ### Common
 
-<LiveDemo 
-dense 
-codeHtml={IconButtonDefaultCodeHtml()}>
-  <IconButtonDemo/>
+<LiveDemo dense codeHtml={IconButtonDefaultCodeHtml()}>
+  <IconButtonDemo />
 </LiveDemo>
 
 ### Toggle
 
 Use the toggle variant to swap between and "on" and "off" state when clicking the button.
 
-Valid icon tags: `<i>`, `<span>`, `<svg>`, `<img>`
+Valid icon tags: `<forge-icon>`, `<i>`, `<span>`, `<svg>`, `<img>`
 
-<LiveDemo 
-dense 
-codeHtml={IconButtonToggleCodeHtml()}>
-  <IconButtonDemo toggle={true}/>
+<LiveDemo dense codeHtml={IconButtonToggleCodeHtml()}>
+  <IconButtonDemo toggle />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -87,8 +82,6 @@ Re-renders the component. Use this after applying any transformations that may c
 </MethodDef>
 
 </PageSection>
-
----
 
 <PageSection>
 

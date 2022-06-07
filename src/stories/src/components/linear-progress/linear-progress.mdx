@@ -1,4 +1,4 @@
-import { DefaultTemplate as LinearProgressDemo } from './templates/default';
+import { Default as LinearProgressDemo } from './linear-progress.stories';
 import { LinearProgressIndeterminateCodeHtml } from './code/linear-progress-indeterminate';
 import { LinearProgressDeterminateCodeHtml } from './code/linear-progress-determinate';
 import { LinearProgressBufferCodeHtml } from './code/linear-progress-buffer';
@@ -44,8 +44,6 @@ This variant is similar to determinate, except it allows you to show that the to
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes
@@ -86,8 +84,6 @@ Sets the `aria-label` attribute on the internal `progressbar` element.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -106,7 +102,22 @@ Closes the component if it is in the open state.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                       | Description
+| :------------------------------------------| :----------------
+| `root`                                     | The root container element.
+| `buffer`                                   | The buffer bar container element.
+| `buffer-bar`                               | The buffer bar element.
+| `buffer-dots`                              | The buffer bar animating dots element.
+| `progress-bar`                             | The progress bar container element.
+| `progress-bar-inner`                       | The progress bar progress element.
+| `secondary-bar`                            | The secondary bar container element.
+| `secondary-bar-inner`                      | The secondary bar progress element.
+
+</PageSection>
 
 <PageSection>
 

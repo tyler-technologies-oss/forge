@@ -1,4 +1,4 @@
-import { getLightElement } from '@tylertech/forge-core';
+import { getLightElement, toggleAttribute } from '@tylertech/forge-core';
 import { BADGE_CONSTANTS, IBadgeComponent } from '../../badge';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IAppBarNotificationButtonComponent } from './app-bar-notification-button';
@@ -31,11 +31,7 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
   }
 
   public setBadgeTheme(theme: string): void {
-    if (theme) {
-      this._badgeElement.setAttribute(BADGE_CONSTANTS.attributes.THEME, theme);
-    } else {
-      this._badgeElement.removeAttribute(BADGE_CONSTANTS.attributes.THEME);
-    }
+    toggleAttribute(this._badgeElement, !!theme, BADGE_CONSTANTS.attributes.THEME, theme);
   }
 
   public setBadgeVisible(isVisible: boolean): void {
