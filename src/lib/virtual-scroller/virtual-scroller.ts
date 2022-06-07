@@ -1,4 +1,4 @@
-import { toggleAttribute } from '@tylertech/forge-core';
+import { throttle, toggleAttribute } from '@tylertech/forge-core';
 
 export interface IVirtualScrollerOptions {
   appendOnly?: boolean;
@@ -14,6 +14,10 @@ export interface IVirtualScrollerChild {
 }
 
 export type VirtualScrollerChildBuilder<T> = (data: T, index: number) => HTMLElement;
+
+// TODO: performance is *bad* when dragging the scroll thumb, this should be fixed
+
+// TODO: prevent duplicate children when `appendOnly` is enabled
 
 export class VirtualScroller<T> {
   // Configurable properties
@@ -39,19 +43,19 @@ export class VirtualScroller<T> {
   private _last = 0;
 
   // Events
-  private _scrollListener: (evt: Event) => void;
+  private _scrollListener: (evt: Event) => void; // What's the type of a scroll event?
 
   // Getters
   private get _firstToRender(): number {
     return Math.max(0, this._first - this._buffer);
   }
   private get _lastToRender(): number {
-    return Math.min(this._data.length, this._last + this._buffer);
+    return Math.min(this._data.length - 1, this._last + this._buffer);
   }
 
   constructor(container: HTMLElement, data: T[], childBuilder: (data: T, index: number) => HTMLElement, childHeight: number, options?: IVirtualScrollerOptions) {
     this._applyContainer(container);
-    this._data = data;
+    this._data = [...data];
     this._childBuilder = childBuilder;
     this._childHeight = childHeight;
 
@@ -67,7 +71,7 @@ export class VirtualScroller<T> {
     this._configureSpacer();
     this._appendSpacer();
 
-    this._scrollListener = (evt: Event) => this._onScroll(evt);
+    this._scrollListener = throttle((evt: Event) => this._onScroll(evt), 100);
     this._registerScrollListener();
     this._layoutChildren();
   }
@@ -131,7 +135,8 @@ export class VirtualScroller<T> {
   }
 
   private _renderChildren(): void {
-    let min = this._data.length;
+    // Start with a child's index to ensure that min is within the set
+    let min = this._childrenToRender[0]?.index ?? this._firstToRender;
     let max = 0;
 
     // Remove hidden children and get the min and max already rendered children
@@ -149,20 +154,27 @@ export class VirtualScroller<T> {
 
     // Add children to the beginning of the list
     if (min > this._firstToRender) {
-      for (let i = min - 1; i >= this._firstToRender; i--) {
-        const child = this._createChildElement(i);
-        this._container.prepend(child);
-        this._childrenToRender.push({element: child, index: i});
+      for (let i = min - 1; i > this._firstToRender; i--) {
+        this._prependChild(i);
       }
     }
 
     // Add children to the end of the list
+    // TODO: prevent accessing the array out of bounds
     if (max < this._lastToRender) {
-      for (let i = max + 1; i < this._lastToRender; i++) {
-        const child = this._createChildElement(i);
-        this._container.append(child);
-        this._childrenToRender.push({element: child, index: i});
+      for (let i = max + 1; i <= this._lastToRender; i++) {
+        this._appendChild(i);
       }
+    }
+
+    // Add the first child to the list
+    // The other loops miss this
+    // The `some` lookup might be costly though
+    if (this._firstToRender === 0 && this._data.length) {
+      if (this._childrenToRender.some(child => child.index === 0)) {
+        return;
+      }
+      this._prependChild(0);
     }
   }
 
@@ -174,6 +186,18 @@ export class VirtualScroller<T> {
       child.element = this._createChildElement(child.index);
       this._container.append(child.element);
     });
+  }
+
+  private _prependChild(index: number): void {
+    const child = this._createChildElement(index);
+    this._container.prepend(child);
+    this._childrenToRender.push({element: child, index});
+  }
+
+  private _appendChild(index: number): void {
+    const child = this._createChildElement(index);
+    this._container.append(child);
+    this._childrenToRender.push({element: child, index});
   }
 
   /**
@@ -255,7 +279,13 @@ export class VirtualScroller<T> {
     this._rerenderChildren();
   }
 
+  // Exposed for possible style manipulation
   public get spacer(): HTMLElement {
     return this._spacer;
+  }
+
+  // Exposed for debugging
+  public get actualChildCount(): number {
+    return this._childrenToRender.length;
   }
 }
