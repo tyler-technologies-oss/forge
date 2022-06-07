@@ -10,7 +10,6 @@
 @use '@material/ripple/ripple-theme';
 @use '@material/theme/theme';
 @use '@material/theme/color-palette';
-
 @use '../theme' as forge-theme;
 
 @mixin core-styles() {
@@ -118,8 +117,8 @@
 }
 
 @mixin outlined-disabled() {
-  @include theme.property(border-color, border-color);
-  @include theme.prop(color, text-disabled-on-light);
+  @include forge-theme.property(border-color, border-color);
+  @include theme.property(color, text-disabled-on-light);
 }
 
 @mixin raised() {

@@ -10,7 +10,6 @@
   .forge-field {
     @include selector.label-input-container;
     @include selector.input-container;
-    @include selector.label;
     @include selector.member;
     @include selector.input;
     @include selector.leading;
