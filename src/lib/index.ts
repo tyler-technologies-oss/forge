@@ -134,6 +134,7 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
+export * from './virtual-scroller';
 export * from './icon';
 
 const CUSTOM_ELEMENTS = [
