@@ -9,9 +9,10 @@
     listItem.innerText = d;
     return listItem;
   };
-  var virtualScroller = new VirtualScroller(list, data, builder, 48, {insetTop: '8px', insetBottom: '8px'});
-
-  list.addEventListener('scroll', () => {
-    console.log(virtualScroller.actualChildCount);
-  });
+  var options = {
+    buffer: 10,
+    insetTop: '8px',
+    insetBottom: '8px'
+  };
+  var virtualScroller = new VirtualScroller(list, data, builder, 48, options);
 })(window.Forge.lib);

@@ -6,6 +6,7 @@ export interface IVirtualScrollerOptions {
   insetBottom?: string;
   insetTop?: string;
   skipAccessibility?: boolean;
+  startIndex?: number; // TODO: use `startIndex` to open the scroller with an element in view
 }
 
 export interface IVirtualScrollerChild {
@@ -14,8 +15,6 @@ export interface IVirtualScrollerChild {
 }
 
 export type VirtualScrollerChildBuilder<T> = (data: T, index: number) => HTMLElement;
-
-// TODO: performance is *bad* when dragging the scroll thumb, this should be fixed
 
 // TODO: prevent duplicate children when `appendOnly` is enabled
 
@@ -51,6 +50,9 @@ export class VirtualScroller<T> {
   }
   private get _lastToRender(): number {
     return Math.min(this._data.length - 1, this._last + this._buffer);
+  }
+  private get _numberOfChildrenToRender(): number {
+    return Math.ceil(this._container.clientHeight / this._childHeight) + this._buffer * 2;
   }
 
   constructor(container: HTMLElement, data: T[], childBuilder: (data: T, index: number) => HTMLElement, childHeight: number, options?: IVirtualScrollerOptions) {
@@ -134,6 +136,12 @@ export class VirtualScroller<T> {
     this._renderChildren();
   }
 
+  // Prevent more children than necessary from being rendered when scrolling quickly
+  private _capCountToRender(count: number): number {
+    const cap = this._numberOfChildrenToRender;
+    return count > cap ? cap : count;
+  }
+
   private _renderChildren(): void {
     // Start with a child's index to ensure that min is within the set
     let min = this._childrenToRender[0]?.index ?? this._firstToRender;
@@ -153,16 +161,28 @@ export class VirtualScroller<T> {
     }
 
     // Add children to the beginning of the list
-    if (min > this._firstToRender) {
-      for (let i = min - 1; i > this._firstToRender; i--) {
+    const firstToRender = this._firstToRender;
+    if (min > firstToRender) {
+      const count = this._capCountToRender(min - this._firstToRender);
+      const start = firstToRender + count - 1;
+
+      console.log({minCount: count, minStart: start, firstToRender});
+
+      for (let i = start; i > this._firstToRender; i--) {
+        console.log(i);
         this._prependChild(i);
       }
     }
 
     // Add children to the end of the list
-    // TODO: prevent accessing the array out of bounds
+    const lastToRender = this._lastToRender;
     if (max < this._lastToRender) {
-      for (let i = max + 1; i <= this._lastToRender; i++) {
+      const count = this._capCountToRender(this._lastToRender - max);
+      const start = lastToRender - count + 1;
+
+      console.log({maxCount: count, maxStart: start, lastToRender});
+
+      for (let i = start; i <= this._lastToRender; i++) {
         this._appendChild(i);
       }
     }
@@ -170,7 +190,7 @@ export class VirtualScroller<T> {
     // Add the first child to the list
     // The other loops miss this
     // The `some` lookup might be costly though
-    if (this._firstToRender === 0 && this._data.length) {
+    if (firstToRender === 0 && this._data.length) {
       if (this._childrenToRender.some(child => child.index === 0)) {
         return;
       }
