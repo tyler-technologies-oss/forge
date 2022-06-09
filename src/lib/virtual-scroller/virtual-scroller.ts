@@ -1,22 +1,8 @@
 import { throttle, toggleAttribute } from '@tylertech/forge-core';
-
-export interface IVirtualScrollerOptions {
-  appendOnly?: boolean;
-  buffer?: number;
-  insetBottom?: string;
-  insetTop?: string;
-  skipAccessibility?: boolean;
-  startIndex?: number; // TODO: use `startIndex` to open the scroller with an element in view
-}
-
-export interface IVirtualScrollerChild {
-  element: HTMLElement;
-  index: number;
-}
-
-export type VirtualScrollerChildBuilder<T> = (data: T, index: number) => HTMLElement;
+import { IVirtualScrollerChild, IVirtualScrollerOptions, VirtualScrollerChildBuilder } from './virtual-scroller-constants';
 
 // TODO: prevent duplicate children when `appendOnly` is enabled
+// TODO: use `startIndex` to open the scroller with an element in view
 
 export class VirtualScroller<T> {
   // Configurable properties
