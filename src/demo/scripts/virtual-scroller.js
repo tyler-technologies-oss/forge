@@ -10,7 +10,7 @@
     return listItem;
   };
   var options = {
-    buffer: 10,
+    buffer: 0,
     insetTop: '8px',
     insetBottom: '8px'
   };

@@ -46,7 +46,7 @@ export class VirtualScroller<T> {
 
   // Getters
   private get _firstToRender(): number {
-    return Math.max(0, this._first - this._buffer);
+    return Math.max(0, this._first - this._buffer - 1);
   }
   private get _lastToRender(): number {
     return Math.min(this._data.length - 1, this._last + this._buffer);
@@ -150,10 +150,13 @@ export class VirtualScroller<T> {
     // Remove hidden children and get the min and max already rendered children
     for (let i = this._childrenToRender.length - 1; i >= 0; i-- ) {
       const child = this._childrenToRender[i];
+      
       if (!this._appendOnly && (child.index < this._firstToRender || child.index > this._lastToRender)) {
         this._container.removeChild(child.element);
         this._childrenToRender.splice(i, 1);
-      } else if (child.index < min) {
+      }
+
+      if (child.index < min) {
         min = child.index;
       } else if (child.index > max) {
         max = child.index;
@@ -166,10 +169,7 @@ export class VirtualScroller<T> {
       const count = this._capCountToRender(min - this._firstToRender);
       const start = firstToRender + count - 1;
 
-      console.log({minCount: count, minStart: start, firstToRender});
-
       for (let i = start; i > this._firstToRender; i--) {
-        console.log(i);
         this._prependChild(i);
       }
     }
@@ -179,8 +179,6 @@ export class VirtualScroller<T> {
     if (max < this._lastToRender) {
       const count = this._capCountToRender(this._lastToRender - max);
       const start = lastToRender - count + 1;
-
-      console.log({maxCount: count, maxStart: start, lastToRender});
 
       for (let i = start; i <= this._lastToRender; i++) {
         this._appendChild(i);
