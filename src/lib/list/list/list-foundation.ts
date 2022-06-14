@@ -46,8 +46,6 @@ export class ListFoundation implements IListFoundation {
     const isArrowUp = evt.key === 'ArrowUp' || evt.keyCode === 38;
     const isHome = evt.key === 'Home' || evt.keyCode === 36;
     const isEnd = evt.key === 'End' || evt.keyCode === 35;
-    const isEnter = evt.key === 'Enter' || evt.keyCode === 13;
-    const isSpace = evt.key === 'Space' || evt.keyCode === 32;
     const isTab = evt.key === 'Tab' || evt.keyCode === 9;
 
     // We don't capture modifier keys
@@ -55,7 +53,7 @@ export class ListFoundation implements IListFoundation {
       return;
     }
 
-    if (!isEnter && !isSpace && !isTab) {
+    if (!isTab) {
       this._preventDefaultEvent(evt);
     }
 
@@ -67,16 +65,6 @@ export class ListFoundation implements IListFoundation {
       this._adapter.focusNextListItem();
     } else if (isArrowUp) {
       this._adapter.focusPreviousListItem();
-    } else if (isEnter || isSpace) {
-      if (evt.target && (evt.target as HTMLElement).tagName.toLowerCase() === LIST_ITEM_CONSTANTS.elementName) {
-        this._preventDefaultEvent(evt);
-        const listItem = evt.target as IListItemComponent;
-        const data: IListItemSelectEventData = {
-          value: listItem.value,
-          listItem
-        };
-        this._adapter.emitHostEvent(LIST_ITEM_CONSTANTS.events.SELECT, data);
-      }
     }
   }
 
