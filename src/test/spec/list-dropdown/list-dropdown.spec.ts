@@ -366,6 +366,17 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(listItems[2].active).toBeTrue();
   });
 
+  it('should not allow a disabled option to be activated', async function(this: ITestContext) {
+    this.context = createListDropdown({ ...DEFAULT_CONFIG, ... { options: [{ label: 'One', value: 1, disabled: true }] } });
+    this.context.listDropdown.open();
+    await delayPopupAnimation();
+    const listItems = getListItems();
+
+    this.context.listDropdown.activateOption(0);
+
+    expect(listItems[0].active).toBeFalse();
+  });
+
   it('should activate last option when end key is pressed', async function(this: ITestContext) {
     this.context = createListDropdown({ ...DEFAULT_CONFIG });
     this.context.listDropdown.open();
