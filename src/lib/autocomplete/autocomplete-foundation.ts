@@ -728,6 +728,8 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
         const actualOption = flatOptions.find(o => optionEqualPredicate(o, value, this._matchKey));
         if (actualOption) {
           this._selectedOptions.push(actualOption);
+        } else if (this._allowUnmatched) {
+          this._selectedOptions.push({ label: value, value });
         }
       }
     }
