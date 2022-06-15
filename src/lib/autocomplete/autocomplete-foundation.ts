@@ -458,18 +458,12 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       return;
     }
 
-    // If the user had an option highlighted (changed while the filter was running) we need to capture that before we reset the options
-    const activeIndex = this._adapter.getActiveOptionIndex() ?? -1;
-
     this._sortSelectedOptions();
     this._adapter.setBusyVisibility(false);
     this._adapter.setOptions(this._options);
     this._adapter.setDismissListener(this._dismissListener);
 
-    // If we captured an existing active option index, we need to reset it here after setting the options
-    if (activeIndex >= 0) {
-      this._adapter.activateOptionByIndex(activeIndex);
-    } else if (activateFirst) {
+    if (activateFirst) {
       this._adapter.activateFirstOption();
     }
   }
@@ -734,8 +728,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
         const actualOption = flatOptions.find(o => optionEqualPredicate(o, value, this._matchKey));
         if (actualOption) {
           this._selectedOptions.push(actualOption);
-        } else if (this._allowUnmatched) {
-          this._selectedOptions.push({ label: value, value });
         }
       }
     }
