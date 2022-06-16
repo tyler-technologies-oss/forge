@@ -74,6 +74,20 @@ describe('SwitchComponent', function (this: ITestContext) {
     expect(this.context.getMDCSwitch().selected).withContext('Expected MDCSwitch.selected to be true').toBeTrue();
   });
 
+  it('should properly synchronize selected state with display when reattached', async function (this: ITestContext) {
+    this.context = setupTestContext(false);
+    this.context.component.setAttribute(SWITCH_CONSTANTS.attributes.SELECTED, '');
+    this.context.append();
+    await tick();
+    this.context.component.remove();
+
+    this.context.component.selected = false;
+    document.body.appendChild(this.context.component);
+
+    expect(this.context.component.selected).withContext('Expected selected property to be false').toBeFalse();
+    expect(this.context.getMDCSwitch().selected).withContext('Expected MDCSwitch.selected to be false').toBeFalse();
+  });
+
   it('should be enabled by default', function (this: ITestContext) {
     this.context = setupTestContext();
     expect(this.context.component.disabled).withContext('Expected disabled property to be false').toBeFalse();
@@ -116,6 +130,20 @@ describe('SwitchComponent', function (this: ITestContext) {
 
     expect(this.context.component.disabled).withContext('Expected disabled property to be true').toBeTrue();
     expect(this.context.getMDCSwitch().disabled).withContext('Expected MDCSwitch.disabled to be true').toBeTrue();
+  });
+
+  it('should properly synchronize disabled state with display when reattached', async function (this: ITestContext) {
+    this.context = setupTestContext(false);
+    this.context.component.setAttribute(SWITCH_CONSTANTS.attributes.DISABLED, '');
+    this.context.append();
+    await tick();
+    this.context.component.remove();
+
+    this.context.component.disabled = false;
+    document.body.appendChild(this.context.component);
+
+    expect(this.context.component.disabled).withContext('Expected disabled property to be false').toBeFalse();
+    expect(this.context.getMDCSwitch().disabled).withContext('Expected MDCSwitch.disabled to be false').toBeFalse();
   });
 
   it('should not be dense by default', function (this: ITestContext) {
