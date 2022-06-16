@@ -262,7 +262,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       _triggerDropdownClick(this.context.input);
       await tick();
-      const popupOptions = _getPopupOptions(this.context.component.popupElement);
+      const popupOptions = _toLabelValue(_getPopupOptions(this.context.component.popupElement));
       expect(popupOptions).toEqual(DEFAULT_FILTER_OPTIONS);
     });
 
@@ -272,8 +272,28 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.filter = () => [DEFAULT_FILTER_OPTIONS[0]];
       _sendInputValue(this.context.input, 'one');
       await tick();
-      const popupOptions = _getPopupOptions(this.context.component.popupElement);
+      const popupOptions = _toLabelValue(_getPopupOptions(this.context.component.popupElement));
       expect(popupOptions).toEqual([DEFAULT_FILTER_OPTIONS[0]]);
+    });
+
+    it('should update selected options in dropdown after filtering', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.allowUnmatched = true;
+      this.context.component.debounce = 0;
+      this.context.component.value = 1;
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.open = true;
+
+      await tick();
+
+      let popupOptions = _getPopupOptions(this.context.component.popupElement);
+      expect(popupOptions[0].selected).toBeTrue();
+
+      await _sendInputValue(this.context.input, 'o');
+      await tick();
+      popupOptions = _getPopupOptions(this.context.component.popupElement);
+
+      expect(popupOptions.every(o => !o.selected)).toBeTrue();
     });
 
     it('should emit change event when clicking option in dropdown', async function(this: ITestContext) {
@@ -1129,7 +1149,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await timer(300);
       await tick();
 
-      const options = _getPopupOptions(this.context.component.popupElement);
+      const options = _toLabelValue(_getPopupOptions(this.context.component.popupElement));
       expect(options).toEqual([{ label: 'B', value: 'b' }]);
     });
 
@@ -1468,7 +1488,6 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         expect(newValue).toBe(listItems[2].value);
       });
     });
-
   });
 
   interface ITestAutocompleteGroup {
@@ -1593,12 +1612,16 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     };
   }
 
-  function _getPopupOptions(popupElement: HTMLElement | null): IOption[] {
+  function _getPopupOptions(popupElement: HTMLElement | null): (IOption & { selected?: boolean })[] {
     if (!popupElement) {
       return [];
     }
     const listItems = Array.from(popupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
-    return listItems.map(li => ({ label: li.innerText, value: li.value } as IOption));
+    return listItems.map(li => ({ label: li.innerText, value: li.value, selected: li.selected }));
+  }
+
+  function _toLabelValue(options: IOption[]): Array<{ label: IOption['label']; value: IOption['value']}> {
+    return options.map(({ label, value }) => ({ label, value }));
   }
 
   function _getListItems(popupElement: HTMLElement | null): IListItemComponent[] {
