@@ -180,9 +180,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _onClear(evt: MouseEvent): void {
-    if (!this._selectedOptions.length) {
-      return;
-    }
     this._clearValue();
     this._adapter.setSelectedText(this._getSelectedText());
   }
@@ -461,6 +458,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._sortSelectedOptions();
     this._adapter.setBusyVisibility(false);
     this._adapter.setOptions(this._options);
+    this._adapter.setSelectedOptions(this._selectedOptions);
     this._adapter.setDismissListener(this._dismissListener);
 
     if (activateFirst) {
@@ -701,7 +699,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       this._adapter.setSelectedText(this._getSelectedText());
     }
 
-    // When the value is changed programatically we should update the selected options
+    // When the value is changed programmatically we should update the selected options
     if (this._isDropdownOpen) {
       this._adapter.setSelectedOptions(this._selectedOptions);
     }
