@@ -24,6 +24,8 @@ export interface IDialogComponent extends IBaseComponent {
   moveTarget: string;
   initializeMoveTarget(): void;
   resetPosition(): void;
+  show(parent?: HTMLElement): Promise<void>;
+  hide(remove?: boolean): Promise<void>;
 }
 
 declare global {
@@ -163,5 +165,12 @@ export class DialogComponent extends BaseComponent implements IDialogComponent {
 
   public resetPosition(): void {
     this._foundation.resetPosition();
+  }
+
+  public show(parent?: HTMLElement): Promise<void> {
+    return this._foundation.show(parent);
+  }
+  public hide(remove?: boolean): Promise<void> {
+    return this._foundation.hide(remove);
   }
 }
