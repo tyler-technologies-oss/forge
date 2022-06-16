@@ -1,6 +1,5 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-
-import { ListItemComponent, IListItemComponent } from './list-item';
+import { ListItemComponent } from './list-item';
 
 export * from './list-item-adapter';
 export * from './list-item-constants';
