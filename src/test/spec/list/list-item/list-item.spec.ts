@@ -212,6 +212,22 @@ describe('ListItemComponent', function(this: ITestContext) {
       expect(listener).toHaveBeenCalledTimes(1);
     });
 
+    it('should emit selected event when enter key is pressed', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const listener = jasmine.createSpy('selected listener');
+      this.context.component.addEventListener(LIST_ITEM_CONSTANTS.events.SELECT, listener);
+      (this.context as ITestListItemDefaultContext).getRootElement().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit selected event when enter space is pressed', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const listener = jasmine.createSpy('selected listener');
+      this.context.component.addEventListener(LIST_ITEM_CONSTANTS.events.SELECT, listener);
+      (this.context as ITestListItemDefaultContext).getRootElement().dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
     it('should set value via property', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = 1;
