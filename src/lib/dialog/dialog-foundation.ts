@@ -123,10 +123,10 @@ export class DialogFoundation implements IDialogFoundation {
 
   public async show(parent?: HTMLElement): Promise<void> {
     this._open = true;
-    await this._openDialog();
-    if (parent || !this._adapter.isConnected) {
+    if (!this._adapter.isConnected) {
       this._adapter.attach(parent);
     }
+    await this._openDialog();
   }
 
   public async hide(remove?: boolean): Promise<void> {
