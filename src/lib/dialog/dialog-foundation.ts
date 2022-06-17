@@ -159,7 +159,6 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.setBodyAttribute(DIALOG_CONSTANTS.attributes.OPEN, 'true');
     this._adapter.registerTransitionEndHandler(this._transitionEndHandler);
     this._setDocumentKeydownListener(this._escapeClose);
-    this._setBackdropClickListener(this._backdropClose);
     this._adapter.setAnimating(true);
     this._isAnimating = true;
 
@@ -167,6 +166,7 @@ export class DialogFoundation implements IDialogFoundation {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         this._adapter.setVisibility(true);
+        this._setBackdropClickListener(this._backdropClose); // Must come after setting visibility because the backdrop may not yet exist
         this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.OPEN);
         this._adapter.trySetInitialFocus();
         if (this._adapter.isScrollable()) {
@@ -207,6 +207,7 @@ export class DialogFoundation implements IDialogFoundation {
     this._lastPosition = undefined;
     this._adapter.setAnimating(true);
     this._adapter.setVisibility(false);
+    this._adapter.setSurfacePosition(null, null, null);
 
     return new Promise<void>(resolve => {
       setTimeout(() => {

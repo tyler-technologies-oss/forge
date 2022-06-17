@@ -104,33 +104,33 @@
     toolbarDialogElement.show();
   }
 
-  // function openDialogScrolling () {
-  //   var dialogElement = document.createElement('forge-dialog');
-  //   dialogElement.fullscreen = dialogFullscreenCheckbox.checked;
-  //   dialogElement.moveable = dialogMoveCheckbox.checked;
-  //   dialogElement.classList.add('forge-dialog--scrollable');
+  function openDialogScrolling () {
+    var scrollableDialogElement = document.createElement('forge-dialog');
+    scrollableDialogElement.fullscreen = dialogFullscreenCheckbox.checked;
+    scrollableDialogElement.moveable = dialogMoveCheckbox.checked;
+    scrollableDialogElement.classList.add('forge-dialog--scrollable');
 
-  //   if (!dialogFullscreenCheckbox.checked) {
-  //     dialogElement.classList.add('forge-dialog--small');
-  //   }
+    if (!dialogFullscreenCheckbox.checked) {
+      scrollableDialogElement.classList.add('forge-dialog--small');
+    }
     
-  //   var content = dialogTemplateScrolling.content.cloneNode(true);
-  //   dialogElement.appendChild(content);
+    var content = dialogTemplateScrolling.content.cloneNode(true);
+    scrollableDialogElement.appendChild(content);
 
-  //   var acceptButton = dialogElement.querySelector('#accept-button-scrolling');
-  //   acceptButton.addEventListener('click', function() {
-  //     dialogElement.open = false;
-  //   });
+    var acceptButton = scrollableDialogElement.querySelector('#accept-button-scrolling');
+    acceptButton.addEventListener('click', function() {
+      scrollableDialogElement.hide(true);
+    });
 
-  //   var cancelButton = dialogElement.querySelector('#cancel-button-scrolling');
-  //   cancelButton.addEventListener('click', function() {
-  //     dialogElement.open = false;
-  //   });
+    var cancelButton = scrollableDialogElement.querySelector('#cancel-button-scrolling');
+    cancelButton.addEventListener('click', function() {
+      scrollableDialogElement.hide(true);
+    });
 
-  //   dialogElement.addEventListener('forge-dialog-close', function (evt) {
-  //     dialogElement.open = false;
-  //   });
+    scrollableDialogElement.addEventListener('forge-dialog-close', function (evt) {
+      scrollableDialogElement.hide(true);
+    });
 
-  //   dialogElement.open = true;
-  // }
+    scrollableDialogElement.show();
+  }
 })();

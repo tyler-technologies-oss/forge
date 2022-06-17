@@ -33,7 +33,7 @@ export interface IDialogAdapter extends IBaseAdapter {
   setMoveTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
   removeDragTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
   getSurfaceBounds(): DOMRect;
-  setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType): void;
+  setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType | null): void;
   captureActiveElement(): void;
   tryRestoreActiveElement(): void;
 }
@@ -182,13 +182,19 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     return this._surfaceElement.getBoundingClientRect() as DOMRect;
   }
 
-  public setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType): void {
-    this._surfaceElement.style.position = positionType === 'absolute' ? positionType : 'relative';
+  public setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType | null): void {
+    if (positionType) {
+      this._surfaceElement.style.position = positionType === 'absolute' ? positionType : 'relative';
+    } else {
+      this._surfaceElement.style.removeProperty('position');
+    }
+
     if (y !== null) {
       this._surfaceElement.style.top = y;
     } else {
       this._surfaceElement.style.removeProperty('top');
     }
+
     if (x !== null) {
       this._surfaceElement.style.left = x;
     } else {
