@@ -122,6 +122,10 @@ export class DialogFoundation implements IDialogFoundation {
   }
 
   public async show(parent?: HTMLElement): Promise<void> {
+    if (this._open) {
+      return;
+    }
+    
     this._open = true;
     if (!this._adapter.isConnected) {
       this._adapter.attach(parent);
@@ -130,6 +134,10 @@ export class DialogFoundation implements IDialogFoundation {
   }
 
   public async hide(remove?: boolean): Promise<void> {
+    if (!this._open) {
+      return;
+    }
+
     this._open = false;
     await this._closeDialog();
     if (remove) {

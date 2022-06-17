@@ -48,7 +48,7 @@
   });
 
   dialogElement.addEventListener('forge-dialog-close', function (evt) {
-    console.log('[forge-dialog] forge-dialog-close');
+    console.log('[dialogElement] forge-dialog-close');
     dialogElement.open = false;
   });
 
@@ -97,7 +97,7 @@
     });
 
     toolbarDialogElement.addEventListener('forge-dialog-close', function (evt) {
-      console.log('forge-dialog-close');
+      console.log('[toolbarDialogElement] forge-dialog-close');
       toolbarDialogElement.hide(true);
     });
 
@@ -128,6 +128,7 @@
     });
 
     scrollableDialogElement.addEventListener('forge-dialog-close', function (evt) {
+      console.log('[scrollableDialogElement] forge-dialog-close');
       scrollableDialogElement.hide(true);
     });
 
