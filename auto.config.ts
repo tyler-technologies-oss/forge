@@ -15,8 +15,7 @@ export default function rc(): AutoRc {
       ['npm', npmOptions],
       'conventional-commits',
       'released',
-      'first-time-contributor',
-      './plugins/auto/forge-prepare-publish'
+      'first-time-contributor'
     ]
   };
 }
