@@ -11,6 +11,7 @@ Forge is a framework-agnostic library of Web Components adhering to [W3C Web Com
 - [Contributing][5]
 - [Changelog][6]
 - [Forge design system][1]
+- [Forge 3.0+ Roadmap/Proposals](https://github.com/tyler-technologies-oss/forge/discussions/61)
 
 ## Using with a framework?
 
