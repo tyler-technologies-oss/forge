@@ -10,6 +10,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './paginator.html';
 import styles from './paginator.scss';
+import { TooltipComponent } from '../tooltip';
 
 export interface IPaginatorComponent extends IBaseComponent {
   pageIndex: number;
@@ -43,7 +44,8 @@ declare global {
   dependencies: [
     IconButtonComponent,
     SelectComponent,
-    IconComponent
+    IconComponent,
+    TooltipComponent
   ]
 })
 export class PaginatorComponent extends BaseComponent implements IPaginatorComponent {
