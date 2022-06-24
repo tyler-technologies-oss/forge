@@ -4,6 +4,6 @@ Paths = []
 Regexes = [
   "TOKEN\": \"\\$\\{localEnv:GITHUB_TOKEN\\}\"",
   "TOKEN\": \"\\$\\{localEnv:GITHUB_TOKEN\\}\"",
-  "TOKEN\": \"\\$\\{localEnv:ARTIFACTORY_TOKEN\\}\"",
+  "TOKEN\": \"\\$\\{localEnv:NPM_TOKEN\\}\"",
   "KeyCombinations \\} from '\\./keyboard-shortcut-utils'",
 ]
