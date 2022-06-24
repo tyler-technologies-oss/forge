@@ -18,6 +18,7 @@ on:
       - 'auto.config.ts'
       - '.github/workflows/**/*'
       - 'src/**/*'
+  workflow_dispatch:
 
 concurrency: build-release-${{ github.ref }}
 
