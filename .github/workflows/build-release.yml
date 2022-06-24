@@ -133,7 +133,7 @@ jobs:
   publish-cdn:
     name: Publish Components to CDN
     needs: [wf-config, build-and-release]
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.17.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.18.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
@@ -141,6 +141,7 @@ jobs:
       AWS_S3_BUCKET_NAME: "tylerforge-s3assets51e60022-1ols9p4m4dr5y"
       AWS_CLOUDFRONT_DISTRIBUTION_ID: "EDE7DVFI1X60B"
       MAX_CLOUDFRONT_INVALIDATIONS: 25
+      DELETE_FILES: true
 
   ## We run this job only when files that effect Storybook are found in the changed files
   # deploy-storybook:
