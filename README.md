@@ -11,7 +11,7 @@ Forge is a framework-agnostic library of Web Components adhering to [W3C Web Com
 - [Contributing][5]
 - [Changelog][6]
 - [Forge design system][1]
-- [Forge 3.0+ Roadmap/Proposals](https://github.com/tyler-technologies-oss/forge/discussions/61)
+- [Roadmap/Proposals](https://github.com/tyler-technologies-oss/forge/discussions/61)
 
 ## Using with a framework?
 
@@ -56,9 +56,23 @@ defineButtonComponent();
 > **Note:** the components are actually self-defining, but without something in your application referencing those components, they will be left out.
 > These definition functions ensure that the components are bundled within your application.
 
+#### CSS
+
+Forge expects a global stylesheet to be loaded to configure the theme and typography globally across your application, and some components may require additional css.
+
+```scss
+@use '@tylertech/forge/dist/forge.css';
+```
+
+Additionally apply the `forge-typography` class to a root element (typically the `<body>`):
+
+```html
+<body class="forge-typography">
+```
+
 ### Using via CDN
 
-The Forge CDN can provide components directly.
+The Forge CDN can provide components directly on demand.
 
 As an example, the text-field and button components can be loaded directly like this:
 
@@ -73,12 +87,13 @@ As an example, the text-field and button components can be loaded directly like 
 <!-- Load the ES modules JavaScript for each component you need -->
 <script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/text-field/text-field.js"></script>
 <script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/button.js"></script>
+```
 
-> **Note:** the components will automatically be registered with the custom element registry in the browser.
+> **Note:** the components will automatically be defined within the custom element registry in the browser when loaded from the CDN.
 
 ### HTML
 
-Now the text-field and button components can be used anywhere in the html:
+Now the text-field and button components can be used anywhere in the DOM:
 
 ```html
 <forge-text-field>
@@ -92,20 +107,6 @@ Now the text-field and button components can be used anywhere in the html:
 ```
 
 Don't forget to also add the `forge-typography` class to the `<body>` element to ensure your application inherits the default typography styles:
-
-```html
-<body class="forge-typography">
-```
-
-### CSS
-
-Forge expects a global stylesheet to be loaded to configure the theme and typography globally across your application, and some components may require additional css.
-
-```scss
-@use '@tylertech/forge/dist/forge.css';
-```
-
-Additionally apply the `forge-typography` class to a root element (typically the `<body>`):
 
 ```html
 <body class="forge-typography">

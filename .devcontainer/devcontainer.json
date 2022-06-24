@@ -15,8 +15,6 @@
 
 	"containerEnv": {
 		"GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
-		"ARTIFACTORY_TOKEN": "${localEnv:ARTIFACTORY_TOKEN}",
-		"ARTIFACTORY_USERNAME": "${localEnv:ARTIFACTORY_USERNAME}",
 		"CHROME_BIN": "/usr/bin/google-chrome-stable"
 	},
 

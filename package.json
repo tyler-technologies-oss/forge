@@ -6,11 +6,10 @@
   "author": "Tyler Technologies, Inc.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tyler-technologies/forge.git"
+    "url": "https://github.com/tyler-technologies-oss/forge.git"
   },
   "scripts": {
     "prepare": "husky install",
-    "postinstall": "cd src/stories && npm install",
     "build": "forge build",
     "build:all": "npm run build -- --all",
     "ci:build:all": "npm run build:all -- --threads 2",
@@ -32,7 +31,7 @@
     "update-deps": "npm-check-updates --peer -u && npm install && npm run lint"
   },
   "dependencies": {
-    "@tylertech/forge-core": "^2.0.0-rc.1",
+    "@tylertech/forge-core": "^2.0.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "imask": "^6.4.2",
     "material-components-web": "^14.0.0",
@@ -44,9 +43,9 @@
     "@auto-it/npm": "^10.36.5",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
-    "@tylertech-eslint/eslint-plugin": "^1.0.8",
-    "@tylertech/forge-cli": "^2.0.0-rc.4",
-    "@tylertech/forge-testing": "^2.0.0-rc.0",
+    "@tylertech-eslint/eslint-plugin": "^1.0.9",
+    "@tylertech/forge-cli": "^2.0.0",
+    "@tylertech/forge-testing": "^2.0.0",
     "@tylertech/stylelint-rules": "^4.0.0",
     "@types/jasmine": "^3.10.3",
     "@types/karma": "^6.3.3",
