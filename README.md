@@ -2,9 +2,6 @@
 
 Forge is a framework-agnostic library of Web Components adhering to [W3C Web Component Spec][2] and the [Forge Design System][1]. Originally derived from Google's [Material Components Web][3] project, this project aims to create a consistent UI/UX across applications regardless of choice in front-end frameworks. Theming is a core part of the library such that competing design objectives can be achieved while still providing UI/UX cohesion across product catalogs. Please visit the [Forge Design System website][1] for additional guidance and documentation.
 
-> This project uses [Auto](https://intuit.github.io/auto/) for its CI/CD automation. Please familiarize
-> yourself with Auto. Release versions are controlled by labels on Pull Requests.
-
 ## Important links
 
 - [Storybook][4]
