@@ -82,6 +82,7 @@ jobs:
             build:
               - 'forge.json'
               - 'tsconfig.json'
+              - 'package.json'
               - '.eslintrc.json'
               - '.stylelintrc'
               - 'auto.config.ts'
@@ -134,7 +135,7 @@ jobs:
   publish-cdn:
     name: Publish Components to CDN
     needs: [wf-config, build-and-release]
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.18.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.17.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       AWS_IAM_ROLE: "arn:aws:iam::505039608154:role/forge-prod-cdnmgmt-forge"
@@ -142,20 +143,19 @@ jobs:
       AWS_S3_BUCKET_NAME: "tylerforge-s3assets51e60022-1ols9p4m4dr5y"
       AWS_CLOUDFRONT_DISTRIBUTION_ID: "EDE7DVFI1X60B"
       MAX_CLOUDFRONT_INVALIDATIONS: 25
-      DELETE_FILES: true
 
   ## We run this job only when files that effect Storybook are found in the changed files
-  # deploy-storybook:
-  #   name: Deploy Storybook
-  #   needs: wf-config
-  #   uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.17.0
-  #   if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
-  #   with:
-  #     PRODUCTION_RELEASE: true
-  #     BUILD_DIRECTORY: dist/storybook
-  #     BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
-  #     BUILD_NPM_SCRIPT: "ci:build-storybook"
-  #     PR_COMMENT_HEADER: "View Storybook Deployment"
-  #   secrets:
-  #     GITHUB_DEPLOY_TOKEN: ${{ secrets.FORGE_AUTOBOT_SECRET }}
-  #     NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
+  deploy-storybook:
+    name: Deploy Storybook
+    needs: wf-config
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.17.0
+    if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
+    with:
+      PRODUCTION_RELEASE: true
+      BUILD_DIRECTORY: dist/storybook
+      BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
+      BUILD_NPM_SCRIPT: "ci:build-storybook"
+      PR_COMMENT_HEADER: "View Storybook Deployment"
+    secrets:
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.FORGE_AUTOBOT_SECRET }}
+      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
