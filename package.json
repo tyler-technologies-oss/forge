@@ -10,6 +10,7 @@
   },
   "scripts": {
     "prepare": "husky install",
+    "postinstall": "cd src/stories && npm install",
     "build": "forge build",
     "build:all": "npm run build -- --all",
     "ci:build:all": "npm run build:all -- --threads 2",
