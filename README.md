@@ -19,8 +19,7 @@ As noted above, Forge components are framework-agnostic. If you haven't used Web
 about, just like any old `<div>`, `<button>`, `<input>`... etc. This means that any framework can already work with them natively without any work on your end.
 
 The caveat to this is that many custom Web Components are enhanced to allow for more complex data (arrays and objects) to be provided, as well as custom event names
-to get notified about changes within the element. It's also handy for dynamic elements such as dialogs and popups. This is where framework adapter libraries can help
-to make the usage more seamless.
+to get notified about changes within the element. This is where framework adapter libraries can help to make the usage more seamless.
 
 Forge provides the following framework adapters:
 
@@ -53,7 +52,7 @@ defineTextFieldComponent();
 defineButtonComponent();
 ```
 
-> **Note:** the components are actually self-defining, but without something in your application referencing those components, they will be left out.
+> **Note:** the components are actually self-defining, but without something in your application referencing those components they could be left out during bundling.
 > These definition functions ensure that the components are bundled within your application.
 
 #### CSS
@@ -85,11 +84,14 @@ As an example, the text-field and button components can be loaded directly like 
 <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/forge-button.css">
 
 <!-- Load the ES modules JavaScript for each component you need -->
-<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/text-field/text-field.js"></script>
-<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/button.js"></script>
+<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/text-field/index.js"></script>
+<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/index.js"></script>
 ```
 
-> **Note:** the components will automatically be defined within the custom element registry in the browser when loaded from the CDN.
+> **Note:** the Forge CDN always contains the latest published changes on a per major version basis. If you need a specific version
+> please use CDN services such as [unpkg](https://unpkg.com/@tylertech/forge@2.0.0/esm/index.js).
+>
+> Additionally, the components will automatically be defined within the custom element registry in the browser when loaded from the CDN.
 
 ### HTML
 
@@ -97,8 +99,8 @@ Now the text-field and button components can be used anywhere in the DOM:
 
 ```html
 <forge-text-field>
-  <input type="text" id="input" />
   <label for="input">Label</label>
+  <input type="text" id="input" />
 </forge-text-field>
 
 <forge-button type="raised">
@@ -114,7 +116,7 @@ Don't forget to also add the `forge-typography` class to the `<body>` element to
 
 ## Need help?
 
-Please create a GitHub issue with any questions.
+Please [create](https://github.com/tyler-technologies-oss/forge/issues/new/choose) a GitHub issue with any questions and we'll be glad to help!
 
 [1]: https://forge.tylertech.com/
 [2]: https://www.w3.org/wiki/WebComponents/
