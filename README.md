@@ -60,6 +60,21 @@ Forge expects a global stylesheet to be loaded to configure the theme and typogr
 @use '@tylertech/forge/dist/forge.css';
 ```
 
+The `forge.css` file contains other stylesheets that you may or may not need. We recommend you only include the stylesheets you need in your application:
+
+```scss
+/// Optionally include a minimal base set of styles commonly used with Forge-based applications
+@use '@tylertech/forge/dist/forge-core.css';
+
+/// Include the theme and typography styles
+@use '@tylertech/forge/dist/theme/forge-theme.css';
+@use '@tylertech/forge/dist/typography/forge-typography.css';
+
+/// Include styles for <forge-button> elements
+@use '@tylertech/forge/dist/button/forge-button.css';
+```
+
+
 Additionally apply the `forge-typography` class to a root element (typically the `<body>`):
 
 ```html
@@ -73,9 +88,12 @@ The Forge CDN can provide components directly on demand.
 As an example, the text-field and button components can be loaded directly like this:
 
 ```html
-<!-- Always include the theme and typography styles -->
+<!-- Optionally include a minimal base set of styles commonly used with Forge-based applications -->
 <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/forge-core.css">
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/forge.css">
+
+<!-- Always include the theme and typography styles -->
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/theme/forge-theme.css">
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/typography/forge-typography.css">
 
 <!-- Some components (such as button) require the use of a global stylesheet (for now) -->
 <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/forge-button.css">
