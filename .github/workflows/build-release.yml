@@ -157,5 +157,5 @@ jobs:
       BUILD_NPM_SCRIPT: "ci:build-storybook"
       PR_COMMENT_HEADER: "View Storybook Deployment"
     secrets:
-      GITHUB_DEPLOY_TOKEN: ${{ secrets.FORGE_AUTOBOT_SECRET }}
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
