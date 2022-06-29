@@ -104,7 +104,7 @@ jobs:
   build:
     name: Build and Test
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.17.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.21.0
     if: ${{ needs.wf-config.outputs.is-release == 'false' && (needs.wf-config.outputs.build-files-changed == 'true' || needs.wf-config.outputs.test-files-changed == 'true') }}
     with:
       BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}
@@ -116,7 +116,7 @@ jobs:
   build-and-release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.17.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-release.yml@v0.21.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       PRODUCTION_RELEASE: true
@@ -135,12 +135,14 @@ jobs:
   publish-cdn:
     name: Publish Components to CDN
     needs: [wf-config, build-and-release]
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.17.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v0.21.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       AWS_IAM_ROLE: "***REMOVED***"
       AWS_REGION: "us-east-1"
       AWS_S3_BUCKET_NAME: "***REMOVED***"
+      AWS_S3_BUCKET_PATH: "/v1/libs/@tylertech/forge@v2/"
+      AWS_S3_DELETE: true
       AWS_CLOUDFRONT_DISTRIBUTION_ID: "***REMOVED***"
       MAX_CLOUDFRONT_INVALIDATIONS: 25
 
@@ -148,7 +150,7 @@ jobs:
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.17.0
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.21.0
     if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true
