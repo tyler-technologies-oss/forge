@@ -67,6 +67,7 @@ jobs:
         run: |
           ## We use `auto version` to calculate whether this is a release build or not
           VERSION_RESULT=$(npx auto version)
+          echo "Version calculation result: ${VERSION_RESULT}"
           if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
             echo "::set-output name=release::true"
           else

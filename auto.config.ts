@@ -8,6 +8,9 @@ const npmOptions: INpmConfig = {
 
 export default function rc(): AutoRc {
   return {
+    shipit: {
+      prerelease: true
+    },
     versionBranches: true,
     prereleaseBranches: ['dev', 'beta', 'rc', 'next'],
     author: 'GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>',
