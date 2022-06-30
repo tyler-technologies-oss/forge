@@ -12,8 +12,6 @@
     "prepare": "husky install",
     "postinstall": "cd src/stories && npm install",
     "build": "forge build",
-    "build:all": "npm run build -- --all",
-    "ci:build:all": "npm run build:all -- --threads 2",
     "start": "npm run storybook",
     "storybook": "cd src/stories && npm start",
     "lint": "forge lint",
