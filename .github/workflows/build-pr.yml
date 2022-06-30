@@ -59,9 +59,9 @@ jobs:
     with:
       PRODUCTION_RELEASE: false
       BUILD_DIRECTORY: dist/storybook
-      BUILD_TARGET_DIRECTORY: docs/${{ github.event.pull_request.head.ref }}
+      BUILD_TARGET_DIRECTORY: docs/next/${{ github.event.pull_request.head.ref }}
       BUILD_NPM_SCRIPT: "ci:build-storybook"
-      PR_COMMENT_HEADER: "View Storybook Deployment"
+      PR_COMMENT_HEADER: "View Storybook Deployment (@next)"
     secrets:
       GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
