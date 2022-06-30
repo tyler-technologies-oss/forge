@@ -67,9 +67,12 @@ jobs:
         run: |
           ## We use `auto version` to calculate whether this is a release build or not
           VERSION_RESULT=$(npx auto version)
+          echo "Version calculation result: ${VERSION_RESULT}"
           if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
+            echo "Release: true"
             echo "::set-output name=release::true"
           else
+            echo "Release: false"
             echo "::set-output name=release::false"
           fi
 
@@ -120,10 +123,7 @@ jobs:
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       PRODUCTION_RELEASE: true
-      NODE_VERSION: "14"
-      TESTS_ENABLED: false ## We know the tests pass because they would have been triggered by a PR that requires tests so let's not waste time
-      RELEASE_ENABLED: true
-      BUILD_NPM_SCRIPT: "ci:build:all" ## We build the npm package and ALL static component bundles (this can take some time)
+      TESTS_ENABLED: false
       PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
       PACKAGE_ASSETS_ENABLED: true
     secrets:
