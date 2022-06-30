@@ -11,42 +11,10 @@ on:
       - 'src/**/*'
 
 jobs:
-  ## Gather configuration required by other jobs
   wf-config:
     name: Workflow Configuration
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Prepare Repository
-        # Fetch full git history and tags
-        run: git fetch --unshallow --tags
-
-      - name: Cache Dependencies
-        id: cache
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-
-      - name: Install
-        id: install
-        run: |
-          npm ci
-
-      ## Detect if any specific files we care about have changed to help us know if we need to execute a CI build or Storybook deployment at all or not
       - name: Check File Changes
         uses: dorny/paths-filter@v2
         id: file-filter
