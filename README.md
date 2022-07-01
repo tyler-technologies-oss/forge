@@ -32,6 +32,10 @@ Forge provides the following framework adapters:
 
 The component library is distributed on npm and as static assets on the Forge CDN.
 
+### Versioning strategy
+
+The Forge component library follows [semver](https://semver.org/) to ensure that consumers can rely on a standard versioning scheme when using Forge components.
+
 ### Using via NPM
 
 To install the library from npm:
@@ -51,6 +55,22 @@ defineButtonComponent();
 
 > **Note:** the components are actually self-defining, but without something in your application referencing those components they could be left out during bundling.
 > These definition functions ensure that the components are bundled within your application.
+
+#### Package format
+
+The `@tylertech/forge` package follows the following format:
+
+- `dist/`: Contains all pre-built static distribution sources.
+  - `<component name>/`: pre-built CSS stylesheets for specific components.
+  - `esm/`: Contains the bundled ESM JavaScript sources (includes dependencies as code-split chunks)
+  - `forge-core.css`: The optional Forge core stylesheet. Typically useful when using the `<forge-scaffold>` for your outer page layout.
+  - `forge-dark.css`: The default Forge dark theme (must be loaded after `forge.css`).
+  - `forge.css`: The pre-built Forge global stylesheet. Contains all required component-specific stylesheets. You should prefer to load individual stylesheets instead of this global stylesheet in production.
+- `esm/`: Contains the unbundled ESM JavaScript sources as the main entry to the package (includes bare module specifiers)
+- `styles/`: Contains all Sass stylesheets as a copy directly from the library.
+- `LICENSE`: The Apache 2.0 license.
+- `package.json`: The package specification.
+- `README.md`: This README.md file.
 
 #### CSS
 
@@ -74,7 +94,6 @@ The `forge.css` file contains other stylesheets that you may or may not need. We
 @use '@tylertech/forge/dist/button/forge-button.css';
 ```
 
-
 Additionally apply the `forge-typography` class to a root element (typically the `<body>`):
 
 ```html
@@ -89,24 +108,19 @@ As an example, the text-field and button components can be loaded directly like 
 
 ```html
 <!-- Optionally include a minimal base set of styles commonly used with Forge-based applications -->
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/forge-core.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/forge-core.css">
 
 <!-- Always include the theme and typography styles -->
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/theme/forge-theme.css">
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/typography/forge-typography.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/theme/forge-theme.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/typography/forge-typography.css">
 
 <!-- Some components (such as button) require the use of a global stylesheet (for now) -->
-<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/forge-button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/button/forge-button.css">
 
 <!-- Load the ES modules JavaScript for each component you need -->
-<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/text-field/index.js"></script>
-<script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@v2/button/index.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/esm/text-field/index.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/esm/button/index.js"></script>
 ```
-
-> **Note:** the Forge CDN always contains the latest published changes on a per major version basis. If you need a specific version
-> please use CDN services such as [unpkg](https://unpkg.com/@tylertech/forge@2.0.0/esm/index.js).
->
-> Additionally, the components will automatically be defined within the custom element registry in the browser when loaded from the CDN.
 
 ### HTML
 
