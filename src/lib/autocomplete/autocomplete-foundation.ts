@@ -180,9 +180,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _onClear(evt: MouseEvent): void {
-    if (!this._selectedOptions.length) {
-      return;
-    }
     this._clearValue();
     this._adapter.setSelectedText(this._getSelectedText());
   }
@@ -458,18 +455,13 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       return;
     }
 
-    // If the user had an option highlighted (changed while the filter was running) we need to capture that before we reset the options
-    const activeIndex = this._adapter.getActiveOptionIndex() ?? -1;
-
     this._sortSelectedOptions();
     this._adapter.setBusyVisibility(false);
     this._adapter.setOptions(this._options);
+    this._adapter.setSelectedOptions(this._selectedOptions);
     this._adapter.setDismissListener(this._dismissListener);
 
-    // If we captured an existing active option index, we need to reset it here after setting the options
-    if (activeIndex >= 0) {
-      this._adapter.activateOptionByIndex(activeIndex);
-    } else if (activateFirst) {
+    if (activateFirst) {
       this._adapter.activateFirstOption();
     }
   }
@@ -707,7 +699,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       this._adapter.setSelectedText(this._getSelectedText());
     }
 
-    // When the value is changed programatically we should update the selected options
+    // When the value is changed programmatically we should update the selected options
     if (this._isDropdownOpen) {
       this._adapter.setSelectedOptions(this._selectedOptions);
     }
