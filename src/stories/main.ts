@@ -2,6 +2,7 @@ module.exports = {
   features: {
     postcss: false,
   },
+  staticDirs: ['./src/assets'],
   stories: ['./src/**/*.stories.*'],
   logLevel: 'debug',
   core: {

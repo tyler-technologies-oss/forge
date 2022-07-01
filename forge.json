@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@tylertech/forge-cli/schema.json",
   "packageOrg": "@tylertech",
   "packageName": "forge",
-  "registry": "https://tylertech.jfrog.io/tylertech/api/npm/forge-npm-local/",
+  "registry": "https://registry.npmjs.org/",
   "license": {
     "header": "/**\n * @license\n * Copyright 2022 Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
   },

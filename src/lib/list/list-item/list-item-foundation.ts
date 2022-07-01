@@ -40,10 +40,12 @@ export class ListItemFoundation implements IListItemFoundation {
   private _wrap = false;
   private _clickListener: (evt: MouseEvent) => void;
   private _mouseDownListener: (evt: MouseEvent) => void;
+  private _keydownListener: (evt: KeyboardEvent) => void;
 
   constructor(private _adapter: IListItemAdapter) {
     this._clickListener = (evt: MouseEvent) => this._onClick(evt);
     this._mouseDownListener = (evt: MouseEvent) => this._onMouseDown(evt);
+    this._keydownListener = (evt: KeyboardEvent) => this._onKeydown(evt);
   }
 
   public initialize(): void {
@@ -58,6 +60,7 @@ export class ListItemFoundation implements IListItemFoundation {
     if (!this._static) {
       this._adapter.addListener('click', this._clickListener);
       this._adapter.addListener('mousedown', this._mouseDownListener, { passive: false, capture: true });
+      this._adapter.addListener('keydown', this._keydownListener);
     }
 
     if (this._threeLine) {
@@ -82,12 +85,25 @@ export class ListItemFoundation implements IListItemFoundation {
     }
   }
 
+  private _onKeydown(evt: KeyboardEvent): void {
+    if (evt.key === 'Enter' || evt.key === ' ') {
+      if (evt.key === ' ') {
+        evt.preventDefault();
+      }
+      this._select(evt.target as HTMLElement);
+    }
+  }
+
   /**
    * Handles clicking a list item.
    * @param evt
    */
   private _onClick(evt: MouseEvent): void {
-    const ignoreElement = evt.target && (evt.target as HTMLElement).hasAttribute(LIST_ITEM_CONSTANTS.attributes.IGNORE);
+    this._select(evt.target as HTMLElement);
+  }
+
+  private _select(targetElement: HTMLElement): void {
+    const ignoreElement = targetElement?.hasAttribute(LIST_ITEM_CONSTANTS.attributes.IGNORE);
     if (this._static || this._disabled || ignoreElement) {
       return;
     }
@@ -106,7 +122,7 @@ export class ListItemFoundation implements IListItemFoundation {
     }
 
     // If the target was not a checkbox or radio button, attempt to find one and toggle its checked state
-    if (!matchesSelectors(evt.target as HTMLElement, LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR)) {
+    if (!matchesSelectors(targetElement, LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR)) {
       this._adapter.tryToggleCheckboxRadio();
     }
 
