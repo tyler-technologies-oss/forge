@@ -14,6 +14,7 @@
     "build": "forge build",
     "start": "npm run storybook",
     "storybook": "cd src/stories && npm start",
+    "dev": "cd src/vite-storybook && npm run storybook",
     "lint": "forge lint",
     "test": "forge test",
     "test:once": "npm run test -- --once",

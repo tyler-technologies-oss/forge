@@ -1,5 +1,4 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
-import { PopupPlacement } from '../popup';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tooltip`;
 

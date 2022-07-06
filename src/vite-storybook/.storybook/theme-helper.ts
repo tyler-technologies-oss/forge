@@ -2,7 +2,7 @@ import addons from '@storybook/addons';
 
 const toggleDarkTheme = (function () {
     let darkHasBeenSet = false;
-    return isDark => {
+    return async isDark => {
 
         // this function can get called multiple times on theme change. Only do the work when it's needed
         if (isDark && darkHasBeenSet || !(isDark || darkHasBeenSet)) {
@@ -10,10 +10,12 @@ const toggleDarkTheme = (function () {
         }
 
         if (isDark) {
-            const stylesheet = require('../lib/forge-dark.scss');
+            const stylesheet = (await import('../../lib/forge-dark.scss?inline' as string)).default;
             let styleTag = document.querySelector('#forge-dark');
-            styleTag = document.createElement('style');
-            styleTag.id = 'forge-dark';
+            if (!styleTag) {
+                styleTag = document.createElement('style');
+                styleTag.id = 'forge-dark';
+            }
             styleTag.textContent = stylesheet;
             document.head.appendChild(styleTag);
             document.body.classList.add('forge-storybook-dark');
@@ -36,8 +38,8 @@ export const listenToThemeChange = () => {
     channel.off('DARK_MODE', isDark => toggleDarkTheme(isDark));
 }
 
-export const addDefaultForgeTheme = () => {
-    const stylesheet = require('../lib/forge.scss');
+export const addDefaultForgeTheme = async () => {
+    const stylesheet = (await import('../../lib/forge.scss?inline' as string)).default;
     let styleTag = document.querySelector('#forge-stylesheet');
     if (!styleTag) {
         styleTag = document.createElement('style');

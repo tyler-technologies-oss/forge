@@ -25,7 +25,7 @@ export const TEXT_FIELD_CONSTANTS = {
 };
 
 export {
-  FieldDensityType as TextFieldDensityType,
-  FieldFloatLabelType as TextFieldFloatLabelType,
-  FieldShapeType as TextFieldShapeType
+  type FieldDensityType as TextFieldDensityType,
+  type FieldFloatLabelType as TextFieldFloatLabelType,
+  type FieldShapeType as TextFieldShapeType
 } from '../field/field-constants';
