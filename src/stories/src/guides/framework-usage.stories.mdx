@@ -1,0 +1,80 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Guides/Framework usage" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Guide' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Guide: Framework usage
+
+While yes, Forge Web Components are framework-agnostic, it can still be very useful to provide what we call framework "adapter" libraries for the various frameworks
+out there to help ease the lives of developers consuming Forge with those frameworks. This guide will walk you through the various frameworks to help you understand
+what the adapter libraries help you with.
+
+> **Note:** it's important to note that the framework adapter libraries are completely **optional**. All components will work as-is within any framework because they
+> are just custom HTML elements like any other HTML element built-in to the web browser. The communication and instantiation of the components is where these adapter
+> libraries shine.
+
+Let's get started!
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Introduction
+
+Web Components give us the ability to create a self contained UI component and distribute that component for use in any application anywhere. The problem here is that
+things don't always work seamlessly in regards to integrating with web frameworks out there such as Angular, React, Vue, Svelte... etc.
+
+There is a great website called [Custom Elements Everywhere](https://custom-elements-everywhere.com/) that does a great job at describing this, and they even provide
+compatibility scores for all major frameworks out there to help you get an idea of whether that specific framework provides built-in support for custom elements or not.
+
+With that being said, it's important to know that custom elements are **just** HTML elements that we can register with the browser. Given that basic description, no matter
+what framework you're using, it will already be inherently compatible. The problem lies in the fact that we can create rich components that work with complex data,
+make use of dynamic elements, or interact with forms and those features may not play nice with the framework of choice.
+
+</PageSection>
+
+--- 
+
+<PageSection>
+
+## Frameworks
+
+Below you will find the various popular front-end web frameworks out there that we either provide adapter libraries for, or have considered in the future.
+
+### Angular
+
+Tyler Technologies makes heavy use of Angular and is by far our most supported framework adapter library. Angular has great built-in compatibility with Web Components,
+but when it comes to interacting with forms, showing dynamic elements such as dialogs, toasts, popups... etc. this is where using the adapter library will really make
+your life easier and make using Forge components seamless.
+
+You can find the Angular adapter library for Forge [here](https://github.com/tyler-technologies-oss/forge-angular).
+
+### React
+
+Out of all of the popular front-end frameworks out there, React surprisingly does not have great Web Component support (latest version React 18 at time of writing).
+In React you must use `ref` to communicate with custom elements when passing complex data such as objects and arrays, or when listening to custom events. This makes
+working with custom elements cumbersome and many revert to creating React component wrappers.
+
+The Forge team maintains a set of React component wrappers for every component in the library to help make this easier. You can find more information [here](https://github.com/tyler-technologies-oss/forge-react).
+
+> This documentation site is built with React using those very same component wrappers!
+
+### Svelte
+
+Svelte is a fantastic and modern web framework. Web Component support is great in this framework, and while we do not offer an adapter library at this time, we intend
+to build one very soon as we invest more into using Svelte internally.
+
+### Vue
+
+Vue, like Angular, offers great built-in support for Web Components. We do not currently offer an adapter library for Vue at this time.
+
+</PageSection>

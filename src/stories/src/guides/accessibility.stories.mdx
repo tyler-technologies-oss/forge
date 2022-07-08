@@ -1,0 +1,177 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Guides/Accessibility" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Guide' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Guide: Accessibility
+
+As you probably know, accessibility is a broad topic that covers many aspects of the web and beyond. The intention of this guide is to introduce you to
+general web accessibility guidance in how it relates to Forge, as well as applications that consume Forge. We will also go into some common tools that
+you can use to audit your applications for gaps in accessibility, and some techniques you can use in regards to web development in general.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Forge
+
+The Forge library of Web Components strives to take care of a lot of the underlying accessibility requirements for you, but there are often scenarios
+with many components where you may need to provide information that is relative to the context that the components are used in. This is where you can 
+use the component-specific accessibility guidance (found on the "Docs" tab of a specific component section) to help get the details on how you can
+do so on a per-component basis.
+
+Each component in the library either make use of the proper built-in semantic HTML elements, or will provide the correct ARIA roles and attributes to
+create the proper semantic structure.
+
+> We are always looking to improve accessibility across the library. If you find any issues that you think we can take care of at a component-level,
+> please open an issue or pull request on the GitHub repository to get it taken care of.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tools
+
+There are many tools out there to help you run accessibility audits, and get a general idea of the compliance level for given web page. Below we discuss
+some of the more popular tools that we use when testing for accessibility.
+
+### [axe](https://www.deque.com/axe/)
+
+This is probably the most used accessibility tool on the web. It will audit your application and provide the necessary feedback about every possible issue
+you could come across. The results are displayed in an easy to read format, and it even provides you with the information you need to understand and fix
+the problem. This can be installed as an [extension](https://chrome.google.com/webstore/detail/axe-devtools-web-accessib/lhdoppojpmngadmnindnejefpokejbdd)
+in your browser.
+
+### [axe-core](https://github.com/dequelabs/axe-core)
+
+This is the accessibility engine behind the axe. We're mentioning this separately because it is a great tool to integrate into your CI automation to
+ensure that you inspect and receive feedback on accessibility as you make changes to your code.
+
+### [Lighthouse](https://github.com/GoogleChrome/lighthouse)
+
+For those of you that use Chrome, you will find Lighthouse very useful for not only accessibility, but for auditing performance and general best practices.
+
+> **Note:** the accessibility audits in Lighthouse are run using axe-core!
+
+### [Storybook](https://storybook.js.org/)
+
+This documentation site is created with a tool called Storybook. When viewing the component demos you can view the "Accessibility" tab that displays the
+accessibility status of the component in its current state. This can be very useful when developing components in isolation like this to get quick
+feedback on compatibility.
+
+Storybook is great tool that is not only for library developers, but it can be used in application projects as well to develop specific parts of an
+application in isolation and you can take advantage of its vast feature set and various plugins created by the community.
+
+### Browser
+
+An often overlooked tool is the dev tools panel built-in to most web browsers. For example with Chrome, you can view contrast ratios, landmark elements,
+accessibility tree... etc. quick and easily to get a great overall view of your accessibility status.
+
+It can also be very useful to search and install web accessibility extensions available to your browser. This will add additional functionality to help
+alert you to accessibility problems.
+
+### Editor
+
+For most editors you will find accessibility extensions that help alert you to accessibility problems as you are writing your code. Visual Studio Code is
+our editor of choice and you can install accessibility linting extensions that use other tools such as axe to help give you immediate and accurate feedback.
+
+> Do you have any tools that you find useful that may be worth sharing with others? Please feel free to let us know and we'll get it added here!
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Screen readers
+
+It's very important that we test our applications with an actual screen reader. I suggest you close your eyes when doing this as you'll quickly get a good idea of
+how difficult it can be if your page is not properly created with accessibility in mind. If you're having trouble or getting frustrated, imagine how a visually
+impaired person might be feel if that's their only option.
+
+Below you will find some common screen reader tools that you can use for testing.
+
+### [NVDA](https://www.nvaccess.org/)
+
+This is a free and open source screen reader for Windows.
+
+### [JAWS](https://www.freedomscientific.com/products/software/jaws/)
+
+This is another screen reader for Windows that has been around for a long time. It's very popular but will cost money to use.
+
+### VoiceOver
+
+This is a great screen reader built-in to many of Apple's operating systems such as macOS.
+
+> There are many browser extensions out there that you can install to be able to quickly enable and test a web page using a slimmed down screen reader.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Best practices
+
+Below you will find a list of common accessibility guidance best practices that you should keep in mind when creating components and applications. These items
+are commonly found in most applications and provide a great base level set of topics to remember in regards to creating properly accessible web pages.
+
+> The following list is not meant to be exhaustive, but is a great introduction and/or checklist to consider when building an application or library. For more
+> detailed information consider researching the topics on the official [WCAG website](https://www.w3.org/WAI/standards-guidelines/wcag/).
+
+- Use heading elements such as `<h1>` and `<h2>` to create a **hierarchy** of headings rather than using them for styling purposes.
+  - Every page should have an `<h1>` tag as the first heading in the hierarchy.
+  - There should only be one `<h1>` within a specific hierarchy of headings (note: dialogs are considered separate from the main page and can use an `<h1>`)
+  - Consider using the Forge [typography](?path=/docs/guides-typography--page) styles to create the proper design while keeping your heading hierarchy intact.
+- Always use `alt` text on all images.
+  - If you want the image to be perceived as decorative-only, set an empty `alt` attribute: `<img alt="">`
+- Use the correct ARIA landmark elements and/or roles.
+  - You should use semantic elements such as `<header>`, `<main>`, `<footer>`, `<aside>`... etc. just to name a few.
+- Never use color only to convey information.
+  - In addition to color, consider adding a relevant icon potentially.
+- Always add a label to all form fields.
+  - This is commonly done with the `<label>` element, but you can also use ARIA attributes such as `aria-label`
+- Keep related form fields together.
+  - It is common to use elements such as `<fieldset>` and `<legend>` for this.
+- Focusable fields should always provide a clear focus indicator.
+  - Forge components will handle the dirty work for you on this one, but keep it in mind for your own custom components.
+- Always ensure sufficient color contrast ratios are met between foreground and background.
+  - Keep in mind that contrast ratios can change based on `font-size` in regards to text.
+- Ensure that your web pages are usable via **only** keyboard and/or screen reader, specifically menus and navigating to relevant content.
+  - This is often times a very good indicator of whether a web page is accessible or not. It can be very frustrating for these users if otherwise.
+- Test your pages on mobile devices.
+  - Learning to use a mobile-first design paradigm will help with this as it becomes built-in as part of your daily development workflow.
+  - Responsive design can go a long way to helping with this topic.
+- Last but not least: Take accessibility **seriously**. It cannot be ignored!
+
+> **Important:** don't always assume that UI components you are using from libraries such as Forge are perfect. While we ourselves strive for great accessibility
+> support, please don't ignore issues you come across with the Forge components. We are guilty of mistakes just as much as anyone else, and we take accessibility
+> seriously and will get issues resolved quickly.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Next steps?
+
+Audit your application with the tools listed above, and review the component-specific documentation in this site to ensure that your applications and components
+are properly in compliance with WCAG guidelines and best practices. Most issues are fairly quick to fix, and you'll quickly find that the more you pay attention
+to accessibility that it becomes part of your normal development routine as you are writing your code.
+
+> If you have any questions at all, or would like feedback on a particular accessibility topic please feel free to reach out to us at any time. We love talking about
+> and spreading the knowledge of accessibility.
+
+</PageSection>
