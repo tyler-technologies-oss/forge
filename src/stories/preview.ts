@@ -28,7 +28,10 @@ export const parameters = {
           'Typography',
           'Using icons',
           'Component customization',
-          'Sass library'
+          'Sass library',
+          'CSS custom properties',
+          'Accessibility',
+          'Framework usage',
         ],
         'Components',
         'Contributing',
@@ -36,7 +39,8 @@ export const parameters = {
           'Guiding principles',
           'Component architecture',
           'Component tutorial'
-        ]
+        ],
+        'About'
       ],
       method: 'alphabetical'
     },
