@@ -1,4 +1,6 @@
 import { Meta } from '@storybook/addon-docs';
+import LibraryVersion from './core/library-version.tsx';
+import packageJson from '../../../package.json';
 
 <Meta title="Forge" parameters={{
   previewTabs: {
@@ -39,6 +41,11 @@ Please take a look at the following guides to get up and running with using Forg
 - [Theming](?path=/docs/guides-theming--page)
 - [Typography](?path=/docs/guides-typography--page)
 - [Icons](?path=/docs/guides-using-icons--page)
+- [Framework usage](?path=/docs/guides-framework-usage--page)
+- [Changelog](?path=/docs/about-changelog--page)
+- [Roadmap](?path=/docs/about-roadmap--page)
+
+<LibraryVersion packageJson={packageJson} />
 
 </PageSection>
 

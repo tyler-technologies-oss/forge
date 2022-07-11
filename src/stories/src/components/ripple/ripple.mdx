@@ -91,3 +91,21 @@ Manually deactivates the ripple state.
 | `--mdc-ripple-fg-opacity`                     | Controls the opacity of the ripple effect.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+The ripple component itself is just a visual effect on an existing element and therefore only needs to provide colors that pass contrast ratio
+requirements, which is handled internally by the component. The element that the component is attached to however needs to provide various
+accessibility features. For example, if you are attaching the ripple to an arbitrary `<div>` or `<forge-card>` (or any element that isn't typically
+in the natural tab order of the page), then you need to ensure this element is interpreted properly.
+
+- Ensure that any elements this attached to receive the proper `role` attribute, commonly `role="button"`.
+- If the element can be disabled, be sure to apply the `aria-disabled="true"` attribute.
+- Always provide an `aria-label` or `aria-describedby` attribute to help users determine what the element is intended to be used for.
+- Ensure that the element is available in the tab order by providing a `tabindex="0"` attribute.
+
+> **Note:** using the ripple with an element to convert it into a button is a common usage. Be sure to follow the guidance noted above in this case.
+
+</PageSection>
