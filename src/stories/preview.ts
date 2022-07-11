@@ -24,8 +24,8 @@ export const parameters = {
         'Guides',
         [
           'Getting started',
-          'Theming',
           'Typography',
+          'Theming',
           'Using icons',
           'Component customization',
           'Sass library',
