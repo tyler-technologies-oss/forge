@@ -153,3 +153,14 @@ Forces the expansion panel to expand/collapse immediately **without** transition
 | `--forge-expansion-panel-height`             | Sets the height style on the internal panel container.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that the user can focus on the element which activates and deactivates the expansion panel.
+  - Ensure that the expansion panel can be activated by keyboard.
+- Ensure that the `aria-expanded` attribute is updated to reflect the state of the expandable panel, especially when toggling its state programmatically.
+  - This attribute is handled for you inside the expansion-panel component.
+
+</PageSection>

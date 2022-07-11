@@ -104,3 +104,16 @@ Manually syncs the checked state in the component.
 | `--mdc-theme-text-hint-on-background`           | Controls the disabled font color.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- Radio buttons should be part of a radio group and interpreted as such by assistive technologies such as screen readers.
+  - Ensure that your radio buttons are contained inside of an element with the `role="radiogroup"` attribute.
+  - Ensure that your radio group also has an `aria-label` attribute describing its purpose.
+
+</PageSection>
