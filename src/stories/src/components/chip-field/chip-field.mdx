@@ -195,6 +195,19 @@ Controls the floating state of the label. Call this to manually float the label.
 
 <PageSection>
 
+## Accessibility
+
+- Add an `id` to your `<input>` element and bind it to your `<label>` element using the `for` attribute on the `<label>`.
+- Ensure that the chips that are added to the field have descriptive `aria-label` or `aria-labelledby` attributes.
+- Make sure that the member chips that are added can be accessed via the keyboard left and right arrows.
+  - There should be a distinct visual cue that indicates which chip is focused
+- Similarly, make sure that when a chip is focused using the arrow keys, that the backspace and delete keys do remove them.
+- Ensure that when disabled, the entire field as well as the member chips all appear visually and interactively disabled.
+
+</PageSection>
+
+<PageSection>
+
 ## Types
 
 ### ChipFieldFloatLabelType

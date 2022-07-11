@@ -33,7 +33,7 @@ Let's get started!
 Web Components give us the ability to create a self contained UI component and distribute that component for use in any application anywhere. The problem here is that
 things don't always work seamlessly in regards to integrating with web frameworks out there such as Angular, React, Vue, Svelte... etc.
 
-There is a great website called [Custom Elements Everywhere](https://custom-elements-everywhere.com/) that does a great job at describing this, and they even provide
+There is a great website called [Custom Elements Everywhere](https://custom-elements-everywhere.com/) that does a nice job at describing this, and they even provide
 compatibility scores for all major frameworks out there to help you get an idea of whether that specific framework provides built-in support for custom elements or not.
 
 With that being said, it's important to know that custom elements are **just** HTML elements that we can register with the browser. Given that basic description, no matter
@@ -52,9 +52,21 @@ Below you will find the various popular front-end web frameworks out there that 
 
 ### Angular
 
-Tyler Technologies makes heavy use of Angular and is by far our most supported framework adapter library. Angular has great built-in compatibility with Web Components,
+Tyler Technologies makes heavy use of Angular and is our most used framework adapter library. Angular has great built-in compatibility with Web Components,
 but when it comes to interacting with forms, showing dynamic elements such as dialogs, toasts, popups... etc. this is where using the adapter library will really make
 your life easier and make using Forge components seamless.
+
+When you create a custom element that interacts with a form, you can integrate this with Angular's `formControl`, `formControlName`, and `ngModel` by creating what
+Angular calls `ControlValueAccessor` directives. These directives teach Angular how to get/set the value of the custom form fields. This adapter library provides these
+directives for you, and all you need to do is simply import the Angular module that contains them.
+
+Along with the directives, this library also provides Angular services to make it easy to show dynamic elements such as toast messages, dialogs, and popups with Angular
+components embedded.
+
+> One caveat of using Web Components (specifically custom elements) with Angular is the requirement to specify the `CUSTOM_ELEMENTS_SCHEMA` in your Angular module. This
+> schema tells Angular to ignore elements that it does not know about, which essentially disables some useful feedback you'd usually receive from the tooling.
+>
+> This caveat can be circumvented by creating Angular component wrappers if desired. We do not provide wrapper components like this at this time.
 
 You can find the Angular adapter library for Forge [here](https://github.com/tyler-technologies-oss/forge-angular).
 
@@ -73,8 +85,11 @@ The Forge team maintains a set of React component wrappers for every component i
 Svelte is a fantastic and modern web framework. Web Component support is great in this framework, and while we do not offer an adapter library at this time, we intend
 to build one very soon as we invest more into using Svelte internally.
 
+Svelte mostly works seamlessly with Web Components, but there are some things we can do to improve the experience around dynamic elements and we intend to build that out soon.
+
 ### Vue
 
-Vue, like Angular, offers great built-in support for Web Components. We do not currently offer an adapter library for Vue at this time.
+Vue, like Svelte and Angular, offers great built-in support for Web Components. We do not currently offer an adapter library for Vue at this time, but if the need is there
+we can certainly put one together.
 
 </PageSection>
