@@ -162,6 +162,22 @@ Controls the hover mode on the mini drawer. Allowing the mini drawer to expand w
 
 <PageSection>
 
+## Accessibility
+
+- Ensure that each destination (menu item) in the drawer is reachable by keyboard.
+- There should be a distinct visual style for the currently focused destination.
+- Arrow up and down keys should also change focus in addition to tab and shift-tab.
+- Ensure that shift or enter key will activate the currently focused destination in the same manner as clicking with the mouse.
+
+> The drawer component does **not** provide any semantics by default. Developers should provide their own `<aside>` for navigation,
+> or various ARIA roles in other scenarios.
+
+</PageSection>
+
+---
+
+<PageSection>
+
 ## Types
 
 ### DrawerDirection

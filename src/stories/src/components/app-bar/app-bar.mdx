@@ -153,3 +153,14 @@ The following example shows the usage of all of the common app-bar elements plac
 | `--forge-app-bar-theme-disabled-on-light`             | Sets the `--mdc-theme-text-disabled-on-light`.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Ensure that the user can interact with each sub-component of the app bar using only the keyboard.
+* The app bar component will use an `<h1>` for the title by default. If you override the title slot content, be sure to use the proper heading element.
+    * Only **one** `<h1>` should be on a page at any given time (unless a new heading hierarchy is created as a sibling).
+* A `<header>` element is built-in to the app bar component.
+
+</PageSection>

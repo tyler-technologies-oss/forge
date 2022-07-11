@@ -203,6 +203,17 @@ Starts removal process from the DOM.
 
 <PageSection>
 
+## Accessibility
+
+- Ensure the busy indicator provides a role attribute with value `alert`, and an `aria-busy` attribute with the value `true` while the busy indicator is active.
+- If a cancel button is enabled, ensure it is accessible via the keyboard while the busy indicator is active, and that it works the same as if it had been clicked by a mouse.
+
+</PageSection>
+
+---
+
+<PageSection>
+
 ## Types
 
 ### IBusyIndicatorMessage

@@ -3,7 +3,7 @@ import { addForgeDocsCoreStyles } from './forge-react-style-helper';
 import { defineComponents } from '../lib';
 import { StorybookMdxComponents } from './StorybookMdxProvider';
 import forgeTheme from './forge-theme';
-import { themes } from "@storybook/theming";
+import { themes } from '@storybook/theming';
 
 defineComponents();
 addDefaultForgeTheme();
@@ -46,7 +46,7 @@ export const parameters = {
     },
   },
   docs: {
-    components: {...StorybookMdxComponents},
+    components: {...StorybookMdxComponents}
   },
   darkMode: {
     light: {
