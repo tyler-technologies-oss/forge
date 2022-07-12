@@ -18,7 +18,7 @@ export interface IVirtualScrollerOptions<T = unknown> {
 }
 
 /**
- * An object used by a virtual scroller to keep track of its child elements.
+ * An object used by a virtual scroller to encapsulate a child element, its height, and a tracking function.
  */
 export interface IVirtualScrollerItem {
   /**

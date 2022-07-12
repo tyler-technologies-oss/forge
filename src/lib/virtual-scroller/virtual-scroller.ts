@@ -137,8 +137,10 @@ export class VirtualScroller<T = unknown> {
 
   /**
    * The function that runs when the container element is scrolled.
+   * 
+   * @todo Determine the correct type of a scroll event.
    */
-  private _scrollListener: (evt: Event) => void; // What's the type of a scroll event?
+  private _scrollListener: (evt: Event) => void;
 
   // Getters
 
