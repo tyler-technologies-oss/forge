@@ -10,9 +10,15 @@
     return listItem;
   };
   var options = {
-    buffer: 0,
+    buffer: 10,
+    itemBuilder: builder,
+    itemHeight: 48,
+    container: list,
+    data,
     insetTop: '8px',
-    insetBottom: '8px'
+    insetBottom: '8px',
+    startIndex: 50,
+    scrollAlignment: 'center'
   };
-  var virtualScroller = new VirtualScroller(list, data, builder, 48, options);
+  var virtualScroller = new VirtualScroller(options);
 })(window.Forge.lib);
