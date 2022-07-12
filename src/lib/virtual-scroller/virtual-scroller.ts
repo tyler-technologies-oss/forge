@@ -375,11 +375,16 @@ export class VirtualScroller<T = unknown> {
     // Add items to the end of the container
     if (max < lastToRender) {
       const count = this.appendOnly ? lastToRender - max : limitCountToRender(lastToRender - max, this._numberOfItemsToRender);
-      const start = lastToRender - count;
+      const start = lastToRender - count + 1;
 
       for (let i = start; i <= lastToRender; i++) {
         this._appendItem(i);
       }
+    }
+
+    // Prepend 0 if missed by the other loops
+    if (firstToRender === 0 && this._data.length && !this._itemsToRender.has(0)) {
+      this._prependItem(0);
     }
   }
 
