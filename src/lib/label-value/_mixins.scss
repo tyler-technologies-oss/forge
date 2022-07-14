@@ -1,10 +1,197 @@
-@use './core';
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/typography/typography' as mdc-typography;
+@use './variables';
 
 @mixin host() {
   display: block;
   min-width: 0;
 }
 
+@mixin base() {
+  display: flex;
+  min-height: variables.$height;
+}
+
+@mixin container() {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+@mixin icon-container() {
+  display: flex;
+  align-items: flex-start;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin align-center() {
+  align-items: center;
+}
+
+@mixin align-right() {
+  align-items: flex-end;
+}
+
+@mixin label() {
+  @include mdc-typography.typography(caption);
+  @include mdc-theme.property(color, text-secondary-on-background);
+
+  font-size: 13px;
+  line-height: 1.9rem;
+}
+
+@mixin value() {
+  @include mdc-typography.typography(body1);
+
+  line-height: 0.6rem;
+}
+
+@mixin roomy() {
+  min-height: variables.$roomy-height;
+}
+
+@mixin dense() {
+  min-height: variables.$dense-height;
+}
+
+@mixin container-dense() {
+  flex-direction: row;
+  align-items: center;
+}
+
+@mixin dense-label() {
+  line-height: 1.25rem;
+  margin-right: 8px;
+}
+
+@mixin dense-value() {
+  line-height: 1.25rem;
+  font-size: 0.875rem;
+}
+
+@mixin roomy-label() {
+  line-height: 2.1rem;
+}
+
+@mixin roomy-value() {
+  line-height: 0.6rem;
+}
+
+@mixin empty-value() {
+  @include mdc-theme.property(color, text-secondary-on-background);
+
+  font-style: italic;
+}
+
+@mixin icon() {
+  @include mdc-theme.property(color, text-primary-on-background);
+
+  font-size: 1.25rem !important;
+  margin-right: 8px;
+  margin-top: 4px;
+}
+
+@mixin dense-icon() {
+  margin-top: 2px;
+}
+
+@mixin roomy-icon() {
+  margin-top: 6px;
+}
+
 @mixin core-styles() {
-  @include core.core-styles;
+  .forge-label-value {
+    @include base;
+
+    &__container {
+      @include container;
+    }
+
+    &__icon-container {
+      @include icon-container;
+
+      ::slotted([slot='icon']) {
+        @include icon;
+      }
+    }
+
+    &--align-center {
+      .forge-label-value__container {
+        @include align-center;
+      }
+    }
+
+    &--align-right {
+      .forge-label-value__container {
+        @include align-right;
+      }
+    }
+
+    &__label {
+      @include label;
+    }
+
+    &__value {
+      @include value;
+    }
+
+    &--roomy {
+      @include roomy;
+
+      .forge-label-value__label {
+        @include roomy-label;
+      }
+
+      .forge-label-value__value {
+        @include roomy-value;
+      }
+
+      ::slotted([slot='icon']) {
+        @include roomy-icon;
+      }
+    }
+
+    &--dense {
+      @include dense;
+
+      .forge-label-value__container {
+        @include container-dense;
+
+        .forge-label-value__label {
+          @include dense-label;
+        }
+
+        .forge-label-value__value {
+          @include dense-value;
+        }
+
+      }
+      
+      ::slotted([slot='icon']) {
+        @include dense-icon;
+      }
+    }
+
+    &--empty {
+      .forge-label-value__value {
+        @include empty-value;
+      }
+    }
+
+    &--ellipsis {
+      .forge-label-value__container {
+        overflow: hidden;
+
+        .forge-label-value__label,
+        .forge-label-value__value {
+          @include ellipsis;
+        }
+      }
+    }
+  }
 }
