@@ -35,11 +35,7 @@ describe('ButtonComponent', function(this: ITestContext) {
     it('should receive correct default classes', async function(this: ITestContext) {
       this.context = setupTestContext();
       const buttonElement = (this.context as ITestButtonContext).buttonElement;
-      expect(buttonElement.classList.contains(BUTTON_CONSTANTS.classes.BUTTON)).toBe(true, 'Expected the default button class');
-
-      // Waiting a frame because ForgeRipple doesn't set its classes until the next cycle
-      await tick();
-      expect(buttonElement.classList.contains('mdc-ripple-upgraded')).toBe(true, 'Expected the mdc-ripple-upgraded class');
+      expect(buttonElement.classList.contains(BUTTON_CONSTANTS.classes.BUTTON)).withContext('Expected the default button class').toBeTrue();
     });
 
     it('should not receive other type classes', function(this: ITestContext) {
@@ -91,6 +87,26 @@ describe('ButtonComponent', function(this: ITestContext) {
       await tick();
       expect(icon.classList.contains(BUTTON_CONSTANTS.classes.ICON)).toBeTrue();
       expect(icon.getAttribute('aria-hidden') === 'true').toBeTrue();
+    });
+
+    it('should not set ripple when initialized', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      await tick();
+
+      const ripple = this.context.component['_rippleInstance'];
+      expect(ripple).toBeFalsy();
+    });
+
+    it('should set ripple after user interaction', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      await tick();
+
+      const button = this.context.component.querySelector('button') as HTMLButtonElement;
+      button.dispatchEvent(new Event('pointerenter'));
+      await tick();
+
+      const ripple = this.context.component['_rippleInstance'];
+      expect(ripple).toBeTruthy();
     });
   });
 

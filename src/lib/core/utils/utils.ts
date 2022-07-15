@@ -24,3 +24,40 @@ export function highlightTextHTML(label: string, highlightText: string): HTMLEle
 
   return undefined;
 }
+
+
+/**
+ * Awaits user interaction on an element in the form of `pointerenter` or `focusin` to let a listener know
+ * when the user has attempted to interact with the provided element.
+ * 
+ * The listeners are only called once, and the other is removed after one of the listeners is called.
+ * @param element The element to listen to.
+ * @param capture Whether to use capturing listeners or not.
+ * @returns A `Promise` that will be resolved when either of the listeners has executed.
+ */
+export function userInteractionListener(element: HTMLElement, { capture = true, pointerenter = true, focusin = true } = {}): Promise<'pointerenter' | 'focusin'> {
+  return new Promise<'pointerenter' | 'focusin'>(resolve => {
+    const listenerOpts: EventListenerOptions & { once: boolean } = { once: true, capture };
+  
+    const handlePointerenter = (): void => {
+      if (focusin) {
+        element.removeEventListener('focusin', handleFocusin, listenerOpts);
+      }
+      resolve('pointerenter');
+    };
+  
+    const handleFocusin = (): void => {
+      if (pointerenter) {
+        element.removeEventListener('pointerenter', handlePointerenter, listenerOpts);
+      }
+      resolve('focusin');
+    };
+
+    if (pointerenter) {
+      element.addEventListener('pointerenter', handlePointerenter, listenerOpts);
+    }
+    if (focusin) {
+      element.addEventListener('focusin', handleFocusin, listenerOpts);
+    }
+  });
+}
