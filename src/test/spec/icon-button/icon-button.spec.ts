@@ -1,6 +1,6 @@
 import { ForgeRipple } from '@tylertech/forge/ripple';
 import { removeElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { tick, timer } from '@tylertech/forge-testing';
 import { defineIconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '@tylertech/forge/icon-button';
 
 interface ITestContext {
@@ -13,6 +13,7 @@ interface ITestIconButtonContext {
   getIconElements(): NodeListOf<HTMLElement>;
   append(): void;
   destroy(): void;
+  simulateInteraction(): Promise<void>; // Simulates a user interaction with the button to instantiate the ripple
 }
 
 describe('IconButtonComponent', function(this: ITestContext) {
@@ -35,7 +36,7 @@ describe('IconButtonComponent', function(this: ITestContext) {
       expect(this.context.component.toggle).toBe(false);
     });
 
-    it('should not intialize if no button element is provided', function(this: ITestContext) {
+    it('should not initialize if no button element is provided', function(this: ITestContext) {
       this.context = setupTestContext(false, false, false);
       expect(this.context.component['rippleInstance']).toBeUndefined();
     });
@@ -50,6 +51,7 @@ describe('IconButtonComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       const button = this.context.getButtonElement();
+      await this.context.simulateInteraction();
       await tick();
       expect(button.classList.contains('mdc-ripple-upgraded')).toBe(true);
       expect(button.classList.contains('mdc-ripple-upgraded--unbounded')).toBe(true);
@@ -110,19 +112,6 @@ describe('IconButtonComponent', function(this: ITestContext) {
 
       const renderedIcons = button.querySelectorAll('i') as NodeListOf<HTMLElement>;
       expect(renderedIcons.item(1).classList.contains('forge-icon-button__icon--on')).toBe(true);
-    });
-
-    it('should throw error when icon count does not match 2', async function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
-      const button = this.context.getButtonElement();
-      const icon = document.createElement('i') as HTMLElement;
-      icon.textContent = 'face';
-      button.appendChild(icon);
-
-      const onerror = spyOn<any>(window, 'onerror');
-      this.context.append();
-      await tick();
-      expect(onerror).toHaveBeenCalledTimes(1);
     });
 
     it('should use toggle when set via attribute', async function(this: ITestContext) {
@@ -309,19 +298,27 @@ describe('IconButtonComponent', function(this: ITestContext) {
   });
 
   describe('ripple', function(this: ITestContext) {
-    it('should reset ripple when initializing', async function(this: ITestContext) {
+    it('should not set ripple when initialized', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
-      const ripple: ForgeRipple = this.context.component['_rippleInstance'];
-      const rippleDestroySpy = spyOn(ripple, 'destroy');
-      expect(rippleDestroySpy.calls.count()).toBe(0);
-      this.context.component['_initialize']();
-      expect(rippleDestroySpy.calls.count()).toBe(1);
+
+      const ripple = this.context.component['_rippleInstance'];
+      expect(ripple).toBeFalsy();
+    });
+
+    it('should set ripple after user interaction', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      await tick();
+      await this.context.simulateInteraction();
+
+      const ripple = this.context.component['_rippleInstance'];
+      expect(ripple).toBeTruthy();
     });
 
     it('should layout the ripple via component', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
+      await this.context.simulateInteraction();
       const ripple: ForgeRipple = this.context.component['_rippleInstance'];
       const rippleLayoutSpy = spyOn(ripple, 'layout');
       expect(rippleLayoutSpy.calls.count()).toBe(0);
@@ -366,7 +363,14 @@ describe('IconButtonComponent', function(this: ITestContext) {
       getButtonElement: () => component.querySelector('button') as HTMLButtonElement,
       getIconElements: () => component.querySelectorAll('i') as NodeListOf<HTMLElement>,
       append: () => document.body.appendChild(fixture),
-      destroy: () => removeElement(fixture)
+      destroy: () => removeElement(fixture),
+      simulateInteraction: async () => {
+        const button = component.querySelector('button');
+        if (button) {
+          button.dispatchEvent(new Event('pointerenter'));
+          await timer();
+        }
+      }
     };
   }
 });
