@@ -22,7 +22,16 @@ Typography defines a set of consistent font styles use through your applications
 
 ## Getting started
 
-Forge relies on a class to be set on the root element, typically the `<body>` tag, that all subsequent elements/classes inherit from.
+The first thing we will need to do is include the font file from the Forge CDN in your `<head>`:
+
+```html
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css">
+```
+
+> This will load the Roboto font and weights that Forge requires from that font.
+
+Forge also relies on a class to be set on a parent element (typically the `<body>` tag in most applications but can be any parent element) that all subsequent
+elements/classes inherit base-level typography styles from:
 
 ```html
 <body class="forge-typography">
