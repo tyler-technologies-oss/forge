@@ -1,6 +1,7 @@
 import { coerceBoolean, coerceNumber, CustomElement, emitEvent, ensureChild, toggleClass } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ForgeRipple } from '../ripple';
+import { userInteractionListener } from '../core/utils';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
 
 export interface IIconButtonComponent extends IBaseComponent {
@@ -154,10 +155,25 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
       this._initializeToggle();
     }
 
+    // We wait to initialize the ripple instance until the user interacts with the component to avoid unnecessary performance overhead
+    this._deferRippleInitialization();
+  }
+
+  private async _deferRippleInitialization(): Promise<void> {
+    const type = await userInteractionListener(this._buttonElement);
+    if (!this._rippleInstance) {
+      this._initRipple();
+      if (type === 'focusin') {
+        // eslint-disable-next-line @typescript-eslint/dot-notation
+        (this._rippleInstance as ForgeRipple)['foundation'].handleFocus();
+      }
+    }
+  }
+
+  private _initRipple(): void {
     if (this._rippleInstance) {
       this._rippleInstance.destroy();
     }
-
     this._rippleInstance = new ForgeRipple(this._buttonElement);
     this._rippleInstance.unbounded = true;
   }
@@ -215,7 +231,8 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
 
     // We require two icon/image elements to be specified for the "on" and "off" states
     if (icons.length !== 2) {
-      throw new Error('You must specify two icons, one for "on" and one for "off".');
+      console.error('You must specify two icons, one for "on" and one for "off".');
+      return;
     }
 
     // Add the icon class to each icon
