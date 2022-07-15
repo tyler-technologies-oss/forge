@@ -1,6 +1,7 @@
 import { CustomElement, ensureChildren, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { BUTTON_CONSTANTS } from './button-constants';
+import { userInteractionListener } from '../core/utils';
 import { ForgeRipple } from '../ripple';
 
 export interface IButtonComponent extends IBaseComponent {
@@ -120,6 +121,22 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
     this._syncDisabledState();
     this._initializeButtonChildren();
 
+    // We wait to initialize the ripple instance until the user interacts with the component to avoid unnecessary performance overhead
+    this._deferRippleInitialization();
+  }
+
+  private async _deferRippleInitialization(): Promise<void> {
+    const type = await userInteractionListener(this._buttonElement);
+    if (!this._rippleInstance) {
+      this._initRipple();
+      if (type === 'focusin') {
+        // eslint-disable-next-line @typescript-eslint/dot-notation
+        (this._rippleInstance as ForgeRipple)['foundation'].handleFocus();
+      }
+    }
+  }
+
+  private _initRipple(): void {
     if (this._rippleInstance) {
       this._rippleInstance.destroy();
     }
