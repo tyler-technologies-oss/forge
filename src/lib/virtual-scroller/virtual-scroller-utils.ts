@@ -11,14 +11,14 @@ import { IVirtualScrollerItem, IVirtualScrollerItemBuilderResult, VirtualScrolle
  */
 export function createSpacer(height: number, marginTop: string, marginBottom: string): HTMLElement {
   const spacer = document.createElement('div');
-  spacer.style.position = 'absolute';
-  spacer.style.top = '0';
-  spacer.style.left = '0';
-  spacer.style.width = '1px';
-  spacer.style.height = `${height}px`;
-  spacer.style.marginTop = marginTop;
-  spacer.style.marginBottom = marginBottom;
-  spacer.style.pointerEvents = 'none';
+  spacer.style.setProperty('position', 'absolute');
+  spacer.style.setProperty('top', '0');
+  spacer.style.setProperty('left', '0');
+  spacer.style.setProperty('width', '1px');
+  spacer.style.setProperty('height', `${height}px`);
+  spacer.style.setProperty('margin-top', marginTop);
+  spacer.style.setProperty('margin-bottom', marginBottom);
+  spacer.style.setProperty('pointer-events', 'none');
   toggleAttribute(spacer, true, 'aria-hidden', 'true');
   return spacer;
 }
@@ -33,8 +33,8 @@ export function createSpacer(height: number, marginTop: string, marginBottom: st
  */
 export function createItem<T>(index: number, data: T, builder: VirtualScrollerItemBuilder<T>): IVirtualScrollerItem {
   const item = coerceVirtualScrollerItemBuilderResult(builder(data, index));
-  item.element.style.position = 'absolute';
-  item.element.style.left = '0';
+  item.element.style.setProperty('position', 'absolute');
+  item.element.style.setProperty('left', '0');
   return item;
 }
 

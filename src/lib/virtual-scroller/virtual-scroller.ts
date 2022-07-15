@@ -42,7 +42,7 @@ export class VirtualScroller<T = unknown> {
   private _insetTop = '0px';
 
   /**
-   * The function provided to create item elements from data.
+   * The function provided to create items from data.
    */
   private _itemBuilder: VirtualScrollerItemBuilder<T>;
 
@@ -209,6 +209,7 @@ export class VirtualScroller<T = unknown> {
     this._initScrollListener();
 
     this._layoutItems();
+    this._renderItems();
   }
 
   /**
@@ -266,6 +267,7 @@ export class VirtualScroller<T = unknown> {
    */
   private _onScroll(evt: Event): void {
     this._layoutItems();
+    this._renderItems();
   }
 
   /**
@@ -329,14 +331,12 @@ export class VirtualScroller<T = unknown> {
   }
 
   /**
-   * Retrieves the scroll position and first and last visible items,
-   * then renders item elements to the DOM.
+   * Retrieves the scroll position and first and last visible items.
    */
   private _layoutItems(): void {
     this._scrollTop = this._container.scrollTop;
     this._first = this._getFirst();
     this._last = this._getLast();
-    this._renderItems();
   }
 
   /**
@@ -350,9 +350,9 @@ export class VirtualScroller<T = unknown> {
     let max = 0;
 
     // Remove hidden items and get the min and max already rendered items
-    this._itemsToRender.forEach((element, index) => {
+    this._itemsToRender.forEach((item, index) => {
       if (!this.appendOnly && (index < firstToRender || index > lastToRender)) {
-        this._container.removeChild(element.element);
+        this._container.removeChild(item.element);
         this._itemsToRender.delete(index);
       }
 
@@ -419,7 +419,7 @@ export class VirtualScroller<T = unknown> {
   }
 
   /**
-   * Create an item element and adds it to the end of the container element.
+   * Creates an item element and adds it to the end of the container element.
    * 
    * @param index The index of the item to add.
    */
@@ -496,7 +496,7 @@ export class VirtualScroller<T = unknown> {
   }
   public set insetBottom(value: string) {
     this._insetBottom = value;
-    this._spacer.style.marginBottom = this._insetBottom;
+    this._spacer.style.setProperty('margin-bottom', this._insetBottom);
   }
 
   public get insetTop(): string {
@@ -504,7 +504,7 @@ export class VirtualScroller<T = unknown> {
   }
   public set insetTop(value: string) {
     this._insetTop = value;
-    this._spacer.style.marginTop = this._insetTop;
+    this._spacer.style.setProperty('margin-top', this.insetTop);
     this._rerenderItems();
   }
 
