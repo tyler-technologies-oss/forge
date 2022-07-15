@@ -24,6 +24,7 @@ $color: tertiary !default; // FORGE (modify): use tertiary theme by default
 $track-color: transparent !default;
 $size: 72px !default; // FORGE (new): added default size
 $stroke-width: 4; // FORGE (new): added default stroke-width
+$radius: 22; // FORGE (new): added default radius
 
 /// The rotation position of the arcs that corresponds to their fully contracted state
 $base-angle: 135deg !default;
