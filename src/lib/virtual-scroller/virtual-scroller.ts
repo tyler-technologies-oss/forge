@@ -194,7 +194,9 @@ export class VirtualScroller<T = unknown> {
     this._setSize = this._data.length;
     this._scrollHeight = this._setSize * this._itemHeight;
 
-    this._container.style.overflowY = 'auto';
+    if (this._container.style.overflowY !== 'scroll') {
+      this._container.style.setProperty('overflow-y', 'auto');
+    }
 
     this._removeSpacer();
     this._spacer = createSpacer(this._scrollHeight, this._insetTop, this._insetBottom);
