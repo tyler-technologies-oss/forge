@@ -1,3 +1,15 @@
+# v2.3.0 (Mon Jul 18 2022)
+
+#### 🚀 Enhancement
+
+- revert(circular-progress): reverted changes to radius customization t… [#119](https://github.com/tyler-technologies-oss/forge/pull/119) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.2.1 (Mon Jul 18 2022)
 
 #### 🐛 Bug Fix
