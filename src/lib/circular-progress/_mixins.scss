@@ -76,7 +76,6 @@
     // FORGE (new): added custom properties for setting stroke-width and radius
     circle {
       @include theme.css-custom-property(stroke-width, --forge-circular-progress-stroke-width, variables.$stroke-width);
-      @include theme.css-custom-property(r, --forge-circular-progress-radius, variables.$radius);
     }
 
     ::slotted(*) {
