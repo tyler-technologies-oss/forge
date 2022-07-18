@@ -1,3 +1,15 @@
+# v2.2.1 (Mon Jul 18 2022)
+
+#### 🐛 Bug Fix
+
+- fix(circular-progress): fixed visibility of component on Firefox and Safari [#118](https://github.com/tyler-technologies-oss/forge/pull/118) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.2.0 (Fri Jul 15 2022)
 
 :tada: This release contains work from a new contributor! :tada:
