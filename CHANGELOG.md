@@ -1,3 +1,26 @@
+# v2.4.0 (Tue Aug 09 2022)
+
+#### 🚀 Enhancement
+
+- feat(storybook): add GA code snippet [#120](https://github.com/tyler-technologies-oss/forge/pull/120) ([@nickonometry](https://github.com/nickonometry))
+
+#### 🐛 Bug Fix
+
+- fix(theme): Fix elevation references in shadow mixin [#125](https://github.com/tyler-technologies-oss/forge/pull/125) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### ⚠️ Pushed to `main`
+
+- chore: added note to roadmap about current state of library ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: add note about dense attribute in icon button docs ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v2.3.0 (Mon Jul 18 2022)
 
 #### 🚀 Enhancement
