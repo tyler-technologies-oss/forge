@@ -4,6 +4,7 @@
 @use '@material/theme/theme-color' as mdc-theme-color;
 @use '@material/theme/replace';
 @use '@material/theme/keys' as mdc-keys;
+@use '@material/elevation/elevation-theme' as elevation-theme;
 @use './custom-properties';
 @use './keys';
 @use './theme-values';
@@ -251,7 +252,7 @@
   @return #{$umbra-z-value} #{$umbra-color}, #{$penumbra-z-value} #{$penumbra-color}, #{$ambient-z-value} #{$ambient-color};
 }
 
-@mixin shadow($z-value, $color: $mdc-elevation-baseline-color, $opacity-boost: 0) {
+@mixin shadow($z-value, $color: elevation-theme.$baseline-color, $opacity-boost: 0) {
   box-shadow: elevation($z-value, $color, $opacity-boost);
 }
 
