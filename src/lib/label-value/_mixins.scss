@@ -41,14 +41,17 @@
   @include mdc-typography.typography(caption);
   @include mdc-theme.property(color, text-secondary-on-background);
 
-  font-size: 13px;
-  line-height: 1.9rem;
+  font-size: variables.$label-size;
+  height: variables.$label-size;
+  line-height: variables.$label-size;
+  margin-top: 0.5rem;
 }
 
 @mixin value() {
   @include mdc-typography.typography(body1);
 
-  line-height: 0.6rem;
+  line-height: 1rem;
+  margin-top: 0.375rem;
 }
 
 @mixin roomy() {
@@ -65,21 +68,21 @@
 }
 
 @mixin dense-label() {
-  line-height: 1.25rem;
+  margin-top: 0;
   margin-right: 8px;
 }
 
 @mixin dense-value() {
-  line-height: 1.25rem;
+  margin-top: 0;
   font-size: 0.875rem;
 }
 
 @mixin roomy-label() {
-  line-height: 2.1rem;
+  margin-top: 0.625rem;
 }
 
 @mixin roomy-value() {
-  line-height: 0.6rem;
+  margin-top: 0.5rem;
 }
 
 @mixin empty-value() {
