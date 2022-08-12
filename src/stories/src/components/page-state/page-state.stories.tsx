@@ -1,5 +1,6 @@
-import { Meta } from '@storybook/react';
-import { DefaultTemplate } from './templates/default';
+import React from 'react';
+import { Meta, Story } from '@storybook/react';
+import { ForgeButton, ForgePageState } from '@tylertech/forge-react';
 import { IPageStateProps, argTypes } from './page-state-args';
 const MDX = require('./page-state.mdx').default;
 
@@ -9,11 +10,38 @@ export default {
   parameters: { 
     docs: { 
       page: MDX
-    },
-  },
+    }
+  }
 } as Meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: Story<IPageStateProps> = ({
+  hasGraphic = true,
+  hasTitle = true,
+  hasMessage = true,
+  hasActions = true
+}) => {
+  return (
+    <ForgePageState>
+      {hasGraphic && <img src="https://cdn.forge.tylertech.com/v1/images/spot-hero/404-error-spot-hero.svg" alt="" slot="graphic" />}
+      {hasTitle && <div slot="title">Nothing but tumbleweeds here...</div>}
+      {hasMessage && 
+        <p slot="message">
+          Even our best explorer couldn't find the page you're looking for. It might have been removed or you may have
+          mistyped the URL.
+        </p>}
+      {hasActions && 
+        <>
+          <ForgeButton type="raised" slot="action">
+            <button type="button">Go back</button>
+          </ForgeButton>
+          <ForgeButton type="outlined" slot="action">
+            <button type="button">Refresh</button>
+          </ForgeButton>
+        </>
+      }
+    </ForgePageState>
+  );
+};
 Default.args = {
   hasGraphic: true,
   hasTitle: true,

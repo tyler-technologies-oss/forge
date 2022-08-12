@@ -1,10 +1,9 @@
-import { DefaultTemplate as CheckboxDemo } from './templates/default';
+import { Default as CheckboxDemo } from './checkbox.stories';
 import { CheckboxDefaultCodeHtml } from './code/checkbox-default';
-import { CheckboxLabelCodeHtml } from './code/checkbox-label';
 
 <PageSection>
 
-## Usage
+# Checkbox
 
 This component is purely used for styling purposes. The native `<input type="checkbox">` element is left exposed, and you are to interact with that element as
 you would any other native `<input type="checkbox">`.
@@ -23,18 +22,10 @@ you would any other native `<input type="checkbox">`.
 ### Basic
 
 <LiveDemo dense codeHtml={CheckboxDefaultCodeHtml()}>
-  <CheckboxDemo />
-</LiveDemo>
-
-### With label
-
-<LiveDemo dense codeHtml={CheckboxLabelCodeHtml()}>
   <CheckboxDemo hasLabel />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -48,8 +39,6 @@ Controls dense state which renders the component using a smaller container and r
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -60,8 +49,6 @@ Controls dense state which renders the component using a smaller container and r
 
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -74,7 +61,21 @@ Controls dense state which renders the component using a smaller container and r
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                          | Description
+| :-----------------------------| :----------------
+| `root`                        | The root element.
+| `container`                   | The cntainer element.
+| `background`                  | The background container element.
+| `checkmark-svg`               | The `<svg>` element.
+| `checkmark-path`              | The SVG `<path>` element.
+| `mixedmark`                   | The indeterminate container element.
+| `ripple-container`            | The ripple sentinel element.
+
+</PageSection>
 
 <PageSection>
 
@@ -85,5 +86,17 @@ Controls dense state which renders the component using a smaller container and r
 | `--forge-theme-tertiary`                        | Controls the checked theme color.
 | `--mdc-theme-text-primary-on-background`        | Controls the unchecked theme color.
 | `--mdc-theme-text-primary-on-dark`              | Controls the disabled checked color.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Verify that you can tab to each checkbox.
+  - Ensure there is a distinct visual cue that a checkbox is checked or unchecked.
+  - Ensure that there is a distinct visual cue that a checkbox is focused.
+  - Ensure that there is a distinct visual cue when a checkbox is disabled.
+- Verify that pressing the space bar key, while focused on a checkbox, will toggle it checked and unchecked in the same manner as it would be with a mouse click.
 
 </PageSection>

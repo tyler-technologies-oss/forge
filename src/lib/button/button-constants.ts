@@ -16,7 +16,7 @@ const classes = {
 const selectors = {
   BUTTON: 'button',
   LABEL: `span:not(.${classes.RIPPLE})`,
-  ICON: 'i,forge-icon',
+  ICON: 'i,forge-icon,[data-forge-button-icon]',
   RIPPLE: `.${classes.RIPPLE}`
 };
 

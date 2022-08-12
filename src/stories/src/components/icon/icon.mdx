@@ -1,13 +1,11 @@
-import { ExternalTemplate as ExternalDemo } from './templates/external';
-import { RegistryTemplate as RegistryDemo } from './templates/registry';
-import { StylesTemplate as StylesDemo } from './templates/styles';
+import { Styles as StylesDemo, Registry as RegistryDemo, External as ExternalDemo } from './icon.stories';
 import { IconRegistryCodeHtml, IconRegistryCodeTs } from './code/icon-registry';
 import { IconExternalCodeHtml } from './code/icon-external';
 import { IconStylesCodeHtml, IconStylesCodeScss, IconStylesCodeTs } from './code/icon-styles';
 
 <PageSection>
 
-## Usage
+# Icon
 
 This component is intended to be used with SVG icons only via the `@tylertech/tyler-icons` package. By installing that package into your application,
 you gain the ability to import only the icons your application is using and include the icons with your application code.
@@ -73,6 +71,8 @@ correctly you will notice no difference between the two once complete.
 
    > **Note:** this should be done as early in your application bootstrapping process as possible. Make sure all icons are defined, prior to the page rendering or else the
    > component will not be able to find the icon data when it is instantiated.
+   > 
+   > A good place to define icons is within component constructors to ensure they aren't removed from bundles during production builds.
 
 </PageSection>
 
@@ -88,11 +88,8 @@ This component can be used with the local icon registry, or by loading the icons
 
 This is the most common, and expected usage of this component. Import the icons your application needs, and reference them by name:
 
-<LiveDemo 
-layout="column" 
-codeHtml={IconRegistryCodeHtml()} 
-codeTs={IconRegistryCodeTs()}>
-   <RegistryDemo/>
+<LiveDemo layout="column" codeHtml={IconRegistryCodeHtml()} codeTs={IconRegistryCodeTs()}>
+  <RegistryDemo />
 </LiveDemo>
 
 The above example shows how to include an icon from each set and define within the registry.
@@ -104,17 +101,15 @@ The above example shows how to include an icon from each set and define within t
 If your application cannot statically determine the name of the icon to use at build time, you may need to use the CDN as a fallback to load the icons dynamically. Just
 set the `external` attribute to toggle this mode on:
 
-<LiveDemo 
-layout="column" 
-codeHtml={IconExternalCodeHtml()}>
-  <ExternalDemo/>
+<LiveDemo layout="column" codeHtml={IconExternalCodeHtml()}>
+  <ExternalDemo />
 </LiveDemo>
 
 > **Important:** the default icon set that the component will load icons from is the **"standard"** set. If you need to load an icon from the "external" or "custom" sets,
 > just set the `external-type` attribute to the corresponding icon set name:
 >
 > ```html
-> <forge-icon name="action_launcher" external-type="custom"></forge-icon>
+> <forge-icon name="action_launcher" external external-type="custom"></forge-icon>
 > ```
 
 ### External (self-hosted)
@@ -132,20 +127,13 @@ iconElement.externalUrlBuilder = (name, type) => {
 
 The SVG icons can still be styled as if they were any other normal font on the page:
 
-<LiveDemo 
-layout="column" 
-codeHtml={IconStylesCodeHtml()} 
-codeScss={IconStylesCodeScss()} 
-codeTs={IconStylesCodeTs()}>
-   <StylesDemo/>
+<LiveDemo layout="column" codeHtml={IconStylesCodeHtml()} codeScss={IconStylesCodeScss()} codeTs={IconStylesCodeTs()}>
+  <StylesDemo />
 </LiveDemo>
 
-
-> The icons are also themeable by default and will continue to work seamlessly with the standard CSS custom properties used within Forge.
+> The icons are also themeable by default and can be styled as if they are font via `font-size` and `color` styles.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -197,8 +185,6 @@ A custom value to apply to the `viewBox` attribute on the internal `<svg>` eleme
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -211,7 +197,16 @@ Forces a reload of the icon. This method can be useful if you need to manually t
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :--------------------
+| `svg`                          | The `<svg>` element holding the icon data.
+| `path`                         | The SVG `<path>` elements within the icon data.
+
+</PageSection>
 
 <PageSection>
 
@@ -221,6 +216,31 @@ Forces a reload of the icon. This method can be useful if you need to manually t
 | :-----------------------------------------------| :--------------------
 | `--forge-icon-theme-color`                        | Controls the color.
 | `--forge-icon-font-size`                          | Controls the font size. The standard `font-size` style can be set directly on the `<forge-icon>` element, but use this custom property to apply to multiple icons if desired.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+There are two types of icons used in applications, decorative and semantic. Typically we use icons for decorative purposes only, but there
+may be cases where you need to make an icon semantic and accessible.
+
+### Decorative icons
+
+Decorative icons are typically hidden from assisitive technologies, but there are some important things to note about these icons:
+
+- Add an `aria-hidden="true"` attribute to the icon element to avoid its content being interpreted incorrectly.
+- Use a `title` attribute or a Forge tooltip component to provide a visual description.
+- Treat icons as any other text on the page and use proper color contrast ratios.
+
+### Semantic icons
+
+- Use an `role="img"` attribute to give it semantic meaning.
+- Use an `aria-label` or `aria-describedby` attribute.
+- Treat icons as any other text on the page and use proper color contrast ratios.
+- If using an SVG icon, hook up the `<title>` element (if applicable) to an `aria-labelledby` attribute on the `<svg>` element.
+  - If no `<title>` element exists, use an alternative approach such as `aria-label` or `title` attribute.
 
 </PageSection>
 
@@ -243,5 +263,3 @@ declare type IconExternalType = '' | 'custom' | 'standard' | 'extended';
 ```
 
 </PageSection>
-
----

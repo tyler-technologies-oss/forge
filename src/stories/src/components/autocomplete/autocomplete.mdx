@@ -1,9 +1,9 @@
-import { DefaultTemplate as AutocompleteDemo } from './templates/default';
+import { Default as AutocompleteDemo } from './autocomplete.stories';
 import { AutocompleteDefaultCodeHtml, AutocompleteDefaultCodeTs } from './code/autocomplete-default';
 
 <PageSection>
 
-## Usage
+#  Autocomplete
 
 The autocomplete is considered an add-on component that allows you to wrap a `<forge-autocomplete>` element around any HTML that contains an `<input>`
 element. This allows the autocomplete to bind to that input and show suggestions in a popup as the user types.
@@ -14,8 +14,6 @@ provide suggestions asynchronously, it's up to the consuming application to choo
 the user has typed into the `<input>` element.
 
 > For text fields, we recommend using a debounce of 500ms. [Read more](https://stackoverflow.com/questions/42361485/how-long-should-you-debounce-text-input)
-
-> This component requires the use of JavaScript to be able to provide a callback function to the `filter` property.
 
 </PageSection>
 
@@ -35,9 +33,9 @@ The only requirement in the HTML is to provide a child `<input>` element. While 
 can attach autocomplete functionality to any `<input>` element. This allows for flexibility in the styling of the input, while allowing the autocomplete to provide
 suggestions in the form of a floating popup anchored to that input.
 
-> The `forge-dropdown-icon` class being applied to the trailing icon is **optional**. It controls the rotation of the icon when the input is focused. This class is available through the Forge theme CSS.
+The only requirement for integration via JavaScript is that you provide a callback function to the `filter` property to provide options based on the current filter text.
 
-The only requirement is that you provide a filter callback function via JavaScript (note: this may be different based on your framework of choice):
+> **Note:** the `data-forge-dropdown-icon` attribute being applied to the trailing icon allows the autocomplete to provide the necessary styling to control open state rotation
 
 </PageSection>
 
@@ -176,8 +174,6 @@ Closes the dropdown.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -200,8 +196,6 @@ Closes the dropdown.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -210,7 +204,18 @@ Closes the dropdown.
 
 | Name               | Values
 | :------------------| :-----------------
-| `default`          | The default (unnamed) slot is the text input. Projects the input into the correct location.
+| (default)          | The default (unnamed) slot is the text input. Projects the input into the correct location.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Verify that you can tab into the autocomplete component.
+* Verify that you can access the options within the autocomplete component using only the keyboard.
+* The input element will receive the proper ARIA attributes such as `aria-role="combobox"`, `aria-live`, `aria-owns`, ... etc.
+* You should ensure that you either use a `<label>` element, or add an `aria-label` or `aria-labelledby` attribute to provide a meaningful label.
 
 </PageSection>
 
@@ -283,7 +288,7 @@ interface IAutocompleteOptionGroup<T = any> {
 
 ### IAutocompletePopupConfiguration
 
-```ts
+```ts expanded
 interface IAutocompletePopupConfiguration {
   filterText: string;
   popupTarget: string;

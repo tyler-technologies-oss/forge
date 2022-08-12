@@ -3,14 +3,14 @@ import { ForgeCard, ForgeExpansionPanel, ForgeOpenIcon } from '@tylertech/forge-
 import React from 'react';
 import { IExpansionPanelProps } from '../expansion-panel-args';
 
-export const CardRecipeTemplate: Story<IExpansionPanelProps> = props => (
-  <ForgeCard has-padding="false">
-    <ForgeExpansionPanel {...props}>
-      <button slot="header" style={{justifyContent: 'space-between', alignItems: 'center'}} className={'forge-expandable__button'}>
+export const CardRecipeTemplate: Story<IExpansionPanelProps> = () => (
+  <ForgeCard style={{'--forge-card-padding': '16px'}}>
+    <ForgeExpansionPanel>
+      <div role="button" tabIndex={0} slot="header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <div>Panel header</div>
-        <ForgeOpenIcon className={'forge-flex-item--right'}></ForgeOpenIcon>
-      </button>
-      <div className={'forge-expandable__content'}>Expandable card content</div>
+        <ForgeOpenIcon />
+      </div>
+      <div>Expandable card content</div>
     </ForgeExpansionPanel>
   </ForgeCard>
 );

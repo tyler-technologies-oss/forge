@@ -4,7 +4,7 @@ import {
   DATE_PICKER_CONSTANTS,
   IDatePickerFoundation
 } from '@tylertech/forge/date-picker';
-import { DEFAULT_DATE_MASK, parseDateString, formatDate } from '@tylertech/forge/core';
+import { DEFAULT_DATE_MASK, parseDateString, formatDate, isSameDate } from '@tylertech/forge/core';
 import { defineTextFieldComponent, TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '@tylertech/forge/text-field';
 import { IPopupComponent, POPUP_CONSTANTS } from '@tylertech/forge/popup';
 import { ICalendarComponent, CALENDAR_CONSTANTS } from '@tylertech/forge/calendar';
@@ -600,6 +600,18 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe('');
     });
 
+    it('should allow value if below min date and allow invalid is set', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.allowInvalidDate = true;
+      const minDate = new Date('01/01/2020');
+      const date = '06/01/2000';
+      const expectedDate = new Date(date);
+      this.context.component.min = minDate;
+      this.context.component.value = expectedDate;
+      expect(this.context.component.value).toEqual(expectedDate);
+      expect(getInputElement(this.context.component).value).toBe(date);
+    });
+
     it('should clear value when min date is set if current value is not valid', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const minDate = new Date('01/01/2020');
@@ -618,6 +630,18 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.value = new Date('06/01/2030');
       expect(this.context.component.value).toBeNull();
       expect(getInputElement(this.context.component).value).toBe('');
+    });
+
+    it('should allow value if above max date and allow invalid is set', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.allowInvalidDate = true;
+      const maxDate = new Date('01/01/2020');
+      const date = '06/01/2030';
+      const expectedDate = new Date(date);
+      this.context.component.max = maxDate;
+      this.context.component.value = expectedDate;
+      expect(this.context.component.value).toEqual(expectedDate);
+      expect(getInputElement(this.context.component).value).toBe(date);
     });
 
     it('should clear value when max date is set if current value is not valid', function(this: ITestContext) {
@@ -898,6 +922,18 @@ describe('DatePickerComponent', function(this: ITestContext) {
       getInputElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
 
       expect(keydownSpy).not.toHaveBeenCalled();
+    });
+
+    it ('should select the active date when tab key is pressed when open', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.valueMode = 'object';
+      openPopup(this.context.component);
+
+      getInputElement(this.context.component).focus();
+      getInputElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+
+      const value = this.context.component.value as Date;
+      expect(isSameDate(value, new Date())).toBeTrue();
     });
 
     it('should set min date when open', function(this: ITestContext) {
@@ -1256,6 +1292,45 @@ describe('DatePickerComponent', function(this: ITestContext) {
       inputElement.dispatchEvent(new Event('blur'));
 
       expect(inputElement.value).toBe(`01/01/${currentCentury - 1}${year}`);
+    });
+
+    it('should clear the value when the input is cleared programmatically', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date();
+
+      getInputElement(this.context.component).value = '';
+
+      expect(this.context.component.value).toBeNull();
+    });
+
+    it('should update value properly when backspacing', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date('01/01/2021');
+      this.context.component.masked = true;
+      this.context.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(this.context.component);
+      inputElement.value = inputElement.value.slice(0,-1);
+      inputElement.dispatchEvent(new KeyboardEvent('input'));
+      expect(inputElement.value).toEqual('01/01/202_');
+    });
+
+    it('should set year range via attribute', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const yearRange = '-5:+5';
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.YEAR_RANGE, yearRange);
+
+      expect(this.context.component.yearRange).toEqual(yearRange);
+    });
+
+    it('should set year range', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const yearRange = '-5:+5';
+      this.context.component.yearRange = yearRange;
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      expect(calendar.yearRange).toEqual(yearRange);
     });
   });
 

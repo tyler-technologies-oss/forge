@@ -327,7 +327,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   }
 
   private _activateListOption(listItem: IListItemComponent | undefined, activeChangeCallback?: (id: string) => void): void {
-    if (listItem) {
+    if (listItem && !listItem.disabled) {
       listItem.active = true;
       if (activeChangeCallback && isFunction(activeChangeCallback)) {
         activeChangeCallback(listItem.id);

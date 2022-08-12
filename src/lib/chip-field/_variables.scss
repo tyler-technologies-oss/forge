@@ -5,7 +5,7 @@ $input-container: (
     default: 2px 12px,
     top: (
       roomy: 22px,
-      default: 20px
+      default: 22px
     ),
     left: (
       leading: 0,
@@ -60,7 +60,7 @@ $icon: (
     y: (
       roomy: 10px,
       default: 5px,
-      dense: 0 // TODO
+      dense: 0
     )
   ),
   padding: (

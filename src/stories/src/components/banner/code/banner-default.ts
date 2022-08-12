@@ -3,7 +3,3 @@ export const BannerDefaultCodeHtml = () => `
   <div>Minim sunt eu laborum labore minim.</div>
 </forge-banner>
 `;
-
-export const BannerDefaultCodeBlazor = () => `
-<ForgeBanner Text="Minim sunt eu laborum labore minim." />
-`;

@@ -287,7 +287,10 @@ describe('ListComponent', function(this: ITestContext) {
       const listener = jasmine.createSpy('selected listener');
       this.context.component.addEventListener(LIST_ITEM_CONSTANTS.events.SELECT, listener);
       await tick();
-      dispatchKeyEvent(this.context.getListItemComponents()[0], 'keydown', 'Enter');
+
+      const listItemEl = getShadowElement(this.context.getListItemComponents()[0], LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
+      listItemEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
       expect(listener).toHaveBeenCalledTimes(1);
     });
 
@@ -296,7 +299,10 @@ describe('ListComponent', function(this: ITestContext) {
       const listener = jasmine.createSpy('selected listener');
       this.context.component.addEventListener(LIST_ITEM_CONSTANTS.events.SELECT, listener);
       await tick();
-      dispatchKeyEvent(this.context.getListItemComponents()[0], 'keydown', 'Space');
+      
+      const listItemEl = getShadowElement(this.context.getListItemComponents()[0], LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
+      listItemEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+
       expect(listener).toHaveBeenCalledTimes(1);
     });
 

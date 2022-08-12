@@ -497,7 +497,7 @@ export class CalendarFoundation implements ICalendarFoundation {
       return;
     }
 
-    this._beforeDateSelected(newDate);
+    this._beforeDateSelected(newDate, type);
   }
 
   /** Sets initial date tabindex and focus to today or the first enabled date in view */
@@ -935,8 +935,8 @@ export class CalendarFoundation implements ICalendarFoundation {
    * @returns An array of ICalendarMenuOptions containing years
    */
   private _getYearsForMenu(): ICalendarMenuOption[] {
-    const min = this._min ? Math.max(this._min.getFullYear(), this._minYear) : this._minYear;
-    const max = this._max ? Math.min(this._max.getFullYear(), this._maxYear) : this._maxYear;
+    const min = this._min ? this._min.getFullYear() : this._minYear;
+    const max = this._max ? this._max.getFullYear() : this._maxYear;
 
     const config: ICalendarMenuYearConfig = {
       locale: this._locale,
@@ -1073,15 +1073,15 @@ export class CalendarFoundation implements ICalendarFoundation {
    * Provides a hook to intercept date selection events.
    * @param date The date that was selected
    * */
-  private _beforeDateSelected(date: Date): void {
+  private _beforeDateSelected(date: Date, type: CalendarView = 'date'): void {
     if (this._dateSelectCallback) {
       Promise.resolve(this._dateSelectCallback(this._getCalendarDate(date))).then(res => {
         if (res) {
-          this._onDateSelected(date);
+          this._onDateSelected(date, undefined, type);
         }
       });
     } else {
-      this._onDateSelected(date);
+      this._onDateSelected(date, undefined, type);
     }
   }
 
@@ -1090,7 +1090,7 @@ export class CalendarFoundation implements ICalendarFoundation {
    * @param date The date that was selected
    * @param force Whether the date should be selected or deselected, regardless of its prior state (optional)
    * */
-  private _onDateSelected(date: Date, force?: boolean): void {
+  private _onDateSelected(date: Date, force?: boolean, type: CalendarView = 'date'): void {
     if (this._mode === 'range' && this._emitRangeSelectionEvent(date)) {
       this._applyRangeSelection(date);
       this._rangeSelectionStore = undefined;
@@ -1101,7 +1101,7 @@ export class CalendarFoundation implements ICalendarFoundation {
     const event: ICalendarDateSelectEventData = {
       date: new Date(date),
       selected,
-      type: 'date'
+      type
     };
     const isAllowed = this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.DATE_SELECT, event, true, true);
 
@@ -1884,6 +1884,11 @@ export class CalendarFoundation implements ICalendarFoundation {
       this._openYearMenu();
       this._setNavigationButtonStates();
     }
+  }
+
+  /** Get the currently focused date */
+  public get activeDate(): Date {
+    return new Date(this._focusedDate);
   }
 
   /** Get/set whether single date ranges are allowed */

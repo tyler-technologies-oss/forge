@@ -1,12 +1,13 @@
-import { DefaultTemplate as IconButtonDemo } from './templates/default';
+import { Default as IconButtonDemo } from './icon-button.stories';
 import { IconButtonDefaultCodeHtml } from './code/icon-button-default';
 import { IconButtonToggleCodeHtml } from './code/icon-button-toggle';
 
 <PageSection>
 
-## Usage
+# Icon button
 
-The icon-button component is nothing more than a standard HTML `<button>` with custom styling provided. Use this component to display an interactive button that renders **only an icon**. You can also use this component to toggle between an "on" and "off" state as well.
+The icon-button component is nothing more than a standard HTML `<button>` with custom styling provided. Use this component to display an
+interactive button that renders **only an icon**. You can also use this component to toggle between an "on" and "off" state as well.
 
 > Ensure that you add an `aria-label` attribute to the `<button>` element to ensure that the action is announced properly to screen readers.
 >
@@ -22,27 +23,21 @@ The icon-button component is nothing more than a standard HTML `<button>` with c
 
 ### Common
 
-<LiveDemo 
-dense 
-codeHtml={IconButtonDefaultCodeHtml()}>
-  <IconButtonDemo/>
+<LiveDemo dense codeHtml={IconButtonDefaultCodeHtml()}>
+  <IconButtonDemo />
 </LiveDemo>
 
 ### Toggle
 
 Use the toggle variant to swap between and "on" and "off" state when clicking the button.
 
-Valid icon tags: `<i>`, `<span>`, `<svg>`, `<img>`
+Valid icon tags: `<forge-icon>`, `<i>`, `<span>`, `<svg>`, `<img>`
 
-<LiveDemo 
-dense 
-codeHtml={IconButtonToggleCodeHtml()}>
-  <IconButtonDemo toggle={true}/>
+<LiveDemo dense codeHtml={IconButtonToggleCodeHtml()}>
+  <IconButtonDemo toggle />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -69,6 +64,8 @@ Gets/sets the dense state.
 <PropertyDef name="densityLevel" type="number" defaultValue="5">
 
 Gets/sets the density level. Valid values: `1` (least dense) - `6` (most dense)
+
+Note: this only applies when `dense` is used.
   
 </PropertyDef>
 
@@ -87,8 +84,6 @@ Re-renders the component. Use this after applying any transformations that may c
 </MethodDef>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -118,5 +113,17 @@ Re-renders the component. Use this after applying any transformations that may c
 | `--forge-badge-border`                | Controls the border of the badge.
 | `--forge-badge-max-width`             | Controls the max-width of the badge.
 | `--forge-app-bar-background-color`    | Controls the color of the badge when included in the app-bar context.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Verify that you can reach every button by keyboard navigation.
+  - Ensure that there is a visual cue that the button is currently in focus.
+  - Ensure that there is an aria-label attribute indicating what the button does.
+- Verify that pressing the space bar or enter key while focused on a button will activate the button in the same manner as if it had been clicked with a mouse.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.
 
 </PageSection>

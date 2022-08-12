@@ -14,8 +14,10 @@
   .forge-select__selected-text {
     @include base.selected-text-core;
   }
+
   // Field Input Styles
   @include field-selector.input('.forge-select__selected-text', $exclude: (core, padding-right));
+
   // Line Height
   &:not(.forge-field--label) {
     &:not(.forge-field--dense):not(.forge-field--roomy) .forge-select__selected-text {
@@ -28,11 +30,22 @@
       @include base.select-text-line-height(dense, default);
     }
   }
+
+  // Dense
+  &.forge-field--dense:not(.forge-field--roomy) .forge-select__selected-text {
+    padding: 0 8px;
+  }
+
   // Placeholder
   .forge-select__selected-text {
     &:empty::before {
       @include base.select-text-placeholder;
     }
+  }
+
+  // Padding
+  .forge-select__selected-text {
+    padding-top: 25px; // Override the default field padding styles to align text content
   }
 }
 
@@ -45,6 +58,7 @@
       @include base.dropdown-icon-opened;
     }
   }
+
   // Color
   &:not(.forge-field--disabled):not(.forge-field--invalid) {
     .forge-select__dropdown-icon {
@@ -60,5 +74,10 @@
     .forge-select__dropdown-icon {
       @include field-base.icon-color(disabled);
     }
+  }
+
+  // Dense
+  &.forge-field--dense:not(.forge-field--roomy) .forge-select__dropdown-icon {
+    margin-right: 4px;
   }
 }

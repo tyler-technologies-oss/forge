@@ -1,13 +1,14 @@
-import { DefaultTemplate as TabBarDemo } from './templates/default';
+import { Default as TabBarDemo } from './tab-bar.stories';
 import { TabBarDefaultHtml, TabBarDefaultTs} from './code/tab-bar-default';
 
 <PageSection>
 
-## Usage
+# Tab bar
 
-The tab bar component allows for navigation controls using `<forge-tab-bar>` and `<forge-tab>`.
+The tab bar component allows for controlling sub-navigation within a page. This component does **not** handle swapping out tab panels for you, but
+it will just allow for you respond to the tab index changing to hide/show the correct panel.
 
-Tab bar can be paired with [view switcher component](?path=/story/components-view-switcher--default) to switch between views on a page.
+Tab bar can easily be paired with [view switcher component](?path=/story/components-view-switcher--default) to switch between views on a page.
 
 </PageSection>
 
@@ -19,12 +20,8 @@ Tab bar can be paired with [view switcher component](?path=/story/components-vie
 
 ### Basic
 
-<LiveDemo 
-fullWidth 
-layout={"column"} 
-codeHtml={TabBarDefaultHtml()} 
-codeTs={TabBarDefaultTs()}>
-  <TabBarDemo/>
+<LiveDemo fullWidth layout="column" codeHtml={TabBarDefaultHtml()} codeTs={TabBarDefaultTs()}>
+  <TabBarDemo />
 </LiveDemo>
 
 ### With View switcher
@@ -103,8 +100,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Tab Properties/Attributes
@@ -129,8 +124,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Tab Bar Methods
@@ -148,8 +141,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 </MethodDef>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -187,8 +178,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Tab Bar Events
@@ -199,8 +188,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Tab Events
@@ -210,8 +197,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 | `forge-tab-interacted`            | Emits when the user interacts with a tab.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -230,8 +215,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Tab Bar Slots
@@ -241,8 +224,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 | `default`                     | The default (unnamed) slot where the tab will be rendered.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -257,7 +238,41 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 
 </PageSection>
 
----
+<PageSection>
+
+## Tab Bar CSS parts
+
+| Name                      | Description
+| :-------------------------| :--------------------
+| `root`                    | The root element.
+| `previous-container`      | The previous button container element.
+| `previous-button`         | The previous button `<forge-icon-button>` element.
+| `previous-button-element` | The previous button `<button>` element.
+| `previous-button-icon`    | The previous button `<forge-icon>` element.
+| `tab-scroller`            | The tab scroller container element.
+| `scroll-area`             | The scrollable container area.
+| `scroll-content`          | The scrollable container around the default slot.
+| `next-container`          | The next button container element.
+| `next-button`             | The next button `<forge-icon-button>` element.
+| `next-button-element`     | The next button `<button>` element.
+| `next-button-icon`        | The next button `<forge-icon>` element.
+
+</PageSection>
+
+<PageSection>
+
+## Tab CSS parts
+
+| Name                            | Description
+| :-------------------------------| :--------------------
+| `button`                        | The root `<button>` element.
+| `content`                       | The content conatiner element.
+| `text`                          | The text container element.
+| `indicator-container`           | The indicator container element.
+| `indicator`                     | The indicator element.
+| `ripple-container`              | The ripple sentinel element.
+
+</PageSection>
 
 <PageSection>
 
@@ -270,8 +285,6 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Tab CSS custom properties
@@ -281,6 +294,35 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 | `--mdc-theme-primary`                           | Controls the font color of active tab.
 | `--mdc-theme-text-secondary-on-light`           | Controls the font color of tab.
 | `--mdc-theme-text-disabled-on-background`       | Controls the font color of disabled tab.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+- Ensure that only the selected tab content is reachable by keyboard.
+
+It's expected that you will need to provide the `tablist` and `tabpanel` roles to your elements to indicate to assistive technologies
+which elements are responsible for the tabs and tab content respectively. Each tab should contain an `aria-controls` property identifying
+its corresponding tab content. In addition, each tab content element should be labelled by a tab. These elements need to be wrapped in an
+element containing a `tablist` role:
+
+```html
+<div role="tablist">
+  <forge-tab-bar>
+    <forge-tab aria-controls="panel-1" id="tab-1"></forge-tab>
+    <forge-tab aria-controls="panel-2" id="tab-2"></forge-tab>
+  </forge-tab-bar>
+  <div role="tabpanel" aria-labelledby="tab-1" id="panel-1"></div>
+  <div role="tabpanel" aria-labelledby="tab-2" id="panel-2"></div>
+</div>
+```
+
+> **Note:** the `<forge-tab>` elements receive the `role="tab"` automatically.
 
 </PageSection>
 
@@ -311,8 +353,6 @@ type TabBarLayoutAlign = 'start' | 'center' | 'end';
 ```
 
 </PageSection>
-
----
 
 <PageSection>
 

@@ -1,4 +1,4 @@
-import { DefaultTemplate as AppBarDemo } from './templates/default';
+import { Default as AppBarDemo } from './app-bar.stories';
 import { AppBarDefaultCodeHtml } from './code/app-bar-default';
 import { AppBarMenuCodeHtml, AppBarMenuCodeTs } from './code/app-bar-menu';
 import { AppBarSearchCodeHtml, AppBarSearchCodeTs } from './code/app-bar-search';
@@ -6,7 +6,7 @@ import { AppBarFullCodeHtml } from './code/app-bar-full';
 
 <PageSection>
 
-## Usage
+# App Bar
 
 The app-bar should be used as the header for every page in your application to ensure consistency across our
 Tyler products and applications. It's the one constant across all applications that helps ensure our applications
@@ -15,12 +15,6 @@ are perceived as being connected and familiar.
 The app-bar itself is nothing more than a container for other add-on components, but it does provide named slots
 and a common location for branding logo and title.
 
-> For in-depth implementation details regarding integrating an application with app-bar and any of the app-bar
-> sub-components (menu button, search input, help button, profile button… etc.) please see the
-> following guide:
->
-> [App Bar implementation guide](?path=/docs/app-bar-implementation-guide)
->
 > For API details regarding any of the app-bar sub-components please see one of the following pages:
 > * [App Bar help button](?path=/docs/components-app-bar-help-button--default)
 > * [App Bar menu button](?path=/docs/components-app-bar-menu-button--default)
@@ -50,7 +44,7 @@ The menu toggle button should always be placed in the `menu` slot. You can add a
 `<forge-app-bar-menu-button>` element to know when it is interacted with.
 
 <LiveDemo layout="column" fullWidth codeHtml={AppBarMenuCodeHtml()} codeTs={AppBarMenuCodeTs()}>
-  <AppBarDemo hasMenu={true} />
+  <AppBarDemo hasMenu />
 </LiveDemo>
 
 
@@ -59,7 +53,7 @@ The menu toggle button should always be placed in the `menu` slot. You can add a
 Always place the search input within the `center` slot so that it's familiar for users to find.
 
 <LiveDemo layout="column" fullWidth codeHtml={AppBarSearchCodeHtml()} codeTs={AppBarSearchCodeTs()}>
-  <AppBarDemo hasSearch={true} />
+  <AppBarDemo hasSearch />
 </LiveDemo>
 
 ### Full
@@ -67,14 +61,7 @@ Always place the search input within the `center` slot so that it's familiar for
 The following example shows the usage of all of the common app-bar elements placed in their corresponding slots.
 
 <LiveDemo layout="column" fullWidth codeHtml={AppBarFullCodeHtml()}>
-  <AppBarDemo
-    title={'Full'}
-    hasMenu={true}
-    hasSearch={true}
-    hasHelp={true}
-    hasNotifications={true}
-    hasAppLauncher={true}
-    hasProfile={true} />
+  <AppBarDemo title="Full" hasMenu hasSearch hasHelp hasNotifications hasAppLauncher hasProfile />
 </LiveDemo>
 
 </PageSection>
@@ -117,8 +104,6 @@ The following example shows the usage of all of the common app-bar elements plac
 
 </PropertyDef>
 
----
-
 </PageSection>
 
 ---
@@ -138,7 +123,21 @@ The following example shows the usage of all of the common app-bar elements plac
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                   | Description
+| :----------------------| :----------------
+| `root`                 | The root element.
+| `row`                  | The container element for the layout.
+| `title`                | The built-in `<h1>` title element.
+| `section-start`        | The container for the `start` slot.
+| `section-center`       | The container for the `center` slot.
+| `section-end`          | The container for the `end` slot.
+| `bottom`               | The container for the `bottom` slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -152,5 +151,16 @@ The following example shows the usage of all of the common app-bar elements plac
 | `--forge-app-bar-theme-secondary-on-background`       | Sets the `--mdc-theme-text-secondary-on-light`.
 | `--forge-app-bar-theme-disabled-on-background`        | Sets the `--mdc-theme-text-disabled-on-background`.
 | `--forge-app-bar-theme-disabled-on-light`             | Sets the `--mdc-theme-text-disabled-on-light`.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Ensure that the user can interact with each sub-component of the app bar using only the keyboard.
+* The app bar component will use an `<h1>` for the title by default. If you override the title slot content, be sure to use the proper heading element.
+    * Only **one** `<h1>` should be on a page at any given time (unless a new heading hierarchy is created as a sibling).
+* A `<header>` element is built-in to the app bar component.
 
 </PageSection>

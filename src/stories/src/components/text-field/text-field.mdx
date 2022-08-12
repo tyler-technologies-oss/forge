@@ -1,21 +1,14 @@
-import { DefaultTemplate as TextFieldDemo } from './templates/default';
-import {
-  TextFieldDefaultHtml,
-} from './code/text-field-default';
+import { Default as TextFieldDemo } from './text-field.stories';
+import { TextFieldDefaultHtml, } from './code/text-field-default';
 
 <PageSection>
 
-## Usage
+# Text field
 
-The text field component supports many different variants, patterns, and configuration options.
+The text field component supports many different variants, patterns, and configuration options. The `<forge-text-field>` element is a
+block-level element by default and will take up 100% of the available width within its parent container.
 
-The `<forge-text-field>` element is a block-level element by default and will take up 100% of the available space within its parent container.
-
-See below for examples and code snippets regarding the most common use cases.
-
-> Use a debounce when actions can occur after a user stops typing. In cases where an HTTP request is fired, or some other long running task occurs, avoid executing those expensive tasks until the user has completed what they are searching for. Forge recommends a debounce of 500ms.
-
-> Masking functionality is not built-in to the component, it’s expected that you’ll use standard third-party mask libraries with it.
+> Masking functionality is not built-in to the component, it's expected that you'll use standard third-party mask libraries with it.
 > If your team is using Angular, we recommend <a href="https://www.npmjs.com/package/ngx-mask">ngx-mask</a>; otherwise we recommend
 > the <a href="https://www.npmjs.com/package/imask">imask package</a>; both available from npm.
 
@@ -31,14 +24,15 @@ See below for examples and code snippets regarding the most common use cases.
 
 The `default` variant is intended to be used in desktop applications.
 
-<LiveDemo 
-codeHtml={TextFieldDefaultHtml()}>
-  <TextFieldDemo/>
+<LiveDemo codeHtml={TextFieldDefaultHtml()}>
+  <TextFieldDemo />
 </LiveDemo>
 
-</PageSection>
+> Use a debounce when actions can occur after a user stops typing. In cases where an HTTP request is fired, or some other long running
+> task occurs, avoid executing those expensive tasks until the user has completed what they are searching for. Forge recommends a debounce
+> of 500ms.
 
----
+</PageSection>
 
 <PageSection>
 
@@ -92,8 +86,6 @@ codeHtml={TextFieldDefaultHtml()}>
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -105,8 +97,6 @@ codeHtml={TextFieldDefaultHtml()}>
 </MethodDef>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -125,7 +115,19 @@ codeHtml={TextFieldDefaultHtml()}>
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                              | Description
+| :---------------------------------| :----------------
+| `root`                            | The root element.
+| `container`                       | The container layout element.
+| `leading-container`               | The container around the `leading` slot.
+| `label-input-container`           | The container element around the label and input slots.
+| `addon-end-container`             | The container element around the addon-end slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -133,24 +135,57 @@ codeHtml={TextFieldDefaultHtml()}>
 
 | Name                                                      | Description
 | :---------------------------------------------------------| :----------------
-| `--mdc-theme-text-primary-on-background`                  | Controls the font color of the input.
-| `--mdc-theme-text-secondary-on-background`                | Controls the font color for label, icons, helper text, and placeholder.
-| `--mdc-theme-text-icon-on-background`                     | Controls the border color of the icons.
-| `--mdc-theme-label-disabled-on-background`                | Controls the disabled color of the label.
-| `--mdc-theme-text-disabled-on-light`                      | Controls the disabled font color of the icon.
-| `--mdc-theme-text-disabled-on-background`                 | Controls the disabled color of the outline.
-| `--mdc-theme-primary`                                     | Controls the focused color throughout the component.
-| `--mdc-theme-error`                                       | Controls the error color throughout the component.
-| `--mdc-theme-on-surface`                                  | Controls the color of the placeholder.
-| `--forge-theme-text-secondary-alternative-on-background`  | Controls the floating label color.
-| `--forge-theme-form-field-required-on-background`         | Controls the required background-color of the field element.
-| `--forge-theme-form-field-invalid-on-background`          | Controls the invalid background-color of the field element.
-| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled font color of the floating label element.
+| **Field**                                                 |
 | `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the field element.
-| `--forge-theme-error-hover`                               | Controls the error hover color for the outline.
-| `--forge-text-field-height`                               | Controls the height of the root element. Default value is `3.5rem`.
-| `--forge-text-field-theme-background`                     | Controls the background-color of the field element.
+| `--forge-text-field-height`                               | Controls the height of the field element. Default value is `3.5rem`.
+| `--forge-text-field-margin-top`                           | Controls the margin-top of the field element. Default value is `0`.
+| **Outline**                                               |
+| `--forge-text-field-theme-background`                     | Controls the background-color of the outline element.
+| `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the outline element.
+| `--mdc-theme-text-icon-on-background`                     | Controls the border-color of the outline element.
+| `--mdc-theme-text-primary-on-background`                  | Controls the hover border-color for the outline element.
+| `--mdc-theme-primary`                                     | Controls the focused and focused-hover border-color for the outline element.
+| `--mdc-theme-error`                                       | Controls the invalid border-color for the outline element.
+| `--forge-theme-error-hover`                               | Controls the invalid-hover border-color for the outline element.
+| `--mdc-theme-text-disabled-on-background`                 | Controls the disabled border-color of the outline element.
+| **Label**                                                 |
+| `--forge-theme-form-field-label-on-background`            | Controls the color of the label element.
+| `--mdc-theme-primary`                                     | Controls the focused color of the label element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the label element.
+| `--forge-theme-label-disabled-on-background`              | Controls the disabled color of the label element.
+| **Required Asterisk**                                     |
+| `--mdc-theme-error`                                       | Controls the error color for the required asterisk element.
+| **Floating Label**                                        |
+| `--forge-theme-form-field-label-on-background`            | Controls the color of the floating label element.
+| `--mdc-theme-primary`                                     | Controls the focused color of the floating label element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the floating label element.
+| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled color of the floating label element.
+| **Input**                                                 |
+| `--mdc-theme-text-primary-on-background`                  | Controls the color of the input element.
+| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled color of the input element.
+| **Helper Text**                                           |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color of the helper text element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the helper text element.
+| **Icons**                                                 |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color for the icon elements.
+| `--mdc-theme-error`                                       | Controls the invalid color of the icon elements.
+| `--mdc-theme-text-disabled-on-light`                      | Controls the disabled color of the icon elements.
+| **Placeholder**                                           |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color of the placeholder element.
 
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+- The label element will receive the proper ARIA attributes such as `aria-owns`.
+
+> Verify that the relevant [aria attributes](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/forms/Basic_form_hints) are set properly when an element is required or invalid.
 
 </PageSection>
 

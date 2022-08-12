@@ -5,17 +5,3 @@ export const SelectAlwaysFloatHtml = () => `
   <forge-option value="fruit">Fruit</forge-option>
 </forge-select>
 `;
-
-
-export const SelectAlwaysFloatBlazor = () => `
-<ForgeSelect Label="Food group" Options="MyOptions" FloatLabelType="@SelectFloatLabelType.Always" />
-
-@code {
-  List<Option<string>> MyOptions { get; set; } = new List<Option<string>>()
-  {
-      new Option<string>() { Value = "grains", Label = "Bread, Cereal, Rice, and Pasta" },
-      new Option<string>() { Value = "vegetables", Label = "Vegetables" },
-      new Option<string>() { Value = "fruit", Label = "Fruit" }
-  };
-}
-`;

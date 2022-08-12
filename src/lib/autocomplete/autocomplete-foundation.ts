@@ -180,9 +180,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _onClear(evt: MouseEvent): void {
-    if (!this._selectedOptions.length) {
-      return;
-    }
     this._clearValue();
     this._adapter.setSelectedText(this._getSelectedText());
   }
@@ -288,7 +285,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    switch (evt.code) {
+    switch (evt.key) {
       case 'Tab':
         if (this._isDropdownOpen && !this._multiple) {
           this._selectActiveOption(false);
@@ -307,25 +304,25 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
         if (!this._isDropdownOpen) {
           this._showDropdown({ activateFirst: true });
         } else {
-          this._adapter.propagateKey(evt.code);
+          this._adapter.propagateKey(evt.key);
         }
         break;
       case 'Up':
       case 'ArrowUp':
         evt.preventDefault();
         if (this._isDropdownOpen) {
-          this._adapter.propagateKey(evt.code);
+          this._adapter.propagateKey(evt.key);
         }
         break;
       case 'Enter':
       case 'Home':
       case 'End':
         if (this._isDropdownOpen) {
-          if (evt.code === 'Enter') {
+          if (evt.key === 'Enter') {
             evt.stopPropagation();
           }
           evt.preventDefault();
-          this._adapter.propagateKey(evt.code);
+          this._adapter.propagateKey(evt.key);
         }
         break;
       case 'Backspace':
@@ -458,18 +455,13 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       return;
     }
 
-    // If the user had an option highlighted (changed while the filter was running) we need to capture that before we reset the options
-    const activeIndex = this._adapter.getActiveOptionIndex() ?? -1;
-
     this._sortSelectedOptions();
     this._adapter.setBusyVisibility(false);
     this._adapter.setOptions(this._options);
+    this._adapter.setSelectedOptions(this._selectedOptions);
     this._adapter.setDismissListener(this._dismissListener);
 
-    // If we captured an existing active option index, we need to reset it here after setting the options
-    if (activeIndex >= 0) {
-      this._adapter.activateOptionByIndex(activeIndex);
-    } else if (activateFirst) {
+    if (activateFirst) {
       this._adapter.activateFirstOption();
     }
   }
@@ -514,10 +506,12 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     // If we are in stateless mode, then we need to just emit an event when selecting an option. The
     // selected values are not tracked in stateless mode
     if (this._mode === AutocompleteMode.Stateless) {
-      this._filterText = '';
-      this._closeDropdown();
       const data: IAutocompleteSelectEventData = { value: selectedValue };
-      this._adapter.emitHostEvent(AUTOCOMPLETE_CONSTANTS.events.SELECT, data, true);
+      const result = this._adapter.emitHostEvent(AUTOCOMPLETE_CONSTANTS.events.SELECT, data, true, true);
+      if (result) {
+        this._filterText = '';
+        this._closeDropdown();
+      }
       return;
     }
 
@@ -705,7 +699,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       this._adapter.setSelectedText(this._getSelectedText());
     }
 
-    // When the value is changed programatically we should update the selected options
+    // When the value is changed programmatically we should update the selected options
     if (this._isDropdownOpen) {
       this._adapter.setSelectedOptions(this._selectedOptions);
     }

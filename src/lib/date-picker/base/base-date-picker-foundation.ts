@@ -26,6 +26,7 @@ export interface IBaseDatePickerFoundation<TValue> extends ICustomElementFoundat
   allowInvalidDate: boolean;
   showToday: boolean;
   showClear: boolean;
+  yearRange: string;
 }
 
 export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerAdapter, TPublicValue, TPrivateValue = TPublicValue> implements IBaseDatePickerFoundation<TPublicValue> {
@@ -51,6 +52,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   protected _showToday = false;
   protected _showClear = false;
   protected _disabledDaysOfWeek: DayOfWeek[];
+  protected _yearRange = '-50:+50';
   protected _isInitialized = false;
 
   // Listeners
@@ -182,6 +184,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
       min: this._min,
       max: this._max,
       disabledDates: this._disabledDates,
+      yearRange: this._yearRange,
       todayButton: this._showToday,
       clearButton: this._showClear,
       todayCallback: this._todayListener,
@@ -303,6 +306,18 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
           this._adapter.propagateCalendarKey(evt);
         }
         break;
+      case 'Tab':
+        if (this._open) {
+          const activeDate = this._adapter.getCalendarActiveDate();
+          if (activeDate) {
+            this._onDateSelected({
+              date: activeDate,
+              selected: true,
+              type: 'date'
+            });
+          }
+        }
+        break;
     }
   }
 
@@ -406,8 +421,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
       return true;
     }
 
-    const passesMinDate = (): boolean => this._min ? this._min.getTime() <= value.getTime() : true;
-    const passesMaxDate = (): boolean => this._max ? this._max.getTime() >= value.getTime() : true;
+    const passesMinDate = (): boolean => this._min && !this._allowInvalidDate ? this._min.getTime() <= value.getTime() : true;
+    const passesMaxDate = (): boolean => this._max && !this._allowInvalidDate ? this._max.getTime() >= value.getTime() : true;
     const disabledDates = (): Date[] => Array.isArray(this._disabledDates) ? this._disabledDates : this._disabledDates ? [this._disabledDates] : [];
     const isNotDisabled = (): boolean => !disabledDates().some(bd => bd.getTime() === value.getTime());
     const dayNotDisabled = (): boolean => !(this._disabledDaysOfWeek && this._disabledDaysOfWeek.includes(value.getDay()));
@@ -702,5 +717,18 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   }
   public set showClear(value: boolean) {
     this._showClear = value;
+  }
+
+  public get yearRange(): string {
+    return this._yearRange;
+  }
+  public set yearRange(value: string) {
+    if (this._yearRange !== value) {
+      this._yearRange = value;
+
+      if (this._isInitialized && this._open) {
+        this._adapter.setCalendarYearRange(this._yearRange);
+      }
+    }
   }
 }

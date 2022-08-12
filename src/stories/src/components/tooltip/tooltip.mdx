@@ -1,15 +1,14 @@
-import { DefaultTemplate as TooltipDemo } from './templates/default';
+import { Default as TooltipDemo } from './tooltip.stories';
 import { TooltipDefaultHtml } from './code/tooltip-default';
 
 <PageSection>
 
-## Usage
+# Tooltip
 
-The tooltip is a component that attaches to another HTML element. By placing `<forge-tooltip>` as a sibling, after an element it will position itself around the attached element.
+The tooltip is a component that attaches to another HTML element. By placing `<forge-tooltip>` as a sibling after an element it
+will position itself around the attached element and the open state will be controlled via mouse/touch events.
 
-You can also attach to none sibling elements with the `target` attribute which takes a css selector.
-
-The tooltip opens based on mouse interactions.
+You can also attach to other elements with the `target` attribute which accepts a CSS selector.
 
 </PageSection>
 
@@ -20,15 +19,6 @@ The tooltip opens based on mouse interactions.
 ## Example
 
 ### Basic
-
-The following code snippet demonstrates a common usage:
-
-```html
-<div>
-  <forge-icon name="inbox"></forge-icon>
-  <forge-tooltip>Inbox</forge-tooltip>
-</div>
-```
 
 <LiveDemo layout="column" codeHtml={TooltipDefaultHtml()}>
   <TooltipDemo />
@@ -41,8 +31,11 @@ Tooltip can also target a specific element using the `target` attribute:
 
 ```html
 <div id="tooltip-host">...</div>
-<forge-tooltip target="tooltip-host">Tooltip text</forge-tooltip>
+<p>Some other element</p>
+<forge-tooltip target="#tooltip-host">Tooltip text</forge-tooltip>
 ```
+
+> **Note:** the `target` attribute must be a valid CSS selector.
 
 </PageSection>
 
@@ -51,7 +44,6 @@ Tooltip can also target a specific element using the `target` attribute:
 <PageSection>
 
 ## Properties/Attributes
-
 
 <PropertyDef name="text" type="string" defaultValue="''">
 
@@ -116,7 +108,6 @@ Tooltip can also target a specific element using the `target` attribute:
 
 </PageSection>
 
----
 <PageSection>
 
 ## CSS custom properties
@@ -127,6 +118,15 @@ Tooltip can also target a specific element using the `target` attribute:
 | `--forge-tooltip-theme-on-background`           | Controls the font color of the tooltip.
 | `--forge-tooltip-font-size`                     | Controls the font-size of the tooltip.
 | `--forge-tooltip-max-width`                     | Controls the max-width of the tooltip.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+* The target element will receive the proper ARIA attributes such as `aria-describedby`.
 
 </PageSection>
 
@@ -151,5 +151,3 @@ type TooltipBuilder = () => HTMLElement;
 ```
 
 </PageSection>
-
----

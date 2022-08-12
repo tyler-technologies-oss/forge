@@ -27,14 +27,9 @@ const classes = {
   LABEL: 'forge-field--label'
 };
 
-const numbers = {
-  FLOATING_LABEL_SCALE_FACTOR: 0.875
-};
-
 export const FIELD_CONSTANTS = {
   attributes,
   observedInputAttributes,
-  numbers,
   classes
 };
 

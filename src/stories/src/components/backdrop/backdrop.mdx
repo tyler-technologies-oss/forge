@@ -1,9 +1,9 @@
-import { DefaultTemplate as BackdropDemo } from './templates/default';
+import { Default as BackdropDemo } from './backdrop.stories';
 import { BackdropCodeHtml, BackdropCodeTs } from './code/backdrop';
 
 <PageSection>
 
-## Usage
+# Backdrop
 
 The backdrop component is intended to be used as a background behind modal elements, such as the dialog for example. You will
 almost always use this component as part of the composition that makes up other larger components, but it's exposed from the library
@@ -20,11 +20,8 @@ the user to a specific modal surface area of the screen.
 
 ## Example
 
-<LiveDemo 
-dense={true} 
-codeHtml={BackdropCodeHtml()} 
-codeTs={BackdropCodeTs()}>
-  <BackdropDemo/>
+<LiveDemo dense codeHtml={BackdropCodeHtml()} codeTs={BackdropCodeTs()}>
+  <BackdropDemo />
 </LiveDemo>
 
 </PageSection>
@@ -88,7 +85,15 @@ Starts the fade out animation.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                      | Description
+| :-----------------------------------------| :-----------------
+| `root`                                    | The root container element.
+
+</PageSection>
 
 <PageSection>
 
@@ -98,6 +103,16 @@ Starts the fade out animation.
 | :---------------------------------------| :-----------------
 | `--forge-backdrop-theme-background`       | Controls the overlay color.
 | `--forge-z-index-backdrop`                | Controls the z-index.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that when a backdrop is in use that navigation on modal elements is still possible via the keyboard.
+  - Ideally elements behind the backdrop should not be navigable, but that's more of a responsibility for the modal element.
+- Ensure any methods used to dismiss the backdrop can still be accessed via the keyboard.
 
 </PageSection>
 

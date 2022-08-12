@@ -1,9 +1,9 @@
-import { DefaultTemplate as AppBarProfileDemo } from './templates/default';
+import { Default as AppBarProfileDemo } from './app-bar-profile.stories';
 import { AppBarProfileButtonDefaultCodeHtml, AppBarProfileButtonDefaultCodeTs } from './code/app-bar-profile-default';
 
 <PageSection>
 
-## Usage
+# App Bar Profile
 
 For convenience Forge provides the `<forge-profile-button>` component. This component uses an icon-button
 (with a predefined avatar), and is responsible for displaying profile information within a popup. The power of
@@ -134,6 +134,16 @@ profileButton.profileCardBuilder = () => {
 | :-----------------------------------| :----------------
 | **Profile Opened**                  |
 | `escape`                            | Closes the profile.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Accessibility
+
+- The component will handle adding necessary ARIA attributes for you, as well as ensure the proper color contrast ratio is used.
 
 </PageSection>
 

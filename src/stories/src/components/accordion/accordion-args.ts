@@ -1,13 +1,3 @@
-export interface IAccordionProps {
-  panelSelector: string;
-}
+export interface IAccordionProps {}
 
-export const argTypes = {
-  panelSelector: {
-    control: 'text',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-};
+export const argTypes = {};

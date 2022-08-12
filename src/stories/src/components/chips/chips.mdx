@@ -1,4 +1,4 @@
-import { DefaultTemplate as ChipsDemo } from './templates/default';
+import { Default as ChipsDemo } from './chips.stories';
 import { ChipsDefaultCodeHtml } from './code/chips-default';
 import { ChipsChoiceCodeHtml } from './code/chips-choice';
 import { ChipsFilterCodeHtml } from './code/chips-filter';
@@ -6,7 +6,7 @@ import { ChipsInputCodeHtml } from './code/chips-input';
 
 <PageSection>
 
-## Usage
+# Chips
 
 The chip-set and chip components are used to display either grouped, or individual, interactive chip elements.
 
@@ -31,7 +31,7 @@ Chips can have one of the following types:
 ### Actions
 
 <LiveDemo codeHtml={ChipsDefaultCodeHtml()}>
-  <ChipsDemo />
+  <ChipsDemo type="action" />
 </LiveDemo>
 
 ### Choice
@@ -56,8 +56,6 @@ Chips can have one of the following types:
 > Each chip can set its own type if desired.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -137,8 +135,6 @@ Controls the invalid state.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -152,8 +148,6 @@ Controls the invalid state.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -166,8 +160,6 @@ Controls the invalid state.
 | `enter`                             | Removes the chip.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -190,7 +182,24 @@ Controls the invalid state.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+### Chip set
+
+| Name                     | Description
+| :------------------------| :----------------
+| `root`                   | The root element.
+
+### Chip
+
+| Name                     | Description
+| :------------------------| :----------------
+| `button`                 | The `<button>` container element.
+| `content`                | The default slot container element for the chip content.
+
+</PageSection>
 
 <PageSection>
 
@@ -215,8 +224,19 @@ Controls the invalid state.
 | `--mdc-theme-text-primary-on-background`   | Sets the focus and hover font color.
 | `--mdc-theme-text-secondary-on-background` | Sets the delete font color.
 
-> **Note:** To make a button fill 100% of its available width, put the `<forge-button>` inside a block element and set
-> the width of both the `<forge-button>` component and its embedded `<button>` element to 100%.
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Verify that you can tab to each chip component.
+  - Ensure that there is a visual cue that the chip component is active or inactive, and/or currently focused.
+- Verify that pressing the space bar or enter key while focusing on a chip will toggle it in the same manner as if it had been clicked by a mouse.
+- If a chip has a delete icon, ensure it can be focused and activated independently of the chip itself.
+- Be sure to include a role attribute to indicate to screen readers what the chip is being used for.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.
 
 </PageSection>
 

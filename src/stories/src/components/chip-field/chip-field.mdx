@@ -1,4 +1,4 @@
-import { DefaultTemplate as ChipFieldDemo } from './templates/default';
+import { Default as ChipFieldDemo } from './chip-field.stories';
 import {
   ChipFieldDefaultHtml,
   ChipFieldDefaultTs,
@@ -6,7 +6,7 @@ import {
 
 <PageSection>
 
-## Usage
+# Chip field
 
 The chip field wraps a label, input and a collection of chips (or other elements if desired) with a set of exposed events you'll use for managing your
 collection. It is used to provide users with an easy way to manage collections of simple data, like managing emails, or users by name.
@@ -50,8 +50,6 @@ Please see the [with autocomplete](?path=/story/components-chip-field--with-auto
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes
@@ -92,8 +90,6 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -106,8 +102,6 @@ Controls the floating state of the label. Call this to manually float the label.
 | `forge-chip-field-member-removed`| Emits when the the user presses Backspace to remove the last member from the collection.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -123,8 +117,6 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -138,7 +130,19 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `root`                         | The root element.
+| `container`                    | The container layout element.
+| `label-input-container`        | The container element around the label and input slot.
+| `input-container`              | The container element around the input slot only.
+| `addon-end-container`          | The container element for the `addon-end` slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -146,22 +150,61 @@ Controls the floating state of the label. Call this to manually float the label.
 
 | Name                                                       | Description
 | :----------------------------------------------------------| :---------------
-| `--mdc-theme-primary`                                      | Controls the focus color throughout the component.
-| `--mdc-theme-error`                                        | Controls the invalid color throughout the component.
-| `--mdc-theme-form-field-disabled-on-background`            | Controls the background-color of the field component.
-| `--mdc-theme-form-field-text-disabled-on-background`       | Controls the label and helper text color.
-| `--mdc-theme-text-secondary-on-light`                      | Controls button color.
-| `--mdc-theme-text-icon-on-background`                      | Controls border-color of the outline.
-| `--mdc-theme-text-hint-on-background`                      | Controls disabled color of the label.
-| `--mdc-theme-text-primary-on-background`                   | Controls hover color throughout the component.
-| `--mdc-theme-text-secondary-on-background`                 | Controls color of the label.
-| `--mdc-theme-text-disabled-on-background`                  | Controls disabled border-color of the outline.
-| `--forge-chip-field-height`                                  | Controls the height of the root element. Default value is `3.5rem`.
-| `--forge-chip-field-theme-background`                        | Controls the background-color of the field element.
+| **Field**                                                 |
+| `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the field element.
+| `--forge-chip-field-height`                               | Controls the height of the field element. Default value is `3.5rem`.
+| `--forge-chip-field-margin-top`                           | Controls the margin-top of the field element. Default value is `0`.
+| **Outline**                                               |
+| `--forge-chip-field-theme-background`                     | Controls the background-color of the outline element.
+| `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the outline element.
+| `--mdc-theme-text-icon-on-background`                     | Controls the border-color of the outline element.
+| `--mdc-theme-text-primary-on-background`                  | Controls the hover border-color for the outline element.
+| `--mdc-theme-primary`                                     | Controls the focused and focused-hover border-color for the outline element.
+| `--mdc-theme-error`                                       | Controls the invalid border-color for the outline element.
+| `--forge-theme-error-hover`                               | Controls the invalid-hover border-color for the outline element.
+| `--mdc-theme-text-disabled-on-background`                 | Controls the disabled border-color of the outline element.
+| **Label**                                                 |
+| `--forge-theme-form-field-label-on-background`            | Controls the color of the label element.
+| `--mdc-theme-primary`                                     | Controls the focused color of the label element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the label element.
+| `--forge-theme-label-disabled-on-background`              | Controls the disabled color of the label element.
+| **Required Asterisk**                                     |
+| `--mdc-theme-error`                                       | Controls the error color for the required asterisk element.
+| **Floating Label**                                        |
+| `--forge-theme-form-field-label-on-background`            | Controls the color of the floating label element.
+| `--mdc-theme-primary`                                     | Controls the focused color of the floating label element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the floating label element.
+| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled color of the floating label element.
+| **Members**                                               |
+| `--mdc-theme-primary`                                     | Controls the color of the member elements.
+| `--mdc-theme-text-disabled-on-light`                      | Controls the disabled color of the member elements.
+| **Input**                                                 |
+| `--mdc-theme-text-primary-on-background`                  | Controls the color of the input element.
+| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled color of the input element.
+| **Helper Text**                                           |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color of the helper text element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the helper text element.
+| **Icons**                                                 |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color for the icon elements.
+| `--mdc-theme-error`                                       | Controls the invalid color of the icon elements.
+| `--mdc-theme-text-disabled-on-light`                      | Controls the disabled color of the icon elements.
+| **Placeholder**                                           |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color of the placeholder element.
 
 </PageSection>
 
----
+<PageSection>
+
+## Accessibility
+
+- Add an `id` to your `<input>` element and bind it to your `<label>` element using the `for` attribute on the `<label>`.
+- Ensure that the chips that are added to the field have descriptive `aria-label` or `aria-labelledby` attributes.
+- Make sure that the member chips that are added can be accessed via the keyboard left and right arrows.
+  - There should be a distinct visual cue that indicates which chip is focused
+- Similarly, make sure that when a chip is focused using the arrow keys, that the backspace and delete keys do remove them.
+- Ensure that when disabled, the entire field as well as the member chips all appear visually and interactively disabled.
+
+</PageSection>
 
 <PageSection>
 

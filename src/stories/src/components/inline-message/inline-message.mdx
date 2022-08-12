@@ -1,13 +1,11 @@
-import { DefaultTemplate as InlineMessageDemo } from './templates/default';
+import { Default as InlineMessageDemo } from './inline-message.stories';
 import { InlineMessageDefaultCodeHtml } from './code/inline-message-default';
 import { InlineMessageThemeCodeHtml } from './code/inline-message-theme';
-import { InlineMessageIconCodeHtml } from './code/inline-message-icon';
-import { InlineMessageTitleCodeHtml } from './code/inline-message-title';
 import { InlineMessageIconTitleCodeHtml } from './code/inline-message-icon-title';
 
 <PageSection>
 
-## Usage
+# Inline message
 
 The inline-message component provides a static, targeted message to the use. It has a moderate amount of emphasis but should not be used for page specific messaging.
 If you need to show a page or app wide messages, you should consider using the [banner component](?path=/story/components-banner--default) instead.
@@ -27,7 +25,7 @@ This component supports built-in predefined themes.
 Below is the most basic usage of the inline message for displaying a static message:
 
 <LiveDemo codeHtml={InlineMessageDefaultCodeHtml()}>
-  <InlineMessageDemo />
+  <InlineMessageDemo hasIcon={false} hasTitle={false} />
 </LiveDemo>
 
 ### Themed
@@ -35,48 +33,26 @@ Below is the most basic usage of the inline message for displaying a static mess
 You can use the built-in themes via attribute. If you need a custom color, see the CSS custom properties section below.
 
 <LiveDemo layout="column" codeHtml={InlineMessageThemeCodeHtml()}>
-  <InlineMessageDemo theme="danger" />
+  <InlineMessageDemo theme="danger" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="warning" />
+  <InlineMessageDemo theme="warning" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="success" />
+  <InlineMessageDemo theme="success" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="info-primary" />
+  <InlineMessageDemo theme="info-primary" hasIcon={false} hasTitle={false} />
   <br/>
-  <InlineMessageDemo theme="info-secondary" />
+  <InlineMessageDemo theme="info-secondary" hasIcon={false} hasTitle={false} />
 </LiveDemo>
-
-### Combined with an icon
-
-Here is an example usage combined with the an icon:
-
-
-<LiveDemo codeHtml={InlineMessageIconCodeHtml()}>
-  <InlineMessageDemo hasIcon={true}/>
-</LiveDemo>
-
-### Combined with a title
-
-Here is an example usage combined with a title:
-
-
-<LiveDemo codeHtml={InlineMessageTitleCodeHtml()}>
-  <InlineMessageDemo hasTitle={true}/>
-</LiveDemo>
-
 
 ### Combined with both an icon and a title
 
 Here is an example usage combined with both an icon and a title:
 
-
 <LiveDemo codeHtml={InlineMessageIconTitleCodeHtml()}>
-  <InlineMessageDemo hasIcon={true} hasTitle={true}/>
+  <InlineMessageDemo />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -89,8 +65,6 @@ Allows for easily setting the theme color to use. Valid values: `danger`, `warni
 </PropertyDef>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -106,6 +80,17 @@ Allows for easily setting the theme color to use. Valid values: `danger`, `warni
 
 <PageSection>
 
+## CSS parts
+
+| Name                       | Description
+| :--------------------------| :----------------
+| `root`                     | The root element.
+| `container`                | The layout container element.
+
+</PageSection>
+
+<PageSection>
+
 ## CSS custom properties
 
 | Name                                                  | Description
@@ -114,5 +99,16 @@ Allows for easily setting the theme color to use. Valid values: `danger`, `warni
 | `--forge-inline-message-theme-on-background`            | Sets the inline message's font color.
 | `--forge-inline-message-theme-icon`                     | Sets the inline message's icon color.
 | `--forge-inline-message-border-radius`                  | Sets the inline message's border radius.
+
+</PageSection>
+
+
+<PageSection>
+
+## Accessibility
+
+- If the inline-message is used to display an important notification to a user, use the `role="alert"` attribute on the `<forge-inline-message>` element.
+  - This is equivalent to using `aria-live="assertive"`.
+  - If the message is less urgent, you can use `aria-live="polite"` to wait until the user is finished with their current task.
 
 </PageSection>

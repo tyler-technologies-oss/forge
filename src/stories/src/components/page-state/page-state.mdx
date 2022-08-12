@@ -1,9 +1,9 @@
-import { DefaultTemplate as PageStateDemo } from './templates/default';
+import { Default as PageStateDemo } from './page-state.stories';
 import { PageStateDefaultHtml } from './code/page-state-default';
 
 <PageSection>
 
-## Usage
+# Page state
 
 The page-state component is a layout design component that was created to ensure consistency, and provide structure for pages that need to
 display a state such as empty, error, 404... etc. This will allow us to keep all of our pages that are using this pattern the same.
@@ -25,15 +25,11 @@ reaches the state.
 
 The following example is a typical empty state implementation with a couple of action buttons.
 
-<LiveDemo 
-layout={"column"} 
-codeHtml={PageStateDefaultHtml()}>
-  <PageStateDemo/>
+<LiveDemo layout="column" codeHtml={PageStateDefaultHtml()}>
+  <PageStateDemo />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -48,7 +44,20 @@ codeHtml={PageStateDefaultHtml()}>
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                        | Description
+| :---------------------------| :----------------
+| `root`                      | The root element.
+| `graphic-container`         | The container element around the `graphic` slot.
+| `title-container`           | The container element around the `title` slot.
+| `message-container`         | The container element around the `message` slot.
+| `actions-container`         | The container element around the `action` slot.
+
+
+</PageSection>
 
 <PageSection>
 
@@ -61,5 +70,14 @@ codeHtml={PageStateDefaultHtml()}>
 | `--forge-page-state-width`                  | Controls the width of component in a desktop viewport. Default is `576px`.
 | `--forge-page-state-mobile-width`           | Controls the width of component in a mobile viewport. Default is `70%`.
 | `--forge-page-state-vertical-margin`        | Controls the vertical margin spacing between the elements. Default is `56px`.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- If the graphic is important to the communication of the page state, ensure it has an `alt` attribute which describes the graphic, otherwise include an `alt` attribute with an empty value (`alt=""`)
+- If any action buttons are included, verify that they have a [role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques) attribute set.
 
 </PageSection>

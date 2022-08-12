@@ -1,9 +1,11 @@
-import { ProfileTemplate as ProfileDemo } from './templates/profile';
-import { ListTemplate as ListDemo } from './templates/list';
-import { ChipsTemplate as ChipsDemo } from './templates/chips';
-import { ButtonsTemplate as ButtonsDemo } from './templates/buttons';
-import { AppTemplate as AppDemo } from './templates/app';
-import { FormFieldTemplate as FormFieldDemo } from './templates/form-field';
+import {
+  Profile as ProfileDemo,
+  List as ListDemo,
+  Chips as ChipsDemo,
+  Buttons as ButtonsDemo,
+  App as AppDemo,
+  FormField as FormFieldDemo
+} from './skeleton.stories';
 import { SkeletonProfileHtml } from './code/skeleton-profile';
 import { SkeletonListHtml } from './code/skeleton-list';
 import { SkeletonChipsHtml } from './code/skeleton-chips';
@@ -13,13 +15,14 @@ import { SkeletonFormFieldHtml } from './code/skeleton-form-field';
 
 <PageSection>
 
-## Usage
+# Skeleton
 
-The skeleton component is a generic, low-level component that can be used to build loading placeholder pages/elements called “skeleton screens”. These screens represent the block-level visual elements of a page, or section of a page, where content is intended to be loaded sometime in the future. Using skeleton screens gives the illusion of speed to the user, and can often reduce frustration for users during long running processes.
+The skeleton component is a generic, low-level component that can be used to build loading placeholder pages/elements called "skeleton screens". These
+screens represent the block-level visual elements of a page, or section of a page, where content is intended to be loaded sometime in the future.
+Using skeleton screens gives the illusion of speed to the user, and can often reduce frustration for users during long running processes.
 
-There are a few built-in variants that can be used by adding an attribute to the element. These built-in variants, are specifically designed to mimic other components in the Forge library for ease of use.
-
-This component will produce a grey colored element, with a subtle animation over the to show that the content is loading.
+There are a few built-in variants that can be used by adding an attribute to the element. These built-in variants are specifically designed to mimic
+other components in the Forge library for ease of use.
 
 </PageSection>
 
@@ -32,7 +35,7 @@ This component will produce a grey colored element, with a subtle animation over
 ### Profile
 
 <LiveDemo codeHtml={SkeletonProfileHtml()}>
-  <ProfileDemo/>
+  <ProfileDemo />
 </LiveDemo>
 
 ### List
@@ -44,33 +47,28 @@ This component will produce a grey colored element, with a subtle animation over
 ### Chips
 
 <LiveDemo codeHtml={SkeletonChipsHtml()}>
-  <ChipsDemo/>
+  <ChipsDemo />
 </LiveDemo>
 
 ### Buttons
 
 <LiveDemo codeHtml={SkeletonButtonsHtml()}>
-  <ButtonsDemo/>
-</LiveDemo>
-
-### App
-
-<LiveDemo 
-fullWidth 
-layout={"column"} 
-codeHtml={SkeletonAppHtml()}>
-  <AppDemo/>
+  <ButtonsDemo />
 </LiveDemo>
 
 ### Form field
 
 <LiveDemo codeHtml={SkeletonFormFieldHtml()}>
-  <FormFieldDemo/>
+  <FormFieldDemo />
+</LiveDemo>
+
+### App
+
+<LiveDemo fullWidth layout="column" codeHtml={SkeletonAppHtml()}>
+  <AppDemo />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -120,7 +118,15 @@ codeHtml={SkeletonAppHtml()}>
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                  | Description
+| :---------------------| :----------------
+| `root`                | The root container element.
+
+</PageSection>
 
 <PageSection>
 
@@ -143,5 +149,13 @@ codeHtml={SkeletonAppHtml()}>
 | `--forge-skeleton-list-item-margin`      | Controls the margin of the internal skeleton container to mimic list item.
 | `--forge-skeleton-text-height`           | Controls the height of the internal skeleton container to mimic text.
 | `--forge-skeleton-theme-gradient`        | Controls the background gradient of the internal skeleton container during the animation.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that the skeleton component does not interfere with screen readers by including the `aria-hidden="true"` attribute.
 
 </PageSection>

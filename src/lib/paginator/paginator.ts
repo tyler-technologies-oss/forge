@@ -7,6 +7,7 @@ import { IconButtonComponent } from '../icon-button';
 import { SelectComponent } from '../select';
 import { IconComponent, IconRegistry } from '../icon';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { TooltipComponent } from '../tooltip';
 
 import template from './paginator.html';
 import styles from './paginator.scss';
@@ -43,7 +44,8 @@ declare global {
   dependencies: [
     IconButtonComponent,
     SelectComponent,
-    IconComponent
+    IconComponent,
+    TooltipComponent
   ]
 })
 export class PaginatorComponent extends BaseComponent implements IPaginatorComponent {

@@ -1,9 +1,9 @@
-import { DefaultTemplate as AppBarHelpButtonDemo } from './templates/default';
+import { Default as AppBarHelpButtonDemo } from './app-bar-help-button.stories';
 import { AppBarHelpButtonDefaultCodeHtml, AppBarHelpButtonDefaultCodeTs } from './code/app-bar-help-button-default';
 
 <PageSection>
 
-## Usage
+# App Bar Help Button
 
 For convenience Forge provides the `<forge-app-bar-help-button>` component. This component uses an icon-button
 (with a predefined icon), and is wrapped in a Forge [menu component](?path=/story/components-menu--default). The power of this component is that it will ensure a
@@ -63,6 +63,17 @@ The following example demonstrates how to bind options to the component, as well
 ### CSS custom properties
 
 See the [icon button](?path=/docs/components-icon-button--default#css-custom-properties) component for information about which CSS custom properties are available.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Accessibility
+
+- The `<forge-app-bar-help-button>` component handles all accessibility attributes for you, but if you implement this yourself be sure to add the proper `aria-label`.
+- Ensure that the proper color contrast ratio is met, especially if using a custom theme.
 
 </PageSection>
 

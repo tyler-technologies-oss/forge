@@ -1,10 +1,10 @@
-import { DefaultTemplate as ButtonGroupDemo } from './templates/default';
+import { Default as ButtonGroupDemo } from './button-toggle.stories';
 import { ButtonToggleDefaultCodeHtml } from './code/button-toggle-default';
-import { ButtonToggleLeadingCodeHtml, ButtonToggleTrailingCodeHtml } from './code/button-toggle-icons';
+import { ButtonToggleTrailingCodeHtml } from './code/button-toggle-icons';
 
 <PageSection>
 
-## Usage
+# Button toggle
 
 The button toggle component can be used as simple buttons, or as an alternative to radio and checkbox elements to help provide users with a choice of options.
 They offer a group of interactive button-style elements that are related to each other.
@@ -22,25 +22,13 @@ of a group contained by a `<forge-button-toggle-group>` parent element.
 
 ### Basic
 
-<LiveDemo
-layout={'column'}
-codeHtml={ButtonToggleDefaultCodeHtml()}>
+<LiveDemo layout="column" codeHtml={ButtonToggleDefaultCodeHtml()}>
   <ButtonGroupDemo/>
 </LiveDemo>
 
-### With leading icons
+### With icons
 
-<LiveDemo 
-layout={'column'}
-codeHtml={ButtonToggleLeadingCodeHtml()}>
-  <ButtonGroupDemo hasLeading={true}/>
-</LiveDemo>
-
-### With trailing icons
-
-<LiveDemo 
-layout={'column'}
-codeHtml={ButtonToggleTrailingCodeHtml()}>
+<LiveDemo layout="column" codeHtml={ButtonToggleTrailingCodeHtml()}>
   <ButtonGroupDemo hasTrailing={true}/>
 </LiveDemo>
 
@@ -138,8 +126,6 @@ Gets/sets the dense state.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -158,8 +144,6 @@ Gets/sets the dense state.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -171,8 +155,6 @@ Gets/sets the dense state.
 
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -194,7 +176,23 @@ Gets/sets the dense state.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+### Button toggle group
+
+| Name                                | Description
+| :-----------------------------------| :----------------
+| `root`                              | The root element.
+
+### Button toggle
+
+| Name                                  | Description
+| :-------------------------------------| :----------------
+| `button`                              | The native `<button>` element.
+
+</PageSection>
 
 <PageSection>
 
@@ -205,12 +203,28 @@ Gets/sets the dense state.
 | `--mdc-theme-primary`                              | Controls the primary theme color.
 | `--mdc-theme-on-primary`                           | Controls the on-primary theme color.
 | `--mdc-theme-text-primary-on-dark`                 | Controls the primary text theme color.
-| `--forge-button-toggle-border-right-width`           | Controls the border-right width for horizontal adjacent toggles.
-| `--forge-button-toggle-border-bottom-width`          | Controls the border-bottom width for vertical adjacent toggles.
-| `--forge-button-toggle-border-top-left-radius`       | Controls the border-top-left-radius.
-| `--forge-button-toggle-border-bottom-left-radius`    | Controls the border-bottom-left-radius.
-| `--forge-button-toggle-border-top-right-radius`      | Controls the border-top-right-radius.
-| `--forge-button-toggle-border-bottom-right-radius`   | Controls the border-bottom-right-radius.
+| `--forge-button-toggle-border-right-width`         | Controls the border-right width for horizontal adjacent toggles.
+| `--forge-button-toggle-border-bottom-width`        | Controls the border-bottom width for vertical adjacent toggles.
+| `--forge-button-toggle-border-top-left-radius`     | Controls the border-top-left-radius.
+| `--forge-button-toggle-border-bottom-left-radius`  | Controls the border-bottom-left-radius.
+| `--forge-button-toggle-border-top-right-radius`    | Controls the border-top-right-radius.
+| `--forge-button-toggle-border-bottom-right-radius` | Controls the border-bottom-right-radius.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* The component will present itself as either checkboxes or radio buttons based on the presence of the `multiple` attribute.
+* For button toggles containing only icons, each button toggle should be given a meaningful label via `aria-label` or `aria-labelledby`.
+* For button toggle groups, each group should be given a meaningful label via `aria-label` or `aria-labelledby`.
+* Verify that you can tab to each button toggle component.
+* Verify that you can tab to each part of a grouped set of button toggles.
+* Verify that pressing the space bar or enter key will activate (or toggle) the currently focused option.
+* Ensure that there is a visual cue that distinctly indicates which toggles are active and inactive.
+* Ensure that active, inactive, and focused states are visually distinct.
+* Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
 
 </PageSection>
 

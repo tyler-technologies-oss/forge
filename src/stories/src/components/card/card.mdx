@@ -1,12 +1,12 @@
-import { DefaultTemplate as CardDemo } from './templates/default';
-import { StyledTemplate as StyledDemo } from './templates/styled';
+import { Default as CardDemo, Styled as StyledDemo, WithScaffold as ScaffoldDemo } from './card.stories.tsx';
 import { CardDefaultCodeHtml } from './code/card-default';
 import { CardOutlinedCodeHtml } from './code/card-outlined';
 import { CardStyledCodeHtml, CardStyledCodeScss } from './code/card-styled';
+import { CardScaffoldCodeHtml, CardScaffoldCodeScss } from './code/card-scaffold';
 
 <PageSection>
 
-## Usage
+# Card
 
 The card component is intended to be used as a layout design element to help group related content together into sections.
 
@@ -24,17 +24,21 @@ See the [CSS custom properties](#css-custom-properties) section below for inform
 
 ## Example
 
-### Styled
+### Basic
 
-<LiveDemo dense={false} padded={false} codeHtml={CardDefaultCodeHtml()}>
+<LiveDemo fullWidth layout="column" dense={false} padded={false} codeHtml={CardDefaultCodeHtml()}>
   <LiveDemoStage>
     <CardDemo />
   </LiveDemoStage>
 </LiveDemo>
 
+> By default the card component will apply a `padding` of `16px` to the entire internal container element.
+>
+> Use the `--forge-card-padding` CSS custom property to set a custom padding value.
+
 ### Outlined
 
-<LiveDemo dense={false} padded={false} codeHtml={CardOutlinedCodeHtml()}>
+<LiveDemo fullWidth layout="column" dense={false} padded={false} codeHtml={CardOutlinedCodeHtml()}>
   <LiveDemoStage>
     <CardDemo outlined />
   </LiveDemoStage>
@@ -42,15 +46,21 @@ See the [CSS custom properties](#css-custom-properties) section below for inform
 
 ### Styled
 
-<LiveDemo dense={false} padded={false} codeHtml={CardStyledCodeHtml()} codeScss={CardStyledCodeScss()}>
+<LiveDemo fullWidth layout="column" dense={false} padded={false} codeHtml={CardStyledCodeHtml()} codeScss={CardStyledCodeScss()}>
   <LiveDemoStage>
     <StyledDemo />
   </LiveDemoStage>
 </LiveDemo>
 
-> By default the card component will apply a `padding` of `16px` to the entire internal container element.
->
-> Use the `--forge-card-padding` CSS custom property to set a custom padding value.
+### With Scaffold
+
+This example uses an internal `<forge-scaffold>` element to create a scrollable content area with fixed headers and footers.
+
+<LiveDemo fullWidth layout="column" dense={false} padded={false} codeHtml={CardScaffoldCodeHtml()} codeScss={CardScaffoldCodeScss()}>
+  <LiveDemoStage>
+    <ScaffoldDemo />
+  </LiveDemoStage>
+</LiveDemo>
 
 </PageSection>
 
@@ -82,7 +92,15 @@ Sets the card to use a flat appearance with a standard `border` instead of the r
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name               | Description
+| :------------------| :----------------
+| `root`             | The root element.
+
+</PageSection>
 
 <PageSection>
 
@@ -96,5 +114,15 @@ Sets the card to use a flat appearance with a standard `border` instead of the r
 | `--forge-card-height`               | Sets the `height` of the card element.
 | `--forge-card-width`                | Sets the `width` of the card element.
 | `--forge-theme-border-color`        | Sets the border color of the outlined card element.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* The card component should not interfere with tab flow.
+* Add a role attribute if this card has any applicable role that should be known to screen readers.
+* Consider using the `group` role on the `<forge-card>` element if the content is related and separate from other surrounding items.
 
 </PageSection>

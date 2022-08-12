@@ -1,5 +1,5 @@
 const path = require('path');
-const { promises: { readdir, rename }, existsSync } = require('fs');
+const { rename, existsSync } = require('@tylertech/forge-build-tools');
 const forgeConfig = require('../../forge.json');
 const ROOT = path.resolve(__dirname, '../../');
 const DIST_PATH = path.join(ROOT, 'dist');
@@ -7,9 +7,9 @@ const DIST_PATH = path.join(ROOT, 'dist');
 /**
  * This plugin is used to hook into the `auto` pipeline after the `shipit` command has completed.
  * 
- * This hook will allow us to access the new version that was calculated from `auto` and use that
- * to update any necessary references in the project to complete deployment process and ensure
- * that the exact version is used when publishing any subsequent assets.
+ * This hook will allow us to access the new version that was calculated from `Auto` and use that
+ * to update any necessary references in the project to complete deployment process, such as
+ * ensuring that the exact version is used when publishing any subsequent assets for example.
  */
 module.exports = class ForgePreparePublishPlugin {
   constructor() {
@@ -18,51 +18,42 @@ module.exports = class ForgePreparePublishPlugin {
 
   apply(auto) {
     // Tap into the `afterShipIt` hook to access the `newVersion` that was calculated.
-    auto.hooks.afterShipIt.tap('ForgePreparePublishPlugin', async ({ context, dryRun, newVersion }) => {
-      // We only run this plugin when creating a new "latest" release
-      if (context !== 'latest') {
-        console.log('Skipping ForgePreparePublishPlugin.');
-        return;
-      }
+    auto.hooks.afterShipIt.tap('ForgePreparePublishPlugin', opts => this.appendVersionNumber(auto, opts));
+  }
 
-      // Build and ensure the deployment path exists
-      const deploymentPath = path.join(forgeConfig.build.static.distPath, forgeConfig.packageOrg, forgeConfig.packageName);
-      if (!existsSync(path.join(DIST_PATH, deploymentPath))) {
-        console.error(`[ForgePreparePublishPlugin] Deployment path doesn't exist: ${deploymentPath}`);
-        return;
-      }
-      
-      // Get the version directory name from the CDN build output
-      const subdirectories = await getDirectories(path.join(DIST_PATH, deploymentPath));
-      const versionDirectoryName = subdirectories[0];
+  /**
+   * Appends the new release version from Auto shipit to the CDN deployment directory
+   */
+  async appendVersionNumber(auto, { context, dryRun, newVersion }) {
+    // We only run this plugin when creating a new "latest" release
+    if (context !== 'latest') {
+      auto.logger.log.info(`Skipping ${this.name}.`);
+      return;
+    }
 
-      // Ensure we have only 1 directory in the CDN build output (this will always be true in the CI environment)
-      if (!subdirectories.length || subdirectories.length > 1 || !versionDirectoryName) {
-        console.error(`[ForgePreparePublishPlugin] Unable to locate version directory in CDN deployment path: ${deploymentPath}`);
-        return;
-      }
+    // Ensure the deployment path exists
+    const deploymentPath = path.join(forgeConfig.build.static.distPath, forgeConfig.packageOrg, forgeConfig.packageName);
+    if (!existsSync(path.join(DIST_PATH, deploymentPath))) {
+      auto.logger.log.error(`[${this.name}] Deployment path doesn't exist: ${deploymentPath}`);
+      return process.exit(1);
+    }
+  
+    // Concatenate the new version number to the existing deployment path
+    // For example, this will update a path like "dist/path/to/package" to this "dist/path/to/package@1.0.0"
+    const versionNumber = newVersion.replace(/^v?/, ''); // Remove leading "v" if exists
+    const versionPath = `${deploymentPath.replace(/\/?$/, '')}@${versionNumber}`;
 
-      // Generate the existing version directory path
-      const existingPath = path.join(DIST_PATH, deploymentPath, versionDirectoryName);
-      
-      // Stop early if this is a dry run
-      if (dryRun) {
-        console.log(`[ForgePreparePublishPlugin] Would have updated version number in CDN deployment path (${deploymentPath}) to ${newVersion}.`);
-        return;
-      }
+    // Stop early if this is a dry run
+    if (dryRun) {
+      auto.logger.log.info(`Would have updated CDN deployment path to: ${versionPath}`);
+      return;
+    }
 
-      // Rename the version directory name to use the new version from the shipit output to ensure a 1:1 match between CDN and npm package
-      const newPath = path.join(DIST_PATH, deploymentPath, newVersion);
-      await rename(existingPath, newPath);
+    // Rename the deployment directory to the new path with the version suffix
+    const currentDeploymentPath = path.join(DIST_PATH, deploymentPath);
+    const newDeploymentPath = path.join(DIST_PATH, versionPath);
+    await rename(currentDeploymentPath, newDeploymentPath);
 
-      console.log(`[ForgePreparePublishPlugin] Renamed deployment path to: ${newPath}`);
-    });
+    auto.logger.log.success(`Renamed deployment path to: ${versionPath}`);
   }
 };
-
-/** Gets all directory names in the provided `source` directory. */
-async function getDirectories(source) {
-  return (await readdir(source, { withFileTypes: true }))
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name);
-}

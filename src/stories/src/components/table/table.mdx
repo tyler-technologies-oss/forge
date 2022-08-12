@@ -1,18 +1,20 @@
-import { DefaultTemplate as TableDemo } from './templates/default';
+import { Default as TableDemo } from './table.stories';
 import { TableDefaultHtml, TableDefaultTs} from './code/table-default';
 
 <PageSection>
 
-## Usage
+# Table
 
-> **Note:** The `forge-table` provides **basic data display and functionality** such as sorting, filtering, and selecting rows. It is not intended to be comprehensive or fully featured. 
+> **Note:** The `forge-table` provides **basic data display and functionality** such as sorting, filtering, and selecting rows. It is not intended to
+be comprehensive or fully featured. 
 >
-> If your team needs extensive data manipulation or editing capability, **a third-party table extension may be more appropriate.** See our guidance on 
-[advanced tables](https://forge.tylertech.com/patterns/external-libraries#advanced-table) under External library guidance. 
+> If your team needs extensive data manipulation or editing capability, **a third-party table extension may be more appropriate.** We recommend looking into
+> alternatives such as [AG Grid](https://www.ag-grid.com/).
 
 The table is a component that allows `<forge-table>` to render tabular data with many options for displaying, filtering, sorting, and selection.
 
-**Note that the table component requires the use of JavaScript for interaction.** It handles the rendering itself for ease of use, while being flexible in the functionality it provides.
+**Note that the table component requires the use of JavaScript for interaction.** It handles the rendering itself for ease of use, while being flexible
+in the functionality it provides. This component is configuration-based, and it renders the table for you completed based on that configuration.
 
 </PageSection>
 
@@ -20,27 +22,11 @@ The table is a component that allows `<forge-table>` to render tabular data with
 
 <PageSection>
 
-## Examples
-
-### Basic
-
-Using the component in the HTML markup is simple. Just add the following HTML:
-
-```html
-<forge-table></forge-table>
-```
-
-This alone won't render anything, but with a little configuration from JavaScript we can setup a table with data easily.
-
-In the example code below, we are getting a reference to the `forge-table` custom element, and then we set the `data` and
-`columnConfigurations` properties.
-
-When those two properties are both set, the table will render the rows of data.
+## Example
 
 <LiveDemo fullWidth layout="column" codeHtml={TableDefaultHtml()} codeTs={TableDefaultTs()}>
   <TableDemo />
 </LiveDemo>
-
 
 ### Using column filters
 
@@ -53,8 +39,8 @@ import { TextFieldComponentDelegate, SelectComponentDelegate } from '@tylertech/
 import { SomeCustomComponentDelegate } from './my-custom-component-delegates';
 
 table.columnConfigurations = [
-  { property: 'name', header: 'Person name', filter: true, filterDelegate: new TextFieldComponentDelegate({ placeholder: 'Filter name...' }) },
-  { property: 'color', header: 'Favorite color', filter: true, filterDelegate: new SelectComponentDelegate({ placeholder: 'Filter color...' }) },
+  { property: 'name', header: 'Person name', filter: true, filterDelegate: new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } }) },
+  { property: 'color', header: 'Favorite color', filter: true, filterDelegate: new SelectComponentDelegate({ options: { placeholder: 'Filter color...' } }) },
   { property: 'age', header: 'Person age', filter: true, filterDelegate: new SomeCustomComponentDelegate() }
 ];
 ```
@@ -66,8 +52,6 @@ columns where you want to show something other than `true` and `false`.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Angular Examples
@@ -77,17 +61,20 @@ Below is an example usage of interacting with the `forge-table` component with
 This first example shows how to set up the bindings within an Angular template:
 
 ```html
-<forge-table [columnConfigurations]="columnConfigurations"
-           [data]="data$ | async"
-           select="true"
-           select-key="Id"
-           (forge-table-select)="onSelect($event)"
-           (forge-table-select-all)="onSelectAll($event)"
-           (forge-table-sort)="onTableSort($event)">
+<forge-table
+  [columnConfigurations]="columnConfigurations"
+  [data]="data$ | async"
+  select="true"
+  select-key="Id"
+  (forge-table-select)="onSelect($event)"
+  (forge-table-select-all)="onSelectAll($event)"
+  (forge-table-sort)="onTableSort($event)">
 </forge-table>
 ```
 
-The following snippet is an example component class with the properties/methods to handle inputs/outputs on the `forge-table` element. The `data` property is being used an RxJS observable here, but by using the `async` pipe we are able to unwrap the observable to provide an array of objects to the table component.
+The following snippet is an example component class with the properties/methods to handle inputs/outputs on the `forge-table` element. The `data`
+property is being used an RxJS observable here, but by using the `async` pipe we are able to unwrap the observable to provide an array of objects
+to the table component.
 
 ```ts
 @Component({
@@ -129,8 +116,6 @@ export class TableExampleComponent implements OnInit {
 ```
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -276,8 +261,6 @@ export class TableExampleComponent implements OnInit {
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -378,8 +361,6 @@ export class TableExampleComponent implements OnInit {
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -397,8 +378,6 @@ export class TableExampleComponent implements OnInit {
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -411,8 +390,6 @@ export class TableExampleComponent implements OnInit {
 | `shift + click`                     | Will select a range of list items if a previusly selected item exist.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -434,6 +411,16 @@ export class TableExampleComponent implements OnInit {
 | `--mdc-theme-text-primary-on-background`                | Controls the font-color of the sorted head cells.
 | `--mdc-theme-text-icon-on-background`                   | Controls the font-color of the icon in sortable head cells.
 | `--mdc-theme-text-disabled-on-background`               | Controls the background-color of the disabled row.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Avoid using tables for layout, as this can make it difficult for users who are using screen readers.
+- The checkbox element will receive the proper ARIA attributes such as `aria-label="Select row"`
+- If the table uses any interactive controls, ensure that any controls that are reachable by the mouse can also be reached and updated by keyboard.
 
 </PageSection>
 

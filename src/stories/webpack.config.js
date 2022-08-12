@@ -18,7 +18,7 @@ module.exports = async ({ config }) => {
 
   // Compile Forge TypeScript with ts-loader instead of babel
   config.module.rules.push({
-    test: /src\/lib\/.*\.ts$/,
+    test: /src[\/\\]lib[\/\\].*\.ts$/,
     use: [
       {
         loader: 'ts-loader',
@@ -33,7 +33,7 @@ module.exports = async ({ config }) => {
   });
 
   config.module.rules.push({
-    test: /src\/lib\/.*\.html$/,
+    test: /src[\/\\]lib[\/\\].*\.html$/,
     use: [
       {
         loader: 'html-loader',

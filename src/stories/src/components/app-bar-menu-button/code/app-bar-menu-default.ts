@@ -1,6 +1,6 @@
 export const AppBarMenuDefaultCodeHtml = () => `
 <forge-app-bar title-text="App Bar">
-  <forge-app-bar-menu-button slot="menu"></forge-app-bar-menu-button>
+  <forge-app-bar-menu-button slot="start"></forge-app-bar-menu-button>
 </forge-app-bar>
 `;
 

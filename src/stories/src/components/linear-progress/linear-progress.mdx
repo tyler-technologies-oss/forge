@@ -1,11 +1,11 @@
-import { DefaultTemplate as LinearProgressDemo } from './templates/default';
+import { Default as LinearProgressDemo } from './linear-progress.stories';
 import { LinearProgressIndeterminateCodeHtml } from './code/linear-progress-indeterminate';
 import { LinearProgressDeterminateCodeHtml } from './code/linear-progress-determinate';
 import { LinearProgressBufferCodeHtml } from './code/linear-progress-buffer';
 
 <PageSection>
 
-## Usage
+# Linear progress
 
 This component has a couple of variants that allows you to provide progress completion percentages, or a simple indicator that some indeterminate amount
 of work is in progress. See the examples section below for information about each variant.
@@ -43,8 +43,6 @@ This variant is similar to determinate, except it allows you to show that the to
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -86,8 +84,6 @@ Sets the `aria-label` attribute on the internal `progressbar` element.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -106,7 +102,22 @@ Closes the component if it is in the open state.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                       | Description
+| :------------------------------------------| :----------------
+| `root`                                     | The root container element.
+| `buffer`                                   | The buffer bar container element.
+| `buffer-bar`                               | The buffer bar element.
+| `buffer-dots`                              | The buffer bar animating dots element.
+| `progress-bar`                             | The progress bar container element.
+| `progress-bar-inner`                       | The progress bar progress element.
+| `secondary-bar`                            | The secondary bar container element.
+| `secondary-bar-inner`                      | The secondary bar progress element.
+
+</PageSection>
 
 <PageSection>
 
@@ -119,5 +130,13 @@ Closes the component if it is in the open state.
 | `--forge-linear-progress-color`                           | Controls the color of the progress bar.
 | `--forge-linear-progress-theme-buffer`                    | Controls the color of the buffer bar.
 | `--forge-linear-progress-theme-buffer-dots-filter`        | Controls the color of the buffer dots filter.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure the progress indicator provides a role attribute with value "alert", and an aria-busy attribute with the value "true" while the progress indicator is active.
 
 </PageSection>

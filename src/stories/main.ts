@@ -1,12 +1,15 @@
 module.exports = {
   features: {
-    postcss: false,
+    postcss: false
   },
+  staticDirs: ['./src/assets'],
   stories: ['./src/**/*.stories.*'],
   logLevel: 'debug',
+  core: {
+    disableTelemetry: true
+  },
   addons: [
     '@storybook/addon-links',
-    '@storybook/addon-actions',
     '@storybook/addon-viewport',
     '@storybook/addon-toolbars',
     '@storybook/addon-measure',
@@ -16,19 +19,21 @@ module.exports = {
       options: {
         sourceLoaderOptions: {
           parser: 'typescript',
-          injectStoryParameters: false,
+          injectStoryParameters: false
         },
         configureJsx: true
       },
     },
     '@storybook/addon-controls',
     '@storybook/addon-a11y',
+    '@storybook/addon-storysource',
+    '@storybook/addon-actions',
     'storybook-dark-mode'
   ],
   typescript: {
     check: true,
     reactDocgenTypescriptOptions: {
-      propFilter: prop => ['label', 'disabled'].includes(prop.name),
-    },
+      propFilter: prop => ['label', 'disabled'].includes(prop.name)
+    }
   }
 };

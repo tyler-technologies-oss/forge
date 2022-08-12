@@ -51,6 +51,8 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   setCalendarDisabledDaysOfWeek(value: DayOfWeek[]): void;
   setCalendarDisableDayCallback(disableDayCallback: (date: Date) => boolean): void;
   setCalendarActiveDate(date: Date): void;
+  getCalendarActiveDate(): Date | undefined;
+  setCalendarYearRange(value: string): void;
   propagateCalendarKey(evt: KeyboardEvent): void;
 }
 
@@ -58,6 +60,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   protected _identifier: string;
   protected _calendarDropdown?: ICalendarDropdown;
   protected _toggleElement?: HTMLElement;
+  protected _valueChangeListeners: Array<() => void> = [];
 
   constructor(component: T) {
     super(component);
@@ -98,6 +101,11 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
 
   public destroy(): void {
     this._calendarDropdown?.destroy();
+    this.destroyValueChangeListener();
+  }
+
+  public destroyValueChangeListener(): void {
+    this._valueChangeListeners.forEach(cb => cb());
   }
 
   public addToggleListener(type: string, listener: (event: Event) => void): void {
@@ -186,6 +194,16 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     this._calendarDropdown?.calendar?.setActiveDate(date);
   }
 
+  public getCalendarActiveDate(): Date | undefined {
+    return this._calendarDropdown?.calendar?.activeDate;
+  }
+
+  public setCalendarYearRange(value: string): void {
+    if (this._calendarDropdown?.calendar?.yearRange) {
+      this._calendarDropdown.calendar.yearRange = value;
+    }
+  }
+
   public propagateCalendarKey(evt: KeyboardEvent): void {
     this._calendarDropdown?.calendar?.handleKey(evt);
   }
@@ -214,7 +232,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
 
   protected _getDefaultTargetElement(): HTMLElement {
     // This component is often used with the Forge text-field, if so, let's target our popup around
-    // one if its internal elements for best alignnment
+    // one if its internal elements for best alignment
     const textField = this._component.querySelector('forge-text-field');
     if (textField && textField.shadowRoot) {
       const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;

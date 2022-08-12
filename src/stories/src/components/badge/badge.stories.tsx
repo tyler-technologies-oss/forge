@@ -1,11 +1,14 @@
 // tslint:disable variable-name
+import React, { useEffect } from 'react';
 import { Meta } from '@storybook/react';
 import { argTypes, IBadgeProps } from './badge-arg-types';
-import { DefaultTemplate } from './templates/default';
-import { IconButtonRecipeTemplate } from './templates/icon-button';
+import { Story } from '@storybook/react';
+import { ForgeBadge, ForgeIcon, ForgeIconButton } from '@tylertech/forge-react';
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
+
 const MDX = require('./badge.mdx').default;
 
-// tslint:disable-next-line: no-default-export
 export default {
   title: 'Components/Badge',
   argTypes,
@@ -16,24 +19,55 @@ export default {
   },
 } as Meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: Story<IBadgeProps> = ({
+  text = '',
+  open = true,
+  strong = false,
+  dot = false,
+  positioned = false,
+  theme = 'default'
+}) => (
+  <ForgeBadge dot={dot} open={open} positioned={positioned} strong={strong} theme={theme}>{text}</ForgeBadge>
+);
 Default.args = {
   dot: false,
   open: true,
   theme: 'default',
   positioned: false,
   strong: false,
-  text: 'Default',
-  badgeBackgroundColor: undefined,
+  text: 'Default'
 } as IBadgeProps;
 
-export const WithIconButton = IconButtonRecipeTemplate.bind({});
+export const WithIconButton: Story<IBadgeProps> = ({
+  text = '',
+  open = true,
+  strong = false,
+  dot = false,
+  positioned = false,
+  theme = 'default'
+}) => {
+  useEffect(() => {
+    IconRegistry.define(tylIconNotifications);
+  }, []);
+
+  const demoIconButtonStyles = {
+    color: 'var(--mdc-theme-on-surface, #000000)',
+  };
+
+  return (
+    <ForgeIconButton style={demoIconButtonStyles} className="forge-icon-button--with-badge">
+      <button type="button">
+        <ForgeIcon name="notifications" />
+      </button>
+      <ForgeBadge  dot={dot} open={open} positioned={positioned} strong={strong} theme={theme}>{text}</ForgeBadge>
+    </ForgeIconButton>
+  )
+};
 WithIconButton.args = {
   dot: false,
   open: true,
   theme: 'default',
   positioned: true,
   strong: false,
-  text: '3',
-  badgeBackgroundColor: undefined,
+  text: '3'
 } as IBadgeProps;

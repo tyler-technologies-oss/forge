@@ -4,25 +4,58 @@ on:
   pull_request:
     paths:
       - 'forge.json'
+      - 'package.json'
       - '.eslintrc.json'
       - '.stylelintrc'
       - '.github/workflows/**/*'
       - 'src/**/*'
 
 jobs:
+  wf-config:
+    name: Workflow Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check File Changes
+        uses: dorny/paths-filter@v2
+        id: file-filter
+        with:
+          filters: |
+            build:
+              - 'forge.json'
+              - 'tsconfig.json'
+              - 'package.json'
+              - '.eslintrc.json'
+              - '.stylelintrc'
+              - 'auto.config.ts'
+              - '.github/workflows/**'
+              - 'src/lib/**'
+            test:
+              - 'src/lib/**'
+              - 'src/test/**'
+            storybook:
+              - 'src/lib/**'
+              - 'src/stories/**'
+    outputs:
+      build-files-changed: ${{ steps.file-filter.outputs.build == 'true' }}
+      test-files-changed: ${{ steps.file-filter.outputs.test == 'true' }}
+      deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
+
   build:
     name: Build and Test
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.10.0
+    needs: wf-config
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v0.22.0
+    if: ${{ needs.wf-config.outputs.build-files-changed == 'true' || needs.wf-config.outputs.test-files-changed == 'true' }}
     with:
-      TESTS_ENABLED: true
+      BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}
+      TESTS_ENABLED: ${{ needs.wf-config.outputs.test-files-changed == 'true' }}
     secrets:
-      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
-      ARTIFACTORY_REGISTRY: ${{ secrets.FORGE_ARTIFACTORY_NPM_REGISTRY }}
+      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
 
   deploy-storybook:
     name: Deploy Storybook
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.10.0
+    needs: wf-config
+    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v0.22.0
+    if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: false
       BUILD_DIRECTORY: dist/storybook
@@ -30,6 +63,5 @@ jobs:
       BUILD_NPM_SCRIPT: "ci:build-storybook"
       PR_COMMENT_HEADER: "View Storybook Deployment"
     secrets:
-      GITHUB_DEPLOY_TOKEN: ${{ secrets.CORPDEV_GITHUB_ACCESS_TOKEN }}
-      ARTIFACTORY_TOKEN: ${{ secrets.FORGE_ARTIFACTORY_TOKEN }}
-      ARTIFACTORY_USERNAME: ${{ secrets.FORGE_ARTIFACTORY_USERNAME }}
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}

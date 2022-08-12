@@ -1,16 +1,16 @@
-import { DefaultTemplate as MenuDemo } from './templates/default';
+import { Default as MenuDemo } from './menu.stories';
 import { MenuDefaultCodeHtml, MenuDefaultCodeTs } from './code/menu-default';
 
 <PageSection>
 
-## Usage
+# Menu
 
-The menu component is a wrapper component that can be placed around any content. It will listen for a click event on its children, and toggle a popup menu
+The menu component is a wrapper component that can be placed around any content. It will listen for a click event on its children and toggle a popup menu
 around the target element.
 
 The popup menu is simply a list of items that allows a user to choose an option to perform a task.
 
-This component supports a cascading menus by adding child options to a specific menu item.
+> This component supports a cascading menus by adding child options to a specific menu item.
 
 </PageSection>
 
@@ -20,15 +20,13 @@ This component supports a cascading menus by adding child options to a specific 
 
 ## Example
 
-<LiveDemo dense={true} codeHtml={MenuDefaultCodeHtml()} codeTs={MenuDefaultCodeTs()}>
+<LiveDemo dense codeHtml={MenuDefaultCodeHtml()} codeTs={MenuDefaultCodeTs()}>
   <MenuDemo />
 </LiveDemo>
 
 > Menu options must be set via JavaScript (or through property binding if using a framework like Angular):
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -122,8 +120,6 @@ Force propagates the key event from another element this component.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -136,8 +132,6 @@ Force propagates the key event from another element this component.
 | `forge-menu-active-change`      | Emits when the active menu item is changed. The data can be accessed via the 'event.detail' property, and is of type `IMenuActiveChangeEventData`.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -161,8 +155,6 @@ See [List](?path=/docs/components-list--default#keyboard-shortcuts) for more key
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -170,6 +162,17 @@ See [List](?path=/docs/components-list--default#keyboard-shortcuts) for more key
 | Name                           | Description
 | :------------------------------| :----------------
 | `default`                      | The default (unnamed) slot is where the child `<forge-button>` element will be placed.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Verify that the trigger element used to open and close the menu can be focused and activated by keyboard.
+  - Ensure that there is a visual cue that the trigger element is currently in focus.
+- Verify that pressing the space bar or enter key while focused on the trigger element will activate the menu in the same manner as if it had been clicked with a mouse.
+- Ensure each menu item can be selected by using arrow-up and arrow-down.
 
 </PageSection>
 

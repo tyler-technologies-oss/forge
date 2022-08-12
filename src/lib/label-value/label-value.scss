@@ -1,7 +1,5 @@
 @use './mixins';
 
-@include mixins.core-styles;
-
 :host {
   @include mixins.host;
 }
@@ -10,3 +8,4 @@
   display: none;
 }
 
+@include mixins.core-styles;

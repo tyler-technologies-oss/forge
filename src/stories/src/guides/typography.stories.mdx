@@ -1,0 +1,101 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Guides/Typography" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Guide' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Guide: Typography
+
+Typography defines a set of consistent font styles use through your applications.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Getting started
+
+The first thing we will need to do is include the font file from the Forge CDN in your `<head>`:
+
+```html
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css">
+```
+
+> This will load the Roboto font and weights that Forge requires from that font.
+
+Forge also relies on a class to be set on a parent element (typically the `<body>` tag in most applications but can be any parent element) that all subsequent
+elements/classes inherit base-level typography styles from:
+
+```html
+<body class="forge-typography">
+```
+
+To ensure you have this class loaded, make sure you either include the `forge.css` global stylesheet (includes theme, typography, component... etc. styles),
+or at the very least the individual `forge-typography.css` file on its own.
+
+```scss
+@use '@tylertech/forge/dist/forge.css'; // Global StyleSheet
+
+// OR
+
+@use '@tylertech/forge/dist/typography/forge-typography.css'; // Individual typography StyleSheet
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## CSS classes
+
+Forge provides a set of predefined typography classes to make it easy for you to use consistent font styles across your app. See examples below. 
+
+### Heading styles
+
+These are the most common typography styles to use for common headings within your pages.
+
+| Name                                     | Example
+| :----------------------------------------| :----------------------
+| `forge-typography--title`                | <span class="forge-typography--title">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--headline5`            | <span class="forge-typography--headline5">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--subtitle1`            | <span class="forge-typography--subtitle1">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--subtitle1-secondary`  | <span class="forge-typography--subtitle1-secondary">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--subtitle2`            | <span class="forge-typography--subtitle2">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--subtitle2-secondary`  | <span class="forge-typography--subtitle2-secondary">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--overline`             | <span class="forge-typography--overline">The quick brown fox jumped over the lazy dog</span>
+
+### Body styles
+
+Common font styles for standard body text, lists, and labels.
+
+| Name                                     | Example
+| :----------------------------------------| :----------------------
+| `forge-typography--body1`                | <span class="forge-typography--body1">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--body2`                | <span class="forge-typography--body2">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--caption`              | <span class="forge-typography--caption">The quick brown fox jumped over the lazy dog</span>
+
+### Additional styles
+
+These are supplemental display styles that can be used for decorative purposes.
+
+> Please make note that these do **not** necessarily map to `<h1>`, `<h2>`, `<h3>`... etc. These are decorative classes that can be applied to any element.
+
+| Name                                     | Example
+| :----------------------------------------| :----------------------
+| `forge-typography--headline1`            | <span class="forge-typography--headline1">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--headline2`            | <span class="forge-typography--headline2">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--headline3`            | <span class="forge-typography--headline3">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--headline4`            | <span class="forge-typography--headline4">The quick brown fox jumped over the lazy dog</span>
+| `forge-typography--headline6`            | <span class="forge-typography--headline6">The quick brown fox jumped over the lazy dog</span>
+
+</PageSection>
+
+---

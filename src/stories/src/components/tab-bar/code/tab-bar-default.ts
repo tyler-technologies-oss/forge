@@ -10,11 +10,3 @@ export const TabBarDefaultTs = () => `
 const tabBar = document.querySelector('forge-tab-bar');
 tabBar.activateTab(0);
 `;
-
-export const TabBarDefaultBlazor = () => `
-<ForgeTabBar Underline="@true" ActiveTab="0">
-  <ForgeTab>Tab one</ForgeTab>
-  <ForgeTab>Tab two</ForgeTab>
-  <ForgeTab>Tab three</ForgeTab>
-</ForgeTabBar>
-`;

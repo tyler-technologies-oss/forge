@@ -6,7 +6,3 @@ export const TimePickerDefaultHtml = () => `
   </forge-text-field>
 </forge-time-picker>
 `;
-
-export const TimePickerDefaultBlazor = () => `
-<ForgeTimePicker Label="Time" />
-`;

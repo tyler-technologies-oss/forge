@@ -1,4 +1,4 @@
-import { DefaultTemplate as SelectDemo } from './templates/default';
+import { Default as SelectDemo } from './select.stories';
 import { SelectDefaultHtml } from './code/select-default';
 import { SelectAlwaysFloatHtml } from './code/select-always-float';
 import { SelectHelperTextHtml } from './code/select-helper-text';
@@ -8,15 +8,19 @@ import { SelectRoomyHtml } from './code/select-roomy';
 
 <PageSection>
 
-## Usage
+# Select
 
 The select component is a form field that provides the user the ability to choose a value from a pre-defined set of options via a dropdown list.
 
-The select component works best when you have a finite set of options. If you need to load options dynamically, or provide filtering, you should opt
+This component works best when you have a finite set of options. If you need to load options dynamically, or provide filtering, you should opt
 for the [autocomplete component](?path=/story/components-autocomplete--default) instead (the two look the same and are very closely related).
 
-The select component options can be configured via HTML or JavaScript. When setting up the options via HTML, you can use the `<forge-option>` element
-to configure the label and value for each option.
+Options can be configured via HTML or JavaScript. When setting up the options via HTML, you can use the `<forge-option>` element to configure the label
+and value for each option as well as many other configuration properties.
+
+> **Note:** the option elements within the dropdown will automatically receive generated `id` attributes to help with uniquely identifying these elements. Keep in
+> mind though that these values will be different every time the page is rendered, but the identifier is how the options are tied back to the underlying `<forge-select>`
+> that triggered the dropdown to open.
 
 </PageSection>
 
@@ -29,7 +33,7 @@ to configure the label and value for each option.
 ### Basic
 
 <LiveDemo fullWidth codeHtml={SelectDefaultHtml()}>
-  <SelectDemo hasHelperText={true} />
+  <SelectDemo />
 </LiveDemo>
 
 ### Roomy
@@ -231,8 +235,6 @@ Sets focus to the internal button element.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -255,8 +257,6 @@ Sets focus to the internal button element.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -269,7 +269,22 @@ Sets focus to the internal button element.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                    | Description
+| :---------------------------------------| :----------------
+| `root`                                  | The root element.
+| `container`                             | The layout container element.
+| `leading-container`                     | The container element around the `leading` slot.
+| `label-input-container`                 | The container element around the selected text and label elements.
+| `text`                                  | The selected text element.
+| `label`                                 | The `<label>` element.
+| `icon`                                  | The dropdown icon `<forge-icon>` element.
+| `addon-end-container`                   | The container element around the `addon-end` slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -277,28 +292,59 @@ Sets focus to the internal button element.
 
 | Name                                                      | Description
 | :---------------------------------------------------------| :----------------
-| `--mdc-theme-text-primary-on-background`                  | Controls the selected option font color.
-| `--mdc-theme-text-secondary-on-background`                | Controls the inset font color for icons and helper text.
-| `--mdc-theme-text-icon-on-background`                     | Controls the icon color.
-| `--mdc-theme-label-disabled-on-background`                | Controls the label color when disabled.
-| `--mdc-theme-text-disabled-on-light`                      | Controls the placeholder font color.
-| `--mdc-theme-text-disabled-on-background`                 | Controls the disabled color of the outline.
-| `--mdc-theme-primary`                                     | Controls the primary font color.
-| `--mdc-theme-error`                                       | Controls the error color throughout the component.
-| `--forge-theme-text-secondary-alternative-on-background`  | Controls the floating label color.
-| `--forge-theme-form-field-required-on-background`         | Controls the required background-color of the field element.
-| `--forge-theme-form-field-invalid-on-background`          | Controls the invalid background-color of the field element.
-| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled font color of the floating label element.
+| **Field**                                                 |
 | `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the field element.
-| `--forge-theme-error-hover`                               | Controls the error hover color for the outline.
-| `--forge-select-height`                                   | Controls the height of the root element. Default value is `3.5rem`.
-| `--forge-select-font-size`                                | Controls the font-size of the selected text. Default value is `3.5rem`.
-| `--forge-select-margin-top`                               | Controls the margin top of the wrapper element. Default value is `0`.
-| `--forge-select-margin-bottom`                            | Controls the margin bottom of the wrapper element. Default value is `0`.
-| `--forge-select-theme-background`                         | Controls the background-color of the field element.
-| `--forge-select-border-display`                           | Controls the display of the outline element.
+| `--forge-select-height`                                   | Controls the height of the field element. Default value is `3.5rem`.
+| `--forge-select-margin-top`                               | Controls the margin-top of the field element. Default value is `0`.
+| **Outline**                                               |
+| `--forge-select-theme-background`                         | Controls the background-color of the outline element.
+| `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the outline element.
+| `--mdc-theme-text-icon-on-background`                     | Controls the border-color of the outline element.
+| `--mdc-theme-text-primary-on-background`                  | Controls the hover border-color for the outline element.
+| `--mdc-theme-primary`                                     | Controls the focused and focused-hover border-color for the outline element.
+| `--mdc-theme-error`                                       | Controls the invalid border-color for the outline element.
+| `--forge-theme-error-hover`                               | Controls the invalid-hover border-color for the outline element.
+| `--mdc-theme-text-disabled-on-background`                 | Controls the disabled border-color of the outline element.
+| **Label**                                                 |
+| `--forge-theme-form-field-label-on-background`            | Controls the color of the label element.
+| `--mdc-theme-primary`                                     | Controls the focused color of the label element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the label element.
+| `--forge-theme-label-disabled-on-background`              | Controls the disabled color of the label element.
+| **Required Asterisk**                                     |
+| `--mdc-theme-error`                                       | Controls the error color for the required asterisk element.
+| **Floating Label**                                        |
+| `--forge-theme-form-field-label-on-background`            | Controls the color of the floating label element.
+| `--mdc-theme-primary`                                     | Controls the focused color of the floating label element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the floating label element.
+| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled color of the floating label element.
+| **Selected Text**                                                 |
+| `--forge-select-font-size`                                | Controls the font-size of the selected text element. Default value is `1rem`.
+| `--mdc-theme-text-primary-on-background`                  | Controls the color of the selected text element.
+| `--forge-theme-form-field-text-disabled-on-background`    | Controls the disabled color of the selected text element.
+| **Helper Text**                                           |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color of the helper text element.
+| `--mdc-theme-error`                                       | Controls the invalid color of the helper text element.
+| **Icons**                                                 |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color for the icon elements.
+| `--mdc-theme-error`                                       | Controls the invalid color of the icon elements.
+| `--mdc-theme-text-disabled-on-light`                      | Controls the disabled color of the icon elements.
+| **Placeholder**                                           |
+| `--mdc-theme-text-secondary-on-background`                | Controls the color of the placeholder element.
 
 > **Note:** To hide the border, add the following CSS declaration: `--forge-select-border-display: none;`
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- Verify that the select list can be toggled open or closed by pressing the space or enter key.
+- Verify that each active item in the select list can be reached by the up-arrow and down-arrow keys.
+- Verify that in multiple-select mode, the Enter key can toggle an item as selected or un-selected.
 
 </PageSection>
 
