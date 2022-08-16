@@ -9,6 +9,10 @@
   @include mixins.host;
 }
 
+:host([hidden]) {
+  display: none;
+}
+
 :host([position=none]) {
   @include mixins.static-styles;
 }

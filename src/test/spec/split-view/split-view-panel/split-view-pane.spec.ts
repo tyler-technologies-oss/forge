@@ -1,19 +1,19 @@
-import { SplitViewPaneComponent, SPLIT_VIEW_PANE_CONSTANTS, defineSplitViewPaneComponent } from '@tylertech/forge/split-view';
+import { SplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS, defineSplitViewPanelComponent } from '@tylertech/forge/split-view';
 
 describe('SplitViewPaneComponent', () => {
-  let componentInstance: SplitViewPaneComponent;
+  let componentInstance: SplitViewPanelComponent;
   let fixtureContainer: HTMLElement;
 
   beforeAll(() => {
-    defineSplitViewPaneComponent();
+    defineSplitViewPanelComponent();
     fixtureContainer = document.createElement('div');
     document.body.appendChild(fixtureContainer);
   });
 
   beforeEach(() => {    
-    const element = document.createElement(SPLIT_VIEW_PANE_CONSTANTS.elementName);
+    const element = document.createElement(SPLIT_VIEW_PANEL_CONSTANTS.elementName);
     fixtureContainer.appendChild(element);
-    componentInstance = document.querySelector(SPLIT_VIEW_PANE_CONSTANTS.elementName) as SplitViewPaneComponent;
+    componentInstance = document.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.elementName) as SplitViewPanelComponent;
   });
 
   afterEach(() => {

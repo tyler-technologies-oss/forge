@@ -9,6 +9,10 @@
   --forge-split-view-handle-width: 8px;
 }
 
+:host([hidden]) {
+  display: none;
+}
+
 :host([orientation=horizontal]) {
   @include mixins.horizontal-styles;
 }
