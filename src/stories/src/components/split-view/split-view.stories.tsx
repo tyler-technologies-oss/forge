@@ -12,7 +12,7 @@ export default {
       page: MDX
     },
     actions: {
-      handles: ['forge-split-view-pane-resize', 'forge-split-view-pane-drag-start', 'forge-split-view-pane-drag-end', 'forge-split-view-pane-did-open', 'forge-split-view-pane-did-close']
+      handles: ['forge-split-view-panel-resize', 'forge-split-view-panel-drag-start', 'forge-split-view-panel-drag-end', 'forge-split-view-panel-did-open', 'forge-split-view-panel-did-close']
     }
   },
 } as Meta;

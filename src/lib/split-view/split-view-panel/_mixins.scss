@@ -3,7 +3,7 @@
 @use '../../theme/theme';
 
 @mixin core-styles() {
-  .forge-split-view-pane {
+  .forge-split-view-panel {
     @include base;
 
     &__handle {
@@ -28,37 +28,41 @@
       #handle {
         @include handle-disabled;
       }
+
+      .forge-split-view-panel__icon {
+        @include icon-disabled;
+      }
     }
   }
 }
 
 @mixin horizontal-styles() {
-  .forge-split-view-pane[orientation=horizontal] {
+  .forge-split-view-panel[orientation=horizontal] {
     @include base-horizontal;
 
-    .forge-split-view-pane {
+    .forge-split-view-panel {
       &__handle {
         @include handle-orientation(horizontal);
         @include cursor(horizontal);
       }
     }
 
-    &.forge-split-view-pane--closing {
-      &[direction=start] {
+    &.forge-split-view-panel--closing {
+      &[position=start] {
         @include closing($direction: left);
       }
 
-      &[direction=end] {
+      &[position=end] {
         @include closing($direction: right);
       }
     }
 
-    &.forge-split-view-pane--opening {
-      &[direction=start] {
+    &.forge-split-view-panel--opening {
+      &[position=start] {
         @include opening($direction: left);
       }
 
-      &[direction=end] {
+      &[position=end] {
         @include opening($direction: right);
       }
     }
@@ -66,32 +70,32 @@
 }
 
 @mixin vertical-styles() {
-  .forge-split-view-pane[orientation=vertical] {
+  .forge-split-view-panel[orientation=vertical] {
     @include base-vertical;
 
-    .forge-split-view-pane {
+    .forge-split-view-l {
       &__handle {
         @include handle-orientation(vertical);
         @include cursor(vertical);
       }
     }
 
-    &.forge-split-view-pane--closing {
-      &[direction=start] {
+    &.forge-split-view-panel--closing {
+      &[position=start] {
         @include closing($direction: top);
       }
 
-      &[direction=end] {
+      &[position=end] {
         @include closing($direction: bottom);
       }
     }
 
-    &.forge-split-view-pane--opening {
-      &[direction=start] {
+    &.forge-split-view-panel--opening {
+      &[position=start] {
         @include opening($direction: top);
       }
 
-      &[direction=end] {
+      &[position=end] {
         @include opening($direction: bottom);
       }
     }
@@ -101,7 +105,7 @@
 @mixin static-styles() {
   @include host-static;
 
-  .forge-split-view-pane {
+  .forge-split-view-panel {
     @include base-static;
 
     &__handle {
@@ -131,18 +135,16 @@
 }
 
 @mixin base-horizontal() {
-  // @include theme.css-custom-property(width, --forge-split-view-pane-size, unset);
   @include theme.css-custom-property(min-width, --forge-split-view-handle-width, variables.$handle-width);
 
-  width: calc(var(--forge-split-view-pane-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
+  width: calc(var(--forge-split-view-panel-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
   flex-direction: row;
 }
 
 @mixin base-vertical() {
-  // @include theme.css-custom-property(height, --forge-split-view-pane-size, unset);
   @include theme.css-custom-property(min-height, --forge-split-view-handle-width, variables.$handle-width);
 
-  height: calc(var(--forge-split-view-pane-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
+  height: calc(var(--forge-split-view-panel-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
   flex-direction: column;
 }
 
@@ -180,13 +182,14 @@
 }
 
 @mixin handle-disabled() {
-  // TODO: find disabled colors more distinct from the enabled colors
-  @include theme.property(color, text-disabled-on-light);
-
   pointer-events: none;
 }
 
 @mixin handle-static() {
+  display: none;
+}
+
+@mixin icon-disabled() {
   display: none;
 }
 

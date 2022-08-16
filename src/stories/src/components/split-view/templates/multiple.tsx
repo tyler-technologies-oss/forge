@@ -12,17 +12,17 @@ export const MultipleTemplate: Story<ISplitViewProps> = ({
     disabled
   };
   const ForgeSplitView = createElementProxy('forge-split-view');
-  const ForgeSplitViewPane = createElementProxy('forge-split-view-pane');
+  const ForgeSplitViewPanel = createElementProxy('forge-split-view-panel');
   return (
     <ForgeSplitView style={{ height: '400px' }} orientation={splitViewProps.orientation} disabled={splitViewProps.disabled}>
-      <ForgeSplitViewPane>
+      <ForgeSplitViewPanel>
         <div style={{ height: '100%', width: '100%', backgroundColor: 'lightskyblue' }}></div>
-      </ForgeSplitViewPane>
-      <ForgeSplitViewPane direction="end">
+      </ForgeSplitViewPanel>
+      <ForgeSplitViewPanel>
         <div style={{ height: '100%', width: '100%', backgroundColor: 'darkseagreen' }}></div>
-      </ForgeSplitViewPane>
-      <ForgeSplitViewPane direction="end">
+      </ForgeSplitViewPanel>
+      <ForgeSplitViewPanel>
         <div style={{ height: '100%', width: '100%', backgroundColor: 'salmon' }}></div>
-      </ForgeSplitViewPane>
+      </ForgeSplitViewPanel>
     </ForgeSplitView>);
 }

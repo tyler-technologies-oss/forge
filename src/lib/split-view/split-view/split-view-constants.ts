@@ -1,11 +1,13 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
-import { SPLIT_VIEW_PANE_CONSTANTS } from '../split-view-pane/split-view-pane-constants';
+import { SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel/split-view-panel-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}split-view`;
 
 const attributes = {
   ORIENTATION: 'orientation',
-  DISABLED: 'disabled'
+  DISABLED: 'disabled',
+  AUTO_CLOSE: 'auto-close',
+  DISABLE_CLOSE: 'disable-close'
 };
 
 const classes = {
@@ -18,7 +20,7 @@ const ids = {
 
 const selectors = {
   ROOT: `#${ids.ROOT}`,
-  PANE: SPLIT_VIEW_PANE_CONSTANTS.elementName
+  PANEL: SPLIT_VIEW_PANEL_CONSTANTS.elementName
 };
 
 export const SPLIT_VIEW_CONSTANTS = {

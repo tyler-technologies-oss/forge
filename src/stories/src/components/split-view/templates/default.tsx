@@ -4,7 +4,7 @@ import React from "react";
 import { ISplitViewProps } from "../split-view-args";
 
 export const DefaultTemplate: Story<ISplitViewProps> = ({
-  direction = 'end',
+  position = 'end',
   disabled = false,
   label = 'Split view pane',
   max = undefined,
@@ -14,7 +14,7 @@ export const DefaultTemplate: Story<ISplitViewProps> = ({
   size = 200
 }) => {
   const splitViewProps = {
-    direction,
+    position,
     disabled,
     label,
     max,
@@ -24,14 +24,14 @@ export const DefaultTemplate: Story<ISplitViewProps> = ({
     size
   };
   const ForgeSplitView = createElementProxy('forge-split-view');
-  const ForgeSplitViewPane = createElementProxy('forge-split-view-pane');
+  const ForgeSplitViewPanel = createElementProxy('forge-split-view-panel');
   return (
     <ForgeSplitView style={{ height: '400px' }} orientation={splitViewProps.orientation} disabled={splitViewProps.disabled}>
-      <ForgeSplitViewPane>
+      <ForgeSplitViewPanel>
         <div style={{ height: '100%', width: '100%', backgroundColor: 'lightskyblue' }}></div>
-      </ForgeSplitViewPane>
-      <ForgeSplitViewPane direction={splitViewProps.direction} open={splitViewProps.open} size={splitViewProps.size} min={splitViewProps.min} max={splitViewProps.max} label={splitViewProps.label}>
+      </ForgeSplitViewPanel>
+      <ForgeSplitViewPanel position={splitViewProps.position} open={splitViewProps.open} size={splitViewProps.size} min={splitViewProps.min} max={splitViewProps.max} label={splitViewProps.label}>
         <div style={{ height: '100%', width: '100%', backgroundColor: 'salmon' }}></div>
-      </ForgeSplitViewPane>
+      </ForgeSplitViewPanel>
     </ForgeSplitView>);
 }

@@ -1,23 +1,103 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
+import { ISplitViewBase } from '../core/split-view-base';
+import { ISplitViewPanelComponent } from '../split-view-panel';
 import { ISplitViewAdapter } from './split-view-adapter';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 
-export interface ISplitViewFoundation extends ICustomElementFoundation {
+export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoundation {
   orientation: SplitViewOrientation;
-  disabled: boolean;
 }
 
 export class SplitViewFoundation implements ISplitViewFoundation {
   private _orientation: SplitViewOrientation = 'horizontal';
   private _disabled = false;
+  private _disableClose = false;
+  private _autoClose = false;
+  private _slotListener: (evt: Event) => void;
+  private _resizeEndListener: (evt: Event) => void;
+  private _panelCloseListener: (evt: Event) => void;
+  private _panelOpenListener: (evt: Event) => void;
 
-  constructor(private _adapter: ISplitViewAdapter) {}
+  constructor(private _adapter: ISplitViewAdapter) {
+    this._slotListener = evt => this._onSlotChange(evt);
+    this._resizeEndListener = evt => this._onResizeEnd(evt);
+    this._panelCloseListener = evt => this._onPanelClose(evt);
+    this._panelOpenListener = evt => this._onPanelOpen(evt);
+  }
 
   public initialize(): void {
+    this._adapter.registerSlotListener(this._slotListener);
+    this._adapter.registerPanelResizeEndListener(this._resizeEndListener);
+    this._adapter.registerPanelCloseListener(this._panelCloseListener);
+    this._adapter.registerPanelOpenListener(this._panelOpenListener);
+    this._adapter.observeResize(this._onResize);
+    
     this._applyOrientation();
   }
 
+  public disconnect(): void {
+    this._adapter.unobserveResize();
+  }
+
+  private _onSlotChange(evt: Event): void {
+    this._layoutSlottedPanels();
+  }
+
+  private _onResizeEnd(evt: Event): void {
+    this._updateSlottedPanelsAccessibility(evt.target as ISplitViewPanelComponent);
+  }
+
+  private _onPanelClose(evt: Event): void {
+    this._updateSlottedPanelsAccessibility(evt.target as ISplitViewPanelComponent);
+  }
+
+  private _onPanelOpen(evt: Event): void {
+    this._updateSlottedPanelsAccessibility(evt.target as ISplitViewPanelComponent);
+  }
+
+  private _onResize(entry: ResizeObserverEntry): void {
+    // TODO: Prompt panels to adjust size and accessibility
+    this._updateSlottedPanelsAccessibility();
+  }
+
+  /**
+   * Sets the position of slotted panels with no positions.
+   */
+  private _layoutSlottedPanels(): void {
+    const panels = Array.from(this._adapter.getSlottedPanels());
+
+    // A single panel should have a position of none. Just leave it alone.
+    if (panels.length < 2) {
+      return;
+    }
+
+    // Don't change any panels if positions are already set.
+    if (panels.some(panel => panel.position !== 'none')) {
+      return;
+    }
+
+    // All panels after the first are set to a position of end.
+    panels.slice(1).forEach(panel => panel.position = 'end');
+  }
+
+  /**
+   * Recalculates and sets the accessible values of all slotted panels.
+   * 
+   * @param target The originating panel. This is is assumed to have already handled its accessibility and is skipped.
+   */
+  private _updateSlottedPanelsAccessibility(target?: ISplitViewPanelComponent): void {
+    const panels = this._adapter.getSlottedPanels();
+    panels.forEach(panel => {
+      if (panel.position !== 'none' && panel !== target) {
+        panel.updateAccessibility();
+      }
+    });
+  }
+
+  /**
+   * Get/set whether panels are arranged horizontally or vertically.
+   */
   public get orientation(): SplitViewOrientation {
     return this._orientation;
   }
@@ -33,6 +113,9 @@ export class SplitViewFoundation implements ISplitViewFoundation {
     this._adapter.setOrientation(this._orientation);
   }
 
+  /**
+   * Get/set whether interactions are disabled.
+   */
   public get disabled(): boolean {
     return this._disabled;
   }
@@ -46,5 +129,41 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _applyDisabled(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.DISABLED, this._disabled);
     this._adapter.setDisabled(this._disabled);
+  }
+
+  /**
+   * Get/set whether closing the panel is disabled.
+   */
+  public get disableClose(): boolean {
+    return this._disableClose;
+  }
+  public set disableClose(value: boolean) {
+    if (this._disableClose !== value) {
+      this._disableClose = value;
+      this._applyDisableClose();
+    }
+  }
+
+  private _applyDisableClose(): void {
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose);
+    this._adapter.setDisableClose(this._disableClose);
+  }
+
+  /**
+   * Get/set whether the panel closes when a threshold size is reached.
+   */
+  public get autoClose(): boolean {
+    return this._autoClose;
+  }
+  public set autoClose(value: boolean) {
+    if (this._autoClose !== value) {
+      this._autoClose = value;
+      this._applyAutoClose();
+    }
+  }
+
+  private _applyAutoClose(): void {
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
+    this._adapter.setAutoClose(this._autoClose);
   }
 }

@@ -9,6 +9,6 @@
   @include mixins.host;
 }
 
-:host([direction=none]) {
+:host([position=none]) {
   @include mixins.static-styles;
 }

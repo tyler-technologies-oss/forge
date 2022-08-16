@@ -1,9 +1,9 @@
-import { SplitViewOrientation, SplitViewPaneDirection } from "@tylertech/forge";
+import { SplitViewOrientation, SplitViewPanelPosition } from "@tylertech/forge";
 
 export interface ISplitViewProps {
   disabled: string;
   orientation: SplitViewOrientation;
-  direction: SplitViewPaneDirection;
+  position: SplitViewPanelPosition;
   open: boolean;
   size: number;
   min: number;
@@ -33,7 +33,7 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  direction: {
+  position: {
     control: {
       type: 'select',
       labels: {
