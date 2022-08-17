@@ -1,12 +1,14 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { ISplitViewBase } from '../core/split-view-base';
-import { ISplitViewPanelComponent } from '../split-view-panel';
+import { ISplitViewPanelComponent, SplitViewAnimatingLayer } from '../split-view-panel';
 import { ISplitViewAdapter } from './split-view-adapter';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 
 export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoundation {
   orientation: SplitViewOrientation;
+  stackSlottedPanels(target: ISplitViewPanelComponent): void;
+  unstackSlottedPanels(): void;
 }
 
 export class SplitViewFoundation implements ISplitViewFoundation {
@@ -15,23 +17,25 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _disableClose = false;
   private _autoClose = false;
   private _slotListener: (evt: Event) => void;
-  private _resizeEndListener: (evt: Event) => void;
+  private _panelResizeEndListener: (evt: Event) => void;
   private _panelCloseListener: (evt: Event) => void;
   private _panelOpenListener: (evt: Event) => void;
+  private _resizeObserverCallback: (entry: ResizeObserverEntry) => void;
 
   constructor(private _adapter: ISplitViewAdapter) {
     this._slotListener = evt => this._onSlotChange(evt);
-    this._resizeEndListener = evt => this._onResizeEnd(evt);
+    this._panelResizeEndListener = evt => this._onResizeEnd(evt);
     this._panelCloseListener = evt => this._onPanelClose(evt);
     this._panelOpenListener = evt => this._onPanelOpen(evt);
+    this._resizeObserverCallback = entry => () => this._onResize(entry);
   }
 
   public initialize(): void {
     this._adapter.registerSlotListener(this._slotListener);
-    this._adapter.registerPanelResizeEndListener(this._resizeEndListener);
+    this._adapter.registerPanelResizeEndListener(this._panelResizeEndListener);
     this._adapter.registerPanelCloseListener(this._panelCloseListener);
     this._adapter.registerPanelOpenListener(this._panelOpenListener);
-    this._adapter.observeResize(this._onResize);
+    this._adapter.observeResize(this._resizeObserverCallback);
     
     this._applyOrientation();
   }
@@ -57,7 +61,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
-    // TODO: Prompt panels to adjust size and accessibility
+    // TODO: Prompt panels to adjust size to fit
     this._updateSlottedPanelsAccessibility();
   }
 
@@ -165,5 +169,35 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _applyAutoClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
     this._adapter.setAutoClose(this._autoClose);
+  }
+
+  /**
+   * Layers panels in a set order during an animation. Panels that the target is animating toward
+   * stack above it and other layers stack under it.
+   * 
+   * @param target The animating panel.
+   */
+  public stackSlottedPanels(target: ISplitViewPanelComponent): void {
+    const panels = this._adapter.getSlottedPanels();
+    const increment = target.position === 'end' ? 1 : -1;
+    let layer = target.position === 'end' ? SplitViewAnimatingLayer.Under : SplitViewAnimatingLayer.Above;
+
+    panels.forEach(panel => {
+      // Increment the layer if moving into or out of the target panel
+      if (panel === target || layer === SplitViewAnimatingLayer.Active) {
+        layer += increment;
+      }
+      panel.style.setProperty('--forge-split-view-animating-layer', layer.toString());
+    });
+  }
+
+  /**
+   * Removes layering after an animation.
+   */
+  public unstackSlottedPanels(): void {
+    const panels = this._adapter.getSlottedPanels();
+    panels.forEach(panel => {
+      panel.style.removeProperty('--forge-split-view-animating-layer');
+    });
   }
 }

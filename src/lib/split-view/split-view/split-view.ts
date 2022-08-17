@@ -3,14 +3,16 @@ import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty
 import { SplitViewAdapter } from './split-view-adapter';
 import { SplitViewFoundation } from './split-view-foundation';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
-import { SplitViewPanelComponent } from '../split-view-panel';
+import { ISplitViewPanelComponent, SplitViewPanelComponent } from '../split-view-panel';
+import { ISplitViewBase } from '../core/split-view-base';
 
 import template from './split-view.html';
 import styles from './split-view.scss';
-import { ISplitViewBase } from '../core/split-view-base';
 
 export interface ISplitViewComponent extends ISplitViewBase, ICustomElement {
   orientation: SplitViewOrientation;
+  stackSlottedPanels(target: ISplitViewPanelComponent): void;
+  unstackSlottedPanels(): void;
 }
 
 declare global {
@@ -77,4 +79,12 @@ export class SplitViewComponent extends HTMLElement implements ISplitViewCompone
 
   @FoundationProperty()
   public autoClose: boolean;
+
+  public stackSlottedPanels(target: ISplitViewPanelComponent): void {
+    this._foundation.stackSlottedPanels(target);
+  }
+
+  public unstackSlottedPanels(): void {
+    this._foundation.unstackSlottedPanels();
+  }
 }

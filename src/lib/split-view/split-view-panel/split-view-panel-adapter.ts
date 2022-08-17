@@ -143,13 +143,17 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
 
   public setOpen(value: boolean): void {
     if (value && this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
+      this._parent?.stackSlottedPanels(this._component);
       this._root.classList.remove(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.OPENING, true).then(() => {
+        this._parent?.unstackSlottedPanels();
         // TODO: should this be handle in the foundation via a callback function?
         this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN);
       });
     } else if (!value && !this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
+      this._parent?.stackSlottedPanels(this._component);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSING, true).then(() => {
+        this._parent?.unstackSlottedPanels();
         this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
         // TODO: should this be handle in the foundation via a callback function?
         this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE);

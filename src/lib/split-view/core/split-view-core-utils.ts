@@ -89,10 +89,15 @@ export function getSplitViewPanelSibling(el: ISplitViewPanelComponent): SplitVie
   if (direction === 'none') {
     return undefined;
   }
-  const sibling = direction === 'start' ? el.nextElementSibling : el.previousElementSibling;
+  
+  let sibling: Element | null = el;
+  do {
+    sibling = direction === 'start' ? sibling.nextElementSibling : sibling.previousElementSibling;
+  } while (sibling instanceof SplitViewPanelComponent && !sibling.open);
+
   if (sibling instanceof SplitViewPanelComponent) {
     return sibling;
-  } else {
-    return undefined;
   }
+
+  return undefined;
 }

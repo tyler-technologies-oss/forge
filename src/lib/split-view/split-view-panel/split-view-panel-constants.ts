@@ -62,3 +62,9 @@ export const SPLIT_VIEW_PANEL_CONSTANTS = {
 // 'end' panels have a handle on the left/top and collapse to the right/bottom
 // 'none' panels don't a handle, are not resizable, and fill the remaining space
 export type SplitViewPanelPosition = 'start' | 'end' | 'none';
+
+export enum SplitViewAnimatingLayer {
+  Under = 1,
+  Active = 2,
+  Above = 3
+}

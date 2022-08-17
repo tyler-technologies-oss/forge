@@ -115,6 +115,9 @@
 }
 
 @mixin host() {
+  // There is no fallback value for the animating z-index
+  @include theme.css-custom-property(z-index, --forge-split-view-animating-layer, $important: true);
+
   display: block;
   position: relative;
   height: 100%;
@@ -244,7 +247,7 @@
 }
 
 @mixin animating-position($direction: right) {
-  @include theme.z-index(surface);
+  // @include theme.z-index(surface);
 
   position: absolute;
 
