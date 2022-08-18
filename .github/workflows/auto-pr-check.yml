@@ -10,4 +10,4 @@ on:
 jobs:
   release:
     name: Pull Request Validation
-    uses: tyler-technologies/forge-automation-shared/.github/workflows/wf-auto-pr-check.yml@v0.22.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-auto-pr-check.yml@v1.0.0
