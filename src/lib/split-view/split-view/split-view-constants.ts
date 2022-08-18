@@ -23,12 +23,17 @@ const selectors = {
   PANEL: SPLIT_VIEW_PANEL_CONSTANTS.elementName
 };
 
+const numbers = {
+  RESIZE_THROTTLE_THRESHOLD: 200
+};
+
 export const SPLIT_VIEW_CONSTANTS = {
   elementName,
   attributes,
   classes,
   ids,
-  selectors
+  selectors,
+  numbers
 };
 
 export type SplitViewOrientation = 'horizontal' | 'vertical';

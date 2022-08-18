@@ -1,7 +1,6 @@
-import { getShadowElement } from '@tylertech/forge-core';
+import { ForgeResizeObserver, getShadowElement } from '@tylertech/forge-core';
 
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { ForgeResizeObserver } from '../../core/observers/resize-observer';
 import { ISplitViewComponent } from './split-view';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 import { ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel';
@@ -47,7 +46,7 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
   public observeResize(callback: (entry: ResizeObserverEntry) => void): void {
     ForgeResizeObserver.observe(this._root, callback);
   }
-
+  
   public unobserveResize(): void {
     ForgeResizeObserver.unobserve(this._root);
   }

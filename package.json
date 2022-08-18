@@ -30,7 +30,7 @@
     "update-deps": "npm-check-updates --peer -u && npm install && npm run lint"
   },
   "dependencies": {
-    "@tylertech/forge-core": "^2.0.0",
+    "@tylertech/forge-core": "^2.1.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "imask": "^6.4.2",
     "material-components-web": "^14.0.0",

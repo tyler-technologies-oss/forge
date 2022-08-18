@@ -1,4 +1,4 @@
-import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { ForgeResizeObserverCallback, ICustomElementFoundation, throttle } from '@tylertech/forge-core';
 
 import { ISplitViewBase } from '../core/split-view-base';
 import { ISplitViewPanelComponent, SplitViewAnimatingLayer } from '../split-view-panel';
@@ -20,14 +20,14 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _panelResizeEndListener: (evt: Event) => void;
   private _panelCloseListener: (evt: Event) => void;
   private _panelOpenListener: (evt: Event) => void;
-  private _resizeObserverCallback: (entry: ResizeObserverEntry) => void;
+  private _resizeObserverCallback: ForgeResizeObserverCallback;
 
   constructor(private _adapter: ISplitViewAdapter) {
     this._slotListener = evt => this._onSlotChange(evt);
-    this._panelResizeEndListener = evt => this._onResizeEnd(evt);
+    this._panelResizeEndListener = evt => this._onPanelResizeEnd(evt);
     this._panelCloseListener = evt => this._onPanelClose(evt);
     this._panelOpenListener = evt => this._onPanelOpen(evt);
-    this._resizeObserverCallback = entry => () => this._onResize(entry);
+    this._resizeObserverCallback = throttle((entry: ResizeObserverEntry) => this._onResize(entry), SPLIT_VIEW_CONSTANTS.numbers.RESIZE_THROTTLE_THRESHOLD);
   }
 
   public initialize(): void {
@@ -46,9 +46,10 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _onSlotChange(evt: Event): void {
     this._layoutSlottedPanels();
+    this._updateSlottedPanelsAccessibility();
   }
 
-  private _onResizeEnd(evt: Event): void {
+  private _onPanelResizeEnd(evt: Event): void {
     this._updateSlottedPanelsAccessibility(evt.target as ISplitViewPanelComponent);
   }
 

@@ -115,7 +115,7 @@
 }
 
 @mixin host() {
-  // There is no fallback value for the animating z-index
+  // There is no fallback value for the animating layer
   @include theme.css-custom-property(z-index, --forge-split-view-animating-layer, $important: true);
 
   display: block;
