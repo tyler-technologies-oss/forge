@@ -135,15 +135,17 @@ jobs:
   publish-cdn:
     name: Publish Components to CDN
     needs: [wf-config, build-and-release]
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v1.0.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v2.0.0
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
-      AWS_IAM_ROLE: "***REMOVED***"
       AWS_REGION: "us-east-1"
-      AWS_S3_BUCKET_NAME: "***REMOVED***"
-      AWS_CLOUDFRONT_DISTRIBUTION_ID: "***REMOVED***"
       MAX_CLOUDFRONT_INVALIDATIONS: 25
       INVALIDATE: false # We do not invalidate the CloudFront cache because we're only pushing new assets
+    secrets:
+      AWS_IAM_ROLE: ${{ secrets.AWS_IAM_ROLE }}
+      AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+      AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+
 
   ## We run this job only when files that effect Storybook are found in the changed files
   deploy-storybook:
