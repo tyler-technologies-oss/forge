@@ -20,9 +20,9 @@ to get notified about changes within the element. This is where framework adapte
 
 Forge provides the following framework adapters:
 
-- [Angular](https://github.com/tyler-technologies/forge-angular)
-- [React](https://github.com/tyler-technologies/forge-react)
-- [Blazor](https://github.com/tyler-technologies/tyler-forge-blazor)
+- [Angular](https://github.com/tyler-technologies-oss/forge-angular)
+- [React](https://github.com/tyler-technologies-oss/forge-react)
+- [Blazor](https://github.com/tyler-technologies-oss/tyler-forge-blazor)
 - Svelte (coming soon)
 
 > Keep in mind that these adapter libraries are **not** required by any means. They are only provided to make usage for certain components feel more native for
@@ -151,5 +151,5 @@ Please [create](https://github.com/tyler-technologies-oss/forge/issues/new/choos
 [2]: https://www.w3.org/wiki/WebComponents/
 [3]: https://material-components.github.io/material-components-web-catalog/
 [4]: https://forge.tylerdev.io/
-[5]: https://github.com/tyler-technologies/forge/blob/main/CONTRIBUTING.md
-[6]: https://github.com/tyler-technologies/forge/blob/main/CHANGELOG.md
+[5]: https://github.com/tyler-technologies-oss/forge/blob/main/CONTRIBUTING.md
+[6]: https://github.com/tyler-technologies-oss/forge/blob/main/CHANGELOG.md
