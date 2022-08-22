@@ -120,10 +120,9 @@ describe('SelectComponentDelegate', function(this: ITestContext) {
 
     const value = `${DEFAULT_OPTIONS[0].value}`;
     this.context.component.open = true;
-    
-    const selectedTextElement = getShadowElement(this.context.component, SELECT_CONSTANTS.selectors.SELECTED_TEXT);
-    dispatchKeyEvent(selectedTextElement, 'keydown', 'ArrowDown');
-    dispatchKeyEvent(selectedTextElement, 'keydown', 'Enter');
+
+    dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+    dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
 
     expect(changeSpy).toHaveBeenCalledOnceWith(value);
   });
@@ -133,9 +132,7 @@ describe('SelectComponentDelegate', function(this: ITestContext) {
 
     const focusSpy = jasmine.createSpy('focus spy');
     this.context.delegate.onFocus(focusSpy);
-
-    const selectedTextElement = getShadowElement(this.context.component, SELECT_CONSTANTS.selectors.SELECTED_TEXT);
-    selectedTextElement.focus();
+    this.context.component.focus();
 
     expect(focusSpy).toHaveBeenCalledTimes(1);
   });
@@ -146,9 +143,8 @@ describe('SelectComponentDelegate', function(this: ITestContext) {
     const blurSpy = jasmine.createSpy('blur spy');
     this.context.delegate.onBlur(blurSpy);
 
-    const selectedTextElement = getShadowElement(this.context.component, SELECT_CONSTANTS.selectors.SELECTED_TEXT);
-    selectedTextElement.focus();
-    selectedTextElement.blur();
+    this.context.component.focus();
+    this.context.component.blur();
 
     expect(blurSpy).toHaveBeenCalledTimes(1);
   });
