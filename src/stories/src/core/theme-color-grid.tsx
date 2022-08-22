@@ -1,105 +1,105 @@
 import React, { FC } from 'react';
 
 const colors = {
-  primary: {
+  '--mdc-theme-primary': {
     value: '#3f51b5'
   },
-  secondary: {
+  '--mdc-theme-secondary': {
     value: '#ffc107'
   },
-  tertiary: {
+  '--forge-theme-tertiary': {
     value: '#3d5afe'
   },
-  background: {
+  '--mdc-theme-background': {
     value: '#fafafa'
   },
-  error: {
+  '--mdc-theme-error': {
     value: '#b00020'
   },
-  'on-primary': {
+  '--mdc-theme-on-primary': {
     value: '#ffffff'
   },
-  'on-secondary': {
+  '--mdc-theme-on-secondary': {
     value: '#000000'
   },
-  'on-tertiary': {
+  '--forge-theme-on-tertiary': {
     value: '#ffffff'
   },
-  surface: {
+  '--mdc-theme-surface': {
     value: '#ffffff'
   },
-  'on-surface': {
+  '--mdc-theme-on-surface': {
     value: '#000000'
   },
-  'on-error': {
+  '--mdc-theme-on-error': {
     value: '#ffffff'
   },
-  'text-primary-on-background': {
+  '--mdc-theme-text-primary-on-background': {
     value: 'rgba(0, 0, 0, 0.87)'
   },
-  'text-secondary-on-background': {
+  '--mdc-theme-text-secondary-on-background': {
     value: 'rgba(0, 0, 0, 0.54)'
   },
-  'text-hint-on-background': {
+  '--mdc-theme-text-hint-on-background': {
     value: 'rgba(0, 0, 0, 0.38)'
   },
-  'text-disabled-on-background': {
+  '--mdc-theme-text-disabled-on-background': {
     value: 'rgba(0, 0, 0, 0.12)'
   },
 
   // Forge-specific
-  'border-color': {
+  '--forge-theme-border-color': {
     value: '#e0e0e0'
   },
-  danger: {
+  '--forge-theme-danger': {
     value: '#b00020'
   },
-  'error-hover': {
+  '--forge-theme-error-hover': {
     value: '#db8a98'
   },
-  warning: {
+  '--forge-theme-warning': {
     value: '#d14900'
   },
-  success: {
+  '--forge-theme-success': {
     value: '#2e7d32'
   },
-  info: {
+  '--forge-theme-info': {
     value: '#424242'
   },
-  'icon-color': {
+  '--forge-theme-icon-color': {
     value: '#757575'
   },
-  'form-field-label-on-background': {
+  '--forge-theme-form-field-label-on-background': {
     value: 'rgba(0, 0, 0, 0.65)'
   },
-  'form-field-icon-disabled-on-background': {
+  '--forge-theme-form-field-icon-disabled-on-background': {
     value: 'rgba(0, 0, 0, 0.26)'
   },
-  'form-field-text-disabled-on-background': {
+  '--forge-theme-form-field-text-disabled-on-background': {
     value: 'rgba(0, 0, 0, 0.6)'
   },
-  'form-field-disabled-on-background': {
+  '--forge-theme-form-field-disabled-on-background': {
     value: '#f5f5f5'
   },
-  'label-disabled-on-background': {
+  '--forge-theme-label-disabled-on-background': {
     value: 'rgba(0, 0, 0, 0.38)'
   },
-  'elevated-surface': {
+  '--forge-theme-elevated-surface': {
     value: '#ffffff'
   },
-  'on-elevated-surface': {
+  '--forge-theme-on-elevated-surface': {
     value: 'rgba(0, 0, 0, 0.87)'
   },
-  'scrollbar-thumb': {
+  '--forge-theme-scrollbar-thumb': {
     value: '#bdbdbd'
   },
-  'scrollbar-thumb-hover': {
+  '--forge-theme-scrollbar-thumb-hover': {
     value: '#9e9e9e'
   },
-  'scrollbar-track': {
+  '--forge-theme-scrollbar-track': {
     value: '#f0f0f0'
   },
-  'scrollbar-track-hover': {
+  '--forge-theme-scrollbar-track-hover': {
     value: '#ececec'
   }
 };
@@ -109,23 +109,23 @@ const ThemeColorGrid: FC = () => (
     <thead>
       <tr className="forge-table-row forge-table-head__row">
         <th className="forge-table-cell forge-table-head__cell">Theme</th>
-        <th className="forge-table-cell forge-table-head__cell">Value</th>
+        <th className="forge-table-cell forge-table-head__cell">Value (light theme)</th>
         <th className="forge-table-cell forge-table-head__cell">Example</th>
       </tr>
     </thead>
     <tbody>
       {Object.keys(colors).map(theme => {
-        const { value, description } = colors[theme];
+        const { value } = colors[theme];
         return (
           <tr key={theme} className="forge-table-row forge-table-body__row">
             <td className="forge-table-cell forge-table-body__cell">
-              <code className="forge-typography--caption">{theme}</code>
+              <code className="forge-docs-core__inline-code">{theme}</code>
             </td>
             <td className="forge-table-cell forge-table-body__cell">
               <code className="forge-docs-core__inline-code">{value}</code>
             </td>
             <td className="forge-table-cell forge-table-body__cell">
-              <div style={{ backgroundColor: value, height: '24px', width: '24px', borderRadius: '4px', border: '1px solid var(--forge-theme-border-color)' }}></div>
+              <div style={{ backgroundColor: `var(${theme}, ${value})`, height: '24px', width: '24px', borderRadius: '4px', border: '1px solid var(--forge-theme-border-color)' }}></div>
             </td>
           </tr>
         );
