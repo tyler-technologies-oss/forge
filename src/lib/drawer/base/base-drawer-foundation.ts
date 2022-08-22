@@ -21,10 +21,12 @@ export class BaseDrawerFoundation implements IBaseDrawerFoundation {
   public connect(): void {
     this._applyOpen();
     this._applyDirection();
+    this._adapter.proxyScrollEvent();
     this._hasInitialized = true;
   }
 
   public disconnect(): void {
+    this._adapter.tryUnproxyScrollEvent();
     this._hasInitialized = false;
   }
 
