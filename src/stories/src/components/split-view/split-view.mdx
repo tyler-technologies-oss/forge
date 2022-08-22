@@ -1,5 +1,259 @@
+import {
+  Default as SplitViewDemo,
+  LeadingPanel as LeadingDemo,
+  MultiplePanelsSplit as MultipleSplitDemo,
+  MultiplePanelsStacked as MultipleStackedDemo
+} from './split-view.stories.tsx';
+import { SplitViewDefaultCodeHtml } from './code/split-view-default.ts';
+import { SplitViewLeadingCodeHtml } from './code/split-view-leading.ts';
+import { SplitViewVerticalCodeHtml } from './code/split-view-vertical.ts';
+import { SplitViewMultipleSplitCodeHtml } from './code/split-view-multiple-split.ts';
+import { SplitViewMultipleStackedCodeHtml } from './code/split-view-multiple-stacked.ts';
+
 <PageSection>
 
-## Under Construction
+# Split view
+
+The split view component presents `<forge-split-view-panel>` elements side-by-side as resizable panels.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Example
+
+### Default
+
+<LiveDemo layout="column" fullWidth codeHtml={SplitViewDefaultCodeHtml()}>
+  <SplitViewDemo />
+</LiveDemo>
+
+### Leading panel
+
+<LiveDemo layout="column" fullWidth codeHtml={SplitViewLeadingCodeHtml()}>
+  <LeadingDemo />
+</LiveDemo>
+
+### Vertical
+
+<LiveDemo layout="column" fullWidth codeHtml={SplitViewVerticalCodeHtml()}>
+  <SplitViewDemo orientation={'vertical'} />
+</LiveDemo>
+
+### Multiple panels split
+
+<LiveDemo layout="column" fullWidth codeHtml={SplitViewMultipleSplitCodeHtml()}>
+  <MultipleSplitDemo />
+</LiveDemo>
+
+### Multiple panels stacked
+
+<LiveDemo layout="column" fullWidth codeHtml={SplitViewMultipleStackedCodeHtml()}>
+  <MultipleStackedDemo />
+</LiveDemo>
+
+</PageSection>
+
+<PageSection>
+
+## Split View Properties/Attributes
+
+<PropertyDef name="orientation" type="SplitViewOrientation" defaultValue="'horizontal'">
+
+Sets whether panels are laid out horizontally or vertically.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+Sets whether all panels are disabled.
+
+</PropertyDef>
+
+<PropertyDef name="autoClose" type="boolean" defaultValue="false">
+
+Sets whether each panel closes when its size reaches zero.
+
+</PropertyDef>
+
+<PropertyDef name="disableClose" type="boolean" defaultValue="false">
+
+Sets whether the user can close all panels.
+
+</PropertyDef>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Split View Panel Properties/Attributes
+
+<PropertyDef name="position" type="SplitViewPanelPosition" defaultValue="'default'">
+
+Controls behavior related to the panel's position within the split view, including where the resize
+handle is placed and the direction it opens and closes.
+
+> The possible `position` values are:  
+> **`start`:** the handle appears after the content and the panel closes and opens to the left or top.  
+> **`end`:** the handle appears before the content and the panel closes and opens to the right or bottom.  
+> **`default`:** no handle appears and the panel cannot be resized or closed, it occupies the space not filled by positioned panels.  
+>  
+> If no positions are provided the first panel is automatically set to `default` and all other panels are set to `end`.
+
+</PropertyDef>
+
+<PropertyDef name="size" type="number" defaultValue="200">
+
+Sets the initial panel size in pixels. This can also be set to programmatically resize the panel.
+
+</PropertyDef>
+
+<PropertyDef name="min" type="number" defaultValue="0">
+
+The minimum allowed size in pixels.
+
+</PropertyDef>
+
+<PropertyDef name="max" type="number | undefined" defaultValue="undefined">
+
+The maximum allowed size in pixels.
+
+</PropertyDef>
+
+<PropertyDef name="open" type="boolean" defaultValue="true">
+
+Controls whether the panel is displayed.
+
+> **Important:** there is no UI built into the component to open closed panels. If you allow the
+> user to close panels you should also provide a mechanism to reopen them.
+
+</PropertyDef>
+
+<PropertyDef name="label" type="string" defaultValue="'Split view panel'">
+
+Sets the accesible label for the resize handle.
+
+> **Important:** for strong accessibility, a unique value should be provided that describes the
+> content or purpose of the panel.
+
+</PropertyDef>
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+Sets whether resize handle interactions are disabled.
+
+</PropertyDef>
+
+<PropertyDef name="autoClose" type="boolean" defaultValue="false">
+
+Sets whether the panel closes when its size reaches zero.
+
+</PropertyDef>
+
+<PropertyDef name="disableClose" type="boolean" defaultValue="false">
+
+Sets whether the user can close the panel.
+
+</PropertyDef>
+
+</PageSection>
+
+<PageSection>
+
+## Events
+
+| Name                                | Description
+| :---------------------------------- | ----------------
+| `forge-split-view-panel-drag-start` | Emits when the resize handle is grabbed.
+| `forge-split-view-panel-drag-end`   | Emits when the resize handle is released.
+| `forge-split-view-panel-resize`     | Emits when the split view panel is resized with the panel's size in pixels along the orientation axis.
+| `forge-split-view-panel-did-open`   | Emits after the split view panel opens.
+| `forge-split-view-panel-did-close`  | Emits after the split view panel closes.
+
+</PageSection>
+
+<PageSection>
+
+## Keyboard shortcuts
+
+| Name                                | Description
+| :-----------------------------------| :----------------
+| `arrow left`                        | Resizes the panel to the left if `orientation` is horizontal.
+| `arrow right`                       | Resizes the panel to the right if `orientation` is horizontal.
+| `arrow up`                          | Resizes the panel up if `orientation` is vertical.
+| `arrow down`                        | Resizes the panel down if `orientation` is vertical.
+| `enter`                             | Closes the panel.
+| `home`                              | Resizes the panel to its minimum size.
+| `end`                               | Resizes the panel to its maximum size.
+
+> An arrow key combined with `shift` resizes faster, ten pixels at a time. On its own an arrow key
+> resizes one pixel at a time.
+
+> The resize handle is focusable and receives all keyboard events.
+
+</PageSection>
+
+<PageSection>
+
+## Slots
+
+### Split view
+
+| Name                              | Description
+| :-------------------------------- | :----------------
+| `default`                         | The default (unnamed) slot is where child `<forge-split-view-panel>` elements will be placed.
+
+### Split view panel
+
+| Name                              | Description
+| :-------------------------------- | :----------------
+| `default`                         | The default (unnamed) slot contains any content provided to it.
+
+</PageSection>
+
+<PageSection>
+
+## CSS custom properties
+
+### Split view panel
+
+| Name                                     | Description
+| :--------------------------------------- | :----------------
+| `--forge-split-view-handle-width`        | Controls the width of the resize handle.
+| `--forge-theme-border-color`             | Controls the background color of the resize handle.
+| `--mdc-theme-text-secondary-on-light`    | Controls the color of the resize handle icon.
+| `--mdc-theme-text-primary-on-background` | Controls the color of the resize handle icon while focused or active.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Verify that all content slotted into a panel is responsive and can resize fluidly.
+  - If a panel's content is inaccessible under or over a certain size, be sure to set the `min` and `max` properties accordingly.
+- Be sure to include a unique `label` property value for each panel that describes its content.
+- If the user can close a panel, provide an easy way for them to reopen it.
+  - Set [`aria-controls`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-controls) and [`aria-expanded`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-expanded) on the element that controls the open state.
+
+</PageSection>
+
+<PageSection>
+
+## Types
+
+### SplitViewPanelPosition
+
+```ts
+export type SplitViewOrientation = 'horizontal' | 'vertical';
+```
+
+```ts
+export type SplitViewPanelPosition = 'start' | 'end' | 'default';
+```
 
 </PageSection>

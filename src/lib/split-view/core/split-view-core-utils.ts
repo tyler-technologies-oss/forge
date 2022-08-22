@@ -86,7 +86,7 @@ export function getActualMax(max?: number, availableSpace?: number): number {
  */
 export function getSplitViewPanelSibling(el: ISplitViewPanelComponent): SplitViewPanelComponent | undefined {
   const direction = el.position;
-  if (direction === 'none') {
+  if (direction === 'default') {
     return undefined;
   }
   

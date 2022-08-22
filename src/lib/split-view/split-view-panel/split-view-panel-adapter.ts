@@ -117,10 +117,10 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
 
   public setPosition(value: SplitViewPanelPosition): void {
     this._root.setAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION, value.toString());
-    toggleAttribute(this._handle, value !== 'none', 'aria-valuemin', '0');
-    toggleAttribute(this._handle, value !== 'none', 'aria-valuemax', '100');
+    toggleAttribute(this._handle, value !== 'default', 'aria-valuemin', '0');
+    toggleAttribute(this._handle, value !== 'default', 'aria-valuemax', '100');
 
-    if (value === 'none') {
+    if (value === 'default') {
       return;
     }
 
@@ -185,7 +185,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   public getAvailableSpace(orientation: SplitViewOrientation, position: SplitViewPanelPosition): number {
-    if (position === 'none') {
+    if (position === 'default') {
       // Return -1 if the panel is static (i.e. can't be user resized)
       return -1;
     }

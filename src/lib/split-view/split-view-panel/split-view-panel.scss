@@ -13,6 +13,6 @@
   display: none;
 }
 
-:host([position=none]) {
+:host([position=default]) {
   @include mixins.static-styles;
 }

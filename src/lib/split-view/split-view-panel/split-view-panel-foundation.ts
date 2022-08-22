@@ -21,7 +21,7 @@ export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElemen
 
 export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   // API
-  private _position: SplitViewPanelPosition = 'none';
+  private _position: SplitViewPanelPosition = 'default';
   private _size = 200;
   private _min = 0;
   private _max: number | undefined;
@@ -313,7 +313,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt 
    */
   private _handlePointermove(evt: PointerEvent): void {
-    if (this._startPoint === undefined || this._startSize === undefined || this._position === 'none') {
+    if (this._startPoint === undefined || this._startSize === undefined || this._position === 'default') {
       return;
     }
 
@@ -507,7 +507,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _applyMin(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN, this._min.toString());
 
-    if (this._position === 'none') {
+    if (this._position === 'default') {
       return;
     }
 
@@ -533,7 +533,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _applyMax(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.MAX, this._max !== undefined, this._max?.toString());
 
-    if (this._position === 'none' || this._max === undefined) {
+    if (this._position === 'default' || this._max === undefined) {
       return;
     }
     
@@ -657,7 +657,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param size The new content size in pixels.
    */
   public setContentSize(size: number): void {
-    if (this._position !== 'none') {
+    if (this._position !== 'default') {
       const newSize = this._clampSize(size);
       this._adapter.setContentSize(newSize);
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);

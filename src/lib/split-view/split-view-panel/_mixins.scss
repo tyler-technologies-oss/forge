@@ -73,7 +73,7 @@
   .forge-split-view-panel[orientation=vertical] {
     @include base-vertical;
 
-    .forge-split-view-l {
+    .forge-split-view-panel {
       &__handle {
         @include handle-orientation(vertical);
         @include cursor(vertical);
@@ -167,6 +167,7 @@
   @include theme.property(background-color, border-color);
 
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
   outline: none;
@@ -198,13 +199,14 @@
 
 @mixin content() {
   flex: 1;
+  overflow: hidden;
 }
 
 @mixin cursor($orientation: horizontal) {
   cursor: if($orientation == horizontal, col-resize, row-resize);
 }
 
-@mixin closed($direction: right) {
+@mixin closed() {
   display: none;
 }
 
@@ -247,8 +249,6 @@
 }
 
 @mixin animating-position($direction: right) {
-  // @include theme.z-index(surface);
-
   position: absolute;
 
   @if ($direction == right) {

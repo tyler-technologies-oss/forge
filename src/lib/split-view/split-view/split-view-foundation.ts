@@ -72,13 +72,13 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _layoutSlottedPanels(): void {
     const panels = Array.from(this._adapter.getSlottedPanels());
 
-    // A single panel should have a position of none. Just leave it alone.
+    // A single panel should have a position of default. Just leave it alone.
     if (panels.length < 2) {
       return;
     }
 
     // Don't change any panels if positions are already set.
-    if (panels.some(panel => panel.position !== 'none')) {
+    if (panels.some(panel => panel.position !== 'default')) {
       return;
     }
 
@@ -94,7 +94,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _updateSlottedPanelsAccessibility(target?: ISplitViewPanelComponent): void {
     const panels = this._adapter.getSlottedPanels();
     panels.forEach(panel => {
-      if (panel.position !== 'none' && panel !== target) {
+      if (panel.position !== 'default' && panel !== target) {
         panel.updateAccessibility();
       }
     });
