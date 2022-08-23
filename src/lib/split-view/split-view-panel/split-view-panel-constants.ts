@@ -49,13 +49,18 @@ const events = {
   DID_CLOSE: `${elementName}-did-close`
 };
 
+const customCssProperties = {
+  SIZE: '--forge-split-view-panel-size'
+};
+
 export const SPLIT_VIEW_PANEL_CONSTANTS = {
   elementName,
   attributes,
   classes,
   ids,
   selectors,
-  events
+  events,
+  customCssProperties
 };
 
 // 'start' panels have a handle on the right/bottom and collapse to the left/top

@@ -20,7 +20,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   removeKeydownListener(listener: (evt: KeyboardEvent) => void): void;
   setKeyupListener(listener: (evt: KeyboardEvent) => void): void;
   removeKeyupListener(listener: (evt: KeyboardEvent) => void): void;
-  getParentProperty(name: string): unknown;
+  getParentProperty(name: keyof ISplitViewComponent): unknown;
   setLabel(value: string): void;
   setDisabled(value: boolean): void;
   setPosition(value: SplitViewPanelPosition): void;
@@ -98,7 +98,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._handle?.removeEventListener('keyup', listener);
   }
 
-  public getParentProperty(name: string): unknown {
+  public getParentProperty(name: keyof ISplitViewComponent): unknown {
     return this._parent?.[name];
   }
 
@@ -174,7 +174,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   public setContentSize(value: number): void {
-    this._component.style.setProperty('--forge-split-view-panel-size', `${value}px`);
+    this._component.style.setProperty(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.SIZE, `${value}px`);
   }
 
   public setValue(value: number): void {

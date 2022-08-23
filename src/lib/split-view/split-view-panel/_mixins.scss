@@ -158,10 +158,6 @@
   min-height: 0;
 }
 
-@mixin base-closed() {
-  display: none;
-}
-
 @mixin handle() {
   @include theme.property(color, text-secondary-on-light);
   @include theme.property(background-color, border-color);

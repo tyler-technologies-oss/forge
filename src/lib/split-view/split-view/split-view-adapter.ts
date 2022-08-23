@@ -1,9 +1,9 @@
 import { ForgeResizeObserver, getShadowElement } from '@tylertech/forge-core';
 
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
+import { ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel';
 import { ISplitViewComponent } from './split-view';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
-import { ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel';
 
 export interface ISplitViewAdapter extends IBaseAdapter {
   registerSlotListener(listener: (evt: Event) => void): void;
@@ -13,10 +13,8 @@ export interface ISplitViewAdapter extends IBaseAdapter {
   observeResize(callback: (entry: ResizeObserverEntry) => void): void;
   unobserveResize(): void;
   setOrientation(value: SplitViewOrientation): void;
-  setDisabled(value: boolean): void;
-  setDisableClose(value: boolean): void;
-  setAutoClose(value: boolean): void;
   getSlottedPanels(): NodeListOf<ISplitViewPanelComponent>;
+  setSlottedPanelProperty<T>(name: keyof ISplitViewPanelComponent, value: T): void;
 }
 
 export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implements ISplitViewAdapter {
@@ -60,42 +58,23 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
       panel.setOrientation(value);
     });
   }
-
-  /**
-   * Sets the disabled state of all child panels.
-   * @param value 
-   */
-  public setDisabled(value: boolean): void {
-    this.getSlottedPanels().forEach(panel => {
-      panel.disabled = value;
-    });
-  }
-
-  /**
-   * Sets whether closing is disabled on all child panels.
-   * @param value 
-   */
-  public setDisableClose(value: boolean): void {
-    this.getSlottedPanels().forEach(panel => {
-      panel.disableClose = value;
-    });
-  }
-
-  /**
-   * Sets whether auto close is enabled on all child panels.
-   * @param value 
-   */
-  public setAutoClose(value: boolean): void {
-    this.getSlottedPanels().forEach(panel => {
-      panel.autoClose = value;
-    });
-  }
   
   /**
    * Gets all child panels.
-   * @returns 
+   * @returns All child panels.
    */
   public getSlottedPanels(): NodeListOf<ISplitViewPanelComponent> {
     return this._component.querySelectorAll<ISplitViewPanelComponent>(SPLIT_VIEW_CONSTANTS.selectors.PANEL);
+  }
+
+  /**
+   * Sets a property on all child panels.
+   * @param property The property to set.
+   * @param value The value the property should take.
+   */
+  public setSlottedPanelProperty<T>(name: keyof ISplitViewPanelComponent, value: T): void {
+    this.getSlottedPanels().forEach(panel => {
+      panel[name as string] = value;
+    });
   }
 }

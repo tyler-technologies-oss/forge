@@ -62,7 +62,6 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
-    // TODO: Prompt panels to adjust size to fit
     this._updateSlottedPanelsAccessibility();
   }
 
@@ -132,7 +131,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyDisabled(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.DISABLED, this._disabled);
-    this._adapter.setDisabled(this._disabled);
+    this._adapter.setSlottedPanelProperty<boolean>('disabled', this._disabled);
   }
 
   /**
@@ -150,7 +149,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyDisableClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose);
-    this._adapter.setDisableClose(this._disableClose);
+    this._adapter.setSlottedPanelProperty<boolean>('disableClose', this._disableClose);
   }
 
   /**
@@ -168,7 +167,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyAutoClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
-    this._adapter.setAutoClose(this._autoClose);
+    this._adapter.setSlottedPanelProperty<boolean>('autoClose', this._autoClose);
   }
 
   /**

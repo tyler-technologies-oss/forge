@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
 import { tylIconDragVerticalVariant } from '@tylertech/tyler-icons/extended';
 import { tylIconDragHandle } from '@tylertech/tyler-icons/standard';
 
