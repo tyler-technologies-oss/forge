@@ -2,6 +2,7 @@ import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty
 import { tylIconDragVerticalVariant } from '@tylertech/tyler-icons/extended';
 import { tylIconDragHandle } from '@tylertech/tyler-icons/standard';
 
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { SplitViewPanelFoundation } from './split-view-panel-foundation';
 import { SplitViewPanelAdapter } from './split-view-panel-adapter';
@@ -13,7 +14,7 @@ import { RippleComponent } from '../../ripple';
 import template from './split-view-panel.html';
 import styles from './split-view-panel.scss';
 
-export interface ISplitViewPanelComponent extends ISplitViewBase, ICustomElement {
+export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent {
   position: SplitViewPanelPosition;
   min: number;
   max: number | undefined;
@@ -47,7 +48,7 @@ declare global {
     RippleComponent
   ]
 })
-export class SplitViewPanelComponent extends HTMLElement implements ISplitViewPanelComponent {
+export class SplitViewPanelComponent extends BaseComponent implements ISplitViewPanelComponent {
   public static get observedAttributes(): string[] {
     return [
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION,

@@ -1,5 +1,6 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
 
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { SplitViewAdapter } from './split-view-adapter';
 import { SplitViewFoundation } from './split-view-foundation';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
@@ -9,10 +10,10 @@ import { ISplitViewBase } from '../core/split-view-base';
 import template from './split-view.html';
 import styles from './split-view.scss';
 
-export interface ISplitViewComponent extends ISplitViewBase, ICustomElement {
+export interface ISplitViewComponent extends ISplitViewBase, IBaseComponent {
   orientation: SplitViewOrientation;
-  stackSlottedPanels(target: ISplitViewPanelComponent): void;
-  unstackSlottedPanels(): void;
+  layerSlottedPanels(target: ISplitViewPanelComponent): void;
+  unlayerSlottedPanels(): void;
 }
 
 declare global {
@@ -25,7 +26,7 @@ declare global {
   name: SPLIT_VIEW_CONSTANTS.elementName,
   dependencies: [SplitViewPanelComponent]
 })
-export class SplitViewComponent extends HTMLElement implements ISplitViewComponent {
+export class SplitViewComponent extends BaseComponent implements ISplitViewComponent {
   public static get observedAttributes(): string[] {
     return [
       SPLIT_VIEW_CONSTANTS.attributes.ORIENTATION,
@@ -80,11 +81,11 @@ export class SplitViewComponent extends HTMLElement implements ISplitViewCompone
   @FoundationProperty()
   public autoClose: boolean;
 
-  public stackSlottedPanels(target: ISplitViewPanelComponent): void {
-    this._foundation.stackSlottedPanels(target);
+  public layerSlottedPanels(target: ISplitViewPanelComponent): void {
+    this._foundation.layerSlottedPanels(target);
   }
 
-  public unstackSlottedPanels(): void {
-    this._foundation.unstackSlottedPanels();
+  public unlayerSlottedPanels(): void {
+    this._foundation.unlayerSlottedPanels();
   }
 }

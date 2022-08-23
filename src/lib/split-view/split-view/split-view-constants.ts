@@ -27,13 +27,18 @@ const numbers = {
   RESIZE_THROTTLE_THRESHOLD: 200
 };
 
+const customCssProperties = {
+  ANIMATING_LAYER: '--forge-split-view-animating-layer'
+};
+
 export const SPLIT_VIEW_CONSTANTS = {
   elementName,
   attributes,
   classes,
   ids,
   selectors,
-  numbers
+  numbers,
+  customCssProperties
 };
 
 export type SplitViewOrientation = 'horizontal' | 'vertical';

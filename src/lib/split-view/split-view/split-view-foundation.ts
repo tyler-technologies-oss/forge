@@ -7,8 +7,8 @@ import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constan
 
 export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoundation {
   orientation: SplitViewOrientation;
-  stackSlottedPanels(target: ISplitViewPanelComponent): void;
-  unstackSlottedPanels(): void;
+  layerSlottedPanels(target: ISplitViewPanelComponent): void;
+  unlayerSlottedPanels(): void;
 }
 
 export class SplitViewFoundation implements ISplitViewFoundation {
@@ -88,7 +88,6 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   /**
    * Recalculates and sets the accessible values of all slotted panels.
-   * 
    * @param target The originating panel. This is is assumed to have already handled its accessibility and is skipped.
    */
   private _updateSlottedPanelsAccessibility(target?: ISplitViewPanelComponent): void {
@@ -175,10 +174,9 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   /**
    * Layers panels in a set order during an animation. Panels that the target is animating toward
    * stack above it and other layers stack under it.
-   * 
    * @param target The animating panel.
    */
-  public stackSlottedPanels(target: ISplitViewPanelComponent): void {
+  public layerSlottedPanels(target: ISplitViewPanelComponent): void {
     const panels = this._adapter.getSlottedPanels();
     const increment = target.position === 'end' ? 1 : -1;
     let layer = target.position === 'end' ? SplitViewAnimatingLayer.Under : SplitViewAnimatingLayer.Above;
@@ -188,17 +186,17 @@ export class SplitViewFoundation implements ISplitViewFoundation {
       if (panel === target || layer === SplitViewAnimatingLayer.Active) {
         layer += increment;
       }
-      panel.style.setProperty('--forge-split-view-animating-layer', layer.toString());
+      panel.style.setProperty(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER, layer.toString());
     });
   }
 
   /**
    * Removes layering after an animation.
    */
-  public unstackSlottedPanels(): void {
+  public unlayerSlottedPanels(): void {
     const panels = this._adapter.getSlottedPanels();
     panels.forEach(panel => {
-      panel.style.removeProperty('--forge-split-view-animating-layer');
+      panel.style.removeProperty(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
     });
   }
 }

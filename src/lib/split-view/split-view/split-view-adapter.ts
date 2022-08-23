@@ -53,7 +53,6 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   /**
    * Sets the orientation of all child panels.
-   * 
    * @param value 
    */
   public setOrientation(value: SplitViewOrientation): void {
@@ -64,7 +63,6 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   /**
    * Sets the disabled state of all child panels.
-   * 
    * @param value 
    */
   public setDisabled(value: boolean): void {
@@ -75,7 +73,6 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   /**
    * Sets whether closing is disabled on all child panels.
-   * 
    * @param value 
    */
   public setDisableClose(value: boolean): void {
@@ -86,7 +83,6 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   /**
    * Sets whether auto close is enabled on all child panels.
-   * 
    * @param value 
    */
   public setAutoClose(value: boolean): void {
@@ -97,7 +93,6 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
   
   /**
    * Gets all child panels.
-   * 
    * @returns 
    */
   public getSlottedPanels(): NodeListOf<ISplitViewPanelComponent> {

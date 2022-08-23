@@ -1,9 +1,9 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
+import { safeMin, scaleValue } from '../../core/utils/utils';
 import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
-import { getActualMax, mapSizeToValue } from '../core/split-view-core-utils';
 import { ISplitViewBase } from '../core/split-view-base';
 
 export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElementFoundation {
@@ -146,7 +146,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Toggles the open state.
-   * 
    * @param evt 
    */
   private _handleEnterKey(evt: KeyboardEvent): void {
@@ -161,7 +160,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Sets panel size to the min.
-   * 
    * @param evt
    */
   private _handleHomeKey(evt: KeyboardEvent): void {
@@ -175,14 +173,13 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Sets panel size to the max.
-   * 
    * @param evt
    */
   private _handleEndKey(evt: KeyboardEvent): void {
     evt.preventDefault();
 
     const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
-    const maxSize = getActualMax(this._max, availableSpace);
+    const maxSize = safeMin(this._max, availableSpace);
     this._adapter.setContentSize(maxSize);
 
     const contentSize = this._adapter.getContentSize(this._orientation);
@@ -191,7 +188,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Runs resize logic if an arrow key is included in the event.
-   * 
    * @param evt 
    */
   private _tryHandleArrowKey(evt: KeyboardEvent): void {
@@ -245,7 +241,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Resizes the panel by a set amount.
-   * 
    * @param increment The pixel change in size.
    */
   private _handleArrowKeyHeld(increment: number): void {
@@ -260,7 +255,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._adapter.setContentSize(this._currentSize);
 
     if (this._availableSpace || this._max) {
-      const maxSize = getActualMax(this._max, this._availableSpace);
+      const maxSize = safeMin(this._max, this._availableSpace);
       this._setValue(this._currentSize, maxSize);
     } else {
       this._setValue(this._currentSize, this._currentSize);
@@ -273,7 +268,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Performs cleanup logic after a keyboard driven resize.
-   * 
    * @param evt 
    */
   private _tryHandleArrowKeyUp(evt: KeyboardEvent): void {
@@ -287,7 +281,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Handles the beginning of a pointer driven resize.
-   * 
    * @param evt 
    */
   private _handlePointerdown(evt: MouseEvent): void {
@@ -309,7 +302,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Resizes the panel from a pointer event.
-   * 
    * @param evt 
    */
   private _handlePointermove(evt: PointerEvent): void {
@@ -327,7 +319,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._adapter.setContentSize(this._currentSize);
 
     if (this._availableSpace || this._max) {
-      const maxSize = getActualMax(this._max, this._availableSpace);
+      const maxSize = safeMin(this._max, this._availableSpace);
       this._setValue(this._currentSize, maxSize);
     } else {
       this._setValue(this._currentSize, this._currentSize);
@@ -366,7 +358,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Sets the sibling size to reflect changes in this panel's size.
-   * 
    * @param newSize This panel's current size.
    * @param delta The change in size since the resize began.
    */
@@ -381,24 +372,22 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Returns a size limited to an allowed range.
-   * 
    * @param size The size to try setting this panel to.
    * @returns A pixel value.
    */
   private _clampSize(size: number): number {
     size = Math.max(size, this._min);
-    size = Math.min(size, getActualMax(this._max, this._availableSpace));
+    size = Math.min(size, safeMin(this._max, this._availableSpace));
     return size;
   }
 
   /**
    * Sets the accessible value.
-   * 
    * @param size This panel's size in pixels.
    * @param maxSize The upper limit of this panel's size, including space ceded by the sibling panel.
    */
   private _setValue(size: number, maxSize: number): void {
-    const value = mapSizeToValue(size, this._min, maxSize);
+    const value = scaleValue(size, this._min, maxSize);
     this._adapter.setValue(value);
   }
 
@@ -487,8 +476,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     // Wait for the DOM to render to get available space
     window.requestAnimationFrame(() => {
       const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
-      const maxSize = getActualMax(this._max, availableSpace);
-      const newValue = mapSizeToValue(this._size, this._min, maxSize);
+      const maxSize = safeMin(this._max, availableSpace);
+      const newValue = scaleValue(this._size, this._min, maxSize);
       this._adapter.setValue(newValue);
     });
   }
@@ -635,7 +624,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Gets the size of panel content without the handle.
-   * 
    * @returns Content size in pixels.
    */
   public getContentSize(): number {
@@ -644,7 +632,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Gets how much the panel can shrink from its current size.
-   * 
    * @returns The difference between the current and min size in pixels.
    */
   public getCollapsibleSize(): number {
@@ -653,7 +640,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Sets a new size for the content area.
-   * 
    * @param size The new content size in pixels.
    */
   public setContentSize(size: number): void {
@@ -666,7 +652,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   /**
    * Sets whether the panel resizes horizontally or vertically.
-   * 
    * @param value An orientation.
    */
   public setOrientation(value: SplitViewOrientation): void {
@@ -682,7 +667,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
 
     if (availableSpace || this._max) {
-      const maxSize = getActualMax(this._max, availableSpace);
+      const maxSize = safeMin(this._max, availableSpace);
       this._setValue(size, maxSize);
     } else {
       this._setValue(size, size);
