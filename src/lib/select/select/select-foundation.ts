@@ -174,8 +174,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     if (this._disabled) {
       return;
     }
-    this._adapter.addRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-    this._floatLabel(true);
+    this._setFocused();
     super._onFocus(evt);
   }
 
@@ -226,6 +225,12 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
       }
     }
     return result;
+  }
+
+  /** Updates the state of the component to contain focus. */
+  private _setFocused(): void {
+    this._adapter.addRootClass(FIELD_CONSTANTS.classes.FOCUSED);
+    this._floatLabel(true);
   }
 
   /** Updates the state of the component to not contain focus. */
