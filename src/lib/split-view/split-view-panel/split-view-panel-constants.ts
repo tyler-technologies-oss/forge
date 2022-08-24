@@ -42,8 +42,8 @@ const selectors = {
 };
 
 const events = {
-  DRAG_START: `${elementName}-drag-start`,
-  DRAG_END: `${elementName}-drag-end`,
+  RESIZE_START: `${elementName}-resize-start`,
+  RESIZE_END: `${elementName}-resize-end`,
   RESIZE: `${elementName}-resize`,
   DID_OPEN: `${elementName}-did-open`,
   DID_CLOSE: `${elementName}-did-close`

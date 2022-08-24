@@ -340,14 +340,18 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
     this._siblingSize = this._adapter.getSiblingContentSize();
 
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DRAG_START, this._startSize);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_START, this._startSize);
   }
 
   /**
    * Handles common logic to end a resize.
    */
   private _endResize(): void {
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DRAG_END, this._currentSize);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, this._currentSize);
+
+    if (this._startSize !== this._currentSize) {
+      this._adapter.updateParentAccessibility();
+    }
 
     this._startPoint = undefined;
     this._startSize = undefined;

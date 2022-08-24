@@ -34,6 +34,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   getSiblingContentSize(): number;
   setSiblingContentSize(value: number): void;
   getParentSize(orientation: SplitViewOrientation): number;
+  updateParentAccessibility(): void;
 }
 
 export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent> implements ISplitViewPanelAdapter {
@@ -173,13 +174,15 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
       this._root.classList.remove(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.OPENING, true).then(() => {
         this._parent?.unlayerSlottedPanels();
+        this._parent?.updateSlottedPanelsAccessibility(this._component);
         this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN);
       });
     } else if (!value && !this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
       this._parent?.layerSlottedPanels(this._component);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSING, true).then(() => {
-        this._parent?.unlayerSlottedPanels();
         this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
+        this._parent?.unlayerSlottedPanels();
+        this._parent?.updateSlottedPanelsAccessibility(this._component);
         this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE);
       });
     }
@@ -278,5 +281,13 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   public getParentSize(orientation: SplitViewOrientation): number {
     const parentSize = orientation === 'horizontal' ? this._parent?.clientWidth : this._parent?.clientHeight;
     return parentSize ?? 0;
+  }
+
+  /**
+   * Prompts the parent split view to notify all split view panels to recalculate and reset
+   * accessibility attributes.
+   */
+  public updateParentAccessibility(): void {
+    this._parent?.updateSlottedPanelsAccessibility(this._component);
   }
 }

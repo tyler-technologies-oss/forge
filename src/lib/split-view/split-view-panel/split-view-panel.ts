@@ -34,8 +34,8 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-split-view-panel-drag-start': CustomEvent<null>;
-    'forge-split-view-panel-drag-end': CustomEvent<null>;
+    'forge-split-view-panel-resize-start': CustomEvent<null>;
+    'forge-split-view-panel-resize-end': CustomEvent<null>;
     'forge-split-view-panel-resize': CustomEvent<number>;
     'forge-split-view-panel-did-open': CustomEvent<null>;
     'forge-split-view-panel-did-close': CustomEvent<null>;

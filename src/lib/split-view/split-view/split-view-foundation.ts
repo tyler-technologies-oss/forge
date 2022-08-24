@@ -7,6 +7,7 @@ import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constan
 
 export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoundation {
   orientation: SplitViewOrientation;
+  updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void;
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
 }
@@ -17,24 +18,15 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _disableClose = false;
   private _autoClose = false;
   private _slotListener: (evt: Event) => void;
-  private _panelResizeEndListener: (evt: Event) => void;
-  private _panelCloseListener: (evt: Event) => void;
-  private _panelOpenListener: (evt: Event) => void;
   private _resizeObserverCallback: ForgeResizeObserverCallback;
 
   constructor(private _adapter: ISplitViewAdapter) {
     this._slotListener = evt => this._onSlotChange(evt);
-    this._panelResizeEndListener = evt => this._onPanelResizeEnd(evt);
-    this._panelCloseListener = evt => this._onPanelClose(evt);
-    this._panelOpenListener = evt => this._onPanelOpen(evt);
     this._resizeObserverCallback = throttle((entry: ResizeObserverEntry) => this._onResize(entry), SPLIT_VIEW_CONSTANTS.numbers.RESIZE_THROTTLE_THRESHOLD);
   }
 
   public initialize(): void {
     this._adapter.registerSlotListener(this._slotListener);
-    this._adapter.registerPanelResizeEndListener(this._panelResizeEndListener);
-    this._adapter.registerPanelCloseListener(this._panelCloseListener);
-    this._adapter.registerPanelOpenListener(this._panelOpenListener);
     this._adapter.observeResize(this._resizeObserverCallback);
     
     this._applyOrientation();
@@ -46,23 +38,11 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _onSlotChange(evt: Event): void {
     this._layoutSlottedPanels();
-    this._updateSlottedPanelsAccessibility();
-  }
-
-  private _onPanelResizeEnd(evt: Event): void {
-    this._updateSlottedPanelsAccessibility(evt.target as ISplitViewPanelComponent);
-  }
-
-  private _onPanelClose(evt: Event): void {
-    this._updateSlottedPanelsAccessibility(evt.target as ISplitViewPanelComponent);
-  }
-
-  private _onPanelOpen(evt: Event): void {
-    this._updateSlottedPanelsAccessibility(evt.target as ISplitViewPanelComponent);
+    this.updateSlottedPanelsAccessibility();
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
-    this._updateSlottedPanelsAccessibility();
+    this.updateSlottedPanelsAccessibility();
   }
 
   /**
@@ -83,20 +63,6 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
     // All panels after the first are set to a position of end.
     panels.slice(1).forEach(panel => panel.position = 'end');
-  }
-
-  /**
-   * Recalculates and sets the accessible values of all slotted panels.
-   * @param target The originating panel. This is is assumed to have already handled its
-   * accessibility and is skipped.
-   */
-  private _updateSlottedPanelsAccessibility(target?: ISplitViewPanelComponent): void {
-    const panels = this._adapter.getSlottedPanels();
-    panels.forEach(panel => {
-      if (panel.position !== 'default' && panel !== target) {
-        panel.updateAccessibility();
-      }
-    });
   }
 
   /**
@@ -169,6 +135,20 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _applyAutoClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
     this._adapter.setSlottedPanelProperty<boolean>('autoClose', this._autoClose);
+  }
+
+  /**
+   * Recalculates and sets the accessible values of all slotted panels.
+   * @param target The originating panel. This is is assumed to have already handled its
+   * accessibility and is skipped.
+   */
+  public updateSlottedPanelsAccessibility(target?: ISplitViewPanelComponent): void {
+    const panels = this._adapter.getSlottedPanels();
+    panels.forEach(panel => {
+      if (panel.position !== 'default' && panel !== target) {
+        panel.updateAccessibility();
+      }
+    });
   }
 
   /**

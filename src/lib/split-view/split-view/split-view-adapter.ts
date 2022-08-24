@@ -7,9 +7,6 @@ import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constan
 
 export interface ISplitViewAdapter extends IBaseAdapter {
   registerSlotListener(listener: (evt: Event) => void): void;
-  registerPanelResizeEndListener(listener: (evt: Event) => void): void;
-  registerPanelCloseListener(listener: (evt: Event) => void): void;
-  registerPanelOpenListener(listener: (evt: Event) => void): void;
   observeResize(callback: (entry: ResizeObserverEntry) => void): void;
   unobserveResize(): void;
   setOrientation(value: SplitViewOrientation): void;
@@ -27,18 +24,6 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   public registerSlotListener(listener: (evt: Event) => void): void {
     this._root.addEventListener('slotchange', listener);
-  }
-
-  public registerPanelResizeEndListener(listener: (evt: Event) => void): void {
-    this._root.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DRAG_END, listener);
-  }
-
-  public registerPanelCloseListener(listener: (evt: Event) => void): void {
-    this._root.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, listener);
-  }
-
-  public registerPanelOpenListener(listener: (evt: Event) => void): void {
-    this._root.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN, listener);
   }
 
   public observeResize(callback: (entry: ResizeObserverEntry) => void): void {

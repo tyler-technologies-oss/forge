@@ -12,6 +12,7 @@ import styles from './split-view.scss';
 
 export interface ISplitViewComponent extends ISplitViewBase, IBaseComponent {
   orientation: SplitViewOrientation;
+  updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void;
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
 }
@@ -92,6 +93,15 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
    */
   @FoundationProperty()
   public autoClose: boolean;
+
+  /**
+   * Recalculates and resets accessibility attributes of split view panels to reflect the current
+   * size of each panel and its neighbors.
+   * @param target The originating split view panel.
+   */
+  public updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void {
+    this._foundation.updateSlottedPanelsAccessibility(target);
+  }
 
   /**
    * Arranges split view panels to avoid overlapping during animations.
