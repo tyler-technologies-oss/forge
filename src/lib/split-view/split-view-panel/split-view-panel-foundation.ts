@@ -1,13 +1,15 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
-import { safeMin, scaleValue } from '../../core/utils/utils';
+import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
 import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
+import { parseSize } from '../core/split-view-core-utils';
 
 export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElementFoundation {
   position: SplitViewPanelPosition;
+  size: number | string;
   min: number;
   max: number | undefined;
   label: string;
@@ -22,7 +24,7 @@ export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElemen
 export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   // API
   private _position: SplitViewPanelPosition = 'default';
-  private _size = 200;
+  private _size: number | string = '200';
   private _min = 0;
   private _max: number | undefined;
   private _label = 'Split view panel';
@@ -460,10 +462,10 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   /**
    * Get/set panel size.
    */
-  public get size(): number {
+  public get size(): number | string {
     return this._size;
   }
-  public set size(value: number) {
+  public set size(value: number | string) {
     if (this._size !== value) {
       this._size = value;
       this._applySize();
@@ -471,13 +473,20 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   private _applySize(): void {
+    const parsedSize = parseSize(this._size);
+    let pixelSize = parsedSize.amount;
+    if (parsedSize.unit === '%') {
+      const parentSize = this._adapter.getParentSize(this._orientation);
+      pixelSize = percentToPixels(parsedSize.amount, parentSize);
+    }
+
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.SIZE, this._size.toString());
-    this._adapter.setContentSize(this._size);
+    this._adapter.setContentSize(pixelSize);
     // Wait for the DOM to render to get available space
     window.requestAnimationFrame(() => {
       const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
       const maxSize = safeMin(this._max, availableSpace);
-      const newValue = scaleValue(this._size, this._min, maxSize);
+      const newValue = scaleValue(pixelSize, this._min, maxSize);
       this._adapter.setValue(newValue);
     });
   }

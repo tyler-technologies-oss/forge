@@ -72,7 +72,7 @@ export function percentToPixels(amount: number, containerSize: number): number {
   if (containerSize === 0) {
     return 0;
   }
-  return 100 / containerSize * amount;
+  return amount / 100 * containerSize;
 }
 
 /**

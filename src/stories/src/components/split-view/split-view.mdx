@@ -106,9 +106,13 @@ handle is placed and the direction it opens and closes.
 
 </PropertyDef>
 
-<PropertyDef name="size" type="number" defaultValue="200">
+<PropertyDef name="size" type="number | string" defaultValue="200">
 
-Sets the initial panel size in pixels. This can also be set to programmatically resize the panel.
+Sets the initial panel size in pixels or percent. This can also be set to programmatically resize the panel.
+
+> **Important:** The `size` property does not update to reflect the current size of the panel.
+
+> The `size` property has no effect on panels with a `position` of `default`.
 
 </PropertyDef>
 

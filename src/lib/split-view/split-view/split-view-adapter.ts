@@ -51,7 +51,7 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   /**
    * Sets the orientation of all child panels.
-   * @param value 
+   * @param value `'horizontal'` or `'vertical'`.
    */
   public setOrientation(value: SplitViewOrientation): void {
     this.getSlottedPanels().forEach(panel => {

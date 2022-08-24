@@ -33,6 +33,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   getAvailableSpace(orientation: SplitViewOrientation, position: SplitViewPanelPosition): number;
   getSiblingContentSize(): number;
   setSiblingContentSize(value: number): void;
+  getParentSize(orientation: SplitViewOrientation): number;
 }
 
 export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent> implements ISplitViewPanelAdapter {
@@ -245,8 +246,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
       const siblingSize = sibling.getCollapsibleSize();
       return siblingSize + this.getContentSize(orientation);
     } else {
-      const parentSize = orientation === 'horizontal' ? this._parent?.clientWidth : this._parent?.clientHeight;
-      return parentSize ?? 0;
+      return this.getParentSize(orientation);
     }
   }
 
@@ -268,5 +268,15 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   public setSiblingContentSize(value: number): void {
     const sibling = getSplitViewPanelSibling(this._component);
     sibling?.setContentSize(value);
+  }
+
+  /**
+   * Gets the size of the parent split view along the axis of orientation.
+   * @param orientation The component's orientation.
+   * @returns The parent's size in pixels.
+   */
+  public getParentSize(orientation: SplitViewOrientation): number {
+    const parentSize = orientation === 'horizontal' ? this._parent?.clientWidth : this._parent?.clientHeight;
+    return parentSize ?? 0;
   }
 }

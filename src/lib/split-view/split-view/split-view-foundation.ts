@@ -87,7 +87,8 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   /**
    * Recalculates and sets the accessible values of all slotted panels.
-   * @param target The originating panel. This is is assumed to have already handled its accessibility and is skipped.
+   * @param target The originating panel. This is is assumed to have already handled its
+   * accessibility and is skipped.
    */
   private _updateSlottedPanelsAccessibility(target?: ISplitViewPanelComponent): void {
     const panels = this._adapter.getSlottedPanels();

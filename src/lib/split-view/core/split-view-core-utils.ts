@@ -41,3 +41,22 @@ export function getSplitViewPanelSibling(el: ISplitViewPanelComponent): SplitVie
 
   return undefined;
 }
+
+/**
+ * Extracts a size and unit from a `number` or `string` formatted as a CSS dimension using px or %.
+ * A `number` is interpreted to be a pixel value.
+ * @param value A `number` or `string` representing a size in pixels or percent.
+ * @returns An object containing the parsed size and unit.
+ */
+export function parseSize(value: number | string): { amount: number; unit: 'px' | '%' | '' } {
+  if (!isNaN(+value)) {
+    return { amount: +value, unit: 'px' };
+  }
+
+  const regex = /(^\d*\.?\d*)(\s*)(px|%$)?/i;
+  const parts = (value as string).match(regex);
+  const amount = parts?.[1] ? +parts[1] : -1;
+  const unit = (parts?.[3]?.toLowerCase() ?? '') as 'px' | '%' | '';
+
+  return { amount, unit };
+}

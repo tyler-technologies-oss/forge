@@ -15,7 +15,7 @@ export interface ISplitViewPanel1Props {
   max1: number | undefined;
   min1: number;
   open1: boolean;
-  size1: number;
+  size1: string;
 }
 
 export interface ISplitViewPanel2Props {
@@ -26,7 +26,7 @@ export interface ISplitViewPanel2Props {
   min2: number;
   max2: number | undefined;
   open2: boolean;
-  size2: number;
+  size2: string;
 }
 
 export interface ISplitViewPanel3Props {
@@ -37,7 +37,7 @@ export interface ISplitViewPanel3Props {
   max3: number | undefined;
   min3: number;
   open3: boolean;
-  size3: number;
+  size3: string;
 }
 
 export interface ISplitViewProps extends ISplitViewCommonProps, Partial<ISplitViewPanel1Props>, Partial<ISplitViewPanel2Props>, Partial<ISplitViewPanel3Props> {};
@@ -91,7 +91,7 @@ const splitViewPanel1ArgTypes = {
   },
   size1: {
     name: 'size (panel 1)',
-    control: 'number',
+    control: 'text',
     description: '',
     table: {
       category: 'Panel 1'
@@ -158,7 +158,7 @@ const splitViewPanel2ArgTypes = {
   },
   size2: {
     name: 'size (panel 2)',
-    control: 'number',
+    control: 'text',
     description: '',
     table: {
       category: 'Panel 2'
@@ -225,7 +225,7 @@ const splitViewPanel3ArgTypes = {
   },
   size3: {
     name: 'size (panel 3)',
-    control: 'number',
+    control: 'text',
     description: '',
     table: {
       category: 'Panel 3'

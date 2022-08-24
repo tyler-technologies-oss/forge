@@ -16,6 +16,7 @@ import styles from './split-view-panel.scss';
 
 export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent {
   position: SplitViewPanelPosition;
+  size: number | string;
   min: number;
   max: number | undefined;
   label: string;
@@ -52,6 +53,7 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
   public static get observedAttributes(): string[] {
     return [
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION,
+      SPLIT_VIEW_PANEL_CONSTANTS.attributes.SIZE,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.MAX,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.LABEL,
@@ -83,6 +85,9 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
     switch (name) {
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION:
         this.position = newValue as SplitViewPanelPosition;
+        break;
+      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.SIZE:
+        this.size = newValue;
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN:
         this.min = coerceNumber(newValue);
@@ -117,6 +122,12 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
    */
   @FoundationProperty()
   public position: SplitViewPanelPosition;
+
+  /**
+   * The initial size along the axis of orientation.
+   */
+  @FoundationProperty()
+  public size: number | string;
 
   /**
    * The smallest size the panel can take along its axis of orientation.
