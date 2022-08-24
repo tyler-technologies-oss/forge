@@ -112,46 +112,91 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
     }
   }
 
+  /**
+   * Controls behavior related to the panel's position in the split view.
+   */
   @FoundationProperty()
   public position: SplitViewPanelPosition;
 
+  /**
+   * The smallest size the panel can take along its axis of orientation.
+   */
   @FoundationProperty()
   public min: number;
 
+  /**
+   * The largest size the panel can take along its axis of orientation.
+   */
   @FoundationProperty()
   public max: number | undefined;
 
+  /**
+   * The accessible label given to the resize handle.
+   */
   @FoundationProperty()
   public label: string;
 
+  /**
+   * Controls the open state of the panel.
+   */
   @FoundationProperty()
   public open: boolean;
 
+  /**
+   * Whether resize interactions are disabled or enabled.
+   */
   @FoundationProperty()
   public disabled: boolean;
 
+  /**
+   * Whether the panel can be closed via keyboard interaction.
+   */
   @FoundationProperty()
   public disableClose: boolean;
 
+  /**
+   * Whether the panel automatically closes when it reaches a size of 0.
+   */
   @FoundationProperty()
   public autoClose: boolean;
 
+  /**
+   * Gets the size of content along the axis of orientation.
+   * @returns The size of content in pixels.
+   */
   public getContentSize(): number {
     return this._foundation.getContentSize();
   }
 
+  /**
+   * Gets the amount that the content can shrink along the axis of orientation before reaching its
+   * min size.
+   * @returns The amount that content can shrink in pixels.
+   */
   public getCollapsibleSize(): number {
     return this._foundation.getCollapsibleSize();
   }
 
+  /**
+   * Sets the size of content along the axis of orientation.
+   * @param size The new size of content in pixels.
+   */
   public setContentSize(size: number): void {
     this._foundation.setContentSize(size);
   }
 
+  /**
+   * Sets the axis that the panel resizes on. Used internally by the parent split view component.
+   * @param value `'horizontal'` or `'vertical'`.
+   */
   public setOrientation(value: SplitViewOrientation): void {
     this._foundation.setOrientation(value);
   }
 
+  /**
+   * Recalculates and resets accessibility attributes to reflect the current size of the panel and
+   * its neighbors. Used internally by the parent split view component.
+   */
   public updateAccessibility(): void {
     this._foundation.updateAccessibility();
   }

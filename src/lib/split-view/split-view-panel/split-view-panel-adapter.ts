@@ -98,14 +98,27 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._handle?.removeEventListener('keyup', listener);
   }
 
+  /**
+   * Gets the specified property value from the parent split view.
+   * @param name The property name.
+   * @returns The value of the property.
+   */
   public getParentProperty(name: keyof ISplitViewComponent): unknown {
     return this._parent?.[name];
   }
 
+  /**
+   * Sets the accessible label of the resize handle.
+   * @param value The label text.
+   */
   public setLabel(value: string): void {
     this._handle?.setAttribute('aria-label', value);
   }
 
+  /**
+   * Sets the disabled state of the component.
+   * @param value Whether the component is disabled.
+   */
   public setDisabled(value: boolean): void {
     this._root.classList.toggle(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED, value);
     if (this._handle) {
@@ -114,6 +127,11 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     }
   }
 
+  /**
+   * Sets the position of the component including its ARIA attributes and the DOM order of
+   * elements.
+   * @param value The component's position.
+   */
   public setPosition(value: SplitViewPanelPosition): void {
     this._root.setAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION, value.toString());
     toggleAttribute(this._handle, value !== 'default', 'aria-valuemin', '0');
@@ -133,6 +151,10 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     }
   }
 
+  /**
+   * Sets the orientation of the component including ARIA attributes and the resize handle icon.
+   * @param value The component's orientation.
+   */
   public setOrientation(value: SplitViewOrientation): void {
     this._root.setAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.ORIENTATION, value);
     // The divider's orientation is perpendicular to the layout of the component
@@ -140,6 +162,10 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._icon?.setAttribute('name', getHandleIcon(value));
   }
 
+  /**
+   * Opens or closes the component.
+   * @param value Whether the component is open.
+   */
   public setOpen(value: boolean): void {
     if (value && this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
       this._parent?.layerSlottedPanels(this._component);
@@ -158,6 +184,12 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     }
   }
 
+  /**
+   * Sets the components appearance and accessibility to indicated whether it is currently grabbed
+   * by the user. Applies a cursor style to the document body.
+   * @param value Whether the component is currently being resized via pointer interaction.
+   * @param orientation The component's orientation.
+   */
   public setGrabbed(value: boolean, orientation: SplitViewOrientation): void {
     this._root.classList.toggle(SPLIT_VIEW_PANEL_CONSTANTS.classes.GRABBED, value);
     this._handle.setAttribute('aria-grabbed', value.toString());
@@ -169,18 +201,40 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     }
   }
 
+  /**
+   * Gets the size of the content along the orientation axis. Does not include the resize handle.
+   * @param orientation The component's orientation.
+   * @returns The width or height of the content in pixels.
+   */
   public getContentSize(orientation: SplitViewOrientation): number {
     return orientation === 'horizontal' ? this._content?.clientWidth ?? 0 : this._content?.clientHeight ?? 0;
   }
 
+  /**
+   * Sets the size of the content not including the resize handle.
+   * @param value The width or height of the content in pixels.
+   */
   public setContentSize(value: number): void {
     this._component.style.setProperty(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.SIZE, `${value}px`);
   }
 
+  /**
+   * Sets the ARIA attribute representing the size of the content compared to its min and max.
+   * @param value The content size scaled from 0 to 100.
+   */
   public setValue(value: number): void {
     this._handle.setAttribute('aria-valuenow', value.toFixed(2));
   }
 
+  /**
+   * Gets the amount of space that the component is allowed to take. This includes the current
+   * size of the component and the size of the sibling it resizes into along the axis of
+   * orientation. The sibling's min and max values are taken into account but the component's are
+   * not.
+   * @param orientation The component's orientation.
+   * @param position The component's position.
+   * @returns The amount of space available for the component to resize into in pixels.
+   */
   public getAvailableSpace(orientation: SplitViewOrientation, position: SplitViewPanelPosition): number {
     if (position === 'default') {
       // Return -1 if the panel is static (i.e. can't be user resized)
@@ -196,11 +250,21 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     }
   }
 
+  /**
+   * Gets the content size of the sibling panel the component resizes into along its axis of
+   * orientation.
+   * @returns The sibling's content size in pixels or 0 if the sibling does not exist.
+   */
   public getSiblingContentSize(): number {
     const sibling = getSplitViewPanelSibling(this._component);
     return sibling?.getContentSize() ?? 0;
   }
 
+  /**
+   * Sets the content size of the sibling panel the component resizes into along its axis of
+   * orientation.
+   * @returns The sibling's content size in pixels.
+   */
   public setSiblingContentSize(value: number): void {
     const sibling = getSplitViewPanelSibling(this._component);
     sibling?.setContentSize(value);

@@ -69,7 +69,7 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   /**
    * Sets a property on all child panels.
-   * @param property The property to set.
+   * @param name The property to set.
    * @param value The value the property should take.
    */
   public setSlottedPanelProperty<T>(name: keyof ISplitViewPanelComponent, value: T): void {

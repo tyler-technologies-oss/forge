@@ -69,22 +69,41 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
     }
   }
 
+  /**
+   * Whether child split view panels are laid out and resize horizontally or vertically.
+   */
   @FoundationProperty()
   public orientation: SplitViewOrientation;
 
+  /**
+   * Whether child split view panels have resize interactions disabled or enabled.
+   */
   @FoundationProperty()
   public disabled: boolean;
 
+  /**
+   * Whether child split view panels can be closed via keyboard interaction.
+   */
   @FoundationProperty()
   public disableClose: boolean;
 
+  /**
+   * Whether child split view panels automatically close when they reach a size of 0.
+   */
   @FoundationProperty()
   public autoClose: boolean;
 
+  /**
+   * Arranges split view panels to avoid overlapping during animations.
+   * @param target The originating split view panel component.
+   */
   public layerSlottedPanels(target: ISplitViewPanelComponent): void {
     this._foundation.layerSlottedPanels(target);
   }
 
+  /**
+   * Removes presentation data set during an animation.
+   */
   public unlayerSlottedPanels(): void {
     this._foundation.unlayerSlottedPanels();
   }
