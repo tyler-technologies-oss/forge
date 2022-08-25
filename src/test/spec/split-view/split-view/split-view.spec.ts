@@ -1,6 +1,6 @@
 import { removeElement } from '@tylertech/forge-core';
 import { tick } from '@tylertech/forge-testing';
-import { SplitViewComponent, SPLIT_VIEW_CONSTANTS, defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS, SplitViewAnimatingLayer } from '@tylertech/forge/split-view';
+import { defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_CONSTANTS } from '@tylertech/forge/split-view';
 
 interface ITestContext {
   context: ITestSplitViewContext;
@@ -69,7 +69,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
 
   describe('layering', function(this: ITestContext) {
     it('should arrange panels correctly when the target has position set to start', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 3);
       this.context.panels![1].position = 'start';
       this.context.component.layerSlottedPanels(this.context.panels![1]);
       const layerOne = this.context.panels![0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
@@ -81,7 +81,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
 
     it('should arrange panels correctly when the target has position set to end', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 3);
       this.context.panels![1].position = 'end';
       this.context.component.layerSlottedPanels(this.context.panels![1]);
       const layerOne = this.context.panels![0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
@@ -93,54 +93,42 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
 
     it('should remove animating layer properties', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
-      this.context.panels![1].position = 'start';
-      this.context.component.layerSlottedPanels(this.context.panels![1]);
+      this.context = setupTestContext(false, 1);
+      this.context.panels![0].position = 'start';
+      this.context.component.layerSlottedPanels(this.context.panels![0]);
       this.context.component.unlayerSlottedPanels();
-      const layerOne = this.context.panels![0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
-      const layerTwo = this.context.panels![1].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
-      const layerThree = this.context.panels![2].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
-      expect(layerOne).toBe('');
-      expect(layerTwo).toBe('');
-      expect(layerThree).toBe('');
+      const layer = this.context.panels![0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
+      expect(layer).toBe('');
     });
   });
 
   describe('panels', function(this: ITestContext) {
     it('should set orientation', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 1);
       this.context.component.orientation = 'vertical';
       expect(this.context.panels![0]['_foundation']._orientation).toBe('vertical');
-      expect(this.context.panels![1]['_foundation']._orientation).toBe('vertical');
-      expect(this.context.panels![2]['_foundation']._orientation).toBe('vertical');
     });
 
     it('should set disabled', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 1);
       this.context.component.disabled = true;
       expect(this.context.panels![0].disabled).toBeTrue();
-      expect(this.context.panels![1].disabled).toBeTrue();
-      expect(this.context.panels![2].disabled).toBeTrue();
     });
 
     it('should set disable close', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 1);
       this.context.component.disableClose = true;
       expect(this.context.panels![0].disableClose).toBeTrue();
-      expect(this.context.panels![1].disableClose).toBeTrue();
-      expect(this.context.panels![2].disableClose).toBeTrue();
     });
 
     it('should set auto close', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 1);
       this.context.component.autoClose = true;
       expect(this.context.panels![0].autoClose).toBeTrue();
-      expect(this.context.panels![1].autoClose).toBeTrue();
-      expect(this.context.panels![2].autoClose).toBeTrue();
     });
 
     it('should layout when all have default positions', async function(this: ITestContext) {
-      this.context = setupTestContext(true, true);
+      this.context = setupTestContext(true, 3);
       await tick();
       expect(this.context.panels![0].position).toBe('default');
       expect(this.context.panels![1].position).toBe('end');
@@ -148,7 +136,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
 
     it('should not layout when a non-default position is set', async function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 3);
       this.context.panels![0].position = 'start';
       this.context.panels![2].position = 'end';
       this.context.append();
@@ -159,16 +147,14 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
 
     it('should not layout one or fewer panels', async function(this: ITestContext) {
-      this.context = setupTestContext(false);
-      const panel = document.createElement('forge-split-view-panel');
-      this.context.component.appendChild(panel);
+      this.context = setupTestContext(false, 1);
       this.context.append();
       await tick();
-      expect(panel.position).toBe('default');
+      expect(this.context.panels![0].position).toBe('default');
     });
 
     it('should update accessibility', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 2);
       this.context.panels![0].position = 'start';
       const spy = spyOn(this.context.panels![0], 'updateAccessibility');
       this.context.component.updateSlottedPanelsAccessibility(this.context.panels![1]);
@@ -176,7 +162,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
 
     it('should not update target accessibility', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 2);
       this.context.panels![0].position = 'start';
       const spy = spyOn(this.context.panels![0], 'updateAccessibility');
       this.context.component.updateSlottedPanelsAccessibility(this.context.panels![0]);
@@ -184,7 +170,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
 
     it('should not update accessibility when position is default', function(this: ITestContext) {
-      this.context = setupTestContext(false, true);
+      this.context = setupTestContext(false, 2);
       this.context.panels![0].position = 'default';
       const spy = spyOn(this.context.panels![0], 'updateAccessibility');
       this.context.component.updateSlottedPanelsAccessibility(this.context.panels![1]);
@@ -192,7 +178,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
 
     it('should update accessibility on resize', async function(this: ITestContext) {
-      this.context = setupTestContext(true, true);
+      this.context = setupTestContext(true, 2);
       await tick();
       const spy = spyOn(this.context.panels![0], 'updateAccessibility');
       this.context.panels![0].position = 'start';
@@ -203,12 +189,12 @@ describe('SplitViewComponent', function(this: ITestContext) {
     });
   });
 
-  function setupTestContext(append = false, withPanels = false): ITestSplitViewContext {
+  function setupTestContext(append = false, numberOfPanels = 0): ITestSplitViewContext {
     const component = document.createElement('forge-split-view');
 
     let panels: ISplitViewPanelComponent[] | undefined = undefined;
-    if (withPanels) {
-      panels = new Array(3).fill(undefined).map(() => {
+    if (numberOfPanels) {
+      panels = new Array(numberOfPanels).fill(undefined).map(() => {
         const panel = document.createElement('forge-split-view-panel');
         component.appendChild(panel);
         return panel;
