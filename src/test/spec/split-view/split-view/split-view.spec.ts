@@ -48,23 +48,23 @@ describe('SplitViewComponent', function(this: ITestContext) {
   })
 
   describe('attributes', function(this: ITestContext) {
-      it('should set disabled', function(this: ITestContext) {
-        this.context = setupTestContext();
-        this.context.component.setAttribute('disabled', 'true');
-        expect(this.context.component.disabled).toBeTrue();
-      })
+    it('should set disabled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute('disabled', 'true');
+      expect(this.context.component.disabled).toBeTrue();
+    })
 
-      it('should set disable close', function(this: ITestContext) {
-        this.context = setupTestContext();
-        this.context.component.setAttribute('disable-close', 'true');
-        expect(this.context.component.disableClose).toBeTrue();
-      })
+    it('should set disable close', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute('disable-close', 'true');
+      expect(this.context.component.disableClose).toBeTrue();
+    })
 
-      it('should set auto close', function(this: ITestContext) {
-        this.context = setupTestContext();
-        this.context.component.setAttribute('auto-close', 'true');
-        expect(this.context.component.autoClose).toBeTrue();
-      })
+    it('should set auto close', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute('auto-close', 'true');
+      expect(this.context.component.autoClose).toBeTrue();
+    })
   });
 
   describe('layering', function(this: ITestContext) {
