@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  height: var(--forge-virtual-scroll-height, 100%);
+  width: var(--forge-virtual-scroll-width, 100%);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-virtual-scroll {
+  &__container {
+    height: var(--forge-virtual-scroll-height, 100%);
+    position: relative;
+    overflow: auto;
+  }
+}

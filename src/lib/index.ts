@@ -73,6 +73,7 @@ import { TooltipComponent } from './tooltip';
 import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
 import { IconComponent } from './icon';
 import { SelectDropdownComponent } from './select/select-dropdown';
+import { VirtualScrollComponent } from './virtual-scroll';
 
 export * from './accordion';
 export * from './app-bar';
@@ -134,7 +135,7 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
-export * from './virtual-scroller';
+export * from './virtual-scroll';
 export * from './icon';
 
 const CUSTOM_ELEMENTS = [
@@ -210,6 +211,7 @@ const CUSTOM_ELEMENTS = [
   TooltipComponent,
   ViewSwitcherComponent,
   ViewComponent,
+  VirtualScrollComponent,
   AutocompleteComponent
 ];
 

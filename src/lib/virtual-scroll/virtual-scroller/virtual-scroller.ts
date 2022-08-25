@@ -3,8 +3,6 @@ import { IVirtualScrollerItem, IVirtualScrollerOptions, VirtualScrollerAlignment
 import { createItem, createSpacer, getFirstMapKey, getScrollTopWithItemInView, limitCountToRender, deleteFirstFromMap, scrollToItem, setItemAccessibility, setItemTop } from './virtual-scroller-utils';
 
 export class VirtualScroller<T = unknown> {
-  // Configurable properties
-
   /**
    * Prevents elements from being removed when they scroll out of view.
    */
@@ -90,7 +88,7 @@ export class VirtualScroller<T = unknown> {
    * An internal element used to force the required scroll height on the
    * container.
    */
-  private _spacer: HTMLElement;
+  private _spacerElement: HTMLElement;
 
   /**
    * The array of items that are in view or within the buffer and
@@ -190,16 +188,11 @@ export class VirtualScroller<T = unknown> {
     this._skipAccessibility = options.skipAccessibility ?? this._skipAccessibility;
     this._startIndex = options.startIndex ?? this._startIndex;
     this._throttle = options.throttle ?? this._throttle;
-
     this._setSize = this._data.length;
     this._scrollHeight = this._setSize * this._itemHeight;
 
-    if (this._container.style.overflowY !== 'scroll') {
-      this._container.style.setProperty('overflow-y', 'auto');
-    }
-
     this._removeSpacer();
-    this._spacer = createSpacer(this._scrollHeight, this._insetTop, this._insetBottom);
+    this._spacerElement = createSpacer(this._scrollHeight, this._insetTop, this._insetBottom);
     this._appendSpacer();
 
     if (this._startIndex) {
@@ -207,7 +200,6 @@ export class VirtualScroller<T = unknown> {
     }
 
     this._initScrollListener();
-
     this._layoutItems();
     this._renderItems();
   }
@@ -251,12 +243,12 @@ export class VirtualScroller<T = unknown> {
   }
 
   private _appendSpacer(): void {
-    this._container.append(this._spacer);
+    this._container.append(this._spacerElement);
   }
 
   private _removeSpacer(): void {
-    if (this._spacer) {
-      this._container.removeChild(this._spacer);
+    if (this._spacerElement) {
+      this._container.removeChild(this._spacerElement);
     }
   }
 
@@ -496,7 +488,7 @@ export class VirtualScroller<T = unknown> {
   }
   public set insetBottom(value: string) {
     this._insetBottom = value;
-    this._spacer.style.setProperty('margin-bottom', this._insetBottom);
+    this._spacerElement.style.setProperty('margin-bottom', this._insetBottom);
   }
 
   public get insetTop(): string {
@@ -504,7 +496,7 @@ export class VirtualScroller<T = unknown> {
   }
   public set insetTop(value: string) {
     this._insetTop = value;
-    this._spacer.style.setProperty('margin-top', this.insetTop);
+    this._spacerElement.style.setProperty('margin-top', this.insetTop);
     this._rerenderItems();
   }
 
@@ -556,8 +548,8 @@ export class VirtualScroller<T = unknown> {
   }
 
   // Exposed for possible style manipulation
-  public get spacer(): HTMLElement {
-    return this._spacer;
+  public get spacerElement(): HTMLElement {
+    return this._spacerElement;
   }
 
   // Exposed for debugging

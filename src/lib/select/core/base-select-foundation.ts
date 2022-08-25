@@ -409,10 +409,18 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
       }
     } else if (isEnter) {
       if (this._open) {
+        // // We close the dropdown if no options are highlighted
+        // if (this._adapter.getActiveOptionIndex() === -1) {
+        //   this._closeDropdown();
+        //   return;
+        // }
+
         evt.stopPropagation();
         evt.preventDefault();
         this._options = this._adapter.getOptions();
         this._selectActiveOption();
+      } else {
+        // this._openDropdown();
       }
     } else if (isArrowUp || isArrowDown) {
       evt.preventDefault();

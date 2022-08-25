@@ -6,6 +6,7 @@ import { IListComponent, LIST_CONSTANTS } from '../list/list';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/list-item';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
+import { IVirtualScrollComponent, VirtualScrollerItemBuilder } from '../virtual-scroll';
 import { IListDropdownCascadingElementFactoryConfig, IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownAsyncStyle, ListDropdownIconType, ListDropdownType, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
 
 export enum ListDropdownOptionType { Option, Group }
@@ -80,6 +81,14 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   return popupElement;
 }
 
+export function createVirtualScroll({ container, itemBuilder, data }: { container: HTMLElement; itemBuilder: VirtualScrollerItemBuilder; data: unknown[] }): IVirtualScrollComponent {
+  const virtualScrollElement = document.createElement('forge-virtual-scroll');
+  virtualScrollElement.container = container;
+  virtualScrollElement.itemBuilder = itemBuilder;
+  virtualScrollElement.data = data;
+  return virtualScrollElement;
+}
+
 export function createList(config: IListDropdownOpenConfig): IListComponent {
   const listElement = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
   listElement.id = `list-dropdown-list-${config.id}`;
@@ -135,149 +144,153 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
 
     // Loop over the options for this group
     for (const option of group.options) {
-      // First we check if this option is just a divider
-      if (option.divider) {
-        const dividerElement = createDivider();
-        listElement.appendChild(dividerElement);
-        continue;
-      }
-
-      // Check if an option limit has been provided to reduce amount of options that need to be rendered
-      if (limitOptions && --optionLimit < 0) {
-        break;
-      }
-
-      optionIndex++;
-      
-      // Create and configure the list element
-      const isSelected = config.selectedValues ? config.selectedValues.some(v => isDeepEqual(v, option.value)) : false;
-      let listItemElement = document.createElement(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
-      listItemElement.value = option.value;
-      listItemElement.id = `list-dropdown-option-${config.id}-${optionIndex}`;
-      listItemElement.style.cursor = 'pointer';
-
-      // Add any CSS classes to the option list-item
-      if (option.optionClass && (typeof option.optionClass === 'string' || Array.isArray(option.optionClass) && option.optionClass.length)) {
-        addClass(option.optionClass, listItemElement);
-      }
-
-      // Set role based on type
-      switch (config.type) {
-        case ListDropdownType.Menu:
-          listItemElement.setAttribute('role', 'menuitem');
-          break;
-        case ListDropdownType.None:
-          break;
-        default:
-          listItemElement.setAttribute('role', 'option');
-      }
-
-      if (config.dense) {
-        listItemElement.dense = true;
-      }
-
-      // Check for a custom option template builder
-      if (config.optionBuilder && typeof config.optionBuilder === 'function') {
-        const element = config.optionBuilder(option, listItemElement);
-        if (element) {
-          if (typeof element === 'string') {
-            listItemElement.innerHTML = element;
-          } else {
-            listItemElement.appendChild(element);
-          }
-        }
-      } else {
-        if (typeof config.transform !== 'function') {
-          listItemElement.textContent = option.label || '';
-        } else {
-          const result = config.transform(option.label);
-          if (typeof result === 'string') {
-            listItemElement.textContent = result;
-          } else if (typeof result === 'object' && result.nodeType !== undefined) {
-            listItemElement.appendChild(result);
-          }
-        }
-      }
-
-      // Leading element/icon
-      if (option.leadingBuilder) {
-        const element = option.leadingBuilder();
-        if (isObject(element)) {
-          element.slot = 'leading';
-          listItemElement.appendChild(element);
-        }
-      } else if (option.leadingIcon) {
-        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass);
-        leadingIconElement.slot = 'leading';
-        listItemElement.appendChild(leadingIconElement);
-      }
-
-      // Trailing element/icon
-      if (option.trailingBuilder) {
-        const element = option.trailingBuilder();
-        if (isObject(element)) {
-          element.slot = 'trailing';
-          listItemElement.appendChild(element);
-        }
-      } else if (option.trailingIcon) {
-        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass);
-        trailingIconElement.slot = 'trailing';
-        listItemElement.appendChild(trailingIconElement);
-      }
-
-      // Update the disabled state
-      if (option.disabled) {
-        listItemElement.disabled = option.disabled;
-        listItemElement.setAttribute('aria-disabled', 'true');
-      } else {
-        listItemElement.style.cursor = 'pointer';
-        listItemElement.setAttribute('aria-disabled', 'false');
-      }
-
-      // Update the selected state
-      if (isSelected) {
-        listItemElement.selected = true;
-      }
-      listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
-
-      // If multiple selections are enabled then we need to create and append a leading checkbox element
-      if (config.multiple) {
-        const checkboxElement = createCheckboxElement(isSelected);
-        listItemElement.appendChild(checkboxElement);
-        listItemElement.setAttribute('aria-selected', `${isSelected}`);
-        listItemElement.setAttribute('aria-checked', `${isSelected}`);
-      }
-
-      if (option.elementAttributes) {
-        option.elementAttributes.forEach((value: string, key: string) => {
-          listItemElement.setAttribute(key, value);
-        });
-      }
-
-      // If we have any child options, we need to render a child menu for this list item
-      if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
-        // Create the trailing indicator icon to show that a child menu exists for this option. 
-        const optionIconElement = document.createElement('forge-icon');
-        optionIconElement.name = 'arrow_right';
-        optionIconElement.slot = 'trailing';
-        listItemElement.appendChild(optionIconElement);
-
-        const nonDividerOptions = group.options.filter(o => !o.divider);
-
-        // Create the nested cascading element wrapper
-        const factoryConfig: IListDropdownCascadingElementFactoryConfig = {
-          index: nonDividerOptions.indexOf(option),
-          options: option.options,
-          parentValue: option.value
-        };
-        const cascadingElement = config.cascadingElementFactory.call(null, factoryConfig);
-        cascadingElement.appendChild(listItemElement);
-        listItemElement = cascadingElement;
-      }
-
-      optionParent.appendChild(listItemElement);
+      createListItem(option);
     }
   }
+}
+
+export function createListItem(option: IListDropdownOption): HTMLElement {
+  // First we check if this option is just a divider
+  if (option.divider) {
+    const dividerElement = createDivider();
+    listElement.appendChild(dividerElement);
+    continue;
+  }
+
+  // Check if an option limit has been provided to reduce amount of options that need to be rendered
+  if (limitOptions && --optionLimit < 0) {
+    break;
+  }
+
+  optionIndex++;
+  
+  // Create and configure the list element
+  const isSelected = config.selectedValues ? config.selectedValues.some(v => isDeepEqual(v, option.value)) : false;
+  let listItemElement = document.createElement(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
+  listItemElement.value = option.value;
+  listItemElement.id = `list-dropdown-option-${config.id}-${optionIndex}`;
+  listItemElement.style.cursor = 'pointer';
+
+  // Add any CSS classes to the option list-item
+  if (option.optionClass && (typeof option.optionClass === 'string' || Array.isArray(option.optionClass) && option.optionClass.length)) {
+    addClass(option.optionClass, listItemElement);
+  }
+
+  // Set role based on type
+  switch (config.type) {
+    case ListDropdownType.Menu:
+      listItemElement.setAttribute('role', 'menuitem');
+      break;
+    case ListDropdownType.None:
+      break;
+    default:
+      listItemElement.setAttribute('role', 'option');
+  }
+
+  if (config.dense) {
+    listItemElement.dense = true;
+  }
+
+  // Check for a custom option template builder
+  if (config.optionBuilder && typeof config.optionBuilder === 'function') {
+    const element = config.optionBuilder(option, listItemElement);
+    if (element) {
+      if (typeof element === 'string') {
+        listItemElement.innerHTML = element;
+      } else {
+        listItemElement.appendChild(element);
+      }
+    }
+  } else {
+    if (typeof config.transform !== 'function') {
+      listItemElement.textContent = option.label || '';
+    } else {
+      const result = config.transform(option.label);
+      if (typeof result === 'string') {
+        listItemElement.textContent = result;
+      } else if (typeof result === 'object' && result.nodeType !== undefined) {
+        listItemElement.appendChild(result);
+      }
+    }
+  }
+
+  // Leading element/icon
+  if (option.leadingBuilder) {
+    const element = option.leadingBuilder();
+    if (isObject(element)) {
+      element.slot = 'leading';
+      listItemElement.appendChild(element);
+    }
+  } else if (option.leadingIcon) {
+    const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass);
+    leadingIconElement.slot = 'leading';
+    listItemElement.appendChild(leadingIconElement);
+  }
+
+  // Trailing element/icon
+  if (option.trailingBuilder) {
+    const element = option.trailingBuilder();
+    if (isObject(element)) {
+      element.slot = 'trailing';
+      listItemElement.appendChild(element);
+    }
+  } else if (option.trailingIcon) {
+    const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass);
+    trailingIconElement.slot = 'trailing';
+    listItemElement.appendChild(trailingIconElement);
+  }
+
+  // Update the disabled state
+  if (option.disabled) {
+    listItemElement.disabled = option.disabled;
+    listItemElement.setAttribute('aria-disabled', 'true');
+  } else {
+    listItemElement.style.cursor = 'pointer';
+    listItemElement.setAttribute('aria-disabled', 'false');
+  }
+
+  // Update the selected state
+  if (isSelected) {
+    listItemElement.selected = true;
+  }
+  listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+
+  // If multiple selections are enabled then we need to create and append a leading checkbox element
+  if (config.multiple) {
+    const checkboxElement = createCheckboxElement(isSelected);
+    listItemElement.appendChild(checkboxElement);
+    listItemElement.setAttribute('aria-selected', `${isSelected}`);
+    listItemElement.setAttribute('aria-checked', `${isSelected}`);
+  }
+
+  if (option.elementAttributes) {
+    option.elementAttributes.forEach((value: string, key: string) => {
+      listItemElement.setAttribute(key, value);
+    });
+  }
+
+  // If we have any child options, we need to render a child menu for this list item
+  if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
+    // Create the trailing indicator icon to show that a child menu exists for this option. 
+    const optionIconElement = document.createElement('forge-icon');
+    optionIconElement.name = 'arrow_right';
+    optionIconElement.slot = 'trailing';
+    listItemElement.appendChild(optionIconElement);
+
+    const nonDividerOptions = group.options.filter(o => !o.divider);
+
+    // Create the nested cascading element wrapper
+    const factoryConfig: IListDropdownCascadingElementFactoryConfig = {
+      index: nonDividerOptions.indexOf(option),
+      options: option.options,
+      parentValue: option.value
+    };
+    const cascadingElement = config.cascadingElementFactory.call(null, factoryConfig);
+    cascadingElement.appendChild(listItemElement);
+    listItemElement = cascadingElement;
+  }
+
+  optionParent.appendChild(listItemElement);
 }
 
 export function createCheckboxElement(selected: boolean): HTMLElement {

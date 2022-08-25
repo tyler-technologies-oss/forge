@@ -1,11 +1,12 @@
 import { IListDropdownOption, IListDropdownOpenConfig, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
-import { createDropdown, createList, createListItems, createAsyncElement, createBusyElement, createCheckboxElement } from './list-dropdown-utils';
+import { createDropdown, createList, createListItems, createAsyncElement, createBusyElement, createCheckboxElement, createVirtualScroll } from './list-dropdown-utils';
 import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
 import { IListComponent } from '../list/list';
 import { LIST_ITEM_CONSTANTS, IListItemComponent, IListItemSelectEventData } from '../list/list-item';
 import { ScrollEvents, getShadowElement, IScrollObserverConfiguration, ScrollAxisObserver, removeAllChildren, isFunction, removeElement, replaceElement, createVisuallyHiddenElement, isDeepEqual, tryScrollIntoView } from '@tylertech/forge-core';
 import { ILinearProgressComponent } from '../linear-progress';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
+import { IVirtualScrollComponent } from '../virtual-scroll';
 
 export interface IListDropdownAdapter {
   dropdownElement: HTMLElement | undefined;
@@ -31,6 +32,7 @@ export interface IListDropdownAdapter {
 
 export class ListDropdownAdapter implements IListDropdownAdapter {
   private _dropdownElement: IPopupComponent | undefined;
+  private _virtualScrollElement?: IVirtualScrollComponent;
   private _listElement: IListComponent | undefined;
   private _announcerElement: HTMLElement | undefined;
   private _scrollObserver: ScrollAxisObserver | undefined;
@@ -73,6 +75,18 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       }
     }
 
+    // Create the virtual scroll container element
+    const virtualScrollContainer = this._dropdownElement.shadowRoot?.querySelector('.forge-popup') as HTMLElement;
+    this._virtualScrollElement = createVirtualScroll({
+      container: virtualScrollContainer,
+      itemBuilder: (o: IListDropdownOption, i) => {
+        const listItem = document.createElement('forge-list-item');
+        listItem.innerText = o.label;
+        return listItem;
+      },
+      data: config.options
+    });
+
     // Create the list from our config
     this._listElement = createList(config);
 
@@ -84,9 +98,11 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
     // Determine if we need to show the list or the async element first
     if (config.options.length) {
+      this._dropdownElement.appendChild(this._virtualScrollElement);
+
       // Now we can create an append the list items
-      createListItems(config, this._listElement);
-      this._dropdownElement.appendChild(this._listElement);
+      // createListItems(config, this._listElement);
+      this._virtualScrollElement.appendChild(this._listElement);
 
       // Always append the optional header element **first**
       if (this._headerElement) {
@@ -118,6 +134,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     this._dropdownElement.open = false;
     this._dropdownElement = undefined;
     this._listElement = undefined;
+    this._virtualScrollElement = undefined;
     this._announcerElement = undefined;
   }
 
@@ -244,7 +261,16 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       this._busyElement.close();
     }
     if (!this._listElement.isConnected) {
-      this._dropdownElement.appendChild(this._listElement);
+      if (this._virtualScrollElement) {
+        // We're using virtual scrolling we need to ensure we append the list to the virtual scroll element
+        if (!this._virtualScrollElement?.isConnected) {
+          this._dropdownElement.appendChild(this._virtualScrollElement);
+        }
+        this._virtualScrollElement?.appendChild(this._listElement);
+      } else {
+        // We are not using virtual scrolling so just append the list directly to the dropdown element
+        this._dropdownElement.appendChild(this._listElement);
+      }
     }
     
     removeAllChildren(this._listElement);
