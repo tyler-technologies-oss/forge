@@ -11,15 +11,12 @@ import { IIconComponent } from '../../icon';
 export interface ISplitViewPanelAdapter extends IBaseAdapter {
   initialize(): void;
   setPointerdownListener(listener: (evt: PointerEvent) => void): void;
-  removePointerdownListener(listener: (evt: PointerEvent) => void): void;
   setPointerupListener(listener: (evt: PointerEvent) => void): void;
   removePointerupListener(listener: (evt: PointerEvent) => void): void;
   setPointermoveListener(listener: (evt: PointerEvent) => void): void;
   removePointermoveListener(listener: (evt: PointerEvent) => void): void;
   setKeydownListener(listener: (evt: KeyboardEvent) => void): void;
-  removeKeydownListener(listener: (evt: KeyboardEvent) => void): void;
   setKeyupListener(listener: (evt: KeyboardEvent) => void): void;
-  removeKeyupListener(listener: (evt: KeyboardEvent) => void): void;
   getParentProperty(name: keyof ISplitViewComponent): unknown;
   setLabel(value: string): void;
   setDisabled(value: boolean): void;
@@ -64,10 +61,6 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._handle?.addEventListener('pointerdown', listener);
   }
 
-  public removePointerdownListener(listener: (evt: PointerEvent) => void): void {
-    this._handle?.removeEventListener('pointerdown', listener);
-  }
-
   public setPointerupListener(listener: (evt: PointerEvent) => void): void {
     document.addEventListener('pointerup', listener);
   }
@@ -88,16 +81,8 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._handle?.addEventListener('keydown', listener);
   }
 
-  public removeKeydownListener(listener: (evt: KeyboardEvent) => void): void {
-    this._handle?.removeEventListener('keydown', listener);
-  }
-
   public setKeyupListener(listener: (evt: KeyboardEvent) => void): void {
     this._handle?.addEventListener('keyup', listener);
-  }
-
-  public removeKeyupListener(listener: (evt: KeyboardEvent) => void): void {
-    this._handle?.removeEventListener('keyup', listener);
   }
 
   /**

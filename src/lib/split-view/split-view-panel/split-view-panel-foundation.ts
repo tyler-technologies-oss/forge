@@ -514,7 +514,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     }
 
     const size = this._adapter.getContentSize(this._orientation);
-    if (size > this._min) {
+    if (size < this._min) {
       const newSize = this._clampSize(size);
       this._adapter.setContentSize(newSize);
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
@@ -540,7 +540,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     }
     
     const size = this._adapter.getContentSize(this._orientation);
-    if (size < this._max) {
+    if (size > this._max) {
       const newSize = this._clampSize(size);
       this._adapter.setContentSize(newSize);
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);

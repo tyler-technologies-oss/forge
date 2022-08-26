@@ -1,5 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
-import { defineSplitViewComponent, getCursor, getHandleIcon, getSplitViewPanelSibling, ISplitViewPanelComponent, parseSize, SplitViewPanelComponent } from '@tylertech/forge/split-view';
+import { defineSplitViewPanelComponent, getCursor, getHandleIcon, getSplitViewPanelSibling, ISplitViewPanelComponent, parseSize, SplitViewPanelComponent } from '@tylertech/forge/split-view';
 
 interface ITestContext {
   context: ITestSplitViewCoreUtilsContext;
@@ -60,7 +60,7 @@ describe('SplitViewCoreUtils', () => {
 
   describe('get panel sibling', function(this: ITestContext) {
     beforeAll(function(this: ITestContext) {
-      defineSplitViewComponent();
+      defineSplitViewPanelComponent();
     });
 
     afterEach(function(this: ITestContext) {
