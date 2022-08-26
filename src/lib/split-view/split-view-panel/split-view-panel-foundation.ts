@@ -12,7 +12,7 @@ export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElemen
   size: number | string;
   min: number;
   max: number | undefined;
-  label: string;
+  accessibleLabel: string;
   open: boolean;
   getContentSize(): number;
   getCollapsibleSize(): number;
@@ -27,7 +27,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _size: number | string = '200';
   private _min = 0;
   private _max: number | undefined;
-  private _label = 'Split view panel';
+  private _accessibleLabel = 'Split view panel';
   private _open = true;
   private _disabled = false;
   private _disableClose = false;
@@ -74,7 +74,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._applyMin();
     this._applyMax();
     this._applySize();
-    this._applyLabel();
+    this._applyAccessibleLabel();
     this._applyOpen();
     this._applyDisabled();
     this._applyDisableClose();
@@ -550,19 +550,19 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   /**
    * Get/set the accessible label.
    */
-  public get label(): string {
-    return this._label;
+  public get accessibleLabel(): string {
+    return this._accessibleLabel;
   }
-  public set label(value: string) {
-    if (this._label !== value) {
-      this._label = value;
-      this._applyLabel();
+  public set accessibleLabel(value: string) {
+    if (this._accessibleLabel !== value) {
+      this._accessibleLabel = value;
+      this._applyAccessibleLabel();
     }
   }
 
-  private _applyLabel(): void {
-    this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.LABEL, this._label);
-    this._adapter.setLabel(this._label);
+  private _applyAccessibleLabel(): void {
+    this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.ACCESSIBLE_LABEL, this._accessibleLabel);
+    this._adapter.setAccessibleLabel(this._accessibleLabel);
   }
 
   /**

@@ -11,7 +11,7 @@ export interface ISplitViewPanel1Props {
   autoClose1: boolean;
   disableClose1: boolean;
   disabled1: boolean;
-  label1: string;
+  accessibleLabel1: string;
   max1: number | undefined;
   min1: number;
   open1: boolean;
@@ -22,7 +22,7 @@ export interface ISplitViewPanel2Props {
   autoClose2: boolean;
   disableClose2: boolean;
   disabled2: boolean;
-  label2: string;
+  accessibleLabel2: string;
   min2: number;
   max2: number | undefined;
   open2: boolean;
@@ -33,7 +33,7 @@ export interface ISplitViewPanel3Props {
   autoClose3: boolean;
   disableClose3: boolean;
   disabled3: boolean;
-  label3: string;
+  accessibleLabel3: string;
   max3: number | undefined;
   min3: number;
   open3: boolean;
@@ -137,8 +137,9 @@ const splitViewPanel1ArgTypes = {
       category: 'Panel 1',
     },
   },
-  label1: {
-    name: 'label (panel 1)',
+  accessibleLabel1
+  : {
+    name: 'accessible label (panel 1)',
     control: 'text',
     description: '',
     table: {
@@ -204,8 +205,8 @@ const splitViewPanel2ArgTypes = {
       category: 'Panel 2',
     },
   },
-  label2: {
-    name: 'label (panel 2)',
+  accessibleLabel2: {
+    name: 'accessible label (panel 2)',
     control: 'text',
     description: '',
     table: {
@@ -271,8 +272,8 @@ const splitViewPanel3ArgTypes = {
       category: 'Panel 3',
     },
   },
-  label3: {
-    name: 'label (panel 3)',
+  accessibleLabel3: {
+    name: 'accessible label (panel 3)',
     control: 'text',
     description: '',
     table: {

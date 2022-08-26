@@ -60,11 +60,11 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(this.context.component.max).toBeUndefined();
     });
 
-    it('should set label', function(this: ITestContext) {
+    it('should set accessible label', function(this: ITestContext) {
       this.context = setupTestContext();
-      const label = 'test';
-      this.context.component.setAttribute('label', label);
-      expect(this.context.component.label).toBe(label);
+      const accessibleLabel = 'test';
+      this.context.component.setAttribute('accessible-label', accessibleLabel);
+      expect(this.context.component.accessibleLabel).toBe(accessibleLabel);
     });
 
     it('should set open', function(this: ITestContext) {

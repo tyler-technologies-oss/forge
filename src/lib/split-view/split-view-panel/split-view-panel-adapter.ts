@@ -18,7 +18,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   setKeydownListener(listener: (evt: KeyboardEvent) => void): void;
   setKeyupListener(listener: (evt: KeyboardEvent) => void): void;
   getParentProperty(name: keyof ISplitViewComponent): unknown;
-  setLabel(value: string): void;
+  setAccessibleLabel(value: string): void;
   setDisabled(value: boolean): void;
   setPosition(value: SplitViewPanelPosition): void;
   setOrientation(value: SplitViewOrientation): void;
@@ -98,7 +98,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * Sets the accessible label of the resize handle.
    * @param value The label text.
    */
-  public setLabel(value: string): void {
+  public setAccessibleLabel(value: string): void {
     this._handle?.setAttribute('aria-label', value);
   }
 

@@ -19,7 +19,7 @@ export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent
   size: number | string;
   min: number;
   max: number | undefined;
-  label: string;
+  accessibleLabel: string;
   open: boolean;
   getContentSize(): number;
   getCollapsibleSize(): number;
@@ -56,7 +56,7 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.SIZE,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.MAX,
-      SPLIT_VIEW_PANEL_CONSTANTS.attributes.LABEL,
+      SPLIT_VIEW_PANEL_CONSTANTS.attributes.ACCESSIBLE_LABEL,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.OPEN,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLED,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE,
@@ -99,8 +99,8 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
           this.max = undefined;
         }
         break;
-      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.LABEL:
-        this.label = newValue;
+      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.ACCESSIBLE_LABEL:
+        this.accessibleLabel = newValue;
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.OPEN:
         this.open = coerceBoolean(newValue);
@@ -142,10 +142,10 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
   public max: number | undefined;
 
   /**
-   * The accessible label given to the resize handle.
+   * The ARIA label given to the resize handle.
    */
   @FoundationProperty()
-  public label: string;
+  public accessibleLabel: string;
 
   /**
    * Controls the open state of the panel.

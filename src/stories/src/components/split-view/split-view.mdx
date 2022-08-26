@@ -26,31 +26,31 @@ The split view component presents `<forge-split-view-panel>` elements side-by-si
 
 ### Default
 
-<LiveDemo layout="column" fullWidth codeHtml={SplitViewDefaultCodeHtml()}>
+<LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewDefaultCodeHtml()}>
   <SplitViewDemo />
 </LiveDemo>
 
 ### Leading panel
 
-<LiveDemo layout="column" fullWidth codeHtml={SplitViewLeadingCodeHtml()}>
+<LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewLeadingCodeHtml()}>
   <LeadingDemo />
 </LiveDemo>
 
 ### Vertical
 
-<LiveDemo layout="column" fullWidth codeHtml={SplitViewVerticalCodeHtml()}>
+<LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewVerticalCodeHtml()}>
   <SplitViewDemo orientation={'vertical'} />
 </LiveDemo>
 
 ### Multiple panels split
 
-<LiveDemo layout="column" fullWidth codeHtml={SplitViewMultipleSplitCodeHtml()}>
+<LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewMultipleSplitCodeHtml()}>
   <MultipleSplitDemo />
 </LiveDemo>
 
 ### Multiple panels stacked
 
-<LiveDemo layout="column" fullWidth codeHtml={SplitViewMultipleStackedCodeHtml()}>
+<LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewMultipleStackedCodeHtml()}>
   <MultipleStackedDemo />
 </LiveDemo>
 
@@ -137,9 +137,9 @@ Controls whether the panel is displayed.
 
 </PropertyDef>
 
-<PropertyDef name="label" type="string" defaultValue="'Split view panel'">
+<PropertyDef name="accessibleLabel" type="string" defaultValue="'Split view panel'">
 
-Sets the accesible label for the resize handle.
+Sets the accessible ARIA label for the resize handle.
 
 > **Important:** for strong accessibility, a unique value should be provided that describes the
 > content or purpose of the panel.
@@ -221,6 +221,28 @@ Sets whether the user can close the panel.
 
 <PageSection>
 
+## CSS parts
+
+### Split view
+
+| Name                                     | Description
+| :--------------------------------------- | :----------------------
+| `root`                                   | The root container element.
+
+### Split view panel
+
+| Name                                     | Description
+| :--------------------------------------- | :----------------------
+| `root`                                   | The root container element.
+| `handle`                                 | The interactive separator element.
+| `icon`                                   | The `<forge-icon>` element that displays in the handle.
+| `ripple`                                 | The `<forge-ripple>` element on the handle.
+| `content`                                | The container element around the slotted content.
+
+</PageSection>
+
+<PageSection>
+
 ## CSS custom properties
 
 ### Split view panel
@@ -240,7 +262,7 @@ Sets whether the user can close the panel.
 
 - Verify that all content slotted into a panel is responsive and can resize fluidly.
   - If a panel's content is inaccessible under or over a certain size, be sure to set the `min` and `max` properties accordingly.
-- Be sure to include a unique `label` property value for each panel that describes its content.
+- Be sure to include a unique `accessibleLabel` property value for each panel that describes its content.
 - If the user can close a panel, provide an easy way for them to reopen it.
   - Set [`aria-controls`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-controls) and [`aria-expanded`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-expanded) on the element that controls the open state.
 

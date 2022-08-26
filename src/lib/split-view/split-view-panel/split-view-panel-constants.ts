@@ -8,7 +8,7 @@ const attributes = {
   MIN: 'min',
   MAX: 'max',
   OPEN: 'open',
-  LABEL: 'label',
+  ACCESSIBLE_LABEL: 'accessible-label',
   DISABLED: 'disabled',
   AUTO_CLOSE: 'auto-close',
   DISABLE_CLOSE: 'disable-close',
