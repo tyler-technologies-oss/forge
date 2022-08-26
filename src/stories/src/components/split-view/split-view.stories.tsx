@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
 import { createElementProxy } from '@tylertech/forge-react';
 import React from 'react';
-import { ISplitViewProps, argTypes, ISplitViewCommonProps } from './split-view-args';
+import { ISplitViewProps, argTypes } from './split-view-args';
 const MDX = require('./split-view.mdx').default;
 
 const ForgeSplitView = createElementProxy('forge-split-view');
