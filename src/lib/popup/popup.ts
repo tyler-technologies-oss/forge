@@ -35,6 +35,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-popup>` custom element.
+ * 
+ * @tag forge-popup
+ */
 @CustomElement({
   name: POPUP_CONSTANTS.elementName
 })

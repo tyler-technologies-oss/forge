@@ -25,6 +25,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-switch>` element.
+ * 
+ * @tag forge-switch
  */
 @CustomElement({
   name: SWITCH_CONSTANTS.elementName

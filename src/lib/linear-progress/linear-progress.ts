@@ -21,6 +21,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-linear-progress>` custom element.
+ * 
+ * @tag forge-linear-progress
+ */
 @CustomElement({
   name: LINEAR_PROGRESS_CONSTANTS.elementName
 })

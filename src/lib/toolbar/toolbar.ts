@@ -16,6 +16,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-toolbar>` custom element.
+ * 
+ * @tag forge-toolbar
+ */
 @CustomElement({
   name: TOOLBAR_CONSTANTS.elementName
 })

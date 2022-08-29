@@ -20,6 +20,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-product-icon>` custom element.
+ * 
+ * @tag forge-product-icon
+ */
 @CustomElement({
   name: PRODUCT_ICON_CONSTANTS.elementName
 })

@@ -25,6 +25,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-button-toggle>` custom element.
+ * 
+ * @tag forge-button-toggle
+ */
 @CustomElement({
   name: BUTTON_TOGGLE_GROUP_CONSTANTS.elementName,
   dependencies: [ButtonToggleComponent]

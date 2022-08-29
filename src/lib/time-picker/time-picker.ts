@@ -62,6 +62,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-time-picker>` custom element.
+ * 
+ * @tag forge-time-picker
+ */
 @CustomElement({
   name: TIME_PICKER_CONSTANTS.elementName,
   dependencies: [

@@ -22,7 +22,11 @@ declare global {
   }
 }
 
-/** The custom element class behind the `<forge-tooltip>` element. */
+/**
+ * The custom element class behind the `<forge-tooltip>` element.
+ * 
+ * @tag forge-tooltip
+ */
 @CustomElement({
   name: TOOLTIP_CONSTANTS.elementName
 })

@@ -28,6 +28,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-tab>` custom element.
+ * 
+ * @tag forge-tab
+ */
 @CustomElement({
   name: TAB_CONSTANTS.elementName
 })

@@ -21,6 +21,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-app-bar-help-button>` custom element.
+ * 
+ * @tag forge-app-bar-help-button
+ */
 @CustomElement({
   name: APP_BAR_HELP_BUTTON_CONSTANTS.elementName,
   dependencies: [

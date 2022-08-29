@@ -36,6 +36,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-tab-bar>` element.
+ * 
+ * @tag forge-tab-bar
  */
 @CustomElement({
   name: TAB_BAR_CONSTANTS.elementName,

@@ -15,6 +15,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-scaffold>` element.
+ * 
+ * @tag forge-scaffold
  */
 @CustomElement({
   name: SCAFFOLD_CONSTANTS.elementName

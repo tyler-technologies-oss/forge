@@ -21,6 +21,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-chip-field>` custom element.
+ * 
+ * @tag forge-chip-field
+ */
 @CustomElement({
   name: CHIP_FIELD_CONSTANTS.elementName,
   dependencies: [ChipComponent]

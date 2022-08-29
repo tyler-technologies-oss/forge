@@ -23,7 +23,11 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
   showBadge: boolean;
   theme: string;
 }
-
+/**
+ * The web component class behind the `<forge-app-bar-notification-button>` custom element.
+ * 
+ * @tag forge-app-bar-notification-button
+ */
 @CustomElement({
   name: APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.elementName,
   dependencies: [

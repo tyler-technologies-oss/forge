@@ -24,6 +24,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-icon-button>` element.
+ * 
+ * @tag forge-icon-button
  */
 @CustomElement({
   name: ICON_BUTTON_CONSTANTS.elementName

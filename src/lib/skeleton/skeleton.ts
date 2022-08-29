@@ -13,6 +13,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-skeleton>` custom element.
+ * 
+ * @tag forge-skeleton
+ */
 @CustomElement({
   name: SKELETON_CONSTANTS.elementName
 })

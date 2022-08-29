@@ -51,6 +51,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-autocomplete>` element.
+ * 
+ * @tag forge-autocomplete
  */
 @CustomElement({
   name: AUTOCOMPLETE_CONSTANTS.elementName,
