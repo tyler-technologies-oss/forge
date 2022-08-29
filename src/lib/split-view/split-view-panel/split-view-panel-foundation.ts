@@ -288,6 +288,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _handlePointerdown(evt: MouseEvent): void {
     this._isGrabbed = true;
     this._adapter.setGrabbed(true, this._orientation);
+    this._adapter.focusHandle();
     
     this._startPoint = this._orientation === 'horizontal' ? evt.clientX : evt.clientY;
     this._startResize();

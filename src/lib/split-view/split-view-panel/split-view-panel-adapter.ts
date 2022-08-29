@@ -27,6 +27,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   getContentSize(orientation: SplitViewOrientation): number;
   setContentSize(value: number): void;
   setValue(value: number): void;
+  focusHandle(): void;
   getAvailableSpace(orientation: SplitViewOrientation, position: SplitViewPanelPosition): number;
   getSiblingContentSize(): number;
   setSiblingContentSize(value: number): void;
@@ -213,6 +214,10 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    */
   public setValue(value: number): void {
     this._handle.setAttribute('aria-valuenow', value.toFixed(2));
+  }
+
+  public focusHandle(): void {
+    this._handle.focus();
   }
 
   /**

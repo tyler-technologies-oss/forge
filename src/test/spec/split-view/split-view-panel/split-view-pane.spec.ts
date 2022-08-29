@@ -378,6 +378,14 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   });
 
   describe('pointer interaction', function(this: ITestContext) {
+    it('should focus handle on pointer down', async function(this: ITestContext) {
+      this.context = setupTestContext(true, 1);
+      this.context.component.position = 'start';
+      this.context.pointerEvent('pointerdown', 0, 0);
+      const focusedElement = this.context.component.shadowRoot!.activeElement;
+      expect(focusedElement).toBe(this.context.getPart('handle'));
+    });
+
     it('should set grabbed value on pointer down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.position = 'start';
@@ -412,7 +420,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(handleGrabbed).toBe('false');
     });
 
-    it('should unset horizontal body cursor on pointer down', function(this: ITestContext) {
+    it('should unset horizontal body cursor on pointer up', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.position = 'start';
       this.context.pointerEvent('pointerdown', 0, 0);
@@ -421,7 +429,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(documentCursor).toBe('');
     });
 
-    it('should unset vertical body cursor on pointer down', function(this: ITestContext) {
+    it('should unset vertical body cursor on pointer up', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.parent.orientation = 'vertical';
       this.context.component.position = 'start';
@@ -749,6 +757,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should resize to fit over min', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
+      this.context.component.position = 'start';
       this.context.component.size = 300;
       const min = 400;
       this.context.component.min = min;
