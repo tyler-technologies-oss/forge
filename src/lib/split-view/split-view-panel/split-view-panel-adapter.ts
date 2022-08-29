@@ -7,6 +7,7 @@ import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
 import { IIconComponent } from '../../icon';
+import { IRippleComponent } from '../../ripple';
 
 export interface ISplitViewPanelAdapter extends IBaseAdapter {
   initialize(): void;
@@ -33,12 +34,15 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   setSiblingContentSize(value: number): void;
   getParentSize(orientation: SplitViewOrientation): number;
   updateParentAccessibility(): void;
+  activateRipple(defaultActivated: boolean): void;
+  deactivateRipple(): void;
 }
 
 export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent> implements ISplitViewPanelAdapter {
   private _root: HTMLElement;
   private _handle: HTMLElement;
   private _icon: IIconComponent;
+  private _ripple: IRippleComponent;
   private _content: HTMLElement;
   private _parent?: ISplitViewComponent;
 
@@ -47,6 +51,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._root = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT);
     this._handle = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.HANDLE);
     this._icon = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.ICON) as IIconComponent;
+    this._ripple = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.RIPPLE) as IRippleComponent;
     this._content = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.CONTENT);
   }
 
@@ -59,7 +64,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   public setPointerdownListener(listener: (evt: PointerEvent) => void): void {
-    this._handle?.addEventListener('pointerdown', listener);
+    this._handle.addEventListener('pointerdown', listener);
   }
 
   public setPointerupListener(listener: (evt: PointerEvent) => void): void {
@@ -79,11 +84,11 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   public setKeydownListener(listener: (evt: KeyboardEvent) => void): void {
-    this._handle?.addEventListener('keydown', listener);
+    this._handle.addEventListener('keydown', listener);
   }
 
   public setKeyupListener(listener: (evt: KeyboardEvent) => void): void {
-    this._handle?.addEventListener('keyup', listener);
+    this._handle.addEventListener('keyup', listener);
   }
 
   /**
@@ -100,7 +105,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * @param value The label text.
    */
   public setAccessibleLabel(value: string): void {
-    this._handle?.setAttribute('aria-label', value);
+    this._handle.setAttribute('aria-label', value);
   }
 
   /**
@@ -129,13 +134,13 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
       return;
     }
 
-    this._handle?.remove();
+    this._handle.remove();
     if (value === 'start') {
       // Place the handle after the content
-      this._root?.append(this._handle);
+      this._root.append(this._handle);
     } else {
       // Place the handle before the content
-      this._root?.prepend(this._handle);
+      this._root.prepend(this._handle);
     }
   }
 
@@ -146,8 +151,8 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   public setOrientation(value: SplitViewOrientation): void {
     this._root.setAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.ORIENTATION, value);
     // The divider's orientation is perpendicular to the layout of the component
-    this._handle?.setAttribute('aria-orientation', value === 'horizontal' ? 'vertical' : 'horizontal');
-    this._icon?.setAttribute('name', getHandleIcon(value));
+    this._handle.setAttribute('aria-orientation', value === 'horizontal' ? 'vertical' : 'horizontal');
+    this._icon.setAttribute('name', getHandleIcon(value));
   }
 
   /**
@@ -197,7 +202,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * @returns The width or height of the content in pixels.
    */
   public getContentSize(orientation: SplitViewOrientation): number {
-    return orientation === 'horizontal' ? this._content?.clientWidth ?? 0 : this._content?.clientHeight ?? 0;
+    return orientation === 'horizontal' ? this._content.clientWidth : this._content.clientHeight;
   }
 
   /**
@@ -216,6 +221,9 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._handle.setAttribute('aria-valuenow', value.toFixed(2));
   }
 
+  /**
+   * Sets focus on the handle element.
+   */
   public focusHandle(): void {
     this._handle.focus();
   }
@@ -279,5 +287,29 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    */
   public updateParentAccessibility(): void {
     this._parent?.updateSlottedPanelsAccessibility(this._component);
+  }
+
+  /**
+   * Runs the ripple animation.
+   * @param defaultActivated Whether the ripple starts from and should end in an activated state.
+   */
+  public activateRipple(defaultActivated: boolean): void {
+    if (defaultActivated) {
+      this._ripple.deactivate();
+      // Wait a small amount of time so the animation is distinguishable
+      window.setTimeout(() => {
+        this._ripple.activate();
+      }, SPLIT_VIEW_PANEL_CONSTANTS.numbers.RIPPLE_ACTIVATION_WAIT);
+    } else {
+      this._ripple.activate();
+      this._ripple.deactivate();
+    }
+  }
+
+  /**
+   * Deactivates the ripple.
+   */
+  public deactivateRipple(): void {
+    this._ripple.deactivate();
   }
 }

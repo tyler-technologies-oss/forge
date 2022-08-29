@@ -31,6 +31,7 @@ const ids = {
   ROOT: 'root',
   HANDLE: 'handle',
   ICON: 'icon',
+  RIPPLE: 'ripple',
   CONTENT: 'content'
 };
 
@@ -38,6 +39,7 @@ const selectors = {
   ROOT: `#${ids.ROOT}`,
   HANDLE: `#${ids.HANDLE}`,
   ICON: `#${ids.ICON}`,
+  RIPPLE: `#${ids.RIPPLE}`,
   CONTENT: `#${ids.CONTENT}`
 };
 
@@ -47,6 +49,10 @@ const events = {
   RESIZE: `${elementName}-resize`,
   DID_OPEN: `${elementName}-did-open`,
   DID_CLOSE: `${elementName}-did-close`
+};
+
+const numbers = {
+  RIPPLE_ACTIVATION_WAIT: 200
 };
 
 const customCssProperties = {
@@ -60,6 +66,7 @@ export const SPLIT_VIEW_PANEL_CONSTANTS = {
   ids,
   selectors,
   events,
+  numbers,
   customCssProperties
 };
 

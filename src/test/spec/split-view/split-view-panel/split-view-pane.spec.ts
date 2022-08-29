@@ -1,5 +1,6 @@
+import { IRippleComponent, RippleComponent } from '@tylertech/forge';
 import { removeElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { tick, timer } from '@tylertech/forge-testing';
 import { defineSplitViewComponent, getCursor, ISplitViewComponent, ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '@tylertech/forge/split-view';
 
 interface ITestContext {
@@ -762,6 +763,35 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       const min = 400;
       this.context.component.min = min;
       expect(this.context.component.getContentSize()).toBe(min);
+    });
+
+    it('should activate ripple when max size is reached', async function(this: ITestContext) {
+      this.context = setupTestContext(true, 1);
+      this.context.component.position = 'start';
+      this.context.component.size = 200;
+      this.context.component.max = 205;
+      const spy = spyOn(this.context.getPart('ripple') as IRippleComponent, 'activate');
+      this.context.keyEvent('keydown', 'ArrowRight', true);
+      this.context.keyEvent('keyup', 'ArrowRight');
+      this.context.component.size = 200;
+      this.context.pointerEvent('pointerdown', 0, 0);
+      this.context.pointerEvent('pointermove', 10, 0, true, 1);
+      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.RIPPLE_ACTIVATION_WAIT);
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should activate ripple when min size is reached', async function(this: ITestContext) {
+      this.context = setupTestContext(true, 1);
+      this.context.component.position = 'start';
+      this.context.component.size = 5;
+      const spy = spyOn(this.context.getPart('ripple') as IRippleComponent, 'activate');
+      this.context.keyEvent('keydown', 'ArrowLeft', true);
+      this.context.keyEvent('keyup', 'ArrowLeft');
+      this.context.component.size = 5;
+      this.context.pointerEvent('pointerdown', 10, 0);
+      this.context.pointerEvent('pointermove', 0, 0, true, 1);
+      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.RIPPLE_ACTIVATION_WAIT);
+      expect(spy).toHaveBeenCalledTimes(2);
     });
   });
 

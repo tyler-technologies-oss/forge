@@ -45,6 +45,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _availableSpace: number | undefined; // Set when dragging begins
   private _siblingSize: number | undefined; // Set when dragging begins
   private _keyboardDelta = 0 ;
+  private _isAtMin = false;
+  private _isAtMax = false;
   private _isInitialized = false;
 
   // Listeners
@@ -253,6 +255,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._keyboardDelta += increment;
 
     const newSize = this._startSize + this._keyboardDelta;
+    this._checkAtMinAtMax(newSize, 'keyboard');
     this._currentSize = this._clampSize(newSize);
     this._adapter.setContentSize(this._currentSize);
 
@@ -300,6 +303,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _handlePointerup(): void {
     this._isGrabbed = false;
     this._adapter.setGrabbed(false, this._orientation);
+    this._adapter.deactivateRipple();
     this._endResize();
   }
 
@@ -318,6 +322,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       delta *= -1;
     }
     const newSize = this._startSize - delta;
+    this._checkAtMinAtMax(newSize, 'pointer');
     this._currentSize = this._clampSize(newSize);
     this._adapter.setContentSize(this._currentSize);
 
@@ -340,6 +345,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._startSize = this._adapter.getContentSize(this._orientation);
     this._availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
     this._siblingSize = this._adapter.getSiblingContentSize();
+    this._isAtMin = false;
+    this._isAtMax = false;
 
     this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_START, this._startSize);
   }
@@ -386,6 +393,37 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     size = Math.max(size, this._min);
     size = Math.min(size, safeMin(this._max, this._availableSpace));
     return size;
+  }
+
+  /**
+   * Checks whether the panel is at its min or max size and runs logic related to that once.
+   * @param size The size the panel is attempting to set to.
+   * @param inputDevice The input device responsible for the resize.
+   * @returns Whether the panel is at its min or max size.
+   */
+  private _checkAtMinAtMax(size: number, inputDevice: 'pointer' | 'keyboard'): boolean {
+    if (size <= this._min) {
+      if (!this._isAtMin) {
+        this._adapter.activateRipple(inputDevice === 'pointer');
+      }
+      this._isAtMin = true;
+      return true;
+    } else {
+      this._isAtMin = false;
+    }
+
+    const actualMax = safeMin(this._max, this._availableSpace);
+    if (size >= actualMax) {
+      if (!this._isAtMax) {
+        this._adapter.activateRipple(inputDevice === 'pointer');
+      }
+      this._isAtMax = true;
+      return true;
+    } else {
+      this._isAtMax = false;
+    }
+
+    return false;
   }
 
   /**
@@ -494,6 +532,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       const newValue = scaleValue(pixelSize, this._min, maxSize);
       this._adapter.setValue(newValue);
     });
+    // this._isAtMin = false;
+    // this._isAtMax = false;
   }
 
   /** Get/set min panel size. */
