@@ -12,6 +12,7 @@
   "scripts": {
     "prepare": "husky install",
     "postinstall": "cd src/stories && npm install",
+    "prebuild": "npm run manifest",
     "build": "forge build",
     "start": "npm run storybook",
     "storybook": "cd src/stories && npm start",

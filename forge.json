@@ -2,6 +2,15 @@
   "$schema": "./node_modules/@tylertech/forge-cli/schema.json",
   "packageOrg": "@tylertech",
   "packageName": "forge",
+  "packageConfig": {
+    "copyFiles": [
+      {
+        "pattern": "custom-elements.json",
+        "root": ".",
+        "output": "."
+      }
+    ]
+  },
   "registry": "https://registry.npmjs.org/",
   "license": {
     "header": "/**\n * @license\n * Copyright 2022 Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
