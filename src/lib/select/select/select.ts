@@ -148,9 +148,4 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
   /** Gets/sets the placeholder text. */
   @FoundationProperty()
   public placeholder: string;
-
-  /** Sets focus to the internal button element. */
-  public override focus(): void {
-    this._foundation.setFocus();
-  }
 }

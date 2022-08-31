@@ -1,3 +1,23 @@
+# v2.5.0 (Tue Aug 23 2022)
+
+#### 🚀 Enhancement
+
+- fix(select): fix a11y when navigating options via keyboard and screen reader [#135](https://github.com/tyler-technologies-oss/forge/pull/135) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(drawer): fixed popup positioning within scrollable drawer content [#134](https://github.com/tyler-technologies-oss/forge/pull/134) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: fix broken links [#131](https://github.com/tyler-technologies-oss/forge/pull/131) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(theme): use hex value without opacity for `border-color` theme style [#126](https://github.com/tyler-technologies-oss/forge/pull/126) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(label-value): remove explicit `line-height` to support wrapping value text [#127](https://github.com/tyler-technologies-oss/forge/pull/127) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fixed placeholder text alignment when no label is set [#129](https://github.com/tyler-technologies-oss/forge/pull/129) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.4.0 (Tue Aug 09 2022)
 
 #### 🚀 Enhancement

@@ -7,6 +7,10 @@
   @include mixins.host;
 }
 
+:host(:focus) {
+  outline: none;
+}
+
 :host([hidden]) {
   display: none;
 }
