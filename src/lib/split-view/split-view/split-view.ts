@@ -15,6 +15,8 @@ export interface ISplitViewComponent extends ISplitViewBase, IBaseComponent {
   updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void;
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
+  setSlottedPanelsCursors(): void;
+  unsetSlottedPanelsCursors(): void;
 }
 
 declare global {
@@ -116,5 +118,19 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
    */
   public unlayerSlottedPanels(): void {
     this._foundation.unlayerSlottedPanels();
+  }
+
+  /**
+   * Sets the appropriate handle cursor for each slotted panel.
+   */
+  public setSlottedPanelsCursors(): void {
+    this._foundation.setSlottedPanelsCursors();
+  }
+
+  /**
+   * Removes each slotted panel's handle cursor property.
+   */
+  public unsetSlottedPanelsCursors(): void {
+    this._foundation.unsetSlottedPanelsCursors();
   }
 }

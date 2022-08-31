@@ -1,4 +1,4 @@
-import { ISplitViewPanelComponent, SplitViewPanelComponent } from '../split-view-panel';
+import { ISplitViewPanelComponent, ISplitViewPanelCursorConfig, SplitViewPanelComponent } from '../split-view-panel';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
 
 /**
@@ -6,8 +6,26 @@ import { SplitViewOrientation } from '../split-view/split-view-constants';
  * @param orientation 
  * @returns A CSS cursor keyword value.
  */
-export function getCursor(orientation: SplitViewOrientation): string {
-  return orientation === 'horizontal' ? 'col-resize' : 'row-resize';
+export function getCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): string {
+  if (orientation === 'horizontal') {
+    switch (config?.boundary) {
+      case 'min':
+        return config.position === 'start' ? 'e-resize' : 'w-resize';
+      case 'max':
+        return config.position === 'start' ? 'w-resize' : 'e-resize';
+      default:
+        return 'col-resize';
+    }
+  } else {
+    switch (config?.boundary) {
+      case 'min':
+        return config.position === 'start' ? 's-resize' : 'n-resize';
+      case 'max':
+        return config.position === 'start' ? 'n-resize' : 's-resize';
+      default:
+        return 'row-resize';
+    }
+  }
 }
 
 /**
@@ -53,10 +71,11 @@ export function parseSize(value: number | string): { amount: number; unit: 'px' 
     return { amount: +value, unit: 'px' };
   }
 
-  const regex = /(^\d*\.?\d*)(\s*)(px|%$)?/i;
+  // Matches digits with or without decimals, any amount of whitespace, and 'px' or '%'
+  const regex = /(^\d*\.?\d*)\s*(px|%$)?/i;
   const parts = (value as string).match(regex);
   const amount = parts?.[1] ? +parts[1] : -1;
-  const unit = (parts?.[3]?.toLowerCase() ?? '') as 'px' | '%' | '';
+  const unit = (parts?.[2]?.toLowerCase() ?? '') as 'px' | '%' | '';
 
   return { amount, unit };
 }

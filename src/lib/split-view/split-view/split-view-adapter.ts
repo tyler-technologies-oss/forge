@@ -10,12 +10,15 @@ export interface ISplitViewAdapter extends IBaseAdapter {
   observeResize(callback: (entry: ResizeObserverEntry) => void): void;
   unobserveResize(): void;
   setOrientation(value: SplitViewOrientation): void;
-  getSlottedPanels(): NodeListOf<ISplitViewPanelComponent>;
+  detectSlottedPanels(): void;
+  getSlottedPanels(): ISplitViewPanelComponent[];
   setSlottedPanelProperty<T>(name: keyof ISplitViewPanelComponent, value: T): void;
+  unsetPanelCursor(panel: ISplitViewPanelComponent): void;
 }
 
 export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implements ISplitViewAdapter {
   private _root: HTMLElement;
+  private _panels: ISplitViewPanelComponent[] = [];
 
   constructor(component: ISplitViewComponent) {
     super(component);
@@ -39,17 +42,25 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
    * @param value `'horizontal'` or `'vertical'`.
    */
   public setOrientation(value: SplitViewOrientation): void {
-    this.getSlottedPanels().forEach(panel => {
+    this._panels.forEach(panel => {
       panel.setOrientation(value);
     });
+  }
+
+  /**
+   * Detects and caches all child panels.
+   */
+  public detectSlottedPanels(): void {
+    const nodeList = this._component.querySelectorAll<ISplitViewPanelComponent>(SPLIT_VIEW_CONSTANTS.selectors.PANEL);
+    this._panels = Array.from(nodeList);
   }
   
   /**
    * Gets all child panels.
    * @returns All child panels.
    */
-  public getSlottedPanels(): NodeListOf<ISplitViewPanelComponent> {
-    return this._component.querySelectorAll<ISplitViewPanelComponent>(SPLIT_VIEW_CONSTANTS.selectors.PANEL);
+  public getSlottedPanels(): ISplitViewPanelComponent[] {
+    return this._panels;
   }
 
   /**
@@ -58,8 +69,17 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
    * @param value The value the property should take.
    */
   public setSlottedPanelProperty<T>(name: keyof ISplitViewPanelComponent, value: T): void {
-    this.getSlottedPanels().forEach(panel => {
+    this._panels.forEach(panel => {
       panel[name as string] = value;
     });
+  }
+
+  /**
+   * Removes the cursor property from a panel.
+   * @param panel A panel.
+   */
+  public unsetPanelCursor(panel: ISplitViewPanelComponent): void {
+    const root = panel.shadowRoot?.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT) as HTMLElement;
+    root.style.removeProperty(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.CURSOR);
   }
 }

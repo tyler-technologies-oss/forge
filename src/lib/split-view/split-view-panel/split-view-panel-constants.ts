@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
+import { SplitViewOrientation } from '../split-view/split-view-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}split-view-panel`;
 
@@ -56,7 +57,8 @@ const numbers = {
 };
 
 const customCssProperties = {
-  SIZE: '--forge-split-view-panel-size'
+  SIZE: '--forge-split-view-panel-size',
+  CURSOR: '--forge-split-view-panel-cursor'
 };
 
 export const SPLIT_VIEW_PANEL_CONSTANTS = {
@@ -79,4 +81,25 @@ export enum SplitViewAnimatingLayer {
   Under = 1,
   Active = 2,
   Above = 3
+}
+
+export interface ISplitViewPanelCursorConfig {
+  position: SplitViewPanelPosition;
+  boundary: 'min' | 'max' | 'none';
+}
+
+export interface ISplitViewPanelState {
+  orientation: SplitViewOrientation;
+  position: SplitViewPanelPosition;
+  arrowKeyHeld: boolean;
+  startPoint?: number;
+  startSize?: number;
+  currentSize?: number;
+  availableSpace?: number;
+  siblingSize?: number;
+  keyboardDelta: number;
+  isAtMin: boolean;
+  isAtMax: boolean;
+  min: number;
+  max?: number;
 }

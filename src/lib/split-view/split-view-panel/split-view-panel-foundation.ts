@@ -1,11 +1,13 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
-import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { eventIncludesArrowKey } from '../../core/utils/event-utils';
+import { ISplitViewPanelState, SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
 import { parseSize } from '../core/split-view-core-utils';
+import { clampSize, clearState, getValueNow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
 
 export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElementFoundation {
   position: SplitViewPanelPosition;
@@ -18,15 +20,13 @@ export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElemen
   getCollapsibleSize(): number;
   setContentSize(size: number): void;
   setOrientation(value: SplitViewOrientation): void;
+  setCursor(): void;
   updateAccessibility(): void;
 }
 
 export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   // API
-  private _position: SplitViewPanelPosition = 'default';
   private _size: number | string = '200';
-  private _min = 0;
-  private _max: number | undefined;
   private _accessibleLabel = 'Split view panel';
   private _open = true;
   private _disabled = false;
@@ -34,20 +34,39 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _autoClose = false;
 
   private _autoCloseThreshold = 0;
-
+  
   // State
-  private _orientation: SplitViewOrientation = 'horizontal';
-  private _isGrabbed = false;
-  private _arrowKeyHeld = false;
-  private _startPoint: number | undefined; // Set when dragging begins
-  private _startSize: number | undefined; // Set when dragging begins
-  private _currentSize: number | undefined; // Set when dragging begins
-  private _availableSpace: number | undefined; // Set when dragging begins
-  private _siblingSize: number | undefined; // Set when dragging begins
-  private _keyboardDelta = 0 ;
-  private _isAtMin = false;
-  private _isAtMax = false;
+  private _state: ISplitViewPanelState = initState();
   private _isInitialized = false;
+
+  // Properties stored in state
+  private get _orientation(): SplitViewOrientation {
+    return this._state.orientation;
+  }
+  private set _orientation(value: SplitViewOrientation) {
+    this._state.orientation = value;
+  }
+
+  private get _position(): SplitViewPanelPosition {
+    return this._state.position;
+  }
+  private set _position(value: SplitViewPanelPosition) {
+    this._state.position = value;
+  }
+
+  private get _min(): number {
+    return this._state.min;
+  }
+  private set _min(value: number) {
+    this._state.min = value;
+  }
+
+  private get _max(): number | undefined {
+    return this._state.max;
+  }
+  private set _max(value: number | undefined) {
+    this._state.max = value;
+  }
 
   // Listeners
   private _pointerdownListener: (evt: PointerEvent) => void;
@@ -67,10 +86,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   public initialize(): void {
     this._adapter.initialize();
     this._adapter.setPointerdownListener(this._pointerdownListener);
-    this._adapter.setPointerupListener(this._pointerupListener);
-    this._adapter.setPointermoveListener(this._pointermoveListener);
     this._adapter.setKeydownListener(this._keydownListener);
-    this._adapter.setKeyupListener(this._keyupListener);
     this._matchParentProperties();
     this._applyPosition();
     this._applyMin();
@@ -89,32 +105,44 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._adapter.removePointermoveListener(this._pointermoveListener);
   }
 
+  /**
+   * Handles a pointerdown event and sets further pointer event listeners.
+   * @param evt The pointer event.
+   */
   private _onPointerdown(evt: PointerEvent): void {
     if (this._disabled) {
       return;
     }
 
     evt.preventDefault();
+
+    this._adapter.setPointermoveListener(this._pointermoveListener);
+    this._adapter.setPointerupListener(this._pointerupListener);
     this._handlePointerdown(evt);
   }
 
+  /**
+   * Handles a pointerup event and removes pointer event listeners.
+   * @param evt The pointer event.
+   */
   private _onPointerup(evt: PointerEvent): void {
     if (this._disabled) {
       return;
     }
 
-    if (this._isGrabbed) {
-      evt.preventDefault();
-      this._handlePointerup();
-    }
+    evt.preventDefault();
+
+    this._adapter.removePointermoveListener(this._pointermoveListener);
+    this._adapter.removePointerupListener(this._pointerupListener);
+    this._handlePointerup();
   }
 
+  /**
+   * Handles a pointermove event and removes pointer events if the mouse button is released.
+   * @param evt The pointer event.
+   */
   private _onPointermove(evt: PointerEvent): void {
     if (this._disabled) {
-      return;
-    }
-
-    if (!this._isGrabbed) {
       return;
     }
 
@@ -122,12 +150,19 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
     // Detect when the mouse button is released outside of the document
     if (evt.buttons === 0) {
+      this._adapter.removePointermoveListener(this._pointermoveListener);
+      this._adapter.removePointerupListener(this._pointerupListener);
       this._handlePointerup();
+      return;
     }
 
     this._handlePointermove(evt);
   }
 
+  /**
+   * Handles a keydown event and sets a keyup listener if an arrow key is pressed.
+   * @param evt The keyboard event.
+   */
   private _onKeydown(evt: KeyboardEvent): void {
     if (this._disabled) {
       return;
@@ -139,13 +174,21 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       this._handleHomeKey(evt);
     } else if (evt.key === 'End') {
       this._handleEndKey(evt);
-    } else {
-      this._tryHandleArrowKey(evt);
+    } else if (eventIncludesArrowKey(evt)) {
+      this._adapter.setKeyupListener(this._keyupListener);
+      this._handleArrowKey(evt);
     }
   }
 
+  /**
+   * Handles a keyup event and removes the keyup listener if an arrow key was released.
+   * @param evt The keyboard event.
+   */
   private _onKeyup(evt: KeyboardEvent): void {
-    this._tryHandleArrowKeyUp(evt);
+    if (eventIncludesArrowKey(evt)) {
+      this._adapter.removeKeyupListener(this._keyupListener);
+      this._handleArrowKeyUp();
+    }
   }
 
   /**
@@ -169,10 +212,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _handleHomeKey(evt: KeyboardEvent): void {
     evt.preventDefault();
 
-    this._adapter.setContentSize(this._min);
-
-    const contentSize = this._adapter.getContentSize(this._orientation);
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, contentSize);
+    const size = minResize(this._adapter, this._state);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, size);
   }
 
   /**
@@ -182,19 +223,15 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _handleEndKey(evt: KeyboardEvent): void {
     evt.preventDefault();
 
-    const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
-    const maxSize = safeMin(this._max, availableSpace);
-    this._adapter.setContentSize(maxSize);
-
-    const contentSize = this._adapter.getContentSize(this._orientation);
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, contentSize);
+    const size = maxResize(this._adapter, this._state);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, size);
   }
 
   /**
    * Runs resize logic if an arrow key is included in the event.
    * @param evt 
    */
-  private _tryHandleArrowKey(evt: KeyboardEvent): void {
+  private _handleArrowKey(evt: KeyboardEvent): void {
     let increment = 0;
     if (this._orientation === 'horizontal') {
       switch (evt.key) {
@@ -220,6 +257,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       }
     }
 
+    evt.preventDefault();
+
     if (this._position === 'end') {
       increment *= -1;
     }
@@ -227,7 +266,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       increment *= 10;
     }
 
-    evt.preventDefault();
     this._tryHandleArrowKeyDown();
     this._handleArrowKeyHeld(increment);
   }
@@ -236,11 +274,17 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * Sets resize properties when an arrow key is first pressed.
    */
   private _tryHandleArrowKeyDown(): void {
-    if (!this._arrowKeyHeld) {
+    if (!this._state.arrowKeyHeld) {
       this._startResize();
-      this._keyboardDelta = 0;
     }
-    this._arrowKeyHeld = true;
+    this._state.arrowKeyHeld = true;
+  }
+
+  /**
+   * Performs cleanup logic after a keyboard driven resize.
+   */
+  private _handleArrowKeyUp(): void {
+    this._endResize();
   }
 
   /**
@@ -248,39 +292,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param increment The pixel change in size.
    */
   private _handleArrowKeyHeld(increment: number): void {
-    if (this._startSize === undefined) {
-      return;
-    }
-
-    this._keyboardDelta += increment;
-
-    const newSize = this._startSize + this._keyboardDelta;
-    this._checkAtMinAtMax(newSize, 'keyboard');
-    this._currentSize = this._clampSize(newSize);
-    this._adapter.setContentSize(this._currentSize);
-
-    if (this._availableSpace || this._max) {
-      const maxSize = safeMin(this._max, this._availableSpace);
-      this._setValue(this._currentSize, maxSize);
-    } else {
-      this._setValue(this._currentSize, this._currentSize);
-    }
-
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, this._currentSize);
-
-    this._resizeSibling(newSize, this._keyboardDelta * -1);
-  }
-
-  /**
-   * Performs cleanup logic after a keyboard driven resize.
-   * @param evt 
-   */
-  private _tryHandleArrowKeyUp(evt: KeyboardEvent): void {
-    if (evt.key === 'ArrowLeft' || evt.key === 'ArrowRight' || evt.key === 'ArrowUp' || evt.key === 'ArrowDown') {
-      // TODO: handle any work that should happen after resizing
-      this._arrowKeyHeld = false;
-      this._endResize();
-      this._keyboardDelta = 0;
+    if (keyboardResize(this._adapter, increment, this._state)) {
+      this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, this._state.currentSize);
     }
   }
 
@@ -289,21 +302,19 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt 
    */
   private _handlePointerdown(evt: MouseEvent): void {
-    this._isGrabbed = true;
-    this._adapter.setGrabbed(true, this._orientation);
+    this._adapter.setGrabbed(true);
     this._adapter.focusHandle();
     
-    this._startPoint = this._orientation === 'horizontal' ? evt.clientX : evt.clientY;
     this._startResize();
+    this._state.startPoint = this._orientation === 'horizontal' ? evt.clientX : evt.clientY;
+    handleBoundariesDuringResize(this._adapter, this._state, 'pointer');
   }
 
   /**
    * Handles the end of a pointer driven resize.
    */
   private _handlePointerup(): void {
-    this._isGrabbed = false;
-    this._adapter.setGrabbed(false, this._orientation);
-    this._adapter.deactivateRipple();
+    this._adapter.setGrabbed(false);
     this._endResize();
   }
 
@@ -312,128 +323,32 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt 
    */
   private _handlePointermove(evt: PointerEvent): void {
-    if (this._startPoint === undefined || this._startSize === undefined || this._position === 'default') {
-      return;
+    if(pointerResize(this._adapter, evt, this._state)) {
+      this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, this._state.currentSize);
     }
-
-    const mousePoint = this._orientation === 'horizontal' ? evt.clientX : evt.clientY;
-    let delta = this._startPoint - mousePoint;
-    if (this._position === 'end') {
-      delta *= -1;
-    }
-    const newSize = this._startSize - delta;
-    this._checkAtMinAtMax(newSize, 'pointer');
-    this._currentSize = this._clampSize(newSize);
-    this._adapter.setContentSize(this._currentSize);
-
-    if (this._availableSpace || this._max) {
-      const maxSize = safeMin(this._max, this._availableSpace);
-      this._setValue(this._currentSize, maxSize);
-    } else {
-      this._setValue(this._currentSize, this._currentSize);
-    }
-
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, this._currentSize);
-
-    this._resizeSibling(newSize, delta);
   }
 
   /**
    * Handles common logic to begin a resize.
    */
   private _startResize(): void {
-    this._startSize = this._adapter.getContentSize(this._orientation);
-    this._availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
-    this._siblingSize = this._adapter.getSiblingContentSize();
-    this._isAtMin = false;
-    this._isAtMax = false;
-
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_START, this._startSize);
+    this._state = setState(this._adapter, this._state);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_START, this._state.startSize);
   }
 
   /**
    * Handles common logic to end a resize.
    */
   private _endResize(): void {
-    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, this._currentSize);
+    this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, this._state.currentSize);
 
-    if (this._startSize !== this._currentSize) {
+    if (this._state.startSize !== this._state.currentSize) {
       this._adapter.updateParentAccessibility();
     }
+    this._adapter.setParentCursors();
 
-    this._startPoint = undefined;
-    this._startSize = undefined;
-    this._currentSize = undefined;
-    this._availableSpace = undefined;
-    this._siblingSize = undefined;
-
+    this._state = clearState(this._state);
     this._tryAutoClose();
-  }
-
-  /**
-   * Sets the sibling size to reflect changes in this panel's size.
-   * @param newSize This panel's current size.
-   * @param delta The change in size since the resize began.
-   */
-  private _resizeSibling(newSize: number, delta: number): void {
-    if (this._siblingSize !== undefined) {
-      const minSizeAdjustment = Math.max(0, this._min - newSize);
-      const maxSizeAdjustment = this._max ? Math.min(0, (this._max ?? 0) - newSize) : 0;
-      const newSiblingContentSize = this._siblingSize + delta - minSizeAdjustment - maxSizeAdjustment;
-      this._adapter.setSiblingContentSize(newSiblingContentSize);
-    }
-  }
-
-  /**
-   * Returns a size limited to an allowed range.
-   * @param size The size to try setting this panel to.
-   * @returns A pixel value.
-   */
-  private _clampSize(size: number): number {
-    size = Math.max(size, this._min);
-    size = Math.min(size, safeMin(this._max, this._availableSpace));
-    return size;
-  }
-
-  /**
-   * Checks whether the panel is at its min or max size and runs logic related to that once.
-   * @param size The size the panel is attempting to set to.
-   * @param inputDevice The input device responsible for the resize.
-   * @returns Whether the panel is at its min or max size.
-   */
-  private _checkAtMinAtMax(size: number, inputDevice: 'pointer' | 'keyboard'): boolean {
-    if (size <= this._min) {
-      if (!this._isAtMin) {
-        this._adapter.activateRipple(inputDevice === 'pointer');
-      }
-      this._isAtMin = true;
-      return true;
-    } else {
-      this._isAtMin = false;
-    }
-
-    const actualMax = safeMin(this._max, this._availableSpace);
-    if (size >= actualMax) {
-      if (!this._isAtMax) {
-        this._adapter.activateRipple(inputDevice === 'pointer');
-      }
-      this._isAtMax = true;
-      return true;
-    } else {
-      this._isAtMax = false;
-    }
-
-    return false;
-  }
-
-  /**
-   * Sets the accessible value.
-   * @param size This panel's size in pixels.
-   * @param maxSize The upper limit of this panel's size, including space ceded by the sibling panel.
-   */
-  private _setValue(size: number, maxSize: number): void {
-    const value = scaleValue(size, this._min, maxSize);
-    this._adapter.setValue(value);
   }
 
   /**
@@ -451,13 +366,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * Sets orientation, disabled, disable close, and autoclose to reflect the parent split view.
    */
   private _matchParentProperties(): void {
-    // Match parent orientation
-    const parentOrientation = this._adapter.getParentProperty('orientation') as SplitViewOrientation;
-    if (!this._isInitialized || this._orientation !== parentOrientation) {
-      this._orientation = parentOrientation;
-      this._applyOrientation();
-    }
-
     // Match parent disabled state
     const parentDisabled = this._adapter.getParentProperty('disabled') as boolean;
     if (!this._isInitialized || this._disabled !== parentDisabled) {
@@ -531,9 +439,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       const maxSize = safeMin(this._max, availableSpace);
       const newValue = scaleValue(pixelSize, this._min, maxSize);
       this._adapter.setValue(newValue);
+      handleBoundariesAfterResize(this._adapter, pixelSize, { ...this._state, availableSpace });
     });
-    // this._isAtMin = false;
-    // this._isAtMax = false;
   }
 
   /** Get/set min panel size. */
@@ -556,7 +463,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
     const size = this._adapter.getContentSize(this._orientation);
     if (size < this._min) {
-      const newSize = this._clampSize(size);
+      const newSize = clampSize(size, this._state);
       this._adapter.setContentSize(newSize);
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
     }
@@ -582,7 +489,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     
     const size = this._adapter.getContentSize(this._orientation);
     if (size > this._max) {
-      const newSize = this._clampSize(size);
+      const newSize = clampSize(size, this._state);
       this._adapter.setContentSize(newSize);
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
     }
@@ -698,7 +605,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    */
   public setContentSize(size: number): void {
     if (this._position !== 'default') {
-      const newSize = this._clampSize(size);
+      const newSize = clampSize(size, this._state);
       this._adapter.setContentSize(newSize);
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
     }
@@ -714,17 +621,23 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   /**
+   * Sets the appropriate handle cursor.
+   */
+  public setCursor(): void {
+    const size = this._adapter.getContentSize(this._orientation);
+    const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
+
+    handleBoundariesAfterResize(this._adapter, size, { ...this._state, availableSpace });
+  }
+
+  /**
    * Recalculates and sets the accessible value.
    */
   public updateAccessibility(): void {
     const size = this._adapter.getContentSize(this._orientation);
     const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
+    const valueNow = getValueNow(size, { ...this._state, availableSpace });
 
-    if (availableSpace || this._max) {
-      const maxSize = safeMin(this._max, availableSpace);
-      this._setValue(size, maxSize);
-    } else {
-      this._setValue(size, size);
-    }
+    this._adapter.setValue(valueNow);
   }
 }

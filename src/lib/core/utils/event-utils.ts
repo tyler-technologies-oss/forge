@@ -9,3 +9,7 @@ export function proxyShadowScrollEvent(shadowEl: Node, proxyEl: Node): () => voi
   shadowEl.addEventListener('scroll', scrollListenerFn, true);
   return () => shadowEl.removeEventListener('scroll', scrollListenerFn, true);
 }
+
+export function eventIncludesArrowKey(evt: KeyboardEvent): boolean {
+  return evt.key === 'ArrowLeft' || evt.key === 'ArrowRight' || evt.key === 'ArrowUp' || evt.key === 'ArrowDown';
+}

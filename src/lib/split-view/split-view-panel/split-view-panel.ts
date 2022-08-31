@@ -25,6 +25,7 @@ export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent
   getCollapsibleSize(): number;
   setContentSize(size: number): void;
   setOrientation(value: SplitViewOrientation): void;
+  setCursor(): void;
   updateAccessibility(): void;
 }
 
@@ -202,6 +203,13 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
    */
   public setOrientation(value: SplitViewOrientation): void {
     this._foundation.setOrientation(value);
+  }
+
+  /**
+   * Sets the appropriate handle cursor.
+   */
+  public setCursor(): void {
+    this._foundation.setCursor();
   }
 
   /**

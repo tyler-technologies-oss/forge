@@ -19,6 +19,8 @@
 }
 
 @mixin host() {
+  --forge-split-view-handle-width: 8px;
+
   display: block;
   height: 100%;
   width: 100%;

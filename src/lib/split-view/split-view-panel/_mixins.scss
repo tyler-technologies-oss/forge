@@ -8,11 +8,6 @@
 
     &__handle {
       @include handle;
-
-      &:focus,
-      &:active {
-        @include handle-active;
-      }
     }
 
     &__content {
@@ -177,10 +172,6 @@
   }
 }
 
-@mixin handle-active() {
-  @include theme.property(color, text-primary-on-background);
-}
-
 @mixin handle-disabled() {
   pointer-events: none;
 }
@@ -199,7 +190,8 @@
 }
 
 @mixin cursor($orientation: horizontal) {
-  cursor: if($orientation == horizontal, col-resize, row-resize);
+  // There is no fallback value for the panel cursor
+  @include theme.css-custom-property(cursor, --forge-split-view-panel-cursor);
 }
 
 @mixin closed() {

@@ -1,13 +1,15 @@
 import { ForgeResizeObserverCallback, ICustomElementFoundation, throttle } from '@tylertech/forge-core';
 
 import { ISplitViewBase } from '../core/split-view-base';
-import { ISplitViewPanelComponent, SplitViewAnimatingLayer } from '../split-view-panel';
+import { ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel';
 import { ISplitViewAdapter } from './split-view-adapter';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 
 export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoundation {
   orientation: SplitViewOrientation;
   updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void;
+  setSlottedPanelsCursors(): void;
+  unsetSlottedPanelsCursors(): void;
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
 }
@@ -37,12 +39,15 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   }
 
   private _onSlotChange(evt: Event): void {
+    this._adapter.detectSlottedPanels();
+    this._adapter.setOrientation(this._orientation);
     this._layoutSlottedPanels();
     this.updateSlottedPanelsAccessibility();
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
     this.updateSlottedPanelsAccessibility();
+    this.setSlottedPanelsCursors();
   }
 
   /**
@@ -148,6 +153,28 @@ export class SplitViewFoundation implements ISplitViewFoundation {
       if (panel.position !== 'default' && panel !== target) {
         panel.updateAccessibility();
       }
+    });
+  }
+
+  /**
+   * Sets the appropriate handle cursor for each slotted panel.
+   */
+  public setSlottedPanelsCursors(): void {
+    const panels = this._adapter.getSlottedPanels();
+    panels.forEach(panel => {
+      if (panel.position !== 'default') {
+        panel.setCursor();
+      }
+    });
+  }
+
+  /**
+   * Removes each slotted panel's handle cursor property.
+   */
+  public unsetSlottedPanelsCursors(): void {
+    const panels = this._adapter.getSlottedPanels();
+    panels.forEach(panel => {
+      this._adapter.unsetPanelCursor(panel);
     });
   }
 

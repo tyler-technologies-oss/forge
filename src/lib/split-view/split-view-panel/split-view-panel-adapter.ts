@@ -3,7 +3,7 @@ import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tyler
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { getCursor, getHandleIcon, getSplitViewPanelSibling } from '../core/split-view-core-utils';
 import { ISplitViewPanelComponent } from './split-view-panel';
-import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { ISplitViewPanelCursorConfig, SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
 import { IIconComponent } from '../../icon';
@@ -18,13 +18,16 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   removePointermoveListener(listener: (evt: PointerEvent) => void): void;
   setKeydownListener(listener: (evt: KeyboardEvent) => void): void;
   setKeyupListener(listener: (evt: KeyboardEvent) => void): void;
+  removeKeyupListener(listener: (evt: KeyboardEvent) => void): void;
   getParentProperty(name: keyof ISplitViewComponent): unknown;
   setAccessibleLabel(value: string): void;
   setDisabled(value: boolean): void;
   setPosition(value: SplitViewPanelPosition): void;
   setOrientation(value: SplitViewOrientation): void;
   setOpen(value: boolean): void;
-  setGrabbed(value: boolean, orientation: SplitViewOrientation): void;
+  setGrabbed(value: boolean): void;
+  setHandleCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
+  setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
   getContentSize(orientation: SplitViewOrientation): number;
   setContentSize(value: number): void;
   setValue(value: number): void;
@@ -34,6 +37,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   setSiblingContentSize(value: number): void;
   getParentSize(orientation: SplitViewOrientation): number;
   updateParentAccessibility(): void;
+  setParentCursors(): void;
   activateRipple(defaultActivated: boolean): void;
   deactivateRipple(): void;
 }
@@ -89,6 +93,10 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
 
   public setKeyupListener(listener: (evt: KeyboardEvent) => void): void {
     this._handle.addEventListener('keyup', listener);
+  }
+
+  public removeKeyupListener(listener: (evt: KeyboardEvent) => void): void {
+    this._handle.removeEventListener('keyup', listener);
   }
 
   /**
@@ -183,17 +191,33 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * Sets the components appearance and accessibility to indicated whether it is currently grabbed
    * by the user. Applies a cursor style to the document body.
    * @param value Whether the component is currently being resized via pointer interaction.
-   * @param orientation The component's orientation.
    */
-  public setGrabbed(value: boolean, orientation: SplitViewOrientation): void {
+  public setGrabbed(value: boolean): void {
     this._root.classList.toggle(SPLIT_VIEW_PANEL_CONSTANTS.classes.GRABBED, value);
     this._handle.setAttribute('aria-grabbed', value.toString());
+    this._parent?.unsetSlottedPanelsCursors();
 
-    if (value) {
-      document.body.style.setProperty('cursor', getCursor(orientation));
-    } else {
+    if (!value) {
       document.body.style.removeProperty('cursor');
     }
+  }
+
+  /**
+   * Applies a cursor style to the resize handle. 
+   * @param orientation The component's orientation.
+   * @param config The component's position and whether it's at the min or max value.
+   */
+  public setHandleCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void {
+    this._root.style.setProperty(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.CURSOR, getCursor(orientation, config));
+  }
+
+  /**
+   * Applies a cursor style to the document body.
+   * @param orientation The component's orientation.
+   * @param config The component's position and whether it's at the min or max value.
+   */
+  public setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void {
+    document.body.style.setProperty('cursor', getCursor(orientation, config));
   }
 
   /**
@@ -290,13 +314,20 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   /**
+   * Prompts the parent split view to notify all split view panels to set the appropriate cursor.
+   */
+  public setParentCursors(): void {
+    this._parent?.setSlottedPanelsCursors();
+  }
+
+  /**
    * Runs the ripple animation.
    * @param defaultActivated Whether the ripple starts from and should end in an activated state.
    */
   public activateRipple(defaultActivated: boolean): void {
     if (defaultActivated) {
       this._ripple.deactivate();
-      // Wait a small amount of time so the animation is distinguishable
+      // Wait a short amount of time so the animation is distinguishable
       window.setTimeout(() => {
         this._ripple.activate();
       }, SPLIT_VIEW_PANEL_CONSTANTS.numbers.RIPPLE_ACTIVATION_WAIT);

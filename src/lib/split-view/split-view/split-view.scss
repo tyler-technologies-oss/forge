@@ -5,8 +5,6 @@
 
 :host {
   @include mixins.host;
-
-  --forge-split-view-handle-width: 8px;
 }
 
 :host([hidden]) {
