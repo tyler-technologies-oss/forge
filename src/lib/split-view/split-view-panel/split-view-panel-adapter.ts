@@ -24,7 +24,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   setDisabled(value: boolean): void;
   setPosition(value: SplitViewPanelPosition): void;
   setOrientation(value: SplitViewOrientation): void;
-  setOpen(value: boolean): void;
+  setOpen(value: boolean, withAnimation?: boolean): void;
   setGrabbed(value: boolean): void;
   setHandleCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
   setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
@@ -166,17 +166,33 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   /**
    * Opens or closes the component.
    * @param value Whether the component is open.
+   * @param withAnimation Whether to use the animation. Defaults to `true`.
    */
-  public setOpen(value: boolean): void {
+  public setOpen(value: boolean, withAnimation = true): void {
     if (value && this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
-      this._parent?.layerSlottedPanels(this._component);
       this._root.classList.remove(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
+
+      if (!withAnimation) {
+        this._parent?.updateSlottedPanelsAccessibility(this._component);
+        this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN);
+        return;
+      }
+
+      this._parent?.layerSlottedPanels(this._component);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.OPENING, true).then(() => {
         this._parent?.unlayerSlottedPanels();
         this._parent?.updateSlottedPanelsAccessibility(this._component);
         this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN);
       });
     } else if (!value && !this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
+
+      if (!withAnimation) {
+        this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
+        this._parent?.updateSlottedPanelsAccessibility(this._component);
+        this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE);
+        return;
+      }
+
       this._parent?.layerSlottedPanels(this._component);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSING, true).then(() => {
         this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);

@@ -528,7 +528,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   private _applyOpen(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.OPEN, this._open.toString());
-    this._adapter.setOpen(this._open);
+    this._adapter.setOpen(this._open, this._isInitialized);
   }
 
   /**
