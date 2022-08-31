@@ -31,10 +31,12 @@ export default {
 
 export const Default: Story<ISplitViewProps> = ({
   autoClose = false,
+  autoCloseThreshold = 0,
   disableClose = false,
   disabled = false,
   orientation = 'horizontal',
   autoClose1 = false,
+  autoCloseThreshold1 = 0,
   disableClose1 = false,
   disabled1 = false,
   accessibleLabel1 = 'Split view panel 1',
@@ -43,6 +45,7 @@ export const Default: Story<ISplitViewProps> = ({
   open1 = true,
   size1 = 200,
   autoClose2 = false,
+  autoCloseThreshold2 = 0,
   disableClose2 = false,
   disabled2 = false,
   accessibleLabel2 = 'Split view panel 2',
@@ -53,12 +56,14 @@ export const Default: Story<ISplitViewProps> = ({
 }) => {
   const splitViewProps = {
     autoClose,
+    autoCloseThreshold,
     disableClose,
     disabled,
     orientation
   };
   const panel1Props = {
     autoClose: autoClose1,
+    autoCloseThreshold: autoCloseThreshold1,
     disableClose: disableClose1,
     disabled: disabled1,
     accessibleLabel: accessibleLabel1,
@@ -69,6 +74,7 @@ export const Default: Story<ISplitViewProps> = ({
   };
   const panel2Props = {
     autoClose: autoClose2,
+    autoCloseThreshold: autoCloseThreshold2,
     disableClose: disableClose2,
     disabled: disabled2,
     accessibleLabel: accessibleLabel2,
@@ -93,10 +99,12 @@ Default.parameters = { controls: { exclude: /3/ } };
 
 export const LeadingPanel: Story<ISplitViewProps> = ({
   autoClose = false,
+  autoCloseThreshold = 0,
   disableClose = false,
   disabled = false,
   orientation = 'horizontal',
   autoClose1 = false,
+  autoCloseThreshold1 = 0,
   disableClose1 = false,
   disabled1 = false,
   accessibleLabel1 = 'Split view panel 1',
@@ -105,6 +113,7 @@ export const LeadingPanel: Story<ISplitViewProps> = ({
   open1 = true,
   size1 = 200,
   autoClose2 = false,
+  autoCloseThreshold2 = 0,
   disableClose2 = false,
   disabled2 = false,
   accessibleLabel2 = 'Split view panel 2',
@@ -115,12 +124,14 @@ export const LeadingPanel: Story<ISplitViewProps> = ({
 }) => {
   const splitViewProps = {
     autoClose,
+    autoCloseThreshold,
     disableClose,
     disabled,
     orientation
   };
   const panel1Props = {
     autoClose: autoClose1,
+    autoCloseThreshold: autoCloseThreshold1,
     disableClose: disableClose1,
     disabled: disabled1,
     accessibleLabel: accessibleLabel1,
@@ -131,6 +142,7 @@ export const LeadingPanel: Story<ISplitViewProps> = ({
   };
   const panel2Props = {
     autoClose: autoClose2,
+    autoCloseThreshold: autoCloseThreshold2,
     disableClose: disableClose2,
     disabled: disabled2,
     accessibleLabel: accessibleLabel2,
@@ -155,10 +167,12 @@ LeadingPanel.parameters = { controls: { exclude: /3/ } };
 
 export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
   autoClose = false,
+  autoCloseThreshold = 0,
   disableClose = false,
   disabled = false,
   orientation = 'horizontal',
   autoClose1 = false,
+  autoCloseThreshold1 = 0,
   disableClose1 = false,
   disabled1 = false,
   accessibleLabel1 = 'Split view panel 1',
@@ -167,6 +181,7 @@ export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
   open1 = true,
   size1 = 200,
   autoClose2 = false,
+  autoCloseThreshold2 = 0,
   disableClose2 = false,
   disabled2 = false,
   accessibleLabel2 = 'Split view panel 2',
@@ -175,6 +190,7 @@ export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
   open2 = true,
   size2 = 200,
   autoClose3 = false,
+  autoCloseThreshold3 = 0,
   disableClose3 = false,
   disabled3 = false,
   accessibleLabel3 = 'Split view panel 3',
@@ -185,12 +201,14 @@ export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
 }) => {
   const splitViewProps = {
     autoClose,
+    autoCloseThreshold,
     disableClose,
     disabled,
     orientation
   };
   const panel1Props = {
     autoClose: autoClose1,
+    autoCloseThreshold: autoCloseThreshold1,
     disableClose: disableClose1,
     disabled: disabled1,
     accessibleLabel: accessibleLabel1,
@@ -201,6 +219,7 @@ export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
   };
   const panel2Props = {
     autoClose: autoClose2,
+    autoCloseThreshold: autoCloseThreshold2,
     disableClose: disableClose2,
     disabled: disabled2,
     accessibleLabel: accessibleLabel2,
@@ -211,6 +230,7 @@ export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
   };
   const panel3Props = {
     autoClose: autoClose3,
+    autoCloseThreshold: autoCloseThreshold3,
     disableClose: disableClose3,
     disabled: disabled3,
     accessibleLabel: accessibleLabel3,
@@ -237,10 +257,12 @@ export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
 
 export const MultiplePanelsStacked: Story<ISplitViewProps> = ({
   autoClose = false,
+  autoCloseThreshold = 0,
   disableClose = false,
   disabled = false,
   orientation = 'horizontal',
   autoClose1 = false,
+  autoCloseThreshold1 = 0,
   disableClose1 = false,
   disabled1 = false,
   accessibleLabel1 = 'Split view panel 1',
@@ -249,6 +271,7 @@ export const MultiplePanelsStacked: Story<ISplitViewProps> = ({
   open1 = true,
   size1 = 200,
   autoClose2 = false,
+  autoCloseThreshold2 = 0,
   disableClose2 = false,
   disabled2 = false,
   accessibleLabel2 = 'Split view panel 2',
@@ -257,6 +280,7 @@ export const MultiplePanelsStacked: Story<ISplitViewProps> = ({
   open2 = true,
   size2 = 200,
   autoClose3 = false,
+  autoCloseThreshold3 = 0,
   disableClose3 = false,
   disabled3 = false,
   accessibleLabel3 = 'Split view panel 3',
@@ -267,12 +291,14 @@ export const MultiplePanelsStacked: Story<ISplitViewProps> = ({
 }) => {
   const splitViewProps = {
     autoClose,
+    autoCloseThreshold,
     disableClose,
     disabled,
     orientation
   };
   const panel1Props = {
     autoClose: autoClose1,
+    autoCloseThreshold: autoCloseThreshold1,
     disableClose: disableClose1,
     disabled: disabled1,
     accessibleLabel: accessibleLabel1,
@@ -283,6 +309,7 @@ export const MultiplePanelsStacked: Story<ISplitViewProps> = ({
   };
   const panel2Props = {
     autoClose: autoClose2,
+    autoCloseThreshold: autoCloseThreshold2,
     disableClose: disableClose2,
     disabled: disabled2,
     accessibleLabel: accessibleLabel2,
@@ -293,6 +320,7 @@ export const MultiplePanelsStacked: Story<ISplitViewProps> = ({
   };
   const panel3Props = {
     autoClose: autoClose3,
+    autoCloseThreshold: autoCloseThreshold3,
     disableClose: disableClose3,
     disabled: disabled3,
     accessibleLabel: accessibleLabel3,

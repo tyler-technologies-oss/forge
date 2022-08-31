@@ -72,15 +72,21 @@ Sets whether all panels are disabled.
 
 </PropertyDef>
 
+<PropertyDef name="disableClose" type="boolean" defaultValue="false">
+
+Sets whether the user can close all panels.
+
+</PropertyDef>
+
 <PropertyDef name="autoClose" type="boolean" defaultValue="false">
 
 Sets whether each panel closes when its size reaches zero.
 
 </PropertyDef>
 
-<PropertyDef name="disableClose" type="boolean" defaultValue="false">
+<PropertyDef name="autoCloseThreshold" type="number" defaultValue="0">
 
-Sets whether the user can close all panels.
+Sets the size at which each panel auto closes if enabled.
 
 </PropertyDef>
 
@@ -152,15 +158,15 @@ Sets whether resize handle interactions are disabled.
 
 </PropertyDef>
 
-<PropertyDef name="autoClose" type="boolean" defaultValue="false">
-
-Sets whether the panel closes when its size reaches zero.
-
-</PropertyDef>
-
 <PropertyDef name="disableClose" type="boolean" defaultValue="false">
 
 Sets whether the user can close the panel.
+
+</PropertyDef>
+
+<PropertyDef name="autoCloseThreshold" type="number" defaultValue="0">
+
+Sets the size at which the panel auto closes if enabled.
 
 </PropertyDef>
 

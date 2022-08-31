@@ -5,4 +5,5 @@ export interface ISplitViewBase {
   disabled: boolean;
   disableClose: boolean;
   autoClose: boolean;
+  autoCloseThreshold: number;
 }

@@ -11,8 +11,9 @@ const attributes = {
   OPEN: 'open',
   ACCESSIBLE_LABEL: 'accessible-label',
   DISABLED: 'disabled',
-  AUTO_CLOSE: 'auto-close',
   DISABLE_CLOSE: 'disable-close',
+  AUTO_CLOSE: 'auto-close',
+  AUTO_CLOSE_THRESHOLD: 'auto-close-threshold',
   ORIENTATION: 'orientation'
 };
 

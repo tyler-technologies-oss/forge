@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
 
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { SplitViewAdapter } from './split-view-adapter';
@@ -35,7 +35,8 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
       SPLIT_VIEW_CONSTANTS.attributes.ORIENTATION,
       SPLIT_VIEW_CONSTANTS.attributes.DISABLED,
       SPLIT_VIEW_CONSTANTS.attributes.DISABLE_CLOSE,
-      SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE
+      SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE,
+      SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD
     ];
   }
 
@@ -69,6 +70,9 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
       case SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE:
         this.autoClose = coerceBoolean(newValue);
         break;
+      case SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD:
+        this.autoCloseThreshold = coerceNumber(newValue);
+        break;
     }
   }
 
@@ -95,6 +99,12 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
    */
   @FoundationProperty()
   public autoClose: boolean;
+
+  /**
+   * The size at which panels auto close.
+   */
+  @FoundationProperty()
+  public autoCloseThreshold: number;
 
   /**
    * Recalculates and resets accessibility attributes of split view panels to reflect the current

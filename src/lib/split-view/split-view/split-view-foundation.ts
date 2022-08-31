@@ -19,6 +19,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _disabled = false;
   private _disableClose = false;
   private _autoClose = false;
+  private _autoCloseThreshold = 0;
   private _slotListener: (evt: Event) => void;
   private _resizeObserverCallback: ForgeResizeObserverCallback;
 
@@ -140,6 +141,24 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _applyAutoClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
     this._adapter.setSlottedPanelProperty<boolean>('autoClose', this._autoClose);
+  }
+
+  /**
+   * Get/set the size at which panels auto close.
+   */
+  public get autoCloseThreshold(): number {
+    return this._autoCloseThreshold;
+  }
+  public set autoCloseThreshold(value: number) {
+    if (this._autoCloseThreshold !== value) {
+      this._autoCloseThreshold = value;
+      this._applyAutoCloseThreshold();
+    }
+  }
+
+  private _applyAutoCloseThreshold(): void {
+    this._adapter.setHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD, this._autoCloseThreshold.toString());
+    // TODO: perform auto close threshold logic
   }
 
   /**

@@ -2,6 +2,7 @@ import { SplitViewOrientation } from "@tylertech/forge";
 
 export interface ISplitViewCommonProps {
   autoClose: boolean;
+  autoCloseThreshold: number;
   disableClose: boolean;
   disabled: boolean;
   orientation: SplitViewOrientation;
@@ -9,6 +10,7 @@ export interface ISplitViewCommonProps {
 
 export interface ISplitViewPanel1Props {
   autoClose1: boolean;
+  autoCloseThreshold1: number;
   disableClose1: boolean;
   disabled1: boolean;
   accessibleLabel1: string;
@@ -20,6 +22,7 @@ export interface ISplitViewPanel1Props {
 
 export interface ISplitViewPanel2Props {
   autoClose2: boolean;
+  autoCloseThreshold2: number;
   disableClose2: boolean;
   disabled2: boolean;
   accessibleLabel2: string;
@@ -31,6 +34,7 @@ export interface ISplitViewPanel2Props {
 
 export interface ISplitViewPanel3Props {
   autoClose3: boolean;
+  autoCloseThreshold3: number;
   disableClose3: boolean;
   disabled3: boolean;
   accessibleLabel3: string;
@@ -64,6 +68,13 @@ const splitViewArgTypes = {
       category: 'Split View',
     },
   },
+  disableClose: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Split View',
+    },
+  },
   autoClose: {
     control: 'boolean',
     description: '',
@@ -71,11 +82,11 @@ const splitViewArgTypes = {
       category: 'Split View',
     },
   },
-  disableClose: {
-    control: 'boolean',
+  autoCloseThreshold: {
+    control: 'number',
     description: '',
     table: {
-      category: 'Split View',
+      category: 'Split View'
     },
   },
 }
@@ -121,6 +132,14 @@ const splitViewPanel1ArgTypes = {
       category: 'Panel 1',
     },
   },
+  disableClose1: {
+    name: 'disable close (panel 1)',
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Panel 1',
+    },
+  },
   autoClose1: {
     name: 'auto close (panel 1)',
     control: 'boolean',
@@ -129,12 +148,12 @@ const splitViewPanel1ArgTypes = {
       category: 'Panel 1',
     },
   },
-  disableClose1: {
-    name: 'disable close (panel 1)',
-    control: 'boolean',
+  autoCloseThreshold1: {
+    name: 'auto close threshold (panel 1)',
+    control: 'number',
     description: '',
     table: {
-      category: 'Panel 1',
+      category: 'Panel 1'
     },
   },
   accessibleLabel1
@@ -189,6 +208,14 @@ const splitViewPanel2ArgTypes = {
       category: 'Panel 2',
     },
   },
+  disableClose2: {
+    name: 'disable close (panel 2)',
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Panel 2',
+    },
+  },
   autoClose2: {
     name: 'auto close (panel 2)',
     control: 'boolean',
@@ -197,12 +224,12 @@ const splitViewPanel2ArgTypes = {
       category: 'Panel 2',
     },
   },
-  disableClose2: {
-    name: 'disable close (panel 2)',
-    control: 'boolean',
+  autoCloseThreshold2: {
+    name: 'auto close threshold (panel 2)',
+    control: 'number',
     description: '',
     table: {
-      category: 'Panel 2',
+      category: 'Panel 2'
     },
   },
   accessibleLabel2: {
@@ -256,6 +283,14 @@ const splitViewPanel3ArgTypes = {
       category: 'Panel 3',
     },
   },
+  disableClose3: {
+    name: 'disable close (panel 3)',
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Panel 3',
+    },
+  },
   autoClose3: {
     name: 'auto close (panel 3)',
     control: 'boolean',
@@ -264,12 +299,12 @@ const splitViewPanel3ArgTypes = {
       category: 'Panel 3',
     },
   },
-  disableClose3: {
-    name: 'disable close (panel 3)',
-    control: 'boolean',
+  autoCloseThreshold3: {
+    name: 'auto close threshold (panel 3)',
+    control: 'number',
     description: '',
     table: {
-      category: 'Panel 3',
+      category: 'Panel 3'
     },
   },
   accessibleLabel3: {

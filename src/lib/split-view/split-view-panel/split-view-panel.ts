@@ -61,7 +61,8 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.OPEN,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLED,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE,
-      SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE
+      SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE,
+      SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD
     ];
   }
 
@@ -114,6 +115,9 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE:
         this.autoClose = coerceBoolean(newValue);
+        break;
+      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD:
+        this.autoCloseThreshold = coerceNumber(newValue);
         break;
     }
   }
@@ -171,6 +175,12 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
    */
   @FoundationProperty()
   public autoClose: boolean;
+
+  /**
+   * The size at which the panel auto closes.
+   */
+  @FoundationProperty()
+  public autoCloseThreshold: number;
 
   /**
    * Gets the size of content along the axis of orientation.

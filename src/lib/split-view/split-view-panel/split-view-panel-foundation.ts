@@ -32,7 +32,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _disabled = false;
   private _disableClose = false;
   private _autoClose = false;
-
   private _autoCloseThreshold = 0;
   
   // State
@@ -97,6 +96,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._applyDisabled();
     this._applyDisableClose();
     this._applyAutoClose();
+    this._applyAutoCloseThreshold();
     this._isInitialized = true;
   }
 
@@ -581,6 +581,27 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   private _applyAutoClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
+    if (this._isInitialized) {
+      this._tryAutoClose();
+    }
+  }
+
+  /** Get/set the size at which the panel auto closes. */
+  public get autoCloseThreshold(): number {
+    return this._autoCloseThreshold;
+  }
+  public set autoCloseThreshold(value: number) {
+    if (this._autoCloseThreshold !== value) {
+      this._autoCloseThreshold = value;
+      this._applyAutoCloseThreshold();
+    }
+  }
+
+  private _applyAutoCloseThreshold(): void {
+    this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD, this._autoCloseThreshold.toString());
+    if (this._isInitialized) {
+      this._tryAutoClose();
+    }
   }
 
   /**
