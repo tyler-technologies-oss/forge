@@ -8,7 +8,6 @@
     "type": "git",
     "url": "https://github.com/tyler-technologies-oss/forge.git"
   },
-  "customElements": "custom-elements.json",
   "scripts": {
     "prepare": "husky install",
     "postinstall": "cd src/stories && npm install",
@@ -16,7 +15,6 @@
     "start": "npm run storybook",
     "storybook": "cd src/stories && npm start",
     "lint": "forge lint",
-    "manifest": "custom-elements-manifest analyze --globs 'src/lib/**/*.ts'",
     "test": "forge test",
     "test:once": "npm run test -- --once",
     "test:container": "forge test --once --no-sandbox",
