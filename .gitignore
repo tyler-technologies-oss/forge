@@ -5,4 +5,3 @@ coverage/
 .DS_Store
 *.log
 .vscode/
-custom-elements.json
