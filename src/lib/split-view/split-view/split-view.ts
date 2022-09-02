@@ -3,7 +3,7 @@ import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean,
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { SplitViewAdapter } from './split-view-adapter';
 import { SplitViewFoundation } from './split-view-foundation';
-import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
+import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 import { ISplitViewPanelComponent, SplitViewPanelComponent } from '../split-view-panel';
 import { ISplitViewBase } from '../core/split-view-base';
 
@@ -12,11 +12,9 @@ import styles from './split-view.scss';
 
 export interface ISplitViewComponent extends ISplitViewBase, IBaseComponent {
   orientation: SplitViewOrientation;
-  updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void;
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
-  setSlottedPanelsCursors(): void;
-  unsetSlottedPanelsCursors(): void;
+  update(config: ISplitViewUpdateConfig): void;
 }
 
 declare global {
@@ -107,15 +105,6 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
   public autoCloseThreshold: number;
 
   /**
-   * Recalculates and resets accessibility attributes of split view panels to reflect the current
-   * size of each panel and its neighbors.
-   * @param target The originating split view panel.
-   */
-  public updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void {
-    this._foundation.updateSlottedPanelsAccessibility(target);
-  }
-
-  /**
    * Arranges split view panels to avoid overlapping during animations.
    * @param target The originating split view panel component.
    */
@@ -131,16 +120,10 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
   }
 
   /**
-   * Sets the appropriate handle cursor for each slotted panel.
+   * Updates the provided characteristics of each slotted panel.
+   * @param config An update configuration.
    */
-  public setSlottedPanelsCursors(): void {
-    this._foundation.setSlottedPanelsCursors();
-  }
-
-  /**
-   * Removes each slotted panel's handle cursor property.
-   */
-  public unsetSlottedPanelsCursors(): void {
-    this._foundation.unsetSlottedPanelsCursors();
+  public update(config: ISplitViewUpdateConfig): void {
+    this._foundation.update(config);
   }
 }

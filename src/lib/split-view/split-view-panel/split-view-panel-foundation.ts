@@ -4,10 +4,10 @@ import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
 import { ISplitViewPanelState, SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
-import { SplitViewOrientation } from '../split-view/split-view-constants';
+import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
 import { parseSize } from '../core/split-view-core-utils';
-import { clampSize, clearState, getValueNow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
+import { clampSize, clearState, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
 
 export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElementFoundation {
   position: SplitViewPanelPosition;
@@ -20,8 +20,7 @@ export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElemen
   getCollapsibleSize(): number;
   setContentSize(size: number): void;
   setOrientation(value: SplitViewOrientation): void;
-  setCursor(): void;
-  updateAccessibility(): void;
+  update(config: ISplitViewUpdateConfig): void;
 }
 
 export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
@@ -315,6 +314,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    */
   private _handlePointerup(): void {
     this._adapter.setGrabbed(false);
+    this._adapter.deactivateRipple();
     this._endResize();
   }
 
@@ -341,12 +341,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    */
   private _endResize(): void {
     this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, this._state.currentSize);
-
-    if (this._state.startSize !== this._state.currentSize) {
-      this._adapter.updateParentAccessibility();
-    }
-    this._adapter.setParentCursors();
-
+    this._adapter.updateParent({ accessibility: this._state.startSize !== this._state.currentSize, cursor: true });
     this._state = clearState(this._state);
     this._tryAutoClose();
   }
@@ -438,8 +433,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
       const maxSize = safeMin(this._max, availableSpace);
       const newValue = scaleValue(pixelSize, this._min, maxSize);
-      this._adapter.setValue(newValue);
-      handleBoundariesAfterResize(this._adapter, pixelSize, { ...this._state, availableSpace });
+      this._adapter.setValuenow(newValue);
+      this._adapter.updateParent({ cursor: true });
     });
   }
 
@@ -528,7 +523,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   private _applyOpen(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.OPEN, this._open.toString());
-    this._adapter.setOpen(this._open, this._isInitialized);
+    this._adapter.setOpen(this._open, this._isInitialized, this._isInitialized);
   }
 
   /**
@@ -642,23 +637,28 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   /**
-   * Sets the appropriate handle cursor.
+   * Updates the proved characteristics.
+   * @param config An update configuration.
    */
-  public setCursor(): void {
+  public update(config: ISplitViewUpdateConfig): void {
+    if (this._position === 'default') {
+      return;
+    }
+
     const size = this._adapter.getContentSize(this._orientation);
     const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
 
-    handleBoundariesAfterResize(this._adapter, size, { ...this._state, availableSpace });
-  }
+    if (config.accessibility) {
+      const valueNow = getValuenow(size, { ...this._state, availableSpace });
+      this._adapter.setValuenow(valueNow);
+    }
 
-  /**
-   * Recalculates and sets the accessible value.
-   */
-  public updateAccessibility(): void {
-    const size = this._adapter.getContentSize(this._orientation);
-    const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
-    const valueNow = getValueNow(size, { ...this._state, availableSpace });
+    if (config.cursor) {
+      handleBoundariesAfterResize(this._adapter, size, { ...this._state, availableSpace });
+    }
 
-    this._adapter.setValue(valueNow);
+    if (config.clearCursor) {
+      this._adapter.setHandleCursor();
+    }
   }
 }

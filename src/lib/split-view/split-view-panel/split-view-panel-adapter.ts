@@ -4,7 +4,7 @@ import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { getCursor, getHandleIcon, getSplitViewPanelSibling } from '../core/split-view-core-utils';
 import { ISplitViewPanelComponent } from './split-view-panel';
 import { ISplitViewPanelCursorConfig, SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
-import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
+import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
 import { IIconComponent } from '../../icon';
 import { IRippleComponent } from '../../ripple';
@@ -24,22 +24,21 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   setDisabled(value: boolean): void;
   setPosition(value: SplitViewPanelPosition): void;
   setOrientation(value: SplitViewOrientation): void;
-  setOpen(value: boolean, withAnimation?: boolean): void;
+  setOpen(value: boolean, withAnimation?: boolean, emitEvent?: boolean): void;
   setGrabbed(value: boolean): void;
-  setHandleCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
+  setHandleCursor(orientation?: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
   setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
   getContentSize(orientation: SplitViewOrientation): number;
   setContentSize(value: number): void;
-  setValue(value: number): void;
+  setValuenow(value: number): void;
   focusHandle(): void;
   getAvailableSpace(orientation: SplitViewOrientation, position: SplitViewPanelPosition): number;
   getSiblingContentSize(): number;
   setSiblingContentSize(value: number): void;
-  getParentSize(orientation: SplitViewOrientation): number;
-  updateParentAccessibility(): void;
-  setParentCursors(): void;
   activateRipple(defaultActivated: boolean): void;
   deactivateRipple(): void;
+  getParentSize(orientation: SplitViewOrientation): number;
+  updateParent(config: ISplitViewUpdateConfig): void;
 }
 
 export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent> implements ISplitViewPanelAdapter {
@@ -168,37 +167,40 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * @param value Whether the component is open.
    * @param withAnimation Whether to use the animation. Defaults to `true`.
    */
-  public setOpen(value: boolean, withAnimation = true): void {
+  public setOpen(value: boolean, withAnimation = true, emitEvent = true): void {
+    const finish = (): void => {
+      if (!value) {
+        this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
+      }
+      if (emitEvent) {
+        this.emitHostEvent(value ? SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN : SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE);
+      }
+      this._parent?.unlayerSlottedPanels();
+      this._parent?.update({ accessibility: true, cursor: true });
+    };
+
     if (value && this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
       this._root.classList.remove(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
 
       if (!withAnimation) {
-        this._parent?.updateSlottedPanelsAccessibility(this._component);
-        this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN);
+        finish();
         return;
       }
 
       this._parent?.layerSlottedPanels(this._component);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.OPENING, true).then(() => {
-        this._parent?.unlayerSlottedPanels();
-        this._parent?.updateSlottedPanelsAccessibility(this._component);
-        this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN);
+        finish();
       });
     } else if (!value && !this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
 
       if (!withAnimation) {
-        this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
-        this._parent?.updateSlottedPanelsAccessibility(this._component);
-        this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE);
+        finish();
         return;
       }
 
       this._parent?.layerSlottedPanels(this._component);
       playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSING, true).then(() => {
-        this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
-        this._parent?.unlayerSlottedPanels();
-        this._parent?.updateSlottedPanelsAccessibility(this._component);
-        this.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE);
+        finish();
       });
     }
   }
@@ -211,7 +213,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   public setGrabbed(value: boolean): void {
     this._root.classList.toggle(SPLIT_VIEW_PANEL_CONSTANTS.classes.GRABBED, value);
     this._handle.setAttribute('aria-grabbed', value.toString());
-    this._parent?.unsetSlottedPanelsCursors();
+    this._parent?.update({ clearCursor: true });
 
     if (!value) {
       document.body.style.removeProperty('cursor');
@@ -220,11 +222,15 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
 
   /**
    * Applies a cursor style to the resize handle. 
-   * @param orientation The component's orientation.
+   * @param orientation The component's orientation. If absent the cursor will be removed.
    * @param config The component's position and whether it's at the min or max value.
    */
-  public setHandleCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void {
-    this._root.style.setProperty(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.CURSOR, getCursor(orientation, config));
+  public setHandleCursor(orientation?: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void {
+    if (orientation) {
+      this._root.style.setProperty(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.CURSOR, getCursor(orientation, config));
+    } else {
+      this._root.style.removeProperty(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.CURSOR);
+    }
   }
 
   /**
@@ -257,7 +263,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * Sets the ARIA attribute representing the size of the content compared to its min and max.
    * @param value The content size scaled from 0 to 100.
    */
-  public setValue(value: number): void {
+  public setValuenow(value: number): void {
     this._handle.setAttribute('aria-valuenow', value.toFixed(2));
   }
 
@@ -312,36 +318,11 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   /**
-   * Gets the size of the parent split view along the axis of orientation.
-   * @param orientation The component's orientation.
-   * @returns The parent's size in pixels.
-   */
-  public getParentSize(orientation: SplitViewOrientation): number {
-    const parentSize = orientation === 'horizontal' ? this._parent?.clientWidth : this._parent?.clientHeight;
-    return parentSize ?? 0;
-  }
-
-  /**
-   * Prompts the parent split view to notify all split view panels to recalculate and reset
-   * accessibility attributes.
-   */
-  public updateParentAccessibility(): void {
-    this._parent?.updateSlottedPanelsAccessibility(this._component);
-  }
-
-  /**
-   * Prompts the parent split view to notify all split view panels to set the appropriate cursor.
-   */
-  public setParentCursors(): void {
-    this._parent?.setSlottedPanelsCursors();
-  }
-
-  /**
    * Runs the ripple animation.
-   * @param defaultActivated Whether the ripple starts from and should end in an activated state.
+   * @param fromActivated Whether the ripple starts from and should end in an activated state.
    */
-  public activateRipple(defaultActivated: boolean): void {
-    if (defaultActivated) {
+  public activateRipple(fromActivated: boolean): void {
+    if (fromActivated) {
       this._ripple.deactivate();
       // Wait a short amount of time so the animation is distinguishable
       window.setTimeout(() => {
@@ -358,5 +339,23 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    */
   public deactivateRipple(): void {
     this._ripple.deactivate();
+  }
+
+  /**
+   * Gets the size of the parent split view along the axis of orientation.
+   * @param orientation The component's orientation.
+   * @returns The parent's size in pixels.
+   */
+  public getParentSize(orientation: SplitViewOrientation): number {
+    const parentSize = orientation === 'horizontal' ? this._parent?.clientWidth : this._parent?.clientHeight;
+    return parentSize ?? 0;
+  }
+
+  /**
+   * Updates the provided characteristics of all panels.
+   * @param config An update configuration.
+   */
+  public updateParent(config: ISplitViewUpdateConfig): void {
+    this._parent?.update(config);
   }
 }

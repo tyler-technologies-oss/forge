@@ -6,7 +6,7 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { SplitViewPanelFoundation } from './split-view-panel-foundation';
 import { SplitViewPanelAdapter } from './split-view-panel-adapter';
-import { SplitViewOrientation } from '../split-view/split-view-constants';
+import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
 import { IconComponent, IconRegistry } from '../../icon';
 import { RippleComponent } from '../../ripple';
@@ -25,8 +25,7 @@ export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent
   getCollapsibleSize(): number;
   setContentSize(size: number): void;
   setOrientation(value: SplitViewOrientation): void;
-  setCursor(): void;
-  updateAccessibility(): void;
+  update(config: ISplitViewUpdateConfig): void;
 }
 
 declare global {
@@ -216,17 +215,10 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
   }
 
   /**
-   * Sets the appropriate handle cursor.
+   * Updates the provided characteristics.
+   * @param config An update configuration.
    */
-  public setCursor(): void {
-    this._foundation.setCursor();
-  }
-
-  /**
-   * Recalculates and resets accessibility attributes to reflect the current size of the panel and
-   * its neighbors. Used internally by the parent split view component.
-   */
-  public updateAccessibility(): void {
-    this._foundation.updateAccessibility();
+  public update(config: ISplitViewUpdateConfig): void {
+    this._foundation.update(config);
   }
 }

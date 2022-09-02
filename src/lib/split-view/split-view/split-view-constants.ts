@@ -43,3 +43,9 @@ export const SPLIT_VIEW_CONSTANTS = {
 };
 
 export type SplitViewOrientation = 'horizontal' | 'vertical';
+
+export interface ISplitViewUpdateConfig {
+  accessibility?: boolean;
+  cursor?: boolean;
+  clearCursor?: boolean;
+}

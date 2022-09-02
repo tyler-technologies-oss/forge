@@ -3,15 +3,13 @@ import { ForgeResizeObserverCallback, ICustomElementFoundation, throttle } from 
 import { ISplitViewBase } from '../core/split-view-base';
 import { ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel';
 import { ISplitViewAdapter } from './split-view-adapter';
-import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
+import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 
 export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoundation {
   orientation: SplitViewOrientation;
-  updateSlottedPanelsAccessibility(target: ISplitViewPanelComponent): void;
-  setSlottedPanelsCursors(): void;
-  unsetSlottedPanelsCursors(): void;
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
+  update(config: ISplitViewUpdateConfig): void;
 }
 
 export class SplitViewFoundation implements ISplitViewFoundation {
@@ -43,19 +41,18 @@ export class SplitViewFoundation implements ISplitViewFoundation {
     this._adapter.detectSlottedPanels();
     this._adapter.setOrientation(this._orientation);
     this._layoutSlottedPanels();
-    this.updateSlottedPanelsAccessibility();
+    this.update({ accessibility: true, cursor: true });
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
-    this.updateSlottedPanelsAccessibility();
-    this.setSlottedPanelsCursors();
+    this.update({ accessibility: true, cursor: true });
   }
 
   /**
    * Sets the position of slotted panels with no positions.
    */
   private _layoutSlottedPanels(): void {
-    const panels = Array.from(this._adapter.getSlottedPanels());
+    const panels = this._adapter.getSlottedPanels();
 
     // A single panel should have a position of default. Just leave it alone.
     if (panels.length < 2) {
@@ -162,42 +159,6 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   }
 
   /**
-   * Recalculates and sets the accessible values of all slotted panels.
-   * @param target The originating panel. This is is assumed to have already handled its
-   * accessibility and is skipped.
-   */
-  public updateSlottedPanelsAccessibility(target?: ISplitViewPanelComponent): void {
-    const panels = this._adapter.getSlottedPanels();
-    panels.forEach(panel => {
-      if (panel.position !== 'default' && panel !== target) {
-        panel.updateAccessibility();
-      }
-    });
-  }
-
-  /**
-   * Sets the appropriate handle cursor for each slotted panel.
-   */
-  public setSlottedPanelsCursors(): void {
-    const panels = this._adapter.getSlottedPanels();
-    panels.forEach(panel => {
-      if (panel.position !== 'default') {
-        panel.setCursor();
-      }
-    });
-  }
-
-  /**
-   * Removes each slotted panel's handle cursor property.
-   */
-  public unsetSlottedPanelsCursors(): void {
-    const panels = this._adapter.getSlottedPanels();
-    panels.forEach(panel => {
-      this._adapter.unsetPanelCursor(panel);
-    });
-  }
-
-  /**
    * Layers panels in a set order during an animation. Panels that the target is animating toward
    * stack above it and other layers stack under it.
    * @param target The animating panel.
@@ -223,6 +184,17 @@ export class SplitViewFoundation implements ISplitViewFoundation {
     const panels = this._adapter.getSlottedPanels();
     panels.forEach(panel => {
       panel.style.removeProperty(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
+    });
+  }
+
+  /**
+   * Updates the provided characteristics of each panel.
+   * @param config An update configuration.
+   */
+  public update(config: ISplitViewUpdateConfig): void {
+    const panels = this._adapter.getSlottedPanels();
+    panels.forEach(panel => {
+      panel.update(config);
     });
   }
 }

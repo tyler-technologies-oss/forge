@@ -78,8 +78,10 @@ export function pointerResize(adapter: ISplitViewPanelAdapter, evt: PointerEvent
   state.currentSize = clampSize(size, state);
   adapter.setContentSize(state.currentSize);
   handleBoundariesDuringResize(adapter, state, 'pointer');
-  adapter.setValue(getValueNow(state.currentSize, state));
-  resizeSibling(adapter, delta, state);
+  adapter.setValuenow(getValuenow(state.currentSize, state));
+
+  const siblingDelta = size - state.currentSize + delta;
+  resizeSibling(adapter, siblingDelta, state);
 
   return size !== state.currentSize;
 }
@@ -102,8 +104,10 @@ export function keyboardResize(adapter: ISplitViewPanelAdapter, increment: numbe
   state.currentSize = clampSize(size, state);
   adapter.setContentSize(state.currentSize);
   handleBoundariesDuringResize(adapter, state, 'keyboard');
-  adapter.setValue(getValueNow(state.currentSize, state));
-  resizeSibling(adapter, state.keyboardDelta * -1, state);
+  adapter.setValuenow(getValuenow(state.currentSize, state));
+
+  const siblingDelta = size - state.currentSize + state.keyboardDelta * -1;
+  resizeSibling(adapter, siblingDelta, state);
 
   return size !== state.currentSize;
 }
@@ -135,15 +139,13 @@ export function maxResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPane
 /**
    * Sets a panel's sibling's size to reflect changes in the panel's size.
    * @param adapter The panel's adapter.
-   * @param delta The change in size since the resize began.
+   * @param delta The change in size to apply to the sibling.
    * @param state The panel's state object.
    */
 export function resizeSibling(adapter: ISplitViewPanelAdapter, delta: number, state: ISplitViewPanelState): void {
-  if (state.siblingSize !== undefined && state.currentSize !== undefined) {
-    const minAdjustment = Math.max(0, state.min - state.currentSize);
-    const maxAdjustment = state.max ? Math.min(0, state.max - state.currentSize) : 0;
-    const size = state.siblingSize + delta - minAdjustment - maxAdjustment;
-    adapter.setSiblingContentSize(size);
+  if (state.siblingSize !== undefined) {
+    const siblingSize = state.siblingSize + delta;
+    adapter.setSiblingContentSize(siblingSize);
   }
 }
 
@@ -240,7 +242,7 @@ export function handleBoundariesAfterResize(adapter: ISplitViewPanelAdapter, siz
    * @param size The panel's size in pixels.
    * @param state The panel's state object.
    */
-export function getValueNow(size: number, state: ISplitViewPanelState): number {
+export function getValuenow(size: number, state: ISplitViewPanelState): number {
   if (!state.availableSpace || !state.max) {
     return 100;
   }
