@@ -3,7 +3,7 @@ import { tylIconDragVerticalVariant } from '@tylertech/tyler-icons/extended';
 import { tylIconDragHandle } from '@tylertech/tyler-icons/standard';
 
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { SplitViewPanelFoundation } from './split-view-panel-foundation';
 import { SplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
@@ -15,7 +15,7 @@ import template from './split-view-panel.html';
 import styles from './split-view-panel.scss';
 
 export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent {
-  position: SplitViewPanelPosition;
+  resizable: SplitViewPanelResizable;
   size: number | string;
   min: number;
   max: number | undefined;
@@ -52,7 +52,7 @@ declare global {
 export class SplitViewPanelComponent extends BaseComponent implements ISplitViewPanelComponent {
   public static get observedAttributes(): string[] {
     return [
-      SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION,
+      SPLIT_VIEW_PANEL_CONSTANTS.attributes.RESIZABLE,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.SIZE,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.MAX,
@@ -84,8 +84,8 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION:
-        this.position = newValue as SplitViewPanelPosition;
+      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.RESIZABLE:
+        this.resizable = newValue as SplitViewPanelResizable;
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.SIZE:
         this.size = newValue;
@@ -122,10 +122,10 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
   }
 
   /**
-   * Controls behavior related to the panel's position in the split view.
+   * Controls which side of the panel the resize handle appears on.
    */
   @FoundationProperty()
-  public position: SplitViewPanelPosition;
+  public resizable: SplitViewPanelResizable;
 
   /**
    * The initial size along the axis of orientation.

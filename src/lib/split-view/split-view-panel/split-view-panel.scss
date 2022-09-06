@@ -13,6 +13,6 @@
   display: none;
 }
 
-:host([position=default]) {
+:host(:not([resizable=start], [resizable=end])) {
   @include mixins.static-styles;
 }

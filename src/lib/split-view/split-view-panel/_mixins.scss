@@ -43,21 +43,21 @@
     }
 
     &.forge-split-view-panel--closing {
-      &[position=start] {
+      &[resizable=end] {
         @include closing($direction: left);
       }
 
-      &[position=end] {
+      &[resizable=start] {
         @include closing($direction: right);
       }
     }
 
     &.forge-split-view-panel--opening {
-      &[position=start] {
+      &[resizable=end] {
         @include opening($direction: left);
       }
 
-      &[position=end] {
+      &[resizable=start] {
         @include opening($direction: right);
       }
     }
@@ -76,21 +76,21 @@
     }
 
     &.forge-split-view-panel--closing {
-      &[position=start] {
+      &[resizable=end] {
         @include closing($direction: top);
       }
 
-      &[position=end] {
+      &[resizable=start] {
         @include closing($direction: bottom);
       }
     }
 
     &.forge-split-view-panel--opening {
-      &[position=start] {
+      &[resizable=end] {
         @include opening($direction: top);
       }
 
-      &[position=end] {
+      &[resizable=start] {
         @include opening($direction: bottom);
       }
     }

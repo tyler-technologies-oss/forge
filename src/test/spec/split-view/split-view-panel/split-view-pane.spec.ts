@@ -33,12 +33,12 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   });
 
   describe('attributes', function(this: ITestContext) {
-    it('should set position', function(this: ITestContext) {
+    it('should set resizable', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute('position', 'start');
-      expect(this.context.component.position).toBe('start');
-      this.context.component.setAttribute('position', 'end');
-      expect(this.context.component.position).toBe('end');
+      this.context.component.setAttribute('resizable', 'end');
+      expect(this.context.component.resizable).toBe('end');
+      this.context.component.setAttribute('resizable', 'start');
+      expect(this.context.component.resizable).toBe('start');
     });
 
     it('should set size', function(this: ITestContext) {
@@ -124,10 +124,10 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should update accessibility', async function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const availableSpace = this.context.component.getContentSize() + this.context.panels[1].getContentSize();
       this.context.component.setContentSize(availableSpace / 2);
-      this.context.component.updateAccessibility();
+      this.context.component.update({ accessibility: true });
       expect(this.context.getPart('handle')!.getAttribute('aria-valuenow')).toBe('50.00');
     });
   });
@@ -135,7 +135,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   describe('keyboard interaction', function(this: ITestContext) {
     it('should do nothing if disabled', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.disabled = true;
       this.context.keyEvent('keydown', 'Enter');
       expect(this.context.component.open).toBeTrue();
@@ -153,21 +153,21 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should close panel on enter key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.keyEvent('keydown', 'Enter');
       expect(this.context.component.open).toBeFalse();
     });
 
     it('should minimize panel on home key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.keyEvent('keydown', 'Home');
       expect(this.context.component.getContentSize()).toBe(this.context.component.min);
     });
 
     it('should maximize panel on end key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.max = 500;
       this.context.keyEvent('keydown', 'End');
       expect(this.context.component.getContentSize()).toBe(this.context.component.max);
@@ -175,16 +175,16 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should do nothing when close is disabled on enter key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.disableClose = true;
       this.context.keyEvent('keydown', 'Enter');
       expect(this.context.component.open).toBeTrue();
     });
 
-    describe('position start', function(this: ITestContext) {
+    describe('resizable end', function(this: ITestContext) {
       it('should increase size one pixel when right arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowRight');
         expect(this.context.component.getContentSize()).toBe(startSize + 1);
@@ -192,7 +192,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should increase size ten pixels when right arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowRight', true);
         expect(this.context.component.getContentSize()).toBe(startSize + 10);
@@ -200,7 +200,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should decrease size one pixel when left arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowLeft');
         expect(this.context.component.getContentSize()).toBe(startSize - 1);
@@ -208,7 +208,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should decrease size ten pixels when left arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowLeft', true);
         expect(this.context.component.getContentSize()).toBe(startSize - 10);
@@ -216,7 +216,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should do nothing when orientation is horizontal and up or down arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowUp', true);
         expect(this.context.component.getContentSize()).toBe(startSize);
@@ -227,7 +227,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should increase size one pixel when orientation is vertical and down arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowDown');
         expect(this.context.component.getContentSize()).toBe(startSize + 1);
@@ -236,7 +236,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should increase size one pixel when orientation is vertical and down arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowDown', true);
         expect(this.context.component.getContentSize()).toBe(startSize + 10);
@@ -245,7 +245,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should decrease size one pixel when orientation is vertical and up arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowUp');
         expect(this.context.component.getContentSize()).toBe(startSize - 1);
@@ -254,7 +254,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should decrease size one pixel when orientation is vertical and up arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowUp', true);
         expect(this.context.component.getContentSize()).toBe(startSize - 10);
@@ -263,7 +263,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should do nothing when orientation is vertical and left or right arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowRight', true);
         expect(this.context.component.getContentSize()).toBe(startSize);
@@ -272,10 +272,10 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       });
     });
 
-    describe('position end', function(this: ITestContext) {
+    describe('resizable start', function(this: ITestContext) {
       it('should increase size one pixel when left arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowLeft');
         expect(this.context.component.getContentSize()).toBe(startSize + 1);
@@ -283,7 +283,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should increase size ten pixels when left arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowLeft', true);
         expect(this.context.component.getContentSize()).toBe(startSize + 10);
@@ -291,7 +291,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should decrease size one pixel when right arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowRight');
         expect(this.context.component.getContentSize()).toBe(startSize - 1);
@@ -299,7 +299,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should decrease size ten pixels when right arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowRight', true);
         expect(this.context.component.getContentSize()).toBe(startSize - 10);
@@ -307,7 +307,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should do nothing when orientation is horizontal and up or down arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowUp', true);
         expect(this.context.component.getContentSize()).toBe(startSize);
@@ -318,7 +318,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should increase size one pixel when orientation is vertical and up arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowUp');
         expect(this.context.component.getContentSize()).toBe(startSize + 1);
@@ -327,7 +327,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should increase size one pixel when orientation is vertical and up arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowUp', true);
         expect(this.context.component.getContentSize()).toBe(startSize + 10);
@@ -336,7 +336,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should decrease size one pixel when orientation is vertical and down arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowDown');
         expect(this.context.component.getContentSize()).toBe(startSize - 1);
@@ -345,7 +345,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should decrease size one pixel when orientation is vertical and down arrow key is pressed with shift', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowDown', true);
         expect(this.context.component.getContentSize()).toBe(startSize - 10);
@@ -354,7 +354,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should do nothing when orientation is vertical and left or right arrow key is pressed', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         this.context.keyEvent('keydown', 'ArrowRight', true);
         expect(this.context.component.getContentSize()).toBe(startSize);
@@ -363,9 +363,9 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       });
     });
 
-    it('should do nothing when position is default and an arrow key is pressed', function(this: ITestContext) {
+    it('should do nothing when resizable is none and an arrow key is pressed', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'default';
+      this.context.component.resizable = 'none';
       const startSize = this.context.component.getContentSize();
       this.context.keyEvent('keydown', 'ArrowRight', true);
       expect(this.context.component.getContentSize()).toBe(startSize);
@@ -381,7 +381,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   describe('pointer interaction', function(this: ITestContext) {
     it('should focus handle on pointer down', async function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
       const focusedElement = this.context.component.shadowRoot!.activeElement;
       expect(focusedElement).toBe(this.context.getPart('handle'));
@@ -389,7 +389,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should set grabbed value on pointer down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
       const handleGrabbed = this.context.getPart('handle')!.getAttribute('aria-grabbed');
       expect(handleGrabbed).toBe('true');
@@ -397,7 +397,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should set horizontal body cursor on pointer down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
       const documentCursor = document.body.style.getPropertyValue('cursor');
       expect(documentCursor).toBe(getCursor('horizontal'));
@@ -406,7 +406,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
     it('should set vertical body cursor on pointer down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.parent.orientation = 'vertical';
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'start';
       this.context.pointerEvent('pointerdown', 0, 0);
       const documentCursor = document.body.style.getPropertyValue('cursor');
       expect(documentCursor).toBe(getCursor('vertical'));
@@ -414,7 +414,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should set grabbed value on pointer up', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
       this.context.pointerEvent('pointerup', 0, 0, true);
       const handleGrabbed = this.context.getPart('handle')!.getAttribute('aria-grabbed');
@@ -423,7 +423,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should unset horizontal body cursor on pointer up', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
       this.context.pointerEvent('pointerup', 0, 0, true);
       const documentCursor = document.body.style.getPropertyValue('cursor');
@@ -433,7 +433,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
     it('should unset vertical body cursor on pointer up', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.parent.orientation = 'vertical';
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
       this.context.pointerEvent('pointerup', 0, 0, true);
       const documentCursor = document.body.style.getPropertyValue('cursor');
@@ -442,7 +442,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should do nothing on pointer down if disabled', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.disabled = true;
       const spy = jasmine.createSpy('resize start');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_START, spy);
@@ -452,7 +452,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should do nothing on pointer up if disabled', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.disabled = true;
       const spy = jasmine.createSpy('resize end');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, spy);
@@ -462,7 +462,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should do nothing on pointer move is disabled', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.disabled = true;
       const startSize = this.context.component.getContentSize();
       this.context.pointerEvent('pointerdown', 200, 0);
@@ -472,17 +472,17 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should set grabbed to false on pointer move with no buttons pressed', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
       this.context.pointerEvent('pointermove', 10, 0, true);
       const handleGrabbed = this.context.getPart('handle')!.getAttribute('aria-grabbed');
       expect(handleGrabbed).toBe('false');
     });
 
-    describe('position start', function(this: ITestContext) {
+    describe('resizable end', function(this: ITestContext) {
       it('should increase in size when the pointer moves to the right', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 200, 0);
@@ -492,7 +492,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should decrease in size when the pointer moves to the left', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         const delta = -10;
         this.context.pointerEvent('pointerdown', 200, 0);
@@ -502,7 +502,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should do nothing when orientation is horizontal and the pointer moves up or down', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 200, 200);
@@ -515,7 +515,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should increase in size when orientation is vertical and the pointer moves down', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 0, 200);
@@ -526,7 +526,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should decrease in size when orientation is vertical and the pointer moves up', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         const delta = -10;
         this.context.pointerEvent('pointerdown', 0, 200);
@@ -537,7 +537,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should do nothing when orientation is vertical and the pointer moves left or right', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'start';
+        this.context.component.resizable = 'end';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 200, 200);
@@ -548,10 +548,10 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       });
     });
 
-    describe('position end', function(this: ITestContext) {
+    describe('resizable start', function(this: ITestContext) {
       it('should increase in size when the pointer moves to the left', function(this: ITestContext) {
         this.context = setupTestContext(true, 1, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 200, 0);
@@ -561,7 +561,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should decrease in size when the pointer moves to the right', function(this: ITestContext) {
         this.context = setupTestContext(true, 1, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         const delta = -10;
         this.context.pointerEvent('pointerdown', 200, 0);
@@ -571,7 +571,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
       it('should do nothing when orientation is horizontal and the pointer moves up or down', function(this: ITestContext) {
         this.context = setupTestContext(true, 1, 1);
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 200, 200);
@@ -584,7 +584,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should increase in size when orientation is vertical and the pointer moves up', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 0, 200);
@@ -595,7 +595,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should decrease in size when orientation is vertical and the pointer moves down', function(this: ITestContext) {
         this.context = setupTestContext(true, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         const delta = -10;
         this.context.pointerEvent('pointerdown', 0, 200);
@@ -606,7 +606,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       it('should do nothing when orientation is vertical and the pointer moves left or right', function(this: ITestContext) {
         this.context = setupTestContext(true, 1, 1);
         this.context.parent.orientation = 'vertical';
-        this.context.component.position = 'end';
+        this.context.component.resizable = 'start';
         const startSize = this.context.component.getContentSize();
         const delta = 10;
         this.context.pointerEvent('pointerdown', 200, 200);
@@ -621,7 +621,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   describe('events', function(this: ITestContext) {
     it('should emit resize start event on arrow key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const spy = jasmine.createSpy('resize start');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_START, spy);
       this.context.keyEvent('keydown', 'ArrowRight');
@@ -630,7 +630,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should emit resize start event on pointer down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const spy = jasmine.createSpy('resize start');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_START, spy);
       this.context.pointerEvent('pointerdown', 0, 0);
@@ -639,7 +639,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should emit resize end event on arrow key up', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const spy = jasmine.createSpy('resize end');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, spy);
       this.context.keyEvent('keyup', 'ArrowRight');
@@ -648,7 +648,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should emit resize end event on pointer up', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const spy = jasmine.createSpy('resize end');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, spy);
       this.context.pointerEvent('pointerdown', 0, 0);
@@ -658,7 +658,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should emit resize event on arrow key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const startSize = this.context.component.getContentSize();
       const spy = jasmine.createSpy('resize');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, spy);
@@ -670,7 +670,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should emit resize event on pointer move', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const startSize = this.context.component.getContentSize();
       const spy = jasmine.createSpy('resize');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, spy);
@@ -682,7 +682,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should emit did close event after the close animation completes', async function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const spy = jasmine.createSpy('did close');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, spy);
       this.context.component.open = false;
@@ -693,7 +693,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should emit did open event after the open animation completes', async function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.open = false;
       this.context.getPart('root')?.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)
       this.context.append();
@@ -709,7 +709,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   describe('resize', function(this: ITestContext) {
     it('should resize sibling', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const sibling = this.context.panels[1];
       const startSize = sibling.getContentSize();
       this.context.keyEvent('keydown', 'ArrowRight', true);
@@ -718,7 +718,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should not resize sibling under sibling min', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const sibling = this.context.panels[1];
       const startSize = sibling.getContentSize();
       sibling.min = startSize;
@@ -726,11 +726,11 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(sibling.getContentSize()).toBe(startSize);
     });
 
-    it('should not resize positioned sibling over sibling max', function(this: ITestContext) {
+    it('should not resize resizable sibling over sibling max', function(this: ITestContext) {
       this.context = setupTestContext(true, 2);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       const sibling = this.context.panels[1];
-      sibling.position = 'start';
+      sibling.resizable = 'end';
       const startSize = sibling.getContentSize();
       sibling.max = startSize;
       this.context.keyEvent('keydown', 'ArrowLeft', true);
@@ -739,7 +739,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should close when size is equal to or under auto size threshold and auto close is anabled', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.autoClose = true;
       this.context.component.size = 10;
       this.context.keyEvent('keydown', 'ArrowLeft', true);
@@ -749,7 +749,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should resize to fit under max', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.size = 400;
       const max = 300;
       this.context.component.max = max;
@@ -758,7 +758,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should resize to fit over min', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.size = 300;
       const min = 400;
       this.context.component.min = min;
@@ -767,7 +767,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should activate ripple when max size is reached', async function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.size = 200;
       this.context.component.max = 205;
       const spy = spyOn(this.context.getPart('ripple') as IRippleComponent, 'activate');
@@ -782,7 +782,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should activate ripple when min size is reached', async function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.position = 'start';
+      this.context.component.resizable = 'end';
       this.context.component.size = 5;
       const spy = spyOn(this.context.getPart('ripple') as IRippleComponent, 'activate');
       this.context.keyEvent('keydown', 'ArrowLeft', true);

@@ -4,7 +4,7 @@ import { SplitViewOrientation } from '../split-view/split-view-constants';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}split-view-panel`;
 
 const attributes = {
-  POSITION: 'position',
+  RESIZABLE: 'resizable',
   SIZE: 'size',
   MIN: 'min',
   MAX: 'max',
@@ -73,10 +73,10 @@ export const SPLIT_VIEW_PANEL_CONSTANTS = {
   customCssProperties
 };
 
-// 'start' panels have a handle on the right/bottom and collapse to the left/top
-// 'end' panels have a handle on the left/top and collapse to the right/bottom
-// 'default' panels don't have a handle, are not resizable, and fill the remaining space
-export type SplitViewPanelPosition = 'start' | 'end' | 'default';
+// 'start' panels have a handle on the left/top and collapse to the right/bottom
+// 'end' panels have a handle on the right/bottom and collapse to the left/top
+// 'none' panels don't have a handle, are not resizable, and fill the remaining space
+export type SplitViewPanelResizable = 'start' | 'end' | 'none';
 
 export enum SplitViewAnimatingLayer {
   Under = 1,
@@ -85,13 +85,13 @@ export enum SplitViewAnimatingLayer {
 }
 
 export interface ISplitViewPanelCursorConfig {
-  position: SplitViewPanelPosition;
+  resizable: SplitViewPanelResizable;
   boundary: 'min' | 'max' | 'none';
 }
 
 export interface ISplitViewPanelState {
   orientation: SplitViewOrientation;
-  position: SplitViewPanelPosition;
+  resizable: SplitViewPanelResizable;
   arrowKeyHeld: boolean;
   startPoint?: number;
   startSize?: number;

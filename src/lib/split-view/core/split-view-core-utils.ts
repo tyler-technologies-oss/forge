@@ -10,18 +10,18 @@ export function getCursor(orientation: SplitViewOrientation, config?: ISplitView
   if (orientation === 'horizontal') {
     switch (config?.boundary) {
       case 'min':
-        return config.position === 'start' ? 'e-resize' : 'w-resize';
+        return config.resizable === 'end' ? 'e-resize' : 'w-resize';
       case 'max':
-        return config.position === 'start' ? 'w-resize' : 'e-resize';
+        return config.resizable === 'end' ? 'w-resize' : 'e-resize';
       default:
         return 'col-resize';
     }
   } else {
     switch (config?.boundary) {
       case 'min':
-        return config.position === 'start' ? 's-resize' : 'n-resize';
+        return config.resizable === 'end' ? 's-resize' : 'n-resize';
       case 'max':
-        return config.position === 'start' ? 'n-resize' : 's-resize';
+        return config.resizable === 'end' ? 'n-resize' : 's-resize';
       default:
         return 'row-resize';
     }
@@ -43,14 +43,14 @@ export function getHandleIcon(orientation: SplitViewOrientation): string {
  * @returns A sibling split view panel or undefined if there is not a sibling.
  */
 export function getSplitViewPanelSibling(el: ISplitViewPanelComponent): SplitViewPanelComponent | undefined {
-  const direction = el.position;
-  if (direction === 'default') {
+  const direction = el.resizable;
+  if (direction === 'none') {
     return undefined;
   }
   
   let sibling: Element | null = el;
   do {
-    sibling = direction === 'start' ? sibling.nextElementSibling : sibling.previousElementSibling;
+    sibling = direction === 'end' ? sibling.nextElementSibling : sibling.previousElementSibling;
   } while (sibling instanceof SplitViewPanelComponent && !sibling.open);
 
   if (sibling instanceof SplitViewPanelComponent) {

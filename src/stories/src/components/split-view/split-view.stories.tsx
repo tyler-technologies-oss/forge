@@ -154,7 +154,7 @@ export const LeadingPanel: Story<ISplitViewProps> = ({
   
   return (
     <ForgeSplitView style={{ height: '400px'}} {...splitViewProps}>
-      <ForgeSplitViewPanel position="start" {...panel1Props}>
+      <ForgeSplitViewPanel resizable="end" {...panel1Props}>
         <div style={{...panelContentStyles, backgroundColor: 'salmon'}}>Panel 1</div>
       </ForgeSplitViewPanel>
       <ForgeSplitViewPanel {...panel2Props}>
@@ -242,13 +242,13 @@ export const MultiplePanelsSplit: Story<ISplitViewProps> = ({
   
   return (
     <ForgeSplitView style={{ height: '400px'}} {...splitViewProps}>
-      <ForgeSplitViewPanel position="start" {...panel1Props}>
+      <ForgeSplitViewPanel resizable="end" {...panel1Props}>
         <div style={{...panelContentStyles, backgroundColor: 'salmon'}}>Panel 1</div>
       </ForgeSplitViewPanel>
       <ForgeSplitViewPanel {...panel2Props}>
         <div style={{...panelContentStyles, backgroundColor: 'lavender'}}>Panel 2</div>
       </ForgeSplitViewPanel>
-      <ForgeSplitViewPanel position="end" {...panel3Props}>
+      <ForgeSplitViewPanel resizable="start" {...panel3Props}>
         <div style={{...panelContentStyles, backgroundColor: 'salmon'}}>Panel 3</div>
       </ForgeSplitViewPanel>
     </ForgeSplitView>
@@ -335,10 +335,10 @@ export const MultiplePanelsStacked: Story<ISplitViewProps> = ({
       <ForgeSplitViewPanel {...panel1Props}>
         <div style={{...panelContentStyles, backgroundColor: 'lavender'}}>Panel 1</div>
       </ForgeSplitViewPanel>
-      <ForgeSplitViewPanel position="end" {...panel2Props}>
+      <ForgeSplitViewPanel resizable="start" {...panel2Props}>
         <div style={{...panelContentStyles, backgroundColor: 'salmon'}}>Panel 2</div>
       </ForgeSplitViewPanel>
-      <ForgeSplitViewPanel position="end" {...panel3Props}>
+      <ForgeSplitViewPanel resizable="start" {...panel3Props}>
         <div style={{...panelContentStyles, backgroundColor: 'salmon'}}>Panel 3</div>
       </ForgeSplitViewPanel>
     </ForgeSplitView>

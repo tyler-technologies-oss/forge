@@ -13,7 +13,7 @@ export type SplitViewPanelBpundary = 'min' | 'max' | 'none';
 export function initState(): ISplitViewPanelState {
   return {
     orientation: 'horizontal',
-    position: 'default',
+    resizable: 'none',
     arrowKeyHeld: false,
     keyboardDelta: 0,
     isAtMin: false,
@@ -34,7 +34,7 @@ export function setState(adapter: ISplitViewPanelAdapter, state: ISplitViewPanel
     ...state,
     currentSize,
     startSize: currentSize,
-    availableSpace: adapter.getAvailableSpace(state.orientation, state.position),
+    availableSpace: adapter.getAvailableSpace(state.orientation, state.resizable),
     siblingSize: adapter.getSiblingContentSize(),
     isAtMin: false,
     isAtMax: false
@@ -64,13 +64,13 @@ export function clearState(state: ISplitViewPanelState): ISplitViewPanelState {
  * @returns Whether a resize happened.
  */
 export function pointerResize(adapter: ISplitViewPanelAdapter, evt: PointerEvent, state: ISplitViewPanelState): boolean {
-  if (state.startPoint === undefined || state.startSize === undefined || state.position === undefined) {
+  if (state.startPoint === undefined || state.startSize === undefined || state.resizable === undefined) {
     return false;
   }
 
   const evtPoint = state.orientation === 'horizontal' ? evt.clientX : evt.clientY;
   let delta = state.startPoint - evtPoint;
-  if (state.position === 'end') {
+  if (state.resizable === 'start') {
     delta *= -1;
   }
 
@@ -130,7 +130,7 @@ export function minResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPane
  * @returns The new pixel size of the panel.
  */
 export function maxResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState): number {
-  const availableSpace = adapter.getAvailableSpace(state.orientation, state.position);
+  const availableSpace = adapter.getAvailableSpace(state.orientation, state.resizable);
   const max = safeMin(state.max, availableSpace);
   adapter.setContentSize(max);
   return max;
@@ -180,7 +180,7 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
     if (!state.isAtMin) {
       adapter.activateRipple(inputDevice === 'pointer');
       if (inputDevice === 'pointer') {
-        adapter.setBodyCursor(state.orientation, { position: state.position, boundary: 'min' });
+        adapter.setBodyCursor(state.orientation, { resizable: state.resizable, boundary: 'min' });
       }
       state.isAtMin = true;
     }
@@ -197,7 +197,7 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
     if(!state.isAtMax) {
       adapter.activateRipple(inputDevice === 'pointer');
       if (inputDevice === 'pointer') {
-        adapter.setBodyCursor(state.orientation, { position: state.position, boundary: 'max' });
+        adapter.setBodyCursor(state.orientation, { resizable: state.resizable, boundary: 'max' });
       }
       state.isAtMax = true;
     }
@@ -223,13 +223,13 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
    */
 export function handleBoundariesAfterResize(adapter: ISplitViewPanelAdapter, size: number, state: ISplitViewPanelState): boolean {
   if (size <= state.min) {
-    adapter.setHandleCursor(state.orientation, { position: state.position, boundary: 'min' });
+    adapter.setHandleCursor(state.orientation, { resizable: state.resizable, boundary: 'min' });
     return true;
   }
 
   const max = safeMin(state.max, state.availableSpace);
   if (size >= max) {
-    adapter.setHandleCursor(state.orientation, { position: state.position, boundary: 'max' });
+    adapter.setHandleCursor(state.orientation, { resizable: state.resizable, boundary: 'max' });
     return true;
   }
 

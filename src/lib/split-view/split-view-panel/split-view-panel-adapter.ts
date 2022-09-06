@@ -3,7 +3,7 @@ import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tyler
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { getCursor, getHandleIcon, getSplitViewPanelSibling } from '../core/split-view-core-utils';
 import { ISplitViewPanelComponent } from './split-view-panel';
-import { ISplitViewPanelCursorConfig, SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { ISplitViewPanelCursorConfig, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
 import { IIconComponent } from '../../icon';
@@ -22,7 +22,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   getParentProperty(name: keyof ISplitViewComponent): unknown;
   setAccessibleLabel(value: string): void;
   setDisabled(value: boolean): void;
-  setPosition(value: SplitViewPanelPosition): void;
+  setResizable(value: SplitViewPanelResizable): void;
   setOrientation(value: SplitViewOrientation): void;
   setOpen(value: boolean, withAnimation?: boolean, emitEvent?: boolean): void;
   setGrabbed(value: boolean): void;
@@ -32,7 +32,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   setContentSize(value: number): void;
   setValuenow(value: number): void;
   focusHandle(): void;
-  getAvailableSpace(orientation: SplitViewOrientation, position: SplitViewPanelPosition): number;
+  getAvailableSpace(orientation: SplitViewOrientation, resizable: SplitViewPanelResizable): number;
   getSiblingContentSize(): number;
   setSiblingContentSize(value: number): void;
   activateRipple(defaultActivated: boolean): void;
@@ -128,21 +128,20 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   /**
-   * Sets the position of the component including its ARIA attributes and the DOM order of
-   * elements.
-   * @param value The component's position.
+   * Sets the whether the component's handle is present and at its start or end.
+   * @param value The component's resizable value.
    */
-  public setPosition(value: SplitViewPanelPosition): void {
-    this._root.setAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION, value.toString());
-    toggleAttribute(this._handle, value !== 'default', 'aria-valuemin', '0');
-    toggleAttribute(this._handle, value !== 'default', 'aria-valuemax', '100');
+  public setResizable(value: SplitViewPanelResizable): void {
+    this._root.setAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.RESIZABLE, value.toString());
+    toggleAttribute(this._handle, value !== 'none', 'aria-valuemin', '0');
+    toggleAttribute(this._handle, value !== 'none', 'aria-valuemax', '100');
 
-    if (value === 'default') {
+    if (value === 'none') {
       return;
     }
 
     this._handle.remove();
-    if (value === 'start') {
+    if (value === 'end') {
       // Place the handle after the content
       this._root.append(this._handle);
     } else {
@@ -223,7 +222,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   /**
    * Applies a cursor style to the resize handle. 
    * @param orientation The component's orientation. If absent the cursor will be removed.
-   * @param config The component's position and whether it's at the min or max value.
+   * @param config The component's resizable value and whether it's at the min or max value.
    */
   public setHandleCursor(orientation?: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void {
     if (orientation) {
@@ -236,7 +235,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   /**
    * Applies a cursor style to the document body.
    * @param orientation The component's orientation.
-   * @param config The component's position and whether it's at the min or max value.
+   * @param config The component's resizable value and whether it's at the min or max value.
    */
   public setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void {
     document.body.style.setProperty('cursor', getCursor(orientation, config));
@@ -280,11 +279,11 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * orientation. The sibling's min and max values are taken into account but the component's are
    * not.
    * @param orientation The component's orientation.
-   * @param position The component's position.
+   * @param resizable The component's resizable value.
    * @returns The amount of space available for the component to resize into in pixels.
    */
-  public getAvailableSpace(orientation: SplitViewOrientation, position: SplitViewPanelPosition): number {
-    if (position === 'default') {
+  public getAvailableSpace(orientation: SplitViewOrientation, resizable: SplitViewPanelResizable): number {
+    if (resizable === 'none') {
       // Return -1 if the panel is static (i.e. can't be user resized)
       return -1;
     }

@@ -68,9 +68,9 @@ describe('SplitViewComponent', function(this: ITestContext) {
   });
 
   describe('layering', function(this: ITestContext) {
-    it('should arrange panels correctly when the target has position set to start', function(this: ITestContext) {
+    it('should arrange panels correctly when the target has resizable set to end', function(this: ITestContext) {
       this.context = setupTestContext(false, 3);
-      this.context.panels![1].position = 'start';
+      this.context.panels![1].resizable = 'end';
       this.context.component.layerSlottedPanels(this.context.panels![1]);
       const layerOne = this.context.panels![0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
       const layerTwo = this.context.panels![1].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
@@ -80,9 +80,9 @@ describe('SplitViewComponent', function(this: ITestContext) {
       expect(layerThree).toBe(SplitViewAnimatingLayer.Under.toString());
     });
 
-    it('should arrange panels correctly when the target has position set to end', function(this: ITestContext) {
+    it('should arrange panels correctly when the target has resizable set to start', function(this: ITestContext) {
       this.context = setupTestContext(false, 3);
-      this.context.panels![1].position = 'end';
+      this.context.panels![1].resizable = 'start';
       this.context.component.layerSlottedPanels(this.context.panels![1]);
       const layerOne = this.context.panels![0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
       const layerTwo = this.context.panels![1].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
@@ -94,7 +94,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
 
     it('should remove animating layer properties', function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
-      this.context.panels![0].position = 'start';
+      this.context.panels![0].resizable = 'end';
       this.context.component.layerSlottedPanels(this.context.panels![0]);
       this.context.component.unlayerSlottedPanels();
       const layer = this.context.panels![0].style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER);
@@ -127,61 +127,63 @@ describe('SplitViewComponent', function(this: ITestContext) {
       expect(this.context.panels![0].autoClose).toBeTrue();
     });
 
-    it('should layout when all have default positions', async function(this: ITestContext) {
+    it('should layout when all have resizable set to none', async function(this: ITestContext) {
       this.context = setupTestContext(true, 3);
       await tick();
-      expect(this.context.panels![0].position).toBe('default');
-      expect(this.context.panels![1].position).toBe('end');
-      expect(this.context.panels![2].position).toBe('end');
+      expect(this.context.panels![0].resizable).toBe('none');
+      expect(this.context.panels![1].resizable).toBe('start');
+      expect(this.context.panels![2].resizable).toBe('start');
     });
 
-    it('should not layout when a non-default position is set', async function(this: ITestContext) {
+    it('should not layout when resizable is set to start or end', async function(this: ITestContext) {
       this.context = setupTestContext(false, 3);
-      this.context.panels![0].position = 'start';
-      this.context.panels![2].position = 'end';
+      this.context.panels![0].resizable = 'end';
+      this.context.panels![2].resizable = 'start';
       this.context.append();
       await tick();
-      expect(this.context.panels![0].position).toBe('start');
-      expect(this.context.panels![1].position).toBe('default');
-      expect(this.context.panels![2].position).toBe('end');
+      expect(this.context.panels![0].resizable).toBe('end');
+      expect(this.context.panels![1].resizable).toBe('none');
+      expect(this.context.panels![2].resizable).toBe('start');
     });
 
     it('should not layout one or fewer panels', async function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
       this.context.append();
       await tick();
-      expect(this.context.panels![0].position).toBe('default');
+      expect(this.context.panels![0].resizable).toBe('none');
     });
 
     it('should update accessibility', function(this: ITestContext) {
       this.context = setupTestContext(false, 2);
-      this.context.panels![0].position = 'start';
-      const spy = spyOn(this.context.panels![0], 'updateAccessibility');
-      this.context.component.updateSlottedPanelsAccessibility(this.context.panels![1]);
+      this.context.panels![0].resizable = 'end';
+      const spy = spyOn(this.context.panels![0], 'update');
+      // this.context.component.update(this.context.panels![1]);
+      this.context.component.update({ accessibility: true });
       expect(spy).toHaveBeenCalled();
     });
 
     it('should not update target accessibility', function(this: ITestContext) {
       this.context = setupTestContext(false, 2);
-      this.context.panels![0].position = 'start';
-      const spy = spyOn(this.context.panels![0], 'updateAccessibility');
-      this.context.component.updateSlottedPanelsAccessibility(this.context.panels![0]);
+      this.context.panels![0].resizable = 'end';
+      const spy = spyOn(this.context.panels![0], 'update');
+      this.context.component.update({ accessibility: true });
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should not update accessibility when position is default', function(this: ITestContext) {
+    it('should not update accessibility when resizable is none', function(this: ITestContext) {
       this.context = setupTestContext(false, 2);
-      this.context.panels![0].position = 'default';
-      const spy = spyOn(this.context.panels![0], 'updateAccessibility');
-      this.context.component.updateSlottedPanelsAccessibility(this.context.panels![1]);
+      this.context.panels![0].resizable = 'none';
+      const spy = spyOn(this.context.panels![0], 'update');
+      // this.context.component.update(this.context.panels![1]);
+      this.context.component.update({ accessibility: true });
       expect(spy).not.toHaveBeenCalled();
     });
 
     it('should update accessibility on resize', async function(this: ITestContext) {
       this.context = setupTestContext(true, 2);
       await tick();
-      const spy = spyOn(this.context.panels![0], 'updateAccessibility');
-      this.context.panels![0].position = 'start';
+      const spy = spyOn(this.context.panels![0], 'update');
+      this.context.panels![0].resizable = 'end';
       this.context.component.style.width = '100%';
       this.context.component.parentElement!.style.width = '400px';
       await tick();

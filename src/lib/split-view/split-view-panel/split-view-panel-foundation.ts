@@ -2,7 +2,7 @@ import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
-import { ISplitViewPanelState, SplitViewPanelPosition, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { ISplitViewPanelState, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
@@ -10,7 +10,7 @@ import { parseSize } from '../core/split-view-core-utils';
 import { clampSize, clearState, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
 
 export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElementFoundation {
-  position: SplitViewPanelPosition;
+  resizable: SplitViewPanelResizable;
   size: number | string;
   min: number;
   max: number | undefined;
@@ -45,11 +45,11 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._state.orientation = value;
   }
 
-  private get _position(): SplitViewPanelPosition {
-    return this._state.position;
+  private get _resizable(): SplitViewPanelResizable {
+    return this._state.resizable;
   }
-  private set _position(value: SplitViewPanelPosition) {
-    this._state.position = value;
+  private set _resizable(value: SplitViewPanelResizable) {
+    this._state.resizable = value;
   }
 
   private get _min(): number {
@@ -86,7 +86,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._adapter.setPointerdownListener(this._pointerdownListener);
     this._adapter.setKeydownListener(this._keydownListener);
     this._matchParentProperties();
-    this._applyPosition();
+    this._applyResizable();
     this._applyMin();
     this._applyMax();
     this._applySize();
@@ -258,7 +258,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
     evt.preventDefault();
 
-    if (this._position === 'end') {
+    if (this._resizable === 'start') {
       increment *= -1;
     }
     if (evt.shiftKey) {
@@ -388,21 +388,21 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   /**
-   * Get/set position. This affects the side the handle appears on and the direction the panel closes into.
+   * Get/set resizable. This affects the side the handle appears on and the direction the panel closes into.
    */
-  public get position(): SplitViewPanelPosition {
-    return this._position;
+  public get resizable(): SplitViewPanelResizable {
+    return this._resizable;
   }
-  public set position(value: SplitViewPanelPosition) {
-    if (this._position !== value) {
-      this._position = value;
-      this._applyPosition();
+  public set resizable(value: SplitViewPanelResizable) {
+    if (this._resizable !== value) {
+      this._resizable = value;
+      this._applyResizable();
     }
   }
 
-  private _applyPosition(): void {
-    this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.POSITION, this._position);
-    this._adapter.setPosition(this._position);
+  private _applyResizable(): void {
+    this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.RESIZABLE, this._resizable);
+    this._adapter.setResizable(this._resizable);
   }
 
   /**
@@ -430,7 +430,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._adapter.setContentSize(pixelSize);
     // Wait for the DOM to render to get available space
     window.requestAnimationFrame(() => {
-      const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
+      const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._resizable);
       const maxSize = safeMin(this._max, availableSpace);
       const newValue = scaleValue(pixelSize, this._min, maxSize);
       this._adapter.setValuenow(newValue);
@@ -452,7 +452,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _applyMin(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN, this._min.toString());
 
-    if (this._position === 'default') {
+    if (this._resizable === 'none') {
       return;
     }
 
@@ -478,7 +478,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _applyMax(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.MAX, this._max !== undefined, this._max?.toString());
 
-    if (this._position === 'default' || this._max === undefined) {
+    if (this._resizable === 'none' || this._max === undefined) {
       return;
     }
     
@@ -620,7 +620,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param size The new content size in pixels.
    */
   public setContentSize(size: number): void {
-    if (this._position !== 'default') {
+    if (this._resizable !== 'none') {
       const newSize = clampSize(size, this._state);
       this._adapter.setContentSize(newSize);
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
@@ -641,12 +641,12 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param config An update configuration.
    */
   public update(config: ISplitViewUpdateConfig): void {
-    if (this._position === 'default') {
+    if (this._resizable === 'none') {
       return;
     }
 
     const size = this._adapter.getContentSize(this._orientation);
-    const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._position);
+    const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._resizable);
 
     if (config.accessibility) {
       const valueNow = getValuenow(size, { ...this._state, availableSpace });

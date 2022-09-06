@@ -67,30 +67,30 @@ describe('SplitViewCoreUtils', () => {
       this.context.destroy();
     });
 
-    it('should return the next panel sibling when position is start', function(this: ITestContext) {
+    it('should return the next panel sibling when resizable is end', function(this: ITestContext) {
       this.context = setupTestContext(false);
-      this.context.panels[0].position = 'start';
+      this.context.panels[0].resizable = 'end';
       const sibling = getSplitViewPanelSibling(this.context.panels[0]);
       expect(sibling).toBe(this.context.panels[1] as SplitViewPanelComponent);
     });
 
-    it('should return the previous panel sibling when position is end', function(this: ITestContext) {
+    it('should return the previous panel sibling when resizable is start', function(this: ITestContext) {
       this.context = setupTestContext(false);
-      this.context.panels[1].position = 'end';
+      this.context.panels[1].resizable = 'start';
       const sibling = getSplitViewPanelSibling(this.context.panels[1]);
       expect(sibling).toBe(this.context.panels[0] as SplitViewPanelComponent);
     });
 
-    it('should return undefined when position is default', function(this: ITestContext) {
+    it('should return undefined when resizable is none', function(this: ITestContext) {
       this.context = setupTestContext(false);
-      this.context.panels[0].position = 'default';
+      this.context.panels[0].resizable = 'none';
       const sibling = getSplitViewPanelSibling(this.context.panels[0]);
       expect(sibling).toBeUndefined();
     });
 
     it('should skip closed panels', function(this: ITestContext) {
       this.context = setupTestContext(false, 3);
-      this.context.panels[0].position = 'start';
+      this.context.panels[0].resizable = 'end';
       this.context.panels[1].open = false;
       const sibling = getSplitViewPanelSibling(this.context.panels[0]);
       expect(sibling).toBe(this.context.panels[2] as SplitViewPanelComponent);
@@ -98,7 +98,7 @@ describe('SplitViewCoreUtils', () => {
 
     it('should skip non-panel siblings', function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
-      this.context.panels[0].position = 'start';
+      this.context.panels[0].resizable = 'end';
       this.context.panels[0].parentElement?.appendChild(document.createElement('div'));
       const sibling = getSplitViewPanelSibling(this.context.panels[0]);
       expect(sibling).toBeUndefined();
@@ -106,7 +106,7 @@ describe('SplitViewCoreUtils', () => {
 
     it('should return undefined if no panel siblings', function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
-      this.context.panels[0].position = 'start';
+      this.context.panels[0].resizable = 'end';
       const sibling = getSplitViewPanelSibling(this.context.panels[0]);
       expect(sibling).toBeUndefined();
     });

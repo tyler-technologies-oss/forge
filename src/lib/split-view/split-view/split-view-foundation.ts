@@ -49,23 +49,23 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   }
 
   /**
-   * Sets the position of slotted panels with no positions.
+   * Sets the resizable value of slotted panels with no resizable value set.
    */
   private _layoutSlottedPanels(): void {
     const panels = this._adapter.getSlottedPanels();
 
-    // A single panel should have a position of default. Just leave it alone.
+    // A single panel should have resizable set to none. Just leave it alone.
     if (panels.length < 2) {
       return;
     }
 
-    // Don't change any panels if positions are already set.
-    if (panels.some(panel => panel.position !== 'default')) {
+    // Don't change any panels if resizable is already set.
+    if (panels.some(panel => panel.resizable !== 'none')) {
       return;
     }
 
-    // All panels after the first are set to a position of end.
-    panels.slice(1).forEach(panel => panel.position = 'end');
+    // All panels after the first have resizable set to start.
+    panels.slice(1).forEach(panel => panel.resizable = 'start');
   }
 
   /**
@@ -165,8 +165,8 @@ export class SplitViewFoundation implements ISplitViewFoundation {
    */
   public layerSlottedPanels(target: ISplitViewPanelComponent): void {
     const panels = this._adapter.getSlottedPanels();
-    const increment = target.position === 'end' ? 1 : -1;
-    let layer = target.position === 'end' ? SplitViewAnimatingLayer.Under : SplitViewAnimatingLayer.Above;
+    const increment = target.resizable === 'start' ? 1 : -1;
+    let layer = target.resizable === 'start' ? SplitViewAnimatingLayer.Under : SplitViewAnimatingLayer.Above;
 
     panels.forEach(panel => {
       // Increment the layer if moving into or out of the target panel
