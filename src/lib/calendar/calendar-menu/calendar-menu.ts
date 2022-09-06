@@ -35,6 +35,7 @@ declare global {
 /**
  * The web component class behind the `<forge-calendar-menu>` custom element.
  * 
+ * @internal
  * @tag forge-calendar-menu
  */
 @CustomElement({

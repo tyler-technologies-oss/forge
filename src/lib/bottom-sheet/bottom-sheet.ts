@@ -42,7 +42,7 @@ declare global {
 /**
  * The web component class behind the `<forge-bottom-sheet>` custom element.
  * 
- * @tag forge-badge
+ * @tag forge-bottom-sheet
  */
 @CustomElement({
   name: BOTTOM_SHEET_CONSTANTS.elementName,
