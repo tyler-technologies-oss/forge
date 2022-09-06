@@ -28,6 +28,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-file-picker>` custom element.
+ * 
+ * @tag forge-file-picker
+ */
 @CustomElement({
   name: FILE_PICKER_CONSTANTS.elementName,
   dependencies: [ButtonComponent]

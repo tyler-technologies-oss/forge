@@ -18,6 +18,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-drawer>` custom element.
+ * 
+ * @tag forge-drawer
+ */
 @CustomElement({
   name: DRAWER_CONSTANTS.elementName
 })

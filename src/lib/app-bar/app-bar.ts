@@ -20,7 +20,11 @@ declare global {
   }
 }
 
-/** The web component class behind the <forge-app-bar> custom element. */
+/**
+ * The web component class behind the `<forge-app-bar>` custom element.
+ * 
+ * @tag forge-app-bar
+ */
 @CustomElement({
   name: APP_BAR_CONSTANTS.elementName
 })

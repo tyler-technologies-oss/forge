@@ -34,6 +34,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-toast>` web component.
+ * 
+ * @tag forge-toast
  */
 @CustomElement({
   name: TOAST_CONSTANTS.elementName,

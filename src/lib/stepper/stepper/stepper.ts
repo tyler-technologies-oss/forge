@@ -26,6 +26,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-stepper>` custom element.
+ * 
+ * @tag forge-stepper
+ */
 @CustomElement({
   name: STEPPER_CONSTANTS.elementName,
   dependencies: [StepComponent]

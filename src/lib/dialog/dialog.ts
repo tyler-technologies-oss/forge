@@ -42,6 +42,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-dialog>` custom element.
+ * 
+ * @tag forge-dialog
+ */
 @CustomElement({
   name: DIALOG_CONSTANTS.elementName,
   dependencies: [BackdropComponent]

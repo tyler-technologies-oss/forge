@@ -82,7 +82,9 @@ declare global {
 }
 
 /**
- * The custom element class behind the `forge-table` component.
+ * The custom element class behind the `<forge-table>` component.
+ * 
+ * @tag forge-table
  */
 @CustomElement({
   name: TABLE_CONSTANTS.elementName,

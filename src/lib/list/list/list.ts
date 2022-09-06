@@ -24,6 +24,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-list>` element.
+ * 
+ * @tag forge-list
  */
 @CustomElement({
   name: LIST_CONSTANTS.elementName,

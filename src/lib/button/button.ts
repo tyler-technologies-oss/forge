@@ -16,6 +16,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-button>` element.
+ * 
+ * @tag forge-button
  */
 @CustomElement({
   name: BUTTON_CONSTANTS.elementName
