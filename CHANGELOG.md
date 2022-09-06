@@ -1,3 +1,20 @@
+# v2.6.0 (Tue Sep 06 2022)
+
+#### 🚀 Enhancement
+
+- feat(metadata): Update Forge CLI and add JSDoc for Custom Elements Manifest [#138](https://github.com/tyler-technologies-oss/forge/pull/138) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### 📝 Documentation
+
+- chore(docs): fix css custom prop docs for floating action button [#137](https://github.com/tyler-technologies-oss/forge/pull/137) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v2.5.0 (Tue Aug 23 2022)
 
 #### 🚀 Enhancement
