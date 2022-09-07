@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
+import { ISplitViewBase } from '../core';
 import { SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel/split-view-panel-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}split-view`;
@@ -48,4 +49,6 @@ export interface ISplitViewUpdateConfig {
   accessibility?: boolean;
   cursor?: boolean;
   clearCursor?: boolean;
+  orientation?: SplitViewOrientation;
+  properties?: Partial<ISplitViewBase>;
 }

@@ -1,4 +1,4 @@
-import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { ICustomElementFoundation, isDefined } from '@tylertech/forge-core';
 
 import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
@@ -9,7 +9,7 @@ import { ISplitViewBase } from '../core/split-view-base';
 import { parseSize } from '../core/split-view-core-utils';
 import { clampSize, clearState, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
 
-export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElementFoundation {
+export interface ISplitViewPanelFoundation extends Partial<ISplitViewBase>, ICustomElementFoundation {
   resizable: SplitViewPanelResizable;
   size: number | string;
   min: number;
@@ -19,7 +19,6 @@ export interface ISplitViewPanelFoundation extends ISplitViewBase, ICustomElemen
   getContentSize(): number;
   getCollapsibleSize(): number;
   setContentSize(size: number): void;
-  setOrientation(value: SplitViewOrientation): void;
   update(config: ISplitViewUpdateConfig): void;
 }
 
@@ -28,10 +27,10 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _size: number | string = '200';
   private _accessibleLabel = 'Split view panel';
   private _open = true;
-  private _disabled = false;
-  private _disableClose = false;
-  private _autoClose = false;
-  private _autoCloseThreshold = 0;
+  private _disabled?: boolean;
+  private _disableClose?: boolean;
+  private _autoClose?: boolean;
+  private _autoCloseThreshold?: number;
   
   // State
   private _state: ISplitViewPanelState = initState();
@@ -66,6 +65,26 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._state.max = value;
   }
 
+  // Properties inherited from parent split view
+  private _parentProperties: Partial<ISplitViewBase> = {};
+
+  // Applied properties that can be inherited from parent
+  private get _appliedDisabled(): boolean {
+    return this._disabled ?? this._parentProperties.disabled ?? false;
+  }
+
+  private get _appliedDisableClose(): boolean {
+    return this._disableClose ?? this._parentProperties.disableClose ?? false;
+  }
+
+  private get _appliedAutoClose(): boolean {
+    return this._autoClose ?? this._parentProperties.autoClose ?? false;
+  }
+
+  private get _appliedAutoCloseThreshold(): number {
+    return this._autoCloseThreshold ?? this._parentProperties.autoCloseThreshold ?? 0;
+  }
+
   // Listeners
   private _pointerdownListener: (evt: PointerEvent) => void;
   private _pointerupListener: (evt: PointerEvent) => void;
@@ -85,7 +104,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._adapter.initialize();
     this._adapter.setPointerdownListener(this._pointerdownListener);
     this._adapter.setKeydownListener(this._keydownListener);
-    this._matchParentProperties();
+    this._getParentProperties();
     this._applyResizable();
     this._applyMin();
     this._applyMax();
@@ -109,7 +128,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt The pointer event.
    */
   private _onPointerdown(evt: PointerEvent): void {
-    if (this._disabled) {
+    if (this._appliedDisabled) {
       return;
     }
 
@@ -125,7 +144,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt The pointer event.
    */
   private _onPointerup(evt: PointerEvent): void {
-    if (this._disabled) {
+    if (this._appliedDisabled) {
       return;
     }
 
@@ -141,7 +160,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt The pointer event.
    */
   private _onPointermove(evt: PointerEvent): void {
-    if (this._disabled) {
+    if (this._appliedDisabled) {
       return;
     }
 
@@ -163,7 +182,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt The keyboard event.
    */
   private _onKeydown(evt: KeyboardEvent): void {
-    if (this._disabled) {
+    if (this._appliedDisabled) {
       return;
     }
 
@@ -195,7 +214,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt 
    */
   private _handleEnterKey(evt: KeyboardEvent): void {
-    if (this._disableClose) {
+    if (this._appliedDisableClose) {
       return;
     }
 
@@ -351,7 +370,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    */
   private _tryAutoClose(): void {
     const size = this._adapter.getContentSize(this._orientation);
-    if (this._autoClose && size <= this._autoCloseThreshold) {
+    if (this._appliedAutoClose && size <= this._appliedAutoCloseThreshold) {
       this._open = false;
       this._applyOpen();
     }
@@ -360,27 +379,25 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   /**
    * Sets orientation, disabled, disable close, and autoclose to reflect the parent split view.
    */
-  private _matchParentProperties(): void {
-    // Match parent disabled state
+  private _getParentProperties(): void {
+    // Parent disabled state
     const parentDisabled = this._adapter.getParentProperty('disabled') as boolean;
-    if (!this._isInitialized || this._disabled !== parentDisabled) {
-      this._disabled = parentDisabled;
-      this._applyDisabled();
-    }
+    this._parentProperties.disabled = parentDisabled;
+    this._applyParentDisabled();
 
-    // Match parent disable close
+    // Parent disable close
     const parentDisableClose = this._adapter.getParentProperty('disableClose') as boolean;
-    if (!this._isInitialized || this._disableClose !== parentDisableClose) {
-      this._disableClose = parentDisableClose;
-      this._applyDisableClose();
-    }
+    this._parentProperties.disableClose = parentDisableClose;
 
-    // Match parent auto close
+    // Parent auto close
     const parentAutoClose = this._adapter.getParentProperty('autoClose') as boolean;
-    if (!this._isInitialized || this._autoClose !== parentAutoClose) {
-      this._autoClose = parentAutoClose;
-      this._applyAutoClose();
-    }
+    this._parentProperties.autoClose = parentAutoClose;
+    this._applyParentAutoClose();
+
+    // Parent auto close threshold
+    const parentAutoCloseThreshold = this._adapter.getParentProperty('autoCloseThreshold') as number;
+    this._parentProperties.autoCloseThreshold = parentAutoCloseThreshold;
+    this._applyParentAutoCloseThreshold();
   }
 
   private _applyOrientation(): void {
@@ -529,10 +546,10 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   /**
    * Get/set whether interactions are disabled.
    */
-  public get disabled(): boolean {
+  public get disabled(): boolean | undefined {
     return this._disabled;
   }
-  public set disabled(value: boolean) {
+  public set disabled(value: boolean | undefined) {
     if (this._disabled !== value) {
       this._disabled = value;
       this._applyDisabled();
@@ -540,17 +557,23 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   private _applyDisabled(): void {
-    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLED, this._disabled);
-    this._adapter.setDisabled(this._disabled);
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLED, this._disabled ?? false);
+    this._adapter.setDisabled(this._appliedDisabled);
+  }
+
+  private _applyParentDisabled(): void {
+    if (this._isInitialized && !isDefined(this._disabled)) {
+      this._adapter.setDisabled(this._appliedDisabled);
+    }
   }
 
   /**
    * Get/set whether closing the panel is disabled.
    */
-  public get disableClose(): boolean {
+  public get disableClose(): boolean | undefined {
     return this._disableClose;
   }
-  public set disableClose(value: boolean) {
+  public set disableClose(value: boolean | undefined) {
     if (this._disableClose !== value) {
       this._disableClose = value;
       this._applyDisableClose();
@@ -558,16 +581,22 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   private _applyDisableClose(): void {
-    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose);
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose ?? false);
+  }
+
+  private _applyParentDisableClose(): void {
+    if (this._isInitialized && !isDefined(this.disableClose)) {
+      this._applyDisableClose();
+    }
   }
 
   /**
    * Get/set whether the panel closes when a threshold size is reached.
    */
-  public get autoClose(): boolean {
+  public get autoClose(): boolean | undefined {
     return this._autoClose;
   }
-  public set autoClose(value: boolean) {
+  public set autoClose(value: boolean | undefined) {
     if (this._autoClose !== value) {
       this._autoClose = value;
       this._applyAutoClose();
@@ -575,17 +604,23 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   private _applyAutoClose(): void {
-    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose ?? false);
     if (this._isInitialized) {
       this._tryAutoClose();
     }
   }
 
+  private _applyParentAutoClose(): void {
+    if (this._isInitialized && !isDefined(this._autoClose)) {
+      this._tryAutoClose();
+    }
+  }
+
   /** Get/set the size at which the panel auto closes. */
-  public get autoCloseThreshold(): number {
+  public get autoCloseThreshold(): number | undefined {
     return this._autoCloseThreshold;
   }
-  public set autoCloseThreshold(value: number) {
+  public set autoCloseThreshold(value: number | undefined) {
     if (this._autoCloseThreshold !== value) {
       this._autoCloseThreshold = value;
       this._applyAutoCloseThreshold();
@@ -593,8 +628,14 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   private _applyAutoCloseThreshold(): void {
-    this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD, this._autoCloseThreshold.toString());
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD, isDefined(this._autoCloseThreshold), this.autoCloseThreshold?.toString());
     if (this._isInitialized) {
+      this._tryAutoClose();
+    }
+  }
+
+  private _applyParentAutoCloseThreshold(): void {
+    if (this._isInitialized && !isDefined(this._autoCloseThreshold)) {
       this._tryAutoClose();
     }
   }
@@ -628,19 +669,39 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   /**
-   * Sets whether the panel resizes horizontally or vertically.
-   * @param value An orientation.
-   */
-  public setOrientation(value: SplitViewOrientation): void {
-    this._orientation = value;
-    this._applyOrientation();
-  }
-
-  /**
    * Updates the proved characteristics.
    * @param config An update configuration.
    */
   public update(config: ISplitViewUpdateConfig): void {
+    // Orientation
+    if (config.orientation) {
+      this._orientation = config.orientation;
+      this._applyOrientation();
+    }
+
+    // Parent properties
+    if (config.properties) {
+      if (isDefined(config.properties.disabled) && this._parentProperties.disabled !== config.properties.disabled) {
+        this._parentProperties.disabled = config.properties.disabled;
+        this._applyDisabled();
+      }
+      if (isDefined(config.properties.disableClose)) {
+        this._parentProperties.disableClose = config.properties.disableClose;
+      }
+      if (isDefined(config.properties.autoClose) && this._parentProperties.autoClose !== config.properties.autoClose) {
+        this._parentProperties.autoClose = config.properties.autoClose;
+        if (!isDefined(this._autoClose)) {
+          this._applyAutoClose();
+        }
+      }
+      if (isDefined(config.properties.autoCloseThreshold) && this._parentProperties.autoCloseThreshold !== config.properties.autoCloseThreshold) {
+        this._parentProperties.autoCloseThreshold = config.properties.autoCloseThreshold;
+        if (!isDefined(this._autoCloseThreshold)) {
+          this._applyAutoCloseThreshold();
+        }
+      }
+    }
+
     if (this._resizable === 'none') {
       return;
     }
@@ -648,15 +709,18 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     const size = this._adapter.getContentSize(this._orientation);
     const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._resizable);
 
+    // Accessibility
     if (config.accessibility) {
       const valueNow = getValuenow(size, { ...this._state, availableSpace });
       this._adapter.setValuenow(valueNow);
     }
 
+    // Contextual cursor
     if (config.cursor) {
       handleBoundariesAfterResize(this._adapter, size, { ...this._state, availableSpace });
     }
 
+    // Unset cursor
     if (config.clearCursor) {
       this._adapter.setHandleCursor();
     }

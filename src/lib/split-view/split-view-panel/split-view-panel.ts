@@ -6,7 +6,7 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { SplitViewPanelFoundation } from './split-view-panel-foundation';
 import { SplitViewPanelAdapter } from './split-view-panel-adapter';
-import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
+import { ISplitViewUpdateConfig } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
 import { IconComponent, IconRegistry } from '../../icon';
 import { RippleComponent } from '../../ripple';
@@ -14,7 +14,7 @@ import { RippleComponent } from '../../ripple';
 import template from './split-view-panel.html';
 import styles from './split-view-panel.scss';
 
-export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent {
+export interface ISplitViewPanelComponent extends Partial<ISplitViewBase>, IBaseComponent {
   resizable: SplitViewPanelResizable;
   size: number | string;
   min: number;
@@ -24,7 +24,6 @@ export interface ISplitViewPanelComponent extends ISplitViewBase, IBaseComponent
   getContentSize(): number;
   getCollapsibleSize(): number;
   setContentSize(size: number): void;
-  setOrientation(value: SplitViewOrientation): void;
   update(config: ISplitViewUpdateConfig): void;
 }
 
@@ -107,16 +106,32 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
         this.open = coerceBoolean(newValue);
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
+        if (newValue) {
+          this.disabled = coerceBoolean(newValue);
+        } else {
+          this.disabled = undefined;
+        }
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE:
-        this.disableClose = coerceBoolean(newValue);
+        if (newValue) {
+          this.disableClose = coerceBoolean(newValue);
+        } else {
+          this.disableClose = undefined;
+        }
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE:
-        this.autoClose = coerceBoolean(newValue);
+        if (newValue) {
+          this.autoClose = coerceBoolean(newValue);
+        } else {
+          this.autoClose = undefined;
+        }
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD:
-        this.autoCloseThreshold = coerceNumber(newValue);
+        if (newValue) {
+          this.autoCloseThreshold = coerceNumber(newValue);
+        } else {
+          this.autoCloseThreshold = undefined;
+        }
         break;
     }
   }
@@ -161,25 +176,25 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
    * Whether resize interactions are disabled or enabled.
    */
   @FoundationProperty()
-  public disabled: boolean;
+  public disabled?: boolean;
 
   /**
    * Whether the panel can be closed via keyboard interaction.
    */
   @FoundationProperty()
-  public disableClose: boolean;
+  public disableClose?: boolean;
 
   /**
    * Whether the panel automatically closes when it reaches a size of 0.
    */
   @FoundationProperty()
-  public autoClose: boolean;
+  public autoClose?: boolean;
 
   /**
    * The size at which the panel auto closes.
    */
   @FoundationProperty()
-  public autoCloseThreshold: number;
+  public autoCloseThreshold?: number;
 
   /**
    * Gets the size of content along the axis of orientation.
@@ -204,14 +219,6 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
    */
   public setContentSize(size: number): void {
     this._foundation.setContentSize(size);
-  }
-
-  /**
-   * Sets the axis that the panel resizes on. Used internally by the parent split view component.
-   * @param value `'horizontal'` or `'vertical'`.
-   */
-  public setOrientation(value: SplitViewOrientation): void {
-    this._foundation.setOrientation(value);
   }
 
   /**

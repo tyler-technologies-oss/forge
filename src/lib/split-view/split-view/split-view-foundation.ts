@@ -1,7 +1,7 @@
 import { ForgeResizeObserverCallback, ICustomElementFoundation, throttle } from '@tylertech/forge-core';
 
 import { ISplitViewBase } from '../core/split-view-base';
-import { ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel';
+import { ISplitViewPanelComponent, SplitViewAnimatingLayer } from '../split-view-panel';
 import { ISplitViewAdapter } from './split-view-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constants';
 
@@ -39,9 +39,8 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _onSlotChange(evt: Event): void {
     this._adapter.detectSlottedPanels();
-    this._adapter.setOrientation(this._orientation);
     this._layoutSlottedPanels();
-    this.update({ accessibility: true, cursor: true });
+    this.update({ accessibility: true, cursor: true, orientation: this._orientation });
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
@@ -83,7 +82,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyOrientation(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.ORIENTATION, this._orientation);
-    this._adapter.setOrientation(this._orientation);
+    this.update({ orientation: this._orientation, accessibility: true });
   }
 
   /**
@@ -101,7 +100,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyDisabled(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.DISABLED, this._disabled);
-    this._adapter.setSlottedPanelProperty<boolean>('disabled', this._disabled);
+    this.update({ properties: { disabled: this._disabled } });
   }
 
   /**
@@ -119,7 +118,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyDisableClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose);
-    this._adapter.setSlottedPanelProperty<boolean>('disableClose', this._disableClose);
+    this.update({ properties: { disableClose: this._disableClose } });
   }
 
   /**
@@ -137,7 +136,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyAutoClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE, this._autoClose);
-    this._adapter.setSlottedPanelProperty<boolean>('autoClose', this._autoClose);
+    this.update({ properties: { autoClose: this._autoClose } });
   }
 
   /**
@@ -155,7 +154,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyAutoCloseThreshold(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD, this._autoCloseThreshold.toString());
-    // TODO: perform auto close threshold logic
+    this.update({ properties: { autoCloseThreshold: this._autoCloseThreshold } });
   }
 
   /**
