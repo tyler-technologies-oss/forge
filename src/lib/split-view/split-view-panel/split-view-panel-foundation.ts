@@ -6,8 +6,7 @@ import { ISplitViewPanelOpenEvent, ISplitViewPanelState, SplitViewPanelResizable
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
-import { parseSize } from '../core/split-view-core-utils';
-import { clampSize, clearState, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
+import { clampSize, clearState, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, parseSize, pointerResize, setState } from './split-view-panel-utils';
 
 export interface ISplitViewPanelFoundation extends Partial<ISplitViewBase>, ICustomElementFoundation {
   resizable: SplitViewPanelResizable;

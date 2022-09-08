@@ -1,11 +1,11 @@
 import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tylertech/forge-core';
 
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { getCursor, getHandleIcon, getSplitViewPanelSibling } from '../core/split-view-core-utils';
 import { ISplitViewPanelComponent } from './split-view-panel';
 import { ISplitViewPanelCursorConfig, ISplitViewPanelOpenEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
+import { getCursor, getHandleIcon, getSplitViewPanelSibling } from './split-view-panel-utils';
 import { IIconComponent } from '../../icon';
 import { IRippleComponent } from '../../ripple';
 
