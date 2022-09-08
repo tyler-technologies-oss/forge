@@ -3,7 +3,7 @@ import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tyler
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { getCursor, getHandleIcon, getSplitViewPanelSibling } from '../core/split-view-core-utils';
 import { ISplitViewPanelComponent } from './split-view-panel';
-import { ISplitViewPanelCursorConfig, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { ISplitViewPanelCursorConfig, ISplitViewPanelOpenEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
 import { IIconComponent } from '../../icon';
@@ -24,7 +24,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   setDisabled(value: boolean): void;
   setResizable(value: SplitViewPanelResizable): void;
   setOrientation(value: SplitViewOrientation): void;
-  setOpen(value: boolean, withAnimation?: boolean, emitEvent?: boolean): void;
+  setOpen(value: boolean, withAnimation?: boolean, event?: ISplitViewPanelOpenEvent): void;
   setGrabbed(value: boolean): void;
   setHandleCursor(orientation?: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
   setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
@@ -166,13 +166,13 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * @param value Whether the component is open.
    * @param withAnimation Whether to use the animation. Defaults to `true`.
    */
-  public setOpen(value: boolean, withAnimation = true, emitEvent = true): void {
+  public setOpen(value: boolean, withAnimation = true, event?: ISplitViewPanelOpenEvent): void {
     const finish = (): void => {
       if (!value) {
         this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
       }
-      if (emitEvent) {
-        this.emitHostEvent(value ? SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN : SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE);
+      if (event) {
+        this.emitHostEvent(value ? SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN : SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, event);
       }
       this._parent?.unlayerSlottedPanels();
       this._parent?.update({ accessibility: true, cursor: true });

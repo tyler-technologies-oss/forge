@@ -50,7 +50,9 @@ const events = {
   RESIZE_END: `${elementName}-resize-end`,
   RESIZE: `${elementName}-resize`,
   DID_OPEN: `${elementName}-did-open`,
-  DID_CLOSE: `${elementName}-did-close`
+  DID_CLOSE: `${elementName}-did-close`,
+  WILL_OPEN: `${elementName}-will-open`,
+  WILL_CLOSE: `${elementName}-will-close`
 };
 
 const numbers = {
@@ -103,4 +105,9 @@ export interface ISplitViewPanelState {
   isAtMax: boolean;
   min: number;
   max?: number;
+}
+
+export interface ISplitViewPanelOpenEvent {
+  auto: boolean;
+  userInitiated: boolean;
 }

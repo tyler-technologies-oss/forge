@@ -2,7 +2,7 @@ import { ICustomElementFoundation, isDefined } from '@tylertech/forge-core';
 
 import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
-import { ISplitViewPanelState, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { ISplitViewPanelOpenEvent, ISplitViewPanelState, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
@@ -219,8 +219,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     }
 
     evt.preventDefault();
-    this._open = !this._open;
-    this._applyOpen();
+    this._tryOpenOrClose(!this._open, false, true);
   }
 
   /**
@@ -232,6 +231,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
     const size = minResize(this._adapter, this._state);
     this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, size);
+    this._tryAutoClose();
   }
 
   /**
@@ -366,13 +366,32 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   /**
+   * Emits a will open or will close event and sets the panel open or closed if allowed.
+   * @param shouldOpen Whether the panel should open or close. Defaults to `true`.
+   * @param auto Whether the panel auto-opened or auto-closed.
+   * @param userInitiated Whether opening or closing via user action instead of programmatically.
+   */
+  private _tryOpenOrClose(shouldOpen = true, auto = false, userInitiated = false): void {
+    const eventType = shouldOpen ? SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_OPEN : SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_CLOSE;
+    const event: ISplitViewPanelOpenEvent = {
+      auto,
+      userInitiated
+    };
+    const isAllowed = this._adapter.emitHostEvent(eventType, event, true, true);
+    if (!isAllowed) {
+      return;
+    }
+    this._open = shouldOpen;
+    this._applyOpen(event);
+  }
+
+  /**
    * Auto close the panel if enabled and within the size threshold.
    */
   private _tryAutoClose(): void {
     const size = this._adapter.getContentSize(this._orientation);
     if (this._appliedAutoClose && size <= this._appliedAutoCloseThreshold) {
-      this._open = false;
-      this._applyOpen();
+      this._tryOpenOrClose(false, true, false);
     }
   }
 
@@ -534,13 +553,17 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   public set open(value: boolean) {
     if (this._open !== value) {
       this._open = value;
-      this._applyOpen();
+      const event: ISplitViewPanelOpenEvent | undefined = this._isInitialized ? {
+        auto: false,
+        userInitiated: false
+      } : undefined;
+      this._applyOpen(event);
     }
   }
 
-  private _applyOpen(): void {
+  private _applyOpen(event?: ISplitViewPanelOpenEvent): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.OPEN, this._open.toString());
-    this._adapter.setOpen(this._open, this._isInitialized, this._isInitialized);
+    this._adapter.setOpen(this._open, this._isInitialized, event);
   }
 
   /**
@@ -582,12 +605,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
   private _applyDisableClose(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose ?? false);
-  }
-
-  private _applyParentDisableClose(): void {
-    if (this._isInitialized && !isDefined(this.disableClose)) {
-      this._applyDisableClose();
-    }
   }
 
   /**
