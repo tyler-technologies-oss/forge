@@ -3,7 +3,7 @@ import { tylIconDragVerticalVariant } from '@tylertech/tyler-icons/extended';
 import { tylIconDragHandle } from '@tylertech/tyler-icons/standard';
 
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { ISplitViewPanelOpenEvent, ISplitViewPanelWillResizeEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { SplitViewPanelFoundation } from './split-view-panel-foundation';
 import { SplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig } from '../split-view/split-view-constants';
@@ -33,11 +33,14 @@ declare global {
   }
 
   interface HTMLElementEventMap {
+    'forge-split-view-panel-will-resize': CustomEvent<ISplitViewPanelWillResizeEvent>;
     'forge-split-view-panel-resize-start': CustomEvent<null>;
     'forge-split-view-panel-resize-end': CustomEvent<null>;
     'forge-split-view-panel-resize': CustomEvent<number>;
-    'forge-split-view-panel-did-open': CustomEvent<null>;
-    'forge-split-view-panel-did-close': CustomEvent<null>;
+    'forge-split-view-panel-will-open': CustomEvent<ISplitViewPanelOpenEvent>;
+    'forge-split-view-panel-will-close': CustomEvent<ISplitViewPanelOpenEvent>;
+    'forge-split-view-panel-did-open': CustomEvent<ISplitViewPanelOpenEvent>;
+    'forge-split-view-panel-did-close': CustomEvent<ISplitViewPanelOpenEvent>;
   }
 }
 

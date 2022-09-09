@@ -1,10 +1,8 @@
 import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
-import { ISplitViewPanelCursorConfig, ISplitViewPanelState } from './split-view-panel-constants';
+import { ISplitViewPanelCursorConfig, ISplitViewPanelState, SplitViewInputDeviceType } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewPanelComponent, SplitViewPanelComponent } from './split-view-panel';
-
-export type InputDeviceType = 'pointer' | 'keyboard';
 
 /**
  * Creates a default split view panel state object.
@@ -169,7 +167,7 @@ export function clampSize(size: number, state: ISplitViewPanelState): number {
    * @param inputDevice The input device responsible for the resize.
    * @returns Whether the panel is at its min or max size.
    */
-export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState, inputDevice?: InputDeviceType): boolean {
+export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState, inputDevice?: SplitViewInputDeviceType): boolean {
   if (state.currentSize === undefined) {
     return false;
   }

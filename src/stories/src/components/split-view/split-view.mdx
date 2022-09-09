@@ -185,8 +185,9 @@ Sets the size at which the panel auto closes if enabled.
 
 | Name                                  | Description
 | :------------------------------------ | ----------------
-| `forge-split-view-panel-resize-start` | Emits when the resize handle is grabbed.
-| `forge-split-view-panel-resize-end`   | Emits when the resize handle is released.
+| `forge-split-view-panel-will-resize`  | Emits before the split view panel begins to resize, allowing the action to be cancelled. The `event.detail` property is of type `ISplitViewPanelWillResizeEvent`.
+| `forge-split-view-panel-resize-start` | Emits when a resize begins.
+| `forge-split-view-panel-resize-end`   | Emits when a resize completes.
 | `forge-split-view-panel-resize`       | Emits when the split view panel is resized with the panel's size in pixels along the orientation axis.
 | `forge-split-view-panel-will-open`    | Emits before the split view panel opens and allows it to be cancelled. The `event.detail` property is of type `ISplitViewPanelOpenEvent`.
 | `forge-split-view-panel-will-close`   | Emits before the split view panel closes and allows it to be cancelled. The `event.detail` property is of type `ISplitViewPanelOpenEvent`.
@@ -286,10 +287,18 @@ Sets the size at which the panel auto closes if enabled.
 
 ## Types
 
+### ISplitViewPanelWillResizeEvent
+
+```ts
+export interface ISplitViewPanelWillResizeEvent {
+  inputDeviceType: 'pointer' | 'keyboard';
+}
+```
+
 ### ISplitViewPanelOpenEvent
 
 ```ts
-export interface ISplitViewOpenEventData {
+export interface ISplitViewPanelOpenEvent {
   auto: boolean;
   userInitiated: boolean;
 }

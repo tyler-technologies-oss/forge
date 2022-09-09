@@ -46,6 +46,7 @@ const selectors = {
 };
 
 const events = {
+  WILL_RESIZE: `${elementName}-will-resize`,
   RESIZE_START: `${elementName}-resize-start`,
   RESIZE_END: `${elementName}-resize-end`,
   RESIZE: `${elementName}-resize`,
@@ -80,6 +81,8 @@ export const SPLIT_VIEW_PANEL_CONSTANTS = {
 // 'none' panels don't have a handle, are not resizable, and fill the remaining space
 export type SplitViewPanelResizable = 'start' | 'end' | 'none';
 
+export type SplitViewInputDeviceType = 'pointer' | 'keyboard';
+
 export enum SplitViewAnimatingLayer {
   Under = 1,
   Active = 2,
@@ -105,6 +108,10 @@ export interface ISplitViewPanelState {
   isAtMax: boolean;
   min: number;
   max?: number;
+}
+
+export interface ISplitViewPanelWillResizeEvent {
+  inputDeviceType: SplitViewInputDeviceType;
 }
 
 export interface ISplitViewPanelOpenEvent {

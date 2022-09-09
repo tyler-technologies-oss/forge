@@ -2,7 +2,7 @@ import { ICustomElementFoundation, isDefined } from '@tylertech/forge-core';
 
 import { safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
-import { ISplitViewPanelOpenEvent, ISplitViewPanelState, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import { ISplitViewPanelOpenEvent, ISplitViewPanelState, SplitViewInputDeviceType, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
@@ -129,7 +129,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt The pointer event.
    */
   private _onPointerdown(evt: PointerEvent): void {
-    if (this._appliedDisabled) {
+    if (this._appliedDisabled || !this._allowResize('pointer')) {
       return;
     }
 
@@ -189,11 +189,11 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
 
     if (evt.key === 'Enter') {
       this._handleEnterKey(evt);
-    } else if (evt.key === 'Home') {
+    } else if (evt.key === 'Home' && this._allowResize('keyboard')) {
       this._handleHomeKey(evt);
-    } else if (evt.key === 'End') {
+    } else if (evt.key === 'End' && this._allowResize('keyboard')) {
       this._handleEndKey(evt);
-    } else if (eventIncludesArrowKey(evt)) {
+    } else if (eventIncludesArrowKey(evt) && this._allowResize('keyboard')) {
       this._adapter.setKeyupListener(this._keyupListener);
       this._handleArrowKey(evt);
     }
@@ -346,6 +346,14 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     if(pointerResize(this._adapter, evt, this._state)) {
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, this._state.currentSize);
     }
+  }
+
+  /**
+   * Emits a will resize event and allows it to be cancelled.
+   * @returns Whether the resize should proceed.
+   */
+  private _allowResize(inputDeviceType: SplitViewInputDeviceType): boolean {
+    return this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_RESIZE, { inputDeviceType }, true, true);
   }
 
   /**
@@ -684,9 +692,13 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param size The new content size in pixels.
    */
   public setContentSize(size: number): void {
-    if (this._resizable !== 'none') {
-      const newSize = clampSize(size, this._state);
-      this._adapter.setContentSize(newSize);
+    if (this._resizable === 'none') {
+      return;
+    }
+
+    const newSize = clampSize(size, this._state);
+    this._adapter.setContentSize(newSize);
+    if (this._isInitialized) {
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
     }
   }

@@ -23,7 +23,16 @@ export default {
       page: MDX
     },
     actions: {
-      handles: ['forge-split-view-panel-resize', 'forge-split-view-panel-resize-start', 'forge-split-view-panel-resize-end', 'forge-split-view-panel-did-open', 'forge-split-view-panel-did-close']
+      handles: [
+        'forge-split-view-panel-will-resize',
+        'forge-split-view-panel-resize',
+        'forge-split-view-panel-resize-start',
+        'forge-split-view-panel-resize-end',
+        'forge-split-view-panel-will-open',
+        'forge-split-view-panel-will-close',
+        'forge-split-view-panel-did-open',
+        'forge-split-view-panel-did-close'
+      ]
     },
     layout: 'fullscreen'
   },
