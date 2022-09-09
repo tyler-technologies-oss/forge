@@ -6,8 +6,6 @@ import { ISplitViewPanelComponent, SplitViewPanelComponent } from './split-view-
 
 export type InputDeviceType = 'pointer' | 'keyboard';
 
-export type SplitViewPanelBpundary = 'min' | 'max' | 'none';
-
 /**
  * Creates a default split view panel state object.
  * @returns A new state object.
