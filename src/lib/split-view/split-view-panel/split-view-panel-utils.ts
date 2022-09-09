@@ -1,4 +1,4 @@
-import { safeMin, scaleValue } from '../../core/utils/utils';
+import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
 import { ISplitViewPanelCursorConfig, ISplitViewPanelState } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
@@ -328,4 +328,19 @@ export function parseSize(value: number | string): { amount: number; unit: 'px' 
   const unit = (parts?.[2]?.toLowerCase() ?? '') as 'px' | '%' | '';
 
   return { amount, unit };
+}
+
+/**
+ * Gets a pixel size value from a pixel or percent value.
+ * @param value A `number` or `string` representing a size in pixels or percent.
+ * @param parentSize The pixel size of the parent container along the relevant axis.
+ * @returns A pixel amount.
+ */
+export function getPixelDimension(value: number | string, parentSize: number): number {
+  const parsedSize = parseSize(value);
+
+  if (parsedSize.unit === '%') {
+    return percentToPixels(parsedSize.amount, parentSize);
+  }
+  return parsedSize.amount;
 }

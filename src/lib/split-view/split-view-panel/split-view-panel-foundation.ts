@@ -1,18 +1,18 @@
 import { ICustomElementFoundation, isDefined } from '@tylertech/forge-core';
 
-import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
+import { safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
 import { ISplitViewPanelOpenEvent, ISplitViewPanelState, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
-import { clampSize, clearState, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, parseSize, pointerResize, setState } from './split-view-panel-utils';
+import { clampSize, clearState, getPixelDimension, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
 
 export interface ISplitViewPanelFoundation extends Partial<ISplitViewBase>, ICustomElementFoundation {
   resizable: SplitViewPanelResizable;
   size: number | string;
-  min: number;
-  max: number | undefined;
+  min: number | string;
+  max: number | string | undefined;
   accessibleLabel: string;
   open: boolean;
   getContentSize(): number;
@@ -23,7 +23,9 @@ export interface ISplitViewPanelFoundation extends Partial<ISplitViewBase>, ICus
 
 export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   // API
-  private _size: number | string = '200';
+  private _size: number | string = 200;
+  private _min: number | string = 0;
+  private _max: number | string | undefined;
   private _accessibleLabel = 'Split view panel';
   private _open = true;
   private _disabled?: boolean;
@@ -50,17 +52,17 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._state.resizable = value;
   }
 
-  private get _min(): number {
+  private get _pixelMin(): number {
     return this._state.min;
   }
-  private set _min(value: number) {
+  private set _pixelMin(value: number) {
     this._state.min = value;
   }
 
-  private get _max(): number | undefined {
+  private get _pixelMax(): number | undefined {
     return this._state.max;
   }
-  private set _max(value: number | undefined) {
+  private set _pixelMax(value: number | undefined) {
     this._state.max = value;
   }
 
@@ -454,30 +456,26 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   private _applySize(): void {
-    const parsedSize = parseSize(this._size);
-    let pixelSize = parsedSize.amount;
-    if (parsedSize.unit === '%') {
-      const parentSize = this._adapter.getParentSize(this._orientation);
-      pixelSize = percentToPixels(parsedSize.amount, parentSize);
-    }
+    const parentSize = this._adapter.getParentSize(this._orientation);
+    const pixelSize = getPixelDimension(this._size, parentSize);
 
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.SIZE, this._size.toString());
     this._adapter.setContentSize(pixelSize);
     // Wait for the DOM to render to get available space
     window.requestAnimationFrame(() => {
       const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._resizable);
-      const maxSize = safeMin(this._max, availableSpace);
-      const newValue = scaleValue(pixelSize, this._min, maxSize);
+      const maxSize = safeMin(this._pixelMax, availableSpace);
+      const newValue = scaleValue(pixelSize, this._pixelMin, maxSize);
       this._adapter.setValuenow(newValue);
       this._adapter.updateParent({ cursor: true });
     });
   }
 
   /** Get/set min panel size. */
-  public get min(): number {
+  public get min(): number | string {
     return this._min;
   }
-  public set min(value: number) {
+  public set min(value: number | string) {
     if (this._min !== value) {
       this._min = value;
       this._applyMin();
@@ -487,23 +485,24 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _applyMin(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN, this._min.toString());
 
+    const parentSize = this._adapter.getParentSize(this._orientation);
+    this._pixelMin = getPixelDimension(this._min, parentSize);
+
     if (this._resizable === 'none') {
       return;
     }
 
     const size = this._adapter.getContentSize(this._orientation);
-    if (size < this._min) {
-      const newSize = clampSize(size, this._state);
-      this._adapter.setContentSize(newSize);
-      this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
+    if (size < this._pixelMin) {
+      this.setContentSize(size);
     }
   }
 
   /** Get/set max panel size. */
-  public get max(): number | undefined {
+  public get max(): number | string | undefined {
     return this._max;
   }
-  public set max(value: number | undefined) {
+  public set max(value: number | string | undefined) {
     if (this._max !== value) {
       this._max = value;
       this._applyMax();
@@ -513,15 +512,21 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _applyMax(): void {
     this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.MAX, this._max !== undefined, this._max?.toString());
 
-    if (this._resizable === 'none' || this._max === undefined) {
+    if (this._max === undefined) {
+      this._pixelMax = undefined;
+      return;
+    }
+
+    const parentSize = this._adapter.getParentSize(this._orientation);
+    this._pixelMax = getPixelDimension(this._max, parentSize);
+
+    if (this._resizable === 'none') {
       return;
     }
     
     const size = this._adapter.getContentSize(this._orientation);
-    if (size > this._max) {
-      const newSize = clampSize(size, this._state);
-      this._adapter.setContentSize(newSize);
-      this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, newSize);
+    if (size > this._pixelMax) {
+      this.setContentSize(size);
     }
   }
 
@@ -669,7 +674,9 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @returns The difference between the current and min size in pixels.
    */
   public getCollapsibleSize(): number {
-    return this._adapter.getContentSize(this._orientation) - this._min;
+    const parentSize = this._adapter.getParentSize(this._orientation);
+    const pixelMin = getPixelDimension(this._min, parentSize);
+    return this._adapter.getContentSize(this._orientation) - pixelMin;
   }
 
   /**
@@ -718,6 +725,15 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
       }
     }
 
+    // Size
+    if (config.size) {
+      const parentSize = this._adapter.getParentSize(this._orientation);
+      this._pixelMin = getPixelDimension(this._min, parentSize);
+      this._pixelMax = isDefined(this._max) ? getPixelDimension(this._max as number | string, parentSize) : undefined;
+      this.setContentSize(this._adapter.getContentSize(this._orientation));
+    }
+
+    // The following properties don't apply to non-resizable panels
     if (this._resizable === 'none') {
       return;
     }

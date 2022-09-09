@@ -44,7 +44,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
-    this.update({ accessibility: true, cursor: true });
+    this.update({ accessibility: true, cursor: true, size: true });
   }
 
   /**

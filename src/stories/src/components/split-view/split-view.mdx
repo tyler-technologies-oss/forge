@@ -106,10 +106,10 @@ affects behavior including in which direction the panel resizes, opens, and clos
 > The possible `resizable` values are:  
 > **`end`:** the handle appears after the content and the panel closes and opens to the left or top.  
 > **`start`:** the handle appears before the content and the panel closes and opens to the right or bottom.  
-> **`default`:** no handle appears and the panel cannot be resized or closed, it occupies the space not filled by resizable panels.  
+> **`none`:** no handle appears and the panel cannot be resized or closed, it occupies the space not filled by resizable panels.
 >  
-> If no panels in split view have resizable set the first panel is automatically set to `none` and
-> all other panels are set to `start`.
+> If no panels in split view have `resizable` set the first panel is automatically set to `none`
+> and all other panels are set to `start`.
 
 </PropertyDef>
 
@@ -123,15 +123,15 @@ Sets the initial panel size in pixels or percent. This can also be set to progra
 
 </PropertyDef>
 
-<PropertyDef name="min" type="number" defaultValue="0">
+<PropertyDef name="min" type="number | string" defaultValue="0">
 
-The minimum allowed size in pixels.
+The minimum allowed size in pixels or percent.
 
 </PropertyDef>
 
-<PropertyDef name="max" type="number | undefined" defaultValue="undefined">
+<PropertyDef name="max" type="number | string | undefined" defaultValue="undefined">
 
-The maximum allowed size in pixels.
+The maximum allowed size in pixels or percent.
 
 </PropertyDef>
 

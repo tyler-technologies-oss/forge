@@ -17,8 +17,8 @@ import styles from './split-view-panel.scss';
 export interface ISplitViewPanelComponent extends Partial<ISplitViewBase>, IBaseComponent {
   resizable: SplitViewPanelResizable;
   size: number | string;
-  min: number;
-  max: number | undefined;
+  min: number | string;
+  max: number | string | undefined;
   accessibleLabel: string;
   open: boolean;
   getContentSize(): number;
@@ -90,11 +90,11 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
         this.size = newValue;
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.MIN:
-        this.min = coerceNumber(newValue);
+        this.min = newValue;
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.MAX:
         if (newValue) {
-          this.max = coerceNumber(newValue);
+          this.max = newValue;
         } else {
           this.max = undefined;
         }
@@ -152,13 +152,13 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
    * The smallest size the panel can take along its axis of orientation.
    */
   @FoundationProperty()
-  public min: number;
+  public min: number | string;
 
   /**
    * The largest size the panel can take along its axis of orientation.
    */
   @FoundationProperty()
-  public max: number | undefined;
+  public max: number | string | undefined;
 
   /**
    * The ARIA label given to the resize handle.
