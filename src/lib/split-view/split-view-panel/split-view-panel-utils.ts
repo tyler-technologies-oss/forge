@@ -62,7 +62,7 @@ export function clearState(state: ISplitViewPanelState): ISplitViewPanelState {
  * @returns Whether a resize happened.
  */
 export function pointerResize(adapter: ISplitViewPanelAdapter, evt: PointerEvent, state: ISplitViewPanelState): boolean {
-  if (state.startPoint === undefined || state.startSize === undefined || state.resizable === undefined) {
+  if (state.startPoint === undefined || state.startSize === undefined) {
     return false;
   }
 

@@ -145,10 +145,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt The pointer event.
    */
   private _onPointerup(evt: PointerEvent): void {
-    if (this._appliedDisabled) {
-      return;
-    }
-
     evt.preventDefault();
 
     this._adapter.removePointermoveListener(this._pointermoveListener);
@@ -564,6 +560,11 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
   public set open(value: boolean) {
     if (this._open !== value) {
+      if (this._isInitialized) {
+        this._tryOpenOrClose(value, false, false);
+        return;
+      }
+
       this._open = value;
       const event: ISplitViewPanelOpenEvent | undefined = this._isInitialized ? {
         auto: false,

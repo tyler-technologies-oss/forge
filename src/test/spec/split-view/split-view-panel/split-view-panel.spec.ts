@@ -1,7 +1,7 @@
 import { IRippleComponent, RippleComponent } from '@tylertech/forge';
 import { removeElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
-import { defineSplitViewComponent, getCursor, ISplitViewComponent, ISplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '@tylertech/forge/split-view';
+import { clearState, defineSplitViewComponent, getCursor, getHandleIcon, getPixelDimension, getSplitViewPanelSibling, handleBoundariesDuringResize, initState, ISplitViewComponent, ISplitViewPanelAdapter, ISplitViewPanelComponent, ISplitViewPanelState, keyboardResize, parseSize, pointerResize, setState, SplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '@tylertech/forge/split-view';
 
 interface ITestContext {
   context: ITestSplitViewPanelContext;
@@ -11,6 +11,7 @@ interface ITestSplitViewPanelContext {
   component: ISplitViewPanelComponent;
   panels: ISplitViewPanelComponent[];
   parent: ISplitViewComponent;
+  adapter: ISplitViewPanelAdapter;
   getPart(part: string): HTMLElement | null;
   keyEvent(type: string, key: string, shiftKey?: boolean): void;
   pointerEvent(type: string, clientX: number, clientY: number, onDocument?: boolean, buttons?: number): void;
@@ -30,6 +31,58 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   it('should instantiate component instance', function(this: ITestContext) {
     this.context = setupTestContext(true);
     expect(this.context.component.isConnected).toBeTrue();
+  });
+
+  describe('properties', function(this: ITestContext) {
+    it('should not be resizable by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.resizable).toBe('none');
+    });
+    
+    it('should not be 200 pixels by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.size).toBe(200);
+    });
+    
+    it('should have min set to 0 by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.min).toBe(0);
+    });
+    
+    it('should not set max by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.max).toBeUndefined();
+    });
+    
+    it('should have an accessible label by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.accessibleLabel).toBe('Split view panel');
+    });
+    
+    it('should be open by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.open).toBeTrue();
+    });
+    
+    it('should not set disabled by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.disabled).toBeUndefined();
+    });
+    
+    it('should not set disable close by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.disableClose).toBeUndefined();
+    });
+    
+    it('should not set auto close by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.autoClose).toBeUndefined();
+    });
+    
+    it('should not set auto close threshold by default', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.autoCloseThreshold).toBeUndefined();
+    });
   });
 
   describe('attributes', function(this: ITestContext) {
@@ -477,12 +530,12 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should do nothing on pointer move is disabled', function(this: ITestContext) {
+    it('should do nothing on pointer move if disabled', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
-      this.context.component.disabled = true;
       const startSize = this.context.component.getContentSize();
       this.context.pointerEvent('pointerdown', 200, 0);
+      this.context.component.disabled = true;
       this.context.pointerEvent('pointermove', 210, 0, true, 1);
       expect(this.context.component.getContentSize()).toBe(startSize);
     });
@@ -636,6 +689,28 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   });
 
   describe('events', function(this: ITestContext) {
+    it('should emit will resize event before resizing', function(this: ITestContext) {
+      this.context = setupTestContext(true, 1);
+      this.context.component.resizable = 'end';
+      this.context.component.size = 200;
+      const spy = jasmine.createSpy('will resize');
+      this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_RESIZE, spy);
+      this.context.keyEvent('keydown', 'ArrowRight');
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should will resize event to be cancelled', function(this: ITestContext) {
+      this.context = setupTestContext(true, 1);
+      const size = 200;
+      this.context.component.resizable = 'end';
+      this.context.component.size = size;
+      this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_RESIZE, evt => {
+        evt.preventDefault();
+      });
+      this.context.keyEvent('keydown', 'ArrowRight');
+      expect(this.context.component.getContentSize()).toBe(size);
+    });
+
     it('should emit resize start event on arrow key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
@@ -696,6 +771,48 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       const delta = 10;
       this.context.pointerEvent('pointermove', delta, 0, true, 1);
       expect(spy).toHaveBeenCalledOnceWith(jasmine.objectContaining({detail: startSize + delta}));
+    });
+
+    it('should emit will close event before closing', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.resizable = 'end';
+      const spy = jasmine.createSpy('will close');
+      this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_CLOSE, spy);
+      this.context.component.open = false;
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should allow will close event to be cancelled', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.resizable = 'end';
+      this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_CLOSE, evt => {
+        evt.preventDefault();
+      });
+      this.context.component.open = false;
+      expect(this.context.component.open).toBeTrue();
+    });
+
+    it('should emit will open event before opening', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.resizable = 'end';
+      this.context.component.open = false;
+      this.context.append();
+      const spy = jasmine.createSpy('will open');
+      this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_OPEN, spy);
+      this.context.component.open = true;
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should allow will open event to be cancelled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.resizable = 'end';
+      this.context.component.open = false;
+      this.context.append();
+      this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.WILL_OPEN, evt => {
+        evt.preventDefault();
+      });
+      this.context.component.open = true;
+      expect(this.context.component.open).toBeFalse();
     });
 
     it('should emit did close event after the close animation completes', async function(this: ITestContext) {
@@ -813,9 +930,300 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
     });
   });
 
-  // describe('utils', function(this: ITestContext) {
+  describe('utils', function(this: ITestContext) {
+    describe('state', function(this: ITestContext) {
+      it('should init state', function(this: ITestContext) {
+        this.context = setupTestContext();
+        const state = initState();
+        const expected: ISplitViewPanelState = {
+          orientation: 'horizontal',
+          resizable: 'none',
+          arrowKeyHeld: false,
+          keyboardDelta: 0,
+          isAtMin: false,
+          isAtMax: false,
+          min: 0
+        };
+        expect(state).toEqual(expected);
+      });
 
-  // });
+      it('should set state', function(this: ITestContext) {
+        this.context = setupTestContext(true, 1);
+        let state = initState();
+        this.context.component.resizable = 'end';
+        state.resizable = 'end';
+        this.context.component.parentElement?.style.setProperty('width', '400px');
+        state = setState(this.context.adapter, state);
+
+        const currentSize = this.context.component.getContentSize();
+        const expected: ISplitViewPanelState = {
+          orientation: 'horizontal',
+          resizable: 'end',
+          currentSize,
+          startSize: currentSize,
+          availableSpace: this.context.adapter.getAvailableSpace('horizontal', 'end'),
+          siblingSize: this.context.adapter.getSiblingContentSize(),
+          arrowKeyHeld: false,
+          keyboardDelta: 0,
+          isAtMin: false,
+          isAtMax: false,
+          min: 0
+        };
+        expect(state).toEqual(expected);
+      });
+
+      it('should clear state', function(this: ITestContext) {
+        this.context = setupTestContext();
+        let state = initState();
+        state.resizable = 'end';
+        state.arrowKeyHeld = true;
+        state.keyboardDelta = 1;
+        state.isAtMin = true;
+        state.isAtMax = true;
+        state = clearState(state);
+        const expected: ISplitViewPanelState = {
+          orientation: 'horizontal',
+          resizable: 'end',
+          arrowKeyHeld: false,
+          keyboardDelta: 0,
+          isAtMin: false,
+          isAtMax: false,
+          min: 0
+        };
+        expect(state).toEqual(expected);
+      });
+    });
+
+    describe('resize', function(this: ITestContext) {
+      it('should not resize when start point or start size is undefined', function(this: ITestContext) {
+        this.context = setupTestContext();
+        const pointerEvt = new PointerEvent('pointermove');
+        let state = initState();
+        expect(pointerResize(this.context.adapter, pointerEvt, state)).toBeFalse();
+        expect(keyboardResize(this.context.adapter, 0, state)).toBeFalse();
+      });
+
+      describe('handle boundaries during resize', function(this: ITestContext) {
+        it('should return false if current size is missing', function(this: ITestContext) {
+          this.context = setupTestContext();
+          const state = initState();
+          expect(handleBoundariesDuringResize(this.context.adapter, state)).toBeFalse();
+        });
+
+        it('should return false and set isAtMin to false if isAtMin is true and the panel is larger than min', function(this: ITestContext) {
+          this.context = setupTestContext();
+          const state = initState();
+          state.currentSize = 200;
+          state.min = 150;
+          state.isAtMin = true;
+          expect(handleBoundariesDuringResize(this.context.adapter, state)).toBeFalse();
+          expect(state.isAtMin).toBeFalse();
+        });
+
+        it('should return false and set isAtMax to false if isAtMax is true and the panel is smaller than max', function(this: ITestContext) {
+          this.context = setupTestContext();
+          const state = initState();
+          state.currentSize = 200;
+          state.max = 250;
+          state.isAtMax = true;
+          expect(handleBoundariesDuringResize(this.context.adapter, state)).toBeFalse();
+          expect(state.isAtMax).toBeFalse();
+        });
+      });
+    });
+
+    describe('cursor', function(this: ITestContext) {
+      describe('horizontal', function(this: ITestContext) {
+        it('should return col-resize cursor when not at min or max', function(this: ITestContext) {
+          this.context = setupTestContext();
+          expect(getCursor('horizontal', {resizable: 'end', boundary: 'none'})).toBe('col-resize');
+          expect(getCursor('horizontal', {resizable: 'start', boundary: 'none'})).toBe('col-resize');
+        });
+
+        it('should return correct cursor when at min', function(this: ITestContext) {
+          this.context = setupTestContext();
+          expect(getCursor('horizontal', {resizable: 'end', boundary: 'min'})).toBe('e-resize');
+          expect(getCursor('horizontal', {resizable: 'start', boundary: 'min'})).toBe('w-resize');
+        });
+
+        it('should return correct cursor when at max', function(this: ITestContext) {
+          this.context = setupTestContext();
+          expect(getCursor('horizontal', {resizable: 'end', boundary: 'max'})).toBe('w-resize');
+          expect(getCursor('horizontal', {resizable: 'start', boundary: 'max'})).toBe('e-resize');
+        });
+      });
+
+      describe('vertical', function(this: ITestContext) {
+        it('should return row-resize cursor when not at min or max', function(this: ITestContext) {
+          this.context = setupTestContext();
+          expect(getCursor('vertical', {resizable: 'end', boundary: 'none'})).toBe('row-resize');
+          expect(getCursor('vertical', {resizable: 'start', boundary: 'none'})).toBe('row-resize');
+        });
+
+        it('should return correct cursor when at min', function(this: ITestContext) {
+          this.context = setupTestContext();
+          expect(getCursor('vertical', {resizable: 'end', boundary: 'min'})).toBe('s-resize');
+          expect(getCursor('vertical', {resizable: 'start', boundary: 'min'})).toBe('n-resize');
+        });
+
+        it('should return correct cursor when at max', function(this: ITestContext) {
+          this.context = setupTestContext();
+          expect(getCursor('vertical', {resizable: 'end', boundary: 'max'})).toBe('n-resize');
+          expect(getCursor('vertical', {resizable: 'start', boundary: 'max'})).toBe('s-resize');
+        });
+      });
+    });
+
+    it('should get handle icon', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(getHandleIcon('horizontal')).toBe('drag_vertical_variant');
+      expect(getHandleIcon('vertical')).toBe('drag_handle');
+    });
+
+    describe('parse size', function(this: ITestContext) {
+      it('should parse a number value', function(this: ITestContext) {
+        this.context = setupTestContext();
+        expect(parseSize(200)).toEqual({amount: 200, unit: 'px'});
+      });
+  
+      it('should parse a unitless string', function(this: ITestContext) {
+        this.context = setupTestContext();
+        expect(parseSize('200')).toEqual({amount: 200, unit: 'px'});
+        expect(parseSize('200.5')).toEqual({amount: 200.5, unit: 'px'});
+      });
+  
+      it('should parse a pixel string', function(this: ITestContext) {
+        this.context = setupTestContext();
+        expect(parseSize('200px')).toEqual({amount: 200, unit: 'px'});
+        expect(parseSize('200PX')).toEqual({amount: 200, unit: 'px'});
+        expect(parseSize('200 px')).toEqual({amount: 200, unit: 'px'});
+        expect(parseSize('200.5px')).toEqual({amount: 200.5, unit: 'px'});
+      });
+  
+      it('should parse a percentage string', function(this: ITestContext) {
+        this.context = setupTestContext();
+        expect(parseSize('200%')).toEqual({amount: 200, unit: '%'});
+        expect(parseSize('200 %')).toEqual({amount: 200, unit: '%'});
+        expect(parseSize('200.5%')).toEqual({amount: 200.5, unit: '%'});
+      });
+  
+      it('should return an amount of -1 if the value is not a number', function(this: ITestContext) {
+        this.context = setupTestContext();
+        expect(parseSize('value').amount).toBe(-1);
+        expect(parseSize('valuepx').amount).toBe(-1);
+        expect(parseSize('value%').amount).toBe(-1);
+      });
+  
+      it('should return an empty string unit if the unit is invalid', function(this: ITestContext) {
+        this.context = setupTestContext();
+        expect(parseSize('value').unit).toBe('');
+        expect(parseSize('valuepx').unit).toBe('');
+        expect(parseSize('value%').unit).toBe('');
+      });
+    });
+
+    it('should get pixel dimension', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(getPixelDimension(200, 0)).toBe(200);
+      expect(getPixelDimension('200', 0)).toBe(200);
+      expect(getPixelDimension('200px', 0)).toBe(200);
+      expect(getPixelDimension('50%', 100)).toBe(50);
+    });
+
+    describe('get panel sibling', function(this: ITestContext) {
+      it('should return the next panel sibling when resizable is end', function(this: ITestContext) {
+        this.context = setupTestContext(false, 1);
+        this.context.component.resizable = 'end';
+        const sibling = getSplitViewPanelSibling(this.context.component);
+        expect(sibling).toBe(this.context.panels[1] as SplitViewPanelComponent);
+      });
+  
+      it('should return the previous panel sibling when resizable is start', function(this: ITestContext) {
+        this.context = setupTestContext(false, 1, 1);
+        this.context.component.resizable = 'start';
+        const sibling = getSplitViewPanelSibling(this.context.component);
+        expect(sibling).toBe(this.context.panels[0] as SplitViewPanelComponent);
+      });
+  
+      it('should return undefined when resizable is none', function(this: ITestContext) {
+        this.context = setupTestContext(false);
+        this.context.component.resizable = 'none';
+        const sibling = getSplitViewPanelSibling(this.context.component);
+        expect(sibling).toBeUndefined();
+      });
+  
+      it('should skip closed panels', function(this: ITestContext) {
+        this.context = setupTestContext(false, 2);
+        this.context.component.resizable = 'end';
+        this.context.panels[1].open = false;
+        const sibling = getSplitViewPanelSibling(this.context.component);
+        expect(sibling).toBe(this.context.panels[2] as SplitViewPanelComponent);
+      });
+  
+      it('should skip non-panel siblings', function(this: ITestContext) {
+        this.context = setupTestContext(false);
+        this.context.component.resizable = 'end';
+        this.context.component.parentElement?.appendChild(document.createElement('div'));
+        const sibling = getSplitViewPanelSibling(this.context.component);
+        expect(sibling).toBeUndefined();
+      });
+  
+      it('should return undefined if no panel siblings', function(this: ITestContext) {
+        this.context = setupTestContext(false);
+        this.context.component.resizable = 'end';
+        const sibling = getSplitViewPanelSibling(this.context.component);
+        expect(sibling).toBeUndefined();
+      });
+    });
+  });
+
+  describe('parent properties', function(this: ITestContext) {
+    it('should apply parent disabled', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.resizable = 'end';
+      this.context.parent.disabled = true;
+      let rootHasDisabledClass = this.context.getPart('root')!.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED);
+      expect(rootHasDisabledClass).toBeTrue();
+      this.context.parent.disabled = false;
+      rootHasDisabledClass = this.context.getPart('root')!.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED);
+      expect(rootHasDisabledClass).toBeFalse();
+    });
+
+    it('should apply parent disable close', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.resizable = 'end';
+      this.context.parent.disableClose = true;
+      this.context.keyEvent('keydown', 'Enter');
+      expect(this.context.component.open).toBeTrue();
+      this.context.parent.disableClose = false;
+      this.context.keyEvent('keydown', 'Enter');
+      expect(this.context.component.open).toBeFalse();
+    });
+
+    it('should apply parent auto close', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.resizable = 'end';
+      this.context.component.size = 5;
+      this.context.keyEvent('keydown', 'ArrowLeft', true);
+      this.context.parent.autoClose = true;
+      expect(this.context.component.open).toBeFalse();
+      this.context.component.size = 5;
+      this.context.component.open = true;
+      this.context.parent.autoClose = false;
+      this.context.keyEvent('keydown', 'ArrowLeft', true);
+      expect(this.context.component.open).toBeTrue();
+    });
+
+    it('should apply parent auto close threshold', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.parent.autoCloseThreshold = 10;
+      this.context.component.resizable = 'end';
+      this.context.component.size = 15;
+      this.context.keyEvent('keydown', 'ArrowLeft', true);
+      this.context.parent.autoClose = true;
+      expect(this.context.component.open).toBeFalse();
+    });
+  });
 
   function setupTestContext(append = false, numberOfSiblings = 0, position = 0): ITestSplitViewPanelContext {
     const fixture = document.createElement('forge-split-view');
@@ -839,6 +1247,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       component,
       panels,
       parent: fixture,
+      adapter: component['_foundation']['_adapter'],
       getPart: (part: string): HTMLElement | null => component.shadowRoot!.querySelector(`[part=${part}]`),
       keyEvent: (type: string, key: string, shiftKey = false) => {
         const handle = component.shadowRoot!.querySelector('[part=handle]') as Element;
