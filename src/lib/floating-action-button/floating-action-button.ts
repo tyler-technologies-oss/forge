@@ -15,7 +15,11 @@ declare global {
   }
 }
 
-/** The custom element class behind the `<forge-fab>` element. */
+/**
+ * The custom element class behind the `<forge-fab>` element.
+ * 
+ * @tag forge-fab
+ */
 @CustomElement({
   name: FLOATING_ACTION_BUTTON_CONSTANTS.elementName
 })

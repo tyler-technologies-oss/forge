@@ -51,6 +51,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-calendar>` custom element.
+ * 
+ * @tag forge-calendar
+ */
 @CustomElement({
   name: CALENDAR_CONSTANTS.elementName,
   dependencies: [

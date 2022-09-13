@@ -23,6 +23,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-avatar>` element.
+ * 
+ * @tag forge-avatar
  */
 @CustomElement({
   name: AVATAR_CONSTANTS.elementName

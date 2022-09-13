@@ -32,6 +32,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-chip>` component.
+ * 
+ * @tag forge-chip
  */
 @CustomElement({
   name: CHIP_CONSTANTS.elementName,

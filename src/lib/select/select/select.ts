@@ -43,6 +43,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-select>` component.
+ * 
+ * @tag forge-select
  */
 @CustomElement({
   name: SELECT_CONSTANTS.elementName,

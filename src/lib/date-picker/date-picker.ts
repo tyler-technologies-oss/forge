@@ -28,7 +28,11 @@ declare global {
   }
 }
 
-/** The custom element class behind the `<forge-date-picker>` element. */
+/**
+ * The custom element class behind the `<forge-date-picker>` element.
+ * 
+ * @tag forge-date-picker
+ */
 @CustomElement({
   name: DATE_PICKER_CONSTANTS.elementName,
   dependencies: [

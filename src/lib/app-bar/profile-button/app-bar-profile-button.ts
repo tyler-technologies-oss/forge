@@ -29,6 +29,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-app-bar-profile-button>` custom element.
+ * 
+ * @tag forge-app-bar-profile-button
+ */
 @CustomElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
   dependencies: [

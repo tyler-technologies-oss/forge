@@ -20,6 +20,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-modal-drawer>` custom element.
+ * 
+ * @tag forge-modal-drawer
+ */
 @CustomElement({
   name: MODAL_DRAWER_CONSTANTS.elementName,
   dependencies: [BackdropComponent]

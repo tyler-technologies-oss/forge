@@ -15,6 +15,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-option>` element.
+ * 
+ * @tag forge-option
  */
 @CustomElement({
   name: OPTION_CONSTANTS.elementName

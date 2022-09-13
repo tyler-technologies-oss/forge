@@ -42,6 +42,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-menu>` custom element.
+ * 
+ * @tag forge-menu
+ */
 @CustomElement({
   name: MENU_CONSTANTS.elementName,
   dependencies: [

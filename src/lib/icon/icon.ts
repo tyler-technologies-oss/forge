@@ -24,6 +24,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-icon>` custom element.
+ * 
+ * @tag forge-icon
+ */
 @CustomElement({
   name: ICON_CONSTANTS.elementName
 })

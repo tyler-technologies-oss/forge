@@ -18,6 +18,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-ripple>` custom element.
+ * 
+ * @tag forge-ripple
+ */
 @CustomElement({
   name: RIPPLE_CONSTANTS.elementName
 })

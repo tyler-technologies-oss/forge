@@ -20,6 +20,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-radio>` element.
+ * 
+ * @tag forge-radio
  */
 @CustomElement({
   name: RADIO_CONSTANTS.elementName

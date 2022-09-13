@@ -27,6 +27,8 @@ declare global {
 
 /**
  * A web component that renders a backdrop covering its parent container with a semi-opaque element.
+ * 
+ * @tag forge-backdrop
  */
 @CustomElement({
   name: BACKDROP_CONSTANTS.elementName

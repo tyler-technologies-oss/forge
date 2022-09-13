@@ -13,6 +13,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-inline-message>` custom element.
+ * 
+ * @tag forge-inline-message
+ */
 @CustomElement({
   name: INLINE_MESSAGE_CONSTANTS.elementName
 })

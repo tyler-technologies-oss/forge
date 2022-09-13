@@ -29,6 +29,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-color-picker>` custom element.
+ * 
+ * @tag forge-color-picker
+ */
 @CustomElement({
   name: COLOR_PICKER_CONSTANTS.elementName,
   dependencies: [

@@ -16,7 +16,11 @@ declare global {
   }
 }
 
-/** The custom element class behind the `forge-card` component. */
+/**
+ * The custom element class behind the `<forge-card>` component.
+ * 
+ * @tag forge-card
+ */
 @CustomElement({
   name: CARD_CONSTANTS.elementName
 })
