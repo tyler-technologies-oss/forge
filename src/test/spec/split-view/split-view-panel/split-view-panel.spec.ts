@@ -48,15 +48,17 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
     });
 
     it('should set min', function(this: ITestContext) {
+      const min = '100';
       this.context = setupTestContext();
-      this.context.component.setAttribute('min', '100');
-      expect(this.context.component.min).toBe(100);
+      this.context.component.setAttribute('min', min);
+      expect(this.context.component.min).toBe(min);
     });
 
     it('should set max', function(this: ITestContext) {
+      const max = '400';
       this.context = setupTestContext();
-      this.context.component.setAttribute('max', '400');
-      expect(this.context.component.max).toBe(400);
+      this.context.component.setAttribute('max', max);
+      expect(this.context.component.max).toBe(max);
       this.context.component.removeAttribute('max');
       expect(this.context.component.max).toBeUndefined();
     });
@@ -78,18 +80,33 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.setAttribute('disabled', 'true');
       expect(this.context.component.disabled).toBeTrue();
+      this.context.component.removeAttribute('disabled');
+      expect(this.context.component.disabled).toBeUndefined();
     });
 
     it('should set disable close', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.setAttribute('disable-close', 'true');
       expect(this.context.component.disableClose).toBeTrue();
+      this.context.component.removeAttribute('disable-close');
+      expect(this.context.component.disableClose).toBeUndefined();
     });
 
     it('should set auto close', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.setAttribute('auto-close', 'true');
       expect(this.context.component.autoClose).toBeTrue();
+      this.context.component.removeAttribute('auto-close');
+      expect(this.context.component.autoClose).toBeUndefined();
+    });
+
+    it('should set auto close threshold', function(this: ITestContext) {
+      const autoCloseThreshold = 10;
+      this.context = setupTestContext();
+      this.context.component.setAttribute('auto-close-threshold', autoCloseThreshold.toString());
+      expect(this.context.component.autoCloseThreshold).toBe(autoCloseThreshold);
+      this.context.component.removeAttribute('auto-close-threshold');
+      expect(this.context.component.autoCloseThreshold).toBeUndefined();
     });
   });
 
@@ -118,7 +135,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
 
     it('should set orientation', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setOrientation('vertical')
+      this.context.component.update({orientation: 'vertical'})
       expect(this.context.getPart('root')!.getAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.ORIENTATION)).toBe('vertical');
     });
 
@@ -162,7 +179,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
       this.context.keyEvent('keydown', 'Home');
-      expect(this.context.component.getContentSize()).toBe(this.context.component.min);
+      expect(this.context.component.getContentSize()).toBe(this.context.component.min as number);
     });
 
     it('should maximize panel on end key down', function(this: ITestContext) {
@@ -642,6 +659,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.component.resizable = 'end';
       const spy = jasmine.createSpy('resize end');
       this.context.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE_END, spy);
+      this.context.keyEvent('keydown', 'ArrowRight');
       this.context.keyEvent('keyup', 'ArrowRight');
       expect(spy).toHaveBeenCalled();
     });
@@ -794,6 +812,10 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(spy).toHaveBeenCalledTimes(2);
     });
   });
+
+  // describe('utils', function(this: ITestContext) {
+
+  // });
 
   function setupTestContext(append = false, numberOfSiblings = 0, position = 0): ITestSplitViewPanelContext {
     const fixture = document.createElement('forge-split-view');

@@ -109,21 +109,21 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
         this.open = coerceBoolean(newValue);
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLED:
-        if (newValue) {
+        if (this.hasAttribute(name)) {
           this.disabled = coerceBoolean(newValue);
         } else {
           this.disabled = undefined;
         }
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE:
-        if (newValue) {
+        if (this.hasAttribute(name)) {
           this.disableClose = coerceBoolean(newValue);
         } else {
           this.disableClose = undefined;
         }
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE:
-        if (newValue) {
+        if (this.hasAttribute(name)) {
           this.autoClose = coerceBoolean(newValue);
         } else {
           this.autoClose = undefined;

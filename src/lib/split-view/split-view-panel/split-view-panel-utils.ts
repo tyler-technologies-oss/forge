@@ -66,6 +66,8 @@ export function pointerResize(adapter: ISplitViewPanelAdapter, evt: PointerEvent
     return false;
   }
 
+  const initialSize = state.currentSize;
+
   const evtPoint = state.orientation === 'horizontal' ? evt.clientX : evt.clientY;
   let delta = state.startPoint - evtPoint;
   if (state.resizable === 'start') {
@@ -81,7 +83,7 @@ export function pointerResize(adapter: ISplitViewPanelAdapter, evt: PointerEvent
   const siblingDelta = size - state.currentSize + delta;
   resizeSibling(adapter, siblingDelta, state);
 
-  return size !== state.currentSize;
+  return initialSize !== state.currentSize;
 }
 
 /**
@@ -96,6 +98,8 @@ export function keyboardResize(adapter: ISplitViewPanelAdapter, increment: numbe
     return false;
   }
 
+  const initialSize = state.currentSize;
+
   state.keyboardDelta += increment;
 
   const size = state.startSize + state.keyboardDelta;
@@ -107,7 +111,7 @@ export function keyboardResize(adapter: ISplitViewPanelAdapter, increment: numbe
   const siblingDelta = size - state.currentSize + state.keyboardDelta * -1;
   resizeSibling(adapter, siblingDelta, state);
 
-  return size !== state.currentSize;
+  return initialSize !== state.currentSize;
 }
 
 /**
@@ -241,7 +245,7 @@ export function handleBoundariesAfterResize(adapter: ISplitViewPanelAdapter, siz
    * @param state The panel's state object.
    */
 export function getValuenow(size: number, state: ISplitViewPanelState): number {
-  if (!state.availableSpace || !state.max) {
+  if (!state.availableSpace && !state.max) {
     return 100;
   }
 

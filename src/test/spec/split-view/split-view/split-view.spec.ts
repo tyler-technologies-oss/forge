@@ -48,6 +48,12 @@ describe('SplitViewComponent', function(this: ITestContext) {
   })
 
   describe('attributes', function(this: ITestContext) {
+    it('should set orientation', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute('orientation', 'vertical');
+      expect(this.context.component.orientation).toBe('vertical');
+    })
+
     it('should set disabled', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.setAttribute('disabled', 'true');
@@ -64,6 +70,13 @@ describe('SplitViewComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.setAttribute('auto-close', 'true');
       expect(this.context.component.autoClose).toBeTrue();
+    })
+
+    it('should set auto close threshold', function(this: ITestContext) {
+      const autoCloseThreshold = 10;
+      this.context = setupTestContext();
+      this.context.component.setAttribute('auto-close-threshold', autoCloseThreshold.toString());
+      expect(this.context.component.autoCloseThreshold).toBe(autoCloseThreshold);
     })
   });
 
@@ -109,24 +122,6 @@ describe('SplitViewComponent', function(this: ITestContext) {
       expect(this.context.panels![0]['_foundation']._orientation).toBe('vertical');
     });
 
-    it('should set disabled', function(this: ITestContext) {
-      this.context = setupTestContext(false, 1);
-      this.context.component.disabled = true;
-      expect(this.context.panels![0].disabled).toBeTrue();
-    });
-
-    it('should set disable close', function(this: ITestContext) {
-      this.context = setupTestContext(false, 1);
-      this.context.component.disableClose = true;
-      expect(this.context.panels![0].disableClose).toBeTrue();
-    });
-
-    it('should set auto close', function(this: ITestContext) {
-      this.context = setupTestContext(false, 1);
-      this.context.component.autoClose = true;
-      expect(this.context.panels![0].autoClose).toBeTrue();
-    });
-
     it('should layout when all have resizable set to none', async function(this: ITestContext) {
       this.context = setupTestContext(true, 3);
       await tick();
@@ -157,26 +152,8 @@ describe('SplitViewComponent', function(this: ITestContext) {
       this.context = setupTestContext(false, 2);
       this.context.panels![0].resizable = 'end';
       const spy = spyOn(this.context.panels![0], 'update');
-      // this.context.component.update(this.context.panels![1]);
       this.context.component.update({ accessibility: true });
       expect(spy).toHaveBeenCalled();
-    });
-
-    it('should not update target accessibility', function(this: ITestContext) {
-      this.context = setupTestContext(false, 2);
-      this.context.panels![0].resizable = 'end';
-      const spy = spyOn(this.context.panels![0], 'update');
-      this.context.component.update({ accessibility: true });
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should not update accessibility when resizable is none', function(this: ITestContext) {
-      this.context = setupTestContext(false, 2);
-      this.context.panels![0].resizable = 'none';
-      const spy = spyOn(this.context.panels![0], 'update');
-      // this.context.component.update(this.context.panels![1]);
-      this.context.component.update({ accessibility: true });
-      expect(spy).not.toHaveBeenCalled();
     });
 
     it('should update accessibility on resize', async function(this: ITestContext) {

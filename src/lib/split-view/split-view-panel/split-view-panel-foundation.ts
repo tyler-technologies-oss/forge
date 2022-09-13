@@ -457,7 +457,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     return this._size;
   }
   public set size(value: number | string) {
-    if (this._size !== value) {
+    if (this._size.toString() !== value.toString()) {
       this._size = value;
       this._applySize();
     }
@@ -484,7 +484,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     return this._min;
   }
   public set min(value: number | string) {
-    if (this._min !== value) {
+    if (this._min.toString() !== value.toString()) {
       this._min = value;
       this._applyMin();
     }
@@ -511,7 +511,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     return this._max;
   }
   public set max(value: number | string | undefined) {
-    if (this._max !== value) {
+    if (this._max?.toString() !== value?.toString()) {
       this._max = value;
       this._applyMax();
     }

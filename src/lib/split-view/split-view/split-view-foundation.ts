@@ -38,7 +38,6 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   }
 
   private _onSlotChange(evt: Event): void {
-    this._adapter.detectSlottedPanels();
     this._layoutSlottedPanels();
     this.update({ accessibility: true, cursor: true, orientation: this._orientation });
   }
