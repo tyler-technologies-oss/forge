@@ -14,7 +14,20 @@ import { SplitViewMultipleStackedCodeHtml } from './code/split-view-multiple-sta
 
 # Split view
 
-The split view component presents `<forge-split-view-panel>` elements side-by-side as resizable panels.
+The split view component presents `<forge-split-view-panel>` elements side-by-side as resizable
+panels.
+
+A split view configuration typically consists of one or more resizable panels as well as at least
+one non-resizable panel. Resizable panels are defined by the `resizable` attribute, which can be
+set to `'start'` or `'end'` to reflect which direction they expand into. Non-resizable panels are
+not interactive on their own, but automatically expand to fill in the space left by their sibling
+panels.
+
+The split view panel component consists of two basic parts: its content, and a handle to resize it.
+Each handle is linked to its content by accessibility attributes, providing an accessible label and
+size information for assistive technology. The handle's position in relation to the content is
+determined by the `resizable` value. When it's `'start'` the handle appears before the content, or
+after the content when it's `'end'`.
 
 </PageSection>
 
@@ -26,33 +39,63 @@ The split view component presents `<forge-split-view-panel>` elements side-by-si
 
 ### Default
 
+In its default configuration the split view component makes all but the first panel resizable. This
+is equivalent to setting `resizable` to `'start'` on the second panel.
+
 <LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewDefaultCodeHtml()}>
   <SplitViewDemo />
 </LiveDemo>
 
+> In this example the handle labels and communicates the size of panel 2.
+
 ### Leading panel
+
+If the first panel contains the primary resizable content, its `resizable` attribute can be set to
+`'end'`. When `resizable` is set to anything but `'none'` on any panel within the split view the
+configuration will not be automatically determined.
 
 <LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewLeadingCodeHtml()}>
   <LeadingDemo />
 </LiveDemo>
 
+> In this example the handle labels and communicates the size of panel 1.
+
 ### Vertical
+
+Vertical layouts are configured similarly to horizontally layouts. Just set `orientation` to
+`'horizontal'` on the split view component. With no resizable panels specified, the component sets
+the bottom panel to be resizable.
 
 <LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewVerticalCodeHtml()}>
   <SplitViewDemo orientation={'vertical'} />
 </LiveDemo>
 
+> In this example the handle labels and communicates the size of panel 2.
+
 ### Multiple panels split
+
+Any number of panels can be added to a single split view component. Leading and trailing panels are
+defined by setting `resizable` to `'end'` and `'start'` respectively.
 
 <LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewMultipleSplitCodeHtml()}>
   <MultipleSplitDemo />
 </LiveDemo>
 
+> In this example the first handle labels and communicates the size of panel 1 and the second
+> handle panel 3.
+
 ### Multiple panels stacked
+
+When multiple panels are added without `resizable` set, the first panel defaults to `'none'` and
+all others default to `'start'`. Resizing one panel into another adjusts the size of the
+neighboring panel.
 
 <LiveDemo layout="column" fullWidth padded="false" codeHtml={SplitViewMultipleStackedCodeHtml()}>
   <MultipleStackedDemo />
 </LiveDemo>
+
+> In this example the first handle labels and communicates the size of panel 2 and the second
+> handle panel 3.
 
 </PageSection>
 
@@ -115,7 +158,7 @@ affects behavior including in which direction the panel resizes, opens, and clos
 
 <PropertyDef name="size" type="number | string" defaultValue="200">
 
-Sets the initial panel size in pixels or percent. This can also be set to programmatically resize the panel.
+Sets the initial content size in pixels or percent. This can also be set to programmatically resize the panel.
 
 > **Important:** The `size` property does not update to reflect the current size of the panel.
 
@@ -280,6 +323,47 @@ Sets the size at which the panel auto closes if enabled.
 - Be sure to include a unique `accessibleLabel` property value for each panel that describes its content.
 - If the user can close a panel, provide an easy way for them to reopen it.
   - Set [`aria-controls`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-controls) and [`aria-expanded`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-expanded) on the element that controls the open state.
+
+### Example
+
+#### HTML
+
+```html
+<forge-button>
+  <button id="button" type="button" aria-controls="aside-panel" aria-expanded="true">Close aside</button>
+</forge-button>
+<forge-split-view>
+  <forge-split-view-panel>
+    <!-- Main content -->
+  </forge-split-view-panel>
+  <forge-split-view-panel id="aside-panel" accessible-label="Aside">
+    <aside>
+      <!-- Aside content -->
+    </aside>
+  </forge-split-view-panel>
+</forge-split-view>
+```
+
+#### TypeScript
+
+```ts
+const button = document.getElementById('button');
+const asidePanel = document.getElementById('aside-panel');
+
+button.addEventListener('click', () => {
+  asidePanel.open = !asidePanel.open;
+});
+
+asidePanel.addEventListener('split-view-panel-did-open', () => {
+  button.setAttribute('aria-expanded', 'true');
+  button.textContent = 'Close aside';
+});
+
+asidePanel.addEventListener('split-view-panel-did-close', () => {
+  button.setAttribute('aria-expanded', 'false');
+  button.textContent = 'Open aside';
+});
+```
 
 </PageSection>
 
