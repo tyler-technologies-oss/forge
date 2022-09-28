@@ -136,6 +136,21 @@ describe('PaginatorComponent', function(this: ITestContext) {
       this.context.nextPageButton.click();
     });
 
+    it('should not proceed to next page when event is cancelled', function(this: ITestContext, done: DoneFn) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
+        evt.preventDefault();
+        const eventDetail: IPaginatorChangeEvent = evt.detail;
+
+        expect(eventDetail.pageIndex).withContext('Expected page index to be incremented by 1').toBe(1);
+        expect(this.context.paginator.pageIndex).withContext('Expect page index within context paginator to not match pageIndex emitted').not.toBe(eventDetail.pageIndex);
+
+        done();
+      });
+      this.context.nextPageButton.click();
+    });
+
     it('should emit change event when changing page size', function(this: ITestContext) {
       this.context = setupTestContext();
       const callback = jasmine.createSpy('listener');
@@ -154,6 +169,22 @@ describe('PaginatorComponent', function(this: ITestContext) {
         expect(eventDetail.type).toBe(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, 'Expected correct previous page change type');
         expect(eventDetail.pageIndex).toBe(0, 'Expected page index to be decremented by 1');
         expect(eventDetail.pageSize).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected the default page size value');
+
+        done();
+      });
+      this.context.previousPageButton.click();
+    });
+
+    it('should not proceed to previous page when event is cancelled', function(this: ITestContext, done: DoneFn) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
+        evt.preventDefault();
+        const eventDetail: IPaginatorChangeEvent = evt.detail;
+
+        expect(eventDetail.pageIndex).withContext('Expected page index to be decremented by 1').toBe(0);
+        expect(this.context.paginator.pageIndex).withContext('Expect page index within context paginator to not match pageIndex emitted').not.toBe(eventDetail.pageIndex);
 
         done();
       });

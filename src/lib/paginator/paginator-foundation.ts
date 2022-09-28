@@ -281,9 +281,11 @@ export class PaginatorFoundation {
     if (!this._hasPreviousPage()) {
       return;
     }
-
-    this.pageIndex--;
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE);
+    
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, { pageIndex: this._pageIndex - 1 });
+    if(canPage){
+      this.pageIndex--;
+    }
   }
 
   /**
@@ -296,9 +298,10 @@ export class PaginatorFoundation {
     if (!this._hasNextPage()) {
       return;
     }
-
-    this.pageIndex++;
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE);
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: this._pageIndex + 1 });
+    if(canPage){
+      this.pageIndex++;
+    }
   }
 
   /**
@@ -327,14 +330,14 @@ export class PaginatorFoundation {
     this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE);
   }
 
-  private _emitChangeEvent(type: string): void {
+  private _emitChangeEvent(type: string, { pageSize = this._pageSize, pageIndex = this._pageIndex, offset = this._pageIndex + this._pageSize }: Partial<IPaginatorChangeEvent> = {}): boolean {
     const detail: IPaginatorChangeEvent = {
       type,
-      pageSize: this._pageSize,
-      pageIndex: this._pageIndex,
-      offset: this._pageIndex * this._pageSize
+      pageSize,
+      pageIndex,
+      offset
     };
-    this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail);
+    return this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail);
   }
 
   /**
