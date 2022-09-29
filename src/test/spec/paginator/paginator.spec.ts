@@ -158,6 +158,19 @@ describe('PaginatorComponent', function(this: ITestContext) {
       emitEvent(this.context.pageSizeSelect, BASE_SELECT_CONSTANTS.events.CHANGE, '5');
       expect(callback).toHaveBeenCalled();
     });
+    it('should not emit change event when changing page size', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const callback = jasmine.createSpy('listener', evt => {
+        console.log('###EVENT DATA###', JSON.stringify(evt.detail, undefined, 2));
+        evt.preventDefault();
+      }).and.callThrough();
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, callback);
+      emitEvent(this.context.pageSizeSelect, BASE_SELECT_CONSTANTS.events.CHANGE, '5');
+      expect(callback).toHaveBeenCalledTimes(1); // Ensures that the listener was only executed once
+      expect(callback).toHaveBeenCalledWith(jasmine.objectContaining({ detail: jasmine.objectContaining({ pageSize: 5 }) })); // Ensures the proper params were sent in the event
+      expect(this.context.paginator.pageSize).not.toBe(5);
+    });
+    
 
     it('should emit change event with proper parameters when clicking previous page button', function(this: ITestContext, done: DoneFn) {
       this.context = setupTestContext();
@@ -399,6 +412,22 @@ describe('PaginatorComponent', function(this: ITestContext) {
         this.context.firstPageButton.click();
       });
 
+      it('should not proceed to first page when event is cancelled', function(this: ITestContext, done: DoneFn) {
+        this.context = setupTestContext(true);
+        this.context.paginator.total = 100;
+        this.context.paginator.pageIndex = 1;
+        this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
+          evt.preventDefault();
+          const eventDetail: IPaginatorChangeEvent = evt.detail;
+
+          expect(eventDetail.pageIndex).toBe(0, 'Expected page index to be 0');
+          expect(this.context.paginator.pageIndex).not.toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected not the default page size value');
+  
+          done();
+        });
+        this.context.firstPageButton.click();
+      });
+
       it('should disable first  page button when disabled', function(this: ITestContext)  {
         this.context = setupTestContext(true);
         this.context.paginator.disabled = true;
@@ -462,21 +491,22 @@ describe('PaginatorComponent', function(this: ITestContext) {
         this.context.lastPageButton.click();
       });
 
-      it('should emit change event with proper parameters when clicking first page button', function(this: ITestContext, done: DoneFn) {
+      it('should not proceed to last page when event is cancelled', function(this: ITestContext, done: DoneFn) {
         this.context = setupTestContext(undefined, true);
         this.context.paginator.total = 100;
-        this.context.paginator.pageIndex = 1;
         this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
           const eventDetail: IPaginatorChangeEvent = evt.detail;
 
-          expect(eventDetail.type).toBe(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, 'Expected correct first page change type');
-          expect(eventDetail.pageIndex).toBe(0, 'Expected page index to be 0');
-          expect(eventDetail.pageSize).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected the default page size value');
+          const expectedPageIndex = Math.floor(this.context.paginator.total / this.context.paginator.pageSize) - 1;
+          expect(eventDetail.pageIndex).toBe(expectedPageIndex, `Expected page index to be ${expectedPageIndex}`);
+          expect(this.context.paginator.pageIndex).not.toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected not the default page size value');
+  
 
           done();
         });
-        this.context.firstPageButton.click();
+        this.context.lastPageButton.click();
       });
+
 
       it('should disable first and last page buttons when disabled',  function(this: ITestContext) {
         this.context = setupTestContext(undefined, true);

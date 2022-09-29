@@ -267,8 +267,10 @@ export class PaginatorFoundation {
       return;
     }
 
-    this.pageIndex = 0;
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE);
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: 0});
+    if(canPage){
+      this.pageIndex = 0;
+    }
   }
 
   /**
@@ -298,6 +300,7 @@ export class PaginatorFoundation {
     if (!this._hasNextPage()) {
       return;
     }
+
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: this._pageIndex + 1 });
     if(canPage){
       this.pageIndex++;
@@ -315,8 +318,11 @@ export class PaginatorFoundation {
       return;
     }
 
-    this.pageIndex = this._getMaxPages();
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE);
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE, { pageIndex: this._getMaxPages() });
+    
+    if(canPage){
+      this.pageIndex = this._getMaxPages();
+    }
   }
 
   /**
@@ -325,9 +331,15 @@ export class PaginatorFoundation {
    */
   private _onPageSizeChanged(evt: CustomEvent): void {
     evt.stopPropagation();
-    this.pageIndex = 0;
-    this.pageSize = Number((evt.target as ISelectComponent).value);
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE);
+
+    const canPage = this._emitChangeEvent(
+      PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize: Number(evt.detail) }
+    );
+
+    if(canPage){
+      this.pageIndex = 0;
+      this.pageSize = Number(evt.detail);
+    }
   }
 
   private _emitChangeEvent(type: string, { pageSize = this._pageSize, pageIndex = this._pageIndex, offset = this._pageIndex + this._pageSize }: Partial<IPaginatorChangeEvent> = {}): boolean {
@@ -337,7 +349,7 @@ export class PaginatorFoundation {
       pageIndex,
       offset
     };
-    return this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail);
+    return this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail, true, true);
   }
 
   /**
