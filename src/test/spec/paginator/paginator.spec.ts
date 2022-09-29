@@ -161,7 +161,6 @@ describe('PaginatorComponent', function(this: ITestContext) {
     it('should not emit change event when changing page size', function(this: ITestContext) {
       this.context = setupTestContext();
       const callback = jasmine.createSpy('listener', evt => {
-        console.log('###EVENT DATA###', JSON.stringify(evt.detail, undefined, 2));
         evt.preventDefault();
       }).and.callThrough();
       this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, callback);
