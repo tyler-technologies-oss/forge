@@ -267,8 +267,8 @@ export class PaginatorFoundation {
       return;
     }
 
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: 0});
-    if(canPage){
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: 0 });
+    if (canPage) {
       this.pageIndex = 0;
     }
   }
@@ -285,7 +285,7 @@ export class PaginatorFoundation {
     }
     
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, { pageIndex: this._pageIndex - 1 });
-    if(canPage){
+    if (canPage) {
       this.pageIndex--;
     }
   }
@@ -302,7 +302,7 @@ export class PaginatorFoundation {
     }
 
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: this._pageIndex + 1 });
-    if(canPage){
+    if (canPage) {
       this.pageIndex++;
     }
   }
@@ -319,8 +319,7 @@ export class PaginatorFoundation {
     }
 
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE, { pageIndex: this._getMaxPages() });
-    
-    if(canPage){
+    if (canPage) {
       this.pageIndex = this._getMaxPages();
     }
   }
@@ -332,23 +331,18 @@ export class PaginatorFoundation {
   private _onPageSizeChanged(evt: CustomEvent): void {
     evt.stopPropagation();
 
-    const canPage = this._emitChangeEvent(
-      PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize: Number(evt.detail) }
-    );
-
-    if(canPage){
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize: Number(evt.detail) });
+    if (canPage) {
       this.pageIndex = 0;
       this.pageSize = Number(evt.detail);
+    } else {
+      evt.preventDefault();
     }
   }
 
-  private _emitChangeEvent(type: string, { pageSize = this._pageSize, pageIndex = this._pageIndex, offset = this._pageIndex + this._pageSize }: Partial<IPaginatorChangeEvent> = {}): boolean {
-    const detail: IPaginatorChangeEvent = {
-      type,
-      pageSize,
-      pageIndex,
-      offset
-    };
+  private _emitChangeEvent(type: string, { pageSize = this._pageSize, pageIndex = this._pageIndex } = {}): boolean {
+    const offset = pageIndex * pageSize;
+    const detail: IPaginatorChangeEvent = { type, pageSize, pageIndex, offset };
     return this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail, true, true);
   }
 
