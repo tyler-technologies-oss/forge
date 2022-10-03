@@ -124,6 +124,7 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
 
   it('should emit after close event when close animation completes', async function(this: ITestContext) {
     this.context = setupTestContext(true);
+    this.context.component.setAttribute(BASE_DRAWER_CONSTANTS.attributes.OPEN, '');
 
     const afterCloseSpy = jasmine.createSpy('after close');
     this.context.component.addEventListener(BASE_DRAWER_CONSTANTS.events.AFTER_CLOSE, afterCloseSpy);
