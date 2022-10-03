@@ -30,6 +30,7 @@ export interface ITimePickerFoundation extends ICustomElementFoundation {
   step: number;
   allowInput: boolean;
   showNow: boolean;
+  showNowOnly: boolean;
   customOptions: ITimePickerOption[];
   validationCallback: TimePickerValidationCallback;
   parseCallback: TimePickerParseCallback;
@@ -59,6 +60,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   private _allowInvalidTime = false;
   private _popupTarget: string;
   private _showNow = false;
+  private _showNowOnly = false;
   private _customOptions: ITimePickerOption[] = [];
   private _validationCallback: TimePickerValidationCallback;
   private _parseCallback: TimePickerParseCallback;
@@ -639,6 +641,12 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       leadingOptions.push({ label: 'Now', value });
     }
 
+    // Check if we need to show only a "Now" option
+    if (this._showNowOnly) {
+      const value: ITimePickerOptionValue = { time: null, metadata: 'now' };
+      leadingOptions.push({ label: 'Now Only', value });
+    }
+
     // Check for any custom provided options to prepend
     if (Array.isArray(this._customOptions) && this._customOptions.length) {
       const options = this._customOptions.map(o => {
@@ -882,6 +890,15 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   public set showNow(value: boolean) {
     if (this._showNow !== value) {
       this._showNow = value;
+    }
+  }
+
+  public get showNowOnly(): boolean {
+    return this._showNowOnly;
+  }
+  public set showNowOnly(value: boolean) {
+    if (this._showNowOnly !== value) {
+      this._showNowOnly = value;
     }
   }
 

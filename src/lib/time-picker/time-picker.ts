@@ -37,6 +37,7 @@ export interface ITimePickerComponent extends IBaseComponent {
   step: number;
   allowInput: boolean;
   showNow: boolean;
+  showNowOnly: boolean;
   customOptions: ITimePickerOption[];
   validationCallback: TimePickerValidationCallback;
   parseCallback: TimePickerParseCallback;
@@ -95,6 +96,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
       TIME_PICKER_CONSTANTS.attributes.STEP,
       TIME_PICKER_CONSTANTS.attributes.ALLOW_INPUT,
       TIME_PICKER_CONSTANTS.attributes.SHOW_NOW,
+      TIME_PICKER_CONSTANTS.attributes.SHOW_NOW_ONLY,
       TIME_PICKER_CONSTANTS.attributes.DISABLED,
       TIME_PICKER_CONSTANTS.attributes.POPUP_CLASSES,
       TIME_PICKER_CONSTANTS.attributes.ALLOW_DROPDOWN
@@ -147,6 +149,9 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
         break;
       case TIME_PICKER_CONSTANTS.attributes.SHOW_NOW:
         this.showNow = coerceBoolean(newValue);
+        break;
+      case TIME_PICKER_CONSTANTS.attributes.SHOW_NOW_ONLY:
+        this.showNowOnly = coerceBoolean(newValue);
         break;
       case TIME_PICKER_CONSTANTS.attributes.MIN:
         this.min = newValue;
@@ -216,6 +221,9 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
 
   @FoundationProperty()
   public showNow: boolean;
+
+  @FoundationProperty()
+  public showNowOnly: boolean;
 
   @FoundationProperty()
   public customOptions: ITimePickerOption[];
