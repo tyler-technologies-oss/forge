@@ -25,7 +25,7 @@ export const Default: Story<ITimePickerProps> = ({
   allowInput = true,
   allowDropdown = true,
   showNow = false,
-  showNowOnly = false,
+  showHourOptions = true,
   disabled = false
 }) => (
   <ForgeTimePicker 
@@ -39,7 +39,7 @@ export const Default: Story<ITimePickerProps> = ({
     allowInput={allowInput}
     allowDropdown={allowDropdown}
     showNow={showNow}
-    showNowOnly={showNowOnly}
+    showHourOptions={showHourOptions}
     disabled={disabled}>
     <ForgeTextField>
       <input autoComplete="off" type="text" id="time-picker" placeholder={`hh:mm${allowSeconds ? ':ss' : ''}${use24HourTime ? '' : ' AM'}`} />

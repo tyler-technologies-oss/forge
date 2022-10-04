@@ -7,7 +7,7 @@
   var maskedCheckbox = example.querySelector('#time-picker-masked');
   var showMaskFormatCheckbox = example.querySelector('#time-picker-show-mask-format');
   var showNowCheckbox = example.querySelector('#time-picker-show-now');
-  var showNowOnlyCheckbox = example.querySelector('#time-picker-show-now-only');
+  var showHourOptionsCheckbox = example.querySelector('#time-picker-show-now-only');
   var useCustomOptionsCheckbox = example.querySelector('#time-picker-custom-options');
   var useCustomCallbacksCheckbox = example.querySelector('#time-picker-custom-callbacks');
   var allowDropdownCheckbox = example.querySelector('#time-picker-allow-dropdown');
@@ -71,8 +71,8 @@
   showNowCheckbox.addEventListener('change', function() {
     timePicker.showNow = showNowCheckbox.checked;
   });
-  showNowOnlyCheckbox.addEventListener('change', function() {
-    timePicker.showNowOnly = showNowOnlyCheckbox.checked;
+  showHourOptionsCheckbox.addEventListener('change', function() {
+    timePicker.showHourOptions = showHourOptionsCheckbox.checked;
   });
   useCustomOptionsCheckbox.addEventListener('change', function() {
     timePicker.customOptions = useCustomOptionsCheckbox.checked ? CUSTOM_OPTIONS : [];

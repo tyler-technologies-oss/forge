@@ -459,10 +459,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.showNow).toBeTrue();
   });
 
-  it('should set showNowOnly via attribute', function(this: ITestContext) {
+  it('should set showHourOptions via attribute', function(this: ITestContext) {
     this.context = _createTimePickerContext();
-    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_NOW_ONLY, '');
-    expect(this.context.component.showNowOnly).toBeTrue();
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_HOUR_OPTIONS, 'false');
+    expect(this.context.component.showHourOptions).toBeFalse();
   });
 
   it('should set min via attribute', function(this: ITestContext) {
