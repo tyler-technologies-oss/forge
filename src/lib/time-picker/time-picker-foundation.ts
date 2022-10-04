@@ -642,9 +642,20 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     }
 
     // Check if we need to show the Hours options
-    if (this._showHourOptions) {
-      const value: ITimePickerOptionValue = { time: null, metadata: 'now' };
-      leadingOptions.push({ label: 'Hours Options', value });
+    if (!this._showHourOptions) {
+      // while loop
+      // while(times.length > 0) {
+      //   times.pop();
+      // }
+
+      // splice time
+      times.splice(0, times.length);
+
+      // override length
+      // times.length = 0;
+
+      // Requires times to not be a constant
+      // times = [];
     }
 
     // Check for any custom provided options to prepend
