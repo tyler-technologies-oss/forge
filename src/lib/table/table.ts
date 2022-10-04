@@ -1,6 +1,7 @@
 import { coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconArrowDownward } from '@tylertech/tyler-icons/standard';
 import { ExpansionPanelComponent } from '../expansion-panel';
+import { CheckboxComponent } from '../checkbox';
 import { TableAdapter } from './table-adapter';
 import { TABLE_CONSTANTS } from './table-constants';
 import { TableFoundation } from './table-foundation';
@@ -90,7 +91,8 @@ declare global {
   name: TABLE_CONSTANTS.elementName,
   dependencies: [
     ExpansionPanelComponent,
-    IconComponent
+    IconComponent,
+    CheckboxComponent
   ]
 })
 export class TableComponent extends BaseComponent implements ITableComponent {
