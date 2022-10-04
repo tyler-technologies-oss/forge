@@ -7,7 +7,7 @@
   var maskedCheckbox = example.querySelector('#time-picker-masked');
   var showMaskFormatCheckbox = example.querySelector('#time-picker-show-mask-format');
   var showNowCheckbox = example.querySelector('#time-picker-show-now');
-  var showHourOptionsCheckbox = example.querySelector('#time-picker-show-now-only');
+  var showHourOptionsCheckbox = example.querySelector('#time-picker-show-hour-option');
   var useCustomOptionsCheckbox = example.querySelector('#time-picker-custom-options');
   var useCustomCallbacksCheckbox = example.querySelector('#time-picker-custom-callbacks');
   var allowDropdownCheckbox = example.querySelector('#time-picker-allow-dropdown');
