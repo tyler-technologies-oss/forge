@@ -641,23 +641,6 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       leadingOptions.push({ label: 'Now', value });
     }
 
-    // Check if we need to show the Hours options
-    if (!this._showHourOptions) {
-      // while loop
-      // while(times.length > 0) {
-      //   times.pop();
-      // }
-
-      // splice time
-      times.splice(0, times.length);
-
-      // override length
-      // times.length = 0;
-
-      // Requires times to not be a constant
-      // times = [];
-    }
-
     // Check for any custom provided options to prepend
     if (Array.isArray(this._customOptions) && this._customOptions.length) {
       const options = this._customOptions.map(o => {
@@ -671,6 +654,12 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     if (leadingOptions.length) {
       times.splice(0, 0, { label: '', value: null, divider: true });
       leadingOptions.forEach((o, index) => times.splice(index, 0, o));
+    }
+
+    // Check if we need to show the Hours options
+    if (!this._showHourOptions) {
+      // empty times array
+      times.splice(0, times.length);
     }
 
     return times;
