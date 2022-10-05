@@ -222,6 +222,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   @FoundationProperty()
   public showNow: boolean;
 
+  /** Whether or not to display hour options in dropdown */
   @FoundationProperty()
   public showHourOptions: boolean;
 

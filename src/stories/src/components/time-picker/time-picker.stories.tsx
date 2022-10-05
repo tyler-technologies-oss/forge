@@ -57,5 +57,6 @@ Default.args = {
   allowInput: true,
   allowDropdown: true,
   showNow: false,
+  showHourOptions: true,
   disabled: false
 } as ITimePickerProps;

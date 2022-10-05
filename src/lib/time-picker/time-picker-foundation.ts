@@ -618,22 +618,25 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     const times: IListDropdownOption[] = [];
     let leadingOptions: IListDropdownOption[] = [];
     
-    for (let totalMinutes = minMinutes; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
-      if (totalMinutes === TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) {
-        break;
+    if (this._showHourOptions) {
+      for (let totalMinutes = minMinutes; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
+        if (totalMinutes === TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) {
+          break;
+        }
+        const millis = minutesToMillis(totalMinutes);
+        const disabled = this._restrictedTimes.includes(millis);
+        const label = millisToTimeString(millis, this._use24HourTime, false) || '';
+        const value: ITimePickerOptionValue = { time: millis };
+        times.push({ label, value, disabled });
       }
-      const millis = minutesToMillis(totalMinutes);
-      const disabled = this._restrictedTimes.includes(millis);
-      const label = millisToTimeString(millis, this._use24HourTime, false) || '';
-      const value: ITimePickerOptionValue = { time: millis };
-      times.push({ label, value, disabled });
+
+      // Add divider between AM/PM times
+      const firstPmIndex = times.findIndex(t => t.value.time / 1000 / 60 >= 720);
+      if (firstPmIndex >= 0 && firstPmIndex < times.length - 1) {
+        times.splice(firstPmIndex, 0, { label: '', value: null, divider: true });
+      }
     }
 
-    // Add divider between AM/PM times
-    const firstPmIndex = times.findIndex(t => t.value.time / 1000 / 60 >= 720);
-    if (firstPmIndex >= 0 && firstPmIndex < times.length - 1) {
-      times.splice(firstPmIndex, 0, { label: '', value: null, divider: true });
-    }
 
     // Check if we need to prepend a "Now" option
     if (this._showNow) {
@@ -652,14 +655,10 @@ export class TimePickerFoundation implements ITimePickerFoundation {
 
     // Append all leading options
     if (leadingOptions.length) {
-      times.splice(0, 0, { label: '', value: null, divider: true });
+      if (times.length > 0) {
+        times.splice(0, 0, { label: '', value: null, divider: true });
+      }
       leadingOptions.forEach((o, index) => times.splice(index, 0, o));
-    }
-
-    // Check if we need to show the Hours options
-    if (!this._showHourOptions) {
-      // empty times array
-      times.splice(0, times.length);
     }
 
     return times;
