@@ -963,6 +963,35 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(listItems[0].value.metadata).toBe('now');
   });
 
+  it('should show "now" as the only option in the dropdown', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+
+    this.context.component.showNow = true;
+    this.context.component.showHourOptions = false;
+    this.context.component.open = true;
+    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+
+    const listItems = this.context.getListItems();
+
+    expect(listItems.length === 1).toBeTrue();
+    expect(listItems[0].value.time).toBeNull();
+    expect(listItems[0].innerText).toBe('Now');
+    expect(listItems[0].value.metadata).toBe('now');
+  });
+
+  it('should show no options in the dropdown', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+
+    this.context.component.showNow = false;
+    this.context.component.showHourOptions = false;
+    this.context.component.open = true;
+    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+
+    const listItems = this.context.getListItems();
+
+    expect(listItems.length === 0).toBeTrue();
+  });
+
   it('should show custom options', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
