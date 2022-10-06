@@ -655,7 +655,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
 
     // Append all leading options
     if (leadingOptions.length) {
-      if (times.length > 0) {
+      if (times.length !== 0) {
         times.splice(0, 0, { label: '', value: null, divider: true });
       }
       leadingOptions.forEach((o, index) => times.splice(index, 0, o));
