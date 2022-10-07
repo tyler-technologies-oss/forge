@@ -1,6 +1,6 @@
 (function ({VirtualScroller}) {
   var list = document.querySelector('#list');
-  var data = Array(100).fill(undefined).map((_, i) => {
+  var data = Array(10000).fill(undefined).map((_, i) => {
     return i.toString();
   });
   var builder = (d, i) => {
@@ -14,9 +14,7 @@
     itemBuilder: builder,
     itemHeight: 48,
     container: list,
-    data,
-    insetTop: '8px',
-    insetBottom: '8px'
+    data
   };
   var virtualScroller = new VirtualScroller(options);
 })(window.Forge.lib);

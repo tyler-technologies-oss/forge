@@ -2,30 +2,18 @@ import { elementFromHTML, toggleAttribute } from '@tylertech/forge-core';
 import { IVirtualScrollerItem, IVirtualScrollerItemBuilderResult, VirtualScrollerAlignment, VirtualScrollerItemBuilder } from './virtual-scroller-constants';
 
 /**
- * Returns a spacer element used to set the scroll height of a container.
- * 
+ * Returns an element to wrap the item elements and set the scroll height.
  * @param height 
- * @param marginTop 
- * @param marginBottom 
- * @returns A spacer `HTMLElement`
+ * @returns A wrapper `HTMLElement`.
  */
-export function createSpacer(height: number, marginTop: string, marginBottom: string): HTMLElement {
-  const spacer = document.createElement('div');
-  spacer.style.setProperty('position', 'absolute');
-  spacer.style.setProperty('top', '0');
-  spacer.style.setProperty('left', '0');
-  spacer.style.setProperty('width', '1px');
-  spacer.style.setProperty('height', `${height}px`);
-  spacer.style.setProperty('margin-top', marginTop);
-  spacer.style.setProperty('margin-bottom', marginBottom);
-  spacer.style.setProperty('pointer-events', 'none');
-  toggleAttribute(spacer, true, 'aria-hidden', 'true');
-  return spacer;
+export function createWrapper(height: number): HTMLElement {
+  const wrapper = document.createElement('div');
+  wrapper.style.setProperty('height', `${height}px`);
+  return wrapper;
 }
 
 /**
  * Returns an item.
- * 
  * @param index The item's position within its set.
  * @param data 
  * @param builder A function that outputs the item element.
@@ -40,7 +28,6 @@ export function createItem<T>(index: number, data: T, builder: VirtualScrollerIt
 
 /**
  * Returns a virtual scroller item from a string, HTML element, or `IVirtualScrollerItemBuilderResult`.
- * 
  * @param value 
  * @returns A virtual scroller item.
  */
@@ -62,7 +49,6 @@ export function coerceVirtualScrollerItemBuilderResult(value: string | HTMLEleme
 
 /**
  * Creates a guaranteed element from an HTML string.
- * 
  * @param html 
  * @returns An HTML element.
  */
@@ -72,19 +58,17 @@ export function definedElementFromHtml(html: string): HTMLElement {
 
 /**
  * Sets the `top` style value on an absolutely positioned element.
- * 
  * @param element The item element.
  * @param index The item's position within its set.
  * @param height The shared fixed height of all items.
  * @param inset An amount to offset by.
  */
-export function setItemTop(element: IVirtualScrollerItem, index: number, height: number, inset: string): void {
-  element.element.style.top = `calc(${index * height}px + ${inset})`;
+export function setItemTop(element: IVirtualScrollerItem, index: number, height: number): void {
+  element.element.style.top = `${index * height}px`;
 }
 
 /**
  * Sets `aria-setsize` and `aria-posinset` on an element.
- * 
  * @param element The item element.
  * @param index The item's position within its set.
  * @param setSize The number of items in the set.
@@ -106,7 +90,6 @@ export function limitCountToRender(count: number, max: number): number {
 
 /**
  * Returns the key of the first entry in a map.
- * 
  * @param map A map object.
  * @returns The key of the first entry or undfined if the map has no entries.
  */
@@ -116,7 +99,6 @@ export function getFirstMapKey<T>(map: Map<T, unknown>): T | undefined {
 
 /**
  * Deletes the first entry from a map.
- * 
  * @param map A map object.
  */
 export function deleteFirstFromMap(map: Map<unknown, unknown>): void {
@@ -126,7 +108,6 @@ export function deleteFirstFromMap(map: Map<unknown, unknown>): void {
 
 /**
  * Returns a `scrollTop` value that will bring an item into view.
- * 
  * @param index The position index of the item.
  * @param itemHeight 
  * @param containerHeight 
@@ -150,7 +131,6 @@ export function getScrollTopWithItemInView(index: number, itemHeight: number, co
 
 /**
  * Scrolls an item into view.
- * 
  * @param index The position index of the item.
  * @param itemHeight 
  * @param container The item's parent element.

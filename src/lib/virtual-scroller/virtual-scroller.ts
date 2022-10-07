@@ -1,6 +1,6 @@
 import { throttle } from '@tylertech/forge-core';
 import { IVirtualScrollerItem, IVirtualScrollerOptions, VirtualScrollerAlignment, VirtualScrollerItemBuilder } from './virtual-scroller-constants';
-import { createItem, createSpacer, getFirstMapKey, getScrollTopWithItemInView, limitCountToRender, deleteFirstFromMap, scrollToItem, setItemAccessibility, setItemTop } from './virtual-scroller-utils';
+import { createItem, getFirstMapKey, getScrollTopWithItemInView, limitCountToRender, deleteFirstFromMap, scrollToItem, setItemAccessibility, setItemTop, createWrapper } from './virtual-scroller-utils';
 
 export class VirtualScroller<T = unknown> {
   // Configurable properties
@@ -25,21 +25,6 @@ export class VirtualScroller<T = unknown> {
    * removed from the DOM, for faster repeat rendering.
    */
   private _cacheSize = 100;
-
-  /**
-   * A margin to apply to the top of the internal spacer element and to adjust
-   * the position of each item element by. Because all item elements are
-   * absolutely positioned this is required to account for margin or padding
-   * on the container.
-   */
-  private _insetBottom = '0px';
-
-  /**
-   * A margin to apply to the bottom of the internal spacer element. Because 
-   * the spacer is absolutely positioned this is required to account for margin
-   * or padding on the container.
-   */
-  private _insetTop = '0px';
 
   /**
    * The function provided to create items from data.
@@ -87,10 +72,9 @@ export class VirtualScroller<T = unknown> {
   private _container: HTMLElement;
 
   /**
-   * An internal element used to force the required scroll height on the
-   * container.
+   * The element that wraps all the items and sets the scroller height.
    */
-  private _spacer: HTMLElement;
+  private _wrapper: HTMLElement;
 
   /**
    * The array of items that are in view or within the buffer and
@@ -137,7 +121,6 @@ export class VirtualScroller<T = unknown> {
 
   /**
    * The function that runs when the container element is scrolled.
-   * 
    * @todo Determine the correct type of a scroll event.
    */
   private _scrollListener: (evt: Event) => void;
@@ -173,7 +156,6 @@ export class VirtualScroller<T = unknown> {
 
   /**
    * Initialize with all provided properties and elements.
-   * 
    * @param options
    */
   public init(options: Partial<IVirtualScrollerOptions<T>>): void {
@@ -182,8 +164,6 @@ export class VirtualScroller<T = unknown> {
     this._cacheSize = options.cacheSize ?? this._cacheSize;
     this._container = options.container ?? this._container;
     this._data = options.data ? [...options.data] : this._data;
-    this._insetBottom = options.insetBottom ?? this._insetBottom;
-    this._insetTop = options.insetTop ?? this._insetTop;
     this._itemBuilder = options.itemBuilder ?? this._itemBuilder;
     this._itemHeight = options.itemHeight ?? this._itemHeight;
     this._scrollAlignment = options.scrollAlignment ?? this._scrollAlignment;
@@ -198,9 +178,9 @@ export class VirtualScroller<T = unknown> {
       this._container.style.setProperty('overflow-y', 'auto');
     }
 
-    this._removeSpacer();
-    this._spacer = createSpacer(this._scrollHeight, this._insetTop, this._insetBottom);
-    this._appendSpacer();
+    this._removeWrapper();
+    this._wrapper = createWrapper(this._scrollHeight);
+    this._appendWrapper();
 
     if (this._startIndex) {
       this._scrollToStartIndex();
@@ -214,17 +194,14 @@ export class VirtualScroller<T = unknown> {
 
   /**
    * Safely destroy the virtual scroller instance.
-   * 
-   * @todo Should items be removed from the container?
    */
   public disconnect(): void {
     this._removeScrollListener();
-    this._removeSpacer();
+    this._removeWrapper();
   }
 
   /**
    * Scrolls an item into view.
-   * 
    * @param index The index of the item.
    * @param alignment Where in the container to scroll the item to.
    * @param behavior
@@ -250,20 +227,20 @@ export class VirtualScroller<T = unknown> {
     this._container.removeEventListener('scroll', this._scrollListener);
   }
 
-  private _appendSpacer(): void {
-    this._container.append(this._spacer);
+  private _appendWrapper(): void {
+    console.log({ container: this._container, wrapper: this._wrapper });
+    this._container.append(this._wrapper);
   }
 
-  private _removeSpacer(): void {
-    if (this._spacer) {
-      this._container.removeChild(this._spacer);
+  private _removeWrapper(): void {
+    if (this._wrapper) {
+      this._container.removeChild(this._wrapper);
     }
   }
 
   /**
    * Respond to scroll events on the container.
    * @param evt The native scroll event.
-   * 
    */
   private _onScroll(evt: Event): void {
     this._layoutItems();
@@ -273,7 +250,6 @@ export class VirtualScroller<T = unknown> {
   /**
    * Returns the item at an index, first checking to see if it's
    * already in the cache then creating it if not.
-   * 
    * @param index The index of the desired item.
    * @param recreate Whether the item element should be recreated.
    * @returns The item at the given index.
@@ -284,7 +260,7 @@ export class VirtualScroller<T = unknown> {
     }
 
     const item = createItem(index, this._data[index], this._itemBuilder);
-    setItemTop(item, index, this._itemHeight, this._insetTop);
+    setItemTop(item, index, this._itemHeight);
     if (!this._skipAccessibility) {
       setItemAccessibility(item, index, this._setSize);
     }
@@ -295,7 +271,6 @@ export class VirtualScroller<T = unknown> {
   /**
    * Adds an item to the cache, removing entries from the start to
    * maintain the maximum cache size.
-   * 
    * @param index The index of the item.
    * @param item The item.
    */
@@ -313,7 +288,6 @@ export class VirtualScroller<T = unknown> {
 
   /**
    * Returns the index of the first visible item.
-   * 
    * @returns An item index.
    */
   private _getFirst(): number {
@@ -322,7 +296,6 @@ export class VirtualScroller<T = unknown> {
 
   /**
    * Returns the index of the last visible item.
-   * 
    * @returns An item index.
    */
   private _getLast(): number {
@@ -352,7 +325,8 @@ export class VirtualScroller<T = unknown> {
     // Remove hidden items and get the min and max already rendered items
     this._itemsToRender.forEach((item, index) => {
       if (!this.appendOnly && (index < firstToRender || index > lastToRender)) {
-        this._container.removeChild(item.element);
+        console.log({ children: this._wrapper.children, item: item.element });
+        this._wrapper.removeChild(item.element);
         this._itemsToRender.delete(index);
       }
 
@@ -403,35 +377,32 @@ export class VirtualScroller<T = unknown> {
       const newElement = this._getItem(index, true);
       this._container.removeChild(item.element);
       this._itemsToRender.set(index, newElement);
-      this._container.append(newElement.element);
+      this._wrapper.append(newElement.element);
     });
   }
 
   /**
    * Creates an item element and adds it to the beginning of the container element.
-   * 
    * @param index The index of the item to add.
    */
   private _prependItem(index: number): void {
     const item = this._getItem(index);
-    this._container.prepend(item.element);
+    this._wrapper.prepend(item.element);
     this._itemsToRender.set(index, item);
   }
 
   /**
    * Creates an item element and adds it to the end of the container element.
-   * 
    * @param index The index of the item to add.
    */
   private _appendItem(index: number): void {
     const item = this._getItem(index);
-    this._container.append(item.element);
+    this._wrapper.append(item.element);
     this._itemsToRender.set(index, item);
   }
 
   /**
    * Sets the container's scrollTop to brign the start index item into view.
-   * 
    * @todo Take insets into account.
    */
   private _scrollToStartIndex(): void {
@@ -491,23 +462,6 @@ export class VirtualScroller<T = unknown> {
     this._rerenderItems();
   }
 
-  public get insetBottom(): string {
-    return this._insetBottom;
-  }
-  public set insetBottom(value: string) {
-    this._insetBottom = value;
-    this._spacer.style.setProperty('margin-bottom', this._insetBottom);
-  }
-
-  public get insetTop(): string {
-    return this._insetTop;
-  }
-  public set insetTop(value: string) {
-    this._insetTop = value;
-    this._spacer.style.setProperty('margin-top', this.insetTop);
-    this._rerenderItems();
-  }
-
   public get itemBuilder(): VirtualScrollerItemBuilder<T> {
     return this._itemBuilder;
   }
@@ -553,11 +507,6 @@ export class VirtualScroller<T = unknown> {
   public set throttle(value: number) {
     this._throttle = value;
     this._initScrollListener();
-  }
-
-  // Exposed for possible style manipulation
-  public get spacer(): HTMLElement {
-    return this._spacer;
   }
 
   // Exposed for debugging

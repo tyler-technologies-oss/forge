@@ -7,8 +7,6 @@ export interface IVirtualScrollerOptions<T = unknown> {
   cacheSize?: number;
   container: HTMLElement;
   data: T[];
-  insetBottom?: string;
-  insetTop?: string;
   itemBuilder: VirtualScrollerItemBuilder<T>;
   itemHeight: number;
   scrollAlignment?: VirtualScrollerAlignment;
@@ -36,7 +34,7 @@ export interface IVirtualScrollerItem {
     * 
     * @optional
     */
-  trackBy?: (...args: any[]) => unknown;
+  trackBy?: (...args: unknown[]) => unknown;
 }
 
 /**
