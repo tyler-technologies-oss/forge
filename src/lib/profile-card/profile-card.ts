@@ -31,6 +31,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-profile-card>` custom element.
+ * 
+ * @tag forge-profile-card
+ */
 @CustomElement({
   name: PROFILE_CARD_CONSTANTS.elementName,
   dependencies: [

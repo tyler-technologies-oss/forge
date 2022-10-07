@@ -1,4 +1,4 @@
-import { DefaultTemplate as PopupDemo } from './templates/default';
+import { Default as PopupDemo } from './popup.stories';
 import { PopupDefaultTs } from './code/popup-default';
 
 <PageSection>
@@ -30,7 +30,6 @@ Popups typically aren't created in the DOM directly, but they can be created dyn
 <LiveDemo fullWidth layout="column" codeTs={PopupDefaultTs()}>
   <PopupDemo />
 </LiveDemo>
-
 
 > **Note:** setting the `open` property to `true` will append the `<forge-popup>` element to the DOM for you.
 
@@ -180,8 +179,6 @@ The following events are emitted from the targetElement, **NOT** the `<forge-pop
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -189,6 +186,16 @@ The following events are emitted from the targetElement, **NOT** the `<forge-pop
 | Name                            | Description
 | :-------------------------------| :------------------
 | `default`                       | The default (unnamed) slot is where all provided content will be rendered.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                       | Description
+| :--------------------------| :------------------
+| `root`                     | The root container element.
 
 </PageSection>
 
@@ -202,6 +209,18 @@ The following events are emitted from the targetElement, **NOT** the `<forge-pop
 | `--forge-z-index-popup`                       | Controls the z-index.
 | `--forge-theme-elevated-surface`              | Controls the elevated surface (background) color.
 | `--forge-theme-popup-elevation`               | Controls the box-shadow of the popup.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- This component is typically detached from the element that it is positioned around in the DOM. Due to this, the usage of `aria-owns` on the target element will ensure that the popup is always related to the target element as if they were together.
+  - If you use this component on its own, be sure to add a unique `id` attribute and bind it to the target element using `aria-owns` on the target element.
 
 </PageSection>
 

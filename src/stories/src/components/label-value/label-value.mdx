@@ -1,4 +1,4 @@
-import { DefaultTemplate as LabelValueDemo } from './templates/default';
+import { Default as LabelValueDemo } from './label-value.stories';
 import { LabelValueDefaultCodeHtml } from './code/label-value-default';
 import { LabelValueIconCodeHtml } from './code/label-value-icon';
 import { LabelValueEmptyCodeHtml } from './code/label-value-empty';
@@ -45,8 +45,6 @@ The `empty` attribute is an "existence" attribute. The value of the attribute is
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes 
@@ -86,8 +84,6 @@ Gets/sets whether label and value will be displayed on a single row.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -100,7 +96,19 @@ Gets/sets whether label and value will be displayed on a single row.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                      | Description
+| :-------------------------| :------------------
+| `root`                    | The root element.
+| `icon-container`          | The icon container element.
+| `container`               | The layout container element.
+| `label-container`         | The container element around the `label` slot.
+| `value-container`         | The container element around the `value` slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -110,6 +118,16 @@ Gets/sets whether label and value will be displayed on a single row.
 | :------------------------------------------------| :------------------
 | `--mdc-theme-text-secondary-on-background`       | Controls the value font color.
 | `--mdc-theme-text-primary-on-background`         | Controls the icon font color.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+> **Note:** This component does not currently automatically add any ARIA attributes for you.
+
+- It is up to a developer to ensure that the content within this component is accessible as we cannot make any assumptions on your behalf.
 
 </PageSection>
 

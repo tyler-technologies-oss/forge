@@ -8,6 +8,8 @@ export interface IRippleComponent extends IBaseComponent {
   target: string;
   unbounded: boolean;
   layout(): void;
+  activate(): void;
+  deactivate(): void;
 }
 
 declare global {
@@ -16,6 +18,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-ripple>` custom element.
+ * 
+ * @tag forge-ripple
+ */
 @CustomElement({
   name: RIPPLE_CONSTANTS.elementName
 })
@@ -55,6 +62,14 @@ export class RippleComponent extends HTMLElement implements IRippleComponent {
 
   public layout(): void {
     this._foundation.layout();
+  }
+
+  public activate(): void {
+    return this._foundation.activate();
+  }
+
+  public deactivate(): void {
+    return this._foundation.deactivate();
   }
 
   @FoundationProperty()

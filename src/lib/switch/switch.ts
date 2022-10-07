@@ -25,6 +25,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-switch>` element.
+ * 
+ * @tag forge-switch
  */
 @CustomElement({
   name: SWITCH_CONSTANTS.elementName
@@ -97,13 +99,9 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
   }
 
   private _applyInitialState(): void {
-    if (this._disabled) {
-      this._mdcSwitch.disabled = this._disabled;
-    }
+    this._mdcSwitch.disabled = this._disabled;
+    this._mdcSwitch.selected = this._selected;
 
-    if (this._selected) {
-      this._mdcSwitch.selected = this._selected;
-    }
 
     this._applyDense();
     this._applyLabelPosition();

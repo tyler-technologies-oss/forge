@@ -33,6 +33,32 @@ declare global {
 
 /**
  * The web component class behind the `<forge-app-bar-search>` custom element.
+ * 
+ * @tag forge-app-bar-search
+ * 
+ * @slot - The default (unnamed) slot is where child `<input>` elements will be placed.
+ * @slot action - Places actions at the end of the input.
+ * 
+ * @csspart root - The root element
+ * @csspart container - The input container element.
+ * @csspart icon-container - The icon container element.
+ * @csspart icon - The <forge-icon> element.
+ * @csspart context - The context container element.
+ * @csspart context-divider - The context divider element.
+ * @csspart context-button - The context button element.
+ * @csspart context-button-text - The context button text element.
+ * @csspart context-button-icon - The context button icon element.
+ * @csspart global-icon-container - The global icon container element.
+ * @csspart global-icon - The global icon <forge-icon> element.
+ * @csspart actions-container - The action container element around the slot.
+ * 
+ * @cssproperty --mdc-theme-on-primary - Controls the border-color of the container outline, the font-color, and icon color.
+ * @cssproperty --mdc-theme-on-surface - Controls the font color of the buttons.
+ * @cssproperty --mdc-theme-text-secondary-on-background - Controls the placeholder font color.
+ * @cssproperty --forge-app-bar-search-theme-background - Controls the background-color of the container.
+ * @cssproperty --forge-app-bar-search-theme-background-focused - Controls the focused background-color of the container.
+ * @cssproperty --forge-app-bar-search-theme-hover-opacity - Controls the hover opacity of the outline.
+ * @cssproperty --forge-app-bar-search-theme-disabled-opacity - Controls the disabled opacity of the component.
  */
 @CustomElement({
   name: APP_BAR_SEARCH_CONSTANTS.elementName,

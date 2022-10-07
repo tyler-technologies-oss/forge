@@ -491,7 +491,9 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.options = options;
         this.context.component.open = true;
         await timer(300);
-        dispatchKeyEvent(getPopupListItem(0), 'keydown', 'Enter');
+        
+        getShadowElement(getPopupListItem(0), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
         await timer(300);
 
         expect(this.context.component.open).toBe(false);

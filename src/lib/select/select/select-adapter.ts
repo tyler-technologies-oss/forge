@@ -66,10 +66,13 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
 
   public initializeAccessibility(): void {
     this._component.setAttribute('role', 'combobox');
-    this._component.setAttribute('aria-live', 'assertive');
-    this._component.setAttribute('aria-atomic', 'true');
     this._component.setAttribute('aria-haspopup', 'true');
     this._component.setAttribute('aria-expanded', 'false');
+
+    // We need to ensure the host element receives a non-negative tabindex for our interactions to work properly
+    if (!this._component.hasAttribute('tabindex') || this._component.tabIndex === -1) {
+      this._component.tabIndex = 0;
+    }
   }
 
   public initializeFloatingLabel(): IFloatingLabel {
@@ -96,27 +99,27 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
   }
 
   public addClickListener(listener: (evt: Event) => void): void {
-    this._selectElement.addEventListener('click', listener);
+    this._component.addEventListener('click', listener);
   }
 
   public removeClickListener(listener: (evt: Event) => void): void {
-    this._selectElement.removeEventListener('click', listener);
+    this._component.removeEventListener('click', listener);
   }
 
   public addMouseDownListener(listener: (evt: MouseEvent) => void): void {
-    this._selectElement.addEventListener('mousedown', listener);
+    this._component.addEventListener('mousedown', listener);
   }
 
   public removeMouseDownListener(listener: (evt: MouseEvent) => void): void {
-    this._selectElement.removeEventListener('mousedown', listener);
+    this._component.removeEventListener('mousedown', listener);
   }
 
   public addTargetListener(type: string, listener: (evt: Event) => void): void {
-    this._selectedTextElement.addEventListener(type, listener);
+    this._component.addEventListener(type, listener);
   }
 
   public removeTargetListener(type: string, listener: (evt: Event) => void): void {
-    this._selectedTextElement.removeEventListener(type, listener);
+    this._component.removeEventListener(type, listener);
   }
 
   public open(config: IListDropdownConfig): void {
@@ -165,7 +168,7 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
   public setDisabled(isDisabled: boolean): void {
     toggleClass(this._selectElement, isDisabled, FIELD_CONSTANTS.classes.DISABLED);
     toggleAttribute(this._component, isDisabled, 'aria-disabled', 'true');
-    this._selectedTextElement.tabIndex = isDisabled ? -1 : 0;
+    this._component.tabIndex = isDisabled ? -1 : 0;
   }
 
   public setInvalid(isInvalid: boolean): void {
@@ -218,7 +221,7 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
   }
 
   public setFocus(): void {
-    this._selectedTextElement.focus();
+    this._component.focus();
   }
 
   public isWithinSelf(element: HTMLElement): boolean {

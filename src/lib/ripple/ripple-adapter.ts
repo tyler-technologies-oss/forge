@@ -7,6 +7,8 @@ import { ForgeRipple } from './forge-ripple';
 export interface IRippleAdapter {
   initialize(target: string, unbounded: boolean): void;
   destroy(): void;
+  activate(): void;
+  deactivate(): void;
 }
 
 export class RippleAdapter implements IRippleAdapter {
@@ -46,5 +48,13 @@ export class RippleAdapter implements IRippleAdapter {
     }
     
     this._target = undefined;
+  }
+
+  public activate(): void {
+    this._ripple?.activate();
+  }
+
+  public deactivate(): void {
+    this._ripple?.deactivate();
   }
 }

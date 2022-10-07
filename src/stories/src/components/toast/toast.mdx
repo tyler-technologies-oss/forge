@@ -1,4 +1,4 @@
-import { DefaultTemplate as ToastDemo } from './templates/default';
+import { Default as ToastDemo } from './toast.stories';
 import { ToastDefaultHtml, ToastDefaultTs } from './code/toast-default';
 
 <PageSection>
@@ -21,15 +21,11 @@ However, the toast element can be created using static HTML if desired.
 
 ### Static HTML
 
-```html
-<forge-toast message="Save successful."></forge-toast>
-```
-
 <LiveDemo layout="column" codeHtml={ToastDefaultHtml()} codeTs={ToastDefaultTs()}>
   <ToastDemo />
 </LiveDemo>
 
-> **Note: **Pass the JavaScript value of `Infinity` to the `duration` property/attribute to force the toast element to NOT automatically close.
+> **Note:** pass the JavaScript value of `Infinity` to the `duration` property/attribute to force the toast element to stay open indefinitely.
 
 </PageSection>
 
@@ -56,7 +52,7 @@ export class ToastExampleComponent {
 
   public onShowToast(): void {
     const toast = this._toastService.show({
-      message: 'Save successful.',
+      message: 'Save successful',
       actionText: 'UNDO',
       actionHandler: () => toast.hide(),
       placement: 'bottom',
@@ -116,8 +112,6 @@ export class ToastExampleComponent {
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -130,8 +124,6 @@ export class ToastExampleComponent {
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -142,8 +134,6 @@ export class ToastExampleComponent {
 | `forge-toast-close`               | Emits when close button is clicked.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -157,13 +147,26 @@ export class ToastExampleComponent {
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                                     | Description
+| :----------------------------------------| :----------------------
+| `root`                                   | The root container element.
+| `message`                                | The element that contains the `message` content.
+| `action-container`                       | The container around the action button.
+| `action-button`                          | The `<forge-button>` element for the action.
+| `action-button-element`                  | The `<button>` element for the action.
+| `close-button`                           | The `<forge-button>` element for the close button.
+| `close-button-element`                   | The `<button>` element for the action.
+| `close-button-icon`                      | The close button `<forge-icon>` element.
+
+</PageSection>
 
 <PageSection>
 
 ## CSS custom properties
-
-</PageSection>
 
 | Name                                                                    | Description
 | :-----------------------------------------------------------------------| :----------------------
@@ -181,6 +184,21 @@ export class ToastExampleComponent {
 | `--forge-toast-top-right-margin-right`                                    | Controls the `margin-right` when using the "top-end" placement.
 | `--forge-toast-top-margin-top`                                            | Controls the `margin-top` when using the "top" placement.
 | `--forge-toast-bottom-margin-bottom`                                      | Controls the `margin-bottom` when using the "bottom" placement.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that the close button is also accessible by keyboard.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.
+
+> **Note**: this control will automatically provide the `aria-live` attribute.
+
+</PageSection>
+
+---
 
 <PageSection>
 

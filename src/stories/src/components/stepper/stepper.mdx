@@ -1,5 +1,4 @@
-import { DefaultTemplate as StepperDemo } from './templates/default';
-import { ConfigurationTemplate as ConfigurationDemo } from './templates/configuration';
+import { Default as StepperDemo, Configuration as ConfigurationDemo } from './stepper.stories';
 import { StepperDefaultHtml } from './code/stepper-default';
 import { StepperConfigurationHtml, StepperConfigurationTs } from './code/stepper-configuration';
 
@@ -23,30 +22,20 @@ The following example demonstrates using the stepper with various step states. T
 this that is tied to each `<forge-step>` element so that you can control its state, but it can certainly be used in a static
 format like shown below.
 
-
-<LiveDemo 
-fullWidth 
-layout={"column"} 
-codeHtml={StepperDefaultHtml()}>
-  <StepperDemo/>
+<LiveDemo fullWidth layout="column" codeHtml={StepperDefaultHtml()}>
+  <StepperDemo />
 </LiveDemo>
-
 
 ## Configuration
 
-If you prefer, you can configure the stepper with an array of objects (instead of declaratively specifying it in
-the HTML), and it will render itself based on that configuration.
+If you prefer, you can configure the stepper with an array of objects (instead of declaratively specifying it in the HTML), and
+it will render itself based on that configuration.
 
-<LiveDemo 
-fullWidth 
-layout={"column"} 
-codeHtml={StepperConfigurationHtml()} 
-codeTs={StepperConfigurationTs()}>
-  <ConfigurationDemo/>
+<LiveDemo fullWidth layout="column" codeHtml={StepperConfigurationHtml()} codeTs={StepperConfigurationTs()}>
+  <ConfigurationDemo />
 </LiveDemo>
 
 </PageSection>
-
 
 <PageSection>
 
@@ -103,8 +92,6 @@ codeTs={StepperConfigurationTs()}>
   Gets/sets whether the stepper will render in a vertical orientation or not.
 
 </PropertyDef>
-
-
 
 ### Step
 
@@ -170,8 +157,6 @@ codeTs={StepperConfigurationTs()}>
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
@@ -186,8 +171,6 @@ Sets the tab index on the step
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -199,8 +182,6 @@ Sets the tab index on the step
 | `forge-step-expanded-content-focusout`  | Emits when the user focus exits the expanded content in a step. **Emits from the `<forge-stepper>` element only.**
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -221,8 +202,6 @@ Sets the tab index on the step
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -242,7 +221,35 @@ Sets the tab index on the step
 
 </PageSection>
 
----
+
+<PageSection>
+
+## CSS parts
+
+### Stepper
+
+| Name                        | Description
+| :---------------------------| :----------------
+| `root`                      | The root container element.
+
+### Step
+
+| Name                        | Description
+| :---------------------------| :----------------
+| `root`                      | The root container element.
+| `button`                    | The `<button>` element.
+| `before`                    | The before line element.
+| `after`                     | The before line element.
+| `after`                     | The before line element.
+| `icon-container`            | The icon container element.
+| `icon-content`              | The icon content element.
+| `index`                     | The index container element.
+| `icon`                      | The `<forge-icon>` element.
+| `text-container`            | The text container element.
+| `title-container`           | The title container element.
+| `subtitle-container`        | The subtitle container element.
+
+</PageSection>
 
 <PageSection>
 
@@ -268,7 +275,16 @@ Sets the tab index on the step
 
 </PageSection>
 
----
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+- The step element will receive the proper ARIA attribute `aria-selected` as necessary.
+
+</PageSection>
 
 <PageSection>
 

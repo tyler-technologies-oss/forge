@@ -23,6 +23,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-keyboard-shortcut>` custom element.
+ * 
+ * @tag forge-keyboard-shortcut
+ */
 @CustomElement({
   name: KEYBOARD_SHORTCUT_CONSTANTS.elementName
 })

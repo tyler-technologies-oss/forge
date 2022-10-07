@@ -1,4 +1,4 @@
-import { DefaultTemplate as BusyIndicatorDemo } from './templates/default';
+import { Default as BusyIndicatorDemo } from './busy-indicator.stories';
 import { BusyIndicatorDefaultCodeTs } from './code/busy-indicator-default';
 import { BusyIndicatorProgressCodeTs } from './code/busy-indicator-progress';
 
@@ -24,30 +24,22 @@ You can think of this component as a configurable, pre-defined dialog that uses 
 
 A common usage of this component in a vanilla JavaScript application would be to do something like the following:
 
-<LiveDemo 
-dense 
-codeTs={BusyIndicatorDefaultCodeTs()}>
-  <BusyIndicatorDemo/>
+<LiveDemo dense  codeTs={BusyIndicatorDefaultCodeTs()}>
+  <BusyIndicatorDemo />
 </LiveDemo>
 
 ### Progress
 
 You can also easily display progress to users by using the built-in linear progress indicator:
 
-<LiveDemo 
-dense 
-codeTs={BusyIndicatorProgressCodeTs()}>
+<LiveDemo dense codeTs={BusyIndicatorProgressCodeTs()}>
   <BusyIndicatorDemo
-  titleText={'Uploading'}
-  message={'Your document is being uploaded...'}
-  cancel={true}
-  spinner={false}
-  progressBar={true}
-  progressBarDeterminate={true}
-  progress={0.5}
-  buffer={1}
-  width={400}
-  direction={'row'}/>
+    titleText="Uploading"
+    message="Your document is being uploaded..."
+    cancel
+    spinner={false}
+    progressBar
+    progressBarDeterminate />
 </LiveDemo>
 
 ### Angular
@@ -180,8 +172,6 @@ Starts removal process from the DOM.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -189,6 +179,34 @@ Starts removal process from the DOM.
 | Name                           | Description
 | :------------------------------| :------------------
 | `forge-busy-indicator-cancel`    | Emits when the cancel button is clicked.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :------------------
+| `backdrop`                     | The `<forge-backdrop>` element.
+| `surface`                      | The surface element.
+| `title`                        | The title element.
+| `message-container`            | The message container element.
+| `spinner`                      | The `<forge-circular-progress>` element.
+| `message`                      | The message element.
+| `cancel-button`                | The `<forge-button>` element for the cancel button.
+| `cancel-button-element`        | The native `<button>` element for the cancel button.
+| `progress-bar-container`       | The container element for the progress bar.
+| `progress-bar`                 | The `<forge-linear-progress>` element.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure the busy indicator provides a role attribute with value `alert`, and an `aria-busy` attribute with the value `true` while the busy indicator is active.
+- If a cancel button is enabled, ensure it is accessible via the keyboard while the busy indicator is active, and that it works the same as if it had been clicked by a mouse.
 
 </PageSection>
 

@@ -1,4 +1,4 @@
-import { DefaultTemplate as ProductIconDemo } from './templates/default';
+import { Default as ProductIconDemo } from './product-icon.stories';
 import { ProductIconDefaultHtml} from './code/product-icon-default';
 import { ProductIconCustomColorHtml } from './code/product-icon-custom-color';
 import { ProductIconCustomSizeHtml } from './code/product-icon-custom-size';
@@ -13,9 +13,9 @@ The product icon component facilitates the creation of a long shadow effect on i
 It takes in a color from the material color palette, and automatically adjusts the color of the shadow based on the palette being used.
 
 Among other things, you can configure the size, shadow effect, and shape of the component if desired. The only requirement is that you provide
-an icon or text.
+an icon or text. The icon must be a font-based icon. SVG icons (which includes the `<forge-icon>` component) are not supported by this component.
 
-> **Note:** if needed, the component will accept textual content in place of an icon.
+> **Note:** this component will also accept plain text content in place of a font-based icon.
 
 </PageSection>
 
@@ -27,47 +27,35 @@ an icon or text.
 
 ### Default
 
-<LiveDemo
-dense={true}
-codeHtml={ProductIconDefaultHtml()}>
-  <ProductIconDemo/>
+<LiveDemo dense codeHtml={ProductIconDefaultHtml()}>
+  <ProductIconDemo />
 </LiveDemo>
 
 ### Custom color
 
-<LiveDemo
-dense={true}
-codeHtml={ProductIconCustomColorHtml()}>
-  <ProductIconDemo color={'pink-500'}/>
+<LiveDemo dense codeHtml={ProductIconCustomColorHtml()}>
+  <ProductIconDemo color="pink-500" />
 </LiveDemo>
 
 ### Custom size
 
-<LiveDemo
-dense={true}
-codeHtml={ProductIconCustomSizeHtml()}>
-  <ProductIconDemo size={128}/>
+<LiveDemo dense codeHtml={ProductIconCustomSizeHtml()}>
+  <ProductIconDemo size={128} />
 </LiveDemo>
 
 ### Text
 
-<LiveDemo
-dense={true}
-codeHtml={ProductIconTextHtml()}>
-  <ProductIconDemo contentType={'text'}/>
+<LiveDemo dense codeHtml={ProductIconTextHtml()}>
+  <ProductIconDemo contentType="text" />
 </LiveDemo>
 
 ### Custom shadow
 
-<LiveDemo
-dense={true}
-codeHtml={ProductIconCustomShadowHtml()}>
-  <ProductIconDemo iterations={8}/>
+<LiveDemo dense codeHtml={ProductIconCustomShadowHtml()}>
+  <ProductIconDemo iterations={8} color="amber-300" />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -78,7 +66,6 @@ codeHtml={ProductIconCustomShadowHtml()}>
 The color of the circle container that holds the icon. Accepts colors from the material palette (ie. `indigo-500`, `deepPurple-500`).
 
 </PropertyDef>
-
 
 <PropertyDef name="size" type="number" defaultValue="64">
 
@@ -102,8 +89,6 @@ This is used to generate the length of the shadow. Set this to exactly half of t
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -111,7 +96,20 @@ This is used to generate the length of the shadow. Set this to exactly half of t
 | Name               | Description
 | :------------------| :----------------
 | `default`          | The default (unnamed) slot is where you'll place your icon element.
-| `text`               | If using text content without an icon, place your content in this slot so that the component can properly switch modes.
+| `text`             | If using text content without an icon, place your content in this slot so that the component can properly switch modes.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                          | Description
+| :-----------------------------| :----------------
+| `root`                        | The root element.
+| `container`                   | The layout container element.
+| `icon-container`              | The container around the `default` slot for use with icons.
+| `text-container`              | The container around the `text` slot for use with plain text.
 
 </PageSection>
 
@@ -123,5 +121,15 @@ This is used to generate the length of the shadow. Set this to exactly half of t
 | :-------------------------------------| :----------------
 | `--forge-product-icon-border-radius`    | Controls the border radius of the container. Use this is you don't want a completely circular icon.
 | `--forge-product-icon-font-size`        | Controls the font-size of the icon.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+* If color conveys important information, provide additional cues for users with color perception deficiencies.
+* If the element is used for decorative purposes, you can hide from assistive technologies by adding an `aria-hidden="true"` attribute.
 
 </PageSection>

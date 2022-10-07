@@ -18,6 +18,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-badge>` custom element.
+ * 
+ * @tag forge-badge
+ */
 @CustomElement({
   name: BADGE_CONSTANTS.elementName
 })

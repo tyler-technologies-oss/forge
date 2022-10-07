@@ -1,6 +1,7 @@
-import { DefaultTemplate as SliderDemo } from './templates/default';
+import { Default as SliderDemo } from './slider.stories';
 import { SliderDefaultHtml } from './code/slider-default';
 import { SliderTicksHtml } from './code/slider-ticks';
+import { SliderRangeHtml } from './code/slider-range';
 
 <PageSection>
 
@@ -31,9 +32,12 @@ In its most basic form, the slider can be used without any configuration:
 
 You can also specify the component to use two handles for setting a range value:
 
-<LiveDemo fullWidth layout="column" codeHtml={SliderDefaultHtml()}>
+<LiveDemo fullWidth layout="column" codeHtml={SliderRangeHtml()}>
   <SliderDemo type="continuous-range" value={70} valueStart={30} />
 </LiveDemo>
+
+> **Note:** when using the range variant, you must set the start value using `value-start` attribute (or `valueStart` JavaScript property). The standard `value`
+> property/attribute pertains to the end range.
 
 ### With tick marks
 
@@ -44,8 +48,6 @@ The following example will force the user to choose a discrete value from the ra
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -83,7 +85,6 @@ The following example will force the user to choose a discrete value from the ra
 
 </PropertyDef>
 
-
 <PropertyDef name="step" type="number" defaultValue="0">
 
   Gets/sets the step value for the slider when in discrete mode.
@@ -100,20 +101,16 @@ The following example will force the user to choose a discrete value from the ra
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
 
 | Name                            | Description
 | :-------------------------------| :----------------
-| `forge-slider-change`             | Emits only when the user has stopped changing the slider value.
-| `forge-slider-input`              | Emits frequently while the user is changing the slider value.
+| `forge-slider-change`           | Emits only when the user has stopped changing the slider value.
+| `forge-slider-input`            | Emits frequently while the user is changing the slider value.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -124,6 +121,40 @@ The following example will force the user to choose a discrete value from the ra
 | `up / right`                        | Increments the value of the slider.
 | `down / left`                       | Decrements the value of the slider.
 
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+The `part` attribute names can change based on variant in this component. In an effort to not pollute the docs, please see the note below.
+
+> To view the parts related to this component, inspect the DOM of the `<forge-slider>` element with your browser's dev tools, and expand the `#shadow-root`
+> to see all of the elements and their corresponding `part` attributes.
+
+</PageSection>
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                | Description
+| :-----------------------------------| :----------------
+| `--mdc-theme-primary`               | Controls the track and handle color.
+| `--mdc-theme-on-primary`            | Controls the tick mark color.
+| `--mdc-ripple-color`                | Controls the ripple color on the handle.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the slider controls are reachable by the tab key.
+- Ensure each slider control can be updated by pressing the left-arrow and right-arrow keys.
+- The slider element will receive the proper ARIA attribute `aria-label="Select Value"`.
+- The slider element will receive the proper role attribute `role="slider"`.
 
 </PageSection>
 

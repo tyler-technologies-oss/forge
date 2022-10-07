@@ -1,4 +1,4 @@
-import { DefaultTemplate as PaginatorDemo } from './templates/default';
+import { Default as PaginatorDemo } from './paginator.stories';
 import { PaginatorDefaultHtml } from './code/paginator-default';
 import { PaginatorAlternativeHtml } from './code/paginator-alternative';
 
@@ -53,11 +53,9 @@ you will respond to the `change` event that gets emitted from this component to 
 <forge-paginator total="100" page-size="10" page-index="1"></forge-paginator>
 ```
 
-> Try combining the paginator with the [table component](?path=/story/components-table--default) to allow for paging of data table rows.
+> Try combining the paginator with the [table component](?path=/story/components-table--default) to allow for paging of data table rows.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -133,8 +131,6 @@ you will respond to the `change` event that gets emitted from this component to 
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -145,7 +141,32 @@ you will respond to the `change` event that gets emitted from this component to 
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :-----------------
+| `root`                         | The root element.
+| `label`                        | The label text container element.
+| `container`                    | The layout container element.
+| `page-size-options`            | The `<forge-select>` element for the page size options.
+| `range-label`                  | The range label container element.
+| `range-label-alternative`      | The alternative range label text container.
+| `first-page-button`            | The `<forge-icon-button>` element for the first page button.
+| `first-page-button-element`    | The `<button>` element for the first page button.
+| `first-page-icon`              | The `<forge-icon>` element for the first page button.
+| `last-page-button`             | The `<forge-icon-button>` element for the last page button.
+| `last-page-button-element`     | The `<button>` element for the last page button.
+| `last-page-icon`               | The `<forge-icon>` element for the last page button.
+| `previous-page-button`         | The `<forge-icon-button>` element for the previous page button.
+| `previous-page-button-element` | The `<button>` element for the previous page button.
+| `previous-page-icon`           | The `<forge-icon>` element for the previous page button.
+| `next-page-button`             | The `<forge-icon-button>` element for the next page button.
+| `next-page-button-element`     | The `<button>` element for the next page button.
+| `next-page-icon`               | The `<forge-icon>` element for the next page button.
+
+</PageSection>
 
 <PageSection>
 
@@ -154,6 +175,17 @@ you will respond to the `change` event that gets emitted from this component to 
 | Name                                              | Description
 | :-------------------------------------------------| :-----------------
 | `--mdc-theme-text-primary-on-background`          | Controls the button font color.   
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- The paginator component will handle adding the proper ARIA attributes to its internal elements.
 
 </PageSection>
 

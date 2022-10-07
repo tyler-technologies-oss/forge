@@ -55,6 +55,7 @@
   pointer-events: none;
   border-radius: 16px;
   padding: 0 8px;
+  font-weight: 700;
 }
 
 @mixin theme-property($property, $theme, $theme-mod) {

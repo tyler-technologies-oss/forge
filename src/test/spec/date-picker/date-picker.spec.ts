@@ -600,6 +600,18 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe('');
     });
 
+    it('should allow value if below min date and allow invalid is set', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.allowInvalidDate = true;
+      const minDate = new Date('01/01/2020');
+      const date = '06/01/2000';
+      const expectedDate = new Date(date);
+      this.context.component.min = minDate;
+      this.context.component.value = expectedDate;
+      expect(this.context.component.value).toEqual(expectedDate);
+      expect(getInputElement(this.context.component).value).toBe(date);
+    });
+
     it('should clear value when min date is set if current value is not valid', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const minDate = new Date('01/01/2020');
@@ -618,6 +630,18 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.value = new Date('06/01/2030');
       expect(this.context.component.value).toBeNull();
       expect(getInputElement(this.context.component).value).toBe('');
+    });
+
+    it('should allow value if above max date and allow invalid is set', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.allowInvalidDate = true;
+      const maxDate = new Date('01/01/2020');
+      const date = '06/01/2030';
+      const expectedDate = new Date(date);
+      this.context.component.max = maxDate;
+      this.context.component.value = expectedDate;
+      expect(this.context.component.value).toEqual(expectedDate);
+      expect(getInputElement(this.context.component).value).toBe(date);
     });
 
     it('should clear value when max date is set if current value is not valid', function(this: ITestContext) {

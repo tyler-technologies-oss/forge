@@ -1,4 +1,4 @@
-import { DefaultTemplate as FabDemo } from './templates/default';
+import { Default as FabDemo } from './fab.stories';
 import { FabDefaultCodeHtml } from './code/fab-default';
 import { FabExtendedCodeHtml } from './code/fab-extended';
 import { FabMiniCodeHtml } from './code/fab-mini';
@@ -57,8 +57,6 @@ Use extended floating action buttons to give more meaning and context to the act
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes
@@ -89,8 +87,6 @@ Controls the exited state. This animates the FAB in/out with a transition while 
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## CSS custom properties
@@ -98,6 +94,19 @@ Controls the exited state. This animates the FAB in/out with a transition while 
 | Name                                | Description
 | :-----------------------------------| :----------------------
 | `--mdc-theme-secondary`             | Controls the background color.
-| `--mdc-theme-text-primary-on-light` | Controls the font color.
+| `--mdc-theme-on-secondary`          | Controls the font color.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Buttons containing only icons should be given a meaningful label via `aria-label` or `aria-labelledby`.
+* Avoid using capitalized text because screen readers will read the text character-by-character.
+* Ensure the FAB can be reached by keyboard navigation.
+* Ensure that there is a distinct visual cue when the FAB is in focus.
+* Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+* Ensure that buttons placed above other content on the page have proper contrast ratio.
 
 </PageSection>

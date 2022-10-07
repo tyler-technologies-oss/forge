@@ -1,6 +1,5 @@
-export const ProductIconTextHtml = () =>
-  `
-<forge-product-icon color="amber-300">
-    <span slot="text">FB</span>
+export const ProductIconTextHtml = () => `
+<forge-product-icon>
+  <span slot="text">FB</span>
 </forge-product-icon>
 `;

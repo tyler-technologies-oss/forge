@@ -13,6 +13,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-mini-drawer>` custom element.
+ * 
+ * @tag forge-mini-drawer
+ */
 @CustomElement({
   name: MINI_DRAWER_CONSTANTS.elementName
 })

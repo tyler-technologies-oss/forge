@@ -14,6 +14,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-page-state>` custom element.
+ * 
+ * @tag forge-page-state
+ */
 @CustomElement({
   name: PAGE_STATE_CONSTANTS.elementName
 })

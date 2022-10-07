@@ -1,4 +1,4 @@
-import { DefaultTemplate as AppBarSearchDemo } from './templates/default';
+import { Default as AppBarSearchDemo } from './app-bar-search.stories';
 import { AppBarSearchDefaultCodeHtml, AppBarSearchDefaultCodeTs } from './code/app-bar-search-default';
 
 <PageSection>
@@ -100,8 +100,6 @@ through its public API, but at the very least it gives a common component to use
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
@@ -113,7 +111,46 @@ through its public API, but at the very least it gives a common component to use
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                      | Description
+| :-------------------------| :------------------
+| `root`                    | The root element.
+| `container`               | The input container element.
+| `icon-container`          | The icon container element.
+| `icon`                    | The `<forge-icon>` element.
+| `context`                 | The context container element.
+| `context-divider`         | The context divider element.
+| `context-button`          | The context button element.
+| `context-button-text`     | The context button text element.
+| `context-button-icon`     | The context button icon element.
+| `global-icon-container`   | The global icon container element.
+| `global-icon`             | The global icon `<forge-icon>` element.
+| `actions-container`       | The action container element around the slot.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                    | Description
+| :-----------------------| :-----------------
+| `root`                  | The root element.
+| `container`             | The container element for layout.
+| `icon`                  | The search `<forge-icon>` element.
+| `context`               | The context container element.
+| `context-divider`       | The divider element between the input and context container.
+| `context-button`        | The context `<button>` element.
+| `context-button-text`   | The context button text element.
+| `context-button-icon`   | The context icon `<forge-icon>` element.
+| `global-icon-container` | The global icon container element.
+| `global-icon`           | The global icon `<forge-icon>` element.
+| `actions-container`     | The container element for the global actions slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -128,6 +165,16 @@ through its public API, but at the very least it gives a common component to use
 | `--forge-app-bar-search-theme-background-focused`   | Controls the focused background-color of the container.
 | `--forge-app-bar-search-theme-hover-opacity`        | Controls the hover opacity of the outline.
 | `--forge-app-bar-search-theme-disabled-opacity`     | Controls the disabled opacity of the component.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Ensure that you provide a `placeholder` attribute for the `<input>` element to help give users an idea of what to enter.
+* Ensure that you add an `aria-label` or `aria-labelledby` attribute to the `<input>`.
+* If using a custom theme, make sure proper color contrast ratios are met and adjust using CSS custom properties if not.
 
 </PageSection>
 

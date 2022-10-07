@@ -1,9 +1,7 @@
 export const InlineMessageDefaultCodeHtml = () => {
-  return `<forge-inline-message>
-  <div>Message.</div>
-</forge-inline-message>`;
-};
-
-export const InlineMessageDefaultCodeBlazor = () => {
-  return `<ForgeInlineMessage Message="Message." />`;
+  return `
+<forge-inline-message>
+  <div>Qui nulla anim sunt eiusmod eiusmod id esse veniam proident ea adipisicing ad exercitation.</div>
+</forge-inline-message>
+  `;
 };

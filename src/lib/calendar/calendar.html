@@ -2,12 +2,12 @@
   <div class="forge-calendar" part="root">
     <div id="view" class="forge-calendar__view" part="view">
       <div id="date-view" class="forge-calendar__date-view" role="grid" part="date-view">
-        <div role="rowgroup">
-          <div id="day-row" class="forge-calendar__date-view__row" role="row"></div>
+        <div role="rowgroup" part="date-view-container">
+          <div id="day-row" class="forge-calendar__date-view__row" role="row" part="date-view-row"></div>
         </div>
-        <div id="date-grid" class="forge-calendar__date-grid" rolw="rowgroup"></div>
+        <div id="date-grid" class="forge-calendar__date-grid" role="rowgroup" part="date-grid-container"></div>
       </div>
-      <forge-calendar-menu id="menu"></forge-calendar-menu>
+      <forge-calendar-menu id="menu" part="calendar-menu"></forge-calendar-menu>
     </div>
   </div>
 </template>

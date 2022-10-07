@@ -1,4 +1,4 @@
-import { DefaultTemplate as ColorPickerDemo } from './templates/default';
+import { Default as ColorPickerDemo } from './color-picker.stories';
 import { ColorPickerDefaultCodeHtml } from './code/color-picker-default';
 
 <PageSection>
@@ -82,8 +82,6 @@ from being called many times while the user is dragging the canvas handles aroun
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Keyboard shortcuts
@@ -96,8 +94,6 @@ from being called many times while the user is dragging the canvas handles aroun
 | `arrow left`                        | Moves thumb position left.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -113,7 +109,16 @@ from being called many times while the user is dragging the canvas handles aroun
 
 </PageSection>
 
----
+<PageSection>
+
+## Accessibility
+
+- Verify that you can tab to the hex input field and the “change color format” button.
+  - Change the color format to RGBA and HSVA and ensure those input fields are accessible by keyboard.
+  - Ensure that there is a visual cue when any of the color value input fields are focused.
+- Verify that pressing the space bar or enter key while focusing on the "change color format" button will cycle through the color input formats.
+
+</PageSection>
 
 <PageSection>
 

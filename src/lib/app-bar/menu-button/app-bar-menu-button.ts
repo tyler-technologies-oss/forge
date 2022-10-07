@@ -17,6 +17,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-app-bar-menu-button>` custom element.
+ * 
+ * @tag forge-app-bar-menu-button
+ */
 @CustomElement({
   name: APP_BAR_MENU_BUTTON_CONSTANTS.elementName,
   dependencies: [

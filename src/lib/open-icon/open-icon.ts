@@ -20,6 +20,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-open-icon>` custom element.
+ * 
+ * @tag forge-open-icon
+ */
 @CustomElement({
   name: OPEN_ICON_CONSTANTS.elementName,
   dependencies: [IconComponent]

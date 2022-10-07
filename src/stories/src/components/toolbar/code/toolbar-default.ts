@@ -5,11 +5,3 @@ export const ToolbarDefaultHtml = () => `
     <div slot="end">End</div>
 </forge-toolbar>
 `;
-
-export const ToolbarDefaultBlazor = () => `
-<ForgeToolbar>
-    <StartContent>Start</StartContent>
-    <CenterContent>Center</CenterContent>
-    <EndContent>End</EndContent>
-</ForgeToolbar>
-`;

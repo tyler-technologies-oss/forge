@@ -1,6 +1,6 @@
 import { BadgeBasicDemoCodeHtml } from './code/badge-basic-demo';
 import { BadgeThemedDemoCodeHtml } from './code/badge-themed-demo';
-import { DefaultTemplate as BadgeDemo } from './templates/default';
+import { Default as BadgeDemo } from './badge.stories';
 
 <PageSection>
 
@@ -11,8 +11,6 @@ make the element interactive you should consider using the [chip component](?pat
 
 This component supports built-in predefined themes, as well as common positioning utilities when used with other components such as 
 the [icon button component](?path=/story/components-icon-button--default).
-
-> **Dot and numeric badges** should use `--forge-badge-background-color: var(--mdc-theme-secondary)` when placed on an **indigo background** and `--forge-badge-background-color: var(--forge-theme-tertiary)` when placed on a **white background.**
 
 </PageSection>
 
@@ -26,27 +24,23 @@ the [icon button component](?path=/story/components-icon-button--default).
 
 Below is the most basic usage of the badge for displaying a count of records:
 
-<LiveDemo dense={true} codeHtml={BadgeBasicDemoCodeHtml()}>
-  <BadgeDemo text={'3'} />
+<LiveDemo dense codeHtml={BadgeBasicDemoCodeHtml()}>
+  <BadgeDemo text="3" />
 </LiveDemo>
-
-</PageSection>
-
-<PageSection>
 
 ### Themed
 
 You can use the built-in themes via attribute. If you need a custom color, see the CSS custom properties section below.
 
-</PageSection>
-
-<PageSection>
-
-<LiveDemo dense={true} codeHtml={BadgeThemedDemoCodeHtml()}>
+<LiveDemo dense codeHtml={BadgeThemedDemoCodeHtml()}>
   <BadgeDemo theme="danger" text="Danger" />
+  <br/>
   <BadgeDemo theme="warning" text="Warning" />
+  <br/>
   <BadgeDemo theme="success" text="Success" />
+  <br/>
   <BadgeDemo theme="info-primary" text="Info (primary)" />
+  <br/>
   <BadgeDemo theme="info-secondary" text="Info (secondary)" />
 </LiveDemo>
 
@@ -102,7 +96,15 @@ You can use the built-in themes via attribute. If you need a custom color, see t
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `root`                         | The root container element.
+
+</PageSection>
 
 <PageSection>
 
@@ -119,5 +121,15 @@ You can use the built-in themes via attribute. If you need a custom color, see t
 | `--forge-badge-theme-default-muted-color`       | Controls the font-color when using the muted themes.
 | `--forge-badge-theme-default-strong-color`      | Controls the font-color when using the strong themes.
 | `--forge-badge-border`                          | Controls the border style of the internal container element.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- If necessary, include a `role` attribute to indicate to screen readers what the badge is being used for.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.1 requirements.
+- If color conveys important information, provide additional cues for users with color perception deficiencies such as an icon.
 
 </PageSection>

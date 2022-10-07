@@ -10,9 +10,9 @@ import styles from './backdrop.scss';
 export interface IBackdropComponent extends IBaseComponent {
   delay: number;
   maxOpacity: number;
+  appearance: BackdropAppearance;
   fadeOut(): Promise<void>;
   fadeIn(): Promise<void>;
-  appearance: BackdropAppearance;
 }
 
 declare global {
@@ -27,6 +27,8 @@ declare global {
 
 /**
  * A web component that renders a backdrop covering its parent container with a semi-opaque element.
+ * 
+ * @tag forge-backdrop
  */
 @CustomElement({
   name: BACKDROP_CONSTANTS.elementName

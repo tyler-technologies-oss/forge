@@ -1,14 +1,11 @@
-import { DefaultTemplate as DividerDemo } from './templates/default';
+import { Default as DividerDemo } from './divider.stories';
 import { DividerDefaultCodeHtml } from './code/divider-default';
 
 <PageSection>
 
 # Divider
 
-Use the divider component when you need to separate groups of content within a section. This is a simple component that was purely created to
-ensure consistency.
-
-This component will also properly inherit theme adjustments via CSS custom properties.
+Use the divider component when you need to separate groups of content within a section.
 
 </PageSection>
 
@@ -20,15 +17,11 @@ This component will also properly inherit theme adjustments via CSS custom prope
 
 Using this component is very simple, use in place of the `<hr>` element like the following:
 
-<LiveDemo 
-fullWidth={true} 
-codeHtml={DividerDefaultCodeHtml()}>
-  <DividerDemo/>
+<LiveDemo fullWidth codeHtml={DividerDefaultCodeHtml()}>
+  <DividerDemo />
 </LiveDemo>
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -42,10 +35,17 @@ Causes the component to render vertically.
 
 </PropertyDef>
 
-
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                 | Description
+| :--------------------| :---------------
+| `root`               | The root element.
+
+</PageSection>
 
 <PageSection>
 
@@ -56,5 +56,14 @@ Causes the component to render vertically.
 | `--forge-theme-border-color`               | Controls the color of the divider line.
 | `--forge-divider-width`                    | Sets the stroke width of the divider line. Default is `1px`.
 | `--forge-divider-margin`                   | Controls the `margin` style that is applied to the internal root element.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- The `<forge-divider>` component automatically provides a role="separator" attribute.
+  - If you would like to remove the divider from the accessibility tree, add `aria-hidden="true"` to the element.
 
 </PageSection>

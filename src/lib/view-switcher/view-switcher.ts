@@ -23,6 +23,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-view-switcher>` custom element.
+ * 
+ * @tag forge-view-switcher
+ */
 @CustomElement({
   name: VIEW_SWITCHER_CONSTANTS.elementName,
   dependencies: [ViewComponent]

@@ -1,6 +1,5 @@
-import { DefaultTemplate as ListDemo } from './templates/default';
-import { DrawerTemplate as DrawerDemo } from './templates/drawer';
-import { ExpandableTemplate as ExpandableDemo } from './templates/expandable';
+import { Default as ListDemo, Expandable as ExpandableDemo } from './list.stories';
+import { DrawerDemo } from './demos/drawer';
 import { ListDefaultCodeHtml } from './code/list-default';
 import { ListTwoLineCodeHtml } from './code/list-two-line';
 import { ListLeadingIconCodeHtml } from './code/list-leading-icon';
@@ -29,7 +28,8 @@ The list offers a few different built-in variants:
 
 Choose the one that fits closest to your needs, and keep in mind that you can adjust certain styles via [CSS custom properties](#css-custom-properties).
 
-> A common use case is to use a list within the [drawer component](?path=/story/components-drawer--drawer) to create a side navigation drawer. See the [List Drawer](?path=/story/components-banner--drawer) example below for implementation details on this pattern.
+> A common use case is to use a list within the [drawer component](?path=/story/components-drawer--drawer) to create a side navigation drawer. See
+> the [List Drawer](?path=/story/components-banner--drawer) example below for implementation details on this pattern.
 
 </PageSection>
 
@@ -41,91 +41,62 @@ Choose the one that fits closest to your needs, and keep in mind that you can ad
 
 ### Default
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListDefaultCodeHtml()}>
-  <ListDemo/>
+<LiveDemo layout="column" fullWidth codeHtml={ListDefaultCodeHtml()}>
+  <ListDemo />
 </LiveDemo>
 
 ### Two-Line
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListTwoLineCodeHtml()}>
-  <ListDemo listStyle={'two-line'}/>
+<LiveDemo layout="column" fullWidth codeHtml={ListTwoLineCodeHtml()}>
+  <ListDemo listStyle="two-line" />
 </LiveDemo>
 
 ### Leading Icon
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListLeadingIconCodeHtml()}>
-  <ListDemo leadingSlot={'icon'}/>
+<LiveDemo layout="column" fullWidth codeHtml={ListLeadingIconCodeHtml()}>
+  <ListDemo leadingSlot="icon" />
 </LiveDemo>
 
 ### Trailing Icon
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListTrailingIconCodeHtml()}>
-  <ListDemo trailingSlot={'icon'}/>
+<LiveDemo layout="column" fullWidth codeHtml={ListTrailingIconCodeHtml()}>
+  <ListDemo trailingSlot="icon" />
 </LiveDemo>
 
 ### Leading Avatar
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListLeadingAvatarCodeHtml()}>
-  <ListDemo leadingSlot={'avatar'}/>
+<LiveDemo layout="column" fullWidth codeHtml={ListLeadingAvatarCodeHtml()}>
+  <ListDemo leadingSlot="avatar" listStyle="two-line" />
 </LiveDemo>
 
 ### Trailing Checkbox
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListTrailingCheckboxCodeHtml()}>
-  <ListDemo trailingSlot={'checkbox'}/>
+<LiveDemo layout="column" fullWidth codeHtml={ListTrailingCheckboxCodeHtml()}>
+  <ListDemo trailingSlot="checkbox" />
 </LiveDemo>
 
 ### Trailing Radio Button
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListTrailingRadioButtonCodeHtml()}>
-  <ListDemo trailingSlot={'radio-button'}/>
+<LiveDemo layout="column" fullWidth codeHtml={ListTrailingRadioButtonCodeHtml()}>
+  <ListDemo trailingSlot="radio-button" />
 </LiveDemo>
 
 ### Expandable List Items
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListExpandableCodeHtml()}>
-  <ExpandableDemo/>
+<LiveDemo layout="column" fullWidth codeHtml={ListExpandableCodeHtml()}>
+  <ExpandableDemo />
 </LiveDemo>
 
 ### Drawer
 
-<LiveDemo 
-layout="column" 
-fullWidth 
-codeHtml={ListDrawerCodeHtml()}>
-  <DrawerDemo/>
+<LiveDemo layout="column" fullWidth codeHtml={ListDrawerCodeHtml()}>
+  <DrawerDemo />
 </LiveDemo>
 
 > **Note:** if you need to disable the default styling of list items when placed within a drawer, you can add the `forge-drawer-context="false"` attribute
->           to all `<forge-list-item>` elements.
+> to all `<forge-list-item>` elements.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -266,33 +237,27 @@ Gets/sets whether the list item content is wrapped or not.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Methods
 
 <MethodDef name="focus(): void">
 
-  Sets focus to this list item.
+Sets focus to this list item.
 
 </MethodDef>
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
 
-| Name                     | Description
-| :------------------------| :-----------------
+| Name                       | Description
+| :--------------------------| :-----------------
 | `forge-list-item-select`   | Emits when a list item is clicked, and provides the value of the list item.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -307,8 +272,6 @@ Gets/sets whether the list item content is wrapped or not.
 | `enter / space`                     | Selects the focused list item.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -334,7 +297,24 @@ Gets/sets whether the list item content is wrapped or not.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+### List
+
+| Name                             | Description
+| :--------------------------------| :----------------
+| `root`                           | The root element.
+
+### List item
+
+| Name                             | Description
+| :--------------------------------| :----------------
+| `root`                           | The root element.
+| `text-container`                 | The container element around the slotted content.
+
+</PageSection>
 
 <PageSection>
 
@@ -350,18 +330,18 @@ Gets/sets whether the list item content is wrapped or not.
 
 | Name                                               | Description
 | :--------------------------------------------------| :----------------
-| `--forge-list-item-height`                           | Sets the height of the list item.
-| `--forge-list-item-padding`                          | Controls the padding applied to the list item.
-| `--forge-list-item-min-height`                       | Sets the min height of the list item. Default is `auto`.
-| `--forge-list-item-max-height`                       | Sets the max-height of the list item. Default is `auto`.
-| `--forge-list-item-indent`                           | Sets the indentation amount (margin-left) of the list item. Default is `56px`.
-| `--forge-list-item-align-items`                      | Controls the cross-axis alignment of list item content.
-| `--forge-list-item-leading-margin-left`              | Controls the margin-left applied to the internal list-item leading element.
-| `--forge-list-item-leading-margin-right`             | Controls the margin-right applied to the internal list-item leading element.
-| `--forge-list-item-margin`                           | Controls the margin around the list items when placed within a drawer.
-| `--forge-list-item-padding`                          | Controls the padding within the list items when placed within a drawer.
-| `--forge-list-item-cursor`                           | Controls the cursor of the list items when placed within a drawer.
-| `--forge-list-item-border-radius`                    | Controls the border-radius of the list items when placed within a drawer.
+| `--forge-list-item-height`                         | Sets the height of the list item.
+| `--forge-list-item-padding`                        | Controls the padding applied to the list item.
+| `--forge-list-item-min-height`                     | Sets the min height of the list item. Default is `auto`.
+| `--forge-list-item-max-height`                     | Sets the max-height of the list item. Default is `auto`.
+| `--forge-list-item-indent`                         | Sets the indentation amount (margin-left) of the list item. Default is `56px`.
+| `--forge-list-item-align-items`                    | Controls the cross-axis alignment of list item content.
+| `--forge-list-item-leading-margin-left`            | Controls the margin-left applied to the internal list-item leading element.
+| `--forge-list-item-leading-margin-right`           | Controls the margin-right applied to the internal list-item leading element.
+| `--forge-list-item-margin`                         | Controls the margin around the list items when placed within a drawer.
+| `--forge-list-item-padding`                        | Controls the padding within the list items when placed within a drawer.
+| `--forge-list-item-cursor`                         | Controls the cursor of the list items when placed within a drawer.
+| `--forge-list-item-border-radius`                  | Controls the border-radius of the list items when placed within a drawer.
 | `--mdc-theme-text-secondary-on-background`         | Controls the leading, trailing, avatar, and subtitle font color.
 | `--mdc-theme-primary`                              | Controls the selected state color.
 | `--mdc-theme-on-primary`                           | Controls the selected state font color.
@@ -369,8 +349,19 @@ Gets/sets whether the list item content is wrapped or not.
 | `--mdc-theme-text-disabled-on-light`               | Controls the disabled font color for leading and trailing elements.
 | `--mdc-theme-text-disabled-on-background`          | Controls the disabled font color.
 
-> **Tip:** To reduce the margin between the icon and label, use the following:
-> `<forge-list-item style="--forge-list-item-leading-margin-right: 16px;">`
+> **Tip:** To reduce the margin between the icon and label, use the following: `--forge-list-item-leading-margin-right: 16px`
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Verify that you can reach each active list item by keyboard navigation.
+  - Ensure a distinct visual style is applied which highlights the currently focused list item.
+- Verify that pressing the space bar or enter key while focused on a list-item will activate the list-item in the same manner as if it had been clicked with a mouse.
+- Be sure to include a [role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques) attribute to indicate to screen readers what the list-item is being used for.
+- If the list item contains a checkbox or radio box, ensure that it can be focused and selected/toggled by keyboard.
 
 </PageSection>
 

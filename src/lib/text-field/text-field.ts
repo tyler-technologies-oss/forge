@@ -15,6 +15,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-text-field>` custom element.
+ * 
+ * @tag forge-text-field
+ */
 @CustomElement({
   name: TEXT_FIELD_CONSTANTS.elementName
 })

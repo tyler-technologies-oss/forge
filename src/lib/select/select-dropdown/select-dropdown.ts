@@ -33,6 +33,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-select-dropdown>` custom element.
+ * 
+ * @tag forge-select-dropdown
+ */
 @CustomElement({
   name: SELECT_DROPDOWN_CONSTANTS.elementName,
   dependencies: [

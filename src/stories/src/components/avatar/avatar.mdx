@@ -1,6 +1,6 @@
-import { DefaultTemplate as AvatarDemo } from './templates/default';
-import { AvatarImageCodeHtml, AvatarImageCodeBlazor } from './code/avatar-image';
-import { AvatarLetterCodeHtml, AvatarLetterCodeBlazor } from './code/avatar-letter';
+import { Default as AvatarDemo } from './avatar.stories';
+import { AvatarImageCodeHtml } from './code/avatar-image';
+import { AvatarLetterCodeHtml } from './code/avatar-letter';
 
 <PageSection>
 
@@ -18,24 +18,16 @@ on the URL provided to it.
 
 ## Example
 
-### Avatar (image)
-
-<LiveDemo 
-dense={true} 
-codeHtml={AvatarImageCodeHtml()} 
-codeBlazor={AvatarImageCodeBlazor()}>
-  <AvatarDemo 
-  imageUrl={'https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg'}
-  text={''}/>
-</LiveDemo>
-
 ### Avatar (letter)
 
-<LiveDemo 
-dense={true} 
-codeHtml={AvatarLetterCodeHtml()} 
-codeBlazor={AvatarLetterCodeBlazor()}>
-  <AvatarDemo/>
+<LiveDemo dense codeHtml={AvatarLetterCodeHtml()}>
+  <AvatarDemo />
+</LiveDemo>
+
+### Avatar (image)
+
+<LiveDemo dense codeHtml={AvatarImageCodeHtml()}>
+  <AvatarDemo imageUrl={'https://cdn.forge.tylertech.com/v1/icons/svg/custom/forge_logo.svg'} />
 </LiveDemo>
 
 </PageSection>
@@ -84,7 +76,15 @@ Gets/set the text to display as characters. If spaces exist, the first letter of
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                   | Description
+| :----------------------| :--------------------
+| `root`                 | The root container element.
+
+</PageSection>
 
 <PageSection>
 
@@ -98,5 +98,17 @@ Gets/set the text to display as characters. If spaces exist, the first letter of
 | `--forge-avatar-theme-on-background`              | Controls the `color` of the font.
 | `--forge-avatar-radius`                           | Controls the `border-radius` style. Can be useful for custom avatar shapes.
 | `--forge-avatar-size`                             | Controls the `height` and `width` styles together.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Note that the avatar component may not be visible to screen readers.
+  - Use `aria-hidden` to ensure that the avatar content is ignored by a screen reader.
+- Avoid using the avatar component for any essential navigation.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.1 requirements.
 
 </PageSection>

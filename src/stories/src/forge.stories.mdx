@@ -1,4 +1,6 @@
 import { Meta } from '@storybook/addon-docs';
+import LibraryVersion from './core/library-version.tsx';
+import packageJson from '../../../package.json';
 
 <Meta title="Forge" parameters={{
   previewTabs: {
@@ -14,10 +16,11 @@ import { Meta } from '@storybook/addon-docs';
 
 Forge is a framework-agnostic library of Web Components adhering to the [W3C Web Component Spec][2] and the [Forge Design System][1]. Originally derived from Google's
 [Material Components Web][3] project (MDC), this project aims to create a consistent UI/UX across applications regardless of choice in front-end frameworks. Theming is a
-core part of the library such that competing design objectives can be achieved while still providing UI/UX cohesion across product catalogs. Please visit the
-[Forge Design System website][1] for additional guidance and documentation.
+core part of the library such that competing design objectives can be achieved while still providing UI/UX cohesion across product catalogs.
 
 To view more information, see the "Guides" section in the menu and to view component demos and documentation view the "Components" section.
+
+View the Forge repository on GitHub [here](https://github.com/tyler-technologies-oss/forge).
 
 </PageSection>
 
@@ -39,6 +42,11 @@ Please take a look at the following guides to get up and running with using Forg
 - [Theming](?path=/docs/guides-theming--page)
 - [Typography](?path=/docs/guides-typography--page)
 - [Icons](?path=/docs/guides-using-icons--page)
+- [Framework usage](?path=/docs/guides-framework-usage--page)
+- [Changelog](?path=/docs/about-changelog--page)
+- [Roadmap](?path=/docs/about-roadmap--page)
+
+<LibraryVersion packageJson={packageJson} />
 
 </PageSection>
 

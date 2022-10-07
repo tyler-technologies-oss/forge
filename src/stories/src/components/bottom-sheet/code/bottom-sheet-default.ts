@@ -22,26 +22,3 @@ const bottomSheetTemplate = document.getElementById('bottom-sheet-content');
 bottomSheet.appendChild(bottomSheetTemplate.content.cloneNode(true));
 bottomSheet.open = true; // This will append the bottom sheet to the body automatically and start the open animation
 `;
-
-export const BottomSheetDefaultBlazor = () => `
-@inject ForgeBottomSheet ForgeBottomSheet
-
-<ForgeBottomSheetTemplate Identifier="bottom-sheet-content" Title="Bottom sheet header">
-  <BodyContent>
-    <section class="forge-bottom-sheet__body">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt
-      distinctio est praesentium. Sed saepe eius, voluptatibus officia dolores recusandae cum. Molestias est
-      numquam odio.
-    </section>
-  </BodyContent>
-<FooterContent>
-    <ForgeButton ButtonType="@ButtonType.Raised" OnClickCallback="@((args) => ForgeBottomSheet.CloseBottomSheet())">Cancel</ForgeButton>
-</FooterContent>
-</ForgeBottomSheetTemplate>
-
-@code {
-  void OpenBottomSheet() {
-    ForgeBottomSheet.OpenBottomSheet("bottom-sheet-content");
-  }
-}
-`;

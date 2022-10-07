@@ -1,4 +1,4 @@
-import { DefaultTemplate as BannerDemo } from './templates/default';
+import { Default as BannerDemo } from './banner.stories';
 import { BannerDefaultCodeHtml } from './code/banner-default';
 import { BannerThemedCodeHtml } from './code/banner-themed';
 import { BannerCombinedFullCodeHtml } from './code/banner-combined-full';
@@ -110,6 +110,25 @@ Note: Not assigning one of the mentioned themes will set the banner to use it's 
 
 <PageSection>
 
+## CSS parts
+
+| Name                  | Description
+| :---------------------| :----------------
+| `root`                | The root element.
+| `container`           | The container layout element.
+| `wrapper`             | The element used to control layout within the container.
+| `icon-container`      | The element around the icon slot.
+| `subsection-wrapper`  | The wrapper around the subsection text.
+| `subsection-text`     | The element containing the text for the default slot.
+| `action-subsection`   | The element containing the action for the button slot.
+| `dismiss-icon-button` | The `<forge-icon-button>` element for the dismiss action.
+| `dismiss-button`      | The `<button>` element within the `<forge-icon-button>` dismiss part.
+| `dismiss-button-icon` | The `<forge-icon>` element for the dismiss action.
+
+</PageSection>
+
+<PageSection>
+
 ## CSS custom properties
 
 | Name                                         | Description
@@ -117,5 +136,15 @@ Note: Not assigning one of the mentioned themes will set the banner to use it's 
 | `--forge-banner-theme-background`              | Sets the banner's background color.
 | `--forge-banner-theme-on-background`           | Sets the banner's font color.
 | `--forge-banner-theme-icon`                    | Sets the banner's icon color.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- If the banner is used to display an important notification to a user, use the `role="alert"` attribute on the `<forge-banner>` element.
+  - This is equivalent to using `aria-live="assertive"`.
+  - If the banner is less urgent, you can use `aria-live="polite"` to wait until the user is finished with their current task.
 
 </PageSection>

@@ -1,4 +1,4 @@
-import { DefaultTemplate as ScaffoldDemo } from './templates/default';
+import { Default as ScaffoldDemo } from './scaffold.stories';
 import { ScaffoldDefaultHtml, ScaffoldDefaultScss } from './code/scaffold-default';
 
 <PageSection>
@@ -18,9 +18,9 @@ to write any CSS at all. For instance, by placing content within the built-in sl
 
 > **Note:** It is recommended that you use a single container element for each slot within the scaffold. This
 > is because the scaffold applies specific CSS grid styles to the slotted elements, and this can cause unwanted
-> side-effects to your elements if you place things like buttons directly into the slots themselves.
-
-> **Note:** If you encounter rendering issues where content is stacked on the z-index, ensure that each named slot is used only once.
+> side-effects to your elements if you place things like multiple buttons directly into the root of the slots themselves.
+>
+> If you encounter rendering issues where content is stacked on the z-index, ensure that each named slot is used only once.
 
 </PageSection>
 
@@ -30,17 +30,13 @@ to write any CSS at all. For instance, by placing content within the built-in sl
 
 ## Example
 
-### Basic application layout
+### Available slots
 
 <LiveDemo layout="column" fullWidth  codeHtml={ScaffoldDefaultHtml()} codeScss={ScaffoldDefaultScss()}>
   <ScaffoldDemo />
 </LiveDemo>
 
-> The Forge website itself uses the scaffold to help with the overall page layout. View the source to see it in action!
-
 </PageSection>
-
----
 
 <PageSection>
 
@@ -56,15 +52,13 @@ Sets the `--forge-scaffold-height` and `--forge-scaffold-width` CSS custom prope
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
 
 | Name               | Description
 | :------------------| :-----------------
-| `left`            | Render content to the left of the body at the left of the scaffold.
+| `left`             | Render content to the left of the body at the left of the scaffold.
 | `header`           | Renders content at the top of the scaffold.
 | `body`             | Render content below the header slot and expands to the bottom of the scaffold, or to the footer if specified.
 | `body-header`      | Render content above the scrollable body slot.
@@ -76,18 +70,39 @@ Sets the `--forge-scaffold-height` and `--forge-scaffold-width` CSS custom prope
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                             | Description
+| :--------------------------------| :----------------
+| `root`                           | The root element.
+| `header-container`               | The container element around the `header` slot.
+| `body-container`                 | The container element around the `body` and `body-*` slots.
+
+</PageSection>
 
 <PageSection>
 
 ## CSS custom properties
 
-| Name                             | Description
-| :--------------------------------| :----------------
+| Name                               | Description
+| :----------------------------------| :----------------
 | `--forge-scaffold-height`          | Controls the height of the root element. Default value is `100%`.
 | `--forge-scaffold-width`           | Controls the width of the root element. Default value is `100%`.
 | `--forge-scaffold-position`        | Controls the position of the root element. Default value is `relative`.
 | `--forge-scaffold-body-position`   | Controls the body position of the body element. Default value is `relative`.
 | `--forge-scaffold-overflow`        | Controls the overflow of the root element. Default value is `hidden`.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the content in each of the slots is accessible by tabbing with the keyboard.
+- Use the proper semantic elements for content (if applicable) such as `<header>`, `<main>`, `<aside>`... etc..
+  - The scaffold component itself has no semantic meaning.
+  - The scaffold component does not make any assumptions about the content you provide so it's up to you to provide the proper landmark elements.
 
 </PageSection>

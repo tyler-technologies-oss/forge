@@ -1,8 +1,10 @@
 export const FabExtendedCodeHtml = () => {
-  return `<forge-fab extended>
+  return `
+<forge-fab extended>
   <button type="button" aria-label="Create">
-    <i class="tyler-icons" aria-hidden="true">add</i>
+    <forge-icon name="add"></forge-icon>
     <span>Create</span>
   </button>
-</forge-fab>`;
+</forge-fab>
+  `;
 };

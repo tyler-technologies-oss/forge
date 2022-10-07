@@ -1,4 +1,4 @@
-import { DefaultTemplate as ChipFieldDemo } from './templates/default';
+import { Default as ChipFieldDemo } from './chip-field.stories';
 import {
   ChipFieldDefaultHtml,
   ChipFieldDefaultTs,
@@ -50,8 +50,6 @@ Please see the [with autocomplete](?path=/story/components-chip-field--with-auto
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Properties/Attributes
@@ -92,8 +90,6 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Events
@@ -106,8 +102,6 @@ Controls the floating state of the label. Call this to manually float the label.
 | `forge-chip-field-member-removed`| Emits when the the user presses Backspace to remove the last member from the collection.
 
 </PageSection>
-
----
 
 <PageSection>
 
@@ -123,22 +117,36 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
-
 <PageSection>
 
 ## Slots
+
+> A default (unnamed) slot exists, and it is intended that an `<input>` element will be placed in this slot.
 
 | Name                           | Description
 | :------------------------------| :----------------
 | `label`                        | Projects the label element into the correct location with the proper typography.
 | `member`                       | Projects each element with this slot to the collection area of the component. This slot will be present on each element comprising your collection.
-| `default`                      | The default (unnamed) slot is the input. Projects the input into the correct location.
 | `helper-text`                  | Places content below the component with the proper typography.
+| `leading`                      | Places content such as icons before the input.
+| `trailing`                     | Places content such as icons after the input.
+| `addon-end`                    | Places an element (such as icon button for example) after the input.
 
 </PageSection>
 
----
+<PageSection>
+
+## CSS parts
+
+| Name                           | Description
+| :------------------------------| :----------------
+| `root`                         | The root element.
+| `container`                    | The container layout element.
+| `label-input-container`        | The container element around the label and input slot.
+| `input-container`              | The container element around the input slot only.
+| `addon-end-container`          | The container element for the `addon-end` slot.
+
+</PageSection>
 
 <PageSection>
 
@@ -189,7 +197,18 @@ Controls the floating state of the label. Call this to manually float the label.
 
 </PageSection>
 
----
+<PageSection>
+
+## Accessibility
+
+- Add an `id` to your `<input>` element and bind it to your `<label>` element using the `for` attribute on the `<label>`.
+- Ensure that the chips that are added to the field have descriptive `aria-label` or `aria-labelledby` attributes.
+- Make sure that the member chips that are added can be accessed via the keyboard left and right arrows.
+  - There should be a distinct visual cue that indicates which chip is focused
+- Similarly, make sure that when a chip is focused using the arrow keys, that the backspace and delete keys do remove them.
+- Ensure that when disabled, the entire field as well as the member chips all appear visually and interactively disabled.
+
+</PageSection>
 
 <PageSection>
 

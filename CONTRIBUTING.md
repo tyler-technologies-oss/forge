@@ -48,7 +48,7 @@ environment is important.
 To get started, clone the repository:
 
 ```bash
-git clone https://github.com/tyler-technologies/forge.git
+git clone https://github.com/tyler-technologies-oss/forge.git
 ```
 
 Navigate to the project root, and install dependencies:
@@ -86,7 +86,7 @@ A successful build-command output is found in the `dist/release/@tylertech/forge
 ### Linting
 
 To ensure proper code style and formatting, we use ESLint and stylelint in this project for linting javascript/TypeScript 
-and CSS/Sass respectively. Linting is executed when running the build command and as a precommit hook. The linter can be 
+and CSS/Sass respectively. Linting is executed when running the build command and as a pre-commit hook. The linter can be 
 run at any time with the `npm run lint` command.
 
 ### Running unit tests
@@ -197,3 +197,11 @@ request template. This will help speed up the process of getting your changes re
 
 > This project uses [Auto](https://intuit.github.io/auto/) for its CI/CD automation. Please familiarize
 > yourself with Auto. Release versions are controlled by labels on Pull Requests.
+
+## Commit message format
+
+This project uses a pre-commit hook (via [husky](https://typicode.github.io/husky/#/)) to ensure a proper commit message format is provided for
+all commits. This format follows the conventional commit format described [here](https://www.conventionalcommits.org/en/v1.0.0/).
+
+> **Note:** if you're on MacOS/Linux **and** use NVM, you may run into an issue with the pre-commit hook.
+> See [here](https://github.com/typicode/husky/issues/77#issuecomment-630065185) for information about how to resolve this issue.

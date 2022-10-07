@@ -22,6 +22,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-chip-set>` custom element.
+ * 
+ * @tag forge-chip-set
+ */
 @CustomElement({
   name: CHIP_SET_CONSTANTS.elementName,
   dependencies: [ChipComponent]

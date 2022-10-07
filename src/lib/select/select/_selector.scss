@@ -44,8 +44,10 @@
   }
 
   // Padding
-  .forge-select__selected-text {
-    padding-top: 25px; // Override the default field padding styles to align text content
+  .forge-select--label {
+    .forge-select__selected-text {
+      padding-top: 25px; // Override the default field padding styles to align text content
+    }
   }
 }
 

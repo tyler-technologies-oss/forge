@@ -1,4 +1,4 @@
-import { DefaultTemplate as AutocompleteDemo } from './templates/default';
+import { Default as AutocompleteDemo } from './autocomplete.stories';
 import { AutocompleteDefaultCodeHtml, AutocompleteDefaultCodeTs } from './code/autocomplete-default';
 
 <PageSection>
@@ -207,6 +207,19 @@ Closes the dropdown.
 | (default)          | The default (unnamed) slot is the text input. Projects the input into the correct location.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Verify that you can tab into the autocomplete component.
+* Verify that you can access the options within the autocomplete component using only the keyboard.
+* The input element will receive the proper ARIA attributes such as `aria-role="combobox"`, `aria-live`, `aria-owns`, ... etc.
+* You should ensure that you either use a `<label>` element, or add an `aria-label` or `aria-labelledby` attribute to provide a meaningful label.
+
+</PageSection>
+
+---
 
 <PageSection>
 

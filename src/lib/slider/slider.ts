@@ -34,6 +34,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-slider>` component.
+ * 
+ * @tag forge-slider
  */
 @CustomElement({
   name: SLIDER_CONSTANTS.elementName

@@ -267,8 +267,10 @@ export class PaginatorFoundation {
       return;
     }
 
-    this.pageIndex = 0;
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE);
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: 0 });
+    if (canPage) {
+      this.pageIndex = 0;
+    }
   }
 
   /**
@@ -281,9 +283,11 @@ export class PaginatorFoundation {
     if (!this._hasPreviousPage()) {
       return;
     }
-
-    this.pageIndex--;
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE);
+    
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, { pageIndex: this._pageIndex - 1 });
+    if (canPage) {
+      this.pageIndex--;
+    }
   }
 
   /**
@@ -297,8 +301,10 @@ export class PaginatorFoundation {
       return;
     }
 
-    this.pageIndex++;
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE);
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: this._pageIndex + 1 });
+    if (canPage) {
+      this.pageIndex++;
+    }
   }
 
   /**
@@ -312,8 +318,10 @@ export class PaginatorFoundation {
       return;
     }
 
-    this.pageIndex = this._getMaxPages();
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE);
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE, { pageIndex: this._getMaxPages() });
+    if (canPage) {
+      this.pageIndex = this._getMaxPages();
+    }
   }
 
   /**
@@ -322,19 +330,20 @@ export class PaginatorFoundation {
    */
   private _onPageSizeChanged(evt: CustomEvent): void {
     evt.stopPropagation();
-    this.pageIndex = 0;
-    this.pageSize = Number((evt.target as ISelectComponent).value);
-    this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE);
+
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize: Number(evt.detail) });
+    if (canPage) {
+      this.pageIndex = 0;
+      this.pageSize = Number(evt.detail);
+    } else {
+      evt.preventDefault();
+    }
   }
 
-  private _emitChangeEvent(type: string): void {
-    const detail: IPaginatorChangeEvent = {
-      type,
-      pageSize: this._pageSize,
-      pageIndex: this._pageIndex,
-      offset: this._pageIndex * this._pageSize
-    };
-    this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail);
+  private _emitChangeEvent(type: string, { pageSize = this._pageSize, pageIndex = this._pageIndex } = {}): boolean {
+    const offset = pageIndex * pageSize;
+    const detail: IPaginatorChangeEvent = { type, pageSize, pageIndex, offset };
+    return this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail, true, true);
   }
 
   /**
