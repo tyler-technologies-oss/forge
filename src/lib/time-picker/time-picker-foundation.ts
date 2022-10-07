@@ -545,7 +545,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     let activeStartIndex: number | undefined;
     
     // Find closest match in list of time options and activate/select it
-    if(options.length) {
+    if (options.length) {
       if (this._value !== null) {
         const optionIndex = this._findClosestOptionIndex(this._value, selectableOptions);
         if (optionIndex >= 0) {
