@@ -531,7 +531,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _openDropdown(): void {
-    if (!this.allowDropdown) {
+    if (!this.allowDropdown || this._generateTimeOptions.length) {
       return;
     }
 
@@ -545,20 +545,22 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     let activeStartIndex: number | undefined;
     
     // Find closest match in list of time options and activate/select it
-    if (this._value !== null) {
-      const optionIndex = this._findClosestOptionIndex(this._value, selectableOptions);
-      if (optionIndex >= 0) {
-        const isExactMatch = selectableOptions[optionIndex].value.time === this._value;
-        if (isExactMatch) {
-          selectedValues = [selectableOptions[optionIndex].value];
-        } else {
+    if(options.length) {
+      if (this._value !== null) {
+        const optionIndex = this._findClosestOptionIndex(this._value, selectableOptions);
+        if (optionIndex >= 0) {
+          const isExactMatch = selectableOptions[optionIndex].value.time === this._value;
+          if (isExactMatch) {
+            selectedValues = [selectableOptions[optionIndex].value];
+          } else {
+            activeStartIndex = optionIndex;
+          }
+        }
+      } else if (typeof this._startTime === 'number') {
+        const optionIndex = this._findClosestOptionIndex(this._startTime, selectableOptions);
+        if (optionIndex >= 0 && optionIndex < selectableOptions.length) {
           activeStartIndex = optionIndex;
         }
-      }
-    } else if (typeof this._startTime === 'number') {
-      const optionIndex = this._findClosestOptionIndex(this._startTime, selectableOptions);
-      if (optionIndex >= 0 && optionIndex < selectableOptions.length) {
-        activeStartIndex = optionIndex;
       }
     }
 
@@ -590,10 +592,14 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _findClosestOptionIndex(value: number, options: Array<IListDropdownOption<ITimePickerOptionValue>>): number {
-    const closestItem = options.reduce((prev, curr) => {
+    if (options.length) {
+      const closestItem = options.reduce((prev, curr) => {
                           return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
                         });
-    return options.indexOf(closestItem);
+      return options.indexOf(closestItem);
+    } else {
+      return 0;
+    }
   }
 
   private _formatInputValue(emitEvents = true): void {
@@ -655,7 +661,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
 
     // Append all leading options
     if (leadingOptions.length) {
-      if (times.length !== 0) {
+      if (times.length) {
         times.splice(0, 0, { label: '', value: null, divider: true });
       }
       leadingOptions.forEach((o, index) => times.splice(index, 0, o));
