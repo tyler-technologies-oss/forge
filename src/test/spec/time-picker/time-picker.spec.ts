@@ -989,7 +989,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const listItems = this.context.getListItems();
 
-    expect(listItems.length).toBeTrue();
+    expect(!listItems.length).toBeTrue();
   });
 
   it('should show custom options', async function(this: ITestContext) {
