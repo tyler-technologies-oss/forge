@@ -973,7 +973,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const listItems = this.context.getListItems();
 
-    expect(listItems.length === 1).toBeTrue();
+    expect(listItems.length).toBe(1);
     expect(listItems[0].value.time).toBeNull();
     expect(listItems[0].innerText).toBe('Now');
     expect(listItems[0].value.metadata).toBe('now');
@@ -989,7 +989,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const listItems = this.context.getListItems();
 
-    expect(!listItems.length).toBeTrue();
+    expect(listItems.length).toBeFalsy();
   });
 
   it('should show custom options', async function(this: ITestContext) {
