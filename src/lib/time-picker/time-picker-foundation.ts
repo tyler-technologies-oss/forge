@@ -531,15 +531,16 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _openDropdown(): void {
-    if (!this.allowDropdown || this._generateTimeOptions.length) {
+    const options = this._generateTimeOptions();
+
+    if (!this.allowDropdown || !options.length) {
       return;
     }
-
+    
     this._formatInputValue();
     this._open = true;
     this._adapter.setHostAttribute(TIME_PICKER_CONSTANTS.attributes.OPEN);
-
-    const options = this._generateTimeOptions();
+    
     const selectableOptions = options.filter(o => !o.divider && !o.disabled);
     let selectedValues: ITimePickerOptionValue[] = [];
     let activeStartIndex: number | undefined;
@@ -592,14 +593,10 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _findClosestOptionIndex(value: number, options: Array<IListDropdownOption<ITimePickerOptionValue>>): number {
-    if (options.length) {
-      const closestItem = options.reduce((prev, curr) => {
-                          return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
-                        });
-      return options.indexOf(closestItem);
-    } else {
-      return 0;
-    }
+    const closestItem = options.reduce((prev, curr) => {
+                        return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
+                      });
+    return options.indexOf(closestItem);
   }
 
   private _formatInputValue(emitEvents = true): void {
