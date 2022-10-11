@@ -61,7 +61,6 @@ export function definedElementFromHtml(html: string): HTMLElement {
  * @param element The item element.
  * @param index The item's position within its set.
  * @param height The shared fixed height of all items.
- * @param inset An amount to offset by.
  */
 export function setItemTop(element: IVirtualScrollerItem, index: number, height: number): void {
   element.element.style.top = `${index * height}px`;
