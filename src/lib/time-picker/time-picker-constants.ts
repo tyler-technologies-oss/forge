@@ -19,6 +19,7 @@ const attributes = {
   STEP: 'step',
   ALLOW_INPUT: 'allow-input',
   SHOW_NOW: 'show-now',
+  SHOW_HOUR_OPTIONS: 'show-hour-options',
   DISABLED: 'disabled',
   POPUP_CLASSES: 'popup-classes',
   ALLOW_DROPDOWN: 'allow-dropdown'
