@@ -8,6 +8,6 @@ on:
 jobs:
   cleanup-storybook-pr:
     name: Cleanup Storybook Deployment
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-cleanup-gh-pages.yml@v1.0.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-cleanup-gh-pages.yml@v2.1.0
     secrets:
       GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
