@@ -27,13 +27,13 @@ export class ModalDrawerFoundation extends BaseDrawerFoundation implements IModa
     this._isInitialized = false;
   }
 
-  protected _setDrawerOpenState(): void {
-    super._setDrawerOpenState();
+  protected _triggerDrawerOpen(): void {
+    super._triggerDrawerOpen();
     this._setBackdrop(true);
   }
 
-  protected _setDrawerClosedState(): void {
-    super._setDrawerClosedState();
+  protected _triggerDrawerClose(): void {
+    super._triggerDrawerClose();
     this._setBackdrop(false);
   }
 

@@ -1,3 +1,45 @@
+# v2.8.0 (Tue Oct 11 2022)
+
+#### 🚀 Enhancement
+
+- feat: showHourOptions for time-picker [#149](https://github.com/tyler-technologies-oss/forge/pull/149) ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+
+#### 🐛 Bug Fix
+
+- fix(drawer): fixes drawer initialization state when defaulting to closed [#150](https://github.com/tyler-technologies-oss/forge/pull/150) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(file-picker): fix helper text slotted styles and dimensions [#155](https://github.com/tyler-technologies-oss/forge/pull/155) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): add checkbox to component dependencies [#152](https://github.com/tyler-technologies-oss/forge/pull/152) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(inline-message): set host to be a block level element [#151](https://github.com/tyler-technologies-oss/forge/pull/151) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Jake Crawford ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.7.0 (Fri Sep 30 2022)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Zachary Silverman ([@zacharysilverman](https://github.com/zacharysilverman)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat: allow cancellation of pagination [#145](https://github.com/tyler-technologies-oss/forge/pull/145) ([@zacharysilverman](https://github.com/zacharysilverman) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(button-toggle-group): allow falsy values in change event [#143](https://github.com/tyler-technologies-oss/forge/pull/143) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(chip-field): add missing slot docs [#142](https://github.com/tyler-technologies-oss/forge/pull/142) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Zachary Silverman ([@zacharysilverman](https://github.com/zacharysilverman))
+
+---
+
 # v2.6.0 (Tue Sep 06 2022)
 
 #### 🚀 Enhancement

@@ -1,7 +1,10 @@
 (function (forge) {
   var example = document.querySelector('#Paginator');
   var paginator = document.querySelector('forge-paginator#forge-paginator-example');
-  paginator.addEventListener('change', evt => console.log(evt.detail));
+
+  paginator.addEventListener('forge-paginator-change', evt => {
+    console.log(evt.detail);
+  });
 
   // Controls showing/hiding of the page size options
   var showPaginatorPageSizeOptionsCheckbox = example.querySelector('#paginator-page-size-options-checkbox');
