@@ -13,6 +13,8 @@
     "postinstall": "cd src/stories && npm install",
     "build": "forge build",
     "start": "npm run storybook",
+    "dev": "cd src/dev && npm run dev",
+    "dev:i": "cd src/dev && npm i && npm run dev",
     "storybook": "cd src/stories && npm start",
     "lint": "forge lint",
     "test": "forge test",

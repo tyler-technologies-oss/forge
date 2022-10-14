@@ -1,0 +1,319 @@
+.app-body {
+  padding: 24px;
+  padding-bottom: 300px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+:not(:defined) {
+  visibility: hidden;
+}
+
+forge-card {
+  max-width: 1000px;
+  margin-bottom: 16px;
+}
+
+forge-card > h2:first-child {
+  margin-top: 0;
+}
+
+forge-card .forge-example-options {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #dddddd;
+  border-top: 1px solid var(--forge-theme-border-color);
+}
+
+forge-autocomplete > forge-text-field {
+  --forge-text-field-margin-bottom: 0;
+}
+
+.badge-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.badge-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge-column forge-badge ~ forge-badge {
+  margin-top: 8px;
+}
+
+.drawer-demo {
+  position: relative;
+  height: 300px;
+  border: 1px solid rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--forge-theme-border-color);
+  overflow: hidden;
+}
+
+.drawer-demo .forge-app-shell {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 100%;
+  flex: 1;
+}
+
+.drawer-demo .forge-app-shell > .forge-header-container {
+  z-index: 7;
+  flex: 0 0 auto;
+  height: 48px;
+}
+
+.drawer-demo .forge-app-shell > .forge-content-container {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+}
+
+.drawer-demo .forge-app-shell > .forge-content-container > .mdc-drawer {
+  z-index: 0;
+}
+
+.list-demo {
+  max-width: 600px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--forge-theme-border-color);
+}
+
+.forge-select {
+  --forge-select-width: 256px;
+}
+
+.forge-demo-card {
+  width: 364px;
+  margin-left: 8px;
+}
+
+.forge-demo-card__body-content {
+  padding: 16px;
+}
+
+.forge-demo-card__body-image {
+  background-image: url('https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg');
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 200px;
+  position: relative;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+}
+
+.forge-demo-card__body-content h2 {
+  margin: 0;
+}
+
+.forge-demo-card__body-content h3 {
+  color: var(--mdc-theme-text-secondary-on-background, rgba(0, 0, 0, 0.54));
+  margin-top: 0;
+}
+
+.forge-demo-card__body-content .forge-typography--body2 {
+  color: var(--mdc-theme-text-secondary-on-background, rgba(0, 0, 0, 0.54));
+}
+
+.forge-demo-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+}
+
+forge-view-switcher > forge-view > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 24px;
+  text-transform: uppercase;
+  border: 4px dashed #e0e0e0;
+  border: 4px dashed var(--forge-theme-border-color);
+}
+
+.forge-table-expandable-row {
+  margin: 16px;
+  border: 4px dashed #e0e0e0;
+  border: 4px dashed var(--forge-theme-border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  padding: 16px;
+  height: 200px;
+  box-sizing: border-box;
+}
+
+forge-card[id='Select'] forge-select,
+forge-card[id='TextField'] forge-text-field {
+  width: 256px;
+}
+
+forge-card[id='TimePicker'] forge-text-field {
+  width: 175px;
+}
+
+.placeholder-container {
+  margin: 16px;
+  border: 4px dashed #e0e0e0;
+  border: 4px dashed var(--forge-theme-border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.placeholder-container--small {
+  border: 2px dashed #e0e0e0;
+  border: 2px dashed var(--forge-theme-border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.color-swatch {
+  height: 24px;
+  width: 24px;
+  border-radius: 4px;
+  background-color: cornflowerblue;
+}
+
+.custom-toast {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.forge-dialog-header {
+  --forge-toolbar-padding: 24px;
+}
+
+.forge-dialog-body__padding {
+  padding: 24px;
+}
+
+.forge-dialog-footer {
+  --forge-toolbar-padding: 24px;
+}
+
+.forge-dialog--small {
+  --forge-dialog-max-width: 400px;
+  --forge-dialog-max-height: 400px;
+}
+
+.tab-content {
+  margin-top: 24px;
+  padding: 56px;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed lightgray;
+}
+
+.app-flex {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.app-flex-col {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.app-flex-item--right {
+  margin-left: auto;
+}
+
+.ripple-surface-example {
+  width: 250px;
+  height: 250px;
+  border-style: dashed;
+  border-width: 1px;
+  border-color: grey;
+}
+.non-standard-input {
+  border-radius: 0;
+  border: 1px solid gray;
+  outline: none;
+  height: 60px;
+  box-sizing: border-box;
+  font-size: 16px;
+  width: 64px;
+  text-align: center;
+}
+
+.non-standard-input[invalid] {
+  background: pink;
+}
+
+.non-standard-input[disabled] {
+  background: #f5f5f5;
+}
+
+.non-standard-button-decrement {
+  border-top-right-radius: 0;
+  border-top-left-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 4px;
+  border-top: 1px solid gray;
+  border-left: 1px solid gray;
+  border-bottom: 1px solid gray;
+  border-right: none;
+  height: 60px;
+  width: 60px;
+  font-size: 24px;
+  color: gray;
+  outline: none;
+  background: white;
+}
+
+.non-standard-button-decrement[disabled] {
+  background: #f5f5f5;
+}
+
+.non-standard-button-increment {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 0;
+  border-top: 1px solid gray;
+  border-left: none;
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray;
+  height: 60px;
+  width: 60px;
+  font-size: 24px;
+  color: gray;
+  outline: none;
+  background: white;
+}
+
+.non-standard-button-increment[disabled] {
+  background: #f5f5f5;
+}
+
+forge-card forge-card, forge-card {
+  --mdc-theme-surface: var(--forge-theme-elevated-surface);
+}
+

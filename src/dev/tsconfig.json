@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "useDefineForClassFields": false,
+    "moduleResolution": "node",
+    "paths": {
+      "@tylertech/forge": ["../lib/index.ts"],
+      "@tylertech/forge/*": ["../lib/*"]
+    }
+  },
+  "include": ["src", "components"]
+}
