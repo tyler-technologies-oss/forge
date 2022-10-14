@@ -150,7 +150,7 @@ export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> imple
   }
 
   public setContainerHeight(height: number | null): void {
-    if (height !== null) {
+    if (height != null) {
       const percent = Math.min(100, 100 * height / window.innerHeight);
       this._containerElement.style.maxHeight = `${percent}%`;
     } else {

@@ -7,10 +7,10 @@ export declare type DatePickerPrepareMaskCallback = (value: string, masked: Mask
 export declare type DatePickerValueMode = 'object' | 'string' | 'iso-string';
 
 export interface IDatePickerCalendarDropdownConfig<T> {
-  value: T | null;
-  min: Date | null;
-  max: Date | null;
-  disabledDates: Date | Date[] | null;
+  value?: T | null;
+  min?: Date | null;
+  max?: Date | null;
+  disabledDates?: Date | Date[] | null;
   popupClasses: string | string[];
   closeCallback: () => void;
   selectCallback: (value: ICalendarDateSelectEventData) => void;
@@ -20,7 +20,7 @@ export interface IDatePickerCalendarDropdownConfig<T> {
   showClear: boolean;
   todayCallback: () => void;
   clearCallback: () => void;
-  disabledDaysOfWeek: DayOfWeek[] | null;
+  disabledDaysOfWeek?: DayOfWeek[] | null;
 }
 
 

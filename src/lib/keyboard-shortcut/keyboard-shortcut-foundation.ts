@@ -5,7 +5,7 @@ import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS } from './keyboard-shortcu
 import { elementAcceptsTextInput, matchKeyCombination, parseKeyCombinations } from './keyboard-shortcut-utils';
 
 export interface IKeyboardShortcutFoundation extends ICustomElementFoundation {
-  key: string | null;
+  key: string | null | undefined;
   target: string;
   global: boolean;
   allowWhileTyping: boolean;
@@ -16,7 +16,7 @@ export interface IKeyboardShortcutFoundation extends ICustomElementFoundation {
 }
 
 export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
-  private _key: string | null;
+  private _key: string | null | undefined;
   private _target: string;
   private _global = false;
   private _allowWhileTyping = false;
@@ -92,10 +92,10 @@ export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
   }
 
   /** Gets/sets the key binding. */
-  public get key(): string | null {
+  public get key(): string | null | undefined {
     return this._key;
   }
-  public set key(value: string| null) {
+  public set key(value: string| null | undefined) {
     if (this._key !== value) {
       this._key = value;
       this._adapter.toggleHostAttribute(KEYBOARD_SHORTCUT_CONSTANTS.attributes.KEY, !!this.key, this._key || '');

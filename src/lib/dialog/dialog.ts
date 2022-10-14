@@ -18,8 +18,8 @@ export interface IDialogComponent extends IBaseComponent {
   closeCallback: DialogStateCallback;
   beforeCloseCallback: () => boolean | Promise<boolean>;
   positionType: DialogPositionType;
-  positionX: number | string | null;
-  positionY: number | string | null;
+  positionX: number | string | null | undefined;
+  positionY: number | string | null | undefined;
   moveable: boolean;
   moveTarget: string;
   initializeMoveTarget(): void;
@@ -148,11 +148,11 @@ export class DialogComponent extends BaseComponent implements IDialogComponent {
 
   /** Controls the horizontal position of the dialog surface. */
   @FoundationProperty()
-  public positionX: number | string | null;
+  public positionX: number | string | null | undefined;
 
   /** Controls the vertical position of the dialog surface. */
   @FoundationProperty()
-  public positionY: number | string | null;
+  public positionY: number | string | null | undefined;
 
   /** Gets/sets whether the dialog surface can be moved or not. */
   @FoundationProperty()

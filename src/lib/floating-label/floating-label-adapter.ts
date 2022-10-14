@@ -26,7 +26,7 @@ export class FloatingLabelAdapter implements IFloatingLabelAdapter {
   }
 
   public getWidth(): number {
-    if (this._labelElement.offsetParent !== null) {
+    if (this._labelElement.offsetParent != null) {
       return this._labelElement.scrollWidth;
     }
     return calcSizeUnattached(this._labelElement).width;

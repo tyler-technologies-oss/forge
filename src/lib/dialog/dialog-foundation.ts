@@ -11,8 +11,8 @@ export interface IDialogFoundation extends ICustomElementFoundation {
   closeCallback: DialogStateCallback;
   beforeCloseCallback: DialogStateCallback;
   positionType: DialogPositionType;
-  positionX: number | string | null;
-  positionY: number | string | null;
+  positionX: number | string | null | undefined;
+  positionY: number | string | null | undefined;
   moveable: boolean;
   moveTarget: string;
   initializeMoveTarget(): void;
@@ -127,7 +127,7 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
   }
 
-  private _normalizePositionValue(value: number | string | null): string | null {
+  private _normalizePositionValue(value: number | string | null | undefined): string | null {
     if (isNumber(value)) {
       return `${value}px`;
     } else if (isString(value)) {
@@ -143,7 +143,7 @@ export class DialogFoundation implements IDialogFoundation {
       if (this._moveable) {
         this._adapter.setMoveable(this._moveable);
       }
-      if (this._positionX !== null || this._positionY !== null) {
+      if (this._positionX != null || this._positionY != null) {
         this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
       }
     }
@@ -473,10 +473,10 @@ export class DialogFoundation implements IDialogFoundation {
     }
   }
 
-  public get positionX(): number | string | null {
+  public get positionX(): number | string | null | undefined {
     return this._positionX;
   }
-  public set positionX(value: number | string | null) {
+  public set positionX(value: number | string | null | undefined) {
     if (this._positionX !== value) {
       this._positionX = this._normalizePositionValue(value);
       if (this._open) {
@@ -485,10 +485,10 @@ export class DialogFoundation implements IDialogFoundation {
     }
   }
 
-  public get positionY(): number | string | null {
+  public get positionY(): number | string | null | undefined {
     return this._positionY;
   }
-  public set positionY(value: number | string | null) {
+  public set positionY(value: number | string | null | undefined) {
     if (this._positionY !== value) {
       this._positionY = this._normalizePositionValue(value);
       if (this._open) {

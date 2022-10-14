@@ -189,12 +189,12 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType): void {
     this._surfaceElement.style.position = positionType === 'absolute' ? positionType : 'relative';
-    if (y !== null) {
+    if (y != null) {
       this._surfaceElement.style.top = y;
     } else {
       this._surfaceElement.style.removeProperty('top');
     }
-    if (x !== null) {
+    if (x != null) {
       this._surfaceElement.style.left = x;
     } else {
       this._surfaceElement.style.removeProperty('left');

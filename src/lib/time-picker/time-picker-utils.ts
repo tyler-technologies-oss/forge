@@ -32,7 +32,7 @@ export function timeStringToMillis(time: string | null, use24HourTime: boolean, 
   return hoursToMillis(hours) + minutesToMillis(minutes) + (allowSeconds ? secondsToMillis(seconds) : 0);
 }
 
-export function millisToTimeString(value: number | null, use24HourTime: boolean, allowSeconds: boolean): string | null {
+export function millisToTimeString(value: number | null | undefined, use24HourTime: boolean, allowSeconds: boolean): string | null {
   if (typeof value !== 'number' || value < 0) {
     return null;
   }

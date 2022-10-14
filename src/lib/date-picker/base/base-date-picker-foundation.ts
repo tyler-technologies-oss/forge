@@ -8,10 +8,10 @@ import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 import { BASE_DATE_PICKER_CONSTANTS, DatePickerFormatCallback, DatePickerParseCallback, DatePickerPrepareMaskCallback, DatePickerValueMode } from './base-date-picker-constants';
 
 export interface IBaseDatePickerFoundation<TValue> extends ICustomElementFoundation {
-  value: TValue | null;
-  min: Date | string | null;
-  max: Date | string | null;
-  disabledDates: Date | Date[] | null;
+  value: TValue | null | undefined;
+  min: Date | string | null | undefined;
+  max: Date | string | null | undefined;
+  disabledDates: Date | Date[] | null | undefined;
   open: boolean;
   parseCallback: DatePickerParseCallback;
   formatCallback: DatePickerFormatCallback;
@@ -32,10 +32,10 @@ export interface IBaseDatePickerFoundation<TValue> extends ICustomElementFoundat
 export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerAdapter, TPublicValue, TPrivateValue = TPublicValue> implements IBaseDatePickerFoundation<TPublicValue> {
   // State
   protected abstract _mode: CalendarMode;
-  protected _value: TPrivateValue | null = null;
-  protected _min: Date | null = null;
-  protected _max: Date | null = null;
-  protected _disabledDates: Date | Date[] | null = null;
+  protected _value?: TPrivateValue | null = null;
+  protected _min?: Date | null = null;
+  protected _max?: Date | null = null;
+  protected _disabledDates?: Date | Date[] | null = null;
   protected _open = false;
   protected _parseCallback: DatePickerParseCallback;
   protected _formatCallback: DatePickerFormatCallback;
@@ -83,13 +83,13 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   }
 
   protected _initializeState?(): void;
-  public abstract value: TPublicValue | null;
-  protected abstract _emitChangeEvent(value: TPrivateValue | null, force?: boolean): boolean;
+  public abstract value: TPublicValue | null | undefined;
+  protected abstract _emitChangeEvent(value: TPrivateValue | null | undefined, force?: boolean): boolean;
   protected abstract _emitOpenEvent(): void;
   protected abstract _emitCloseEvent(): void;
   protected abstract _onToday(): void;
   protected abstract _onClear(): void;
-  protected abstract _getCurrentValue(): TPrivateValue | null;
+  protected abstract _getCurrentValue(): TPrivateValue | null | undefined;
   protected abstract _setFormattedInputValue(suppressValueChanges?: boolean): void;
   protected abstract _onInputValueChanged(value: string): void;
   protected abstract _handleInput(value: string): void;
@@ -180,7 +180,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
     const calendarConfig: Partial<ICalendarComponent> = {
       mode: this._mode,
-      value: this._getCurrentValue() as Date | Date[] | DateRange | null,
+      value: this._getCurrentValue() as Date | Date[] | DateRange | null | undefined,
       min: this._min,
       max: this._max,
       disabledDates: this._disabledDates,
@@ -376,7 +376,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     }
   }
 
-  protected _formatDate(date: Date | null): string {
+  protected _formatDate(date: Date | null | undefined): string {
     if (!isValidDate(date)) {
       return '';
     }
@@ -392,14 +392,14 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     return isValidDate(parsedDate) ? parsedDate : null;
   }
 
-  protected _coerceDateValue(value: Date | string | null): Date | null {
+  protected _coerceDateValue(value?: Date | string | null): Date | null | undefined {
     if (typeof value === 'string') {
       return this._parseDateString(value);
     }
     return value;
   }
 
-  protected _getTypedValue(value: Date | null): Date | string | null {
+  protected _getTypedValue(value: Date | null | undefined): Date | string | null | undefined {
     switch (this._valueMode) {
       case 'object':
         return value;
@@ -416,7 +416,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     }
   }
 
-  protected _isDateValueAcceptable(value: Date | null): boolean {
+  protected _isDateValueAcceptable(value?: Date | null): boolean {
     if (!value) {
       return true;
     }
@@ -490,10 +490,10 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     }
   }
 
-  public get min(): Date | string | null {
+  public get min(): Date | string | null | undefined {
     return this._min ? new Date(this._min.getTime()) : null;
   }
-  public set min(value: Date | string | null) {
+  public set min(value: Date | string | null | undefined) {
     if (this._min !== value) {
       const date = this._coerceDateValue(value);
       this._min = !!date ? new Date(date.getTime()) : null;
@@ -505,10 +505,10 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     }
   }
 
-  public get max(): Date | string | null {
+  public get max(): Date | string | null | undefined {
     return this._max ? new Date(this._max.getTime()) : null;
   }
-  public set max(value: Date | string | null) {
+  public set max(value: Date | string | null | undefined) {
     if (this._max !== value) {
       this._max = this._coerceDateValue(value);
       this._applyMax();
@@ -547,7 +547,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     }
   }
 
-  public get disabledDates(): Date | Date[] | null {
+  public get disabledDates(): Date | Date[] | null | undefined {
     if (!this._disabledDates) {
       return null;
     }
@@ -559,7 +559,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     return new Date(this._disabledDates.getTime());
   }
 
-  public set disabledDates(value: Date | Date[] | null) {
+  public set disabledDates(value: Date | Date[] | null | undefined) {
     if (!value) {
       this._disabledDates = null;
     } else if (Array.isArray(value)) {
