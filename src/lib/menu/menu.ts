@@ -128,54 +128,54 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   /** Gets/sets the open state. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /** Gets/sets the array of options to display in the menu. */
   @FoundationProperty()
-  public options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
+  public declare options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
 
   /** Gets/sets the selected option to the index. Does not support cascading menus. */
   @FoundationProperty()
-  public selectedIndex: number;
+  public declare selectedIndex: number;
 
   /** Gets/sets the value of the option to select. */
   @FoundationProperty()
-  public selectedValue: any;
+  public declare selectedValue: any;
 
   /** Gets/sets the menu placement (default is bottom-left). */
   @FoundationProperty()
-  public placement: PopupPlacement;
+  public declare placement: PopupPlacement;
 
   /** Gets/sets dense state of the list options used in the menu popup. */
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   /** Gets/sets the class name to use for option icons. */
   @FoundationProperty()
-  public iconClass: string;
+  public declare iconClass: string;
 
   /**
    * Gets/sets whether selection of menu items is persisted.
    * @deprecated Please use `<forge-select-dropdown>` for handling selection states.
    */
   @FoundationProperty()
-  public persistSelection: boolean;
+  public declare persistSelection: boolean;
 
   /** Gets/sets the mode that this menu is using. */
   @FoundationProperty()
-  public mode: MenuMode;
+  public declare mode: MenuMode;
 
   /** Sets the position adustment on the internal popup element. */
   @FoundationProperty()
-  public popupOffset: IPopupPosition;
+  public declare popupOffset: IPopupPosition;
 
   /** Sets the callback that will be executed for each option in the dropdown for producing custom option templates. */
   @FoundationProperty()
-  public optionBuilder: MenuOptionBuilder;
+  public declare optionBuilder: MenuOptionBuilder;
 
   /** Gets/sets whether selection of menu items is persisted. */
   @FoundationProperty({ set: false })
-  public popupElement: HTMLElement | undefined;
+  public declare popupElement: HTMLElement | undefined;
 
   /** Force propagates the key event from another element this component. */
   public propagateKeyEvent(evt: KeyboardEvent): void {

@@ -120,34 +120,34 @@ export class StepComponent extends BaseComponent implements IStepComponent {
   }
 
   @FoundationProperty()
-  public alternative: boolean;
+  public declare alternative: boolean;
 
   @FoundationProperty()
-  public index: number;
+  public declare index: number;
 
   @FoundationProperty()
-  public editable: boolean;
+  public declare editable: boolean;
 
   @FoundationProperty()
-  public completed: boolean;
+  public declare completed: boolean;
 
   @FoundationProperty()
-  public error: boolean;
+  public declare error: boolean;
 
   @FoundationProperty()
-  public selected: boolean;
+  public declare selected: boolean;
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   @FoundationProperty()
-  public vertical: boolean;
+  public declare vertical: boolean;
   
   @FoundationProperty()
-  public expanded: boolean;
+  public declare expanded: boolean;
   
   @FoundationProperty()
-  public ignoreUserExpansion: boolean;
+  public declare ignoreUserExpansion: boolean;
 
   public override focus(): void {
     this._foundation.focus();

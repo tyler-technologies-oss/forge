@@ -91,53 +91,53 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
 
   /** Gets/sets the value of this option. */
   @FoundationProperty()
-  public value: any;
+  public declare value: any;
 
   /** Gets/sets the label of this option. */
   @FoundationProperty()
-  public label: string;
+  public declare label: string;
 
   /** Gets/sets the disabled status of this option. */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   /** Gets/sets the whether this option is a divider. */
   @FoundationProperty()
-  public divider: boolean;
+  public declare divider: boolean;
 
   /** Gets/sets the classes of this option. */
   @FoundationProperty()
-  public optionClass: string | string[];
+  public declare optionClass: string | string[];
 
   /** Gets/sets the leading icon of this option. */
   @FoundationProperty()
-  public leadingIcon: string;
+  public declare leadingIcon: string;
 
   /** Gets/sets the leading icon class of this option. */
   @FoundationProperty()
-  public leadingIconClass: string;
+  public declare leadingIconClass: string;
 
   /** Gets/sets the leading icon type of this option. */
   @FoundationProperty()
-  public leadingIconType: ListDropdownIconType;
+  public declare leadingIconType: ListDropdownIconType;
 
   /** Gets/sets the trailing icon of this option. */
   @FoundationProperty()
-  public trailingIcon: string;
+  public declare trailingIcon: string;
 
   /** Gets/sets the trailing icon class of this option. */
   @FoundationProperty()
-  public trailingIconClass: string;
+  public declare trailingIconClass: string;
 
   /** Gets/sets the trailing icon type of this option. */
   @FoundationProperty()
-  public trailingIconType: ListDropdownIconType;
+  public declare trailingIconType: ListDropdownIconType;
 
   /** Gets/sets the leading builder of this option. */
   @FoundationProperty()
-  public leadingBuilder: () => HTMLElement;
+  public declare leadingBuilder: () => HTMLElement;
 
   /** Gets/sets the trailing builder of this option. */
   @FoundationProperty()
-  public trailingBuilder: () => HTMLElement;
+  public declare trailingBuilder: () => HTMLElement;
 }

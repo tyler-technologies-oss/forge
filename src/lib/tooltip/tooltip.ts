@@ -75,30 +75,30 @@ export class TooltipComponent extends BaseComponent implements ITooltipComponent
 
   /** Gets/sets the tooltip text. */
   @FoundationProperty()
-  public text: string;
+  public declare text: string;
 
   /** Sets the tooltip builder function for display complex tooltip content. */
   @FoundationProperty()
-  public builder: TooltipBuilder | undefined;
+  public declare builder: TooltipBuilder | undefined;
   
   /** Gets/sets the target element selector. */
   @FoundationProperty()
-  public target: string;
+  public declare target: string;
 
   /** The tooltip display delay in milliseconds. */
   @FoundationProperty()
-  public delay: number;
+  public declare delay: number;
 
   /** Gets/sets the position. */
   @FoundationProperty()
-  public position: PopupPlacement;
+  public declare position: PopupPlacement;
 
   /** Gets the open state of the tooltip. */
   @FoundationProperty({ set: false })
-  public open: boolean;
+  public declare open: boolean;
 
   @FoundationProperty({ set: false })
-  public tooltipElement: HTMLElement | null;
+  public declare tooltipElement: HTMLElement | null;
 
   /** Hides the tooltip if it's open. */
   public hide(): void {

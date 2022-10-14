@@ -11,6 +11,7 @@
     "noEmitHelpers": true,
     "suppressImplicitAnyIndexErrors": true,
     "noImplicitThis": true,
+    "useDefineForClassFields": false,
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["src/lib"],

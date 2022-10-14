@@ -157,59 +157,59 @@ export class ListItemComponent extends BaseComponent implements IListItemCompone
 
   /** Gets/sets whether the static state of this list item. */
   @FoundationProperty()
-  public static: boolean;
+  public declare static: boolean;
 
   /** Gets/sets whether the list item displays two lines of text. */
   @FoundationProperty()
-  public twoLine: boolean;
+  public declare twoLine: boolean;
 
   /** Gets/sets whether the list item displays three lines of text. */
   @FoundationProperty()
-  public threeLine: boolean;
+  public declare threeLine: boolean;
 
   /** Gets/sets whether the list item is active or not. */
   @FoundationProperty()
-  public active: boolean;
+  public declare active: boolean;
 
   /** Gets/sets whether the list item is selected or not. */
   @FoundationProperty()
-  public selected: boolean;
+  public declare selected: boolean;
 
   /** Gets/sets list item value. */
   @FoundationProperty()
-  public value: any;
+  public declare value: any;
 
   /** Gets/sets the href link that this list item will send the browser to when clicked. */
   @FoundationProperty()
-  public href: string;
+  public declare href: string;
 
   /** Gets/sets the href link target. Only pertains when `href` is also used. */
   @FoundationProperty()
-  public target: string;
+  public declare target: string;
 
   /** Gets/sets whether the list item has a ripple or not. */
   @FoundationProperty()
-  public ripple: boolean;
+  public declare ripple: boolean;
 
   /** Gets/sets whether the list item is disabled or not. */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   /** Gets/sets whether the list item is using dense styles or not. */
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   /** Gets/sets whether the list item allows mousedown events through to the underlying list item element. Default is true. */
   @FoundationProperty()
-  public propagateClick: boolean;
+  public declare propagateClick: boolean;
 
   /** Gets/sets whether the list item is indented or not. Default is false. */
   @FoundationProperty()
-  public indented: boolean;
+  public declare indented: boolean;
 
   /** Gets/sets whether the list item content is wrapped or not. Default is true. */
   @FoundationProperty()
-  public wrap: boolean;
+  public declare wrap: boolean;
 
   /** Sets focus to this list item. */
   public override focus(): void {

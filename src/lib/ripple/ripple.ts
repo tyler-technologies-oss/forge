@@ -73,8 +73,8 @@ export class RippleComponent extends HTMLElement implements IRippleComponent {
   }
 
   @FoundationProperty()
-  public target: string;
+  public declare target: string;
 
   @FoundationProperty()
-  public unbounded: boolean;
+  public declare unbounded: boolean;
 }

@@ -139,63 +139,63 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /** Gets/sets the interaction mode. */
   @FoundationProperty()
-  public mode: AutocompleteMode;
+  public declare mode: AutocompleteMode;
 
   /** Gets/sets the multi-select state. */
   @FoundationProperty()
-  public multiple: boolean;
+  public declare multiple: boolean;
 
   /** Gets/sets the value. */
   @FoundationProperty()
-  public value: any;
+  public declare value: any;
 
   /** Gets/sets the debounce delay (milliseconds) for keyboard events. */
   @FoundationProperty()
-  public debounce: number;
+  public declare debounce: number;
 
   /** Gets/sets filter on focus settings which controls whether the dropdown displays automatically when focused. */
   @FoundationProperty()
-  public filterOnFocus: boolean;
+  public declare filterOnFocus: boolean;
 
   /** Controls whether unmatched text entered by the user will stay visible an option in the dropdown is not found. */
   @FoundationProperty()
-  public allowUnmatched: boolean;
+  public declare allowUnmatched: boolean;
 
   /** Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element. */
   @FoundationProperty()
-  public popupTarget: string;
+  public declare popupTarget: string;
 
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
   @FoundationProperty()
-  public optionBuilder: AutocompleteOptionBuilder;
+  public declare optionBuilder: AutocompleteOptionBuilder;
 
   /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
   @FoundationProperty()
-  public filter: AutocompleteFilterCallback;
+  public declare filter: AutocompleteFilterCallback;
 
   /** Sets the selected text builder callback that will be executed when getting the selected text. */
   @FoundationProperty()
-  public selectedTextBuilder: AutocompleteSelectedTextBuilder;
+  public declare selectedTextBuilder: AutocompleteSelectedTextBuilder;
 
   /** Controls the open state of the dropdown. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /** Gets/sets the property key to match the value to an option. */
   @FoundationProperty()
-  public matchKey: string;
+  public declare matchKey: string;
 
   /** Returns whether the component has been initialized or not yet. */
   @FoundationProperty({ set: false })
-  public isInitialized: boolean;
+  public declare isInitialized: boolean;
 
   /** Sets the callback to be executed when the user selects an option, before the UI is updated to allow for validation. */
   @FoundationProperty({ set: false })
-  public popupElement: HTMLElement | null;
+  public declare popupElement: HTMLElement | null;
 
   /** Sets the callback to be executed when the user selects an option, before the UI is updated to allow for validation. */
   @FoundationProperty()
-  public beforeValueChange: (value: any) => boolean | Promise<boolean>;
+  public declare beforeValueChange: (value: any) => boolean | Promise<boolean>;
 
   /** Adds options to the dropdown while it is open. Has no effect if the dropdown is closed.  */
   public appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {

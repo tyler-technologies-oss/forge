@@ -70,11 +70,11 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
 
   /** Gets/sets the currently visible view index. */
   @FoundationProperty()
-  public index: number;
+  public declare index: number;
   
   /** Gets/sets the animation type. */
   @FoundationProperty()
-  public animationType: ViewSwitcherAnimationType;
+  public declare animationType: ViewSwitcherAnimationType;
 
   /** Transitions to the next view. */
   public next(): void {

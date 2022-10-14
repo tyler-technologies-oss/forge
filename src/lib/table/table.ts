@@ -316,78 +316,78 @@ export class TableComponent extends BaseComponent implements ITableComponent {
 
   /** The data to be display in the table body. */
   @FoundationProperty()
-  public data: any[];
+  public declare data: any[];
 
   /** The column configuration options. */
   @FoundationProperty()
-  public columnConfigurations: IColumnConfiguration[];
+  public declare columnConfigurations: IColumnConfiguration[];
 
   /** Controls the visibility of the select column. */
   @FoundationProperty()
-  public select: boolean;
+  public declare select: boolean;
 
   /** Controls the visibility of the select all checkbox (only applied when `select` is `true`). */
   @FoundationProperty()
-  public multiselect: boolean;
+  public declare multiselect: boolean;
 
   /** The row key for matching data to selections. */
   @FoundationProperty()
-  public selectKey: string | string[];
+  public declare selectKey: string | string[];
 
   @FoundationProperty()
-  public tooltipSelect: string | TableSelectTooltipCallback;
+  public declare tooltipSelect: string | TableSelectTooltipCallback;
 
   @FoundationProperty()
-  public tooltipSelectAll: string;
+  public declare tooltipSelectAll: string;
 
   /** Controls whether the table is dense or not. False by default. */
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   /** Controls whether the table is roomy or not. False by default. */
   @FoundationProperty()
-  public roomy: boolean;
+  public declare roomy: boolean;
 
   /** Controls whether the table filters are visible or not. */
   @FoundationProperty()
-  public filter: boolean;
+  public declare filter: boolean;
 
   /** Controls whether the table applies fixed headers when in scroll containers. */
   @FoundationProperty()
-  public fixedHeaders: boolean;
+  public declare fixedHeaders: boolean;
 
   /** Controls the table layout algorithm. */
   @FoundationProperty()
-  public layoutType: TableLayoutType;
+  public declare layoutType: TableLayoutType;
 
   /** Controls whether the content in each cell wraps or not (true by default). */
   @FoundationProperty()
-  public wrapContent: boolean;
+  public declare wrapContent: boolean;
 
   /** Controls whether the columns are resizable or not. */
   @FoundationProperty()
-  public resizable: boolean;
+  public declare resizable: boolean;
 
   /** Gets/sets the minimum width that a column can be resized to by the user dragging the resize handle. */
   @FoundationProperty()
-  public minResizeWidth: number;
+  public declare minResizeWidth: number;
 
   /** Gets/sets whether the rows respond to (and emit) row click events. */
   @FoundationProperty()
-  public allowRowClick: boolean;
+  public declare allowRowClick: boolean;
 
   @FoundationProperty()
-  public multiColumnSort: boolean;
+  public declare multiColumnSort: boolean;
 
   @FoundationProperty()
-  public rowCreated: TableRowCreatedCallback;
+  public declare rowCreated: TableRowCreatedCallback;
 
   @FoundationProperty()
-  public cellCreated: TableCellCreatedCallback;
+  public declare cellCreated: TableCellCreatedCallback;
 
   @FoundationProperty()
-  public selectAllTemplate: TableHeaderSelectAllTemplate;
+  public declare selectAllTemplate: TableHeaderSelectAllTemplate;
 
   @FoundationProperty()
-  public selectCheckboxAlignment: CellAlign;
+  public declare selectCheckboxAlignment: CellAlign;
 }

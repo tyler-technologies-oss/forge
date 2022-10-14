@@ -129,43 +129,43 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
 
   /** The zero-based page index. Default is 0. */
   @FoundationProperty()
-  public pageIndex: number;
+  public declare pageIndex: number;
 
   /** Number of items to display on a page. By default set to 25. */
   @FoundationProperty()
-  public pageSize: number;
+  public declare pageSize: number;
 
   /** Sets page index by providing the number of items to skip. The getter for this property returns the number of items to skip. */
   @FoundationProperty()
-  public offset: number;
+  public declare offset: number;
 
   /** The total number of items to be paginated. Default is 0. */
   @FoundationProperty()
-  public total: number;
+  public declare total: number;
 
   /** The set of provided page size options to display to the user. */
   @FoundationProperty()
-  public pageSizeOptions: number[] | boolean;
+  public declare pageSizeOptions: number[] | boolean;
 
   /** A label for the paginator. Default is "Rows per page:". */
   @FoundationProperty()
-  public label: string;
+  public declare label: string;
 
   /** Whether to show the first page and last page buttons. Default is false. */
   @FoundationProperty()
-  public firstLast: boolean;
+  public declare firstLast: boolean;
 
   /** Whether to show the first page button. Default is false. */
   @FoundationProperty()
-  public first: boolean;
+  public declare first: boolean;
 
   /** Whether the paginator is disabled. Default is false. */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   @FoundationProperty()
-  public alternative: boolean;
+  public declare alternative: boolean;
 
   @FoundationProperty()
-  public alignment: PaginatorAlternativeAlignment;
+  public declare alignment: PaginatorAlternativeAlignment;
 }

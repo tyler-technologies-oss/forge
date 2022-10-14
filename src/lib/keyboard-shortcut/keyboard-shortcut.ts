@@ -91,33 +91,33 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
 
   /** Gets/sets the key binding. */
   @FoundationProperty()
-  public key: string | null;
+  public declare key: string | null;
 
   /** Gets/sets the target element selector. */
   @FoundationProperty()
-  public target: string;
+  public declare target: string;
 
   /** Gets/sets the global listener state. */
   @FoundationProperty()
-  public global: boolean;
+  public declare global: boolean;
 
   /** Gets/sets whether the callback will be called while in a text entry field. */
   @FoundationProperty()
-  public allowWhileTyping: boolean;
+  public declare allowWhileTyping: boolean;
   
   /** Gets/sets whether to prevent default on keyboard events */
   @FoundationProperty()
-  public preventDefault: boolean;
+  public declare preventDefault: boolean;
   
   /** Gets/sets whether to use capturing on keyboard events */
   @FoundationProperty()
-  public capture: boolean;
+  public declare capture: boolean;
   
   /** Gets/sets whether to match codes instead of keys on keyboard events */
   @FoundationProperty()
-  public useCode: boolean;
+  public declare useCode: boolean;
 
   /** Gets/sets whether the callback will be called. */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 }

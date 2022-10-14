@@ -96,30 +96,30 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
 
   /** Gets/sets the chip type. */
   @FoundationProperty()
-  public type: ChipType;
+  public declare type: ChipType;
 
   /** Gets/sets the selected state of the chip. */
   @FoundationProperty()
-  public selected: boolean;
+  public declare selected: boolean;
 
   /** Gets/sets the disabled state of the chip. */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   /** Gets/sets the invalid state of the chip. */
   @FoundationProperty()
-  public invalid: boolean;
+  public declare invalid: boolean;
 
   /** Gets/sets the chip value. */
   @FoundationProperty()
-  public value: string;
+  public declare value: string;
 
   /** Gets/sets the dense state of the chip. */
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   @FoundationProperty()
-  public emulateFocus: boolean;
+  public declare emulateFocus: boolean;
 
   public override focus(): void {
     this._foundation.setFocus();

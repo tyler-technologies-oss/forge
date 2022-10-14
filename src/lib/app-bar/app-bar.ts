@@ -65,15 +65,15 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
 
   /** Gets/sets the title text. */
   @FoundationProperty()
-  public titleText: string;
+  public declare titleText: string;
 
   /** Gets/sets the fixed variant. */
   @FoundationProperty()
-  public fixed: boolean;
+  public declare fixed: boolean;
 
   /** Gets/sets the raised state. */
   @FoundationProperty()
-  public raised: boolean;
+  public declare raised: boolean;
 
   /** Convenience property to allow for easily getting/setting the theme color from JavaScript. */
   public get theme(): string | null {

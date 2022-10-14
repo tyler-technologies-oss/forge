@@ -69,17 +69,17 @@ export class ProductIconComponent extends BaseComponent implements IProductIconC
 
   /** The color of the container element from the material color palette. */
   @FoundationProperty()
-  public color: string;
+  public declare color: string;
 
   /** Controls the height and width of the container element. */
   @FoundationProperty()
-  public size: number;
+  public declare size: number;
 
   /** Controls the visibility of the text shadow. */
   @FoundationProperty()
-  public shadow: boolean;
+  public declare shadow: boolean;
 
   /** The number of iterations to apply the text shadow. */
   @FoundationProperty()
-  public iterations: number;
+  public declare iterations: number;
 }
