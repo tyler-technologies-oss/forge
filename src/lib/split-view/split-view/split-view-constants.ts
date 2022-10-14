@@ -7,7 +7,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}split-
 const attributes = {
   ORIENTATION: 'orientation',
   DISABLED: 'disabled',
-  DISABLE_CLOSE: 'disable-close',
+  ALLOW_CLOSE: 'allow-close',
   AUTO_CLOSE: 'auto-close',
   AUTO_CLOSE_THRESHOLD: 'auto-close-threshold'
 };

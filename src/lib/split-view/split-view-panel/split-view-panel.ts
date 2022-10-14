@@ -61,7 +61,7 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.ACCESSIBLE_LABEL,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.OPEN,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLED,
-      SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE,
+      SPLIT_VIEW_PANEL_CONSTANTS.attributes.ALLOW_CLOSE,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE,
       SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD
     ];
@@ -115,11 +115,11 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
           this.disabled = undefined;
         }
         break;
-      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE:
+      case SPLIT_VIEW_PANEL_CONSTANTS.attributes.ALLOW_CLOSE:
         if (this.hasAttribute(name)) {
-          this.disableClose = coerceBoolean(newValue);
+          this.allowClose = coerceBoolean(newValue);
         } else {
-          this.disableClose = undefined;
+          this.allowClose = undefined;
         }
         break;
       case SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE:
@@ -185,7 +185,7 @@ export class SplitViewPanelComponent extends BaseComponent implements ISplitView
    * Whether the panel can be closed via keyboard interaction.
    */
   @FoundationProperty()
-  public disableClose?: boolean;
+  public allowClose?: boolean;
 
   /**
    * Whether the panel automatically closes when it reaches a size of 0.

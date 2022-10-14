@@ -29,7 +29,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   private _accessibleLabel = 'Split view panel';
   private _open = true;
   private _disabled?: boolean;
-  private _disableClose?: boolean;
+  private _allowClose?: boolean;
   private _autoClose?: boolean;
   private _autoCloseThreshold?: number;
   
@@ -74,8 +74,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     return this._disabled ?? this._parentProperties.disabled ?? false;
   }
 
-  private get _appliedDisableClose(): boolean {
-    return this._disableClose ?? this._parentProperties.disableClose ?? false;
+  private get _appliedAllowClose(): boolean {
+    return this._allowClose ?? this._parentProperties.allowClose ?? false;
   }
 
   private get _appliedAutoClose(): boolean {
@@ -113,7 +113,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._applyAccessibleLabel();
     this._applyOpen();
     this._applyDisabled();
-    this._applyDisableClose();
+    this._applyAllowClose();
     this._applyAutoClose();
     this._applyAutoCloseThreshold();
     this._isInitialized = true;
@@ -211,7 +211,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param evt 
    */
   private _handleEnterKey(evt: KeyboardEvent): void {
-    if (this._appliedDisableClose) {
+    if (!this._appliedAllowClose) {
       return;
     }
 
@@ -410,8 +410,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     this._applyParentDisabled();
 
     // Parent disable close
-    const parentDisableClose = this._adapter.getParentProperty('disableClose') as boolean;
-    this._parentProperties.disableClose = parentDisableClose;
+    const parentAllowClose = this._adapter.getParentProperty('allowClose') as boolean;
+    this._parentProperties.allowClose = parentAllowClose;
 
     // Parent auto close
     const parentAutoClose = this._adapter.getParentProperty('autoClose') as boolean;
@@ -606,18 +606,18 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   /**
    * Get/set whether closing the panel is disabled.
    */
-  public get disableClose(): boolean | undefined {
-    return this._disableClose;
+  public get allowClose(): boolean | undefined {
+    return this._allowClose;
   }
-  public set disableClose(value: boolean | undefined) {
-    if (this._disableClose !== value) {
-      this._disableClose = value;
-      this._applyDisableClose();
+  public set allowClose(value: boolean | undefined) {
+    if (this._allowClose !== value) {
+      this._allowClose = value;
+      this._applyAllowClose();
     }
   }
 
-  private _applyDisableClose(): void {
-    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose ?? false);
+  private _applyAllowClose(): void {
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.ALLOW_CLOSE, this._allowClose ?? false);
   }
 
   /**
@@ -721,8 +721,8 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
         this._parentProperties.disabled = config.properties.disabled;
         this._applyDisabled();
       }
-      if (isDefined(config.properties.disableClose)) {
-        this._parentProperties.disableClose = config.properties.disableClose;
+      if (isDefined(config.properties.allowClose)) {
+        this._parentProperties.allowClose = config.properties.allowClose;
       }
       if (isDefined(config.properties.autoClose) && this._parentProperties.autoClose !== config.properties.autoClose) {
         this._parentProperties.autoClose = config.properties.autoClose;

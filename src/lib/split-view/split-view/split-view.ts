@@ -32,7 +32,7 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
     return [
       SPLIT_VIEW_CONSTANTS.attributes.ORIENTATION,
       SPLIT_VIEW_CONSTANTS.attributes.DISABLED,
-      SPLIT_VIEW_CONSTANTS.attributes.DISABLE_CLOSE,
+      SPLIT_VIEW_CONSTANTS.attributes.ALLOW_CLOSE,
       SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE,
       SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD
     ];
@@ -62,8 +62,8 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
       case SPLIT_VIEW_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case SPLIT_VIEW_CONSTANTS.attributes.DISABLE_CLOSE:
-        this.disableClose = coerceBoolean(newValue);
+      case SPLIT_VIEW_CONSTANTS.attributes.ALLOW_CLOSE:
+        this.allowClose = coerceBoolean(newValue);
         break;
       case SPLIT_VIEW_CONSTANTS.attributes.AUTO_CLOSE:
         this.autoClose = coerceBoolean(newValue);
@@ -90,7 +90,7 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
    * Whether child split view panels can be closed via keyboard interaction.
    */
   @FoundationProperty()
-  public disableClose: boolean;
+  public allowClose: boolean;
 
   /**
    * Whether child split view panels automatically close when they reach a size of 0.

@@ -37,9 +37,9 @@ describe('SplitViewComponent', function(this: ITestContext) {
     expect(this.context.component.disabled).toBeFalse();
   })
 
-  it('should enable closing by default', function(this: ITestContext) {
+  it('should disable closing by default', function(this: ITestContext) {
     this.context = setupTestContext();
-    expect(this.context.component.disableClose).toBeFalse();
+    expect(this.context.component.allowClose).toBeFalse();
   })
 
   it('should disable autoclose by default', function(this: ITestContext) {
@@ -60,10 +60,10 @@ describe('SplitViewComponent', function(this: ITestContext) {
       expect(this.context.component.disabled).toBeTrue();
     })
 
-    it('should set disable close', function(this: ITestContext) {
+    it('should set allow close', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute('disable-close', 'true');
-      expect(this.context.component.disableClose).toBeTrue();
+      this.context.component.setAttribute('allow-close', 'true');
+      expect(this.context.component.allowClose).toBeTrue();
     })
 
     it('should set auto close', function(this: ITestContext) {

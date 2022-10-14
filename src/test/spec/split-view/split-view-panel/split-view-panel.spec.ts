@@ -69,9 +69,9 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(this.context.component.disabled).toBeUndefined();
     });
     
-    it('should not set disable close by default', function(this: ITestContext) {
+    it('should not set allow close by default', function(this: ITestContext) {
       this.context = setupTestContext();
-      expect(this.context.component.disableClose).toBeUndefined();
+      expect(this.context.component.allowClose).toBeUndefined();
     });
     
     it('should not set auto close by default', function(this: ITestContext) {
@@ -137,12 +137,12 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(this.context.component.disabled).toBeUndefined();
     });
 
-    it('should set disable close', function(this: ITestContext) {
+    it('should set allow close', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute('disable-close', 'true');
-      expect(this.context.component.disableClose).toBeTrue();
-      this.context.component.removeAttribute('disable-close');
-      expect(this.context.component.disableClose).toBeUndefined();
+      this.context.component.setAttribute('allow-close', 'true');
+      expect(this.context.component.allowClose).toBeTrue();
+      this.context.component.removeAttribute('allow-close');
+      expect(this.context.component.allowClose).toBeUndefined();
     });
 
     it('should set auto close', function(this: ITestContext) {
@@ -221,9 +221,10 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(this.context.component.getContentSize()).toBe(size);
     });
 
-    it('should close panel on enter key down', function(this: ITestContext) {
+    it('should close panel on enter key down when closing is allowed', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
+      this.context.component.allowClose = true;
       this.context.keyEvent('keydown', 'Enter');
       expect(this.context.component.open).toBeFalse();
     });
@@ -243,10 +244,10 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(this.context.component.getContentSize()).toBe(this.context.component.max);
     });
 
-    it('should do nothing when close is disabled on enter key down', function(this: ITestContext) {
+    it('should do nothing when closing is disabled on enter key down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
-      this.context.component.disableClose = true;
+      this.context.component.allowClose = false;
       this.context.keyEvent('keydown', 'Enter');
       expect(this.context.component.open).toBeTrue();
     });
@@ -1189,13 +1190,13 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(rootHasDisabledClass).toBeFalse();
     });
 
-    it('should apply parent disable close', function(this: ITestContext) {
+    it('should apply parent allow close', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.resizable = 'end';
-      this.context.parent.disableClose = true;
+      this.context.parent.allowClose = false;
       this.context.keyEvent('keydown', 'Enter');
       expect(this.context.component.open).toBeTrue();
-      this.context.parent.disableClose = false;
+      this.context.parent.allowClose = true;
       this.context.keyEvent('keydown', 'Enter');
       expect(this.context.component.open).toBeFalse();
     });

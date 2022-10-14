@@ -3,7 +3,7 @@ import { SplitViewOrientation } from "@tylertech/forge";
 export interface ISplitViewCommonProps {
   autoClose: boolean;
   autoCloseThreshold: number;
-  disableClose: boolean;
+  allowClose: boolean;
   disabled: boolean;
   orientation: SplitViewOrientation;
 }
@@ -11,7 +11,7 @@ export interface ISplitViewCommonProps {
 export interface ISplitViewPanel1Props {
   autoClose1: boolean;
   autoCloseThreshold1: number;
-  disableClose1: boolean;
+  allowClose1: boolean;
   disabled1: boolean;
   accessibleLabel1: string;
   max1: number | undefined;
@@ -23,7 +23,7 @@ export interface ISplitViewPanel1Props {
 export interface ISplitViewPanel2Props {
   autoClose2: boolean;
   autoCloseThreshold2: number;
-  disableClose2: boolean;
+  allowClose2: boolean;
   disabled2: boolean;
   accessibleLabel2: string;
   min2: number;
@@ -35,7 +35,7 @@ export interface ISplitViewPanel2Props {
 export interface ISplitViewPanel3Props {
   autoClose3: boolean;
   autoCloseThreshold3: number;
-  disableClose3: boolean;
+  allowClose3: boolean;
   disabled3: boolean;
   accessibleLabel3: string;
   max3: number | undefined;
@@ -68,7 +68,7 @@ const splitViewArgTypes = {
       category: 'Split View',
     },
   },
-  disableClose: {
+  allowClose: {
     control: 'boolean',
     description: '',
     table: {
@@ -132,8 +132,8 @@ const splitViewPanel1ArgTypes = {
       category: 'Panel 1',
     },
   },
-  disableClose1: {
-    name: 'disable close (panel 1)',
+  allowClose1: {
+    name: 'allow close (panel 1)',
     control: 'boolean',
     description: '',
     table: {
@@ -208,8 +208,8 @@ const splitViewPanel2ArgTypes = {
       category: 'Panel 2',
     },
   },
-  disableClose2: {
-    name: 'disable close (panel 2)',
+  allowClose2: {
+    name: 'allow close (panel 2)',
     control: 'boolean',
     description: '',
     table: {
@@ -283,8 +283,8 @@ const splitViewPanel3ArgTypes = {
       category: 'Panel 3',
     },
   },
-  disableClose3: {
-    name: 'disable close (panel 3)',
+  allowClose3: {
+    name: 'allow close (panel 3)',
     control: 'boolean',
     description: '',
     table: {

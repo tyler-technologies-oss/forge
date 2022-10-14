@@ -15,7 +15,7 @@ export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoun
 export class SplitViewFoundation implements ISplitViewFoundation {
   private _orientation: SplitViewOrientation = 'horizontal';
   private _disabled = false;
-  private _disableClose = false;
+  private _allowClose = false;
   private _autoClose = false;
   private _autoCloseThreshold = 0;
   private _slotListener: (evt: Event) => void;
@@ -105,19 +105,19 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   /**
    * Get/set whether closing the panel is disabled.
    */
-  public get disableClose(): boolean {
-    return this._disableClose;
+  public get allowClose(): boolean {
+    return this._allowClose;
   }
-  public set disableClose(value: boolean) {
-    if (this._disableClose !== value) {
-      this._disableClose = value;
-      this._applyDisableClose();
+  public set allowClose(value: boolean) {
+    if (this._allowClose !== value) {
+      this._allowClose = value;
+      this._applyAllowClose();
     }
   }
 
-  private _applyDisableClose(): void {
-    this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.DISABLE_CLOSE, this._disableClose);
-    this.update({ properties: { disableClose: this._disableClose } });
+  private _applyAllowClose(): void {
+    this._adapter.toggleHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.ALLOW_CLOSE, this._allowClose);
+    this.update({ properties: { allowClose: this._allowClose } });
   }
 
   /**
