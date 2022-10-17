@@ -15,6 +15,7 @@ export interface ISplitViewComponent extends ISplitViewBase, IBaseComponent {
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
   update(config: ISplitViewUpdateConfig): void;
+  refit(): void;
 }
 
 declare global {
@@ -125,5 +126,12 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
    */
   public update(config: ISplitViewUpdateConfig): void {
     this._foundation.update(config);
+  }
+
+  /**
+   * Resizes panels within the split view to avoid overflow.
+   */
+  public refit(): void {
+    this._foundation.refitSlottedPanels();
   }
 }

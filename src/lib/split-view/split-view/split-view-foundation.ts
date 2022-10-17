@@ -10,6 +10,7 @@ export interface ISplitViewFoundation extends ISplitViewBase, ICustomElementFoun
   layerSlottedPanels(target: ISplitViewPanelComponent): void;
   unlayerSlottedPanels(): void;
   update(config: ISplitViewUpdateConfig): void;
+  refitSlottedPanels(): void;
 }
 
 export class SplitViewFoundation implements ISplitViewFoundation {
@@ -20,6 +21,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _autoCloseThreshold = 0;
   private _slotListener: (evt: Event) => void;
   private _resizeObserverCallback: ForgeResizeObserverCallback;
+  private _isInitialized = false;
 
   constructor(private _adapter: ISplitViewAdapter) {
     this._slotListener = evt => this._onSlotChange(evt);
@@ -31,6 +33,7 @@ export class SplitViewFoundation implements ISplitViewFoundation {
     this._adapter.observeResize(this._resizeObserverCallback);
     
     this._applyOrientation();
+    this._isInitialized = true;
   }
 
   public disconnect(): void {
@@ -81,7 +84,12 @@ export class SplitViewFoundation implements ISplitViewFoundation {
 
   private _applyOrientation(): void {
     this._adapter.setHostAttribute(SPLIT_VIEW_CONSTANTS.attributes.ORIENTATION, this._orientation);
-    this.update({ orientation: this._orientation, accessibility: true });
+    this.update({ orientation: this._orientation });
+
+    if (this._isInitialized) {
+      this._adapter.refitSlottedPanels(this._orientation);
+    }
+    this.update({ accessibility: true, cursor: true });
   }
 
   /**
@@ -194,5 +202,12 @@ export class SplitViewFoundation implements ISplitViewFoundation {
     panels.forEach(panel => {
       panel.update(config);
     });
+  }
+
+  /**
+   * Resizes panels within the split view to avoid overflow.
+   */
+  public refitSlottedPanels(): void {
+    this._adapter.refitSlottedPanels(this._orientation);
   }
 }
