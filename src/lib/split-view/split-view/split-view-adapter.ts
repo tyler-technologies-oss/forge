@@ -47,7 +47,8 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
     const size = orientation === 'horizontal' ? this._root.clientWidth : this._root.clientHeight;
     const panels = this.getSlottedPanels();
     const combinedPanelSize = panels.map(panel => {
-      const panelSize = orientation === 'horizontal' ? panel.shadowRoot?.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT)?.clientWidth : panel.shadowRoot?.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT)?.clientHeight;
+      const panelRoot = panel.shadowRoot?.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT);
+      const panelSize = orientation === 'horizontal' ? panelRoot?.clientWidth : panelRoot?.clientHeight;
       return panelSize ?? 0;
     }).reduce((cur, acc) => cur + acc, 0);
 
