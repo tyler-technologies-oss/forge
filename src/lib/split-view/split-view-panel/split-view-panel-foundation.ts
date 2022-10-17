@@ -492,7 +492,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     const parentSize = this._adapter.getParentSize(this._orientation);
     this._pixelMin = getPixelDimension(this._min, parentSize);
 
-    if (this._resizable === 'none') {
+    if (this._resizable === 'off') {
       return;
     }
 
@@ -524,7 +524,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     const parentSize = this._adapter.getParentSize(this._orientation);
     this._pixelMax = getPixelDimension(this._max, parentSize);
 
-    if (this._resizable === 'none') {
+    if (this._resizable === 'off') {
       return;
     }
     
@@ -693,7 +693,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    * @param size The new content size in pixels.
    */
   public setContentSize(size: number): void {
-    if (this._resizable === 'none') {
+    if (this._resizable === 'off') {
       return;
     }
 
@@ -747,7 +747,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     }
 
     // The following properties don't apply to non-resizable panels
-    if (this._resizable === 'none') {
+    if (this._resizable === 'off') {
       return;
     }
 

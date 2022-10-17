@@ -11,7 +11,7 @@ import { ISplitViewPanelComponent, SplitViewPanelComponent } from './split-view-
 export function initState(): ISplitViewPanelState {
   return {
     orientation: 'horizontal',
-    resizable: 'none',
+    resizable: 'off',
     arrowKeyHeld: false,
     keyboardDelta: 0,
     isAtMin: false,
@@ -295,14 +295,14 @@ export function getHandleIcon(orientation: SplitViewOrientation): string {
  * @returns A sibling split view panel or undefined if there is not a sibling.
  */
 export function getSplitViewPanelSibling(el: ISplitViewPanelComponent): SplitViewPanelComponent | undefined {
-  const direction = el.resizable;
-  if (direction === 'none') {
+  const resizable = el.resizable;
+  if (resizable === 'off') {
     return undefined;
   }
   
   let sibling: Element | null = el;
   do {
-    sibling = direction === 'end' ? sibling.nextElementSibling : sibling.previousElementSibling;
+    sibling = resizable === 'end' ? sibling.nextElementSibling : sibling.previousElementSibling;
   } while (sibling instanceof SplitViewPanelComponent && !sibling.open);
 
   if (sibling instanceof SplitViewPanelComponent) {

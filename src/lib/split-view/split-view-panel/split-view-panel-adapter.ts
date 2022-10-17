@@ -133,10 +133,10 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    */
   public setResizable(value: SplitViewPanelResizable): void {
     this._root.setAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.RESIZABLE, value.toString());
-    toggleAttribute(this._handle, value !== 'none', 'aria-valuemin', '0');
-    toggleAttribute(this._handle, value !== 'none', 'aria-valuemax', '100');
+    toggleAttribute(this._handle, value !== 'off', 'aria-valuemin', '0');
+    toggleAttribute(this._handle, value !== 'off', 'aria-valuemax', '100');
 
-    if (value === 'none') {
+    if (value === 'off') {
       return;
     }
 
@@ -283,7 +283,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * @returns The amount of space available for the component to resize into in pixels.
    */
   public getAvailableSpace(orientation: SplitViewOrientation, resizable: SplitViewPanelResizable): number {
-    if (resizable === 'none') {
+    if (resizable === 'off') {
       // Return -1 if the panel is static (i.e. can't be user resized)
       return -1;
     }

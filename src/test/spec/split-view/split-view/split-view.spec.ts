@@ -122,10 +122,10 @@ describe('SplitViewComponent', function(this: ITestContext) {
       expect(this.context.panels![0]['_foundation']._orientation).toBe('vertical');
     });
 
-    it('should layout when all have resizable set to none', async function(this: ITestContext) {
+    it('should layout when all have resizable set to off', async function(this: ITestContext) {
       this.context = setupTestContext(true, 3);
       await tick();
-      expect(this.context.panels![0].resizable).toBe('none');
+      expect(this.context.panels![0].resizable).toBe('off');
       expect(this.context.panels![1].resizable).toBe('start');
       expect(this.context.panels![2].resizable).toBe('start');
     });
@@ -137,7 +137,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
       this.context.append();
       await tick();
       expect(this.context.panels![0].resizable).toBe('end');
-      expect(this.context.panels![1].resizable).toBe('none');
+      expect(this.context.panels![1].resizable).toBe('off');
       expect(this.context.panels![2].resizable).toBe('start');
     });
 
@@ -145,7 +145,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
       this.context.append();
       await tick();
-      expect(this.context.panels![0].resizable).toBe('none');
+      expect(this.context.panels![0].resizable).toBe('off');
     });
 
     it('should update accessibility', function(this: ITestContext) {

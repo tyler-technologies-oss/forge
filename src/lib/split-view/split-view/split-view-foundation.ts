@@ -55,13 +55,13 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _layoutSlottedPanels(): void {
     const panels = this._adapter.getSlottedPanels();
 
-    // A single panel should have resizable set to none. Just leave it alone.
+    // A single panel should have resizable set to off. Just leave it alone.
     if (panels.length < 2) {
       return;
     }
 
     // Don't change any panels if resizable is already set.
-    if (panels.some(panel => panel.resizable !== 'none')) {
+    if (panels.some(panel => panel.resizable !== 'off')) {
       return;
     }
 

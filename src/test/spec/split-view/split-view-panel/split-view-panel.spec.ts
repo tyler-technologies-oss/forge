@@ -36,7 +36,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
   describe('properties', function(this: ITestContext) {
     it('should not be resizable by default', function(this: ITestContext) {
       this.context = setupTestContext();
-      expect(this.context.component.resizable).toBe('none');
+      expect(this.context.component.resizable).toBe('off');
     });
     
     it('should not be 200 pixels by default', function(this: ITestContext) {
@@ -434,9 +434,9 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       });
     });
 
-    it('should do nothing when resizable is none and an arrow key is pressed', function(this: ITestContext) {
+    it('should do nothing when resizable is off and an arrow key is pressed', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
-      this.context.component.resizable = 'none';
+      this.context.component.resizable = 'off';
       const startSize = this.context.component.getContentSize();
       this.context.keyEvent('keydown', 'ArrowRight', true);
       expect(this.context.component.getContentSize()).toBe(startSize);
@@ -938,7 +938,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
         const state = initState();
         const expected: ISplitViewPanelState = {
           orientation: 'horizontal',
-          resizable: 'none',
+          resizable: 'off',
           arrowKeyHeld: false,
           keyboardDelta: 0,
           isAtMin: false,
@@ -1146,9 +1146,9 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
         expect(sibling).toBe(this.context.panels[0] as SplitViewPanelComponent);
       });
   
-      it('should return undefined when resizable is none', function(this: ITestContext) {
+      it('should return undefined when resizable is off', function(this: ITestContext) {
         this.context = setupTestContext(false);
-        this.context.component.resizable = 'none';
+        this.context.component.resizable = 'off';
         const sibling = getSplitViewPanelSibling(this.context.component);
         expect(sibling).toBeUndefined();
       });
