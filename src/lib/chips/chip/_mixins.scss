@@ -133,7 +133,7 @@
       @include dense;
 
       &.forge-chip--field {
-        @include theme.css-custom-property(height, --forge-chip-height, 20px);
+        @include theme.css-custom-property(min-height, --forge-chip-min-height, variables.$dense-field-min-height);
         padding: 0;
         margin: 0;
         display: flex;
@@ -187,7 +187,8 @@
   @include button-mixins.outlined;
   @include mdc-chip-theme.shape-radius(50%);
   @include theme.css-custom-property(width, --forge-chip-width, auto);
-  @include theme.css-custom-property(height, --forge-chip-height, variables.$height);
+  @include theme.css-custom-property(height, --forge-chip-height, auto);
+  @include theme.css-custom-property(min-height, --forge-chip-min-height, variables.$min-height);
 
   box-sizing: border-box;
   transition: mdc-animation.enter(background-color, 150ms);
@@ -268,5 +269,5 @@
 }
 
 @mixin dense() {
-  @include theme.css-custom-property(height, --forge-chip-height, variables.$dense-height);
+  @include theme.css-custom-property(min-height, --forge-chip-min-height, variables.$dense-min-height);
 }
