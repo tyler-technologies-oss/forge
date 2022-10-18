@@ -747,7 +747,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(this.context.component.popupElement).not.toBeNull();
     });
 
-    it('should activate first option if opened via down arrow key', async function(this: ITestContext) {
+    it('should activate first option if opened via down arrow key when there is no option selected', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       this.context.input.focus();
@@ -760,7 +760,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(activeListItemIndex).toBe(0);
     });
 
-    it('should activate selected option if opened via down arrow key', async function(this: ITestContext) {
+    it('should activate selected option if opened via down arrow key when there is a selected option', async function(this: ITestContext) {
       const expectedSelectedIndex = 1;
       this.context = setupTestContext(true);
       this.context.component.value = DEFAULT_FILTER_OPTIONS[expectedSelectedIndex].value;
