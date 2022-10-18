@@ -302,7 +302,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       case 'ArrowDown':
         evt.preventDefault();
         if (!this._isDropdownOpen) {
-          this._showDropdown({ activateFirst: true });
+          this._showDropdown({ activateFirst: true, activateSelected: true });
         } else {
           this._adapter.propagateKey(evt.key);
         }
@@ -391,7 +391,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._emitChangeEvent();
   }
 
-  private async _showDropdown({ filter = true, userTriggered = true, activateFirst = false } = {}): Promise<void> {
+  private async _showDropdown({ filter = true, userTriggered = true, activateFirst = false, activateSelected = false } = {}): Promise<void> {
     const sendFilterText = this._allowUnmatched && !this._selectedOptions.length;
     this._isDropdownOpen = true;
     const config: IListDropdownConfig = {
@@ -446,10 +446,10 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       return;
     }
 
-    this._dropdownReady({ userTriggered, activateFirst });
+    this._dropdownReady({ userTriggered, activateFirst, activateSelected });
   }
 
-  private _dropdownReady({ userTriggered = true, activateFirst = false} = {}): void {
+  private _dropdownReady({ userTriggered = true, activateFirst = false, activateSelected = false } = {}): void {
     if (!this._isDropdownOpen || !this._options.length || (userTriggered && !this._adapter.hasFocus())) {
       this._closeDropdown();
       return;
@@ -461,7 +461,9 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._adapter.setSelectedOptions(this._selectedOptions);
     this._adapter.setDismissListener(this._dismissListener);
 
-    if (activateFirst) {
+    if (activateSelected && this._selectedOptions.length) {
+      this._adapter.activateSelectedOption();
+    } else if (activateFirst) {
       this._adapter.activateFirstOption();
     }
   }
@@ -678,7 +680,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
 
     // Execute the filter now if we have a value, but not options yet (only if it has been initialized already)
-    if (this._values.length && !this._selectedOptions.length && this._filter && this._isInitialized) {
+    if (this._values.length && !this._selectedOptions.length && !!this._filter && this._isInitialized) {
       try {
         await this._executeFilter(false, true);
       } catch (e) {
@@ -906,7 +908,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       this._filter = cb;
 
       // If we have a value, but don't have any options yet then execute the filter
-      if (this._isInitialized && this._values.length && !this._flatOptions.length && this._filter) {
+      if (this._isInitialized && this._values.length && !this._flatOptions.length && !!this._filter) {
         this._executeFilter().then(() => {
           this._updateSelectedOptions(this._values);
           this._adapter.setSelectedText(this._getSelectedText());
