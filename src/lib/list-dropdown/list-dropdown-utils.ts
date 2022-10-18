@@ -193,7 +193,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           const result = config.transform(option.label);
           if (typeof result === 'string') {
             listItemElement.textContent = result;
-          } else if (typeof result === 'object' && result.nodeType !== undefined) {
+          } else if (typeof result === 'object' && (result as HTMLElement).nodeType !== undefined) {
             listItemElement.appendChild(result);
           }
         }
