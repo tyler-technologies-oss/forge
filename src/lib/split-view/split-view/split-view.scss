@@ -1,0 +1,20 @@
+@use './mixins';
+@use '../../ripple/forge-ripple.scss';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([orientation=horizontal]) {
+  @include mixins.horizontal-styles;
+}
+
+:host([orientation=vertical]) {
+  @include mixins.vertical-styles;
+}
