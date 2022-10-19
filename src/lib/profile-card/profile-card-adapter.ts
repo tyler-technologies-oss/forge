@@ -14,6 +14,8 @@ export interface IProfileCardAdapter extends IBaseAdapter {
   setActionToolbarVisibility(isVisible: boolean): void;
   setProfileButtonVisibility(isVisible: boolean): void;
   setSignOutButtonVisibility(isVisible: boolean): void;
+  setSignOutButtonText(value: string): void;
+  setProfileButtonText(value: string): void;
   setProfileButtonListener(listener: (evt: Event) => void): void;
   setSignOutButtonListener(listener: (evt: Event) => void): void;
   removeProfileButtonListener(listener: (evt: Event) => void): void;
@@ -87,6 +89,14 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
     } else {
       this._signOutButton.style.display = 'none';
     }
+  }
+
+  public setSignOutButtonText(value: string): void {
+    this._signOutButton.textContent = value;
+  }
+  
+  public setProfileButtonText(value: string): void {
+    this._profileButton.textContent = value;
   }
 
   public setProfileButtonListener(listener: (evt: Event) => void): void {
