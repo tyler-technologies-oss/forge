@@ -840,7 +840,7 @@ export class TableUtils {
    * @param rowElement
    */
   private static _getCheckboxElement(rowElement: HTMLTableRowElement): HTMLInputElement | null {
-    const selectCell = rowElement.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_CELL_SELECT_CHECKBOX_CONTAINER}`);
+    const selectCell = rowElement.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_CELL_SELECT}`);
     if (!selectCell) {
       return null;
     }
@@ -852,7 +852,7 @@ export class TableUtils {
    * @param rowElement
    */
   private static _tryGetSelectAllCheckboxElement(rowElement: HTMLTableRowElement): HTMLInputElement | null {
-    const selectAllCell = rowElement.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_CELL_SELECT_CHECKBOX_CONTAINER}`);
+    const selectAllCell = rowElement.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_CELL_SELECT}`);
     if (!selectAllCell) {
       return null;
     }
