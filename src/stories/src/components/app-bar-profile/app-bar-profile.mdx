@@ -98,6 +98,18 @@ profileButton.profileCardBuilder = () => {
 
 </PropertyDef>
 
+<PropertyDef name="signOutButtonText" type="string" defaultValue="'Sign out'">
+
+  Gets/sets the sign out button text.
+
+</PropertyDef>
+
+<PropertyDef name="profileButtonText" type="string" defaultValue="'Profile'">
+
+  Gets/sets the profile button text.
+
+</PropertyDef>
+
 <PropertyDef name="profileCardBuilder" type="AppBarProfileButtonProfileCardBuilder" defaultValue="undefined">
 
   The callback that can be used to provide custom content within the profile card.
@@ -161,6 +173,8 @@ interface IAppBarProfileCardConfig {
   email: string;
   signOut: boolean;
   profile: boolean;
+  signOutButtonText: string;
+  profileButtonText: string;
   avatarText: string;
   avatarImageUrl: string;
   avatarLetterCount: number;
