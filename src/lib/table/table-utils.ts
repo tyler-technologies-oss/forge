@@ -561,7 +561,7 @@ export class TableUtils {
 
   private static _attachRowSelectListener(row: HTMLTableRowElement, clickListener: (evt: Event) => void): void {
     const checkboxElement = TableUtils._getCheckboxElement(row);
-    checkboxElement.addEventListener('click', clickListener);
+    checkboxElement?.addEventListener('click', clickListener);
   }
 
   /**
@@ -572,9 +572,7 @@ export class TableUtils {
   private static _detachRowSelectListeners(tbodyElement: HTMLTableSectionElement, clickListener: (evt: Event) => void): void {
     Array.from(tbodyElement.rows).forEach(row => {
       const checkboxElement = TableUtils._getCheckboxElement(row);
-      if (checkboxElement) {
-        checkboxElement.removeEventListener('click', clickListener);
-      }
+      checkboxElement?.removeEventListener('click', clickListener);
     });
   }
 
@@ -609,7 +607,7 @@ export class TableUtils {
    */
   private static _tryAttachSelectAllTemplateListener(theadElement: HTMLTableSectionElement, listener: (evt: Event) => void): void {
     const lastTheadRow = theadElement.rows[theadElement.rows.length - 1];
-    const checkboxElement = TableUtils._tryGetCheckboxElement(lastTheadRow);
+    const checkboxElement = TableUtils._tryGetSelectAllCheckboxElement(lastTheadRow);
 
     if (checkboxElement) {
       checkboxElement.addEventListener('change', listener);
@@ -623,7 +621,7 @@ export class TableUtils {
    */
   private static _detachSelectAllListener(theadElement: HTMLTableSectionElement, listener: (evt: Event) => void): void {
     const lastTheadRow = theadElement.rows[theadElement.rows.length - 1];
-    const checkboxElement = TableUtils._tryGetCheckboxElement(lastTheadRow);
+    const checkboxElement = TableUtils._tryGetSelectAllCheckboxElement(lastTheadRow);
 
     if (!checkboxElement) {
       return;
@@ -841,16 +839,25 @@ export class TableUtils {
    * Retrieves the checkbox element from the given table row. Used in select mode only.
    * @param rowElement
    */
-  private static _getCheckboxElement(rowElement: HTMLTableRowElement): HTMLInputElement {
-    return rowElement.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement;
+  private static _getCheckboxElement(rowElement: HTMLTableRowElement): HTMLInputElement | null {
+    const selectCell = rowElement.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_CELL_SELECT}`);
+    if (!selectCell) {
+      return null;
+    }
+    return selectCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement;
   }
 
   /**
-   * Retrieves the checkbox element from the given table row. Used in select mode only.
+   * Retrieves the select all checkbox element from the given table row. Used in select mode only.
    * @param rowElement
    */
-  private static _tryGetCheckboxElement(rowElement: HTMLTableRowElement): HTMLInputElement {
-    return rowElement.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement || rowElement.querySelector(TABLE_CONSTANTS.selectors.SELECT_ALL_TEMPLATE_CHECKBOX_INPUT) as HTMLInputElement;
+  private static _tryGetSelectAllCheckboxElement(rowElement: HTMLTableRowElement): HTMLInputElement | null {
+    const selectAllCell = rowElement.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_CELL_SELECT}`);
+    if (!selectAllCell) {
+      return null;
+    }
+    return selectAllCell.querySelector(TABLE_CONSTANTS.selectors.CHECKBOX_INPUT) as HTMLInputElement ||
+           selectAllCell.querySelector(TABLE_CONSTANTS.selectors.SELECT_ALL_TEMPLATE_CHECKBOX_INPUT) as HTMLInputElement;
   }
 
   /**
@@ -910,7 +917,10 @@ export class TableUtils {
    */
   public static updateSelectedState(rowElement: HTMLTableRowElement, isSelected: boolean): void {
     TableUtils._setRowSelectedState(rowElement, isSelected);
-    TableUtils._setSelectedCheckboxState(TableUtils._getCheckboxElement(rowElement), isSelected);
+    const selectCheckbox = TableUtils._getCheckboxElement(rowElement);
+    if (selectCheckbox) {
+      TableUtils._setSelectedCheckboxState(selectCheckbox, isSelected);
+    }
   }
 
   /**
@@ -931,7 +941,7 @@ export class TableUtils {
     }
 
     const lastTheadRow = tableElement.tHead.rows[tableElement.tHead.rows.length - 1];
-    const selectAllCheckboxElement = TableUtils._tryGetCheckboxElement(lastTheadRow);
+    const selectAllCheckboxElement = TableUtils._tryGetSelectAllCheckboxElement(lastTheadRow);
 
     if (selectAllCheckboxElement) {
       TableUtils._setSelectedCheckboxState(selectAllCheckboxElement, isAllSelected);
@@ -965,7 +975,10 @@ export class TableUtils {
         const existingSelection = findWhere(selectedRows, createPredicate(key, rowData));
         if (existingSelection) {
           TableUtils._setRowSelectedState(row, true);
-          TableUtils._setSelectedCheckboxState(TableUtils._getCheckboxElement(row), true);
+          const selectCheckbox = TableUtils._getCheckboxElement(row);
+          if (selectCheckbox) {
+            TableUtils._setSelectedCheckboxState(selectCheckbox, true);
+          }
           selectedRowCount++;
         }
       });
@@ -985,7 +998,10 @@ export class TableUtils {
     const nonExpandedRows = TableUtils._getNonExpandedRows(tableElement.tBodies[0].rows);
     nonExpandedRows.forEach(row => {
       TableUtils._setRowSelectedState(row, false);
-      TableUtils._setSelectedCheckboxState(TableUtils._getCheckboxElement(row), false);
+      const selectCheckbox = TableUtils._getCheckboxElement(row);
+      if (selectCheckbox) {
+        TableUtils._setSelectedCheckboxState(selectCheckbox, false);
+      }
     });
   }
 
