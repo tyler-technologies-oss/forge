@@ -39,7 +39,9 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
   }
 
   protected _onToday(): void {
-    this._onDateSelected({ date: new Date(), selected: true, type: 'date' });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    this._onDateSelected({ date: today, selected: true, type: 'date' });
   }
 
   protected _onClear(): void {

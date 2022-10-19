@@ -15,6 +15,8 @@ export interface IProfileCardComponent extends IBaseComponent {
   email: string;
   signOut: boolean;
   profile: boolean;
+  signOutText: string;
+  profileText: string;
   avatarText: string;
   avatarImageUrl: string;
   avatarLetterCount: number;
@@ -51,6 +53,8 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
       PROFILE_CARD_CONSTANTS.attributes.EMAIL,
       PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT,
       PROFILE_CARD_CONSTANTS.attributes.PROFILE,
+      PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT,
+      PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_LETTER_COUNT
@@ -83,6 +87,12 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
       case PROFILE_CARD_CONSTANTS.attributes.PROFILE:
         this.profile = coerceBoolean(PROFILE_CARD_CONSTANTS.attributes.PROFILE);
         break;
+      case PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT:
+        this.signOutText = PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT;
+        break;
+      case PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT:
+        this.profileText = PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT;
+        break;
       case PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT:
         this.avatarText = newValue;
         break;
@@ -106,6 +116,12 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
 
   @FoundationProperty()
   public profile: boolean;
+
+  @FoundationProperty()
+  public signOutText: string;
+
+  @FoundationProperty()
+  public profileText: string;
 
   @FoundationProperty()
   public avatarText: string;

@@ -120,7 +120,7 @@
 @mixin input {
   // Base
   // chip-field input should have no padding, so we exclude padding from the base.
-  @include field-selector.input('::slotted(input)', $exclude: (padding, padding-top, padding-right, padding-bottom, padding-left));
+  @include field-selector.input('::slotted(input)', $exclude: (padding, padding-top, padding-right, padding-bottom, padding-left), $component-name: 'forge-chip-field');
   // Core
   ::slotted(input) {
     @include base.input-core;

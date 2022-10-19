@@ -72,7 +72,7 @@
   &::before {
     @include mdc-theme.property(color, error);
     content: '*';
-    margin-right: 1px;
+    margin-right: 4px;
   }
 }
 

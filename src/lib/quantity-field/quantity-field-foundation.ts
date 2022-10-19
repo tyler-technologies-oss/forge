@@ -98,8 +98,6 @@ export class QuantityFieldFoundation implements IQuantityFieldFoundation {
       this._adapter.removeHostAttribute(QUANTITY_FIELD_CONSTANTS.attributes.REQUIRED);
       this._adapter.removeRootClass(QUANTITY_FIELD_CONSTANTS.classes.REQUIRED);
     }
-
-    this._adapter.setLabelAsRequired(this._required);
   }
 
   public get invalid(): boolean {

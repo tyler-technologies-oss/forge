@@ -375,18 +375,30 @@
   @include utils.error-theme-state(input-color, $theme-state);
 }
 
-@mixin input-font-size($layout-state) {
+@mixin input-font-size($layout-state, $custom-prop-font-size) {
   // Default
   @if $layout-state == default or $layout-state == shape-rounded {
-    font-size: map.get(variables.$input, font-size, default);
+    @include theme.css-custom-property(
+      font-size,
+      $custom-prop-font-size,
+      map.get(variables.$input, font-size, default)
+    );
   }
   // Roomy
   @else if $layout-state == roomy or $layout-state == shape-rounded-roomy {
-    font-size: map.get(variables.$input, font-size, roomy);
+    @include theme.css-custom-property(
+      font-size,
+      $custom-prop-font-size,
+      map.get(variables.$input, font-size, roomy)
+    );
   }
   // Dense
   @else if $layout-state == dense or $layout-state == shape-rounded-dense {
-    font-size: map.get(variables.$input, font-size, dense);
+    @include theme.css-custom-property(
+      font-size,
+      $custom-prop-font-size,
+      map.get(variables.$input, font-size, dense)
+    );
   }
   @include utils.error-layout-state(input-font-size, $layout-state);
 }

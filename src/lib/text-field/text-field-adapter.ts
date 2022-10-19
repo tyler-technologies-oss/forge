@@ -16,8 +16,8 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
     super(component);
   }
 
-  public initialize(required: boolean): void {
-    super.initialize(required, TEXT_FIELD_CONSTANTS.selectors.ROOT);
+  public initialize(): void {
+    super.initialize(TEXT_FIELD_CONSTANTS.selectors.ROOT);
     this._inputElements = Array.from(this._component.querySelectorAll('input:not([type=checkbox]):not([type=radio]), textarea'));
     if (this._inputElements.length > 1) {
       this._handleMultiInputs();
