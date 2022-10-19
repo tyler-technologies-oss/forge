@@ -1,3 +1,29 @@
+# v2.9.0 (Wed Oct 19 2022)
+
+#### 🚀 Enhancement
+
+- create new split view component [#2](https://github.com/tyler-technologies-oss/forge/pull/2) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+- feat(app-bar-profile-button): allow for customizing the text on the sign out and profile buttons [#167](https://github.com/tyler-technologies-oss/forge/pull/167) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(table): ignore filter row checkboxes when toggling select column state [#169](https://github.com/tyler-technologies-oss/forge/pull/169) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip): change default `height` style to use `auto` to accommodate content height [#166](https://github.com/tyler-technologies-oss/forge/pull/166) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: fixed duplicate asterisk characters on required form field labels in Safari [#168](https://github.com/tyler-technologies-oss/forge/pull/168) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): fixed a bug where opening the dropdown via down arrow key would not activate the selected option [#163](https://github.com/tyler-technologies-oss/forge/pull/163) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fix to ensure `--forge-select-font-size` CSS custom prop… [#164](https://github.com/tyler-technologies-oss/forge/pull/164) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-picker): _onToday zeros out time values [#162](https://github.com/tyler-technologies-oss/forge/pull/162) ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- chore: support node 16 [#157](https://github.com/tyler-technologies-oss/forge/pull/157) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: post release notes to slack [#156](https://github.com/tyler-technologies-oss/forge/pull/156) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Jake Crawford ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.8.0 (Tue Oct 11 2022)
 
 #### 🚀 Enhancement
