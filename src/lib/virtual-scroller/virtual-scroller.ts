@@ -228,7 +228,6 @@ export class VirtualScroller<T = unknown> {
   }
 
   private _appendWrapper(): void {
-    console.log({ container: this._container, wrapper: this._wrapper });
     this._container.append(this._wrapper);
   }
 
