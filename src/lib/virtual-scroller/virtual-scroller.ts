@@ -220,7 +220,7 @@ export class VirtualScroller<T = unknown> {
   }
   
   private _registerScrollListener(): void {
-    this._container.addEventListener('scroll', this._scrollListener);
+    this._container.addEventListener('scroll', this._scrollListener, { passive: true });
   }
 
   private _removeScrollListener(): void {
