@@ -17,7 +17,7 @@ import template from './autocomplete.html';
 import styles from './autocomplete.scss';
 
 export interface IAutocompleteComponent extends IListDropdownAware {
-  mode: AutocompleteMode;
+  mode: `${AutocompleteMode}`;
   multiple: boolean;
   value: any;
   debounce: number;
@@ -139,7 +139,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /** Gets/sets the interaction mode. */
   @FoundationProperty()
-  public mode: AutocompleteMode;
+  public mode: `${AutocompleteMode}`;
 
   /** Gets/sets the multi-select state. */
   @FoundationProperty()
