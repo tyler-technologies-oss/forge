@@ -94,7 +94,7 @@ export class PopupComponent extends BaseComponent implements IPopupComponent {
   public targetElement: HTMLElement;
 
   @FoundationProperty()
-  public placement: PopupPlacement;
+  public placement: `${PopupPlacement}`;
 
   @FoundationProperty()
   public open: boolean;

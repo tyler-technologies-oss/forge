@@ -144,7 +144,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   /** Gets/sets the menu placement (default is bottom-left). */
   @FoundationProperty()
-  public placement: PopupPlacement;
+  public placement: `${PopupPlacement}`;
 
   /** Gets/sets dense state of the list options used in the menu popup. */
   @FoundationProperty()
