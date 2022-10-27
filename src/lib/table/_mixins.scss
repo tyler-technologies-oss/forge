@@ -360,6 +360,8 @@
 
 @mixin head-filter() {
   --forge-text-field-height: 2.5rem;
+  --forge-select-height: 2.5rem;
+
   .forge-table-head__cell-container {
     padding: 8px 0;
   }
