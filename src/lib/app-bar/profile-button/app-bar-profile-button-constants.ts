@@ -10,6 +10,8 @@ const attributes = {
   AVATAR_TEXT: 'avatar-text',
   SIGN_OUT_BUTTON: 'sign-out-button',
   PROFILE_BUTTON: 'profile-button',
+  SIGN_OUT_BUTTON_TEXT: 'sign-out-button-text',
+  PROFILE_BUTTON_TEXT: 'profile-button-text',
   OPEN: 'open'
 };
 
@@ -28,6 +30,8 @@ export interface IAppBarProfileCardConfig {
   email: string;
   signOut: boolean;
   profile: boolean;
+  signOutButtonText: string;
+  profileButtonText: string;
   avatarText: string;
   avatarImageUrl: string;
   avatarLetterCount: number;

@@ -82,7 +82,6 @@ export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
         evt.preventDefault();
       }
       this._adapter.emitHostEvent(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, evt);
-      // TODO: should this also provide a callback?
     }
   }
 

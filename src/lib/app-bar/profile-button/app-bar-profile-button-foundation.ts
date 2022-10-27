@@ -12,6 +12,8 @@ export interface IAppBarProfileButtonFoundation extends ICustomElementFoundation
   avatarText: string;
   signOutButton: boolean;
   profileButton: boolean;
+  signOutButtonText: string;
+  profileButtonText: string;
   open: boolean;
   profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }
@@ -24,6 +26,8 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   private _avatarText: string;
   private _showSignOutButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_SIGN_OUT_BUTTON;
   private _showProfileButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_PROFILE_BUTTON;
+  private _signOutButtonText = PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT;
+  private _profileButtonText = PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT;
   private _profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
   private _open = false;
   private _isInitialized = false;
@@ -108,6 +112,8 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
       email: this._email,
       signOut: this._showSignOutButton,
       profile: this._showProfileButton,
+      signOutButtonText: this._signOutButtonText,
+      profileButtonText: this._profileButtonText,
       avatarText: this._avatarText,
       avatarImageUrl: this._avatarImageUrl,
       avatarLetterCount: this._avatarLetterCount
@@ -211,6 +217,26 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     if (this._showProfileButton !== value) {
       this._showProfileButton = value;
       this._adapter.setHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON, this._showProfileButton as any);
+    }
+  }
+
+  public get signOutButtonText(): string {
+    return this._signOutButtonText;
+  }
+  public set signOutButtonText(value: string) {
+    if (this._signOutButtonText !== value) {
+      this._signOutButtonText = value;
+      this._adapter.setSignOutButtonText(value);
+    }
+  }
+
+  public get profileButtonText(): string {
+    return this._profileButtonText;
+  }
+  public set profileButtonText(value: string) {
+    if (this._profileButtonText !== value) {
+      this._profileButtonText = value;
+      this._adapter.setProfileButtonText(value);
     }
   }
 

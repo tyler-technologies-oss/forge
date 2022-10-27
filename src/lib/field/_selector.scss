@@ -267,7 +267,7 @@
   }
 }
 
-@mixin input($input-selector: '::slotted(input)', $exclude: ()) {
+@mixin input($input-selector: '::slotted(input)', $exclude: (), $component-name: 'forge-field') {
   // Core
   @if list.index($exclude, core) == null {
     #{$input-selector} {
@@ -291,17 +291,17 @@
   @if list.index($exclude, font-size) == null {
     &:not(.forge-field--dense):not(.forge-field--roomy) {
       #{$input-selector} {
-        @include base.input-font-size(default);
+        @include base.input-font-size(default, --#{$component-name}-font-size);
       }
     }
     &--roomy:not(.forge-field--dense) {
       #{$input-selector} {
-        @include base.input-font-size(roomy);
+        @include base.input-font-size(roomy, --#{$component-name}-font-size);
       }
     }
     &--dense:not(.forge-field--roomy) {
       #{$input-selector} {
-        @include base.input-font-size(dense);
+        @include base.input-font-size(dense, --#{$component-name}-font-size);
       }
     }
   }

@@ -37,6 +37,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   updateActiveDescendant(id: string): void;
   getTargetElementWidth(selector: string): number;
   activateFirstOption(): void;
+  activateSelectedOption(): void;
   activateOptionByIndex(value: number): void;
   setBusyVisibility(busy: boolean): void;
   getActiveOptionIndex(): number | null;
@@ -233,6 +234,10 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
 
   public activateFirstOption(): void {
     this._listDropdown?.activateFirstOption();
+  }
+
+  public activateSelectedOption(): void {
+    this._listDropdown?.activateSelectedOption();
   }
 
   public activateOptionByIndex(value: number): void {

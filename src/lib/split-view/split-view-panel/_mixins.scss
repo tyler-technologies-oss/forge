@@ -1,0 +1,255 @@
+@use '@material/animation/variables' as mdc-animation-variables;
+@use './variables';
+@use '../../theme/theme';
+
+@mixin core-styles() {
+  .forge-split-view-panel {
+    @include base;
+
+    &__handle {
+      @include handle;
+    }
+
+    &__content {
+      @include content;
+    }
+
+    &--closed {
+      @include closed;
+    }
+
+    &--disabled {
+      // Use an id selector to increase specificity
+      #handle {
+        @include handle-disabled;
+      }
+
+      .forge-split-view-panel__icon {
+        @include icon-disabled;
+      }
+    }
+  }
+}
+
+@mixin horizontal-styles() {
+  .forge-split-view-panel[orientation=horizontal] {
+    @include base-horizontal;
+
+    .forge-split-view-panel {
+      &__handle {
+        @include handle-orientation(horizontal);
+        @include cursor(horizontal);
+      }
+    }
+
+    &.forge-split-view-panel--closing {
+      &[resizable=end] {
+        @include closing($direction: left);
+      }
+
+      &[resizable=start] {
+        @include closing($direction: right);
+      }
+    }
+
+    &.forge-split-view-panel--opening {
+      &[resizable=end] {
+        @include opening($direction: left);
+      }
+
+      &[resizable=start] {
+        @include opening($direction: right);
+      }
+    }
+  }
+}
+
+@mixin vertical-styles() {
+  .forge-split-view-panel[orientation=vertical] {
+    @include base-vertical;
+
+    .forge-split-view-panel {
+      &__handle {
+        @include handle-orientation(vertical);
+        @include cursor(vertical);
+      }
+    }
+
+    &.forge-split-view-panel--closing {
+      &[resizable=end] {
+        @include closing($direction: top);
+      }
+
+      &[resizable=start] {
+        @include closing($direction: bottom);
+      }
+    }
+
+    &.forge-split-view-panel--opening {
+      &[resizable=end] {
+        @include opening($direction: top);
+      }
+
+      &[resizable=start] {
+        @include opening($direction: bottom);
+      }
+    }
+  }
+}
+
+@mixin static-styles() {
+  @include host-static;
+
+  .forge-split-view-panel {
+    @include base-static;
+
+    &__handle {
+      @include handle-static;
+    }
+  }
+}
+
+@mixin host() {
+  // There is no fallback value for the animating layer
+  @include theme.css-custom-property(z-index, --forge-split-view-animating-layer, $important: true);
+
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  flex: 0;
+}
+
+@mixin host-static() {
+  flex: 1;
+}
+
+@mixin base() {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  contain: paint size;
+}
+
+@mixin base-horizontal() {
+  @include theme.css-custom-property(min-width, --forge-split-view-handle-width, variables.$handle-width);
+
+  width: calc(var(--forge-split-view-panel-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
+  flex-direction: row;
+}
+
+@mixin base-vertical() {
+  @include theme.css-custom-property(min-height, --forge-split-view-handle-width, variables.$handle-width);
+
+  height: calc(var(--forge-split-view-panel-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
+  flex-direction: column;
+}
+
+@mixin base-static() {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+@mixin handle() {
+  @include theme.property(color, text-secondary-on-light);
+  @include theme.property(background-color, border-color);
+
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+}
+
+@mixin handle-orientation($orientation: horizontal) {
+  @if $orientation == horizontal {
+    @include theme.css-custom-property(width, --forge-split-view-handle-width, variables.$handle-width);
+  } @else {
+    @include theme.css-custom-property(height, --forge-split-view-handle-width, variables.$handle-width);
+  }
+}
+
+@mixin handle-disabled() {
+  pointer-events: none;
+}
+
+@mixin handle-static() {
+  display: none;
+}
+
+@mixin icon-disabled() {
+  display: none;
+}
+
+@mixin content() {
+  flex: 1;
+  overflow: hidden;
+}
+
+@mixin cursor($orientation: horizontal) {
+  // There is no fallback value for the panel cursor
+  @include theme.css-custom-property(cursor, --forge-split-view-panel-cursor);
+}
+
+@mixin closed() {
+  display: none;
+}
+
+@mixin closing($direction: right) {
+  @include closing-animation($direction);
+}
+
+@mixin opening($direction: right) {
+  @include closing-animation($direction);
+
+  animation-direction: reverse;
+}
+
+@mixin closing-animation($direction: right) {
+  @include animating-position($direction);
+
+  $animation-name: unique-id();
+
+  animation-name: $animation-name;
+  animation-duration: variables.$animation-duration;
+  animation-timing-function: mdc-animation-variables.$standard-curve-timing-function;
+
+  @keyframes #{$animation-name} {
+    from {
+      transform: none;
+    }
+  
+    to {
+      @if ($direction == right) {
+        transform: translateX(100%);
+      } @else if ($direction == left) {
+        transform: translateX(-100%);
+      } @else if ($direction == top) {
+        transform: translateY(-100%);
+      } @else {
+        transform: translateY(100%);
+      }
+    }
+  }
+}
+
+@mixin animating-position($direction: right) {
+  position: absolute;
+
+  @if ($direction == right) {
+    top: 0;
+    right: 0;
+  } @else if ($direction == left) {
+    top: 0;
+    left: 0;
+  } @else if ($direction == top) {
+    top: 0;
+    left: 0;
+  } @else {
+    bottom: 0;
+    left: 0;
+  }
+}
