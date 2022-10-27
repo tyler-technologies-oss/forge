@@ -520,7 +520,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _normalizeTimeValue(value: number | null | undefined): number | null {
-    if (value === null || value === undefined) {
+    if (value == null) {
       return null;
     } else if (value < 0) {
       return 0;
