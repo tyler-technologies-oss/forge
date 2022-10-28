@@ -267,9 +267,10 @@ export class PaginatorFoundation {
       return;
     }
 
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: 0 });
+    const firstPage = 0;
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: firstPage });
     if (canPage) {
-      this.pageIndex = 0;
+      this.pageIndex = firstPage;
     }
   }
 
@@ -284,9 +285,10 @@ export class PaginatorFoundation {
       return;
     }
     
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, { pageIndex: this._pageIndex - 1 });
+    const prevPage = this._pageIndex - 1;
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, { pageIndex: prevPage });
     if (canPage) {
-      this.pageIndex--;
+      this.pageIndex = prevPage;
     }
   }
 
@@ -301,9 +303,10 @@ export class PaginatorFoundation {
       return;
     }
 
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: this._pageIndex + 1 });
+    const nextPage = this._pageIndex + 1;
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: nextPage });
     if (canPage) {
-      this.pageIndex++;
+      this.pageIndex = nextPage;
     }
   }
 
@@ -318,9 +321,10 @@ export class PaginatorFoundation {
       return;
     }
 
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE, { pageIndex: this._getMaxPages() });
+    const lastPage = this._getMaxPages();
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE, { pageIndex: lastPage });
     if (canPage) {
-      this.pageIndex = this._getMaxPages();
+      this.pageIndex = lastPage;
     }
   }
 
@@ -331,11 +335,11 @@ export class PaginatorFoundation {
   private _onPageSizeChanged(evt: CustomEvent): void {
     evt.stopPropagation();
 
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize: Number(evt.detail) });
+    const pageSize = Number(evt.detail);
+    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize });
     if (canPage) {
       this.pageIndex = 0;
-      this.pageSize = Number(evt.detail);
-    } else {
+      this.pageSize = pageSize;
       evt.preventDefault();
     }
   }
