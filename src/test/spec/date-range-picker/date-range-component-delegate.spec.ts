@@ -33,8 +33,8 @@ describe('DateRangeComponentDelegate', function(this: ITestContext) {
     this.context.delegate.value = value;
 
     expect(this.context.delegate.value).toEqual({ from: new Date(value.from), to: new Date(value.to) });
-    expect(this.context.delegate.element.value.from).toEqual(new Date(value.from));
-    expect(this.context.delegate.element.value.to).toEqual(new Date(value.to));
+    expect(this.context.delegate.element.value?.from).toEqual(new Date(value.from));
+    expect(this.context.delegate.element.value?.to).toEqual(new Date(value.to));
   });
 
   it('should execute change callback when from input is modified', function(this: ITestContext) {

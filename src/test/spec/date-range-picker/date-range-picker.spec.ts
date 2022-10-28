@@ -1183,8 +1183,8 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context.component.from = fromDate;
       this.context.component.to = toDate;
 
-      expect(this.context.component.value.from).toEqual(fromDate, 'the value\'s from property should be set to the value passed to the component\'s from property');
-      expect(this.context.component.value.to).toEqual(toDate, 'the value\'s to property should be set to the value passed to the component\'s to property');
+      expect(this.context.component.value?.from).toEqual(fromDate, 'the value\'s from property should be set to the value passed to the component\'s from property');
+      expect(this.context.component.value?.to).toEqual(toDate, 'the value\'s to property should be set to the value passed to the component\'s to property');
     });
 
     it('should set allow invalid date via attribute', function(this: ITestContext) {
@@ -1333,9 +1333,9 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.open).toBeTrue();
       expect(popup).not.toBeNull('Expected popup to stay open');
-      expect(this.context.component.value.from).not.toBeNull();
-      expect(this.context.component.value.to).toBeNull();
-      expect((this.context.component.value.from as Date).getDate()).toEqual(new Date().getDate());
+      expect(this.context.component.value?.from).not.toBeNull();
+      expect(this.context.component.value?.to).toBeNull();
+      expect((this.context.component.value?.from as Date).getDate()).toEqual(new Date().getDate());
     });
 
     it('should remove value when clicking clear button', async function(this: ITestContext) {

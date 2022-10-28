@@ -42,7 +42,7 @@ declare global {
     IconComponent
   ]
 })
-export class DatePickerComponent extends BaseDatePickerComponent<Date | string, Date, DatePickerFoundation> implements IDatePickerComponent {
+export class DatePickerComponent extends BaseDatePickerComponent<Date | string | undefined, Date, DatePickerFoundation> implements IDatePickerComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_DATE_PICKER_CONSTANTS.observedAttributes),

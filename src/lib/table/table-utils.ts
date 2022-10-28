@@ -400,7 +400,7 @@ export class TableUtils {
         if (columnConfig.transform && typeof columnConfig.transform === 'function') {
           Promise.resolve(columnConfig.transform(cellData[i])).then(value => span.textContent = value);
         } else {
-          if (cellData[i] === undefined || cellData[i] === null) {
+          if (cellData[i] == null) {
             span.textContent = '';
           } else {
             span.textContent = cellData[i].toString();

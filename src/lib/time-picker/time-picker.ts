@@ -23,17 +23,17 @@ import template from './time-picker.html';
 import styles from './time-picker.scss';
 
 export interface ITimePickerComponent extends IBaseComponent {
-  value: string | null;
+  value: string | null | undefined;
   open: boolean;
   allowSeconds: boolean;
   masked: boolean;
   showMaskFormat: boolean;
   use24HourTime: boolean;
   allowInvalidTime: boolean;
-  min: string | null;
-  max: string | null;
+  min: string | null | undefined;
+  max: string | null | undefined;
   restrictedTimes: string[];
-  startTime: string | null;
+  startTime: string | null | undefined;
   step: number;
   allowInput: boolean;
   showNow: boolean;
@@ -181,7 +181,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   }
 
   @FoundationProperty()
-  public value: string | null;
+  public value: string | null | undefined;
 
   @FoundationProperty()
   public open: boolean;
@@ -202,16 +202,16 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   public allowInvalidTime: boolean;
 
   @FoundationProperty()
-  public min: string | null;
+  public min: string | null | undefined;
 
   @FoundationProperty()
-  public max: string | null;
+  public max: string | null | undefined;
 
   @FoundationProperty()
   public restrictedTimes: string[];
 
   @FoundationProperty()
-  public startTime: string | null;
+  public startTime: string | null | undefined;
 
   @FoundationProperty()
   public step: number;

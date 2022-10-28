@@ -9,7 +9,7 @@ export function elementAcceptsTextInput(el: any): boolean {
 }
 
 /** Parses a string of key combinations into an array of keys and modifiers */
-export function parseKeyCombinations(keys: string | null, useCode = false): IKeyCombination[] {
+export function parseKeyCombinations(keys: string | null | undefined, useCode = false): IKeyCombination[] {
   if (!keys || !keys.length) {
     return [];
   }
@@ -18,7 +18,7 @@ export function parseKeyCombinations(keys: string | null, useCode = false): IKey
   return separatedKeys.map(key => {
     const keyParts = key.split('+');
     const fixedKey = useCode ? keyParts.pop() || '' : fixKey((keyParts.pop() || '').toLowerCase());
-    const modifiers = keyParts.sort().join('');
+    const modifiers = keyParts.sort().join('').toLowerCase();
     return { key: fixedKey, modifier: modifiers };
   });
 }
@@ -35,16 +35,16 @@ export function getModiferKeysString(evt: KeyboardEvent): string {
   // Ensure the modifier keys are appended in alphabetical order
   let modifierString = '';
   if (evt.altKey) {
-    modifierString += 'Alt';
+    modifierString += 'alt';
   }
   if (evt.ctrlKey) {
-    modifierString += 'Control';
+    modifierString += 'control';
   }
   if (evt.metaKey) {
-    modifierString += 'Meta';
+    modifierString += 'meta';
   }
   if (evt.shiftKey) {
-    modifierString += 'Shift';
+    modifierString += 'shift';
   }
   return modifierString;
 }
