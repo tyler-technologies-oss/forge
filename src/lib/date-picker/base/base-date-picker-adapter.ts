@@ -44,10 +44,10 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   goToCalendarDate(date: Date): void;
   addDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void;
   removeDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void;
-  setCalendarValue(value: Date | DateRange | null): void;
-  setCalendarMinDate(value: Date | null): void;
-  setCalendarMaxDate(value: Date | null): void;
-  setCalendarDisabledDates(value: Date | Date[] | null): void;
+  setCalendarValue(value: Date | DateRange | null | undefined): void;
+  setCalendarMinDate(value: Date | null | undefined): void;
+  setCalendarMaxDate(value: Date | null | undefined): void;
+  setCalendarDisabledDates(value: Date | Date[] | null | undefined): void;
   setCalendarDisabledDaysOfWeek(value: DayOfWeek[]): void;
   setCalendarDisableDayCallback(disableDayCallback: (date: Date) => boolean): void;
   setCalendarActiveDate(date: Date): void;
@@ -55,7 +55,6 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   setCalendarYearRange(value: string): void;
   propagateCalendarKey(evt: KeyboardEvent): void;
 }
-
 export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends BaseAdapter<T> implements IBaseDatePickerAdapter {
   protected _identifier: string;
   protected _calendarDropdown?: ICalendarDropdown;
@@ -154,25 +153,25 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     this._calendarDropdown?.calendar?.removeEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, listener);
   }
 
-  public setCalendarValue(value: Date | DateRange | null): void {
+  public setCalendarValue(value: Date | DateRange | null | undefined): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.value = value;
     }
   }
 
-  public setCalendarMinDate(value: Date | null): void {
+  public setCalendarMinDate(value: Date | null | undefined): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.min = value;
     }
   }
 
-  public setCalendarMaxDate(value: Date | null): void {
+  public setCalendarMaxDate(value: Date | null | undefined): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.max = value;
     }
   }
 
-  public setCalendarDisabledDates(value: Date | Date[] | null): void {
+  public setCalendarDisabledDates(value: Date | Date[] | null | undefined): void {
     if (this._calendarDropdown?.calendar) {
       this._calendarDropdown.calendar.disabledDates = value;
     }

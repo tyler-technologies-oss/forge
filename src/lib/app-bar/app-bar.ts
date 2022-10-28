@@ -11,7 +11,7 @@ export interface IAppBarComponent extends IBaseComponent {
   titleText: string;
   fixed: boolean;
   raised: boolean;
-  theme: string | null;
+  theme: string | null | undefined;
 }
 
 declare global {
@@ -76,10 +76,10 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
   public raised: boolean;
 
   /** Convenience property to allow for easily getting/setting the theme color from JavaScript. */
-  public get theme(): string | null {
+  public get theme(): string | null | undefined {
     return this.getAttribute(APP_BAR_CONSTANTS.attributes.THEME) || null;
   }
-  public set theme(value: string | null) {
+  public set theme(value: string | null | undefined) {
     if (value) {
       this.setAttribute(APP_BAR_CONSTANTS.attributes.THEME, value);
     } else {

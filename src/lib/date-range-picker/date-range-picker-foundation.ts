@@ -7,14 +7,14 @@ import { IDateRangePickerAdapter } from './date-range-picker-adapter';
 import { DatePickerRange, DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants';
 
 export interface IDateRangePickerFoundation extends IBaseDatePickerFoundation<IDatePickerRange> {
-  from: Date | string | null;
-  to: Date | string | null;
+  from: Date | string | null | undefined;
+  to: Date | string | null | undefined;
 }
 
 export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRangePickerAdapter, IDatePickerRange> implements IDateRangePickerFoundation {
   protected _mode: CalendarMode = 'range';
-  private _from: Date | null = null;
-  private _to: Date | null = null;
+  private _from?: Date | null = null;
+  private _to?: Date | null = null;
   private _toInputListener: (evt: Event) => void;
   private _toInputKeydownListener: (evt: KeyboardEvent) => void;
   private _toInputFocusListener: (evt: Event) => void;
@@ -73,7 +73,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     }
   }
 
-  protected _emitChangeEvent(value: DateRange | null, force?: boolean): boolean {
+  protected _emitChangeEvent(value: DateRange | null | undefined, force?: boolean): boolean {
     const typedStartValue = this._getTypedValue((value && value.from) || null);
     const typedEndValue = this._getTypedValue((value && value.to) || null);
     const detail: IDateRangePickerChangeEventData = new DatePickerRange({ from: typedStartValue, to: typedEndValue });
@@ -107,7 +107,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     this._closeCalendar(true);
   }
 
-  protected _getCurrentValue(): IDatePickerRange | null {
+  protected _getCurrentValue(): IDatePickerRange | null | undefined {
     return this._value;
   }
 
@@ -144,7 +144,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     this._adapter.setToInputValue(formattedDate, suppressValueChanges ? false : this._notifyInputValueChanges);
   }
 
-  protected _setValue(value: Date | null): void {
+  protected _setValue(value: Date | null | undefined): void {
     if (this._isDateValueAcceptable(value)) {
       this._from = value || null;
       if (!this._value) {
@@ -155,7 +155,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     }
   }
 
-  private _setToValue(value: Date | null): void {
+  private _setToValue(value: Date | null | undefined): void {
     if (this._isDateValueAcceptable(value)) {
       this._to = value || null;
       if (!this._value) {
@@ -346,7 +346,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     this._value = { from: this.from, to: this.to };
   }
 
-  public get from(): Date | string | null {
+  public get from(): Date | string | null | undefined {
     const date = this._getTypedValue(this._from);
 
     if (!date) {
@@ -359,7 +359,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
 
     return date;
   }
-  public set from(value: Date | string | null) {
+  public set from(value: Date | string | null | undefined) {
     if (this._from !== value) {
       this._setValue(this._coerceDateValue(value));
       if (this._isInitialized) {
@@ -371,7 +371,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     }
   }
 
-  public get to(): Date | string | null {
+  public get to(): Date | string | null | undefined {
     const date = this._getTypedValue(this._to);
 
     if (!date) {
@@ -384,7 +384,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
 
     return date;
   }
-  public set to(value: Date | string | null) {
+  public set to(value: Date | string | null | undefined) {
     if (this._to !== value) {
       this._setToValue(this._coerceDateValue(value));
       if (this._isInitialized) {

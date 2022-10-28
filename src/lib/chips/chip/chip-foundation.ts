@@ -8,7 +8,7 @@ export interface IChipFoundation extends ICustomElementFoundation {
   selected: boolean;
   disabled: boolean;
   invalid: boolean;
-  value: string;
+  value: any;
   dense: boolean;
   emulateFocus: boolean;
   setFocus(): void;

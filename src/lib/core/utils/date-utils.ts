@@ -111,7 +111,7 @@ export function formatDate(date: Date): string {
  * @param second The date to compare the first date to. 
  * @returns A boolean whether the two dates are equivalent.
  */
-export function isSameDate(first: Date | null, second: Date | null): boolean {
+export function isSameDate(first?: Date | null, second?: Date | null): boolean {
   if (!first && !second) {
     return true;
   } else if (!first || !second) {

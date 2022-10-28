@@ -6,7 +6,8 @@ import { KEYBOARD_SHORTCUT_CONSTANTS } from './keyboard-shortcut-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 export interface IKeyboardShortcutComponent extends IBaseComponent {
-  key: string | null;
+  key: string | null | undefined;
+  keyBinding: string | null | undefined;
   target: string;
   global: boolean;
   allowWhileTyping: boolean;
@@ -91,7 +92,15 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
 
   /** Gets/sets the key binding. */
   @FoundationProperty()
-  public key: string | null;
+  public key: string | null | undefined;
+
+  /** Alias for key. */
+  public get keyBinding(): string | null | undefined {
+    return this.key;
+  }
+  public set keyBinding(value: string | null | undefined) {
+    this.key = value;
+  }
 
   /** Gets/sets the target element selector. */
   @FoundationProperty()
