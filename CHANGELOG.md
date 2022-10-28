@@ -1,3 +1,26 @@
+# v2.10.0 (Fri Oct 28 2022)
+
+#### 🚀 Enhancement
+
+- feat: expand nullable types to allow undefined [#160](https://github.com/tyler-technologies-oss/forge/pull/160) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### 🐛 Bug Fix
+
+- fix(table): fixed default select height in column filter [#176](https://github.com/tyler-technologies-oss/forge/pull/176) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(paginator): fixed change event state reconciliation [#172](https://github.com/tyler-technologies-oss/forge/pull/172) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(build): update Forge CLI to enable ESM minification [#173](https://github.com/tyler-technologies-oss/forge/pull/173) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(keyboard-shortcut): add storybook docs for keyboard shortcuts [#174](https://github.com/tyler-technologies-oss/forge/pull/174) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- chore: optimize pr-check workflow to limit dependency installation to [#171](https://github.com/tyler-technologies-oss/forge/pull/171) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: fix actions workflow deprecations [#170](https://github.com/tyler-technologies-oss/forge/pull/170) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.9.0 (Wed Oct 19 2022)
 
 #### 🚀 Enhancement
