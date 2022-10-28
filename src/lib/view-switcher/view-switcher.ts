@@ -10,7 +10,7 @@ import styles from './view-switcher.scss';
 
 export interface IViewSwitcherComponent extends IBaseComponent {
   index: number;
-  animationType: ViewSwitcherAnimationType;
+  animationType: `${ViewSwitcherAnimationType}`;
   next(): void;
   previous(): void;
   goToStart(): void;
@@ -74,7 +74,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
   
   /** Gets/sets the animation type. */
   @FoundationProperty()
-  public animationType: ViewSwitcherAnimationType;
+  public animationType: `${ViewSwitcherAnimationType}`;
 
   /** Transitions to the next view. */
   public next(): void {

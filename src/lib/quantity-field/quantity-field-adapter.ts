@@ -180,7 +180,7 @@ export class QuantityFieldAdapter extends BaseAdapter<IQuantityFieldComponent> i
   }
 
   private _isNullOrUndefinedOrEmpty(value: any): value is null | undefined {
-    return value === null || value === undefined || value === '';
+    return value == null || value === '';
   }
 
   private _setupInputDisabledAttributeMutationObserver(callback: () => void): void {

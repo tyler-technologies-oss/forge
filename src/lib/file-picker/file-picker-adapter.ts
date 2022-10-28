@@ -17,8 +17,8 @@ export interface IFilePickerAdapter extends IBaseAdapter {
   removeDropListener(listener: (evt: DragEvent) => void): void;
   initializeButton(): void;
   setHighlightState(value: boolean): void;
-  setAccept(value: string | null): void;
-  setCapture(value: string | null): void;
+  setAccept(value: string | null | undefined): void;
+  setCapture(value: string | null | undefined): void;
   setMultiple(value: boolean): void;
   setDisabled(value: boolean): void;
   setCompact(value: boolean): void;
@@ -106,7 +106,7 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
    * Sets the accept attribute of the input.
    * @param value The accept string.
    */
-  public setAccept(value: string | null): void {
+  public setAccept(value: string | null | undefined): void {
     if (value) {
       this._input.setAttribute('accept', value);
     } else {
@@ -118,7 +118,7 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
    * Sets the capture attribute of the input.
    * @param value The capture string.
    */
-  public setCapture(value: string | null): void {
+  public setCapture(value: string | null | undefined): void {
     if (value) {
       this._input.setAttribute('capture', value);
     } else {

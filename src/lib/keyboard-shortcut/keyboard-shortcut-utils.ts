@@ -9,7 +9,7 @@ export function elementAcceptsTextInput(el: any): boolean {
 }
 
 /** Parses a string of key combinations into an array of keys and modifiers */
-export function parseKeyCombinations(keys: string | null, useCode = false): IKeyCombination[] {
+export function parseKeyCombinations(keys: string | null | undefined, useCode = false): IKeyCombination[] {
   if (!keys || !keys.length) {
     return [];
   }
