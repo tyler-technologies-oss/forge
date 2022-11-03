@@ -1,3 +1,15 @@
+# v2.10.1 (Thu Nov 03 2022)
+
+#### 🐛 Bug Fix
+
+- fix(slider): fixed propagation to underlying implementation state for `min`, `max`, and `step` properties [#180](https://github.com/tyler-technologies-oss/forge/pull/180) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.10.0 (Fri Oct 28 2022)
 
 #### 🚀 Enhancement
