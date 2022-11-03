@@ -214,20 +214,24 @@ export class FieldFoundation {
     }
   }
 
+  public get addonEndAlwaysEnabled(): boolean {
+    return this._addonEndAlwaysEnabled;
+  }
+
   public set addonEndAlwaysEnabled(value: boolean) {
     if (this._addonEndAlwaysEnabled !== value) {
       this._addonEndAlwaysEnabled = value;
 
+      if (this._isInitialized) {
+        this._setAddonEndAlwaysEnabled();
+      }
+
       if (this._addonEndAlwaysEnabled) {
-        this._adapter.setRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
+        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED);
       } else {
-        this._adapter.removeRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
+        this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED);
       }
     }
-  }
-
-  public get addonEndAlwaysEnabled(): boolean {
-    return this._addonEndAlwaysEnabled;
   }
 
   //
@@ -393,6 +397,14 @@ export class FieldFoundation {
       this._adapter.setRootClass(FIELD_CONSTANTS.classes.REQUIRED);
     } else {
       this._adapter.removeRootClass(FIELD_CONSTANTS.classes.REQUIRED);
+    }
+  }
+
+  protected _setAddonEndAlwaysEnabled(): void {
+    if (this._addonEndAlwaysEnabled) {
+      this._adapter.setRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
+    } else {
+      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
     }
   }
 

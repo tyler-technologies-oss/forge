@@ -65,6 +65,9 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
       case FIELD_CONSTANTS.attributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         break;
+      case FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED:
+        this.addonEndAlwaysEnabled = coerceBoolean(newValue);
+        break;
     }
   }
 

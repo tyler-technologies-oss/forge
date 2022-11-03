@@ -986,8 +986,48 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       });
     });
 
-    describe('Disable chip field', function(this: ITestContext) {
-      it('should set the disabled class on root when the native input disabled property is set to true', async function(this: ITestContext) {
+    describe('API (attributes) - addon-end-always-enabled', function (this: ITestContext) {
+      it('should set addonEndAlwaysEnabled via attribute', async function (this: ITestContext) {
+        this.context = setupTestContext();
+
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, 'true');
+        await tick();
+
+        expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(true);
+      });
+
+      it('should toggle correct class for addonEndAlwaysEnabled via attribute', async function (this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, 'true');
+        await tick();
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, 'false');
+        await tick();
+        expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(false);
+      });
+    });
+
+    describe('API (Properties) - addonEndAlwaysEnabled', function (this: ITestContext) {
+      it('should set addonEndAlwaysEnabled via property', async function (this: ITestContext) {
+        this.context = setupTestContext();
+
+        this.context.component.addonEndAlwaysEnabled = true;
+        await tick();
+
+        expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(true);
+      });
+
+      it('should toggle correct class for addonEndAlwaysEnabled via property', async function (this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.addonEndAlwaysEnabled = true;
+        await tick();
+        this.context.component.addonEndAlwaysEnabled = false;
+        await tick();
+        expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(false);
+      });
+    });
+
+    describe('Disable chip field', function (this: ITestContext) {
+      it('should set the disabled class on root when the native input disabled property is set to true', async function (this: ITestContext) {
         this.context = setupTestContext();
         getNativeInput(this.context.component).disabled = true;
 
