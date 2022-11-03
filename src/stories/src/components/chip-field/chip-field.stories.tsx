@@ -1,16 +1,17 @@
 import { Meta, Story } from '@storybook/react';
-import { argTypes, IChipFieldProps } from './chip-field-args';
-import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
-import { ForgeChipField, ForgeIcon, ForgeIconButton, ForgeAutocomplete, ForgeChip } from '@tylertech/forge-react';
+import { AutocompleteFilterCallback, IAutocompleteSelectEventData, IChipComponent, IChipFieldComponent, IconRegistry, IOption } from '@tylertech/forge';
+import { ForgeAutocomplete, ForgeChip, ForgeChipField, ForgeIcon, ForgeIconButton } from '@tylertech/forge-react';
 import { tylIconEvent, tylIconMoreVert, tylIconSend } from '@tylertech/tyler-icons/standard';
-import { IconRegistry, AutocompleteFilterCallback, IAutocompleteSelectEventData, IChipComponent, IOption, IChipFieldComponent } from '@tylertech/forge';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+
+import { argTypes, IChipFieldProps } from './chip-field-args';
 
 const MDX = require('./chip-field.mdx').default;
 
 export default {
   title: 'Components/Chip Field',
-  parameters: { 
-    docs: { 
+  parameters: {
+    docs: {
       page: MDX
     },
   },
@@ -30,6 +31,7 @@ export const Default: Story<IChipFieldProps> = ({
   hasTrailing = false,
   hasHelperText = false,
   hasAddonEnd = false,
+  addonEndAlwaysEnabled = false,
 }) => {
   const chipFieldRef = useRef<IChipFieldComponent>();
   const addMember = (evt: CustomEvent) => {
@@ -69,7 +71,8 @@ export const Default: Story<IChipFieldProps> = ({
       shape={shape}
       invalid={invalid}
       required={required}
-      style={{width: '559px'}}>
+      style={{width: '559px'}}
+      addonEndAlwaysEnabled={addonEndAlwaysEnabled}>
 
       {hasLeading && <ForgeIcon slot="leading" name="event" />}
       {hasLabel && <label htmlFor="input-text" slot="label">{label}</label>}
@@ -109,6 +112,7 @@ Default.args = {
   hasTrailing: false,
   hasHelperText: false,
   hasAddonEnd: false,
+  addonEndAlwaysEnabled: false,
 } as IChipFieldProps;
 
 export const WithAutocomplete: Story<{}> = () => {

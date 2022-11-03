@@ -4,7 +4,9 @@ const attributes = {
   SHAPE: 'shape',
   INVALID: 'invalid',
   REQUIRED: 'required',
-  HOST_LABEL_FLOATING: `forge-label-floating`
+  HOST_LABEL_FLOATING: `forge-label-floating`,
+  ADDON_END_ALWAYS_ENABLED: `forge-addon-end-always-enabled`
+
 };
 
 const observedInputAttributes = ['disabled', 'readonly', 'value', 'placeholder'];
@@ -24,7 +26,8 @@ const classes = {
   REQUIRED: 'forge-field--required',
   DENSE: 'forge-field--dense',
   ROOMY: 'forge-field--roomy',
-  LABEL: 'forge-field--label'
+  LABEL: 'forge-field--label',
+  ADDON_END_ALWAYS_ENABLED: 'forge-field__addon-end-container--enabled'
 };
 
 export const FIELD_CONSTANTS = {

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { textFieldArgTypes, textFieldTextareaArgTypes, ITextFieldProps, ITextFieldTextareaProps } from './text-field-args';
-import { ForgeIcon, ForgeIconButton, ForgeTextField } from '@tylertech/forge-react';
 import { IconRegistry } from '@tylertech/forge';
+import { ForgeIcon, ForgeIconButton, ForgeTextField } from '@tylertech/forge-react';
 import { tylIconEvent, tylIconMoreVert, tylIconSend } from '@tylertech/tyler-icons/standard';
+import React, { useEffect } from 'react';
+
+import { ITextFieldProps, ITextFieldTextareaProps, textFieldArgTypes, textFieldTextareaArgTypes } from './text-field-args';
 
 const MDX = require('./text-field.mdx').default;
 
@@ -28,6 +29,7 @@ export const Default: Story<ITextFieldProps> = ({
   hasTrailing = false,
   hasHelperText = false,
   hasAddonEnd = false,
+  addonEndAlwaysEnabled = false,
 }) => {
   useEffect(() => {
     IconRegistry.define([tylIconEvent, tylIconMoreVert, tylIconSend]);
@@ -40,7 +42,9 @@ export const Default: Story<ITextFieldProps> = ({
       shape={shape}
       invalid={invalid}
       required={required}
-      style={{width:  '259px'}}>
+      style={{width:  '259px'}}
+      addonEndAlwaysEnabled={addonEndAlwaysEnabled}>
+
       {hasLeading && <ForgeIcon slot="leading" name="event" />}
 
       <input autoComplete="off" type="text" id="input-text" disabled={disabled} placeholder={hasPlaceholder ? 'Enter first name...' : undefined} />
@@ -79,6 +83,7 @@ Default.args = {
   hasTrailing: false,
   hasHelperText: false,
   hasAddonEnd: false,
+  addonEndAlwaysEnabled: false,
 } as ITextFieldProps;
 
 export const Textarea: Story<ITextFieldTextareaProps> = ({

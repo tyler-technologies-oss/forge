@@ -1,7 +1,8 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+
 import { IFloatingLabel } from '../floating-label/floating-label';
 import { IFieldAdapter } from './field-adapter';
-import { FIELD_CONSTANTS, FieldFloatLabelType, FieldShapeType, FieldDensityType } from './field-constants';
+import { FIELD_CONSTANTS, FieldDensityType, FieldFloatLabelType, FieldShapeType } from './field-constants';
 
 export interface IFieldFoundation extends ICustomElementFoundation {
   density: FieldDensityType;
@@ -9,6 +10,7 @@ export interface IFieldFoundation extends ICustomElementFoundation {
   shape: FieldShapeType;
   invalid: boolean;
   required: boolean;
+  addonEndAlwaysEnabled: boolean;
   floatLabel(value: boolean, alwaysFloat?: boolean): void;
 }
 
@@ -20,6 +22,7 @@ export class FieldFoundation {
   protected _required = false;
   protected _floatLabelType: FieldFloatLabelType = 'auto';
   protected _isInitialized = false;
+  protected _addonEndAlwaysEnabled = false;
   protected _labelSlotListener: (evt: Event) => void;
   protected _leadingSlotListener: (evt: Event) => void;
   protected _trailingSlotListener: (evt: Event) => void;
@@ -209,6 +212,22 @@ export class FieldFoundation {
         this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
       }
     }
+  }
+
+  public set addonEndAlwaysEnabled(value: boolean) {
+    if (this._addonEndAlwaysEnabled !== value) {
+      this._addonEndAlwaysEnabled = value;
+
+      if (this._addonEndAlwaysEnabled) {
+        this._adapter.setRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
+      } else {
+        this._adapter.removeRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
+      }
+    }
+  }
+
+  public get addonEndAlwaysEnabled(): boolean {
+    return this._addonEndAlwaysEnabled;
   }
 
   //

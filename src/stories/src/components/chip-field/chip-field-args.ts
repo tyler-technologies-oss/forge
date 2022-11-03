@@ -14,6 +14,7 @@ export interface IChipFieldProps {
   hasLeading: boolean;
   hasTrailing: boolean;
   hasAddonEnd: boolean;
+  addonEndAlwaysEnabled: boolean;
 }
 
 export const argTypes = {
@@ -89,6 +90,13 @@ export const argTypes = {
     },
   },
   hasPlaceholder: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  addonEndAlwaysEnabled: {
     control: 'boolean',
     description: '',
     table: {

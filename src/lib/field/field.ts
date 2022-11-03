@@ -1,7 +1,8 @@
-import { FieldDensityType, FieldFloatLabelType, FieldShapeType, FIELD_CONSTANTS } from './field-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { FieldFoundation } from './field-foundation';
 import { coerceBoolean, ensureChildren, FoundationProperty } from '@tylertech/forge-core';
+
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { FIELD_CONSTANTS, FieldDensityType, FieldFloatLabelType, FieldShapeType } from './field-constants';
+import { FieldFoundation } from './field-foundation';
 
 export interface IFieldComponent extends IBaseComponent {
   density: FieldDensityType;
@@ -9,6 +10,7 @@ export interface IFieldComponent extends IBaseComponent {
   shape: FieldShapeType;
   invalid: boolean;
   required: boolean;
+  addonEndAlwaysEnabled: boolean;
   floatLabel(value: boolean): void;
 }
 
@@ -19,7 +21,8 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
       FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE,
       FIELD_CONSTANTS.attributes.SHAPE,
       FIELD_CONSTANTS.attributes.INVALID,
-      FIELD_CONSTANTS.attributes.REQUIRED
+      FIELD_CONSTANTS.attributes.REQUIRED,
+      FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED
     ];
   }
 
@@ -84,6 +87,10 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
   /** Gets/sets the required state which controls the visibility of the asterisk in the label. */
   @FoundationProperty()
   public required: boolean;
+
+  /** Gets/sets addonEndAlawysEnabled which controls whether the addon end slot should remain enabled when the control is otherwise disabled.. */
+  @FoundationProperty()
+  public addonEndAlwaysEnabled: boolean;
 
   /**
    * Controls whether the label should be floating or not.

@@ -14,6 +14,7 @@ export interface ITextFieldProps {
   hasLeading: boolean;
   hasTrailing: boolean;
   hasAddonEnd: boolean;
+  addonEndAlwaysEnabled: boolean;
 }
 
 export interface ITextFieldTextareaProps {
@@ -92,6 +93,13 @@ export const textFieldArgTypes = {
     },
   },
   disabled: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  addonEndAlwaysEnabled: {
     control: 'boolean',
     description: '',
     table: {
