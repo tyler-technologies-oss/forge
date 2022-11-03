@@ -1,7 +1,7 @@
 import { defineSliderComponent, ISliderComponent, SLIDER_CONSTANTS, SliderComponent } from '@tylertech/forge/slider';
 import { removeElement, getShadowElement, emitEvent } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
-import { MDCSlider } from '@material/slider';
+import { MDCSlider, MDCSliderFoundation } from '@material/slider';
 
 interface ITestContext {
   context: ITestSliderContext;
@@ -10,6 +10,7 @@ interface ITestContext {
 interface ITestSliderContext {
   component: ISliderComponent;
   getMDCSlider(): MDCSlider;
+  getMDCSliderFoundation(): MDCSliderFoundation;
   getStep(): number;
   getMin(): number;
   getMax(): number;
@@ -156,6 +157,7 @@ describe('SliderComponent', function(this: ITestContext) {
 
     expect(this.context.getMax()).toBe(75, 'Expected MDC slider to be set to 75');
     expect(this.context.component.getAttribute(SLIDER_CONSTANTS.attributes.MAX)).toBe('75');
+    expect(this.context.getMDCSliderFoundation().getMax()).toBe(75);
   });
 
   it('should set max via attribute', async function(this: ITestContext) {
@@ -166,15 +168,17 @@ describe('SliderComponent', function(this: ITestContext) {
 
     expect(this.context.component.max).toBe(75);
     expect(this.context.getMax()).toBe(75);
+    expect(this.context.getMDCSliderFoundation().getMax()).toBe(75);
   });
 
   it('should set min via attribute when set by default', async function(this: ITestContext) {
     this.context = setupTestContext();
-    this.context.component.setAttribute(SLIDER_CONSTANTS.attributes.MAX, '75');
+    this.context.component.setAttribute(SLIDER_CONSTANTS.attributes.MIN, '75');
     this.context.append();
     await timer();
-    expect(this.context.component.max).toBe(75);
-    expect(this.context.getMax()).toBe(75);
+    expect(this.context.component.min).toBe(75);
+    expect(this.context.getMin()).toBe(75);
+    expect(this.context.getMDCSliderFoundation().getMin()).toBe(75);
   });
 
   it('should set step via property', async function(this: ITestContext) {
@@ -183,6 +187,7 @@ describe('SliderComponent', function(this: ITestContext) {
     this.context.component.step = 2;
     expect(this.context.getStep()).toBe(2);
     expect(this.context.component.getAttribute(SLIDER_CONSTANTS.attributes.STEP)).toBe('2');
+    expect(this.context.getMDCSliderFoundation().getStep()).toBe(2);
   });
 
   it('should set step via attribute', async function(this: ITestContext) {
@@ -193,6 +198,7 @@ describe('SliderComponent', function(this: ITestContext) {
 
     expect(this.context.component.step).toBe(2);
     expect(this.context.getStep()).toBe(2);
+    expect(this.context.getMDCSliderFoundation().getStep()).toBe(2);
   });
 
   it('should set min via attribute when set by default', async function(this: ITestContext) {
@@ -215,6 +221,7 @@ describe('SliderComponent', function(this: ITestContext) {
     return {
       component,
       getMDCSlider: () => component['_mdcSlider'],
+      getMDCSliderFoundation: () => component['_mdcSliderFoundation'],
       getStep: () => {
         const inputElement = getShadowElement(component, SLIDER_CONSTANTS.selectors.VALUE_INPUT) as HTMLInputElement;
         return +inputElement.step;
