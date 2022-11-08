@@ -63,12 +63,28 @@ directives for you, and all you need to do is simply import the Angular module t
 Along with the directives, this library also provides Angular services to make it easy to show dynamic elements such as toast messages, dialogs, and popups with Angular
 components embedded.
 
-> One caveat of using Web Components (specifically custom elements) with Angular is the requirement to specify the `CUSTOM_ELEMENTS_SCHEMA` in your Angular module. This
-> schema tells Angular to ignore elements that it does not know about, which essentially disables some useful feedback you'd usually receive from the tooling.
->
-> This caveat can be circumvented by creating Angular component wrappers if desired. We do not provide wrapper components like this at this time.
+#### **Usage without `CUSTOM_ELEMENTS_SCHEMA`**
 
-You can find the Angular adapter library for Forge [here](https://github.com/tyler-technologies-oss/forge-angular).
+Usually, one caveat of using Web Components (specifically custom elements) with Angular is the requirement to specify the `CUSTOM_ELEMENTS_SCHEMA` in your Angular module. This
+schema tells Angular to ignore elements that it does not know about, which essentially disables some useful feedback you'd usually receive from the tooling. 
+The [Angular adapter library for Forge](https://github.com/tyler-technologies-oss/forge-angular) now circumvents this by providing generated "proxy" components
+which allow you to use the Forge components as if they were Angular components.  This is entirely opt-in in V2, but in v3 will be provided by the same NgModules as the value accessors.
+
+To opt-in, import the appropriate modules from `@tylertech/forge-angular` in place of using the `CUSTOM_ELEMENTS_SCHEMA`.
+In cases where a module already exists to provide a value accessor, such as `DatePickerModule`, a separate `DatePickerProxyModule` will exist.
+In v3 this separate module will no longer be necessary, but you will still need to import modules for Forge components without value accessors.
+Individual modules are available for every custom element, but related ones are typically also grouped for convenience.
+For example, `TabContainerModule` also re-exports `TabModule`.
+
+Generally, this migration process is fairly seamless, though occasionally stricter template type-checking will catch some issues.  Some of these may be
+actual errors in your template, while others will be technically valid but the types don't match perfectly, such as providing an object to a boolean property
+intending to use existence to represent truthiness.  Address these errors, or use `$any()` to suppress them.
+
+> There is one subtle but breaking change related to using proxy components.  `ViewChild` or `ViewChildren` references to Forge components
+> would previously always have resulting in an `ElementRef`, even if the `{ read: ElementRef }` option was not specified.  Now that they are
+> actual Angular Components, they will default to the proxy component itself, but this mismatch will not be detected at compile-time.
+>
+> Audit all your `ViewChild` references, and ensure you pass the `{ read: ElementRef }` option anywhere you expect the type to be `ElementRef`.
 
 ### React
 
