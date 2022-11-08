@@ -13,6 +13,7 @@ export interface ISelectFoundation extends IBaseSelectFoundation {
   required: boolean;
   floatLabelType: FieldFloatLabelType;
   placeholder: string;
+  addonEndAlwaysEnabled: boolean;
 }
 
 /**
@@ -28,6 +29,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   private _floatLabelType: FieldFloatLabelType = 'auto';
   private _placeholder: string;
   private _density: FieldDensityType = 'default';
+  private _addonEndAlwaysEnabled = false;
   private _isInitialized = false;
   private _leadingChangeListener: (evt: Event) => void;
   private _addonEndChangeListener: (evt: Event) => void;
@@ -50,6 +52,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     this._adapter.setPlaceholderText(this._placeholder);
     this._applyDensity();
     this._setShapeType();
+    this._applyAddonEndAlwaysEnabled();
 
     this._detectLeadingElement();
     this._detectAddonEndContent();
@@ -270,6 +273,14 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     }
   }
 
+  private _applyAddonEndAlwaysEnabled(): void {
+    if (this._addonEndAlwaysEnabled) {
+      this._adapter.addRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
+    } else {
+      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
+    }
+  }
+
   private _applyDensity(): void {
     this._adapter.setRoomy(this._density === 'roomy');
     this._adapter.setDense(this._density === 'dense');
@@ -390,6 +401,20 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
       this._placeholder = value;
       this._adapter.setPlaceholderText(this._placeholder);
       this._initializeLabel();
+    }
+  }
+
+  public get addonEndAlwaysEnabled(): boolean {
+    return this._addonEndAlwaysEnabled;
+  }
+
+  public set addonEndAlwaysEnabled(value: boolean) {
+    if (this._addonEndAlwaysEnabled !== value) {
+      this._addonEndAlwaysEnabled = value;
+      if (this._isInitialized) {
+        this._applyAddonEndAlwaysEnabled();
+      }
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, this._addonEndAlwaysEnabled);
     }
   }
 }

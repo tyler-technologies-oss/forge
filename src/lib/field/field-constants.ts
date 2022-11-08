@@ -4,9 +4,8 @@ const attributes = {
   SHAPE: 'shape',
   INVALID: 'invalid',
   REQUIRED: 'required',
-  HOST_LABEL_FLOATING: `forge-label-floating`,
-  ADDON_END_ALWAYS_ENABLED: `forge-addon-end-always-enabled`
-
+  ADDON_END_ALWAYS_ENABLED: `addon-end-always-enabled`,
+  HOST_LABEL_FLOATING: `forge-label-floating`
 };
 
 const observedInputAttributes = ['disabled', 'readonly', 'value', 'placeholder'];

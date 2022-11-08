@@ -28,6 +28,7 @@ export const Default: Story<ISelectProps> = ({
   floatLabelType = 'default',
   shape = 'default',
   placeholder = '',
+  addonEndAlwaysEnabled = false,
   hasLeadingIcon = false,
   hasHelperText = false,
   hasAddonEnd = false
@@ -48,6 +49,7 @@ export const Default: Story<ISelectProps> = ({
       floatLabelType={floatLabelType}
       shape={shape}
       placeholder={placeholder}
+      addonEndAlwaysEnabled={addonEndAlwaysEnabled}
       style={{ width: '259px' }}>
       {hasLeadingIcon && <ForgeIcon slot="leading" name="fastfood" />}
       <ForgeOption value="grains">Bread, Cereal, Rice, and Pasta</ForgeOption>
@@ -74,6 +76,7 @@ Default.args = {
   open: false,
   label: 'Food group',
   placeholder: '',
+  addonEndAlwaysEnabled: false,
   hasLeadingIcon: false,
   hasHelperText: false,
   hasAddonEnd: false,

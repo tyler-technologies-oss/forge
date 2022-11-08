@@ -1429,6 +1429,44 @@ describe('SelectComponent', function(this: ITestContext) {
     });
   });
 
+  describe('API - addon-end-always-enabled', function (this: ITestContext) {
+    it('should set addonEndAlwaysEnabled via property', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+
+      this.context.component.addonEndAlwaysEnabled = true;
+      await tick();
+
+      expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(true);
+    });
+
+    it('should set addonEndAlwaysEnabled via attribute', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, 'true');
+      await tick();
+
+      expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(true);
+    });
+
+    it('should toggle correct class for addonEndAlwaysEnabled via property', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.addonEndAlwaysEnabled = true;
+      await tick();
+      this.context.component.addonEndAlwaysEnabled = false;
+      await tick();
+      expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(false);
+    });
+
+    it('should toggle correct class for addonEndAlwaysEnabled via attribute', async function (this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, 'true');
+      await tick();
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, 'false');
+      await tick();
+      expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED)).toBe(false);
+    });
+  })
+
   function _createFixture(): HTMLElement {
     const fixture = document.createElement('div');
     fixture.id = 'select-test-fixture';

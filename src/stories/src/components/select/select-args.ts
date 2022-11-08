@@ -14,6 +14,7 @@ export interface ISelectProps {
   hasLeadingIcon: boolean;
   hasHelperText: boolean;
   hasAddonEnd: boolean;
+  addonEndAlwaysEnabled: boolean;
 }
 
 export const argTypes = {
@@ -97,6 +98,13 @@ export const argTypes = {
       },
     },
     options: ['default', 'rounded'],
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  addonEndAlwaysEnabled: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',

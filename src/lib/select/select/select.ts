@@ -28,6 +28,7 @@ export interface ISelectComponent extends IBaseSelectComponent {
   label: string;
   disabled: boolean;
   placeholder: string;
+  addonEndAlwaysEnabled: boolean;
 }
 
 declare global {
@@ -69,6 +70,7 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
       FIELD_CONSTANTS.attributes.SHAPE,
       FIELD_CONSTANTS.attributes.INVALID,
       FIELD_CONSTANTS.attributes.REQUIRED,
+      FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED,
       SELECT_CONSTANTS.attributes.LABEL,
       SELECT_CONSTANTS.attributes.MULTIPLE,
       SELECT_CONSTANTS.attributes.VALUE,
@@ -106,6 +108,9 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
       case FIELD_CONSTANTS.attributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         return;
+      case FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED:
+        this.addonEndAlwaysEnabled = coerceBoolean(newValue);
+        break;
       case SELECT_CONSTANTS.attributes.LABEL:
         this.label = newValue;
         return;
@@ -150,4 +155,8 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
   /** Gets/sets the placeholder text. */
   @FoundationProperty()
   public placeholder: string;
+
+  /** Gets/sets addonEndAlawysEnabled which controls whether the addon end slot should remain enabled when the control is otherwise disabled.. */
+  @FoundationProperty()
+  public addonEndAlwaysEnabled: boolean;
 }

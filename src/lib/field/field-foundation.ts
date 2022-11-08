@@ -72,6 +72,7 @@ export class FieldFoundation {
     this._applyDensity();
     this._setShapeType();
     this._setValidity();
+    this._applyAddonEndAlwaysEnabled();
 
     if (this._adapter.isDisabled()) {
       this._adapter.setRootClass(FIELD_CONSTANTS.classes.DISABLED);
@@ -221,16 +222,10 @@ export class FieldFoundation {
   public set addonEndAlwaysEnabled(value: boolean) {
     if (this._addonEndAlwaysEnabled !== value) {
       this._addonEndAlwaysEnabled = value;
-
       if (this._isInitialized) {
-        this._setAddonEndAlwaysEnabled();
+        this._applyAddonEndAlwaysEnabled();
       }
-
-      if (this._addonEndAlwaysEnabled) {
-        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED);
-      } else {
-        this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED);
-      }
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.ADDON_END_ALWAYS_ENABLED, this._addonEndAlwaysEnabled);
     }
   }
 
@@ -400,7 +395,7 @@ export class FieldFoundation {
     }
   }
 
-  protected _setAddonEndAlwaysEnabled(): void {
+  protected _applyAddonEndAlwaysEnabled(): void {
     if (this._addonEndAlwaysEnabled) {
       this._adapter.setRootClass(FIELD_CONSTANTS.classes.ADDON_END_ALWAYS_ENABLED);
     } else {
