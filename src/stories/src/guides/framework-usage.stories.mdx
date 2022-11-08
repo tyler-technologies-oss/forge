@@ -76,6 +76,9 @@ In v3 this separate module will no longer be necessary, but you will still need 
 Individual modules are available for every custom element, but related ones are typically also grouped for convenience.
 For example, `TabContainerModule` also re-exports `TabModule`.
 
+It is also no longer necessary to invoke define methods (e.g. `defineDatePickerComponent()`) for usages in a template. 
+These will still be necessary in cases where the elements are created dynamically using `document.createElement()` or similar.
+
 Generally, this migration process is fairly seamless, though occasionally stricter template type-checking will catch some issues.  Some of these may be
 actual errors in your template, while others will be technically valid but the types don't match perfectly, such as providing an object to a boolean property
 intending to use existence to represent truthiness.  Address these errors, or use `$any()` to suppress them.
