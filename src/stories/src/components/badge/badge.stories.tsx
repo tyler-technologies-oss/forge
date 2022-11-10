@@ -71,3 +71,23 @@ WithIconButton.args = {
   strong: false,
   text: '3'
 } as IBadgeProps;
+
+export const withIcon: Story<IBadgeProps> = ({
+  text = 'Default',
+  open = true,
+  strong = false,
+  dot = false,
+  positioned = false,
+  theme = 'default'
+}) => {
+  useEffect(() => {
+    IconRegistry.define(tylIconNotifications)
+  }, []);
+
+  return (
+    <ForgeBadge dot={dot} open={open} positioned={positioned} strong={strong} theme={theme}>
+      <ForgeIcon slot="leading" name="notifications" />
+      {text}
+    </ForgeBadge>
+  )
+}
