@@ -5,6 +5,8 @@ export interface IBadgeProps {
   positioned: boolean;
   strong: boolean;
   text: string;
+  hasLeadingIcon: boolean;
+  hasTrailingIcon: boolean;
 }
 
 export const argTypes = {
@@ -57,6 +59,20 @@ export const argTypes = {
   text: { 
     control: 'text',
     description: 'Use a numeric badge for numeric counts. Use a text status badge to communicate status or description.',
+    table: {
+      category: 'Slots'
+    },
+  },
+  hasLeadingIcon: { 
+    control: 'boolean',
+    description: 'Use an icon to visually reinforce a badge\'s meaning.',
+    table: {
+      category: 'Slots'
+    },
+  },
+  hasTrailingIcon: { 
+    control: 'boolean',
+    description: 'Use an icon to visually reinforce a badge\'s meaning.',
     table: {
       category: 'Slots'
     },

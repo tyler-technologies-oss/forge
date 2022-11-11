@@ -27,6 +27,8 @@
 }
 
 @mixin host() {
+  --forge-icon-font-size: 14px;
+
   display: flex;
   box-sizing: border-box;
 }
@@ -46,7 +48,9 @@
   @include theme.css-custom-property(max-width, --forge-badge-max-width, variables.$max-width);
   @include theme.css-custom-property(border, --forge-badge-border, none);
 
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   transition: transform 200ms ease-in-out;
   transform: scale(0);
   overflow: hidden;
