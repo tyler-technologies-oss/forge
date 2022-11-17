@@ -33,7 +33,7 @@ export const BUTTON_TOGGLE_GROUP_CONSTANTS = {
   events
 };
 
-export type IButtonToggleGroupChangeEventData<T> = T;
+export type IButtonToggleGroupChangeEventData<T = any> = T;
 
 export interface IButtonToggleOption {
   label?: string;
