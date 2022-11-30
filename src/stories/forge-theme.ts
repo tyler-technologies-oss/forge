@@ -1,8 +1,8 @@
 export default {
   light: {
     // Branding
-    brandTitle: 'Tyler Technologies, Inc.',
-    brandImage: 'https://cdn.forge.tylertech.com/v1/images/branding/tyler/tyler-logo-color.svg',
+    brandTitle: 'Tyler Forge Design System Logo',
+    brandImage: 'forge-logo-full-color.svg',
 
     // Theme
     colorPrimary: '#3f51b5',
@@ -35,8 +35,8 @@ export default {
   },
   dark: {
     // Branding
-    brandTitle: 'Tyler Technologies, Inc.',
-    brandImage: 'https://cdn.forge.tylertech.com/v1/images/branding/tyler/tyler-logo-white.svg',
+    brandTitle: 'Tyler Forge Design System Logo',
+    brandImage: 'forge-logo-full-white.svg',
 
     // Theme
     colorPrimary: '#8c9eff',
