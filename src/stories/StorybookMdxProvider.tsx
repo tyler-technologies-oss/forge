@@ -27,7 +27,7 @@ export const StorybookMdxComponents: Record<string, FC> = {
   inlineCode: (props: any) => <ThemeWrapper><code className="forge-docs-core__inline-code">{props.children}</code></ThemeWrapper>,
   code: (props: any) => <ThemeWrapper><Code {...props} /></ThemeWrapper>,
   pre: (props: any) => <div {...props}></div>,
-  img: ({ src }: any) => <div style={{ display: 'flex', justifyContent: 'center', width: '100%', margin: '32px 0' }}><img src={src} /></div>,
+  img: (props: any) => <div style={{ display: 'flex', justifyContent: 'center', width: '100%', margin: '32px 0' }}><img {...props} /></div>,
   CodeSwitcher: (props: any) => <ThemeWrapper><CodeSwitcher {...props}/></ThemeWrapper>,
   ContentDivider,
   LiveDemo: (props: any) => <ThemeWrapper><LiveDemo {...props}/></ThemeWrapper>,
