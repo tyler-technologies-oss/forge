@@ -1,3 +1,36 @@
+# v2.11.0 (Tue Dec 06 2022)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Josh Pierro ([@joshpierro](https://github.com/joshpierro)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat(badge): added leading and trailing slots with support for icons [#185](https://github.com/tyler-technologies-oss/forge/pull/185) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(field): fixed incorrect checking for presence of input/textarea [#195](https://github.com/tyler-technologies-oss/forge/pull/195) ([@fallXone](https://github.com/fallXone))
+- fix(button-toggle-group): fixed `forge-button-toggle-group-change` typings [#190](https://github.com/tyler-technologies-oss/forge/pull/190) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: update templates and fix license text in sb [#193](https://github.com/tyler-technologies-oss/forge/pull/193) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(legal): use forge logo and add license info [#192](https://github.com/tyler-technologies-oss/forge/pull/192) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(button-toggle): corrects spelling error [#189](https://github.com/tyler-technologies-oss/forge/pull/189) ([@joshpierro](https://github.com/joshpierro))
+- chore: update Angular framework usage [#182](https://github.com/tyler-technologies-oss/forge/pull/182) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### 📝 Documentation
+
+- docs(app-bar): fixed app-bar-profile-button references to use correct element name [#187](https://github.com/tyler-technologies-oss/forge/pull/187) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 5
+
+- Conner Fallone ([@fallXone](https://github.com/fallXone))
+- Josh Pierro ([@joshpierro](https://github.com/joshpierro))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.10.1 (Thu Nov 03 2022)
 
 #### 🐛 Bug Fix
