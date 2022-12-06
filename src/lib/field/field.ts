@@ -1,7 +1,7 @@
 import { FieldDensityType, FieldFloatLabelType, FieldShapeType, FIELD_CONSTANTS } from './field-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FieldFoundation } from './field-foundation';
-import { coerceBoolean, ensureChildren, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, ensureChild, FoundationProperty } from '@tylertech/forge-core';
 
 export interface IFieldComponent extends IBaseComponent {
   density: FieldDensityType;
@@ -30,10 +30,10 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
   }
 
   public connectedCallback(): void {
-    if (this.children.length) {
+    if (this.querySelector(FIELD_CONSTANTS.selectors.INPUT)) {
       this._initialize();
     } else {
-      ensureChildren(this).then(() => this._initialize());
+      ensureChild(this, FIELD_CONSTANTS.selectors.INPUT).then(() => this._initialize());
     }
   }
 
