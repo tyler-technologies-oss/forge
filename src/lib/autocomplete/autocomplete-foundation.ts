@@ -573,7 +573,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
         this._adapter.toggleOptionMultiple(index, isSelected);
       }
 
-      this._emitChangeEvent();
+      this._tryUpdateDropdownPosition();
     };
 
     // We close the dropdown immediately if in single selection mode
@@ -586,6 +586,8 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       const shouldContinue = await this._valueChanging;
       if (shouldContinue) {
         select();
+      } else {
+        this._tryUpdateDropdownPosition();
       }
       this._valueChanging = undefined;
     } else {
@@ -605,6 +607,12 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
 
   private _emitChangeEvent(): void {
     this._adapter.emitHostEvent(AUTOCOMPLETE_CONSTANTS.events.CHANGE, this._getValue(), true);
+  }
+
+  private _tryUpdateDropdownPosition(): void {
+    if (this._isDropdownOpen) {
+      this._adapter.queueDropdownPositionUpdate();
+    }
   }
 
   /**
