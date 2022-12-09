@@ -33,6 +33,7 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   appendDropdownOptions(options: ISelectOption[] | ISelectOptionGroup[]): void;
   setMultiple(multiple: boolean): void;
   isFocusWithinPopup(target: HTMLElement): boolean;
+  queueDropdownPositionUpdate(): void;
   popupElement: HTMLElement | undefined;
 }
 
@@ -188,6 +189,17 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     return this._listDropdown.dropdownElement.contains(target);
   }
 
+  public queueDropdownPositionUpdate(): void {
+    if (!this.popupElement) {
+      return;
+    }
+    // We need to wait for the next animation frame to ensure that the layout has been updated
+    window.requestAnimationFrame(() => {
+      const dropdownEl = this.popupElement as IPopupComponent | undefined;
+      dropdownEl?.position();
+    });
+  }
+
   private _clearOptions(): void {
     // First we remove all option group elements
     const existingOptionGroupElements = Array.from(this._component.querySelectorAll(OPTION_GROUP_CONSTANTS.elementName));
@@ -197,7 +209,6 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     const existingOptionElements = Array.from(this._component.querySelectorAll(OPTION_CONSTANTS.elementName));
     existingOptionElements.forEach((o: HTMLElement) => removeElement(o));
   }
-
 
   private _createOptionGroupElement(group: ISelectOptionGroup): HTMLElement {
     const optionGroupElement = document.createElement(OPTION_GROUP_CONSTANTS.elementName) as IOptionGroupComponent;
