@@ -574,6 +574,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       }
 
       this._tryUpdateDropdownPosition();
+      this._emitChangeEvent();
     };
 
     // We close the dropdown immediately if in single selection mode
