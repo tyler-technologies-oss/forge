@@ -573,8 +573,8 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
         this._adapter.toggleOptionMultiple(index, isSelected);
       }
 
-      this._tryUpdateDropdownPosition();
       this._emitChangeEvent();
+      this._tryUpdateDropdownPosition();
     };
 
     // We close the dropdown immediately if in single selection mode
