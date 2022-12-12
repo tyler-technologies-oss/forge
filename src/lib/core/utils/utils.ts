@@ -123,3 +123,14 @@ export function safeMin(...args: (number | undefined)[]): number {
 export function safeMax(...args: (number | undefined)[]): number {
   return Math.max(...args.map(arg => arg ?? Number.NEGATIVE_INFINITY));
 }
+
+/**
+ * Copies properties from one object to another, much like Object.assign(), but only where properties exist in both source objects.
+ * @param from The object to apply properties from.
+ * @param to The object to apply property values to.
+ */
+export function assignMatchingProperties(from: object, to: object): void {
+  Object.keys(from)
+    .filter(prop => prop in to)
+    .forEach(prop => to[prop] = from[prop]);
+}
