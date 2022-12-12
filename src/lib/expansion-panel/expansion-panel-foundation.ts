@@ -144,9 +144,8 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
    * @param {KeyboardEvent} evt The keydown event
    */
   private _onKeydown(evt: KeyboardEvent): void {
-    evt.stopPropagation();
-
-    if (evt.key === 'Space' || evt.key === 'Enter' || evt.keyCode === 32 || evt.keyCode === 13) {
+    if (evt.key === ' ' || evt.key === 'Enter') {
+      evt.stopPropagation();
       evt.preventDefault();
       this._toggle();
       this._emitEvent();
