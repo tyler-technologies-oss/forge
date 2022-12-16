@@ -20,16 +20,22 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _autoClose = false;
   private _autoCloseThreshold = 0;
   private _slotListener: (evt: Event) => void;
+  private _didOpenListener: () => void;
+  private _didCloseListener: () => void;
   private _resizeObserverCallback: ForgeResizeObserverCallback;
   private _isInitialized = false;
 
   constructor(private _adapter: ISplitViewAdapter) {
     this._slotListener = evt => this._onSlotChange(evt);
+    this._didOpenListener = () => this._onDidOpen();
+    this._didCloseListener = () => this._onDidClose();
     this._resizeObserverCallback = throttle((entry: ResizeObserverEntry) => this._onResize(entry), SPLIT_VIEW_CONSTANTS.numbers.RESIZE_THROTTLE_THRESHOLD);
   }
 
   public initialize(): void {
     this._adapter.registerSlotListener(this._slotListener);
+    this._adapter.registerDidOpenListener(this._didOpenListener);
+    this._adapter.registerDidCloseListener(this._didCloseListener);
     this._adapter.observeResize(this._resizeObserverCallback);
     
     this._applyOrientation();
@@ -43,6 +49,16 @@ export class SplitViewFoundation implements ISplitViewFoundation {
   private _onSlotChange(evt: Event): void {
     this._layoutSlottedPanels();
     this.update({ accessibility: true, cursor: true, orientation: this._orientation });
+  }
+
+  private _onDidOpen(): void {
+    this._adapter.refitSlottedPanels(this._orientation);
+    this.update({ accessibility: true, cursor: true, size: true});
+  }
+
+  private _onDidClose(): void {
+    this._adapter.refitSlottedPanels(this._orientation);
+    this.update({ accessibility: true, cursor: true, size: true});
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
