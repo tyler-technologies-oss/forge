@@ -17,6 +17,8 @@ export interface IDialogFoundation extends ICustomElementFoundation {
   moveTarget: string;
   initializeMoveTarget(): void;
   resetPosition(): void;
+  show(parent?: HTMLElement): Promise<void>;
+  hide(remove?: boolean): Promise<void>;
 }
 
 export class DialogFoundation implements IDialogFoundation {
@@ -46,10 +48,6 @@ export class DialogFoundation implements IDialogFoundation {
   private _moveTargetMouseMoveHandler: (evt: MouseEvent) => void;
   private _moveTargetMouseUpHandler: (evt: MouseEvent) => void;
 
-  // Event handler states
-  private _attachedDocumentKeydownHandler = false;
-  private _attachedBackdropClickHandler = false;
-
   constructor(public _adapter: IDialogAdapter) {
     this._transitionEndHandler = (evt: TransitionEvent) => this._onTransitionEnd();
     this._documentKeydownHandler = (evt: KeyboardEvent) => this._onDocumentKeydown(evt);
@@ -73,12 +71,8 @@ export class DialogFoundation implements IDialogFoundation {
     if (this._open) {
       this._removeDragHandlers();
       this._adapter.deregisterTransitionEndHandler(this._transitionEndHandler);
-      if (this._attachedDocumentKeydownHandler) {
-        this._adapter.removeDocumentListener('keydown', this._documentKeydownHandler);
-      }
-      if (this._attachedBackdropClickHandler) {
-        this._adapter.deregisterBackdropClickHandler(this._backdropClickHandler);
-      }
+      this._adapter.removeDocumentListener('keydown', this._documentKeydownHandler);
+      this._adapter.deregisterBackdropClickHandler(this._backdropClickHandler);
     }
   }
 
@@ -96,7 +90,7 @@ export class DialogFoundation implements IDialogFoundation {
       this._open = value;
       this._closeDialog();
     }
-    
+
     this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.OPEN, this._open);
   }
 
@@ -127,6 +121,30 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
   }
 
+  public async show(parent?: HTMLElement): Promise<void> {
+    if (this._open) {
+      return;
+    }
+    
+    this._open = true;
+    if (!this._adapter.isConnected) {
+      this._adapter.attach(parent);
+    }
+    await this._openDialog();
+  }
+
+  public async hide(remove?: boolean): Promise<void> {
+    if (!this._open) {
+      return;
+    }
+
+    this._open = false;
+    await this._closeDialog();
+    if (remove) {
+      this._adapter.detach();
+    }
+  }
+
   private _normalizePositionValue(value: number | string | null | undefined): string | null {
     if (isNumber(value)) {
       return `${value}px`;
@@ -136,14 +154,12 @@ export class DialogFoundation implements IDialogFoundation {
     return null;
   }
 
-  private _openDialog(): void {
-    this._adapter.attach();
-
+  private _openDialog(): Promise<void> {
     if (!this._fullscreen) {
       if (this._moveable) {
         this._adapter.setMoveable(this._moveable);
       }
-      if (this._positionX != null || this._positionY != null) {
+      if (this._positionX !== null || this._positionY !== null) {
         this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
       }
     }
@@ -151,7 +167,6 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.setBodyAttribute(DIALOG_CONSTANTS.attributes.OPEN, 'true');
     this._adapter.registerTransitionEndHandler(this._transitionEndHandler);
     this._setDocumentKeydownListener(this._escapeClose);
-    this._setBackdropClickListener(this._backdropClose);
     this._adapter.setAnimating(true);
     this._isAnimating = true;
 
@@ -159,6 +174,7 @@ export class DialogFoundation implements IDialogFoundation {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         this._adapter.setVisibility(true);
+        this._setBackdropClickListener(this._backdropClose); // Must come after setting visibility because the backdrop may not yet exist
         this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.OPEN);
         this._adapter.trySetInitialFocus();
         if (this._adapter.isScrollable()) {
@@ -167,41 +183,51 @@ export class DialogFoundation implements IDialogFoundation {
       });
     });
 
-    // Wait for the dialog to finish animating open, then emit the ready event and attach any listeners
-    setTimeout(() => {
-      window.requestAnimationFrame(() => {
-        if (this._open && this._isAnimating) {
-          this._onTransitionEnd();
-        }
-      });
-    }, DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    return new Promise<void>(resolve => {
+      // Wait for the dialog to finish animating open, then emit the ready event and attach any listeners
+      window.setTimeout(() => {
+        window.requestAnimationFrame(() => {
+          if (this._open && this._isAnimating) {
+            this._onTransitionEnd();
+            resolve();
+          }
+        });
+      }, DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    });
   }
 
-  private _closeDialog(): void {
+  private _closeDialog(): Promise<void> {
     if (this._moveTarget) {
       this._removeDragHandlers();
     }
 
     this._adapter.deregisterTransitionEndHandler(this._transitionEndHandler);
-    if (this._attachedDocumentKeydownHandler) {
+
+    if (this._escapeClose) {
       this._adapter.removeDocumentListener('keydown', this._documentKeydownHandler);
     }
-    if (this._attachedBackdropClickHandler) {
+    if (this._backdropClose) {
       this._adapter.deregisterBackdropClickHandler(this._backdropClickHandler);
     }
 
     this._isAnimating = false;
+    this._moveContext = undefined;
+    this._lastPosition = undefined;
     this._adapter.setAnimating(true);
     this._adapter.setVisibility(false);
+    this._adapter.setSurfacePosition(null, null, null);
 
-    setTimeout(() => {
-      this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.CLOSE);
-      this._adapter.detach();
-      const openDialogs = this._adapter.getOpenDialogs(DIALOG_CONSTANTS.elementName);
-      if (!openDialogs.length) {
-        this._adapter.removeBodyAttribute(DIALOG_CONSTANTS.attributes.OPEN);
-      }
-    }, DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    return new Promise<void>(resolve => {
+      setTimeout(() => {
+        this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.CLOSE);
+        const openDialogs = this._adapter.getOpenDialogs(`${DIALOG_CONSTANTS.elementName}[${DIALOG_CONSTANTS.attributes.OPEN}]`);
+        if (!openDialogs.length) {
+          this._adapter.removeBodyAttribute(DIALOG_CONSTANTS.attributes.OPEN);
+        }
+        this._adapter.setAnimating(false);
+        resolve();
+      }, DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    });
   }
 
   private _onTransitionEnd(): void {
@@ -328,12 +354,10 @@ export class DialogFoundation implements IDialogFoundation {
       return;
     }
 
-    if (attach && !this._attachedBackdropClickHandler) {
+    if (attach && this._backdropClose) {
       this._adapter.registerBackdropClickHandler(this._backdropClickHandler);
-      this._attachedBackdropClickHandler = true;
-    } else if (!attach && this._attachedBackdropClickHandler) {
+    } else if (!attach) {
       this._adapter.deregisterBackdropClickHandler(this._backdropClickHandler);
-      this._attachedBackdropClickHandler = false;
     }
   }
 
@@ -342,12 +366,10 @@ export class DialogFoundation implements IDialogFoundation {
       return;
     }
 
-    if (attach && !this._attachedDocumentKeydownHandler) {
+    if (attach && this._escapeClose) {
       this._adapter.setDocumentListener('keydown', this._documentKeydownHandler);
-      this._attachedDocumentKeydownHandler = true;
-    } else if (!attach && this._attachedDocumentKeydownHandler) {
+    } else if (!attach) {
       this._adapter.removeDocumentListener('keydown', this._documentKeydownHandler);
-      this._attachedDocumentKeydownHandler = false;
     }
   }
 
