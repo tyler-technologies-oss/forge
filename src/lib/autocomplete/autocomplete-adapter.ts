@@ -43,6 +43,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   getActiveOptionIndex(): number | null;
   clearActiveOption(): void;
   setSelectedOptions(options: IOption[]): void;
+  queueDropdownPositionUpdate(): void;
 }
 
 /**
@@ -257,6 +258,17 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
       const values = options.map(o => o.value);
       this._listDropdown.setSelectedValues(values);
     }
+  }
+
+  public queueDropdownPositionUpdate(): void {
+    if (!this.getPopupElement()) {
+      return;
+    }
+    // We need to wait for the next animation frame to ensure that the layout has been updated
+    window.requestAnimationFrame(() => {
+      const dropdownEl = this.getPopupElement() as IPopupComponent | undefined;
+      dropdownEl?.position();
+    });
   }
 
   private _getTargetElement(selector?: string): HTMLElement {
