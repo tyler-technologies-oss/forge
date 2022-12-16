@@ -68,7 +68,7 @@ jobs:
           ## We use `auto version` to calculate whether this is a release build or not
           VERSION_RESULT=$(npx auto version)
           echo "Version calculation result: ${VERSION_RESULT}"
-          if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
+          if [[ "${VERSION_RESULT}" =~ ^(premajor|preminor|prepatch)$ ]]; then
             echo "Release: true"
             echo "release=true" >> $GITHUB_OUTPUT
           else
