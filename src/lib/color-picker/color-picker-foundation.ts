@@ -6,16 +6,16 @@ import { ColorPickerSlider } from './color-picker-slider';
 import { formatHex, formatRgba, hexToRgba, hsvaToRgba, isValidHex, isValidHSVA, isValidRGBA, rgbaToHex, rgbaToHsva } from './color-picker-utils';
 
 export interface IColorPickerFoundation extends ICustomElementFoundation {
-  value: string | null;
-  rgba: IRGBA | null;
-  hsva: IHSVA | null;
-  opacity: number | null;
+  value: string | null | undefined;
+  rgba: IRGBA | null | undefined;
+  hsva: IHSVA | null | undefined;
+  opacity: number | null | undefined;
   allowOpacity: boolean;
   debounceChangeEvent: boolean;
 }
 
 export class ColorPickerFoundation implements IColorPickerFoundation {
-  private _value: string | null = null;
+  private _value: string | null | undefined = null;
   private _allowOpacity = true;
   private _hex = DEFAULT_COLOR;
   private _hsva: IHSVA = { h: 0, s: 0, v: 0, a: 1 };
@@ -193,10 +193,10 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
     this._adapter.emitHostEvent(COLOR_PICKER_CONSTANTS.events.CHANGE, data);
   }
 
-  public get value(): string | null {
+  public get value(): string | null | undefined {
     return this._getFormattedHex();
   }
-  public set value(value: string | null) {
+  public set value(value: string | null | undefined) {
     if (this._value !== value) {
       this._value = value || DEFAULT_COLOR;
 
@@ -210,10 +210,10 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
     }
   }
 
-  public get rgba(): IRGBA | null {
+  public get rgba(): IRGBA | null | undefined {
     return !!this._rgba ? { ...this._rgba } : null;
   }
-  public set rgba(value: IRGBA | null) {
+  public set rgba(value: IRGBA | null | undefined) {
     if (value) {
       if (isValidRGBA(value)) {
         this.value = rgbaToHex(value);
@@ -223,10 +223,10 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
     }
   }
 
-  public get hsva(): IHSVA | null {
+  public get hsva(): IHSVA | null | undefined {
     return !!this._hsva ? { ...this._hsva } : null;
   }
-  public set hsva(value: IHSVA | null) {
+  public set hsva(value: IHSVA | null | undefined) {
     if (value) {
       if (isValidHSVA(value)) {
         this.value = rgbaToHex(hsvaToRgba(value));
@@ -236,12 +236,12 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
     }
   }
 
-  public get opacity(): number | null {
+  public get opacity(): number | null | undefined {
     return this._hsva ? this._hsva.a : null;
   }
-  public set opacity(value: number | null) {
+  public set opacity(value: number | null | undefined) {
     if (this._hsva.a !== value) {
-      if (value !== null && value !== undefined && this._allowOpacity) {
+      if (value != null && this._allowOpacity) {
         if (value >= 0 && value <= 1) {
           this._hsva.a = value;
           this._opacitySlider.setValue(this._hsva.a);

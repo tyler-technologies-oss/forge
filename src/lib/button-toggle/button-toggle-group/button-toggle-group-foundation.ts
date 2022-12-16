@@ -89,7 +89,7 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
 
   private _getValue(): any {
     const selections = this._adapter.getSelectedValues();
-    return this._multiple ? Array.from(new Set(selections)) : selections.slice(0, 1)[0] || null;
+    return this._multiple ? Array.from(new Set(selections)) : selections.slice(0, 1)[0] ?? null;
   }
 
   private _applyValue(value: any): void {

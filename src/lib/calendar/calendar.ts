@@ -51,6 +51,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-calendar>` custom element.
+ * 
+ * @tag forge-calendar
+ */
 @CustomElement({
   name: CALENDAR_CONSTANTS.elementName,
   dependencies: [
@@ -212,16 +217,16 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   public disabledDateBuilder: ((date: Date) => boolean) | undefined;
 
   @FoundationProperty()
-  public disabledDates: Date | Date[] | null;
+  public disabledDates: Date | Date[] | null | undefined;
 
   @FoundationProperty()
-  public disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null;
+  public disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
 
   @FoundationProperty()
   public eventBuilder: CalendarEventBuilder | undefined;
 
   @FoundationProperty()
-  public events: ICalendarEvent[] | null;
+  public events: ICalendarEvent[] | null | undefined;
 
   @FoundationProperty()
   public firstDayOfWeek: DayOfWeek | undefined;
@@ -236,13 +241,13 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   public locale: string | undefined;
 
   @FoundationProperty()
-  public max: Date | string | null;
+  public max: Date | string | null | undefined;
 
   @FoundationProperty()
   public menuAnimation: CalendarMenuAnimationType;
 
   @FoundationProperty()
-  public min: Date | string | null;
+  public min: Date | string | null | undefined;
 
   @FoundationProperty()
   public mode: CalendarMode;
@@ -278,13 +283,13 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   public tooltipBuilder: CalendarTooltipBuilder | undefined;
 
   @FoundationProperty()
-  public value: Date | Date[] | DateRange | null;
+  public value: Date | Date[] | DateRange | null | undefined;
 
   @FoundationProperty()
   public view: CalendarView;
 
   @FoundationProperty()
-  public weekendDays: DayOfWeek[] | null;
+  public weekendDays: DayOfWeek[] | null | undefined;
 
   @FoundationProperty()
   public year: number;

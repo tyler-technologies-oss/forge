@@ -7,7 +7,7 @@ import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
 
 export interface IDatePickerFoundation extends IBaseDatePickerFoundation<Date | string> {}
 
-export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAdapter, Date | string | null, Date> implements IDatePickerFoundation {
+export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAdapter, Date | string | null | undefined, Date> implements IDatePickerFoundation {
   protected _mode: CalendarMode = 'single';
 
   constructor(adapter: IDatePickerAdapter) {
@@ -20,7 +20,7 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
     }
   }
 
-  protected _emitChangeEvent(value: Date | null, force?: boolean): boolean {
+  protected _emitChangeEvent(value: Date | null | undefined, force?: boolean): boolean {
     const typedValue = this._getTypedValue(value);
     const wasCancelled = !this._adapter.emitHostEvent(DATE_PICKER_CONSTANTS.events.CHANGE, typedValue, true, !force);
     if (!wasCancelled) {
@@ -39,14 +39,16 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
   }
 
   protected _onToday(): void {
-    this._onDateSelected({ date: new Date(), selected: true, type: 'date' });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    this._onDateSelected({ date: today, selected: true, type: 'date' });
   }
 
   protected _onClear(): void {
     this._onDateSelected({ date: null, selected: false, type: 'date' });
   }
 
-  protected _getCurrentValue(): Date | null {
+  protected _getCurrentValue(): Date | null | undefined {
     return this._value;
   }
 
@@ -61,7 +63,7 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
     }
   }
 
-  protected _setValue(value: Date | null): void {
+  protected _setValue(value?: Date | null): void {
     if (!value || this._isDateValueAcceptable(value)) {
       this._value = value;
     }
@@ -159,7 +161,7 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
     }
   }
 
-  public get value(): Date | string | null {
+  public get value(): Date | string | null | undefined {
     const date = this._getTypedValue(this._value);
 
     if (!date) {
@@ -173,7 +175,7 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
     return date;
   }
 
-  public set value(value: Date | string | null) {
+  public set value(value: Date | string | null | undefined) {
     if (this._value !== value) {
       this._setValue(this._coerceDateValue(value));
       if (this._isInitialized) {

@@ -94,9 +94,17 @@ Gets/sets the progress percentage. Valid values are between 0 and 1.
 
 | Name                                            | Description
 | :-----------------------------------------------| :----------
-| `--forge-theme-tertiary`                          | Sets the stroke color.
-| `--forge-circular-progress-track-color`           | Sets the track (background) color.
-| `--forge-circular-progress-size`                  | Sets the diameter of the circle. Default is `72px`.
-| `--forge-circular-progress-stroke-width`          | Sets the stroke width of the outline. Default is `4`.
+| `--forge-theme-tertiary`                        | Sets the stroke color.
+| `--forge-circular-progress-track-color`         | Sets the track (background) color.
+| `--forge-circular-progress-size`                | Sets the diameter of the circle. Default is `72px`.
+| `--forge-circular-progress-stroke-width`        | Sets the stroke width of the outline. Default is `4`.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* Ensure the progress indicator provides a role attribute with value "alert", and an `aria-busy="true"`attribute while the progress indicator is active.
 
 </PageSection>

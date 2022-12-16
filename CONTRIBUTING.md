@@ -48,7 +48,7 @@ environment is important.
 To get started, clone the repository:
 
 ```bash
-git clone https://github.com/tyler-technologies/forge.git
+git clone https://github.com/tyler-technologies-oss/forge.git
 ```
 
 Navigate to the project root, and install dependencies:

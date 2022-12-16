@@ -37,7 +37,11 @@ declare global {
   }
 }
 
-/** The custom element class behind the `<forge-list-item>` element. */
+/**
+ * The custom element class behind the `<forge-list-item>` element.
+ * 
+ * @tag forge-list-item
+ */
 @CustomElement({
   name: LIST_ITEM_CONSTANTS.elementName
 })

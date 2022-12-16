@@ -2,6 +2,7 @@ import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, define
 import { BASE_SELECT_CONSTANTS, ISelectComponent } from '@tylertech/forge/select';
 import { IIconButtonComponent } from '@tylertech/forge/icon-button';
 import { getShadowElement, removeElement, emitEvent } from '@tylertech/forge-core';
+import { timer } from '@tylertech/forge-testing';
 
 interface ITestContext {
   context: ITestPaginatorContext;
@@ -136,6 +137,21 @@ describe('PaginatorComponent', function(this: ITestContext) {
       this.context.nextPageButton.click();
     });
 
+    it('should not proceed to next page when event is cancelled', function(this: ITestContext, done: DoneFn) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
+        evt.preventDefault();
+        const eventDetail: IPaginatorChangeEvent = evt.detail;
+
+        expect(eventDetail.pageIndex).withContext('Expected page index to be incremented by 1').toBe(1);
+        expect(this.context.paginator.pageIndex).withContext('Expect page index within context paginator to not match pageIndex emitted').not.toBe(eventDetail.pageIndex);
+
+        done();
+      });
+      this.context.nextPageButton.click();
+    });
+
     it('should emit change event when changing page size', function(this: ITestContext) {
       this.context = setupTestContext();
       const callback = jasmine.createSpy('listener');
@@ -143,6 +159,18 @@ describe('PaginatorComponent', function(this: ITestContext) {
       emitEvent(this.context.pageSizeSelect, BASE_SELECT_CONSTANTS.events.CHANGE, '5');
       expect(callback).toHaveBeenCalled();
     });
+    it('should not emit change event when changing page size', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const callback = jasmine.createSpy('listener', evt => {
+        evt.preventDefault();
+      }).and.callThrough();
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, callback);
+      emitEvent(this.context.pageSizeSelect, BASE_SELECT_CONSTANTS.events.CHANGE, '5');
+      expect(callback).toHaveBeenCalledTimes(1); // Ensures that the listener was only executed once
+      expect(callback).toHaveBeenCalledWith(jasmine.objectContaining({ detail: jasmine.objectContaining({ pageSize: 5 }) })); // Ensures the proper params were sent in the event
+      expect(this.context.paginator.pageSize).not.toBe(5);
+    });
+    
 
     it('should emit change event with proper parameters when clicking previous page button', function(this: ITestContext, done: DoneFn) {
       this.context = setupTestContext();
@@ -154,6 +182,36 @@ describe('PaginatorComponent', function(this: ITestContext) {
         expect(eventDetail.type).toBe(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, 'Expected correct previous page change type');
         expect(eventDetail.pageIndex).toBe(0, 'Expected page index to be decremented by 1');
         expect(eventDetail.pageSize).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected the default page size value');
+
+        done();
+      });
+      this.context.previousPageButton.click();
+    });
+
+    it('should reconcile state if pageIndex is altered before listener returns', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent<IPaginatorChangeEvent>) => {
+        this.context.paginator.pageIndex = evt.detail.pageIndex; // Force the pageIndex change directly on the element to try to throw off the internal state
+      });
+      this.context.previousPageButton.click();
+
+      await timer();
+
+      expect(this.context.paginator.pageIndex).toBe(1);
+    });
+
+    it('should not proceed to previous page when event is cancelled', function(this: ITestContext, done: DoneFn) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
+        evt.preventDefault();
+        const eventDetail: IPaginatorChangeEvent = evt.detail;
+
+        expect(eventDetail.pageIndex).withContext('Expected page index to be decremented by 1').toBe(0);
+        expect(this.context.paginator.pageIndex).withContext('Expect page index within context paginator to not match pageIndex emitted').not.toBe(eventDetail.pageIndex);
 
         done();
       });
@@ -368,6 +426,22 @@ describe('PaginatorComponent', function(this: ITestContext) {
         this.context.firstPageButton.click();
       });
 
+      it('should not proceed to first page when event is cancelled', function(this: ITestContext, done: DoneFn) {
+        this.context = setupTestContext(true);
+        this.context.paginator.total = 100;
+        this.context.paginator.pageIndex = 1;
+        this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
+          evt.preventDefault();
+          const eventDetail: IPaginatorChangeEvent = evt.detail;
+
+          expect(eventDetail.pageIndex).toBe(0, 'Expected page index to be 0');
+          expect(this.context.paginator.pageIndex).not.toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected not the default page size value');
+  
+          done();
+        });
+        this.context.firstPageButton.click();
+      });
+
       it('should disable first  page button when disabled', function(this: ITestContext)  {
         this.context = setupTestContext(true);
         this.context.paginator.disabled = true;
@@ -431,21 +505,22 @@ describe('PaginatorComponent', function(this: ITestContext) {
         this.context.lastPageButton.click();
       });
 
-      it('should emit change event with proper parameters when clicking first page button', function(this: ITestContext, done: DoneFn) {
+      it('should not proceed to last page when event is cancelled', function(this: ITestContext, done: DoneFn) {
         this.context = setupTestContext(undefined, true);
         this.context.paginator.total = 100;
-        this.context.paginator.pageIndex = 1;
         this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent) => {
           const eventDetail: IPaginatorChangeEvent = evt.detail;
 
-          expect(eventDetail.type).toBe(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, 'Expected correct first page change type');
-          expect(eventDetail.pageIndex).toBe(0, 'Expected page index to be 0');
-          expect(eventDetail.pageSize).toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected the default page size value');
+          const expectedPageIndex = Math.floor(this.context.paginator.total / this.context.paginator.pageSize) - 1;
+          expect(eventDetail.pageIndex).toBe(expectedPageIndex, `Expected page index to be ${expectedPageIndex}`);
+          expect(this.context.paginator.pageIndex).not.toBe(PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE, 'Expected not the default page size value');
+  
 
           done();
         });
-        this.context.firstPageButton.click();
+        this.context.lastPageButton.click();
       });
+
 
       it('should disable first and last page buttons when disabled',  function(this: ITestContext) {
         this.context = setupTestContext(undefined, true);

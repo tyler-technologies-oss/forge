@@ -279,6 +279,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
         this._valueChanging = undefined;
         if (!shouldContinue) {
           rollbackValue();
+          this._tryUpdateDropdownPosition();
           return resolve(false);
         }
       }
@@ -291,6 +292,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
         rollbackValue();
       }
 
+      this._tryUpdateDropdownPosition();
       resolve(!cancelled);
     });
   }
@@ -299,6 +301,12 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
     const activeOptionIndex = this._adapter.getActiveOptionIndex();
     if (activeOptionIndex >= 0 && this._nonDividerOptions[activeOptionIndex]) {
       this._onSelect(this._nonDividerOptions[activeOptionIndex], activeOptionIndex);
+    }
+  }
+
+  protected _tryUpdateDropdownPosition(): void {
+    if (this._open) {
+      this._adapter.queueDropdownPositionUpdate();
     }
   }
 

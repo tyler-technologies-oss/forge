@@ -11,10 +11,10 @@ import { ColorPickerFoundation } from './color-picker-foundation';
 import template from './color-picker.html';
 import styles from './color-picker.scss';
 export interface IColorPickerComponent extends IBaseComponent {
-  value: string | null;
-  rgba: IRGBA | null;
-  hsva: IHSVA | null;
-  opacity: number | null;
+  value: string | null | undefined;
+  rgba: IRGBA | null | undefined;
+  hsva: IHSVA | null | undefined;
+  opacity: number | null | undefined;
   allowOpacity: boolean;
   debounceChangeEvent: boolean;
 }
@@ -29,6 +29,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-color-picker>` custom element.
+ * 
+ * @tag forge-color-picker
+ */
 @CustomElement({
   name: COLOR_PICKER_CONSTANTS.elementName,
   dependencies: [
@@ -79,19 +84,19 @@ export class ColorPickerComponent extends BaseComponent implements IColorPickerC
 
   /** Gets/sets the value using hex format only. */
   @FoundationProperty()
-  public value: string | null;
+  public value: string | null | undefined;
 
   /** Gets/sets the value using rgba format. */
   @FoundationProperty()
-  public rgba: IRGBA | null;
+  public rgba: IRGBA | null | undefined;
 
   /** Gets/sets the value using hsva format. */
   @FoundationProperty()
-  public hsva: IHSVA | null;
+  public hsva: IHSVA | null | undefined;
 
   /** Gets/sets the opacity value, if `allowOpacity` is true. */
   @FoundationProperty()
-  public opacity: number | null;
+  public opacity: number | null | undefined;
 
   /** Gets/sets whether opacity is displayed and allowed be to changed. */
   @FoundationProperty()

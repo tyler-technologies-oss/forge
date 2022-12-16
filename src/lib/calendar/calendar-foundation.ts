@@ -456,7 +456,7 @@ export class CalendarFoundation implements ICalendarFoundation {
 
   private _onMonthSelected(month: number): void {
     const yearChanged = this._year !== this._menuYear;
-    if (yearChanged && this._menuYear !== null) {
+    if (yearChanged && this._menuYear != null) {
       this._year = this._menuYear;
       this._setYear();
     }
@@ -880,7 +880,7 @@ export class CalendarFoundation implements ICalendarFoundation {
    */
   private _openMonthMenu(setFocus = false): void {
     this._view = 'month';
-    if (this._menuYear === null) {
+    if (this._menuYear == null) {
       this._menuYear = this._year;
     }
     if (this._showHeader) {
@@ -1393,7 +1393,7 @@ export class CalendarFoundation implements ICalendarFoundation {
         return !this._min || this._min < new Date(this._year, this._month, 1);
       case 'month':
         const minDateYear = this._min?.getFullYear();
-        return this._menuYear !== null && (minDateYear === undefined || minDateYear < this._menuYear);
+        return this._menuYear != null && (minDateYear == null || minDateYear < this._menuYear);
       case 'year':
         return !!this._menuYearsInView && this._minYear < this._menuYearsInView.min;
       default:
@@ -1415,7 +1415,7 @@ export class CalendarFoundation implements ICalendarFoundation {
         return !this._max || this._max > getLastDateOfMonth(this._month, this._year);
       case 'month':
         const maxDateYear = this._max?.getFullYear();
-        return this._menuYear !== null && (maxDateYear === undefined || maxDateYear > this._menuYear);
+        return this._menuYear != null && (maxDateYear == null || maxDateYear > this._menuYear);
       case 'year':
         return !!this._menuYearsInView && this._maxYear > this._menuYearsInView.max;
       default:
@@ -1471,7 +1471,7 @@ export class CalendarFoundation implements ICalendarFoundation {
    * Sets the year currently visible in the menu.
    * */
   private _setMenuYear(): void {
-    if (this._menuYear !== null) {
+    if (this._menuYear != null) {
       this._setNavigationButtonStates();
       this._adapter.setYear(this._menuYear, this._locale);
     }
@@ -1983,11 +1983,11 @@ export class CalendarFoundation implements ICalendarFoundation {
   }
 
   /** Get/set disabled dates */
-  public get disabledDates(): Date | Date[] | null {
+  public get disabledDates(): Date | Date[] | null | undefined {
     const dates = this._disabledDates.map(d => new Date(d));
     return dates.length ? dates : null;
   }
-  public set disabledDates(value: Date | Date[] | null) {
+  public set disabledDates(value: Date | Date[] | null | undefined) {
     const dates = value ? isArray(value) ? value : [value] : [];
     this._disabledDates = (dates as Date[]).map(d => {
       const date = new Date(d);
@@ -2001,10 +2001,10 @@ export class CalendarFoundation implements ICalendarFoundation {
   }
 
   /** Get/set disabled days of week */
-  public get disabledDaysOfWeek(): DayOfWeek | DayOfWeek[] | null {
+  public get disabledDaysOfWeek(): DayOfWeek | DayOfWeek[] | null | undefined {
     return this._disabledDaysOfWeek.length ? [...this._disabledDaysOfWeek] : null ;
   }
-  public set disabledDaysOfWeek(value: DayOfWeek | DayOfWeek[] | null) {
+  public set disabledDaysOfWeek(value: DayOfWeek | DayOfWeek[] | null | undefined) {
     this._disabledDaysOfWeek = (isDefined(value) ? isArray(value) ? value : [value] : []) as DayOfWeek[];
 
     if (this._isInitialized) {
@@ -2025,10 +2025,10 @@ export class CalendarFoundation implements ICalendarFoundation {
   }
 
   /** Get/set events */
-  public get events(): ICalendarEvent[] | null {
+  public get events(): ICalendarEvent[] | null | undefined {
     return this._events ? [...this._events] : null;
   }
-  public set events(value: ICalendarEvent[] | null) {
+  public set events(value: ICalendarEvent[] | null | undefined) {
     this._events = value?.length ? [...value] : [];
 
     if (this._isInitialized) {
@@ -2094,10 +2094,10 @@ export class CalendarFoundation implements ICalendarFoundation {
   }
 
   /** Get/set max date */
-  public get max(): Date | string | null {
+  public get max(): Date | string | null | undefined {
     return this._max;
   }
-  public set max(value: Date | string | null) {
+  public set max(value: Date | string | null | undefined) {
     if (this._maxAttribute !== value) {
       this._maxAttribute = value?.toString() ?? null;
       this._max = coerceDateFromValue(value);
@@ -2120,10 +2120,10 @@ export class CalendarFoundation implements ICalendarFoundation {
   }
 
   /** Get/set min date */
-  public get min(): Date | string | null {
+  public get min(): Date | string | null | undefined {
     return this._min;
   }
-  public set min(value: Date | string | null) {
+  public set min(value: Date | string | null | undefined) {
     if (this._minAttribute !== value) {
       this._minAttribute = value?.toString() ?? null;
       this._min = coerceDateFromValue(value);
@@ -2284,7 +2284,7 @@ export class CalendarFoundation implements ICalendarFoundation {
   }
 
   /** Get/set value */
-  public get value(): Date | Date[] | DateRange | null {
+  public get value(): Date | Date[] | DateRange | null | undefined {
     if (this._mode === 'range') {
       return this._rangeSelectionStore ?? getDateRangeFromDates(this._value);
     }
@@ -2292,7 +2292,7 @@ export class CalendarFoundation implements ICalendarFoundation {
     const dates = this._value.map(d => new Date(d));
     return this._mode === 'multiple' ? dates : dates.length ? dates[0] : null;
   }
-  public set value(value: Date | Date[] | DateRange | null) {
+  public set value(value: Date | Date[] | DateRange | null | undefined) {
     let dates: Date[] = [];
 
     this._rangeSelectionStore = undefined;
@@ -2337,10 +2337,10 @@ export class CalendarFoundation implements ICalendarFoundation {
   }
 
   /** Get/set weekend days */
-  public get weekendDays(): DayOfWeek[] | null {
+  public get weekendDays(): DayOfWeek[] | null | undefined {
     return this._weekendDays ? [...this._weekendDays] : null;
   }
-  public set weekendDays(value: DayOfWeek[] | null) {
+  public set weekendDays(value: DayOfWeek[] | null | undefined) {
     this._weekendDays = value?.map(v => +v) ?? null;
 
     if (this._isInitialized) {

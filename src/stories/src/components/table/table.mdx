@@ -30,9 +30,13 @@ in the functionality it provides. This component is configuration-based, and it 
 
 ### Using column filters
 
-To add column filters you will need to specify a `filterDelegate` for each column that needs it. You can use the built-in component delegate classes (see example below) for the common filter input types, or you can build your own delegate class that represents the component you would like to render in the filter cell.
+To add column filters you will need to specify a `filterDelegate` for each column that needs it. You can use the built-in component delegate classes
+(see example below) for the common filter input types, or you can build your own delegate class that represents the component you would like to render
+in the filter cell.
 
-A component delegate is a flexible API that allows you to define a class that extends an `AbstractComponentDelegate`. This class defines a common interface to use for dynamic components that require the ability to get/set values, set invalid, disabled, required... etc. You can then communicate with your component through this delegate instance.
+A component delegate is a flexible API that allows you to define a class that extends an `BaseComponentDelegate` or `FormFieldComponentDelegate`. These
+classes define a common interface to use for dynamic components that require the ability to get/set values, set invalid, disabled, required... etc. You
+can then communicate with your component through this delegate instance.
 
 ```ts
 import { TextFieldComponentDelegate, SelectComponentDelegate } from '@tylertech/forge';
@@ -47,8 +51,15 @@ table.columnConfigurations = [
 
 ### Mapping Boolean outputs
 
-To map the output for Boolean (true/false) values, use the `transform` method in your `IColumnConfiguration` for those
-columns where you want to show something other than `true` and `false`.
+To map the output for boolean values, use the `transform` method in your `IColumnConfiguration` for those columns where you want to show something other than `true` and `false`.
+
+```typescript
+{
+  transform: value =>  value ? 'Enabled' : 'Disabled',
+}
+```
+
+> Note: You would use the `template` property to render custom HTML elements instead of plain text.
 
 </PageSection>
 
@@ -255,7 +266,7 @@ export class TableExampleComponent implements OnInit {
 
   Sets the callback to return a custom template for the select all cell in the table header.
 
-  The default select all functionality will automatically wire up to an `<input type="checkbox"/>` if it is present in the template unless the attribute `forge-ignore` resides on the `input`
+  The default select all functionality will automatically wire up to an `<input type="checkbox">` if it is present in the template unless the attribute `forge-ignore` resides on the `<input>`.
 
 </PropertyDef>
 
@@ -413,6 +424,18 @@ export class TableExampleComponent implements OnInit {
 | `--mdc-theme-text-disabled-on-background`               | Controls the background-color of the disabled row.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Avoid using tables for layout, as this can make it difficult for users who are using screen readers.
+- The checkbox element will receive the proper ARIA attributes such as `aria-label="Select row"`
+- If the table uses any interactive controls, ensure that any controls that are reachable by the mouse can also be reached and updated by keyboard.
+
+</PageSection>
+
+---
 
 <PageSection>
 

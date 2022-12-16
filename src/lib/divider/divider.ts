@@ -15,6 +15,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-divider>` element.
+ * 
+ * @tag forge-divider
  */
 @CustomElement({
   name: DIVIDER_CONSTANTS.elementName

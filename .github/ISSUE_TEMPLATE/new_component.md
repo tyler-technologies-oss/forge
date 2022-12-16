@@ -2,15 +2,15 @@
 name: New component
 about: Propose a new component
 title: ''
-labels: 'new-component'
+labels: ['new component', 'needs triage']
 assignees: ''
 ---
 
 **Describe the component:**
-A clear and concise description of the component.
+<!-- A clear and concise description of the component. -->
 
 **Describe the use case:**
-A clear and concise description of how this component will be used and where it originated from.
+<!-- A clear and concise description of how this component will be used and where it originated from. -->
 
 **Required features:**
 - This component **must** do X...
@@ -20,7 +20,11 @@ A clear and concise description of how this component will be used and where it 
 - Ideally this component would also do Z... but is not required initially
 
 **Screenshots:**
-If applicable, add screenshots of mockups or similar components in other libraries to help describe your request.
+<!--
+  If applicable, add screenshots of mockups or similar components in other libraries to help describe your request.
+
+  **Be cautious about posting screenshots of sensitive data and internal software here**
+-->
 
 **Please complete the following information:**
  - Will this be a contribution by you or your team? [Y/N]
@@ -29,4 +33,4 @@ If applicable, add screenshots of mockups or similar components in other librari
  - I have searched existing issues before creating this request? [Y/N]
 
 **Additional context:**
-Add any other context about the component here.
+<!-- Add any other context about the component here. -->

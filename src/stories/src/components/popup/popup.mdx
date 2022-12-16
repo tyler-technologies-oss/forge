@@ -214,6 +214,20 @@ The following events are emitted from the targetElement, **NOT** the `<forge-pop
 
 <PageSection>
 
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- This component is typically detached from the element that it is positioned around in the DOM. Due to this, the usage of `aria-owns` on the target element will ensure that the popup is always related to the target element as if they were together.
+  - If you use this component on its own, be sure to add a unique `id` attribute and bind it to the target element using `aria-owns` on the target element.
+
+</PageSection>
+
+---
+
+<PageSection>
+
 ## Types
 
 ### PopupPlacement

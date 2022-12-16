@@ -16,7 +16,7 @@
   }
 
   // Field Input Styles
-  @include field-selector.input('.forge-select__selected-text', $exclude: (core, padding-right));
+  @include field-selector.input('.forge-select__selected-text', $exclude: (core, padding-right), $component-name: 'forge-select');
 
   // Line Height
   &:not(.forge-field--label) {
@@ -44,8 +44,10 @@
   }
 
   // Padding
-  .forge-select__selected-text {
-    padding-top: 25px; // Override the default field padding styles to align text content
+  .forge-select--label {
+    .forge-select__selected-text {
+      padding-top: 25px; // Override the default field padding styles to align text content
+    }
   }
 }
 

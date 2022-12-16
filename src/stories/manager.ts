@@ -2,10 +2,10 @@ import { addons } from '@storybook/addons';
 
 addons.setConfig({
   previewTabs: {
-    canvas: { title: 'Demo ' }
+    canvas: { title: 'Demo' }
   },
   sidebar: {
     showRoots: false,
-    collapsedRoots: ['Guides', 'Components']
+    collapsedRoots: ['Guides', 'Components', 'Contributing', 'About']
   }
 });

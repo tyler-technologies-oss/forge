@@ -29,6 +29,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-banner>` element.
+ * 
+ * @tag forge-banner
  */
 @CustomElement({
   name: BANNER_CONSTANTS.elementName,

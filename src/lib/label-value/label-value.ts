@@ -21,6 +21,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-label-value>` custom element.
+ * 
+ * @tag forge-label-value
+ */
 @CustomElement({
   name: LABEL_VALUE_CONSTANTS.elementName
 })

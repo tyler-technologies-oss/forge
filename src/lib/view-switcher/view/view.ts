@@ -14,6 +14,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-view>` custom element.
+ * 
+ * @tag forge-view
+ */
 @CustomElement({
   name: VIEW_CONSTANTS.elementName
 })

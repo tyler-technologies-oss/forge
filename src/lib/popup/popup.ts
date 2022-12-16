@@ -13,7 +13,7 @@ export interface IPopupComponent extends IBaseComponent {
   placement: PopupPlacement;
   open: boolean;
   manageFocus: boolean;
-  animationType: PopupAnimationType;
+  animationType: `${PopupAnimationType}`;
   static: boolean;
   offset: IPopupPosition;
   hideWhenClipped: boolean;
@@ -35,6 +35,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-popup>` custom element.
+ * 
+ * @tag forge-popup
+ */
 @CustomElement({
   name: POPUP_CONSTANTS.elementName
 })
@@ -89,7 +94,7 @@ export class PopupComponent extends BaseComponent implements IPopupComponent {
   public targetElement: HTMLElement;
 
   @FoundationProperty()
-  public placement: PopupPlacement;
+  public placement: `${PopupPlacement}`;
 
   @FoundationProperty()
   public open: boolean;
@@ -98,7 +103,7 @@ export class PopupComponent extends BaseComponent implements IPopupComponent {
   public manageFocus: boolean;
 
   @FoundationProperty()
-  public animationType: PopupAnimationType;
+  public animationType: `${PopupAnimationType}`;
 
   @FoundationProperty()
   public static: boolean;

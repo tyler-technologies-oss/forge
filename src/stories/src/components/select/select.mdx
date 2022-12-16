@@ -18,6 +18,10 @@ for the [autocomplete component](?path=/story/components-autocomplete--default) 
 Options can be configured via HTML or JavaScript. When setting up the options via HTML, you can use the `<forge-option>` element to configure the label
 and value for each option as well as many other configuration properties.
 
+> **Note:** the option elements within the dropdown will automatically receive generated `id` attributes to help with uniquely identifying these elements. Keep in
+> mind though that these values will be different every time the page is rendered, but the identifier is how the options are tied back to the underlying `<forge-select>`
+> that triggered the dropdown to open.
+
 </PageSection>
 
 ---
@@ -330,6 +334,21 @@ Sets focus to the internal button element.
 > **Note:** To hide the border, add the following CSS declaration: `--forge-select-border-display: none;`
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- Verify that the select list can be toggled open or closed by pressing the space or enter key.
+- Verify that each active item in the select list can be reached by the up-arrow and down-arrow keys.
+- Verify that in multiple-select mode, the Enter key can toggle an item as selected or un-selected.
+
+</PageSection>
+
+---
 
 <PageSection>
 

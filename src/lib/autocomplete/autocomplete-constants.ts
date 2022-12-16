@@ -3,6 +3,7 @@ import { IOption } from '../select';
 import { IListItemComponent } from '../list';
 import { IListDropdownConfig } from '../list-dropdown';
 import { IPopupPosition } from '../popup';
+import { FIELD_CONSTANTS } from '../field/field-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}autocomplete`;
 
@@ -24,7 +25,7 @@ const attributes = {
 };
 
 const selectors = {
-  INPUT: 'input,textarea',
+  INPUT: FIELD_CONSTANTS.selectors.INPUT,
   DROPDOWN_ICON: '[data-forge-dropdown-icon],[data-forge-dropdown-icon],[forge-dropdown-icon],.forge-dropdown-icon',
   CLEAR_BUTTON: '[data-forge-autocomplete-clear],[forge-autocomplete-clear]'
 };

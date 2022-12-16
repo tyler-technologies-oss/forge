@@ -35,6 +35,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-step>` custom element.
+ * 
+ * @tag forge-step
+ */
 @CustomElement({
   name: STEP_CONSTANTS.elementName,
   dependencies: [

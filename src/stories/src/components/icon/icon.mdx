@@ -221,6 +221,33 @@ Forces a reload of the icon. This method can be useful if you need to manually t
 
 <PageSection>
 
+## Accessibility
+
+There are two types of icons used in applications, decorative and semantic. Typically we use icons for decorative purposes only, but there
+may be cases where you need to make an icon semantic and accessible.
+
+### Decorative icons
+
+Decorative icons are typically hidden from assisitive technologies, but there are some important things to note about these icons:
+
+- Add an `aria-hidden="true"` attribute to the icon element to avoid its content being interpreted incorrectly.
+- Use a `title` attribute or a Forge tooltip component to provide a visual description.
+- Treat icons as any other text on the page and use proper color contrast ratios.
+
+### Semantic icons
+
+- Use an `role="img"` attribute to give it semantic meaning.
+- Use an `aria-label` or `aria-describedby` attribute.
+- Treat icons as any other text on the page and use proper color contrast ratios.
+- If using an SVG icon, hook up the `<title>` element (if applicable) to an `aria-labelledby` attribute on the `<svg>` element.
+  - If no `<title>` element exists, use an alternative approach such as `aria-label` or `title` attribute.
+
+</PageSection>
+
+---
+
+<PageSection>
+
 ## Types
 
 ### IconUrlBuilder

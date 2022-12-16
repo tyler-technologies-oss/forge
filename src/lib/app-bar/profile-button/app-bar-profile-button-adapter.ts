@@ -16,12 +16,15 @@ export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
   setAvatarText(value: string): void;
   setAvatarLetterCount(value: number): void;
   setAvatarImageUrl(value: string): void;
+  setSignOutButtonText(value: string): void;
+  setProfileButtonText(value: string): void;
 }
 
 export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButtonComponent> implements IAppBarProfileButtonAdapter {
   private _avatarElement: IAvatarComponent;
-  private _popupElement: IPopupComponent;
   private _buttonElement: HTMLButtonElement;
+  private _popupElement?: IPopupComponent;
+  private _profileCardElement?: IProfileCardComponent;
 
   constructor(component: IAppBarProfileButtonComponent) {
     super(component);
@@ -41,25 +44,28 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
   }
 
   public openPopup(profileCardConfig: IAppBarProfileCardConfig, dismissListener: () => void, profileListener: () => void, signOutListener: () => void, profileCardContent?: HTMLElement): () => void {
-    const profileCardElement = document.createElement(PROFILE_CARD_CONSTANTS.elementName) as IProfileCardComponent;
-    profileCardElement.fullName = profileCardConfig.fullName;
-    profileCardElement.email = profileCardConfig.email;
-    profileCardElement.signOut = profileCardConfig.signOut;
-    profileCardElement.profile = profileCardConfig.profile;
-    profileCardElement.avatarText = profileCardConfig.avatarText;
-    profileCardElement.avatarImageUrl = profileCardConfig.avatarImageUrl;
-    profileCardElement.avatarLetterCount = profileCardConfig.avatarLetterCount;
-    profileCardElement.addEventListener(PROFILE_CARD_CONSTANTS.events.PROFILE, () => profileListener());
-    profileCardElement.addEventListener(PROFILE_CARD_CONSTANTS.events.SIGN_OUT, () => signOutListener());
+    this._profileCardElement = document.createElement(PROFILE_CARD_CONSTANTS.elementName);
+    this._profileCardElement.fullName = profileCardConfig.fullName;
+    this._profileCardElement.email = profileCardConfig.email;
+    this._profileCardElement.signOut = profileCardConfig.signOut;
+    this._profileCardElement.profile = profileCardConfig.profile;
+    this._profileCardElement.signOutText = profileCardConfig.signOutButtonText;
+    this._profileCardElement.profileText = profileCardConfig.profileButtonText;
+    this._profileCardElement.avatarText = profileCardConfig.avatarText;
+    this._profileCardElement.avatarImageUrl = profileCardConfig.avatarImageUrl;
+    this._profileCardElement.avatarLetterCount = profileCardConfig.avatarLetterCount;
+    this._profileCardElement.addEventListener(PROFILE_CARD_CONSTANTS.events.PROFILE, () => profileListener());
+    this._profileCardElement.addEventListener(PROFILE_CARD_CONSTANTS.events.SIGN_OUT, () => signOutListener());
+
     if (profileCardContent) {
-      profileCardElement.appendChild(profileCardContent);
+      this._profileCardElement.appendChild(profileCardContent);
     }
 
-    this._popupElement = document.createElement(POPUP_CONSTANTS.elementName) as IPopupComponent;
+    this._popupElement = document.createElement(POPUP_CONSTANTS.elementName);
     this._popupElement.targetElement = this._component;
     this._popupElement.placement = 'bottom-end';
     this._popupElement.animationType = PopupAnimationType.Menu;
-    this._popupElement.appendChild(profileCardElement);
+    this._popupElement.appendChild(this._profileCardElement);
     this._popupElement.open = true;
 
     return notChildEventListener(this._popupElement, activeElement => {
@@ -75,6 +81,8 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
   public closePopup(): void {
     if (this._popupElement) {
       this._popupElement.open = false;
+      this._popupElement = undefined;
+      this._profileCardElement = undefined;
     }
   }
 
@@ -92,5 +100,19 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
 
   public setAvatarImageUrl(value: string): void {
     this._avatarElement.imageUrl = value;
+  }
+
+  public setSignOutButtonText(value: string): void {
+    if (this._profileCardElement) {
+      this._profileCardElement.signOutText = value;
+      this._popupElement?.position();
+    }
+  }
+
+  public setProfileButtonText(value: string): void {
+    if (this._profileCardElement) {
+      this._profileCardElement.profileText = value;
+      this._popupElement?.position();
+    }
   }
 }

@@ -1,7 +1,8 @@
 module.exports = {
   features: {
-    postcss: false,
+    postcss: false
   },
+  staticDirs: ['./src/assets'],
   stories: ['./src/**/*.stories.*'],
   logLevel: 'debug',
   core: {
@@ -18,7 +19,7 @@ module.exports = {
       options: {
         sourceLoaderOptions: {
           parser: 'typescript',
-          injectStoryParameters: false,
+          injectStoryParameters: false
         },
         configureJsx: true
       },
@@ -32,7 +33,7 @@ module.exports = {
   typescript: {
     check: true,
     reactDocgenTypescriptOptions: {
-      propFilter: prop => ['label', 'disabled'].includes(prop.name),
-    },
+      propFilter: prop => ['label', 'disabled'].includes(prop.name)
+    }
   }
 };

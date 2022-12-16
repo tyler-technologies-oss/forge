@@ -19,12 +19,19 @@ export class BaseDrawerFoundation implements IBaseDrawerFoundation {
   }
 
   public connect(): void {
-    this._applyOpen();
+    if (this._open) {
+      this._setOpened();
+    } else {
+      this._setClosed();
+    }
+
     this._applyDirection();
+    this._adapter.proxyScrollEvent();
     this._hasInitialized = true;
   }
 
   public disconnect(): void {
+    this._adapter.tryUnproxyScrollEvent();
     this._hasInitialized = false;
   }
 
@@ -37,6 +44,7 @@ export class BaseDrawerFoundation implements IBaseDrawerFoundation {
     if (!this._open) {
       return;
     }
+    this._setOpened();
     this._adapter.emitHostEvent(BASE_DRAWER_CONSTANTS.events.AFTER_OPEN);
   }
   
@@ -44,33 +52,37 @@ export class BaseDrawerFoundation implements IBaseDrawerFoundation {
     if (this._open) {
       return;
     }
-    this._adapter.removeDrawerClass(BASE_DRAWER_CONSTANTS.classes.CLOSING);
-    this._adapter.removeDrawerClass(BASE_DRAWER_CONSTANTS.classes.NO_TRANSITION);
-    this._adapter.setDrawerClass(BASE_DRAWER_CONSTANTS.classes.CLOSED);
+    this._setClosed();
     this._adapter.emitHostEvent(BASE_DRAWER_CONSTANTS.events.AFTER_CLOSE);
+  }
+
+  private _setOpened(): void {
+    this._adapter.removeDrawerClass([BASE_DRAWER_CONSTANTS.classes.CLOSED, BASE_DRAWER_CONSTANTS.classes.CLOSING]);
+    this._adapter.setHostAttribute(BASE_DRAWER_CONSTANTS.attributes.OPEN);
+  }
+
+  private _setClosed(): void {
+    this._adapter.removeDrawerClass([BASE_DRAWER_CONSTANTS.classes.CLOSING, BASE_DRAWER_CONSTANTS.classes.NO_TRANSITION]);
+    this._adapter.setDrawerClass(BASE_DRAWER_CONSTANTS.classes.CLOSED);
+    this._adapter.removeHostAttribute(BASE_DRAWER_CONSTANTS.attributes.OPEN);
   }
 
   protected _applyOpen(): void {
     if (this._open) {
-      this._setDrawerOpenState();
-    } else {
-      this._setDrawerClosedState();
-    }
-    
-    if (this._open) {
+      this._triggerDrawerOpen();
       this._adapter.setHostAttribute(BASE_DRAWER_CONSTANTS.attributes.OPEN);
     } else {
+      this._triggerDrawerClose();
       this._adapter.removeHostAttribute(BASE_DRAWER_CONSTANTS.attributes.OPEN);
     }
   }
 
-  protected _setDrawerOpenState(): void {
+  protected _triggerDrawerOpen(): void {
     this._adapter.listenTransitionComplete(this._openAnimationListener);
-    this._adapter.removeDrawerClass(BASE_DRAWER_CONSTANTS.classes.CLOSED);
-    this._adapter.removeDrawerClass(BASE_DRAWER_CONSTANTS.classes.CLOSING);
+    this._adapter.removeDrawerClass([BASE_DRAWER_CONSTANTS.classes.CLOSED, BASE_DRAWER_CONSTANTS.classes.CLOSING]);
   }
 
-  protected _setDrawerClosedState(): void {
+  protected _triggerDrawerClose(): void {
     this._adapter.listenTransitionComplete(this._closeAnimationListener);
     this._adapter.setDrawerClass(BASE_DRAWER_CONSTANTS.classes.CLOSING);
   }

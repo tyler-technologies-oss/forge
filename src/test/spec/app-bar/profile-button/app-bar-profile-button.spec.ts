@@ -283,6 +283,106 @@ describe('AppBarProfileButtonComponent', function(this: ITestContext) {
       expect(popup).toBeNull();
       expect(profileCard).toBeNull();
     });
+
+    it('should show default sign out text', async function(this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.open = true;
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+      
+      const popup = document.querySelector(POPUP_CONSTANTS.elementName) as PopupComponent;
+      const profileCard = popup.querySelector(PROFILE_CARD_CONSTANTS.elementName) as ProfileCardComponent;
+      const signOutButton = getShadowElement(profileCard, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as HTMLButtonElement;
+
+      expect(signOutButton.textContent).toBe(PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT);
+    });
+
+    it('should show default profile text', async function(this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.open = true;
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+      
+      const popup = document.querySelector(POPUP_CONSTANTS.elementName) as PopupComponent;
+      const profileCard = popup.querySelector(PROFILE_CARD_CONSTANTS.elementName) as ProfileCardComponent;
+      const profileButton = getShadowElement(profileCard, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as HTMLButtonElement;
+
+      expect(profileButton.textContent).toBe(PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT);
+    });
+
+    it('should show custom sign out text', async function(this: ITestContext) {
+      this.context = setupTestContext();
+
+      const expectedSignOutText = 'Custom sign out text';
+      this.context.component.signOutButtonText = expectedSignOutText;
+      
+      this.context.component.open = true;
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+      
+      const popup = document.querySelector(POPUP_CONSTANTS.elementName) as PopupComponent;
+      const profileCard = popup.querySelector(PROFILE_CARD_CONSTANTS.elementName) as ProfileCardComponent;
+      const signOutButton = getShadowElement(profileCard, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as HTMLButtonElement;
+
+      expect(signOutButton.textContent).toBe(expectedSignOutText);
+    });
+
+    it('should show custom profile text', async function(this: ITestContext) {
+      this.context = setupTestContext();
+
+      const expectedProfileText = 'Custom profile text';
+      this.context.component.profileButtonText = expectedProfileText;
+
+      this.context.component.open = true;
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+      
+      const popup = document.querySelector(POPUP_CONSTANTS.elementName) as PopupComponent;
+      const profileCard = popup.querySelector(PROFILE_CARD_CONSTANTS.elementName) as ProfileCardComponent;
+      const profileButton = getShadowElement(profileCard, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as HTMLButtonElement;
+
+      expect(profileButton.textContent).toBe(expectedProfileText);
+    });
+
+    it('should change custom sign out text while open', async function(this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.open = true;
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+
+      const popup = document.querySelector(POPUP_CONSTANTS.elementName) as PopupComponent;
+      const profileCard = popup.querySelector(PROFILE_CARD_CONSTANTS.elementName) as ProfileCardComponent;
+      const signOutButton = getShadowElement(profileCard, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as HTMLButtonElement;
+
+      expect(signOutButton.textContent).toBe(PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT);
+
+      const expectedSignOutText = 'Custom sign out text';
+      this.context.component.signOutButtonText = expectedSignOutText;
+
+      expect(signOutButton.textContent).toBe(expectedSignOutText);
+    });
+
+    it('should show custom profile text', async function(this: ITestContext) {
+      this.context = setupTestContext();
+
+      this.context.component.open = true;
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+      
+      const popup = document.querySelector(POPUP_CONSTANTS.elementName) as PopupComponent;
+      const profileCard = popup.querySelector(PROFILE_CARD_CONSTANTS.elementName) as ProfileCardComponent;
+      const profileButton = getShadowElement(profileCard, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as HTMLButtonElement;
+
+      expect(profileButton.textContent).toBe(PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT);
+
+      const expectedProfileText = 'Custom profile text';
+      this.context.component.profileButtonText = expectedProfileText;
+
+      expect(profileButton.textContent).toBe(expectedProfileText);
+    });
   });
 
   function setupTestContext(): ITestAppBarProfileButtonContext {

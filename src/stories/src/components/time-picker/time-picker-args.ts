@@ -8,6 +8,7 @@ export interface ITimePickerProps {
   allowInput: boolean;
   allowDropdown: boolean;
   showNow: boolean;
+  showHourOptions: boolean;
   disabled: boolean;
 }
 
@@ -69,6 +70,13 @@ export const argTypes = {
     },
   },
   showNow: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  showHourOptions: {
     control: 'boolean',
     description: '',
     table: {

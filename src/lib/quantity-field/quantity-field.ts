@@ -19,6 +19,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-quantity-field>` custom element.
+ * 
+ * @tag forge-quantity-field
+ */
 @CustomElement({
   name: QUANTITY_FIELD_CONSTANTS.elementName,
   dependencies: [

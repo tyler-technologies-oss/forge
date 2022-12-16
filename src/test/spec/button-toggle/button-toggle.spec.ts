@@ -196,6 +196,19 @@ describe('ButtonToggleComponent', function(this: ITestContext) {
       expect(changeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: [DEFAULT_OPTIONS[1].value, DEFAULT_OPTIONS[2].value] }));
     });
 
+    it('should emit change event from group with falsy values', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      
+      const selectSpy = jasmine.createSpy('select listener');
+      this.context.component.addEventListener(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, selectSpy);
+
+      const buttonToggles = _getButtonToggles(this.context.component);
+      buttonToggles[0].value = 0;
+      _clickToggle(buttonToggles[0]);
+
+      expect(selectSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: 0 }));
+    });
+
     it('should emit select event', function(this: ITestContext) {
       this.context = setupTestContext(true);
 

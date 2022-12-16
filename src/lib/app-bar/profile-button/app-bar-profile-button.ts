@@ -19,6 +19,8 @@ export interface IAppBarProfileButtonComponent extends IBaseComponent {
   email: string;
   signOutButton: boolean;
   profileButton: boolean;
+  signOutButtonText: string;
+  profileButtonText: string;
   open: boolean;
   profileCardBuilder: (fn: AppBarProfileButtonProfileCardBuilder) => void;
 }
@@ -29,6 +31,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-app-bar-profile-button>` custom element.
+ * 
+ * @tag forge-app-bar-profile-button
+ */
 @CustomElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
   dependencies: [
@@ -49,6 +56,8 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_TEXT,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON,
+      APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON_TEXT,
+      APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON_TEXT,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.OPEN
     ];
   }
@@ -95,6 +104,12 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
       case APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON:
         this.profileButton = coerceBoolean(newValue);
         break;
+      case APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON_TEXT:
+        this.signOutButtonText = newValue;
+        break;
+      case APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON_TEXT:
+        this.profileButtonText = newValue;
+        break;
       case APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
@@ -121,6 +136,12 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
 
   @FoundationProperty()
   public profileButton: boolean;
+
+  @FoundationProperty()
+  public signOutButtonText: string;
+
+  @FoundationProperty()
+  public profileButtonText: string;
 
   @FoundationProperty()
   public open: boolean;

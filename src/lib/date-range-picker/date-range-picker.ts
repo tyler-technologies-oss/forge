@@ -14,8 +14,8 @@ import template from './date-range-picker.html';
 import styles from './date-range-picker.scss';
 
 export interface IDateRangePickerComponent extends IBaseDatePickerComponent<IDatePickerRange> {
-  from: Date | string | null;
-  to: Date | string | null;
+  from: Date | string | null | undefined;
+  to: Date | string | null | undefined;
 }
 
 declare global {
@@ -31,7 +31,11 @@ declare global {
   }
 }
 
-/** The custom element class behind the `<forge-date-range-picker>` element. */
+/**
+ * The custom element class behind the `<forge-date-range-picker>` element.
+ * 
+ * @tag forge-date-range-picker
+ */
 @CustomElement({
   name: DATE_RANGE_PICKER_CONSTANTS.elementName,
   dependencies: [
@@ -71,9 +75,9 @@ export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePicke
 
   /** Gets/sets the "from" date range value. */
   @FoundationProperty()
-  public from: Date | string | null;
+  public from: Date | string | null | undefined;
 
   /** Gets/sets the "to" date range value. */
   @FoundationProperty()
-  public to: Date | string | null;
+  public to: Date | string | null | undefined;
 }

@@ -212,10 +212,13 @@ Controls the invalid state.
 | `--forge-chip-set-spacing`                   | Sets the gap spacing between chips
 
 
-### Chips
+### Chip
 
 | Name                                       | Description
 | :------------------------------------------| :----------------
+| `--forge-chip-height`                      | Sets the `height` of the element. Default is `auto`.
+| `--forge-chip-width`                       | Sets the `width` of the element. Default is `auto`.
+| `--forge-chip-min-height`                  | Sets the `min-height` of the element. Default varies based on type and density.
 | `--mdc-theme-primary`                      | Sets the primary theme throughout the component
 | `--mdc-theme-on-primary`                   | Sets the contrasting color of the primary theme through the component.
 | `--forge-theme-border-color`               | Sets the border color.
@@ -225,6 +228,22 @@ Controls the invalid state.
 | `--mdc-theme-text-secondary-on-background` | Sets the delete font color.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Verify that you can tab to each chip component.
+  - Ensure that there is a visual cue that the chip component is active or inactive, and/or currently focused.
+- Verify that pressing the space bar or enter key while focusing on a chip will toggle it in the same manner as if it had been clicked by a mouse.
+- If a chip has a delete icon, ensure it can be focused and activated independently of the chip itself.
+- Be sure to include a role attribute to indicate to screen readers what the chip is being used for.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.
+
+</PageSection>
+
+---
 
 <PageSection>
 

@@ -162,11 +162,11 @@
 
   // Default
   @if $layout-state == default or $layout-state == shape-rounded {
-    --forge-chip-height: #{map.get(variables.$member, height, default)};
+    --forge-chip-min-height: #{map.get(variables.$member, min-height, default)};
   }
   // Dense
   @else if $layout-state == dense or $layout-state == shape-rounded-dense {
-    --forge-chip-height: #{map.get(variables.$member, height, dense)};
+    --forge-chip-min-height: #{map.get(variables.$member, min-height, dense)};
   }
   // Roomy uses the default chip height
   @include field-utils.error-layout-state(member-height, $layout-state);

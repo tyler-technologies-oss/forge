@@ -16,20 +16,21 @@ import { IListDropdownConfig, ListDropdownType, IListDropdownOption } from '../l
 import { timeStringToMillis, millisToTimeString, minutesToMillis, getCurrentTimeOfDayMillis, millisToMinutes, stripSecondsFromMillis } from './time-picker-utils';
 
 export interface ITimePickerFoundation extends ICustomElementFoundation {
-  value: string | null;
+  value: string | null | undefined;
   open: boolean;
   allowSeconds: boolean;
   masked: boolean;
   showMaskFormat: boolean;
   use24HourTime: boolean;
   allowInvalidTime: boolean;
-  min: string | null;
-  max: string | null;
+  min: string | null | undefined;
+  max: string | null | undefined;
   restrictedTimes: string[];
-  startTime: string | null;
+  startTime: string | null | undefined;
   step: number;
   allowInput: boolean;
   showNow: boolean;
+  showHourOptions: boolean;
   customOptions: ITimePickerOption[];
   validationCallback: TimePickerValidationCallback;
   parseCallback: TimePickerParseCallback;
@@ -43,14 +44,14 @@ export interface ITimePickerFoundation extends ICustomElementFoundation {
 
 export class TimePickerFoundation implements ITimePickerFoundation {
   // State vars
-  private _value: number | null = null;
+  private _value?: number | null = null;
   private _masked = true;
   private _use24HourTime = false;
   private _showMaskFormat = false;
-  private _min: number | null = null;
-  private _max: number | null = null;
+  private _min?: number | null = null;
+  private _max?: number | null = null;
   private _restrictedTimes: number[] = [];
-  private _startTime: number | null = null;
+  private _startTime?: number | null = null;
   private _step = TIME_PICKER_CONSTANTS.numbers.DEFAULT_MINUTE_STEP;
   private _allowInput = true;
   private _identifier: string;
@@ -59,6 +60,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   private _allowInvalidTime = false;
   private _popupTarget: string;
   private _showNow = false;
+  private _showHourOptions = true;
   private _customOptions: ITimePickerOption[] = [];
   private _validationCallback: TimePickerValidationCallback;
   private _parseCallback: TimePickerParseCallback;
@@ -378,7 +380,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     }
 
     // Convert the time string to milliseconds
-    let millis: number | null;
+    let millis: number | null | undefined;
     if (!this._masked && typeof this._parseCallback === 'function') {
       millis = this._parseCallback.call(null, value);
     } else {
@@ -396,7 +398,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     return this._adapter.emitHostEvent(TIME_PICKER_CONSTANTS.events.CHANGE, value, true, !force);
   }
 
-  private _trySetValue(millis: number | null): boolean {
+  private _trySetValue(millis: number | null | undefined): boolean {
     // If our value hasn't changed, we can just return
     if (millis === this._value) {
       return false;
@@ -422,11 +424,11 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     return false;
   }
 
-  private _setValue(value: number | null): void {
+  private _setValue(value: number | null | undefined): void {
     this._value = this._normalizeTimeValue(value);
   }
 
-  private _validateMillis(millis: number | null): number | null {
+  private _validateMillis(millis: number | null | undefined): number | null | undefined {
     // Trap for min/max validation
     if (typeof millis === 'number') {
       const isBelowMin = typeof this._min === 'number' && millis < this._min;
@@ -509,7 +511,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     });
   }
 
-  private _applyValue(value: number | null, emitEvents = true): void {
+  private _applyValue(value: number | null | undefined, emitEvents = true): void {
     this._setValue(value);
     const formattedValue = this._formatValue(this._value);
     if (this._adapter.getInputValue() !== formattedValue) {
@@ -517,8 +519,8 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     }
   }
 
-  private _normalizeTimeValue(value: number | null): number | null {
-    if (value === null || value === undefined) {
+  private _normalizeTimeValue(value: number | null | undefined): number | null {
+    if (value == null) {
       return null;
     } else if (value < 0) {
       return 0;
@@ -529,34 +531,37 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _openDropdown(): void {
-    if (!this.allowDropdown) {
+    const options = this._generateTimeOptions();
+
+    if (!this.allowDropdown || !options.length) {
       return;
     }
-
+    
     this._formatInputValue();
     this._open = true;
     this._adapter.setHostAttribute(TIME_PICKER_CONSTANTS.attributes.OPEN);
-
-    const options = this._generateTimeOptions();
+    
     const selectableOptions = options.filter(o => !o.divider && !o.disabled);
     let selectedValues: ITimePickerOptionValue[] = [];
     let activeStartIndex: number | undefined;
     
     // Find closest match in list of time options and activate/select it
-    if (this._value !== null) {
-      const optionIndex = this._findClosestOptionIndex(this._value, selectableOptions);
-      if (optionIndex >= 0) {
-        const isExactMatch = selectableOptions[optionIndex].value.time === this._value;
-        if (isExactMatch) {
-          selectedValues = [selectableOptions[optionIndex].value];
-        } else {
+    if (options.length) {
+      if (this._value != null) {
+        const optionIndex = this._findClosestOptionIndex(this._value, selectableOptions);
+        if (optionIndex >= 0) {
+          const isExactMatch = selectableOptions[optionIndex].value.time === this._value;
+          if (isExactMatch) {
+            selectedValues = [selectableOptions[optionIndex].value];
+          } else {
+            activeStartIndex = optionIndex;
+          }
+        }
+      } else if (typeof this._startTime === 'number') {
+        const optionIndex = this._findClosestOptionIndex(this._startTime, selectableOptions);
+        if (optionIndex >= 0 && optionIndex < selectableOptions.length) {
           activeStartIndex = optionIndex;
         }
-      }
-    } else if (typeof this._startTime === 'number') {
-      const optionIndex = this._findClosestOptionIndex(this._startTime, selectableOptions);
-      if (optionIndex >= 0 && optionIndex < selectableOptions.length) {
-        activeStartIndex = optionIndex;
       }
     }
 
@@ -589,8 +594,8 @@ export class TimePickerFoundation implements ITimePickerFoundation {
 
   private _findClosestOptionIndex(value: number, options: Array<IListDropdownOption<ITimePickerOptionValue>>): number {
     const closestItem = options.reduce((prev, curr) => {
-                          return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
-                        });
+                        return Math.abs((curr.value.time || 0) - value) < Math.abs((prev.value.time || 0) - value) ? curr : prev;
+                      });
     return options.indexOf(closestItem);
   }
 
@@ -610,28 +615,31 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _generateTimeOptions(): Array<IListDropdownOption<ITimePickerOptionValue>> {
-    const minMinutes = this._min !== null ? Math.max(millisToMinutes(this._min), 0) : 0;
-    const maxMinutes = this._max !== null ? Math.min(millisToMinutes(this._max), TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) : TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES;
+    const minMinutes = this._min != null ? Math.max(millisToMinutes(this._min), 0) : 0;
+    const maxMinutes = this._max != null ? Math.min(millisToMinutes(this._max), TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) : TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES;
     const minuteStep = this._step;
     const times: IListDropdownOption[] = [];
     let leadingOptions: IListDropdownOption[] = [];
     
-    for (let totalMinutes = minMinutes; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
-      if (totalMinutes === TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) {
-        break;
+    if (this._showHourOptions) {
+      for (let totalMinutes = minMinutes; totalMinutes <= maxMinutes; totalMinutes += minuteStep) {
+        if (totalMinutes === TIME_PICKER_CONSTANTS.numbers.MAX_DAY_MINUTES) {
+          break;
+        }
+        const millis = minutesToMillis(totalMinutes);
+        const disabled = this._restrictedTimes.includes(millis);
+        const label = millisToTimeString(millis, this._use24HourTime, false) || '';
+        const value: ITimePickerOptionValue = { time: millis };
+        times.push({ label, value, disabled });
       }
-      const millis = minutesToMillis(totalMinutes);
-      const disabled = this._restrictedTimes.includes(millis);
-      const label = millisToTimeString(millis, this._use24HourTime, false) || '';
-      const value: ITimePickerOptionValue = { time: millis };
-      times.push({ label, value, disabled });
+
+      // Add divider between AM/PM times
+      const firstPmIndex = times.findIndex(t => t.value.time / 1000 / 60 >= 720);
+      if (firstPmIndex >= 0 && firstPmIndex < times.length - 1) {
+        times.splice(firstPmIndex, 0, { label: '', value: null, divider: true });
+      }
     }
 
-    // Add divider between AM/PM times
-    const firstPmIndex = times.findIndex(t => t.value.time / 1000 / 60 >= 720);
-    if (firstPmIndex >= 0 && firstPmIndex < times.length - 1) {
-      times.splice(firstPmIndex, 0, { label: '', value: null, divider: true });
-    }
 
     // Check if we need to prepend a "Now" option
     if (this._showNow) {
@@ -650,7 +658,9 @@ export class TimePickerFoundation implements ITimePickerFoundation {
 
     // Append all leading options
     if (leadingOptions.length) {
-      times.splice(0, 0, { label: '', value: null, divider: true });
+      if (times.length) {
+        times.splice(0, 0, { label: '', value: null, divider: true });
+      }
       leadingOptions.forEach((o, index) => times.splice(index, 0, o));
     }
 
@@ -664,7 +674,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     return timeStringToMillis(value, use24HourTime, allowSeconds);
   }
 
-  private _formatValue(value: number | null): string {
+  private _formatValue(value: number | null | undefined): string {
     if (!this._masked && typeof this._formatCallback === 'function') {
       return this._formatCallback.call(null, value, this._use24HourTime, this._allowSeconds);
     }
@@ -882,6 +892,15 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   public set showNow(value: boolean) {
     if (this._showNow !== value) {
       this._showNow = value;
+    }
+  }
+
+  public get showHourOptions(): boolean {
+    return this._showHourOptions;
+  }
+  public set showHourOptions(value: boolean) {
+    if (this._showHourOptions !== value) {
+      this._showHourOptions = value;
     }
   }
 

@@ -20,6 +20,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-circular-progress>` custom element.
+ * 
+ * @tag forge-circular-progress
+ */
 @CustomElement({
   name: CIRCULAR_PROGRESS_CONSTANTS.elementName
 })

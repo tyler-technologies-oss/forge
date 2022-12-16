@@ -48,14 +48,14 @@ export interface IFieldAdapter extends IBaseAdapter {
   getLabelWidth(fontSize: number, fontFamily: string): number;
 
   // state actions
-  initialize(required: boolean, rootSelector: string): void;
+  initialize(rootSelector: string): void;
   initializeFloatingLabel(): IFloatingLabel;
   ensureLabelOrder(): void;
   ensureSlottedLabel(): void;
   destroy(): void;
   setValueChangedListener(context: any, listener: (value: any) => void): void;
   destroyValueChangeListener(): void;
-  detectLabel(required: boolean): void;
+  detectLabel(): void;
   setRoomy(isRoomy: boolean): void;
   setDense(isDense: boolean): void;
   setInputAttributeObserver(listener: (name: string, value: string | null) => void): void;
@@ -76,14 +76,14 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     super(component);
   }
 
-  public initialize(required: boolean, rootSelector: string): void {
+  public initialize(rootSelector: string): void {
     this._rootElement = getShadowElement(this._component, rootSelector);
     this._labelSlot = getShadowElement(this._component, 'slot[name=label]') as HTMLSlotElement;
     this._leadingSlot = getShadowElement(this._component, 'slot[name=leading]') as HTMLSlotElement;
     this._trailingSlot = getShadowElement(this._component, 'slot[name=trailing]') as HTMLSlotElement;
     this._addonEndSlot = getShadowElement(this._component, 'slot[name=addon-end]') as HTMLSlotElement;
     this._inputElement = this._component.querySelector('input:not([type=checkbox]):not([type=radio])') as HTMLInputElement;
-    this.detectLabel(required);
+    this.detectLabel();
   }
 
   public destroy(): void {
@@ -168,18 +168,8 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._valueChangeListeners.forEach(cb => cb());
   }
 
-  public detectLabel(required: boolean): void {
+  public detectLabel(): void {
     this._labelElement = this._component.querySelector('label') as HTMLLabelElement;
-
-    // Due to a Safari bug with ::slotted::after selectors, we need to manually append the required 'asterisk' to the label text
-    // https://bugs.webkit.org/show_bug.cgi?id=178237
-    if (required && Platform.WEBKIT && this._labelElement && !this._labelElement.innerText.endsWith('*')) {
-      const asterisk = document.createElement('span');
-      asterisk.style.color = 'var(--mdc-theme-error)';
-      asterisk.style.marginLeft = '1px';
-      asterisk.textContent = '*';
-      this._labelElement.appendChild(asterisk);
-    }
   }
 
   public initializeFloatingLabel(): IFloatingLabel {

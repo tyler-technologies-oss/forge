@@ -42,6 +42,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-menu>` custom element.
+ * 
+ * @tag forge-menu
+ */
 @CustomElement({
   name: MENU_CONSTANTS.elementName,
   dependencies: [
@@ -139,7 +144,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   /** Gets/sets the menu placement (default is bottom-left). */
   @FoundationProperty()
-  public placement: PopupPlacement;
+  public placement: `${PopupPlacement}`;
 
   /** Gets/sets dense state of the list options used in the menu popup. */
   @FoundationProperty()
@@ -168,7 +173,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   @FoundationProperty()
   public optionBuilder: MenuOptionBuilder;
 
-  /** Gets/sets whether selection of menu items is persisted. */
+  /** Gets the currently active popup element when the dropdown is open. */
   @FoundationProperty({ set: false })
   public popupElement: HTMLElement | undefined;
 

@@ -22,7 +22,11 @@ declare global {
   }
 }
 
-/** The custom element class behind the `<forge-tooltip>` element. */
+/**
+ * The custom element class behind the `<forge-tooltip>` element.
+ * 
+ * @tag forge-tooltip
+ */
 @CustomElement({
   name: TOOLTIP_CONSTANTS.elementName
 })
@@ -87,7 +91,7 @@ export class TooltipComponent extends BaseComponent implements ITooltipComponent
 
   /** Gets/sets the position. */
   @FoundationProperty()
-  public position: PopupPlacement;
+  public position: `${PopupPlacement}`;
 
   /** Gets the open state of the tooltip. */
   @FoundationProperty({ set: false })

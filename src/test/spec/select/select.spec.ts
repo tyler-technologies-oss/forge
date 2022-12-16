@@ -10,11 +10,12 @@ import {
   SelectOptionBuilder,
   defineOptionComponent,
   defineOptionGroupComponent,
-  BASE_SELECT_CONSTANTS
+  BASE_SELECT_CONSTANTS,
+  OPTION_GROUP_CONSTANTS
 } from '@tylertech/forge/select';
 import { POPUP_CONSTANTS, IPopupComponent } from '@tylertech/forge/popup';
 import { LIST_ITEM_CONSTANTS, IListItemComponent } from '@tylertech/forge/list/list-item';
-import { removeElement, getShadowElement, getActiveElement } from '@tylertech/forge-core';
+import { removeElement, getShadowElement } from '@tylertech/forge-core';
 import { tick, dispatchNativeEvent, dispatchKeyEvent, timer, deepCopy } from '@tylertech/forge-testing';
 import { FLOATING_LABEL_CONSTANTS } from '@tylertech/forge/floating-label';
 import { LIST_DROPDOWN_CONSTANTS, ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from '@tylertech/forge/list-dropdown/list-dropdown-constants';
@@ -253,7 +254,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       
       await tick();
-      dispatchNativeEvent(this.context.selectedTextElement, 'focus');
+      dispatchNativeEvent(this.context.component, 'focus');
       await floatTick();
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.FOCUSED)).toBe(true);
       expect(this.context.label.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(true);
@@ -276,9 +277,9 @@ describe('SelectComponent', function(this: ITestContext) {
       
         this.context.component.options = DEFAULT_OPTIONS;
         await tick();
-        dispatchNativeEvent(this.context.selectedTextElement, 'focus');
+        dispatchNativeEvent(this.context.component, 'focus');
         await tick();
-        dispatchKeyEvent(this.context.selectedTextElement, 'keydown', key);
+        dispatchKeyEvent(this.context.component, 'keydown', key);
         await tick();
         expect(this.context.component.popupElement).toBeDefined();
         expect(this.context.component.popupElement!.isConnected).toBe(true);
@@ -292,9 +293,9 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.options = DEFAULT_OPTIONS;
       this.context.component.multiple = true;
       await tick();
-      dispatchNativeEvent(this.context.selectedTextElement, 'focus');
+      dispatchNativeEvent(this.context.component, 'focus');
       await tick();
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       await tick();
       expect(this.context.component.open).toBe(true);
       expect(this.context.component.popupElement).toBeDefined();
@@ -445,10 +446,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       this.context.component.focus();
-      const deepActiveElement = getActiveElement();
       
       expect(document.activeElement).toBe(this.context.component);
-      expect(deepActiveElement).toBe(this.context.selectedTextElement);
     });
 
     it('should handle removing label by destroying floating label instance', async function(this: ITestContext) {
@@ -466,7 +465,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       this.context.component.disabled = true;
-      this.context.selectedTextElement.click();
+      this.context.component.click();
 
       expect(document.activeElement).not.toBe(this.context.component);
     });
@@ -477,7 +476,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await _triggerPopupOpen(this.context.component);
 
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Escape');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Escape');
       await _popupAnimation();
       
       _expectPopupVisibility(this.context.component.popupElement, false);
@@ -487,8 +486,8 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      this.context.selectedTextElement.focus();
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Space');
+      this.context.component.focus();
+      dispatchKeyEvent(this.context.component, 'keydown', 'Space');
       await _popupAnimation();
 
       _expectPopupVisibility(this.context.component.popupElement, true);
@@ -500,7 +499,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await _triggerPopupOpen(this.context.component);
 
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Space');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Space');
       await _popupAnimation();
 
       _expectPopupVisibility(this.context.component.popupElement, false);
@@ -513,8 +512,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       expect(this.context.component.value).toBeUndefined();
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
 
       expect(this.context.component.value).toBe(DEFAULT_OPTIONS[0].value);
@@ -528,8 +527,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       expect(this.context.component.value).toBeUndefined();
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Tab');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Tab');
       await _popupAnimation();
 
       expect(this.context.component.value).toBe(DEFAULT_OPTIONS[0].value);
@@ -544,8 +543,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       expect(this.context.component.value).toEqual([]);
 
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Tab');
-      this.context.selectedTextElement.blur();
+      dispatchKeyEvent(this.context.component, 'keydown', 'Tab');
+      this.context.component.blur();
       await _popupAnimation();
 
       expect(this.context.component.value).toEqual([]);
@@ -559,7 +558,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       expect(this.context.component.value).toBeUndefined();
 
-      this.context.selectedTextElement.blur();
+      this.context.component.blur();
       await _popupAnimation();
 
       expect(this.context.component.value).toBeUndefined();
@@ -574,8 +573,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       expect(this.context.component.value).toBeUndefined();
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
 
       expect(this.context.component.value).toBeUndefined();
@@ -591,8 +590,8 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.addEventListener(BASE_SELECT_CONSTANTS.events.CHANGE, changeSpy);
       await _triggerPopupOpen(this.context.component);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
 
       expect(eventTargetValue).toBe(DEFAULT_OPTIONS[0].value);
@@ -606,8 +605,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       expect(this.context.component.value).toBeUndefined();
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
 
       expect(this.context.component.value).toBeUndefined();
@@ -622,7 +621,8 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.multiple = true;
       await _triggerPopupOpen(this.context.component);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
 
       expect(this.context.component.value).toEqual([]);
@@ -640,8 +640,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       expect(this.context.component.value).toBeUndefined();
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
       await timer();
 
@@ -656,8 +656,8 @@ describe('SelectComponent', function(this: ITestContext) {
       const beforeChangeSpy = jasmine.createSpy('beforeValueChange spy', evt => {}).and.callThrough();
       this.context.component.addEventListener(BASE_SELECT_CONSTANTS.events.CHANGE, beforeChangeSpy);
       await _triggerPopupOpen(this.context.component);
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
 
       expect(beforeChangeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: DEFAULT_OPTIONS[0].value }));
     });
@@ -669,8 +669,8 @@ describe('SelectComponent', function(this: ITestContext) {
       const beforeChangeSpy = jasmine.createSpy('beforeValueChange spy', value => true).and.callThrough();
       this.context.component.beforeValueChange = beforeChangeSpy;
       await _triggerPopupOpen(this.context.component);
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
 
       expect(beforeChangeSpy).toHaveBeenCalledWith(DEFAULT_OPTIONS[0].value);
     });
@@ -697,17 +697,17 @@ describe('SelectComponent', function(this: ITestContext) {
       expect(this.context.component.value).toEqual([]);
       
       // First we check to see if pressing enter selects the active option and keeps the popup open
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
       
       expect(this.context.component.value).toEqual([DEFAULT_OPTIONS[0].value]);
       _expectPopupVisibility(this.context.component.popupElement, true);
       
       // Now we check to see if pressing enter deselects the active option
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowUp');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Enter');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Enter');
       await _popupAnimation();
 
       expect(this.context.component.value).toEqual([]);
@@ -721,7 +721,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await _triggerPopupOpen(this.context.component);
       _expectActiveOption(this.context.component.popupElement!, -1);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       _expectActiveOption(this.context.component.popupElement!, 0);
     });
 
@@ -731,10 +731,10 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await _triggerPopupOpen(this.context.component);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       _expectActiveOption(this.context.component.popupElement!, 0);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowUp');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');
       _expectActiveOption(this.context.component.popupElement!, DEFAULT_OPTIONS.length - 1);
     });
 
@@ -744,7 +744,7 @@ describe('SelectComponent', function(this: ITestContext) {
 
       await _triggerPopupOpen(this.context.component);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowUp');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');
 
       const optionContext = _getOptionContext(this.context.component.popupElement);
       _expectActiveOption(this.context.component.popupElement, optionContext.options.length - 1);
@@ -755,9 +755,9 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       await _triggerPopupOpen(this.context.component);
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'End');
+      dispatchKeyEvent(this.context.component, 'keydown', 'End');
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
 
       _expectActiveOption(this.context.component.popupElement, 0);
     });
@@ -768,7 +768,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await _triggerPopupOpen(this.context.component);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'End');
+      dispatchKeyEvent(this.context.component, 'keydown', 'End');
 
       const optionContext = _getOptionContext(this.context.component.popupElement);
       _expectActiveOption(this.context.component.popupElement, optionContext.options.length - 1);
@@ -779,10 +779,10 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       await _triggerPopupOpen(this.context.component);
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'End');
+      dispatchKeyEvent(this.context.component, 'keydown', 'End');
       _expectActiveOption(this.context.component.popupElement, 2);
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'Home');
+      dispatchKeyEvent(this.context.component, 'keydown', 'Home');
 
       _expectActiveOption(this.context.component.popupElement, 0);
     });
@@ -797,8 +797,8 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.options = opts;
 
       await _triggerPopupOpen(this.context.component);
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       
       _expectActiveOption(this.context.component.popupElement, 2);
     });
@@ -813,10 +813,10 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.options = opts;
 
       await _triggerPopupOpen(this.context.component);
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'End');
+      dispatchKeyEvent(this.context.component, 'keydown', 'End');
       _expectActiveOption(this.context.component.popupElement, 2);
 
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowUp');      
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');      
       _expectActiveOption(this.context.component.popupElement, 0);
     });
 
@@ -826,7 +826,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await _triggerPopupOpen(this.context.component);
       
-      _sendFilterKey(this.context.selectedTextElement, 't', 84);
+      _sendFilterKey(this.context.component, 't', 84);
       await timer();
 
       _expectActiveOption(this.context.component.popupElement, 1);
@@ -839,8 +839,8 @@ describe('SelectComponent', function(this: ITestContext) {
       
       await _triggerPopupOpen(this.context.component);
       
-      _sendFilterKey(this.context.selectedTextElement, 't', 84);
-      _sendFilterKey(this.context.selectedTextElement, 'h', 72);
+      _sendFilterKey(this.context.component, 't', 84);
+      _sendFilterKey(this.context.component, 'h', 72);
       await timer();
 
       _expectActiveOption(this.context.component.popupElement, 2);
@@ -850,7 +850,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      _sendFilterKey(this.context.selectedTextElement, 't', 84);
+      _sendFilterKey(this.context.component, 't', 84);
       await timer();
       
       expect(this.context.component.value).toBe(DEFAULT_OPTIONS[1].value);
@@ -860,8 +860,8 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      _sendFilterKey(this.context.selectedTextElement, 't', 84);
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'End');
+      _sendFilterKey(this.context.component, 't', 84);
+      dispatchKeyEvent(this.context.component, 'keydown', 'End');
       await timer();
       
       expect(this.context.foundation['_filterTimeout']).toBeUndefined();
@@ -871,7 +871,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       await timer();
       
       expect(this.context.component.value).toBe(DEFAULT_OPTIONS[0].value);
@@ -881,7 +881,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowUp');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');
       await timer();
       
       expect(this.context.component.value).toBe(DEFAULT_OPTIONS[2].value);
@@ -892,8 +892,8 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       this.context.component.multiple = true;
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowUp');
-      dispatchKeyEvent(this.context.selectedTextElement, 'keydown', 'ArrowDown');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');
+      dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       await timer();
       
       expect(this.context.component.value).toEqual([]);
@@ -1001,14 +1001,14 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      this.context.selectedTextElement.focus();
+      this.context.component.focus();
       _openDropdown(this.context.component);
       
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
       _expectPopupVisibility(this.context.component.popupElement, true);
 
-      this.context.selectedTextElement.blur();
-      this.context.selectedTextElement.dispatchEvent(new Event('blur'));
+      this.context.component.blur();
+      this.context.component.dispatchEvent(new Event('blur'));
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
       _expectPopupVisibility(this.context.component.popupElement, false);
@@ -1265,11 +1265,10 @@ describe('SelectComponent', function(this: ITestContext) {
       document.body.appendChild(this.context.fixture);
       await tick();
 
-      const selectedTextElement = getShadowElement(this.context.component, SELECT_CONSTANTS.selectors.SELECTED_TEXT);
       await tick();
       this.context.component.selectedIndex = 1;
       expect(this.context.component.value).toBe('two');
-      expect(selectedTextElement.innerText).toBe('Two');
+      expect(this.context.selectedTextElement.innerText).toBe('Two');
     });
   });
 
@@ -1306,6 +1305,44 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.options = options;
       await tick();
       expect(this.context.component.querySelectorAll(OPTION_CONSTANTS.elementName).length).toBe(3);
+    });
+
+    it('should apply option and option-group configuration to elements when setting options via property', async function(this: ITestContext) {        
+      this.context = setupTestContext(true);
+      this.context.component.value = 'one';
+      await tick();
+      
+      await tick();
+      this.context.component.options = [
+        {
+          text: '',
+          options: [
+            { label: 'option-1', value: 1, disabled: true, leadingBuilder: () => document.createElement('div'), metadata: 'test-meta' } as any,
+          ]
+        },
+        {
+          text: 'group',
+          options: [
+            { label: 'option-2', value: 2 },
+            { label: 'option-3', value: 3, optionClass: 'test-cls' }
+          ]
+        }
+      ];
+      await tick();
+
+      const optionGroupElements = this.context.component.querySelectorAll(OPTION_GROUP_CONSTANTS.elementName);
+      const optionElements = this.context.component.querySelectorAll(OPTION_CONSTANTS.elementName);
+
+      expect(optionGroupElements[0].label).toBe('');
+      expect(optionGroupElements[1].label).toBe('group');
+
+      expect(optionElements[0].label).toBe('option-1');
+      expect(optionElements[0].disabled).toBeTrue();
+      expect(optionElements[0].leadingBuilder).toBeTruthy();
+      expect('metadata' in optionElements[0]).toBeFalse();
+
+      expect(optionElements[2].label).toBe('option-3');
+      expect(optionElements[2].optionClass).toEqual(['test-cls']);
     });
 
     it('should set value and selected text correctly when options are set via property', async function(this: ITestContext) {
@@ -1438,8 +1475,7 @@ describe('SelectComponent', function(this: ITestContext) {
   }
 
   function _openDropdown(component: ISelectComponent): void {
-    const element = getShadowElement(component, SELECT_CONSTANTS.selectors.SELECTED_TEXT);
-    element.click();
+    component.click();
   }
 
   function setupTestContext(append?: boolean): ITestSelectContext {

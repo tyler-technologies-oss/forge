@@ -37,7 +37,11 @@ declare global {
   }
 }
 
-/** A web component that renders a busy indicator covering its parent container. */
+/**
+ * A web component that renders a busy indicator covering its parent container.
+ * 
+ * @tag forge-busy-indicator
+ */
 @CustomElement({
   name: BUSY_INDICATOR_CONSTANTS.elementName,
   dependencies: [BackdropComponent, CircularProgressComponent, LinearProgressComponent, ButtonComponent]

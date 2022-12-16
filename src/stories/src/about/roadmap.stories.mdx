@@ -1,0 +1,88 @@
+import { Meta } from '@storybook/addon-docs';
+import Changelog from '../../../../CHANGELOG.md';
+import Markdown from '../core/markdown.tsx';
+
+<Meta title="About/Roadmap" parameters={{
+  previewTabs: {
+    'storybook/docs/panel': { title: 'Roadmap' },
+    canvas: { hidden: true }
+  },
+  viewMode: 'docs'
+}} />
+
+<PageSection>
+
+# Roadmap
+
+> **Important:** The Forge components library was previously built to solve the specific needs of Tyler Technologies products. As we look forward
+> to the future and contributing the library to the open source community, we understand that the strict nature of various patterns and designs
+> within the library may not fit the needs of external developers perfectly at the moment.
+>
+> The following roadmap details are intended to address these concerns and make the library design system agnostic, as well as adjusting usage patterns
+> to make the components more intuitive and consistent as a whole. We're very excited about these changes, and we hope you are too!
+
+As we look to the future toward improving the Forge library of Web Components, we have some specific goals that we would like to accomplish.
+
+Our goal at a high level with the Forge 3.0 release is to focus on developer experience, performance improvements, accessibility improvements,
+and adjustments to our architecture and patterns to allow for Forge to be more customizable and flexible whether that be through functional
+or stylistic customization.
+
+> At the time of writing, our current latest major version is `2.x`. Our plans for the next version are outlined below, with links to discussions
+> within the GitHub repository for specific well-defined features/goals.
+
+## Goals
+
+### Improve developer experience
+
+This goal will focus on our usage patterns from a consumers perspective. We have learned a lot over the lifetime of Forge, and we know there are
+some better, more modern ways to solve certain problems. This release will focus heavily on our usage patterns around custom HTML content, better
+seamless framework support, and adjustments to our component APIs for consistency and clarity.
+
+### Performance improvements
+
+We understand that there is a minimum overhead threshold that comes with using Web Components, specifically custom elements with Shadow DOM and
+heavily initialization logic. Currently there are performance bottlenecks around our ripple functionality, render-blocking initialization logic,
+and too many forced reflows that cause problems when many Forge elements are in the DOM. We intend to focus on each component to ensure we are
+doing everything we can to get the best performance, as well as taking a step back to look at patterns like our ripple and improve upon that as
+well.
+
+### Accessibility improvements
+
+Forge components will often times take care of most, if not all, accessibility concerns for you. In cases where this is not true, or if you need
+to alter the accessibility of elements within the Shadow DOM, we intend to introduce new patterns and APIs to make this more convenient and
+intuitive for developers. We will also be looking to audit each component for accessibility compliance again and make sure there have been no
+regressions or missing items.
+
+We also intend to improve our accessibility docs within this site for each component to help ensure developers are made aware of not only what
+the components handle for you in regards to accessibility, but what you may need to on top of that to introduce your accessibility customizations.
+
+### Style abstraction library
+
+We intend to separate the Forge library of Web Components from the CSS styles. This will allow for us to create a new library that focuses on 
+styles and interactions from a design perspective only. This library can then be consumed back into Forge to support the components.
+
+This abstraction has many benefits, but the following are the most important to us:
+
+- More control over introduction of shared libraries and naming conventions from those libraries. This allows Forge to hide its dependencies more easily.
+- Allows for Forge design to be used outside of a Web Component context, and within other component libraries.
+- Separates styles from implementation.
+- Reduces complexity of our Sass library within Forge by deferring to a library of pre-defined and exposed mixins, variables, functions... etc.
+
+> Along with this work we intend to refactor any components that currently rely on light DOM to use shadow DOM instead. We had reasons for using 
+> light DOM for certain components originally, but our stance has changed on this over the years to favor encapsulation vs. exposing native elements.
+
+### Architecture, patterns, and APIs
+
+One of our long term goals for Forge components is to review our architecture patterns and APIs. We would like Forge components to be more extensible
+and support a plugin system, as well as support global configuration flags. This would be make overriding default built-in functionality more feasible
+for our consumers, as well as allow for introducing new functionality via plugins. We understand this can open us up to concerns about maintenance in
+the future, but it's something we'd like to at least partially support depending on where we choose to use it.
+
+## Proposals
+
+See our [proposals discussion](https://github.com/tyler-technologies-oss/forge/discussions/61) in GitHub for more information about specific details
+regarding features and plans for our next release.
+
+We do not currently have a release date for 3.0 scheduled quite yet, but we will provide status updates on that as we begin work.
+
+</PageSection>

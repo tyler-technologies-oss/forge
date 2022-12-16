@@ -93,6 +93,8 @@ You can use the built-in themes via attribute. If you need a custom color, see t
 | Name                           | Description
 | :------------------------------| :----------------
 | `default`                      | The default (unnamed) slot will render any content that is placed within the badge component element directly.
+| `leading`                      | The leading slot for content to render before the default slot. This is typically an icon element.
+| `trailing`                     | The trailing slot for content to render after the default slot. This is typically an icon element.
 
 </PageSection>
 
@@ -121,5 +123,15 @@ You can use the built-in themes via attribute. If you need a custom color, see t
 | `--forge-badge-theme-default-muted-color`       | Controls the font-color when using the muted themes.
 | `--forge-badge-theme-default-strong-color`      | Controls the font-color when using the strong themes.
 | `--forge-badge-border`                          | Controls the border style of the internal container element.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- If necessary, include a `role` attribute to indicate to screen readers what the badge is being used for.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.1 requirements.
+- If color conveys important information, provide additional cues for users with color perception deficiencies such as an icon.
 
 </PageSection>

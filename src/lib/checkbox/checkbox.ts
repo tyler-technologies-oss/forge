@@ -19,6 +19,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-checkbox>` element.
+ * 
+ * @tag forge-checkbox
  */
 @CustomElement({
   name: CHECKBOX_CONSTANTS.elementName

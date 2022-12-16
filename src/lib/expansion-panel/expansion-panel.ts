@@ -29,6 +29,8 @@ declare global {
 
 /**
  * A web component that encapsulates the functionality of expanding/collapsing content when clicked.
+ * 
+ * @tag forge-expansion-panel
  */
 @CustomElement({
   name: EXPANSION_PANEL_CONSTANTS.elementName

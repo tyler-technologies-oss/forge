@@ -349,6 +349,31 @@ describe('MenuComponent', function(this: ITestContext) {
         expect(listItems[index].textContent).toBe(`Custom option: ${option.label}`);
       });
     });
+
+    it('should reset options with leading icon if set while dropdown is open', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      const options = generateMenuOptions(1);
+
+      await tick();
+
+      this.context.component.options = options;
+      this.context.component.open = true;
+
+      await tick();
+
+      const newOptions = generateMenuOptions(1);
+      newOptions[0].icon = 'code';
+      this.context.component.options = newOptions;
+
+      await tick();
+
+      const list = getPopupList(getPopupElement());
+      const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
+      const leadingIconEl = listItems[0].querySelector('i[slot=leading]');
+
+      expect(leadingIconEl).toBeTruthy();
+      expect(leadingIconEl?.textContent).toBe('code');
+    });
   });
 
   describe(`events`, function(this: ITestContext) {

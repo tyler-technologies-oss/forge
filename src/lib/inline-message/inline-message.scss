@@ -8,6 +8,10 @@
 @include mixins.theme('info-primary');
 @include mixins.theme('info-secondary');
 
+:host {
+  display: block;
+}
+
 :host([hidden]) {
   display: none;
 }

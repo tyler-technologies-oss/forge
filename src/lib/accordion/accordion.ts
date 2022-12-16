@@ -20,6 +20,8 @@ declare global {
  * 
  * This component is intended to wrap and orchestrate child expansion panels
  * so that only one expansion panel is open at a time.
+ * 
+ * @tag forge-accordion
  */
 @CustomElement({
   name: ACCORDION_CONSTANTS.elementName,

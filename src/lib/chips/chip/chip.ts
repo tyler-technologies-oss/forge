@@ -14,7 +14,7 @@ export interface IChipComponent extends IBaseComponent {
   selected: boolean;
   disabled: boolean;
   invalid: boolean;
-  value: string;
+  value: any;
   dense: boolean;
   emulateFocus: boolean;
 }
@@ -32,6 +32,8 @@ declare global {
 
 /**
  * The custom element class behind the `<forge-chip>` component.
+ * 
+ * @tag forge-chip
  */
 @CustomElement({
   name: CHIP_CONSTANTS.elementName,
@@ -110,7 +112,7 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
 
   /** Gets/sets the chip value. */
   @FoundationProperty()
-  public value: string;
+  public value: any;
 
   /** Gets/sets the dense state of the chip. */
   @FoundationProperty()

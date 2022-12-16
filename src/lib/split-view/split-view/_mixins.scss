@@ -1,0 +1,43 @@
+@use '../../theme/theme';
+
+@mixin core-styles() {
+  .forge-split-view {
+    @include base;
+  }
+}
+
+@mixin horizontal-styles() {
+  .forge-split-view {
+    @include base-horizontal;
+  }
+}
+
+@mixin vertical-styles() {
+  .forge-split-view {
+    @include base-vertical;
+  }
+}
+
+@mixin host() {
+  --forge-split-view-handle-width: 8px;
+
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  contain: paint size;
+}
+
+@mixin base() {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin base-horizontal() {
+  flex-direction: row;
+}
+
+@mixin base-vertical() {
+  flex-direction: column;
+}

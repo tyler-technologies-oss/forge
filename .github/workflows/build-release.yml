@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Prepare Repository
         # Fetch full git history and tags
@@ -37,7 +37,7 @@ jobs:
 
       - name: Cache Dependencies
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -49,14 +49,14 @@ jobs:
             ${{ runner.os }}-
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "16"
 
       - name: Install
         id: install
         run: |
-          npm ci
+          npm ci --ignore-scripts
 
       ## Determine if this is a release build or not, which will affect which dependent jobs run below
       - name: Detect Release Status
@@ -68,10 +68,12 @@ jobs:
           ## We use `auto version` to calculate whether this is a release build or not
           VERSION_RESULT=$(npx auto version)
           echo "Version calculation result: ${VERSION_RESULT}"
-          if [[ "${VERSION_RESULT}" =~ ^(premajor|preminor|prepatch)$ ]]; then
-            echo "::set-output name=release::true"
+          if [[ "${VERSION_RESULT}" =~ ^(major|minor|patch|release)$ ]]; then
+            echo "Release: true"
+            echo "release=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=release::false"
+            echo "Release: false"
+            echo "release=false" >> $GITHUB_OUTPUT
           fi
 
       ## Detect if any specific files we care about have changed to help us know if we need to execute a CI build or Storybook deployment at all or not
@@ -105,7 +107,7 @@ jobs:
   build:
     name: Build and Test
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v1.0.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.1.1
     if: ${{ needs.wf-config.outputs.is-release == 'false' && (needs.wf-config.outputs.build-files-changed == 'true' || needs.wf-config.outputs.test-files-changed == 'true') }}
     with:
       BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}
@@ -117,11 +119,13 @@ jobs:
   build-and-release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-release.yml@v1.0.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-release.yml@v2.1.1
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       PRODUCTION_RELEASE: true
       TESTS_ENABLED: false
+      PACKAGE_ASSETS_ARCHIVE_PATH: "dist/deployment-assets.tar.gz"
+      PACKAGE_ASSETS_ENABLED: true
     secrets:
       GITHUB_APP_ID: ${{ secrets.FORGE_AUTOBOT_ID }}
       GITHUB_APP_KEY: ${{ secrets.FORGE_AUTOBOT_SECRET }}
@@ -131,7 +135,7 @@ jobs:
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v1.0.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.1.1
     if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true

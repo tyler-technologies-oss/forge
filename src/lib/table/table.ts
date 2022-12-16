@@ -1,6 +1,7 @@
 import { coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconArrowDownward } from '@tylertech/tyler-icons/standard';
 import { ExpansionPanelComponent } from '../expansion-panel';
+import { CheckboxComponent } from '../checkbox';
 import { TableAdapter } from './table-adapter';
 import { TABLE_CONSTANTS } from './table-constants';
 import { TableFoundation } from './table-foundation';
@@ -41,7 +42,7 @@ export interface ITableComponent extends IBaseComponent {
   minResizeWidth: number;
   allowRowClick: boolean;
   multiColumnSort: boolean;
-  selectCheckboxAlignment: CellAlign;
+  selectCheckboxAlignment: `${CellAlign}`;
   tooltipSelect: string | TableSelectTooltipCallback;
   tooltipSelectAll: string;
   rowCreated: TableRowCreatedCallback;
@@ -82,13 +83,16 @@ declare global {
 }
 
 /**
- * The custom element class behind the `forge-table` component.
+ * The custom element class behind the `<forge-table>` component.
+ * 
+ * @tag forge-table
  */
 @CustomElement({
   name: TABLE_CONSTANTS.elementName,
   dependencies: [
     ExpansionPanelComponent,
-    IconComponent
+    IconComponent,
+    CheckboxComponent
   ]
 })
 export class TableComponent extends BaseComponent implements ITableComponent {
@@ -385,5 +389,5 @@ export class TableComponent extends BaseComponent implements ITableComponent {
   public selectAllTemplate: TableHeaderSelectAllTemplate;
 
   @FoundationProperty()
-  public selectCheckboxAlignment: CellAlign;
+  public selectCheckboxAlignment: `${CellAlign}`;
 }

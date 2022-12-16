@@ -747,7 +747,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(this.context.component.popupElement).not.toBeNull();
     });
 
-    it('should activate first option if opened via down arrow key', async function(this: ITestContext) {
+    it('should activate first option if opened via down arrow key when there is no option selected', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       this.context.input.focus();
@@ -758,6 +758,21 @@ describe('AutocompleteComponent', function(this: ITestContext) {
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
       expect(activeListItemIndex).toBe(0);
+    });
+
+    it('should activate selected option if opened via down arrow key when there is a selected option', async function(this: ITestContext) {
+      const expectedSelectedIndex = 1;
+      this.context = setupTestContext(true);
+      this.context.component.value = DEFAULT_FILTER_OPTIONS[expectedSelectedIndex].value;
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.input.focus();
+
+      this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      await tick();
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+
+      const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
+      expect(activeListItemIndex).toBe(expectedSelectedIndex);
     });
 
     it('should activate first option when filtering', async function(this: ITestContext) {

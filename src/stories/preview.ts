@@ -3,7 +3,7 @@ import { addForgeDocsCoreStyles } from './forge-react-style-helper';
 import { defineComponents } from '../lib';
 import { StorybookMdxComponents } from './StorybookMdxProvider';
 import forgeTheme from './forge-theme';
-import { themes } from "@storybook/theming";
+import { themes } from '@storybook/theming';
 
 defineComponents();
 addDefaultForgeTheme();
@@ -24,11 +24,14 @@ export const parameters = {
         'Guides',
         [
           'Getting started',
-          'Theming',
           'Typography',
+          'Theming',
           'Using icons',
           'Component customization',
-          'Sass library'
+          'Sass library',
+          'CSS custom properties',
+          'Accessibility',
+          'Framework usage',
         ],
         'Components',
         'Contributing',
@@ -36,13 +39,14 @@ export const parameters = {
           'Guiding principles',
           'Component architecture',
           'Component tutorial'
-        ]
+        ],
+        'About'
       ],
       method: 'alphabetical'
     },
   },
   docs: {
-    components: {...StorybookMdxComponents},
+    components: {...StorybookMdxComponents}
   },
   darkMode: {
     light: {

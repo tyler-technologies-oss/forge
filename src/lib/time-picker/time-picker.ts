@@ -23,20 +23,21 @@ import template from './time-picker.html';
 import styles from './time-picker.scss';
 
 export interface ITimePickerComponent extends IBaseComponent {
-  value: string | null;
+  value: string | null | undefined;
   open: boolean;
   allowSeconds: boolean;
   masked: boolean;
   showMaskFormat: boolean;
   use24HourTime: boolean;
   allowInvalidTime: boolean;
-  min: string | null;
-  max: string | null;
+  min: string | null | undefined;
+  max: string | null | undefined;
   restrictedTimes: string[];
-  startTime: string | null;
+  startTime: string | null | undefined;
   step: number;
   allowInput: boolean;
   showNow: boolean;
+  showHourOptions: boolean;
   customOptions: ITimePickerOption[];
   validationCallback: TimePickerValidationCallback;
   parseCallback: TimePickerParseCallback;
@@ -62,6 +63,11 @@ declare global {
   }
 }
 
+/**
+ * The web component class behind the `<forge-time-picker>` custom element.
+ * 
+ * @tag forge-time-picker
+ */
 @CustomElement({
   name: TIME_PICKER_CONSTANTS.elementName,
   dependencies: [
@@ -90,6 +96,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
       TIME_PICKER_CONSTANTS.attributes.STEP,
       TIME_PICKER_CONSTANTS.attributes.ALLOW_INPUT,
       TIME_PICKER_CONSTANTS.attributes.SHOW_NOW,
+      TIME_PICKER_CONSTANTS.attributes.SHOW_HOUR_OPTIONS,
       TIME_PICKER_CONSTANTS.attributes.DISABLED,
       TIME_PICKER_CONSTANTS.attributes.POPUP_CLASSES,
       TIME_PICKER_CONSTANTS.attributes.ALLOW_DROPDOWN
@@ -143,6 +150,9 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
       case TIME_PICKER_CONSTANTS.attributes.SHOW_NOW:
         this.showNow = coerceBoolean(newValue);
         break;
+      case TIME_PICKER_CONSTANTS.attributes.SHOW_HOUR_OPTIONS:
+        this.showHourOptions = coerceBoolean(newValue);
+        break;
       case TIME_PICKER_CONSTANTS.attributes.MIN:
         this.min = newValue;
         break;
@@ -171,7 +181,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   }
 
   @FoundationProperty()
-  public value: string | null;
+  public value: string | null | undefined;
 
   @FoundationProperty()
   public open: boolean;
@@ -192,16 +202,16 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   public allowInvalidTime: boolean;
 
   @FoundationProperty()
-  public min: string | null;
+  public min: string | null | undefined;
 
   @FoundationProperty()
-  public max: string | null;
+  public max: string | null | undefined;
 
   @FoundationProperty()
   public restrictedTimes: string[];
 
   @FoundationProperty()
-  public startTime: string | null;
+  public startTime: string | null | undefined;
 
   @FoundationProperty()
   public step: number;
@@ -211,6 +221,10 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
 
   @FoundationProperty()
   public showNow: boolean;
+
+  /** Whether or not to display hour options in dropdown */
+  @FoundationProperty()
+  public showHourOptions: boolean;
 
   @FoundationProperty()
   public customOptions: ITimePickerOption[];

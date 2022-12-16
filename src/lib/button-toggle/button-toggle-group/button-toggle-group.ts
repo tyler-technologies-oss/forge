@@ -2,7 +2,7 @@ import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty 
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ButtonToggleComponent } from '../button-toggle/button-toggle';
 import { ButtonToggleGroupAdapter } from './button-toggle-group-adapter';
-import { BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleOption } from './button-toggle-group-constants';
+import { BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData, IButtonToggleOption } from './button-toggle-group-constants';
 import { ButtonToggleGroupFoundation } from './button-toggle-group-foundation';
 
 import template from './button-toggle-group.html';
@@ -23,8 +23,17 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-button-toggle-group': IButtonToggleGroupComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-button-toggle-group-change': CustomEvent<IButtonToggleGroupChangeEventData>;
+  }
 }
 
+/**
+ * The web component class behind the `<forge-button-toggle-group>` custom element.
+ * 
+ * @tag forge-button-toggle-group
+ */
 @CustomElement({
   name: BUTTON_TOGGLE_GROUP_CONSTANTS.elementName,
   dependencies: [ButtonToggleComponent]

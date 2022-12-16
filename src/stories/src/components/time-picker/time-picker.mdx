@@ -156,6 +156,12 @@ Gets/sets whether an option called "Now" (for setting the value to the current t
 
 </PropertyDef>
 
+<PropertyDef name="showHourOptions" type="boolean" defaultValue="true">
+
+Gets/sets whether to display the hour options in the dropdown list.
+
+</PropertyDef>
+
 <PropertyDef name="customOptions" type="ITimePickerOption[]" attr={false} defaultValue="[]">
 
 Gets/sets the custom options that are displayed at the top of the dropdown list.
@@ -277,6 +283,24 @@ The time-picker component itself does not provide any CSS custom properties beca
 | `default`                   | The default (unnamed) slot can accept any content, but must contain an `<input>` element.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- When using a screen reader, ensure keyboard navigation in the dropdown list is announced.
+- Be sure that you add the proper `aria-label` to the `<input>` element if not using a `<label>` element with a `for` attribute.
+- The time-picker component will add the following ARIA attributes to the `<input>` element for you:
+  - `aria-live`
+  - `aria-atomic`
+  - `aria-haspopup`
+  - `aria-expanded`
+  - `aria-owns`
+  - `aria-disabled`
+
+</PageSection>
+
+---
 
 <PageSection>
 

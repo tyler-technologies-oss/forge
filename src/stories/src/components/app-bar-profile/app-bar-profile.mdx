@@ -5,7 +5,7 @@ import { AppBarProfileButtonDefaultCodeHtml, AppBarProfileButtonDefaultCodeTs } 
 
 # App Bar Profile
 
-For convenience Forge provides the `<forge-profile-button>` component. This component uses an icon-button
+For convenience Forge provides the `<forge-app-bar-profile-button>` component. This component uses an icon-button
 (with a predefined avatar), and is responsible for displaying profile information within a popup. The power of
 this component is that it will ensure a consistent experience for users across all applications that consume it.
 
@@ -98,6 +98,18 @@ profileButton.profileCardBuilder = () => {
 
 </PropertyDef>
 
+<PropertyDef name="signOutButtonText" type="string" defaultValue="'Sign out'">
+
+  Gets/sets the sign out button text.
+
+</PropertyDef>
+
+<PropertyDef name="profileButtonText" type="string" defaultValue="'Profile'">
+
+  Gets/sets the profile button text.
+
+</PropertyDef>
+
 <PropertyDef name="profileCardBuilder" type="AppBarProfileButtonProfileCardBuilder" defaultValue="undefined">
 
   The callback that can be used to provide custom content within the profile card.
@@ -141,6 +153,16 @@ profileButton.profileCardBuilder = () => {
 
 <PageSection>
 
+## Accessibility
+
+- The component will handle adding necessary ARIA attributes for you, as well as ensure the proper color contrast ratio is used.
+
+</PageSection>
+
+---
+
+<PageSection>
+
 ## Types
 
 ### IProfileCardConfig
@@ -151,6 +173,8 @@ interface IAppBarProfileCardConfig {
   email: string;
   signOut: boolean;
   profile: boolean;
+  signOutButtonText: string;
+  profileButtonText: string;
   avatarText: string;
   avatarImageUrl: string;
   avatarLetterCount: number;

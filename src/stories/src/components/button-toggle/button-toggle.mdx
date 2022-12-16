@@ -140,7 +140,7 @@ Gets/sets the dense state.
 
 | Name                               | Description
 | :----------------------------------| :----------------
-| `forge-button-toggle-group-change`   | Emits when the selected state of the gruop is changed.
+| `forge-button-toggle-group-change`   | Emits when the selected state of the group is changed.
 
 </PageSection>
 
@@ -211,6 +211,24 @@ Gets/sets the dense state.
 | `--forge-button-toggle-border-bottom-right-radius` | Controls the border-bottom-right-radius.
 
 </PageSection>
+
+<PageSection>
+
+## Accessibility
+
+* The component will present itself as either checkboxes or radio buttons based on the presence of the `multiple` attribute.
+* For button toggles containing only icons, each button toggle should be given a meaningful label via `aria-label` or `aria-labelledby`.
+* For button toggle groups, each group should be given a meaningful label via `aria-label` or `aria-labelledby`.
+* Verify that you can tab to each button toggle component.
+* Verify that you can tab to each part of a grouped set of button toggles.
+* Verify that pressing the space bar or enter key will activate (or toggle) the currently focused option.
+* Ensure that there is a visual cue that distinctly indicates which toggles are active and inactive.
+* Ensure that active, inactive, and focused states are visually distinct.
+* Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+
+</PageSection>
+
+---
 
 <PageSection>
 
