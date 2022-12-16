@@ -8,6 +8,7 @@ import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group';
 import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants';
 import { isOptionGroupObject } from './select-utils';
 import { IPopupComponent, POPUP_CONSTANTS } from '../../popup';
+import { assignMatchingProperties } from '../../core/utils/utils';
 
 export interface IBaseSelectAdapter extends IBaseAdapter {
   initializeAccessibility(): void;
@@ -211,18 +212,16 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
   }
 
   private _createOptionGroupElement(group: ISelectOptionGroup): HTMLElement {
-    const optionGroupElement = document.createElement(OPTION_GROUP_CONSTANTS.elementName) as IOptionGroupComponent;
-    optionGroupElement.label = group.text || '';
+    const optionGroupElement = document.createElement('forge-option-group');
+    assignMatchingProperties(group, optionGroupElement);
+    optionGroupElement.label = group.text ?? '';
     return optionGroupElement;
   }
 
   private _createOptionElement(option: ISelectOption): HTMLElement {
-    const optionElement = document.createElement(OPTION_CONSTANTS.elementName) as IOptionComponent;
-    optionElement.value = option.value;
+    const optionElement = document.createElement('forge-option');
+    assignMatchingProperties(option, optionElement);
     optionElement.textContent = option.label;
-    if (option.disabled) {
-      optionElement.disabled = option.disabled;
-    }
     return optionElement;
   }
 }

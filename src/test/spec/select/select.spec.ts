@@ -10,7 +10,8 @@ import {
   SelectOptionBuilder,
   defineOptionComponent,
   defineOptionGroupComponent,
-  BASE_SELECT_CONSTANTS
+  BASE_SELECT_CONSTANTS,
+  OPTION_GROUP_CONSTANTS
 } from '@tylertech/forge/select';
 import { POPUP_CONSTANTS, IPopupComponent } from '@tylertech/forge/popup';
 import { LIST_ITEM_CONSTANTS, IListItemComponent } from '@tylertech/forge/list/list-item';
@@ -1304,6 +1305,44 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.options = options;
       await tick();
       expect(this.context.component.querySelectorAll(OPTION_CONSTANTS.elementName).length).toBe(3);
+    });
+
+    it('should apply option and option-group configuration to elements when setting options via property', async function(this: ITestContext) {        
+      this.context = setupTestContext(true);
+      this.context.component.value = 'one';
+      await tick();
+      
+      await tick();
+      this.context.component.options = [
+        {
+          text: '',
+          options: [
+            { label: 'option-1', value: 1, disabled: true, leadingBuilder: () => document.createElement('div'), metadata: 'test-meta' } as any,
+          ]
+        },
+        {
+          text: 'group',
+          options: [
+            { label: 'option-2', value: 2 },
+            { label: 'option-3', value: 3, optionClass: 'test-cls' }
+          ]
+        }
+      ];
+      await tick();
+
+      const optionGroupElements = this.context.component.querySelectorAll(OPTION_GROUP_CONSTANTS.elementName);
+      const optionElements = this.context.component.querySelectorAll(OPTION_CONSTANTS.elementName);
+
+      expect(optionGroupElements[0].label).toBe('');
+      expect(optionGroupElements[1].label).toBe('group');
+
+      expect(optionElements[0].label).toBe('option-1');
+      expect(optionElements[0].disabled).toBeTrue();
+      expect(optionElements[0].leadingBuilder).toBeTruthy();
+      expect('metadata' in optionElements[0]).toBeFalse();
+
+      expect(optionElements[2].label).toBe('option-3');
+      expect(optionElements[2].optionClass).toEqual(['test-cls']);
     });
 
     it('should set value and selected text correctly when options are set via property', async function(this: ITestContext) {
