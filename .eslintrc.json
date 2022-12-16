@@ -48,7 +48,7 @@
         "arrow-body-style": "off",
         "@typescript-eslint/arrow-body-style": "off",
         "@typescript-eslint/no-require-imports": "error",
-        "eqeqeq": ["error", "always"]
+        "eqeqeq": ["error", "always", {"null": "ignore"}]
       }
     }
   ]
