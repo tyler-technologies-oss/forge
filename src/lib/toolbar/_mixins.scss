@@ -21,8 +21,8 @@
 }
 
 @mixin inverted() {
-  border-top-width: 1px;
-  border-top-style: solid;
+  @include theme.css-custom-property(border-top, --forge-toolbar-border-top, variables.$border-bottom);
+
   border-bottom: none;
 }
 
