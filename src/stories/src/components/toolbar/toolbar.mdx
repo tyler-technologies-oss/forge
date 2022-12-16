@@ -36,6 +36,12 @@ Controls whether a border bottom (default) or top (true) is used.
 
 </PropertyDef>
 
+<PropertyDef prop={false} name="no-border" type="string">
+
+Disables the internal `border-top` or `border-bottom` styles. **This can only be applied via an attribute**.
+
+</PropertyDef>
+
 </PageSection>
 
 <PageSection>
@@ -75,6 +81,7 @@ Controls whether a border bottom (default) or top (true) is used.
 | `--forge-toolbar-min-height`                  | Controls the minimum height.
 | `--forge-toolbar-padding`                     | Controls the left and right padding.
 | `--forge-toolbar-border-bottom`               | Controls the style for the bottom border. Can be set to "none" for no border.
+| `--forge-toolbar-border-top`                  | Controls the style for the top border. Can be set to "none" for no border. **only applies when inverted.**
 | `--forge-toolbar-border-top-left-radius`      | Sets the top left border radius.
 | `--forge-toolbar-border-top-right-radius`     | Sets the top right border radius.
 | `--forge-toolbar-border-bottom-left-radius`   | Sets the bottom left border radius.

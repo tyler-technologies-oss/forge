@@ -11,6 +11,12 @@
   display: none;
 }
 
+:host([no-border]) {
+  .forge-toolbar {
+    border: none;
+  }
+}
+
 /// Remove margin from all commonly used native elements that have default margin
 .forge-toolbar {
   ::slotted(h1) { margin: 0; }
