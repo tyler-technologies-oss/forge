@@ -1,3 +1,17 @@
+# v2.12.0 (Tue Jan 03 2023)
+
+#### 🐛 Bug Fix
+
+- fix(split-view): avoid updating size and accessibility of closed panels [#202](https://github.com/tyler-technologies-oss/forge/pull/202) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- docs(split-view): add JSDoc for manifest [#205](https://github.com/tyler-technologies-oss/forge/pull/205) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 2
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.11.0 (Tue Dec 06 2022)
 
 :tada: This release contains work from a new contributor! :tada:
