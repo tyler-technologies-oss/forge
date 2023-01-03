@@ -24,6 +24,11 @@ declare global {
   }
 }
 
+/**
+ * The custom element class behind the `<forge-split-view>` element.
+ * 
+ * @tag forge-split-view
+ */
 @CustomElement({
   name: SPLIT_VIEW_CONSTANTS.elementName,
   dependencies: [SplitViewPanelComponent]
