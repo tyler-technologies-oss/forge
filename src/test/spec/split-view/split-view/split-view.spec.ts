@@ -1,6 +1,6 @@
 import { removeElement } from '@tylertech/forge-core';
 import { tick } from '@tylertech/forge-testing';
-import { defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_CONSTANTS } from '@tylertech/forge/split-view';
+import { defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_CONSTANTS, SPLIT_VIEW_PANEL_CONSTANTS } from '@tylertech/forge/split-view';
 
 interface ITestContext {
   context: ITestSplitViewContext;
@@ -165,6 +165,19 @@ describe('SplitViewComponent', function(this: ITestContext) {
       this.context.component.parentElement!.style.width = '400px';
       await tick();
       expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not update size of closed panels on resize', async function(this: ITestContext) {
+      this.context = setupTestContext(true, 2);
+      await tick();
+      this.context.component.style.width = '400px';
+      this.context.panels![1].size = '50%'
+      this.context.panels![1].open = false;
+      await tick();
+      this.context.component.style.width = '200px';
+      await tick();
+      const size = this.context.panels![1].style.getPropertyValue(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.SIZE);
+      expect(size).not.toBe('0px');
     });
   });
 
