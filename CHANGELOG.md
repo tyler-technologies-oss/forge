@@ -1,3 +1,15 @@
+# v2.12.1 (Wed Jan 04 2023)
+
+#### 🐛 Bug Fix
+
+- Fix/popup position [#208](https://github.com/tyler-technologies-oss/forge/pull/208) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.12.0 (Tue Jan 03 2023)
 
 #### 🐛 Bug Fix
