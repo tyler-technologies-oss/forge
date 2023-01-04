@@ -7,6 +7,8 @@ import { SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from './split-view-constan
 
 export interface ISplitViewAdapter extends IBaseAdapter {
   registerSlotListener(listener: (evt: Event) => void): void;
+  registerDidOpenListener(listener: () => void): void;
+  registerDidCloseListener(listener: () => void): void;
   observeResize(callback: (entry: ResizeObserverEntry) => void): void;
   unobserveResize(): void;
   getSlottedPanels(): ISplitViewPanelComponent[];
@@ -23,6 +25,14 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
 
   public registerSlotListener(listener: (evt: Event) => void): void {
     this._root.addEventListener('slotchange', listener);
+  }
+
+  public registerDidOpenListener(listener: () => void): void {
+    this._root.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN, listener);
+  }
+
+  public registerDidCloseListener(listener: () => void): void {
+    this._root.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, listener);
   }
 
   public observeResize(callback: (entry: ResizeObserverEntry) => void): void {
@@ -61,7 +71,7 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
     let diff = combinedPanelSize - size;
 
     // Size down the panels as needed in reverse order, adjusting diff accordingly
-    panels.reverse().forEach(panel => {
+    panels.slice().reverse().forEach(panel => {
       if (diff <= 0) {
         return;
       }

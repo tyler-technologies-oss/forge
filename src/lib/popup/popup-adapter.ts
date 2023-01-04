@@ -63,6 +63,13 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
   public addPopup(targetElement: HTMLElement, manageFocus: boolean): void {
     this._component.setAttribute('tabindex', '-1');
     this._component.setAttribute(POPUP_CONSTANTS.attributes.HOST, '');
+
+    // Set initial position to top-left of the host element while we wait for positioning.
+    // This ensures that the element is not visible, nor does it affect layouts before it
+    // is properly moved into its expected location.
+    this._component.style.top = '0';
+    this._component.style.left = '0';
+
     const hostDocument = targetElement.ownerDocument || document;
     this._hostElement = (closestElement(POPUP_CONSTANTS.selectors.HOST, targetElement) as HTMLElement) || hostDocument.body;
     this._hostElement.appendChild(this._component);

@@ -44,6 +44,11 @@ declare global {
   }
 }
 
+/**
+ * The custom element class behind the `<forge-split-view-panel>` element.
+ * 
+ * @tag forge-split-view-panel
+ */
 @CustomElement({
   name: SPLIT_VIEW_PANEL_CONSTANTS.elementName,
   dependencies: [

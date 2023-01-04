@@ -739,7 +739,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     }
 
     // Size
-    if (config.size) {
+    if (config.size && this.open) {
       const parentSize = this._adapter.getParentSize(this._orientation);
       this._pixelMin = getPixelDimension(this._min, parentSize);
       this._pixelMax = isDefined(this._max) ? getPixelDimension(this._max as number | string, parentSize) : undefined;
@@ -755,7 +755,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     const availableSpace = this._adapter.getAvailableSpace(this._orientation, this._resizable);
 
     // Accessibility
-    if (config.accessibility) {
+    if (config.accessibility && this.open) {
       const valueNow = getValuenow(size, { ...this._state, availableSpace });
       this._adapter.setValuenow(valueNow);
     }
