@@ -12,7 +12,7 @@ export interface IDialogAdapter extends IBaseAdapter {
   initializeAccessibility(): void;
   setAnimating(animating: boolean): void;
   setVisibility(visible: boolean): void;
-  attach(): void;
+  attach(parent?: HTMLElement): void;
   detach(): void;
   setDocumentListener(type: string, listener: (evt: Event) => void): void;
   removeDocumentListener(type: string, listener: (evt: Event) => void): void;
@@ -33,7 +33,7 @@ export interface IDialogAdapter extends IBaseAdapter {
   setMoveTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
   removeDragTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
   getSurfaceBounds(): DOMRect;
-  setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType): void;
+  setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType | null): void;
   captureActiveElement(): void;
   tryRestoreActiveElement(): void;
 }
@@ -42,7 +42,7 @@ export interface IDialogAdapter extends IBaseAdapter {
  * Provides facilities for interacting with the internal DOM of `DialogComponent`.
  */
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
-  private _backdropElement: IBackdropComponent;
+  private _backdropElement?: IBackdropComponent;
   private _containerElement: HTMLElement;
   private _surfaceElement: HTMLElement;
   private _moveTargetElement: HTMLElement | null;
@@ -50,7 +50,6 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   constructor(component: IDialogComponent) {
     super(component);
-    this._backdropElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.BACKDROP) as IBackdropComponent;
     this._containerElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.CONTAINER);
     this._surfaceElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.SURFACE);
   }
@@ -63,23 +62,27 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public setAnimating(animating: boolean): void {
-    if (animating) {
-      this._containerElement.classList.add(DIALOG_CONSTANTS.classes.ANIMATING);
-    } else {
-      this._containerElement.classList.remove(DIALOG_CONSTANTS.classes.ANIMATING);
-    }
+    toggleClass(this._containerElement, animating, DIALOG_CONSTANTS.classes.ANIMATING);
   }
 
   public setVisibility(visible: boolean): void {
+    toggleClass(this._containerElement, visible, DIALOG_CONSTANTS.classes.OPEN);
+
+    if (!this._backdropElement) {
+      this._backdropElement = document.createElement('forge-backdrop');
+      this._backdropElement.setAttribute('part', 'scrim');
+      this._containerElement.appendChild(this._backdropElement);
+    }
+    
     if (visible) {
-      this._containerElement.classList.add(DIALOG_CONSTANTS.classes.OPEN);
+      this._backdropElement.fadeIn();
     } else {
-      this._containerElement.classList.remove(DIALOG_CONSTANTS.classes.OPEN);
+      this._backdropElement.fadeOut();
     }
   }
 
-  public attach(): void {
-    document.body.appendChild(this._component);
+  public attach(parent: HTMLElement = document.body): void {
+    parent.appendChild(this._component);
   }
 
   public detach(): void {
@@ -106,11 +109,11 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public registerBackdropClickHandler(handler: (evt: CustomEvent) => void): void {
-    this._backdropElement.addEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
+    this._backdropElement?.addEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
   }
 
   public deregisterBackdropClickHandler(handler: (evt: CustomEvent) => void): void {
-    this._backdropElement.removeEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
+    this._backdropElement?.removeEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
   }
 
   public getOpenDialogs(selector: string): NodeListOf<HTMLElement> {
@@ -146,11 +149,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public setFullscreen(value: boolean): void {
-    if (value) {
-      this._containerElement.classList.add(DIALOG_CONSTANTS.classes.FULLSCREEN);
-    } else {
-      this._containerElement.classList.remove(DIALOG_CONSTANTS.classes.FULLSCREEN);
-    }
+    toggleClass(this._containerElement, value, DIALOG_CONSTANTS.classes.FULLSCREEN);
   }
 
   public setMoveable(value: boolean): void {
@@ -172,29 +171,31 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public setMoveTargetHandler(type: string, listener: (evt: MouseEvent) => void): void {
-    if (this._moveTargetElement) {
-      this._moveTargetElement.addEventListener(type, listener);
-    }
+    this._moveTargetElement?.addEventListener(type, listener);
   }
 
   public removeDragTargetHandler(type: string, listener: (evt: MouseEvent) => void): void {
-    if (this._moveTargetElement) {
-      this._moveTargetElement.removeEventListener(type, listener);
-    }
+    this._moveTargetElement?.removeEventListener(type, listener);
   }
 
   public getSurfaceBounds(): DOMRect {
     return this._surfaceElement.getBoundingClientRect() as DOMRect;
   }
 
-  public setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType): void {
-    this._surfaceElement.style.position = positionType === 'absolute' ? positionType : 'relative';
-    if (y != null) {
+  public setSurfacePosition(x: string | null, y: string | null, positionType: DialogPositionType | null): void {
+    if (positionType) {
+      this._surfaceElement.style.position = positionType === 'absolute' ? positionType : 'relative';
+    } else {
+      this._surfaceElement.style.removeProperty('position');
+    }
+
+    if (y !== null) {
       this._surfaceElement.style.top = y;
     } else {
       this._surfaceElement.style.removeProperty('top');
     }
-    if (x != null) {
+
+    if (x !== null) {
       this._surfaceElement.style.left = x;
     } else {
       this._surfaceElement.style.removeProperty('left');
@@ -203,9 +204,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public captureActiveElement(): void {
     this._activeElement = getActiveElement() as HTMLElement;
-    if (this._activeElement) {
-      this._activeElement.blur();
-    }
+    this._activeElement?.blur();
   }
 
   public tryRestoreActiveElement(): void {

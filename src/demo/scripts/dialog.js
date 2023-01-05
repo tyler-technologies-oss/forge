@@ -1,6 +1,6 @@
 (function() {
   var dialogExample = document.querySelector('#Dialog');
-  var dialogTemplate = dialogExample.querySelector('#forge-dialog-template');
+  var dialogElement = dialogExample.querySelector('forge-dialog');
   var dialogTemplateToolbars = dialogExample.querySelector('#forge-dialog-template-toolbars');
   var dialogTemplateScrolling = dialogExample.querySelector('#forge-dialog-template-scrolling');
   var dialogFullscreenCheckbox = dialogExample.querySelector('#dialog-fullscreen');
@@ -23,114 +23,114 @@
     openDialogScrolling();
   })
   
-
-  function openDialog () {
-    var dialogElement = document.createElement('forge-dialog');
+  dialogFullscreenCheckbox.addEventListener('change', evt => {
     dialogElement.fullscreen = dialogFullscreenCheckbox.checked;
+  });
+  
+  dialogMoveCheckbox.addEventListener('change', evt => {
     dialogElement.moveable = dialogMoveCheckbox.checked;
+  });
+  
+  dialogCustomPositionCheckbox.addEventListener('change', evt => {
+    dialogElement.positionX = dialogCustomPositionCheckbox.checked ? 100 : null;
+    dialogElement.positionY = dialogCustomPositionCheckbox.checked ? 100 : null;
+  });
+  
+  var acceptButton = dialogElement.querySelector('#accept-button');
+  acceptButton.addEventListener('click', function() {
+    dialogElement.open = false;
+  });
 
-    if (dialogCustomPositionCheckbox.checked) {
-      dialogElement.positionX = 100;
-      dialogElement.positionY = 100;
+  var cancelButton = dialogElement.querySelector('#cancel-button');
+  cancelButton.addEventListener('click', function() {
+    dialogElement.open = false;
+  });
+
+  dialogElement.addEventListener('forge-dialog-close', function (evt) {
+    console.log('[dialogElement] forge-dialog-close');
+    dialogElement.open = false;
+  });
+
+  dialogElement.addEventListener('forge-dialog-ready', function (evt) {
+    console.log('[forge-dialog] ready');
+  });
+
+  dialogElement.addEventListener('forge-dialog-move', function (evt) {
+    console.log('[forge-dialog] move', evt.detail);
+    if (dialogMovedPreventCheckbox.checked) {
+      evt.preventDefault();
+      console.log('[forge-dialog] move prevented');
+      return;
     }
-    
-    var content = dialogTemplate.content.cloneNode(true);
-    dialogElement.appendChild(content);
-    
-    var acceptButton = dialogElement.querySelector('#accept-button');
-    acceptButton.addEventListener('click', function() {
-      dialogElement.open = false;
-    });
+  });
 
-    var cancelButton = dialogElement.querySelector('#cancel-button');
-    cancelButton.addEventListener('click', function() {
-      dialogElement.open = false;
-    });
+  dialogElement.addEventListener('forge-dialog-move-end', function (evt) {
+    console.log('[forge-dialog] move end');
+  });
 
-    dialogElement.addEventListener('forge-dialog-close', function (evt) {
-      dialogElement.open = false;
-      dialogElement = undefined;
-    });
-
-    dialogElement.addEventListener('forge-dialog-ready', function (evt) {
-      console.log('[forge-dialog] ready');
-    });
-
-    dialogElement.addEventListener('forge-dialog-move', function (evt) {
-      console.log('[forge-dialog] move', evt.detail);
-      if (dialogMovedPreventCheckbox.checked) {
-        evt.preventDefault();
-        console.log('[forge-dialog] move prevented');
-        return;
-      }
-    });
-
-    dialogElement.addEventListener('forge-dialog-move-end', function (evt) {
-      console.log('[forge-dialog] move end');
-    });
-
+  function openDialog() {
     dialogElement.open = true;
   }
 
   function openDialogToolbars () {
-    var dialogElement = document.createElement('forge-dialog');
-    dialogElement.fullscreen = dialogFullscreenCheckbox.checked;
-    dialogElement.moveable = dialogMoveCheckbox.checked;
+    var toolbarDialogElement = document.createElement('forge-dialog');
+    toolbarDialogElement.fullscreen = dialogFullscreenCheckbox.checked;
+    toolbarDialogElement.moveable = dialogMoveCheckbox.checked;
     
     var content = dialogTemplateToolbars.content.cloneNode(true);
-    dialogElement.appendChild(content);
+    toolbarDialogElement.appendChild(content);
     
-    var closeButton = dialogElement.querySelector('#close-button-toolbars');
+    var closeButton = toolbarDialogElement.querySelector('#close-button-toolbars');
     closeButton.addEventListener('click', function() {
-      dialogElement.open = false;
+      toolbarDialogElement.hide(true);
     })
 
-    var acceptButton = dialogElement.querySelector('#accept-button-toolbars');
+    var acceptButton = toolbarDialogElement.querySelector('#accept-button-toolbars');
     acceptButton.addEventListener('click', function() {
-      dialogElement.open = false;
+      toolbarDialogElement.hide(true);
     });
 
-    var cancelButton = dialogElement.querySelector('#cancel-button-toolbars');
+    var cancelButton = toolbarDialogElement.querySelector('#cancel-button-toolbars');
     cancelButton.addEventListener('click', function() {
-      dialogElement.open = false;
+      toolbarDialogElement.hide(true);
     });
 
-    dialogElement.addEventListener('forge-dialog-close', function (evt) {
-      dialogElement.open = false;
-      dialogElement = undefined;
+    toolbarDialogElement.addEventListener('forge-dialog-close', function (evt) {
+      console.log('[toolbarDialogElement] forge-dialog-close');
+      toolbarDialogElement.hide(true);
     });
 
-    dialogElement.open = true;
+    toolbarDialogElement.show();
   }
 
   function openDialogScrolling () {
-    var dialogElement = document.createElement('forge-dialog');
-    dialogElement.fullscreen = dialogFullscreenCheckbox.checked;
-    dialogElement.moveable = dialogMoveCheckbox.checked;
-    dialogElement.classList.add('forge-dialog--scrollable');
+    var scrollableDialogElement = document.createElement('forge-dialog');
+    scrollableDialogElement.fullscreen = dialogFullscreenCheckbox.checked;
+    scrollableDialogElement.moveable = dialogMoveCheckbox.checked;
+    scrollableDialogElement.classList.add('forge-dialog--scrollable');
 
     if (!dialogFullscreenCheckbox.checked) {
-      dialogElement.classList.add('forge-dialog--small');
+      scrollableDialogElement.classList.add('forge-dialog--small');
     }
     
     var content = dialogTemplateScrolling.content.cloneNode(true);
-    dialogElement.appendChild(content);
+    scrollableDialogElement.appendChild(content);
 
-    var acceptButton = dialogElement.querySelector('#accept-button-scrolling');
+    var acceptButton = scrollableDialogElement.querySelector('#accept-button-scrolling');
     acceptButton.addEventListener('click', function() {
-      dialogElement.open = false;
+      scrollableDialogElement.hide(true);
     });
 
-    var cancelButton = dialogElement.querySelector('#cancel-button-scrolling');
+    var cancelButton = scrollableDialogElement.querySelector('#cancel-button-scrolling');
     cancelButton.addEventListener('click', function() {
-      dialogElement.open = false;
+      scrollableDialogElement.hide(true);
     });
 
-    dialogElement.addEventListener('forge-dialog-close', function (evt) {
-      dialogElement.open = false;
-      dialogElement = undefined;
+    scrollableDialogElement.addEventListener('forge-dialog-close', function (evt) {
+      console.log('[scrollableDialogElement] forge-dialog-close');
+      scrollableDialogElement.hide(true);
     });
 
-    dialogElement.open = true;
+    scrollableDialogElement.show();
   }
 })();

@@ -9,7 +9,11 @@ interface ITestContext {
 
 interface ITestDialogContext {
   component: IDialogComponent;
+  open(): void;
+  close(): void;
+  append(): void;
   destroy(): void;
+  isVisible: boolean;
 }
 
 describe('DialogComponent', function(this: ITestContext) {
@@ -22,82 +26,84 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context.destroy();
   });
 
-  it('should be connected when opened', function(this: ITestContext) {
-    this.context = setupTestContext();
-    expect(this.context.component.isConnected).toBe(false);
-    this.context.component.open = true;
-    expect(this.context.component.isConnected).toBe(true);
+  it('should be visible when opened', async function(this: ITestContext) {
+    this.context = setupTestContext(true);
+    expect(this.context.isVisible).toBeFalse();
+    await this.context.open();
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('should have proper default values', function(this: ITestContext) {
-    this.context = setupTestContext();
-    expect(this.context.component.open).toBe(false, 'Expected open to be false');
-    expect(this.context.component.backdropClose).toBe(true, 'Expected backdropClose to be true');
-    expect(this.context.component.escapeClose).toBe(true, 'Expected escapeClose to be true');
+    this.context = setupTestContext(true);
+    expect(this.context.component.open).withContext('Expected open to be false').toBeFalse();
+    expect(this.context.component.backdropClose).withContext('Expected backdropClose to be true').toBeTrue();
+    expect(this.context.component.escapeClose).withContext('Expected escapeClose to be true').toBeTrue();
   });
 
-  it('should have proper accessibility attributes', function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.component.open = true;
+  it('should have proper accessibility attributes', async function(this: ITestContext) {
+    this.context = setupTestContext(true);
+    await this.context.open();
 
     expect(this.context.component.getAttribute('role')).toBe('dialog');
     expect(this.context.component.getAttribute('aria-modal')).toBe('true');
   });
 
-  it('should mirror properties as attributes', function(this: ITestContext) {
-    this.context = setupTestContext();
+  it('should mirror properties as attributes', async function(this: ITestContext) {
+    this.context = setupTestContext(true);
     this.context.component.backdropClose = false;
     this.context.component.escapeClose = false;
-    this.context.component.open = true;
+    await this.context.open();
 
     expect(this.context.component.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN)).withContext('Expected open attribute to be "true"').toBeTrue();
-    expect(this.context.component.getAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE)).toBe('false', 'Expected backdrop close attribute to be "false"');
-    expect(this.context.component.getAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE)).toBe('false', 'Expected escape close attribute to be "false"');
+    expect(this.context.component.getAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE)).withContext('Expected backdrop close attribute to be "false"').toBe('false');
+    expect(this.context.component.getAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE)).withContext('Expected escape close attribute to be "false"').toBe('false');
   });
 
-  it('should add attribute to body when opened', function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.component.open = true;
-    expect(document.body.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN)).toBe(true);
+  it('should add attribute to body when opened', async function(this: ITestContext) {
+    this.context = setupTestContext(true);
+    await this.context.open();
+    expect(document.body.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN)).toBeTrue();
   });
 
   it('should open and close', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.component.open = true;
+    this.context = setupTestContext(true);
+    await this.context.open();
     await tick();
-    expect(this.context.component.isConnected).toBe(true);
-    this.context.component.open = false;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    expect(this.context.component.isConnected).toBe(false);
+    expect(this.context.isVisible).toBeTrue();
+    await this.context.close();
+    await tick();
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('should close on backdrop click', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context = setupTestContext(true);
+    await this.context.open();
+
     const closeSpy = jasmine.createSpy('close');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeSpy);
+
     const backdropComponent = getShadowElement(this.context.component, DIALOG_CONSTANTS.selectors.BACKDROP);
     getShadowElement(backdropComponent, BACKDROP_CONSTANTS.selectors.CONTAINER).click();
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+
     expect(closeSpy).toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(false);
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('should not close on backdrop click', async function(this: ITestContext) {
-    this.context = setupTestContext();
+    this.context = setupTestContext(true);
     this.context.component.backdropClose = false;
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    await this.context.open();
+
     const spy = jasmine.createSpy('callback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, spy);
     
     const backdropComponent = getShadowElement(this.context.component, DIALOG_CONSTANTS.selectors.BACKDROP);
     getShadowElement(backdropComponent, BACKDROP_CONSTANTS.selectors.CONTAINER).click();
-
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+
     expect(spy).not.toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(true);
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('[beforeCloseCallback] should prevent dialog from closing on backdrop click', async function(this: ITestContext) {
@@ -106,18 +112,21 @@ describe('DialogComponent', function(this: ITestContext) {
 
     const closeCallback = jasmine.createSpy('callback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeCallback);
+
     const beforeCloseSpy = jasmine.createSpy('beforeCloseCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    await tick();
+
+    this.context.append();
+    await this.context.open();
+
     const backdropComponent = getShadowElement(this.context.component, DIALOG_CONSTANTS.selectors.BACKDROP);
     getShadowElement(backdropComponent, BACKDROP_CONSTANTS.selectors.CONTAINER).click();
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
+
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeCallback).not.toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(true);
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('[beforeCloseCallback] should allow dialog from closing on backdrop click', async function(this: ITestContext) {
@@ -126,18 +135,21 @@ describe('DialogComponent', function(this: ITestContext) {
 
     const closeSpy = jasmine.createSpy('closeEvent');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeSpy);
+
     const beforeCloseSpy = jasmine.createSpy('beforeCloseEvent');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    await tick();
+
+    this.context.append();
+    await this.context.open();
+
     const backdropComponent = getShadowElement(this.context.component, DIALOG_CONSTANTS.selectors.BACKDROP);
     getShadowElement(backdropComponent, BACKDROP_CONSTANTS.selectors.CONTAINER).click();
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
+
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeSpy).toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(false);
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('[beforeCloseCallback] should prevent closing the dialog when escape is pressed', async function(this: ITestContext) {
@@ -146,17 +158,20 @@ describe('DialogComponent', function(this: ITestContext) {
 
     const closeSpy = jasmine.createSpy('closeCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeSpy);
+
     const beforeCloseSpy = jasmine.createSpy('beforeCloseCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    await tick();
+
+    this.context.append();
+    await this.context.open();
+
     dispatchKeyEvent(document, 'keydown', 'Escape');
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
+
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeSpy).not.toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(true);
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('[beforeCloseCallback] should allow closing the dialog when escape is pressed', async function(this: ITestContext) {
@@ -165,17 +180,20 @@ describe('DialogComponent', function(this: ITestContext) {
 
     const closeSpy = jasmine.createSpy('closeCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeSpy);
+
     const beforeCloseSpy = jasmine.createSpy('beforeCloseCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    await tick();
+
+    this.context.append();
+    await this.context.open();
+
     dispatchKeyEvent(document, 'keydown', 'Escape');
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
+
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeSpy).toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(false);
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('[BEFORE_CLOSE] should prevent closing the dialog when escape is pressed', async function(this: ITestContext) {
@@ -184,17 +202,20 @@ describe('DialogComponent', function(this: ITestContext) {
 
     const closeSpy = jasmine.createSpy('closeCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeSpy);
+    
     const beforeCloseSpy = jasmine.createSpy('beforeCloseCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    await tick();
+
+    this.context.append();
+    await this.context.open();
+
     dispatchKeyEvent(document, 'keydown', 'Escape');
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
+
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeSpy).not.toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(true);
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('[BEFORE_CLOSE] should prevent dialog from closing on backdrop click', async function(this: ITestContext) {
@@ -203,44 +224,49 @@ describe('DialogComponent', function(this: ITestContext) {
 
     const closeCallback = jasmine.createSpy('callback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeCallback);
+
     const beforeCloseSpy = jasmine.createSpy('beforeCloseCallback');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.BEFORE_CLOSE, beforeCloseSpy);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    await tick();
+    
+    this.context.append();
+    await this.context.open();
+
     const backdropComponent = getShadowElement(this.context.component, DIALOG_CONSTANTS.selectors.BACKDROP);
     getShadowElement(backdropComponent, BACKDROP_CONSTANTS.selectors.CONTAINER).click();
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
+    
     expect(beforeCloseSpy).toHaveBeenCalled();
     expect(closeCallback).not.toHaveBeenCalled();
-    expect(this.context.component.isConnected).toBe(true);
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('should close on backdrop escape keydown', async function(this: ITestContext) {
     this.context = setupTestContext();
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    await this.context.open();
+
     dispatchKeyEvent(document, 'keydown', 'Escape');
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    expect(this.context.component.isConnected).toBe(false);
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('should not close on backdrop escape keydown', async function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.escapeClose = false;
-    this.context.component.open = true;
+    await this.context.append();
+    await this.context.open();
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
     dispatchKeyEvent(getShadowElement(this.context.component, DIALOG_CONSTANTS.selectors.BACKDROP), 'keydown', 'Escape');
     await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    expect(this.context.component.isConnected).toBe(true);
+    expect(this.context.isVisible).toBeTrue();
   });
 
-  it('should project the content into the correct slot', function(this: ITestContext) {
+  it('should project the content into the correct slot', async function(this: ITestContext) {
     this.context = setupTestContext();
     const content = document.createElement('div');
     this.context.component.appendChild(content);
-    this.context.component.open = true;
+    await this.context.open();
+
     const slotElement = getShadowElement(this.context.component, 'slot') as HTMLSlotElement;
     expect(slotElement.assignedNodes().length).toBe(1);
     expect(slotElement.assignedNodes()[0]).toBe(content);
@@ -248,86 +274,78 @@ describe('DialogComponent', function(this: ITestContext) {
   });
 
   it('should call openCallback before opening', async function(this: ITestContext) {
-    this.context = setupTestContext();
+    this.context = setupTestContext(true);
     const spy = jasmine.createSpy('openCallback');
     this.context.component.openCallback = spy;
-    this.context.component.open = true;
+    await this.context.open();
     expect(spy).toHaveBeenCalledTimes(1);
 
     // When setting the openCallback it causes a microtask (uses a promise) to be queued 
     // so we need to wait a frame before checking for existence.
     await tick();
-    expect(this.context.component.isConnected).toBe(true);
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('should not open if openCallback returns false', async function(this: ITestContext) {
     this.context = setupTestContext();
     const spy = jasmine.createSpy('openCallback', () => false).and.callThrough();
     this.context.component.openCallback = spy;
-    this.context.component.open = true;
+    await this.context.open();
     expect(spy).toHaveBeenCalledTimes(1);
     await tick();
     
-    expect(this.context.component.isConnected).toBeFalse();
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('should not open if openCallback returns a promise that resolves to false', async function(this: ITestContext) {
     this.context = setupTestContext();
     const spy = jasmine.createSpy('openCallback', () => new Promise<boolean>(resolve => resolve(false))).and.callThrough();
     this.context.component.openCallback = spy;
-    this.context.component.open = true;
+    await this.context.open();
     expect(spy).toHaveBeenCalledTimes(1);
     await tick();
 
-    expect(this.context.component.isConnected).toBeFalse();
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('should call closeCallback before closing', async function(this: ITestContext) {
     this.context = setupTestContext();
     const spy = jasmine.createSpy('closeCallback');
     this.context.component.closeCallback = spy;
-    this.context.component.open = true;
 
-    // When setting the closeCallback it causes a microtask (uses a promise) to be queued 
-    // so we need to wait a frame before checking for existence.
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    this.context.component.open = false;
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
+    await this.context.close();
+
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(this.context.component.isConnected).toBe(false);
+    expect(this.context.isVisible).toBeFalse();
   });
 
   it('should not close if closeCallback returns false', async function(this: ITestContext) {
-    this.context = setupTestContext();
+    this.context = setupTestContext(true);
     const spy = jasmine.createSpy('closeCallback', () => false).and.callThrough();
     this.context.component.closeCallback = spy;
 
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
 
-    this.context.component.open = false;
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    await this.context.close();
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(this.context.component.isConnected).toBeTrue();
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('should not close if closeCallback returns a promise that resolves to false', async function(this: ITestContext) {
-    this.context = setupTestContext();
+    this.context = setupTestContext(true);
+
     const spy = jasmine.createSpy('closeCallback', () => new Promise<boolean>(resolve => resolve(false))).and.callThrough();
     this.context.component.closeCallback = spy;
-
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-
-    this.context.component.open = false;
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    
+    await this.context.open();
+    await this.context.close();
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(this.context.component.isConnected).toBeTrue();
+    expect(this.context.isVisible).toBeTrue();
   });
 
   it('should set focus to a button with initial focus attribute set', async function(this: ITestContext) {
@@ -335,79 +353,77 @@ describe('DialogComponent', function(this: ITestContext) {
     const button = document.createElement('button');
     button.setAttribute(DIALOG_CONSTANTS.attributes.INITIAL_FOCUS, '');
     this.context.component.appendChild(button);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    await this.context.append();
+    await this.context.open();
     expect(getActiveElement()).toBe(button);
   });
 
   it('should set focus to the body by default', async function(this: ITestContext) {
-    this.context = setupTestContext();
+    this.context = setupTestContext(true);
     const button = document.createElement('button');
     this.context.component.appendChild(button);
-    this.context.component.open = true;
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    await this.context.open();
+
     expect(getActiveElement()).toBe(document.body);
   });
 
   it('should set full screen', async function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.fullscreen = true;
-    this.context.component.open = true;
-    await tick();
+    this.context.append();
+    await this.context.open();
 
-    expect(this.context.component.fullscreen).toBe(true);
-    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.FULLSCREEN)).toBe(true);
+    expect(this.context.component.fullscreen).toBeTrue();
+    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.FULLSCREEN)).toBeTrue();
   });
 
   it('should set full screen via attribute', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.component.open = true;
-    await tick();
+    this.context = setupTestContext(true);
+    await this.context.open();
 
     this.context.component.setAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN, '');
 
-    expect(this.context.component.fullscreen).toBe(true);
-    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.FULLSCREEN)).toBe(true);
+    expect(this.context.component.fullscreen).toBeTrue();
+    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.FULLSCREEN)).toBeTrue();
   });
 
   it('should toggle full screen', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.component.open = true;
-    await tick();
+    this.context = setupTestContext(true);
+    await this.context.open();
     
     this.context.component.fullscreen = true;
     this.context.component.fullscreen = false;
 
-    expect(this.context.component.fullscreen).toBe(false);
-    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.FULLSCREEN)).toBe(false);
+    expect(this.context.component.fullscreen).toBeFalse();
+    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.FULLSCREEN)).toBeFalse();
   });
 
   it('should set moveable', async function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.moveable = true;
-    this.context.component.open = true;
-    await tick();
+    this.context.append();
+    await this.context.open();
     
-    expect(this.context.component.moveable).toBe(true);
-    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.MOVEABLE)).toBe(true);
+    expect(this.context.component.moveable).toBeTrue();
+    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.MOVEABLE)).toBeTrue();
   });
 
   it('should set moveable via attribute', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.component.open = true;
-    await tick();
+    this.context = setupTestContext(true);
+    await this.context.open();
 
     this.context.component.setAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, '');
     
-    expect(this.context.component.moveable).toBe(true);
-    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.MOVEABLE)).toBe(true);
+    expect(this.context.component.moveable).toBeTrue();
+    expect(getContainerElement(this.context.component).classList.contains(DIALOG_CONSTANTS.classes.MOVEABLE)).toBeTrue();
   });
 
   it('should attach mousedown event when moveable', async function(this: ITestContext) {
     this.context = setupTestContext();
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
+    this.context.append();
+    await this.context.open();
 
     const mousedownSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseDown').and.callThrough();
     moveTarget.dispatchEvent(new Event('mousedown'));
@@ -425,7 +441,8 @@ describe('DialogComponent', function(this: ITestContext) {
     const moveTargeSelected = `#${customId}`;
     this.context.component.moveTarget = moveTargeSelected;
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
+    this.context.append();
+    await this.context.open();
 
     const mousedownSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseDown').and.callThrough();
     moveTarget.dispatchEvent(new Event('mousedown'));
@@ -435,8 +452,8 @@ describe('DialogComponent', function(this: ITestContext) {
   });
 
   it('should set move target via attribute', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    await openDialog(this.context.component);
+    this.context = setupTestContext(true);
+    await this.context.open();
 
     this.context.component.setAttribute(DIALOG_CONSTANTS.attributes.MOVE_TARGET, 'test');
 
@@ -449,7 +466,8 @@ describe('DialogComponent', function(this: ITestContext) {
     moveTarget.removeAttribute(DIALOG_CONSTANTS.attributes.DFEAULT_MOVE_TARGET);
 
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
+    this.context.append();
+    await this.context.open();
 
     const mousedownSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseDown').and.callThrough();
     moveTarget.dispatchEvent(new Event('mousedown'));
@@ -461,9 +479,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
 
     const mousedownSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseDown').and.callThrough();
     const mousemoveSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseMove').and.callThrough();
@@ -485,9 +502,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
 
     const movedSpy = jasmine.createSpy('moved listener', evt => evt.preventDefault()).and.callThrough();
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.MOVED, movedSpy);
@@ -504,9 +520,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
 
     const moveStartSpy = jasmine.createSpy('move start listener', evt => evt.preventDefault()).and.callThrough();
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.MOVE_START, moveStartSpy);
@@ -530,9 +545,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
 
     const moveEndSpy = jasmine.createSpy('move end listener', evt => evt.preventDefault()).and.callThrough();
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.MOVE_END, moveEndSpy);
@@ -555,9 +569,8 @@ describe('DialogComponent', function(this: ITestContext) {
     const readySpy = jasmine.createSpy('ready event listener');
     this.context.component.addEventListener(DIALOG_CONSTANTS.events.READY, readySpy);
 
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION + 500);
+    this.context.append();
+    await this.context.open();
 
     expect(readySpy).toHaveBeenCalled();
   });
@@ -565,7 +578,8 @@ describe('DialogComponent', function(this: ITestContext) {
   it('should set custom x position', async function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.positionX = 100;
-    await openDialog(this.context.component);
+    this.context.append();
+    await this.context.open();
     
     expect(getSurfaceElement(this.context.component).style.position).toBe('absolute');
     expect(getSurfaceElement(this.context.component).style.left).toBe('100px');
@@ -574,7 +588,8 @@ describe('DialogComponent', function(this: ITestContext) {
   it('should set custom y position', async function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.positionY = 100;
-    await openDialog(this.context.component);
+    this.context.append();
+    await this.context.open();
     
     expect(getSurfaceElement(this.context.component).style.position).toBe('absolute');
     expect(getSurfaceElement(this.context.component).style.top).toBe('100px');
@@ -585,7 +600,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context.component.positionType = 'relative';
     this.context.component.positionX = 100;
     this.context.component.positionY = 100;
-    await openDialog(this.context.component);
+    this.context.append();
+    await this.context.open();
     
     expect(getSurfaceElement(this.context.component).style.position).toBe('relative');
     expect(getSurfaceElement(this.context.component).style.top).toBe('100px');
@@ -593,8 +609,8 @@ describe('DialogComponent', function(this: ITestContext) {
   });
 
   it('should change position dynamically', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    await openDialog(this.context.component);
+    this.context = setupTestContext(true);
+    await this.context.open();
 
     this.context.component.positionX = 100;
     this.context.component.positionY = 100;
@@ -605,8 +621,8 @@ describe('DialogComponent', function(this: ITestContext) {
   });
 
   it('should set position via attribute', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    await openDialog(this.context.component);
+    this.context = setupTestContext(true);
+    await this.context.open();
 
     this.context.component.setAttribute(DIALOG_CONSTANTS.attributes.POSITION_X, '100px');
     this.context.component.setAttribute(DIALOG_CONSTANTS.attributes.POSITION_Y, '100px');
@@ -619,8 +635,8 @@ describe('DialogComponent', function(this: ITestContext) {
   });
 
   it('should set position type via attribute', async function(this: ITestContext) {
-    this.context = setupTestContext();
-    await openDialog(this.context.component);
+    this.context = setupTestContext(true);
+    await this.context.open();
 
     this.context.component.setAttribute(DIALOG_CONSTANTS.attributes.POSITION_TYPE, 'relative');
     this.context.component.setAttribute(DIALOG_CONSTANTS.attributes.POSITION_X, '100px');
@@ -639,9 +655,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context.component.positionY = 100;
     this.context.component.moveable = true;
 
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
 
     moveTarget.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100 } as any));
     document.dispatchEvent(new MouseEvent('mousemove', { pageX: 150, pageY: 150 } as any));
@@ -656,9 +671,8 @@ describe('DialogComponent', function(this: ITestContext) {
   it('should manually initialize move target', async function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
     
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.initializeMoveTarget();
@@ -673,9 +687,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
     
     this.context.component.moveable = false;
 
@@ -689,9 +702,8 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     const moveTarget = attachMoveTarget(this.context.component);
     this.context.component.moveable = true;
-    await openDialog(this.context.component);
-    await tick();
-    await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+    this.context.append();
+    await this.context.open();
     
     const button = document.createElement('button');
     button.textContent = 'Button';
@@ -714,11 +726,35 @@ describe('DialogComponent', function(this: ITestContext) {
     expect(document.activeElement).toBe(button);
   });
 
-  function setupTestContext(): ITestDialogContext {
+  function setupTestContext(append = false): ITestDialogContext {
     const component = document.createElement(DIALOG_CONSTANTS.elementName) as IDialogComponent;
+    const rootEl = component.shadowRoot?.querySelector(DIALOG_CONSTANTS.selectors.CONTAINER) as HTMLElement;
+    const surfaceEl = component.shadowRoot?.querySelector(DIALOG_CONSTANTS.selectors.SURFACE) as HTMLElement;
+    if (append) {
+      document.body.appendChild(component);
+    }
     return {
       component,
-      destroy: () => removeElement(component)
+      open: async () => {
+        component.open = true;
+        await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+        surfaceEl.dispatchEvent(new TransitionEvent('transitionend'));
+        await tick();
+        component['_foundation']['_onTransitionEnd']();
+      },
+      close: async () => {
+        component.open = false;
+        await timer(DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
+        surfaceEl.dispatchEvent(new TransitionEvent('transitionend'));
+        await tick();
+      },
+      append: () => document.body.appendChild(component),
+      destroy: () => removeElement(component),
+      get isVisible() {
+        return component.isConnected &&
+               (rootEl?.classList.contains(DIALOG_CONSTANTS.classes.OPEN) ||
+               rootEl?.classList.contains(DIALOG_CONSTANTS.classes.ANIMATING));
+      }
     };
   }
 
@@ -728,11 +764,6 @@ describe('DialogComponent', function(this: ITestContext) {
 
   function getSurfaceElement(component: IDialogComponent): HTMLElement {
     return component.shadowRoot!.querySelector(DIALOG_CONSTANTS.selectors.SURFACE) as HTMLElement;
-  }
-
-  async function openDialog(dialog: IDialogComponent): Promise<void> {
-    dialog.open = true;
-    await tick();
   }
 
   function attachMoveTarget(dialog: IDialogComponent): HTMLElement {

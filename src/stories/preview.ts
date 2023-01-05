@@ -26,6 +26,7 @@ export const parameters = {
           'Getting started',
           'Typography',
           'Theming',
+          'Typography',
           'Using icons',
           'Component customization',
           'Sass library',
