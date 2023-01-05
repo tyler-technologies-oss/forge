@@ -1,0 +1,20 @@
+name: Deploy Pull Request
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  deploy-storybook:
+    name: Storybook
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.1.1
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'storybook-preview') }}
+    with:
+      PRODUCTION_RELEASE: false
+      BUILD_DIRECTORY: dist/storybook
+      BUILD_TARGET_DIRECTORY: docs/next/${{ github.event.pull_request.head.ref }}
+      BUILD_NPM_SCRIPT: "ci:build-storybook"
+      PR_COMMENT_HEADER: "View Storybook Deployment (@next)"
+    secrets:
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}

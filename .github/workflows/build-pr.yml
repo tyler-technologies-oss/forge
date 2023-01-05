@@ -32,13 +32,9 @@ jobs:
             test:
               - 'src/lib/**'
               - 'src/test/**'
-            storybook:
-              - 'src/lib/**'
-              - 'src/stories/**'
     outputs:
       build-files-changed: ${{ steps.file-filter.outputs.build == 'true' }}
       test-files-changed: ${{ steps.file-filter.outputs.test == 'true' }}
-      deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
 
   build:
     name: Build and Test
@@ -49,19 +45,4 @@ jobs:
       BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}
       TESTS_ENABLED: ${{ needs.wf-config.outputs.test-files-changed == 'true' }}
     secrets:
-      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
-
-  deploy-storybook:
-    name: Deploy Storybook
-    needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.1.1
-    if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
-    with:
-      PRODUCTION_RELEASE: false
-      BUILD_DIRECTORY: dist/storybook
-      BUILD_TARGET_DIRECTORY: docs/next/${{ github.event.pull_request.head.ref }}
-      BUILD_NPM_SCRIPT: "ci:build-storybook"
-      PR_COMMENT_HEADER: "View Storybook Deployment (@next)"
-    secrets:
-      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
