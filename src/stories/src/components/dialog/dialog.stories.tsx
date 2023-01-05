@@ -31,35 +31,34 @@ export const Simple: Story<IDialogProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);  
   const hide = () => setIsOpen(false);
   const show = () => setIsOpen(true);
-  const dialogProps: any = {
-    backdropClose,
-    escapeClose,
-    fullscreen,
-    moveable,
-    positionType
-  };
-  if (customPosition) {
-    dialogProps.positionX = positionX;
-    dialogProps.positionY = positionY;
-  }
+
   return (
     <>
       <ForgeButton type="raised">
         <button type="button" onClick={show}>Show dialog</button>
       </ForgeButton>
-      <ForgeDialog open={isOpen} options={dialogProps} onDismiss={hide}>
-        <header className="forge-dialog__header" forge-dialog-move-target="">
-          <h2 className="forge-dialog__title">Discard draft?</h2>
+
+      <ForgeDialog
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-message"
+        open={isOpen}
+        backdropClose={backdropClose}
+        escapeClose={escapeClose}
+        fullscreen={fullscreen}
+        moveable={moveable}
+        positionType={positionType}
+        positionX={positionX > 0 ? positionX : null}
+        positionY={positionY > 0 ? positionY : null}
+        on-forge-dialog-close={hide}>
+        <header className="forge-dialog__header" forge-dialog-move-target={moveable ? 'true' : null}>
+          <h2 id="dialog-title" className="forge-dialog__title">Dialog title</h2>
         </header>
-        <section className="forge-dialog__body" style={{ width: '500px' }}>
+        <p id="dialog-message" className="forge-dialog__body" style={{ width: '500px' }}>
           {LOREM_IPSUM.p1.slice(0, 162)}
-        </section>
+        </p>
         <footer className="forge-dialog__footer">
-          <ForgeButton type="outlined" style={{ marginRight: 16 }}>
-            <button type="button" onClick={hide}>Cancel</button>
-          </ForgeButton>
           <ForgeButton type="raised">
-            <button type="button" onClick={hide} forge-dialog-focus="true">Discard</button>
+            <button type="button" onClick={hide}>Close</button>
           </ForgeButton>
         </footer>
       </ForgeDialog>
