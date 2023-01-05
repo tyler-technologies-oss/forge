@@ -47,8 +47,8 @@ export const Simple: Story<IDialogProps> = ({
         fullscreen={fullscreen}
         moveable={moveable}
         positionType={positionType}
-        positionX={positionX > 0 ? positionX : null}
-        positionY={positionY > 0 ? positionY : null}
+        positionX={customPosition ? positionX : null}
+        positionY={customPosition ? positionY : null}
         on-forge-dialog-close={hide}>
         <header className="forge-dialog__header" forge-dialog-move-target={moveable ? 'true' : null}>
           <h2 id="dialog-title" className="forge-dialog__title">Dialog title</h2>
@@ -86,40 +86,43 @@ export const Complex: Story<IDialogProps> = ({
   positionY = 0,
   positionType = 'absolute'
 }) => {
-  useEffect(() => {
-    IconRegistry.define(tylIconClose);
-  }, []);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const hide = () => setIsOpen(false);
   const show = () => setIsOpen(true);
-  const dialogProps: any = {
-    backdropClose,
-    escapeClose,
-    fullscreen,
-    moveable,
-    positionType,
-  };
-  if (customPosition) {
-    dialogProps.positionX = positionX;
-    dialogProps.positionY = positionY;
-  }
+
+  useEffect(() => {
+    IconRegistry.define(tylIconClose);
+  }, []);
+
   return (
     <>
       <ForgeButton type="raised">
         <button type="button" onClick={show}>Show complex dialog</button>
       </ForgeButton>
-      <ForgeDialog open={isOpen} options={dialogProps} onDismiss={hide}>
-        <ForgeToolbar forge-dialog-move-target="">
-          <h2 slot="start">Discard draft?</h2>
+
+      <ForgeDialog
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-message"
+        open={isOpen}
+        backdropClose={backdropClose}
+        escapeClose={escapeClose}
+        fullscreen={fullscreen}
+        moveable={moveable}
+        positionType={positionType}
+        positionX={customPosition ? positionX : null}
+        positionY={customPosition ? positionY : null}
+        on-forge-dialog-close={hide}>
+        <ForgeToolbar forge-dialog-move-target={moveable ? 'true' : null}>
+          <h2 id="dialog-title" slot="start">Discard draft?</h2>
           <ForgeIconButton slot="end">
-            <button onClick={hide} type="button" aria-label="Close complex dialog">
+            <button onClick={hide} type="button" aria-label="Close dialog">
               <ForgeIcon name="close" />
             </button>
           </ForgeIconButton>
         </ForgeToolbar>
-        <section className="forge-dialog__body" style={{ width: '500px' }}>
+        <p id="dialog-message" className="forge-dialog__body" style={{ width: '500px' }}>
           {LOREM_IPSUM.p1}
-        </section>
+        </p>
         <ForgeDivider />
         <ForgeToolbar>
           <ForgeButton type="outlined" style={{ marginRight: 16 }} slot="end">
