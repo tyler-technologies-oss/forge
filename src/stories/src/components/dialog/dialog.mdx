@@ -7,10 +7,12 @@ import { DialogComplexCodeHtml, DialogComplexCodeTs } from './code/dialog-comple
 # Dialog
 
 The dialog component is designed to be a modal dialog that acts as a container element for you to provide content that will render within the dialog surface.
-It provides a built-in scrim (backdrop), and a material styled surface area for your content. The surface element is sized based on the content you provide to it.
+It provides a built-in scrim (backdrop), and a surface area for your content. The surface element is sized based on the content you provide to it.
 
-The dialog can simple be placed in the DOM, and it will not be visible until it is told to open. It contains all of the open/close animations per Forge guidance,
-and provides a few properties/attributes for customizing the dialog.
+The dialog can be placed in the DOM, and it will not be visible until it is told to open. It contains open/close animations, and provides properties/attributes
+for customizing the behavior.
+
+> The dialog component can be created on-the-fly via JavaScript, or used statically within the page and its visibility can be controlled via the `open` property.
 
 </PageSection>
 
@@ -21,14 +23,17 @@ and provides a few properties/attributes for customizing the dialog.
 ## Example
 
 ### Simple
-The dialog component is typically created on the fly using JavaScript. Below is an example of how to create and
-configure a dialog on the fly using vanilla JavaScript:
+
+This example shows a simple dialog this is used statically by controlling the visibility via the `open` property.
 
 <LiveDemo layout="column" codeHtml={DialogSimpleCodeHtml()} codeTs={DialogSimpleCodeTs()} >
   <SimpleDemo />
 </LiveDemo>
 
 ### Complex
+
+This example demonstrates how to create a dialog dynamically via JavaScript, and shows how other Forge components can be composed together to create a more complex dialog.
+
 <LiveDemo layout="column" codeHtml={DialogComplexCodeHtml()} codeTs={DialogComplexCodeTs()}>
   <ComplexDemo />
 </LiveDemo>
@@ -271,9 +276,9 @@ Resets the dialog surface position to its original `positionX` and `positionY` v
 
 ## CSS custom properties
 
-| Name                         | Description
-| :----------------------------| :----------------
-| `--mdc-theme-surface`        | Controls the background-color of the dialog surface.
+| Name                           | Description
+| :------------------------------| :----------------
+| `--mdc-theme-surface`          | Controls the background-color of the dialog surface.
 | `--forge-dialog-min-width`     | Minimum width of the dialog being rendered. Default is `280px`.
 | `--forge-dialog-max-width`     | Maximum width of the dialog being rendered. Default is `100%`.
 | `--forge-dialog-max-height`    | Minimum height of the dialog being rendered. Default is `100%`.
