@@ -8,11 +8,13 @@ export const DialogComplexCodeHtml = () => `
       </button>
     </forge-icon-button>
   </forge-toolbar>
-  <section class="forge-dialog__body" style="width: 500px">
-    Lorem ipsum
-  </section>
+
+  <p id="dialog-message" class="forge-dialog__body" style="width: 500px">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquam, neque non varius egestas, nisi urna venenatis lacus, sit amet malesuada mauris urna et ex. Donec varius convallis egestas. Sed venenatis risus id euismod congue. Phasellus laoreet facilisis erat, ac auctor lectus euismod vitae. Vivamus a odio in turpis scelerisque venenatis. Etiam tempor vehicula ex vitae venenatis. Vivamus mollis erat leo. Etiam aliquet, erat a tempus tempor, lectus nunc viverra libero, a posuere tortor neque ultrices metus. Maecenas tristique rutrum nisi, sed porta metus venenatis vel.
+  </p>
+
   <forge-toolbar>
-    <forge-button type="outlined" style="margin-right: 16px" slot="end">
+    <forge-button type="outlined" slot="end" style="margin-right: 16px">
       <button type="button" id="cancel-button">Cancel</button>
     </forge-button>
     <forge-button type="raised" slot="end">
@@ -26,7 +28,11 @@ export const DialogComplexCodeTs = () => `
 IconRegistry.define(tylIconClose);
 
 const dialog = document.createElement('forge-dialog');
+dialog.setAttribute('aria-labelledby', 'dialog-title');
+dialog.setAttribute('aria-describedby', 'dialog-message');
+
 const dialogTemplate = document.getElementById('dialog-content');
 dialog.appendChild(dialogTemplate.content.cloneNode(true));
-dialog.open = true; // This will append the dialog to the body automatically and start the open animation
+document.body.appendChild(dialog);
+dialog.open = true;
 `;
