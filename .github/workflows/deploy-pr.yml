@@ -2,14 +2,6 @@ name: Deploy Pull Request
 
 on:
   pull_request:
-    paths:
-      - 'forge.json'
-      - 'package.json'
-      - '.eslintrc.json'
-      - '.stylelintrc'
-      - '.github/workflows/**/*'
-      - 'src/**/*'
-    types: [labeled]
 
 jobs:
   wf-config:
