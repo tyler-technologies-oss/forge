@@ -1,0 +1,72 @@
+@use '../theme';
+@use './variables';
+
+@mixin host() {
+  @include theme.z-index(overlay);
+  @include theme.css-custom-property(position, --forge-overlay-position, fixed);
+  @include theme.css-custom-property(top, --forge-overlay-top, 0);
+  @include theme.css-custom-property(left, --forge-overlay-left, 0);
+
+  display: block;
+  width: max-content;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+@mixin core-styles() {
+  .forge-overlay {
+    @include base;
+
+    &--entering {
+      @include entering;
+    }
+
+    &--exiting {
+      @include exiting;
+    }
+
+    &--entered {
+      @include entered;
+    }
+  }
+}
+
+@mixin base() {
+  @include theme.css-custom-property(background, --forge-overlay-background, transparent);
+  @include theme.css-custom-property(border-radius, --forge-overlay-border-radius, 4px);
+  @include theme.css-custom-property(box-shadow, --forge-overlay-box-shadow, none);
+  @include theme.css-custom-property(transform, --forge-overlay-transform, scale(1));
+  @include theme.css-custom-property(transform-origin, --forge-overlay-transform-origin, 50% 24px 0);
+  @include theme.css-custom-property(opacity, --forge-overlay-opacity, 0);
+  @include theme.css-custom-property(will-change, --forge-overlay-will-change, variables.$will-change);
+  @include theme.css-custom-property(transition, --forge-overlay-transition, variables.$transition);
+
+  display: none;
+  box-sizing: border-box;
+}
+
+
+@mixin entering() {
+  @include theme.css-custom-property(transform, --forge-overlay-transition-transform-entering, scale(0.8));
+  @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-entering, 0);
+
+  display: block;
+}
+
+@mixin exiting() {
+  @include theme.css-custom-property(transition, --forge-overlay-transition-exiting, opacity variables.$transition-duration linear);
+  @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-exiting, 0);
+
+  display: block;
+}
+
+@mixin entered() {
+  @include theme.css-custom-property(transform, --forge-overlay-transition-transform-entered, scale(1));
+  @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-entered, 1);
+
+  display: block;
+}
+
+@mixin absolute() {
+  @include theme.css-custom-property(position, --forge-overlay-position, absolute);
+}

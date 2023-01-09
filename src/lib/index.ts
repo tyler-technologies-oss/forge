@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright (c) 2022 Tyler Technologies, Inc.
+ * Copyright (c) Tyler Technologies, Inc.
  * License: Apache-2.0
  */
 
@@ -50,6 +50,7 @@ import {
   ProfileCardComponent
 } from './app-bar';
 import { OpenIconComponent } from './open-icon';
+import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
 import { PaginatorComponent } from './paginator';
 import { PopupComponent } from './popup';
@@ -104,6 +105,7 @@ export * from './expansion-panel';
 export * from './file-picker';
 export * from './floating-action-button';
 export * from './floating-label';
+export * from './icon';
 export * from './icon-button';
 export * from './inline-message';
 export * from './keyboard-shortcut';
@@ -112,8 +114,10 @@ export * from './linear-progress';
 export * from './list';
 export * from './menu';
 export * from './open-icon';
+export * from './overlay';
 export * from './page-state';
 export * from './paginator';
+export * from './popover';
 export * from './popup';
 export * from './product-icon';
 export * from './quantity-field';
@@ -136,7 +140,6 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
-export * from './icon';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
@@ -187,6 +190,7 @@ const CUSTOM_ELEMENTS = [
   OpenIconComponent,
   OptionComponent,
   OptionGroupComponent,
+  OverlayComponent,
   PageStateComponent,
   PaginatorComponent,
   PopupComponent,

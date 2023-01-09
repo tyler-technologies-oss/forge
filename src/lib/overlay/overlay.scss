@@ -1,0 +1,15 @@
+@use './mixins';
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([position-strategy=absolute]) {
+  @include mixins.absolute;
+}
+
+@include mixins.core-styles;

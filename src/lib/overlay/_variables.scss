@@ -1,0 +1,6 @@
+@use '@material/animation/animation' as mdc-animation;
+
+$transition-duration: 120ms !default;
+$transition: opacity $transition-duration linear,
+             transform $transition-duration mdc-animation.$deceleration-curve-timing-function !default;
+$will-change: opacity, transform;

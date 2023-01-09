@@ -62,7 +62,7 @@ describe('DialogComponent', function(this: ITestContext) {
   it('should add attribute to body when opened', async function(this: ITestContext) {
     this.context = setupTestContext(true);
     await this.context.open();
-    expect(document.body.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN)).toBeTrue();
+    expect(document.body.hasAttribute(DIALOG_CONSTANTS.attributes.BODY_OPEN)).toBeTrue();
   });
 
   it('should open and close', async function(this: ITestContext) {

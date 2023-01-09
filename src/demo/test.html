@@ -9,6 +9,17 @@
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css">
     <link rel="stylesheet" href="../../dist/styles/forge-core.css">
     <link rel="stylesheet" href="../../dist/styles/forge.css">
+
+    <style>
+      :root {
+        --forge-overlay-background: var(--mdc-theme-surface);
+        --forge-overlay-box-shadow: var(--forge-theme-popup-elevation);
+      }
+
+      .overlay-content {
+        padding: 16px;
+      }
+    </style>
   </head>
   <body class="forge-typography">
     <forge-scaffold>
@@ -22,15 +33,29 @@
         <forge-app-bar-notification-button slot="end"></forge-app-bar-notification-button>
         <forge-app-bar-profile-button slot="end"></forge-app-bar-profile-button>
       </forge-app-bar>
-      <main slot="body" style="padding: 16px; display: flex; gap: 16px;">
-        <forge-button type="raised">
-          <button type="button">Raised</button>
-        </forge-button>
-    
-        <forge-text-field>
-          <input type="text" id="input-id" />
-          <label for="input-id">Label text</label>
-        </forge-text-field>
+      <main slot="body">
+        <!-- <div style="height: 2000px; width: 2000px;">
+          <forge-button type="raised" style="margin-left: 1000px; margin-top: 1000px;">
+            <button type="button" id="my-btn" style="white-space: nowrap;">Show overlay</button>
+          </forge-button>
+          
+          <div style="position: relative; overflow: hidden;">
+          <forge-overlay id="my-overlay">
+            <div class="overlay-content">Yay awesome overlay content</div>
+          </forge-overlay>
+          </div>
+          <div style="height: 2000px; width: 2000px;"></div>
+        </div> -->
+
+        <forge-dialog open>
+          <forge-button type="raised">
+            <button type="button" id="my-btn" style="white-space: nowrap;">Show overlay</button>
+          </forge-button>
+          
+          <forge-overlay id="my-overlay">
+            <div class="overlay-content">Yay awesome overlay content</div>
+          </forge-overlay>
+        </forge-dialog>
       </main>
     </forge-scaffold>
 
@@ -40,6 +65,17 @@
       Forge.lib.defineComponents();
       const icon = document.querySelector('forge-app-bar > forge-icon');
       icon.src = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 158.86 158.86\"><path d=\"M13.01 44.28a13 13 0 11-13 13 13 13 0 0113-13m22.14 22.14a13 13 0 11-13 13 13 13 0 0113-13m22.14 22.14a13 13 0 11-13 13 13 13 0 0113-13m0 44.29a13 13 0 11-13 13 13 13 0 0113-13m22.14-22.14a13 13 0 11-13 13 13 13 0 0113-13m22.14-22.15a13 13 0 11-13 13 13 13 0 0113-13M57.29 44.28a13 13 0 11-13 13 13 13 0 0113-13m22.14-22.14a13 13 0 11-13 13 13 13 0 0113-13m22.14 22.14a13 13 0 11-13 13 13 13 0 0113-13m22.15 22.14a13 13 0 11-13 13 13 13 0 0113-13m22.14 22.14a13 13 0 11-13 13 13 13 0 0113-13M101.57 0a13 13 0 11-13 13 13 13 0 0113-13m26.58 115.09a5.2 5.2 0 11-5.2-5.19 5.21 5.21 0 015.2 5.19zm-.85 0a4.36 4.36 0 10-4.35 4.49 4.35 4.35 0 004.35-4.49zm-5.44 3.09h-.84v-6.17h2.37c1.38 0 2 .6 2 1.7a1.66 1.66 0 01-1.43 1.73l1.72 2.74h-.96l-1.68-2.74h-1.19zm1-3.44c.81 0 1.72 0 1.72-1 0-.87-.7-1-1.34-1h-1.35v2z\"/></svg>";
+
+      const overlay = document.querySelector('#my-overlay');
+      const button = document.querySelector('#my-btn');
+
+      overlay.targetElement = button;
+      overlay.offset = { x: 0, y: 4 }
+
+      // button.scrollIntoView({ block: 'center', inline: 'center' });
+      button.addEventListener('click', () => {
+        overlay.open = !overlay.open;
+      });
     </script>
   </body>
 </html>
