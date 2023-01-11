@@ -1,3 +1,15 @@
+# v2.12.2 (Wed Jan 11 2023)
+
+#### 🐛 Bug Fix
+
+- fix(select): fixed a bug where the UI was not reflecting the selected value if the option values are changed after the component value is set [#212](https://github.com/tyler-technologies-oss/forge/pull/212) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.12.1 (Wed Jan 04 2023)
 
 #### 🐛 Bug Fix
