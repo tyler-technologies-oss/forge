@@ -16,7 +16,12 @@ const attributes = {
   VALUE: 'value'
 };
 
+const events = {
+  VALUE_CHANGE: `${elementName}-value-change`
+};
+
 export const OPTION_CONSTANTS = {
   elementName,
-  attributes
+  attributes,
+  events
 };

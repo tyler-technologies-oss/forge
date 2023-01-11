@@ -1375,6 +1375,39 @@ describe('SelectComponent', function(this: ITestContext) {
       expect(listItems.length).toBe(options.length + 1);
       expect(listItems[listItems.length - 1].textContent).toBe('New option');
     });
+
+    it('should set selected option if select component value is set before option values are set', async function(this: ITestContext) {
+      // Don't append to DOM yet
+      this.context = setupTestContext(false);
+
+      // Unset all option values to simulate the options not having a value yet
+      const optionElements = this.context.component.querySelectorAll('forge-option');
+      optionElements.forEach(o => {
+        o.removeAttribute(OPTION_CONSTANTS.attributes.VALUE);
+        o.value = undefined;
+      });
+
+      // Now we can append to DOM and start the test
+      document.body.appendChild(this.context.fixture);
+
+      await tick();
+
+      // Set the select value first **before** any option elements receive their correct values
+      this.context.component.value = 0;
+
+      expect(this.context.component.value).withContext('Expected component value to be 0').toBe(0); // There are no matching options to select, but we've stored the value internally...
+      expect(this.context.foundation['_value']).withContext('Expected foundation _value to be []').toEqual([0]); // Checking if the value is stored
+      expect(this.context.foundation['_selectedValues']).withContext('Expected foundation _selectedValues to be []').toEqual([]); // Checking if options have been selected
+      expect(this.context.selectedTextElement.textContent).withContext('Expected selected text to be empty string').toBe(''); // Checking if the selected text is set or not yet
+
+      // Now we can update the values of our options
+      optionElements.forEach((o, i) => o.value = i);
+
+      expect(this.context.component.value).withContext('Expected component value to be 0').toBe(0); // Our value is now available because there are matching options
+      expect(this.context.foundation['_value']).withContext('Expected foundation _value to be [0]').toEqual([0]); // Internal state is set
+      expect(this.context.foundation['_selectedValues']).withContext('Expected foundation _selectedValues to be [0]').toEqual([0]); // Internal state identifying that matching options are set
+      expect(this.context.selectedTextElement.textContent).withContext('Expected selected text to be first option label').toBe(DEFAULT_OPTIONS[0].label); // Ensure label matches option text
+    });
   });  
 
   describe('multiselect', function(this: ITestContext) {
@@ -1478,22 +1511,27 @@ describe('SelectComponent', function(this: ITestContext) {
     component.click();
   }
 
-  function setupTestContext(append?: boolean): ITestSelectContext {
+  function setupTestContext(append = false): ITestSelectContext {
     const fixture = _createFixture();
-    const component = document.createElement(SELECT_CONSTANTS.elementName) as ISelectComponent;
+    
+    const component = document.createElement('forge-select');
     component.label = 'Label text';
+
     const optionElements: IOptionComponent[] = [];
     DEFAULT_OPTIONS.forEach(o => {
-      const option = document.createElement(OPTION_CONSTANTS.elementName) as IOptionComponent;
+      const option = document.createElement('forge-option');
       option.setAttribute(OPTION_CONSTANTS.attributes.VALUE, o.value);
       option.textContent = o.label;
       optionElements.push(option);
       component.appendChild(option);
     });
+
     fixture.appendChild(component);
+
     if (append) {
       document.body.appendChild(fixture);
     }
+
     return {
       fixture,
       component,

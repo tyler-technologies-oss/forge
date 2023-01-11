@@ -146,9 +146,21 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
   }
 
   public setOptionsListener(listener: (options: ISelectOption[] | ISelectOptionGroup[]) => void): SelectOptionListenerDestructor {
+    // Watch for option value property changes
+    const optionValueChangeListener: EventListener = evt => {
+      evt.stopPropagation();
+      listener(this.getOptions());
+    };
+    this._component.addEventListener(OPTION_CONSTANTS.events.VALUE_CHANGE, optionValueChangeListener);
+
+    // Watch for DOM changes
     const observer = new MutationObserver(() => listener(this.getOptions()));
     observer.observe(this._component, { childList: true, subtree: true });
-    return () => observer.disconnect();
+
+    return () => {
+      this._component.removeEventListener(OPTION_CONSTANTS.events.VALUE_CHANGE, optionValueChangeListener);
+      observer.disconnect();
+    };
   }
 
   public setOptions(options: ISelectOption[] | ISelectOptionGroup[], clear = true): void {
