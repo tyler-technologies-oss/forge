@@ -70,6 +70,9 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
   protected _onFocus(evt: Event): void {}
 
   public initialize(): void {
+    if (this._optionListenerDestructor) {
+      this._optionListenerDestructor();
+    }
     this._optionListenerDestructor = this._adapter.setOptionsListener(this._optionsChangedListener);
     this._initializeValue();
   }
@@ -219,6 +222,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
       const label = option ? option.label : '';
 
       // Store the current selections in case we need to rollback (if the event was cancelled)
+      const prevValues = [...this._value];
       const prevSelectedValues = [...this._selectedValues];
       const prevSelectedLabels = [...this._selectedLabels];
       const prevSelectedIndexes = [...this._selectedIndexes];
@@ -246,16 +250,16 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
         }
       }
 
+      this._value = [...this._selectedValues];
+
       const rollbackValue = (): void => {
         this._selectedValues = [...prevSelectedValues];
         this._selectedLabels = [...prevSelectedLabels];
         this._selectedIndexes = [...prevSelectedIndexes];
+        this._value = [...prevValues];
       };
 
       const applyValue = (): void => {
-        // Always keep the internal value in sync in case the component needs to reinitialize with the existing value later on
-        this._value = [...this._selectedValues];
-
         // If we're in multiselect mode, we need to toggle the selected option
         if (this._multiple) {
           const isSelected = this._selectedIndexes.includes(optionIndex);
@@ -543,7 +547,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
 
   /** Gets/sets the value of the component. */
   public get value(): any {
-    return this._multiple ? [...this._selectedValues] : this._selectedValues[0];
+    return this._multiple ? [...this._value] : this._value[0];
   }
   public set value(value: any) {
     let _value: string | string[];
