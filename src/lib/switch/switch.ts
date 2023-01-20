@@ -4,7 +4,7 @@ import { SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './switch.html';
-import styles from './switch.scss';
+import styles from './switch.scss?inline';
 
 export interface ISwitchComponent extends IBaseComponent {
   dense: boolean;

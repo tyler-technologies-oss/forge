@@ -6,7 +6,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FieldDensityType } from '../field/field-constants';
 
 import template from './label-value.html';
-import styles from './label-value.scss';
+import styles from './label-value.scss?inline';
 
 export interface ILabelValueComponent extends IBaseComponent {
   empty: boolean;

@@ -1,3 +1,135 @@
+# v2.12.2 (Wed Jan 11 2023)
+
+#### 🐛 Bug Fix
+
+- fix(select): fixed a bug where the UI was not reflecting the selected value if the option values are changed after the component value is set [#212](https://github.com/tyler-technologies-oss/forge/pull/212) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.12.1 (Wed Jan 04 2023)
+
+#### 🐛 Bug Fix
+
+- Fix/popup position [#208](https://github.com/tyler-technologies-oss/forge/pull/208) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.12.0 (Tue Jan 03 2023)
+
+#### 🐛 Bug Fix
+
+- fix(split-view): avoid updating size and accessibility of closed panels [#202](https://github.com/tyler-technologies-oss/forge/pull/202) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- docs(split-view): add JSDoc for manifest [#205](https://github.com/tyler-technologies-oss/forge/pull/205) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 2
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.11.0 (Tue Dec 06 2022)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Josh Pierro ([@joshpierro](https://github.com/joshpierro)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat(badge): added leading and trailing slots with support for icons [#185](https://github.com/tyler-technologies-oss/forge/pull/185) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(field): fixed incorrect checking for presence of input/textarea [#195](https://github.com/tyler-technologies-oss/forge/pull/195) ([@fallXone](https://github.com/fallXone))
+- fix(button-toggle-group): fixed `forge-button-toggle-group-change` typings [#190](https://github.com/tyler-technologies-oss/forge/pull/190) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: update templates and fix license text in sb [#193](https://github.com/tyler-technologies-oss/forge/pull/193) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(legal): use forge logo and add license info [#192](https://github.com/tyler-technologies-oss/forge/pull/192) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(button-toggle): corrects spelling error [#189](https://github.com/tyler-technologies-oss/forge/pull/189) ([@joshpierro](https://github.com/joshpierro))
+- chore: update Angular framework usage [#182](https://github.com/tyler-technologies-oss/forge/pull/182) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### 📝 Documentation
+
+- docs(app-bar): fixed app-bar-profile-button references to use correct element name [#187](https://github.com/tyler-technologies-oss/forge/pull/187) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 5
+
+- Conner Fallone ([@fallXone](https://github.com/fallXone))
+- Josh Pierro ([@joshpierro](https://github.com/joshpierro))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.10.1 (Thu Nov 03 2022)
+
+#### 🐛 Bug Fix
+
+- fix(slider): fixed propagation to underlying implementation state for `min`, `max`, and `step` properties [#180](https://github.com/tyler-technologies-oss/forge/pull/180) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.10.0 (Fri Oct 28 2022)
+
+#### 🚀 Enhancement
+
+- feat: expand nullable types to allow undefined [#160](https://github.com/tyler-technologies-oss/forge/pull/160) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### 🐛 Bug Fix
+
+- fix(table): fixed default select height in column filter [#176](https://github.com/tyler-technologies-oss/forge/pull/176) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(paginator): fixed change event state reconciliation [#172](https://github.com/tyler-technologies-oss/forge/pull/172) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore(build): update Forge CLI to enable ESM minification [#173](https://github.com/tyler-technologies-oss/forge/pull/173) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(keyboard-shortcut): add storybook docs for keyboard shortcuts [#174](https://github.com/tyler-technologies-oss/forge/pull/174) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- chore: optimize pr-check workflow to limit dependency installation to [#171](https://github.com/tyler-technologies-oss/forge/pull/171) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: fix actions workflow deprecations [#170](https://github.com/tyler-technologies-oss/forge/pull/170) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.9.0 (Wed Oct 19 2022)
+
+#### 🚀 Enhancement
+
+- create new split view component [#2](https://github.com/tyler-technologies-oss/forge/pull/2) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+- feat(app-bar-profile-button): allow for customizing the text on the sign out and profile buttons [#167](https://github.com/tyler-technologies-oss/forge/pull/167) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(table): ignore filter row checkboxes when toggling select column state [#169](https://github.com/tyler-technologies-oss/forge/pull/169) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip): change default `height` style to use `auto` to accommodate content height [#166](https://github.com/tyler-technologies-oss/forge/pull/166) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: fixed duplicate asterisk characters on required form field labels in Safari [#168](https://github.com/tyler-technologies-oss/forge/pull/168) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): fixed a bug where opening the dropdown via down arrow key would not activate the selected option [#163](https://github.com/tyler-technologies-oss/forge/pull/163) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fix to ensure `--forge-select-font-size` CSS custom prop… [#164](https://github.com/tyler-technologies-oss/forge/pull/164) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-picker): _onToday zeros out time values [#162](https://github.com/tyler-technologies-oss/forge/pull/162) ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- chore: support node 16 [#157](https://github.com/tyler-technologies-oss/forge/pull/157) ([@DRiFTy17](https://github.com/DRiFTy17))
+- chore: post release notes to slack [#156](https://github.com/tyler-technologies-oss/forge/pull/156) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Jake Crawford ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.8.0 (Tue Oct 11 2022)
 
 #### 🚀 Enhancement

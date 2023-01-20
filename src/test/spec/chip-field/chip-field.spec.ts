@@ -71,9 +71,11 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       // Make sure that the component doesn't initialize when added to DOM
       expect(this.context.foundation['_isInitialized']).toBeFalse();
   
+      const inputContainer = document.createElement('div');
       // Add the input and label elements to the text-field component
-      this.context.component.appendChild(this.context.input as HTMLInputElement);
-      this.context.component.appendChild(this.context.label as HTMLLabelElement);
+      inputContainer.appendChild(this.context.input as HTMLInputElement);
+      inputContainer.appendChild(this.context.label as HTMLLabelElement);
+      this.context.component.appendChild(inputContainer)
       await tick();
   
       // Now the component should initialize

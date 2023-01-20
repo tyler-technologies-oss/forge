@@ -6,7 +6,7 @@ import { BOTTOM_SHEET_CONSTANTS, IBottomSheetDragEventData, IBottomSheetDragStar
 import { BottomSheetFoundation } from './bottom-sheet-foundation';
 
 import template from './bottom-sheet.html';
-import styles from './bottom-sheet.scss';
+import styles from './bottom-sheet.scss?inline';
 
 export interface IBottomSheetComponent extends ICustomElement {
   showBackdrop: boolean;

@@ -6,7 +6,7 @@ import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants';
 import { ModalDrawerFoundation } from './modal-drawer-foundation';
 
 import template from './modal-drawer.html';
-import styles from './modal-drawer.scss';
+import styles from './modal-drawer.scss?inline';
 
 export interface IModalDrawerComponent extends IBaseDrawerComponent {}
 

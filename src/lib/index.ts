@@ -61,6 +61,7 @@ import { ScaffoldComponent } from './scaffold';
 import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
 import { SkeletonComponent } from './skeleton';
 import { SliderComponent } from './slider';
+import { SplitViewComponent } from './split-view';
 import { StepComponent, StepperComponent } from './stepper';
 import { SwitchComponent } from './switch';
 import { TableComponent } from './table';
@@ -122,6 +123,7 @@ export * from './scaffold';
 export * from './select';
 export * from './skeleton';
 export * from './slider';
+export * from './split-view';
 export * from './stepper';
 export * from './switch';
 export * from './table';
@@ -196,6 +198,7 @@ const CUSTOM_ELEMENTS = [
   SelectDropdownComponent,
   SkeletonComponent,
   SliderComponent,
+  SplitViewComponent,
   StepperComponent,
   StepComponent,
   SwitchComponent,

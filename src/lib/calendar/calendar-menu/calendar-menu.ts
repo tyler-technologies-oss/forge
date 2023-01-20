@@ -5,7 +5,7 @@ import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, 
 import { CalendarMenuFoundation } from './calendar-menu-foundation';
 
 import template from './calendar-menu.html';
-import styles from './calendar-menu.scss';
+import styles from './calendar-menu.scss?inline';
 
 export interface ICalendarMenuComponent extends ICustomElement {
   animationType: CalendarMenuAnimationType;

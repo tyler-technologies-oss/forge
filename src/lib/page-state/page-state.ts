@@ -4,7 +4,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { PAGE_STATE_CONSTANTS } from './page-state-constants';
 
 import template from './page-state.html';
-import styles from './page-state.scss';
+import styles from './page-state.scss?inline';
 
 export interface IPageStateComponent extends IBaseComponent {}
 

@@ -6,14 +6,14 @@ import { PopupFoundation } from './popup-foundation';
 
 
 import template from './popup.html';
-import styles from './popup.scss';
+import styles from './popup.scss?inline';
 
 export interface IPopupComponent extends IBaseComponent {
   targetElement: HTMLElement;
   placement: PopupPlacement;
   open: boolean;
   manageFocus: boolean;
-  animationType: PopupAnimationType;
+  animationType: `${PopupAnimationType}`;
   static: boolean;
   offset: IPopupPosition;
   hideWhenClipped: boolean;
@@ -94,7 +94,7 @@ export class PopupComponent extends BaseComponent implements IPopupComponent {
   public declare targetElement: HTMLElement;
 
   @FoundationProperty()
-  public declare placement: PopupPlacement;
+  public declare placement: `${PopupPlacement}`;
 
   @FoundationProperty()
   public declare open: boolean;
@@ -103,7 +103,7 @@ export class PopupComponent extends BaseComponent implements IPopupComponent {
   public declare manageFocus: boolean;
 
   @FoundationProperty()
-  public declare animationType: PopupAnimationType;
+  public declare animationType: `${PopupAnimationType}`;
 
   @FoundationProperty()
   public declare static: boolean;

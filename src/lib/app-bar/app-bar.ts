@@ -5,13 +5,13 @@ import { APP_BAR_CONSTANTS } from './app-bar-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './app-bar.html';
-import styles from './app-bar.scss';
+import styles from './app-bar.scss?inline';
 
 export interface IAppBarComponent extends IBaseComponent {
   titleText: string;
   fixed: boolean;
   raised: boolean;
-  theme: string | null;
+  theme: string | null | undefined;
 }
 
 declare global {
@@ -76,10 +76,10 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
   public declare raised: boolean;
 
   /** Convenience property to allow for easily getting/setting the theme color from JavaScript. */
-  public get theme(): string | null {
+  public get theme(): string | null | undefined {
     return this.getAttribute(APP_BAR_CONSTANTS.attributes.THEME) || null;
   }
-  public set theme(value: string | null) {
+  public set theme(value: string | null | undefined) {
     if (value) {
       this.setAttribute(APP_BAR_CONSTANTS.attributes.THEME, value);
     } else {

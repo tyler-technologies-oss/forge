@@ -9,12 +9,12 @@ import { COLOR_PICKER_CONSTANTS, IColorPickerChangeEventData, IHSVA, IRGBA } fro
 import { ColorPickerFoundation } from './color-picker-foundation';
 
 import template from './color-picker.html';
-import styles from './color-picker.scss';
+import styles from './color-picker.scss?inline';
 export interface IColorPickerComponent extends IBaseComponent {
-  value: string | null;
-  rgba: IRGBA | null;
-  hsva: IHSVA | null;
-  opacity: number | null;
+  value: string | null | undefined;
+  rgba: IRGBA | null | undefined;
+  hsva: IHSVA | null | undefined;
+  opacity: number | null | undefined;
   allowOpacity: boolean;
   debounceChangeEvent: boolean;
 }
@@ -84,19 +84,19 @@ export class ColorPickerComponent extends BaseComponent implements IColorPickerC
 
   /** Gets/sets the value using hex format only. */
   @FoundationProperty()
-  public declare value: string | null;
+  public declare value: string | null | undefined;
 
   /** Gets/sets the value using rgba format. */
   @FoundationProperty()
-  public declare rgba: IRGBA | null;
+  public declare rgba: IRGBA | null | undefined;
 
   /** Gets/sets the value using hsva format. */
   @FoundationProperty()
-  public declare hsva: IHSVA | null;
+  public declare hsva: IHSVA | null | undefined;
 
   /** Gets/sets the opacity value, if `allowOpacity` is true. */
   @FoundationProperty()
-  public declare opacity: number | null;
+  public declare opacity: number | null | undefined;
 
   /** Gets/sets whether opacity is displayed and allowed be to changed. */
   @FoundationProperty()

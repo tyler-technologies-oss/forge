@@ -11,11 +11,11 @@ import { DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEv
 import { DateRangePickerFoundation } from './date-range-picker-foundation';
 
 import template from './date-range-picker.html';
-import styles from './date-range-picker.scss';
+import styles from './date-range-picker.scss?inline';
 
 export interface IDateRangePickerComponent extends IBaseDatePickerComponent<IDatePickerRange> {
-  from: Date | string | null;
-  to: Date | string | null;
+  from: Date | string | null | undefined;
+  to: Date | string | null | undefined;
 }
 
 declare global {
@@ -75,9 +75,9 @@ export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePicke
 
   /** Gets/sets the "from" date range value. */
   @FoundationProperty()
-  public declare from: Date | string | null;
+  public declare from: Date | string | null | undefined;
 
   /** Gets/sets the "to" date range value. */
   @FoundationProperty()
-  public declare to: Date | string | null;
+  public declare to: Date | string | null | undefined;
 }

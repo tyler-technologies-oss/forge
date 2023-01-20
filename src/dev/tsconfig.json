@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
+    "module": "esnext",
     "useDefineForClassFields": false,
     "moduleResolution": "node",
     "paths": {

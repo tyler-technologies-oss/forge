@@ -5,7 +5,7 @@ import { PRODUCT_ICON_CONSTANTS } from './product-icon-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './product-icon.html';
-import styles from './product-icon.scss';
+import styles from './product-icon.scss?inline';
 
 export interface IProductIconComponent extends IBaseComponent {
   color: string;

@@ -7,7 +7,7 @@ import { STEPPER_CONSTANTS } from './stepper-constants';
 import { StepperFoundation } from './stepper-foundation';
 
 import template from './stepper.html';
-import styles from './stepper.scss';
+import styles from './stepper.scss?inline';
 
 export interface IStepperComponent extends IBaseComponent {
   steps: IStepConfiguration[];

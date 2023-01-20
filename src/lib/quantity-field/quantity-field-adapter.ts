@@ -24,7 +24,6 @@ export interface IQuantityFieldAdapter extends IBaseAdapter {
   addTextFieldAttribute(name: string, value?: string): void;
   removeTextFieldAttribute(name: string): void;
   removeInputDisabledAttributeChangeListener(): void;
-  setLabelAsRequired(required: boolean): void;
   increment(): void;
   decrement(): void;
 }
@@ -130,20 +129,6 @@ export class QuantityFieldAdapter extends BaseAdapter<IQuantityFieldComponent> i
     this._decrementButtonElement.removeAttribute(name);
   }
 
-  public setLabelAsRequired(required: boolean): void {
-    const labelElement = this._component.querySelector(QUANTITY_FIELD_CONSTANTS.selectors.LABEL) as HTMLLabelElement;
-
-    // Due to a Safari bug with ::slotted::after selectors, we need to manually append the required "asterisk" to the label text
-    // https://bugs.webkit.org/show_bug.cgi?id=178237
-    if (required && Platform.WEBKIT && labelElement && !labelElement.innerText.endsWith('*')) {
-      const asterisk = document.createElement('span');
-      asterisk.style.color = 'var(--mdc-theme-error)';
-      asterisk.style.marginLeft = '1px';
-      asterisk.textContent = '*';
-      labelElement.appendChild(asterisk);
-    }
-  }
-
   public increment(): void {
     const input = this.inputElement;
     if (!input) {
@@ -195,7 +180,7 @@ export class QuantityFieldAdapter extends BaseAdapter<IQuantityFieldComponent> i
   }
 
   private _isNullOrUndefinedOrEmpty(value: any): value is null | undefined {
-    return value === null || value === undefined || value === '';
+    return value == null || value === '';
   }
 
   private _setupInputDisabledAttributeMutationObserver(callback: () => void): void {

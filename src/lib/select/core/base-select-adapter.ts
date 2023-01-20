@@ -8,6 +8,7 @@ import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group';
 import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants';
 import { isOptionGroupObject } from './select-utils';
 import { IPopupComponent, POPUP_CONSTANTS } from '../../popup';
+import { assignMatchingProperties } from '../../core/utils/utils';
 
 export interface IBaseSelectAdapter extends IBaseAdapter {
   initializeAccessibility(): void;
@@ -33,6 +34,7 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   appendDropdownOptions(options: ISelectOption[] | ISelectOptionGroup[]): void;
   setMultiple(multiple: boolean): void;
   isFocusWithinPopup(target: HTMLElement): boolean;
+  queueDropdownPositionUpdate(): void;
   popupElement: HTMLElement | undefined;
 }
 
@@ -144,9 +146,21 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
   }
 
   public setOptionsListener(listener: (options: ISelectOption[] | ISelectOptionGroup[]) => void): SelectOptionListenerDestructor {
+    // Watch for option value property changes
+    const optionValueChangeListener: EventListener = evt => {
+      evt.stopPropagation();
+      listener(this.getOptions());
+    };
+    this._component.addEventListener(OPTION_CONSTANTS.events.VALUE_CHANGE, optionValueChangeListener);
+
+    // Watch for DOM changes
     const observer = new MutationObserver(() => listener(this.getOptions()));
     observer.observe(this._component, { childList: true, subtree: true });
-    return () => observer.disconnect();
+
+    return () => {
+      this._component.removeEventListener(OPTION_CONSTANTS.events.VALUE_CHANGE, optionValueChangeListener);
+      observer.disconnect();
+    };
   }
 
   public setOptions(options: ISelectOption[] | ISelectOptionGroup[], clear = true): void {
@@ -188,6 +202,17 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     return this._listDropdown.dropdownElement.contains(target);
   }
 
+  public queueDropdownPositionUpdate(): void {
+    if (!this.popupElement) {
+      return;
+    }
+    // We need to wait for the next animation frame to ensure that the layout has been updated
+    window.requestAnimationFrame(() => {
+      const dropdownEl = this.popupElement as IPopupComponent | undefined;
+      dropdownEl?.position();
+    });
+  }
+
   private _clearOptions(): void {
     // First we remove all option group elements
     const existingOptionGroupElements = Array.from(this._component.querySelectorAll(OPTION_GROUP_CONSTANTS.elementName));
@@ -198,20 +223,17 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     existingOptionElements.forEach((o: HTMLElement) => removeElement(o));
   }
 
-
   private _createOptionGroupElement(group: ISelectOptionGroup): HTMLElement {
-    const optionGroupElement = document.createElement(OPTION_GROUP_CONSTANTS.elementName) as IOptionGroupComponent;
-    optionGroupElement.label = group.text || '';
+    const optionGroupElement = document.createElement('forge-option-group');
+    assignMatchingProperties(group, optionGroupElement);
+    optionGroupElement.label = group.text ?? '';
     return optionGroupElement;
   }
 
   private _createOptionElement(option: ISelectOption): HTMLElement {
-    const optionElement = document.createElement(OPTION_CONSTANTS.elementName) as IOptionComponent;
-    optionElement.value = option.value;
+    const optionElement = document.createElement('forge-option');
+    assignMatchingProperties(option, optionElement);
     optionElement.textContent = option.label;
-    if (option.disabled) {
-      optionElement.disabled = option.disabled;
-    }
     return optionElement;
   }
 }

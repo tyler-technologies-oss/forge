@@ -20,20 +20,20 @@ import { ListComponent, ListItemComponent } from '../list';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './time-picker.html';
-import styles from './time-picker.scss';
+import styles from './time-picker.scss?inline';
 
 export interface ITimePickerComponent extends IBaseComponent {
-  value: string | null;
+  value: string | null | undefined;
   open: boolean;
   allowSeconds: boolean;
   masked: boolean;
   showMaskFormat: boolean;
   use24HourTime: boolean;
   allowInvalidTime: boolean;
-  min: string | null;
-  max: string | null;
+  min: string | null | undefined;
+  max: string | null | undefined;
   restrictedTimes: string[];
-  startTime: string | null;
+  startTime: string | null | undefined;
   step: number;
   allowInput: boolean;
   showNow: boolean;
@@ -181,7 +181,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   }
 
   @FoundationProperty()
-  public declare value: string | null;
+  public declare value: string | null | undefined;
 
   @FoundationProperty()
   public declare open: boolean;
@@ -202,16 +202,16 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   public declare allowInvalidTime: boolean;
 
   @FoundationProperty()
-  public declare min: string | null;
+  public declare min: string | null | undefined;
 
   @FoundationProperty()
-  public declare max: string | null;
+  public declare max: string | null | undefined;
 
   @FoundationProperty()
   public declare restrictedTimes: string[];
 
   @FoundationProperty()
-  public declare startTime: string | null;
+  public declare startTime: string | null | undefined;
 
   @FoundationProperty()
   public declare step: number;

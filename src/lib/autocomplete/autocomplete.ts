@@ -14,19 +14,19 @@ import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder
 import { AutocompleteFoundation } from './autocomplete-foundation';
 
 import template from './autocomplete.html';
-import styles from './autocomplete.scss';
+import styles from './autocomplete.scss?inline';
 
 export interface IAutocompleteComponent extends IListDropdownAware {
-  mode: AutocompleteMode;
+  mode: `${AutocompleteMode}`;
   multiple: boolean;
   value: any;
   debounce: number;
   filterOnFocus: boolean;
   allowUnmatched: boolean;
-  matchKey: string | null;
+  matchKey: string | null | undefined;
   popupTarget: string;
-  filter: AutocompleteFilterCallback;
-  optionBuilder: AutocompleteOptionBuilder;
+  filter: AutocompleteFilterCallback | null | undefined;
+  optionBuilder: AutocompleteOptionBuilder | null | undefined;
   selectedTextBuilder: AutocompleteSelectedTextBuilder;
   popupElement: HTMLElement | null;
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
@@ -139,7 +139,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /** Gets/sets the interaction mode. */
   @FoundationProperty()
-  public declare mode: AutocompleteMode;
+  public declare mode: `${AutocompleteMode}`;
 
   /** Gets/sets the multi-select state. */
   @FoundationProperty()
@@ -167,11 +167,11 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
   @FoundationProperty()
-  public declare optionBuilder: AutocompleteOptionBuilder;
+  public declare optionBuilder: AutocompleteOptionBuilder | null | undefined;
 
   /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
   @FoundationProperty()
-  public declare filter: AutocompleteFilterCallback;
+  public declare filter: AutocompleteFilterCallback | null | undefined;
 
   /** Sets the selected text builder callback that will be executed when getting the selected text. */
   @FoundationProperty()
@@ -183,13 +183,13 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /** Gets/sets the property key to match the value to an option. */
   @FoundationProperty()
-  public declare matchKey: string;
+  public declare matchKey: string | null | undefined;
 
   /** Returns whether the component has been initialized or not yet. */
   @FoundationProperty({ set: false })
   public declare isInitialized: boolean;
 
-  /** Sets the callback to be executed when the user selects an option, before the UI is updated to allow for validation. */
+  /** Gets the currently active popup element when the dropdown is open. */
   @FoundationProperty({ set: false })
   public declare popupElement: HTMLElement | null;
 

@@ -7,7 +7,7 @@ import { CHIP_SET_CONSTANTS } from './chip-set-constants';
 import { ChipSetFoundation } from './chip-set-foundation';
 
 import template from './chip-set.html';
-import styles from './chip-set.scss';
+import styles from './chip-set.scss?inline';
 
 export interface IChipSetComponent extends IBaseComponent {
   vertical: boolean;

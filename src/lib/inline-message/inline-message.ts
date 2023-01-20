@@ -3,7 +3,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { INLINE_MESSAGE_CONSTANTS } from './inline-message-constants';
 
 import template from './inline-message.html';
-import styles from './inline-message.scss';
+import styles from './inline-message.scss?inline';
 
 export interface IInlineMessageComponent extends IBaseComponent {}
 

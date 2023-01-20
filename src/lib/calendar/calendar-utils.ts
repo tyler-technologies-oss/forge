@@ -309,14 +309,14 @@ export function getMultipleFromRange(dates: Date[], disabledParams?: ICalendarDi
 }
 
 /** Gets a date or null from a date, string, or date offset. */
-export function coerceDateFromValue(value: Date | string | null): Date | null {
+export function coerceDateFromValue(value?: Date | string | null): Date | null {
   let date: Date | null = null;
 
   if (typeof value === 'string' && !value.length) {
     value = null;
   }
 
-  if (value !== null && value !== undefined) {
+  if (value != null) {
     if (isValidDate(new Date(value as string | Date))) {
       date = new Date(value as Date);
     } else if ((value as string).length) {

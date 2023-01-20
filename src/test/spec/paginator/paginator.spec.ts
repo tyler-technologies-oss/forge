@@ -2,6 +2,7 @@ import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, define
 import { BASE_SELECT_CONSTANTS, ISelectComponent } from '@tylertech/forge/select';
 import { IIconButtonComponent } from '@tylertech/forge/icon-button';
 import { getShadowElement, removeElement, emitEvent } from '@tylertech/forge-core';
+import { timer } from '@tylertech/forge-testing';
 
 interface ITestContext {
   context: ITestPaginatorContext;
@@ -185,6 +186,20 @@ describe('PaginatorComponent', function(this: ITestContext) {
         done();
       });
       this.context.previousPageButton.click();
+    });
+
+    it('should reconcile state if pageIndex is altered before listener returns', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, (evt: CustomEvent<IPaginatorChangeEvent>) => {
+        this.context.paginator.pageIndex = evt.detail.pageIndex; // Force the pageIndex change directly on the element to try to throw off the internal state
+      });
+      this.context.previousPageButton.click();
+
+      await timer();
+
+      expect(this.context.paginator.pageIndex).toBe(1);
     });
 
     it('should not proceed to previous page when event is cancelled', function(this: ITestContext, done: DoneFn) {

@@ -3,7 +3,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { DIVIDER_CONSTANTS } from './divider-constants';
 
 import template from './divider.html';
-import styles from './divider.scss';
+import styles from './divider.scss?inline';
 
 export interface IDividerComponent extends IBaseComponent {}
 

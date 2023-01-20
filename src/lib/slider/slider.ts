@@ -1,4 +1,4 @@
-import { MDCSlider } from '@material/slider';
+import { MDCSlider, MDCSliderFoundation } from '@material/slider';
 import { CustomElement, coerceBoolean, coerceNumber, emitEvent, attachShadowTemplate, getShadowElement, isDefined, removeAllChildren, replaceShadowTemplate } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { SLIDER_CONSTANTS, SliderType, ISliderChangeEventData, ISliderInputEventData } from './slider-constants';
@@ -9,7 +9,7 @@ import discreteTemplate from './slider-discrete.html';
 import discreteMarkersTemplate from './slider-discrete-markers.html';
 import discreteRangeTemplate from './slider-discrete-range.html';
 import discreteRangeMarkersTemplate from './slider-discrete-range-markers.html';
-import styles from './slider.scss';
+import styles from './slider.scss?inline';
 
 export interface ISliderComponent extends IBaseComponent {
   type: SliderType;
@@ -54,6 +54,7 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
   }
 
   private _mdcSlider: MDCSlider;
+  private _mdcSliderFoundation: MDCSliderFoundation;
 
   // State
   private _type: SliderType = 'continuous';
@@ -61,7 +62,7 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
   private _valueStart = 0;
   private _min = 0;
   private _max = 100;
-  private _step = 0;
+  private _step = 1;
   private _disabled = false;
 
   // Listeners
@@ -155,18 +156,23 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
 
     // We need to initialize MDCSlider in the next cycle after our template has been placed in the DOM
     window.setTimeout(() => {
-      if (!this._rootElement) {
-        return;
-      }
-      if (this._mdcSlider) {
-        this._mdcSlider.destroy();
-      }
-      this._mdcSlider = new MDCSlider(this._rootElement);
-      this._syncToSlider();
-      this._mdcSlider.initialize();
-      this._rootElement.addEventListener(SLIDER_CONSTANTS.events.MDC_INPUT, this._mdcSliderUpdateListener);
-      this._rootElement.addEventListener(SLIDER_CONSTANTS.events.MDC_CHANGE, this._mdcSliderUpdateListener);
+      this._initializeMdcSlider();
+      this._rootElement?.addEventListener(SLIDER_CONSTANTS.events.MDC_INPUT, this._mdcSliderUpdateListener);
+      this._rootElement?.addEventListener(SLIDER_CONSTANTS.events.MDC_CHANGE, this._mdcSliderUpdateListener);
     });
+  }
+
+  private _initializeMdcSlider(): void {
+    if (!this._rootElement) {
+      return;
+    }
+    if (this._mdcSlider) {
+      this._mdcSlider.destroy();
+    }
+    this._mdcSlider = new MDCSlider(this._rootElement);
+    this._mdcSliderFoundation = (this._mdcSlider as any).foundation as MDCSliderFoundation;
+    this._syncToSlider();
+    this._mdcSlider.initialize();
   }
 
   private _onSliderUpdate(evt: CustomEvent): void {
@@ -204,6 +210,7 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
     if (this._inputElementStart) {
       this._inputElementStart.min = `${min}`;
     }
+    this._mdcSliderFoundation?.setMin(min);
     this._mdcSlider?.layout();
   }
 
@@ -214,6 +221,7 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
     if (this._inputElementStart) {
       this._inputElementStart.max = `${max}`;
     }
+    this._mdcSliderFoundation?.setMax(max);
     this._mdcSlider?.layout();
   }
 
@@ -224,6 +232,7 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
     if (this._inputElementStart) {
       this._inputElementStart.step = `${step}`;
     }
+    this._mdcSliderFoundation?.setStep(step);
     this._mdcSlider?.layout();
   }
 

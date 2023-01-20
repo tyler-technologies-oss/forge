@@ -3,7 +3,7 @@ import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerFoundation, IBaseDraw
 import { MINI_DRAWER_CONSTANTS } from './mini-drawer-constants';
 
 import template from './mini-drawer.html';
-import styles from './mini-drawer.scss';
+import styles from './mini-drawer.scss?inline';
 
 export interface IMiniDrawerComponent extends IBaseDrawerComponent {}
 

@@ -7,7 +7,7 @@ import { IListComponent } from '../list';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import defaultTemplate from './list-item.html';
-import styles from './list-item.scss';
+import styles from './list-item.scss?inline';
 
 export interface IListItemComponent extends IBaseComponent {
   static: boolean;

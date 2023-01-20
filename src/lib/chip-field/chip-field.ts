@@ -6,7 +6,7 @@ import { ChipComponent } from '../chips';
 import { FieldComponent, IFieldComponent } from '../field/field';
 
 import template from './chip-field.html';
-import styles from './chip-field.scss';
+import styles from './chip-field.scss?inline';
 
 export interface IChipFieldComponent extends IFieldComponent { }
 

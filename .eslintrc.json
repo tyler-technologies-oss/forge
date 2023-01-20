@@ -48,7 +48,8 @@
         "max-len": "off",
         "arrow-body-style": "off",
         "@typescript-eslint/arrow-body-style": "off",
-        "@typescript-eslint/no-require-imports": "error"
+        "@typescript-eslint/no-require-imports": "error",
+        "eqeqeq": ["error", "always", {"null": "never"}]
       }
     }
   ]

@@ -45,7 +45,7 @@ export class FieldFoundation {
   //
 
   public initialize(): void {
-    this._adapter.initialize(this._required, '');
+    this._adapter.initialize('');
 
     if (this._adapter.hasLabel()) {
       this._adapter.ensureSlottedLabel();
@@ -235,7 +235,7 @@ export class FieldFoundation {
     if (this._floatingLabel) {
       this._floatingLabel.destroy();
     }
-    this._adapter.detectLabel(this._required);
+    this._adapter.detectLabel();
     if (this._adapter.hasLabel() && this._density !== 'dense') {
       this._floatingLabel = this._adapter.initializeFloatingLabel();
       this._adapter.ensureLabelOrder();

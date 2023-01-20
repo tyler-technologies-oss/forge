@@ -7,6 +7,10 @@ const attributes = {
   HOST_LABEL_FLOATING: `forge-label-floating`
 };
 
+const selectors = {
+  INPUT: 'input,textarea'
+};
+
 const observedInputAttributes = ['disabled', 'readonly', 'value', 'placeholder'];
 
 const classes = {
@@ -30,6 +34,7 @@ const classes = {
 export const FIELD_CONSTANTS = {
   attributes,
   observedInputAttributes,
+  selectors,
   classes
 };
 

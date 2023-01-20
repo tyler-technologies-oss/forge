@@ -5,7 +5,7 @@ import { BackdropAppearance, BACKDROP_CONSTANTS } from './backdrop-constants';
 import { BackdropFoundation } from './backdrop-foundation';
 
 import template from './backdrop.html';
-import styles from './backdrop.scss';
+import styles from './backdrop.scss?inline';
 
 export interface IBackdropComponent extends IBaseComponent {
   delay: number;

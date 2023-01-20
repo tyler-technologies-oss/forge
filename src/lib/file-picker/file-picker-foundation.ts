@@ -4,9 +4,9 @@ import { IFilePickerAdapter } from './file-picker-adapter';
 import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
 
 export interface IFilePickerFoundation extends ICustomElementFoundation {
-  accept: string | null;
-  maxSize: number | null;
-  capture: string | null;
+  accept: string | null | undefined;
+  maxSize: number | null | undefined;
+  capture: string | null | undefined;
   multiple: boolean;
   disabled: boolean;
   compact: boolean;
@@ -14,9 +14,9 @@ export interface IFilePickerFoundation extends ICustomElementFoundation {
 }
 
 export class FilePickerFoundation implements IFilePickerFoundation {
-  private _accept: string | null = null;
-  private _maxSize: number | null = null;
-  private _capture: string | null = null;
+  private _accept: string | null | undefined = null;
+  private _maxSize: number | null | undefined = null;
+  private _capture: string | null | undefined = null;
   private _multiple = false;
   private _disabled = false;
   private _compact = false;
@@ -146,10 +146,10 @@ export class FilePickerFoundation implements IFilePickerFoundation {
   }
 
   /** Get and set the allowed file types */
-  public get accept(): string | null {
+  public get accept(): string | null | undefined {
     return this._accept;
   }
-  public set accept(value: string | null) {
+  public set accept(value: string | null | undefined) {
     if (this._accept !== value) {
       this._accept = value;
       this._adapter.setAccept(value);
@@ -162,10 +162,10 @@ export class FilePickerFoundation implements IFilePickerFoundation {
   }
 
   /** Get and set the maximum allowed file size */
-  public get maxSize(): number | null {
+  public get maxSize(): number | null | undefined {
     return this._maxSize;
   }
-  public set maxSize(value: number | null) {
+  public set maxSize(value: number | null | undefined) {
     if (this._maxSize !== value) {
       this._maxSize = value;
       if (value) {
@@ -177,10 +177,10 @@ export class FilePickerFoundation implements IFilePickerFoundation {
   }
 
   /** Get and set the camera to use when capturing video or images */
-  public get capture(): string | null {
+  public get capture(): string | null | undefined {
     return this._capture;
   }
-  public set capture(value: string | null) {
+  public set capture(value: string | null | undefined) {
     if (this._capture !== value) {
       this._capture = value;
       this._adapter.setCapture(value);

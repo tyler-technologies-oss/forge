@@ -4,7 +4,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { TOOLBAR_CONSTANTS } from './toolbar-constants';
 
 import template from './toolbar.html';
-import styles from './toolbar.scss';
+import styles from './toolbar.scss?inline';
 
 export interface IToolbarComponent extends IBaseComponent {
   inverted: boolean;

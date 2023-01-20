@@ -5,7 +5,7 @@ import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-
 import { ButtonToggleFoundation } from './button-toggle-foundation';
 
 import template from './button-toggle.html';
-import styles from './button-toggle.scss';
+import styles from './button-toggle.scss?inline';
 
 export interface IButtonToggleComponent extends IBaseComponent {
   value: any;

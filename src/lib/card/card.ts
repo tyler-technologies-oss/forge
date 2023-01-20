@@ -4,7 +4,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { CARD_CONSTANTS } from './card-constants';
 
 import template from './card.html';
-import styles from './card.scss';
+import styles from './card.scss?inline';
 
 export interface ICardComponent extends IBaseComponent {
   outlined: boolean;

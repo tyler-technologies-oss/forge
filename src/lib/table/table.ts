@@ -42,7 +42,7 @@ export interface ITableComponent extends IBaseComponent {
   minResizeWidth: number;
   allowRowClick: boolean;
   multiColumnSort: boolean;
-  selectCheckboxAlignment: CellAlign;
+  selectCheckboxAlignment: `${CellAlign}`;
   tooltipSelect: string | TableSelectTooltipCallback;
   tooltipSelectAll: string;
   rowCreated: TableRowCreatedCallback;
@@ -389,5 +389,5 @@ export class TableComponent extends BaseComponent implements ITableComponent {
   public declare selectAllTemplate: TableHeaderSelectAllTemplate;
 
   @FoundationProperty()
-  public declare selectCheckboxAlignment: CellAlign;
+  public declare selectCheckboxAlignment: `${CellAlign}`;
 }

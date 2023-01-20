@@ -7,7 +7,7 @@ import { IconRegistry, IconComponent } from '../icon';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './open-icon.html';
-import styles from './open-icon.scss';
+import styles from './open-icon.scss?inline';
 
 export interface IOpenIconComponent extends IBaseComponent {
   open: boolean;

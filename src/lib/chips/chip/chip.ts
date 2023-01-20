@@ -7,14 +7,14 @@ import { ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } 
 import { ChipFoundation } from './chip-foundation';
 
 import template from './chip.html';
-import styles from './chip.scss';
+import styles from './chip.scss?inline';
 
 export interface IChipComponent extends IBaseComponent {
   type: ChipType;
   selected: boolean;
   disabled: boolean;
   invalid: boolean;
-  value: string;
+  value: any;
   dense: boolean;
   emulateFocus: boolean;
 }
@@ -112,7 +112,7 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
 
   /** Gets/sets the chip value. */
   @FoundationProperty()
-  public declare value: string;
+  public declare value: any;
 
   /** Gets/sets the dense state of the chip. */
   @FoundationProperty()

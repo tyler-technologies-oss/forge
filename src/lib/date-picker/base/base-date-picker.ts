@@ -6,10 +6,10 @@ import { BaseDatePickerFoundation } from './base-date-picker-foundation';
 import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 
 export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
-  value: TValue;
-  min: Date | string | null;
-  max: Date | string | null;
-  disabledDates: Date | Date[] | null;
+  value: TValue | undefined;
+  min: Date | string | null | undefined;
+  max: Date | string | null | undefined;
+  disabledDates: Date | Date[] | null | undefined;
   open: boolean;
   parseCallback: DatePickerParseCallback;
   formatCallback: DatePickerFormatCallback;
@@ -98,19 +98,19 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
 
   /** Gets/sets the value of the component. */
   @FoundationProperty()
-  public declare value: TPublicValue;
+  public declare value: TPublicValue | undefined;
 
   /** Gets/sets the minimum date the calendar will allow. */
   @FoundationProperty()
-  public declare min: Date | string | null;
+  public declare min: Date | string | null | undefined;
 
   /** Gets/sets the maximum date the calendar will allow. */
   @FoundationProperty()
-  public declare max: Date | string | null;
+  public declare max: Date | string | null | undefined;
 
   /** Gets/sets the dates that are restricted from being selected. */
   @FoundationProperty()
-  public declare disabledDates: Date | Date[] | null;
+  public declare disabledDates: Date | Date[] | null | undefined;
 
   /** Gets/sets whether the calendar dropdown is open. */
   @FoundationProperty()

@@ -6,7 +6,7 @@ import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './circular-progress.html';
-import styles from './circular-progress.scss';
+import styles from './circular-progress.scss?inline';
 
 export interface ICircularProgressComponent extends IBaseComponent {
   open: boolean;

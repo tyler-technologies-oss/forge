@@ -6,11 +6,11 @@ import { ViewComponent } from './view/view';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './view-switcher.html';
-import styles from './view-switcher.scss';
+import styles from './view-switcher.scss?inline';
 
 export interface IViewSwitcherComponent extends IBaseComponent {
   index: number;
-  animationType: ViewSwitcherAnimationType;
+  animationType: `${ViewSwitcherAnimationType}`;
   next(): void;
   previous(): void;
   goToStart(): void;
@@ -74,7 +74,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
   
   /** Gets/sets the animation type. */
   @FoundationProperty()
-  public declare animationType: ViewSwitcherAnimationType;
+  public declare animationType: `${ViewSwitcherAnimationType}`;
 
   /** Transitions to the next view. */
   public next(): void {

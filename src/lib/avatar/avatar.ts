@@ -6,7 +6,7 @@ import { AVATAR_CONSTANTS } from './avatar-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './avatar.html';
-import styles from './avatar.scss';
+import styles from './avatar.scss?inline';
 
 export interface IAvatarComponent extends IBaseComponent {
   imageUrl: string;

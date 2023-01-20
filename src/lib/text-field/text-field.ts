@@ -5,7 +5,7 @@ import { TEXT_FIELD_CONSTANTS } from './text-field-constants';
 import { FieldComponent, IFieldComponent } from '../field/field';
 
 import template from './text-field.html';
-import styles from './text-field.scss';
+import styles from './text-field.scss?inline';
 
 export interface ITextFieldComponent extends IFieldComponent {}
 

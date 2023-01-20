@@ -1,17 +1,9 @@
 {
+  "extends": "./lib/tsconfig-build.json",
   "compilerOptions": {
-    "target": "es2015",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "lib": ["dom", "es2015", "es2017"],
     "sourceMap": true,
-    "noImplicitAny": false,
-    "experimentalDecorators": true,
     "noImplicitReturns": true,
     "preserveConstEnums": true,
-    "strictNullChecks": true,
-    "importHelpers": true,
-    "noEmitHelpers": true,
     "pretty": true,
     "suppressImplicitAnyIndexErrors": true,
     "useDefineForClassFields": false,
@@ -26,8 +18,5 @@
       "@tylertech/forge/*": ["lib/*"]
     }
   },
-  "exclude": [
-    "demo",
-    "stories"
-  ]
+  "exclude": ["demo", "stories"]
 }

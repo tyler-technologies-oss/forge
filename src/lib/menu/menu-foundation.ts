@@ -269,10 +269,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       options.forEach(o => o.selected = false);
     }
 
-    const flatOptions = this._flatOptions;
-
-    // Map the old "icon" property to the new "leadingIcon" property (if exists)
-    flatOptions.filter(o => o.icon).forEach(o => o.leadingIcon = o.icon);
+    this._mapIconToLeadingIcon();
 
     const selectedValues = this._persistSelection ? this._getSelectedValues() : [];
 
@@ -468,6 +465,11 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     return menu;
   }
 
+  private _mapIconToLeadingIcon(): void {
+    // For backwards compatibility with old API, map the old "icon" property to the new "leadingIcon" property (if exists)
+    this._flatOptions.filter(o => o.icon).forEach(o => o.leadingIcon = o.icon);
+  }
+
   public get open(): boolean {
     return this._open;
   }
@@ -494,6 +496,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       this._options = options.map(o => ({ ...o }));
       
       if (this._open) {
+        this._mapIconToLeadingIcon();
         this._adapter.setOptions(this._options as IMenuOption[]);
         if (this._persistSelection) {
           const selectedValues = this._getSelectedValues();

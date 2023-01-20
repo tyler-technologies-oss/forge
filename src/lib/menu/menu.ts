@@ -11,7 +11,7 @@ import { IMenuActiveChangeEventData, IMenuOption, IMenuOptionGroup, IMenuSelectE
 import { MenuFoundation } from './menu-foundation';
 
 import template from './menu.html';
-import styles from './menu.scss';
+import styles from './menu.scss?inline';
 
 export interface IMenuComponent extends IListDropdownAware {
   open: boolean;
@@ -144,7 +144,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   /** Gets/sets the menu placement (default is bottom-left). */
   @FoundationProperty()
-  public declare placement: PopupPlacement;
+  public declare placement: `${PopupPlacement}`;
 
   /** Gets/sets dense state of the list options used in the menu popup. */
   @FoundationProperty()
@@ -173,7 +173,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   @FoundationProperty()
   public declare optionBuilder: MenuOptionBuilder;
 
-  /** Gets/sets whether selection of menu items is persisted. */
+  /** Gets the currently active popup element when the dropdown is open. */
   @FoundationProperty({ set: false })
   public declare popupElement: HTMLElement | undefined;
 

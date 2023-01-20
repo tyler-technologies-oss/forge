@@ -21,6 +21,8 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   private _avatarLetterCount: number;
   private _showSignOutButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_SIGN_OUT_BUTTON;
   private _showProfileButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_PROFILE_BUTTON;
+  private _signOutButtonText = PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT;
+  private _profileButtonText = PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT;
   private _profileListener: (evt: Event) => void;
   private _signOutListener: (evt: Event) => void;
 
@@ -38,6 +40,8 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     }
 
     this._setActionVisibility();
+    this._adapter.setSignOutButtonText(this._signOutButtonText);
+    this._adapter.setProfileButtonText(this._profileButtonText);
   }
 
   private _requestInitialFocus(): void {
@@ -132,6 +136,26 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     if (this._showProfileButton !== value) {
       this._showProfileButton = value;
       this._setActionVisibility();
+    }
+  }
+
+  public get signOutText(): string {
+    return this._signOutButtonText;
+  }
+  public set signOutText(value: string) {
+    if (this._signOutButtonText !== value) {
+      this._signOutButtonText = value || PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT;
+      this._adapter.setSignOutButtonText(this._signOutButtonText);
+    }
+  }
+
+  public get profileText(): string {
+    return this._profileButtonText;
+  }
+  public set profileText(value: string) {
+    if (this._profileButtonText !== value) {
+      this._profileButtonText = value || PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT;
+      this._adapter.setProfileButtonText(this._profileButtonText);
     }
   }
 }

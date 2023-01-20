@@ -5,7 +5,7 @@ import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType } from './icon-constan
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './icon.html';
-import styles from './icon.scss';
+import styles from './icon.scss?inline';
 
 export interface IIconComponent extends IBaseComponent {
   name: string | undefined;

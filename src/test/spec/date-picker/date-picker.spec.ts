@@ -1073,12 +1073,48 @@ describe('DatePickerComponent', function(this: ITestContext) {
       await tick();
 
       const popup = getPopup(this.context.component);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
       expect(this.context.component.open).toBeFalse();
       expect(popup).toBeNull('Expected popup to be removed');
       expect(this.context.component.value).toBeInstanceOf(Date);
-      expect((this.context.component.value as Date).getDate()).toEqual(new Date().getDate());
+      expect((this.context.component.value as Date)).toEqual(today);
+    });
+
+    it('should set date to todays date when clicking today button a second time', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.showToday = true;
+      const changeSpy = jasmine.createSpy('change spy');
+      this.context.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      openPopup(this.context.component);
+
+      clickTodayButton(this.context.component);
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+
+      const popup = getPopup(this.context.component);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      expect(changeSpy).toHaveBeenCalledTimes(1);
+      expect(this.context.component.open).toBeFalse();
+      expect(popup).toBeNull('Expected popup to be removed');
+      expect(this.context.component.value).toBeInstanceOf(Date);
+      expect((this.context.component.value as Date)).toEqual(today);
+      
+      openPopup(this.context.component);
+      
+      clickTodayButton(this.context.component);
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await tick();
+      
+      expect(changeSpy).toHaveBeenCalledTimes(2);
+      expect(this.context.component.open).toBeFalse();
+      expect(popup).toBeNull('Expected popup to be removed');
+      expect(this.context.component.value).toBeInstanceOf(Date);
+      expect((this.context.component.value as Date)).toEqual(today);
     });
 
     it('should remove value when clicking clear button', async function(this: ITestContext) {

@@ -13,7 +13,7 @@ import { ICalendarBase } from './core/calendar-base';
 import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu';
 
 import template from './calendar.html';
-import styles from './calendar.scss';
+import styles from './calendar.scss?inline';
 
 export interface ICalendarComponent extends ICalendarBase, ICustomElement {
   mode: CalendarMode;
@@ -217,16 +217,16 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   public declare disabledDateBuilder: ((date: Date) => boolean) | undefined;
 
   @FoundationProperty()
-  public declare disabledDates: Date | Date[] | null;
+  public declare disabledDates: Date | Date[] | null | undefined;
 
   @FoundationProperty()
-  public declare disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null;
+  public declare disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
 
   @FoundationProperty()
   public declare eventBuilder: CalendarEventBuilder | undefined;
 
   @FoundationProperty()
-  public declare events: ICalendarEvent[] | null;
+  public declare events: ICalendarEvent[] | null | undefined;
 
   @FoundationProperty()
   public declare firstDayOfWeek: DayOfWeek | undefined;
@@ -241,13 +241,13 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   public declare locale: string | undefined;
 
   @FoundationProperty()
-  public declare max: Date | string | null;
+  public declare max: Date | string | null | undefined;
 
   @FoundationProperty()
   public declare menuAnimation: CalendarMenuAnimationType;
 
   @FoundationProperty()
-  public declare min: Date | string | null;
+  public declare min: Date | string | null | undefined;
 
   @FoundationProperty()
   public declare mode: CalendarMode;
@@ -283,13 +283,13 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   public declare tooltipBuilder: CalendarTooltipBuilder | undefined;
 
   @FoundationProperty()
-  public declare value: Date | Date[] | DateRange | null;
+  public declare value: Date | Date[] | DateRange | null | undefined;
 
   @FoundationProperty()
   public declare view: CalendarView;
 
   @FoundationProperty()
-  public declare weekendDays: DayOfWeek[] | null;
+  public declare weekendDays: DayOfWeek[] | null | undefined;
 
   @FoundationProperty()
   public declare year: number;

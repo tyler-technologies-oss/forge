@@ -8,13 +8,15 @@ import { ToolbarComponent } from '../toolbar';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './profile-card.html';
-import styles from './profile-card.scss';
+import styles from './profile-card.scss?inline';
 
 export interface IProfileCardComponent extends IBaseComponent {
   fullName: string;
   email: string;
   signOut: boolean;
   profile: boolean;
+  signOutText: string;
+  profileText: string;
   avatarText: string;
   avatarImageUrl: string;
   avatarLetterCount: number;
@@ -51,6 +53,8 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
       PROFILE_CARD_CONSTANTS.attributes.EMAIL,
       PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT,
       PROFILE_CARD_CONSTANTS.attributes.PROFILE,
+      PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT,
+      PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_LETTER_COUNT
@@ -83,6 +87,12 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
       case PROFILE_CARD_CONSTANTS.attributes.PROFILE:
         this.profile = coerceBoolean(PROFILE_CARD_CONSTANTS.attributes.PROFILE);
         break;
+      case PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT:
+        this.signOutText = PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT;
+        break;
+      case PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT:
+        this.profileText = PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT;
+        break;
       case PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT:
         this.avatarText = newValue;
         break;
@@ -106,6 +116,12 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
 
   @FoundationProperty()
   public declare profile: boolean;
+
+  @FoundationProperty()
+  public declare signOutText: string;
+
+  @FoundationProperty()
+  public declare profileText: string;
 
   @FoundationProperty()
   public declare avatarText: string;

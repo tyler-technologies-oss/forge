@@ -6,12 +6,12 @@ import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker
 import { FilePickerFoundation } from './file-picker-foundation';
 
 import template from './file-picker.html';
-import styles from './file-picker.scss';
+import styles from './file-picker.scss?inline';
 
 export interface IFilePickerComponent extends IBaseComponent {
-  accept: string | null;
-  maxSize: number | null;
-  capture: string | null;
+  accept: string | null | undefined;
+  maxSize: number | null | undefined;
+  capture: string | null | undefined;
   multiple: boolean;
   disabled: boolean;
   compact: boolean;
@@ -90,15 +90,15 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
 
   /** Gets and sets the allowed file types */
   @FoundationProperty()
-  public declare accept: string | null;
+  public declare accept: string | null | undefined;
 
   /** Gets and sets the maximum allowed file size */
   @FoundationProperty()
-  public declare maxSize: number | null;
+  public declare maxSize: number | null | undefined;
 
   /** Gets and sets the camera to use when capturing video or images */
   @FoundationProperty()
-  public declare capture: string | null;
+  public declare capture: string | null | undefined;
 
   /** Gets and sets whether multiple files are allowed */
   @FoundationProperty()
