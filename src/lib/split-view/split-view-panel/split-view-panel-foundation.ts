@@ -764,10 +764,5 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     if (config.cursor) {
       handleBoundariesAfterResize(this._adapter, size, { ...this._state, availableSpace });
     }
-
-    // Unset cursor
-    if (config.clearCursor) {
-      this._adapter.setHandleCursor();
-    }
   }
 }

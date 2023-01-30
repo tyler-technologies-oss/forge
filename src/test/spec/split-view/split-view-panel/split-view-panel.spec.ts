@@ -13,6 +13,7 @@ interface ITestSplitViewPanelContext {
   parent: ISplitViewComponent;
   adapter: ISplitViewPanelAdapter;
   getPart(part: string): HTMLElement | null;
+  getOverlay(): HTMLElement | null;
   keyEvent(type: string, key: string, shiftKey?: boolean): void;
   pointerEvent(type: string, clientX: number, clientY: number, onDocument?: boolean, buttons?: number): void;
   append(): void;
@@ -466,21 +467,21 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(handleGrabbed).toBe('true');
     });
 
-    it('should set horizontal body cursor on pointer down', function(this: ITestContext) {
+    it('should set horizontal overlay cursor on pointer down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
       this.context.pointerEvent('pointerdown', 0, 0);
-      const documentCursor = document.body.style.getPropertyValue('cursor');
-      expect(documentCursor).toBe(getCursor('horizontal'));
+      const overlayCursor = this.context.getOverlay()?.style.getPropertyValue('cursor');
+      expect(overlayCursor).toBe(getCursor('horizontal'));
     });
 
-    it('should set vertical body cursor on pointer down', function(this: ITestContext) {
+    it('should set vertical overlay cursor on pointer down', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.parent.orientation = 'vertical';
       this.context.component.resizable = 'start';
       this.context.pointerEvent('pointerdown', 0, 0);
-      const documentCursor = document.body.style.getPropertyValue('cursor');
-      expect(documentCursor).toBe(getCursor('vertical'));
+      const overlayCursor = this.context.getOverlay()?.style.getPropertyValue('cursor');
+      expect(overlayCursor).toBe(getCursor('vertical'));
     });
 
     it('should set grabbed value on pointer up', function(this: ITestContext) {
@@ -490,25 +491,6 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.pointerEvent('pointerup', 0, 0, true);
       const handleGrabbed = this.context.getPart('handle')!.getAttribute('aria-grabbed');
       expect(handleGrabbed).toBe('false');
-    });
-
-    it('should unset horizontal body cursor on pointer up', function(this: ITestContext) {
-      this.context = setupTestContext(true, 1);
-      this.context.component.resizable = 'end';
-      this.context.pointerEvent('pointerdown', 0, 0);
-      this.context.pointerEvent('pointerup', 0, 0, true);
-      const documentCursor = document.body.style.getPropertyValue('cursor');
-      expect(documentCursor).toBe('');
-    });
-
-    it('should unset vertical body cursor on pointer up', function(this: ITestContext) {
-      this.context = setupTestContext(true, 1);
-      this.context.parent.orientation = 'vertical';
-      this.context.component.resizable = 'end';
-      this.context.pointerEvent('pointerdown', 0, 0);
-      this.context.pointerEvent('pointerup', 0, 0, true);
-      const documentCursor = document.body.style.getPropertyValue('cursor');
-      expect(documentCursor).toBe('');
     });
 
     it('should do nothing on pointer down if disabled', function(this: ITestContext) {
@@ -548,6 +530,21 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.pointerEvent('pointermove', 10, 0, true);
       const handleGrabbed = this.context.getPart('handle')!.getAttribute('aria-grabbed');
       expect(handleGrabbed).toBe('false');
+    });
+
+    it('should append overlay on pointer down', function(this: ITestContext) {
+      this.context = setupTestContext(true, 1);
+      this.context.component.resizable = 'end';
+      this.context.pointerEvent('pointerdown', 0, 0);
+      expect(this.context.getOverlay()).toBeDefined();
+    });
+
+   it('should remove overlay on pointer up', function(this: ITestContext) {
+      this.context = setupTestContext(true, 1);
+      this.context.component.resizable = 'end';
+      this.context.pointerEvent('pointerdown', 0, 0);
+      this.context.pointerEvent('pointerup', 0, 0, true);
+      expect(this.context.getOverlay()).toBeNull();
     });
 
     describe('resizable end', function(this: ITestContext) {
@@ -1250,6 +1247,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       parent: fixture,
       adapter: component['_foundation']['_adapter'],
       getPart: (part: string): HTMLElement | null => component.shadowRoot!.querySelector(`[part=${part}]`),
+      getOverlay: () => document.body.querySelector(`.${SPLIT_VIEW_PANEL_CONSTANTS.classes.OVERLAY}`),
       keyEvent: (type: string, key: string, shiftKey = false) => {
         const handle = component.shadowRoot!.querySelector('[part=handle]') as Element;
         const event = new KeyboardEvent(type, {key, shiftKey})

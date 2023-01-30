@@ -1,5 +1,5 @@
 import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils';
-import { ISplitViewPanelCursorConfig, ISplitViewPanelState, SplitViewInputDeviceType } from './split-view-panel-constants';
+import { ISplitViewPanelCursorConfig, ISplitViewPanelState, SplitViewInputDeviceType, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewPanelComponent, SplitViewPanelComponent } from './split-view-panel';
@@ -345,4 +345,21 @@ export function getPixelDimension(value: number | string, parentSize: number): n
     return percentToPixels(parsedSize.amount, parentSize);
   }
   return parsedSize.amount;
+}
+
+/**
+ * Gets a transparent element to overlay on top of the document body, ensuring the split view
+ * behaves as expected when dragging over other contexts.
+ * @returns An overlay element.
+ */
+export function getOverlay(): HTMLElement {
+  const el = document.createElement('div');
+  el.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.OVERLAY);
+  el.style.position = 'fixed';
+  el.style.top = '0';
+  el.style.left = '0';
+  el.style.width = '100vw';
+  el.style.height = '100vh';
+  el.style.zIndex = '999';
+  return el;
 }
