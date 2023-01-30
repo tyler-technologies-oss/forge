@@ -360,6 +360,6 @@ export function getOverlay(): HTMLElement {
   el.style.left = '0';
   el.style.width = '100vw';
   el.style.height = '100vh';
-  el.style.zIndex = '999';
+  el.style.zIndex = '9999';
   return el;
 }
