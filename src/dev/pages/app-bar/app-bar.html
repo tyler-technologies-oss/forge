@@ -1,0 +1,24 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'App Bar',
+    includePath: './pages/app-bar/app-bar.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'app-bar-theme-select',
+        defaultValue: '',
+        options: [
+          { label: 'Default', value: '' },
+          { label: 'White', value: 'white' }
+        ]
+      },
+      { type: 'text-field', label: 'Title text', id: 'app-bar-title-input', defaultValue: 'App bar' },
+      { type: 'checkbox', label: 'Raised', id: 'app-bar-raised-checkbox', defaultValue: true },
+      { type: 'checkbox', label: 'Use profile card builder', id: 'app-bar-profile-card-builder-checkbox' },
+      { type: 'checkbox', label: 'Show tabs', id: 'app-bar-show-tabs-checkbox', defaultValue: true },
+    ]
+  }
+})
+%>

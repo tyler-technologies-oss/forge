@@ -1,6 +1,7 @@
 [
   { "label": "Accordion", "path": "/pages/accordion/accordion.html", "tags": ["expansion", "panel"] },
   { "label": "Autocomplete", "path": "/pages/autocomplete/autocomplete.html", "tags": ["text", "field"] },
+  { "label": "App Bar", "path": "/pages/app-bar/app-bar.html", "tags": ["omnibar", "header"] },
   { "label": "Avatar", "path": "/pages/avatar/avatar.html" },
   { "label": "Button", "path": "/pages/button/button.html" }
 ]
