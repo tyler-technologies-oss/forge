@@ -4,20 +4,30 @@ include('./src/partials/page.ejs', {
     title: 'Autocomplete',
     includePath: './pages/autocomplete/autocomplete.ejs',
     options: [
-      { type: 'text-field', inputType: 'number', label: 'Debounce threshold', id: 'autocomplete-debounce', defaultValue: 0 },
       {
         type: 'select',
-        label: 'Debounce threshold',
-        id: 'autocomplete-debounce',
+        label: 'Mode',
+        id: 'autocomplete-mode',
         defaultValue: 'default',
         options: [
           { label: 'Default', value: 'default' },
           { label: 'Stateless', value: 'stateless' }
         ]
       },
+      { type: 'text-field', inputType: 'number', label: 'Debounce threshold', id: 'autocomplete-debounce', defaultValue: 500 },
+      { type: 'text-field', inputType: 'number', label: 'Option limit', id: 'autocomplete-option-limit', defaultValue: 100 },
+      { type: 'checkbox', label: 'Multiple', id: 'autocomplete-multiple' },
+      { type: 'checkbox', label: 'Filter on focus', id: 'autocomplete-filter-on-focus', defaultValue: true },
+      { type: 'checkbox', label: 'Allow unmatched', id: 'autocomplete-allow-unmatched' },
       { type: 'checkbox', label: 'Simulate async', id: 'autocomplete-simulate-async' },
+      { type: 'checkbox', label: 'Use scroll observer', id: 'autocomplete-scroll-observer' },
+      { type: 'checkbox', label: 'Sync popup width', id: 'autocomplete-sync-popup-width' },
       { type: 'checkbox', label: 'Group options', id: 'autocomplete-group' },
-      { type: 'checkbox', label: 'Use group header builder', id: 'autocomplete-group-header-builder' }
+      { type: 'checkbox', label: 'Use selected text builder', id: 'autocomplete-selected-text-builder' },
+      { type: 'checkbox', label: 'Use group header builder', id: 'autocomplete-group-header-builder' },
+      { type: 'checkbox', label: 'Use item builder', id: 'autocomplete-item-builder' },
+      { type: 'checkbox', label: 'Use header builder', id: 'autocomplete-header-builder' },
+      { type: 'checkbox', label: 'Use footer builder', id: 'autocomplete-footer-builder' }
     ]
   }
 })

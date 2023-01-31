@@ -1,11 +1,18 @@
-<form autocomplete="off">
-  <forge-autocomplete id="autocomplete">
-    <forge-text-field>
-      <input type="text" id="autocomplete-input" aria-label="Choose state" />
-      <label for="autocomplete-input">Choose state</label>
-      <forge-icon slot="trailing" name="arrow_drop_down" data-forge-dropdown-icon></forge-icon>
-    </forge-text-field>
-  </forge-autocomplete>
-</form>
+<div class="flex-vert">
+  <form autocomplete="off">
+    <forge-autocomplete id="autocomplete">
+      <forge-text-field>
+        <input type="text" id="autocomplete-input" aria-label="Choose state" />
+        <label for="autocomplete-input">Choose state</label>
+        <forge-icon slot="trailing" name="arrow_drop_down" data-forge-dropdown-icon></forge-icon>
+      </forge-text-field>
+    </forge-autocomplete>
+  </form>
+
+  <forge-label-value>
+    <span slot="label">Selected value</span>
+    <span slot="value" id="autocomplete-value">No value selected</span>
+  </forge-label-value>
+</div>
 
 <script type="module" src="autocomplete.ts"></script>

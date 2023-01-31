@@ -27,3 +27,35 @@ local development tool. It takes longer to build, and HMR at the time of writing
 quick as we'd like it. We also don't want new developers to necessarily have to know how to
 build with React to start developing. This site provides a much lower barrier to entry and is
 built for speed.
+
+### Partials
+
+The dev site is comprised of various EJS partial templates that are used to construct each page.
+These partials can receive a data object to provide dynamic values depending on the context
+of the page.
+
+Each page makes use of the `src/partials/page.ejs` partial. This template can receive the following
+data:
+
+```javascript
+// All variables are provided underneath the `page` object
+page: {
+  title: 'Page title', // (Optional) This is the title text you see in the browser tab, app-bar title, and content card header
+  includePath: './pages/autocomplete/autocomplete.ejs', // (Required) The path to the partial file to include within the card content
+  options: [] // (optional) An array of control configurations to render within the options drawer
+}
+```
+
+#### Options
+
+Options can be provided to each page in the form of:
+
+```javascript
+{
+  type: '', // Can be one of "text-field", "select", "checkbox", "radio-group", "toggle" (see `src/partials/controls` for more info)
+  inputType: 'number', // Only applies to the "text-field" type
+  label: '', // The label text to display
+  id: '', // The control id to set so that it can easily be identified by the page
+  defaultValue: "" // The default value to set the control to (depends on the type of control being provided)
+},
+```
