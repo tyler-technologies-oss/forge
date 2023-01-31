@@ -6,7 +6,7 @@ import { IconButtonComponent } from '../icon-button';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './quantity-field.html';
-import styles from './quantity-field.scss?inline';
+import styles from './quantity-field.scss';
 
 export interface IQuantityFieldComponent extends IBaseComponent {
   invalid: boolean;

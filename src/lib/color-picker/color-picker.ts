@@ -9,7 +9,7 @@ import { COLOR_PICKER_CONSTANTS, IColorPickerChangeEventData, IHSVA, IRGBA } fro
 import { ColorPickerFoundation } from './color-picker-foundation';
 
 import template from './color-picker.html';
-import styles from './color-picker.scss?inline';
+import styles from './color-picker.scss';
 export interface IColorPickerComponent extends IBaseComponent {
   value: string | null | undefined;
   rgba: IRGBA | null | undefined;

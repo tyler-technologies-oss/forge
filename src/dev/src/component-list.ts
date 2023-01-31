@@ -1,16 +1,21 @@
-import * as Forge from '@tylertech/forge';
-import { IconRegistry, ListComponent, COMPONENT_NAME_PREFIX } from '@tylertech/forge';
+import { IconRegistry, ListComponent } from '@tylertech/forge';
 import { tylIconChevronRight } from '@tylertech/tyler-icons/standard';
+import componentsJson from '$src/components.json';
 
 IconRegistry.define(tylIconChevronRight);
 
-// eslint-disable-next-line @typescript-eslint/dot-notation
-const elementNames: string[] = Object.values(Forge).filter(obj => obj.hasOwnProperty('_customElementName')).map(cls => cls['_customElementName']);
+interface ComponentIdentifier {
+  label: string;
+  path: string;
+  tags?: string[];
+}
+
+const components: ComponentIdentifier[] = componentsJson;
 const listElement = document.getElementById('component-list') as ListComponent;
 const searchField = document.getElementById('search-field') as HTMLInputElement;
 const clearButton = document.getElementById('clear-button') as HTMLButtonElement;
 
-listElement.replaceChildren(...buildListItems(elementNames));
+listElement.replaceChildren(...buildListItems(components));
 searchField.addEventListener('input', ({ target }) => onSearch((target as HTMLInputElement).value));
 clearButton.addEventListener('click', () => {
   searchField.value = '';
@@ -18,26 +23,33 @@ clearButton.addEventListener('click', () => {
 });
 
 function onSearch(filter: string): void {
-  const names = elementNames.filter(name => name.toLowerCase().includes(filter.toLowerCase()));
+  filter = filter.trim().toLowerCase();
+  const names = components.filter(({ label, tags }) => {
+    return label.toLowerCase().includes(filter) ||
+           tags?.some(tag => tag.toLowerCase().includes(filter));
+  });
   const elements = buildListItems(names);
   listElement.replaceChildren(...elements);
 }
 
-function buildListItems(names: string[]): HTMLElement[] {
+function buildListItems(entries: ComponentIdentifier[]): HTMLElement[] {
   const elements = [];
 
-  for (const name of names) {
-    const componentName = name.replace(new RegExp(`^${COMPONENT_NAME_PREFIX}`), '');
+  for (const { label, path } of entries) {
+    const anchor = document.createElement('a');
+    anchor.classList.add('list-item-link');
+    anchor.href = path;
+
     const listItem = document.createElement('forge-list-item');
-    listItem.href = `/components/${componentName}/${componentName}.html`;
-    listItem.textContent = `<${name}>`;
+    listItem.textContent = label;
+    anchor.appendChild(listItem);
 
     const trailingIcon = document.createElement('forge-icon');
     trailingIcon.slot = 'trailing';
     trailingIcon.name = 'chevron_right';
     listItem.appendChild(trailingIcon);
 
-    elements.push(listItem);
+    elements.push(anchor);
   }
 
   return elements;

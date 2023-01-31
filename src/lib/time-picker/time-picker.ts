@@ -20,7 +20,7 @@ import { ListComponent, ListItemComponent } from '../list';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './time-picker.html';
-import styles from './time-picker.scss?inline';
+import styles from './time-picker.scss';
 
 export interface ITimePickerComponent extends IBaseComponent {
   value: string | null | undefined;

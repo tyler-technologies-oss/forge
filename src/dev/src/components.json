@@ -1,0 +1,6 @@
+[
+  { "label": "Accordion", "path": "/pages/accordion/accordion.html", "tags": ["expansion", "panel"] },
+  { "label": "Autocomplete", "path": "/pages/autocomplete/autocomplete.html", "tags": ["text", "field"] },
+  { "label": "Avatar", "path": "/pages/avatar/avatar.html" },
+  { "label": "Button", "path": "/pages/button/button.html" }
+]

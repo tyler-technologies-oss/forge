@@ -5,7 +5,7 @@ import { TAB_CONSTANTS, ITabDimensions } from './tab-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './tab.html';
-import styles from './tab.scss?inline';
+import styles from './tab.scss';
 
 export interface ITabComponent extends IBaseComponent {
   disabled: boolean;

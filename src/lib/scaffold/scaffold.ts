@@ -3,7 +3,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { SCAFFOLD_CONSTANTS } from './scaffold-constants';
 
 import template from './scaffold.html';
-import styles from './scaffold.scss?inline';
+import styles from './scaffold.scss';
 
 export interface IScaffoldComponent extends IBaseComponent {}
 

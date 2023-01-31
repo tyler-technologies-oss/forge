@@ -12,7 +12,7 @@ import { IconComponent, IconRegistry } from '../../icon';
 import { RippleComponent } from '../../ripple';
 
 import template from './split-view-panel.html';
-import styles from './split-view-panel.scss?inline';
+import styles from './split-view-panel.scss';
 
 export interface ISplitViewPanelComponent extends Partial<ISplitViewBase>, IBaseComponent {
   resizable: SplitViewPanelResizable;

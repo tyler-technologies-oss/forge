@@ -6,7 +6,7 @@ import { LIST_CONSTANTS } from './list-constants';
 import { ListFoundation } from './list-foundation';
 
 import template from './list.html';
-import styles from './list.scss?inline';
+import styles from './list.scss';
 
 export interface IListComponent extends IBaseComponent {
   static: boolean;

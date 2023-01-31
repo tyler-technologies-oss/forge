@@ -5,7 +5,7 @@ import { RadioAdapter } from './radio-adapter';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './radio.html';
-import styles from './radio.scss?inline';
+import styles from './radio.scss';
 
 export interface IRadioComponent extends IBaseComponent {
   dense: boolean;

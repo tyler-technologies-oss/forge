@@ -7,7 +7,7 @@ import { ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } 
 import { ChipFoundation } from './chip-foundation';
 
 import template from './chip.html';
-import styles from './chip.scss?inline';
+import styles from './chip.scss';
 
 export interface IChipComponent extends IBaseComponent {
   type: ChipType;

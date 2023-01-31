@@ -6,7 +6,7 @@ import { PopupFoundation } from './popup-foundation';
 
 
 import template from './popup.html';
-import styles from './popup.scss?inline';
+import styles from './popup.scss';
 
 export interface IPopupComponent extends IBaseComponent {
   targetElement: HTMLElement;

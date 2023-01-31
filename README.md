@@ -1,6 +1,6 @@
-# Forge Components
+# Tyler Forge™ Web Components
 
-Forge is a framework-agnostic library of Web Components adhering to [W3C Web Component Spec][2] and the [Forge Design System][1]. Originally derived from Google's [Material Components Web][3] project, this project aims to create a consistent UI/UX across applications regardless of choice in front-end frameworks. Theming is a core part of the library such that competing design objectives can be achieved while still providing UI/UX cohesion across product catalogs. Please visit the [Forge Design System website][1] for additional guidance and documentation.
+Forge is a framework-agnostic library of Web Components adhering to [W3C Web Component Spec][2] and the [Tyler Forge™ Design System][1]. Originally derived from Google's [Material Components Web][3] project, this project aims to create a consistent UI/UX across applications regardless of choice in front-end frameworks. Theming is a core part of the library such that competing design objectives can be achieved while still providing UI/UX cohesion across product catalogs. Please visit the [Tyler Forge™ Design System website][1] for additional guidance and documentation.
 
 ## Important links
 
@@ -30,7 +30,18 @@ Forge provides the following framework adapters:
 
 ## Getting started
 
-The component library is distributed on npm and as static assets on the Forge CDN.
+The component library is distributed on npm and as static assets on via CDN.
+
+### Local development
+
+To develop locally, simply run the following commands from the root of the project after cloning:
+
+```bash
+npm install
+npm run dev
+```
+
+> For more information about developing locally, see the dev site [README](https://github.com/tyler-technologies-oss/forge/blob/main/src/dev/README.md).
 
 ### Versioning strategy
 

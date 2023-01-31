@@ -1,0 +1,8 @@
+<forge-select
+  label="<%= control.label %>"
+  id="<%= control.id %>"
+  value="<%= control.defaultValue ?? undefined %>">
+  <% control.options.forEach(({ label, value }) => { %>
+    <forge-option value="<%= value %>"><%= label %></forge-option>
+  <% }); %>
+</forge-select>

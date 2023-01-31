@@ -1,0 +1,24 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Autocomplete',
+    includePath: './pages/autocomplete/autocomplete.ejs',
+    options: [
+      { type: 'text-field', inputType: 'number', label: 'Debounce threshold', id: 'autocomplete-debounce', defaultValue: 0 },
+      {
+        type: 'select',
+        label: 'Debounce threshold',
+        id: 'autocomplete-debounce',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Stateless', value: 'stateless' }
+        ]
+      },
+      { type: 'checkbox', label: 'Simulate async', id: 'autocomplete-simulate-async' },
+      { type: 'checkbox', label: 'Group options', id: 'autocomplete-group' },
+      { type: 'checkbox', label: 'Use group header builder', id: 'autocomplete-group-header-builder' }
+    ]
+  }
+})
+%>

@@ -9,7 +9,7 @@ import { ToastBuilder, ToastPlacement, TOAST_CONSTANTS } from './toast-constants
 import { ToastFoundation } from './toast-foundation';
 
 import template from './toast.html';
-import styles from './toast.scss?inline';
+import styles from './toast.scss';
 
 export interface IToastComponent extends IBaseComponent {
   message: string;

@@ -14,7 +14,7 @@ import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder
 import { AutocompleteFoundation } from './autocomplete-foundation';
 
 import template from './autocomplete.html';
-import styles from './autocomplete.scss?inline';
+import styles from './autocomplete.scss';
 
 export interface IAutocompleteComponent extends IListDropdownAware {
   mode: `${AutocompleteMode}`;

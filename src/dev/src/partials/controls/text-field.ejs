@@ -1,0 +1,9 @@
+<forge-text-field>
+  <input
+    type="<%= control.inputType ?? 'text' %>"
+    id="<%= control.id %>"
+    value="<%= control.defaultValue ?? undefined %>" />
+  <% if (control.label) { %>
+    <label for="<%= control.id %>"><%= control.label %></label>
+  <% } %>
+</forge-text-field>

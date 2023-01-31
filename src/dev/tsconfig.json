@@ -4,10 +4,13 @@
     "module": "esnext",
     "useDefineForClassFields": false,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@tylertech/forge": ["../lib/index.ts"],
-      "@tylertech/forge/*": ["../lib/*"]
+      "@tylertech/forge/*": ["../lib/*"],
+      "$src/*": ["./src/*"]
     }
   },
-  "include": ["src", "components"]
+  "include": ["src", "pages"]
 }

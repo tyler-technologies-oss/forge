@@ -11,7 +11,7 @@ import { IMenuActiveChangeEventData, IMenuOption, IMenuOptionGroup, IMenuSelectE
 import { MenuFoundation } from './menu-foundation';
 
 import template from './menu.html';
-import styles from './menu.scss?inline';
+import styles from './menu.scss';
 
 export interface IMenuComponent extends IListDropdownAware {
   open: boolean;

@@ -1,0 +1,12 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Button',
+    includePath: './pages/button/button.ejs',
+    options: [
+      { type: 'checkbox', label: 'Disabled', id: 'disabled-checkbox' },
+      { type: 'checkbox', label: 'Dense', id: 'dense-checkbox' }
+    ]
+  }
+})
+%>

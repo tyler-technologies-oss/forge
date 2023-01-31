@@ -3,7 +3,7 @@ import { DRAWER_CONSTANTS } from './drawer-constants';
 import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerFoundation, IBaseDrawerComponent } from '../base';
 
 import template from './drawer.html';
-import styles from './drawer.scss?inline';
+import styles from './drawer.scss';
 
 export interface IDrawerComponent extends IBaseDrawerComponent {}
 

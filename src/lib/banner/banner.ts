@@ -9,7 +9,7 @@ import { BANNER_CONSTANTS } from './banner-constants';
 import { BannerFoundation } from './banner-foundation';
 
 import template from './banner.html';
-import styles from './banner.scss?inline';
+import styles from './banner.scss';
 
 export interface IBannerComponent extends IBaseComponent {
   dismissed: boolean;

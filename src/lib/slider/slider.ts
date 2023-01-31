@@ -9,7 +9,7 @@ import discreteTemplate from './slider-discrete.html';
 import discreteMarkersTemplate from './slider-discrete-markers.html';
 import discreteRangeTemplate from './slider-discrete-range.html';
 import discreteRangeMarkersTemplate from './slider-discrete-range-markers.html';
-import styles from './slider.scss?inline';
+import styles from './slider.scss';
 
 export interface ISliderComponent extends IBaseComponent {
   type: SliderType;

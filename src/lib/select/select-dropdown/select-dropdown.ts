@@ -15,7 +15,7 @@ import { ToolbarComponent } from '../../toolbar';
 import { IconButtonComponent } from '../../icon-button';
 
 import template from './select-dropdown.html';
-import styles from './select-dropdown.scss?inline';
+import styles from './select-dropdown.scss';
 
 export interface ISelectDropdownComponent extends IBaseSelectComponent {
   target: string;

@@ -5,7 +5,7 @@ import { BADGE_CONSTANTS } from './badge-constants';
 import { BadgeFoundation } from './badge-foundation';
 
 import template from './badge.html';
-import styles from './badge.scss?inline';
+import styles from './badge.scss';
 
 export interface IBadgeComponent extends IBaseComponent {
   dot: boolean;

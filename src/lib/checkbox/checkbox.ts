@@ -5,7 +5,7 @@ import { CheckboxAdapter } from './checkbox-adapter';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './checkbox.html';
-import styles from './checkbox.scss?inline';
+import styles from './checkbox.scss';
 
 export interface ICheckboxComponent extends IBaseComponent {
   dense: boolean;

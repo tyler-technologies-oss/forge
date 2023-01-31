@@ -3,7 +3,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { SKELETON_CONSTANTS } from './skeleton-constants';
 
 import template from './skeleton.html';
-import styles from './skeleton.scss?inline';
+import styles from './skeleton.scss';
 
 export interface ISkeletonComponent extends IBaseComponent {}
 

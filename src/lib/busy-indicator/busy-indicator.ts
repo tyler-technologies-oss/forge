@@ -9,7 +9,7 @@ import { BUSY_INDICATOR_CONSTANTS, BusyIndicatorLayoutDirection } from './busy-i
 import { BusyIndicatorFoundation } from './busy-indicator-foundation';
 
 import template from './busy-indicator.html';
-import styles from './busy-indicator.scss?inline';
+import styles from './busy-indicator.scss';
 
 export interface IBusyIndicatorComponent extends IBaseComponent {
   titleText: string;

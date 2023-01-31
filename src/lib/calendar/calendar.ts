@@ -13,7 +13,7 @@ import { ICalendarBase } from './core/calendar-base';
 import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu';
 
 import template from './calendar.html';
-import styles from './calendar.scss?inline';
+import styles from './calendar.scss';
 
 export interface ICalendarComponent extends ICalendarBase, ICustomElement {
   mode: CalendarMode;

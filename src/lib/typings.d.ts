@@ -5,7 +5,7 @@ declare module '*.html' {
 }
 
 // Allow for importing from .scss files
-declare module '*.scss?inline' {
-  const styles: string;
-  export default styles;
+declare module '*.scss' {
+  const css: string;
+  export default css;
 }

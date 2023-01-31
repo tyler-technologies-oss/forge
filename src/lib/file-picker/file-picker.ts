@@ -6,7 +6,7 @@ import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker
 import { FilePickerFoundation } from './file-picker-foundation';
 
 import template from './file-picker.html';
-import styles from './file-picker.scss?inline';
+import styles from './file-picker.scss';
 
 export interface IFilePickerComponent extends IBaseComponent {
   accept: string | null | undefined;

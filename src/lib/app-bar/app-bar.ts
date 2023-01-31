@@ -5,7 +5,7 @@ import { APP_BAR_CONSTANTS } from './app-bar-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './app-bar.html';
-import styles from './app-bar.scss?inline';
+import styles from './app-bar.scss';
 
 export interface IAppBarComponent extends IBaseComponent {
   titleText: string;

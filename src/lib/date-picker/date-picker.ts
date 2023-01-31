@@ -11,7 +11,7 @@ import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
 import { DatePickerFoundation } from './date-picker-foundation';
 
 import template from './date-picker.html';
-import styles from './date-picker.scss?inline';
+import styles from './date-picker.scss';
 
 export interface IDatePickerComponent extends IBaseDatePickerComponent<Date | string | null> {}
 

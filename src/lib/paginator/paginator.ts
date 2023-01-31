@@ -10,7 +10,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { TooltipComponent } from '../tooltip';
 
 import template from './paginator.html';
-import styles from './paginator.scss?inline';
+import styles from './paginator.scss';
 
 export interface IPaginatorComponent extends IBaseComponent {
   pageIndex: number;

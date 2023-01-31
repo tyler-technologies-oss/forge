@@ -6,7 +6,7 @@ import { ViewComponent } from './view/view';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './view-switcher.html';
-import styles from './view-switcher.scss?inline';
+import styles from './view-switcher.scss';
 
 export interface IViewSwitcherComponent extends IBaseComponent {
   index: number;

@@ -7,7 +7,7 @@ import { BackdropComponent } from '../backdrop';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './dialog.html';
-import styles from './dialog.scss?inline';
+import styles from './dialog.scss';
 
 export interface IDialogComponent extends IBaseComponent {
   backdropClose: boolean;

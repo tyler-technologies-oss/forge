@@ -4,7 +4,7 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { VIEW_CONSTANTS } from './view-constants';
 
 import template from './view.html';
-import styles from './view.scss?inline';
+import styles from './view.scss';
 
 export interface IViewComponent extends IBaseComponent {}
 

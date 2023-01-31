@@ -7,7 +7,7 @@ import { IconRegistry, IconComponent } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './step.html';
-import styles from './step.scss?inline';
+import styles from './step.scss';
 
 export interface IStepComponent extends IBaseComponent {
   index: number;

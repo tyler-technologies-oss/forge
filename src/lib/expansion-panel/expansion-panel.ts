@@ -5,7 +5,7 @@ import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 import { ExpansionPanelFoundation } from './expansion-panel-foundation';
 
 import template from './expansion-panel.html';
-import styles from './expansion-panel.scss?inline';
+import styles from './expansion-panel.scss';
 
 export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;

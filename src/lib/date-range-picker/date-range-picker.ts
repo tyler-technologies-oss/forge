@@ -11,7 +11,7 @@ import { DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEv
 import { DateRangePickerFoundation } from './date-range-picker-foundation';
 
 import template from './date-range-picker.html';
-import styles from './date-range-picker.scss?inline';
+import styles from './date-range-picker.scss';
 
 export interface IDateRangePickerComponent extends IBaseDatePickerComponent<IDatePickerRange> {
   from: Date | string | null | undefined;

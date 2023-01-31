@@ -4,7 +4,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 
 import template from './linear-progress.html';
-import styles from './linear-progress.scss?inline';
+import styles from './linear-progress.scss';
 
 export interface ILinearProgressComponent extends IBaseComponent {
   determinate: boolean;

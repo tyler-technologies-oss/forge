@@ -9,7 +9,7 @@ import { IconComponent, IconRegistry } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './tab-bar.html';
-import styles from './tab-bar.scss?inline';
+import styles from './tab-bar.scss';
 
 export interface ITabBarComponent extends IBaseComponent {
   activeTab: number;

@@ -6,7 +6,7 @@ import { BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData, IButt
 import { ButtonToggleGroupFoundation } from './button-toggle-group-foundation';
 
 import template from './button-toggle-group.html';
-import styles from './button-toggle-group.scss?inline';
+import styles from './button-toggle-group.scss';
 
 export interface IButtonToggleGroupComponent extends IBaseComponent {
   value: any;

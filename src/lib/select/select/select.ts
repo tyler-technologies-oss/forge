@@ -17,7 +17,7 @@ import { FieldDensityType, FieldFloatLabelType, FieldShapeType, FIELD_CONSTANTS 
 import { IBaseSelectComponent } from '../core/base-select';
 
 import template from './select.html';
-import styles from './select.scss?inline';
+import styles from './select.scss';
 
 export interface ISelectComponent extends IBaseSelectComponent {
   density: FieldDensityType;

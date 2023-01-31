@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./src/partials/head.ejs', { title: page.title }) %>
+  </head>
+  <body class="forge-typography">
+    <forge-scaffold>
+      <!-- Header -->
+      <%- include('./src/partials/header.ejs', { title: page.title }); %>
+      
+      <!-- Content -->
+      <main slot="body" class="content">
+        <forge-card outlined class="card<%= !page.options?.length ? ' card--centered' : undefined %>">
+          <!-- Card header-->
+          <forge-toolbar>
+            <h2 slot="start" class="forge-typography--headline5"><%= page.contentTitle ?? page.title %></h2>
+          </forge-toolbar>
+
+          <!-- Card content -->
+          <div class="container">
+            <!-- Dynamic page include -->
+            <%- include(page.includePath, page.includeData); %>
+          </div>
+        </forge-card>
+      </main>
+
+      <!-- Options drawer -->
+      <% if (page.options?.length) { %>
+        <%- include('./src/partials/options-drawer.ejs', { controls: page.options }); %>
+      <% } %>
+    </forge-scaffold>
+  </body>
+</html>

@@ -9,7 +9,7 @@ import { IconComponent, IconRegistry } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './app-bar-search.html';
-import styles from './app-bar-search.scss?inline';
+import styles from './app-bar-search.scss';
 
 export interface IAppBarSearchComponent extends IBaseComponent {
   disabled: boolean;

@@ -8,7 +8,7 @@ import { ToolbarComponent } from '../toolbar';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './profile-card.html';
-import styles from './profile-card.scss?inline';
+import styles from './profile-card.scss';
 
 export interface IProfileCardComponent extends IBaseComponent {
   fullName: string;

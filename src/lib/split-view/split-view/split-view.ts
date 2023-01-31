@@ -8,7 +8,7 @@ import { ISplitViewPanelComponent, SplitViewPanelComponent } from '../split-view
 import { ISplitViewBase } from '../core/split-view-base';
 
 import template from './split-view.html';
-import styles from './split-view.scss?inline';
+import styles from './split-view.scss';
 
 export interface ISplitViewComponent extends ISplitViewBase, IBaseComponent {
   orientation: SplitViewOrientation;
