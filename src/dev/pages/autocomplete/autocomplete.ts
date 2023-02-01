@@ -39,9 +39,9 @@ autocomplete.addEventListener('forge-autocomplete-select', ({ detail }) => {
 });
 
 // Options
-const multipleCheckbox = document.querySelector('#autocomplete-multiple') as HTMLInputElement;
-multipleCheckbox.addEventListener('change', () => {
-  autocomplete.multiple = multipleCheckbox.checked;
+const multipleToggle = document.querySelector('#autocomplete-multiple') as HTMLInputElement;
+multipleToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.multiple = selected;
 });
 
 const debounceThresholdInput = document.querySelector('#autocomplete-debounce') as HTMLInputElement;
@@ -59,54 +59,54 @@ optionLimitInput.addEventListener('input', () => {
   autocomplete.optionLimit = +optionLimitInput.value;
 });
 
-const filterOnFocusCheckbox = document.querySelector('#autocomplete-filter-on-focus') as HTMLInputElement;
-filterOnFocusCheckbox.addEventListener('change', () => {
-  autocomplete.filterOnFocus = filterOnFocusCheckbox.checked;
+const filterOnFocusToggle = document.querySelector('#autocomplete-filter-on-focus') as HTMLInputElement;
+filterOnFocusToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.filterOnFocus = selected;
 });
 
-const itemBuilderCheckbox = document.querySelector('#autocomplete-item-builder') as HTMLInputElement;
-itemBuilderCheckbox.addEventListener('change', () => {
-  autocomplete.optionBuilder = itemBuilderCheckbox.checked ? itemBuilder : undefined;
+const itemBuilderToggle = document.querySelector('#autocomplete-item-builder') as HTMLInputElement;
+itemBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.optionBuilder = selected ? itemBuilder : undefined;
 });
 
-const allowUnmatchedCheckbox = document.querySelector('#autocomplete-allow-unmatched') as HTMLInputElement;
-allowUnmatchedCheckbox.addEventListener('change', () => {
-  autocomplete.allowUnmatched = allowUnmatchedCheckbox.checked;
+const allowUnmatchedToggle = document.querySelector('#autocomplete-allow-unmatched') as HTMLInputElement;
+allowUnmatchedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.allowUnmatched = selected;
 });
 
-const selectedTextBuilderCheckbox = document.querySelector('#autocomplete-selected-text-builder') as HTMLInputElement;
-selectedTextBuilderCheckbox.addEventListener('change', () => {
-  autocomplete.selectedTextBuilder = selectedTextBuilderCheckbox.checked ? selectedTextBuilder : undefined;
+const selectedTextBuilderToggle = document.querySelector('#autocomplete-selected-text-builder') as HTMLInputElement;
+selectedTextBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
 });
 
-const scrollObserverCheckbox = document.querySelector('#autocomplete-scroll-observer') as HTMLInputElement;
-scrollObserverCheckbox.addEventListener('change', () => {
-  autocomplete.observeScroll = scrollObserverCheckbox.checked;
+const scrollObserverToggle = document.querySelector('#autocomplete-scroll-observer') as HTMLInputElement;
+scrollObserverToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.observeScroll = selected;
 });
 
-const syncPopupWidthCheckbox = document.querySelector('#autocomplete-sync-popup-width') as HTMLInputElement;
-syncPopupWidthCheckbox.addEventListener('change', () => {
-  autocomplete.syncPopupWidth = syncPopupWidthCheckbox.checked;
+const syncPopupWidthToggle = document.querySelector('#autocomplete-sync-popup-width') as HTMLInputElement;
+syncPopupWidthToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.syncPopupWidth = selected;
 });
 
-const headerBuilderCheckbox = document.querySelector('#autocomplete-header-builder') as HTMLInputElement;
-headerBuilderCheckbox.addEventListener('change', () => {
-  autocomplete.popupHeaderBuilder = headerBuilderCheckbox.checked ? headerBuilderCallback : undefined;
+const headerBuilderToggle = document.querySelector('#autocomplete-header-builder') as HTMLInputElement;
+headerBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.popupHeaderBuilder = selected ? headerBuilderCallback : undefined;
 });
 
-const footerBuilderCheckbox = document.querySelector('#autocomplete-footer-builder') as HTMLInputElement;
-footerBuilderCheckbox.addEventListener('change', () => {
-  autocomplete.popupFooterBuilder = footerBuilderCheckbox.checked ? footerBuilderCallback : undefined;
+const footerBuilderToggle = document.querySelector('#autocomplete-footer-builder') as HTMLInputElement;
+footerBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.popupFooterBuilder = selected ? footerBuilderCallback : undefined;
 });
 
-const simulateAsyncCheckbox = document.querySelector('#autocomplete-simulate-async') as HTMLInputElement;
-simulateAsyncCheckbox.addEventListener('change', () => asyncFilter = simulateAsyncCheckbox.checked);
+const simulateAsyncToggle = document.querySelector('#autocomplete-simulate-async') as HTMLInputElement;
+simulateAsyncToggle.addEventListener('forge-switch-select', ({ detail: selected }) => asyncFilter = selected);
 
-const groupCheckbox = document.querySelector('#autocomplete-group') as HTMLInputElement;
-groupCheckbox.addEventListener('change', () => useGroupedData = groupCheckbox.checked);
+const groupToggle = document.querySelector('#autocomplete-group') as HTMLInputElement;
+groupToggle.addEventListener('forge-switch-select', ({ detail: selected }) => useGroupedData = selected);
 
-const groupHeaderBuilderCheckbox = document.querySelector('#autocomplete-group-header-builder') as HTMLInputElement;
-groupHeaderBuilderCheckbox.addEventListener('change', () => useGroupHeaderBuilder = groupHeaderBuilderCheckbox.checked);
+const groupHeaderBuilderToggle = document.querySelector('#autocomplete-group-header-builder') as HTMLInputElement;
+groupHeaderBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => useGroupHeaderBuilder = selected);
 
 
 function itemBuilder(option: IListDropdownOption, filterText: string, _listItem: IListItemComponent): HTMLElement {

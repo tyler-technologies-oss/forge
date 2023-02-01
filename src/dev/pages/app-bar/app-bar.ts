@@ -18,6 +18,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import type { IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ITabBarComponent } from '@tylertech/forge/tabs';
+import type { ISwitchComponent } from '@tylertech/forge/switch';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import {
   tylIconAssignment,
@@ -75,9 +76,9 @@ appBarSearch.addEventListener('forge-app-bar-search-input', ({ detail }) => {
   document.body.appendChild(toast);
 });
 
-const useProfileCardBuilderCheckbox = document.querySelector('#app-bar-profile-card-builder-checkbox') as HTMLInputElement;
-useProfileCardBuilderCheckbox.addEventListener('change', () => {
-  appBarProfileButton.profileCardBuilder = useProfileCardBuilderCheckbox.checked ? profileCardBuilder : undefined;
+const useProfileCardBuilderToggle = document.querySelector('#app-bar-profile-card-builder-toggle') as ISwitchComponent;
+useProfileCardBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  appBarProfileButton.profileCardBuilder = selected ? profileCardBuilder : undefined;
 });
 
 function buildListItemElement(text: string, icon: string, value: string): HTMLElement {
@@ -110,9 +111,9 @@ function profileCardBuilder(): HTMLElement {
   return listElement;
 }
 
-const appBarRaisedCheckbox = document.querySelector('#app-bar-raised-checkbox') as HTMLInputElement;
-appBarRaisedCheckbox.addEventListener('change', () => {
-  appBar.raised = appBarRaisedCheckbox.checked;
+const appBarRaisedToggle = document.querySelector('#app-bar-raised-toggle') as ISwitchComponent;
+appBarRaisedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  appBar.raised = selected;
 });
 
 const appBarTitleInput = document.querySelector('#app-bar-title-input') as HTMLInputElement;
@@ -129,9 +130,9 @@ appBarThemeSelect.addEventListener('change', () => {
   }
 });
 
-const showAppBarTabsCheckbox = document.querySelector('#app-bar-show-tabs-checkbox') as HTMLInputElement;
-showAppBarTabsCheckbox.addEventListener('change', () => {
-  if (showAppBarTabsCheckbox.checked) {
+const showAppBarTabsToggle = document.querySelector('#app-bar-show-tabs-toggle') as ISwitchComponent;
+showAppBarTabsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  if (selected) {
     appBarTabs.style.removeProperty('display');
   } else {
     appBarTabs.style.display = 'none';

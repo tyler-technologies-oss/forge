@@ -4,5 +4,6 @@
   { "label": "App Bar", "path": "/pages/app-bar/app-bar.html", "tags": ["omnibar", "header"] },
   { "label": "Avatar", "path": "/pages/avatar/avatar.html" },
   { "label": "Badge", "path": "/pages/badge/badge.html", "tags": ["notification", "status"] },
+  { "label": "Banner", "path": "/pages/banner/banner.html", "tags": ["notification", "message"] },
   { "label": "Button", "path": "/pages/button/button.html" }
 ]

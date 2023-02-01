@@ -15,9 +15,9 @@ include('./src/partials/page.ejs', {
         ]
       },
       { type: 'text-field', label: 'Title text', id: 'app-bar-title-input', defaultValue: 'App bar' },
-      { type: 'checkbox', label: 'Raised', id: 'app-bar-raised-checkbox', defaultValue: true },
-      { type: 'checkbox', label: 'Use profile card builder', id: 'app-bar-profile-card-builder-checkbox' },
-      { type: 'checkbox', label: 'Show tabs', id: 'app-bar-show-tabs-checkbox', defaultValue: true },
+      { type: 'switch', label: 'Raised', id: 'app-bar-raised-toggle', defaultValue: true },
+      { type: 'switch', label: 'Show tabs', id: 'app-bar-show-tabs-toggle', defaultValue: true },
+      { type: 'switch', label: 'Use profile card builder', id: 'app-bar-profile-card-builder-toggle' }
     ]
   }
 })
