@@ -57,12 +57,18 @@ Navigate to the project root, and install dependencies:
 npm install
 ```
 
-We use [Storybook](https://storybook.js.org/) for local development. This helps us build and
+This project contains a dev site built using Vite to make development faster and easier.
+
+```bash
+npm start
+```
+
+We also use [Storybook](https://storybook.js.org/) for docs and local development. This helps us build and
 maintain component demos (stories) and the corresponding documentation for each component.
 To start up the Storybook environment locally, run the following command:
 
 ```bash
-npm start
+npm run storybook
 ```
 
 > New Storybook versions are deployed for every pull request to help reviewers easily validate changes. The main

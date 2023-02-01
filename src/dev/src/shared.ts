@@ -36,6 +36,7 @@ IconRegistry.define([
 listenThemeChange();
 
 await Promise.allSettled([
+  window.customElements.whenDefined('forge-app-bar'),
   window.customElements.whenDefined('forge-scaffold'),
   window.customElements.whenDefined('forge-card')
 ]);

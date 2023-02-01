@@ -12,9 +12,7 @@
     "prepare": "husky install",
     "postinstall": "cd src/stories && npm install",
     "build": "forge build",
-    "start": "npm run storybook",
-    "dev": "cd src/dev && npm run dev",
-    "dev:i": "cd src/dev && npm i && npm run dev",
+    "start": "vite serve src/dev",
     "storybook": "cd src/stories && npm start",
     "lint": "forge lint",
     "test": "forge test",
@@ -61,6 +59,11 @@
     "karma-fixture": "^0.2.6",
     "npm-check-updates": "^16.3.11",
     "stylelint": "^14.13.0",
-    "typescript": "~4.6.3"
+    "typescript": "~4.6.3",
+    "vite": "^4.0.4",
+    "vite-plugin-ejs": "^1.6.4",
+    "vite-plugin-full-reload": "^1.0.5",
+    "vite-plugin-inspect": "^0.7.14",
+    "vite-tsconfig-paths": "^4.0.5"
   }
 }
