@@ -1,0 +1,54 @@
+<div class="flex-vert">
+  <div class="flex-vert">
+    <forge-badge>9</forge-badge>
+    <forge-badge>99</forge-badge>
+    <forge-badge>999+</forge-badge>
+    <forge-badge>99999999+</forge-badge>
+  </div>
+
+  <div class="flex-vert">
+    <forge-icon-button class="forge-icon-button--with-badge">
+      <button type="button">
+        <forge-icon name="notifications" external></forge-icon>
+      </button>
+      <forge-badge dot positioned></forge-badge>
+    </forge-icon-button>
+
+    <forge-icon-button class="forge-icon-button--with-badge">
+      <button type="button">
+        <forge-icon name="notifications" external></forge-icon>
+      </button>
+      <forge-badge positioned>99</forge-badge>
+    </forge-icon-button>
+
+    <forge-icon-button class="forge-icon-button--with-badge">
+      <button type="button">
+        <forge-icon name="notifications" external></forge-icon>
+      </button>
+      <forge-badge positioned>999999+</forge-badge>
+    </forge-icon-button>
+  </div>
+
+  <div class="flex">
+    <div class="flex-vert">
+      <h3 class="forge-typography--subtitle1-secondary">Theme</h3>
+      <forge-badge>Default</forge-badge>
+      <forge-badge theme="danger">Danger</forge-badge>
+      <forge-badge theme="warning">Warning</forge-badge>
+      <forge-badge theme="success">Success</forge-badge>
+      <forge-badge theme="info-primary">Info (primary)</forge-badge>
+      <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
+    </div>
+    <div class="flex-vert">
+      <h3 class="forge-typography--subtitle1-secondary">Strong theme</h3>
+      <forge-badge strong>Default</forge-badge>
+      <forge-badge theme="danger" strong>Danger</forge-badge>
+      <forge-badge theme="warning" strong>Warning</forge-badge>
+      <forge-badge theme="success" strong>Success</forge-badge>
+      <forge-badge theme="info-primary" strong>Info (primary)</forge-badge>
+      <forge-badge theme="info-secondary" strong>Info (secondary)</forge-badge>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="badge.ts"></script>

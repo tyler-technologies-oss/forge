@@ -1,44 +1,4 @@
-.content {
-  .card {
-    margin: 24px;
-    max-width: 960px;
-    --forge-card-padding: 0;
-
-    &--centered {
-      margin: 24px auto;
-    }
-  }
-
-  .container {
-    padding: 16px;
-  }
-}
-
-.options-container {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-}
-
-forge-drawer:has(.options-container) {
-  --forge-drawer-width: 300px;
-}
-
-.flex-vert {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.list-item-link {
-  &:link,
-  &:active,
-  &:visited,
-  &:hover {
-    text-decoration: none;
-    color: var(--mdc-theme-text-primary-on-background);
-  }
-}
+@use './styles/content';
+@use './styles/options';
+@use './styles/flex';
+@use './styles/list';

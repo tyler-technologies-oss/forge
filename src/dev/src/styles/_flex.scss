@@ -1,0 +1,11 @@
+.flex {
+  display: flex;
+  gap: 16px;
+}
+
+.flex-vert {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+}

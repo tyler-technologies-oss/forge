@@ -1,0 +1,11 @@
+.options-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+}
+
+forge-drawer:has(.options-container) {
+  --forge-drawer-width: 300px;
+}

@@ -1,0 +1,15 @@
+.content {
+  .card {
+    margin: 24px;
+    max-width: 960px;
+    --forge-card-padding: 0;
+
+    &--centered {
+      margin: 24px auto;
+    }
+  }
+
+  .container {
+    padding: 16px;
+  }
+}
