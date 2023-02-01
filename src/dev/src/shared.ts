@@ -6,6 +6,7 @@ import '@tylertech/forge/forge-core.scss';
 import '@tylertech/forge/typography/forge-typography.scss';
 import '@tylertech/forge/theme/forge-theme.scss';
 import '@tylertech/forge/icon-button/forge-icon-button.scss';
+import '@tylertech/forge/tooltip/forge-tooltip.scss';
 
 // Components
 import '@tylertech/forge/scaffold';
@@ -21,6 +22,7 @@ import '@tylertech/forge/checkbox';
 import '@tylertech/forge/switch';
 import '@tylertech/forge/text-field';
 import '@tylertech/forge/select';
+import '@tylertech/forge/tooltip';
 
 // Icons
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
