@@ -2,3 +2,12 @@
 @use './styles/options';
 @use './styles/flex';
 @use './styles/list';
+
+body.ready {
+  opacity: 1;
+  transition: 300ms opacity 200ms;
+}
+
+:not(:defined) {
+  visibility: hidden;
+}

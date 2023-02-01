@@ -1,3 +1,8 @@
+import { getCookie, setCookie } from '$src/utils/utils';
+
+const THEME_COOKIE_NAME = 'forge-theme';
+const THEME_IDENTIFIER_LIGHT = 'light';
+const THEME_IDENTIFIER_DARK = 'dark';
 let darkStyles: string | undefined;
 
 export async function toggleDarkTheme(): Promise<boolean> {
@@ -11,13 +16,20 @@ export async function toggleDarkTheme(): Promise<boolean> {
 }
 
 export async function listenThemeChange(): Promise<void> {
-  // createThemeSwitcherButton();
-  preloadDarkStyle();
+  const isDarkInitial = detectDarkTheme();
+  if (isDarkInitial) {
+    await preloadDarkStyle();
+    setDarkStyles();
+  } else {
+    preloadDarkStyle();
+  }
+
   const darkThemeButton = document.querySelector('#dark-theme-button');
   darkThemeButton.addEventListener('click', async () => {
     const isDark = await toggleDarkTheme();
     const forgeIcon = darkThemeButton.querySelector('forge-icon');
     forgeIcon.name = isDark ? 'wb_sunny' : 'brightness_3';
+    setCookie(THEME_COOKIE_NAME, isDark ? THEME_IDENTIFIER_DARK : THEME_IDENTIFIER_LIGHT);
   });
 }
 
@@ -26,21 +38,20 @@ async function preloadDarkStyle(): Promise<void> {
   darkStyles = stylesMod?.default;
 }
 
-// function createThemeSwitcherButton(): void {
-//   const appBar = document.querySelector('forge-app-bar');
-//   appBar.insertAdjacentHTML('beforeend', `
-//     <forge-icon-button slot="end">
-//       <button type="button" id="dark-theme-button">
-//         <forge-icon name="brightness_3"></forge-icon>
-//       </button>
-//     </forge-icon-button>
-//   `);
-// }
-
 function setDarkStyles(): void {
   const styleTag = document.createElement('style');
   styleTag.id = 'forge-dark-style';
   styleTag.setAttribute('type', 'text/css');
   styleTag.textContent = darkStyles;
   document.head.appendChild(styleTag);
+}
+
+function detectDarkTheme(): boolean {
+  const cookieVal = getCookie(THEME_COOKIE_NAME);
+  if (cookieVal) {
+    return cookieVal === THEME_IDENTIFIER_DARK;
+  }
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setCookie(THEME_COOKIE_NAME, prefersDark ? THEME_IDENTIFIER_DARK : THEME_IDENTIFIER_LIGHT);
+  return prefersDark;
 }

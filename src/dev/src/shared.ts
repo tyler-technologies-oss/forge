@@ -34,3 +34,10 @@ IconRegistry.define([
 ]);
 
 listenThemeChange();
+
+await Promise.allSettled([
+  window.customElements.whenDefined('forge-scaffold'),
+  window.customElements.whenDefined('forge-card')
+]);
+
+document.body.classList.add('ready');
