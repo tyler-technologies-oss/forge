@@ -144,7 +144,7 @@ function filterOptions(filter: string, value: string): Promise<IOption[] | IList
     // }
 
     return new Promise(resolve => {
-      window.setTimeout(function() {
+      window.setTimeout(() => {
         const result = executeFilter(filter);
         resolve(useGroupedData ? groupOptions(result) : result);
       }, randomTimeout(250, 1500));
@@ -162,11 +162,9 @@ function executeFilter(filter: string): IOption[] {
   if (asyncFilter) {
     if (filterCache.size > 10) {
       Array.from(filterCache.keys())
-        .filter(function(key) { return !!key; })
+        .filter(key => !!key)
         .slice(0, 4)
-        .forEach(function(key) {
-          filterCache.delete(key);
-        });
+        .forEach(key => filterCache.delete(key));
     }
     filterCache.set(filter, filteredData);
   } else {
