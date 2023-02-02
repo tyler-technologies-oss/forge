@@ -120,6 +120,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   public disconnect(): void {
+    this._adapter.tryRemoveOverlay();
     this._adapter.removePointerupListener(this._pointerupListener);
     this._adapter.removePointermoveListener(this._pointermoveListener);
   }

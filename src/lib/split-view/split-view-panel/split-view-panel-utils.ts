@@ -348,11 +348,11 @@ export function getPixelDimension(value: number | string, parentSize: number): n
 }
 
 /**
- * Gets a transparent element to overlay on top of the document body, ensuring the split view
+ * Creates a transparent element to overlay on top of the document body, ensuring the split view
  * behaves as expected when dragging over other contexts.
  * @returns An overlay element.
  */
-export function getOverlay(): HTMLElement {
+export function createOverlay(): HTMLElement {
   const el = document.createElement('div');
   el.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.OVERLAY);
   el.style.position = 'fixed';

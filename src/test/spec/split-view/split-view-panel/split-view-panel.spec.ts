@@ -870,7 +870,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       expect(sibling.getContentSize()).toBe(startSize);
     });
 
-    it('should close when size is equal to or under auto size threshold and auto close is anabled', function(this: ITestContext) {
+    it('should close when size is equal to or under auto size threshold and auto close is enabled', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
       this.context.component.autoClose = true;

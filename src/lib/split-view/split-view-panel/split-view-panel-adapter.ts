@@ -5,12 +5,13 @@ import { ISplitViewPanelComponent } from './split-view-panel';
 import { ISplitViewPanelCursorConfig, ISplitViewPanelOpenEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
-import { getCursor, getHandleIcon, getOverlay, getSplitViewPanelSibling } from './split-view-panel-utils';
+import { getCursor, getHandleIcon, createOverlay, getSplitViewPanelSibling } from './split-view-panel-utils';
 import { IIconComponent } from '../../icon';
 import { IRippleComponent } from '../../ripple';
 
 export interface ISplitViewPanelAdapter extends IBaseAdapter {
   initialize(): void;
+  tryRemoveOverlay(): void;
   setPointerdownListener(listener: (evt: PointerEvent) => void): void;
   setPointerupListener(listener: (evt: PointerEvent) => void): void;
   removePointerupListener(listener: (evt: PointerEvent) => void): void;
@@ -65,6 +66,11 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     if (parent?.tagName.toLowerCase() === SPLIT_VIEW_CONSTANTS.elementName) {
       this._parent = parent as ISplitViewComponent;
     }
+  }
+
+  public tryRemoveOverlay(): void {
+    this._overlay?.remove();
+    this._overlay = undefined;
   }
 
   public setPointerdownListener(listener: (evt: PointerEvent) => void): void {
@@ -215,11 +221,12 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._handle.setAttribute('aria-grabbed', value.toString());
 
     if (value) {
-      this._overlay = getOverlay();
+      if (!this._overlay) {
+        this._overlay = createOverlay();
+      }
       document.body.append(this._overlay);
     } else {
       this._overlay?.remove();
-      this._overlay = undefined;
     }
   }
 
