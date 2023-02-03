@@ -1,7 +1,7 @@
 name: Build Pull Request
 
 on:
-  pull_request_target:
+  pull_request:
     paths:
       - 'forge.json'
       - 'package.json'
@@ -54,7 +54,7 @@ jobs:
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.5.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.6.0
     if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: false
@@ -64,5 +64,5 @@ jobs:
       PR_COMMENT_HEADER: "View Storybook Deployment"
       PR_PATH: pr/${{ github.event.pull_request.head.label }}
     secrets:
-      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.FORGE_GITHUB_ACCESS_TOKEN }}
       NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
