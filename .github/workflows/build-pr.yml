@@ -54,8 +54,8 @@ jobs:
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.6.1
-    if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.7.0
+    if: ${{ github.event.pull_request.head.repo.fork == false && needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: false
       BUILD_DIRECTORY: dist/storybook
@@ -64,5 +64,5 @@ jobs:
       PR_COMMENT_HEADER: "View Storybook Deployment"
       PR_PATH: pr/${{ github.event.pull_request.head.label }}
     secrets:
-      GITHUB_DEPLOY_TOKEN: ${{ secrets.FORGE_GITHUB_ACCESS_TOKEN }}
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}

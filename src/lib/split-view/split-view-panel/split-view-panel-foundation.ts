@@ -120,6 +120,7 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
   }
 
   public disconnect(): void {
+    this._adapter.tryRemoveOverlay();
     this._adapter.removePointerupListener(this._pointerupListener);
     this._adapter.removePointermoveListener(this._pointermoveListener);
   }
@@ -763,11 +764,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
     // Contextual cursor
     if (config.cursor) {
       handleBoundariesAfterResize(this._adapter, size, { ...this._state, availableSpace });
-    }
-
-    // Unset cursor
-    if (config.clearCursor) {
-      this._adapter.setHandleCursor();
     }
   }
 }

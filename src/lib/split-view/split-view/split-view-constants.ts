@@ -47,7 +47,6 @@ export type SplitViewOrientation = 'horizontal' | 'vertical';
 
 export interface ISplitViewUpdateConfig {
   accessibility?: boolean;
-  clearCursor?: boolean;
   cursor?: boolean;
   orientation?: SplitViewOrientation;
   properties?: Partial<ISplitViewBase>;
