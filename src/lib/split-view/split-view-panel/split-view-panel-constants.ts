@@ -26,7 +26,8 @@ const classes = {
   CLOSED: 'forge-split-view-panel--closed',
   CLOSING: 'forge-split-view-panel--closing',
   OPENING: 'forge-split-view-panel--opening',
-  DISABLED: 'forge-split-view-panel--disabled'
+  DISABLED: 'forge-split-view-panel--disabled',
+  OVERLAY: 'forge-split-view-panel-overlay'
 };
 
 const ids = {
