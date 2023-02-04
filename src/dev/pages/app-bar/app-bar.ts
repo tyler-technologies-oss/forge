@@ -43,6 +43,7 @@ IconRegistry.define([
   tylIconSettings
 ]);
 
+const pageAppBar = document.querySelector('forge-app-bar#page-app-bar') as IAppBarComponent;
 const appBar = document.querySelector('forge-app-bar#forge-app-bar-example') as IAppBarComponent;
 const appBarSearch = appBar.querySelector('forge-app-bar-search#app-bar-search') as IAppBarSearchComponent;
 const appBarProfileButton = appBar.querySelector('forge-app-bar-profile-button') as IAppBarProfileButtonComponent;
@@ -114,6 +115,7 @@ function profileCardBuilder(): HTMLElement {
 const appBarRaisedToggle = document.querySelector('#app-bar-raised-toggle') as ISwitchComponent;
 appBarRaisedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   appBar.raised = selected;
+  pageAppBar.raised = selected;
 });
 
 const appBarTitleInput = document.querySelector('#app-bar-title-input') as HTMLInputElement;
@@ -125,8 +127,10 @@ const appBarThemeSelect = document.querySelector('#app-bar-theme-select') as ISe
 appBarThemeSelect.addEventListener('change', () => {
   if (appBarThemeSelect.value) {
     appBar.setAttribute('theme', appBarThemeSelect.value);
+    pageAppBar.setAttribute('theme', appBarThemeSelect.value);
   } else {
     appBar.removeAttribute('theme');
+    pageAppBar.removeAttribute('theme');
   }
 });
 

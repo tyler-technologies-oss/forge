@@ -13,7 +13,7 @@
         <forge-card outlined class="card<%= !page.options?.length ? ' card--centered' : undefined %>">
           <!-- Card header-->
           <forge-toolbar>
-            <h2 slot="start" class="forge-typography--headline5"><%= page.contentTitle ?? page.title %></h2>
+            <h2 slot="start" id="content-title" class="forge-typography--headline5"><%= page.contentTitle ?? page.title %></h2>
           </forge-toolbar>
 
           <!-- Card content -->
