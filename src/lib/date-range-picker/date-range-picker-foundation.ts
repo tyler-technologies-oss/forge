@@ -26,7 +26,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     this._toInputListener = evt => this._onToInput(evt);
     this._toInputValueChangedListener = value => this._onToInputValueChanged(value);
     this._toInputKeydownListener = evt => this._onInputKeydown(evt);
-    this._toInputFocusListener = evt => this._onToInputFocus();
+    this._toInputFocusListener = evt => this._onToInputFocus(evt);
     this._toInputBlurListener = evt => this._onToInputBlur(evt);
   }
 
@@ -93,13 +93,13 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   protected _emitCloseEvent(): void {
     this._adapter.emitHostEvent(DATE_RANGE_PICKER_CONSTANTS.events.CLOSE, undefined, false);
   }
-
+  
   protected _onToday(): void {
     const today = new Date();
-    const range = new DateRange({ from: today });
+    const range = this._open ? new DateRange({ from: this._from || today, to: today }) : new DateRange({ from: today });
     this.value = range;
     this._onDateSelected({ date: today, range, selected: true, type: 'date' });
-    this._adapter.setCalendarActiveDate(today);
+    this._adapter.setCalendarActiveDate(today)
   }
 
   protected _onClear(): void {
@@ -289,7 +289,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     }
   }
 
-  private _onToInputFocus(): void {
+  private _onToInputFocus(evt: Event): void {
     this._adapter.selectToInputText();
   }
 
