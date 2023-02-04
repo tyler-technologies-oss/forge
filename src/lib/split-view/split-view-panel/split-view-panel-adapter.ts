@@ -5,12 +5,13 @@ import { ISplitViewPanelComponent } from './split-view-panel';
 import { ISplitViewPanelCursorConfig, ISplitViewPanelOpenEvent, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
 import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } from '../split-view/split-view-constants';
 import { ISplitViewComponent } from '../split-view/split-view';
-import { getCursor, getHandleIcon, getSplitViewPanelSibling } from './split-view-panel-utils';
+import { getCursor, getHandleIcon, createOverlay, getSplitViewPanelSibling } from './split-view-panel-utils';
 import { IIconComponent } from '../../icon';
 import { IRippleComponent } from '../../ripple';
 
 export interface ISplitViewPanelAdapter extends IBaseAdapter {
   initialize(): void;
+  tryRemoveOverlay(): void;
   setPointerdownListener(listener: (evt: PointerEvent) => void): void;
   setPointerupListener(listener: (evt: PointerEvent) => void): void;
   removePointerupListener(listener: (evt: PointerEvent) => void): void;
@@ -48,6 +49,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   private _ripple: IRippleComponent;
   private _content: HTMLElement;
   private _parent?: ISplitViewComponent;
+  private _overlay?: HTMLElement;
 
   constructor(component: ISplitViewPanelComponent) {
     super(component);
@@ -64,6 +66,11 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     if (parent?.tagName.toLowerCase() === SPLIT_VIEW_CONSTANTS.elementName) {
       this._parent = parent as ISplitViewComponent;
     }
+  }
+
+  public tryRemoveOverlay(): void {
+    this._overlay?.remove();
+    this._overlay = undefined;
   }
 
   public setPointerdownListener(listener: (evt: PointerEvent) => void): void {
@@ -212,10 +219,14 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   public setGrabbed(value: boolean): void {
     this._root.classList.toggle(SPLIT_VIEW_PANEL_CONSTANTS.classes.GRABBED, value);
     this._handle.setAttribute('aria-grabbed', value.toString());
-    this._parent?.update({ clearCursor: true });
 
-    if (!value) {
-      document.body.style.removeProperty('cursor');
+    if (value) {
+      if (!this._overlay) {
+        this._overlay = createOverlay();
+      }
+      document.body.append(this._overlay);
+    } else {
+      this._overlay?.remove();
     }
   }
 
@@ -233,12 +244,12 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   /**
-   * Applies a cursor style to the document body.
+   * Applies a cursor style to the overlay element covering the document body.
    * @param orientation The component's orientation.
    * @param config The component's resizable value and whether it's at the min or max value.
    */
   public setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void {
-    document.body.style.setProperty('cursor', getCursor(orientation, config));
+    this._overlay?.style.setProperty('cursor', getCursor(orientation, config));
   }
 
   /**

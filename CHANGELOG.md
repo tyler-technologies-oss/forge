@@ -1,3 +1,43 @@
+# v2.12.4 (Sat Feb 04 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Logan Brown ([@Lillious](https://github.com/Lillious)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(date-range-picker): fixed a bug that caused the end date to reset upon pressing t with the calendar open and end date selected ([@Lillious](https://github.com/Lillious))
+- fix(field): fixed a bug where height of helper-text element was incorrect [#222](https://github.com/tyler-technologies-oss/forge/pull/222) ([@Lillious](https://github.com/Lillious) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/tyler-technologies-oss/forge ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Logan Brown ([@Lillious](https://github.com/Lillious))
+
+---
+
+# v2.12.3 (Fri Feb 03 2023)
+
+#### 🐛 Bug Fix
+
+- fix(split-view): added an overlay while dragging to maintain listeners and cursor styles [#220](https://github.com/tyler-technologies-oss/forge/pull/220) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(switch): fixed a bug where the UI could incorrectly reflect the component state [#215](https://github.com/tyler-technologies-oss/forge/pull/215) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### ⚠️ Pushed to `main`
+
+- chore(auto-pr-check): use `pull_request_target` ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.12.2 (Wed Jan 11 2023)
 
 #### 🐛 Bug Fix
