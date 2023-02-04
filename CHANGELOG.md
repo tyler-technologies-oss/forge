@@ -1,3 +1,25 @@
+# v2.12.4 (Sat Feb 04 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Logan Brown ([@Lillious](https://github.com/Lillious)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(date-range-picker): fixed a bug that caused the end date to reset upon pressing t with the calendar open and end date selected ([@Lillious](https://github.com/Lillious))
+- fix(field): fixed a bug where height of helper-text element was incorrect [#222](https://github.com/tyler-technologies-oss/forge/pull/222) ([@Lillious](https://github.com/Lillious) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/tyler-technologies-oss/forge ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Logan Brown ([@Lillious](https://github.com/Lillious))
+
+---
+
 # v2.12.3 (Fri Feb 03 2023)
 
 #### 🐛 Bug Fix
