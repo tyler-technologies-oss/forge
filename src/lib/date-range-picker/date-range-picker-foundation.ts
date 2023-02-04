@@ -99,7 +99,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     const range = this._open ? new DateRange({ from: this._from || today, to: today }) : new DateRange({ from: today });
     this.value = range;
     this._onDateSelected({ date: today, range, selected: true, type: 'date' });
-    this._adapter.setCalendarActiveDate(today)
+    this._adapter.setCalendarActiveDate(today);
   }
 
   protected _onClear(): void {
