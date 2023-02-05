@@ -9,5 +9,6 @@
   { "label": "Button", "path": "/pages/button/button.html" },
   { "label": "Button toggle", "path": "/pages/button-toggle/button-toggle.html" },
   { "label": "Calendar", "path": "/pages/calendar/calendar.html" },
+  { "label": "Typography", "path": "/pages/typography/typography.html" },
   { "label": "View switcher", "path": "/pages/view-switcher/view-switcher.html", "tags": ["tabs"] }
 ]
