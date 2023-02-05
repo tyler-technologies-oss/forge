@@ -8,5 +8,6 @@
   { "label": "Busy indicator", "path": "/pages/busy-indicator/busy-indicator.html" },
   { "label": "Button", "path": "/pages/button/button.html" },
   { "label": "Button toggle", "path": "/pages/button-toggle/button-toggle.html" },
-  { "label": "Calendar", "path": "/pages/calendar/calendar.html" }
+  { "label": "Calendar", "path": "/pages/calendar/calendar.html" },
+  { "label": "View switcher", "path": "/pages/view-switcher/view-switcher.html", "tags": ["tabs"] }
 ]

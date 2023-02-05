@@ -20,3 +20,13 @@ forge-switch {
     justify-content: space-between;
   }
 }
+
+.radio-option-container {
+  display: grid;
+
+  &--vertical {
+    [role=radiogroup] {
+      display: grid;
+    }
+  }
+}

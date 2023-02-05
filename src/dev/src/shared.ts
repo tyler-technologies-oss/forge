@@ -19,6 +19,7 @@ import '@tylertech/forge/toast';
 import '@tylertech/forge/list';
 import '@tylertech/forge/drawer';
 import '@tylertech/forge/checkbox';
+import '@tylertech/forge/radio';
 import '@tylertech/forge/switch';
 import '@tylertech/forge/text-field';
 import '@tylertech/forge/select';
