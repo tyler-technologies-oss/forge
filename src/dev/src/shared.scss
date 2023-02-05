@@ -11,3 +11,7 @@ body.ready {
 :not(:defined) {
   visibility: hidden;
 }
+
+* {
+  box-sizing: border-box;
+}
