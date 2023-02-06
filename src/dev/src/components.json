@@ -9,6 +9,7 @@
   { "label": "Button", "path": "/pages/button/button.html" },
   { "label": "Button toggle", "path": "/pages/button-toggle/button-toggle.html" },
   { "label": "Calendar", "path": "/pages/calendar/calendar.html" },
+  { "label": "Select", "path": "/pages/select/select.html" },
   { "label": "Text field", "path": "/pages/text-field/text-field.html" },
   { "label": "Time picker", "path": "/pages/time-picker/time-picker.html" },
   { "label": "Toast", "path": "/pages/toast/toast.html" },
