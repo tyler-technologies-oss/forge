@@ -1,6 +1,6 @@
 type ListItemStyle = 'one-line' | 'two-line' | 'three-line';
-type LeadingSlot = 'none' | 'icon' | 'avatar' | 'checkbox' | 'radio-button';
-type TrailingSlot = 'none' | 'icon' | 'checkbox' | 'radio-button';
+type LeadingSlot = 'none' | 'icon' | 'avatar' | 'checkbox' | 'radio-button' | 'badge';
+type TrailingSlot = 'none' | 'icon' | 'checkbox' | 'radio-button' | 'badge';
 export interface IListProps {
   staticList: boolean;
   dense: boolean;
@@ -76,13 +76,14 @@ export const argTypes = {
       type: 'select',
       labels: {
         'none': 'None',
-        'icon': 'Icon',
         'avatar': 'Avatar',
+        'badge': 'Badge',
         'checkbox': 'Checkbox',
+        'icon': 'Icon',
         'radio-button': 'Radio button',
       },
     },
-    options: ['none', 'icon', 'avatar', 'checkbox', 'radio-button'],
+    options: ['none', 'icon', 'avatar', 'checkbox', 'radio-button', 'badge'],
     description: '',
     table: {
       category: 'Slots',
@@ -93,12 +94,14 @@ export const argTypes = {
       type: 'select',
       labels: {
         'none': 'None',
-        'icon': 'Icon',
+        'avatar': 'Avatar',
+        'badge': 'Badge',
         'checkbox': 'Checkbox',
+        'icon': 'Icon',
         'radio-button': 'Radio button',
       },
     },
-    options: ['none', 'icon', 'checkbox', 'radio-button'],
+    options: ['none', 'icon', 'checkbox', 'radio-button', 'badge'],
     description: '',
     table: {
       category: 'Slots',
