@@ -22,7 +22,7 @@ button.addEventListener('click', () => {
 });
 
 optPlacementSelect.addEventListener('change', () => onPlacementChanged());
-
+onPlacementChanged();
 
 function showToast(): void {
   const toast = document.createElement('forge-toast');
@@ -87,7 +87,7 @@ function applyCustomStyleOverrides(toast: IToastComponent): void {
     }
 
     if (optPlacementSelect.value.includes('bottom')) {
-      if (optPlacementSelect.value.includes('right')) {
+      if (optPlacementSelect.value.includes('end')) {
         toast.style.setProperty('--forge-toast-bottom-right-margin-right', (optHorizMarginInput.value || DEFAULT_MARGIN) + 'px');
         toast.style.setProperty('--forge-toast-bottom-right-margin-bottom', (optVertMarginInput.value || DEFAULT_MARGIN) + 'px');
       } else {
@@ -95,7 +95,7 @@ function applyCustomStyleOverrides(toast: IToastComponent): void {
         toast.style.setProperty('--forge-toast-bottom-left-margin-bottom', (optVertMarginInput.value || DEFAULT_MARGIN) + 'px');
       }
     } else {
-      if (optPlacementSelect.value.includes('right')) {
+      if (optPlacementSelect.value.includes('end')) {
         toast.style.setProperty('--forge-toast-top-right-margin-right', (optHorizMarginInput.value || DEFAULT_MARGIN) + 'px');
         toast.style.setProperty('--forge-toast-top-right-margin-top', (optVertMarginInput.value || DEFAULT_MARGIN) + 'px');
       } else {
