@@ -10,6 +10,7 @@
   { "label": "Button toggle", "path": "/pages/button-toggle/button-toggle.html" },
   { "label": "Calendar", "path": "/pages/calendar/calendar.html" },
   { "label": "Card", "path": "/pages/card/card.html" },
+  { "label": "Checkbox", "path": "/pages/checkbox/checkbox.html" },
   { "label": "Ripple", "path": "/pages/ripple/ripple.html" },
   { "label": "Select", "path": "/pages/select/select.html" },
   { "label": "Text field", "path": "/pages/text-field/text-field.html" },
