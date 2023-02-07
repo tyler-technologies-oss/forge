@@ -17,6 +17,8 @@
           <%- include('controls/time-picker.ejs', { control }); %>
         <% } else if (control.type === 'radiogroup') { %>
           <%- include('controls/radiogroup.ejs', { control }); %>
+        <% } else if (control.type === 'button') { %>
+          <%- include('controls/button.ejs', { control }); %>
         <% } else if (control.type === 'custom') { %>
           <%- control.render() %>
         <% } %>

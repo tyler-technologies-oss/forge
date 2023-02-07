@@ -5,6 +5,7 @@ import '$src/shared.scss';
 import '@tylertech/forge/forge-core.scss';
 import '@tylertech/forge/typography/forge-typography.scss';
 import '@tylertech/forge/theme/forge-theme.scss';
+import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/icon-button/forge-icon-button.scss';
 import '@tylertech/forge/tooltip/forge-tooltip.scss';
 
@@ -18,6 +19,7 @@ import '@tylertech/forge/toolbar';
 import '@tylertech/forge/toast';
 import '@tylertech/forge/list';
 import '@tylertech/forge/drawer';
+import '@tylertech/forge/button';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/radio';
 import '@tylertech/forge/switch';

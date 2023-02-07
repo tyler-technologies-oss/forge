@@ -3,30 +3,37 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
 
-forge-drawer:has(.options-container) {
-  --forge-drawer-width: 300px;
-}
-
-forge-switch {
-  &::part(label) {
-    padding-left: 0;
-    margin-left: initial;
-    width: 100%;
+  forge-drawer:has(.options-container) {
+    --forge-drawer-width: 300px;
   }
-
-  &::part(root) {
-    justify-content: space-between;
+  
+  forge-switch {
+    &::part(label) {
+      padding-left: 0;
+      margin-left: initial;
+      width: 100%;
+    }
+  
+    &::part(root) {
+      justify-content: space-between;
+    }
   }
-}
-
-.radio-option-container {
-  display: grid;
-
-  &--vertical {
-    [role=radiogroup] {
-      display: grid;
+  
+  .radio-option-container {
+    display: grid;
+  
+    &--vertical {
+      [role=radiogroup] {
+        display: grid;
+      }
+    }
+  }
+  
+  .option-button {
+    button {
+      width: 100%;
     }
   }
 }
+
