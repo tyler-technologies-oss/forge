@@ -69,7 +69,10 @@ export class ListItemFoundation implements IListItemFoundation {
       this._adapter.setTwoLine(this._twoLine);
     }
 
-    this._selected = this._adapter.trySelect(this._value);
+    const isSelected = this._adapter.trySelect(this._value);
+    if(isSelected != null) {
+      this._selected = isSelected;
+    }
   }
 
   public disconnect(): void {
@@ -252,7 +255,10 @@ export class ListItemFoundation implements IListItemFoundation {
   }
   public set value(value: any) {
     this._value = value;
-    this._selected = this._adapter.trySelect(this._value);
+    const isSelected = this._adapter.trySelect(this._value);
+    if(isSelected != null) {
+      this._selected = isSelected;
+    }
   }
 
   /** Gets/sets the href link that this list item will send the browser to when clicked. */

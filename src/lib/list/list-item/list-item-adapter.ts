@@ -26,7 +26,7 @@ export interface IListItemAdapter extends IBaseAdapter {
   setDense(dense: boolean): void;
   setIndented(indented: boolean): void;
   setWrap(value: boolean): void;
-  trySelect(value: unknown): boolean;
+  trySelect(value: unknown): boolean | null;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
@@ -208,10 +208,10 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
    * @param value The value to compare to the parent list element's selected value
    * @returns Returns whether the list item is selected or not
    */
-  public trySelect(value: unknown): boolean {
+  public trySelect(value: unknown): boolean | null {
     const list = requireParent<IListComponent>(this._component, LIST_CONSTANTS.elementName);
     if (!list || list.selectedValue === undefined) {
-      return false;
+      return null;
     }
 
     const listValues = list.selectedValue instanceof Array ? list.selectedValue : [list.selectedValue];
