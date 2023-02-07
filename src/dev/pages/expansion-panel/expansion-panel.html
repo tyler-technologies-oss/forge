@@ -1,0 +1,11 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Expansion panel',
+    includePath: './pages/expansion-panel/expansion-panel.ejs',
+    options: [
+      { type: 'switch', label: 'Use animations', id: 'opt-use-animations', defaultValue: true }
+    ]
+  }
+})
+%>
