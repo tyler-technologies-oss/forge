@@ -1,0 +1,21 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Linear progress',
+    includePath: './pages/linear-progress/linear-progress.ejs',
+    options: [
+      {
+        type: 'select',
+        id: 'opt-mode',
+        defaultValue: 'indeterminate',
+        options: [
+          { label: 'Indeterminate', value: 'indeterminate' },
+          { label: 'Determinate', value: 'determinate' },
+          { label: 'Buffer', value: 'buffer' }
+        ]
+      },
+      { type: 'switch', label: 'Visible', id: 'opt-visible', defaultValue: true }
+    ]
+  }
+})
+%>
