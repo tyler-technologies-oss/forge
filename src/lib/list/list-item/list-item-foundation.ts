@@ -69,7 +69,7 @@ export class ListItemFoundation implements IListItemFoundation {
       this._adapter.setTwoLine(this._twoLine);
     }
 
-    this._adapter.trySelect(this._value);
+    this._selected = this._adapter.trySelect(this._value);
   }
 
   public disconnect(): void {
@@ -252,7 +252,7 @@ export class ListItemFoundation implements IListItemFoundation {
   }
   public set value(value: any) {
     this._value = value;
-    this._adapter.trySelect(this._value);
+    this._selected = this._adapter.trySelect(this._value);
   }
 
   /** Gets/sets the href link that this list item will send the browser to when clicked. */
