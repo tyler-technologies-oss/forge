@@ -13,6 +13,7 @@
   { "label": "Color picker", "path": "/pages/color-picker/color-picker.html" },
   { "label": "Circular progress", "path": "/pages/circular-progress/circular-progress.html" },
   { "label": "Checkbox", "path": "/pages/checkbox/checkbox.html" },
+  { "label": "Chips", "path": "/pages/chips/chips.html" },
   { "label": "Divider", "path": "/pages/divider/divider.html" },
   { "label": "Expansion panel", "path": "/pages/expansion-panel/expansion-panel.html" },
   { "label": "Floating action button", "path": "/pages/fab/fab.html" },

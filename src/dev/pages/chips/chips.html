@@ -1,0 +1,12 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Chips',
+    includePath: './pages/chips/chips.ejs',
+    options: [
+      { type: 'switch', label: 'Dense', id: 'opt-dense' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' }
+    ]
+  }
+})
+%>
