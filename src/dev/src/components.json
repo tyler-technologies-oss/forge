@@ -11,6 +11,7 @@
   { "label": "Calendar", "path": "/pages/calendar/calendar.html" },
   { "label": "Card", "path": "/pages/card/card.html" },
   { "label": "Color picker", "path": "/pages/color-picker/color-picker.html" },
+  { "label": "Circular progress", "path": "/pages/circular-progress/circular-progress.html" },
   { "label": "Checkbox", "path": "/pages/checkbox/checkbox.html" },
   { "label": "Divider", "path": "/pages/divider/divider.html" },
   { "label": "Expansion panel", "path": "/pages/expansion-panel/expansion-panel.html" },
