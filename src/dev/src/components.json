@@ -11,6 +11,7 @@
   { "label": "Calendar", "path": "/pages/calendar/calendar.html" },
   { "label": "Card", "path": "/pages/card/card.html" },
   { "label": "Checkbox", "path": "/pages/checkbox/checkbox.html" },
+  { "label": "Icon", "path": "/pages/icon/icon.html" },
   { "label": "Inline message", "path": "/pages/inline-message/inline-message.html" },
   { "label": "Label value", "path": "/pages/label-value/label-value.html" },
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
