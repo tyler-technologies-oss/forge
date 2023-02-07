@@ -14,6 +14,7 @@
   { "label": "Inline message", "path": "/pages/inline-message/inline-message.html" },
   { "label": "Label value", "path": "/pages/label-value/label-value.html" },
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
+  { "label": "List", "path": "/pages/list/list.html" },
   { "label": "Ripple", "path": "/pages/ripple/ripple.html" },
   { "label": "Select", "path": "/pages/select/select.html" },
   { "label": "Text field", "path": "/pages/text-field/text-field.html" },
