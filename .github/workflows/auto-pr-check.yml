@@ -10,6 +10,6 @@ on:
 jobs:
   release:
     name: Pull Request Validation
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-auto-pr-check.yml@v2.8.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-auto-pr-check.yml@v2.8.1
     with:
       NPM_INSTALL_COMMAND: "ci --ignore-scripts"
