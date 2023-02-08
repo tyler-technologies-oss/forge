@@ -16,6 +16,7 @@
   { "label": "Chips", "path": "/pages/chips/chips.html" },
   { "label": "Dialog", "path": "/pages/dialog/dialog.html" },
   { "label": "Divider", "path": "/pages/divider/divider.html" },
+  { "label": "Drawer", "path": "/pages/drawer/drawer.html" },
   { "label": "Expansion panel", "path": "/pages/expansion-panel/expansion-panel.html" },
   { "label": "Floating action button", "path": "/pages/fab/fab.html" },
   { "label": "Icon", "path": "/pages/icon/icon.html" },

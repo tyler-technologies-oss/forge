@@ -6,6 +6,10 @@ $card-width: 960px;
     max-width: $card-width;
     --forge-card-padding: 0;
 
+    forge-card {
+      --forge-card-padding: 16px; // Reset padding to default for all children
+    }
+
     &--centered {
       margin-left: auto;
       margin-right: auto;
