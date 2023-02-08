@@ -28,6 +28,7 @@ interface ITestListItemCheckboxContext {
   listComponent: IListComponent;
   getRootElement(): HTMLElement;
   getInputElement(): HTMLInputElement;
+  append(): void;
   destroy(): void;
 }
 
@@ -477,13 +478,27 @@ describe('ListItemComponent', function(this: ITestContext) {
 
   describe('with checkbox', function(this: ITestContext) {
     it('should check checkbox when clicked', function(this: ITestContext) {
-      this.context = setupCheckboxTestContext();
+      this.context = setupCheckboxTestContext(true);
       (this.context as ITestListItemCheckboxContext).getRootElement().click();
       expect((this.context as ITestListItemCheckboxContext).getInputElement().checked).toBe(true);
     });
 
-    it('should not check checkbox with the forge-ignore attribute applied when list-item is clicked', function(this: ITestContext) {
+    it('should check checkbox when parent list has selectedValue', async function(this: ITestContext) {
       this.context = setupCheckboxTestContext();
+
+      (this.context as ITestListItemCheckboxContext).listComponent.selectedValue = [1];
+      this.context.component.value = 1;
+
+      // append to the DOM to start the test
+      (this.context as ITestListItemCheckboxContext).append();
+
+      await tick();
+
+      expect((this.context as ITestListItemCheckboxContext).getInputElement().checked).toBe(true);
+    });
+
+    it('should not check checkbox with the forge-ignore attribute applied when list-item is clicked', function(this: ITestContext) {
+      this.context = setupCheckboxTestContext(true);
       const checkboxInputElement = (this.context as ITestListItemCheckboxContext).getInputElement();
       checkboxInputElement.setAttribute(LIST_ITEM_CONSTANTS.attributes.IGNORE, '');
       (this.context as ITestListItemCheckboxContext).getRootElement().click();
@@ -491,7 +506,7 @@ describe('ListItemComponent', function(this: ITestContext) {
     });
 
     it('should emit change event toggling checked state', function(this: ITestContext) {
-      this.context = setupCheckboxTestContext();
+      this.context = setupCheckboxTestContext(true);
       const changeSpy = jasmine.createSpy('change spy');
       (this.context as ITestListItemCheckboxContext).getInputElement().addEventListener('change', changeSpy);
 
@@ -574,7 +589,7 @@ describe('ListItemComponent', function(this: ITestContext) {
     };
   }
 
-  function setupCheckboxTestContext(): ITestListItemCheckboxContext {
+  function setupCheckboxTestContext(append = false): ITestListItemCheckboxContext {
     const fixture = document.createElement('div');
     fixture.id = 'list-item-test-fixture';
     const listComponent = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
@@ -587,12 +602,17 @@ describe('ListItemComponent', function(this: ITestContext) {
     component.appendChild(checkboxComponent);
     listComponent.appendChild(component)
     fixture.appendChild(listComponent);
-    document.body.appendChild(fixture);
+
+    if(append) {
+      document.body.appendChild(fixture);
+    }
+
     return {
       listComponent,
       component,
       getRootElement: () => getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM),
       getInputElement: () => component.querySelector('input') as HTMLInputElement,
+      append: () => document.body.appendChild(fixture),
       destroy: () => removeElement(fixture)
     };
   }

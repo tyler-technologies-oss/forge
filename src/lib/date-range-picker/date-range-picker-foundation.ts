@@ -26,7 +26,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     this._toInputListener = evt => this._onToInput(evt);
     this._toInputValueChangedListener = value => this._onToInputValueChanged(value);
     this._toInputKeydownListener = evt => this._onInputKeydown(evt);
-    this._toInputFocusListener = evt => this._onToInputFocus(evt);
+    this._toInputFocusListener = evt => this._onToInputFocus();
     this._toInputBlurListener = evt => this._onToInputBlur(evt);
   }
 
@@ -96,7 +96,10 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   
   protected _onToday(): void {
     const today = new Date();
-    const range = this._open ? new DateRange({ from: this._from || today, to: today }) : new DateRange({ from: today });
+    const range = this._open ? new DateRange({ from: this._from || today, to: this._to || undefined }) : new DateRange({ from: today });
+    if (!this._isDateRangeAcceptable(range)) {
+      return;
+    }
     this.value = range;
     this._onDateSelected({ date: today, range, selected: true, type: 'date' });
     this._adapter.setCalendarActiveDate(today);
@@ -142,6 +145,18 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
       formattedDate = '';
     }
     this._adapter.setToInputValue(formattedDate, suppressValueChanges ? false : this._notifyInputValueChanges);
+  }
+
+  protected _isDateRangeAcceptable(value?: DateRange | null | undefined): boolean {
+    if (!value?.to) {
+      return true;
+    }
+
+    const passesMinDate = (): boolean => this._isDateValueAcceptable(value.from);
+    const passesMaxDate = (): boolean => this._isDateValueAcceptable(value.to);
+    const passesDateRange = (): boolean => value?.from && value?.to ? value.from.getTime() <= value.to.getTime() : true;
+
+    return passesMinDate() && passesMaxDate() && passesDateRange();
   }
 
   protected _setValue(value: Date | null | undefined): void {
@@ -289,7 +304,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     }
   }
 
-  private _onToInputFocus(evt: Event): void {
+  private _onToInputFocus(): void {
     this._adapter.selectToInputText();
   }
 

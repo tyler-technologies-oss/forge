@@ -105,7 +105,7 @@ The `forge.css` file contains other stylesheets that you may or may not need. We
 @use '@tylertech/forge/dist/button/forge-button.css';
 ```
 
-Additionally apply the `forge-typography` class to a root element (typically the `<body>`):
+Additionally, apply the `forge-typography` class to a root element (typically the `<body>`):
 
 ```html
 <body class="forge-typography">
