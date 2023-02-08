@@ -18,6 +18,7 @@
   { "label": "Divider", "path": "/pages/divider/divider.html" },
   { "label": "Drawer", "path": "/pages/drawer/drawer.html" },
   { "label": "Expansion panel", "path": "/pages/expansion-panel/expansion-panel.html" },
+  { "label": "File picker", "path": "/pages/file-picker/file-picker.html" },
   { "label": "Floating action button", "path": "/pages/fab/fab.html" },
   { "label": "Icon", "path": "/pages/icon/icon.html" },
   { "label": "Icon button", "path": "/pages/icon-button/icon-button.html" },
