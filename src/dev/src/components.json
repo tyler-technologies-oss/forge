@@ -24,6 +24,7 @@
   { "label": "Label value", "path": "/pages/label-value/label-value.html" },
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
   { "label": "List", "path": "/pages/list/list.html" },
+  { "label": "Menu", "path": "/pages/menu/menu.html" },
   { "label": "Page state", "path": "/pages/page-state/page-state.html" },
   { "label": "Paginator", "path": "/pages/paginator/paginator.html", "tags": ["table", "data"] },
   { "label": "Popup", "path": "/pages/popup/popup.html" },
