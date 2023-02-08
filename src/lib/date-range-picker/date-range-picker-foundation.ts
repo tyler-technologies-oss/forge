@@ -97,6 +97,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   protected _onToday(): void {
     const today = new Date();
     const range = this._open ? new DateRange({ from: this._from || today, to: today }) : new DateRange({ from: today });
+    if (!this._isDateRangeAcceptable(range)) return;
     this.value = range;
     this._onDateSelected({ date: today, range, selected: true, type: 'date' });
     this._adapter.setCalendarActiveDate(today);
@@ -142,6 +143,18 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
       formattedDate = '';
     }
     this._adapter.setToInputValue(formattedDate, suppressValueChanges ? false : this._notifyInputValueChanges);
+  }
+
+  protected _isDateRangeAcceptable(value?: DateRange | null | undefined): boolean {
+    if (!value?.to) {
+      return true;
+    }
+
+    const passesMinDate = (): boolean => this._isDateValueAcceptable(value.from);
+    const passesMaxDate = (): boolean => this._isDateValueAcceptable(value.to);
+    const passesDateRange = (): boolean => value?.from && value?.to ? value.from.getTime() <= value.to.getTime() : true;
+
+    return passesMinDate() && passesMaxDate() && passesDateRange();
   }
 
   protected _setValue(value: Date | null | undefined): void {
