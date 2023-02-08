@@ -24,6 +24,7 @@
   { "label": "Label value", "path": "/pages/label-value/label-value.html" },
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
   { "label": "List", "path": "/pages/list/list.html" },
+  { "label": "Page state", "path": "/pages/page-state/page-state.html" },
   { "label": "Radio", "path": "/pages/radio/radio.html" },
   { "label": "Ripple", "path": "/pages/ripple/ripple.html" },
   { "label": "Scaffold", "path": "/pages/scaffold/scaffold.html" },
