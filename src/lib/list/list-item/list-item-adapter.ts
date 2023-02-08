@@ -215,13 +215,10 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
 
     const listValues = list.selectedValue instanceof Array ? list.selectedValue : [list.selectedValue];
-    if (listValues.some(v => isDeepEqual(v, value))) {
-      this.setSelected(true);
-      this.tryToggleCheckboxRadio(true);
-      return true;
-    } else {
-      this.tryToggleCheckboxRadio(false);
-      return false;
-    }
+    const isSelected = listValues.some(v => isDeepEqual(v, value));
+
+    this.setSelected(isSelected);
+    this.tryToggleCheckboxRadio(isSelected);
+    return isSelected;
   }
 }
