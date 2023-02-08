@@ -73,7 +73,7 @@ export class ListItemComponent extends BaseComponent implements IListItemCompone
     this._foundation = new ListItemFoundation(new ListItemAdapter(this));
   }
 
-  public initializedCallback(): void {
+  public connectedCallback(): void {
     // To simulate the :host-context() selector for Firefox until they implement it, we need to determine if the
     // list item is within a drawer for auto-styling the list item when included within a drawer. Check to see if
     // any of the parents of this element are a drawer.
