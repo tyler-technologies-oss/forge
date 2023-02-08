@@ -26,6 +26,7 @@
   { "label": "List", "path": "/pages/list/list.html" },
   { "label": "Ripple", "path": "/pages/ripple/ripple.html" },
   { "label": "Select", "path": "/pages/select/select.html" },
+  { "label": "Slider", "path": "/pages/slider/slider.html" },
   { "label": "Switch", "path": "/pages/switch/switch.html" },
   { "label": "Text field", "path": "/pages/text-field/text-field.html" },
   { "label": "Time picker", "path": "/pages/time-picker/time-picker.html" },
