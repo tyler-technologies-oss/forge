@@ -1,0 +1,16 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Paginator',
+    includePath: './pages/paginator/paginator.ejs',
+    options: [
+      { type: 'switch', label: 'Show page size options', id: 'opt-show-page-size-opts', defaultValue: true },
+      { type: 'switch', label: 'Show label', id: 'opt-show-label', defaultValue: true },
+      { type: 'switch', label: 'Show first', id: 'opt-show-first' },
+      { type: 'switch', label: 'Show first & last', id: 'opt-show-first-last' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Alternative', id: 'opt-alternative' }
+    ]
+  }
+})
+%>

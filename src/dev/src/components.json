@@ -25,6 +25,7 @@
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
   { "label": "List", "path": "/pages/list/list.html" },
   { "label": "Page state", "path": "/pages/page-state/page-state.html" },
+  { "label": "Paginator", "path": "/pages/paginator/paginator.html", "tags": ["table", "data"] },
   { "label": "Popup", "path": "/pages/popup/popup.html" },
   { "label": "Radio", "path": "/pages/radio/radio.html" },
   { "label": "Ripple", "path": "/pages/ripple/ripple.html" },
