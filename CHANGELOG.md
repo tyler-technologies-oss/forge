@@ -1,3 +1,27 @@
+# v2.13.0 (Wed Feb 08 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Alan Collins ([@Alanoll](https://github.com/Alanoll)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat(list): added a badge demo to the list [#224](https://github.com/tyler-technologies-oss/forge/pull/224) ([@nickonometry](https://github.com/nickonometry))
+
+#### 🐛 Bug Fix
+
+- fix(list-item): fixed a bug where the UI could incorrectly reflect the component state [#225](https://github.com/tyler-technologies-oss/forge/pull/225) ([@Alanoll](https://github.com/Alanoll) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-range-picker): fixed a bug that allowed invalid date ranges [#226](https://github.com/tyler-technologies-oss/forge/pull/226) ([@Lillious](https://github.com/Lillious))
+
+#### Authors: 4
+
+- Alan Collins ([@Alanoll](https://github.com/Alanoll))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Logan Brown ([@Lillious](https://github.com/Lillious))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v2.12.4 (Sat Feb 04 2023)
 
 :tada: This release contains work from a new contributor! :tada:
