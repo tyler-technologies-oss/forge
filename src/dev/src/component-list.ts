@@ -91,7 +91,7 @@ function updateQueryString(filter: string): void {
  */
 function updateContentTitle(groups: IComponentGroup[], filtered = false): number {
   const count = getComponentCount(groups);
-  const titleText = `Components (${count})`;
+  const titleText = `Components (${count}${filtered ? ` of ${originalComponentCount}` : ''})`;
   if (filtered) {
     contentTitleElement.innerHTML = `
       <div class="flex">

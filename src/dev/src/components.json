@@ -37,6 +37,7 @@
   { "label": "Skeleton", "path": "/pages/skeleton/skeleton.html" },
   { "label": "Slider", "path": "/pages/slider/slider.html" },
   { "label": "Switch", "path": "/pages/switch/switch.html" },
+  { "label": "Table", "path": "/pages/table/table.html" },
   { "label": "Text field", "path": "/pages/text-field/text-field.html" },
   { "label": "Time picker", "path": "/pages/time-picker/time-picker.html" },
   { "label": "Toast", "path": "/pages/toast/toast.html" },
