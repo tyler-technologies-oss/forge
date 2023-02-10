@@ -15,6 +15,7 @@
   { "label": "Circular progress", "path": "/pages/circular-progress/circular-progress.html" },
   { "label": "Color picker", "path": "/pages/color-picker/color-picker.html" },
   { "label": "Date picker", "path": "/pages/date-picker/date-picker.html" },
+  { "label": "Date range picker", "path": "/pages/date-range-picker/date-range-picker.html" },
   { "label": "Dialog", "path": "/pages/dialog/dialog.html" },
   { "label": "Divider", "path": "/pages/divider/divider.html" },
   { "label": "Drawer", "path": "/pages/drawer/drawer.html" },
