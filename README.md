@@ -38,7 +38,7 @@ To develop locally, simply run the following commands from the root of the proje
 
 ```bash
 npm install
-npm run dev
+npm start
 ```
 
 > For more information about developing locally, see the dev site [README](https://github.com/tyler-technologies-oss/forge/blob/main/src/dev/README.md).
