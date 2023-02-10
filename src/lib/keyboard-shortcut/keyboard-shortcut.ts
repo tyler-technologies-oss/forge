@@ -22,6 +22,10 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-keyboard-shortcut': IKeyboardShortcutComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-keyboard-shortcut-activate': CustomEvent<KeyboardEvent>;
+  }
 }
 
 /**
