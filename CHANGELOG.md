@@ -1,3 +1,15 @@
+# v2.13.1 (Fri Feb 10 2023)
+
+#### 🐛 Bug Fix
+
+- perf(list-item): delay ripple creation [#231](https://github.com/tyler-technologies-oss/forge/pull/231) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v2.13.0 (Wed Feb 08 2023)
 
 :tada: This release contains work from a new contributor! :tada:

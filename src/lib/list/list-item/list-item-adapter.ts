@@ -1,5 +1,6 @@
 import { addClass, getShadowElement, removeClass, requireParent, isDeepEqual, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
+import { userInteractionListener } from '../../core/utils';
 import { IListComponent } from '../list/list';
 import { LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
@@ -27,6 +28,7 @@ export interface IListItemAdapter extends IBaseAdapter {
   setIndented(indented: boolean): void;
   setWrap(value: boolean): void;
   trySelect(value: unknown): boolean | null;
+  userInteractionListener(): ReturnType<typeof userInteractionListener>;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
@@ -220,5 +222,9 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     this.setSelected(isSelected);
     this.tryToggleCheckboxRadio(isSelected);
     return isSelected;
+  }
+
+  public userInteractionListener(): ReturnType<typeof userInteractionListener> {
+    return userInteractionListener(this._listItemElement);
   }
 }
