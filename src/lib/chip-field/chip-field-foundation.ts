@@ -74,6 +74,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     const input = event.target as HTMLInputElement;
     switch (event.key) {
       case 'Enter':
+      case 'NumpadEnter':
         this._addMember(input);
         break;
       case 'Esc':
