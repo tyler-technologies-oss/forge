@@ -202,6 +202,7 @@ export class ListDropdownFoundation implements IListDropdownFoundation {
   public handleKey(key: string): void {
     switch (key) {
       case 'Enter':
+      case 'NumpadEnter':
         const activeOptionIndex = this.getActiveOptionIndex();
         const activeOption = this._nonDividerOptions[activeOptionIndex];
         if (this._canSelectOption(activeOption)) {

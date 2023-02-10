@@ -276,10 +276,11 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
       case 'ArrowLeft':
       case 'ArrowRight':
       case 'Enter':
+      case 'NumpadEnter':
       case 'Home':
       case 'End':
         if (this._open) {
-          if (evt.key === 'Enter') {
+          if (evt.key === 'Enter' || evt.key === 'NumpadEnter') {
             evt.stopPropagation();
           }
           evt.preventDefault();
