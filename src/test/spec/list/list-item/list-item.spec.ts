@@ -1,5 +1,5 @@
 import { getShadowElement, removeElement, getActiveElement } from '@tylertech/forge-core';
-import { tick } from '@tylertech/forge-testing';
+import { tick, timer } from '@tylertech/forge-testing';
 import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '@tylertech/forge/checkbox';
 import { DRAWER_CONSTANTS, IDrawerComponent } from '@tylertech/forge/drawer';
 import { defineListComponent, IListComponent, LIST_CONSTANTS } from '@tylertech/forge/list';
@@ -16,6 +16,8 @@ interface ITestListItemDefaultContext {
   getRootElement(): HTMLElement;
   append(): void;
   destroy(): void;
+  /** Simulates a user interaction with the button to instantiate the ripple */
+  simulateInteraction(): Promise<void>; 
 }
 
 interface ITestListItemDrawerContext {
@@ -88,11 +90,13 @@ describe('ListItemComponent', function(this: ITestContext) {
       expect((this.context as ITestListItemDefaultContext).getRootElement().classList.contains(LIST_ITEM_CONSTANTS.classes.ACTIVE)).toBe(false);
     });
 
-    it('should use ripple by default', async function(this: ITestContext) {
+    it('should use ripple by default, but delay initialization until user interaction', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      await tick();
-      expect(this.context.component.ripple).toBe(true);
-      expect((this.context as ITestListItemDefaultContext).getRootElement().classList.contains('mdc-ripple-upgraded')).toBe(true);
+      const context = this.context as ITestListItemDefaultContext ;
+      expect(context.component.ripple).withContext('ripple property').toBe(true);
+      expect(context.getRootElement().classList.contains('mdc-ripple-upgraded')).withContext('ripple before interaction').toBe(false);
+      await context.simulateInteraction();
+      expect(context.getRootElement().classList.contains('mdc-ripple-upgraded')).withContext('ripple after interaction').toBe(true);
     });
 
     it('should not be selected by default', function(this: ITestContext) {
@@ -569,7 +573,15 @@ describe('ListItemComponent', function(this: ITestContext) {
       component,
       getRootElement: () => getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM),
       append: () => document.body.appendChild(fixture),
-      destroy: () => removeElement(fixture)
+      destroy: () => removeElement(fixture),
+      simulateInteraction: async () => {
+        const listItem = getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
+        if (listItem) {
+          listItem.dispatchEvent(new Event('pointerenter'));
+          await timer();
+          await tick();
+        }
+      }
     };
   }
 
