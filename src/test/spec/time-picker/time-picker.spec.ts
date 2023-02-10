@@ -913,6 +913,27 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.value).toBe(selectedTimeString);
   });
 
+  it('should select active option in dropdown when number pad enter key is pressed', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+
+    const changeSpy = jasmine.createSpy('change spy');
+    this.context.component.addEventListener(TIME_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+
+    this.context.component.open = true;
+    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+
+    const listItems = this.context.getListItems();
+
+    this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'End' }));      
+    this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'NumpadEnter' }));
+
+    const selectedListItem = listItems[listItems.length - 1];
+    const selectedTimeString = millisToTimeString(selectedListItem.value.time, true, false);
+
+    expect(changeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: selectedTimeString }));
+    expect(this.context.component.value).toBe(selectedTimeString);
+  });
+
   it('should clear value if shift + delete is pressed', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
