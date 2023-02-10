@@ -271,7 +271,6 @@ export class CalendarFoundation implements ICalendarFoundation {
         break;
       case ' ':
       case 'Enter':
-      case 'NumpadEnter':
         this._handleEnterOrSpaceKey(evt);
         break;
       case 'm':
