@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconModeEdit, tylIconWarning, tylIconCheck, tylIconBlock } from '@tylertech/tyler-icons/standard';
+import { tylIconModeEdit, tylIconWarning, tylIconCheck, tylIconBlock, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 import { StepAdapter } from './step-adapter';
 import { STEP_CONSTANTS } from './step-constants';
 import { StepFoundation } from './step-foundation';
@@ -8,6 +8,7 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import template from './step.html';
 import styles from './step.scss';
+import { ExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
 
 export interface IStepComponent extends IBaseComponent {
   index: number;
@@ -43,7 +44,8 @@ declare global {
 @CustomElement({
   name: STEP_CONSTANTS.elementName,
   dependencies: [
-    IconComponent
+    IconComponent,
+    ExpansionPanelComponent
   ]
 })
 export class StepComponent extends BaseComponent implements IStepComponent {
@@ -70,7 +72,8 @@ export class StepComponent extends BaseComponent implements IStepComponent {
       tylIconModeEdit,
       tylIconCheck,
       tylIconWarning,
-      tylIconBlock
+      tylIconBlock,
+      tylIconKeyboardArrowDown
     ]);
     attachShadowTemplate(this, template, styles);
     this._foundation = new StepFoundation(new StepAdapter(this));
