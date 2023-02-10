@@ -194,7 +194,6 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
         }
         break;
       case 'Enter':
-      case 'NumpadEnter':
         if (!this._open) {
           return;
         }

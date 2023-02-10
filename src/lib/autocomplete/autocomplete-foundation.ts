@@ -311,11 +311,10 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
         }
         break;
       case 'Enter':
-      case 'NumpadEnter':
       case 'Home':
       case 'End':
         if (this._isDropdownOpen) {
-          if (evt.key === 'Enter' || evt.key === 'NumpadEnter') {
+          if (evt.key === 'Enter') {
             evt.stopPropagation();
           }
           evt.preventDefault();
