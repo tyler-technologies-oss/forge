@@ -5,6 +5,7 @@
   { "label": "Avatar", "path": "/pages/avatar/avatar.html" },
   { "label": "Badge", "path": "/pages/badge/badge.html", "tags": ["notification", "status"] },
   { "label": "Banner", "path": "/pages/banner/banner.html", "tags": ["notification", "message"] },
+  { "label": "Bottom sheet", "path": "/pages/bottom-sheet/bottom-sheet.html" },
   { "label": "Busy indicator", "path": "/pages/busy-indicator/busy-indicator.html" },
   { "label": "Button", "path": "/pages/button/button.html" },
   { "label": "Button toggle", "path": "/pages/button-toggle/button-toggle.html", "tags": ["form"] },

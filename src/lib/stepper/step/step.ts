@@ -5,10 +5,10 @@ import { STEP_CONSTANTS } from './step-constants';
 import { StepFoundation } from './step-foundation';
 import { IconRegistry, IconComponent } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { ExpansionPanelComponent } from '../../expansion-panel';
 
 import template from './step.html';
 import styles from './step.scss';
-import { ExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
 
 export interface IStepComponent extends IBaseComponent {
   index: number;
