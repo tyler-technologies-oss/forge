@@ -47,6 +47,11 @@ export function parseDateString(value: string): Date | null {
     day = '1';
   }
 
+  // Trap for the case where a 4 digit year is entered with a leading 0 
+  if (typeof year === 'string' && year.length === 4) {
+    year = year.replace(/^0+/, '');
+  }
+
   // Trap for the case where only 3 digit years are entered
   if (typeof year === 'string' && year.length === 3) {
     year = year.padEnd(4, '0');
