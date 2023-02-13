@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { IListProps, argTypes } from './list-args';
-import { ForgeCheckbox, ForgeExpansionPanel, ForgeIcon, ForgeList, ForgeListItem, ForgeOpenIcon, ForgeRadio } from '@tylertech/forge-react';
+import { ForgeBadge, ForgeCheckbox, ForgeExpansionPanel, ForgeIcon, ForgeList, ForgeListItem, ForgeOpenIcon, ForgeRadio } from '@tylertech/forge-react';
 import { tylIconFolder, tylIconCode, tylIconFace, tylIconWifi, tylIconBluetooth, tylIconDataUsage, tylIconCloudDownload, tylIconInfo } from '@tylertech/tyler-icons/standard';
 import { tylIconEmoticonSadOutline } from '@tylertech/tyler-icons/extended';
 import { IconRegistry } from '@tylertech/forge';
@@ -77,6 +77,7 @@ export const Default: Story<IListProps> = ({
     : null;
   const LineThree: FC = () => listStyle === 'three-line' ? <span slot="tertiary-title">Tertiary Text</span> : null;
   const LeadingAvatar: FC = () => leadingSlot === 'avatar' ? <ForgeIcon name="folder" slot="avatar" /> : null;
+  const LeadingBadge: FC = () => leadingSlot === 'badge' ? <ForgeBadge slot="leading">3</ForgeBadge> : null;
   const LeadingCheckbox: FC<{label: string}> = ({label}) => leadingSlot === 'checkbox'
     ? (<ForgeCheckbox slot="leading">
         <input type="checkbox" aria-label={`Select list item ${label}`} />
@@ -88,6 +89,7 @@ export const Default: Story<IListProps> = ({
         <input type="radio" name="list-radio" aria-label={`Select list item ${label}`} />
       </ForgeRadio>)
     : null;
+  const TrailingBadge: FC = () => trailingSlot === 'badge' ? <ForgeBadge slot="trailing">3</ForgeBadge> : null;
   const TrailingCheckbox: FC<{label: string}> = ({label}) => trailingSlot === 'checkbox'
     ? (<ForgeCheckbox slot="trailing">
         <input type="checkbox" aria-label={`Select list item ${label}`} />
@@ -104,11 +106,13 @@ export const Default: Story<IListProps> = ({
     <ForgeList static={staticList} dense={dense} indented={indented} role={hasRole} style={{ width: '450px' }}>
       <ForgeListItem {...listItemProps}>
         <LeadingAvatar />
+        <LeadingBadge />
         <LeadingCheckbox label="one" />
         <LeadingIcon icon="wifi" />
         <LeadingRadioButton label="one" />
         <TrailingCheckbox label="one" />
         <TrailingIcon />
+        <TrailingBadge />
         <TrailingRadioButton label="one" />
         <LineOne label="One" avatarText="Dog Photos" />
         <LineTwo avatarText="9 Jan 2018" />
@@ -117,11 +121,13 @@ export const Default: Story<IListProps> = ({
 
       <ForgeListItem {...listItemProps}>
         <LeadingAvatar />
+        <LeadingBadge />
         <LeadingCheckbox label="two" />
         <LeadingIcon icon="bluetooth" />
         <LeadingRadioButton label="two" />
         <TrailingCheckbox label="two" />
         <TrailingIcon />
+        <TrailingBadge />
         <TrailingRadioButton label="two" />
         <LineOne label="Two" avatarText="Cat Photos"/>
         <LineTwo avatarText="22 Dec 2017" />
@@ -130,11 +136,13 @@ export const Default: Story<IListProps> = ({
 
       <ForgeListItem {...listItemProps}>
         <LeadingAvatar />
+        <LeadingBadge />
         <LeadingCheckbox label="three"/>
         <LeadingIcon icon="data_usage" />
         <LeadingRadioButton label="three" />
         <TrailingCheckbox label="three" />
         <TrailingIcon />
+        <TrailingBadge />
         <TrailingRadioButton label="three" />
         <LineOne label="Three" avatarText="Potatoes" />
         <LineTwo avatarText="30 Nov 2017" />
@@ -143,11 +151,13 @@ export const Default: Story<IListProps> = ({
     
       <ForgeListItem {...listItemProps}>
         <LeadingAvatar />
+        <LeadingBadge />
         <LeadingCheckbox label="four" />
         <LeadingIcon icon="cloud_download" />
         <LeadingRadioButton label="four" />
         <TrailingCheckbox label="four" />
         <TrailingIcon />
+        <TrailingBadge />
         <TrailingRadioButton label="four" />
         <LineOne label="Four" avatarText="Carrots" />
         <LineTwo avatarText="17 Oct 2017" />

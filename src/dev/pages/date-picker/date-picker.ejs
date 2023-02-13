@@ -1,0 +1,20 @@
+<div class="vert">
+  <forge-date-picker id="demo-date-picker">
+    <forge-text-field>
+      <label for="date-picker">Date</label>
+      <input type="text" id="date-picker" autocomplete="off" placeholder="mm/dd/yyyy">
+    </forge-text-field>
+  </forge-date-picker>
+
+  <forge-label-value>
+    <span slot="label">Model value</span>
+    <span slot="value" id="date-picker-change-status"></span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Input value</span>
+    <span slot="value" id="date-picker-input-value">&quot;&quot;</span>
+  </forge-label-value>
+</div>
+
+<script type="module" src="date-picker.ts"></script>

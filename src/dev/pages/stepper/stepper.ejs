@@ -1,0 +1,53 @@
+<div class="vert">
+  <h2 class="forge-typography--subtitle1">Default stepper</h2>
+  <forge-stepper id="demo-stepper">
+    <forge-step id="stepper-step-one">Step One</forge-step>
+    <forge-step >Step Two <span slot="optional">An Alternate Message</span></forge-step>
+    <forge-step completed editable>Step Three</forge-step>
+    <forge-step completed>Step Four</forge-step>
+    <forge-step >Step Five<span slot="optional">And here it is</span></forge-step>
+  </forge-stepper>
+
+  <div>
+    <h2 class="forge-typography--subtitle1">Stepper from configuration</h2>
+    <forge-stepper id="demo-config-stepper"></forge-stepper>
+  </div>
+  
+  <div>
+    <h2 class="forge-typography--subtitle1">Vertical stepper variant</h2>
+    <forge-stepper id="VerticalStepper" vertical>
+      <forge-step id="stepper-step-one">Step One</forge-step> 
+      <forge-step expanded ignore-user-expansion id="vertical-stepper-content">
+        Step Two
+        <span slot="optional">Ignore User Expansion</span>
+      </forge-step>
+    <forge-step completed editable>Step Three</forge-step>
+    <forge-step  expanded completed>Step Four
+      <div slot="expansion-content" >
+          <div style="padding: 24px;">
+            <input placeholder="Enter Some random information"/>
+            <input placeholder="Enter Some random information"/>
+          </div>
+          <div style="padding: 24px;">
+            <input placeholder="Enter Some random information"/>
+            <input placeholder="Enter Some random information"/>
+            <button type="button">Example Button</button>
+            <div style="padding: 24px;">
+              <input placeholder="Enter Some random information"/>
+              <input placeholder="Enter Some random information"/>
+          </div>
+        </div>
+      </div>
+    </forge-step>
+    <forge-step style="--forge-step-expansion-panel-margin-left: 0;">
+      Step Five 
+      <span slot="optional">Custom left padding</span>
+      <div slot="expansion-content" >
+        <div style="padding: 24px;">Slotted Content</div>
+      </div>
+     </forge-step>
+   </forge-stepper>
+  </div>
+</div>
+
+<script type="module" src="stepper.ts"></script>

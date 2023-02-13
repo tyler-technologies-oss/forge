@@ -1,0 +1,12 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Ripple',
+    includePath: './pages/ripple/ripple.ejs',
+    options: [
+      { type: 'button', label: 'Activate', id: 'opt-ripple-activate' },
+      { type: 'button', label: 'Deactivate', id: 'opt-ripple-deactivate' }
+    ]
+  }
+})
+%>

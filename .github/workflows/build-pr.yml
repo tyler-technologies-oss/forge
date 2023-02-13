@@ -39,7 +39,7 @@ jobs:
   build:
     name: Build and Test
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.3.0
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.8.1
     if: ${{ needs.wf-config.outputs.build-files-changed == 'true' || needs.wf-config.outputs.test-files-changed == 'true' }}
     with:
       BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}

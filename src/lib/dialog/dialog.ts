@@ -118,51 +118,51 @@ export class DialogComponent extends BaseComponent implements IDialogComponent {
 
   /** Controls whether clicking the backdrop closes the dialog or not. Default is true. */
   @FoundationProperty()
-  public backdropClose: boolean;
+  public declare backdropClose: boolean;
 
   /** Controls whether pressing the escape key closes the dialog or not. Default is true. */
   @FoundationProperty()
-  public escapeClose: boolean;
+  public declare escapeClose: boolean;
 
   /** Controls whether the dialog is open or not. Default is false. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /** Controls whether the dialog is full screen or not. Default is false. */
   @FoundationProperty()
-  public fullscreen: boolean;
+  public declare fullscreen: boolean;
 
   /** The function to call when the dialog wants to open. */
   @FoundationProperty()
-  public openCallback: DialogStateCallback;
+  public declare openCallback: DialogStateCallback;
 
   /** the function to call when the dialog wants to close. */
   @FoundationProperty()
-  public closeCallback: DialogStateCallback;
+  public declare closeCallback: DialogStateCallback;
 
   /** the function to call when the dialog wants to close. */
   @FoundationProperty()
-  public beforeCloseCallback: () => boolean | Promise<boolean>;
+  public declare beforeCloseCallback: () => boolean | Promise<boolean>;
 
   /** Gets/sets the position type when using custom positioning values. Default is 'absolute'. */
   @FoundationProperty()
-  public positionType: DialogPositionType;
+  public declare positionType: DialogPositionType;
 
   /** Controls the horizontal position of the dialog surface. */
   @FoundationProperty()
-  public positionX: number | string | null | undefined;
+  public declare positionX: number | string | null | undefined;
 
   /** Controls the vertical position of the dialog surface. */
   @FoundationProperty()
-  public positionY: number | string | null | undefined;
+  public declare positionY: number | string | null | undefined;
 
   /** Gets/sets whether the dialog surface can be moved or not. */
   @FoundationProperty()
-  public moveable: boolean;
+  public declare moveable: boolean;
 
   /** Gets/sets the selector used to target the element that is used as the drag target. */
   @FoundationProperty()
-  public moveTarget: string;
+  public declare moveTarget: string;
 
   public initializeMoveTarget(): void {
     this._foundation.initializeMoveTarget();

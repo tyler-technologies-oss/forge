@@ -1,0 +1,12 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Button',
+    includePath: './pages/button/button.ejs',
+    options: [
+      { type: 'switch', label: 'Disabled', id: 'disabled-switch' },
+      { type: 'switch', label: 'Dense', id: 'dense-switch' }
+    ]
+  }
+})
+%>

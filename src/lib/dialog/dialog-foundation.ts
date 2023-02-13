@@ -409,14 +409,8 @@ export class DialogFoundation implements IDialogFoundation {
     value = Boolean(value);
     if (this._backdropClose !== value) {
       this._backdropClose = value;
-
       this._setBackdropClickListener(this._backdropClose);
-
-      if (isDefined(this._backdropClose)) {
-        this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE, this._backdropClose.toString());
-      } else {
-        this._adapter.removeHostAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE);
-      }
+      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE, this._backdropClose);
     }
   }
   public get backdropClose(): boolean {
@@ -427,13 +421,9 @@ export class DialogFoundation implements IDialogFoundation {
   public set escapeClose(value: boolean) {
     value = Boolean(value);
     if (this._escapeClose !== value) {
-      this._escapeClose = value;
+      this._escapeClose = !!value;
       this._setDocumentKeydownListener(this._escapeClose);
-      if (isDefined(this._escapeClose)) {
-        this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE, this._escapeClose.toString());
-      } else {
-        this._adapter.removeHostAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE);
-      }
+      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE, this._escapeClose);
     }
   }
   public get escapeClose(): boolean {
@@ -457,8 +447,9 @@ export class DialogFoundation implements IDialogFoundation {
   }
   public set fullscreen(value: boolean) {
     if (this._fullscreen !== value) {
-      this._fullscreen = value;
+      this._fullscreen = !!value;
       this._adapter.setFullscreen(this._fullscreen);
+      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN, this._fullscreen);
     }
   }
 
@@ -524,7 +515,8 @@ export class DialogFoundation implements IDialogFoundation {
   }
   public set moveable(value: boolean) {
     if (this._moveable !== value) {
-      this._moveable = value;
+      this._moveable = !!value;
+
       if (this._open) {
         this._adapter.setMoveable(this._moveable);
         if (this._moveable) {
@@ -534,6 +526,8 @@ export class DialogFoundation implements IDialogFoundation {
           this._isMoving = false;
         }
       }
+
+      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, this._moveable);
     }
   }
 

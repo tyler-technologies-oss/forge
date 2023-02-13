@@ -1,0 +1,21 @@
+<div role="tablist">
+  <forge-tab-bar id="tab-bar" active-tab="0" underline>
+    <forge-tab>View one</forge-tab>
+    <forge-tab>View two</forge-tab>
+    <forge-tab>View three</forge-tab>
+  </forge-tab-bar>
+
+  <forge-view-switcher id="view-switcher">
+    <forge-view role="tabpanel">
+      <div class="view">View one</div>
+    </forge-view>
+    <forge-view role="tabpanel">
+      <div class="view" style="height: 300px;">View two</div>
+    </forge-view>
+    <forge-view role="tabpanel">
+      <div class="view" style="height: 500px;">View three</div>
+    </forge-view>
+  </forge-view-switcher>
+</div>
+
+<script type="module" src="view-switcher.ts"></script>

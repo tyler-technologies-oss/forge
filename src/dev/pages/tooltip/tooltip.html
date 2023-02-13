@@ -1,0 +1,25 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Tooltip',
+    includePath: './pages/tooltip/tooltip.ejs',
+    options: [
+      { type: 'text-field', id: 'tooltip-text', label: 'Text', defaultValue: '✨ Tooltips are cool ✨' },
+      { type: 'text-field', inputType: 'number', id: 'tooltip-delay', label: 'Delay', defaultValue: 500 },
+      {
+        type: 'select',
+        id: 'tooltip-position',
+        label: 'Position',
+        defaultValue: 'right',
+        options: [
+          { label: 'Top', value: 'top' },
+          { label: 'Right', value: 'right' },
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Left', value: 'left' }
+        ]
+      },
+      { type: 'switch', id: 'tooltip-builder', label: 'Use builder' }
+    ]
+  }
+})
+%>

@@ -37,39 +37,39 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
 
   /** Gets/sets the value. */
   @FoundationProperty()
-  public value: any;
+  public declare value: any;
   
   /** Gets/sets the selected index. */
   @FoundationProperty()
-  public selectedIndex: number | number[];
+  public declare selectedIndex: number | number[];
   
   /** Gets/sets the available options. */
   @FoundationProperty()
-  public options: ISelectOption[] | ISelectOptionGroup[];
+  public declare options: ISelectOption[] | ISelectOptionGroup[];
 
   /** Gets/sets the multiple select state. */
   @FoundationProperty()
-  public multiple: boolean;
+  public declare multiple: boolean;
   
   /** Gets the open state of the dropdown. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
   
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
   @FoundationProperty()
-  public optionBuilder: SelectOptionBuilder;
+  public declare optionBuilder: SelectOptionBuilder;
   
   /** Sets the selected text builder callback that will be executed when getting the selected text to display in the field. */
   @FoundationProperty()
-  public selectedTextBuilder: SelectSelectedTextBuilder;
+  public declare selectedTextBuilder: SelectSelectedTextBuilder;
 
   /** Sets the callback to be executed when the user selects a value. */
   @FoundationProperty()
-  public beforeValueChange: SelectBeforeValueChangeCallback<any>;
+  public declare beforeValueChange: SelectBeforeValueChangeCallback<any>;
 
   /** Gets the popup element (when the dropdown is open). */
   @FoundationProperty({ set: false })
-  public popupElement: IPopupComponent | undefined;
+  public declare popupElement: IPopupComponent | undefined;
   
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     super.attributeChangedCallback(name, oldValue, newValue);

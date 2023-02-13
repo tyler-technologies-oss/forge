@@ -131,20 +131,32 @@ export class ButtonToggleGroupAdapter extends BaseAdapter<IButtonToggleGroupComp
     }
 
     if (option.leadingIcon) {
-      const leadingIcon = document.createElement('i');
+      let leadingIcon;
+      if (option.leadingIconType === 'component') {
+        leadingIcon = document.createElement('forge-icon');
+        leadingIcon.name = option.leadingIcon;
+      } else {
+        leadingIcon = document.createElement('i');
+        leadingIcon.textContent = option.leadingIcon;
+        leadingIcon.classList.add(ICON_CLASS_NAME);
+        leadingIcon.setAttribute('aria-hidden', 'true');
+      }
       leadingIcon.slot = 'leading';
-      leadingIcon.textContent = option.leadingIcon;
-      leadingIcon.classList.add(ICON_CLASS_NAME);
-      leadingIcon.setAttribute('aria-hidden', 'true');
       buttonToggle.appendChild(leadingIcon);
     }
 
     if (option.trailingIcon) {
-      const trailingIcon = document.createElement('i');
+      let trailingIcon;
+      if (option.trailingIconType === 'component') {
+        trailingIcon = document.createElement('forge-icon');
+        trailingIcon.name = option.trailingIcon;
+      } else {
+        trailingIcon = document.createElement('i');
+        trailingIcon.textContent = option.trailingIcon;
+        trailingIcon.classList.add(ICON_CLASS_NAME);
+        trailingIcon.setAttribute('aria-hidden', 'true');
+      }
       trailingIcon.slot = 'trailing';
-      trailingIcon.textContent = option.trailingIcon;
-      trailingIcon.classList.add(ICON_CLASS_NAME);
-      trailingIcon.setAttribute('aria-hidden', 'true');
       buttonToggle.appendChild(trailingIcon);
     }
 

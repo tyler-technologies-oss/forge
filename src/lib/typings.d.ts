@@ -6,6 +6,6 @@ declare module '*.html' {
 
 // Allow for importing from .scss files
 declare module '*.scss' {
-  const value: string;
-  export default value;
+  const css: string;
+  export default css;
 }

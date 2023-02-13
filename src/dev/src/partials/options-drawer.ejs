@@ -1,0 +1,28 @@
+<forge-drawer slot="body-left">
+  <forge-toolbar slot="header">
+    <h3 slot="start" class="forge-typography--subtitle1-secondary">Options</h3>
+  </forge-toolbar>
+  <aside>
+    <div class="options-container">
+      <% controls.forEach(control => { %>
+        <% if (control.type === 'checkbox') { %>
+          <%- include('controls/checkbox.ejs', { control }); %>
+        <% } else if (control.type === 'switch') { %>
+          <%- include('controls/switch.ejs', { control }); %>
+        <% } else if (control.type === 'text-field') { %>
+          <%- include('controls/text-field.ejs', { control }); %>
+        <% } else if (control.type === 'select') { %>
+          <%- include('controls/select.ejs', { control }); %>
+        <% } else if (control.type === 'time-picker') { %>
+          <%- include('controls/time-picker.ejs', { control }); %>
+        <% } else if (control.type === 'radiogroup') { %>
+          <%- include('controls/radiogroup.ejs', { control }); %>
+        <% } else if (control.type === 'button') { %>
+          <%- include('controls/button.ejs', { control }); %>
+        <% } else if (control.type === 'custom') { %>
+          <%- control.render() %>
+        <% } %>
+      <% }); %>
+    </div>
+  </aside>
+</forge-drawer>

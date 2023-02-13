@@ -75,9 +75,9 @@ export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePicke
 
   /** Gets/sets the "from" date range value. */
   @FoundationProperty()
-  public from: Date | string | null | undefined;
+  public declare from: Date | string | null | undefined;
 
   /** Gets/sets the "to" date range value. */
   @FoundationProperty()
-  public to: Date | string | null | undefined;
+  public declare to: Date | string | null | undefined;
 }

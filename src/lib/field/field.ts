@@ -67,23 +67,23 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
 
   /** Controls the density type. */
   @FoundationProperty()
-  public density: FieldDensityType;
+  public declare density: FieldDensityType;
 
   /** Whether the label should always float, never float or float as the user types. */
   @FoundationProperty()
-  public floatLabelType: FieldFloatLabelType;
+  public declare floatLabelType: FieldFloatLabelType;
 
   /** The shape type to use. */
   @FoundationProperty()
-  public shape: FieldShapeType;
+  public declare shape: FieldShapeType;
 
   /** Gets/sets the invalid state. */
   @FoundationProperty()
-  public invalid: boolean;
+  public declare invalid: boolean;
 
   /** Gets/sets the required state which controls the visibility of the asterisk in the label. */
   @FoundationProperty()
-  public required: boolean;
+  public declare required: boolean;
 
   /**
    * Controls whether the label should be floating or not.

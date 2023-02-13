@@ -474,9 +474,11 @@
 // Helper Text
 @mixin helper-text-core {
   @include mdc-typography.typography(caption, $exclude-props: (font-size));
-  @include mdc-typography.baseline-top(map.get(variables.$helper-text, text-baseline, default));
   display: block;
-  height: auto;
+  min-height: 1.5rem;
+  line-height: normal;
+  padding-top: 4px;
+  box-sizing: border-box;
 }
 
 @mixin helper-text-font-size($layout-state) {

@@ -93,31 +93,31 @@ export class StepperComponent extends BaseComponent implements IStepperComponent
 
   /** The step configurations. */
   @FoundationProperty()
-  public steps: IStepConfiguration[];
+  public declare steps: IStepConfiguration[];
 
   /** The active step index. */
   @FoundationProperty()
-  public selectedIndex: number;
+  public declare selectedIndex: number;
 
   /** Whether the stepper is linear or non-linear. */
   @FoundationProperty()
-  public linear: boolean;
+  public declare linear: boolean;
 
   /** Whether the stepper uses the default or alternative label layout mode. */
   @FoundationProperty()
-  public alternative: boolean;
+  public declare alternative: boolean;
 
   /** The layout mode of the stepper. */
   @FoundationProperty()
-  public layoutMode: StepperLayoutMode;
+  public declare layoutMode: StepperLayoutMode;
 
   /** The layout alignment of the stepper. */
   @FoundationProperty()
-  public layoutAlign: StepperLayoutAlign;
+  public declare layoutAlign: StepperLayoutAlign;
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   @FoundationProperty()
-  public vertical: boolean;
+  public declare vertical: boolean;
 }

@@ -78,9 +78,9 @@ export class BannerComponent extends BaseComponent implements IBannerComponent {
 
   /** Controls whether the component is dismissed (hidden) or not.  */
   @FoundationProperty()
-  public dismissed: boolean;
+  public declare dismissed: boolean;
 
   /** Controls the visibility of the dismiss button. */
   @FoundationProperty()
-  public canDismiss: boolean;
+  public declare canDismiss: boolean;
 }

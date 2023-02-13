@@ -243,6 +243,25 @@ describe('SwitchComponent', function (this: ITestContext) {
     expect(this.context.getMDCSwitch().selected).withContext('Expected MDCSwitch selected state to stay unchanged').toBeFalse();
   });
 
+  /**
+   * It is common for developers to hold their own state that is bound to a select, and they often times toggle the value
+   * and bind it to the select within event listeners. This test ensures that the internal state does not toggle incorrectly
+   * to avoid the UI incorrectly reflecting the opposite state value.
+   */
+  it('should always set selected state to value provided in select event if not cancelled', function(this: ITestContext) {
+    this.context = setupTestContext(true);
+    let switchState = false;
+    const selectSpy = jasmine.createSpy('select event spy', (evt: CustomEvent<boolean>) => {
+      switchState = !switchState; // Simulate a developer updating their own state (in reality it would be more correct to use `evt.detail` here though...)
+      this.context.component.selected = switchState; // Developer updating the state (they in theory should not be doing this, but the component is smart enough to handle it)
+    }).and.callThrough();
+    this.context.component.addEventListener(SWITCH_CONSTANTS.events.SELECT, selectSpy);
+    this.context.buttonElement.dispatchEvent(new MouseEvent('click'));
+
+    expect(this.context.component.selected).withContext('Expected selected state to be correct').toBeTrue();
+    expect(this.context.getMDCSwitch().selected).withContext('Expected MDCSwitch selected state to match').toBeTrue();
+  });
+
   function setupTestContext(append = true, config?: Partial<ISwitchComponent>): ISwitchTextContext {
     const component = document.createElement('forge-switch');
     component.textContent = 'Label text';

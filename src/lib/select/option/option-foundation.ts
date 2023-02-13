@@ -24,12 +24,13 @@ export class OptionFoundation implements IOptionFoundation {
   constructor(private _adapter: IOptionAdapter) {}
 
   /** Gets/sets the value of this option. */
-  public get value(): string {
+  public get value(): any {
     return this._value;
   }
-  public set value(value: string) {
+  public set value(value: any) {
     if (this._value !== value) {
       this._value = value;
+      this._adapter.emitHostEvent(OPTION_CONSTANTS.events.VALUE_CHANGE, this._value);
     }
   }
 
