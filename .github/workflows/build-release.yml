@@ -146,7 +146,6 @@ jobs:
       AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
       AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
 
-
   ## We run this job only when files that effect Storybook are found in the changed files
   deploy-storybook:
     name: Deploy Storybook
