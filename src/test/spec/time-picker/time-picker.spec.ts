@@ -913,7 +913,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.value).toBe(selectedTimeString);
   });
 
-  it('should select active option in dropdown when number pad enter key is pressed', async function(this: ITestContext) {
+  it('should select active option in dropdown when number pad numpadenter key is pressed', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     const changeSpy = jasmine.createSpy('change spy');
