@@ -190,112 +190,112 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   }
 
   @FoundationProperty({set: false})
-  public activeDate: Date;
+  public declare activeDate: Date;
 
   @FoundationProperty()
-  public allowSingleDateRange: boolean;
+  public declare allowSingleDateRange: boolean;
 
   @FoundationProperty()
-  public clearButton: boolean;
+  public declare clearButton: boolean;
 
   @FoundationProperty()
-  public clearCallback: (() => void) | undefined;
+  public declare clearCallback: (() => void) | undefined;
 
   @FoundationProperty()
-  public constrainToEnabled: boolean;
+  public declare constrainToEnabled: boolean;
 
   @FoundationProperty()
-  public dateBuilder: CalendarDateBuilder | undefined;
+  public declare dateBuilder: CalendarDateBuilder | undefined;
 
   @FoundationProperty()
-  public dateSelectCallback: CalendarDateSelectCallback | undefined;
+  public declare dateSelectCallback: CalendarDateSelectCallback | undefined;
 
   @FoundationProperty()
-  public dayBuilder: CalendarDayBuilder | undefined;
+  public declare dayBuilder: CalendarDayBuilder | undefined;
 
   @FoundationProperty()
-  public disabledDateBuilder: ((date: Date) => boolean) | undefined;
+  public declare disabledDateBuilder: ((date: Date) => boolean) | undefined;
 
   @FoundationProperty()
-  public disabledDates: Date | Date[] | null | undefined;
+  public declare disabledDates: Date | Date[] | null | undefined;
 
   @FoundationProperty()
-  public disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
+  public declare disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
 
   @FoundationProperty()
-  public eventBuilder: CalendarEventBuilder | undefined;
+  public declare eventBuilder: CalendarEventBuilder | undefined;
 
   @FoundationProperty()
-  public events: ICalendarEvent[] | null | undefined;
+  public declare events: ICalendarEvent[] | null | undefined;
 
   @FoundationProperty()
-  public firstDayOfWeek: DayOfWeek | undefined;
+  public declare firstDayOfWeek: DayOfWeek | undefined;
 
   @FoundationProperty()
-  public fixedHeight: boolean;
+  public declare fixedHeight: boolean;
 
   @FoundationProperty()
-  public listYears: boolean;
+  public declare listYears: boolean;
 
   @FoundationProperty()
-  public locale: string | undefined;
+  public declare locale: string | undefined;
 
   @FoundationProperty()
-  public max: Date | string | null | undefined;
+  public declare max: Date | string | null | undefined;
 
   @FoundationProperty()
-  public menuAnimation: CalendarMenuAnimationType;
+  public declare menuAnimation: CalendarMenuAnimationType;
 
   @FoundationProperty()
-  public min: Date | string | null | undefined;
+  public declare min: Date | string | null | undefined;
 
   @FoundationProperty()
-  public mode: CalendarMode;
+  public declare mode: CalendarMode;
 
   @FoundationProperty()
-  public month: number;
+  public declare month: number;
 
   @FoundationProperty()
-  public preventFocus: boolean;
+  public declare preventFocus: boolean;
 
   @FoundationProperty()
-  public readonly: boolean;
+  public declare readonly: boolean;
 
   @FoundationProperty()
-  public selectionFollowsMonth: boolean;
+  public declare selectionFollowsMonth: boolean;
 
   @FoundationProperty()
-  public showHeader: boolean;
+  public declare showHeader: boolean;
 
   @FoundationProperty()
-  public showOtherMonths: boolean;
+  public declare showOtherMonths: boolean;
 
   @FoundationProperty()
-  public showToday: boolean;
+  public declare showToday: boolean;
 
   @FoundationProperty()
-  public todayButton: boolean;
+  public declare todayButton: boolean;
 
   @FoundationProperty()
-  public todayCallback: (() => void) | undefined;
+  public declare todayCallback: (() => void) | undefined;
 
   @FoundationProperty()
-  public tooltipBuilder: CalendarTooltipBuilder | undefined;
+  public declare tooltipBuilder: CalendarTooltipBuilder | undefined;
 
   @FoundationProperty()
-  public value: Date | Date[] | DateRange | null | undefined;
+  public declare value: Date | Date[] | DateRange | null | undefined;
 
   @FoundationProperty()
-  public view: CalendarView;
+  public declare view: CalendarView;
 
   @FoundationProperty()
-  public weekendDays: DayOfWeek[] | null | undefined;
+  public declare weekendDays: DayOfWeek[] | null | undefined;
 
   @FoundationProperty()
-  public year: number;
+  public declare year: number;
 
   @FoundationProperty()
-  public yearRange: string;
+  public declare yearRange: string;
 
   public clear(): void {
     this._foundation.clear();

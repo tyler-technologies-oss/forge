@@ -1,0 +1,41 @@
+<div class="vert">
+  <div>
+    <h3 class="forge-typography--caption">Default</h3>
+    <forge-icon-button>
+      <button type="button">
+        <forge-icon name="code"></forge-icon>
+      </button>
+    </forge-icon-button>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--caption">Default (dense)</h3>
+    <forge-icon-button dense>
+      <button type="button">
+        <forge-icon name="code"></forge-icon>
+      </button>
+    </forge-icon-button>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--caption">Toggle</h3>
+    <forge-icon-button toggle="true" is-on="false">
+      <button type="button">
+        <forge-icon name="favorite" external forge-icon-button-on></forge-icon>
+        <forge-icon name="favorite_border" external></forge-icon>
+      </button>
+    </forge-icon-button>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--caption">Toggle (dense)</h3>
+    <forge-icon-button dense toggle is-on="false">
+      <button type="button">
+        <forge-icon name="favorite" external forge-icon-button-on></forge-icon>
+        <forge-icon name="favorite_border" external></forge-icon>
+      </button>
+    </forge-icon-button>
+  </div>
+</div>
+
+<script type="module" src="icon-button.ts"></script>

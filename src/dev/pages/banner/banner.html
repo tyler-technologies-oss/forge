@@ -1,0 +1,27 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Banner',
+    includePath: './pages/banner/banner.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'theme-select',
+        options: [
+          { label: 'Default (none)', value: '' },
+          { label: 'Danger', value: 'danger' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Success', value: 'success' },
+          { label: 'Info (Primary)', value: 'info-primary' },
+          { label: 'Info (Secondary)', value: 'info-secondary' },
+        ]
+      },
+      { type: 'switch', label: 'Dismissed', id: 'dismissed-toggle' },
+      { type: 'switch', label: 'Show leading icon', id: 'show-leading-icon-toggle', defaultValue: true },
+      { type: 'switch', label: 'Show dismiss', id: 'show-dismiss-toggle', defaultValue: true },
+      { type: 'switch', label: 'Use more text', id: 'use-more-text-toggle' },
+    ]
+  }
+})
+%>

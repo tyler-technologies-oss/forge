@@ -92,27 +92,27 @@ export class ToastComponent extends BaseComponent implements IToastComponent {
 
   /** The message to display in the toast. */
   @FoundationProperty()
-  public message: string;
+  public declare message: string;
 
   /** The text to display in the action button. */
   @FoundationProperty()
-  public actionText: string;
+  public declare actionText: string;
 
   /** The time in milliseconds to show the toast. */
   @FoundationProperty()
-  public duration: number;
+  public declare duration: number;
 
   /** The placement of the toast. */
   @FoundationProperty()
-  public placement: ToastPlacement;
+  public declare placement: ToastPlacement;
 
   /** Sets the toast builder function for displaying custom content. */
   @FoundationProperty()
-  public builder: ToastBuilder | string;
+  public declare builder: ToastBuilder | string;
 
   /** Controls the visibility of the close button. */
   @FoundationProperty()
-  public showClose: boolean;
+  public declare showClose: boolean;
 
   /** Hides the toast and removes it from the DOM. */
   public hide(): void {

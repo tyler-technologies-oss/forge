@@ -84,25 +84,25 @@ export class ColorPickerComponent extends BaseComponent implements IColorPickerC
 
   /** Gets/sets the value using hex format only. */
   @FoundationProperty()
-  public value: string | null | undefined;
+  public declare value: string | null | undefined;
 
   /** Gets/sets the value using rgba format. */
   @FoundationProperty()
-  public rgba: IRGBA | null | undefined;
+  public declare rgba: IRGBA | null | undefined;
 
   /** Gets/sets the value using hsva format. */
   @FoundationProperty()
-  public hsva: IHSVA | null | undefined;
+  public declare hsva: IHSVA | null | undefined;
 
   /** Gets/sets the opacity value, if `allowOpacity` is true. */
   @FoundationProperty()
-  public opacity: number | null | undefined;
+  public declare opacity: number | null | undefined;
 
   /** Gets/sets whether opacity is displayed and allowed be to changed. */
   @FoundationProperty()
-  public allowOpacity: boolean;
+  public declare allowOpacity: boolean;
 
   /** Gets/sets whether change event has a debounce applied to avoid successive updates. Defaults to `false`. */
   @FoundationProperty()
-  public debounceChangeEvent: boolean;
+  public declare debounceChangeEvent: boolean;
 }

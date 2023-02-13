@@ -72,11 +72,11 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
   }
 
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
   
   @FoundationProperty()
-  public determinate: boolean;
+  public declare determinate: boolean;
 
   @FoundationProperty()
-  public progress: number;
+  public declare progress: number;
 }

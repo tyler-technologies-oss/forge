@@ -50,9 +50,9 @@ export abstract class BaseDrawerComponent<T extends BaseDrawerFoundation> extend
 
   /** Toggles whether a `dismissible` or `modal` drawer is open or not. Has no effect on `permanent` drawers. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /** Controls the laytout direction of the drawer for positioning on the left vs. right side of the screen. */
   @FoundationProperty()
-  public direction: DrawerDirection;
+  public declare direction: DrawerDirection;
 }

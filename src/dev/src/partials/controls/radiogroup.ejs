@@ -1,0 +1,11 @@
+<div class="radio-option-container<%= control.vertical ? ' radio-option-container--vertical' : null %>">
+  <div class="forge-typography--caption"><%= control.label %></div>
+  <div role="radiogroup" aria-label="<%= control.label %>" id="<%= control.id %>">
+  <% control.radios.forEach(({ label, value, id, defaultValue }) => { %>
+    <forge-radio>
+      <input type="radio" id="<%= id %>" name="<%= control.id %>" value="<%= value %>" <%= defaultValue ? 'checked' : null %>>
+      <label slot="label" for="<%= id %>"><%= label %></label>
+    </forge-radio>
+  <% }); %>
+  </div>
+</div>

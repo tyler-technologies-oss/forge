@@ -97,47 +97,47 @@ export class BusyIndicatorComponent extends BaseComponent implements IBusyIndica
 
   /** The title to be displayed. */
   @FoundationProperty()
-  public titleText: string;
+  public declare titleText: string;
 
   /** The message to be displayed. */
   @FoundationProperty()
-  public message: string;
+  public declare message: string;
 
   /** Controls whether the cancel button is visible or not. */
   @FoundationProperty()
-  public cancel: boolean;
+  public declare cancel: boolean;
 
   /** Controls whether the progress spinner is visible or not. */
   @FoundationProperty()
-  public spinner: boolean;
+  public declare spinner: boolean;
 
   /** Controls whether the progres bar is visible or not. */
   @FoundationProperty()
-  public progressBar: boolean;
+  public declare progressBar: boolean;
 
   /** Sets the progress bar determinate state. */
   @FoundationProperty()
-  public progressBarDeterminate: boolean;
+  public declare progressBarDeterminate: boolean;
 
   /** The progress amount of the progress bar. */
   @FoundationProperty()
-  public progress: number;
+  public declare progress: number;
 
   /** The buffer amount of the progress bar. */
   @FoundationProperty()
-  public buffer: number;
+  public declare buffer: number;
 
   /** Sets the width of the busy indicator element. */
   @FoundationProperty()
-  public width: number | 'auto';
+  public declare width: number | 'auto';
 
   /** The layout direction for alternative designs. */
   @FoundationProperty()
-  public direction: BusyIndicatorLayoutDirection;
+  public declare direction: BusyIndicatorLayoutDirection;
 
   /** Controls whether the component will manage capturing and relasing focus when opened/closed. */
   @FoundationProperty()
-  public manageFocus: boolean;
+  public declare manageFocus: boolean;
 
   /**
    * Controls the `position` of the backdrop and surface element between `fixed` and `absolute` positioning. Default is `true`.
@@ -146,7 +146,7 @@ export class BusyIndicatorComponent extends BaseComponent implements IBusyIndica
    *       full viewport heigth/width to only cover the parent element bounds.
    */
   @FoundationProperty()
-  public fixed: boolean;
+  public declare fixed: boolean;
 
   /**
    * Removes the element from the DOM.

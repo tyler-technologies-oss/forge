@@ -84,10 +84,10 @@ export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuC
   }
 
   @FoundationProperty()
-  public animationType: CalendarMenuAnimationType;
+  public declare animationType: CalendarMenuAnimationType;
 
   @FoundationProperty()
-  public preventFocus: boolean;
+  public declare preventFocus: boolean;
 
   public animateIn(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus = false): void {
     this._foundation.animateIn(options, direction, setFocus);

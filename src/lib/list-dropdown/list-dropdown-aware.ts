@@ -39,29 +39,29 @@ export class ListDropdownAware extends BaseComponent {
   
   /** Gets/sets the list of classes to apply to the popup element. */
   @FoundationProperty()
-  public popupClasses: string | string[];
+  public declare popupClasses: string | string[];
 
   /** Gets/sets the list of classes to apply to the popup element. */
   @FoundationProperty()
-  public popupHeaderBuilder: ListDropdownHeaderBuilder;
+  public declare popupHeaderBuilder: ListDropdownHeaderBuilder;
 
   /** Gets/sets the list of classes to apply to the popup element. */
   @FoundationProperty()
-  public popupFooterBuilder: ListDropdownFooterBuilder;
+  public declare popupFooterBuilder: ListDropdownFooterBuilder;
 
   /** Gets/sets whether the popup width is synchronized with the popup target width. */
   @FoundationProperty()
-  public syncPopupWidth: boolean;
+  public declare syncPopupWidth: boolean;
 
   /** Gets/sets the maximum number of options to display in the dropdown. */
   @FoundationProperty()
-  public optionLimit: number;
+  public declare optionLimit: number;
 
   /** Controls the observation of scroll events on the dropdown. */
   @FoundationProperty()
-  public observeScroll: boolean;
+  public declare observeScroll: boolean;
 
   /** The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true. */
   @FoundationProperty()
-  public observeScrollThreshold: number;
+  public declare observeScrollThreshold: number;
 }

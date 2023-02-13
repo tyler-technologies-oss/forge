@@ -57,7 +57,7 @@ export class CheckboxComponent extends BaseComponent implements ICheckboxCompone
 
   /** Gets or sets whether or not the checkbox is dense */
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   private async _ensureInputElement(): Promise<Element> {
     // Not using core function ensureChild because it was not selecting the input properly

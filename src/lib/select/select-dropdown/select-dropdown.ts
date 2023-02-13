@@ -91,13 +91,13 @@ export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownF
 
   /** Sets the target element CSS selector */
   @FoundationProperty()
-  public target: string;
+  public declare target: string;
 
   /** Sets the selected text element CSS selector */
   @FoundationProperty()
-  public selectedTextTarget: string;
+  public declare selectedTextTarget: string;
 
   /** Controls whether the selected text is synchronized to the target elements' text content. Default is false. */
   @FoundationProperty()
-  public syncSelectedText: boolean;
+  public declare syncSelectedText: boolean;
 }

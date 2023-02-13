@@ -31,7 +31,9 @@ declare global {
  */
 @CustomElement({
   name: SPLIT_VIEW_CONSTANTS.elementName,
-  dependencies: [SplitViewPanelComponent]
+  dependencies: [
+    SplitViewPanelComponent
+  ]
 })
 export class SplitViewComponent extends BaseComponent implements ISplitViewComponent {
   public static get observedAttributes(): string[] {
