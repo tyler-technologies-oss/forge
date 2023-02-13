@@ -64,7 +64,7 @@ Default.args = {
   max: '',
   open: false,
   masked: true,
-  maskFormat: 'MM/DD/YYYY',
+  maskFormat: DEFAULT_DATE_MASK,
   showMaskFormat: false,
   allowInvalidDate: false,
   showToday: false,
