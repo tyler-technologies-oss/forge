@@ -47,11 +47,6 @@ export function parseDateString(value: string): Date | null {
     day = '1';
   }
 
-  // Trap for the case where a 4 digit year is entered with a leading 0 
-  if (typeof year === 'string' && year.length === 4) {
-    year = year.replace(/^0+/, '');
-  }
-
   // Trap for the case where only 3 digit years are entered
   if (typeof year === 'string' && year.length === 3) {
     year = year.padEnd(4, '0');
@@ -104,7 +99,7 @@ export function parseDateString(value: string): Date | null {
 export function formatDate(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-  const year = date.getFullYear();
+  const year = String(date.getFullYear()).padStart(4, '0');
   return [month, day, year].join('/');
 }
 
