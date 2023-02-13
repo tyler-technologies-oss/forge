@@ -1,0 +1,12 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Toolbar',
+    includePath: './pages/toolbar/toolbar.ejs',
+    options: [
+      { type: 'switch', id: 'toolbar-inverted', label: 'Inverted' },
+      { type: 'switch', id: 'toolbar-border', label: 'Show border', defaultValue: true }
+    ]
+  }
+})
+%>

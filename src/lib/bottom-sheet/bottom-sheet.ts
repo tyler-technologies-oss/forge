@@ -97,33 +97,33 @@ export class BottomSheetComponent extends HTMLElement implements IBottomSheetCom
 
   /** Controls whether clicking the backdrop closes the bottom-sheet or not. Default is true. */
   @FoundationProperty()
-  public backdropClose: boolean;
+  public declare backdropClose: boolean;
 
   /** Controls whether pressing the escape key closes the bottom-sheet or not. Default is true. */
   @FoundationProperty()
-  public escapeClose: boolean;
+  public declare escapeClose: boolean;
 
   /** Controls whether the bottom-sheet is open or not. Default is false. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /** Controls whether the bottom-sheet is full screen or not. Default is false. */
   @FoundationProperty()
-  public fullscreen: boolean;
+  public declare fullscreen: boolean;
 
   /** Shows a backdrop to prevent interacting with other content until the bottom sheet is dismissed.  Default is false. */
   @FoundationProperty()
-  public showBackdrop: boolean;
+  public declare showBackdrop: boolean;
 
   /** The function to call when the bottom-sheet wants to open. */
   @FoundationProperty()
-  public openCallback: () => void | Promise<void>;
+  public declare openCallback: () => void | Promise<void>;
 
   /** the function to call when the bottom-sheet wants to close. */
   @FoundationProperty()
-  public closeCallback: () => void | Promise<void>;
+  public declare closeCallback: () => void | Promise<void>;
 
   /** the function to call when the bottom-sheet wants to close. */
   @FoundationProperty()
-  public beforeCloseCallback: () => boolean | Promise<boolean>;
+  public declare beforeCloseCallback: () => boolean | Promise<boolean>;
 }

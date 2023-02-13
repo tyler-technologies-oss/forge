@@ -63,12 +63,12 @@ export class OpenIconComponent extends BaseComponent implements IOpenIconCompone
 
   /** Controls the open state of the icon. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /**
    * Gets/sets the orientation of the icon.
    * Valid values are 'vertical' (default) or 'horizontal'.
    */
   @FoundationProperty()
-  public orientation: string;
+  public declare orientation: string;
 }

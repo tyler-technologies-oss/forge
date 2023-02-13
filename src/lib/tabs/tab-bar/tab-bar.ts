@@ -109,35 +109,35 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
 
   /** Gets and sets the active tab index. */
   @FoundationProperty()
-  public activeTab: number;
+  public declare activeTab: number;
 
   /** Gets/sets the layout mode that controls how the tabs are sized and rendered. */
   @FoundationProperty()
-  public layoutMode: TabBarLayoutMode;
+  public declare layoutMode: TabBarLayoutMode;
 
   /** Gets/sets the layout alignment. Only pertains to non-full width layout modes. */
   @FoundationProperty()
-  public layoutAlign: TabBarLayoutAlign;
+  public declare layoutAlign: TabBarLayoutAlign;
 
   /** Gets/sets whether the component displays an underline or not. Default is `false`. */
   @FoundationProperty()
-  public underline: boolean;
+  public declare underline: boolean;
 
   /** Gets/sets whether tabs are auto-activated when using arrow keys. Default is `true` */
   @FoundationProperty()
-  public autoActivate: boolean;
+  public declare autoActivate: boolean;
 
   /** Gets/sets whether the tabs are displayed with as their stacked variant. Default is `false`. */
   @FoundationProperty()
-  public stacked: boolean;
+  public declare stacked: boolean;
 
   /** Gets/sets whether the scroll buttons can be displayed or not. Default is `true`. The component handles visibility automatically. */
   @FoundationProperty()
-  public scrollButtons: boolean;
+  public declare scrollButtons: boolean;
 
   /** Gets/sets whether the scroll buttons are visible indefinitely or not. Default is `false`. */
   @FoundationProperty()
-  public forceScrollButtons: boolean;
+  public declare forceScrollButtons: boolean;
 
   /**
    * Activates the tab at the given index.

@@ -1,0 +1,9 @@
+.list-item-link {
+  &:link,
+  &:active,
+  &:visited,
+  &:hover {
+    text-decoration: none;
+    color: var(--mdc-theme-text-primary-on-background);
+  }
+}

@@ -26,7 +26,7 @@ declare global {
 @CustomElement({
   name: RIPPLE_CONSTANTS.elementName
 })
-export class RippleComponent extends HTMLElement implements IRippleComponent {
+export class RippleComponent extends BaseComponent implements IRippleComponent {
   public static get observedAttributes(): string[] {
     return [
       RIPPLE_CONSTANTS.attributes.TARGET,
@@ -73,8 +73,8 @@ export class RippleComponent extends HTMLElement implements IRippleComponent {
   }
 
   @FoundationProperty()
-  public target: string;
+  public declare target: string;
 
   @FoundationProperty()
-  public unbounded: boolean;
+  public declare unbounded: boolean;
 }

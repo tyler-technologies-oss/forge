@@ -1,7 +1,7 @@
 import { CustomElement, ensureChildren, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { BUTTON_CONSTANTS } from './button-constants';
-import { userInteractionListener } from '../core/utils';
+import { userInteractionListener } from '../core/utils/utils';
 import { ForgeRipple } from '../ripple';
 
 export interface IButtonComponent extends IBaseComponent {

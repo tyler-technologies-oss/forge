@@ -181,78 +181,78 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
   }
 
   @FoundationProperty()
-  public value: string | null | undefined;
+  public declare value: string | null | undefined;
 
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   @FoundationProperty()
-  public allowSeconds: boolean;
+  public declare allowSeconds: boolean;
 
   @FoundationProperty()
-  public masked: boolean;
+  public declare masked: boolean;
 
   @FoundationProperty()
-  public showMaskFormat: boolean;
+  public declare showMaskFormat: boolean;
 
   @FoundationProperty()
-  public use24HourTime: boolean;
+  public declare use24HourTime: boolean;
 
   @FoundationProperty()
-  public allowInvalidTime: boolean;
+  public declare allowInvalidTime: boolean;
 
   @FoundationProperty()
-  public min: string | null | undefined;
+  public declare min: string | null | undefined;
 
   @FoundationProperty()
-  public max: string | null | undefined;
+  public declare max: string | null | undefined;
 
   @FoundationProperty()
-  public restrictedTimes: string[];
+  public declare restrictedTimes: string[];
 
   @FoundationProperty()
-  public startTime: string | null | undefined;
+  public declare startTime: string | null | undefined;
 
   @FoundationProperty()
-  public step: number;
+  public declare step: number;
 
   @FoundationProperty()
-  public allowInput: boolean;
+  public declare allowInput: boolean;
 
   @FoundationProperty()
-  public showNow: boolean;
+  public declare showNow: boolean;
 
   /** Whether or not to display hour options in dropdown */
   @FoundationProperty()
-  public showHourOptions: boolean;
+  public declare showHourOptions: boolean;
 
   @FoundationProperty()
-  public customOptions: ITimePickerOption[];
+  public declare customOptions: ITimePickerOption[];
 
   @FoundationProperty()
-  public validationCallback: TimePickerValidationCallback;
+  public declare validationCallback: TimePickerValidationCallback;
   
   @FoundationProperty()
-  public parseCallback: TimePickerParseCallback;
+  public declare parseCallback: TimePickerParseCallback;
 
   @FoundationProperty()
-  public formatCallback: TimePickerFormatCallback;
+  public declare formatCallback: TimePickerFormatCallback;
 
   @FoundationProperty()
-  public coercionCallback: TimePickerCoercionCallback;
+  public declare coercionCallback: TimePickerCoercionCallback;
 
   @FoundationProperty()
-  public prepareMaskCallback: TimePickerPrepareMaskCallback;
+  public declare prepareMaskCallback: TimePickerPrepareMaskCallback;
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   @FoundationProperty()
-  public popupClasses: string | string[];
+  public declare popupClasses: string | string[];
 
   @FoundationProperty()
-  public allowDropdown: boolean;
+  public declare allowDropdown: boolean;
 
   @FoundationProperty()
-  public popupTarget: string;
+  public declare popupTarget: string;
 }

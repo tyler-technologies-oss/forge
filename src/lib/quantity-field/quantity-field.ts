@@ -100,9 +100,9 @@ export class QuantityFieldComponent extends BaseComponent implements IQuantityFi
 
   /** Gets/sets the invalid state. */
   @FoundationProperty()
-  public invalid: boolean;
+  public declare invalid: boolean;
 
   /** Gets/sets the required state which controls the visibility of the asterisk in the label. */
   @FoundationProperty()
-  public required: boolean;
+  public declare required: boolean;
 }

@@ -1,0 +1,160 @@
+<div class="vert">
+  <div id="chips-basic">
+    <h3>Basic chips</h3>
+    <forge-chip-set style="width: 600px; display: flex; flex: auto; flex-direction: row; flex-wrap: wrap;">
+      <forge-chip>Small</forge-chip>
+      <forge-chip>Medium</forge-chip>
+      <forge-chip>Large</forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-choice">
+    <h3>Choice chips</h3>
+    <forge-chip-set type="choice">
+      <forge-chip>Small</forge-chip>
+      <forge-chip selected>Medium</forge-chip>
+      <forge-chip>Large</forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-choice-vertical">
+    <h3>Choice chips (vertical)</h3>
+    <forge-chip-set type="choice" vertical>
+      <forge-chip>Small</forge-chip>
+      <forge-chip selected>Medium</forge-chip>
+      <forge-chip>Large</forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-filter">
+    <h3>Filter chips</h3>
+    <h5>No leading icon</h5>
+    <forge-chip-set type="filter">
+      <forge-chip value="tops" selected>Tops</forge-chip>
+      <forge-chip value="bottoms" selected>Bottoms</forge-chip>
+      <forge-chip value="shoes">Shoes</forge-chip>
+      <forge-chip value="accessories">Accessories</forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-filter-leading">
+    <h5>With leading icon</h5>
+    <forge-chip-set type="filter">
+      <forge-chip selected>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Alice
+      </forge-chip>
+      <forge-chip selected>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Bob
+      </forge-chip>
+      <forge-chip>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Charlie
+      </forge-chip>
+      <forge-chip>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Danielle
+      </forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-action">
+    <h3>Action chips</h3>
+    <forge-chip-set>
+      <forge-chip value="calendar">
+        <forge-icon slot="leading" name="event"></forge-icon>
+        Add to calendar
+      </forge-chip>
+      <forge-chip value="bookmark">
+        <forge-icon slot="leading" name="bookmark"></forge-icon>
+        Bookmark
+      </forge-chip>
+      <forge-chip value="alarm">
+        <forge-icon slot="leading" name="alarm"></forge-icon>
+        Set alarm
+      </forge-chip>
+      <forge-chip value="directions">
+        <forge-icon slot="leading" name="directions"></forge-icon>
+        Get directions
+      </forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-avatar">
+    <h3>With leading avatar</h3>
+    <forge-chip-set>
+      <forge-chip value="calendar">
+        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
+        Add to calendar
+      </forge-chip>
+      <forge-chip value="bookmark">
+        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
+        Bookmark
+      </forge-chip>
+      <forge-chip value="alarm">
+        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
+        Set alarm
+      </forge-chip>
+      <forge-chip value="directions">
+        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
+        Get directions
+      </forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-input">
+    <h3 class="flex">
+      Input chips
+      <span>
+        <forge-icon-button>
+          <button type="button">
+            <forge-icon name="refresh"></forge-icon>
+          </button>
+        </forge-icon-button>
+      </span>
+    </h3>
+    <forge-chip-set type="input">
+      <forge-chip>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Falmouth
+      </forge-chip>
+      <forge-chip>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Yarmouth
+      </forge-chip>
+      <forge-chip>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Plano
+      </forge-chip>
+      <forge-chip>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Renton
+      </forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-input">
+    <h3>Invalid chips</h3>
+    <forge-chip-set type="input">
+      <forge-chip invalid>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Falmouth
+      </forge-chip>
+      <forge-chip invalid>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Yarmouth
+      </forge-chip>
+      <forge-chip invalid>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Plano
+      </forge-chip>
+      <forge-chip invalid>
+        <forge-icon slot="leading" name="place"></forge-icon>
+        Renton
+      </forge-chip>
+    </forge-chip-set>
+  </div>
+</div>
+
+<script type="module" src="chips.ts"></script>

@@ -5,7 +5,13 @@
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "pretty": true,
-    "types": ["jasmine", "node", "webpack-env"],
+    "suppressImplicitAnyIndexErrors": true,
+    "useDefineForClassFields": false,
+    "types": [
+      "jasmine",
+      "node",
+      "webpack-env"
+    ],
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["lib"],

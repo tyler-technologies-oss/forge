@@ -435,8 +435,9 @@ export class DialogFoundation implements IDialogFoundation {
   }
   public set fullscreen(value: boolean) {
     if (this._fullscreen !== value) {
-      this._fullscreen = value;
+      this._fullscreen = !!value;
       this._adapter.setFullscreen(this._fullscreen);
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN, String(this._fullscreen));
     }
   }
 

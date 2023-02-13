@@ -80,7 +80,7 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
 
   /** Controls the open state of the panel. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /**
    * Sets the function to call when the panel wants to open.
@@ -88,7 +88,7 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
    * open the panel or rejected which cancels the panel open.
    */
   @FoundationProperty()
-  public openCallback: () => void | Promise<void>;
+  public declare openCallback: () => void | Promise<void>;
 
   /**
    * Sets the function to call when the panel wants to close.
@@ -96,18 +96,18 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
    * close the panel or rejected which cancels the panel close.
    */
   @FoundationProperty()
-  public closeCallback: () => void | Promise<void>;
+  public declare closeCallback: () => void | Promise<void>;
 
   /**
    * Sets the orientation of the panel expansion.
    * Valid values are 'vertical' (default) or 'horizontal'.
    */
   @FoundationProperty()
-  public orientation: string;
+  public declare orientation: string;
 
   /** Gets/sets if animations are used in the expand/collapse transition. */
   @FoundationProperty()
-  public useAnimations: boolean;
+  public declare useAnimations: boolean;
 
   /** Toggles the collapsed state. */
   public toggle(): void {

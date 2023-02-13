@@ -126,27 +126,27 @@ export class AppBarSearchComponent extends BaseComponent implements IAppBarSearc
 
   /** Gets/sets the value. */
   @FoundationProperty()
-  public value: string;
+  public declare value: string;
 
   /** Gets/sets the disabled state of the search input. */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
   
   /** Gets/sets whether this is a combined search box with search options. */
   @FoundationProperty()
-  public combined: boolean;
+  public declare combined: boolean;
   
   /** Gets/sets seelcted option for the combined search dropdown. */
   @FoundationProperty()
-  public combinedOptions: IOption[];
+  public declare combinedOptions: IOption[];
   
   /** Gets/sets selected option for the combined search dropdown. */
   @FoundationProperty()
-  public selectedCombinedOption: string;
+  public declare selectedCombinedOption: string;
   
   /** Gets/sets whether the global icon is displayed at the end of the input. */
   @FoundationProperty()
-  public global: boolean;
+  public declare global: boolean;
 
   /** Sets the input placeholder value. */
   public set placeholder(value: string) {

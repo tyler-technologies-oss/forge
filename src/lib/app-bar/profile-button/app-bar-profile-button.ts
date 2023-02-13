@@ -117,36 +117,36 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
   }
 
   @FoundationProperty()
-  public fullName: string;
+  public declare fullName: string;
 
   @FoundationProperty()
-  public email: string;
+  public declare email: string;
 
   @FoundationProperty()
-  public avatarImageUrl: string;
+  public declare avatarImageUrl: string;
 
   @FoundationProperty()
-  public avatarLetterCount: number;
+  public declare avatarLetterCount: number;
 
   @FoundationProperty()
-  public avatarText: string;
+  public declare avatarText: string;
 
   @FoundationProperty()
-  public signOutButton: boolean;
+  public declare signOutButton: boolean;
 
   @FoundationProperty()
-  public profileButton: boolean;
+  public declare profileButton: boolean;
 
   @FoundationProperty()
-  public signOutButtonText: string;
+  public declare signOutButtonText: string;
 
   @FoundationProperty()
-  public profileButtonText: string;
+  public declare profileButtonText: string;
 
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /** Sets the profile card builder callback that will be used to add extra content to the profile card. */
   @FoundationProperty()
-  public profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
+  public declare profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }

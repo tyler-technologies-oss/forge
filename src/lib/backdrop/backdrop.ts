@@ -88,15 +88,15 @@ export class BackdropComponent extends BaseComponent {
    * Note: The element will start with 0% opacity when the component is rendered.
    */
   @FoundationProperty()
-  public delay: number;
+  public declare delay: number;
 
   /** Controls whether the theme defaults to light vs dark compatibility. */
   @FoundationProperty()
-  public appearance: BackdropAppearance;
+  public declare appearance: BackdropAppearance;
 
   /** The max opacity to fade the element to. This defines how opaque the backdrop is when visible. */
   @FoundationProperty()
-  public maxOpacity: number;
+  public declare maxOpacity: number;
 
   /**
    * Starts the fade-out animation to animate the backdrop to 0% opacity.

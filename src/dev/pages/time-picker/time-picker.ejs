@@ -1,0 +1,21 @@
+<div class="vert">
+  <forge-time-picker id="time-picker">
+    <forge-text-field>
+      <input type="text" id="time-picker-input" />
+      <label for="time-picker-input">Choose time</label>
+    </forge-text-field>
+  </forge-time-picker>
+
+  <div class="vert">
+    <forge-label-value>
+      <span slot="label">Model value</span>
+      <span slot="value" id="time-picker-model-value"></span>
+    </forge-label-value>
+    <forge-label-value>
+      <span slot="label">Input value</span>
+      <span slot="value" id="time-picker-input-value">&quot;&quot;</span>
+    </forge-label-value>
+  </div>
+</div>
+
+<script type="module" src="time-picker.ts"></script>
