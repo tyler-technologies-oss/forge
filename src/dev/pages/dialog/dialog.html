@@ -1,0 +1,14 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Dialog',
+    includePath: './pages/dialog/dialog.ejs',
+    options: [
+      { type: 'switch', label: 'Fullscreen', id: 'opt-fullscreen' },
+      { type: 'switch', label: 'Moveable', id: 'opt-moveable' },
+      { type: 'switch', label: 'Prevent move', id: 'opt-prevent-move' },
+      { type: 'switch', label: 'Use custom position', id: 'opt-custom-position' }
+    ]
+  }
+})
+%>

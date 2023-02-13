@@ -1,0 +1,146 @@
+<div class="vert">
+  <div class="limit-container">
+    <h3 class="forge-typography--subtitle1-secondary">Profile</h3>
+    <forge-skeleton avatar></forge-skeleton>
+    <forge-skeleton text></forge-skeleton>
+    <forge-skeleton text></forge-skeleton>
+    <forge-skeleton text style="width: 75%;"></forge-skeleton>
+  </div>
+
+  <div class="limit-container">
+    <h3 class="forge-typography--subtitle1-secondary">List</h3>
+    <forge-skeleton list-item></forge-skeleton>
+    <forge-skeleton list-item></forge-skeleton>
+    <forge-skeleton list-item></forge-skeleton>
+  </div>
+
+  <div class="limit-container">
+    <h3 class="forge-typography--subtitle1-secondary">Section</h3>
+    <forge-skeleton stretch style="height: 256px;"></forge-skeleton>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--subtitle1-secondary">Chips</h3>
+    <div style="display: flex;">
+      <div style="display: grid; grid-auto-flow: column; grid-gap: 16px;">
+        <forge-skeleton chip></forge-skeleton>
+        <forge-skeleton chip></forge-skeleton>
+        <forge-skeleton chip></forge-skeleton>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--subtitle1-secondary">Buttons</h3>
+    <div style="display: flex;">
+      <div style="display: grid; grid-auto-flow: column; grid-gap: 16px;">
+        <forge-skeleton button></forge-skeleton>
+        <forge-skeleton button></forge-skeleton>
+        <forge-skeleton button></forge-skeleton>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--subtitle1-secondary">Form Fields</h3>
+    <div style="display: flex;">
+      <div>
+        <forge-skeleton form-field></forge-skeleton>
+        <forge-skeleton form-field></forge-skeleton>
+        <forge-skeleton form-field></forge-skeleton>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--subtitle1-secondary">App</h3>
+    <div style="height: 750px;">
+      <forge-scaffold style="--forge-scaffold-width: 100%; --forge-scaffold-height: 100%;">
+        <forge-app-bar slot="header" title-text="Skeleton">
+          <forge-icon slot="logo" name="forge_logo"></forge-icon>
+        </forge-app-bar>
+        <forge-drawer slot="body-left" style="padding-top: 8px;">
+          <div>
+            <forge-skeleton list-item></forge-skeleton>
+            <forge-skeleton list-item></forge-skeleton>
+            <forge-skeleton list-item></forge-skeleton>
+          </div>
+        </forge-drawer>
+        <div slot="body" style="padding: 16px; background-color: var(--mdc-theme-background);">
+          <forge-card style="--forge-card-padding: 16px; margin-bottom: 16px;">
+            <forge-skeleton avatar></forge-skeleton>
+            <forge-skeleton text></forge-skeleton>
+            <forge-skeleton text></forge-skeleton>
+            <forge-skeleton text style="width: 75%;"></forge-skeleton>
+          </forge-card>
+          <forge-card style="--forge-card-padding: 16px; margin-bottom: 16px;">
+            <forge-skeleton text></forge-skeleton>
+            <forge-skeleton text></forge-skeleton>
+            <forge-skeleton text style="width: 75%;"></forge-skeleton>
+          </forge-card>
+          <forge-card style="--forge-card-padding: 16px;">
+            <forge-skeleton text></forge-skeleton>
+            <forge-skeleton text></forge-skeleton>
+            <forge-skeleton text style="width: 75%;"></forge-skeleton>
+          </forge-card>
+        </div>
+      </forge-scaffold>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--subtitle1-secondary">Table</h3>
+    <div>
+      <table style="width: 500px;">
+        <thead>
+          <tr>
+            <th>
+              <forge-skeleton text></forge-skeleton>
+            </th>
+            <th>
+              <forge-skeleton text></forge-skeleton>
+            </th>
+            <th>
+              <forge-skeleton text></forge-skeleton>
+            </th>
+            <th>
+              <forge-skeleton text></forge-skeleton>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+            <td>
+              <forge-skeleton text></forge-skeleton>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="skeleton.ts"></script>

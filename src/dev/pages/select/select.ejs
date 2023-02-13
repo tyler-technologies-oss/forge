@@ -1,0 +1,46 @@
+<div class="demo">
+  <!-- Select -->
+  <forge-select label="Pick a Food Group" id="select">
+    <forge-option value=""></forge-option>
+    <forge-option value="grains">Bread, Cereal, Rice, and Pasta</forge-option>
+    <forge-option value="vegetables" disabled>Vegetables (disabled)</forge-option>
+    <forge-option value="fruit">Fruit</forge-option>
+
+    <!-- Leading -->
+    <forge-icon slot="leading" name="food"></forge-icon>
+
+    <!-- Addon end -->
+    <forge-checkbox slot="addon-end" dense>
+      <input type="checkbox" id="select-all">
+    </forge-checkbox>
+
+    <!-- Helper text -->
+    <span slot="helper-text">Please choose a food group</span>
+  </forge-select>
+
+  <!-- Select dropdown -->
+  <h4>Select dropdown</h4>
+  <forge-button type="raised">
+    <button type="button" style="width: 256px;" id="select-dropdown-target" aria-label="Choose an option">
+      <span id="select-dropdown-text">Choose...</span>
+      <forge-icon name="arrow_drop_down"></forge-icon>
+    </button>
+  </forge-button>
+  <forge-select-dropdown
+    target="#select-dropdown-target"
+    id="select-dropdown"
+    sync-selected-text="true"
+    selected-text-target="#select-dropdown-text">
+    <forge-option value=""></forge-option>
+    <forge-option value="1">One</forge-option>
+    <forge-option value="2">Two</forge-option>
+    <forge-option value="3" disabled>Three</forge-option>
+    <forge-option divider></forge-option>
+    <forge-option value="4">Four</forge-option>
+    <forge-option value="5">Five</forge-option>
+    <forge-option divider></forge-option>
+    <forge-option value="6">Six</forge-option>
+  </forge-select-dropdown>
+</div>
+
+<script type="module" src="select.ts"></script>

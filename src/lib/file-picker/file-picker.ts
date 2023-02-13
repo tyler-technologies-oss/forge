@@ -90,29 +90,29 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
 
   /** Gets and sets the allowed file types */
   @FoundationProperty()
-  public accept: string | null | undefined;
+  public declare accept: string | null | undefined;
 
   /** Gets and sets the maximum allowed file size */
   @FoundationProperty()
-  public maxSize: number | null | undefined;
+  public declare maxSize: number | null | undefined;
 
   /** Gets and sets the camera to use when capturing video or images */
   @FoundationProperty()
-  public capture: string | null | undefined;
+  public declare capture: string | null | undefined;
 
   /** Gets and sets whether multiple files are allowed */
   @FoundationProperty()
-  public multiple: boolean;
+  public declare multiple: boolean;
 
   /** Gets and sets whether the file picker is disabled */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   /** Gets and sets whether the file picker is compact */
   @FoundationProperty()
-  public compact: boolean;
+  public declare compact: boolean;
 
   /** Gets and sets whether the file picker is borderless */
   @FoundationProperty()
-  public borderless: boolean;
+  public declare borderless: boolean;
 }

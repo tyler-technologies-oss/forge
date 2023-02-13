@@ -1,0 +1,38 @@
+<h3 class="forge-typography--subtitle1">Mini Hover (right)</h3>
+<div class="drawer-demo" style="position: relative;">
+  <forge-scaffold stretch>
+    <forge-app-bar id="drawer-mini-hover-app-bar" title-text="Mini Hover Drawer" slot="header">
+      <forge-icon slot="logo" external external-type="custom" name="forge_logo"></forge-icon>
+    </forge-app-bar>
+    <forge-toolbar slot="body-header">
+      <h2 slot="start" class="forge-typography--title">Toolbar</h2>
+    </forge-toolbar>
+    <forge-mini-drawer hover slot="body-right" direction="right">
+      <forge-list>
+        <forge-list-item selected id="tooltip-host">
+          <forge-icon slot="leading" name="inbox"></forge-icon>
+          Inbox
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="leading" name="send"></forge-icon>
+          Outgoing
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="leading" name="drafts"></forge-icon>
+          Drafts
+        </forge-list-item>
+      </forge-list>
+    </forge-mini-drawer>
+    <div slot="body" style="padding: 16px;">
+      <forge-card outlined>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+        enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+        anim id est laborum.
+      </forge-card>
+    </div>
+  </forge-scaffold>
+</div>

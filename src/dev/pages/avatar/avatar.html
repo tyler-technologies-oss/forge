@@ -1,0 +1,11 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Avatar',
+    includePath: './pages/avatar/avatar.ejs',
+    options: [
+      { type: 'switch', label: 'Auto color', id: 'auto-color-checkbox' }
+    ]
+  }
+})
+%>

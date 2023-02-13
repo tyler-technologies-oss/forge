@@ -167,7 +167,7 @@ export const LeadingPanel: Story<ISplitViewProps> = ({
         <div style={{...panelContentStyles, backgroundColor: 'salmon'}}>Panel 1</div>
       </ForgeSplitViewPanel>
       <ForgeSplitViewPanel {...panel2Props}>
-        <div style={{...panelContentStyles, backgroundColor: 'lavender'}}>Panel 2</div>
+      <div style={{...panelContentStyles, backgroundColor: 'salmon'}}>Panel 1</div>
       </ForgeSplitViewPanel>
     </ForgeSplitView>
   );

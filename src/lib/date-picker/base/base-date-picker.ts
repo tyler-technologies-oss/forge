@@ -98,85 +98,85 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
 
   /** Gets/sets the value of the component. */
   @FoundationProperty()
-  public value: TPublicValue | undefined;
+  public declare value: TPublicValue | undefined;
 
   /** Gets/sets the minimum date the calendar will allow. */
   @FoundationProperty()
-  public min: Date | string | null | undefined;
+  public declare min: Date | string | null | undefined;
 
   /** Gets/sets the maximum date the calendar will allow. */
   @FoundationProperty()
-  public max: Date | string | null | undefined;
+  public declare max: Date | string | null | undefined;
 
   /** Gets/sets the dates that are restricted from being selected. */
   @FoundationProperty()
-  public disabledDates: Date | Date[] | null | undefined;
+  public declare disabledDates: Date | Date[] | null | undefined;
 
   /** Gets/sets whether the calendar dropdown is open. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   /** Gets/sets the CSS classes that are applied to the popup element. */
   @FoundationProperty()
-  public popupClasses: string | string[];
+  public declare popupClasses: string | string[];
 
   /** Gets/sets whether the date picker is disabled or not. */
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   /** Gets/sets whether the input mask is applied or not. */
   @FoundationProperty()
-  public masked: boolean;
+  public declare masked: boolean;
 
   /** Gets/sets the mask format that displayed in the input. Default is `MM/DD/YYYY` */
   @FoundationProperty()
-  public maskFormat: string;
+  public declare maskFormat: string;
 
   /** Gets/sets whether the mask format is displayed in the input or not. Only applies if `masked` is `true`. */
   @FoundationProperty()
-  public showMaskFormat: boolean;
+  public declare showMaskFormat: boolean;
 
   /** Gets/sets the type for the `value` property and `forge-date-picker-change` event. */
   @FoundationProperty()
-  public valueMode: DatePickerValueMode;
+  public declare valueMode: DatePickerValueMode;
 
   /** Gets/sets whether the native input will be notified of value changes via the `input` and `change` events. */
   @FoundationProperty()
-  public notifyInputValueChanges: boolean;
+  public declare notifyInputValueChanges: boolean;
 
   /** Gets/sets whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed). */
   @FoundationProperty()
-  public allowInvalidDate: boolean;
+  public declare allowInvalidDate: boolean;
 
   /** Gets/sets whether the today button is visible in the popup. */
   @FoundationProperty()
-  public showToday: boolean;
+  public declare showToday: boolean;
 
   /** Gets/sets whether the clear button is visible in the popup. */
   @FoundationProperty()
-  public showClear: boolean;
+  public declare showClear: boolean;
 
   /** Sets the callback to use for parsing a date value string to a `Date` object. */
   @FoundationProperty()
-  public parseCallback: DatePickerParseCallback;
+  public declare parseCallback: DatePickerParseCallback;
 
   /** Sets the callback to use for formatting `Date` value to a custom string format. */
   @FoundationProperty()
-  public formatCallback: DatePickerFormatCallback;
+  public declare formatCallback: DatePickerFormatCallback;
 
   /** Sets the callback to use when altering default mask entry. */
   @FoundationProperty()
-  public prepareMaskCallback: DatePickerPrepareMaskCallback;
+  public declare prepareMaskCallback: DatePickerPrepareMaskCallback;
 
   /** Sets the days of the week to disable from selection. */
   @FoundationProperty()
-  public disabledDaysOfWeek: DayOfWeek[];
+  public declare disabledDaysOfWeek: DayOfWeek[];
 
   /** Sets the callback to use for testing whether a specific date should be disabled or not. */
   @FoundationProperty()
-  public disableDayCallback: (date: Date) => boolean;
+  public declare disableDayCallback: (date: Date) => boolean;
 
   /** Sets the year range. */
   @FoundationProperty()
-  public yearRange: string;
+  public declare yearRange: string;
 }

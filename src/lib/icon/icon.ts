@@ -85,31 +85,31 @@ export class IconComponent extends BaseComponent implements IIconComponent {
 
   /** The name of the icon within the icon registry to be used. */
   @FoundationProperty()
-  public name: string | undefined;
+  public declare name: string | undefined;
 
   /** Provides the ability to set the SVG string content directly. */
   @FoundationProperty()
-  public src: string | undefined;
+  public declare src: string | undefined;
 
   /** Controls whether the icon will be loaded dynamically when it comes into view. False by default. */
   @FoundationProperty()
-  public lazy: boolean;
+  public declare lazy: boolean;
 
   /** Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't defined in the registry. */
   @FoundationProperty()
-  public external: boolean;
+  public declare external: boolean;
 
   /** The type of icon to load externally. Possible values: "standard", "extended", "custom". */
   @FoundationProperty()
-  public externalType: IconExternalType;
+  public declare externalType: IconExternalType;
 
   /** A callback that can be provided to generate a URL that will be used to fetch an SVG icon. */
   @FoundationProperty()
-  public externalUrlBuilder: IconUrlBuilder;
+  public declare externalUrlBuilder: IconUrlBuilder;
 
   /** A custom value to apply to the `viewBox` attribute on the internal `<svg>` element. */
   @FoundationProperty()
-  public viewbox: string;
+  public declare viewbox: string;
 
   /** Forces a reload of the icon. */
   public layout(): void {

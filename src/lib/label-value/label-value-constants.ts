@@ -30,4 +30,4 @@ export const LABEL_VALUE_CONSTANTS = {
 };
 
 export type LabelValueAlignment = 'left' | 'center' | 'right';
-export { FieldDensityType as LabelValueDensityType } from '../field/field-constants';
+export { type FieldDensityType as LabelValueDensityType } from '../field/field-constants';

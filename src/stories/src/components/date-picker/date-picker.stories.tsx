@@ -2,6 +2,7 @@ import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { argTypes, IDatePickerProps } from './date-picker-args';
 import { ForgeDatePicker, ForgeTextField } from '@tylertech/forge-react';
+import { DEFAULT_DATE_MASK } from '../../../../lib/core';
 
 const MDX = require('./date-picker.mdx').default;
 
@@ -21,7 +22,7 @@ export const Default: Story<IDatePickerProps> = ({
   max = '',
   open = false,
   masked = true,
-  maskFormat = 'MM/DD/YYYY',
+  maskFormat = DEFAULT_DATE_MASK,
   showMaskFormat = false,
   allowInvalidDate = false,
   showToday = false,

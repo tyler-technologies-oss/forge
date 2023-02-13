@@ -84,16 +84,16 @@ export class ButtonToggleComponent extends BaseComponent implements IButtonToggl
   }
 
   @FoundationProperty()
-  public value: any;
+  public declare value: any;
 
   @FoundationProperty()
-  public selected: boolean;
+  public declare selected: boolean;
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   public override focus(): void {
     this._foundation.setFocus();

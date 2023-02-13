@@ -1,0 +1,14 @@
+.demo-container {
+  height: 750px;
+  border: 1px solid var(--forge-theme-border-color);
+}
+
+.placeholder-container {
+  margin: 16px;
+  border: 2px dashed var(--forge-theme-border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}

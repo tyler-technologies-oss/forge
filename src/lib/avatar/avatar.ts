@@ -74,17 +74,17 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
 
   /** Gets/sets the text to display. */
   @FoundationProperty()
-  public text: string;
+  public declare text: string;
 
   /** Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used. */
   @FoundationProperty()
-  public letterCount: number;
+  public declare letterCount: number;
 
   /** Sets the background image URL to use. */
   @FoundationProperty()
-  public imageUrl: string;
+  public declare imageUrl: string;
 
   /** Controls whether the background color is set automatically based on the text value. Does not have any effect when an image URL is specified. */
   @FoundationProperty()
-  public autoColor: boolean;
+  public declare autoColor: boolean;
 }

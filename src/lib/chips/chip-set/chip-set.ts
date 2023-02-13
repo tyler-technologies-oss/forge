@@ -71,14 +71,14 @@ export class ChipSetComponent extends BaseComponent implements IChipSetComponent
   }
 
   @FoundationProperty()
-  public vertical: boolean;
+  public declare vertical: boolean;
 
   @FoundationProperty()
-  public type: ChipType;
+  public declare type: ChipType;
 
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 }

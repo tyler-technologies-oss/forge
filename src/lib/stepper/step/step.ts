@@ -1,10 +1,11 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconModeEdit, tylIconWarning, tylIconCheck, tylIconBlock } from '@tylertech/tyler-icons/standard';
+import { tylIconModeEdit, tylIconWarning, tylIconCheck, tylIconBlock, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 import { StepAdapter } from './step-adapter';
 import { STEP_CONSTANTS } from './step-constants';
 import { StepFoundation } from './step-foundation';
 import { IconRegistry, IconComponent } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { ExpansionPanelComponent } from '../../expansion-panel';
 
 import template from './step.html';
 import styles from './step.scss';
@@ -43,7 +44,8 @@ declare global {
 @CustomElement({
   name: STEP_CONSTANTS.elementName,
   dependencies: [
-    IconComponent
+    IconComponent,
+    ExpansionPanelComponent
   ]
 })
 export class StepComponent extends BaseComponent implements IStepComponent {
@@ -70,7 +72,8 @@ export class StepComponent extends BaseComponent implements IStepComponent {
       tylIconModeEdit,
       tylIconCheck,
       tylIconWarning,
-      tylIconBlock
+      tylIconBlock,
+      tylIconKeyboardArrowDown
     ]);
     attachShadowTemplate(this, template, styles);
     this._foundation = new StepFoundation(new StepAdapter(this));
@@ -120,34 +123,34 @@ export class StepComponent extends BaseComponent implements IStepComponent {
   }
 
   @FoundationProperty()
-  public alternative: boolean;
+  public declare alternative: boolean;
 
   @FoundationProperty()
-  public index: number;
+  public declare index: number;
 
   @FoundationProperty()
-  public editable: boolean;
+  public declare editable: boolean;
 
   @FoundationProperty()
-  public completed: boolean;
+  public declare completed: boolean;
 
   @FoundationProperty()
-  public error: boolean;
+  public declare error: boolean;
 
   @FoundationProperty()
-  public selected: boolean;
+  public declare selected: boolean;
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   @FoundationProperty()
-  public vertical: boolean;
+  public declare vertical: boolean;
   
   @FoundationProperty()
-  public expanded: boolean;
+  public declare expanded: boolean;
   
   @FoundationProperty()
-  public ignoreUserExpansion: boolean;
+  public declare ignoreUserExpansion: boolean;
 
   public override focus(): void {
     this._foundation.focus();

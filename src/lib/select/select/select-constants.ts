@@ -43,7 +43,7 @@ export const SELECT_CONSTANTS = {
 };
 
 export {
-  FieldDensityType as SelectDensityType,
-  FieldFloatLabelType as SelectFloatLabelType,
-  FieldShapeType as SelectShapeType
+  type FieldDensityType as SelectDensityType,
+  type FieldFloatLabelType as SelectFloatLabelType,
+  type FieldShapeType as SelectShapeType
 } from '../../field/field-constants';

@@ -57,5 +57,5 @@ export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarH
   }
 
   @FoundationProperty()
-  public options: IMenuOption[];
+  public declare options: IMenuOption[];
 }

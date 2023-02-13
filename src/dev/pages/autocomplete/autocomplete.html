@@ -1,0 +1,34 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Autocomplete',
+    includePath: './pages/autocomplete/autocomplete.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Mode',
+        id: 'autocomplete-mode',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Stateless', value: 'stateless' }
+        ]
+      },
+      { type: 'text-field', inputType: 'number', label: 'Debounce threshold', id: 'autocomplete-debounce', defaultValue: 500 },
+      { type: 'text-field', inputType: 'number', label: 'Option limit', id: 'autocomplete-option-limit', defaultValue: 100 },
+      { type: 'switch', label: 'Multiple', id: 'autocomplete-multiple' },
+      { type: 'switch', label: 'Filter on focus', id: 'autocomplete-filter-on-focus', defaultValue: true },
+      { type: 'switch', label: 'Allow unmatched', id: 'autocomplete-allow-unmatched' },
+      { type: 'switch', label: 'Simulate async', id: 'autocomplete-simulate-async' },
+      { type: 'switch', label: 'Use scroll observer', id: 'autocomplete-scroll-observer' },
+      { type: 'switch', label: 'Sync popup width', id: 'autocomplete-sync-popup-width' },
+      { type: 'switch', label: 'Group options', id: 'autocomplete-group' },
+      { type: 'switch', label: 'Use selected text builder', id: 'autocomplete-selected-text-builder' },
+      { type: 'switch', label: 'Use group header builder', id: 'autocomplete-group-header-builder' },
+      { type: 'switch', label: 'Use item builder', id: 'autocomplete-item-builder' },
+      { type: 'switch', label: 'Use header builder', id: 'autocomplete-header-builder' },
+      { type: 'switch', label: 'Use footer builder', id: 'autocomplete-footer-builder' }
+    ]
+  }
+})
+%>

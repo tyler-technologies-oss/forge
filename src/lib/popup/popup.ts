@@ -91,34 +91,34 @@ export class PopupComponent extends BaseComponent implements IPopupComponent {
   }
 
   @FoundationProperty()
-  public targetElement: HTMLElement;
+  public declare targetElement: HTMLElement;
 
   @FoundationProperty()
-  public placement: `${PopupPlacement}`;
+  public declare placement: `${PopupPlacement}`;
 
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   @FoundationProperty()
-  public manageFocus: boolean;
+  public declare manageFocus: boolean;
 
   @FoundationProperty()
-  public animationType: `${PopupAnimationType}`;
+  public declare animationType: `${PopupAnimationType}`;
 
   @FoundationProperty()
-  public static: boolean;
+  public declare static: boolean;
 
   @FoundationProperty()
-  public hideWhenClipped: boolean;
+  public declare hideWhenClipped: boolean;
 
   @FoundationProperty()
-  public openCallback: PopupStateCallback;
+  public declare openCallback: PopupStateCallback;
 
   @FoundationProperty()
-  public closeCallback: PopupStateCallback;
+  public declare closeCallback: PopupStateCallback;
 
   @FoundationProperty()
-  public offset: IPopupPosition;
+  public declare offset: IPopupPosition;
 
   public position(): void {
     this._foundation.position();

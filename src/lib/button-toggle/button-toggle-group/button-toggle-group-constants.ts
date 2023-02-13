@@ -34,11 +34,14 @@ export const BUTTON_TOGGLE_GROUP_CONSTANTS = {
 };
 
 export type IButtonToggleGroupChangeEventData<T = any> = T;
+export type ButtonToggleIconType = 'font' | 'component';
 
 export interface IButtonToggleOption {
   label?: string;
   icon?: string;
   value: any;
   leadingIcon?: string;
+  leadingIconType?: ButtonToggleIconType;
   trailingIcon?: string;
+  trailingIconType?: ButtonToggleIconType;
 }
