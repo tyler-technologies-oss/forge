@@ -135,7 +135,6 @@ function buildComponentsList(groups: IComponentGroup[]): HTMLElement[] {
       const anchor = document.createElement('a');
       anchor.classList.add('list-item-link');
       anchor.href = path;
-      anchor.target = '_blank';
 
       const listItem = document.createElement('forge-list-item');
       listItem.textContent = componentLabel;
