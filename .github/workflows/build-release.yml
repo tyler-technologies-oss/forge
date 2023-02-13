@@ -107,7 +107,7 @@ jobs:
   build:
     name: Build and Test
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.7.1
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.8.1
     if: ${{ needs.wf-config.outputs.is-release == 'false' && (needs.wf-config.outputs.build-files-changed == 'true' || needs.wf-config.outputs.test-files-changed == 'true') }}
     with:
       BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}
@@ -119,7 +119,7 @@ jobs:
   build-and-release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-release.yml@v2.7.1
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-release.yml@v2.8.1
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       PRODUCTION_RELEASE: true
@@ -135,7 +135,7 @@ jobs:
   publish-cdn:
     name: Publish Components to CDN
     needs: [wf-config, build-and-release]
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v2.7.1
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-cloudfront-assets.yml@v2.8.1
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       AWS_REGION: "us-east-1"
@@ -151,7 +151,7 @@ jobs:
   deploy-storybook:
     name: Deploy Storybook
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.7.1
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.8.1
     if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true

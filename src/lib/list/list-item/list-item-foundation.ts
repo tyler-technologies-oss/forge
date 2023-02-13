@@ -69,7 +69,10 @@ export class ListItemFoundation implements IListItemFoundation {
       this._adapter.setTwoLine(this._twoLine);
     }
 
-    this._adapter.trySelect(this._value);
+    const isSelected = this._adapter.trySelect(this._value);
+    if(isSelected != null) {
+      this._selected = isSelected;
+    }
   }
 
   public disconnect(): void {
@@ -252,7 +255,10 @@ export class ListItemFoundation implements IListItemFoundation {
   }
   public set value(value: any) {
     this._value = value;
-    this._adapter.trySelect(this._value);
+    const isSelected = this._adapter.trySelect(this._value);
+    if(isSelected != null) {
+      this._selected = isSelected;
+    }
   }
 
   /** Gets/sets the href link that this list item will send the browser to when clicked. */
@@ -336,9 +342,16 @@ export class ListItemFoundation implements IListItemFoundation {
     }
   }
 
-  private _setRipple(): void {
+  private async _setRipple(): Promise<void> {
     if (this._ripple && !this._static && !this._rippleInstance) {
-      this._rippleInstance = this._adapter.createRipple();
+      const type = await this._adapter.userInteractionListener();
+      if (this._ripple && !this._static && !this._rippleInstance) { // need to re-check after await
+        this._rippleInstance = this._adapter.createRipple();
+        if (type === 'focusin') {
+          // eslint-disable-next-line @typescript-eslint/dot-notation
+          (this._rippleInstance as ForgeRipple)['foundation'].handleFocus();
+        }
+      }
     } else if ((!this._ripple || this._static) && this._rippleInstance) {
       this._rippleInstance.destroy();
       this._rippleInstance = undefined as any;
