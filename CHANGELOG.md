@@ -1,3 +1,17 @@
+# v2.13.2 (Tue Feb 14 2023)
+
+#### 🐛 Bug Fix
+
+- bug: number pad enter for time-picker [#233](https://github.com/tyler-technologies-oss/forge/pull/233) ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- use Vite for local dev [#234](https://github.com/tyler-technologies-oss/forge/pull/234) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Jake Crawford ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.13.1 (Fri Feb 10 2023)
 
 #### 🐛 Bug Fix

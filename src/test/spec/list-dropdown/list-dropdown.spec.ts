@@ -415,6 +415,18 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(selectCallback).toHaveBeenCalledOnceWith(BASIC_OPTIONS[BASIC_OPTIONS.length - 1].value);
   });
 
+  it('should select active option when numpadenter key is pressed', async function(this: ITestContext) {
+    const selectCallback = jasmine.createSpy('selectCallback') as any;
+    this.context = createListDropdown({ ...DEFAULT_CONFIG, selectCallback });
+    this.context.listDropdown.open();
+    await delayPopupAnimation();
+    
+    this.context.listDropdown.activateOption(BASIC_OPTIONS.length - 1);
+    this.context.listDropdown.handleKey('NumpadEnter');
+    
+    expect(selectCallback).toHaveBeenCalledOnceWith(BASIC_OPTIONS[BASIC_OPTIONS.length - 1].value);
+  });
+
   it('should scroll selected option into view when opened', async function(this: ITestContext) {
     const options = generateScrollableOptions();
     const selectedValue = options[99].value;
