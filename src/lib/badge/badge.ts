@@ -59,9 +59,9 @@ export class BadgeComponent extends BaseComponent implements IBadgeComponent {
 
   /** Controls whether the component renders a simple dot/circle, or allows for content. */
   @FoundationProperty()
-  public dot: boolean;
+  public declare dot: boolean;
 
   /** Controls the visibility state. */
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 }

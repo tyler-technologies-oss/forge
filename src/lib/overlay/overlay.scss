@@ -1,7 +1,7 @@
 @use './mixins';
 
 :host {
-  @include mixins.host;
+  display: block;
 }
 
 :host([hidden]) {

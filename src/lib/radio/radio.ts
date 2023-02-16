@@ -85,5 +85,5 @@ export class RadioComponent extends BaseComponent implements IRadioComponent {
 
   /** Gets/sets whether the radio button is dense. */
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 }

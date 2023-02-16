@@ -1,0 +1,34 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Select',
+    includePath: './pages/select/select.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Density',
+        id: 'opt-density',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Roomy', value: 'roomy' },
+          { label: 'Dense', value: 'dense' }
+        ]
+      },
+      { type: 'text-field', label: 'Label', id: 'opt-label', defaultValue: 'Pick a food group' },
+      { type: 'text-field', label: 'Placeholder', id: 'opt-placeholder' },
+      { type: 'switch', label: 'Show leading', id: 'opt-leading' },
+      { type: 'switch', label: 'Show addon-end', id: 'opt-addon-end' },
+      { type: 'switch', label: 'Show helper text', id: 'opt-helper-text' },
+      { type: 'switch', label: 'Multiple', id: 'opt-multiple' },
+      { type: 'switch', label: 'Float label', id: 'opt-float' },
+      { type: 'switch', label: 'Required', id: 'opt-required' },
+      { type: 'switch', label: 'Invalid', id: 'opt-invalid' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Rounded', id: 'opt-rounded' },
+      { type: 'switch', label: 'Use option builder', id: 'opt-option-builder' },
+      { type: 'switch', label: 'Use selected text builder', id: 'opt-selected-text-builder' }
+    ]
+  }
+})
+%>

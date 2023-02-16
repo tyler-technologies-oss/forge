@@ -94,26 +94,26 @@ export class ButtonToggleGroupComponent extends BaseComponent implements IButton
   }
 
   @FoundationProperty()
-  public value: any;
+  public declare value: any;
 
   @FoundationProperty()
-  public multiple: boolean;
+  public declare multiple: boolean;
 
   @FoundationProperty()
-  public mandatory: boolean;
+  public declare mandatory: boolean;
 
   @FoundationProperty()
-  public vertical: boolean;
+  public declare vertical: boolean;
 
   @FoundationProperty()
-  public stretch: boolean;
+  public declare stretch: boolean;
 
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
 
   @FoundationProperty()
-  public options: IButtonToggleOption[];
+  public declare options: IButtonToggleOption[];
 }

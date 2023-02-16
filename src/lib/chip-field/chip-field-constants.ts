@@ -37,7 +37,7 @@ export const CHIP_FIELD_CONSTANTS = {
 };
 
 export {
-  FieldDensityType as ChipFieldDensityType,
-  FieldFloatLabelType as ChipFieldFloatLabelType,
-  FieldShapeType as ChipFieldShapeType
+  type FieldDensityType as ChipFieldDensityType,
+  type FieldFloatLabelType as ChipFieldFloatLabelType,
+  type FieldShapeType as ChipFieldShapeType
 } from '../field/field-constants';

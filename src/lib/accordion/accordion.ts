@@ -59,5 +59,5 @@ export class AccordionComponent extends BaseComponent implements IAccordionCompo
 
   /** Gets/sets the selector to use for finding the child expansion panels. Defaults to searching the direct children for `<forge-expansion-panel>` elements. */
   @FoundationProperty()
-  public panelSelector: string;
+  public declare panelSelector: string;
 }

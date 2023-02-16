@@ -1,0 +1,31 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Toast',
+    includePath: './pages/toast/toast.ejs',
+    options: [
+      { type: 'text-field', id: 'opt-toast-message', label: 'Message', defaultValue: 'Save successful' },
+      { type: 'text-field', id: 'opt-toast-action-text', label: 'Action text', defaultValue: 'Undo' },
+      { type: 'text-field', inputType: 'number', id: 'opt-toast-duration', label: 'Duration', defaultValue: 2750 },
+      { type: 'text-field', inputType: 'number', id: 'opt-toast-horiz-margin', label: 'Horizontal margin (px)' },
+      { type: 'text-field', inputType: 'number', id: 'opt-toast-vert-margin', label: 'Vertical margin (px)' },
+      {
+        type: 'select',
+        id: 'opt-toast-placement',
+        label: 'Placement',
+        defaultValue: 'bottom',
+        options: [
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Bottom start', value: 'bottom-start' },
+          { label: 'Bottom end', value: 'bottom-end' },
+          { label: 'Top', value: 'top' },
+          { label: 'Top start', value: 'top-start' },
+          { label: 'Top end', value: 'top-end' },
+        ]
+      },
+      { type: 'switch', id: 'opt-toast-close', label: 'Show close button' },
+      { type: 'switch', id: 'opt-toast-builder', label: 'Use builder' }
+    ]
+  }
+})
+%>

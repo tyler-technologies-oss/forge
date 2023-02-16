@@ -19,7 +19,7 @@ export class OverlayFoundation implements IOverlayFoundation {
   private _open = false;
   private _targetElement: HTMLElement;
   private _placement: OverlayPlacement = 'bottom-start';
-  private _positionStrategy: OverlayPositionStrategy = 'fixed';
+  private _positionStrategy: OverlayPositionStrategy = 'absolute';
   private _offset: IOverlayPosition = { x: 0, y: 0 };
   private _hideWhenClipped = true;
 
@@ -47,7 +47,8 @@ export class OverlayFoundation implements IOverlayFoundation {
 
   private _applyOpen(): void {
     this._adapter.setOpen(this._open);
-    if (this._targetElement) {
+
+    if (this._open && this._targetElement) {
       this._adapter.positionElement(this._targetElement, this._positionStrategy, this._placement, this._hideWhenClipped, this._offset);
     }
   }
@@ -56,10 +57,10 @@ export class OverlayFoundation implements IOverlayFoundation {
     return this._open;
   }
   public set open(value: boolean) {
-    if (this._open !== value) {
+    if (this._open !== !!value) {
       this._open = !!value;
       this._applyOpen();
-      this._adapter.setHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, `${this._open}`);
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._open);
     }
   }
 
@@ -101,9 +102,9 @@ export class OverlayFoundation implements IOverlayFoundation {
     return this._hideWhenClipped;
   }
   public set hideWhenClipped(value: boolean) {
-    if (this._hideWhenClipped !== value) {
-      this._hideWhenClipped = value;
-      this._adapter.setHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED, `${this._hideWhenClipped}`);
+    if (this._hideWhenClipped !== !!value) {
+      this._hideWhenClipped = !!value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED, this._hideWhenClipped);
     }
   }
 }

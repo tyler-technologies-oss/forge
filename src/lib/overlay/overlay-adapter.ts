@@ -1,6 +1,6 @@
 import { autoUpdate } from '@floating-ui/dom';
 import { getShadowElement, positionElementAsync } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../core';
+import { BaseAdapter, IBaseAdapter, supportsPopover } from '../core';
 import { IOverlayComponent } from './overlay';
 import { IOverlayPosition, OverlayPlacement, OverlayPositionStrategy } from './overlay-constants';
 
@@ -20,10 +20,37 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   }
 
   public setOpen(value: boolean): void {
+    // TODO: refactor this to properly handle transitions after PoC
     if (value) {
-      this._rootElement.classList.add('forge-overlay--entered');
+      if (supportsPopover()) {
+        this._rootElement.setAttribute('popover', 'manual');
+        (this._rootElement as any).showPopover();
+      }
+
+      // this._rootElement.classList.remove('forge-overlay--entered');
+      // this._rootElement.classList.remove('forge-overlay--exiting');
+      // this._rootElement.classList.add('forge-overlay--entering');
+
+      // setTimeout(() => {
+      //   this._rootElement.classList.remove('forge-overlay--entering');
+      //   this._rootElement.classList.add('forge-overlay--entered');
+      // }, 120);
     } else {
-      this._rootElement.classList.remove('forge-overlay--entered');
+      // this._rootElement.classList.remove('forge-overlay--entering');
+      // this._rootElement.classList.remove('forge-overlay--entered');
+      // this._rootElement.classList.add('forge-overlay--exiting');
+
+      // setTimeout(() => {
+      //   this._rootElement.classList.remove('forge-overlay--exiting');
+
+      if (supportsPopover()) {
+        (this._rootElement as any).hidePopover();
+        this._rootElement.removeAttribute('popover');
+        this._rootElement.style.removeProperty('top');
+        this._rootElement.style.removeProperty('left');
+        this._rootElement.style.removeProperty('visibility');
+      }
+      // }, 120);
     }
   }
 
@@ -31,21 +58,24 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     this.tryCleanupAutoUpdate();
 
     positionElementAsync({
-      element: this._component,
+      element: this._rootElement,
       targetElement,
+      strategy,
       placement,
       hide,
-      offset
+      offset,
+      transform: false
     });
 
-    this._autoUpdateCleanup = autoUpdate(targetElement, this._component, () => {
+    this._autoUpdateCleanup = autoUpdate(targetElement, this._rootElement, () => {
       positionElementAsync({
-        element: this._component,
+        element: this._rootElement,
         targetElement,
         strategy,
         placement,
         hide,
-        offset
+        offset,
+        transform: false
       });
     });
   }

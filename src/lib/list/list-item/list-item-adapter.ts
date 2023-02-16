@@ -1,5 +1,6 @@
 import { addClass, getShadowElement, removeClass, requireParent, isDeepEqual, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
+import { userInteractionListener } from '../../core/utils';
 import { IListComponent } from '../list/list';
 import { LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
@@ -26,7 +27,8 @@ export interface IListItemAdapter extends IBaseAdapter {
   setDense(dense: boolean): void;
   setIndented(indented: boolean): void;
   setWrap(value: boolean): void;
-  trySelect(value: unknown): void;
+  trySelect(value: unknown): boolean | null;
+  userInteractionListener(): ReturnType<typeof userInteractionListener>;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
@@ -203,15 +205,26 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     toggleClass(this._listItemElement, value, LIST_ITEM_CONSTANTS.classes.WRAP);
   }
 
-  public trySelect(value: unknown): void {
+  /**
+   * Attempts to set the selected state of the list item element and it's visual indicators
+   * @param value The value to compare to the parent list element's selected value
+   * @returns Returns whether the list item is selected or not
+   */
+  public trySelect(value: unknown): boolean | null {
     const list = requireParent<IListComponent>(this._component, LIST_CONSTANTS.elementName);
     if (!list || list.selectedValue === undefined) {
-      return;
+      return null;
     }
 
     const listValues = list.selectedValue instanceof Array ? list.selectedValue : [list.selectedValue];
-    if (listValues.some(v => isDeepEqual(v, value))) {
-      this.setSelected(true);
-    }
+    const isSelected = listValues.some(v => isDeepEqual(v, value));
+
+    this.setSelected(isSelected);
+    this.tryToggleCheckboxRadio(isSelected);
+    return isSelected;
+  }
+
+  public userInteractionListener(): ReturnType<typeof userInteractionListener> {
+    return userInteractionListener(this._listItemElement);
   }
 }

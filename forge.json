@@ -4,7 +4,7 @@
   "packageName": "forge",
   "registry": "https://registry.npmjs.org/",
   "license": {
-    "header": "/**\n * @license\n * Copyright 2022 Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
+    "header": "/**\n * @license\n * Copyright 2023 Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
   },
   "karma": {
     "stylesheets": [
@@ -18,11 +18,6 @@
     ]
   },
   "build": {
-    "webpack": {
-      "devtool": {
-        "development": "source-map"
-      }
-    },
     "static": {
       "distPath": "cdn/v1/libs/"
     }

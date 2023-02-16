@@ -1,0 +1,37 @@
+$card-width: 960px;
+
+.content {
+  .card {
+    margin: 24px;
+    max-width: $card-width;
+    --forge-card-padding: 0;
+
+    forge-card {
+      --forge-card-padding: 16px; // Reset padding to default for all children
+    }
+
+    &--centered {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .container {
+    padding: 16px;
+  }
+}
+
+@media (max-width: $card-width) {
+  .content {
+    .card {
+      margin: 0;
+
+      &::part(root) {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+      }
+    }
+  }
+}

@@ -106,29 +106,29 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
   }
 
   @FoundationProperty()
-  public fullName: string;
+  public declare fullName: string;
 
   @FoundationProperty()
-  public email: string;
+  public declare email: string;
 
   @FoundationProperty()
-  public signOut: boolean;
+  public declare signOut: boolean;
 
   @FoundationProperty()
-  public profile: boolean;
+  public declare profile: boolean;
 
   @FoundationProperty()
-  public signOutText: string;
+  public declare signOutText: string;
 
   @FoundationProperty()
-  public profileText: string;
+  public declare profileText: string;
 
   @FoundationProperty()
-  public avatarText: string;
+  public declare avatarText: string;
 
   @FoundationProperty()
-  public avatarImageUrl: string;
+  public declare avatarImageUrl: string;
 
   @FoundationProperty()
-  public avatarLetterCount: number;
+  public declare avatarLetterCount: number;
 }

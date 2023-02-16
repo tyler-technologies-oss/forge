@@ -1,0 +1,13 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Overlay',
+    includePath: './pages/overlay/overlay.ejs',
+    options: [
+      { type: 'switch', label: 'Use small container', id: 'opt-use-small-container' },
+      { type: 'switch', label: 'Force clipping', id: 'opt-force-clipping' },
+      { type: 'switch', label: 'Use offset', id: 'opt-use-offset' },
+    ]
+  }
+})
+%>

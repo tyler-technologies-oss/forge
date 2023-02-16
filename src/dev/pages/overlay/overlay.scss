@@ -1,0 +1,32 @@
+:root {
+  --forge-overlay-background: var(--forge-theme-elevated-surface);
+  --forge-overlay-box-shadow: var(--forge-theme-popup-elevation);
+  --forge-overlay-width: 300px;
+}
+
+.overlay-content {
+  padding: 16px;
+}
+
+.clipping-container {
+  height: 500px;
+  border: 1px solid var(--forge-theme-border-color);
+  overflow: auto;
+
+  &.force-clipping {
+    transform: translate3d(0,0,0);
+    border-color: var(--mdc-theme-error);
+  }
+
+  &.use-small-container {
+    height: 150px;
+  }
+}
+
+.scroll-container {
+  height: 250%;
+  width: 250%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

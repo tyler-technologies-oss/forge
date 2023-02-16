@@ -1,3 +1,91 @@
+# v2.13.1 (Fri Feb 10 2023)
+
+#### 🐛 Bug Fix
+
+- perf(list-item): delay ripple creation [#231](https://github.com/tyler-technologies-oss/forge/pull/231) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
+# v2.13.0 (Wed Feb 08 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Alan Collins ([@Alanoll](https://github.com/Alanoll)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat(list): added a badge demo to the list [#224](https://github.com/tyler-technologies-oss/forge/pull/224) ([@nickonometry](https://github.com/nickonometry))
+
+#### 🐛 Bug Fix
+
+- fix(list-item): fixed a bug where the UI could incorrectly reflect the component state [#225](https://github.com/tyler-technologies-oss/forge/pull/225) ([@Alanoll](https://github.com/Alanoll) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(date-range-picker): fixed a bug that allowed invalid date ranges [#226](https://github.com/tyler-technologies-oss/forge/pull/226) ([@Lillious](https://github.com/Lillious))
+
+#### Authors: 4
+
+- Alan Collins ([@Alanoll](https://github.com/Alanoll))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Logan Brown ([@Lillious](https://github.com/Lillious))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
+# v2.12.4 (Sat Feb 04 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Logan Brown ([@Lillious](https://github.com/Lillious)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(date-range-picker): fixed a bug that caused the end date to reset upon pressing t with the calendar open and end date selected ([@Lillious](https://github.com/Lillious))
+- fix(field): fixed a bug where height of helper-text element was incorrect [#222](https://github.com/tyler-technologies-oss/forge/pull/222) ([@Lillious](https://github.com/Lillious) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/tyler-technologies-oss/forge ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Logan Brown ([@Lillious](https://github.com/Lillious))
+
+---
+
+# v2.12.3 (Fri Feb 03 2023)
+
+#### 🐛 Bug Fix
+
+- fix(split-view): added an overlay while dragging to maintain listeners and cursor styles [#220](https://github.com/tyler-technologies-oss/forge/pull/220) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(switch): fixed a bug where the UI could incorrectly reflect the component state [#215](https://github.com/tyler-technologies-oss/forge/pull/215) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### ⚠️ Pushed to `main`
+
+- chore(auto-pr-check): use `pull_request_target` ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.12.2 (Wed Jan 11 2023)
+
+#### 🐛 Bug Fix
+
+- fix(select): fixed a bug where the UI was not reflecting the selected value if the option values are changed after the component value is set [#212](https://github.com/tyler-technologies-oss/forge/pull/212) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.12.1 (Wed Jan 04 2023)
 
 #### 🐛 Bug Fix

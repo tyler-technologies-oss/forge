@@ -70,17 +70,17 @@ export class LabelValueComponent extends BaseComponent implements ILabelValueCom
 
   /** Gets/sets the empty state. */
   @FoundationProperty()
-  public empty: boolean;
+  public declare empty: boolean;
 
   /** Gets/sets the wrap-content attribute. */
   @FoundationProperty()
-  public ellipsis: boolean;
+  public declare ellipsis: boolean;
 
   /** Controls the density type. */
   @FoundationProperty()
-  public density: FieldDensityType;
+  public declare density: FieldDensityType;
 
   /** Gets/sets the alignment. */
   @FoundationProperty()
-  public align: LabelValueAlignment;
+  public declare align: LabelValueAlignment;
 }

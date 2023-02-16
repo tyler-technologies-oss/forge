@@ -113,13 +113,24 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
       return;
     }
 
-    this._mdcSwitch.ripple.layout();
-    const isCancelled = !emitEvent(this, SWITCH_CONSTANTS.events.SELECT, !this._selected, true, true);
+    // Prevents MDCSwitch from receiving the click event in the targeting phase.
+    // We will handle updating the selected state of MDCSwitch based on the result of our own event.
+    evt.stopImmediatePropagation();
 
-    if (isCancelled) {
-      evt.stopImmediatePropagation(); // Prevents MDCSwitch from receiving the click event in the targeting phase
-    } else {
-      this._selected = !this._selected;
+    this._mdcSwitch.ripple.layout();
+
+    const newValue = !this._selected;
+    const isCancelled = !emitEvent(this, SWITCH_CONSTANTS.events.SELECT, newValue, true, true);
+    
+    if (!isCancelled) {
+      this._applySelected(newValue);
+    }
+  }
+
+  private _applySelected(value: boolean): void {
+    this._selected = value;
+    if (this._mdcSwitch) {
+      this._mdcSwitch.selected = this._selected;
     }
   }
 
@@ -169,10 +180,7 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
   }
   public set selected(value: boolean) {
     if (this._selected !== value) {
-      this._selected = value;
-      if (this._mdcSwitch) {
-        this._mdcSwitch.selected = this._selected;
-      }
+      this._applySelected(value);
       toggleAttribute(this, this._selected, SWITCH_CONSTANTS.attributes.SELECTED);
     }
   }

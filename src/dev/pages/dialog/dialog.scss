@@ -1,0 +1,29 @@
+.dialog:not([fullscreen]) {
+  .dialog-container {
+    width: 500px;
+  }
+}
+
+.dialog[fullscreen] {
+  .dialog-container {
+    height: 100%;
+  }
+
+  .dialog-body {
+    max-height: 100%;
+  }
+}
+
+.header-toolbar forge-icon-button:last-child {
+  margin-right: -8px;
+}
+
+.dialog-body {
+  padding: 0px 24px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.footer-toolbar forge-button:first-child {
+  margin-right: 8px
+}

@@ -1186,7 +1186,7 @@ export class TableUtils {
       TableUtils._addResizeHandles(thead, configuration);
     } else {
       configuration.tableElement.classList.remove(TABLE_CONSTANTS.classes.TABLE_RESIZABLE);
-      TableUtils._removeResizeHandles(thead);
+      TableUtils._removeResizeHandles(thead, configuration);
     }
   }
 
@@ -1216,13 +1216,17 @@ export class TableUtils {
     }
   }
 
-  private static _removeResizeHandles(thead: HTMLTableSectionElement | null): void {
+  private static _removeResizeHandles(thead: HTMLTableSectionElement | null, configuration: ITableConfiguration): void {
     if (!thead) {
       return;
     }
     const firstRow = thead.rows.item(0);
     if (firstRow) {
-      const cells = Array.from(firstRow.cells);
+      let cells = Array.from(firstRow.cells);
+      // If the select column is on, we need to skip the first cell
+      if (configuration.selectListener) {
+        cells = cells.slice(1);
+      }
       for (const cell of cells) {
         const resizeHandle = document.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_RESIZE_HANDLE}`);
         if (resizeHandle) {

@@ -76,13 +76,13 @@ export class TabComponent extends BaseComponent implements ITabComponent {
   }
 
   @FoundationProperty()
-  public disabled: boolean;
+  public declare disabled: boolean;
   
   @FoundationProperty()
-  public active: boolean;
+  public declare active: boolean;
   
   @FoundationProperty()
-  public stretch: boolean;
+  public declare stretch: boolean;
 
   public activate(previousIndicatorClientRect?: DOMRect): void {
     this._foundation.activate(previousIndicatorClientRect);

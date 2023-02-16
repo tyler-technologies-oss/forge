@@ -1,0 +1,27 @@
+<div class="vert">
+  <forge-date-range-picker id="demo-date-range-picker">
+    <forge-text-field>
+      <input type="text" id="input-date-range-picker-01" autocomplete="off" placeholder="mm/dd/yyyy">
+      <input type="text" id="input-date-range-picker-02" autocomplete="off" placeholder="mm/dd/yyyy">
+      <label for="input-date-range-picker-01">Date</label>
+      <span slot="helper-text">Enter a date range</span>
+    </forge-text-field>
+  </forge-date-range-picker>
+
+  <forge-label-value>
+    <span slot="label">Model value</span>
+    <span slot="value" id="date-range-picker-change-status"></span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">From input value</span>
+    <span slot="value" id="date-range-picker-from-input-value">&quot;&quot;</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">To input value</span>
+    <span slot="value" id="date-range-picker-to-input-value">&quot;&quot;</span>
+  </forge-label-value>
+</div>
+
+<script type="module" src="date-range-picker.ts"></script>

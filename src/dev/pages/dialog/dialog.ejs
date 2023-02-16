@@ -1,0 +1,19 @@
+<div class="flex">
+  <forge-button type="raised">
+    <button id="show-inline-dialog-button">Show inline dialog</button>
+  </forge-button>
+
+  <forge-button type="raised">
+    <button id="show-dynamic-dialog-button">Show dynamic dialog</button>
+  </forge-button>
+</div>
+
+<forge-dialog id="inline-dialog" class="dialog">
+  <%- include('./dialog-template-basic.ejs') %>
+</forge-dialog>
+
+<template id="forge-dialog-template">
+  <%- include('./dialog-template-basic.ejs') %>
+</template>
+
+<script type="module" src="dialog.ts"></script>

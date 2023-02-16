@@ -76,21 +76,21 @@ export class ListComponent extends BaseComponent implements IListComponent {
 
   /** Gets/sets whether the list has all static items or not. */
   @FoundationProperty()
-  public static: boolean;
+  public declare static: boolean;
 
   /** Gets/sets whether the list has all dense items or not. */
   @FoundationProperty()
-  public dense: boolean;
+  public declare dense: boolean;
 
   /** Gets/sets whether the list items allow mousedown events through to their underlying list item elements. Default is true. */
   @FoundationProperty()
-  public propagateClick: boolean;
+  public declare propagateClick: boolean;
 
   /** Gets/sets whether the list items within this list are indented. Default is false. */
   @FoundationProperty()
-  public indented: boolean;
+  public declare indented: boolean;
 
   /** Gets/sets the selected list item value(s) */
   @FoundationProperty()
-  public selectedValue: any;
+  public declare selectedValue: any;
 }
