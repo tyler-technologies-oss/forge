@@ -10,3 +10,7 @@
 .mdc-ripple-surface::before {
   --mdc-ripple-color: var(--mdc-theme-on-surface);
 }
+
+forge-ripple {
+  display: none;
+}

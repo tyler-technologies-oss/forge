@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright (c) 2022 Tyler Technologies, Inc.
+ * Copyright (c) 2023 Tyler Technologies, Inc.
  * License: Apache-2.0
  */
 
@@ -16,6 +16,7 @@ import { BannerComponent } from './banner';
 import { BottomSheetComponent } from './bottom-sheet';
 import { BusyIndicatorComponent } from './busy-indicator';
 import { ButtonComponent } from './button';
+import { NextButtonComponent } from './next/next-button';
 import { ButtonToggleComponent, ButtonToggleGroupComponent } from './button-toggle';
 import { CalendarComponent } from './calendar';
 import { CardComponent } from './card';
@@ -85,6 +86,7 @@ export * from './banner';
 export * from './bottom-sheet';
 export * from './busy-indicator';
 export * from './button';
+export * from './next/next-button';
 export * from './button-toggle';
 export * from './calendar';
 export * from './card';
@@ -215,9 +217,13 @@ const CUSTOM_ELEMENTS = [
   AutocompleteComponent
 ];
 
+const NEXT_CUSTOM_ELEMENTS = [
+  NextButtonComponent
+];
+
 /**
  * Registers all components in the library with the browser.
  */
 export function defineComponents(): void {
-  defineCustomElements(CUSTOM_ELEMENTS);
+  defineCustomElements([...CUSTOM_ELEMENTS, ...NEXT_CUSTOM_ELEMENTS]);
 }

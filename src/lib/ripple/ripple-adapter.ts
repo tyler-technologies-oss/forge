@@ -9,6 +9,7 @@ export interface IRippleAdapter {
   destroy(): void;
   activate(): void;
   deactivate(): void;
+  getRippleInstance(): ForgeRipple | undefined;
 }
 
 export class RippleAdapter implements IRippleAdapter {
@@ -56,5 +57,9 @@ export class RippleAdapter implements IRippleAdapter {
 
   public deactivate(): void {
     this._ripple?.deactivate();
+  }
+
+  public getRippleInstance(): ForgeRipple | undefined {
+    return this._ripple;
   }
 }

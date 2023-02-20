@@ -1,5 +1,6 @@
 import { coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { ForgeRipple } from './forge-ripple';
 import { RippleAdapter } from './ripple-adapter';
 import { RIPPLE_CONSTANTS } from './ripple-constants';
 import { RippleFoundation } from './ripple-foundation';
@@ -7,6 +8,7 @@ import { RippleFoundation } from './ripple-foundation';
 export interface IRippleComponent extends IBaseComponent {
   target: string;
   unbounded: boolean;
+  getRippleInstance(): ForgeRipple | undefined;
   layout(): void;
   activate(): void;
   deactivate(): void;
@@ -70,6 +72,10 @@ export class RippleComponent extends BaseComponent implements IRippleComponent {
 
   public deactivate(): void {
     return this._foundation.deactivate();
+  }
+
+  public getRippleInstance(): ForgeRipple | undefined {
+    return this._foundation.getRippleInstance();
   }
 
   @FoundationProperty()

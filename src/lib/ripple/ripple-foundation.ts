@@ -1,4 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { ForgeRipple } from './forge-ripple';
 import { IRippleAdapter } from './ripple-adapter';
 
 export interface IRippleFoundation extends ICustomElementFoundation {
@@ -21,6 +22,10 @@ export class RippleFoundation implements IRippleFoundation {
 
   public disconnect(): void {
     this._adapter.destroy();
+  }
+
+  public getRippleInstance(): ForgeRipple | undefined {
+    return this._adapter.getRippleInstance();
   }
 
   public layout(): void {

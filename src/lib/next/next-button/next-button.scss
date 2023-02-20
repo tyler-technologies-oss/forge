@@ -1,0 +1,39 @@
+@use './button';
+@use '../../ripple/forge-ripple';
+
+:host {
+  @include button.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@include button.styles;
+
+::slotted([slot=start]),
+::slotted([slot=end]) {
+  display: inline-block;
+  font-size: 1.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.forge-button {
+  &.mdc-ripple-surface {
+    &::before,
+    &::after {
+      --mdc-ripple-color: var(--mdc-theme-primary);
+    }
+  }
+}
+
+.forge-button--raised,
+.forge-button--unelevated {
+  &.mdc-ripple-surface {
+    &::before,
+    &::after {
+      --mdc-ripple-color: var(--mdc-theme-on-primary);
+    }
+  }
+}
