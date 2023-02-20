@@ -209,10 +209,11 @@ export class TimePickerFoundation implements ITimePickerFoundation {
         }
         break;
       case 'Enter':
+      case 'NumpadEnter':
       case 'Home':
       case 'End':
         if (this._open) {
-          if (evt.code === 'Enter') {
+          if (evt.code === 'Enter' || evt.code === 'NumpadEnter') {
             evt.stopPropagation();
           }
           evt.preventDefault();
