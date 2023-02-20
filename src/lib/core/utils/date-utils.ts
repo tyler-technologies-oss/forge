@@ -49,7 +49,7 @@ export function parseDateString(value: string): Date | null {
 
   // Trap for the case where only 3 digit years are entered
   if (typeof year === 'string' && year.length === 3) {
-    year = year.padEnd(4, '0');
+    year = year.padStart(4, '0');
   }
   
   if (hasMonthDayYear) {
