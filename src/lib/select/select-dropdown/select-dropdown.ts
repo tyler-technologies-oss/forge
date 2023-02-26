@@ -68,6 +68,8 @@ export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownF
     ];
   }
 
+  protected _foundation: SelectDropdownFoundation;
+
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);

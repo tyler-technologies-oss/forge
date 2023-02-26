@@ -267,6 +267,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
         }
 
         this._applySelection();
+        this._adapter.syncFormValue(JSON.stringify(this.value));
       };
 
       const data = this.multiple ? [...this._selectedValues] : this._selectedValues[0];

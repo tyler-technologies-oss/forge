@@ -24,6 +24,7 @@
   { "label": "Expansion panel", "path": "/pages/expansion-panel/expansion-panel.html" },
   { "label": "File picker", "path": "/pages/file-picker/file-picker.html", "tags": ["form"] },
   { "label": "Floating action button", "path": "/pages/fab/fab.html" },
+  { "label": "Form compatibility", "path": "/pages/form-compat/form-compat.html" },
   { "label": "Icon", "path": "/pages/icon/icon.html" },
   { "label": "Icon button", "path": "/pages/icon-button/icon-button.html" },
   { "label": "Inline message", "path": "/pages/inline-message/inline-message.html" },

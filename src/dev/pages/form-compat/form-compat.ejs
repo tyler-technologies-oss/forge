@@ -1,0 +1,29 @@
+<form id="demo-form" class="vert">
+  <fieldset>
+    <legend class="forge-typography--caption">Legend</legend>
+
+    <div class="vert">
+      <forge-text-field>
+        <label for="text-field-input">Text field</label>
+        <input type="text" id="name" name="text-field-input" value="initial" />
+      </forge-text-field>
+
+      <forge-select label="Select" name="select" value="2">
+        <forge-option value="1">One</forge-option>
+        <forge-option value="2">Two</forge-option>
+        <forge-option value="3">Three</forge-option>
+      </forge-select>
+    </div>
+  </fieldset>
+
+  <div class="footer">
+    <forge-button slot="end">
+      <button type="reset">Reset</button>
+    </forge-button>
+    <forge-button slot="end" type="raised">
+      <button type="submit">Submit</button>
+    </forge-button>
+  </div>
+</form>
+
+<script type="module" src="form-compat.ts"></script>

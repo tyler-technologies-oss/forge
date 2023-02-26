@@ -82,6 +82,8 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
     ];
   }
 
+  protected _foundation: SelectFoundation;
+
   constructor() {
     super();
     IconRegistry.define([tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
@@ -117,6 +119,10 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
         return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
+  }
+
+  public formDisabledCallback(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
   /** Gets/sets the label text. */

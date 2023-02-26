@@ -35,6 +35,7 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   setMultiple(multiple: boolean): void;
   isFocusWithinPopup(target: HTMLElement): boolean;
   queueDropdownPositionUpdate(): void;
+  syncFormValue(value: string): void;
   popupElement: HTMLElement | undefined;
 }
 
@@ -211,6 +212,10 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
       const dropdownEl = this.popupElement as IPopupComponent | undefined;
       dropdownEl?.position();
     });
+  }
+
+  public syncFormValue(value: string): void {
+    this._component._internals.setFormValue(value);
   }
 
   private _clearOptions(): void {

@@ -2,8 +2,9 @@ import { FieldDensityType, FieldFloatLabelType, FieldShapeType, FIELD_CONSTANTS 
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FieldFoundation } from './field-foundation';
 import { coerceBoolean, ensureChild, FoundationProperty } from '@tylertech/forge-core';
+import { IFormAssociated } from '../core/form/form-associated';
 
-export interface IFieldComponent extends IBaseComponent {
+export interface IFieldComponent extends IBaseComponent, IFormAssociated {
   density: FieldDensityType;
   floatLabelType: FieldFloatLabelType;
   shape: FieldShapeType;
@@ -12,7 +13,8 @@ export interface IFieldComponent extends IBaseComponent {
   floatLabel(value: boolean): void;
 }
 
-export abstract class FieldComponent<T extends FieldFoundation> extends BaseComponent implements IFieldComponent {
+export abstract class FieldComponent<T extends FieldFoundation> extends BaseComponent implements IFieldComponent, IFormAssociated {
+  public static formAssociated = true;
   public static get observedAttributes(): string[] {
     return [
       FIELD_CONSTANTS.attributes.DENSITY,
@@ -24,21 +26,19 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
   }
 
   protected _foundation: T;
+  public readonly _internals: ElementInternals;
 
   constructor() {
     super();
+    this._internals = this.attachInternals();
   }
 
   public connectedCallback(): void {
     if (this.querySelector(FIELD_CONSTANTS.selectors.INPUT)) {
-      this._initialize();
+      this._foundation.initialize();
     } else {
-      ensureChild(this, FIELD_CONSTANTS.selectors.INPUT).then(() => this._initialize());
+      ensureChild(this, FIELD_CONSTANTS.selectors.INPUT).then(() => this._foundation.initialize());
     }
-  }
-
-  private _initialize(): void {
-    this._foundation.initialize();
   }
 
   public disconnectedCallback(): void {
@@ -63,6 +63,41 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
         this.required = coerceBoolean(newValue);
         break;
     }
+  }
+
+  public formDisabledCallback(isDisabled: boolean): void {
+    const input = this.querySelector(FIELD_CONSTANTS.selectors.INPUT) as HTMLInputElement;
+    if (input) {
+      input.disabled = isDisabled;
+    }
+  }
+
+  public checkValidity(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public reportValidity(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public get form(): HTMLElement | null {
+    return this._internals.form;
+  }
+
+  public get name(): string | null {
+    return this.getAttribute('name');
+  }
+
+  public get validity(): ValidityState {
+    return this._internals.validity;
+  }
+
+  public get validationMessage(): string {
+    return this._internals.validationMessage;
+  }
+
+  public get willValidate(): boolean {
+    return this._internals.willValidate;
   }
 
   /** Controls the density type. */

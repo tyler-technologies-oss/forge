@@ -1,0 +1,16 @@
+.footer {
+  display: flex;
+  justify-content: end;
+  gap: 8px;
+}
+
+forge-select,
+forge-text-field {
+  max-width: 256px;
+}
+
+fieldset {
+  border: 1px solid var(--forge-theme-border-color);
+  border-radius: 4px;
+  padding: 16px;
+}

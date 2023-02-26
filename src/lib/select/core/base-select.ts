@@ -1,16 +1,14 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 
-import {
-  SelectOptionBuilder,
-  SelectSelectedTextBuilder,
-  ISelectOption,
-  ISelectOptionGroup,
-  SelectBeforeValueChangeCallback,
-  BASE_SELECT_CONSTANTS
-} from './base-select-constants';
-import { IBaseSelectFoundation } from './base-select-foundation';
 import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
 import { IPopupComponent } from '../../popup';
+import {
+  BASE_SELECT_CONSTANTS, ISelectOption,
+  ISelectOptionGroup,
+  SelectBeforeValueChangeCallback, SelectOptionBuilder,
+  SelectSelectedTextBuilder
+} from './base-select-constants';
+import { IBaseSelectFoundation } from './base-select-foundation';
 
 
 export interface IBaseSelectComponent extends IListDropdownAware {
@@ -19,6 +17,7 @@ export interface IBaseSelectComponent extends IListDropdownAware {
   options: ISelectOption[] | ISelectOptionGroup[];
   multiple: boolean;
   open: boolean;
+  _internals: ElementInternals;
   optionBuilder: SelectOptionBuilder;
   selectedTextBuilder: SelectSelectedTextBuilder;
   popupElement: IPopupComponent | undefined;
@@ -29,10 +28,14 @@ export interface IBaseSelectComponent extends IListDropdownAware {
 }
 
 export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> extends ListDropdownAware implements IBaseSelectComponent {
-  protected _foundation: T;
+  public static formAssociated = true;
+
+  public _internals: ElementInternals;
+  protected abstract _foundation: T;
 
   constructor() {
     super();
+    this._internals = this.attachInternals();
   }
 
   /** Gets/sets the value. */
@@ -81,6 +84,29 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
         this.value = newValue;
         break;
     }
+  }
+
+  public formResetCallback(): void {
+    console.log('formResetCallback');
+    const value = this.getAttribute(BASE_SELECT_CONSTANTS.attributes.VALUE);
+    if (value) {
+      this.value = value;
+    }
+  }
+
+  public formStateRestoreCallback(state: string, reason: 'restore' | 'autocomplete'): void {
+    console.log('formStateRestoreCallback', state, reason);
+    if (state && reason === 'restore') {
+      try {
+        this.value = JSON.parse(state);
+      } catch (e) {
+        console.warn('[BaseSelect] Unable to restore state.', e);
+      }
+    }
+  }
+
+  public formAssociatedCallback(form: HTMLFormElement): void {
+    console.log('formAssociatedCallback', form);
   }
 
   public appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void {
