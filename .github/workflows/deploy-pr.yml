@@ -1,0 +1,37 @@
+name: Deploy Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+jobs:
+  wf-config:
+    name: Workflow Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check File Changes
+        uses: dorny/paths-filter@v2
+        id: file-filter
+        with:
+          filters: |
+            storybook:
+              - 'src/lib/**'
+              - 'src/stories/**'
+    outputs:
+      deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
+
+  deploy-storybook:
+    name: Storybook
+    needs: wf-config
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.8.1
+    if: ${{ github.event.pull_request.head.repo.fork == false && needs.wf-config.outputs.deploy-storybook == 'true' && contains(github.event.pull_request.labels.*.name, 'storybook-preview') }}
+    with:
+      PRODUCTION_RELEASE: false
+      BUILD_DIRECTORY: dist/storybook
+      BUILD_TARGET_DIRECTORY: docs/pr/${{ github.event.pull_request.head.label }}
+      BUILD_NPM_SCRIPT: "ci:build-storybook"
+      PR_COMMENT_HEADER: "View Storybook Deployment"
+      PR_PATH: pr/${{ github.event.pull_request.head.label }}
+    secrets:
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
