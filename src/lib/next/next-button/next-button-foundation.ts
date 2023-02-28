@@ -1,43 +1,24 @@
-import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { INextBaseButtonFoundation, NextBaseButtonFoundation } from '../core/button/base-button-foundation';
 import { INextButtonAdapter } from './next-button-adapter';
-import { NextButtonType, NextButtonVariant, NEXT_BUTTON_CONSTANTS } from './next-button-constants';
+import { NextButtonVariant, NEXT_BUTTON_CONSTANTS } from './next-button-constants';
 
-export interface INextButtonFoundation extends ICustomElementFoundation {
-  type: NextButtonType;
+export interface INextButtonFoundation extends INextBaseButtonFoundation {
   variant: NextButtonVariant;
   dense: boolean;
-  disabled: boolean;
-  initialize(): void;
-  destroy(): void;
 }
 
-export class NextButtonFoundation implements INextButtonFoundation {
-  private _type: NextButtonType = 'button';
+export class NextButtonFoundation extends NextBaseButtonFoundation<INextButtonAdapter> implements INextButtonFoundation {
   private _variant: NextButtonVariant = 'text';
   private _dense = false;
-  private _disabled = false;
 
-  constructor(private _adapter: INextButtonAdapter) {
-
+  constructor(adapter: INextButtonAdapter) {
+    super(adapter);
   }
 
-  public initialize(): void {
-    this._adapter.deferRippleInitialization();
-  }
-
-  public destroy(): void {
-
-  }
-
-  public get type(): NextButtonType {
-    return this._type;
-  }
-  public set type(value: NextButtonType) {
-    if (this._type !== value) {
-      this._type = value;
-      this._adapter.setButtonType(this._type);
-      this._adapter.setHostAttribute(NEXT_BUTTON_CONSTANTS.attributes.TYPE, this._type);
-    }
+  protected override _syncState(): void {
+    super._syncState();
+    this._adapter.setVariant(this._variant);
+    this._adapter.setDense(this._dense);
   }
 
   public get variant(): NextButtonVariant {
@@ -59,17 +40,6 @@ export class NextButtonFoundation implements INextButtonFoundation {
       this._dense = !!value;
       this._adapter.setDense(this._dense);
       this._adapter.toggleHostAttribute(NEXT_BUTTON_CONSTANTS.attributes.DENSE, this._dense);
-    }
-  }
-
-  public get disabled(): boolean {
-    return this._disabled;
-  }
-  public set disabled(value: boolean) {
-    if (this._disabled !== !!value) {
-      this._disabled = !!value;
-      this._adapter.setDisabled(this._disabled);
-      this._adapter.toggleHostAttribute(NEXT_BUTTON_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }
 }

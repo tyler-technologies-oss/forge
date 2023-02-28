@@ -16,7 +16,7 @@ import { BannerComponent } from './banner';
 import { BottomSheetComponent } from './bottom-sheet';
 import { BusyIndicatorComponent } from './busy-indicator';
 import { ButtonComponent } from './button';
-import { NextButtonComponent } from './next/next-button';
+import { NextButtonElement } from './next/next-button';
 import { ButtonToggleComponent, ButtonToggleGroupComponent } from './button-toggle';
 import { CalendarComponent } from './calendar';
 import { CardComponent } from './card';
@@ -218,7 +218,7 @@ const CUSTOM_ELEMENTS = [
 ];
 
 const NEXT_CUSTOM_ELEMENTS = [
-  NextButtonComponent
+  NextButtonElement
 ];
 
 /**

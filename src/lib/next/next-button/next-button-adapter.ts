@@ -1,46 +1,14 @@
-import { getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
-import type { IRippleComponent } from '@tylertech/forge/ripple';
-import { BaseAdapter, IBaseAdapter, userInteractionListener } from '../../core';
+import { removeClass, toggleClass } from '@tylertech/forge-core';
+import { INextBaseButtonAdapter, NextBaseButtonAdapter } from '../core/button/base-button-adapter';
 import { INextButtonComponent } from './next-button-component';
-import { NextButtonType, NextButtonVariant, NEXT_BUTTON_CONSTANTS } from './next-button-constants';
+import { NextButtonVariant, NEXT_BUTTON_CONSTANTS } from './next-button-constants';
 
-export interface INextButtonAdapter extends IBaseAdapter {
-  deferRippleInitialization():  Promise<void>;
-  setButtonType(type: NextButtonType): void;
+export interface INextButtonAdapter extends INextBaseButtonAdapter {
   setVariant(variant: NextButtonVariant): void;
   setDense(value: boolean): void;
-  setDisabled(value: boolean): void;
 }
 
-export class NextButtonAdapter extends BaseAdapter<INextButtonComponent> implements INextButtonAdapter {
-  private _rootElement: HTMLButtonElement;
-  private _rippleElement: IRippleComponent | undefined;
-
-  constructor(_component: INextButtonComponent) {
-    super(_component);
-    this._rootElement = getShadowElement(_component, NEXT_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
-  }
-
-  public async deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this._rootElement);
-    if (!this._rippleElement) {
-      if (!this._rippleElement) {
-        this._rippleElement = document.createElement('forge-ripple');
-      }
-
-      this._rootElement.appendChild(this._rippleElement);
-
-      if (type === 'focusin') {
-        // eslint-disable-next-line @typescript-eslint/dot-notation
-        this._rippleElement.getRippleInstance()?.['foundation'].handleFocus();
-      }
-    }
-  }
-
-  public setButtonType(type: NextButtonType): void {
-    this._rootElement.type = type;
-  }
-
+export class NextButtonAdapter extends NextBaseButtonAdapter<INextButtonComponent> implements INextButtonAdapter {
   public setVariant(variant: NextButtonVariant): void {
     const { RAISED, FLAT, OUTLINED } = NEXT_BUTTON_CONSTANTS.classes;
     removeClass([RAISED, FLAT, OUTLINED], this._rootElement);
@@ -59,14 +27,5 @@ export class NextButtonAdapter extends BaseAdapter<INextButtonComponent> impleme
 
   public setDense(value: boolean): void {
     toggleClass(this._rootElement, value, NEXT_BUTTON_CONSTANTS.classes.DENSE);
-  }
-
-  public setDisabled(value: boolean): void {
-    this._rootElement.disabled = value;
-    toggleClass(this._rootElement, value, NEXT_BUTTON_CONSTANTS.classes.DISABLED);
-  }
-
-  private _initRipple(): void {
-    
   }
 }

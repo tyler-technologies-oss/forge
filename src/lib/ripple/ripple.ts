@@ -9,6 +9,7 @@ export interface IRippleComponent extends IBaseComponent {
   target: string;
   unbounded: boolean;
   getRippleInstance(): ForgeRipple | undefined;
+  handleFocus(): void;
   layout(): void;
   activate(): void;
   deactivate(): void;
@@ -76,6 +77,11 @@ export class RippleComponent extends BaseComponent implements IRippleComponent {
 
   public getRippleInstance(): ForgeRipple | undefined {
     return this._foundation.getRippleInstance();
+  }
+
+  public handleFocus(): void {
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    this.getRippleInstance()?.['foundation'].handleFocus();
   }
 
   @FoundationProperty()
