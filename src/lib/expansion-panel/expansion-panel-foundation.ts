@@ -1,11 +1,14 @@
-import { debounce, ICustomElementFoundation } from '@tylertech/forge-core';
+import { debounce, getEventPath, ICustomElementFoundation } from '@tylertech/forge-core';
 import { IExpansionPanelAdapter } from './expansion-panel-adapter';
-import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { ExpansionPanelType, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { eventPathIncludesIgnoredElement } from './expansion-panel-utils';
 
 export interface IExpansionPanelFoundation extends ICustomElementFoundation {
   open: boolean;
+  type: ExpansionPanelType;
   orientation: string;
   useAnimations: boolean;
+  accessibleLabel: string;
   openCallback: () => void | Promise<void>;
   closeCallback: () => void | Promise<void>;
   setOpenImmediate(open: boolean): void;
@@ -16,34 +19,32 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
   private _useAnimations = true;
   private _openCallback: () => void | Promise<void>;
   private _closeCallback: () => void | Promise<void>;
+  private _type: ExpansionPanelType = 'button';
   private _orientation = EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_VERTICAL;
+  private _accessibleLabel = 'expansion panel';
   private _clickListener: (evt: MouseEvent) => void;
-  private _keydownListener: (evt: KeyboardEvent) => void;
   private _headerSlotChangeListener: (evt: Event) => void;
   private _isInitialized = false;
 
   constructor(private _adapter: IExpansionPanelAdapter) {
     this._clickListener = debounce((evt: MouseEvent) => this._onClick(evt), EXPANSION_PANEL_CONSTANTS.numbers.CLICK_DEBOUNCE_THRESHOLD, true);
-    this._keydownListener = (evt: KeyboardEvent) => this._onKeydown(evt);
     this._headerSlotChangeListener = (evt: Event) => this._onHeaderSlotChanged(evt);
   }
 
   public initialize(): void {
     this.connect();
     this._adapter.initialize(this._open, this._orientation);
+    this._applyType();
     this._isInitialized = true;
   }
 
   public connect(): void {
     this._adapter.registerHeaderSlotListener(this._headerSlotChangeListener);
-    this._adapter.registerClickListener(this._clickListener);
-    this._adapter.registerKeydownListener(this._keydownListener);
   }
 
   public disconnect(): void {
     this._adapter.deregisterHeaderSlotListener(this._headerSlotChangeListener);
     this._adapter.deregisterClickListener(this._clickListener);
-    this._adapter.deregisterKeydownListener(this._keydownListener);
   }
 
   public setOpenImmediate(open: boolean): void {
@@ -87,6 +88,23 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
     }
   }
 
+  private _applyType(): void {
+    this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.TYPE, this._type);
+    this._adapter.setType(this._type, this._open);
+
+    if (this._type === 'button') {
+      this._adapter.registerClickListener(this._clickListener);
+      this._adapter.setButtonLabel(this._accessibleLabel);
+    } else {
+      this._adapter.deregisterClickListener(this._clickListener);
+    }
+  }
+
+  private _applyAccessibleLabel(): void {
+    this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.ACCESSIBLE_LABEL, this._accessibleLabel);
+    this._adapter.setButtonLabel(this._accessibleLabel);
+  }
+
   /** Controls the open state of the panel. */
   public get open(): boolean {
     return this._open;
@@ -112,6 +130,16 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
     this._closeCallback = callback;
   }
 
+  public get type(): ExpansionPanelType {
+    return this._type;
+  }
+  public set type(value: ExpansionPanelType) {
+    if (this._type !== value) {
+      this._type = value;
+      this._applyType();
+    }
+  }
+
   public get orientation(): string {
     return this._orientation;
   }
@@ -129,27 +157,28 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
     }
   }
 
+  public get accessibleLabel(): string {
+    return this._accessibleLabel;
+  }
+  public set accessibleLabel(value: string) {
+    if (this._accessibleLabel !== value) {
+      this._accessibleLabel = value;
+      this._applyAccessibleLabel();
+    }
+  }
+
   /**
    * Handles click events on the header element.
    * @param {MouseEvent} evt The click event.
    */
   private _onClick(evt: MouseEvent): void {
+    if (eventPathIncludesIgnoredElement(evt)) {
+      return;
+    }
+
     evt.stopPropagation();
     this._toggle();
     this._emitEvent();
-  }
-
-  /**
-   * Handles keydown events on the header.
-   * @param {KeyboardEvent} evt The keydown event
-   */
-  private _onKeydown(evt: KeyboardEvent): void {
-    if (evt.key === ' ' || evt.key === 'Enter') {
-      evt.stopPropagation();
-      evt.preventDefault();
-      this._toggle();
-      this._emitEvent();
-    }
   }
 
   private _emitEvent(): void {

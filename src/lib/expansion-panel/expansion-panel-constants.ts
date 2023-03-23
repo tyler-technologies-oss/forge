@@ -6,7 +6,13 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}expans
 const classes = {
   CONTAINER: 'forge-expansion-panel',
   HEADER: 'forge-expansion-panel__header',
-  CONTENT: 'forge-expansion-panel__content'
+  HEADER_BUTTON: 'forge-expansion-panel__header--button',
+  CONTENT: 'forge-expansion-panel__content',
+  BUTTON: 'forge-expansion-panel__button'
+};
+
+const ids = {
+  CONTENT: 'content'
 };
 
 const selectors = {
@@ -14,7 +20,9 @@ const selectors = {
   HEADER: `.${classes.HEADER}`,
   CONTENT: `.${classes.CONTENT}`,
   HEADER_SLOT: `.${classes.HEADER} > slot[name=header]`,
-  OPEN_ICON: `[slot=header] ${OPEN_ICON_CONSTANTS.elementName}`
+  OPEN_ICON: `[slot=header] ${OPEN_ICON_CONSTANTS.elementName}`,
+  BUTTON: `.${classes.BUTTON}`,
+  IGNORE: `[forge-ignore]`
 };
 
 const events = {
@@ -24,7 +32,9 @@ const events = {
 const attributes = {
   OPEN: 'open',
   ORIENTATION: 'orientation',
-  USE_ANIMATIONS: 'use-animations'
+  USE_ANIMATIONS: 'use-animations',
+  TYPE: 'type',
+  ACCESSIBLE_LABEL: 'accessible-label'
 };
 
 const numbers = {
@@ -42,9 +52,12 @@ const strings = {
 export const EXPANSION_PANEL_CONSTANTS = {
   elementName,
   classes,
+  ids,
   selectors,
   events,
   attributes,
   numbers,
   strings
 };
+
+export type ExpansionPanelType = 'button' | 'manual';

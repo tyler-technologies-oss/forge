@@ -5,11 +5,17 @@ import '@tylertech/forge/open-icon';
 import './expansion-panel.scss';
 import type { IExpansionPanelComponent, ISwitchComponent } from '@tylertech/forge';
 
-const basicExpansionPanel = document.querySelector('#expansion-panel-basic') as IExpansionPanelComponent;
-const cardExpansionPanel = document.querySelector('#expansion-panel-card') as IExpansionPanelComponent;
+const manualExpansionPanel = document.querySelector('#expansion-panel-manual') as IExpansionPanelComponent;
+const buttonExpansionPanel = document.querySelector('#expansion-panel-button') as IExpansionPanelComponent;
+const manualToggleButton = document.querySelector('#manual-toggle-button') as HTMLButtonElement;
 const useAnimationToggle = document.getElementById('opt-use-animations') as ISwitchComponent;
 
+manualToggleButton.addEventListener('click', () => {
+  manualExpansionPanel.toggle();
+  manualToggleButton.ariaExpanded = manualExpansionPanel.open.toString();
+});
+
 useAnimationToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
-  basicExpansionPanel.useAnimations = selected;
-  cardExpansionPanel.useAnimations = selected;
+  manualExpansionPanel.useAnimations = selected;
+  buttonExpansionPanel.useAnimations = selected;
 });

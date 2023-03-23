@@ -2,6 +2,7 @@
 @use '@material/ripple/ripple' as mdc-ripple;
 @use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '../theme';
+@use '../utils/mixins' as utils;
 
 @mixin core-styles() {
   .forge-expansion-panel {
@@ -10,8 +11,8 @@
     &__header {
       @include header;
 
-      &:hover {
-        @include header-hover;
+      &--button {
+        @include header-button;
       }
       
       forge-open-icon {
@@ -22,6 +23,10 @@
     &__content {
       @include content;
     }
+
+    &__button {
+      @include button;
+    }
   }
 }
 
@@ -30,16 +35,27 @@
   @include theme.css-custom-property(height, --forge-expansion-panel-height, auto);
 }
 
-@mixin header() {
-  outline: none;
-}
+@mixin header() {}
 
-@mixin header-hover() {
+@mixin header-button() {
+  @include mdc-ripple.surface();
+  @include mdc-ripple.radius-bounded();
+  @include mdc-ripple-theme.states(text-hint-on-background, true);
+
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  overflow: hidden;
+  font-size: 1rem;
   cursor: pointer;
 }
 
 @mixin header-icon() {
   margin-left: auto;
+}
+
+@mixin button {
+  @include utils.visually-hidden();
 }
 
 @mixin content() {
@@ -51,7 +67,7 @@
 @mixin slotted-button() {
   @include mdc-ripple.surface();
   @include mdc-ripple.radius-bounded();
-  @include mdc-ripple-theme.states(text-hint-on-background, false);
+  @include mdc-ripple-theme.states(text-hint-on-background, true);
   @include mdc-theme.property(color, text-primary-on-background);
 
   display: flex;
@@ -79,4 +95,8 @@
   border-top-width: 1px;
   border-top-style: solid;
   padding: 16px;
+}
+
+@mixin toggle {
+  @include utils.visually-hidden();
 }

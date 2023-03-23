@@ -1,7 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ExpansionPanelAdapter } from './expansion-panel-adapter';
-import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { ExpansionPanelType, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 import { ExpansionPanelFoundation } from './expansion-panel-foundation';
 
 import template from './expansion-panel.html';
@@ -9,10 +9,12 @@ import styles from './expansion-panel.scss';
 
 export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;
-  useAnimations: boolean;
   openCallback: () => void | Promise<void>;
   closeCallback: () => void | Promise<void>;
+  useAnimations: boolean;
   orientation: string;
+  type: ExpansionPanelType;
+  accessibleLabel: string;
   toggle(): void;
   setOpenImmediate(open: boolean): void;
 }
@@ -40,7 +42,9 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
     return [
       EXPANSION_PANEL_CONSTANTS.attributes.OPEN,
       EXPANSION_PANEL_CONSTANTS.attributes.ORIENTATION,
-      EXPANSION_PANEL_CONSTANTS.attributes.USE_ANIMATIONS
+      EXPANSION_PANEL_CONSTANTS.attributes.USE_ANIMATIONS,
+      EXPANSION_PANEL_CONSTANTS.attributes.TYPE,
+      EXPANSION_PANEL_CONSTANTS.attributes.ACCESSIBLE_LABEL
     ];
   }
 
@@ -70,6 +74,12 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
         break;
       case EXPANSION_PANEL_CONSTANTS.attributes.USE_ANIMATIONS:
         this.useAnimations = coerceBoolean(newValue);
+        break;
+      case EXPANSION_PANEL_CONSTANTS.attributes.TYPE:
+        this.type = newValue as ExpansionPanelType;
+        break;
+      case EXPANSION_PANEL_CONSTANTS.attributes.ACCESSIBLE_LABEL:
+        this.accessibleLabel = newValue;
         break;
     }
   }
@@ -108,6 +118,14 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
   /** Gets/sets if animations are used in the expand/collapse transition. */
   @FoundationProperty()
   public declare useAnimations: boolean;
+
+  /** Sets whether an internal button and associated interactions are attached. */
+  @FoundationProperty()
+  public declare type: ExpansionPanelType;
+
+  /** Gets/sets the internal toggle button's label. */
+  @FoundationProperty()
+  public declare accessibleLabel: string;
 
   /** Toggles the collapsed state. */
   public toggle(): void {

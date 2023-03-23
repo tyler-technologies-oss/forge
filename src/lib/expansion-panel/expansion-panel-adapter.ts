@@ -1,17 +1,19 @@
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { OpenIconComponent } from '../open-icon';
+import { ForgeRipple } from '../ripple';
 import { IExpansionPanelComponent } from './expansion-panel';
-import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { ExpansionPanelType, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { createButtonElement } from './expansion-panel-utils';
 
 export interface IExpansionPanelAdapter extends IBaseAdapter {
   initialize: (open: boolean, orientation: string) => void;
   setHeaderVisibility: (visible: boolean) => void;
   setOpenState: (open: boolean, orientation: string, animate: boolean) => void;
+  setType: (type: ExpansionPanelType, open: boolean) => void;
+  setButtonLabel: (label: string) => void;
   registerClickListener: (listener: (evt: MouseEvent) => void) => void;
   deregisterClickListener: (listener: (evt: MouseEvent) => void) => void;
-  registerKeydownListener: (listener: (evt: KeyboardEvent) => void) => void;
-  deregisterKeydownListener: (listener: (evt: KeyboardEvent) => void) => void;
   registerHeaderSlotListener: (listener: (evt: Event) => void) => void;
   deregisterHeaderSlotListener: (listener: (evt: Event) => void) => void;
 }
@@ -20,12 +22,15 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _headerElement: HTMLElement;
   private _contentElement: HTMLElement;
   private _headerSlotElement: HTMLSlotElement;
+  private _buttonElement: HTMLButtonElement | undefined;
+  private _ripple: ForgeRipple | undefined;
 
   constructor(component: IExpansionPanelComponent) {
     super(component);
     this._headerElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.HEADER);
     this._contentElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.CONTENT);
     this._headerSlotElement = getShadowElement(this._component, EXPANSION_PANEL_CONSTANTS.selectors.HEADER_SLOT) as HTMLSlotElement;
+    this._ripple = new ForgeRipple(this._headerElement);
   }
 
   public initialize(open: boolean, orientation = 'vertical'): void {
@@ -51,7 +56,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
       }
     }
 
-    this._headerElement.setAttribute('aria-expanded', open ? 'true' : 'false');
+    this._buttonElement?.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
   public setHeaderVisibility(visible: boolean): void {
@@ -123,7 +128,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
               this._contentElement.style.height = `${this._contentElement.scrollHeight}px`;
             }
             this._contentElement.style.opacity = '1';
-            this._headerElement.setAttribute('aria-expanded', 'true');
+            this._buttonElement?.setAttribute('aria-expanded', 'true');
             if (openIconElement) {
               openIconElement.open = true;
             }
@@ -134,7 +139,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
               this._contentElement.style.height = '0px';
             }
             this._contentElement.style.opacity = '0';
-            this._headerElement.setAttribute('aria-expanded', 'false');
+            this._buttonElement?.setAttribute('aria-expanded', 'false');
             if (openIconElement) {
               openIconElement.open = false;
             }
@@ -151,7 +156,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         }
         this._contentElement.style.removeProperty('visibility');
         this._contentElement.style.removeProperty('opacity');
-        this._headerElement.setAttribute('aria-expanded', 'true');
+        this._buttonElement?.setAttribute('aria-expanded', 'true');
         if (openIconElement) {
           openIconElement.open = true;
         }
@@ -163,11 +168,38 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         }
         this._contentElement.style.opacity = '0';
         this._contentElement.style.visibility = 'hidden';
-        this._headerElement.setAttribute('aria-expanded', 'false');
+        this._buttonElement?.setAttribute('aria-expanded', 'false');
         if (openIconElement) {
           openIconElement.open = false;
         }
       }
+    }
+  }
+
+  public setType(type: ExpansionPanelType, open: boolean): void {
+    if (type === 'button' && !this._buttonElement) {
+      this._headerElement.classList.add(EXPANSION_PANEL_CONSTANTS.classes.HEADER_BUTTON);
+
+      this._buttonElement = createButtonElement(open);
+      this._buttonElement.addEventListener('focus', () => this._ripple?.getDefaultFoundation().handleFocus());
+      this._buttonElement.addEventListener('blur', () => this._ripple?.getDefaultFoundation().handleBlur());
+      this._headerElement.appendChild(this._buttonElement);
+
+      this._ripple = new ForgeRipple(this._headerElement);
+    } else if (type === 'manual') {
+      this._headerElement.classList.remove(EXPANSION_PANEL_CONSTANTS.classes.HEADER_BUTTON);
+
+      this._buttonElement?.remove();
+      this._buttonElement = undefined;
+
+      this._ripple?.destroy();
+      this._ripple = undefined;
+    }
+  }
+
+  public setButtonLabel(label: string): void {
+    if (this._buttonElement) {
+      this._buttonElement.innerText = `Toggle ${label}`;
     }
   }
 
@@ -177,14 +209,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
 
   public deregisterClickListener(listener: (evt: MouseEvent) => void): void {
     this._headerElement.removeEventListener('click', listener);
-  }
-
-  public registerKeydownListener(listener: (evt: KeyboardEvent) => void): void {
-    this._headerElement.addEventListener('keydown', listener);
-  }
-
-  public deregisterKeydownListener(listener: (evt: KeyboardEvent) => void): void {
-    this._headerElement.removeEventListener('keydown', listener);
   }
 
   public registerHeaderSlotListener(listener: (evt: Event) => void): void {

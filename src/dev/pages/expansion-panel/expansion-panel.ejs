@@ -1,19 +1,36 @@
-<h3 class="forge-typography--subtitle1">Basic (unstyled)</h3>
-<forge-expansion-panel id="expansion-panel-basic">
-  <div slot="header">Click me</div>
-  <div>Expandable content</div>
+<h3 class="forge-typography--subtitle1">Manual</h3>
+<forge-button class="manual-toggle-button">
+  <button id="manual-toggle-button" type="button" aria-expanded="false" aria-controls="manual-panel-content">Toggle panel</button>
+</forge-button>
+<forge-expansion-panel id="expansion-panel-manual" type="manual">
+  <div slot="header">Expansion panel header</div>
+  <div id="manual-panel-content" role="group">Expandable content</div>
 </forge-expansion-panel>
 
-<h3 class="forge-typography--subtitle1">Card</h3>
+<h3 class="forge-typography--subtitle1">Button</h3>
 <forge-card class="expandable-card" outlined>
-  <forge-expansion-panel id="expansion-panel-card">
-    <div slot="header" role="button" class="flex expansion-panel-header">
-      <div class="forge-typography--body1">Click me too</div>
+  <forge-expansion-panel id="expansion-panel-button">
+    <div slot="header" class="flex expansion-panel-header">
+      <div class="forge-typography--body1">Click me</div>
       <forge-open-icon></forge-open-icon>
     </div>
     <div class="forge-typography--body1">
-      Expandable card content
+      Expandable content
     </div>
+  </forge-expansion-panel>
+</forge-card>
+
+<h3 class="forge-typography--subtitle1">Button with nested buttons</h3>
+<forge-card class="expandable-card" outlined>
+  <forge-expansion-panel id="expansion-panel-button-nested">
+    <div slot="header" class="flex expansion-panel-header">
+      <span>Click me too</span>
+      <forge-button forge-ignore>
+        <button type="button">Nested button</button>
+      </forge-button>
+      <forge-open-icon></forge-open-icon>
+    </div>
+    <div>Expandable content</div>
   </forge-expansion-panel>
 </forge-card>
 

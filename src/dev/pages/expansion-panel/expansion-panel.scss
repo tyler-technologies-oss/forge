@@ -1,7 +1,12 @@
-.expandable-card {
-  --forge-card-padding: 16px;
+.manual-toggle-button {
+  margin-block-end: 16px;
+}
+
+forge-card:has(#expansion-panel-button, #expansion-panel-button-nested) {
+  --forge-card-padding: 0;
 }
 
 .expansion-panel-header {
+  width: 100%;
   justify-content: space-between;
 }
