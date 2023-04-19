@@ -2,9 +2,11 @@ import { getLightElement, toggleAttribute } from '@tylertech/forge-core';
 import { BADGE_CONSTANTS, IBadgeComponent } from '../../badge';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IAppBarNotificationButtonComponent } from './app-bar-notification-button';
+import { ICON_CONSTANTS, IIconComponent } from '../../icon';
 
 export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
   initialize(): void;
+  setIcon(icon: string): void;
   setCount(value: number): void;
   setBadgeType(dot: boolean): void;
   setBadgeTheme(theme: string): void;
@@ -13,13 +15,19 @@ export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
 
 export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotificationButtonComponent> implements IAppBarNotificationButtonAdapter {
   private _badgeElement: IBadgeComponent;
+  private _iconElement: IIconComponent;
 
   constructor(component: IAppBarNotificationButtonComponent) {
     super(component);
   }
 
+  public setIcon(icon: string): void {
+    this._iconElement.setAttribute('name', icon);
+  }
+
   public initialize(): void {
     this._badgeElement = getLightElement(this._component, BADGE_CONSTANTS.elementName) as IBadgeComponent;
+    this._iconElement = getLightElement(this._component, ICON_CONSTANTS.elementName) as IIconComponent;
   }
 
   public setCount(value: number): void {
