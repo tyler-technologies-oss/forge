@@ -1,5 +1,6 @@
 import IMask, { InputMask, createMask, MaskedEnum, Masked } from 'imask';
 import { isNumeric } from '@tylertech/forge-core';
+import { IntermediateTimeParser } from './intermediate-time-parser';
 
 export interface ITimeInputMaskOptions {
   showMaskFormat?: boolean;
@@ -73,98 +74,85 @@ export class TimeInputMask {
     if (typeof this._options.prepareCallback === 'function') {
       return this._options.prepareCallback.call(null, value, masked, flags, this._mask);
     }
-    return this._prepareDefault(value, masked, flags, maskInstance).toUpperCase();
+    return this._prepareDefault(value, flags, maskInstance).toUpperCase();
   }
 
-  private _prepareDefault(value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.AnyMaskedOptions>): string {
-    if (!flags.input || !value.length || !maskInstance) {
-      return value;
+  private _prepareDefault(char: string, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.AnyMaskedOptions>): string {
+    if (!flags.input || !char.length || !maskInstance) {
+      return char;
     }
 
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    const isAllSelected = maskInstance['_selection'] && maskInstance['_selection'].end === 8;
-    const currentValue = isAllSelected ? '' : maskInstance.value;
+    const parser = new IntermediateTimeParser(char, maskInstance, this._options);
 
-    if (!isNumeric(value)) {
+    if (!isNumeric(char)) {
       // Before we ignore this character let's do some checks for common scenarios where the user enters a colon to help with coercion
-      if (value === ':') {
-        const isFinalHoursChar = maskInstance.cursorPos === 2 && currentValue.length === 1;
-        if (isFinalHoursChar) {
+      if (char === ':') {
+        if (parser.isFinalHoursChar) {
           // The user attempted to press the colon key after entering a single hour character so let's pad the value
-          this._setMaskedValueAdjusted(currentValue.padStart(2, '0'), 3);
-          return ':';
+          this._setMaskedValueAdjusted(parser.value.padStart(2, '0'), 3);
+          return char;
         }
 
-        const isFinalMinutesChar = maskInstance.cursorPos === 5 && currentValue.length === 4;
-        if (isFinalMinutesChar) {
+        if (parser.isFinalMinutesChar) {
           // The user attempted to press the colon key after entering a single minute character so let's pad the value
-          const newValue = `${currentValue.substring(0, 3)}${currentValue[3].padStart(2, '0').padStart(2, '0')}`;
-          this._setMaskedValueAdjusted(newValue, 3);
-          return ':';
+          const newValue = `${parser.value.substring(0, 3)}${parser.value[3].padStart(2, '0').padStart(2, '0')}`;
+          this._setMaskedValueAdjusted(newValue, 5);
+          return char;
         }
 
-        if (this._options.showSeconds) {
-          const isFinalSecondsChar = maskInstance.cursorPos === 8 && currentValue.length === 6;
-          if (isFinalSecondsChar) {
-            // The user attempted to press the colon key after entering a single second character so let's pad the value
-            const newValue = `${currentValue.substring(0, 6)}${currentValue[5].padStart(2, '0')}${currentValue.slice(8)}`;
-            this._setMaskedValueAdjusted(newValue, 3);
-            return ':';
-          }
+        if (this._options.showSeconds && parser.isFinalSecondsChar) {
+          // The user attempted to press the colon key after entering a single second character so let's pad the value
+          const newValue = `${parser.value.substring(0, 6)}${parser.value[5].padStart(2, '0')}${parser.value.slice(8)}`;
+          this._setMaskedValueAdjusted(newValue, 8);
+          return char;
         }
       }
-      return value;
+      return char;
     }
 
-    const numValue = +value;
-
-    // Attempt to pad a leading zero to the hours segment
-    const isFirstHourChar = maskInstance.cursorPos === 1 && numValue > 2;
-    if (isFirstHourChar) {
+    // Attempt to pad a leading zero to the hours segment on initial entry only
+    if (parser.isInitialEntry && parser.isFirstHoursChar) {
       // Replace just the hours segment with the padded value and update cursor position
-      const newValue = `${String(numValue).padStart(2, '0')}${currentValue.slice(2)}`;
-      this._setMaskedValueAdjusted(newValue, 3);
+      const newValue = `${parser.asPaddedChar}${parser.value.slice(2)}`;
+      this._setMaskedValueAdjusted(newValue, 2);
       return ':';
     }
-    
-    // Attempt to pad a leading zero to the minutes segment
-    const isFirstMinuteChar = (maskInstance.cursorPos === 3 || maskInstance.cursorPos === 4) && numValue > 5;
-    if (isFirstMinuteChar) {
-      // Replace just the minute segment with the padded value and update cursor position
-      const newValue = `${currentValue.substring(0, 3)}${String(numValue).padStart(2, '0')}${currentValue.slice(5)}`;
-      this._setMaskedValueAdjusted(newValue, 3);
-      return ':';
-    }
-    
-    // Attempt to pad a leading zero to the seconds segment
-    if (this._options.showSeconds) {
-      const isFirstSecondChar = (maskInstance.cursorPos === 6 || maskInstance.cursorPos === 7) && numValue > 5;
-      if (isFirstSecondChar) {
-        // Replace just the second segment with the padded value and update cursor position
-        const newValue = `${currentValue.substring(0, 6)}${String(numValue).padStart(2, '0')}${currentValue.slice(8)}`;
+
+    // Attempt to overwrite the hours (w/leading zero)
+    if (parser.hasOnlyHoursSegment && parser.canOverwriteHoursChar) {
+      const numNewHour = +`${parser.hoursSegmentNum}${parser.numChar}`;
+      if (numNewHour <= 12 || (this._options.use24HourTime && numNewHour <= 23)) {
+        // Overwrite the hours segment with the entered char concatenated with the previous entry value
+        const newValue = String(numNewHour);
         this._setMaskedValueAdjusted(newValue, 3);
         return ':';
       }
     }
     
-    // Attempt to automatically add a colon after the hours or minutes segment is complete and/or move cursor to after colon
-    if (!this._options.showMaskFormat && (maskInstance.cursorPos === 2 || (this._options.showSeconds && maskInstance.cursorPos === 5))) {
-      let newValue: string;
-      if (maskInstance.cursorPos === 2) {
-        newValue = `${currentValue.substring(0, 1)}${numValue}:${currentValue.slice(3)}`;
-      } else {
-        newValue = `${currentValue.substring(0, 4)}${numValue}:${currentValue.slice(6)}`;
-      }
-      this._setMaskedValueAdjusted(newValue, 2);
-      return '';
+    // Attempt to pad a leading zero to the minutes segment
+    if (parser.isFirstMinutesChar) {
+      // Replace just the minute segment with the padded value and update cursor position
+      const newValue = `${parser.value.substring(0, 3)}${parser.asPaddedChar}${parser.value.slice(5)}`;
+      this._setMaskedValueAdjusted(newValue, 5);
+      return ':';
+    }
+    
+    // Attempt to pad a leading zero to the seconds segment
+    if (this._options.showSeconds && parser.isFirstSecondsChar) {
+      // Replace just the second segment with the padded value and update cursor position
+      const newValue = `${parser.value.substring(0, 6)}${parser.asPaddedChar}${parser.value.slice(8)}`;
+      this._setMaskedValueAdjusted(newValue, 8);
+      return ':';
     }
 
-    return value;
+    return char;
   }
 
-  private _setMaskedValueAdjusted(value: string, position: number): void {
+  private _setMaskedValueAdjusted(value: string, cursorPos?: number): void {
     this._mask.unmaskedValue = value;
-    window.requestAnimationFrame(() => this._mask.updateCursor(this._mask.cursorPos + position));
+    if (cursorPos !== undefined) {
+      window.requestAnimationFrame(() => this._mask.updateCursor(cursorPos));
+    }
   }
 
   private _getMaskFormat(): string {

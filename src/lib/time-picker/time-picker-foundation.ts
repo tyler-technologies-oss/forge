@@ -408,10 +408,8 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     // Convert our milliseconds to a 24-hour time string to use as our normalized value
     const timeString = millisToTimeString(millis, true, this._allowSeconds);
 
-    // If we are using an input mask, we need to dispatch our custom input event to let consumers know input happened (before our change event)
-    if (this._masked) {
-      this._adapter.emitInputEvent(TIME_PICKER_CONSTANTS.events.INPUT, timeString);
-    }
+    // Dispatch our custom input event to let consumers know raw input occurred (before our change event)
+    this._adapter.emitInputEvent(TIME_PICKER_CONSTANTS.events.INPUT, timeString);
 
     // Only emit our change event if the value is different
     if (this._value !== millis) {
@@ -612,6 +610,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     
     if (inputValue !== formattedValue) {
       this._adapter.setInputValue(formattedValue, emitEvents);
+      this._adapter.emitInputEvent(TIME_PICKER_CONSTANTS.events.INPUT, formattedValue);
     }
   }
 

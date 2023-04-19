@@ -57,11 +57,7 @@ export class TimePickerComponentDelegate extends FormFieldComponentDelegate<ITim
   }
 
   public onInput(listener: (value: string) => void): void {
-    if (this._element.masked) {
-      this._element.addEventListener(TIME_PICKER_CONSTANTS.events.INPUT, (evt: CustomEvent<string>) => listener(evt.detail ?? ''));
-    } else {
-      this._textFieldDelegate.inputElement.addEventListener('input', evt => listener((evt.target as HTMLInputElement).value));
-    }
+    this._element.addEventListener(TIME_PICKER_CONSTANTS.events.INPUT, (evt: CustomEvent<string>) => listener(evt.detail ?? ''));
   }
 
   public onFocus(listener: (evt: FocusEvent) => void): void {

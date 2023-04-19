@@ -17,6 +17,7 @@ interface ITimePickerTestContext {
   identifier: string;
   getPopup(): IPopupComponent;
   getListItems(): IListItemComponent[];
+  writeValue(char: string, pos: number, clear?: boolean): void;
 }
 
 describe('TimePickerComponent', function(this: ITestContext) {
@@ -1284,29 +1285,30 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
     this.context.component.masked = false;
 
-    const coercionSpy = jasmine.createSpy('coercionCallback', (val, coercedStr, allowSeconds) => coercedStr).and.callThrough();
+    const coercionSpy = jasmine.createSpy('coercionCallback', (_val, coercedStr, _allowSeconds) => coercedStr).and.callThrough();
     this.context.component.coercionCallback = coercionSpy;
 
     const value = '120';
     this.context.inputElement.value = value;
     this.context.inputElement.dispatchEvent(new Event('input'));
 
-    expect(coercionSpy).toHaveBeenCalledOnceWith('120', '12:00', false);
+    expect(coercionSpy).toHaveBeenCalledOnceWith('120', '01:20', false);
   });
 
   it('should use custom coercion callback value', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    const expectedValue = '01:20 AM';
+    const expectedValue = '12:00 PM';
     const coercionSpy = jasmine.createSpy('coercionCallback', (val, coercedStr, allowSeconds) => expectedValue).and.callThrough();
     this.context.component.coercionCallback = coercionSpy;
 
     const value = '120';
+    this.context.inputElement.focus();
     this.context.inputElement.value = value;
     this.context.inputElement.dispatchEvent(new Event('input'));
     await tick();
 
-    expect(this.context.component.value).toBe('01:20');
+    expect(this.context.component.value).toBe('12:00');
 
     this.context.inputElement.dispatchEvent(new Event('blur'));
     await tick();
@@ -1334,24 +1336,24 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(merged).toEqual(expected);
   });
 
-  it('should not pad leading zero when entering hour of 1', function(this: ITestContext) {
+  it('should pad leading zero when entering hour of 1', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '1';
     this.context.inputElement.dispatchEvent(new Event('input'));
 
-    expect(this.context.component.value).toBeNull();
-    expect(this.context.inputElement.value).toBe('1');
+    expect(this.context.component.value).toBe('01:00');
+    expect(this.context.inputElement.value).toBe('01:');
   });
 
-  it('should not pad leading zero when entering hour of 2', function(this: ITestContext) {
+  it('should pad leading zero when entering hour of 2', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '2';
     this.context.inputElement.dispatchEvent(new Event('input'));
 
-    expect(this.context.component.value).toBeNull();
-    expect(this.context.inputElement.value).toBe('2');
+    expect(this.context.component.value).toBe('02:00');
+    expect(this.context.inputElement.value).toBe('02:');
   });
 
   it('should pad leading zero when entering initial hour of 3 or higher', function(this: ITestContext) {
@@ -1360,8 +1362,67 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.inputElement.value = '3';
     this.context.inputElement.dispatchEvent(new Event('input'));
 
-    expect(this.context.component.value).toBe('00:03');
+    expect(this.context.component.value).toBe('03:00');
     expect(this.context.inputElement.value).toBe('03:');
+  });
+
+  it('should coerce special case 3-digit shorthand values when unmasked', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.masked = false;
+
+    this.context.inputElement.value = '123';
+    this.context.inputElement.dispatchEvent(new Event('input'));
+
+    expect(this.context.component.value).toBe('01:23');
+  });
+
+  it('should overwrite hours if 1 is entered', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+
+    await this.context.writeValue('1', 0);
+    await this.context.writeValue('2', 2);
+
+    expect(this.context.component.value).toBe('12:00');
+  });
+
+  it('should overwrite hours if entered with format visible', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.showMaskFormat = true;
+
+    await this.context.writeValue('1', 0);
+    expect(this.context.component.value).toBe('01:00');
+
+    await this.context.writeValue('2', 2);
+    expect(this.context.component.value).toBe('12:00');
+  });
+
+  it('should not overwrite hours if > 2 is entered', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+
+    await this.context.writeValue('1', 0);
+    await this.context.writeValue('3', 2, true);
+
+    expect(this.context.component.value).toBe('01:03');
+  });
+
+  it('should overwrite hours if <= 2 is entered in 24 hour time', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.use24HourTime = true;
+
+    await this.context.writeValue('2', 0);
+    await this.context.writeValue('1', 2);
+
+    expect(this.context.component.value).toBe('21:00');
+  });
+
+  it('should not overwrite hours if > 2 is entered in 24 hour time', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.use24HourTime = true;
+
+    await this.context.writeValue('3', 0);
+    await this.context.writeValue('1', 2, true);
+
+    expect(this.context.component.value).toBe('03:01');
   });
 
   function _createTimePickerContext(append = true, hasInput = true): ITimePickerTestContext {
@@ -1380,7 +1441,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const foundation = component['_foundation'];
     const identifier = `forge-time-picker-${foundation['_identifier']}`;
     const getPopup = () => document.querySelector(`[id=list-dropdown-popup-${identifier}]`) as IPopupComponent;
-    
+
     return {
       component,
       foundation,
@@ -1392,7 +1453,31 @@ describe('TimePickerComponent', function(this: ITestContext) {
       getListItems: () => {
         const popup = getPopup();
         return Array.from(popup.querySelectorAll(LIST_ITEM_CONSTANTS.elementName));
+      },
+      writeValue: async (key: string, pos: number, replace = false) => {
+        await setCursorPos(inputElement, pos);
+        const value = setCharAtPos(inputElement.value, key, pos, replace);
+        await setInputValue(inputElement, value);
+        await setCursorPos(inputElement, pos);
       }
     };
+  }
+
+  async function setInputValue(inputElement: HTMLInputElement, value: string): Promise<void> {
+    inputElement.value = value;
+    inputElement.dispatchEvent(new Event('input'));
+    await tick();
+  }
+
+  async function setCursorPos(inputElement: HTMLInputElement, pos: number): Promise<void> {
+    inputElement.focus();
+    inputElement.setSelectionRange(pos, pos);
+    await tick();
+  }
+
+  function setCharAtPos(str: string, char: string, pos: number, replace: boolean) {
+    const startAdj = replace || pos === 0 ? 0 : 1;
+    const endAdj = pos === 0 ? 1 : 0;
+    return [str.slice(0, pos - startAdj), char, str.slice(pos + endAdj)].join('');
   }
 });
