@@ -22,7 +22,7 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
   }
 
   public setIcon(icon: string): void {
-    this._iconElement.setAttribute('name', icon);
+    this._iconElement.name = icon;
   }
 
   public initialize(): void {
