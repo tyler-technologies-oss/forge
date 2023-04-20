@@ -24,9 +24,10 @@ export abstract class CascadingListDropdownAwareFoundation<T> extends ListDropdo
   protected abstract _detachCascadingListeners(): void;
   protected abstract _onCascadingOptionSelected(data: any): void;
   protected abstract _onCascadingChildOpen(index: number): void;
-  protected abstract _onCascadingChildClose(): void;
+  protected abstract _onCascadingChildClose(index: number): void;
   protected abstract _closeDropdown(): void;
-  protected abstract _openDropdown(): void;
+  protected abstract _openDropdown({ fromKeyboard }: { fromKeyboard?: boolean }): void;
+  protected abstract _setCascadeTargetInactive(): void;
   protected abstract _isOwnElement(element: Element): boolean;
 
   constructor(private _config: ICascadingListDropdownAwareFoundationConfiguration) {
@@ -47,6 +48,7 @@ export abstract class CascadingListDropdownAwareFoundation<T> extends ListDropdo
     setTimeout(() => {
       const mouseElement = document.elementFromPoint(this._mouseCoords.x, this._mouseCoords.y);
       if (!this._popupHasMouse && !this._childOpen && (!mouseElement || !this._isOwnElement(mouseElement))) {
+        this._setCascadeTargetInactive();
         this._closeDropdown();
       }
     }, this._config.popupTimeout);
@@ -56,7 +58,7 @@ export abstract class CascadingListDropdownAwareFoundation<T> extends ListDropdo
     if (!this._options.length) {
       return;
     }
-    this._openDropdown();
+    this._openDropdown({ fromKeyboard: false });
   }
 
   private _onTargetMouseLeave(evt: MouseEvent): void {
@@ -74,6 +76,7 @@ export abstract class CascadingListDropdownAwareFoundation<T> extends ListDropdo
           return;
         }
       }
+      this._setCascadeTargetInactive();
       this._closeDropdown();
     }, this._config.targetTimeout);
   }

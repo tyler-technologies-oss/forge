@@ -62,6 +62,15 @@ Gets/sets the popup placement around the child element.
   
 </PropertyDef>
 
+<PropertyDef name="fallbackPlacements" type="PopupPlacement[]" defaultValue="[]">
+
+The fallback placements to prefer around the target element when `placement` causes the element to be clipped.
+
+By default the component will try all available placements for a "best-fit" strategy, but overriding this value to a sub-set of those
+can be valuable when you only want the popup to fall back to specific placements of your choosing.
+
+</PropertyDef>
+
 <PropertyDef name="dense" type="boolean" defaultValue="false">
 
 Controls dense state of the list options in the dropdown.
@@ -115,6 +124,12 @@ Sets the callback that will be executed for each option in the dropdown for prod
 <MethodDef name="propagateKeyEvent(evt: KeyboardEvent): void;">
 
 Force propagates the key event from another element this component.
+
+</MethodDef>
+
+<MethodDef name="activateFirstOption(): void;">
+
+Sets the first option in the menu to be active.
 
 </MethodDef>
 

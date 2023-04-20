@@ -62,6 +62,10 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   popupElement.manageFocus = false;
   popupElement.static = !!config.popupStatic;
 
+  if (config.popupFallbackPlacements?.length) {
+    popupElement.fallbackPlacements = config.popupFallbackPlacements;
+  }
+
   if (config.popupOffset) {
     popupElement.offset = config.popupOffset;
   }
@@ -94,6 +98,7 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
 export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>): void {
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
   const groups = getOptionsByGroup(options || config.options);
+  const flatOptions = getFlattenedOptions(groups);
 
   const limitOptions = config.optionLimit ? true : false;
   let optionLimit = config.optionLimit || 0;
@@ -110,7 +115,13 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         const groupWrapper = document.createElement('div');
         groupWrapper.classList.add(LIST_DROPDOWN_CONSTANTS.classes.GROUP_WRAPPER);
         optionParent = groupWrapper;
-        groupWrapper.appendChild(headerElement);
+
+        if (typeof headerElement === 'string') {
+          groupWrapper.innerHTML = headerElement;
+        } else if (headerElement instanceof HTMLElement) {
+          groupWrapper.appendChild(headerElement);
+        }
+
         listElement.appendChild(groupWrapper);
       }
     } else if (group.text) {
@@ -262,7 +273,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         optionIconElement.slot = 'trailing';
         listItemElement.appendChild(optionIconElement);
 
-        const nonDividerOptions = group.options.filter(o => !o.divider);
+        const nonDividerOptions = flatOptions.filter(o => !o.divider);
 
         // Create the nested cascading element wrapper
         const factoryConfig: IListDropdownCascadingElementFactoryConfig = {
@@ -375,4 +386,12 @@ export function isListDropdownOptionType(options: Array<IListDropdownOption | IL
   const isOptionGroups = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder')));
   const isOptionTypes = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value'));
   return (isOptionGroups && type === ListDropdownOptionType.Group) || (isOptionTypes && type === ListDropdownOptionType.Option);
+}
+
+export function getFlattenedOptions(options: Array<IListDropdownOptionGroup | IListDropdownOption>): IListDropdownOption[] {
+  if (isListDropdownOptionType(options, ListDropdownOptionType.Group)) {
+    const groups = options as IListDropdownOptionGroup[];
+    return groups.reduce((flatOpts, group) => flatOpts.concat(group.options), [] as IListDropdownOption[]);
+  }
+  return [...options as IListDropdownOption[]];
 }

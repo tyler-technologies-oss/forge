@@ -76,6 +76,6 @@ export interface IAutocompletePopupConfiguration {
   scrollEndListener: () => void;
 }
 
-export interface IAutocompleteSelectEventData {
-  value: any;
+export interface IAutocompleteSelectEventData<T = any> {
+  value: T;
 }
