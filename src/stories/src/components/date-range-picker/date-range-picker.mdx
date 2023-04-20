@@ -277,27 +277,6 @@ type DatepickerPrepareMaskCallback = (value: string, masked: Masked<string>, fla
 type DatePickerValueMode = 'object' | 'string' | 'iso-string';
 ```
 
-### IDatePickerRangeCalendarDropdownConfig
-
-```ts expanded
-interface IDatePickerRangeCalendarDropdownConfig {
-  value: DateRange | null;
-  min: Date | null;
-  max: Date | null;
-  disabledDates: Date | Date[] | null;
-  popupClasses: string | string[];
-  closeCallback: () => void;
-  selectCallback: (value: ICalendarDateRangeSelectEvent) => void;
-  activeChangeCallback: (id: string) => void;
-  showToday: boolean;
-  showClear: boolean;
-  todayCallback: () => void;
-  clearCallback: () => void;
-  disableDayCallback: (date: Date) => boolean;
-  disabledDaysOfWeek: DayOfWeek[] | null;
-}
-```
-
 ### IDatePickerRange
 
 ```ts expanded
