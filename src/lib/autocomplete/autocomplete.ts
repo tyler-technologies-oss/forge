@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, ensureChild, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { DividerComponent } from '../divider';
 import { IconComponent, IconRegistry } from '../icon';
 import { LinearProgressComponent } from '../linear-progress';
@@ -90,7 +90,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   constructor() {
     super();
-    IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
+    IconRegistry.define([tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
     attachShadowTemplate(this, template, styles);
     this._foundation = new AutocompleteFoundation(new AutocompleteAdapter(this));
   }
