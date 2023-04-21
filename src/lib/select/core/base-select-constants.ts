@@ -15,7 +15,9 @@ const observedAttributes = {
   OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold',
   POPUP_CLASSES: 'popup-classes',
   OPTION_LIMIT: 'option-limit',
-  SYNC_POPUP_WIDTH: 'sync-popup-width'
+  SYNC_POPUP_WIDTH: 'sync-popup-width',
+  CONSTRAIN_POPUP_WIDTH: 'constrain-popup-width',
+  WRAP_OPTION_TEXT: 'wrap-option-text'
 };
 
 const attributes = {

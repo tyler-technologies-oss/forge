@@ -56,11 +56,15 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
 }
 
 export function createPopupDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopupComponent {
-  const popupElement = document.createElement(POPUP_CONSTANTS.elementName) as IPopupComponent;
+  const popupElement = document.createElement('forge-popup');
   popupElement.targetElement = targetElement;
   popupElement.placement = config.popupPlacement || 'bottom-start';
   popupElement.manageFocus = false;
   popupElement.static = !!config.popupStatic;
+
+  if (config.constrainViewportWidth) {
+    popupElement.setAttribute(POPUP_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
+  }
 
   if (config.popupOffset) {
     popupElement.offset = config.popupOffset;
@@ -151,11 +155,15 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       
       // Create and configure the list element
       const isSelected = config.selectedValues ? config.selectedValues.some(v => isDeepEqual(v, option.value)) : false;
-      let listItemElement = document.createElement(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
+      let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
       listItemElement.id = `list-dropdown-option-${config.id}-${optionIndex}`;
       listItemElement.style.cursor = 'pointer';
 
+      if (config.wrapOptionText) {
+        listItemElement.wrap = true;
+      }
+      
       // Add any CSS classes to the option list-item
       if (option.optionClass && (typeof option.optionClass === 'string' || Array.isArray(option.optionClass) && option.optionClass.length)) {
         addClass(option.optionClass, listItemElement);
