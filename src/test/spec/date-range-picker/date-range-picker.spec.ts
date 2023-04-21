@@ -603,6 +603,22 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(getToElement(this.context.component).value).toBe('');
     });
 
+    it('should clear value when set to null', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.valueMode = 'string';
+      
+      const from = '01/01/2000';
+      const to = '01/10/2000';
+      this.context.component.value = { from: new Date(from), to: new Date(to) };
+
+      expect(this.context.component.from).toBe(from);
+      expect(this.context.component.to).toBe(to);
+      
+      this.context.component.value = null;
+
+      expect(this.context.component.value).toEqual({ from: null, to: null } as any);
+    });
+
     it('should clear value when min date is set if current value is not valid on from input', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const minDate = new Date('01/01/2020');

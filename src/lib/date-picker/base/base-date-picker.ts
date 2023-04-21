@@ -6,7 +6,7 @@ import { BaseDatePickerFoundation } from './base-date-picker-foundation';
 import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 
 export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
-  value: TValue | undefined;
+  value: TValue | null | undefined;
   min: Date | string | null | undefined;
   max: Date | string | null | undefined;
   disabledDates: Date | Date[] | null | undefined;
@@ -98,7 +98,7 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
 
   /** Gets/sets the value of the component. */
   @FoundationProperty()
-  public declare value: TPublicValue | undefined;
+  public declare value: TPublicValue | null | undefined;
 
   /** Gets/sets the minimum date the calendar will allow. */
   @FoundationProperty()
