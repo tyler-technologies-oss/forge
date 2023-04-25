@@ -516,7 +516,9 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       const result = this._adapter.emitHostEvent(AUTOCOMPLETE_CONSTANTS.events.SELECT, data, true, true);
       if (result) {
         this._filterText = '';
-        this._closeDropdown();
+        if (!this._multiple) {
+          this._closeDropdown();
+        }
       }
       return;
     }
