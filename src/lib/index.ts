@@ -137,6 +137,7 @@ export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
 export * from './icon';
+export * from './stack';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
