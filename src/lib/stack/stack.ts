@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, ICustomElement } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
 import { StackFoundation } from './stack-foundation';
 import { STACK_CONSTANTS } from './stack-constants';
@@ -7,7 +7,7 @@ import template from './stack.html';
 import styles from './stack.scss';
 
 export interface IStackComponent extends ICustomElement {
-
+  inline: boolean;
 }
 
 declare global {
@@ -21,7 +21,10 @@ declare global {
 })
 export class StackComponent extends HTMLElement implements IStackComponent {
   public static get observedAttributes(): string[] {
-    return [];
+    return [
+      STACK_CONSTANTS.attributes.INLINE,
+      STACK_CONSTANTS.attributes.WRAP
+    ];
   }
 
   private _foundation: StackFoundation;
@@ -31,6 +34,7 @@ export class StackComponent extends HTMLElement implements IStackComponent {
     attachShadowTemplate(this, template, styles);
     this._foundation = new StackFoundation(new StackAdapter(this));
   }
+  
 
   public connectedCallback(): void {
     this._foundation.initialize();
@@ -41,6 +45,21 @@ export class StackComponent extends HTMLElement implements IStackComponent {
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-
+    switch (name) {
+      case STACK_CONSTANTS.attributes.INLINE:
+        this.inline = coerceBoolean(newValue);
+        break;
+      case STACK_CONSTANTS.attributes.WRAP:
+        this.wrap = coerceBoolean(newValue);
+        break;
+    }
   }
+
+  /** Controls the direction of the stack. */
+  @FoundationProperty()
+  public declare inline: boolean;
+
+  /** Controls if items wrap to a new line in inline mode */
+  @FoundationProperty()
+  public declare wrap: boolean;
 }

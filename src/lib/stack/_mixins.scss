@@ -3,3 +3,15 @@
 @mixin core-styles() {
   // TODO: All component shadow selectors go here
 }
+
+@mixin base() {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@mixin inline() {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
