@@ -1,5 +1,5 @@
 import { CustomElement } from '@tylertech/forge-core';
-import { ListDropdownOptionGroupBuilder } from '@tylertech/forge/list-dropdown';
+import { ListDropdownOptionGroupBuilder } from '../../list-dropdown/list-dropdown-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ISelectOption, ISelectOptionGroup } from '../core';
 import { OPTION_GROUP_CONSTANTS } from './option-group-constants';
