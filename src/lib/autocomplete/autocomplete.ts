@@ -6,11 +6,10 @@ import { LinearProgressComponent } from '../linear-progress';
 import { ListComponent, ListItemComponent } from '../list';
 import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware';
 import { PopupComponent } from '../popup';
-import { IOption } from '../select';
 import { SkeletonComponent } from '../skeleton';
 import { TextFieldComponent } from '../text-field';
 import { AutocompleteAdapter } from './autocomplete-adapter';
-import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
+import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
 import { AutocompleteFoundation } from './autocomplete-foundation';
 
 import template from './autocomplete.html';
@@ -32,7 +31,7 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
   isInitialized: boolean;
   open: boolean;
-  appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;
+  appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   openDropdown(): void;
   closeDropdown(): void;
 }
@@ -198,7 +197,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   public declare beforeValueChange: (value: any) => boolean | Promise<boolean>;
 
   /** Adds options to the dropdown while it is open. Has no effect if the dropdown is closed.  */
-  public appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {
+  public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
     this._foundation.appendOptions(options);
   }
 

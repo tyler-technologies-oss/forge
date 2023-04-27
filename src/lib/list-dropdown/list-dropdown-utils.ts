@@ -110,7 +110,13 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         const groupWrapper = document.createElement('div');
         groupWrapper.classList.add(LIST_DROPDOWN_CONSTANTS.classes.GROUP_WRAPPER);
         optionParent = groupWrapper;
-        groupWrapper.appendChild(headerElement);
+
+        if (typeof headerElement === 'string') {
+          groupWrapper.innerHTML = headerElement;
+        } else {
+          groupWrapper.appendChild(headerElement);
+        }
+
         listElement.appendChild(groupWrapper);
       }
     } else if (group.text) {
@@ -199,6 +205,20 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         }
       }
 
+      // If multiple selections are enabled then we need to create and append a leading checkbox element
+      if (config.multiple) {
+        const checkboxElement = createCheckboxElement(isSelected);
+        listItemElement.appendChild(checkboxElement);
+        listItemElement.setAttribute('aria-selected', `${isSelected}`);
+        listItemElement.setAttribute('aria-checked', `${isSelected}`);
+      }
+
+      if (option.elementAttributes) {
+        option.elementAttributes.forEach((value: string, key: string) => {
+          listItemElement.setAttribute(key, value);
+        });
+      }
+
       // Leading element/icon
       if (option.leadingBuilder) {
         const element = option.leadingBuilder();
@@ -239,20 +259,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         listItemElement.selected = true;
       }
       listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
-
-      // If multiple selections are enabled then we need to create and append a leading checkbox element
-      if (config.multiple) {
-        const checkboxElement = createCheckboxElement(isSelected);
-        listItemElement.appendChild(checkboxElement);
-        listItemElement.setAttribute('aria-selected', `${isSelected}`);
-        listItemElement.setAttribute('aria-checked', `${isSelected}`);
-      }
-
-      if (option.elementAttributes) {
-        option.elementAttributes.forEach((value: string, key: string) => {
-          listItemElement.setAttribute(key, value);
-        });
-      }
 
       // If we have any child options, we need to render a child menu for this list item
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {

@@ -3,15 +3,14 @@ import { highlightTextHTML } from '../core';
 import { IListItemComponent } from '../list';
 import { IListDropdownConfig, IListDropdownOption, ListDropdownAsyncStyle, ListDropdownFooterBuilder, ListDropdownHeaderBuilder, ListDropdownOptionBuilder } from '../list-dropdown';
 import { IListDropdownAwareFoundation, ListDropdownAwareFoundation } from '../list-dropdown/list-dropdown-aware-foundation';
-import { IOption, IOptionGroup } from '../select';
 import { IAutocompleteAdapter } from './autocomplete-adapter';
-import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
+import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
 import { getSelectedOption, isOptionType, optionEqualPredicate, OptionType } from './autocomplete-utils';
 
 export interface IAutocompleteFoundation extends IListDropdownAwareFoundation {
   mode: AutocompleteMode;
   multiple: boolean;
-  value: string | string[] | IOption | IOption[] | null | undefined;
+  value: string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined;
   debounce: number;
   filterOnFocus: boolean;
   allowUnmatched: boolean;
@@ -22,7 +21,7 @@ export interface IAutocompleteFoundation extends IListDropdownAwareFoundation {
   isInitialized: boolean;
   open: boolean;
   matchKey: string | null | undefined;
-  appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;
+  appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
 }
 
@@ -41,11 +40,11 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   private _optionBuilder?: AutocompleteOptionBuilder | null;
   private _filter?: AutocompleteFilterCallback | null;
   private _selectedTextBuilder: AutocompleteSelectedTextBuilder;
-  private _options: IOption[] | IAutocompleteOptionGroup[] = [];
+  private _options: IAutocompleteOption[] | IAutocompleteOptionGroup[] = [];
   private _filterText = '';
-  private _selectedOptions: IOption[] = [];
+  private _selectedOptions: IAutocompleteOption[] = [];
   private _values: any[] = [];
-  private _pendingFilterPromises: Array<Promise<IOption[] | IOptionGroup[]>> = [];
+  private _pendingFilterPromises: Array<Promise<IAutocompleteOption[] | IAutocompleteOptionGroup[]>> = [];
   private _identifier: string;
   private _matchKey?: string | null = null;
   private _filterFn: () => Promise<void>;
@@ -149,11 +148,11 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._adapter.intializeInputAccessibility(this._identifier);
   }
 
-  private get _flatOptions(): IOption[] {
+  private get _flatOptions(): IAutocompleteOption[] {
     if (isOptionType(this._options, OptionType.Group)) {
-      return (this._options as IAutocompleteOptionGroup[]).reduce((previousValue, currentValue) => previousValue.concat(currentValue.options), [] as IOption[]) as IOption[];
+      return (this._options as IAutocompleteOptionGroup[]).reduce((previousValue, currentValue) => previousValue.concat(currentValue.options), [] as IAutocompleteOption[]);
     }
-    return this._options as IOption[];
+    return this._options as IAutocompleteOption[];
   }
 
   private _onClick(evt: MouseEvent): void {
@@ -338,7 +337,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
   }
 
-  private _executeFilter(sendFilterText = true, sendValue = false): Promise<IOption[] | IAutocompleteOptionGroup[]> {
+  private _executeFilter(sendFilterText = true, sendValue = false): Promise<IAutocompleteOption[] | IAutocompleteOptionGroup[]> {
     if (!this._filter || typeof this._filter !== 'function') {
       throw new Error('A filter callback must be provided. Did you set the "filter" property?');
     }
@@ -347,7 +346,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     const filterText = sendFilterText ? this._filterText : '';
     const value = sendValue ? this._getValue() : null;
 
-    return new Promise<IOption[] | IAutocompleteOptionGroup[]>((resolve, reject) => {
+    return new Promise<IAutocompleteOption[] | IAutocompleteOptionGroup[]>((resolve, reject) => {
       return Promise.resolve(filter(filterText, value))
         .then(options => {
           this._options = options;
@@ -485,10 +484,10 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   private _sortSelectedOptions(): void {
     // When in multiple selection mode, we need to make sure that the selected options appear at the top of the list
     if (this._multiple && this._selectedOptions.length && isOptionType(this._options, OptionType.Option)) {
-      const selectedOptions: IOption[] = [];
-      const unselectedOptions: IOption[] = [];
+      const selectedOptions: IAutocompleteOption[] = [];
+      const unselectedOptions: IAutocompleteOption[] = [];
 
-      (this._options as IOption[]).forEach(option => {
+      (this._options as IAutocompleteOption[]).forEach(option => {
         if (this._selectedOptions.find(o => optionEqualPredicate(o, option.value, this._matchKey))) {
           selectedOptions.push(option);
         } else {
@@ -523,7 +522,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
 
     const select = (): void => {
       const flatOptions = this._flatOptions;
-      const option = flatOptions.find(o => optionEqualPredicate(o, selectedValue, this._matchKey)) as IOption;
+      const option = flatOptions.find(o => optionEqualPredicate(o, selectedValue, this._matchKey)) as IAutocompleteOption;
       const value = option ? option.value : '';
       const label = option ? option.label : '';
 
@@ -664,7 +663,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._closeDropdown();
   }
 
-  private async _applyValue(value: string | string[] | IOption | IOption[] | null | undefined): Promise<void> {
+  private async _applyValue(value: string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined): Promise<void> {
     let values: any[] = [];
     this._selectedOptions = [];
 
@@ -680,8 +679,8 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
 
     if (isOptionType(values, OptionType.Option)) {
-      this._values = values.map((o: IOption) => o.value);
-      this._selectedOptions = values as IOption[];
+      this._values = values.map((o: IAutocompleteOption) => o.value);
+      this._selectedOptions = values as IAutocompleteOption[];
     } else {
       this._values = values as any[];
     }
@@ -720,7 +719,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
   }
 
-  private _updateSelectedOptions(values: Array<any | IOption>): void {
+  private _updateSelectedOptions(values: Array<any | IAutocompleteOption>): void {
     const flatOptions = [...this._flatOptions, ...this._selectedOptions];
 
     if (this._selectedOptions.length) {
@@ -728,7 +727,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
 
     if (isOptionType(values, OptionType.Option)) {
-      for (const option of values as IOption[]) {
+      for (const option of values as IAutocompleteOption[]) {
         const actualOption = flatOptions.find(o => optionEqualPredicate(o, option.value, this._matchKey));
         if (actualOption) {
           this._selectedOptions.push(actualOption);
@@ -777,11 +776,11 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   /** Gets/sets the value of the component. */
-  public get value(): string | string[] | IOption | IOption[] | null | undefined {
+  public get value(): string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined {
     return this._getValue();
   }
-  public set value(value: string | string[] | IOption | IOption[] | null | undefined) {
-    let values: Array<string | IOption | IOption[] | string[]> = [];
+  public set value(value: string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined) {
+    let values: Array<string | IAutocompleteOption | IAutocompleteOption[] | string[]> = [];
 
     if (value == null) {
       values = [];
@@ -957,11 +956,11 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._observeScrollThreshold = value;
   }
 
-  public appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {
+  public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
     if (!this._isDropdownOpen) {
       return;
     }
-    this._options = [...this._options, ...options] as IOption[] | IAutocompleteOptionGroup[];
+    this._options = [...this._options, ...options] as IAutocompleteOption[] | IAutocompleteOptionGroup[];
     this._adapter.appendOptions(options);
   }
 
