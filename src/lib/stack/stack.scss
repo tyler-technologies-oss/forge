@@ -1,15 +1,2 @@
-@use './mixins' as stack;
-
-.forge-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    &--inline {
-        @include stack.inline();
-
-        &--wrap {
-            flex-wrap: wrap;
-        }
-    }
-}
+@use './mixins';
+@include mixins.core-styles;

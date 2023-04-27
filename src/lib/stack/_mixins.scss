@@ -1,7 +1,17 @@
 @use './variables';
 
 @mixin core-styles() {
-  // TODO: All component shadow selectors go here
+  .forge-stack {
+    @include base();
+  
+    &--inline {
+      @include inline();
+  
+      &--wrap {
+          flex-wrap: wrap;
+      }
+    }
+  }
 }
 
 @mixin base() {
