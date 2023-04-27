@@ -1,6 +1,6 @@
 import { CustomElement, ensureChildren, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { BUTTON_CONSTANTS } from './button-constants';
+import { ALLOWED_CHILDREN, BUTTON_CONSTANTS } from './button-constants';
 import { userInteractionListener } from '../core/utils/utils';
 import { ForgeRipple } from '../ripple';
 
@@ -194,7 +194,7 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
   private _buttonWasAdded(mutationList: MutationRecord[]): boolean {
     return mutationList.some(mutation => {
       return Array.from(mutation.addedNodes)
-        .some(node => node.nodeName.toLowerCase() === BUTTON_CONSTANTS.selectors.BUTTON);
+        .some(node => ALLOWED_CHILDREN.includes(node.nodeName.toLowerCase()));
     });
   }
 

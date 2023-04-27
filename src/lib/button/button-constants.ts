@@ -2,6 +2,8 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}button`;
 
+export const ALLOWED_CHILDREN = ['button', 'a'];
+
 const classes = {
   BUTTON: 'forge-button',
   LABEL: 'forge-button__label',
@@ -14,7 +16,7 @@ const classes = {
 };
 
 const selectors = {
-  BUTTON: 'button, a',
+  BUTTON: ALLOWED_CHILDREN.join(','),
   LABEL: `span:not(.${classes.RIPPLE})`,
   ICON: 'i,forge-icon,[data-forge-button-icon]',
   RIPPLE: `.${classes.RIPPLE}`
