@@ -11,6 +11,8 @@ export interface ISelectProps {
   floatLabelType: SelectFloatLabelType;
   shape: SelectShapeType;
   placeholder: string;
+  constrainPopupWidth: boolean;
+  wrapOptionText: boolean;
   hasLeadingIcon: boolean;
   hasHelperText: boolean;
   hasAddonEnd: boolean;
@@ -104,6 +106,20 @@ export const argTypes = {
   },
   placeholder: {
     control: 'text',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  constrainPopupWidth: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  wrapOptionText: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',

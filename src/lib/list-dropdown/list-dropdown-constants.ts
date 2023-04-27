@@ -6,6 +6,8 @@ const attributes = {
   OBSERVE_SCROLL: 'observe-scroll',
   OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold',
   SYNC_POPUP_WIDTH: 'sync-popup-width',
+  CONSTRAIN_POPUP_WIDTH: 'constrain-popup-width',
+  WRAP_OPTION_TEXT: 'wrap-option-text',
 
   // Internal
   CHECKBOX_ELEMENT: 'data-list-dropdown-checkbox',
@@ -68,6 +70,8 @@ export interface IListDropdownConfig<T = any> {
   activeChangeCallback?: (id: string) => void;
   closeCallback?: () => void;
   syncWidth?: boolean;
+  constrainViewportWidth?: boolean;
+  wrapOptionText?: boolean;
   selectedValues?: T[];
   multiple?: boolean;
   activeStartIndex?: number;
