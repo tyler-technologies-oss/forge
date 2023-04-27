@@ -1,6 +1,7 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { IStackAdapter } from './stack-adapter';
+import { STACK_CONSTANTS } from './stack-constants';
 
 export interface IStackFoundation extends ICustomElementFoundation {
 
@@ -9,11 +10,11 @@ export interface IStackFoundation extends ICustomElementFoundation {
 export class StackFoundation implements IStackFoundation {
   private _inline = false;
   private _wrap = false;
+  private _stretch = false;
+  private _gap = 16;
   constructor(private _adapter: IStackAdapter) {}
 
   public initialize(): void {
-    this._adapter.setStackDirection(this._inline);
-    this._adapter.setWrap(this._wrap);
   }
 
   /** Controls the direction of the stack. */
@@ -24,7 +25,7 @@ export class StackFoundation implements IStackFoundation {
     value = Boolean(value);
     if (this._inline !== value) {
       this._inline = value;
-      this._adapter.setStackDirection(this._inline);
+      this._adapter.toggleHostAttribute(STACK_CONSTANTS.attributes.INLINE, this._inline);
     }
   }
 
@@ -36,11 +37,33 @@ export class StackFoundation implements IStackFoundation {
     value = Boolean(value);
     if (this._wrap !== value) {
       this._wrap = value;
-      this._adapter.setWrap(this._wrap);
+      this._adapter.toggleHostAttribute(STACK_CONSTANTS.attributes.WRAP, this._wrap);
+    }
+  }
+
+  /** Controls if the children within the stack should stretch in width */
+  public get stretch(): boolean {
+    return this._stretch;
+  }
+  public set stretch(value: boolean) {
+    value = Boolean(value);
+    if (this._stretch !== value) {
+      this._stretch = value;
+      this._adapter.toggleHostAttribute(STACK_CONSTANTS.attributes.STRETCH, this._stretch);
+    }
+  }
+
+  /** Controls the gap amount between the children in pixels */
+  public get gap(): number {
+    return this._gap;
+  }
+  public set gap(value: number) {
+    if (this._gap !== value) {
+      this._gap = value;
+      this._adapter.setGap(this._gap);
     }
   }
 
   public disconnect(): void {
-
   }
 }

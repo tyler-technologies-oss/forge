@@ -1,13 +1,17 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty, coerceNumber } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
 import { StackFoundation } from './stack-foundation';
 import { STACK_CONSTANTS } from './stack-constants';
 
 import template from './stack.html';
 import styles from './stack.scss';
+import { BaseComponent } from '../core';
 
 export interface IStackComponent extends ICustomElement {
   inline: boolean;
+  wrap: boolean;
+  stretch: boolean;
+  gap: number;
 }
 
 declare global {
@@ -19,11 +23,13 @@ declare global {
 @CustomElement({
   name: STACK_CONSTANTS.elementName
 })
-export class StackComponent extends HTMLElement implements IStackComponent {
+export class StackComponent extends BaseComponent implements IStackComponent {
   public static get observedAttributes(): string[] {
     return [
       STACK_CONSTANTS.attributes.INLINE,
-      STACK_CONSTANTS.attributes.WRAP
+      STACK_CONSTANTS.attributes.WRAP,
+      STACK_CONSTANTS.attributes.STRETCH,
+      STACK_CONSTANTS.attributes.GAP
     ];
   }
 
@@ -52,6 +58,12 @@ export class StackComponent extends HTMLElement implements IStackComponent {
       case STACK_CONSTANTS.attributes.WRAP:
         this.wrap = coerceBoolean(newValue);
         break;
+      case STACK_CONSTANTS.attributes.STRETCH:
+        this.stretch = coerceBoolean(newValue);
+        break;
+      case STACK_CONSTANTS.attributes.GAP:
+        this.gap = coerceNumber(newValue);
+        break;
     }
   }
 
@@ -62,4 +74,12 @@ export class StackComponent extends HTMLElement implements IStackComponent {
   /** Controls if items wrap to a new line in inline mode */
   @FoundationProperty()
   public declare wrap: boolean;
+
+  /** Controls if items wrap to a new line in inline mode */
+  @FoundationProperty()
+  public declare stretch: boolean;
+
+  /** Controls if items wrap to a new line in inline mode */
+  @FoundationProperty()
+  public declare gap: number;
 }

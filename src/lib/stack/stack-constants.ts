@@ -10,7 +10,9 @@ const classes = {
 
 const attributes = {
   INLINE: 'inline',
-  WRAP: 'wrap'
+  WRAP: 'wrap',
+  STRETCH: 'stretch',
+  GAP: 'gap'
 };
 
 const selectors = {

@@ -1,24 +1,21 @@
 import { getShadowElement, toggleClass } from '@tylertech/forge-core';
 import { IStackComponent } from './stack';
 import { STACK_CONSTANTS } from './stack-constants';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 
-export interface IStackAdapter {
-  setStackDirection: (inline: boolean) => void;
-  setWrap: (wrap: boolean) => void;
+export interface IStackAdapter extends IBaseAdapter {
+  setGap: (gap: number) => void;
 }
 
-export class StackAdapter implements IStackAdapter {
+export class StackAdapter extends BaseAdapter<IStackComponent> implements IStackAdapter {
   private _stackContainer: HTMLElement;
 
-  constructor(private _component: IStackComponent) {
-    this._stackContainer = getShadowElement(_component, `.${STACK_CONSTANTS.classes.DEFAULT}`);
+  constructor(component: IStackComponent) {
+    super(component);
+    this._stackContainer = getShadowElement(component, `.${STACK_CONSTANTS.classes.DEFAULT}`);
   }
 
-  public setStackDirection(inline: boolean): void {
-    toggleClass(this._stackContainer, inline, STACK_CONSTANTS.classes.INLINE);
-  }
-
-  public setWrap(wrap: boolean): void {
-    toggleClass(this._stackContainer, wrap, STACK_CONSTANTS.classes.WRAP);
+  public setGap(gap: number): void {
+    this._stackContainer.style.setProperty('--forge-stack-gap', `${gap}px`);
   }
 }

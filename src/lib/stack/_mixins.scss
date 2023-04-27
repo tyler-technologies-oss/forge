@@ -1,27 +1,29 @@
+@use '../theme';
 @use './variables';
 
 @mixin core-styles() {
   .forge-stack {
     @include base();
-  
-    &--inline {
-      @include inline();
-  
-      &--wrap {
-          flex-wrap: wrap;
-      }
-    }
+    @include theme.css-custom-property(gap, --forge-stack-gap, 16px);
   }
 }
 
 @mixin base() {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 @mixin inline() {
   display: flex;
   flex-direction: row;
-  gap: 16px;
+}
+
+@mixin wrap() {
+  flex-wrap: wrap;
+}
+
+@mixin stretch() {
+  ::slotted(*) {
+    flex: 1;
+  }
 }
