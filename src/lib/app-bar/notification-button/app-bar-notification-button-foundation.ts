@@ -7,6 +7,7 @@ export interface IAppBarNotificationButtonFoundation extends ICustomElementFound
   dot: boolean;
   theme: string;
   showBadge: boolean;
+  icon: string;
 }
 
 export class AppBarNotificationButtonFoundation implements IAppBarNotificationButtonFoundation {
@@ -15,6 +16,7 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
   private _theme: string;
   private _showBadge = false;
   private _isInitialized = false;
+  private _icon = 'notifications';
 
   constructor(private _adapter: IAppBarNotificationButtonAdapter) {}
 
@@ -24,11 +26,25 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
     this._adapter.setBadgeType(this._dot);
     this._adapter.setBadgeTheme(this._theme);
     this._adapter.setBadgeVisible(this._showBadge);
+    this._adapter.setIcon(this._icon);
     this._isInitialized = true;
   }
 
   public disconnect(): void {
     this._isInitialized = false;
+  }
+
+  public get icon(): string {
+    return this._icon;
+  }
+  public set icon(value: string) {
+    if (this._icon !== value) {
+      this._icon = value;
+      if (this._isInitialized) {
+        this._adapter.setIcon(this._icon);
+        this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON, this._icon);
+      }
+    }
   }
 
   public get count(): number {
