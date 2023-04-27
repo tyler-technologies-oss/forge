@@ -24,7 +24,7 @@ export const LIST_DROPDOWN_CONSTANTS = {
 export type ListDropdownOptionBuilder<T = HTMLElement> = (option: IListDropdownOption, parentElement: T) => HTMLElement | string | void;
 export type ListDropdownHeaderBuilder = () => HTMLElement;
 export type ListDropdownFooterBuilder = () => HTMLElement;
-export type ListDropdownOptionGroupBuilder = (option: IListDropdownOptionGroup) => HTMLElement;
+export type ListDropdownOptionGroupBuilder<T = any> = (option: IListDropdownOptionGroup<T>) => HTMLElement | string;
 export type ListDropdownTransformCallback = (label: string) =>  string | HTMLElement;
 export type ListDropdownIconType = 'font' | 'component';
 
@@ -49,10 +49,10 @@ export interface IListDropdownOption<T = any> extends IBaseListDropdownOption<T>
   elementAttributes?: Map<string, string>;
 }
 
-export interface IListDropdownOptionGroup {
-  options: IListDropdownOption[];
+export interface IListDropdownOptionGroup<T = any> {
   text?: string;
   builder?: ListDropdownOptionGroupBuilder;
+  options: IListDropdownOption<T>[];
 }
 
 export interface IListDropdownSelectEventData {

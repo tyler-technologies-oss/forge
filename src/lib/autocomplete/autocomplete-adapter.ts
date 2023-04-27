@@ -1,12 +1,12 @@
 import { getShadowElement, deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IOption } from '../select';
 import { IAutocompleteComponent } from './autocomplete';
 import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOptionGroup } from './autocomplete-constants';
 import { TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
 import { CHIP_FIELD_CONSTANTS } from '../chip-field';
 import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
+import { IAutocompleteOption } from '..';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   setInputElement(): HTMLInputElement;
@@ -18,8 +18,8 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   show(config: IListDropdownConfig, popupTarget: string): void;
   hide(listener: () => void): void;
   focus(): void;
-  setOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;
-  appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;
+  setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
+  appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   setSelectedText(value: string): void;
   getInputValue(): string;
   selectInputValue(): void;
@@ -42,7 +42,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   setBusyVisibility(busy: boolean): void;
   getActiveOptionIndex(): number | null;
   clearActiveOption(): void;
-  setSelectedOptions(options: IOption[]): void;
+  setSelectedOptions(options: IAutocompleteOption[]): void;
   queueDropdownPositionUpdate(): void;
 }
 
@@ -143,11 +143,11 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     window.requestAnimationFrame(() => this._inputElement.focus());
   }
 
-  public setOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {
+  public setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
     this._listDropdown?.setOptions(options);
   }
 
-  public appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {
+  public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
     this._listDropdown?.appendOptions(options);
   }
 
@@ -253,7 +253,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._listDropdown?.clearActiveOption();
   }
 
-  public setSelectedOptions(options: IOption[]): void {
+  public setSelectedOptions(options: IAutocompleteOption[]): void {
     if (this._listDropdown) {
       const values = options.map(o => o.value);
       this._listDropdown.setSelectedValues(values);
