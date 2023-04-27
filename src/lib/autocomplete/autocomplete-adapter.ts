@@ -1,12 +1,11 @@
 import { getShadowElement, deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IAutocompleteComponent } from './autocomplete';
-import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOptionGroup } from './autocomplete-constants';
+import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
 import { TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
 import { CHIP_FIELD_CONSTANTS } from '../chip-field';
 import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
-import { IAutocompleteOption } from '..';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   setInputElement(): HTMLInputElement;
