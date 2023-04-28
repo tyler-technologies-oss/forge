@@ -1,15 +1,15 @@
 @use './mixins';
 @include mixins.core-styles;
 
-:host([inline][wrap]) {
-  .forge-stack {
-    @include mixins.wrap;
-  }
-}
-
 :host([inline]) {
   .forge-stack {
     @include mixins.inline;
+  }
+}
+
+:host([inline][wrap]) {
+  .forge-stack {
+    @include mixins.wrap;
   }
 }
 
@@ -19,37 +19,19 @@
   }
 }
 
-:host(:not([inline])[align='start']) {
+:host([align='start']) {
   .forge-stack {
     @include mixins.justify-start;
   }
 }
 
-:host(:not([inline])[align='center']) {
+:host([align='center']) {
   .forge-stack {
     @include mixins.justify-center;
   }
 }
 
-:host(:not([inline])[align='end']) {
-  .forge-stack {
-    @include mixins.justify-end;
-  }
-}
-
-:host([inline][align='start']) {
-  .forge-stack {
-    @include mixins.justify-start;
-  }
-}
-
-:host([inline][align='center']) {
-  .forge-stack {
-    @include mixins.justify-center;
-  }
-}
-
-:host([inline][align='end']) {
+:host([align='end']) {
   .forge-stack {
     @include mixins.justify-end;
   }
