@@ -1,11 +1,10 @@
-.resize-div {
-    resize: both;
-    overflow: auto;
-    border: 1px solid #ececec;
-    padding: 16px;
+.stack-container {
+  height: 800px;
 }
 
 .box {
     padding: 36px;
-    border: 4px dashed lightgray;
+    border: 4px dashed darkgray;
+    background-color: bisque;
+    border-radius: 8px;
 }

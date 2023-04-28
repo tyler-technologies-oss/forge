@@ -12,12 +12,19 @@ const attributes = {
   INLINE: 'inline',
   WRAP: 'wrap',
   STRETCH: 'stretch',
-  GAP: 'gap'
+  GAP: 'gap',
+  ALIGN: 'align'
 };
 
 const selectors = {
   CONTAINER: '.forge-stack'
 };
+
+export enum StackAlignMode {
+  Start = 'start',
+  Center = 'center',
+  End = 'end'
+}
 
 export const STACK_CONSTANTS = {
   elementName,

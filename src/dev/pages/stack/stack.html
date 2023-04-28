@@ -7,7 +7,18 @@ include('./src/partials/page.ejs', {
       { type: 'switch', label: 'Inline', id: 'inline-switch' },
       { type: 'switch', label: 'Wrap (inline only)', id: 'wrap-switch' },
       { type: 'switch', label: 'Stretch', id: 'stretch-switch' },
-      { type: 'text-field', label: 'Gap', id: 'gap-input' },
+      { type: 'text-field', label: 'Gap', id: 'gap-input', defaultValue: '16' },
+      {
+        type: 'select',
+        label: 'Align',
+        id: 'align-select',
+        defaultValue: 'start',
+        options: [
+          { label: 'Start', value: 'start' },
+          { label: 'Center', value: 'center' },
+          { label: 'End', value: 'end' },
+        ]
+      }
     ]
   }
 })

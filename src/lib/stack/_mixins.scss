@@ -5,17 +5,21 @@
   .forge-stack {
     @include base();
     @include theme.css-custom-property(gap, --forge-stack-gap, 16px);
+    @include theme.css-custom-property(height, --forge-stack-height, 100%);
   }
 }
 
 @mixin base() {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  text-align: left;
 }
 
 @mixin inline() {
   display: flex;
   flex-direction: row;
+  --forge-stack-height: auto;
 }
 
 @mixin wrap() {
@@ -26,4 +30,16 @@
   ::slotted(*) {
     flex: 1;
   }
+}
+
+@mixin justify-start() {
+  justify-content: start;
+}
+
+@mixin justify-center() {
+  justify-content: center;
+}
+
+@mixin justify-end() {
+  justify-content: end;
 }

@@ -18,3 +18,39 @@
     @include mixins.stretch;
   }
 }
+
+:host(:not([inline])[align='start']) {
+  .forge-stack {
+    @include mixins.justify-start;
+  }
+}
+
+:host(:not([inline])[align='center']) {
+  .forge-stack {
+    @include mixins.justify-center;
+  }
+}
+
+:host(:not([inline])[align='end']) {
+  .forge-stack {
+    @include mixins.justify-end;
+  }
+}
+
+:host([inline][align='start']) {
+  .forge-stack {
+    @include mixins.justify-start;
+  }
+}
+
+:host([inline][align='center']) {
+  .forge-stack {
+    @include mixins.justify-center;
+  }
+}
+
+:host([inline][align='end']) {
+  .forge-stack {
+    @include mixins.justify-end;
+  }
+}

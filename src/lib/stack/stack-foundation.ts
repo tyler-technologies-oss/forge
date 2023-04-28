@@ -1,7 +1,7 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { IStackAdapter } from './stack-adapter';
-import { STACK_CONSTANTS } from './stack-constants';
+import { STACK_CONSTANTS, StackAlignMode } from './stack-constants';
 
 export interface IStackFoundation extends ICustomElementFoundation {
 
@@ -12,6 +12,7 @@ export class StackFoundation implements IStackFoundation {
   private _wrap = false;
   private _stretch = false;
   private _gap = 16;
+  private _align = StackAlignMode.Start;
   constructor(private _adapter: IStackAdapter) {}
 
   public initialize(): void {
@@ -61,6 +62,17 @@ export class StackFoundation implements IStackFoundation {
     if (this._gap !== value) {
       this._gap = value;
       this._adapter.setGap(this._gap);
+    }
+  }
+
+  /** Controls the alignment of children */
+  public get align(): StackAlignMode {
+    return this._align;
+  }
+  public set align(value: StackAlignMode) {
+    if (this._align !== value) {
+      this._align = value;
+      this._adapter.setHostAttribute(STACK_CONSTANTS.attributes.ALIGN, this._align);
     }
   }
 
