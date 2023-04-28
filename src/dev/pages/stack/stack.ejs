@@ -1,11 +1,119 @@
 <p class="forge-typography--body2">Resize browser window to see wrapping (set inline and wrap to true)</p>
 <div class="stack-container">
-  <forge-stack>
+  <forge-stack id="main-demo">
     <div class="box"></div>
     <div class="box"></div>
     <div class="box"></div>
     <div class="box"></div>
   </forge-stack>
+</div>
+
+<div class="more-examples">
+  <p class="forge-typography--title">More examples</p>
+  <forge-stack gap="56">
+    <forge-card outlined>
+      <forge-toolbar style="--forge-toolbar-padding: 0" no-border>
+        <p slot="start" class="forge-typography--body2">Homemade toolbar with end buttons</p>
+      </forge-toolbar>
+      <div style="padding: 16px; border: 1px solid #ececec">
+        <forge-stack inline align="end">
+          <forge-button>
+            <button type="button">Cancel</button>
+          </forge-button>
+          <forge-button type="unelevated">
+            <button type="button">Save</button>
+          </forge-button>
+        </forge-stack>
+      </div>
+    </forge-card>
+    <forge-card outlined style="--forge-card-padding: 0;">
+      <forge-toolbar>
+        <p slot="start" class="forge-typography--body2">Simple vertical form</p>
+      </forge-toolbar>
+      <form style="padding: 16px;">
+        <forge-stack gap="16">
+          <forge-text-field>
+            <input type="text" id="input-text-01" />
+            <label for="input-text-01" slot="label">Text field</label>
+          </forge-text-field>
+          <forge-text-field>
+            <input type="text" id="input-text-01" />
+            <label for="input-text-01" slot="label">Text field</label>
+          </forge-text-field>
+          <forge-text-field>
+            <input type="text" id="input-text-01" />
+            <label for="input-text-01" slot="label">Text field</label>
+          </forge-text-field>
+        </forge-stack>
+      </form>
+    </forge-card>
+
+
+    <forge-card outlined style="--forge-card-padding: 0;">
+      <forge-toolbar>
+        <p slot="start" class="forge-typography--body2">Complex form</p>
+      </forge-toolbar>
+      <form style="padding: 16px;">
+        <forge-stack>
+          <forge-stack stretch>
+            <span class="forge-typography--body2">Header</span>
+          </forge-stack>
+          <forge-stack inline stretch>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+          </forge-stack>
+          <forge-stack inline stretch>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+          </forge-stack>
+          <forge-stack stretch>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+          </forge-stack>
+          <forge-stack inline stretch>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field>
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+          </forge-stack>
+        </forge-stack>
+      </form>
+    </forge-card>
+</forge-stack>
 </div>
 
 <script type="module" src="stack.ts"></script>

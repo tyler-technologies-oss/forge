@@ -1,5 +1,8 @@
 .stack-container {
   height: 800px;
+  padding: 16px;
+  background: beige;
+  border-radius: 8px;
 }
 
 .box {
@@ -7,4 +10,8 @@
     border: 4px dashed darkgray;
     background-color: bisque;
     border-radius: 8px;
+}
+
+.more-examples {
+  margin-block-start: 64px;
 }

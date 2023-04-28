@@ -16,6 +16,6 @@ export class StackAdapter extends BaseAdapter<IStackComponent> implements IStack
   }
 
   public setGap(gap: number): void {
-    this._stackContainer.style.setProperty('--forge-stack-gap', `${gap}px`);
+    this._stackContainer.style.gap = `var(--forge-stack-gap, ${gap}px)`;
   }
 }

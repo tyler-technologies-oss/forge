@@ -16,6 +16,7 @@ export class StackFoundation implements IStackFoundation {
   constructor(private _adapter: IStackAdapter) {}
 
   public initialize(): void {
+    this._adapter.setGap(this._gap);
   }
 
   /** Controls the direction of the stack. */
