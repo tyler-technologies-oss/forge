@@ -21,9 +21,10 @@ import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansio
 import { TooltipComponent, TOOLTIP_CONSTANTS } from '../tooltip';
 import { TABLE_CONSTANTS } from './table-constants';
 import { TableRow } from './table-row';
-import { CellAlign, IColumnConfiguration, IColumnData, ITableConfiguration, SortDirection, TableFilterDelegateFactory, TableFilterListener, TableHeaderSelectAllTemplate, TableTemplateBuilder, TableViewTemplate, TableSelectTooltipCallback, ITableTemplateBuilderResult } from './types';
+import { CellAlign, IColumnConfiguration, IColumnData, ITableConfiguration, SortDirection, TableFilterDelegateFactory, TableFilterListener, TableHeaderSelectAllTemplate, TableTemplateBuilder, TableViewTemplate, TableSelectTooltipCallback, ITableTemplateBuilderResult, TableViewTemplateBuilder } from './types';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
 import { FormFieldComponentDelegate, IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate';
+import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions } from '../core';
 
 function isTemplateResultObject(val: any): val is ITableTemplateBuilderResult {
   return val && typeof val === 'object' && 'content' in val;
@@ -372,7 +373,7 @@ export class TableUtils {
       // Otherwise use the property to go get the value from the row data...
       if (columnConfig.template && typeof columnConfig.template === 'function') {
         const rowData = configuration.data[rowIndex] ? configuration.data[rowIndex].data : undefined;
-        Promise.resolve(columnConfig.template(rowIndex, div, rowData)).then(result => {
+        Promise.resolve(columnConfig.template(rowIndex, div, rowData, i)).then(result => {
           const config = isTemplateResultObject(result) ? result : { content: result, stopClickPropagation: columnConfig.stopCellTemplateClickPropagation } as ITableTemplateBuilderResult;
           
           if (!config.content) {
@@ -1405,17 +1406,18 @@ export class TableUtils {
    * @param {IColumnConfiguration} columnConfig The column configuration.
    */
   private static _createFilterElement(columnConfig: IColumnConfiguration, columnIndex: number, filterListener: TableFilterListener): HTMLElement {
-    let delegate: IFormFieldComponentDelegate<any>;
+    let delegate: IFormFieldComponentDelegate<any> | IBaseComponentDelegate<HTMLElement>;
 
     if (isFunction(columnConfig.filterDelegate)) {
       delegate = (columnConfig.filterDelegate as TableFilterDelegateFactory)();
-    } else if (columnConfig.filterDelegate instanceof FormFieldComponentDelegate) {
+    } else if (columnConfig.filterDelegate instanceof FormFieldComponentDelegate || columnConfig.filterDelegate instanceof BaseComponentDelegate) {
       delegate = columnConfig.filterDelegate;
     } else {
       throw new Error('Invalid filter delegate.');
     }
 
-    if (filterListener) {
+    // If this is a FormFieldComponentDelegate then we can listen for when the value changes, otherwise we just render the custom delegate element
+    if (!!filterListener && delegate instanceof FormFieldComponentDelegate && isFunction(delegate.onChange)) {
       if (!isDefined(columnConfig.filterDebounceTime) || isNumber(columnConfig.filterDebounceTime)) {
         const debounceTime = isDefined(columnConfig.filterDebounceTime) ? (columnConfig.filterDebounceTime as number) : TABLE_CONSTANTS.numbers.DEFAULT_FILTER_DEBOUNCE_TIME;
         delegate.onChange(debounce((value: any) => filterListener(value, columnIndex), debounceTime));
@@ -1468,7 +1470,7 @@ export class TableUtils {
 
     if (isFunction(template)) {
       const rowData = configuration.data[rowIndex] ? configuration.data[rowIndex].data : undefined;
-      const templateValue = (template as TableTemplateBuilder)(rowIndex, contentDiv, rowData);
+      const templateValue = (template as TableViewTemplateBuilder)(rowIndex, contentDiv, rowData);
       try {
         const result = await Promise.resolve(templateValue);
         content = isTemplateResultObject(result) ? result.content : result;
