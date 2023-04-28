@@ -12,7 +12,6 @@ import { ISelectComponent, IStackComponent, ITextFieldComponent } from '@tylerte
 
 const inlineToggle = document.querySelector('#inline-switch') as ISwitchComponent;
 const wrapToggle = document.querySelector('#wrap-switch') as ISwitchComponent;
-wrapToggle.disabled = true;
 const stretchToggle = document.querySelector('#stretch-switch') as ISwitchComponent;
 const gapInput = document.querySelector('#gap-input') as HTMLInputElement;
 const stackContainer = document.querySelector('#main-demo') as IStackComponent;
@@ -30,25 +29,25 @@ inlineToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
 
 wrapToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   if (selected) {
-    stackContainer.setAttribute('wrap', 'true');
+    stackContainer.wrap = true;
   } else {
-    stackContainer.removeAttribute('wrap');
+    stackContainer.wrap = false;
   }
 });
 
 stretchToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   if (selected) {
-    stackContainer.setAttribute('stretch', 'true');
+    stackContainer.stretch = true;
   } else {
-    stackContainer.removeAttribute('stretch');
+    stackContainer.stretch = false;
   }
 });
 
 const alignSelect = document.getElementById('align-select') as ISelectComponent;
 alignSelect.addEventListener('change', () => {
-  stackContainer.align = alignSelect.value;
+  stackContainer.alignment = alignSelect.value;
 });
 
 gapInput.addEventListener('input', () => {
-  stackContainer.setAttribute('gap', gapInput.value);
+  stackContainer.gap = Number(gapInput.value);
 });

@@ -19,19 +19,19 @@
   }
 }
 
-:host([align='start']) {
+:host([alignment='start']) {
   .forge-stack {
     @include mixins.justify-start;
   }
 }
 
-:host([align='center']) {
+:host([alignment='center']) {
   .forge-stack {
     @include mixins.justify-center;
   }
 }
 
-:host([align='end']) {
+:host([alignment='end']) {
   .forge-stack {
     @include mixins.justify-end;
   }

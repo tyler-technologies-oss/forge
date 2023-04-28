@@ -12,7 +12,7 @@ export class StackFoundation implements IStackFoundation {
   private _wrap = false;
   private _stretch = false;
   private _gap = 16;
-  private _align = StackAlignMode.Start;
+  private _alignment = StackAlignMode.Start;
   constructor(private _adapter: IStackAdapter) {}
 
   public initialize(): void {
@@ -68,13 +68,13 @@ export class StackFoundation implements IStackFoundation {
   }
 
   /** Controls the alignment of children */
-  public get align(): StackAlignMode {
-    return this._align;
+  public get alignment(): StackAlignMode {
+    return this._alignment;
   }
-  public set align(value: StackAlignMode) {
-    if (this._align !== value) {
-      this._align = value;
-      this._adapter.setHostAttribute(STACK_CONSTANTS.attributes.ALIGN, this._align);
+  public set alignment(value: StackAlignMode) {
+    if (this._alignment !== value) {
+      this._alignment = value;
+      this._adapter.setHostAttribute(STACK_CONSTANTS.attributes.ALIGNMENT, this._alignment);
     }
   }
 

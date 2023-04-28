@@ -5,7 +5,7 @@ include('./src/partials/page.ejs', {
     includePath: './pages/stack/stack.ejs',
     options: [
       { type: 'switch', label: 'Inline', id: 'inline-switch' },
-      { type: 'switch', label: 'Wrap (inline only)', id: 'wrap-switch' },
+      { type: 'switch', label: 'Wrap (inline only)', id: 'wrap-switch', disabled: true },
       { type: 'switch', label: 'Stretch', id: 'stretch-switch' },
       { type: 'text-field', label: 'Gap', id: 'gap-input', defaultValue: '16' },
       {
