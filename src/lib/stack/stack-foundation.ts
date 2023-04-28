@@ -63,6 +63,7 @@ export class StackFoundation implements IStackFoundation {
     if (this._gap !== value) {
       this._gap = value;
       this._adapter.setGap(this._gap);
+      this._adapter.setHostAttribute(STACK_CONSTANTS.attributes.GAP, String(this._gap));
     }
   }
 
