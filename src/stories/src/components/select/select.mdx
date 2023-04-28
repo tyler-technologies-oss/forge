@@ -182,6 +182,44 @@ Gets/sets the placeholder text for when no values are selected. This only applie
 
 </PropertyDef>
 
+<PropertyDef name="popupClasses" type="string | string[]" defaultValue="[]">
+
+Gets/sets the list of classes to apply to the popup element.
+
+</PropertyDef>
+
+<PropertyDef name="popupHeaderBuilder" type="ListDropdownHeaderBuilder" defaultValue="undefined">
+
+Gets/sets the callback function for generating header content within the popup.
+
+</PropertyDef>
+
+<PropertyDef name="popupFooterBuilder" type="ListDropdownFooterBuilder" defaultValue="undefined">
+
+Gets/sets the callback function for generating footer content within the popup.
+
+</PropertyDef>
+
+<PropertyDef name="syncPopupWidth" type="boolean" defaultValue="false">
+
+Gets/sets whether the popup width is synchronized with the popup target width.
+
+</PropertyDef>
+
+<PropertyDef name="constrainPopupWidth" type="boolean" defaultValue="true">
+
+Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`).
+
+</PropertyDef>
+
+<PropertyDef name="wrapOptionText" type="boolean" defaultValue="false">
+
+Gets/sets whether the options will wrap their text or not.
+
+This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
+
+</PropertyDef>
+
 </PageSection>
 
 ---
@@ -408,6 +446,18 @@ type SelectFloatLabelType = 'default' | 'always';
 
 ```ts
 type SelectBeforeValueChangeCallback<T> = (value: T | T[]) => boolean | Promise<boolean>;
+```
+
+### ListDropdownHeaderBuilder
+
+```ts
+type ListDropdownHeaderBuilder = () => HTMLElement;
+```
+
+### ListDropdownFooterBuilder
+
+```ts
+type ListDropdownFooterBuilder = () => HTMLElement;
 ```
 
 </PageSection>
