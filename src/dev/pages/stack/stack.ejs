@@ -13,10 +13,10 @@
   <forge-stack gap="56">
     <forge-card outlined>
       <forge-toolbar style="--forge-toolbar-padding: 0" no-border>
-        <p slot="start" class="forge-typography--body2">Homemade toolbar with end buttons</p>
+        <p slot="start" class="forge-typography--body2">Forge toolbar with perfectly spaced end slot buttons</p>
       </forge-toolbar>
-      <div style="padding: 16px; border: 1px solid #ececec">
-        <forge-stack inline align="end">
+      <forge-toolbar>
+        <forge-stack inline gap="16" slot="end">
           <forge-button>
             <button type="button">Cancel</button>
           </forge-button>
@@ -24,7 +24,7 @@
             <button type="button">Save</button>
           </forge-button>
         </forge-stack>
-      </div>
+      </forge-toolbar>
     </forge-card>
     <forge-card outlined style="--forge-card-padding: 0;">
       <forge-toolbar>
