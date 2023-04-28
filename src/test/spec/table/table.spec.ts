@@ -1149,6 +1149,15 @@ describe('TableComponent', function(this: ITestContext) {
       expect(headerRow.cells.length).toBe(columns.length - 1);
     });
 
+    it('should return whether a column is hidden or not', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.columnConfigurations = columns;
+      this.context.component.hideColumn(0);
+    
+      expect(this.context.component.isColumnHidden(0)).toBeTrue();
+      expect(this.context.component.isColumnHidden(1)).toBeFalse();
+    });
+
     it('should reset the sorted column on hide column', function(this: ITestContext) {
       this.context = setupTestContext();
       const testColumns = deepCopy(columns);
@@ -1195,7 +1204,7 @@ describe('TableComponent', function(this: ITestContext) {
       expect(headerRow.cells.length).toBe(columns.length);
     });
 
-    it('should not remove column config if config alreaady exist on column show', function(this: ITestContext) {
+    it('should not remove column config if config already exist on column show', function(this: ITestContext) {
       this.context = setupTestContext();
       const testColumns = deepCopy(columns);
       testColumns[0].sortable = true;
