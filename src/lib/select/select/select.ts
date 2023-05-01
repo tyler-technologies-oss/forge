@@ -78,7 +78,9 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
       SELECT_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD,
       BASE_SELECT_CONSTANTS.attributes.POPUP_CLASSES,
       BASE_SELECT_CONSTANTS.attributes.OPTION_LIMIT,
-      BASE_SELECT_CONSTANTS.attributes.SYNC_POPUP_WIDTH
+      BASE_SELECT_CONSTANTS.attributes.SYNC_POPUP_WIDTH,
+      BASE_SELECT_CONSTANTS.attributes.CONSTRAIN_POPUP_WIDTH,
+      BASE_SELECT_CONSTANTS.attributes.WRAP_OPTION_TEXT
     ];
   }
 

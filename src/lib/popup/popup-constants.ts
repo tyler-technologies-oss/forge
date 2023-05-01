@@ -12,7 +12,8 @@ const attributes = {
   STATIC: 'static',
   HIDE_WHEN_CLIPPED: 'hide-when-clipped',
   HOST: 'forge-popup-host',
-  INITIAL_FOCUS: 'forge-popup-focus'
+  INITIAL_FOCUS: 'forge-popup-focus',
+  CONSTRAIN_VIEWPORT_WIDTH: 'constrain-viewport-width'
 };
 
 const classes = {

@@ -10,6 +10,8 @@ export interface IListDropdownAwareFoundation extends ICustomElementFoundation {
   optionLimit: number;
   observeScroll: boolean;
   observeScrollThreshold: number;
+  constrainPopupWidth: boolean;
+  wrapOptionText: boolean;
 }
 
 export abstract class ListDropdownAwareFoundation implements IListDropdownAwareFoundation {
@@ -20,6 +22,8 @@ export abstract class ListDropdownAwareFoundation implements IListDropdownAwareF
   protected _optionLimit = 0;
   protected _observeScroll = false;
   protected _observeScrollThreshold = 0;
+  protected _constrainPopupWidth = true;
+  protected _wrapOptionText = false;
 
   public get syncPopupWidth(): boolean {
     return this._syncPopupWidth;
@@ -73,6 +77,20 @@ export abstract class ListDropdownAwareFoundation implements IListDropdownAwareF
   }
   public set popupFooterBuilder(value: ListDropdownFooterBuilder) {
     this._popupFooterBuilder = value;
+  }
+
+  public get constrainPopupWidth(): boolean {
+    return this._constrainPopupWidth;
+  }
+  public set constrainPopupWidth(value: boolean) {
+    this._constrainPopupWidth = value;
+  }
+
+  public get wrapOptionText(): boolean {
+    return this._wrapOptionText;
+  }
+  public set wrapOptionText(value: boolean) {
+    this._wrapOptionText = value;
   }
 
   protected _applySelection(): void {}

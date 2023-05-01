@@ -15,9 +15,6 @@ export interface IBaseSelectFoundation extends IListDropdownAwareFoundation {
   popupElement: HTMLElement | undefined;
   optionBuilder: SelectOptionBuilder;
   selectedTextBuilder: SelectSelectedTextBuilder;
-  observeScroll: boolean;
-  observeScrollThreshold: number;
-  syncPopupWidth: boolean;
   beforeValueChange: SelectBeforeValueChangeCallback<any>;
   appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void;
   selectAll(): void;
@@ -176,6 +173,8 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
       id: this._identifier,
       optionBuilder: this._optionBuilder,
       syncWidth: this._syncPopupWidth,
+      constrainViewportWidth: this._constrainPopupWidth,
+      wrapOptionText: this._wrapOptionText,
       observeScroll: this._observeScroll,
       observeScrollThreshold: this._observeScrollThreshold,
       scrollEndListener: this._dropdownScrollEndListener,
@@ -656,28 +655,6 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
   public set selectedTextBuilder(fn: SelectSelectedTextBuilder) {
     this._selectedTextBuilder = fn;
   }
-
-  public get observeScroll(): boolean {
-    return this._observeScroll;
-  }
-  public set observeScroll(value: boolean) {
-    this._observeScroll = value;
-  }
-
-  public get observeScrollThreshold(): number {
-    return this._observeScrollThreshold;
-  }
-  public set observeScrollThreshold(value: number) {
-    this._observeScrollThreshold = value;
-  }
-
-  public get syncPopupWidth(): boolean {
-    return this._syncPopupWidth;
-  }
-  public set syncPopupWidth(value: boolean) {
-    this._syncPopupWidth = value;
-  }
-
 
   public get optionLimit(): number {
     return this._optionLimit;
