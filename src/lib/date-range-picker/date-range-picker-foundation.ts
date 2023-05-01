@@ -339,12 +339,12 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     }
   }
 
-  public get value(): IDatePickerRange {
+  public get value(): IDatePickerRange | null | undefined {
     return { from: this.from, to: this.to };
   }
-  public set value(value: IDatePickerRange) {
+  public set value(value: IDatePickerRange | null | undefined) {
     if (!value) {
-      return;
+      value = { from: null, to: null };
     }
 
     if (value.from === undefined) {

@@ -8,13 +8,12 @@ import '@tylertech/forge/label-value';
 
 // Icons
 import type { AutocompleteFilterCallback, IAutocompleteComponent, IListItemComponent, ISelectComponent } from '@tylertech/forge';
-import { IconRegistry, IOption, IOptionGroup } from '@tylertech/forge';
+import { IOption, IOptionGroup, IconRegistry } from '@tylertech/forge';
 import { IListDropdownOption, IListDropdownOptionGroup } from '@tylertech/forge/list-dropdown';
-import { tylIconArrowDropDown, tylIconClose } from '@tylertech/tyler-icons/standard';
+import { tylIconClose } from '@tylertech/tyler-icons/standard';
 import { randomTimeout } from '../../src/utils/utils';
 
 IconRegistry.define([
-  tylIconArrowDropDown,
   tylIconClose
 ]);
 

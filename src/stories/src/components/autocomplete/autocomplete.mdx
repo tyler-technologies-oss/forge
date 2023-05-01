@@ -62,7 +62,8 @@ The only requirement for integration via JavaScript is that you provide a callba
   Sets the filter function. **Required.**
 
   The filter function is used by the component whenever it needs to retrieved options/suggestions to display. You can return the options
-  as an array of `IOption` objects, or you can also return a `Promise` that will be resolved with an array of objects at some later time.
+  as an array of `IAutocompleteOption` or `IAutocompleteOptionGroup` objects, or you can also return a `Promise` that will be resolved
+  with an array of those objects at some later time.
 
 </PropertyDef>
 
@@ -118,7 +119,7 @@ Gets/sets the list of classes to apply to the popup element. Can be a string of 
   
 </PropertyDef>
 
-<PropertyDef name="value" type="string | string[] | IOption | IOption[] | null" defaultValue="null">
+<PropertyDef name="value" type="string | string[] | IAutocompleteOption | IAutocompleteOption[] | null" defaultValue="null">
 
 Gets/sets the selected value(s).
   
@@ -138,7 +139,7 @@ Sets the callback that will be executed when a user selects an option. This will
 
 ## Methods
 
-<MethodDef name="appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;">
+<MethodDef name="appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;">
 
   Dynamically adds options to the end of the option list while the popup is open.
 
@@ -228,7 +229,7 @@ Below you will find the API for all custom public type declarations that you wil
 ### AutocompleteOptionBuilder
 
 ```ts
-type AutocompleteOptionBuilder<T = any> = (option: IOption<T>, filterText: string, parentElement: IListItemComponent) => HTMLElement;
+type AutocompleteOptionBuilder<T = any> = (option: IAutocompleteOption<T>, filterText: string, parentElement: IListItemComponent) => HTMLElement;
 ```
 
 ### AutocompleteOptionGroupBuilder
@@ -240,19 +241,19 @@ type AutocompleteOptionGroupBuilder<T = any> = (option: IAutocompleteOptionGroup
 ### AutocompleteFilterCallback
 
 ```ts
-type AutocompleteFilterCallback<T = any> = (filterText: string, value: T | null) => Array<IOption<T>> | IAutocompleteOptionGroup[] | Promise<Array<IOption<T>> | IAutocompleteOptionGroup[]>;
+type AutocompleteFilterCallback<T = any> = (filterText: string, value: T | null) => IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[] | Promise<IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[]>;
 ```
 
 ### AutocompleteOptionComparator
 
 ```ts
-type AutocompleteOptionComparator<T = any> = (optionA: IOption<T>, optionB: IOption<T>) => number;
+type AutocompleteOptionComparator<T = any> = (optionA: IAutocompleteOption<T>, optionB: IAutocompleteOption<T>) => number;
 ```
 
 ### AutocompleteSelectedTextBuilder
 
 ```ts
-type AutocompleteSelectedTextBuilder<T = any> = (selectedOptions: Array<IOption<T>>) => string;
+type AutocompleteSelectedTextBuilder<T = any> = (selectedOptions: IAutocompleteOption<T>[]) => string;
 ```
 
 ### AutocompleteMode
@@ -264,13 +265,25 @@ enum AutocompleteMode {
 }
 ```
 
-### IOption
+### IAutocompleteOption
 
 ```ts
-interface IOption<T = any>  {
+interface IAutocompleteOption<T = any>  {
   value: T;
   label: string;
   disabled?: boolean;
+  divider?: boolean;
+  optionClass?: string | string[];
+  leadingIcon?: string;
+  leadingIconClass?: string;
+  leadingIconType?: ListDropdownIconType;
+  trailingIcon?: string;
+  trailingIconClass?: string;
+  trailingIconType?: ListDropdownIconType;
+  leadingBuilder?: () => HTMLElement;
+  trailingBuilder?: () => HTMLElement;
+  options?: Array<IListDropdownOption | IListDropdownOptionGroup>;
+  elementAttributes?: Map<string, string>;
 }
 ```
 
@@ -280,7 +293,7 @@ interface IOption<T = any>  {
 interface IAutocompleteOptionGroup<T = any> {
   text?: string;
   builder?: AutocompleteOptionGroupBuilder;
-  options: Array<IOption<T>>;
+  options: IAutocompleteOption[];
 }
 ```
 
