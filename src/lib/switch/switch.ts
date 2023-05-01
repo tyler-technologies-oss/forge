@@ -1,10 +1,12 @@
 import { CustomElement, attachShadowTemplate, coerceBoolean, getShadowElement, emitEvent, toggleAttribute, toggleClass } from '@tylertech/forge-core';
 import { MDCSwitch } from '@material/switch';
+import { MDCRipple } from '@material/ripple';
 import { SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './switch.html';
 import styles from './switch.scss';
+import { userInteractionListener } from '../core/utils';
 
 export interface ISwitchComponent extends IBaseComponent {
   dense: boolean;
@@ -20,6 +22,31 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-switch-select': CustomEvent<boolean>;
+  }
+}
+
+class ForgeMDCSwitch extends MDCSwitch {
+  public override initialize(): void {
+    // Do not call super.initialize()
+    // We defer instantiation of the ripple until first user interaction
+    this._deferRippleInitialization();
+  }
+
+  public override destroy(): void {
+    // We are not calling super.destroy() because it expects `ripple` to be set when it might not be yet
+    // We instead just replicate all existing functionality, but allow for `ripple` to be undefined
+    this.foundation.destroy();
+    this.ripple?.destroy();
+    this.root.removeEventListener('click', this.foundation.handleClick);
+  }
+
+  private async _deferRippleInitialization(): Promise<void> {
+    const type = await userInteractionListener(this.root);
+    this.ripple = new MDCRipple(this.root, this.createRippleFoundation());
+    if (type === 'focusin') {
+      // eslint-disable-next-line @typescript-eslint/dot-notation
+      this.ripple['foundation'].handleFocus();
+    }
   }
 }
 
@@ -44,7 +71,7 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
 
   private _containerElement: HTMLElement;
   private _buttonElement: HTMLButtonElement;
-  private _mdcSwitch: MDCSwitch;
+  private _mdcSwitch: MDCSwitch | undefined;
   private _dense = false;
   private _disabled = false;
   private _selected = false;
@@ -67,16 +94,12 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
     // Add our click listener before initializing MDCSwitch to ensure we receive the event **first**
     this._buttonElement.addEventListener('click', this._clickListener);
 
-    this._mdcSwitch = new MDCSwitch(this._buttonElement);
-    this._mdcSwitch.initialize();
-
+    this._mdcSwitch = new ForgeMDCSwitch(this._buttonElement);
     this._applyInitialState();
   }
 
   public disconnectedCallback(): void {
-    if (this._mdcSwitch) {
-      this._mdcSwitch.destroy();
-    }
+    this._mdcSwitch?.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -95,13 +118,15 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
         break;
       case SWITCH_CONSTANTS.attributes.BUTTON_ARIA_LABEL:
         this._applyButtonLabel(newValue);
+        break;
     }
   }
 
   private _applyInitialState(): void {
-    this._mdcSwitch.disabled = this._disabled;
-    this._mdcSwitch.selected = this._selected;
-
+    if (this._mdcSwitch) {
+      this._mdcSwitch.disabled = this._disabled;
+      this._mdcSwitch.selected = this._selected;
+    }
 
     this._applyDense();
     this._applyLabelPosition();
@@ -109,15 +134,13 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
   }
 
   private _onClick(evt: MouseEvent): void {
-    if (this._mdcSwitch.disabled) {
+    if (this._mdcSwitch?.disabled) {
       return;
     }
 
     // Prevents MDCSwitch from receiving the click event in the targeting phase.
     // We will handle updating the selected state of MDCSwitch based on the result of our own event.
     evt.stopImmediatePropagation();
-
-    this._mdcSwitch.ripple.layout();
 
     const newValue = !this._selected;
     const isCancelled = !emitEvent(this, SWITCH_CONSTANTS.events.SELECT, newValue, true, true);
@@ -136,9 +159,7 @@ export class SwitchComponent extends BaseComponent implements ISwitchComponent {
 
   private _applyDense(): void {
     toggleAttribute(this, this._dense, SWITCH_CONSTANTS.attributes.DENSE);
-    if (this._mdcSwitch) {
-      this._mdcSwitch.ripple.layout();
-    }
+    this._mdcSwitch?.ripple?.layout();
   }
 
   private _applyLabelPosition(): void {
