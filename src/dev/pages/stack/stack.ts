@@ -49,5 +49,5 @@ alignSelect.addEventListener('change', () => {
 });
 
 gapInput.addEventListener('input', () => {
-  stackContainer.gap = Number(gapInput.value);
+  stackContainer.gap = gapInput.value;
 });
