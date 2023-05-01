@@ -38,7 +38,25 @@ Controls whether a border bottom (default) or top (true) is used.
 
 <PropertyDef prop={false} name="no-border" type="string">
 
-Disables the internal `border-top` or `border-bottom` styles. **This can only be applied via an attribute**.
+Disables the internal `border-top` or `border-bottom` styles.
+
+**Note: This can only be applied via an attribute**.
+
+</PropertyDef>
+
+<PropertyDef prop={false} name="no-padding" type="string">
+
+Sets the internal `padding` style to `0`.
+
+**Note: This can only be applied via an attribute**.
+
+</PropertyDef>
+
+<PropertyDef prop={false} name="auto-height" type="string">
+
+Forces the internal container to use `height: auto` for dynamic content that doesn't fit the static height.
+
+**Note: This can only be applied via an attribute**.
 
 </PropertyDef>
 
@@ -48,11 +66,12 @@ Disables the internal `border-top` or `border-bottom` styles. **This can only be
 
 ## Slots
 
-| Name                              | Description
-| :---------------------------------| :----------------
-| `start`                             | Places content at the beginning of the toolbar.
-| `center`                            | Places content at the center of the toolbar.
-| `end`                               | Places content at the end of the toolbar.
+| Name              | Description
+| :-----------------| :----------------
+| `default`           | The default (unnamed) slot is an alias to the `start` slot and places content at the beginning of the toolbar.
+| `start`           | Places content at the beginning of the toolbar.
+| `center`          | Places content at the center of the toolbar.
+| `end`             | Places content at the end of the toolbar.
 
 </PageSection>
 
@@ -79,7 +98,7 @@ Disables the internal `border-top` or `border-bottom` styles. **This can only be
 | `--forge-theme-border-color`                  | Controls the border-color of the toolbar.
 | `--forge-toolbar-height`                      | Controls the height.
 | `--forge-toolbar-min-height`                  | Controls the minimum height.
-| `--forge-toolbar-padding`                     | Controls the left and right padding.
+| `--forge-toolbar-padding`                     | Controls the left and right padding using the `padding-inline` style.
 | `--forge-toolbar-border-bottom`               | Controls the style for the bottom border. Can be set to "none" for no border.
 | `--forge-toolbar-border-top`                  | Controls the style for the top border. Can be set to "none" for no border. **only applies when inverted.**
 | `--forge-toolbar-border-top-left-radius`      | Sets the top left border radius.
