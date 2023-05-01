@@ -130,19 +130,18 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
   private async _deferRippleInitialization(): Promise<void> {
     const type = await userInteractionListener(this._buttonElement);
     if (!this._rippleInstance) {
-      this._initRipple();
+      this._rippleInstance = this._createRipple();
       if (type === 'focusin') {
-        // eslint-disable-next-line @typescript-eslint/dot-notation
-        (this._rippleInstance as ForgeRipple)['foundation'].handleFocus();
+        this._rippleInstance.handleFocus();
       }
     }
   }
 
-  private _initRipple(): void {
+  private _createRipple(): ForgeRipple {
     if (this._rippleInstance) {
       this._rippleInstance.destroy();
     }
-    this._rippleInstance = new ForgeRipple(this._buttonElement);
+    return new ForgeRipple(this._buttonElement);
   }
 
   private _initializeButtonChildren(): void {
