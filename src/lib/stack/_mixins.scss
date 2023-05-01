@@ -4,7 +4,7 @@
 @mixin core-styles() {
   .forge-stack {
     @include base();
-    @include theme.css-custom-property(gap, --forge-stack-gap, 16px);
+    @include theme.css-custom-property(gap, --forge-stack-gap, variables.$gap);
     @include theme.css-custom-property(height, --forge-stack-height, 100%);
   }
 }

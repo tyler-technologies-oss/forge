@@ -1,13 +1,13 @@
 // Styles
-import './stack.scss';
 import '@tylertech/forge/stack/stack.scss';
+import './stack.scss';
 
 // Components
 import '@tylertech/forge/stack';
 
 import '$src/shared';
+import { ISelectComponent, IStackComponent } from '@tylertech/forge';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import { ISelectComponent, IStackComponent, ITextFieldComponent } from '@tylertech/forge';
 
 
 const inlineToggle = document.querySelector('#inline-switch') as ISwitchComponent;
@@ -18,10 +18,10 @@ const stackContainer = document.querySelector('#main-demo') as IStackComponent;
 
 inlineToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   if (selected) {
-    stackContainer.setAttribute('inline', 'true');
+    stackContainer.inline = true;
     wrapToggle.disabled = false;
   } else {
-    stackContainer.removeAttribute('inline');
+    stackContainer.inline = false;
     wrapToggle.disabled = true;
     wrapToggle.selected = false;
   }

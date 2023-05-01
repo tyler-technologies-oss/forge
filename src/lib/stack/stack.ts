@@ -11,7 +11,7 @@ export interface IStackComponent extends ICustomElement {
   inline: boolean;
   wrap: boolean;
   stretch: boolean;
-  gap: number;
+  gap: string;
   alignment: StackAlignMode;
 }
 
@@ -48,10 +48,6 @@ export class StackComponent extends BaseComponent implements IStackComponent {
     this._foundation.initialize();
   }
 
-  public disconnectedCallback(): void {
-    this._foundation.disconnect();
-  }
-
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case STACK_CONSTANTS.attributes.INLINE:
@@ -64,7 +60,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
         this.stretch = coerceBoolean(newValue);
         break;
       case STACK_CONSTANTS.attributes.GAP:
-        this.gap = coerceNumber(newValue);
+        this.gap = newValue;
         break;
       case STACK_CONSTANTS.attributes.ALIGNMENT:
         this.alignment = newValue as StackAlignMode;
@@ -80,13 +76,13 @@ export class StackComponent extends BaseComponent implements IStackComponent {
   @FoundationProperty()
   public declare wrap: boolean;
 
-  /** Controls if items wrap to a new line in inline mode */
+  /** Controls if items stretch and take up the maximum amount of space */
   @FoundationProperty()
   public declare stretch: boolean;
 
-  /** Controls if items wrap to a new line in inline mode */
+  /** Controls the gap between the children within the stack */
   @FoundationProperty()
-  public declare gap: number;
+  public declare gap: string;
 
   /** Controls if stack items are at the end of the row or column */
   @FoundationProperty()

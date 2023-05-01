@@ -4,14 +4,18 @@ import { IStackAdapter } from './stack-adapter';
 import { STACK_CONSTANTS, StackAlignMode } from './stack-constants';
 
 export interface IStackFoundation extends ICustomElementFoundation {
-
+  inline: boolean;
+  wrap: boolean;
+  stretch: boolean;
+  gap: string;
+  alignment: StackAlignMode;
 }
 
 export class StackFoundation implements IStackFoundation {
   private _inline = false;
   private _wrap = false;
   private _stretch = false;
-  private _gap = 16;
+  private _gap = '16';
   private _alignment = StackAlignMode.Start;
   constructor(private _adapter: IStackAdapter) {}
 
@@ -56,14 +60,14 @@ export class StackFoundation implements IStackFoundation {
   }
 
   /** Controls the gap amount between the children in pixels */
-  public get gap(): number {
+  public get gap(): string {
     return this._gap;
   }
-  public set gap(value: number) {
+  public set gap(value: string) {
     if (this._gap !== value) {
       this._gap = value;
       this._adapter.setGap(this._gap);
-      this._adapter.setHostAttribute(STACK_CONSTANTS.attributes.GAP, String(this._gap));
+      this._adapter.setHostAttribute(STACK_CONSTANTS.attributes.GAP, this._gap);
     }
   }
 
@@ -76,8 +80,5 @@ export class StackFoundation implements IStackFoundation {
       this._alignment = value;
       this._adapter.setHostAttribute(STACK_CONSTANTS.attributes.ALIGNMENT, this._alignment);
     }
-  }
-
-  public disconnect(): void {
   }
 }
