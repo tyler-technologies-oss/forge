@@ -2,10 +2,11 @@ import { addClass, getShadowElement, removeClass, getActiveElement } from '@tyle
 import { IRadioComponent } from './radio';
 import { RADIO_CONSTANTS } from './radio-constants';
 import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
+import { userInteractionListener } from '../core/utils';
 
 export interface IRadioAdapter {
   connect(): void;
-  initializeRipple(): void;
+  deferRippleInitialization(): Promise<void>;
   destroyRipple(): void;
   setHostAttribute(name: string, value?: string): void;
   removeHostAttribute(name: string): void;
@@ -26,20 +27,20 @@ export interface IRadioAdapter {
 }
 
 export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
-  private _shadowRoot: HTMLElement;
+  private _rootElement: HTMLElement;
   private _containerElement: HTMLElement;
   private _nativeInputElement: HTMLInputElement | null;
   private _inputAttributeMutationObserver?: MutationObserver;
-  private _rippleInstance: ForgeRipple;
+  private _rippleInstance: ForgeRipple | undefined;
 
   constructor(private _component: IRadioComponent) {
-    this._shadowRoot = getShadowElement(this._component, RADIO_CONSTANTS.selectors.RADIO);
+    this._rootElement = getShadowElement(this._component, RADIO_CONSTANTS.selectors.RADIO);
     this._containerElement = getShadowElement(this._component, RADIO_CONSTANTS.selectors.WRAPPER);
   }
 
   // ForgeRippleCapableSurface
   public get root(): Element {
-    return this._shadowRoot;
+    return this._rootElement;
   }
 
   public get unbounded(): boolean | undefined {
@@ -57,20 +58,19 @@ export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
     }
   }
 
-  public initializeRipple(): void {
-    this._rippleInstance = this._createRipple();
-
-    requestAnimationFrame(() => {
-      if (this._rippleInstance) {
-        this._rippleInstance.layout();
+  public async deferRippleInitialization(): Promise<void> {
+    const type = await userInteractionListener(this._rootElement);
+    if (!this._rippleInstance) {
+      this._rippleInstance = this._createRipple();
+      if (type === 'focusin') {
+        this._rippleInstance.handleFocus();
       }
-    });
+    }
   }
 
   public destroyRipple(): void {
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
-    }
+    this._rippleInstance?.destroy();
+    this._rippleInstance = undefined;
   }
 
   public setHostAttribute(name: string, value = ''): void {
@@ -82,11 +82,11 @@ export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
   }
 
   public addRootClass(className: string): void {
-    this._shadowRoot.classList.add(className);
+    this._rootElement.classList.add(className);
   }
 
   public removeRootClass(className: string): void {
-    this._shadowRoot.classList.remove(className);
+    this._rootElement.classList.remove(className);
   }
 
   public addContainerClass(className: string): void {
@@ -318,10 +318,10 @@ export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
         }
       },
       isSurfaceDisabled: () => this._inputElement ? this._inputElement.disabled : false,
-      addClass: (className: string) => addClass(className, this._shadowRoot),
-      removeClass: (className: string) => removeClass(className, this._shadowRoot),
-      updateCssVariable: (varName: string, value: string | null) => this._shadowRoot.style.setProperty(varName, value)
+      addClass: (className: string) => addClass(className, this._rootElement),
+      removeClass: (className: string) => removeClass(className, this._rootElement),
+      updateCssVariable: (varName: string, value: string | null) => this._rootElement.style.setProperty(varName, value)
     };
-    return new ForgeRipple(this._shadowRoot, new ForgeRippleFoundation(adapter));
+    return new ForgeRipple(this._rootElement, new ForgeRippleFoundation(adapter));
   }
 }
