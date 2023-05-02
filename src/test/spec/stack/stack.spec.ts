@@ -1,5 +1,4 @@
-import { IToolbarComponent, TOOLBAR_CONSTANTS, defineToolbarComponent } from '@tylertech/forge/toolbar';
-import { removeElement, getShadowElement } from '@tylertech/forge-core';
+import { removeElement } from '@tylertech/forge-core';
 import { IStackComponent, STACK_CONSTANTS, StackAlignMode, defineStackComponent } from '@tylertech/forge';
 
 interface ITestContext {
@@ -42,11 +41,11 @@ describe('StackComponent', function(this: ITestContext) {
     });
     it('should set the align property to start when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
-      expect(this.context.component.align).toBe(StackAlignMode.Start);
+      expect(this.context.component.alignment).toBe(StackAlignMode.Start);
     });
     it('should set the gap property to 16 when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
-      expect(this.context.component.gap).toBe(16);
+      expect(this.context.component.gap).toBe('16');
     });
   });
   
@@ -88,28 +87,34 @@ describe('StackComponent', function(this: ITestContext) {
       expect(this.context.component.stretch).toBe(false);
     });
 
-    it('should set the gap property to 100 when the attribute is set to 100', function(this: ITestContext) {
+    it('should set the gap property to 100px when the attribute is set to 100', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.setAttribute(STACK_CONSTANTS.attributes.GAP, '100');
-      expect(this.context.component.gap).toBe(100);
+      expect(this.context.component.gap).toBe('100px');
     });
 
-    it('should set the align property to start when the attribute is set to start', function(this: ITestContext) {
+    it('should set the gap property to 64px when the attribute is set to 64px', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute(STACK_CONSTANTS.attributes.ALIGN, 'start');
-      expect(this.context.component.align).toBe(StackAlignMode.Start);
+      this.context.component.setAttribute(STACK_CONSTANTS.attributes.GAP, '64px');
+      expect(this.context.component.gap).toBe('64px');
+    });
+
+    it('should set the alignment property to start when the attribute is set to start', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute(STACK_CONSTANTS.attributes.ALIGNMENT, 'start');
+      expect(this.context.component.alignment).toBe(StackAlignMode.Start);
     });
 
     it('should set the align property to center when the attribute is set to center', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute(STACK_CONSTANTS.attributes.ALIGN, 'center');
-      expect(this.context.component.align).toBe(StackAlignMode.Center);
+      this.context.component.setAttribute(STACK_CONSTANTS.attributes.ALIGNMENT, 'center');
+      expect(this.context.component.alignment).toBe(StackAlignMode.Center);
     });
 
     it('should set the align property to end when the attribute is set to end', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute(STACK_CONSTANTS.attributes.ALIGN, 'end');
-      expect(this.context.component.align).toBe(StackAlignMode.End);
+      this.context.component.setAttribute(STACK_CONSTANTS.attributes.ALIGNMENT, 'end');
+      expect(this.context.component.alignment).toBe(StackAlignMode.End);
     });
   });
 
