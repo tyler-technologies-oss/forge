@@ -25,6 +25,7 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
   private _gradientSlider: ColorPickerGradientSlider;
   private _hueSlider: ColorPickerSlider;
   private _opacitySlider: ColorPickerSlider;
+  private _initialized = false;
   private _gradientSliderChangedListener: (x: number, y: number) => void;
   private _hueSliderChangedListener: (percent: number) => void;
   private _opacitySliderChangedListener: (percent: number) => void;
@@ -45,6 +46,7 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
   }
   
   public initialize(): void {
+    this._initialized = true;
     this._applyChangeEventTrigger();
     this._adapter.setTypeClickListener(this._typeClickListener);
     this._adapter.setHexInputListener('input', this._hexInputChangedListener);
@@ -68,6 +70,7 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
     this._gradientSlider.destroy();
     this._hueSlider.destroy();
     this._opacitySlider.destroy();
+    this._initialized = false;
   }
 
   private _applyChangeEventTrigger(): void {
@@ -126,10 +129,13 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
   private _setColorFromHex(): void {
     this._rgba = hexToRgba(this._hex);
     this._hsva = rgbaToHsva(this._rgba);
-    this._gradientSlider.setValue(this._hsva.s, this._hsva.v);
-    this._hueSlider.setValue(parseFloat((this._hsva.h / 360).toFixed(2)));
-    this._opacitySlider.setValue(this._hsva.a);
-    this._render();
+
+    if (this._initialized) {
+      this._gradientSlider.setValue(this._hsva.s, this._hsva.v);
+      this._hueSlider.setValue(parseFloat((this._hsva.h / 360).toFixed(2)));
+      this._opacitySlider.setValue(this._hsva.a);
+      this._render();
+    }
   }
 
   private _onGradientSliderChanged(x: number, y: number): void {
@@ -244,9 +250,12 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
       if (value != null && this._allowOpacity) {
         if (value >= 0 && value <= 1) {
           this._hsva.a = value;
-          this._opacitySlider.setValue(this._hsva.a);
           this._syncColors();
-          this._render();
+
+          if (this._initialized) {
+            this._opacitySlider.setValue(this._hsva.a);
+            this._render();
+          }
         } else {
           console.warn(`The provided opacity value (${value}) must be between 0 and 1.`);
         }
@@ -259,7 +268,9 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
   }
   public set allowOpacity(value: boolean) {
     this._allowOpacity = value;
-    this._initializeOpacity();
+    if (this._initialized) {
+      this._initializeOpacity();
+    }
   }
 
   public get debounceChangeEvent(): boolean {
@@ -268,7 +279,9 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
   public set debounceChangeEvent(value: boolean) {
     if (this._debounceChangeEvent !== value) {
       this._debounceChangeEvent = value;
-      this._applyChangeEventTrigger();
+      if (this._initialized) {
+        this._applyChangeEventTrigger();
+      }
     }
   }
 }
