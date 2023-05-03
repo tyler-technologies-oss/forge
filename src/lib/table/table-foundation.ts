@@ -48,6 +48,7 @@ export interface ITableFoundation extends ICustomElementFoundation {
   connect(): void;
   hideColumn(columnIndex: number): void;
   showColumn(columnIndex: number): void;
+  isColumnHidden(columnIndex: number): boolean;
   getSelectedRows(): any[];
   selectRows(data: any[], clearCurrentSelections: boolean): void;
   deselectRows(data: any[]): void;
@@ -590,6 +591,16 @@ export class TableFoundation implements ITableFoundation {
       this._hiddenColumnManager.remove(columnConfig);
       this.render();
     }
+  }
+
+  /**
+   * Determines if a column at the given index is hidden or not.
+   * @param {number} columnIndex The index of the column.
+   * @returns {boolean} `true` if the column is hidden, `false` otherwise.
+   */
+  public isColumnHidden(columnIndex: number): boolean {
+    const columnConfig = this._columnConfigurations[columnIndex];
+    return !!columnConfig && this._hiddenColumnManager.exists(columnConfig);
   }
 
   /**
