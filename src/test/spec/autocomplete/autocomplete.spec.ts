@@ -1313,6 +1313,23 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(this.context.component.isConnected).toBe(true, 'Expected component to be connected to the DOM');
       expect(this.context.component instanceof AutocompleteComponent).toBe(true, 'Expected component to be instance of AutocompleteComponent');
     });
+
+    it('should keep dropdown open when selecting options in stateless + multiple mode', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.mode = 'stateless';
+      this.context.component.multiple = true;
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      _triggerDropdownClick(this.context.input);
+      await tick();
+
+      expect(this.context.component.popupElement).not.toBeNull();
+
+      _clickListItem(0, this.context.component.popupElement);
+      expect(this.context.component.popupElement).not.toBeNull();
+
+      _clickListItem(1, this.context.component.popupElement);
+      expect(this.context.component.popupElement).not.toBeNull();
+    });
   });
 
   describe('with text-field and icon', function(this: ITestContext) {
