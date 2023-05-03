@@ -867,24 +867,28 @@ describe('SelectComponent', function(this: ITestContext) {
       expect(this.context.foundation['_filterTimeout']).toBeUndefined();
     });
 
-    it('should select next item if arrow down key is pressed while popup is closed', async function(this: ITestContext) {
+    it('should open popup if arrow down key is pressed while popup is closed', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
       dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       await timer();
       
-      expect(this.context.component.value).toBe(DEFAULT_OPTIONS[0].value);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+      expect(this.context.component.open).toBeTrue();
+      expect(this.context.component.value).toBeUndefined();
     });
 
-    it('should select previous item if arrow up key is pressed while popup is closed', async function(this: ITestContext) {
+    it('should open popup if arrow up key is pressed while popup is closed', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
       dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');
       await timer();
       
-      expect(this.context.component.value).toBe(DEFAULT_OPTIONS[2].value);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+      expect(this.context.component.open).toBeTrue();
+      expect(this.context.component.value).toBeUndefined();
     });
 
     it('should not select item if arrow key is pressed while popup is closed in multiple mode', async function(this: ITestContext) {
