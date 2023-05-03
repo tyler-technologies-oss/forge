@@ -35,7 +35,7 @@
   @if list.index($exclude, core) == null {
     &::before {
       content: '';
-      @include base.outline-core(--#{$component-selector}-theme-background);
+      @include base.outline-core(--#{$component-selector}-theme-background, --#{$component-selector}-border-style);
     }
   }
   // Border Color
