@@ -145,7 +145,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _initializeAccessibility(): void {
-    this._adapter.intializeInputAccessibility(this._identifier);
+    this._adapter.initializeInputAccessibility(this._identifier);
   }
 
   private get _flatOptions(): IAutocompleteOption[] {

@@ -38,6 +38,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
   private _onInputContainerMouseDown(evt: MouseEvent): void {
     evt.preventDefault();
     this._adapter.focusInput();
+    this._adapter.tryPropagateClick(evt.target);
   }
 
   protected _onBlur(event: Event): void {
