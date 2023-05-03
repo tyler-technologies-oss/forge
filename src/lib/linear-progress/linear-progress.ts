@@ -43,7 +43,7 @@ export class LinearProgressComponent extends BaseComponent implements ILinearPro
   private _mdcLinearProgress: MDCLinearProgress;
   private _determinate = false;
   private _progress = 0;
-  private _buffer = 0;
+  private _buffer = 1;
   private _visible = true;
   private _progressbarElement: HTMLElement;
 
