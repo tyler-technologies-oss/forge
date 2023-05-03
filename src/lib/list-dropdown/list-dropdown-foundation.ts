@@ -1,6 +1,6 @@
 import { IListDropdownAdapter } from './list-dropdown-adapter';
 import { DEFAULT_LIST_DROPDOWN_CONFIG, IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup } from './list-dropdown-constants';
-import { isListDropdownOptionType, ListDropdownOptionType } from './list-dropdown-utils';
+import { getFlattenedOptions } from './list-dropdown-utils';
 
 export interface IListDropdownFoundation {
   dropdownElement: HTMLElement | undefined;
@@ -264,11 +264,7 @@ export class ListDropdownFoundation implements IListDropdownFoundation {
   }
 
   private get _flatOptions(): IListDropdownOption[] {
-    if (isListDropdownOptionType(this._config.options, ListDropdownOptionType.Group)) {
-      const groups = this._config.options as IListDropdownOptionGroup[];
-      return groups.reduce((flatOpts, group) => flatOpts.concat(group.options), [] as IListDropdownOption[]);
-    }
-    return [...this._config.options as IListDropdownOption[]];
+    return getFlattenedOptions(this._config.options);
   }
 
   private get _nonDividerOptions(): IListDropdownOption[] {

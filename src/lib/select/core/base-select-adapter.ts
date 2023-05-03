@@ -66,6 +66,7 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
         return {
           text: optionGroupElement.label,
           builder: optionGroupElement.builder,
+          value: optionGroupElement.value,
           options
         } as ISelectOptionGroup;
       });

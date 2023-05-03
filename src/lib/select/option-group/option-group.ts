@@ -60,6 +60,9 @@ export class OptionGroupComponent extends BaseComponent implements IOptionGroupC
   /** The builder function for the group content. */
   public declare builder: ListDropdownOptionGroupBuilder;
 
+  /** Gets/sets the optional group value. */
+  public declare value: any;
+
   /** The text content for the group. */
   public get text(): string {
     return this._label;

@@ -5,6 +5,7 @@ import { IPopupPosition, PopupAnimationType, PopupPlacement, PopupStateCallback,
 export interface IPopupFoundation extends ICustomElementFoundation {
   targetElement: HTMLElement;
   placement: PopupPlacement;
+  fallbackPlacements: PopupPlacement[];
   open: boolean;
   manageFocus: boolean;
   animationType: PopupAnimationType;
@@ -19,6 +20,7 @@ export interface IPopupFoundation extends ICustomElementFoundation {
 export class PopupFoundation implements IPopupFoundation {
   private _targetElement: HTMLElement;
   private _placement: PopupPlacement = 'bottom-start';
+  private _fallbackPlacements: PopupPlacement[] = [];
   private _open = false;
   private _manageFocus = false;
   private _animationType = PopupAnimationType.None;
@@ -192,6 +194,13 @@ export class PopupFoundation implements IPopupFoundation {
       this._placement = value || 'bottom-start';
       this._adapter.setAttribute(POPUP_CONSTANTS.attributes.PLACEMENT, this._placement);
     }
+  }
+
+  public get fallbackPlacements(): PopupPlacement[] {
+    return this._fallbackPlacements;
+  }
+  public set fallbackPlacements(value: PopupPlacement[]) {
+    this._fallbackPlacements = Array.isArray(value) ? value : [];
   }
 
   public get open(): boolean {

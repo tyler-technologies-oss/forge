@@ -11,6 +11,7 @@ import styles from './popup.scss';
 export interface IPopupComponent extends IBaseComponent {
   targetElement: HTMLElement;
   placement: PopupPlacement;
+  fallbackPlacements: PopupPlacement[];
   open: boolean;
   manageFocus: boolean;
   animationType: `${PopupAnimationType}`;
@@ -95,6 +96,9 @@ export class PopupComponent extends BaseComponent implements IPopupComponent {
 
   @FoundationProperty()
   public declare placement: `${PopupPlacement}`;
+
+  @FoundationProperty()
+  public declare fallbackPlacements: `${PopupPlacement}`[];
 
   @FoundationProperty()
   public declare open: boolean;
