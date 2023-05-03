@@ -28,7 +28,7 @@ export interface IFilePickerAdapter extends IBaseAdapter {
 export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> implements IFilePickerAdapter {
   private _container: HTMLElement;
   private _buttonSlot: HTMLSlotElement;
-  private _button: HTMLButtonElement;
+  private _button: HTMLButtonElement | undefined;
   private _input: HTMLInputElement;
   private _inputEventListener: () => void;
 
@@ -145,11 +145,11 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
   public setDisabled(value: boolean): void {
     if (value) {
       this._container.removeEventListener('click', this._inputEventListener);
-      this._button.setAttribute('disabled', '');
+      this._button?.setAttribute('disabled', '');
       this._container.setAttribute('disabled', '');
     } else {
       this._container.addEventListener('click', this._inputEventListener);
-      this._button.removeAttribute('disabled');
+      this._button?.removeAttribute('disabled');
       this._container.removeAttribute('disabled');
     }
   }

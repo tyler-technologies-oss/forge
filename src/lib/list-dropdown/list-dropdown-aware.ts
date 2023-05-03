@@ -10,6 +10,8 @@ export interface IListDropdownAware extends IBaseComponent {
   optionLimit: number;
   observeScroll: boolean;
   observeScrollThreshold: number;
+  constrainPopupWidth: boolean;
+  wrapOptionText: boolean;
 }
 
 export class ListDropdownAware extends BaseComponent {
@@ -34,6 +36,12 @@ export class ListDropdownAware extends BaseComponent {
       case LIST_DROPDOWN_CONSTANTS.attributes.SYNC_POPUP_WIDTH:
         this.syncPopupWidth = coerceBoolean(newValue);
         break;
+      case LIST_DROPDOWN_CONSTANTS.attributes.CONSTRAIN_POPUP_WIDTH:
+        this.constrainPopupWidth = coerceBoolean(newValue);
+        break;
+      case LIST_DROPDOWN_CONSTANTS.attributes.WRAP_OPTION_TEXT:
+        this.wrapOptionText = coerceBoolean(newValue);
+        break;
     }
   }
   
@@ -41,11 +49,11 @@ export class ListDropdownAware extends BaseComponent {
   @FoundationProperty()
   public declare popupClasses: string | string[];
 
-  /** Gets/sets the list of classes to apply to the popup element. */
+  /** Gets/sets the callback function for generating header content within the popup. */
   @FoundationProperty()
   public declare popupHeaderBuilder: ListDropdownHeaderBuilder;
 
-  /** Gets/sets the list of classes to apply to the popup element. */
+  /** Gets/sets the callback function for generating header content within the popup. */
   @FoundationProperty()
   public declare popupFooterBuilder: ListDropdownFooterBuilder;
 
@@ -64,4 +72,15 @@ export class ListDropdownAware extends BaseComponent {
   /** The number of pixels from the bottom to trigger the scroll bottom event. Only applicable if `observeScroll` is true. */
   @FoundationProperty()
   public declare observeScrollThreshold: number;
+
+  /** Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`). */
+  @FoundationProperty()
+  public declare constrainPopupWidth: boolean;
+
+  /**
+   * Gets/sets whether the options will wrap their text or not.
+   * This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
+   * */
+  @FoundationProperty()
+  public declare wrapOptionText: boolean;
 }

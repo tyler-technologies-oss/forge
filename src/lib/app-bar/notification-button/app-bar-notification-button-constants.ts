@@ -6,7 +6,8 @@ const attributes = {
   COUNT: 'count',
   DOT: 'dot',
   THEME: 'theme',
-  SHOW_BADGE: 'show-badge'
+  SHOW_BADGE: 'show-badge',
+  ICON: 'icon'
 };
 
 export const APP_BAR_NOTIFICATION_BUTTON_CONSTANTS = {

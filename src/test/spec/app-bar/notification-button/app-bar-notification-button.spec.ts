@@ -108,6 +108,16 @@ describe('AppBarNotificationButtonComponent', function(this: ITestContext) {
     });
   });
 
+  describe('icon', function (this: ITestContext) {
+    it('should change icon when set via property', function (this: ITestContext) {
+      this.context = setupTestContext();
+      const icon = 'connection';
+      this.context.component.icon = icon;
+      expect(this.context.component.icon).toBe(icon, `Component property icon value should be set to: ${icon}`);
+      expect(this.context.component.getAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON)).toBe(icon, `Component attribute icon value should be set to: ${icon}`);
+    });
+  });
+
   describe('showBadge', function(this: ITestContext) {
     it('should default showBadge property and attribute to false', function(this: ITestContext) {
       this.context = setupTestContext();

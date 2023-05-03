@@ -3,16 +3,18 @@ import { IAutocompleteComponent, IChipComponent, IChipFieldComponent, IconRegist
 import '@tylertech/forge/chip-field';
 import '@tylertech/forge/autocomplete';
 import data from '../autocomplete/data.json';
-import { tylIconPlace } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown, tylIconPlace } from '@tylertech/tyler-icons/standard';
 
 IconRegistry.define([
-  tylIconPlace
+  tylIconPlace,
+  tylIconArrowDropDown
 ]);
 
 const simpleChipField = document.querySelector('#demo-simple-chip-field') as IChipFieldComponent;
 const autocompleteComponent = document.querySelector('#demo-autocomplete') as IAutocompleteComponent;
 const autocompleteChipField = autocompleteComponent.querySelector('#demo-autocomplete-chip-field') as IChipFieldComponent;
 const autocompleteChipFieldInput = autocompleteChipField.querySelector('#autocomplete-chip-field-input') as HTMLInputElement;
+let selectedAutocompleteValues: string[] = [];
 
 const requiredToggle = document.querySelector('#opt-required') as ISwitchComponent;
 const invalidToggle = document.querySelector('#opt-invalid') as ISwitchComponent;
@@ -51,29 +53,17 @@ simpleChipField.addEventListener('forge-chip-field-member-removed', ({ detail })
 });
 
 autocompleteComponent.filter = filter => {
-  return data.filter(({ label }) => {
-    return label.toLowerCase().includes(filter.toLowerCase());
-  });
+  return data.filter(({ label }) => label.toLowerCase().includes(filter.toLowerCase()));
 };
-autocompleteComponent.addEventListener('forge-autocomplete-change', ({ detail: newValues }) => {
-  const currentValues = Array.from(autocompleteChipField.querySelectorAll('forge-chip')).map(chip => chip.value);
-  const valuesToAdd = newValues.filter(value => currentValues.includes(value));
-  const valuesToRemove = currentValues.filter(value => !newValues.includes(value));
 
-  valuesToRemove.forEach(removeMember);
-  valuesToAdd.forEach(addMember);
-});
-
-function onAddMemberEvent(evt: CustomEvent): void {
-  if (data.includes(evt.detail)) {
-    return;
+autocompleteComponent.addEventListener('forge-autocomplete-select', ({ detail: { value }}) => {
+  const exists = selectedAutocompleteValues.includes(value);
+  if (!exists) {
+    addMember(value);
+  } else {
+    removeMember(value);
   }
-  addMember(evt.detail);
-};
-
-function onRemoveMember(evt): void {
-  removeMember(evt.detail.value);
-}
+});
 
 function onRemoveMemberEvent(evt): void {
   if (evt.target.disabled) {
@@ -88,17 +78,12 @@ function addAutocompleteMember(value: string): void {
     return;
   }
 
-  if (!autocompleteComponent.value) {
-    autocompleteComponent.value = [];
-  }
-
-  const selectedOptions = autocompleteComponent.value;
-  if (selectedOptions.includes(value)) {
+  if (selectedAutocompleteValues.includes(value)) {
     return;
   }
 
-  selectedOptions.push(value);
-  autocompleteComponent.value = selectedOptions;
+  selectedAutocompleteValues.push(value);
+  autocompleteComponent.value = [...selectedAutocompleteValues];
 }
 
 function addChipFieldMember(name: string): void {
@@ -110,7 +95,7 @@ function addChipFieldMember(name: string): void {
   const newChip = document.createElement('forge-chip');
   newChip.setAttribute('slot', 'member');
   newChip.type = 'field';
-  newChip.dense = denseToggle.selected;
+  newChip.dense = true;
   newChip.invalid = invalidToggle.selected;
   newChip.value = name;
   newChip.textContent = name;
@@ -130,23 +115,18 @@ function addMember(name: string): void {
   addAutocompleteMember(name);
 }
 
-function removeAutocompleteMember(value: unknown): void {
+function removeAutocompleteMember(value: string): void {
   if (!autocompleteComponent) {
     return;
   }
 
-  if (!autocompleteComponent.value) {
-    autocompleteComponent.value = [];
-  }
-
-  const selectedOptions = autocompleteComponent.value;
-  const index = selectedOptions.indexOf(value);
+  const index = selectedAutocompleteValues.indexOf(value);
   if (index < 0) {
     return;
   }
 
-  selectedOptions.splice(index, 1);
-  autocompleteComponent.value = selectedOptions;
+  selectedAutocompleteValues.splice(index, 1);
+  autocompleteComponent.value = [...selectedAutocompleteValues];
 }
 
 function removeChipFieldMember(name: string): void {
@@ -173,7 +153,7 @@ function populateMembers(numberOfMembers: number): void {
 }
 
 function removeAllMembers(): void {
-  autocompleteComponent.value = [];
+  selectedAutocompleteValues = [];
   autocompleteChipField.querySelectorAll('forge-chip').forEach(chip => chip.remove());
 }
 

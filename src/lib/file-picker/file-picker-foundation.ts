@@ -14,6 +14,7 @@ export interface IFilePickerFoundation extends ICustomElementFoundation {
 }
 
 export class FilePickerFoundation implements IFilePickerFoundation {
+  private _isInitialized = false;
   private _accept: string | null | undefined = null;
   private _maxSize: number | null | undefined = null;
   private _capture: string | null | undefined = null;
@@ -45,6 +46,12 @@ export class FilePickerFoundation implements IFilePickerFoundation {
 
   public initialize(): void {
     this._adapter.initializeButton();
+    this._adapter.setDisabled(this._disabled);
+    this._isInitialized = true;
+  }
+
+  public destroy(): void {
+    this._isInitialized = false;
   }
 
   private _onButtonSlotChanged(evt: Event): void {
@@ -153,11 +160,7 @@ export class FilePickerFoundation implements IFilePickerFoundation {
     if (this._accept !== value) {
       this._accept = value;
       this._adapter.setAccept(value);
-      if (value) {
-        this._adapter.setHostAttribute(FILE_PICKER_CONSTANTS.attributes.ACCEPT, value);
-      } else {
-        this._adapter.removeHostAttribute(FILE_PICKER_CONSTANTS.attributes.ACCEPT);
-      }
+      this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.ACCEPT, !!value, String(value));
     }
   }
 
@@ -168,11 +171,7 @@ export class FilePickerFoundation implements IFilePickerFoundation {
   public set maxSize(value: number | null | undefined) {
     if (this._maxSize !== value) {
       this._maxSize = value;
-      if (value) {
-        this._adapter.setHostAttribute(FILE_PICKER_CONSTANTS.attributes.MAX_SIZE, value.toString());
-      } else {
-        this._adapter.removeHostAttribute(FILE_PICKER_CONSTANTS.attributes.MAX_SIZE);
-      }
+      this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.MAX_SIZE, !!value, String(value));
     }
   }
 
@@ -184,11 +183,7 @@ export class FilePickerFoundation implements IFilePickerFoundation {
     if (this._capture !== value) {
       this._capture = value;
       this._adapter.setCapture(value);
-      if (value) {
-        this._adapter.setHostAttribute(FILE_PICKER_CONSTANTS.attributes.CAPTURE, value);
-      } else {
-        this._adapter.removeHostAttribute(FILE_PICKER_CONSTANTS.attributes.CAPTURE);
-      }
+      this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.CAPTURE, !!value, String(value));
     }
   }
 
@@ -200,11 +195,7 @@ export class FilePickerFoundation implements IFilePickerFoundation {
     if (this._multiple !== value) {
       this._multiple = value;
       this._adapter.setMultiple(value);
-      if (value) {
-        this._adapter.setHostAttribute(FILE_PICKER_CONSTANTS.attributes.MULTIPLE);
-      } else {
-        this._adapter.removeHostAttribute(FILE_PICKER_CONSTANTS.attributes.MULTIPLE);
-      }
+      this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.MULTIPLE, value);
     }
   }
 
@@ -215,12 +206,10 @@ export class FilePickerFoundation implements IFilePickerFoundation {
   public set disabled(value: boolean) {
     if (this._disabled !== value) {
       this._disabled = value;
-      this._adapter.setDisabled(value);
-      if (value) {
-        this._adapter.setHostAttribute(FILE_PICKER_CONSTANTS.attributes.DISABLED);
-      } else {
-        this._adapter.removeHostAttribute(FILE_PICKER_CONSTANTS.attributes.DISABLED);
+      if (this._isInitialized) {
+        this._adapter.setDisabled(value);
       }
+      this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.DISABLED, value);
     }
   }
 
@@ -233,12 +222,11 @@ export class FilePickerFoundation implements IFilePickerFoundation {
       this._compact = value;
       this._adapter.setCompact(value);
       if (value) {
-        this._adapter.setHostAttribute(FILE_PICKER_CONSTANTS.attributes.COMPACT);
         this._removeDragListeners();
       } else {
-        this._adapter.removeHostAttribute(FILE_PICKER_CONSTANTS.attributes.COMPACT);
         this._registerDragListeners();
       }
+      this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.COMPACT, value);
     }
   }
 
@@ -250,11 +238,7 @@ export class FilePickerFoundation implements IFilePickerFoundation {
     if (this._borderless !== value) {
       this._borderless = value;
       this._adapter.setBorderless(value);
-      if (value) {
-        this._adapter.setHostAttribute(FILE_PICKER_CONSTANTS.attributes.BORDERLESS);
-      } else {
-        this._adapter.removeHostAttribute(FILE_PICKER_CONSTANTS.attributes.BORDERLESS);
-      }
+      this._adapter.toggleHostAttribute(FILE_PICKER_CONSTANTS.attributes.BORDERLESS, value);
     }
   }
 }
