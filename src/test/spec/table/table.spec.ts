@@ -808,10 +808,29 @@ describe('TableComponent', function(this: ITestContext) {
 
     it('should set allow row click', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.allowRowClick = false;
-      expect(this.context.component.allowRowClick).toBe(false, 'Expected allow row click to be false');
+      this.context.component.columnConfigurations = columns;
+      this.context.component.data = data;
+      
       this.context.component.allowRowClick = true;
-      expect(this.context.component.allowRowClick).toBe(true, 'Expected allow row click to be true');
+      expect(this.context.component.allowRowClick).withContext('Expected allow row click to be true').toBeTrue();
+
+      const hasClickableClass = Array.from(this.context.getTableElement().tBodies[0].rows)
+                                  .every(r => r.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_CLICKABLE));
+      expect(hasClickableClass).toBeTrue();
+    });
+
+    it('should apply clickable class when data changes', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.columnConfigurations = columns;
+      this.context.component.data = data;
+      this.context.component.allowRowClick = true;
+      
+
+      this.context.component.data = [...this.context.component.data];
+
+      const hasClickableClass = Array.from(this.context.getTableElement().tBodies[0].rows)
+                                  .every(r => r.classList.contains(TABLE_CONSTANTS.classes.TABLE_BODY_ROW_CLICKABLE));
+      expect(hasClickableClass).toBeTrue();
     });
 
     it('should set select rows from code', function(this: ITestContext) {

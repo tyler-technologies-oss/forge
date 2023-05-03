@@ -121,6 +121,7 @@ export class TableUtils {
     // If we are allowing click events on the table rows then attach the row click listeners
     if (configuration.clickListener) {
       TableUtils._attachRowClickListeners(tbody, configuration.clickListener, configuration.doubleClickListener);
+      TableUtils._addRowClickAttributes(tbody);
     }
 
     // Add the select column if necessary
