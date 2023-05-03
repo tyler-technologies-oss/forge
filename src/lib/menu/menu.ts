@@ -19,6 +19,7 @@ export interface IMenuComponent extends IListDropdownAware {
   selectedIndex: number;
   selectedValue: number;
   placement: PopupPlacement;
+  fallbackPlacements: PopupPlacement[];
   dense: boolean;
   iconClass: string;
   persistSelection: boolean;
@@ -27,6 +28,7 @@ export interface IMenuComponent extends IListDropdownAware {
   optionBuilder: MenuOptionBuilder | undefined;
   popupElement: HTMLElement | undefined;
   propagateKeyEvent(evt: KeyboardEvent): void;
+  activateFirstOption(): void;
 }
 
 declare global {
@@ -146,6 +148,10 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   @FoundationProperty()
   public declare placement: `${PopupPlacement}`;
 
+  /** Gets/sets the fallback menu placement for overriding the default of any side. */
+  @FoundationProperty()
+  public declare fallbackPlacements: `${PopupPlacement}`[];
+
   /** Gets/sets dense state of the list options used in the menu popup. */
   @FoundationProperty()
   public declare dense: boolean;
@@ -165,7 +171,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   @FoundationProperty()
   public declare mode: MenuMode;
 
-  /** Sets the position adustment on the internal popup element. */
+  /** Sets the position adjustment on the internal popup element. */
   @FoundationProperty()
   public declare popupOffset: IPopupPosition;
 
@@ -180,5 +186,9 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   /** Force propagates the key event from another element this component. */
   public propagateKeyEvent(evt: KeyboardEvent): void {
     this._foundation.onKeydown(evt);
+  }
+
+  public activateFirstOption(): void {
+    this._foundation.activateFirstOption();
   }
 }
