@@ -12,7 +12,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   setInputAttribute(name: string, value: string): void;
   addInputListener(type: string, listener: (evt: Event) => void): void;
   removeInputListener(type: string, listener: (evt: Event) => void): void;
-  intializeInputAccessibility(identifier: string): void;
+  initializeInputAccessibility(identifier: string): void;
   isWrappingChipField(): boolean;
   show(config: IListDropdownConfig, popupTarget: string): void;
   hide(listener: () => void): void;
@@ -78,7 +78,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._inputElement.removeEventListener(type, listener);
   }
 
-  public intializeInputAccessibility(identifier: string): void {
+  public initializeInputAccessibility(identifier: string): void {
     this._inputElement.setAttribute('autocomplete', 'off');
     this._inputElement.setAttribute('role', 'combobox');
     this._inputElement.setAttribute('aria-live', 'polite');
