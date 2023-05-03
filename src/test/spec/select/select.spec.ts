@@ -1317,9 +1317,15 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       await tick();
+
+      function optionGroupBuilder() {
+        return '<div>Custom group header</div>';
+      }
+
       this.context.component.options = [
         {
           text: '',
+          builder: optionGroupBuilder,
           options: [
             { label: 'option-1', value: 1, disabled: true, leadingBuilder: () => document.createElement('div'), metadata: 'test-meta' } as any,
           ]
@@ -1338,12 +1344,13 @@ describe('SelectComponent', function(this: ITestContext) {
       const optionElements = this.context.component.querySelectorAll(OPTION_CONSTANTS.elementName);
 
       expect(optionGroupElements[0].label).toBe('');
+      expect(optionGroupElements[0].builder).toBe(optionGroupBuilder);
       expect(optionGroupElements[1].label).toBe('group');
 
       expect(optionElements[0].label).toBe('option-1');
       expect(optionElements[0].disabled).toBeTrue();
       expect(optionElements[0].leadingBuilder).toBeTruthy();
-      expect('metadata' in optionElements[0]).toBeFalse();
+      expect('metadata' in optionElements[0]).toBeTrue();
 
       expect(optionElements[2].label).toBe('option-3');
       expect(optionElements[2].optionClass).toEqual(['test-cls']);

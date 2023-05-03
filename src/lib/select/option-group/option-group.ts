@@ -1,8 +1,10 @@
 import { CustomElement } from '@tylertech/forge-core';
+import { ListDropdownOptionGroupBuilder } from '../../list-dropdown/list-dropdown-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { ISelectOption, ISelectOptionGroup } from '../core';
 import { OPTION_GROUP_CONSTANTS } from './option-group-constants';
 
-export interface IOptionGroupComponent extends IBaseComponent {
+export interface IOptionGroupComponent extends Required<ISelectOptionGroup>, IBaseComponent {
   label: string;
 }
 
@@ -50,5 +52,19 @@ export class OptionGroupComponent extends BaseComponent implements IOptionGroupC
       this._label = value || '';
       this.setAttribute(OPTION_GROUP_CONSTANTS.attributes.LABEL, this._label);
     }
+  }
+
+  /** The child options of this group. */
+  public declare options: ISelectOption[];
+
+  /** The builder function for the group content. */
+  public declare builder: ListDropdownOptionGroupBuilder;
+
+  /** The text content for the group. */
+  public get text(): string {
+    return this._label;
+  }
+  public set text(value: string) {
+    this.label = value;
   }
 }

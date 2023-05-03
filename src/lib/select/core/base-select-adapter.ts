@@ -1,4 +1,4 @@
-import { isDefined, removeElement } from '@tylertech/forge-core';
+import { isDefined, isFunction, removeElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IBaseSelectComponent } from './base-select';
 import { ListDropdown, IListDropdown } from '../../list-dropdown';
@@ -8,7 +8,6 @@ import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group';
 import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants';
 import { isOptionGroupObject } from './select-utils';
 import { IPopupComponent, POPUP_CONSTANTS } from '../../popup';
-import { assignMatchingProperties } from '../../core/utils/utils';
 
 export interface IBaseSelectAdapter extends IBaseAdapter {
   initializeAccessibility(): void;
@@ -64,7 +63,11 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
       return optionGroupElements.map(optionGroupElement => {
         const optionElements = Array.from(optionGroupElement.querySelectorAll(OPTION_CONSTANTS.elementName)) as IOptionComponent[];
         const options = this._createOptionsFromElements(optionElements);
-        return { text: optionGroupElement.label, options } as ISelectOptionGroup;
+        return {
+          text: optionGroupElement.label,
+          builder: optionGroupElement.builder,
+          options
+        } as ISelectOptionGroup;
       });
     } else {
       const optionElements = Array.from(this._component.querySelectorAll(OPTION_CONSTANTS.elementName)) as IOptionComponent[];
@@ -225,14 +228,13 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
 
   private _createOptionGroupElement(group: ISelectOptionGroup): HTMLElement {
     const optionGroupElement = document.createElement('forge-option-group');
-    assignMatchingProperties(group, optionGroupElement);
-    optionGroupElement.label = group.text ?? '';
+    Object.assign(optionGroupElement, group);
     return optionGroupElement;
   }
 
   private _createOptionElement(option: ISelectOption): HTMLElement {
     const optionElement = document.createElement('forge-option');
-    assignMatchingProperties(option, optionElement);
+    Object.assign(optionElement, option);
     optionElement.textContent = option.label;
     return optionElement;
   }
