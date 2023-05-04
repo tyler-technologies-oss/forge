@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, ensureChildren, FoundationProperty, isDefined } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, CustomElement, ensureChild, FoundationProperty, isDefined } from '@tylertech/forge-core';
 import { tylIconArrowRight } from '@tylertech/tyler-icons/standard';
 import { CircularProgressComponent } from '../circular-progress';
 import { IconRegistry } from '../icon';
@@ -9,7 +9,6 @@ import { IPopupPosition, PopupComponent, PopupPlacement } from '../popup';
 import { MenuAdapter } from './menu-adapter';
 import { IMenuActiveChangeEventData, IMenuOption, IMenuOptionGroup, IMenuSelectEventData, MenuMode, MenuOptionBuilder, MenuOptionFactory, MENU_CONSTANTS } from './menu-constants';
 import { MenuFoundation } from './menu-foundation';
-
 import template from './menu.html';
 import styles from './menu.scss';
 
@@ -87,10 +86,10 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   }
 
   public connectedCallback(): void {
-    if (this.children.length) {
+    if (this.querySelector(MENU_CONSTANTS.selectors.TOGGLE)) {
       this._foundation.initialize();
     } else {
-      ensureChildren(this).then(() => this._foundation.initialize());
+      ensureChild(this, MENU_CONSTANTS.selectors.TOGGLE).then(() => this._foundation.initialize());
     }
   }
 

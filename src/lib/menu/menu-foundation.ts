@@ -93,7 +93,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     }
     this._applyMode();
     this._adapter.addTargetListener('keydown', this._keydownListener, true);
-    this._adapter.addTargetListener('blur', this._blurListener);
+    this._adapter.addTargetListener('focusout', this._blurListener);
   }
 
   private _destroyInteractionListeners(): void {
@@ -101,7 +101,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       return;
     }
     this._adapter.removeTargetListener('keydown', this._clickListener);
-    this._adapter.removeTargetListener('blur', this._blurListener);
+    this._adapter.removeTargetListener('focusout', this._blurListener);
     this._adapter.removeTargetListener('click', this._clickListener);
     this._detachCascadingListeners();
   }
