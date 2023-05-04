@@ -21,6 +21,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   setSelectedText(value: string): void;
   getInputValue(): string;
+  setInputValue(value: string): void;
   selectInputValue(): void;
   setDismissListener(listener: () => void): void;
   toggleOptionMultiple(index: number, selected: boolean): void;
@@ -156,6 +157,10 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
 
   public getInputValue(): string {
     return this._inputElement.value;
+  }
+
+  public setInputValue(value: string): void {
+    this._inputElement.value = value;
   }
 
   public selectInputValue(): void {
