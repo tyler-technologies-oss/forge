@@ -17,7 +17,7 @@ export class RadioFoundation implements IRadioFoundation {
 
   public connect(): void {
     this._adapter.connect();
-    this._adapter.initializeRipple();
+    this._adapter.deferRippleInitialization();
     this._focusListenerCallback = () => this._adapter.syncFocusedStateWithInput();
     this._disabledListenerCallback = () => this._adapter.syncDisabledStateWithInput();
     this._syncRadiogroupCheckStyles = () => this._adapter.syncRadiogroupCheckStyles();

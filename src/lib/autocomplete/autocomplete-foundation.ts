@@ -145,7 +145,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _initializeAccessibility(): void {
-    this._adapter.intializeInputAccessibility(this._identifier);
+    this._adapter.initializeInputAccessibility(this._identifier);
   }
 
   private get _flatOptions(): IAutocompleteOption[] {
@@ -515,7 +515,9 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       const result = this._adapter.emitHostEvent(AUTOCOMPLETE_CONSTANTS.events.SELECT, data, true, true);
       if (result) {
         this._filterText = '';
-        this._closeDropdown();
+        if (!this._multiple) {
+          this._closeDropdown();
+        }
       }
       return;
     }

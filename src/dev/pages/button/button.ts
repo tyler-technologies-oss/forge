@@ -7,7 +7,7 @@ import '@tylertech/forge/button';
 
 // Icons
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
+import { tylIconFavorite, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 
 import '$src/shared';
@@ -15,7 +15,7 @@ import type { ButtonComponent } from '@tylertech/forge/button';
 import { isDefined } from '@tylertech/forge-core';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
 
-IconRegistry.define([tylIconForgeLogo, tylIconFavorite]);
+IconRegistry.define([tylIconForgeLogo, tylIconFavorite, tylIconOpenInNew]);
 
 function getButtonElements(): NodeListOf<ButtonComponent> {
   return document.querySelectorAll('.content forge-button');

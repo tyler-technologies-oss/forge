@@ -208,13 +208,15 @@ export class DialogFoundation implements IDialogFoundation {
     if (!this._isAnimating) {
       return;
     }
+
     this._adapter.deregisterTransitionEndHandler(this._transitionEndHandler);
     this._adapter.setAnimating(false);
     this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.READY);
-    this._adapter.tryLayoutChildren();
+
     if (this._moveable) {
       this._initMoveTarget();
     }
+    
     this._isAnimating = false;
   }
 

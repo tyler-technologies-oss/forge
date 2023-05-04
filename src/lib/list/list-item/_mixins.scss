@@ -317,8 +317,6 @@
 @mixin subtitle() {
   @include mdc-typography.typography(body2);
   @include mdc-typography.overflow-ellipsis;
-  @include mdc-typography.baseline-top(20);
-
   @include mdc-theme.property(color, text-secondary-on-background);
 
   display: block;
