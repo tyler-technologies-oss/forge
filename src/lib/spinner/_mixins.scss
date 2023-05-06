@@ -1,0 +1,108 @@
+@use '@material/theme/theme' as mdc-theme;
+@use '@material/animation/animation' as mdc-animation;
+@use '../theme';
+@use './variables';
+
+@mixin base() {
+  @include mdc-theme.property(border-color, text-icon-on-background);
+  
+  --forge-icon-font-size: 16px;
+  
+  width: fit-content;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: mdc-animation.enter(border-color, 200ms);
+}
+
+@mixin base-hover() {
+  @include mdc-theme.property(border-color, text-primary-on-background);
+
+  transition: mdc-animation.enter(border-color, 200ms);
+}
+
+@mixin base-disabled() {
+  @include theme.property(color, label-disabled-on-background);
+  @include mdc-theme.property(border-color, text-disabled-on-background);
+
+  transition: none;
+  pointer-events: none;
+}
+
+@mixin button() {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+@mixin button-before() {
+  @include theme.property(background-color, on-surface);
+
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+@mixin button-hover() {
+  &::before {
+    opacity: 0.04;
+  }
+}
+
+@mixin button-active() {
+  &::before {
+    opacity: 0.12;
+  }
+}
+
+@mixin increment() {
+}
+
+@mixin decrement() {
+  transform: rotate(180deg);
+}
+
+@mixin core-styles() {
+  .forge-spinner {
+    @include base;
+
+    &:hover {
+      @include base-hover;
+    }
+
+    &__button {
+      @include button;
+
+      &::before {
+        @include button-before;
+      }
+
+      &--increment {
+        @include increment;
+      }
+
+      &--decrement {
+        @include decrement;
+      }
+
+      &:hover {
+        @include button-hover;
+      }
+    }
+
+    &--active {
+      .forge-spinner__button:hover {
+        @include button-active;
+      }
+    }
+
+    &--disabled {
+      @include base-disabled;
+    }
+  }
+}

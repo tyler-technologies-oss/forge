@@ -41,6 +41,7 @@
   { "label": "Select", "path": "/pages/select/select.html", "tags": ["form", "field"] },
   { "label": "Skeleton", "path": "/pages/skeleton/skeleton.html" },
   { "label": "Slider", "path": "/pages/slider/slider.html", "tags": ["form"] },
+  { "label": "Spinner", "path": "/pages/spinner/spinner.html", "tags": ["form", "field"] },
   { "label": "Split view", "path": "/pages/split-view/split-view.html", "tags": ["form"] },
   { "label": "Stepper", "path": "/pages/stepper/stepper.html" },
   { "label": "Switch", "path": "/pages/switch/switch.html", "tags": ["form"] },

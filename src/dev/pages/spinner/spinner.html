@@ -1,0 +1,11 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Spinner',
+    includePath: './pages/spinner/spinner.ejs',
+    options: [
+      { type: 'switch', id: 'spinner-disabled', label: 'Disabled' }
+    ]
+  }
+})
+%>
