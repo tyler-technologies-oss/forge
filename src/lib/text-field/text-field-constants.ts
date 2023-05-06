@@ -1,4 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { FIELD_CONSTANTS } from '../field/field-constants';
+import { SPINNER_CONSTANTS } from '../spinner';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}text-field`;
 
@@ -14,14 +16,18 @@ const classes = {
 };
 
 const selectors = {
-  ROOT: `.${classes.ROOT}`
+  ROOT: `.${classes.ROOT}`,
+  SPINNER: `${SPINNER_CONSTANTS.elementName}`
 };
+
+const observedInputAttributes = [...FIELD_CONSTANTS.observedInputAttributes, 'type', 'min', 'max', 'step'];
 
 export const TEXT_FIELD_CONSTANTS = {
   elementName,
   attributes,
   classes,
-  selectors
+  selectors,
+  observedInputAttributes
 };
 
 export {

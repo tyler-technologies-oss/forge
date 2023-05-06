@@ -1,11 +1,15 @@
-import { addClass, listenOwnProperty, getActiveElement, createElementAttributeObserver } from '@tylertech/forge-core';
+import { addClass, listenOwnProperty, getActiveElement, createElementAttributeObserver, coerceNumber } from '@tylertech/forge-core';
 import { ITextFieldComponent } from './text-field';
 import { FieldAdapter, IFieldAdapter } from '../field/field-adapter';
 import { TEXT_FIELD_CONSTANTS } from './text-field-constants';
-import { FIELD_CONSTANTS } from '../field/field-constants';
 
 export interface ITextFieldAdapter extends IFieldAdapter {
   detectTextarea(): void;
+  isNumber(): boolean;
+  getMin(): number | null;
+  getMax(): number | null;
+  getStep(): number | null;
+  toggleSpinner(value: boolean): void;
 }
 
 export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter {
@@ -89,7 +93,7 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
 
   public override setInputAttributeObserver(listener: (name: string, value: string) => void): void {
     this._applyToInputs(input => {
-      const observer = createElementAttributeObserver(input, listener, FIELD_CONSTANTS.observedInputAttributes);
+      const observer = createElementAttributeObserver(input, listener, TEXT_FIELD_CONSTANTS.observedInputAttributes);
       this._inputMutationObserverInstances.push(observer);
     });
   }
@@ -100,6 +104,26 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
 
   public override isReadonly(): boolean {
     return this._inputsSome(input => input.hasAttribute('readonly'));
+  }
+
+  public isNumber(): boolean {
+    return this._inputsSome(input => input.getAttribute('type') === 'number');
+  }
+
+  public getMin(): number | null {
+    return this._getNumberAttribute('min');
+  }
+
+  public getMax(): number | null {
+    return this._getNumberAttribute('max');
+  }
+
+  public getStep(): number | null {
+    return this._getNumberAttribute('step');
+  }
+
+  public toggleSpinner(value: boolean): void {
+    
   }
 
   protected _inputsSome(action: (input: HTMLInputElement) => boolean): boolean {
@@ -125,5 +149,18 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
     divider.setAttribute(TEXT_FIELD_CONSTANTS.attributes.MULTI_INPUT_SEPARATOR, '');
     divider.textContent = '-';
     return divider;
+  }
+
+  private _getNumberAttribute(name: 'min' | 'max' | 'step'): number | null {
+    const value = this._inputElements[0].getAttribute(name);
+    if (!value) {
+      return null;
+    }
+
+    const numberValue = Number(this._inputElements[0].getAttribute(name));
+    if (isNaN(numberValue)) {
+      return null;
+    }
+    return numberValue;
   }
 }
