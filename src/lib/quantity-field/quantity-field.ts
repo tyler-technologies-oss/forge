@@ -1,4 +1,5 @@
 import { CustomElement, attachShadowTemplate, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { tylIconRemoveCircleOutline, tylIconControlPoint } from '@tylertech/tyler-icons/standard';
 import { QuantityFieldAdapter } from './quantity-field-adapter';
 import { QuantityFieldFoundation } from './quantity-field-foundation';
 import { QUANTITY_FIELD_CONSTANTS } from './quantity-field-constants';
@@ -7,6 +8,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './quantity-field.html';
 import styles from './quantity-field.scss';
+import { IconRegistry } from '../icon';
 
 export interface IQuantityFieldComponent extends IBaseComponent {
   invalid: boolean;
@@ -44,6 +46,11 @@ export class QuantityFieldComponent extends BaseComponent implements IQuantityFi
     super();
     attachShadowTemplate(this, template, styles);
     this._foundation = new QuantityFieldFoundation(new QuantityFieldAdapter(this));
+
+    IconRegistry.define([
+      tylIconRemoveCircleOutline,
+      tylIconControlPoint
+    ]);
   }
 
   public connectedCallback(): void {
