@@ -2,19 +2,18 @@
 @use './base';
 
 @mixin field {
-  .forge-chip-field {
-    // Core
-    @include base.field-core;
-    // Height
-    &:not(.forge-field--dense):not(.forge-field--roomy) {
-      @include base.field-height(default, --forge-chip-field-height);
-    }
-    &.forge-field--roomy:not(.forge-field--dense) {
-      @include base.field-height(roomy, --forge-chip-field-height);
-    }
-    &.forge-field--dense:not(.forge-field--roomy) {
-      @include base.field-height(dense, --forge-chip-field-height);
-    }
+  // Core
+  @include base.field-core;
+
+  // Height
+  &:not(.forge-field--dense):not(.forge-field--roomy) {
+    @include base.field-height(default, --forge-chip-field-height);
+  }
+  &.forge-field--roomy:not(.forge-field--dense) {
+    @include base.field-height(roomy, --forge-chip-field-height);
+  }
+  &.forge-field--dense:not(.forge-field--roomy) {
+    @include base.field-height(dense, --forge-chip-field-height);
   }
 }
 
