@@ -3,7 +3,7 @@ import '@tylertech/forge/table';
 import '@tylertech/forge/table/forge-table.scss';
 import './table.scss';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { CellAlign, IColumnConfiguration, IconRegistry, ISelectComponent, ISortedColumn, ISwitchComponent, ITableComponent, ITableSortMultipleEventData, ITableTemplateBuilderResult, SelectComponentDelegate, SortDirection } from '@tylertech/forge';
+import { ButtonComponentDelegate, CellAlign, IColumnConfiguration, IconRegistry, ISelectComponent, ISortedColumn, ISwitchComponent, ITableComponent, ITableSortMultipleEventData, ITableTemplateBuilderResult, SelectComponentDelegate, SortDirection } from '@tylertech/forge';
 import { PositionPlacement } from '@tylertech/forge-core';
 import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons/standard';
 
@@ -49,7 +49,7 @@ const columnConfigurations: IColumnConfiguration[] = [
   {
     header: 'Player name',
     property: 'name',
-    template: (_index, _parent, { name }) => name,
+    template: (_index, _parent, { name }, _colIndex) => name,
     sortable: true,
     initialSort: { direction: SortDirection.Descending, sortOrder: 1 } as ISortedColumn,
     headerTemplate: () => Promise.resolve('<span>Player names</span>'),
@@ -77,7 +77,11 @@ const columnConfigurations: IColumnConfiguration[] = [
     filterDelegate: new SelectComponentDelegate({ props: { options: positionOptions, placeholder: 'Filter position...' }})
   },
   { template: getMenuColumnTemplate, resizable: false, align: CellAlign.Center, headerCellStyle: { width: '50px' }, stopCellTemplateClickPropagation: true },
-  { template: getExpandRowColumnTemplate, resizable: false, align: CellAlign.Center, headerCellStyle: { width: '50px' } }
+  {
+    filter: true,
+    filterDelegate: new ButtonComponentDelegate({ options: { text: 'Clear filters '} }),
+    template: getExpandRowColumnTemplate, resizable: false, align: CellAlign.Center, headerCellStyle: { width: '50px' }
+  }
 ];
 
 let sortDirection = 'DESC';

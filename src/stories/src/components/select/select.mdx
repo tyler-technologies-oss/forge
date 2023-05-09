@@ -182,6 +182,44 @@ Gets/sets the placeholder text for when no values are selected. This only applie
 
 </PropertyDef>
 
+<PropertyDef name="popupClasses" type="string | string[]" defaultValue="[]">
+
+Gets/sets the list of classes to apply to the popup element.
+
+</PropertyDef>
+
+<PropertyDef name="popupHeaderBuilder" type="ListDropdownHeaderBuilder" defaultValue="undefined">
+
+Gets/sets the callback function for generating header content within the popup.
+
+</PropertyDef>
+
+<PropertyDef name="popupFooterBuilder" type="ListDropdownFooterBuilder" defaultValue="undefined">
+
+Gets/sets the callback function for generating footer content within the popup.
+
+</PropertyDef>
+
+<PropertyDef name="syncPopupWidth" type="boolean" defaultValue="false">
+
+Gets/sets whether the popup width is synchronized with the popup target width.
+
+</PropertyDef>
+
+<PropertyDef name="constrainPopupWidth" type="boolean" defaultValue="true">
+
+Gets/sets whether the popup width will be constrained to a max width of the viewport width (default: `100vw`).
+
+</PropertyDef>
+
+<PropertyDef name="wrapOptionText" type="boolean" defaultValue="false">
+
+Gets/sets whether the options will wrap their text or not.
+
+This only applies if `constrainPopupWidth` is `true`, if there is an explicit width set via CSS.
+
+</PropertyDef>
+
 </PageSection>
 
 ---
@@ -292,6 +330,7 @@ Sets focus to the internal button element.
 | `--forge-select-margin-top`                               | Controls the margin-top of the field element. Default value is `0`.
 | **Outline**                                               |
 | `--forge-select-theme-background`                         | Controls the background-color of the outline element.
+| `--forge-select-border-style`                             | Controls the `border-style` (defaults to `solid`). Set to `none` to remove the border.
 | `--forge-theme-form-field-disabled-on-background`         | Controls the disabled background-color of the outline element.
 | `--mdc-theme-text-icon-on-background`                     | Controls the border-color of the outline element.
 | `--mdc-theme-text-primary-on-background`                  | Controls the hover border-color for the outline element.
@@ -324,8 +363,6 @@ Sets focus to the internal button element.
 | `--mdc-theme-text-disabled-on-light`                      | Controls the disabled color of the icon elements.
 | **Placeholder**                                           |
 | `--mdc-theme-text-secondary-on-background`                | Controls the color of the placeholder element.
-
-> **Note:** To hide the border, add the following CSS declaration: `--forge-select-border-display: none;`
 
 </PageSection>
 
@@ -408,6 +445,18 @@ type SelectFloatLabelType = 'default' | 'always';
 
 ```ts
 type SelectBeforeValueChangeCallback<T> = (value: T | T[]) => boolean | Promise<boolean>;
+```
+
+### ListDropdownHeaderBuilder
+
+```ts
+type ListDropdownHeaderBuilder = () => HTMLElement;
+```
+
+### ListDropdownFooterBuilder
+
+```ts
+type ListDropdownFooterBuilder = () => HTMLElement;
 ```
 
 </PageSection>

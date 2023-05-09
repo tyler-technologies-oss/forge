@@ -21,8 +21,8 @@
     <h3 class="forge-typography--caption">Toggle</h3>
     <forge-icon-button toggle="true" is-on="false">
       <button type="button">
-        <forge-icon name="favorite" external forge-icon-button-on></forge-icon>
-        <forge-icon name="favorite_border" external></forge-icon>
+        <forge-icon name="favorite" forge-icon-button-on></forge-icon>
+        <forge-icon name="favorite_border"></forge-icon>
       </button>
     </forge-icon-button>
   </div>
@@ -31,9 +31,18 @@
     <h3 class="forge-typography--caption">Toggle (dense)</h3>
     <forge-icon-button dense toggle is-on="false">
       <button type="button">
-        <forge-icon name="favorite" external forge-icon-button-on></forge-icon>
-        <forge-icon name="favorite_border" external></forge-icon>
+        <forge-icon name="favorite" forge-icon-button-on></forge-icon>
+        <forge-icon name="favorite_border"></forge-icon>
       </button>
+    </forge-icon-button>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--caption">w/Anchor link</h3>
+    <forge-icon-button>
+      <a href="javascript: alert('Anchor link icon button works!');">
+        <forge-icon name="open_in_new"></forge-icon>
+      </a>
     </forge-icon-button>
   </div>
 </div>

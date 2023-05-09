@@ -16,18 +16,21 @@ export interface IMenuFoundation extends ICustomElementFoundation {
   optionsFactory: MenuOptionFactory | undefined;
   selectedIndex: number;
   selectedValue: any;
-  placement: string;
+  placement: PopupPlacement;
+  fallbackPlacements: PopupPlacement[];
   dense: boolean;
   iconClass: string;
   persistSelection: boolean;
   mode: MenuMode;
   popupOffset: IPopupPosition;
   optionBuilder: MenuOptionBuilder | undefined;
+  activateFirstOption(): void;
 }
 
 export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOption | IMenuOptionGroup> implements IMenuFoundation {
   private _optionsFactory: MenuOptionFactory | undefined;
   private _placement: PopupPlacement = 'bottom-start';
+  private _fallbackPlacements: PopupPlacement[] = [];
   private _dense = false;
   private _selectedValue: any;
   private _iconClass = ICON_CLASS_NAME;
@@ -68,6 +71,10 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     this._destroyInteractionListeners();
   }
 
+  public activateFirstOption(): void {
+    this._adapter.activateFirstOption();
+  }
+
   private _applyMode(): void {
     if (!this._adapter.hasTargetElement()) {
       return;
@@ -86,7 +93,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     }
     this._applyMode();
     this._adapter.addTargetListener('keydown', this._keydownListener, true);
-    this._adapter.addTargetListener('blur', this._blurListener);
+    this._adapter.addTargetListener('focusout', this._blurListener);
   }
 
   private _destroyInteractionListeners(): void {
@@ -94,7 +101,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       return;
     }
     this._adapter.removeTargetListener('keydown', this._clickListener);
-    this._adapter.removeTargetListener('blur', this._blurListener);
+    this._adapter.removeTargetListener('focusout', this._blurListener);
     this._adapter.removeTargetListener('click', this._clickListener);
     this._detachCascadingListeners();
   }
@@ -154,13 +161,6 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
   public onKeydown(evt: KeyboardEvent): void {
     // If we have any child menus open, we need to proxy the keyboard events to those and exit
     if (this._childOpen) {
-      // If escape is pressed while other menus are open then we need to close everything
-      if (evt.code === 'Escape') {
-        evt.preventDefault();
-        this._adapter.closeOtherChildMenus();
-        this._closeDropdown();
-        return;
-      }
       this._adapter.proxyKeyboardEventToChild(evt, this._identifier);
       return;
     }
@@ -183,7 +183,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
         if (this._open) {
           this._closeDropdown();
         } else {
-          this._openDropdown();
+          this._openDropdown({ fromKeyboard: true });
         }
         break;
       case 'Home':
@@ -194,12 +194,15 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
         }
         break;
       case 'Enter':
+        evt.preventDefault();
+
         if (!this._open) {
+          evt.preventDefault();
+          this._openDropdown({ fromKeyboard: true });
           return;
         }
 
         evt.stopImmediatePropagation();
-        evt.preventDefault();
 
         this._adapter.propagateKey(evt.code);
 
@@ -219,7 +222,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
         evt.preventDefault();
 
         if (!this._open && evt.code === 'ArrowDown') {
-          this._openDropdown();
+          this._openDropdown({ fromKeyboard: true });
           this._adapter.activateFirstOption();
           return;
         }
@@ -251,7 +254,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     }
   }
 
-  private async _openMenu(): Promise<void> {
+  private async _openMenu({ fromKeyboard }: { fromKeyboard?: boolean } = {}): Promise<void> {
     this._open = true;
     let options: IMenuOption[] = [];
 
@@ -291,7 +294,8 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       observeScroll: this._observeScroll,
       observeScrollThreshold: this._observeScrollThreshold,
       popupPlacement: this._placement,
-      activeStartIndex: this._mode === 'cascade' ? 0 : undefined,
+      popupFallbackPlacements: this._fallbackPlacements,
+      activeStartIndex: fromKeyboard ? 0 : undefined,
       popupClasses: [
         MENU_CONSTANTS.classes.POPUP,
         MENU_CONSTANTS.classes.MENU,
@@ -426,7 +430,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
   }
 
   /** Called when a child menu is closed off of one of our menu options. */
-  protected _onCascadingChildClose(): void {
+  protected _onCascadingChildClose(index: number): void {
     this._childOpen = false;
   }
 
@@ -434,8 +438,12 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     this._closeMenu();
   }
 
-  protected _openDropdown(): void {
-    this._openMenu();
+  protected _openDropdown({ fromKeyboard }: { fromKeyboard?: boolean } = {}): void {
+    this._openMenu({ fromKeyboard });
+  }
+
+  protected _setCascadeTargetInactive(): void {
+    this._adapter.setCascadeTargetInactive();
   }
 
   protected _isOwnElement(element: Element): boolean {
@@ -454,6 +462,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     menu.popupOffset = { x: 0, y: -8 };
     menu.dense = this._dense;
     menu.placement = 'right-start';
+    menu.fallbackPlacements = ['left-start', 'right-start']; // Cascading menus should only fallback to left or right placement if needed
     menu.persistSelection = this._persistSelection;
     if (this._persistSelection) {
       menu.selectedValue = this._selectedValue;
@@ -550,6 +559,13 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       this._placement = value || 'bottom-start';
       this._adapter.setHostAttribute(MENU_CONSTANTS.attributes.PLACEMENT, this._placement);
     }
+  }
+
+  public get fallbackPlacements(): PopupPlacement[] {
+    return this._fallbackPlacements;
+  }
+  public set fallbackPlacements(value: PopupPlacement[]) {
+    this._fallbackPlacements = Array.isArray(value) ? value : [];
   }
 
   public get dense(): boolean {

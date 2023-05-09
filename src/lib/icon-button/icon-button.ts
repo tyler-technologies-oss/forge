@@ -164,20 +164,20 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
   private async _deferRippleInitialization(): Promise<void> {
     const type = await userInteractionListener(this._buttonElement);
     if (!this._rippleInstance) {
-      this._initRipple();
+      this._rippleInstance = this._createRipple();
       if (type === 'focusin') {
-        // eslint-disable-next-line @typescript-eslint/dot-notation
-        (this._rippleInstance as ForgeRipple)['foundation'].handleFocus();
+        this._rippleInstance.handleFocus();
       }
     }
   }
 
-  private _initRipple(): void {
+  private _createRipple(): ForgeRipple {
     if (this._rippleInstance) {
       this._rippleInstance.destroy();
     }
-    this._rippleInstance = new ForgeRipple(this._buttonElement);
-    this._rippleInstance.unbounded = true;
+    const ripple = new ForgeRipple(this._buttonElement);
+    ripple.unbounded = true;
+    return ripple;
   }
 
   private _toggleValue(): void {

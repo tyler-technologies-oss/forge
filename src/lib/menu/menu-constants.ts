@@ -9,7 +9,7 @@ const classes = {
 };
 
 const selectors = {
-  TOGGLE: `.${COMPONENT_NAME_PREFIX}menu__toggle, [${elementName}-toggle], button, [type=button]`,
+  TOGGLE: `.${elementName}__toggle,[${elementName}-toggle],button,[type=button],[role=button],a,[tabindex]:not([tabindex^="-"])`,
   MENU_LIST: 'forge-list'
 };
 

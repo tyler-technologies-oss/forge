@@ -133,14 +133,12 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     // the user interacted with the checkbox before the animation was finished.
     if (this._currentAnimationClass.length > 0) {
       clearTimeout(this._animEndLatchTimer);
-      this._adapter.forceLayout();
       this._adapter.removeRootClass(this._currentAnimationClass);
     }
     // Check to ensure that there isn't a previously existing animation class, in case for example
     // the user interacted with the checkbox before the animation was finished.
     if (this._currentAnimationClass.length > 0) {
       clearTimeout(this._animEndLatchTimer);
-      this._adapter.forceLayout();
       this._adapter.removeRootClass(this._currentAnimationClass);
     }
 
@@ -153,8 +151,6 @@ export class CheckboxFoundation implements ICheckboxFoundation {
       this._adapter.setRootClass(this._currentAnimationClass);
       this._enableAnimationEndHandler = true;
     }
-
-    this._adapter.forceLayout();
   }
 
   private _handleInputAttributeChange(): void {

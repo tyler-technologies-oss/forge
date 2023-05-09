@@ -15,9 +15,6 @@ export interface IBaseSelectFoundation extends IListDropdownAwareFoundation {
   popupElement: HTMLElement | undefined;
   optionBuilder: SelectOptionBuilder;
   selectedTextBuilder: SelectSelectedTextBuilder;
-  observeScroll: boolean;
-  observeScrollThreshold: number;
-  syncPopupWidth: boolean;
   beforeValueChange: SelectBeforeValueChangeCallback<any>;
   appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void;
   selectAll(): void;
@@ -176,6 +173,8 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
       id: this._identifier,
       optionBuilder: this._optionBuilder,
       syncWidth: this._syncPopupWidth,
+      constrainViewportWidth: this._constrainPopupWidth,
+      wrapOptionText: this._wrapOptionText,
       observeScroll: this._observeScroll,
       observeScrollThreshold: this._observeScrollThreshold,
       scrollEndListener: this._dropdownScrollEndListener,
@@ -429,7 +428,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
     } else if (isArrowUp || isArrowDown) {
       evt.preventDefault();
 
-      if (this._multiple && !this._open) {
+      if (!this._open) {
         this._openDropdown();
         this._adapter.activateFirstOption();
         return;
@@ -455,12 +454,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
         optionIndex = this._getNextHighlightableOptionIndex(optionIndex, this._nonDividerOptions);
       }
 
-      // If the dropdown is open then we just move the active index, otherwise we change the selection (to mimic the native <select>)
-      if (this._open) {
-        this._adapter.highlightActiveOption(optionIndex);
-      } else {
-        this._onSelect(this._nonDividerOptions[optionIndex], optionIndex);
-      }
+      this._adapter.highlightActiveOption(optionIndex);
     } else if (isHomeKey) {
       if (this._open) {
         evt.preventDefault();
@@ -656,28 +650,6 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
   public set selectedTextBuilder(fn: SelectSelectedTextBuilder) {
     this._selectedTextBuilder = fn;
   }
-
-  public get observeScroll(): boolean {
-    return this._observeScroll;
-  }
-  public set observeScroll(value: boolean) {
-    this._observeScroll = value;
-  }
-
-  public get observeScrollThreshold(): number {
-    return this._observeScrollThreshold;
-  }
-  public set observeScrollThreshold(value: number) {
-    this._observeScrollThreshold = value;
-  }
-
-  public get syncPopupWidth(): boolean {
-    return this._syncPopupWidth;
-  }
-  public set syncPopupWidth(value: boolean) {
-    this._syncPopupWidth = value;
-  }
-
 
   public get optionLimit(): number {
     return this._optionLimit;

@@ -9,3 +9,7 @@
 :host([hidden]) {
   display: none;
 }
+
+:host([constrain-viewport-width]) {
+  max-width: 100vw;
+}

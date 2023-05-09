@@ -1,4 +1,3 @@
-@use '@material/list/evolution-variables' as mdc-evolution-variables;
 @use '@material/rtl/rtl' as mdc-rtl;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/typography' as mdc-typography;
@@ -37,12 +36,6 @@
       }
     }
   
-    &--wrap {
-      .forge-list-item__text {
-        @include text-wrap;
-      }
-    }
-  
     &__text {
       @include text;
     }
@@ -55,7 +48,7 @@
     ::slotted([slot=tertiary-title]) {
       @include subtitle;
     }
-  
+
     &--two-line {
       @include two-line;
     }
@@ -81,6 +74,18 @@
       }
     }
   
+    &--wrap {
+      @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$single-line-height);
+      @include theme.css-custom-property(height, --forge-list-item-height, auto);
+
+      ::slotted([slot=title]),
+      ::slotted([slot=subtitle]),
+      ::slotted([slot=tertiary-title]),
+      .forge-list-item__text {
+        @include text-wrap;
+      }
+    }
+
     &--indented {
       @include indented;
     }
@@ -137,11 +142,13 @@
     }
 
     &--two-line {
-      height: variables.$two-line-height - 8px;
+      @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$two-line-height - 8px);
+      @include theme.css-custom-property(height, --forge-list-item-height, variables.$two-line-height - 8px);
     }
 
     &--three-line {
-      height: variables.$three-line-height - 8px;
+      @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$three-line-height - 8px);
+      @include theme.css-custom-property(height, --forge-list-item-height, variables.$three-line-height - 8px);
     }
 
     &:nth-child(1) {
@@ -162,6 +169,12 @@
       }
     }
 
+    &--wrap {
+      @include theme.css-custom-property(height, --forge-list-item-height, auto);
+      @include theme.css-custom-property(padding, --forge-list-item-padding, 4px variables.$drawer-inline-padding);
+      @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$drawer-single-line-height);
+    }
+
     &--disabled {
       @include theme.css-custom-property(cursor, --forge-list-item-cursor, not-allowed);
     }
@@ -175,10 +188,10 @@
 }
 
 @mixin base() {
-  @include theme.css-custom-property(min-height, --forge-list-item-min-height, auto);
-  @include theme.css-custom-property(max-height, --forge-list-item-max-height, auto);
+  @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$single-line-height);
+  @include theme.css-custom-property(max-height, --forge-list-item-max-height, none);
   @include theme.css-custom-property(height, --forge-list-item-height, variables.$single-line-height);
-  @include theme.css-custom-property(padding, --forge-list-item-padding, 0 mdc-evolution-variables.$side-padding);
+  @include theme.css-custom-property(padding, --forge-list-item-padding, #{variables.$block-padding variables.$inline-padding});
   @include theme.css-custom-property(margin-left, --forge-list-item-indent, 0);
   @include theme.css-custom-property(align-items, --forge-list-item-align-items, center);
 
@@ -251,13 +264,13 @@
 
 @mixin drawer {
   @include theme.css-custom-property(margin, --forge-list-item-margin, variables.$margin-drawer);
-  @include theme.css-custom-property(padding, --forge-list-item-padding, 0 8px);
+  @include theme.css-custom-property(padding, --forge-list-item-padding, 0 variables.$drawer-inline-padding);
   @include theme.css-custom-property(border-radius, --forge-list-item-border-radius, 4px);
   @include theme.css-custom-property(cursor, --forge-list-item-cursor, pointer);
+  @include theme.css-custom-property(height, --forge-list-item-height, variables.$drawer-single-line-height);
 
   font-size: 0.875rem;
   font-weight: 500;
-  height: 40px;
 }
 
 @mixin leading() {
@@ -304,8 +317,6 @@
 @mixin subtitle() {
   @include mdc-typography.typography(body2);
   @include mdc-typography.overflow-ellipsis;
-  @include mdc-typography.baseline-top(20);
-
   @include mdc-theme.property(color, text-secondary-on-background);
 
   display: block;

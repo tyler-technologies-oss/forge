@@ -1,7 +1,7 @@
 import { addClass, closestElement, emitEvent, getShadowElement, IPositionElementConfig, notChildEventListener, positionElementAsync, removeClass, removeElement, deepQuerySelectorAll, getActiveElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IPopupComponent } from './popup';
-import { IPopupPositionEventData, POPUP_CONSTANTS } from './popup-constants';
+import { IPopupPositionEventData, POPUP_CONSTANTS, PopupPlacement } from './popup-constants';
 
 export interface IPopupAdapter extends IBaseAdapter {
   setAttribute(attribute: string, value: string, element?: HTMLElement): void;
@@ -51,8 +51,18 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
       element: this._component,
       targetElement: this._component.targetElement,
       placement: this._component.placement,
-      hide: this._component.hideWhenClipped
+      hide: this._component.hideWhenClipped,
+      flipOptions: {
+        fallbackPlacements: ['top-start', 'top', 'top-end', 'left-start', 'left', 'left-end', 'right-start', 'right', 'right-end'],
+        fallbackStrategy: 'initialPlacement'
+      }
     };
+
+    const fallbackPlacements: PopupPlacement[] = this._component.fallbackPlacements;
+    if (fallbackPlacements?.length) {
+      config.flipOptions = { ...config.flipOptions, fallbackPlacements };
+    }
+
     if (this._component.offset) {
       config.offset = this._component.offset;
     }

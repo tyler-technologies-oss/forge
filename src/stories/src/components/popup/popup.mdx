@@ -90,6 +90,17 @@ See the [PopupPlacement](#popupplacement) type below for information about other
 
 </PropertyDef>
 
+<PropertyDef name="fallbackPlacements" type="PopupPlacement[]" defaultValue="[]">
+
+The fallback placements to prefer around the target element when `placement` causes the element to be clipped.
+
+By default the component will try all available placements for a "best-fit" strategy, but overriding this value to a sub-set of those
+can be valuable when you only want the popup to fall back to specific placements of your choosing.
+
+See the [PopupPlacement](#popupplacement) type below for acceptable values.
+
+</PropertyDef>
+
 <PropertyDef name="open" type="boolean" defaultValue="false">
 
 Controls the visibility of the popup.
@@ -139,6 +150,12 @@ By using this callback, you can get notified and control whether the popup can c
 <PropertyDef name="hideWhenClipped" type="boolean" defaultValue="false">
 
 Gets/sets whether the popup will automatically hide itself when the target element is scrolled out of view.
+
+</PropertyDef>
+
+<PropertyDef name="constrain-viewport-width" prop={false} type="boolean" defaultValue="''">
+
+Controls whether the host element will have a `max-width` applied or not.
 
 </PropertyDef>
 

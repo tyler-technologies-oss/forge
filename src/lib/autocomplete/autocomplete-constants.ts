@@ -1,7 +1,6 @@
 import { COMPONENT_NAME_PREFIX, KEYSTROKE_DEBOUNCE_THRESHOLD } from '../constants';
-import { IOption } from '../select';
 import { IListItemComponent } from '../list';
-import { IListDropdownConfig } from '../list-dropdown';
+import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownOptionGroupBuilder } from '../list-dropdown';
 import { IPopupPosition } from '../popup';
 import { FIELD_CONSTANTS } from '../field/field-constants';
 
@@ -49,21 +48,18 @@ export const AUTOCOMPLETE_CONSTANTS = {
   events
 };
 
-export type AutocompleteOptionBuilder<T = any> = (option: IOption<T>, filterText: string, parentElement: IListItemComponent) => HTMLElement;
-export type AutocompleteOptionGroupBuilder<T = any> = (option: IAutocompleteOptionGroup<T>) => HTMLElement;
-export type AutocompleteFilterCallback<T = any> = (filterText: string, value: T | null) => Array<IOption<T>> | IAutocompleteOptionGroup[] | Promise<Array<IOption<T>> | IAutocompleteOptionGroup[]>;
-export type AutocompleteSelectedTextBuilder<T = any> = (selectedOptions: Array<IOption<T>>) => string;
+export type AutocompleteOptionBuilder<T = any> = (option: IAutocompleteOption<T>, filterText: string, parentElement: IListItemComponent) => HTMLElement;
+export type AutocompleteOptionGroupBuilder<T = any> = ListDropdownOptionGroupBuilder<T>;
+export type AutocompleteFilterCallback<T = any> = (filterText: string, value: T | null) => IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[] | Promise<IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[]>;
+export type AutocompleteSelectedTextBuilder<T = any> = (selectedOptions: Array<IAutocompleteOption<T>>) => string;
 
 export enum AutocompleteMode {
   Default = 'default',
   Stateless = 'stateless'
 }
 
-export interface IAutocompleteOptionGroup<T = any> {
-  text?: string;
-  builder?: AutocompleteOptionGroupBuilder;
-  options: Array<IOption<T>>;
-}
+export interface IAutocompleteOption<T = any> extends IListDropdownOption<T> {}
+export interface IAutocompleteOptionGroup<T = any> extends IListDropdownOptionGroup<T> {}
 
 export interface IAutocompletePopupConfiguration {
   filterText: string;
@@ -76,6 +72,6 @@ export interface IAutocompletePopupConfiguration {
   scrollEndListener: () => void;
 }
 
-export interface IAutocompleteSelectEventData {
-  value: any;
+export interface IAutocompleteSelectEventData<T = any> {
+  value: T;
 }
