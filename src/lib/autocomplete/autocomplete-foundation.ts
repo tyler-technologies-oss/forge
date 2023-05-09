@@ -290,6 +290,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       case 'Escape':
         if (this._isDropdownOpen) {
           evt.preventDefault();
+          evt.stopPropagation();
           this._closeDropdown();
         }
         break;

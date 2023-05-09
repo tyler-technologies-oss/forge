@@ -404,6 +404,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
 
     if (isEscapeKey) {
       evt.preventDefault();
+      evt.stopPropagation();
       if (this._open) {
         this._closeDropdown();
         return;

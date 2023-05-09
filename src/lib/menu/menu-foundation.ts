@@ -174,6 +174,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       case 'Escape':
         if (this._open) {
           evt.preventDefault();
+          evt.stopPropagation();
           this._closeDropdown();
         }
         break;
