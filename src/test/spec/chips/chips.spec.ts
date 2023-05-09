@@ -12,7 +12,7 @@ import {
   IChipDeleteEventData
 } from '@tylertech/forge/chips';
 import { removeElement, getShadowElement } from '@tylertech/forge-core';
-import { dispatchKeyEvent, tick, appendElement } from '@tylertech/forge-testing';
+import { dispatchKeyEvent, tick, appendElement, timer } from '@tylertech/forge-testing';
 
 interface ITestContext {
   context: ITestChipsContext
@@ -46,36 +46,36 @@ describe('ChipComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.chipSet.disabled = true;
 
-      expect(getChipButtonElement(this.context.chips[0]).disabled).toBe(false);
+      expect(getChipRootElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.DISABLED)).toBeFalse();
       
       this.context.append();
 
-      expect(getChipButtonElement(this.context.chips[0]).disabled).toBe(true);
+      expect(getChipRootElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.DISABLED)).toBeTrue()
     });
 
     it('should not set dense before being placed in DOM', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.chipSet.dense = true;
 
-      expect(getChipButtonElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.DENSE)).toBe(false);
+      expect(getChipRootElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.DENSE)).toBe(false);
       
       this.context.append();
 
-      expect(getChipButtonElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.DENSE)).toBe(true);
+      expect(getChipRootElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.DENSE)).toBe(true);
     });
 
     it('should not set selected before being placed in DOM', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.chips[0].selected = true;
 
-      expect(getChipButtonElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.SELECTED)).toBe(false);
+      expect(getChipRootElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.SELECTED)).toBe(false);
       
       this.context.chipSet.type = 'choice';
       this.context.append();
 
       expect(this.context.chips[0].hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).toBe(true);
       expect(this.context.chips[0].selected).toBe(true);
-      expect(getChipButtonElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.SELECTED)).toBe(true);
+      expect(getChipRootElement(this.context.chips[0]).classList.contains(CHIP_CONSTANTS.classes.SELECTED)).toBe(true);
     });
 
     it('should allow chip to be used without chip-set parent', function(this: ITestContext) {
@@ -266,11 +266,12 @@ describe('ChipComponent', function(this: ITestContext) {
       expectChipSelected(this.context.chips[0], true);
     });
 
-    it('should set selected when type is `filter`', function(this: ITestContext) {
+    it('should set selected when type is `filter`', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.chipSet.type = 'filter';
 
       clickChip(this.context.chips[0]);
+      await timer(300); // Double transition duration
       
       expectChipSelected(this.context.chips[0], true);
       expectChipCheckmarkState(this.context.chips[0], true);
@@ -496,9 +497,9 @@ describe('ChipComponent', function(this: ITestContext) {
   function setupTestContext(append = false): ITestChipsContext {
     const fixture = document.createElement('div');
     fixture.id = 'chips-test-fixture';
-    const chipSet = document.createElement(CHIP_SET_CONSTANTS.elementName) as IChipSetComponent;
+    const chipSet = document.createElement(CHIP_SET_CONSTANTS.elementName);
     const chips: IChipComponent[] = DEFAULT_CHIPS.map(chipConfig => {
-      const chip = document.createElement(CHIP_CONSTANTS.elementName) as IChipComponent;
+      const chip = document.createElement(CHIP_CONSTANTS.elementName);
       chip.textContent = chipConfig.text;
       chip.value = chipConfig.value;
       chipSet.appendChild(chip);
@@ -509,8 +510,8 @@ describe('ChipComponent', function(this: ITestContext) {
       document.body.appendChild(fixture);
     }
     return { 
-      chipSet: chipSet, 
-      chips: chips,
+      chipSet, 
+      chips,
       append: () => document.body.appendChild(fixture),
       destroy: () => removeElement(fixture)
     };
@@ -521,7 +522,7 @@ describe('ChipComponent', function(this: ITestContext) {
   }
 
   function expectChipSelected(chip: IChipComponent, isSelected: boolean): void {
-    const buttonElement = getShadowElement(chip, CHIP_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
+    const buttonElement = getShadowElement(chip, CHIP_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
     expect(chip.selected).toBe(isSelected);
     expect(buttonElement.classList.contains(CHIP_CONSTANTS.classes.SELECTED)).toBe(isSelected);
   }
@@ -555,7 +556,7 @@ describe('ChipComponent', function(this: ITestContext) {
   }
 
   function expectChipType(chip: IChipComponent, type: ChipType): void {
-    const buttonElement = getShadowElement(chip, CHIP_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
+    const buttonElement = getShadowElement(chip, CHIP_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
     expect(chip.type).toBe(type);
 
     let chipTypeClass: string;
@@ -579,8 +580,12 @@ describe('ChipComponent', function(this: ITestContext) {
     expect(buttonElement.classList.contains(chipTypeClass)).toBe(true);
   }
 
-  function getChipButtonElement(chip: IChipComponent): HTMLButtonElement {
-    return getShadowElement(chip, CHIP_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
+  function getChipRootElement(chip: IChipComponent): HTMLElement {
+    return getShadowElement(chip, CHIP_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
+  }
+
+  function getChipButtonElement(chip: IChipComponent): HTMLDivElement {
+    return getShadowElement(chip, CHIP_CONSTANTS.selectors.BUTTON) as HTMLDivElement;
   }
 
   function clickChip(chip: IChipComponent): void {
@@ -612,16 +617,18 @@ describe('ChipComponent', function(this: ITestContext) {
   }
 
   function expectChipDisabled(chip: IChipComponent, isDisabled: boolean): void {
+    const rootElement = getChipRootElement(chip);
     const buttonElement = getChipButtonElement(chip);
     
     expect(chip.disabled).toBe(isDisabled);
-    expect(buttonElement.disabled).toBe(isDisabled);
+    expect(buttonElement.tabIndex).toBe(isDisabled ? -1 : 0);
+    expect(rootElement.classList.contains(CHIP_CONSTANTS.classes.DISABLED)).toBe(isDisabled);
   }
 
   function expectChipDense(chip: IChipComponent, isDense: boolean): void {
-    const buttonElement = getChipButtonElement(chip);
+    const rootElement = getChipRootElement(chip);
 
     expect(chip.dense).toBe(isDense);
-    expect(buttonElement.classList.contains(CHIP_CONSTANTS.classes.DENSE)).toBe(isDense);
+    expect(rootElement.classList.contains(CHIP_CONSTANTS.classes.DENSE)).toBe(isDense);
   }
 });

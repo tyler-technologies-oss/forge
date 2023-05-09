@@ -23,16 +23,20 @@ const classes = {
   DELETE_BUTTON: 'forge-chip__delete-button',
   DELETE_BUTTON_TOUCH_TARGET: 'forge-chip__delete-button__touch-target',
   DENSE: 'forge-chip--dense',
+  DISABLED: 'forge-chip--disabled',
   LEADING_HIDDEN: 'forge-chip__leading--hidden'
 };
 
 const selectors = {
-  BUTTON: 'button.forge-chip'
+  ROOT: '.forge-chip',
+  BUTTON: '[role=button]'
 };
 
 const events = {
   DELETE: `${elementName}-delete`,
-  SELECT: `${elementName}-select`
+  SELECT: `${elementName}-select`,
+  FOCUS_NEXT: `${elementName}-focus-next`,
+  FOCUS_PREVIOUS: `${elementName}-focus-previous`
 };
 
 const defaults = {

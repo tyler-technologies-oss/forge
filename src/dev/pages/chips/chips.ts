@@ -35,7 +35,7 @@ inputChipSet.addEventListener('forge-chip-delete', ({ target }) => {
   deletedChips.push(target);
   (target as IChipComponent).remove();
 });
-const refreshButton = inputExample.querySelector('forge-icon-button > button');
+const refreshButton = inputExample.querySelector('#refresh-button');
 refreshButton.addEventListener('click', () => {
   deletedChips.forEach(chip => {
     inputChipSet.appendChild(chip);

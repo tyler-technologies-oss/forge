@@ -12,6 +12,7 @@ export interface IChipFoundation extends ICustomElementFoundation {
   dense: boolean;
   emulateFocus: boolean;
   setFocus(): void;
+  tryFocusDelete(): void;
 }
 
 export class ChipFoundation implements IChipFoundation {
@@ -40,7 +41,8 @@ export class ChipFoundation implements IChipFoundation {
 
   public initialize(): void {
     this._rippleInstance = this._adapter.initializeRipple();
-    this._adapter.addButtonListener('click', this._clickListener);
+    this._adapter.addRootListener('click', this._clickListener);
+    this._adapter.addRootListener('keydown', this._keydownListener);
     this._adapter.addButtonListener('focus', this._buttonFocusListener);
     this._adapter.addButtonListener('blur', this._buttonBlurListener);
     this._applyState();
@@ -49,8 +51,8 @@ export class ChipFoundation implements IChipFoundation {
 
   public disconnect(): void {
     this._destroyRipple();
-    this._adapter.removeButtonListener('keydown', this._keydownListener);
-    this._adapter.removeButtonListener('click', this._clickListener);
+    this._adapter.removeRootListener('click', this._clickListener);
+    this._adapter.removeRootListener('keydown', this._keydownListener);
     this._adapter.removeButtonListener('focus', this._buttonFocusListener);
     this._adapter.removeButtonListener('blur', this._buttonBlurListener);
     this._isInitialized = false;
@@ -87,7 +89,8 @@ export class ChipFoundation implements IChipFoundation {
 
   private _onClick(evt: MouseEvent): void {
     const target = evt.target as HTMLElement;
-    const isDeleteButton = target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON) || target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON_TOUCH_TARGET);
+    const isDeleteButton = target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON) ||
+                           target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON_TOUCH_TARGET);
     if (isDeleteButton) {
       this._handleDeleteInteraction(evt);
     } else {
@@ -96,11 +99,28 @@ export class ChipFoundation implements IChipFoundation {
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    if (this._type === 'input') {
-      const isDeleteKey = evt.key === 'Delete' || evt.key === 'Backspace';
-      if (isDeleteKey) {
-        this._emitDeleteEvent();
-      }
+    switch (evt.key) {
+      case 'Delete':
+      case 'Backspace':
+        if (this._type === 'input') {
+          evt.preventDefault();
+          this._emitDeleteEvent();
+        }
+        break;
+      case 'Enter':
+      case ' ':
+        evt.preventDefault();
+        this._rippleInstance?.animate();
+        this._handleSelectInteraction();
+        break;
+      case 'ArrowLeft':
+        evt.preventDefault();
+        this._adapter.tryMoveFocusPrevious();
+        break;
+      case 'ArrowRight':
+        evt.preventDefault();
+        this._adapter.tryMoveFocusNext();
+        break;
     }
   }
 
@@ -121,7 +141,8 @@ export class ChipFoundation implements IChipFoundation {
   private _handleDeleteInteraction(evt: Event): void {
     // The delete event can only be fired when the `input` or `field` type is used
     const target = evt.target as HTMLElement;
-    const isDeleteButton = target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON) || target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON_TOUCH_TARGET);
+    const isDeleteButton = target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON) ||
+                           target.classList.contains(CHIP_CONSTANTS.classes.DELETE_BUTTON_TOUCH_TARGET);
     if (isDeleteButton) {
       evt.stopPropagation();
       this._emitDeleteEvent();
@@ -131,6 +152,7 @@ export class ChipFoundation implements IChipFoundation {
   private _handleSelectInteraction(): void {
     const wasDefaultPrevented = this._emitSelectEvent();
     const isSelectableType = ['filter', 'choice', 'input'].includes(this._type);
+
     // We only toggle the selected state for certain types (and if default wasn't prevented on the event)
     if (!wasDefaultPrevented && isSelectableType) {
       this._selected = !this._selected;
@@ -153,7 +175,6 @@ export class ChipFoundation implements IChipFoundation {
 
   private _applyType(): void {
     this._adapter.clearTypeClass();
-    this._adapter.removeButtonListener('keydown', this._keydownListener);
 
     switch (this._type) {
       case 'action':
@@ -167,11 +188,9 @@ export class ChipFoundation implements IChipFoundation {
         break;
       case 'input':
         this._adapter.addRootClass(CHIP_CONSTANTS.classes.INPUT);
-        this._adapter.addButtonListener('keydown', this._keydownListener);
         break;
       case 'field':
         this._adapter.addRootClass(CHIP_CONSTANTS.classes.FIELD);
-        this._adapter.addButtonListener('keydown', this._keydownListener);
         break;
     }
 
@@ -307,5 +326,13 @@ export class ChipFoundation implements IChipFoundation {
 
   public setFocus(): void {
     this._adapter.setFocus();
+  }
+
+  public tryFocusDelete(): void {
+    if (this._type === 'input') {
+      this._adapter.tryFocusDelete();
+      return;
+    }
+    this.setFocus();
   }
 }
