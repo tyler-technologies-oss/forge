@@ -298,6 +298,7 @@ export class CalendarFoundation implements ICalendarFoundation {
       case 'Escape':
         if (this._view !== 'date') {
           evt.preventDefault();
+          evt.stopPropagation();
           this._closeMenu(false, true);
         }
         break;
