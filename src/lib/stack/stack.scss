@@ -1,6 +1,11 @@
 @use './mixins';
 @include mixins.core-styles;
 
+:host {
+  display: block;
+  height: 100%;
+}
+
 :host([inline]) {
   .forge-stack {
     @include mixins.inline;
@@ -14,9 +19,7 @@
 }
 
 :host([stretch]) {
-  .forge-stack {
-    @include mixins.stretch;
-  }
+  --forge-stack-stretch: 1;
 }
 
 :host([alignment='start']) {

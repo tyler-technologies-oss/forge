@@ -11,7 +11,7 @@ const attributes = {
   WRAP: 'wrap',
   STRETCH: 'stretch',
   GAP: 'gap',
-  ALIGNMENT: 'align'
+  ALIGNMENT: 'alignment'
 };
 
 const selectors = {
