@@ -63,7 +63,7 @@ describe('LinearProgressComponent', function(this:ITestContext) {
 
   it('should have correct buffer by default', function(this:ITestContext) {
     this.context = setupTestContext(true);
-    expect(this.context.component.buffer).toBe(0);
+    expect(this.context.component.buffer).toBe(1);
     expect(this.context.getBufferBar().style.flexBasis).toBe('100%');
   });
 

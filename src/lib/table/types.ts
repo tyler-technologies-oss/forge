@@ -1,8 +1,10 @@
+import { BaseComponentDelegate, IBaseComponentDelegate, IBaseComponentDelegateOptions } from '../core';
 import { IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate';
 import { TableRow } from './table-row';
 
-export declare type TableViewTemplate = string | HTMLElement | TableTemplateBuilder;
-export declare type TableTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T) => HTMLElement | string | ITableTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableTemplateBuilderResult>;
+export declare type TableViewTemplate = string | HTMLElement | TableViewTemplateBuilder;
+export declare type TableViewTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T) => HTMLElement | string | ITableViewTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableViewTemplateBuilderResult>;
+export declare type TableTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T, columnIndex: number) => HTMLElement | string | ITableTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableTemplateBuilderResult>;
 export declare type TableHeaderTemplateBuilder = (rowIndex: number, div: HTMLElement, columConfig: IColumnConfiguration) => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableHeaderSelectAllTemplate = () => HTMLElement | string | Promise<HTMLElement | string>;
 export declare type TableRowCreatedCallback = (rowElement: HTMLTableRowElement, rowIndex: number, rowData: any) => void;
@@ -56,7 +58,7 @@ export interface IColumnConfiguration {
   width?: string | number;
   transform?: (value: any) => any | Promise<any>;
   filter?: boolean;
-  filterDelegate?: IFormFieldComponentDelegate<any> | TableFilterDelegateFactory;
+  filterDelegate?: IFormFieldComponentDelegate<any> | BaseComponentDelegate<HTMLElement, IBaseComponentDelegateOptions> | TableFilterDelegateFactory;
   filterDebounceTime?: number;
   cellStyle?: Partial<CSSStyleDeclaration>;
   headerCellStyle?: Partial<CSSStyleDeclaration>;
@@ -152,7 +154,7 @@ export enum TableFilterType {
 }
 
 export type TableFilterListener<T = any> = (value: T, columnIndex: number) => void;
-export type TableFilterDelegateFactory<T extends HTMLElement = any> = () => IFormFieldComponentDelegate<T>;
+export type TableFilterDelegateFactory<T extends HTMLElement = any> = () => IFormFieldComponentDelegate<T> | IBaseComponentDelegate<HTMLElement>;
 export type TableLayoutType = 'auto' | 'fixed';
 
 export interface ITableFilterEventData<T = any> {
@@ -172,3 +174,5 @@ export interface ITableTemplateBuilderResult {
   content: HTMLElement | string;
   stopClickPropagation?: boolean;
 }
+
+export interface ITableViewTemplateBuilderResult extends ITableTemplateBuilderResult {}

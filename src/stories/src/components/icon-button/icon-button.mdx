@@ -6,7 +6,7 @@ import { IconButtonToggleCodeHtml } from './code/icon-button-toggle';
 
 # Icon button
 
-The icon-button component is nothing more than a standard HTML `<button>` with custom styling provided. Use this component to display an
+The icon-button component is nothing more than a standard HTML `<button>` or `<a>` element with custom styling provided. Use this component to display an
 interactive button that renders **only an icon**. You can also use this component to toggle between an "on" and "off" state as well.
 
 > Ensure that you add an `aria-label` attribute to the `<button>` element to ensure that the action is announced properly to screen readers.
@@ -26,6 +26,8 @@ interactive button that renders **only an icon**. You can also use this componen
 <LiveDemo dense codeHtml={IconButtonDefaultCodeHtml()}>
   <IconButtonDemo />
 </LiveDemo>
+
+> **Note:** You can substitute the `<a>` element in place of the `<button>` element if you need the button to act as an anchor link.
 
 ### Toggle
 

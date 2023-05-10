@@ -288,6 +288,12 @@ export class TableExampleComponent implements OnInit {
 
 </MethodDef>
 
+<MethodDef name="isColumnHidden(columnIndex: number): boolean">
+
+  Determines if a column at the given index is hidden or not.
+
+</MethodDef>
+
 <MethodDef name="getSelectedRows(): any[]">
 
   Returns the selected row instances.
@@ -450,7 +456,13 @@ type TableViewTemplate = string | HTMLElement | TableTemplateBuilder;
 ### TableTemplateBuilder
 
 ```ts
-type type TableTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T) => HTMLElement | string | ITableTemplateBuilderResult | Promise<HTMLElement | string | ITableTemplateBuilderResult>;
+type TableTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T, columnIndex: number) => HTMLElement | string | ITableTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableTemplateBuilderResult>;
+```
+
+### TableViewTemplateBuilder
+
+```ts
+type TableViewTemplateBuilder<T = any> = (rowIndex: number, div: HTMLElement, rowData: T) => HTMLElement | string | ITableViewTemplateBuilderResult | undefined | Promise<HTMLElement | string | undefined | ITableViewTemplateBuilderResult>;
 ```
 
 ### TableHeaderTemplateBuilder
@@ -744,6 +756,12 @@ interface ITableTemplateBuilderResult {
   content: HTMLElement | string;
   stopClickPropagation?: boolean;
 }
+```
+
+### ITableViewTemplateBuilderResult
+
+```ts
+interface ITableViewTemplateBuilderResult extends ITableTemplateBuilderResult {}
 ```
 
 </PageSection>

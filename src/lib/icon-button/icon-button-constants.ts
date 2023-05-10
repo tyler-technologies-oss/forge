@@ -11,7 +11,7 @@ const attributes = {
 };
 
 const selectors = {
-  BUTTON: 'button',
+  BUTTON: 'button, a',
   ICON: 'i, span, svg, img, forge-icon'
 };
 

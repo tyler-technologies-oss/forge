@@ -15,7 +15,7 @@ export function isSelectOptionType(options: ISelectOption[] | ISelectOptionGroup
 }
 
 export function isOptionGroupObject(o: ISelectOption | ISelectOptionGroup): o is ISelectOptionGroup {
-  return isDefined(o) && isObject(o) && o.hasOwnProperty('options') && o.hasOwnProperty('text');
+  return isDefined(o) && isObject(o) && o.hasOwnProperty('options');
 }
 
 export function isOptionObject(o: ISelectOption | ISelectOptionGroup): o is ISelectOption {
