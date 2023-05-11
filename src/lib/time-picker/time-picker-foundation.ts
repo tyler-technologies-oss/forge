@@ -557,7 +557,14 @@ export class TimePickerFoundation implements ITimePickerFoundation {
             activeStartIndex = optionIndex;
           }
         }
-      } else if (typeof this._startTime === 'number') {
+      } else if (typeof this._startTime === 'number' || this._startTime == null) {
+        // If we don't have a start time set then let's default to the current time
+        if (this._startTime == null) {
+          const date = new Date();
+          const currentTimeString = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+          this._startTime = timeStringToMillis(currentTimeString, true, false) as number;
+        }
+
         const optionIndex = this._findClosestOptionIndex(this._startTime, selectableOptions);
         if (optionIndex >= 0 && optionIndex < selectableOptions.length) {
           activeStartIndex = optionIndex;
