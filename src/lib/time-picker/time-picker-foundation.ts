@@ -181,6 +181,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       case 'Escape':
         if (this._open) {
           evt.preventDefault();
+          evt.stopPropagation();
           this._closeDropdown(true);
         }
         break;

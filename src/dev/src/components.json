@@ -35,6 +35,7 @@
   { "label": "Page state", "path": "/pages/page-state/page-state.html" },
   { "label": "Paginator", "path": "/pages/paginator/paginator.html", "tags": ["table", "data"] },
   { "label": "Popup", "path": "/pages/popup/popup.html" },
+  { "label": "Quantity field", "path": "/pages/quantity-field/quantity-field.html", "tags": ["form", "field"] },
   { "label": "Radio", "path": "/pages/radio/radio.html", "tags": ["form"] },
   { "label": "Ripple", "path": "/pages/ripple/ripple.html" },
   { "label": "Scaffold", "path": "/pages/scaffold/scaffold.html" },

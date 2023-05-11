@@ -5,6 +5,7 @@ import { QUANTITY_FIELD_CONSTANTS } from './quantity-field-constants';
 import { TextFieldComponent } from '../text-field';
 
 export interface IQuantityFieldAdapter extends IBaseAdapter {
+  initializeButtons(): void;
   addRootClass(name: string): void;
   removeRootClass(name: string): void;
   inputHasAttribute(name: string): boolean;
@@ -43,6 +44,15 @@ export class QuantityFieldAdapter extends BaseAdapter<IQuantityFieldComponent> i
     this._rootElement = getShadowElement(component, QUANTITY_FIELD_CONSTANTS.selectors.ROOT);
     this._incrementButtonSlot = getShadowElement(this._component, QUANTITY_FIELD_CONSTANTS.selectors.INCREMENT_BUTTON_SLOT) as HTMLSlotElement;
     this._decrementButtonSlot = getShadowElement(this._component, QUANTITY_FIELD_CONSTANTS.selectors.DECREMENT_BUTTON_SLOT) as HTMLSlotElement;
+  }
+
+  public initializeButtons(): void {
+    if (this._incrementButton && !this._incrementButton.hasAttribute('tabindex')) {
+      this._incrementButton.tabIndex = -1;
+    }
+    if (this._decrementButton && !this._decrementButton.hasAttribute('tabindex')) {
+      this._decrementButton.tabIndex = -1;
+    }
   }
 
   public addRootClass(name: string): void {
