@@ -265,6 +265,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
   it('should set value through input element when unmasked', function(this: ITestContext) {
     this.context = _createTimePickerContext();
+    this.context.component.masked = false;
 
     const timeValue = '1111';
     this.context.inputElement.value = timeValue;
@@ -272,9 +273,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.value).toBeNull();
     expect(this.context.inputElement.value).toBe(timeValue);
     
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
     
+    expect(this.context.component.value).toBe('11:11');
     expect(this.context.inputElement.value).toBe('11:11 AM');
   });
 
@@ -1181,7 +1183,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await tick();
     
     this.context.inputElement.value = '1';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
     
@@ -1193,7 +1195,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '1111';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertFromPaste' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
 
     expect(this.context.inputElement.value).toBe('11:11 AM');
@@ -1203,7 +1205,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '01:30';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
 
     expect(this.context.inputElement.value).toBe('01:30 AM');
@@ -1213,7 +1215,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '9';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
 
     expect(this.context.inputElement.value).toBe('09:');
@@ -1226,7 +1228,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await tick();
 
     this.context.inputElement.value = '9';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
     
     expect(this.context.inputElement.value).toBe('9');
@@ -1234,7 +1236,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     
     this.context.component.masked = true;
     this.context.inputElement.value = '9';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
 
     expect(this.context.inputElement.value).toBe('09:');
@@ -1276,7 +1278,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const value = '120';
     this.context.inputElement.value = value;
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertFromPaste' }));
 
     expect(coercionSpy).toHaveBeenCalledOnceWith('12:0', '12:00', false);
   });
@@ -1290,7 +1292,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const value = '120';
     this.context.inputElement.value = value;
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
     expect(coercionSpy).toHaveBeenCalledOnceWith('120', '01:20', false);
   });
@@ -1305,7 +1307,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const value = '120';
     this.context.inputElement.focus();
     this.context.inputElement.value = value;
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
 
     expect(this.context.component.value).toBe('12:00');
@@ -1340,7 +1342,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '1';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
     expect(this.context.component.value).toBe('01:00');
     expect(this.context.inputElement.value).toBe('01:');
@@ -1350,7 +1352,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '2';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
     expect(this.context.component.value).toBe('02:00');
     expect(this.context.inputElement.value).toBe('02:');
@@ -1360,7 +1362,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '3';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
     expect(this.context.component.value).toBe('03:00');
     expect(this.context.inputElement.value).toBe('03:');
@@ -1371,7 +1373,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.masked = false;
 
     this.context.inputElement.value = '123';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
     expect(this.context.component.value).toBe('01:23');
   });
@@ -1465,7 +1467,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
   async function setInputValue(inputElement: HTMLInputElement, value: string): Promise<void> {
     inputElement.value = value;
-    inputElement.dispatchEvent(new Event('input'));
+    inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
   }
 
