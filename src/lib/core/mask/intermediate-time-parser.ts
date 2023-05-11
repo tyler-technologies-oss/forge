@@ -1,6 +1,16 @@
 import { InputMask } from 'imask';
-import { ITimeInputMaskOptions } from './time-input-mask';
 import { TimeSegmentParser, TimeSegmentType } from './time-segment-parser';
+
+export const SEGMENT_CURSOR_POSITION = {
+  'hours-start': 0,
+  'hours-end': 2,
+  'minutes-start': 3,
+  'minutes-end': 5,
+  'seconds-start': 6,
+  'seconds-end': 8,
+  'meridiem-start': 9,
+  'meridiem-end': 11
+};
 
 export class IntermediateTimeParser {
   private segmentParser: TimeSegmentParser;
@@ -8,7 +18,7 @@ export class IntermediateTimeParser {
   constructor(
     private _char: string,
     private _mask: InputMask<IMask.AnyMaskedOptions>) {
-    this.segmentParser = new TimeSegmentParser(this._mask.value, this._char);
+    this.segmentParser = new TimeSegmentParser(this._mask.value);
   }
 
   public get value(): string {
@@ -44,7 +54,6 @@ export class IntermediateTimeParser {
   }
 
   public get isFinalHoursChar(): boolean {
-    // console.log('this._mask.cursorPos === 2 && this.segmentParser.hours.length === 2', this._mask.cursorPos, this.segmentParser.hours.length);
     return this._mask.cursorPos === 3 && this.segmentParser.hours.length === 2;
   }
 
@@ -88,74 +97,18 @@ export class IntermediateTimeParser {
     return [8, 9].includes(this._mask.cursorPos) && !!this.segmentParser.seconds.length && this.secondsSegmentNum < 60;
   }
 
-  public patchUnmaskedValue(value: string, cursorPos?: number): void {
-    this._mask.unmaskedValue = value;
-    if (cursorPos !== undefined) {
-      window.requestAnimationFrame(() => this._mask.updateCursor(cursorPos));
+  public patchSegmentValue(type: TimeSegmentType, value: string, { overwrite = false } = {}): string {
+    if (overwrite) {
+      this.segmentParser.applyValue(''); // Clear all segments
     }
+    this.segmentParser.patchSegmentValue(type, value);
+    return this.segmentParser.toString();
   }
 
-  // public process(): string {
-  //   const segmentParser = new TimeSegmentParser(this._mask.value, this._char);
-  //   const { segment, value } = segmentParser.getSegmentByCursorPosition(this._mask.cursorPos);
-
-  //   // We don't handle any parsing of meridiem values
-  //   if (segment === 'meridiem') {
-  //     return this._char;
-  //   }
-
-  //   const isSegmentFirstEntry = value.length === 1;
-  //   const isSegmentLastEntry = value.length > 1;
-
-  //   if (isSegmentFirstEntry) {
-  //     // console.log('First segment entry:', segment);
-  //     segmentParser.patchSegmentValue(segment, value);
-  //     this.patchUnmaskedValue(segmentParser.toString(), this._getCursorPositionBySegment(segment));
-  //   } else if (isSegmentLastEntry) {
-  //     // console.log('Last segment entry:', segment);
-  //     const numNewSegment = Number(`${value}${this._char}`);
-  //     if (numNewSegment <= (segment === 'hours' ? 12 : 59)) {
-  //       segmentParser.patchSegmentValue(segment, String(numNewSegment));
-  //       this.patchUnmaskedValue(segmentParser.toString(), this._getCursorPositionBySegment(segment));
-  //     }
-  //   } else {
-  //     // console.log('Overwrite segment:', segment, value);
-  //     const numValue = Number(value);
-
-  //     if (segment === 'hours') {
-  //       if (numValue <= 12 || (this._options.use24HourTime && numValue <= 23)) {
-  //         segmentParser.patchSegmentValue(segment, String(numValue));
-  //       } else {
-  //         segmentParser.patchSegmentValue('minutes', `${this._mask.value}${this.asPaddedChar}`);
-  //       }
-  //     } else {
-  //       if (numValue < 60) {
-  //         segmentParser.patchSegmentValue(segment, String(numValue));
-  //       } else {
-  //         let newSegment = segment;
-  //         if (segment === 'minutes' && this._options.showSeconds) {
-  //           newSegment = 'seconds';
-  //         }
-  //         segmentParser.patchSegmentValue(newSegment, `${this._mask.value}${this.asPaddedChar}`);
-  //       }
-  //     }
-
-  //     this.patchUnmaskedValue(segmentParser.toString(), this._getCursorPositionBySegment(segment) + 1);
-  //   }
-
-  //   return ':';
-  // }
-
-  // private _getCursorPositionBySegment(segment: TimeSegmentType): number {
-  //   switch (segment) {
-  //     case 'hours':
-  //       return 2;
-  //     case 'minutes':
-  //       return 5;
-  //     case 'seconds':
-  //       return 8;
-  //     default:
-  //       return 11;
-  //   }
-  // }
+  public applyValue(value: string, cursorPos?: keyof typeof SEGMENT_CURSOR_POSITION): void {
+    this._mask.unmaskedValue = value;
+    if (cursorPos !== undefined) {
+      window.requestAnimationFrame(() => this._mask.updateCursor(SEGMENT_CURSOR_POSITION[cursorPos]));
+    }
+  }
 }
