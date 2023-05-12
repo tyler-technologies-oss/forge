@@ -17,6 +17,7 @@ export interface IChipComponent extends IBaseComponent {
   value: any;
   dense: boolean;
   emulateFocus: boolean;
+  tryFocusDelete(): void;
 }
 
 declare global {
@@ -123,5 +124,9 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
 
   public override focus(): void {
     this._foundation.setFocus();
+  }
+
+  public tryFocusDelete(): void {
+    this._foundation.tryFocusDelete();
   }
 }
