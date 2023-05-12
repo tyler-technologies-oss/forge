@@ -1,3 +1,4 @@
+import { isNumeric } from '@tylertech/forge-core';
 import IMask, { createMask, InputMask, Masked, MaskedEnum } from 'imask';
 import { IntermediateTimeParser } from './intermediate-time-parser';
 
@@ -91,10 +92,43 @@ export class TimeInputMask {
   private _prepareDefault(char: string, maskInstance: InputMask<IMask.AnyMaskedOptions>): string {
     const parser = new IntermediateTimeParser(char, maskInstance);
 
+    // Handle non-numeric character entry here
+    if (!isNumeric(char)) {
+      // Before we ignore this character let's do some checks for common scenarios where the user enters a colon to help with coercion
+      if (char === ':') {
+        if (parser.isFinalHoursChar) {
+          // The user attempted to press the colon key after entering a single hour character so let's pad the value
+          const newValue = parser.patchSegmentValue('hours', parser.value);
+          parser.applyValue(newValue, 'minutes-start');
+          return char;
+        }
+
+        if (parser.isFinalMinutesChar) {
+          // The user attempted to press the colon key after entering a single minute character so let's pad the value
+          const newValue = parser.patchSegmentValue('minutes', String(parser.minutesSegmentNum));
+          parser.applyValue(newValue, this._options.showSeconds ? 'seconds-start' : 'minutes-end');
+          return char;
+        }
+
+        if (this._options.showSeconds && parser.isFinalSecondsChar) {
+          // The user attempted to press the colon key after entering a single second character so let's pad the value
+          const newValue = parser.patchSegmentValue('seconds', String(parser.secondsSegmentNum));
+          parser.applyValue(newValue, 'meridiem-start');
+          return char;
+        }
+      }
+      return char;
+    }
+
+    // If all of the text is selected, we can safely assume the whole value is being overwritten
+    if (parser.isAllSelected) {
+      parser.reset();
+    }
+
     // Attempt to pad a leading zero to the hours segment on initial entry only
-    if (parser.isInitialEntry && parser.isFirstHoursChar) {
+    if (parser.isInitialHoursEntry && parser.isFirstHoursChar) {
       // Replace just the hours segment with the padded value and update cursor position
-      const newValue = parser.patchSegmentValue('hours', parser.asPaddedChar, { overwrite: true });
+      const newValue = parser.patchSegmentValue('hours', parser.asPaddedChar);
       parser.applyValue(newValue, 'hours-end');
       return ':';
     }

@@ -17,6 +17,7 @@ export interface IListDropdownAdapter {
   getSelectedOptionIndex(): number;
   getActiveOptionIdByIndex(index: number): string | null;
   toggleOptionMultiple(index: number, isSelected: boolean): void;
+  scrollOptionIntoView(index: number): void;
   scrollSelectedOptionIntoView(animate?: boolean): void;
   activateSelectedOption(config: IListDropdownOpenConfig): void;
   activateOption(index: number, activeChangeCallback: ((id: string) => void) | undefined, animate?: boolean): void;
@@ -169,6 +170,13 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length && listItems[index]) {
       this._toggleSelectedOption(listItems[index], isSelected);
+    }
+  }
+
+  public scrollOptionIntoView(index: number, animate = true): void {
+    const listItem = this._getListItemElements()[index];
+    if (listItem) {
+      this._scrollListItemIntoView(listItem, animate ? 'smooth' : 'auto', 'center');
     }
   }
 

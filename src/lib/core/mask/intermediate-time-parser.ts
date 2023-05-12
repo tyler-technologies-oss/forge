@@ -22,7 +22,7 @@ export class IntermediateTimeParser {
   }
 
   public get value(): string {
-    return this._isAllSelected ? '' : this._mask.value.replace(/\s+|_/g, '');
+    return this.isAllSelected ? '' : this._normalizeTimeString(this._mask.value);
   }
 
   public get numChar(): number {
@@ -33,7 +33,19 @@ export class IntermediateTimeParser {
     return String(this.numChar).padStart(2, '0');
   }
 
-  private get _isAllSelected(): boolean {
+  private _normalizeTimeString(str: string): string {
+    // Remove all whitespace and placeholder chars
+    let value = str.replace(/\s+|_/g, '');
+
+    // If the time value only contains separator chars (:) then we can assume it's empty (applicable when the mask format is visible)
+    if (/^:+$/.test(value)) {
+      value = '';
+    }
+
+    return value;
+  }
+
+  public get isAllSelected(): boolean {
     // eslint-disable-next-line @typescript-eslint/dot-notation
     const { start, end } = this._mask['_selection'];
     return start === 0 && end > 0 && end === this._mask.value.length;
@@ -65,8 +77,8 @@ export class IntermediateTimeParser {
     return this._mask.cursorPos === 9 && this.segmentParser.seconds.length === 2;
   }
 
-  public get isInitialEntry(): boolean {
-    return this.value.length === 0;
+  public get isInitialHoursEntry(): boolean {
+    return this.segmentParser.hours.length === 0;
   }
 
   public get hasOnlyHoursSegment(): boolean {
@@ -97,9 +109,13 @@ export class IntermediateTimeParser {
     return [8, 9].includes(this._mask.cursorPos) && !!this.segmentParser.seconds.length && this.secondsSegmentNum < 60;
   }
 
+  public reset(): void {
+    this.segmentParser.applyValue('');
+  }
+
   public patchSegmentValue(type: TimeSegmentType, value: string, { overwrite = false } = {}): string {
     if (overwrite) {
-      this.segmentParser.applyValue(''); // Clear all segments
+      this.reset();
     }
     this.segmentParser.patchSegmentValue(type, value);
     return this.segmentParser.toString();

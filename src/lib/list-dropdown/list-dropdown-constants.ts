@@ -76,6 +76,7 @@ export interface IListDropdownConfig<T = any> {
   selectedValues?: T[];
   multiple?: boolean;
   activeStartIndex?: number;
+  visibleStartIndex?: number;
   transform?: ListDropdownTransformCallback;
   allowBusy?: boolean;
   asyncStyle?: ListDropdownAsyncStyle;

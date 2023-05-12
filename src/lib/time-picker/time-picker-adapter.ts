@@ -37,6 +37,8 @@ export interface ITimePickerAdapter extends BaseAdapter<ITimePickerComponent> {
   emitInputEvent(type: string, data?: any): void;
   setInputReadonly(value: boolean): void;
   setToggleDisabled(value: boolean): void;
+  hasActiveOption(): boolean;
+  activateOptionByIndex(index: number): void;
   activateFirstOption(): void;
   getActiveOption(): IListDropdownOption | undefined;
 }
@@ -246,6 +248,14 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
         }
       }
     }
+  }
+
+  public hasActiveOption(): boolean {
+    return (this._listDropdown?.getActiveOptionIndex() ?? -1) >= 0;
+  }
+
+  public activateOptionByIndex(index: number): void {
+    this._listDropdown?.activateOption(index);
   }
 
   public activateFirstOption(): void {
