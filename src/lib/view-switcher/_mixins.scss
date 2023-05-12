@@ -13,12 +13,14 @@
 
 @mixin host() {
   @include theme.css-custom-property(height, --forge-view-switcher-height, auto);
+  @include theme.css-custom-property(width, --forge-view-switcher-width, auto);
 
   display: block;
 }
 
 @mixin base() {
   @include theme.css-custom-property(height, --forge-view-switcher-height, auto);
+  @include theme.css-custom-property(width, --forge-view-switcher-width, auto);
 
   position: relative;
   overflow: hidden;
