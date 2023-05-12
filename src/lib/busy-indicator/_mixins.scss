@@ -136,6 +136,7 @@
   @include mdc-theme.property(color, text-secondary-on-background);
 
   flex: 1 auto;
+  margin-block: 0;
 
   &:nth-child(2) {
     margin-left: 16px;
