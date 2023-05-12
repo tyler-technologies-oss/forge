@@ -237,8 +237,8 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.captureActiveElement();
     const bounds = this._adapter.getSurfaceBounds();
     this._moveContext = {
-      top: evt.clientY - bounds.top,
-      left: evt.clientX - bounds.left,
+      top: evt.pageY - bounds.top,
+      left: evt.pageX - bounds.left,
       height: bounds.height,
       width: bounds.width
     };
