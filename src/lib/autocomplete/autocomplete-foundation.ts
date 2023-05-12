@@ -15,6 +15,7 @@ export interface IAutocompleteFoundation extends IListDropdownAwareFoundation {
   filterOnFocus: boolean;
   allowUnmatched: boolean;
   popupTarget: string;
+  filterText: string;
   optionBuilder: AutocompleteOptionBuilder | null | undefined;
   filter: AutocompleteFilterCallback | null | undefined;
   selectedTextBuilder: AutocompleteSelectedTextBuilder;
@@ -228,10 +229,10 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._filterFn();
   }
 
-  private async _debounceFilter(): Promise<void> {
+  private async _debounceFilter({ checkFocus = true } = {}): Promise<void> {
     // There is the potential that the user could have started a filter, then moved focus to another element
     // while a debounced filter is running. This check detects that scenario and stops all pending filters.
-    if (!this._adapter.hasFocus()) {
+    if (!checkFocus && !this._adapter.hasFocus()) {
       this._pendingFilterPromises = [];
       if (this._isDropdownOpen) {
         this._closeDropdown();
@@ -847,6 +848,28 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   public set popupTarget(value: string) {
     if (this._popupTarget !== value) {
       this._popupTarget = value;
+    }
+  }
+
+  /**
+   * Gets/sets the filter text.
+   * 
+   * Setting the filter text only applies when allowUnmatched is enabled.
+   */
+  public get filterText(): string {
+    return this._filterText;
+  }
+  public set filterText(value: string) {
+    if (this._filterText !== value) {
+      this._filterText = this._allowUnmatched ? value : '';
+
+      if (this._isInitialized && this._allowUnmatched) {
+        this._adapter.setInputValue(this._filterText);
+
+        if (this._isDropdownOpen) {
+          this._debounceFilter({ checkFocus: false });
+        }
+      }
     }
   }
 
