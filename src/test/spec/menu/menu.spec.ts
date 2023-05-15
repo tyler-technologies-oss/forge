@@ -236,7 +236,7 @@ describe('MenuComponent', function(this: ITestContext) {
       expect(this.context.adapter.hasTargetElement()).toBeTrue();
     });
 
-    fit('should close dropdown on blur when nested dynamic toggle element is provided', async function(this: ITestContext) {
+    it('should close dropdown on blur when nested dynamic toggle element is provided', async function(this: ITestContext) {
       this.context = setupTestContext(false);
 
       const emptyContainer = document.createElement('div');

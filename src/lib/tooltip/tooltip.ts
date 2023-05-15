@@ -94,7 +94,7 @@ export class TooltipComponent extends BaseComponent implements ITooltipComponent
   public declare position: `${PopupPlacement}`;
 
   /** Gets the open state of the tooltip. */
-  @FoundationProperty({ set: false })
+  @FoundationProperty()
   public declare open: boolean;
 
   @FoundationProperty({ set: false })
