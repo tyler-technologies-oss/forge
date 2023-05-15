@@ -1,0 +1,81 @@
+<p class="forge-typography--body2">Resize browser window to see wrapping (set inline and wrap to true)</p>
+<div class="stack-container">
+  <forge-stack id="main-demo" gap="16px">
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+  </forge-stack>
+</div>
+
+<div class="more-examples">
+  <p class="forge-typography--title">More examples</p>
+  <forge-stack gap="56">
+    <!-- Toolbar buttons -->
+    <forge-card outlined>
+      <forge-toolbar style="--forge-toolbar-padding: 0" no-border>
+        <p slot="start" class="forge-typography--body2">Forge toolbar with perfectly spaced end slot buttons</p>
+      </forge-toolbar>
+      <forge-toolbar>
+        <forge-stack inline slot="end">
+          <forge-button>
+            <button type="button">Cancel</button>
+          </forge-button>
+          <forge-button type="raised">
+            <button type="button">Save</button>
+          </forge-button>
+        </forge-stack>
+      </forge-toolbar>
+    </forge-card>
+
+    <!-- Vertical form -->
+    <forge-card outlined style="--forge-card-padding: 0;">
+      <forge-toolbar>
+        <p slot="start" class="forge-typography--body2">Simple vertical form</p>
+      </forge-toolbar>
+      <form style="padding: 16px;">
+        <forge-stack gap="16">
+          <forge-text-field>
+            <input type="text" id="input-text-01" />
+            <label for="input-text-01" slot="label">Text field</label>
+          </forge-text-field>
+          <forge-text-field>
+            <input type="text" id="input-text-01" />
+            <label for="input-text-01" slot="label">Text field</label>
+          </forge-text-field>
+          <forge-text-field>
+            <input type="text" id="input-text-01" />
+            <label for="input-text-01" slot="label">Text field</label>
+          </forge-text-field>
+        </forge-stack>
+      </form>
+    </forge-card>
+
+    <!-- Complex form -->
+    <forge-card outlined style="--forge-card-padding: 0;">
+      <forge-toolbar>
+        <p slot="start" class="forge-typography--body2">Complex form</p>
+      </forge-toolbar>
+      <form style="padding: 16px;">
+        <forge-stack gap="16" stretch>
+          <forge-stack inline wrap>
+            <forge-text-field style="--forge-stack-stretch: 2">
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field style="--forge-stack-stretch: 4">
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+            <forge-text-field style="--forge-stack-stretch: 6">
+              <input type="text" id="input-text-01" />
+              <label for="input-text-01" slot="label">Text field</label>
+            </forge-text-field>
+          </forge-stack>
+        </forge-stack>
+      </form>
+    </forge-card>
+  </forge-stack>
+</div>
+
+<script type="module" src="stack.ts"></script>

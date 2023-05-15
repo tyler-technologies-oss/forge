@@ -74,6 +74,7 @@ import { TooltipComponent } from './tooltip';
 import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
 import { IconComponent } from './icon';
 import { SelectDropdownComponent } from './select/select-dropdown';
+import { StackComponent } from './stack';
 
 export * from './accordion';
 export * from './app-bar';
@@ -137,6 +138,7 @@ export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
 export * from './icon';
+export * from './stack';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
@@ -199,6 +201,7 @@ const CUSTOM_ELEMENTS = [
   SkeletonComponent,
   SliderComponent,
   SplitViewComponent,
+  StackComponent,
   StepperComponent,
   StepComponent,
   SwitchComponent,
