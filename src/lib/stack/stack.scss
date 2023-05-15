@@ -22,19 +22,19 @@
   --forge-stack-stretch: 1;
 }
 
-:host([alignment='start']) {
+:host([alignment=start]) {
   .forge-stack {
     @include mixins.justify-start;
   }
 }
 
-:host([alignment='center']) {
+:host([alignment=center]) {
   .forge-stack {
     @include mixins.justify-center;
   }
 }
 
-:host([alignment='end']) {
+:host([alignment=end]) {
   .forge-stack {
     @include mixins.justify-end;
   }

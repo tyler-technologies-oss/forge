@@ -1,5 +1,4 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-
 import { IStackAdapter } from './stack-adapter';
 import { STACK_CONSTANTS, StackAlignMode } from './stack-constants';
 
@@ -15,13 +14,10 @@ export class StackFoundation implements IStackFoundation {
   private _inline = false;
   private _wrap = false;
   private _stretch = false;
-  private _gap = '16';
+  private _gap = STACK_CONSTANTS.strings.DEFAULT_GAP;
   private _alignment = StackAlignMode.Start;
-  constructor(private _adapter: IStackAdapter) {}
 
-  public initialize(): void {
-    this._adapter.setGap(this._gap);
-  }
+  constructor(private _adapter: IStackAdapter) {}
 
   /** Controls the direction of the stack. */
   public get inline(): boolean {

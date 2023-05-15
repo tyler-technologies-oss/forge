@@ -11,21 +11,24 @@
 <div class="more-examples">
   <p class="forge-typography--title">More examples</p>
   <forge-stack gap="56">
+    <!-- Toolbar buttons -->
     <forge-card outlined>
       <forge-toolbar style="--forge-toolbar-padding: 0" no-border>
         <p slot="start" class="forge-typography--body2">Forge toolbar with perfectly spaced end slot buttons</p>
       </forge-toolbar>
       <forge-toolbar>
-        <forge-stack inline gap="16px" slot="end">
+        <forge-stack inline slot="end">
           <forge-button>
             <button type="button">Cancel</button>
           </forge-button>
-          <forge-button type="unelevated">
+          <forge-button type="raised">
             <button type="button">Save</button>
           </forge-button>
         </forge-stack>
       </forge-toolbar>
     </forge-card>
+
+    <!-- Vertical form -->
     <forge-card outlined style="--forge-card-padding: 0;">
       <forge-toolbar>
         <p slot="start" class="forge-typography--body2">Simple vertical form</p>
@@ -48,7 +51,7 @@
       </form>
     </forge-card>
 
-
+    <!-- Complex form -->
     <forge-card outlined style="--forge-card-padding: 0;">
       <forge-toolbar>
         <p slot="start" class="forge-typography--body2">Complex form</p>
@@ -72,7 +75,7 @@
         </forge-stack>
       </form>
     </forge-card>
-</forge-stack>
+  </forge-stack>
 </div>
 
 <script type="module" src="stack.ts"></script>

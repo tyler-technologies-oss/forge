@@ -2,25 +2,21 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IStackComponent } from './stack';
 import { STACK_CONSTANTS } from './stack-constants';
-import { containsAlphaCharacter } from './stack-utils';
 
 export interface IStackAdapter extends IBaseAdapter {
   setGap(gap: string): void;
 }
 
 export class StackAdapter extends BaseAdapter<IStackComponent> implements IStackAdapter {
-  private _stackContainer: HTMLElement;
+  private _rootElement: HTMLElement;
 
   constructor(component: IStackComponent) {
     super(component);
-    this._stackContainer = getShadowElement(component, `.${STACK_CONSTANTS.classes.DEFAULT}`);
+    this._rootElement = getShadowElement(component, STACK_CONSTANTS.selectors.ROOT);
   }
 
   public setGap(gap: string): void {
-    if (containsAlphaCharacter(gap)) {
-      this._stackContainer.style.gap = `var(--forge-stack-gap, ${gap})`;
-    } else {
-      this._stackContainer.style.gap = `var(--forge-stack-gap, ${gap}px)`;
-    }
+    const value = /^\d+$/.test(gap) ? `${gap}px` : gap;
+    this._rootElement.style.gap = `var(--forge-stack-gap, ${value})`;
   }
 }

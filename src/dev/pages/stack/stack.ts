@@ -1,14 +1,10 @@
-// Styles
-import '@tylertech/forge/stack/stack.scss';
-import './stack.scss';
-
-// Components
-import '@tylertech/forge/stack';
-
 import '$src/shared';
-import { ISelectComponent, IStackComponent } from '@tylertech/forge';
+import '@tylertech/forge/stack';
+import '@tylertech/forge/stack/stack.scss';
+import type { ISelectComponent } from '@tylertech/forge/select';
+import type { IStackComponent } from '@tylertech/forge/stack';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-
+import './stack.scss';
 
 const inlineToggle = document.querySelector('#inline-switch') as ISwitchComponent;
 const wrapToggle = document.querySelector('#wrap-switch') as ISwitchComponent;
@@ -17,30 +13,20 @@ const gapInput = document.querySelector('#gap-input') as HTMLInputElement;
 const stackContainer = document.querySelector('#main-demo') as IStackComponent;
 
 inlineToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
-  if (selected) {
-    stackContainer.inline = true;
-    wrapToggle.disabled = false;
-  } else {
-    stackContainer.inline = false;
-    wrapToggle.disabled = true;
+  stackContainer.inline = selected;
+  wrapToggle.disabled = !selected;
+
+  if (!selected) {
     wrapToggle.selected = false;
   }
 });
 
 wrapToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
-  if (selected) {
-    stackContainer.wrap = true;
-  } else {
-    stackContainer.wrap = false;
-  }
+  stackContainer.wrap = selected;
 });
 
 stretchToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
-  if (selected) {
-    stackContainer.stretch = true;
-  } else {
-    stackContainer.stretch = false;
-  }
+  stackContainer.stretch = selected;
 });
 
 const alignSelect = document.getElementById('align-select') as ISelectComponent;

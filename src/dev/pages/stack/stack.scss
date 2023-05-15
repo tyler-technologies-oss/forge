@@ -1,16 +1,12 @@
 .stack-container {
   height: 800px;
-  padding: 16px;
-  background: var(--mdc-theme-surface);
-  border-radius: 8px;
 }
 
 .box {
-    padding: 36px;
-    border: 4px dashed var(--forge-theme-icon-color);
-    background-color: var(--mdc-theme-text-disabled-on-background);
-    // opacity: .30;
-    border-radius: 8px;
+  padding: 36px;
+  border: 4px dashed var(--mdc-theme-text-secondary-on-background);
+  background-color: var(--mdc-theme-text-disabled-on-background);
+  border-radius: 8px;
 }
 
 .more-examples {

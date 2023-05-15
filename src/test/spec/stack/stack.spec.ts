@@ -1,13 +1,13 @@
-import { removeElement } from '@tylertech/forge-core';
-import { IStackComponent, STACK_CONSTANTS, StackAlignMode, defineStackComponent } from '@tylertech/forge';
+import { getShadowElement, removeElement } from '@tylertech/forge-core';
+import { IStackComponent, STACK_CONSTANTS, StackAlignMode, defineStackComponent } from '@tylertech/forge/stack';
 
 interface ITestContext {
   context: IStackTestContext;
 }
 
 interface IStackTestContext {
-  fixture: HTMLElement;
   component: IStackComponent;
+  rootElement: HTMLDivElement,
   append(): void;
   destroy(): void;
 }
@@ -31,25 +31,28 @@ describe('StackComponent', function(this: ITestContext) {
       this.context = setupTestContext();
       expect(this.context.component.inline).toBe(false);
     });
+
     it('should set the wrap property to false when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
       expect(this.context.component.wrap).toBe(false);
     });
+
     it('should set the stretch property to false when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
       expect(this.context.component.stretch).toBe(false);
     });
+
     it('should set the align property to start when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
       expect(this.context.component.alignment).toBe(StackAlignMode.Start);
     });
+
     it('should set the gap property to 16 when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
       expect(this.context.component.gap).toBe('16');
     });
   });
   
-
   describe('without default values', function(this: ITestContext) {
     it('should set the inline property to true when the attribute is set to true', function(this: ITestContext) {
       this.context = setupTestContext();
@@ -87,16 +90,20 @@ describe('StackComponent', function(this: ITestContext) {
       expect(this.context.component.stretch).toBe(false);
     });
 
-    it('should set the gap property to 100px when the attribute is set to 100', function(this: ITestContext) {
+    it('should set the gap property to the value provided verbatim', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute(STACK_CONSTANTS.attributes.GAP, '100');
-      expect(this.context.component.gap).toBe('100px');
-    });
 
-    it('should set the gap property to 64px when the attribute is set to 64px', function(this: ITestContext) {
-      this.context = setupTestContext();
-      this.context.component.setAttribute(STACK_CONSTANTS.attributes.GAP, '64px');
-      expect(this.context.component.gap).toBe('64px');
+      this.context.component.setAttribute(STACK_CONSTANTS.attributes.GAP, '100');
+      expect(this.context.component.gap).toBe('100');
+      expect(this.context.rootElement.style.gap).toBe('var(--forge-stack-gap, 100px)');
+
+      this.context.component.setAttribute(STACK_CONSTANTS.attributes.GAP, '100px');
+      expect(this.context.component.gap).toBe('100px');
+      expect(this.context.rootElement.style.gap).toBe('var(--forge-stack-gap, 100px)');
+
+      this.context.component.setAttribute(STACK_CONSTANTS.attributes.GAP, '2rem');
+      expect(this.context.component.gap).toBe('2rem');
+      expect(this.context.rootElement.style.gap).toBe('var(--forge-stack-gap, 2rem)');
     });
 
     it('should set the alignment property to start when the attribute is set to start', function(this: ITestContext) {
@@ -121,6 +128,7 @@ describe('StackComponent', function(this: ITestContext) {
   function setupTestContext(append = true): IStackTestContext {
     const fixture = document.createElement('div');
     const component = document.createElement('forge-stack');
+    const rootElement = getShadowElement(component, STACK_CONSTANTS.selectors.ROOT) as HTMLDivElement;
     fixture.appendChild(component);
 
     if (append) {
@@ -128,8 +136,8 @@ describe('StackComponent', function(this: ITestContext) {
     }
 
     return {
-      fixture,
       component,
+      rootElement,
       append: () => document.body.appendChild(fixture),
       destroy: () => removeElement(fixture)
     };

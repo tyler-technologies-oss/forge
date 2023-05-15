@@ -1,11 +1,11 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty, coerceNumber } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
 import { StackFoundation } from './stack-foundation';
 import { STACK_CONSTANTS, StackAlignMode } from './stack-constants';
+import { BaseComponent } from '../core/base/base-component';
 
 import template from './stack.html';
 import styles from './stack.scss';
-import { BaseComponent } from '../core';
 
 export interface IStackComponent extends ICustomElement {
   inline: boolean;
@@ -46,11 +46,6 @@ export class StackComponent extends BaseComponent implements IStackComponent {
     super();
     attachShadowTemplate(this, template, styles);
     this._foundation = new StackFoundation(new StackAdapter(this));
-  }
-  
-
-  public connectedCallback(): void {
-    this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

@@ -6,6 +6,10 @@ const classes = {
   DEFAULT: 'forge-stack'
 };
 
+const selectors = {
+  ROOT: `.${classes.DEFAULT}`
+};
+
 const attributes = {
   INLINE: 'inline',
   WRAP: 'wrap',
@@ -14,8 +18,16 @@ const attributes = {
   ALIGNMENT: 'alignment'
 };
 
-const selectors = {
-  CONTAINER: '.forge-stack'
+const strings = {
+  DEFAULT_GAP: '16'
+};
+
+export const STACK_CONSTANTS = {
+  elementName,
+  classes,
+  attributes,
+  selectors,
+  strings
 };
 
 export enum StackAlignMode {
@@ -23,10 +35,3 @@ export enum StackAlignMode {
   Center = 'center',
   End = 'end'
 }
-
-export const STACK_CONSTANTS = {
-  elementName,
-  classes,
-  attributes,
-  selectors
-};
