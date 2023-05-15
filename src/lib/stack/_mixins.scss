@@ -17,7 +17,6 @@
 }
 
 @mixin inline() {
-  display: flex;
   flex-direction: row;
   --forge-stack-height: auto;
 }
@@ -28,7 +27,7 @@
 
 @mixin stretch() {
   ::slotted(*) {
-    flex: var(--forge-stack-stretch, 0);
+    flex-grow: var(--forge-stack-stretch, 0);
   }
 }
 
