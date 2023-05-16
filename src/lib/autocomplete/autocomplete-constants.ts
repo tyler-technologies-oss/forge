@@ -20,6 +20,7 @@ const attributes = {
   SYNC_POPUP_WIDTH: 'sync-popup-width',
   OPEN: 'open',
   MATCH_KEY: 'match-key',
+  FILTER_TEXT: 'filter-text',
   DROPDOWN_ICON_OPEN: 'data-forge-dropdown-icon-open'
 };
 

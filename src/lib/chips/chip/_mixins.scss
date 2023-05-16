@@ -12,8 +12,13 @@
   .forge-chip {
     @include base;
 
-    &:disabled {
+    &.forge-chip--disabled {
       @include button-mixins.outlined-disabled;
+
+      @include theme.property(border-color, border-color);
+      @include mdc-theme.property(color, text-disabled-on-light);
+      cursor: default;
+      pointer-events: none;
 
       .forge-chip__delete-button {
         opacity: 0.54;
@@ -28,6 +33,10 @@
 
     &__content {
       flex-grow: 1;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     ::slotted([slot='leading']) {
@@ -73,11 +82,11 @@
     &--input,
     &--choice {
       &.forge-chip--selected {
-        &:not(:disabled) {
+        &:not(.forge-chip--disabled) {
           @include selected;
         }
 
-        &:disabled {
+        &.forge-chip--disabled {
           @include selected-disabled;
         }
 
@@ -111,7 +120,7 @@
         }
       }
 
-      &.forge-chip--invalid:not(:disabled) {
+      &.forge-chip--invalid:not(.forge-chip--disabled) {
         .forge-chip__delete-button {
           @include mdc-theme.property(color, error);
 
@@ -122,7 +131,7 @@
         }
       }
 
-      &:disabled {
+      &.forge-chip--disabled {
         .forge-chip__delete-button {
           @include mdc-theme.property(color, text-secondary-on-background);
         }
@@ -160,7 +169,7 @@
       }
     }
 
-    &--invalid:not(:disabled) {
+    &--invalid:not(.forge-chip--disabled) {
       @include invalid;
 
       .forge-chip__delete-button {
@@ -234,6 +243,10 @@
   outline: none;
   line-height: inherit;
   position: relative;
+
+  &:focus {
+    outline: currentColor solid 2px;
+  }
 }
 
 @mixin checkmark() {

@@ -296,6 +296,9 @@ export class TooltipFoundation implements ITooltipFoundation {
     }
   }
 
+  public set open(value: boolean) {
+    this._show();
+  }
   public get open(): boolean {
     return this._isOpen;
   }
