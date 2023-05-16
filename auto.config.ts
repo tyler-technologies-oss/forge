@@ -1,16 +1,9 @@
 import { AutoRc } from 'auto';
 import { INpmConfig } from '@auto-it/npm';
-import { ISlackPluginOptions } from '@auto-it/slack';
 
 const npmOpts: INpmConfig = {
   setRcToken: false,
   publishFolder: 'dist/release/@tylertech/forge'
-};
-
-const slackOpts: ISlackPluginOptions = {
-  auth: 'app',
-  channels: ['tyler-forge'],
-  atTarget: 'here'
 };
 
 export default function rc(): AutoRc {
@@ -23,8 +16,7 @@ export default function rc(): AutoRc {
       'conventional-commits',
       'released',
       'first-time-contributor',
-      './plugins/auto/forge-prepare-publish',
-      ['slack', slackOpts]
+      './plugins/auto/forge-prepare-publish'
     ]
   };
 }
