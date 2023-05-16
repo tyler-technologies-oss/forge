@@ -1,9 +1,14 @@
 {
   "name": "@tylertech/forge",
   "version": "2.13.2",
-  "description": "Forge Web Components library",
+  "description": "Tyler Forge™ Web Components library",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
+  "keywords": [
+    "tyler forge",
+    "web components",
+    "custom elements"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/tyler-technologies-oss/forge.git"

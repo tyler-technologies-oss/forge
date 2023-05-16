@@ -8,7 +8,7 @@ Please check if your PR fulfills the following requirements:
 - I have linked any related GitHub issues to be closed when this PR is merged? [Y/N]
 
 ## Describe the new behavior?
-<!-- A clear and concise description of the changes, including an breaking changes (if applicable) -->
+<!-- A clear and concise description of the changes, including any breaking changes (if applicable) -->
 
 ## Additional information
 <!-- Add any other context about the change here. -->
