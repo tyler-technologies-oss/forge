@@ -2,19 +2,50 @@
 
 #### 🚀 Enhancement
 
-- fix: reference `@material/*` packages instead of `material-components-web` meta package to avoid dependency conflicts [#307](https://github.com/tyler-technologies-oss/forge/pull/307) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat: created new `<forge-stack>` component [#280](https://github.com/tyler-technologies-oss/forge/pull/280) ([@nickonometry](https://github.com/nickonometry))
+- feat(view-switcher): added new `--forge-view-switcher-width` CSS custom property [#295](https://github.com/tyler-technologies-oss/forge/pull/295) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(autocomplete): added new `filterText` property/attribute to allow for setting the filter text state manually (only applies when `allowUnmatched` is enabled) [#294](https://github.com/tyler-technologies-oss/forge/pull/294) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat: added CSS custom property for controlling the internal `border-style` on select, text-field, and chip-field [#286](https://github.com/tyler-technologies-oss/forge/pull/286) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(toolbar): various toolbar improvements [#283](https://github.com/tyler-technologies-oss/forge/pull/283) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(table): added new method `isColumnHidden()` [#279](https://github.com/tyler-technologies-oss/forge/pull/279) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(table): provided the column index to the `TableTemplateBuilder` [#278](https://github.com/tyler-technologies-oss/forge/pull/278) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat: allow for using `<a>` element in place of `<button>` in `<forge-button>`, `<forge-icon-button>` and `<forge-fab>` components [#276](https://github.com/tyler-technologies-oss/forge/pull/276) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(select): added the ability to specify if option text should wrap in the dropdown, and updated the default popup behavior to set a `max-width: 100vw` style to ensure that the popup cannot be larger than the width of screen (which allows for options to wrap if necessary) [#266](https://github.com/tyler-technologies-oss/forge/pull/266) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(app-bar-notification-button): allow icon to be set to a user specified icon [#259](https://github.com/tyler-technologies-oss/forge/pull/259) ([@DRiFTy17](https://github.com/DRiFTy17))
 
 #### 🐛 Bug Fix
 
+- fix: reference `@material/*` packages instead of `material-components-web` meta package to avoid dependency conflicts [#307](https://github.com/tyler-technologies-oss/forge/pull/307) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(time-picker): improve input mask usability [#306](https://github.com/tyler-technologies-oss/forge/pull/306) ([@DRiFTy17](https://github.com/DRiFTy17))
 - perf: checkbox, radio, and switch will now instantiate ripple upon first user interaction [#285](https://github.com/tyler-technologies-oss/forge/pull/285) ([@DRiFTy17](https://github.com/DRiFTy17))
 - fix(date-range-picker): allow for setting `value` to `null` to clear the component value [#265](https://github.com/tyler-technologies-oss/forge/pull/265) ([@DRiFTy17](https://github.com/DRiFTy17))
 - fix(autocomplete): always define the `arrow_drop_down` icon [#262](https://github.com/tyler-technologies-oss/forge/pull/262) ([@DRiFTy17](https://github.com/DRiFTy17))
 - chore: separate temp storybook deployment from build-pr workflow [#237](https://github.com/tyler-technologies-oss/forge/pull/237) ([@DRiFTy17](https://github.com/DRiFTy17))
 - fix(date-picker): fixed a bug where a 4-digit year was not correctly being masked with a leading 0 [#236](https://github.com/tyler-technologies-oss/forge/pull/236) ([@Lillious](https://github.com/Lillious) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(busy-indicator): fixed various accessibility issues [#298](https://github.com/tyler-technologies-oss/forge/pull/298) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip): fixed accessibility issues [#201](https://github.com/tyler-technologies-oss/forge/pull/301) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): fixed a bug where moving the dialog within a scroll container would calculate an incorrect position [#308](https://github.com/tyler-technologies-oss/forge/pull/308) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: stop propagation on `Escape` key events [#302](https://github.com/tyler-technologies-oss/forge/pull/302) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(quantity-field): remove increment and decrement buttons from the tab order by default [#297](https://github.com/tyler-technologies-oss/forge/pull/297) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): fixed a bug where addon-end slot was not expanding full height as the field grew [#290](https://github.com/tyler-technologies-oss/forge/pull/290) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(menu): fixed toggle element initialization [#293](https://github.com/tyler-technologies-oss/forge/pull/293) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(menu): fixed a bug where cascading child menus would overlap when clipped [#261](https://github.com/tyler-technologies-oss/forge/pull/261) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): fixed a bug where clicking on the field would not propagate the click event [#289](https://github.com/tyler-technologies-oss/forge/pull/289) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): remove unused `::before` pseudo element from slotted elements [#284](https://github.com/tyler-technologies-oss/forge/pull/284) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(file-picker): allow for setting disabled state before child `<button>` is in DOM [#281](https://github.com/tyler-technologies-oss/forge/pull/281) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fixed a bug where the option group `builder` property was not being called [#274](https://github.com/tyler-technologies-oss/forge/pull/274) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): keep dropdown open when selecting items in stateless + multiple mode [#269](https://github.com/tyler-technologies-oss/forge/pull/269) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fixed a bug where the dropdown was not opening when pressing up/down arrow keys, and fixed a11y announcements when the value text changes [#264](https://github.com/tyler-technologies-oss/forge/pull/264) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): fixed a bug where the `pointer` cursor could be lost when `allowRowClick` is enabled [#288](https://github.com/tyler-technologies-oss/forge/pull/288) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(linear-progress): updated the default `buffer` state to be `1` instead of `0` [#282](https://github.com/tyler-technologies-oss/forge/pull/282) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list-item): fixed a bug where the `wrap` property in list-item component was not allowing for text to wrap on slotted elements [#266](https://github.com/tyler-technologies-oss/forge/pull/266) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(autocomplete): fixed typings and leading icon render order [#273](https://github.com/tyler-technologies-oss/forge/pull/273) ([@Alex-Oxthorn](https://github.com/Alex-Oxthorn))
 
 #### Authors: 2
 
 - Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+- Alex Oxthorn ([@Alex-Oxthorn](https://github.com/Alex-Oxthorn))
 - Logan Brown ([@Lillious](https://github.com/Lillious))
 
 ---
