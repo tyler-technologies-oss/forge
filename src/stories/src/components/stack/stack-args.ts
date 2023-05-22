@@ -1,6 +1,7 @@
 export interface IStackProps {
   inline: boolean;
   wrap: boolean;
+  gap: string;
   stretch: boolean;
   alignment: string;
 }
@@ -15,6 +16,13 @@ export const argTypes = {
   },
   wrap: {
     control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  gap: {
+    control: 'text',
     description: '',
     table: {
       category: 'Properties',
@@ -39,7 +47,7 @@ export const argTypes = {
     description: 'Use alignment to define how the browser places space the child items along the current direction of a stack',
     options: ['start', 'center', 'end'],
     table: {
-      category: 'Attributes'
+      category: 'Properties'
     },
   },
 };

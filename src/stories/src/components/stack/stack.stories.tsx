@@ -34,13 +34,14 @@ export default {
 export const Default: Story<IStackProps> = ({
   inline = false,
   wrap = false,
+  gap = "16",
   stretch = false,
   alignment = "start"
 }) => (
   <>
     <p>Resize this container to play with wrapping and alignment</p>
     <div style={{...stackContainer}}>
-      <ForgeStack inline={inline} wrap={wrap} stretch={stretch} alignment={alignment}>
+      <ForgeStack inline={inline} wrap={wrap} gap={gap} stretch={stretch} alignment={alignment}>
         <div style={{...box}}></div>
         <div style={{...box}}></div>
         <div style={{...box}}></div>
@@ -55,10 +56,11 @@ export const Default: Story<IStackProps> = ({
 export const DocsDemo: Story<IStackProps> = ({
   inline = true,
   wrap = false,
+  gap = "16",
   stretch = false,
   alignment = "start"
 }) => (
-  <ForgeStack inline={inline} wrap={wrap} stretch={stretch} alignment={alignment}>
+  <ForgeStack inline={inline} wrap={wrap} gap={gap} stretch={stretch} alignment={alignment}>
     <div style={{...box}}></div>
     <div style={{...box}}></div>
     <div style={{...box}}></div>
@@ -68,6 +70,7 @@ export const DocsDemo: Story<IStackProps> = ({
 Default.args = {
   inline: false,
   wrap: false,
+  gap: "16",
   stretch: false,
   alignment: 'start',
 } as IStackProps;
