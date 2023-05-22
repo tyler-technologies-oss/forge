@@ -1,8 +1,11 @@
 export const StackDefaultHtml = () => `
-<forge-stack inline>
-  <div></div>
-  <div></div>
-  <div></div>
+<forge-stack>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
 </forge-stack>
 `;
 

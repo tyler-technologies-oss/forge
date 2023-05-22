@@ -7,7 +7,7 @@ const MDX = require('./stack.mdx').default;
 
 const stackContainer: React.CSSProperties = {
   position: 'relative',
-  width: '960px',
+  maxWidth: '768px',
   border: '4px solid var(--mdc-theme-text-secondary-on-background)',
   padding: '36px',
   resize: 'both',
@@ -51,20 +51,6 @@ export const Default: Story<IStackProps> = ({
       </ForgeStack>
     </div>
   </>
-);
-
-export const DocsDemo: Story<IStackProps> = ({
-  inline = true,
-  wrap = false,
-  gap = "16",
-  stretch = false,
-  alignment = "start"
-}) => (
-  <ForgeStack inline={inline} wrap={wrap} gap={gap} stretch={stretch} alignment={alignment}>
-    <div style={{...box}}></div>
-    <div style={{...box}}></div>
-    <div style={{...box}}></div>
-  </ForgeStack>
 );
 
 Default.args = {
