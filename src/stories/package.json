@@ -24,7 +24,7 @@
     "@storybook/react": "^6.5.16",
     "@storybook/theming": "^6.5.16",
     "@tylertech/forge-docs-core": "^2.0.0",
-    "@tylertech/forge-react": "^2.1.0",
+    "@tylertech/forge-react": "^2.2.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
