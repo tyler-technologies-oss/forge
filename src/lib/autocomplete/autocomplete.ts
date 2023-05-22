@@ -24,6 +24,7 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   allowUnmatched: boolean;
   matchKey: string | null | undefined;
   popupTarget: string;
+  filterText: string;
   filter: AutocompleteFilterCallback | null | undefined;
   optionBuilder: AutocompleteOptionBuilder | null | undefined;
   selectedTextBuilder: AutocompleteSelectedTextBuilder;
@@ -81,7 +82,8 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       AUTOCOMPLETE_CONSTANTS.attributes.OPTION_LIMIT,
       AUTOCOMPLETE_CONSTANTS.attributes.SYNC_POPUP_WIDTH,
       AUTOCOMPLETE_CONSTANTS.attributes.OPEN,
-      AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY
+      AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY,
+      AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT
     ];
   }
 
@@ -133,6 +135,9 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       case AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY:
         this.matchKey = newValue;
         break;
+      case AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT:
+        this.filterText = newValue;
+        break;
     }
   }
 
@@ -163,6 +168,14 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   /** Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element. */
   @FoundationProperty()
   public declare popupTarget: string;
+
+  /**
+   * Gets/sets the filter text.
+   * 
+   * Setting the filter text only applies when allowUnmatched is enabled.
+   */
+  @FoundationProperty()
+  public declare filterText: string;
 
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
   @FoundationProperty()

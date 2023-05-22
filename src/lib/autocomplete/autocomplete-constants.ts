@@ -20,6 +20,7 @@ const attributes = {
   SYNC_POPUP_WIDTH: 'sync-popup-width',
   OPEN: 'open',
   MATCH_KEY: 'match-key',
+  FILTER_TEXT: 'filter-text',
   DROPDOWN_ICON_OPEN: 'data-forge-dropdown-icon-open'
 };
 
@@ -72,6 +73,6 @@ export interface IAutocompletePopupConfiguration {
   scrollEndListener: () => void;
 }
 
-export interface IAutocompleteSelectEventData {
-  value: any;
+export interface IAutocompleteSelectEventData<T = any> {
+  value: T;
 }

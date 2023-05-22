@@ -53,6 +53,10 @@ export class ChipSetComponent extends BaseComponent implements IChipSetComponent
     this._foundation.initialize();
   }
 
+  public disconnectedCallback(): void {
+    this._foundation.destroy();
+  }
+
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case CHIP_SET_CONSTANTS.attributes.VERTICAL:

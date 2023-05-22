@@ -485,7 +485,7 @@ describe('DialogComponent', function(this: ITestContext) {
     const mousedownSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseDown').and.callThrough();
     const mousemoveSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseMove').and.callThrough();
     const mouseupSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseUp').and.callThrough();
-    moveTarget.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100 } as any));
+    moveTarget.dispatchEvent(new MouseEvent('mousedown', { pageX: 100, pageY: 100 } as any));
     document.dispatchEvent(new MouseEvent('mousemove', { pageX: 150, pageY: 150 } as any));
     document.dispatchEvent(new MouseEvent('mouseup'));
     

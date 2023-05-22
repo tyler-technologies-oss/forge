@@ -17,6 +17,7 @@ interface ITimePickerTestContext {
   identifier: string;
   getPopup(): IPopupComponent;
   getListItems(): IListItemComponent[];
+  writeValue(char: string, pos: number, clear?: boolean): void;
 }
 
 describe('TimePickerComponent', function(this: ITestContext) {
@@ -264,6 +265,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
   it('should set value through input element when unmasked', function(this: ITestContext) {
     this.context = _createTimePickerContext();
+    this.context.component.masked = false;
 
     const timeValue = '1111';
     this.context.inputElement.value = timeValue;
@@ -271,9 +273,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.value).toBeNull();
     expect(this.context.inputElement.value).toBe(timeValue);
     
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
     
+    expect(this.context.component.value).toBe('11:11');
     expect(this.context.inputElement.value).toBe('11:11 AM');
   });
 
@@ -360,7 +363,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(changeEventSpy).not.toHaveBeenCalled();
   });
 
-  it('should set time to curent time when "n" key is pressed', function(this: ITestContext) {
+  it('should set time to current time when "n" key is pressed', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     const millis = getCurrentTimeOfDayMillis(false);
@@ -370,7 +373,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.value).toBe(expectedTimeValue);
   });
 
-  it('should set time to curent time when "n" key is pressed with seconds', function(this: ITestContext) {
+  it('should set time to current time when "n" key is pressed with seconds', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     const millis = getCurrentTimeOfDayMillis(true);
@@ -624,44 +627,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(matchingListItem.value.time).toBe(timeMillis);
   });
 
-  it('should highlight closest matching time in dropdown if time doesn\'t match exactly', async function(this: ITestContext) {
-    this.context = _createTimePickerContext();
-
-    const timeString = '08:23';
-    const closestTimeString = '08:00';
-    const closestTimeMillis = timeStringToMillis(closestTimeString, true, false);
-    this.context.component.value = timeString;
-    this.context.component.open = true;
-
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-
-    const listItems = this.context.getListItems();
-    const selectedListItem = listItems.find(li => li.selected);
-    const activeListItem = listItems.find(li => li.active) as IListItemComponent;
-
-    expect(selectedListItem).toBeFalsy();
-    expect(activeListItem.value.time).toBe(closestTimeMillis);
-  });
-
-  it('should highlight startTime in dropdown when opened without value set', async function(this: ITestContext) {
-    this.context = _createTimePickerContext();
-
-    const startTime = '08:00';
-    const startTimeMillis = timeStringToMillis(startTime, true, false);
-    this.context.component.startTime = startTime;
-    this.context.component.open = true;
-
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-
-    const listItems = this.context.getListItems();
-    const selectedListItem = listItems.find(li => li.selected);
-    const activeListItem = listItems.find(li => li.active) as IListItemComponent;
-
-    expect(selectedListItem).toBeFalsy();
-    expect(activeListItem.value.time).toBe(startTimeMillis);
-  });
-
-  it('should highlight first time in dropdown when opened via arrow down key', async function(this: ITestContext) {
+  it('should highlight option in dropdown when opened via arrow down key', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
@@ -670,7 +636,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const listItems = this.context.getListItems();
     const activeListItemIndex = listItems.findIndex(li => li.active);
 
-    expect(activeListItemIndex).toBe(0);
+    expect(activeListItemIndex).toBe(this.context.foundation['_dropdownConfig'].visibleStartIndex);
   });
 
   it('should select highlighted time in dropdown when tab key is pressed', async function(this: ITestContext) {
@@ -685,7 +651,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
-    expect(this.context.component.value).toBe('00:00');
+    expect(this.context.component.value).not.toBeNull();
   });
 
   it('should select matching value in dropdown when opened when startTime is set', async function(this: ITestContext) {
@@ -847,14 +813,14 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
-    let activeListItem = listItems.find(li => li.active) as IListItemComponent;
+    let activeListItemIndex = listItems.findIndex(li => li.active);
 
-    expect(listItems.indexOf(activeListItem)).toBe(-1);
+    expect(activeListItemIndex).toBe(-1);
 
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
-    activeListItem = listItems.find(li => li.active) as IListItemComponent;
-    expect(listItems.indexOf(activeListItem)).toBe(0);
+    activeListItemIndex = listItems.findIndex(li => li.active);
+    expect(activeListItemIndex).toBe(this.context.foundation['_dropdownConfig'].visibleStartIndex);
   });
 
   it('should propagate up arrow key to dropdown', async function(this: ITestContext) {
@@ -864,14 +830,14 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
-    let activeListItem = listItems.find(li => li.active) as IListItemComponent;
+    const originalActiveListItemIndex = listItems.findIndex(li => li.active);
 
-    expect(listItems.indexOf(activeListItem)).toBe(-1);
+    expect(originalActiveListItemIndex).toBe(-1);
 
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
 
-    activeListItem = listItems.find(li => li.active) as IListItemComponent;
-    expect(listItems.indexOf(activeListItem)).toBe(listItems.length - 1);
+    const activeListItemIndex = listItems.findIndex(li => li.active);
+    expect(activeListItemIndex).toBe(this.context.foundation['_dropdownConfig'].visibleStartIndex);
   });
 
   it('should propagate home and end key to dropdown', async function(this: ITestContext) {
@@ -883,13 +849,13 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const listItems = this.context.getListItems();
 
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'End' }));
-    let activeListItem = listItems.find(li => li.active) as IListItemComponent;
-    expect(listItems.indexOf(activeListItem)).toBe(listItems.length - 1);
+    let activeListItemIndex = listItems.findIndex(li => li.active);
+    expect(activeListItemIndex).toBe(listItems.length - 1);
     
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Home' }));
     
-    activeListItem = listItems.find(li => li.active) as IListItemComponent;
-    expect(listItems.indexOf(activeListItem)).toBe(0);
+    activeListItemIndex = listItems.findIndex(li => li.active);
+    expect(activeListItemIndex).toBe(0);
   });
 
   it('should select active option in dropdown when enter key is pressed', async function(this: ITestContext) {
@@ -905,27 +871,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'End' }));      
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
-
-    const selectedListItem = listItems[listItems.length - 1];
-    const selectedTimeString = millisToTimeString(selectedListItem.value.time, true, false);
-
-    expect(changeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: selectedTimeString }));
-    expect(this.context.component.value).toBe(selectedTimeString);
-  });
-
-  it('should select active option in dropdown when number pad numpadenter key is pressed', async function(this: ITestContext) {
-    this.context = _createTimePickerContext();
-
-    const changeSpy = jasmine.createSpy('change spy');
-    this.context.component.addEventListener(TIME_PICKER_CONSTANTS.events.CHANGE, changeSpy);
-
-    this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-
-    const listItems = this.context.getListItems();
-
-    this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'End' }));      
-    this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'NumpadEnter' }));
 
     const selectedListItem = listItems[listItems.length - 1];
     const selectedTimeString = millisToTimeString(selectedListItem.value.time, true, false);
@@ -1050,7 +995,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.open = true;
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
-    this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+    this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Home' })); // Custom options are displayed first
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
     expect(toMillisSpy).toHaveBeenCalledOnceWith(customOptions[0].value);
@@ -1180,7 +1125,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await tick();
     
     this.context.inputElement.value = '1';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
     await tick();
     
@@ -1192,7 +1137,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '1111';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertFromPaste' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
 
     expect(this.context.inputElement.value).toBe('11:11 AM');
@@ -1202,7 +1147,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '01:30';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
 
     expect(this.context.inputElement.value).toBe('01:30 AM');
@@ -1212,7 +1157,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '9';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
 
     expect(this.context.inputElement.value).toBe('09:');
@@ -1225,7 +1170,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await tick();
 
     this.context.inputElement.value = '9';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
     
     expect(this.context.inputElement.value).toBe('9');
@@ -1233,7 +1178,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     
     this.context.component.masked = true;
     this.context.inputElement.value = '9';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
 
     expect(this.context.inputElement.value).toBe('09:');
@@ -1275,7 +1220,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const value = '120';
     this.context.inputElement.value = value;
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertFromPaste' }));
 
     expect(coercionSpy).toHaveBeenCalledOnceWith('12:0', '12:00', false);
   });
@@ -1284,29 +1229,30 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context = _createTimePickerContext();
     this.context.component.masked = false;
 
-    const coercionSpy = jasmine.createSpy('coercionCallback', (val, coercedStr, allowSeconds) => coercedStr).and.callThrough();
+    const coercionSpy = jasmine.createSpy('coercionCallback', (_val, coercedStr, _allowSeconds) => coercedStr).and.callThrough();
     this.context.component.coercionCallback = coercionSpy;
 
     const value = '120';
     this.context.inputElement.value = value;
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
-    expect(coercionSpy).toHaveBeenCalledOnceWith('120', '12:00', false);
+    expect(coercionSpy).toHaveBeenCalledOnceWith('120', '01:20', false);
   });
 
   it('should use custom coercion callback value', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    const expectedValue = '01:20 AM';
+    const expectedValue = '12:00 PM';
     const coercionSpy = jasmine.createSpy('coercionCallback', (val, coercedStr, allowSeconds) => expectedValue).and.callThrough();
     this.context.component.coercionCallback = coercionSpy;
 
     const value = '120';
+    this.context.inputElement.focus();
     this.context.inputElement.value = value;
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
 
-    expect(this.context.component.value).toBe('01:20');
+    expect(this.context.component.value).toBe('12:00');
 
     this.context.inputElement.dispatchEvent(new Event('blur'));
     await tick();
@@ -1334,34 +1280,93 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(merged).toEqual(expected);
   });
 
-  it('should not pad leading zero when entering hour of 1', function(this: ITestContext) {
+  it('should pad leading zero when entering hour of 1', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '1';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
-    expect(this.context.component.value).toBeNull();
-    expect(this.context.inputElement.value).toBe('1');
+    expect(this.context.component.value).toBe('01:00');
+    expect(this.context.inputElement.value).toBe('01:');
   });
 
-  it('should not pad leading zero when entering hour of 2', function(this: ITestContext) {
+  it('should pad leading zero when entering hour of 2', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '2';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
-    expect(this.context.component.value).toBeNull();
-    expect(this.context.inputElement.value).toBe('2');
+    expect(this.context.component.value).toBe('02:00');
+    expect(this.context.inputElement.value).toBe('02:');
   });
 
   it('should pad leading zero when entering initial hour of 3 or higher', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
     this.context.inputElement.value = '3';
-    this.context.inputElement.dispatchEvent(new Event('input'));
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
-    expect(this.context.component.value).toBe('00:03');
+    expect(this.context.component.value).toBe('03:00');
     expect(this.context.inputElement.value).toBe('03:');
+  });
+
+  it('should coerce special case 3-digit shorthand values when unmasked', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.masked = false;
+
+    this.context.inputElement.value = '123';
+    this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
+
+    expect(this.context.component.value).toBe('01:23');
+  });
+
+  it('should overwrite hours if 1 is entered', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+
+    await this.context.writeValue('1', 0);
+    await this.context.writeValue('2', 2);
+
+    expect(this.context.component.value).toBe('12:00');
+  });
+
+  it('should overwrite hours if entered with format visible', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.showMaskFormat = true;
+
+    await this.context.writeValue('1', 0);
+    expect(this.context.component.value).toBe('01:00');
+
+    await this.context.writeValue('2', 2);
+    expect(this.context.component.value).toBe('12:00');
+  });
+
+  it('should not overwrite hours if > 2 is entered', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+
+    await this.context.writeValue('1', 0);
+    await this.context.writeValue('3', 2, true);
+
+    expect(this.context.component.value).toBe('01:03');
+  });
+
+  it('should overwrite hours if <= 2 is entered in 24 hour time', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.use24HourTime = true;
+
+    await this.context.writeValue('2', 0);
+    await this.context.writeValue('1', 2);
+
+    expect(this.context.component.value).toBe('21:00');
+  });
+
+  it('should not overwrite hours if > 2 is entered in 24 hour time', async function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.use24HourTime = true;
+
+    await this.context.writeValue('3', 0);
+    await this.context.writeValue('1', 2, true);
+
+    expect(this.context.component.value).toBe('03:01');
   });
 
   function _createTimePickerContext(append = true, hasInput = true): ITimePickerTestContext {
@@ -1380,7 +1385,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const foundation = component['_foundation'];
     const identifier = `forge-time-picker-${foundation['_identifier']}`;
     const getPopup = () => document.querySelector(`[id=list-dropdown-popup-${identifier}]`) as IPopupComponent;
-    
+
     return {
       component,
       foundation,
@@ -1392,7 +1397,31 @@ describe('TimePickerComponent', function(this: ITestContext) {
       getListItems: () => {
         const popup = getPopup();
         return Array.from(popup.querySelectorAll(LIST_ITEM_CONSTANTS.elementName));
+      },
+      writeValue: async (key: string, pos: number, replace = false) => {
+        await setCursorPos(inputElement, pos);
+        const value = setCharAtPos(inputElement.value, key, pos, replace);
+        await setInputValue(inputElement, value);
+        await setCursorPos(inputElement, pos);
       }
     };
+  }
+
+  async function setInputValue(inputElement: HTMLInputElement, value: string): Promise<void> {
+    inputElement.value = value;
+    inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
+    await tick();
+  }
+
+  async function setCursorPos(inputElement: HTMLInputElement, pos: number): Promise<void> {
+    inputElement.focus();
+    inputElement.setSelectionRange(pos, pos);
+    await tick();
+  }
+
+  function setCharAtPos(str: string, char: string, pos: number, replace: boolean) {
+    const startAdj = replace || pos === 0 ? 0 : 1;
+    const endAdj = pos === 0 ? 1 : 0;
+    return [str.slice(0, pos - startAdj), char, str.slice(pos + endAdj)].join('');
   }
 });

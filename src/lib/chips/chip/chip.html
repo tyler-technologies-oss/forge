@@ -1,9 +1,9 @@
 <template>
-  <button class="forge-chip" part="button">
+  <div class="forge-chip" part="root button">
     <slot name="leading" class="forge-chip__leading"></slot>
-    <div class="forge-chip__content" part="content">
+    <div role="button" tabindex="0" class="forge-chip__content" part="content">
       <slot></slot>
     </div>
     <slot name="trailing"></slot>
-  </button>
+  </div>
 </template>

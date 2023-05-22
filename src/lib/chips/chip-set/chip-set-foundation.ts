@@ -16,14 +16,27 @@ export class ChipSetFoundation implements IChipSetFoundation {
   private _type: ChipType = CHIP_CONSTANTS.defaults.TYPE as ChipType;
   private _dense = false;
   private _disabled = false;
+  private _focusPreviousListener: (evt: CustomEvent) => void;
+  private _focusNextListener: (evt: CustomEvent) => void;
 
-  constructor(private _adapter: IChipSetAdapter) {}
+  constructor(private _adapter: IChipSetAdapter) {
+    this._focusPreviousListener = (evt: CustomEvent) => this._adapter.tryFocusPrevious(evt.target);
+    this._focusNextListener = (evt: CustomEvent) => this._adapter.tryFocusNext(evt.target);
+  }
 
   public initialize(): void {
+    this._adapter.addHostListener(CHIP_CONSTANTS.events.FOCUS_PREVIOUS, this._focusPreviousListener);
+    this._adapter.addHostListener(CHIP_CONSTANTS.events.FOCUS_NEXT, this._focusNextListener);
+
     this._applyVertical();
     this._applyType();
     this._applyDense();
     this._applyDisabled();
+  }
+
+  public destroy(): void {
+    this._adapter.removeHostListener(CHIP_CONSTANTS.events.FOCUS_PREVIOUS, this._focusPreviousListener);
+    this._adapter.removeHostListener(CHIP_CONSTANTS.events.FOCUS_NEXT, this._focusNextListener);
   }
 
   private _applyVertical(): void {

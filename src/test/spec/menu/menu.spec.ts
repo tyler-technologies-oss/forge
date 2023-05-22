@@ -1,16 +1,15 @@
-import { getShadowElement, removeElement } from '@tylertech/forge-core';
-import { dispatchKeyEvent, tick, timer } from '@tylertech/forge-testing';
 import {
   defineMenuComponent,
-  IListComponent,
-  IMenuComponent,
+  IListComponent, IListItemComponent, IMenuAdapter, IMenuComponent,
+  IMenuFoundation,
   IMenuOption,
   IPopupComponent,
   LIST_ITEM_CONSTANTS,
   MENU_CONSTANTS,
-  POPUP_CONSTANTS,
-  IListItemComponent
+  POPUP_CONSTANTS
 } from '@tylertech/forge';
+import { getShadowElement, removeElement } from '@tylertech/forge-core';
+import { tick, timer } from '@tylertech/forge-testing';
 import { ICON_CLASS_NAME } from '@tylertech/forge/constants';
 
 interface ITestContext {
@@ -19,6 +18,9 @@ interface ITestContext {
 
 interface ITestMenuContext {
   component: IMenuComponent;
+  foundation: IMenuFoundation;
+  adapter: IMenuAdapter;
+  fixture: HTMLElement;
   getToggleElement(): HTMLElement;
   destroy(): void;
 }
@@ -203,6 +205,58 @@ describe('MenuComponent', function(this: ITestContext) {
   });
 
   describe('toggle element', function(this: ITestContext) {
+    it('should await dynamic toggle element', async function(this: ITestContext) {
+      this.context = setupTestContext(false);
+
+      await tick();
+      expect(this.context.adapter.hasTargetElement()).toBeFalse();
+
+      const toggleElement = createToggleElement();
+      this.context.component.appendChild(toggleElement);
+      await tick();
+
+      expect(this.context.adapter.hasTargetElement()).toBeTrue();
+    });
+
+    it('should await nested dynamic toggle element', async function(this: ITestContext) {
+      this.context = setupTestContext(false);
+
+      // Create and append an empty child element
+      const emptyContainer = document.createElement('div');
+      this.context.component.appendChild(emptyContainer);
+      await tick();
+
+      expect(this.context.adapter.hasTargetElement()).toBeFalse();
+      
+      // Create the toggle element and append to the empty child element
+      const toggleElement = createToggleElement();
+      emptyContainer.appendChild(toggleElement);
+      await tick();
+
+      expect(this.context.adapter.hasTargetElement()).toBeTrue();
+    });
+
+    it('should close dropdown on blur when nested dynamic toggle element is provided', async function(this: ITestContext) {
+      this.context = setupTestContext(false);
+
+      const emptyContainer = document.createElement('div');
+      this.context.component.appendChild(emptyContainer);
+      await tick();
+
+      const toggleElement = createToggleElement();
+      emptyContainer.appendChild(toggleElement);
+      await tick();
+
+      toggleElement.focus();
+      toggleElement.click();
+      expect(this.context.component.open).toBeTrue();
+      expect(document.activeElement).toBe(toggleElement);
+
+      toggleElement.blur();
+      expect(this.context.component.open).toBeFalse();
+      expect(document.activeElement).not.toBe(toggleElement);
+    });
+
     it(`when clicked should open the menu`, function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.getToggleElement().click();
@@ -691,15 +745,22 @@ describe('MenuComponent', function(this: ITestContext) {
     });
   });
 
-  function setupTestContext(): ITestMenuContext {
+  function setupTestContext(appendToggle = true): ITestMenuContext {
     const fixture = document.createElement('div');
     fixture.id = 'menu-test-fixture';
-    const component = document.createElement(MENU_CONSTANTS.elementName) as IMenuComponent;
-    component.appendChild(createToggleElement());
+    const component = document.createElement(MENU_CONSTANTS.elementName);
+    const foundation = component['_foundation'] as IMenuFoundation;
+    const adapter = foundation['_adapter'] as IMenuAdapter;
+    if (appendToggle) {
+      component.appendChild(createToggleElement());
+    }
     fixture.appendChild(component);
     document.body.appendChild(fixture);
     return {
       component,
+      foundation,
+      adapter,
+      fixture,
       getToggleElement: () => component.querySelector('button') as HTMLButtonElement,
       destroy: () => removeElement(fixture)
     };

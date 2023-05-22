@@ -62,6 +62,10 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
     this._foundation.initialize();
   }
 
+  public disconnectedCallback(): void {
+    this._foundation.destroy();
+  }
+
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case FILE_PICKER_CONSTANTS.attributes.ACCEPT:

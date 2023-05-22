@@ -28,6 +28,7 @@ export class QuantityFieldFoundation implements IQuantityFieldFoundation {
   public connect(): void {
     this._adapter.addInputDisabledAttributeChangeListener(() => this._syncDisabledStateOfButtons());
     this._syncDisabledStateOfButtons();
+    this._adapter.initializeButtons();
   }
 
   public disconnect(): void {

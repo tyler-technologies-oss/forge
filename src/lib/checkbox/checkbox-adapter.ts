@@ -1,4 +1,5 @@
 import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
+import { userInteractionListener } from '../core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
 import { ICheckboxComponent } from './checkbox';
@@ -7,7 +8,6 @@ import { CHECKBOX_CONSTANTS } from './checkbox-constants';
 type PropertyDescriptorGetter = (() => unknown) | undefined;
 
 export interface ICheckboxAdapter extends IBaseAdapter {
-  forceLayout(): void;
   isAttachedToDOM(): boolean;
   isDisabled(): boolean;
   isChecked(): boolean;
@@ -37,7 +37,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private _inputFocusHandler: () => void;
   private _inputBlurHandler: () => void;
   private _inputMutationObserver: MutationObserver;
-  private _rippleInstance: ForgeRipple;
+  private _rippleInstance: ForgeRipple | undefined;
 
   constructor(component: ICheckboxComponent) {
     super(component);
@@ -59,13 +59,17 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   public initialize(): void {
     this._configureElements();
     this._attachInternalInputListeners();
-    this._rippleInstance = this._createRipple();
+    this._deferRippleInitialization();
+  }
 
-    requestAnimationFrame(() => {
-      if (this._rippleInstance) {
-        this._rippleInstance.layout();
+  private async _deferRippleInitialization(): Promise<void> {
+    const type = await userInteractionListener(this._rootElement);
+    if (!this._rippleInstance) {
+      this._rippleInstance = this._createRipple();
+      if (type === 'focusin') {
+        this._rippleInstance.handleFocus();
       }
-    });
+    }
   }
 
   public setDense(value: boolean | undefined): void {
@@ -76,10 +80,8 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
       this._removeHostAttribute(CHECKBOX_CONSTANTS.attributes.DENSE);
       this.removeRootClass(CHECKBOX_CONSTANTS.classes.CHECKBOX_DENSE);
     }
-  }
 
-  public forceLayout(): void {
-    this._rippleInstance.layout();
+    this._rippleInstance?.layout();
   }
 
   public isAttachedToDOM(): boolean {

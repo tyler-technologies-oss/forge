@@ -51,8 +51,9 @@ export interface IListDropdownOption<T = any> extends IBaseListDropdownOption<T>
   elementAttributes?: Map<string, string>;
 }
 
-export interface IListDropdownOptionGroup<T = any> {
+export interface IListDropdownOptionGroup<T = any, K = any> {
   text?: string;
+  value?: K;
   builder?: ListDropdownOptionGroupBuilder;
   options: IListDropdownOption<T>[];
 }
@@ -75,6 +76,7 @@ export interface IListDropdownConfig<T = any> {
   selectedValues?: T[];
   multiple?: boolean;
   activeStartIndex?: number;
+  visibleStartIndex?: number;
   transform?: ListDropdownTransformCallback;
   allowBusy?: boolean;
   asyncStyle?: ListDropdownAsyncStyle;
@@ -85,6 +87,7 @@ export interface IListDropdownConfig<T = any> {
   popupOffset?: IPopupPosition;
   popupStatic?: boolean;
   popupPlacement?: PopupPlacement;
+  popupFallbackPlacements?: PopupPlacement[];
   optionLimit?: number;
   optionBuilder?: ListDropdownOptionBuilder;
   observeScroll?: boolean;

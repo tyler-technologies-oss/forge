@@ -253,8 +253,9 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
     switch (evt.key) {
       case 'Escape':
-        evt.preventDefault();
         if (this._open) {
+          evt.preventDefault();
+          evt.stopPropagation();
           this._closeCalendar(true);
         }
         break;

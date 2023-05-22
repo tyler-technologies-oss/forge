@@ -1,13 +1,14 @@
 <div class="vert">
   <forge-chip-field id="demo-simple-chip-field">
-    <label slot="label" for="demo-chip-field-input">Choose state</label>
+    <label slot="label" for="demo-chip-field-input">Test label</label>
     <input type="text" id="demo-chip-field-input">
   </forge-chip-field>
 
-  <forge-autocomplete multiple id="demo-autocomplete">
+  <forge-autocomplete mode="stateless" multiple id="demo-autocomplete">
     <forge-chip-field id="demo-autocomplete-chip-field">
       <label slot="label" for="autocomplete-chip-field-input">Choose states</label>
       <input type="text" id="autocomplete-chip-field-input" aria-label="Choose states" />
+      <forge-icon slot="trailing" name="arrow_drop_down" data-forge-dropdown-icon></forge-icon>
     </forge-chip-field>
   </forge-autocomplete>
 </div>

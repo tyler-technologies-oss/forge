@@ -10,6 +10,8 @@ export interface IChipSetAdapter extends IBaseAdapter {
   setType(value: ChipType): void;
   setDense(value: boolean): void;
   setDisabled(value: boolean): void;
+  tryFocusPrevious(fromChip: EventTarget | null): void;
+  tryFocusNext(fromChip: EventTarget | null): void;
 }
 
 export class ChipSetAdapter extends BaseAdapter<IChipSetComponent> implements IChipSetAdapter {
@@ -37,6 +39,32 @@ export class ChipSetAdapter extends BaseAdapter<IChipSetComponent> implements IC
   public setDisabled(value: boolean): void {
     const chips = this._getChips();
     chips.forEach(c => c.disabled = value);
+  }
+
+  public tryFocusPrevious(fromChip: EventTarget | null): void {
+    const chips = this._getChips();
+    const activeChipIndex = chips.findIndex(chip => chip === fromChip);
+
+    if (activeChipIndex >= 0) {
+      if (activeChipIndex === 0) {
+        chips[chips.length - 1].tryFocusDelete();
+      } else {
+        chips[activeChipIndex - 1].tryFocusDelete();
+      }
+    }
+  }
+
+  public tryFocusNext(fromChip: EventTarget | null): void {
+    const chips = this._getChips();
+    const activeChipIndex = chips.findIndex(chip => chip === fromChip);
+
+    if (activeChipIndex >= 0) {
+      if (activeChipIndex === chips.length - 1) {
+        chips[0].focus();
+      } else {
+        chips[activeChipIndex + 1].focus();
+      }
+    }
   }
 
   private _getChips(): IChipComponent[] {

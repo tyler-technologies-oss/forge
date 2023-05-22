@@ -348,8 +348,7 @@ export class ListItemFoundation implements IListItemFoundation {
       if (this._ripple && !this._static && !this._rippleInstance) { // need to re-check after await
         this._rippleInstance = this._adapter.createRipple();
         if (type === 'focusin') {
-          // eslint-disable-next-line @typescript-eslint/dot-notation
-          (this._rippleInstance as ForgeRipple)['foundation'].handleFocus();
+          this._rippleInstance.handleFocus();
         }
       }
     } else if ((!this._ripple || this._static) && this._rippleInstance) {

@@ -1,9 +1,8 @@
-import { addClass, getEventPath, isDefined, isObject, isDeepEqual } from '@tylertech/forge-core';
+import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { ICON_CLASS_NAME } from '../constants';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
 import { IListComponent, LIST_CONSTANTS } from '../list/list';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/list-item';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
 import { IListDropdownCascadingElementFactoryConfig, IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownAsyncStyle, ListDropdownIconType, ListDropdownType, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
@@ -62,6 +61,10 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   popupElement.manageFocus = false;
   popupElement.static = !!config.popupStatic;
 
+  if (config.popupFallbackPlacements?.length) {
+    popupElement.fallbackPlacements = config.popupFallbackPlacements;
+  }
+
   if (config.constrainViewportWidth) {
     popupElement.setAttribute(POPUP_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
   }
@@ -98,6 +101,7 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
 export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>): void {
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
   const groups = getOptionsByGroup(options || config.options);
+  const flatOptions = getFlattenedOptions(groups);
 
   const limitOptions = config.optionLimit ? true : false;
   let optionLimit = config.optionLimit || 0;
@@ -117,7 +121,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
 
         if (typeof headerElement === 'string') {
           groupWrapper.innerHTML = headerElement;
-        } else {
+        } else if (headerElement instanceof HTMLElement) {
           groupWrapper.appendChild(headerElement);
         }
 
@@ -276,7 +280,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         optionIconElement.slot = 'trailing';
         listItemElement.appendChild(optionIconElement);
 
-        const nonDividerOptions = group.options.filter(o => !o.divider);
+        const nonDividerOptions = flatOptions.filter(o => !o.divider);
 
         // Create the nested cascading element wrapper
         const factoryConfig: IListDropdownCascadingElementFactoryConfig = {
@@ -389,4 +393,12 @@ export function isListDropdownOptionType(options: Array<IListDropdownOption | IL
   const isOptionGroups = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder')));
   const isOptionTypes = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value'));
   return (isOptionGroups && type === ListDropdownOptionType.Group) || (isOptionTypes && type === ListDropdownOptionType.Option);
+}
+
+export function getFlattenedOptions(options: Array<IListDropdownOptionGroup | IListDropdownOption>): IListDropdownOption[] {
+  if (isListDropdownOptionType(options, ListDropdownOptionType.Group)) {
+    const groups = options as IListDropdownOptionGroup[];
+    return groups.reduce((flatOpts, group) => flatOpts.concat(group.options), [] as IListDropdownOption[]);
+  }
+  return [...options as IListDropdownOption[]];
 }

@@ -404,6 +404,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
 
     if (isEscapeKey) {
       evt.preventDefault();
+      evt.stopPropagation();
       if (this._open) {
         this._closeDropdown();
         return;
@@ -428,7 +429,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
     } else if (isArrowUp || isArrowDown) {
       evt.preventDefault();
 
-      if (this._multiple && !this._open) {
+      if (!this._open) {
         this._openDropdown();
         this._adapter.activateFirstOption();
         return;
@@ -454,12 +455,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
         optionIndex = this._getNextHighlightableOptionIndex(optionIndex, this._nonDividerOptions);
       }
 
-      // If the dropdown is open then we just move the active index, otherwise we change the selection (to mimic the native <select>)
-      if (this._open) {
-        this._adapter.highlightActiveOption(optionIndex);
-      } else {
-        this._onSelect(this._nonDividerOptions[optionIndex], optionIndex);
-      }
+      this._adapter.highlightActiveOption(optionIndex);
     } else if (isHomeKey) {
       if (this._open) {
         evt.preventDefault();

@@ -867,24 +867,28 @@ describe('SelectComponent', function(this: ITestContext) {
       expect(this.context.foundation['_filterTimeout']).toBeUndefined();
     });
 
-    it('should select next item if arrow down key is pressed while popup is closed', async function(this: ITestContext) {
+    it('should open popup if arrow down key is pressed while popup is closed', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
       dispatchKeyEvent(this.context.component, 'keydown', 'ArrowDown');
       await timer();
       
-      expect(this.context.component.value).toBe(DEFAULT_OPTIONS[0].value);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+      expect(this.context.component.open).toBeTrue();
+      expect(this.context.component.value).toBeUndefined();
     });
 
-    it('should select previous item if arrow up key is pressed while popup is closed', async function(this: ITestContext) {
+    it('should open popup if arrow up key is pressed while popup is closed', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
       dispatchKeyEvent(this.context.component, 'keydown', 'ArrowUp');
       await timer();
       
-      expect(this.context.component.value).toBe(DEFAULT_OPTIONS[2].value);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+      expect(this.context.component.open).toBeTrue();
+      expect(this.context.component.value).toBeUndefined();
     });
 
     it('should not select item if arrow key is pressed while popup is closed in multiple mode', async function(this: ITestContext) {
@@ -1313,9 +1317,15 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       await tick();
+
+      function optionGroupBuilder() {
+        return '<div>Custom group header</div>';
+      }
+
       this.context.component.options = [
         {
           text: '',
+          builder: optionGroupBuilder,
           options: [
             { label: 'option-1', value: 1, disabled: true, leadingBuilder: () => document.createElement('div'), metadata: 'test-meta' } as any,
           ]
@@ -1334,12 +1344,13 @@ describe('SelectComponent', function(this: ITestContext) {
       const optionElements = this.context.component.querySelectorAll(OPTION_CONSTANTS.elementName);
 
       expect(optionGroupElements[0].label).toBe('');
+      expect(optionGroupElements[0].builder).toBe(optionGroupBuilder);
       expect(optionGroupElements[1].label).toBe('group');
 
       expect(optionElements[0].label).toBe('option-1');
       expect(optionElements[0].disabled).toBeTrue();
       expect(optionElements[0].leadingBuilder).toBeTruthy();
-      expect('metadata' in optionElements[0]).toBeFalse();
+      expect('metadata' in optionElements[0]).toBeTrue();
 
       expect(optionElements[2].label).toBe('option-3');
       expect(optionElements[2].optionClass).toEqual(['test-cls']);

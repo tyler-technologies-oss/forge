@@ -1,10 +1,6 @@
-import { getShadowElement, removeElement, deepQuerySelectorAll, getActiveElement, toggleClass } from '@tylertech/forge-core';
+import { deepQuerySelectorAll, getActiveElement, getShadowElement, removeElement, toggleClass } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
-import { CHECKBOX_CONSTANTS } from '../checkbox';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { ICON_BUTTON_CONSTANTS } from '../icon-button';
-import { RADIO_CONSTANTS } from '../radio';
-import { SWITCH_CONSTANTS } from '../switch';
 import { IDialogComponent } from './dialog';
 import { DialogPositionType, DIALOG_CONSTANTS } from './dialog-constants';
 
@@ -28,7 +24,6 @@ export interface IDialogAdapter extends IBaseAdapter {
   addRootClass(name: string): void;
   setFullscreen(value: boolean): void;
   setMoveable(value: boolean): void;
-  tryLayoutChildren(): void;
   setMoveTarget(selector: string): boolean;
   setMoveTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
   removeDragTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
@@ -154,12 +149,6 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setMoveable(value: boolean): void {
     toggleClass(this._containerElement, value, DIALOG_CONSTANTS.classes.MOVEABLE);
-  }
-
-  public tryLayoutChildren(): void {
-    const layoutChildren = [ICON_BUTTON_CONSTANTS.elementName, SWITCH_CONSTANTS.elementName, CHECKBOX_CONSTANTS.elementName, RADIO_CONSTANTS.elementName];
-    const commonLayoutElements = Array.from(this._component.querySelectorAll(layoutChildren.join(','))) as any[];
-    commonLayoutElements.filter(el => typeof el.layout === 'function').forEach(el => el.layout());
   }
 
   public setMoveTarget(selector: string): boolean {
