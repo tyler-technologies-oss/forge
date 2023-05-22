@@ -38,19 +38,16 @@ export const Default: Story<IStackProps> = ({
   stretch = false,
   alignment = "start"
 }) => (
-  <>
-    <p>Resize this container to play with wrapping and alignment</p>
-    <div style={{...stackContainer}}>
-      <ForgeStack inline={inline} wrap={wrap} gap={gap} stretch={stretch} alignment={alignment}>
-        <div style={{...box}}></div>
-        <div style={{...box}}></div>
-        <div style={{...box}}></div>
-        <div style={{...box}}></div>
-        <div style={{...box}}></div>
-        <div style={{...box}}></div>
-      </ForgeStack>
-    </div>
-  </>
+  <div style={{...stackContainer}}>
+    <ForgeStack inline={inline} wrap={wrap} gap={gap} stretch={stretch} alignment={alignment}>
+      <div style={{...box}}></div>
+      <div style={{...box}}></div>
+      <div style={{...box}}></div>
+      <div style={{...box}}></div>
+      <div style={{...box}}></div>
+      <div style={{...box}}></div>
+    </ForgeStack>
+  </div>
 );
 
 Default.args = {
