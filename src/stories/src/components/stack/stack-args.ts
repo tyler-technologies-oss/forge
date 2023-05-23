@@ -44,7 +44,7 @@ export const argTypes = {
         'end': 'End',
       },        
     },
-    description: 'Use alignment to define how the browser places space the child items along the current direction of a stack',
+    description: 'Use alignment to define how the browser places child items along the current direction of a stack',
     options: ['start', 'center', 'end'],
     table: {
       category: 'Properties'
