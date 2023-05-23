@@ -3,6 +3,7 @@ export interface IAppBarNotificationsProps {
   dot: boolean;
   showBadge: boolean;
   theme: string;
+  icon: string;
 }
 
 export const argTypes = {
@@ -22,6 +23,21 @@ export const argTypes = {
   },
   showBadge: {
     control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  icon: {
+    control: {
+      type: 'select',
+      labels: {
+        'notifications': 'Notifications (Default)',
+        'email': 'Emails',
+        'connection': 'Connections'
+      },
+    },
+    options: ['notifications', 'email', 'connection'],
     description: '',
     table: {
       category: 'Properties',

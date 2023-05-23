@@ -4,6 +4,8 @@ import { Story } from '@storybook/react';
 import { IconRegistry } from '@tylertech/forge';
 import { ForgeAppBar, ForgeAppBarNotificationButton, ForgeIcon } from '@tylertech/forge-react';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+import { tylIconEmail } from '@tylertech/tyler-icons/standard'
+import { tylIconConnection } from '@tylertech/tyler-icons/extended'
 import React, { useEffect } from 'react';
 
 const MDX = require('./app-bar-notifications.mdx').default;
@@ -22,10 +24,11 @@ export const Default: Story<IAppBarNotificationsProps> = ({
   count = 1,
   dot = true,
   showBadge = true,
-  theme = 'default'
+  theme = 'default',
+  icon = 'notifications'
 }) => {
   useEffect(() => {
-    IconRegistry.define(tylIconForgeLogo);
+    IconRegistry.define([tylIconForgeLogo, tylIconEmail, tylIconConnection]);
   }, []);
 
   if (theme === 'default') {
@@ -40,7 +43,9 @@ export const Default: Story<IAppBarNotificationsProps> = ({
         count={count}
         dot={dot}
         showBadge={showBadge}
-        theme={theme}></ForgeAppBarNotificationButton>
+        theme={theme}
+        icon={icon}
+    ></ForgeAppBarNotificationButton>
     </ForgeAppBar>
   );
 };
@@ -48,5 +53,6 @@ Default.args = {
   count: 1,
   dot: true,
   showBadge: true,
-  theme: 'default'
+  theme: 'default',
+  icon: 'notifications'
 } as IAppBarNotificationsProps;

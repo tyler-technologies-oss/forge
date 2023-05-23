@@ -49,6 +49,7 @@ export interface ITableComponent extends IBaseComponent {
   cellCreated: TableCellCreatedCallback;
   hideColumn(columnIndex: number): void;
   showColumn(columnIndex: number): void;
+  isColumnHidden(columnIndex: number): boolean;
   getSelectedRows(): any[];
   selectRowsByIndex(indexes: number | number[], preserveExisting?: boolean): void;
   deselectRowsByIndex(indexes: number | number[]): void;
@@ -204,6 +205,15 @@ export class TableComponent extends BaseComponent implements ITableComponent {
    */
   public showColumn(columnIndex: number): void {
     this._foundation.showColumn(columnIndex);
+  }
+
+  /**
+   * Determines if a column at the given index is hidden or not.
+   * @param {number} columnIndex The index of the column.
+   * @returns {boolean} `true` if the column is hidden, `false` otherwise.
+   */
+  public isColumnHidden(columnIndex: number): boolean {
+    return this._foundation.isColumnHidden(columnIndex);
   }
 
   /** Returns the selected row instances. */

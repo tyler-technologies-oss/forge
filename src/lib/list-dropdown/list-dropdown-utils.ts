@@ -1,9 +1,8 @@
-import { addClass, getEventPath, isDefined, isObject, isDeepEqual } from '@tylertech/forge-core';
+import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { ICON_CLASS_NAME } from '../constants';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
 import { IListComponent, LIST_CONSTANTS } from '../list/list';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list/list-item';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
 import { IListDropdownCascadingElementFactoryConfig, IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownAsyncStyle, ListDropdownIconType, ListDropdownType, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
@@ -56,11 +55,19 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
 }
 
 export function createPopupDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopupComponent {
-  const popupElement = document.createElement(POPUP_CONSTANTS.elementName) as IPopupComponent;
+  const popupElement = document.createElement('forge-popup');
   popupElement.targetElement = targetElement;
   popupElement.placement = config.popupPlacement || 'bottom-start';
   popupElement.manageFocus = false;
   popupElement.static = !!config.popupStatic;
+
+  if (config.popupFallbackPlacements?.length) {
+    popupElement.fallbackPlacements = config.popupFallbackPlacements;
+  }
+
+  if (config.constrainViewportWidth) {
+    popupElement.setAttribute(POPUP_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
+  }
 
   if (config.popupOffset) {
     popupElement.offset = config.popupOffset;
@@ -94,6 +101,7 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
 export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>): void {
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
   const groups = getOptionsByGroup(options || config.options);
+  const flatOptions = getFlattenedOptions(groups);
 
   const limitOptions = config.optionLimit ? true : false;
   let optionLimit = config.optionLimit || 0;
@@ -110,7 +118,13 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         const groupWrapper = document.createElement('div');
         groupWrapper.classList.add(LIST_DROPDOWN_CONSTANTS.classes.GROUP_WRAPPER);
         optionParent = groupWrapper;
-        groupWrapper.appendChild(headerElement);
+
+        if (typeof headerElement === 'string') {
+          groupWrapper.innerHTML = headerElement;
+        } else if (headerElement instanceof HTMLElement) {
+          groupWrapper.appendChild(headerElement);
+        }
+
         listElement.appendChild(groupWrapper);
       }
     } else if (group.text) {
@@ -151,11 +165,15 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       
       // Create and configure the list element
       const isSelected = config.selectedValues ? config.selectedValues.some(v => isDeepEqual(v, option.value)) : false;
-      let listItemElement = document.createElement(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
+      let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
       listItemElement.id = `list-dropdown-option-${config.id}-${optionIndex}`;
       listItemElement.style.cursor = 'pointer';
 
+      if (config.wrapOptionText) {
+        listItemElement.wrap = true;
+      }
+      
       // Add any CSS classes to the option list-item
       if (option.optionClass && (typeof option.optionClass === 'string' || Array.isArray(option.optionClass) && option.optionClass.length)) {
         addClass(option.optionClass, listItemElement);
@@ -199,6 +217,20 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         }
       }
 
+      // If multiple selections are enabled then we need to create and append a leading checkbox element
+      if (config.multiple) {
+        const checkboxElement = createCheckboxElement(isSelected);
+        listItemElement.appendChild(checkboxElement);
+        listItemElement.setAttribute('aria-selected', `${isSelected}`);
+        listItemElement.setAttribute('aria-checked', `${isSelected}`);
+      }
+
+      if (option.elementAttributes) {
+        option.elementAttributes.forEach((value: string, key: string) => {
+          listItemElement.setAttribute(key, value);
+        });
+      }
+
       // Leading element/icon
       if (option.leadingBuilder) {
         const element = option.leadingBuilder();
@@ -240,20 +272,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       }
       listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
 
-      // If multiple selections are enabled then we need to create and append a leading checkbox element
-      if (config.multiple) {
-        const checkboxElement = createCheckboxElement(isSelected);
-        listItemElement.appendChild(checkboxElement);
-        listItemElement.setAttribute('aria-selected', `${isSelected}`);
-        listItemElement.setAttribute('aria-checked', `${isSelected}`);
-      }
-
-      if (option.elementAttributes) {
-        option.elementAttributes.forEach((value: string, key: string) => {
-          listItemElement.setAttribute(key, value);
-        });
-      }
-
       // If we have any child options, we need to render a child menu for this list item
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
         // Create the trailing indicator icon to show that a child menu exists for this option. 
@@ -262,7 +280,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         optionIconElement.slot = 'trailing';
         listItemElement.appendChild(optionIconElement);
 
-        const nonDividerOptions = group.options.filter(o => !o.divider);
+        const nonDividerOptions = flatOptions.filter(o => !o.divider);
 
         // Create the nested cascading element wrapper
         const factoryConfig: IListDropdownCascadingElementFactoryConfig = {
@@ -375,4 +393,12 @@ export function isListDropdownOptionType(options: Array<IListDropdownOption | IL
   const isOptionGroups = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder')));
   const isOptionTypes = options.some((o: IListDropdownOption | IListDropdownOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value'));
   return (isOptionGroups && type === ListDropdownOptionType.Group) || (isOptionTypes && type === ListDropdownOptionType.Option);
+}
+
+export function getFlattenedOptions(options: Array<IListDropdownOptionGroup | IListDropdownOption>): IListDropdownOption[] {
+  if (isListDropdownOptionType(options, ListDropdownOptionType.Group)) {
+    const groups = options as IListDropdownOptionGroup[];
+    return groups.reduce((flatOpts, group) => flatOpts.concat(group.options), [] as IListDropdownOption[]);
+  }
+  return [...options as IListDropdownOption[]];
 }

@@ -73,6 +73,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   
   // Internal state vars
   private _isInitialized = false;
+  private _dropdownConfig: IListDropdownConfig<ITimePickerOptionValue> | undefined;
 
   // Listeners
   private _inputListener: (evt: Event) => void;
@@ -181,6 +182,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       case 'Escape':
         if (this._open) {
           evt.preventDefault();
+          evt.stopPropagation();
           this._closeDropdown(true);
         }
         break;
@@ -190,29 +192,41 @@ export class TimePickerFoundation implements ITimePickerFoundation {
           evt.preventDefault();
           if (!this._open) {
             this._openDropdown();
-            this._adapter.activateFirstOption();
+            if (typeof this._dropdownConfig?.visibleStartIndex === 'number' && this._dropdownConfig.visibleStartIndex >= 0) {
+              this._adapter.activateOptionByIndex(this._dropdownConfig?.visibleStartIndex);
+            } else {
+              this._adapter.activateFirstOption();
+            }
             // TODO: Should we cycle the hours, minutes, seconds, or meridiem where the cursor is instead of opening the dropdown?
           } else {
-            this._adapter.propagateKey(evt.code);
+            if (!this._adapter.hasActiveOption()) {
+              this._trySetActiveOption();
+            } else {
+              this._adapter.propagateKey(evt.code);
+            }
           }
         }
         break;
-      case 'Up':
       case 'ArrowUp':
         if (this._allowDropdown) {
           evt.preventDefault();
           if (this._open) {
-            this._adapter.propagateKey(evt.code);
+            if (!this._adapter.hasActiveOption()) {
+              this._trySetActiveOption();
+            } else {
+              this._adapter.propagateKey(evt.code);
+            }
           } else {
             // TODO: cycle the hours, minutes, seconds, or meridiem where the cursor is
           }
         }
         break;
       case 'Enter':
+      case 'NumpadEnter':
       case 'Home':
       case 'End':
         if (this._open) {
-          if (evt.code === 'Enter') {
+          if (evt.code === 'Enter' || evt.code === 'NumpadEnter') {
             evt.stopPropagation();
           }
           evt.preventDefault();
@@ -231,6 +245,12 @@ export class TimePickerFoundation implements ITimePickerFoundation {
           }
         }
         break;
+    }
+  }
+
+  private _trySetActiveOption(): void {
+    if (!this._adapter.hasActiveOption() && typeof this._dropdownConfig?.visibleStartIndex === 'number' && this._dropdownConfig.visibleStartIndex >= 0) {
+      this._adapter.activateOptionByIndex(this._dropdownConfig?.visibleStartIndex);
     }
   }
 
@@ -407,10 +427,8 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     // Convert our milliseconds to a 24-hour time string to use as our normalized value
     const timeString = millisToTimeString(millis, true, this._allowSeconds);
 
-    // If we are using an input mask, we need to dispatch our custom input event to let consumers know input happened (before our change event)
-    if (this._masked) {
-      this._adapter.emitInputEvent(TIME_PICKER_CONSTANTS.events.INPUT, timeString);
-    }
+    // Dispatch our custom input event to let consumers know raw input occurred (before our change event)
+    this._adapter.emitInputEvent(TIME_PICKER_CONSTANTS.events.INPUT, timeString);
 
     // Only emit our change event if the value is different
     if (this._value !== millis) {
@@ -543,7 +561,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     
     const selectableOptions = options.filter(o => !o.divider && !o.disabled);
     let selectedValues: ITimePickerOptionValue[] = [];
-    let activeStartIndex: number | undefined;
+    let visibleStartIndex = 0;
     
     // Find closest match in list of time options and activate/select it
     if (options.length) {
@@ -554,22 +572,25 @@ export class TimePickerFoundation implements ITimePickerFoundation {
           if (isExactMatch) {
             selectedValues = [selectableOptions[optionIndex].value];
           } else {
-            activeStartIndex = optionIndex;
+            visibleStartIndex = optionIndex;
           }
         }
       } else if (typeof this._startTime === 'number') {
         const optionIndex = this._findClosestOptionIndex(this._startTime, selectableOptions);
         if (optionIndex >= 0 && optionIndex < selectableOptions.length) {
-          activeStartIndex = optionIndex;
+          visibleStartIndex = optionIndex;
         }
+      } else if (this._startTime == null) {
+        // If we don't have a start time set then let's scroll the closest time to current time into view
+        visibleStartIndex = this._getOptionIndexClosestCurrent(selectableOptions);
       }
     }
 
-    const config: IListDropdownConfig<ITimePickerOptionValue> = {
+    this._dropdownConfig = {
       id: `forge-time-picker-${this._identifier}`,
       selectedValues,
       syncWidth: true,
-      activeStartIndex,
+      visibleStartIndex,
       popupClasses: this._popupClasses,
       popupStatic: true,
       type: ListDropdownType.Standard,
@@ -579,17 +600,25 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       activeChangeCallback: id => this._adapter.setActiveDescendant(id),
       targetWidthCallback: () => this._adapter.getTargetElementWidth(this._popupTarget)
     };
-    this._adapter.attachDropdown(config);
+    this._adapter.attachDropdown(this._dropdownConfig);
     this._adapter.emitHostEvent(TIME_PICKER_CONSTANTS.events.OPEN, undefined, false);
   }
 
   private _closeDropdown(emitCloseEvent = false): void {
     this._open = false;
+    this._dropdownConfig = undefined;
     this._adapter.removeHostAttribute(TIME_PICKER_CONSTANTS.attributes.OPEN);
     this._adapter.detachDropdown();
     if (emitCloseEvent) {
       this._adapter.emitHostEvent(TIME_PICKER_CONSTANTS.events.CLOSE, true, false);
     }
+  }
+
+  private _getOptionIndexClosestCurrent(options: IListDropdownOption<ITimePickerOptionValue>[]): number {
+    const date = new Date();
+    const currentTimeString = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    const currentTimeMillis = timeStringToMillis(currentTimeString, true, false) as number;
+    return this._findClosestOptionIndex(currentTimeMillis, options);
   }
 
   private _findClosestOptionIndex(value: number, options: Array<IListDropdownOption<ITimePickerOptionValue>>): number {
@@ -611,6 +640,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     
     if (inputValue !== formattedValue) {
       this._adapter.setInputValue(formattedValue, emitEvents);
+      this._adapter.emitInputEvent(TIME_PICKER_CONSTANTS.events.INPUT, formattedValue);
     }
   }
 

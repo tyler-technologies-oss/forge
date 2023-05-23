@@ -1,16 +1,15 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, ensureChild, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
+import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { DividerComponent } from '../divider';
 import { IconComponent, IconRegistry } from '../icon';
 import { LinearProgressComponent } from '../linear-progress';
 import { ListComponent, ListItemComponent } from '../list';
 import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware';
 import { PopupComponent } from '../popup';
-import { IOption } from '../select';
 import { SkeletonComponent } from '../skeleton';
 import { TextFieldComponent } from '../text-field';
 import { AutocompleteAdapter } from './autocomplete-adapter';
-import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
+import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
 import { AutocompleteFoundation } from './autocomplete-foundation';
 
 import template from './autocomplete.html';
@@ -25,6 +24,7 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   allowUnmatched: boolean;
   matchKey: string | null | undefined;
   popupTarget: string;
+  filterText: string;
   filter: AutocompleteFilterCallback | null | undefined;
   optionBuilder: AutocompleteOptionBuilder | null | undefined;
   selectedTextBuilder: AutocompleteSelectedTextBuilder;
@@ -32,7 +32,7 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
   isInitialized: boolean;
   open: boolean;
-  appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;
+  appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   openDropdown(): void;
   closeDropdown(): void;
 }
@@ -82,7 +82,8 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       AUTOCOMPLETE_CONSTANTS.attributes.OPTION_LIMIT,
       AUTOCOMPLETE_CONSTANTS.attributes.SYNC_POPUP_WIDTH,
       AUTOCOMPLETE_CONSTANTS.attributes.OPEN,
-      AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY
+      AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY,
+      AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT
     ];
   }
 
@@ -90,7 +91,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   constructor() {
     super();
-    IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
+    IconRegistry.define([tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
     attachShadowTemplate(this, template, styles);
     this._foundation = new AutocompleteFoundation(new AutocompleteAdapter(this));
   }
@@ -134,6 +135,9 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       case AUTOCOMPLETE_CONSTANTS.attributes.MATCH_KEY:
         this.matchKey = newValue;
         break;
+      case AUTOCOMPLETE_CONSTANTS.attributes.FILTER_TEXT:
+        this.filterText = newValue;
+        break;
     }
   }
 
@@ -164,6 +168,14 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   /** Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element. */
   @FoundationProperty()
   public declare popupTarget: string;
+
+  /**
+   * Gets/sets the filter text.
+   * 
+   * Setting the filter text only applies when allowUnmatched is enabled.
+   */
+  @FoundationProperty()
+  public declare filterText: string;
 
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
   @FoundationProperty()
@@ -198,7 +210,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   public declare beforeValueChange: (value: any) => boolean | Promise<boolean>;
 
   /** Adds options to the dropdown while it is open. Has no effect if the dropdown is closed.  */
-  public appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {
+  public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
     this._foundation.appendOptions(options);
   }
 

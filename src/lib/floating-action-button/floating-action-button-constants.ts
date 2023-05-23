@@ -3,7 +3,7 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}fab`;
 
 const selectors = {
-  BUTTON: 'button',
+  BUTTON: 'button, a',
   ICON: 'i,forge-icon,img,svg',
   LABEL: 'span'
 };

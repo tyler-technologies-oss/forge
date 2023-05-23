@@ -18,6 +18,7 @@ export interface IMenuAdapter extends IBaseAdapter {
   getActiveOptionIndex(): number;
   setActiveOption(index: number): void;
   activateFirstOption(): void;
+  setCascadeTargetInactive(): void;
   propagateKey(key: string): void;
   proxyKeyboardEventToChild(evt: KeyboardEvent, id: string): void;
   toggleChildMenu(index: number, open?: boolean): void;
@@ -120,6 +121,13 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
     this._listDropdown?.activateFirstOption();
   }
 
+  public setCascadeTargetInactive(): void {
+    const listItem = this._targetElement as IListItemComponent;
+    if (listItem?.active) {
+      listItem.active = false;
+    }
+  }
+
   public getActiveOptionIndex(): number {
     return this._listDropdown?.getActiveOptionIndex() ?? -1;
   }
@@ -183,6 +191,7 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
       } else {
         childMenu.open = open;
       }
+      childMenu.activateFirstOption();
     }
   }
 

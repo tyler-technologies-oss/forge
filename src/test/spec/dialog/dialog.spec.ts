@@ -54,9 +54,9 @@ describe('DialogComponent', function(this: ITestContext) {
     this.context.component.escapeClose = false;
     await this.context.open();
 
-    expect(this.context.component.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN)).withContext('Expected open attribute to be "true"').toBeTrue();
-    expect(this.context.component.getAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE)).withContext('Expected backdrop close attribute to be "false"').toBe('false');
-    expect(this.context.component.getAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE)).withContext('Expected escape close attribute to be "false"').toBe('false');
+    expect(this.context.component.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN)).toBeTrue();
+    expect(this.context.component.hasAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE)).toBeFalse();
+    expect(this.context.component.hasAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE)).toBeFalse();
   });
 
   it('should add attribute to body when opened', async function(this: ITestContext) {
@@ -485,7 +485,7 @@ describe('DialogComponent', function(this: ITestContext) {
     const mousedownSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseDown').and.callThrough();
     const mousemoveSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseMove').and.callThrough();
     const mouseupSpy = spyOn(this.context.component['_foundation'], '_onMoveTargetMouseUp').and.callThrough();
-    moveTarget.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100 } as any));
+    moveTarget.dispatchEvent(new MouseEvent('mousedown', { pageX: 100, pageY: 100 } as any));
     document.dispatchEvent(new MouseEvent('mousemove', { pageX: 150, pageY: 150 } as any));
     document.dispatchEvent(new MouseEvent('mouseup'));
     

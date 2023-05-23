@@ -124,13 +124,13 @@ describe('TooltipComponent', function(this: ITestContext) {
       this.context.attach();
       await tick();
 
-      const tooltipElement = await this.context.open();
+      this.context.component.open = true;
+      await timer(TOOLTIP_CONSTANTS.numbers.DEFAULT_DELAY);
       await tick();
-      await timer();
       
       expect(this.context.component.target).toBe(targetSelector);
-      expect(tooltipElement).toBeTruthy();
-      expect(tooltipElement.textContent).toBe(this.context.component.text);
+      expect(this.context.component.tooltipElement).toBeTruthy();
+      expect(this.context.component.tooltipElement?.textContent).toBe(this.context.component.text);
     });
 
     it('should throw when unable to find target element', async function(this: ITestContext) {

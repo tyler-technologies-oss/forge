@@ -1,0 +1,43 @@
+@use './mixins';
+@include mixins.core-styles;
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+:host([inline]) {
+  height: auto;
+  
+  .forge-stack {
+    @include mixins.inline;
+  }
+}
+
+:host([inline][wrap]) {
+  .forge-stack {
+    @include mixins.wrap;
+  }
+}
+
+:host([stretch]) {
+  --forge-stack-stretch: 1;
+}
+
+:host([alignment=start]) {
+  .forge-stack {
+    @include mixins.justify-start;
+  }
+}
+
+:host([alignment=center]) {
+  .forge-stack {
+    @include mixins.justify-center;
+  }
+}
+
+:host([alignment=end]) {
+  .forge-stack {
+    @include mixins.justify-end;
+  }
+}

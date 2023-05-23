@@ -60,7 +60,7 @@
 }
 
 // Outline
-@mixin outline-core($custom-prop-text-field-background) {
+@mixin outline-core($custom-prop-text-field-background, $custom-prop-border-style) {
   display: flex;
   position: absolute;
   top: 0;
@@ -72,7 +72,7 @@
   max-width: 100%;
   height: 100%;
   pointer-events: none;
-  border-style: solid;
+  @include theme.css-custom-property(border-style, $custom-prop-border-style, solid);
   border-width: map.get(variables.$outline, border-width, default);
   transition: mdc-animation.enter(border-color, 200ms);
   @include theme.css-custom-property(

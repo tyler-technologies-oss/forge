@@ -6,8 +6,7 @@
   @include mdc-theme.property(background-color, surface);
   @include theme.css-custom-property(min-height, --forge-toolbar-min-height, variables.$min-height);
   @include theme.css-custom-property(height, --forge-toolbar-height, variables.$height);
-  @include theme.css-custom-property(padding-left, --forge-toolbar-padding, variables.$padding);
-  @include theme.css-custom-property(padding-right, --forge-toolbar-padding, variables.$padding);
+  @include theme.css-custom-property(padding-inline, --forge-toolbar-padding, variables.$padding);
   @include theme.css-custom-property(border-bottom, --forge-toolbar-border-bottom, variables.$border-bottom);
   @include theme.css-custom-property(border-top-left-radius, --forge-toolbar-border-top-left-radius, 0);
   @include theme.css-custom-property(border-top-right-radius, --forge-toolbar-border-top-right-radius, 0);

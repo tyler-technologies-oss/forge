@@ -22,6 +22,7 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
   dot: boolean;
   showBadge: boolean;
   theme: string;
+  icon: string;
 }
 /**
  * The web component class behind the `<forge-app-bar-notification-button>` custom element.
@@ -43,7 +44,8 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT,
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT,
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.THEME,
-      APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE
+      APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE,
+      APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON
     ];
   }
 
@@ -74,6 +76,9 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
       case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.THEME:
         this.theme = newValue;
         break;
+      case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON:
+        this.icon = newValue;
+        break;
       case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE:
         this.showBadge = coerceBoolean(newValue);
         break;
@@ -88,6 +93,9 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
 
   @FoundationProperty()
   public declare theme: string;
+
+  @FoundationProperty()
+  public declare icon: string;
 
   @FoundationProperty()
   public declare showBadge: boolean;

@@ -18,5 +18,5 @@
       "@tylertech/forge/*": ["lib/*"]
     }
   },
-  "exclude": ["demo", "stories"]
+  "exclude": ["dev", "stories"]
 }

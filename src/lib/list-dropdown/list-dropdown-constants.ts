@@ -6,6 +6,8 @@ const attributes = {
   OBSERVE_SCROLL: 'observe-scroll',
   OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold',
   SYNC_POPUP_WIDTH: 'sync-popup-width',
+  CONSTRAIN_POPUP_WIDTH: 'constrain-popup-width',
+  WRAP_OPTION_TEXT: 'wrap-option-text',
 
   // Internal
   CHECKBOX_ELEMENT: 'data-list-dropdown-checkbox',
@@ -24,7 +26,7 @@ export const LIST_DROPDOWN_CONSTANTS = {
 export type ListDropdownOptionBuilder<T = HTMLElement> = (option: IListDropdownOption, parentElement: T) => HTMLElement | string | void;
 export type ListDropdownHeaderBuilder = () => HTMLElement;
 export type ListDropdownFooterBuilder = () => HTMLElement;
-export type ListDropdownOptionGroupBuilder = (option: IListDropdownOptionGroup) => HTMLElement;
+export type ListDropdownOptionGroupBuilder<T = any> = (option: IListDropdownOptionGroup<T>) => HTMLElement | string;
 export type ListDropdownTransformCallback = (label: string) =>  string | HTMLElement;
 export type ListDropdownIconType = 'font' | 'component';
 
@@ -49,10 +51,11 @@ export interface IListDropdownOption<T = any> extends IBaseListDropdownOption<T>
   elementAttributes?: Map<string, string>;
 }
 
-export interface IListDropdownOptionGroup {
-  options: IListDropdownOption[];
+export interface IListDropdownOptionGroup<T = any, K = any> {
   text?: string;
+  value?: K;
   builder?: ListDropdownOptionGroupBuilder;
+  options: IListDropdownOption<T>[];
 }
 
 export interface IListDropdownSelectEventData {
@@ -68,9 +71,12 @@ export interface IListDropdownConfig<T = any> {
   activeChangeCallback?: (id: string) => void;
   closeCallback?: () => void;
   syncWidth?: boolean;
+  constrainViewportWidth?: boolean;
+  wrapOptionText?: boolean;
   selectedValues?: T[];
   multiple?: boolean;
   activeStartIndex?: number;
+  visibleStartIndex?: number;
   transform?: ListDropdownTransformCallback;
   allowBusy?: boolean;
   asyncStyle?: ListDropdownAsyncStyle;
@@ -81,6 +87,7 @@ export interface IListDropdownConfig<T = any> {
   popupOffset?: IPopupPosition;
   popupStatic?: boolean;
   popupPlacement?: PopupPlacement;
+  popupFallbackPlacements?: PopupPlacement[];
   optionLimit?: number;
   optionBuilder?: ListDropdownOptionBuilder;
   observeScroll?: boolean;

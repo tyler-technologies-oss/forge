@@ -1,8 +1,7 @@
 import { getShadowElement, deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IOption } from '../select';
 import { IAutocompleteComponent } from './autocomplete';
-import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOptionGroup } from './autocomplete-constants';
+import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
 import { TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
 import { CHIP_FIELD_CONSTANTS } from '../chip-field';
@@ -13,15 +12,16 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   setInputAttribute(name: string, value: string): void;
   addInputListener(type: string, listener: (evt: Event) => void): void;
   removeInputListener(type: string, listener: (evt: Event) => void): void;
-  intializeInputAccessibility(identifier: string): void;
+  initializeInputAccessibility(identifier: string): void;
   isWrappingChipField(): boolean;
   show(config: IListDropdownConfig, popupTarget: string): void;
   hide(listener: () => void): void;
   focus(): void;
-  setOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;
-  appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void;
+  setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
+  appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   setSelectedText(value: string): void;
   getInputValue(): string;
+  setInputValue(value: string): void;
   selectInputValue(): void;
   setDismissListener(listener: () => void): void;
   toggleOptionMultiple(index: number, selected: boolean): void;
@@ -42,7 +42,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   setBusyVisibility(busy: boolean): void;
   getActiveOptionIndex(): number | null;
   clearActiveOption(): void;
-  setSelectedOptions(options: IOption[]): void;
+  setSelectedOptions(options: IAutocompleteOption[]): void;
   queueDropdownPositionUpdate(): void;
 }
 
@@ -79,7 +79,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._inputElement.removeEventListener(type, listener);
   }
 
-  public intializeInputAccessibility(identifier: string): void {
+  public initializeInputAccessibility(identifier: string): void {
     this._inputElement.setAttribute('autocomplete', 'off');
     this._inputElement.setAttribute('role', 'combobox');
     this._inputElement.setAttribute('aria-live', 'polite');
@@ -143,11 +143,11 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     window.requestAnimationFrame(() => this._inputElement.focus());
   }
 
-  public setOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {
+  public setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
     this._listDropdown?.setOptions(options);
   }
 
-  public appendOptions(options: IOption[] | IAutocompleteOptionGroup[]): void {
+  public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
     this._listDropdown?.appendOptions(options);
   }
 
@@ -157,6 +157,10 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
 
   public getInputValue(): string {
     return this._inputElement.value;
+  }
+
+  public setInputValue(value: string): void {
+    this._inputElement.value = value;
   }
 
   public selectInputValue(): void {
@@ -253,7 +257,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._listDropdown?.clearActiveOption();
   }
 
-  public setSelectedOptions(options: IOption[]): void {
+  public setSelectedOptions(options: IAutocompleteOption[]): void {
     if (this._listDropdown) {
       const values = options.map(o => o.value);
       this._listDropdown.setSelectedValues(values);

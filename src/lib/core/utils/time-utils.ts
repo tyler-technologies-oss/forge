@@ -1,6 +1,7 @@
 export const TWENTY_FOUR_HOUR_TIME_REGEX = /^(0?[0-9]|1\d|2[0-3]):([0-5]\d)(:([0-5]\d))?$/;
 export const TWELVE_HOUR_TIME_REGEX = /^(0?[1-9]|1[0-2]):([0-5]\d)(:([0-5]\d))?\s*([AaPp][Mm])?$/;
-export const PARSEABLE_TIME_FORMAT = /^(\d\d?):?(\d\d?)(:?(\d?\d?))?\s*([AaPp][Mm]?)?$/;
+export const PARSEABLE_TIME_FORMAT = /^(\d?\d?):?(\d?\d?)(:?(\d?\d?))?\s*([AaPp][Mm]?)?$/;
+export const HAS_MERIDIEM_REGEX = /[AaPp][Mm]?/;
 
 export function tokenize24HourTimeString(value: string): { hours: string; minutes: string; seconds: string } {
   const matches = value.match(TWENTY_FOUR_HOUR_TIME_REGEX) as RegExpMatchArray || [null, 0, 0, null, 0];
@@ -26,7 +27,7 @@ export function isSupportedTimeFormat(value: string): boolean {
 
 export function tryCoerceTimeString(str: string, use24HourTime: boolean, allowSeconds: boolean): string {
   str = str && typeof str === 'string' ? str.replace(/_|\s/g, '') : '';
-  if (/^\s*$/.test(str)) {
+  if (/^\s*$/.test(str) || /^:+$/.test(str)) {
     return '';
   }
 
@@ -40,10 +41,28 @@ export function tryCoerceTimeString(str: string, use24HourTime: boolean, allowSe
   let secondsStr = matches[4];
   let meridiem = matches[5];
 
+  // Special case detection for meridiem
+  const meridiemMatches = str.match(HAS_MERIDIEM_REGEX);
+  if (meridiemMatches) {
+    meridiem = meridiemMatches[0];
+    str = str.replace(meridiem, ''); // Remove the meridiem from the input string our next special case
+
+    // We allow for entering an "a" or "p" shorthand so let's coerce it to the proper value
+    if (meridiem.length === 1) {
+      meridiem += 'm';
+    }
+  }
+
+  // Special case handling for 3-digit "shorthand" time values (ex. "130" => "1:30 AM")
+  if (str.length === 3 && !str.includes(':')) {
+    hoursStr = str[0];
+    minutesStr = str.substring(1);
+  }
+
   // Normalize the meridiem string
   if (use24HourTime) {
     meridiem = '';
-  } else if (/[AaPp][Mm]/.test(meridiem)) {
+  } else if (HAS_MERIDIEM_REGEX.test(meridiem)) {
     meridiem = meridiem.toUpperCase();
   } else {
     if (/^[AaPp]/.test(meridiem)) {
@@ -67,6 +86,8 @@ export function tryCoerceTimeString(str: string, use24HourTime: boolean, allowSe
   } else if (hoursNum < 0) {
     hoursStr = '00';
   }
+
+  hoursStr = hoursStr.padStart(2, '0');
 
   // Clamp and normalize minutes
   if (minutesStr !== undefined) {
