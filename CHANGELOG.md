@@ -1,3 +1,24 @@
+# v2.15.0 (Tue May 23 2023)
+
+#### 🚀 Enhancement
+
+- feat(app-bar-profile-button): added new `avatarIcon` property to allow for rendering an icon from the `IconRegistry` instead of text [#312](https://github.com/tyler-technologies-oss/forge/pull/312) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- Feat/stack component documentation [#311](https://github.com/tyler-technologies-oss/forge/pull/311) ([@nickonometry](https://github.com/nickonometry))
+
+#### ⚠️ Pushed to `main`
+
+- chore: fixup changelog ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v2.14.0 (Tue May 16 2023)
 
 #### 🚀 Enhancement
