@@ -86,6 +86,12 @@ profileButton.profileCardBuilder = () => {
 
 </PropertyDef>
 
+<PropertyDef name="avatarIcon" type="string" defaultValue="undefined">
+
+  Sets the icon name to render using a `<forge-icon>` element instead of text. You must register the icon in the `IconRegistry` to use this.
+
+</PropertyDef>
+
 <PropertyDef name="signOutButton" type="boolean" defaultValue="true">
 
   Gets/sets the visibility of the "Sign out" button.
@@ -164,22 +170,6 @@ profileButton.profileCardBuilder = () => {
 <PageSection>
 
 ## Types
-
-### IProfileCardConfig
-
-```ts
-interface IAppBarProfileCardConfig {
-  fullName: string;
-  email: string;
-  signOut: boolean;
-  profile: boolean;
-  signOutButtonText: string;
-  profileButtonText: string;
-  avatarText: string;
-  avatarImageUrl: string;
-  avatarLetterCount: number;
-}
-```
 
 ### AppBarProfileButtonProfileCardBuilder
 

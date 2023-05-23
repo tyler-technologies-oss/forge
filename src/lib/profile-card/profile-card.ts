@@ -18,6 +18,7 @@ export interface IProfileCardComponent extends IBaseComponent {
   signOutText: string;
   profileText: string;
   avatarText: string;
+  avatarIcon: string;
   avatarImageUrl: string;
   avatarLetterCount: number;
 }
@@ -56,6 +57,7 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
       PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT,
       PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT,
+      PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL,
       PROFILE_CARD_CONSTANTS.attributes.AVATAR_LETTER_COUNT
     ];
@@ -96,6 +98,9 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
       case PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT:
         this.avatarText = newValue;
         break;
+      case PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON:
+        this.avatarIcon = newValue;
+        break;
       case PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL:
         this.avatarImageUrl = newValue;
         break;
@@ -125,6 +130,9 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
 
   @FoundationProperty()
   public declare avatarText: string;
+
+  @FoundationProperty()
+  public declare avatarIcon: string;
 
   @FoundationProperty()
   public declare avatarImageUrl: string;
