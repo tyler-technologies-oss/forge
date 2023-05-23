@@ -775,7 +775,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(activeListItemIndex).toBe(expectedSelectedIndex);
     });
 
-    it('should activate first option when filtering', async function(this: ITestContext) {
+    it('should not activate first option when filtering', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
       this.context.input.focus();
@@ -789,7 +789,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
 
       const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
-      expect(activeListItemIndex).toBe(0);
+      expect(activeListItemIndex).toBe(-1);
     });
 
     it('should not activate first option when clearing filter text', async function(this: ITestContext) {
