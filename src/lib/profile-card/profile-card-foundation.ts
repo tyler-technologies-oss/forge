@@ -9,6 +9,7 @@ export interface IProfileCardFoundation extends ICustomElementFoundation {
   signOut: boolean;
   profile: boolean;
   avatarText: string;
+  avatarIcon: string;
   avatarImageUrl: string;
   avatarLetterCount: number;
 }
@@ -17,6 +18,7 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   private _fullName: string;
   private _email: string;
   private _avatarText: string;
+  private _avatarIcon: string;
   private _avatarImageUrl: string;
   private _avatarLetterCount: number;
   private _showSignOutButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_SIGN_OUT_BUTTON;
@@ -96,6 +98,16 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     if (this._avatarText !== value) {
       this._avatarText = value;
       this._adapter.setAvatarText(this._avatarText);
+    }
+  }
+
+  public get avatarIcon(): string {
+    return this._avatarIcon;
+  }
+  public set avatarIcon(value: string) {
+    if (this._avatarIcon !== value) {
+      this._avatarIcon = value;
+      this._adapter.setAvatarIcon(this._avatarIcon);
     }
   }
 
