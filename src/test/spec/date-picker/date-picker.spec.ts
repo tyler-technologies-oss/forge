@@ -175,7 +175,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
     });
   });
 
-  fdescribe('with static HTML', function(this: ITestContext) {
+  describe('with static HTML', function(this: ITestContext) {
     afterEach(function(this: ITestContext) {
       const popup = getPopup(this.context.component);
       if (popup) {
@@ -1342,7 +1342,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.value).toBeNull();
     });
 
-    it('should update value properly when backspacing when focused', function(this: ITestContext) {
+    it('should update value and mask properly when backspacing after focused', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = new Date('01/01/2021');
       this.context.component.masked = true;
@@ -1350,9 +1350,36 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const inputElement = getInputElement(this.context.component);
       inputElement.focus();
-      inputElement.value = inputElement.value.slice(0,-1);
+      inputElement.value = inputElement.value.slice(0, -1);
       inputElement.dispatchEvent(new KeyboardEvent('input'));
+
       expect(inputElement.value).toEqual('01/01/202_');
+    });
+
+    it('should update value and mask properly when backspacing after blur', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date('01/01/2021');
+      this.context.component.masked = true;
+      this.context.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
+      inputElement.value = inputElement.value.slice(0, -1);
+      inputElement.dispatchEvent(new KeyboardEvent('input'));
+      inputElement.blur();
+
+      expect(inputElement.value).toEqual('01/01/0202');
+    });
+
+    it('should clear mask format if the input is cleared programmatically', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date();
+      this.context.component.masked = true;
+      this.context.component.showMaskFormat = true;
+
+      getInputElement(this.context.component).value = '';
+
+      expect(this.context.component.value).toBeNull();
     });
 
     it('should set year range via attribute', function(this: ITestContext) {
