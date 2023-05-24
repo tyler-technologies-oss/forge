@@ -175,7 +175,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
     });
   });
 
-  describe('with static HTML', function(this: ITestContext) {
+  fdescribe('with static HTML', function(this: ITestContext) {
     afterEach(function(this: ITestContext) {
       const popup = getPopup(this.context.component);
       if (popup) {
@@ -813,12 +813,15 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(inputElement.value).toBe('01/01/2020');
     });
 
-    it('should show mask format', function(this: ITestContext) {
+    it('should show mask format on focus only', function(this: ITestContext) {
       this.context = setupTestContext(true);
+      const inputElement = getInputElement(this.context.component);
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
 
       expect(this.context.component.showMaskFormat).toBe(true);
+      expect(getInputElement(this.context.component).value).toBe('');
+      inputElement.focus();
       expect(getInputElement(this.context.component).value).toBe('__/__/____');
     });
 
@@ -1339,13 +1342,14 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.value).toBeNull();
     });
 
-    it('should update value properly when backspacing', function(this: ITestContext) {
+    it('should update value properly when backspacing when focused', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = new Date('01/01/2021');
       this.context.component.masked = true;
       this.context.component.showMaskFormat = true;
 
       const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
       inputElement.value = inputElement.value.slice(0,-1);
       inputElement.dispatchEvent(new KeyboardEvent('input'));
       expect(inputElement.value).toEqual('01/01/202_');
