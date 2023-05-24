@@ -179,6 +179,38 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     if (this._open && !this._adapter.isInputFocused()) {
       this._closeCalendar(true);
     }
+    // Mock Dates
+    const nowDate = new Date() as any;
+    const nowString = new Date().toISOString() as any;
+    const nowUnformatted = '05242023' as any;
+
+    console.log('_onInputBlur > Check Initial Values...');
+    console.log('_onInputBlur > this: ', this);
+    console.log('_onInputBlur > this.value: ', this.value);
+    console.log('_onInputBlur > [1] Mock Date Object...');
+    this.value = nowDate;
+    this._formatInputValue();
+    console.log('_onInputBlur > mock now: ', nowDate);
+    console.log('_onInputBlur > this: ', this);
+    console.log('_onInputBlur > this.value: ', this.value);
+    console.log('_onInputBlur > reset data...');
+    this.value = null;
+    console.log('_onInputBlur > this.value: ', this.value);
+    console.log('_onInputBlur > [2] Mock Date Object to ISO String...');
+    this.value = nowString;
+    this._formatInputValue();
+    console.log('_onInputBlur > this.value: ', this.value);
+    console.log('_onInputBlur > mock now: ', nowString);
+    console.log('_onInputBlur > this: ', this);
+    console.log('_onInputBlur > reset data...');
+    this.value = null;
+    console.log('_onInputBlur > this.value: ', this.value);
+    console.log('_onInputBlur > [3] Mock Date unformatted String...');
+    this.value = nowUnformatted;
+    this._formatInputValue();
+    console.log('_onInputBlur > mock now: ', nowUnformatted);
+    console.log('_onInputBlur > this: ', this);
+    console.log('_onInputBlur > this.value: ', this.value);
   }
 
   protected _openCalendar(emitOpenEvent = false): void {
@@ -634,6 +666,9 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   public set showMaskFormat(value: boolean) {
     if (this._showMaskFormat !== value) {
       this._showMaskFormat = value;
+      // if (this._isInitialized) {
+      //   this._applyMask();
+      // }
     }
   }
 
