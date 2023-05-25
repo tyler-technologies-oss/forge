@@ -775,6 +775,8 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       if (this._isInitialized && !this._showMaskFormat) {
         this._applyMask();
         this._formatInputValue();
+      } else if (this._isInitialized) {
+        this._formatInputValue();
       }
       this._adapter.setHostAttribute(TIME_PICKER_CONSTANTS.attributes.ALLOW_SECONDS, `${!!value}`);
     }
@@ -790,6 +792,8 @@ export class TimePickerFoundation implements ITimePickerFoundation {
         this._adapter.destroyMask();
         this._formatInputValue();
         this._applyMask();
+      } else if (this._isInitialized) {
+        this._formatInputValue();
       }
       this._adapter.setHostAttribute(TIME_PICKER_CONSTANTS.attributes.USE_24_HOUR_TIME, `${!!value}`);
     }
