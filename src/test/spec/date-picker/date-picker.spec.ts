@@ -813,7 +813,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(inputElement.value).toBe('01/01/2020');
     });
 
-    it('should show mask format on focus only', function(this: ITestContext) {
+    it('should only show mask format on focus', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const inputElement = getInputElement(this.context.component);
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
