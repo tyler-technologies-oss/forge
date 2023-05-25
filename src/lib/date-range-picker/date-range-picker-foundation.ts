@@ -312,6 +312,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   }
 
   private _onToInputBlur(evt: Event): void {
+    // We also need to blur the "from" input, for masking purposes
     super._onInputBlur(evt);
     this._formatToInputValue();
     if (this._open) {
@@ -320,6 +321,7 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   }
 
   protected override _onInputBlur(evt: Event): void {
+    // We also need to blur the "to" input, for masking purposes
     super._onInputBlur(evt);
     this._onToInputBlur(evt);
   }
