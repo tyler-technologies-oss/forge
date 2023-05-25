@@ -290,9 +290,15 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     if (this._allowInput) {
       this._adapter.selectInputText();
     }
+    if(this.masked && this.showMaskFormat && this._isInitialized) {
+      this._applyMask();
+    }
   }
 
   private _onInputBlur(evt: Event): void {
+    if(this.masked && this.showMaskFormat && this._isInitialized) {
+      this._adapter.destroyMask();
+    }
     this._formatInputValue();
     if (this._open && !this._adapter.isInputFocused()) {
       this._closeDropdown(true);
@@ -756,9 +762,6 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   public set showMaskFormat(value: boolean) {
     if (this._showMaskFormat !== value) {
       this._showMaskFormat = value;
-      if (this._isInitialized) {
-        this._applyMask();
-      }
     }
   }
 
@@ -769,7 +772,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     if (this._allowSeconds !== value) {
       this._allowSeconds = !!value;
       this._applyAllowSeconds();
-      if (this._isInitialized) {
+      if (this._isInitialized && !this._showMaskFormat) {
         this._applyMask();
         this._formatInputValue();
       }
@@ -783,7 +786,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   public set use24HourTime(value: boolean) {
     if (this._use24HourTime !== value) {
       this._use24HourTime = !!value;
-      if (this._isInitialized) {
+      if (this._isInitialized && !this._showMaskFormat) {
         this._adapter.destroyMask();
         this._formatInputValue();
         this._applyMask();

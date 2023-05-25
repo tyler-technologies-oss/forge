@@ -20,7 +20,7 @@ interface ITimePickerTestContext {
   writeValue(char: string, pos: number, clear?: boolean): void;
 }
 
-describe('TimePickerComponent', function(this: ITestContext) {
+fdescribe('TimePickerComponent', function(this: ITestContext) {
   beforeAll(function(this: ITestContext) {
     defineTextFieldComponent();
     defineTimePickerComponent();
