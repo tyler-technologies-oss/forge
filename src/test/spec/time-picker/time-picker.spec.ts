@@ -1089,6 +1089,23 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(inputElement.value).toBe('__:__:__ __');
   });
 
+  it('should clear mask format on blur', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const inputElement = this.context.inputElement;
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.MASKED, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_MASK_FORMAT, '');
+
+    expect(this.context.component.masked).toBe(true);
+    expect(this.context.component.showMaskFormat).toBe(true);
+    expect(inputElement.value).toBe('');
+    inputElement.focus();
+    expect(inputElement.value).toBe('__:__ __');
+    inputElement.dispatchEvent(new KeyboardEvent('input'));
+    inputElement.blur();
+
+    expect(inputElement.value).toBeFalsy();
+  });
+
   it('should use custom callbacks to control values', async function(this: ITestContext) {
     this.context = _createTimePickerContext(); 
 

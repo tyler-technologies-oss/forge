@@ -825,6 +825,22 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe('__/__/____');
     });
 
+    it('should clear mask format on blur', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const inputElement = getInputElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      expect(getInputElement(this.context.component).value).toBe('');
+      inputElement.focus();
+      expect(getInputElement(this.context.component).value).toBe('__/__/____');
+      inputElement.dispatchEvent(new KeyboardEvent('input'));
+      inputElement.blur();
+  
+      expect(inputElement.value).toBeFalsy();
+    });
+
     it('should use custom parse callback, format callback, and mask format', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.masked = true;
