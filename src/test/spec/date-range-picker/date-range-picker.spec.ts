@@ -918,22 +918,56 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(inputElement.value).toBe('01/01/2020');
     });
 
-    it('should show mask format in from input', function(this: ITestContext) {
+    it('should only show mask format in "from" input on focus', function(this: ITestContext) {
       this.context = setupTestContext(true);
+      const fromElement = getFromElement(this.context.component);
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
 
       expect(this.context.component.showMaskFormat).toBe(true);
-      expect(getFromElement(this.context.component).value).toBe('__/__/____');
+      fromElement.focus();
+      expect(fromElement.value).toBe('__/__/____');
     });
 
-    it('should show mask format in to input', function(this: ITestContext) {
+    it('should only show mask format in "to" input on focus', function(this: ITestContext) {
       this.context = setupTestContext(true);
+      const toElement = getToElement(this.context.component);
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
 
       expect(this.context.component.showMaskFormat).toBe(true);
-      expect(getToElement(this.context.component).value).toBe('__/__/____');
+      toElement.focus();
+      expect(toElement.value).toBe('__/__/____');
+    });
+
+    it('should clear mask format in "from" input on blur', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const fromElement = getFromElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      fromElement.focus();
+      expect(fromElement.value).toBe('__/__/____');
+      fromElement.dispatchEvent(new KeyboardEvent('input'));
+      fromElement.blur();
+
+      expect(fromElement.value).toBeFalsy();
+    });
+
+    it('should clear mask format in "to" input on blur', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const toElement = getToElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      toElement.focus();
+      expect(toElement.value).toBe('__/__/____');
+      toElement.dispatchEvent(new KeyboardEvent('input'));
+      toElement.blur();
+
+      expect(toElement.value).toBeFalsy();
     });
 
     it('should use custom parse callback, format callback, and mask format on from input', function(this: ITestContext) {

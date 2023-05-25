@@ -306,13 +306,22 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
 
   private _onToInputFocus(): void {
     this._adapter.selectToInputText();
+    if(this.masked && this.showMaskFormat && this._isInitialized) {
+      this._initializeMask();
+    }
   }
 
   private _onToInputBlur(evt: Event): void {
+    super._onInputBlur(evt);
     this._formatToInputValue();
     if (this._open) {
       this._closeCalendar(true);
     }
+  }
+
+  protected override _onInputBlur(evt: Event): void {
+    super._onInputBlur(evt);
+    this._onToInputBlur(evt);
   }
 
   protected _onInputValueChanged(value: string): void {
