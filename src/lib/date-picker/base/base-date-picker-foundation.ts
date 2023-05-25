@@ -634,9 +634,6 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   public set showMaskFormat(value: boolean) {
     if (this._showMaskFormat !== value) {
       this._showMaskFormat = value;
-      // if (this._isInitialized) {
-      //   this._applyMask();
-      // }
     }
   }
 

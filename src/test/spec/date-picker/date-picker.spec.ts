@@ -1350,13 +1350,13 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const inputElement = getInputElement(this.context.component);
       inputElement.focus();
-      inputElement.value = inputElement.value.slice(0, -1);
+      inputElement.value = inputElement.value.slice(0,-1);
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
       expect(inputElement.value).toEqual('01/01/202_');
     });
 
-    it('should update value and mask properly when backspacing after blur', function(this: ITestContext) {
+    it('should update value and mask properly when backspacing then blurred', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = new Date('01/01/2021');
       this.context.component.masked = true;
@@ -1364,9 +1364,10 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       const inputElement = getInputElement(this.context.component);
       inputElement.focus();
-      inputElement.value = inputElement.value.slice(0, -1);
+      inputElement.value = inputElement.value.slice(0,-1);
       inputElement.dispatchEvent(new KeyboardEvent('input'));
       inputElement.blur();
+      inputElement.dispatchEvent(new Event('blur'));
 
       expect(inputElement.value).toEqual('01/01/0202');
     });
