@@ -54,7 +54,7 @@ Controls the amount of space between child elements within a stack.
 
 </PropertyDef>
 
-<PropertyDef name="alignment" type="string" defaultValue="&quot;start&quot;">
+<PropertyDef name="alignment" type="StackAlignment" defaultValue="&quot;start&quot;">
 
   Align child elements within a stack. Valid values: `start` (default), `center`, `end`.
 
@@ -82,6 +82,18 @@ Controls the amount of space between child elements within a stack.
 
 > **Tip:** Check out the MDN web docs on flex-grow to learn more: [MDN: flex-grow](https://developer.mozilla.org/en-US/docs/Web/CSS/flex-grow).
 
-
 </PageSection>
 
+---
+
+<PageSection>
+
+## Types
+
+### StackAlignment
+
+```ts
+type StackAlignment = 'start' | 'center' | 'end';
+```
+
+</PageSection>
