@@ -832,6 +832,19 @@ describe('SelectComponent', function(this: ITestContext) {
       _expectActiveOption(this.context.component.popupElement, 1);
       _expectPopupVisibility(this.context.component.popupElement, true);
     });
+
+    it('should highlight first match when filtering with uppercase characters', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      await tick();
+      
+      await _triggerPopupOpen(this.context.component);
+      
+      _sendFilterKey(this.context.component, 'T', 84);
+      await timer();
+
+      _expectActiveOption(this.context.component.popupElement, 1);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+    });
     
     it('should highlight match when filtering quickly while popup is open', async function(this: ITestContext) {
       this.context = setupTestContext(true);
