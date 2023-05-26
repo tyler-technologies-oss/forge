@@ -1,9 +1,10 @@
 export interface IAppBarProfileProps {
   fullName: string;
   email: string;
-  avatarImageUrl: string;
   avatarLetterCount: number;
   avatarText: string;
+  useAvatarImage: boolean;
+  useAvatarIcon: boolean;
   signOutButton: boolean;
   profileButton: boolean;
 }
@@ -23,13 +24,6 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  avatarImageUrl: {
-    control: 'text',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
   avatarLetterCount: {
     control: 'number',
     description: '',
@@ -39,6 +33,20 @@ export const argTypes = {
   },
   avatarText: {
     control: 'text',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  useAvatarImage: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  useAvatarIcon: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',

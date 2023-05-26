@@ -8,6 +8,7 @@ import { AvatarComponent } from '../../avatar';
 import { PopupComponent } from '../../popup';
 import { TooltipComponent } from '../../tooltip';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IconComponent } from '../../icon';
 
 import template from './app-bar-profile-button.html';
 
@@ -15,6 +16,7 @@ export interface IAppBarProfileButtonComponent extends IBaseComponent {
   avatarImageUrl: string;
   avatarLetterCount: number;
   avatarText: string;
+  avatarIcon: string;
   fullName: string;
   email: string;
   signOutButton: boolean;
@@ -42,6 +44,7 @@ declare global {
     PopupComponent,
     ProfileCardComponent,
     IconButtonComponent,
+    IconComponent,
     AvatarComponent,
     TooltipComponent
   ]
@@ -54,6 +57,7 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_IMAGE_URL,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_LETTER_COUNT,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_TEXT,
+      APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_ICON,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON,
       APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON_TEXT,
@@ -98,6 +102,9 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
       case APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_TEXT:
         this.avatarText = newValue;
         break;
+      case APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_ICON:
+        this.avatarIcon = newValue;
+        break;
       case APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON:
         this.signOutButton = coerceBoolean(newValue);
         break;
@@ -130,6 +137,9 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
 
   @FoundationProperty()
   public declare avatarText: string;
+
+  @FoundationProperty()
+  public declare avatarIcon: string;
 
   @FoundationProperty()
   public declare signOutButton: boolean;
