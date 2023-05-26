@@ -17,6 +17,10 @@
   }
 }
 
+:host([stretch]:not([inline])) {
+  height: 100%;
+}
+
 :host([stretch]) {
   --forge-stack-stretch: 1;
 }
