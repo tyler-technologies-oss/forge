@@ -366,7 +366,11 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
 
     if (this._multiple) {
       if (this._selectedLabels.length) {
-        return `${this._selectedLabels.length} ${this._selectedLabels.length === 1 ? 'option' : 'options'} selected`;
+        if (this._selectedLabels.length === 1) {
+          return this._selectedLabels[0];
+        } else {
+          return `${this._selectedLabels.length} options selected`;
+        }
       } else {
         return '';
       }
