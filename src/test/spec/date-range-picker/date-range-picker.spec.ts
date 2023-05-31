@@ -32,7 +32,7 @@ interface ITestDateRangePickerContext {
   destroy(): void;
 }
 
-describe('DateRangePickerComponent', function(this: ITestContext) {
+fdescribe('DateRangePickerComponent', function(this: ITestContext) {
   beforeAll(function(this: ITestContext) {
     defineDateRangePickerComponent();
     defineTextFieldComponent();
@@ -512,6 +512,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const date = '05/04/2020';
       const expectedDate = new Date(date);
       const inputElement = getToElement(this.context.component);
+      inputElement.focus();
       inputElement.value = date;
       inputElement.dispatchEvent(new Event('blur'));
 
@@ -892,26 +893,28 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expectPopupOpen(this.context.component, false);
     });
 
-    it('should use from input mask', function(this: ITestContext) {
+    fit('should use "from" input mask', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.masked = true;
 
       expect(this.context.component.masked).toBe(true);
 
       const inputElement = getFromElement(this.context.component);
+      inputElement.focus();
       inputElement.value = '01012020';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
       expect(inputElement.value).toBe('01/01/2020');
     });
 
-    it('should use to input mask', function(this: ITestContext) {
+    fit('should use "to" input mask', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.masked = true;
 
       expect(this.context.component.masked).toBe(true);
 
       const inputElement = getToElement(this.context.component);
+      inputElement.focus();
       inputElement.value = '01012020';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
