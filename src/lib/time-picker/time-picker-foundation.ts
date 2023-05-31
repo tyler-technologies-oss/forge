@@ -126,7 +126,6 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     this._applyAllowInput();
     this._applyAllowDropdown();
     this._applyDisabled();
-    this._applyMask();
 
     this._isInitialized = true;
   }
@@ -290,13 +289,11 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     if (this._allowInput) {
       this._adapter.selectInputText();
     }
-    if(this.masked && this.showMaskFormat && this._isInitialized) {
-      this._applyMask();
-    }
+    this._applyMask();
   }
 
   private _onInputBlur(evt: Event): void {
-    if(this.masked && this.showMaskFormat && this._isInitialized) {
+    if(this.masked && this.showMaskFormat) {
       this._adapter.destroyMask();
     }
     this._formatInputValue();
@@ -790,8 +787,8 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       this._use24HourTime = !!value;
       if (this._isInitialized && !this._showMaskFormat) {
         this._adapter.destroyMask();
-        this._formatInputValue();
         this._applyMask();
+        this._formatInputValue();
       } else if (this._isInitialized) {
         this._formatInputValue();
       }
