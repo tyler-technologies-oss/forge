@@ -109,14 +109,11 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     this._initializeState?.();
     this._adapter.tryCreateToggle();
 
-    if (!this._masked) {
-      this._setInputChangeListeners();
-    }
+    this._setInputChangeListeners();
 
     this._initializeListeners();
     this._setFormattedInputValue(true);
     this._applyDisabled();
-    this._applyMask();
     this._initializeValueChangedListeners();
     this._isInitialized = true;
   }
@@ -166,13 +163,11 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
   protected _onInputFocus(evt: Event): void {
     this._adapter.selectInputText();
-    if(this.masked && this.showMaskFormat && this._isInitialized) {
-      this._applyMask();
-    }
+    this._applyMask();
   }
   
   protected _onInputBlur(evt: Event): void {
-    if(this.masked && this.showMaskFormat && this._isInitialized) {
+    if(this.masked && this.showMaskFormat) {
       this._adapter.destroyMask();
     }
     this._formatInputValue();

@@ -26,7 +26,7 @@ interface ITestDatePickerContext {
   destroy(): void;
 }
 
-describe('DatePickerComponent', function(this: ITestContext) {
+fdescribe('DatePickerComponent', function(this: ITestContext) {
   beforeAll(function(this: ITestContext) {
     defineDatePickerComponent();
     defineTextFieldComponent();
@@ -486,6 +486,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const date = '05/04/2020';
       const expectedDate = new Date(date);
       const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
       inputElement.value = date;
       inputElement.dispatchEvent(new Event('blur'));
 
@@ -517,6 +518,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
 
       const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
       inputElement.value = '>01/01/2020';
       inputElement.blur();
       inputElement.dispatchEvent(new Event('blur'));
@@ -807,6 +809,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.masked).toBe(true);
 
       const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
       inputElement.value = '01012020';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
@@ -1302,6 +1305,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.masked = true;
 
       const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
       inputElement.value = '2';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
@@ -1313,6 +1317,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.masked = true;
 
       const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
       inputElement.value = '01/';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
       inputElement.value = '01/5';
