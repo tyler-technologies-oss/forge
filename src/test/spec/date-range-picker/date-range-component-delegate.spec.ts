@@ -12,7 +12,7 @@ interface ITestDateRangeComponentDelegateContext {
   destroy(): void;
 }
 
-fdescribe('DateRangeComponentDelegate', function(this: ITestContext) {
+describe('DateRangeComponentDelegate', function(this: ITestContext) {
   beforeAll(function(this: ITestContext) {
     defineDateRangePickerComponent();
     defineTextFieldComponent();

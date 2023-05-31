@@ -26,7 +26,7 @@ interface ITestDatePickerContext {
   destroy(): void;
 }
 
-fdescribe('DatePickerComponent', function(this: ITestContext) {
+describe('DatePickerComponent', function(this: ITestContext) {
   beforeAll(function(this: ITestContext) {
     defineDatePickerComponent();
     defineTextFieldComponent();

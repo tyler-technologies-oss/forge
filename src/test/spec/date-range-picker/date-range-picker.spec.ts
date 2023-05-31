@@ -32,7 +32,7 @@ interface ITestDateRangePickerContext {
   destroy(): void;
 }
 
-fdescribe('DateRangePickerComponent', function(this: ITestContext) {
+describe('DateRangePickerComponent', function(this: ITestContext) {
   beforeAll(function(this: ITestContext) {
     defineDateRangePickerComponent();
     defineTextFieldComponent();
