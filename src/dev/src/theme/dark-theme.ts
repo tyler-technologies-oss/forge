@@ -25,9 +25,12 @@ export async function listenThemeChange(): Promise<void> {
   }
 
   const darkThemeButton = document.querySelector('#dark-theme-button');
+  const forgeIcon = darkThemeButton.querySelector('forge-icon');
+
+  forgeIcon.name = isDarkInitial ? 'wb_sunny' : 'brightness_3';
+
   darkThemeButton.addEventListener('click', async () => {
     const isDark = await toggleDarkTheme();
-    const forgeIcon = darkThemeButton.querySelector('forge-icon');
     forgeIcon.name = isDark ? 'wb_sunny' : 'brightness_3';
     setCookie(THEME_COOKIE_NAME, isDark ? THEME_IDENTIFIER_DARK : THEME_IDENTIFIER_LIGHT);
   });
