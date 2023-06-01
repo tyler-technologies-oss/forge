@@ -24,7 +24,8 @@ const events = {
 const attributes = {
   OPEN: 'open',
   ORIENTATION: 'orientation',
-  USE_ANIMATIONS: 'use-animations'
+  USE_ANIMATIONS: 'use-animations',
+  IGNORE: 'data-forge-ignore'
 };
 
 const numbers = {
