@@ -21,7 +21,7 @@ export const Default: Story<IExpansionPanelProps> = ({
   useAnimations = true
 }) => (
   <ForgeExpansionPanel open={open} orientation={orientation} useAnimations={useAnimations} style={{ width: '250px' }}>
-    <div role="button" tabIndex={0} slot="header">Click me</div>
+    <button slot="header" style={{ all: 'unset' }}>Click me</button>
     <div style={{ width: orientation === 'horizontal' ? '250px' : 'auto' }}>
       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum error officia iure
       corporis veritatis ut quod quo libero ea repellendus, consequuntur porro explicabo

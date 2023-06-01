@@ -6,10 +6,10 @@ import { IExpansionPanelProps } from '../expansion-panel-args';
 export const CardRecipeTemplate: Story<IExpansionPanelProps> = () => (
   <ForgeCard style={{'--forge-card-padding': '16px'}}>
     <ForgeExpansionPanel>
-      <div role="button" tabIndex={0} slot="header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+      <button slot="header" style={{ all: 'unset', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
         <div>Panel header</div>
         <ForgeOpenIcon />
-      </div>
+      </button>
       <div>Expandable card content</div>
     </ForgeExpansionPanel>
   </ForgeCard>
