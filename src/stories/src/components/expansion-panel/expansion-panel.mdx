@@ -158,9 +158,10 @@ Forces the expansion panel to expand/collapse immediately **without** transition
 
 ## Accessibility
 
+- If the user is able to click the expansion panel to toggle its state, ensure that a `<button>` element is present and clearly labeled to serve as an accessible point of interaction.
+  - Set the `aria-expanded` atribute on the button to reflect the state of the component.
+  - Set `aria-controls` on the button to reference the id of the expandable content.
 - Ensure that the user can focus on the element which activates and deactivates the expansion panel.
   - Ensure that the expansion panel can be activated by keyboard.
-- Ensure that the `aria-expanded` attribute is updated to reflect the state of the expandable panel, especially when toggling its state programmatically.
-  - This attribute is handled for you inside the expansion-panel component.
 
 </PageSection>
