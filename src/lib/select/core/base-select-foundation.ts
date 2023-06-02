@@ -519,8 +519,8 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
       this._filterTimeout = undefined;
     }, 300);
     this._options = this._adapter.getOptions();
-    // TODO(kieran.nichols): Enhance this to cycle through closest matches (see the native select)
-    const matchedOption = this._flatOptions.find(option => !option.disabled && option.label.toLowerCase().startsWith(this._filterString));
+    // TODO: Enhance this to cycle through closest matches (see the native select)
+    const matchedOption = this._flatOptions.find(option => !option.disabled && option.label.toLowerCase().startsWith(this._filterString.toLowerCase()));
     if (matchedOption) {
       const optionIndex = this._flatOptions.indexOf(matchedOption);
       if (this._open) {
