@@ -486,7 +486,6 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const date = '05/04/2020';
       const expectedDate = new Date(date);
       const inputElement = getInputElement(this.context.component);
-      inputElement.focus();
       inputElement.value = date;
       inputElement.dispatchEvent(new Event('blur'));
 
@@ -518,7 +517,6 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
 
       const inputElement = getInputElement(this.context.component);
-      inputElement.focus();
       inputElement.value = '>01/01/2020';
       inputElement.blur();
       inputElement.dispatchEvent(new Event('blur'));
@@ -809,7 +807,6 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(this.context.component.masked).toBe(true);
 
       const inputElement = getInputElement(this.context.component);
-      inputElement.focus();
       inputElement.value = '01012020';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
@@ -836,12 +833,13 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
       expect(this.context.component.showMaskFormat).toBe(true);
       expect(getInputElement(this.context.component).value).toBe('');
+
       inputElement.focus();
       expect(getInputElement(this.context.component).value).toBe('__/__/____');
+
       inputElement.dispatchEvent(new KeyboardEvent('input'));
       inputElement.blur();
-  
-      expect(inputElement.value).toBeFalsy();
+      expect(inputElement.value).toBe('');
     });
 
     it('should use custom parse callback, format callback, and mask format', function(this: ITestContext) {
@@ -1310,7 +1308,6 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.masked = true;
 
       const inputElement = getInputElement(this.context.component);
-      inputElement.focus();
       inputElement.value = '2';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
@@ -1322,7 +1319,6 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.masked = true;
 
       const inputElement = getInputElement(this.context.component);
-      inputElement.focus();
       inputElement.value = '01/';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
       inputElement.value = '01/5';

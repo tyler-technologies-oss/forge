@@ -1280,7 +1280,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.allowSeconds = true;
     this.context.component.value = timeValueWithSeconds;
     document.body.appendChild(this.context.component);
-    this.context.component.focus();
     await tick();
 
     expect(this.context.component.value).toBe(timeValueWithSeconds);
@@ -1322,6 +1321,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.coercionCallback = coercionSpy;
 
     const value = '120';
+    this.context.inputElement.focus();
     this.context.inputElement.value = value;
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();

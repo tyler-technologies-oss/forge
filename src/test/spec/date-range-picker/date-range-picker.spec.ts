@@ -487,7 +487,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(getFromElement(this.context.component).value).toBe(expectedDate);
     });
 
-    it('should set value from input element value on from input', function(this: ITestContext) {
+    it('should set value from input element value on "from" input', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const date = '05/04/2020';
       const expectedDate = new Date(date);
@@ -499,7 +499,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(this.context.component.from).toEqual(expectedDate);
     });
 
-    it('should set value on to input', function(this: ITestContext) {
+    it('should set value on "to" input', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const expectedDate = '05/04/2020';
       const date = new Date(expectedDate);
@@ -508,12 +508,11 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(getToElement(this.context.component).value).toBe(expectedDate);
     });
 
-    it('should set input element value on to input', function(this: ITestContext) {
+    it('should set input element value on "to" input', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const date = '05/04/2020';
       const expectedDate = new Date(date);
       const inputElement = getToElement(this.context.component);
-      inputElement.focus();
       inputElement.value = date;
       inputElement.dispatchEvent(new Event('blur'));
 
@@ -915,7 +914,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
       const inputElement = getToElement(this.context.component);
       inputElement.value = '01012020';
-      inputElement.dispatchEvent(new Event('input'));
+      inputElement.dispatchEvent(new KeyboardEvent('input'));
 
       expect(inputElement.value).toBe('01/01/2020');
     });
