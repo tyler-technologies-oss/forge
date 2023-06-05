@@ -141,12 +141,10 @@ export class DatePickerFoundation extends BaseDatePickerFoundation<IDatePickerAd
   }
 
   protected _onInputValueChanged(value: string): void {
-    const sanitizedValue = this._getSanitizedDateString(value);
-    if (this._masked && sanitizedValue) {
-      // If masked, allow clearing value by setting input.value directly
-      // To set a date value, dispatch `input` event and mask will handle it.
+    if (this._masked) {
       return;
     }
+    const sanitizedValue = this._getSanitizedDateString(value);
     const date = this._coerceDateValue(sanitizedValue);
     if (!isSameDate(date, this._value) && this._isDateValueAcceptable(date)) {
       this.value = date;

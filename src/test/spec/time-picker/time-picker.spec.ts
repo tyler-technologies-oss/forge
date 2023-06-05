@@ -1040,7 +1040,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.component.masked).toBe(true);
 
     const inputElement = this.context.inputElement;
-    inputElement.focus();
+
     inputElement.value = '0101';
     inputElement.dispatchEvent(new KeyboardEvent('input'));
 
@@ -1210,7 +1210,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should mask input value', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    this.context.inputElement.focus();
     this.context.inputElement.value = '1111';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertFromPaste' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
@@ -1221,7 +1220,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should mask input value when valid format is entered in 12 hour time', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    this.context.inputElement.focus();
     this.context.inputElement.value = '01:30';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     this.context.inputElement.dispatchEvent(new Event('blur'));
@@ -1232,7 +1230,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should mask input value when large number entered', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    this.context.inputElement.focus();
     this.context.inputElement.value = '9';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
@@ -1297,7 +1294,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.coercionCallback = coercionSpy;
 
     const value = '120';
-    this.context.inputElement.focus();
     this.context.inputElement.value = value;
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertFromPaste' }));
 
@@ -1326,7 +1322,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.coercionCallback = coercionSpy;
 
     const value = '120';
-    this.context.inputElement.focus();
     this.context.inputElement.value = value;
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
     await tick();
@@ -1362,7 +1357,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should pad leading zero when entering hour of 1', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    this.context.inputElement.focus();
     this.context.inputElement.value = '1';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
@@ -1373,7 +1367,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should pad leading zero when entering hour of 2', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    this.context.inputElement.focus();
     this.context.inputElement.value = '2';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 
@@ -1384,7 +1377,6 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should pad leading zero when entering initial hour of 3 or higher', function(this: ITestContext) {
     this.context = _createTimePickerContext();
 
-    this.context.inputElement.focus();
     this.context.inputElement.value = '3';
     this.context.inputElement.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
 

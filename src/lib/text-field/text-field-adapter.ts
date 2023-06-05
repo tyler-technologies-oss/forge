@@ -75,8 +75,8 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
     return this._inputsSome(input => input.placeholder ? input.placeholder.trim().length > 0 : false);
   }
 
-  public override inputHasFocus(): boolean {
-    return this._inputsSome(input => input === getActiveElement());
+  public override inputHasFocus(target?: EventTarget | null): boolean {
+    return this._inputsSome(input => input === target || input === getActiveElement());
   }
 
   public override setInputClass(className: string): void {
@@ -113,7 +113,7 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
   protected _handleMultiInputs(): void {
     addClass(TEXT_FIELD_CONSTANTS.classes.MULTI_INPUT, this._rootElement);
     this._applyToInputs((input, index) => {
-      input.setAttribute(`${TEXT_FIELD_CONSTANTS.attributes.MULTI_INPUT}-${index.toString()}`, '');
+      input.setAttribute(`${TEXT_FIELD_CONSTANTS.attributes.MULTI_INPUT}-${index}`, '');
       if (index % 2 !== 1) {
         Promise.resolve().then(() => input.insertAdjacentElement('afterend', this._createSeperatorElement()));
       }

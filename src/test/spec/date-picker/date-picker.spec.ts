@@ -852,11 +852,13 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.parseCallback = str => str ? new Date(`${str}T00:00:00.000Z`) : null;
       this.context.component.formatCallback = date => date ? date.toISOString().split('T')[0] : '';
 
-      expect(getInputElement(this.context.component).value).toBe('____-__-__');
+      const inputEl = getInputElement(this.context.component);
+      inputEl.focus();
 
-      getInputElement(this.context.component).value = '20200101';
-      // note: the setting of the input element value does emit the input event, but in this case parseCallback gets called with 20200101 which results in a date of new Date(`20200101T00:00:00.000Z`), which isn't valid so it gets nulled and the input event never gets fired (because the input value and the component value are the same value of null). it's almost like the mask needs to occur before that call and then re-emitting another input wouldn't be necessary
-      dispatchNativeEvent(getInputElement(this.context.component), 'input');
+      expect(inputEl.value).toBe('____-__-__');
+
+      inputEl.value = '20200101';
+      inputEl.dispatchEvent(new Event('input'));
 
       expect(getInputElement(this.context.component).value).toBe('2020-01-01');
     });
@@ -867,6 +869,9 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASK_FORMAT, format);
+
+      const inputEl = getInputElement(this.context.component);
+      inputEl.focus();
 
       expect(this.context.component.maskFormat).toBe(format);
       expect(getInputElement(this.context.component).value).toBe('____-__-__');
@@ -1358,7 +1363,9 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = new Date();
 
-      getInputElement(this.context.component).value = '';
+      const input = getInputElement(this.context.component);
+      input.value = '';
+      input.dispatchEvent(new Event('input'));
 
       expect(this.context.component.value).toBeNull();
     });
@@ -1399,7 +1406,9 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.masked = true;
       this.context.component.showMaskFormat = true;
 
-      getInputElement(this.context.component).value = '';
+      const inputEl = getInputElement(this.context.component);
+      inputEl.value = '';
+      inputEl.dispatchEvent(new Event('input'));
 
       expect(this.context.component.value).toBeNull();
     });

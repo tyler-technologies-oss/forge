@@ -491,9 +491,10 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const date = '05/04/2020';
       const expectedDate = new Date(date);
+
       const inputElement = getFromElement(this.context.component);
       inputElement.value = date;
-      inputElement.dispatchEvent(new Event('blur'));
+      inputElement.dispatchEvent(new Event('input'));
 
       expect(this.context.component.from).toEqual(expectedDate);
     });
@@ -893,30 +894,28 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expectPopupOpen(this.context.component, false);
     });
 
-    fit('should use "from" input mask', function(this: ITestContext) {
+    it('should use "from" input mask', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.masked = true;
 
       expect(this.context.component.masked).toBe(true);
 
       const inputElement = getFromElement(this.context.component);
-      inputElement.focus();
       inputElement.value = '01012020';
       inputElement.dispatchEvent(new KeyboardEvent('input'));
 
       expect(inputElement.value).toBe('01/01/2020');
     });
 
-    fit('should use "to" input mask', function(this: ITestContext) {
+    it('should use "to" input mask', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.masked = true;
 
       expect(this.context.component.masked).toBe(true);
 
       const inputElement = getToElement(this.context.component);
-      inputElement.focus();
       inputElement.value = '01012020';
-      inputElement.dispatchEvent(new KeyboardEvent('input'));
+      inputElement.dispatchEvent(new Event('input'));
 
       expect(inputElement.value).toBe('01/01/2020');
     });
@@ -981,30 +980,14 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context.component.parseCallback = str => (str ? new Date(`${str}T00:00:00.000Z`) : null);
       this.context.component.formatCallback = date => (date ? date.toISOString().split('T')[0] : '');
 
-      expect(getFromElement(this.context.component).value).toBe('____-__-__');
+      const fromInput = getFromElement(this.context.component);
+      fromInput.focus();
+      expect(fromInput.value).toBe('____-__-__');
 
-      getFromElement(this.context.component).value = '20200101';
-      // note: the setting of the input element value does emit the input event, but in this case parseCallback gets called with 20200101 which results in a date of new Date(`20200101T00:00:00.000Z`), which isn't valid so it gets nulled and the input event never gets fired (because the input value and the component value are the same value of null). it's almost like the mask needs to occur before that call and then re-emitting another input wouldn't be necessary
-      dispatchNativeEvent(getFromElement(this.context.component), 'input');
+      fromInput.value = '20200101';
+      fromInput.dispatchEvent(new Event('input'));
 
-      expect(getFromElement(this.context.component).value).toBe('2020-01-01');
-    });
-
-    it('should use custom parse callback, format callback, and mask format on from input', function(this: ITestContext) {
-      this.context = setupTestContext(true);
-      this.context.component.masked = true;
-      this.context.component.showMaskFormat = true;
-      this.context.component.maskFormat = 'YYYY-MM-DD';
-      this.context.component.parseCallback = str => (str ? new Date(`${str}T00:00:00.000Z`) : null);
-      this.context.component.formatCallback = date => (date ? date.toISOString().split('T')[0] : '');
-
-      expect(getToElement(this.context.component).value).toBe('____-__-__');
-
-      getToElement(this.context.component).value = '20200101';
-      // note: the setting of the input element value does emit the input event, but in this case parseCallback gets called with 20200101 which results in a date of new Date(`20200101T00:00:00.000Z`), which isn't valid so it gets nulled and the input event never gets fired (because the input value and the component value are the same value of null). it's almost like the mask needs to occur before that call and then re-emitting another input wouldn't be necessary
-      dispatchNativeEvent(getToElement(this.context.component), 'input');
-
-      expect(getToElement(this.context.component).value).toBe('2020-01-01');
+      expect(fromInput.value).toBe('2020-01-01');
     });
 
     it('should allow for setting mask format via attribute in from input', function(this: ITestContext) {
@@ -1012,6 +995,9 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASK_FORMAT, 'YYYY-MM-DD');
+
+      const inputEl = getFromElement(this.context.component);
+      inputEl.focus();
 
       expect(this.context.component.maskFormat).toBe('YYYY-MM-DD');
       expect(getFromElement(this.context.component).value).toBe('____-__-__');
@@ -1022,6 +1008,9 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASK_FORMAT, 'YYYY-MM-DD');
+
+      const inputEl = getFromElement(this.context.component);
+      inputEl.focus();
 
       expect(this.context.component.maskFormat).toBe('YYYY-MM-DD');
       expect(getToElement(this.context.component).value).toBe('____-__-__');

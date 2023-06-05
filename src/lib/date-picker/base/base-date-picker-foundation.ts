@@ -58,8 +58,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   // Listeners
   private _inputListener: (evt: Event) => void;
   private _inputKeydownListener: (evt: KeyboardEvent) => void;
-  private _inputFocusListener: (evt: Event) => void;
-  private _inputBlurListener: (evt: Event) => void;
+  private _inputFocusListener: (evt: FocusEvent) => void;
+  private _inputBlurListener: (evt: FocusEvent) => void;
   private _inputValueChangedListener: (value: string) => void;
   private _toggleMousedownListener: (evt: MouseEvent) => void;
   private _dropdownCloseListener: () => void;
@@ -109,11 +109,14 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     this._initializeState?.();
     this._adapter.tryCreateToggle();
 
-    this._setInputChangeListeners();
+    if (!this._masked) {
+      this._setInputChangeListeners();
+    }
 
     this._initializeListeners();
     this._setFormattedInputValue(true);
     this._applyDisabled();
+    this._applyMask();
     this._initializeValueChangedListeners();
     this._isInitialized = true;
   }
@@ -161,16 +164,21 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     this._handleInput(this._adapter.getInputValue());
   }
 
-  protected _onInputFocus(evt: Event): void {
+  protected _onInputFocus(evt: FocusEvent): void {
     this._adapter.selectInputText();
-    this._applyMask();
+
+    if (this.masked && this.showMaskFormat) {
+      this._applyMask();
+    }
   }
   
-  protected _onInputBlur(evt: Event): void {
-    if(this.masked && this.showMaskFormat) {
-      this._adapter.destroyMask();
+  protected _onInputBlur(evt: FocusEvent): void {
+    if (this.masked && this.showMaskFormat) {
+      this._applyMask();
     }
+
     this._formatInputValue();
+
     if (this._open && !this._adapter.isInputFocused()) {
       this._closeCalendar(true);
     }
@@ -435,7 +443,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
   protected _initializeMask(): void {
     const options: IDateInputMaskOptions = {
-      showMaskFormat: this._showMaskFormat,
+      showMaskFormat: this._showMaskFormat && this._adapter.isInputFocused(),
       pattern: this._maskFormat,
       onChange: (value: string) => this._handleInput(value)
     };
