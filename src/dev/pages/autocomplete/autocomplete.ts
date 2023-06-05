@@ -63,6 +63,11 @@ filterOnFocusToggle.addEventListener('forge-switch-select', ({ detail: selected 
   autocomplete.filterOnFocus = selected;
 });
 
+const filterFocusFirstToggle = document.querySelector('#autocomplete-filter-focus-first') as HTMLInputElement;
+filterFocusFirstToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  autocomplete.filterFocusFirst = selected;
+});
+
 const itemBuilderToggle = document.querySelector('#autocomplete-item-builder') as HTMLInputElement;
 itemBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   autocomplete.optionBuilder = selected ? itemBuilder : undefined;
