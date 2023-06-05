@@ -196,14 +196,16 @@ export class FieldFoundation {
       return;
     }
 
-    this._floatingLabel?.float(value, this._floatLabelType === 'always');
+    if (this._floatingLabel) {
+      this._floatingLabel.float(value, this._floatLabelType === 'always');
 
-    if (value) {
-      this._adapter.setInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
-    } else {
-      this._adapter.removeInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-      this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+      if (value) {
+        this._adapter.setInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
+        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
+      } else {
+        this._adapter.removeInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
+        this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+      }
     }
   }
 

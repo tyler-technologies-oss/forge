@@ -9,7 +9,7 @@ export interface ITextFieldAdapter extends IFieldAdapter {
 }
 
 export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter {
-  protected _inputElements: Array<HTMLInputElement|HTMLTextAreaElement>;
+  protected _inputElements: Array<HTMLInputElement | HTMLTextAreaElement> = [];
   protected _inputMutationObserverInstances: MutationObserver[] = [];
 
   constructor(component: ITextFieldComponent) {
