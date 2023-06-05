@@ -1,6 +1,7 @@
-import { emitEvent, getShadowElement } from '@tylertech/forge-core';
+import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
 import { IAvatarComponent } from '../avatar';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { IconComponentDelegate } from '../icon';
 import { IToolbarComponent } from '../toolbar';
 import { IProfileCardComponent } from './profile-card';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
@@ -9,6 +10,7 @@ export interface IProfileCardAdapter extends IBaseAdapter {
   setFullName(value: string): void;
   setEmail(value: string): void;
   setAvatarText(value: string): void;
+  setAvatarIcon(value: string): void;
   setAvatarImageUrl(value: string): void;
   setAvatarLetterCount(count: number): void;
   setActionToolbarVisibility(isVisible: boolean): void;
@@ -55,6 +57,16 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
   public setAvatarText(value: string): void {
     this._component.setAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT, value);
     this._avatarElement.text = value;
+    removeAllChildren(this._avatarElement);
+  }
+
+  public setAvatarIcon(value: string): void {
+    if (value) {
+      const iconDelegate = new IconComponentDelegate({ props: { name: value }});
+      this._avatarElement.replaceChildren(iconDelegate.element);
+    } else {
+      removeAllChildren(this._avatarElement);
+    }
   }
 
   public setAvatarImageUrl(value: string): void {

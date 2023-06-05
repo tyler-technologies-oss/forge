@@ -30,6 +30,9 @@ export const STACK_CONSTANTS = {
   strings
 };
 
+export type StackAlignment = 'start' | 'center' | 'end';
+
+/** @deprecated Use `StackAlignment` instead. */
 export enum StackAlignMode {
   Start = 'start',
   Center = 'center',

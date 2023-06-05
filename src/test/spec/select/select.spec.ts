@@ -832,6 +832,19 @@ describe('SelectComponent', function(this: ITestContext) {
       _expectActiveOption(this.context.component.popupElement, 1);
       _expectPopupVisibility(this.context.component.popupElement, true);
     });
+
+    it('should highlight first match when filtering with uppercase characters', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      await tick();
+      
+      await _triggerPopupOpen(this.context.component);
+      
+      _sendFilterKey(this.context.component, 'T', 84);
+      await timer();
+
+      _expectActiveOption(this.context.component.popupElement, 1);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+    });
     
     it('should highlight match when filtering quickly while popup is open', async function(this: ITestContext) {
       this.context = setupTestContext(true);
@@ -976,6 +989,26 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.selectedIndex = [1, 2];
 
       expect(this.context.component.value).toEqual([DEFAULT_OPTIONS[1].value, DEFAULT_OPTIONS[2].value]);
+    });
+
+    it('should set generic selected text in multiple mode when more than one option is selected', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      await tick();
+      
+      this.context.component.multiple = true;
+      this.context.component.selectedIndex = [1, 2];
+
+      expect(this.context.selectedTextElement.innerText).toBe('2 options selected');
+    });
+
+    it('should set selected text to option label when one option is selected in multiple mode', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      await tick();
+      
+      this.context.component.multiple = true;
+      this.context.component.selectedIndex = [1];
+
+      expect(this.context.selectedTextElement.innerText).toBe(DEFAULT_OPTIONS[1].label);
     });
 
     it('should use option builder', async function(this: ITestContext) {

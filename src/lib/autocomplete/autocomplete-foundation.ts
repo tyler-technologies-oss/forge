@@ -651,7 +651,11 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     } else {
       if (this._multiple) {
         if (this._values.length) {
-          return `${this._values.length} ${this._values.length === 1 ? 'option' : 'options'} selected`;
+          if (this._values.length === 1) {
+            return this._selectedOptions[0]?.label ?? '';
+          } else {
+            return `${this._values.length} options selected`;
+          }
         } else {
           return '';
         }

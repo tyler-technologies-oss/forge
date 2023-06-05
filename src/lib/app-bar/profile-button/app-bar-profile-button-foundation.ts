@@ -10,6 +10,7 @@ export interface IAppBarProfileButtonFoundation extends ICustomElementFoundation
   avatarImageUrl: string;
   avatarLetterCount: number;
   avatarText: string;
+  avatarIcon: string;
   signOutButton: boolean;
   profileButton: boolean;
   signOutButtonText: string;
@@ -24,6 +25,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   private _avatarImageUrl: string;
   private _avatarLetterCount = AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT;
   private _avatarText: string;
+  private _avatarIcon: string;
   private _showSignOutButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_SIGN_OUT_BUTTON;
   private _showProfileButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_PROFILE_BUTTON;
   private _signOutButtonText = PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT;
@@ -52,6 +54,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     this._adapter.setAvatarImageUrl(this._avatarImageUrl);
     this._adapter.setAvatarLetterCount(this._avatarLetterCount);
     this._adapter.setAvatarText(this._avatarText);
+    this._adapter.setAvatarIcon(this._avatarIcon);
     this._isInitialized = true;
   }
 
@@ -115,6 +118,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
       signOutButtonText: this._signOutButtonText,
       profileButtonText: this._profileButtonText,
       avatarText: this._avatarText,
+      avatarIcon: this._avatarIcon,
       avatarImageUrl: this._avatarImageUrl,
       avatarLetterCount: this._avatarLetterCount
     };
@@ -195,7 +199,20 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
       this._avatarText = value;
       if (this._isInitialized) {
         this._adapter.setAvatarText(this._avatarText);
-        this._adapter.setHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_TEXT, this._avatarText);
+        this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_TEXT, !!this._avatarText, this._avatarText);
+      }
+    }
+  }
+
+  public get avatarIcon(): string {
+    return this._avatarIcon;
+  }
+  public set avatarIcon(value: string) {
+    if (this._avatarIcon !== value) {
+      this._avatarIcon = value;
+      if (this._isInitialized) {
+        this._adapter.setAvatarIcon(this._avatarIcon);
+        this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_ICON, !!this._avatarIcon, this._avatarIcon);
       }
     }
   }
