@@ -191,7 +191,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       _clickListItem(1, this.context.component.popupElement);
       this.context.component.value = [DEFAULT_FILTER_OPTIONS[2]];
 
-      expect(this.context.input.value).toBe('1 option selected');
+      expect(this.context.input.value).toBe(DEFAULT_FILTER_OPTIONS[2].label);
       expect(this.context.component.open).toBe(true);
     });
 
@@ -381,6 +381,15 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       expect(this.context.component.value).toEqual([DEFAULT_FILTER_OPTIONS[0].value, DEFAULT_FILTER_OPTIONS[1].value]);
       expect(this.context.input.value).toBe('2 options selected');
+    });
+
+    it('should set single option value when one option is selected in multiple mode', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.multiple = true;
+      this.context.component.value = [DEFAULT_FILTER_OPTIONS[0].value];
+      await tick();
+      expect(this.context.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
     });
 
     it('should set label via match key', async function (this: ITestContext) {
