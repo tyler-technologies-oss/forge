@@ -10,57 +10,105 @@ export interface IOverlayFoundation extends ICustomElementFoundation {
   positionStrategy: OverlayPositionStrategy;
   offset: IOverlayPosition;
   hideWhenClipped: boolean;
+  static: boolean;
   position(): void;
-  show(): Promise<void>;
-  hide(): Promise<void>;
+}
+
+// TODO: Remove when native typings support this interface
+interface ToggleEvent extends Event {
+  newState: 'closed' | 'open';
+  oldState: 'closed' | 'open';
 }
 
 export class OverlayFoundation implements IOverlayFoundation {
+  private _isConnected = false;
   private _open = false;
   private _targetElement: HTMLElement;
   private _placement: OverlayPlacement = 'bottom-start';
   private _positionStrategy: OverlayPositionStrategy = 'absolute';
   private _offset: IOverlayPosition = { x: 0, y: 0 };
   private _hideWhenClipped = true;
+  private _static = false;
+  private _lightDismissListener: (evt: ToggleEvent) => void;
 
-  constructor(private _adapter: IOverlayAdapter) {}
+  constructor(private _adapter: IOverlayAdapter) {
+    this._lightDismissListener = evt => {
+      if (evt.newState === 'closed') {
+        this._onLightDismiss();
+      }
+    };
+  }
 
   public initialize(): void {
-
+    this._isConnected = true;
+    this._adapter.initialize();
   }
 
   public disconnect(): void {
     this._adapter.tryCleanupAutoUpdate();
+    this._isConnected = false;
   }
 
   public position(): void {
+    if (!this._open || !this._targetElement) {
+      return;
+    }
 
+    this._adapter.positionElement({
+      targetElement: this._targetElement,
+      strategy: this._positionStrategy,
+      placement: this._placement,
+      hide: this._hideWhenClipped,
+      offset: this._offset
+    });
   }
 
-  public show(): Promise<void> {
-    return new Promise<void>(resolve => resolve());
+  private _onLightDismiss(): void {
+    this._applyOpen(false);
   }
 
-  public hide(): Promise<void> {
-    return new Promise<void>(resolve => resolve());
-  }
+  private _applyOpen(newState: boolean): void {
+    if (this._open === newState || !this._isConnected) {
+      return;
+    }
 
-  private _applyOpen(): void {
+    this._open = newState;
+    
+    const isCancelled = this._adapter.dispatchHostEvent({
+      type: 'forge-overlay-beforetoggle',
+      detail: { open: this._open },
+      cancelable: true,
+      composed: true
+    });
+    if (isCancelled) {
+      this._open = !newState;
+      return;
+    }
+    
     this._adapter.setOpen(this._open);
 
-    if (this._open && this._targetElement) {
-      this._adapter.positionElement(this._targetElement, this._positionStrategy, this._placement, this._hideWhenClipped, this._offset);
+    this._adapter.dispatchHostEvent({ type: 'forge-overlay-toggle', detail: { open: this._open }, composed: true });
+
+    if (this._open) {
+      if (!this._static) {
+        this._adapter.addLightDismissListener(this._lightDismissListener);
+      }
+    } else {
+      this._adapter.removeLightDismissListener(this._lightDismissListener);
     }
+
+    this.position();
+
+    this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._open);
   }
 
   public get open(): boolean {
     return this._open;
   }
   public set open(value: boolean) {
-    if (this._open !== !!value) {
-      this._open = !!value;
-      this._applyOpen();
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._open);
+    value = Boolean(value);
+    if (this._open !== value) {
+      this._applyOpen(value);
     }
   }
 
@@ -105,6 +153,17 @@ export class OverlayFoundation implements IOverlayFoundation {
     if (this._hideWhenClipped !== !!value) {
       this._hideWhenClipped = !!value;
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED, this._hideWhenClipped);
+    }
+  }
+
+  public get static(): boolean {
+    return this._static;
+  }
+  public set static(value: boolean) {
+    value = Boolean(value);
+    if (this._static !== value) {
+      this._static = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.STATIC, this._static);
     }
   }
 }

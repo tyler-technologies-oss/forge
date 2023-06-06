@@ -7,7 +7,8 @@ const attributes = {
   OPEN: 'open',
   PLACEMENT: 'placement',
   POSITION_STRATEGY: 'position-strategy',
-  HIDE_WHEN_CLIPPED: 'hide-when-clipped'
+  HIDE_WHEN_CLIPPED: 'hide-when-clipped',
+  STATIC: 'static'
 };
 
 export const OVERLAY_CONSTANTS = {

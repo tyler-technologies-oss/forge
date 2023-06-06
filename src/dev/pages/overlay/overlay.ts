@@ -4,11 +4,14 @@ import '@tylertech/forge/button';
 import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/dialog';
 import '@tylertech/forge/overlay';
+import '@tylertech/forge/popover';
+import '@tylertech/forge/exp/select';
+import '@tylertech/forge/exp/form-field';
 import type { IOverlayComponent } from '@tylertech/forge';
 import './overlay.scss';
 import { toggleClass } from '@tylertech/forge-core';
 
-const DEFAULT_OFFSET = { x: 0, y: 4 };
+const DEFAULT_OFFSET = { x: 0, y: 16 }; // TODO: consider logical property names (inline, block)
 
 //
 // DOM references
@@ -20,12 +23,12 @@ const clippingContainer = document.querySelector('.clipping-container') as HTMLE
 //
 // Configure overlay
 //
-overlay.targetElement = showOverlayButton; // TODO: use heuristic to locate optionally slotted button OR property via configuration
+overlay.targetElement = showOverlayButton; // TODO: use heuristic in consuming components (such as <forge-popover>) to locate optionally slotted button OR property via configuration
 
 //
 // Demo listeners/configuration
 //
-showOverlayButton.addEventListener('click', () => overlay.open = !overlay.open);
+// showOverlayButton.addEventListener('click', () => overlay.open = !overlay.open);
 centerButton();
 
 //
@@ -36,19 +39,19 @@ const useSmallContainerToggle = document.getElementById('opt-use-small-container
 useSmallContainerToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   toggleClass(clippingContainer, selected, 'use-small-container');
   centerButton();
-  tryForceReposition();
+  // tryForceReposition();
 });
 
 const forceClippingToggle = document.getElementById('opt-force-clipping') as ISwitchComponent;
 forceClippingToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   toggleClass(clippingContainer, selected, 'force-clipping');
-  tryForceReposition();
+  // tryForceReposition();
 });
 
 const useOffsetToggle = document.getElementById('opt-use-offset') as ISwitchComponent;
 useOffsetToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   overlay.offset = selected ? DEFAULT_OFFSET : { x: 0, y: 0 }; // TODO: need to test with changes to core package
-  tryForceReposition();
+  // tryForceReposition();
   // TODO: overlay is not adjusting offset dynamically while open
 });
 
@@ -59,8 +62,8 @@ function centerButton(): void {
   showOverlayButton.scrollIntoView({ block: 'center', inline: 'center' });
 }
 
-function tryForceReposition(): void {
-  if (overlay.open) {
-    window.requestAnimationFrame(() => overlay.position());
-  }
-}
+// function tryForceReposition(): void {
+//   if (overlay.open) {
+//     window.requestAnimationFrame(() => overlay.position());
+//   }
+// }

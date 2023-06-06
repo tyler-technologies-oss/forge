@@ -16,3 +16,8 @@ body.ready {
 * {
   box-sizing: border-box;
 }
+
+forge-app-bar {
+  --forge-app-bar-theme-background: var(--mdc-theme-secondary);
+  --forge-app-bar-theme-on-background: var(--mdc-theme-on-secondary);
+}

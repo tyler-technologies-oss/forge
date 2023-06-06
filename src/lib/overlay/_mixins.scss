@@ -5,89 +5,97 @@
   .forge-overlay {
     @include base;
 
-    &[popover]:open {
+    &--open {
+      display: block;
+      inset: unset;
       border: none;
       padding: 0;
       margin: 0;
       overflow: visible;
-      color: inherit;
-      inset: auto;
-
-      display: block;
-      opacity: 1;
+      // color: inherit;
+      // opacity: 1;
+      // position-fallback: var(--forge-overlay-position-fallback, --fallback-default);
 
       &::backdrop {
-        inset: auto;
         display: none;
       }
     }
 
-    &--entering {
-      @include entering;
-    }
+    // &--entering {
+    //   @include entering;
+    // }
 
-    &--exiting {
-      @include exiting;
-    }
+    // &--exiting {
+    //   @include exiting;
+    // }
 
-    &--entered {
-      @include entered;
-    }
+    // &--entered {
+    //   @include entered;
+    // }
   }
 }
 
 @mixin base() {
   @include theme.z-index(overlay);
-  @include theme.css-custom-property(position, --forge-overlay-position, fixed);
-  @include theme.css-custom-property(top, --forge-overlay-top, 0);
-  @include theme.css-custom-property(left, --forge-overlay-left, 0);
-  @include theme.css-custom-property(width, --forge-overlay-width, min-content);
-  @include theme.css-custom-property(height, --forge-overlay-height, min-content);
-  @include theme.css-custom-property(background, --forge-overlay-background, transparent);
-  @include theme.css-custom-property(border-radius, --forge-overlay-border-radius, variables.$border-radius);
-  @include theme.css-custom-property(box-shadow, --forge-overlay-box-shadow, none);
-  @include theme.css-custom-property(opacity, --forge-overlay-opacity, 0);
-  @include theme.css-custom-property(will-change, --forge-overlay-will-change, variables.$will-change);
+  // @include theme.css-custom-property(position, --forge-overlay-position, fixed);
+  // @include theme.css-custom-property(top, --forge-overlay-top, 0);
+  // @include theme.css-custom-property(left, --forge-overlay-left, 0);
+  // @include theme.css-custom-property(width, --forge-overlay-width, min-content);
+  // @include theme.css-custom-property(height, --forge-overlay-height, min-content);
+  // @include theme.css-custom-property(background, --forge-overlay-background, transparent);
+  // @include theme.css-custom-property(border-radius, --forge-overlay-border-radius, variables.$border-radius);
+  // @include theme.css-custom-property(box-shadow, --forge-overlay-box-shadow, none);
+  // @include theme.css-custom-property(opacity, --forge-overlay-opacity, 0);
+  // @include theme.css-custom-property(will-change, --forge-overlay-will-change, variables.$will-change);
 
   display: none;
   box-sizing: border-box;
+  position: var(--forge-overlay-position, fixed);
+  top: var(--forge-overlay-top, 0);
+  left: var(--forge-overlay-left, 0);
+  width: var(--forge-overlay-width, fit-content);
+  height: var(--forge-overlay-height, fit-content);
+  border-radius: inherit;
+  background: inherit;
+  color: inherit;
+  // height: var(--forge-overlay-height, min-content);
+  // width: var(--forge-overlay-width, min-content);
+  // opacity: var(--forge-overlay-opacity, 1);
+  // transform: var(--forge-overlay-transform, none);
+  // animation: var(--forge-overlay-animation, none);
+  // transition: var(--forge-overlay-transition, none);
 
-  @media(prefers-reduced-motion: no-preference) {
-    @include theme.css-custom-property(transform, --forge-overlay-transform, scale(1));
-    @include theme.css-custom-property(transform-origin, --forge-overlay-transform-origin, 50% 24px 0);
-    @include theme.css-custom-property(transition, --forge-overlay-transition, variables.$transition);
-  }
+  // @media(prefers-reduced-motion: no-preference) {
+  //   @include theme.css-custom-property(transform, --forge-overlay-transform, scale(1));
+  //   @include theme.css-custom-property(transform-origin, --forge-overlay-transform-origin, 50% 24px 0);
+  //   @include theme.css-custom-property(transition, --forge-overlay-transition, variables.$transition);
+  // }
 }
 
+// @mixin entering() {
+//   @media(prefers-reduced-motion: no-preference) {
+//     @include theme.css-custom-property(transform, --forge-overlay-transition-transform-entering, scale(0.8));
+//     @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-entering, 0);
+//   }
 
-@mixin entering() {
-  @media(prefers-reduced-motion: no-preference) {
-    @include theme.css-custom-property(transform, --forge-overlay-transition-transform-entering, scale(0.8));
-    @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-entering, 0);
-  }
+//   display: block;
+// }
 
-  display: block;
-}
+// @mixin exiting() {
+//   @media(prefers-reduced-motion: no-preference) {
+//     @include theme.css-custom-property(transition, --forge-overlay-transition-exiting, opacity variables.$transition-duration ease-in-out);
+//     @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-exiting, 0);
+//   }
 
-@mixin exiting() {
-  @media(prefers-reduced-motion: no-preference) {
-    @include theme.css-custom-property(transition, --forge-overlay-transition-exiting, opacity variables.$transition-duration ease-in-out);
-    @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-exiting, 0);
-  }
+//   display: block;
+// }
 
-  display: block;
-}
+// @mixin entered() {
+//   @media(prefers-reduced-motion: no-preference) {
+//     @include theme.css-custom-property(transform, --forge-overlay-transition-transform-entered, scale(1));
+//   }
 
-@mixin entered() {
-  @media(prefers-reduced-motion: no-preference) {
-    @include theme.css-custom-property(transform, --forge-overlay-transition-transform-entered, scale(1));
-  }
+//   @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-entered, 1);
 
-  @include theme.css-custom-property(opacity, --forge-overlay-transition-opacity-entered, 1);
-
-  display: block;
-}
-
-@mixin absolute() {
-  @include theme.css-custom-property(position, --forge-overlay-position, absolute);
-}
+//   display: block;
+// }

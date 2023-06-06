@@ -1,0 +1,85 @@
+@use './base';
+@use '../../field/base' as field-base;
+@use '../../field/selector' as field-selector;
+
+@mixin leading-container {
+  // Core
+  &__leading-container {
+    @include field-base.leading-core;
+  }
+}
+
+@mixin selected-text {
+  // Core
+  .forge-select__selected-text {
+    @include base.selected-text-core;
+  }
+
+  // Field Input Styles
+  @include field-selector.input('.forge-select__selected-text', $exclude: (core, padding-right), $component-name: 'forge-select');
+
+  // Line Height
+  &:not(.forge-field--label) {
+    &:not(.forge-field--dense):not(.forge-field--roomy) .forge-select__selected-text {
+      @include base.select-text-line-height(default, default);
+    }
+    &.forge-field--roomy:not(.forge-field--dense) .forge-select__selected-text {
+      @include base.select-text-line-height(roomy, default);
+    }
+    &.forge-field--dense:not(.forge-field--roomy) .forge-select__selected-text {
+      @include base.select-text-line-height(dense, default);
+    }
+  }
+
+  // Dense
+  &.forge-field--dense:not(.forge-field--roomy) .forge-select__selected-text {
+    padding: 0 8px;
+  }
+
+  // Placeholder
+  .forge-select__selected-text {
+    &:empty::before {
+      @include base.select-text-placeholder;
+    }
+  }
+
+  // Padding
+  .forge-select--label {
+    .forge-select__selected-text {
+      padding-top: 25px; // Override the default field padding styles to align text content
+    }
+  }
+}
+
+@mixin dropdown-icon {
+  // Core
+  .forge-select__dropdown-icon {
+    @include base.dropdown-icon-core;
+
+    .forge-select--opened & {
+      @include base.dropdown-icon-opened;
+    }
+  }
+
+  // Color
+  &:not(.forge-field--disabled):not(.forge-field--invalid) {
+    .forge-select__dropdown-icon {
+      @include field-base.icon-color(default);
+    }
+  }
+  &--invalid:not(.forge-field--disabled) {
+    .forge-select__dropdown-icon {
+      @include field-base.icon-color(invalid);
+    }
+  }
+  &--disabled {
+    .forge-select__dropdown-icon {
+      @include field-base.icon-color(disabled);
+    }
+  }
+
+  // Dense
+  &.forge-field--dense:not(.forge-field--roomy) .forge-select__dropdown-icon {
+    margin-right: 4px;
+  }
+}

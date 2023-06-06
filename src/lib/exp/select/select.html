@@ -1,0 +1,36 @@
+<template>
+  <!-- Trigger element -->
+  <slot name="trigger">
+    <!-- <forge-form-field-exp></forge-form-field-exp> -->
+    <div class="forge-select__wrapper" part="root">
+      <!-- Default trigger element content -->
+      <div class="forge-select forge-field" part="container" tabindex="0" aria-controls="listbox" aria-haspopup="listbox" aria-describedby="helper-text" role="combobox" aria-expanded="false" aria-disabled="false">
+        <div class="forge-select__leading-container" part="leading-container">
+          <slot name="leading"></slot>
+        </div>
+        <div class="forge-field__label-input-container" part="label-input-container">
+          <div id="selected-text" class="forge-select__selected-text" part="text" aria-live="assertive" aria-atomic="true">Choose something...</div>
+          <label id="select-label" aria-hidden="true" part="label"></label>
+        </div>
+        <forge-icon class="forge-select__dropdown-icon" name="arrow_drop_down" part="icon"></forge-icon>
+        <div class="forge-field__addon-end-container" part="addon-end-container">
+          <slot name="addon-end"></slot>
+        </div>
+      </div>
+      
+      <!-- Helper text -->
+      <slot name="helper-text"></slot>
+    </div>
+  </slot>
+  <!-- List dropdown -->
+  <forge-list-dropdown id="listbox" role="listbox" aria-expanded="false" aria-multiselectable="false" exportparts="overlay">
+    <!-- Dropdown header -->
+    <slot slot="header" name="header"></slot>
+
+    <!-- <forge-option> elements -->
+    <slot></slot>
+
+    <!-- Dropdown footer -->
+    <slot slot="footer" name="footer"></slot>
+  </forge-list-dropdown>
+</template>

@@ -76,6 +76,8 @@ import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
 import { IconComponent } from './icon';
 import { SelectDropdownComponent } from './select/select-dropdown';
 import { StackComponent } from './stack';
+import { ListDropdownComponent } from './exp/list-dropdown';
+import { OptionComponentExp, SelectComponentExp } from './exp';
 
 export * from './accordion';
 export * from './app-bar';
@@ -142,6 +144,7 @@ export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
 export * from './stack';
+export * from './exp';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
@@ -219,7 +222,10 @@ const CUSTOM_ELEMENTS = [
   TooltipComponent,
   ViewSwitcherComponent,
   ViewComponent,
-  AutocompleteComponent
+  AutocompleteComponent,
+  SelectComponentExp,
+  ListDropdownComponent,
+  OptionComponentExp
 ];
 
 /**

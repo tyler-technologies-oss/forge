@@ -55,7 +55,7 @@ module.exports = defineConfig({
     ViteTransformForgeInlineStyleImports,
     ViteEjsPlugin({
       site: {
-        title: 'Tyler Forge™ Dev'
+        title: 'Tyler Forge™ Dev (@next)'
       }
     }),
     ViteFullReload(['./**/*.ejs'])

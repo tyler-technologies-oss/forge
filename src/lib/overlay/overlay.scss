@@ -1,15 +1,81 @@
 @use './mixins';
 
 :host {
-  display: block;
+  display: contents;
 }
+
+// :host {
+//   display: none;
+// }
+  
+// :host([popover]:popover-open) {
+//   inset: unset;
+//   top: 0;
+//   left: 0;
+//   // position-fallback: --fallback-default;
+//   // translate: -50% 0;
+//   border: none;
+//   padding: 0;
+//   margin: 0;
+//   overflow: visible;
+//   color: inherit;
+
+//   display: block;
+//   // opacity: 1;
+
+// }
+
+// @position-fallback --fallback-default {
+//   @try {
+//     top: anchor(bottom);
+//     left: anchor(left);
+//   }
+
+//   @try {
+//     top: anchor(bottom);
+//     right: anchor(right);
+//   }
+
+//   @try {
+//     bottom: anchor(top);
+//     left: anchor(start);
+//   }
+// }
+
+// @position-fallback --fallback-default {
+//   @try {
+//     top: anchor(bottom);
+//     left: anchor(left);
+//   }
+
+//   @try {
+//     top: anchor(bottom);
+//     right: anchor(right);
+//   }
+
+//   @try {
+//     bottom: anchor(top);
+//     left: anchor(start);
+//   }
+// }
+
+// @position-fallback --fallback-cascade {
+//   @try {
+//     top: anchor(bottom);
+//     left: anchor(left);
+//   }
+// }
+
+// :host::backdrop {
+//   display: none;
+// }
 
 :host([hidden]) {
   display: none;
 }
 
 :host([position-strategy=absolute]) {
-  @include mixins.absolute;
+  --forge-overlay-position: absolute;
 }
 
 @include mixins.core-styles;

@@ -1,11 +1,5 @@
-:root {
-  --forge-overlay-background: var(--forge-theme-elevated-surface);
-  --forge-overlay-box-shadow: var(--forge-theme-popup-elevation);
+forge-popover {
   --forge-overlay-width: 300px;
-}
-
-.overlay-content {
-  padding: 16px;
 }
 
 .clipping-container {
@@ -15,7 +9,7 @@
 
   &.force-clipping {
     transform: translate3d(0,0,0);
-    border-color: var(--mdc-theme-error);
+    border: 2px dashed var(--mdc-theme-error);
   }
 
   &.use-small-container {
@@ -24,9 +18,17 @@
 }
 
 .scroll-container {
-  height: 250%;
-  width: 250%;
+  height: 350%;
+  width: 350%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.select-dropdown-section {
+  display: flex;
+  justify-content: center;
+  border: 1px dashed var(--forge-theme-border-color);
+  font-size: 0.75em;
+  padding: 16px;
 }

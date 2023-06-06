@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, ICustomElement } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { PopoverAdapter } from './popover-adapter';
 import { PopoverFoundation } from './popover-foundation';
 import { POPOVER_CONSTANTS } from './popover-constants';
@@ -9,7 +9,7 @@ import { OverlayComponent } from '../overlay';
 import { BaseComponent } from '../core';
 
 export interface IPopoverComponent extends ICustomElement {
-
+  targetElement: HTMLElement;
 }
 
 declare global {
@@ -51,4 +51,7 @@ export class PopoverComponent extends BaseComponent implements IPopoverComponent
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
 
   }
+
+  @FoundationProperty()
+  public targetElement: HTMLElement;
 }

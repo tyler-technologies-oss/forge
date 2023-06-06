@@ -1,11 +1,11 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { OverlayAdapter } from './overlay-adapter';
+import { IOverlayPosition, OVERLAY_CONSTANTS, OverlayPlacement, OverlayPositionStrategy } from './overlay-constants';
 import { OverlayFoundation } from './overlay-foundation';
-import { IOverlayPosition, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from './overlay-constants';
 
+import { BaseComponent, IBaseComponent } from '../core';
 import template from './overlay.html';
 import styles from './overlay.scss';
-import { BaseComponent, IBaseComponent } from '../core';
 
 export interface IOverlayComponent extends IBaseComponent {
   open: boolean;
@@ -14,9 +14,8 @@ export interface IOverlayComponent extends IBaseComponent {
   positionStrategy: OverlayPositionStrategy;
   offset: IOverlayPosition;
   hideWhenClipped: boolean;
-  position(): void;
-  show(): Promise<void>;
-  hide(): Promise<void>;
+  static: boolean;
+  internals: ElementInternals;
 }
 
 declare global {
@@ -43,16 +42,19 @@ export class OverlayComponent extends BaseComponent implements IOverlayComponent
       OVERLAY_CONSTANTS.attributes.OPEN,
       OVERLAY_CONSTANTS.attributes.PLACEMENT,
       OVERLAY_CONSTANTS.attributes.POSITION_STRATEGY,
-      OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED
+      OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED,
+      OVERLAY_CONSTANTS.attributes.STATIC
     ];
   }
 
   private _foundation: OverlayFoundation;
+  public internals: ElementInternals;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
     this._foundation = new OverlayFoundation(new OverlayAdapter(this));
+    this.internals = this.attachInternals();
   }
 
   public connectedCallback(): void {
@@ -77,6 +79,9 @@ export class OverlayComponent extends BaseComponent implements IOverlayComponent
       case OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED:
         this.hideWhenClipped = coerceBoolean(newValue);
         break;
+      case OVERLAY_CONSTANTS.attributes.STATIC:
+        this.static = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -98,15 +103,6 @@ export class OverlayComponent extends BaseComponent implements IOverlayComponent
   @FoundationProperty()
   public hideWhenClipped: boolean;
 
-  public position(): void {
-    this._foundation.position();
-  }
-
-  public show(): Promise<void> {
-    return this._foundation.show();
-  }
-
-  public hide(): Promise<void> {
-    return this._foundation.hide();
-  }
+  @FoundationProperty()
+  public static: boolean;
 }

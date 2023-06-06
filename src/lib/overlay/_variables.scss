@@ -1,7 +1,7 @@
-@use '@material/animation/animation' as mdc-animation;
+// @use '@material/animation/animation' as mdc-animation;
 
-$transition-duration: 120ms !default;
-$transition: opacity $transition-duration ease-in-out,
-             transform $transition-duration mdc-animation.$deceleration-curve-timing-function !default;
-$will-change: opacity, transform;
-$border-radius: 4px; // TODO: make this a global theme token
+// $transition-duration: 120ms !default;
+// $transition: opacity $transition-duration ease-in-out,
+//              transform $transition-duration mdc-animation.$deceleration-curve-timing-function !default;
+// $will-change: opacity, transform;
+// $border-radius: 4px; // TODO: make this a global theme token

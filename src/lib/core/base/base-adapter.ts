@@ -8,6 +8,7 @@ export interface IBaseAdapter {
   setHostAttribute(name: string, value?: string): void;
   toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void;
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
+  dispatchHostEvent(config: IDispatchEventConfig): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   removeHostListener(event: string, callback: (event: Event) => void): void;
   addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
@@ -17,6 +18,14 @@ export interface IBaseAdapter {
   getScreenWidth(): number;
   setBodyAttribute(name: string, value: string): void;
   removeBodyAttribute(name: string): void;
+}
+
+export interface IDispatchEventConfig {
+  type: string;
+  detail?: unknown;
+  bubbles?: boolean;
+  cancelable?: boolean;
+  composed?: boolean;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
@@ -40,6 +49,14 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public emitHostEvent(type: string, data: any = null, bubble = true, cancelable?: boolean): boolean {
     return emitEvent(this._component, type, data, bubble, cancelable);
+  }
+
+  public dispatchHostEvent({ type, detail = null, bubbles = true, cancelable = false, composed = false }: IDispatchEventConfig): boolean {
+    if (!type) {
+      throw new Error('Invalid event type.');
+    }
+    const evt = new CustomEvent(type, { detail, bubbles, cancelable, composed });
+    return !this._component.dispatchEvent(evt);
   }
 
   public addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
