@@ -10,6 +10,7 @@ const attributes = {
   SIGN_OUT_TEXT: 'sign-out-text',
   PROFILE_TEXT: 'profile-text',
   AVATAR_TEXT: 'avatar-text',
+  AVATAR_ICON: 'avatar-icon',
   AVATAR_IMAGE_URL: 'avatar-image-url',
   AVATAR_LETTER_COUNT: 'avatar-letter-count'
 };

@@ -3,12 +3,14 @@ import { tick, timer } from '@tylertech/forge-testing';
 import { defineAppBarProfileButtonComponent, IAppBarProfileButtonComponent, AppBarProfileButtonComponent, APP_BAR_PROFILE_BUTTON_CONSTANTS } from '@tylertech/forge/app-bar/profile-button';
 import { ProfileCardComponent, PROFILE_CARD_CONSTANTS } from '@tylertech/forge/profile-card';
 import { PopupComponent, POPUP_CONSTANTS } from '@tylertech/forge/popup';
+import { IIconComponent } from '@tylertech/forge/icon';
 
 const fullName = 'Jane Doe';
 const email = 'jane.doe@gmail.com';
 const avatarImageUrl = 'https://cdn.forge.tylertech.com/v1/images/spot/artistry-spot.svg';
 const avatarLetterCount = 1;
 const avatarText = 'OP';
+const avatarIcon = 'person';
 
 interface ITestContext {
   context: ITestAppBarProfileButtonContext;
@@ -122,6 +124,28 @@ describe('AppBarProfileButtonComponent', function(this: ITestContext) {
     this.context.component.setAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_TEXT, avatarText);
     expect(this.context.component.avatarText).toBe(avatarText, `AvatarText property should be ${avatarText}`);
     expect(this.context.component.getAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_TEXT)).toBe(avatarText, `avatarText attribute should be ${avatarText}`);
+  });
+
+  it('should set avatar icon via property', function(this: ITestContext) {
+    this.context = setupTestContext();
+    this.context.component.avatarIcon = avatarIcon;
+
+    const iconEl = this.context.component.querySelector('forge-avatar > forge-icon') as IIconComponent;
+    expect(iconEl).toBeTruthy();
+    expect(iconEl.name).toBe(avatarIcon);
+    expect(this.context.component.avatarIcon).toBe(avatarIcon);
+    expect(this.context.component.getAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_ICON)).toBe(avatarIcon);
+  });
+
+  it('should set avatar icon via attribute', function(this: ITestContext) {
+    this.context = setupTestContext();
+    this.context.component.setAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_ICON, avatarIcon);
+
+    const iconEl = this.context.component.querySelector('forge-avatar > forge-icon') as IIconComponent;
+    expect(iconEl).toBeTruthy();
+    expect(iconEl.name).toBe(avatarIcon);
+    expect(this.context.component.avatarIcon).toBe(avatarIcon);
+    expect(this.context.component.getAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_ICON)).toBe(avatarIcon);
   });
 
   it('should set show sign out button via property', async function(this: ITestContext) {
