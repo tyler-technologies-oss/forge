@@ -4,6 +4,7 @@ import { defineComponents } from '../lib';
 import { StorybookMdxComponents } from './StorybookMdxProvider';
 import forgeTheme from './forge-theme';
 import { themes } from '@storybook/theming';
+import './style.css';
 
 defineComponents();
 addDefaultForgeTheme();
@@ -56,6 +57,6 @@ export const parameters = {
     dark: {
       ...themes.dark,
       ...forgeTheme.dark
-    }
+    },
   }
 };

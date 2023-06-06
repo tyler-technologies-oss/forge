@@ -6,7 +6,7 @@ import { IExpansionPanelProps } from '../expansion-panel-args';
 export const CardRecipeTemplate: Story<IExpansionPanelProps> = () => (
   <ForgeCard style={{'--forge-card-padding': '16px'}}>
     <ForgeExpansionPanel>
-      <button slot="header" style={{ all: 'unset', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+      <button slot="header" className={'expansion-panel-button expansion-panel-button--card'}>
         <div>Panel header</div>
         <ForgeOpenIcon />
       </button>

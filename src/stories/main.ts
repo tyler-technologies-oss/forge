@@ -28,6 +28,7 @@ module.exports = {
     '@storybook/addon-a11y',
     '@storybook/addon-storysource',
     '@storybook/addon-actions',
+    '@storybook/addon-styling',
     'storybook-dark-mode'
   ],
   typescript: {

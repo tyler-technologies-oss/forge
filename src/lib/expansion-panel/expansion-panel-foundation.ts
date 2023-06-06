@@ -134,7 +134,7 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
    * @param {MouseEvent} evt The click event.
    */
   private _onClick(evt: MouseEvent): void {
-    if (getEventPath(evt).find(p => p.hasAttribute && p.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.IGNORE))) {
+    if (getEventPath(evt).find(p => p.nodeType === 1 && (p.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.IGNORE) || p.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.IGNORE_ALT)))) {
       return;
     }
 
