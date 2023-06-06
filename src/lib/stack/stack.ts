@@ -1,7 +1,7 @@
 import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
 import { StackFoundation } from './stack-foundation';
-import { STACK_CONSTANTS, StackAlignMode } from './stack-constants';
+import { STACK_CONSTANTS, StackAlignMode, StackAlignment } from './stack-constants';
 import { BaseComponent } from '../core/base/base-component';
 
 import template from './stack.html';
@@ -12,7 +12,7 @@ export interface IStackComponent extends ICustomElement {
   wrap: boolean;
   stretch: boolean;
   gap: string;
-  alignment: StackAlignMode;
+  alignment: StackAlignMode | StackAlignment;
 }
 
 declare global {
@@ -63,7 +63,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
         this.gap = newValue;
         break;
       case STACK_CONSTANTS.attributes.ALIGNMENT:
-        this.alignment = newValue as StackAlignMode;
+        this.alignment = newValue as StackAlignment;
         break;
     }
   }
@@ -86,5 +86,5 @@ export class StackComponent extends BaseComponent implements IStackComponent {
 
   /** Controls if stack items are at the end of the row or column */
   @FoundationProperty()
-  public declare alignment: StackAlignMode;
+  public declare alignment: StackAlignMode | StackAlignment;
 }

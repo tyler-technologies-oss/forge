@@ -5,6 +5,7 @@ import { ForgeAppBar, ForgeAppBarProfileButton, ForgeIcon } from '@tylertech/for
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import { IAppBarProfileProps, argTypes } from './app-bar-profile-args';
+import { tylIconPerson } from '@tylertech/tyler-icons/standard';
 
 const MDX = require('./app-bar-profile.mdx').default;
 
@@ -14,9 +15,6 @@ export default {
   parameters: { 
     docs: { 
       page: MDX
-    },
-    controls: {
-      disable: true
     }
   }
 } as Meta;
@@ -24,14 +22,15 @@ export default {
 export const Default: Story<IAppBarProfileProps> = ({
   fullName = 'First Last',
   email = 'first.last@tylertech.com',
-  avatarImageUrl = 'https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg',
   avatarLetterCount = 2,
-  avatarText = 'FL',
+  avatarText = 'First Last',
+  useAvatarImage = false,
+  useAvatarIcon = false,
   signOutButton = true,
   profileButton = true,
 }) => {
   useEffect(() => {
-    IconRegistry.define(tylIconForgeLogo);
+    IconRegistry.define([tylIconForgeLogo, tylIconPerson]);
   }, []);
 
   function showToast(msg: string): void {
@@ -46,9 +45,10 @@ export const Default: Story<IAppBarProfileProps> = ({
       <ForgeAppBarProfileButton
         fullName={fullName}
         email={email}
-        avatarImageUrl={avatarImageUrl}
+        avatarImageUrl={useAvatarImage && !useAvatarIcon ? 'https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg' : null}
         avatarLetterCount={avatarLetterCount}
-        avatarText={avatarText}
+        avatarText={!useAvatarIcon ? avatarText : null}
+        avatarIcon={useAvatarIcon ? 'person' : null}
         signOutButton={signOutButton}
         profileButton={profileButton}
         on-forge-profile-card-sign-out={() => showToast('Sign out button clicked')}
@@ -61,9 +61,10 @@ export const Default: Story<IAppBarProfileProps> = ({
 Default.args = {
   fullName: 'First Last',
   email: 'first.last@tylertech.com',
-  avatarImageUrl: 'https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg',
   avatarLetterCount: 2,
   avatarText: 'First Last',
+  useAvatarImage: false,
+  useAvatarIcon: false,
   signOutButton: true,
   profileButton: true,
 } as IAppBarProfileProps;

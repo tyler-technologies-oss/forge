@@ -1,7 +1,8 @@
-import { getLightElement, notChildEventListener, getActiveElement } from '@tylertech/forge-core';
+import { getLightElement, notChildEventListener, getActiveElement, removeAllChildren } from '@tylertech/forge-core';
+import { IconComponentDelegate } from '../../icon';
 import { AVATAR_CONSTANTS, IAvatarComponent } from '../../avatar';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IPopupComponent, PopupAnimationType, PopupPlacement, POPUP_CONSTANTS } from '../../popup';
+import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../../popup';
 import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card';
 import { IAppBarProfileButtonComponent } from './app-bar-profile-button';
 import { IAppBarProfileCardConfig, APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
@@ -14,6 +15,7 @@ export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
   closePopup(): void;
   requestFocus(): void;
   setAvatarText(value: string): void;
+  setAvatarIcon(value: string): void;
   setAvatarLetterCount(value: number): void;
   setAvatarImageUrl(value: string): void;
   setSignOutButtonText(value: string): void;
@@ -52,6 +54,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
     this._profileCardElement.signOutText = profileCardConfig.signOutButtonText;
     this._profileCardElement.profileText = profileCardConfig.profileButtonText;
     this._profileCardElement.avatarText = profileCardConfig.avatarText;
+    this._profileCardElement.avatarIcon = profileCardConfig.avatarIcon;
     this._profileCardElement.avatarImageUrl = profileCardConfig.avatarImageUrl;
     this._profileCardElement.avatarLetterCount = profileCardConfig.avatarLetterCount;
     this._profileCardElement.addEventListener(PROFILE_CARD_CONSTANTS.events.PROFILE, () => profileListener());
@@ -92,6 +95,16 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
 
   public setAvatarText(value: string): void {
     this._avatarElement.text = value;
+    removeAllChildren(this._avatarElement);
+  }
+
+  public setAvatarIcon(value: string): void {
+    if (value) {
+      const iconDelegate = new IconComponentDelegate({ props: { name: value }});
+      this._avatarElement.replaceChildren(iconDelegate.element);
+    } else {
+      removeAllChildren(this._avatarElement);
+    }
   }
 
   public setAvatarLetterCount(value: number): void {
