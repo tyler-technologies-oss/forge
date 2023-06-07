@@ -2,6 +2,7 @@ import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { argTypes, IExpansionPanelProps } from './expansion-panel-args';
 import { ForgeExpansionPanel } from '@tylertech/forge-react';
+import './expansion-panel-style.css';
 
 const MDX = require('./expansion-panel.mdx').default;
 

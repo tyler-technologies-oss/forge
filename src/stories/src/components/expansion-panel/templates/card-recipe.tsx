@@ -2,6 +2,7 @@ import { Story } from '@storybook/react';
 import { ForgeCard, ForgeExpansionPanel, ForgeOpenIcon } from '@tylertech/forge-react';
 import React from 'react';
 import { IExpansionPanelProps } from '../expansion-panel-args';
+import '../expansion-panel-style.css';
 
 export const CardRecipeTemplate: Story<IExpansionPanelProps> = () => (
   <ForgeCard style={{'--forge-card-padding': '16px'}}>
