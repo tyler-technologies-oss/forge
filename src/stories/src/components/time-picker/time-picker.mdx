@@ -86,7 +86,7 @@ Gets/sets whether the input mask is applied to the `<input>` element. This is en
 
 <PropertyDef name="showMaskFormat" type="boolean" defaultValue="false">
 
-Gets/sets whether the input mask characters are shown and overwritten as the user types. Only applies if `masked` is `true`.
+Gets/sets whether the input mask characters are shown and overwritten as the user types. Only applies if `masked` is `true`. Only shows on focus, hides on blur. Ex. `__:__ __`
 
 > *Note* If using `showMaskFormat`, use the `placeholder` attribute to style it correctly. Without it, the mask format may be mistaken for input instead of placeholder text.
 

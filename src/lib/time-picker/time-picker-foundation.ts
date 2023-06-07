@@ -290,10 +290,19 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     if (this._allowInput) {
       this._adapter.selectInputText();
     }
+
+    if (this.masked && this._showMaskFormat) {
+      this._applyMask();
+    }
   }
 
   private _onInputBlur(evt: Event): void {
+    if (this.masked && this._showMaskFormat) {
+      this._applyMask();
+    }
+
     this._formatInputValue();
+
     if (this._open && !this._adapter.isInputFocused()) {
       this._closeDropdown(true);
     }
@@ -313,8 +322,9 @@ export class TimePickerFoundation implements ITimePickerFoundation {
 
   private _applyMask(): void {
     if (this._masked && this._allowInput) {
+      this._adapter.destroyMask();
       const options: ITimeInputMaskOptions = {
-        showMaskFormat: this._showMaskFormat,
+        showMaskFormat: this._showMaskFormat && this._adapter.isInputFocused(),
         use24HourTime: this._use24HourTime,
         showSeconds: this._allowSeconds,
         prepareCallback: this._prepareMaskCallback,
@@ -756,9 +766,6 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   public set showMaskFormat(value: boolean) {
     if (this._showMaskFormat !== value) {
       this._showMaskFormat = value;
-      if (this._isInitialized) {
-        this._applyMask();
-      }
     }
   }
 
@@ -769,10 +776,12 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     if (this._allowSeconds !== value) {
       this._allowSeconds = !!value;
       this._applyAllowSeconds();
+
       if (this._isInitialized) {
         this._applyMask();
         this._formatInputValue();
       }
+
       this._adapter.setHostAttribute(TIME_PICKER_CONSTANTS.attributes.ALLOW_SECONDS, `${!!value}`);
     }
   }
@@ -783,11 +792,12 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   public set use24HourTime(value: boolean) {
     if (this._use24HourTime !== value) {
       this._use24HourTime = !!value;
+      
       if (this._isInitialized) {
-        this._adapter.destroyMask();
-        this._formatInputValue();
         this._applyMask();
+        this._formatInputValue();
       }
+
       this._adapter.setHostAttribute(TIME_PICKER_CONSTANTS.attributes.USE_24_HOUR_TIME, `${!!value}`);
     }
   }

@@ -17,8 +17,8 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   private _to?: Date | null = null;
   private _toInputListener: (evt: Event) => void;
   private _toInputKeydownListener: (evt: KeyboardEvent) => void;
-  private _toInputFocusListener: (evt: Event) => void;
-  private _toInputBlurListener: (evt: Event) => void;
+  private _toInputFocusListener: (evt: FocusEvent) => void;
+  private _toInputBlurListener: (evt: FocusEvent) => void;
   private _toInputValueChangedListener: (value: string) => void;
 
   constructor(adapter: IDateRangePickerAdapter) {
@@ -31,6 +31,8 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   }
 
   protected _initializeState(): void {
+    this._applyToMask();
+
     if (!this._from) {
       this._from = this._coerceDateValue(this._adapter.getInputValue());
     }
@@ -112,6 +114,15 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
 
   protected _getCurrentValue(): IDatePickerRange | null | undefined {
     return this._value;
+  }
+
+  private _applyToMask(): void {
+    if (this._masked) {
+      this._initializeToMask();
+    } else {
+      this._adapter.destroyToMask();
+      this._formatToInputValue();
+    }
   }
 
   private _formatToInputValue(): void {
@@ -235,25 +246,24 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     super._applyMax();
   }
 
-  protected override _initializeMask(): void {
-    super._initializeMask();
-
-    // We also need to initialize our mask for the "to" input
-    if (this._masked) {
-      const options: IDateInputMaskOptions = {
-        showMaskFormat: this._showMaskFormat,
-        pattern: this._maskFormat,
-        onChange: (value: string) => this._handleToInput(value)
-      };
-
-      if (this._prepareMaskCallback) {
-        options.prepareCallback = (value, masked, flags, maskInstance) => {
-          return this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
-        };
-      }
-
-      this._adapter.initializeToMask(options);
+  protected _initializeToMask(): void {
+    if (!this._masked) {
+      return;
     }
+
+    const options: IDateInputMaskOptions = {
+      showMaskFormat: this._showMaskFormat && this._adapter.isInputFocused(),
+      pattern: this._maskFormat,
+      onChange: (value: string) => this._handleToInput(value)
+    };
+
+    if (this._prepareMaskCallback) {
+      options.prepareCallback = (value, masked, flags, maskInstance) => {
+        return this._prepareMaskCallback.call(null, value, masked, flags, maskInstance);
+      };
+    }
+
+    this._adapter.initializeToMask(options);
   }
 
   protected _applyDisabledDates(): void {
@@ -306,11 +316,42 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
 
   private _onToInputFocus(): void {
     this._adapter.selectToInputText();
+    if (this.masked && this._showMaskFormat) {
+      this._initializeMask();
+      this._initializeToMask();
+    }
   }
 
-  private _onToInputBlur(evt: Event): void {
+  private _onToInputBlur(evt: FocusEvent): void {
+    if (this._masked && !this._adapter.isInputFocused(evt.relatedTarget)) {
+      this._initializeMask();
+      this._initializeToMask();
+    }
+
     this._formatToInputValue();
+
     if (this._open) {
+      this._closeCalendar(true);
+    }
+  }
+
+  protected override _onInputFocus(evt: FocusEvent): void {
+    this._adapter.selectInputText();
+    if (this.masked && this._showMaskFormat) {
+      this._initializeMask();
+      this._initializeToMask();
+    }
+  }
+
+  protected override _onInputBlur(evt: FocusEvent): void {
+    if (this.masked && !this._adapter.isInputFocused(evt.relatedTarget)) {
+      this._initializeMask();
+      this._initializeToMask();
+    }
+
+    this._formatInputValue();
+
+    if (this._open && !this._adapter.isInputFocused(evt.relatedTarget)) {
       this._closeCalendar(true);
     }
   }
