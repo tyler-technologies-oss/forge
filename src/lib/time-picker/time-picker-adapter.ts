@@ -59,9 +59,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public initializeMask(options: ITimeInputMaskOptions): void {
-    if (this._inputMask) {
-      this._inputMask.destroy();
-    }
+    this.destroyMask();
     this._inputMask = new TimeInputMask(this._inputElement, options);
   }
 
@@ -72,10 +70,8 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public destroyMask(): void {
-    if (this._inputMask) {
-      this._inputMask.destroy();
-      this._inputMask = undefined;
-    }
+    this._inputMask?.destroy();
+    this._inputMask = undefined;
   }
 
   public initializeAccessibility(identifier: string): void {

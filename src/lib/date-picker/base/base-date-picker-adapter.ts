@@ -31,7 +31,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   tryFocusInput(): void;
   tryBlurInput(): void;
   isInputDisabled(): boolean;
-  isInputFocused(): boolean;
+  isInputFocused(target?: EventTarget | null): boolean;
   setDisabled(value: boolean): void;
   getInputValue(): string;
   setInputValue(value: string, emitEvents: boolean): void;
@@ -84,7 +84,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   public abstract tryFocusInput(): void;
   public abstract tryBlurInput(): void;
   public abstract isInputDisabled(): boolean;
-  public abstract isInputFocused(): boolean;
+  public abstract isInputFocused(target?: EventTarget | null): boolean;
   public abstract setDisabled(value: boolean): void;
   public abstract addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
   public abstract removeInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;

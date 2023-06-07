@@ -1033,6 +1033,80 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(this.context.inputElement.value).toBe(invalidTimeValue);
   });
 
+  it('should use input mask', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    this.context.component.masked = true;
+
+    expect(this.context.component.masked).toBe(true);
+
+    const inputElement = this.context.inputElement;
+
+    inputElement.value = '0101';
+    inputElement.dispatchEvent(new KeyboardEvent('input'));
+
+    expect(inputElement.value).toBe('01:01');
+  });
+
+  it('should only show default mask format on focus', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const inputElement = this.context.inputElement;
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.MASKED, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_MASK_FORMAT, '');
+
+    expect(this.context.component.masked).toBe(true);
+    expect(this.context.component.showMaskFormat).toBe(true);
+    expect(inputElement.value).toBe('');
+    inputElement.focus();
+    expect(inputElement.value).toBe('__:__ __');
+  });
+
+  it('should only show 24hour mask format on focus', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const inputElement = this.context.inputElement;
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.MASKED, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_MASK_FORMAT, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.USE_24_HOUR_TIME, '');
+
+    expect(this.context.component.masked).toBe(true);
+    expect(this.context.component.showMaskFormat).toBe(true);
+    expect(this.context.component.use24HourTime).toBe(true);
+    expect(inputElement.value).toBe('');
+    inputElement.focus();
+    expect(inputElement.value).toBe('__:__');
+  });
+
+  it('should only show seconds mask format on focus', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const inputElement = this.context.inputElement;
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.MASKED, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_MASK_FORMAT, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.ALLOW_SECONDS, '');
+
+    expect(this.context.component.masked).toBe(true);
+    expect(this.context.component.showMaskFormat).toBe(true);
+    expect(this.context.component.allowSeconds).toBe(true);
+    expect(inputElement.value).toBe('');
+    inputElement.focus();
+    expect(inputElement.value).toBe('__:__:__ __');
+  });
+
+  it('should clear mask format on blur', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const inputElement = this.context.inputElement;
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.MASKED, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_MASK_FORMAT, '');
+
+    expect(this.context.component.masked).toBe(true);
+    expect(this.context.component.showMaskFormat).toBe(true);
+    expect(inputElement.value).toBe('');
+    inputElement.focus();
+    expect(inputElement.value).toBe('__:__ __');
+    inputElement.dispatchEvent(new KeyboardEvent('input'));
+    inputElement.blur();
+
+    expect(inputElement.value).toBeFalsy();
+  });
+
   it('should use custom callbacks to control values', async function(this: ITestContext) {
     this.context = _createTimePickerContext(); 
 

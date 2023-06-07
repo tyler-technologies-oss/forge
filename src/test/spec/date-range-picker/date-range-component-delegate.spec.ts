@@ -37,7 +37,7 @@ describe('DateRangeComponentDelegate', function(this: ITestContext) {
     expect(this.context.delegate.element.value?.to).toEqual(new Date(value.to));
   });
 
-  it('should execute change callback when from input is modified', function(this: ITestContext) {
+  it('should execute change callback when "from" input is modified', function(this: ITestContext) {
     this.context = setupTestContext(true);
 
     const changeSpy = jasmine.createSpy('change spy');
@@ -49,10 +49,11 @@ describe('DateRangeComponentDelegate', function(this: ITestContext) {
     expect(changeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ from: new Date('01/01/2020'), to: null }));
   });
 
-  it('should execute change callback when to input is modified', function(this: ITestContext) {
+  it('should execute change callback when "to" input is modified', function(this: ITestContext) {
     this.context = setupTestContext(true);
     const changeSpy = jasmine.createSpy('change spy');
     this.context.delegate.onChange(changeSpy);
+    this.context.delegate.toInput.focus();
     this.context.delegate.toInput.value = '01/01/2020';
     this.context.delegate.toInput.dispatchEvent(new KeyboardEvent('input'));
     

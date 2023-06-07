@@ -1,4 +1,4 @@
-import { addClass, calculateFontWidth, getShadowElement, IFontInfo, listenOwnProperty, Platform, removeClass, getActiveElement, createElementAttributeObserver, toggleClass } from '@tylertech/forge-core';
+import { addClass, calculateFontWidth, getShadowElement, IFontInfo, listenOwnProperty, Platform, removeClass, getActiveElement, createElementAttributeObserver, toggleClass, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { FloatingLabel, IFloatingLabel } from '../floating-label/floating-label';
 import { IFieldComponent } from './field';
@@ -20,6 +20,7 @@ export interface IFieldAdapter extends IBaseAdapter {
   removeLabelSlotListener(listener: (evt: Event) => void): void;
   setLabelClass(name: string): void;
   removeLabelClass(name: string): void;
+  isLabelFloating(): boolean;
 
   // leading
   addLeadingSlotListener(listener: (evt: Event) => void): void;
@@ -39,7 +40,7 @@ export interface IFieldAdapter extends IBaseAdapter {
   hasLeadingNodes(): boolean;
   hasPlaceholder(): boolean;
   hasTrailingNodes(): boolean;
-  inputHasFocus(): boolean;
+  inputHasFocus(target?: EventTarget | null): boolean;
   inputHasValue(): boolean;
   fieldHasValue(): boolean;
   isDisabled(): boolean;
@@ -189,8 +190,8 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     return this._inputElement.placeholder ? this._inputElement.placeholder.trim().length > 0 : false;
   }
 
-  public inputHasFocus(): boolean {
-    return this._inputElement === getActiveElement();
+  public inputHasFocus(target?: EventTarget | null): boolean {
+    return this._inputElement === target || this._inputElement === getActiveElement();
   }
 
   public setLabelClass(name: string): void {
@@ -203,6 +204,10 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     if (this._labelElement) {
       this._labelElement.classList.remove(name);
     }
+  }
+
+  public isLabelFloating(): boolean {
+    return this._component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
   }
 
   public setRoomy(isRoomy: boolean): void {
