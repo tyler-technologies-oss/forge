@@ -21,6 +21,7 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   value: any;
   debounce: number;
   filterOnFocus: boolean;
+  filterFocusFirst: boolean;
   allowUnmatched: boolean;
   matchKey: string | null | undefined;
   popupTarget: string;
@@ -74,6 +75,7 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       AUTOCOMPLETE_CONSTANTS.attributes.MULTIPLE,
       AUTOCOMPLETE_CONSTANTS.attributes.DEBOUNCE,
       AUTOCOMPLETE_CONSTANTS.attributes.FILTER_ON_FOCUS,
+      AUTOCOMPLETE_CONSTANTS.attributes.FILTER_FOCUS_FIRST,
       AUTOCOMPLETE_CONSTANTS.attributes.ALLOW_UNMATCHED,
       AUTOCOMPLETE_CONSTANTS.attributes.POPUP_TARGET,
       AUTOCOMPLETE_CONSTANTS.attributes.POPUP_CLASSES,
@@ -123,6 +125,9 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
       case AUTOCOMPLETE_CONSTANTS.attributes.FILTER_ON_FOCUS:
         this.filterOnFocus = coerceBoolean(newValue);
         break;
+      case AUTOCOMPLETE_CONSTANTS.attributes.FILTER_FOCUS_FIRST:
+        this.filterFocusFirst = coerceBoolean(newValue);
+        break;
       case AUTOCOMPLETE_CONSTANTS.attributes.ALLOW_UNMATCHED:
         this.allowUnmatched = coerceBoolean(newValue);
         break;
@@ -160,6 +165,10 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   /** Gets/sets filter on focus settings which controls whether the dropdown displays automatically when focused. */
   @FoundationProperty()
   public declare filterOnFocus: boolean;
+
+  /** Gets/sets whether the first option in the dropdown will be focused automatically when opened or not. */
+  @FoundationProperty()
+  public declare filterFocusFirst: boolean;
 
   /** Controls whether unmatched text entered by the user will stay visible an option in the dropdown is not found. */
   @FoundationProperty()

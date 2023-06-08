@@ -801,6 +801,24 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(activeListItemIndex).toBe(0);
     });
 
+    it('should not activate first option if filterFocusFirst is false', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.filterFocusFirst = false;
+      this.context.input.focus();
+      this.context.component.openDropdown();
+
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+
+      this.context.input.value = 'o';
+      this.context.input.dispatchEvent(new Event('input'));
+      await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+      await tick();
+
+      const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
+      expect(activeListItemIndex).toBe(-1);
+    });
+
     it('should not activate first option when clearing filter text', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
