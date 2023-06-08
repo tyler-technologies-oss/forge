@@ -56,6 +56,6 @@ export const parameters = {
     dark: {
       ...themes.dark,
       ...forgeTheme.dark
-    }
+    },
   }
 };
