@@ -6,8 +6,12 @@ import { CircularProgressCustomHtml, CircularProgressCustomScss } from './code/c
 
 # Circular progress
 
-The circular progress is a configurable component that can be used for both determinate and indeterminate busy states. It renders as an svg,
-and the properties can be controlled dynamically through the component and CSS custom properties.
+Circular progress indicators display progress by animating along a circular track in a clockwise direction.
+
+Progress indicators inform users about the status of ongoing processes.
+
+  - Determinate indicators display how long a process will take.
+  - Indeterminate indicators express an unspecified amount of wait time.
 
 </PageSection>
 
@@ -39,17 +43,11 @@ The following example shows how easy it is to customize the theme, diameter, and
 
 ## Properties/Attributes
 
-<PropertyDef name="open" type="boolean" defaultValue="true">
-
-Controls the visibility of the circular progress.
-
-</PropertyDef>
-
 <PropertyDef name="determinate" type="boolean" defaultValue="false">
 
-Gets/sets determinate.
+Gets/sets the determinate state.
 
-**false:** continuous animation.
+**false:** indeterminate (continuous) animation.
 
 **true:** allows for setting specific progress percentage amount to be controlled manually.
 
@@ -57,7 +55,7 @@ Gets/sets determinate.
 
 <PropertyDef name="progress" type="number" defaultValue="0">
 
-Gets/sets the progress percentage. Valid values are between 0 and 1.
+Gets/sets the progress percentage. Valid values are between `0` and `1`.
 
 </PropertyDef>
 
@@ -69,22 +67,7 @@ Gets/sets the progress percentage. Valid values are between 0 and 1.
 
 | Name                                            | Description
 | :-----------------------------------------------| :----------
-| `root`                                          | The root element.
-| `determinate-container`                         | The determinate container element.
-| `determinate-svg`                               | The determinate `<svg>` element.
-| `determinate-svg-circle-track`                  | The determinate track SVG `<circle>` element.
-| `determinate-svg-circle`                        | The determinate circle SVG `<circle>` element.
-| `indeterminate-container`                       | The indeterminate container.
-| `spinner-container`                             | The spinner container.
-| `spinner-circle-left`                           | The left circle container.
-| `spinner-circle-left-svg`                       | The left circle container `<svg>` element.
-| `spinner-circle-left-svg-circle`                | The left circle SVG `<circle>` element.
-| `spinner-gap`                                   | The spinner gap container element.
-| `spinner-gap-svg`                               | The spinner gap `<svg>` element.
-| `spinner-gap-circle`                            | The spinner gap SVG `<circle>` element.
-| `spinner-circle-right`                          | The right circle container.
-| `spinner-circle-right-svg`                      | The right circle container `<svg>` element.
-| `spinner-circle-right-svg-circle`               | The right circle SVG `<circle>` element.
+| `progressbar`                                   | The progress indicator container element.
 
 </PageSection>
 
@@ -92,12 +75,13 @@ Gets/sets the progress percentage. Valid values are between 0 and 1.
 
 ## CSS custom properties
 
-| Name                                            | Description
-| :-----------------------------------------------| :----------
-| `--forge-theme-tertiary`                        | Sets the stroke color.
-| `--forge-circular-progress-track-color`         | Sets the track (background) color.
-| `--forge-circular-progress-size`                | Sets the diameter of the circle. Default is `72px`.
-| `--forge-circular-progress-stroke-width`        | Sets the stroke width of the outline. Default is `4`.
+| Name                                                    | Description
+| :-------------------------------------------------------| :----------
+| `--forge-circular-progress-size`                        | Sets the indicator diameter (heigth and width). Default is `48px`.
+| `--forge-circular-progress-padding`                     | Sets the padding between the container and the indicator track. Default is `0`.
+| `--forge-circular-progress-indicator-width`             | Sets the indicator track width.
+| `--forge-circular-progress-indicator-color`             | Sets the indicator theme color. Inherits from the tertiary theme by default.
+| `--forge-circular-progress-indicator-background-color`  | Sets the indicator background color. Inherits from the text-disabled-on-background theme by default.
 
 </PageSection>
 
@@ -105,6 +89,6 @@ Gets/sets the progress percentage. Valid values are between 0 and 1.
 
 ## Accessibility
 
-* Ensure the progress indicator provides a role attribute with value "alert", and an `aria-busy="true"`attribute while the progress indicator is active.
+* Ensure the progress indicator provides a role attribute with value "alert", and an `aria-busy="true"` attribute while the progress indicator is active.
 
 </PageSection>

@@ -1,0 +1,116 @@
+@use './variables';
+@use './core';
+@use './animations';
+
+@forward './variables';
+@forward './core';
+@forward './animations';
+
+///
+/// Creates selectors for the standard circular progress structure
+/// 
+@mixin styles {
+  @include base-styles;
+  @include indeterminate-styles;
+  @include determinate-styles;
+  @include forced-colors;
+  @include animations.keyframes;
+}
+
+///
+/// Selectors for the base container structure
+/// 
+@mixin base-styles {
+  @layer base {
+    .#{variables.$prefix} {
+      @include core.configuration;
+      @include core.progress;
+
+      &--indeterminate {
+        @include core.indeterminate;
+      }
+    }
+
+    .#{variables.$prefix},
+    .spinner,
+    .left,
+    .right,
+    .circle,
+    svg {
+      @include core.positioned;
+    }
+  }
+}
+
+///
+/// Selectors for the indeterminate structure
+/// 
+@mixin indeterminate-styles {
+  @layer indeterminate {
+    .left {
+      @include core.indeterminate-left;
+
+      .circle {
+        @include core.indeterminate-left-circle;
+      }
+    }
+        
+    .right {
+      @include core.indeterminate-right;
+
+      .circle {
+        @include core.indeterminate-right-circle;
+      }
+    }
+
+    .circle {
+      @include core.indeterminate-circle;
+    }
+  }
+}
+
+///
+/// Selectors for the determinate structure
+/// 
+@mixin determinate-styles {
+  @layer determinate {
+    svg {
+      @include core.determinate-svg;
+
+      circle {
+        @include core.determinate-svg-circle;
+      }
+    }
+
+    .progress {
+      @include core.determinate-progress;
+    }
+
+    .track {
+      @include core.determinate-track;
+
+      &-background {
+        @include core.determinate-track-background;
+      }
+    }
+
+    .spinner {
+      @include core.determinate-spinner;
+    }
+  }
+}
+
+///
+/// Provides selectors to support forced-colors mode
+/// 
+@mixin forced-colors {
+  @media screen and (forced-colors: active) {
+    .progress {
+      stroke: CanvasText;
+    }
+
+    .circle {
+      border-color: CanvasText CanvasText Canvas Canvas;
+    }
+  }
+}

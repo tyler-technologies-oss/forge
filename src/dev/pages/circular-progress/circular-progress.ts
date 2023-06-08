@@ -9,15 +9,10 @@ let determinateIntervalTimer: number | undefined;
 const showTrackToggle = document.getElementById('opt-show-track') as ISwitchComponent;
 showTrackToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   if (selected) {
-    circularProgress.style.setProperty('--forge-circular-progress-track-color', 'var(--mdc-theme-text-disabled-on-background)');
+    circularProgress.style.removeProperty('--forge-circular-progress-indicator-background-color');
   } else {
-    circularProgress.style.removeProperty('--forge-circular-progress-track-color');
+    circularProgress.style.setProperty('--forge-circular-progress-indicator-background-color', 'transparent');
   }
-});
-
-const openToggle = document.getElementById('opt-open') as ISwitchComponent;
-openToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
-  circularProgress.open = selected;
 });
 
 const showPercentToggle = document.getElementById('opt-show-percent') as ISwitchComponent;
@@ -34,11 +29,10 @@ themeSelect.addEventListener('change', ({ detail }) => {
   }
 });
 
-const modeSelect = document.getElementById('opt-mode') as ISelectComponent;
-modeSelect.addEventListener('change', ({ detail }) => {
-  circularProgress.determinate = detail === 'determinate';
-  
-  showTrackToggle.disabled = !circularProgress.determinate;
+const determinateToggle = document.getElementById('opt-determinate') as ISwitchComponent;
+determinateToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  circularProgress.determinate = selected;
+
   showPercentToggle.disabled = !circularProgress.determinate;
 
   if (!circularProgress.determinate) {
@@ -52,9 +46,9 @@ modeSelect.addEventListener('change', ({ detail }) => {
   if (circularProgress.determinate) {
     circularProgress.progress = 0;
     determinateIntervalTimer = window.setInterval(() => {
-      circularProgress.progress += 0.005;
-      if (circularProgress.progress >= 1) {
-        circularProgress.progress = 0;
+      circularProgress.progress += 0.025;
+      if (circularProgress.progress > 1) {
+        clearInterval(determinateIntervalTimer);
       }
       if (showPercentToggle.selected) {
         const percent = parseInt(String(parseFloat(circularProgress.progress.toFixed(2)) * 100), 10);
@@ -73,11 +67,20 @@ sizeInput.addEventListener('input', () => {
   }
 });
 
-const strokeWidthInput = document.getElementById('opt-stroke-width') as ISelectComponent;
-strokeWidthInput.addEventListener('input', () => {
-  if (!strokeWidthInput.value) {
-    circularProgress.style.removeProperty('--forge-circular-progress-stroke-width');
+const spacingInput = document.getElementById('opt-spacing') as HTMLInputElement;
+spacingInput.addEventListener('input', () => {
+  if (!spacingInput.value) {
+    circularProgress.style.removeProperty('--forge-circular-progress-padding');
   } else {
-    circularProgress.style.setProperty('--forge-circular-progress-stroke-width', strokeWidthInput.value);
+    circularProgress.style.setProperty('--forge-circular-progress-padding', spacingInput.value);
+  }
+});
+
+const trackWidthInput = document.getElementById('opt-track-width') as ISelectComponent;
+trackWidthInput.addEventListener('input', () => {
+  if (!trackWidthInput.value) {
+    circularProgress.style.removeProperty('--forge-circular-progress-indicator-width');
+  } else {
+    circularProgress.style.setProperty('--forge-circular-progress-indicator-width', trackWidthInput.value);
   }
 });
