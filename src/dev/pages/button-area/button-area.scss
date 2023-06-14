@@ -1,0 +1,17 @@
+forge-card {
+  --forge-card-padding: 0 !important;
+}
+
+.flex-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 16px;
+  
+  &>*:first-child {
+    margin-inline-end: auto;
+  }
+}
+
+forge-icon[name=chevron_right] {
+  margin-inline-start: 8px;
+}
