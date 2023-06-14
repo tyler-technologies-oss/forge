@@ -1,6 +1,6 @@
 import { removeElement } from '@tylertech/forge-core';
 import { tick } from '@tylertech/forge-testing';
-import { defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_CONSTANTS, SPLIT_VIEW_PANEL_CONSTANTS } from '@tylertech/forge/split-view';
+import { defineSplitViewComponent, ISplitViewComponent, ISplitViewPanelComponent, SplitViewAnimatingLayer, SPLIT_VIEW_CONSTANTS, SPLIT_VIEW_PANEL_CONSTANTS, ISplitViewAdapter } from '@tylertech/forge/split-view';
 
 interface ITestContext {
   context: ITestSplitViewContext;
@@ -178,6 +178,17 @@ describe('SplitViewComponent', function(this: ITestContext) {
       await tick();
       const size = this.context.panels![1].style.getPropertyValue(SPLIT_VIEW_PANEL_CONSTANTS.customCssProperties.SIZE);
       expect(size).not.toBe('0px');
+    });
+
+    it('should query only immediate child panels', function(this: ITestContext) {
+      const numberOfImmediateChildren = 2;
+      this.context = setupTestContext(true, numberOfImmediateChildren);
+      const div = document.createElement('div');
+      const panel = document.createElement('forge-split-view-panel');
+      div.appendChild(panel);
+      this.context.component.appendChild(div);
+      const queriedComponents = (this.context.component['_foundation']['_adapter'] as ISplitViewAdapter).getSlottedPanels();
+      expect(queriedComponents.length).toBe(2);
     });
   });
 
