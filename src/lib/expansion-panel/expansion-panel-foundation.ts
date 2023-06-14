@@ -1,4 +1,4 @@
-import { debounce, ICustomElementFoundation } from '@tylertech/forge-core';
+import { debounce, getEventPath, ICustomElementFoundation } from '@tylertech/forge-core';
 import { IExpansionPanelAdapter } from './expansion-panel-adapter';
 import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
@@ -134,6 +134,10 @@ export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
    * @param {MouseEvent} evt The click event.
    */
   private _onClick(evt: MouseEvent): void {
+    if (getEventPath(evt).find(p => p.nodeType === 1 && (p.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.IGNORE) || p.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.IGNORE_ALT)))) {
+      return;
+    }
+
     evt.stopPropagation();
     this._toggle();
     this._emitEvent();

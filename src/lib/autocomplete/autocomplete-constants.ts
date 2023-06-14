@@ -11,6 +11,7 @@ const attributes = {
   MULTIPLE: 'multiple',
   DEBOUNCE: 'debounce',
   FILTER_ON_FOCUS: 'filter-on-focus',
+  FILTER_FOCUS_FIRST: 'filter-focus-first',
   ALLOW_UNMATCHED: 'allow-unmatched',
   POPUP_TARGET: 'popup-target',
   POPUP_CLASSES: 'popup-classes',
