@@ -1,3 +1,17 @@
+# v2.16.1 (Wed Jun 14 2023)
+
+#### 🐛 Bug Fix
+
+- fix(split-view): query only immediate child panels [#328](https://github.com/tyler-technologies-oss/forge/pull/328) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(date-picker): always dispatch the change event when a valid date is entered if `allowInvalidDate` is `true` [#325](https://github.com/tyler-technologies-oss/forge/pull/325) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.16.0 (Thu Jun 08 2023)
 
 #### 🚀 Enhancement
