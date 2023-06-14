@@ -427,7 +427,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   }
 
   protected _isDateValueAcceptable(value?: Date | null): boolean {
-    if (!value) {
+    if (!value || this._allowInvalidDate) {
       return true;
     }
 

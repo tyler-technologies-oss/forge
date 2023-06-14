@@ -612,6 +612,19 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe(date);
     });
 
+    it('should allow value if matches disabled day of week date if allow invalid is set', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.allowInvalidDate = true;
+      this.context.component.disabledDaysOfWeek = [6]; // Saturdays
+
+      const disabledDate = '01/01/2000'; // This is a Saturday
+      const expectedDate = new Date(disabledDate);
+      this.context.component.value = expectedDate;
+
+      expect(this.context.component.value).toEqual(expectedDate);
+      expect(getInputElement(this.context.component).value).toBe(disabledDate);
+    });
+
     it('should clear value when min date is set if current value is not valid', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const minDate = new Date('01/01/2020');
