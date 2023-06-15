@@ -1,6 +1,5 @@
 import { ICustomElementFoundation, getEventPath } from '@tylertech/forge-core';
 
-import { ForgeRipple } from '../ripple';
 import { IButtonAreaAdapter } from './button-area-adapter';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 
@@ -10,19 +9,21 @@ export interface IButtonAreaFoundation extends ICustomElementFoundation {
 
 export class ButtonAreaFoundation implements IButtonAreaFoundation {
   private _disabled = false;
-  private _rippleInstance?: ForgeRipple;
   private _clickListener: (event: Event) => void;
+  private _pointerdownListener: (event: Event) => void;
   private _slotListener: () => void;
 
   constructor(private _adapter: IButtonAreaAdapter) {
     this._clickListener = event => this._handleClick(event);
+    this._pointerdownListener = event => this._handlePointerdown(event);
     this._slotListener = () => this._handleSlotChange();
   }
 
   public initialize(): void {
     this._adapter.addListener('click', this._clickListener);
+    this._adapter.addListener('pointerdown', this._pointerdownListener);
     this._adapter.addSlotChangeListener(this._slotListener);
-    this._setRipple();
+    this._adapter.createRipple();
   }
 
   public disconnect(): void {
@@ -49,6 +50,17 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     }
   }
 
+  private _handlePointerdown(event: Event): void {
+    if (this._disabled) {
+      return;
+    }
+
+    // Prevent the ripple animation when ignored children are clicked
+    if (this._shouldIgnoreEvent(event)) {
+      this._adapter.requestDisabledButtonFrame();
+    }
+  }
+
   private _handleSlotChange(): void {
     // Clear old button-connected listeners
     this._adapter.stopButtonObserver();
@@ -57,7 +69,7 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     this._adapter.startButtonObserver(() => this._handleButtonDisabled());
 
     // Match the component and button states if either is disabled
-    if (this._adapter.buttonDisabled()) {
+    if (this._adapter.buttonIsDisabled()) {
       this.disabled = true;
     } else if (this._disabled) {
       this._adapter.setDisabled(true);
@@ -65,27 +77,12 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
   }
 
   private _handleButtonDisabled(): void {
-    this.disabled = this._adapter.buttonDisabled();
+    this.disabled = this._adapter.buttonIsDisabled();
   }
 
   private _shouldIgnoreEvent(event: Event): boolean {
     const eventPath = getEventPath(event);
     return eventPath.some(el => el.nodeType === 1 && (el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE) || el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE_ALT)));
-  }
-
-  private async _setRipple(): Promise<void> {
-    if (!this._rippleInstance) {
-      const type = await this._adapter.userInteractionListener();
-      if (!this._rippleInstance) {
-        this._rippleInstance = this._adapter.createRipple();
-        if (type === 'focusin') {
-          this._rippleInstance.handleFocus();
-        }
-      }
-    } else {
-      this._rippleInstance.destroy();
-      this._rippleInstance = undefined;
-    }
   }
 
   public get disabled(): boolean {
