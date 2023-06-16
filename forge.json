@@ -9,12 +9,6 @@
   "karma": {
     "stylesheets": [
       "src/lib/forge.scss"
-    ],
-    "frameworks": [
-      "fixture"
-    ],
-    "plugins": [
-      "karma-fixture"
     ]
   },
   "build": {

@@ -1,4 +1,12 @@
 @use 'mixins';
 @use '../theme';
 
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
 @include mixins.core-styles;

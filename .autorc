@@ -1,0 +1,13 @@
+plugins:
+  - - npm
+    - setRcToken: false,
+    - publishFolder: dist/release/@tylertech/forge/
+  - conventional-commits
+  - released
+  - first-time-contributor
+  - ./plugins/auto/forge-prepare-publish
+author: GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>
+prereleaseBranches: [dev, beta, rc, next]
+versionBranches: true
+shipit:
+  - prerelease: true
