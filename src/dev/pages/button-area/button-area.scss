@@ -12,6 +12,11 @@ forge-card {
   }
 }
 
-forge-icon[name=chevron_right] {
+forge-icon[name=chevron_right],
+forge-open-icon {
   margin-inline-start: 8px;
+}
+
+.expansion-panel-content {
+  margin: 16px;
 }
