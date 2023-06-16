@@ -12,6 +12,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noImplicitThis": true,
     "useDefineForClassFields": false,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["src/lib"],
