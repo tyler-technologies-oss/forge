@@ -1,7 +1,7 @@
 plugins:
   - - npm
     - setRcToken: false
-    - publishFolder: dist/release/@tylertech/forge/
+      publishFolder: dist/release/@tylertech/forge/
   - conventional-commits
   - released
   - first-time-contributor
