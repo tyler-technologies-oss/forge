@@ -1,6 +1,6 @@
 plugins:
   - - npm
-    - setRcToken: false,
+    - setRcToken: false
     - publishFolder: dist/release/@tylertech/forge/
   - conventional-commits
   - released
@@ -10,4 +10,4 @@ author: GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>
 prereleaseBranches: [dev, beta, rc, next]
 versionBranches: true
 shipit:
-  - prerelease: true
+  prerelease: true
