@@ -534,11 +534,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       const label = option ? option.label : '';
 
       if (this._multiple) {
-        const optionIndex = flatOptions.findIndex(o => optionEqualPredicate(o, selectedValue, this._matchKey));
-        if (optionIndex >= 0) {
-          const selected = this._selectedOptions.some(o => optionEqualPredicate(o, selectedValue, this._matchKey));
-          this._adapter.toggleOptionMultiple(optionIndex, selected);
-        }
         const selectedOption = getSelectedOption(this._selectedOptions, value);
         if (selectedOption) {
           const index = this._selectedOptions.indexOf(selectedOption);
@@ -570,13 +565,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       // Select the text in the input to allow for the next filter
       if (!Platform.isMobile && keepFocus) {
         this._adapter.selectInputValue();
-      }
-
-      if (this._multiple) {
-        // If we're in multiselect mode, we need to toggle the selected option
-        const index = flatOptions.findIndex(o => optionEqualPredicate(o, selectedValue, this._matchKey));
-        const isSelected = this._values.includes(selectedValue);
-        this._adapter.toggleOptionMultiple(index, isSelected);
       }
 
       this._emitChangeEvent();
