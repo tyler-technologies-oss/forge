@@ -80,12 +80,12 @@
 
   @keyframes primary-indeterminate-translate#{$suffix} {
     0% {
-      transform: translateX(0px);
+      transform: translateX(0);
     }
 
     20% {
       animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
-      transform: translateX(0px);
+      transform: translateX(0);
     }
 
     59.15% {
@@ -106,7 +106,7 @@
   @keyframes secondary-indeterminate-translate#{$suffix} {
     0% {
       animation-timing-function: cubic-bezier(0.15, 0, 0.515058, 0.409685);
-      transform: translateX(0px);
+      transform: translateX(0);
     }
 
     25% {
