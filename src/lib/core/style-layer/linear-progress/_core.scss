@@ -1,0 +1,120 @@
+///
+/// Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
+/// The original source code can be found at [GitHub](https://github.com/material-components/material-web/blob/main/linearprogress/lib/_linear-progress.scss)
+///
+
+@use './variables';
+@use '../../../theme/theme-values';
+
+///
+/// Initializes private configuration state CSS variables
+/// 
+@mixin configuration {
+  --_track-height: var(--#{variables.$prefix}-height, #{variables.$track-height});
+  --_track-color: var(--#{variables.$prefix}-indicator-background-color, #{variables.$track-background-color});
+  --_active-indicator-color: var(--#{variables.$prefix}-indicator-color, var(--forge-theme-tertiary, #{theme-values.$tertiary}));
+
+  --_track-shape: 0;
+  --_active-indicator-height: var(--_track-height);
+  --_determinate-duration: #{variables.$determinate-duration};
+  --_indeterminate-duration: #{variables.$indeterminate-duration};
+  --_determinate-easing: #{variables.$determinate-easing};
+  --_track-dot-size: calc(var(--_track-height) / 2);
+  --_track-background-width: calc(var(--_track-dot-size) * 5);
+  --_track-background: 0 / var(--_track-background-width) 100%
+    radial-gradient(
+      circle at calc(var(--_track-dot-size) * 2),
+      var(--_track-color) 0,
+      var(--_track-color) var(--_track-dot-size),
+      transparent var(--_track-dot-size)
+    );
+}
+
+///
+/// Styles for the container/wrapper element to support the bounding box of the progress indicator
+/// 
+@mixin container {
+  display: block;
+  position: relative;
+  min-inline-size: 80px;
+  block-size: var(--#{variables.$prefix}-height, #{variables.$track-height});
+  content-visibility: auto;
+  contain: strict;
+}
+
+@mixin progress {
+  inset: 0;
+  outline: transparent solid 1px;
+  border-radius: var(--_track-shape);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+@mixin bar {
+  animation: none;
+  inline-size: 100%;
+  block-size: var(--_active-indicator-height);
+  transform-origin: left center;
+  will-change: transform;
+  transition: transform var(--_determinate-duration) var(--_determinate-easing);
+}
+
+@mixin secondary-bar {
+  display: none;
+}
+
+@mixin bar-inner {
+  inset: 0;
+  animation: none;
+  background: var(--_active-indicator-color);
+}
+
+@mixin buffer-bar {
+  background: var(--_track-color);
+  inset: 0;
+  will-change: transform;
+  transition: transform var(--_determinate-duration) var(--_determinate-easing);
+  transform-origin: left center;
+}
+
+@mixin track {
+  inset: 0;
+  will-change: transform;
+  animation: linear infinite var(--_determinate-duration);
+  animation-name: buffering;
+  background: var(--_track-background);
+}
+
+@mixin indeterminate-bar {
+  transition: none;
+}
+
+@mixin indeterminate-primary-bar {
+  inset-inline-start: -145.167%;
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration);
+  animation-name: primary-indeterminate-translate;
+}
+
+@mixin indeterminate-secondary-bar {
+  inset-inline-start: -54.8889%;
+  display: block;
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration);
+  animation-name: secondary-indeterminate-translate;
+}
+
+@mixin indeterminate-track {
+  display: none;
+}
+
+@mixin indeterminate-primary-bar-inner {
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration) primary-indeterminate-scale;
+}
+
+@mixin indeterminate-secondary-bar-inner {
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration) secondary-indeterminate-scale;
+}

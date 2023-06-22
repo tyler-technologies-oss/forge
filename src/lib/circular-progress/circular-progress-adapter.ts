@@ -14,7 +14,7 @@ export interface ICircularProgressAdapter extends IBaseAdapter {
 }
 
 export class CircularProgressAdapter extends BaseAdapter<ICircularProgressComponent> implements ICircularProgressAdapter {
-  private _rootElement: HTMLElement;
+  private readonly _rootElement: HTMLElement;
   private _determinateProgressCircleElement: HTMLElement | undefined;
 
   constructor(component: ICircularProgressComponent) {

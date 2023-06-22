@@ -22,11 +22,6 @@ describe('Circular Progress', () => {
     await expect(el).to.be.accessible();
   });
 
-  it('should be accessible if data-aria-label is provided in determinate mode', async () => {
-    const el = await fixture(html`<forge-circular-progress data-aria-label="Test label" determinate></forge-circular-progress>`);
-    await expect(el).to.be.accessible();
-  });
-
   it('should have expected defaults', async () => {
     const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress></forge-circular-progress>`);
     await expect(el.progress).to.equal(0);

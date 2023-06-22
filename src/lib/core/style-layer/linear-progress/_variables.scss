@@ -1,0 +1,10 @@
+@use '../core/config';
+
+$prefix: #{config.$prefix}-linear-progress !default;
+$track-height: 4px !default;
+$track-background-color: #ced5f7 !default;
+$track-background-color-dark: #7c704c !default;
+$determinate-duration: 250ms !default;
+$indeterminate-duration: 2s !default;
+$determinate-easing: cubic-bezier(0.4, 0, 0.6, 1) !default;
+
