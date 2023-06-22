@@ -1,6 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
-import { cssClasses as MDC_LINEAR_PROGRESS_CLASSES } from '@material/linear-progress';
 import {
   defineAutocompleteComponent,
   IAutocompleteComponent,
@@ -1016,14 +1015,12 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       const popup = this.context.component.popupElement;
       const skeletons = Array.from(popup!.querySelectorAll(SKELETON_CONSTANTS.elementName)) as ISkeletonComponent[];
       const linearProgress = popup!.querySelector(LINEAR_PROGRESS_CONSTANTS.elementName) as ILinearProgressComponent;
-      const linearProgressContainer = linearProgress.shadowRoot!.querySelector(LINEAR_PROGRESS_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       expect(skeletons.length).toBe(0);
       expect(getComputedStyle(linearProgress).display).not.toBe('none');
-      expect(linearProgressContainer.classList.contains(MDC_LINEAR_PROGRESS_CLASSES.CLOSED_CLASS)).toBe(false);
 
       await timer(timeout);
-      expect(linearProgressContainer.classList.contains(MDC_LINEAR_PROGRESS_CLASSES.CLOSED_CLASS)).toBe(true);
+      expect(getComputedStyle(linearProgress).display).toBe('none');
     });
 
     it('should handle multiple filter requests in proper order', async function(this: ITestContext) {
