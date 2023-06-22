@@ -78,7 +78,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     this._listElement = createList(config);
 
     // Add the listener for when list items are selected from the dropdown
-    this._listElement.addEventListener(LIST_ITEM_CONSTANTS.events.SELECT, (evt: CustomEvent<IListItemSelectEventData>) => {
+    this._listElement.addEventListener('forge-list-item-select', evt => {
       evt.detail.listItem.setAttribute('aria-selected', 'true');
       selectCallback(evt.detail.value, evt.detail.listItem.id);
     });
@@ -249,7 +249,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
       removeElement(this._asyncElement);
     }
     if (this._busyElement) {
-      this._busyElement.close();
+      this._busyElement.style.display = 'none';
     }
     if (!this._listElement.isConnected) {
       this._dropdownElement.appendChild(this._listElement);
@@ -282,9 +282,8 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     }
     if (isVisible) {
       this._busyElement.style.removeProperty('display');
-      this._busyElement.open();
     } else {
-      this._busyElement.close();
+      this._busyElement.style.display = 'none';
     }
   }
 
