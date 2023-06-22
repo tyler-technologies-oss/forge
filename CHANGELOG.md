@@ -1,3 +1,15 @@
+# v2.16.2 (Thu Jun 22 2023)
+
+#### 🐛 Bug Fix
+
+- fix(autocomplete): fixed a bug where selecting appended options in multiple mode would incorrectly select the wrong options in the UI dropdown [#330](https://github.com/tyler-technologies-oss/forge/pull/330) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.16.1 (Wed Jun 14 2023)
 
 #### 🐛 Bug Fix
