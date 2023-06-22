@@ -41,7 +41,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     this._adapter.tryPropagateClick(evt.target);
   }
 
-  protected _onBlur(event: Event): void {
+  protected _onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
     input.value = '';
     super._onBlur(event);

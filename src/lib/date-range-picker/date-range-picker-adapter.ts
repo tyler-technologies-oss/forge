@@ -19,6 +19,7 @@ export interface IDateRangePickerAdapter extends IBaseDatePickerAdapter {
   tryFocusInput(): void;
   tryBlurInput(): void;
   selectToInputText(): void;
+  destroyToMask(): void;
 }
 
 export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePickerComponent> implements IDateRangePickerAdapter {
@@ -48,34 +49,29 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     this._calendarDropdown = new CalendarDropdown(targetElement, this._dropdownIdentifier);
   }
 
-  public initializeMask(fromOptions: IDateInputMaskOptions): void {
-    if (this._fromInputMask) {
-      this._fromInputMask.destroy();
-    }
+  public override initializeMask(fromOptions: IDateInputMaskOptions): void {
+    this._fromInputMask?.destroy();
     this._fromInputMask = new DateInputMask(this._fromInputElement, fromOptions);
   }
 
+  public override destroyMask(): void {
+    this._fromInputMask?.destroy();
+    this._fromInputMask = undefined;
+  }
+
   public initializeToMask(toOptions: IDateInputMaskOptions): void {
-    if (this._toInputMask) {
-      this._toInputMask.destroy();
-    }
+    this._toInputMask?.destroy();
     this._toInputMask = new DateInputMask(this._toInputElement, toOptions);
   }
 
-  public destroy(): void {
-    super.destroy();
-    this._destroyToValueChangeListener();
+  public destroyToMask(): void {
+    this._toInputMask?.destroy();
+    this._toInputMask = undefined;
   }
 
-  public destroyMask(): void {
-    if (this._fromInputMask) {
-      this._fromInputMask.destroy();
-      this._fromInputMask = undefined;
-    }
-    if (this._toInputMask) {
-      this._toInputMask.destroy();
-      this._toInputMask = undefined;
-    }
+  public override destroy(): void {
+    super.destroy();
+    this._destroyToValueChangeListener();
   }
 
   private _destroyToValueChangeListener(): void {
@@ -185,8 +181,12 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     return this._fromInputElement.disabled;
   }
 
-  public isInputFocused(): boolean {
-    return this._toInputElement === getActiveElement() || this._fromInputElement === getActiveElement();
+  public isInputFocused(target?: EventTarget | null): boolean {
+    if (target && this._toInputElement === target || this._fromInputElement === target) {
+      return true;
+    }
+    const activeEl = getActiveElement();
+    return this._toInputElement === activeEl || this._fromInputElement === activeEl;
   }
 
   public getInputValue(): string {

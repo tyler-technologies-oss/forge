@@ -13,6 +13,7 @@ export interface IAutocompleteFoundation extends IListDropdownAwareFoundation {
   value: string | string[] | IAutocompleteOption | IAutocompleteOption[] | null | undefined;
   debounce: number;
   filterOnFocus: boolean;
+  filterFocusFirst: boolean;
   allowUnmatched: boolean;
   popupTarget: string;
   filterText: string;
@@ -38,6 +39,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   private _allowUnmatched = false;
   private _popupTarget: string;
   private _filterOnFocus = true;
+  private _filterFocusFirst = true;
   private _optionBuilder?: AutocompleteOptionBuilder | null;
   private _filter?: AutocompleteFilterCallback | null;
   private _selectedTextBuilder: AutocompleteSelectedTextBuilder;
@@ -369,7 +371,8 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     if (this._options.length) {
       const sendFilterText = this._allowUnmatched && !this._selectedOptions.length;
       this._dropdownReady({ userTriggered: sendFilterText });
-      if (this._filterText) {
+
+      if (this._filterFocusFirst && this._filterText) {
         this._adapter.activateFirstOption();
       }
     } else {
@@ -809,7 +812,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     this._applyValue(value);
   }
 
-
   /** Gets/sets filter on focus settings which controls whether the dropdown displays automatically when focused. */
   public get filterOnFocus(): boolean {
     return this._filterOnFocus;
@@ -818,6 +820,17 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     if (this._filterOnFocus !== value) {
       this._filterOnFocus = value;
       this._adapter.setHostAttribute(AUTOCOMPLETE_CONSTANTS.attributes.FILTER_ON_FOCUS, isDefined(this._filterOnFocus) ? this._filterOnFocus.toString() : '');
+    }
+  }
+
+  /** Gets/sets whether the first option in the dropdown will be focused automatically when opened or not. */
+  public get filterFocusFirst(): boolean {
+    return this._filterFocusFirst;
+  }
+  public set filterFocusFirst(value: boolean) {
+    if (this._filterFocusFirst !== value) {
+      this._filterFocusFirst = value;
+      this._adapter.toggleHostAttribute(AUTOCOMPLETE_CONSTANTS.attributes.FILTER_FOCUS_FIRST, this._filterFocusFirst);
     }
   }
 

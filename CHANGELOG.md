@@ -1,3 +1,40 @@
+# v2.16.1 (Wed Jun 14 2023)
+
+#### 🐛 Bug Fix
+
+- fix(split-view): query only immediate child panels [#328](https://github.com/tyler-technologies-oss/forge/pull/328) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- fix(date-picker): always dispatch the change event when a valid date is entered if `allowInvalidDate` is `true` [#325](https://github.com/tyler-technologies-oss/forge/pull/325) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.16.0 (Thu Jun 08 2023)
+
+#### 🚀 Enhancement
+
+- fix(expansion-panel): remove internal a11y attributes [#322](https://github.com/tyler-technologies-oss/forge/pull/322) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+- feat(autocomplete): add `filterFocusFirst` property [#313](https://github.com/tyler-technologies-oss/forge/pull/313) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(masks): time-picker, date-picker, date-range-picker > updates to mask behavior [#318](https://github.com/tyler-technologies-oss/forge/pull/318) ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select, autocomplete): show option label when one option is selected in multiple mode [#320](https://github.com/tyler-technologies-oss/forge/pull/320) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fixed a bug where filtering options with uppercase letters was not working [#319](https://github.com/tyler-technologies-oss/forge/pull/319) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(stack): fix stretch styles [#321](https://github.com/tyler-technologies-oss/forge/pull/321) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(stack): fix to allow string values to be provided to the `alignment` property/attribute (instead of just an `enum` value) when strict typing is used [#317](https://github.com/tyler-technologies-oss/forge/pull/317) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- Jake Crawford ([@jake-crawford-tyler](https://github.com/jake-crawford-tyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.15.0 (Tue May 23 2023)
 
 #### 🚀 Enhancement

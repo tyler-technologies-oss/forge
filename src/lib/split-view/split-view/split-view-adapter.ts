@@ -49,7 +49,9 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
    */
   public getSlottedPanels(): ISplitViewPanelComponent[] {
     const nodeList = this._component.querySelectorAll<ISplitViewPanelComponent>(SPLIT_VIEW_CONSTANTS.selectors.PANEL);
-    return Array.from(nodeList);
+    const panelArray = Array.from(nodeList);
+    const immediateChildPanels = panelArray.filter(panel => panel.parentElement === this._component);
+    return immediateChildPanels;
   }
 
   public refitSlottedPanels(orientation: SplitViewOrientation): void {

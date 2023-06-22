@@ -58,8 +58,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   // Listeners
   private _inputListener: (evt: Event) => void;
   private _inputKeydownListener: (evt: KeyboardEvent) => void;
-  private _inputFocusListener: (evt: Event) => void;
-  private _inputBlurListener: (evt: Event) => void;
+  private _inputFocusListener: (evt: FocusEvent) => void;
+  private _inputBlurListener: (evt: FocusEvent) => void;
   private _inputValueChangedListener: (value: string) => void;
   private _toggleMousedownListener: (evt: MouseEvent) => void;
   private _dropdownCloseListener: () => void;
@@ -164,12 +164,21 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     this._handleInput(this._adapter.getInputValue());
   }
 
-  protected _onInputFocus(evt: Event): void {
+  protected _onInputFocus(evt: FocusEvent): void {
     this._adapter.selectInputText();
-  }
 
-  protected _onInputBlur(evt: Event): void {
+    if (this.masked && this.showMaskFormat) {
+      this._applyMask();
+    }
+  }
+  
+  protected _onInputBlur(evt: FocusEvent): void {
+    if (this.masked && this.showMaskFormat) {
+      this._applyMask();
+    }
+
     this._formatInputValue();
+
     if (this._open && !this._adapter.isInputFocused()) {
       this._closeCalendar(true);
     }
@@ -418,7 +427,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   }
 
   protected _isDateValueAcceptable(value?: Date | null): boolean {
-    if (!value) {
+    if (!value || this._allowInvalidDate) {
       return true;
     }
 
@@ -434,7 +443,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
   protected _initializeMask(): void {
     const options: IDateInputMaskOptions = {
-      showMaskFormat: this._showMaskFormat,
+      showMaskFormat: this._showMaskFormat && this._adapter.isInputFocused(),
       pattern: this._maskFormat,
       onChange: (value: string) => this._handleInput(value)
     };
@@ -628,9 +637,6 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   public set showMaskFormat(value: boolean) {
     if (this._showMaskFormat !== value) {
       this._showMaskFormat = value;
-      if (this._isInitialized) {
-        this._applyMask();
-      }
     }
   }
 
