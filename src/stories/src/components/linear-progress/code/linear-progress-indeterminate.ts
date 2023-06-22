@@ -1,3 +1,3 @@
 export const LinearProgressIndeterminateCodeHtml = () => {
-  return `<forge-linear-progress></forge-linear-progress>`;
+  return `<forge-linear-progress data-aria-label="Loading data"></forge-linear-progress>`;
 };
