@@ -23,6 +23,8 @@ export function getTextColor(text?: string): string {
     text = '';
   }
 
+  text = text.toUpperCase();
+
   let color: string;
 
   if (text.charCodeAt(0) < 65) {
