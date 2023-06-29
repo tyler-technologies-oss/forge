@@ -1,6 +1,23 @@
+@use 'sass:list';
+@use '../core/style-layer/linear-progress';
 @use '../theme';
 @use './variables';
 
 @mixin provide-theme($theme) {
-  @include theme.theme-properties(linear-progress, $theme, variables.$theme-values);
+  @each $key, $value in $theme {
+    @if list.index(variables.$supported-theme-properties, $key) == null {
+      @error 'Invalid theme property: #{$key}';
+    }
+    @if $value {
+      --#{linear-progress.$prefix}-#{$key}: #{$value};
+    }
+  }
+}
+
+@mixin host {
+  @include linear-progress.container;
+}
+
+@mixin core-styles {
+  @include linear-progress.styles;
 }

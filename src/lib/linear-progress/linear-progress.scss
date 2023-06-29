@@ -1,35 +1,11 @@
-@use '@material/linear-progress/mdc-linear-progress';
-@use '@material/linear-progress/mixins' as mdc-linear-progress-mixins;
-@use '../theme';
-@use './variables';
+@use './mixins';
 
 :host {
-  display: block;
+  @include mixins.host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-
-///
-/// Custom Tyler theming below
-///
-
-@include mdc-linear-progress-mixins.buffer-color(variables.$buffer-color);
-
-.mdc-linear-progress {
-  @include theme.css-custom-property(border-radius, --forge-linear-progress-border-radius, inherit);
-  
-  &__bar-inner {
-    @include theme.property(border-color, tertiary);
-  }
-
-  &__buffer-bar {
-    @include theme.css-custom-property(background-color, --forge-linear-progress-theme-buffer, variables.$buffer-color);
-  }
-
-  &__buffer-dots {
-    @include theme.css-custom-property(filter, --forge-linear-progress-theme-buffer-dots, variables.$buffer-dots-color);
-  }
-}
+@include mixins.core-styles;

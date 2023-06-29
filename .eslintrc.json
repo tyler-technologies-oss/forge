@@ -5,6 +5,7 @@
     "docs/**/*",
     "plugins/**/*",
     "src/demo/**/*",
+    "src/test/**/*",
     "src/stories/**/*",
     "web-test-runner.*",
     "*.spec.ts",

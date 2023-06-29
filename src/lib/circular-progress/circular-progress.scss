@@ -1,5 +1,4 @@
-@use 'mixins';
-@use '../theme';
+@use './mixins';
 
 :host {
   @include mixins.host;
