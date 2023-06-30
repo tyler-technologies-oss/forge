@@ -12,13 +12,13 @@ slider.addEventListener('forge-slider-change', evt => {
 });
 
 const minInput = document.querySelector('#slider-min') as HTMLInputElement;
-minInput.addEventListener('input', ({ target }) => slider.min = (target as HTMLInputElement).valueAsNumber);
+minInput.addEventListener('change', ({ target }) => slider.min = (target as HTMLInputElement).valueAsNumber);
 
 const maxInput = document.querySelector('#slider-max') as HTMLInputElement;
-maxInput.addEventListener('input', ({ target }) => slider.max = (target as HTMLInputElement).valueAsNumber);
+maxInput.addEventListener('change', ({ target }) => slider.max = (target as HTMLInputElement).valueAsNumber);
 
 const stepInput = document.querySelector('#slider-step') as HTMLInputElement;
-stepInput.addEventListener('input', ({ target }) => slider.step = (target as HTMLInputElement).valueAsNumber);
+stepInput.addEventListener('change', ({ target }) => slider.step = (target as HTMLInputElement).valueAsNumber);
 
 const rangeToggle = document.querySelector('#slider-range') as ISwitchComponent;
 rangeToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.range = selected);
@@ -29,5 +29,8 @@ tickmarksToggle.addEventListener('forge-switch-select', ({ detail: selected }) =
 const disabledToggle = document.querySelector('#slider-disabled') as ISwitchComponent;
 disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.disabled = selected);
 
-const labelsToggle = document.querySelector('#slider-labels') as ISwitchComponent;
+const readonlyToggle = document.querySelector('#slider-readonly') as ISwitchComponent;
+readonlyToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.readonly = selected);
+
+const labelsToggle = document.querySelector('#slider-labeled') as ISwitchComponent;
 labelsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.labeled = selected);

@@ -15,7 +15,8 @@ const attributes = {
   TICKMARKS: 'tickmarks',
   LABELED: 'labeled',
   RANGE: 'range',
-  DISABLED: 'disabled'
+  DISABLED: 'disabled',
+  READONLY: 'readonly'
 };
 
 const selectors = {
@@ -42,7 +43,8 @@ const classes = {
   RANGE: 'forge-slider--range',
   TICKMARKS: 'forge-slider__track--tickmarks',
   ON_TOP: 'on-top',
-  OVERLAPPING: 'overlapping'
+  OVERLAPPING: 'overlapping',
+  HOVER: 'hover'
 };
 
 const events = {
@@ -71,9 +73,13 @@ export const SLIDER_CONSTANTS = {
 };
 
 export interface ISliderInputEventData {
-  value?: number;
-  valueStart?: number;
-  valueEnd?: number;
+  value: number;
+}
+
+export interface ISliderRangeInputEventData {
+  valueStart: number;
+  valueEnd: number;
 }
 
 export interface ISliderChangeEventData extends ISliderInputEventData {}
+export interface ISliderRangeChangeEventData extends ISliderRangeInputEventData {}

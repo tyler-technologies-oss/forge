@@ -16,6 +16,7 @@ export interface ISliderFoundation extends ICustomElementFoundation {
   labeled: boolean;
   range: boolean;
   disabled: boolean;
+  readonly: boolean;
 }
 
 export class SliderFoundation implements ISliderFoundation {
@@ -26,10 +27,11 @@ export class SliderFoundation implements ISliderFoundation {
   private _min = 0;
   private _max = 100;
   private _step = SLIDER_CONSTANTS.numbers.DEFAULT_STEP;
-  private _disabled = false;
   private _tickmarks = false;
   private _labeled = true;
   private _range = false;
+  private _disabled = false;
+  private _readonly = false;
 
   // Listeners
   private readonly _pointerEnterListener: EventListener;
@@ -57,43 +59,49 @@ export class SliderFoundation implements ISliderFoundation {
   }
 
   private _update(): void {
+    // We make copies of our values so we can mutate them without affecting the original values
+    let valueCopy = this._value;
+    let valueStartCopy = this._valueStart;
+    let valueEndCopy = this._valueEnd;
+
+    // Ensure values are within current min/max parameters
+    if (this._range) {
+      if (valueStartCopy > this._max) {
+        valueStartCopy = this._max;
+      } else if (valueStartCopy < this._min) {
+        valueStartCopy = this._min;
+      }
+
+      if (valueEndCopy > this._max) {
+        valueEndCopy = this._max;
+      } else if (valueEndCopy < this._min) {
+        valueEndCopy = this._min;
+      }
+    } else {
+      if (valueCopy > this._max) {
+        valueCopy = this._max;
+      } else if (this._value < this._min) {
+        valueCopy = this._min;
+      }
+    }
+
     const step = this._step <= 0 ? 1 : this._step;
     const range = Math.max(this._max - this._min, step);
-    const startFraction = this._range ? ((this._valueStart ?? this._min) - this._min) / range : 0;
-    const valueEnd = this._range ? this._valueEnd : this._value;
+    const startFraction = this._range ? ((valueStartCopy ?? this._min) - this._min) / range : 0;
+    const valueEnd = this._range ? valueEndCopy : valueCopy;
     const endFraction = ((valueEnd ?? this.min) - this.min) / range;
     const tickCount = range / step;
-    this._adapter.update({
-      startFraction,
-      endFraction,
-      tickCount,
-      labels: this._labeled
-    });
+
+    this._adapter.update({ startFraction, endFraction, tickCount });
+    this._adapter.syncInputValues(valueStartCopy, this._range ? valueEndCopy : valueCopy);
+
+    const labelStart = String(valueStartCopy);
+    const labelEnd = String(this._range ? valueEndCopy : valueCopy);
+    // TODO: implement label callback for custom labels; we may also be able to use properties/attributes for this as well?
+    this._adapter.updateLabels(labelStart, labelEnd);
   }
 
   private _applyInputListeners(): void {
-    this._adapter.addInputListener('pointerdown', (evt: PointerEvent) => {
-      const input = evt.target as HTMLInputElement;
-      const isStart = input.classList.contains('start');
-      // If start and end are equal, then we need to determine which handle the user intends to use
-      // based on their initial drag direction and potentially swap the inputs we are referencing
-      console.log(`[${evt.type}]`, `"${input.id}"`);
-      if (this._valueStart === this._valueEnd) {
-        if (isStart) {
-          if (input.valueAsNumber > this._valueEnd) {
-            console.log('needs flip');
-            // User attempted to drag the start input past the end input
-            // (this._adapter as any)._endInput.valueAsNumber = input.valueAsNumber;
-            // (this._adapter as any)._endInput.focus();
-            // this._valueStart = this._valueEnd;
-            // input.valueAsNumber = this._valueStart;
-            // return;
-          }
-        } else {
-          
-        }
-      }
-    });
     this._adapter.addInputListener('pointerenter', this._pointerEnterListener);
     this._adapter.addInputListener('pointermove', this._pointerMoveListener);
     this._adapter.addInputListener('pointerleave', this._pointerLeaveListener);
@@ -117,21 +125,28 @@ export class SliderFoundation implements ISliderFoundation {
     }
 
     if (this._range) {
-      this._adapter.tryToggleOverlap();
+      this._adapter.tryDetectOverlap();
     }
   }
 
   private _handlePointerLeave(evt: PointerEvent): void {
+    this._adapter.unhoverHandleContainer();
     this._adapter.tryBlurStartHandle();
     this._adapter.tryBlurEndHandle();
   }
 
   private _handleInputUpdate(evt: InputEvent): void {
+    evt.stopPropagation(); // We don't allow the native input & change events to bleed outside of the component
+
+    if (this._disabled || this._readonly) {
+      this._adapter.syncInputValues(this._valueStart, this._range ? this._valueEnd : this._value);
+      return;
+    }
+
     const input = evt.target as HTMLInputElement;
     
     if (this._range) {
       const isStart = input.classList.contains('start');
-
       if (isStart) {
         this._valueStart = input.valueAsNumber;
       } else {
@@ -146,9 +161,9 @@ export class SliderFoundation implements ISliderFoundation {
           this._valueEnd = this._valueStart;
         }
 
-        // Ensure our underlying inputs are synchronized with our state since they
-        // continue moving even when we clamp
+        // Ensure our underlying inputs are synchronized with our state since they continue moving even when we clamp
         this._adapter.syncInputValues(this._valueStart, this._valueEnd);
+        this._update();
         return; // We don't dispatch events when clamping
       }
     } else {
@@ -169,35 +184,12 @@ export class SliderFoundation implements ISliderFoundation {
     return this._valueStart > this._valueEnd || this._valueEnd < this._valueStart;
   }
 
-  private _sanitizeNumberValue(value: number, fallback: number, min?: number, max?: number): number {
-    // Validate min (if provided)
-    if (typeof min === 'number' && value < min) {
-      value = 0;
-      return value;
-    }
-
-    // Validate max (if provided)
-    if (typeof max === 'number' && value > max) {
-      value = max;
-      return value;
-    }
-
-    // Check for NaN and null/undefined
-    if (isNaN(value)) {
-      value = fallback;
-    } else {
-      value = value ?? fallback;
-    }
-
-    return value;
-  }
-
   public get value(): number {
     return this._value;
   }
   public set value(value: number) {
     if (this._value !== value) {
-      this._value = this._sanitizeNumberValue(value, 0, this._min, this._max);
+      this._value = value;
       this._update();
       this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.VALUE, String(this._value));
     }
@@ -208,7 +200,7 @@ export class SliderFoundation implements ISliderFoundation {
   }
   public set valueStart(value: number) {
     if (this._valueStart !== value) {
-      this._valueStart = this._sanitizeNumberValue(value, 0, this._min, this._max);
+      this._valueStart = value;
       this._update();
       this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.VALUE_START, String(this._valueStart));
     }
@@ -219,7 +211,7 @@ export class SliderFoundation implements ISliderFoundation {
   }
   public set valueEnd(value: number) {
     if (this._valueEnd !== value) {
-      this._valueEnd = this._sanitizeNumberValue(value, 0, this._min, this._max);
+      this._valueEnd = value;
       this._update();
       this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.VALUE_END, String(this._valueEnd));
     }
@@ -230,7 +222,7 @@ export class SliderFoundation implements ISliderFoundation {
   }
   public set min(value: number) {
     if (this._min !== value) {
-      this._min = this._sanitizeNumberValue(value, 0, 0, this._max);
+      this._min = value;
       this._adapter.setMin(this._min);
       this._update();
       this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.MIN, String(this._min));
@@ -242,7 +234,7 @@ export class SliderFoundation implements ISliderFoundation {
   }
   public set max(value: number) {
     if (this._max !== value) {
-      this._max = this._sanitizeNumberValue(value, 100, this._min, 100);
+      this._max = value;
       this._adapter.setMax(this._max);
       this._update();
       this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.MAX, String(this._max));
@@ -254,7 +246,7 @@ export class SliderFoundation implements ISliderFoundation {
   }
   public set step(value: number) {
     if (this._step !== value) {
-      this._step = this._sanitizeNumberValue(value, SLIDER_CONSTANTS.numbers.DEFAULT_STEP);
+      this._step = value;
       this._adapter.setStep(this._step);
       this._update();
       this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.STEP, String(this._step));
@@ -306,6 +298,17 @@ export class SliderFoundation implements ISliderFoundation {
       this._disabled = value;
       this._adapter.setDisabled(value);
       this._adapter.toggleHostAttribute(SLIDER_CONSTANTS.attributes.DISABLED, this._disabled);
+    }
+  }
+
+  public get readonly(): boolean {
+    return this._readonly;
+  }
+  public set readonly(value: boolean) {
+    if (this._readonly !== value) {
+      this._readonly = value;
+      this._adapter.setReadonly(value);
+      this._adapter.toggleHostAttribute(SLIDER_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }
 

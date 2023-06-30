@@ -18,6 +18,10 @@ export interface ISliderComponent extends IBaseComponent {
   tickmarks: boolean;
   labeled: boolean;
   disabled: boolean;
+  readonly: boolean;
+  form: HTMLFormElement | null;
+  name: string | null;
+  // labelCallback: (({ value: number, which: 'start' | 'end' }): ILabelCallbackArgs) => string;
 }
 
 declare global {
@@ -56,7 +60,8 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
       SLIDER_CONSTANTS.attributes.TICKMARKS,
       SLIDER_CONSTANTS.attributes.LABELED,
       SLIDER_CONSTANTS.attributes.RANGE,
-      SLIDER_CONSTANTS.attributes.DISABLED
+      SLIDER_CONSTANTS.attributes.DISABLED,
+      SLIDER_CONSTANTS.attributes.READONLY
     ];
   }
 
@@ -136,6 +141,9 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
       case SLIDER_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
+      case SLIDER_CONSTANTS.attributes.READONLY:
+        this.readonly = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -176,4 +184,7 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
 
   @FoundationProperty()
   public declare disabled: boolean;
+
+  @FoundationProperty()
+  public declare readonly: boolean;
 }

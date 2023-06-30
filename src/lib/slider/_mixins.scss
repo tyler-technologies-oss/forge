@@ -304,11 +304,10 @@ $ripple-target: '.handle';
     z-index: 1;
   }
 
-  // native input styling
   // note, the input is what the user interacts with so it must render and
   // be clickable, but it is visually hidden via opacity: 0 and non-clickable
   // styled ui is shown instead and positioned accordingly.
-  input[type='range'] {
+  input[type=range] {
     opacity: 0;
     -webkit-tap-highlight-color: transparent;
     position: absolute;
@@ -323,7 +322,7 @@ $ripple-target: '.handle';
     appearance: none;
   }
 
-  input[type='range']:focus {
+  input[type=range]:focus {
     outline: none;
   }
 
