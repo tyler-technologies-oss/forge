@@ -123,3 +123,32 @@ export function safeMin(...args: (number | undefined)[]): number {
 export function safeMax(...args: (number | undefined)[]): number {
   return Math.max(...args.map(arg => arg ?? Number.NEGATIVE_INFINITY));
 }
+
+/**
+ * Determines if two elements are overlapping.
+ * @param elA {Element | null}
+ * @param elB {Element | null}
+ * @returns 
+ */
+export function elementsOverlapping(elA: Element | null, elB: Element | null): boolean {
+  if (!(elA && elB)) {
+    return false;
+  }
+  const a = elA.getBoundingClientRect();
+  const b = elB.getBoundingClientRect();
+  return !(a.top > b.bottom || a.right < b.left || a.bottom < b.top || a.left > b.right);
+}
+
+/**
+ * Determines if a pointer event is over an element.
+ * @param event {PointerEvent} The pointer event to test.
+ * @param element {HTMElement} The element to test against.
+ * @returns 
+ */
+export function isPointerOverElement({ x, y }: { x: number; y: number }, element: HTMLElement | null): boolean {
+  if (!element) {
+    return false;
+  }
+  const { top, left, bottom, right } = element.getBoundingClientRect();
+  return x >= left && x <= right && y >= top && y <= bottom;
+}
