@@ -7,10 +7,9 @@ import { SliderRangeHtml } from './code/slider-range';
 
 # Slider
 
-The slider component allows for the selection of a value from a range. You can use the component to choose a discrete or continuous
-value based on the range and configuration you provide.
+Sliders allow users to make selections from a range of values.
 
-It's common to use a slider when you want to the user to choose a value from a pre-defined range of options, such as choosing a rating from 1-10 for instance.
+Use sliders to enable users to select a value from a continuous or discrete range of values.
 
 </PageSection>
 
@@ -20,9 +19,7 @@ It's common to use a slider when you want to the user to choose a value from a p
 
 ## Examples
 
-### Basic
-
-In its most basic form, the slider can be used without any configuration:
+### Default
 
 <LiveDemo fullWidth layout="column" codeHtml={SliderDefaultHtml()}>
   <SliderDemo />
@@ -30,21 +27,20 @@ In its most basic form, the slider can be used without any configuration:
 
 ### Range
 
-You can also specify the component to use two handles for setting a range value:
+You can also specify the component to use two handles by setting the range attribute:
 
 <LiveDemo fullWidth layout="column" codeHtml={SliderRangeHtml()}>
-  <SliderDemo type="continuous-range" value={70} valueStart={30} />
+  <SliderDemo range valueStart={30} valueEnd={70} />
 </LiveDemo>
 
-> **Note:** when using the range variant, you must set the start value using `value-start` attribute (or `valueStart` JavaScript property). The standard `value`
-> property/attribute pertains to the end range.
+> **Note:** when using the range variant, you must set the start and end values separately with `valueStart` and `valueEnd`. 
 
 ### With tick marks
 
 The following example will force the user to choose a discrete value from the range, with visual markers on the component:
 
 <LiveDemo fullWidth layout="column" codeHtml={SliderTicksHtml()}>
-  <SliderDemo type="discrete-markers" value={50} step={10} />
+  <SliderDemo tickmarks step={10} />
 </LiveDemo>
 
 </PageSection>
@@ -53,23 +49,33 @@ The following example will force the user to choose a discrete value from the ra
 
 ## Properties/Attributes
 
-<PropertyDef name="type" type="SliderType" defaultValue="continuous">
+<PropertyDef name="range" type="boolean" defaultValue="false">
 
-  Gets/sets the type of slider.
-
-  Valid values: `continuous`, `discrete`, `discrete-markers`, `continuous-range`, `discrete-range`, `discrete-range-markers`.
+  Controls whether range mode is enabled.
 
 </PropertyDef>
 
-<PropertyDef name="value" type="number" defaultValue="0">
+<PropertyDef name="tickmarks" type="boolean" defaultValue="false">
 
-  Gets/sets the value of the slider.
+  Controls if tickmarks are visible.
 
 </PropertyDef>
 
-<PropertyDef name="valueStart" type="number" defaultValue="0">
+<PropertyDef name="value" type="number" defaultValue="50">
 
-  Gets/sets the value of the slider.
+  Gets/sets the value of the slider. Only applies when **not** in range mode.
+
+</PropertyDef>
+
+<PropertyDef name="valueStart" type="number" defaultValue="33">
+
+  Gets/sets the start value of the slider. Only applies in range mode.
+
+</PropertyDef>
+
+<PropertyDef name="valueEnd" type="number" defaultValue="67">
+
+  Gets/sets the value of the slider. Only applies in range mode.
 
 </PropertyDef>
 
@@ -87,15 +93,91 @@ The following example will force the user to choose a discrete value from the ra
 
 <PropertyDef name="step" type="number" defaultValue="0">
 
-  Gets/sets the step value for the slider when in discrete mode.
+  Gets/sets the step value for the slider.
 
-  > Only pertains to discrete and discrete-markers sliders.
+</PropertyDef>
+
+<PropertyDef name="labeled" type="boolean" defaultValue="true">
+
+  Controls if handle labels are visible.
 
 </PropertyDef>
 
 <PropertyDef name="disabled" type="boolean" defaultValue="false">
 
   Gets/sets the disabled state of the slider.
+
+</PropertyDef>
+
+<PropertyDef name="readonly" type="boolean" defaultValue="false">
+
+  Gets/sets the readonly state of the slider.
+
+</PropertyDef>
+
+<PropertyDef name="label" type="string" defaultValue="undefined">
+
+  The label text for the slider handle.
+
+</PropertyDef>
+
+<PropertyDef name="labelStart" type="string" defaultValue="undefined">
+
+  The label text for the start slider handle.
+
+</PropertyDef>
+
+<PropertyDef name="labelEnd" type="string" defaultValue="undefined">
+
+  The label text for the end slider handle.
+
+</PropertyDef>
+
+<PropertyDef attr={false} name="labelBuilder" type="string" defaultValue="undefined">
+
+  A function that returns a label for the slider handle.
+
+</PropertyDef>
+
+<PropertyDef attr={false} name="labelBuilder" type="string" defaultValue="undefined">
+
+  A function that returns a label for the slider handle.
+
+</PropertyDef>
+
+<PropertyDef name="name" type="string" defaultValue="''">
+
+  The form control name.
+
+</PropertyDef>
+
+<PropertyDef name="nameStart" type="string" defaultValue="''">
+
+  The form control name for the start handle in range mode.
+
+</PropertyDef>
+
+<PropertyDef name="nameEnd" type="string" defaultValue="''">
+
+  The form control name for the end handle in range mode.
+
+</PropertyDef>
+
+<PropertyDef prop={false} name="data-aria-label" type="string" defaultValue="''">
+
+  Sets the `aria-label` attribute on the internal semantic element.
+
+</PropertyDef>
+
+<PropertyDef prop={false} name="data-aria-label-start" type="string" defaultValue="''">
+
+  Sets the `aria-label` attribute on the internal semantic element for the start range handle.
+
+</PropertyDef>
+
+<PropertyDef prop={false} name="data-aria-label-end" type="string" defaultValue="''">
+
+  Sets the `aria-label` attribute on the internal semantic element for the end range handle.
 
 </PropertyDef>
 
@@ -107,8 +189,8 @@ The following example will force the user to choose a discrete value from the ra
 
 | Name                            | Description
 | :-------------------------------| :----------------
-| `forge-slider-change`           | Emits only when the user has stopped changing the slider value.
-| `forge-slider-input`            | Emits frequently while the user is changing the slider value.
+| `forge-slider-change`           | Dispatches when the slider value changes and the value has been committed.
+| `forge-slider-input`            | Dispatches when the slider value changes.
 
 </PageSection>
 
@@ -116,10 +198,10 @@ The following example will force the user to choose a discrete value from the ra
 
 ## Keyboard shortcuts
 
-| Name                                | Description
-| :-----------------------------------| :----------------
-| `up / right`                        | Increments the value of the slider.
-| `down / left`                       | Decrements the value of the slider.
+| Name                         | Description
+| :----------------------------| :----------------
+| `ArrowRight`                  | Increments the value of the slider.
+| `ArrowLeft`                  | Decrements the value of the slider.
 
 </PageSection>
 
@@ -127,10 +209,19 @@ The following example will force the user to choose a discrete value from the ra
 
 ## CSS parts
 
-The `part` attribute names can change based on variant in this component. In an effort to not pollute the docs, please see the note below.
+| Name                          | Description
+| :-----------------------------| :----------------
+| `slider`                      | Styles the slider container element.
+| `track`                       | Styles the track element.
+| `handle-end`                  | Styles the end handle element.
+| `handle-end-thumb`            | Styles the end handle thumb element.
+| `handle-end-label`            | Styles the end handle label element.
+| `handle-end-label-content`    | Styles the end handle label content element.
+| `handle-start`                | Styles the start handle element.
+| `handle-start-thumb`          | Styles the start handle thumb element.
+| `handle-start-label`          | Styles the start handle label element.
+| `handle-start-label-content`  | Styles the start handle label content element.
 
-> To view the parts related to this component, inspect the DOM of the `<forge-slider>` element with your browser's dev tools, and expand the `#shadow-root`
-> to see all of the elements and their corresponding `part` attributes.
 
 </PageSection>
 
@@ -138,11 +229,40 @@ The `part` attribute names can change based on variant in this component. In an 
 
 ## CSS custom properties
 
-| Name                                | Description
-| :-----------------------------------| :----------------
-| `--mdc-theme-primary`               | Controls the track and handle color.
-| `--mdc-theme-on-primary`            | Controls the tick mark color.
-| `--mdc-ripple-color`                | Controls the ripple color on the handle.
+| Name                                                                    | Description
+| :-----------------------------------------------------------------------| :----------------
+| `--mdc-theme-primary`                                                   | The primary color of the slider.
+| `--mdc-theme-on-primary`                                                | The color of elements placed on top of the primary color (the label text for example).
+| `--forge-slider-track-height`                                           | The height of the track.
+| `--forge-slider-active-track-color`                                     | The color of the active track.
+| `--forge-slider-active-track-height`                                    | The height of the active track.
+| `--forge-slider-active-track-shape`                                     | The shape of the active track.
+| `--forge-slider-disabled-active-track-color`                            | The color of the active track when disabled.
+| `--forge-slider-disabled-active-track-opacity`                          | The opacity of the active track when disabled.
+| `--forge-slider-disabled-handle-color`                                  | The color of the slider handle when disabled.
+| `--forge-slider-disabled-inactive-track-color`                          | The color of the inactive track when disabled.
+| `--forge-slider-disabled-inactive-track-opacity`                        | The opacity of the inactive track when disabled.
+| `--forge-slider-focus-handle-color`                                     | The color of the slider handle when focused.
+| `--forge-slider-handle-color`                                           | The color of the slider handle.
+| `--forge-slider-handle-height`                                          | The height of the slider handle.
+| `--forge-slider-handle-width`                                           | The width of the slider handle.
+| `--forge-slider-handle-shape`                                           | The shape of the slider handle.
+| `--forge-slider-hover-handle-color`                                     | The color of the slider handle when hovered.
+| `--forge-slider-inactive-track-color`                                   | The color of the inactive track.
+| `--forge-slider-inactive-track-height`                                  | The height of the inactive track.
+| `--forge-slider-inactive-track-shape`                                   | The shape of the inactive track.
+| `--forge-slider-label-container-color`                                  | The color of the label container.
+| `--forge-slider-label-container-height`                                 | The height of the label container.
+| `--forge-slider-label-label-text-color`                                 | The color of the label text.
+| `--forge-slider-pressed-handle-color`                                   | The color of the slider handle when pressed.
+| `--forge-slider-state-layer-size`                                       | The size of the state layer.
+| `--forge-slider-with-overlap-handle-outline-color`                      | The color of the slider handle outline when overlapping.
+| `--forge-slider-with-overlap-handle-outline-width`                      | The width of the slider handle outline when overlapping.
+| `--forge-slider-with-tick-marks-active-container-color`                 | The color of the active tick mark container when tick marks are visible.
+| `--forge-slider-with-tick-marks-container-size`                         | The size of the tick mark container when tick marks are visible.
+| `--forge-slider-with-tick-marks-disabled-active-container-color`        | The color of the active tick mark container when tick marks are visible and disabled.
+| `--forge-slider-with-tick-marks-disabled-inactive-container-color`      | The color of the inactive tick mark container when tick marks are visible and disabled.
+| `--forge-slider-with-tick-marks-inactive-container-color`               | The color of the inactive tick mark container when tick marks are visible.
 
 </PageSection>
 
@@ -153,42 +273,13 @@ The `part` attribute names can change based on variant in this component. In an 
 - Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
 - Ensure the slider controls are reachable by the tab key.
 - Ensure each slider control can be updated by pressing the left-arrow and right-arrow keys.
-- The slider element will receive the proper ARIA attribute `aria-label="Select Value"`.
-- The slider element will receive the proper role attribute `role="slider"`.
+- The slider element will receive the proper `aria-label` attribute.
 
-</PageSection>
-
-<PageSection>
-
-## Keyboard shortcuts
-
-| Name                                | Description
-| :-----------------------------------| :----------------
-| `up / right`                        | Increments the value of the slider.
-| `down / left`                       | Decrements the value of the slider.
-
-</PageSection>
-
-<PageSection>
-
-## CSS parts
-
-The `part` attribute names can change based on variant in this component. In an effort to not pollute the docs, please see the note below.
-
-> To view the parts related to this component, inspect the DOM of the `<forge-slider>` element with your browser's dev tools, and expand the `#shadow-root`
-> to see all of the elements and their corresponding `part` attributes.
-
-</PageSection>
-
-<PageSection>
-
-## CSS custom properties
-
-| Name                                | Description
-| :-----------------------------------| :----------------
-| `--mdc-theme-primary`               | Controls the track and handle color.
-| `--mdc-theme-on-primary`            | Controls the tick mark color.
-| `--mdc-ripple-color`                | Controls the ripple color on the handle.
+> Be sure to set the `data-aria-label` attribute to provide a descriptive label for screen readers.
+>
+> For range mode, use the corresponding `data-aria-label-start` and `data-aria-label-end` attributes. These will apply different labels to the start and end handles.
+>
+> The `aria-label` attributes are propagated to internal elements, this is why they must to be provided as `data-*` attributes on the `<forge-slider>` host element.
 
 </PageSection>
 
@@ -196,26 +287,19 @@ The `part` attribute names can change based on variant in this component. In an 
 
 ## Types
 
-### ISliderInputEventData
+### ISliderRangeEventData
 
 ``` ts
-interface ISliderInputEventData {
-  value?: number;
-  valueStart?: number;
-  valueEnd?: number;
+interface ISliderRangeEventData {
+  valueStart: number;
+  valueEnd: number;
 }
 ```
 
-### ISliderChangeEventData
+### SliderLabelBuilder
 
 ``` ts
-interface ISliderChangeEventData extends ISliderInputEventData {}
-```
-
-### SliderType
-
-```typescript
-type SliderType = 'continuous' | 'discrete' | 'discrete-markers' | 'continuous-range' | 'discrete-range' | 'discrete-range-markers';
+type SliderLabelBuilder = (value: number, which?: 'start' | 'end') => string;
 ```
 
 </PageSection>

@@ -7,7 +7,7 @@ module.exports = async ({ config }) => {
   config.resolve.alias['@tylertech/forge'] = `${LIB_ROOT}/index.ts`;
 
   // Full sourcemap quality
-  config.devtool = 'sourcemap';
+  config.devtool = 'source-map';
 
   // Add support for .mjs files
   config.module.rules.push({
@@ -44,7 +44,7 @@ module.exports = async ({ config }) => {
   config.module.rules.push({
     test: /\.scss$/,
     use: [
-      'css-to-string-loader',
+      'to-string-loader',
       {
         loader: 'css-loader',
         options: {

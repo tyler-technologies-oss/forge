@@ -1,29 +1,27 @@
-import { SliderType } from '@tylertech/forge';
-
 export interface ISliderProps {
-  type: SliderType;
+  range: boolean;
+  tickmarks: boolean;
   value: number;
   valueStart: number;
+  valueEnd: number;
   min: number;
   max: number;
   step: number;
   disabled: boolean;
+  readonly: boolean;
+  labeled: boolean;
 }
 
 export const argTypes = {
-  type: {
-    control: {
-      type: 'select',
-      labels: {
-        'continuous': 'Continuous',
-        'continuous-range': 'Continuous range',
-        'discrete': 'Discrete',
-        'discrete-markers': 'Discrete markers',
-        'discrete-range-markers': 'Discrete range markers',
-        'discrete-range': 'Discrete range',
-      },
+  range: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
     },
-    options: ['continuous', 'continuous-range', 'discrete', 'discrete-markers', 'discrete-range-markers', 'discrete-range'],
+  },
+  tickmarks: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',
@@ -37,6 +35,13 @@ export const argTypes = {
     },
   },
   valueStart: {
+    control: 'number',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  valueEnd: {
     control: 'number',
     description: '',
     table: {
@@ -65,6 +70,13 @@ export const argTypes = {
     },
   },
   disabled: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  readonly: {
     control: 'boolean',
     description: '',
     table: {

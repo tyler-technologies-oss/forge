@@ -1,1 +1,9 @@
-export const SliderRangeHtml = () => '<forge-slider type="continuous-range" value-start="30" value="70"></forge-slider>';
+export const SliderRangeHtml = () => `
+<forge-slider
+  range
+  value-start="30"
+  value-end="70"
+  data-aria-label-start="Choose start value"
+  data-aria-label-end="Choose end value">
+</forge-slider>
+`;
