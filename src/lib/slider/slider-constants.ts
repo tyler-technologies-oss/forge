@@ -9,6 +9,9 @@ const attributes = {
   VALUE: 'value',
   VALUE_START: 'value-start',
   VALUE_END: 'value-end',
+  LABEL: 'label',
+  LABEL_START: 'label-start',
+  LABEL_END: 'label-end',
   MIN: 'min',
   MAX: 'max',
   STEP: 'step',
@@ -21,30 +24,37 @@ const attributes = {
 
 const selectors = {
   ROOT: '.forge-slider',
-  TRACK: '.forge-slider__track',
+  TRACK: '.track',
   HANDLE_CONTAINER: '.handle-container',
   START_INPUT: 'input.start',
   END_INPUT: 'input.end',
   START_HANDLE: '.handle.start',
-  START_HANDLE_THUMB: '.handle.start .handle-nub',
+  START_HANDLE_THUMB: '.handle.start .handle-thumb',
   END_HANDLE: '.handle.end',
-  END_HANDLE_THUMB: '.handle.end .handle-nub',
-  START_LABEL: '.handle.start .label',
-  START_LABEL_CONTENT: '.handle.start .label-content',
-  END_LABEL: '.handle.end .label',
-  END_LABEL_CONTENT: '.handle.end .label-content',
-  START_RIPPLE_SURFACE: '.handle.start .forge-slider__handle-ripple',
-  END_RIPPLE_SURFACE: '.handle.end .forge-slider__handle-ripple',
-  LABEL: '.label',
+  END_HANDLE_THUMB: '.handle.end .handle-thumb',
+  START_LABEL: '.handle.start .handle-label',
+  START_LABEL_CONTENT: '.handle.start .handle-label-content',
+  END_LABEL: '.handle.end .handle-label',
+  END_LABEL_CONTENT: '.handle.end .handle-label-content',
+  START_RIPPLE_SURFACE: '.handle.start .handle-ripple',
+  END_RIPPLE_SURFACE: '.handle.end .handle-ripple',
+  LABEL: '.handle-label',
   INPUT: 'input[type=range]'
 };
 
 const classes = {
-  RANGE: 'forge-slider--range',
-  TICKMARKS: 'forge-slider__track--tickmarks',
+  RANGE: 'range',
+  TICKMARKS: 'tickmarks',
   ON_TOP: 'on-top',
   OVERLAPPING: 'overlapping',
-  HOVER: 'hover'
+  HOVER: 'hover',
+  HANDLE: 'handle',
+  HANDLE_RIPPLE: 'handle-ripple',
+  HANDLE_THUMB: 'handle-thumb',
+  HANDLE_START: 'start',
+  HANDLE_LABEL: 'handle-label',
+  LABEL: 'handle-label',
+  LABEL_CONTENT: 'handle-label-content'
 };
 
 const events = {
@@ -59,7 +69,10 @@ const cssCustomProperties = {
 };
 
 const numbers = {
-  DEFAULT_STEP: 1
+  DEFAULT_STEP: 1,
+  DEFAULT_VALUE: 50,
+  DEFAULT_START_VALUE: 33,
+  DEFAULT_END_VALUE: 67
 };
 
 export const SLIDER_CONSTANTS = {
@@ -72,14 +85,9 @@ export const SLIDER_CONSTANTS = {
   cssCustomProperties
 };
 
-export interface ISliderInputEventData {
-  value: number;
-}
-
-export interface ISliderRangeInputEventData {
+export interface ISliderRangeEventData {
   valueStart: number;
   valueEnd: number;
 }
 
-export interface ISliderChangeEventData extends ISliderInputEventData {}
-export interface ISliderRangeChangeEventData extends ISliderRangeInputEventData {}
+export type SliderLabelBuilder = (value: number, which?: 'start' | 'end') => string;

@@ -1,4 +1,4 @@
-export abstract class FixtureContext<T extends HTMLElement> {
+export abstract class TestHarness<T extends HTMLElement> {
   constructor(public element: T) {
     this.initElementRefs();
   }

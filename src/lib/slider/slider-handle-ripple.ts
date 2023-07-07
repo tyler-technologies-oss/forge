@@ -10,8 +10,8 @@ export class SliderHandleRipple implements ForgeRippleCapableSurface {
       registerInteractionHandler: (evtType, handler) => this._inputElement.addEventListener(evtType, handler, { passive: true }),
       deregisterInteractionHandler: (evtType, handler) => this._inputElement.removeEventListener(evtType, handler, { passive: true } as AddEventListenerOptions),
       isSurfaceActive: () => this._inputElement.matches(':active'),
-      isUnbounded: () => Boolean(this.unbounded),
-      isSurfaceDisabled: () => this._inputElement.disabled,
+      isUnbounded: () => this.unbounded,
+      isSurfaceDisabled: () => this.disabled,
       addClass: (className: string) => addClass(className, this._root),
       removeClass: (className: string) => removeClass(className, this._root),
       updateCssVariable: (varName: string, value: string | null) => this._root.style.setProperty(varName, value)
@@ -32,23 +32,15 @@ export class SliderHandleRipple implements ForgeRippleCapableSurface {
     this._rippleInstance?.handleBlur();
   }
 
-  public activate(): void {
-    this._rippleInstance?.activate();
-  }
-
-  public deactivate(): void {
-    this._rippleInstance?.deactivate();
-  }
-
   public get root(): Element {
     return this._root;
   }
 
-  public get unbounded(): boolean | undefined {
+  public get unbounded(): boolean {
     return true;
   }
 
-  public get disabled(): boolean | undefined {
+  public get disabled(): boolean {
     return this._inputElement.disabled;
   }
 }

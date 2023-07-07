@@ -1,6 +1,6 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { ISliderAdapter } from './slider-adapter';
-import { SLIDER_CONSTANTS } from './slider-constants';
+import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeEventData } from './slider-constants';
 
 export interface ISliderFoundation extends ICustomElementFoundation {
   ariaLabel: string | null;
@@ -9,6 +9,10 @@ export interface ISliderFoundation extends ICustomElementFoundation {
   value: number;
   valueStart: number;
   valueEnd: number;
+  label: string;
+  labelStart: string;
+  labelEnd: string;
+  labelBuilder: SliderLabelBuilder;
   min: number;
   max: number;
   step: number;
@@ -21,9 +25,12 @@ export interface ISliderFoundation extends ICustomElementFoundation {
 
 export class SliderFoundation implements ISliderFoundation {
   // State
-  private _value = 50;
-  private _valueStart = 33;
-  private _valueEnd = 67;
+  private _value = SLIDER_CONSTANTS.numbers.DEFAULT_VALUE;
+  private _valueStart = SLIDER_CONSTANTS.numbers.DEFAULT_START_VALUE;
+  private _valueEnd = SLIDER_CONSTANTS.numbers.DEFAULT_END_VALUE;
+  private _labelStart: string;
+  private _labelEnd: string;
+  private _labelBuilder: SliderLabelBuilder;
   private _min = 0;
   private _max = 100;
   private _step = SLIDER_CONSTANTS.numbers.DEFAULT_STEP;
@@ -59,12 +66,46 @@ export class SliderFoundation implements ISliderFoundation {
   }
 
   private _update(): void {
+    const {
+      value: renderValue,
+      valueStart: renderValueStart,
+      valueEnd: renderValueEnd
+    } = this._clampMinMax();
+    const step = this._step <= 0 ? 1 : this._step;
+    const range = Math.max(this._max - this._min, step);
+    const startFraction = this._range ? ((renderValueStart ?? this._min) - this._min) / range : 0;
+    const valueEnd = this._range ? renderValueEnd : renderValue;
+    const endFraction = ((valueEnd ?? this.min) - this.min) / range;
+    const tickCount = range / step;
+
+    this._adapter.update({ startFraction, endFraction, tickCount });
+    this._adapter.syncInputValues(renderValueStart, this._range ? renderValueEnd : renderValue);
+
+    if (this._range) {
+      this._adapter.tryDetectOverlap();
+    }
+
+    let labelStart = this._labelStart ?? String(renderValueStart);
+    let labelEnd = this._labelEnd ?? String(this._range ? renderValueEnd : renderValue);
+
+    if (typeof this._labelBuilder === 'function') {
+      if (this._range) {
+        labelStart = this._labelBuilder(renderValueStart, 'start');
+        labelEnd = this._labelBuilder(renderValueEnd, 'end');
+      } else {
+        labelEnd = this._labelBuilder(renderValue);
+      }
+    }
+
+    this._adapter.updateLabels(labelStart, labelEnd);
+  }
+
+  private _clampMinMax(): { value: number; valueStart: number; valueEnd: number } {
     // We make copies of our values so we can mutate them without affecting the original values
     let valueCopy = this._value;
     let valueStartCopy = this._valueStart;
     let valueEndCopy = this._valueEnd;
 
-    // Ensure values are within current min/max parameters
     if (this._range) {
       if (valueStartCopy > this._max) {
         valueStartCopy = this._max;
@@ -85,20 +126,11 @@ export class SliderFoundation implements ISliderFoundation {
       }
     }
 
-    const step = this._step <= 0 ? 1 : this._step;
-    const range = Math.max(this._max - this._min, step);
-    const startFraction = this._range ? ((valueStartCopy ?? this._min) - this._min) / range : 0;
-    const valueEnd = this._range ? valueEndCopy : valueCopy;
-    const endFraction = ((valueEnd ?? this.min) - this.min) / range;
-    const tickCount = range / step;
-
-    this._adapter.update({ startFraction, endFraction, tickCount });
-    this._adapter.syncInputValues(valueStartCopy, this._range ? valueEndCopy : valueCopy);
-
-    const labelStart = String(valueStartCopy);
-    const labelEnd = String(this._range ? valueEndCopy : valueCopy);
-    // TODO: implement label callback for custom labels; we may also be able to use properties/attributes for this as well?
-    this._adapter.updateLabels(labelStart, labelEnd);
+    return {
+      value: valueCopy,
+      valueStart: valueStartCopy,
+      valueEnd: valueEndCopy
+    };
   }
 
   private _applyInputListeners(): void {
@@ -114,29 +146,23 @@ export class SliderFoundation implements ISliderFoundation {
     this._handlePointerMove(evt);
   }
 
-  private _handlePointerMove(evt: PointerEvent): void {
-    const { target, x, y } = evt;
-    const which = (target as HTMLInputElement).id as 'start' | 'end';
-
-    if (which === 'start') {
+  private _handlePointerMove({ target, x, y }: PointerEvent): void {
+    const isStart = (target as HTMLInputElement).id === 'start';
+    if (isStart) {
       this._adapter.tryHoverStartHandle({ x, y });
     } else {
       this._adapter.tryHoverEndHandle({ x, y });
     }
-
-    if (this._range) {
-      this._adapter.tryDetectOverlap();
-    }
   }
 
-  private _handlePointerLeave(evt: PointerEvent): void {
-    this._adapter.unhoverHandleContainer();
+  private _handlePointerLeave(_evt: PointerEvent): void {
+    this._adapter.leaveHandleContainer();
     this._adapter.tryBlurStartHandle();
     this._adapter.tryBlurEndHandle();
   }
 
   private _handleInputUpdate(evt: InputEvent): void {
-    evt.stopPropagation(); // We don't allow the native input & change events to bleed outside of the component
+    evt.stopPropagation(); // We don't allow the native input & change events to bubble outside of the component
 
     if (this._disabled || this._readonly) {
       this._adapter.syncInputValues(this._valueStart, this._range ? this._valueEnd : this._value);
@@ -146,7 +172,7 @@ export class SliderFoundation implements ISliderFoundation {
     const input = evt.target as HTMLInputElement;
     
     if (this._range) {
-      const isStart = input.classList.contains('start');
+      const isStart = input.id === 'start';
       if (isStart) {
         this._valueStart = input.valueAsNumber;
       } else {
@@ -154,7 +180,7 @@ export class SliderFoundation implements ISliderFoundation {
       }
 
       // Clamp values to keep start and end from going past each other
-      if (this._needsClamping()) {
+      if (this._canClamp()) {
         if (isStart) {
           this._valueStart = this._valueEnd;
         } else {
@@ -171,7 +197,7 @@ export class SliderFoundation implements ISliderFoundation {
     }
 
     const type = evt.type === 'change' ? SLIDER_CONSTANTS.events.CHANGE : SLIDER_CONSTANTS.events.INPUT;
-    const data = this._range ? { valueStart: this._valueStart, valueEnd: this._valueEnd } : this._value;
+    const data: number | ISliderRangeEventData = this._range ? { valueStart: this._valueStart, valueEnd: this._valueEnd } : this._value;
     this._adapter.emitHostEvent(type, data, true);
     this._update();
   }
@@ -180,7 +206,7 @@ export class SliderFoundation implements ISliderFoundation {
     this._adapter.updateHandleLayering();
   }
 
-  private _needsClamping(): boolean {
+  private _canClamp(): boolean {
     return this._valueStart > this._valueEnd || this._valueEnd < this._valueStart;
   }
 
@@ -191,7 +217,6 @@ export class SliderFoundation implements ISliderFoundation {
     if (this._value !== value) {
       this._value = value;
       this._update();
-      this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.VALUE, String(this._value));
     }
   }
 
@@ -202,7 +227,6 @@ export class SliderFoundation implements ISliderFoundation {
     if (this._valueStart !== value) {
       this._valueStart = value;
       this._update();
-      this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.VALUE_START, String(this._valueStart));
     }
   }
 
@@ -213,8 +237,42 @@ export class SliderFoundation implements ISliderFoundation {
     if (this._valueEnd !== value) {
       this._valueEnd = value;
       this._update();
-      this._adapter.setHostAttribute(SLIDER_CONSTANTS.attributes.VALUE_END, String(this._valueEnd));
     }
+  }
+
+  public get label(): string {
+    return this.labelEnd;
+  }
+  public set label(value: string) {
+    this.labelEnd = value;
+  }
+
+  public get labelStart(): string {
+    return this._labelStart;
+  }
+  public set labelStart(value: string) {
+    if (this._labelStart !== value) {
+      this._labelStart = value;
+      this._adapter.updateLabels(this._labelStart, this._labelEnd);
+    }
+  }
+
+  public get labelEnd(): string {
+    return this._labelEnd;
+  }
+  public set labelEnd(value: string) {
+    if (this._labelEnd !== value) {
+      this._labelEnd = value;
+      this._adapter.updateLabels(this._labelStart, this._labelEnd);
+    }
+  }
+
+  public get labelBuilder(): SliderLabelBuilder {
+    return this._labelBuilder;
+  }
+  public set labelBuilder(cb: SliderLabelBuilder) {
+    this._labelBuilder = cb;
+    this._update();
   }
 
   public get min(): number {

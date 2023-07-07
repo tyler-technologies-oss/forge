@@ -4,6 +4,7 @@ import { elementsOverlapping, isPointerOverElement, userInteractionListener } fr
 import { ISliderComponent } from '../slider';
 import { SLIDER_CONSTANTS } from './slider-constants';
 import { SliderHandleRipple } from './slider-handle-ripple';
+import { createLabel, createStartHandleElement, createStartInputElement } from './slider-utils';
 
 export interface ISliderState {
   startFraction: number;
@@ -18,13 +19,12 @@ export interface ISliderAdapter extends IBaseAdapter {
   update(state: ISliderState): void;
   updateLabels(labelStart: string, labelEnd: string): void;
   updateHandleLayering(): void;
-  hasFocus(): boolean;
   tryHoverStartHandle(coords: { x: number; y: number }): void;
   tryHoverEndHandle(coords: { x: number; y: number }): void;
   tryBlurStartHandle(): void;
   tryBlurEndHandle(): void;
   tryDetectOverlap(): void;
-  unhoverHandleContainer(): void;
+  leaveHandleContainer(): void;
   syncInputValues(valueStart: number, valueEnd: number): void;
   setRange(value: boolean): void;
   setTickmarks(value: boolean): void;
@@ -115,18 +115,12 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
     toggleClass(this._endHandleElement, isEndFocused, SLIDER_CONSTANTS.classes.ON_TOP);
   }
 
-  public hasFocus(): boolean {
-    return this._component.matches(':focus');
-  }
-
   public tryHoverStartHandle(coords: { x: number; y: number }): void {
-    if (!this._startHandleThumbElement) {
-      return;
+    if (!this._component.disabled) {
+      this._startHandleRipple?.emulateFocus();
     }
 
-    this._startHandleRipple?.emulateFocus();
-
-    if (isPointerOverElement(coords, this._startHandleThumbElement)) {
+    if (this._startHandleThumbElement && isPointerOverElement(coords, this._startHandleThumbElement)) {
       this._handleContainerElement.classList.add(SLIDER_CONSTANTS.classes.HOVER);
       this._startHandleElement?.classList.add(SLIDER_CONSTANTS.classes.HOVER);
     } else if (!this._startInputElement?.matches(':focus')) {
@@ -136,7 +130,9 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
   }
 
   public tryHoverEndHandle(coords: { x: number; y: number }): void {
-    this._endHandleRipple?.emulateFocus();
+    if (!this._component.disabled) {
+      this._endHandleRipple?.emulateFocus();
+    }
 
     if (isPointerOverElement(coords, this._endHandleThumbElement)) {
       this._handleContainerElement.classList.add(SLIDER_CONSTANTS.classes.HOVER);
@@ -160,15 +156,14 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
   }
 
   public tryDetectOverlap(): void {
-    if (!this._startHandleElement) {
-      return;
+    if (this._startHandleElement) {
+      const isOverlapping = elementsOverlapping(this._startHandleElement, this._endHandleElement);
+      toggleClass(this._endHandleElement, isOverlapping, SLIDER_CONSTANTS.classes.OVERLAPPING);
+      toggleClass(this._startHandleElement, isOverlapping, SLIDER_CONSTANTS.classes.OVERLAPPING);
     }
-    const isOverlapping = elementsOverlapping(this._startHandleElement, this._endHandleElement);
-    toggleClass(this._endHandleElement, isOverlapping, SLIDER_CONSTANTS.classes.OVERLAPPING);
-    toggleClass(this._startHandleElement, isOverlapping, SLIDER_CONSTANTS.classes.OVERLAPPING);
   }
 
-  public unhoverHandleContainer(): void {
+  public leaveHandleContainer(): void {
     this._handleContainerElement.classList.remove(SLIDER_CONSTANTS.classes.HOVER);
   }
 
@@ -177,6 +172,15 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
       this._startInputElement.valueAsNumber = valueStart;
     }
     this._endInputElement.valueAsNumber = valueEnd;
+
+    if (this._startInputElement) {
+      const data = new FormData();
+      data.append(this._component.nameStart, String(valueStart));
+      data.append(this._component.nameEnd, String(valueEnd));
+      this._component.internals.setFormValue(data);
+    } else {
+      this._component.internals.setFormValue(String(valueEnd));
+    }
   }
 
   public setRange(value: boolean): void {
@@ -184,7 +188,7 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
 
     if (value) {
       // Create start input
-      this._startInputElement = this._createStartInputElement();
+      this._startInputElement = createStartInputElement(this._component);
       this._rootElement.insertAdjacentElement('afterbegin', this._startInputElement);
 
       // Ensure the end input is updated to the valueEnd property value now that we are in range mode
@@ -192,7 +196,7 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
 
       // Create start handle
       const thumbLabel = this._startInputElement.value;
-      this._startHandleElement = this._createStartHandleElement(thumbLabel);
+      this._startHandleElement = createStartHandleElement(thumbLabel);
       this._handleContainerElement.insertAdjacentElement('afterbegin', this._startHandleElement);
       this._startHandleThumbElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.START_HANDLE_THUMB);
       this._startHandleRippleSurfaceElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.START_RIPPLE_SURFACE);
@@ -254,19 +258,13 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
     this._startLabelContentElement = undefined;
 
     if (value) {
-      const createLabel = (text: string): string => `
-        <div class="label">
-          <span class="label-content">${text}</span>
-        </div>
-      `;
-
       const endLabelEl = createLabel(this._endInputElement.value);
-      this._endHandleElement.insertAdjacentHTML('beforeend', endLabelEl);
+      this._endHandleElement.insertAdjacentElement('beforeend', endLabelEl);
       this._endLabelContentElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.END_LABEL_CONTENT);
       
       if (this._startInputElement) {
         const startLabelEl = createLabel(this._startInputElement.value);
-        this._startHandleElement?.insertAdjacentHTML('beforeend', startLabelEl);
+        this._startHandleElement?.insertAdjacentElement('beforeend', startLabelEl);
         this._startLabelContentElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.START_LABEL_CONTENT);
       }
     }
@@ -274,12 +272,12 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
 
   public setStartAriaLabel(value: string | null): void {
     if (this._startInputElement) {
-      toggleAttribute(this._startInputElement, !!value, 'aria-label', value ?? undefined);
+      toggleAttribute(this._startInputElement, !!value, 'aria-label', value as string);
     }
   }
 
   public setEndAriaLabel(value: string | null): void {
-    toggleAttribute(this._endInputElement, !!value, 'aria-label', value ?? undefined);
+    toggleAttribute(this._endInputElement, !!value, 'aria-label', value as string);
   }
 
   private _getInputs(): HTMLInputElement[] {
@@ -297,53 +295,7 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
     this._tryInitializeStartHandleRipple(type);
   }
 
-  private _createStartInputElement(): HTMLInputElement {
-    const startInput = document.createElement('input');
-    startInput.type = 'range';
-    startInput.id = 'start';
-    startInput.min = String(this._component.min);
-    startInput.max = String(this._component.max);
-    startInput.step = String(this._component.step);
-    startInput.valueAsNumber = this._component.valueStart;
-    startInput.disabled = this._component.disabled;
-    startInput.classList.add('start');
-    
-    if (this._component.hasAttribute(SLIDER_CONSTANTS.attributes.ARIA_LABEL_START)) {
-      startInput.setAttribute('aria-label', this._component.getAttribute(SLIDER_CONSTANTS.attributes.ARIA_LABEL_START) as string);
-    }
-    startInput.setAttribute('aria-valuetext', String(this._component.valueStart));
-
-    return startInput;
-  }
-
-  private _createStartHandleElement(thumbLabel: string): HTMLElement {
-    const startHandle = document.createElement('div');
-    startHandle.classList.add('handle', 'start');
-    
-    const startHandleNub = document.createElement('div');
-    startHandleNub.classList.add('handle-nub');
-    startHandle.appendChild(startHandleNub);
-    
-    const startHandleLabel = document.createElement('div');
-    startHandleLabel.classList.add('label');
-    startHandle.appendChild(startHandleLabel);
-
-    const startHandleLabelContent = document.createElement('span');
-    startHandleLabelContent.textContent = thumbLabel;
-    startHandleLabelContent.classList.add('label-content');
-    startHandleLabel.appendChild(startHandleLabelContent);
-
-    const startHandleRipple = document.createElement('span');
-    startHandleRipple.classList.add('forge-slider__handle-ripple');
-    startHandle.appendChild(startHandleRipple);
-    
-    return startHandle;
-  }
-
   private _tryInitializeEndHandleRipple(type?: string): void {
-    if (this._endHandleRipple) {
-      return;
-    }
     this._endHandleRipple = new SliderHandleRipple(this._endHandleRippleSurfaceElement, this._endInputElement);
     if (type === 'focusin' && this._endInputElement.matches(':focus')) {
       this._endHandleRipple.emulateFocus();

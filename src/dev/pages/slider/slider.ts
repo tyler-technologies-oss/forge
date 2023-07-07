@@ -4,6 +4,7 @@ import { ISliderComponent } from '@tylertech/forge/slider';
 import '@tylertech/forge/slider';
 
 const slider = document.querySelector('#slider') as ISliderComponent;
+
 slider.addEventListener('forge-slider-input', evt => {
   console.log('forge-slider-input', evt.detail);
 });
@@ -34,3 +35,8 @@ readonlyToggle.addEventListener('forge-switch-select', ({ detail: selected }) =>
 
 const labelsToggle = document.querySelector('#slider-labeled') as ISwitchComponent;
 labelsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.labeled = selected);
+
+const labelBuilderToggle = document.querySelector('#slider-label-builder') as ISwitchComponent;
+labelBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+  slider.labelBuilder = selected ? (value: number) => `Value: ${value}` : undefined;
+});
