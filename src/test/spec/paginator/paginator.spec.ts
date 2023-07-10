@@ -1,8 +1,9 @@
 import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, definePaginatorComponent } from '@tylertech/forge/paginator';
 import { BASE_SELECT_CONSTANTS, ISelectComponent } from '@tylertech/forge/select';
 import { IIconButtonComponent } from '@tylertech/forge/icon-button';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
 import { getShadowElement, removeElement, emitEvent } from '@tylertech/forge-core';
-import { timer } from '@tylertech/forge-testing';
+import { tick, timer } from '@tylertech/forge-testing';
 
 interface ITestContext {
   context: ITestPaginatorContext;
@@ -240,6 +241,38 @@ describe('PaginatorComponent', function(this: ITestContext) {
       const newOptions = [1, 2, 3, 4];
       this.context.paginator.pageSizeOptions = newOptions;
       expect(this.context.paginator.pageSize).toBe(1);
+    });
+
+    it('should reflect page size selection', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.pageSizeSelect.open = true;
+
+      const listItem = this.context.pageSizeSelect.popupElement?.querySelector(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
+      const listItemRoot = getShadowElement(listItem, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
+      listItemRoot.click();
+      await tick();
+
+      expect(listItem.value).toBe('5');
+      expect(this.context.paginator.pageSize).toBe(5);
+      expect(this.context.pageSizeSelect.value).toBe('5');
+    });
+
+    it('should not reflect page size selection if change event is cancelled', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      
+      const originalPageSize = this.context.pageSizeSelect.value;
+
+      const changeSpy = jasmine.createSpy('changeSpy', evt => evt.preventDefault()).and.callThrough();
+      this.context.paginator.addEventListener('forge-paginator-change', changeSpy);
+
+      this.context.pageSizeSelect.open = true;
+      const listItem = this.context.pageSizeSelect.popupElement?.querySelector(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
+      const listItemRoot = getShadowElement(listItem, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
+      listItemRoot.click();
+      await tick();
+
+      expect(this.context.paginator.pageSize).toBe(Number(originalPageSize));
+      expect(this.context.pageSizeSelect.value).toBe(originalPageSize);
     });
 
     it('should use default page size if options doesn\'t contain current page size as an option and no options exist', function(this: ITestContext) {

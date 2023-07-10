@@ -1,7 +1,9 @@
 import { Meta } from '@storybook/react';
 import { Story } from '@storybook/react';
-import { ForgeAvatar } from '@tylertech/forge-react';
-import React from 'react';
+import { ForgeAvatar, ForgeIcon } from '@tylertech/forge-react';
+import { IconRegistry } from '@tylertech/forge';
+import React, { useEffect } from 'react';
+import { tylIconPerson } from '@tylertech/tyler-icons/standard';
 import { argTypes, IAvatarProps } from './avatar-args';
 
 const MDX = require('./avatar.mdx').default;
@@ -19,18 +21,28 @@ export default {
 export const Default: Story<IAvatarProps> = ({
   autoColor = false,
   imageUrl = '',
+  useIcon = false,
   letterCount = 2,
   text = 'First Last',
-}) => (
-  <ForgeAvatar
-    autoColor={autoColor}
-    imageUrl={imageUrl}
-    letterCount={letterCount}
-    text={text} />
-);
+}) => {
+  useEffect(() => {
+    IconRegistry.define(tylIconPerson);
+  }, []);
+
+  return (
+    <ForgeAvatar
+      autoColor={autoColor}
+      imageUrl={imageUrl}
+      letterCount={letterCount}
+      text={text}>
+      {useIcon ? <ForgeIcon name="person" /> : null}
+    </ForgeAvatar>
+  );
+};
 Default.args = {
   autoColor: false,
   imageUrl: '',
+  useIcon: false,
   letterCount: 2,
   text: 'First Last',
 } as IAvatarProps;
