@@ -1,6 +1,7 @@
 export interface IAvatarProps {
   autoColor: boolean;
   imageUrl: string;
+  useIcon: boolean;
   letterCount: number;
   text: string;
 }
@@ -14,6 +15,12 @@ export const argTypes = {
   },
   imageUrl: {
     control: 'text',
+    table: {
+      category: 'Properties'
+    }
+  },
+  useIcon: {
+    control: 'boolean',
     table: {
       category: 'Properties'
     }

@@ -1,3 +1,29 @@
+# v2.16.3 (Fri Jun 23 2023)
+
+#### 🐛 Bug Fix
+
+- fix(paginator): fixed a bug where the paginator was not reflecting the current page size after selection in the page size select [#333](https://github.com/tyler-technologies-oss/forge/pull/333) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-to-color): convert text input to uppercase [#334](https://github.com/tyler-technologies-oss/forge/pull/334) ([@zacharysilverman](https://github.com/zacharysilverman))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Zachary Silverman ([@zacharysilverman](https://github.com/zacharysilverman))
+
+---
+
+# v2.16.2 (Thu Jun 22 2023)
+
+#### 🐛 Bug Fix
+
+- fix(autocomplete): fixed a bug where selecting appended options in multiple mode would incorrectly select the wrong options in the UI dropdown [#330](https://github.com/tyler-technologies-oss/forge/pull/330) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.16.1 (Wed Jun 14 2023)
 
 #### 🐛 Bug Fix

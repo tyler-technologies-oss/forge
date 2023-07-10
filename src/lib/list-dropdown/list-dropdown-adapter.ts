@@ -273,7 +273,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     if (!this._dropdownElement || !this._listElement) {
       return;
     }
-    createListItems(config, this._listElement, options);
+    createListItems(config, this._listElement, options, this._listElement.childElementCount, false);
   }
 
   public setBusyVisibility(isVisible: boolean): void {

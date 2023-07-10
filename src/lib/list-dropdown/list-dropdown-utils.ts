@@ -98,14 +98,14 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
  * Creates the list to place inside of the dropdown.
  * @param config 
  */
-export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>): void {
+export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>, startIndex = 0, renderSelected = true): void {
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
   const groups = getOptionsByGroup(options || config.options);
   const flatOptions = getFlattenedOptions(groups);
 
   const limitOptions = config.optionLimit ? true : false;
   let optionLimit = config.optionLimit || 0;
-  let optionIndex = 0;
+  let optionIdIndex = startIndex;
 
   // Iterate over our groups and render the optional headers and options for that group
   for (const group of groups) {
@@ -160,14 +160,18 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       if (limitOptions && --optionLimit < 0) {
         break;
       }
-
-      optionIndex++;
       
       // Create and configure the list element
       const isSelected = config.selectedValues ? config.selectedValues.some(v => isDeepEqual(v, option.value)) : false;
+
+      // We don't render selected options that are appended dynamically since those are always displayed at the top of the list
+      if (!renderSelected && isSelected) {
+        continue;
+      }
+
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
-      listItemElement.id = `list-dropdown-option-${config.id}-${optionIndex}`;
+      listItemElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
       listItemElement.style.cursor = 'pointer';
 
       if (config.wrapOptionText) {

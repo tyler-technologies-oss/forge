@@ -1,6 +1,7 @@
 import { Default as AvatarDemo } from './avatar.stories';
 import { AvatarImageCodeHtml } from './code/avatar-image';
 import { AvatarLetterCodeHtml } from './code/avatar-letter';
+import { AvatarIconCodeHtml } from './code/avatar-icon';
 
 <PageSection>
 
@@ -24,7 +25,17 @@ on the URL provided to it.
   <AvatarDemo />
 </LiveDemo>
 
+### Avatar (icon)
+
+You can compose avatars together with icons using the `<forge-icon>` component. The avatar will automatically apply the proper dimensions to the icon.
+
+<LiveDemo dense codeHtml={AvatarIconCodeHtml()}>
+  <AvatarDemo useIcon />
+</LiveDemo>
+
 ### Avatar (image)
+
+When using with an image, the avatar will apply your image as that background of the avatar (replacing the background color). The image will be sized to fit the avatar dimensions.
 
 <LiveDemo dense codeHtml={AvatarImageCodeHtml()}>
   <AvatarDemo imageUrl={'https://cdn.forge.tylertech.com/v1/icons/svg/custom/forge_logo.svg'} />

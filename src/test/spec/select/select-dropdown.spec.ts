@@ -246,10 +246,10 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.targetElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
     expect(this.context.targetElement.hasAttribute('aria-activedescendant')).toBeTrue();
-    expect(this.context.targetElement.getAttribute('aria-activedescendant')).toBe(`list-dropdown-option-${this.context.foundation['_identifier']}-1`);
+    expect(this.context.targetElement.getAttribute('aria-activedescendant')).toBe(`list-dropdown-option-${this.context.foundation['_identifier']}-0`);
   });
 
-  it('should update active descenadant when using keyboard navigation',  async function(this: ITestContext) {
+  it('should update active descendant when using keyboard navigation',  async function(this: ITestContext) {
     this.context = setupTestContext();
 
     this.context.component.open = true;
