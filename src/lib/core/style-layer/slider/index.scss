@@ -9,12 +9,5 @@
 /// Creates selectors for the standard slider structure
 /// 
 @mixin styles {
-  @include base-styles;
-}
-
-///
-/// Selectors for the base container structure
-/// 
-@mixin base-styles {
   @include core.styles;
 }

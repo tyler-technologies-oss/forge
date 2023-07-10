@@ -54,6 +54,7 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
   --_handle-shape: var(--#{variables.$prefix}-handle-shape, 9999px);
   --_handle-width: var(--#{variables.$prefix}-handle-width, #{variables.$handle-width});
   --_hover-handle-color: var(--#{variables.$prefix}-hover-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_inactive-track-color-fallback: var(--#{variables.$prefix}-inactive-track-color, #d5d8ee); // TODO: remove this when we're confident that color-mix is more widely supported
   --_inactive-track-color: var(--#{variables.$prefix}-inactive-track-color, color-mix(in srgb, var(--mdc-theme-primary, #{theme.$primary}) 24%, transparent));
   --_inactive-track-height: var(--#{variables.$prefix}-inactive-track-height, var(--_track-height));
   --_inactive-track-shape: var(--#{variables.$prefix}-inactive-track-shape, 9999px);
@@ -67,7 +68,7 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
   --_with-tick-marks-active-container-color: var(--#{variables.$prefix}-with-tick-marks-active-container-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
   --_with-tick-marks-container-size: var(--#{variables.$prefix}-with-tick-marks-container-size, #{variables.$tickmarks-container-size});
   --_with-tick-marks-disabled-active-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-active-container-color, var(--mdc-theme-text-primary-on-background, #{theme.$text-primary-color}));
-  --_with-tick-marks-disabled-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-inactive-container-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
+  --_with-tick-marks-disabled-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-inactive-container-color, color-mix(in srgb, var(--mdc-theme-on-primary, #{theme.$on-primary}) 50%, transparent));
   --_with-tick-marks-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-inactive-container-color, var(--mdc-theme-primary, #{theme.$primary}));
 }
 
@@ -317,7 +318,13 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 @mixin track-inactive {
   block-size: var(--_inactive-track-height);
   border-radius: var(--_inactive-track-shape);
-  background-color: var(--_inactive-track-color);
+
+  // TODO: remove this and the @supports check below when we're confident that color-mix is more widely supported
+  background-color: var(--_inactive-track-color-fallback);
+
+  @supports (background-color: color-mix(in srgb, red 50%, transparent)) {
+    background-color: var(--_inactive-track-color);
+  }
 }
 
 @mixin track-active-disabled {

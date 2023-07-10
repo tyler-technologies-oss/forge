@@ -329,6 +329,7 @@ export class SliderFoundation implements ISliderFoundation {
     if (this._labeled !== value) {
       this._labeled = value;
       this._adapter.toggleLabels(this._labeled);
+      this._update();
       this._adapter.toggleHostAttribute(SLIDER_CONSTANTS.attributes.LABELED, this._labeled);
     }
   }
