@@ -1,0 +1,545 @@
+///
+/// Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
+/// The original source code can be found at [GitHub](https://github.com/material-components/material-web/blob/main/slider/lib/_slider.scss)
+///
+
+@use '@material/elevation/elevation-theme' as mdc-elevation-theme;
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '../../../theme';
+@use '../../../typography';
+@use './functions';
+@use './variables';
+
+// The max clip is reduced by 1 full tick display which is 2x the container
+// size to account for always showing the active track on the outside
+// edge of the last tick.
+$_active-track-max-clip: calc(100% - var(--_with-tick-marks-container-size) * 2);
+
+// When the start fraction is !0, add clipping by the tick container size
+$_start-fraction-not-zero: min(var(--_start-fraction) * 1e9, 1);
+$_active-track-start-offset: calc(var(--_with-tick-marks-container-size) * $_start-fraction-not-zero);
+$_active-track-start-clip: calc($_active-track-start-offset + $_active-track-max-clip * var(--_start-fraction));
+
+// When the end fraction is !1, add clipping by the tick container size
+$_end-fraction-not-one: min((1 - var(--_end-fraction)) * 1e9, 1);
+$_active-track-end-offset: calc(var(--_with-tick-marks-container-size) * $_end-fraction-not-one);
+$_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-clip * (1 - var(--_end-fraction)));
+
+@mixin container {
+  display: inline-flex;
+  vertical-align: middle;
+  min-inline-size: 100%;
+}
+
+@mixin configuration {
+  // Internal state variables
+  --_start-fraction: 0;
+  --_end-fraction: 0;
+  --_tick-count: 100;
+
+  // External state variables
+  --_track-height: var(--#{variables.$prefix}-track-height, #{variables.$track-height});
+  --_active-track-color: var(--#{variables.$prefix}-active-track-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_active-track-height: var(--#{variables.$prefix}-active-track-height, var(--_track-height));
+  --_active-track-shape: var(--#{variables.$prefix}-active-track-shape, 9999px);
+  --_disabled-active-track-color: var(--#{variables.$prefix}-disabled-active-track-color, #{theme.$disabled-color});
+  --_disabled-active-track-opacity: var(--#{variables.$prefix}-disabled-active-track-opacity, #{variables.$disabled-active-track-opacity});
+  --_disabled-handle-color: var(--#{variables.$prefix}-disabled-handle-color, #{theme.$disabled-color});
+  --_disabled-inactive-track-color: var(--#{variables.$prefix}-disabled-inactive-track-color, #{theme.$disabled-color});
+  --_disabled-inactive-track-opacity: var(--#{variables.$prefix}-disabled-inactive-track-opacity, #{variables.$disabled-inactive-track-opacity});
+  --_focus-handle-color: var(--#{variables.$prefix}-focus-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_handle-color: var(--#{variables.$prefix}-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_handle-height: var(--#{variables.$prefix}-handle-height, #{variables.$handle-height});
+  --_handle-shape: var(--#{variables.$prefix}-handle-shape, 9999px);
+  --_handle-width: var(--#{variables.$prefix}-handle-width, #{variables.$handle-width});
+  --_hover-handle-color: var(--#{variables.$prefix}-hover-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_inactive-track-color-fallback: var(--#{variables.$prefix}-inactive-track-color, #d5d8ee); // TODO: remove this when we're confident that color-mix is more widely supported
+  --_inactive-track-color: var(--#{variables.$prefix}-inactive-track-color, color-mix(in srgb, var(--mdc-theme-primary, #{theme.$primary}) 24%, transparent));
+  --_inactive-track-height: var(--#{variables.$prefix}-inactive-track-height, var(--_track-height));
+  --_inactive-track-shape: var(--#{variables.$prefix}-inactive-track-shape, 9999px);
+  --_label-container-color: var(--#{variables.$prefix}-label-container-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_label-container-height: var(--#{variables.$prefix}-label-container-height, #{variables.$label-container-height});
+  --_label-label-text-color: var(--#{variables.$prefix}-label-label-text-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
+  --_pressed-handle-color: var(--#{variables.$prefix}-pressed-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_state-layer-size: var(--#{variables.$prefix}-state-layer-size, #{variables.$state-layer-size});
+  --_with-overlap-handle-outline-color: var(--#{variables.$prefix}-with-overlap-handle-outline-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
+  --_with-overlap-handle-outline-width: var(--#{variables.$prefix}-with-overlap-handle-outline-width, #{variables.$handle-outline-width});
+  --_with-tick-marks-active-container-color: var(--#{variables.$prefix}-with-tick-marks-active-container-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
+  --_with-tick-marks-container-size: var(--#{variables.$prefix}-with-tick-marks-container-size, #{variables.$tickmarks-container-size});
+  --_with-tick-marks-disabled-active-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-active-container-color, var(--mdc-theme-text-primary-on-background, #{theme.$text-primary-color}));
+  --_with-tick-marks-disabled-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-inactive-container-color, color-mix(in srgb, var(--mdc-theme-on-primary, #{theme.$on-primary}) 50%, transparent));
+  --_with-tick-marks-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-inactive-container-color, var(--mdc-theme-primary, #{theme.$primary}));
+}
+
+@mixin styles {
+  @include mdc-ripple.common;
+
+  .#{variables.$prefix} {
+    @include configuration;
+    @include slider;
+
+    &.range {
+      @include range;
+    }
+  }
+
+  .track {
+    @include track;
+
+    &::before,
+    &::after {
+      content: '';
+      
+      @include track-dimensions;
+    }
+
+    &::before {
+      @include track-inactive;
+    }
+
+    &::after {
+      @include track-active;
+    }
+
+    &.tickmarks {
+      &::before {
+        @include tickmarks-inactive;
+      }
+
+      &::after {
+        @include tickmarks-active;
+      }
+    }
+  }
+
+  .handle-container-padded,
+  .handle-container-block {
+    @include handle-container-dimensions;
+  }
+
+  .handle-container-padded {
+    @include handle-container-padded;
+  }
+
+  .handle-container {
+    @include handle-container;
+  }
+
+  .handle {
+    @include handle;
+
+    &.start {
+      @include handle-start;
+    }
+
+    &.end {
+      @include handle-end;
+    }
+
+    &-thumb {
+      @include handle-thumb;
+    }
+
+    &-label {
+      @include handle-label;
+
+      &::before,
+      &::after {
+        content: '';
+        @include handle-label-base;
+      }
+
+      &::before {
+        @include handle-label-bottom;
+      }
+
+      &::after {
+        @include handle-label-top;
+      }
+
+      &-content {
+        @include handle-label-content;
+      }
+    }
+  }
+
+  .handle-ripple {
+    @include handle-ripple-surface;
+  }
+
+  .handle-container.hover .handle-thumb {
+    @include handle-thumb-hover;
+  }
+
+  :host(:not([disabled])) {
+    input.end:active ~ .handle-container-padded .handle.end > .handle-thumb,
+    input.start:active ~ .handle-container-padded .handle.start > .handle-thumb {
+      @include handle-thumb-pressed;
+    }
+  }
+
+  :host([disabled]) {
+    .handle-thumb {
+      @include handle-thumb-disabled;
+    }
+    
+    .handle-label {
+      @include handle-label-disabled;
+    }
+
+    .track {
+      &::before {
+        @include track-inactive-disabled;
+      }
+
+      &::after {
+        @include track-active-disabled;
+      }
+
+      &.tickmarks {
+        &::before {
+          @include tickmarks-active-disabled;
+        }
+
+        &::after {
+          @include tickmarks-inactive-disabled;
+        }
+      }
+    }
+
+    input[type=range] {
+      @include input-disabled;
+    }
+  }
+
+  // rtl for active track clipping
+  @each $_rtl-selectors in functions.get-rtl-selectors('.track', '::after') {
+    #{$_rtl-selectors} {
+      @include rtl-track-clipping;
+    }
+  }
+
+  input.end:focus ~ .handle-container-padded .handle.end > .handle-thumb,
+  input.start:focus ~ .handle-container-padded .handle.start > .handle-thumb {
+    @include handle-thumb-focused;
+  }
+
+  .on-top.overlapping {
+    .handle-thumb,
+    .handle-label,
+    .handle-label::before {
+      @include handles-overlapping;
+    }
+  }
+
+  :host(:focus-within) .handle-label,
+  .handle-container.hover .handle-label,
+  :where(:has(input:active)) .handle-label {
+    @include handle-label-visible;
+  }
+
+  input[type=range] {
+    @include input;
+  }
+
+  .on-top {
+    @include on-top;
+  }
+
+  @include reduced-motion;
+}
+
+@mixin slider {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  block-size: var(--_state-layer-size);
+  pointer-events: none;
+  touch-action: none;
+}
+
+@mixin range {
+  // Clip the inputs to the space left/right of the center point between the
+  // values so the right input gets pointer events.
+  $_clip-to-start: calc(
+    var(--_state-layer-size) / 2 + (100% - var(--_state-layer-size)) *
+    (var(--_start-fraction) + ((var(--_end-fraction) - var(--_start-fraction)) / 2))
+  );
+
+  $_clip-to-end: calc(100% - $_clip-to-start);
+
+  // in 'rtl', clip right side of "lesser" input
+  @each $_rtl-selector in functions.get-rtl-selectors('input.start') {
+    #{$_rtl-selector} {
+      clip-path: inset(0 0 0 $_clip-to-end);
+    }
+  }
+
+  input.start {
+    clip-path: inset(0 $_clip-to-end 0 0);
+  }
+
+  input.end {
+    clip-path: inset(0 0 0 $_clip-to-start);
+  }
+
+  // in 'rtl', clip left side of "greater" input
+  @each $_rtl-selector in functions.get-rtl-selectors('input.end') {
+    #{$_rtl-selector} {
+      clip-path: inset(0 $_clip-to-start 0 0);
+    }
+  }
+}
+
+@mixin track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+@mixin track-dimensions {
+  $_track-padding: calc((var(--_state-layer-size) / 2) - var(--_with-tick-marks-container-size));
+  position: absolute;
+  inset-inline-start: $_track-padding;
+  inset-inline-end: $_track-padding;
+  background-size: calc((100% - var(--_with-tick-marks-container-size) * 2) / var(--_tick-count)) 100%;
+}
+
+@mixin track-active {
+  block-size: var(--_active-track-height);
+  border-radius: var(--_active-track-shape);
+  clip-path: inset(0 $_active-track-end-clip 0 $_active-track-start-clip);
+  background-color: var(--_active-track-color);
+}
+
+@mixin track-inactive {
+  block-size: var(--_inactive-track-height);
+  border-radius: var(--_inactive-track-shape);
+
+  // TODO: remove this and the @supports check below when we're confident that color-mix is more widely supported
+  background-color: var(--_inactive-track-color-fallback);
+
+  @supports (background-color: color-mix(in srgb, red 50%, transparent)) {
+    background-color: var(--_inactive-track-color);
+  }
+}
+
+@mixin track-active-disabled {
+  background-color: var(--_disabled-active-track-color);
+}
+
+@mixin track-inactive-disabled {
+  opacity: calc((1 / var(--_disabled-active-track-opacity)) * var(--_disabled-inactive-track-opacity));
+  background-color: var(--_disabled-inactive-track-color);
+}
+
+@mixin rtl-track-clipping {
+  clip-path: inset(0 $_active-track-start-clip 0 $_active-track-end-clip);
+}
+
+@mixin tickmarks-inactive {
+  background-image: functions.get-tick-image('var(--_with-tick-marks-inactive-container-color)');
+}
+
+@mixin tickmarks-active {
+  background-image: functions.get-tick-image('var(--_with-tick-marks-active-container-color)');
+}
+
+@mixin tickmarks-active-disabled {
+  background-image: functions.get-tick-image('var(--_with-tick-marks-disabled-active-container-color)');
+}
+
+@mixin tickmarks-inactive-disabled {
+  background-image: functions.get-tick-image('var(--_with-tick-marks-disabled-inactive-container-color)');
+}
+
+@mixin handle-container-dimensions {
+  position: relative;
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+@mixin handle-container-padded {
+  padding-inline: calc(var(--_state-layer-size) / 2);
+}
+
+@mixin handle-container {
+  position: absolute;
+  inset-block-start: 0;
+  inset-block-end: 0;
+  inset-inline-start: calc(100% * var(--_start-fraction));
+  inline-size: calc(100% * (var(--_end-fraction) - var(--_start-fraction)));
+}
+
+@mixin handle {
+  position: absolute;
+  block-size: var(--_state-layer-size);
+  inline-size: var(--_state-layer-size);
+  border-radius: var(--_handle-shape);
+  display: grid;
+  place-items: center;
+}
+
+@mixin handle-start {
+  inset-inline-start: calc(0px - var(--_state-layer-size) / 2);
+}
+
+@mixin handle-end {
+  inset-inline-end: calc(0px - var(--_state-layer-size) / 2);
+}
+
+@mixin handle-thumb {
+  position: absolute;
+  height: var(--_handle-height);
+  width: var(--_handle-width);
+  border-radius: var(--_handle-shape);
+  background: var(--_handle-color);
+  @include mdc-elevation-theme.elevation(1);
+}
+
+@mixin handle-thumb-hover {
+  background: var(--_hover-handle-color);
+}
+
+@mixin handle-thumb-pressed {
+  background: var(--_pressed-handle-color);
+}
+
+@mixin handle-thumb-focused {
+  background: var(--_focus-handle-color);
+}
+
+@mixin handle-thumb-disabled {
+  background: var(--_disabled-handle-color);
+  @include mdc-elevation-theme.elevation(0);
+}
+
+@mixin handle-label {
+  @include typography.typography(caption);
+
+  position: absolute;
+  box-sizing: border-box;
+  display: grid;
+  padding: 4px;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--_label-label-text-color);
+  font-weight: 500;
+  white-space: nowrap;
+  inset-block-end: 100%;
+  min-inline-size: var(--_label-container-height);
+  min-block-size: var(--_label-container-height);
+  background: var(--_label-container-color);
+  transition: transform 100ms cubic-bezier(0.2, 0, 0, 1);
+  transform-origin: center bottom;
+  transform: scale(0);
+}
+
+@mixin handle-label-disabled {
+  background: var(--_disabled-handle-color);
+}
+
+@mixin handle-label-content {
+  z-index: 1;
+}
+
+@mixin handle-ripple-surface {
+  @include mdc-ripple.surface;
+  @include mdc-ripple.radius-unbounded;
+  @include mdc-ripple-theme.states($color: primary);
+
+  box-sizing: content-box;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin handle-label-base {
+  position: absolute;
+  display: block;
+  background: inherit;
+}
+
+@mixin handle-label-top {
+  inset: 0;
+  border-radius: inherit;
+}
+
+@mixin handle-label-bottom {
+  $_triangle-size: calc(var(--_label-container-height) / 2);
+  inline-size: $_triangle-size;
+  block-size: $_triangle-size;
+  bottom: calc(var(--_label-container-height) / -10);
+  transform: rotate(45deg);
+}
+
+@mixin handle-label-visible {
+  transform: scale(1);
+}
+
+@mixin input-disabled {
+  cursor: not-allowed;
+}
+
+@mixin handles-overlapping {
+  border: var(--_with-overlap-handle-outline-color) solid var(--_with-overlap-handle-outline-width);
+}
+
+@mixin on-top {
+  z-index: 1;
+}
+
+@mixin input {
+  opacity: 0;
+  -webkit-tap-highlight-color: transparent;
+  position: absolute;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+  }
+
+  &::-moz-range-track {
+    appearance: none;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    block-size: var(--_state-layer-size);
+    inline-size: var(--_state-layer-size);
+    transform: scaleX(0);
+    opacity: 0;
+    z-index: 2;
+  }
+
+  &::-moz-range-thumb {
+    appearance: none;
+    block-size: var(--_state-layer-size);
+    inline-size: var(--_state-layer-size);
+    transform: scaleX(0);
+    opacity: 0;
+    z-index: 2;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion) {
+    .handle-label {
+      transition-duration: 0;
+    }
+  }
+}

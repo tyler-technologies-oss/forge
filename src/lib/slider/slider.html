@@ -1,0 +1,19 @@
+<template>
+  <div part="root" class="forge-slider">
+    <input type="range" class="end" id="end" min="0" max="100" step="1" aria-valuetext="0" />
+    <div class="track" part="track"></div>
+    <div class="handle-container-padded">
+      <div class="handle-container-block">
+        <div class="handle-container">
+          <div class="handle end" part="handle-end">
+            <div class="handle-thumb" part="handle-end-thumb"></div>
+            <span class="handle-ripple"></span>
+            <div class="handle-label" part="handle-end-label">
+              <span class="handle-label-content" part="handle-end-label-content"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

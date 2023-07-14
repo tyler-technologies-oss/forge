@@ -1,0 +1,13 @@
+@use './variables';
+@use './core';
+
+@forward './core';
+@forward './functions';
+@forward './variables';
+
+///
+/// Creates selectors for the standard slider structure
+/// 
+@mixin styles {
+  @include core.styles;
+}

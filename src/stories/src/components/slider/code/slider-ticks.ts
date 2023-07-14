@@ -1,1 +1,1 @@
-export const SliderTicksHtml = () => '<forge-slider type="discrete-markers" value="50" step="10"></forge-slider>';
+export const SliderTicksHtml = () => '<forge-slider tickmarks step="10" data-aria-label="Choose value"></forge-slider>';

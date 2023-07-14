@@ -1,0 +1,12 @@
+@use '../core/config';
+
+$prefix: #{config.$prefix}-slider !default;
+$track-height: 4px !default;
+$disabled-active-track-opacity: 0.38 !default;
+$disabled-inactive-track-opacity: 0.12 !default;
+$handle-height: 20px !default;
+$handle-width: 20px !default;
+$label-container-height: 28px !default;
+$state-layer-size: 40px !default;
+$handle-outline-width: 1px !default;
+$tickmarks-container-size: 2px !default;
