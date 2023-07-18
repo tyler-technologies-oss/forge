@@ -1,0 +1,4 @@
+@use '../../core/config';
+
+$prefix: #{config.$prefix}-tab-bar !default;
+$underline-thickness: 1px !default;

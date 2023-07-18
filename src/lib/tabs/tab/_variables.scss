@@ -1,4 +1,26 @@
-$horizontal-padding: 24px !default;
-$height: 48px !default;
-$height-stacked: 72px !default;
-$stacked-padding: 8px !default;
+$supported-theme-properties: (
+  'indicator-color',
+  'indicator-height',
+  'indicator-shape',
+  'container-color',
+  'container-height',
+  'shape',
+  'height',
+  'active-focus-icon-color',
+  'active-hover-icon-color',
+  'active-icon-color',
+  'active-pressed-icon-color',
+  'icon-size',
+  'focus-icon-color',
+  'hover-icon-color',
+  'icon-color',
+  'pressed-icon-color',
+  'active-focus-label-text-color',
+  'active-hover-label-text-color',
+  'active-label-text-color',
+  'active-pressed-label-text-color',
+  'focus-label-text-color',
+  'hover-label-text-color',
+  'label-text-color',
+  'pressed-label-text-color'
+);

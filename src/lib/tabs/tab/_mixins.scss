@@ -1,160 +1,78 @@
-@use '@material/theme/theme' as mdc-theme;
-@use '@material/typography/typography' as mdc-typography;
-@use '@material/ripple/ripple' as mdc-ripple;
-@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
-@use '../../typography/mixins' as typography-mixins;
+@use '../../core/style-layer/tabs/tab';
 @use './variables';
 
-@mixin core-styles() {
-  .forge-tab {
-    @include base;
-
-    &:disabled {
-      @include disabled;
+@mixin provide-theme($theme) {
+  @each $key, $value in $theme {
+    @if list.index(variables.$supported-theme-properties, $key) == null {
+      @error 'Invalid theme property: #{$key}';
     }
-
-    // Firefox still draws a dotted border around focused buttons unless specifically overridden
-    &::-moz-focus-inner {
-      padding: 0;
-      border: 0;
-    }
-
-    ::slotted([slot=top]) {
-      @include top;
-    }
-
-    ::slotted([slot=top]),
-    ::slotted([slot=leading]),
-    ::slotted([slot=trailing]) {
-      @include icon-base;
-    }
-
-    ::slotted([slot=leading]),
-    ::slotted([slot=trailing]) {
-      padding: 0 8px;
-    }
-
-    &__content {
-      @include content;
-    }
-
-    &__text {
-      @include text;
-    }
-  
-    &--active {
-      @include active;
-
-      ::slotted([slot=top]),
-      ::slotted([slot=leading]),
-      ::slotted([slot=trailing]) {
-        transition-delay: 100ms;
-      }
-    }
-
-    &__ripple {
-      @include mdc-ripple.surface();
-      @include mdc-ripple.radius-bounded();
-      @include mdc-ripple-theme.states($color: primary);
-
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+    @if $value {
+      --#{tab.$prefix}-#{$key}: #{$value};
     }
   }
 }
 
-@mixin host() {
-  display: inline-block;
+@mixin core-styles {
+  @include tab.styles;
 }
 
-@mixin host-stretch() {
-  flex: 1;
+@mixin focus-styles {
+  @include tab.focus-styles;
 }
 
-@mixin base() {
-  @include mdc-typography.typography(button);
-  @include mdc-theme.property(color, text-secondary-on-light);
-
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  margin: 0; // To override safari default margin for button elements
-  padding-top: 0;
-  padding-bottom: 0;
-  border: none;
-  outline: none;
-  background: none;
-  text-align: center;
-  white-space: nowrap;
-  cursor: pointer;
-  -webkit-appearance: none;
-  z-index: 1;
-  padding-right: variables.$horizontal-padding;
-  padding-left: variables.$horizontal-padding;
-  height: 100%;
-  width: 100%;
+@mixin focus-selected-styles {
+  @include tab.focus-selected-styles;
 }
 
-@mixin disabled() {
-  @include mdc-theme.property(color, text-disabled-on-background);
-
-  cursor: not-allowed;
-  pointer-events: none;
+@mixin pressed-styles {
+  @include tab.pressed-styles;
 }
 
-@mixin top() {
-  padding-top: variables.$stacked-padding;
+@mixin pressed-selected-styles {
+  @include tab.pressed-selected-styles;
 }
 
-@mixin icon-base() {
-  transition: 150ms color linear;
-  fill: currentColor;
-  width: 24px;
-  height: 24px;
-  font-size: 24px;
-  z-index: 2;
+@mixin disabled-styles {
+  @include tab.disabled-styles;
 }
 
-@mixin content() {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: inherit;
-  pointer-events: none;
+@mixin selected-styles {
+  @include tab.selected-styles;
+  @include tab.forced-colors-styles;
 }
 
-@mixin text() {
-  transition: 150ms color linear;
-  display: inline-block;
-  line-height: 1;
-  z-index: 2;
+@mixin stacked-styles {
+  @include tab.stacked-styles;
 }
 
-@mixin active() {
-  @include mdc-theme.property(color, primary);
+@mixin secondary-styles {
+  @include tab.secondary-styles;
 }
 
-@mixin host-theme($theme, $properties) {
-  :host([theme=#{$theme}]) {
-    @include theme($theme, $properties);
-  }
+@mixin vertical-styles {
+  @include tab.vertical-styles;
 }
 
-@mixin theme($theme, $properties) {
-  $defaultValue: map-get($properties, $theme);
-  --mdc-theme-primary: var(--mdc-theme-#{$theme}, $defaultValue);
+@mixin vertical-primary-styles {
+  @include tab.vertical-primary-styles;
+}
 
-  // IE support
-  .forge-tab.forge-tab--active {
-    color: $defaultValue;
-  }
+@mixin vertical-secondary-styles {
+  @include tab.vertical-secondary-styles;
+}
+
+@mixin vertical-inverted-styles {
+  @include tab.vertical-inverted-styles;
+}
+
+@mixin inverted-styles {
+  @include tab.inverted-styles;
+}
+
+@mixin host {
+  @include tab.host;
+}
+
+@mixin host-disabled {
+  @include tab.host-disabled;
 }

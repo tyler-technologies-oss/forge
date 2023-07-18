@@ -4,24 +4,32 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab`;
 
 const attributes = {
   DISABLED: 'disabled',
-  ACTIVE: 'active',
-  STRETCH: 'stretch'
+  SELECTED: 'selected',
+  VERTICAL: 'vertical',
+  STACKED: 'stacked',
+  SECONDARY: 'secondary',
+  INVERTED: 'inverted'
 };
 
 const selectors = {
-  BUTTON: 'button.forge-tab',
-  RIPPLE: '.forge-tab__ripple',
-  INDICATOR: '.mdc-tab-indicator',
-  CONTENT: '.forge-tab__content',
-  DEFAULT_SLOT: 'slot:not([name])'
+  RIPPLE: '.ripple-surface',
+  INDICATOR: '.indicator'
 };
 
 const classes = {
-  ACTIVE: 'forge-tab--active'
+  SELECTED: 'selected'
 };
 
 const events = {
-  INTERACTED: `${elementName}-interacted`
+  SELECT: `${elementName}-select`
+};
+
+const strings = {
+  EASING: 'cubic-bezier(0.4, 0, 0.2, 1)'
+};
+
+const numbers = {
+  ANIMATION_DURATION: 250
 };
 
 export const TAB_CONSTANTS = {
@@ -29,12 +37,8 @@ export const TAB_CONSTANTS = {
   attributes,
   selectors,
   classes,
-  events
+  events,
+  strings,
+  numbers
 };
 
-export interface ITabDimensions {
-  rootLeft: number;
-  rootRight: number;
-  contentLeft: number;
-  contentRight: number;
-}

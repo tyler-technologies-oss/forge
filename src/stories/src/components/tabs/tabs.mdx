@@ -1,0 +1,290 @@
+import { Default as TabBarDemo } from './tabs.stories';
+import { TabBarDefaultHtml } from './code/tab-bar-default';
+
+<PageSection>
+
+# Tabs
+
+Tabs organize content across different screens and views.
+
+Use tabs to group content into helpful categories. Tabs are typically placed above the content they relate to.
+Tabs can be used to navigate between screens, or to group related content within a screen.
+
+This component does **not** handle swapping out tab panels for you, but it will allow for you respond to the tab
+index changing to then hide/show the correct panel in your content.
+
+Tabs can easily be paired with [view switcher component](?path=/story/components-view-switcher--default) to switch between views on a page.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+### Basic
+
+<LiveDemo fullWidth layout="column" codeHtml={TabBarDefaultHtml()}>
+  <TabBarDemo />
+</LiveDemo>
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Tab Bar Properties/Attributes
+
+<PropertyDef name="activeTab" type="number | null | undefined" defaultValue="undefined">
+
+  Controls the active tab index.
+
+</PropertyDef>
+
+<PropertyDef name="vertical" type="boolean" defaultValue="false">
+
+Controls whether the tabs are rendered vertically or not.
+
+</PropertyDef>
+
+<PropertyDef name="clustered" type="boolean" defaultValue="false">
+
+Controls whether the tabs are rendered in a cluster (collapsed to minimum width) or not (stretched to fill available space).
+
+</PropertyDef>
+
+<PropertyDef name="stacked" type="boolean" defaultValue="false">
+
+Controls whether the tab content is stacked vertically or not.
+
+</PropertyDef>
+
+<PropertyDef name="secondary" type="boolean" defaultValue="false">
+
+Controls whether the tabs are rendered as secondary tabs or not.
+
+</PropertyDef>
+
+<PropertyDef name="inverted" type="boolean" defaultValue="false">
+
+Controls whether the tab indicators are rendered on the opposite side of the tabs.
+
+</PropertyDef>
+
+<PropertyDef name="autoActivate" type="boolean" defaultValue="false">
+
+Controls whether tabs are auto-activated when using arrow keys.
+
+Keys which auto activate: `ArrowLeft`, `ArrowRight`, `Home`, `End`, as well as `ArrowUp` and `ArrowDown` when in vertical mode.
+
+</PropertyDef>
+
+<PropertyDef name="scrollButtons" type="boolean" defaultValue="false">
+
+Controls whether scroll buttons are rendered or not when the tab container is scrollable.
+
+</PropertyDef>
+
+</PageSection>
+
+<PageSection>
+
+## Tab Properties/Attributes
+
+<PropertyDef name="disabled" type="boolean" defaultValue="false">
+
+Gets/sets whether the tab is disabled or not.
+
+</PropertyDef>
+
+<PropertyDef name="selected" type="boolean" defaultValue="false">
+
+Gets/sets whether the tab is selected or not.
+
+</PropertyDef>
+
+<PropertyDef name="vertical" type="boolean" defaultValue="false">
+
+Controls whether the tab is rendered vertically or not.
+
+</PropertyDef>
+
+<PropertyDef name="stacked" type="boolean" defaultValue="false">
+
+Controls whether the tab content is stacked vertically or not.
+
+</PropertyDef>
+
+<PropertyDef name="secondary" type="boolean" defaultValue="false">
+
+Controls whether the tab is rendered as a secondary tab or not.
+
+</PropertyDef>
+
+<PropertyDef name="inverted" type="boolean" defaultValue="false">
+
+Controls whether the tab indicator is rendered on the opposite side of the tab.
+
+</PropertyDef>
+
+</PageSection>
+
+<PageSection>
+
+## Tab Bar Events
+
+| Name                            | Description
+| :-------------------------------| :----------------
+| `forge-tab-bar-change`          | Emits when the user activates a new tab.
+
+</PageSection>
+
+<PageSection>
+
+## Tab Events
+
+| Name                            | Description
+| :-------------------------------| :----------------
+| `forge-tab-select`              | Emits when the user selects a tab.
+
+</PageSection>
+
+<PageSection>
+
+## Keyboard shortcuts
+
+| Name                                | Description
+| :-----------------------------------| :----------------
+| `End`                               | Focus end tab.
+| `Space/Enter`                       | Activate the focused tab.
+| **Horizontal**                      |
+| `ArrowLeft`                         | Focus previous tab.
+| `ArrowRight`                        | Focus next tab.
+| **Vertical**                        |
+| `ArrowUp`                           | Focus previous tab.
+| `ArrowDown`                         | Focus next tab.
+
+> **Note:** If `autoActivate` is enabled, using the arrow keys will also activate the tab when focused.
+
+</PageSection>
+
+<PageSection>
+
+## Tab Bar Slots
+
+| Name                          | Description
+| :-----------------------------| :----------------------
+| `default`                     | The default (unnamed) slot where the tab will be rendered.
+
+</PageSection>
+
+<PageSection>
+
+## Tab Slots
+
+| Name                          | Description
+| :-----------------------------| :----------------------
+| `default`                     | The default (unnamed) slot where the tab text or icon will be rendered.
+| `leading`                     | The leading slot for content to render before the default slot. This is typically an icon element.
+| `trailing`                    | The trailing slot for content to render after the default slot. This is typically an icon element.
+
+</PageSection>
+
+<PageSection>
+
+## Tab Bar CSS parts
+
+| Name                      | Description
+| :-------------------------| :--------------------
+| `container`               | The root container element.
+| `scroll-container`        | The scroll container element.
+
+</PageSection>
+
+<PageSection>
+
+## Tab CSS parts
+
+| Name                            | Description
+| :-------------------------------| :--------------------
+| `container`                     | The tab container element.
+| `content`                       | The tab content element.
+| `label`                         | The tab label element.
+| `indicator`                     | The tab active indicator element.
+
+</PageSection>
+
+<PageSection>
+
+## Tab Bar CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :--------------------
+| `--forge-tab-bar-justify`                       | Controls the color of tab bar underline.
+| `--forge-tab-bar-stretch`                       | Controls the height.
+| `--forge-tab-bar-underline-color`               | Controls the color of tab bar underline.
+| `--forge-tab-bar-underline-thickness`           | Controls the thickness of tab bar underline.
+
+</PageSection>
+
+<PageSection>
+
+## Tab CSS custom properties
+
+| Name                                            | Description
+| :-----------------------------------------------| :--------------------
+| `--forge-tab-indicator-color`                   | The color of the tab indicator.
+| `--forge-tab-indicator-height`                  | The height of the tab indicator.
+| `--forge-tab-indicator-shape`                   | The shape of the tab indicator.
+| `--forge-tab-container-color`                   | The color of the tab container.
+| `--forge-tab-height`                            | The height of the tab.
+| `--forge-tab-shape`                             | The shape of the tab.
+| `--forge-tab-disabled-opacity`                  | The opacity of the tab when disabled.
+| `--forge-tab-active-focus-icon-color`           | The color of the tab icon when active and focused.
+| `--forge-tab-active-hover-icon-color`           | The color of the tab icon when active and hovered.
+| `--forge-tab-active-icon-color`                 | The color of the tab icon when active.
+| `--forge-tab-active-pressed-icon-color`         | The color of the tab icon when active and pressed.
+| `--forge-tab-icon-size`                         | The size of the tab icon.
+| `--forge-tab-focus-icon-color`                  | The color of the tab icon when focused.
+| `--forge-tab-hover-icon-color`                  | The color of the tab icon when hovered.
+| `--forge-tab-icon-color`                        | The color of the tab icon.
+| `--forge-tab-pressed-icon-color`                | The color of the tab icon when pressed.
+| `--forge-tab-active-focus-label-text-color`     | The color of the tab label text when active and focused.
+| `--forge-tab-active-hover-label-text-color`     | The color of the tab label text when active and hovered.
+| `--forge-tab-active-label-text-color`           | The color of the tab label text when active.
+| `--forge-tab-active-pressed-label-text-color`   | The color of the tab label text when active and pressed.
+| `--forge-tab-focus-label-text-color`            | The color of the tab label text when focused.
+| `--forge-tab-hover-label-text-color`            | The color of the tab label text when hovered.
+| `--forge-tab-label-text-color`                  | The color of the tab label text.
+| `--forge-tab-pressed-label-text-color`          | The color of the tab label text when pressed.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+- Ensure that only the selected tab content is reachable by keyboard.
+- Ensure a tab is always active at any given time.
+
+It's expected that you will need to provide the `tabpanel` role to your elements to indicate to assistive technologies
+which element is responsible for tab content. Each tab should contain an `aria-controls` property identifying
+its corresponding tab content. In addition, each tab content element should be labelled by a tab:
+
+```html
+<forge-tab-bar>
+  <forge-tab aria-controls="panel-1" id="tab-1">Tab 1</forge-tab>
+  <forge-tab aria-controls="panel-2" id="tab-2">Tab 2</forge-tab>
+</forge-tab-bar>
+<div role="tabpanel" aria-labelledby="tab-1" id="panel-1">Content 1</div>
+<div role="tabpanel" aria-labelledby="tab-2" id="panel-2">Content 2</div>
+```
+
+> **Note:** the `<forge-tab>` elements receive the `role="tab"` automatically.
+
+</PageSection>
