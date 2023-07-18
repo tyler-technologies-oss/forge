@@ -23,10 +23,21 @@ Tabs can easily be paired with [view switcher component](?path=/story/components
 
 ## Examples
 
-### Basic
+### Primary
 
 <LiveDemo fullWidth layout="column" codeHtml={TabBarDefaultHtml()}>
   <TabBarDemo />
+</LiveDemo>
+
+> Take note of the ARIA attributes used here. These are important to provide a good experience for screen reader users.
+
+### Secondary
+
+Secondary tabs are used when there is a need for multiple levels of tabs on the same page. The only difference is that there is simpler style of
+indicator, but the same functionality is provided.
+
+<LiveDemo fullWidth layout="column">
+  <TabBarDemo secondary />
 </LiveDemo>
 
 </PageSection>
@@ -64,6 +75,8 @@ Controls whether the tab content is stacked vertically or not.
 <PropertyDef name="secondary" type="boolean" defaultValue="false">
 
 Controls whether the tabs are rendered as secondary tabs or not.
+
+Use secondary tabs when there is a need for multiple levels of tabs on the same page.
 
 </PropertyDef>
 
