@@ -11,7 +11,6 @@ import type { ITabComponent } from './tab/tab';
 import type { IIconComponent } from '../icon/icon';
 
 import './tab-bar/tab-bar';
-import exp from 'constants';
 
 describe('Tabs', () => {
   it('should contain shadow root', async () => {
