@@ -1,153 +1,110 @@
-import { getShadowElement, toggleClass } from '@tylertech/forge-core';
-import { MDCTabIndicator } from '@material/tab-indicator';
-import { IBaseAdapter, BaseAdapter } from '../../core/base/base-adapter';
+import { getShadowElement, requireParent, toggleAttribute } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { ITabComponent } from './tab';
 import { TAB_CONSTANTS } from './tab-constants';
-import { ForgeRipple, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../../ripple';
+import { TabRipple } from './tab-ripple';
+import { userInteractionListener } from '../../core/utils';
+import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants';
 
 export interface ITabAdapter extends IBaseAdapter {
   initialize(): void;
-  initializeIndicator(): void;
-  destroyIndicator(): void;
-  computeIndicatorBounds(): DOMRect | undefined;
-  activateIndicator(previousIndicatorClientRect?: DOMRect): void;
-  deactivateIndicator(): void;
-  initializeRipple(): void;
-  destroyRipple(): void;
-  addButtonListener(type: string, listener: (evt: Event) => void): void;
-  removeButtonListener(type: string, listener: (evt: Event) => void): void;
+  destroy(): void;
+  addInteractionListener(type: string, listener: EventListener): void;
   setDisabled(value: boolean): void;
-  setActive(value: boolean): void;
-  getOffsetLeft(): number;
-  getOffsetWidth(): number;
-  getContentOffsetLeft(): number;
-  getContentOffsetWidth(): number;
-  focus(): void;
-  setTabIndex(value: number): void;
-}
-
-class TabRippleSurface implements ForgeRippleCapableSurface {
-  constructor(private _root: HTMLButtonElement) {}
-
-  public get root(): Element {
-    return this._root;
-  }
-
-  public get unbounded(): boolean | undefined {
-    return false;
-  }
-
-  public get disabled(): boolean | undefined {
-    return this._root.disabled;
-  }
+  setSelected(value: boolean): void;
+  animateSelected(): void;
 }
 
 export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapter {
-  private _buttonElement: HTMLButtonElement;
-  private _content: HTMLElement;
-  private _rippleElement: HTMLElement;
-  private _rippleInstance: ForgeRipple | undefined;
-  private _tabIndicatorElement: HTMLElement;
-  private _tabIndicator: MDCTabIndicator | undefined;
+  private readonly _rippleElement: HTMLElement;
+  private readonly _tabIndicatorElement: HTMLElement;
+  private _rippleInstance: TabRipple | undefined;
 
   constructor(component: ITabComponent) {
     super(component);
-    this._buttonElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
-    this._content = getShadowElement(this._component, TAB_CONSTANTS.selectors.CONTENT);
     this._rippleElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.RIPPLE);
     this._tabIndicatorElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.INDICATOR);
   }
 
   public initialize(): void {
+    this._deferRippleInitialization();
+    this._component.tabIndex = -1;
     this._component.setAttribute('role', 'tab');
+    this._component.setAttribute('aria-selected', 'false');
   }
 
-  public initializeRipple(): void {
-    const rippleCapableSurface = new TabRippleSurface(this._buttonElement);
-    const rippleAdapter = {
-      ...ForgeRipple.createAdapter(rippleCapableSurface),
-      addClass: (className: string) => this._rippleElement.classList.add(className),
-      removeClass: (className: string) => this._rippleElement.classList.remove(className),
-      updateCssVariable: (varName: string, value: string) => this._rippleElement.style.setProperty(varName, value)
-    };
-    const rippleFoundation = new ForgeRippleFoundation(rippleAdapter);
-    this._rippleInstance = new ForgeRipple(this._buttonElement, rippleFoundation);
+  public destroy(): void {
+    this._rippleInstance?.destroy();
   }
 
-  public destroyRipple(): void {
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
-    }
-  }
-
-  public initializeIndicator(): void {
-    this._tabIndicator = new MDCTabIndicator(this._tabIndicatorElement);
-  }
-
-  public destroyIndicator(): void {
-    if (this._tabIndicator) {
-      this._tabIndicator.destroy();
-      this._tabIndicator = undefined;
-    }
-  }
-
-  public activateIndicator(previousIndicatorClientRect?: DOMRect): void {
-    if (this._tabIndicator) {
-      this._tabIndicator.activate(previousIndicatorClientRect);
-    }
-  }
-
-  public deactivateIndicator(): void {
-    if (this._tabIndicator) {
-      this._tabIndicator.deactivate();
-    }
-  }
-
-  public computeIndicatorBounds(): DOMRect | undefined {
-    return this._tabIndicator ? this._tabIndicator.computeContentClientRect() as DOMRect : undefined;
-  }
-
-  public addButtonListener(type: string, listener: (evt: Event) => void): void {
-    this._buttonElement.addEventListener(type, listener);
-  }
-
-  public removeButtonListener(type: string, listener: (evt: Event) => void): void {
-    this._buttonElement.removeEventListener(type, listener);
+  public addInteractionListener(type: string, listener: EventListener): void {
+    this._component.addEventListener(type, listener);
   }
 
   public setDisabled(value: boolean): void {
-    this._buttonElement.disabled = value;
-    this.setTabIndex(!value ? 0 : -1);
-    this._component.setAttribute('aria-disabled', value.toString());
+    this._component.tabIndex = value ? -1 : this._component.selected ? 0 : -1;
+    this._component.setAttribute('aria-disabled', String(value));
+    toggleAttribute(this._component, value, TAB_CONSTANTS.attributes.DISABLED, String(value));
   }
 
-  public setActive(value: boolean): void {
-    toggleClass(this._buttonElement, value, TAB_CONSTANTS.classes.ACTIVE);
-    this.setTabIndex(value ? 0 : -1);
-    this._component.setAttribute('aria-selected', value.toString());
+  public setSelected(value: boolean): void {
+    this._component.tabIndex = value ? 0 : -1;
+    this._component.setAttribute('aria-selected', String(value));
   }
 
-  public getOffsetLeft(): number {
-    return this._buttonElement.offsetLeft;
-  }
-  
-  public getOffsetWidth(): number {
-    return this._buttonElement.offsetWidth;
-  }
-
-  public getContentOffsetLeft(): number {
-    return this._content.offsetLeft;
+  private async _deferRippleInitialization(): Promise<void> {
+    const type = await userInteractionListener(this._component);
+    this._rippleInstance = new TabRipple(this._rippleElement, this._component as any);
+    if (type === 'focusin' && this._component.matches(':focus')) {
+      this._rippleInstance.emulateFocus();
+    }
   }
 
-  public getContentOffsetWidth(): number {
-    return this._content.offsetWidth;
+  public animateSelected(): void {
+    this._tabIndicatorElement.getAnimations().forEach(a => a.cancel());
+    const frames = this._getKeyframes();
+    if (frames) {
+      this._tabIndicatorElement.animate(frames, { duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION, easing: TAB_CONSTANTS.strings.EASING });
+    }
   }
 
-  public focus(): void {
-    this._buttonElement.focus();
+  private _getKeyframes(): Keyframe[] | null {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!this._component.selected) {
+      return reduceMotion ? [{ opacity: 1 }, { transform: 'none' }] : null;
+    }
+
+    const from: Keyframe = {};
+    const isVertical = this._component.vertical;
+    const selectedTabIndicator = this._getSelectedTabIndicator();
+    const fromRect = selectedTabIndicator?.getBoundingClientRect() ?? {} as DOMRect;
+    const fromPos = isVertical ? fromRect.top : fromRect.left;
+    const fromExtent = isVertical ? fromRect.height : fromRect.width;
+    const toRect = this._tabIndicatorElement.getBoundingClientRect();
+    const toPos = isVertical ? toRect.top : toRect.left;
+    const toExtent = isVertical ? toRect.height : toRect.width;
+    const axis = isVertical ? 'Y' : 'X';
+    const scale = fromExtent / toExtent;
+
+    if (!reduceMotion && fromPos !== undefined && toPos !== undefined && !isNaN(scale)) {
+      from.transform = `translate${axis}(${(fromPos - toPos).toFixed(4)}px) scale${axis}(${scale.toFixed(4)})`;
+    } else {
+      from.opacity = 0;
+    }
+
+    return [from, { transform: 'none' }];
   }
 
-  public setTabIndex(value: number): void {
-    this._buttonElement.tabIndex = value;
+  private _getSelectedTabIndicator(): HTMLElement | null {
+    const tabsEl = requireParent(this._component, TAB_BAR_CONSTANTS.elementName);
+    if (tabsEl) {
+      const tabChildren = Array.from(tabsEl.querySelectorAll(TAB_CONSTANTS.elementName)) as ITabComponent[];
+      const selectedTab = tabChildren.find(tab => tab.hasAttribute(TAB_CONSTANTS.attributes.SELECTED));
+      if (selectedTab) {
+        return getShadowElement(selectedTab, TAB_CONSTANTS.selectors.INDICATOR);
+      }
+    }
+    return null;
   }
 }

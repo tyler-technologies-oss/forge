@@ -1,7 +1,4 @@
-@use '../../theme/theme-values';
 @use './mixins';
-@use '../../ripple/forge-ripple';
-@use '@material/tab-indicator/mdc-tab-indicator';
 
 @include mixins.core-styles;
 
@@ -13,13 +10,55 @@
   display: none;
 }
 
-:host([stretch]) {
-  @include mixins.host-stretch;
+:host(:focus) {
+  @include mixins.focus-styles;
 }
 
-@include mixins.host-theme(primary, theme-values.$mdc-property-values);
-@include mixins.host-theme(secondary, theme-values.$mdc-property-values);
-@include mixins.host-theme(warning, theme-values.$property-values);
-@include mixins.host-theme(success, theme-values.$property-values);
-@include mixins.host-theme(danger, theme-values.$property-values);
-@include mixins.host-theme(info, theme-values.$property-values);
+:host(:active) {
+  @include mixins.pressed-styles;
+}
+
+:host([disabled]) {
+  @include mixins.host-disabled;
+  @include mixins.disabled-styles;
+}
+
+:host([selected]) {
+  @include mixins.selected-styles;
+}
+
+:host([selected]:focus) {
+  @include mixins.focus-selected-styles;
+}
+
+:host([selected]:active) {
+  @include mixins.pressed-selected-styles;
+}
+
+:host([stacked]) {
+  @include mixins.stacked-styles;
+}
+
+:host([secondary]) {
+  @include mixins.secondary-styles;
+}
+
+:host([vertical]) {
+  @include mixins.vertical-styles;
+}
+
+:host([vertical][secondary]) {
+  @include mixins.vertical-secondary-styles;
+}
+
+:host([vertical]:not([secondary])) {
+  @include mixins.vertical-primary-styles;
+}
+
+:host([inverted]) {
+  @include mixins.inverted-styles;
+}
+
+:host([inverted][vertical]) {
+  @include mixins.vertical-inverted-styles;
+}

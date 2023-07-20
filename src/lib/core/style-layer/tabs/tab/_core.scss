@@ -1,0 +1,414 @@
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '../../../../theme/theme-values';
+@use '../../../../typography';
+@use './variables';
+
+@mixin configuration {
+  // Indicator
+  --_active-indicator-color: var(--#{variables.$prefix}-indicator-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-indicator-height: var(--#{variables.$prefix}-indicator-height, #{variables.$indicator-height});
+  --_active-indicator-shape: var(--#{variables.$prefix}-indicator-shape, #{variables.$indicator-shape});
+
+  // Container
+  --_container-color: var(--#{variables.$prefix}-container-color, var(--mdc-theme-surface, #{theme-values.$surface}));
+  --_container-height: var(--#{variables.$prefix}-container-height, #{variables.$height});
+  --_container-shape: var(--#{variables.$prefix}-shape, 0);
+  
+  // Content
+  --_content-height: var(--#{variables.$prefix}-height, #{variables.$content-height});
+
+  // Icon
+  --_active-focus-icon-color: var(--#{variables.$prefix}-active-focus-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-hover-icon-color: var(--#{variables.$prefix}-active-hover-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-icon-color: var(--#{variables.$prefix}-active-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-pressed-icon-color: var(--#{variables.$prefix}-active-pressed-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_icon-size: var(--#{variables.$prefix}-icon-size, #{variables.$icon-size});
+  --_focus-icon-color: var(--#{variables.$prefix}-focus-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_hover-icon-color: var(--#{variables.$prefix}-hover-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_icon-color: var(--#{variables.$prefix}-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_pressed-icon-color: var(--#{variables.$prefix}-pressed-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+
+  // Label
+  --_active-focus-label-text-color: var(--#{variables.$prefix}-active-focus-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-hover-label-text-color: var(--#{variables.$prefix}-active-hover-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-label-text-color: var(--#{variables.$prefix}-active-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-pressed-label-text-color: var(--#{variables.$prefix}-active-pressed-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_focus-label-text-color: var(--#{variables.$prefix}-focus-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_hover-label-text-color: var(--#{variables.$prefix}-hover-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_label-text-color: var(--#{variables.$prefix}-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_pressed-label-text-color: var(--#{variables.$prefix}-pressed-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+}
+
+@mixin vertical-primary-configuration {
+  --_active-indicator-shape: #{variables.$vertical-indicator-shape};
+}
+
+@mixin configuration-secondary {
+  --_active-indicator-height: var(--#{variables.$prefix}-active-indicator-height, #{variables.$secondary-indicator-height});
+  --_active-indicator-shape: var(--#{variables.$prefix}-indicator-shape, 0);
+}
+
+@mixin configuration-inverted {
+  --_active-indicator-shape: var(--#{variables.$prefix}-indicator-shape, #{variables.$inverted-indicator-shape});
+}
+
+@mixin configuration-vertical-inverted {
+  --_active-indicator-shape: var(--#{variables.$prefix}-indicator-shape, #{variables.$vertical-inverted-indicator-shape});
+}
+
+@mixin styles {
+  @include mdc-ripple.common;
+
+  .#{variables.$prefix} {
+    @include configuration;
+    @include tab;
+
+    .content {
+      @include content;
+
+      .label {
+        @include label;
+      }
+    }
+
+    .indicator {
+      @include indicator;
+    }
+
+    .ripple-surface {
+      @include ripple-surface;
+    }
+  }
+
+  host,
+  ::slotted(*) {
+    white-space: nowrap;
+  }
+}
+
+@mixin focus-styles {
+  .#{variables.$prefix} {
+    @include tab-focus;
+  }
+}
+
+@mixin focus-selected-styles {
+  .#{variables.$prefix} {
+    @include tab-selected-focus;
+  }
+}
+
+@mixin pressed-styles {
+  .#{variables.$prefix} {
+    @include tab-pressed;
+  }
+}
+
+@mixin pressed-selected-styles {
+  .#{variables.$prefix} {
+    @include tab-selected-pressed;
+  }
+}
+
+@mixin disabled-styles {
+  .#{variables.$prefix} {
+    pointer-events: none;
+  }
+}
+
+@mixin selected-styles {
+  .#{variables.$prefix} {
+    color: var(--_active-label-text-color);
+
+    ::slotted([slot=leading]),
+    ::slotted([slot=trailing]) {
+      color: var(--_active-icon-color);
+    }
+
+    &:hover {
+      color: var(--_active-hover-label-text-color);
+    }
+
+    &:hover {
+      ::slotted([slot=leading]),
+      ::slotted([slot=trailing]) {
+        color: var(--_active-hover-icon-color);
+      }
+    }
+  }
+
+  .indicator {
+    opacity: 1;
+  }
+}
+
+@mixin stacked-styles {
+  .#{variables.$prefix} {
+    --_container-height: #{variables.$stacked-container-height};
+    --_content-height: #{variables.$stacked-height};
+
+    .content {
+      @include content-stacked;
+    }
+  }
+}
+
+@mixin secondary-styles {
+  .#{variables.$prefix} {
+    @include configuration-secondary;
+  }
+
+  .content {
+    @include content-secondary;
+  }
+
+  .indicator {
+    @include indicator-secondary;
+  }
+}
+
+@mixin vertical-styles {
+  .#{variables.$prefix} {
+    @include vertical;
+  }
+
+  .content {
+    @include vertical-content;
+  }
+
+  .indicator {
+    @include vertical-indicator;
+  }
+}
+
+@mixin vertical-primary-styles {
+  .#{variables.$prefix} {
+    @include vertical-primary-configuration;
+  }
+}
+
+@mixin vertical-secondary-styles {
+  .content {
+    @include vertical-secondary-content;
+  }
+}
+
+@mixin vertical-inverted-styles {
+  .#{variables.$prefix} {
+    @include configuration-vertical-inverted;
+  }
+
+  .indicator {
+    @include vertical-inverted-indicator;
+  }
+}
+
+@mixin inverted-styles {
+  .#{variables.$prefix} {
+    @include configuration-inverted;
+  }
+
+  .indicator {
+    @include inverted-indicator;
+  }
+}
+
+@mixin forced-colors-styles {
+  @media (forced-colors: active) {
+    .#{variables.$prefix} {
+      --_active-indicator-color: CanvasText;
+    }
+  }
+}
+
+@mixin host {
+  display: inline-flex;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  vertical-align: middle;
+}
+
+@mixin host-disabled {
+  cursor: not-allowed;
+  opacity: var(--#{variables.$prefix}-disabled-opacity, #{variables.$disabled-opacity});
+}
+
+@mixin tab {
+  @include typography.typography(button);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  user-select: none;
+  -webkit-appearance: none;
+  vertical-align: middle;
+  background: transparent;
+  text-decoration: none;
+  width: 100%;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  z-index: 0; // Ensure this is a stacking context so the indicator displays
+  background-color: var(--_container-color);
+  color: var(--_label-text-color);
+  min-height: var(--_container-height);
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    display: inline-flex;
+    position: relative;
+    writing-mode: horizontal-tb;
+    fill: currentColor;
+    color: var(--_icon-color);
+    font-size: var(--_icon-size);
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+  }
+
+  &:hover {
+    color: var(--_hover-label-text-color);
+    cursor: pointer;
+  }
+
+  &:hover {
+    ::slotted([slot=leading]),
+    ::slotted([slot=trailing]) {
+      color: var(--_hover-icon-color);
+    }
+  }
+}
+
+@mixin tab-focus {
+  color: var(--_focus-label-text-color);
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_focus-icon-color);
+  }
+}
+
+@mixin tab-selected-focus {
+  color: var(--_active-focus-label-text-color);
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_active-focus-icon-color);
+  }
+}
+
+@mixin tab-pressed {
+  color: var(--_pressed-label-text-color);
+  outline: none;
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_pressed-icon-color);
+  }
+}
+
+@mixin tab-selected-pressed {
+  color: var(--_active-pressed-label-text-color);
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_active-pressed-icon-color);
+  }
+}
+
+@mixin content {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: 150ms color linear;
+
+  $_content-padding: 8px;
+  max-height: calc(var(--_content-height) + 2 * $_content-padding);
+  min-height: var(--_content-height);
+  padding: $_content-padding calc(2 * $_content-padding);
+  gap: 4px;
+}
+
+@mixin label {
+  display: inline-block;
+  line-height: 1;
+}
+
+@mixin indicator {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: -1;
+  transform-origin: bottom left;
+  background: var(--_active-indicator-color);
+  border-radius: var(--_active-indicator-shape);
+  height: var(--_active-indicator-height);
+  inset: auto 0 0;
+  opacity: 0;
+}
+
+@mixin ripple-surface {
+  @include mdc-ripple.surface;
+  @include mdc-ripple.radius-bounded;
+  @include mdc-ripple-theme.states($color: primary);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--_container-shape);
+}
+
+@mixin content-secondary {
+  width: 100%;
+}
+
+@mixin indicator-secondary {
+  min-width: 100%;
+}
+
+@mixin vertical {
+  width: 100%;
+  flex-direction: row;
+  border-bottom: none;
+}
+
+@mixin vertical-content {
+  width: 100%;
+}
+
+@mixin vertical-secondary-content {
+  min-height: 100%;
+}
+
+@mixin vertical-indicator {
+  height: 100%;
+  min-width: var(--_active-indicator-height);
+  inset: 0 0 0 auto;
+}
+
+@mixin vertical-inverted-indicator {
+  inset: 0 auto 0 0;
+}
+
+@mixin content-stacked {
+  flex-direction: column;
+}
+
+@mixin inverted-indicator {
+  inset: 0 0 auto;
+  transform-origin: top left;
+}

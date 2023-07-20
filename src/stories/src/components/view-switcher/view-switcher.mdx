@@ -44,36 +44,36 @@ viewSwitcher.goToEnd();
 The switcher can be paired with [forge-tab](?path=/story/components-tab-bar--default) to control view switching via tab controls.
 
 ```html
-<div role="tablist">
-  <forge-tab-bar>
-    <forge-tab>View one</forge-tab>
-    <forge-tab>View two</forge-tab>
-    <forge-tab>View three</forge-tab>
-  </forge-tab-bar>
+<forge-tab-bar active-tab="0">
+  <forge-tab id="tab-1" aria-controls="tabpanel-1">View one</forge-tab>
+  <forge-tab id="tab-2" aria-controls="tabpanel-2">View two</forge-tab>
+  <forge-tab id="tab-3" aria-controls="tabpanel-3">View three</forge-tab>
+</forge-tab-bar>
 
-  <forge-view-switcher>
-    <forge-view role="tabpanel">
-      <div>View one</div>
-    </forge-view>
-    <forge-view role="tabpanel">
-      <div>View two</div>
-    </forge-view>
-    <forge-view role="tabpanel">
-      <div>View three</div>
-    </forge-view>
-  </forge-view-switcher>
-</div>
+<forge-view-switcher>
+  <forge-view id="tabpanel-1" aria-labelledby="tab-1" role="tabpanel">
+    <div>View one</div>
+  </forge-view>
+  <forge-view id="tabpanel-2" aria-labelledby="tab-2" role="tabpanel">
+    <div style="height: 300px;">View two</div>
+  </forge-view>
+  <forge-view id="tabpanel-3" aria-labelledby="tab-3" role="tabpanel">
+    <div style="height: 500px;">View three</div>
+  </forge-view>
+</forge-view-switcher>
 ```
 
 ```js
 const tabBar = document.querySelector('forge-tab-bar');
 const viewSwitcher = document.querySelector('forge-view-switcher');
-tabBar.addEventListener('forge-tab-bar-activate', function(evt) {
-  viewSwitcher.index = evt.detail.index;
+tabBar.addEventListener('forge-tab-bar-cahnge', ({ detail: tabIndex }) => {
+  viewSwitcher.index = tabIndex;
 });
 ```
 
-> **Note:** This component does not add and remove the non-visible views from the DOM. It will toggle their visibility based on the animation type. If `none` is used, the `display` will be set to `none`, but if you're using `slide` or `fade` then the views are still rendered, but hidden with `visibility: hidden`. This is important to note when using this component in Angular because binding will still occur on the non-visible views.
+> **Note:** This component does not add and remove the non-visible views from the DOM. It will toggle their visibility based on the animation type.
+> If `none` is used, the `display` will be set to `none`, but if you're using `slide` or `fade` then the views are still rendered, but hidden with
+> `visibility: hidden`. This is important to note when using this component in Angular because binding will still occur on the non-visible views.
 
 <LiveDemo layout="column" codeHtml={ViewSwitcherDefaultCodeHtml()} codeTs={ViewSwitcherDefaultCodeTs()}>
   <ViewSwitcherDemo />

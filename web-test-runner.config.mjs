@@ -34,6 +34,8 @@ export default {
     reportDir: '.coverage',
     exclude: [
       'src/lib/core/base/**',
+      'src/lib/**/index.ts',
+      'src/lib/**/*.{html,scss,json}',
       '**/node_modules/**',
     ],
     threshold: {
