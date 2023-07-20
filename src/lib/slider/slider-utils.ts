@@ -24,6 +24,10 @@ export function createStartHandleElement(thumbLabel: string): HTMLElement {
   const startHandle = document.createElement('div');
   startHandle.classList.add(SLIDER_CONSTANTS.classes.HANDLE, SLIDER_CONSTANTS.classes.HANDLE_START);
   startHandle.setAttribute('part', 'handle-start');
+
+  const startHandleFocusIndicator = document.createElement('forge-focus-indicator');
+  startHandleFocusIndicator.target = 'start';
+  startHandle.appendChild(startHandleFocusIndicator);
   
   const startHandleThumb = document.createElement('div');
   startHandleThumb.classList.add(SLIDER_CONSTANTS.classes.HANDLE_THUMB);

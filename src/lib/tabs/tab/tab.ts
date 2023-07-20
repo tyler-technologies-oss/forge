@@ -4,6 +4,7 @@ import { TabAdapter } from './tab-adapter';
 import { TabFoundation } from './tab-foundation';
 import { TAB_CONSTANTS } from './tab-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
 
 import template from './tab.html';
 import styles from './tab.scss';
@@ -76,7 +77,10 @@ declare global {
  * @csspart indicator - The tab active indicator.
  */
 @CustomElement({
-  name: TAB_CONSTANTS.elementName
+  name: TAB_CONSTANTS.elementName,
+  dependencies: [
+    FocusIndicatorComponent
+  ]
 })
 export class TabComponent extends BaseComponent implements ITabComponent {
   public static get observedAttributes(): string[] {

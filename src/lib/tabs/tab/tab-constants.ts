@@ -13,7 +13,8 @@ const attributes = {
 
 const selectors = {
   RIPPLE: '.ripple-surface',
-  INDICATOR: '.indicator'
+  INDICATOR: '.indicator',
+  FOCUS_INDICATOR: '.focus-indicator'
 };
 
 const classes = {

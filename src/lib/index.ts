@@ -32,6 +32,7 @@ import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './dr
 import { ExpansionPanelComponent } from './expansion-panel';
 import { FilePickerComponent } from './file-picker';
 import { FloatingActionButton } from './floating-action-button';
+import { FocusIndicatorComponent } from './focus-indicator';
 import { IconButtonComponent } from './icon-button';
 import { InlineMessageComponent } from './inline-message';
 import { KeyboardShortcutComponent } from './keyboard-shortcut';
@@ -105,6 +106,7 @@ export * from './expansion-panel';
 export * from './file-picker';
 export * from './floating-action-button';
 export * from './floating-label';
+export * from './focus-indicator';
 export * from './icon-button';
 export * from './inline-message';
 export * from './keyboard-shortcut';
@@ -169,6 +171,7 @@ const CUSTOM_ELEMENTS = [
   ExpansionPanelComponent,
   FilePickerComponent,
   FloatingActionButton,
+  FocusIndicatorComponent,
   ProductIconComponent,
   IconComponent,
   IconButtonComponent,
