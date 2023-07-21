@@ -1,6 +1,6 @@
 import { Default as CardDemo, Styled as StyledDemo, WithScaffold as ScaffoldDemo } from './card.stories.tsx';
 import { CardDefaultCodeHtml } from './code/card-default';
-import { CardOutlinedCodeHtml } from './code/card-outlined';
+import { CardRaisedCodeHtml } from './code/card-raised';
 import { CardStyledCodeHtml, CardStyledCodeScss } from './code/card-styled';
 import { CardScaffoldCodeHtml, CardScaffoldCodeScss } from './code/card-scaffold';
 
@@ -10,11 +10,8 @@ import { CardScaffoldCodeHtml, CardScaffoldCodeScss } from './code/card-scaffold
 
 The card component is intended to be used as a layout design element to help group related content together into sections.
 
-This a simple component that doesn't provide any functionality, but brings consistency through common default values for `padding`, `box-shadow`, `border` and some
-structure within its template to help support fixed header and footer while allowing for a scrollable body. You are free to place any content you would like into this
-component using its default slot.
-
-See the [CSS custom properties](#css-custom-properties) section below for information on internal styles that you can override.
+This a simple component that doesn't provide any functionality, but brings consistency through common default values. You are
+free to place any content you would like into this component using its default slot.
 
 </PageSection>
 
@@ -36,11 +33,11 @@ See the [CSS custom properties](#css-custom-properties) section below for inform
 >
 > Use the `--forge-card-padding` CSS custom property to set a custom padding value.
 
-### Outlined
+### Raised
 
-<LiveDemo fullWidth layout="column" dense={false} padded={false} codeHtml={CardOutlinedCodeHtml()}>
+<LiveDemo fullWidth layout="column" dense={false} padded={false} codeHtml={CardRaisedCodeHtml()}>
   <LiveDemoStage>
-    <CardDemo outlined />
+    <CardDemo raised />
   </LiveDemoStage>
 </LiveDemo>
 
@@ -70,11 +67,11 @@ This example uses an internal `<forge-scaffold>` element to create a scrollable 
 
 ## Properties/Attributes
 
-<PropertyDef name="outlined" type="boolean" defaultValue="null">
+<PropertyDef name="raised" type="boolean" defaultValue="false">
 
-Sets the card to use a flat appearance with a standard `border` instead of the raised `box-shadow`.
+Controls whether the card has elevation applied.
 
-> Never use a standard raised card on another raised surface. Use the `outlined` type if you need to place cards on other cards for example.
+> Avoid using a raised card on another elevated surface.
   
 </PropertyDef>
 
@@ -109,11 +106,12 @@ Sets the card to use a flat appearance with a standard `border` instead of the r
 | Name                              | Description
 | :---------------------------------| :----------------
 | `--mdc-theme-surface`             | Controls the surface (background) color of the card.
-| `--forge-card-padding`              | Controls the `padding` of the container element.
-| `--forge-card-overflow`             | Controls the `overflow` style of the card element.
-| `--forge-card-height`               | Sets the `height` of the card element.
-| `--forge-card-width`                | Sets the `width` of the card element.
-| `--forge-theme-border-color`        | Sets the border color of the outlined card element.
+| `--mdx-shape-medium`              | Controls the border radius of the card.
+| `--forge-card-padding`            | Controls the `padding` of the container element.
+| `--forge-card-overflow`           | Controls the `overflow` style of the card element.
+| `--forge-card-height`             | Sets the `height` of the card element.
+| `--forge-card-width`              | Sets the `width` of the card element.
+| `--forge-theme-border-color`      | Sets the border color of the card element when not raised.
 
 </PageSection>
 

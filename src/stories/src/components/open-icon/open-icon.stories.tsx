@@ -38,7 +38,7 @@ export const WithExpansionPanel: Story<{}> = () => {
     margin: '8px'
   };
   return (
-    <ForgeCard outlined style={{'--forge-card-padding': '16px', margin: '16px'}}>
+    <ForgeCard style={{'--forge-card-padding': '16px', margin: '16px'}}>
       <ForgeExpansionPanel>
         <div slot="header" role="button" tabIndex={0} style={flexContainer}>
           <div>Expansion panel</div>

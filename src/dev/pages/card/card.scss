@@ -1,4 +1,4 @@
-.demo-card {
+#demo-content forge-card.demo-card {
   width: 320px;
   --forge-card-padding: 0;
 
@@ -15,7 +15,7 @@
     margin: 0;
   }
 
-  .card-footer-buttons>* {
+  .card-footer-buttons > * {
     margin-right: 16px;
   }
 }

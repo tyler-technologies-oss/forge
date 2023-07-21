@@ -37,7 +37,7 @@ export const Drawer: Story<IDrawerProps> = ({
         </ForgeList>
       </ForgeDrawer>
       <div slot="body">
-        <ForgeCard outlined style={{margin: '16px', '--forge-card-padding': '16px'}}>
+        <ForgeCard style={{margin: '16px', '--forge-card-padding': '16px'}}>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda, dolorum omnis. Sint ullam ut eaque est perspiciatis adipisci voluptate minima dignissimos, excepturi similique nam amet iure quaerat, eveniet odit laudantium.
         </ForgeCard>
       </div>
@@ -70,7 +70,7 @@ export const Modal: Story<IDrawerProps> = ({
         </ForgeList>
       </ForgeModalDrawer>
       <div slot="body">
-        <ForgeCard outlined style={{margin: '16px', '--forge-card-padding': '16px'}}>
+        <ForgeCard style={{margin: '16px', '--forge-card-padding': '16px'}}>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda, dolorum omnis. Sint ullam ut eaque est perspiciatis adipisci voluptate minima dignissimos, excepturi similique nam amet iure quaerat, eveniet odit laudantium.
         </ForgeCard>
       </div>
@@ -121,7 +121,7 @@ export const Mini: Story<IMiniDrawerProps> = ({
         </ForgeList>
       </ForgeMiniDrawer>
       <div slot="body">
-        <ForgeCard outlined style={{margin: '16px', '--forge-card-padding': '16px'}}>
+        <ForgeCard style={{margin: '16px', '--forge-card-padding': '16px'}}>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda, dolorum omnis. Sint ullam ut eaque est perspiciatis adipisci voluptate minima dignissimos, excepturi similique nam amet iure quaerat, eveniet odit laudantium.
         </ForgeCard>
       </div>
