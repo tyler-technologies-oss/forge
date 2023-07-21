@@ -1,0 +1,38 @@
+.example-target {
+  position: relative;
+  outline: none;
+
+  &:not(button) {
+    cursor: pointer;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inward-example {
+  width: 200px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px solid var(--forge-theme-border-color);
+
+  --forge-focus-indicator-shape: 10px;
+  --forge-focus-indicator-inward-offset: 4px;
+}
+
+.custom-target {
+  --forge-focus-indicator-color: red;
+  --forge-focus-indicator-active-width: 14px;
+  --forge-focus-indicator-width: 6px;
+  --forge-focus-indicator-duration: 2s;
+  --forge-focus-indicator-outward-offset: 0px; /* stylelint-disable-line */
+  --forge-focus-indicator-easing: ease-in;
+  --forge-focus-indicator-shape-start-start: 0;
+  --forge-focus-indicator-shape-end-end: 0;
+}

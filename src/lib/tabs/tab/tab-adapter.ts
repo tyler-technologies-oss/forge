@@ -1,10 +1,10 @@
 import { getShadowElement, requireParent, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { ITabComponent } from './tab';
-import { TAB_CONSTANTS } from './tab-constants';
-import { TabRipple } from './tab-ripple';
 import { userInteractionListener } from '../../core/utils';
 import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants';
+import type { ITabComponent } from './tab';
+import { TAB_CONSTANTS } from './tab-constants';
+import { TabRipple } from './tab-ripple';
 
 export interface ITabAdapter extends IBaseAdapter {
   initialize(): void;
@@ -28,9 +28,9 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
 
   public initialize(): void {
     this._deferRippleInitialization();
-    this._component.tabIndex = -1;
+    this._component.tabIndex = this._component.selected ? 0 : -1;
     this._component.setAttribute('role', 'tab');
-    this._component.setAttribute('aria-selected', 'false');
+    this._component.setAttribute('aria-selected', this._component.selected ? 'true' : 'false');
   }
 
   public destroy(): void {

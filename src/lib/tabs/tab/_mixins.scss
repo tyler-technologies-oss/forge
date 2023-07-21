@@ -1,4 +1,5 @@
 @use '../../core/style-layer/tabs/tab';
+@use '../../focus-indicator/mixins' as focus-indicator;
 @use './variables';
 
 @mixin provide-theme($theme) {
@@ -14,6 +15,10 @@
 
 @mixin core-styles {
   @include tab.styles;
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme(( shape: 8px ));
+  }
 }
 
 @mixin focus-styles {
@@ -39,6 +44,12 @@
 @mixin selected-styles {
   @include tab.selected-styles;
   @include tab.forced-colors-styles;
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      'offset-block': 0 calc(var(--_active-indicator-height) + 1px)
+    ));
+  }
 }
 
 @mixin stacked-styles {

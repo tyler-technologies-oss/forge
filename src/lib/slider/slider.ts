@@ -1,5 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { SliderAdapter } from './slider-adapter';
 import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeEventData } from './slider-constants';
 import { SliderFoundation } from './slider-foundation';
@@ -132,10 +133,12 @@ declare global {
  * @csspart handle-start-thumb - Styles the start handle thumb element.
  * @csspart handle-start-label - Styles the start handle label element.
  * @csspart handle-start-label-content - Styles the start handle label content element.
- * 
  */
 @CustomElement({
-  name: SLIDER_CONSTANTS.elementName
+  name: SLIDER_CONSTANTS.elementName,
+  dependencies: [
+    FocusIndicatorComponent
+  ]
 })
 export class SliderComponent extends BaseComponent implements ISliderComponent {
   public static get observedAttributes(): string[] {

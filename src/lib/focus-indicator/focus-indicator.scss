@@ -1,0 +1,27 @@
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([active]) {
+  @include mixins.active-styles;
+}
+
+:host(:not([inward])) {
+  @include mixins.outward-styles;
+}
+
+:host([inward]) {
+  @include mixins.inward-styles;
+}
+
+:host([circular]) {
+  @include mixins.circular-styles;
+}

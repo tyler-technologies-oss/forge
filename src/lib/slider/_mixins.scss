@@ -1,5 +1,6 @@
 @use 'sass:list';
 @use '../core/style-layer/slider';
+@use '../focus-indicator/mixins' as focus-indicator;
 @use './variables';
 
 @mixin provide-theme($theme) {
@@ -19,4 +20,12 @@
 
 @mixin core-styles {
   @include slider.styles;
+
+  forge-focus-indicator {
+    /* stylelint-disable length-zero-no-unit */
+    @include focus-indicator.provide-theme((
+      shape: 50%,
+      outward-offset: 0px
+    ));
+  }
 }
