@@ -49,7 +49,7 @@ export const WithCard: Story = () => {
     cursor: 'pointer'
   };
   return (
-    <ForgeCard outlined style={cardStyles} role="button" tabIndex="0" aria-label="Click me for fun!">
+    <ForgeCard style={cardStyles} role="button" tabIndex="0" aria-label="Click me for fun!">
       <div style={cardBodyStyles}>Click me!</div>
       <ForgeRipple />
     </ForgeCard>

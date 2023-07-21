@@ -10,6 +10,6 @@ import type { ICardComponent, ISwitchComponent } from '@tylertech/forge';
 
 const card = document.querySelector('.demo-card') as ICardComponent;
 
-const outlinedToggle = document.querySelector('#opt-card-outlined') as ISwitchComponent;
-outlinedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => card.outlined = selected);
+const raisedToggle = document.querySelector('#opt-card-raised') as ISwitchComponent;
+raisedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => card.raised = selected);
 

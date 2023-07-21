@@ -1,5 +1,3 @@
-/// <reference types="@types/mocha" />
-
 import { sendKeys } from '@web/test-runner-commands';
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';

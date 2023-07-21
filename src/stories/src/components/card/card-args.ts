@@ -1,9 +1,9 @@
 export interface ICardProps {
-  outlined: boolean;
+  raised: boolean;
 }
 
 export const argTypes = {
-  outlined: {
+  raised: {
     control: 'boolean',
     description: '',
     table: {

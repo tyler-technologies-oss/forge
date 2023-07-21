@@ -26,10 +26,10 @@ export default {
 } as Meta;
 
 export const Default: Story<ICardProps> = ({
-  outlined = false,
+  raised = false,
 }) => {
   return (
-    <ForgeCard outlined={outlined} style={{ width: '400px', '--forge-card-padding': '16px' }}>
+    <ForgeCard raised={raised} style={{ width: '400px', '--forge-card-padding': '16px' }}>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed
       aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus
       enim sint nesciunt provident excepturi dolorum pariatur illum?  
@@ -37,11 +37,11 @@ export const Default: Story<ICardProps> = ({
   );
 };
 Default.args = {
-  outlined: false
+  raised: false
 } as ICardProps;
 
 export const Styled: Story<ICardProps> = ({
-  outlined = false,
+  raised = false,
 }) => {
   const containerStyle = {
     maxWidth: '400px'
@@ -61,7 +61,7 @@ export const Styled: Story<ICardProps> = ({
 
   return (
     <div style={containerStyle}>
-      <ForgeCard outlined={outlined} style={{'--forge-card-padding': '16px'}}>
+      <ForgeCard raised={raised} style={{'--forge-card-padding': '16px'}}>
         <div style={headerStyle}>
           <h3 className="forge-typography--headline6">This is the card title</h3>
           <ForgeIconButton>
@@ -88,14 +88,14 @@ export const Styled: Story<ICardProps> = ({
   );
 };
 Styled.args = {
-  outlined: false
+  raised: false
 } as ICardProps;
 
 export const WithScaffold: Story<ICardProps> = ({
-  outlined = false
+  raised = false
 }) => {
   return (
-    <ForgeCard outlined={outlined} style={{ width: '400px', '--forge-card-padding': '0', '--forge-card-height': '300px' }}>
+    <ForgeCard raised={raised} style={{ width: '400px', '--forge-card-padding': '0', '--forge-card-height': '300px' }}>
       <ForgeScaffold>
         <ForgeToolbar slot="header">
           <h1 slot="start" className="forge-typography--title">Lorem ipsum</h1>
@@ -128,5 +128,5 @@ export const WithScaffold: Story<ICardProps> = ({
   );
 };
 WithScaffold.args = {
-  outlined: false
+  raised: false
 } as ICardProps;

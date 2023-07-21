@@ -7,7 +7,7 @@ import template from './card.html';
 import styles from './card.scss';
 
 export interface ICardComponent extends IBaseComponent {
-  outlined: boolean;
+  raised: boolean;
 }
 
 declare global {
@@ -17,9 +17,20 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-card>` component.
- * 
  * @tag forge-card
+ * 
+ * @summary Cards are used to group related information and actions about a single subject.
+ * 
+ * @property {boolean} raised - Whether the card has elevation or not.
+ * 
+ * @attribute {boolean} raised - Whether the card has an raised or not.
+ * 
+ * @cssproperty --forge-card-height - The height of the card.
+ * @cssproperty --forge-card-width - The width of the card.
+ * @cssproperty --forge-card-padding - The padding of the card.
+ * @cssproperty --forge-card-overflow - The overflow of the card.
+ * 
+ * @csspart root - The components' internal root container element.
  */
 @CustomElement({
   name: CARD_CONSTANTS.elementName
@@ -27,12 +38,12 @@ declare global {
 export class CardComponent extends BaseComponent implements ICardComponent {
   public static get observedAttributes(): string[] {
     return [
-      CARD_CONSTANTS.attributes.OUTLINED
+      CARD_CONSTANTS.attributes.RAISED
     ];
   }
 
   private _rootElement: HTMLElement;
-  private _outlined = false;
+  private _raised = false;
 
   constructor() {
     super();
@@ -41,33 +52,31 @@ export class CardComponent extends BaseComponent implements ICardComponent {
   }
 
   public connectedCallback(): void {
-    this._applyOutlined();
+    this._applyRaised();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    if (oldValue === newValue) {
-      return;
-    }
     switch (name) {
-      case CARD_CONSTANTS.attributes.OUTLINED:
-        this.outlined = coerceBoolean(newValue);
+      case CARD_CONSTANTS.attributes.RAISED:
+        this.raised = coerceBoolean(newValue);
         break;
     }
   }
 
-  private _applyOutlined(): void {
-    toggleClass(this._rootElement, this._outlined, CARD_CONSTANTS.classes.OUTLINED);
+  private _applyRaised(): void {
+    toggleClass(this._rootElement, this._raised, CARD_CONSTANTS.classes.RAISED);
   }
 
-  /** Gets/sets whether the card is using the outlined style or not. */
-  public get outlined(): boolean {
-    return this._outlined;
+  /** Gets/sets whether the card is elevated or not. */
+  public get raised(): boolean {
+    return this._raised;
   }
-  public set outlined(value: boolean) {
-    if (this._outlined !== value) {
-      this._outlined = !!value;
-      toggleAttribute(this, this._outlined, CARD_CONSTANTS.attributes.OUTLINED, String(!!this._outlined));
-      this._applyOutlined();
+  public set raised(value: boolean) {
+    value = Boolean(value);
+    if (this._raised !== value) {
+      this._raised = value;
+      this._applyRaised();
+      toggleAttribute(this, this._raised, CARD_CONSTANTS.attributes.RAISED, String(!!this._raised));
     }
   }
 }
