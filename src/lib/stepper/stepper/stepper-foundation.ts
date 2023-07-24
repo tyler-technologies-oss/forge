@@ -223,6 +223,7 @@ export class StepperFoundation implements IStepperFoundation {
   private _renderConfiguration(): void {
     const steps = StepperUtils.createSteps({
       steps: this._steps,
+      vertical: this._vertical,
       selectedIndex: this._selectedIndex,
       alternative: this._alternative,
       layoutAlign: this._layoutAlign,

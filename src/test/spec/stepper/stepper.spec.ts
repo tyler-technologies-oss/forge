@@ -499,6 +499,17 @@ describe('StepperComponent', function (this: ITestContext) {
 
       expect(icon.name).toBe('mode_edit', 'Should have a edit when selected and editable');
     });
+
+    it('should set steps to vertical', async function (this: ITestContext) {
+      this.context = setupTestContext(true, DEFAULT_STEPS.length);
+      this.context.component.vertical = true;
+      this.context.component.steps = DEFAULT_STEPS;
+      await tick();
+
+      this.context.component.steps = [...DEFAULT_STEPS];
+
+      expect(this.context.getSteps().every(step => step.vertical)).toBeTrue();
+    });
   });
 
   describe('vertical stepper', function (this: ITestContext) {

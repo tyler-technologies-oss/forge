@@ -19,7 +19,7 @@ export class StepperUtils {
     stepElement.alternative = stepperConfig.alternative;
     stepElement.error = step.error || false;
     stepElement.disabled = step.disabled || false;
-    stepElement.vertical = step.vertical || false;
+    stepElement.vertical = step.vertical ?? stepperConfig.vertical ?? false;
     stepElement.ignoreUserExpansion = step.ignoreUserExpansion || false;
     stepElement.expanded = step.expanded || false;
 
