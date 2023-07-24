@@ -13,6 +13,7 @@ export interface IDatePickerProps {
   showClear: boolean;
   disabledDaysOfWeek: DayOfWeek[];
   yearRange: string;
+  locale: string | undefined;
 }
 
 export const argTypes = {
@@ -106,6 +107,13 @@ export const argTypes = {
     },
   },
   yearRange: {
+    control: 'text',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  locale: {
     control: 'text',
     description: '',
     table: {

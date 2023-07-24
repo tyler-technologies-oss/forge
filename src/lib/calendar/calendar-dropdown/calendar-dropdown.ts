@@ -12,6 +12,7 @@ export interface ICalendarDropdown {
   id: string;
   targetElement: HTMLElement;
   popupClasses: string | string[] | null;
+  locale: string | undefined;
   isOpen: boolean;
   activeChangeCallback: ((id: string) => void) | undefined;
   closeCallback: (() => void) | undefined;
@@ -41,6 +42,15 @@ export class CalendarDropdown implements ICalendarDropdown {
   }
   public set popupClasses(value: string | string[] | null) {
     this._popupClasses = !!value ? isArray(value) ? [...value as string[]] : [value as string] : [];
+  }
+
+  public get locale(): string | undefined {
+    return this.calendar?.locale;
+  }
+  public set locale(value: string | undefined) {
+    if (this.calendar) {
+      this.calendar.locale = value;
+    }
   }
   
   constructor(targetElement: HTMLElement, id: string) {
