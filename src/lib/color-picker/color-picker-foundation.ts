@@ -175,14 +175,10 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
   private _render(): void {
     this._setGradientColor();
     this._adapter.setPreviewColor(formatRgba(this._rgba));
-    this._adapter.setHexInputValue(this._getFormattedHex());
+    this._adapter.setHexInputValue(`#${this._hex}`);
     this._adapter.setRgbaInputValue(this._rgba);
     this._adapter.setHsvaInputValue(this._hsva);
     this._adapter.updateA11y(this._hsva.h, Math.round(this._hsva.a * 100));
-  }
-
-  private _getFormattedHex(): string {
-    return formatHex(this._hex, false);
   }
 
   private _emitChangeEvent(type: ColorPickerChangeEventType, source: ColorPickerChangeEventSource): void {
@@ -200,7 +196,7 @@ export class ColorPickerFoundation implements IColorPickerFoundation {
   }
 
   public get value(): string | null | undefined {
-    return this._getFormattedHex();
+    return formatHex(this._hex, false);
   }
   public set value(value: string | null | undefined) {
     if (this._value !== value) {
