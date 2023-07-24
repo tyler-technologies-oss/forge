@@ -1,3 +1,16 @@
+# v2.16.4 (Mon Jul 24 2023)
+
+#### 🐛 Bug Fix
+
+- fix(date-picker): fixed a bug where the `locale` of the calendar could not be set through the date picker element [#344](https://github.com/tyler-technologies-oss/forge/pull/344) ([@DRiFTy17](https://github.com/DRiFTy17))
+- docs(avatar): updated docs and demo to use composition with icons ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.16.3 (Fri Jun 23 2023)
 
 #### 🐛 Bug Fix
