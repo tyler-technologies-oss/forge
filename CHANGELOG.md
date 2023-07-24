@@ -3,7 +3,9 @@
 #### 🐛 Bug Fix
 
 - fix(date-picker): fixed a bug where the `locale` of the calendar could not be set through the date picker element [#344](https://github.com/tyler-technologies-oss/forge/pull/344) ([@DRiFTy17](https://github.com/DRiFTy17))
-- docs(avatar): updated docs and demo to use composition with icons ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(color-picker): fixed a bug where manually entering a hex value would not accept characters until a valid hex string value and length was reached [#346](https://github.com/tyler-technologies-oss/forge/pull/346) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(stepper): fixed a bug where the vertical state was not being applied if the `steps` property was changed dynamically [#345](https://github.com/tyler-technologies-oss/forge/pull/345) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chips): fixed a bug where the text was not centered if the width was less than than the min-width of the chip [#347](https://github.com/tyler-technologies-oss/forge/pull/347) ([@DRiFTy17](https://github.com/DRiFTy17))
 
 #### Authors: 1
 
