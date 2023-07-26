@@ -921,6 +921,26 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).withContext('float-label-type attribute should be "always"').toBe('always');
       });
 
+      it('should float the label when floatLabelType property is set to "always" after being moved in the DOM', async function(this: ITestContext) {
+        this.context = setupTestContext(true, {}, { label: 'Test' });
+        this.context.component.floatLabelType = 'always';
+        await tick();
+        
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+
+        const parent = this.context.component.parentElement as HTMLElement;
+        this.context.destroy();
+        await tick();
+
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeFalse();
+
+        parent.appendChild(this.context.component);
+        await tick();
+
+        expect((this.context.foundation as any)._floatingLabel.isFloating).withContext('label should be floating').toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+      });
+
       it('should not float the label when floatLabelType property is set from "always" to auto (while input has no value)', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { label: 'Test' });
         this.context.component.floatLabelType = 'always';
