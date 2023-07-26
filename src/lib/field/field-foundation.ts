@@ -93,6 +93,9 @@ export class FieldFoundation {
     this._isInitialized = false;
     this._adapter.destroy();
 
+    this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+    this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LABEL);
+
     if (this._floatingLabel) {
       this._floatingLabel.destroy();
       this._floatingLabel = undefined;
