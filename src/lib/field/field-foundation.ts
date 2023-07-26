@@ -190,6 +190,9 @@ export class FieldFoundation {
 
   public floatLabel(value: boolean): void {
     if (this._floatingLabel?.isFloating === value || this._adapter.isLabelFloating() === value) {
+      if (value) {
+        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
+      }
       return;
     }
 
