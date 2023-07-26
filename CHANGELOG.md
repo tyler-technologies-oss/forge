@@ -1,3 +1,15 @@
+# v2.16.5 (Wed Jul 26 2023)
+
+#### 🐛 Bug Fix
+
+- fix(chip-field): fix floating label state [#350](https://github.com/tyler-technologies-oss/forge/pull/350) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.16.4 (Mon Jul 24 2023)
 
 #### 🐛 Bug Fix
