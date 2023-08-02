@@ -1,4 +1,3 @@
-@use '../core/styles/tokens/theme/tokens' as theme-tokens;
 @use '../core/styles/tokens';
 
 @mixin provide-theme($theme) {
@@ -7,7 +6,7 @@
 
 @mixin configuration {
   --_active-width: var(--forge-focus-indicator-active-width, 6px);
-  --_color: var(--forge-focus-indicator-color, #{theme-tokens.variable(primary)});
+  --_color: var(--forge-focus-indicator-color, #{tokens.variable(primary)});
   --_duration: var(--forge-focus-indicator-duration, 600ms);
   --_outward-offset: var(--forge-focus-indicator-outward-offset, 4px);
   --_inward-offset: var(--forge-focus-indicator-inward-offset, 0px); // stylelint-disable-line length-zero-no-unit

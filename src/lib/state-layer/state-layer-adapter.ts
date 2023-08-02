@@ -15,8 +15,8 @@ export interface IStateLayerAdapter extends IBaseAdapter {
   removeTargetListener(type: string, listener: EventListener): void;
   setHovered(hovered: boolean): void;
   setPressed(pressed: boolean): void;
-  startRippleAnimation(coords?: StateLayerCoords): void;
-  endRippleAnimation(): Promise<void>;
+  startAnimation(coords?: StateLayerCoords): void;
+  endAnimation(): Promise<void>;
   inBounds(x: number, y: number): boolean;
 }
 
@@ -76,7 +76,7 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
     this._targetElement = locateTargetHeuristic(this._component, value);
   }
 
-  public startRippleAnimation(coords?: StateLayerCoords): void {
+  public startAnimation(coords?: StateLayerCoords): void {
     if (!this._surfaceElement) {
       return;
     }
@@ -108,7 +108,7 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
       });
   }
 
-  public async endRippleAnimation(): Promise<void> {
+  public async endAnimation(): Promise<void> {
     const animation = this._rippleAnimation;
     const pressAnimationPlayState = animation?.currentTime ?? Infinity;
 

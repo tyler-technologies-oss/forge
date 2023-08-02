@@ -7,7 +7,7 @@ export interface IStateLayerFoundation extends ICustomElementFoundation {
   targetElement: HTMLElement | null;
   target: string | null;
   disabled: boolean;
-  playRippleAnimation(coords?: StateLayerCoords): void;
+  playAnimation(coords?: StateLayerCoords): void;
 }
 
 export class StateLayerFoundation implements IStateLayerFoundation {
@@ -58,9 +58,9 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     this._removeListeners();
   }
 
-  public playRippleAnimation(coords?: StateLayerCoords): void {
-    this._adapter.startRippleAnimation(coords);
-    this._endRippleAnimation();
+  public playAnimation(coords?: StateLayerCoords): void {
+    this._adapter.startAnimation(coords);
+    this._endAnimation();
   }
 
   private _deferInitialization(): void {
@@ -119,7 +119,7 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     this._adapter.setHovered(false);
 
     if (this._pointerState !== PointerState.INACTIVE) {
-      this._adapter.endRippleAnimation();
+      this._adapter.endAnimation();
     }
   }
 
@@ -132,7 +132,7 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     
     if (!this._isTouch(evt.pointerType)) {
       this._pointerState = PointerState.WAITING_FOR_CLICK;
-      this._startRippleAnimation(evt);
+      this._startAnimation(evt);
       return;
     }
 
@@ -153,7 +153,7 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     }
 
     this._pointerState = PointerState.HOLDING;
-    this._startRippleAnimation(evt);
+    this._startAnimation(evt);
   }
 
   private _onPointerUp(evt: PointerEvent): void {
@@ -168,7 +168,7 @@ export class StateLayerFoundation implements IStateLayerFoundation {
 
     if (this._pointerState === PointerState.TOUCH_DELAY) {
       this._pointerState = PointerState.WAITING_FOR_CLICK;
-      this._startRippleAnimation(this._pointerStartEvent);
+      this._startAnimation(this._pointerStartEvent);
       return;
     }
   }
@@ -179,13 +179,13 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     }
 
     if (this._pointerState === PointerState.WAITING_FOR_CLICK) {
-      this._endRippleAnimation();
+      this._endAnimation();
       return;
     }
 
     if (this._pointerState === PointerState.INACTIVE) {
-      this._startRippleAnimation(this._pointerStartEvent);
-      this._endRippleAnimation();
+      this._startAnimation(this._pointerStartEvent);
+      this._endAnimation();
     }
   }
 
@@ -193,7 +193,7 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     if (!this._canHandleEvent(evt)) {
       return;
     }
-    this._endRippleAnimation();
+    this._endAnimation();
   }
 
   private _onContextmenu(): void {
@@ -202,17 +202,17 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     }
 
     this._checkBoundsAfterContextMenu = true;
-    this._adapter.endRippleAnimation();
+    this._adapter.endAnimation();
   }
 
-  private _startRippleAnimation(evt?: PointerEvent): void {
+  private _startAnimation(evt?: PointerEvent): void {
     const coords = evt ? StateLayerCoords.fromPointerEvent(evt) : undefined;
-    this._adapter.startRippleAnimation(coords);
+    this._adapter.startAnimation(coords);
   }
 
-  private _endRippleAnimation(): void {
+  private _endAnimation(): void {
     this._pointerState = PointerState.INACTIVE;
-    this._adapter.endRippleAnimation();
+    this._adapter.endAnimation();
     this._pointerStartEvent = undefined;
   }
 

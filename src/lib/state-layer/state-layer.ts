@@ -11,7 +11,7 @@ export interface IStateLayerComponent extends IBaseComponent {
   targetElement: HTMLElement | null;
   target: string | null;
   disabled: boolean;
-  playRippleAnimation(coords?: StateLayerCoords): void;
+  playAnimation(coords?: StateLayerCoords): void;
 }
 
 declare global {
@@ -44,7 +44,7 @@ declare global {
  * @cssproperty --forge-state-layer-pressed-color - The color of the state layer when pressed.
  * @cssproperty --forge-state-layer-pressed-opacity - The opacity of the state layer when pressed.
  * @cssproperty --forge-state-layer-hover-duration - The duration of the hover animation.
- * @cssproperty --forge-state-layer-ripple-duration - The duration of the ripple animation.
+ * @cssproperty --forge-state-layer-animation-duration - The duration of the animation.
  * @cssproperty --forge-state-layer-pressed-duration - The duration of the pressed animation.
  * 
  * @csspart surface - The surface element.
@@ -97,13 +97,13 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
   public declare disabled: boolean;
 
   /**
-   * Triggers the ripple animation to run.
+   * Triggers the animation to run.
    * 
    * Note: If coordinates are not provided, the transition will originate from the center of the target element.
    * 
    * @param {StateLayerCoords} [coords] - The coordinates to play the animation from.
    */
-  public playRippleAnimation(coords?: StateLayerCoords): void {
-    this._foundation.playRippleAnimation(coords);
+  public playAnimation(coords?: StateLayerCoords): void {
+    this._foundation.playAnimation(coords);
   }
 }

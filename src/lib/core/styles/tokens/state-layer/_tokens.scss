@@ -7,6 +7,6 @@ $tokens: (
   pressed-color: var(--_color),
   pressed-opacity: 0.12,
   hover-duration: 15ms,
-  ripple-duration: 375ms,
-  pressed-duration: 105ms
+  pressed-duration: 105ms,
+  animation-duration: 375ms
 ) !default;

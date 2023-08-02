@@ -55,7 +55,7 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
   }
 
   public animateStateLayer(): void {
-    this._stateLayerElement.playRippleAnimation();
+    this._stateLayerElement.playAnimation();
   }
 
   private _getKeyframes(): Keyframe[] | null {

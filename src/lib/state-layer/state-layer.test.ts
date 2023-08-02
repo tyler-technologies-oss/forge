@@ -178,7 +178,7 @@ describe('StateLayer', () => {
 
     const animateSpy = spy(surface, 'animate');
 
-    stateLayer.playRippleAnimation();
+    stateLayer.playAnimation();
     await elementUpdated(surface);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.true;

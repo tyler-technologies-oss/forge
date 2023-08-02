@@ -24,4 +24,4 @@ circularToggle.addEventListener('forge-switch-select', ({ detail: selected }) =>
 });
 
 const playRippleAnimationButton = document.querySelector('#opt-btn-play-ripple-animation') as HTMLButtonElement;
-playRippleAnimationButton.addEventListener('click', () => stateLayer.playRippleAnimation());
+playRippleAnimationButton.addEventListener('click', () => stateLayer.playAnimation());
