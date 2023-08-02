@@ -5,6 +5,7 @@ import { TabFoundation } from './tab-foundation';
 import { TAB_CONSTANTS } from './tab-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
+import { StateLayerComponent } from '../../state-layer/state-layer';
 
 import template from './tab.html';
 import styles from './tab.scss';
@@ -79,7 +80,8 @@ declare global {
 @CustomElement({
   name: TAB_CONSTANTS.elementName,
   dependencies: [
-    FocusIndicatorComponent
+    FocusIndicatorComponent,
+    StateLayerComponent
   ]
 })
 export class TabComponent extends BaseComponent implements ITabComponent {
@@ -104,10 +106,6 @@ export class TabComponent extends BaseComponent implements ITabComponent {
 
   public connectedCallback(): void {
     this._foundation.initialize();
-  }
-
-  public disconnectedCallback(): void {
-    this._foundation.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

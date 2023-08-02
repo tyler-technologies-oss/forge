@@ -5,6 +5,7 @@
 
 @use './variables';
 @use '../../../theme/theme-values';
+@use '../tokens';
 
 /// Configurable module-level variables
 $indeterminate-animation: linear infinite linear-rotate !default;
@@ -14,14 +15,10 @@ $determinate-animation: infinite both rotate-arc !default;
 ///
 /// Initializes private configuration state CSS variables
 /// 
-@mixin configuration {
-  --_size: var(--#{variables.$prefix}-size, #{variables.$size});
-  --_spacing: var(--#{variables.$prefix}-padding, #{variables.$spacing});
-  --_track-width: var(--#{variables.$prefix}-indicator-width, #{variables.$track-width});
-  --_track-color: var(--#{variables.$prefix}-indicator-color, var(--forge-theme-tertiary, #{theme-values.$tertiary}));
-  --_track-background: var(--#{variables.$prefix}-indicator-background-color, var(--mdc-theme-text-disabled-on-background, #{theme-values.$text-disabled-on-background}));
+@mixin configuration($prefix: variables.$prefix) {
+  @include tokens.configuration(circular-progress, $prefix);
 
-  --_arc-duration: 1333ms;
+  --_arc-duration: #{variables.$arc-duration};
   --_cycle-duration: calc(4 * var(--_arc-duration));
   --_linear-duration: calc(var(--_arc-duration) * 360 / 306);
 }

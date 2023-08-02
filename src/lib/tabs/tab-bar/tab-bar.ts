@@ -66,8 +66,8 @@ declare global {
  * 
  * @cssproperty --forge-tab-bar-justify - The `justify-content` value for the tab bar flex container.
  * @cssproperty --forge-tab-bar-stretch - The `flex` value for the child `<forge-tab>` elements.
- * @cssproperty --forge-tab-bar-underline-color - The color of the underline.
- * @cssproperty --forge-tab-bar-underline-thickness - The thickness of the underline.
+ * @cssproperty --forge-tab-bar-divider-color - The color of the divider.
+ * @cssproperty --forge-tab-bar-divider-thickness - The thickness of the divider.
  * 
  * @csspart container - The container element.
  * @csspart scroll-container - The scroll container element.

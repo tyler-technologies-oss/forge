@@ -2,7 +2,3 @@
 
 @forward './core';
 @forward './variables';
-
-@mixin styles {
-  @include core.styles;
-}

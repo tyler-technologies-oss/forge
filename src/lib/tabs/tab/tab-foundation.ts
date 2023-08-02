@@ -36,10 +36,6 @@ export class TabFoundation implements ITabFoundation {
     this._adapter.addInteractionListener('keydown', this._keydownListener);
   }
 
-  public destroy(): void {
-    this._adapter.destroy();
-  }
-
   private _onClick(): void {
     if (this._disabled || this._selected) {
       return;
@@ -55,6 +51,7 @@ export class TabFoundation implements ITabFoundation {
     const isSelectionKey = evt.key === ' ' || evt.key === 'Enter';
     if (isSelectionKey) {
       evt.preventDefault();
+      this._adapter.animateStateLayer();
       this._dispatchSelectEvent();
     }
   }

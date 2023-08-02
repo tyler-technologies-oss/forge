@@ -1,0 +1,18 @@
+@use '../core/styles/state-layer';
+@use '../core/styles/tokens';
+
+@mixin provide-theme($theme) {
+  @include tokens.provide('state-layer', $theme);
+}
+
+@mixin core-styles {
+  @include state-layer.styles;
+}
+
+@mixin host {
+  @include state-layer.host;
+}
+
+@mixin disabled {
+  @include state-layer.disabled;
+}

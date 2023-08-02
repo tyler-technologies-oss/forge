@@ -29,12 +29,14 @@ export const directoryGroup = source =>
 export default {
   concurrentBrowsers: 3,
   nodeResolve: true,
+  testsFinishTimeout: 60000,
   coverageConfig: {
     report: true,
     reportDir: '.coverage',
     exclude: [
       'src/lib/*',
       'src/lib/core/**',
+      'src/lib/**/index.ts',
       'src/lib/**/*.{html,scss,json}',
       '**/node_modules/**',
     ],

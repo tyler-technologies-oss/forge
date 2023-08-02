@@ -57,7 +57,7 @@ export class FocusIndicatorFoundation implements IFocusIndicatorFoundation {
         this.active = false;
         break;
       case 'pointerdown':
-        this.active = this._allowFocus ? this._adapter.isActive(':focus') : false;
+        this.active = this._allowFocus ? this._adapter.isActive(':focus') : this._adapter.isActive(':focus-visible');
         break;
     }
   }

@@ -1,9 +1,9 @@
 import { getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { elementsOverlapping, isPointerOverElement, userInteractionListener } from '../core/utils/utils';
+import { elementsOverlapping, isPointerOverElement } from '../core/utils/utils';
 import { ISliderComponent } from '../slider';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
 import { SLIDER_CONSTANTS } from './slider-constants';
-import { SliderHandleRipple } from './slider-handle-ripple';
 import { createLabel, createStartHandleElement, createStartInputElement } from './slider-utils';
 
 export interface ISliderState {
@@ -13,16 +13,12 @@ export interface ISliderState {
 }
 
 export interface ISliderAdapter extends IBaseAdapter {
-  initialize(): void;
-  destroy(): void;
   addInputListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
   update(state: ISliderState): void;
   updateLabels(labelStart: string, labelEnd: string): void;
   updateHandleLayering(): void;
   tryHoverStartHandle(coords: { x: number; y: number }): void;
   tryHoverEndHandle(coords: { x: number; y: number }): void;
-  tryBlurStartHandle(): void;
-  tryBlurEndHandle(): void;
   tryDetectOverlap(): void;
   leaveHandleContainer(): void;
   syncInputValues(valueStart: number, valueEnd: number): void;
@@ -45,16 +41,11 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
   private readonly _endInputElement: HTMLInputElement;
   private readonly _endHandleElement: HTMLElement;
   private readonly _endHandleThumbElement: HTMLElement;
-  private readonly _endHandleRippleSurfaceElement: HTMLElement;
   private _endLabelContentElement: HTMLElement | undefined;
   private _startInputElement: HTMLInputElement | undefined;
   private _startHandleElement: HTMLElement | undefined;
   private _startHandleThumbElement: HTMLElement | undefined;
-  private _startHandleRippleSurfaceElement: HTMLElement | undefined;
   private _startLabelContentElement: HTMLElement | undefined;
-  private _startHandleRipple: SliderHandleRipple | undefined;
-  private _endHandleRipple: SliderHandleRipple | undefined;
-  private _ripplesInitialized = false;
 
   constructor(component: ISliderComponent) {
     super(component);
@@ -65,22 +56,7 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
     this._endInputElement = getShadowElement(component, SLIDER_CONSTANTS.selectors.END_INPUT) as HTMLInputElement;
     this._endHandleElement = getShadowElement(component, SLIDER_CONSTANTS.selectors.END_HANDLE);
     this._endHandleThumbElement = getShadowElement(component, SLIDER_CONSTANTS.selectors.END_HANDLE_THUMB);
-    this._endHandleRippleSurfaceElement = getShadowElement(component, SLIDER_CONSTANTS.selectors.END_RIPPLE_SURFACE);
     this._endLabelContentElement = getShadowElement(component, SLIDER_CONSTANTS.selectors.END_LABEL_CONTENT);
-  }
-
-  public initialize(): void {
-    this._deferRippleInitialization();
-  }
-
-  public destroy(): void {
-    this._startHandleRipple?.destroy();
-    this._startHandleRipple = undefined;
-
-    this._endHandleRipple?.destroy();
-    this._endHandleRipple = undefined;
-
-    this._ripplesInitialized = false;
   }
 
   public addInputListener(type: keyof HTMLElementEventMap, listener: EventListener): void {
@@ -116,10 +92,6 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
   }
 
   public tryHoverStartHandle(coords: { x: number; y: number }): void {
-    if (!this._component.disabled) {
-      this._startHandleRipple?.emulateFocus();
-    }
-
     if (this._startHandleThumbElement && isPointerOverElement(coords, this._startHandleThumbElement)) {
       this._handleContainerElement.classList.add(SLIDER_CONSTANTS.classes.HOVER);
       this._startHandleElement?.classList.add(SLIDER_CONSTANTS.classes.HOVER);
@@ -130,28 +102,12 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
   }
 
   public tryHoverEndHandle(coords: { x: number; y: number }): void {
-    if (!this._component.disabled) {
-      this._endHandleRipple?.emulateFocus();
-    }
-
     if (isPointerOverElement(coords, this._endHandleThumbElement)) {
       this._handleContainerElement.classList.add(SLIDER_CONSTANTS.classes.HOVER);
-      this._endHandleThumbElement.classList.add(SLIDER_CONSTANTS.classes.HOVER);
+      this._endHandleElement.classList.add(SLIDER_CONSTANTS.classes.HOVER);
     } else if (!this._endInputElement.matches(':focus')) {
       this._handleContainerElement.classList.remove(SLIDER_CONSTANTS.classes.HOVER);
-      this._endHandleThumbElement.classList.remove(SLIDER_CONSTANTS.classes.HOVER);
-    }
-  }
-
-  public tryBlurStartHandle(): void {
-    if (!this._startInputElement?.matches(':focus')) {
-      this._startHandleRipple?.emulateBlur();
-    }
-  }
-
-  public tryBlurEndHandle(): void {
-    if (!this._endInputElement.matches(':focus')) {
-      this._endHandleRipple?.emulateBlur();
+      this._endHandleElement.classList.remove(SLIDER_CONSTANTS.classes.HOVER);
     }
   }
 
@@ -199,24 +155,14 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
       this._startHandleElement = createStartHandleElement(thumbLabel);
       this._handleContainerElement.insertAdjacentElement('afterbegin', this._startHandleElement);
       this._startHandleThumbElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.START_HANDLE_THUMB);
-      this._startHandleRippleSurfaceElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.START_RIPPLE_SURFACE);
       this._startLabelContentElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.START_LABEL_CONTENT);
-
-      // Initialize start handle ripple if the end handle ripple has already been initialized
-      if (this._ripplesInitialized) {
-        this._tryInitializeStartHandleRipple();
-      }
     } else {
       this._startInputElement?.remove();
       this._startHandleElement?.remove();
 
-      this._startHandleRipple?.destroy();
-      this._startHandleRipple = undefined;
-
       this._startInputElement = undefined;
       this._startHandleElement = undefined;
       this._startHandleThumbElement = undefined;
-      this._startHandleRippleSurfaceElement = undefined;
       this._startLabelContentElement = undefined;
     }
   }
@@ -243,6 +189,9 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
   public setDisabled(value: boolean): void {
     const inputs = this._getInputs();
     inputs.forEach(input => input.disabled = value);
+
+    const stateLayers = this._rootElement.querySelectorAll(STATE_LAYER_CONSTANTS.elementName) as NodeListOf<IStateLayerComponent>;
+    stateLayers.forEach(sl => sl.disabled = value);
   }
 
   public setReadonly(value: boolean): void {
@@ -286,29 +235,5 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
       inputs.push(this._startInputElement);
     }
     return [...inputs, this._endInputElement];
-  }
-
-  private async _deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this._rootElement);
-    this._ripplesInitialized = true;
-    this._tryInitializeEndHandleRipple(type);
-    this._tryInitializeStartHandleRipple(type);
-  }
-
-  private _tryInitializeEndHandleRipple(type?: string): void {
-    this._endHandleRipple = new SliderHandleRipple(this._endHandleRippleSurfaceElement, this._endInputElement);
-    if (type === 'focusin' && this._endInputElement.matches(':focus')) {
-      this._endHandleRipple.emulateFocus();
-    }
-  }
-
-  private _tryInitializeStartHandleRipple(type?: string): void {
-    if (this._startHandleRipple || !this._startInputElement || !this._startHandleRippleSurfaceElement) {
-      return;
-    }
-    this._startHandleRipple = new SliderHandleRipple(this._startHandleRippleSurfaceElement, this._startInputElement);
-    if (type === 'focusin' && this._startInputElement?.matches(':focus')) {
-      this._startHandleRipple.emulateFocus();
-    }
   }
 }

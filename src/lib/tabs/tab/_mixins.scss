@@ -1,5 +1,7 @@
-@use '../../core/style-layer/tabs/tab';
+@use 'sass:list';
+@use '../../core/styles/tabs/tab';
 @use '../../focus-indicator/mixins' as focus-indicator;
+@use '../../state-layer/mixins' as state-layer;
 @use './variables';
 
 @mixin provide-theme($theme) {
@@ -48,6 +50,12 @@
   forge-focus-indicator {
     @include focus-indicator.provide-theme((
       'offset-block': 0 calc(var(--_active-indicator-height) + 1px)
+    ));
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_active-indicator-color)
     ));
   }
 }

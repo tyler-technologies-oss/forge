@@ -1,40 +1,33 @@
 import { getShadowElement, requireParent, toggleAttribute } from '@tylertech/forge-core';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { userInteractionListener } from '../../core/utils';
 import { TAB_BAR_CONSTANTS } from '../tab-bar/tab-bar-constants';
 import type { ITabComponent } from './tab';
 import { TAB_CONSTANTS } from './tab-constants';
-import { TabRipple } from './tab-ripple';
 
 export interface ITabAdapter extends IBaseAdapter {
   initialize(): void;
-  destroy(): void;
   addInteractionListener(type: string, listener: EventListener): void;
   setDisabled(value: boolean): void;
   setSelected(value: boolean): void;
   animateSelected(): void;
+  animateStateLayer(): void;
 }
 
 export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapter {
-  private readonly _rippleElement: HTMLElement;
   private readonly _tabIndicatorElement: HTMLElement;
-  private _rippleInstance: TabRipple | undefined;
+  private readonly _stateLayerElement: IStateLayerComponent;
 
   constructor(component: ITabComponent) {
     super(component);
-    this._rippleElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.RIPPLE);
     this._tabIndicatorElement = getShadowElement(this._component, TAB_CONSTANTS.selectors.INDICATOR);
+    this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
   public initialize(): void {
-    this._deferRippleInitialization();
     this._component.tabIndex = this._component.selected ? 0 : -1;
     this._component.setAttribute('role', 'tab');
     this._component.setAttribute('aria-selected', this._component.selected ? 'true' : 'false');
-  }
-
-  public destroy(): void {
-    this._rippleInstance?.destroy();
   }
 
   public addInteractionListener(type: string, listener: EventListener): void {
@@ -42,6 +35,7 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
   }
 
   public setDisabled(value: boolean): void {
+    this._stateLayerElement.disabled = value;
     this._component.tabIndex = value ? -1 : this._component.selected ? 0 : -1;
     this._component.setAttribute('aria-disabled', String(value));
     toggleAttribute(this._component, value, TAB_CONSTANTS.attributes.DISABLED, String(value));
@@ -52,20 +46,16 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
     this._component.setAttribute('aria-selected', String(value));
   }
 
-  private async _deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this._component);
-    this._rippleInstance = new TabRipple(this._rippleElement, this._component as any);
-    if (type === 'focusin' && this._component.matches(':focus')) {
-      this._rippleInstance.emulateFocus();
-    }
-  }
-
   public animateSelected(): void {
     this._tabIndicatorElement.getAnimations().forEach(a => a.cancel());
     const frames = this._getKeyframes();
     if (frames) {
       this._tabIndicatorElement.animate(frames, { duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION, easing: TAB_CONSTANTS.strings.EASING });
     }
+  }
+
+  public animateStateLayer(): void {
+    this._stateLayerElement.playRippleAnimation();
   }
 
   private _getKeyframes(): Keyframe[] | null {

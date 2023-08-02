@@ -1,26 +1,18 @@
-@use 'sass:list';
-@use '../theme/theme-values';
-@use './variables';
+@use '../core/styles/tokens/theme/tokens' as theme-tokens;
+@use '../core/styles/tokens';
 
 @mixin provide-theme($theme) {
-  @each $key, $value in $theme {
-    @if list.index(variables.$supported-theme-properties, $key) == null {
-      @error 'Invalid theme property: #{$key}';
-    }
-    @if $value {
-      --forge-focus-indicator-#{$key}: #{$value};
-    }
-  }
+  @include tokens.provide('focus-indicator', $theme);
 }
 
 @mixin configuration {
   --_active-width: var(--forge-focus-indicator-active-width, 6px);
-  --_color: var(--forge-focus-indicator-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_color: var(--forge-focus-indicator-color, #{theme-tokens.variable(primary)});
   --_duration: var(--forge-focus-indicator-duration, 600ms);
   --_outward-offset: var(--forge-focus-indicator-outward-offset, 4px);
   --_inward-offset: var(--forge-focus-indicator-inward-offset, 0px); // stylelint-disable-line length-zero-no-unit
   --_shape: var(--forge-focus-indicator-shape, 1px);
-  --_width: var(--forge-focus-indicator-width, 3px);
+  --_width: var(--forge-focus-indicator-width, 2px);
   --_easing: var(--forge-focus-indicator-easing, cubic-bezier(0.2, 0, 0, 1));
   --_shape-start-start: var(--forge-focus-indicator-shape-start-start, var(--_shape));
   --_shape-start-end: var(--forge-focus-indicator-shape-start-end, var(--_shape));

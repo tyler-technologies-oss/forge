@@ -40,9 +40,9 @@ declare global {
  * 
  * @cssproperty --forge-circular-progress-size - The height and width of the indicator container.
  * @cssproperty --forge-circular-progress-padding - The padding inside the bounding box of the container.
- * @cssproperty --forge-circular-progress-indicator-width - The active indicator width.
- * @cssproperty --forge-circular-progress-indicator-color - The active indicator color.
- * @cssproperty --forge-circular-progress-indicator-background-color - The indicator background color.
+ * @cssproperty --forge-circular-progress-track-width - The track indicator width.
+ * @cssproperty --forge-circular-progress-track-color - The track indicator color.
+ * @cssproperty --forge-circular-progress-track-background - The track background color.
  * 
  * @csspart progressbar - Styles the progress bar container element
  */

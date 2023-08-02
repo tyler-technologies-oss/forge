@@ -1,4 +1,5 @@
-@use '../../core/style-layer/tabs/tab-bar';
+@use 'sass:list';
+@use '../../core/styles/tabs/tab-bar';
 @use './variables';
 
 @mixin provide-theme($theme) {

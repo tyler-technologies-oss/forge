@@ -1,6 +1,7 @@
 @use 'sass:list';
-@use '../core/style-layer/slider';
+@use '../core/styles/slider';
 @use '../focus-indicator/mixins' as focus-indicator;
+@use '../state-layer/mixins' as state-layer;
 @use './variables';
 
 @mixin provide-theme($theme) {
@@ -26,6 +27,12 @@
     @include focus-indicator.provide-theme((
       shape: 50%,
       outward-offset: 0px
+    ));
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_handle-color)
     ));
   }
 }

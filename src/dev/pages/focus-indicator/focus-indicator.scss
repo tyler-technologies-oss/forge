@@ -11,6 +11,11 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  border-radius: 50%;
+  height: 48px;
+  width: 48px;
+
+  --forge-focus-indicator-outward-offset: 0px; /* stylelint-disable-line */
 }
 
 .inward-example {

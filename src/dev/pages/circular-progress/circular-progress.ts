@@ -9,9 +9,9 @@ let determinateIntervalTimer: number | undefined;
 const showTrackToggle = document.getElementById('opt-show-track') as ISwitchComponent;
 showTrackToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   if (selected) {
-    circularProgress.style.removeProperty('--forge-circular-progress-indicator-background-color');
+    circularProgress.style.removeProperty('--forge-circular-progress-track-background');
   } else {
-    circularProgress.style.setProperty('--forge-circular-progress-indicator-background-color', 'transparent');
+    circularProgress.style.setProperty('--forge-circular-progress-track-background', 'transparent');
   }
 });
 

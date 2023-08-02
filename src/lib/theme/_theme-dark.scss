@@ -21,12 +21,14 @@
 @use '../table/variables' as table-variables;
 @use '../switch/switch-theme' as switch-theme;
 
+@use '../core/styles/tokens/theme/tokens' as theme-tokens;
+
 ///
 /// Provides the CSS custom property definitions for the default Forge dark theme.
 ///
-@mixin theme-properties() {
-  /// Global MDC and Forge theme properties
-  @include theme.provide-theme(theme-values.$property-values-dark);
+@mixin theme-properties {
+  /// Global Forge theme properties
+  @include theme-tokens.theme-properties-dark;
 
   /// Component-specific Forge theme properties
   @include app-bar-mixins.provide-theme(app-bar-variables.$theme-values-dark);

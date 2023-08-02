@@ -1,0 +1,12 @@
+@use '../theme/tokens';
+
+$tokens: (
+  color: tokens.variable(on-surface),
+  hover-color: var(--_color),
+  hover-opacity: 0.08,
+  pressed-color: var(--_color),
+  pressed-opacity: 0.12,
+  hover-duration: 15ms,
+  ripple-duration: 375ms,
+  pressed-duration: 105ms
+) !default;

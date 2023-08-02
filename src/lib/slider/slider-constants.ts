@@ -36,8 +36,6 @@ const selectors = {
   START_LABEL_CONTENT: '.handle.start .handle-label-content',
   END_LABEL: '.handle.end .handle-label',
   END_LABEL_CONTENT: '.handle.end .handle-label-content',
-  START_RIPPLE_SURFACE: '.handle.start .handle-ripple',
-  END_RIPPLE_SURFACE: '.handle.end .handle-ripple',
   LABEL: '.handle-label',
   INPUT: 'input[type=range]'
 };
@@ -49,7 +47,6 @@ const classes = {
   OVERLAPPING: 'overlapping',
   HOVER: 'hover',
   HANDLE: 'handle',
-  HANDLE_RIPPLE: 'handle-ripple',
   HANDLE_THUMB: 'handle-thumb',
   HANDLE_START: 'start',
   HANDLE_LABEL: 'handle-label',

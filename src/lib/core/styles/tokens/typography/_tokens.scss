@@ -1,0 +1,42 @@
+@use 'sass:map';
+@use '../../tokens';
+
+$font-family: 'Roboto', sans-serif !default;
+
+$base: (
+  font-family: $font-family,
+  font-size: 16px,
+  font-weight: 400,
+  line-height: normal,
+  letter-spacing: normal,
+  text-transform: none,
+  text-decoration: none,
+  color: tokens.variable(text-primary)
+) !default;
+
+$title: (
+  font-family: map.get($base, font-family)
+  font-size: 20px,
+  font-weight: map.get($base, font-weight),
+  line-height: 24px,
+  letter-spacing: 0.0125em,
+  text-transform: inherit,
+  text-decoration: inherit,
+  color: map.get($base, color)
+) !default;
+
+$label: (
+  font-family: map.get($base, font-family),
+  font-size: 12px,
+  font-weight: map.get($base, font-weight),
+  line-height: 20px,
+  letter-spacing: 0.0333333333em,
+  text-transform: inherit,
+  text-decoration: inherit,
+  color: map.get($base, color)
+) !default;
+
+$tokens: (
+  title: $title,
+  label: $label
+) !default;

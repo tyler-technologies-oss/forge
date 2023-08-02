@@ -1,16 +1,9 @@
 @use 'sass:list';
-@use '../core/style-layer/circular-progress';
-@use './variables';
+@use '../core/styles/circular-progress';
+@use '../core/styles/tokens';
 
 @mixin provide-theme($theme) {
-  @each $key, $value in $theme {
-    @if list.index(variables.$supported-theme-properties, $key) == null {
-      @error 'Invalid theme property: #{$key}';
-    }
-    @if $value {
-      --#{circular-progress.$prefix}-#{$key}: #{$value};
-    }
-  }
+  @include tokens.provide(circular-progress, $theme);
 }
 
 @mixin host {

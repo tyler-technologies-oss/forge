@@ -1,0 +1,9 @@
+@use '../theme/tokens';
+
+$tokens: (
+  size: 48px,
+  padding: 0,
+  track-width: 12,
+  track-color: tokens.variable(tertiary),
+  track-background: tokens.variable(track-color)
+) !default;

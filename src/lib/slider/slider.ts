@@ -1,6 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
+import { StateLayerComponent } from '../state-layer/state-layer';
 import { SliderAdapter } from './slider-adapter';
 import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeEventData } from './slider-constants';
 import { SliderFoundation } from './slider-foundation';
@@ -137,7 +138,8 @@ declare global {
 @CustomElement({
   name: SLIDER_CONSTANTS.elementName,
   dependencies: [
-    FocusIndicatorComponent
+    FocusIndicatorComponent,
+    StateLayerComponent
   ]
 })
 export class SliderComponent extends BaseComponent implements ISliderComponent {
@@ -206,10 +208,6 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
 
   public connectedCallback(): void {
     this._foundation.initialize();
-  }
-
-  public disconnectedCallback(): void {
-    this._foundation.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

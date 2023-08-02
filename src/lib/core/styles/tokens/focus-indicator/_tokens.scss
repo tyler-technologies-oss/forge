@@ -1,0 +1,19 @@
+@use '../theme/tokens';
+
+/* stylelint-disable length-zero-no-unit */
+$tokens: (
+  active-width: 6px,
+  color: tokens.variable(primary),
+  duration: 600ms,
+  outward-offset: 4px,
+  inward-offset: 0px,
+  shape: 1px,
+  width: 2px,
+  easing: cubic-bezier(0.2, 0, 0, 1),
+  shape-start-start: var(--_shape),
+  shape-start-end: var(--_shape),
+  shape-end-end: var(--_shape),
+  shape-end-start: var(--_shape),
+  offset-block: 0,
+  offset-inline: 0
+) !default;

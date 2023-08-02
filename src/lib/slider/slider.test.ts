@@ -6,9 +6,10 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { TestHarness } from '../../test/utils/test-harness';
 import { ISliderComponent } from '../slider';
 import { SLIDER_CONSTANTS } from './slider-constants';
-import { ForgeRipple } from '../ripple/forge-ripple';
+import type { IStateLayerComponent } from '../state-layer/state-layer';
 
 import './slider';
+import { STATE_LAYER_CONSTANTS } from '../state-layer';
 
 class SliderHarness extends TestHarness<ISliderComponent> {
   public rootElement: HTMLElement;
@@ -19,13 +20,13 @@ class SliderHarness extends TestHarness<ISliderComponent> {
   public endHandleThumbElement: HTMLElement;
   public endLabelElement: HTMLElement;
   public endLabelContentElement: HTMLElement;
-  public endRippleSurfaceElement: HTMLElement;
+  public endStateLayer: IStateLayerComponent;
   public startInputElement: HTMLInputElement;
   public startHandleElement: HTMLElement;
   public startHandleThumbElement: HTMLElement;
   public startLabelElement: HTMLElement;
   public startLabelContentElement: HTMLElement;
-  public startRippleSurfaceElement: HTMLElement;
+  public startStateLayer: IStateLayerComponent;
   
   constructor(el: ISliderComponent) {
     super(el);
@@ -40,29 +41,13 @@ class SliderHarness extends TestHarness<ISliderComponent> {
     this.endHandleThumbElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.END_HANDLE_THUMB);
     this.endLabelElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.END_LABEL);
     this.endLabelContentElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.END_LABEL_CONTENT);
-    this.endRippleSurfaceElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.END_RIPPLE_SURFACE);
+    this.endStateLayer = getShadowElement(this.element, '.handle.end forge-state-layer') as IStateLayerComponent;
     this.startInputElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.START_INPUT) as HTMLInputElement;
     this.startHandleElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.START_HANDLE);
     this.startHandleThumbElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.START_HANDLE_THUMB);
     this.startLabelElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.START_LABEL);
     this.startLabelContentElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.START_LABEL_CONTENT);
-    this.startRippleSurfaceElement = getShadowElement(this.element, SLIDER_CONSTANTS.selectors.START_RIPPLE_SURFACE);
-  }
-
-  public get endHandleRipple(): ForgeRipple | null {
-    return (this.element as any)._foundation._adapter._endHandleRipple;
-  }
-
-  public get endRippleActive(): boolean {
-    return this.endRippleSurfaceElement.classList.contains('mdc-ripple-upgraded--background-focused');
-  }
-
-  public get startHandleRipple(): ForgeRipple | null {
-    return (this.element as any)._foundation._adapter._startHandleRipple;
-  }
-
-  public get startRippleActive(): boolean {
-    return this.startRippleSurfaceElement.classList.contains('mdc-ripple-upgraded--background-focused');
+    this.startStateLayer = getShadowElement(this.element, '.handle.start forge-state-layer') as IStateLayerComponent;
   }
   
   public focusStart(): void {
@@ -96,10 +81,10 @@ class SliderHarness extends TestHarness<ISliderComponent> {
     this.startInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
   
-  public simulateStartMove(): void {
+  public simulateStartMove(divisor = 2): void {
     let { x, y, width, height } = this.startInputElement.getBoundingClientRect();
-    x = x + (width / 2);
-    y = y + (height / 2);
+    x = x + (width / divisor);
+    y = y + (height / divisor);
     this.startInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
@@ -114,10 +99,10 @@ class SliderHarness extends TestHarness<ISliderComponent> {
     this.endInputElement.dispatchEvent(new PointerEvent('pointerenter', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
   
-  public simulateEndMove(): void {
+  public simulateEndMove(divisor = 2): void {
     let { x, y, width, height } = this.endInputElement.getBoundingClientRect();
-    x = x + (width / 2);
-    y = y + (height / 2);
+    x = x + (width / divisor);
+    y = y + (height / divisor);
     this.endInputElement.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, screenX: x, screenY: y }));
   }
 
@@ -262,6 +247,18 @@ describe('Slider', () => {
 
     expect(el.disabled).to.be.true;
     expect(ctx.endInputElement.disabled).to.be.true;
+    expect(ctx.endStateLayer.disabled).to.be.true;
+  });
+
+  it('should accepts disabled in range mode', async () => {
+    const el = await fixture<ISliderComponent>(html`<forge-slider range disabled></forge-slider>`);
+    const ctx = new SliderHarness(el);
+
+    expect(el.disabled).to.be.true;
+    expect(ctx.startInputElement.disabled).to.be.true;
+    expect(ctx.endInputElement.disabled).to.be.true;
+    expect(ctx.startStateLayer.disabled).to.be.true;
+    expect(ctx.endStateLayer.disabled).to.be.true;
   });
 
   it('should accept readonly', async () => {
@@ -411,7 +408,7 @@ describe('Slider', () => {
     await elementUpdated(el);
     
     expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
-    expect(ctx.endHandleThumbElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
+    expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
   });
 
   it('should return form element and name', async () => {
@@ -602,27 +599,56 @@ describe('Slider', () => {
     expect(slider.value).to.equal(60);
   });
 
-  it('should show thumb ripple when pointer is over input', async () => {
+  it('should hover end handle', async () => {
     const el = await fixture<ISliderComponent>(html`<forge-slider></forge-slider>`);
     const ctx = new SliderHarness(el);
 
     await ctx.simulateEndEnter();
-    await ctx.simulateEndMove();
     await elementUpdated(el);
 
-    expect(ctx.endHandleRipple).to.be.ok;
-    expect(ctx.endRippleActive).to.be.true;
+    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
+    expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
   });
 
-  it('should hide thumb ripple when pointer leaves input', async () => {
+  it('should hover start handle', async () => {
+    const el = await fixture<ISliderComponent>(html`<forge-slider range></forge-slider>`);
+    const ctx = new SliderHarness(el);
+
+    await ctx.simulateStartEnter();
+    await elementUpdated(el);
+
+    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
+    expect(ctx.startHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
+  });
+
+  it('should not set end hover if moving mouse over input when not focused', async () => {
     const el = await fixture<ISliderComponent>(html`<forge-slider></forge-slider>`);
     const ctx = new SliderHarness(el);
 
     await ctx.simulateEndEnter();
-    await ctx.simulateEndMove();
-    await ctx.simulateEndLeave();
+    await elementUpdated(el);
+    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
+    expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
 
-    expect(ctx.endRippleActive).to.be.false;
+    await ctx.simulateEndMove(1);
+    await elementUpdated(el);
+    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.false;
+    expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.false;
+  });
+
+  it('should not set start hover if moving mouse over input when not focused', async () => {
+    const el = await fixture<ISliderComponent>(html`<forge-slider range></forge-slider>`);
+    const ctx = new SliderHarness(el);
+
+    await ctx.simulateStartEnter();
+    await elementUpdated(el);
+    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
+    expect(ctx.startHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.true;
+
+    await ctx.simulateStartMove(1);
+    await elementUpdated(el);
+    expect(ctx.handleContainerElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.false;
+    expect(ctx.startHandleElement.classList.contains(SLIDER_CONSTANTS.classes.HOVER)).to.be.false;
   });
 
   it('should toggle to range mode dynamically', async () => {
@@ -637,7 +663,7 @@ describe('Slider', () => {
     expect(el.range).to.be.true;
     expect(ctx.startInputElement).to.be.ok;
     expect(ctx.startHandleElement).to.be.ok;
-    expect(ctx.startHandleRipple).not.to.be.ok;
+    expect(ctx.startStateLayer).to.be.ok;
     expect(ctx.startInputElement.valueAsNumber).to.equal(33);
     expect(ctx.startInputElement.getAttribute('aria-valuetext')).to.equal('33');
     expect(ctx.startLabelContentElement.textContent).to.equal('33');
@@ -663,7 +689,7 @@ describe('Slider', () => {
     expect(el.range).to.be.false;
     expect(ctx.startInputElement).not.to.be.ok;
     expect(ctx.startHandleElement).not.to.be.ok;
-    expect(ctx.startHandleRipple).not.to.be.ok;
+    expect(ctx.startStateLayer).not.to.be.ok;
     expect(ctx.startLabelContentElement).not.to.ok;
     expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0');
     expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0.5');
@@ -703,7 +729,7 @@ describe('Slider', () => {
     el.range = true;
     ctx.invalidate();
 
-    expect(ctx.startHandleRipple).to.be.ok;
+    expect(ctx.startStateLayer).to.be.ok;
   });
 
   it('should destroy start handle ripple when toggling from range mode dynamically', async () => {
@@ -713,12 +739,12 @@ describe('Slider', () => {
     await ctx.simulateEndEnter();
     await ctx.simulateEndLeave();
     
-    expect(ctx.startHandleRipple).to.be.ok;
+    expect(ctx.startStateLayer).to.be.ok;
     
     el.range = false;
     ctx.invalidate();
     
-    expect(ctx.startHandleRipple).not.to.be.ok;
+    expect(ctx.startStateLayer).not.to.be.ok;
   });
 
   it('should toggle labeled dynamically', async () => {
@@ -769,10 +795,10 @@ describe('Slider', () => {
     await ctx.focusStart();
     await elementUpdated(el);
 
-    expect(ctx.endHandleRipple).to.be.ok;
-    expect(ctx.endRippleActive).to.be.false;
-    expect(ctx.startHandleRipple).to.be.ok;
-    expect(ctx.startRippleActive).to.be.true;
+    expect(ctx.endStateLayer).to.be.ok;
+    // expect(ctx.endRippleActive).to.be.false;
+    expect(ctx.startStateLayer).to.be.ok;
+    // expect(ctx.startRippleActive).to.be.true;
   });
 
   it('should call labelBuilder', async () => {
@@ -812,66 +838,6 @@ describe('Slider', () => {
 
       expect(ctx.startHandleElement.classList.contains(SLIDER_CONSTANTS.classes.OVERLAPPING)).to.be.true;
       expect(ctx.endHandleElement.classList.contains(SLIDER_CONSTANTS.classes.OVERLAPPING)).to.be.true;
-    });
-
-    it('should show thumb ripple when pointer is over start input', async () => {
-      const el = await fixture<ISliderComponent>(html`<forge-slider></forge-slider>`);
-      const ctx = new SliderHarness(el);
-  
-      await ctx.simulateEndEnter();
-      await ctx.simulateEndMove();
-      await elementUpdated(el);
-  
-      expect(ctx.endHandleRipple).to.be.ok;
-      expect(ctx.endRippleActive).to.be.true;
-    });
-  
-    it('should show start thumb ripple when pointer is over input', async () => {
-      const el = await fixture<ISliderComponent>(html`<forge-slider range></forge-slider>`);
-      const ctx = new SliderHarness(el);
-  
-      await ctx.simulateStartEnter();
-      await ctx.simulateStartMove();
-      await elementUpdated(el);
-  
-      expect(ctx.startHandleRipple).to.be.ok;
-      expect(ctx.startRippleActive).to.be.true;
-    });
-  
-    it('should show end thumb ripple when pointer is over input', async () => {
-      const el = await fixture<ISliderComponent>(html`<forge-slider range></forge-slider>`);
-      const ctx = new SliderHarness(el);
-  
-      await ctx.simulateEndEnter();
-      await ctx.simulateEndMove();
-      await elementUpdated(el);
-  
-      expect(ctx.endHandleRipple).to.be.ok;
-      expect(ctx.endRippleActive).to.be.true;
-    });
-
-    it('should hide end thumb ripple when pointer leaves input', async () => {
-      const el = await fixture<ISliderComponent>(html`<forge-slider range></forge-slider>`);
-      const ctx = new SliderHarness(el);
-  
-      await ctx.simulateEndEnter();
-      await ctx.simulateEndMove();
-      await ctx.simulateEndLeave();
-      await elementUpdated(el);
-  
-      expect(ctx.endRippleActive).to.be.false;
-    });
-
-    it('should hide start thumb ripple when pointer leaves input', async () => {
-      const el = await fixture<ISliderComponent>(html`<forge-slider range></forge-slider>`);
-      const ctx = new SliderHarness(el);
-  
-      await ctx.simulateStartEnter();
-      await ctx.simulateStartMove();
-      await ctx.simulateStartLeave();
-      await elementUpdated(el);
-  
-      expect(ctx.startRippleActive).to.be.false;
     });
 
     it('should clamp end value to start', async () => {

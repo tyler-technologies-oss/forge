@@ -1,0 +1,15 @@
+@use './mixins';
+
+@include mixins.core-styles;
+
+:host {
+  @include mixins.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([disabled]) {
+  @include mixins.disabled;
+}
