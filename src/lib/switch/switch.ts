@@ -6,7 +6,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './switch.html';
 import styles from './switch.scss';
-import { userInteractionListener } from '../core/utils';
+import { createUserInteractionListener } from '../core/utils';
 
 export interface ISwitchComponent extends IBaseComponent {
   dense: boolean;
@@ -26,6 +26,8 @@ declare global {
 }
 
 class ForgeMDCSwitch extends MDCSwitch {
+  private _destroyUserInteractionListener: (() => void) | undefined;
+
   public override initialize(): void {
     // Do not call super.initialize()
     // We defer instantiation of the ripple until first user interaction
@@ -38,10 +40,18 @@ class ForgeMDCSwitch extends MDCSwitch {
     this.foundation.destroy();
     this.ripple?.destroy();
     this.root.removeEventListener('click', this.foundation.handleClick);
+
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
+    }
   }
 
   private async _deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this.root);
+    const { userInteraction, destroy } = createUserInteractionListener(this.root);
+    this._destroyUserInteractionListener = destroy;
+    const { type } = await userInteraction;
+    this._destroyUserInteractionListener = undefined;
     this.ripple = new MDCRipple(this.root, this.createRippleFoundation());
     if (type === 'focusin') {
       // eslint-disable-next-line @typescript-eslint/dot-notation

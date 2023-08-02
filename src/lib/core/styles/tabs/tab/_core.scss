@@ -1,17 +1,21 @@
-@use '@material/ripple/ripple' as mdc-ripple;
-@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '../../../../theme/theme-values';
+@use '../../../../focus-indicator/mixins' as focus-indicator;
+@use '../../../../state-layer/mixins' as state-layer;
 @use '../../../../typography';
 @use './variables';
 
 @mixin configuration {
+  // Shared
+  --_active-color: var(--#{variables.$prefix}-active-color, var(--forge-theme-primary, #{theme-values.$primary}));
+  --_inactive-color: var(--#{variables.$prefix}-inactive-color, var(--forge-theme-text-secondary, #{theme-values.$text-secondary-color}));
+
   // Indicator
-  --_active-indicator-color: var(--#{variables.$prefix}-indicator-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-indicator-color: var(--#{variables.$prefix}-indicator-color, var(--_active-color));
   --_active-indicator-height: var(--#{variables.$prefix}-indicator-height, #{variables.$indicator-height});
   --_active-indicator-shape: var(--#{variables.$prefix}-indicator-shape, #{variables.$indicator-shape});
 
   // Container
-  --_container-color: var(--#{variables.$prefix}-container-color, var(--mdc-theme-surface, #{theme-values.$surface}));
+  --_container-color: var(--#{variables.$prefix}-container-color, transparent);
   --_container-height: var(--#{variables.$prefix}-container-height, #{variables.$height});
   --_container-shape: var(--#{variables.$prefix}-shape, 0);
   
@@ -19,25 +23,25 @@
   --_content-height: var(--#{variables.$prefix}-height, #{variables.$content-height});
 
   // Icon
-  --_active-focus-icon-color: var(--#{variables.$prefix}-active-focus-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
-  --_active-hover-icon-color: var(--#{variables.$prefix}-active-hover-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
-  --_active-icon-color: var(--#{variables.$prefix}-active-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
-  --_active-pressed-icon-color: var(--#{variables.$prefix}-active-pressed-icon-color, var(--mdc-theme-primary, #{theme-values.$primary}));
+  --_active-focus-icon-color: var(--#{variables.$prefix}-active-focus-icon-color, var(--_active-color));
+  --_active-hover-icon-color: var(--#{variables.$prefix}-active-hover-icon-color, var(--_active-color));
+  --_active-icon-color: var(--#{variables.$prefix}-active-icon-color, var(--_active-color));
+  --_active-pressed-icon-color: var(--#{variables.$prefix}-active-pressed-icon-color, var(--_active-color));
   --_icon-size: var(--#{variables.$prefix}-icon-size, #{variables.$icon-size});
-  --_focus-icon-color: var(--#{variables.$prefix}-focus-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
-  --_hover-icon-color: var(--#{variables.$prefix}-hover-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
-  --_icon-color: var(--#{variables.$prefix}-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
-  --_pressed-icon-color: var(--#{variables.$prefix}-pressed-icon-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_focus-icon-color: var(--#{variables.$prefix}-focus-icon-color, var(--_inactive-color));
+  --_hover-icon-color: var(--#{variables.$prefix}-hover-icon-color, var(--_inactive-color));
+  --_icon-color: var(--#{variables.$prefix}-icon-color, var(--_inactive-color));
+  --_pressed-icon-color: var(--#{variables.$prefix}-pressed-icon-color, var(--_inactive-color));
 
   // Label
-  --_active-focus-label-text-color: var(--#{variables.$prefix}-active-focus-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
-  --_active-hover-label-text-color: var(--#{variables.$prefix}-active-hover-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
-  --_active-label-text-color: var(--#{variables.$prefix}-active-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
-  --_active-pressed-label-text-color: var(--#{variables.$prefix}-active-pressed-label-text-color, var(--mdc-theme-primary, #{theme-values.$primary}));
-  --_focus-label-text-color: var(--#{variables.$prefix}-focus-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
-  --_hover-label-text-color: var(--#{variables.$prefix}-hover-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
-  --_label-text-color: var(--#{variables.$prefix}-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
-  --_pressed-label-text-color: var(--#{variables.$prefix}-pressed-label-text-color, var(--mdc-theme-text-secondary-on-background, #{theme-values.$text-secondary-color}));
+  --_active-focus-label-text-color: var(--#{variables.$prefix}-active-focus-label-text-color, var(--_active-color));
+  --_active-hover-label-text-color: var(--#{variables.$prefix}-active-hover-label-text-color, var(--_active-color));
+  --_active-label-text-color: var(--#{variables.$prefix}-active-label-text-color, var(--_active-color));
+  --_active-pressed-label-text-color: var(--#{variables.$prefix}-active-pressed-label-text-color, var(--_active-color));
+  --_focus-label-text-color: var(--#{variables.$prefix}-focus-label-text-color, var(--_inactive-color));
+  --_hover-label-text-color: var(--#{variables.$prefix}-hover-label-text-color, var(--_inactive-color));
+  --_label-text-color: var(--#{variables.$prefix}-label-text-color, var(--_inactive-color));
+  --_pressed-label-text-color: var(--#{variables.$prefix}-pressed-label-text-color, var(--_inactive-color));
 }
 
 @mixin vertical-primary-configuration {
@@ -58,8 +62,6 @@
 }
 
 @mixin styles {
-  @include mdc-ripple.common;
-
   .#{variables.$prefix} {
     @include configuration;
     @include tab;
@@ -75,15 +77,23 @@
     .indicator {
       @include indicator;
     }
-
-    .ripple-surface {
-      @include ripple-surface;
-    }
   }
 
   host,
   ::slotted(*) {
     white-space: nowrap;
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      color: var(--_active-color)
+    ));
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_active-color)
+    ));
   }
 }
 
@@ -356,20 +366,6 @@
   height: var(--_active-indicator-height);
   inset: auto 0 0;
   opacity: 0;
-}
-
-@mixin ripple-surface {
-  @include mdc-ripple.surface;
-  @include mdc-ripple.radius-bounded;
-  @include mdc-ripple-theme.states($color: primary);
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: var(--_container-shape);
 }
 
 @mixin content-secondary {

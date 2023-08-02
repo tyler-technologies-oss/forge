@@ -25,6 +25,10 @@ export function createStartHandleElement(thumbLabel: string): HTMLElement {
   startHandle.classList.add(SLIDER_CONSTANTS.classes.HANDLE, SLIDER_CONSTANTS.classes.HANDLE_START);
   startHandle.setAttribute('part', 'handle-start');
 
+  const startHandleStateLayer = document.createElement('forge-state-layer');
+  startHandleStateLayer.target = 'start';
+  startHandle.appendChild(startHandleStateLayer);
+
   const startHandleFocusIndicator = document.createElement('forge-focus-indicator');
   startHandleFocusIndicator.target = 'start';
   startHandle.appendChild(startHandleFocusIndicator);
@@ -44,10 +48,6 @@ export function createStartHandleElement(thumbLabel: string): HTMLElement {
   startHandleLabelContent.classList.add(SLIDER_CONSTANTS.classes.LABEL_CONTENT);
   startHandleLabelContent.setAttribute('part', 'handle-start-label-content');
   startHandleLabel.appendChild(startHandleLabelContent);
-
-  const startHandleRipple = document.createElement('span');
-  startHandleRipple.classList.add(SLIDER_CONSTANTS.classes.HANDLE_RIPPLE);
-  startHandle.appendChild(startHandleRipple);
   
   return startHandle;
 }

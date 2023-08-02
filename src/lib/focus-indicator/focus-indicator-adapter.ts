@@ -1,4 +1,4 @@
-import { BaseAdapter, IBaseAdapter } from '../core';
+import { BaseAdapter, IBaseAdapter, locateTargetHeuristic } from '../core';
 import { IFocusIndicatorComponent } from './focus-indicator';
 
 export interface IFocusIndicatorAdapter extends IBaseAdapter {
@@ -43,31 +43,8 @@ export class FocusIndicatorAdapter extends BaseAdapter<IFocusIndicatorComponent>
     this._targetElement = el;
   }
 
-  /**
-   * We use the following heuristic for locating the target element:
-   *  - If the `target` attribute is set, we use that value to query the DOM for the target element
-   *  - If the `target` attribute is set to `:host`, we use the host element from within a shadow tree (only if the root node is a ShadowRoot instance)
-   *  - If the `target` attribute is set but the querySelector returns null, we use the parent element as the target element
-   *  - If the `target` attribute is not set, we use the parent element as the target element
-   * @param value {string | null} - A selector string to query the DOM for the target element
-   */
   public trySetTarget(value: string | null): void {
-    if (value) {
-      const rootNode = this._component.getRootNode() as Document | ShadowRoot;
-
-      // Special case handling for a `:host` selector to easily target a host element
-      // from within a shadow tree, given that this is a very common scenario
-      if (value === ':host' && rootNode instanceof ShadowRoot) {
-        this._targetElement = rootNode.host as HTMLElement;
-        return;
-      }
-
-      this._targetElement = rootNode.querySelector(`#${value}`);
-    }
-
-    if (!this._targetElement) {
-      this.setTargetElement(this._component.parentElement);
-    }
+    this._targetElement = locateTargetHeuristic(this._component, value);
   }
 
   public isActive(selector: string): boolean {

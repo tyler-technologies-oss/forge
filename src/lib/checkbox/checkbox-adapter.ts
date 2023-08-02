@@ -1,5 +1,5 @@
 import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
-import { userInteractionListener } from '../core';
+import { createUserInteractionListener } from '../core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
 import { ICheckboxComponent } from './checkbox';
@@ -38,6 +38,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private _inputBlurHandler: () => void;
   private _inputMutationObserver: MutationObserver;
   private _rippleInstance: ForgeRipple | undefined;
+  private _destroyUserInteractionListener: (() => void) | undefined;
 
   constructor(component: ICheckboxComponent) {
     super(component);
@@ -63,7 +64,10 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   }
 
   private async _deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this._rootElement);
+    const { userInteraction, destroy } = createUserInteractionListener(this._rootElement);
+    this._destroyUserInteractionListener = destroy;
+    const { type } = await userInteraction;
+    this._destroyUserInteractionListener = undefined;
     if (!this._rippleInstance) {
       this._rippleInstance = this._createRipple();
       if (type === 'focusin') {
@@ -125,6 +129,11 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     }
 
     this._detachInternalInputListeners();
+
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
+    }
 
     if (this._rippleInstance) {
       this._rippleInstance.destroy();

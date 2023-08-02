@@ -1,0 +1,139 @@
+@use '../tokens';
+@use './variables';
+
+@mixin configuration($prefix: variables.$prefix) {
+  @include tokens.configuration('state-layer', $prefix);
+}
+
+@mixin styles {
+  .#{variables.$prefix} {
+    @include configuration;
+    @include surface;
+
+    &--hovered::before {
+      @include hovered;
+    }
+
+    &--pressed::after {
+      @include pressed;
+    }
+  }
+
+  @media screen and (forced-colors: active) {
+    :host {
+      display: none;
+    }
+  }
+}
+
+@mixin host {
+  @include container;
+  
+  display: flex;
+  margin: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin surface {
+  &::before,
+  &::after {
+    content: '';
+
+    @include layer-base;
+  }
+
+  &::before {
+    @include hover-base;
+  }
+
+  &::after {
+    @include ripple-base;
+  }
+}
+
+@mixin container {
+  border-radius: inherit;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+@mixin disabled {
+  display: none;
+}
+
+@mixin hovered {
+  background-color: var(--_hover-color);
+  opacity: var(--_hover-opacity);
+}
+
+@mixin pressed {
+  opacity: var(--_pressed-opacity);
+  transition-duration: var(--_pressed-duration);
+}
+
+@mixin layer-base {
+  opacity: 0;
+  position: absolute;
+}
+
+@mixin hover-base {
+  background-color: var(--_hover-color);
+  inset: 0;
+  transition: opacity var(--_hover-duration) linear,
+              background-color var(--_hover-duration) linear;
+}
+
+@mixin ripple-base {
+  background: radial-gradient(
+    closest-side,
+    var(--_pressed-color) max(calc(100% - 70px), 65%),
+    transparent 100%
+  );
+  transform-origin: center center;
+  transition: opacity var(--_animation-duration) linear;
+}
+
+///
+/// Creates the styles for a visual-only state layer without the use of JavaScript.
+/// 
+/// This adds hover and pressed states to the element it is applied to, but does not
+/// provide any "ripple" styles because that requires the use of JavaScript.
+/// 
+@mixin states($selector: variables.$prefix) {
+  @include states-target;
+  
+  .#{$selector} {
+    @include configuration;
+
+    pointer-events: none;
+
+    &::before {
+      content: '';
+
+      @include layer-base;
+    }
+
+    &::before {
+      @include hover-base;
+    }
+  }
+
+  &:hover {
+    .#{$selector}::before {
+      @include hovered;
+    }
+  }
+
+  &:active {
+    .#{$selector}::before {
+      opacity: var(--_pressed-opacity);
+    }
+  }
+}
+
+@mixin states-target {
+  position: relative;
+  overflow: hidden;
+}

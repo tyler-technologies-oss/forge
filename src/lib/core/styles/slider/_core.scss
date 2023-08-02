@@ -4,8 +4,6 @@
 ///
 
 @use '@material/elevation/elevation-theme' as mdc-elevation-theme;
-@use '@material/ripple/ripple' as mdc-ripple;
-@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '../../../theme';
 @use '../../../typography';
 @use './functions';
@@ -40,7 +38,7 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 
   // External state variables
   --_track-height: var(--#{variables.$prefix}-track-height, #{variables.$track-height});
-  --_active-track-color: var(--#{variables.$prefix}-active-track-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_active-track-color: var(--#{variables.$prefix}-active-track-color, var(--forge-theme-primary, #{theme.$primary}));
   --_active-track-height: var(--#{variables.$prefix}-active-track-height, var(--_track-height));
   --_active-track-shape: var(--#{variables.$prefix}-active-track-shape, 9999px);
   --_disabled-active-track-color: var(--#{variables.$prefix}-disabled-active-track-color, #{theme.$disabled-color});
@@ -48,33 +46,31 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
   --_disabled-handle-color: var(--#{variables.$prefix}-disabled-handle-color, #{theme.$disabled-color});
   --_disabled-inactive-track-color: var(--#{variables.$prefix}-disabled-inactive-track-color, #{theme.$disabled-color});
   --_disabled-inactive-track-opacity: var(--#{variables.$prefix}-disabled-inactive-track-opacity, #{variables.$disabled-inactive-track-opacity});
-  --_focus-handle-color: var(--#{variables.$prefix}-focus-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
-  --_handle-color: var(--#{variables.$prefix}-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_focus-handle-color: var(--#{variables.$prefix}-focus-handle-color, var(--forge-theme-primary, #{theme.$primary}));
+  --_handle-color: var(--#{variables.$prefix}-handle-color, var(--forge-theme-primary, #{theme.$primary}));
   --_handle-height: var(--#{variables.$prefix}-handle-height, #{variables.$handle-height});
   --_handle-shape: var(--#{variables.$prefix}-handle-shape, 9999px);
   --_handle-width: var(--#{variables.$prefix}-handle-width, #{variables.$handle-width});
-  --_hover-handle-color: var(--#{variables.$prefix}-hover-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_hover-handle-color: var(--#{variables.$prefix}-hover-handle-color, var(--forge-theme-primary, #{theme.$primary}));
   --_inactive-track-color-fallback: var(--#{variables.$prefix}-inactive-track-color, #d5d8ee); // TODO: remove this when we're confident that color-mix is more widely supported
-  --_inactive-track-color: var(--#{variables.$prefix}-inactive-track-color, color-mix(in srgb, var(--mdc-theme-primary, #{theme.$primary}) 24%, transparent));
+  --_inactive-track-color: var(--#{variables.$prefix}-inactive-track-color, color-mix(in srgb, var(--forge-theme-primary, #{theme.$primary}) 24%, transparent));
   --_inactive-track-height: var(--#{variables.$prefix}-inactive-track-height, var(--_track-height));
   --_inactive-track-shape: var(--#{variables.$prefix}-inactive-track-shape, 9999px);
-  --_label-container-color: var(--#{variables.$prefix}-label-container-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_label-container-color: var(--#{variables.$prefix}-label-container-color, var(--forge-theme-primary, #{theme.$primary}));
   --_label-container-height: var(--#{variables.$prefix}-label-container-height, #{variables.$label-container-height});
-  --_label-label-text-color: var(--#{variables.$prefix}-label-label-text-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
-  --_pressed-handle-color: var(--#{variables.$prefix}-pressed-handle-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_label-label-text-color: var(--#{variables.$prefix}-label-label-text-color, var(--forge-theme-on-primary, #{theme.$on-primary}));
+  --_pressed-handle-color: var(--#{variables.$prefix}-pressed-handle-color, var(--forge-theme-primary, #{theme.$primary}));
   --_state-layer-size: var(--#{variables.$prefix}-state-layer-size, #{variables.$state-layer-size});
-  --_with-overlap-handle-outline-color: var(--#{variables.$prefix}-with-overlap-handle-outline-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
+  --_with-overlap-handle-outline-color: var(--#{variables.$prefix}-with-overlap-handle-outline-color, var(--forge-theme-on-primary, #{theme.$on-primary}));
   --_with-overlap-handle-outline-width: var(--#{variables.$prefix}-with-overlap-handle-outline-width, #{variables.$handle-outline-width});
-  --_with-tick-marks-active-container-color: var(--#{variables.$prefix}-with-tick-marks-active-container-color, var(--mdc-theme-on-primary, #{theme.$on-primary}));
+  --_with-tick-marks-active-container-color: var(--#{variables.$prefix}-with-tick-marks-active-container-color, var(--forge-theme-on-primary, #{theme.$on-primary}));
   --_with-tick-marks-container-size: var(--#{variables.$prefix}-with-tick-marks-container-size, #{variables.$tickmarks-container-size});
-  --_with-tick-marks-disabled-active-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-active-container-color, var(--mdc-theme-text-primary-on-background, #{theme.$text-primary-color}));
-  --_with-tick-marks-disabled-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-inactive-container-color, color-mix(in srgb, var(--mdc-theme-on-primary, #{theme.$on-primary}) 50%, transparent));
-  --_with-tick-marks-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-inactive-container-color, var(--mdc-theme-primary, #{theme.$primary}));
+  --_with-tick-marks-disabled-active-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-active-container-color, var(--forge-theme-text-primary, #{theme.$text-primary-color}));
+  --_with-tick-marks-disabled-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-disabled-inactive-container-color, color-mix(in srgb, var(--forge-theme-on-primary, #{theme.$on-primary}) 50%, transparent));
+  --_with-tick-marks-inactive-container-color: var(--#{variables.$prefix}-with-tick-marks-inactive-container-color, var(--forge-theme-primary, #{theme.$primary}));
 }
 
 @mixin styles {
-  @include mdc-ripple.common;
-
   .#{variables.$prefix} {
     @include configuration;
     @include slider;
@@ -162,10 +158,6 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
         @include handle-label-content;
       }
     }
-  }
-
-  .handle-ripple {
-    @include handle-ripple-surface;
   }
 
   .handle-container.hover .handle-thumb {
@@ -444,16 +436,6 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 
 @mixin handle-label-content {
   z-index: 1;
-}
-
-@mixin handle-ripple-surface {
-  @include mdc-ripple.surface;
-  @include mdc-ripple.radius-unbounded;
-  @include mdc-ripple-theme.states($color: primary);
-
-  box-sizing: content-box;
-  width: 100%;
-  height: 100%;
 }
 
 @mixin handle-label-base {

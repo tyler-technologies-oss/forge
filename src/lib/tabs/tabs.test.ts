@@ -11,6 +11,7 @@ import type { ITabComponent } from './tab/tab';
 import type { IIconComponent } from '../icon/icon';
 
 import './tab-bar/tab-bar';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
 
 describe('Tabs', () => {
   it('should contain shadow root', async () => {
@@ -82,7 +83,10 @@ describe('Tabs', () => {
 
     await expect(el).to.be.accessible();
     expect(el.disabled).to.be.true;
-    expect(ctx.tabs.every(tab => tab.disabled && tab.hasAttribute('disabled'))).to.be.true;
+    expect(ctx.tabs.every(tab => {
+      const stateLayer = getShadowElement(tab, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+      return tab.disabled && tab.hasAttribute('disabled') && stateLayer.disabled;
+    })).to.be.true;
   });
 
   it('should set stacked', async () => {

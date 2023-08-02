@@ -12,7 +12,6 @@ const attributes = {
 };
 
 const selectors = {
-  RIPPLE: '.ripple-surface',
   INDICATOR: '.indicator'
 };
 

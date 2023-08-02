@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { getShadowElement, tryDefine } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import type { IFocusIndicatorComponent } from './focus-indicator';
 
@@ -197,4 +197,5 @@ async function focusPointer(targetEl: HTMLElement): Promise<void> {
   const mouseX = Math.round(x + width / 2);
   const mouseY = Math.round(y + height / 2);
   await sendMouse({ type: 'click', position: [mouseX, mouseY], button: 'left' });
+  targetEl.focus();
 }

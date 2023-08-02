@@ -63,6 +63,7 @@ import { OptionComponent, OptionGroupComponent, SelectComponent } from './select
 import { SkeletonComponent } from './skeleton';
 import { SliderComponent } from './slider';
 import { SplitViewComponent } from './split-view';
+import { StateLayerComponent } from './state-layer';
 import { StepComponent, StepperComponent } from './stepper';
 import { SwitchComponent } from './switch';
 import { TableComponent } from './table';
@@ -127,6 +128,7 @@ export * from './select';
 export * from './skeleton';
 export * from './slider';
 export * from './split-view';
+export * from './state-layer';
 export * from './stepper';
 export * from './switch';
 export * from './table';
@@ -205,6 +207,7 @@ const CUSTOM_ELEMENTS = [
   SliderComponent,
   SplitViewComponent,
   StackComponent,
+  StateLayerComponent,
   StepperComponent,
   StepComponent,
   SwitchComponent,

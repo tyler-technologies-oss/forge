@@ -4,8 +4,8 @@
 @mixin configuration {
   --_container-justify: var(--#{variables.$prefix}-justify, space-between);
   --_tab-flex: var(--#{variables.$prefix}-stretch, 1);
-  --_divider-color: var(--#{variables.$prefix}-underline-color, var(--forge-theme-border-color, #{theme-values.$border-color}));
-  --_divider-thickness: var(--#{variables.$prefix}-underline-thickness, #{variables.$underline-thickness});
+  --_divider-color: var(--#{variables.$prefix}-divider-color, var(--forge-theme-border-color, #{theme-values.$border-color}));
+  --_divider-thickness: var(--#{variables.$prefix}-divider-thickness, #{variables.$divider-thickness});
 }
 
 @mixin styles {

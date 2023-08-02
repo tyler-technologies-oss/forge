@@ -56,13 +56,8 @@ export class SliderFoundation implements ISliderFoundation {
   }
 
   public initialize(): void {
-    this._adapter.initialize();
     this._applyInputListeners();
     this._update();
-  }
-
-  public destroy(): void {
-    this._adapter.destroy();
   }
 
   private _update(): void {
@@ -157,8 +152,6 @@ export class SliderFoundation implements ISliderFoundation {
 
   private _handlePointerLeave(_evt: PointerEvent): void {
     this._adapter.leaveHandleContainer();
-    this._adapter.tryBlurStartHandle();
-    this._adapter.tryBlurEndHandle();
   }
 
   private _handleInputUpdate(evt: InputEvent): void {
