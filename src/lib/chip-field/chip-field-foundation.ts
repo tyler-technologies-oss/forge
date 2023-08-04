@@ -131,7 +131,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
   }
 
   private _memberIsActive(ele: HTMLElement): boolean {
-    return getActiveElement() === ele || ele.hasAttribute('focused');
+    return getActiveElement(ele.ownerDocument) === ele || ele.hasAttribute('focused');
   }
 
   private _getActiveMember(): HTMLElement | null {

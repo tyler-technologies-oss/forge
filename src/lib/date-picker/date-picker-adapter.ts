@@ -108,7 +108,7 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
   }
 
   public isInputFocused(): boolean {
-    return getActiveElement() === this._inputElement;
+    return getActiveElement(this._component.ownerDocument) === this._inputElement;
   }
 
   public getInputValue(): string {

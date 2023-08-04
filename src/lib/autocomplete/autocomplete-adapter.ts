@@ -170,7 +170,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public hasFocus(): boolean {
-    const activeElement = getActiveElement() as HTMLElement;
+    const activeElement = getActiveElement(this._component.ownerDocument) as HTMLElement;
     return activeElement === this._inputElement || this.isFocusWithinPopup(activeElement);
   }
 

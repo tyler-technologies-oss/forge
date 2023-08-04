@@ -213,7 +213,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   }
 
   public getFocusedTabIndex(): number {
-    const activeElement = getActiveElement() as ITabComponent;
+    const activeElement = getActiveElement(this._component.ownerDocument) as ITabComponent;
     return this._tabs.findIndex(tab => {
       if (tab === activeElement) {
         return true;
