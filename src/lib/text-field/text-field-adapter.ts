@@ -76,7 +76,8 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
   }
 
   public override inputHasFocus(target?: EventTarget | null): boolean {
-    return this._inputsSome(input => input === target || input === getActiveElement());
+    const activeElement = getActiveElement(this._component.ownerDocument);
+    return this._inputsSome(input => input === target || input === activeElement);
   }
 
   public override setInputClass(className: string): void {

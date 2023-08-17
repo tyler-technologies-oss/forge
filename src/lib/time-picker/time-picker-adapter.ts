@@ -162,7 +162,8 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public isInputFocused(): boolean {
-    return getActiveElement() === this._inputElement;
+    const activeElement = getActiveElement(this._component.ownerDocument);
+    return activeElement === this._inputElement;
   }
 
   public setInputValue(value: string, emitEvents: boolean): void {
