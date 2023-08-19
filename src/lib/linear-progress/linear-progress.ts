@@ -39,9 +39,14 @@ declare global {
  * @attribute {number} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {string} data-aria-label - Propagates an `aria-label` to the underlying progress bar element.
  * 
- * @cssproperty --forge-linear-progress-height - The height of the indicator container.
- * @cssproperty --forge-linear-progress-indicator-background-color - The background color of the indicator.
+ * @cssproperty --forge-linear-progress-height - The height of the element.
+ * @cssproperty --forge-linear-progress-track-color - The background color of the indicator.
  * @cssproperty --forge-linear-progress-indicator-color - The color of the indicator.
+ * @cssproperty --forge-linear-progress-track-shape - The shape of the indicator.
+ * @cssproperty --forge-linear-progress-indicator-height - The height of the indicator only.
+ * @cssproperty --forge-linear-progress-determinate-duration - The duration of the determinate animation.
+ * @cssproperty --forge-linear-progress-indeterminate-duration - The duration of the indeterminate animation.
+ * @cssproperty --forge-linear-progress-determinate-easing - The easing function to use for the determinate animation.
  * 
  * @csspart progressbar - Styles the progress bar container element
  */

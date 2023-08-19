@@ -1,0 +1,338 @@
+@use '../core/styles/tokens/utils';
+@use '../core/styles/tokens/slider/tokens';
+@use '../core/styles/elevation';
+@use '../typography';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, slider);
+}
+
+// The max clip is reduced by 1 full tick display which is 2x the container
+// size to account for always showing the active track on the outside
+// edge of the last tick.
+$_active-track-max-clip: calc(100% - var(--_with-tick-marks-container-size) * 2);
+
+// When the start fraction is !0, add clipping by the tick container size
+$_start-fraction-not-zero: min(var(--_start-fraction) * 1e9, 1);
+$_active-track-start-offset: calc(var(--_with-tick-marks-container-size) * $_start-fraction-not-zero);
+$_active-track-start-clip: calc($_active-track-start-offset + $_active-track-max-clip * var(--_start-fraction));
+
+// When the end fraction is !1, add clipping by the tick container size
+$_end-fraction-not-one: min((1 - var(--_end-fraction)) * 1e9, 1);
+$_active-track-end-offset: calc(var(--_with-tick-marks-container-size) * $_end-fraction-not-one);
+$_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-clip * (1 - var(--_end-fraction)));
+
+@mixin container {
+  display: inline-flex;
+  vertical-align: middle;
+  min-inline-size: 100%;
+}
+
+@mixin slider {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  block-size: var(--_state-layer-size);
+  pointer-events: none;
+  touch-action: none;
+}
+
+@mixin range {
+  // Clip the inputs to the space left/right of the center point between the
+  // values so the right input gets pointer events.
+  $_clip-to-start: calc(
+    var(--_state-layer-size) / 2 + (100% - var(--_state-layer-size)) *
+    (var(--_start-fraction) + ((var(--_end-fraction) - var(--_start-fraction)) / 2))
+  );
+
+  $_clip-to-end: calc(100% - $_clip-to-start);
+
+  // in 'rtl', clip right side of "lesser" input
+  @each $_rtl-selector in get-rtl-selectors('input.start') {
+    #{$_rtl-selector} {
+      clip-path: inset(0 0 0 $_clip-to-end);
+    }
+  }
+
+  input.start {
+    clip-path: inset(0 $_clip-to-end 0 0);
+  }
+
+  input.end {
+    clip-path: inset(0 0 0 $_clip-to-start);
+  }
+
+  // in 'rtl', clip left side of "greater" input
+  @each $_rtl-selector in get-rtl-selectors('input.end') {
+    #{$_rtl-selector} {
+      clip-path: inset(0 $_clip-to-start 0 0);
+    }
+  }
+}
+
+@mixin track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+@mixin track-dimensions {
+  $_track-padding: calc((var(--_state-layer-size) / 2) - var(--_with-tick-marks-container-size));
+
+  position: absolute;
+  inset-inline-start: $_track-padding;
+  inset-inline-end: $_track-padding;
+  background-size: calc((100% - var(--_with-tick-marks-container-size) * 2) / var(--_tick-count)) 100%;
+}
+
+@mixin track-active {
+  block-size: var(--_active-track-height);
+  border-radius: var(--_active-track-shape);
+  clip-path: inset(0 $_active-track-end-clip 0 $_active-track-start-clip);
+  background-color: var(--_active-track-color);
+}
+
+@mixin track-inactive {
+  block-size: var(--_inactive-track-height);
+  border-radius: var(--_inactive-track-shape);
+
+  // TODO: remove this and the @supports check below when we're confident that color-mix is more widely supported
+  background-color: var(--_inactive-track-color-fallback);
+
+  @supports (background-color: color-mix(in srgb, red 50%, transparent)) {
+    background-color: var(--_inactive-track-color);
+  }
+}
+
+@mixin track-active-disabled {
+  background-color: var(--_disabled-active-track-color);
+}
+
+@mixin track-inactive-disabled {
+  opacity: calc((1 / var(--_disabled-active-track-opacity)) * var(--_disabled-inactive-track-opacity));
+  background-color: var(--_disabled-inactive-track-color);
+}
+
+@mixin rtl-track-clipping {
+  clip-path: inset(0 $_active-track-start-clip 0 $_active-track-end-clip);
+}
+
+@mixin tickmarks-inactive {
+  background-image: get-tick-image('var(--_with-tick-marks-inactive-container-color)');
+}
+
+@mixin tickmarks-active {
+  background-image: get-tick-image('var(--_with-tick-marks-active-container-color)');
+}
+
+@mixin tickmarks-active-disabled {
+  background-image: get-tick-image('var(--_with-tick-marks-disabled-active-container-color)');
+}
+
+@mixin tickmarks-inactive-disabled {
+  background-image: get-tick-image('var(--_with-tick-marks-disabled-inactive-container-color)');
+}
+
+@mixin handle-container-dimensions {
+  position: relative;
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+@mixin handle-container-padded {
+  padding-inline: calc(var(--_state-layer-size) / 2);
+}
+
+@mixin handle-container {
+  position: absolute;
+  inset-block-start: 0;
+  inset-block-end: 0;
+  inset-inline-start: calc(100% * var(--_start-fraction));
+  inline-size: calc(100% * (var(--_end-fraction) - var(--_start-fraction)));
+}
+
+@mixin handle {
+  position: absolute;
+  block-size: var(--_state-layer-size);
+  inline-size: var(--_state-layer-size);
+  border-radius: var(--_handle-shape);
+  display: grid;
+  place-items: center;
+}
+
+@mixin handle-start {
+  inset-inline-start: calc(0px - var(--_state-layer-size) / 2);
+}
+
+@mixin handle-end {
+  inset-inline-end: calc(0px - var(--_state-layer-size) / 2);
+}
+
+@mixin handle-thumb {
+  @include elevation.box-shadow(1);
+
+  position: absolute;
+  height: var(--_handle-height);
+  width: var(--_handle-width);
+  border-radius: var(--_handle-shape);
+  background: var(--_handle-color);
+}
+
+@mixin handle-thumb-hover {
+  background: var(--_hover-handle-color);
+}
+
+@mixin handle-thumb-pressed {
+  background: var(--_pressed-handle-color);
+}
+
+@mixin handle-thumb-focused {
+  background: var(--_focus-handle-color);
+}
+
+@mixin handle-thumb-disabled {
+  @include elevation.box-shadow(0);
+
+  background: var(--_disabled-handle-color);
+}
+
+@mixin handle-label {
+  @include typography.typography(caption);
+
+  position: absolute;
+  box-sizing: border-box;
+  display: grid;
+  padding: 4px;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--_label-label-text-color);
+  font-weight: 500;
+  white-space: nowrap;
+  inset-block-end: 100%;
+  min-inline-size: var(--_label-container-height);
+  min-block-size: var(--_label-container-height);
+  background: var(--_label-container-color);
+  transition: transform 100ms cubic-bezier(0.2, 0, 0, 1);
+  transform-origin: center bottom;
+  transform: scale(0);
+}
+
+@mixin handle-label-disabled {
+  background: var(--_disabled-handle-color);
+}
+
+@mixin handle-label-content {
+  z-index: 1;
+}
+
+@mixin handle-label-base {
+  position: absolute;
+  display: block;
+  background: inherit;
+}
+
+@mixin handle-label-top {
+  inset: 0;
+  border-radius: inherit;
+}
+
+@mixin handle-label-bottom {
+  $_triangle-size: calc(var(--_label-container-height) / 2);
+  inline-size: $_triangle-size;
+  block-size: $_triangle-size;
+  bottom: calc(var(--_label-container-height) / -10);
+  transform: rotate(45deg);
+}
+
+@mixin handle-label-visible {
+  transform: scale(1);
+}
+
+@mixin input-disabled {
+  cursor: not-allowed;
+}
+
+@mixin handles-overlapping {
+  border: var(--_with-overlap-handle-outline-color) solid var(--_with-overlap-handle-outline-width);
+}
+
+@mixin on-top {
+  z-index: 1;
+}
+
+@mixin input {
+  opacity: 0;
+  -webkit-tap-highlight-color: transparent;
+  position: absolute;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+  }
+
+  &::-moz-range-track {
+    appearance: none;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    block-size: var(--_state-layer-size);
+    inline-size: var(--_state-layer-size);
+    transform: scaleX(0);
+    opacity: 0;
+    z-index: 2;
+  }
+
+  &::-moz-range-thumb {
+    appearance: none;
+    block-size: var(--_state-layer-size);
+    inline-size: var(--_state-layer-size);
+    transform: scaleX(0);
+    opacity: 0;
+    z-index: 2;
+  }
+}
+
+///
+/// Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
+/// The original source code can be found at [GitHub](https://github.com/material-components/material-web/blob/main/slider/lib/_slider.scss)
+///
+
+// Returns a background-image with sized circular ticks of the given color.
+@function get-tick-image($color) {
+  @return radial-gradient(
+    circle at var(--_with-tick-marks-container-size) center,
+    #{$color} 0,
+    #{$color} calc(var(--_with-tick-marks-container-size) / 2),
+    transparent calc(var(--_with-tick-marks-container-size) / 2)
+  );
+}
+
+// Returns a list of rtl selectors to construct distinct rulesets. Separating
+// rulesets ensure they are not dropped on browsers where one is not supported;
+// note, `:where` cannot be used to create compound selectors that contain
+// pseudo elements
+// (e.g. this does not work: `:where(:host([dir="rtl"]) .foo::after)`),
+@function get-rtl-selectors($selector: '', $suffix: '') {
+  @return (
+    // TODO: remove selectors other than `:dir` when browser support improves.
+    ':host-context([dir="rtl"]) #{$selector}#{$suffix}',
+    ':host([dir="rtl"]) #{$selector}#{$suffix}',
+    '#{$selector}:dir(rtl)#{$suffix}'
+  );
+}
+

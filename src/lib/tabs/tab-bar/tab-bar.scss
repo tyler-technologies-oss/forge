@@ -1,22 +1,38 @@
-@use './mixins';
+@use './core';
+@use './configuration';
 @use '../../icon-button/forge-icon-button';
 
-@include mixins.core-styles;
-
+/// Host styles
 :host {
-  @include mixins.host;
+  @include core.host;
 }
 
 :host([vertical]) {
-  @include mixins.vertical-styles;
+  .container {
+    @include core.container-vertical;
+  }
+
+  .scroll-container {
+    @include core.vertical;
+  }
+
+  .scroll-button {
+    justify-self: center;
+  }
 }
 
 :host([inverted]:not([vertical])) {
-  @include mixins.inverted-styles;
+  .container {
+    border-bottom: none;
+    border-top: var(--_divider-thickness) solid var(--_divider-color);
+  }
 }
 
 :host([inverted][vertical]) {
-  @include mixins.inverted-vertical-styles;
+  .container {
+    border-right: none;
+    border-left: var(--_divider-thickness) solid var(--_divider-color);
+  }
 }
 
 :host([clustered]) {
@@ -38,4 +54,22 @@
 
 :host([hidden]) {
   display: none;
+}
+
+/// Base styles
+.container {
+  @include configuration.configuration;
+  @include core.container;
+}
+
+.scroll-container {
+  @include core.base;
+}
+
+::slotted(*) {
+  flex: var(--_tab-flex);
+}
+
+::slotted([selected]) {
+  z-index: 1;
 }

@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '../../tokens';
+@use '../../theme';
 
 $font-family: 'Roboto', sans-serif !default;
 
@@ -11,12 +11,12 @@ $base: (
   letter-spacing: normal,
   text-transform: none,
   text-decoration: none,
-  color: tokens.variable(text-primary)
+  color: theme.variable(text-primary)
 ) !default;
 
 $title: (
-  font-family: map.get($base, font-family)
-  font-size: 20px,
+  font-family: map.get($base, font-family),
+  // font-size: typography.font-size(title) var(--forge-typography-title-font-size, calc(var(--forge-typography-root-font-size, 16px) * 1.5)),
   font-weight: map.get($base, font-weight),
   line-height: 24px,
   letter-spacing: 0.0125em,
@@ -36,7 +36,33 @@ $label: (
   color: map.get($base, color)
 ) !default;
 
+// $caption: (
+//   ...$label,
+//   font-size: 10px,
+// ) !default;
+
 $tokens: (
   title: $title,
-  label: $label
+  label: $label,
+  helper-text: $label
 ) !default;
+
+
+// @mixin typography($style) {
+//   $typography-tokens: map.get($tokens, $style);
+
+//   @if not $typography-tokens {
+//     @error 'Invalid typography style: "#{$style}"';
+//   }
+
+//   /// Use the `font` style instead??
+
+//   font-family: var(--forge-typography-#{$style}-font-family, map.get($typography-tokens, font-family));
+//   font-size: var(--forge-typography-#{$style}-font-size, map.get($typography-tokens, font-size));
+//   font-weight: var(--forge-typography-#{$style}-font-weight, map.get($typography-tokens, font-weight));
+//   line-height: var(--forge-typography-#{$style}-line-height, map.get($typography-tokens, line-height));
+//   letter-spacing: var(--forge-typography-#{$style}-letter-spacing, map.get($typography-tokens, letter-spacing));
+//   text-transform: var(--forge-typography-#{$style}-text-transform, map.get($typography-tokens, text-transform));
+//   text-decoration: var(--forge-typography-#{$style}-text-decoration, map.get($typography-tokens, text-decoration));
+//   color: var(--forge-typography-#{$style}-color, map.get($typography-tokens, color));
+// }

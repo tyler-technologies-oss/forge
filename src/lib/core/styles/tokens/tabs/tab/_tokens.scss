@@ -1,0 +1,66 @@
+@use 'sass:map';
+@use '../../../theme';
+@use '../../utils';
+
+$tokens: (
+  // Shared
+  active-color: utils.module-val(tab, active-color, theme.variable(primary)),
+  inactive-color: utils.module-val(tab, inactive-color, theme.variable(text-secondary)),
+  height: utils.module-val(tab, height, 48px),
+  stacked-height: utils.module-val(tab, stacked-height, 64px),
+
+  // Disabled
+  disabled-opacity: utils.module-val(tab, disabled-opacity, 0.38),
+
+  // Indicator
+  indicator-color: utils.module-ref(tab, indicator-color, active-color),
+  indicator-height: utils.module-val(tab, indicator-height, 3px),
+  indicator-shape: utils.module-val(tab, indicator-shape, 3px 3px 0 0),
+
+  // Indicator (vertical)
+  vertical-indicator-shape: utils.module-val(tab, indicator-shape, 3px 0 0 3px),
+
+  // Indicator (secondary)
+  secondary-indicator-height: utils.module-val(tab, indicator-height, 2px),
+  secondary-indicator-shape: utils.module-val(tab, indicator-shape, 0),
+
+  // Indicator (inverted)
+  inverted-indicator-shape: utils.module-val(tab, indicator-shape, 0 0 3px 3px),
+  vertical-inverted-indicator-shape: utils.module-val(tab, indicator-shape, 0 3px 3px 0),
+
+  // Container
+  container-color: utils.module-val(tab, container-color, transparent),
+  container-height: utils.module-ref(tab, container-height, height),
+  container-shape: utils.module-val(tab, container-shape, 0),
+  
+  // Content
+  content-height: utils.module-ref(tab, content-height, height),
+
+  // Icon
+  active-focus-icon-color: utils.module-ref(tab, active-focus-icon-color, active-color),
+  active-hover-icon-color: utils.module-ref(tab, active-hover-icon-color, active-color),
+  active-icon-color: utils.module-ref(tab, active-icon-color, active-color),
+  active-pressed-icon-color: utils.module-ref(tab, active-pressed-icon-color, active-color),
+  icon-size: utils.module-val(tab, icon-size, 24px),
+  focus-icon-color: utils.module-ref(tab, focus-icon-color, inactive-color),
+  hover-icon-color: utils.module-ref(tab, hover-icon-color, inactive-color),
+  icon-color: utils.module-ref(tab, icon-color, inactive-color),
+  pressed-icon-color: utils.module-ref(tab, pressed-icon-color, inactive-color),
+
+  // Label
+  active-focus-label-text-color: utils.module-ref(tab, active-focus-label-text-color, active-color),
+  active-hover-label-text-color: utils.module-ref(tab, active-hover-label-text-color, active-color),
+  active-label-text-color: utils.module-ref(tab, active-label-text-color, active-color),
+  active-pressed-label-text-color: utils.module-ref(tab, active-pressed-label-text-color, active-color),
+  focus-label-text-color: utils.module-ref(tab, focus-label-text-color, inactive-color),
+  hover-label-text-color: utils.module-ref(tab, hover-label-text-color, inactive-color),
+  label-text-color: utils.module-ref(tab, label-text-color, inactive-color),
+  pressed-label-text-color: utils.module-ref(tab, pressed-label-text-color, inactive-color)
+) !default;
+
+///
+/// Gets a token from the token map.
+/// 
+@function get($name) {
+  @return map.get($tokens, $name);
+}
