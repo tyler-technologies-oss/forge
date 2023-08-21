@@ -1,3 +1,15 @@
+# v2.16.6 (Mon Aug 21 2023)
+
+#### 🐛 Bug Fix
+
+- fix(list-item): fixed a bug where setting `dense` wasn't applying the correct height [#358](https://github.com/tyler-technologies-oss/forge/pull/358) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.16.5 (Wed Jul 26 2023)
 
 #### 🐛 Bug Fix
