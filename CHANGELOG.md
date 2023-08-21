@@ -1,3 +1,43 @@
+# v2.16.6 (Mon Aug 21 2023)
+
+#### 🐛 Bug Fix
+
+- fix(list-item): fixed a bug where setting `dense` wasn't applying the correct height [#358](https://github.com/tyler-technologies-oss/forge/pull/358) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: fixed a bug where detecting the active element after being adopted into a new document could incorrectly reflect the wrong element [#355](https://github.com/tyler-technologies-oss/forge/pull/355) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.16.5 (Wed Jul 26 2023)
+
+#### 🐛 Bug Fix
+
+- fix(chip-field): fix floating label state [#350](https://github.com/tyler-technologies-oss/forge/pull/350) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.16.4 (Mon Jul 24 2023)
+
+#### 🐛 Bug Fix
+
+- fix(date-picker): fixed a bug where the `locale` of the calendar could not be set through the date picker element [#344](https://github.com/tyler-technologies-oss/forge/pull/344) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(color-picker): fixed a bug where manually entering a hex value would not accept characters until a valid hex string value and length was reached [#346](https://github.com/tyler-technologies-oss/forge/pull/346) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(stepper): fixed a bug where the vertical state was not being applied if the `steps` property was changed dynamically [#345](https://github.com/tyler-technologies-oss/forge/pull/345) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chips): fixed a bug where the text was not centered if the width was less than than the min-width of the chip [#347](https://github.com/tyler-technologies-oss/forge/pull/347) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.16.3 (Fri Jun 23 2023)
 
 #### 🐛 Bug Fix

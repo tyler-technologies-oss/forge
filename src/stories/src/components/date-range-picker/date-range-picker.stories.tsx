@@ -27,7 +27,8 @@ export const Default: Story<IDateRangePickerProps> = ({
   allowInvalidDate = false,
   showToday = false,
   showClear = false,
-  disabledDaysOfWeek = []
+  disabledDaysOfWeek = [],
+  locale = undefined
 }) => {
   if (min) {
     min = new Date(min);
@@ -48,6 +49,7 @@ export const Default: Story<IDateRangePickerProps> = ({
       showToday={showToday}
       showClear={showClear}
       disabledDaysOfWeek={disabledDaysOfWeek}
+      locale={locale}
       style={{ width: '320px' }}>
       <ForgeTextField>
         <input type="text" id="input-date-range-picker-01" autoComplete="off" placeholder="mm/dd/yyyy" />
@@ -68,5 +70,6 @@ Default.args = {
   allowInvalidDate: false,
   showToday: false,
   showClear: false,
-  disabledDaysOfWeek: []
+  disabledDaysOfWeek: [],
+  locale: ''
 } as IDateRangePickerProps;

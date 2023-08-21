@@ -72,10 +72,17 @@
       ::slotted(.forge-list-item__title) {
         @include mdc-typography.typography(body2);
       }
+
+      &.forge-list-item--two-line {
+        @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$dense-two-line-height);
+      }
+
+      &.forge-list-item--three-line {
+        @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$dense-three-line-height);
+      }
     }
   
     &--wrap {
-      @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$single-line-height);
       @include theme.css-custom-property(height, --forge-list-item-height, auto);
 
       ::slotted([slot=title]),
@@ -343,14 +350,17 @@
 }
 
 @mixin two-line() {
+  @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$two-line-height);
   @include theme.css-custom-property(height, --forge-list-item-height, variables.$two-line-height);
 }
 
 @mixin three-line() {
+  @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$three-line-height);
   @include theme.css-custom-property(height, --forge-list-item-height, variables.$three-line-height);
 }
 
 @mixin dense() {
+  @include theme.css-custom-property(min-height, --forge-list-item-min-height, variables.$dense-single-line-height);
   @include theme.css-custom-property(height, --forge-list-item-height, variables.$dense-height);
 }
 

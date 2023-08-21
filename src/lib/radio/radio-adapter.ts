@@ -119,7 +119,8 @@ export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
   }
 
   public syncFocusedStateWithInput(): void {
-    if (getActiveElement() === this._inputElement) {
+    const activeElement = getActiveElement(this._component.ownerDocument);
+    if (activeElement === this._inputElement) {
       this.addRootClass(RADIO_CONSTANTS.classes.FOCUSED);
     } else {
       this.removeRootClass(RADIO_CONSTANTS.classes.FOCUSED);

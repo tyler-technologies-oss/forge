@@ -221,7 +221,7 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
   }
 
   public tryMoveFocusNext(): void {
-    const activeElement = getActiveElement();
+    const activeElement = getActiveElement(this._component.ownerDocument);
     if (activeElement === this._buttonElement) {
       if (this._deleteButton) {
         this._deleteButton.focus();
@@ -234,7 +234,7 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
   }
 
   public tryMoveFocusPrevious(): void {
-    const activeElement = getActiveElement();
+    const activeElement = getActiveElement(this._component.ownerDocument);
     if (activeElement === this._deleteButton) {
       this._buttonElement.focus();
     } else if (activeElement === this._buttonElement) {

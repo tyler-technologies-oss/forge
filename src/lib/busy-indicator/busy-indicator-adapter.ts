@@ -266,7 +266,7 @@ export class BusyIndicatorAdapter extends BaseAdapter<IBusyIndicatorComponent> i
   }
 
   public getFocusedElement(): HTMLElement {
-    return getActiveElement() as HTMLElement;
+    return getActiveElement(this._component.ownerDocument) as HTMLElement;
   }
 
   public hasFocus(): boolean {

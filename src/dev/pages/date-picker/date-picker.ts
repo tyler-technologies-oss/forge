@@ -26,6 +26,11 @@ datePickerInput.addEventListener('input', () => {
   datePickerInputValueElement.textContent = datePickerInput.value ?? '""';
 });
 
+const localeSelect = document.getElementById('opt-locale') as ISelectComponent;
+localeSelect.addEventListener('change', () => {
+  datePicker.locale = localeSelect.value;
+});
+
 const valueModeSelect = document.getElementById('opt-value-mode') as ISelectComponent;
 valueModeSelect.addEventListener('change', () => {
   datePicker.valueMode = valueModeSelect.value;
