@@ -3,6 +3,7 @@
 #### 🐛 Bug Fix
 
 - fix(list-item): fixed a bug where setting `dense` wasn't applying the correct height [#358](https://github.com/tyler-technologies-oss/forge/pull/358) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: fixed a bug where detecting the active element after being adopted into a new document could incorrectly reflect the wrong element [#355](https://github.com/tyler-technologies-oss/forge/pull/355) ([@DRiFTy17](https://github.com/DRiFTy17))
 
 #### Authors: 1
 
