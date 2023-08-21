@@ -7,6 +7,15 @@ $drawer-inline-padding: #{math.div($inline-padding, 2)};
 /// The default height for a single line list item.
 $single-line-height: #{48px - $block-padding * 2} !default;
 
+/// The default height for a single line list item.
+$dense-single-line-height: #{32px - $block-padding * 2} !default;
+
+/// The default height for a two line list item.
+$dense-two-line-height: #{56px - $block-padding * 2} !default;
+
+/// The default height for a three line list item.
+$dense-three-line-height: #{72px - $block-padding * 2} !default;
+
 /// The default min-height for a single line list item in a drawer context.
 $drawer-single-line-height: 40px !default;
 
