@@ -1,0 +1,42 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../color-palette';
+@use '../utils';
+
+$tokens: (
+  track-height: utils.module-val(slider, track-height, 4px),
+  active-track-color: utils.module-val(slider, active-track-color, theme.variable(primary)),
+  active-track-height: utils.module-ref(slider, active-track-height, track-height),
+  active-track-shape: utils.module-val(slider, active-track-shape, 9999px),
+  disabled-active-track-color: utils.module-val(slider, disabled-active-track-color, color-palette.$grey-500),
+  disabled-active-track-opacity: utils.module-val(slider, disabled-active-track-opacity, 0.38),
+  disabled-handle-color: utils.module-val(slider, disabled-handle-color, color-palette.$grey-500),
+  disabled-inactive-track-color: utils.module-val(slider, disabled-inactive-track-color, color-palette.$grey-500),
+  disabled-inactive-track-opacity: utils.module-val(slider, disabled-inactive-track-opacity, 0.12),
+  focus-handle-color: utils.module-val(slider, focus-handle-color, theme.variable(primary)),
+  handle-color: utils.module-val(slider, handle-color, theme.variable(primary)),
+  handle-height: utils.module-val(slider, handle-height, 20px),
+  handle-shape: utils.module-val(slider, handle-shape, 9999px),
+  handle-width: utils.module-val(slider, handle-width, 20px),
+  hover-handle-color: utils.module-val(slider, hover-handle-color, theme.variable(primary)),
+  inactive-track-color-fallback: utils.module-val(slider, inactive-track-color, #d5d8ee), // TODO: remove this when we're confident that color-mix is more widely supported
+  inactive-track-color: utils.module-val(slider, inactive-track-color, color-mix(in srgb, theme.variable(primary) 24%, transparent)),
+  inactive-track-height: utils.module-ref(slider, inactive-track-height, track-height),
+  inactive-track-shape: utils.module-val(slider, inactive-track-shape, 9999px),
+  label-container-color: utils.module-val(slider, label-container-color, theme.variable(primary)),
+  label-container-height: utils.module-val(slider, label-container-height, 28px),
+  label-label-text-color: utils.module-val(slider, label-label-text-color, theme.variable(on-primary)),
+  pressed-handle-color: utils.module-val(slider, pressed-handle-color, theme.variable(primary)),
+  state-layer-size: utils.module-val(slider, state-layer-size, 40px),
+  with-overlap-handle-outline-color: utils.module-val(slider, with-overlap-handle-outline-color, theme.variable(on-primary)),
+  with-overlap-handle-outline-width: utils.module-val(slider, with-overlap-handle-outline-width, 1px),
+  with-tick-marks-active-container-color: utils.module-val(slider, with-tick-marks-active-container-color, theme.variable(primary)),
+  with-tick-marks-container-size: utils.module-val(slider, with-tick-marks-container-size, 2px),
+  with-tick-marks-disabled-active-container-color: utils.module-val(slider, with-tick-marks-disabled-active-container-color, theme.variable(text-primary)),
+  with-tick-marks-disabled-inactive-container-color: utils.module-val(slider, with-tick-marks-disabled-inactive-container-color, color-mix(in srgb, theme.variable(on-primary) 50%, transparent)),
+  with-tick-marks-inactive-container-color: utils.module-val(slider, with-tick-marks-inactive-container-color, theme.variable(primary))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

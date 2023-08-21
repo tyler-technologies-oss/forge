@@ -1,9 +1,11 @@
-@use './mixins';
-
-@include mixins.core-styles;
+@use './core';
+@use './configuration';
+@use '../../core/styles/tokens/tabs/tab/tokens';
+@use '../../focus-indicator';
+@use '../../state-layer';
 
 :host {
-  @include mixins.host;
+  @include core.host;
 }
 
 :host([hidden]) {
@@ -11,54 +13,166 @@
 }
 
 :host(:focus) {
-  @include mixins.focus-styles;
+  .forge-tab {
+    @include core.focus;
+  }
 }
 
 :host(:active) {
-  @include mixins.pressed-styles;
+  .forge-tab {
+    @include core.pressed;
+  }
 }
 
 :host([disabled]) {
-  @include mixins.host-disabled;
-  @include mixins.disabled-styles;
+  @include core.host-disabled;
+
+  .forge-tab {
+    pointer-events: none;
+  }
 }
 
 :host([selected]) {
-  @include mixins.selected-styles;
+  .forge-tab {
+    color: var(--_active-label-text-color);
+
+    ::slotted([slot=leading]),
+    ::slotted([slot=trailing]) {
+      color: var(--_active-icon-color);
+    }
+
+    &:hover {
+      color: var(--_active-hover-label-text-color);
+    }
+
+    &:hover {
+      ::slotted([slot=leading]),
+      ::slotted([slot=trailing]) {
+        color: var(--_active-hover-icon-color);
+      }
+    }
+  
+    .indicator {
+      opacity: 1;
+    }
+  }
 }
 
 :host([selected]:focus) {
-  @include mixins.focus-selected-styles;
+  .forge-tab {
+    @include core.selected-focus;
+  }
 }
 
 :host([selected]:active) {
-  @include mixins.pressed-selected-styles;
+  .forge-tab {
+    @include core.selected-pressed;
+  }
 }
 
 :host([stacked]) {
-  @include mixins.stacked-styles;
+  .forge-tab {
+    --_height: #{tokens.get(stacked-height)};
+
+    .content {
+      @include core.content-stacked;
+    }
+  }
 }
 
 :host([secondary]) {
-  @include mixins.secondary-styles;
+  .forge-tab {
+    @include configuration.configuration-secondary;
+  }
+
+  .content {
+    @include core.content-secondary;
+  }
+
+  .indicator {
+    @include core.indicator-secondary;
+  }
 }
 
 :host([vertical]) {
-  @include mixins.vertical-styles;
+  .forge-tab {
+    @include core.vertical;
+  
+    .content {
+      @include core.vertical-content;
+    }
+  
+    .indicator {
+      @include core.vertical-indicator;
+    }
+  }
 }
 
 :host([vertical][secondary]) {
-  @include mixins.vertical-secondary-styles;
+  .content {
+    @include core.vertical-secondary-content;
+  }
 }
 
 :host([vertical]:not([secondary])) {
-  @include mixins.vertical-primary-styles;
+  .forge-tab {
+    @include configuration.vertical-primary-configuration;
+  }
 }
 
 :host([inverted]) {
-  @include mixins.inverted-styles;
+  .forge-tab {
+    @include configuration.configuration-inverted;
+  }
+
+  .indicator {
+    @include core.inverted-indicator;
+  }
 }
 
 :host([inverted][vertical]) {
-  @include mixins.vertical-inverted-styles;
+  .forge-tab {
+    @include configuration.configuration-vertical-inverted;
+  }
+
+  .indicator {
+    @include core.vertical-inverted-indicator;
+  }
+}
+
+/// Base styles
+.forge-tab {
+  @include configuration.configuration;
+  @include core.tab;
+
+  .content {
+    @include core.content;
+
+    .label {
+      @include core.label;
+    }
+  }
+
+  .indicator {
+    @include core.indicator;
+  }
+}
+
+host,
+::slotted(*) {
+  white-space: nowrap;
+}
+
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: var(--_active-color),
+    shape: 8px
+  ));
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: var(--_inactive-color)
+  ));
 }

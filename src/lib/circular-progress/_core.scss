@@ -1,0 +1,117 @@
+@use 'sass:list';
+@use './configuration';
+@use '../core/styles/tokens/utils';
+@use '../core/styles/tokens/circular-progress/tokens';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, circular-progress);
+}
+
+@mixin container {
+  display: inline-flex;
+  vertical-align: middle;
+  min-block-size: #{tokens.get(size)};
+  min-inline-size: #{tokens.get(size)};
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  // `contain` and `content-visibility` are performance optimizations important here because progress indicators
+  // are often used when a CPU=intensive task is underway so it's especially important to minimize their CPU consumption.
+  contain: strict;
+  content-visibility: auto;
+}
+
+@mixin progress {
+  flex: 1;
+  align-self: stretch;
+  margin: var(--_spacing);
+}
+
+@mixin indeterminate {
+  will-change: transform;
+  animation: #{configuration.$indeterminate-animation};
+  animation-duration: var(--_linear-duration);
+}
+
+@mixin indeterminate-left {
+  overflow: hidden;
+  inset: 0 50% 0 0;
+}
+
+@mixin indeterminate-left-circle {
+  rotate: 135deg;
+  inset: 0 -100% 0 0;
+}
+
+@mixin indeterminate-right {
+  overflow: hidden;
+  inset: 0 0 0 50%;
+}
+
+@mixin indeterminate-circle {
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: solid calc(var(--_size) * var(--_track-width) / 100);
+  border-color: var(--_track-color) var(--_track-color) transparent transparent;
+  will-change: transform;
+  animation: #{configuration.$indeterminate-circle-animation};
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-duration: var(--_arc-duration), var(--_cycle-duration);
+  animation-timing-function: #{configuration.$indeterminate-easing};
+}
+
+@mixin indeterminate-right-circle {
+  rotate: 100deg;
+  inset: 0 0 0 -100%;
+  animation-delay: calc(-0.5 * var(--_arc-duration)), 0ms;
+}
+
+@mixin determinate-svg {
+  transform: rotate(-90deg);
+}
+
+@mixin determinate-svg-circle {
+  cx: 50%;
+  cy: 50%;
+  r: calc(50% * (1 - var(--_track-width) / 100));
+  // match size to indeterminate border width
+  stroke-width: calc(var(--_track-width) * 1%);
+  // note, pathLength is set so this can be normalized
+  stroke-dasharray: 100;
+  fill: transparent;
+}
+
+@mixin determinate-progress {
+  transition: stroke-dashoffset 500ms #{configuration.$determinate-easing};
+  stroke: var(--_track-color);
+}
+
+@mixin determinate-track {
+  stroke: transparent;
+}
+
+@mixin determinate-track-background {
+  stroke: var(--_track-background);
+}
+
+@mixin determinate-spinner {
+  will-change: transform;
+  animation: #{configuration.$determinate-animation};
+  animation-duration: var(--_cycle-duration);
+  animation-timing-function: #{configuration.$indeterminate-easing};
+}
+
+@mixin positioned {
+  position: absolute;
+  inset: 0;
+}
+
+@mixin center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}

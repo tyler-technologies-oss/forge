@@ -1,0 +1,38 @@
+@use 'sass:map';
+@use '../core/config';
+
+///
+/// Creates a CSS custom property declaration for a token in the provided module
+/// referencing an existing module token variable as the fallback.
+/// 
+@function module-ref($module, $token, $ref-token, $prefix: config.$prefix) {
+  @return _create-var($module, $token, var(--_#{$ref-token}), $prefix);
+}
+
+///
+/// Creates a CSS custom property declaration for a module token using the
+/// provided value as the variable fallback.
+/// 
+@function module-val($module, $token, $value, $prefix: config.$prefix) {
+  @return _create-var($module, $token, $value, $prefix);
+}
+
+///
+/// Emits CSS custom property declarations for tokens on a per-module basis,
+/// using the provided token map.
+/// 
+@mixin provide($module-tokens, $tokens, $module, $prefix: config.$prefix) {
+  @each $token-name, $token-value in $tokens {
+    @if not map.get($module-tokens, $token-name) {
+      @error 'Invalid token "#{$token-name}" for module "#{$module}"';
+    }
+    --#{$prefix}-#{$module}-#{$token-name}: #{$token-value};
+  }
+}
+
+///
+/// Creates a CSS custom property declaration for a module token, using the provided fallback value.
+/// 
+@function _create-var($module, $token, $value, $prefix: config.$prefix) {
+  @return var(--#{$prefix}-#{$module}-#{$token}, $value);
+}

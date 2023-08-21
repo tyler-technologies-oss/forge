@@ -1,0 +1,43 @@
+@use 'sass:map';
+@use '../core/config';
+@use '../tokens/theme/tokens' as theme-tokens;
+
+///
+/// Emits custom property declarations for all default theme tokens.
+/// 
+@mixin properties {
+  /// Temporary tokens to map the MDC theme to Forge theme
+  /// TODO: Remove this once MDC dependency is removed
+  :root {
+    @each $token-name, $token-value in theme-tokens.$mdc-remap {
+      --mdc-theme-#{$token-name}: #{$token-value};
+    }
+  }
+
+  // Forge theme tokens
+  :root {
+    @each $token-name, $token-value in theme-tokens.$tokens {
+      --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
+    }
+  }
+}
+
+///
+/// Emits custom property declarations for all dark theme tokens.
+/// 
+@mixin properties-dark {
+  @each $token-name, $token-value in theme-tokens.$tokens-dark {
+    --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
+  }
+}
+
+///
+/// Gets a CSS custom property declaration for a specific theme variable, with its token value as the fallback value
+/// 
+@function variable($key, $prefix: '#{config.$prefix}-theme') {
+  @if not map.get(theme-tokens.$tokens, $key) {
+    @error 'Invalid theme property: #{$key}';
+  }
+  $value: map.get(theme-tokens.$tokens, $key);
+  @return var(--#{$prefix}-#{$key}, $value);
+}

@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../utils';
+
+$tokens: (
+  track-height: utils.module-val(linear-progress, track-height, 4px),
+  track-color: utils.module-val(linear-progress, track-color, theme.variable(tertiary-track-color)),
+  active-indicator-color: utils.module-val(linear-progress, indicator-color, theme.variable(tertiary)),
+  track-shape: utils.module-val(linear-progress, track-shape, 0),
+  active-indicator-height: utils.module-ref(linear-progress, indicator-height, track-height),
+  determinate-duration: utils.module-val(linear-progress, determinate-duration, 250ms),
+  indeterminate-duration: utils.module-val(linear-progress, indeterminate-duration, 2s),
+  determinate-easing: utils.module-val(linear-progress, determinate-easing, cubic-bezier(0.4, 0, 0.6, 1)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

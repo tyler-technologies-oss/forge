@@ -9,10 +9,10 @@
 @use './keys';
 @use './theme-values';
 @use './theme-utils';
-@use '../core/styles/tokens/theme/tokens' as theme-tokens;
+@use '../core/styles/theme';
 
 @mixin theme-styles($prefix: forge) {
-  @include theme-tokens.theme-properties;
+  @include theme.properties;
   @include theme-utils.core-styles;
 }
 

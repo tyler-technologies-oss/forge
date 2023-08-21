@@ -1,9 +1,8 @@
-@use './mixins';
-
-@include mixins.core-styles;
+@use './core';
+@use './configuration';
 
 :host {
-  @include mixins.host;
+  @include core.host;
 }
 
 :host([hidden]) {
@@ -11,5 +10,24 @@
 }
 
 :host([disabled]) {
-  @include mixins.disabled;
+  @include core.disabled;
+}
+
+.forge-state-layer {
+  @include configuration.configuration;
+  @include core.surface;
+
+  &--hovered::before {
+    @include core.hovered;
+  }
+
+  &--pressed::after {
+    @include core.pressed;
+  }
+}
+
+@media screen and (forced-colors: active) {
+  :host {
+    display: none;
+  }
 }

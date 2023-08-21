@@ -1,7 +1,8 @@
-@use './mixins';
+@use './animations';
+@use './configuration';
+@use './core';
 
-@include mixins.core-styles;
-
+/// Host styles
 :host {
   display: contents;
 }
@@ -11,17 +12,39 @@
 }
 
 :host([active]) {
-  @include mixins.active-styles;
+  .forge-focus-indicator {
+    @include core.active;
+  }
 }
 
 :host(:not([inward])) {
-  @include mixins.outward-styles;
+  .forge-focus-indicator {
+    @include core.outward;
+  }
 }
 
 :host([inward]) {
-  @include mixins.inward-styles;
+  .forge-focus-indicator {
+    @include core.inward;
+  }
 }
 
 :host([circular]) {
-  @include mixins.circular-styles;
+  .forge-focus-indicator {
+    @include core.circular;
+  }
+}
+
+/// Base styles
+.forge-focus-indicator {
+  @include configuration.configuration;
+  @include core.base;
+}
+
+@include animations.keyframes;
+
+@media (prefers-reduced-motion) {
+  .forge-focus-indicator {
+    animation: none;
+  }
 }

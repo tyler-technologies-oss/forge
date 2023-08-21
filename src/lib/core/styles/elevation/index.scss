@@ -1,0 +1,56 @@
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use '../core/config';
+@use '../tokens/theme/elevation';
+
+///
+/// Generates a `box-shadow` style value for the provided elevation z-value.
+/// 
+@function _calc-box-shadow($z-value, $color, $opacity-boost) {
+  @if meta.type-of($z-value) != number or not math.is-unitless($z-value) {
+    @error "$z-value must be a unitless number, but received '#{$z-value}'";
+  }
+
+  @if $z-value < 0 or $z-value > 24 {
+    @error "$z-value must be between 0 and 24, but received '#{$z-value}'";
+  }
+
+  $umbra-z-value: map.get(elevation.$umbra-map, $z-value);
+  $penumbra-z-value: map.get(elevation.$penumbra-map, $z-value);
+  $ambient-z-value: map.get(elevation.$ambient-map, $z-value);
+
+  $umbra-color: rgba($color, elevation.$umbra-opacity + $opacity-boost);
+  $penumbra-color: rgba($color, elevation.$penumbra-opacity + $opacity-boost);
+  $ambient-color: rgba($color, elevation.$ambient-opacity + $opacity-boost);
+
+  @return (
+    #{'#{$umbra-z-value} #{$umbra-color}'},
+    #{'#{$penumbra-z-value} #{$penumbra-color}'},
+    #{$ambient-z-value} $ambient-color
+  );
+}
+
+///
+/// Returns a an elevation value specified by the provided elevation z-value.
+/// 
+@function value($z-value, $color: elevation.$baseline-color, $opacity-boost: 0) {
+  @return _calc-box-shadow($z-value, $color, $opacity-boost);
+}
+
+///
+/// Sets a `box-shadow` style specified by the provided elevation z-value.
+/// 
+@mixin box-shadow($z-value, $color: elevation.$baseline-color, $opacity-boost: 0) {
+  box-shadow: #{_calc-box-shadow($z-value, $color, $opacity-boost)};
+}
+
+///
+/// Sets the z-index of an element based on the level provided.
+/// 
+/// All z-index values are set as CSS custom properties, so they can be overridden globally.
+/// 
+@mixin z-index($level) {
+  $value: map.get(elevation.$z-index-map, $level);
+  z-index: var(--#{config.$prefix}-z-index-#{$level}, #{$value});
+}

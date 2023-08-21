@@ -1,13 +1,10 @@
-@use '../theme';
-@use '../theme/theme-values';
+@use '../core/styles/theme' as theme;
 @use '../app-bar/mixins' as app-bar-mixins;
 @use '../app-bar/variables' as app-bar-variables;
 @use '../backdrop/mixins' as backdrop-mixins;
 @use '../backdrop/variables' as backdrop-variables;
 @use '../skeleton/mixins' as skeleton-mixins;
 @use '../skeleton/variables' as skeleton-variables;
-@use '../linear-progress/mixins' as linear-progress-mixins;
-@use '../linear-progress/variables' as linear-progress-variables;
 @use '../tooltip/mixins' as tooltip-mixins;
 @use '../toast/mixins' as toast-mixins;
 @use '../toast/variables' as toast-variables;
@@ -21,20 +18,17 @@
 @use '../table/variables' as table-variables;
 @use '../switch/switch-theme' as switch-theme;
 
-@use '../core/styles/tokens/theme/tokens' as theme-tokens;
-
 ///
 /// Provides the CSS custom property definitions for the default Forge dark theme.
 ///
 @mixin theme-properties {
   /// Global Forge theme properties
-  @include theme-tokens.theme-properties-dark;
+  @include theme.properties-dark;
 
   /// Component-specific Forge theme properties
   @include app-bar-mixins.provide-theme(app-bar-variables.$theme-values-dark);
   @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);
   @include skeleton-mixins.provide-theme(skeleton-variables.$theme-values-dark);
-  @include linear-progress-mixins.provide-theme(linear-progress-variables.$theme-values-dark);
   @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);
   @include table-mixins.provide-theme(table-variables.$theme-values-dark);
   @include badge-mixins.provide-theme(badge-variables.$theme-values-dark);

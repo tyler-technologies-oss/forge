@@ -25,7 +25,7 @@ themeSelect.addEventListener('change', ({ detail }) => {
   if (detail === 'tertiary') {
     circularProgress.style.removeProperty('--forge-theme-tertiary');
   } else {
-    circularProgress.style.setProperty('--forge-theme-tertiary', `var(--mdc-theme-${detail})`);
+    circularProgress.style.setProperty('--forge-theme-tertiary', `var(--forge-theme-${detail})`);
   }
 });
 
@@ -79,8 +79,8 @@ spacingInput.addEventListener('input', () => {
 const trackWidthInput = document.getElementById('opt-track-width') as ISelectComponent;
 trackWidthInput.addEventListener('input', () => {
   if (!trackWidthInput.value) {
-    circularProgress.style.removeProperty('--forge-circular-progress-indicator-width');
+    circularProgress.style.removeProperty('--forge-circular-progress-track-width');
   } else {
-    circularProgress.style.setProperty('--forge-circular-progress-indicator-width', trackWidthInput.value);
+    circularProgress.style.setProperty('--forge-circular-progress-track-width', trackWidthInput.value);
   }
 });

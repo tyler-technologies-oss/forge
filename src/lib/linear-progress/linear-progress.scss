@@ -1,11 +1,118 @@
-@use './mixins';
+@use './animations';
+@use './configuration';
+@use './core';
 
+/// Host styles
 :host {
-  @include mixins.host;
+  @include core.container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.core-styles;
+/// Base styles
+.forge-linear-progress {
+  @include configuration.configuration;
+  @include core.progress;
+}
+
+.forge-linear-progress,
+.track,
+.buffer-bar,
+.bar,
+.bar-inner {
+  position: absolute;
+}
+
+.bar {
+  @include core.bar;
+}
+
+.secondary-bar {
+  @include core.secondary-bar;
+}
+
+.bar-inner {
+  @include core.bar-inner;
+}
+
+.buffer-bar {
+  @include core.buffer-bar;
+}
+
+.track {
+  @include core.track;
+}
+
+/// Indeterminate styles
+.forge-linear-progress--indeterminate {
+  .bar {
+    @include core.indeterminate-bar;
+  }
+
+  .primary-bar {
+    @include core.indeterminate-primary-bar;
+  }
+
+  .secondary-bar {
+    @include core.indeterminate-secondary-bar;
+  }
+
+  .track {
+    @include core.indeterminate-track;
+  }
+
+  .primary-bar > .bar-inner {
+    @include core.indeterminate-primary-bar-inner;
+  }
+
+  .secondary-bar > .bar-inner {
+    @include core.indeterminate-secondary-bar-inner;
+  }
+}
+
+/// RTL styles
+$rtl-selectors: (
+  ':host-context([dir="rtl"]) .forge-linear-progress',
+  ':host([dir="rtl"]) .forge-linear-progress',
+  '.forge-linear-progress:dir(rtl)'
+);
+
+@each $selector in $rtl-selectors {
+  #{$selector} {
+    .bar {
+      transform-origin: right center;
+    }
+
+    .buffer-bar {
+      transform-origin: right center;
+    }
+
+    .track {
+      animation-name: buffering-rtl;
+    }
+
+    &.forge-linear-progress--indeterminate .primary-bar {
+      animation-name: primary-indeterminate-translate-rtl;
+    }
+
+    &.forge-linear-progress--indeterminate .secondary-bar {
+      animation-name: secondary-indeterminate-translate-rtl;
+    }
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .forge-linear-progress {
+    --_active-indicator-color: canvastext;
+    --_track-color: graytext;
+    border: 1px solid canvastext;
+
+    &.forge-linear-progress--indeterminate {
+      --_track-color: canvas;
+    }
+  }
+}
+
+@include animations.keyframes;

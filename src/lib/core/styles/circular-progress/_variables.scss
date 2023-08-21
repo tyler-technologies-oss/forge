@@ -1,9 +1,0 @@
-@use '../core/config';
-
-$prefix: #{config.$prefix}-circular-progress !default;
-$track-width: 12 !default;
-$size: 48px !default;
-$spacing: 0 !default;
-$arc-duration: 1333ms;
-$indeterminate-easing: cubic-bezier(0.4, 0, 0.2, 1) !default;
-$determinate-easing: cubic-bezier(0, 0, 0.2, 1) !default;
