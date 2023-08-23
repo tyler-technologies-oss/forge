@@ -111,9 +111,10 @@ declare global {
  * @cssproperty --forge-slider-inactive-track-color - The color of the inactive track.
  * @cssproperty --forge-slider-inactive-track-height - The height of the inactive track.
  * @cssproperty --forge-slider-inactive-track-shape - The shape of the inactive track.
+ * @cssproperty --forge-slider-label-container-shape - The shape of the label container.
  * @cssproperty --forge-slider-label-container-color - The color of the label container.
  * @cssproperty --forge-slider-label-container-height - The height of the label container.
- * @cssproperty --forge-slider-label-label-text-color - The color of the label text.
+ * @cssproperty --forge-slider-label-text-color - The color of the label text.
  * @cssproperty --forge-slider-pressed-handle-color - The color of the slider handle when pressed.
  * @cssproperty --forge-slider-state-layer-size - The size of the state layer.
  * @cssproperty --forge-slider-with-overlap-handle-outline-color - The color of the slider handle outline when overlapping.

@@ -1,0 +1,26 @@
+@use 'sass:map';
+@use '../core/config';
+@use '../tokens/shape/tokens';
+@use '../utils';
+
+///
+/// Creates a `border-radius` style using the provided radius token.
+/// 
+@mixin radius($radius) {
+  border-radius: variable($radius);
+}
+
+///
+/// Gets a CSS custom property declaration for a specific shape token, with its token value as the fallback value.
+/// 
+@function variable($key, $prefix: config.$prefix) {
+  @return utils.variable(shape, tokens.$tokens, $key, $prefix);
+}
+
+///
+/// Generates CSS custom property declarations for the provided shape tokens.
+/// 
+@mixin provide($tokens, $prefix: config.$prefix) {
+  @include utils.provide(tokens.$tokens, $tokens, shape, $prefix);
+}
+

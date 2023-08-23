@@ -2,7 +2,7 @@
 @use 'sass:math';
 @use 'sass:meta';
 @use '../core/config';
-@use '../tokens/theme/elevation';
+@use '../tokens/elevation/tokens';
 
 ///
 /// Generates a `box-shadow` style value for the provided elevation z-value.
@@ -16,13 +16,13 @@
     @error "$z-value must be between 0 and 24, but received '#{$z-value}'";
   }
 
-  $umbra-z-value: map.get(elevation.$umbra-map, $z-value);
-  $penumbra-z-value: map.get(elevation.$penumbra-map, $z-value);
-  $ambient-z-value: map.get(elevation.$ambient-map, $z-value);
+  $umbra-z-value: map.get(tokens.$umbra-map, $z-value);
+  $penumbra-z-value: map.get(tokens.$penumbra-map, $z-value);
+  $ambient-z-value: map.get(tokens.$ambient-map, $z-value);
 
-  $umbra-color: rgba($color, elevation.$umbra-opacity + $opacity-boost);
-  $penumbra-color: rgba($color, elevation.$penumbra-opacity + $opacity-boost);
-  $ambient-color: rgba($color, elevation.$ambient-opacity + $opacity-boost);
+  $umbra-color: rgba($color, tokens.$umbra-opacity + $opacity-boost);
+  $penumbra-color: rgba($color, tokens.$penumbra-opacity + $opacity-boost);
+  $ambient-color: rgba($color, tokens.$ambient-opacity + $opacity-boost);
 
   @return (
     #{'#{$umbra-z-value} #{$umbra-color}'},
@@ -34,14 +34,14 @@
 ///
 /// Returns a an elevation value specified by the provided elevation z-value.
 /// 
-@function value($z-value, $color: elevation.$baseline-color, $opacity-boost: 0) {
+@function value($z-value, $color: tokens.$baseline-color, $opacity-boost: 0) {
   @return _calc-box-shadow($z-value, $color, $opacity-boost);
 }
 
 ///
 /// Sets a `box-shadow` style specified by the provided elevation z-value.
 /// 
-@mixin box-shadow($z-value, $color: elevation.$baseline-color, $opacity-boost: 0) {
+@mixin box-shadow($z-value, $color: tokens.$baseline-color, $opacity-boost: 0) {
   box-shadow: #{_calc-box-shadow($z-value, $color, $opacity-boost)};
 }
 
@@ -51,6 +51,6 @@
 /// All z-index values are set as CSS custom properties, so they can be overridden globally.
 /// 
 @mixin z-index($level) {
-  $value: map.get(elevation.$z-index-map, $level);
+  $value: map.get(tokens.$z-index-map, $level);
   z-index: var(--#{config.$prefix}-z-index-#{$level}, #{$value});
 }

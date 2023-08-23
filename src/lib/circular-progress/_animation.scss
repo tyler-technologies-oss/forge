@@ -3,6 +3,12 @@
 /// The original source code can be found at [GitHub](https://github.com/material-components/material-web/blob/main/circularprogress/lib/_circular-progress.scss)
 ///
 
+$indeterminate-animation: linear infinite linear-rotate !default;
+$indeterminate-circle-animation: expand-arc !default;
+$determinate-animation: infinite both rotate-arc !default;
+$indeterminate-easing: cubic-bezier(0.4, 0, 0.2, 1) !default;
+$determinate-easing: cubic-bezier(0, 0, 0.2, 1) !default;
+
 @mixin keyframes {
   // Indeterminate mode is 3 animations composed together:
   // 1. expand-arc: an arc is expanded/contracted between 10deg and 270deg.

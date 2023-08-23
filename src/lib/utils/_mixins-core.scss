@@ -5,7 +5,7 @@
   width: 100%;
 }
 
-@mixin body-base() {
+@mixin body-base {
   @include mdc-theme.property(background-color, background);
 
   margin: 0;

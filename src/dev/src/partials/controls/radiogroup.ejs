@@ -1,5 +1,5 @@
 <div class="radio-option-container<%= control.vertical ? ' radio-option-container--vertical' : null %>">
-  <div class="forge-typography--caption"><%= control.label %></div>
+  <div class="forge-typography--label"><%= control.label %></div>
   <div role="radiogroup" aria-label="<%= control.label %>" id="<%= control.id %>">
   <% control.radios.forEach(({ label, value, id, defaultValue }) => { %>
     <forge-radio>

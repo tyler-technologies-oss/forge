@@ -1,5 +1,5 @@
 @use './core';
-@use './animations';
+@use './animation';
 @use './configuration';
 
 /// Host styles
@@ -90,4 +90,4 @@ svg {
   }
 }
 
-@include animations.keyframes;
+@include animation.keyframes;
