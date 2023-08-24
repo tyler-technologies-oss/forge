@@ -1,5 +1,16 @@
 @use 'sass:map';
-@use '../core/config';
+@use './core/config';
+
+///
+/// Gets a CSS custom property declaration for a specific theme variable, with its token value as the fallback value
+/// 
+@function variable($module, $tokens, $key, $prefix: config.$prefix) {
+  $value: map.get($tokens, $key);
+  @if not $value {
+    @error 'Invalid #{$module} token: #{$key}';
+  }
+  @return _create-var($module, $key, $value, $prefix);
+}
 
 ///
 /// Creates a CSS custom property declaration for a token in the provided module
@@ -31,8 +42,17 @@
 }
 
 ///
+/// Creates a new map by inheriting from a base map and overriding/adding values.
+/// 
+@function inherit-map($base, $overrides) {
+  @return map.merge($base, $overrides);
+}
+
+
+///
 /// Creates a CSS custom property declaration for a module token, using the provided fallback value.
 /// 
 @function _create-var($module, $token, $value, $prefix: config.$prefix) {
   @return var(--#{$prefix}-#{$module}-#{$token}, $value);
 }
+

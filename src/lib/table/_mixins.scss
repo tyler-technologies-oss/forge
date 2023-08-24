@@ -389,7 +389,7 @@
 @mixin head-cell-text-sorted() {
   @include mdc-theme.property(color, text-primary-on-background);
 
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 /// Creates styles for the sort icon within the table head cells.
@@ -402,7 +402,7 @@
   margin-left: 5px;
   transition: transform 250ms;
   display: none !important;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /// The active sort icon styles.

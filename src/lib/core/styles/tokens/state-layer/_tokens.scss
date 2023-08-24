@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '../../theme';
-@use '../utils';
+@use '../../utils';
 
 $tokens: (
   color: utils.module-val(state-layer, color, theme.variable(on-surface)),

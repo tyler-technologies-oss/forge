@@ -1,0 +1,12 @@
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  thin: 1px,
+  medium: 2px,
+  thick: 4px
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

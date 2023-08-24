@@ -1,6 +1,6 @@
 @use 'sass:list';
-@use './configuration';
-@use '../core/styles/tokens/utils';
+@use './animation';
+@use '../core/styles/utils';
 @use '../core/styles/tokens/circular-progress/tokens';
 
 @mixin provide-theme($theme) {
@@ -30,7 +30,7 @@
 
 @mixin indeterminate {
   will-change: transform;
-  animation: #{configuration.$indeterminate-animation};
+  animation: #{animation.$indeterminate-animation};
   animation-duration: var(--_linear-duration);
 }
 
@@ -55,11 +55,11 @@
   border: solid calc(var(--_size) * var(--_track-width) / 100);
   border-color: var(--_track-color) var(--_track-color) transparent transparent;
   will-change: transform;
-  animation: #{configuration.$indeterminate-circle-animation};
+  animation: #{animation.$indeterminate-circle-animation};
   animation-iteration-count: infinite;
   animation-fill-mode: both;
   animation-duration: var(--_arc-duration), var(--_cycle-duration);
-  animation-timing-function: #{configuration.$indeterminate-easing};
+  animation-timing-function: #{animation.$indeterminate-easing};
 }
 
 @mixin indeterminate-right-circle {
@@ -84,7 +84,7 @@
 }
 
 @mixin determinate-progress {
-  transition: stroke-dashoffset 500ms #{configuration.$determinate-easing};
+  transition: stroke-dashoffset 500ms #{animation.$determinate-easing};
   stroke: var(--_track-color);
 }
 
@@ -98,9 +98,9 @@
 
 @mixin determinate-spinner {
   will-change: transform;
-  animation: #{configuration.$determinate-animation};
+  animation: #{animation.$determinate-animation};
   animation-duration: var(--_cycle-duration);
-  animation-timing-function: #{configuration.$indeterminate-easing};
+  animation-timing-function: #{animation.$indeterminate-easing};
 }
 
 @mixin positioned {

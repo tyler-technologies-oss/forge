@@ -1,6 +1,7 @@
-@use '../../core/styles/tokens/utils';
+@use '../../core/styles/utils';
 @use '../../core/styles/tokens/tabs/tab/tokens';
-@use '../../typography';
+@use '../../core/styles/typography';
+@use '../../core/styles/spacing';
 
 @mixin provide-theme($theme) {
   @include utils.provide(tokens.$tokens, $theme, tab);
@@ -19,7 +20,7 @@
 }
 
 @mixin tab {
-  @include typography.typography(button);
+  @include typography.style(button);
 
   display: inline-flex;
   align-items: center;
@@ -118,11 +119,11 @@
   white-space: nowrap;
   transition: 150ms color linear;
 
-  $_content-padding: 8px;
+  $_content-padding: spacing.variable('100');
   max-height: calc(var(--_content-height) + 2 * $_content-padding);
   min-height: var(--_content-height);
   padding: $_content-padding calc(2 * $_content-padding);
-  gap: 4px;
+  gap: spacing.variable('050');
 }
 
 @mixin label {

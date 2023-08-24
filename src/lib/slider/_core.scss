@@ -1,7 +1,8 @@
-@use '../core/styles/tokens/utils';
+@use '../core/styles/utils';
 @use '../core/styles/tokens/slider/tokens';
 @use '../core/styles/elevation';
-@use '../typography';
+@use '../core/styles/typography';
+@use '../core/styles/animation';
 
 @mixin provide-theme($theme) {
   @include utils.provide(tokens.$tokens, $theme, slider);
@@ -199,22 +200,22 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 }
 
 @mixin handle-label {
-  @include typography.typography(caption);
+  @include typography.style(label, [color font-weight]);
 
   position: absolute;
   box-sizing: border-box;
   display: grid;
   padding: 4px;
   place-items: center;
-  border-radius: 9999px;
-  color: var(--_label-label-text-color);
+  border-radius: var(--_label-container-shape);
+  color: var(--_label-text-color);
   font-weight: 500;
   white-space: nowrap;
   inset-block-end: 100%;
   min-inline-size: var(--_label-container-height);
   min-block-size: var(--_label-container-height);
   background: var(--_label-container-color);
-  transition: transform 100ms cubic-bezier(0.2, 0, 0, 1);
+  transition: transform animation.variable(duration-short2) animation.variable(easing-standard);
   transform-origin: center bottom;
   transform: scale(0);
 }

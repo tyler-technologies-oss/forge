@@ -1,4 +1,4 @@
-@use '../core/styles/tokens/utils';
+@use '../core/styles/utils';
 @use '../core/styles/tokens/focus-indicator/tokens';
 
 @mixin provide-theme($theme) {

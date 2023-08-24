@@ -1,0 +1,11 @@
+@use '../core/config';
+@use '../utils';
+@use '../tokens/animation/tokens';
+
+@function variable($key, $prefix: config.$prefix) {
+  @return utils.variable(animation, tokens.$tokens, $key, $prefix);
+}
+
+@function provide($tokens, $prefix: config.$prefix) {
+  @return utils.provide(tokens.$tokens, $tokens, animation, $prefix);
+}

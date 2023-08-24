@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '../../theme';
-@use '../utils';
+@use '../../utils';
 
 $tokens: (
   size: utils.module-val(circular-progress, size, 48px),

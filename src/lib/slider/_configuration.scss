@@ -40,9 +40,10 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
   --_inactive-track-color: #{tokens.get(inactive-track-color)};
   --_inactive-track-height: #{tokens.get(inactive-track-height)};
   --_inactive-track-shape: #{tokens.get(inactive-track-shape)};
+  --_label-container-shape: #{tokens.get(label-container-shape)};
   --_label-container-color: #{tokens.get(label-container-color)};
   --_label-container-height: #{tokens.get(label-container-height)};
-  --_label-label-text-color: #{tokens.get(label-label-text-color)};
+  --_label-text-color: #{tokens.get(label-text-color)};
   --_pressed-handle-color: #{tokens.get(pressed-handle-color)};
   --_state-layer-size: #{tokens.get(state-layer-size)};
   --_with-overlap-handle-outline-color: #{tokens.get(with-overlap-handle-outline-color)};

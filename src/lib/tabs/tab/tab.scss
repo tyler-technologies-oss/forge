@@ -58,6 +58,14 @@
   }
 }
 
+:host([selected]:not([vertical])) {
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      offset-block: 0 calc(var(--_active-indicator-height) + 1px)
+    ));
+  }
+}
+
 :host([selected]:focus) {
   .forge-tab {
     @include core.selected-focus;
@@ -105,6 +113,12 @@
     .indicator {
       @include core.vertical-indicator;
     }
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      offset-inline: 0 calc(var(--_active-indicator-height) + 1px)
+    ));
   }
 }
 
