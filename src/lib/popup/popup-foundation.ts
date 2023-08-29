@@ -1,6 +1,6 @@
 import { ICustomElementFoundation, isElement } from '@tylertech/forge-core';
 import { IPopupAdapter } from './popup-adapter';
-import { IPopupPosition, PopupAnimationType, PopupPlacement, PopupStateCallback, POPUP_CONSTANTS as constants, POPUP_CONSTANTS } from './popup-constants';
+import { IPopupPosition, PopupAnimationType, PopupPlacement, PopupStateCallback, POPUP_CONSTANTS } from './popup-constants';
 
 export interface IPopupFoundation extends ICustomElementFoundation {
   targetElement: HTMLElement;
@@ -66,7 +66,7 @@ export class PopupFoundation implements IPopupFoundation {
     }
 
     this._adapter.manageWindowEvents(true);
-    this._adapter.dispatchEvent(constants.events.OPEN);
+    this._adapter.dispatchEvent(POPUP_CONSTANTS.events.OPEN);
   }
 
   private _closePopup(): void {
@@ -85,7 +85,9 @@ export class PopupFoundation implements IPopupFoundation {
   private _destroyPopup(): void {
     this._adapter.manageWindowEvents(false);
     this._adapter.removePopup(this._manageFocus);
-    this._adapter.dispatchEvent(constants.events.CLOSE);
+    const eventData = this._adapter.getCloseEventData();
+    this._adapter.dispatchEvent(POPUP_CONSTANTS.events.CLOSE, eventData);
+    this._adapter.emitHostEvent(POPUP_CONSTANTS.events.CLOSE, eventData);
     this._adapter.removeAttribute(POPUP_CONSTANTS.attributes.OPEN);
   }
 
