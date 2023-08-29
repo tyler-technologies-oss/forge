@@ -1,3 +1,15 @@
+# v2.17.0 (Tue Aug 29 2023)
+
+#### 🚀 Enhancement
+
+- feat(popup): add popup ref to close event, emit from host [#365](https://github.com/tyler-technologies-oss/forge/pull/365) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v2.16.6 (Mon Aug 21 2023)
 
 #### 🐛 Bug Fix
