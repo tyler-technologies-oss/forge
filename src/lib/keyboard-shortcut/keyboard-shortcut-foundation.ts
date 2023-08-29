@@ -1,7 +1,7 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { IKeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
-import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivationCallback } from './keyboard-shortcut-constants';
+import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
 import { elementAcceptsTextInput, matchKeyCombination, parseKeyCombinations } from './keyboard-shortcut-utils';
 
 export interface IKeyboardShortcutFoundation extends ICustomElementFoundation {
@@ -13,7 +13,7 @@ export interface IKeyboardShortcutFoundation extends ICustomElementFoundation {
   capture: boolean;
   useCode: boolean;
   disabled: boolean;
-  activationCallback: KeyboardShortcutActivationCallback | null | undefined;
+  activateCallback: KeyboardShortcutActivateCallback | null | undefined;
 }
 
 export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
@@ -25,7 +25,7 @@ export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
   private _capture = false;
   private _useCode = false;
   private _disabled = false;
-  private _activationCallback: KeyboardShortcutActivationCallback | null | undefined;
+  private _activateCallback: KeyboardShortcutActivateCallback | null | undefined;
   private _keyCombinations: IKeyCombination[];
   private _keyDownListener: (evt: KeyboardEvent) => void;
   
@@ -84,7 +84,7 @@ export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
         evt.preventDefault();
       }
       this._adapter.emitHostEvent(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, evt);
-      this._activationCallback?.(evt);
+      this._activateCallback?.(evt);
     }
   }
 
@@ -199,12 +199,12 @@ export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
   }
 
   /** Gets/sets the activation callback. */
-  public get activationCallback(): KeyboardShortcutActivationCallback | null | undefined {
-    return this._activationCallback;
+  public get activateCallback(): KeyboardShortcutActivateCallback | null | undefined {
+    return this._activateCallback;
   }
-  public set activationCallback(value: KeyboardShortcutActivationCallback | null | undefined) {
-    if (this._activationCallback !== value) {
-      this._activationCallback = value;
+  public set activateCallback(value: KeyboardShortcutActivateCallback | null | undefined) {
+    if (this._activateCallback !== value) {
+      this._activateCallback = value;
     }
   }
 }

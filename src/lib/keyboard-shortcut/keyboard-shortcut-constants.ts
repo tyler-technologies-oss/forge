@@ -44,7 +44,7 @@ export const textInputTypes = [
   'week'
 ];
 
-export type KeyboardShortcutActivationCallback = (event: KeyboardEvent) => void;
+export type KeyboardShortcutActivateCallback = (event: KeyboardEvent) => void;
 
 export interface IKeyCombination {
   key: string;

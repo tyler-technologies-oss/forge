@@ -127,7 +127,7 @@ target element.
 
 </PropertyDef>
 
-<PropertyDef name="activationCallback" type="KeyboardShortcutActivationCallback" attr={false} defaultValue="undefined">
+<PropertyDef name="activateCallback" type="KeyboardShortcutActivateCallback" attr={false} defaultValue="undefined">
 
 Sets a function to call when the keyboard shortcut is activated. This provides an alternative to
 binding to the `forge-keyboard-shortcut-activate` event in scenerios where that may be cumbersome.
@@ -174,10 +174,10 @@ pressed if it includes a submit button.
 
 ## Types
 
-### KeyboardShortcutActivationCallback
+### KeyboardShortcutActivateCallback
 
 ```ts
-type KeyboardShortcutActivationCallback = (event: KeyboardEvent) => void;
+type KeyboardShortcutActivateCallback = (event: KeyboardEvent) => void;
 ```
 
 </PageSection>

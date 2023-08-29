@@ -2,7 +2,7 @@ import { coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/for
 
 import { KeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
 import { KeyboardShortcutFoundation } from './keyboard-shortcut-foundation';
-import { KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivationCallback } from './keyboard-shortcut-constants';
+import { KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 export interface IKeyboardShortcutComponent extends IBaseComponent {
@@ -15,7 +15,7 @@ export interface IKeyboardShortcutComponent extends IBaseComponent {
   capture: boolean;
   useCode: boolean;
   disabled: boolean;
-  activationCallback: KeyboardShortcutActivationCallback | null | undefined;
+  activateCallback: KeyboardShortcutActivateCallback | null | undefined;
 }
 
 declare global {
@@ -137,5 +137,5 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
 
   /** Gets/sets whether the activation callback. */
   @FoundationProperty()
-  public declare activationCallback: KeyboardShortcutActivationCallback | null | undefined;
+  public declare activateCallback: KeyboardShortcutActivateCallback | null | undefined;
 }

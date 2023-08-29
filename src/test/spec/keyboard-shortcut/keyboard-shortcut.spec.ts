@@ -1,6 +1,6 @@
 import { removeElement } from '@tylertech/forge-core';
 import { tick } from '@tylertech/forge-testing';
-import { IKeyboardShortcutComponent, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivationCallback, defineKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
+import { IKeyboardShortcutComponent, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback, defineKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
 
 interface ITestContext {
   context: IKeyboardShortcutTestContext
@@ -45,7 +45,7 @@ describe('KeyboardShortcutComponent', function(this: ITestContext) {
     const callback = jasmine.createSpy();
     this.context = setupTestContext();
     this.context.component.key = key;
-    this.context.component.activationCallback = callback;
+    this.context.component.activateCallback = callback;
 
     this.context.attach();
 
@@ -544,7 +544,7 @@ describe('KeyboardShortcutComponent', function(this: ITestContext) {
       const callback = jasmine.createSpy();
       this.context = setupTestContext();
       this.context.component.key = key;
-      this.context.component.activationCallback = callback;
+      this.context.component.activateCallback = callback;
       this.context.component.disabled = true;
 
       this.context.attach();
