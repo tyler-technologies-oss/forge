@@ -127,6 +127,13 @@ target element.
 
 </PropertyDef>
 
+<PropertyDef name="activateCallback" type="KeyboardShortcutActivateCallback" attr={false} defaultValue="undefined">
+
+Sets a function to call when the keyboard shortcut is activated. This provides an alternative to
+binding to the `forge-keyboard-shortcut-activate` event in scenerios where that may be cumbersome.
+
+</PropertyDef>
+
 </PageSection>
 
 ---
@@ -160,5 +167,17 @@ pressed if it includes a submit button.
 
 > Even though the keyboard shortcut component exists in the DOM, the element itself doesn't affect
 > accessibility or layout due to having its `display` style property set to `none`.
+
+</PageSection>
+
+<PageSection>
+
+## Types
+
+### KeyboardShortcutActivateCallback
+
+```ts
+type KeyboardShortcutActivateCallback = (event: KeyboardEvent) => void;
+```
 
 </PageSection>
