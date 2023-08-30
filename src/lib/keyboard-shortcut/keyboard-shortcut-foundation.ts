@@ -84,7 +84,7 @@ export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
         evt.preventDefault();
       }
       this._adapter.emitHostEvent(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, evt);
-      this._activateCallback?.(evt);
+      this._activateCallback?.call(null, evt);
     }
   }
 
@@ -203,8 +203,6 @@ export class KeyboardShortcutFoundation implements IKeyboardShortcutFoundation {
     return this._activateCallback;
   }
   public set activateCallback(value: KeyboardShortcutActivateCallback | null | undefined) {
-    if (this._activateCallback !== value) {
-      this._activateCallback = value;
-    }
+    this._activateCallback = value;
   }
 }
