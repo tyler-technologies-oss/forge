@@ -1,0 +1,16 @@
+@use '../../../core/styles/utils';
+@use '../../../core/styles/tokens/list/list/tokens';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, list);
+}
+
+@mixin base {
+  display: block;
+  outline: none;
+  background-color: var(--_container-color);
+  padding: var(--_block-padding) var(--_inline-padding);
+  margin: 0;
+  border-radius: inherit;
+  min-width: inherit;
+}

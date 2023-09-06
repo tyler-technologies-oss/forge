@@ -1,3 +1,13 @@
+// TODO: REMOVE ME
+.content .card {
+  max-width: calc(100% - 24px);
+}
+.split-container {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
 .list-demo {
   max-width: 600px;
   border: 1px solid var(--forge-theme-border-color);

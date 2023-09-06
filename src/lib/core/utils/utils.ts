@@ -202,3 +202,19 @@ export function locateTargetHeuristic(element: HTMLElement, id?: string | null):
 
   return targetEl;
 }
+
+/**
+ * Replaces an existing element with a new element, while optionally moving the children of the old element into the new element.
+ * @param oldElement The element to replace.
+ * @param newElement The element to replace with.
+ * @param preserveChildren Whether or not to preserve the children of the old element in the new element.
+ * @returns The new element.
+ */
+export function replaceElement(oldElement: HTMLElement, newElement: HTMLElement, preserveChildren = true): HTMLElement {
+  if (preserveChildren) {
+    newElement.append(...oldElement.childNodes);
+  }
+  oldElement.insertAdjacentElement('beforebegin', newElement);
+  oldElement.remove();
+  return newElement;
+}

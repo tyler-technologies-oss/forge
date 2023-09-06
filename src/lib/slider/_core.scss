@@ -200,7 +200,7 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 }
 
 @mixin handle-label {
-  @include typography.style(label, [color font-weight]);
+  @include typography.style(label, $exclude: [color font-weight]);
 
   position: absolute;
   box-sizing: border-box;
