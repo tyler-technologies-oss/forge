@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import sinon from 'sinon';
@@ -21,10 +22,32 @@ describe('List', () => {
   it('should have a default role of list', async () => {
     const ctx = await createFixture();
     expect(ctx.list.getAttribute('role')).to.equal('list');
+    expect(ctx.listItemsAttr('role', 'listitem')).to.true;
   });
 
-  it('should set list item role to listitem', async () => {
+  it('should set role to listbox', async () => {
+    const ctx = await createFixture({ role: 'listbox' });
+    expect(ctx.list.getAttribute('role')).to.equal('listbox');
+    expect(ctx.listItemsAttr('role', 'option')).to.true;
+  });
+
+  it('should set role to menu', async () => {
+    const ctx = await createFixture({ role: 'menu' });
+    expect(ctx.list.getAttribute('role')).to.equal('menu');
+    expect(ctx.listItemsAttr('role', 'menuitem')).to.true;
+  });
+
+  it('should update role dynamically', async () => {
     const ctx = await createFixture();
+    expect(ctx.listItemsAttr('role', 'listitem')).to.true;
+    
+    ctx.list.role = 'listbox';
+    expect(ctx.listItemsAttr('role', 'option')).to.true;
+
+    ctx.list.role = 'menu';
+    expect(ctx.listItemsAttr('role', 'menuitem')).to.true;
+
+    ctx.list.role = 'list';
     expect(ctx.listItemsAttr('role', 'listitem')).to.true;
   });
 
@@ -372,6 +395,7 @@ describe('List', () => {
 
   it('should inherit parent list state when adding new list item', async () => {
     const ctx = await createFixture({
+      role: 'listbox',
       nonInteractive: true,
       disabled: true,
       dense: true,
@@ -390,6 +414,7 @@ describe('List', () => {
     expect(listItem.twoLine).to.be.true;
     expect(listItem.threeLine).to.be.true;
     expect(listItem.selected).to.be.true;
+    expect(listItem.role).to.equal('option');
   });
 
   it('should not dispatch select event if target element has forge-ignore attribute', async () => {
@@ -410,6 +435,7 @@ describe('List', () => {
 });
 
 interface ListFixtureConfig {
+  role?: 'list' | 'listbox' | 'menu';
   nonInteractive?: boolean;
   disabled?: boolean;
   dense?: boolean;
@@ -425,6 +451,7 @@ interface ListFixtureConfig {
 }
 
 async function createFixture({
+  role,
   nonInteractive,
   disabled,
   dense,
@@ -440,6 +467,7 @@ async function createFixture({
 }: ListFixtureConfig = {}): Promise<ListHarness> {
   const el = await fixture<IListComponentExp>(html`
     <forge-list-exp
+      role=${role ?? nothing}
       ?non-interactive=${nonInteractive}
       ?disabled=${disabled}
       ?dense=${dense}

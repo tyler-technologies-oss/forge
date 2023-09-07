@@ -64,6 +64,10 @@ export class ListFoundationExp implements IListFoundationExp {
     }
   }
 
+  public updateRole(): void {
+    this._adapter.updateListItemRole();
+  }
+
   public get static(): boolean {
     return this.nonInteractive;
   }

@@ -4,7 +4,7 @@ import { BaseAdapter, IBaseAdapter } from '../../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../../state-layer';
 import { IListComponentExp } from '../list/list';
-import { LIST_CONSTANTS_EXP } from '../list/list-constants';
+import { ListComponentExpItemRole, LIST_CONSTANTS_EXP } from '../list/list-constants';
 import { IListItemComponentExp } from './list-item';
 import { LIST_ITEM_CONSTANTS_EXP } from './list-item-constants';
 
@@ -41,10 +41,10 @@ export class ListItemAdapterExp extends BaseAdapter<IListItemComponentExp> imple
       this._inheritParentListProps(list);
     }
 
-    this._component.tabIndex = this._component.static || this._component.disabled ? -1 : 0;
+    this._component.tabIndex = this._component.nonInteractive || this._component.disabled ? -1 : 0;
 
     if (!this._component.hasAttribute('role')) {
-      this._component.setAttribute('role', 'listitem');
+      this._setRole(list);
     }
   }
 
@@ -182,5 +182,11 @@ export class ListItemAdapterExp extends BaseAdapter<IListItemComponentExp> imple
     if (list.hasAttribute(LIST_CONSTANTS_EXP.attributes.THREE_LINE)) {
       this._component.threeLine = true;
     }
+  }
+
+  private _setRole(list: IListComponentExp | null): void {
+    const listRole = list?.getAttribute('role');
+    const role = ListComponentExpItemRole[listRole as string] ?? 'listitem';
+    this._component.setAttribute('role', role);
   }
 }

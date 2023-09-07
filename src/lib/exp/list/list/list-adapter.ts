@@ -3,7 +3,7 @@ import { BaseAdapter } from '../../../core/base/base-adapter';
 import { IListComponentExp } from './list';
 import { LIST_ITEM_CONSTANTS_EXP } from '../list-item/list-item-constants';
 import { IListItemComponentExp } from '../list-item/list-item';
-import { LIST_CONSTANTS_EXP } from './list-constants';
+import { ListComponentExpItemRole, LIST_CONSTANTS_EXP } from './list-constants';
 
 export interface IListAdapterExp extends BaseAdapter<IListComponentExp> {
   initialize(): void;
@@ -13,6 +13,7 @@ export interface IListAdapterExp extends BaseAdapter<IListComponentExp> {
   focusLastListItem(): void;
   setSelectedListItems(values: unknown | unknown[]): void;
   updateListItems(cb: (li: IListItemComponentExp) => void): void;
+  updateListItemRole(): void;
 }
 
 export class ListAdapterExp extends BaseAdapter<IListComponentExp> implements IListAdapterExp {
@@ -80,6 +81,11 @@ export class ListAdapterExp extends BaseAdapter<IListComponentExp> implements IL
   /** Calls the provided callback on all list items to apply an updated property to each list item. */
   public updateListItems(cb: (li: IListItemComponentExp) => void): void {
     this._getListItems().forEach(cb);
+  }
+
+  public updateListItemRole(): void {
+    const role = ListComponentExpItemRole[this._component.getAttribute('role') as string] ?? 'listitem';
+    this.updateListItems(li => li.role = role);
   }
 
   private _getListItems(): IListItemComponentExp[] {

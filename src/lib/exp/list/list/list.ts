@@ -40,6 +40,7 @@ declare global {
  * @cssproperty --forge-list-block-padding - The block padding of the list before and after the list items.
  * @cssproperty --forge-list-inline-padding - The inline padding of the list next to the list items.
  * 
+ * @property {string} role - The role of the list. Default is 'list'. Valid values are 'list', 'listbox', and 'menu'.
  * @property {boolean} static - Whether the list has all static items or not.
  * @property {boolean} nonInteractive - Whether the list has all non-interactive items or not.
  * @property {boolean} disabled - Whether the list items are disabled or not.
@@ -50,6 +51,7 @@ declare global {
  * @property {boolean} threeLine - Whether the list has all three-line items or not.
  * @property {boolean} wrap - Whether the list has all items that wrap their text or not.
  * 
+ * @attribute {string} role - The role of the list. Default is 'list'. Valid values are 'list', 'listbox', and 'menu'.
  * @attribute {boolean} static - Whether the list has all static items or not.
  * @attribute {boolean} non-interactive - Whether the list has all non-interactive items or not.
  * @attribute {boolean} disabled - Whether the list items are disabled or not.
@@ -70,6 +72,7 @@ declare global {
 export class ListComponentExp extends BaseComponent implements IListComponentExp {
   public static get observedAttributes(): string[] {
     return [
+      LIST_CONSTANTS_EXP.attributes.ROLE,
       LIST_CONSTANTS_EXP.attributes.STATIC,
       LIST_CONSTANTS_EXP.attributes.NON_INTERACTIVE,
       LIST_CONSTANTS_EXP.attributes.DISABLED,
@@ -96,6 +99,9 @@ export class ListComponentExp extends BaseComponent implements IListComponentExp
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
+      case LIST_CONSTANTS_EXP.attributes.ROLE:
+        this._foundation.updateRole();
+        break;
       case LIST_CONSTANTS_EXP.attributes.STATIC:
       case LIST_CONSTANTS_EXP.attributes.NON_INTERACTIVE:
         this.nonInteractive = coerceBoolean(newValue);
