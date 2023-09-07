@@ -1,4 +1,4 @@
-@use '../../../core/styles/tokens/list/list-item/tokens';
+@use '../../core/styles/tokens/list/list-item/tokens';
 
 @mixin host {
   --_indent: #{tokens.get(indent)};

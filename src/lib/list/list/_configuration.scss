@@ -1,4 +1,4 @@
-@use '../../../core/styles/tokens/list/list/tokens';
+@use '../../core/styles/tokens/list/list/tokens';
 
 @mixin configuration {
   --_container-color: #{tokens.get(container-color)};

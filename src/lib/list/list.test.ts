@@ -3,13 +3,13 @@ import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import sinon from 'sinon';
-import { TestHarness } from '../../../test/utils/test-harness';
-import { IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
-import { IStateLayerComponent } from '../../state-layer/state-layer';
-import { IListItemComponentExp, LIST_ITEM_CONSTANTS_EXP } from './list-item';
+import { TestHarness } from '../../test/utils/test-harness';
+import { IFocusIndicatorComponent } from '../focus-indicator/focus-indicator';
+import { IStateLayerComponent } from '../state-layer/state-layer';
+import { IListItemComponent, LIST_ITEM_CONSTANTS } from './list-item';
 import './list/list';
-import { IListComponentExp } from './list/list';
-import { LIST_CONSTANTS_EXP } from './list/list-constants';
+import { IListComponent } from './list/list';
+import { LIST_CONSTANTS } from './list/list-constants';
 
 const DEFAULT_HREF = 'https://www.tylertech.com/';
 
@@ -54,7 +54,7 @@ describe('List', () => {
   it('should dispatch select event when clicked', async () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-exp-select', spy);
+    ctx.list.addEventListener('forge-list-item-select', spy);
     ctx.listItems[1].click();
     expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
   });
@@ -62,7 +62,7 @@ describe('List', () => {
   it('should dispatch select event when enter key is pressed', async () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-exp-select', spy);
+    ctx.list.addEventListener('forge-list-item-select', spy);
     ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
     expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
   });
@@ -70,7 +70,7 @@ describe('List', () => {
   it('should dispatch select event when space key is pressed', async () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-exp-select', spy);
+    ctx.list.addEventListener('forge-list-item-select', spy);
     ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
     expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
   });
@@ -78,7 +78,7 @@ describe('List', () => {
   it('should not dispatch select event when disabled', async () => {
     const ctx = await createFixture({ disabled: true });
     const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-exp-select', spy);
+    ctx.list.addEventListener('forge-list-item-select', spy);
     ctx.listItems[1].click();
     ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
     ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
@@ -88,7 +88,7 @@ describe('List', () => {
   it('should not dispatch select event when noninteractive', async () => {
     const ctx = await createFixture({ nonInteractive: true });
     const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-exp-select', spy);
+    ctx.list.addEventListener('forge-list-item-select', spy);
     ctx.listItems[1].click();
     ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
     ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
@@ -106,7 +106,7 @@ describe('List', () => {
   it('should set selected value via attribute', async () => {
     const ctx = await createFixture();
 
-    ctx.list.setAttribute(LIST_CONSTANTS_EXP.attributes.SELECTED_VALUE, '2');
+    ctx.list.setAttribute(LIST_CONSTANTS.attributes.SELECTED_VALUE, '2');
     expect(ctx.list.selectedValue).to.equal('2');
     expect(ctx.listItems[1].selected).to.be.true;
   });
@@ -126,7 +126,7 @@ describe('List', () => {
 
     expect(anchor).to.be.instanceOf(HTMLAnchorElement);
     expect(ctx.listItems[0].href).to.equal(DEFAULT_HREF);
-    expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.HREF)).to.equal(DEFAULT_HREF);
+    expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS.attributes.HREF)).to.equal(DEFAULT_HREF);
     expect(anchor.href).to.equal(DEFAULT_HREF);
     expect(anchor.target).to.equal('_blank');
     await expect(ctx.list).to.be.accessible();
@@ -138,7 +138,7 @@ describe('List', () => {
 
     expect(anchor).to.be.instanceOf(HTMLAnchorElement);
     expect(ctx.listItems[0].target).to.equal('_self');
-    expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.TARGET)).to.equal('_self');
+    expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS.attributes.TARGET)).to.equal('_self');
     expect(anchor.href).to.equal(DEFAULT_HREF);
     expect(anchor.target).to.equal('_self');
   });
@@ -167,7 +167,7 @@ describe('List', () => {
     const ctx = await createFixture({ disabled: true });
 
     expect(ctx.listItemsAttr('disabled', '')).to.true;
-    expect(ctx.listItemsAttr('tabindex', '-1')).to.true;
+    expect(ctx.listItemsTabIndex(-1)).to.true;
     expect(ctx.hasStateLayer()).to.be.false;
     expect(ctx.hasFocusIndicator()).to.be.false;
     await expect(ctx.list).to.be.accessible();
@@ -180,7 +180,7 @@ describe('List', () => {
     expect(ctx.hasFocusIndicator()).to.be.false;
 
     ctx.list.disabled = false;
-    expect(ctx.listItemsAttr('tabindex', '0')).to.true;
+    expect(ctx.listItemsTabIndex(0)).to.true;
     expect(ctx.hasStateLayer()).to.be.true;
     expect(ctx.hasFocusIndicator()).to.be.true; 
   });
@@ -188,7 +188,7 @@ describe('List', () => {
   it('should set nonInteractive', async () => {
     const ctx = await createFixture({ nonInteractive: true });
 
-    expect(ctx.listItemsAttr('tabindex', '-1')).to.true;
+    expect(ctx.listItemsTabIndex(-1)).to.true;
     expect(ctx.hasStateLayer()).to.be.false;
     expect(ctx.hasFocusIndicator()).to.be.false;
     await expect(ctx.list).to.be.accessible();
@@ -200,18 +200,18 @@ describe('List', () => {
     ctx.list.static = true;
     expect(ctx.list.static).to.be.true;
     expect(ctx.list.nonInteractive).to.be.true;
-    expect(ctx.listItemsAttr('tabindex', '-1')).to.true;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS_EXP.attributes.STATIC, '')).to.true;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS_EXP.attributes.NON_INTERACTIVE, '')).to.true;
+    expect(ctx.listItemsTabIndex(-1)).to.true;
+    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.STATIC, '')).to.true;
+    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.NON_INTERACTIVE, '')).to.true;
     expect(ctx.hasStateLayer()).to.be.false;
     expect(ctx.hasFocusIndicator()).to.be.false;
 
     ctx.list.static = false;
     expect(ctx.list.static).to.be.false;
     expect(ctx.list.nonInteractive).to.be.false;
-    expect(ctx.listItemsAttr('tabindex', '0')).to.true;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS_EXP.attributes.STATIC, '')).to.false;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS_EXP.attributes.NON_INTERACTIVE, '')).to.false;
+    expect(ctx.listItemsTabIndex(0)).to.true;
+    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.STATIC, '')).to.false;
+    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.NON_INTERACTIVE, '')).to.false;
     expect(ctx.hasStateLayer()).to.be.true;
     expect(ctx.hasFocusIndicator()).to.be.true;
 
@@ -227,7 +227,7 @@ describe('List', () => {
     expect(ctx.hasFocusIndicator()).to.be.false;
 
     ctx.list.nonInteractive = false;
-    expect(ctx.listItemsAttr('tabindex', '0')).to.true;
+    expect(ctx.listItemsTabIndex(0)).to.true;
     expect(ctx.hasStateLayer()).to.be.true;
     expect(ctx.hasFocusIndicator()).to.be.true;
   });
@@ -235,60 +235,60 @@ describe('List', () => {
   it('should set dense', async () => {
     const ctx = await createFixture({ dense: true });
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.DENSE)).to.true;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE)).to.true;
     expect(ctx.listItemsAttr('dense', '')).to.true;
 
     ctx.list.dense = false;
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.DENSE)).to.false;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE)).to.false;
     expect(ctx.listItemsAttr('dense', '')).to.false;
   });
 
   it('should set indented', async () => {
     const ctx = await createFixture({ indented: true });
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.INDENTED)).to.true;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED)).to.true;
     expect(ctx.listItemsAttr('indented', '')).to.true;
 
     ctx.list.indented = false;
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.INDENTED)).to.false;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED)).to.false;
     expect(ctx.listItemsAttr('indented', '')).to.false;
   });
 
   it('should set twoLine', async () => {
     const ctx = await createFixture({ twoLine: true });
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.TWO_LINE)).to.true;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE)).to.true;
     expect(ctx.listItemsAttr('two-line', '')).to.true;
 
     ctx.list.twoLine = false;
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.TWO_LINE)).to.false;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE)).to.false;
     expect(ctx.listItemsAttr('two-line', '')).to.false;
   });
 
   it('should set threeLine', async () => {
     const ctx = await createFixture({ threeLine: true });
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.THREE_LINE)).to.true;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE)).to.true;
     expect(ctx.listItemsAttr('three-line', '')).to.true;
 
     ctx.list.threeLine = false;
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.THREE_LINE)).to.false;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE)).to.false;
     expect(ctx.listItemsAttr('three-line', '')).to.false;
   });
 
   it('should set wrap', async () => {
     const ctx = await createFixture({ wrap: true });
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.WRAP)).to.true;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).to.true;
     expect(ctx.listItemsAttr('wrap', '')).to.true;
 
     ctx.list.wrap = false;
 
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.WRAP)).to.false;
+    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).to.false;
     expect(ctx.listItemsAttr('wrap', '')).to.false;
   });
 
@@ -356,7 +356,7 @@ describe('List', () => {
 
     ctx.listItems[1].active = true;
     expect(ctx.listItems[1].active).to.be.true;
-    expect(ctx.listItems[1].hasAttribute(LIST_ITEM_CONSTANTS_EXP.attributes.ACTIVE)).to.be.true;
+    expect(ctx.listItems[1].hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).to.be.true;
     expect(ctx.listItemActive(0)).to.be.false; 
     expect(ctx.listItemActive(1)).to.be.true; 
     expect(ctx.listItemActive(0)).to.be.false; 
@@ -399,18 +399,20 @@ describe('List', () => {
       nonInteractive: true,
       disabled: true,
       dense: true,
+      propagateClick: false,
       twoLine: true,
       threeLine: true,
       selectedValue: '4'
     });
 
-    const listItem = document.createElement('forge-list-item-exp');
+    const listItem = document.createElement('forge-list-item');
     listItem.value = '4';
     ctx.list.appendChild(listItem);
 
     expect(listItem.nonInteractive).to.be.true;
     expect(listItem.disabled).to.be.true;
     expect(listItem.dense).to.be.true;
+    expect(listItem.propagateClick).to.be.false;
     expect(listItem.twoLine).to.be.true;
     expect(listItem.threeLine).to.be.true;
     expect(listItem.selected).to.be.true;
@@ -420,7 +422,7 @@ describe('List', () => {
   it('should not dispatch select event if target element has forge-ignore attribute', async () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-exp-select', spy);
+    ctx.list.addEventListener('forge-list-item-select', spy);
 
     const ignoredElement = document.createElement('button');
     ignoredElement.type = 'button';
@@ -439,6 +441,7 @@ interface ListFixtureConfig {
   nonInteractive?: boolean;
   disabled?: boolean;
   dense?: boolean;
+  propagateClick?: boolean;
   indented?: boolean;
   selectedValue?: any;
   twoLine?: boolean;
@@ -455,6 +458,7 @@ async function createFixture({
   nonInteractive,
   disabled,
   dense,
+  propagateClick,
   indented,
   selectedValue,
   twoLine,
@@ -465,8 +469,8 @@ async function createFixture({
   withCheckbox,
   withRadioButton
 }: ListFixtureConfig = {}): Promise<ListHarness> {
-  const el = await fixture<IListComponentExp>(html`
-    <forge-list-exp
+  const el = await fixture<IListComponent>(html`
+    <forge-list
       role=${role ?? nothing}
       ?non-interactive=${nonInteractive}
       ?disabled=${disabled}
@@ -475,39 +479,44 @@ async function createFixture({
       ?two-line=${twoLine}
       ?three-line=${threeLine}
       ?wrap=${wrap}
+      .propagateClick=${propagateClick}
       .selectedValue=${selectedValue}>
-      <forge-list-item-exp .href=${anchor ? DEFAULT_HREF : ''} .target=${anchorTarget} value="1">
+      <forge-list-item .href=${anchor ? DEFAULT_HREF : ''} .target=${anchorTarget} value="1">
         One
         ${withCheckbox ? html`<input type="checkbox" slot="trailing" />` : null}
         ${withRadioButton ? html`<input type="radio" slot="trailing" />` : null}
-      </forge-list-item-exp>
-      <forge-list-item-exp value="2">Two</forge-list-item-exp>
-      <forge-list-item-exp value="3">Three</forge-list-item-exp>
-    </forge-list-exp>
+      </forge-list-item>
+      <forge-list-item value="2">Two</forge-list-item>
+      <forge-list-item value="3">Three</forge-list-item>
+    </forge-list>
   `);
   return new ListHarness(el);
 }
 
-class ListHarness extends TestHarness<IListComponentExp> {
-  public list: IListComponentExp;
-  public listItems: IListItemComponentExp[];
+class ListHarness extends TestHarness<IListComponent> {
+  public list: IListComponent;
+  public listItems: IListItemComponent[];
 
-  constructor(el: IListComponentExp) {
+  constructor(el: IListComponent) {
     super(el);
   }
   
   public initElementRefs(): void {
     this.list = this.element;
-    this.listItems = Array.from(this.element.querySelectorAll('forge-list-item-exp'));
+    this.listItems = Array.from(this.element.querySelectorAll('forge-list-item'));
   }
 
   public listItemsAttr(attr: string, value: string): boolean {
     return this.listItems.every(li => li.getAttribute(attr) === value);
   }
 
+  public listItemsTabIndex(tabIndex: number): boolean {
+    return this.listItems.every(li => (li.shadowRoot?.firstElementChild as HTMLElement)?.tabIndex === tabIndex);
+  }
+
   public getListItemRootElement(index: number): HTMLElement {
     const item = this.listItems[index];
-    return item.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS_EXP.selectors.ROOT) as HTMLElement;
+    return item.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
   }
 
   public hasStateLayer(): boolean {

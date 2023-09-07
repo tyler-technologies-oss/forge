@@ -1,6 +1,6 @@
-@use '../../../core/styles/utils';
-@use '../../../core/styles/typography';
-@use '../../../core/styles/tokens/list/list-item/tokens';
+@use '../../core/styles/utils';
+@use '../../core/styles/typography';
+@use '../../core/styles/tokens/list/list-item/tokens';
 
 @mixin provide-theme($theme) {
   @include utils.provide(tokens.$tokens, $theme, list-item);

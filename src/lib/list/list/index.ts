@@ -1,5 +1,4 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-
 import { ListComponent } from './list';
 
 export * from './list-adapter';

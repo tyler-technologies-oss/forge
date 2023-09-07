@@ -1,5 +1,5 @@
-@use '../../../core/styles/utils';
-@use '../../../core/styles/tokens/list/list/tokens';
+@use '../../core/styles/utils';
+@use '../../core/styles/tokens/list/list/tokens';
 
 @mixin provide-theme($theme) {
   @include utils.provide(tokens.$tokens, $theme, list);

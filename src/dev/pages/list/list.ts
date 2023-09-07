@@ -1,5 +1,4 @@
 import '$src/shared';
-import '@tylertech/forge/exp/list';
 import '@tylertech/forge/list';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/radio';

@@ -77,7 +77,6 @@ import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
 import { IconComponent } from './icon';
 import { SelectDropdownComponent } from './select/select-dropdown';
 import { StackComponent } from './stack';
-import { ListComponentExp, ListItemComponentExp } from './exp/list';
 
 export * from './accordion';
 export * from './app-bar';
@@ -115,7 +114,6 @@ export * from './keyboard-shortcut';
 export * from './label-value';
 export * from './linear-progress';
 export * from './list';
-export * from './exp/list';
 export * from './menu';
 export * from './open-icon';
 export * from './page-state';
@@ -184,9 +182,7 @@ const CUSTOM_ELEMENTS = [
   LabelValueComponent,
   LinearProgressComponent,
   ListComponent,
-  ListComponentExp,
   ListItemComponent,
-  ListItemComponentExp,
   MenuComponent,
   AppBarComponent,
   AppBarSearchComponent,
