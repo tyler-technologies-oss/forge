@@ -1487,8 +1487,8 @@ describe('SelectComponent', function(this: ITestContext) {
 
       _openDropdown(this.context.component);
       const listItems = Array.from(this.context.component.popupElement!.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
-      getShadowElement(listItems[0], LIST_ITEM_CONSTANTS.selectors.LIST_ITEM).click();
-      getShadowElement(listItems[1], LIST_ITEM_CONSTANTS.selectors.LIST_ITEM).click();
+      listItems[0].click();
+      listItems[1].click();
       expect(this.context.component.value).toEqual(['one', 'two']);
       expect(this.context.component.selectedIndex).toEqual([0, 1]);
       expect(listItems[0].selected).toBe(true);

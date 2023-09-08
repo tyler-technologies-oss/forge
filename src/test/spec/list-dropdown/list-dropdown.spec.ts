@@ -4,7 +4,7 @@ import { IListDropdownTestContext, createListDropdown, getListItems, getListDrop
 import { IListDropdownConfig, IListDropdownOption, ListDropdownAsyncStyle, ListDropdownHeaderBuilder, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS, ListDropdownFooterBuilder, ListDropdownType, ListDropdownOptionBuilder, ListDropdownTransformCallback } from '@tylertech/forge/list-dropdown';
 import { defineOptionComponent, defineOptionGroupComponent } from '@tylertech/forge/select';
 import { definePopupComponent, POPUP_CONSTANTS, IPopupComponent } from '@tylertech/forge/popup';
-import { defineListComponent, IListItemComponent } from '@tylertech/forge/list';
+import { defineListComponent, IListComponent, IListItemComponent, LIST_CONSTANTS } from '@tylertech/forge/list';
 import { defineLinearProgressComponent, SKELETON_CONSTANTS, DIVIDER_CONSTANTS, IIconComponent, CIRCULAR_PROGRESS_CONSTANTS } from '@tylertech/forge';
 import { tryCleanupPopups, isVisibleInScrollContainer } from '../../utils';
 
@@ -295,7 +295,7 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(listItems[2].selected).toBeTrue();
   });
 
-  it('should toggle selection and active state in multiple mode of deselected option', async function(this: ITestContext) {
+  it('should toggle selection in multiple mode of deselected option', async function(this: ITestContext) {
     this.context = createListDropdown({ ...DEFAULT_CONFIG, multiple: true, selectedValues: [BASIC_OPTIONS[1].value]  });
     this.context.listDropdown.open();
     await delayPopupAnimation();
@@ -310,7 +310,7 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(listItems[1].selected).toBeTrue();
     expect(listItems[1].active).toBeFalse();
     expect(listItems[2].selected).toBeTrue();
-    expect(listItems[2].active).toBeTrue();
+    expect(listItems[2].active).toBeFalse();
   });
 
   it('should activate selected option', async function(this: ITestContext) {
@@ -733,7 +733,8 @@ describe('ListDropdown', function(this: ITestContext) {
     this.context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect(this.context.listDropdown.dropdownElement!.getAttribute('role')).toBe('menu');
+    const listElement = this.context.listDropdown.dropdownElement!.querySelector(LIST_CONSTANTS.elementName) as IListComponent;
+    expect(listElement.getAttribute('role')).toBe('menu');
   });
 
   it('should set popup classes', async function(this: ITestContext) {

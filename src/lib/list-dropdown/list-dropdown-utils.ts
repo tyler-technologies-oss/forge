@@ -34,16 +34,6 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
     }
   });
 
-  // Set roles and other attributes based on our type
-  switch (config.type) {
-    case ListDropdownType.Menu:
-      dropdownElement.setAttribute('role', 'menu');
-      dropdownElement.setAttribute('aria-orientation', 'vertical');
-      break;
-    default:
-      dropdownElement.setAttribute('role', 'listbox');
-  }
-
   if (config.id) {
     dropdownElement.id = dropdownId;
   }
@@ -91,6 +81,17 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
   const listElement = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
   listElement.id = `list-dropdown-list-${config.id}`;
   listElement.propagateClick = false;
+
+  // Set roles and other attributes based on our type
+  switch (config.type) {
+    case ListDropdownType.Menu:
+      listElement.setAttribute('role', 'menu');
+      listElement.setAttribute('aria-orientation', 'vertical');
+      break;
+    default:
+      listElement.setAttribute('role', 'listbox');
+  }
+
   return listElement;
 }
 
@@ -172,7 +173,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
       listItemElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
-      listItemElement.style.cursor = 'pointer';
 
       if (config.wrapOptionText) {
         listItemElement.wrap = true;
@@ -181,17 +181,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       // Add any CSS classes to the option list-item
       if (option.optionClass && (typeof option.optionClass === 'string' || Array.isArray(option.optionClass) && option.optionClass.length)) {
         addClass(option.optionClass, listItemElement);
-      }
-
-      // Set role based on type
-      switch (config.type) {
-        case ListDropdownType.Menu:
-          listItemElement.setAttribute('role', 'menuitem');
-          break;
-        case ListDropdownType.None:
-          break;
-        default:
-          listItemElement.setAttribute('role', 'option');
       }
 
       if (config.dense) {
@@ -266,7 +255,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         listItemElement.disabled = option.disabled;
         listItemElement.setAttribute('aria-disabled', 'true');
       } else {
-        listItemElement.style.cursor = 'pointer';
         listItemElement.setAttribute('aria-disabled', 'false');
       }
 

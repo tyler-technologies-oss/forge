@@ -8,7 +8,7 @@ import { FocusIndicatorComponent } from '../../focus-indicator';
 import template from './list-item.html';
 import styles from './list-item.scss';
 
-export interface IListItemComponent extends ICustomElement {
+export interface IListItemComponent<T = unknown> extends ICustomElement {
   href: string;
   target: string;
   /** @deprecated Use nonInteractive instead. */
@@ -17,7 +17,7 @@ export interface IListItemComponent extends ICustomElement {
   disabled: boolean;
   selected: boolean;
   active: boolean;
-  value: unknown;
+  value: T;
   dense: boolean;
   propagateClick: boolean;
   indented: boolean;

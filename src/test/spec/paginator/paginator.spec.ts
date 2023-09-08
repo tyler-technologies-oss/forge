@@ -248,8 +248,7 @@ describe('PaginatorComponent', function(this: ITestContext) {
       this.context.pageSizeSelect.open = true;
 
       const listItem = this.context.pageSizeSelect.popupElement?.querySelector(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
-      const listItemRoot = getShadowElement(listItem, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      listItemRoot.click();
+      listItem.click();
       await tick();
 
       expect(listItem.value).toBe('5');
@@ -267,8 +266,7 @@ describe('PaginatorComponent', function(this: ITestContext) {
 
       this.context.pageSizeSelect.open = true;
       const listItem = this.context.pageSizeSelect.popupElement?.querySelector(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
-      const listItemRoot = getShadowElement(listItem, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      listItemRoot.click();
+      listItem.click();
       await tick();
 
       expect(this.context.paginator.pageSize).toBe(Number(originalPageSize));
