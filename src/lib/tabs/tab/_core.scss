@@ -1,0 +1,185 @@
+@use '../../core/styles/utils';
+@use '../../core/styles/tokens/tabs/tab/tokens';
+@use '../../core/styles/typography';
+@use '../../core/styles/spacing';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, tab);
+}
+
+@mixin host {
+  display: inline-flex;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  vertical-align: middle;
+}
+
+@mixin host-disabled {
+  cursor: not-allowed;
+  opacity: #{tokens.get(disabled-opacity)};
+}
+
+@mixin tab {
+  @include typography.style(button);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  user-select: none;
+  -webkit-appearance: none;
+  vertical-align: middle;
+  background: transparent;
+  text-decoration: none;
+  width: 100%;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  z-index: 0; // Ensure this is a stacking context so the indicator displays
+  background-color: var(--_container-color);
+  color: var(--_label-text-color);
+  min-height: var(--_container-height);
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    display: inline-flex;
+    position: relative;
+    writing-mode: horizontal-tb;
+    fill: currentColor;
+    color: var(--_icon-color);
+    font-size: var(--_icon-size);
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+  }
+
+  &:hover {
+    color: var(--_hover-label-text-color);
+    cursor: pointer;
+  }
+
+  &:hover {
+    ::slotted([slot=leading]),
+    ::slotted([slot=trailing]) {
+      color: var(--_hover-icon-color);
+    }
+  }
+}
+
+@mixin focus {
+  color: var(--_focus-label-text-color);
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_focus-icon-color);
+  }
+}
+
+@mixin selected-focus {
+  color: var(--_active-focus-label-text-color);
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_active-focus-icon-color);
+  }
+}
+
+@mixin pressed {
+  color: var(--_pressed-label-text-color);
+  outline: none;
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_pressed-icon-color);
+  }
+}
+
+@mixin selected-pressed {
+  color: var(--_active-pressed-label-text-color);
+
+  ::slotted([slot=leading]),
+  ::slotted([slot=trailing]) {
+    color: var(--_active-pressed-icon-color);
+  }
+}
+
+@mixin content {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: 150ms color linear;
+
+  $_content-padding: spacing.variable('100');
+  max-height: calc(var(--_content-height) + 2 * $_content-padding);
+  min-height: var(--_content-height);
+  padding: $_content-padding calc(2 * $_content-padding);
+  gap: spacing.variable('050');
+}
+
+@mixin label {
+  display: inline-block;
+  line-height: 1;
+}
+
+@mixin indicator {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: -1;
+  transform-origin: bottom left;
+  background: var(--_active-indicator-color);
+  border-radius: var(--_active-indicator-shape);
+  height: var(--_active-indicator-height);
+  inset: auto 0 0;
+  opacity: 0;
+}
+
+@mixin content-secondary {
+  width: 100%;
+}
+
+@mixin indicator-secondary {
+  min-width: 100%;
+}
+
+@mixin vertical {
+  width: 100%;
+  flex-direction: row;
+  border-bottom: none;
+}
+
+@mixin vertical-content {
+  width: 100%;
+}
+
+@mixin vertical-secondary-content {
+  min-height: 100%;
+}
+
+@mixin vertical-indicator {
+  height: 100%;
+  min-width: var(--_active-indicator-height);
+  inset: 0 0 0 auto;
+}
+
+@mixin vertical-inverted-indicator {
+  inset: 0 auto 0 0;
+}
+
+@mixin content-stacked {
+  flex-direction: column;
+}
+
+@mixin inverted-indicator {
+  inset: 0 0 auto;
+  transform-origin: top left;
+}

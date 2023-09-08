@@ -1,0 +1,33 @@
+@use './core';
+@use './configuration';
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([disabled]) {
+  @include core.disabled;
+}
+
+.forge-state-layer {
+  @include configuration.configuration;
+  @include core.surface;
+
+  &--hovered::before {
+    @include core.hovered;
+  }
+
+  &--pressed::after {
+    @include core.pressed;
+  }
+}
+
+@media screen and (forced-colors: active) {
+  :host {
+    display: none;
+  }
+}

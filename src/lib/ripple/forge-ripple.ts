@@ -6,6 +6,11 @@ export class ForgeRipple extends MDCRipple {
     this.foundation.handleFocus();
   }
 
+  /** Manually trigger focus deactivation. */
+  public handleBlur(): void {
+    this.foundation.handleBlur();
+  }
+
   /** Executes the ripple animation. */
   public animate(): void {
     (this.foundation as any).animateActivation(); // MDC does not expose this method, using `any` to access it.

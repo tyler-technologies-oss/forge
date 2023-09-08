@@ -87,7 +87,7 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(activeChangeCallback).not.toHaveBeenCalled();
 
     this.context.listDropdown.handleKey('ArrowDown');
-    expect(activeChangeCallback).toHaveBeenCalledWith('list-dropdown-option-list-dropdown-1');
+    expect(activeChangeCallback).toHaveBeenCalledWith('list-dropdown-option-list-dropdown-0');
   });
 
   it('should close', async function(this: ITestContext) {

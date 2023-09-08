@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  color: utils.module-val(state-layer, color, theme.variable(on-surface)),
+  hover-color: utils.module-ref(state-layer, hover-color, color),
+  hover-opacity: 0.08,
+  pressed-color: utils.module-ref(state-layer, pressed-color, color),
+  pressed-opacity: 0.12,
+  hover-duration: 15ms,
+  pressed-duration: 105ms,
+  animation-duration: 375ms
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

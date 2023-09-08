@@ -29,17 +29,13 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
   }
 
   public initializeMask(options: IDateInputMaskOptions): void {
-    if (this._inputMask) {
-      this._inputMask.destroy();
-    }
+    this._inputMask?.destroy();
     this._inputMask = new DateInputMask(this._inputElement, options);
   }
 
   public destroyMask(): void {
-    if (this._inputMask) {
-      this._inputMask.destroy();
-      this._inputMask = undefined;
-    }
+    this._inputMask?.destroy();
+    this._inputMask = undefined;
   }
 
   public initializeAccessibility(): void {
@@ -112,7 +108,7 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
   }
 
   public isInputFocused(): boolean {
-    return getActiveElement() === this._inputElement;
+    return getActiveElement(this._component.ownerDocument) === this._inputElement;
   }
 
   public getInputValue(): string {

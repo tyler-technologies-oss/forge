@@ -1,0 +1,47 @@
+@use '../core/styles/utils';
+@use '../core/styles/tokens/focus-indicator/tokens';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, focus-indicator);
+}
+
+@mixin base {
+  animation-delay: 0s, calc(var(--_duration) * 0.25);
+  animation-duration: calc(var(--_duration) * 0.25), calc(var(--_duration) * 0.75);
+  animation-timing-function: var(--_easing);
+  box-sizing: border-box;
+  color: var(--_color);
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  margin-block: var(--_margin-block);
+  margin-inline: var(--_margin-inline);
+}
+
+@mixin active {
+  display: flex;
+}
+
+@mixin circular {
+  --_shape: 50%;
+}
+
+@mixin outward {
+  animation-name: outward-grow, outward-shrink;
+  border-end-end-radius: calc(var(--_shape-end-end) + var(--_outward-offset));
+  border-end-start-radius: calc(var(--_shape-end-start) + var(--_outward-offset));
+  border-start-end-radius: calc(var(--_shape-start-end) + var(--_outward-offset));
+  border-start-start-radius: calc(var(--_shape-start-start) + var(--_outward-offset));
+  inset: calc(-1 * var(--_outward-offset));
+  outline: var(--_width) solid currentColor;
+}
+
+@mixin inward {
+  animation-name: inward-grow, inward-shrink;
+  border-end-end-radius: calc(var(--_shape-end-end) - var(--_inward-offset));
+  border-end-start-radius: calc(var(--_shape-end-start) - var(--_inward-offset));
+  border-start-end-radius: calc(var(--_shape-start-end) - var(--_inward-offset));
+  border-start-start-radius: calc(var(--_shape-start-start) - var(--_inward-offset));
+  border: var(--_width) solid currentColor;
+  inset: var(--_inward-offset);
+}

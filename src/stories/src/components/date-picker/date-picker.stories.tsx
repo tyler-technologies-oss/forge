@@ -28,7 +28,8 @@ export const Default: Story<IDatePickerProps> = ({
   showToday = false,
   showClear = false,
   disabledDaysOfWeek = [],
-  yearRange = '-50:+50'
+  yearRange = '-50:+50',
+  locale = undefined
 }) => {
   if (min) {
     min = new Date(min);
@@ -50,6 +51,7 @@ export const Default: Story<IDatePickerProps> = ({
       showClear={showClear}
       disabledDaysOfWeek={disabledDaysOfWeek}
       yearRange={yearRange}
+      locale={locale}
       style={{ maxWidth: '256px' }}>
       <ForgeTextField>
         <input type="text" id="input-date-picker" />
@@ -70,5 +72,6 @@ Default.args = {
   showToday: false,
   showClear: false,
   disabledDaysOfWeek: [],
-  yearRange: '-50:+50'
+  yearRange: '-50:+50',
+  locale: ''
 } as IDatePickerProps;

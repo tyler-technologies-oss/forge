@@ -23,6 +23,7 @@ export const Default: Story<IAutocompleteProps> = ({
   allowUnmatched = false,
   debounce = 500,
   filterOnFocus = true,
+  filterFocusFirst = true,
   mode = 'default',
   multiple = false,
   observeScrollThreshold = 0,
@@ -35,6 +36,7 @@ export const Default: Story<IAutocompleteProps> = ({
       allowUnmatched={allowUnmatched}
       debounce={debounce}
       filterOnFocus={filterOnFocus}
+      filterFocusFirst={filterFocusFirst}
       mode={mode}
       multiple={multiple}
       observeScrollThreshold={observeScrollThreshold}
@@ -60,6 +62,7 @@ Default.args = {
   allowUnmatched: false,
   debounce: 500,
   filterOnFocus: true,
+  filterFocusFirst: true,
   mode: 'default',
   multiple: false,
   observeScroll: false,

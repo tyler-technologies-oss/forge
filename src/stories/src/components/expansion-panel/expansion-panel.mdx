@@ -1,7 +1,7 @@
 import { Default as ExpansionPanelDemo } from './expansion-panel.stories';
 import { CardRecipeTemplate as ExpansionPanelCardDemo } from './templates/card-recipe.tsx';
-import { ExpansionPanelDefaultCodeHtml } from './code/expansion-panel-default';
-import { ExpansionPanelCardRecipeCodeHtml } from './code/expansion-panel-card-recipe.ts';
+import { ExpansionPanelDefaultCodeHtml, ExpansionPanelDefaultCodeCss, ExpansionPanelDefaultCodeTs } from './code/expansion-panel-default';
+import { ExpansionPanelCardRecipeCodeHtml, ExpansionPanelCardRecipeCodeCss, ExpansionPanelCardRecipeCodeTs } from './code/expansion-panel-card-recipe.ts';
 
 <PageSection>
 
@@ -26,15 +26,16 @@ region that is controlled by another element.
 
 This following is a simple example demonstrating the most basic usage of this component.
 
-<LiveDemo codeHtml={ExpansionPanelDefaultCodeHtml()}>
+<LiveDemo codeHtml={ExpansionPanelDefaultCodeHtml()} codeScss={ExpansionPanelDefaultCodeCss()} codeTs={ExpansionPanelDefaultCodeTs()}>
   <ExpansionPanelDemo />
 </LiveDemo>
+
 
 ### Card
 
 Expansion panels can be composed with many other elements such as cards for example:
 
-<LiveDemo codeHtml={ExpansionPanelCardRecipeCodeHtml()}>
+<LiveDemo codeHtml={ExpansionPanelCardRecipeCodeHtml()} codeScss={ExpansionPanelCardRecipeCodeCss()} codeTs={ExpansionPanelCardRecipeCodeTs()}>
   <ExpansionPanelCardDemo />
 </LiveDemo>
 
@@ -75,6 +76,8 @@ A callback that can be provided to be notified before the collapse transition oc
 Gets/sets if animations are used in the expand/collapse transition.
   
 </PropertyDef>
+
+> You can use the attribute `data-forge-ignore` on elements internal to the expansion panel header in order to prevent user interactions with that element from toggling the expansion panel's state.
 
 </PageSection>
 
@@ -158,9 +161,30 @@ Forces the expansion panel to expand/collapse immediately **without** transition
 
 ## Accessibility
 
+- If the user is able to click the expansion panel to toggle its state, ensure that a `<button>` element is present and clearly labeled to serve as an accessible point of interaction.
+  - Set the `aria-expanded` atribute on the button to reflect the state of the component. Update it when the panel opens or closes.
+  - Enclose the expandable content in an element with `role="group"` or another non-generic role.
+  - Set `aria-controls` on the button to reference the id of the expandable content.
+  - Do not place complex or interactive elements within a button. If your design requires such content in the expanion panel header, place a button in the header alongside that content instead of enclosing it.
 - Ensure that the user can focus on the element which activates and deactivates the expansion panel.
   - Ensure that the expansion panel can be activated by keyboard.
-- Ensure that the `aria-expanded` attribute is updated to reflect the state of the expandable panel, especially when toggling its state programmatically.
-  - This attribute is handled for you inside the expansion-panel component.
+
+Here is an example of a properly marked up expansion panel:
+```html
+<!-- aria-expanded will be toggled via script to reflect the state of the component -->
+<forge-expansion-panel>
+  <button slot="header" aria-controls="expandable-content" aria-expanded="false">Toggle panel</button>
+  <div id="expandable-content" role="group">Expandable content</div>
+</forge-expansion-panel>
+```
+
+The button can also be placed elsewhere in the document, outside the expansion panel, with the same attributes set:
+```html
+<button slot="header" aria-controls="expandable-content" aria-expanded="false">Toggle panel</button>
+
+<forge-expansion-panel>
+  <div id="expandable-content" role="group">Expandable content</div>
+</forge-expansion-panel>
+```
 
 </PageSection>

@@ -1,7 +1,7 @@
 import { coerceBoolean, coerceNumber, CustomElement, emitEvent, ensureChild, toggleClass } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ForgeRipple } from '../ripple';
-import { userInteractionListener } from '../core/utils';
+import { createUserInteractionListener } from '../core/utils';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
 
 export interface IIconButtonComponent extends IBaseComponent {
@@ -47,6 +47,7 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
   private _dense = false;
   private _densityLevel = 5;
   private _toggleHandler: (event: Event) => void;
+  private _destroyUserInteractionListener: (() => void) | undefined;
 
   constructor() {
     super();
@@ -61,6 +62,11 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
   }
 
   public disconnectedCallback(): void {
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
+    }
+
     if (this._rippleInstance) {
       this._rippleInstance.destroy();
     }
@@ -162,7 +168,10 @@ export class IconButtonComponent extends BaseComponent implements IIconButtonCom
   }
 
   private async _deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this._buttonElement);
+    const { userInteraction, destroy } = createUserInteractionListener(this._buttonElement);
+    this._destroyUserInteractionListener = destroy;
+    const { type } = await userInteraction;
+    this._destroyUserInteractionListener = undefined;
     if (!this._rippleInstance) {
       this._rippleInstance = this._createRipple();
       if (type === 'focusin') {

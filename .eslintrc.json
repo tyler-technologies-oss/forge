@@ -5,8 +5,11 @@
     "docs/**/*",
     "plugins/**/*",
     "src/demo/**/*",
+    "src/test/**/*",
     "src/stories/**/*",
-    "*.spec.ts"
+    "web-test-runner.*",
+    "*.spec.ts",
+    "*.test.ts"
   ],
   "overrides": [
     {
@@ -35,20 +38,21 @@
             ]
         }],
         "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }],
-        "no-trailing-spaces": ["error", { "ignoreComments": true, "skipBlankLines": true }],
-        "quote-props": ["error", "as-needed", { "unnecessary": false }],
         "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
-        "comma-dangle": "error",
         "@typescript-eslint/comma-dangle": ["error"],
-        "comma-spacing": "off",
         "@typescript-eslint/comma-spacing": ["error"],
-        "no-extra-parens": "off",
         "@typescript-eslint/no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
         "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { "constructors": "no-public" } }],
-        "max-len": "off",
-        "arrow-body-style": "off",
         "@typescript-eslint/arrow-body-style": "off",
         "@typescript-eslint/no-require-imports": "error",
+        "explicit-function-return-type": "off",
+        "no-trailing-spaces": ["error", { "ignoreComments": true, "skipBlankLines": true }],
+        "quote-props": ["error", "as-needed", { "unnecessary": false }],
+        "comma-dangle": "error",
+        "comma-spacing": "off",
+        "no-extra-parens": "off",
+        "max-len": "off",
+        "arrow-body-style": "off",
         "eqeqeq": ["error", "always", {"null": "ignore"}]
       }
     }

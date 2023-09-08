@@ -1,4 +1,93 @@
-@use 'mixins';
-@use '../theme';
+@use './core';
+@use './animation';
+@use './configuration';
 
-@include mixins.core-styles;
+/// Host styles
+:host {
+  @include core.container;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+/// Base styles
+.forge-circular-progress {
+  @include configuration.configuration;
+  @include core.progress;
+
+  &--indeterminate {
+    @include core.indeterminate;
+  }
+}
+
+.forge-circular-progress,
+.spinner,
+.left,
+.right,
+.circle,
+svg {
+  @include core.positioned;
+}
+
+.center-content {
+  @include core.center-content;
+}
+
+/// Indeterminate styles
+.left {
+  @include core.indeterminate-left;
+
+  .circle {
+    @include core.indeterminate-left-circle;
+  }
+}
+    
+.right {
+  @include core.indeterminate-right;
+
+  .circle {
+    @include core.indeterminate-right-circle;
+  }
+}
+
+.circle {
+  @include core.indeterminate-circle;
+}
+
+/// Determinate styles
+svg {
+  @include core.determinate-svg;
+
+  circle {
+    @include core.determinate-svg-circle;
+  }
+}
+
+.progress {
+  @include core.determinate-progress;
+}
+
+.track {
+  @include core.determinate-track;
+
+  &-background {
+    @include core.determinate-track-background;
+  }
+}
+
+.spinner {
+  @include core.determinate-spinner;
+}
+
+@media screen and (forced-colors: active) {
+  .progress {
+    stroke: CanvasText;
+  }
+
+  .circle {
+    border-color: CanvasText CanvasText Canvas Canvas;
+  }
+}
+
+@include animation.keyframes;

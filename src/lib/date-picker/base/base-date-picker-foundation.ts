@@ -27,6 +27,7 @@ export interface IBaseDatePickerFoundation<TValue> extends ICustomElementFoundat
   showToday: boolean;
   showClear: boolean;
   yearRange: string;
+  locale: string | undefined;
 }
 
 export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerAdapter, TPublicValue, TPrivateValue = TPublicValue> implements IBaseDatePickerFoundation<TPublicValue> {
@@ -53,13 +54,14 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   protected _showClear = false;
   protected _disabledDaysOfWeek: DayOfWeek[];
   protected _yearRange = '-50:+50';
+  protected _locale: string | undefined;
   protected _isInitialized = false;
 
   // Listeners
   private _inputListener: (evt: Event) => void;
   private _inputKeydownListener: (evt: KeyboardEvent) => void;
-  private _inputFocusListener: (evt: Event) => void;
-  private _inputBlurListener: (evt: Event) => void;
+  private _inputFocusListener: (evt: FocusEvent) => void;
+  private _inputBlurListener: (evt: FocusEvent) => void;
   private _inputValueChangedListener: (value: string) => void;
   private _toggleMousedownListener: (evt: MouseEvent) => void;
   private _dropdownCloseListener: () => void;
@@ -164,12 +166,21 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     this._handleInput(this._adapter.getInputValue());
   }
 
-  protected _onInputFocus(evt: Event): void {
+  protected _onInputFocus(evt: FocusEvent): void {
     this._adapter.selectInputText();
-  }
 
-  protected _onInputBlur(evt: Event): void {
+    if (this.masked && this.showMaskFormat) {
+      this._applyMask();
+    }
+  }
+  
+  protected _onInputBlur(evt: FocusEvent): void {
+    if (this.masked && this.showMaskFormat) {
+      this._applyMask();
+    }
+
     this._formatInputValue();
+
     if (this._open && !this._adapter.isInputFocused()) {
       this._closeCalendar(true);
     }
@@ -194,7 +205,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
       preventFocus: true,
       menuAnimation: 'fade',
       fixedHeight: true,
-      selectionFollowsMonth: true
+      selectionFollowsMonth: true,
+      locale: this._locale
     };
     const dropdownConfig: ICalendarDropdownPopupConfig = {
       popupClasses: this._popupClasses,
@@ -418,7 +430,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   }
 
   protected _isDateValueAcceptable(value?: Date | null): boolean {
-    if (!value) {
+    if (!value || this._allowInvalidDate) {
       return true;
     }
 
@@ -434,7 +446,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
   protected _initializeMask(): void {
     const options: IDateInputMaskOptions = {
-      showMaskFormat: this._showMaskFormat,
+      showMaskFormat: this._showMaskFormat && this._adapter.isInputFocused(),
       pattern: this._maskFormat,
       onChange: (value: string) => this._handleInput(value)
     };
@@ -628,9 +640,6 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   public set showMaskFormat(value: boolean) {
     if (this._showMaskFormat !== value) {
       this._showMaskFormat = value;
-      if (this._isInitialized) {
-        this._applyMask();
-      }
     }
   }
 
@@ -729,6 +738,19 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
       if (this._isInitialized && this._open) {
         this._adapter.setCalendarYearRange(this._yearRange);
+      }
+    }
+  }
+
+  public get locale(): string | undefined {
+    return this._locale;
+  }
+  public set locale(value: string | undefined) {
+    if (this._locale !== value) {
+      this._locale = value;
+
+      if (this._isInitialized && this._open) {
+        this._adapter.setCalendarLocale(this._locale);
       }
     }
   }

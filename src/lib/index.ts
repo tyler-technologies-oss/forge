@@ -32,6 +32,7 @@ import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './dr
 import { ExpansionPanelComponent } from './expansion-panel';
 import { FilePickerComponent } from './file-picker';
 import { FloatingActionButton } from './floating-action-button';
+import { FocusIndicatorComponent } from './focus-indicator';
 import { IconButtonComponent } from './icon-button';
 import { InlineMessageComponent } from './inline-message';
 import { KeyboardShortcutComponent } from './keyboard-shortcut';
@@ -63,6 +64,7 @@ import { OptionComponent, OptionGroupComponent, SelectComponent } from './select
 import { SkeletonComponent } from './skeleton';
 import { SliderComponent } from './slider';
 import { SplitViewComponent } from './split-view';
+import { StateLayerComponent } from './state-layer';
 import { StepComponent, StepperComponent } from './stepper';
 import { SwitchComponent } from './switch';
 import { TableComponent } from './table';
@@ -108,6 +110,7 @@ export * from './expansion-panel';
 export * from './file-picker';
 export * from './floating-action-button';
 export * from './floating-label';
+export * from './focus-indicator';
 export * from './icon';
 export * from './icon-button';
 export * from './inline-message';
@@ -131,6 +134,7 @@ export * from './select';
 export * from './skeleton';
 export * from './slider';
 export * from './split-view';
+export * from './state-layer';
 export * from './stepper';
 export * from './switch';
 export * from './table';
@@ -175,6 +179,7 @@ const CUSTOM_ELEMENTS = [
   ExpansionPanelComponent,
   FilePickerComponent,
   FloatingActionButton,
+  FocusIndicatorComponent,
   ProductIconComponent,
   IconComponent,
   IconButtonComponent,
@@ -209,6 +214,7 @@ const CUSTOM_ELEMENTS = [
   SliderComponent,
   SplitViewComponent,
   StackComponent,
+  StateLayerComponent,
   StepperComponent,
   StepComponent,
   SwitchComponent,

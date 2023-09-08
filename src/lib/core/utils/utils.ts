@@ -35,22 +35,38 @@ export function highlightTextHTML(label: string, highlightText: string): HTMLEle
  * @param capture Whether to use capturing listeners or not.
  * @returns A `Promise` that will be resolved when either of the listeners has executed.
  */
-export function userInteractionListener(element: HTMLElement, { capture = true, pointerenter = true, focusin = true } = {}): Promise<'pointerenter' | 'focusin'> {
-  return new Promise<'pointerenter' | 'focusin'>(resolve => {
+export function createUserInteractionListener(element: HTMLElement, { capture = true, pointerenter = true, focusin = true } = {}): { userInteraction: Promise<Event>; destroy: () => void } {
+  let destroyFn: () => void;
+  const destroy: () => void = () => {
+    if (typeof destroyFn === 'function') {
+      destroyFn();
+    }
+  };
+
+  const userInteraction = new Promise<Event>(resolve => {
     const listenerOpts: EventListenerOptions & { once: boolean } = { once: true, capture };
   
-    const handlePointerenter = (): void => {
+    const handlePointerenter = (evt: Event): void => {
       if (focusin) {
         element.removeEventListener('focusin', handleFocusin, listenerOpts);
       }
-      resolve('pointerenter');
+      resolve(evt);
     };
   
-    const handleFocusin = (): void => {
+    const handleFocusin = (evt: Event): void => {
       if (pointerenter) {
         element.removeEventListener('pointerenter', handlePointerenter, listenerOpts);
       }
-      resolve('focusin');
+      resolve(evt);
+    };
+
+    destroyFn = (): void => {
+      if (pointerenter) {
+        element.removeEventListener('pointerenter', handlePointerenter, listenerOpts);
+      }
+      if (focusin) {
+        element.removeEventListener('focusin', handleFocusin, listenerOpts);
+      }
     };
 
     if (pointerenter) {
@@ -60,6 +76,8 @@ export function userInteractionListener(element: HTMLElement, { capture = true, 
       element.addEventListener('focusin', handleFocusin, listenerOpts);
     }
   });
+
+  return { userInteraction, destroy };
 }
 
 /**
@@ -122,4 +140,65 @@ export function safeMin(...args: (number | undefined)[]): number {
  */
 export function safeMax(...args: (number | undefined)[]): number {
   return Math.max(...args.map(arg => arg ?? Number.NEGATIVE_INFINITY));
+}
+
+/**
+ * Determines if two elements are overlapping.
+ * @param elA {Element | null}
+ * @param elB {Element | null}
+ * @returns 
+ */
+export function elementsOverlapping(elA: Element | null, elB: Element | null): boolean {
+  if (!(elA && elB)) {
+    return false;
+  }
+  const a = elA.getBoundingClientRect();
+  const b = elB.getBoundingClientRect();
+  return !(a.top > b.bottom || a.right < b.left || a.bottom < b.top || a.left > b.right);
+}
+
+/**
+ * Determines if a pointer event is over an element.
+ * @param event {PointerEvent} The pointer event to test.
+ * @param element {HTMElement} The element to test against.
+ * @returns 
+ */
+export function isPointerOverElement({ x, y }: { x: number; y: number }, element: HTMLElement | null): boolean {
+  if (!element) {
+    return false;
+  }
+  const { top, left, bottom, right } = element.getBoundingClientRect();
+  return x >= left && x <= right && y >= top && y <= bottom;
+}
+
+/**
+ * Attempts to locate a target element based on a heuristic.
+ * 
+ * We use the following heuristic for locating the target element:
+ *  - If an id is set, we use that value to query the DOM for the target element
+ *  - If id is set to `:host`, we use the host element from within a shadow tree (only if the root node is a ShadowRoot instance)
+ *  - If an id is set but the querySelector returns null, we use the parent element
+ *  - If an id is not set, we use the parent element
+ * @param value {string | null} - A selector string to query the DOM for the target element
+ */
+export function locateTargetHeuristic(element: HTMLElement, id?: string | null): HTMLElement | null {
+  let targetEl: HTMLElement | null = null;
+
+  if (id) {
+    const rootNode = element.getRootNode() as Document | ShadowRoot;
+
+    // Special case handling for a `:host` selector to easily target a host element
+    // from within a shadow tree, given that this is a very common scenario
+    if (id === ':host' && rootNode instanceof ShadowRoot) {
+      return rootNode.host as HTMLElement;
+    }
+
+    targetEl = rootNode.querySelector(`#${id}`);
+  }
+
+  if (!targetEl) {
+    return element.parentElement;
+  }
+
+  return targetEl;
 }

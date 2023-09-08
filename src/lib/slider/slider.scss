@@ -1,28 +1,200 @@
-@use '@material/slider/styles';
-@use '@material/theme/theme' as mdc-theme;
+@use './core';
+@use './configuration';
+@use '../focus-indicator';
+@use '../state-layer';
 
 :host {
-  display: block;
+  @include core.container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-///
-/// Override default MDC disabled styles
-///
-.mdc-slider.mdc-slider--disabled {
-  cursor: not-allowed;
+.forge-slider {
+  @include configuration.configuration;
+  @include core.slider;
+
+  &.range {
+    @include core.range;
+  }
 }
 
-///
-/// Override default MDC value indicator styles (to support theming)
-///
-.mdc-slider .mdc-slider__value-indicator {
-  background-color: var(--mdc-theme-on-surface);
+.track {
+  @include core.track;
+
+  &::before,
+  &::after {
+    content: '';
+    
+    @include core.track-dimensions;
+  }
 
   &::before {
-    border-top-color: var(--mdc-theme-on-surface);
+    @include core.track-inactive;
   }
+
+  &::after {
+    @include core.track-active;
+  }
+
+  &.tickmarks {
+    &::before {
+      @include core.tickmarks-inactive;
+    }
+
+    &::after {
+      @include core.tickmarks-active;
+    }
+  }
+}
+
+.handle-container-padded,
+.handle-container-block {
+  @include core.handle-container-dimensions;
+}
+
+.handle-container-padded {
+  @include core.handle-container-padded;
+}
+
+.handle-container {
+  @include core.handle-container;
+}
+
+.handle {
+  @include core.handle;
+
+  &.start {
+    @include core.handle-start;
+  }
+
+  &.end {
+    @include core.handle-end;
+  }
+
+  &-thumb {
+    @include core.handle-thumb;
+  }
+
+  &-label {
+    @include core.handle-label;
+
+    &::before,
+    &::after {
+      content: '';
+      @include core.handle-label-base;
+    }
+
+    &::before {
+      @include core.handle-label-bottom;
+    }
+
+    &::after {
+      @include core.handle-label-top;
+    }
+
+    &-content {
+      @include core.handle-label-content;
+    }
+  }
+}
+
+.handle-container.hover .handle-thumb {
+  @include core.handle-thumb-hover;
+}
+
+:host(:not([disabled])) {
+  input.end:active ~ .handle-container-padded .handle.end > .handle-thumb,
+  input.start:active ~ .handle-container-padded .handle.start > .handle-thumb {
+    @include core.handle-thumb-pressed;
+  }
+}
+
+:host([disabled]) {
+  .handle-thumb {
+    @include core.handle-thumb-disabled;
+  }
+  
+  .handle-label {
+    @include core.handle-label-disabled;
+  }
+
+  .track {
+    &::before {
+      @include core.track-inactive-disabled;
+    }
+
+    &::after {
+      @include core.track-active-disabled;
+    }
+
+    &.tickmarks {
+      &::before {
+        @include core.tickmarks-active-disabled;
+      }
+
+      &::after {
+        @include core.tickmarks-inactive-disabled;
+      }
+    }
+  }
+
+  input[type=range] {
+    @include core.input-disabled;
+  }
+}
+
+// rtl for active track clipping
+@each $_rtl-selectors in core.get-rtl-selectors('.track', '::after') {
+  #{$_rtl-selectors} {
+    @include core.rtl-track-clipping;
+  }
+}
+
+input.end:focus ~ .handle-container-padded .handle.end > .handle-thumb,
+input.start:focus ~ .handle-container-padded .handle.start > .handle-thumb {
+  @include core.handle-thumb-focused;
+}
+
+.on-top.overlapping {
+  .handle-thumb,
+  .handle-label,
+  .handle-label::before {
+    @include core.handles-overlapping;
+  }
+}
+
+:host(:focus-within) .handle-label,
+.handle-container.hover .handle-label,
+:where(:has(input:active)) .handle-label {
+  @include core.handle-label-visible;
+}
+
+input[type=range] {
+  @include core.input;
+}
+
+.on-top {
+  @include core.on-top;
+}
+
+@media (prefers-reduced-motion) {
+  .handle-label {
+    transition-duration: 0;
+  }
+}
+
+forge-focus-indicator {
+  /* stylelint-disable length-zero-no-unit */
+  @include focus-indicator.provide-theme((
+    shape: 50%,
+    outward-offset: 0px
+  ));
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: var(--_handle-color)
+  ));
 }

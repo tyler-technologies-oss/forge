@@ -1,5 +1,5 @@
+const fs = require('fs');
 const path = require('path');
-const { rename, existsSync } = require('@tylertech/forge-build-tools');
 const forgeConfig = require('../../forge.json');
 const ROOT = path.resolve(__dirname, '../../');
 const DIST_PATH = path.join(ROOT, 'dist');
@@ -33,7 +33,7 @@ module.exports = class ForgePreparePublishPlugin {
 
     // Ensure the deployment path exists
     const deploymentPath = path.join(forgeConfig.build.static.distPath, forgeConfig.packageOrg, forgeConfig.packageName);
-    if (!existsSync(path.join(DIST_PATH, deploymentPath))) {
+    if (!fs.existsSync(path.join(DIST_PATH, deploymentPath))) {
       auto.logger.log.error(`[${this.name}] Deployment path doesn't exist: ${deploymentPath}`);
       return process.exit(1);
     }
@@ -52,7 +52,11 @@ module.exports = class ForgePreparePublishPlugin {
     // Rename the deployment directory to the new path with the version suffix
     const currentDeploymentPath = path.join(DIST_PATH, deploymentPath);
     const newDeploymentPath = path.join(DIST_PATH, versionPath);
-    await rename(currentDeploymentPath, newDeploymentPath);
+    fs.rename(currentDeploymentPath, newDeploymentPath, () => {
+      if (err) {
+        throw new Error('Unable to rename deployment path');
+      }
+    });
 
     auto.logger.log.success(`Renamed deployment path to: ${versionPath}`);
   }

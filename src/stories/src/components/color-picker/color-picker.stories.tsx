@@ -23,7 +23,7 @@ export const Default: Story<IColorPickerProps> = ({
   value = value.length === 7 ? value : '';
 
   return (
-    <ForgeCard outlined style={{'--forge-card-padding': '0', display: 'inline-block'}}>
+    <ForgeCard style={{'--forge-card-padding': '0', display: 'inline-block'}}>
       <ForgeColorPicker value={value} allowOpacity={allowOpacity} opacity={opacity} />
     </ForgeCard>
   );

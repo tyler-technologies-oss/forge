@@ -86,7 +86,7 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
     this.positionPopup();
 
     if (manageFocus) {
-      this._previouslyFocusedElement = getActiveElement() as HTMLElement;
+      this._previouslyFocusedElement = getActiveElement(this._component.ownerDocument) as HTMLElement;
       this._component.focus();
     }
   }
@@ -97,7 +97,7 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
     if (manageFocus) {
       window.requestAnimationFrame(() => {
         if (this._previouslyFocusedElement) {
-          const activeElement = getActiveElement();
+          const activeElement = getActiveElement(this._component.ownerDocument);
           if (!activeElement || activeElement === document.body) {
             this._previouslyFocusedElement.focus();
           }

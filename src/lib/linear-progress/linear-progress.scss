@@ -1,35 +1,118 @@
-@use '@material/linear-progress/mdc-linear-progress';
-@use '@material/linear-progress/mixins' as mdc-linear-progress-mixins;
-@use '../theme';
-@use './variables';
+@use './animations';
+@use './configuration';
+@use './core';
 
+/// Host styles
 :host {
-  display: block;
+  @include core.container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+/// Base styles
+.forge-linear-progress {
+  @include configuration.configuration;
+  @include core.progress;
+}
 
-///
-/// Custom Tyler theming below
-///
+.forge-linear-progress,
+.track,
+.buffer-bar,
+.bar,
+.bar-inner {
+  position: absolute;
+}
 
-@include mdc-linear-progress-mixins.buffer-color(variables.$buffer-color);
+.bar {
+  @include core.bar;
+}
 
-.mdc-linear-progress {
-  @include theme.css-custom-property(border-radius, --forge-linear-progress-border-radius, inherit);
-  
-  &__bar-inner {
-    @include theme.property(border-color, tertiary);
+.secondary-bar {
+  @include core.secondary-bar;
+}
+
+.bar-inner {
+  @include core.bar-inner;
+}
+
+.buffer-bar {
+  @include core.buffer-bar;
+}
+
+.track {
+  @include core.track;
+}
+
+/// Indeterminate styles
+.forge-linear-progress--indeterminate {
+  .bar {
+    @include core.indeterminate-bar;
   }
 
-  &__buffer-bar {
-    @include theme.css-custom-property(background-color, --forge-linear-progress-theme-buffer, variables.$buffer-color);
+  .primary-bar {
+    @include core.indeterminate-primary-bar;
   }
 
-  &__buffer-dots {
-    @include theme.css-custom-property(filter, --forge-linear-progress-theme-buffer-dots, variables.$buffer-dots-color);
+  .secondary-bar {
+    @include core.indeterminate-secondary-bar;
+  }
+
+  .track {
+    @include core.indeterminate-track;
+  }
+
+  .primary-bar > .bar-inner {
+    @include core.indeterminate-primary-bar-inner;
+  }
+
+  .secondary-bar > .bar-inner {
+    @include core.indeterminate-secondary-bar-inner;
   }
 }
+
+/// RTL styles
+$rtl-selectors: (
+  ':host-context([dir="rtl"]) .forge-linear-progress',
+  ':host([dir="rtl"]) .forge-linear-progress',
+  '.forge-linear-progress:dir(rtl)'
+);
+
+@each $selector in $rtl-selectors {
+  #{$selector} {
+    .bar {
+      transform-origin: right center;
+    }
+
+    .buffer-bar {
+      transform-origin: right center;
+    }
+
+    .track {
+      animation-name: buffering-rtl;
+    }
+
+    &.forge-linear-progress--indeterminate .primary-bar {
+      animation-name: primary-indeterminate-translate-rtl;
+    }
+
+    &.forge-linear-progress--indeterminate .secondary-bar {
+      animation-name: secondary-indeterminate-translate-rtl;
+    }
+  }
+}
+
+@media screen and (forced-colors: active) {
+  .forge-linear-progress {
+    --_active-indicator-color: canvastext;
+    --_track-color: graytext;
+    border: 1px solid canvastext;
+
+    &.forge-linear-progress--indeterminate {
+      --_track-color: canvas;
+    }
+  }
+}
+
+@include animations.keyframes;

@@ -1,6 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
-import { cssClasses as MDC_LINEAR_PROGRESS_CLASSES } from '@material/linear-progress';
 import {
   defineAutocompleteComponent,
   IAutocompleteComponent,
@@ -801,6 +800,24 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(activeListItemIndex).toBe(0);
     });
 
+    it('should not activate first option if filterFocusFirst is false', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+      this.context.component.filterFocusFirst = false;
+      this.context.input.focus();
+      this.context.component.openDropdown();
+
+      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+
+      this.context.input.value = 'o';
+      this.context.input.dispatchEvent(new Event('input'));
+      await timer(AUTOCOMPLETE_CONSTANTS.numbers.DEFAULT_DEBOUNCE_TIME);
+      await tick();
+
+      const activeListItemIndex = _getActiveListItemIndex(this.context.component.popupElement);
+      expect(activeListItemIndex).toBe(-1);
+    });
+
     it('should not activate first option when clearing filter text', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
@@ -1016,14 +1033,12 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       const popup = this.context.component.popupElement;
       const skeletons = Array.from(popup!.querySelectorAll(SKELETON_CONSTANTS.elementName)) as ISkeletonComponent[];
       const linearProgress = popup!.querySelector(LINEAR_PROGRESS_CONSTANTS.elementName) as ILinearProgressComponent;
-      const linearProgressContainer = linearProgress.shadowRoot!.querySelector(LINEAR_PROGRESS_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       expect(skeletons.length).toBe(0);
       expect(getComputedStyle(linearProgress).display).not.toBe('none');
-      expect(linearProgressContainer.classList.contains(MDC_LINEAR_PROGRESS_CLASSES.CLOSED_CLASS)).toBe(false);
 
       await timer(timeout);
-      expect(linearProgressContainer.classList.contains(MDC_LINEAR_PROGRESS_CLASSES.CLOSED_CLASS)).toBe(true);
+      expect(getComputedStyle(linearProgress).display).toBe('none');
     });
 
     it('should handle multiple filter requests in proper order', async function(this: ITestContext) {

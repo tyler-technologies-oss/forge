@@ -27,6 +27,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   showClear: boolean;
   disabledDaysOfWeek: DayOfWeek[];
   yearRange: string;
+  locale: string | undefined;
 }
 
 export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoundation extends BaseDatePickerFoundation<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>> extends BaseComponent implements IBaseDatePickerComponent<TPublicValue> {
@@ -92,6 +93,9 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
         break;
       case BASE_DATE_PICKER_CONSTANTS.observedAttributes.YEAR_RANGE:
         this.yearRange = newValue;
+        break;
+      case BASE_DATE_PICKER_CONSTANTS.observedAttributes.LOCALE:
+        this.locale = newValue;
         break;
     }
   }
@@ -179,4 +183,8 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
   /** Sets the year range. */
   @FoundationProperty()
   public declare yearRange: string;
+
+  /** Sets the locale to use. */
+  @FoundationProperty()
+  public declare locale: string | undefined;
 }

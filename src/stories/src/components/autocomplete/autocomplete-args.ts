@@ -4,6 +4,7 @@ export interface IAutocompleteProps {
   allowUnmatched: boolean;
   debounce: number;
   filterOnFocus: boolean;
+  filterFocusFirst: boolean;
   mode: AutocompleteMode;
   multiple: boolean;
   observeScroll: boolean;
@@ -25,6 +26,12 @@ export const argTypes = {
     }
   },
   filterOnFocus: {
+    control: 'boolean',
+    table: {
+      category: 'Properties'
+    }
+  },
+  filterFocusFirst: {
     control: 'boolean',
     table: {
       category: 'Properties'

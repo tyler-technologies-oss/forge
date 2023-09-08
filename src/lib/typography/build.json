@@ -3,7 +3,7 @@
   "extends": "../build.json",
   "compile": false,
   "stylesheets": [
-    "./forge-typography.scss",
-    "./forge-form.scss"
+    "./forge-typography-legacy.scss",
+    "./forge-typography.scss"
   ]
 }

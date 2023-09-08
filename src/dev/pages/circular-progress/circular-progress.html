@@ -6,16 +6,6 @@ include('./src/partials/page.ejs', {
     options: [
       {
         type: 'select',
-        label: 'Mode',
-        id: 'opt-mode',
-        defaultValue: 'indeterminate',
-        options: [
-          { label: 'Indeterminate', value: 'indeterminate' },
-          { label: 'Determinate', value: 'determinate' }
-        ]
-      },
-      {
-        type: 'select',
         label: 'Theme',
         id: 'opt-theme',
         defaultValue: 'tertiary',
@@ -25,11 +15,12 @@ include('./src/partials/page.ejs', {
           { label: 'Tertiary', value: 'tertiary' }
         ]
       },
-      { type: 'text-field', label: 'Size', id: 'opt-size', defaultValue: '72px' },
-      { type: 'text-field', inputType: 'number', label: 'Stroke width', id: 'opt-stroke-width', defaultValue: 4 },
-      { type: 'switch', label: 'Open', id: 'opt-open', defaultValue: true },
-      { type: 'switch', label: 'Show track', id: 'opt-show-track', disabled: true },
+      { type: 'text-field', label: 'Size', id: 'opt-size', defaultValue: '48px' },
+      { type: 'text-field', label: 'Spacing', id: 'opt-spacing', defaultValue: '0' },
+      { type: 'text-field', inputType: 'number', label: 'Track width', id: 'opt-track-width', defaultValue: 12 },
+      { type: 'switch', label: 'Determinate', id: 'opt-determinate' },
       { type: 'switch', label: 'Show percent', id: 'opt-show-percent', disabled: true },
+      { type: 'switch', label: 'Show track', id: 'opt-show-track', disabled: false, defaultValue: true },
     ]
   }
 })

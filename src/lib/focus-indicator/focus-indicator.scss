@@ -1,0 +1,50 @@
+@use './animations';
+@use './configuration';
+@use './core';
+
+/// Host styles
+:host {
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([active]) {
+  .forge-focus-indicator {
+    @include core.active;
+  }
+}
+
+:host(:not([inward])) {
+  .forge-focus-indicator {
+    @include core.outward;
+  }
+}
+
+:host([inward]) {
+  .forge-focus-indicator {
+    @include core.inward;
+  }
+}
+
+:host([circular]) {
+  .forge-focus-indicator {
+    @include core.circular;
+  }
+}
+
+/// Base styles
+.forge-focus-indicator {
+  @include configuration.configuration;
+  @include core.base;
+}
+
+@include animations.keyframes;
+
+@media (prefers-reduced-motion) {
+  .forge-focus-indicator {
+    animation: none;
+  }
+}

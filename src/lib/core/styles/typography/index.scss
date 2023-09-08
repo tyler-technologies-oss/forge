@@ -1,0 +1,114 @@
+@use 'sass:map';
+@use 'sass:list';
+@use '../core/config';
+@use '../tokens/typography/tokens';
+
+@forward '../tokens/typography/tokens';
+
+///
+/// Emits the typography styles for the given style.
+/// 
+/// Example:
+/// ```scss
+/// @include style(title);
+/// ```
+/// 
+/// Allows for providing an optional list of tokens to exclude from the output:
+/// ```scss
+/// @include style(title, [font-family font-size]);
+/// ```
+/// 
+@mixin style($style, $exclude: null) {
+  $styles: (
+    font-family: _get-style-value($style, font-family),
+    font-size: _get-style-value($style, font-size),
+    font-weight: _get-style-value($style, font-weight),
+    line-height: _get-style-value($style, line-height),
+    letter-spacing: _get-style-value($style, letter-spacing),
+    text-transform: _get-style-value($style, text-transform),
+    text-decoration: _get-style-value($style, text-decoration),
+    color: _get-style-value($style, color)
+  );
+
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+
+  @each $key, $value in $styles {
+    @if not $exclude or not list.index($exclude, $key) {
+      #{$key}: #{$value};
+    }
+  }
+}
+
+///
+/// Sets base typography styles.
+/// 
+@mixin base {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: map.get(tokens.$base, font-family);
+  color: map.get(tokens.$base, color);
+}
+
+///
+/// Generates helper classes for each typography style/role.
+/// 
+@mixin classes {
+  @each $style, $tokens in tokens.$tokens {
+    .#{config.$prefix}-typography--#{$style} {
+      @include style($style);
+    }
+  }
+}
+
+///
+/// Provides override CSS custom property declarations for the given style overrides.
+/// 
+/// Example:
+/// ```
+/// .my-class {
+///   @include provide(title, (font-family: Arial, font-size: 20px));
+/// }
+/// ```
+/// 
+/// This will output:
+/// ```
+/// .my-class {
+///   --forge-typography-title-font-family: Arial;
+///   --forge-typography-title-font-size: 20px;
+/// }
+/// ```
+/// 
+@mixin provide($style, $overrides) {
+  $style-tokens: map.get(tokens.$tokens, $style);
+  @each $key, $value in $overrides {
+    @if not map.get($style-tokens, $key) {
+      @error 'Invalid token "#{$key}" for style "#{$style}"';
+    }
+    --#{config.$prefix}-typography-#{$key}: #{$value};
+  }
+}
+
+///
+/// Creates a calculated style value that will scale relative to the root font size.
+/// 
+/// Example:
+/// ```scss
+/// .my-class {
+///   padding: typography.font-size-relative(2);
+/// }
+/// 
+/// // Outputs
+/// .my-class {
+///   padding: calc(var(--forge-typography-font-size, 1rem) * 2);
+/// }
+/// 
+/// ```
+/// 
+@function font-size-relative($scale) {
+  @return calc(#{map.get(tokens.$base, font-size)} * #{$scale});
+}
+
+@function _get-style-value($style, $token) {
+  @return var(--#{config.$prefix}-typography-#{$style}-#{$token}, #{tokens.get($style, $token)});
+}

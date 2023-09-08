@@ -1,0 +1,94 @@
+@use 'sass:list';
+@use '../core/styles/utils';
+@use '../core/styles/tokens/linear-progress/tokens';
+@use '../theme';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, linear-progress);
+}
+
+@mixin container {
+  display: block;
+  position: relative;
+  min-inline-size: 80px;
+  block-size: #{tokens.get(track-height)};
+  content-visibility: auto;
+  contain: strict;
+}
+
+@mixin progress {
+  inset: 0;
+  outline: transparent solid 1px;
+  border-radius: var(--_track-shape);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+@mixin bar {
+  animation: none;
+  inline-size: 100%;
+  block-size: var(--_active-indicator-height);
+  transform-origin: left center;
+  will-change: transform;
+  transition: transform var(--_determinate-duration) var(--_determinate-easing);
+}
+
+@mixin secondary-bar {
+  display: none;
+}
+
+@mixin bar-inner {
+  inset: 0;
+  animation: none;
+  background: var(--_active-indicator-color);
+}
+
+@mixin buffer-bar {
+  background: var(--_track-color);
+  inset: 0;
+  will-change: transform;
+  transition: transform var(--_determinate-duration) var(--_determinate-easing);
+  transform-origin: left center;
+}
+
+@mixin track {
+  inset: 0;
+  will-change: transform;
+  animation: linear infinite var(--_determinate-duration);
+  animation-name: buffering;
+  background: var(--_track-background);
+}
+
+@mixin indeterminate-bar {
+  transition: none;
+}
+
+@mixin indeterminate-primary-bar {
+  inset-inline-start: -145.167%;
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration);
+  animation-name: primary-indeterminate-translate;
+}
+
+@mixin indeterminate-secondary-bar {
+  inset-inline-start: -54.8889%;
+  display: block;
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration);
+  animation-name: secondary-indeterminate-translate;
+}
+
+@mixin indeterminate-track {
+  display: none;
+}
+
+@mixin indeterminate-primary-bar-inner {
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration) primary-indeterminate-scale;
+}
+
+@mixin indeterminate-secondary-bar-inner {
+  will-change: transform;
+  animation: linear infinite var(--_indeterminate-duration) secondary-indeterminate-scale;
+}

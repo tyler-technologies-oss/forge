@@ -612,6 +612,19 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe(date);
     });
 
+    it('should allow value if matches disabled day of week date if allow invalid is set', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.allowInvalidDate = true;
+      this.context.component.disabledDaysOfWeek = [6]; // Saturdays
+
+      const disabledDate = '01/01/2000'; // This is a Saturday
+      const expectedDate = new Date(disabledDate);
+      this.context.component.value = expectedDate;
+
+      expect(this.context.component.value).toEqual(expectedDate);
+      expect(getInputElement(this.context.component).value).toBe(disabledDate);
+    });
+
     it('should clear value when min date is set if current value is not valid', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const minDate = new Date('01/01/2020');
@@ -813,13 +826,33 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(inputElement.value).toBe('01/01/2020');
     });
 
-    it('should show mask format', function(this: ITestContext) {
+    it('should only show mask format on focus', function(this: ITestContext) {
       this.context = setupTestContext(true);
+      const inputElement = getInputElement(this.context.component);
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
 
       expect(this.context.component.showMaskFormat).toBe(true);
+      expect(getInputElement(this.context.component).value).toBe('');
+      inputElement.focus();
       expect(getInputElement(this.context.component).value).toBe('__/__/____');
+    });
+
+    it('should clear mask format on blur', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const inputElement = getInputElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      expect(getInputElement(this.context.component).value).toBe('');
+
+      inputElement.focus();
+      expect(getInputElement(this.context.component).value).toBe('__/__/____');
+
+      inputElement.dispatchEvent(new KeyboardEvent('input'));
+      inputElement.blur();
+      expect(inputElement.value).toBe('');
     });
 
     it('should use custom parse callback, format callback, and mask format', function(this: ITestContext) {
@@ -830,11 +863,13 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.parseCallback = str => str ? new Date(`${str}T00:00:00.000Z`) : null;
       this.context.component.formatCallback = date => date ? date.toISOString().split('T')[0] : '';
 
-      expect(getInputElement(this.context.component).value).toBe('____-__-__');
+      const inputEl = getInputElement(this.context.component);
+      inputEl.focus();
 
-      getInputElement(this.context.component).value = '20200101';
-      // note: the setting of the input element value does emit the input event, but in this case parseCallback gets called with 20200101 which results in a date of new Date(`20200101T00:00:00.000Z`), which isn't valid so it gets nulled and the input event never gets fired (because the input value and the component value are the same value of null). it's almost like the mask needs to occur before that call and then re-emitting another input wouldn't be necessary
-      dispatchNativeEvent(getInputElement(this.context.component), 'input');
+      expect(inputEl.value).toBe('____-__-__');
+
+      inputEl.value = '20200101';
+      inputEl.dispatchEvent(new Event('input'));
 
       expect(getInputElement(this.context.component).value).toBe('2020-01-01');
     });
@@ -845,6 +880,9 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
       this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASK_FORMAT, format);
+
+      const inputEl = getInputElement(this.context.component);
+      inputEl.focus();
 
       expect(this.context.component.maskFormat).toBe(format);
       expect(getInputElement(this.context.component).value).toBe('____-__-__');
@@ -1334,21 +1372,54 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = new Date();
 
-      getInputElement(this.context.component).value = '';
+      const input = getInputElement(this.context.component);
+      input.value = '';
+      input.dispatchEvent(new Event('input'));
 
       expect(this.context.component.value).toBeNull();
     });
 
-    it('should update value properly when backspacing', function(this: ITestContext) {
+    it('should update value and mask properly when backspacing after focused', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.value = new Date('01/01/2021');
       this.context.component.masked = true;
       this.context.component.showMaskFormat = true;
 
       const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
       inputElement.value = inputElement.value.slice(0,-1);
       inputElement.dispatchEvent(new KeyboardEvent('input'));
+
       expect(inputElement.value).toEqual('01/01/202_');
+    });
+
+    it('should update value and mask properly when backspacing then blurred', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date('01/01/2021');
+      this.context.component.masked = true;
+      this.context.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(this.context.component);
+      inputElement.focus();
+      inputElement.value = inputElement.value.slice(0,-1);
+      inputElement.dispatchEvent(new KeyboardEvent('input'));
+      inputElement.blur();
+      inputElement.dispatchEvent(new Event('blur'));
+
+      expect(inputElement.value).toEqual('01/01/0202');
+    });
+
+    it('should clear mask format if the input is cleared programmatically', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.value = new Date();
+      this.context.component.masked = true;
+      this.context.component.showMaskFormat = true;
+
+      const inputEl = getInputElement(this.context.component);
+      inputEl.value = '';
+      inputEl.dispatchEvent(new Event('input'));
+
+      expect(this.context.component.value).toBeNull();
     });
 
     it('should set year range via attribute', function(this: ITestContext) {

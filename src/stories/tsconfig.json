@@ -12,6 +12,7 @@
     "strictNullChecks": true,
     "importHelpers": true,
     "noEmitHelpers": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["../lib"]

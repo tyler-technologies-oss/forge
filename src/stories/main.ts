@@ -6,6 +6,7 @@ module.exports = {
   stories: ['./src/**/*.stories.*'],
   logLevel: 'debug',
   core: {
+    builder: 'webpack5',
     disableTelemetry: true
   },
   addons: [

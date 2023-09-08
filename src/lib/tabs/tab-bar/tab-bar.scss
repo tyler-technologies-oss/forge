@@ -1,14 +1,75 @@
-@use './mixins';
+@use './core';
+@use './configuration';
 @use '../../icon-button/forge-icon-button';
-@use '@material/tab-scroller/mdc-tab-scroller';
 
-@include mixins.core-styles;
-
+/// Host styles
 :host {
-  @include mixins.host;
+  @include core.host;
+}
+
+:host([vertical]) {
+  .container {
+    @include core.container-vertical;
+  }
+
+  .scroll-container {
+    @include core.vertical;
+  }
+
+  .scroll-button {
+    justify-self: center;
+  }
+}
+
+:host([inverted]:not([vertical])) {
+  .container {
+    border-bottom: none;
+    border-top: var(--_divider-thickness) solid var(--_divider-color);
+  }
+}
+
+:host([inverted][vertical]) {
+  .container {
+    border-right: none;
+    border-left: var(--_divider-thickness) solid var(--_divider-color);
+  }
+}
+
+:host([clustered]) {
+  --forge-tab-bar-justify: flex-start;
+  --forge-tab-bar-stretch: 0;
+}
+
+:host([clustered=start]) {
+  --forge-tab-bar-justify: flex-start;
+}
+
+:host([clustered=center]) {
+  --forge-tab-bar-justify: center;
+}
+
+:host([clustered=end]) {
+  --forge-tab-bar-justify: flex-end;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+/// Base styles
+.container {
+  @include configuration.configuration;
+  @include core.container;
+}
+
+.scroll-container {
+  @include core.base;
+}
+
+::slotted(*) {
+  flex: var(--_tab-flex);
+}
+
+::slotted([selected]) {
+  z-index: 1;
+}

@@ -1,0 +1,29 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../shape';
+@use '../../border';
+@use '../../animation';
+@use '../../spacing';
+@use '../../utils';
+
+/* stylelint-disable length-zero-no-unit */
+$tokens: (
+  active-width: utils.module-val(focus-indicator, active-width, 6px),
+  color: utils.module-val(focus-indicator, color, theme.variable(primary)),
+  duration: utils.module-val(focus-indicator, duration, animation.variable(duration-long4)),
+  outward-offset: utils.module-val(focus-indicator, outward-offset, spacing.variable('050')),
+  inward-offset: utils.module-val(focus-indicator, inward-offset, 0), // Requires unit
+  shape: utils.module-val(focus-indicator, shape, shape.variable(extra-small)),
+  width: utils.module-val(focus-indicator, width, border.variable(medium)),
+  easing: utils.module-val(focus-indicator, easing, animation.variable(easing-emphasized)),
+  shape-start-start: utils.module-ref(focus-indicator, shape-start-start, shape),
+  shape-start-end: utils.module-ref(focus-indicator, shape-start-end, shape),
+  shape-end-end: utils.module-ref(focus-indicator, shape-end-end, shape),
+  shape-end-start: utils.module-ref(focus-indicator, shape-end-start, shape),
+  offset-block: utils.module-val(focus-indicator, offset-block, 0),
+  offset-inline: utils.module-val(focus-indicator, offset-inline, 0)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

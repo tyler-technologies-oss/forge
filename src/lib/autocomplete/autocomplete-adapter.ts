@@ -24,7 +24,6 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   setInputValue(value: string): void;
   selectInputValue(): void;
   setDismissListener(listener: () => void): void;
-  toggleOptionMultiple(index: number, selected: boolean): void;
   isFocusWithinPopup(target: HTMLElement): boolean;
   hasFocus(): boolean;
   hasInputElement(): boolean;
@@ -125,10 +124,6 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._listDropdown?.setBusyVisibility(isVisible);
   }
 
-  public toggleOptionMultiple(index: number, selected: boolean): void {
-    this._listDropdown?.toggleOptionMultiple(index, selected);
-  }
-
   public setDismissListener(listener: () => void): void {
     if (!this._listDropdown || !this._listDropdown.dropdownElement) {
       return;
@@ -175,7 +170,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   public hasFocus(): boolean {
-    const activeElement = getActiveElement() as HTMLElement;
+    const activeElement = getActiveElement(this._component.ownerDocument) as HTMLElement;
     return activeElement === this._inputElement || this.isFocusWithinPopup(activeElement);
   }
 

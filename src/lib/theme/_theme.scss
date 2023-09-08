@@ -1,52 +1,19 @@
 @use 'sass:map';
+@use 'sass:list';
 @use '@material/theme/css';
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/theme/theme-color' as mdc-theme-color;
 @use '@material/theme/replace';
-@use '@material/theme/keys' as mdc-keys;
 @use '@material/elevation/elevation-theme' as elevation-theme;
 @use './custom-properties';
 @use './keys';
 @use './theme-values';
 @use './theme-utils';
-@use 'sass:list';
-
-/// Overrides the MDC theme key store with our own values to ensure that the fallback
-/// values for the custom properties are using our theme
-@include mdc-keys.register-theme(theme-values.$mdc-property-values);
+@use '../core/styles/theme';
 
 @mixin theme-styles($prefix: forge) {
-  @include mdc-theme-properties;
-  @include forge-theme-properties($prefix);
-  @include forge-z-index-properties($prefix);
+  @include theme.properties;
   @include theme-utils.core-styles;
-}
-
-/// MDC theme property overrides
-@mixin mdc-theme-properties() {
-  :root {
-    @each $style in map.keys(theme-values.$mdc-property-values) {
-      --mdc-theme-#{$style}: #{map.get(theme-values.$mdc-property-values, $style)};
-    }
-  }
-}
-
-/// Tyler-specific theme properties
-@mixin forge-theme-properties($prefix: forge) {
-  :root {
-    @each $style in map.keys(theme-values.$property-values) {
-      --#{$prefix}-theme-#{$style}: #{map.get(theme-values.$property-values, $style)};
-    }
-  }
-}
-
-/// Tyler-specific z-index properties
-@mixin forge-z-index-properties($prefix: forge) {
-  :root {
-    @each $type in map.keys(theme-values.$z-index-values) {
-      --#{$prefix}-z-index-#{$type}: #{map.get(theme-values.$z-index-values, $type)};
-    }
-  }
 }
 
 @function text-emphasis($emphasis) {

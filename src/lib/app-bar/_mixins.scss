@@ -9,6 +9,8 @@
 @use '@material/top-app-bar/variables' as mdc-top-app-bar-variables;
 @use '../theme';
 @use './variables';
+@use '../tabs/tab-bar';
+@use '../tabs/tab';
 
 @mixin provide-theme($theme) {
   @include theme.theme-properties(app-bar, $theme, variables.$theme-values);
@@ -227,7 +229,12 @@
   --mdc-theme-text-disabled-on-light: var(--forge-app-bar-theme-disabled-on-light, #{variables.$disabled-on-light});
 
   ::slotted(forge-tab-bar) {
-    --mdc-theme-primary: var(--forge-app-bar-theme-on-background, #{variables.$on-background});
+    @include tab-bar.provide-theme(( divider-thickness: 0 ));
+
+    @include tab.provide-theme((
+      active-color: var(--forge-app-bar-theme-on-background, #{variables.$on-background}),
+      inactive-color: var(--forge-app-bar-theme-secondary-on-background, #{variables.$secondary-on-background})
+    ));
   }
 
   ::slotted(forge-button[type=outlined]),

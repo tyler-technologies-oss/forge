@@ -1,25 +1,192 @@
-@use '../../theme/theme-values';
-@use './mixins';
-@use '../../ripple/forge-ripple';
-@use '@material/tab-indicator/mdc-tab-indicator';
-
-@include mixins.core-styles;
+@use './core';
+@use './configuration';
+@use '../../core/styles/tokens/tabs/tab/tokens';
+@use '../../focus-indicator';
+@use '../../state-layer';
 
 :host {
-  @include mixins.host;
+  @include core.host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host([stretch]) {
-  @include mixins.host-stretch;
+:host(:focus) {
+  .forge-tab {
+    @include core.focus;
+  }
 }
 
-@include mixins.host-theme(primary, theme-values.$mdc-property-values);
-@include mixins.host-theme(secondary, theme-values.$mdc-property-values);
-@include mixins.host-theme(warning, theme-values.$property-values);
-@include mixins.host-theme(success, theme-values.$property-values);
-@include mixins.host-theme(danger, theme-values.$property-values);
-@include mixins.host-theme(info, theme-values.$property-values);
+:host(:active) {
+  .forge-tab {
+    @include core.pressed;
+  }
+}
+
+:host([disabled]) {
+  @include core.host-disabled;
+
+  .forge-tab {
+    pointer-events: none;
+  }
+}
+
+:host([selected]) {
+  .forge-tab {
+    color: var(--_active-label-text-color);
+
+    ::slotted([slot=leading]),
+    ::slotted([slot=trailing]) {
+      color: var(--_active-icon-color);
+    }
+
+    &:hover {
+      color: var(--_active-hover-label-text-color);
+    }
+
+    &:hover {
+      ::slotted([slot=leading]),
+      ::slotted([slot=trailing]) {
+        color: var(--_active-hover-icon-color);
+      }
+    }
+  
+    .indicator {
+      opacity: 1;
+    }
+  }
+}
+
+:host([selected]:not([vertical])) {
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      offset-block: 0 calc(var(--_active-indicator-height) + 1px)
+    ));
+  }
+}
+
+:host([selected]:focus) {
+  .forge-tab {
+    @include core.selected-focus;
+  }
+}
+
+:host([selected]:active) {
+  .forge-tab {
+    @include core.selected-pressed;
+  }
+}
+
+:host([stacked]) {
+  .forge-tab {
+    --_height: #{tokens.get(stacked-height)};
+
+    .content {
+      @include core.content-stacked;
+    }
+  }
+}
+
+:host([secondary]) {
+  .forge-tab {
+    @include configuration.configuration-secondary;
+  }
+
+  .content {
+    @include core.content-secondary;
+  }
+
+  .indicator {
+    @include core.indicator-secondary;
+  }
+}
+
+:host([vertical]) {
+  .forge-tab {
+    @include core.vertical;
+  
+    .content {
+      @include core.vertical-content;
+    }
+  
+    .indicator {
+      @include core.vertical-indicator;
+    }
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      offset-inline: 0 calc(var(--_active-indicator-height) + 1px)
+    ));
+  }
+}
+
+:host([vertical][secondary]) {
+  .content {
+    @include core.vertical-secondary-content;
+  }
+}
+
+:host([vertical]:not([secondary])) {
+  .forge-tab {
+    @include configuration.vertical-primary-configuration;
+  }
+}
+
+:host([inverted]) {
+  .forge-tab {
+    @include configuration.configuration-inverted;
+  }
+
+  .indicator {
+    @include core.inverted-indicator;
+  }
+}
+
+:host([inverted][vertical]) {
+  .forge-tab {
+    @include configuration.configuration-vertical-inverted;
+  }
+
+  .indicator {
+    @include core.vertical-inverted-indicator;
+  }
+}
+
+/// Base styles
+.forge-tab {
+  @include configuration.configuration;
+  @include core.tab;
+
+  .content {
+    @include core.content;
+
+    .label {
+      @include core.label;
+    }
+  }
+
+  .indicator {
+    @include core.indicator;
+  }
+}
+
+host,
+::slotted(*) {
+  white-space: nowrap;
+}
+
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: var(--_active-color),
+    shape: 8px
+  ));
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: var(--_inactive-color)
+  ));
+}

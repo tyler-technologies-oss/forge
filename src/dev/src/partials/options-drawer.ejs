@@ -1,8 +1,8 @@
-<forge-drawer slot="body-left">
-  <forge-toolbar slot="header">
-    <h3 slot="start" class="forge-typography--subtitle1-secondary">Options</h3>
-  </forge-toolbar>
-  <aside>
+<aside slot="body-left">
+  <forge-drawer>
+    <forge-toolbar slot="header">
+      <h2 slot="start" class="forge-typography--subtitle1-secondary">Options</h2>
+    </forge-toolbar>
     <div class="options-container">
       <% controls.forEach(control => { %>
         <% if (control.type === 'checkbox') { %>
@@ -24,5 +24,5 @@
         <% } %>
       <% }); %>
     </div>
-  </aside>
-</forge-drawer>
+  </forge-drawer>
+</aside>

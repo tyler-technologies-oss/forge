@@ -11,8 +11,8 @@
   .forge-card {
     @include base;
   
-    &--outlined {
-      @include outlined;
+    &--raised {
+      @include raised;
     }
   }
 }
@@ -24,17 +24,18 @@
 @mixin base() {
   @include mdc-card-mixins.fill-color(surface);
   @include mdc-card-mixins.shape-radius(medium);
-  @include mdc-elevation-theme.elevation(1);
+  @include mdc-card-mixins.outline(mdc-card-variables.$outline-color);
   @include theme.css-custom-property(height, --forge-card-height, 100%);
   @include theme.css-custom-property(width, --forge-card-width, 100%);
   @include theme.css-custom-property(padding, --forge-card-padding, variables.$padding);
   @include theme.css-custom-property(overflow, --forge-card-overflow, hidden);
+  @include theme.property(border-color, border-color);
 
   box-sizing: border-box;
 }
 
-@mixin outlined() {
-  @include mdc-elevation-theme.elevation(0);
-  @include mdc-card-mixins.outline(mdc-card-variables.$outline-color);
-  @include theme.property(border-color, border-color);
+@mixin raised() {
+  @include mdc-elevation-theme.elevation(1);
+  
+  border: none;
 }

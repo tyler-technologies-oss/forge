@@ -41,7 +41,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     this._adapter.tryPropagateClick(evt.target);
   }
 
-  protected _onBlur(event: Event): void {
+  protected _onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
     input.value = '';
     super._onBlur(event);
@@ -131,7 +131,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
   }
 
   private _memberIsActive(ele: HTMLElement): boolean {
-    return getActiveElement() === ele || ele.hasAttribute('focused');
+    return getActiveElement(ele.ownerDocument) === ele || ele.hasAttribute('focused');
   }
 
   private _getActiveMember(): HTMLElement | null {

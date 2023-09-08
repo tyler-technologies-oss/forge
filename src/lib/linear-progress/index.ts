@@ -1,5 +1,4 @@
 import { defineCustomElement } from '@tylertech/forge-core';
-
 import { LinearProgressComponent } from './linear-progress';
 
 export * from './linear-progress-constants';

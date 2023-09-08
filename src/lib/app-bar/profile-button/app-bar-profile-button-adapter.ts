@@ -75,7 +75,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
       if (!this._popupElement) {
         return;
       }
-      if (!this._component.contains(getActiveElement())) {
+      if (!this._component.contains(getActiveElement(this._component.ownerDocument))) {
         dismissListener();
       }
     }, true);

@@ -55,8 +55,7 @@ jobs:
 
       - name: Install
         id: install
-        run: |
-          npm ci --ignore-scripts
+        run: npm ci --ignore-scripts
 
       ## Determine if this is a release build or not, which will affect which dependent jobs run below
       - name: Detect Release Status

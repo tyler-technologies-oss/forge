@@ -1,0 +1,18 @@
+$base: 8px !default; // The Forge spacing system scales in multiples of 8
+
+$tokens: (
+  '025': $base * 0.25, // 2px
+  '050': $base * 0.5,  // 4px
+  '100': $base,        // 8px
+  '150': $base * 1.5,  // 12px
+  '200': $base * 2,    // 16px
+  '300': $base * 3,    // 24px
+  '400': $base * 4,    // 32px
+  '600': $base * 6,    // 48px
+  '700': $base * 7,    // 56px
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
+

@@ -340,6 +340,7 @@ export class PaginatorFoundation {
     if (canPage) {
       this.pageIndex = 0;
       this.pageSize = pageSize;
+    } else {
       evt.preventDefault();
     }
   }

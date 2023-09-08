@@ -1,92 +1,63 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { ITabAdapter } from './tab-adapter';
-import { TAB_CONSTANTS, ITabDimensions } from './tab-constants';
+import { TAB_CONSTANTS } from './tab-constants';
 
 export interface ITabFoundation extends ICustomElementFoundation {
   disabled: boolean;
-  active: boolean;
-  stretch: boolean;
-  activate(previousIndicatorClientRect?: DOMRect): void;
-  deactivate(): void;
-  computeIndicatorBounds(): DOMRect | undefined;
-  computeDimensions(): ITabDimensions;
-  focus(): void;
-  setTabIndex(value: number): void;
+  selected: boolean;
+  vertical: boolean;
+  stacked: boolean;
+  secondary: boolean;
+  inverted: boolean;
 }
 
 export class TabFoundation implements ITabFoundation {
+  // State
+  private _selected = false;
   private _disabled = false;
-  private _active = false;
-  private _stretch = false;
-  private _clickListener: (evt: MouseEvent) => void;
+  private _vertical = false;
+  private _stacked = false;
+  private _secondary = false;
+  private _inverted = false;
+
+  // Listeners
+  private _clickListener: EventListener;
+  private _keydownListener: EventListener;
 
   constructor(private _adapter: ITabAdapter) {
-    this._clickListener = (evt: MouseEvent) => this._onClick(evt);
+    this._clickListener = () => this._onClick();
+    this._keydownListener = (evt: KeyboardEvent) => this._onKeydown(evt);
   }
 
   public initialize(): void {
     this._adapter.initialize();
-    this._adapter.initializeRipple();
-    this._adapter.initializeIndicator();
-    this._adapter.setDisabled(this._disabled);
-    this._setActive(this._active);
-    this._adapter.addButtonListener('click', this._clickListener);
-  }
-  
-  public disconnect(): void {
-    this._adapter.destroyRipple();
-    this._adapter.destroyIndicator();
-    this._adapter.removeButtonListener('click', this._clickListener);
+    this._adapter.addInteractionListener('click', this._clickListener);
+    this._adapter.addInteractionListener('keydown', this._keydownListener);
   }
 
-  private _onClick(evt: MouseEvent): void {
-    if (!this._active) {
-      this._adapter.emitHostEvent(TAB_CONSTANTS.events.INTERACTED, undefined, true);
+  private _onClick(): void {
+    if (this._disabled || this._selected) {
+      return;
+    }
+    this._dispatchSelectEvent();
+  }
+
+  private _onKeydown(evt: KeyboardEvent): void {
+    if (this._disabled || this._selected) {
+      return;
+    }
+
+    const isSelectionKey = evt.key === ' ' || evt.key === 'Enter';
+    if (isSelectionKey) {
+      evt.preventDefault();
+      this._adapter.animateStateLayer();
+      this._dispatchSelectEvent();
     }
   }
 
-  private _setActive(isActive: boolean, previousIndicatorClientRect?: DOMRect): void {
-    this._active = isActive;
-    this._adapter.setActive(this._active);
-    if (this._active) {
-      this._adapter.activateIndicator(previousIndicatorClientRect);
-    } else {
-      this._adapter.deactivateIndicator();
-    }
-  }
-
-  public activate(previousIndicatorClientRect?: DOMRect): void {
-    this._setActive(true, previousIndicatorClientRect);
-  }
-
-  public deactivate(): void {
-    this._setActive(false);
-  }
-
-  public computeIndicatorBounds(): DOMRect | undefined {
-    return this._adapter.computeIndicatorBounds();
-  }
-
-  public computeDimensions(): ITabDimensions {
-    const rootWidth = this._adapter.getOffsetWidth();
-    const rootLeft = this._adapter.getOffsetLeft();
-    const contentWidth = this._adapter.getContentOffsetWidth();
-    const contentLeft = this._adapter.getContentOffsetLeft();
-    return {
-      contentLeft: rootLeft + contentLeft,
-      contentRight: rootLeft + contentLeft + contentWidth,
-      rootLeft,
-      rootRight: rootLeft + rootWidth
-    };
-  }
-  
-  public focus(): void {
-    this._adapter.focus();
-  }
-
-  public setTabIndex(value: number): void {
-    this._adapter.setTabIndex(value);
+  private _dispatchSelectEvent(): void {
+    this._adapter.emitHostEvent(TAB_CONSTANTS.events.SELECT, { bubbles: true, composed: true });
   }
 
   public get disabled(): boolean {
@@ -100,23 +71,55 @@ export class TabFoundation implements ITabFoundation {
     }
   }
 
-  public get active(): boolean {
-    return this._active;
+  public get selected(): boolean {
+    return this._selected;
   }
-  public set active(value: boolean) {
-    if (this._active !== value) {
-      this._setActive(value);
-      this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.ACTIVE, this._active);
+  public set selected(value: boolean) {
+    if (this._selected !== value) {
+      this._selected = value;
+      this._adapter.setSelected(this._selected);
+      this._adapter.animateSelected();
+      this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.SELECTED, this._selected);
     }
   }
 
-  public get stretch(): boolean {
-    return this._stretch;
+  public get vertical(): boolean {
+    return this._vertical;
   }
-  public set stretch(value: boolean) {
-    if (this._stretch !== value) {
-      this._stretch = value;
-      this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.STRETCH, this._stretch);
+  public set vertical(value: boolean) {
+    if (this._vertical !== value) {
+      this._vertical = value;
+      this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.VERTICAL, this._vertical);
+    }
+  }
+
+  public get stacked(): boolean {
+    return this._stacked;
+  }
+  public set stacked(value: boolean) {
+    if (this._stacked !== value) {
+      this._stacked = value;
+      this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.STACKED, this._stacked);
+    }
+  }
+
+  public get secondary(): boolean {
+    return this._secondary;
+  }
+  public set secondary(value: boolean) {
+    if (this._secondary !== value) {
+      this._secondary = value;
+      this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.SECONDARY, this._secondary);
+    }
+  }
+
+  public get inverted(): boolean {
+    return this._inverted;
+  }
+  public set inverted(value: boolean) {
+    if (this._inverted !== value) {
+      this._inverted = value;
+      this._adapter.toggleHostAttribute(TAB_CONSTANTS.attributes.INVERTED, this._inverted);
     }
   }
 }

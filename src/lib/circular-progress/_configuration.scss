@@ -1,0 +1,18 @@
+@use '../core/styles/tokens/circular-progress/tokens';
+
+///
+/// Initializes private configuration state CSS variables
+/// 
+@mixin configuration {
+  // Tokens
+  --_size: #{tokens.get(size)};
+  --_spacing: #{tokens.get(padding)};
+  --_track-width: #{tokens.get(track-width)};
+  --_track-color: #{tokens.get(track-color)};
+  --_track-background: #{tokens.get(track-background)};
+  --_arc-duration: #{tokens.get(arc-duration)};
+
+  // Duration variables
+  --_cycle-duration: calc(4 * var(--_arc-duration));
+  --_linear-duration: calc(var(--_arc-duration) * 360 / 306);
+}
