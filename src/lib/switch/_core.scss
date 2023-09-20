@@ -1,0 +1,203 @@
+@use '../core/styles/animation';
+@use '../core/styles/typography';
+@use '../core/styles/utils';
+@use '../core/styles/tokens/switch/tokens';
+
+// The tallest element may be absolutely positioned so the container needs to
+// be manually sized to match.
+$_container-block-size: max(var(--_handle-height), var(--_track-height), var(--_current-state-layer-height));
+
+// The effective track border radius, for use in other calculations.
+$_track-border-radius: calc(var(--_track-height) / 2);
+
+// Returns the wider of the handle width and state layer width.
+$_max-handle-inline-size: max(var(--_handle-width), var(--_current-state-layer-width));
+
+// Offsets the track to place the center of its border caps at the center of
+// the handle's off and on positions.
+$_track-margin-inline: calc(#{$_max-handle-inline-size} / 2 - #{$_track-border-radius});
+
+// The x translation of the handle in its on state.
+$_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, switch);
+}
+
+@mixin host {
+  display: inline-block;
+
+  cursor: pointer;
+}
+
+@mixin host-disabled {
+  opacity: #{tokens.get(disabled-opacity)};
+
+  cursor: not-allowed;
+}
+
+@mixin switch {
+  position: relative;
+  flex-direction: var(--_direction);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: var(--_justify);
+  gap: var(--_gap);
+
+  display: flex;
+
+  cursor: unset;
+}
+
+@mixin input {
+  position: absolute;
+  z-index: 1;
+
+  appearance: none;
+
+  outline: none;
+  margin: 0;
+  inline-size: 100%;
+  block-size: 100%;
+
+  cursor: unset;
+}
+
+@mixin container {
+  position: relative;
+  align-items: center;
+
+  display: flex;
+
+  block-size: #{$_container-block-size};
+}
+
+@mixin track {  
+  transition-property: background-color, border-color;
+  transition-duration: animation.variable(duration-short2);
+  transition-timing-function: animation.variable(easing-standard);
+
+  box-sizing: border-box;
+  margin-inline: #{$_track-margin-inline};
+  border-width: var(--_track-border-width);
+  border-color: var(--_track-off-border-color);
+  border-style: solid;
+  border-radius: var(--_track-shape);
+  inline-size: var(--_track-width);
+  block-size: var(--_track-height);
+
+  background-color: var(--_track-off-color);
+}
+
+@mixin track-on {
+  border-color: var(--_track-on-border-color);
+
+  background-color: var(--_track-on-color);
+}
+
+@mixin handle {  
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+
+  display: flex;
+
+  transition-property: translate;
+  transition-duration: animation.variable(duration-short2);
+  transition-timing-function: animation.variable(easing-standard);
+
+  border-radius: var(--_handle-shape);
+  inline-size: var(--_current-state-layer-width);
+  block-size: var(--_current-state-layer-height);
+
+  &::before {    
+    content: '';
+
+    position: relative;
+
+    display: block;
+    scale: var(--_handle-off-scale);
+
+    transition:
+      background-color animation.variable(duration-short2) animation.variable(easing-standard),
+      scale animation.variable(duration-short2) animation.variable(easing-linear)
+    ;
+
+    box-shadow: var(--_handle-elevation);
+    border-radius: var(--_handle-shape);
+    inline-size: var(--_handle-width);
+    block-size: var(--_handle-height);
+
+    background-color: var(--_handle-off-color);
+  }
+}
+
+@mixin handle-active {
+  &::before {
+    scale: var(--_handle-active-scale);
+  }
+}
+
+@mixin handle-on {
+  translate: #{$_handle-on-translate};
+
+  &::before {
+    scale: var(--_handle-on-scale);
+
+    background-color: var(--_handle-on-color);
+  }
+}
+
+@mixin icon {
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  transition-property: opacity, scale;
+  transition-duration: animation.variable(duration-short2);
+  transition-timing-function: animation.variable(easing-standard);
+}
+
+@mixin icon-on {
+  --forge-icon-font-size: var(--_icon-on-size);
+
+  inline-size: var(--_icon-on-size);
+  block-size: var(--_icon-on-size);
+
+  color: var(--_icon-on-color);
+  fill: var(--_icon-on-color);
+
+  font-size: var(--_icon-on-size);
+}
+
+@mixin icon-off {
+  --forge-icon-font-size: var(--_icon-off-size);
+
+  inline-size: var(--_icon-off-size);
+  block-size: var(--_icon-off-size);
+
+  color: var(--_icon-off-color);
+  fill: var(--_icon-off-color);
+
+  font-size: var(--_icon-off-size);
+}
+
+@mixin icon-hidden {
+  opacity: 0;
+  scale: 0.4;
+}
+
+@mixin icon-shown {
+  opacity: 1;
+  scale: 1;
+}
+
+@mixin label {
+  @include typography.style(label);
+
+  &:empty {
+    display: none;
+  }
+}

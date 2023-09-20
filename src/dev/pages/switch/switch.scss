@@ -1,0 +1,27 @@
+.form-switch {
+  display: flex;
+  align-items: center;
+}
+
+.custom-switch {
+  --primary-color: #2e7d32;
+  --primary-color: var(--forge-theme-primary);
+
+  --forge-switch-handle-on-color: var(--forge-theme-surface);
+  --forge-switch-handle-width: 24px;
+  --forge-switch-handle-height: 24px;
+  --forge-switch-handle-off-scale: 0.7;
+  // --forge-switch-handle-elevation: none;
+
+  --forge-switch-track-on-color: var(--primary-color);
+  --forge-switch-track-width: 54px;
+  --forge-switch-track-height: 32px;
+  --forge-switch-track-border-width: 2px;
+  --forge-switch-track-off-border-color: #9e9e9e;
+
+  --forge-switch-icon-on-size: 16px;
+  --forge-switch-icon-on-color: var(--primary-color);
+
+  --forge-switch-direction: column;
+  --forge-switch-gap: 4px;
+}

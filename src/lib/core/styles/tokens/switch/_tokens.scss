@@ -1,0 +1,60 @@
+@use 'sass:map';
+@use '../color-palette';
+@use '../../elevation';
+@use '../../shape';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  // Handle
+  handle-on-color: utils.module-val(switch, handle-on-color, theme.variable(primary)),
+  handle-off-color: utils.module-val(switch, handle-off-color, color-palette.$grey-500),
+  handle-width: utils.module-val(switch, handle-width, 20px),
+  handle-height: utils.module-val(switch, handle-height, 20px), // TODO: tie the handle height to the handle width
+  handle-on-scale: utils.module-val(switch, handle-on-scale, 1),
+  handle-off-scale: utils.module-val(switch, handle-off-scale, 1),
+  handle-shape: utils.module-val(switch, handle-shape, shape.variable(round)),
+  handle-elevation: utils.module-val(switch, handle-elevation, elevation.value(1)),
+
+  // Track
+  track-on-color: utils.module-val(switch, track-on-color, color-palette.$indigo-100),
+  track-off-color: utils.module-val(switch, track-off-color, theme.variable(track-color)),
+  track-width: utils.module-val(switch, track-width, 36px),
+  track-height: utils.module-val(switch, track-height, 14px),
+  track-shape: utils.module-val(switch, track-shape, shape.variable(full)),
+  track-border-width: utils.module-val(switch, track-border-width, 0),
+  track-on-border-color: utils.module-val(switch, track-on-border-color, transparent),
+  track-off-border-color: utils.module-val(switch, track-off-border-color, transparent),
+
+  // Icon
+  icon-on-color: utils.module-val(switch, icon-on-color, theme.variable(on-primary)),
+  icon-off-color: utils.module-val(switch, icon-off-color, theme.variable(on-primary)),
+  icon-on-size: utils.module-val(switch, icon-on-size, 20px), // TODO: tie icon on and off size to the handle size
+  icon-off-size: utils.module-val(switch, icon-off-size, 20px),
+
+  // Label
+  gap: utils.module-val(switch, gap, 0),
+  justify: utils.module-val(switch, justify, space-between),
+  direction: utils.module-val(switch, direction, initial),
+
+  // State layer
+  state-layer-width: utils.module-val(switch, state-layer-width, 40px),
+  state-layer-height: utils.module-val(switch, state-layer-height, 40px), // TODO: tie the state layer height to the state layer width
+
+  // Dense
+  state-layer-dense-width: utils.module-val(switch, state-layer-dense-width, 28px),
+  state-layer-dense-height: utils.module-val(switch, state-layer-dense-height, 28px), // TODO: tie the state layer dense height to the state layer dense width
+
+  // Disabled
+  disabled-opacity: utils.module-val(switch, disabled-opacity, 0.38),
+
+  // Active
+  handle-active-scale: utils.module-val(switch, handle-active-scale, 1.2)
+) !default;
+
+///
+/// Gets a token from the token map.
+///
+@function get($name) {
+  @return map.get($tokens, $name);
+}

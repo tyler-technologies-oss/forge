@@ -1,75 +1,146 @@
-@use 'sass:map';
-@use '../form-field/mixins' as form-field-mixins;
-@use '@material/dom/dom' as mdc-dom;
-@use '@material/typography/typography' as mdc-typography;
-@use '@material/theme/theme' as mdc-theme;
-@use '../theme';
-@use '../theme/theme-values';
-@use './switch-theme';
-@use './switch-mixins' as switch;
-
-@include switch.static-styles();
-
-.mdc-switch {
-  @include switch-theme.theme-styles(switch-theme.$light-theme);
-}
-
-@include mdc-dom.forced-colors-mode {
-  .mdc-switch {
-    @include switch-theme.theme-styles(switch-theme.$forced-colors-theme);
-  }
-}
-
-@include form-field-mixins.core-styles;
-
-.forge-switch__container {
-  display: flex;
-  align-items: center;
-
-  &.forge-switch--label-position-start {
-    flex-flow: row-reverse;
-
-    .forge-switch__label {
-      margin-left: auto;
-      padding-right: 8px;
-    }
-  }
-}
+@use './core';
+@use './configuration';
+@use '../core/styles/tokens/switch/tokens';
+@use '../focus-indicator';
+@use '../state-layer';
 
 :host {
-  display: inline-block;
-
-  * {
-    cursor: pointer;
-  }
-  
-  .forge-switch__label {
-    @include mdc-typography.typography(caption);
-
-    padding-left: 8px;
-  }
+  @include core.host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host([dense]) {
-  .mdc-switch__ripple {
-    $density: switch-theme.density(minimum);
-    $size: map.get($density, state-layer-size);
+:host([disabled]) {
+  @include core.host-disabled;
 
-    @include mdc-theme.property(height, $size);
-    @include mdc-theme.property(width, $size);
+  .forge-switch {
+    pointer-events: none;
+  }
+
+  .handle::before {
+    box-shadow: none;
   }
 }
 
-:host([disabled]) {
-  * {
-    cursor: not-allowed;
+/// Base styles (defaults to off)
+.forge-switch {
+  @include configuration.configuration;
+  @include core.switch;
+
+  --_current-state-layer-width: var(--_state-layer-width);
+  --_current-state-layer-height: var(--_state-layer-height);
+
+  .container {
+    @include core.container;
   }
 
-  .forge-switch__label {
-    @include theme.property(color, label-disabled-on-background);
+  .input {
+    @include core.input;
+
+    /// On styles
+    &:checked ~ {
+      .track {
+        @include core.track-on;
+      }
+  
+      .handle {
+        @include core.handle-on;
+
+        .icon {
+          &__on {
+            @include core.icon-shown;
+          }
+    
+          &__off {
+            @include core.icon-hidden;
+          }
+        }
+      }
+  
+  
+      forge-state-layer {
+        @include state-layer.provide-theme((
+          color: var(--_handle-on-color)
+        ));
+      }
+    }
+
+    /// Active styles
+    &:active ~ {
+      .handle {
+        @include core.handle-active;
+      }
+    }
   }
+
+  .track {
+    @include core.track;
+  }
+
+  .handle {
+    @include core.handle;
+  }
+
+  .icon {
+    @include core.icon;
+
+    &__on {
+      @include core.icon-on;
+      @include core.icon-hidden;
+    }
+
+    &__off {
+      @include core.icon-off;
+      @include core.icon-shown;
+    }
+  }
+
+  .label {
+    @include core.label;
+  }
+
+  .hidden {
+    display: none;
+  }
+}
+
+/// Dense styles
+:host([dense]) {
+  .forge-switch {
+    // Set the state layer width and height for use in calculations of other properties
+    --_current-state-layer-width: var(--_state-layer-dense-width);
+    --_current-state-layer-height: var(--_state-layer-dense-height);
+  }
+}
+
+/// Reduced motion styles
+@media (prefers-reduced-motion) {
+  .handle,
+  .handle::before,
+  .icon {
+    transition-duration: 0s !important;
+  }
+
+  .input:active {
+    ~ {
+      .handle::before {
+        scale: var(--_handle-off-scale) !important;
+      }
+    }
+
+    &:checked ~ {
+      .handle::before {
+        scale: var(--_handle-on-scale) !important;
+      }
+    }
+  }
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    shape: var(--_track-shape),
+    outward-offset: 0px
+  ));
 }

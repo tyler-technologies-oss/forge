@@ -12,7 +12,7 @@ export interface ISwitchComponentDelegateOptions extends IFormFieldComponentDele
 export interface ISwitchComponentDelegateConfig extends IBaseComponentDelegateConfig<ISwitchComponent, ISwitchComponentDelegateOptions> {}
 
 export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchComponent, ISwitchComponentDelegateOptions> {
-  private _labelElement?: HTMLLabelElement;
+  private _labelElement?: HTMLSpanElement;
 
   constructor(config?: ISwitchComponentDelegateConfig) {
     super(config);
@@ -32,7 +32,7 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
     this._element.disabled = value;
   }
 
-  public get labelElement(): HTMLLabelElement | undefined {
+  public get labelElement(): HTMLSpanElement | undefined {
     return this._labelElement;
   }
 
@@ -78,7 +78,7 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
   }
 
   private _createLabel(text: string): void {
-    this._labelElement = document.createElement('label');
+    this._labelElement = document.createElement('span');
     this._labelElement.textContent = text;
     this._element.appendChild(this._labelElement);
   }

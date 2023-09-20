@@ -3,20 +3,25 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}switch`;
 
 const classes = {
-  LABEL_START: 'forge-switch--label-position-start'
+  HIDDEN: 'hidden'
 };
 
 const selectors = {
-  BUTTON: '.mdc-switch',
-  CONTAINER: '.forge-switch__container'
+  ROOT: '.forge-switch',
+  CONTAINER: '.container',
+  INPUT: '#input',
+  LABEL: '#label',
+  ICON_ON: '#icon-on',
+  ICON_OFF: '#icon-off'
 };
 
 const attributes = {
-  DENSE: 'dense',
-  DISABLED: 'disabled',
   SELECTED: 'selected',
-  LABEL_POSITION: 'label-position',
-  BUTTON_ARIA_LABEL: 'button-aria-label'
+  DISABLED: 'disabled',
+  REQUIRED: 'required',
+  DENSE: 'dense',
+  ICON: 'icon',
+  LABEL_POSITION: 'label-position'
 };
 
 const events = {
@@ -32,3 +37,5 @@ export const SWITCH_CONSTANTS = {
 };
 
 export type SwitchLabelPosition = 'start' | 'end';
+
+export type SwitchIconVisibility = 'both' | 'none' | 'off' | 'on';

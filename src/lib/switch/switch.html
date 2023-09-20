@@ -1,26 +1,29 @@
 <template>
-  <div class="forge-switch__container" part="root">
-    <button id="switch-btn" class="mdc-switch" type="button" role="switch" aria-checked="false" aria-labelledby="switch-label" part="button">
-      <div class="mdc-switch__track" part="track"></div>
-      <div class="mdc-switch__handle-track" part="handle-track">
-        <div class="mdc-switch__handle" part="handle">
-          <div class="mdc-switch__shadow" part="shadow">
-            <div class="mdc-elevation-overlay" part="overlay"></div>
-          </div>
-          <div class="mdc-switch__ripple" part="ripple"></div>
-          <div class="mdc-switch__icons" part="icons">
-            <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24" part="icon-on">
-              <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" part="icon-on-path" />
-            </svg>
-            <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24" part="icon-off">
+  <label class="forge-switch" part="switch">
+    <div class="container" part="input-container">
+      <input id="input" class="input" type="checkbox" role="switch" part="input" />
+      <div class="track" part="track"></div>
+      <div class="handle" part="handle">
+        <div id="icon-off" class="icon icon__off" part="icon-off">
+          <slot name="icon-off">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
               <path d="M20 13H4v-2h16v2z" part="icon-off-path" />
             </svg>
-          </div>
+          </slot>
         </div>
+        <div id="icon-on" class="icon icon__on" part="icon-on">
+          <slot name="icon-on">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" part="icon-on-path"/>
+            </svg>
+          </slot>
+        </div>
+        <forge-state-layer target="input" part="state-layer"></forge-state-layer>
       </div>
-    </button>
-    <label id="switch-label" class="forge-switch__label" for="switch-btn" part="label">
+      <forge-focus-indicator target="input" part="focus-indicator"></forge-focus-indicator>
+    </div>
+    <div id="label" class="label" part="label">
       <slot></slot>
-    </label>
-  </div>
+    </div>
+  </label>
 </template>
