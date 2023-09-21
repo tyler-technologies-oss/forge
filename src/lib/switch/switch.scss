@@ -48,7 +48,7 @@
       .handle {
         @include core.handle-on;
 
-        .icon {     
+        .icon {
           &__on {
             @include core.icon-on-shown;
           }
