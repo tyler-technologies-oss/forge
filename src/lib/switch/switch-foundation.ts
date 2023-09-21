@@ -4,7 +4,7 @@ import { ISwitchAdapter } from './switch-adapter';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
 export interface ISwitchFoundation extends ICustomElementFoundation {
-  selected: boolean;
+  on: boolean;
   disabled: boolean;
   required: boolean;
   dense: boolean;
@@ -16,7 +16,7 @@ export interface ISwitchFoundation extends ICustomElementFoundation {
 
 export class SwitchFoundation implements ISwitchFoundation {
   // State
-  private _selected = false;
+  private _on = false;
   private _disabled = false;
   private _required = false;
   private _dense = false;
@@ -33,22 +33,7 @@ export class SwitchFoundation implements ISwitchFoundation {
   public initialize(): void {
     this._adapter.addInputListener('change', this._changeListener);
     this._adapter.setIconVisibility(this._icon);
-    this._adapter.syncValue(this._selected);
-  }
-
-  private _handleChange(evt: Event): void {
-    const target = evt.target as HTMLInputElement;
-    const newValue = target.checked;
-
-    const isCancelled = !this._adapter.emitHostEvent(SWITCH_CONSTANTS.events.SELECT, newValue, true, true);
-    if (isCancelled) {
-      this._adapter.setSelected(this._selected);
-      return;
-    }
-
-    this._selected = newValue;
-    this._adapter.syncValue(this._selected);
-    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.SELECTED, this._selected);
+    this._adapter.syncValue(this._on);
   }
 
   public syncValidity(hasCustomValidityError: boolean): void {
@@ -59,15 +44,36 @@ export class SwitchFoundation implements ISwitchFoundation {
     this._adapter.setValidity(flags, message);
   }
 
-  public get selected(): boolean {
-    return this._selected;
+  private _handleChange(evt: Event): void {
+    const target = evt.target as HTMLInputElement;
+    const newValue = target.checked;
+
+    const isCancelled = !this._adapter.emitHostEvent(SWITCH_CONSTANTS.events.CHANGE, newValue, true, true);
+    if (isCancelled) {
+      this._adapter.setOn(this._on);
+      return;
+    }
+
+    this._on = newValue;
+    this._adapter.syncValue(this._on);
+    this._setOnAttribute();
   }
-  public set selected(value: boolean) {
-    if (this._selected !== value) {
-      this._selected = value;
-      this._adapter.setSelected(this._selected);
-      this._adapter.syncValue(this._selected);
-      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.SELECTED, this._selected);
+
+  private _setOnAttribute(): void {
+    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.ON, this._on);
+    // Also set selected for backwards compatibility
+    this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.SELECTED, this._on);
+  }
+
+  public get on(): boolean {
+    return this._on;
+  }
+  public set on(value: boolean) {
+    if (this._on !== value) {
+      this._on = value;
+      this._adapter.setOn(this._on);
+      this._adapter.syncValue(this._on);
+      this._setOnAttribute();
     }
   }
 

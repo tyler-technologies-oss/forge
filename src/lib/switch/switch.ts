@@ -11,9 +11,8 @@ import template from './switch.html';
 import styles from './switch.scss';
 
 export interface ISwitchComponent extends IBaseFormComponent {
+  on: boolean;
   selected: boolean;
-  disabled: boolean;
-  required: boolean;
   dense: boolean;
   icon: SwitchIconVisibility;
   labelPosition: SwitchLabelPosition;
@@ -40,14 +39,16 @@ declare global {
  * - Toggle a single item on or off, on mobile and tablet
  * - Immediately activate or deactivate something
  * 
- * @property {boolean} selected - Whether the switch is selected (e.g. on).
+ * @property {boolean} on - Whether the switch is on the on or off state.
+ * @property {boolean} selected - Alias for `on`.
  * @property {boolean} disabled - Controls if the switch is disabled.
  * @property {boolean} required = Controls if the switch is required.
  * @property {boolean} dense - The density state.
  * @property {SwitchIconVisibility} icon - Controls the presence of the off and on icons.
  * @property {SwitchLabelPosition} labelPosition - Whether the label appears before or after the switch.
  * 
- * @attribute {string} selected - Sets the selected state of the switch.
+ * @attribute {string} on - Controls whether the switch is in the on or off state.
+ * @attribute {string} selected - Alias for `on`.
  * @attribute {string} disabled - Controls if the switch is disabled.
  * @attribute {string} required - Controls if the switch is required.
  * @attribute {string} dense - Sets the density state.
@@ -56,36 +57,67 @@ declare global {
  * 
  * @method {(force?: boolean) => void} toggle - Toggles whether the switch is selected or forces a selected state.
  *  
- * @event forge-switch-select {CustomEvent} - Dispatches when the switch's value changes.
+ * @event forge-switch-change {CustomEvent} - Dispatches when the switch's value changes.
  * 
  * @cssproperty --forge-theme-primary - The primary color of the switch.
  * @cssproperty --forge-theme-on-primary - The color of elements placed on top of the primary color (the handle icons for example).
  * @cssproperty --forge-switch-handle-on-color - The color of the handle in the switch's on state.
  * @cssproperty --forge-switch-handle-off-color - The color of the handle in the switch's off state.
+ * @cssproperty --forge-switch-handle-active-on-color - The color of the handle when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-handle-active-off-color - The color of the handle when the switch is active (pressed) in its off state.
+ * @cssproperty --forge-switch-handle-size - The inline and block size of the handle.
  * @cssproperty --forge-switch-handle-width - The inline size of the handle.
  * @cssproperty --forge-switch-handle-height - The block size of the handle.
+ * @cssproperty --forge-switch-handle-scale - The scale transformation applied to the handle.
  * @cssproperty --forge-switch-handle-on-scale - The scale transformation applied to the handle in the switch's on state.
  * @cssproperty --forge-switch-handle-off-scale - The scale transformation applied to the handle in the switch's off state.
  * @cssproperty --forge-switch-handle-active-scale - The scale transformation applied to the handle when the switch is active (pressed).
+ * @cssproperty --forge-switch-handle-active-on-scale - The scale transformation applied to the handle when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-handle-active-off-scale - The scale transformation applied to the handle when the switch is active (pressed) in its off state.
  * @cssproperty --forge-switch-handle-shape - The shape of the handle.
- * @cssproperty --forge-switch-handle-elevation - The shadow of the handle.
+ * @cssproperty --forge-switch-handle-elevation - The handle's shadow.
+ * @cssproperty --forge-switch-handle-on-elevation - The handle's shadow in the switch's on state.
+ * @cssproperty --forge-switch-handle-off-elevation - The handle's shadow in the switch's off state.
+ * @cssproperty --forge-switch-handle-active-elevation - The handle's shadow when the switch is active (pressed).
+ * @cssproperty --forge-switch-handle-active-on-elevation - The handle's shadow when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-handle-active-off-elevation - The handle's shadow when the switch is active (pressed) in its off state.
  * @cssproperty --forge-switch-track-on-color - The color of the track in the switch's on state.
  * @cssproperty --forge-switch-track-off-color - The color fo the track in the switch's off state.
+ * @cssproperty --forge-switch-track-active-on-color - The color of the track when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-track-active-off-color - The color fo the track when the switch is active (pressed) in its off state.
  * @cssproperty --forge-switch-track-width - The inline size of the track.
  * @cssproperty --forge-switch-track-height - The block size of the track.
  * @cssproperty --forge-switch-track-shape - The shape of the track.
  * @cssproperty --forge-switch-track-border-width - The width of the track border.
+ * @cssproperty --forge-switch-track-on-border-width - The width of the track border in the switch's on state.
+ * @cssproperty --forge-switch-track-off-border-width - The width of the track border in the switch's off state.
+ * @cssproperty --forge-switch-track-active-on-border-width - The width of the track border when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-track-active-off-border-width - The width of the track border when the switch is active (pressed) in its off state.
+ * @cssproperty --forge-switch-track-border-color - The color of the track border.
  * @cssproperty --forge-switch-track-on-border-color - The color of the track border in the switch's on state.
  * @cssproperty --forge-switch-track-off-border-color - The color of the track border in the switch's off state.
+ * @cssproperty --forge-switch-track-active-on-border-color - The color of the track border when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-track-active-off-border-color - The color of the track border when the switch is active (pressed) in its off state.
+ * @cssproperty --forge-switch-icon-color - The color of the handle icons.
  * @cssproperty --forge-switch-icon-on-color - The color of the handle icon in the switch's on state.
  * @cssproperty --forge-switch-icon-off-color - The color of the handle icon in the switch's off state.
+ * @cssproperty --forge-switch-icon-active-on-color - The color of the handle icon when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-icon-active-off-color - The color of the handle icon when the switch is active (pressed) in its off state.
  * @cssproperty --forge-switch-icon-on-size - The size of the handle icon in the switch's on state.
  * @cssproperty --forge-switch-icon-off-size - The size of the handle icon in the switch's off state.
+ * @cssproperty --forge-switch-icon-scale - The scale transformation applied to the handle icons.
+ * @cssproperty --forge-switch-icon-active-scale - The scale transformation applied to the handle icons when the switch is active (pressed).
+ * @cssproperty --forge-switch-icon-on-scale - The scale transformation applied to the handle icons in the switch's on state.
+ * @cssproperty --forge-switch-icon-off-scale - The scale transformation applied to the handle icons in the switch's off state.
+ * @cssproperty --forge-switch-icon-active-on-scale - The scale transformation applied to the handle icons when the switch is active (pressed) in its on state.
+ * @cssproperty --forge-switch-icon-active-off-scale - The scale transformation applied to the handle icons when the switch is active (pressed) in its off state.
  * @cssproperty --forge-switch-gap - The space between the switch and label.
  * @cssproperty --forge-switch-justify - How the switch and label are distributed along their main axis.
  * @cssproperty --forge-switch-direction - Whether the switch and label are arranged along the inline or block axis.
+ * @cssproperty --forge-switch-state-layer-size - The inline and block size of the handle's state layer.
  * @cssproperty --forge-switch-state-layer-width - The inline size of the handle's state layer.
  * @cssproperty --forge-switch-state-layer-height - The block size of the handle's state layer.
+ * @cssproperty --forge-switch-state-layer-dense-size - The inline and block size of the handle's state layer when the dense switch is used.
  * @cssproperty --forge-switch-state-layer-dense-width - The inline size of the handle's state layer when the dense switch is used.
  * @cssproperty --forge-switch-state-layer-dense-height - The block size of the handle's state layer when the dense switch is used.
  * @cssproperty --forge-switch-disabled-opacity - The opacity of the switch when disabled.
@@ -173,6 +205,9 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
+      case SWITCH_CONSTANTS.attributes.ON:
+        this.on = coerceBoolean(newValue);
+        break;
       case SWITCH_CONSTANTS.attributes.SELECTED:
         this.selected = coerceBoolean(newValue);
         break;
@@ -221,6 +256,9 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   }
 
   @FoundationProperty()
+  public declare on: boolean;
+
+  @FoundationProperty({ name: 'on' })
   public declare selected: boolean;
 
   @FoundationProperty()
@@ -239,14 +277,14 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   public declare labelPosition: SwitchLabelPosition;
 
   /**
-   * Toggles the value of `selected` or sets it to a forced value.
-   * @param force A value to set `selected` to.
+   * Toggles the switch on or off.
+   * @param force Whether to force the switch on or off.
    */
   public toggle(force?: boolean): void {
     if (isDefined(force)) {
-      this._foundation.selected = force as boolean;
+      this._foundation.on = force as boolean;
     } else {
-      this._foundation.selected = !this._foundation.selected;
+      this._foundation.on = !this._foundation.on;
     }
   }
 }

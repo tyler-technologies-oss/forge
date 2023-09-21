@@ -73,13 +73,13 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
 }
 
 @mixin track {  
-  transition-property: background-color, border-color;
-  transition-duration: animation.variable(duration-short2);
+  transition-property: background-color, border-color, border-width;
+  transition-duration: var(--_animation-duration);
   transition-timing-function: animation.variable(easing-standard);
 
   box-sizing: border-box;
   margin-inline: #{$_track-margin-inline};
-  border-width: var(--_track-border-width);
+  border-width: var(--_track-off-border-width);
   border-color: var(--_track-off-border-color);
   border-style: solid;
   border-radius: var(--_track-shape);
@@ -90,9 +90,24 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
 }
 
 @mixin track-on {
+  border-width: var(--_track-on-border-width);
   border-color: var(--_track-on-border-color);
 
   background-color: var(--_track-on-color);
+}
+
+@mixin track-active {
+  border-width: var(--_track-active-off-border-width);
+  border-color: var(--_track-active-off-border-color);
+
+  background-color: var(--_track-active-off-color);
+}
+
+@mixin track-active-on {
+  border-width: var(--_track-active-on-border-width);
+  border-color: var(--_track-active-on-border-color);
+
+  background-color: var(--_track-active-on-color);
 }
 
 @mixin handle {  
@@ -103,7 +118,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   display: flex;
 
   transition-property: translate;
-  transition-duration: animation.variable(duration-short2);
+  transition-duration: var(--_animation-duration);
   transition-timing-function: animation.variable(easing-standard);
 
   border-radius: var(--_handle-shape);
@@ -119,22 +134,17 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
     scale: var(--_handle-off-scale);
 
     transition:
-      background-color animation.variable(duration-short2) animation.variable(easing-standard),
-      scale animation.variable(duration-short2) animation.variable(easing-linear)
+      background-color var(--_animation-duration) animation.variable(easing-standard),
+      box-shadow var(--_animation-duration) animation.variable(easing-standard),
+      scale var(--_animation-duration) animation.variable(easing-linear)
     ;
 
-    box-shadow: var(--_handle-elevation);
+    box-shadow: var(--_handle-off-elevation);
     border-radius: var(--_handle-shape);
     inline-size: var(--_handle-width);
     block-size: var(--_handle-height);
 
     background-color: var(--_handle-off-color);
-  }
-}
-
-@mixin handle-active {
-  &::before {
-    scale: var(--_handle-active-scale);
   }
 }
 
@@ -144,11 +154,35 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   &::before {
     scale: var(--_handle-on-scale);
 
+    box-shadow: var(--handle-on-elevation);
+
     background-color: var(--_handle-on-color);
   }
 }
 
+@mixin handle-active {
+  &::before {
+    scale: var(--_handle-active-off-scale);
+
+    box-shadow: var(--_handle-active-off-elevation);
+
+    background-color: var(--_handle-active-off-color);
+  }
+}
+
+@mixin handle-active-on {
+  &::before {
+    scale: var(--_handle-active-on-scale);
+
+    box-shadow: var(--_handle-active-on-elevation);
+
+    background-color: var(--_handle-active-on-color);
+  }
+}
+
 @mixin icon {
+  --forge-icon-font-size: var(--_icon-off-size);
+
   position: absolute;
   align-items: center;
   justify-content: center;
@@ -156,8 +190,16 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   display: flex;
 
   transition-property: opacity, scale;
-  transition-duration: animation.variable(duration-short2);
+  transition-duration: var(--_animation-duration);
   transition-timing-function: animation.variable(easing-standard);
+
+  inline-size: var(--_icon-off-size);
+  block-size: var(--_icon-off-size);
+
+  color: var(--_icon-off-color);
+  fill: var(--_icon-off-color);
+
+  font-size: var(--_icon-off-size);
 }
 
 @mixin icon-on {
@@ -172,26 +214,33 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   font-size: var(--_icon-on-size);
 }
 
-@mixin icon-off {
-  --forge-icon-font-size: var(--_icon-off-size);
+@mixin icon-active {
+  scale: var(--_icon-active-off-scale);
 
-  inline-size: var(--_icon-off-size);
-  block-size: var(--_icon-off-size);
+  color: var(--_icon-active-off-color);
+  fill: var(--_icon-active-off-color);
+}
 
-  color: var(--_icon-off-color);
-  fill: var(--_icon-off-color);
+@mixin icon-active-on {
+  scale: var(--_icon-active-on-scale);
 
-  font-size: var(--_icon-off-size);
+  color: var(--_icon-active-on-color);
+  fill: var(--_icon-active-on-color);
+}
+
+@mixin icon-on-shown {
+  opacity: 1;
+  scale: var(--_icon-on-scale);
+}
+
+@mixin icon-off-shown {
+  opacity: 1;
+  scale: var(--_icon-off-scale);
 }
 
 @mixin icon-hidden {
   opacity: 0;
   scale: 0.4;
-}
-
-@mixin icon-shown {
-  opacity: 1;
-  scale: 1;
 }
 
 @mixin label {

@@ -13,6 +13,7 @@ export interface IBaseFormComponent extends IBaseComponent {
   readonly validityMessage: string;
   readonly willValidate: boolean;
   readonly internals: ElementInternals;
+  setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
   checkValidity(): boolean;
   reportValidity(): boolean;
   setCustomValidity(error: string): void;

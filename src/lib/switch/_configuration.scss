@@ -1,6 +1,17 @@
 @use '../core/styles/tokens/switch/tokens' as switch-tokens;
 
 @mixin configuration {
+  // Shared
+  --_handle-size: #{switch-tokens.get(handle-size)};
+  --_handle-scale: #{switch-tokens.get(handle-scale)};
+  --_handle-elevation: #{switch-tokens.get(handle-elevation)};
+  --_track-border-width: #{switch-tokens.get(track-border-width)};
+  --_track-border-color: #{switch-tokens.get(track-border-color)};
+  --_icon-color: #{switch-tokens.get(icon-color)};
+  --_icon-scale: #{switch-tokens.get(icon-scale)};
+  --_state-layer-size: #{switch-tokens.get(state-layer-size)};
+  --_state-layer-dense-size: #{switch-tokens.get(state-layer-dense-size)};
+
   // Handle
   --_handle-on-color: #{switch-tokens.get(handle-on-color)};
   --_handle-off-color: #{switch-tokens.get(handle-off-color)};
@@ -9,7 +20,8 @@
   --_handle-on-scale: #{switch-tokens.get(handle-on-scale)};
   --_handle-off-scale: #{switch-tokens.get(handle-off-scale)};
   --_handle-shape: #{switch-tokens.get(handle-shape)};
-  --_handle-elevation: #{switch-tokens.get(handle-elevation)};
+  --_handle-on-elevation: #{switch-tokens.get(handle-on-elevation)};
+  --_handle-off-elevation: #{switch-tokens.get(handle-off-elevation)};
 
   // Track
   --_track-on-color: #{switch-tokens.get(track-on-color)};
@@ -17,7 +29,8 @@
   --_track-width: #{switch-tokens.get(track-width)};
   --_track-height: #{switch-tokens.get(track-height)};
   --_track-shape: #{switch-tokens.get(track-shape)};
-  --_track-border-width: #{switch-tokens.get(track-border-width)};
+  --_track-on-border-width: #{switch-tokens.get(track-on-border-width)};
+  --_track-off-border-width: #{switch-tokens.get(track-off-border-width)};
   --_track-on-border-color: #{switch-tokens.get(track-on-border-color)};
   --_track-off-border-color: #{switch-tokens.get(track-off-border-color)};
 
@@ -26,6 +39,8 @@
   --_icon-off-color: #{switch-tokens.get(icon-off-color)};
   --_icon-on-size: #{switch-tokens.get(icon-on-size)};
   --_icon-off-size: #{switch-tokens.get(icon-off-size)};
+  --_icon-on-scale: #{switch-tokens.get(icon-on-scale)};
+  --_icon-off-scale: #{switch-tokens.get(icon-off-scale)};
 
   // Label
   --_gap: #{switch-tokens.get(gap)};
@@ -44,34 +59,28 @@
   --_disabled-opacity: #{switch-tokens.get(disabled-opacity)};
 
   // Active
+  --_handle-active-on-color: #{switch-tokens.get(handle-active-on-color)};
+  --_handle-active-off-color: #{switch-tokens.get(handle-active-off-color)};
   --_handle-active-scale: #{switch-tokens.get(handle-active-scale)};
-}
+  --_handle-active-on-scale: #{switch-tokens.get(handle-active-on-scale)};
+  --_handle-active-off-scale: #{switch-tokens.get(handle-active-off-scale)};
+  --_handle-active-elevation: #{switch-tokens.get(handle-active-elevation)};
+  --_handle-active-on-elevation: #{switch-tokens.get(handle-active-on-elevation)};
+  --_handle-active-off-elevation: #{switch-tokens.get(handle-active-off-elevation)};
 
-// TODO: implement all of these theme options?
-// Old dark theme properties
-// --mdc-switch-selected-handle-color: #{theme-values.$secondary};
-// --mdc-switch-selected-hover-handle-color: #{$_secondary-state-content};
-// --mdc-switch-selected-focus-handle-color: #{$_secondary-state-content};
-// --mdc-switch-selected-pressed-handle-color: #{$_secondary-state-content};
-// --mdc-switch-selected-focus-state-layer-color: #{theme-values.$secondary};
-// --mdc-switch-selected-hover-state-layer-color: #{theme-values.$secondary};
-// --mdc-switch-selected-pressed-state-layer-color: #{theme-values.$secondary};
-// --mdc-switch-selected-focus-track-color: #{$_inverse-secondary};
-// --mdc-switch-selected-hover-track-color: #{$_inverse-secondary};
-// --mdc-switch-selected-pressed-track-color: #{$_inverse-secondary};
-// --mdc-switch-selected-track-color: #{$_inverse-secondary};
-// --mdc-switch-unselected-hover-handle-color: rgba(255, 255, 255, 0.54);
-// --mdc-switch-unselected-focus-handle-color: rgba(255, 255, 255, 0.87);
-// --mdc-switch-unselected-pressed-handle-color: rgba(255, 255, 255, 0.54);
-// --mdc-switch-unselected-focus-state-layer-color: rgba(255, 255, 255, 0.87);
-// --mdc-switch-unselected-hover-state-layer-color: rgba(255, 255, 255, 0.87);
-// --mdc-switch-unselected-pressed-state-layer-color: rgba(255, 255, 255, 0.87);
-// --mdc-switch-disabled-handle-opacity: 0.54;
-// --mdc-switch-disabled-selected-handle-color: #{$_inverse-secondary};
-// --mdc-switch-disabled-selected-icon-opacity: 0.54;
-// --mdc-switch-disabled-selected-track-color: #{$_inverse-secondary};
-// --mdc-switch-disabled-track-opacity: 0.38;
-// --mdc-switch-disabled-unselected-handle-color: #{$_on-surface-dark};
-// --mdc-switch-disabled-unselected-icon-color: on-primary;
-// --mdc-switch-disabled-unselected-icon-opacity: 0.54;
-// --mdc-switch-disabled-unselected-track-color: #{$_on-surface-dark};
+  --_track-active-on-color: #{switch-tokens.get(track-active-on-color)};
+  --_track-active-off-color: #{switch-tokens.get(track-active-off-color)};
+  --_track-active-on-border-width: #{switch-tokens.get(track-active-on-border-width)};
+  --_track-active-off-border-width: #{switch-tokens.get(track-active-off-border-width)};
+  --_track-active-on-border-color: #{switch-tokens.get(track-active-on-border-color)};
+  --_track-active-off-border-color: #{switch-tokens.get(track-active-off-border-color)};
+
+  --_icon-active-on-color: #{switch-tokens.get(icon-active-on-color)};
+  --_icon-active-off-color: #{switch-tokens.get(icon-active-off-color)};
+  --_icon-active-scale: #{switch-tokens.get(icon-active-scale)};
+  --_icon-active-on-scale: #{switch-tokens.get(icon-active-on-scale)};
+  --_icon-active-off-scale: #{switch-tokens.get(icon-active-off-scale)};
+
+  // Animation
+  --_animation-duration: #{switch-tokens.get(animation-duration)};
+}

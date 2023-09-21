@@ -16,6 +16,7 @@ const selectors = {
 };
 
 const attributes = {
+  ON: 'on',
   SELECTED: 'selected',
   DISABLED: 'disabled',
   REQUIRED: 'required',
@@ -25,7 +26,7 @@ const attributes = {
 };
 
 const events = {
-  SELECT: `${elementName}-select`
+  CHANGE: `${elementName}-change`
 };
 
 export const SWITCH_CONSTANTS = {

@@ -5,13 +5,12 @@ import { ISwitchComponent } from './switch';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
 export interface ISwitchAdapter extends IBaseAdapter {
-  setSelected(value: boolean): void;
+  setOn(value: boolean): void;
   setDisabled(value: boolean): void;
   setRequired(value: boolean): void;
   setIconVisibility(value: SwitchIconVisibility): void;
   setLabelPosition(value: SwitchLabelPosition): void;
   addInputListener(event: string, callback: EventListener): void;
-  addLabelListener(event: string, callback: EventListener): void;
   syncValue(value: boolean): void;
   syncValidity(hasCustomValidityError: boolean): void;
   setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
@@ -33,14 +32,10 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     this._iconOnElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);
     this._iconOffElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_OFF);
 
-    forwardAriaAttributes(component, this._inputElement, {
-      label: this._labelElement,
-      'icon-on': this._iconOnElement,
-      'icon-off': this._iconOffElement
-    });
+    forwardAriaAttributes(component, this._inputElement);
   }
 
-  public setSelected(value: boolean): void {
+  public setOn(value: boolean): void {
     this._inputElement.checked = value;
   }
 
@@ -71,10 +66,6 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
 
   public addInputListener(event: string, callback: EventListener): void {
     this._inputElement.addEventListener(event, callback);
-  }
-
-  public addLabelListener(event: string, callback: EventListener): void {
-    this._labelElement.addEventListener(event, callback);
   }
 
   public syncValue(value: boolean): void {

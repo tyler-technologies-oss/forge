@@ -48,29 +48,53 @@
       .handle {
         @include core.handle-on;
 
-        .icon {
+        .icon {          
           &__on {
-            @include core.icon-shown;
+            @include core.icon-on-shown;
           }
     
           &__off {
             @include core.icon-hidden;
           }
         }
-      }
-  
-  
-      forge-state-layer {
-        @include state-layer.provide-theme((
-          color: var(--_handle-on-color)
-        ));
+
+        forge-state-layer {
+          @include state-layer.provide-theme((
+            color: var(--_handle-on-color)
+          ));
+        }
       }
     }
 
     /// Active styles
-    &:active ~ {
-      .handle {
-        @include core.handle-active;
+    &:active {
+      ~ {
+        .track {
+          @include core.track-active;
+        }
+
+        .handle {
+          @include core.handle-active;
+
+          .icon {
+            @include core.icon-active;
+          }
+        }
+      }
+
+      /// Active on styles
+      &:checked ~ {
+        .track {
+          @include core.track-active-on;
+        }
+
+        .handle {
+          @include core.handle-active-on;
+
+          .icon {
+            @include core.icon-active-on;
+          }
+        }
       }
     }
   }
@@ -92,8 +116,7 @@
     }
 
     &__off {
-      @include core.icon-off;
-      @include core.icon-shown;
+      @include core.icon-off-shown;
     }
   }
 
@@ -117,24 +140,8 @@
 
 /// Reduced motion styles
 @media (prefers-reduced-motion) {
-  .handle,
-  .handle::before,
-  .icon {
-    transition-duration: 0s !important;
-  }
-
-  .input:active {
-    ~ {
-      .handle::before {
-        scale: var(--_handle-off-scale) !important;
-      }
-    }
-
-    &:checked ~ {
-      .handle::before {
-        scale: var(--_handle-on-scale) !important;
-      }
-    }
+  .switch {
+    --_animation-duration: 0s;
   }
 }
 
