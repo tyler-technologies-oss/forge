@@ -32,7 +32,11 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     this._iconOnElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);
     this._iconOffElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_OFF);
 
-    forwardAriaAttributes(component, this._inputElement);
+    forwardAriaAttributes({
+      observedAttributes: SWITCH_CONSTANTS.ariaAttributes,
+      sourceEl: component,
+      targetEl: this._inputElement
+    });
   }
 
   public setOn(value: boolean): void {

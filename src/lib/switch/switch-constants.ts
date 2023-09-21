@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { getObservedAriaAttributes } from '../core';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}switch`;
 
@@ -29,12 +30,15 @@ const events = {
   CHANGE: `${elementName}-change`
 };
 
+const ariaAttributes = getObservedAriaAttributes({ unprefixed: true });
+
 export const SWITCH_CONSTANTS = {
   classes,
   selectors,
   attributes,
   elementName,
-  events
+  events,
+  ariaAttributes
 };
 
 export type SwitchLabelPosition = 'start' | 'end';
