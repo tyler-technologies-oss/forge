@@ -72,7 +72,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   block-size: #{$_container-block-size};
 }
 
-@mixin track {  
+@mixin track {
   transition-property: background-color, border-color, border-width;
   transition-duration: var(--_animation-duration);
   transition-timing-function: animation.variable(easing-standard);
@@ -110,7 +110,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   background-color: var(--_track-active-on-color);
 }
 
-@mixin handle {  
+@mixin handle {
   position: absolute;
   justify-content: center;
   align-items: center;
@@ -125,7 +125,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   inline-size: var(--_current-state-layer-width);
   block-size: var(--_current-state-layer-height);
 
-  &::before {    
+  &::before {
     content: '';
 
     position: relative;
@@ -136,8 +136,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
     transition:
       background-color var(--_animation-duration) animation.variable(easing-standard),
       box-shadow var(--_animation-duration) animation.variable(easing-standard),
-      scale var(--_animation-duration) animation.variable(easing-linear)
-    ;
+      scale var(--_animation-duration) animation.variable(easing-linear);
 
     box-shadow: var(--_handle-off-elevation);
     border-radius: var(--_handle-shape);
