@@ -9,7 +9,7 @@ import { PopupComponent } from '../popup';
 import { SkeletonComponent } from '../skeleton';
 import { TextFieldComponent } from '../text-field';
 import { AutocompleteAdapter } from './autocomplete-adapter';
-import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
+import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteForceFilterOptions, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
 import { AutocompleteFoundation } from './autocomplete-foundation';
 
 import template from './autocomplete.html';
@@ -36,6 +36,7 @@ export interface IAutocompleteComponent extends IListDropdownAware {
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   openDropdown(): void;
   closeDropdown(): void;
+  forceFilter(opts?: IAutocompleteForceFilterOptions): void;
 }
 
 declare global {
@@ -231,5 +232,13 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   /** Closes the dropdown. */
   public closeDropdown(): void {
     this.open = false;
+  }
+
+  /**
+   * Forces the filter callback to be executed to update the current selection state with new options.
+   * @param opts
+   */
+  public forceFilter(opts: IAutocompleteForceFilterOptions = { preserveValue: false }): void {
+    this._foundation.forceFilter(opts);
   }
 }
