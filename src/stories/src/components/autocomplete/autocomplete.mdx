@@ -173,6 +173,14 @@ Closes the dropdown.
 
 </MethodDef>
 
+<MethodDef name="forceFilter(opts: IAutocompleteForceFilterOptions): void;">
+
+Forces the filter callback to be executed to update the current selection state with new options.
+
+Call this when you need to update the options of an autocomplete dynamically by forcing the filter callback to execute and clear any existing options.
+
+</MethodDef>
+
 </PageSection>
 
 ---
@@ -328,6 +336,14 @@ interface IAutocompletePopupConfiguration {
   syncPopupWidth: boolean;
   listener: (value: string) => void;
   scrollEndListener: () => void;
+}
+```
+
+### IAutocompleteForceFilterOptions
+
+```ts
+interface IAutocompleteForceFilterOptions {
+  preserveValue: boolean;
 }
 ```
 
