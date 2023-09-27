@@ -6,6 +6,7 @@ const attributes = {
   DISABLED: 'disabled',
   DIVIDER: 'divider',
   LABEL: 'label',
+  SECONDARY_LABEL: 'secondary-label',
   LEADING_ICON_CLASS: 'leading-icon-class',
   LEADING_ICON_TYPE: 'leading-icon-type',
   LEADING_ICON: 'leading-icon',
