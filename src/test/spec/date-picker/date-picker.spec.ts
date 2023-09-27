@@ -77,6 +77,30 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect((<Date>calendar.value).toDateString()).toEqual(date.toDateString());
     });
 
+    it('should open calendar in month of min date if min is after current month', function(this: ITestContext) {
+      this.context = setupTestContext(false);
+      const date = new Date();
+      this.context.component.min = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+      this.context.append();
+
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      expect(calendar.month).toEqual(date.getMonth() + 1);
+    });
+
+    it('should open calendar in month of max date if max is before current month', function(this: ITestContext) {
+      this.context = setupTestContext(false);
+      const date = new Date();
+      this.context.component.max = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+      this.context.append();
+
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      expect(calendar.month).toEqual(date.getMonth() - 1);
+    });
+
     it('should automatically render a toggle button with a Forge text-field component', function(this: ITestContext) {
       this.context = setupTestContext(false, true, false);
 
