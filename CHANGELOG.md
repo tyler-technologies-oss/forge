@@ -1,3 +1,27 @@
+# v2.18.0 (Wed Sep 27 2023)
+
+#### 🚀 Enhancement
+
+- feat(autocomplete): added new `forceFilter()` method to allow for dynamically updating the options of an autocomplete [#391](https://github.com/tyler-technologies-oss/forge/pull/391) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(list-dropdown): added configuration for setting secondary labels and for providing additional configuration to leading/trailing icon component elements [#393](https://github.com/tyler-technologies-oss/forge/pull/393) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(keyboard-shortcut): add activate callback [#367](https://github.com/tyler-technologies-oss/forge/pull/367) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(autocomplete): fixed a bug where the filter text was not getting removed when the clear button is clicked [#390](https://github.com/tyler-technologies-oss/forge/pull/390) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(calendar): fixed a bug where an exception was being thrown if min/max was set and caused the current month to have no selectable dates. The calendar will now automatically move to the closest month with a selectable date [#392](https://github.com/tyler-technologies-oss/forge/pull/392) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): don't wrap leading/trailing icons [#386](https://github.com/tyler-technologies-oss/forge/pull/386) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(date-picker, time-picker, date-range-picker): select mask on focus if shown [#385](https://github.com/tyler-technologies-oss/forge/pull/385) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(chip-field): don't propagate click if disabled [#384](https://github.com/tyler-technologies-oss/forge/pull/384) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.17.0 (Tue Aug 29 2023)
 
 #### 🚀 Enhancement
