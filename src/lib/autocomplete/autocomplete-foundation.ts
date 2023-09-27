@@ -178,6 +178,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _onClear(evt: MouseEvent): void {
+    this._filterText = '';
     this._clearValue();
     this._adapter.setSelectedText(this._getSelectedText());
   }
