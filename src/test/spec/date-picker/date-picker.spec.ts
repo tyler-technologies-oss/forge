@@ -838,6 +838,19 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe('__/__/____');
     });
 
+    it('should select mask when shown on focus', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const inputElement = getInputElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      inputElement.focus();
+
+      expect(inputElement.selectionStart).toEqual(0);
+      expect(inputElement.selectionEnd).toEqual('__/__/____'.length);
+    });
+
     it('should clear mask format on blur', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const inputElement = getInputElement(this.context.component);
