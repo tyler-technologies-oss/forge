@@ -220,6 +220,7 @@
 @mixin leading-core {
   @include _grid-leading;
   align-self: flex-start;
+  display: flex;
 }
 
 // Trailing
