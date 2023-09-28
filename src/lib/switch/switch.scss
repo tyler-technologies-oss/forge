@@ -154,7 +154,6 @@ forge-state-layer {
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
     shape: var(--_track-shape),
-    /* stylelint-disable-next-line */
-    outward-offset: 0px
+    outward-offset: 0px /* stylelint-disable-line */
   ));
 }
