@@ -50,6 +50,8 @@
   // State layer
   --_state-layer-width: #{switch-tokens.get(state-layer-width)};
   --_state-layer-height: #{switch-tokens.get(state-layer-height)};
+  --_state-layer-on-color: #{switch-tokens.get(state-layer-on-color)};
+  --_state-layer-off-color: #{switch-tokens.get(state-layer-off-color)};
 
   // Dense
   --_state-layer-dense-width: #{switch-tokens.get(state-layer-dense-width)};

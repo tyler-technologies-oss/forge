@@ -1,7 +1,7 @@
 import { toggleAttribute } from '@tylertech/forge-core';
 
 // Attributes referencing element IDs can't be forwarded across shadow boundaries
-export const ariaAttributes = [
+export const forwardingAriaAttributes = [
   'aria-atomic',
   'aria-autocomplete',
   'aria-busy',
@@ -53,11 +53,11 @@ export const ariaAttributes = [
 export function getObservedAriaAttributes(config: { unprefixed?: boolean; parts?: string[] }): string[] {
   const observedAttributes: string[] = [];
   if (config.unprefixed) {
-    observedAttributes.push(...ariaAttributes);
+    observedAttributes.push(...forwardingAriaAttributes);
   }
   if (config.parts) {
     config.parts.forEach(part => {
-      const partAttributes = ariaAttributes.map(attribute => `${part}:${attribute}`);
+      const partAttributes = forwardingAriaAttributes.map(attribute => `${part}:${attribute}`);
       observedAttributes.push(...partAttributes);
     });
   }

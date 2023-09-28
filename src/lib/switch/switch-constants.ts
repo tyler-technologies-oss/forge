@@ -9,7 +9,6 @@ const classes = {
 
 const selectors = {
   ROOT: '.forge-switch',
-  CONTAINER: '.container',
   INPUT: '#input',
   LABEL: '#label',
   ICON_ON: '#icon-on',

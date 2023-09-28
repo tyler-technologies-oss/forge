@@ -153,7 +153,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   &::before {
     scale: var(--_handle-on-scale);
 
-    box-shadow: var(--handle-on-elevation);
+    box-shadow: var(--_handle-on-elevation);
 
     background-color: var(--_handle-on-color);
   }

@@ -31,6 +31,7 @@ export class SwitchFoundation implements ISwitchFoundation {
   }
 
   public initialize(): void {
+    this._adapter.initialize();
     this._adapter.addInputListener('change', this._changeListener);
     this._adapter.setIconVisibility(this._icon);
     this._adapter.syncValue(this._on);

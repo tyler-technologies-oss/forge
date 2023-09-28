@@ -1,5 +1,5 @@
 <template>
-  <label class="forge-switch" part="switch">
+  <div class="forge-switch" part="switch">
     <div class="container" part="input-container">
       <input id="input" class="input" type="checkbox" role="switch" part="input" />
       <div class="track" part="track"></div>
@@ -22,8 +22,8 @@
       </div>
       <forge-focus-indicator target="input" part="focus-indicator"></forge-focus-indicator>
     </div>
-    <div id="label" class="label" part="label">
+    <label id="label" for="input" class="label" part="label">
       <slot></slot>
-    </div>
-  </label>
+    </label>
+  </div>
 </template>

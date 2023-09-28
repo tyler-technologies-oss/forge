@@ -17,5 +17,5 @@ formButton.addEventListener('click', () => {
   console.log(formSwitch.internals);
 });
 
-preventSwitch.addEventListener('forge-switch-select', (evt: CustomEvent) => evt.preventDefault());
+preventSwitch.addEventListener('forge-switch-change', (evt: CustomEvent) => evt.preventDefault());
 

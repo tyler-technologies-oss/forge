@@ -117,6 +117,8 @@ declare global {
  * @cssproperty --forge-switch-state-layer-size - The inline and block size of the handle's state layer.
  * @cssproperty --forge-switch-state-layer-width - The inline size of the handle's state layer.
  * @cssproperty --forge-switch-state-layer-height - The block size of the handle's state layer.
+ * @cssproperty --forge-switch-state-layer-on-color - The color of the handle's state layer when the switch is in its on state.
+ * @cssproperty --forge-switch-state-layer-off-color - The color of the handle's state layer when the switch is in its off state.
  * @cssproperty --forge-switch-state-layer-dense-size - The inline and block size of the handle's state layer when the dense switch is used.
  * @cssproperty --forge-switch-state-layer-dense-width - The inline size of the handle's state layer when the dense switch is used.
  * @cssproperty --forge-switch-state-layer-dense-height - The block size of the handle's state layer when the dense switch is used.
@@ -145,6 +147,7 @@ declare global {
 export class SwitchComponent extends BaseFormComponent implements ISwitchComponent {
   public static get observedAttributes(): string[] {
     return [
+      SWITCH_CONSTANTS.attributes.ON,
       SWITCH_CONSTANTS.attributes.SELECTED,
       SWITCH_CONSTANTS.attributes.DISABLED,
       SWITCH_CONSTANTS.attributes.REQUIRED,
@@ -232,11 +235,11 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
     this.internals.setFormValue(value, state);
     if (isString(value)) {
-      this.selected = coerceBoolean(value);
+      this.on = coerceBoolean(value);
     } else if (value?.[this.name]) {
-      this.selected = coerceBoolean(value[this.name]);
+      this.on = coerceBoolean(value[this.name]);
     } else {
-      this.selected = false;
+      this.on = false;
     }
   }
 
@@ -253,6 +256,22 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   public setCustomValidity(error: string): void {
     this._hasCustomValidityError = !!error;
     this._foundation.setValidity({ customError: !!error }, error);
+  }
+
+  public formAssociatedCallback(): void {
+    return;
+  }
+
+  public formResetCallback(): void {
+    this.on = false;
+  }
+
+  public formStateRestoreCallback(state: string): void {
+    this.on = coerceBoolean(state);
+  }
+
+  public formDisabledCallback(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
   @FoundationProperty()
@@ -278,7 +297,7 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
 
   /**
    * Toggles the switch on or off.
-   * @param force Whether to force the switch on or off.
+   * @param force Whether to set the switch on or off.
    */
   public toggle(force?: boolean): void {
     if (isDefined(force)) {

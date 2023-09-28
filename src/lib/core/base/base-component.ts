@@ -3,68 +3,44 @@ export interface IBaseComponent extends HTMLElement {}
 /** Any Custom HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. */
 export abstract class BaseComponent extends HTMLElement implements IBaseComponent {}
 
-export interface IBaseFormComponent extends IBaseComponent {
+export interface IBaseFormComponent<T = string> extends IBaseComponent {
   disabled: boolean;
   required: boolean;
   name: string;
   readonly form: HTMLFormElement | null;
   readonly labels: NodeList;
   readonly validity: ValidityState;
-  readonly validityMessage: string;
+  readonly validationMessage: string;
   readonly willValidate: boolean;
   readonly internals: ElementInternals;
   setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
   checkValidity(): boolean;
   reportValidity(): boolean;
   setCustomValidity(error: string): void;
+  formResetCallback(): void;
+  formStateRestoreCallback(state: T, reason: 'restore' | 'autocomplete'): void;
+  formDisabledCallback(isDisabled: boolean): void;
 }
 
-export abstract class BaseFormComponent extends BaseComponent implements IBaseFormComponent {
-  public disabled: boolean;
-  public required: boolean;
-  
-  public readonly internals: ElementInternals;
+/** Any form associated Custom HTML element. */
+export abstract class BaseFormComponent<T = string> extends BaseComponent implements IBaseFormComponent<T> {
+  public abstract disabled: boolean;
+  public abstract required: boolean;
+  public abstract name: string;
 
-  public get name(): string {
-    throw new Error('Method not implemented.');
-  }
-  public set name(value: string) {
-    throw new Error('Method not implemented.');
-  }
+  public abstract get form(): HTMLFormElement | null;
+  public abstract get labels(): NodeList;
+  public abstract get validity(): ValidityState;
+  public abstract get validationMessage(): string;
+  public abstract get willValidate(): boolean;
+  public abstract get internals(): ElementInternals;
 
-  public get form(): HTMLFormElement | null {
-    throw new Error('Method not implemented.');
-  }
-
-  public get labels(): NodeList {
-    throw new Error('Method not implemented.');
-  }
-
-  public get validity(): ValidityState {
-    throw new Error('Method not implemented.');
-  }
-
-  public get validityMessage(): string {
-    throw new Error('Method not implemented.');
-  }
-
-  public get willValidate(): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
-    throw new Error('Method not implemented.');
-  }
-
-  public checkValidity(): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  public reportValidity(): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  public setCustomValidity(error: string): void {
-    throw new Error('Method not implemented.');
-  }
+  public abstract setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
+  public abstract checkValidity(): boolean;
+  public abstract reportValidity(): boolean;
+  public abstract setCustomValidity(error: string): void;
+  public abstract formAssociatedCallback(form: HTMLFormElement): void;
+  public abstract formResetCallback(): void;
+  public abstract formStateRestoreCallback(state: T, reason: 'restore' | 'autocomplete'): void;
+  public abstract formDisabledCallback(isDisabled: boolean): void;
 }

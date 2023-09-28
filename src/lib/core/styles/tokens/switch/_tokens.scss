@@ -59,6 +59,8 @@ $tokens: (
   // State layer
   state-layer-width: utils.module-ref(switch, state-layer-width, state-layer-size),
   state-layer-height: utils.module-ref(switch, state-layer-height, state-layer-size),
+  state-layer-on-color: utils.module-ref(switch, state-layer-on-color, handle-on-color),
+  state-layer-off-color: utils.module-ref(state-layer, state-layer-off-color, color),
 
   // Dense
   state-layer-dense-width: utils.module-ref(switch, state-layer-dense-width, state-layer-dense-size),
@@ -75,7 +77,7 @@ $tokens: (
   handle-active-off-scale: utils.module-ref(switch, handle-active-off-scale, handle-active-scale),
   handle-active-elevation: utils.module-ref(switch, handle-active-elevation, handle-elevation),
   handle-active-on-elevation: utils.module-ref(switch, handle-active-on-elevation, handle-active-elevation),
-  handle-active-off-elevatioff: utils.module-ref(switch, handle-active-on-elevation, handle-active-elevation),
+  handle-active-off-elevation: utils.module-ref(switch, handle-active-on-elevation, handle-active-elevation),
   track-active-on-color: utils.module-ref(switch, track-active-on-color, track-on-color),
   track-active-off-color: utils.module-ref(switch, track-active-off-color, track-off-color),
   track-active-on-border-width: utils.module-ref(switch, track-active-on-border-width, track-on-border-width),

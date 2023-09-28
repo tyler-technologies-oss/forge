@@ -5,6 +5,7 @@ import { ISwitchComponent } from './switch';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
 export interface ISwitchAdapter extends IBaseAdapter {
+  initialize(): void;
   setOn(value: boolean): void;
   setDisabled(value: boolean): void;
   setRequired(value: boolean): void;
@@ -31,10 +32,12 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     this._labelElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.LABEL);
     this._iconOnElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);
     this._iconOffElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_OFF);
+  }
 
+  public initialize(): void {
     forwardAriaAttributes({
       observedAttributes: SWITCH_CONSTANTS.ariaAttributes,
-      sourceEl: component,
+      sourceEl: this._component,
       targetEl: this._inputElement
     });
   }
@@ -75,7 +78,7 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
   public syncValue(value: boolean): void {
     const data = new FormData();
     data.append(this._component.name, String(value));
-    this._component.internals.setFormValue(data);
+    this._component.internals.setFormValue(data, value.toString());
   }
 
   public syncValidity(hasCustomValidityError: boolean): void {

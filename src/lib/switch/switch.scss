@@ -60,7 +60,7 @@
 
         forge-state-layer {
           @include state-layer.provide-theme((
-            color: var(--_handle-on-color)
+            color: var(--_state-layer-on-color)
           ));
         }
       }
@@ -145,9 +145,15 @@
   }
 }
 
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: var(--_state-layer-off-color)
+  ));
+}
+
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
     shape: var(--_track-shape),
-    outward-offset: 0
+    outward-offset: 0px
   ));
 }
