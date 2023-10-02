@@ -49,7 +49,7 @@ describe('ButtonAreaComponent', function(this: ITestContext) {
     this.context.component.disabled = true;
     const callback = jasmine.createSpy('callback');
     this.context.component.addEventListener('click', callback);
-    this.context.component.click();
+    this.context.button.click();
     expect(callback).not.toHaveBeenCalled();
     expect(this.context.button.disabled).toBeTrue();
   });
