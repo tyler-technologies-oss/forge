@@ -1,6 +1,7 @@
 import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { ICON_CLASS_NAME } from '../constants';
+import { IIconComponent } from '../icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
 import { IListComponent, LIST_CONSTANTS } from '../list/list';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
@@ -98,14 +99,14 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
  * Creates the list to place inside of the dropdown.
  * @param config 
  */
-export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>): void {
+export function createListItems(config: IListDropdownOpenConfig, listElement: IListComponent, options?: Array<IListDropdownOption | IListDropdownOptionGroup>, startIndex = 0, renderSelected = true): void {
   // Ensure the options are provided in the form a group (if no groups provided, then we have one anonymous group of options)
   const groups = getOptionsByGroup(options || config.options);
   const flatOptions = getFlattenedOptions(groups);
 
   const limitOptions = config.optionLimit ? true : false;
   let optionLimit = config.optionLimit || 0;
-  let optionIndex = 0;
+  let optionIdIndex = startIndex;
 
   // Iterate over our groups and render the optional headers and options for that group
   for (const group of groups) {
@@ -160,14 +161,18 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       if (limitOptions && --optionLimit < 0) {
         break;
       }
-
-      optionIndex++;
       
       // Create and configure the list element
       const isSelected = config.selectedValues ? config.selectedValues.some(v => isDeepEqual(v, option.value)) : false;
+
+      // We don't render selected options that are appended dynamically since those are always displayed at the top of the list
+      if (!renderSelected && isSelected) {
+        continue;
+      }
+
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
-      listItemElement.id = `list-dropdown-option-${config.id}-${optionIndex}`;
+      listItemElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
       listItemElement.style.cursor = 'pointer';
 
       if (config.wrapOptionText) {
@@ -217,6 +222,15 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         }
       }
 
+      // Check for secondary (subtitle) text
+      if (option.secondaryLabel) {
+        const secondaryLabelElement = document.createElement('span');
+        secondaryLabelElement.slot = 'subtitle';
+        secondaryLabelElement.textContent = option.secondaryLabel;
+        listItemElement.twoLine = true;
+        listItemElement.appendChild(secondaryLabelElement);
+      }
+
       // If multiple selections are enabled then we need to create and append a leading checkbox element
       if (config.multiple) {
         const checkboxElement = createCheckboxElement(isSelected);
@@ -239,7 +253,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.leadingIcon) {
-        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass);
+        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass, option.leadingIconComponentProps);
         leadingIconElement.slot = 'leading';
         listItemElement.appendChild(leadingIconElement);
       }
@@ -252,7 +266,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.trailingIcon) {
-        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass);
+        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass, option.trailingIconComponentProps);
         trailingIconElement.slot = 'trailing';
         listItemElement.appendChild(trailingIconElement);
       }
@@ -314,7 +328,7 @@ function createDivider(): HTMLElement {
   return divider;
 }
 
-function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string): HTMLElement {
+function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string, componentProps?: Partial<IIconComponent>): HTMLElement {
   if (type === 'component') {
     const icon = document.createElement('forge-icon');
     if (iconClass) {
@@ -322,6 +336,9 @@ function createIconElement(type: ListDropdownIconType = 'font', iconName: string
     }
     icon.setAttribute('aria-hidden', 'true');
     icon.name = iconName;
+    if (componentProps) {
+      Object.assign(icon, componentProps);
+    }
     return icon;
   }
 

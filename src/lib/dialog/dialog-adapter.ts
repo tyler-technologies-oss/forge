@@ -191,7 +191,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public captureActiveElement(): void {
-    this._activeElement = getActiveElement() as HTMLElement;
+    this._activeElement = getActiveElement(this._component.ownerDocument) as HTMLElement;
     if (this._activeElement) {
       this._activeElement.blur();
     }

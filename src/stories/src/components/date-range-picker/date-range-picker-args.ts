@@ -12,6 +12,7 @@ export interface IDateRangePickerProps {
   showToday: boolean;
   showClear: boolean;
   disabledDaysOfWeek: DayOfWeek[];
+  locale: string | undefined;
 }
 
 export const argTypes = {
@@ -103,5 +104,12 @@ export const argTypes = {
     table: {
       category: 'Properties',
     },
-  }
+  },
+  locale: {
+    control: 'text',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
 };

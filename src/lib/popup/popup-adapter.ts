@@ -1,6 +1,6 @@
 import { addClass, closestElement, emitEvent, getShadowElement, IPositionElementConfig, notChildEventListener, positionElementAsync, removeClass, removeElement, deepQuerySelectorAll, getActiveElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IPopupComponent } from './popup';
+import { IPopupComponent, IPopupCloseEventData } from './popup';
 import { IPopupPositionEventData, POPUP_CONSTANTS, PopupPlacement } from './popup-constants';
 
 export interface IPopupAdapter extends IBaseAdapter {
@@ -17,6 +17,7 @@ export interface IPopupAdapter extends IBaseAdapter {
   removeEventListener(type: string, listener: (evt: Event) => void): void;
   setBlurListener(listener: () => void): () => void;
   trySetInitialFocus(): void;
+  getCloseEventData(): IPopupCloseEventData;
 }
 
 export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopupAdapter {
@@ -86,7 +87,7 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
     this.positionPopup();
 
     if (manageFocus) {
-      this._previouslyFocusedElement = getActiveElement() as HTMLElement;
+      this._previouslyFocusedElement = getActiveElement(this._component.ownerDocument) as HTMLElement;
       this._component.focus();
     }
   }
@@ -97,7 +98,7 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
     if (manageFocus) {
       window.requestAnimationFrame(() => {
         if (this._previouslyFocusedElement) {
-          const activeElement = getActiveElement();
+          const activeElement = getActiveElement(this._component.ownerDocument);
           if (!activeElement || activeElement === document.body) {
             this._previouslyFocusedElement.focus();
           }
@@ -128,6 +129,10 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
       return !emitEvent(this._component.targetElement, type, data, bubbles, cancelable);
     }
     return false;
+  }
+
+  public getCloseEventData(): IPopupCloseEventData {
+    return { popup: this._component };
   }
 
   public addClass(classes: string | string[]): void {

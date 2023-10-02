@@ -185,7 +185,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     if (target && this._toInputElement === target || this._fromInputElement === target) {
       return true;
     }
-    const activeEl = getActiveElement();
+    const activeEl = getActiveElement(this._component.ownerDocument);
     return this._toInputElement === activeEl || this._fromInputElement === activeEl;
   }
 

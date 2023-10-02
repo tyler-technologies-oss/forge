@@ -921,6 +921,26 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).withContext('float-label-type attribute should be "always"').toBe('always');
       });
 
+      it('should float the label when floatLabelType property is set to "always" after being moved in the DOM', async function(this: ITestContext) {
+        this.context = setupTestContext(true, {}, { label: 'Test' });
+        this.context.component.floatLabelType = 'always';
+        await tick();
+        
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+
+        const parent = this.context.component.parentElement as HTMLElement;
+        this.context.destroy();
+        await tick();
+
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeFalse();
+
+        parent.appendChild(this.context.component);
+        await tick();
+
+        expect((this.context.foundation as any)._floatingLabel.isFloating).withContext('label should be floating').toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+      });
+
       it('should not float the label when floatLabelType property is set from "always" to auto (while input has no value)', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { label: 'Test' });
         this.context.component.floatLabelType = 'always';
@@ -1101,6 +1121,37 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
     });
 
+   describe('Click events', function (this: ITestContext) {
+      it('should emit a click event from the input if the container is clicked', function(this: ITestContext) {
+        this.context = setupTestContext();
+        const clickSpy = jasmine.createSpy('inputClick');
+        const inputEl =  getNativeInput(this.context.component);
+        inputEl.addEventListener('click', clickSpy);
+        
+        const containerEl = getInputContainerElement(this.context.component);
+        containerEl.dispatchEvent(new MouseEvent('mousedown'));
+        
+        expect(clickSpy).toHaveBeenCalledTimes(1);
+        
+        inputEl.removeEventListener('click', clickSpy);
+      });
+
+      it('should not emit a click event from a disabled input if the container is clicked', function(this: ITestContext) {
+        this.context = setupTestContext();
+        const clickSpy = jasmine.createSpy('inputClick');
+        const inputEl =  getNativeInput(this.context.component);
+        inputEl.addEventListener('click', clickSpy);
+        inputEl.disabled = true;
+        
+        const containerEl = getInputContainerElement(this.context.component);
+        containerEl.dispatchEvent(new MouseEvent('mousedown'));
+        
+        expect(clickSpy).not.toHaveBeenCalled();
+        
+        inputEl.removeEventListener('click', clickSpy);
+      });
+    });
+
     describe('Member navigation', function(this: ITestContext) {
       it('should focus the last element when the left arrow key is pressed while the input is focused', function(this: ITestContext) {
         this.context = setupTestContext();
@@ -1196,6 +1247,10 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
   function getHelperTextElement(component: IChipFieldComponent) {
     return component.querySelector(CHIP_FIELD_CONSTANTS.selectors.HELPER_TEXT) as HTMLElement;
+  }
+
+  function getInputContainerElement(component: IChipFieldComponent) {
+    return getShadowElement(component, CHIP_FIELD_CONSTANTS.selectors.INPUT_CONTAINER) as HTMLDivElement;
   }
 
   function dispatchKeydownEvent(ele: HTMLElement, key: string) {

@@ -53,6 +53,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   setCalendarActiveDate(date: Date): void;
   getCalendarActiveDate(): Date | undefined;
   setCalendarYearRange(value: string): void;
+  setCalendarLocale(locale: string | undefined): void;
   propagateCalendarKey(evt: KeyboardEvent): void;
 }
 export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends BaseAdapter<T> implements IBaseDatePickerAdapter {
@@ -200,6 +201,12 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   public setCalendarYearRange(value: string): void {
     if (this._calendarDropdown?.calendar?.yearRange) {
       this._calendarDropdown.calendar.yearRange = value;
+    }
+  }
+
+  public setCalendarLocale(locale: string | undefined): void {
+    if (this._calendarDropdown?.calendar) {
+      this._calendarDropdown.locale = locale;
     }
   }
 

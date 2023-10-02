@@ -191,7 +191,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   }
 
   public inputHasFocus(target?: EventTarget | null): boolean {
-    return this._inputElement === target || this._inputElement === getActiveElement();
+    return this._inputElement === target || this._inputElement === getActiveElement(this._component.ownerDocument);
   }
 
   public setLabelClass(name: string): void {

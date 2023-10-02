@@ -315,11 +315,11 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   }
 
   private _onToInputFocus(): void {
-    this._adapter.selectToInputText();
     if (this.masked && this._showMaskFormat) {
       this._initializeMask();
       this._initializeToMask();
     }
+    this._adapter.selectToInputText();
   }
 
   private _onToInputBlur(evt: FocusEvent): void {
@@ -336,11 +336,11 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
   }
 
   protected override _onInputFocus(evt: FocusEvent): void {
-    this._adapter.selectInputText();
     if (this.masked && this._showMaskFormat) {
       this._initializeMask();
       this._initializeToMask();
     }
+    this._adapter.selectInputText();
   }
 
   protected override _onInputBlur(evt: FocusEvent): void {

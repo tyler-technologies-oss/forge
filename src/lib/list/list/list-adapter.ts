@@ -63,7 +63,7 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
     const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
 
     if (listItems && listItems.length > 0) {
-      const focusedListItemIndex = listItems.indexOf(getActiveElement() as HTMLElement);
+      const focusedListItemIndex = listItems.indexOf(getActiveElement(this._component.ownerDocument) as HTMLElement);
       const nextIndex = focusedListItemIndex < listItems.length - 1 ? focusedListItemIndex + 1 : 0;
 
       if (nextIndex <= listItems.length - 1) {
@@ -79,7 +79,7 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
     const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
 
     if (listItems && listItems.length > 0) {
-      const focusedListItemIndex = listItems.indexOf(getActiveElement() as HTMLElement);
+      const focusedListItemIndex = listItems.indexOf(getActiveElement(this._component.ownerDocument) as HTMLElement);
       const nextIndex = focusedListItemIndex > 0 ? focusedListItemIndex - 1 : listItems.length - 1;
 
       if (nextIndex >= 0) {

@@ -27,6 +27,7 @@ export interface IBaseDatePickerFoundation<TValue> extends ICustomElementFoundat
   showToday: boolean;
   showClear: boolean;
   yearRange: string;
+  locale: string | undefined;
 }
 
 export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerAdapter, TPublicValue, TPrivateValue = TPublicValue> implements IBaseDatePickerFoundation<TPublicValue> {
@@ -53,6 +54,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   protected _showClear = false;
   protected _disabledDaysOfWeek: DayOfWeek[];
   protected _yearRange = '-50:+50';
+  protected _locale: string | undefined;
   protected _isInitialized = false;
 
   // Listeners
@@ -165,11 +167,11 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   }
 
   protected _onInputFocus(evt: FocusEvent): void {
-    this._adapter.selectInputText();
-
     if (this.masked && this.showMaskFormat) {
       this._applyMask();
     }
+
+    this._adapter.selectInputText();
   }
   
   protected _onInputBlur(evt: FocusEvent): void {
@@ -203,7 +205,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
       preventFocus: true,
       menuAnimation: 'fade',
       fixedHeight: true,
-      selectionFollowsMonth: true
+      selectionFollowsMonth: true,
+      locale: this._locale
     };
     const dropdownConfig: ICalendarDropdownPopupConfig = {
       popupClasses: this._popupClasses,
@@ -735,6 +738,19 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
       if (this._isInitialized && this._open) {
         this._adapter.setCalendarYearRange(this._yearRange);
+      }
+    }
+  }
+
+  public get locale(): string | undefined {
+    return this._locale;
+  }
+  public set locale(value: string | undefined) {
+    if (this._locale !== value) {
+      this._locale = value;
+
+      if (this._isInitialized && this._open) {
+        this._adapter.setCalendarLocale(this._locale);
       }
     }
   }
