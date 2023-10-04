@@ -1,3 +1,17 @@
+# v2.18.1 (Wed Oct 04 2023)
+
+#### 🐛 Bug Fix
+
+- fix(paginator): fixed a bug where focus was lost when disabling the page buttons dynamically [#398](https://github.com/tyler-technologies-oss/forge/pull/398) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(icon): move aria-hidden from host element to svg [#396](https://github.com/tyler-technologies-oss/forge/pull/396) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.18.0 (Wed Sep 27 2023)
 
 #### 🚀 Enhancement
