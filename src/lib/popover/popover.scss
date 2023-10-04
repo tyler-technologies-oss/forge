@@ -1,3 +1,199 @@
-@use './mixins';
+@use './core';
+@use './configuration';
+@use './animations';
 
-@include mixins.core-styles;
+:host {
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+///
+/// Base styles
+/// 
+
+.forge-popover {
+  @include configuration.base;
+  @include core.base;
+}
+
+///
+/// Arrow styles
+/// 
+
+:host([arrow]) {
+  .arrow {
+    @include configuration.arrow;
+    @include core.arrow;
+  }
+
+  forge-overlay[position-placement^=top] {
+    .arrow {
+      --_arrow-translate-y: calc(var(--_border-width) * -1);
+      --_arrow-rotation: var(--_arrow-top-rotation);
+    }
+  }
+  
+  forge-overlay[position-placement^=right] {
+    .arrow {
+      --_arrow-translate-x: var(--_border-width);
+      --_arrow-rotation: var(--_arrow-right-rotation);
+    }
+  }
+  
+  forge-overlay[position-placement^=bottom] {
+    .arrow {
+      --_arrow-translate-y: var(--_border-width);
+      --_arrow-rotation: var(--_arrow-bottom-rotation);
+    }
+  }
+  
+  forge-overlay[position-placement^=left] {
+    .arrow {
+      --_arrow-translate-x: calc(var(--_border-width) * -1);
+      --_arrow-rotation: var(--_arrow-left-rotation);
+    }
+  }
+}
+
+///
+/// Animation styles
+/// 
+
+:host(:not([animation-type=none])) {
+  .forge-popover {
+    @include configuration.animation-base;
+  }
+}
+
+:host(:not([animation-type])),
+:host([animation-type=zoom]) {
+  .forge-popover {
+    @include configuration.zoom;
+    @include core.zoom-base;
+  }
+
+  forge-overlay[open] {
+    &[position-placement^=top] {
+      &:not([position-placement*='-']) {
+        .forge-popover {
+          --_zoomin-origin: bottom center;
+        }
+      }
+
+      &[position-placement$=-start] {
+        .forge-popover {
+          --_zoomin-origin: bottom left;
+        }
+      }
+
+      &[position-placement$=-end] {
+        .forge-popover {
+          --_zoomin-origin: bottom right;
+        }
+      }
+    }
+
+    &[position-placement^=right] {
+      &:not([position-placement*='-']) {
+        .forge-popover {
+          --_zoomin-origin: left center;
+        }
+      }
+
+      &[position-placement$=-start] {
+        .forge-popover {
+          --_zoomin-origin: left top;
+        }
+      }
+
+      &[position-placement$=-end] {
+        .forge-popover {
+          --_zoomin-origin: left bottom;
+        }
+      }
+    }
+
+    &[position-placement^=bottom] {
+      &:not([position-placement*='-']) {
+        .forge-popover {
+          --_zoomin-origin: top center;
+        }
+      }
+
+      &[position-placement$=-start] {
+        .forge-popover {
+          --_zoomin-origin: top left;
+        }
+      }
+
+      &[position-placement$=-end] {
+        .forge-popover {
+          --_zoomin-origin: top right;
+        }
+      }
+    }
+
+    &[position-placement^=left] {
+      &:not([position-placement*='-']) {
+        .forge-popover {
+          --_zoomin-origin: right center;
+        }
+      }
+
+      &[position-placement$=-start] {
+        .forge-popover {
+          --_zoomin-origin: right top;
+        }
+      }
+
+      &[position-placement$=-end] {
+        .forge-popover {
+          --_zoomin-origin: right bottom;
+        }
+      }
+    }
+  }
+}
+
+:host([animation-type=slide]) {
+  .forge-popover {
+    @include configuration.slide;
+    @include core.slide-base;
+  }
+
+  forge-overlay[open] {
+    &[position-placement^=top] {
+      .forge-popover {
+        --_slidein-y: var(--_slide-offset);
+      }
+    }
+    
+    &[position-placement^=right] {
+      .forge-popover {
+        --_slidein-x: calc(var(--_slide-offset) * -1);
+      }
+    }
+    
+    &[position-placement^=bottom] {
+      .forge-popover {
+        --_slidein-y: calc(var(--_slide-offset) * -1);
+      }
+    }
+    
+    &[position-placement^=left] {
+      .forge-popover {
+        --_slidein-x: var(--_slide-offset);
+      }
+    }
+  }
+}
+
+:host([animation-type=fade]) {
+  .forge-popover {
+    @include configuration.fade;
+    @include core.fade-base;
+  }
+}

@@ -1,60 +1,90 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { attachShadowTemplate, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { OverlayAdapter } from './overlay-adapter';
-import { IOverlayPosition, OVERLAY_CONSTANTS, OverlayPlacement, OverlayPositionStrategy } from './overlay-constants';
+import { OverlayToggleEventData, OVERLAY_CONSTANTS } from './overlay-constants';
 import { OverlayFoundation } from './overlay-foundation';
+import { BaseOverlay, IBaseOverlay } from './base-overlay';
 
-import { BaseComponent, IBaseComponent } from '../core';
 import template from './overlay.html';
 import styles from './overlay.scss';
 
-export interface IOverlayComponent extends IBaseComponent {
-  open: boolean;
+export interface IOverlayComponent extends IBaseOverlay {
   targetElement: HTMLElement;
-  placement: OverlayPlacement;
-  positionStrategy: OverlayPositionStrategy;
-  offset: IOverlayPosition;
-  hideWhenClipped: boolean;
-  static: boolean;
-  internals: ElementInternals;
+  arrowElement: HTMLElement | undefined;
+  arrowElementOffset: number;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
     'forge-overlay': IOverlayComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-overlay-toggle': CustomEvent<OverlayToggleEventData>;
+    'forge-overlay-beforetoggle': CustomEvent<OverlayToggleEventData>;
+  }
 }
 
 /**
- * The custom element class behind the `<forge-overlay>` element.
+ * @tag forge-overlay
  * 
+ * @summary Overlays are used to render content in a floating element that is anchored around a target element.
+ * 
+ * @description
  * An overlay is a primitive component that does not provide any visual styles. Its only
  * purpose is to render slotted content in a floating element. The element can be positioned
- * manually, or configured to anchor itself with smart positioning around another element.
+ * manually, or configured to anchor itself with smart positioning around a target element.
  * 
- * @tag forge-overlay
+ * @property {boolean} open - Whether or not the overlay is open.
+ * @property {boolean} inline - Whether or not the overlay should be rendered inline (not in the :top-layer).
+ * @property {HTMLElement} targetElement - The element to anchor the overlay to.
+ * @property {HTMLElement} arrowElement - The element to use as the arrow for the overlay.
+ * @property {number} arrowElementOffset - The offset to apply to the arrow element.
+ * @property {OverlayPlacement} placement - The placement of the overlay relative to the target element.
+ * @property {OverlayPositionStrategy} positionStrategy - The positioning strategy to use for the overlay. Valid values are `'fixed'` and `'absolute'`.
+ * @property {IOverlayPosition} offset - The offset to apply to the overlay position relative to the target element.
+ * @property {boolean} shift - Whether or not the target element should shift along the side of the overlay when scrolling.
+ * @property {boolean} hide - Whether or not the overlay should hide itself when the target element is out of view.
+ * @property {boolean} static - Whether or not the overlay handles light dismiss itself or not.
+ * @property {boolean} flip - Whether or not the overlay should flip to the opposite placement when not enough room.
+ * @property {boolean} auto - Whether or not the overlay should automatically attempt to locate the best placement.
+ * 
+ * @attribute {boolean} open - Whether or not the overlay is open.
+ * @attribute {boolean} inline - Whether or not the overlay should be rendered inline (not in the :top-layer).
+ * @attribute {OverlayPlacement} placement - The placement of the overlay relative to the target element.
+ * @attribute {OverlayPositionStrategy} position-strategy - The positioning strategy to use for the overlay. Valid values are `'fixed'` and `'absolute'`.
+ * @attribute {boolean} hide - Whether or not the overlay should hide itself when the target element is out of view.
+ * @attribute {boolean} static - Whether or not the overlay handles light dismiss itself or not.
+ * @attribute {boolean} shift - Whether or not the target element should shift along the side of the overlay when scrolling.
+ * @attribute {boolean} no-flip - Tells the overlay not to flip to the opposite placement when not enough room.
+ * @attribute {boolean} auto - Whether or not the overlay should automatically attempt to locate the best placement.
+ * @attribute {string} position-placement - The placement of the overlay around the target element **after** dynamic positioning. This is a read-only attribute that is only available when open.
+ * 
+ * @event {CustomEvent<OverlayToggleEventData>} forge-overlay-toggle - Fires when the overlay is toggled.
+ * @event {CustomEvent<OverlayToggleEventData>} forge-overlay-beforetoggle - Fires before the overlay is toggled.
+ * 
+ * @cssproperty --forge-overlay-position - The `position` of the overlay.
+ * @cssproperty --forge-overlay-z-index - The `z-index` of the overlay. Defaults to the `popup` range.
+ * @cssproperty --forge-overlay-height - The `height` of the overlay. Defaults to `min-content`.
+ * @cssproperty --forge-overlay-width - The `width` of the overlay. Defaults to `min-content`.
+ * 
+ * @slot - The content to render inside the overlay.
+ * 
+ * @csspart root - The component's root element.
  */
 @CustomElement({
   name: OVERLAY_CONSTANTS.elementName
 })
-export class OverlayComponent extends BaseComponent implements IOverlayComponent {
+export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements IOverlayComponent {
   public static get observedAttributes(): string[] {
     return [
-      OVERLAY_CONSTANTS.attributes.OPEN,
-      OVERLAY_CONSTANTS.attributes.PLACEMENT,
-      OVERLAY_CONSTANTS.attributes.POSITION_STRATEGY,
-      OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED,
-      OVERLAY_CONSTANTS.attributes.STATIC
+      ...Object.values(OVERLAY_CONSTANTS.observedAttributes)
     ];
   }
-
-  private _foundation: OverlayFoundation;
-  public internals: ElementInternals;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
     this._foundation = new OverlayFoundation(new OverlayAdapter(this));
-    this.internals = this.attachInternals();
   }
 
   public connectedCallback(): void {
@@ -64,45 +94,13 @@ export class OverlayComponent extends BaseComponent implements IOverlayComponent
   public disconnectedCallback(): void {
     this._foundation.disconnect();
   }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case OVERLAY_CONSTANTS.attributes.OPEN:
-        this.open = coerceBoolean(newValue);
-        break;
-      case OVERLAY_CONSTANTS.attributes.PLACEMENT:
-        this.placement = newValue as OverlayPlacement;
-        break;
-      case OVERLAY_CONSTANTS.attributes.POSITION_STRATEGY:
-        this.positionStrategy = newValue as OverlayPositionStrategy;
-        break;
-      case OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED:
-        this.hideWhenClipped = coerceBoolean(newValue);
-        break;
-      case OVERLAY_CONSTANTS.attributes.STATIC:
-        this.static = coerceBoolean(newValue);
-        break;
-    }
-  }
-
-  @FoundationProperty()
-  public open: boolean;
-
+  
   @FoundationProperty()
   public targetElement: HTMLElement;
 
   @FoundationProperty()
-  public placement: OverlayPlacement;
+  public arrowElement: HTMLElement;
 
   @FoundationProperty()
-  public positionStrategy: OverlayPositionStrategy;
-
-  @FoundationProperty()
-  public offset: IOverlayPosition;
-
-  @FoundationProperty()
-  public hideWhenClipped: boolean;
-
-  @FoundationProperty()
-  public static: boolean;
+  public arrowElementOffset: number;
 }

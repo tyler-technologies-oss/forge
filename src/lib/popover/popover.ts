@@ -1,38 +1,46 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { PopoverAdapter } from './popover-adapter';
-import { PopoverFoundation } from './popover-foundation';
-import { POPOVER_CONSTANTS } from './popover-constants';
+import { PopoverAnimationType, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
+import { IPopoverFoundation, PopoverFoundation } from './popover-foundation';
+import { OverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
+import { IOverlayAware, OverlayAware } from '../overlay/overlay-aware';
 
 import template from './popover.html';
 import styles from './popover.scss';
-import { OverlayComponent } from '../overlay';
-import { BaseComponent } from '../core';
 
-export interface IPopoverComponent extends ICustomElement {
+export interface IPopoverComponent extends IOverlayAware {
   targetElement: HTMLElement;
+  arrow: boolean;
+  animationType: PopoverAnimationType;
+  triggerType: PopoverTriggerType;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
     'forge-popover': IPopoverComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-popover-toggle': CustomEvent;
+  }
 }
 
 /**
- * The custom element class behind the `<forge-popover>` element.
- * 
  * @tag forge-popover
  */
 @CustomElement({
   name: POPOVER_CONSTANTS.elementName,
   dependencies: [OverlayComponent]
 })
-export class PopoverComponent extends BaseComponent implements IPopoverComponent {
+export class PopoverComponent extends OverlayAware<IPopoverFoundation> implements IPopoverComponent {
   public static get observedAttributes(): string[] {
-    return [];
+    return [
+      ...Object.values(OVERLAY_CONSTANTS.observedAttributes),
+      POPOVER_CONSTANTS.attributes.ARROW,
+      POPOVER_CONSTANTS.attributes.ANIMATION_TYPE,
+      POPOVER_CONSTANTS.attributes.TRIGGER_TYPE
+    ];
   }
-
-  private _foundation: PopoverFoundation;
 
   constructor() {
     super();
@@ -49,9 +57,29 @@ export class PopoverComponent extends BaseComponent implements IPopoverComponent
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-
+    switch (name) {
+      case POPOVER_CONSTANTS.attributes.ARROW:
+        this.arrow = coerceBoolean(newValue);
+        return;
+      case POPOVER_CONSTANTS.attributes.ANIMATION_TYPE:
+        this.animationType = newValue as PopoverAnimationType;
+        return;
+      case POPOVER_CONSTANTS.attributes.TRIGGER_TYPE:
+        this.triggerType = newValue as PopoverTriggerType;
+        return;
+    }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
   @FoundationProperty()
   public targetElement: HTMLElement;
+
+  @FoundationProperty()
+  public arrow: boolean;
+
+  @FoundationProperty()
+  public animationType: PopoverAnimationType;
+
+  @FoundationProperty()
+  public triggerType: PopoverTriggerType;
 }

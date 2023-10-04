@@ -1,0 +1,22 @@
+<div class="clipping-container">
+  <div class="scroll-container">
+    <forge-button type="raised" slot="trigger">
+      <button type="button" id="my-btn" style="white-space: nowrap;" aria-controls="my-popover" aria-haspopup="true" aria-expanded="false">Show popover</button>
+    </forge-button>
+
+    <forge-popover id="my-popover">
+      <forge-scaffold style="width: 300px;">
+        <div slot="body" id="my-popover" role="dialog" class="popover-content" style="padding: 16px;">
+          <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus sit in placeat aliquam expedita quis, totam impedit atque, delectus quaerat dolorum labore, eaque cumque nobis a porro quia iste ex?</p>
+        </div>
+        <forge-toolbar slot="footer" no-border>
+          <forge-button slot="end">
+            <button type="button" id="close-button">Close</button>
+          </forge-button>
+        </forge-toolbar>
+      </forge-scaffold>
+    </forge-popover>
+  </div>
+</div>
+
+<script type="module" src="popover.ts"></script>

@@ -8,7 +8,7 @@ const tabBar = document.querySelector('forge-tab-bar#tab-bar') as ITabBarCompone
 const viewSwitcher = document.querySelector('forge-view-switcher#view-switcher') as IViewSwitcherComponent;
 const typeRadioGroup = document.querySelector('#view-switcher-animation-type-radiogroup');
 
-tabBar.addEventListener('forge-tab-bar-activate', ({ detail: { index }}) => {
+tabBar.addEventListener('forge-tab-bar-change', ({ detail: index }) => {
   viewSwitcher.index = index;
 });
 

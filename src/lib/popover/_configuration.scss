@@ -1,0 +1,51 @@
+@use '../core/styles/tokens/popover/tokens';
+
+@mixin base {
+  --_background-color: #{tokens.get(background-color)};
+  --_border-radius: #{tokens.get(border-radius)};
+  --_box-shadow: #{tokens.get(box-shadow)};
+  --_border-width: #{tokens.get(border-width)};
+  --_border-style: #{tokens.get(border-style)};
+  --_border-color: #{tokens.get(border-color)};
+}
+
+@mixin arrow {
+  --_arrow-size: #{tokens.get(arrow-size)};
+  --_arrow-height: #{tokens.get(arrow-height)};
+  --_arrow-width: #{tokens.get(arrow-width)};
+  --_arrow-background-color: #{tokens.get(arrow-background-color)};
+  --_arrow-clip-path: #{tokens.get(arrow-clip-path)};
+  --_arrow-top-rotation: #{tokens.get(arrow-top-rotation)};
+  --_arrow-right-rotation: #{tokens.get(arrow-right-rotation)};
+  --_arrow-bottom-rotation: #{tokens.get(arrow-bottom-rotation)};
+  --_arrow-left-rotation: #{tokens.get(arrow-left-rotation)};
+
+  --_arrow-translate-x: 0;
+  --_arrow-translate-y: 0;
+  --_arrow-rotation: 0;
+}
+
+@mixin animation-base {
+  --_animation-timing: #{tokens.get(animation-timing)};
+}
+
+@mixin zoom {
+  --_zoom-duration: #{tokens.get(zoom-duration)};
+  --_zoom-timing: #{tokens.get(zoom-timing)};
+
+  --_zoomin-origin: 50% 50% 0;
+}
+
+@mixin slide {
+  --_slide-duration: #{tokens.get(slide-duration)};
+  --_slide-timing: #{tokens.get(slide-timing)};
+  --_slide-offset: #{tokens.get(slide-offset)};
+
+  --_slidein-x: 0;
+  --_slidein-y: 0;
+}
+
+@mixin fade {
+  --_fade-duration: #{tokens.get(fade-duration)};
+  --_fade-timing: #{tokens.get(fade-timing)};
+}

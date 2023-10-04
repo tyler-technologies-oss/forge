@@ -1,8 +1,8 @@
 <%-
 include('./src/partials/page.ejs', {
   page: {
-    title: 'Overlay',
-    includePath: './pages/overlay/overlay.ejs',
+    title: 'Popover',
+    includePath: './pages/popover/popover.ejs',
     options: [
       {
         type: 'select',
@@ -26,23 +26,32 @@ include('./src/partials/page.ejs', {
       },
       {
         type: 'select',
-        label: 'Position strategy',
-        id: 'opt-position-strategy',
-        defaultValue: 'fixed',
+        label: 'Animation type',
+        id: 'opt-animation-type',
+        defaultValue: 'zoom',
         options: [
-          { label: 'Fixed', value: 'fixed' },
-          { label: 'Absolute', value: 'absolute' }
+          { label: 'None', value: 'none' },
+          { label: 'Fade', value: 'fade' },
+          { label: 'Slide', value: 'slide' },
+          { label: 'Zoom', value: 'zoom' }
         ]
       },
+      {
+        type: 'select',
+        label: 'Trigger type',
+        id: 'opt-trigger-type',
+        defaultValue: 'click',
+        options: [
+          { label: 'Click', value: 'click' },
+          { label: 'Hover', value: 'hover' },
+          { label: 'Focus', value: 'focus' }
+        ]
+      },
+      { type: 'switch', label: 'Arrow', id: 'opt-arrow' },
       { type: 'switch', label: 'Inline', id: 'opt-inline' },
       { type: 'switch', label: 'Static', id: 'opt-static' },
-      { type: 'switch', label: 'Hide', id: 'opt-hide', defaultValue: true },
-      { type: 'switch', label: 'Shift', id: 'opt-shift' },
-      { type: 'switch', label: 'Flip', id: 'opt-flip', defaultValue: true },
-      { type: 'switch', label: 'Auto', id: 'opt-auto' },
-      { type: 'switch', label: 'Use small container', id: 'opt-use-small-container' },
-      { type: 'switch', label: 'Force containment', id: 'opt-force-containment' },
       { type: 'switch', label: 'Use offset', id: 'opt-use-offset' },
+      { type: 'switch', label: 'Force containment', id: 'opt-force-containment' },
       { type: 'button', label: 'Center demo', id: 'opt-center'}
     ]
   }

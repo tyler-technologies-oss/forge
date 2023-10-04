@@ -1,0 +1,54 @@
+@use './variables';
+@use '../core/styles/utils';
+@use '../core/styles/tokens/popover/tokens';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, popover);
+}
+
+@mixin base {
+  background-color: var(--_background-color);
+  border-radius: var(--_border-radius);
+  box-shadow: var(--_box-shadow);
+  border: var(--_border-width) var(--_border-style) var(--_border-color);
+  position: relative;
+}
+
+@mixin arrow {
+  position: absolute;
+  height: var(--_arrow-height);
+  width: var(--_arrow-width);
+  background-color: var(--_arrow-background-color);
+  box-shadow: var(--_box-shadow);
+  border: var(--_border-width) var(--_border-style) var(--_border-color);
+  transform: 
+    translate(var(--_arrow-translate-x), var(--_arrow-translate-y))
+    rotate(var(--_arrow-rotation));
+  clip-path: var(
+    --_arrow-clip-path,
+    polygon(
+      calc(var(--_border-width) * -1) calc(var(--_border-width) * -1),
+      calc(100% + var(--_border-width)) calc(var(--_border-width) * -1),
+      calc(100% + var(--_border-width)) calc(100% + var(--_border-width))
+    )
+  );
+}
+
+@mixin zoom-base {
+  animation-duration: var(--_zoom-duration);
+  animation-timing-function: var(--_zoom-timing);
+  animation-name: zoomin;
+  transform-origin: var(--_zoomin-origin);
+}
+
+@mixin slide-base {
+  animation-duration: var(--_slide-duration);
+  animation-timing-function: var(--_slide-timing);
+  animation-name: slidein;
+}
+
+@mixin fade-base {
+  animation-duration: var(--_fade-duration);
+  animation-timing-function: var(--_fade-timing);
+  animation-name: fadein;
+}

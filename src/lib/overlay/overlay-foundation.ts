@@ -1,35 +1,37 @@
-import { ICustomElementFoundation } from '@tylertech/forge-core';
 
+import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IOverlayAdapter } from './overlay-adapter';
-import { IOverlayPosition, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from './overlay-constants';
+import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OverlayToggleEvent, OverlayToggleEventData, OVERLAY_CONSTANTS } from './overlay-constants';
 
 export interface IOverlayFoundation extends ICustomElementFoundation {
-  open: boolean;
   targetElement: HTMLElement;
+  arrowElement: HTMLElement;
+  arrowElementOffset: number;
+  inline: boolean;
   placement: OverlayPlacement;
   positionStrategy: OverlayPositionStrategy;
-  offset: IOverlayPosition;
-  hideWhenClipped: boolean;
+  offset: IOverlayOffset;
+  shift: boolean;
+  hide: boolean;
   static: boolean;
-  position(): void;
-}
-
-// TODO: Remove when native typings support this interface
-interface ToggleEvent extends Event {
-  newState: 'closed' | 'open';
-  oldState: 'closed' | 'open';
 }
 
 export class OverlayFoundation implements IOverlayFoundation {
   private _isConnected = false;
   private _open = false;
-  private _targetElement: HTMLElement;
-  private _placement: OverlayPlacement = 'bottom-start';
-  private _positionStrategy: OverlayPositionStrategy = 'absolute';
-  private _offset: IOverlayPosition = { x: 0, y: 0 };
-  private _hideWhenClipped = true;
+  private _inline = false;
+  private _placement: OverlayPlacement = 'bottom';
+  private _positionStrategy: OverlayPositionStrategy = 'fixed';
+  private _offset: IOverlayOffset = {};
+  private _shift = false;
+  private _hide = true;
+  private _flip = true;
+  private _auto = false;
   private _static = false;
-  private _lightDismissListener: (evt: ToggleEvent) => void;
+  private _targetElement: HTMLElement;
+  private _arrowElement: HTMLElement;
+  private _arrowElementOffset = 0;
+  private _lightDismissListener: (evt: OverlayToggleEvent) => void;
 
   constructor(private _adapter: IOverlayAdapter) {
     this._lightDismissListener = evt => {
@@ -58,8 +60,11 @@ export class OverlayFoundation implements IOverlayFoundation {
       targetElement: this._targetElement,
       strategy: this._positionStrategy,
       placement: this._placement,
-      hide: this._hideWhenClipped,
-      offset: this._offset
+      hide: this._hide,
+      offset: this._offset,
+      shift: this._shift,
+      flip: this._flip,
+      auto: this._auto
     });
   }
 
@@ -67,27 +72,32 @@ export class OverlayFoundation implements IOverlayFoundation {
     this._applyOpen(false);
   }
 
-  private _applyOpen(newState: boolean): void {
+  protected _applyOpen(newState: boolean): void {
     if (this._open === newState || !this._isConnected) {
       return;
     }
 
+    const oldState = this._open;
     this._open = newState;
     
     const isCancelled = this._adapter.dispatchHostEvent({
-      type: 'forge-overlay-beforetoggle',
-      detail: { open: this._open },
+      type: OVERLAY_CONSTANTS.events.BEFORETOGGLE,
+      detail: { open: this._open } as OverlayToggleEventData,
       cancelable: true,
       composed: true
     });
     if (isCancelled) {
-      this._open = !newState;
+      this._open = oldState;
       return;
     }
     
     this._adapter.setOpen(this._open);
 
-    this._adapter.dispatchHostEvent({ type: 'forge-overlay-toggle', detail: { open: this._open }, composed: true });
+    this._adapter.dispatchHostEvent({
+      type: OVERLAY_CONSTANTS.events.TOGGLE,
+      detail: { open: this._open } as OverlayToggleEventData,
+      composed: true
+    });
 
     if (this._open) {
       if (!this._static) {
@@ -97,10 +107,13 @@ export class OverlayFoundation implements IOverlayFoundation {
       this._adapter.removeLightDismissListener(this._lightDismissListener);
     }
 
-    this.position();
-
+    if (this._open) {
+      this.position();
+    }
+    
     this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._open);
   }
+
 
   public get open(): boolean {
     return this._open;
@@ -117,6 +130,31 @@ export class OverlayFoundation implements IOverlayFoundation {
   }
   public set targetElement(value: HTMLElement) {
     this._targetElement = value;
+  }
+
+  public get arrowElement(): HTMLElement {
+    return this._arrowElement;
+  }
+  public set arrowElement(value: HTMLElement) {
+    this._arrowElement = value;
+  }
+
+  public get arrowElementOffset(): number {
+    return this._arrowElementOffset;
+  }
+  public set arrowElementOffset(value: number) {
+    this._arrowElementOffset = value;
+  }
+
+  public get inline(): boolean {
+    return this._inline;
+  }
+  public set inline(value: boolean) {
+    value = Boolean(value);
+    if (this._inline !== value) {
+      this._inline = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.INLINE, this._inline);
+    }
   }
 
   public get placement(): OverlayPlacement {
@@ -139,20 +177,31 @@ export class OverlayFoundation implements IOverlayFoundation {
     }
   }
 
-  public get offset(): IOverlayPosition {
+  public get offset(): IOverlayOffset {
     return this._offset;
   }
-  public set offset(value: IOverlayPosition) {
+  public set offset(value: IOverlayOffset) {
     this._offset = value;
   }
 
-  public get hideWhenClipped(): boolean {
-    return this._hideWhenClipped;
+  public get shift(): boolean {
+    return this._shift;
   }
-  public set hideWhenClipped(value: boolean) {
-    if (this._hideWhenClipped !== !!value) {
-      this._hideWhenClipped = !!value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE_WHEN_CLIPPED, this._hideWhenClipped);
+  public set shift(value: boolean) {
+    value = Boolean(value);
+    if (this._shift !== value) {
+      this._shift = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.SHIFT, this._shift);
+    }
+  }
+
+  public get hide(): boolean {
+    return this._hide;
+  }
+  public set hide(value: boolean) {
+    if (this._hide !== !!value) {
+      this._hide = !!value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE, this._hide);
     }
   }
 
@@ -164,6 +213,28 @@ export class OverlayFoundation implements IOverlayFoundation {
     if (this._static !== value) {
       this._static = value;
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.STATIC, this._static);
+    }
+  }
+
+  public get flip(): boolean {
+    return this._flip;
+  }
+  public set flip(value: boolean) {
+    value = Boolean(value);
+    if (this._flip !== value) {
+      this._flip = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.NO_FLIP, !this._flip);
+    }
+  }
+
+  public get auto(): boolean {
+    return this._auto;
+  }
+  public set auto(value: boolean) {
+    value = Boolean(value);
+    if (this._auto !== value) {
+      this._auto = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.AUTO, this._auto);
     }
   }
 }

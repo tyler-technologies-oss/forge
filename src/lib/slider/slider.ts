@@ -88,8 +88,8 @@ declare global {
  * @attribute {string} name-start - Controls the form control name for the start handle in range mode.
  * @attribute {string} name-end - Controls the form control name for the end handle in range mode.
  * 
- * @event forge-slider-input {CustomEvent} - Dispatches when the slider value changes.
- * @event forge-slider-change {CustomEvent} - Dispatches when the slider value changes and the value has been committed.
+ * @event {CustomEvent} forge-slider-input - Dispatches when the slider value changes.
+ * @event {CustomEvent} forge-slider-change - Dispatches when the slider value changes and the value has been committed.
  * 
  * @cssproperty --mdc-theme-primary - The primary color of the slider.
  * @cssproperty --mdc-theme-on-primary - The color of elements placed on top of the primary color (the label text for example).

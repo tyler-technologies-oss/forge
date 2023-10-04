@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use 'sass:math';
 @use 'sass:meta';
+@use '../utils';
 @use '../core/config';
 @use '../tokens/elevation/tokens';
 
@@ -53,4 +54,11 @@
 @mixin z-index($level) {
   $value: map.get(tokens.$z-index-map, $level);
   z-index: var(--#{config.$prefix}-z-index-#{$level}, #{$value});
+}
+
+///
+/// Gets a CSS custom property declaration for a specific elevation token, with its token value as the fallback value
+/// 
+@function z-index($key, $prefix: config.$prefix) {
+  @return utils.variable(z-index, tokens.$z-index-map, $key, $prefix);
 }

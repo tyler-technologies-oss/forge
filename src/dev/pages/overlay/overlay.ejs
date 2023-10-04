@@ -1,57 +1,15 @@
-<!-- <div>
-  <forge-form-field-exp>
-    <label for="my-input" slot="label">Label text</label>
-    <input type="text" id="my-input" name="my-input" />
-  </forge-form-field-exp>
-</div>
-
-<div>
-  <forge-form-field-exp>
-    <label for="my-input" slot="label">Label text</label>
-    <input type="text" id="my-input" name="my-input" />
-  </forge-form-field-exp>
-</div> -->
-
-<div>
-  <forge-select-exp style="width: 256px;">
-    <!-- <button slot="trigger" type="button">Choose...</button> -->
-
-    <div slot="header" class="select-dropdown-section">Header</div>
-
-    <forge-option-exp role="option" aria-selected="false" aria-disabled="false">One</forge-option-exp>
-    <forge-option-exp role="option" aria-selected="false" aria-disabled="false">Two</forge-option-exp>
-    <forge-option-exp role="option" aria-selected="false" aria-disabled="false">Three</forge-option-exp>
-
-    <div slot="footer" class="select-dropdown-section">Footer</div>
-  </forge-select-exp>
-</div>
-
 <div class="clipping-container">
   <div class="scroll-container">
-    <!-- Trigger element -->
-    <!-- <forge-popover> -->
-      <forge-button type="raised" slot="trigger">
-        <button type="button" id="my-btn" style="white-space: nowrap;">Show overlay</button>
-      </forge-button>
+    <forge-button type="raised" slot="trigger">
+      <button type="button" id="my-btn" style="white-space: nowrap;">Show overlay</button>
+    </forge-button>
 
-      <!-- <div slot="nested" class="overlay-content">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea labore tenetur illum aliquam corporis veritatis quos accusamus. Laborum ullam autem fugiat eligendi ratione beatae consequuntur provident earum, nemo neque itaque!
-      </div> -->
-    <!-- </forge-popover> -->
-    <forge-popover>
-      <div class="cool-popover" style="padding: 16px;">
-        My awesome popover
-      </div>
-    </forge-popover>
-
-    <!-- Static/inline overlay -->
     <forge-overlay id="my-overlay">
-      <div class="overlay-content">
+      <div class="overlay-content" tabindex="0">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea labore tenetur illum aliquam corporis veritatis quos accusamus. Laborum ullam autem fugiat eligendi ratione beatae consequuntur provident earum, nemo neque itaque!
       </div>
     </forge-overlay>
   </div>
-  
 </div>
 
 <script type="module" src="overlay.ts"></script>

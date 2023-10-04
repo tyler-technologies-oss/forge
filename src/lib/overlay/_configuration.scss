@@ -1,0 +1,8 @@
+@use '../core/styles/tokens/overlay/tokens';
+
+@mixin configuration {
+  --_position: #{tokens.get(position)};
+  --_z-index: #{tokens.get(z-index)};
+  --_height: #{tokens.get(height)};
+  --_width: #{tokens.get(width)};
+}

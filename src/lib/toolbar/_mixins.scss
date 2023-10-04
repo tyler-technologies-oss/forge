@@ -17,6 +17,7 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   box-sizing: border-box;
+  background-color: transparent;
 }
 
 @mixin inverted() {

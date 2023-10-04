@@ -1,0 +1,20 @@
+@use '../core/styles/utils';
+@use '../core/styles/tokens/overlay/tokens';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, overlay);
+}
+
+@mixin base() {
+  display: none;
+  box-sizing: border-box;
+  position: var(--_position);
+  top: 0;
+  left: 0;
+  height: var(--_height);
+  width: var(--_width);
+  z-index: var(--_z-index);
+  border-radius: inherit;
+  background: inherit;
+  color: inherit;
+}

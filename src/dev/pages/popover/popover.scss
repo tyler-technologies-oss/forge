@@ -1,5 +1,5 @@
 .clipping-container {
-  height: 500px;
+  height: 550px;
   border: 1px solid var(--forge-theme-border-color);
   overflow: auto;
 
@@ -13,16 +13,14 @@
   }
 }
 
-.overlay-content {
-  width: 300px;
-  padding: 8px;
-  border: 1px dashed var(--forge-theme-primary);
-}
-
 .scroll-container {
   height: 250%;
   width: 250%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.popover-content p {
+  margin: 0;
 }

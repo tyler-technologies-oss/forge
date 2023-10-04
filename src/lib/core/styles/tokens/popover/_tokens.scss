@@ -1,0 +1,45 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../elevation';
+@use '../../theme';
+@use '../../shape';
+@use '../../border';
+@use '../../animation';
+
+$tokens: (
+  // Base
+  background-color: utils.module-val(popover, background-color, theme.variable(elevated-surface)),
+  border-radius: utils.module-val(popover, border-radius, shape.variable(medium)),
+  box-shadow: utils.module-val(popover, box-shadow, theme.variable(popup-elevation)),
+  border-width: utils.module-val(popover, border-width, border.variable(thin)),
+  border-style: utils.module-val(popover, border-style, solid),
+  border-color: utils.module-val(popover, border-color, theme.variable(border-color)),
+
+  // Arrow
+  arrow-size: utils.module-val(popover, arrow-size, 12px),
+  arrow-height: utils.module-ref(popover, arrow-height, arrow-size),
+  arrow-width: utils.module-ref(popover, arrow-width, arrow-size),
+  arrow-background-color: utils.module-ref(popover, arrow-background-color, background-color),
+  arrow-clip-path: utils.module-val(popover, arrow-clip-path),
+  arrow-top-rotation: utils.module-val(popover, arrow-top-rotation, 135deg),
+  arrow-right-rotation: utils.module-val(popover, arrow-right-rotation, 225deg),
+  arrow-bottom-rotation: utils.module-val(popover, arrow-bottom-rotation, 315deg),
+  arrow-left-rotation: utils.module-val(popover, arrow-left-rotation, 45deg),
+
+  // Animation
+  animation-timing: utils.module-val(popover, animation-timing, animation.variable(easing-decelerate)),
+
+  zoom-duration: utils.module-val(popover, zoom-duration, animation.variable(duration-short3)),
+  zoom-timing: utils.module-ref(popover, zoom-timing, animating-timing),
+
+  slide-duration: utils.module-val(popover, slide-duration, animation.variable(duration-short3)),
+  slide-timing: utils.module-ref(popover, slide-timing, animating-timing),
+  slide-offset: utils.module-val(popover, slide-offset, 24px),
+
+  fade-duration: utils.module-val(popover, fade-duration, animation.variable(duration-medium2)),
+  fade-timing: utils.module-ref(popover, fade-timing, animating-timing),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

@@ -1,9 +1,9 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { IOverlayAwareFoundation } from './overlay-aware-foundation';
+import { IBaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from './overlay-constants';
 
-export interface IOverlayAware extends IBaseComponent {
+export interface IBaseOverlay extends IBaseComponent {
   open: boolean;
   inline: boolean;
   placement: OverlayPlacement;
@@ -17,7 +17,7 @@ export interface IOverlayAware extends IBaseComponent {
   position(): void;
 }
 
-export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends BaseComponent implements IOverlayAware {
+export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends BaseComponent implements IBaseOverlay {
   protected _foundation: T;
 
   constructor() {

@@ -63,7 +63,7 @@
     "@material/top-app-bar": "^14.0.0",
     "@material/touch-target": "^14.0.0",
     "@material/typography": "^14.0.0",
-    "@tylertech/forge-core": "^2.3.0",
+    "@tylertech/forge-core": "^2.4.0-dev.3",
     "@tylertech/tyler-icons": "^1.12.0",
     "imask": "^6.6.1",
     "tslib": "^2.3.1"

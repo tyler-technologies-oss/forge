@@ -24,7 +24,7 @@
 /// Creates a CSS custom property declaration for a module token using the
 /// provided value as the variable fallback.
 /// 
-@function module-val($module, $token, $value, $prefix: config.$prefix) {
+@function module-val($module, $token, $value: null, $prefix: config.$prefix) {
   @return _create-var($module, $token, $value, $prefix);
 }
 
@@ -52,7 +52,10 @@
 ///
 /// Creates a CSS custom property declaration for a module token, using the provided fallback value.
 /// 
-@function _create-var($module, $token, $value, $prefix: config.$prefix) {
+@function _create-var($module, $token, $value: null, $prefix: config.$prefix) {
+  @if not $value {
+    @return var(--#{$prefix}-#{$module}-#{$token});
+  }
   @return var(--#{$prefix}-#{$module}-#{$token}, $value);
 }
 
