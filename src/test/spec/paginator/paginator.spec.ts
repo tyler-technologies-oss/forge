@@ -114,6 +114,46 @@ describe('PaginatorComponent', function(this: ITestContext) {
       expect(this.context.nextPageButton.hasAttribute('disabled')).toBe(true);
     });
 
+    it('should move focus to previous page button when next page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.nextPageButton.click();
+
+      expect(this.context.nextPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.previousPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to next page button when previous page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.previousPageButton.click();
+
+      expect(this.context.previousPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.nextPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to next page button when first page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext(true, true);
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.firstPageButton.click();
+
+      expect(this.context.firstPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.nextPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to previous page button when last page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext(true, true);
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.lastPageButton.click();
+
+      expect(this.context.lastPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.previousPageButton.matches(':focus')).toBe(true);
+    });
+
     it('should emit change event when clicking next page button', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.paginator.total = 100;

@@ -185,6 +185,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disableFirstPageButton(): void {
+    this._handleFocusMove('first');
     this._firstPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -193,6 +194,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disablePreviousPageButton(): void {
+    this._handleFocusMove('previous');
     this._previousPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -201,6 +203,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disableNextPageButton(): void {
+    this._handleFocusMove('next');
     this._nextPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -209,6 +212,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disablePageSizeSelect(): void {
+    this._handleFocusMove('page-size');
     this._pageSizeSelect.setAttribute('disabled', 'disabled');
   }
 
@@ -225,6 +229,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disableLastPageButton(): void {
+    this._handleFocusMove('last');
     this._lastPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -254,6 +259,60 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
       default:
         addClass(PAGINATOR_CONSTANTS.classes.ALIGNMENT_SPACE_BETWEEN, this._root);
         break;
+    }
+  }
+
+  private _handleFocusMove(from: 'first' | 'last' | 'previous' | 'next' | 'page-size'): void {
+    switch (from) {
+      case 'first':
+        this._tryFocus([
+          this._nextPageButton,
+          this._lastPageButton,
+          this._previousPageButton,
+          this._pageSizeSelect
+        ]);
+        break;
+      case 'last':
+        this._tryFocus([
+          this._previousPageButton,
+          this._firstPageButton,
+          this._nextPageButton,
+          this._pageSizeSelect
+        ]);
+        break;
+      case 'previous':
+        this._tryFocus([
+          this._nextPageButton,
+          this._lastPageButton,
+          this._firstPageButton,
+          this._pageSizeSelect
+        ]);
+        break;
+      case 'next':
+        this._tryFocus([
+          this._previousPageButton,
+          this._firstPageButton,
+          this._lastPageButton,
+          this._pageSizeSelect
+        ]);
+        break;
+      case 'page-size':
+        this._tryFocus([
+          this._nextPageButton,
+          this._lastPageButton,
+          this._firstPageButton,
+          this._previousPageButton
+        ]);
+        break;
+    }
+  }
+
+  private _tryFocus(elements: Array<HTMLButtonElement | ISelectComponent>): void {
+    for (const el of elements) {
+      if (el && el.isConnected && !el.disabled) {
+        el.focus();
+        return;
+      }
     }
   }
 }
