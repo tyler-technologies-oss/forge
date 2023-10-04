@@ -273,6 +273,18 @@ describe('IconComponent', function(this: ITestContext) {
     expect(loadSpy).not.toHaveBeenCalled();
   });
 
+  it('should hide icon from assistive technology', async function(this: ITestContext) {
+    this.context = setupTestContext();
+    IconRegistry.define(DEFAULT_ICON);
+
+    this.context.component.name = 'action_launcher';
+    await timer();
+
+    const svg = this.context.component.shadowRoot!.querySelector('svg')
+    expect(svg?.getAttribute('aria-hidden')).toBe('true');
+    IconRegistry.remove(DEFAULT_ICON);
+  });
+
   function setupTestContext(config?: Partial<IIconComponent>): ITestIconContext {
     const fixture = document.createElement('div');
     fixture.id = 'icon-test-fixture';
