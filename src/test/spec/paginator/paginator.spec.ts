@@ -418,6 +418,47 @@ describe('PaginatorComponent', function(this: ITestContext) {
       expect(this.context.paginator.pageIndex).toBe(0);
     });
 
+    it('should set page index via offset property if total is not > 0 initially', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const pageSizeOptions = [5, 10, 25];
+      this.context.paginator.pageSizeOptions = pageSizeOptions;
+      this.context.paginator.pageSize = 25;
+      
+      expect(this.context.paginator.total).toBe(0);
+      
+      this.context.paginator.offset = 25;
+      expect(this.context.paginator.pageIndex).toBe(0);
+
+      this.context.paginator.total = 100;
+      expect(this.context.paginator.pageIndex).toBe(1);
+    });
+
+    it('should update offset when page index changes', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const pageSizeOptions = [5, 10, 25];
+      this.context.paginator.pageSizeOptions = pageSizeOptions;
+      this.context.paginator.pageSize = 25;
+      this.context.paginator.total = 100;
+      
+      expect(this.context.paginator.pageIndex).toBe(0);
+      expect(this.context.paginator.offset).toBe(0);
+
+      this.context.paginator.pageIndex = 1;
+
+      expect(this.context.paginator.pageIndex).toBe(1);
+      expect(this.context.paginator.offset).toBe(25);
+
+      this.context.paginator.pageIndex = 3;
+      
+      expect(this.context.paginator.pageIndex).toBe(3);
+      expect(this.context.paginator.offset).toBe(75);
+
+      this.context.paginator.pageIndex = 0;
+
+      expect(this.context.paginator.pageIndex).toBe(0);
+      expect(this.context.paginator.offset).toBe(0);
+    });
+
     it('should get offset', function(this: ITestContext) {
       this.context = setupTestContext();
       const pageSizeOptions = [5, 10, 25];

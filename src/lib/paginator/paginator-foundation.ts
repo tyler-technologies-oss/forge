@@ -21,6 +21,7 @@ export class PaginatorFoundation {
   // Backing models
   private _pageIndex = PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_INDEX;
   private _pageSize = PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE;
+  private _offset = 0;
   private _total = PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL;
   private _pageSizeOptions: ISelectOption[] = [];
   private _label = PAGINATOR_CONSTANTS.strings.DEFAULT_LABEL;
@@ -82,24 +83,24 @@ export class PaginatorFoundation {
 
   /** Sets page index by providing the number of items to skip. */
   public set offset(value: number) {
-    if (value >= this._total) {
-      if (this._total >= this._pageSize) {
-        value = this._total - this._pageSize;
-      } else {
-        value = 0;
-      }
+    if (this._offset !== value) {
+      this._offset = value;
+      this._computePageIndexFromOffset(value);
     }
-    const clampedValue = Math.min(Math.max(value, 0), this._total);
-    this.pageIndex = Math.floor(clampedValue / this._pageSize);
   }
   public get offset(): number {
-    return this._pageIndex * this._pageSize;
+    return this._offset;
   }
 
   /** The total number of items to be paginated. Default is 0. */
   public set total(value: number) {
     if (this._total !== value) {
       this._total = value;
+
+      if (this._offset > 0 && this._total > 0) {
+        this._computePageIndexFromOffset(this._offset);
+      }
+
       this._update();
       this._adapter.setHostAttribute(PAGINATOR_CONSTANTS.attributes.TOTAL, this._total.toString());
     }
@@ -362,6 +363,8 @@ export class PaginatorFoundation {
    * Updates our internal state as well as updating the UI.
    */
   private _update(): void {
+    this._offset = this._pageIndex * this._pageSize;
+
     // Create and update the range label
     if (this.pageSize > 1) {
       const startIndex = this._pageIndex * this._pageSize;
@@ -468,5 +471,17 @@ export class PaginatorFoundation {
   private _hasLastPage(): boolean {
     // same as has next page
     return this._hasNextPage();
+  }
+
+  private _computePageIndexFromOffset(value: number): void {
+    if (value >= this._total) {
+      if (this._total >= this._pageSize) {
+        value = this._total - this._pageSize;
+      } else {
+        value = 0;
+      }
+    }
+    const clampedValue = Math.min(Math.max(value, 0), this._total);
+    this.pageIndex = Math.floor(clampedValue / this._pageSize);
   }
 }
