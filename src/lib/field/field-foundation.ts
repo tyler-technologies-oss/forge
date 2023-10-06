@@ -115,11 +115,16 @@ export class FieldFoundation {
   }
   public set density(value: FieldDensityType) {
     if (this._density !== value) {
+      const prevDensity = this._density;
       this._density = value;
 
       if (this._isInitialized) {
         this._applyDensity();
-        this._initializeLabel();
+
+        // We only need to initialize the label if we are changing from dense to non-dense or vice versa
+        if (this._density === 'dense' || prevDensity === 'dense') {
+          this._initializeLabel();
+        }
       }
 
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.DENSITY, this._density.toString());
