@@ -5,40 +5,43 @@ import { ISelectComponent, ISelectOption } from '../select';
 import { IPaginatorComponent } from './paginator';
 import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS } from './paginator-constants';
 
+export type PaginatorFieldIdentifier = 'first' | 'last' | 'previous' | 'next' | 'page-size';
+
 export interface IPaginatorAdapter extends IBaseAdapter {
-  setLabel: (value: string) => void;
-  setPageSizeOptions: (options: ISelectOption[]) => void;
-  setPageSize: (value: number) => void;
-  setRangeLabel: (value: string) => void;
+  setLabel(value: string): void;
+  setPageSizeOptions(options: ISelectOption[]): void;
+  setPageSize(value: number): void;
+  setRangeLabel(value: string): void;
   hasFirstPageButton(): boolean;
   showFirstPageButton(): void;
   hideFirstPageButton(): void;
   hasLastPageButton(): boolean;
   showLastPageButton(): void;
   hideLastPageButton(): void;
-  attachPageSizeChangeListener: (listener: (evt: CustomEvent) => void) => void;
-  attachFirstPageListener: (listener: (evt: Event) => void) => void;
-  attachPreviousPageListener: (listener: (evt: Event) => void) => void;
-  attachNextPageListener: (listener: (evt: Event) => void) => void;
-  attachLastPageListener: (listener: (evt: Event) => void) => void;
-  detachPageSizeChangeListener: (listener: (evt: CustomEvent) => void) => void;
-  detachFirstPageListener: (listener: (evt: Event) => void) => void;
-  detachPreviousPageListener: (listener: (evt: Event) => void) => void;
-  detachNextPageListener: (listener: (evt: Event) => void) => void;
-  detachLastPageListener: (listener: (evt: Event) => void) => void;
-  disableFirstPageButton: () => void;
-  enableFirstPageButton: () => void;
-  disablePreviousPageButton: () => void;
-  enablePreviousPageButton: () => void;
-  disableNextPageButton: () => void;
-  enableNextPageButton: () => void;
+  attachPageSizeChangeListener(listener: (evt: CustomEvent) => void): void;
+  attachFirstPageListener(listener: (evt: Event) => void): void;
+  attachPreviousPageListener(listener: (evt: Event) => void): void;
+  attachNextPageListener(listener: (evt: Event) => void): void;
+  attachLastPageListener(listener: (evt: Event) => void): void;
+  detachPageSizeChangeListener(listener: (evt: CustomEvent) => void): void;
+  detachFirstPageListener(listener: (evt: Event) => void): void;
+  detachPreviousPageListener(listener: (evt: Event) => void): void;
+  detachNextPageListener(listener: (evt: Event) => void): void;
+  detachLastPageListener(listener: (evt: Event) => void): void;
+  disableFirstPageButton(): void;
+  enableFirstPageButton(): void;
+  disablePreviousPageButton(): void;
+  enablePreviousPageButton(): void;
+  disableNextPageButton(): void;
+  enableNextPageButton(): void;
   disablePageSizeSelect(): void;
   enablePageSizeSelect(): void;
   setPageSizeVisibility(visible: boolean): void;
-  disableLastPageButton: () => void;
-  enableLastPageButton: () => void;
-  setAlternative: (alternative: boolean) => void;
-  setAlignment: (alignment: PaginatorAlternativeAlignment) => void;
+  disableLastPageButton(): void;
+  enableLastPageButton(): void;
+  setAlternative(alternative: boolean): void;
+  setAlignment(alignment: PaginatorAlternativeAlignment): void;
+  handleFocusMove(from: PaginatorFieldIdentifier): void;
 }
 
 /**
@@ -185,7 +188,6 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disableFirstPageButton(): void {
-    this._handleFocusMove('first');
     this._firstPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -194,7 +196,6 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disablePreviousPageButton(): void {
-    this._handleFocusMove('previous');
     this._previousPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -203,7 +204,6 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disableNextPageButton(): void {
-    this._handleFocusMove('next');
     this._nextPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -212,7 +212,6 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disablePageSizeSelect(): void {
-    this._handleFocusMove('page-size');
     this._pageSizeSelect.setAttribute('disabled', 'disabled');
   }
 
@@ -229,7 +228,6 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   }
 
   public disableLastPageButton(): void {
-    this._handleFocusMove('last');
     this._lastPageButton.setAttribute('disabled', 'disabled');
   }
 
@@ -262,7 +260,11 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
     }
   }
 
-  private _handleFocusMove(from: 'first' | 'last' | 'previous' | 'next' | 'page-size'): void {
+  public handleFocusMove(from: PaginatorFieldIdentifier): void {
+    if (!this._component.matches(':focus')) {
+      return; // We can only move focus elsewhere within the element if the element already contains focus
+    }
+
     switch (from) {
       case 'first':
         this._tryFocus([
