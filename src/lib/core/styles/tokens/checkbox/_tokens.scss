@@ -22,7 +22,9 @@ $tokens: (
   unchecked-border-color: utils.module-val(checkbox, unchecked-border-color, theme.variable(text-secondary-on-light)),
   shape: utils.module-val(checkbox, shape, shape.variable(small)),
   elevation: utils.module-val(checkbox, elevation, elevation.value(0)),
+  /* stylelint-disable length-zero-no-unit */
   gap: utils.module-val(checkbox, gap, 0px),
+  /* stylelint-enable length-zero-no-unit */
   
   // Checkbox checked
   checked-color: utils.module-val(checkbox, checked-color, theme.variable(on-tertiary)),
