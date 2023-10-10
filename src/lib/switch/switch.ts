@@ -12,6 +12,9 @@ import styles from './switch.scss';
 
 export interface ISwitchComponent extends IBaseFormComponent {
   on: boolean;
+  /**
+   * @deprecated use `on` instead
+   */
   selected: boolean;
   dense: boolean;
   icon: SwitchIconVisibility;
@@ -25,7 +28,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-switch-select': CustomEvent<boolean>;
+    'forge-switch-change': CustomEvent<boolean>;
   }
 }
 
@@ -40,7 +43,7 @@ declare global {
  * - Immediately activate or deactivate something
  * 
  * @property {boolean} on - Whether the switch is on the on or off state.
- * @property {boolean} selected - Alias for `on`.
+ * @property {boolean} selected - Deprecated. Alias for `on`.
  * @property {boolean} disabled - Controls if the switch is disabled.
  * @property {boolean} required = Controls if the switch is required.
  * @property {boolean} dense - The density state.
@@ -123,6 +126,9 @@ declare global {
  * @cssproperty --forge-switch-state-layer-dense-width - The inline size of the handle's state layer when the dense switch is used.
  * @cssproperty --forge-switch-state-layer-dense-height - The block size of the handle's state layer when the dense switch is used.
  * @cssproperty --forge-switch-disabled-opacity - The opacity of the switch when disabled.
+ * @cssproperty --forge-switch-animation-duration - The duration of animations.
+ * @cssproperty --forge-switch-animation-timing - The timing function used in most animations.
+ * @cssproperty --forge-switch-active-animation-timing - The timing function used in active state animations.
  * 
  * @csspart switch - Styles the switch container element.
  * @csspart input-container - Styles the wrapper element of the input, track and handle.
@@ -256,10 +262,6 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   public setCustomValidity(error: string): void {
     this._hasCustomValidityError = !!error;
     this._foundation.setValidity({ customError: !!error }, error);
-  }
-
-  public formAssociatedCallback(): void {
-    return;
   }
 
   public formResetCallback(): void {

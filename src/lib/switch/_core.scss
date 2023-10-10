@@ -1,4 +1,3 @@
-@use '../core/styles/animation';
 @use '../core/styles/typography';
 @use '../core/styles/utils';
 @use '../core/styles/tokens/switch/tokens';
@@ -75,7 +74,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
 @mixin track {
   transition-property: background-color, border-color, border-width;
   transition-duration: var(--_animation-duration);
-  transition-timing-function: animation.variable(easing-standard);
+  transition-timing-function: var(--_animation-timing);
 
   box-sizing: border-box;
   margin-inline: #{$_track-margin-inline};
@@ -119,7 +118,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
 
   transition-property: translate;
   transition-duration: var(--_animation-duration);
-  transition-timing-function: animation.variable(easing-standard);
+  transition-timing-function: var(--_animation-timing);
 
   border-radius: var(--_handle-shape);
   inline-size: var(--_current-state-layer-width);
@@ -134,9 +133,9 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
     scale: var(--_handle-off-scale);
 
     transition:
-      background-color var(--_animation-duration) animation.variable(easing-standard),
-      box-shadow var(--_animation-duration) animation.variable(easing-standard),
-      scale var(--_animation-duration) animation.variable(easing-linear);
+      background-color var(--_animation-duration) var(--_animation-timing),
+      box-shadow var(--_animation-duration) var(--_animation-timing),
+      scale var(--_animation-duration) var(--_active-animation-timing);
 
     box-shadow: var(--_handle-off-elevation);
     border-radius: var(--_handle-shape);
@@ -190,7 +189,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
 
   transition-property: opacity, scale;
   transition-duration: var(--_animation-duration);
-  transition-timing-function: animation.variable(easing-standard);
+  transition-timing-function: var(--_animation-timing);
 
   inline-size: var(--_icon-off-size);
   block-size: var(--_icon-off-size);

@@ -7,6 +7,7 @@ export type SwitchComponentDelegateProps = Partial<ISwitchComponent>;
 export interface ISwitchComponentDelegateOptions extends IFormFieldComponentDelegateOptions {
   id?: string;
   label?: string;
+  on?: boolean;
   selected?: boolean;
 }
 export interface ISwitchComponentDelegateConfig extends IBaseComponentDelegateConfig<ISwitchComponent, ISwitchComponentDelegateOptions> {}
@@ -19,10 +20,10 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
   }
 
   public get value(): boolean {
-    return this._element.selected;
+    return this._element.on;
   }
   public set value(value: boolean) {
-    this._element.selected = value;
+    this._element.on = value;
   }
 
   public get disabled(): boolean {
@@ -37,7 +38,7 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
   }
 
   public onChange(listener: (value: boolean) => void): void {
-    this._element.addEventListener('forge-switch-select', ({ detail }: CustomEvent<boolean>) => listener(detail));
+    this._element.addEventListener('forge-switch-change', ({ detail }: CustomEvent<boolean>) => listener(detail));
   }
 
   public onFocus(listener: (evt: Event) => void): void {
@@ -69,8 +70,8 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
     if (typeof this._config.options?.label === 'string') {
       this._createLabel(this._config.options.label);
     }
-    if (this._config.options?.selected !== undefined) {
-      this._element.selected = this._config.options.selected;
+    if (this._config.options?.on !== undefined || this._config.options?.selected !== undefined) {
+      this._element.on = (this._config.options.on ?? this._config.options.selected) as boolean;
     }
     if (this._config.options?.id) {
       this._element.id = this._config.options.id;

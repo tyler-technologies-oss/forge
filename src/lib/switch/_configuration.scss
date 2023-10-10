@@ -85,4 +85,6 @@
 
   // Animation
   --_animation-duration: #{switch-tokens.get(animation-duration)};
+  --_animation-timing: #{switch-tokens.get(animation-timing)};
+  --_active-animation-timing: #{switch-tokens.get(active-animation-timing)};
 }

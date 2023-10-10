@@ -1,6 +1,6 @@
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { expect } from '@esm-bundle/chai';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
+import { fixture, html } from '@open-wc/testing';
 import { spy } from 'sinon';
 import { getShadowElement } from '@tylertech/forge-core';
 import { TestHarness } from '../../test/utils/test-harness';
@@ -72,7 +72,7 @@ describe('Switch', () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch></forge-switch>`);
     const ctx = new SwitchHarness(el);
 
-    expect(el).not.to.be.accessible();
+    await expect(el).not.to.be.accessible();
     expect(el.on).to.be.false;
     expect(el.selected).to.be.false;
     expect(el.dense).to.be.false;
@@ -105,11 +105,12 @@ describe('Switch', () => {
   });
 
   it('should accept disabled', async () => {
-    const el = await fixture<ISwitchComponent>(html`<forge-switch disabled></forge-switch>`);
+    const el = await fixture<ISwitchComponent>(html`<forge-switch disabled aria-label="Active"></forge-switch>`);
     const ctx = new SwitchHarness(el);
 
     expect(el.disabled).to.be.true;
     expect(ctx.inputElement.disabled).to.be.true;
+    await expect(el).to.be.accessible();
   });
 
   it('should accept required', async () => {
@@ -173,13 +174,14 @@ describe('Switch', () => {
   });
 
   it('should toggle on', async () => {
-    const el = await fixture<ISwitchComponent>(html`<forge-switch></forge-switch>`);
+    const el = await fixture<ISwitchComponent>(html`<forge-switch aria-label="Active"></forge-switch>`);
     const ctx = new SwitchHarness(el);
 
     el.toggle(true);
 
     expect(el.on).to.be.true;
     expect(ctx.inputElement.checked).to.be.true;
+    await expect(el).to.be.accessible();
   });
 
   it('should toggle off', async () => {
@@ -222,7 +224,7 @@ describe('Switch', () => {
   it('should cancel change event', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch></forge-switch>`);
     const ctx = new SwitchHarness(el);
-    el.addEventListener('forge-switch-change', event => {
+    el.addEventListener('forge-switch-change', (event: Event) => {
       event.preventDefault();
     });
 
@@ -334,6 +336,7 @@ describe('Switch', () => {
     
     el.on = true;
 
+    expect(el.willValidate).to.be.true;
     expect(el.validity.valid).to.be.true;
     expect(el.validationMessage).to.be.empty;
     expect(el.checkValidity()).to.be.true;

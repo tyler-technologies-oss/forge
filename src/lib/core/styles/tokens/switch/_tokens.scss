@@ -23,7 +23,7 @@ $tokens: (
 
   // Handle
   handle-on-color: utils.module-val(switch, handle-on-color, theme.variable(primary)),
-  handle-off-color: utils.module-val(switch, handle-off-color, color-palette.$grey-500),
+  handle-off-color: utils.module-val(switch, handle-off-color, theme.variable(handle-off-color)),
   handle-width: utils.module-ref(switch, handle-width, handle-size),
   handle-height: utils.module-ref(switch, handle-height, handle-size),
   handle-on-scale: utils.module-ref(switch, handle-on-scale, handle-scale),
@@ -33,7 +33,7 @@ $tokens: (
   handle-off-elevation: utils.module-ref(switch, handle-off-elevation, handle-elevation),
 
   // Track
-  track-on-color: utils.module-val(switch, track-on-color, color-palette.$indigo-100),
+  track-on-color: utils.module-val(switch, track-on-color, theme.variable(primary-track-color)),
   track-off-color: utils.module-val(switch, track-off-color, theme.variable(track-color)),
   track-width: utils.module-val(switch, track-width, 36px),
   track-height: utils.module-val(switch, track-height, 14px),
@@ -90,7 +90,9 @@ $tokens: (
   icon-active-off-scale: utils.module-ref(switch, icon-active-off-scale, icon-off-scale),
 
   // Animation
-  animation-duration: utils.module-val(switch, animation-duration, animation.variable(duration-short2))
+  animation-duration: utils.module-val(switch, animation-duration, animation.variable(duration-short2)),
+  animation-timing: utils.module-val(switch, animation-timing, animation.variable(easing-standard)),
+  active-animation-timing: utils.module-val(switch, active-animation-timing, animation.variable(easing-linear))
 ) !default;
 
 ///

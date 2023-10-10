@@ -39,7 +39,6 @@ export abstract class BaseFormComponent<T = string> extends BaseComponent implem
   public abstract checkValidity(): boolean;
   public abstract reportValidity(): boolean;
   public abstract setCustomValidity(error: string): void;
-  public abstract formAssociatedCallback(form: HTMLFormElement): void;
   public abstract formResetCallback(): void;
   public abstract formStateRestoreCallback(state: T, reason: 'restore' | 'autocomplete'): void;
   public abstract formDisabledCallback(isDisabled: boolean): void;

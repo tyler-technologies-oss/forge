@@ -48,14 +48,17 @@ export class SwitchFoundation implements ISwitchFoundation {
   private _handleChange(evt: Event): void {
     const target = evt.target as HTMLInputElement;
     const newValue = target.checked;
+    const oldValue = this._on;
+
+    this._on = newValue;
 
     const isCancelled = !this._adapter.emitHostEvent(SWITCH_CONSTANTS.events.CHANGE, newValue, true, true);
     if (isCancelled) {
+      this._on = oldValue;
       this._adapter.setOn(this._on);
       return;
     }
 
-    this._on = newValue;
     this._adapter.syncValue(this._on);
     this._setOnAttribute();
   }
