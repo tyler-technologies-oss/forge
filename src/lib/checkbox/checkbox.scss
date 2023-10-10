@@ -1,14 +1,145 @@
-@use '../theme';
-@use './checkbox.mixins' as mixins;
-@use '../form-field/mixins' as form-field-mixins;
-
-@include mixins.core-styles;
-@include form-field-mixins.shadow-styles;
+@use './core';
+@use './configuration';
+@use '../core/styles/tokens/checkbox/tokens';
+@use '../focus-indicator';
+@use '../state-layer';
 
 :host {
-  display: inline-block;
+  @include core.host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+:host([disabled]) {
+  @include core.host-disabled;
+
+  .forge-checkbox {
+    pointer-events: none;
+  }
+}
+
+// Readonly
+:host([readonly]) {
+  @include core.host-readonly;
+
+  .forge-checkbox {
+    pointer-events: none;
+
+    forge-state-layer {
+      display: none;
+    }
+  }
+}
+
+// Unchecked
+.forge-checkbox {
+  @include configuration.configuration;
+  @include core.checkbox;
+
+  .container {
+    @include core.container;
+  }
+
+  .input {
+    @include core.input;
+  }
+
+  .background {
+    @include core.background;
+  }
+
+  .icon {
+    @include core.icon;
+
+    &--checked {
+      @include core.icon-checked;
+      @include core.icon-checked-hidden;
+    }
+
+    &--indeterminate {
+      @include core.icon-indeterminate;
+      @include core.icon-indeterminate-hidden;
+    }
+  }
+
+  .label {
+    @include core.label;
+  }
+}
+
+// Checked
+:host([checked]) {
+  .background {
+    @include core.background-checked;
+  }
+
+  .icon {
+    &--checked {
+      @include core.icon-checked-visible;
+    }
+
+    &--indeterminate {
+      @include core.icon-indeterminate-hidden;
+    }
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_state-layer-checked-color)
+    ));
+  }
+}
+
+// Indeterminate
+:host([indeterminate]) {
+  .background {
+    @include core.background-checked;
+  }
+
+  .icon {
+    &--checked {
+      @include core.icon-checked-hidden;
+    }
+
+    &--indeterminate {
+      @include core.icon-indeterminate-visible;
+    }
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_state-layer-on-color)
+    ));
+  }
+}
+
+// Dense
+:host([dense]) {
+  .forge-checkbox {
+    .container {
+      @include core.container-dense;
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion) {
+  .forge-checkbox {
+    --_animation-duration: 0s;
+  }
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: var(--_state-layer-unchecked-color)
+  ));
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    shape: 0px,
+    outward-offset: 8px
+  ));
 }

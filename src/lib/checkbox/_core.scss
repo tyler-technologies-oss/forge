@@ -1,0 +1,158 @@
+@use '../core/styles/typography';
+@use '../core/styles/utils';
+@use '../core/styles/tokens/checkbox/tokens';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, checkbox);
+}
+
+@mixin host {
+  display: inline-block;
+
+  cursor: pointer;
+}
+
+@mixin host-disabled {
+  opacity: #{tokens.get(disabled-opacity)};
+
+  cursor: not-allowed;
+}
+
+@mixin host-readonly {
+  cursor: unset;
+}
+
+@mixin checkbox {
+  position: relative;
+  flex-direction: var(--_direction);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: var(--_justify);
+  gap: var(--_gap);
+
+  display: flex;
+
+  cursor: unset;
+}
+
+@mixin container {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  border-radius: var(--_state-layer-shape);
+  inline-size: var(--_state-layer-width);
+  block-size: var(--_state-layer-height);
+}
+
+@mixin container-dense {
+  inline-size: var(--_state-layer-dense-width);
+  block-size: var(--_state-layer-dense-height);
+}
+
+@mixin input {
+  position: absolute;
+  z-index: 1;
+
+  appearance: none;
+
+  outline: none;
+  margin: 0;
+  inline-size: 100%;
+  block-size: 100%;
+
+  cursor: unset;
+}
+
+@mixin background {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  transition-property: background-color, border-width, border-color;
+  transition-duration: var(--_animation-duration);
+  transition-timing-function: var(--_background-animation-timing);
+
+  box-shadow: var(--_elevation);
+  border-style: solid;
+  border-width: var(--_unchecked-border-width);
+  border-color: var(--_unchecked-border-color);
+  border-radius: var(--_shape);
+  box-sizing: border-box;
+  block-size: var(--_height);
+  inline-size: var(--_width);
+
+  background-color: var(--_background-color);
+}
+
+@mixin background-checked {
+  border-style: solid;
+  border-width: var(--_checked-border-width);
+  border-color: var(--_checked-border-color);
+
+  background-color: var(--_checked-background-color);
+}
+
+@mixin icon {
+  position: absolute;
+
+  transition-property: stroke-dashoffset;
+  transition-duration: var(--_animation-duration);
+  transition-timing-function: var(--_icon-animation-timing);
+
+  fill: none;
+  stroke: var(--_checked-color);
+  stroke-width: 4px;
+}
+
+@mixin icon-checked {
+  stroke-dasharray: 30;
+}
+
+@mixin icon-checked-hidden {
+  transition-delay: 0s;
+  
+  stroke-dashoffset: 30;
+}
+
+@mixin icon-checked-visible {
+  transition-delay: var(--_animation-duration);
+
+  stroke-dashoffset: 0;
+
+  &:dir(rtl) {
+    stroke-dashoffset: 60;
+  }
+}
+
+@mixin icon-indeterminate {  
+  stroke-dasharray: 20;
+}
+
+@mixin icon-indeterminate-hidden {
+  transition-delay: 0s;
+  
+  stroke-dashoffset: 20;
+}
+
+@mixin icon-indeterminate-visible {
+  transition-delay: var(--_animation-duration);
+
+  stroke-dashoffset: 0;
+
+  &:dir(rtl) {
+    stroke-dashoffset: 40;
+  }
+}
+
+@mixin label {
+  @include typography.style(label);
+
+  &:empty {
+    display: none;
+  }
+}

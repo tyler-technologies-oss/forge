@@ -3,10 +3,12 @@ import { IBaseComponent } from './base-component';
 
 export interface IBaseAdapter {
   readonly isConnected: boolean;
+  initialize(): void;
   removeHostAttribute(name: string): void;
   getHostAttribute(name: string): string | null;
   setHostAttribute(name: string, value?: string): void;
   toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void;
+  redispatchEvent(event: Event): boolean;
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   removeHostListener(event: string, callback: (event: Event) => void): void;
@@ -22,6 +24,8 @@ export interface IBaseAdapter {
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   constructor(protected _component: T) {}
 
+  public initialize(): void {}
+
   public getHostAttribute(name: string): string | null {
     return this._component.getAttribute(name);
   }
@@ -36,6 +40,19 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void {
     toggleAttribute(this._component, hasAttribute, name, value);
+  }
+
+  public redispatchEvent(event: Event): boolean {
+    if (event.bubbles && (event.composed && !this._component.shadowRoot)) {
+      event.stopPropagation();
+    }
+    
+    const newEvent = Reflect.construct(event.constructor, [event.type, event]);
+    const isCancelled = this._component.dispatchEvent(newEvent);
+    if (isCancelled) {
+      event.preventDefault();
+    }
+    return !isCancelled;
   }
 
   public emitHostEvent(type: string, data: any = null, bubble = true, cancelable?: boolean): boolean {

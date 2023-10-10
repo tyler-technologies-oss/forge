@@ -1,306 +1,100 @@
-import { addClass, getShadowElement, removeClass } from '@tylertech/forge-core';
-import { createUserInteractionListener } from '../core';
-import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
-import { ICheckboxComponent } from './checkbox';
-import { CHECKBOX_CONSTANTS } from './checkbox-constants';
-
-type PropertyDescriptorGetter = (() => unknown) | undefined;
+import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter, forwardAttributes } from '../core';
+import { ICheckboxComponent, forwardedAttributes } from './checkbox';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition } from './checkbox-constants';
 
 export interface ICheckboxAdapter extends IBaseAdapter {
-  isAttachedToDOM(): boolean;
-  isDisabled(): boolean;
-  isChecked(): boolean;
-  isIndeterminate(): boolean;
-  setRootClass(classes: string | string[]): void;
-  removeRootClass(classes: string | string[]): void;
-  setWrapperClass(classes: string | string[]): void;
-  removeWrapperClass(classes: string | string[]): void;
-  setDense(value: boolean): void;
-  initialize(): void;
-  disconnect(): void;
-  // Sets attributes on the native checkbox element
-  setNativeAttribute(qualifiedName: string, value: string): void;
-  removeNativeAttribute(qualifiedName: string): void;
-  listen(qualifiedName: string, callback: () => void, onRoot?: boolean): void;
-  unlisten(qualifiedName: string, callback: () => void, onRoot?: boolean): void;
-  installPropertyChangeHooks(callback: () => void): void;
-  uninstallPropertyChangeHooks(): void;
-  setInputAttributeObserver(listener: (name: string, value: string) => void): void;
+  setChecked(value: boolean): void;
+  setDefaultChecked(value: boolean): void;
+  setIndeterminate(value: boolean): void;
+  setDisabled(value: boolean): void;
+  setRequired(value: boolean): void;
+  setReadonly(value: boolean): void;
+  setLabelPosition(value: CheckboxLabelPosition): void;
+  addInputListener(event: string, callback: EventListener): void;
+  syncValue(value: boolean): void;
+  syncValidity(hasCustomValidityError: boolean): void;
+  setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
 }
 
-export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements ICheckboxAdapter, ForgeRippleCapableSurface {
-  private _wrapperElement: HTMLElement;
-  private _rootElement: HTMLElement;
-  private _inputElement: HTMLInputElement;
-  private _labelElement: HTMLLabelElement;
-  private _inputFocusHandler: () => void;
-  private _inputBlurHandler: () => void;
-  private _inputMutationObserver: MutationObserver;
-  private _rippleInstance: ForgeRipple | undefined;
-  private _destroyUserInteractionListener: (() => void) | undefined;
+export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements ICheckboxAdapter {
+  private readonly _rootElement: HTMLElement;
+  private readonly _inputElement: HTMLInputElement;
+  private readonly _labelElement: HTMLElement;
 
   constructor(component: ICheckboxComponent) {
     super(component);
+    this._rootElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.ROOT);
+    this._inputElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.INPUT) as HTMLInputElement;
+    this._labelElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.LABEL);
   }
 
-  // ForgeRippleCapableSurface
-  public get root(): Element {
-    return this._rootElement;
+  public override initialize(): void {
+    forwardAttributes(this._component, forwardedAttributes, (name, value) => {
+      toggleAttribute(this._inputElement, !!value, name, value ?? undefined);
+    });
   }
 
-  public get unbounded(): boolean | undefined {
-    return true;
+  // public inputAdapter(initializeCallback: (oldEl: HTMLInputElement | null, newEl: HTMLInputElement) => void): void {
+  //   let inputElement;
+  // }
+
+  public setChecked(value: boolean): void {
+    this._inputElement.checked = value;
   }
 
-  public get disabled(): boolean | undefined {
-    return this.isDisabled();
+  public setDefaultChecked(value: boolean): void {
+    this._inputElement.toggleAttribute('checked', value);
   }
 
-  public initialize(): void {
-    this._configureElements();
-    this._attachInternalInputListeners();
-    this._deferRippleInitialization();
+  public setIndeterminate(value: boolean): void {
+    this._inputElement.indeterminate = value;
   }
 
-  private async _deferRippleInitialization(): Promise<void> {
-    const { userInteraction, destroy } = createUserInteractionListener(this._rootElement);
-    this._destroyUserInteractionListener = destroy;
-    const { type } = await userInteraction;
-    this._destroyUserInteractionListener = undefined;
-    if (!this._rippleInstance) {
-      this._rippleInstance = this._createRipple();
-      if (type === 'focusin') {
-        this._rippleInstance.handleFocus();
-      }
-    }
+  public setDisabled(value: boolean): void {
+    this._inputElement.disabled = value;
   }
 
-  public setDense(value: boolean | undefined): void {
-    if (value) {
-      this._setHostAttribute(CHECKBOX_CONSTANTS.attributes.DENSE);
-      this.setRootClass(CHECKBOX_CONSTANTS.classes.CHECKBOX_DENSE);
+  public setRequired(value: boolean): void {
+    this._inputElement.required = value;
+  }
+
+  public setReadonly(value: boolean): void {
+    this._inputElement.readOnly = value;
+    toggleAttribute(this._inputElement, value, 'aria-readonly', value.toString());
+  }
+
+  public setLabelPosition(value: CheckboxLabelPosition): void {
+    this._labelElement.remove();
+
+    if (value === 'start') {
+      this._rootElement.prepend(this._labelElement);
     } else {
-      this._removeHostAttribute(CHECKBOX_CONSTANTS.attributes.DENSE);
-      this.removeRootClass(CHECKBOX_CONSTANTS.classes.CHECKBOX_DENSE);
-    }
-
-    this._rippleInstance?.layout();
-  }
-
-  public isAttachedToDOM(): boolean {
-    return Boolean(this._component.parentNode);
-  }
-
-  private _configureElements(): void {
-    this._inputElement = this._component.querySelector(CHECKBOX_CONSTANTS.selectors.INPUT) as HTMLInputElement;
-    this._wrapperElement = getShadowElement(this._component, CHECKBOX_CONSTANTS.selectors.WRAPPER);
-    this._rootElement = getShadowElement(this._component, CHECKBOX_CONSTANTS.selectors.ROOT);
-    this._labelElement = this._component.querySelector(CHECKBOX_CONSTANTS.selectors.LABEL) as HTMLLabelElement;
-
-    if (this._labelElement) {
-      this._labelElement.setAttribute(CHECKBOX_CONSTANTS.attributes.SLOT, CHECKBOX_CONSTANTS.selectors.LABEL);
-    }
-    if (this._inputElement) {
-      this._inputElement.setAttribute(CHECKBOX_CONSTANTS.attributes.SLOT, CHECKBOX_CONSTANTS.selectors.INPUT);
-    }
-    addClass(CHECKBOX_CONSTANTS.classes.UPGRADED, this._rootElement);
-  }
-
-  private _setHostAttribute(name: string, value = ''): void {
-    this._component.setAttribute(name, value);
-  }
-
-  private _removeHostAttribute(name: string): void {
-    this._component.removeAttribute(name);
-  }
-
-  public disconnect(): void {
-    if (this._labelElement) {
-      this._labelElement.removeAttribute(CHECKBOX_CONSTANTS.attributes.SLOT);
-    }
-
-    if (this._inputElement) {
-      this._inputElement.removeAttribute(CHECKBOX_CONSTANTS.attributes.SLOT);
-    }
-
-    if (this._inputMutationObserver) {
-      this._inputMutationObserver.disconnect();
-    }
-
-    this._detachInternalInputListeners();
-
-    if (typeof this._destroyUserInteractionListener === 'function') {
-      this._destroyUserInteractionListener();
-      this._destroyUserInteractionListener = undefined;
-    }
-
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
+      this._rootElement.append(this._labelElement);
     }
   }
 
-  public setRootClass(classes: string | string[]): void {
-    if (this._rootElement) {
-      addClass(classes, this._rootElement);
-    }
+  public addInputListener(event: string, callback: EventListener): void {
+    this._inputElement.addEventListener(event, callback);
   }
 
-  public removeRootClass(classes: string | string[]): void {
-    if (this._rootElement) {
-      removeClass(classes, this._rootElement);
-    }
+  public syncValue(value: boolean): void {
+    const data = new FormData();
+    // data.append(this._component.name, String(value));
+    // this._component.internals.setFormValue(data, value.toString());
   }
 
-  public setWrapperClass(classes: string | string[]): void {
-    if (this._wrapperElement) {
-      addClass(classes, this._wrapperElement);
-    }
-  }
-
-  public removeWrapperClass(classes: string | string[]): void {
-    if (this._wrapperElement) {
-      removeClass(classes, this._wrapperElement);
-    }
-  }
-
-  public setNativeAttribute(qualifiedName: string, value: string): void {
-    this._inputElement.setAttribute(qualifiedName, value);
-  }
-
-  public isDisabled(): boolean {
-    return this._inputElement.disabled;
-  }
-
-  public isChecked(): boolean {
-    return this._inputElement && this._inputElement.checked;
-  }
-  public isIndeterminate(): boolean {
-    return this._inputElement && this._inputElement.indeterminate;
-  }
-
-  public removeNativeAttribute(qualifiedName: string): void {
-    this._inputElement.removeAttribute(qualifiedName);
-  }
-
-  public installPropertyChangeHooks(callback: () => void): void {
-    const nativeCb = this._inputElement;
-    const cbProto = Object.getPrototypeOf(nativeCb);
-
-    CHECKBOX_CONSTANTS.CB_PROTO_PROPS.forEach(controlState => {
-      const desc = Object.getOwnPropertyDescriptor(cbProto, controlState);
-      // We have to check for this descriptor, since some browsers (Safari) don't support its return.
-      // See: https://bugs.webkit.org/show_bug.cgi?id=49739
-      if (!this._validDescriptor(desc)) {
-        return;
-      }
-
-      // Type cast is needed for compatibility with Closure Compiler.
-      const nativeGetter = (desc as { get: PropertyDescriptorGetter }).get;
-
-      if (desc) {
-        const nativeCbDesc = {
-          configurable: desc.configurable,
-          enumerable: desc.enumerable,
-          get: nativeGetter,
-          set: (state: boolean) => {
-            desc.set?.call(nativeCb, state);
-            callback();
-          }
-        };
-        Object.defineProperty(nativeCb, controlState, nativeCbDesc);
-      }
-    });
-  }
-
-  public listen(qualifiedName: string, callback: () => void, onRoot = false): void {
-    if (onRoot) {
-      this._rootElement.addEventListener(qualifiedName, callback);
+  public syncValidity(hasCustomValidityError: boolean): void {
+    if (hasCustomValidityError) {
+      this._inputElement.setCustomValidity(this._component.internals.validationMessage);
     } else {
-      this._inputElement.addEventListener(qualifiedName, callback);
-    }
-  }
-
-  public unlisten(qualifiedName: string, callback: () => void, onRoot = false): void {
-    if (!this._inputElement) {
-      return;
+      this._inputElement.setCustomValidity('');
     }
 
-    if (onRoot) {
-      this._rootElement.removeEventListener(qualifiedName, callback);
-    } else {
-      this._inputElement.removeEventListener(qualifiedName, callback);
-    }
+    this._component.internals.setValidity(this._inputElement.validity, this._inputElement.validationMessage, this._inputElement);
   }
 
-  public uninstallPropertyChangeHooks(): void {
-    if (!this._inputElement) {
-      return;
-    }
-
-    const nativeCb = this._inputElement;
-    const cbProto = Object.getPrototypeOf(nativeCb);
-
-    CHECKBOX_CONSTANTS.CB_PROTO_PROPS.forEach(controlState => {
-      const desc = Object.getOwnPropertyDescriptor(cbProto, controlState);
-      if (!this._validDescriptor(desc)) {
-        return;
-      }
-      Object.defineProperty(nativeCb, controlState, desc);
-    });
-  }
-
-  public setInputAttributeObserver(listener: (name: string, value: string) => void): void {
-    this._inputMutationObserver = new MutationObserver(mutations => {
-      for (const mutation of mutations) {
-        if (mutation.attributeName) {
-          listener(mutation.attributeName, this._inputElement.getAttribute(mutation.attributeName) as string);
-        }
-      }
-    });
-    this._inputMutationObserver.observe(this._inputElement, {
-      attributes: true,
-      attributeFilter: ['disabled', 'checked']
-    });
-  }
-
-  private _validDescriptor(inputPropDesc: PropertyDescriptor | undefined): inputPropDesc is PropertyDescriptor {
-    return !!inputPropDesc && typeof inputPropDesc.set === 'function';
-  }
-
-  private _attachInternalInputListeners(): void {
-    this._inputFocusHandler = () => this._handleInputFocusListener();
-    this._inputBlurHandler = () => this._handleInputBlurListener();
-    this._inputElement.addEventListener('focus', this._inputFocusHandler);
-    this._inputElement.addEventListener('blur', this._inputBlurHandler);
-  }
-
-  private _detachInternalInputListeners(): void {
-    removeEventListener('focus', this._inputFocusHandler);
-    removeEventListener('blur', this._inputBlurHandler);
-  }
-
-  private _handleInputFocusListener(): void {
-    addClass(CHECKBOX_CONSTANTS.classes.FOCUSED, this._rootElement);
-  }
-
-  private _handleInputBlurListener(): void {
-    removeClass(CHECKBOX_CONSTANTS.classes.FOCUSED, this._rootElement);
-  }
-
-  private _createRipple(): ForgeRipple {
-    const adapter: ForgeRippleAdapter = {
-      ...ForgeRipple.createAdapter(this),
-      deregisterInteractionHandler: (evtType, handler) => this._inputElement.removeEventListener(evtType, handler, { passive: true } as AddEventListenerOptions),
-      isSurfaceActive: () => this._inputElement.matches(':active'),
-      isUnbounded: () => Boolean(this.unbounded),
-      registerInteractionHandler: (evtType, handler) => this._inputElement.addEventListener(evtType, handler, { passive: true }),
-      isSurfaceDisabled: () => this._inputElement.disabled,
-      addClass: (className: string) => addClass(className, this._rootElement),
-      removeClass: (className: string) => removeClass(className, this._rootElement),
-      updateCssVariable: (varName: string, value: string | null) => this._rootElement.style.setProperty(varName, value)
-    };
-    const ripple = new ForgeRipple(this._rootElement, new ForgeRippleFoundation(adapter));
-    return ripple;
+  public setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void {
+    this._component.internals.setValidity(flags, message, this._inputElement);
   }
 }
