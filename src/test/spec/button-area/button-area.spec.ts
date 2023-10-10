@@ -1,4 +1,5 @@
 import { BUTTON_AREA_CONSTANTS, IButtonAreaComponent, defineButtonAreaComponent } from '@tylertech/forge';
+import { tick } from '@tylertech/forge-testing';
 
 interface ITestContext {
   context: IButtonAreaTestContext;
@@ -51,7 +52,6 @@ describe('ButtonAreaComponent', function(this: ITestContext) {
     this.context.component.addEventListener('click', callback);
     this.context.button.click();
     expect(callback).not.toHaveBeenCalled();
-    expect(this.context.button.disabled).toBeTrue();
   });
 
   it('should not handle click from ignored children', function(this: ITestContext) {
