@@ -141,7 +141,6 @@ export * from './utils';
 export * from './view-switcher';
 export * from './icon';
 export * from './stack';
-export * from './button-area';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
