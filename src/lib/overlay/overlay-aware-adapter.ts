@@ -3,7 +3,7 @@ import { IOverlayComponent } from './overlay';
 import { IOverlayAware } from './overlay-aware';
 
 export interface IOverlayAwareAdapter extends IBaseAdapter {
-  readonly overlay: IOverlayComponent;
+  readonly overlayElement: IOverlayComponent;
 }
 
 export abstract class OverlayAwareAdapter<T extends IOverlayAware> extends BaseAdapter<T> implements IOverlayAwareAdapter {
@@ -16,7 +16,7 @@ export abstract class OverlayAwareAdapter<T extends IOverlayAware> extends BaseA
 
   protected abstract _initializeOverlayElement(): void;
 
-  public get overlay(): IOverlayComponent {
+  public get overlayElement(): IOverlayComponent {
     return this._overlayElement;
   }
 }

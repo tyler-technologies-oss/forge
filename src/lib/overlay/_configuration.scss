@@ -5,4 +5,8 @@
   --_z-index: #{tokens.get(z-index)};
   --_height: #{tokens.get(height)};
   --_width: #{tokens.get(width)};
+  
+  &::backdrop {
+    --_backdrop-fade-duration: #{tokens.get(backdrop-fade-duration)};
+  }
 }

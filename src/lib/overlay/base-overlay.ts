@@ -4,6 +4,8 @@ import { IBaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from './overlay-constants';
 
 export interface IBaseOverlay extends IBaseComponent {
+  targetElement: HTMLElement;
+  target: string | null;
   open: boolean;
   inline: boolean;
   placement: OverlayPlacement;
@@ -14,6 +16,8 @@ export interface IBaseOverlay extends IBaseComponent {
   static: boolean;
   flip: boolean;
   auto: boolean;
+  dialog: boolean;
+  modal: boolean;
   position(): void;
 }
 
@@ -30,6 +34,9 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
 
   public attributeChangedCallback(name: string, _oldValue: string, newValue: string): void {
     switch (name) {
+      case OVERLAY_CONSTANTS.observedAttributes.TARGET:
+        this.target = newValue;
+        break;
       case OVERLAY_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
@@ -57,36 +64,54 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
       case OVERLAY_CONSTANTS.observedAttributes.AUTO:
         this.auto = coerceBoolean(newValue);
         break;
+      case OVERLAY_CONSTANTS.observedAttributes.DIALOG:
+        this.dialog = coerceBoolean(newValue);
+        break;
+      case OVERLAY_CONSTANTS.observedAttributes.MODAL:
+        this.modal = coerceBoolean(newValue);
+        break;
     }
   }
 
   @FoundationProperty()
-  public open: boolean;
+  public declare targetElement: HTMLElement;
 
   @FoundationProperty()
-  public inline: boolean;
+  public declare target: string | null;
 
   @FoundationProperty()
-  public placement: OverlayPlacement;
+  public declare open: boolean;
 
   @FoundationProperty()
-  public positionStrategy: OverlayPositionStrategy;
+  public declare inline: boolean;
 
   @FoundationProperty()
-  public offset: IOverlayOffset;
+  public declare placement: OverlayPlacement;
 
   @FoundationProperty()
-  public shift: boolean;
+  public declare positionStrategy: OverlayPositionStrategy;
 
   @FoundationProperty()
-  public hide: boolean;
+  public declare offset: IOverlayOffset;
 
   @FoundationProperty()
-  public static: boolean;
+  public declare shift: boolean;
 
   @FoundationProperty()
-  public flip: boolean;
+  public declare hide: boolean;
 
   @FoundationProperty()
-  public auto: boolean;
+  public declare static: boolean;
+
+  @FoundationProperty()
+  public declare flip: boolean;
+
+  @FoundationProperty()
+  public declare auto: boolean;
+
+  @FoundationProperty()
+  public declare dialog: boolean;
+
+  @FoundationProperty()
+  public declare modal: boolean;
 }

@@ -1,73 +1,172 @@
 import { IBaseOverlayFoundation } from './base-overlay-foundation';
+import { IOverlayComponent } from './overlay';
 import { IOverlayAwareAdapter } from './overlay-aware-adapter';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OverlayToggleEventData, OVERLAY_CONSTANTS } from './overlay-constants';
+import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from './overlay-constants';
 
-export interface IOverlayAwareFoundation extends IBaseOverlayFoundation {}
+export interface IOverlayAwareFoundation extends IBaseOverlayFoundation {
+  readonly overlayElement: IOverlayComponent;
+}
 
 export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> implements IOverlayAwareFoundation {
-  private _toggleListener: (evt: CustomEvent<OverlayToggleEventData>) => void;
+  private _lightDismissListener: (evt: CustomEvent) => void;
 
   constructor(protected _adapter: T) {
-    this._toggleListener = (evt: CustomEvent<OverlayToggleEventData>) => this._onToggle(evt);
+    this._lightDismissListener = (evt: CustomEvent) => this._onOverlayLightDismiss(evt);
   }
 
-  public abstract disconnect(): void;
-  protected abstract _onToggle(evt: CustomEvent<OverlayToggleEventData>): void;
+  protected abstract _onOverlayLightDismiss(evt: CustomEvent): void;
 
   public initialize(): void {
-    this._adapter.overlay.addEventListener(OVERLAY_CONSTANTS.events.TOGGLE, this._toggleListener);
+    if (!this.static) {
+      this._adapter.overlayElement.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
+    }
+  }
+
+  public disconnect(): void {
+    this._adapter.overlayElement.removeEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
+  }
+
+  public get overlayElement(): IOverlayComponent {
+    return this._adapter.overlayElement;
+  }
+
+  public get targetElement(): HTMLElement {
+    return this._adapter.overlayElement.targetElement;
+  }
+  public set targetElement(value: HTMLElement) {
+    this._adapter.overlayElement.targetElement = value;
+  }
+
+  public get target(): string | null {
+    return this._adapter.overlayElement.target;
+  }
+  public set target(value: string | null) {
+    this._adapter.overlayElement.target = value;
   }
 
   public get open(): boolean {
-    return this._adapter.overlay.open;
+    return this._adapter.overlayElement.open;
   }
   public set open(value: boolean) {
-    this._adapter.overlay.open = value;
+    this._adapter.overlayElement.open = value;
+    this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._adapter.overlayElement.open);
   }
 
   public get inline(): boolean {
-    return this._adapter.overlay.inline;
+    return this._adapter.overlayElement.inline;
   }
   public set inline(value: boolean) {
-    this._adapter.overlay.inline = value;
+    if (this._adapter.overlayElement.inline !== value) {
+      this._adapter.overlayElement.inline = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.INLINE, this._adapter.overlayElement.inline);
+    }
   }
 
   public get placement(): OverlayPlacement {
-    return this._adapter.overlay.placement;
+    return this._adapter.overlayElement.placement;
   }
   public set placement(value: OverlayPlacement) {
-    this._adapter.overlay.placement = value;
+    if (this._adapter.overlayElement.placement !== value) {
+      this._adapter.overlayElement.placement = value;
+      this._adapter.setHostAttribute(OVERLAY_CONSTANTS.attributes.PLACEMENT, this._adapter.overlayElement.placement);
+    }
   }
 
   public get positionStrategy(): OverlayPositionStrategy {
-    return this._adapter.overlay.positionStrategy;
+    return this._adapter.overlayElement.positionStrategy;
   }
   public set positionStrategy(value: OverlayPositionStrategy) {
-    this._adapter.overlay.positionStrategy = value;
+    this._adapter.overlayElement.positionStrategy = value;
+    this._adapter.setHostAttribute(OVERLAY_CONSTANTS.attributes.POSITION_STRATEGY, this._adapter.overlayElement.positionStrategy);
   }
 
   public get offset(): IOverlayOffset {
-    return this._adapter.overlay.offset;
+    return this._adapter.overlayElement.offset;
   }
   public set offset(value: IOverlayOffset) {
-    this._adapter.overlay.offset = value;
+    if (this._adapter.overlayElement.offset !== value) {
+      this._adapter.overlayElement.offset = value;
+    }
   }
 
   public get hide(): boolean {
-    return this._adapter.overlay.hide;
+    return this._adapter.overlayElement.hide;
   }
   public set hide(value: boolean) {
-    this._adapter.overlay.hide = value;
+    if (this._adapter.overlayElement.hide !== value) {
+      this._adapter.overlayElement.hide = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE, this._adapter.overlayElement.hide);
+    }
   }
 
   public get static(): boolean {
-    return this._adapter.overlay.static;
+    return this._adapter.overlayElement.static;
   }
   public set static(value: boolean) {
-    this._adapter.overlay.static = value;
+    if (this._adapter.overlayElement.static !== value) {
+      this._adapter.overlayElement.static = value;
+
+      if (!this.static) {
+        this._adapter.overlayElement.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
+      } else {
+        this._adapter.overlayElement.removeEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
+      }
+
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.STATIC, this._adapter.overlayElement.static);
+    }
+  }
+
+  public get shift(): boolean {
+    return this._adapter.overlayElement.shift;
+  }
+  public set shift(value: boolean) {
+    if (this._adapter.overlayElement.shift !== value) {
+      this._adapter.overlayElement.shift = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.SHIFT, this._adapter.overlayElement.shift);
+    }
+  }
+
+  public get flip(): boolean {
+    return this._adapter.overlayElement.flip;
+  }
+  public set flip(value: boolean) {
+    if (this._adapter.overlayElement.flip !== value) {
+      this._adapter.overlayElement.flip = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.NO_FLIP, !this._adapter.overlayElement.flip);
+    }
+  }
+
+  public get auto(): boolean {
+    return this._adapter.overlayElement.auto;
+  }
+  public set auto(value: boolean) {
+    if (this._adapter.overlayElement.auto !== value) {
+      this._adapter.overlayElement.auto = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.AUTO, this._adapter.overlayElement.auto);
+    }
+  }
+
+  public get dialog(): boolean {
+    return this._adapter.overlayElement.dialog;
+  }
+  public set dialog(value: boolean) {
+    if (this._adapter.overlayElement.dialog !== value) {
+      this._adapter.overlayElement.dialog = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.DIALOG, this._adapter.overlayElement.dialog);
+    }
+  }
+
+  public get modal(): boolean {
+    return this._adapter.overlayElement.modal;
+  }
+  public set modal(value: boolean) {
+    if (this._adapter.overlayElement.modal !== value) {
+      this._adapter.overlayElement.modal = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.MODAL, this._adapter.overlayElement.modal);
+    }
   }
   
   public position(): void {
-    this._adapter.overlay.position();
+    this._adapter.overlayElement.position();
   }
 }

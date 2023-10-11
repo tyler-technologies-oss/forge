@@ -1,11 +1,11 @@
 <div class="clipping-container">
   <div class="scroll-container">
     <forge-button type="raised" slot="trigger">
-      <button type="button" id="my-btn" style="white-space: nowrap;">Show overlay</button>
+      <button type="button" id="my-btn">Show overlay</button>
     </forge-button>
 
-    <forge-overlay id="my-overlay">
-      <div class="overlay-content" tabindex="0">
+    <forge-overlay target="my-btn" id="my-overlay">
+      <div class="overlay-content">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea labore tenetur illum aliquam corporis veritatis quos accusamus. Laborum ullam autem fugiat eligendi ratione beatae consequuntur provident earum, nemo neque itaque!
       </div>
     </forge-overlay>

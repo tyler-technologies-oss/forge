@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { IOverlayToggleEventData } from '../overlay';
 
 const elementName = `${COMPONENT_NAME_PREFIX}popover`;
 
@@ -37,3 +38,5 @@ export const POPOVER_CONSTANTS = {
 
 export type PopoverAnimationType = 'none' | 'zoom' | 'slide' | 'fade';
 export type PopoverTriggerType = 'click' | 'hover' | 'focus';
+
+export interface PopoverToggleEventData extends IOverlayToggleEventData {}

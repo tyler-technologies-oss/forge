@@ -22,22 +22,12 @@ autocomplete.filter = filterOptions as AutocompleteFilterCallback<string>;
 
 
 // State
-let states = data as IOption[];
+const states = data as IOption[];
 let asyncFilter = false;
 let useGroupedData = false;
 let useGroupHeaderBuilder = false;
 const filterCache = new Map();
 autocomplete.value = 'ME';
-
-setTimeout(() => {
-  const options = [
-    { "label": "Kentucky", "value": "KY" },
-    { "label": "Louisiana", "value": "LA" },
-    { "label": "Maine UPDATED", "value": "ME" }
-  ];
-  states = options;
-  autocomplete._foundation._updateSelectedOptions(options);
-}, 1000);
 
 const valueContainer = document.querySelector('#autocomplete-value');
 autocomplete.addEventListener('forge-autocomplete-change', ({ detail }) => {

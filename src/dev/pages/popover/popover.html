@@ -47,11 +47,14 @@ include('./src/partials/page.ejs', {
           { label: 'Focus', value: 'focus' }
         ]
       },
+      { type: 'switch', label: 'Dialog', id: 'opt-dialog' },
+      { type: 'switch', label: 'Modal', id: 'opt-modal', disabled: true },
       { type: 'switch', label: 'Arrow', id: 'opt-arrow' },
       { type: 'switch', label: 'Inline', id: 'opt-inline' },
       { type: 'switch', label: 'Static', id: 'opt-static' },
       { type: 'switch', label: 'Use offset', id: 'opt-use-offset' },
       { type: 'switch', label: 'Force containment', id: 'opt-force-containment' },
+      { type: 'switch', label: 'Prevent dialog close', id: 'opt-prevent-dialog-close', disabled: true },
       { type: 'button', label: 'Center demo', id: 'opt-center'}
     ]
   }

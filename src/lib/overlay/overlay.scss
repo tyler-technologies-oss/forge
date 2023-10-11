@@ -1,3 +1,4 @@
+@use './animations';
 @use './configuration';
 @use './core';
 @use '../core/styles/utils';
@@ -24,12 +25,22 @@
     padding: 0;
     margin: 0;
     overflow: visible;
-
-    &::backdrop {
-      display: none;
-    }
   }
 }
+
+:host([dialog]) {
+  .forge-overlay::backdrop {
+    background-color: transparent;
+    // animation: fadein var(--_backdrop-fade-duration) ease-in-out;
+  }
+}
+
+// :host([open][dialog][modal]) {
+//   .forge-overlay::backdrop {
+//     backdrop-filter: none;
+//     background-color: rgba(0, 0, 0, 0.24);
+//   }
+// }
 
 .forge-overlay {
   @include configuration.configuration;

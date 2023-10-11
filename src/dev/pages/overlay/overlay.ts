@@ -11,7 +11,13 @@ const overlay = document.querySelector('#my-overlay') as IOverlayComponent;
 const showOverlayButton = document.querySelector('#my-btn') as HTMLButtonElement;
 const clippingContainer = document.querySelector('.clipping-container') as HTMLElement;
 
-overlay.targetElement = showOverlayButton; // TODO: use heuristic in consuming components (such as <forge-popover>) to locate optionally slotted button OR property via configuration
+overlay.addEventListener('forge-overlay-light-dismiss', ({ detail }: CustomEvent) => {
+  console.log('forge-overlay-beforetoggle', detail);
+});
+
+overlay.addEventListener('forge-overlay-toggle', ({ detail }: CustomEvent) => {
+  console.log('forge-overlay-toggle', detail);
+});
 
 showOverlayButton.addEventListener('click', () => overlay.open = !overlay.open);
 centerDemoButton();
@@ -27,6 +33,12 @@ inlineToggle.addEventListener('forge-switch-select', ({ detail: selected }) => o
 
 const staticToggle = document.getElementById('opt-static') as ISwitchComponent;
 staticToggle.addEventListener('forge-switch-select', ({ detail: selected }) => overlay.static = selected);
+
+const dialogToggle = document.getElementById('opt-dialog') as ISwitchComponent;
+dialogToggle.addEventListener('forge-switch-select', ({ detail: selected }) => overlay.dialog = selected);
+
+const modalToggle = document.getElementById('opt-modal') as ISwitchComponent;
+modalToggle.addEventListener('forge-switch-select', ({ detail: selected }) => overlay.modal = selected);
 
 const hideToggle = document.getElementById('opt-hide') as ISwitchComponent;
 hideToggle.addEventListener('forge-switch-select', ({ detail: selected }) => overlay.hide = selected);

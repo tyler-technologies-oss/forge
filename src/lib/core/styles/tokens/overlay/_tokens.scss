@@ -6,7 +6,8 @@ $tokens: (
   position: utils.module-val(overlay, position, fixed),
   z-index: utils.module-val(overlay, z-index, elevation.z-index(popup)),
   height: utils.module-val(overlay, height, fit-content),
-  width: utils.module-val(overlay, width, fit-content)
+  width: utils.module-val(overlay, width, fit-content),
+  backdrop-fade-duration: utils.module-val(overlay, backdrop-fade-duration, 150ms)
 ) !default;
 
 @function get($key) {

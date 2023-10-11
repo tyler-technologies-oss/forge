@@ -1,23 +1,16 @@
 
-import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { IBaseOverlayFoundation, BaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayAdapter } from './overlay-adapter';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OverlayToggleEvent, OverlayToggleEventData, OVERLAY_CONSTANTS } from './overlay-constants';
+import { CAN_USE_POPOVER, IOverlayOffset, IOverlayToggleEventData, OverlayLightDismissEventData, OverlayPlacement, OverlayPositionStrategy, OverlayToggleEvent, OVERLAY_CONSTANTS } from './overlay-constants';
 
-export interface IOverlayFoundation extends ICustomElementFoundation {
-  targetElement: HTMLElement;
+export interface IOverlayFoundation extends IBaseOverlayFoundation {
   arrowElement: HTMLElement;
   arrowElementOffset: number;
-  inline: boolean;
-  placement: OverlayPlacement;
-  positionStrategy: OverlayPositionStrategy;
-  offset: IOverlayOffset;
-  shift: boolean;
-  hide: boolean;
-  static: boolean;
 }
 
-export class OverlayFoundation implements IOverlayFoundation {
-  private _isConnected = false;
+export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> implements IOverlayFoundation {
+  private _targetElement: HTMLElement;
+  private _target: string | null;
   private _open = false;
   private _inline = false;
   private _placement: OverlayPlacement = 'bottom';
@@ -28,27 +21,43 @@ export class OverlayFoundation implements IOverlayFoundation {
   private _flip = true;
   private _auto = false;
   private _static = false;
-  private _targetElement: HTMLElement;
+  private _dialog = false;
+  private _modal = false;
   private _arrowElement: HTMLElement;
   private _arrowElementOffset = 0;
-  private _lightDismissListener: (evt: OverlayToggleEvent) => void;
 
-  constructor(private _adapter: IOverlayAdapter) {
-    this._lightDismissListener = evt => {
+  private _lightDismissPopoverListener: EventListener;
+  private _lightDismissDialogListener: EventListener | (() => void);
+  private _lightDismissCustomListener: () => void;
+
+  constructor(adapter: IOverlayAdapter) {
+    super(adapter);
+    this._lightDismissPopoverListener = (evt: OverlayToggleEvent) => {
       if (evt.newState === 'closed') {
-        this._onLightDismiss();
+        this._onLightDismiss({ type: 'modeless' });
       }
     };
+    this._lightDismissDialogListener = (evt: Event | undefined) => {
+      evt?.preventDefault();
+      if (!evt || this._adapter.isMostRecentOpenOverlay()) {
+        this._onLightDismiss({ type: 'modal' });
+      }
+    };
+    this._lightDismissCustomListener = () => this._onLightDismiss({ type: 'modeless' });
   }
 
   public initialize(): void {
-    this._isConnected = true;
-    this._adapter.initialize();
+    if (!this._targetElement && this._target) {
+      const target = this._adapter.locateTargetElement(this._target);
+      if (target) {
+        this._targetElement = target;
+      }
+    }
   }
 
   public disconnect(): void {
     this._adapter.tryCleanupAutoUpdate();
-    this._isConnected = false;
+    this._removeLightDismissListener();
   }
 
   public position(): void {
@@ -68,52 +77,82 @@ export class OverlayFoundation implements IOverlayFoundation {
     });
   }
 
-  private _onLightDismiss(): void {
+  private _onLightDismiss({ type }: OverlayLightDismissEventData): void {
+    const isCancelled = this._adapter.dispatchHostEvent({
+      type: OVERLAY_CONSTANTS.events.LIGHT_DISMISS,
+      bubbles: false,
+      cancelable: true,
+      detail: { type } as OverlayLightDismissEventData
+    });
+    if (isCancelled) {
+      return;
+    }
     this._applyOpen(false);
   }
 
   protected _applyOpen(newState: boolean): void {
-    if (this._open === newState || !this._isConnected) {
+    if (this._open === newState || !this._adapter.isConnected) {
       return;
     }
 
-    const oldState = this._open;
     this._open = newState;
-    
-    const isCancelled = this._adapter.dispatchHostEvent({
-      type: OVERLAY_CONSTANTS.events.BEFORETOGGLE,
-      detail: { open: this._open } as OverlayToggleEventData,
-      cancelable: true,
-      composed: true
-    });
-    if (isCancelled) {
-      this._open = oldState;
-      return;
-    }
-    
     this._adapter.setOpen(this._open);
-
-    this._adapter.dispatchHostEvent({
-      type: OVERLAY_CONSTANTS.events.TOGGLE,
-      detail: { open: this._open } as OverlayToggleEventData,
-      composed: true
-    });
 
     if (this._open) {
       if (!this._static) {
-        this._adapter.addLightDismissListener(this._lightDismissListener);
+        this._applyLightDismissListener();
       }
     } else {
-      this._adapter.removeLightDismissListener(this._lightDismissListener);
+      this._removeLightDismissListener();
     }
 
-    if (this._open) {
+    if (this._open && this._targetElement) {
       this.position();
     }
     
     this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._open);
   }
 
+  private _applyLightDismissListener(): void {
+    if (this._dialog && this._modal) {
+      this._adapter.addDialogLightDismissListener(this._lightDismissDialogListener);
+    } else {
+      if (this._inline && CAN_USE_POPOVER) {
+        this._adapter.addCustomLightDismissListener(this._lightDismissCustomListener);
+      } else {
+        this._adapter.addPopoverLightDismissListener(this._lightDismissPopoverListener);
+      }
+    }
+  }
+
+  private _removeLightDismissListener(): void {
+    this._adapter.removePopoverLightDismissListener(this._lightDismissPopoverListener);
+    this._adapter.removeDialogLightDismissListener(this._lightDismissDialogListener);
+    this._adapter.removeCustomLightDismissListener();
+  }
+
+  public get targetElement(): HTMLElement {
+    return this._targetElement;
+  }
+  public set targetElement(value: HTMLElement) {
+    this._targetElement = value;
+  }
+
+  public get target(): string | null {
+    return this._target;
+  }
+  public set target(value: string | null) {
+    if (this._target !== value) {
+      this._target = value;
+      if (this._adapter.isConnected && this._target) {
+        const target = this._adapter.locateTargetElement(this._target);
+        if (target) {
+          this._targetElement = target;
+        }
+      }
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.TARGET, !!this._target, this._target as string);
+    }
+  }
 
   public get open(): boolean {
     return this._open;
@@ -123,13 +162,6 @@ export class OverlayFoundation implements IOverlayFoundation {
     if (this._open !== value) {
       this._applyOpen(value);
     }
-  }
-
-  public get targetElement(): HTMLElement {
-    return this._targetElement;
-  }
-  public set targetElement(value: HTMLElement) {
-    this._targetElement = value;
   }
 
   public get arrowElement(): HTMLElement {
@@ -199,8 +231,9 @@ export class OverlayFoundation implements IOverlayFoundation {
     return this._hide;
   }
   public set hide(value: boolean) {
-    if (this._hide !== !!value) {
-      this._hide = !!value;
+    value = Boolean(value);
+    if (this._hide !== value) {
+      this._hide = value;
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE, this._hide);
     }
   }
@@ -212,6 +245,11 @@ export class OverlayFoundation implements IOverlayFoundation {
     value = Boolean(value);
     if (this._static !== value) {
       this._static = value;
+      
+      if (this._static) {
+        this._removeLightDismissListener();
+      }
+
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.STATIC, this._static);
     }
   }
@@ -235,6 +273,27 @@ export class OverlayFoundation implements IOverlayFoundation {
     if (this._auto !== value) {
       this._auto = value;
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.AUTO, this._auto);
+    }
+  }
+
+  public get dialog(): boolean {
+    return this._dialog;
+  }
+  public set dialog(value: boolean) {
+    if (this._dialog !== value) {
+      this._dialog = value;
+      this._adapter.setDialog(this._dialog);
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.DIALOG, this._dialog);
+    }
+  }
+
+  public get modal(): boolean {
+    return this._modal;
+  }
+  public set modal(value: boolean) {
+    if (this._modal !== value) {
+      this._modal = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.MODAL, this._modal);
     }
   }
 }

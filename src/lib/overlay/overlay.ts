@@ -1,6 +1,6 @@
 import { attachShadowTemplate, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { OverlayAdapter } from './overlay-adapter';
-import { OverlayToggleEventData, OVERLAY_CONSTANTS } from './overlay-constants';
+import { IOverlayToggleEventData, OverlayLightDismissEventData, OVERLAY_CONSTANTS } from './overlay-constants';
 import { OverlayFoundation } from './overlay-foundation';
 import { BaseOverlay, IBaseOverlay } from './base-overlay';
 
@@ -8,7 +8,6 @@ import template from './overlay.html';
 import styles from './overlay.scss';
 
 export interface IOverlayComponent extends IBaseOverlay {
-  targetElement: HTMLElement;
   arrowElement: HTMLElement | undefined;
   arrowElementOffset: number;
 }
@@ -19,8 +18,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-overlay-toggle': CustomEvent<OverlayToggleEventData>;
-    'forge-overlay-beforetoggle': CustomEvent<OverlayToggleEventData>;
+    'forge-overlay-light-dismiss': CustomEvent<OverlayLightDismissEventData>;
   }
 }
 
@@ -37,6 +35,7 @@ declare global {
  * @property {boolean} open - Whether or not the overlay is open.
  * @property {boolean} inline - Whether or not the overlay should be rendered inline (not in the :top-layer).
  * @property {HTMLElement} targetElement - The element to anchor the overlay to.
+ * @property {HTMLElement} target - The id of the element to anchor the overlay to.
  * @property {HTMLElement} arrowElement - The element to use as the arrow for the overlay.
  * @property {number} arrowElementOffset - The offset to apply to the arrow element.
  * @property {OverlayPlacement} placement - The placement of the overlay relative to the target element.
@@ -47,6 +46,8 @@ declare global {
  * @property {boolean} static - Whether or not the overlay handles light dismiss itself or not.
  * @property {boolean} flip - Whether or not the overlay should flip to the opposite placement when not enough room.
  * @property {boolean} auto - Whether or not the overlay should automatically attempt to locate the best placement.
+ * @property {boolean} dialog - Whether or not the overlay is intended to be a dialog semantically. Default is `false`.
+ * @property {boolean} modal - Only applies when `dialog` is `true`. Whether or not the dialog is modal. Default is `false`.
  * 
  * @attribute {boolean} open - Whether or not the overlay is open.
  * @attribute {boolean} inline - Whether or not the overlay should be rendered inline (not in the :top-layer).
@@ -58,6 +59,8 @@ declare global {
  * @attribute {boolean} no-flip - Tells the overlay not to flip to the opposite placement when not enough room.
  * @attribute {boolean} auto - Whether or not the overlay should automatically attempt to locate the best placement.
  * @attribute {string} position-placement - The placement of the overlay around the target element **after** dynamic positioning. This is a read-only attribute that is only available when open.
+ * @attribute {boolean} dialog - Whether or not the overlay is intended to be a dialog semantically. Default is `false`.
+ * @attribute {boolean} modal - Only applies when `dialog` is `true`. Whether or not the dialog is modal. Default is `false`.
  * 
  * @event {CustomEvent<OverlayToggleEventData>} forge-overlay-toggle - Fires when the overlay is toggled.
  * @event {CustomEvent<OverlayToggleEventData>} forge-overlay-beforetoggle - Fires before the overlay is toggled.
@@ -94,9 +97,6 @@ export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements 
   public disconnectedCallback(): void {
     this._foundation.disconnect();
   }
-  
-  @FoundationProperty()
-  public targetElement: HTMLElement;
 
   @FoundationProperty()
   public arrowElement: HTMLElement;

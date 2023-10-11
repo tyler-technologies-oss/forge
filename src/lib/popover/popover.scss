@@ -1,6 +1,7 @@
 @use './core';
 @use './configuration';
 @use './animations';
+@use '../overlay';
 
 :host {
   display: contents;
@@ -17,6 +18,25 @@
 .forge-popover {
   @include configuration.base;
   @include core.base;
+}
+
+///
+/// Dialog styles
+///
+
+:host([dialog]) {
+  forge-overlay {
+    @include overlay.provide-theme((
+      backdrop-fade-duration: 1000ms
+    ));
+  }
+}
+
+:host([open][dialog][modal]) {
+  forge-overlay::part(container)::backdrop {
+    backdrop-filter: blur(1px);
+    background-color: rgba(0, 0, 0, 0.24);
+  }
 }
 
 ///

@@ -1,17 +1,22 @@
-import { getActiveElement, getShadowElement } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/overlay-aware-adapter';
 import { IPopoverComponent } from './popover';
 import { POPOVER_CONSTANTS } from './popover-constants';
 
 export interface IPopoverAdapter extends IOverlayAwareAdapter {
-  initialize(targetElement: HTMLElement): void;
+  initializeTargetElement(): void;
   addTargetListener(type: string, listener: EventListener): void;
   removeTargetListener(type: string, listener: EventListener): void;
+  addSurfaceListener(type: string, listener: EventListener): void;
+  removeSurfaceListener(type: string, listener: EventListener): void;
   setOverlayOpen(newState: boolean): void;
   toggleArrow(value: boolean): void;
   position(): void;
   isChildElement(element: HTMLElement): boolean;
+  tryAutofocus(): void;
+  hasFocus(): boolean;
+  captureFocusedElement(): HTMLElement | null;
 }
 
 export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> implements IPopoverAdapter {
@@ -27,26 +32,36 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     this._overlayElement = getShadowElement(this._component, OVERLAY_CONSTANTS.elementName) as IOverlayComponent;
   }
 
-  public initialize(targetElement: HTMLElement): void {
-    const target = targetElement ?? this._getTargetElement(); // TODO: if doesn't have an element reference already
-    if (!target) {
-      return;
+  public initializeTargetElement(): void {
+    if (this._component.targetElement) {
+      this._overlayElement.targetElement = this._component.targetElement;
+    } else {
+      const targetEl = this._getTargetElement(this._component.target);
+      if (targetEl) {
+        this._overlayElement.targetElement = targetEl;
+      }
     }
-    this._overlayElement.targetElement = target;
   }
 
   public addTargetListener(type: string, listener: EventListener): void {
-    this._overlayElement.targetElement.addEventListener(type, listener);
+    this._overlayElement.targetElement?.addEventListener(type, listener);
   }
 
   public removeTargetListener(type: string, listener: EventListener): void {
-    this._overlayElement.targetElement.removeEventListener(type, listener);
+    this._overlayElement.targetElement?.removeEventListener(type, listener);
+  }
+
+  public addSurfaceListener(type: string, listener: EventListener): void {
+    this._surfaceElement.addEventListener(type, listener);
+  }
+
+  public removeSurfaceListener(type: string, listener: EventListener): void {
+    this._surfaceElement.removeEventListener(type, listener);
   }
 
   public setOverlayOpen(newState: boolean): void {
     this._overlayElement.arrowElement = this._arrowElement;
     this._overlayElement.open = newState;
-
     if (this._arrowElement) {
       this._overlayElement.arrowElementOffset = Math.sqrt(2 * this._arrowElement.offsetWidth ** 2) / 2;
     }
@@ -74,9 +89,30 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     return this._component.contains(element);
   }
 
-  private _getTargetElement(id?: string): HTMLElement {
+  public tryAutofocus(): void {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (this._component.open && this._overlayElement.isConnected && !this._component.matches(':focus-within')) {
+          const autofocusElement = this._component.querySelector<HTMLElement>('[autofocus]');
+          if (autofocusElement) {
+            autofocusElement.focus();
+          }
+        }
+      });
+    });
+  }
+
+  public hasFocus(): boolean {
+    return this._component.matches(':focus-within');
+  }
+
+  public captureFocusedElement(): HTMLElement | null {
+    return this._component.ownerDocument.activeElement as HTMLElement | null;
+  }
+
+  private _getTargetElement(id?: string | null): HTMLElement {
     if (id) {
-      // First we attempt to locate the target element based on the IDREF provided
+      // First we attempt to locate the target element based on the id reference provided
       const rootNode = this._component.getRootNode() as Document | ShadowRoot;
       const targetEl = rootNode.querySelector<HTMLElement>(`#${id}`);
       if (targetEl) {

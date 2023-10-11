@@ -9,7 +9,6 @@ import template from './popover.html';
 import styles from './popover.scss';
 
 export interface IPopoverComponent extends IOverlayAware {
-  targetElement: HTMLElement;
   arrow: boolean;
   animationType: PopoverAnimationType;
   triggerType: PopoverTriggerType;
@@ -21,6 +20,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
+    'forge-popover-beforetoggle': CustomEvent;
     'forge-popover-toggle': CustomEvent;
   }
 }
@@ -70,9 +70,6 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
-
-  @FoundationProperty()
-  public targetElement: HTMLElement;
 
   @FoundationProperty()
   public arrow: boolean;

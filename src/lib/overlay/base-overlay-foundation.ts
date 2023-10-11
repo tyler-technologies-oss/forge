@@ -6,6 +6,8 @@ export interface IBaseOverlayFoundation extends ICustomElementFoundation {
   initialize(): void;
   disconnect(): void;
   position(): void;
+  targetElement: HTMLElement;
+  target: string | null;
   open: boolean;
   inline: boolean;
   placement: OverlayPlacement;
@@ -13,15 +15,22 @@ export interface IBaseOverlayFoundation extends ICustomElementFoundation {
   offset: IOverlayOffset;
   hide: boolean;
   static: boolean;
+  shift: boolean;
+  flip: boolean;
+  auto: boolean;
+  dialog: boolean;
+  modal: boolean;
 }
 
-export abstract class BaseOverlayFoundation implements IBaseOverlayFoundation {
-  constructor(protected _adapter: IBaseAdapter) {}
+export abstract class BaseOverlayFoundation<T extends IBaseAdapter> implements IBaseOverlayFoundation {
+  constructor(protected _adapter: T) {}
 
-  public abstract initialize(): void;
+  public initialize(): void {}
   public abstract disconnect(): void;
   public abstract position(): void;
 
+  public abstract targetElement: HTMLElement;
+  public abstract target: string | null;
   public abstract open: boolean;
   public abstract inline: boolean;
   public abstract placement: OverlayPlacement;
@@ -29,4 +38,9 @@ export abstract class BaseOverlayFoundation implements IBaseOverlayFoundation {
   public abstract offset: IOverlayOffset;
   public abstract hide: boolean;
   public abstract static: boolean;
+  public abstract shift: boolean;
+  public abstract flip: boolean;
+  public abstract auto: boolean;
+  public abstract dialog: boolean;
+  public abstract modal: boolean;
 }
