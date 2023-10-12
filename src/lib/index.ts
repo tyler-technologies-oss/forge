@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright (c) 2022 Tyler Technologies, Inc.
+ * Copyright (c) 2024 Tyler Technologies, Inc.
  * License: Apache-2.0
  */
 

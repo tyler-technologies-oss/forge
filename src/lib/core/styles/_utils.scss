@@ -16,8 +16,19 @@
 /// Creates a CSS custom property declaration for a token in the provided module
 /// referencing an existing module token variable as the fallback.
 /// 
-@function module-ref($module, $token, $ref-token, $prefix: config.$prefix) {
-  @return _create-var($module, $token, var(--_#{$ref-token}), $prefix);
+/// To provide a module reference variable with a different fallback value, set the
+/// $type parameter to `value` and `$value` will be used verbatim.
+/// 
+@function module-ref($module, $token, $value, $type: ref, $prefix: config.$prefix) {
+  $fallback: if($type == ref, var(--_#{$value}), $value);
+  @return _create-var($module, $token, $fallback, $prefix);
+}
+
+///
+/// Gets a module token CSS variable.
+/// 
+@function module-var($token, $prefix: config.$prefix) {
+  @return var(--_#{$token});
 }
 
 ///

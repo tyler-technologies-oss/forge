@@ -1753,11 +1753,11 @@ describe('AutocompleteComponent', function(this: ITestContext) {
     return options.map(({ label, value }) => ({ label, value }));
   }
 
-  function _getListItems(popupElement: HTMLElement | null): IListItemComponent[] {
+  function _getListItems(popupElement: HTMLElement | null): IListItemComponent<any>[] {
     if (!popupElement) {
       return [];
     }
-    return Array.from(popupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
+    return Array.from(popupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent<any>[];
   }
 
   function _triggerDropdownClick(input: HTMLInputElement): void {

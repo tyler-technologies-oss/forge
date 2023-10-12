@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use 'sass:list';
 @use '../core/config';
+@use '../utils';
 @use '../tokens/typography/tokens';
 
 @forward '../tokens/typography/tokens';
@@ -15,7 +16,7 @@
 /// 
 /// Allows for providing an optional list of tokens to exclude from the output:
 /// ```scss
-/// @include style(title, [font-family font-size]);
+/// @include style(title, $exclude: [font-family font-size]);
 /// ```
 /// 
 @mixin style($style, $exclude: null) {
@@ -38,6 +39,26 @@
       #{$key}: #{$value};
     }
   }
+}
+
+///
+/// Gets a CSS custom property declaration for a specific typography style token, with its token value as the fallback value.
+/// 
+@function variable($style, $token, $prefix: config.$prefix) {
+  @return _get-style-value($style, $token);
+}
+
+///
+/// Gets the value of a typography scale token.
+/// 
+@function scale($scale) {
+  @return #{map.get(tokens.$font-scale, $scale)}rem;
+}
+
+@mixin ellipse {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 ///
