@@ -1,7 +1,9 @@
 <template>
   <div class="forge-chip-field__wrapper" part="root">
     <div class="forge-chip-field forge-field" part="container">
-      <slot name="leading"></slot>
+      <div class="forge-field__leading-container" part="leading-container">
+        <slot name="leading"></slot>
+      </div>
       <div class="forge-field__label-input-container" part="label-input-container">
         <slot name="label"></slot>
         <div class="forge-field__input-container" part="input-container">
@@ -9,7 +11,9 @@
           <slot></slot>
         </div>
       </div>
-      <slot name="trailing"></slot>
+      <div class="forge-field__trailing-container" part="trailing-container">
+        <slot name="trailing"></slot>
+      </div>
       <div class="forge-field__addon-end-container" part="addon-end-container">
         <slot name="addon-end"></slot>
       </div>

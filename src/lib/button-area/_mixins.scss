@@ -1,0 +1,42 @@
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '../utils/mixins' as utils;
+@use '../ripple/forge-ripple';
+
+@mixin core-styles() {
+  .forge-button-area {
+    @include base;
+
+    &:not(.forge-button-area--disabled) {
+      &.forge-button-area {
+        @include enabled;
+      }
+    }
+
+    &__button {
+      @include button;
+    }
+  }
+}
+
+@mixin host() {
+  display: block;
+}
+
+@mixin base() {
+  overflow: hidden;
+}
+
+@mixin enabled() {
+  @include mdc-ripple.surface;
+  @include mdc-ripple.radius-bounded;
+  @include mdc-ripple-theme.states(primary);
+  @include mdc-ripple-theme.states-activated(primary);
+  @include mdc-ripple-theme.states-selected(primary);
+
+  cursor: pointer;
+}
+
+@mixin button() {
+  @include utils.visually-hidden;
+}

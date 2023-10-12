@@ -77,6 +77,30 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect((<Date>calendar.value).toDateString()).toEqual(date.toDateString());
     });
 
+    it('should open calendar in month of min date if min is after current month', function(this: ITestContext) {
+      this.context = setupTestContext(false);
+      const date = new Date();
+      this.context.component.min = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+      this.context.append();
+
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      expect(calendar.month).toEqual(date.getMonth() + 1);
+    });
+
+    it('should open calendar in month of max date if max is before current month', function(this: ITestContext) {
+      this.context = setupTestContext(false);
+      const date = new Date();
+      this.context.component.max = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+      this.context.append();
+
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      expect(calendar.month).toEqual(date.getMonth() - 1);
+    });
+
     it('should automatically render a toggle button with a Forge text-field component', function(this: ITestContext) {
       this.context = setupTestContext(false, true, false);
 
@@ -836,6 +860,19 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe('');
       inputElement.focus();
       expect(getInputElement(this.context.component).value).toBe('__/__/____');
+    });
+
+    it('should select mask when shown on focus', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const inputElement = getInputElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      inputElement.focus();
+
+      expect(inputElement.selectionStart).toEqual(0);
+      expect(inputElement.selectionEnd).toEqual('__/__/____'.length);
     });
 
     it('should clear mask format on blur', function(this: ITestContext) {

@@ -114,6 +114,50 @@ describe('PaginatorComponent', function(this: ITestContext) {
       expect(this.context.nextPageButton.hasAttribute('disabled')).toBe(true);
     });
 
+    it('should move focus to previous page button when next page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.nextPageButton.focus();
+      this.context.nextPageButton.click();
+
+      expect(this.context.nextPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.previousPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to next page button when previous page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.previousPageButton.focus();
+      this.context.previousPageButton.click();
+
+      expect(this.context.previousPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.nextPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to next page button when first page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext(true, true);
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.firstPageButton.focus();
+      this.context.firstPageButton.click();
+
+      expect(this.context.firstPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.nextPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to previous page button when last page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext(true, true);
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.lastPageButton.focus();
+      this.context.lastPageButton.click();
+
+      expect(this.context.lastPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.previousPageButton.matches(':focus')).toBe(true);
+    });
+
     it('should emit change event when clicking next page button', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.paginator.total = 100;
@@ -376,6 +420,45 @@ describe('PaginatorComponent', function(this: ITestContext) {
 
       this.context.paginator.offset = -150;
       expect(this.context.paginator.pageIndex).toBe(0);
+    });
+
+    it('should set page index via offset property if total is not > 0 initially', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const pageSizeOptions = [5, 10, 25];
+      this.context.paginator.pageSizeOptions = pageSizeOptions;
+      this.context.paginator.pageSize = 25;
+
+      expect(this.context.paginator.total).toBe(0);
+
+      this.context.paginator.offset = 25;
+      expect(this.context.paginator.pageIndex).toBe(0);
+
+      this.context.paginator.total = 100;
+      expect(this.context.paginator.pageIndex).toBe(1);
+    });
+
+    it('should update offset when page index changes', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const pageSizeOptions = [5, 10, 25];
+      this.context.paginator.pageSizeOptions = pageSizeOptions;
+      this.context.paginator.pageSize = 25;
+      this.context.paginator.total = 100;
+      expect(this.context.paginator.pageIndex).toBe(0);
+      expect(this.context.paginator.offset).toBe(0);
+
+      this.context.paginator.pageIndex = 1;
+
+      expect(this.context.paginator.pageIndex).toBe(1);
+      expect(this.context.paginator.offset).toBe(25);
+
+      this.context.paginator.pageIndex = 3;
+      expect(this.context.paginator.pageIndex).toBe(3);
+      expect(this.context.paginator.offset).toBe(75);
+
+      this.context.paginator.pageIndex = 0;
+
+      expect(this.context.paginator.pageIndex).toBe(0);
+      expect(this.context.paginator.offset).toBe(0);
     });
 
     it('should get offset', function(this: ITestContext) {

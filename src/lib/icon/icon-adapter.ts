@@ -3,7 +3,6 @@ import { BaseAdapter, IBaseAdapter } from '../core';
 import { ICON_CONSTANTS } from './icon-constants';
 
 export interface IIconAdapter extends IBaseAdapter {
-  initialize(): void;
   canLazyLoad(): boolean;
   observeVisibility(listener: () => void): void;
   destroyVisibilityObserver(): void;
@@ -15,12 +14,6 @@ export class IconAdapter extends BaseAdapter<IIconComponent> implements IIconAda
 
   constructor(component: IIconComponent) {
     super(component);
-  }
-
-  public initialize(): void {
-    if (!this._component.hasAttribute('aria-hidden')) {
-      this._component.setAttribute('aria-hidden', 'true');
-    }
   }
 
   public canLazyLoad(): boolean {
@@ -48,6 +41,9 @@ export class IconAdapter extends BaseAdapter<IIconComponent> implements IIconAda
     const shadowRoot = this._component.shadowRoot as ShadowRoot;
     const styleTag = shadowRoot.querySelector('style');
     shadowRoot.innerHTML = content;
+    if (content) {
+      shadowRoot.firstElementChild?.setAttribute('aria-hidden', 'true');
+    }
     if (styleTag) {
       shadowRoot.appendChild(styleTag);
     }

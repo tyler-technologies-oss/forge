@@ -1,6 +1,6 @@
 import { addClass, closestElement, emitEvent, getShadowElement, IPositionElementConfig, notChildEventListener, positionElementAsync, removeClass, removeElement, deepQuerySelectorAll, getActiveElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { IPopupComponent } from './popup';
+import { IPopupComponent, IPopupCloseEventData } from './popup';
 import { IPopupPositionEventData, POPUP_CONSTANTS, PopupPlacement } from './popup-constants';
 
 export interface IPopupAdapter extends IBaseAdapter {
@@ -17,6 +17,7 @@ export interface IPopupAdapter extends IBaseAdapter {
   removeEventListener(type: string, listener: (evt: Event) => void): void;
   setBlurListener(listener: () => void): () => void;
   trySetInitialFocus(): void;
+  getCloseEventData(): IPopupCloseEventData;
 }
 
 export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopupAdapter {
@@ -128,6 +129,10 @@ export class PopupAdapter extends BaseAdapter<IPopupComponent> implements IPopup
       return !emitEvent(this._component.targetElement, type, data, bubbles, cancelable);
     }
     return false;
+  }
+
+  public getCloseEventData(): IPopupCloseEventData {
+    return { popup: this._component };
   }
 
   public addClass(classes: string | string[]): void {

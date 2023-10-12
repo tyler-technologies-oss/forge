@@ -77,3 +77,7 @@ export interface IAutocompletePopupConfiguration {
 export interface IAutocompleteSelectEventData<T = any> {
   value: T;
 }
+
+export interface IAutocompleteForceFilterOptions {
+  preserveValue: boolean;
+}
