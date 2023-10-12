@@ -10,17 +10,20 @@ export interface IButtonAreaFoundation extends ICustomElementFoundation {
 export class ButtonAreaFoundation implements IButtonAreaFoundation {
   private _disabled = false;
   private _clickListener: (event: Event) => void;
+  private _keydownListener: (event: KeyboardEvent) => void;
   private _pointerdownListener: (event: Event) => void;
   private _slotListener: () => void;
 
   constructor(private _adapter: IButtonAreaAdapter) {
     this._clickListener = event => this._handleClick(event);
+    this._keydownListener = event => this._handleKeydown(event);
     this._pointerdownListener = event => this._handlePointerdown(event);
     this._slotListener = () => this._handleSlotChange();
   }
 
   public initialize(): void {
     this._adapter.addListener('click', this._clickListener);
+    this._adapter.addListener('keydown', this._keydownListener);
     this._adapter.addListener('pointerdown', this._pointerdownListener);
     this._adapter.addSlotChangeListener(this._slotListener);
     this._adapter.createRipple();
@@ -45,6 +48,17 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     }
 
     // Prevent the click if it originates from an ignored element
+    if (this._shouldIgnoreEvent(event)) {
+      event.stopPropagation();
+    }
+  }
+
+  private _handleKeydown(event: KeyboardEvent): void {
+    if (event.key !== ' ' && event.key !== 'Enter') {
+      return;
+    }
+
+    // Prevent the keydown if it originates from an ignored element
     if (this._shouldIgnoreEvent(event)) {
       event.stopPropagation();
     }
