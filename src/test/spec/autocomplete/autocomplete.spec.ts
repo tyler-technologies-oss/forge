@@ -1525,7 +1525,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         expect(this.context.component.value).toBe(listItems[2].value);
       });
 
-       it('should pass in to-be new value in beforeValueChange', async function(this: ITestContext) {
+      it('should pass in to-be new value in beforeValueChange', async function(this: ITestContext) {
         this.context = setupTestContext(true);
         let newValue = '';
         this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
@@ -1542,6 +1542,79 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         await tick();
 
         expect(newValue).toBe(listItems[2].value);
+      });
+
+      it('should force filter callback to execute and update selected value', async function(this: ITestContext) {
+        this.context = setupTestContext(true);
+        this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+
+        _triggerDropdownClick(this.context.input);
+
+        await tick();
+        const listItems = _getListItems(this.context.component.popupElement);
+        _clickListItem(2, this.context.component.popupElement);
+        await tick();
+
+        expect(this.context.component.value).toBe(listItems[2].value);
+
+        this.context.component.filter = () => [
+          { label: `${DEFAULT_FILTER_OPTIONS[2].label} UPDATED`, value: DEFAULT_FILTER_OPTIONS[2].value},
+          { label: 'New', value: 'new' }
+        ];
+        this.context.component.forceFilter();
+
+        await tick();
+
+        expect(this.context.input.value).toBe(`${DEFAULT_FILTER_OPTIONS[2].label} UPDATED`);
+        expect(this.context.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
+      });
+
+      it('should force filter callback to execute and remove selected value', async function(this: ITestContext) {
+        this.context = setupTestContext(true);
+        this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+
+        _triggerDropdownClick(this.context.input);
+
+        await tick();
+        const listItems = _getListItems(this.context.component.popupElement);
+        _clickListItem(2, this.context.component.popupElement);
+        await tick();
+
+        expect(this.context.component.value).toBe(listItems[2].value);
+
+        this.context.component.filter = () => [
+          { label: 'New', value: 'new' }
+        ];
+        this.context.component.forceFilter();
+
+        await tick();
+
+        expect(this.context.input.value).toBe('');
+        expect(this.context.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
+      });
+
+      it('should force filter callback to execute and preserve selected value if not present in new filtered options', async function(this: ITestContext) {
+        this.context = setupTestContext(true);
+        this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
+
+        _triggerDropdownClick(this.context.input);
+
+        await tick();
+        const listItems = _getListItems(this.context.component.popupElement);
+        _clickListItem(2, this.context.component.popupElement);
+        await tick();
+
+        expect(this.context.component.value).toBe(listItems[2].value);
+
+        this.context.component.filter = () => [
+          { label: 'New', value: 'new' }
+        ];
+        this.context.component.forceFilter({ preserveValue: true });
+
+        await tick();
+
+        expect(this.context.input.value).toBe(DEFAULT_FILTER_OPTIONS[2].label);
+        expect(this.context.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
       });
     });
   });

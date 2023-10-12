@@ -128,6 +128,18 @@ describe('Popup component', function(this: ITestContext) {
     targetElement.removeEventListener(POPUP_CONSTANTS.events.CLOSE, callback);
   });
 
+  it('should also emit close event from the host element', function(this: ITestContext) {
+    this.context = setupTestContext();
+    const { component, targetElement } = this.context;
+    component.targetElement = targetElement;
+    const callback = jasmine.createSpy('callback');
+    component.addEventListener(POPUP_CONSTANTS.events.CLOSE, callback);
+    component.open = true;
+    component.open = false;
+    expect(callback).toHaveBeenCalledTimes(1);
+    component.removeEventListener(POPUP_CONSTANTS.events.CLOSE, callback);
+  });
+
   it('should accept and return focus on open and close', async function(this: ITestContext) {
     this.context = setupTestContext();
     const { component, targetElement } = this.context;

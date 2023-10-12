@@ -86,6 +86,7 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
       return {
         // eslint-disable-next-line @typescript-eslint/no-extra-parens
         label: o.hasAttribute(OPTION_CONSTANTS.attributes.LABEL) ? o.getAttribute(OPTION_CONSTANTS.attributes.LABEL) as string : (isDefined(o.label) ? o.label : o.innerText),
+        secondaryLabel: o.hasAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) ? o.getAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) as string : isDefined(o.secondaryLabel) ? o.secondaryLabel : undefined,
         value: o.hasAttribute(OPTION_CONSTANTS.attributes.VALUE) ? o.getAttribute(OPTION_CONSTANTS.attributes.VALUE) : o.value,
         disabled: o.hasAttribute(OPTION_CONSTANTS.attributes.DISABLED),
         divider: o.hasAttribute(OPTION_CONSTANTS.attributes.DIVIDER),
@@ -93,9 +94,11 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
         leadingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) as string : o.leadingIcon,
         leadingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) as string : o.leadingIconClass,
         leadingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) as ListDropdownIconType : o.leadingIconType,
+        leadingIconComponentProps: o.leadingIconComponentProps,
         trailingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) as string : o.trailingIcon,
         trailingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) as string : o.trailingIconClass,
         trailingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) as ListDropdownIconType : o.trailingIconType,
+        trailingIconComponentProps: o.trailingIconComponentProps,
         leadingBuilder: o.leadingBuilder,
         trailingBuilder: o.trailingBuilder
       };

@@ -954,4 +954,17 @@ describe('ListDropdown', function(this: ITestContext) {
     expect(attrValue).toBeTruthy();
     expect(attrValue).toBe('test-value');
   });
+
+  it('should display options with secondary label', async function(this: ITestContext) {
+    const opts: IListDropdownOption[] = [
+      { label: 'Label', secondaryLabel: 'Secondary label', value: 'value' },
+    ];
+    this.context = createListDropdown({ ...DEFAULT_CONFIG, options: opts });
+    this.context.listDropdown.open();
+    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await tick();
+
+    const listItems = getListItems();
+    expect(listItems[0].querySelector('span[slot=subtitle]')?.textContent).toBe('Secondary label');
+  });
 });

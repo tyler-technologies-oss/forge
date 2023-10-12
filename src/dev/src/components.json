@@ -8,6 +8,7 @@
   { "label": "Bottom sheet", "path": "/pages/bottom-sheet/bottom-sheet.html" },
   { "label": "Busy indicator", "path": "/pages/busy-indicator/busy-indicator.html" },
   { "label": "Button", "path": "/pages/button/button.html" },
+  { "label": "Button area", "path": "/pages/button-area/button-area.html" },
   { "label": "Button toggle", "path": "/pages/button-toggle/button-toggle.html", "tags": ["form"] },
   { "label": "Calendar", "path": "/pages/calendar/calendar.html", "tags": ["form"] },
   { "label": "Card", "path": "/pages/card/card.html" },

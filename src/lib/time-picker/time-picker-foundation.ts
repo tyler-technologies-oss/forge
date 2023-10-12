@@ -287,12 +287,12 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _onInputFocus(evt: Event): void {
-    if (this._allowInput) {
-      this._adapter.selectInputText();
-    }
-
     if (this.masked && this._showMaskFormat) {
       this._applyMask();
+    }
+
+    if (this._allowInput) {
+      this._adapter.selectInputText();
     }
   }
 

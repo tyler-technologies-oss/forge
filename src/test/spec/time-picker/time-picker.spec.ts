@@ -1051,6 +1051,20 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(inputElement.value).toBe('01:01');
   });
 
+  it('should select mask when shown on focus', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const inputElement = this.context.inputElement;
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.MASKED, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_MASK_FORMAT, '');
+
+    expect(this.context.component.masked).toBe(true);
+    expect(this.context.component.showMaskFormat).toBe(true);
+    inputElement.focus();
+
+    expect(inputElement.selectionStart).toEqual(0);
+    expect(inputElement.selectionEnd).toEqual('__:__ __'.length);
+  });
+
   it('should only show default mask format on focus', function(this: ITestContext) {
     this.context = _createTimePickerContext();
     const inputElement = this.context.inputElement;

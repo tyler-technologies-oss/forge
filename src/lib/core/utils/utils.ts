@@ -25,7 +25,6 @@ export function highlightTextHTML(label: string, highlightText: string): HTMLEle
   return undefined;
 }
 
-
 /**
  * Awaits user interaction on an element in the form of `pointerenter` or `focusin` to let a listener know
  * when the user has attempted to interact with the provided element.

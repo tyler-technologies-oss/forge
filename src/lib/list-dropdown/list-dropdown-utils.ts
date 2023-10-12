@@ -1,6 +1,7 @@
 import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { ICON_CLASS_NAME } from '../constants';
+import { IIconComponent } from '../icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
 import { IListComponent, LIST_CONSTANTS } from '../list/list';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
@@ -210,6 +211,15 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         }
       }
 
+      // Check for secondary (subtitle) text
+      if (option.secondaryLabel) {
+        const secondaryLabelElement = document.createElement('span');
+        secondaryLabelElement.slot = 'subtitle';
+        secondaryLabelElement.textContent = option.secondaryLabel;
+        listItemElement.twoLine = true;
+        listItemElement.appendChild(secondaryLabelElement);
+      }
+
       // If multiple selections are enabled then we need to create and append a leading checkbox element
       if (config.multiple) {
         const checkboxElement = createCheckboxElement(isSelected);
@@ -232,7 +242,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.leadingIcon) {
-        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass);
+        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass, option.leadingIconComponentProps);
         leadingIconElement.slot = 'leading';
         listItemElement.appendChild(leadingIconElement);
       }
@@ -245,7 +255,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.trailingIcon) {
-        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass);
+        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass, option.trailingIconComponentProps);
         trailingIconElement.slot = 'trailing';
         listItemElement.appendChild(trailingIconElement);
       }
@@ -306,7 +316,7 @@ function createDivider(): HTMLElement {
   return divider;
 }
 
-function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string): HTMLElement {
+function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string, componentProps?: Partial<IIconComponent>): HTMLElement {
   if (type === 'component') {
     const icon = document.createElement('forge-icon');
     if (iconClass) {
@@ -314,6 +324,9 @@ function createIconElement(type: ListDropdownIconType = 'font', iconName: string
     }
     icon.setAttribute('aria-hidden', 'true');
     icon.name = iconName;
+    if (componentProps) {
+      Object.assign(icon, componentProps);
+    }
     return icon;
   }
 

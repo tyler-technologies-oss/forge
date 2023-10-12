@@ -1,3 +1,72 @@
+# v2.19.0 (Thu Oct 12 2023)
+
+#### 🚀 Enhancement
+
+- feat(button-area): create button area component [#326](https://github.com/tyler-technologies-oss/forge/pull/326) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(expansion-panel): fixed a bug where calling `setOpenImmediate()` while an expand/collapse animation is already running would not cancel the active animation [#406](https://github.com/tyler-technologies-oss/forge/pull/406) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): fixed a bug where the label was not being initialized properly when toggling density dynamically [#404](https://github.com/tyler-technologies-oss/forge/pull/404) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(paginator): fixed how `offset` updates `pageIndex` along with updates to focus management [#402](https://github.com/tyler-technologies-oss/forge/pull/402) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.18.1 (Wed Oct 04 2023)
+
+#### 🐛 Bug Fix
+
+- fix(paginator): fixed a bug where focus was lost when disabling the page buttons dynamically [#398](https://github.com/tyler-technologies-oss/forge/pull/398) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(icon): move aria-hidden from host element to svg [#396](https://github.com/tyler-technologies-oss/forge/pull/396) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.18.0 (Wed Sep 27 2023)
+
+#### 🚀 Enhancement
+
+- feat(autocomplete): added new `forceFilter()` method to allow for dynamically updating the options of an autocomplete [#391](https://github.com/tyler-technologies-oss/forge/pull/391) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(list-dropdown): added configuration for setting secondary labels and for providing additional configuration to leading/trailing icon component elements [#393](https://github.com/tyler-technologies-oss/forge/pull/393) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(keyboard-shortcut): add activate callback [#367](https://github.com/tyler-technologies-oss/forge/pull/367) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(autocomplete): fixed a bug where the filter text was not getting removed when the clear button is clicked [#390](https://github.com/tyler-technologies-oss/forge/pull/390) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat(calendar): fixed a bug where an exception was being thrown if min/max was set and caused the current month to have no selectable dates. The calendar will now automatically move to the closest month with a selectable date [#392](https://github.com/tyler-technologies-oss/forge/pull/392) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(chip-field): don't wrap leading/trailing icons [#386](https://github.com/tyler-technologies-oss/forge/pull/386) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(date-picker, time-picker, date-range-picker): select mask on focus if shown [#385](https://github.com/tyler-technologies-oss/forge/pull/385) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(chip-field): don't propagate click if disabled [#384](https://github.com/tyler-technologies-oss/forge/pull/384) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 3
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
+# v2.17.0 (Tue Aug 29 2023)
+
+#### 🚀 Enhancement
+
+- feat(popup): add popup ref to close event, emit from host [#365](https://github.com/tyler-technologies-oss/forge/pull/365) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v2.16.6 (Mon Aug 21 2023)
 
 #### 🐛 Bug Fix
