@@ -54,7 +54,8 @@ $tokens: (
   scrollbar-thumb: color-palette.$grey-400,
   scrollbar-thumb-hover: color-palette.$grey-500,
   scrollbar-track: #f0f0f0,
-  scrollbar-track-hover: #ececec
+  scrollbar-track-hover: #ececec,
+  handle-off-color: color-palette.$grey-500
 ) !default;
 
 /// All tokens for the Forge dark theme
@@ -98,7 +99,8 @@ $tokens-dark: (
   scrollbar-track-hover: color-palette.$grey-800,
   elevated-surface: #363636,
   on-elevated-surface: rgba(255, 255, 255, 0.87),
-  popup-elevation: elevation.value(16)
+  popup-elevation: elevation.value(16),
+  handle-off-color: color-palette.$grey-500
 ) !default;
 
 ///

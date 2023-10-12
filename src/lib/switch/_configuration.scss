@@ -1,0 +1,90 @@
+@use '../core/styles/tokens/switch/tokens' as switch-tokens;
+
+@mixin configuration {
+  // Shared
+  --_handle-size: #{switch-tokens.get(handle-size)};
+  --_handle-scale: #{switch-tokens.get(handle-scale)};
+  --_handle-elevation: #{switch-tokens.get(handle-elevation)};
+  --_track-border-width: #{switch-tokens.get(track-border-width)};
+  --_track-border-color: #{switch-tokens.get(track-border-color)};
+  --_icon-color: #{switch-tokens.get(icon-color)};
+  --_icon-scale: #{switch-tokens.get(icon-scale)};
+  --_state-layer-size: #{switch-tokens.get(state-layer-size)};
+  --_state-layer-dense-size: #{switch-tokens.get(state-layer-dense-size)};
+
+  // Handle
+  --_handle-on-color: #{switch-tokens.get(handle-on-color)};
+  --_handle-off-color: #{switch-tokens.get(handle-off-color)};
+  --_handle-width: #{switch-tokens.get(handle-width)};
+  --_handle-height: #{switch-tokens.get(handle-height)};
+  --_handle-on-scale: #{switch-tokens.get(handle-on-scale)};
+  --_handle-off-scale: #{switch-tokens.get(handle-off-scale)};
+  --_handle-shape: #{switch-tokens.get(handle-shape)};
+  --_handle-on-elevation: #{switch-tokens.get(handle-on-elevation)};
+  --_handle-off-elevation: #{switch-tokens.get(handle-off-elevation)};
+
+  // Track
+  --_track-on-color: #{switch-tokens.get(track-on-color)};
+  --_track-off-color: #{switch-tokens.get(track-off-color)};
+  --_track-width: #{switch-tokens.get(track-width)};
+  --_track-height: #{switch-tokens.get(track-height)};
+  --_track-shape: #{switch-tokens.get(track-shape)};
+  --_track-on-border-width: #{switch-tokens.get(track-on-border-width)};
+  --_track-off-border-width: #{switch-tokens.get(track-off-border-width)};
+  --_track-on-border-color: #{switch-tokens.get(track-on-border-color)};
+  --_track-off-border-color: #{switch-tokens.get(track-off-border-color)};
+
+  // Icon
+  --_icon-on-color: #{switch-tokens.get(icon-on-color)};
+  --_icon-off-color: #{switch-tokens.get(icon-off-color)};
+  --_icon-on-size: #{switch-tokens.get(icon-on-size)};
+  --_icon-off-size: #{switch-tokens.get(icon-off-size)};
+  --_icon-on-scale: #{switch-tokens.get(icon-on-scale)};
+  --_icon-off-scale: #{switch-tokens.get(icon-off-scale)};
+
+  // Label
+  --_gap: #{switch-tokens.get(gap)};
+  --_justify: #{switch-tokens.get(justify)};
+  --_direction: #{switch-tokens.get(direction)};
+
+  // State layer
+  --_state-layer-width: #{switch-tokens.get(state-layer-width)};
+  --_state-layer-height: #{switch-tokens.get(state-layer-height)};
+  --_state-layer-on-color: #{switch-tokens.get(state-layer-on-color)};
+  --_state-layer-off-color: #{switch-tokens.get(state-layer-off-color)};
+
+  // Dense
+  --_state-layer-dense-width: #{switch-tokens.get(state-layer-dense-width)};
+  --_state-layer-dense-height: #{switch-tokens.get(state-layer-dense-height)};
+
+  // Disabled
+  --_disabled-opacity: #{switch-tokens.get(disabled-opacity)};
+
+  // Active
+  --_handle-active-on-color: #{switch-tokens.get(handle-active-on-color)};
+  --_handle-active-off-color: #{switch-tokens.get(handle-active-off-color)};
+  --_handle-active-scale: #{switch-tokens.get(handle-active-scale)};
+  --_handle-active-on-scale: #{switch-tokens.get(handle-active-on-scale)};
+  --_handle-active-off-scale: #{switch-tokens.get(handle-active-off-scale)};
+  --_handle-active-elevation: #{switch-tokens.get(handle-active-elevation)};
+  --_handle-active-on-elevation: #{switch-tokens.get(handle-active-on-elevation)};
+  --_handle-active-off-elevation: #{switch-tokens.get(handle-active-off-elevation)};
+
+  --_track-active-on-color: #{switch-tokens.get(track-active-on-color)};
+  --_track-active-off-color: #{switch-tokens.get(track-active-off-color)};
+  --_track-active-on-border-width: #{switch-tokens.get(track-active-on-border-width)};
+  --_track-active-off-border-width: #{switch-tokens.get(track-active-off-border-width)};
+  --_track-active-on-border-color: #{switch-tokens.get(track-active-on-border-color)};
+  --_track-active-off-border-color: #{switch-tokens.get(track-active-off-border-color)};
+
+  --_icon-active-on-color: #{switch-tokens.get(icon-active-on-color)};
+  --_icon-active-off-color: #{switch-tokens.get(icon-active-off-color)};
+  --_icon-active-scale: #{switch-tokens.get(icon-active-scale)};
+  --_icon-active-on-scale: #{switch-tokens.get(icon-active-on-scale)};
+  --_icon-active-off-scale: #{switch-tokens.get(icon-active-off-scale)};
+
+  // Animation
+  --_animation-duration: #{switch-tokens.get(animation-duration)};
+  --_animation-timing: #{switch-tokens.get(animation-timing)};
+  --_active-animation-timing: #{switch-tokens.get(active-animation-timing)};
+}
