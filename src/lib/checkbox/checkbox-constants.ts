@@ -17,7 +17,10 @@ const attributes = {
 const selectors = {
   ROOT: '.forge-checkbox',
   INPUT: 'input',
-  LABEL: 'label'
+  LABEL: 'label',
+  INPUT_SLOT: 'slot[name=input]',
+  STATE_LAYER: 'forge-state-layer',
+  FOCUS_INDICATOR: 'forge-focus-indicator'
 };
 
 export const CHECKBOX_CONSTANTS = {

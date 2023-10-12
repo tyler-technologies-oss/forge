@@ -67,6 +67,10 @@
   .label {
     @include core.label;
   }
+
+  ::slotted([slot=input]) {
+    @include core.input;
+  }
 }
 
 // Checked

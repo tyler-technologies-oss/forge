@@ -3,7 +3,6 @@ import { IBaseComponent } from './base-component';
 
 export interface IBaseAdapter {
   readonly isConnected: boolean;
-  initialize(): void;
   removeHostAttribute(name: string): void;
   getHostAttribute(name: string): string | null;
   setHostAttribute(name: string, value?: string): void;
@@ -24,8 +23,6 @@ export interface IBaseAdapter {
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   constructor(protected _component: T) {}
 
-  public initialize(): void {}
-
   public getHostAttribute(name: string): string | null {
     return this._component.getAttribute(name);
   }
@@ -43,7 +40,8 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   }
 
   public redispatchEvent(event: Event): boolean {
-    if (event.bubbles && (event.composed && !this._component.shadowRoot)) {
+    const isFromLightDom = !((event.target as HTMLElement)?.getRootNode() instanceof ShadowRoot);
+    if (event.bubbles && (event.composed || isFromLightDom)) {
       event.stopPropagation();
     }
     

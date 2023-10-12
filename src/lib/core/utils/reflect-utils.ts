@@ -1,3 +1,5 @@
+import { isDefined } from '@tylertech/forge-core';
+
 export type AttributeForwardingCallback = (name: string, value: string | null, part: string | null) => void;
 
 export const ARIA_ATTRIBUTES = [
@@ -56,7 +58,7 @@ export const LIVE_REGION_ATTRIBUTES = [
 ];
 
 /**
- * Gets an array of attribute names following prefixed by a part name and colon.
+ * Gets an array of attribute names prefixed by a part name and colon.
  * @param part The part name of a shadow element.
  * @param attributes An array of attribute names to prefix.
  * @returns An array of prefixed attribute name strings.
@@ -66,8 +68,8 @@ export function getPartPrefixedAttributes(part: string, attributes: string[]): s
 }
 
 /**
- * Observes a configured array of attributes set on a source element and forwards them to callback
- * function.
+ * Observes a configured array of attributes set on a source element and forwards them to a
+ * callback function.
  * @param from The element to forward attributes from.
  * @param attributes Forwarded attributes.
  * @param callback A function to handle forwarded attributes.
@@ -101,4 +103,53 @@ export function forwardAttributes(from: HTMLElement, attributes: string[], callb
   const observer = new MutationObserver(observerCallback);
   observer.observe(from, observerConfig);
   return observer;
+}
+
+/**
+ * Clones attributes from one element to another.
+ * @param from The source element to clone attributes from.
+ * @param to The target element to clone attributes to.
+ * @param attributes The list of attributes to clone.
+ */
+export function cloneAttributes(from: HTMLElement, to: HTMLElement, attributes: string[]): void {
+  attributes.forEach(attr => {
+    const value = from.getAttribute(attr);
+    if (value !== null) {
+      to.setAttribute(attr, value);
+    }
+  });
+}
+
+/**
+ * Clones input properties from one element to another.
+ * @param from The source element to clone input properties from.
+ * @param to The target element to clone input properties to.
+ */
+export function cloneInputProperties(from: HTMLInputElement, to: HTMLInputElement): void {
+  const properties = [
+    'value',
+    'checked',
+    'indeterminate',
+    'disabled',
+    'required',
+    'readOnly'
+  ];
+  properties.forEach(prop => {
+    const value = from[prop];
+    if (isDefined(value)) {
+      to[prop] = value;
+    }
+  });
+}
+
+/**
+ * Clones the validation message of one input element to another.
+ * @param from The source input element to clone the validation message from.
+ * @param to The target input element to clone the validation message to.
+ */
+export function cloneValidationMessage(from: HTMLInputElement, to: HTMLInputElement): void {
+  const message = from.validationMessage;
+  if (message) {
+    to.setCustomValidity(message);
+  }
 }

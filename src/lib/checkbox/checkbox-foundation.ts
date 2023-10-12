@@ -31,14 +31,17 @@ export class CheckboxFoundation implements ICheckboxFoundation {
 
   // Listeners
   private readonly _changeListener: EventListener;
+  private readonly _inputSlotListener: EventListener;
 
   constructor(private _adapter: ICheckboxAdapter) {
     this._changeListener = (evt: Event) => this._handleChange(evt);
+    this._inputSlotListener = () => this._handleInputSlotChange();
   }
 
   public initialize(): void {
     this._adapter.initialize();
-    this._adapter.addInputListener('change', this._changeListener);
+    this._adapter.addRootListener('change', this._changeListener);
+    this._adapter.addInputSlotListener(this._inputSlotListener);
   };
 
   public syncValidity(hasCustomValidityError: boolean): void {
@@ -60,13 +63,17 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     const target = evt.target as HTMLInputElement;
     const newValue = target.checked;
     this._checked = newValue;
-    this._adapter.syncValue(this._checked);
+    this._adapter.syncValue(this._checked ? this._value : null);
     this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
 
     // Toggle inderminate off after a user action
     this._indeterminate = false;
     this._adapter.setIndeterminate(this._indeterminate);
     this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.INDETERMINATE, this._indeterminate);
+  }
+
+  private _handleInputSlotChange(): void {
+    this._adapter.detectInputElement();
   }
 
   public get checked(): boolean {
@@ -76,7 +83,7 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     if (this._checked !== value) {
       this._checked = value;
       this._adapter.setChecked(this._checked);
-      this._adapter.syncValue(this._checked);
+      this._adapter.syncValue(this._checked ? this._value : null);
       this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
     }
   }
