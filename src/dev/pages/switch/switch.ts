@@ -13,3 +13,8 @@ const preventSwitch = document.getElementById('prevent-switch') as ISwitchCompon
 
 preventSwitch.addEventListener('forge-switch-change', (evt: CustomEvent) => evt.preventDefault());
 
+const testForm = document.getElementById('test-form') as HTMLFormElement;
+testForm.addEventListener('submit', (evt: Event) => {
+  evt.preventDefault();
+  console.log('[submit] switch value:', new FormData(testForm).get('test-switch'));
+});
