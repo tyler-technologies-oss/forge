@@ -7,6 +7,7 @@ import { IListComponent } from '../list/list';
 import { ListComponentItemRole, LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
 import { LIST_ITEM_CONSTANTS } from './list-item-constants';
+import { ISwitchComponent } from '../../switch';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   initialize(): void;
@@ -113,7 +114,7 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   /**
-   * Attempts to toggle a checkbox or radio button within the list item if it can find one.
+   * Attempts to toggle a checkbox radio button, or switch within the list item if it can find one.
    */
   public tryToggleSelectionControl(value?: boolean): void {
     const checkable = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR) as HTMLInputElement;
@@ -127,6 +128,23 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
       // TODO: This seems weird... Should we be dispatching events on slotted elements when changes are made programmatically?
       if (!force || currentState !== value) {
         checkable.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    } else {
+      // Special case handling for the Forge switch element since it doesn't have a checked property
+      const switchEl = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.SWITCH_SELECTOR) as ISwitchComponent;
+      if (!switchEl) {
+        return;
+      }
+      
+      const force = typeof value === 'boolean';
+      const currentState = switchEl.on;
+
+      // Check if we are just toggling or forcing to a specific checked state
+      switchEl.on = force ? value as boolean : !switchEl.on;
+
+      // TODO: This seems weird... Should we be dispatching events on slotted elements when changes are made programmatically?
+      if (!force || currentState !== value) {
+        switchEl.dispatchEvent(new CustomEvent('forge-switch-change', { bubbles: true, detail: switchEl.on }));
       }
     }
   }
