@@ -1,3 +1,22 @@
+# v2.19.0 (Thu Oct 12 2023)
+
+#### 🚀 Enhancement
+
+- feat(button-area): create button area component [#326](https://github.com/tyler-technologies-oss/forge/pull/326) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### 🐛 Bug Fix
+
+- fix(expansion-panel): fixed a bug where calling `setOpenImmediate()` while an expand/collapse animation is already running would not cancel the active animation [#406](https://github.com/tyler-technologies-oss/forge/pull/406) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(text-field): fixed a bug where the label was not being initialized properly when toggling density dynamically [#404](https://github.com/tyler-technologies-oss/forge/pull/404) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(paginator): fixed how `offset` updates `pageIndex` along with updates to focus management [#402](https://github.com/tyler-technologies-oss/forge/pull/402) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.18.1 (Wed Oct 04 2023)
 
 #### 🐛 Bug Fix
