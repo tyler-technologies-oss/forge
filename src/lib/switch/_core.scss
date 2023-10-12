@@ -30,7 +30,7 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
 }
 
 @mixin host-disabled {
-  opacity: #{tokens.get(disabled-opacity)};
+  opacity: var(--_disabled-opacity);
 
   cursor: not-allowed;
 }
