@@ -82,6 +82,17 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       expect(this.context.foundation['_isInitialized']).toBeTrue();
     });
 
+    it('should set the setValueOnBlur property to false when the attribute is not applied', function(this: ITestContext) {
+      this.context = setupTestContext();
+      expect(this.context.component.setValueOnBlur).toBe(false);
+    });
+
+    it('should set the setValueOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, 'true');
+      expect(this.context.component.setValueOnBlur).toBe(true);
+    });
+
 
     it('should float label if value is set before adding to DOM', async function(this: ITestContext) {
       this.context = setupTestContext(false);
