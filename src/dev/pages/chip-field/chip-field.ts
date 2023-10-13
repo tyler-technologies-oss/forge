@@ -11,6 +11,7 @@ IconRegistry.define([
 ]);
 
 const simpleChipField = document.querySelector('#demo-simple-chip-field') as IChipFieldComponent;
+const onBlurChipField = document.querySelector('#demo-onblur-chip-field') as IChipFieldComponent;
 const autocompleteComponent = document.querySelector('#demo-autocomplete') as IAutocompleteComponent;
 const autocompleteChipField = autocompleteComponent.querySelector('#demo-autocomplete-chip-field') as IChipFieldComponent;
 const autocompleteChipFieldInput = autocompleteChipField.querySelector('#autocomplete-chip-field-input') as HTMLInputElement;
@@ -50,6 +51,29 @@ simpleChipField.addEventListener('forge-chip-field-member-added', ({ detail: nam
 
 simpleChipField.addEventListener('forge-chip-field-member-removed', ({ detail }) => {
   simpleChipField.removeChild(detail);
+});
+
+
+onBlurChipField.addEventListener('forge-chip-field-member-added', ({ detail: name }) => {
+  const newChip = document.createElement('forge-chip');
+  newChip.setAttribute('slot', 'member');
+  newChip.type = 'field';
+  newChip.dense = true;
+  newChip.value = name;
+  newChip.textContent = name;
+
+  newChip.addEventListener('forge-chip-delete', () => {
+    if (newChip.disabled) {
+      return;
+    }
+    newChip.remove();
+  });
+
+  onBlurChipField.appendChild(newChip);
+});
+
+onBlurChipField.addEventListener('forge-chip-field-member-removed', ({ detail }) => {
+  onBlurChipField.removeChild(detail);
 });
 
 autocompleteComponent.filter = filter => {
