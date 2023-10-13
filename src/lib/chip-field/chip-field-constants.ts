@@ -28,12 +28,17 @@ const events = {
   MEMBER_REMOVED: `${elementName}-member-removed`
 };
 
+const attributes = {
+  SET_VALUE_ON_BLUR: 'set-value-on-blur'
+};
+
 export const CHIP_FIELD_CONSTANTS = {
   elementName,
   classes,
   slots,
   selectors,
-  events
+  events,
+  attributes
 };
 
 export {

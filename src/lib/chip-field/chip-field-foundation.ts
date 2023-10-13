@@ -3,9 +3,12 @@ import { IChipFieldAdapter } from './chip-field-adapter';
 import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
 import { IFieldFoundation, FieldFoundation } from '../field/field-foundation';
 
-export interface IChipFieldFoundation extends IFieldFoundation {}
+export interface IChipFieldFoundation extends IFieldFoundation {
+  setValueOnBlur: boolean;
+}
 
 export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFoundation {
+  private _setValueOnBlur = false;
   private _memberSlotListener: () => void;
   private _inputContainerMouseDownListener: (evt: MouseEvent) => void;
   private _handleRootKeyDown: (event: KeyboardEvent) => void;
@@ -35,6 +38,18 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     this._adapter.removeInputListener('keydown', this._handleKeyDown);
   }
 
+  /** Controls setting the value of entered text on blur. */
+  public get setValueOnBlur(): boolean {
+    return this._setValueOnBlur;
+  }
+  public set setValueOnBlur(value: boolean) {
+    value = Boolean(value);
+    if (this._setValueOnBlur !== value) {
+      this._setValueOnBlur = value;
+      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, this._setValueOnBlur);
+    }
+  }
+
   private _onInputContainerMouseDown(evt: MouseEvent): void {
     evt.preventDefault();
     this._adapter.focusInput();
@@ -43,6 +58,12 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
 
   protected _onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
+
+    if (this.setValueOnBlur) {
+      this._addMember(input);
+      return;
+    }
+
     input.value = '';
     super._onBlur(event);
   }
@@ -80,8 +101,13 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
       case 'Esc':
       case 'Escape':
       case 'Tab':
-        input.value = '';
-        break;
+        if (!this.setValueOnBlur) {
+          input.value = '';
+          break;
+        } else {
+          this._addMember(input);
+          break;
+        }
       default:
         break;
     }
