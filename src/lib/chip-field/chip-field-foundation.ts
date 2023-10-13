@@ -99,6 +99,8 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
         break;
       case 'Esc':
       case 'Escape':
+        input.value = '';
+        break;
       case 'Tab':
         if (this.setValueOnBlur) {
           this._addMember(input);
