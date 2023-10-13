@@ -60,6 +60,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     const input = event.target as HTMLInputElement;
     if (this.setValueOnBlur) {
       this._addMember(input);
+      super._onBlur(event);
       return;
     }
     input.value = '';
