@@ -1203,6 +1203,18 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         const inputIsActive = getActiveElement() === getNativeInput(this.context.component);
         expect(inputIsActive).toBeTrue();
       });
+
+      it('should set the setValueOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, 'true');
+        expect(this.context.component.setValueOnBlur).toBe(true);
+      });
+  
+      it('should set the setValueOnBlur property to false when the attribute is set to false', function(this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, 'false');
+        expect(this.context.component.setValueOnBlur).toBe(false);
+      });
     });
 
   });

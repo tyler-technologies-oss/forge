@@ -180,7 +180,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.value = '1/1/2021';
       await tick();
 
-      expect(textField.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+      expect(textField.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).toBeTrue();
     });
 
     it('should notify date picker of input value changes when text-field is used', async function(this: ITestContext) {
