@@ -93,7 +93,7 @@ export class FieldFoundation {
     this._isInitialized = false;
     this._adapter.destroy();
 
-    this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+    this._adapter.removeHostAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING);
     this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LABEL);
 
     if (this._floatingLabel) {
@@ -128,7 +128,7 @@ export class FieldFoundation {
         }
       }
 
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.DENSITY, this._density.toString());
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, this._density.toString());
     }
   }
 
@@ -143,7 +143,7 @@ export class FieldFoundation {
         this.floatLabel(this._floatLabelType === 'always');
       }
 
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, this._floatLabelType);
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE, this._floatLabelType);
     }
   }
 
@@ -158,7 +158,7 @@ export class FieldFoundation {
         this._setShapeType();
       }
 
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SHAPE, this._shape);
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.SHAPE, this._shape);
     }
   }
 
@@ -187,9 +187,9 @@ export class FieldFoundation {
       }
 
       if (this._required) {
-        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.REQUIRED);
+        this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED);
       } else {
-        this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.REQUIRED);
+        this._adapter.removeHostAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED);
       }
     }
   }
@@ -197,14 +197,14 @@ export class FieldFoundation {
   public floatLabel(value: boolean): void {
     if (this._floatingLabel?.isFloating === value || this._adapter.isLabelFloating() === value) {
       if (value) {
-        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
+        this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING, '');
       }
       return;
     }
 
     if (!value && this._floatLabelType === 'always') {
       this._floatingLabel?.float(true, true);
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING, '');
       return;
     }
 
@@ -213,10 +213,10 @@ export class FieldFoundation {
 
       if (value) {
         this._adapter.setInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
+        this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING, '');
       } else {
         this._adapter.removeInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-        this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+        this._adapter.removeHostAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING);
       }
     }
   }
@@ -256,7 +256,7 @@ export class FieldFoundation {
   }
 
   private _destroyFloatingLabel({ cancelFloat = false } = {}): void {
-    this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+    this._adapter.removeHostAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING);
     this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LABEL);
     this._floatingLabel?.destroy({ cancelFloat });
     this._floatingLabel = undefined;
@@ -308,7 +308,7 @@ export class FieldFoundation {
 
     if (!this._adapter.fieldHasValue() && !this._adapter.hasPlaceholder()) {
       this.floatLabel(false);
-      this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+      this._adapter.removeHostAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING);
     }
   }
 

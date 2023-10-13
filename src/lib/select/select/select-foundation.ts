@@ -317,7 +317,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
         this._setShapeType();
       }
 
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SHAPE, this._shape);
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.SHAPE, this._shape);
     }
   }
 
@@ -352,7 +352,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     if (this._required !== value) {
       this._required = value;
       this._adapter.setRequired(this._required);
-      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.REQUIRED, this._required);
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED, this._required);
     }
   }
 
@@ -364,7 +364,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     if (this._density !== value) {
       this._density = value;
       this._applyDensity();
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.DENSITY, this._density.toString());
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, this._density.toString());
       this._initializeLabel(); // This ensures label is removed while dense
     }
   }
@@ -377,7 +377,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     if (this._floatLabelType !== value) {
       this._floatLabelType = value;
       this._floatLabel(this._floatLabelType === 'always' || !!this._placeholder);
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, isDefined(this._floatLabelType) ? this._floatLabelType.toString() : '');
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE, isDefined(this._floatLabelType) ? this._floatLabelType.toString() : '');
     }
   }
 

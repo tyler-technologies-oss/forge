@@ -7,6 +7,7 @@ import { FieldComponent, IFieldComponent } from '../field/field';
 
 import template from './chip-field.html';
 import styles from './chip-field.scss';
+import { FIELD_CONSTANTS } from '../field/field-constants';
 
 export interface IChipFieldComponent extends IFieldComponent {
   setValueOnBlur: boolean;
@@ -35,6 +36,7 @@ declare global {
 export class ChipFieldComponent extends FieldComponent<ChipFieldFoundation> implements IChipFieldComponent {
   public static get observedAttributes(): string[] {
     return [
+      ...Object.values(FIELD_CONSTANTS.observedAttributes),
       CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR
     ];
   }
@@ -49,11 +51,12 @@ export class ChipFieldComponent extends FieldComponent<ChipFieldFoundation> impl
     switch (name) {
       case CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR:
         this.setValueOnBlur = coerceBoolean(newValue);
-        break;
+        return;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  /** Controls the direction of the stack. */
+  /** Controls whether or not the value should be set onBlur */
   @FoundationProperty()
   public declare setValueOnBlur: boolean;
 }

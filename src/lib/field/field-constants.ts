@@ -1,12 +1,3 @@
-const attributes = {
-  DENSITY: 'density',
-  FLOAT_LABEL_TYPE: 'float-label-type',
-  SHAPE: 'shape',
-  INVALID: 'invalid',
-  REQUIRED: 'required',
-  HOST_LABEL_FLOATING: `forge-label-floating`
-};
-
 const selectors = {
   INPUT: 'input,textarea'
 };
@@ -31,8 +22,17 @@ const classes = {
   LABEL: 'forge-field--label'
 };
 
+const observedAttributes = {
+  DENSITY: 'density',
+  FLOAT_LABEL_TYPE: 'float-label-type',
+  SHAPE: 'shape',
+  INVALID: 'invalid',
+  REQUIRED: 'required',
+  HOST_LABEL_FLOATING: `forge-label-floating`
+};
+
 export const FIELD_CONSTANTS = {
-  attributes,
+  observedAttributes,
   observedInputAttributes,
   selectors,
   classes
