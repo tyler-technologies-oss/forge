@@ -1,7 +1,7 @@
 import { getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, InputAdapter, forwardAttributes } from '../core';
+import { BaseAdapter, IBaseAdapter, InputAdapter, forwardAttributes } from '../core';
 import { StateLayerComponent } from '../state-layer';
-import { ISwitchComponent, forwardedAttributes } from './switch';
+import { ISwitchComponent } from './switch';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
 export interface ISwitchAdapter extends IBaseAdapter {
@@ -153,7 +153,7 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
   }
 
   private _initializeForwardObserver(el: HTMLElement): void {
-    this._forwardObserver = forwardAttributes(this._component, forwardedAttributes, (name, value) => {
+    this._forwardObserver = forwardAttributes(this._component, SWITCH_CONSTANTS.forwardedAttributes, (name, value) => {
       toggleAttribute(el, !!value, name, value ?? undefined);
     });
   }

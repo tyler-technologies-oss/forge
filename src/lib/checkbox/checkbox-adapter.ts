@@ -1,8 +1,7 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, InputAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
-import { FocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
-import { ICheckboxComponent, forwardedAttributes } from './checkbox';
+import { ICheckboxComponent } from './checkbox';
 import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
 
 export interface ICheckboxAdapter extends IBaseAdapter {
@@ -141,7 +140,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   }
 
   private _initializeForwardObserver(el: HTMLElement): void {
-    this._forwardObserver = forwardAttributes(this._component, forwardedAttributes, (name, value) => {
+    this._forwardObserver = forwardAttributes(this._component, CHECKBOX_CONSTANTS.forwardedAttributes, (name, value) => {
       toggleAttribute(el, !!value, name, value ?? undefined);
     });
   }

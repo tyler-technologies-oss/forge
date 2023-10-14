@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { INPUT_ARIA_ATTRIBUTES } from '../core';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}switch`;
 
@@ -38,13 +39,16 @@ const state = {
   OFF: 'off'
 };
 
+const forwardedAttributes = [...INPUT_ARIA_ATTRIBUTES];
+
 export const SWITCH_CONSTANTS = {
   classes,
   selectors,
   attributes,
   elementName,
   events,
-  state
+  state,
+  forwardedAttributes
 };
 
 export type SwitchLabelPosition = 'start' | 'end';

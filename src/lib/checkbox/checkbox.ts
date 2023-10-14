@@ -1,5 +1,5 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-import { INPUT_ARIA_ATTRIBUTES, BaseFormComponent, IBaseFormComponent } from '../core';
+import { BaseFormComponent, IBaseFormComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { CheckboxAdapter } from './checkbox-adapter';
@@ -8,8 +8,6 @@ import { CheckboxFoundation } from './checkbox-foundation';
 
 import template from './checkbox.html';
 import styles from './checkbox.scss';
-
-export const forwardedAttributes = [...INPUT_ARIA_ATTRIBUTES];
 
 export interface ICheckboxComponent extends IBaseFormComponent {
   checked: boolean;

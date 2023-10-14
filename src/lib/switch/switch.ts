@@ -9,8 +9,6 @@ import { SwitchFoundation } from './switch-foundation';
 import template from './switch.html';
 import styles from './switch.scss';
 
-export const forwardedAttributes = [...INPUT_ARIA_ATTRIBUTES];
-
 export interface ISwitchComponent extends IBaseFormComponent {
   on: boolean;
   /**

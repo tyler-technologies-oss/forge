@@ -1,4 +1,5 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { INPUT_ARIA_ATTRIBUTES } from '../core';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}checkbox`;
 
@@ -23,10 +24,13 @@ const selectors = {
   FOCUS_INDICATOR: 'forge-focus-indicator'
 };
 
+const forwardedAttributes = [...INPUT_ARIA_ATTRIBUTES];
+
 export const CHECKBOX_CONSTANTS = {
   elementName,
   selectors,
-  attributes
+  attributes,
+  forwardedAttributes
 };
 
 export type CheckboxState = 'checked' | 'unchecked' | 'checked-indeterminate' | 'unchecked-indeterminate';
