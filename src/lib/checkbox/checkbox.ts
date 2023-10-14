@@ -1,15 +1,15 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-import { ARIA_INPUT_ATTRIBUTES, BaseFormComponent, IBaseFormComponent } from '../core';
+import { INPUT_ARIA_ATTRIBUTES, BaseFormComponent, IBaseFormComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { CheckboxAdapter } from './checkbox-adapter';
-import { CHECKBOX_CONSTANTS, CheckboxLabelPosition } from './checkbox-constants';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
 import { CheckboxFoundation } from './checkbox-foundation';
 
 import template from './checkbox.html';
 import styles from './checkbox.scss';
 
-export const forwardedAttributes = [...ARIA_INPUT_ATTRIBUTES];
+export const forwardedAttributes = [...INPUT_ARIA_ATTRIBUTES];
 
 export interface ICheckboxComponent extends IBaseFormComponent {
   checked: boolean;
@@ -76,10 +76,15 @@ declare global {
  * @cssproperty --forge-checkbox-shape - The shape of the checkbox.
  * @cssproperty --forge-checkbox-elevation - The shadow of the checkbox.
  * @cssproperty --forge-checkbox-gap - The space between the checkbox and label.
- * @cssproperty --forge-checkbox-checked-color - The color of the checkmark and indeterminate mark.
+ * @cssproperty --forge-checkbox-justify - How the checkbox and label are distributed along their main axis.
+ * @cssproperty --forge-checkbox-direction - Whether the checkbox and label are arranged along the inline or block axis.
  * @cssproperty --forge-checkbox-checked-background-color - The color of the checkbox background when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-width - The width of the checkbox border when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-color - The color of the checkbox border when checked or indeterminate.
+ * @cssproperty --forge-checkbox-icon-color - The color of the checkmark and indeterminate mark.
+ * @cssproperty --forge-checkbox-icon-checked-color - The color of the checkmark mark.
+ * @cssproperty --forge-checkbox-icon-indeterminate-color - The color of the indeterminate mark.
+ * @cssproperty --forge-checkbox-icon-stroke-width - The stroke width of the checkmark and indeterminate marks.
  * @cssproperty --forge-checkbox-state-layer-width - The inline size of the state layer.
  * @cssproperty --forge-checkbox-state-layer-width - The inline size of the state layer.
  * @cssproperty --forge-checkbox-state-layer-height - The block size of the state layer.
@@ -181,6 +186,9 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
       case CHECKBOX_CONSTANTS.attributes.INDETERMINATE:
         this.indeterminate = coerceBoolean(newValue);
         break;
+      case CHECKBOX_CONSTANTS.attributes.VALUE:
+        this.value = newValue;
+        break;
       case CHECKBOX_CONSTANTS.attributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
@@ -201,10 +209,18 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
 
   public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
     this.internals.setFormValue(value, state);
+
+    if (state) {
+      const stateValue = isString(state) ? state : state[this.name];
+      this.checked = stateValue === 'checked' || stateValue === 'checked-indeterminate';
+      this.indeterminate = stateValue === 'unchecked-indeterminate' || stateValue === 'checked-indeterminate';
+      return;
+    }
+    
     if (isString(value)) {
-      this.checked = coerceBoolean(value);
+      this.checked = !!value;
     } else if (value?.[this.name]) {
-      this.checked = coerceBoolean(value[this.name]);
+      this.checked = !!value[this.name];
     } else {
       this.checked = false;
     }
@@ -229,8 +245,9 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
     this.checked = this.defaultChecked;
   }
 
-  public formStateRestoreCallback(state: string, reason: 'restore' | 'autocomplete'): void {
-    this.checked = coerceBoolean(state);
+  public formStateRestoreCallback(state: CheckboxState, reason: 'restore' | 'autocomplete'): void {
+    this.checked = state === 'checked' || state === 'checked-indeterminate';
+    this.indeterminate = state === 'unchecked-indeterminate' || state === 'checked-indeterminate';
   }
 
   public formDisabledCallback(isDisabled: boolean): void {

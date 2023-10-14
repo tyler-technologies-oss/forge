@@ -1,8 +1,14 @@
 import { isDefined } from '@tylertech/forge-core';
 
+/**
+ * A callback function for handling forwarded attributes.
+ */
 export type AttributeForwardingCallback = (name: string, value: string | null, part: string | null) => void;
 
-export const ARIA_ATTRIBUTES = [
+/**
+ * ARIA attributes capable of being reflected to a shadow element.
+ */
+export const REFLECTIVE_ARIA_ATTRIBUTES = [
   'aria-atomic',
   'aria-autocomplete',
   'aria-busy',
@@ -11,7 +17,6 @@ export const ARIA_ATTRIBUTES = [
   'aria-colindex',
   'aria-colspan',
   'aria-current',
-  'aria-description',
   'aria-description',
   'aria-disabled',
   'aria-expanded',
@@ -44,17 +49,26 @@ export const ARIA_ATTRIBUTES = [
   'aria-valuenow',
   'aria-valuetext'
 ];
-export const ARIA_INPUT_ATTRIBUTES = [
+/**
+ * ARIA attributes typically useful for input elements.
+ */
+export const INPUT_ARIA_ATTRIBUTES = [
   'aria-autocomplete',
   'aria-description',
   'aria-invalid',
   'aria-keyshortcuts',
   'aria-label'
 ];
-export const LIVE_REGION_ATTRIBUTES = [
-  'aria-busy',
-  'aria-live',
-  'aria-atomic'
+/**
+ * Property names relevant to input elements.
+ */
+export const INPUT_PROPERTIES: (keyof HTMLInputElement)[] = [
+  'checked',
+  'disabled',
+  'indeterminate',
+  'readOnly',
+  'required',
+  'value'
 ];
 
 /**
@@ -78,7 +92,7 @@ export function getPartPrefixedAttributes(part: string, attributes: string[]): s
 export function forwardAttributes(from: HTMLElement, attributes: string[], callback: AttributeForwardingCallback): MutationObserver {
   // Set the source element's role to presentation to prevent duplicated ARIA attributes being
   // seen by assistive technology
-  if (attributes.some(attr => attr.toLowerCase().startsWith('aria'))) {
+  if (attributes.some(attr => attr.toLowerCase().startsWith('aria-'))) {
     from.setAttribute('role', 'presentation');
   }
 
@@ -121,19 +135,12 @@ export function cloneAttributes(from: HTMLElement, to: HTMLElement, attributes: 
 }
 
 /**
- * Clones input properties from one element to another.
- * @param from The source element to clone input properties from.
- * @param to The target element to clone input properties to.
+ * Clones properties from one element to another.
+ * @param from The source element to clone properties from.
+ * @param to The target element to clone properties to.
+ * @param attributes The list of properties to clone.
  */
-export function cloneInputProperties(from: HTMLInputElement, to: HTMLInputElement): void {
-  const properties = [
-    'value',
-    'checked',
-    'indeterminate',
-    'disabled',
-    'required',
-    'readOnly'
-  ];
+export function cloneProperties<T, K extends keyof T>(from: T, to: T, properties: K[]): void {
   properties.forEach(prop => {
     const value = from[prop];
     if (isDefined(value)) {
@@ -151,5 +158,73 @@ export function cloneValidationMessage(from: HTMLInputElement, to: HTMLInputElem
   const message = from.validationMessage;
   if (message) {
     to.setCustomValidity(message);
+  }
+}
+
+/**
+ * A utility class for switching between input elements.
+ */
+export class InputAdapter {
+  private _el: HTMLInputElement;
+  private _attachCallback: (newEl: HTMLInputElement, oldEl?: HTMLInputElement) => void;
+
+  /**
+   * Returns the input element associated with this adapter.
+   */
+  public get el(): HTMLInputElement {
+    return this._el;
+  }
+
+  /**
+   * Clones the specified attributes from one element to another.
+   * 
+   * @param from - The element to clone attributes from.
+   * @param to - The element to clone attributes to.
+   * @param attributes - The names of the attributes to clone.
+   */
+  public static cloneAttributes(from: HTMLInputElement, to: HTMLInputElement, attributes: string[]): void {
+    cloneAttributes(from, to, attributes);
+  }
+
+  /**
+   * Clones the input specific properties from one element to another.
+   * 
+   * @param from - The element to clone properties from.
+   * @param to - The element to clone properties to.
+   */
+  public static cloneProperties(from: HTMLInputElement, to: HTMLInputElement): void {
+    cloneProperties(from, to, INPUT_PROPERTIES);
+  }
+  
+  /**
+   * Clones the validation message from one input element to another.
+   * 
+   * @param from - The input element to clone the validation message from.
+   * @param to - The input element to clone the validation message to.
+   */
+  public static cloneValidationMessage(from: HTMLInputElement, to: HTMLInputElement): void {
+    cloneValidationMessage(from, to);
+  }
+
+  /**
+   * Initializes the adapter with an initial input element and attach callback.
+   * 
+   * @param el - The input element to associate with the adapter.
+   * @param attachCallback - The callback to invoke when attaching the input element.
+   */
+  public initialize(el: HTMLInputElement, attachCallback: (newEl: HTMLInputElement, oldEl?: HTMLInputElement) => void): void {
+    this._attachCallback = attachCallback;
+    this._attachCallback(el, this._el);
+    this._el = el;
+  }
+
+  /**
+   * Replaces the attached input element.
+   * 
+   * @param el - The new input element to attach.
+   */
+  public attachInput(el: HTMLInputElement): void {
+    this._attachCallback(el, this._el);
+    this._el = el;
   }
 }

@@ -11,6 +11,7 @@ $tokens: (
   primary-color: utils.module-val(checkbox, primary-color, theme.variable(tertiary)),
   size: utils.module-val(checkbox, size, 16px),
   border-width: utils.module-val(checkbox, border-width, 2px),
+  icon-color: utils.module-val(checkbox, icon-color, theme.variable(on-tertiary)),
   state-layer-size: utils.module-val(checkbox, state-layer-size, 40px),
   state-layer-dense-size: utils.module-val(checkbox, state-layer-size, 24px),
 
@@ -22,13 +23,21 @@ $tokens: (
   unchecked-border-color: utils.module-val(checkbox, unchecked-border-color, theme.variable(text-secondary-on-light)),
   shape: utils.module-val(checkbox, shape, shape.variable(small)),
   elevation: utils.module-val(checkbox, elevation, elevation.value(0)),
-  gap: utils.module-val(checkbox, gap, 0),
   
   // Checkbox checked
-  checked-color: utils.module-val(checkbox, checked-color, theme.variable(on-tertiary)),
   checked-background-color: utils.module-ref(checkbox, checked-background-color, primary-color),
   checked-border-width: utils.module-ref(checkbox, checked-border-width, border-width),
   checked-border-color: utils.module-ref(checkbox, checked-border-color, checked-background-color),
+
+  // Icon
+  icon-checked-color: utils.module-ref(checkbox, icon-checked-color, icon-color),
+  icon-indeterminate-color: utils.module-ref(checkbox, icon-indeterminate-color, icon-color),
+  icon-stroke-width: utils.module-val(checkbox, icon-stroke-width, 4px),
+
+  // Label
+  gap: utils.module-val(checkbox, gap, 0),
+  justify: utils.module-val(switch, justify, space-between),
+  direction: utils.module-val(switch, direction, initial),
 
   // State layer
   state-layer-width: utils.module-ref(checkbox, state-layer-width, state-layer-size),

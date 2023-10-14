@@ -7,17 +7,17 @@ const checkboxesCheckedToggle = document.getElementById('opt-checked') as ISwitc
 const checkboxesIndeterminateToggle = document.getElementById('opt-indeterminate') as ISwitchComponent;
 const exposeInputToggle = document.getElementById('opt-expose-input') as ISwitchComponent;
 
-checkboxesCheckedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+checkboxesCheckedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const checkboxes = document.querySelectorAll('forge-checkbox') as NodeListOf<ICheckboxComponent>;
   checkboxes.forEach(checkbox => checkbox.checked = selected);
 });
 
-checkboxesIndeterminateToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+checkboxesIndeterminateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const checkboxes = document.querySelectorAll('forge-checkbox') as NodeListOf<ICheckboxComponent>;
   checkboxes.forEach(checkbox => checkbox.indeterminate = selected);
 });
 
-exposeInputToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+exposeInputToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const checkbox = document.getElementById('exposed-input-checkbox') as ICheckboxComponent;
   if (selected) {
     const input = document.createElement('input');

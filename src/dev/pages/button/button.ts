@@ -22,7 +22,7 @@ function getButtonElements(): NodeListOf<ButtonComponent> {
 }
 
 const disabledToggle = document.querySelector('#disabled-switch') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const buttons = getButtonElements();
   buttons.forEach(forgeButton => {
     const buttonEl = forgeButton.querySelector('button') as HTMLButtonElement;
@@ -31,7 +31,7 @@ disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) =>
 });
 
 const denseToggle = document.querySelector('#dense-switch') as ISwitchComponent;
-denseToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const buttons = getButtonElements();
   buttons.forEach(forgeButton => {
     const isChecked = selected;

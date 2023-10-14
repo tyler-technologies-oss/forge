@@ -28,31 +28,31 @@ keyTextField.addEventListener('change', () => {
 });
 
 const globalToggle = document.querySelector('#opt-global') as ISwitchComponent;
-globalToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+globalToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonShortcut.global = selected;
   textFieldShortcut.global = selected;
 });
 
 const allowWhileTypingToggle = document.querySelector('#opt-allow-while-typing') as ISwitchComponent;
-allowWhileTypingToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+allowWhileTypingToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonShortcut.allowWhileTyping = selected;
   textFieldShortcut.allowWhileTyping = selected;
 });
 
 const preventDefaultToggle = document.querySelector('#opt-prevent-default') as ISwitchComponent;
-preventDefaultToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+preventDefaultToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonShortcut.preventDefault = selected;
   textFieldShortcut.preventDefault = selected;
 });
 
 const useCodeToggle = document.querySelector('#opt-use-code') as ISwitchComponent;
-useCodeToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+useCodeToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonShortcut.useCode = selected;
   textFieldShortcut.useCode = selected;
 });
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonShortcut.disabled = selected;
   textFieldShortcut.disabled = selected;
 });

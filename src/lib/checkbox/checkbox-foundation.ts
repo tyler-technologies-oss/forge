@@ -1,7 +1,7 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { ICheckboxAdapter } from './checkbox-adapter';
-import { CHECKBOX_CONSTANTS, CheckboxLabelPosition } from './checkbox-constants';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
 
 export interface ICheckboxFoundation extends ICustomElementFoundation {
   checked: boolean;
@@ -29,6 +29,19 @@ export class CheckboxFoundation implements ICheckboxFoundation {
   private _readonly = false;
   private _labelPosition: CheckboxLabelPosition = 'end';
 
+  private get _submittedValue(): string | null {
+    return this._checked ? this._value : null;
+  }
+  private get _formState(): CheckboxState {
+    return this._checked
+      ? this._indeterminate
+        ? 'checked-indeterminate'
+        : 'checked'
+      : this._indeterminate
+        ? 'unchecked-indeterminate'
+        : 'unchecked';
+  }
+
   // Listeners
   private readonly _changeListener: EventListener;
   private readonly _inputSlotListener: EventListener;
@@ -42,6 +55,7 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     this._adapter.initialize();
     this._adapter.addRootListener('change', this._changeListener);
     this._adapter.addInputSlotListener(this._inputSlotListener);
+    this._adapter.syncValue(this._submittedValue, this._formState);
   };
 
   public syncValidity(hasCustomValidityError: boolean): void {
@@ -56,6 +70,7 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     if (this.readonly) {
       this._adapter.setChecked(this._checked);
       evt.stopPropagation();
+      return;
     }
 
     this._adapter.redispatchEvent(evt);
@@ -63,7 +78,7 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     const target = evt.target as HTMLInputElement;
     const newValue = target.checked;
     this._checked = newValue;
-    this._adapter.syncValue(this._checked ? this._value : null);
+    this._adapter.syncValue(this._submittedValue, this._formState);
     this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
 
     // Toggle inderminate off after a user action
@@ -83,7 +98,7 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     if (this._checked !== value) {
       this._checked = value;
       this._adapter.setChecked(this._checked);
-      this._adapter.syncValue(this._checked ? this._value : null);
+      this._adapter.syncValue(this._submittedValue, this._formState);
       this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
     }
   }
@@ -106,6 +121,7 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     if (this._indeterminate !== value) {
       this._indeterminate = value;
       this._adapter.setIndeterminate(this._indeterminate);
+      this._adapter.syncValue(this._submittedValue, this._formState);
       this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.INDETERMINATE, this._indeterminate);
     }
   }
@@ -116,6 +132,8 @@ export class CheckboxFoundation implements ICheckboxFoundation {
   public set value(value: string) {
     if (this._value !== value) {
       this._value = value;
+      this._adapter.setValue(this._value);
+      this._adapter.syncValue(this._submittedValue, this._formState);
       this._adapter.setHostAttribute(CHECKBOX_CONSTANTS.attributes.VALUE, this._value);
     }
   }

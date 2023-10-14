@@ -12,27 +12,6 @@
   display: none;
 }
 
-:host([disabled]) {
-  @include core.host-disabled;
-
-  .forge-checkbox {
-    pointer-events: none;
-  }
-}
-
-// Readonly
-:host([readonly]) {
-  @include core.host-readonly;
-
-  .forge-checkbox {
-    pointer-events: none;
-
-    forge-state-layer {
-      display: none;
-    }
-  }
-}
-
 // Unchecked
 .forge-checkbox {
   @include configuration.configuration;
@@ -124,6 +103,25 @@
   .forge-checkbox {
     .container {
       @include core.container-dense;
+    }
+  }
+}
+
+:host([disabled]) {
+  .forge-checkbox {
+    @include core.checkbox-disabled;
+
+    .container {
+      @include core.container-disabled;
+    }
+  }
+}
+
+// Readonly
+:host([readonly]) {
+  .forge-checkbox {
+    .container {
+      @include core.container-disabled;
     }
   }
 }

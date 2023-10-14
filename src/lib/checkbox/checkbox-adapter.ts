@@ -1,15 +1,16 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter, InputAdapter, cloneAttributes, cloneInputProperties, cloneValidationMessage, forwardAttributes } from '../core';
-import { StateLayerComponent } from '../state-layer';
+import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, InputAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator';
+import { StateLayerComponent } from '../state-layer';
 import { ICheckboxComponent, forwardedAttributes } from './checkbox';
-import { CHECKBOX_CONSTANTS, CheckboxLabelPosition } from './checkbox-constants';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
 
 export interface ICheckboxAdapter extends IBaseAdapter {
   initialize(): void;
   setChecked(value: boolean): void;
   setDefaultChecked(value: boolean): void;
   setIndeterminate(value: boolean): void;
+  setValue(value: string): void;
   setDisabled(value: boolean): void;
   setRequired(value: boolean): void;
   setReadonly(value: boolean): void;
@@ -17,7 +18,7 @@ export interface ICheckboxAdapter extends IBaseAdapter {
   addRootListener(event: string, callback: EventListener): void;
   addInputSlotListener(callback: EventListener): void;
   detectInputElement(): void;
-  syncValue(value: string | null): void;
+  syncValue(value: string | null, state: CheckboxState): void;
   syncValidity(hasCustomValidityError: boolean): void;
   setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
 }
@@ -28,60 +29,66 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private readonly _labelElement: HTMLElement;
   private readonly _inputSlotElement: HTMLSlotElement;
   private readonly _stateLayerElement: StateLayerComponent;
-  private readonly _focusIndicatorElement: FocusIndicatorComponent;
   private readonly _inputAdapter: InputAdapter;
   private _forwardObserver?: MutationObserver;
 
+  private get _activeInputElement(): HTMLInputElement {
+    return this._inputAdapter.el ?? this._inputElement;
+  }
+
   constructor(component: ICheckboxComponent) {
     super(component);
+    
     this._rootElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.ROOT);
     this._inputElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.INPUT) as HTMLInputElement;
     this._labelElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.LABEL);
     this._inputSlotElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.INPUT_SLOT) as HTMLSlotElement;
     this._stateLayerElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
-    this._focusIndicatorElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.FOCUS_INDICATOR) as FocusIndicatorComponent;
     this._inputAdapter = new InputAdapter();
   }
 
   public initialize(): void {
     this._inputAdapter.initialize(this._inputElement, (newEl, oldEl) => {
       if (oldEl) {
-        cloneAttributes(oldEl, newEl, ['checked', 'aria-readonly']);
-        cloneInputProperties(oldEl, newEl);
+        cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
+        cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
         cloneValidationMessage(oldEl, newEl);
       }
 
       this._forwardObserver?.disconnect();
       this._initializeForwardObserver(newEl);
-
-      this._stateLayerElement.targetElement = newEl;
-      this._focusIndicatorElement.targetElement = newEl;
     });
   }
 
   public setChecked(value: boolean): void {
-    this._inputAdapter.el.checked = value;
+    this._activeInputElement.checked = value;
   }
 
   public setDefaultChecked(value: boolean): void {
-    this._inputAdapter?.el.toggleAttribute('checked', value);
+    this._activeInputElement.toggleAttribute('checked', value);
   }
 
   public setIndeterminate(value: boolean): void {
-    this._inputAdapter.el.indeterminate = value;
+    this._activeInputElement.indeterminate = value;
+  }
+
+  public setValue(value: string): void {
+    this._activeInputElement.value = value;
   }
 
   public setDisabled(value: boolean): void {
-    this._inputAdapter.el.disabled = value;
+    this._activeInputElement.disabled = value;
+    this._stateLayerElement.disabled = value;
   }
 
   public setRequired(value: boolean): void {
-    this._inputAdapter.el.required = value;
+    this._activeInputElement.required = value;
   }
 
   public setReadonly(value: boolean): void {
-    this._inputAdapter.el.readOnly = value;
-    toggleAttribute(this._inputAdapter.el, value, 'aria-readonly', value.toString());
+    this._activeInputElement.readOnly = value;
+    toggleAttribute(this._activeInputElement, value, 'aria-readonly', value.toString());
+    this._stateLayerElement.disabled = value;
   }
 
   public setLabelPosition(value: CheckboxLabelPosition): void {
@@ -111,29 +118,26 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     }
   }
 
-  public syncValue(value: string | null): void {
-    if (value === null) {
-      this._component.internals.setFormValue(null);
-      return;
+  public syncValue(value: string | null, state: CheckboxState): void {
+    const data = value ? new FormData() : null;
+    if (data && value) {
+      data.append(this._component.name, value);
     }
-
-    const data = new FormData();
-    data.append(this._component.name, value);
-    this._component.internals.setFormValue(data, value);
+    this._component.setFormValue(data, state);
   }
 
   public syncValidity(hasCustomValidityError: boolean): void {
     if (hasCustomValidityError) {
-      this._inputAdapter.el.setCustomValidity(this._component.internals.validationMessage);
+      this._activeInputElement.setCustomValidity(this._component.internals.validationMessage);
     } else {
-      this._inputAdapter.el.setCustomValidity('');
+      this._activeInputElement.setCustomValidity('');
     }
 
-    this._component.internals.setValidity(this._inputAdapter.el.validity, this._inputAdapter.el.validationMessage, this._inputAdapter.el);
+    this._component.internals.setValidity(this._activeInputElement.validity, this._activeInputElement.validationMessage, this._activeInputElement);
   }
 
   public setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void {
-    this._component.internals.setValidity(flags, message, this._inputAdapter.el);
+    this._component.internals.setValidity(flags, message, this._activeInputElement);
   }
 
   private _initializeForwardObserver(el: HTMLElement): void {

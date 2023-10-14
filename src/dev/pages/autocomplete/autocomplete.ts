@@ -39,7 +39,7 @@ autocomplete.addEventListener('forge-autocomplete-select', ({ detail }) => {
 
 // Options
 const multipleToggle = document.querySelector('#autocomplete-multiple') as HTMLInputElement;
-multipleToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+multipleToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.multiple = selected;
 });
 
@@ -59,58 +59,58 @@ optionLimitInput.addEventListener('input', () => {
 });
 
 const filterOnFocusToggle = document.querySelector('#autocomplete-filter-on-focus') as HTMLInputElement;
-filterOnFocusToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+filterOnFocusToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.filterOnFocus = selected;
 });
 
 const filterFocusFirstToggle = document.querySelector('#autocomplete-filter-focus-first') as HTMLInputElement;
-filterFocusFirstToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+filterFocusFirstToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.filterFocusFirst = selected;
 });
 
 const itemBuilderToggle = document.querySelector('#autocomplete-item-builder') as HTMLInputElement;
-itemBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+itemBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.optionBuilder = selected ? itemBuilder : undefined;
 });
 
 const allowUnmatchedToggle = document.querySelector('#autocomplete-allow-unmatched') as HTMLInputElement;
-allowUnmatchedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+allowUnmatchedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.allowUnmatched = selected;
 });
 
 const selectedTextBuilderToggle = document.querySelector('#autocomplete-selected-text-builder') as HTMLInputElement;
-selectedTextBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+selectedTextBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
 });
 
 const scrollObserverToggle = document.querySelector('#autocomplete-scroll-observer') as HTMLInputElement;
-scrollObserverToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+scrollObserverToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.observeScroll = selected;
 });
 
 const syncPopupWidthToggle = document.querySelector('#autocomplete-sync-popup-width') as HTMLInputElement;
-syncPopupWidthToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+syncPopupWidthToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.syncPopupWidth = selected;
 });
 
 const headerBuilderToggle = document.querySelector('#autocomplete-header-builder') as HTMLInputElement;
-headerBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+headerBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.popupHeaderBuilder = selected ? headerBuilderCallback : undefined;
 });
 
 const footerBuilderToggle = document.querySelector('#autocomplete-footer-builder') as HTMLInputElement;
-footerBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+footerBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   autocomplete.popupFooterBuilder = selected ? footerBuilderCallback : undefined;
 });
 
 const simulateAsyncToggle = document.querySelector('#autocomplete-simulate-async') as HTMLInputElement;
-simulateAsyncToggle.addEventListener('forge-switch-select', ({ detail: selected }) => asyncFilter = selected);
+simulateAsyncToggle.addEventListener('forge-switch-change', ({ detail: selected }) => asyncFilter = selected);
 
 const groupToggle = document.querySelector('#autocomplete-group') as HTMLInputElement;
-groupToggle.addEventListener('forge-switch-select', ({ detail: selected }) => useGroupedData = selected);
+groupToggle.addEventListener('forge-switch-change', ({ detail: selected }) => useGroupedData = selected);
 
 const groupHeaderBuilderToggle = document.querySelector('#autocomplete-group-header-builder') as HTMLInputElement;
-groupHeaderBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => useGroupHeaderBuilder = selected);
+groupHeaderBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => useGroupHeaderBuilder = selected);
 
 
 function itemBuilder(option: IListDropdownOption, filterText: string, _listItem: IListItemComponent): HTMLElement {

@@ -60,12 +60,12 @@ maxSizeTextField.addEventListener('input', () => {
 });
 
 
-multipleCheckbox.addEventListener('forge-switch-select', ({ detail: selected }) => {
+multipleCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
   filePicker.multiple = selected;
   filePickerCompact.multiple = selected;
 });
 
-disabledCheckbox.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
   filePicker.disabled = selected;
   filePickerCompact.disabled = selected;
 });

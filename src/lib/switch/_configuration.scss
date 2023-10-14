@@ -8,6 +8,7 @@
   --_track-border-width: #{switch-tokens.get(track-border-width)};
   --_track-border-color: #{switch-tokens.get(track-border-color)};
   --_icon-color: #{switch-tokens.get(icon-color)};
+  --_icon-size: #{switch-tokens.get(icon-size)};
   --_icon-scale: #{switch-tokens.get(icon-scale)};
   --_state-layer-size: #{switch-tokens.get(state-layer-size)};
   --_state-layer-dense-size: #{switch-tokens.get(state-layer-dense-size)};

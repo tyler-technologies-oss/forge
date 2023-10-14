@@ -12,19 +12,7 @@
   display: none;
 }
 
-:host([disabled]) {
-  @include core.host-disabled;
-
-  .forge-switch {
-    pointer-events: none;
-  }
-
-  .handle::before {
-    box-shadow: none;
-  }
-}
-
-/// Base styles (defaults to off)
+// Off
 .forge-switch {
   @include configuration.configuration;
   @include core.switch;
@@ -34,69 +22,24 @@
 
   .container {
     @include core.container;
+
+    &:active {
+      .track {
+        @include core.track-active;
+      }
+  
+      .handle {
+        @include core.handle-active;
+  
+        .icon {
+          @include core.icon-active;
+        }
+      }
+    }
   }
 
   .input {
     @include core.input;
-
-    /// On styles
-    &:checked ~ {
-      .track {
-        @include core.track-on;
-      }
-  
-      .handle {
-        @include core.handle-on;
-
-        .icon {
-          &__on {
-            @include core.icon-on-shown;
-          }
-    
-          &__off {
-            @include core.icon-hidden;
-          }
-        }
-
-        forge-state-layer {
-          @include state-layer.provide-theme((
-            color: var(--_state-layer-on-color)
-          ));
-        }
-      }
-    }
-
-    /// Active styles
-    &:active {
-      ~ {
-        .track {
-          @include core.track-active;
-        }
-
-        .handle {
-          @include core.handle-active;
-
-          .icon {
-            @include core.icon-active;
-          }
-        }
-      }
-
-      /// Active on styles
-      &:checked ~ {
-        .track {
-          @include core.track-active-on;
-        }
-
-        .handle {
-          @include core.handle-active-on;
-
-          .icon {
-            @include core.icon-active-on;
-          }
-        }
-      }
-    }
   }
 
   .track {
@@ -127,9 +70,57 @@
   .hidden {
     display: none;
   }
+
+  ::slotted([slot=input]) {
+    @include core.input;
+  }
 }
 
-/// Dense styles
+// On
+:host([on]) {
+  .container {
+    &:active {
+      .track {
+        @include core.track-active-on;
+      }
+  
+      .handle {
+        @include core.handle-active-on;
+  
+        .icon {
+          @include core.icon-active-on;
+        }
+      }
+    }
+  }
+
+  .track {
+    @include core.track-on;
+  }
+
+  .handle {
+    @include core.handle-on;
+
+    .icon {
+      &__on {
+        @include core.icon-on-shown;
+      }
+
+      &__off {
+        @include core.icon-hidden;
+      }
+
+    }
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_state-layer-on-color)
+    ));
+  }
+}
+
+// Dense
 :host([dense]) {
   .forge-switch {
     // Set the state layer width and height for use in calculations of other properties
@@ -138,7 +129,31 @@
   }
 }
 
-/// Reduced motion styles
+// Disabled
+:host([disabled]) {
+  .forge-switch {
+    @include core.switch-disabled;
+
+    .container {
+      @include core.container-disabled;
+    }
+
+    .handle {
+      @include core.handle-disabled;
+    }
+  }
+}
+
+// Readonly
+:host([readonly]) {
+  .forge-switch {
+    .container {
+      @include core.container-disabled;
+    }
+  }
+}
+
+// Reduced motion
 @media (prefers-reduced-motion) {
   .switch {
     --_animation-duration: 0s;

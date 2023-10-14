@@ -1,18 +1,23 @@
-import { getShadowElement, toggleClass } from '@tylertech/forge-core';
-
-import { BaseAdapter, IBaseAdapter, forwardAriaAttributes } from '../core';
-import { ISwitchComponent } from './switch';
+import { getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, InputAdapter, forwardAttributes } from '../core';
+import { StateLayerComponent } from '../state-layer';
+import { ISwitchComponent, forwardedAttributes } from './switch';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
 export interface ISwitchAdapter extends IBaseAdapter {
   initialize(): void;
   setOn(value: boolean): void;
+  setDefaultOn(value: boolean): void;
+  setValue(value: string): void;
   setDisabled(value: boolean): void;
   setRequired(value: boolean): void;
+  setReadonly(value: boolean): void;
   setIconVisibility(value: SwitchIconVisibility): void;
   setLabelPosition(value: SwitchLabelPosition): void;
-  addInputListener(event: string, callback: EventListener): void;
-  syncValue(value: boolean): void;
+  addRootListener(event: string, callback: EventListener): void;
+  addInputSlotListener(callback: EventListener): void;
+  detectInputElement(): void;
+  syncValue(value: string | null): void;
   syncValidity(hasCustomValidityError: boolean): void;
   setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
 }
@@ -23,6 +28,14 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
   private readonly _labelElement: HTMLElement;
   private readonly _iconOnElement: HTMLElement;
   private readonly _iconOffElement: HTMLElement;
+  private readonly _inputSlotElement: HTMLSlotElement;
+  private readonly _stateLayerElement: StateLayerComponent;
+  private readonly _inputAdapter: InputAdapter;
+  private _forwardObserver?: MutationObserver;
+
+  private get _activeInputElement(): HTMLInputElement {
+    return this._inputAdapter.el ?? this._inputElement;
+  }
 
   constructor(component: ISwitchComponent) {
     super(component);
@@ -32,26 +45,48 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     this._labelElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.LABEL);
     this._iconOnElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);
     this._iconOffElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_OFF);
+    this._stateLayerElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
+    this._inputAdapter = new InputAdapter();
   }
 
   public initialize(): void {
-    forwardAriaAttributes({
-      observedAttributes: SWITCH_CONSTANTS.ariaAttributes,
-      sourceEl: this._component,
-      targetEl: this._inputElement
+    this._inputAdapter.initialize(this._inputElement, (newEl, oldEl) => {
+      if (oldEl) {
+        InputAdapter.cloneAttributes(oldEl, newEl, ['type', 'role', 'checked', 'aria-readonly']);
+        InputAdapter.cloneProperties(oldEl, newEl);
+        InputAdapter.cloneValidationMessage(oldEl, newEl);
+      }
+
+      this._forwardObserver?.disconnect();
+      this._initializeForwardObserver(newEl);
     });
   }
 
   public setOn(value: boolean): void {
-    this._inputElement.checked = value;
+    this._activeInputElement.checked = value;
+  }
+
+  public setDefaultOn(value: boolean): void {
+    this._activeInputElement.toggleAttribute('checked', value);
+  }
+
+  public setValue(value: string): void {
+    this._activeInputElement.value = value;
   }
 
   public setDisabled(value: boolean): void {
-    this._inputElement.disabled = value;
+    this._activeInputElement.disabled = value;
+    this._stateLayerElement.disabled = value;
   }
 
   public setRequired(value: boolean): void {
-    this._inputElement.required = value;
+    this._activeInputElement.required = value;
+  }
+
+  public setReadonly(value: boolean): void {
+    this._activeInputElement.readOnly = value;
+    toggleAttribute(this._activeInputElement, value, 'aria-readonly', value.toString());
+    this._stateLayerElement.disabled = value;
   }
 
   public setIconVisibility(value: SwitchIconVisibility): void {
@@ -71,27 +106,55 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     }
   }
 
-  public addInputListener(event: string, callback: EventListener): void {
-    this._inputElement.addEventListener(event, callback);
+  public addRootListener(event: string, callback: EventListener): void {
+    this._rootElement.addEventListener(event, callback);
   }
 
-  public syncValue(value: boolean): void {
+  public addInputSlotListener(callback: EventListener): void {
+    this._inputElement.addEventListener('slotchange', callback);
+  }
+
+  /**
+   * Detects the input element and attaches it to the input adapter.
+   * If an assigned element exists, it will be used. Otherwise, the default input element will be used.
+   */
+  public detectInputElement(): void {
+    const inputElement = this._inputSlotElement.assignedElements()[0] as HTMLInputElement;
+    if (inputElement) {
+      this._inputAdapter.attachInput(inputElement);
+    } else {
+      this._inputAdapter.attachInput(this._inputElement);
+    }
+  }
+
+  public syncValue(value: string | null): void {
+    if (value === null) {
+      this._component.internals.setFormValue(null, SWITCH_CONSTANTS.state.OFF);
+      return;
+    }
+
     const data = new FormData();
-    data.append(this._component.name, String(value));
-    this._component.internals.setFormValue(data, value.toString());
+    data.append(this._component.name, value);
+    this._component.internals.setFormValue(data, SWITCH_CONSTANTS.state.ON);
   }
 
   public syncValidity(hasCustomValidityError: boolean): void {
     if (hasCustomValidityError) {
-      this._inputElement.setCustomValidity(this._component.internals.validationMessage);
+      this._activeInputElement.setCustomValidity(this._component.internals.validationMessage);
     } else {
-      this._inputElement.setCustomValidity('');
+      this._activeInputElement.setCustomValidity('');
     }
 
-    this._component.internals.setValidity(this._inputElement.validity, this._inputElement.validationMessage, this._inputElement);
+    this._component.internals.setValidity(this._activeInputElement.validity, this._activeInputElement.validationMessage, this._activeInputElement);
   }
 
   public setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void {
-    this._component.internals.setValidity(flags, message, this._inputElement);
+    this._component.internals.setValidity(flags, message, this._activeInputElement);
+  }
+
+  private _initializeForwardObserver(el: HTMLElement): void {
+    this._forwardObserver = forwardAttributes(this._component, forwardedAttributes, (name, value) => {
+      toggleAttribute(el, !!value, name, value ?? undefined);
+    });
   }
 }

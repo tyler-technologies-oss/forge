@@ -11,7 +11,7 @@ const attributes = {
   DISABLED: 'disabled',
   REQUIRED: 'required',
   READONLY: 'readonly',
-  LABEL_POSITION: 'end'
+  LABEL_POSITION: 'label-position'
 };
 
 const selectors = {
@@ -29,4 +29,5 @@ export const CHECKBOX_CONSTANTS = {
   attributes
 };
 
+export type CheckboxState = 'checked' | 'unchecked' | 'checked-indeterminate' | 'unchecked-indeterminate';
 export type CheckboxLabelPosition = 'start' | 'end';

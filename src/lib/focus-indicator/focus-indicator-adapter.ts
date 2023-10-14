@@ -9,7 +9,7 @@ export interface IFocusIndicatorAdapter extends IBaseAdapter {
   getTargetElement(): HTMLElement | null;
   setTargetElement(el: HTMLElement | null): void;
   trySetTarget(value: string | null): void;
-  isActive(selector: string): boolean;
+  isActive(selector: string, el?: HTMLElement | null): boolean;
 }
 
 export class FocusIndicatorAdapter extends BaseAdapter<IFocusIndicatorComponent> implements IFocusIndicatorAdapter {
@@ -47,7 +47,8 @@ export class FocusIndicatorAdapter extends BaseAdapter<IFocusIndicatorComponent>
     this._targetElement = locateTargetHeuristic(this._component, value);
   }
 
-  public isActive(selector: string): boolean {
-    return !!this._targetElement?.matches(selector);
+  public isActive(selector: string, el?: HTMLElement | null): boolean {
+    const targetedEl = el ?? this._targetElement;
+    return !!targetedEl?.matches(selector);
   }
 }

@@ -8,18 +8,6 @@
 
 @mixin host {
   display: inline-block;
-
-  cursor: pointer;
-}
-
-@mixin host-disabled {
-  opacity: #{tokens.get(disabled-opacity)};
-
-  cursor: not-allowed;
-}
-
-@mixin host-readonly {
-  cursor: unset;
 }
 
 @mixin checkbox {
@@ -31,8 +19,10 @@
   gap: var(--_gap);
 
   display: flex;
+}
 
-  cursor: unset;
+@mixin checkbox-disabled {
+  opacity: var(--_disabled-opacity);
 }
 
 @mixin container {
@@ -45,11 +35,17 @@
   border-radius: var(--_state-layer-shape);
   inline-size: var(--_state-layer-width);
   block-size: var(--_state-layer-height);
+
+  cursor: pointer;
 }
 
 @mixin container-dense {
   inline-size: var(--_state-layer-dense-width);
   block-size: var(--_state-layer-dense-height);
+}
+
+@mixin container-disabled {
+  cursor: not-allowed;
 }
 
 @mixin input {
@@ -105,11 +101,11 @@
   transition-timing-function: var(--_icon-animation-timing);
 
   fill: none;
-  stroke: var(--_checked-color);
-  stroke-width: 4px;
+  stroke-width: var(--_icon-stroke-width);
 }
 
 @mixin icon-checked {
+  stroke: var(--_icon-checked-color);
   stroke-dasharray: 30;
 }
 
@@ -124,12 +120,14 @@
 
   stroke-dashoffset: 0;
 
+  // Animate from right to left in RTL
   &:dir(rtl) {
     stroke-dashoffset: 60;
   }
 }
 
 @mixin icon-indeterminate {
+  stroke: var(--_icon-indeterminate-color);
   stroke-dasharray: 20;
 }
 
@@ -144,6 +142,7 @@
 
   stroke-dashoffset: 0;
 
+  // Animate from right to left in RTL
   &:dir(rtl) {
     stroke-dashoffset: 40;
   }
@@ -151,6 +150,8 @@
 
 @mixin label {
   @include typography.style(label);
+
+  margin-inline: 8px;
 
   &:empty {
     display: none;

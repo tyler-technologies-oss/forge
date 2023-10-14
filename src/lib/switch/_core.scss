@@ -25,14 +25,6 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
 
 @mixin host {
   display: inline-block;
-
-  cursor: pointer;
-}
-
-@mixin host-disabled {
-  opacity: var(--_disabled-opacity);
-
-  cursor: not-allowed;
 }
 
 @mixin switch {
@@ -44,8 +36,10 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   gap: var(--_gap);
 
   display: flex;
+}
 
-  cursor: unset;
+@mixin switch-disabled {
+  opacity: var(--_disabled-opacity);
 }
 
 @mixin input {
@@ -69,6 +63,12 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
   display: flex;
 
   block-size: #{$_container-block-size};
+
+  cursor: pointer;
+}
+
+@mixin container-disabled {
+  cursor: not-allowed;
 }
 
 @mixin track {
@@ -175,6 +175,12 @@ $_handle-on-translate: calc(var(--_track-width) - #{$_track-border-radius} * 2);
     box-shadow: var(--_handle-active-on-elevation);
 
     background-color: var(--_handle-active-on-color);
+  }
+}
+
+@mixin handle-disabled {
+  &::before {
+    box-shadow: none;
   }
 }
 
