@@ -258,7 +258,7 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
   }
 
   public labelChangedCallback(value: string | null): void {
-    this.ariaLabel = value;
+    this._foundation.proxyLabel(value);
   }
 
   @FoundationProperty()

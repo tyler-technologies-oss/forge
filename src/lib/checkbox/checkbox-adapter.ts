@@ -18,6 +18,7 @@ export interface ICheckboxAdapter extends IBaseAdapter {
   addInputSlotListener(callback: EventListener): void;
   detectInputElement(): void;
   proxyClick(): void;
+  proxyLabel(value: string | null): void;
   syncValue(value: string | null, state: CheckboxState): void;
   syncValidity(hasCustomValidityError: boolean): void;
   setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
