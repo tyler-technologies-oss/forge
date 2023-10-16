@@ -1,6 +1,7 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
 import { BaseFormComponent, IBaseFormComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
+import { ILabelAware } from '../label/label-aware';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { CheckboxAdapter } from './checkbox-adapter';
 import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
@@ -9,7 +10,7 @@ import { CheckboxFoundation } from './checkbox-foundation';
 import template from './checkbox.html';
 import styles from './checkbox.scss';
 
-export interface ICheckboxComponent extends IBaseFormComponent {
+export interface ICheckboxComponent extends IBaseFormComponent, ILabelAware {
   checked: boolean;
   defaultChecked: boolean;
   indeterminate: boolean;
@@ -169,7 +170,7 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
     this._foundation = new CheckboxFoundation(new CheckboxAdapter(this));
   }
 
-  public async connectedCallback(): Promise<void> {
+  public connectedCallback(): void {
     this._foundation.initialize();
   }
 
@@ -250,6 +251,14 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
 
   public formDisabledCallback(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+  public labelClickedCallback(): void {
+    this._foundation.proxyClick();
+  }
+
+  public labelChangedCallback(value: string | null): void {
+    this.ariaLabel = value;
   }
 
   @FoundationProperty()
