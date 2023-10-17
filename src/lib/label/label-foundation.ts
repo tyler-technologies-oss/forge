@@ -5,13 +5,16 @@ import { LABEL_CONSTANTS } from './label-constants';
 export interface ILabelFoundation extends ICustomElementFoundation {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
+  freeze: boolean;
   disconnect(): void;
+  update(): void;
 }
 
 export class LabelFoundation implements ILabelFoundation {
   // State
   private _for: string | null | undefined;
   private _forElement: HTMLElement | null | undefined;
+  private _freeze = false;
   private _isConnected = false;
 
   // Listeners
@@ -35,6 +38,10 @@ export class LabelFoundation implements ILabelFoundation {
     this._adapter.destroy();
   }
 
+  public update(): void {
+    this._adapter.updateTargetLabel();
+  }
+
   private _handleClick(evt: PointerEvent): void {
     // Prevent duplicate clicks from a nested target element
     if (evt.target === this._adapter.getTargetElement()) {
@@ -49,7 +56,9 @@ export class LabelFoundation implements ILabelFoundation {
 
   private _connect(): void {
     this._adapter.addHostListener('click', this._clickListener);
-    this._adapter.addMutationObserver(this._mutationCallback);
+    if (!this._freeze) {
+      this._adapter.addMutationObserver(this._mutationCallback);
+    }
     this._isConnected = true;
   }
 
@@ -87,6 +96,22 @@ export class LabelFoundation implements ILabelFoundation {
       this._forElement = value;
       this._adapter.setTargetElement(this._forElement ?? null);
       this._tryConnect();
+    }
+  }
+
+  public get freeze(): boolean {
+    return this._freeze;
+  }
+  public set freeze(value: boolean) {
+    if (this._freeze !== value) {
+      this._freeze = value;
+      this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.FREEZE, this._freeze);
+      if (this._freeze) {
+        this._adapter.removeMutationObserver();
+        this._adapter.updateTargetLabel();
+      } else if (this._adapter.hasTargetElement()) {
+        this._adapter.addMutationObserver(this._mutationCallback);
+      }
     }
   }
 }

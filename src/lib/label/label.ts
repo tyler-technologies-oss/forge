@@ -1,4 +1,4 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate } from '@tylertech/forge-core';
+import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core';
 import { LabelAdapter } from './label-adapter';
 import { LABEL_CONSTANTS } from './label-constants';
@@ -10,6 +10,8 @@ import style from './label.scss';
 export interface ILabelComponent extends IBaseComponent {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
+  freeze: boolean;
+  update(): void;
 }
 
 declare global {
@@ -21,13 +23,17 @@ declare global {
 /**
  * @tag forge-label
  * 
- * @summary The Forge Label component is used to associate a text label with a Forge form
+ * @summary The Forge Label component is used to associate a text label with a compatible Forge
  * component.
  * 
- * @property {string | null | undefined} for - The id of the associated form component.
- * @property {HTMLElement | null | undefined} forElement - The associated form component.
+ * @property {string | null | undefined} for - The id of the associated element.
+ * @property {HTMLElement | null | undefined} forElement - The associated element.
+ * @property {boolean} freeze - Prevents the label from monitoring changes to its content. Set this if the label's content will never change.
  * 
  * @attribute {string} for - The id of the associated form component.
+ * @attribute {boolean} freeze - Prevents the label from monitoring changes to its content.
+ * 
+ * @method update - Updates the targetted element with the label's current text content.
  * 
  * @csspart label - Styles the label's root element.
  */
@@ -37,7 +43,8 @@ declare global {
 export class LabelComponent extends BaseComponent implements ILabelComponent {
   public static get observedAttributes(): string[] {
     return [
-      LABEL_CONSTANTS.attributes.FOR
+      LABEL_CONSTANTS.attributes.FOR,
+      LABEL_CONSTANTS.attributes.FREEZE
     ];
   }
 
@@ -62,6 +69,9 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
       case LABEL_CONSTANTS.attributes.FOR:
         this.for = newValue;
         break;
+      case LABEL_CONSTANTS.attributes.FREEZE:
+        this.freeze = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -70,4 +80,14 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
 
   @FoundationProperty()
   public forElement: HTMLElement | null | undefined;
+
+  @FoundationProperty()
+  public freeze: boolean;
+
+  /**
+   * Updates the targetted element with the label's current text content.
+   */
+  public update(): void {
+    this._foundation.update();
+  }
 }

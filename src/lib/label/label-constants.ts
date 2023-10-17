@@ -5,7 +5,8 @@ import { SWITCH_CONSTANTS } from '../switch';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label`;
 
 const attributes = {
-  FOR: 'for'
+  FOR: 'for',
+  FREEZE: 'freeze'
 };
 
 const selectors = {
