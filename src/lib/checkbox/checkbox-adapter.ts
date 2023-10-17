@@ -129,9 +129,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
 
   public proxyLabel(value: string | null): void {
     this._labelElementText = value ?? undefined;
-    if (!this._forwardedAriaLabel) {
-      toggleAttribute(this._activeInputElement, !!value, 'aria-label', value ?? undefined);
-    }
+    this._setAriaLabel();
   }
 
   public syncValue(value: string | null, state: CheckboxState): void {
@@ -162,11 +160,16 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
       // it can be used to determine whether an updated label element should take effect.
       if (name === 'aria-label') {
         this._forwardedAriaLabel = value ?? undefined;
-        toggleAttribute(el, !!value || !!this._labelElementText, name, value ?? this._labelElementText);
+        this._setAriaLabel();
         return;
       }
       // Otherwise forward the attribute to the element.
       toggleAttribute(el, !!value, name, value ?? undefined);
     });
+  }
+
+  private _setAriaLabel(): void {
+    const hasAriaLabel = !!this._forwardedAriaLabel || !!this._labelElementText;
+    toggleAttribute(this._activeInputElement, hasAriaLabel, 'aria-label', this._forwardedAriaLabel ?? this._labelElementText);
   }
 }
