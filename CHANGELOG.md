@@ -1,3 +1,15 @@
+# v2.19.1 (Thu Oct 19 2023)
+
+#### 🐛 Bug Fix
+
+- chore(button-area): add build file and jsdoc [#412](https://github.com/tyler-technologies-oss/forge/pull/412) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### Authors: 1
+
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.19.0 (Thu Oct 12 2023)
 
 #### 🚀 Enhancement
