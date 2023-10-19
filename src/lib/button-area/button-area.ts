@@ -17,6 +17,11 @@ declare global {
   }
 }
 
+/**
+ * The custom element class behind the `<forge-button-area>` element.
+ * 
+ * @tag forge-button-area
+ */
 @CustomElement({
   name: BUTTON_AREA_CONSTANTS.elementName,
   dependencies: [
