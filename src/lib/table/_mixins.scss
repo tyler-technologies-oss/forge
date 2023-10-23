@@ -108,10 +108,14 @@
             display: none;
           }
         }
-  
+
         &--sortable {
           @include head-cell-sortable(forge-table-head__cell-sort-icon, forge-table-head__cell__sort-order);
-  
+
+          button {
+            @include head-cell-sortable-button;
+          }
+
           &.forge-table-head__cell--sorted-ascending {
             .forge-table-head__cell-sort-icon {
               @include head-cell-sort-icon-ascending;
@@ -431,6 +435,20 @@
       @include mdc-theme.property(color, text-icon-on-background);
     }
   }
+}
+
+@mixin head-cell-sortable-button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  text-align: inherit;
+  margin: inherit;
+  padding-block: 4px;
+  padding-inline: 0;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+  outline-offset: 4px;
 }
 
 /// The base table body row styles for row interactions.

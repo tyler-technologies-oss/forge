@@ -259,7 +259,9 @@ describe('TableComponent', function(this: ITestContext) {
 
       expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTABLE)).toBe(true, 'Expected sortable class on first cell');
       expect(secondCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTABLE)).toBe(true, 'Expected sortable class on second cell');
-      expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_DESCENDING)).toBe(true, 'Expected sort ascending class on first cell');
+      expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_DESCENDING)).toBe(true, 'Expected sort descending class on first cell');
+      expect(firstCell.getAttribute('aria-sort')).toBe('descending', 'Expected aria-sort to be ascending');
+      expect(secondCell.hasAttribute('aria-sort')).toBeFalse();
       expect(activelySortedCells.length).toBe(1, 'Expected only 1 actively sorted column');
       expect(sortIconElement).toBeDefined();
       expect((<HTMLElement>sortIconElement).classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON_ACTIVE)).toBe(true);
@@ -917,6 +919,40 @@ describe('TableComponent', function(this: ITestContext) {
       expect(callback).toHaveBeenCalled();
     });
 
+    it('should emit sort event when pressing space key on sortable column', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+
+      this.context.component.columnConfigurations = testColumns;
+
+      const callback = jasmine.createSpy('callback');
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.SORT, callback);
+
+      const headerRow = getTableHeaderRow(this.context.getTableElement());
+      const firstCell = headerRow.cells.item(0) as HTMLTableCellElement;
+      firstCell.querySelector('button')?.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+
+      expect(callback).toHaveBeenCalled();
+    });
+
+    it('should emit sort event when pressing enter key on sortable column', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+
+      this.context.component.columnConfigurations = testColumns;
+
+      const callback = jasmine.createSpy('callback');
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.SORT, callback);
+
+      const headerRow = getTableHeaderRow(this.context.getTableElement());
+      const firstCell = headerRow.cells.item(0) as HTMLTableCellElement;
+      firstCell.querySelector('button')?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(callback).toHaveBeenCalled();
+    });
+
     it('should not emit sort event clicking non-sortable column', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.columnConfigurations = columns;
@@ -926,6 +962,20 @@ describe('TableComponent', function(this: ITestContext) {
 
       const headerRow = getTableHeaderRow(this.context.getTableElement());
       headerRow.cells.item(0)!.click();
+
+      expect(callback).not.toHaveBeenCalled();
+    });
+
+    it('should not emit sort event pressing enter or space key on non-sortable column', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.columnConfigurations = columns;
+
+      const callback = jasmine.createSpy('callback');
+      this.context.component.addEventListener(TABLE_CONSTANTS.events.SORT, callback);
+
+      const headerRow = getTableHeaderRow(this.context.getTableElement());
+      headerRow.cells.item(0)!.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      headerRow.cells.item(0)!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
       expect(callback).not.toHaveBeenCalled();
     });
@@ -942,9 +992,11 @@ describe('TableComponent', function(this: ITestContext) {
 
       clickTableCell(firstCell);
       expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)).toBe(true);
+      expect(firstCell.getAttribute('aria-sort')).toBe('ascending');
 
       clickTableCell(firstCell);
       expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_DESCENDING)).toBe(true);
+      expect(firstCell.getAttribute('aria-sort')).toBe('descending');
     });
 
     it('should not sort column when clicking non-sortable column', function(this: ITestContext) {
@@ -968,6 +1020,7 @@ describe('TableComponent', function(this: ITestContext) {
 
       expect(callback).not.toHaveBeenCalled();
       expect(hasSortClass).toBe(false);
+      expect(secondCell.hasAttribute('aria-sort')).toBeFalse();
       expect(sortIconElement).toBeNull();
     });
 
@@ -990,7 +1043,9 @@ describe('TableComponent', function(this: ITestContext) {
       const secondCellSortIcon = secondCell.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON}`) as HTMLElement;
 
       expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)).toBe(false);
+      expect(firstCell.hasAttribute('aria-sort')).toBeFalse();
       expect(secondCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)).toBe(true);
+      expect(secondCell.getAttribute('aria-sort')).toBe('ascending');
       expect(firstCellSortIcon.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON_ACTIVE)).toBe(false);
       expect(secondCellSortIcon.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON_ACTIVE)).toBe(true);
     });
@@ -1018,9 +1073,11 @@ describe('TableComponent', function(this: ITestContext) {
       const firstCellSortIcon = firstCell.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON}`) as HTMLElement;
       const secondCellSortIcon = secondCell.querySelector(`.${TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON}`) as HTMLElement;
 
-      expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)).toBe(true, 'First column should have descending sort class');
+      expect(firstCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)).toBe(true, 'First column should have ascending sort class');
+      expect(firstCell.getAttribute('aria-sort')).toBe('ascending');
       expect(secondCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)).toBe(false, 'Second column should not have descending sort class');
       expect(secondCell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_DESCENDING)).toBe(false, 'Second column should not have ascending sort class');
+      expect(secondCell.hasAttribute('aria-sort')).toBeFalse();
       expect(firstCellSortIcon.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON_ACTIVE)).toBe(true, 'First column should have active sort icon');
       expect(secondCellSortIcon.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON_ACTIVE)).toBe(false, 'Second column should not have active sort icon');
     });
