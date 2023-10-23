@@ -2,10 +2,20 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 
   forge-drawer:has(.options-container) {
     --forge-drawer-width: 300px;
+  }
+
+  forge-text-field,
+  forge-select {
+    &:not(:first-child) {
+      margin-block-start: 8px;
+    }
+
+    &:not(:last-child) {
+      margin-block-end: 8px;
+    }
   }
   
   forge-switch {

@@ -15,15 +15,15 @@ $tokens: (
   track-border-width: utils.module-val(switch, track-border-width, 0),
   track-border-color: utils.module-val(switch, track-border-color, transparent),
 
-  icon-color: utils.module-val(switch, icon-color, theme.variable(on-primary)),
+  icon-color: utils.module-val(switch, icon-color, theme.variable(on-tertiary)),
   icon-scale: utils.module-val(switch, icon-scale, 1),
 
   state-layer-size: utils.module-val(switch, state-layer-size, 40px),
   state-layer-dense-size: utils.module-val(switch, handle-dense-size, 28px),
 
   // Handle
-  handle-on-color: utils.module-val(switch, handle-on-color, theme.variable(primary)),
-  handle-off-color: utils.module-val(switch, handle-off-color, theme.variable(handle-off-color)),
+  handle-on-color: utils.module-val(switch, handle-on-color, theme.variable(tertiary)),
+  handle-off-color: utils.module-val(switch, handle-off-color, theme.variable(surface-container-high)),
   handle-width: utils.module-ref(switch, handle-width, handle-size),
   handle-height: utils.module-ref(switch, handle-height, handle-size),
   handle-on-scale: utils.module-ref(switch, handle-on-scale, handle-scale),
@@ -33,8 +33,8 @@ $tokens: (
   handle-off-elevation: utils.module-ref(switch, handle-off-elevation, handle-elevation),
 
   // Track
-  track-on-color: utils.module-val(switch, track-on-color, theme.variable(primary-track-color)),
-  track-off-color: utils.module-val(switch, track-off-color, theme.variable(track-color)),
+  track-on-color: utils.module-val(switch, track-on-color, theme.variable(tertiary-container)),
+  track-off-color: utils.module-val(switch, track-off-color, theme.variable(surface-container)),
   track-width: utils.module-val(switch, track-width, 36px),
   track-height: utils.module-val(switch, track-height, 14px),
   track-shape: utils.module-val(switch, track-shape, shape.variable(full)),

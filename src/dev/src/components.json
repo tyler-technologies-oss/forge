@@ -52,6 +52,7 @@
   { "label": "Table", "path": "/pages/table/table.html" },
   { "label": "Tabs", "path": "/pages/tabs/tabs.html", "tags": ["view", "bar"] },
   { "label": "Text field", "path": "/pages/text-field/text-field.html", "tags": ["form"] },
+  { "label": "Theme", "path": "/pages/theme/theme.html", "tags": ["color"] },
   { "label": "Time picker", "path": "/pages/time-picker/time-picker.html" },
   { "label": "Toast", "path": "/pages/toast/toast.html" },
   { "label": "Toolbar", "path": "/pages/toolbar/toolbar.html" },

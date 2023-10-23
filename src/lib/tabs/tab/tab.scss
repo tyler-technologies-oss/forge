@@ -1,6 +1,5 @@
 @use './core';
 @use './configuration';
-@use '../../core/styles/tokens/tabs/tab/tokens';
 @use '../../focus-indicator';
 @use '../../state-layer';
 
@@ -28,6 +27,8 @@
   @include core.host-disabled;
 
   .forge-tab {
+    @include core.disabled;
+
     pointer-events: none;
   }
 }
@@ -80,7 +81,7 @@
 
 :host([stacked]) {
   .forge-tab {
-    --_height: #{tokens.get(stacked-height)};
+    --_height: var(--_stacked-height);
 
     .content {
       @include core.content-stacked;

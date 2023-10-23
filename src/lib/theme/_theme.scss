@@ -162,31 +162,31 @@
     @include css-custom-property(height, --forge-scrollbar-height, theme-values.$scrollbar-height);
   }
   
-  &::-webkit-scrollbar-corner {
-    @include property(background-color, scrollbar-track);
-  }
-
   &::-webkit-scrollbar-track {
-    @include property(background-color, scrollbar-track);
+    background-color: var(--forge-theme-scrollbar-track, var(--forge-theme-surface-container-low));
     
     &:hover {
-      @include property(background-color, scrollbar-track-hover);
+      background-color: var(--forge-theme-scrollbar-track-hover, var(--forge-theme-surface-container-low));
     }
   }
 
+  &::-webkit-scrollbar-corner {
+    background-color: var(--forge-theme-scrollbar-track, var(--forge-theme-surface-container-low));
+  }
+
   &::-webkit-scrollbar-thumb {
-    @include property(background-color, scrollbar-thumb);
     @include css-custom-property(height, --forge-scrollbar-min-height, theme-values.$scrollbar-thumb-min-height);
     @include css-custom-property(width, --forge-scrollbar-min-width, theme-values.$scrollbar-thumb-min-width);
-    @include css-custom-property(border-radius, --forge-scrollbar-border-radius, 10px);
+    @include css-custom-property(border-radius, --forge-scrollbar-border-radius, 9999px);
     @include css-custom-property(border-width, --forge-scrollbar-border-width, 3px);
-
+    
+    background-color: var(--forge-theme-scrollbar-thumb, var(--forge-theme-surface-container-medium));
     border-style: solid;
     border-color: transparent;
     background-clip: content-box;
 
     &:hover {
-      @include property(background-color, scrollbar-thumb-hover);
+      background-color: var(--forge-theme-scrollbar-thumb-hover, var(--forge-theme-surface-container-high));
     }
   }
 }

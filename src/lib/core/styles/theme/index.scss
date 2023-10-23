@@ -1,6 +1,8 @@
 @use 'sass:map';
+@use 'sass:math';
 @use '../core/config';
 @use '../tokens/theme/tokens';
+@use '../tokens/theme/color-emphasis';
 @use '../utils';
 
 ///
@@ -45,3 +47,13 @@
 @mixin provide($tokens, $prefix: config.$prefix) {
   @include utils.provide(tokens.$tokens, $tokens, theme, $prefix);
 }
+
+///
+/// Gets a theme emphasis value by semantic name.
+/// 
+/// Valid names are `highest`, `higher`, `high`, `medium-high`, `medium`, `medium-low`, `low`, `lower`, and `lowest`.
+/// 
+@function emphasis($emphasis) {
+  @return math.div(color-emphasis.value($emphasis), 100%);
+}
+
