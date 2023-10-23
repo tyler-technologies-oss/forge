@@ -20,6 +20,7 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
   private _headerElement: HTMLElement;
   private _contentElement: HTMLElement;
   private _headerSlotElement: HTMLSlotElement;
+  private _activeAnimationFrame: number | undefined;
 
   constructor(component: IExpansionPanelComponent) {
     super(component);
@@ -114,8 +115,9 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         this._contentElement.style.transition = EXPANSION_PANEL_CONSTANTS.strings.EXPANSION_VERTICAL_TRANSITION;
       }
 
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
+      this._activeAnimationFrame = window.requestAnimationFrame(() => {
+        this._activeAnimationFrame = window.requestAnimationFrame(() => {
+          this._activeAnimationFrame = undefined;
           if (opening) {
             if (orientation === EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_HORIZONTAL) {
               this._contentElement.style.width = `${this._contentElement.scrollWidth}px`;
@@ -142,6 +144,11 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         });
       });
     } else {
+      if (this._activeAnimationFrame) {
+        window.cancelAnimationFrame(this._activeAnimationFrame);
+        this._activeAnimationFrame = undefined;
+      }
+
       this._contentElement.style.removeProperty('transition');
       if (opening) {
         if (orientation === EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_HORIZONTAL) {

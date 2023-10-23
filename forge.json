@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/@tylertech/forge-cli/schema.json",
+  "$schema": "./node_modules/@tylertech/forge-cli/config/schema.json",
   "packageOrg": "@tylertech",
   "packageName": "forge",
   "registry": "https://registry.npmjs.org/",

@@ -4,6 +4,7 @@ import { Platform } from '@tylertech/forge-core';
 
 export class FloatingLabelFoundation {
   private _floatAnimationEndHandler: () => void;
+  private _activeFrame: number | undefined;
 
   constructor(protected _adapter: IFloatingLabelAdapter) {
     this._floatAnimationEndHandler = () => this._handleFloatAnimationEnd();
@@ -19,11 +20,16 @@ export class FloatingLabelFoundation {
     }
   }
 
-  public disconnect(): void {
+  public disconnect({ cancelFloat = false } = {}): void {
+    if (cancelFloat && this._activeFrame) {
+      window.cancelAnimationFrame(this._activeFrame);
+    }
+
     this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOATING_LABEL);
     this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
     this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME);
     this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME);
+
     if (this._floatAnimationEndHandler) {
       this._adapter.removeLabelListener('transitionend', this._floatAnimationEndHandler);
     }
@@ -34,9 +40,9 @@ export class FloatingLabelFoundation {
       if (this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME)) {
         this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME);
       }
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (alwaysFloat || this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)) {
+      this._activeFrame = window.requestAnimationFrame(() => {
+        this._activeFrame = window.requestAnimationFrame(() => {
+          if (alwaysFloat || this.isFloating) {
             this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME);
           }
           this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE);
@@ -47,8 +53,9 @@ export class FloatingLabelFoundation {
       if (this._adapter.hasLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME)) {
         this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE_END_KEYFRAME);
         this._adapter.addLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
+        
+        this._activeFrame = window.requestAnimationFrame(() => {
+          this._activeFrame = window.requestAnimationFrame(() => {
             this._adapter.removeLabelClass(FLOATING_LABEL_CONSTANTS.classes.UNFLOAT_ABOVE_START_KEYFRAME);
           });
         });

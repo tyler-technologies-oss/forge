@@ -1,25 +1,205 @@
-@use '@material/typography' as mdc-typography;
-@use '../../theme';
-@use './mixins';
-@use '../../ripple/forge-ripple';
-@use '../../typography/mixins' as typography-mixins;
-@use './variables';
+@use './configuration';
+@use './core';
+@use '../../focus-indicator';
+@use '../../state-layer';
+@use '../../core/styles/shape';
 
-@include mixins.core-styles;
-
+// Host styles
 :host {
-  @include mixins.host;
+  @include configuration.host;
+  @include core.container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-// This is here until Firefox supports :host-context()...
-:host([forge-drawer-context=true]) {
-  @include mixins.drawer-context-styles;
+// Non-interactive
+:host([non-interactive]) {
+  .forge-list-item {
+    @include core.non-interactive;
+  }
 }
 
+// Disabled
+:host([disabled]) {
+  .forge-list-item {
+    @include core.disabled;
+  }
+}
+
+// Two-line
+:host([two-line]) {
+  .forge-list-item {
+    @include core.two-line;
+  }
+}
+
+// Three-line
+:host([three-line]) {
+  .forge-list-item {
+    @include core.three-line;
+  }
+}
+
+// Dense
 :host([dense]) {
-  @include mdc-typography.typography(body2);
+  .forge-list-item {
+    @include core.dense;
+  }
+
+  .text-container {
+    @include core.dense-text;
+  }
+}
+
+// Dense indented
+:host([dense][indented]) {
+  @include core.dense-indented;
+}
+
+// Dense two-line
+:host([dense][two-line]) {
+  .forge-list-item {
+    @include core.dense-two-line;
+  }
+}
+
+// Dense three-line
+:host([dense][three-line]) {
+  .forge-list-item {
+    @include core.dense-three-line;
+  }
+}
+
+// Dense leading/trailing
+:host([selected]) {
+  .forge-list-item {
+    @include core.selected;
+
+    ::slotted([slot=leading]),
+    ::slotted([slot=trailing]) {
+      @include core.leading-trailing-selected;
+    }
+
+    ::slotted([slot=leading]) {
+      @include core.leading-selected;
+    }
+
+    ::slotted([slot=trailing]) {
+      @include core.trailing-selected;
+    }
+  }
+
+  .text-container {
+    @include core.text-container-selected;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_selected-color)
+    ));
+  }
+}
+
+// Indented
+:host([indented]) {
+  @include core.indented;
+}
+
+// Base
+.forge-list-item {
+  @include configuration.configuration;
+  @include core.base;
+}
+
+// Anchor base
+a.forge-list-item {
+  @include core.anchor-link;
+}
+
+// Text container base
+.text-container {
+  @include core.text-container;
+}
+
+// Supporting text slotted elements
+slot[name=secondary-text],
+slot[name=subtitle],
+slot[name=tertiary-text],
+slot[name=tertiary-title] {
+  &::slotted(*) {
+    @include core.supporting-text;
+  }
+
+  :host([selected]) &::slotted(*) {
+    @include core.supporting-text-selected;
+  }
+}
+
+// Avatar slotted elements
+::slotted([slot=avatar]) {
+  @include core.avatar;
+}
+
+// Leading/trailing slotted elements
+::slotted([slot=leading]),
+::slotted([slot=trailing]) {
+  @include core.leading-trailing-base;
+}
+
+// Leading slotted elements
+::slotted([slot=leading]) {
+  @include core.leading;
+
+  :host([selected]) & {
+    @include core.leading-selected;
+  }
+
+  :host([dense]) & {
+    @include core.leading-dense;
+  }
+}
+
+// Trailing slotted elements
+::slotted([slot=trailing]) {
+  @include core.trailing;
+
+  :host([selected]) & {
+    @include core.trailing-selected;
+  }
+
+  :host([dense]) & {
+    @include core.trailing-dense;
+  }
+}
+
+// Wrap styles
+:host([wrap]) {
+  .forge-list-item {
+    @include core.wrap;
+  }
+
+  .text-container {
+    @include core.text-container-wrap;
+  }
+
+  slot[name=secondary-text],
+  slot[name=subtitle],
+  slot[name=tertiary-text],
+  slot[name=tertiary-title] {
+    &::slotted(*) {
+      @include core.supporting-text-wrap;
+    }
+  }
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    shape: shape.variable(medium)
+  ));
+}
+
+forge-state-layer {
+  border-radius: inherit;
 }

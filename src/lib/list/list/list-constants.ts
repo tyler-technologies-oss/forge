@@ -1,21 +1,32 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 
-const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}list`;
+const elementName = `${COMPONENT_NAME_PREFIX}list`;
 
-const attributes = {
+const observedAttributes = {
+  ROLE: 'role',
   STATIC: 'static',
+  NON_INTERACTIVE: 'non-interactive',
+  DISABLED: 'disabled',
   DENSE: 'dense',
   PROPAGATE_CLICK: 'propagate-click',
+  SELECTED_VALUE: 'selected-value',
   INDENTED: 'indented',
-  SELECTED_VALUE: 'selected-value'
+  TWO_LINE: 'two-line',
+  THREE_LINE: 'three-line',
+  WRAP: 'wrap'
 };
 
-const selectors = {
-  FOCUSABLE_LIST_ITEMS: '.forge-list-item:not(.forge-list-item--static):not(.forge-list-item--disabled)'
+const attributes = {
+  ...observedAttributes
 };
 
 export const LIST_CONSTANTS = {
   elementName,
-  attributes,
-  selectors
+  attributes
+};
+
+export const ListComponentItemRole = {
+  list: 'listitem',
+  listbox: 'option',
+  menu: 'menuitem'
 };

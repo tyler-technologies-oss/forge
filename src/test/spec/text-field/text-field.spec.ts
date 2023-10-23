@@ -184,6 +184,34 @@ describe('TextFieldComponent', function(this: ITestContext) {
       expectFloatingLabelState(this.context, true);
     });
 
+    it('should float label when value is set after changing from dense to roomy', async function(this: ITestContext) {
+      this.context = setupTestContext(true, { density: 'dense' });
+
+      await tick();
+      this.context.input.value = 'test';
+      await floatTick();
+      
+      this.context.component.density = 'roomy';
+      await floatTick();
+
+      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+      expectFloatingLabelState(this.context, true);
+    });
+
+    it('should float label when value is set after changing from dense to default', async function(this: ITestContext) {
+      this.context = setupTestContext(true, { density: 'dense' });
+
+      await tick();
+      this.context.input.value = 'test';
+      await floatTick();
+      
+      this.context.component.density = 'default';
+      await floatTick();
+
+      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+      expectFloatingLabelState(this.context, true);
+    });
+
     it('should float label when invoked programmatically', async function(this: ITestContext) {
       this.context = setupTestContext();
       await tick();

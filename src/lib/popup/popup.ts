@@ -23,6 +23,10 @@ export interface IPopupComponent extends IBaseComponent {
   closeCallback: PopupStateCallback;
 }
 
+export interface IPopupCloseEventData {
+  popup: IPopupComponent;
+}
+
 declare global {
   interface HTMLElementTagNameMap {
     'forge-popup': IPopupComponent;
@@ -30,7 +34,7 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-popup-open': CustomEvent<void>;
-    'forge-popup-close': CustomEvent<void>;
+    'forge-popup-close': CustomEvent<IPopupCloseEventData>;
     'forge-popup-position': CustomEvent<IPopupPositionEventData>;
     'forge-popup-blur': CustomEvent<void>;
   }

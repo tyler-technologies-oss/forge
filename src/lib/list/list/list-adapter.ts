@@ -1,124 +1,100 @@
-import { emitEvent, deepQuerySelectorAll, getActiveElement } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list-item';
+import { isDeepEqual } from '@tylertech/forge-core';
+import { BaseAdapter } from '../../core/base/base-adapter';
 import { IListComponent } from './list';
-import { LIST_CONSTANTS } from './list-constants';
+import { LIST_ITEM_CONSTANTS } from '../list-item/list-item-constants';
+import { IListItemComponent } from '../list-item/list-item';
+import { ListComponentItemRole, LIST_CONSTANTS } from './list-constants';
 
-export interface IListAdapter extends IBaseAdapter {
-  initializeAccessibility(): void;
-  addListener(type: string, listener: (evt: Event) => void): void;
-  removeListener(type: string, listener: (evt: Event) => void): void;
-  getListItems(): IListItemComponent[];
+export interface IListAdapter extends BaseAdapter<IListComponent> {
+  initialize(): void;
   focusNextListItem(): void;
   focusPreviousListItem(): void;
   focusFirstListItem(): void;
   focusLastListItem(): void;
-  setSelectedListItems(values: any[]): void;
+  setSelectedListItems(values: unknown | unknown[]): void;
   updateListItems(cb: (li: IListItemComponent) => void): void;
+  updateListItemRole(): void;
 }
 
-/**
- * The DOM adapter for the `<forge-list>` component.
- */
 export class ListAdapter extends BaseAdapter<IListComponent> implements IListAdapter {
   constructor(component: IListComponent) {
     super(component);
   }
 
-  public initializeAccessibility(): void {
+  public initialize(): void {
     if (!this._component.hasAttribute('role')) {
       this._component.setAttribute('role', 'list');
     }
   }
 
-  /**
-   * Adds an event listener to the `<forge-list>` host element.
-   * @param {string} type The event type.
-   * @param {Function} listener The event callback.
-   */
-  public addListener(type: string, listener: (evt: Event) => void): void {
-    this._component.addEventListener(type, listener);
-  }
-
-  /**
-   * Removes an event listener to the `<forge-list>` host element.
-   * @param {string} type The event type.
-   * @param {Function} listener The event callback.
-   */
-  public removeListener(type: string, listener: (evt: Event) => void): void {
-    this._component.removeEventListener(type, listener);
-  }
-
-  /**
-   * Returns all child `<forge-list-item>` elements.
-   */
-  public getListItems(): IListItemComponent[] {
-    return Array.from(this._component.children).filter(child => child.tagName === LIST_ITEM_CONSTANTS.elementName.toUpperCase()) as IListItemComponent[];
-  }
-
-  /**
-   * Sets focus to the next item in the list.
-   */
+  /** Sets focus to the next item in the list. */
   public focusNextListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-
-    if (listItems && listItems.length > 0) {
-      const focusedListItemIndex = listItems.indexOf(getActiveElement(this._component.ownerDocument) as HTMLElement);
+    const listItems = this._getFocusableListItems();
+    if (listItems.length) {
+      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus'));
+      console.log('focusedListItemIndex', focusedListItemIndex);
       const nextIndex = focusedListItemIndex < listItems.length - 1 ? focusedListItemIndex + 1 : 0;
-
       if (nextIndex <= listItems.length - 1) {
-        listItems[nextIndex].focus();
+        listItems[nextIndex].focus({ preventScroll: true});
       }
     }
   }
 
-  /**
-   * Sets focus to the previous item in the list.
-   */
+  /** Sets focus to the previous item in the list. */
   public focusPreviousListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-
-    if (listItems && listItems.length > 0) {
-      const focusedListItemIndex = listItems.indexOf(getActiveElement(this._component.ownerDocument) as HTMLElement);
+    const listItems = this._getFocusableListItems();
+    if (listItems.length) {
+      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus'));
       const nextIndex = focusedListItemIndex > 0 ? focusedListItemIndex - 1 : listItems.length - 1;
-
       if (nextIndex >= 0) {
-        listItems[nextIndex].focus();
+        listItems[nextIndex].focus({ preventScroll: true});
       }
     }
   }
 
-  /**
-   * Sets focus to the first item in the list.
-   */
+  /** Sets focus to the first item in the list. */
   public focusFirstListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-
-    if (listItems && listItems.length > 0) {
-      listItems[0].focus();
+    const listItems = this._getFocusableListItems();
+    if (listItems.length) {
+      listItems[0].focus({ preventScroll: true});
     }
   }
 
-  /**
-   * Sets focus to the last item in the list.
-   */
+  /** Sets focus to the last item in the list. */
   public focusLastListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-    if (listItems && listItems.length > 0) {
-      listItems[listItems.length - 1].focus();
+    const listItems = this._getFocusableListItems();
+    if (listItems.length) {
+      listItems[listItems.length - 1].focus({ preventScroll: true});
     }
   }
 
-  public setSelectedListItems(values: any[]): void {
-    const listItems = Array.from(this._component.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
-    if (listItems && listItems.length) {
+  /** Select all list items that match values in the provided array of values. */
+  public setSelectedListItems(value: unknown | unknown[]): void {
+    const listItems = this._getListItems();
+    if (listItems.length) {
+      const values = Array.isArray(value) ? value : [value];
       for (const item of listItems) {
-        item.selected = values.includes(item.value);
+        item.selected = values.some(val => isDeepEqual(val, item.value));
       }
     }
   }
 
+  /** Calls the provided callback on all list items to apply an updated property to each list item. */
   public updateListItems(cb: (li: IListItemComponent) => void): void {
-    this.getListItems().forEach(li => cb(li));
+    this._getListItems().forEach(cb);
+  }
+
+  public updateListItemRole(): void {
+    const role = ListComponentItemRole[this._component.getAttribute('role') as string] ?? 'listitem';
+    this.updateListItems(li => li.role = role);
+  }
+
+  private _getListItems(): IListItemComponent[] {
+    const listItems = Array.from(this._component.querySelectorAll(LIST_ITEM_CONSTANTS.elementName));
+    return listItems.filter(item => item.closest(LIST_CONSTANTS.elementName) === this._component) as IListItemComponent[];
+  }
+
+  private _getFocusableListItems(): IListItemComponent[] {
+    return this._getListItems().filter(li => !li.disabled && !li.nonInteractive && !li.hidden);
   }
 }

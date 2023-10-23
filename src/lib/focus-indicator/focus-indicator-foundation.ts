@@ -32,8 +32,8 @@ export class FocusIndicatorFoundation implements IFocusIndicatorFoundation {
   }
 
   public destroy(): void {
+    this._removeListeners(); // Must be called before destroying adapter
     this._adapter.destroy();
-    this._removeListeners();
   }
 
   private _addListeners(): void {

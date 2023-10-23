@@ -1,7 +1,8 @@
 import { emitEvent, toggleAttribute } from '@tylertech/forge-core';
 import { IBaseComponent } from './base-component';
 
-export interface IBaseAdapter {
+export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
+  readonly hostElement: T;
   readonly isConnected: boolean;
   removeHostAttribute(name: string): void;
   getHostAttribute(name: string): string | null;
@@ -22,6 +23,10 @@ export interface IBaseAdapter {
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   constructor(protected _component: T) {}
+
+  public get hostElement(): T {
+    return this._component;
+  }
 
   public getHostAttribute(name: string): string | null {
     return this._component.getAttribute(name);
@@ -57,12 +62,20 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
     return emitEvent(this._component, type, data, bubble, cancelable);
   }
 
+  public toggleHostListener(event: string, listener: EventListener, value: boolean, options?: boolean | AddEventListenerOptions): void {
+    if (value) {
+      this.addHostListener(event, listener, options);
+    } else {
+      this.removeHostListener(event, listener, options);
+    }
+  }
+
   public addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
     this._component.addEventListener(event, callback, options);
   }
 
-  public removeHostListener(event: string, callback: (event: Event) => void): void {
-    this._component.removeEventListener(event, callback);
+  public removeHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
+    this._component.removeEventListener(event, callback, options);
   }
 
   public addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {

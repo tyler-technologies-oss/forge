@@ -1,3 +1,4 @@
+import { IconExternalType, IIconComponent } from '../icon';
 import { IPopupPosition, PopupPlacement } from '../popup';
 
 const attributes = {
@@ -33,15 +34,18 @@ export type ListDropdownIconType = 'font' | 'component';
 export interface IBaseListDropdownOption<T = any> {
   value: T;
   label: string;
+  secondaryLabel?: string;
   disabled?: boolean;
   divider?: boolean;
   optionClass?: string | string[];
   leadingIcon?: string;
   leadingIconClass?: string;
   leadingIconType?: ListDropdownIconType;
+  leadingIconComponentProps?: Partial<IIconComponent>;
   trailingIcon?: string;
   trailingIconClass?: string;
   trailingIconType?: ListDropdownIconType;
+  trailingIconComponentProps?: Partial<IIconComponent>;
   leadingBuilder?: () => HTMLElement;
   trailingBuilder?: () => HTMLElement;
 }
