@@ -22,7 +22,7 @@ expansionPanel.addEventListener('forge-expansion-panel-toggle', (event: CustomEv
 
 
 const disabledToggle = document.querySelector('#disabled-switch') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   buttonArea.disabled = selected;
   expansionPanelButtonArea.disabled = selected;
 });

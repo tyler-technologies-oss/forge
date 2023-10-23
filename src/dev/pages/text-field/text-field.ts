@@ -61,54 +61,54 @@ optPlaceholder.addEventListener('input', () => {
     textarea.placeholder = optPlaceholder.value;
   }
 });
-optShowLeading.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowLeading.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     textField.appendChild(leadingEl);
   } else {
     leadingEl.remove();
   }
 });
-optShowTrailing.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowTrailing.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     textField.appendChild(trailingEl);
   } else {
     trailingEl.remove();
   }
 });
-optShowAddonEnd.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowAddonEnd.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     textField.appendChild(addonEndEl);
   } else {
     addonEndEl.remove();
   }
 });
-optShowHelperText.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowHelperText.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     textField.appendChild(helperTextEl);
   } else {
     helperTextEl.remove();
   }
 });
-optFloatLabel.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optFloatLabel.addEventListener('forge-switch-change', ({ detail: selected }) => {
   textField.floatLabelType = selected ? 'always' : 'auto';
 });
-optRequired.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optRequired.addEventListener('forge-switch-change', ({ detail: selected }) => {
   textField.required = selected;
 });
-optDisabled.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optDisabled.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (input.isConnected) {
     input.disabled = selected;
   } else if (textarea) {
     textarea.disabled = selected;
   }
 });
-optInvalid.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optInvalid.addEventListener('forge-switch-change', ({ detail: selected }) => {
   textField.invalid = selected;
 });
-optRounded.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optRounded.addEventListener('forge-switch-change', ({ detail: selected }) => {
   textField.shape = selected ? 'rounded' : 'default';
 });
-optTextarea.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optTextarea.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const parent = textField.parentElement;
   textField.remove();
 

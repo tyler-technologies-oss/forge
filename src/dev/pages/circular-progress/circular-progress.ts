@@ -7,7 +7,7 @@ const circularProgress = document.querySelector('forge-circular-progress#circula
 let determinateIntervalTimer: number | undefined;
 
 const showTrackToggle = document.getElementById('opt-show-track') as ISwitchComponent;
-showTrackToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showTrackToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     circularProgress.style.removeProperty('--forge-circular-progress-track-background');
   } else {
@@ -16,7 +16,7 @@ showTrackToggle.addEventListener('forge-switch-select', ({ detail: selected }) =
 });
 
 const showPercentToggle = document.getElementById('opt-show-percent') as ISwitchComponent;
-showPercentToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showPercentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   circularProgress.textContent = selected ? '0%' : '';
 });
 
@@ -30,7 +30,7 @@ themeSelect.addEventListener('change', ({ detail }) => {
 });
 
 const determinateToggle = document.getElementById('opt-determinate') as ISwitchComponent;
-determinateToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+determinateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   circularProgress.determinate = selected;
 
   showPercentToggle.disabled = !circularProgress.determinate;

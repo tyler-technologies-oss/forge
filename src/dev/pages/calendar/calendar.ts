@@ -7,12 +7,12 @@ import type { ISelectComponent } from '@tylertech/forge/select';
 const calendar = document.querySelector('forge-calendar') as ICalendarComponent;
 
 const showTodayToggle = document.querySelector('#calendar-today') as ISwitchComponent;
-showTodayToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showTodayToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   calendar.showToday = selected;
 });
 
 const readonlyToggle = document.querySelector('#calendar-readonly') as ISwitchComponent;
-readonlyToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+readonlyToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   calendar.readonly = selected;
 });
 

@@ -11,26 +11,26 @@ const showFirstLastToggle = document.getElementById('opt-show-first-last') as IS
 const disabledToggle = document.getElementById('opt-disabled') as ISwitchComponent;
 const alternativeToggle = document.getElementById('opt-alternative') as ISwitchComponent;
 
-showPageSizeOptsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showPageSizeOptsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   paginator.pageSizeOptions = selected ? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS : false;
 });
 
-showLabelToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showLabelToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   paginator.label = selected ? PAGINATOR_CONSTANTS.strings.DEFAULT_LABEL : null;
 });
 
-showFirstToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showFirstToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   paginator.first = selected;
 });
 
-showFirstLastToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showFirstLastToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   paginator.firstLast = selected;
 });
 
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   paginator.disabled = selected;
 });
 
-alternativeToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+alternativeToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   paginator.alternative = selected;
 });

@@ -23,10 +23,10 @@ const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
 const populateButton = document.querySelector('#opt-btn-populate') as HTMLButtonElement;
 const clearButton = document.querySelector('#opt-btn-clear') as HTMLButtonElement;
 
-requiredToggle.addEventListener('forge-switch-select', updateRequiredState);
-invalidToggle.addEventListener('forge-switch-select', updateInvalidState);
-disabledToggle.addEventListener('forge-switch-select', updateDisabledState);
-denseToggle.addEventListener('forge-switch-select', updateDenseState);
+requiredToggle.addEventListener('forge-switch-change', updateRequiredState);
+invalidToggle.addEventListener('forge-switch-change', updateInvalidState);
+disabledToggle.addEventListener('forge-switch-change', updateDisabledState);
+denseToggle.addEventListener('forge-switch-change', updateDenseState);
 populateButton.addEventListener('click', () => populateMembers(45));
 clearButton.addEventListener('click', removeAllMembers);
 

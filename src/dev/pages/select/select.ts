@@ -47,49 +47,49 @@ optLabel.addEventListener('input', () => {
 optPlaceholder.addEventListener('input', () => {
   select.placeholder = optPlaceholder.value;
 });
-optShowLeading.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowLeading.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     select.appendChild(leadingEl);
   } else {
     leadingEl.remove();
   }
 });
-optShowAddonEnd.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowAddonEnd.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     select.appendChild(addonEndEl);
   } else {
     addonEndEl.remove();
   }
 });
-optShowHelperText.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optShowHelperText.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     select.appendChild(helperTextEl);
   } else {
     helperTextEl.remove();
   }
 });
-optMultiple.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optMultiple.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.multiple = selected;
 });
-optFloatLabel.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optFloatLabel.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.floatLabelType = selected ? 'always' : 'auto';
 });
-optRequired.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optRequired.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.required = selected;
 });
-optDisabled.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optDisabled.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.disabled = selected;
 });
-optInvalid.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optInvalid.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.invalid = selected;
 });
-optRounded.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optRounded.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.shape = selected ? 'rounded' : 'default';
 });
-optOptionBuilder.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optOptionBuilder.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.optionBuilder = selected ? optionBuilder : undefined;
 });
-optSelectedTextBuilder.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optSelectedTextBuilder.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
 });
 
