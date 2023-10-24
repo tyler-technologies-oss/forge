@@ -36,15 +36,15 @@ cancelButton.addEventListener('click', () => inlineDialog.hide());
 const closeButton = inlineDialog.querySelector('#close-button');
 closeButton.addEventListener('click', () => inlineDialog.hide());
 
-fullscreenToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+fullscreenToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   inlineDialog.fullscreen = selected;
 });
 
-moveableToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+moveableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   inlineDialog.moveable = selected;
 });
 
-preventMoveToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+preventMoveToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     inlineDialog.addEventListener('forge-dialog-move', onPreventMove);
   } else {
@@ -52,7 +52,7 @@ preventMoveToggle.addEventListener('forge-switch-select', ({ detail: selected })
   }
 });
 
-customPositionToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+customPositionToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   inlineDialog.positionX = selected ? 100 : undefined;
   inlineDialog.positionY = selected ? 100 : undefined;
 });

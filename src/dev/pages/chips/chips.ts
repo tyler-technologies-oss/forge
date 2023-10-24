@@ -44,7 +44,7 @@ refreshButton.addEventListener('click', () => {
 });
 
 // Dense toggling
-chipsDenseToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+chipsDenseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const chipSets = document.querySelectorAll('forge-chip-set') as NodeListOf<IChipSetComponent>;
   for (const chipSet of chipSets) {
     chipSet.dense = selected;
@@ -52,7 +52,7 @@ chipsDenseToggle.addEventListener('forge-switch-select', ({ detail: selected }) 
 });
 
 // Disabled toggling
-chipsDisabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+chipsDisabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const chipSets = document.querySelectorAll('forge-chip-set') as NodeListOf<IChipSetComponent>;
   for (const chipSet of chipSets) {
     chipSet.disabled = selected;

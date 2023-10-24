@@ -78,7 +78,7 @@ appBarSearch.addEventListener('forge-app-bar-search-input', ({ detail }) => {
 });
 
 const useProfileCardBuilderToggle = document.querySelector('#app-bar-profile-card-builder-toggle') as ISwitchComponent;
-useProfileCardBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+useProfileCardBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   appBarProfileButton.profileCardBuilder = selected ? profileCardBuilder : undefined;
 });
 
@@ -113,7 +113,7 @@ function profileCardBuilder(): HTMLElement {
 }
 
 const appBarRaisedToggle = document.querySelector('#app-bar-raised-toggle') as ISwitchComponent;
-appBarRaisedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+appBarRaisedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   appBar.raised = selected;
   pageAppBar.raised = selected;
 });
@@ -135,7 +135,7 @@ appBarThemeSelect.addEventListener('change', () => {
 });
 
 const showAppBarTabsToggle = document.querySelector('#app-bar-show-tabs-toggle') as ISwitchComponent;
-showAppBarTabsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showAppBarTabsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     appBarTabs.style.removeProperty('display');
   } else {

@@ -9,7 +9,7 @@ function getAvatarElements(): NodeListOf<AvatarComponent> {
 }
 
 const autoColorToggle = document.querySelector('#auto-color-checkbox') as ISwitchComponent;
-autoColorToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+autoColorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const avatars = getAvatarElements();
   avatars.forEach(avatar => avatar.autoColor = selected);
 });

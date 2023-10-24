@@ -9,17 +9,17 @@ const stateLayerDemoEl = document.querySelector('.state-layer-demo') as HTMLElem
 const stateLayer = stateLayerDemoEl.querySelector('forge-state-layer') as IStateLayerComponent;
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stateLayer.disabled = selected;
 });
 
 const selectedToggle = document.querySelector('#opt-selected') as ISwitchComponent;
-selectedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+selectedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stateLayerDemoEl.classList.toggle('selected', selected);
 });
 
 const circularToggle = document.querySelector('#opt-circular') as ISwitchComponent;
-circularToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+circularToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stateLayerDemoEl.classList.toggle('circular', selected);
 });
 

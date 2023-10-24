@@ -42,17 +42,17 @@ layoutAlignSelect.addEventListener('change', () => {
 });
 
 const linearToggle = document.querySelector('#opt-linear') as ISwitchComponent;
-linearToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+linearToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stepper.linear = selected;
 });
 
 const alternativeToggle = document.querySelector('#opt-alternative') as ISwitchComponent;
-alternativeToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+alternativeToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stepper.alternative = selected;
 });
 
 const firstStepDisabledToggle = document.querySelector('#opt-first-step-disabled') as ISwitchComponent;
-firstStepDisabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+firstStepDisabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const firstStep = document.querySelector('#stepper-step-one') as IStepComponent;
   firstStep.disabled = selected;
 });
