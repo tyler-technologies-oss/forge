@@ -1,4 +1,19 @@
-@use './theme';
+@use '../core/styles/theme';
+@use '../core/styles/scrollbar';
 
-@include theme.theme-styles;
-@include theme.scrollbar-theme-styles;
+// Temporary theme properties for compatibility with MDC theme tokens
+//
+// TODO: remove this once MDC dependency is removed
+:root {
+  @include theme.properties-compat;
+}
+
+// Root theme properties
+:root {
+  @include theme.properties;
+}
+
+// Custom scrollbar styles
+* {
+  @include scrollbar.base;
+}

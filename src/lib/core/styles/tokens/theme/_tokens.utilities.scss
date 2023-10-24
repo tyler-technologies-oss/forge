@@ -1,5 +1,4 @@
 @use 'sass:map';
-@use '../../utils';
 @use '../../theme/utils' as theme-utils;
 @use './color-emphasis';
 @use './tokens.surface' as surface;
@@ -15,11 +14,7 @@
   $on-surface: map.get($surface-theme, on-surface);
 
   @return (
-    outline: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower)),
-    scrollbar-track: utils.variable-ref(theme, surface-container-low),
-    scrollbar-track-hover: utils.variable-ref(theme, surface-container-low),
-    scrollbar-thumb: utils.variable-ref(theme, surface-container-medium),
-    scrollbar-thumb-hover: utils.variable-ref(theme, surface-container-high)
+    outline: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower))
   );
 }
 

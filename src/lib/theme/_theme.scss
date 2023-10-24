@@ -9,12 +9,7 @@
 @use './keys';
 @use './theme-values';
 @use './theme-utils';
-@use '../core/styles/theme';
-
-@mixin theme-styles($prefix: forge) {
-  @include theme.properties;
-  @include theme-utils.core-styles;
-}
+@use '../core/styles/scrollbar';
 
 @function text-emphasis($emphasis) {
   @return map.get(theme-values.$text-emphasis, $emphasis);
@@ -156,45 +151,8 @@
   ), $important: $important);
 }
 
-@mixin scrollbar() {
-  &::-webkit-scrollbar {
-    @include css-custom-property(width, --forge-scrollbar-width, theme-values.$scrollbar-width);
-    @include css-custom-property(height, --forge-scrollbar-height, theme-values.$scrollbar-height);
-  }
-  
-  &::-webkit-scrollbar-track {
-    background-color: var(--forge-theme-scrollbar-track, var(--forge-theme-surface-container-low));
-    
-    &:hover {
-      background-color: var(--forge-theme-scrollbar-track-hover, var(--forge-theme-surface-container-low));
-    }
-  }
-
-  &::-webkit-scrollbar-corner {
-    background-color: var(--forge-theme-scrollbar-track, var(--forge-theme-surface-container-low));
-  }
-
-  &::-webkit-scrollbar-thumb {
-    @include css-custom-property(height, --forge-scrollbar-min-height, theme-values.$scrollbar-thumb-min-height);
-    @include css-custom-property(width, --forge-scrollbar-min-width, theme-values.$scrollbar-thumb-min-width);
-    @include css-custom-property(border-radius, --forge-scrollbar-border-radius, 9999px);
-    @include css-custom-property(border-width, --forge-scrollbar-border-width, 3px);
-    
-    background-color: var(--forge-theme-scrollbar-thumb, var(--forge-theme-surface-container-medium));
-    border-style: solid;
-    border-color: transparent;
-    background-clip: content-box;
-
-    &:hover {
-      background-color: var(--forge-theme-scrollbar-thumb-hover, var(--forge-theme-surface-container-high));
-    }
-  }
-}
-
-@mixin scrollbar-theme-styles() {
-  * {
-    @include scrollbar;
-  }
+@mixin scrollbar {
+  @include scrollbar.base;
 }
 
 @function elevation($z-value, $color: elevation-theme.$baseline-color, $opacity-boost: 0) {

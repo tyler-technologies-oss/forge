@@ -9,19 +9,8 @@
 /// Emits custom property declarations for all default theme tokens.
 /// 
 @mixin properties {
-  /// Temporary tokens to map the MDC theme to Forge theme
-  /// TODO: Remove this once MDC dependency is removed
-  :root {
-    @each $token-name, $token-value in tokens.$mdc-remap {
-      --mdc-theme-#{$token-name}: #{$token-value};
-    }
-  }
-
-  // Forge theme tokens
-  :root {
-    @each $token-name, $token-value in tokens.$tokens {
-      --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
-    }
+  @each $token-name, $token-value in tokens.$tokens {
+    --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
   }
 }
 
@@ -31,6 +20,17 @@
 @mixin properties-dark {
   @each $token-name, $token-value in tokens.$tokens-dark {
     --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
+  }
+}
+
+///
+/// Temporary tokens to map the MDC theme to Forge theme
+/// 
+/// TODO: Remove this once MDC dependency is removed
+/// 
+@mixin properties-compat {
+  @each $token-name, $token-value in tokens.$mdc-remap {
+    --mdc-theme-#{$token-name}: #{$token-value};
   }
 }
 
