@@ -35,6 +35,20 @@
 }
 
 ///
+/// Generates utility classes for each theme token as both `color` and `background-color` styles separately.
+/// 
+@mixin classes {
+  @each $token, $value in tokens.$tokens {
+    .#{config.$prefix}-color--#{$token} {
+      color: #{variable($token)};
+    }
+    .#{config.$prefix}-background--#{$token} {
+      background-color: #{variable($token)};
+    }
+  }
+}
+
+///
 /// Gets a CSS custom property declaration for a specific theme token, with its token value as the fallback value
 /// 
 @function variable($key, $prefix: config.$prefix) {

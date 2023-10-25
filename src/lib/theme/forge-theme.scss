@@ -17,3 +17,6 @@
 * {
   @include scrollbar.base;
 }
+
+// Utility classes for all theme tokens
+@include theme.classes;
