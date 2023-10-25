@@ -10,11 +10,13 @@ $color-emphasis-scale: (
   '060': 60%,
   '065': 65%,
   '070': 70%,
-  '087': 87%,
+  '080': 80%,
+  '087': 87%
 );
 
 $color-emphasis: (
   highest: map.get($color-emphasis-scale, '087'),
+  inverse: map.get($color-emphasis-scale, '080'),
   higher: map.get($color-emphasis-scale, '070'),
   high: map.get($color-emphasis-scale, '065'),
   medium-high: map.get($color-emphasis-scale, '060'),

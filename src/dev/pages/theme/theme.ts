@@ -18,7 +18,8 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
     swatches: [
       { text: 'Surface', background: 'surface' },
       { text: 'Surface dim (background)', background: 'surface-dim' },
-      { text: 'Surface bright', background: 'surface-bright' }
+      { text: 'Surface bright', background: 'surface-bright' },
+      { text: 'Surface inverse', background: 'surface-inverse', foreground: 'on-surface-inverse' }
     ]
   },
   {

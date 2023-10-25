@@ -15,6 +15,7 @@
   $surface: map.get($theme, surface);
   $on-surface: theme-utils.contrast($surface);
   $surface-tone: color-utils.tone($surface);
+  $surface-inverse: theme-utils.hexify($on-surface, $surface, color-emphasis.value(inverse));
 
   $surface-container: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower));
   $surface-container-low: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lowest));
@@ -23,6 +24,7 @@
 
   @return (
     surface: $surface,
+    surface-inverse: $surface-inverse,
     surface-container: $surface-container,
     surface-container-low: $surface-container-low,
     surface-container-medium: $surface-container-medium,
@@ -31,6 +33,7 @@
     surface-bright: map.get($theme, surface-bright),
     surface-bright-shadow: map.get($theme, surface-bright-shadow),
     on-surface: $on-surface,
+    on-surface-inverse: theme-utils.contrast($surface-inverse),
     on-surface-container: theme-utils.contrast($surface-container),
     on-surface-container-low: theme-utils.contrast($surface-container-low),
     on-surface-container-medium: theme-utils.contrast($surface-container-medium),
