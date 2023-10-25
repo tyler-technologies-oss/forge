@@ -1,0 +1,23 @@
+@use '../../theme';
+@use '../../utils';
+@use './type-utils';
+@use './tokens.core' as core;
+
+// Less important body text
+$body1: utils.inherit-map(core.$base, (
+  font-size: type-utils.font-size-relative(body, font-size, '0875'),
+  line-height: type-utils.font-size-relative(body, line-height, '1125'),
+  letter-spacing: 0.0178571429em
+)) !default;
+
+// Standard body text
+$body2: utils.inherit-map(core.$base, (
+  font-size: type-utils.font-size-relative(body, font-size, '1000'),
+  line-height: type-utils.font-size-relative(body, line-height, '1500'),
+  letter-spacing: 0.03125em
+)) !default;
+
+$tokens: (
+  body1: $body1,
+  body2: $body2
+) !default;

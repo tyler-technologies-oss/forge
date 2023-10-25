@@ -3,7 +3,7 @@ export const CardStyledCodeHtml = () => {
 <div class="demo-card">
   <forge-card>
     <div class="forge-card-header-container">
-      <h3 class="forge-typography--headline6">This is the card title</h3>
+      <h3 class="forge-typography--heading4">This is the card title</h3>
       <forge-icon-button>
         <button type="button">
           <forge-icon name="more_vert"></forge-icon>
@@ -12,7 +12,7 @@ export const CardStyledCodeHtml = () => {
     </div>
 
     <div>
-      <p class="forge-typography--body2">
+      <p>
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias exercitationem doloremque dolorem ullam, nesciunt quia velit necessitatibus numquam quasi voluptates impedit earum dolores repudiandae facilis totam non quo labore itaque?
       </p>
     </div>

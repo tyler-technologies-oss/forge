@@ -17,9 +17,9 @@ $tokens: (
 
   // Supporting text
   supporting-text-color: utils.module-val(list-item, supporting-text-color, theme.variable(text-medium)),
-  supporting-text-font-size: utils.module-val(list-item, supporting-text-font-size, typography.variable(body, font-size)),
-  supporting-text-font-weight: utils.module-val(list-item, supporting-text-font-weight, typography.variable(body, font-weight)),
-  supporting-text-line-height: utils.module-val(list-item, supporting-text-line-height, typography.scale(24)),
+  supporting-text-font-size: utils.module-val(list-item, supporting-text-font-size, typography.variable(body2, font-size)),
+  supporting-text-font-weight: utils.module-val(list-item, supporting-text-font-weight, typography.variable(body2, font-weight)),
+  supporting-text-line-height: utils.module-val(list-item, supporting-text-line-height, typography.scale('1500')),
 
   // Selected
   selected-color: utils.module-val(list-item, selected-color, theme.variable(primary)),

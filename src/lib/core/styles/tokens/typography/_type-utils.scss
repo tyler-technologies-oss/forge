@@ -1,0 +1,20 @@
+@use '../../core/config';
+@use './tokens.core' as core;
+@use './scale';
+
+$module: 'typography' !default;
+$token: 'scale' !default;
+
+///
+/// Creates a style value that is relative to the base font size for the given property.
+/// 
+/// This allows for typography styles to be scaled relative to the root font size, or
+/// relative to a specific CSS custom property if optionally applied. This is useful
+/// when embedding Forge in an application that adjusts the root `font-size` to something
+/// other than `16px` (browser default).
+///
+@function font-size-relative($style, $property, $scale) {
+  $scale-value: scale.value($scale);
+  $var-name: '--#{config.$prefix}-#{$module}-#{$style}-#{$property}-#{$token}';
+  @return calc(#{core.get(font-size)} * var(#{$var-name}, #{$scale-value}));
+}

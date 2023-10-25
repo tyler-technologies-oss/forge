@@ -127,7 +127,7 @@ function buildComponentsList(groups: IComponentGroup[]): HTMLElement[] {
 
   for (const { label: groupLabel, components } of groups) {
     const groupHeader = document.createElement('h3');
-    groupHeader.classList.add('forge-typography--subtitle1-secondary');
+    groupHeader.classList.add('forge-typography--subtitle3');
     groupHeader.textContent = groupLabel;
     elements.push(groupHeader);
 

@@ -39,7 +39,7 @@ export const Default: Story<IPopupProps> = ({
         open={isOpen}
         onDismiss={() => setIsOpen(false)}
         options={{ placement, manageFocus, animationType, offset }}>
-        <div style={{ width: '256px', padding: '16px' }} className="forge-typography--body1">
+        <div style={{ width: '256px', padding: '16px' }}>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum, est iste.
           Tempore iure iste molestias expedita, laboriosam magni a nostrum, ullam molestiae,
           obcaecati dicta ipsam provident aut praesentium eius dolore!

@@ -42,13 +42,13 @@ export const Default: Story<IViewSwitcherProps> = ({
 
         <ForgeViewSwitcher {...viewSwitcherProps} index={index}>
           <ForgeView id="tabpanel-1" aria-labelledby="tab-1" role="tabpanel">
-            <div style={viewStyles} className="forge-typography--body1">View one</div>
+            <div style={viewStyles}>View one</div>
           </ForgeView>
           <ForgeView id="tabpanel-2" aria-labelledby="tab-2" role="tabpanel">
-            <div style={viewStyles} className="forge-typography--body1">View two</div>
+            <div style={viewStyles}>View two</div>
           </ForgeView>
           <ForgeView id="tabpanel-3" aria-labelledby="tab-3" role="tabpanel">
-            <div style={viewStyles} className="forge-typography--body1">View three</div>
+            <div style={viewStyles}>View three</div>
           </ForgeView>
         </ForgeViewSwitcher>
       </div>

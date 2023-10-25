@@ -6,7 +6,7 @@ export const CardScaffoldCodeHtml = () => {
       <h1 slot="start" class="forge-typography--title">Lorem ipsum</h1>
     </forge-toolbar>
 
-    <p slot="body" class="forge-typography--body2" tabindex="0" class="card-content">
+    <p slot="body" tabindex="0" class="card-content">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed
       aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus
       enim sint nesciunt provident excepturi dolorum pariatur illum?
