@@ -38,7 +38,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     this._adapter.removeInputListener('keydown', this._handleKeyDown);
   }
 
-  /** Controls setting the value of entered text on blur. */
+  /** Controls adding a member of entered text on blur. */
   public get addMemberOnBlur(): boolean {
     return this._addMemberOnBlur;
   }
