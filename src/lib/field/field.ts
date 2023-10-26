@@ -15,11 +15,11 @@ export interface IFieldComponent extends IBaseComponent {
 export abstract class FieldComponent<T extends FieldFoundation> extends BaseComponent implements IFieldComponent {
   public static get observedAttributes(): string[] {
     return [
-      FIELD_CONSTANTS.observedAttributes.DENSITY,
-      FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE,
-      FIELD_CONSTANTS.observedAttributes.SHAPE,
-      FIELD_CONSTANTS.observedAttributes.INVALID,
-      FIELD_CONSTANTS.observedAttributes.REQUIRED
+      FIELD_CONSTANTS.attributes.DENSITY,
+      FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE,
+      FIELD_CONSTANTS.attributes.SHAPE,
+      FIELD_CONSTANTS.attributes.INVALID,
+      FIELD_CONSTANTS.attributes.REQUIRED
     ];
   }
 
@@ -47,19 +47,19 @@ export abstract class FieldComponent<T extends FieldFoundation> extends BaseComp
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case FIELD_CONSTANTS.observedAttributes.DENSITY:
+      case FIELD_CONSTANTS.attributes.DENSITY:
         this.density = newValue as FieldDensityType;
         break;
-      case FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE:
+      case FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE:
         this.floatLabelType = newValue as FieldFloatLabelType;
         break;
-      case FIELD_CONSTANTS.observedAttributes.SHAPE:
+      case FIELD_CONSTANTS.attributes.SHAPE:
         this.shape = newValue as FieldShapeType;
         break;
-      case FIELD_CONSTANTS.observedAttributes.INVALID:
+      case FIELD_CONSTANTS.attributes.INVALID:
         this.invalid = coerceBoolean(newValue);
         break;
-      case FIELD_CONSTANTS.observedAttributes.REQUIRED:
+      case FIELD_CONSTANTS.attributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         break;
     }

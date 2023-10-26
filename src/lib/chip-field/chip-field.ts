@@ -36,7 +36,7 @@ declare global {
 export class ChipFieldComponent extends FieldComponent<ChipFieldFoundation> implements IChipFieldComponent {
   public static get observedAttributes(): string[] {
     return [
-      ...Object.values(FIELD_CONSTANTS.observedAttributes),
+      ...Object.values(FIELD_CONSTANTS.attributes),
       CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR
     ];
   }

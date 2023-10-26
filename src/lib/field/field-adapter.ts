@@ -207,7 +207,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   }
 
   public isLabelFloating(): boolean {
-    return this._component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING);
+    return this._component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
   }
 
   public setRoomy(isRoomy: boolean): void {

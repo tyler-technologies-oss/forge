@@ -273,7 +273,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should set dense via attribute', function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'dense');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'dense');
 
       expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.DENSE)).toBeTrue();
     });
@@ -289,7 +289,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should set roomy via attribute', function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'roomy');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'roomy');
 
       expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.ROOMY)).toBeTrue();
     });
@@ -364,7 +364,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should set invalid via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.INVALID, 'true');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.INVALID, 'true');
       await tick();
 
       expect(this.context.component.invalid).toBeTrue();
@@ -383,7 +383,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should set required via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED, 'true');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.REQUIRED, 'true');
       await tick();
 
       expect(this.context.component.required).toBeTrue();
@@ -399,7 +399,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       await tick();
 
       expect(this.context.component.required).toBeFalse();
-      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED)).toBeFalse();
+      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).toBeFalse();
     });
 
     it('should set shape to rounded', async function(this: ITestContext) {
@@ -414,7 +414,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should set rounded shape via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.SHAPE, 'rounded');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.SHAPE, 'rounded');
       await tick();
 
       expect(this.context.component.shape).toBe('rounded');
@@ -433,7 +433,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should set density to dense via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'dense');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'dense');
       await tick();
 
       expect(this.context.component.density).toBe('dense');
@@ -452,7 +452,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     it('should set density to roomy via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'roomy');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'roomy');
       await tick();
 
       expect(this.context.component.density).toBe('roomy');
@@ -838,7 +838,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         await tick();
         this.context.component.required = false;
         expect(!this.context.component.required).withContext('required property should be false').toBeTrue();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED)).withContext('required attribute should not be present').toBeFalse();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).withContext('required attribute should not be present').toBeFalse();
         expect(requiredAsteriskIsDisplayed(this.context.component)).withContext('required asterisk should not be visible').toBeFalse();
       });
 
@@ -847,7 +847,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         this.context.component.required = false;
         await tick();
         this.context.component.required = true;
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED)).withContext('required attribute should be present').toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).withContext('required attribute should be present').toBeTrue();
         expect(this.context.component.required).withContext('required property should be true').toBeTrue();
         expect(requiredAsteriskIsDisplayed(this.context.component)).withContext('required asterisk should be visible').toBeTrue();
       });
@@ -856,18 +856,18 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     describe('API (Attributes) - required', function(this: ITestContext) {
       it('should not display the required asterisk on the label when required attribute is not present', function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.removeAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED);
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED)).withContext('required attribute should not be present').toBeFalse();
+        this.context.component.removeAttribute(FIELD_CONSTANTS.attributes.REQUIRED);
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).withContext('required attribute should not be present').toBeFalse();
         expect(!this.context.component.required).withContext('required property should be false').toBeTrue();
         expect(requiredAsteriskIsDisplayed(this.context.component)).withContext('required asterisk should not be visible').toBeFalse();
       });
 
       it('should display the required asterisk on the label when required property is set to true from false', async function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.removeAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED);
+        this.context.component.removeAttribute(FIELD_CONSTANTS.attributes.REQUIRED);
         await tick();
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED, '');
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED)).withContext('required attribute should be present').toBeTrue();
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.REQUIRED, '');
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).withContext('required attribute should be present').toBeTrue();
         expect(this.context.component.required).withContext('required property should be true').toBeTrue();
         expect(requiredAsteriskIsDisplayed(this.context.component)).withContext('required asterisk should be visible').toBeTrue();
       });
@@ -900,23 +900,23 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     describe('API (attributes) - invalid', function(this: ITestContext) {
       it('should not display the invalid style on the label and helper-text when invalid attribute is set to false', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { helperText: 'Helper text' });
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.INVALID, '');
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.INVALID, '');
         await tick();
-        this.context.component.removeAttribute(FIELD_CONSTANTS.observedAttributes.INVALID);
+        this.context.component.removeAttribute(FIELD_CONSTANTS.attributes.INVALID);
         await tick();
         expect(this.context.component.invalid).withContext('invalid property should be false').toBeFalse();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.INVALID)).withContext('invalid attribute should not be present').toBeFalse();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.INVALID)).withContext('invalid attribute should not be present').toBeFalse();
         // expect(invalidStyleIsDisplayedOnLabel(this.context.component)).withContext('invalid style should not be present on label').toBeFalse();
         expect(invalidStyleIsDisplayedOnHelperText(this.context.component)).withContext('invalid style should not be present on helper-text').toBeFalse();
       });
 
       it('should display the invalid style on the label and helper-text when invalid property is set to true from false', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { helperText: 'Helper text' });
-        this.context.component.removeAttribute(FIELD_CONSTANTS.observedAttributes.INVALID);
+        this.context.component.removeAttribute(FIELD_CONSTANTS.attributes.INVALID);
         await tick();
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.INVALID, '');
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.INVALID, '');
         await tick();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.INVALID)).withContext('invalid attribute should be present').toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.INVALID)).withContext('invalid attribute should be present').toBeTrue();
         expect(this.context.component.invalid).withContext('invalid property should be true').toBeTrue();
         // expect(invalidStyleIsDisplayedOnLabel(this.context.component)).withContext('invalid style should be present on label').toBeTrue();
         expect(invalidStyleIsDisplayedOnHelperText(this.context.component)).withContext('invalid style should be present on helper-text').toBeTrue();
@@ -928,8 +928,8 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { label: 'Test' });
         this.context.component.floatLabelType = 'always';
         await tick();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should be present when label is floating').toBeTrue();
-        expect(this.context.component.getAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE)).withContext('float-label-type attribute should be "always"').toBe('always');
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should be present when label is floating').toBeTrue();
+        expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).withContext('float-label-type attribute should be "always"').toBe('always');
       });
 
       it('should float the label when floatLabelType property is set to "always" after being moved in the DOM', async function(this: ITestContext) {
@@ -937,19 +937,19 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         this.context.component.floatLabelType = 'always';
         await tick();
         
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
 
         const parent = this.context.component.parentElement as HTMLElement;
         this.context.destroy();
         await tick();
 
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).toBeFalse();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeFalse();
 
         parent.appendChild(this.context.component);
         await tick();
 
         expect((this.context.foundation as any)._floatingLabel.isFloating).withContext('label should be floating').toBeTrue();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
       });
 
       it('should not float the label when floatLabelType property is set from "always" to auto (while input has no value)', async function(this: ITestContext) {
@@ -960,35 +960,35 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         this.context.component.floatLabelType = 'auto';
         await tick();
 
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
-        expect(this.context.component.getAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE)).withContext('float-label-type attribute should be "auto"').toBe('auto');
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
+        expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).withContext('float-label-type attribute should be "auto"').toBe('auto');
       });
     });
 
     describe('API (attributes) - float-label-type', function(this: ITestContext) {
       it('should not float the label when float-label-type attribute is not applied (default value)', async function(this: ITestContext) {
         this.context = setupTestContext();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
         expect(this.context.component.floatLabelType).withContext('floatLabelType property should be "auto" by default').toBe('auto');
       });
 
       it('should float the label when float-label-type attribute is set to "always"', async function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE, 'always');
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'always');
         await tick();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should be present when label is floating').toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should be present when label is floating').toBeTrue();
         expect(this.context.component.floatLabelType).withContext('floatLabelType property should be "always"').toBe('always');
       });
 
       it('should not float the label when float-label-type attribute is set from "always" to auto (while input has no value)', async function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE, 'always');
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'always');
         await floatTick();
 
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE, 'auto');
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'auto');
         await tick();
 
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
         expect(this.context.component.floatLabelType).withContext('floatLabelType property should be "auto"').toBe('auto');
       });
     });
@@ -996,23 +996,23 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     describe('API (attributes) - float-label-type', function(this: ITestContext) {
       it('should not display the invalid style on the label and helper-text when invalid attribute is set to false', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { helperText: 'Helper text' });
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.INVALID, '');
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.INVALID, '');
         await tick();
-        this.context.component.removeAttribute(FIELD_CONSTANTS.observedAttributes.INVALID);
+        this.context.component.removeAttribute(FIELD_CONSTANTS.attributes.INVALID);
         await tick();
         expect(!this.context.component.invalid).withContext('invalid property should be false').toBeTrue();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.INVALID)).withContext('invalid attribute should not be present').toBeFalse();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.INVALID)).withContext('invalid attribute should not be present').toBeFalse();
         // expect(invalidStyleIsDisplayedOnLabel(this.context.component)).withContext('invalid style should not be present on label').toBeFalse();
         expect(invalidStyleIsDisplayedOnHelperText(this.context.component)).withContext('invalid style should not be present on helper-text').toBeFalse();
       });
 
       it('should display the invalid style on the label and helper-text when invalid property is set to true from false', async function(this: ITestContext) {
         this.context = setupTestContext(true, {}, { helperText: 'Helper text' });
-        this.context.component.removeAttribute(FIELD_CONSTANTS.observedAttributes.INVALID);
+        this.context.component.removeAttribute(FIELD_CONSTANTS.attributes.INVALID);
         await tick();
-        this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.INVALID, '');
+        this.context.component.setAttribute(FIELD_CONSTANTS.attributes.INVALID, '');
         await tick();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.INVALID)).withContext('invalid attribute should be present').toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.INVALID)).withContext('invalid attribute should be present').toBeTrue();
         expect(this.context.component.invalid).withContext('invalid property should be true').toBeTrue();
         // expect(invalidStyleIsDisplayedOnLabel(this.context.component)).withContext('invalid style should be present on label').toBeTrue();
         expect(invalidStyleIsDisplayedOnHelperText(this.context.component)).withContext('invalid style should be present on helper-text').toBeTrue();
@@ -1054,7 +1054,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         await tick();
         getNativeInput(this.context.component).focus();
         await floatTick();
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should be present when label is floating').toBeTrue();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should be present when label is floating').toBeTrue();
       });
 
       it('should not float label when empty input is blurred', async function(this: ITestContext) {
@@ -1064,7 +1064,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         await tick();
         getNativeInput(this.context.component).blur();
 
-        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
+        expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
       });
     });
 
@@ -1222,7 +1222,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
   describe('With no label', function(this: ITestContext) {
     it('should not apply attributes for a floated label when a label element does not exist', function(this: ITestContext) {
       this.context = setupTestContext(true);
-      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
+      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).withContext('floating attribute should not be present when label is not floating').toBeFalse();
     });
   });
 

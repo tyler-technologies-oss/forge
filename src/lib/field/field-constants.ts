@@ -31,7 +31,12 @@ const observedAttributes = {
   HOST_LABEL_FLOATING: `forge-label-floating`
 };
 
+const attributes = {
+  ...observedAttributes
+};
+
 export const FIELD_CONSTANTS = {
+  attributes,
   observedAttributes,
   observedInputAttributes,
   selectors,

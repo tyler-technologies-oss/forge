@@ -194,7 +194,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context.component.density = 'roomy';
       await floatTick();
 
-      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).toBeTrue();
+      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
       expectFloatingLabelState(this.context, true);
     });
 
@@ -208,7 +208,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       this.context.component.density = 'default';
       await floatTick();
 
-      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.HOST_LABEL_FLOATING)).toBeTrue();
+      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
       expectFloatingLabelState(this.context, true);
     });
 
@@ -278,7 +278,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should set dense via attribute', function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'dense');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'dense');
 
       expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.DENSE)).toBe(true);
     });
@@ -294,7 +294,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should set roomy via attribute', function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'roomy');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'roomy');
 
       expect(this.context.root.classList.contains(FIELD_CONSTANTS.classes.ROOMY)).toBe(true);
     });
@@ -369,7 +369,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should set invalid via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.INVALID, 'true');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.INVALID, 'true');
       await tick();
 
       expect(this.context.component.invalid).toBe(true);
@@ -388,7 +388,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should set required via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED, 'true');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.REQUIRED, 'true');
       await tick();
 
       expect(this.context.component.required).toBe(true);
@@ -404,7 +404,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
       await tick();
 
       expect(this.context.component.required).toBe(false);
-      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED)).toBe(false);
+      expect(this.context.component.hasAttribute(FIELD_CONSTANTS.attributes.REQUIRED)).toBe(false);
     });
 
     it('should set shape to rounded', async function(this: ITestContext) {
@@ -419,7 +419,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should set rounded shape via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.SHAPE, 'rounded');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.SHAPE, 'rounded');
       await tick();
 
       expect(this.context.component.shape).toBe('rounded');
@@ -438,7 +438,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should set density to dense via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'dense');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'dense');
       await tick();
 
       expect(this.context.component.density).toBe('dense');
@@ -457,7 +457,7 @@ describe('TextFieldComponent', function(this: ITestContext) {
     it('should set density to roomy via attribute', async function(this: ITestContext) {
       this.context = setupTestContext();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'roomy');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'roomy');
       await tick();
 
       expect(this.context.component.density).toBe('roomy');

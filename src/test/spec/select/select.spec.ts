@@ -168,7 +168,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.floatLabelType = 'always';
       await floatTick();
       
-      expect(this.context.component.getAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE)).toBe('always');
+      expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE)).toBe('always');
       expect(this.context.component.floatLabelType).toBe('always');
       _expectLabelFloatState(this.context.component, true);
     });
@@ -177,7 +177,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
 
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.FLOAT_LABEL_TYPE, 'always');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, 'always');
       await floatTick();
       
       expect(this.context.component.floatLabelType).toBe('always');
@@ -345,7 +345,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.REQUIRED, 'true');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.REQUIRED, 'true');
       
       expect(this.context.component.required).toBe(true);
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.REQUIRED)).toBe(true);
@@ -375,7 +375,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.INVALID, 'true');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.INVALID, 'true');
       
       expect(this.context.component.invalid).toBe(true);
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.INVALID)).toBe(true);
@@ -398,7 +398,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       this.context.component.density = 'dense';
       
-      expect(this.context.component.getAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY)).toBe('dense');
+      expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.DENSITY)).toBe('dense');
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.DENSE)).toBe(true);
     });
 
@@ -406,7 +406,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'dense');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'dense');
       
       expect(this.context.component.density).toBe('dense');
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.DENSE)).toBe(true);
@@ -418,7 +418,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       this.context.component.density = 'roomy';
       
-      expect(this.context.component.getAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY)).toBe('roomy');
+      expect(this.context.component.getAttribute(FIELD_CONSTANTS.attributes.DENSITY)).toBe('roomy');
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.ROOMY)).toBe(true);
     });
 
@@ -426,7 +426,7 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
       
-      this.context.component.setAttribute(FIELD_CONSTANTS.observedAttributes.DENSITY, 'roomy');
+      this.context.component.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, 'roomy');
       
       expect(this.context.component.density).toBe('roomy');
       expect(this.context.rootElement.classList.contains(FIELD_CONSTANTS.classes.ROOMY)).toBe(true);
