@@ -1215,8 +1215,30 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'false');
         expect(this.context.component.addMemberOnBlur).toBe(false);
       });
-    });
 
+      it('chips should not be added when addMemberOnBlur is set to false and the "Tab" key is pressed', function(this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'false');
+        const listener = jasmine.createSpy('add member listener');
+        this.context.component.addEventListener(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, listener);
+        getNativeInput(this.context.component).value = 'test';
+        dispatchKeydownEvent(getNativeInput(this.context.component), 'Tab');
+        expect(listener).toHaveBeenCalledTimes(0)
+        expect(getNativeInput(this.context.component).value).withContext('the input value should have been cleared').toBe('');
+      });
+
+
+      it('chips should be added when addMemberOnBlur is set to true and the mouse is clicked outside of the input', function(this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'true');
+        const listener = jasmine.createSpy('add member listener');
+        this.context.component.addEventListener(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, listener);
+        getNativeInput(this.context.component).value = 'test';
+        getNativeInput(this.context.component).focus();
+        getNativeInput(this.context.component).blur();
+        expect(listener).toHaveBeenCalledTimes(1)
+      });
+    });
   });
 
   describe('With no label', function(this: ITestContext) {
@@ -1294,5 +1316,10 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     chip.textContent = value;
     component.append(chip);
     return chip;
+  }
+
+  function checkIfAChipWasAdded(component: IChipFieldComponent): number {
+    let test = component.querySelectorAll('forge-chip');
+    return test.length;
   }
 });
