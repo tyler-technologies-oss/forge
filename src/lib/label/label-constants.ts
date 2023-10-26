@@ -6,11 +6,12 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label`
 
 const attributes = {
   FOR: 'for',
-  FREEZE: 'freeze'
+  DYNAMIC: 'dynamic'
 };
 
 const selectors = {
-  ROOT: '.forge-label'
+  ROOT: '.forge-label',
+  SLOT: 'slot'
 };
 
 const labelableChildSelectors = [

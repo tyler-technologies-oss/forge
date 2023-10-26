@@ -1,10 +1,4 @@
 @use '../core/styles/typography';
-@use '../core/styles/utils';
-@use '../core/styles/tokens/label/tokens';
-
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, label);
-}
 
 @mixin host {
   display: inline-block;

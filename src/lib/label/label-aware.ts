@@ -9,8 +9,5 @@ export interface ILabelAware {
  * @returns True if the object is label aware, false otherwise.
  */
 export const isLabelAware = (obj: any): obj is ILabelAware => {
-  return obj.labelClickedCallback &&
-    typeof obj.labelClickedCallback === 'function' &&
-    obj.labelChangedCallback &&
-    typeof obj.labelChangedCallback === 'function';
+  return typeof obj.labelClickedCallback === 'function' && typeof obj.labelChangedCallback === 'function';
 };

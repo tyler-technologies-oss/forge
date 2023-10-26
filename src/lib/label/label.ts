@@ -10,7 +10,7 @@ import style from './label.scss';
 export interface ILabelComponent extends IBaseComponent {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
-  freeze: boolean;
+  dynamic: boolean;
   update(): void;
 }
 
@@ -28,10 +28,10 @@ declare global {
  * 
  * @property {string | null | undefined} for - The id of the associated element.
  * @property {HTMLElement | null | undefined} forElement - The associated element.
- * @property {boolean} freeze - Prevents the label from monitoring changes to its content. Set this if the label's content will never change.
+ * @property {boolean} dynamic - Propagates changes in the label's text content to the associated element.
  * 
  * @attribute {string} for - The id of the associated form component.
- * @attribute {boolean} freeze - Prevents the label from monitoring changes to its content.
+ * @attribute {boolean} dynamic - Propagates changes in the label's text content to the associated element.
  * 
  * @method update - Updates the targetted element with the label's current text content.
  * 
@@ -44,7 +44,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
   public static get observedAttributes(): string[] {
     return [
       LABEL_CONSTANTS.attributes.FOR,
-      LABEL_CONSTANTS.attributes.FREEZE
+      LABEL_CONSTANTS.attributes.DYNAMIC
     ];
   }
 
@@ -69,8 +69,8 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
       case LABEL_CONSTANTS.attributes.FOR:
         this.for = newValue;
         break;
-      case LABEL_CONSTANTS.attributes.FREEZE:
-        this.freeze = coerceBoolean(newValue);
+      case LABEL_CONSTANTS.attributes.DYNAMIC:
+        this.dynamic = coerceBoolean(newValue);
         break;
     }
   }
@@ -82,7 +82,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
   public forElement: HTMLElement | null | undefined;
 
   @FoundationProperty()
-  public freeze: boolean;
+  public dynamic: boolean;
 
   /**
    * Updates the targetted element with the label's current text content.

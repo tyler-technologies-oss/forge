@@ -1,3 +1,4 @@
+import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core';
 import { ILabelComponent } from './label';
 import { ILabelAware, isLabelAware } from './label-aware';
@@ -11,16 +12,19 @@ export interface ILabelAdapter extends IBaseAdapter {
   trySetTarget(value: string | null): void;
   clickTarget(): void;
   updateTargetLabel(): void;
+  addSlotChangeListener(callback: EventListener): void;
   addMutationObserver(callback: MutationCallback): void;
   removeMutationObserver(): void;
 }
 
 export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabelAdapter {
+  private _slotElement: HTMLElement;
   private _targetElement: ILabelAware & HTMLElement | null = null;
   private _mutationObserver?: MutationObserver;
 
   constructor(component: ILabelComponent) {
     super(component);
+    this._slotElement = getShadowElement(component, LABEL_CONSTANTS.selectors.SLOT);
   }
 
   public destroy(): void {
@@ -61,6 +65,10 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
   public updateTargetLabel(): void {
     const value = this._component.innerText.trim();
     this._targetElement?.labelChangedCallback(value);
+  }
+
+  public addSlotChangeListener(callback: EventListener): void {
+    this._slotElement.addEventListener('slotchange', callback);
   }
 
   public addMutationObserver(callback: MutationCallback): void {

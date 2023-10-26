@@ -5,7 +5,7 @@ import { LABEL_CONSTANTS } from './label-constants';
 export interface ILabelFoundation extends ICustomElementFoundation {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
-  freeze: boolean;
+  dynamic: boolean;
   disconnect(): void;
   update(): void;
 }
@@ -14,19 +14,22 @@ export class LabelFoundation implements ILabelFoundation {
   // State
   private _for: string | null | undefined;
   private _forElement: HTMLElement | null | undefined;
-  private _freeze = false;
+  private _dynamic = false;
   private _isConnected = false;
 
   // Listeners
   private readonly _clickListener: EventListener;
+  private readonly _slotChangeListener: EventListener;
   private readonly _mutationCallback: MutationCallback;
 
   constructor(private _adapter: ILabelAdapter) {
     this._clickListener = (evt: PointerEvent) => this._handleClick(evt);
+    this._slotChangeListener = () => this._handleSlotChange();
     this._mutationCallback = () => this._handleMutation();
   }
 
   public initialize(): void {
+    this._adapter.addSlotChangeListener(this._slotChangeListener);
     this._adapter.trySetTarget(null);
     if (this._adapter.hasTargetElement()) {
       this._connect();
@@ -50,13 +53,20 @@ export class LabelFoundation implements ILabelFoundation {
     this._adapter.clickTarget();
   }
 
+  private _handleSlotChange(): void {
+    if (!this._for && !this._forElement) {
+      this._adapter.trySetTarget(null);
+      this._tryConnect();
+    }
+  }
+
   private _handleMutation(): void {
     this._adapter.updateTargetLabel();
   }
 
   private _connect(): void {
     this._adapter.addHostListener('click', this._clickListener);
-    if (!this._freeze) {
+    if (this._dynamic) {
       this._adapter.addMutationObserver(this._mutationCallback);
     }
     this._isConnected = true;
@@ -99,16 +109,16 @@ export class LabelFoundation implements ILabelFoundation {
     }
   }
 
-  public get freeze(): boolean {
-    return this._freeze;
+  public get dynamic(): boolean {
+    return this._dynamic;
   }
-  public set freeze(value: boolean) {
-    if (this._freeze !== value) {
-      this._freeze = value;
-      this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.FREEZE, this._freeze);
-      if (this._freeze) {
+  public set dynamic(value: boolean) {
+    if (this._dynamic !== value) {
+      this._dynamic = value;
+      this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.DYNAMIC, this._dynamic);
+
+      if (!this._dynamic) {
         this._adapter.removeMutationObserver();
-        this._adapter.updateTargetLabel();
       } else if (this._adapter.hasTargetElement()) {
         this._adapter.addMutationObserver(this._mutationCallback);
       }

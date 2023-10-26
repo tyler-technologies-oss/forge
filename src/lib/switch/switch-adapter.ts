@@ -17,6 +17,8 @@ export interface ISwitchAdapter extends IBaseAdapter {
   addRootListener(event: string, callback: EventListener): void;
   addInputSlotListener(callback: EventListener): void;
   detectInputElement(): void;
+  proxyClick(): void;
+  proxyLabel(value: string | null): void;
   syncValue(value: string | null): void;
   syncValidity(hasCustomValidityError: boolean): void;
   setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
@@ -32,6 +34,8 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
   private readonly _stateLayerElement: StateLayerComponent;
   private readonly _inputAdapter: InputAdapter;
   private _forwardObserver?: MutationObserver;
+  private _forwardedAriaLabel?: string;
+  private _labelElementText?: string;
 
   private get _activeInputElement(): HTMLInputElement {
     return this._inputAdapter.el ?? this._inputElement;
@@ -127,6 +131,17 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     }
   }
 
+  public proxyClick(): void {
+    this._activeInputElement.click();
+    // TODO: use `{ focusVisble: false }` when supported.
+    this._activeInputElement.focus();
+  }
+
+  public proxyLabel(value: string | null): void {
+    this._labelElementText = value ?? undefined;
+    this._setAriaLabel();
+  }
+
   public syncValue(value: string | null): void {
     if (value === null) {
       this._component.internals.setFormValue(null, SWITCH_CONSTANTS.state.OFF);
@@ -154,7 +169,20 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
 
   private _initializeForwardObserver(el: HTMLElement): void {
     this._forwardObserver = forwardAttributes(this._component, SWITCH_CONSTANTS.forwardedAttributes, (name, value) => {
+      // Use the connected label element as a fallback if aria-label is removed. Store the value so
+      // it can be used to determine whether an updated label element should take effect.
+      if (name === 'aria-label') {
+        this._forwardedAriaLabel = value ?? undefined;
+        this._setAriaLabel();
+        return;
+      }
+      // Otherwise forward the attribute to the element.
       toggleAttribute(el, !!value, name, value ?? undefined);
     });
+  }
+
+  private _setAriaLabel(): void {
+    const hasAriaLabel = !!this._forwardedAriaLabel || !!this._labelElementText;
+    toggleAttribute(this._activeInputElement, hasAriaLabel, 'aria-label', this._forwardedAriaLabel ?? this._labelElementText);
   }
 }

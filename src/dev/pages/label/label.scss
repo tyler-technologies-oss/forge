@@ -2,3 +2,13 @@ forge-label::part(label) {
   display: flex;
   align-items: center;
 }
+
+.list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+
+  forge-label {
+    width: 100%;
+  }
+}
