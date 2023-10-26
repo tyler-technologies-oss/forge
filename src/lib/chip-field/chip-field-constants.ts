@@ -33,12 +33,12 @@ const attributes = {
 };
 
 export const CHIP_FIELD_CONSTANTS = {
+  attributes,
   elementName,
   classes,
   slots,
   selectors,
-  events,
-  attributes
+  events
 };
 
 export {
