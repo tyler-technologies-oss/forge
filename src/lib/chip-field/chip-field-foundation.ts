@@ -4,11 +4,11 @@ import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
 import { IFieldFoundation, FieldFoundation } from '../field/field-foundation';
 
 export interface IChipFieldFoundation extends IFieldFoundation {
-  setValueOnBlur: boolean;
+  addMemberOnBlur: boolean;
 }
 
 export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFoundation {
-  private _setValueOnBlur = false;
+  private _addMemberOnBlur = false;
   private _memberSlotListener: () => void;
   private _inputContainerMouseDownListener: (evt: MouseEvent) => void;
   private _handleRootKeyDown: (event: KeyboardEvent) => void;
@@ -39,14 +39,14 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
   }
 
   /** Controls setting the value of entered text on blur. */
-  public get setValueOnBlur(): boolean {
-    return this._setValueOnBlur;
+  public get addMemberOnBlur(): boolean {
+    return this._addMemberOnBlur;
   }
-  public set setValueOnBlur(value: boolean) {
+  public set addMemberOnBlur(value: boolean) {
     value = Boolean(value);
-    if (this._setValueOnBlur !== value) {
-      this._setValueOnBlur = value;
-      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, this._setValueOnBlur);
+    if (this._addMemberOnBlur !== value) {
+      this._addMemberOnBlur = value;
+      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, this._addMemberOnBlur);
     }
   }
 
@@ -58,7 +58,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
 
   protected _onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
-    if (this.setValueOnBlur) {
+    if (this.addMemberOnBlur) {
       this._addMember(input);
       super._onBlur(event);
       return;
@@ -102,7 +102,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
         input.value = '';
         break;
       case 'Tab':
-        if (this.setValueOnBlur) {
+        if (this.addMemberOnBlur) {
           this._addMember(input);
           break;
         } else {

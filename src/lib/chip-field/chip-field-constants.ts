@@ -29,7 +29,7 @@ const events = {
 };
 
 const attributes = {
-  SET_VALUE_ON_BLUR: 'set-value-on-blur'
+  ADD_MEMBER_ON_BLUR: 'add-member-on-blur'
 };
 
 export const CHIP_FIELD_CONSTANTS = {

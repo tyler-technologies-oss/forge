@@ -82,15 +82,15 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       expect(this.context.foundation['_isInitialized']).toBeTrue();
     });
 
-    it('should set the setValueOnBlur property to false when the attribute is not applied', function(this: ITestContext) {
+    it('should set the addMemberOnBlur property to false when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
-      expect(this.context.component.setValueOnBlur).toBe(false);
+      expect(this.context.component.addMemberOnBlur).toBe(false);
     });
 
-    it('should set the setValueOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
+    it('should set the addMemberOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, 'true');
-      expect(this.context.component.setValueOnBlur).toBe(true);
+      this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'true');
+      expect(this.context.component.addMemberOnBlur).toBe(true);
     });
 
 
@@ -1204,16 +1204,16 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         expect(inputIsActive).toBeTrue();
       });
 
-      it('should set the setValueOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
+      it('should set the addMemberOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, 'true');
-        expect(this.context.component.setValueOnBlur).toBe(true);
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'true');
+        expect(this.context.component.addMemberOnBlur).toBe(true);
       });
   
-      it('should set the setValueOnBlur property to false when the attribute is set to false', function(this: ITestContext) {
+      it('should set the addMemberOnBlur property to false when the attribute is set to false', function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.SET_VALUE_ON_BLUR, 'false');
-        expect(this.context.component.setValueOnBlur).toBe(false);
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'false');
+        expect(this.context.component.addMemberOnBlur).toBe(false);
       });
     });
 
