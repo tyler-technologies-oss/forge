@@ -73,11 +73,18 @@ export class CheckboxFoundation implements ICheckboxFoundation {
       return;
     }
 
-    this._adapter.redispatchEvent(evt);
-
     const target = evt.target as HTMLInputElement;
+    const oldValue = this._checked;
     const newValue = target.checked;
     this._checked = newValue;
+
+    const isCancelled = !this._adapter.redispatchEvent(evt, { cancelable: true });
+    if (isCancelled) {
+      this._checked = oldValue;
+      this._adapter.setChecked(this._checked);
+      return;
+    }
+
     this._adapter.syncValue(this._submittedValue, this._formState);
     this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
 
