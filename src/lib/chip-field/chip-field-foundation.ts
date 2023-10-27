@@ -3,9 +3,12 @@ import { IChipFieldAdapter } from './chip-field-adapter';
 import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
 import { IFieldFoundation, FieldFoundation } from '../field/field-foundation';
 
-export interface IChipFieldFoundation extends IFieldFoundation {}
+export interface IChipFieldFoundation extends IFieldFoundation {
+  addOnBlur: boolean;
+}
 
 export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFoundation {
+  private _addOnBlur = false;
   private _memberSlotListener: () => void;
   private _inputContainerMouseDownListener: (evt: MouseEvent) => void;
   private _handleRootKeyDown: (event: KeyboardEvent) => void;
@@ -35,6 +38,18 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     this._adapter.removeInputListener('keydown', this._handleKeyDown);
   }
 
+  /** Controls adding a member of entered text on blur. */
+  public get addOnBlur(): boolean {
+    return this._addOnBlur;
+  }
+  public set addOnBlur(value: boolean) {
+    value = Boolean(value);
+    if (this._addOnBlur !== value) {
+      this._addOnBlur = value;
+      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, this._addOnBlur);
+    }
+  }
+
   private _onInputContainerMouseDown(evt: MouseEvent): void {
     evt.preventDefault();
     this._adapter.focusInput();
@@ -43,6 +58,11 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
 
   protected _onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
+
+    if (this._addOnBlur) {
+      this._addMember(input);
+    }
+
     input.value = '';
     super._onBlur(event);
   }
@@ -79,8 +99,12 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
         break;
       case 'Esc':
       case 'Escape':
-      case 'Tab':
         input.value = '';
+        break;
+      case 'Tab':
+        if (!this._addOnBlur) {
+          input.value = '';
+        }
         break;
       default:
         break;
@@ -152,7 +176,6 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     if (cleanInputValue && cleanInputValue.length > 0) {
       this._adapter.emitHostEvent(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, cleanInputValue);
     }
-
     input.value = '';
   }
 
