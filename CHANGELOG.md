@@ -1,3 +1,22 @@
+# v2.20.0 (Fri Oct 27 2023)
+
+#### 🚀 Enhancement
+
+- feat(chip field): add member on blur [#408](https://github.com/tyler-technologies-oss/forge/pull/408) ([@nickonometry](https://github.com/nickonometry) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(paginator): fix focus management to properly account for state updates while the element is already focused [#415](https://github.com/tyler-technologies-oss/forge/pull/415) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(table): sortable column headers will now use `<button>` element for a11y purposes [#416](https://github.com/tyler-technologies-oss/forge/pull/416) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(select): fixed a bug where options that contain leading whitespace could not be selected via keyboard filtering [#414](https://github.com/tyler-technologies-oss/forge/pull/414) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Nick Andrews ([@nickonometry](https://github.com/nickonometry))
+
+---
+
 # v2.19.1 (Thu Oct 19 2023)
 
 #### 🐛 Bug Fix
