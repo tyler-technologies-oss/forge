@@ -1,59 +1,50 @@
 @use '../../utils';
-@use '../../theme';
 @use './scale';
 @use './weight';
 @use './type-utils';
 @use './tokens.core' as core;
-@use './tokens.heading' as heading;
 
-$subheading1: utils.inherit-map(heading.$heading1, (
+$subheading1: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(subheading1, font-size, '0875'),
   font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading1, line-height, '1125')
 )) !default;
 
-$subheading2: utils.inherit-map(heading.$heading2, (
+$subheading2: utils.inherit-map($subheading1, (
   font-size: type-utils.font-size-relative(subheading2, font-size, '1000'),
-  font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading2, line-height, '1250')
 )) !default;
 
-$subheading3: utils.inherit-map(heading.$heading3, (
+$subheading3: utils.inherit-map($subheading2, (
   font-size: type-utils.font-size-relative(subheading3, font-size, '1125'),
-  font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading3, line-height, '1375')
 )) !default;
 
-$subheading4: utils.inherit-map(heading.$heading4, (
+$subheading4: utils.inherit-map($subheading3, (
   font-size: type-utils.font-size-relative(subheading4, font-size, '1250'),
-  font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading4, line-height, '1500')
 )) !default;
 
-$subheading5: utils.inherit-map(heading.$heading5, (
+$subheading5: utils.inherit-map($subheading4, (
   font-size: type-utils.font-size-relative(subheading5, font-size, '1500'),
-  font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading5, line-height, '1750'),
   letter-spacing: type-utils.calc-letter-spacing(0, scale.value('1500'))
 )) !default;
 
-$subheading6: utils.inherit-map(heading.$heading6, (
+$subheading6: utils.inherit-map($subheading5, (
   font-size: type-utils.font-size-relative(subheading6, font-size, '1750'),
-  font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading6, line-height, '2125'),
   letter-spacing: type-utils.calc-letter-spacing(0, scale.value('1750'))
 )) !default;
 
-$subheading7: utils.inherit-map(heading.$heading7, (
+$subheading7: utils.inherit-map($subheading6, (
   font-size: type-utils.font-size-relative(subheading7, font-size, '2000'),
-  font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading7, line-height, '2500'),
   letter-spacing: type-utils.calc-letter-spacing(-0.05, scale.value('2000'))
 )) !default;
 
-$subheading8: utils.inherit-map(heading.$heading8, (
+$subheading8: utils.inherit-map($subheading7, (
   font-size: type-utils.font-size-relative(subheading8, font-size, '2250'),
-  font-weight: weight.value(regular),
   line-height: type-utils.font-size-relative(subheading8, line-height, '2625'),
   letter-spacing: type-utils.calc-letter-spacing(-0.1, scale.value('2250'))
 )) !default;
