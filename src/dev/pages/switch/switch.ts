@@ -9,6 +9,6 @@ IconRegistry.define([
   tylIconEmoticonSad
 ]);
 
-// const preventSwitch = document.getElementById('prevent-switch') as ISwitchComponent;
+const preventSwitch = document.getElementById('prevent-switch') as ISwitchComponent;
 
-// preventSwitch.addEventListener('forge-switch-change', (evt: CustomEvent) => evt.preventDefault());
+preventSwitch.addEventListener('forge-switch-change', (evt: CustomEvent) => evt.preventDefault());

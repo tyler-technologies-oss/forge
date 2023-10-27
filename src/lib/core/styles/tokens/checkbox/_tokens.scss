@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use '../color-palette';
 @use '../../animation';
+@use '../../border';
 @use '../../elevation';
 @use '../../shape';
 @use '../../theme';
@@ -10,7 +11,7 @@ $tokens: (
   // Shared
   primary-color: utils.module-val(checkbox, primary-color, theme.variable(tertiary)),
   size: utils.module-val(checkbox, size, 16px),
-  border-width: utils.module-val(checkbox, border-width, 2px),
+  border-width: utils.module-val(checkbox, border-width, border.variable(medium)),
   icon-color: utils.module-val(checkbox, icon-color, theme.variable(on-tertiary)),
   state-layer-size: utils.module-val(checkbox, state-layer-size, 40px),
   state-layer-dense-size: utils.module-val(checkbox, state-layer-size, 24px),
