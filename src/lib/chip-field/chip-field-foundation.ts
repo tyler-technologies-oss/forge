@@ -58,11 +58,11 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
 
   protected _onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
-    if (this.addMemberOnBlur) {
+
+    if (this._addMemberOnBlur) {
       this._addMember(input);
-      super._onBlur(event);
-      return;
     }
+
     input.value = '';
     super._onBlur(event);
   }
@@ -176,7 +176,6 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     if (cleanInputValue && cleanInputValue.length > 0) {
       this._adapter.emitHostEvent(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, cleanInputValue);
     }
-
     input.value = '';
   }
 
