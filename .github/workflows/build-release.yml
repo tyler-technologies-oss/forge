@@ -20,7 +20,7 @@ on:
       - 'src/**/*'
   workflow_dispatch:
 
-concurrency: build-release-${{ github.ref }}
+concurrency: build-release
 
 jobs:
   ## Gather configuration required by other jobs

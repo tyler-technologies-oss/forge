@@ -332,8 +332,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.DISABLED)).toBe(true);
+
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.DISABLED)).toBe(true);
     });
 
     it(`should have selected class when option is set to selected and persistSelection is true`, async function(this: ITestContext) {
@@ -344,8 +344,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.SELECTED)).toBe(true);
+
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(true);
     });
 
     it(`should not have selected class when option is set to selected and persistSelection is false`, async function(this: ITestContext) {
@@ -356,8 +356,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.options = options;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.SELECTED)).toBe(false);
+
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
 
     it(`should not have selected class when option is set to selected and persistSelection is switched from true to false`, async function(this: ITestContext) {
@@ -370,8 +370,8 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.persistSelection = false;
       this.context.component.open = true;
       await timer(300);
-      const listItemHost = getShadowElement(getPopupListItem(5), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      expect(listItemHost.classList.contains(LIST_ITEM_CONSTANTS.classes.SELECTED)).toBe(false);
+
+      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED)).toBe(false);
     });
 
     it('should use option builder', async function(this: ITestContext) {
@@ -447,8 +447,7 @@ describe('MenuComponent', function(this: ITestContext) {
         await timer(300);
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
-        const listItem = getShadowElement(getPopupListItem(0), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-        expect(listItem.classList.contains(LIST_ITEM_CONSTANTS.classes.ACTIVE)).toBe(true);
+        expect(getPopupListItem(0).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });
 
       it('arrow up from the start should activate the last list element', async function(this: ITestContext) {
@@ -459,8 +458,7 @@ describe('MenuComponent', function(this: ITestContext) {
         await timer(300);
         this.context.getToggleElement().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
 
-        const listItem = getShadowElement(getPopupListItem(6), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-        expect(listItem.classList.contains(LIST_ITEM_CONSTANTS.classes.ACTIVE)).toBe(true);
+        expect(getPopupListItem(6).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });
 
       it('enter should select the list element when persistSelection is true', async function(this: ITestContext) {
@@ -571,7 +569,7 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.open = true;
         await timer(300);
         
-        getShadowElement(getPopupListItem(0), LIST_ITEM_CONSTANTS.selectors.LIST_ITEM).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+        getPopupListItem(0).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
         await timer(300);
 
@@ -684,7 +682,7 @@ describe('MenuComponent', function(this: ITestContext) {
       await tick();
 
       const childMenuListItems = getChildMenuListItems(getPopupElement());
-      childMenuListItems[1].shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.LIST_ITEM)!.dispatchEvent(new MouseEvent('click'));
+      childMenuListItems[1].dispatchEvent(new MouseEvent('click'));
 
       expect(selectSpy).toHaveBeenCalledTimes(1);
       expect(selectSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: { index: 1, value: EXPETED_SELECTION_VALUE, parentValue: options[1].value }}));

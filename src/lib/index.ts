@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright (c) 2022 Tyler Technologies, Inc.
+ * Copyright (c) 2024 Tyler Technologies, Inc.
  * License: Apache-2.0
  */
 
@@ -78,6 +78,7 @@ import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
 import { IconComponent } from './icon';
 import { SelectDropdownComponent } from './select/select-dropdown';
 import { StackComponent } from './stack';
+import { ButtonAreaComponent } from './button-area';
 
 export * from './accordion';
 export * from './app-bar';
@@ -89,6 +90,7 @@ export * from './banner';
 export * from './bottom-sheet';
 export * from './busy-indicator';
 export * from './button';
+export * from './button-area';
 export * from './button-toggle';
 export * from './calendar';
 export * from './card';
@@ -155,6 +157,7 @@ const CUSTOM_ELEMENTS = [
   BottomSheetComponent,
   BusyIndicatorComponent,
   ButtonComponent,
+  ButtonAreaComponent,
   ButtonToggleComponent,
   ButtonToggleGroupComponent,
   CalendarComponent,

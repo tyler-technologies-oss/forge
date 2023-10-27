@@ -58,7 +58,7 @@ declare global {
  * 
  * @method {(force?: boolean) => void} toggle - Toggles whether the checkbox is is checked or forces a checked state.
  *  
- * @event change {CustomEvent} - Dispatches when the switch's value changes.
+ * @event {Event} change - Dispatches when the checkbox is checked or unchecked.
  * 
  * @cssproperty --forge-theme-tertiary - The primary color of the checkbox.
  * @cssproperty --forge-theme-on-tertiary - The color of the checkmark and indeterminate mark.

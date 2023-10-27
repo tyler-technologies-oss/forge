@@ -1,9 +1,9 @@
 @use '@material/ripple/ripple' as mdc-ripple;
 @use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '@material/theme/theme' as mdc-theme;
 @use '@material/typography/typography' as mdc-typography;
 @use '../../theme';
 @use '../../theme/theme-values';
-@use '../../list/list-item/mixins' as list-item;
 @use './variables';
 
 @mixin core-styles() {
@@ -225,7 +225,7 @@
 }
 
 @mixin list-item() {
-  @include list-item.interactable;
+  @include _deprecated-interactable;
 
   display: flex;
   align-items: center;
@@ -409,6 +409,52 @@
 
     to {
       transform: translateX(100%);
+    }
+  }
+}
+
+@mixin _deprecated-interactable() {
+  @include mdc-ripple.surface;
+  @include mdc-ripple.radius-bounded;
+  @include mdc-ripple-theme.states(on-surface);
+  @include mdc-ripple-theme.states-activated(primary);
+  @include mdc-ripple-theme.states-selected(primary);
+
+  &--selected:focus:hover.mdc-ripple-upgraded--background-focused:not(.mdc-ripple-upgraded--foreground-activation)::before {
+    opacity: mdc-ripple-theme.states-opacity(primary, activated) + mdc-ripple-theme.states-opacity(primary, focus) +
+      mdc-ripple-theme.states-opacity(primary, hover);
+  }
+
+  &:focus,
+  &--active {
+    &:not(.forge-list-item--selected):not(.forge-list-item--activated):not(.mdc-ripple-upgraded--foreground-activation) {
+      &::before {
+        opacity: mdc-ripple-theme.states-opacity(primary, focus);
+      }
+      &:hover {
+        &::before {
+          opacity: mdc-ripple-theme.states-opacity(primary, focus) + mdc-ripple-theme.states-opacity(primary, hover);
+        }
+      }
+
+      &::before,
+      &::after {
+        @include mdc-theme.property(background-color, on-surface);
+      }
+    }
+  }
+
+  &--active:focus {
+    &.forge-list-item--selected.forge-list-item--activated:not(.mdc-ripple-upgraded--foreground-activation) {
+      &::before {
+        opacity: mdc-ripple-theme.states-opacity(primary, focus) + mdc-ripple-theme.states-opacity(primary, activated);
+      }
+      &:hover {
+        &::before {
+          opacity: mdc-ripple-theme.states-opacity(primary, focus) + mdc-ripple-theme.states-opacity(primary, hover) +
+            mdc-ripple-theme.states-opacity(primary, activated);
+        }
+      }
     }
   }
 }

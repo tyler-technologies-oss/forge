@@ -5,7 +5,7 @@ export interface IFloatingLabel {
   isFloating: boolean;
   float(float: boolean, alwaysFloat?: boolean): void;
   getWidth(): number;
-  destroy(): void;
+  destroy(opts?: { cancelFloat?: boolean }): void;
 }
 
 export class FloatingLabel implements IFloatingLabel {
@@ -21,8 +21,8 @@ export class FloatingLabel implements IFloatingLabel {
     return this._foundation.isFloating;
   }
 
-  public destroy(): void {
-    this._foundation.disconnect();
+  public destroy({ cancelFloat = false } = {}): void {
+    this._foundation.disconnect({ cancelFloat });
     this._labelElement = undefined as any;
   }
 

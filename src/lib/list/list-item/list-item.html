@@ -2,13 +2,17 @@
   <div class="forge-list-item" tabindex="0" part="root">
     <slot name="leading"></slot>
     <slot name="avatar"></slot>
-    <div class="forge-list-item__text" part="text-container">
+    <div class="text-container" part="text-container">
       <slot></slot>
       <slot name="title"></slot>
+      <slot name="primary-text"></slot>
       <slot name="subtitle"></slot>
+      <slot name="secondary-text"></slot>
+      <slot name="tertiary-text"></slot>
       <slot name="tertiary-title"></slot>
-      <slot></slot>
     </div>
     <slot name="trailing"></slot>
+    <forge-state-layer exportparts="surface:state-layer__surface"></forge-state-layer>
+    <forge-focus-indicator exportparts="indicator:focus-indicator__indicator" inward></forge-focus-indicator>
   </div>
 </template>

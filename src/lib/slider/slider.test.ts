@@ -9,7 +9,6 @@ import { SLIDER_CONSTANTS } from './slider-constants';
 import type { IStateLayerComponent } from '../state-layer/state-layer';
 
 import './slider';
-import { STATE_LAYER_CONSTANTS } from '../state-layer';
 
 class SliderHarness extends TestHarness<ISliderComponent> {
   public rootElement: HTMLElement;

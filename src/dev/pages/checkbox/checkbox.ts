@@ -33,3 +33,8 @@ exposeInputToggle.addEventListener('forge-switch-change', ({ detail: selected })
 document.querySelectorAll('forge-checkbox').forEach(checkbox => {
   checkbox.addEventListener('change', evt => console.log(evt));
 });
+
+const preventCheckbox = document.getElementById('prevent-checkbox') as ICheckboxComponent;
+preventCheckbox.addEventListener('change', (evt: Event) => {
+  evt.preventDefault();
+});

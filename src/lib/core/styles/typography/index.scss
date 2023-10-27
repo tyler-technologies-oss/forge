@@ -1,7 +1,11 @@
 @use 'sass:map';
 @use 'sass:list';
 @use '../core/config';
+@use '../utils';
+@use '../theme';
 @use '../tokens/typography/tokens';
+@use '../tokens/typography/scale';
+@use '../tokens/typography/tokens.core' as core;
 
 @forward '../tokens/typography/tokens';
 
@@ -15,7 +19,7 @@
 /// 
 /// Allows for providing an optional list of tokens to exclude from the output:
 /// ```scss
-/// @include style(title, [font-family font-size]);
+/// @include style(title, $exclude: [font-family font-size]);
 /// ```
 /// 
 @mixin style($style, $exclude: null) {
@@ -26,8 +30,7 @@
     line-height: _get-style-value($style, line-height),
     letter-spacing: _get-style-value($style, letter-spacing),
     text-transform: _get-style-value($style, text-transform),
-    text-decoration: _get-style-value($style, text-decoration),
-    color: _get-style-value($style, color)
+    text-decoration: _get-style-value($style, text-decoration)
   );
 
   -moz-osx-font-smoothing: grayscale;
@@ -41,13 +44,35 @@
 }
 
 ///
+/// Gets a CSS custom property declaration for a specific typography style token, with its token value as the fallback value.
+/// 
+@function variable($style, $token, $prefix: config.$prefix) {
+  @return _get-style-value($style, $token);
+}
+
+///
+/// Gets the value of a typography scale token.
+/// 
+@function scale($scale) {
+  @return #{scale.value($scale)}rem;
+}
+
+@mixin ellipse {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+///
 /// Sets base typography styles.
 /// 
 @mixin base {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: map.get(tokens.$base, font-family);
-  color: map.get(tokens.$base, color);
+  font-family: core.get(font-family);
+  color: theme.variable(text-high);
+
+  @include style(body2);
 }
 
 ///
@@ -106,7 +131,7 @@
 /// ```
 /// 
 @function font-size-relative($scale) {
-  @return calc(#{map.get(tokens.$base, font-size)} * #{$scale});
+  @return calc(#{core.get(font-size)} * #{$scale});
 }
 
 @function _get-style-value($style, $token) {

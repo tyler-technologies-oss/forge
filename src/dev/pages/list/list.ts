@@ -8,7 +8,7 @@ import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/drawer';
 import './list.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconBluetooth, tylIconCode, tylIconDataUsage, tylIconFace, tylIconInfo, tylIconWifi } from '@tylertech/tyler-icons/standard';
+import { tylIconBluetooth, tylIconCode, tylIconDataUsage, tylIconFace, tylIconInfo, tylIconWifi, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 
 IconRegistry.define([
   tylIconWifi,
@@ -16,5 +16,6 @@ IconRegistry.define([
   tylIconDataUsage,
   tylIconInfo,
   tylIconCode,
-  tylIconFace
+  tylIconFace,
+  tylIconOpenInNew
 ]);

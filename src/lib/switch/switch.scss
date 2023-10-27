@@ -22,20 +22,6 @@
 
   .container {
     @include core.container;
-
-    &:active {
-      .track {
-        @include core.track-active;
-      }
-  
-      .handle {
-        @include core.handle-active;
-  
-        .icon {
-          @include core.icon-active;
-        }
-      }
-    }
   }
 
   .input {
@@ -78,22 +64,6 @@
 
 // On
 :host([on]) {
-  .container {
-    &:active {
-      .track {
-        @include core.track-active-on;
-      }
-  
-      .handle {
-        @include core.handle-active-on;
-  
-        .icon {
-          @include core.icon-active-on;
-        }
-      }
-    }
-  }
-
   .track {
     @include core.track-on;
   }
@@ -117,6 +87,42 @@
     @include state-layer.provide-theme((
       color: var(--_state-layer-on-color)
     ));
+  }
+}
+
+// Active
+:host(:not([disabled]):not([readonly])) {
+  .forge-switch {
+    .container:active {
+      .track {
+        @include core.track-active;
+      }
+  
+      .handle {
+        @include core.handle-active;
+  
+        .icon {
+          @include core.icon-active;
+        }
+      }
+    }
+  }
+}
+:host(:not([disabled]):not([readonly])[on]) {
+  .forge-switch {
+    .container:active {
+      .track {
+        @include core.track-active-on;
+      }
+  
+      .handle {
+        @include core.handle-active-on;
+  
+        .icon {
+          @include core.icon-active-on;
+        }
+      }
+    }
   }
 }
 

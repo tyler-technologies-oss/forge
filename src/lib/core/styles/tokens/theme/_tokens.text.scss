@@ -1,0 +1,33 @@
+@use 'sass:map';
+@use '../../theme/utils' as theme-utils;
+@use './color-emphasis';
+@use './tokens.surface' as surface;
+
+///
+/// Computes the text theme colors.
+/// 
+/// @param {Color} $surface-theme - The base surface theme
+/// @return {Map} - The computed text theme
+/// 
+@function get-text-theme($surface-theme) {
+  $surface: map.get($surface-theme, surface);
+  $text: theme-utils.contrast($surface);
+  $text-inverse: theme-utils.contrast($text);
+
+  @return (
+    text-high: theme-utils.emphasized($text, color-emphasis.value(highest)),
+    text-high-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(highest)),
+    text-medium: theme-utils.emphasized($text, color-emphasis.value(medium)),
+    text-medium-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(medium)),
+    text-low: theme-utils.emphasized($text, color-emphasis.value(medium-low)),
+    text-low-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(medium-low)),
+    text-lowest: theme-utils.emphasized($text, color-emphasis.value(lowest)),
+    text-lowest-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(lowest)),
+  );
+}
+
+// Light
+$tokens: get-text-theme(surface.$tokens);
+
+// Dark
+$tokens-dark: get-text-theme(surface.$tokens-dark);

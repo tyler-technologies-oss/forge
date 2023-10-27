@@ -7,7 +7,7 @@ $tokens: (
   padding: utils.module-val(circular-progress, padding, 0),
   track-width: utils.module-val(circular-progress, track-width, 12),
   track-color: utils.module-val(circular-progress, track-color, theme.variable(tertiary)),
-  track-background: utils.module-val(circular-progress, track-background, theme.variable(track-color)),
+  track-background: utils.module-val(circular-progress, track-background, theme.variable(surface-container)),
   arc-duration: utils.module-val(circular-progress, arc-duration, 1333ms)
 ) !default;
 

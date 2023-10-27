@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:math';
 @use './core/config';
 
 ///
@@ -9,23 +10,69 @@
   @if not $value {
     @error 'Invalid #{$module} token: #{$key}';
   }
-  @return _create-var($module, $key, $value, $prefix);
+  @return create-var($module, $key, $value, $prefix);
 }
 
 ///
-/// Creates a CSS custom property declaration for a token in the provided module
+/// Creates a CSS custom property reference for a token in the provided module
 /// referencing an existing module token variable as the fallback.
 /// 
-@function module-ref($module, $token, $ref-token, $prefix: config.$prefix) {
-  @return _create-var($module, $token, var(--_#{$ref-token}), $prefix);
+/// To provide a module reference variable with a different fallback value, set the
+/// $type parameter to `value` and `$value` will be used verbatim.
+/// 
+/// Example:
+/// ```scss
+/// $my-token: module-ref(comp, color, primary-color); // => var(--forge-comp-color, var(--_primary-color));
+/// ```
+/// 
+@function module-ref($module, $token, $value, $type: ref, $prefix: config.$prefix) {
+  $fallback: if($type == ref, module-var($value), $value);
+  @return create-var($module, $token, $fallback, $prefix);
 }
 
 ///
-/// Creates a CSS custom property declaration for a module token using the
+/// Gets a module token CSS variable.
+/// 
+@function module-var($token, $prefix: config.$prefix) {
+  @return var(--_#{$token});
+}
+
+///
+/// Creates a CSS custom property reference for a module token using the
 /// provided value as the variable fallback.
 /// 
+/// Example:
+/// ```scss
+/// $my-token: module-val(comp, color, red); // => var(--forge-comp-color, red);
+/// $my-other-token: module-val(comp, color, theme.variable(primary)); // => var(--forge-comp-color, var(--forge-theme-primary));
+/// ```
+/// 
 @function module-val($module, $token, $value, $prefix: config.$prefix) {
-  @return _create-var($module, $token, $value, $prefix);
+  @return create-var($module, $token, $value, $prefix);
+}
+
+///
+/// Creates a CSS custom property variable reference for a token in the provided module.
+/// 
+/// Example:
+/// ```scss
+/// $my-var: variable-ref(theme, color); // => var(--forge-theme-color);
+/// ```
+///
+@function variable-ref($module, $token, $value: null, $prefix: config.$prefix) {
+  @return create-var($module, $token, $value, $prefix);
+}
+
+///
+/// Creates a CSS custom property variable reference for a token in the provided module.
+/// 
+/// Example:
+/// ```scss
+/// $my-var: variable-ref(theme, color); // => var(--forge-theme-color);
+/// ```
+///
+@function variable-ref($module, $token, $value: null, $prefix: config.$prefix) {
+  @return create-var($module, $token, $value, $prefix);
 }
 
 ///
@@ -37,22 +84,49 @@
     @if not map.get($module-tokens, $token-name) {
       @error 'Invalid token "#{$token-name}" for module "#{$module}"';
     }
-    --#{$prefix}-#{$module}-#{$token-name}: #{$token-value};
+    @include declare-var($module, $token-name, $token-value, $prefix);
   }
 }
 
 ///
 /// Creates a new map by inheriting from a base map and overriding/adding values.
-/// 
+///
 @function inherit-map($base, $overrides) {
   @return map.merge($base, $overrides);
 }
 
-
 ///
-/// Creates a CSS custom property declaration for a module token, using the provided fallback value.
+/// Creates a CSS custom property reference for a module token, using the provided fallback value.
 /// 
-@function _create-var($module, $token, $value, $prefix: config.$prefix) {
+@function create-var($module, $token, $value: null, $prefix: config.$prefix) {
+  @if $value == null {
+    @return var(--#{$prefix}-#{$module}-#{$token});
+  }
   @return var(--#{$prefix}-#{$module}-#{$token}, $value);
 }
 
+///
+/// Rounds a number to the specified number of decimal places.
+///
+@function round($value, $fractionDigits: 0) {
+  $power: math.pow(10, $fractionDigits);
+  @return math.div(math.round($power * $value), $power);
+}
+
+///
+/// Creates a CSS custom property declaration for a module token. 
+///
+@mixin declare-var($module, $name, $value, $prefix: config.$prefix) {
+  --#{$prefix}-#{$module}-#{$name}: #{$value};
+}
+
+///
+/// Flattens multiple maps into a single map. 
+///
+@function flatten($maps...) {
+  $merged: ();
+  @each $map in $maps {
+    $merged: map.merge($merged, $map);
+  }
+  @return $merged;
+}

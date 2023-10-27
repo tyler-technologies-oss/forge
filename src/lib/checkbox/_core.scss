@@ -151,8 +151,6 @@
 @mixin label {
   @include typography.style(label);
 
-  margin-inline: 8px;
-
   &:empty {
     display: none;
   }

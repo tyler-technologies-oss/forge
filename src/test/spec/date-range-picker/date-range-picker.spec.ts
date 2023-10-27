@@ -919,6 +919,32 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(inputElement.value).toBe('01/01/2020');
     });
 
+    it('should select mask in "from" input when shown on focus', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const fromElement = getFromElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      fromElement.focus();
+      
+      expect(fromElement.selectionStart).toEqual(0);
+      expect(fromElement.selectionEnd).toEqual('__/__/____'.length);
+    });
+
+    it('should select mask in "to" input when shown on focus', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const toElement = getToElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      toElement.focus();
+      
+      expect(toElement.selectionStart).toEqual(0);
+      expect(toElement.selectionEnd).toEqual('__/__/____'.length);
+    });
+
     it('should only show mask format in "from" input on focus', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const fromElement = getFromElement(this.context.component);

@@ -1,13 +1,14 @@
 import { emitEvent, toggleAttribute } from '@tylertech/forge-core';
 import { IBaseComponent } from './base-component';
 
-export interface IBaseAdapter {
+export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
+  readonly hostElement: T;
   readonly isConnected: boolean;
   removeHostAttribute(name: string): void;
   getHostAttribute(name: string): string | null;
   setHostAttribute(name: string, value?: string): void;
   toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void;
-  redispatchEvent(event: Event): boolean;
+  redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean;
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   removeHostListener(event: string, callback: (event: Event) => void): void;
@@ -22,6 +23,10 @@ export interface IBaseAdapter {
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   constructor(protected _component: T) {}
+
+  public get hostElement(): T {
+    return this._component;
+  }
 
   public getHostAttribute(name: string): string | null {
     return this._component.getAttribute(name);
@@ -39,14 +44,20 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
     toggleAttribute(this._component, hasAttribute, name, value);
   }
 
-  public redispatchEvent(event: Event): boolean {
+  public redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean {
     const isFromLightDom = !((event.target as HTMLElement)?.getRootNode() instanceof ShadowRoot);
     if (event.bubbles && (event.composed || isFromLightDom)) {
       event.stopPropagation();
     }
     
-    const newEvent = Reflect.construct(event.constructor, [event.type, event]);
-    const isCancelled = this._component.dispatchEvent(newEvent);
+    const eventCopy = {
+      ...event,
+      bubbles: options?.bubbles ?? event.bubbles,
+      cancelable: options?.cancelable ?? event.cancelable,
+      composed: options?.composed ?? event.composed
+    };
+    const newEvent = Reflect.construct(event.constructor, [event.type, eventCopy]);
+    const isCancelled = !this._component.dispatchEvent(newEvent);
     if (isCancelled) {
       event.preventDefault();
     }
@@ -57,12 +68,20 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
     return emitEvent(this._component, type, data, bubble, cancelable);
   }
 
+  public toggleHostListener(event: string, listener: EventListener, value: boolean, options?: boolean | AddEventListenerOptions): void {
+    if (value) {
+      this.addHostListener(event, listener, options);
+    } else {
+      this.removeHostListener(event, listener, options);
+    }
+  }
+
   public addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
     this._component.addEventListener(event, callback, options);
   }
 
-  public removeHostListener(event: string, callback: (event: Event) => void): void {
-    this._component.removeEventListener(event, callback);
+  public removeHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
+    this._component.removeEventListener(event, callback, options);
   }
 
   public addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
