@@ -3,10 +3,10 @@ export const CardScaffoldCodeHtml = () => {
 <forge-card class="scaffold-card">
   <forge-scaffold>
     <forge-toolbar slot="header">
-      <h1 slot="start" class="forge-typography--title">Lorem ipsum</h1>
+      <h1 slot="start" class="forge-typography--heading4">Lorem ipsum</h1>
     </forge-toolbar>
 
-    <p slot="body" class="forge-typography--body2" tabindex="0" class="card-content">
+    <p slot="body" className="forge-typography--body1" tabindex="0" class="card-content">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed
       aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus
       enim sint nesciunt provident excepturi dolorum pariatur illum?

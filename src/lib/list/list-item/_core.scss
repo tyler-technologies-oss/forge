@@ -33,7 +33,7 @@
 }
 
 @mixin text-container {
-  @include typography.style(body, $exclude: [font-size font-weight line-height]);
+  @include typography.style(body2, $exclude: [font-size font-weight line-height]);
   @include typography.ellipse;
 
   box-sizing: border-box;
@@ -73,7 +73,7 @@
 }
 
 @mixin supporting-text {
-  @include typography.style(body-01);
+  @include typography.style(body1);
   @include typography.ellipse;
 
   color: var(--_supporting-text-color);

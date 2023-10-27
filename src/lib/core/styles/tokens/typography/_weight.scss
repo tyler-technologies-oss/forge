@@ -1,0 +1,15 @@
+@use 'sass:map';
+
+$font-weight: (
+  light: 300,
+  regular: 400,
+  medium: 500,
+  bold: 700
+) !default;
+
+@function value($weight) {
+  @if not map.has-key($font-weight, $weight) {
+    @error 'Invalid font weight: "#{$weight}"';
+  }
+  @return map.get($font-weight, $weight);
+}

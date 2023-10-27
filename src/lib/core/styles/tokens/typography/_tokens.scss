@@ -1,220 +1,25 @@
 @use 'sass:map';
-@use 'sass:list';
-@use '../../core/config';
-@use '../../theme';
 @use '../../utils';
+@use './tokens.body' as body;
+@use './tokens.display' as display;
+@use './tokens.heading' as heading;
+@use './tokens.label' as label;
+@use './tokens.subheading' as subheading;
 
-/// Base typography style values
-$font-family: 'Roboto', sans-serif !default;
-$font-size: 1rem !default; // 16px
-
-/// The Forge typography scale system
-$font-scale: (
-  12: 0.75,
-  14: 0.875,
-  16: 1,
-  18: 1.125,
-  20: 1.25,
-  22: 1.375,
-  24: 1.5,
-  28: 1.75,
-  32: 2,
-  34: 2.125,
-  36: 2.25,
-  40: 2.5,
-  42: 2.625,
-  44: 2.75,
-  48: 3,
-  56: 3.5,
-  64: 4,
-) !default;
-
-/// Available font weights for Forge typography styles
-$font-weight: (
-  light: 300,
-  regular: 400,
-  medium: 500,
-  bold: 700
-) !default;
-
-/// The base typography styles that other styles inherit from.
-$base: (
-  font-family: var(--#{config.$prefix}-typography-font-family, #{$font-family}),
-  font-size: var(--#{config.$prefix}-typography-font-size, #{$font-size}),
-  font-weight: map.get($font-weight, regular),
-  line-height: normal,
-  letter-spacing: normal,
-  text-transform: inherit,
-  text-decoration: inherit,
-  color: theme.variable(text-high)
+$tokens: utils.flatten(
+  display.$tokens,
+  heading.$tokens,
+  subheading.$tokens,
+  body.$tokens,
+  label.$tokens
 ) !default;
 
 ///
-/// Creates a style value that is relative to the base font size for the given property.
+/// Retrieves a typography style token value.
 /// 
-/// This allows for typography styles to be scaled relative to the root font size, or
-/// relative to a specific CSS custom property if optionally applied. This is useful
-/// when embedding Forge in an application that adjusts the root `font-size` to something
-/// other than `16px` (browser default).
-///
-@function _font-size-relative($style, $property, $scale) {
-  @return calc(#{map.get($base, font-size)} * var(--#{config.$prefix}-typography-#{$style}-#{$property}-scale, #{$scale}));
-}
-
-/// Heading
-$heading-01: utils.inherit-map($base, (
-  font-size: _font-size-relative(heading-01, font-size, map.get($font-scale, 14)),
-  font-weight: map.get($font-weight, medium),
-  line-height: _font-size-relative(heading-01, line-height, map.get($font-scale, 20)),
-  letter-spacing: 0.0071428571em
-)) !default;
-
-$heading-02: utils.inherit-map($heading-01, (
-  font-size: _font-size-relative(heading-02, font-size, map.get($font-scale, 16)),
-  line-height: _font-size-relative(heading-02, line-height, map.get($font-scale, 20)),
-  letter-spacing: 0.009375em
-)) !default;
-
-$heading-03: utils.inherit-map($heading-02, (
-  font-size: _font-size-relative(heading-03, font-size, map.get($font-scale, 18)),
-  line-height: _font-size-relative(heading-03, line-height, map.get($font-scale, 24)),
-  letter-spacing: 0.0125em
-)) !default;
-
-$heading-04: utils.inherit-map($heading-03, (
-  font-size: _font-size-relative(heading-04, font-size, map.get($font-scale, 20)),
-  line-height: _font-size-relative(heading-04, line-height, map.get($font-scale, 28)),
-  letter-spacing: normal
-)) !default;
-
-$heading-05: utils.inherit-map($heading-04, (
-  font-size: _font-size-relative(heading-05, font-size, map.get($font-scale, 24)),
-  line-height: _font-size-relative(heading-05, line-height, map.get($font-scale, 32)),
-)) !default;
-
-$heading-06: utils.inherit-map($heading-05, (
-  font-size: _font-size-relative(heading-06, font-size, map.get($font-scale, 28)),
-  line-height: _font-size-relative(heading-06, line-height, map.get($font-scale, 36)),
-)) !default;
-
-/// Display
-$display-01: utils.inherit-map($base, (
-  font-size: _font-size-relative(display-01, font-size, map.get($font-scale, 24)),
-  font-weight: map.get($font-weight, light),
-  line-height: _font-size-relative(display-01, line-height, map.get($font-scale, 30)),
-)) !default;
-
-$display-02: utils.inherit-map($display-01, (
-  font-size: _font-size-relative(display-02, font-size, map.get($font-scale, 28)),
-  line-height: _font-size-relative(display-02, line-height, map.get($font-scale, 34)),
-)) !default;
-
-$display-03: utils.inherit-map($display-02, (
-  font-size: _font-size-relative(display-03, font-size, map.get($font-scale, 32)),
-  line-height: _font-size-relative(display-03, line-height, map.get($font-scale, 40)),
-)) !default;
-
-$display-04: utils.inherit-map($display-03, (
-  font-size: _font-size-relative(display-04, font-size, map.get($font-scale, 36)),
-  line-height: _font-size-relative(display-04, line-height, map.get($font-scale, 44)),
-)) !default;
-
-$display-05: utils.inherit-map($display-04, (
-  font-size: _font-size-relative(display-05, font-size, map.get($font-scale, 40)),
-  line-height: _font-size-relative(display-05, line-height, map.get($font-scale, 48)),
-)) !default;
-
-$display-06: utils.inherit-map($display-05, (
-  font-size: _font-size-relative(display-06, font-size, map.get($font-scale, 48)),
-  line-height: _font-size-relative(display-06, line-height, map.get($font-scale, 64)),
-)) !default;
-
-/// Title
-$title: utils.inherit-map($heading-03, (
-  font-family: #{map.get($base, font-family)},
-  font-size: _font-size-relative(title, font-size, map.get($font-scale, 20)),
-  font-weight: map.get($font-weight, regular),
-  line-height: _font-size-relative(title, line-height, map.get($font-scale, 24)),
-  letter-spacing: 0.0125em,
-)) !default;
-
-/// Subtitle
-$subtitle: (
-  font-family: #{map.get($base, font-family)},
-  font-size: _font-size-relative(subtitle, font-size, map.get($font-scale, 16)),
-  font-weight: map.get($base, font-weight),
-  line-height: _font-size-relative(subtitle, line-height, map.get($font-scale, 28)),
-  letter-spacing: 0.009375em,
-  text-transform: inherit,
-  text-decoration: inherit,
-  color: theme.variable(text-medium)
-) !default;
-
-$body-01: utils.inherit-map($base, (
-  font-size: _font-size-relative(body, font-size, map.get($font-scale, 14)),
-  line-height: _font-size-relative(body, line-height, map.get($font-scale, 20)),
-  letter-spacing: 0.0178571429em
-)) !default;
-
-$body-02: utils.inherit-map($base, (
-  font-size: _font-size-relative(body, font-size, map.get($font-scale, 16)),
-  line-height: _font-size-relative(body, line-height, map.get($font-scale, 24)),
-  letter-spacing: 0.03125em
-)) !default;
-
-$body: utils.inherit-map($body-01, (
-  font-size: _font-size-relative(body, font-size, map.get($font-scale, 16)),
-  line-height: _font-size-relative(body, line-height, map.get($font-scale, 24)),
-)) !default;
-
-/// Label
-$label: (
-  font-family: #{map.get($base, font-family)},
-  font-size: _font-size-relative(label, font-size, 0.75), // 12px
-  font-weight: map.get($base, font-weight),
-  line-height: _font-size-relative(label, line-height, 1.25), // 20px
-  letter-spacing: 0.0333333333em,
-  text-transform: inherit,
-  text-decoration: inherit,
-  color: map.get($base, color)
-) !default;
-
-/// Button
-$button: (
-  font-family: #{map.get($base, font-family)},
-  font-size: _font-size-relative(button, font-size, 0.875), // 14px
-  font-weight: 500,
-  line-height: _font-size-relative(button, line-height, 2.25), // 36px
-  letter-spacing: 0.0892857143em,
-  text-transform: inherit,
-  text-decoration: inherit,
-  color: map.get($base, color)
-) !default;
-
-$tokens: (
-  heading-01: $heading-01,
-  heading-02: $heading-02,
-  heading-03: $heading-03,
-  heading-04: $heading-04,
-  heading-05: $heading-05,
-  heading-06: $heading-06,
-  display-01: $display-01,
-  display-02: $display-02,
-  display-03: $display-03,
-  display-04: $display-04,
-  display-05: $display-05,
-  display-06: $display-06,
-  title: $title,
-  subtitle: $subtitle,
-  body-01: $body-01,
-  body-02: $body-02,
-  body: $body,
-  label: $label,
-  button: $button
-) !default;
-
-///
-/// Returns a typography style token value.
+/// @param {String} $style - The typography style.
+/// @param {String} $token - The token within the provided style.
+/// @return {String} - The value of the style token.
 /// 
 @function get($style, $token) {
   $style-tokens: map.get($tokens, $style);

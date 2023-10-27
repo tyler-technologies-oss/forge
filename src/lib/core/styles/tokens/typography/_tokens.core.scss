@@ -1,0 +1,26 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../core/config';
+@use './weight';
+
+// Base typography style values
+$font-family: 'Roboto', sans-serif !default;
+$font-size: 1rem !default; // 16px
+
+// The base typography styles that other styles inherit from.
+$base: (
+  font-family: utils.create-var(typography, font-family, $font-family),
+  font-size: utils.create-var(typography, font-size, $font-size),
+  font-weight: weight.value(regular),
+  line-height: normal,
+  letter-spacing: normal,
+  text-transform: inherit,
+  text-decoration: inherit
+) !default;
+
+@function get($key) {
+  @if not map.has-key($base, $key) {
+    @error 'No typography style exists with the key `#{$key}`.';
+  }
+  @return map.get($base, $key);
+}

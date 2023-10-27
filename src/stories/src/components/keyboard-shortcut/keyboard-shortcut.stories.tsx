@@ -38,7 +38,7 @@ export const Default: Story<IKeyboardShortcutProps> = ({
 
   return (
     <div>
-      <div className="forge-typography--body2" style={{ marginBottom: '16px' }}>Focus an element and press the key combination ({key})</div>
+      <div className="forge-typography--body1" style={{ marginBottom: '16px' }}>Focus an element and press the key combination ({key})</div>
       <form style={gridStyles}>
         <ForgeTextField>
           <label slot="label" htmlFor="first-name">First name</label>

@@ -2,7 +2,10 @@
 @use 'sass:list';
 @use '../core/config';
 @use '../utils';
+@use '../theme';
 @use '../tokens/typography/tokens';
+@use '../tokens/typography/scale';
+@use '../tokens/typography/tokens.core' as core;
 
 @forward '../tokens/typography/tokens';
 
@@ -27,8 +30,7 @@
     line-height: _get-style-value($style, line-height),
     letter-spacing: _get-style-value($style, letter-spacing),
     text-transform: _get-style-value($style, text-transform),
-    text-decoration: _get-style-value($style, text-decoration),
-    color: _get-style-value($style, color)
+    text-decoration: _get-style-value($style, text-decoration)
   );
 
   -moz-osx-font-smoothing: grayscale;
@@ -52,7 +54,7 @@
 /// Gets the value of a typography scale token.
 /// 
 @function scale($scale) {
-  @return #{map.get(tokens.$font-scale, $scale)}rem;
+  @return #{scale.value($scale)}rem;
 }
 
 @mixin ellipse {
@@ -67,8 +69,10 @@
 @mixin base {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: map.get(tokens.$base, font-family);
-  color: map.get(tokens.$base, color);
+  font-family: core.get(font-family);
+  color: theme.variable(text-high);
+
+  @include style(body2);
 }
 
 ///
@@ -127,7 +131,7 @@
 /// ```
 /// 
 @function font-size-relative($scale) {
-  @return calc(#{map.get(tokens.$base, font-size)} * #{$scale});
+  @return calc(#{core.get(font-size)} * #{$scale});
 }
 
 @function _get-style-value($style, $token) {

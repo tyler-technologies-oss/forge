@@ -9,26 +9,6 @@
 @use '../theme/custom-properties';
 
 @mixin core-styles() {
-  .forge-typography {
-    @include mdc-typography.base;
-    @include theme.css-custom-property(color, --mdc-theme-text-primary-on-background, mdc-theme-color.prop-value(text-primary-on-background));
-  }
-
-  // Create custom classes for built-in MDC typography styles
-  @each $style in map.keys(mdc-typography.$styles) {
-    .forge-typography--#{$style} {
-      @include mdc-typography.typography($style);
-      @include apply-additional-styles(variables.$mdc-typography-additional-styles, $style);
-    }
-  }
-  
-  // Create classes for forge-specific typography styles
-  @each $style in map.keys(variables.$styles) {
-    .forge-typography--#{$style} {
-      @include typography($style);
-    }
-  }
-  
   :root {
     // forge-specific MDC typography overrides
     @each $style, $properties in variables.$mdc-typography-overrides {
