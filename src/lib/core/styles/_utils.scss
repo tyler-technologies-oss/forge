@@ -64,6 +64,18 @@
 }
 
 ///
+/// Creates a CSS custom property variable reference for a token in the provided module.
+/// 
+/// Example:
+/// ```scss
+/// $my-var: variable-ref(theme, color); // => var(--forge-theme-color);
+/// ```
+///
+@function variable-ref($module, $token, $value: null, $prefix: config.$prefix) {
+  @return create-var($module, $token, $value, $prefix);
+}
+
+///
 /// Emits CSS custom property declarations for tokens on a per-module basis,
 /// using the provided token map.
 /// 
@@ -101,6 +113,7 @@
   @return math.div(math.round($power * $value), $power);
 }
 
+///
 /// Creates a CSS custom property declaration for a module token. 
 ///
 @mixin declare-var($module, $name, $value, $prefix: config.$prefix) {
