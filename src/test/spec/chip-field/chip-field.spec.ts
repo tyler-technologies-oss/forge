@@ -84,15 +84,16 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
     it('should set the addMemberOnBlur property to false when the attribute is not applied', function(this: ITestContext) {
       this.context = setupTestContext();
-      expect(this.context.component.addMemberOnBlur).toBe(false);
+
+      expect(this.context.component.addMemberOnBlur).toBeFalse();
     });
 
     it('should set the addMemberOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
       this.context = setupTestContext();
-      this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'true');
+      this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, '');
+
       expect(this.context.component.addMemberOnBlur).toBe(true);
     });
-
 
     it('should float label if value is set before adding to DOM', async function(this: ITestContext) {
       this.context = setupTestContext(false);
@@ -1206,27 +1207,37 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
       it('should set the addMemberOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'true');
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, '');
+
         expect(this.context.component.addMemberOnBlur).toBe(true);
       });
   
       it('should set the addMemberOnBlur property to false when the attribute is set to false', function(this: ITestContext) {
         this.context = setupTestContext();
+
+        this.context.component.addMemberOnBlur = true;
+        expect(this.context.component.addMemberOnBlur).toBeTrue();
+
         this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'false');
         expect(this.context.component.addMemberOnBlur).toBe(false);
       });
 
       it('chips should not be added when addMemberOnBlur is set to false and the "Tab" key is pressed', function(this: ITestContext) {
         this.context = setupTestContext();
-        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, 'false');
+        
+        expect(this.context.component.addMemberOnBlur).toBeFalse();
+
         const listener = jasmine.createSpy('add member listener');
         this.context.component.addEventListener(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, listener);
-        getNativeInput(this.context.component).value = 'test';
-        dispatchKeydownEvent(getNativeInput(this.context.component), 'Tab');
-        expect(listener).toHaveBeenCalledTimes(0)
-        expect(getNativeInput(this.context.component).value).withContext('the input value should have been cleared').toBe('');
-      });
 
+        const inputEl = getNativeInput(this.context.component);
+        inputEl.focus();
+        inputEl.value = 'test';
+        dispatchKeydownEvent(inputEl, 'Tab');
+
+        expect(listener).toHaveBeenCalledTimes(0);
+        expect(inputEl.value).withContext('the input value should have been cleared').toBe('');
+      });
 
       it('chips should be added when addMemberOnBlur is set to true and the mouse is clicked outside of the input', function(this: ITestContext) {
         this.context = setupTestContext();
@@ -1316,10 +1327,5 @@ describe('ChipFieldComponent', function(this: ITestContext) {
     chip.textContent = value;
     component.append(chip);
     return chip;
-  }
-
-  function checkIfAChipWasAdded(component: IChipFieldComponent): number {
-    let test = component.querySelectorAll('forge-chip');
-    return test.length;
   }
 });
