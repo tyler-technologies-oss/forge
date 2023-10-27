@@ -10,6 +10,7 @@ export interface IPaginatorFoundation extends ICustomElementFoundation {
   total: number;
   pageSizeOptions: number[] | boolean;
   pageSizeLabel: string;
+  focus(options?: FocusOptions): void;
 }
 
 export class PaginatorFoundation {
@@ -54,6 +55,10 @@ export class PaginatorFoundation {
     this._detachListeners();
   }
 
+  public focus(options?: FocusOptions): void {
+    this._adapter.handleFocusMove(null, options);
+  }
+
   private _attachListeners(): void {
     this._adapter.attachPageSizeChangeListener(this._pageSizeListener);
     this._adapter.attachFirstPageListener(this._firstPageListener);
@@ -80,7 +85,7 @@ export class PaginatorFoundation {
     const firstPage = 0;
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: firstPage });
     if (canPage) {
-      this._applyPageIndex(firstPage, { fromField: 'first' });
+      this._applyPageIndex(firstPage);
     }
   }
 
@@ -94,7 +99,7 @@ export class PaginatorFoundation {
     const prevPage = this._pageIndex - 1;
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, { pageIndex: prevPage });
     if (canPage) {
-      this._applyPageIndex(prevPage, { fromField: 'previous' });
+      this._applyPageIndex(prevPage);
     }
   }
 
@@ -108,7 +113,7 @@ export class PaginatorFoundation {
     const nextPage = this._pageIndex + 1;
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: nextPage });
     if (canPage) {
-      this._applyPageIndex(nextPage, { fromField: 'next' });
+      this._applyPageIndex(nextPage);
     }
   }
 
@@ -122,7 +127,7 @@ export class PaginatorFoundation {
     const lastPage = this._getMaxPages();
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE, { pageIndex: lastPage });
     if (canPage) {
-      this._applyPageIndex(lastPage, { fromField: 'last' });
+      this._applyPageIndex(lastPage);
     }
   }
 
@@ -132,7 +137,7 @@ export class PaginatorFoundation {
     const pageSize = Number(evt.detail);
     const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize });
     if (canPage) {
-      this._applyPageIndex(0, { fromField: 'page-size' });
+      this._applyPageIndex(0);
       this._applyPageSize(pageSize);
     } else {
       evt.preventDefault();
@@ -162,36 +167,36 @@ export class PaginatorFoundation {
     this._adapter.setRangeLabel(this._rangeLabel);
   }
 
-  private _syncInteractionState(fromField: PaginatorFieldIdentifier | null = null): void {
+  private _syncInteractionState(): void {
     this._adapter.enableFirstPageButton();
     this._adapter.enablePreviousPageButton();
     this._adapter.enableNextPageButton();
     this._adapter.enableLastPageButton();
 
     if (!this._hasFirstPage()) {
-      if (fromField) {
-        this._adapter.handleFocusMove(fromField);
+      if (this._adapter.hasFocus()) {
+        this._adapter.handleFocusMove('first');
       }
       this._adapter.disableFirstPageButton();
     }
 
     if (!this._hasPreviousPage()) {
-      if (fromField) {
-        this._adapter.handleFocusMove(fromField);
+      if (this._adapter.hasFocus()) {
+        this._adapter.handleFocusMove('previous');
       }
       this._adapter.disablePreviousPageButton();
     }
 
     if (!this._hasNextPage()) {
-      if (fromField) {
-        this._adapter.handleFocusMove(fromField);
+      if (this._adapter.hasFocus()) {
+        this._adapter.handleFocusMove('next');
       }
       this._adapter.disableNextPageButton();
     }
 
     if (!this._hasLastPage()) {
-      if (fromField) {
-        this._adapter.handleFocusMove(fromField);
+      if (this._adapter.hasFocus()) {
+        this._adapter.handleFocusMove('last');
       }
       this._adapter.disableLastPageButton();
     }
@@ -258,11 +263,11 @@ export class PaginatorFoundation {
     }
   }
 
-  private _applyPageIndex(value: number, { fromField = null }: { fromField?: PaginatorFieldIdentifier | null } = {}): void {
+  private _applyPageIndex(value: number): void {
     this._pageIndex = value;
     this._computeOffset();
     this._updateRangeLabel();
-    this._syncInteractionState(fromField);
+    this._syncInteractionState();
     this._adapter.toggleHostAttribute(PAGINATOR_CONSTANTS.attributes.PAGE_INDEX, this._pageIndex != null, this._pageIndex.toString());
   }
 
