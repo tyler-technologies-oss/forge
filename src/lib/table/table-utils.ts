@@ -179,7 +179,14 @@ export class TableUtils {
       addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_HEAD_CELL], th);
 
       // We wrap the header text in a div for ease of alignment
-      const cellContainer = document.createElement('div');
+      let cellContainer: HTMLElement;
+      if (columnConfig.sortable) {
+        cellContainer = document.createElement('button');
+        (cellContainer as HTMLButtonElement).type = 'button';
+        cellContainer.addEventListener('keydown', tableConfiguration.sortableHeadCellKeydownListener);
+      } else {
+        cellContainer = document.createElement('div');
+      }
       cellContainer.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_CONTAINER);
 
       // Add tooltip for multisort
@@ -286,6 +293,7 @@ export class TableUtils {
    */
   public static setSortDirection(tableElement: HTMLTableElement, columnIndex: number, sortDirection: SortDirection): void {
     const cell = TableUtils._getHeaderCellByIndex(tableElement, columnIndex);
+    tableElement.querySelectorAll('th[aria-sort]').forEach(th => th.removeAttribute('aria-sort'));
     TableUtils._setColumnSortDirection(cell, sortDirection);
   }
 
@@ -294,7 +302,7 @@ export class TableUtils {
    * @param thElement
    * @param sortDirection
    */
-  private static _setColumnSortDirection(thElement: HTMLTableHeaderCellElement, sortDirection: SortDirection | undefined): void {
+  private static _setColumnSortDirection(thElement: HTMLTableCellElement, sortDirection: SortDirection | undefined): void {
     if (thElement.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)) {
       thElement.classList.remove(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING);
     }
@@ -304,8 +312,10 @@ export class TableUtils {
     }
 
     if (!sortDirection || sortDirection === SortDirection.Descending) {
+      thElement.setAttribute('aria-sort', 'descending');
       thElement.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_DESCENDING);
     } else {
+      thElement.setAttribute('aria-sort', 'ascending');
       thElement.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING);
     }
   }
@@ -1051,6 +1061,8 @@ export class TableUtils {
    */
   public static removeColumnSort(tableElement: HTMLTableElement, columnIndex: number): void {
     const cell = TableUtils._getHeaderCellByIndex(tableElement, columnIndex);
+
+    cell.removeAttribute('aria-sort');
 
     // Remove any existing sort direction classes from the existing th element
     if (cell.classList.contains(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTED_ASCENDING)) {

@@ -36,6 +36,7 @@ export interface ITableConfiguration {
   doubleClickListener: ((evt: Event) => void) | null;
   selectListener: ((evt: Event) => void) | null;
   selectAllListener: ((evt: Event) => void) | null;
+  sortableHeadCellKeydownListener: EventListener;
   headRowMouseDownListener: (evt: Event) => void;
   headRowContextMenuListener: (evt: Event) => void;
   filterListener: ((value: any, columnIndex: number) => void) | null;
