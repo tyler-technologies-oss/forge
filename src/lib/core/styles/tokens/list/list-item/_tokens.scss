@@ -6,7 +6,7 @@
 
 $tokens: (
   // Base
-  background-color: utils.module-val(list-item, color, theme.variable(surface)),
+  background-color: utils.module-val(list-item, background-color, transparent),
   shape: utils.module-val(list-item, shape, 0),
   padding: utils.module-val(list-item, padding, 8px 16px),
   margin: utils.module-val(list-item, margin, 0),
@@ -16,7 +16,7 @@ $tokens: (
   cursor: utils.module-val(list-item, cursor, pointer),
 
   // Supporting text
-  supporting-text-color: utils.module-val(list-item, supporting-text-color, theme.variable(text-secondary)),
+  supporting-text-color: utils.module-val(list-item, supporting-text-color, theme.variable(text-medium)),
   supporting-text-font-size: utils.module-val(list-item, supporting-text-font-size, typography.variable(body, font-size)),
   supporting-text-font-weight: utils.module-val(list-item, supporting-text-font-weight, typography.variable(body, font-weight)),
   supporting-text-line-height: utils.module-val(list-item, supporting-text-line-height, typography.scale(24)),
@@ -26,7 +26,7 @@ $tokens: (
   selected-opacity: utils.module-val(list-item, selected-opacity, 0.08),
   selected-leading-color: utils.module-ref(list-item, selected-leading-color, selected-color),
   selected-trailing-color: utils.module-ref(list-item, selected-trailing-color, selected-color),
-  selected-supporting-text-color: utils.module-val(list-item, selected-supporting-text-color, theme.variable(text-secondary)),
+  selected-supporting-text-color: utils.module-val(list-item, selected-supporting-text-color, theme.variable(text-medium)),
 
   // Disabled
   disabled-opacity: utils.module-val(list-item, disabled-opacity, 0.38),
@@ -59,7 +59,7 @@ $tokens: (
   trailing-selected-color: utils.module-ref(list-item, trailing-selected-color, selected-color),
 
   // Avatar
-  avatar-background-color: utils.module-val(list-item, avatar-background-color, theme.variable(text-secondary)),
+  avatar-background-color: utils.module-val(list-item, avatar-background-color, theme.variable(text-medium)),
   avatar-color: utils.module-val(list-item, avatar-color, theme.variable(on-primary)),
   avatar-shape: utils.module-val(list-item, avatar-shape, shape.variable(round)),
   avatar-margin-start: utils.module-val(list-item, avatar-margin-start, 0),

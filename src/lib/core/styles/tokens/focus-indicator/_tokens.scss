@@ -11,7 +11,7 @@ $tokens: (
   active-width: utils.module-val(focus-indicator, active-width, 6px),
   color: utils.module-val(focus-indicator, color, theme.variable(primary)),
   duration: utils.module-val(focus-indicator, duration, animation.variable(duration-long4)),
-  outward-offset: utils.module-val(focus-indicator, outward-offset, spacing.variable('050')),
+  outward-offset: utils.module-val(focus-indicator, outward-offset, spacing.variable('025')),
   inward-offset: utils.module-val(focus-indicator, inward-offset, 0px), // Requires unit
   shape: utils.module-val(focus-indicator, shape, shape.variable(extra-small)),
   width: utils.module-val(focus-indicator, width, border.variable(medium)),

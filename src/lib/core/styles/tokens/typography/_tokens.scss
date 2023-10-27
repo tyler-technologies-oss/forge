@@ -46,7 +46,7 @@ $base: (
   letter-spacing: normal,
   text-transform: inherit,
   text-decoration: inherit,
-  color: theme.variable(text-primary)
+  color: theme.variable(text-high)
 ) !default;
 
 ///
@@ -147,7 +147,7 @@ $subtitle: (
   letter-spacing: 0.009375em,
   text-transform: inherit,
   text-decoration: inherit,
-  color: theme.variable(text-secondary)
+  color: theme.variable(text-medium)
 ) !default;
 
 $body-01: utils.inherit-map($base, (

@@ -131,11 +131,11 @@
 
     &.tickmarks {
       &::before {
-        @include core.tickmarks-active-disabled;
+        @include core.tickmarks-inactive-disabled;
       }
 
       &::after {
-        @include core.tickmarks-inactive-disabled;
+        @include core.tickmarks-active-disabled;
       }
     }
   }

@@ -1,0 +1,41 @@
+@use '../../theme/utils' as theme-utils;
+@use '../../theme/color-utils';
+@use './color-emphasis';
+
+///
+/// Computes the dependent theme colors from the provided theme color value.
+/// 
+/// @param {String} $name - The name of the theme color
+/// @param {Color} $color - The theme color
+/// @param {Color} $surface - The base surface color
+/// @return {Map} - The computed theme map
+/// 
+@function get-color-theme($name, $color, $surface) {
+  @if not theme-utils.is-color($color) {
+    @error 'The value for "#{$name}" must be a color type.';
+  }
+
+  $surface-tone: color-utils.tone($surface);
+
+  // The container colors are the provided color mixed with the surface color at lower emphasis levels
+  $container: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', low, medium-low)));
+  // $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', medium-low, medium)));
+
+  // The on-color is the contrast color against the provided color
+  $on-color: theme-utils.contrast($color);
+
+  // The on-container colors are the contrast color for the provided color mixed with the
+  // container color at a lower emphasis to let the contrast color bleed through for
+  // increased contrast against the lower emphasis container color 
+  $on-container: theme-utils.hexify($color, theme-utils.contrast($container), color-emphasis.value(low));
+  // $on-container-high: theme-utils.contrast($container-high);
+
+  @return (
+    #{$name}: $color,
+    #{$name}-container: $container,
+    // #{$name}-container-high: $container-high,
+    on-#{$name}: $on-color,
+    on-#{$name}-container: $on-container,
+    // on-#{$name}-container-high: $on-container-high
+  );
+}

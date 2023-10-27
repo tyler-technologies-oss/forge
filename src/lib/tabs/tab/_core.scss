@@ -1,7 +1,6 @@
 @use '../../core/styles/utils';
 @use '../../core/styles/tokens/tabs/tab/tokens';
 @use '../../core/styles/typography';
-@use '../../core/styles/spacing';
 
 @mixin provide-theme($theme) {
   @include utils.provide(tokens.$tokens, $theme, tab);
@@ -16,7 +15,10 @@
 
 @mixin host-disabled {
   cursor: not-allowed;
-  opacity: #{tokens.get(disabled-opacity)};
+}
+
+@mixin disabled {
+  opacity: var(--_disabled-opacity);
 }
 
 @mixin tab {
@@ -118,12 +120,10 @@
   justify-content: center;
   white-space: nowrap;
   transition: 150ms color linear;
-
-  $_content-padding: spacing.variable('100');
-  max-height: calc(var(--_content-height) + 2 * $_content-padding);
+  max-height: calc(var(--_content-height) + 2 * var(--_content-padding));
   min-height: var(--_content-height);
-  padding: $_content-padding calc(2 * $_content-padding);
-  gap: spacing.variable('050');
+  padding: var(--_content-padding) calc(2 * var(--_content-padding));
+  gap: var(--_content-padding);
 }
 
 @mixin label {

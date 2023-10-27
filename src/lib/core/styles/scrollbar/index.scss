@@ -1,0 +1,40 @@
+@use '../tokens/scrollbar/tokens';
+
+///
+/// Provides scrollbar styles.
+///
+@mixin base {
+  &::-webkit-scrollbar {
+    height: #{tokens.get(height)};
+    width: #{tokens.get(width)};
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: #{tokens.get(track-container)};
+    
+    &:hover {
+      background-color: #{tokens.get(track-container-hover)};
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: #{tokens.get(track-container)};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: #{tokens.get(thumb-min-height)};
+    width: #{tokens.get(thumb-min-width)};
+    
+    border-radius: #{tokens.get(border-radius)};
+    border-width: #{tokens.get(border-width)};
+    border-style: solid;
+    border-color: transparent;
+    
+    background-color: #{tokens.get(thumb-container)};
+    background-clip: content-box;
+
+    &:hover {
+      background-color: #{tokens.get(thumb-container-hover)};
+    }
+  }
+}
