@@ -21,7 +21,7 @@ $tokens: (
   width: utils.module-ref(checkbox, width, size),
   height: utils.module-ref(checkbox, height, size),
   unchecked-border-width: utils.module-ref(checkbox, unchecked-border-width, border-width),
-  unchecked-border-color: utils.module-val(checkbox, unchecked-border-color, theme.variable(text-secondary-on-light)),
+  unchecked-border-color: utils.module-val(checkbox, unchecked-border-color, theme.variable(surface-container-high)), // TODO: check out surface-container
   shape: utils.module-val(checkbox, shape, shape.variable(small)),
   elevation: utils.module-val(checkbox, elevation, elevation.value(0)),
   
@@ -52,7 +52,7 @@ $tokens: (
   state-layer-dense-height: utils.module-ref(checkbox, state-layer-dense-height, state-layer-dense-size),
 
   // Disabled
-  disabled-opacity: utils.module-val(checkbox, disabled-opacity, 0.48),
+  disabled-opacity: utils.module-val(checkbox, disabled-opacity, theme.emphasis(medium-low)),
 
   // Animation
   animation-duration: utils.module-val(checkbox, animation-duration, animation.variable(duration-short2)),

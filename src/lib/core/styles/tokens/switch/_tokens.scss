@@ -68,7 +68,7 @@ $tokens: (
   state-layer-dense-height: utils.module-ref(switch, state-layer-dense-height, state-layer-dense-size),
 
   // Disabled
-  disabled-opacity: utils.module-val(switch, disabled-opacity, 0.38),
+  disabled-opacity: utils.module-val(switch, disabled-opacity, theme.emphasis(medium-low)),
 
   // Active
   handle-active-on-color: utils.module-ref(switch, handle-active-on-color, handle-on-color),
