@@ -2,16 +2,17 @@
 @use './type-utils';
 @use './tokens.core' as core;
 @use './weight';
+@use './scale';
 
 $display1: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(display1, font-size, '1500'),
   font-weight: weight.value(light),
-  line-height: type-utils.font-size-relative(display1, line-height, '2000')
+  line-height: type-utils.font-size-relative(display1, line-height, '2250')
 )) !default;
 
 $display2: utils.inherit-map($display1, (
   font-size: type-utils.font-size-relative(display2, font-size, '1750'),
-  line-height: type-utils.font-size-relative(display2, line-height, '2125')
+  line-height: type-utils.font-size-relative(display2, line-height, '2250')
 )) !default;
 
 $display3: utils.inherit-map($display2, (
@@ -21,17 +22,32 @@ $display3: utils.inherit-map($display2, (
 
 $display4: utils.inherit-map($display3, (
   font-size: type-utils.font-size-relative(display4, font-size, '2250'),
-  line-height: type-utils.font-size-relative(display4, line-height, '2750')
+  line-height: type-utils.font-size-relative(display4, line-height, '2750'),
+  letter-spacing: type-utils.calc-letter-spacing(-0.25, scale.value('2250'))
 )) !default;
 
 $display5: utils.inherit-map($display4, (
   font-size: type-utils.font-size-relative(display5, font-size, '2500'),
-  line-height: type-utils.font-size-relative(display5, line-height, '3000')
+  line-height: type-utils.font-size-relative(display5, line-height, '3000'),
+  letter-spacing: type-utils.calc-letter-spacing(-0.5, scale.value('2500'))
 )) !default;
 
 $display6: utils.inherit-map($display5, (
   font-size: type-utils.font-size-relative(display6, font-size, '3000'),
-  line-height: type-utils.font-size-relative(display6, line-height, '4000')
+  line-height: type-utils.font-size-relative(display6, line-height, '4000'),
+  letter-spacing: type-utils.calc-letter-spacing(-1, scale.value('3000'))
+)) !default;
+
+$display7: utils.inherit-map($display6, (
+  font-size: type-utils.font-size-relative(display7, font-size, '3500'),
+  line-height: type-utils.font-size-relative(display7, line-height, '4500'),
+  letter-spacing: type-utils.calc-letter-spacing(-1.5, scale.value('3500'))
+)) !default;
+
+$display8: utils.inherit-map($display7, (
+  font-size: type-utils.font-size-relative(display8, font-size, '4000'),
+  line-height: type-utils.font-size-relative(display8, line-height, '4750'),
+  letter-spacing: type-utils.calc-letter-spacing(-2, scale.value('4000'))
 )) !default;
 
 $tokens: (
@@ -40,5 +56,7 @@ $tokens: (
   display3: $display3,
   display4: $display4,
   display5: $display5,
-  display6: $display6
+  display6: $display6,
+  display7: $display7,
+  display8: $display8
 ) !default;

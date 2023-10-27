@@ -4,14 +4,14 @@
 @use './tokens.display' as display;
 @use './tokens.heading' as heading;
 @use './tokens.label' as label;
-@use './tokens.title' as title;
+@use './tokens.subheading' as subheading;
 
 $tokens: utils.flatten(
-  heading.$tokens,
   display.$tokens,
-  label.$tokens,
+  heading.$tokens,
+  subheading.$tokens,
   body.$tokens,
-  title.$tokens
+  label.$tokens
 ) !default;
 
 ///

@@ -98,7 +98,7 @@ export const WithScaffold: Story<ICardProps> = ({
     <ForgeCard raised={raised} style={{ width: '400px', '--forge-card-padding': '0', '--forge-card-height': '300px' }}>
       <ForgeScaffold>
         <ForgeToolbar slot="header">
-          <h1 slot="start" className="forge-typography--title">Lorem ipsum</h1>
+          <h1 slot="start" className="forge-typography--subheading4">Lorem ipsum</h1>
         </ForgeToolbar>
 
         <p slot="body" tabIndex={0} style={{padding: '16px', margin: '0'}}>

@@ -1,41 +1,56 @@
 @use '../../utils';
 @use './type-utils';
+@use './scale';
 @use './weight';
 @use './tokens.core' as core;
 
 $heading1: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(heading1, font-size, '0875'),
   font-weight: weight.value(medium),
-  line-height: type-utils.font-size-relative(heading1, line-height, '1250'),
-  letter-spacing: 0.0071428571em
+  line-height: type-utils.font-size-relative(heading1, line-height, '1125'),
+  letter-spacing: type-utils.calc-letter-spacing(0.25, scale.value('0875'))
 )) !default;
 
 $heading2: utils.inherit-map($heading1, (
   font-size: type-utils.font-size-relative(heading2, font-size, '1000'),
   line-height: type-utils.font-size-relative(heading2, line-height, '1250'),
-  letter-spacing: 0.009375em
+  letter-spacing: type-utils.calc-letter-spacing(0.2, scale.value('1000'))
 )) !default;
 
 $heading3: utils.inherit-map($heading2, (
   font-size: type-utils.font-size-relative(heading3, font-size, '1125'),
-  line-height: type-utils.font-size-relative(heading3, line-height, '1500'),
-  letter-spacing: 0.0125em
+  line-height: type-utils.font-size-relative(heading3, line-height, '1375'),
+  letter-spacing: type-utils.calc-letter-spacing(0.15, scale.value('1125'))
 )) !default;
 
 $heading4: utils.inherit-map($heading3, (
   font-size: type-utils.font-size-relative(heading4, font-size, '1250'),
-  line-height: type-utils.font-size-relative(heading4, line-height, '1750'),
-  letter-spacing: normal
+  line-height: type-utils.font-size-relative(heading4, line-height, '1500'),
+  letter-spacing: type-utils.calc-letter-spacing(0.1, scale.value('1250'))
 )) !default;
 
 $heading5: utils.inherit-map($heading4, (
   font-size: type-utils.font-size-relative(heading5, font-size, '1500'),
-  line-height: type-utils.font-size-relative(heading5, line-height, '2000'),
+  line-height: type-utils.font-size-relative(heading5, line-height, '1750'),
+  letter-spacing: type-utils.calc-letter-spacing(0, scale.value('1500'))
 )) !default;
 
 $heading6: utils.inherit-map($heading5, (
   font-size: type-utils.font-size-relative(heading6, font-size, '1750'),
-  line-height: type-utils.font-size-relative(heading6, line-height, '2250'),
+  line-height: type-utils.font-size-relative(heading6, line-height, '2125'),
+  letter-spacing: type-utils.calc-letter-spacing(0, scale.value('1750'))
+)) !default;
+
+$heading7: utils.inherit-map($heading6, (
+  font-size: type-utils.font-size-relative(heading7, font-size, '2000'),
+  line-height: type-utils.font-size-relative(heading7, line-height, '2500'),
+  letter-spacing: type-utils.calc-letter-spacing(-0.05, scale.value('2000'))
+)) !default;
+
+$heading8: utils.inherit-map($heading7, (
+  font-size: type-utils.font-size-relative(heading8, font-size, '2250'),
+  line-height: type-utils.font-size-relative(heading8, line-height, '2625'),
+  letter-spacing: type-utils.calc-letter-spacing(-0.1, scale.value('2250'))
 )) !default;
 
 $tokens: (
@@ -44,5 +59,7 @@ $tokens: (
   heading3: $heading3,
   heading4: $heading4,
   heading5: $heading5,
-  heading6: $heading6
+  heading6: $heading6,
+  heading7: $heading7,
+  heading8: $heading8
 ) !default;

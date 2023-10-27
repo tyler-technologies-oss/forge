@@ -3,7 +3,7 @@ export const CardScaffoldCodeHtml = () => {
 <forge-card class="scaffold-card">
   <forge-scaffold>
     <forge-toolbar slot="header">
-      <h1 slot="start" class="forge-typography--title">Lorem ipsum</h1>
+      <h1 slot="start" class="forge-typography--subheading4">Lorem ipsum</h1>
     </forge-toolbar>
 
     <p slot="body" tabindex="0" class="card-content">

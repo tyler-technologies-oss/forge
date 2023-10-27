@@ -1,23 +1,36 @@
 @use '../../theme';
 @use '../../utils';
+@use './scale';
 @use './type-utils';
 @use './tokens.core' as core;
 
-// Less important body text
 $body1: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(body, font-size, '0875'),
   line-height: type-utils.font-size-relative(body, line-height, '1125'),
-  letter-spacing: 0.0178571429em
+  letter-spacing: type-utils.calc-letter-spacing(0.5, scale.value('0875'))
 )) !default;
 
-// Standard body text
 $body2: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(body, font-size, '1000'),
+  line-height: type-utils.font-size-relative(body, line-height, '1375'),
+  letter-spacing: type-utils.calc-letter-spacing(0.25, scale.value('1000'))
+)) !default;
+
+$body3: utils.inherit-map(core.$base, (
+  font-size: type-utils.font-size-relative(body, font-size, '1125'),
   line-height: type-utils.font-size-relative(body, line-height, '1500'),
-  letter-spacing: 0.03125em
+  letter-spacing: type-utils.calc-letter-spacing(0.15, scale.value('1125'))
+)) !default;
+
+$body4: utils.inherit-map(core.$base, (
+  font-size: type-utils.font-size-relative(body, font-size, '1250'),
+  line-height: type-utils.font-size-relative(body, line-height, '1750'),
+  letter-spacing: type-utils.calc-letter-spacing(0.1, scale.value('1250'))
 )) !default;
 
 $tokens: (
   body1: $body1,
-  body2: $body2
+  body2: $body2,
+  body3: $body3,
+  body4: $body4
 ) !default;
