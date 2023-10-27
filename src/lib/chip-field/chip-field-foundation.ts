@@ -4,11 +4,11 @@ import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
 import { IFieldFoundation, FieldFoundation } from '../field/field-foundation';
 
 export interface IChipFieldFoundation extends IFieldFoundation {
-  addMemberOnBlur: boolean;
+  addOnBlur: boolean;
 }
 
 export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFoundation {
-  private _addMemberOnBlur = false;
+  private _addOnBlur = false;
   private _memberSlotListener: () => void;
   private _inputContainerMouseDownListener: (evt: MouseEvent) => void;
   private _handleRootKeyDown: (event: KeyboardEvent) => void;
@@ -39,14 +39,14 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
   }
 
   /** Controls adding a member of entered text on blur. */
-  public get addMemberOnBlur(): boolean {
-    return this._addMemberOnBlur;
+  public get addOnBlur(): boolean {
+    return this._addOnBlur;
   }
-  public set addMemberOnBlur(value: boolean) {
+  public set addOnBlur(value: boolean) {
     value = Boolean(value);
-    if (this._addMemberOnBlur !== value) {
-      this._addMemberOnBlur = value;
-      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR, this._addMemberOnBlur);
+    if (this._addOnBlur !== value) {
+      this._addOnBlur = value;
+      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, this._addOnBlur);
     }
   }
 
@@ -59,7 +59,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
   protected _onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
 
-    if (this._addMemberOnBlur) {
+    if (this._addOnBlur) {
       this._addMember(input);
     }
 
@@ -102,7 +102,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
         input.value = '';
         break;
       case 'Tab':
-        if (!this._addMemberOnBlur) {
+        if (!this._addOnBlur) {
           input.value = '';
         }
         break;

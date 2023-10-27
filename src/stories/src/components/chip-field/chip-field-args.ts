@@ -14,7 +14,7 @@ export interface IChipFieldProps {
   hasLeading: boolean;
   hasTrailing: boolean;
   hasAddonEnd: boolean;
-  addMemberOnBlur: boolean;
+  addOnBlur: boolean;
 }
 
 export const argTypes = {
@@ -131,9 +131,9 @@ export const argTypes = {
       category: 'Slots',
     },
   },
-  addMemberOnBlur: {
+  addOnBlur: {
     control: 'boolean',
-    description: 'When set to true, pressing tab or clicking away from the field will set whatever you have typed as a value',
+    description: '',
     table: {
       category: 'Properties',
     },

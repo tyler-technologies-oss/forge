@@ -10,7 +10,7 @@ import styles from './chip-field.scss';
 import { FIELD_CONSTANTS } from '../field/field-constants';
 
 export interface IChipFieldComponent extends IFieldComponent {
-  addMemberOnBlur: boolean;
+  addOnBlur: boolean;
 }
 
 declare global {
@@ -37,7 +37,7 @@ export class ChipFieldComponent extends FieldComponent<ChipFieldFoundation> impl
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(FIELD_CONSTANTS.attributes),
-      CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR
+      CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR
     ];
   }
 
@@ -49,8 +49,8 @@ export class ChipFieldComponent extends FieldComponent<ChipFieldFoundation> impl
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case CHIP_FIELD_CONSTANTS.attributes.ADD_MEMBER_ON_BLUR:
-        this.addMemberOnBlur = coerceBoolean(newValue);
+      case CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR:
+        this.addOnBlur = coerceBoolean(newValue);
         return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
@@ -58,5 +58,5 @@ export class ChipFieldComponent extends FieldComponent<ChipFieldFoundation> impl
 
   /** Controls whether or not the value should be set onBlur */
   @FoundationProperty()
-  public declare addMemberOnBlur: boolean;
+  public declare addOnBlur: boolean;
 }

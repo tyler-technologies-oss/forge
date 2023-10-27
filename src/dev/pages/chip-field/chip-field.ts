@@ -20,7 +20,7 @@ const requiredToggle = document.querySelector('#opt-required') as ISwitchCompone
 const invalidToggle = document.querySelector('#opt-invalid') as ISwitchComponent;
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;
 const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
-const onBlurToggle = document.querySelector('#opt-member-on-blur') as ISwitchComponent;
+const onBlurToggle = document.querySelector('#opt-add-on-blur') as ISwitchComponent;
 const populateButton = document.querySelector('#opt-btn-populate') as HTMLButtonElement;
 const clearButton = document.querySelector('#opt-btn-clear') as HTMLButtonElement;
 
@@ -182,8 +182,8 @@ function updateDenseState({ detail: isDense }: CustomEvent<boolean>): void {
   chips.forEach(({ dense }) => dense = isDense);
 }
 
-function updateOnBlurProperty({ detail: addMemberOnBlur }: CustomEvent<boolean>): void {
-  simpleChipField.addMemberOnBlur = addMemberOnBlur;
+function updateOnBlurProperty({ detail: addOnBlur }: CustomEvent<boolean>): void {
+  simpleChipField.addOnBlur = addOnBlur;
 }
 
 function setChipsDisabledState(isDisabled: boolean): void {

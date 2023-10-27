@@ -30,7 +30,7 @@ export const Default: Story<IChipFieldProps> = ({
   hasTrailing = false,
   hasHelperText = false,
   hasAddonEnd = false,
-  addMemberOnBlur = false
+  addOnBlur = false
 }) => {
   const chipFieldRef = useRef<IChipFieldComponent>();
   const addMember = (evt: CustomEvent) => {
@@ -69,7 +69,7 @@ export const Default: Story<IChipFieldProps> = ({
       floatLabelType={floatLabelType}
       shape={shape}
       invalid={invalid}
-      addMemberOnBlur={addMemberOnBlur}
+      addOnBlur={addOnBlur}
       required={required}
       style={{width: '559px'}}>
 
@@ -111,7 +111,7 @@ Default.args = {
   hasTrailing: false,
   hasHelperText: false,
   hasAddonEnd: false,
-  addMemberOnBlur: false
+  addOnBlur: false
 } as IChipFieldProps;
 
 export const WithAutocomplete: Story<{}> = () => {
