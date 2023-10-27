@@ -48,7 +48,7 @@ export const Default: Story<IButtonAreaProps> = ({
         <button slot="button" type="button" disabled={disabled}>{label}</button>
         <div style={contentStyle}>
           <div style={textStyle}>
-            <div className="forge-typography--headline5">Heading</div>
+            <div className="forge-typography--heading4">Heading</div>
             <div>Content</div>
           </div>
           <ForgeIconButton data-forge-ignore>
@@ -90,7 +90,7 @@ export const InExpansionPanel: Story<IButtonAreaProps> = ({
           <button ref={buttonRef} slot="button" type="button" disabled={disabled} aria-controls="expandable-content" aria-expanded="false">{label}</button>
           <div style={contentStyle}>
             <div style={textStyle}>
-              <div className="forge-typography--headline5">Heading</div>
+              <div className="forge-typography--heading4">Heading</div>
               <div>Content</div>
             </div>
             <ForgeIconButton data-forge-ignore>

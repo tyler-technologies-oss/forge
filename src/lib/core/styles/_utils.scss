@@ -10,11 +10,11 @@
   @if not $value {
     @error 'Invalid #{$module} token: #{$key}';
   }
-  @return _create-var($module, $key, $value, $prefix);
+  @return create-var($module, $key, $value, $prefix);
 }
 
 ///
-/// Creates a CSS custom property declaration for a token in the provided module
+/// Creates a CSS custom property reference for a token in the provided module
 /// referencing an existing module token variable as the fallback.
 /// 
 /// To provide a module reference variable with a different fallback value, set the
@@ -27,7 +27,7 @@
 /// 
 @function module-ref($module, $token, $value, $type: ref, $prefix: config.$prefix) {
   $fallback: if($type == ref, module-var($value), $value);
-  @return _create-var($module, $token, $fallback, $prefix);
+  @return create-var($module, $token, $fallback, $prefix);
 }
 
 ///
@@ -38,7 +38,7 @@
 }
 
 ///
-/// Creates a CSS custom property declaration for a module token using the
+/// Creates a CSS custom property reference for a module token using the
 /// provided value as the variable fallback.
 /// 
 /// Example:
@@ -48,7 +48,7 @@
 /// ```
 /// 
 @function module-val($module, $token, $value, $prefix: config.$prefix) {
-  @return _create-var($module, $token, $value, $prefix);
+  @return create-var($module, $token, $value, $prefix);
 }
 
 ///
@@ -60,7 +60,19 @@
 /// ```
 ///
 @function variable-ref($module, $token, $value: null, $prefix: config.$prefix) {
-  @return _create-var($module, $token, $value, $prefix);
+  @return create-var($module, $token, $value, $prefix);
+}
+
+///
+/// Creates a CSS custom property variable reference for a token in the provided module.
+/// 
+/// Example:
+/// ```scss
+/// $my-var: variable-ref(theme, color); // => var(--forge-theme-color);
+/// ```
+///
+@function variable-ref($module, $token, $value: null, $prefix: config.$prefix) {
+  @return create-var($module, $token, $value, $prefix);
 }
 
 ///
@@ -72,22 +84,21 @@
     @if not map.get($module-tokens, $token-name) {
       @error 'Invalid token "#{$token-name}" for module "#{$module}"';
     }
-    --#{$prefix}-#{$module}-#{$token-name}: #{$token-value};
+    @include declare-var($module, $token-name, $token-value, $prefix);
   }
 }
 
 ///
 /// Creates a new map by inheriting from a base map and overriding/adding values.
-/// 
+///
 @function inherit-map($base, $overrides) {
   @return map.merge($base, $overrides);
 }
 
-
 ///
-/// Creates a CSS custom property declaration for a module token, using the provided fallback value.
+/// Creates a CSS custom property reference for a module token, using the provided fallback value.
 /// 
-@function _create-var($module, $token, $value: null, $prefix: config.$prefix) {
+@function create-var($module, $token, $value: null, $prefix: config.$prefix) {
   @if $value == null {
     @return var(--#{$prefix}-#{$module}-#{$token});
   }
@@ -100,6 +111,13 @@
 @function round($value, $fractionDigits: 0) {
   $power: math.pow(10, $fractionDigits);
   @return math.div(math.round($power * $value), $power);
+}
+
+///
+/// Creates a CSS custom property declaration for a module token. 
+///
+@mixin declare-var($module, $name, $value, $prefix: config.$prefix) {
+  --#{$prefix}-#{$module}-#{$name}: #{$value};
 }
 
 ///

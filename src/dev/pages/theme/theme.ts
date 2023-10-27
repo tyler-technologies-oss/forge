@@ -100,7 +100,7 @@ function buildSwatches(): void {
 
     if (group.header) {
       const header = document.createElement('h2');
-      header.classList.add('forge-typography--heading-03');
+      header.classList.add('forge-typography--subheading4');
       header.textContent = group.header;
       container.appendChild(header);
     }
