@@ -71,7 +71,7 @@ export const Styled: Story<ICardProps> = ({
           </ForgeIconButton>
         </div>
         <div>
-          <p>{LOREM_IPSUM.p1}</p>
+          <p className="forge-typography--body1">{LOREM_IPSUM.p1}</p>
         </div>
         <div style={footerStyle}>
           <div>
@@ -98,10 +98,10 @@ export const WithScaffold: Story<ICardProps> = ({
     <ForgeCard raised={raised} style={{ width: '400px', '--forge-card-padding': '0', '--forge-card-height': '300px' }}>
       <ForgeScaffold>
         <ForgeToolbar slot="header">
-          <h1 slot="start" className="forge-typography--subheading4">Lorem ipsum</h1>
+          <h1 slot="start" className="forge-typography--heading4">Lorem ipsum</h1>
         </ForgeToolbar>
 
-        <p slot="body" tabIndex={0} style={{padding: '16px', margin: '0'}}>
+        <p slot="body" className="forge-typography--body1" tabIndex={0} style={{padding: '16px', margin: '0'}}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed
           aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus
           enim sint nesciunt provident excepturi dolorum pariatur illum?

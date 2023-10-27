@@ -12,7 +12,7 @@ export const CardStyledCodeHtml = () => {
     </div>
 
     <div>
-      <p>
+      <p className="forge-typography--body1">
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias exercitationem doloremque dolorem ullam, nesciunt quia velit necessitatibus numquam quasi voluptates impedit earum dolores repudiandae facilis totam non quo labore itaque?
       </p>
     </div>
