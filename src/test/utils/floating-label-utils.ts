@@ -6,14 +6,14 @@ export interface IFloatingLabelContext {
 }
 
 export function expectFloatingLabelState(
-  instance: IFloatingLabelContext, 
+  instance: IFloatingLabelContext,
   isFloating: boolean
 ): void {
   testFloatingLabelState(instance.label, isFloating);
 }
 
 export function testFloatingLabelState(
-  labelElement: HTMLLabelElement, 
+  labelElement: HTMLLabelElement,
   isFloating: boolean
 ): void {
   expect(labelElement.classList.contains(FLOATING_LABEL_CONSTANTS.classes.FLOAT_ABOVE)).toBe(isFloating);

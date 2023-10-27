@@ -37,8 +37,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-paginator>` component.
- * 
  * @tag forge-paginator
  */
 @CustomElement({

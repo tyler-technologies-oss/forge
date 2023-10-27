@@ -1,6 +1,6 @@
 import { removeElement } from '@tylertech/forge-core';
 import { tick } from '@tylertech/forge-testing';
-import { IKeyboardShortcutComponent, KEYBOARD_SHORTCUT_CONSTANTS, defineKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
+import { IKeyboardShortcutComponent, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback, defineKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
 
 interface ITestContext {
   context: IKeyboardShortcutTestContext
@@ -38,6 +38,19 @@ describe('KeyboardShortcutComponent', function(this: ITestContext) {
     const spy = this.context.spyOnActivateEvent();
     this.context.dispatchKeydownEvent({key});
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should invoke the callback function on a matching target keydown event', function(this: ITestContext) {
+    const key = 'a';
+    const callback = jasmine.createSpy();
+    this.context = setupTestContext();
+    this.context.component.key = key;
+    this.context.component.activateCallback = callback;
+
+    this.context.attach();
+
+    this.context.dispatchKeydownEvent({key});
+    expect(callback).toHaveBeenCalled();
   });
 
   describe('attributes', function(this: ITestContext) {
@@ -524,6 +537,20 @@ describe('KeyboardShortcutComponent', function(this: ITestContext) {
       const spy = this.context.spyOnActivateEvent();
       this.context.dispatchKeydownEvent({key});
       expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should not invoke the callback when disabled is set to true', function(this: ITestContext) {
+      const key = 'a';
+      const callback = jasmine.createSpy();
+      this.context = setupTestContext();
+      this.context.component.key = key;
+      this.context.component.activateCallback = callback;
+      this.context.component.disabled = true;
+
+      this.context.attach();
+
+      this.context.dispatchKeydownEvent({key});
+      expect(callback).not.toHaveBeenCalled();
     });
 
     it('should connect target element when disabled is set to false', function(this: ITestContext) {

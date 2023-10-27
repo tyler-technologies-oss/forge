@@ -74,7 +74,7 @@ export class ChipFieldAdapter extends FieldAdapter implements IChipFieldAdapter 
   
   public tryPropagateClick(target: EventTarget | null): void {
     // We only propagate the click to the input if it originated from our internal input container
-    if (target instanceof HTMLElement && target.matches(CHIP_FIELD_CONSTANTS.selectors.INPUT_CONTAINER)) {
+    if (!this._inputElement.disabled && target instanceof HTMLElement && target.matches(CHIP_FIELD_CONSTANTS.selectors.INPUT_CONTAINER)) {
       this._inputElement?.dispatchEvent(new MouseEvent('click'));
     }
   }

@@ -1,6 +1,7 @@
 import { addClass, getEventPath, isDeepEqual, isDefined, isObject } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { ICON_CLASS_NAME } from '../constants';
+import { IIconComponent } from '../icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
 import { IListComponent, LIST_CONSTANTS } from '../list/list';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
@@ -33,16 +34,6 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
       evt.preventDefault();
     }
   });
-
-  // Set roles and other attributes based on our type
-  switch (config.type) {
-    case ListDropdownType.Menu:
-      dropdownElement.setAttribute('role', 'menu');
-      dropdownElement.setAttribute('aria-orientation', 'vertical');
-      break;
-    default:
-      dropdownElement.setAttribute('role', 'listbox');
-  }
 
   if (config.id) {
     dropdownElement.id = dropdownId;
@@ -91,6 +82,17 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
   const listElement = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
   listElement.id = `list-dropdown-list-${config.id}`;
   listElement.propagateClick = false;
+
+  // Set roles and other attributes based on our type
+  switch (config.type) {
+    case ListDropdownType.Menu:
+      listElement.setAttribute('role', 'menu');
+      listElement.setAttribute('aria-orientation', 'vertical');
+      break;
+    default:
+      listElement.setAttribute('role', 'listbox');
+  }
+
   return listElement;
 }
 
@@ -172,7 +174,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
       listItemElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
-      listItemElement.style.cursor = 'pointer';
 
       if (config.wrapOptionText) {
         listItemElement.wrap = true;
@@ -181,17 +182,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       // Add any CSS classes to the option list-item
       if (option.optionClass && (typeof option.optionClass === 'string' || Array.isArray(option.optionClass) && option.optionClass.length)) {
         addClass(option.optionClass, listItemElement);
-      }
-
-      // Set role based on type
-      switch (config.type) {
-        case ListDropdownType.Menu:
-          listItemElement.setAttribute('role', 'menuitem');
-          break;
-        case ListDropdownType.None:
-          break;
-        default:
-          listItemElement.setAttribute('role', 'option');
       }
 
       if (config.dense) {
@@ -221,6 +211,15 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         }
       }
 
+      // Check for secondary (subtitle) text
+      if (option.secondaryLabel) {
+        const secondaryLabelElement = document.createElement('span');
+        secondaryLabelElement.slot = 'subtitle';
+        secondaryLabelElement.textContent = option.secondaryLabel;
+        listItemElement.twoLine = true;
+        listItemElement.appendChild(secondaryLabelElement);
+      }
+
       // If multiple selections are enabled then we need to create and append a leading checkbox element
       if (config.multiple) {
         const checkboxElement = createCheckboxElement(isSelected);
@@ -243,7 +242,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.leadingIcon) {
-        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass);
+        const leadingIconElement = createIconElement(option.leadingIconType, option.leadingIcon, option.leadingIconClass || config.iconClass, option.leadingIconComponentProps);
         leadingIconElement.slot = 'leading';
         listItemElement.appendChild(leadingIconElement);
       }
@@ -256,7 +255,7 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
           listItemElement.appendChild(element);
         }
       } else if (option.trailingIcon) {
-        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass);
+        const trailingIconElement = createIconElement(option.trailingIconType, option.trailingIcon, option.trailingIconClass || config.iconClass, option.trailingIconComponentProps);
         trailingIconElement.slot = 'trailing';
         listItemElement.appendChild(trailingIconElement);
       }
@@ -266,7 +265,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         listItemElement.disabled = option.disabled;
         listItemElement.setAttribute('aria-disabled', 'true');
       } else {
-        listItemElement.style.cursor = 'pointer';
         listItemElement.setAttribute('aria-disabled', 'false');
       }
 
@@ -318,7 +316,7 @@ function createDivider(): HTMLElement {
   return divider;
 }
 
-function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string): HTMLElement {
+function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string, componentProps?: Partial<IIconComponent>): HTMLElement {
   if (type === 'component') {
     const icon = document.createElement('forge-icon');
     if (iconClass) {
@@ -326,6 +324,9 @@ function createIconElement(type: ListDropdownIconType = 'font', iconName: string
     }
     icon.setAttribute('aria-hidden', 'true');
     icon.name = iconName;
+    if (componentProps) {
+      Object.assign(icon, componentProps);
+    }
     return icon;
   }
 

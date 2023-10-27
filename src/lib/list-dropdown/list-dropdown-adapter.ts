@@ -2,7 +2,7 @@ import { IListDropdownOption, IListDropdownOpenConfig, IListDropdownOptionGroup,
 import { createDropdown, createList, createListItems, createAsyncElement, createBusyElement, createCheckboxElement } from './list-dropdown-utils';
 import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
 import { IListComponent } from '../list/list';
-import { LIST_ITEM_CONSTANTS, IListItemComponent, IListItemSelectEventData } from '../list/list-item';
+import { LIST_ITEM_CONSTANTS, IListItemComponent } from '../list/list-item';
 import { ScrollEvents, getShadowElement, IScrollObserverConfiguration, ScrollAxisObserver, removeAllChildren, isFunction, removeElement, replaceElement, createVisuallyHiddenElement, isDeepEqual, tryScrollIntoView } from '@tylertech/forge-core';
 import { ILinearProgressComponent } from '../linear-progress';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
@@ -304,19 +304,13 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length) {
       const activeItems = listItems.filter(li => li !== listItem && li.active);
-      if (activeItems.length) {
-        activeItems.forEach(ai => ai.active = false);
-      }
+      activeItems.forEach(ai => ai.active = false);
     }
 
     // Now we can toggle the selected state and sync the active state
     listItem.selected = isSelected;
     listItem.setAttribute('aria-selected', `${isSelected}`);
     listItem.setAttribute('aria-checked', `${isSelected}`);
-
-    if (isSelected) {
-      listItem.active = true;
-    }
 
     // Toggle the checkbox icon based on the selected state
     const checkboxElement = listItem.querySelector(`${ICON_CONSTANTS.elementName}[slot=leading]`) as IIconComponent;

@@ -115,11 +115,17 @@ export class FieldFoundation {
   }
   public set density(value: FieldDensityType) {
     if (this._density !== value) {
+      const prevDensity = this._density;
       this._density = value;
 
       if (this._isInitialized) {
         this._applyDensity();
-        this._initializeLabel();
+
+        if (this._density === 'dense') {
+          this._destroyFloatingLabel({ cancelFloat: true });
+        } else if (prevDensity === 'dense') {
+          this._initializeLabel();
+        }
       }
 
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.DENSITY, this._density.toString());
@@ -236,20 +242,24 @@ export class FieldFoundation {
   }
 
   protected _initializeLabel(): void {
-    if (this._floatingLabel) {
-      this._floatingLabel.destroy();
-    }
+    this._floatingLabel?.destroy();
     this._adapter.detectLabel();
+    
     if (this._adapter.hasLabel() && this._density !== 'dense') {
       this._floatingLabel = this._adapter.initializeFloatingLabel();
       this._adapter.ensureLabelOrder();
       this.floatLabel(this._floatLabelType === 'always' || this._adapter.fieldHasValue() || this._adapter.hasPlaceholder());
       this._adapter.setRootClass(FIELD_CONSTANTS.classes.LABEL);
     } else {
-      this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LABEL);
-      this._floatingLabel = undefined;
+      this._destroyFloatingLabel();
     }
+  }
+
+  private _destroyFloatingLabel({ cancelFloat = false } = {}): void {
+    this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+    this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LABEL);
+    this._floatingLabel?.destroy({ cancelFloat });
+    this._floatingLabel = undefined;
   }
 
   protected _detectLeadingContent(): void {
