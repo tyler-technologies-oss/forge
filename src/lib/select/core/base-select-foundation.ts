@@ -524,7 +524,9 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
     }, 300);
     this._options = this._adapter.getOptions();
     // TODO: Enhance this to cycle through closest matches (see the native select)
-    const matchedOption = this._flatOptions.find(option => !option.disabled && option.label.toLowerCase().startsWith(this._filterString.toLowerCase()));
+    const matchedOption = this._flatOptions.find(({ disabled, label }) => {
+      return !disabled && label.trim().toLowerCase().startsWith(this._filterString.trim().toLowerCase());
+    });
     if (matchedOption) {
       const optionIndex = this._flatOptions.indexOf(matchedOption);
       if (this._open) {

@@ -833,6 +833,21 @@ describe('SelectComponent', function(this: ITestContext) {
       _expectPopupVisibility(this.context.component.popupElement, true);
     });
 
+    it('should highlight first match when filtering while popup is open with leading whitespace', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const firstOption = this.context.component.querySelector('forge-option:first-child') as IOptionComponent;
+      firstOption.textContent = '   With Whitespace   ';
+      await tick();
+      
+      await _triggerPopupOpen(this.context.component);
+      
+      _sendFilterKey(this.context.component, 'w', 87);
+      await timer();
+
+      _expectActiveOption(this.context.component.popupElement, 0);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+    });
+
     it('should highlight first match when filtering with uppercase characters', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
