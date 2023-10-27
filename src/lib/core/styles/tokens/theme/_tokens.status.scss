@@ -1,0 +1,44 @@
+@use 'sass:map';
+@use '../../utils';
+@use './token-utils';
+@use './tokens.surface' as surface;
+@use '../color-palette';
+
+///
+/// Computes the status theme colors.
+/// 
+/// @param {Map} $colors - The status colors map.
+/// @param {Map} $surface-theme - The base surface theme
+/// @return {Map} - The computed status theme
+///
+@function get-status-theme($colors, $surface-theme) {
+  $surface: map.get($surface-theme, surface);
+
+  $success-theme: token-utils.get-color-theme('success', map.get($colors, success), $surface);
+  $error-theme: token-utils.get-color-theme('error', map.get($colors, error), $surface);
+  $warning-theme: token-utils.get-color-theme('warning', map.get($colors, warning), $surface);
+  $info-theme: token-utils.get-color-theme('info', map.get($colors, info), $surface);
+
+  @return utils.flatten(
+    $success-theme,
+    $error-theme,
+    $warning-theme,
+    $info-theme
+  );
+}
+
+// Light
+$tokens: get-status-theme((
+  success: color-palette.$green-800,
+  error: color-palette.$crimson-900,
+  warning: color-palette.$burnt-orange-800,
+  info: color-palette.$blue-800
+), surface.$tokens);
+
+// Dark
+$tokens-dark: get-status-theme((
+  success: color-palette.$dollar-bill-600,
+  error: color-palette.$ruddy-pink-200,
+  warning: color-palette.$apricot-200,
+  info: color-palette.$blue-800,
+), surface.$tokens-dark);

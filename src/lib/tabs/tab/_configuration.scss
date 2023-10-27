@@ -5,6 +5,10 @@
   --_active-color: #{tab-tokens.get(active-color)};
   --_inactive-color: #{tab-tokens.get(inactive-color)};
   --_height: #{tab-tokens.get(height)};
+  --_stacked-height: #{tab-tokens.get(stacked-height)};
+
+  // Disabled
+  --_disabled-opacity: #{tab-tokens.get(disabled-opacity)};
 
   // Indicator
   --_active-indicator-color: #{tab-tokens.get(indicator-color)};
@@ -18,6 +22,7 @@
   
   // Content
   --_content-height: #{tab-tokens.get(content-height)};
+  --_content-padding: #{tab-tokens.get(content-padding)};
 
   // Icon
   --_active-focus-icon-color: #{tab-tokens.get(active-focus-icon-color)};

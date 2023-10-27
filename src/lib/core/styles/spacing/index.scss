@@ -9,7 +9,7 @@
 /// Example:
 /// ```scss
 /// .my-class {
-///   margin: spacing.variable('200'); // => margin: var(--forge-spacing-standard, 16px);
+///   margin: spacing.variable('100'); // => margin: var(--forge-spacing-standard, 16px);
 /// }
 /// ```
 /// 

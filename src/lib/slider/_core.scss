@@ -98,13 +98,7 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 @mixin track-inactive {
   block-size: var(--_inactive-track-height);
   border-radius: var(--_inactive-track-shape);
-
-  // TODO: remove this and the @supports check below when we're confident that color-mix is more widely supported
-  background-color: var(--_inactive-track-color-fallback);
-
-  @supports (background-color: color-mix(in srgb, red 50%, transparent)) {
-    background-color: var(--_inactive-track-color);
-  }
+  background-color: var(--_inactive-track-color);
 }
 
 @mixin track-active-disabled {

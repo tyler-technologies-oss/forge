@@ -1,0 +1,21 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../utils';
+@use '../../shape';
+
+$tokens: (
+  height: utils.module-val(scrollbar, height, 16px),
+  width: utils.module-val(scrollbar, width, 16px),
+  thumb-min-height: utils.module-val(scrollbar, thumb-min-height, 32px),
+  thumb-min-width: utils.module-val(scrollbar, thumb-min-width, 32px),
+  border-radius: utils.module-val(scrollbar, border-radius, shape.variable(full)),
+  border-width: utils.module-val(scrollbar, border-width, 3px),
+  track-container: utils.module-val(scrollbar, track-container, theme.variable(surface-container-low)),
+  track-container-hover: utils.module-val(scrollbar, track-container-hover, theme.variable(surface-container-low)),
+  thumb-container: utils.module-val(scrollbar, thumb-container, theme.variable(surface-container-medium)),
+  thumb-container-hover: utils.module-val(scrollbar, thumb-container-hover, theme.variable(surface-container-high))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
