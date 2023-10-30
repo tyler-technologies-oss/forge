@@ -56,6 +56,14 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     this._adapter.addRootListener('change', this._changeListener);
     this._adapter.addInputSlotListener(this._inputSlotListener);
     this._adapter.syncValue(this._submittedValue, this._formState);
+
+    this._adapter.setChecked(this._checked);
+    this._adapter.setDefaultChecked(this._defaultChecked);
+    this._adapter.setIndeterminate(this._indeterminate);
+    this._adapter.setValue(this._value);
+    this._adapter.setDisabled(this._disabled);
+    this._adapter.setRequired(this._required);
+    this._adapter.setReadonly(this._readonly);
   };
 
   public syncValidity(hasCustomValidityError: boolean): void {

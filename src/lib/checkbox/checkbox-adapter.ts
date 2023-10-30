@@ -50,6 +50,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     const slottedInput = this._component.querySelector(':is(input[type=checkbox]:not([slot]), [slot=input])') as HTMLInputElement;
     if (slottedInput) {
       slottedInput.slot = 'input';
+      slottedInput.type = 'checkbox';
     }
     this.observeInput(slottedInput ?? this._inputElement);
     if (!slottedInput) {
@@ -64,9 +65,10 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
 
   public observeInput(el: HTMLInputElement = this._inputElement): void {
     this._inputAdapter.initialize(el, (newEl, oldEl) => {
-      cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
+      cloneAttributes(oldEl, newEl, ['checked', 'aria-readonly']);
       cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
       cloneValidationMessage(oldEl, newEl);
+      newEl.type = 'checkbox';
       this.initializeInput();
     });
   }

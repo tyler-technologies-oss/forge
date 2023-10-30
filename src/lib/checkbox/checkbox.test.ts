@@ -1,10 +1,12 @@
+/// <reference types="mocha" />
+
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { TestHarness } from '../../test/utils/test-harness';
-import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '../checkbox';
+import { CHECKBOX_CONSTANTS, CheckboxComponentDelegate, ICheckboxComponent } from '../checkbox';
 import { IFocusIndicatorComponent } from '../focus-indicator';
 import { IStateLayerComponent } from '../state-layer';
 
@@ -443,6 +445,122 @@ describe('Checkbox', () => {
       el.setCustomValidity(message);
 
       expect(el.validationMessage).to.equal(message);
+    });
+  });
+
+  describe('delegate', () => {
+    it('should create delegate with default values', () => {
+      const delegate = new CheckboxComponentDelegate();
+      expect(delegate.checked).to.be.false;
+      expect(delegate.defaultChecked).to.be.false;
+      expect(delegate.indeterminate).to.be.false;
+      expect(delegate.value).to.equal('on');
+      expect(delegate.dense).to.be.false;
+      expect(delegate.disabled).to.be.false;
+      expect(delegate.required).to.be.false;
+      expect(delegate.readonly).to.be.false;
+      expect(delegate.labelPosition).to.equal('end');
+    });
+
+    it('should set properties via the constructor', () => {
+      const delegate = new CheckboxComponentDelegate({ props: {
+        checked: true,
+        defaultChecked: true,
+        indeterminate: true,
+        value: 'value',
+        dense: true,
+        disabled: true,
+        required: true,
+        readonly: true,
+        labelPosition: 'start'
+      }});
+      expect(delegate.checked).to.be.true;
+      expect(delegate.defaultChecked).to.be.true;
+      expect(delegate.indeterminate).to.be.true;
+      expect(delegate.value).to.equal('value');
+      expect(delegate.dense).to.be.true;
+      expect(delegate.disabled).to.be.true;
+      expect(delegate.required).to.be.true;
+      expect(delegate.readonly).to.be.true;
+      expect(delegate.labelPosition).to.equal('start');
+    });
+
+    it('should set checked', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.checked = true;
+      expect(delegate.checked).to.be.true;
+    });
+
+    it('should set defaultChecked', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.defaultChecked = true;
+      expect(delegate.defaultChecked).to.be.true;
+    });
+
+    it('should set indeterminate', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.indeterminate = true;
+      expect(delegate.indeterminate).to.be.true;
+    });
+
+    it('should set value', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.value = 'value';
+      expect(delegate.value).to.equal('value');
+    });
+
+    it('should set dense', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.dense = true;
+      expect(delegate.dense).to.be.true;
+    });
+
+    it('should set disabled', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.disabled = true;
+      expect(delegate.disabled).to.be.true;
+    });
+
+    it('should set required', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.required = true;
+      expect(delegate.required).to.be.true;
+    });
+
+    it('should set readonly', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.readonly = true;
+      expect(delegate.readonly).to.be.true;
+    });
+
+    it('should set labelPosition', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.labelPosition = 'start';
+      expect(delegate.labelPosition).to.equal('start');
+    });
+
+    it('should toggle', () => {
+      const delegate = new CheckboxComponentDelegate();
+
+      delegate.toggle();
+      expect(delegate.checked).to.be.true;
+
+      delegate.toggle(false);
+      expect(delegate.checked).to.be.false;
+
+      delegate.toggle(true);
+      expect(delegate.checked).to.be.true;
+    });
+
+    it('should set label via constructor', () => {
+      const delegate = new CheckboxComponentDelegate({ options: { label: 'Label' } });
+      expect(delegate.element.innerText).to.equal('Label');
+    });
+
+    it('should set label', () => {
+      const delegate = new CheckboxComponentDelegate();
+      delegate.setLabel('Label');
+      expect(delegate.element.innerText).to.equal('Label');
     });
   });
 });
