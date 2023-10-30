@@ -54,6 +54,7 @@ export class LabelFoundation implements ILabelFoundation {
   }
 
   private _handleSlotChange(): void {
+    console.log('slot change');
     if (!this._for && !this._forElement) {
       this._adapter.trySetTarget(null);
       this._tryConnect();
@@ -66,6 +67,7 @@ export class LabelFoundation implements ILabelFoundation {
 
   private _connect(): void {
     this._adapter.addHostListener('click', this._clickListener);
+    this._adapter.updateTargetLabel();
     if (this._dynamic) {
       this._adapter.addMutationObserver(this._mutationCallback);
     }

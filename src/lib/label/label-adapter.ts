@@ -50,6 +50,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
 
   public trySetTarget(value: string | null): void {
     this._targetElement = this._locateTargetElement(value);
+    console.log(this._targetElement);
   }
 
   /**
