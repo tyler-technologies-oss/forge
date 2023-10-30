@@ -86,7 +86,6 @@ export class CheckboxComponentDelegate extends FormFieldComponentDelegate<ICheck
   }
 
   public onChange(listener: (value: boolean) => void): void {
-    console.log(listener);
     this._element.addEventListener('change', evt => listener((evt.target as ICheckboxComponent).checked));
   }
 
