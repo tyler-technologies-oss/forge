@@ -21,7 +21,7 @@ $tokens: (
   width: utils.module-ref(checkbox, width, size),
   height: utils.module-ref(checkbox, height, size),
   unchecked-border-width: utils.module-ref(checkbox, unchecked-border-width, border-width),
-  unchecked-border-color: utils.module-val(checkbox, unchecked-border-color, theme.variable(surface-container-high)), // TODO: check out surface-container
+  unchecked-border-color: utils.module-val(checkbox, unchecked-border-color, theme.variable(surface-container-high)),
   shape: utils.module-val(checkbox, shape, shape.variable(small)),
   elevation: utils.module-val(checkbox, elevation, elevation.value(0)),
   

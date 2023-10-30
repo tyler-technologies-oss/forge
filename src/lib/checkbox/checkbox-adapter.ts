@@ -1,5 +1,5 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, InputAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
+import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, SlottedElementAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
 import { StateLayerComponent } from '../state-layer';
 import { ICheckboxComponent } from './checkbox';
 import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
@@ -28,7 +28,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private readonly _labelElement: HTMLElement;
   private readonly _inputSlotElement: HTMLSlotElement;
   private readonly _stateLayerElement: StateLayerComponent;
-  private readonly _inputAdapter: InputAdapter;
+  private readonly _inputAdapter: SlottedElementAdapter<HTMLInputElement>;
   private _forwardObserver?: MutationObserver;
 
   private get _activeInputElement(): HTMLInputElement {
@@ -43,19 +43,31 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     this._labelElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.LABEL);
     this._inputSlotElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.INPUT_SLOT) as HTMLSlotElement;
     this._stateLayerElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
-    this._inputAdapter = new InputAdapter();
+    this._inputAdapter = new SlottedElementAdapter();
   }
 
   public initialize(): void {
-    this._inputAdapter.initialize(this._inputElement, (newEl, oldEl) => {
-      if (oldEl) {
-        cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
-        cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
-        cloneValidationMessage(oldEl, newEl);
-      }
+    const slottedInput = this._component.querySelector(':is(input[type=checkbox]:not([slot]), [slot=input])') as HTMLInputElement;
+    if (slottedInput) {
+      slottedInput.slot = 'input';
+    }
+    this.observeInput(slottedInput ?? this._inputElement);
+    if (!slottedInput) {
+      this.initializeInput();
+    }
+  }
 
-      this._forwardObserver?.disconnect();
-      this._initializeForwardObserver(newEl);
+  public initializeInput(): void {
+    this._forwardObserver?.disconnect();
+    this._initializeForwardObserver(this._activeInputElement);
+  }
+
+  public observeInput(el: HTMLInputElement = this._inputElement): void {
+    this._inputAdapter.initialize(el, (newEl, oldEl) => {
+      cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
+      cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
+      cloneValidationMessage(oldEl, newEl);
+      this.initializeInput();
     });
   }
 
@@ -111,9 +123,9 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   public detectInputElement(): void {
     const inputElement = this._inputSlotElement.assignedElements()[0] as HTMLInputElement;
     if (inputElement) {
-      this._inputAdapter.attachInput(inputElement);
+      this._inputAdapter.attachElement(inputElement);
     } else {
-      this._inputAdapter.attachInput(this._inputElement);
+      this._inputAdapter.attachElement(this._inputElement);
     }
   }
 
