@@ -1,6 +1,5 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-
-import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-component';
+import { BaseFormComponent, IBaseFormComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SwitchAdapter } from './switch-adapter';
@@ -16,6 +15,7 @@ export interface ISwitchComponent extends IBaseFormComponent {
    * @deprecated use `on` instead
    */
   selected: boolean;
+  defaultOn: boolean;
   dense: boolean;
   icon: SwitchIconVisibility;
   labelPosition: SwitchLabelPosition;
@@ -44,17 +44,23 @@ declare global {
  * 
  * @property {boolean} on - Whether the switch is on the on or off state.
  * @property {boolean} selected - Deprecated. Alias for `on`.
+ * @property {boolean} defaultOn - Whether the switch is on or off by default.
+ * @property {string} value - The value of the switch.
+ * @property {boolean} dense - The density state.
  * @property {boolean} disabled - Controls if the switch is disabled.
  * @property {boolean} required = Controls if the switch is required.
- * @property {boolean} dense - The density state.
+ * @property {boolean} readonly - Controls if the switch is readonly.
  * @property {SwitchIconVisibility} icon - Controls the presence of the off and on icons.
  * @property {SwitchLabelPosition} labelPosition - Whether the label appears before or after the switch.
  * 
  * @attribute {string} on - Controls whether the switch is in the on or off state.
- * @attribute {string} selected - Alias for `on`.
+ * @attribute {string} selected - Deprecated. Alias for `on`.
+ * @attribute {string} default-on - Controls whether the switch is in the on or off state by default.
+ * @attribute {string} value - The value of the switch.
+ * @attribute {string} dense - Sets the density state.
  * @attribute {string} disabled - Controls if the switch is disabled.
  * @attribute {string} required - Controls if the switch is required.
- * @attribute {string} dense - Sets the density state.
+ * @attribute {string} readonly - Controls if the switch is readonly.
  * @attribute {string} icon - Controls the presence of the off and on icons.
  * @attribute {string} label-position - Sets whether the label appears before or after the switch.
  * 
@@ -106,6 +112,7 @@ declare global {
  * @cssproperty --forge-switch-icon-off-color - The color of the handle icon in the switch's off state.
  * @cssproperty --forge-switch-icon-active-on-color - The color of the handle icon when the switch is active (pressed) in its on state.
  * @cssproperty --forge-switch-icon-active-off-color - The color of the handle icon when the switch is active (pressed) in its off state.
+ * @cssproperty --forge-switch-icon-size - The size of the handle icon.
  * @cssproperty --forge-switch-icon-on-size - The size of the handle icon in the switch's on state.
  * @cssproperty --forge-switch-icon-off-size - The size of the handle icon in the switch's off state.
  * @cssproperty --forge-switch-icon-scale - The scale transformation applied to the handle icons.
@@ -131,17 +138,13 @@ declare global {
  * @cssproperty --forge-switch-active-animation-timing - The timing function used in active state animations.
  * 
  * @csspart switch - Styles the switch container element.
- * @csspart input-container - Styles the wrapper element of the input, track and handle.
- * @csspart input - Styles the input element.
  * @csspart track - Styles the track element.
  * @csspart handle - Styles the handle element.
  * @csspart icon-on - Styles the on icon element.
  * @csspart icon-off - Styles the off icon element.
- * @csspart icon-on-path - Styles the default on icon path.
- * @csspart icon-off-path - Styles the default off icon path.
  * @csspart label - Styles the label element.
- * @csspart state-layer - Styles the state layer element.
- * @csspart focus-indicator - Styles the focus indicator element.
+ * @csspart state-layer - Styles the state layer root element.
+ * @csspart focus-indicator - Styles the focus indicator root element.
  */
 @CustomElement({
   name: SWITCH_CONSTANTS.elementName,
@@ -155,15 +158,16 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
     return [
       SWITCH_CONSTANTS.attributes.ON,
       SWITCH_CONSTANTS.attributes.SELECTED,
+      SWITCH_CONSTANTS.attributes.DEFAULT_ON,
+      SWITCH_CONSTANTS.attributes.VALUE,
+      SWITCH_CONSTANTS.attributes.DENSE,
       SWITCH_CONSTANTS.attributes.DISABLED,
       SWITCH_CONSTANTS.attributes.REQUIRED,
-      SWITCH_CONSTANTS.attributes.DENSE,
+      SWITCH_CONSTANTS.attributes.READONLY,
       SWITCH_CONSTANTS.attributes.ICON,
       SWITCH_CONSTANTS.attributes.LABEL_POSITION
     ];
   }
-
-  public static formAssociated = true;
 
   public get form(): HTMLFormElement | null {
     return this.internals.form;
@@ -194,10 +198,6 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
     return this.internals.willValidate;
   }
 
-  // Needed for Safari, see https://bugs.webkit.org/show_bug.cgi?id=261432
-  // Replace with this.internals.validity.customError when resolved.
-  private _hasCustomValidityError = false;
-
   public readonly internals: ElementInternals;
   private readonly _foundation: SwitchFoundation;
 
@@ -215,10 +215,17 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case SWITCH_CONSTANTS.attributes.ON:
+      case SWITCH_CONSTANTS.attributes.SELECTED:
         this.on = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.SELECTED:
-        this.selected = coerceBoolean(newValue);
+      case SWITCH_CONSTANTS.attributes.DEFAULT_ON:
+        this.defaultOn = coerceBoolean(newValue);
+        break;
+      case SWITCH_CONSTANTS.attributes.VALUE:
+        this.value = newValue;
+        break;
+      case SWITCH_CONSTANTS.attributes.DENSE:
+        this.dense = coerceBoolean(newValue);
         break;
       case SWITCH_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
@@ -226,8 +233,8 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
       case SWITCH_CONSTANTS.attributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.DENSE:
-        this.dense = coerceBoolean(newValue);
+      case SWITCH_CONSTANTS.attributes.READONLY:
+        this.readonly = coerceBoolean(newValue);
         break;
       case SWITCH_CONSTANTS.attributes.ICON:
         this.icon = newValue as SwitchIconVisibility;
@@ -240,10 +247,17 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
 
   public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
     this.internals.setFormValue(value, state);
+
+    if (state) {
+      const stateValue = isString(state) ? state : state[this.name];
+      this.on = stateValue === SWITCH_CONSTANTS.state.ON;
+      return;
+    }
+
     if (isString(value)) {
-      this.on = coerceBoolean(value);
+      this.on = !!value;
     } else if (value?.[this.name]) {
-      this.on = coerceBoolean(value[this.name]);
+      this.on = !!value[this.name];
     } else {
       this.on = false;
     }
@@ -265,11 +279,11 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   }
 
   public formResetCallback(): void {
-    this.on = false;
+    this.on = this.defaultOn;
   }
 
   public formStateRestoreCallback(state: string): void {
-    this.on = coerceBoolean(state);
+    this.on = state === SWITCH_CONSTANTS.state.ON;
   }
 
   public formDisabledCallback(isDisabled: boolean): void {
@@ -279,8 +293,17 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   @FoundationProperty()
   public declare on: boolean;
 
+  /**
+   * @deprecated use `on` instead
+   */
   @FoundationProperty({ name: 'on' })
   public declare selected: boolean;
+
+  @FoundationProperty()
+  public declare defaultOn: boolean;
+
+  @FoundationProperty()
+  public declare value: string;
 
   @FoundationProperty()
   public declare dense: boolean;
@@ -290,6 +313,9 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
 
   @FoundationProperty()
   public declare required: boolean;
+
+  @FoundationProperty()
+  public declare readonly: boolean;
 
   @FoundationProperty()
   public declare icon: SwitchIconVisibility;

@@ -2,7 +2,12 @@
 include('./src/partials/page.ejs', {
   page: {
     title: 'Checkbox',
-    includePath: './pages/checkbox/checkbox.ejs'
+    includePath: './pages/checkbox/checkbox.ejs',
+    options: [
+      { type: 'switch', label: 'Checked', id: 'opt-checked' },
+      { type: 'switch', label: 'Indeterminate', id: 'opt-indeterminate' },
+      { type: 'switch', label: 'Expose input', id: 'opt-expose-input' }
+    ]
   }
 })
 %>

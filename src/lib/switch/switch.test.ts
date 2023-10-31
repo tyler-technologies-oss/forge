@@ -58,6 +58,7 @@ class SwitchHarness extends TestHarness<ISwitchComponent> {
 describe('Switch', () => {
   it('should contain shadow root', async () => {
     const el = await fixture(html`<forge-switch></forge-switch>`);
+    expect(el.shadowRoot).to.not.be.null;
   });
 
   it('should be accessible', async () => {
@@ -75,9 +76,12 @@ describe('Switch', () => {
     await expect(el).not.to.be.accessible();
     expect(el.on).to.be.false;
     expect(el.selected).to.be.false;
+    expect(el.defaultOn).to.be.false;
+    expect(el.value).to.equal('on');
     expect(el.dense).to.be.false;
     expect(el.disabled).to.be.false;
     expect(el.required).to.be.false;
+    expect(el.readonly).to.be.false;
     expect(el.icon).to.equal('on');
     expect(el.labelPosition).to.equal('end');
     expect(ctx.inputElement.checked).to.be.false;
@@ -104,6 +108,22 @@ describe('Switch', () => {
     expect(ctx.inputElement.checked).to.be.true;
   });
 
+  it('should accept default-on', async () => {
+    const el = await fixture<ISwitchComponent>(html`<forge-switch default-on></forge-switch>`);
+    const ctx = new SwitchHarness(el);
+
+    expect(el.defaultOn).to.be.true;
+    expect(ctx.inputElement.hasAttribute('checked')).to.be.true;
+  });
+
+  it('should accept value', async () => {
+    const el = await fixture<ISwitchComponent>(html`<forge-switch value="test"></forge-switch>`);
+    const ctx = new SwitchHarness(el);
+
+    expect(el.value).to.equal('test');
+    expect(ctx.inputElement.value).to.equal('test');
+  });
+
   it('should accept disabled', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch disabled aria-label="Active"></forge-switch>`);
     const ctx = new SwitchHarness(el);
@@ -119,6 +139,20 @@ describe('Switch', () => {
 
     expect(el.required).to.be.true;
     expect(ctx.inputElement.required).to.be.true;
+  });
+
+  it('should accept readonly', async () => {
+    const el = await fixture<ISwitchComponent>(html`<forge-switch readonly></forge-switch>`);
+    const ctx = new SwitchHarness(el);
+    const changeSpy = spy();
+    
+    el.addEventListener('forge-switch-change', changeSpy);
+    await ctx.clickElement(ctx.inputElement);
+
+    expect(el.readonly).to.be.true;
+    expect(ctx.inputElement.readOnly).to.be.true;
+    expect(ctx.inputElement).to.have.attribute('aria-readonly', 'true');
+    expect(changeSpy).to.not.have.been.called;
   });
 
   it('should accept dense', async () => {
@@ -265,7 +299,7 @@ describe('Switch', () => {
     label.textContent = labelText;
     form.appendChild(label);
 
-    expect(switchEl.labels.length).to.equal(1);
+    expect(switchEl.labels).to.have.lengthOf(1);
     expect(switchEl.labels[0].textContent).to.equal(labelText);
   });
 
@@ -277,11 +311,11 @@ describe('Switch', () => {
     form.appendChild(switchEl);
 
     let formData = new FormData(form);
-    expect(formData.get('test-switch')).to.equal('false');
+    expect(formData.get('test-switch')).to.be.null;
 
     switchEl.on = true;
     formData = new FormData(form);
-    expect(formData.get('test-switch')).to.equal('true');
+    expect(formData.get('test-switch')).to.equal('on');
   });
 
   it('should reset value when form is reset', async () => {
@@ -293,13 +327,13 @@ describe('Switch', () => {
 
     switchEl.on = true;
     let formData = new FormData(form);
-    expect(formData.get('test-switch')).to.equal('true');
+    expect(formData.get('test-switch')).to.equal('on');
 
     form.reset();
     formData = new FormData(form);
 
     expect(switchEl.on).to.be.false;
-    expect(formData.get('test-switch')).to.equal('false');
+    expect(formData.get('test-switch')).to.be.null;
   });
 
   it('should restore form state', async () => {
@@ -345,7 +379,7 @@ describe('Switch', () => {
 
   it('should set custom validity', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch required></forge-switch>`);
-    const message = 'test message';
+    const message = 'Custom error message';
 
     el.setCustomValidity(message);
 

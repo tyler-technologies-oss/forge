@@ -32,7 +32,6 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
     const listItems = this._getFocusableListItems();
     if (listItems.length) {
       const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus'));
-      console.log('focusedListItemIndex', focusedListItemIndex);
       const nextIndex = focusedListItemIndex < listItems.length - 1 ? focusedListItemIndex + 1 : 0;
       if (nextIndex <= listItems.length - 1) {
         listItems[nextIndex].focus({ preventScroll: true});

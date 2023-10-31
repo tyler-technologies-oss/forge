@@ -1,0 +1,65 @@
+@use 'sass:map';
+@use '../color-palette';
+@use '../../animation';
+@use '../../border';
+@use '../../elevation';
+@use '../../shape';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  // Shared
+  primary-color: utils.module-val(checkbox, primary-color, theme.variable(tertiary)),
+  size: utils.module-val(checkbox, size, 16px),
+  border-width: utils.module-val(checkbox, border-width, border.variable(medium)),
+  icon-color: utils.module-val(checkbox, icon-color, theme.variable(on-tertiary)),
+  state-layer-size: utils.module-val(checkbox, state-layer-size, 40px),
+  state-layer-dense-size: utils.module-val(checkbox, state-layer-size, 24px),
+
+  // Checkbox
+  background-color: utils.module-val(checkbox, background-color, theme.variable(surface)),
+  width: utils.module-ref(checkbox, width, size),
+  height: utils.module-ref(checkbox, height, size),
+  unchecked-border-width: utils.module-ref(checkbox, unchecked-border-width, border-width),
+  unchecked-border-color: utils.module-val(checkbox, unchecked-border-color, theme.variable(surface-container-high)),
+  shape: utils.module-val(checkbox, shape, shape.variable(small)),
+  elevation: utils.module-val(checkbox, elevation, elevation.value(0)),
+  
+  // Checkbox checked
+  checked-background-color: utils.module-ref(checkbox, checked-background-color, primary-color),
+  checked-border-width: utils.module-ref(checkbox, checked-border-width, border-width),
+  checked-border-color: utils.module-ref(checkbox, checked-border-color, checked-background-color),
+
+  // Icon
+  icon-checked-color: utils.module-ref(checkbox, icon-checked-color, icon-color),
+  icon-indeterminate-color: utils.module-ref(checkbox, icon-indeterminate-color, icon-color),
+  icon-stroke-width: utils.module-val(checkbox, icon-stroke-width, 4px),
+
+  // Label
+  gap: utils.module-val(checkbox, gap, 0),
+  justify: utils.module-val(switch, justify, space-between),
+  direction: utils.module-val(switch, direction, initial),
+
+  // State layer
+  state-layer-width: utils.module-ref(checkbox, state-layer-width, state-layer-size),
+  state-layer-height: utils.module-ref(checkbox, state-layer-height, state-layer-size),
+  state-layer-checked-color: utils.module-ref(checkbox, state-layer-on-color, primary-color),
+  state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-off-color, color),
+  state-layer-shape: utils.module-val(checkbox, state-layer-shape, shape.variable(full)),
+
+  // Dense
+  state-layer-dense-width: utils.module-ref(checkbox, state-layer-dense-width, state-layer-dense-size),
+  state-layer-dense-height: utils.module-ref(checkbox, state-layer-dense-height, state-layer-dense-size),
+
+  // Disabled
+  disabled-opacity: utils.module-val(checkbox, disabled-opacity, theme.emphasis(medium-low)),
+
+  // Animation
+  animation-duration: utils.module-val(checkbox, animation-duration, animation.variable(duration-short2)),
+  background-animation-timing: utils.module-val(checkbox, animation-duration, animation.variable(easing-standard)),
+  icon-animation-timing: utils.module-val(checkbox, animation-duration, animation.variable(easing-emphasized-accelerate))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

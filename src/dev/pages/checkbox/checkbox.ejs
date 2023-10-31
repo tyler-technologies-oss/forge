@@ -1,34 +1,46 @@
-<div class="vert">
+<div class="vert" id="container">
   <div>
     <h3 class="forge-typography--heading2">Default</h3>
-    <forge-checkbox>
-      <input type="checkbox" id="default-checkbox" checked>
-      <label for="default-checkbox" class="forge-typography--label">Checkbox label</label>
+    <forge-checkbox>Default</forge-checkbox>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Exposed input</h3>
+    <forge-checkbox id="exposed-input-checkbox">
+      <span>Exposed input</span>
     </forge-checkbox>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">Dense</h3>
-    <forge-checkbox dense>
-      <input type="checkbox" id="dense-checkbox" checked>
-      <label for="dense-checkbox" class="forge-typography--label">Dense checkbox</label>
-    </forge-checkbox>
+    <forge-checkbox dense>Dense</forge-checkbox>
   </div>
 
   <div>
-    <h3 class="forge-typography--heading2">Indeterminate</h3>
-    <forge-checkbox >
-      <input type="checkbox" id="indeterminate-checkbox" checked>
-      <label for="indeterminate-checkbox" class="forge-typography--label">Indeterminate checkbox</label>
-    </forge-checkbox>
+    <h3 class="forge-typography--heading2">Readonly</h3>
+    <forge-checkbox readonly>Readonly</forge-checkbox>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">Disabled</h3>
-    <forge-checkbox>
-      <input type="checkbox" id="disabled-checkbox" checked disabled>
-      <label for="disabled-checkbox" class="forge-typography--label">Disabled checkbox</label>
-    </forge-checkbox>
+    <forge-checkbox disabled>Disabled</forge-checkbox>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Start label</h3>
+    <forge-checkbox label-position="start">Start label</forge-checkbox>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Prevent default</h3>
+    <forge-checkbox id="prevent-checkbox">Prevent default</forge-checkbox>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Form associated</h3>
+    <form name="test-form">
+      <forge-checkbox name="test-checkbox">Form associated</forge-checkbox>
+    </form>
   </div>
 </div>
 

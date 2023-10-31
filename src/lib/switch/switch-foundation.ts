@@ -5,9 +5,12 @@ import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './s
 
 export interface ISwitchFoundation extends ICustomElementFoundation {
   on: boolean;
+  defaultOn: boolean;
+  value: string;
+  dense: boolean;
   disabled: boolean;
   required: boolean;
-  dense: boolean;
+  readonly: boolean;
   icon: SwitchIconVisibility;
   labelPosition: SwitchLabelPosition;
   syncValidity(hasCustomValidityError: boolean): void;
@@ -17,24 +20,34 @@ export interface ISwitchFoundation extends ICustomElementFoundation {
 export class SwitchFoundation implements ISwitchFoundation {
   // State
   private _on = false;
+  private _defaultOn = false;
+  private _value = 'on';
+  private _dense = false;
   private _disabled = false;
   private _required = false;
-  private _dense = false;
+  private _readonly = false;
   private _icon: SwitchIconVisibility = 'on';
   private _labelPosition: SwitchLabelPosition = 'end';
 
+  private get _submittedValue(): string | null {
+    return this._on ? this._value : null;
+  }
+
   // Listeners
   private readonly _changeListener: EventListener;
+  private readonly _inputSlotListener: EventListener;
 
   constructor(private readonly _adapter: ISwitchAdapter) {
     this._changeListener = (evt: Event) => this._handleChange(evt);
+    this._inputSlotListener = () => this._handleInputSlotChange();
   }
 
   public initialize(): void {
     this._adapter.initialize();
-    this._adapter.addInputListener('change', this._changeListener);
+    this._adapter.addRootListener('change', this._changeListener);
+    this._adapter.addInputSlotListener(this._inputSlotListener);
     this._adapter.setIconVisibility(this._icon);
-    this._adapter.syncValue(this._on);
+    this._adapter.syncValue(this._submittedValue);
   }
 
   public syncValidity(hasCustomValidityError: boolean): void {
@@ -46,6 +59,11 @@ export class SwitchFoundation implements ISwitchFoundation {
   }
 
   private _handleChange(evt: Event): void {
+    if (this._readonly) {
+      this._adapter.setOn(this._on);
+      return;
+    }
+
     const target = evt.target as HTMLInputElement;
     const newValue = target.checked;
     const oldValue = this._on;
@@ -59,8 +77,12 @@ export class SwitchFoundation implements ISwitchFoundation {
       return;
     }
 
-    this._adapter.syncValue(this._on);
+    this._adapter.syncValue(this._submittedValue);
     this._setOnAttribute();
+  }
+
+  private _handleInputSlotChange(): void {
+    this._adapter.detectInputElement();
   }
 
   private _setOnAttribute(): void {
@@ -76,8 +98,41 @@ export class SwitchFoundation implements ISwitchFoundation {
     if (this._on !== value) {
       this._on = value;
       this._adapter.setOn(this._on);
-      this._adapter.syncValue(this._on);
+      this._adapter.syncValue(this._submittedValue);
       this._setOnAttribute();
+    }
+  }
+
+  public get defaultOn(): boolean {
+    return this._defaultOn;
+  }
+  public set defaultOn(value: boolean) {
+    if (this._defaultOn !== value) {
+      this._defaultOn = value;
+      this._adapter.setDefaultOn(this._defaultOn);
+      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.DEFAULT_ON, this._defaultOn);
+    }
+  }
+
+  public get value(): string {
+    return this._value;
+  }
+  public set value(value: string) {
+    if (this._value !== value) {
+      this._value = value;
+      this._adapter.setValue(this._value);
+      this._adapter.syncValue(this._submittedValue);
+      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.VALUE, true, this._value);
+    }
+  }
+
+  public get dense(): boolean {
+    return this._dense;
+  }
+  public set dense(value: boolean) {
+    if (this._dense !== value) {
+      this._dense = value;
+      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.DENSE, this._dense);
     }
   }
 
@@ -103,13 +158,14 @@ export class SwitchFoundation implements ISwitchFoundation {
     }
   }
 
-  public get dense(): boolean {
-    return this._dense;
+  public get readonly(): boolean {
+    return this._readonly;
   }
-  public set dense(value: boolean) {
-    if (this._dense !== value) {
-      this._dense = value;
-      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.DENSE, this._dense);
+  public set readonly(value: boolean) {
+    if (this._readonly !== value) {
+      this._readonly = value;
+      this._adapter.setReadonly(this._readonly);
+      this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }
 

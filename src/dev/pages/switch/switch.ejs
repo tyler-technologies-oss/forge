@@ -27,6 +27,11 @@
   </div>
 
   <div>
+    <h3 class="forge-typography--heading2">Readonly</h3>
+    <forge-switch readonly>off/on</forge-switch>
+  </div>
+
+  <div>
     <h3 class="forge-typography--heading2">Custom icons</h3>
     <forge-switch icon="both">
       <span>sad/happy</span>
@@ -34,16 +39,6 @@
       <forge-icon slot="icon-on" name="emoticon_happy"></forge-icon>
     </forge-switch>
   </div>
-
-  <form id="test-form">
-    <h3 class="forge-typography--heading2">Form associated</h3>
-    <label class="form-switch">
-      <span class="forge-typography--label">off/on</span>
-      <forge-switch id="form-switch" name="test-switch" aria-label="Aria active"></forge-switch>
-    </label>
-    <button type="reset">Reset</button>
-    <button type="submit">Submit</button>
-  </form>
 
   <div>
     <h3 class="forge-typography--heading2">Custom styling</h3>
@@ -53,6 +48,14 @@
   <div>
     <h3 class="forge-typography--heading2">Prevent default</h3>
     <forge-switch id="prevent-switch">off/on</forge-switch>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--subtitle1-secondary">Exposed input</h3>
+    <forge-switch id="exposed-input">
+      <input id="light-input" slot="input" type="checkbox" aria-labelledby="exposed-input" />
+      <span>off/on</span>
+    </forge-switch>
   </div>
 </div>
 

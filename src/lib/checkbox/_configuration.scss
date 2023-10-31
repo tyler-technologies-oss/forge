@@ -1,0 +1,54 @@
+@use '../core/styles/tokens/checkbox/tokens' as checkbox-tokens;
+
+@mixin configuration {
+  // Shared
+  --_primary-color: #{checkbox-tokens.get(primary-color)};
+  --_size: #{checkbox-tokens.get(size)};
+  --_border-width: #{checkbox-tokens.get(border-width)};
+  --_icon-color: #{checkbox-tokens.get(icon-color)};
+  --_state-layer-size: #{checkbox-tokens.get(state-layer-size)};
+  --_state-layer-dense-size: #{checkbox-tokens.get(state-layer-dense-size)};
+  
+  // Checkbox
+  --_background-color: #{checkbox-tokens.get(background-color)};
+  --_width: #{checkbox-tokens.get(width)};
+  --_height: #{checkbox-tokens.get(height)};
+  --_unchecked-border-width: #{checkbox-tokens.get(unchecked-border-width)};
+  --_unchecked-border-color: #{checkbox-tokens.get(unchecked-border-color)};
+  --_shape: #{checkbox-tokens.get(shape)};
+  --_elevation: #{checkbox-tokens.get(elevation)};
+
+  // Checkbox checked
+  --_checked-background-color: #{checkbox-tokens.get(checked-background-color)};
+  --_checked-border-width: #{checkbox-tokens.get(checked-border-width)};
+  --_checked-border-color: #{checkbox-tokens.get(checked-border-color)};
+
+  // Icon
+  --_icon-checked-color: #{checkbox-tokens.get(icon-checked-color)};
+  --_icon-indeterminate-color: #{checkbox-tokens.get(icon-indeterminate-color)};
+  --_icon-stroke-width: #{checkbox-tokens.get(icon-stroke-width)};
+
+  // Label
+  --_gap: #{checkbox-tokens.get(gap)};
+  --_justify: #{checkbox-tokens.get(justify)};
+  --_direction: #{checkbox-tokens.get(direction)};
+
+  // State layer
+  --_state-layer-width: #{checkbox-tokens.get(state-layer-width)};
+  --_state-layer-height: #{checkbox-tokens.get(state-layer-height)};
+  --_state-layer-checked-color: #{checkbox-tokens.get(state-layer-checked-color)};
+  --_state-layer-unchecked-color: #{checkbox-tokens.get(state-layer-unchecked-color)};
+  --_state-layer-shape: #{checkbox-tokens.get(state-layer-shape)};
+  
+  // Dense
+  --_state-layer-dense-width: #{checkbox-tokens.get(state-layer-dense-width)};
+  --_state-layer-dense-height: #{checkbox-tokens.get(state-layer-dense-height)};
+
+  // Disabled
+  --_disabled-opacity: #{checkbox-tokens.get(disabled-opacity)};
+
+  // Animation
+  --_animation-duration: #{checkbox-tokens.get(animation-duration)};
+  --_background-animation-timing: #{checkbox-tokens.get(background-animation-timing)};
+  --_icon-animation-timing: #{checkbox-tokens.get(icon-animation-timing)};
+}

@@ -4,8 +4,10 @@ export interface IBaseComponent extends HTMLElement {}
 export abstract class BaseComponent extends HTMLElement implements IBaseComponent {}
 
 export interface IBaseFormComponent<T = string> extends IBaseComponent {
+  value: T;
   disabled: boolean;
   required: boolean;
+  readonly: boolean;
   name: string;
   readonly form: HTMLFormElement | null;
   readonly labels: NodeList;
@@ -24,8 +26,12 @@ export interface IBaseFormComponent<T = string> extends IBaseComponent {
 
 /** Any form associated Custom HTML element. */
 export abstract class BaseFormComponent<T = string> extends BaseComponent implements IBaseFormComponent<T> {
+  public static formAssociated = true;
+
+  public abstract value: T;
   public abstract disabled: boolean;
   public abstract required: boolean;
+  public abstract readonly: boolean;
   public abstract name: string;
 
   public abstract get form(): HTMLFormElement | null;
@@ -34,6 +40,10 @@ export abstract class BaseFormComponent<T = string> extends BaseComponent implem
   public abstract get validationMessage(): string;
   public abstract get willValidate(): boolean;
   public abstract get internals(): ElementInternals;
+
+  // Needed for Safari, see https://bugs.webkit.org/show_bug.cgi?id=261432
+  // Replace with this.internals.validity.customError when resolved.
+  protected _hasCustomValidityError = false;
 
   public abstract setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
   public abstract checkValidity(): boolean;

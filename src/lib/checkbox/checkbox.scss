@@ -1,14 +1,148 @@
-@use '../theme';
-@use './checkbox.mixins' as mixins;
-@use '../form-field/mixins' as form-field-mixins;
-
-@include mixins.core-styles;
-@include form-field-mixins.shadow-styles;
+@use './core';
+@use './configuration';
+@use '../focus-indicator';
+@use '../state-layer';
 
 :host {
-  display: inline-block;
+  @include core.host;
 }
 
 :host([hidden]) {
   display: none;
 }
+
+// Unchecked
+.forge-checkbox {
+  @include configuration.configuration;
+  @include core.checkbox;
+
+  .container {
+    @include core.container;
+  }
+
+  .input {
+    @include core.input;
+  }
+
+  .background {
+    @include core.background;
+  }
+
+  .icon {
+    @include core.icon;
+
+    &--checked {
+      @include core.icon-checked;
+      @include core.icon-checked-hidden;
+    }
+
+    &--indeterminate {
+      @include core.icon-indeterminate;
+      @include core.icon-indeterminate-hidden;
+    }
+  }
+
+  .label {
+    @include core.label;
+  }
+
+  ::slotted([slot=input]) {
+    @include core.input;
+  }
+}
+
+// Checked
+:host([checked]) {
+  .background {
+    @include core.background-checked;
+  }
+
+  .icon {
+    &--checked {
+      @include core.icon-checked-visible;
+    }
+
+    &--indeterminate {
+      @include core.icon-indeterminate-hidden;
+    }
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_state-layer-checked-color)
+    ));
+  }
+}
+
+// Indeterminate
+:host([indeterminate]) {
+  .background {
+    @include core.background-checked;
+  }
+
+  .icon {
+    &--checked {
+      @include core.icon-checked-hidden;
+    }
+
+    &--indeterminate {
+      @include core.icon-indeterminate-visible;
+    }
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--_state-layer-on-color)
+    ));
+  }
+}
+
+// Dense
+:host([dense]) {
+  .forge-checkbox {
+    .container {
+      @include core.container-dense;
+    }
+  }
+}
+
+:host([disabled]) {
+  .forge-checkbox {
+    @include core.checkbox-disabled;
+
+    .container {
+      @include core.container-disabled;
+    }
+  }
+}
+
+// Readonly
+:host([readonly]) {
+  .forge-checkbox {
+    .container {
+      @include core.container-disabled;
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion) {
+  .forge-checkbox {
+    --_animation-duration: 0s;
+  }
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: var(--_state-layer-unchecked-color)
+  ));
+}
+
+/* stylelint-disable length-zero-no-unit */
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    shape: 0px,
+    outward-offset: 8px
+  ));
+}
+/* stylelint-enable length-zero-no-unit */
