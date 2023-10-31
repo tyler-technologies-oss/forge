@@ -21,7 +21,7 @@ const selectors = {
   LABEL: 'label',
   INPUT_SLOT: 'slot[name=input]',
   STATE_LAYER: 'forge-state-layer',
-  FOCUS_INDICATOR: 'forge-focus-indicator'
+  SLOTTED_INPUT: 'input[type=checkbox]'
 };
 
 const forwardedAttributes = [...INPUT_ARIA_ATTRIBUTES];

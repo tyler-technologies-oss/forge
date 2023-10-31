@@ -97,13 +97,9 @@ declare global {
  * @cssproperty --forge-checkbox-icon-animation-timing - The timing function of the checked and indeterminate icons animations.
  * 
  * @csspart checkbox - Styles the checkbox container element.
- * @csspart input-container - Styles the wrapper element of the input and checkbox background.
- * @csspart input - Styles the input element.
  * @csspart background - Styles the checkbox background element.
  * @csspart checkmark - Styles the checkmark element.
- * @csspart checkmark-path - Styles the checkmark path.
  * @csspart mixedmark - Styles the indeterminate mark element.
- * @csspart mixedmark-path - Styles the indeterminate mark path.
  * @csspart label - Styles the label element.
  * @csspart state-layer - Styles the state layer element.
  * @csspart focus-indicator - Styles the focus indicator element.

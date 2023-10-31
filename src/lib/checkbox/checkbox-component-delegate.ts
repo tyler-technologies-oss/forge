@@ -106,12 +106,14 @@ export class CheckboxComponentDelegate extends FormFieldComponentDelegate<ICheck
   }
 
   protected _build(): ICheckboxComponent {
-    const el = document.createElement(CHECKBOX_CONSTANTS.elementName);
-    return el;
+    return document.createElement(CHECKBOX_CONSTANTS.elementName);
   }
 
   protected override _configure(): void {
-    if (typeof this._config.options?.label === 'string') {
+    if (this._config.options?.id) {
+      this._element.id = this._config.options.id;
+    }
+    if (this._config.options?.label) {
       this._element.innerText = this._config.options.label;
     }
   }

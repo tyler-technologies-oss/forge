@@ -1,5 +1,5 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-import { INPUT_ARIA_ATTRIBUTES, BaseFormComponent, IBaseFormComponent } from '../core';
+import { BaseFormComponent, IBaseFormComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SwitchAdapter } from './switch-adapter';
@@ -138,17 +138,13 @@ declare global {
  * @cssproperty --forge-switch-active-animation-timing - The timing function used in active state animations.
  * 
  * @csspart switch - Styles the switch container element.
- * @csspart input-container - Styles the wrapper element of the input, track and handle.
- * @csspart input - Styles the input element.
  * @csspart track - Styles the track element.
  * @csspart handle - Styles the handle element.
  * @csspart icon-on - Styles the on icon element.
  * @csspart icon-off - Styles the off icon element.
- * @csspart icon-on-path - Styles the default on icon path.
- * @csspart icon-off-path - Styles the default off icon path.
  * @csspart label - Styles the label element.
- * @csspart state-layer - Styles the state layer element.
- * @csspart focus-indicator - Styles the focus indicator element.
+ * @csspart state-layer - Styles the state layer root element.
+ * @csspart focus-indicator - Styles the focus indicator root element.
  */
 @CustomElement({
   name: SWITCH_CONSTANTS.elementName,

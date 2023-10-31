@@ -47,30 +47,14 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   }
 
   public initialize(): void {
-    const slottedInput = this._component.querySelector(':is(input[type=checkbox]:not([slot]), [slot=input])') as HTMLInputElement;
+    const slottedInput = this._component.querySelector(CHECKBOX_CONSTANTS.selectors.SLOTTED_INPUT) as HTMLInputElement;
     if (slottedInput) {
       slottedInput.slot = 'input';
-      slottedInput.type = 'checkbox';
+      this._switchInput(slottedInput, this._inputElement);
+    } else {
+      this._initializeForwardObserver(this._inputElement);
     }
-    this.observeInput(slottedInput ?? this._inputElement);
-    if (!slottedInput) {
-      this.initializeInput();
-    }
-  }
-
-  public initializeInput(): void {
-    this._forwardObserver?.disconnect();
-    this._initializeForwardObserver(this._activeInputElement);
-  }
-
-  public observeInput(el: HTMLInputElement = this._inputElement): void {
-    this._inputAdapter.initialize(el, (newEl, oldEl) => {
-      cloneAttributes(oldEl, newEl, ['checked', 'aria-readonly']);
-      cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
-      cloneValidationMessage(oldEl, newEl);
-      newEl.type = 'checkbox';
-      this.initializeInput();
-    });
+    this._observeInput(slottedInput ?? this._inputElement);
   }
 
   public setChecked(value: boolean): void {
@@ -153,9 +137,27 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     this._component.internals.setValidity(flags, message, this._activeInputElement);
   }
 
+  private _initializeInput(): void {
+    this._forwardObserver?.disconnect();
+    this._initializeForwardObserver(this._activeInputElement);
+  }
+
   private _initializeForwardObserver(el: HTMLElement): void {
     this._forwardObserver = forwardAttributes(this._component, CHECKBOX_CONSTANTS.forwardedAttributes, (name, value) => {
       toggleAttribute(el, !!value, name, value ?? undefined);
+    });
+  }
+
+  private _switchInput(newEl: HTMLInputElement, oldEl: HTMLInputElement): void {
+    cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
+    cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
+    cloneValidationMessage(oldEl, newEl);
+  }
+
+  private _observeInput(el: HTMLInputElement = this._inputElement): void {
+    this._inputAdapter.initialize(el, (newEl, oldEl) => {
+      this._switchInput(newEl, oldEl);
+      this._initializeInput();
     });
   }
 }
