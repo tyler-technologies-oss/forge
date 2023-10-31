@@ -8,8 +8,9 @@ import { SwitchFoundation } from './switch-foundation';
 
 import template from './switch.html';
 import styles from './switch.scss';
+import { ILabelAware } from '../label/label-aware';
 
-export interface ISwitchComponent extends IBaseFormComponent {
+export interface ISwitchComponent extends IBaseFormComponent, ILabelAware {
   on: boolean;
   /**
    * @deprecated use `on` instead
@@ -288,6 +289,14 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
 
   public formDisabledCallback(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+  public labelClickedCallback(): void {
+    this._foundation.proxyClick();
+  }
+
+  public labelChangedCallback(value: string | null): void {
+    this._foundation.proxyLabel(value);
   }
 
   @FoundationProperty()

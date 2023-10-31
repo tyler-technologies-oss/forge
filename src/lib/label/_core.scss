@@ -1,0 +1,11 @@
+@use '../core/styles/typography';
+
+@mixin host {
+  display: inline-block;
+}
+
+@mixin label {
+  @include typography.style(label);
+
+  cursor: default;
+}

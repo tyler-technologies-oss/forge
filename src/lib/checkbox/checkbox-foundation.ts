@@ -13,6 +13,8 @@ export interface ICheckboxFoundation extends ICustomElementFoundation {
   required: boolean;
   readonly: boolean;
   labelPosition: CheckboxLabelPosition;
+  proxyClick(): void;
+  proxyLabel(value: string | null): void;
   syncValidity(hasCustomValidityError: boolean): void;
   setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
 }
@@ -57,6 +59,14 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     this._adapter.addInputSlotListener(this._inputSlotListener);
     this._adapter.syncValue(this._submittedValue, this._formState);
   };
+
+  public proxyClick(): void {
+    this._adapter.proxyClick();
+  }
+
+  public proxyLabel(value: string | null): void {
+    this._adapter.proxyLabel(value);
+  }
 
   public syncValidity(hasCustomValidityError: boolean): void {
     this._adapter.syncValidity(hasCustomValidityError);

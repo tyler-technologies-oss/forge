@@ -1,0 +1,13 @@
+@use './core';
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-label {
+  @include core.label;
+}

@@ -30,6 +30,7 @@
   { "label": "Icon button", "path": "/pages/icon-button/icon-button.html" },
   { "label": "Inline message", "path": "/pages/inline-message/inline-message.html" },
   { "label": "Keyboard shortcut", "path": "/pages/keyboard-shortcut/keyboard-shortcut.html" },
+  { "label": "Label", "path": "/pages/label/label.html", "tags": ["form"] },
   { "label": "Label value", "path": "/pages/label-value/label-value.html", "tags": ["readonly"] },
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
   { "label": "List", "path": "/pages/list/list.html" },

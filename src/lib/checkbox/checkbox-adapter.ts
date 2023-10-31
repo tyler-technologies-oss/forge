@@ -17,6 +17,8 @@ export interface ICheckboxAdapter extends IBaseAdapter {
   addRootListener(event: string, callback: EventListener): void;
   addInputSlotListener(callback: EventListener): void;
   detectInputElement(): void;
+  proxyClick(): void;
+  proxyLabel(value: string | null): void;
   syncValue(value: string | null, state: CheckboxState): void;
   syncValidity(hasCustomValidityError: boolean): void;
   setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
@@ -30,6 +32,8 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private readonly _stateLayerElement: StateLayerComponent;
   private readonly _inputAdapter: SlottedElementAdapter<HTMLInputElement>;
   private _forwardObserver?: MutationObserver;
+  private _forwardedAriaLabel?: string;
+  private _labelElementText?: string;
 
   private get _activeInputElement(): HTMLInputElement {
     return this._inputAdapter.el ?? this._inputElement;
@@ -115,6 +119,17 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     }
   }
 
+  public proxyClick(): void {
+    this._activeInputElement.click();
+    // TODO: use `{ focusVisble: false }` when supported.
+    this._activeInputElement.focus();
+  }
+
+  public proxyLabel(value: string | null): void {
+    this._labelElementText = value ?? undefined;
+    this._setAriaLabel();
+  }
+
   public syncValue(value: string | null, state: CheckboxState): void {
     const data = value ? new FormData() : null;
     if (data && value) {
@@ -144,10 +159,23 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
 
   private _initializeForwardObserver(el: HTMLElement): void {
     this._forwardObserver = forwardAttributes(this._component, CHECKBOX_CONSTANTS.forwardedAttributes, (name, value) => {
+      // Use the connected label element as a fallback if aria-label is removed. Store the value so
+      // it can be used to determine whether an updated label element should take effect.
+      if (name === 'aria-label') {
+        this._forwardedAriaLabel = value ?? undefined;
+        this._setAriaLabel();
+        return;
+      }
+      // Otherwise forward the attribute to the element.
       toggleAttribute(el, !!value, name, value ?? undefined);
     });
   }
 
+  private _setAriaLabel(): void {
+    const hasAriaLabel = !!this._forwardedAriaLabel || !!this._labelElementText;
+    toggleAttribute(this._activeInputElement, hasAriaLabel, 'aria-label', this._forwardedAriaLabel ?? this._labelElementText);
+  }
+  
   private _switchInput(newEl: HTMLInputElement, oldEl: HTMLInputElement): void {
     cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
     cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
