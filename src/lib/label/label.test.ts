@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
@@ -105,8 +105,91 @@ describe('Label', () => {
     const connectedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
 
     el.append(ctx.labelAwareElement);
-    console.log(el);
+    await elementUpdated(el);
 
-    expect(connectedSpy).to.have.been.calledOnce;
+    expect(connectedSpy).to.have.been.called;
+  });
+
+  it('should update manually', async () => {
+    const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
+    const ctx = new LabelHarness(el);
+    
+    el.append(ctx.labelAwareElement);
+    await elementUpdated(el);
+    
+    const updatedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
+    el.update();
+
+    expect(updatedSpy).to.have.been.calledOnce;
+  });
+
+  it('should not update automatically by default', async () => {
+    const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
+    const ctx = new LabelHarness(el);
+    
+    el.insertAdjacentElement('afterend', ctx.labelAwareElement);
+    el.for = ctx.labelAwareElement.id;
+    
+    const changedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
+    el.innerText = 'New Label';
+
+    expect(changedSpy).to.not.have.been.called;
+  });
+
+  it('should update automatically when dynamic', async () => {
+    const el = await fixture<ILabelComponent>(html`<forge-label dynamic>Label</forge-label>`);
+    const ctx = new LabelHarness(el);
+    
+    el.insertAdjacentElement('afterend', ctx.labelAwareElement);
+    el.for = ctx.labelAwareElement.id;
+    
+    const changedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
+    el.innerText = 'New Label';
+
+    await elementUpdated(el);
+
+    expect(changedSpy).to.have.been.calledWith('New Label');
+  });
+
+  it('should stop updating automatically when dynamic is removed', async () => {
+    const el = await fixture<ILabelComponent>(html`<forge-label dynamic>Label</forge-label>`);
+    const ctx = new LabelHarness(el);
+    
+    el.insertAdjacentElement('afterend', ctx.labelAwareElement);
+    el.for = ctx.labelAwareElement.id;
+    el.innerText = 'New Label';
+    
+    await elementUpdated(el);
+    el.dynamic = false;
+
+    const changedSpy = spy(ctx.labelAwareElement, 'labelChangedCallback');
+    el.innerText = 'New Label 2';
+
+    expect(changedSpy).to.not.have.been.called;
+  });
+
+  it('should handle click', async () => {
+    const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
+    const ctx = new LabelHarness(el);
+    
+    el.insertAdjacentElement('afterend', ctx.labelAwareElement);
+    el.for = ctx.labelAwareElement.id;
+    
+    const clickedSpy = spy(ctx.labelAwareElement, 'labelClickedCallback');
+    await ctx.clickElement(el);
+
+    expect(clickedSpy).to.have.been.calledOnce;
+  });
+
+  it('should warn when target is not label aware', async () => {
+    const el = await fixture<ILabelComponent>(html`<forge-label>Label</forge-label>`);
+    const div = document.createElement('div');
+    const warnSpy = spy(console, 'warn');
+
+    div.id = 'label-unaware';
+    el.insertAdjacentElement('afterend', div);
+    el.for = div.id;
+
+    expect(warnSpy).to.have.been.calledOnce;
   });
 })

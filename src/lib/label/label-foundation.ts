@@ -54,7 +54,6 @@ export class LabelFoundation implements ILabelFoundation {
   }
 
   private _handleSlotChange(): void {
-    console.log('slot change');
     if (!this._for && !this._forElement) {
       this._adapter.trySetTarget(null);
       this._tryConnect();

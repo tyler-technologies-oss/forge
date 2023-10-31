@@ -50,7 +50,6 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
 
   public trySetTarget(value: string | null): void {
     this._targetElement = this._locateTargetElement(value);
-    console.log(this._targetElement);
   }
 
   /**
@@ -76,7 +75,8 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
     this._mutationObserver = new MutationObserver(callback);
     this._mutationObserver.observe(this._component, {
       subtree: true,
-      characterData: true
+      characterData: true,
+      childList: true
     });
 
     // Run the callback once to capture the current state of the label
