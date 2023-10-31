@@ -1,111 +1,120 @@
 import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core';
 import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
 import { ICheckboxComponent } from './checkbox';
-import { CHECKBOX_CONSTANTS } from './checkbox-constants';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition } from './checkbox-constants';
 
 export type CheckboxComponentDelegateProps = Partial<ICheckboxComponent>;
 export interface ICheckboxComponentDelegateOptions extends IFormFieldComponentDelegateOptions {
   id?: string;
   label?: string;
-  checked?: boolean;
 }
 export interface ICheckboxComponentDelegateConfig extends IBaseComponentDelegateConfig<ICheckboxComponent, ICheckboxComponentDelegateOptions> {}
 
 export class CheckboxComponentDelegate extends FormFieldComponentDelegate<ICheckboxComponent, ICheckboxComponentDelegateOptions> {
-  private _inputElement: HTMLInputElement;
-  private _labelElement?: HTMLLabelElement;
-
   constructor(config?: ICheckboxComponentDelegateConfig) {
     super(config);
   }
 
-  public get value(): boolean {
-    return this.checked;
+  public get value(): string {
+    return this._element.value;
   }
-  public set value(value: boolean) {
-    this.checked = value;
+  public set value(value: string) {
+    this._element.value = value;
   }
 
   public get checked(): boolean {
-    return this._inputElement.checked;
+    return this._element.checked;
   }
   public set checked(value: boolean) {
-    this._inputElement.checked = value;
+    this._element.checked = value;
+  }
+
+  public get defaultChecked(): boolean {
+    return this._element.defaultChecked;
+  }
+  public set defaultChecked(value: boolean) {
+    this._element.defaultChecked = value;
   }
 
   public get disabled(): boolean {
-    return this._inputElement.disabled;
+    return this._element.disabled;
   }
   public set disabled(value: boolean) {
-    this._inputElement.disabled = value;
+    this._element.disabled = value;
   }
 
-  public get inputElement(): HTMLInputElement {
-    return this._inputElement;
+  public get indeterminate(): boolean {
+    return this._element.indeterminate;
+  }
+  public set indeterminate(value: boolean) {
+    this._element.indeterminate = value;
   }
 
-  public get labelElement(): HTMLLabelElement | undefined {
-    return this._labelElement;
+  public get dense(): boolean {
+    return this._element.dense;
+  }
+  public set dense(value: boolean) {
+    this._element.dense = value;
+  }
+
+  public get required(): boolean {
+    return this._element.required;
+  }
+  public set required(value: boolean) {
+    this._element.required = value;
+  }
+
+  public get readonly(): boolean {
+    return this._element.readonly;
+  }
+  public set readonly(value: boolean) {
+    this._element.readonly = value;
+  }
+
+  public get name(): string {
+    return this._element.name;
+  }
+  public set name(value: string) {
+    this._element.name = value;
+  }
+
+  public get labelPosition(): CheckboxLabelPosition {
+    return this._element.labelPosition;
+  }
+  public set labelPosition(value: CheckboxLabelPosition) {
+    this._element.labelPosition = value;
   }
 
   public onChange(listener: (value: boolean) => void): void {
-    this._inputElement.addEventListener('change', evt => listener((evt.target as HTMLInputElement).checked));
+    this._element.addEventListener('change', evt => listener((evt.target as ICheckboxComponent).checked));
   }
 
   public onFocus(listener: (evt: Event) => void): void {
-    this._inputElement.addEventListener('focus', evt => listener(evt));
+    this._element.addEventListener('focus', evt => listener(evt));
   }
 
   public onBlur(listener: (evt: Event) => void): void {
-    this._inputElement.addEventListener('blur', evt => listener(evt));
+    this._element.addEventListener('blur', evt => listener(evt));
   }
 
   public setLabel(text: string | null): void {
-    if (text) {
-      if (this._labelElement) {
-        this._labelElement.textContent = text;
-      } else {
-        this._createLabel(text);
-      }
-    } else if (this._labelElement) {
-      this._element.removeChild(this._labelElement);
-      this._labelElement = undefined;
-    }
+    this._element.innerText = text ?? '';
+  }
+
+  public toggle(force?: boolean): void {
+    this._element.toggle(force);
   }
 
   protected _build(): ICheckboxComponent {
-    const checkbox = document.createElement(CHECKBOX_CONSTANTS.elementName);
-    this._inputElement = this._buildInputElement();
-    checkbox.appendChild(this._inputElement);
-    return checkbox;
+    return document.createElement(CHECKBOX_CONSTANTS.elementName);
   }
 
   protected override _configure(): void {
-    if (typeof this._config.options?.label === 'string') {
-      this._createLabel(this._config.options.label);
-    }
-  }
-
-  private _createLabel(text: string): void {
-    this._labelElement = document.createElement('label');
-    this._labelElement.textContent = text;
     if (this._config.options?.id) {
-      this._labelElement.setAttribute('for', this._config.options.id);
+      this._element.id = this._config.options.id;
     }
-    this._element.appendChild(this._labelElement);
-  }
-
-  private _buildInputElement(): HTMLInputElement {
-    const inputElement = document.createElement('input');
-    inputElement.type = 'checkbox';
-
-    if (this._config.options?.checked !== undefined) {
-      inputElement.checked = this._config.options.checked;
+    if (this._config.options?.label) {
+      this._element.innerText = this._config.options.label;
     }
-    if (this._config.options?.id) {
-      inputElement.id = this._config.options.id;
-    }
-
-    return inputElement;
   }
 }

@@ -162,16 +162,16 @@ export function cloneValidationMessage(from: HTMLInputElement, to: HTMLInputElem
 }
 
 /**
- * A utility class for switching between input elements.
+ * A utility class for switching between elements.
  */
-export class InputAdapter {
-  private _el: HTMLInputElement;
-  private _attachCallback: (newEl: HTMLInputElement, oldEl?: HTMLInputElement) => void;
+export class SlottedElementAdapter<T extends HTMLElement = HTMLElement> {
+  private _el: T;
+  private _attachCallback: (newEl: T, oldEl: T) => void;
 
   /**
-   * Returns the input element associated with this adapter.
+   * Returns the element associated with this adapter.
    */
-  public get el(): HTMLInputElement {
+  public get el(): T {
     return this._el;
   }
 
@@ -182,7 +182,7 @@ export class InputAdapter {
    * @param to - The element to clone attributes to.
    * @param attributes - The names of the attributes to clone.
    */
-  public static cloneAttributes(from: HTMLInputElement, to: HTMLInputElement, attributes: string[]): void {
+  public static cloneAttributes(from: HTMLElement, to: HTMLElement, attributes: string[]): void {
     cloneAttributes(from, to, attributes);
   }
 
@@ -192,38 +192,41 @@ export class InputAdapter {
    * @param from - The element to clone properties from.
    * @param to - The element to clone properties to.
    */
-  public static cloneProperties(from: HTMLInputElement, to: HTMLInputElement): void {
-    cloneProperties(from, to, INPUT_PROPERTIES);
+  public static cloneProperties(from: HTMLElement, to: HTMLElement, properties: (keyof HTMLElement)[]): void {
+    cloneProperties(from, to, properties);
   }
   
   /**
-   * Clones the validation message from one input element to another.
+   * Clones the validation message from one element to another.
    * 
-   * @param from - The input element to clone the validation message from.
-   * @param to - The input element to clone the validation message to.
+   * @param from - The element to clone the validation message from.
+   * @param to - The element to clone the validation message to.
    */
-  public static cloneValidationMessage(from: HTMLInputElement, to: HTMLInputElement): void {
-    cloneValidationMessage(from, to);
+  public static cloneValidationMessage(from: HTMLElement, to: HTMLElement): void {
+    if (Object.hasOwnProperty.call(from, 'validationMessage') && Object.hasOwnProperty.call(to, 'validationMessage')) {
+      cloneValidationMessage(from as HTMLInputElement, to as HTMLInputElement);
+    } else {
+      console.warn('cloneValidationMessage() requires both elements to be input elements.');
+    }
   }
 
   /**
-   * Initializes the adapter with an initial input element and attach callback.
+   * Initializes the adapter with an initial element and attach callback.
    * 
-   * @param el - The input element to associate with the adapter.
-   * @param attachCallback - The callback to invoke when attaching the input element.
+   * @param el - The element to associate with the adapter.
+   * @param attachCallback - The callback to invoke when attaching the element.
    */
-  public initialize(el: HTMLInputElement, attachCallback: (newEl: HTMLInputElement, oldEl?: HTMLInputElement) => void): void {
+  public initialize(el: T, attachCallback: (newEl: T, oldEl: T) => void): void {
     this._attachCallback = attachCallback;
-    this._attachCallback(el, this._el);
     this._el = el;
   }
 
   /**
-   * Replaces the attached input element.
+   * Replaces the attached element.
    * 
-   * @param el - The new input element to attach.
+   * @param el - The new element to attach.
    */
-  public attachInput(el: HTMLInputElement): void {
+  public attachElement(el: T): void {
     this._attachCallback(el, this._el);
     this._el = el;
   }

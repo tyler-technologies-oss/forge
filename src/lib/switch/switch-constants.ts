@@ -27,7 +27,8 @@ const selectors = {
   ICON_ON: '#icon-on',
   ICON_OFF: '#icon-off',
   INPUT_SLOT: 'slot[name=input]',
-  STATE_LAYER: 'forge-state-layer'
+  STATE_LAYER: 'forge-state-layer',
+  SLOTTED_INPUT: 'input[type=checkbox]'
 };
 
 const events = {

@@ -1,5 +1,5 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, InputAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
+import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, SlottedElementAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
 import { StateLayerComponent } from '../state-layer';
 import { ICheckboxComponent } from './checkbox';
 import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
@@ -30,7 +30,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private readonly _labelElement: HTMLElement;
   private readonly _inputSlotElement: HTMLSlotElement;
   private readonly _stateLayerElement: StateLayerComponent;
-  private readonly _inputAdapter: InputAdapter;
+  private readonly _inputAdapter: SlottedElementAdapter<HTMLInputElement>;
   private _forwardObserver?: MutationObserver;
   private _forwardedAriaLabel?: string;
   private _labelElementText?: string;
@@ -47,20 +47,18 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     this._labelElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.LABEL);
     this._inputSlotElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.INPUT_SLOT) as HTMLSlotElement;
     this._stateLayerElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
-    this._inputAdapter = new InputAdapter();
+    this._inputAdapter = new SlottedElementAdapter();
   }
 
   public initialize(): void {
-    this._inputAdapter.initialize(this._inputElement, (newEl, oldEl) => {
-      if (oldEl) {
-        cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
-        cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
-        cloneValidationMessage(oldEl, newEl);
-      }
-
-      this._forwardObserver?.disconnect();
-      this._initializeForwardObserver(newEl);
-    });
+    const slottedInput = this._component.querySelector(CHECKBOX_CONSTANTS.selectors.SLOTTED_INPUT) as HTMLInputElement;
+    if (slottedInput) {
+      slottedInput.slot = 'input';
+      this._switchInput(slottedInput, this._inputElement);
+    } else {
+      this._initializeForwardObserver(this._inputElement);
+    }
+    this._observeInput(slottedInput ?? this._inputElement);
   }
 
   public setChecked(value: boolean): void {
@@ -115,9 +113,9 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   public detectInputElement(): void {
     const inputElement = this._inputSlotElement.assignedElements()[0] as HTMLInputElement;
     if (inputElement) {
-      this._inputAdapter.attachInput(inputElement);
+      this._inputAdapter.attachElement(inputElement);
     } else {
-      this._inputAdapter.attachInput(this._inputElement);
+      this._inputAdapter.attachElement(this._inputElement);
     }
   }
 
@@ -154,6 +152,11 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
     this._component.internals.setValidity(flags, message, this._activeInputElement);
   }
 
+  private _initializeInput(): void {
+    this._forwardObserver?.disconnect();
+    this._initializeForwardObserver(this._activeInputElement);
+  }
+
   private _initializeForwardObserver(el: HTMLElement): void {
     this._forwardObserver = forwardAttributes(this._component, CHECKBOX_CONSTANTS.forwardedAttributes, (name, value) => {
       // Use the connected label element as a fallback if aria-label is removed. Store the value so
@@ -171,5 +174,18 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   private _setAriaLabel(): void {
     const hasAriaLabel = !!this._forwardedAriaLabel || !!this._labelElementText;
     toggleAttribute(this._activeInputElement, hasAriaLabel, 'aria-label', this._forwardedAriaLabel ?? this._labelElementText);
+  }
+  
+  private _switchInput(newEl: HTMLInputElement, oldEl: HTMLInputElement): void {
+    cloneAttributes(oldEl, newEl, ['type', 'checked', 'aria-readonly']);
+    cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
+    cloneValidationMessage(oldEl, newEl);
+  }
+
+  private _observeInput(el: HTMLInputElement = this._inputElement): void {
+    this._inputAdapter.initialize(el, (newEl, oldEl) => {
+      this._switchInput(newEl, oldEl);
+      this._initializeInput();
+    });
   }
 }

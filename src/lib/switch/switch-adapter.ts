@@ -1,5 +1,5 @@
 import { getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter, InputAdapter, forwardAttributes } from '../core';
+import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, SlottedElementAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
 import { StateLayerComponent } from '../state-layer';
 import { ISwitchComponent } from './switch';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
@@ -32,7 +32,7 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
   private readonly _iconOffElement: HTMLElement;
   private readonly _inputSlotElement: HTMLSlotElement;
   private readonly _stateLayerElement: StateLayerComponent;
-  private readonly _inputAdapter: InputAdapter;
+  private readonly _inputAdapter: SlottedElementAdapter<HTMLInputElement>;
   private _forwardObserver?: MutationObserver;
   private _forwardedAriaLabel?: string;
   private _labelElementText?: string;
@@ -50,20 +50,18 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     this._iconOnElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_ON);
     this._iconOffElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.ICON_OFF);
     this._stateLayerElement = getShadowElement(component, SWITCH_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
-    this._inputAdapter = new InputAdapter();
+    this._inputAdapter = new SlottedElementAdapter();
   }
 
   public initialize(): void {
-    this._inputAdapter.initialize(this._inputElement, (newEl, oldEl) => {
-      if (oldEl) {
-        InputAdapter.cloneAttributes(oldEl, newEl, ['type', 'role', 'checked', 'aria-readonly']);
-        InputAdapter.cloneProperties(oldEl, newEl);
-        InputAdapter.cloneValidationMessage(oldEl, newEl);
-      }
-
-      this._forwardObserver?.disconnect();
-      this._initializeForwardObserver(newEl);
-    });
+    const slottedInput = this._component.querySelector(SWITCH_CONSTANTS.selectors.SLOTTED_INPUT) as HTMLInputElement;
+    if (slottedInput) {
+      slottedInput.slot = 'input';
+      this._switchInput(slottedInput, this._inputElement);
+    } else {
+      this._initializeForwardObserver(this._inputElement);
+    }
+    this._observeInput(slottedInput ?? this._inputElement);
   }
 
   public setOn(value: boolean): void {
@@ -118,16 +116,12 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     this._inputElement.addEventListener('slotchange', callback);
   }
 
-  /**
-   * Detects the input element and attaches it to the input adapter.
-   * If an assigned element exists, it will be used. Otherwise, the default input element will be used.
-   */
   public detectInputElement(): void {
     const inputElement = this._inputSlotElement.assignedElements()[0] as HTMLInputElement;
     if (inputElement) {
-      this._inputAdapter.attachInput(inputElement);
+      this._inputAdapter.attachElement(inputElement);
     } else {
-      this._inputAdapter.attachInput(this._inputElement);
+      this._inputAdapter.attachElement(this._inputElement);
     }
   }
 
@@ -167,6 +161,11 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
     this._component.internals.setValidity(flags, message, this._activeInputElement);
   }
 
+  private _initializeInput(): void {
+    this._forwardObserver?.disconnect();
+    this._initializeForwardObserver(this._activeInputElement);
+  }
+
   private _initializeForwardObserver(el: HTMLElement): void {
     this._forwardObserver = forwardAttributes(this._component, SWITCH_CONSTANTS.forwardedAttributes, (name, value) => {
       // Use the connected label element as a fallback if aria-label is removed. Store the value so
@@ -184,5 +183,18 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
   private _setAriaLabel(): void {
     const hasAriaLabel = !!this._forwardedAriaLabel || !!this._labelElementText;
     toggleAttribute(this._activeInputElement, hasAriaLabel, 'aria-label', this._forwardedAriaLabel ?? this._labelElementText);
+  }
+  
+  private _switchInput(newEl: HTMLInputElement, oldEl: HTMLInputElement): void {
+    cloneAttributes(oldEl, newEl, ['type', 'role', 'checked', 'aria-readonly']);
+    cloneProperties(oldEl, newEl, INPUT_PROPERTIES);
+    cloneValidationMessage(oldEl, newEl);
+  }
+
+  private _observeInput(el: HTMLInputElement = this._inputElement): void {
+    this._inputAdapter.initialize(el, (newEl, oldEl) => {
+      this._switchInput(newEl, oldEl);
+      this._initializeInput();
+    });
   }
 }
