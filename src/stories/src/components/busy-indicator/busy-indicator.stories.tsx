@@ -79,9 +79,7 @@ export const Default: Story<IBusyIndicatorProps> = ({
   };
 
   return (
-    <ForgeButton type="raised">
-      <button type="button" onClick={show}>Show busy</button>
-    </ForgeButton>
+    <ForgeButton variant="raised" onClick={show}>Show busy</ForgeButton>
   );
 };
 Default.args = {

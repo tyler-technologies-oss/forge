@@ -14,12 +14,8 @@ export const DialogComplexCodeHtml = () => `
   </p>
 
   <forge-toolbar>
-    <forge-button type="outlined" slot="end" style="margin-right: 16px">
-      <button type="button" id="cancel-button">Cancel</button>
-    </forge-button>
-    <forge-button type="raised" slot="end">
-      <button type="button" id="accept-button" forge-dialog-focus>Discard</button>
-    </forge-button>
+    <forge-button variant="outlined" slot="end" style="margin-right: 16px" id="cancel-button">Cancel</forge-button>
+    <forge-button variant="raised" slot="end" id="accept-button" forge-dialog-focus>Discard</forge-button>
   </forge-toolbar>
 </template>
 `;

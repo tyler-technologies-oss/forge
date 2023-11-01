@@ -36,6 +36,7 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
       this._destroyDeferListener();
       this._destroyDeferListener = undefined;
     }
+    this._targetElement = null;
   }
 
   public async deferInitialization(listener: (evt?: PointerEvent) => void): Promise<void> {

@@ -1,7 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/file-picker';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import type { IFilePickerComponent, ISwitchComponent } from '@tylertech/forge';
 
 const filePicker = document.querySelector('#file-picker-default') as IFilePickerComponent;

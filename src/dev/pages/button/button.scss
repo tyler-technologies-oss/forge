@@ -1,5 +1,30 @@
 @use '../../src/shared';
 
-button, a {
+.button-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+forge-button {
   width: 256px;
+}
+
+form:has(forge-button) forge-button {
+  width: auto;
+}
+
+#my-popover {
+  max-inline-size: 500px;
+}
+
+.test-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+h3 {
+  margin-block: 16px 0;
 }

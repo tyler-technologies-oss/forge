@@ -100,9 +100,6 @@ The `forge.css` file contains other stylesheets that you may or may not need. We
 /// Include the theme and typography styles
 @use '@tylertech/forge/dist/theme/forge-theme.css';
 @use '@tylertech/forge/dist/typography/forge-typography.css';
-
-/// Include styles for <forge-button> elements
-@use '@tylertech/forge/dist/button/forge-button.css';
 ```
 
 Additionally, apply the `forge-typography` class to a root element (typically the `<body>`):
@@ -143,9 +140,7 @@ Now the text-field and button components can be used anywhere in the DOM:
   <input type="text" id="input" />
 </forge-text-field>
 
-<forge-button type="raised">
-  <button type="button">Button</button>
-</forge-button>
+<forge-button variant="raised">Button</forge-button>
 ```
 
 Don't forget to also add the `forge-typography` class to the `<body>` element to ensure your application inherits the default typography styles:

@@ -1,5 +1,4 @@
 @use './mixins';
-@use '../button/forge-button';
 
 :host {
   @include mixins.host;

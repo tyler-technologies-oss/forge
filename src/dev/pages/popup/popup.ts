@@ -4,7 +4,6 @@ import '@tylertech/forge/select';
 import '@tylertech/forge/text-field';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import type { IPopupComponent, IPopupPositionEventData, ISelectComponent } from '@tylertech/forge';
 
 let popupElement: IPopupComponent | undefined;

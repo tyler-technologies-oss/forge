@@ -2,7 +2,6 @@ import '$src/shared';
 import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/banner';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import { tylIconAddAlert } from '@tylertech/tyler-icons/standard';
 import type { IBannerComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 

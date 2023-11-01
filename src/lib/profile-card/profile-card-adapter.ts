@@ -1,5 +1,6 @@
 import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
 import { IAvatarComponent } from '../avatar';
+import { IButtonComponent } from '../button';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IconComponentDelegate } from '../icon';
 import { IToolbarComponent } from '../toolbar';
@@ -31,8 +32,8 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
   private _emailElement: HTMLElement;
   private _avatarElement: IAvatarComponent;
   private _actionToolbar: IToolbarComponent;
-  private _profileButton: HTMLButtonElement;
-  private _signOutButton: HTMLButtonElement;
+  private _profileButton: IButtonComponent;
+  private _signOutButton: IButtonComponent;
 
   constructor(component: IProfileCardComponent) {
     super(component);
@@ -40,8 +41,8 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
     this._emailElement = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.EMAIL);
     this._avatarElement = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.AVATAR) as IAvatarComponent;
     this._actionToolbar = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.ACTION_TOOLBAR) as IToolbarComponent;
-    this._profileButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as HTMLButtonElement;
-    this._signOutButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as HTMLButtonElement;
+    this._profileButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as IButtonComponent;
+    this._signOutButton = getShadowElement(component, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as IButtonComponent;
   }
 
   public setFullName(value: string): void {

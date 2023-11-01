@@ -3,7 +3,6 @@ import type { IBusyIndicatorComponent, ISelectComponent, ISwitchComponent } from
 import '@tylertech/forge/busy-indicator';
 import '@tylertech/forge/busy-indicator/forge-busy-indicator.scss';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import './busy-indicator.scss';
 
 const titleInput = document.querySelector('#title-input') as HTMLInputElement;

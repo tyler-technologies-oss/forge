@@ -1,9 +1,7 @@
 export const MenuDefaultCodeHtml = () => {
   return `
 <forge-menu>
-  <forge-button type="raised">
-    <button type="button">Show menu</button>
-  </forge-button>
+  <forge-button variant="raised">Show menu</forge-button>
 </forge-menu>
   `;
 };

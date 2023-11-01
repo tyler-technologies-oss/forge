@@ -1,6 +1,5 @@
 import '$src/shared';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/select';
 import type { ISelectComponent, ISwitchComponent, SelectDensityType } from '@tylertech/forge';

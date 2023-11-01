@@ -1,7 +1,5 @@
 export const DialogSimpleCodeHtml = () => `
-<forge-button type="raised">
-  <button type="button" id="my-button">Show dialog</button>
-</forge-button>
+<forge-button variant="raised" id="my-button">Show dialog</forge-button>
 
 <forge-dialog id="my-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-message">
   <header class="forge-dialog__header" forge-dialog-move-target>
@@ -15,9 +13,7 @@ export const DialogSimpleCodeHtml = () => `
   </p>
 
   <footer class="forge-dialog__footer">
-    <forge-button type="raised">
-      <button type="button" id="cancel-button">Close</button>
-    </forge-button>
+    <forge-button variant="raised" id="cancel-button">Close</forge-button>
   </footer>
 </template>
 `;

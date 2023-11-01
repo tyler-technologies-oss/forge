@@ -20,11 +20,9 @@
 
   <!-- Select dropdown -->
   <h4>Select dropdown</h4>
-  <forge-button type="raised">
-    <button type="button" style="width: 256px;" id="select-dropdown-target" aria-label="Choose an option">
-      <span id="select-dropdown-text" aria-live="assertive" aria-atomic="true">Choose...</span>
-      <forge-icon name="arrow_drop_down"></forge-icon>
-    </button>
+  <forge-button variant="raised" style="width: 256px;" id="select-dropdown-target" aria-label="Choose an option">
+    <span id="select-dropdown-text" aria-live="assertive" aria-atomic="true">Choose...</span>
+    <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
   </forge-button>
   <forge-select-dropdown
     target="#select-dropdown-target"

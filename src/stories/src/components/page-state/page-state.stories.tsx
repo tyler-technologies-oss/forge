@@ -31,12 +31,8 @@ export const Default: Story<IPageStateProps> = ({
         </p>}
       {hasActions && 
         <>
-          <ForgeButton type="raised" slot="action">
-            <button type="button">Go back</button>
-          </ForgeButton>
-          <ForgeButton type="outlined" slot="action">
-            <button type="button">Refresh</button>
-          </ForgeButton>
+          <ForgeButton variant="raised" slot="action">Go back</ForgeButton>
+          <ForgeButton variant="outlined" slot="action">Refresh</ForgeButton>
         </>
       }
     </ForgePageState>

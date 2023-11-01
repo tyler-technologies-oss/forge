@@ -35,9 +35,7 @@ export const Default: Story<IToastProps> = ({
   }
   return (
     <>
-      <ForgeButton type="raised">
-        <button type="button" onClick={() => setIsOpen(true)}>Show toast</button>
-      </ForgeButton>
+      <ForgeButton variant="raised" onClick={() => setIsOpen(true)}>Show toast</ForgeButton>
       <ForgeToast options={options} open={isOpen} onDismiss={() => setIsOpen(false)} />
     </>
   );

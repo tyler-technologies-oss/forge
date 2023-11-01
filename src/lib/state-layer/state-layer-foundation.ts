@@ -54,8 +54,8 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     this._pointerState = PointerState.INACTIVE;
     this._adapter.setHovered(false);
     this._adapter.setPressed(false);
+    this._removeListeners(); // Must be called before destroying adapter
     this._adapter.destroy();
-    this._removeListeners();
   }
 
   public playAnimation(coords?: StateLayerCoords): void {

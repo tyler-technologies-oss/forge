@@ -1,0 +1,125 @@
+@use './configuration';
+@use './core';
+@use '../state-layer/core' as state-layer;
+@use '../focus-indicator/core' as focus-indicator;
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-button {
+  @include configuration.configuration;
+  @include core.base;
+
+  ::slotted(:not([slot])) {
+    @include core.text;
+  }
+
+  ::slotted([slot]) {
+    @include core.slotted-base;
+  }
+}
+
+a.forge-button {
+  @include core.anchor-reset;
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: var(--forge-theme-primary)
+  ));
+}
+
+// Variant styles
+
+:host(:is(:not([variant], [variant=text]))) {
+  .forge-button {
+    @include core.text;
+  }
+
+  forge-focus-indicator {
+    /* stylelint-disable-next-line length-zero-no-unit */
+    @include focus-indicator.provide-theme(( outward-offset: 0px ));
+  }
+}
+
+:host(:is([variant=raised], [variant=flat])) {
+  .forge-button {
+    @include core.filled;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: var(--forge-theme-on-primary)
+    ));
+  }
+}
+
+:host([variant=raised]) {
+  .forge-button {
+    @include core.raised;
+  }
+}
+
+:host([variant=flat]) {
+  .forge-button {
+    @include core.flat;
+  }
+}
+
+:host([variant=outlined]) {
+  .forge-button {
+    @include core.outlined;
+  }
+}
+
+:host([variant=link]) {
+  .forge-button {
+    @include core.link;
+  }
+
+  forge-focus-indicator {
+    /* stylelint-disable-next-line length-zero-no-unit */
+    @include focus-indicator.provide-theme(( outward-offset: 0px ));
+  }
+}
+
+// Dense styles
+
+:host([dense]) {
+  .forge-button {
+    @include core.dense;
+  }
+}
+
+// Disabled styles
+
+:host(:not([href])[disabled]) {
+  @include core.host-disabled;
+
+  .forge-button {
+    @include core.disabled;
+  }
+}
+
+:host(:not([href]):is([variant=raised], [variant=flat])[disabled]) {
+  .forge-button {
+    @include core.filled-disabled;
+  }
+}
+
+:host(:not([href])[variant=raised][disabled]) {
+  .forge-button {
+    @include core.raised-disabled;
+  }
+}
+
+:host(:not([href])[variant=outlined][disabled]) {
+  .forge-button {
+    @include core.outlined-disabled;
+  }
+}

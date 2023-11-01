@@ -1,7 +1,13 @@
-@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/animation/functions' as mdc-animation;
-@use '../../button/mixins' as button-mixins;
+@use '@material/ripple/ripple' as mdc-ripple;
+@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+@use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
+@use '@material/button/button-base' as mdc-button-base;
+@use '@material/button/button-shared-theme' as mdc-button-shared-theme;
+@use '@material/button/button-outlined' as mdc-button-outlined;
+@use '@material/button/button-outlined-theme' as mdc-button-outlined-theme;
+@use '../../theme';
 
 @mixin host() {
   display: inline-block;
@@ -12,7 +18,8 @@
     @include base;
 
     &:disabled {
-      @include button-mixins.outlined-disabled;
+      @include theme.property(border-color, border-color);
+      @include mdc-theme.property(color, text-disabled-on-light);
     }
 
     &__selected:not(:disabled) {
@@ -51,9 +58,20 @@
 }
 
 @mixin base() {
-  @include button-mixins.base;
-  @include button-mixins.outlined;
+  @include mdc-ripple.surface();
+  @include mdc-ripple.radius-bounded();
+  @include mdc-ripple-theme.states(primary, false);
+  @include mdc-button-base.base(mdc-feature-targeting.all());
+  @include mdc-button-shared-theme.shape-radius(small);
+  @include mdc-button-shared-theme.container-fill-color(transparent);
+  @include mdc-button-shared-theme.ink-color(primary);
+  @include mdc-button-shared-theme.density(0);
+  @include mdc-button-outlined.outlined(mdc-feature-targeting.all());
+  @include mdc-button-outlined-theme.outline-width(mdc-button-outlined-theme.$outlined-border-width);
+  @include mdc-button-outlined-theme.outline-color(primary);
 
+  text-transform: none;
+  overflow: hidden;
   width: 100%;
   box-sizing: border-box;
   transition: mdc-animation.enter(background-color, 150ms);
@@ -73,8 +91,9 @@
 }
 
 @mixin dense() {
-  @include button-mixins.dense;
+  @include mdc-button-shared-theme.density(-3);
 
+  height: 1.5rem;
   font-size: 0.75rem;
 }
 

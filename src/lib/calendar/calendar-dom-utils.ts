@@ -206,20 +206,16 @@ export function getHeader(): HTMLElement {
   nextButtonElement.appendChild(nextIcon);
 
   const monthButton = document.createElement('forge-button');
-  const monthButtonElement = document.createElement('button');
   monthButton.setAttribute('part', CALENDAR_CONSTANTS.parts.MONTH_BUTTON);
-  monthButtonElement.id = CALENDAR_CONSTANTS.ids.MONTH_BUTTON;
-  monthButtonElement.type = 'button';
-  monthButtonElement.setAttribute('aria-pressed', 'false');
-  monthButton.appendChild(monthButtonElement);
+  monthButton.id = CALENDAR_CONSTANTS.ids.MONTH_BUTTON;
+  monthButton.type = 'button';
+  monthButton.setAttribute('aria-pressed', 'false');
 
   const yearButton = document.createElement('forge-button');
-  const yearButtonElement = document.createElement('button');
   yearButton.setAttribute('part', CALENDAR_CONSTANTS.parts.YEAR_BUTTON);
-  yearButtonElement.id = CALENDAR_CONSTANTS.ids.YEAR_BUTTON;
-  yearButtonElement.type = 'button';
-  yearButtonElement.setAttribute('aria-pressed', 'false');
-  yearButton.appendChild(yearButtonElement);
+  yearButton.id = CALENDAR_CONSTANTS.ids.YEAR_BUTTON;
+  yearButton.type = 'button';
+  yearButton.setAttribute('aria-pressed', 'false');
 
   // TODO: change order of month and year based on locale
   const centerContainer = document.createElement('div');
@@ -281,24 +277,20 @@ export function getFooter(): HTMLElement {
 /** Returns a clear button. */
 export function getClearButton(): HTMLElement {
   const clearButton = document.createElement('forge-button');
-  const clearButtonElement = document.createElement('button');
   clearButton.id = CALENDAR_CONSTANTS.ids.CLEAR_BUTTON;
   clearButton.setAttribute('part', CALENDAR_CONSTANTS.parts.CLEAR_BUTTON);
-  clearButtonElement.type = 'button';
-  clearButtonElement.innerText = 'Clear';
-  clearButton.appendChild(clearButtonElement);
+  clearButton.type = 'button';
+  clearButton.innerText = 'Clear';
   return clearButton;
 }
 
 /** Returns a today button. */
 export function getTodayButton(): HTMLElement {
   const todayButton = document.createElement('forge-button');
-  const todayButtonElement = document.createElement('button');
   todayButton.id = CALENDAR_CONSTANTS.ids.TODAY_BUTTON;
   todayButton.setAttribute('part', CALENDAR_CONSTANTS.parts.TODAY_BUTTON);
-  todayButtonElement.type = 'button';
-  todayButtonElement.innerText = 'Today';
-  todayButton.appendChild(todayButtonElement);
+  todayButton.type = 'button';
+  todayButton.innerText = 'Today';
   return todayButton;
 }
 
