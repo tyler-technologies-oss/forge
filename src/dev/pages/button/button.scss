@@ -1,10 +1,11 @@
 @use '../../src/shared';
+@use '../../../lib/button';
 
 .button-demo {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 16px;
 }
 
 forge-button {
@@ -26,5 +27,31 @@ form:has(forge-button) forge-button {
 }
 
 h3 {
-  margin-block: 16px 0;
+  margin-block: 16px;
+}
+
+.custom-button {
+  --forge-typography-button-font-family: monospace;
+
+  @include button.provide-theme((
+    height: 56px,
+    dense-height: 48px,
+    border-top-left-radius: 10px,
+    border-top-right-radius: 10px,
+    shadow: 0 4px 2px 0 var(--forge-theme-surface-container-medium),
+    hover-shadow: 0 6px 4px 0 var(--forge-theme-surface-container-medium),
+    active-shadow: 0 8px 6px 0 var(--forge-theme-surface-container-medium),
+    color: black,
+    background: linear-gradient(to right, #1CD8D2 0%, #93EDC7  51%, #1CD8D2  100%),
+    hover-background: skyblue,
+    active-background: lightgreen,
+    disabled-background: lightgray,
+    disabled-shadow: none
+  ));
+
+  &[popover-icon] {
+    @include button.provide-theme((
+      justify: space-between
+    ));
+  }
 }

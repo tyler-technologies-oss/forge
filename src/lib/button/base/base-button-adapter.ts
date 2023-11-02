@@ -1,4 +1,5 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { replaceElement } from '../../core/utils/utils';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
@@ -6,6 +7,8 @@ import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
 import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
+import { internals } from '../../constants';
+import { supportsPopover } from '../../core/utils/feature-detection';
 
 export interface IBaseButtonAdapter extends IBaseAdapter {
   initialize(): void;
@@ -14,6 +17,7 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   setAnchorDownload(value: string): void;
   setAnchorRel(value: string): void;
   setDisabled(value: boolean): void;
+  ensureAnchorEnabled(value: boolean): void;
   clickAnchor(): void;
   clickHost(): void;
   clickFormButton(type: string): void;
@@ -21,12 +25,14 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   removeAnchorEventListener(type: string, listener: EventListener): void;
   hasPopoverTarget(): boolean;
   tryShowPopover(): void;
+  toggleDefaultPopoverIcon(value: boolean): void;
 }
 
 export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> implements IBaseButtonAdapter {
   protected _rootElement: HTMLElement | HTMLAnchorElement;
   protected _focusIndicatorElement: IFocusIndicatorComponent;
   protected _stateLayerElement: IStateLayerComponent;
+  protected _endSlotElement: HTMLSlotElement;
 
   private get _isAnchor(): boolean {
     return this._rootElement.tagName === 'A';
@@ -37,6 +43,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._rootElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement | HTMLAnchorElement;
     this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+    this._endSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;
   }
 
   public initialize(): void {
@@ -80,7 +87,10 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     if (this._isAnchor) {
       return; // Cannot disable an anchor element
     }
+    this.ensureAnchorEnabled(value);
+  }
 
+  public ensureAnchorEnabled(value: boolean): void {
     if (value) {
       this._focusIndicatorElement.remove();
       this._stateLayerElement.remove();
@@ -90,7 +100,6 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
 
     this._component.tabIndex = value ? -1 : 0;
     toggleAttribute(this._component, value, 'aria-disabled', 'true');
-
   }
 
   public clickAnchor(): void {
@@ -109,6 +118,8 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     }
 
     if (type === 'submit') {
+      this._component[internals].setFormValue(this._component.value);
+
       // We don't use a real <button> since the host is the semantic button, so for
       // the "submit" button type we need to create a temporary button and click it
       // to trigger the form submission
@@ -146,19 +157,33 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   public hasPopoverTarget(): boolean {
     return this._component.hasAttribute('popovertarget');
   }
-  
+
   public tryShowPopover(): void {
-    if (!this._component.hasAttribute('popovertarget') || !HTMLElement.prototype.hasOwnProperty('popover')) {
+    if (!this.hasPopoverTarget() || !supportsPopover()) {
       return;
     }
 
     const doc = this._component.ownerDocument.getRootNode() as Document | ShadowRoot;
-    if (!doc || !this._component.hasAttribute('popovertarget')) {
+    if (!doc) {
       return;
     }
     const targetId = this._component.getAttribute('popovertarget');
     const popoverTargetElement = doc.querySelector(`#${targetId}`);
-    (popoverTargetElement as any)?.showPopover();
+    (popoverTargetElement as any)?.showPopover(); // TODO: remove `any` when TypeScript version is upgraded
+  }
+
+  public toggleDefaultPopoverIcon(value: boolean): void {
+    if (value) {
+      const hasIcon = this._endSlotElement.querySelector('forge-icon');
+      if (!hasIcon) {
+        const icon = document.createElement('forge-icon');
+        icon.name = tylIconArrowDropDown.name;
+        this._endSlotElement.append(icon);
+      }
+    } else {
+      const icon = this._endSlotElement.querySelector('forge-icon');
+      icon?.remove();
+    }
   }
 
   private _applyHostSemantics(): void {
@@ -170,7 +195,6 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     const a = document.createElement('a');
     a.classList.add(BASE_BUTTON_CONSTANTS.classes.ROOT);
     a.setAttribute('part', 'root');
-    a.setAttribute('aria-hidden', 'true');
     a.tabIndex = -1;
     a.target = target;
     return a;

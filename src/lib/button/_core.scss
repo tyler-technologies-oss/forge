@@ -1,12 +1,13 @@
 @use '../core/styles/typography';
+@use '../core/styles/utils';
+@use '../core/styles/tokens/button/tokens';
 
 @mixin provide-theme($theme) {
-
+  @include utils.provide(tokens.$tokens, $theme, button);
 }
 
 @mixin host {
-  display: inline-flex;
-  vertical-align: top;
+  display: var(--_display);
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -14,27 +15,41 @@
 @mixin base {
   @include typography.style(button);
   
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  position: relative;
   box-sizing: border-box;
-  min-inline-size: 64px;
-  border: none;
+  display: var(--_display);
+  align-items: center;
+  justify-content: var(--_justify);
+  gap: var(--_spacing);
   outline: none;
   user-select: none;
   -webkit-appearance: none;
   vertical-align: middle;
-  background: transparent;
   text-decoration: none;
-  inline-size: 100%;
-  position: relative;
   z-index: 0;
-  height: 36px;
-  border-radius: 4px;
-  padding: 0 8px;
 
-  color: var(--forge-theme-primary);
+  background: var(--_background);
+  color: var(--_color);
+  
+  min-inline-size: var(--_width);
+  height: var(--_height);
+  inline-size: 100%;
+  
+  border-width: var(--_border-width);
+  border-style: var(--_border-style);
+  border-color: var(--_border-color);
+  border-top-left-radius: var(--_border-top-left-radius);
+  border-top-right-radius: var(--_border-top-right-radius);
+  border-bottom-left-radius: var(--_border-bottom-left-radius);
+  border-bottom-right-radius: var(--_border-bottom-right-radius);
+
+  padding-block: var(--_padding-block);
+  padding-inline: var(--_padding-inline);
+
+  box-shadow: var(--_shadow);
+
+  transition: box-shadow var(--_raised-transition-duration) var(--_raised-transition-timing);
+  cursor: var(--_cursor);
 
   &::-moz-focus-inner {
     padding: 0;
@@ -42,89 +57,106 @@
   }
 
   &:hover {
-    cursor: pointer;
+    --_shadow: var(--_hover-shadow);
+    --_background: var(--_hover-background);
+  }
+
+  &:active {
+    --_shadow: var(--_active-shadow);
+    --_background: var(--_active-background);
   }
 }
 
-@mixin slotted-base {
-  font-size: 1.125rem;
+@mixin slotted-start-end {
+  font-size: var(--_icon-size);
 }
 
 @mixin anchor-reset {
   text-decoration: none;
 }
 
-@mixin text {
-  background-color: transparent;
-}
-
-@mixin filled {
-  background-color: var(--forge-theme-primary);
-  color: var(--forge-theme-on-primary);
-}
-
 @mixin raised {
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  --_background: var(--_raised-background);
+  --_color: var(--_raised-color);
+  --_shadow: var(--_raised-shadow);
+
+  &:hover {
+    --_shadow: var(--_raised-hover-shadow);
+  }
 
   &:active {
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    --_shadow: var(--_raised-active-shadow);
   }
 }
 
 @mixin flat {
-
+  --_background: var(--_flat-background);
+  --_color: var(--_flat-color);
 }
 
 @mixin outlined {
-  border: 1px solid var(--forge-theme-primary);
+  --_background: var(--_outlined-background);
+  --_color: var(--_outlined-color);
+  --_border-width: var(--_outlined-border-width);
+  --_border-style: var(--_outlined-border-style);
+  --_border-color: var(--_outlined-border-color);
 }
 
 @mixin link {
-  color: var(--forge-theme-primary);
-  text-decoration: underline;
-  height: auto;
-  padding: 0;
-  line-height: normal;
-  opacity: 1;
-  transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  inline-size: auto;
+  --_color: var(--_link-color);
+  --_height: var(--_link-height);
+  --_padding: var(--_link-padding);
+
+  text-decoration: var(--_link-text-decoration);
+  line-height: var(--_link-line-height);
+  transition: opacity var(--_link-transition-duration) var(--_link-transition-timing);
+  inline-size: var(--_link-width);
 
   &:visited {
-    color: var(--forge-theme-primary);
+    --_color: var(--_link-visited-color);
   }
 
-  &:focus,
-  &:hover:not([disabled]) {
-    text-decoration: none;
+  &:hover {
+    text-decoration: var(--_link-hover-text-decoration);
   }
 
   &:active {
-    opacity: 0.54;
+    opacity: var(--_link-active-opacity);
   }
 }
 
 @mixin host-disabled {
-  cursor: not-allowed;
+  cursor: var(--_disabled-cursor);
 }
 
 @mixin disabled {
-  pointer-events: none;
-  color: var(--forge-theme-text-low);
-}
+  --_background: var(--_disabled-background);
+  --_color: var(--_disabled-text-color);
+  --_shadow: var(--_disabled-shadow);
 
-@mixin filled-disabled {
-  background-color: var(--forge-theme-surface-container);
+  pointer-events: none;
 }
 
 @mixin raised-disabled {
-  box-shadow: none;
+  --_shadow: var(--_raised-disabled-shadow);
+  --_background: var(--_raised-disabled-background);
+  --_color: var(--_raised-disabled-color);
+}
+
+@mixin flat-disabled {
+  --_background: var(--_flat-disabled-background);
+  --_color: var(--_flat-disabled-color);
 }
 
 @mixin outlined-disabled {
-  border-color: var(--forge-theme-surface-container);
+  --_border-color: var(--_disabled-border-color);
 }
 
 @mixin dense {
-  height: 24px;
+  --_height: var(--_dense-height);
+}
+
+@mixin pill {
+  --_shape: var(--_pill-shape);
+  --_padding-inline: var(--_pill-padding-inline);
 }

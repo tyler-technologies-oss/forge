@@ -1,10 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { FocusIndicatorComponent } from '../focus-indicator';
+import { IconComponent, IconRegistry } from '../icon';
 import { StateLayerComponent } from '../state-layer';
 import { BaseButton, IBaseButton } from './base/base-button';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
 import { ButtonAdapter } from './button-adapter';
-import { ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
+import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
 import { ButtonFoundation } from './button-foundation';
 
 import template from './button.html';
@@ -12,6 +14,8 @@ import styles from './button.scss';
 
 export interface IButtonComponent extends IBaseButton {
   variant: ButtonVariant;
+  pill: boolean;
+  theme: ButtonTheme;
 }
 
 declare global {
@@ -29,7 +33,8 @@ declare global {
   name: BUTTON_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
-    StateLayerComponent
+    StateLayerComponent,
+    IconComponent
   ]
 })
 export class ButtonComponent extends BaseButton<ButtonFoundation> implements IButtonComponent {
@@ -44,6 +49,7 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
 
   constructor() {
     super();
+    IconRegistry.define(tylIconArrowDropDown);
     attachShadowTemplate(this, template, styles);
     this._foundation = new ButtonFoundation(new ButtonAdapter(this));
   }
@@ -53,10 +59,22 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
       case BUTTON_CONSTANTS.observedAttributes.VARIANT:
         this.variant = newValue as ButtonVariant;
         return;
+      case BUTTON_CONSTANTS.observedAttributes.PILL:
+        this.pill = coerceBoolean(newValue);
+        return;
+      case BUTTON_CONSTANTS.observedAttributes.THEME:
+        this.theme = newValue as ButtonTheme;
+        return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
   @FoundationProperty()
   public declare variant: ButtonVariant;
+
+  @FoundationProperty()
+  public declare pill: boolean;
+
+  @FoundationProperty()
+  public declare theme: ButtonTheme;
 }

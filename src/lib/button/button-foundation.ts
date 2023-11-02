@@ -1,13 +1,17 @@
 import { BaseButtonFoundation, IBaseButtonFoundation } from './base/base-button-foundation';
 import { IButtonAdapter } from './button-adapter';
-import { ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
+import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
 
 export interface IButtonFoundation extends IBaseButtonFoundation {
   variant: ButtonVariant;
+  pill: boolean;
+  theme: ButtonTheme;
 }
 
 export class ButtonFoundation extends BaseButtonFoundation<IButtonAdapter> implements IButtonFoundation {
   private _variant: ButtonVariant = 'text';
+  private _pill = false;
+  private _theme: ButtonTheme = 'primary';
 
   constructor(adapter: IButtonAdapter) {
     super(adapter);
@@ -28,6 +32,26 @@ export class ButtonFoundation extends BaseButtonFoundation<IButtonAdapter> imple
       }
 
       this._adapter.setHostAttribute(BUTTON_CONSTANTS.attributes.VARIANT, this._variant);
+    }
+  }
+
+  public get pill(): boolean {
+    return this._pill;
+  }
+  public set pill(value: boolean) {
+    if (this._pill !== value) {
+      this._pill = value;
+      this._adapter.toggleHostAttribute(BUTTON_CONSTANTS.attributes.PILL, this._pill);
+    }
+  }
+
+  public get theme(): ButtonTheme {
+    return this._theme;
+  }
+  public set theme(value: ButtonTheme) {
+    if (this._theme !== value) {
+      this._theme = value;
+      this._adapter.setHostAttribute(BUTTON_CONSTANTS.attributes.THEME, this._theme);
     }
   }
 }

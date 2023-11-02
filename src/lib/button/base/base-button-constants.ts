@@ -1,6 +1,7 @@
 const observedAttributes = {
   TYPE: 'type',
   DISABLED: 'disabled',
+  POPOVER_ICON: 'popover-icon',
   HREF: 'href',
   TARGET: 'target',
   DOWNLOAD: 'download',
@@ -17,7 +18,8 @@ const classes = {
 };
 
 const selectors = {
-  ROOT:'[part=root]'
+  ROOT:'[part=root]',
+  END_SLOT: 'slot[name=end]'
 };
 
 export const BASE_BUTTON_CONSTANTS = {

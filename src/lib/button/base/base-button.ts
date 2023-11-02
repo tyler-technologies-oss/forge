@@ -8,6 +8,7 @@ import { BaseButtonFoundation } from './base-button-foundation';
 export interface IBaseButton extends IBaseComponent {
   type: ButtonType;
   disabled: boolean;
+  popoverIcon: boolean;
   name: string;
   value: string;
   dense: boolean;
@@ -42,6 +43,9 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
       case BASE_BUTTON_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
+      case BASE_BUTTON_CONSTANTS.observedAttributes.POPOVER_ICON:
+        this.popoverIcon = coerceBoolean(newValue);
+        break;
       case BASE_BUTTON_CONSTANTS.observedAttributes.HREF:
         this.href = newValue;
         break;
@@ -71,13 +75,21 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
     this.setAttribute('name', name);
   }
 
-  public value = '';
+  public get value(): string {
+    return this.getAttribute('value') ?? '';
+  }
+  public set value(value: string) {
+    this.setAttribute('value', value);
+  }
 
   @FoundationProperty()
   public declare type: ButtonType;
 
   @FoundationProperty()
   public declare disabled: boolean;
+
+  @FoundationProperty()
+  public declare popoverIcon: boolean;
 
   @FoundationProperty()
   public declare href: string;

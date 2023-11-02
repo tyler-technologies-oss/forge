@@ -1,10 +1,11 @@
-import { getEventPath, ICustomElementFoundation } from '@tylertech/forge-core';
+import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 
 export interface IBaseButtonFoundation extends ICustomElementFoundation {
   type: ButtonType;
   disabled: boolean;
+  popoverIcon: boolean;
   href: string;
   target: string;
   download: string;
@@ -16,6 +17,7 @@ export interface IBaseButtonFoundation extends ICustomElementFoundation {
 export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> implements IBaseButtonFoundation {
   private _type: ButtonType = 'button';
   private _disabled = false;
+  private _popoverIcon = false;
   private _href = '';
   private _target = '';
   private _download = '';
@@ -41,12 +43,18 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     this._adapter.initialize();
 
     if (this._hasHref) {
+      // When an `href` is provided, we swap to us an `<a>` internally as the root. Since the `<a>`
+      // element is interactive by default, we can remove our click listener since the anchor will
+      // take over the default interaction handling
       this._adapter.addAnchorEventListener('focus', this._anchorFocusListener);
     } else {
       this._adapter.addHostListener('click', this._clickListener);
     }
   }
 
+  /**
+   * Handles overriding the the `.click()` event on the element
+   */
   public click(): void {
     if (this._hasHref) {
       this._adapter.clickAnchor();
@@ -59,36 +67,28 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     // Wait a cycle to allow the click event to propagate
     await new Promise<void>(resolve => setTimeout(() => resolve()));
 
-    if (evt.defaultPrevented) {
+    // We allow for our click event to bubble first before we handle it in case the developer
+    // wants to prevent the default behavior
+    if (evt.defaultPrevented || this._disabled) {
       return;
     }
 
-    this._handleClick({ proxyClick: false });
-  }
-
-  private _handleClick({ proxyClick = true } = {}): void {
-    if (this._disabled) {
-      return;
-    }
-
-    if (this._hasHref) {
-      this._adapter.clickAnchor();
-      return;
-    }
-
-    if (this._type !== 'button') {
+    // For button types of submit or reset, we need to manually submit or reset the form
+    // since the click event doesn't do that for us with custom elements
+    if (this._type === 'submit' || this._type === 'reset') {
       this._adapter.clickFormButton(this._type);
     }
 
+    // Custom elements don't work with the popover attributes so we need to manually
+    // attempt to show a popover if one is attached via `popovertarget`
     if (this._adapter.hasPopoverTarget()) {
       this._adapter.tryShowPopover();
     }
-
-    if (proxyClick) {
-      this._adapter.clickHost();
-    }
   }
 
+  /**
+   * Handle keydown events on the host element to manually trigger click events.
+   */
   private async _onKeydown(evt: KeyboardEvent): Promise<void> {
     // Wait a cycle for the keydown event to propagate
     await new Promise<void>(resolve => setTimeout(() => resolve()));
@@ -121,6 +121,9 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   }
   public set disabled(value: boolean) {
     if (this._hasHref) {
+      if (this._disabled) {
+        this._adapter.ensureAnchorEnabled(false);
+      }
       value = false;
     }
     value = Boolean(value);
@@ -130,6 +133,22 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.DISABLED, value);
     }
   }
+
+  public get popoverIcon(): boolean {
+    return this._popoverIcon;
+  }
+  public set popoverIcon(value: boolean) {
+    value = Boolean(value);
+    if (this._popoverIcon !== value) {
+      this._popoverIcon = value;
+      this._adapter.toggleDefaultPopoverIcon(this._popoverIcon);
+      this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.POPOVER_ICON, value);
+    }
+  }
+
+  /**
+   * Anchor properties
+   */
 
   public get href(): string {
     return this._href;
