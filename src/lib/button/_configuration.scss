@@ -17,7 +17,7 @@
 
   // Base
   --_height: #{tokens.get(height)};
-  --_width: #{tokens.get(width)};
+  --_min-width: #{tokens.get(min-width)};
   --_spacing: #{tokens.get(spacing)};
   --_border-width: #{tokens.get(border-width)};
   --_border-style: #{tokens.get(border-style)};
@@ -70,7 +70,6 @@
   --_link-padding: #{tokens.get(link-padding)};
   --_link-line-height: #{tokens.get(link-line-height)};
   --_link-width: #{tokens.get(link-width)};
-  --_link-visited-color: #{tokens.get(link-visited-color)};
   --_link-hover-text-decoration: #{tokens.get(link-hover-text-decoration)};
   --_link-active-opacity: #{tokens.get(link-active-opacity)};
   --_link-transition-duration: #{tokens.get(link-transition-duration)};
@@ -85,7 +84,7 @@
   // Dense
   --_dense-height: #{tokens.get(dense-height)};
 
-  // Utilities
+  // Pill
   --_pill-shape: #{tokens.get(pill-shape)};
   --_pill-padding-inline: #{tokens.get(pill-padding-inline)};
 }

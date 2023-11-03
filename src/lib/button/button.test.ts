@@ -366,12 +366,12 @@ describe('Button', () => {
     const href = `javascript: console.log('href button')`;
     const el = await fixture<IButtonComponent>(html`<forge-button href="${href}">Button</forge-button>`);
 
-    const rootEl = getRootEl(el);
+    const anchorEl = getAnchorEl(el);
+    expect(anchorEl).to.be.ok;
     expect(el.href).to.equal(href);
-    expect(rootEl.tagName.toLowerCase()).to.equal('a');
-    expect(rootEl.getAttribute('part')).to.equal('root');
-    expect(rootEl.tabIndex).to.be.equal(-1);
-    expect(rootEl.classList.contains(BASE_BUTTON_CONSTANTS.classes.ROOT)).to.be.true;
+    expect(anchorEl.href).to.equal(href);
+    expect(anchorEl.tabIndex).to.be.equal(-1);
+    expect(anchorEl.getAttribute('aria-hidden')).to.equal('true');
     await expect(el).to.be.accessible();
   });
 
@@ -381,10 +381,30 @@ describe('Button', () => {
     const href = `javascript: console.log('href button')`;
     el.href = href;
 
-    const rootEl = getRootEl(el);
+    const anchorEl = getAnchorEl(el);
     expect(el.href).to.equal(href);
-    expect(rootEl.tagName.toLowerCase()).to.equal('a');
+    expect(anchorEl.href).to.equal(href);
+    expect(anchorEl.tabIndex).to.be.equal(-1);
+    expect(anchorEl.getAttribute('aria-hidden')).to.equal('true');
     await expect(el).to.be.accessible();
+  });
+
+  it('should set all state on <a> when href is set after', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button>Button</forge-button>`);
+
+    let anchorEl = getAnchorEl(el);
+    expect(anchorEl).not.to.be.ok;
+    
+    el.target = '_blank';
+    el.download = 'test';
+    el.rel = 'noopener';
+    el.href = 'javascript: void(0);'; // Set this last to ensure other anchor state is set first
+    
+    anchorEl = getAnchorEl(el);
+    expect(anchorEl).to.be.ok;
+    expect(anchorEl.getAttribute('target')).to.equal(el.target);
+    expect(anchorEl.getAttribute('download')).to.equal(el.download);
+    expect(anchorEl.getAttribute('rel')).to.equal(el.rel);
   });
 
   it('should click <a> tag when click() is called', async () => {
@@ -480,7 +500,7 @@ describe('Button', () => {
     const target = '_blank';
     const el = await fixture<IButtonComponent>(html`<forge-button href="javascript: void(0);" target="${target}">Button</forge-button>`);
 
-    const anchorEl = getRootEl(el) as HTMLAnchorElement;
+    const anchorEl = getAnchorEl(el);
     expect(el.target).to.equal(target);
     expect(el.getAttribute('target')).to.equal(target);
     expect(anchorEl.target).to.equal(target);
@@ -491,7 +511,7 @@ describe('Button', () => {
     const download = 'test';
     const el = await fixture<IButtonComponent>(html`<forge-button href="javascript: void(0);" download="${download}">Button</forge-button>`);
     
-    const anchorEl = getRootEl(el) as HTMLAnchorElement;
+    const anchorEl = getAnchorEl(el);
     expect(el.download).to.equal(download);
     expect(el.getAttribute('download')).to.equal(download);
     expect(anchorEl.download).to.equal(download);
@@ -502,7 +522,7 @@ describe('Button', () => {
     const rel = 'test';
     const el = await fixture<IButtonComponent>(html`<forge-button href="javascript: void(0);" rel="${rel}">Button</forge-button>`);
     
-    const anchorEl = getRootEl(el) as HTMLAnchorElement;
+    const anchorEl = getAnchorEl(el);
     expect(el.rel).to.equal(rel);
     expect(el.getAttribute('rel')).to.equal(rel);
     expect(anchorEl.rel).to.equal(rel);
@@ -512,13 +532,13 @@ describe('Button', () => {
   it('should switch from <a> to default', async () => {
     const el = await fixture<IButtonComponent>(html`<forge-button href="javascript: void(0);">Button</forge-button>`);
 
-    let rootEl = getRootEl(el);
-    expect(rootEl.tagName.toLowerCase()).to.equal('a');
+    let anchorEl = getAnchorEl(el);
+    expect(anchorEl).to.be.ok;
     
     el.href = '';
-    rootEl = getRootEl(el);
+    anchorEl = getAnchorEl(el);
 
-    expect(rootEl.tagName.toLowerCase()).to.equal('div');
+    expect(anchorEl).not.to.be.ok;
   });
 
   it('should show popover when click() method is called', async () => {
@@ -775,8 +795,12 @@ describe('Button', () => {
     expect(el.open).to.be.false;
   });
 
-  function getRootEl(el: IButtonComponent): HTMLElement | HTMLAnchorElement {
-    return el.shadowRoot?.firstElementChild as HTMLElement | HTMLAnchorElement;
+  function getRootEl(el: IButtonComponent): HTMLElement {
+    return el.shadowRoot?.firstElementChild as HTMLElement;
+  }
+
+  function getAnchorEl(el: IButtonComponent): HTMLAnchorElement {
+    return el.shadowRoot?.querySelector('a') as HTMLAnchorElement;
   }
 
   function getStateLayer(btn: IButtonComponent): IStateLayerComponent {

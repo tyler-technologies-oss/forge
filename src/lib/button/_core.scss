@@ -8,6 +8,7 @@
 
 @mixin host {
   display: var(--_display);
+  position: relative;
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -16,25 +17,16 @@
   @include typography.style(button);
   
   position: relative;
-  box-sizing: border-box;
   display: var(--_display);
   align-items: center;
   justify-content: var(--_justify);
   gap: var(--_spacing);
-  outline: none;
-  user-select: none;
-  -webkit-appearance: none;
-  vertical-align: middle;
-  text-decoration: none;
   z-index: 0;
 
-  background: var(--_background);
-  color: var(--_color);
-  
-  min-inline-size: var(--_width);
+  box-sizing: border-box;
+  min-inline-size: var(--_min-width);
   height: var(--_height);
   inline-size: 100%;
-  
   border-width: var(--_border-width);
   border-style: var(--_border-style);
   border-color: var(--_border-color);
@@ -42,14 +34,21 @@
   border-top-right-radius: var(--_border-top-right-radius);
   border-bottom-left-radius: var(--_border-bottom-left-radius);
   border-bottom-right-radius: var(--_border-bottom-right-radius);
-
   padding-block: var(--_padding-block);
   padding-inline: var(--_padding-inline);
-
   box-shadow: var(--_shadow);
 
-  transition: box-shadow var(--_raised-transition-duration) var(--_raised-transition-timing);
+  outline: none;
+  user-select: none;
+  -webkit-appearance: none;
+  vertical-align: middle;
+  text-decoration: none;
+
+  background: var(--_background);
+  color: var(--_color);
   cursor: var(--_cursor);
+
+  transition: box-shadow var(--_raised-transition-duration) var(--_raised-transition-timing);
 
   &::-moz-focus-inner {
     padding: 0;
@@ -71,7 +70,9 @@
   font-size: var(--_icon-size);
 }
 
-@mixin anchor-reset {
+@mixin anchor-base {
+  position: absolute;
+  inset: 0;
   text-decoration: none;
 }
 
@@ -111,10 +112,6 @@
   line-height: var(--_link-line-height);
   transition: opacity var(--_link-transition-duration) var(--_link-transition-timing);
   inline-size: var(--_link-width);
-
-  &:visited {
-    --_color: var(--_link-visited-color);
-  }
 
   &:hover {
     text-decoration: var(--_link-hover-text-decoration);

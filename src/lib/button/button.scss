@@ -3,6 +3,10 @@
 @use '../state-layer/core' as state-layer;
 @use '../focus-indicator/core' as focus-indicator;
 
+//
+// Host
+//
+
 :host {
   @include configuration.host-configuration;
   @include core.host;
@@ -11,6 +15,10 @@
 :host([hidden]) {
   display: none;
 }
+
+//
+// Base
+//
 
 .forge-button {
   @include configuration.configuration;
@@ -21,8 +29,8 @@
   }
 }
 
-a.forge-button {
-  @include core.anchor-reset;
+a {
+  @include core.anchor-base;
 }
 
 forge-state-layer {
@@ -33,7 +41,9 @@ forge-focus-indicator {
   @include focus-indicator.provide-theme(( color: var(--_primary-color) ));
 }
 
+//
 // Theme
+//
 
 @mixin theme($theme) {
   :host([theme=#{$theme}]) {
@@ -51,7 +61,9 @@ forge-focus-indicator {
 @include theme(warning);
 @include theme(info);
 
-// Variant styles
+//
+// Variants
+//
 
 :host(:is(:not([variant], [variant=text]))) {
   forge-focus-indicator {
@@ -96,7 +108,9 @@ forge-focus-indicator {
   }
 }
 
-// Dense styles
+//
+// Dense
+//
 
 :host([dense]) {
   .forge-button {
@@ -104,7 +118,9 @@ forge-focus-indicator {
   }
 }
 
-// Utilities
+//
+// Pill
+//
 
 :host([pill]) {
   .forge-button {
@@ -116,7 +132,9 @@ forge-focus-indicator {
   }
 }
 
-// Disabled styles
+//
+// Disabled
+//
 
 :host(:not([href])[disabled]) {
   @include core.host-disabled;

@@ -21,7 +21,7 @@ $tokens: (
 
   // Base
   height: utils.module-val(button, height, 36px),
-  width: utils.module-val(button, width, 64px),
+  min-width: utils.module-val(button, min-width, 64px),
   spacing: utils.module-val(button, spacing, spacing.variable(xsmall)),
   border-width: utils.module-val(button, border-width, medium),
   border-style: utils.module-val(button, border-style, none),
@@ -44,7 +44,7 @@ $tokens: (
 
   // Raised
   raised-background: utils.module-ref(button, raised-background, primary-color),
-  raised-disabled-background: utils.module-ref(button, raised-disabled-background, disabled-background),
+  raised-disabled-background: utils.module-ref(button, raised-disabled-background, disabled-color),
   raised-color: utils.module-val(button, raised-color, theme.variable(on-primary)),
   raised-disabled-color: utils.module-ref(button, raised-disabled-color, disabled-text-color),
   raised-shadow: utils.module-val(button, raised-shadow, elevation.value(2)),
@@ -56,7 +56,7 @@ $tokens: (
 
   // Flat
   flat-background: utils.module-ref(button, flat-background, primary-color),
-  flat-disabled-background: utils.module-ref(button, flat-disabled-background, disabled-background),
+  flat-disabled-background: utils.module-ref(button, flat-disabled-background, disabled-color),
   flat-color: utils.module-val(button, flat-color, theme.variable(on-primary)),
   flat-disabled-color: utils.module-ref(button, flat-disabled-color, disabled-text-color),
 
@@ -74,7 +74,6 @@ $tokens: (
   link-padding: utils.module-val(button, link-padding, 0),
   link-line-height: utils.module-val(button, link-line-height, normal),
   link-width: utils.module-val(button, link-width, auto),
-  link-visited-color: utils.module-ref(button, link-visited-color, link-color),
   link-hover-text-decoration: utils.module-val(button, link-hover-text-decoration, none),
   link-active-opacity: utils.module-val(button, link-active-opacity, theme.emphasis(high)),
   link-transition-duration: utils.module-val(button, link-transition-duration, animation.variable(duration-short3)),
@@ -83,14 +82,14 @@ $tokens: (
   // Disabled
   disabled-cursor: utils.module-val(button, disabled-cursor, not-allowed),
   disabled-text-color: utils.module-val(button, disabled-text-color, theme.variable(text-low)),
-  disabled-background: utils.module-ref(button, disabled-background, disabled-color),
+  disabled-background: utils.module-val(button, disabled-background, transparent),
   disabled-border-color: utils.module-ref(button, disabled-border-color, disabled-color),
   disabled-shadow: utils.module-val(button, disabled-shadow, none),
 
   // Dense
   dense-height: utils.module-val(button, dense-height, 24px),
 
-  // Utilities
+  // Pill
   pill-shape: utils.module-val(button, pill-shape, shape.variable(full)),
   pill-padding-inline: utils.module-val(button, pill-padding-inline, spacing.variable(small))
 ) !default;

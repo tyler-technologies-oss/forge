@@ -1,6 +1,5 @@
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
-import { replaceElement } from '../../core/utils/utils';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
@@ -12,7 +11,7 @@ import { supportsPopover } from '../../core/utils/feature-detection';
 
 export interface IBaseButtonAdapter extends IBaseAdapter {
   initialize(): void;
-  setAnchorHref(href: string, target: string): void;
+  setAnchorHref(href: string): void;
   setAnchorTarget(target: string): void;
   setAnchorDownload(value: string): void;
   setAnchorRel(value: string): void;
@@ -29,18 +28,15 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
 }
 
 export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> implements IBaseButtonAdapter {
-  protected _rootElement: HTMLElement | HTMLAnchorElement;
+  protected _rootElement: HTMLElement;
+  protected _anchorElement: HTMLAnchorElement | undefined;
   protected _focusIndicatorElement: IFocusIndicatorComponent;
   protected _stateLayerElement: IStateLayerComponent;
   protected _endSlotElement: HTMLSlotElement;
 
-  private get _isAnchor(): boolean {
-    return this._rootElement.tagName === 'A';
-  }
-
   constructor(component: IBaseButton) {
     super(component);
-    this._rootElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement | HTMLAnchorElement;
+    this._rootElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
     this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
     this._endSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;
@@ -50,41 +46,41 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._applyHostSemantics();
   }
 
-  public setAnchorHref(href: string, target: string): void {
+  public setAnchorHref(href: string): void {
     const hasHref = typeof href === 'string' && !!href && href.trim().length > 0;
     if (hasHref) {
-      if (!this._isAnchor) {
-        const anchor = this._createAnchorRootElement(target);
-        this._rootElement = replaceElement(this._rootElement, anchor) as HTMLAnchorElement;
+      if (!this._anchorElement) {
+        this._anchorElement = this._createAnchorRootElement();
+        this._rootElement.insertAdjacentElement('afterend', this._anchorElement);
       }
-      (this._rootElement as HTMLAnchorElement).href = href;
-    } else if (this._isAnchor) {
-      const defaultEl = this._createDefaultRootElement();
-      this._rootElement = replaceElement(this._rootElement, defaultEl) as HTMLElement;
+      this._anchorElement.href = href;
+    } else {
+      this._anchorElement?.remove();
+      this._anchorElement = undefined;
     }
     this._applyHostSemantics();
   }
 
   public setAnchorTarget(target: string): void {
-    if (this._isAnchor) {
-      (this._rootElement as HTMLAnchorElement).target = target;
+    if (this._anchorElement) {
+      this._anchorElement.target = target;
     }
   }
 
   public setAnchorDownload(value: string): void {
-    if (this._isAnchor) {
-      (this._rootElement as HTMLAnchorElement).download = value;
+    if (this._anchorElement) {
+      this._anchorElement.download = value;
     }
   }
 
   public setAnchorRel(value: string): void {
-    if (this._isAnchor) {
-      (this._rootElement as HTMLAnchorElement).rel = value;
+    if (this._anchorElement) {
+      this._anchorElement.rel = value;
     }
   }
 
   public setDisabled(value: boolean): void {
-    if (this._isAnchor) {
+    if (this._anchorElement) {
       return; // Cannot disable an anchor element
     }
     this.ensureAnchorEnabled(value);
@@ -103,9 +99,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   }
 
   public clickAnchor(): void {
-    if (this._isAnchor) {
-      (this._rootElement as HTMLAnchorElement).click();
-    }
+    this._anchorElement?.click();
   }
 
   public clickHost(): void {
@@ -187,23 +181,17 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   }
 
   private _applyHostSemantics(): void {
-    this._component.role = this._isAnchor ? 'link' : 'button';
-    this._component.tabIndex = !this._isAnchor && this._component.disabled ? -1 : 0;
+    this._component.role = this._anchorElement ? 'link' : 'button';
+    this._component.tabIndex = !this._anchorElement && this._component.disabled ? -1 : 0;
   }
 
-  private _createAnchorRootElement(target: string): HTMLAnchorElement {
+  private _createAnchorRootElement(): HTMLAnchorElement {
     const a = document.createElement('a');
-    a.classList.add(BASE_BUTTON_CONSTANTS.classes.ROOT);
-    a.setAttribute('part', 'root');
+    a.setAttribute('aria-hidden', 'true');
     a.tabIndex = -1;
-    a.target = target;
+    a.target = this._component.target;
+    a.download = this._component.download;
+    a.rel = this._component.rel;
     return a;
-  }
-
-  private _createDefaultRootElement(): HTMLElement {
-    const div = document.createElement('div');
-    div.classList.add(BASE_BUTTON_CONSTANTS.classes.ROOT);
-    div.setAttribute('part', 'root');
-    return div;
   }
 }

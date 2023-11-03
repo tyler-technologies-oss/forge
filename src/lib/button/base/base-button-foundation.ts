@@ -157,7 +157,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     value = (value ?? '').trim();
     if (this._href !== value) {
       this._href = value;
-      this._adapter.setAnchorHref(this._href, this._target);
+      this._adapter.setAnchorHref(this._href);
 
       if (this._hasHref) {
         this._adapter.removeHostListener('click', this._clickListener);

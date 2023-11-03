@@ -45,7 +45,7 @@ h3 {
     background: linear-gradient(to right, #1CD8D2 0%, #93EDC7  51%, #1CD8D2  100%),
     hover-background: skyblue,
     active-background: lightgreen,
-    disabled-background: lightgray,
+    disabled-background: linear-gradient(to right, #aaa 0%, #ccc  51%, #aaa  100%),
     disabled-shadow: none
   ));
 
