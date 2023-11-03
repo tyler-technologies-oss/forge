@@ -33,6 +33,30 @@ describe('Button', () => {
     await expect(el).to.be.accessible();
   });
 
+  it('should allow for alternate role', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button role="presentation">Button</forge-button>`);
+    await elementUpdated(el);
+
+    expect(el.role).to.equal('presentation');
+  });
+
+  it('should allow for alternate role dynamically', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button>Button</forge-button>`);
+
+    el.role = 'presentation';
+    expect(el.role).to.equal('presentation');
+
+    await elementUpdated(el);
+
+    el.href = 'javascript: void(0);';
+    expect(el.role).to.equal('presentation');
+
+    await elementUpdated(el);
+
+    el.href = '';
+    expect(el.role).to.equal('presentation');
+  });
+
   it('should be text variant by default', async () => {
     const el = await fixture<IButtonComponent>(html`<forge-button>Button</forge-button>`);
 

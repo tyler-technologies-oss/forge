@@ -181,7 +181,10 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   }
 
   private _applyHostSemantics(): void {
-    this._component.role = this._anchorElement ? 'link' : 'button';
+    const role = this._component.getAttribute('role');
+    if (!role || ['button', 'link'].includes(role)) {
+      this._component.role = this._anchorElement ? 'link' : 'button';
+    }
     this._component.tabIndex = !this._anchorElement && this._component.disabled ? -1 : 0;
   }
 
