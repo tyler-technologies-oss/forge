@@ -2,7 +2,14 @@
 @use './animation';
 @use './configuration';
 
-/// Host styles
+//
+// Host styles
+//
+
+:host {
+  @include configuration.host-configuration;
+}
+
 :host {
   @include core.container;
 }
@@ -11,9 +18,15 @@
   display: none;
 }
 
-/// Base styles
+//
+// Base styles
+//
+
 .forge-circular-progress {
   @include configuration.configuration;
+}
+
+.forge-circular-progress {
   @include core.progress;
 
   &--indeterminate {
@@ -34,7 +47,10 @@ svg {
   @include core.center-content;
 }
 
-/// Indeterminate styles
+//
+// Indeterminate styles
+//
+
 .left {
   @include core.indeterminate-left;
 
@@ -55,7 +71,10 @@ svg {
   @include core.indeterminate-circle;
 }
 
-/// Determinate styles
+//
+// Determinate styles
+//
+
 svg {
   @include core.determinate-svg;
 

@@ -1,0 +1,25 @@
+@use '../../core/styles/tokens/list/list/tokens';
+@use '../../core/styles/tokens/token-utils';
+
+$_module: list;
+$_tokens: tokens.$tokens;
+
+@mixin provide-theme($theme) {
+  @include token-utils.provide-theme($_module, $_tokens, $theme);
+}
+
+@function variable($token) {
+  @return token-utils.variable($_module, $token);
+}
+
+@function declare($token) {
+  @return token-utils.declare($_module, $token);
+}
+
+@mixin override($token, $token-or-value, $force-value: false) {
+  @include token-utils.override($_module, $_tokens, $token, $token-or-value, $force-value);
+}
+
+@mixin tokens($config) {
+  @include token-utils.tokens($_module, $_tokens, $config);
+}

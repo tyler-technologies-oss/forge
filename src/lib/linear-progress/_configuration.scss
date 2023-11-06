@@ -1,24 +1,32 @@
-@use '../core/styles/tokens/linear-progress/tokens';
+@use './token-utils' as *;
+
+@mixin host-configuration {
+  @include tokens((
+    track-height
+  ));
+}
 
 @mixin configuration {
   // Token vars
-  --_track-height: #{tokens.get(track-height)};
-  --_track-color: #{tokens.get(track-color)};
-  --_active-indicator-color: #{tokens.get(active-indicator-color)};
-  --_track-shape: #{tokens.get(track-shape)};
-  --_active-indicator-height: #{tokens.get(active-indicator-height)};
-  --_determinate-duration: #{tokens.get(determinate-duration)};
-  --_indeterminate-duration: #{tokens.get(indeterminate-duration)};
-  --_determinate-easing: #{tokens.get(determinate-easing)};
+  @include tokens((
+    track-height,
+    track-color,
+    active-indicator-color,
+    track-shape,
+    active-indicator-height,
+    determinate-duration,
+    indeterminate-duration,
+    determinate-easing
+  ));
 
   // State vars
-  --_track-dot-size: calc(var(--_track-height) / 2);
-  --_track-background-width: calc(var(--_track-dot-size) * 5);
-  --_track-background: 0 / var(--_track-background-width) 100%
+  #{declare(track-dot-size)}: calc(#{variable(track-height)} / 2);
+  #{declare(track-background-width)}: calc(#{variable(track-dot-size)} * 5);
+  #{declare(track-background)}: 0 / #{variable(track-background-width)} 100%
     radial-gradient(
-      circle at calc(var(--_track-dot-size) * 2),
-      var(--_track-color) 0,
-      var(--_track-color) var(--_track-dot-size),
-      transparent var(--_track-dot-size)
+      circle at calc(#{variable(track-dot-size)} * 2),
+      #{variable(track-color)} 0,
+      #{variable(track-color)} #{variable(track-dot-size)},
+      transparent #{variable(track-dot-size)}
     );
 }

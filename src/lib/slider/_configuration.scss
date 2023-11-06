@@ -1,56 +1,50 @@
-@use '../core/styles/tokens/slider/tokens';
-
-// The max clip is reduced by 1 full tick display which is 2x the container
-// size to account for always showing the active track on the outside
-// edge of the last tick.
-$_active-track-max-clip: calc(100% - var(--_with-tick-marks-container-size) * 2);
-
-// When the start fraction is !0, add clipping by the tick container size
-$_start-fraction-not-zero: min(var(--_start-fraction) * 1e9, 1);
-$_active-track-start-offset: calc(var(--_with-tick-marks-container-size) * $_start-fraction-not-zero);
-$_active-track-start-clip: calc($_active-track-start-offset + $_active-track-max-clip * var(--_start-fraction));
-
-// When the end fraction is !1, add clipping by the tick container size
-$_end-fraction-not-one: min((1 - var(--_end-fraction)) * 1e9, 1);
-$_active-track-end-offset: calc(var(--_with-tick-marks-container-size) * $_end-fraction-not-one);
-$_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-clip * (1 - var(--_end-fraction)));
+@use './token-utils' as *;
 
 @mixin configuration {
   // Internal state variables
-  --_start-fraction: 0;
-  --_end-fraction: 0;
-  --_tick-count: 100;
+  #{declare(start-fraction)}: 0;
+  #{declare(end-fraction)}: 0;
+  #{declare(tick-count)}: 100;
 
   // External state variables
-  --_track-height: #{tokens.get(track-height)};
-  --_active-track-color: #{tokens.get(active-track-color)};
-  --_active-track-height: #{tokens.get(active-track-height)};
-  --_active-track-shape: #{tokens.get(active-track-shape)};
-  --_disabled-active-track-color: #{tokens.get(disabled-active-track-color)};
-  --_disabled-active-track-opacity: #{tokens.get(disabled-active-track-opacity)};
-  --_disabled-handle-color: #{tokens.get(disabled-handle-color)};
-  --_disabled-inactive-track-color: #{tokens.get(disabled-inactive-track-color)};
-  --_disabled-inactive-track-opacity: #{tokens.get(disabled-inactive-track-opacity)};
-  --_focus-handle-color: #{tokens.get(focus-handle-color)};
-  --_handle-color: #{tokens.get(handle-color)};
-  --_handle-height: #{tokens.get(handle-height)};
-  --_handle-shape: #{tokens.get(handle-shape)};
-  --_handle-width: #{tokens.get(handle-width)};
-  --_hover-handle-color: #{tokens.get(hover-handle-color)};
-  --_inactive-track-color: #{tokens.get(inactive-track-color)};
-  --_inactive-track-height: #{tokens.get(inactive-track-height)};
-  --_inactive-track-shape: #{tokens.get(inactive-track-shape)};
-  --_label-container-shape: #{tokens.get(label-container-shape)};
-  --_label-container-color: #{tokens.get(label-container-color)};
-  --_label-container-height: #{tokens.get(label-container-height)};
-  --_label-text-color: #{tokens.get(label-text-color)};
-  --_pressed-handle-color: #{tokens.get(pressed-handle-color)};
-  --_state-layer-size: #{tokens.get(state-layer-size)};
-  --_with-overlap-handle-outline-color: #{tokens.get(with-overlap-handle-outline-color)};
-  --_with-overlap-handle-outline-width: #{tokens.get(with-overlap-handle-outline-width)};
-  --_with-tick-marks-active-container-color: #{tokens.get(with-tick-marks-active-container-color)};
-  --_with-tick-marks-container-size: #{tokens.get(with-tick-marks-container-size)};
-  --_with-tick-marks-disabled-active-container-color: #{tokens.get(with-tick-marks-disabled-active-container-color)};
-  --_with-tick-marks-disabled-inactive-container-color: #{tokens.get(with-tick-marks-disabled-inactive-container-color)};
-  --_with-tick-marks-inactive-container-color: #{tokens.get(with-tick-marks-inactive-container-color)};
+  @include tokens((
+    track-height,
+    state-layer-size,
+
+    active-track-color,
+    active-track-height,
+    active-track-shape,
+
+    disabled-active-track-color,
+    disabled-active-track-opacity,
+    disabled-handle-color,
+    disabled-inactive-track-color,
+    disabled-inactive-track-opacity,
+
+    handle-color,
+    handle-height,
+    handle-shape,
+    handle-width,
+    focus-handle-color,
+    hover-handle-color,
+    pressed-handle-color,
+
+    inactive-track-color,
+    inactive-track-height,
+    inactive-track-shape,
+
+    label-container-shape,
+    label-container-color,
+    label-container-height,
+    label-text-color,
+
+    with-overlap-handle-outline-color,
+    with-overlap-handle-outline-width,
+
+    with-tick-marks-active-container-color,
+    with-tick-marks-container-size,
+    with-tick-marks-disabled-active-container-color,
+    with-tick-marks-disabled-inactive-container-color,
+    with-tick-marks-inactive-container-color
+  ));
 }

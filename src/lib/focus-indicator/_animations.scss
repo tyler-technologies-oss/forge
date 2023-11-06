@@ -1,16 +1,18 @@
+@use './token-utils' as *;
+
 @mixin keyframes {
   @keyframes outward-grow {
     from {
       outline-width: 0;
     }
     to {
-      outline-width: var(--_active-width);
+      outline-width: #{variable(active-width)};
     }
   }
 
   @keyframes outward-shrink {
     from {
-      outline-width: var(--_active-width);
+      outline-width: #{variable(active-width)};
     }
   }
 
@@ -19,13 +21,13 @@
       border-width: 0;
     }
     to {
-      border-width: var(--_active-width);
+      border-width: #{variable(active-width)};
     }
   }
 
   @keyframes inward-shrink {
     from {
-      border-width: var(--_active-width);
+      border-width: #{variable(active-width)};
     }
   }
 }

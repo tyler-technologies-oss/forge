@@ -1,10 +1,5 @@
-@use '../../core/styles/utils';
 @use '../../core/styles/typography';
-@use '../../core/styles/tokens/list/list-item/tokens';
-
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, list-item);
-}
+@use './token-utils' as *;
 
 @mixin container {
   display: block;
@@ -18,14 +13,14 @@
   box-sizing: border-box;
   outline: none;
   text-decoration: none;
-  background-color: var(--_background-color);
-  border-radius: var(--_shape);
+  background-color: #{variable(background-color)};
+  border-radius: #{variable(shape)};
   -webkit-tap-highlight-color: transparent;
-  height: var(--_height);
-  min-height: var(--_height);
-  padding: var(--_padding);
-  margin: var(--_margin);
-  cursor: var(--_cursor);
+  height: #{variable(height)};
+  min-height: #{variable(height)};
+  padding: #{variable(padding)};
+  margin: #{variable(margin)};
+  cursor: #{variable(cursor)};
 }
 
 @mixin anchor-link {
@@ -37,107 +32,107 @@
   @include typography.ellipse;
 
   box-sizing: border-box;
-  font-size: var(--_supporting-text-font-size);
-  font-weight: var(--_supporting-text-font-weight);
-  line-height: var(--_supporting-text-line-height);
+  font-size: #{variable(supporting-text-font-size)};
+  font-weight: #{variable(supporting-text-font-weight)};
+  line-height: #{variable(supporting-text-line-height)};
   flex: 1;
 }
 
 @mixin selected {
-  color: var(--_selected-color);
+  color: #{variable(selected-color)};
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    opacity: var(--_selected-opacity);
-    background-color: var(--_selected-color);
+    opacity: #{variable(selected-opacity)};
+    background-color: #{variable(selected-color)};
   }
 }
 
 @mixin leading-selected {
-  color: var(--_leading-selected-color);
+  color: #{variable(leading-selected-color)};
 }
 
 @mixin trailing-selected {
-  color: var(--_trailing-selected-color);
+  color: #{variable(trailing-selected-color)};
 }
 
 @mixin text-container-selected {
-  color: var(--_selected-color);
+  color: #{variable(selected-color)};
 }
 
 @mixin leading-trailing-selected {
-  color: var(--_selected-color);
+  color: #{variable(selected-color)};
 }
 
 @mixin supporting-text {
   @include typography.style(body1);
   @include typography.ellipse;
 
-  color: var(--_supporting-text-color);
+  color: #{variable(supporting-text-color)};
   display: block;
 }
 
 @mixin supporting-text-selected {
-  color: var(--_selected-supporting-text-color);
+  color: #{variable(selected-supporting-text-color)};
 }
 
 @mixin two-line {
-  height: var(--_two-line-height);
-  min-height: var(--_two-line-height);
+  height: #{variable(two-line-height)};
+  min-height: #{variable(two-line-height)};
 }
 
 @mixin three-line {
-  height: var(--_three-line-height);
-  min-height: var(--_three-line-height);
+  height: #{variable(three-line-height)};
+  min-height: #{variable(three-line-height)};
 }
 
 @mixin dense {
-  height: var(--_dense-one-line-height);
-  min-height: var(--_dense-one-line-height);
+  height: #{variable(dense-one-line-height)};
+  min-height: #{variable(dense-one-line-height)};
 }
 
 @mixin dense-text {
-  font-size: var(--_dense-font-size);
+  font-size: #{variable(dense-font-size)};
 }
 
 @mixin dense-two-line {
-  height: var(--_dense-two-line-height);
-  min-height: var(--_dense-two-line-height);
+  height: #{variable(dense-two-line-height)};
+  min-height: #{variable(dense-two-line-height)};
 }
 
 @mixin dense-three-line {
-  height: var(--_dense-three-line-height);
-  min-height: var(--_dense-three-line-height);
+  height: #{variable(dense-three-line-height)};
+  min-height: #{variable(dense-three-line-height)};
 }
 
 @mixin indented {
-  margin-inline-start: var(--_indent);
+  margin-inline-start: #{variable(indent)};
 }
 
 @mixin dense-indented {
-  margin-inline-start: var(--_dense-indent);
+  margin-inline-start: #{variable(dense-indent)};
 }
 
 @mixin avatar {
-  background-color: var(--_avatar-background-color);
-  color: var(--_avatar-color);
+  background-color: #{variable(avatar-background-color)};
+  color: #{variable(avatar-color)};
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   fill: currentColor;
-  margin-inline-start: var(--_avatar-margin-start);
-  margin-inline-end: var(--_avatar-margin-end);
-  min-width: var(--_avatar-size);
-  min-height: var(--_avatar-size);
-  border-radius: var(--_avatar-shape);
+  margin-inline-start: #{variable(avatar-margin-start)};
+  margin-inline-end: #{variable(avatar-margin-end)};
+  min-width: #{variable(avatar-size)};
+  min-height: #{variable(avatar-size)};
+  border-radius: #{variable(avatar-shape)};
 }
 
 @mixin leading-trailing-base {
-  color: var(--_supporting-text-color);
+  color: #{variable(supporting-text-color)};
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -146,29 +141,29 @@
 }
 
 @mixin leading {
-  margin-inline-start: var(--_leading-margin-start);
-  margin-inline-end: var(--_leading-margin-end);
+  margin-inline-start: #{variable(leading-margin-start)};
+  margin-inline-end: #{variable(leading-margin-end)};
 }
 
 @mixin leading-selected {
-  color: var(--_leading-selected-color);
+  color: #{variable(leading-selected-color)};
 }
 
 @mixin leading-dense {
-  margin-inline-end: var(--_dense-leading-margin-end);
+  margin-inline-end: #{variable(dense-leading-margin-end)};
 }
 
 @mixin trailing {
-  margin-inline-start: var(--_trailing-margin-start);
-  margin-inline-end: var(--_trailing-margin-end);
+  margin-inline-start: #{variable(trailing-margin-start)};
+  margin-inline-end: #{variable(trailing-margin-end)};
 }
 
 @mixin trailing-selected {
-  color: var(--_trailing-selected-color);
+  color: #{variable(trailing-selected-color)};
 }
 
 @mixin trailing-dense {
-  margin-inline-start: var(--_dense-trailing-margin-start);
+  margin-inline-start: #{variable(dense-trailing-margin-start)};
 }
 
 @mixin wrap {
@@ -190,6 +185,6 @@
 }
 
 @mixin disabled {
-  cursor: var(--_disabled-cursor);
-  opacity: var(--_disabled-opacity);
+  cursor: #{variable(disabled-cursor)};
+  opacity: #{variable(disabled-opacity)};
 }

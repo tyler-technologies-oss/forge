@@ -633,7 +633,7 @@ describe('Button', () => {
 
   it('should submit form when click() is called', async () => {
     const el = await fixture<HTMLFormElement>(html`
-      <form id="test-form" action="javascript: void(0)">
+      <form id="test-form" action="javascript: void(0);">
         <forge-button type="submit">Button</forge-button>
       </form>
     `);
@@ -641,6 +641,7 @@ describe('Button', () => {
     const buttonEl = el.querySelector('forge-button') as IButtonComponent;
     const submitSpy = spy();
     el.addEventListener('submit', submitSpy);
+    await elementUpdated(buttonEl);
 
     buttonEl.click();
     await elementUpdated(buttonEl);

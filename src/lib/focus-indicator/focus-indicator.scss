@@ -2,7 +2,10 @@
 @use './configuration';
 @use './core';
 
-/// Host styles
+//
+// Host
+//
+
 :host {
   display: contents;
 }
@@ -10,6 +13,23 @@
 :host([hidden]) {
   display: none;
 }
+
+//
+// Base
+//
+
+.forge-focus-indicator {
+  @include configuration.configuration;
+}
+
+.forge-focus-indicator {
+  @include core.base;
+}
+
+
+//
+// States
+//
 
 :host([active]) {
   .forge-focus-indicator {
@@ -35,13 +55,15 @@
   }
 }
 
-/// Base styles
-.forge-focus-indicator {
-  @include configuration.configuration;
-  @include core.base;
-}
+//
+// Animations
+//
 
 @include animations.keyframes;
+
+//
+// Media Queries
+//
 
 @media (prefers-reduced-motion) {
   .forge-focus-indicator {

@@ -2,6 +2,11 @@
 @use './configuration';
 @use '../focus-indicator';
 @use '../state-layer';
+@use './token-utils' as *;
+
+//
+// Host
+//
 
 :host {
   @include core.container;
@@ -11,14 +16,25 @@
   display: none;
 }
 
+//
+// Base
+//
+
 .forge-slider {
   @include configuration.configuration;
+}
+
+.forge-slider {
   @include core.slider;
 
   &.range {
     @include core.range;
   }
 }
+
+//
+// Track
+//
 
 .track {
   @include core.track;
@@ -48,6 +64,10 @@
     }
   }
 }
+
+//
+// Handle
+//
 
 .handle-container-padded,
 .handle-container-block {
@@ -110,6 +130,10 @@
     @include core.handle-thumb-pressed;
   }
 }
+
+//
+// Disabled
+//
 
 :host([disabled]) {
   .handle-thumb {
@@ -195,6 +219,6 @@ forge-focus-indicator {
 
 forge-state-layer {
   @include state-layer.provide-theme((
-    color: var(--_handle-color)
+    color: #{variable(handle-color)}
   ));
 }

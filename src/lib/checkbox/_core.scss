@@ -1,10 +1,5 @@
 @use '../core/styles/typography';
-@use '../core/styles/utils';
-@use '../core/styles/tokens/checkbox/tokens';
-
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, checkbox);
-}
+@use './token-utils' as *;
 
 @mixin host {
   display: inline-block;
@@ -12,17 +7,17 @@
 
 @mixin checkbox {
   position: relative;
-  flex-direction: var(--_direction);
+  flex-direction: #{variable(direction)};
   flex-shrink: 0;
   align-items: center;
-  justify-content: var(--_justify);
-  gap: var(--_gap);
+  justify-content: #{variable(justify)};
+  gap: #{variable(gap)};
 
   display: flex;
 }
 
 @mixin checkbox-disabled {
-  opacity: var(--_disabled-opacity);
+  opacity: #{variable(disabled-opacity)};
 }
 
 @mixin container {
@@ -32,16 +27,16 @@
 
   display: flex;
 
-  border-radius: var(--_state-layer-shape);
-  inline-size: var(--_state-layer-width);
-  block-size: var(--_state-layer-height);
+  border-radius: #{variable(state-layer-shape)};
+  inline-size: #{variable(state-layer-width)};
+  block-size: #{variable(state-layer-height)};
 
   cursor: pointer;
 }
 
 @mixin container-dense {
-  inline-size: var(--_state-layer-dense-width);
-  block-size: var(--_state-layer-dense-height);
+  inline-size: #{variable(state-layer-dense-width)};
+  block-size: #{variable(state-layer-dense-height)};
 }
 
 @mixin container-disabled {
@@ -70,42 +65,42 @@
   display: flex;
 
   transition-property: background-color, border-width, border-color;
-  transition-duration: var(--_animation-duration);
-  transition-timing-function: var(--_background-animation-timing);
+  transition-duration: #{variable(animation-duration)};
+  transition-timing-function: #{variable(background-animation-timing)};
 
-  box-shadow: var(--_elevation);
+  box-shadow: #{variable(elevation)};
   border-style: solid;
-  border-width: var(--_unchecked-border-width);
-  border-color: var(--_unchecked-border-color);
-  border-radius: var(--_shape);
+  border-width: #{variable(unchecked-border-width)};
+  border-color: #{variable(unchecked-border-color)};
+  border-radius: #{variable(shape)};
   box-sizing: border-box;
-  block-size: var(--_height);
-  inline-size: var(--_width);
+  block-size: #{variable(height)};
+  inline-size: #{variable(width)};
 
-  background-color: var(--_background-color);
+  background-color: #{variable(background-color)};
 }
 
 @mixin background-checked {
   border-style: solid;
-  border-width: var(--_checked-border-width);
-  border-color: var(--_checked-border-color);
+  border-width: #{variable(checked-border-width)};
+  border-color: #{variable(checked-border-color)};
 
-  background-color: var(--_checked-background-color);
+  background-color: #{variable(checked-background-color)};
 }
 
 @mixin icon {
   position: absolute;
 
   transition-property: stroke-dashoffset;
-  transition-duration: var(--_animation-duration);
-  transition-timing-function: var(--_icon-animation-timing);
+  transition-duration: #{variable(animation-duration)};
+  transition-timing-function: #{variable(icon-animation-timing)};
 
   fill: none;
-  stroke-width: var(--_icon-stroke-width);
+  stroke-width: #{variable(icon-stroke-width)};
 }
 
 @mixin icon-checked {
-  stroke: var(--_icon-checked-color);
+  stroke: #{variable(icon-checked-color)};
   stroke-dasharray: 30;
 }
 
@@ -116,7 +111,7 @@
 }
 
 @mixin icon-checked-visible {
-  transition-delay: var(--_animation-duration);
+  transition-delay: #{variable(animation-duration)};
 
   stroke-dashoffset: 0;
 
@@ -127,7 +122,7 @@
 }
 
 @mixin icon-indeterminate {
-  stroke: var(--_icon-indeterminate-color);
+  stroke: #{variable(icon-indeterminate-color)};
   stroke-dasharray: 20;
 }
 
@@ -138,7 +133,7 @@
 }
 
 @mixin icon-indeterminate-visible {
-  transition-delay: var(--_animation-duration);
+  transition-delay: #{variable(animation-duration)};
 
   stroke-dashoffset: 0;
 

@@ -1,0 +1,123 @@
+@use 'sass:meta';
+@use 'sass:map';
+@use 'sass:list';
+@use '../utils';
+
+///
+/// Mixin for providing theme tokens to the module using external names.
+/// 
+/// Example:
+/// ```sass
+/// provide-theme(( color: red )); // => --forge-component-name-color: red;
+/// ```
+/// 
+/// @param {Map} $theme - The theme tokens. 
+///
+@mixin provide-theme($module, $tokens, $theme) {
+  @include utils.provide($tokens, $theme, $module);
+}
+
+///
+/// Creates an internal token reference variable for the module.
+///
+/// Example:
+/// ```sass
+/// color: #{variable(color)}; // => color: var(--_component-name-color);
+/// ```
+/// 
+/// @param {String} $token - The token name.
+///
+@function variable($module, $token) {
+  @return utils.module-var($module, $token);
+}
+
+///
+/// Declares an internal token reference variable for the module.
+/// 
+/// Example:
+/// ```sass
+/// #{declare(color)}: red; // => --_component-name-color: red;
+/// ```
+/// 
+/// @param {String} $token - The token name.
+/// 
+@function declare($module, $token) {
+  @return utils.create-module-var($module, $token);
+}
+
+///
+/// Creates a token CSS custom property definition to point one token to another.
+/// 
+/// If `$new-token` is not a valid token then the provided value will be used verbatim.
+/// 
+/// Example:
+/// ```sass
+/// #{override(color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
+/// ```
+/// 
+/// @param {String} $token - The token name to override.
+/// @param {String} $token-or-value - The token name (if exists) or value to point to.
+/// @param {Boolean} $force-value - Whether to force the value to be used verbatim.
+/// 
+@mixin override($module, $tokens, $token, $token-or-value, $force-value: false) {
+  @include utils.override($module, $tokens, $token, $token-or-value, $force-value);
+}
+
+///
+/// Creates a module-level token CSS custom property declaration that sets a default
+/// variable reference to the token and its fallback value.
+/// 
+/// Example:
+/// ```sass
+/// @mixin configuration {
+///   @include tokens((
+///     color,
+///     background,
+///     [custom-name padding] // Supports a tuple for a custom name
+///   ));
+/// 
+///   // Generates the following CSS:
+///   --_component-name-color: var(--_component-name-color, var(--_component-name-color, <fallback value>));
+///   --_component-name-background: var(--_component-name-background, var(--_component-name-color, <fallback value>));
+///   --_component-name-custom-name: var(--_component-name-custom-name, var(--_component-name-padding, <fallback value>));
+/// }
+/// ```
+/// 
+/// @param {List} $config - The list of token names.
+/// 
+@mixin tokens($module, $tokens, $config) {
+  @each $token in $config {
+    $token-name: $token;
+    $value-name: $token;
+    
+    // The entry can be a tuple of the name and the value name in case they
+    // need to differ. If so, we pull the name from the first entry, and
+    // the value name is the second entry.
+    @if (meta.type-of($token) == 'list') {
+      @if (list.length($token) != 2) {
+        @error 'Invalid token configuration for module "#{$module}". Expected a list of 2 items, but got #{length($token)}.';
+      }
+
+      $token-name: list.nth($token, 1);
+      $value-name: list.nth($token, 2);
+    }
+
+    // The entry can be a map with specific `name` and `token` keys
+    @if (meta.type-of($token) == 'map') {
+      @if (not map.get($token, name) or not map.get($token, token)) {
+        @error 'Invalid token configuration for module "#{$module}". Expect a map with `name` and `token` keys.';
+      }
+
+      $token-name: map.get($token, name);
+      $value-name: map.get($token, token);
+    }
+
+    $value: map.get($tokens, $value-name);
+
+    @if not $value {
+      @error 'Invalid token "#{$value-name}" for module "#{$module}"';
+    }
+
+    #{declare($module, $token-name)}: #{$value};
+  }
+}

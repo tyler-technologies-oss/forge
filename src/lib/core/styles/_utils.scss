@@ -26,15 +26,23 @@
 /// ```
 /// 
 @function module-ref($module, $token, $value, $type: ref, $prefix: config.$prefix) {
-  $fallback: if($type == ref, module-var($value), $value);
+  $fallback: if($type == ref, module-var($module, $value), $value);
   @return create-var($module, $token, $fallback, $prefix);
 }
 
 ///
-/// Gets a module token CSS variable.
+/// Creates an internal token reference variable for a module.
+///
+/// Example:
+/// ```sass
+/// color: #{module-var(color)}; // => color: var(--_component-name-color);
+/// ```
 /// 
-@function module-var($token, $prefix: config.$prefix) {
-  @return var(--_#{$token});
+/// @param {String} $module - The module name.
+/// @param {String} $token - The token name.
+///
+@function module-var($module, $token, $prefix: config.$prefix) {
+  @return var(#{create-module-var($module, $token)});
 }
 
 ///
@@ -89,6 +97,27 @@
 }
 
 ///
+/// Creates a token CSS custom property definition to point one token to another.
+/// 
+/// If `$new-token` is not a valid token then the provided value will be used verbatim.
+/// 
+/// Example:
+/// ```sass
+/// #{override(tokens, color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
+/// #{override(tokens, color, red)}; // => --_component-name-color: red;
+/// ```
+/// 
+/// @param {String} $module-tokens - The available tokens.
+/// @param {String} $token - The token name to override.
+/// @param {String} $token-or-value - The token name (if exists) or value to point to.
+/// @param {Boolean} $force-value - Whether to force the value to be used verbatim.
+/// 
+@mixin override($module, $module-tokens, $token, $token-or-value, $force-value: false) {
+  $value: if(not $force-value and map.get($module-tokens, $token-or-value), module-var($module, $token-or-value), $token-or-value);
+  #{create-module-var($module, $token)}: #{$value};
+}
+
+///
 /// Creates a new map by inheriting from a base map and overriding/adding values.
 ///
 @function inherit-map($base, $overrides) {
@@ -118,6 +147,20 @@
 ///
 @mixin declare-var($module, $name, $value, $prefix: config.$prefix) {
   --#{$prefix}-#{$module}-#{$name}: #{$value};
+}
+
+///
+/// Declares an internal token reference variable for a module.
+/// 
+/// Example:
+/// ```sass
+/// #{create-module-var(color)}: red; // => --_component-name-color: red;
+/// ```
+/// 
+/// @param {String} $token - The token name.
+/// 
+@function create-module-var($module, $token) {
+  @return --_#{$module}-#{$token};
 }
 
 ///

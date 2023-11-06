@@ -1,10 +1,5 @@
-@use '../core/styles/utils';
-@use '../core/styles/tokens/state-layer/tokens';
 @use './configuration';
-
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, state-layer);
-}
+@use './token-utils' as *;
 
 @mixin host {
   @include container;
@@ -44,13 +39,13 @@
 }
 
 @mixin hovered {
-  background-color: var(--_hover-color);
-  opacity: var(--_hover-opacity);
+  background-color: #{variable(hover-color)};
+  opacity: #{variable(hover-opacity)};
 }
 
 @mixin pressed {
-  opacity: var(--_pressed-opacity);
-  transition-duration: var(--_pressed-duration);
+  opacity: #{variable(pressed-opacity)};
+  transition-duration: #{variable(pressed-duration)};
 }
 
 @mixin layer-base {
@@ -59,20 +54,20 @@
 }
 
 @mixin hover-base {
-  background-color: var(--_hover-color);
+  background-color: #{variable(hover-color)};
   inset: 0;
-  transition: opacity var(--_hover-duration) linear,
-              background-color var(--_hover-duration) linear;
+  transition: opacity #{variable(hover-duration)} linear,
+              background-color #{variable(hover-duration)} linear;
 }
 
 @mixin ripple-base {
   background: radial-gradient(
     closest-side,
-    var(--_pressed-color) max(calc(100% - 70px), 65%),
+    #{variable(pressed-color)} max(calc(100% - 70px), 65%),
     transparent 100%
   );
   transform-origin: center center;
-  transition: opacity var(--_animation-duration) linear;
+  transition: opacity #{variable(animation-duration)} linear;
 }
 
 ///
@@ -108,7 +103,7 @@
 
   &:active {
     .forge-state-layer::before {
-      opacity: var(--_pressed-opacity);
+      opacity: #{variable(pressed-opacity)};
     }
   }
 }

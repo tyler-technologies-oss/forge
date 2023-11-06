@@ -1,13 +1,8 @@
 @use '../core/styles/typography';
-@use '../core/styles/utils';
-@use '../core/styles/tokens/button/tokens';
-
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, button);
-}
+@use './token-utils' as *;
 
 @mixin host {
-  display: var(--_display);
+  display: #{variable(display)};
   position: relative;
   outline: none;
   -webkit-tap-highlight-color: transparent;
@@ -17,26 +12,26 @@
   @include typography.style(button);
   
   position: relative;
-  display: var(--_display);
+  display: #{variable(display)};
   align-items: center;
-  justify-content: var(--_justify);
-  gap: var(--_spacing);
+  justify-content: #{variable(justify)};
+  gap: #{variable(spacing)};
   z-index: 0;
 
   box-sizing: border-box;
-  min-inline-size: var(--_min-width);
-  height: var(--_height);
+  min-inline-size: #{variable(min-width)};
+  height: #{variable(height)};
   inline-size: 100%;
-  border-width: var(--_border-width);
-  border-style: var(--_border-style);
-  border-color: var(--_border-color);
-  border-top-left-radius: var(--_border-top-left-radius);
-  border-top-right-radius: var(--_border-top-right-radius);
-  border-bottom-left-radius: var(--_border-bottom-left-radius);
-  border-bottom-right-radius: var(--_border-bottom-right-radius);
-  padding-block: var(--_padding-block);
-  padding-inline: var(--_padding-inline);
-  box-shadow: var(--_shadow);
+  border-width: #{variable(border-width)};
+  border-style: #{variable(border-style)};
+  border-color: #{variable(border-color)};
+  border-top-left-radius: #{variable(border-top-left-radius)};
+  border-top-right-radius: #{variable(border-top-right-radius)};
+  border-bottom-left-radius: #{variable(border-bottom-left-radius)};
+  border-bottom-right-radius: #{variable(border-bottom-right-radius)};
+  padding-block: #{variable(padding-block)};
+  padding-inline: #{variable(padding-inline)};
+  box-shadow: #{variable(shadow)};
 
   outline: none;
   user-select: none;
@@ -44,11 +39,13 @@
   vertical-align: middle;
   text-decoration: none;
 
-  background: var(--_background);
-  color: var(--_color);
-  cursor: var(--_cursor);
+  background: #{variable(background)};
+  color: #{variable(color)};
+  cursor: #{variable(cursor)};
 
-  transition: box-shadow var(--_raised-transition-duration) var(--_raised-transition-timing);
+  transition-property: box-shadow, background;
+  transition-duration: #{variable(transition-duration)};
+  transition-timing-function: #{variable(transition-timing)};
 
   &::-moz-focus-inner {
     padding: 0;
@@ -56,18 +53,20 @@
   }
 
   &:hover {
-    --_shadow: var(--_hover-shadow);
-    --_background: var(--_hover-background);
+    @include override(shadow, hover-shadow);
+
+    background: #{variable(hover-background)};
   }
 
   &:active {
-    --_shadow: var(--_active-shadow);
-    --_background: var(--_active-background);
+    @include override(shadow, active-shadow);
+
+    background: #{variable(active-background)};
   }
 }
 
 @mixin slotted-start-end {
-  font-size: var(--_icon-size);
+  font-size: #{variable(icon-size)};
 }
 
 @mixin anchor-base {
@@ -76,84 +75,89 @@
   text-decoration: none;
 }
 
+@mixin text {
+  @include override(focus-indicator-offset, text-focus-indicator-offset);
+}
+
 @mixin raised {
-  --_background: var(--_raised-background);
-  --_color: var(--_raised-color);
-  --_shadow: var(--_raised-shadow);
+  @include override(background, raised-background);
+  @include override(color, raised-color);
+  @include override(shadow, raised-shadow);
 
   &:hover {
-    --_shadow: var(--_raised-hover-shadow);
+    @include override(shadow, raised-hover-shadow);
   }
 
   &:active {
-    --_shadow: var(--_raised-active-shadow);
+    @include override(shadow, raised-active-shadow);
   }
 }
 
 @mixin flat {
-  --_background: var(--_flat-background);
-  --_color: var(--_flat-color);
+  @include override(background, flat-background);
+  @include override(color, flat-color);
 }
 
 @mixin outlined {
-  --_background: var(--_outlined-background);
-  --_color: var(--_outlined-color);
-  --_border-width: var(--_outlined-border-width);
-  --_border-style: var(--_outlined-border-style);
-  --_border-color: var(--_outlined-border-color);
+  @include override(background, outlined-background);
+  @include override(color, outlined-color);
+  @include override(border-width, outlined-border-width);
+  @include override(border-style, outlined-border-style);
+  @include override(border-color, outlined-border-color);
 }
 
 @mixin link {
-  --_color: var(--_link-color);
-  --_height: var(--_link-height);
-  --_padding: var(--_link-padding);
+  @include override(color, link-color);
+  @include override(height, link-height);
+  @include override(padding, link-padding);
+  @include override(focus-indicator-offset, link-focus-indicator-offset);
 
-  text-decoration: var(--_link-text-decoration);
-  line-height: var(--_link-line-height);
-  transition: opacity var(--_link-transition-duration) var(--_link-transition-timing);
-  inline-size: var(--_link-width);
+  text-decoration: #{variable(link-text-decoration)};
+  line-height: #{variable(link-line-height)};
+  transition: opacity #{variable(link-transition-duration)} #{variable(link-transition-timing)};
+  inline-size: #{variable(link-width)};
 
   &:hover {
-    text-decoration: var(--_link-hover-text-decoration);
+    text-decoration: #{variable(link-hover-text-decoration)};
   }
 
   &:active {
-    opacity: var(--_link-active-opacity);
+    opacity: #{variable(link-active-opacity)};
   }
 }
 
 @mixin host-disabled {
-  cursor: var(--_disabled-cursor);
+  cursor: #{variable(disabled-cursor)};
 }
 
 @mixin disabled {
-  --_background: var(--_disabled-background);
-  --_color: var(--_disabled-text-color);
-  --_shadow: var(--_disabled-shadow);
+  @include override(background, disabled-background);
+  @include override(color, disabled-text-color);
+  @include override(shadow, disabled-shadow);
 
   pointer-events: none;
 }
 
 @mixin raised-disabled {
-  --_shadow: var(--_raised-disabled-shadow);
-  --_background: var(--_raised-disabled-background);
-  --_color: var(--_raised-disabled-color);
+  @include override(shadow, raised-disabled-shadow);
+  @include override(background, raised-disabled-background);
+  @include override(color, raised-disabled-color);
 }
 
 @mixin flat-disabled {
-  --_background: var(--_flat-disabled-background);
-  --_color: var(--_flat-disabled-color);
+  @include override(background, flat-disabled-background);
+  @include override(color, flat-disabled-color);
 }
 
 @mixin outlined-disabled {
-  --_border-color: var(--_disabled-border-color);
+  @include override(border-color, disabled-border-color);
 }
 
 @mixin dense {
-  --_height: var(--_dense-height);
+  @include override(height, dense-height);
 }
 
 @mixin pill {
-  --_shape: var(--_pill-shape);
-  --_padding-inline: var(--_pill-padding-inline);
+  @include override(shape, pill-shape);
+  @include override(padding-inline, pill-padding-inline);
 }

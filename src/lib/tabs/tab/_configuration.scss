@@ -1,64 +1,77 @@
-@use '../../core/styles/tokens/tabs/tab/tokens' as tab-tokens;
+@use './token-utils' as *;
 
 @mixin configuration {
-  // Shared
-  --_active-color: #{tab-tokens.get(active-color)};
-  --_inactive-color: #{tab-tokens.get(inactive-color)};
-  --_height: #{tab-tokens.get(height)};
-  --_stacked-height: #{tab-tokens.get(stacked-height)};
+  @include tokens((
+    // Shared
+    active-color,
+    inactive-color,
+    height,
+    stacked-height,
 
-  // Disabled
-  --_disabled-opacity: #{tab-tokens.get(disabled-opacity)};
+    // Disabled
+    disabled-opacity,
 
-  // Indicator
-  --_active-indicator-color: #{tab-tokens.get(indicator-color)};
-  --_active-indicator-height: #{tab-tokens.get(indicator-height)};
-  --_active-indicator-shape: #{tab-tokens.get(indicator-shape)};
+    // Indicator
+    [active-indicator-color indicator-color],
+    [active-indicator-height indicator-height],
+    [active-indicator-shape indicator-shape],
 
-  // Container
-  --_container-color: #{tab-tokens.get(container-color)};
-  --_container-height: #{tab-tokens.get(container-height)};
-  --_container-shape: #{tab-tokens.get(container-shape)};
-  
-  // Content
-  --_content-height: #{tab-tokens.get(content-height)};
-  --_content-padding: #{tab-tokens.get(content-padding)};
+    // Indicator (vertical)
+    vertical-indicator-shape,
 
-  // Icon
-  --_active-focus-icon-color: #{tab-tokens.get(active-focus-icon-color)};
-  --_active-hover-icon-color: #{tab-tokens.get(active-hover-icon-color)};
-  --_active-icon-color: #{tab-tokens.get(active-icon-color)};
-  --_active-pressed-icon-color: #{tab-tokens.get(active-pressed-icon-color)};
-  --_icon-size: #{tab-tokens.get(icon-size)};
-  --_focus-icon-color: #{tab-tokens.get(focus-icon-color)};
-  --_hover-icon-color: #{tab-tokens.get(hover-icon-color)};
-  --_icon-color: #{tab-tokens.get(icon-color)};
-  --_pressed-icon-color: #{tab-tokens.get(pressed-icon-color)};
+    // Indicator (secondary)
+    secondary-indicator-height,
+    secondary-indicator-shape,
 
-  // Label
-  --_active-focus-label-text-color: #{tab-tokens.get(active-focus-label-text-color)};
-  --_active-hover-label-text-color: #{tab-tokens.get(active-hover-label-text-color)};
-  --_active-label-text-color: #{tab-tokens.get(active-label-text-color)};
-  --_active-pressed-label-text-color: #{tab-tokens.get(active-pressed-label-text-color)};
-  --_focus-label-text-color: #{tab-tokens.get(focus-label-text-color)};
-  --_hover-label-text-color: #{tab-tokens.get(hover-label-text-color)};
-  --_label-text-color: #{tab-tokens.get(label-text-color)};
-  --_pressed-label-text-color: #{tab-tokens.get(pressed-label-text-color)};
+    // Indicator (inverted)
+    inverted-indicator-shape,
+    vertical-inverted-indicator-shape,
+
+    // Container
+    container-color,
+    container-height,
+    container-shape,
+
+    // Content
+    content-height,
+    content-padding,
+
+    // Icon
+    active-focus-icon-color,
+    active-hover-icon-color,
+    active-icon-color,
+    active-pressed-icon-color,
+    icon-size,
+    focus-icon-color,
+    hover-icon-color,
+    icon-color,
+    pressed-icon-color,
+
+    // Label
+    active-focus-label-text-color,
+    active-hover-label-text-color,
+    active-label-text-color,
+    active-pressed-label-text-color,
+    focus-label-text-color,
+    hover-label-text-color,
+    label-text-color,
+    pressed-label-text-color
+  ));
 }
 
 @mixin vertical-primary-configuration {
-  --_active-indicator-shape: #{tab-tokens.get(vertical-indicator-shape)};
+  @include override(active-indicator-shape, vertical-indicator-shape);
 }
 
 @mixin configuration-secondary {
-  --_active-indicator-height: #{tab-tokens.get(secondary-indicator-height)};
-  --_active-indicator-shape: #{tab-tokens.get(secondary-indicator-shape)};
+  @include override(active-indicator-height, secondary-indicator-height);
+  @include override(active-indicator-shape, secondary-indicator-shape);
 }
 
 @mixin configuration-inverted {
-  --_active-indicator-shape: #{tab-tokens.get(inverted-indicator-shape)};
+  @include override(active-indicator-shape, inverted-indicator-shape);
 }
 
 @mixin configuration-vertical-inverted {
-  --_active-indicator-shape: #{tab-tokens.get(vertical-inverted-indicator-shape)};
+  @include override(active-indicator-shape, vertical-inverted-indicator-shape);
 }
