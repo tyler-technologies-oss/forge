@@ -2,6 +2,11 @@
 @use './configuration';
 @use '../../focus-indicator';
 @use '../../state-layer';
+@use './token-utils' as *;
+
+//
+// Host
+//
 
 :host {
   @include core.host;
@@ -10,6 +15,51 @@
 :host([hidden]) {
   display: none;
 }
+
+//
+// Base
+//
+
+.forge-tab {
+  @include configuration.configuration;
+}
+
+.forge-tab {
+  @include core.tab;
+
+  .content {
+    @include core.content;
+
+    .label {
+      @include core.label;
+    }
+  }
+
+  .indicator {
+    @include core.indicator;
+  }
+}
+
+:host, ::slotted(*) {
+  white-space: nowrap;
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: #{token(active-color)},
+    shape: 8px
+  ));
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: #{token(inactive-color)}
+  ));
+}
+
+//
+// States
+//
 
 :host(:focus) {
   .forge-tab {
@@ -23,6 +73,10 @@
   }
 }
 
+//
+// Disabled
+//
+
 :host([disabled]) {
   @include core.host-disabled;
 
@@ -33,23 +87,27 @@
   }
 }
 
+//
+// Selected
+//
+
 :host([selected]) {
   .forge-tab {
-    color: var(--_active-label-text-color);
+    color: #{token(active-label-text-color)};
 
     ::slotted([slot=leading]),
     ::slotted([slot=trailing]) {
-      color: var(--_active-icon-color);
+      color: #{token(active-icon-color)};
     }
 
     &:hover {
-      color: var(--_active-hover-label-text-color);
+      color: #{token(active-hover-label-text-color)};
     }
 
     &:hover {
       ::slotted([slot=leading]),
       ::slotted([slot=trailing]) {
-        color: var(--_active-hover-icon-color);
+        color: #{token(active-hover-icon-color)};
       }
     }
   
@@ -57,12 +115,18 @@
       opacity: 1;
     }
   }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: #{token(active-color)}
+    ));
+  }
 }
 
 :host([selected]:not([vertical])) {
   forge-focus-indicator {
     @include focus-indicator.provide-theme((
-      offset-block: 0 calc(var(--_active-indicator-height) + 1px)
+      offset-block: 0 calc(#{token(indicator-height)} + 1px)
     ));
   }
 }
@@ -79,15 +143,23 @@
   }
 }
 
+//
+// Stacked
+//
+
 :host([stacked]) {
   .forge-tab {
-    --_height: var(--_stacked-height);
+    @include override(height, stacked-height);
 
     .content {
       @include core.content-stacked;
     }
   }
 }
+
+//
+// Secondary
+//
 
 :host([secondary]) {
   .forge-tab {
@@ -102,6 +174,10 @@
     @include core.indicator-secondary;
   }
 }
+
+//
+// Vertical
+//
 
 :host([vertical]) {
   .forge-tab {
@@ -118,7 +194,7 @@
 
   forge-focus-indicator {
     @include focus-indicator.provide-theme((
-      offset-inline: 0 calc(var(--_active-indicator-height) + 1px)
+      offset-inline: 0 calc(#{token(indicator-height)} + 1px)
     ));
   }
 }
@@ -134,6 +210,10 @@
     @include configuration.vertical-primary-configuration;
   }
 }
+
+//
+// Inverted
+//
 
 :host([inverted]) {
   .forge-tab {
@@ -153,41 +233,4 @@
   .indicator {
     @include core.vertical-inverted-indicator;
   }
-}
-
-/// Base styles
-.forge-tab {
-  @include configuration.configuration;
-  @include core.tab;
-
-  .content {
-    @include core.content;
-
-    .label {
-      @include core.label;
-    }
-  }
-
-  .indicator {
-    @include core.indicator;
-  }
-}
-
-host,
-::slotted(*) {
-  white-space: nowrap;
-}
-
-
-forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    color: var(--_active-color),
-    shape: 8px
-  ));
-}
-
-forge-state-layer {
-  @include state-layer.provide-theme((
-    color: var(--_inactive-color)
-  ));
 }

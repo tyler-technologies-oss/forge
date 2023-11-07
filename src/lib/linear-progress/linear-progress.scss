@@ -1,8 +1,16 @@
 @use './animations';
 @use './configuration';
 @use './core';
+@use './token-utils' as *;
 
-/// Host styles
+//
+// Host styles
+//
+
+:host {
+  @include configuration.host-configuration;
+}
+
 :host {
   @include core.container;
 }
@@ -11,9 +19,15 @@
   display: none;
 }
 
-/// Base styles
+//
+// Base
+//
+
 .forge-linear-progress {
   @include configuration.configuration;
+}
+
+.forge-linear-progress {
   @include core.progress;
 }
 
@@ -105,12 +119,13 @@ $rtl-selectors: (
 
 @media screen and (forced-colors: active) {
   .forge-linear-progress {
-    --_active-indicator-color: canvastext;
-    --_track-color: graytext;
-    border: 1px solid canvastext;
+    @include override(active-indicator-color, CanvasText, value);
+    @include override(track-color, GrayText, value);
+
+    border: 1px solid CanvasText;
 
     &.forge-linear-progress--indeterminate {
-      --_track-color: canvas;
+      @include override(track-color, Canvas, value);
     }
   }
 }

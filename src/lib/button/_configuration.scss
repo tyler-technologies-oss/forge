@@ -1,90 +1,11 @@
-@use '../core/styles/tokens/button/tokens';
+@use './token-utils' as *;
+
+$host-tokens: [display disabled-cursor];
 
 @mixin host-configuration {
-  --_display: #{tokens.get(display)};
-  --_disabled-cursor: #{tokens.get(disabled-cursor)};
+  @include tokens($includes: $host-tokens);
 }
 
 @mixin configuration {
-  // Shared
-  --_primary-color: #{tokens.get(primary-color)};
-  --_text-color: #{tokens.get(text-color)};
-  --_disabled-color: #{tokens.get(disabled-color)};
-  --_padding: #{tokens.get(padding)};
-  --_display: #{tokens.get(display)};
-  --_justify: #{tokens.get(justify)};
-  --_shape: #{tokens.get(shape)};
-
-  // Base
-  --_height: #{tokens.get(height)};
-  --_min-width: #{tokens.get(min-width)};
-  --_spacing: #{tokens.get(spacing)};
-  --_border-width: #{tokens.get(border-width)};
-  --_border-style: #{tokens.get(border-style)};
-  --_border-color: #{tokens.get(border-color)};
-  --_border-top-left-radius: #{tokens.get(border-top-left-radius)};
-  --_border-top-right-radius: #{tokens.get(border-top-right-radius)};
-  --_border-bottom-left-radius: #{tokens.get(border-bottom-left-radius)};
-  --_border-bottom-right-radius: #{tokens.get(border-bottom-right-radius)};
-  --_padding-block: #{tokens.get(padding-block)};
-  --_padding-inline: #{tokens.get(padding-inline)};
-  --_background: #{tokens.get(background)};
-  --_hover-background: #{tokens.get(hover-background)};
-  --_active-background: #{tokens.get(active-background)};
-  --_color: #{tokens.get(color)};
-  --_icon-size: #{tokens.get(icon-size)};
-  --_shadow: #{tokens.get(shadow)};
-  --_hover-shadow: #{tokens.get(hover-shadow)};
-  --_active-shadow: #{tokens.get(active-shadow)};
-  --_cursor: #{tokens.get(cursor)};
-
-  // Raised
-  --_raised-background: #{tokens.get(raised-background)};
-  --_raised-disabled-background: #{tokens.get(raised-disabled-background)};
-  --_raised-color: #{tokens.get(raised-color)};
-  --_raised-disabled-color: #{tokens.get(raised-disabled-color)};
-  --_raised-shadow: #{tokens.get(raised-shadow)};
-  --_raised-hover-shadow: #{tokens.get(raised-hover-shadow)};
-  --_raised-active-shadow: #{tokens.get(raised-active-shadow)};
-  --_raised-disabled-shadow: #{tokens.get(raised-disabled-shadow)};
-  --_raised-transition-duration: #{tokens.get(raised-transition-duration)};
-  --_raised-transition-timing: #{tokens.get(raised-transition-timing)};
-
-  // Flat
-  --_flat-background: #{tokens.get(flat-background)};
-  --_flat-disabled-background: #{tokens.get(flat-disabled-background)};
-  --_flat-color: #{tokens.get(flat-color)};
-  --_flat-disabled-color: #{tokens.get(flat-disabled-color)};
-
-  // Outlined
-  --_outlined-background: #{tokens.get(outlined-background)};
-  --_outlined-color: #{tokens.get(outlined-color)};
-  --_outlined-border-width: #{tokens.get(outlined-border-width)};
-  --_outlined-border-style: #{tokens.get(outlined-border-style)};
-  --_outlined-border-color: #{tokens.get(outlined-border-color)};
-
-  // Link
-  --_link-color: #{tokens.get(link-color)};
-  --_link-text-decoration: #{tokens.get(link-text-decoration)};
-  --_link-height: #{tokens.get(link-height)};
-  --_link-padding: #{tokens.get(link-padding)};
-  --_link-line-height: #{tokens.get(link-line-height)};
-  --_link-width: #{tokens.get(link-width)};
-  --_link-hover-text-decoration: #{tokens.get(link-hover-text-decoration)};
-  --_link-active-opacity: #{tokens.get(link-active-opacity)};
-  --_link-transition-duration: #{tokens.get(link-transition-duration)};
-  --_link-transition-timing: #{tokens.get(link-transition-timing)};
-
-  // Disabled
-  --_disabled-text-color: #{tokens.get(disabled-text-color)};
-  --_disabled-background: #{tokens.get(disabled-background)};
-  --_disabled-border-color: #{tokens.get(disabled-border-color)};
-  --_disabled-shadow: #{tokens.get(disabled-shadow)};
-
-  // Dense
-  --_dense-height: #{tokens.get(dense-height)};
-
-  // Pill
-  --_pill-shape: #{tokens.get(pill-shape)};
-  --_pill-padding-inline: #{tokens.get(pill-padding-inline)};
+  @include tokens($excludes: $host-tokens);
 }

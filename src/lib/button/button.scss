@@ -1,7 +1,9 @@
 @use './configuration';
 @use './core';
-@use '../state-layer/core' as state-layer;
-@use '../focus-indicator/core' as focus-indicator;
+@use '../core/styles/theme';
+@use '../state-layer' as state-layer;
+@use '../focus-indicator' as focus-indicator;
+@use './token-utils' as *;
 
 //
 // Host
@@ -9,6 +11,9 @@
 
 :host {
   @include configuration.host-configuration;
+}
+
+:host {
   @include core.host;
 }
 
@@ -22,8 +27,11 @@
 
 .forge-button {
   @include configuration.configuration;
-  @include core.base;
+}
 
+.forge-button {
+  @include core.base;
+  
   ::slotted(:is([slot=start],[slot=end])) {
     @include core.slotted-start-end;
   }
@@ -34,11 +42,14 @@ a {
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme(( color: var(--_color) ));
+  @include state-layer.provide-theme(( color: #{token(color)} ));
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme(( color: var(--_primary-color) ));
+  @include focus-indicator.provide-theme((
+    color: #{token(primary-color)},
+    outward-offset: #{token(focus-indicator-offset)}
+  ));
 }
 
 //
@@ -48,8 +59,7 @@ forge-focus-indicator {
 @mixin theme($theme) {
   :host([theme=#{$theme}]) {
     .forge-button {
-      --_primary-color: var(--forge-theme-#{$theme});
-      --_text-color: var(--forge-theme-on-#{$theme});
+      @include override(primary-color, theme.variable($theme));
     }
   }
 }
@@ -66,9 +76,8 @@ forge-focus-indicator {
 //
 
 :host(:is(:not([variant], [variant=text]))) {
-  forge-focus-indicator {
-    /* stylelint-disable-next-line length-zero-no-unit */
-    @include focus-indicator.provide-theme(( outward-offset: 0px ));
+  .forge-button {
+    @include core.text;
   }
 }
 
@@ -78,7 +87,7 @@ forge-focus-indicator {
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: var(--_raised-color) ));
+    @include state-layer.provide-theme(( color: #{token(raised-color)} ));
   }
 }
 
@@ -88,7 +97,7 @@ forge-focus-indicator {
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: var(--_flat-color) ));
+    @include state-layer.provide-theme(( color: #{token(flat-color)} ));
   }
 }
 
@@ -101,10 +110,6 @@ forge-focus-indicator {
 :host([variant=link]) {
   .forge-button {
     @include core.link;
-  }
-
-  forge-focus-indicator {
-    @include focus-indicator.provide-theme(( outward-offset: 2px ));
   }
 }
 
@@ -128,7 +133,7 @@ forge-focus-indicator {
   }
 
   forge-focus-indicator {
-    @include focus-indicator.provide-theme(( shape: var(--_pill-shape) ));
+    @include focus-indicator.provide-theme(( shape: #{token(pill-shape)} ));
   }
 }
 

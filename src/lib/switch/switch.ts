@@ -117,7 +117,6 @@ declare global {
  * @cssproperty --forge-switch-icon-on-size - The size of the handle icon in the switch's on state.
  * @cssproperty --forge-switch-icon-off-size - The size of the handle icon in the switch's off state.
  * @cssproperty --forge-switch-icon-scale - The scale transformation applied to the handle icons.
- * @cssproperty --forge-switch-icon-active-scale - The scale transformation applied to the handle icons when the switch is active (pressed).
  * @cssproperty --forge-switch-icon-on-scale - The scale transformation applied to the handle icons in the switch's on state.
  * @cssproperty --forge-switch-icon-off-scale - The scale transformation applied to the handle icons in the switch's off state.
  * @cssproperty --forge-switch-icon-active-on-scale - The scale transformation applied to the handle icons when the switch is active (pressed) in its on state.

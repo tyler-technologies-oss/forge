@@ -9,6 +9,7 @@
 @use '../../typography';
 @use '../../utils';
 
+/* stylelint-disable length-zero-no-unit */
 $tokens: (
   // Shared
   primary-color: utils.module-val(button, primary, theme.variable(primary)),
@@ -33,14 +34,16 @@ $tokens: (
   padding-block: utils.module-ref(button, padding-block, padding),
   padding-inline: utils.module-ref(button, padding-inline, padding),
   background: utils.module-val(button, background, transparent),
-  hover-background: utils.module-val(button, hover-background, transparent),
-  active-background: utils.module-val(button, active-background, transparent),
+  hover-background: utils.module-ref(button, hover-background, background),
+  active-background: utils.module-ref(button, active-background, background),
   color: utils.module-ref(button, color, text-color),
   icon-size: utils.module-val(button, icon-size, typography.font-size-relative('1125')),
   shadow: utils.module-val(button, shadow, none),
   hover-shadow: utils.module-val(button, hover-shadow, none),
   active-shadow: utils.module-val(button, active-shadow, none),
   cursor: utils.module-val(button, cursor, pointer),
+  transition-duration: utils.module-val(button, transition-duration, animation.variable(duration-short3)),
+  transition-timing: utils.module-val(button, transition-timing, animation.variable(easing-standard)),
 
   // Raised
   raised-background: utils.module-ref(button, raised-background, primary-color),
@@ -51,8 +54,6 @@ $tokens: (
   raised-hover-shadow: utils.module-val(button, raised-hover-shadow, elevation.value(4)),
   raised-active-shadow: utils.module-val(button, raised-active-shadow, elevation.value(8)),
   raised-disabled-shadow: utils.module-val(button, raised-disabled-shadow, none),
-  raised-transition-duration: utils.module-val(button, raised-transition-duration, animation.variable(duration-short3)),
-  raised-transition-timing: utils.module-val(button, raised-transition-timing, animation.variable(easing-standard)),
 
   // Flat
   flat-background: utils.module-ref(button, flat-background, primary-color),
@@ -91,8 +92,14 @@ $tokens: (
 
   // Pill
   pill-shape: utils.module-val(button, pill-shape, shape.variable(full)),
-  pill-padding-inline: utils.module-val(button, pill-padding-inline, spacing.variable(small))
+  pill-padding-inline: utils.module-val(button, pill-padding-inline, spacing.variable(small)),
+
+  // Focus indicator
+  focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 4px),
+  text-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 0px),
+  link-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 2px)
 ) !default;
+/* stylelint-enable length-zero-no-unit */
 
 @function get($key) {
   @return map.get($tokens, $key);

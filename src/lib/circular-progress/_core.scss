@@ -1,17 +1,14 @@
 @use 'sass:list';
 @use './animation';
-@use '../core/styles/utils';
-@use '../core/styles/tokens/circular-progress/tokens';
+@use './token-utils' as *;
 
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, circular-progress);
-}
+$_cycle-duration: calc(4 * #{token(arc-duration)});
 
 @mixin container {
   display: inline-flex;
   vertical-align: middle;
-  min-block-size: #{tokens.get(size)};
-  min-inline-size: #{tokens.get(size)};
+  min-block-size: #{token(size)};
+  min-inline-size: #{token(size)};
   position: relative;
   align-items: center;
   justify-content: center;
@@ -25,13 +22,13 @@
 @mixin progress {
   flex: 1;
   align-self: stretch;
-  margin: var(--_spacing);
+  margin: #{token(padding)};
 }
 
 @mixin indeterminate {
   will-change: transform;
   animation: #{animation.$indeterminate-animation};
-  animation-duration: var(--_linear-duration);
+  animation-duration: calc(#{token(arc-duration)} * 360 / 306);
 }
 
 @mixin indeterminate-left {
@@ -52,20 +49,20 @@
 @mixin indeterminate-circle {
   box-sizing: border-box;
   border-radius: 50%;
-  border: solid calc(var(--_size) * var(--_track-width) / 100);
-  border-color: var(--_track-color) var(--_track-color) transparent transparent;
+  border: solid calc(#{token(size)} * #{token(track-width)} / 100);
+  border-color: #{token(track-color)} #{token(track-color)} transparent transparent;
   will-change: transform;
   animation: #{animation.$indeterminate-circle-animation};
   animation-iteration-count: infinite;
   animation-fill-mode: both;
-  animation-duration: var(--_arc-duration), var(--_cycle-duration);
+  animation-duration: #{token(arc-duration)}, #{$_cycle-duration};
   animation-timing-function: #{animation.$indeterminate-easing};
 }
 
 @mixin indeterminate-right-circle {
   rotate: 100deg;
   inset: 0 0 0 -100%;
-  animation-delay: calc(-0.5 * var(--_arc-duration)), 0ms;
+  animation-delay: calc(-0.5 * #{token(arc-duration)}), 0ms;
 }
 
 @mixin determinate-svg {
@@ -75,9 +72,9 @@
 @mixin determinate-svg-circle {
   cx: 50%;
   cy: 50%;
-  r: calc(50% * (1 - var(--_track-width) / 100));
+  r: calc(50% * (1 - #{token(track-width)} / 100));
   // match size to indeterminate border width
-  stroke-width: calc(var(--_track-width) * 1%);
+  stroke-width: calc(#{token(track-width)} * 1%);
   // note, pathLength is set so this can be normalized
   stroke-dasharray: 100;
   fill: transparent;
@@ -85,7 +82,7 @@
 
 @mixin determinate-progress {
   transition: stroke-dashoffset 500ms #{animation.$determinate-easing};
-  stroke: var(--_track-color);
+  stroke: #{token(track-color)};
 }
 
 @mixin determinate-track {
@@ -93,13 +90,13 @@
 }
 
 @mixin determinate-track-background {
-  stroke: var(--_track-background);
+  stroke: #{token(track-background)};
 }
 
 @mixin determinate-spinner {
   will-change: transform;
   animation: #{animation.$determinate-animation};
-  animation-duration: var(--_cycle-duration);
+  animation-duration: #{$_cycle-duration};
   animation-timing-function: #{animation.$indeterminate-easing};
 }
 

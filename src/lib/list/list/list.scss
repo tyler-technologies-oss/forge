@@ -2,6 +2,10 @@
 @use './core';
 @use '../list-item';
 
+//
+// Host
+//
+
 :host {
   display: block;
 }
@@ -20,7 +24,14 @@
   ));
 }
 
+//
+// Base
+//
+
 .forge-list {
   @include configuration.configuration;
+}
+
+.forge-list {
   @include core.base;
 }

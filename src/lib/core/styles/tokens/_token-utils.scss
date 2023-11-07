@@ -1,0 +1,113 @@
+@use 'sass:meta';
+@use 'sass:map';
+@use 'sass:list';
+@use '../utils';
+
+///
+/// Mixin for providing theme tokens to the module using external names.
+/// 
+/// Example:
+/// ```sass
+/// provide-theme(( color: red )); // => --forge-component-name-color: red;
+/// ```
+/// 
+/// @param {String} $module - The module name.
+/// @param {Map} $tokens - The tokens for this module.
+/// @param {Map} $theme - The theme tokens. 
+///
+@mixin provide-theme($module, $tokens, $theme) {
+  @include utils.provide($tokens, $theme, $module);
+}
+
+///
+/// Creates an internal token reference variable for the module.
+///
+/// This function requires that the token exists in the module.
+/// 
+/// Example:
+/// ```sass
+/// color: #{token(color)}; // => color: var(--_component-name-color);
+/// color: #{token(my-color, custom)}; // => color: var(--_component-name-my-color);
+/// ```
+/// 
+/// @param {String} $module - The module name. 
+/// @param {String} $tokens - The tokens for this module.
+/// @param {String} $token - The token name.
+/// @param {String} $type - The type of token this is. Valid values are `token` and `custom`. Using `custom` will not check if the token exists.
+///
+@function token($module, $tokens, $token, $type: token) {
+  @if ($type == 'token' and not map.has-key($tokens, $token)) {
+    @error 'Invalid token "#{$token}" for module "#{$module}"';
+  }
+  @return utils.module-var($module, $token);
+}
+
+///
+/// Declares an internal token reference variable for the module.
+/// 
+/// Example:
+/// ```sass
+/// #{declare(color)}: red; // => --_component-name-color: red;
+/// ```
+/// 
+/// @param {String} $module - The module name. 
+/// @param {String} $token - The token name.
+/// 
+@function declare($module, $token) {
+  @return utils.create-module-var($module, $token);
+}
+
+///
+/// Creates a token CSS custom property definition to point one token to another.
+/// 
+/// If `$new-token` is not a valid token then the provided value will be used verbatim.
+/// 
+/// Example:
+/// ```sass
+/// #{override(color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
+/// ```
+///
+/// @param {String} $module - The module name.
+/// @param {String} $tokens - The tokens for this module.
+/// @param {String} $token - The token name to override.
+/// @param {String} $token-or-value - The token name (if exists) or value to point to.
+/// @param {Boolean} $type - The type of token this is. Valid values are `token` and `value`.
+/// 
+@mixin override($module, $tokens, $token, $token-or-value, $type: token) {
+  @include utils.override($module, $tokens, $token, $token-or-value, $type);
+}
+
+///
+/// Generates CSS custom property declarations for all provided module-level tokens.
+///
+/// @param {String} $module - The module name.
+/// @param {String} $tokens - The tokens for this module.
+/// @param {List} $includes - An optional list of token names to include from `$tokens`
+/// @param {List} $excludes - An optional list of token names to exclude from `$tokens`
+/// 
+@mixin tokens($module, $tokens, $includes: null, $excludes: null) {
+  @if ($includes) {
+    // We are including only specific tokens
+    @each $token in $includes {
+      @if (not map.has-key($tokens, $token)) {
+        @error 'Invalid include token "#{$token}" for module "#{$module}"';
+      }
+      #{declare($module, $token)}: #{map.get($tokens, $token)};
+    }
+  } @else {
+    // We are including all tokens, but first we need to check if any excluded tokens were provided
+    @if ($excludes) {
+      @each $token in $excludes {
+        @if (not map.has-key($tokens, $token)) {
+          @error 'Invalid exclude token "#{$token}" for module "#{$module}"';
+        }
+        $tokens: map.remove($tokens, $token);
+      }
+    }
+
+    @each $token-name, $token-value in $tokens {
+      #{declare($module, $token-name)}: #{$token-value};
+    }
+  }
+}
+
