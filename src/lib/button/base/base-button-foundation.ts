@@ -63,6 +63,20 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   }
 
   private async _onClick(evt: MouseEvent): Promise<void> {
+    const isFormType = this._type === 'submit' || this._type === 'reset';
+
+    // Custom elements do not work with the popover* attributes by default so we need to manually
+    // manage the popover functionality for now...
+    if (!isFormType && this._adapter.hasPopoverTarget()) {
+      const isOpen = this._adapter.managePopover();
+
+      // If the popover was opened successfully we can stop here since there is no need to
+      // handle any other scenarios
+      if (isOpen) {
+        return;
+      }
+    }
+
     // Wait a cycle to allow the click event to propagate
     await new Promise<void>(resolve => setTimeout(resolve));
 
@@ -74,14 +88,8 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
 
     // For button types of submit or reset, we need to manually submit or reset the form
     // since the click event doesn't do that for us with custom elements
-    if (this._type === 'submit' || this._type === 'reset') {
+    if (isFormType) {
       this._adapter.clickFormButton(this._type);
-    }
-
-    // Custom elements don't work with the popover attributes so we need to manually
-    // attempt to show a popover if one is attached via `popovertarget`
-    if (this._adapter.hasPopoverTarget()) {
-      this._adapter.tryShowPopover();
     }
   }
 
@@ -89,14 +97,22 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
    * Handle keydown events on the host element to manually trigger click events.
    */
   private async _onKeydown(evt: KeyboardEvent): Promise<void> {
+    // Handle the special case for the space key (when not an anchor) to avoid
+    // scrolling when triggered
+    if (evt.key === ' ' && !this._anchor) {
+      evt.preventDefault();
+      this.click();
+      return;
+    }
+
     // Wait a cycle for the keydown event to propagate
     await new Promise<void>(resolve => setTimeout(resolve));
 
-    if (evt.defaultPrevented) {
+    if (evt.defaultPrevented || this._disabled) {
       return;
     }
     
-    if (evt.key === 'Enter' || (evt.key === ' ' && !this._anchor)) {
+    if (evt.key === 'Enter') {
       if (this._anchor) {
         this._adapter.clickAnchor();
       } else {

@@ -663,12 +663,12 @@ describe('Button', () => {
 
     const buttonEl = el.querySelector('forge-button') as IButtonComponent;
     const popoverEl = el.querySelector('[popover]') as HTMLElement;
-    const showSpy = spy(popoverEl as any, 'showPopover');
+    const toggleSpy = spy(popoverEl as any, 'togglePopover');
 
     buttonEl.click();
     await elementUpdated(buttonEl);
 
-    expect(showSpy).to.have.been.calledOnce;
+    expect(toggleSpy).to.have.been.calledOnce;
   });
 
   it('should show popover when clicked', async () => {
@@ -681,12 +681,12 @@ describe('Button', () => {
 
     const buttonEl = el.querySelector('forge-button') as IButtonComponent;
     const popoverEl = el.querySelector('[popover]') as HTMLElement;
-    const showSpy = spy(popoverEl as any, 'showPopover');
+    const toggleSpy = spy(popoverEl as any, 'togglePopover');
 
     await clickElement(buttonEl);
-    showSpy.restore();
+    toggleSpy.restore();
 
-    expect(showSpy).to.have.been.calledOnce;
+    expect(toggleSpy).to.have.been.calledOnce;
   });
 
   it('should show popover when enter key is pressed', async () => {
@@ -699,13 +699,113 @@ describe('Button', () => {
 
     const buttonEl = el.querySelector('forge-button') as IButtonComponent;
     const popoverEl = el.querySelector('[popover]') as HTMLElement;
-    const showSpy = spy(popoverEl as any, 'showPopover');
+    const toggleSpy = spy(popoverEl as any, 'togglePopover');
 
     buttonEl.focus();
     await pressKey('Enter');
     await elementUpdated(el);
 
+    expect(toggleSpy).to.have.been.calledOnce;
+  });
+
+  it('should hide popover when clicked', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <forge-button popovertarget="test-popover">Button</forge-button>
+        <div popover id="test-popover">Popover</div>
+      </div>
+    `);
+
+    const buttonEl = el.querySelector('forge-button') as IButtonComponent;
+    const popoverEl = el.querySelector('[popover]') as HTMLElement;
+
+    await clickElement(buttonEl);
+    await elementUpdated(popoverEl);
+    expect(popoverEl.matches(':popover-open')).to.be.true;
+    
+    await clickElement(buttonEl);
+    await elementUpdated(popoverEl);
+    expect(popoverEl.matches(':popover-open')).to.be.false;
+  });
+
+  it('should hide popover when enter key is pressed', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <forge-button popovertarget="test-popover">Button</forge-button>
+        <div popover id="test-popover">Popover</div>
+      </div>
+    `);
+
+    const buttonEl = el.querySelector('forge-button') as IButtonComponent;
+    const popoverEl = el.querySelector('[popover]') as HTMLElement;
+
+    buttonEl.focus();
+    await pressKey('Enter');
+    await elementUpdated(popoverEl);
+    expect(popoverEl.matches(':popover-open')).to.be.true;
+    
+    buttonEl.focus();
+    await pressKey('Enter');
+    await elementUpdated(el);
+    expect(popoverEl.matches(':popover-open')).to.be.false;
+  });
+
+  it('should not show popover if popovertargetaction is set to hide', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <forge-button popovertarget="test-popover" popovertargetaction="hide">Button</forge-button>
+        <div popover id="test-popover">Popover</div>
+      </div>
+    `);
+
+    const buttonEl = el.querySelector('forge-button') as IButtonComponent;
+    const popoverEl = el.querySelector('[popover]') as HTMLElement;
+    const showSpy = spy(popoverEl as any, 'showPopover');
+    const toggleSpy = spy(popoverEl as any, 'togglePopover');
+
+    await clickElement(buttonEl);
+
+    expect(showSpy).not.to.have.been.called;
+    expect(toggleSpy).not.to.have.been.called;
+  });
+
+  it('should show popover if popovertargetaction is set to show', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <forge-button popovertarget="test-popover" popovertargetaction="show">Button</forge-button>
+        <div popover id="test-popover">Popover</div>
+      </div>
+    `);
+
+    const buttonEl = el.querySelector('forge-button') as IButtonComponent;
+    const popoverEl = el.querySelector('[popover]') as HTMLElement;
+    const showSpy = spy(popoverEl as any, 'showPopover');
+    const toggleSpy = spy(popoverEl as any, 'togglePopover');
+
+    await clickElement(buttonEl);
+
     expect(showSpy).to.have.been.calledOnce;
+    expect(toggleSpy).not.to.have.been.called;
+  });
+
+  it('should not hide popover if popovertargetaction is set to show', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <forge-button popovertarget="test-popover" popovertargetaction="show">Button</forge-button>
+        <div popover id="test-popover">Popover</div>
+      </div>
+    `);
+
+    const buttonEl = el.querySelector('forge-button') as IButtonComponent;
+    const popoverEl = el.querySelector('[popover]') as HTMLElement;
+
+    await clickElement(buttonEl);
+    await elementUpdated(popoverEl);
+    expect(popoverEl.matches(':popover-open')).to.be.true;
+
+    await clickElement(buttonEl);
+    await elementUpdated(popoverEl);
+    expect(popoverEl.matches(':popover-open')).to.be.true;
   });
 
   it('should set form reference', async () => {

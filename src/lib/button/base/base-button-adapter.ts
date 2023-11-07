@@ -9,6 +9,15 @@ import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflec
 import { internals } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
 
+// TODO: remove this augmentation when the TypeScript version is upgraded for latest DOM typings
+type TempHTMLElementWithPopover = IBaseButton & {
+  popoverTargetElement: TempHTMLElementWithPopover | null;
+  popover: 'manual' | 'auto';
+  showPopover(): void;
+  hidePopover(): void;
+  togglePopover(): boolean;
+};
+
 export interface IBaseButtonAdapter extends IBaseAdapter {
   initialize(): void;
   initializeAnchor(): void;
@@ -25,7 +34,7 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   addAnchorEventListener(type: string, listener: EventListener): void;
   removeAnchorEventListener(type: string, listener: EventListener): void;
   hasPopoverTarget(): boolean;
-  tryShowPopover(): void;
+  managePopover(): boolean;
   toggleDefaultPopoverIcon(value: boolean): void;
 }
 
@@ -157,27 +166,65 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   }
 
   public hasPopoverTarget(): boolean {
-    return this._component.hasAttribute('popovertarget');
+    return this._component.hasAttribute('popovertarget') || !!(this._component as TempHTMLElementWithPopover).popoverTargetElement;
   }
 
   /**
    * We are emulating native behavior here since custom elements do not support integrating with the
-   * native popover element. This method will attempt to find the popover target element and call its
-   * `showPopover()` method, which achieves the same result.
+   * native popover element. This method will attempt to find the popover target element and handle
+   * its `popovertargetaction`
    */
-  public tryShowPopover(): void {
-    if (!this.hasPopoverTarget() || !supportsPopover()) {
-      return;
+  public managePopover(): boolean {
+    if (this._component.form || !this.hasPopoverTarget() || !supportsPopover()) {
+      return false;
+    }
+    
+    const popoverElement = this._locatePopoverTargetElement();
+    if (!popoverElement) {
+      return false;
     }
 
-    const rootNode = this._component.ownerDocument.getRootNode() as Document | ShadowRoot;
-    if (!rootNode) {
-      return;
-    }
+    const action = this._component.getAttribute('popovertargetaction') || 'toggle';
+    const isPopoverOpen = popoverElement.matches(':popover-open');
 
-    const targetId = this._component.getAttribute('popovertarget');
-    const popoverTargetElement = rootNode.querySelector(`#${targetId}`);
-    (popoverTargetElement as any)?.showPopover(); // TODO: remove `any` when TypeScript version is upgraded for latest DOM typings
+    switch (action) {
+      case 'show':
+        if (!isPopoverOpen) {
+          popoverElement.showPopover();
+        }
+        return true;
+      case 'hide':
+        if (isPopoverOpen) {
+          popoverElement.hidePopover();
+        }
+        return false;
+      case 'toggle':
+      default:
+        const result = popoverElement.togglePopover();
+
+        // When the popover is open and is using an "auto" popover mode, we need to handle
+        // clicking ourselves again to close without re-opening the popover. We do this by
+        // adding a click listener to the component that will stop propagation of the event
+        // and then remove itself after the first click (or when the popover is closed externally).
+        if (result && popoverElement.popover !== 'manual') {
+          const listener: EventListener = evt => {
+            evt.stopPropagation();
+
+            // The popover will already be closed via pointer, but we need to ensure that
+            // it closes via keyboard as well so we perform the following check regardless
+            if (popoverElement.matches(':popover-open')) {
+              popoverElement.hidePopover();
+            }
+          };
+          this._component.addEventListener('click', listener, { capture: true, once: true });
+          popoverElement.addEventListener('beforetoggle', async () => {
+            await new Promise<void>(resolve => setTimeout(resolve)); // Wait a cycle to allow the click event to propagate first
+            this._component.removeEventListener('click', listener, { capture: true });
+          }, { once: true });
+        }
+
+        return result;
+    }
   }
 
   public toggleDefaultPopoverIcon(value: boolean): void {
@@ -194,6 +241,22 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       const icon = this._endSlotElement.querySelector('forge-icon');
       icon?.remove();
     }
+  }
+
+  private _locatePopoverTargetElement(): TempHTMLElementWithPopover | null {
+    let popoverElement = (this._component as TempHTMLElementWithPopover).popoverTargetElement ?? null;
+
+    if (!popoverElement) {
+      const rootNode = this._component.ownerDocument.getRootNode() as Document | ShadowRoot;
+      if (!rootNode) {
+        return null;
+      }
+
+      const targetId = this._component.getAttribute('popovertarget');
+      popoverElement = rootNode.querySelector(`#${targetId}`);
+    }
+
+    return popoverElement;
   }
 
   private _applyHostSemantics(): void {
