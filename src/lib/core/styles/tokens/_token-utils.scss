@@ -11,6 +11,8 @@
 /// provide-theme(( color: red )); // => --forge-component-name-color: red;
 /// ```
 /// 
+/// @param {String} $module - The module name.
+/// @param {Map} $tokens - The tokens for this module.
 /// @param {Map} $theme - The theme tokens. 
 ///
 @mixin provide-theme($module, $tokens, $theme) {
@@ -20,14 +22,23 @@
 ///
 /// Creates an internal token reference variable for the module.
 ///
+/// This function requires that the token exists in the module.
+/// 
 /// Example:
 /// ```sass
-/// color: #{variable(color)}; // => color: var(--_component-name-color);
+/// color: #{token(color)}; // => color: var(--_component-name-color);
+/// color: #{token(my-color, custom)}; // => color: var(--_component-name-my-color);
 /// ```
 /// 
+/// @param {String} $module - The module name. 
+/// @param {String} $tokens - The tokens for this module.
 /// @param {String} $token - The token name.
+/// @param {String} $type - The type of token this is. Valid values are `token` and `custom`. Using `custom` will not check if the token exists.
 ///
-@function variable($module, $token) {
+@function token($module, $tokens, $token, $type: token) {
+  @if ($type == 'token' and not map.has-key($tokens, $token)) {
+    @error 'Invalid token "#{$token}" for module "#{$module}"';
+  }
   @return utils.module-var($module, $token);
 }
 
@@ -39,6 +50,7 @@
 /// #{declare(color)}: red; // => --_component-name-color: red;
 /// ```
 /// 
+/// @param {String} $module - The module name. 
 /// @param {String} $token - The token name.
 /// 
 @function declare($module, $token) {
@@ -54,70 +66,48 @@
 /// ```sass
 /// #{override(color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
 /// ```
-/// 
+///
+/// @param {String} $module - The module name.
+/// @param {String} $tokens - The tokens for this module.
 /// @param {String} $token - The token name to override.
 /// @param {String} $token-or-value - The token name (if exists) or value to point to.
-/// @param {Boolean} $force-value - Whether to force the value to be used verbatim.
+/// @param {Boolean} $type - The type of token this is. Valid values are `token` and `value`.
 /// 
-@mixin override($module, $tokens, $token, $token-or-value, $force-value: false) {
-  @include utils.override($module, $tokens, $token, $token-or-value, $force-value);
+@mixin override($module, $tokens, $token, $token-or-value, $type: token) {
+  @include utils.override($module, $tokens, $token, $token-or-value, $type);
 }
 
 ///
-/// Creates a module-level token CSS custom property declaration that sets a default
-/// variable reference to the token and its fallback value.
+/// Generates CSS custom property declarations for all provided module-level tokens.
+///
+/// @param {String} $module - The module name.
+/// @param {String} $tokens - The tokens for this module.
+/// @param {List} $includes - An optional list of token names to include from `$tokens`
+/// @param {List} $excludes - An optional list of token names to exclude from `$tokens`
 /// 
-/// Example:
-/// ```sass
-/// @mixin configuration {
-///   @include tokens((
-///     color,
-///     background,
-///     [custom-name padding] // Supports a tuple for a custom name
-///   ));
-/// 
-///   // Generates the following CSS:
-///   --_component-name-color: var(--_component-name-color, var(--_component-name-color, <fallback value>));
-///   --_component-name-background: var(--_component-name-background, var(--_component-name-color, <fallback value>));
-///   --_component-name-custom-name: var(--_component-name-custom-name, var(--_component-name-padding, <fallback value>));
-/// }
-/// ```
-/// 
-/// @param {List} $config - The list of token names.
-/// 
-@mixin tokens($module, $tokens, $config) {
-  @each $token in $config {
-    $token-name: $token;
-    $value-name: $token;
-    
-    // The entry can be a tuple of the name and the value name in case they
-    // need to differ. If so, we pull the name from the first entry, and
-    // the value name is the second entry.
-    @if (meta.type-of($token) == 'list') {
-      @if (list.length($token) != 2) {
-        @error 'Invalid token configuration for module "#{$module}". Expected a list of 2 items, but got #{length($token)}.';
+@mixin tokens($module, $tokens, $includes: null, $excludes: null) {
+  @if ($includes) {
+    // We are including only specific tokens
+    @each $token in $includes {
+      @if (not map.has-key($tokens, $token)) {
+        @error 'Invalid include token "#{$token}" for module "#{$module}"';
       }
-
-      $token-name: list.nth($token, 1);
-      $value-name: list.nth($token, 2);
+      #{declare($module, $token)}: #{map.get($tokens, $token)};
     }
-
-    // The entry can be a map with specific `name` and `token` keys
-    @if (meta.type-of($token) == 'map') {
-      @if (not map.get($token, name) or not map.get($token, token)) {
-        @error 'Invalid token configuration for module "#{$module}". Expect a map with `name` and `token` keys.';
+  } @else {
+    // We are including all tokens, but first we need to check if any excluded tokens were provided
+    @if ($excludes) {
+      @each $token in $excludes {
+        @if (not map.has-key($tokens, $token)) {
+          @error 'Invalid exclude token "#{$token}" for module "#{$module}"';
+        }
+        $tokens: map.remove($tokens, $token);
       }
-
-      $token-name: map.get($token, name);
-      $value-name: map.get($token, token);
     }
 
-    $value: map.get($tokens, $value-name);
-
-    @if not $value {
-      @error 'Invalid token "#{$value-name}" for module "#{$module}"';
+    @each $token-name, $token-value in $tokens {
+      #{declare($module, $token-name)}: #{$token-value};
     }
-
-    #{declare($module, $token-name)}: #{$value};
   }
 }
+

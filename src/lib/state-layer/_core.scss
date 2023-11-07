@@ -39,13 +39,13 @@
 }
 
 @mixin hovered {
-  background-color: #{variable(hover-color)};
-  opacity: #{variable(hover-opacity)};
+  background-color: #{token(hover-color)};
+  opacity: #{token(hover-opacity)};
 }
 
 @mixin pressed {
-  opacity: #{variable(pressed-opacity)};
-  transition-duration: #{variable(pressed-duration)};
+  opacity: #{token(pressed-opacity)};
+  transition-duration: #{token(pressed-duration)};
 }
 
 @mixin layer-base {
@@ -54,20 +54,20 @@
 }
 
 @mixin hover-base {
-  background-color: #{variable(hover-color)};
+  background-color: #{token(hover-color)};
   inset: 0;
-  transition: opacity #{variable(hover-duration)} linear,
-              background-color #{variable(hover-duration)} linear;
+  transition: opacity #{token(hover-duration)} linear,
+              background-color #{token(hover-duration)} linear;
 }
 
 @mixin ripple-base {
   background: radial-gradient(
     closest-side,
-    #{variable(pressed-color)} max(calc(100% - 70px), 65%),
+    #{token(pressed-color)} max(calc(100% - 70px), 65%),
     transparent 100%
   );
   transform-origin: center center;
-  transition: opacity #{variable(animation-duration)} linear;
+  transition: opacity #{token(animation-duration)} linear;
 }
 
 ///
@@ -103,7 +103,7 @@
 
   &:active {
     .forge-state-layer::before {
-      opacity: #{variable(pressed-opacity)};
+      opacity: #{token(pressed-opacity)};
     }
   }
 }

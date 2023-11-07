@@ -7,44 +7,5 @@
   #{declare(tick-count)}: 100;
 
   // External state variables
-  @include tokens((
-    track-height,
-    state-layer-size,
-
-    active-track-color,
-    active-track-height,
-    active-track-shape,
-
-    disabled-active-track-color,
-    disabled-active-track-opacity,
-    disabled-handle-color,
-    disabled-inactive-track-color,
-    disabled-inactive-track-opacity,
-
-    handle-color,
-    handle-height,
-    handle-shape,
-    handle-width,
-    focus-handle-color,
-    hover-handle-color,
-    pressed-handle-color,
-
-    inactive-track-color,
-    inactive-track-height,
-    inactive-track-shape,
-
-    label-container-shape,
-    label-container-color,
-    label-container-height,
-    label-text-color,
-
-    with-overlap-handle-outline-color,
-    with-overlap-handle-outline-width,
-
-    with-tick-marks-active-container-color,
-    with-tick-marks-container-size,
-    with-tick-marks-disabled-active-container-color,
-    with-tick-marks-disabled-inactive-container-color,
-    with-tick-marks-inactive-container-color
-  ));
+  @include tokens;
 }

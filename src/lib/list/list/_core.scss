@@ -3,8 +3,8 @@
 @mixin base {
   display: block;
   outline: none;
-  background-color: #{variable(container-color)};
-  padding: #{variable(block-padding)} #{variable(inline-padding)};
+  background-color: #{token(container-color)};
+  padding: #{token(block-padding)} #{token(inline-padding)};
   margin: 0;
   border-radius: inherit;
   min-width: inherit;

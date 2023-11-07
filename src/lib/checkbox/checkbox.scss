@@ -73,7 +73,7 @@
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: #{variable(state-layer-checked-color)}
+      color: #{token(state-layer-checked-color)}
     ));
   }
 }
@@ -96,7 +96,7 @@
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: #{variable(state-layer-on-color)}
+      color: #{token(state-layer-checked-color)}
     ));
   }
 }
@@ -132,13 +132,13 @@
 // Reduced motion
 @media (prefers-reduced-motion) {
   .forge-checkbox {
-    @include override(animation-duration, 0s, $force-value: true);
+    @include override(animation-duration, 0s, value);
   }
 }
 
 forge-state-layer {
   @include state-layer.provide-theme((
-    color: #{variable(state-layer-unchecked-color)}
+    color: #{token(state-layer-unchecked-color)}
   ));
 }
 

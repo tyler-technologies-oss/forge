@@ -1,18 +1,11 @@
 @use './token-utils' as *;
 
+$_host-tokens: [size];
+
 @mixin host-configuration {
-  @include tokens((
-    size
-  ));
+  @include tokens($includes: $_host-tokens);
 }
 
 @mixin configuration {
-  @include tokens((
-    size,
-    [spacing padding],
-    track-width,
-    track-color,
-    track-background,
-    arc-duration
-  ));
+  @include tokens($excludes: $_host-tokens);
 }

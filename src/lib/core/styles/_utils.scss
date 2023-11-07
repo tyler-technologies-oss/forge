@@ -110,10 +110,10 @@
 /// @param {String} $module-tokens - The available tokens.
 /// @param {String} $token - The token name to override.
 /// @param {String} $token-or-value - The token name (if exists) or value to point to.
-/// @param {Boolean} $force-value - Whether to force the value to be used verbatim.
+/// @param {Boolean} $type - The type of token this is. Valid values are `token` and `value`.
 /// 
-@mixin override($module, $module-tokens, $token, $token-or-value, $force-value: false) {
-  $value: if(not $force-value and map.get($module-tokens, $token-or-value), module-var($module, $token-or-value), $token-or-value);
+@mixin override($module, $module-tokens, $token, $token-or-value, $type: token) {
+  $value: if($type == 'token' and map.get($module-tokens, $token-or-value), module-var($module, $token-or-value), $token-or-value);
   #{create-module-var($module, $token)}: #{$value};
 }
 

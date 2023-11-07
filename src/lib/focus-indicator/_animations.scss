@@ -6,13 +6,13 @@
       outline-width: 0;
     }
     to {
-      outline-width: #{variable(active-width)};
+      outline-width: #{token(active-width)};
     }
   }
 
   @keyframes outward-shrink {
     from {
-      outline-width: #{variable(active-width)};
+      outline-width: #{token(active-width)};
     }
   }
 
@@ -21,13 +21,13 @@
       border-width: 0;
     }
     to {
-      border-width: #{variable(active-width)};
+      border-width: #{token(active-width)};
     }
   }
 
   @keyframes inward-shrink {
     from {
-      border-width: #{variable(active-width)};
+      border-width: #{token(active-width)};
     }
   }
 }

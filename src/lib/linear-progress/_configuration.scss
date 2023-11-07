@@ -1,32 +1,23 @@
 @use './token-utils' as *;
 
+$_host-tokens: [track-height];
+
 @mixin host-configuration {
-  @include tokens((
-    track-height
-  ));
+  @include tokens($includes: $_host-tokens);
 }
 
 @mixin configuration {
   // Token vars
-  @include tokens((
-    track-height,
-    track-color,
-    active-indicator-color,
-    track-shape,
-    active-indicator-height,
-    determinate-duration,
-    indeterminate-duration,
-    determinate-easing
-  ));
+  @include tokens($excludes: $_host-tokens);
 
   // State vars
-  #{declare(track-dot-size)}: calc(#{variable(track-height)} / 2);
-  #{declare(track-background-width)}: calc(#{variable(track-dot-size)} * 5);
-  #{declare(track-background)}: 0 / #{variable(track-background-width)} 100%
+  #{declare(track-dot-size)}: calc(#{token(track-height)} / 2);
+  #{declare(track-background-width)}: calc(#{token(track-dot-size, custom)} * 5);
+  #{declare(track-background)}: 0 / #{token(track-background-width, custom)} 100%
     radial-gradient(
-      circle at calc(#{variable(track-dot-size)} * 2),
-      #{variable(track-color)} 0,
-      #{variable(track-color)} #{variable(track-dot-size)},
-      transparent #{variable(track-dot-size)}
+      circle at calc(#{token(track-dot-size, custom)} * 2),
+      #{token(track-color)} 0,
+      #{token(track-color)} #{token(track-dot-size, custom)},
+      transparent #{token(track-dot-size, custom)}
     );
 }

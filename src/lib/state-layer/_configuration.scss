@@ -1,15 +1,5 @@
-@use '../core/styles/tokens/state-layer/tokens';
 @use './token-utils' as *; 
 
 @mixin configuration {
-  @include tokens((
-    color,
-    hover-color,
-    hover-opacity,
-    pressed-color,
-    pressed-opacity,
-    hover-duration,
-    pressed-duration,
-    animation-duration
-  ));
+  @include tokens;
 }

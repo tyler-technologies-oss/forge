@@ -1,21 +1,5 @@
-@use '../core/styles/tokens/focus-indicator/tokens';
 @use './token-utils' as *;
 
 @mixin configuration {
-  @include tokens((
-    active-width,
-    color,
-    duration,
-    outward-offset,
-    inward-offset,
-    shape,
-    width,
-    easing,
-    shape-start-start,
-    shape-start-end,
-    shape-end-start,
-    shape-end-end,
-    [margin-block offset-block],
-    [margin-inline offset-inline]
-  ));
+  @include tokens;
 }

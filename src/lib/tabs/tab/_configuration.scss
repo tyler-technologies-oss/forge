@@ -1,77 +1,22 @@
 @use './token-utils' as *;
 
 @mixin configuration {
-  @include tokens((
-    // Shared
-    active-color,
-    inactive-color,
-    height,
-    stacked-height,
-
-    // Disabled
-    disabled-opacity,
-
-    // Indicator
-    [active-indicator-color indicator-color],
-    [active-indicator-height indicator-height],
-    [active-indicator-shape indicator-shape],
-
-    // Indicator (vertical)
-    vertical-indicator-shape,
-
-    // Indicator (secondary)
-    secondary-indicator-height,
-    secondary-indicator-shape,
-
-    // Indicator (inverted)
-    inverted-indicator-shape,
-    vertical-inverted-indicator-shape,
-
-    // Container
-    container-color,
-    container-height,
-    container-shape,
-
-    // Content
-    content-height,
-    content-padding,
-
-    // Icon
-    active-focus-icon-color,
-    active-hover-icon-color,
-    active-icon-color,
-    active-pressed-icon-color,
-    icon-size,
-    focus-icon-color,
-    hover-icon-color,
-    icon-color,
-    pressed-icon-color,
-
-    // Label
-    active-focus-label-text-color,
-    active-hover-label-text-color,
-    active-label-text-color,
-    active-pressed-label-text-color,
-    focus-label-text-color,
-    hover-label-text-color,
-    label-text-color,
-    pressed-label-text-color
-  ));
+  @include tokens;
 }
 
 @mixin vertical-primary-configuration {
-  @include override(active-indicator-shape, vertical-indicator-shape);
+  @include override(indicator-shape, vertical-indicator-shape);
 }
 
 @mixin configuration-secondary {
-  @include override(active-indicator-height, secondary-indicator-height);
-  @include override(active-indicator-shape, secondary-indicator-shape);
+  @include override(indicator-height, secondary-indicator-height);
+  @include override(indicator-shape, secondary-indicator-shape);
 }
 
 @mixin configuration-inverted {
-  @include override(active-indicator-shape, inverted-indicator-shape);
+  @include override(indicator-shape, inverted-indicator-shape);
 }
 
 @mixin configuration-vertical-inverted {
-  @include override(active-indicator-shape, vertical-inverted-indicator-shape);
+  @include override(indicator-shape, vertical-inverted-indicator-shape);
 }

@@ -119,13 +119,13 @@ $rtl-selectors: (
 
 @media screen and (forced-colors: active) {
   .forge-linear-progress {
-    @include override(active-indicator-color, CanvasText, $force-value: true);
-    @include override(track-color, GrayText, $force-value: true);
+    @include override(active-indicator-color, CanvasText, value);
+    @include override(track-color, GrayText, value);
 
     border: 1px solid CanvasText;
 
     &.forge-linear-progress--indeterminate {
-      @include override(track-color, Canvas, $force-value: true);
+      @include override(track-color, Canvas, value);
     }
   }
 }

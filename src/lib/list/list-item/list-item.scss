@@ -101,7 +101,7 @@
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: #{variable(selected-color)}
+      color: #{token(selected-color)}
     ));
   }
 }

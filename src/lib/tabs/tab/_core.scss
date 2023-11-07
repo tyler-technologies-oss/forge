@@ -13,7 +13,7 @@
 }
 
 @mixin disabled {
-  opacity: #{variable(disabled-opacity)};
+  opacity: #{token(disabled-opacity)};
 }
 
 @mixin tab {
@@ -35,9 +35,9 @@
   padding: 0;
   margin: 0;
   z-index: 0; // Ensure this is a stacking context so the indicator displays
-  background-color: #{variable(container-color)};
-  color: #{variable(label-text-color)};
-  min-height: #{variable(container-height)};
+  background-color: #{token(container-color)};
+  color: #{token(label-text-color)};
+  min-height: #{token(container-height)};
 
   &::-moz-focus-inner {
     padding: 0;
@@ -50,59 +50,59 @@
     position: relative;
     writing-mode: horizontal-tb;
     fill: currentColor;
-    color: #{variable(icon-color)};
-    font-size: #{variable(icon-size)};
-    width: #{variable(icon-size)};
-    height: #{variable(icon-size)};
+    color: #{token(icon-color)};
+    font-size: #{token(icon-size)};
+    width: #{token(icon-size)};
+    height: #{token(icon-size)};
   }
 
   &:hover {
-    color: #{variable(hover-label-text-color)};
+    color: #{token(hover-label-text-color)};
     cursor: pointer;
   }
 
   &:hover {
     ::slotted([slot=leading]),
     ::slotted([slot=trailing]) {
-      color: #{variable(hover-icon-color)};
+      color: #{token(hover-icon-color)};
     }
   }
 }
 
 @mixin focus {
-  color: #{variable(focus-label-text-color)};
+  color: #{token(focus-label-text-color)};
 
   ::slotted([slot=leading]),
   ::slotted([slot=trailing]) {
-    color:#{variable(focus-icon-color)};
+    color:#{token(focus-icon-color)};
   }
 }
 
 @mixin selected-focus {
-  color: #{variable(active-focus-label-text-color)};
+  color: #{token(active-focus-label-text-color)};
 
   ::slotted([slot=leading]),
   ::slotted([slot=trailing]) {
-    color: #{variable(active-focus-icon-color)};
+    color: #{token(active-focus-icon-color)};
   }
 }
 
 @mixin pressed {
-  color: #{variable(pressed-label-text-color)};
+  color: #{token(pressed-label-text-color)};
   outline: none;
 
   ::slotted([slot=leading]),
   ::slotted([slot=trailing]) {
-    color: #{variable(pressed-icon-color)};
+    color: #{token(pressed-icon-color)};
   }
 }
 
 @mixin selected-pressed {
-  color: #{variable(active-pressed-label-text-color)};
+  color: #{token(active-pressed-label-text-color)};
 
   ::slotted([slot=leading]),
   ::slotted([slot=trailing]) {
-    color: #{variable(active-pressed-icon-color)};
+    color: #{token(active-pressed-icon-color)};
   }
 }
 
@@ -115,10 +115,10 @@
   justify-content: center;
   white-space: nowrap;
   transition: 150ms color linear;
-  max-height: calc(#{variable(content-height)} + 2 * #{variable(content-padding)});
-  min-height: #{variable(content-height)};
-  padding: #{variable(content-padding)} calc(2 * #{variable(content-padding)});
-  gap: #{variable(content-padding)};
+  max-height: calc(#{token(content-height)} + 2 * #{token(content-padding)});
+  min-height: #{token(content-height)};
+  padding: #{token(content-padding)} calc(2 * #{token(content-padding)});
+  gap: #{token(content-padding)};
 }
 
 @mixin label {
@@ -131,9 +131,9 @@
   box-sizing: border-box;
   z-index: -1;
   transform-origin: bottom left;
-  background: #{variable(active-indicator-color)};
-  border-radius: #{variable(active-indicator-shape)};
-  height: #{variable(active-indicator-height)};
+  background: #{token(indicator-color)};
+  border-radius: #{token(indicator-shape)};
+  height: #{token(indicator-height)};
   inset: auto 0 0;
   opacity: 0;
 }
@@ -162,7 +162,7 @@
 
 @mixin vertical-indicator {
   height: 100%;
-  min-width: #{variable(active-indicator-height)};
+  min-width: #{token(indicator-height)};
   inset: 0 0 0 auto;
 }
 

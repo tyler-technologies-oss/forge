@@ -13,14 +13,14 @@
   box-sizing: border-box;
   outline: none;
   text-decoration: none;
-  background-color: #{variable(background-color)};
-  border-radius: #{variable(shape)};
+  background-color: #{token(background-color)};
+  border-radius: #{token(shape)};
   -webkit-tap-highlight-color: transparent;
-  height: #{variable(height)};
-  min-height: #{variable(height)};
-  padding: #{variable(padding)};
-  margin: #{variable(margin)};
-  cursor: #{variable(cursor)};
+  height: #{token(height)};
+  min-height: #{token(height)};
+  padding: #{token(padding)};
+  margin: #{token(margin)};
+  cursor: #{token(cursor)};
 }
 
 @mixin anchor-link {
@@ -32,107 +32,107 @@
   @include typography.ellipse;
 
   box-sizing: border-box;
-  font-size: #{variable(supporting-text-font-size)};
-  font-weight: #{variable(supporting-text-font-weight)};
-  line-height: #{variable(supporting-text-line-height)};
+  font-size: #{token(supporting-text-font-size)};
+  font-weight: #{token(supporting-text-font-weight)};
+  line-height: #{token(supporting-text-line-height)};
   flex: 1;
 }
 
 @mixin selected {
-  color: #{variable(selected-color)};
+  color: #{token(selected-color)};
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    opacity: #{variable(selected-opacity)};
-    background-color: #{variable(selected-color)};
+    opacity: #{token(selected-opacity)};
+    background-color: #{token(selected-color)};
   }
 }
 
 @mixin leading-selected {
-  color: #{variable(leading-selected-color)};
+  color: #{token(leading-selected-color)};
 }
 
 @mixin trailing-selected {
-  color: #{variable(trailing-selected-color)};
+  color: #{token(trailing-selected-color)};
 }
 
 @mixin text-container-selected {
-  color: #{variable(selected-color)};
+  color: #{token(selected-color)};
 }
 
 @mixin leading-trailing-selected {
-  color: #{variable(selected-color)};
+  color: #{token(selected-color)};
 }
 
 @mixin supporting-text {
   @include typography.style(body1);
   @include typography.ellipse;
 
-  color: #{variable(supporting-text-color)};
+  color: #{token(supporting-text-color)};
   display: block;
 }
 
 @mixin supporting-text-selected {
-  color: #{variable(selected-supporting-text-color)};
+  color: #{token(selected-supporting-text-color)};
 }
 
 @mixin two-line {
-  height: #{variable(two-line-height)};
-  min-height: #{variable(two-line-height)};
+  height: #{token(two-line-height)};
+  min-height: #{token(two-line-height)};
 }
 
 @mixin three-line {
-  height: #{variable(three-line-height)};
-  min-height: #{variable(three-line-height)};
+  height: #{token(three-line-height)};
+  min-height: #{token(three-line-height)};
 }
 
 @mixin dense {
-  height: #{variable(dense-one-line-height)};
-  min-height: #{variable(dense-one-line-height)};
+  height: #{token(dense-one-line-height)};
+  min-height: #{token(dense-one-line-height)};
 }
 
 @mixin dense-text {
-  font-size: #{variable(dense-font-size)};
+  font-size: #{token(dense-font-size)};
 }
 
 @mixin dense-two-line {
-  height: #{variable(dense-two-line-height)};
-  min-height: #{variable(dense-two-line-height)};
+  height: #{token(dense-two-line-height)};
+  min-height: #{token(dense-two-line-height)};
 }
 
 @mixin dense-three-line {
-  height: #{variable(dense-three-line-height)};
-  min-height: #{variable(dense-three-line-height)};
+  height: #{token(dense-three-line-height)};
+  min-height: #{token(dense-three-line-height)};
 }
 
 @mixin indented {
-  margin-inline-start: #{variable(indent)};
+  margin-inline-start: #{token(indent)};
 }
 
 @mixin dense-indented {
-  margin-inline-start: #{variable(dense-indent)};
+  margin-inline-start: #{token(dense-indent)};
 }
 
 @mixin avatar {
-  background-color: #{variable(avatar-background-color)};
-  color: #{variable(avatar-color)};
+  background-color: #{token(avatar-background-color)};
+  color: #{token(avatar-color)};
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   fill: currentColor;
-  margin-inline-start: #{variable(avatar-margin-start)};
-  margin-inline-end: #{variable(avatar-margin-end)};
-  min-width: #{variable(avatar-size)};
-  min-height: #{variable(avatar-size)};
-  border-radius: #{variable(avatar-shape)};
+  margin-inline-start: #{token(avatar-margin-start)};
+  margin-inline-end: #{token(avatar-margin-end)};
+  min-width: #{token(avatar-size)};
+  min-height: #{token(avatar-size)};
+  border-radius: #{token(avatar-shape)};
 }
 
 @mixin leading-trailing-base {
-  color: #{variable(supporting-text-color)};
+  color: #{token(supporting-text-color)};
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -141,29 +141,29 @@
 }
 
 @mixin leading {
-  margin-inline-start: #{variable(leading-margin-start)};
-  margin-inline-end: #{variable(leading-margin-end)};
+  margin-inline-start: #{token(leading-margin-start)};
+  margin-inline-end: #{token(leading-margin-end)};
 }
 
 @mixin leading-selected {
-  color: #{variable(leading-selected-color)};
+  color: #{token(leading-selected-color)};
 }
 
 @mixin leading-dense {
-  margin-inline-end: #{variable(dense-leading-margin-end)};
+  margin-inline-end: #{token(dense-leading-margin-end)};
 }
 
 @mixin trailing {
-  margin-inline-start: #{variable(trailing-margin-start)};
-  margin-inline-end: #{variable(trailing-margin-end)};
+  margin-inline-start: #{token(trailing-margin-start)};
+  margin-inline-end: #{token(trailing-margin-end)};
 }
 
 @mixin trailing-selected {
-  color: #{variable(trailing-selected-color)};
+  color: #{token(trailing-selected-color)};
 }
 
 @mixin trailing-dense {
-  margin-inline-start: #{variable(dense-trailing-margin-start)};
+  margin-inline-start: #{token(dense-trailing-margin-start)};
 }
 
 @mixin wrap {
@@ -185,6 +185,6 @@
 }
 
 @mixin disabled {
-  cursor: #{variable(disabled-cursor)};
-  opacity: #{variable(disabled-opacity)};
+  cursor: #{token(disabled-cursor)};
+  opacity: #{token(disabled-opacity)};
 }

@@ -42,13 +42,13 @@ a {
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme(( color: #{variable(color)} ));
+  @include state-layer.provide-theme(( color: #{token(color)} ));
 }
 
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
-    color: #{variable(primary-color)},
-    outward-offset: #{variable(focus-indicator-offset)}
+    color: #{token(primary-color)},
+    outward-offset: #{token(focus-indicator-offset)}
   ));
 }
 
@@ -87,7 +87,7 @@ forge-focus-indicator {
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: #{variable(raised-color)} ));
+    @include state-layer.provide-theme(( color: #{token(raised-color)} ));
   }
 }
 
@@ -97,7 +97,7 @@ forge-focus-indicator {
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: #{variable(flat-color)} ));
+    @include state-layer.provide-theme(( color: #{token(flat-color)} ));
   }
 }
 
@@ -133,7 +133,7 @@ forge-focus-indicator {
   }
 
   forge-focus-indicator {
-    @include focus-indicator.provide-theme(( shape: #{variable(pill-shape)} ));
+    @include focus-indicator.provide-theme(( shape: #{token(pill-shape)} ));
   }
 }
 

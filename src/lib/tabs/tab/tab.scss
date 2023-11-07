@@ -46,14 +46,14 @@
 
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
-    color: #{variable(active-color)},
+    color: #{token(active-color)},
     shape: 8px
   ));
 }
 
 forge-state-layer {
   @include state-layer.provide-theme((
-    color: #{variable(inactive-color)}
+    color: #{token(inactive-color)}
   ));
 }
 
@@ -93,21 +93,21 @@ forge-state-layer {
 
 :host([selected]) {
   .forge-tab {
-    color: #{variable(active-label-text-color)};
+    color: #{token(active-label-text-color)};
 
     ::slotted([slot=leading]),
     ::slotted([slot=trailing]) {
-      color: #{variable(active-icon-color)};
+      color: #{token(active-icon-color)};
     }
 
     &:hover {
-      color: #{variable(active-hover-label-text-color)};
+      color: #{token(active-hover-label-text-color)};
     }
 
     &:hover {
       ::slotted([slot=leading]),
       ::slotted([slot=trailing]) {
-        color: #{variable(active-hover-icon-color)};
+        color: #{token(active-hover-icon-color)};
       }
     }
   
@@ -118,7 +118,7 @@ forge-state-layer {
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: #{variable(active-color)}
+      color: #{token(active-color)}
     ));
   }
 }
@@ -126,7 +126,7 @@ forge-state-layer {
 :host([selected]:not([vertical])) {
   forge-focus-indicator {
     @include focus-indicator.provide-theme((
-      offset-block: 0 calc(#{variable(active-indicator-height)} + 1px)
+      offset-block: 0 calc(#{token(indicator-height)} + 1px)
     ));
   }
 }
@@ -149,7 +149,7 @@ forge-state-layer {
 
 :host([stacked]) {
   .forge-tab {
-    @include override(tab-height, stacked-height);
+    @include override(height, stacked-height);
 
     .content {
       @include core.content-stacked;
@@ -194,7 +194,7 @@ forge-state-layer {
 
   forge-focus-indicator {
     @include focus-indicator.provide-theme((
-      offset-inline: 0 calc(#{variable(active-indicator-height)} + 1px)
+      offset-inline: 0 calc(#{token(indicator-height)} + 1px)
     ));
   }
 }

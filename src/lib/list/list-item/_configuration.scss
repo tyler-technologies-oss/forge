@@ -1,71 +1,11 @@
 @use './token-utils' as *;
 
+$_host-tokens: [indent dense-indent];
+
 @mixin host {
-  @include tokens((
-    indent,
-    dense-indent
-  ));
+  @include tokens($includes: $_host-tokens);
 }
 
 @mixin configuration {
-  @include tokens((
-    // Base
-    background-color,
-    shape,
-    padding,
-    margin,
-    height,
-    dense-height,
-    cursor,
-
-    // Supporting text
-    supporting-text-color,
-    supporting-text-font-size,
-    supporting-text-font-weight,
-    supporting-text-line-height,
-
-    // Selected
-    selected-color,
-    selected-opacity,
-    selected-leading-color,
-    selected-trailing-color,
-    selected-supporting-text-color,
-
-    // Disabled
-    disabled-opacity,
-    disabled-cursor,
-
-    // Line variants
-    one-line-height,
-    two-line-height,
-    three-line-height,
-
-    // Dense
-    dense-one-line-height,
-    dense-two-line-height,
-    dense-three-line-height,
-    dense-font-size,
-
-    // Dense leading/trailing
-    dense-leading-margin-end,
-    dense-trailing-margin-start,
-
-    // Leading
-    leading-margin-start,
-    leading-margin-end,
-    leading-selected-color,
-
-    // Trailing
-    trailing-margin-start,
-    trailing-margin-end,
-    trailing-selected-color,
-
-    // Avatar
-    avatar-background-color,
-    avatar-color,
-    avatar-shape,
-    avatar-margin-start,
-    avatar-margin-end,
-    avatar-size
-  ));
+  @include tokens($excludes: $_host-tokens);
 }

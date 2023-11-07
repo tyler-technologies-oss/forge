@@ -219,6 +219,6 @@ forge-focus-indicator {
 
 forge-state-layer {
   @include state-layer.provide-theme((
-    color: #{variable(handle-color)}
+    color: #{token(handle-color)}
   ));
 }

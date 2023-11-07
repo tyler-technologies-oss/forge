@@ -42,8 +42,8 @@ $tokens: (
   // State layer
   state-layer-width: utils.module-ref(checkbox, state-layer-width, state-layer-size),
   state-layer-height: utils.module-ref(checkbox, state-layer-height, state-layer-size),
-  state-layer-checked-color: utils.module-ref(checkbox, state-layer-on-color, primary-color),
-  state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-off-color, color),
+  state-layer-checked-color: utils.module-ref(checkbox, state-layer-checked-color, primary-color),
+  state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-unchecked-color, color),
   state-layer-shape: utils.module-val(checkbox, state-layer-shape, shape.variable(full)),
 
   // Dense

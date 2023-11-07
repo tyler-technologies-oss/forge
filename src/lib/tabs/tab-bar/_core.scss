@@ -8,7 +8,7 @@
 @mixin base {
   position: relative;
   display: flex;
-  justify-content: #{variable(container-justify)};
+  justify-content: #{token(justify)};
   align-items: flex-end;
   box-sizing: border-box;
   overflow: auto;
@@ -22,7 +22,7 @@
 }
 
 @mixin slotted-base {
-  flex: #{variable(tab-flex)};
+  flex: #{token(stretch)};
 }
 
 @mixin slotted-selected {
@@ -36,7 +36,7 @@
   max-width: 100%;
   max-height: 100%;
   align-items: center;
-  border-bottom: #{variable(divider-thickness)} solid #{variable(divider-color)};
+  border-bottom: #{token(divider-thickness)} solid #{token(divider-color)};
 }
 
 @mixin container-vertical {
@@ -44,7 +44,7 @@
   grid-template-rows: auto 1fr auto;
   align-items: initial;
   border-bottom: none;
-  border-right: #{variable(divider-thickness)} solid #{variable(divider-color)};
+  border-right: #{token(divider-thickness)} solid #{token(divider-color)};
   height: 100%;
 }
 
@@ -63,10 +63,10 @@
 
 @mixin inverted {
   border-bottom: none;
-  border-top: #{variale(divider-thickness)} solid #{variable(divider-color)};
+  border-top: #{variale(divider-thickness)} solid #{token(divider-color)};
 }
 
 @mixin vertical-inverted {
   border-bottom: none;
-  border-top: #{variable(divider-thickness)} solid #{variable(divider-color)};
+  border-top: #{token(divider-thickness)} solid #{token(divider-color)};
 }

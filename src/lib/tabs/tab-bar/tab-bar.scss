@@ -78,18 +78,26 @@
 // 
 
 :host([clustered]) {
-  @include override(justify, flex-start);
-  @include override(stretch, 0);
+  .container {
+    @include override(justify, flex-start);
+    @include override(stretch, 0);
+  }
 }
 
 :host([clustered=start]) {
-  @include override(justify, flex-start);
+  .container {
+    @include override(justify, flex-start);
+  }
 }
 
 :host([clustered=center]) {
-  @include override(justify, center);
+  .container {
+    @include override(justify, center);
+  }
 }
 
 :host([clustered=end]) {
-  @include override(justify, flex-end);
+  .container {
+    @include override(justify, flex-end);
+  }
 }

@@ -74,7 +74,7 @@
 
   @keyframes buffering#{$suffix} {
     0% {
-      transform: translateX(calc(#{$sign} * #{variable(track-background-width)}));
+      transform: translateX(calc(#{$sign} * #{token(track-background-width, custom)}));
     }
   }
 

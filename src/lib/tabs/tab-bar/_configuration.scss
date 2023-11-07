@@ -1,10 +1,5 @@
 @use './token-utils' as *;
 
 @mixin configuration {
-  @include tokens((
-    container-justify,
-    tab-flex,
-    divider-color,
-    divider-thickness
-  ));
+  @include tokens;
 }

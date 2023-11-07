@@ -1,99 +1,11 @@
 @use './token-utils' as *;
 
+$host-tokens: [display disabled-cursor];
+
 @mixin host-configuration {
-  @include tokens((
-    display,
-    disabled-cursor
-  ));
+  @include tokens($includes: $host-tokens);
 }
 
 @mixin configuration {
-  @include tokens((
-    // Shared
-    primary-color,
-    text-color,
-    disabled-color,
-    padding,
-    display,
-    justify,
-    shape,
-
-    // Base
-    height,
-    min-width,
-    spacing,
-    border-width,
-    border-style,
-    border-color,
-    border-top-left-radius,
-    border-top-right-radius,
-    border-bottom-left-radius,
-    border-bottom-right-radius,
-    padding-block,
-    padding-inline,
-    background,
-    hover-background,
-    active-background,
-    color,
-    icon-size,
-    shadow,
-    hover-shadow,
-    active-shadow,
-    cursor,
-    transition-duration,
-    transition-timing,
-
-    // Raised
-    raised-background,
-    raised-disabled-background,
-    raised-color,
-    raised-disabled-color,
-    raised-shadow,
-    raised-hover-shadow,
-    raised-active-shadow,
-    raised-disabled-shadow,
-
-    // Flat
-    flat-background,
-    flat-disabled-background,
-    flat-color,
-    flat-disabled-color,
-
-    // Outlined
-    outlined-background,
-    outlined-color,
-    outlined-border-width,
-    outlined-border-style,
-    outlined-border-color,
-
-    // Link
-    link-color,
-    link-text-decoration,
-    link-height,
-    link-padding,
-    link-line-height,
-    link-width,
-    link-hover-text-decoration,
-    link-active-opacity,
-    link-transition-duration,
-    link-transition-timing,
-
-    // Disabled
-    disabled-text-color,
-    disabled-background,
-    disabled-border-color,
-    disabled-shadow,
-
-    // Dense
-    dense-height,
-
-    // Pill
-    pill-shape,
-    pill-padding-inline,
-
-    // Focus indicator
-    focus-indicator-offset,
-    text-focus-indicator-offset,
-    link-focus-indicator-offset
-  ));
+  @include tokens($excludes: $host-tokens);
 }

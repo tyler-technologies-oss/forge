@@ -3,20 +3,20 @@
 
 // The tallest element may be absolutely positioned so the container needs to
 // be manually sized to match.
-$_container-block-size: max(#{variable(handle-height)}, #{variable(track-height)}, #{variable(current-state-layer-height)});
+$_container-block-size: max(#{token(handle-height)}, #{token(track-height)}, #{token(current-state-layer-height, custom)});
 
 // The effective track border radius, for use in other calculations.
-$_track-border-radius: calc(#{variable(track-height)} / 2);
+$_track-border-radius: calc(#{token(track-height)} / 2);
 
 // Returns the wider of the handle width and state layer width.
-$_max-handle-inline-size: max(#{variable(handle-width)}, #{variable(current-state-layer-width)});
+$_max-handle-inline-size: max(#{token(handle-width)}, #{token(current-state-layer-width, custom)});
 
 // Offsets the track to place the center of its border caps at the center of
 // the handle's off and on positions.
 $_track-margin-inline: calc(#{$_max-handle-inline-size} / 2 - #{$_track-border-radius});
 
 // The x translation of the handle in its on state.
-$_handle-on-translate: calc(#{variable(track-width)} - #{$_track-border-radius} * 2);
+$_handle-on-translate: calc(#{token(track-width)} - #{$_track-border-radius} * 2);
 
 @mixin host {
   display: inline-block;
@@ -24,17 +24,17 @@ $_handle-on-translate: calc(#{variable(track-width)} - #{$_track-border-radius} 
 
 @mixin switch {
   position: relative;
-  flex-direction: #{variable(direction)};
+  flex-direction: #{token(direction)};
   flex-shrink: 0;
   align-items: center;
-  justify-content: #{variable(justify)};
-  gap: #{variable(gap)};
+  justify-content: #{token(justify)};
+  gap: #{token(gap)};
 
   display: flex;
 }
 
 @mixin switch-disabled {
-  opacity: #{variable(disabled-opacity)};
+  opacity: #{token(disabled-opacity)};
 }
 
 @mixin input {
@@ -68,40 +68,40 @@ $_handle-on-translate: calc(#{variable(track-width)} - #{$_track-border-radius} 
 
 @mixin track {
   transition-property: background-color, border-color, border-width;
-  transition-duration: #{variable(animation-duration)};
-  transition-timing-function: #{variable(animation-timing)};
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing)};
 
   box-sizing: border-box;
   margin-inline: #{$_track-margin-inline};
-  border-width: #{variable(track-off-border-width)};
-  border-color: #{variable(track-off-border-color)};
+  border-width: #{token(track-off-border-width)};
+  border-color: #{token(track-off-border-color)};
   border-style: solid;
-  border-radius: #{variable(track-shape)};
-  inline-size: #{variable(track-width)};
-  block-size: #{variable(track-height)};
+  border-radius: #{token(track-shape)};
+  inline-size: #{token(track-width)};
+  block-size: #{token(track-height)};
 
-  background-color: #{variable(track-off-color)};
+  background-color: #{token(track-off-color)};
 }
 
 @mixin track-on {
-  border-width: #{variable(track-on-border-width)};
-  border-color: #{variable(track-on-border-color)};
+  border-width: #{token(track-on-border-width)};
+  border-color: #{token(track-on-border-color)};
 
-  background-color: #{variable(track-on-color)};
+  background-color: #{token(track-on-color)};
 }
 
 @mixin track-active {
-  border-width: #{variable(track-active-off-border-width)};
-  border-color: #{variable(track-active-off-border-color)};
+  border-width: #{token(track-active-off-border-width)};
+  border-color: #{token(track-active-off-border-color)};
 
-  background-color: #{variable(track-active-off-color)};
+  background-color: #{token(track-active-off-color)};
 }
 
 @mixin track-active-on {
-  border-width: #{variable(track-active-on-border-width)};
-  border-color: #{variable(track-active-on-border-color)};
+  border-width: #{token(track-active-on-border-width)};
+  border-color: #{token(track-active-on-border-color)};
 
-  background-color: #{variable(track-active-on-color)};
+  background-color: #{token(track-active-on-color)};
 }
 
 @mixin handle {
@@ -112,12 +112,12 @@ $_handle-on-translate: calc(#{variable(track-width)} - #{$_track-border-radius} 
   display: flex;
 
   transition-property: translate;
-  transition-duration: #{variable(animation-duration)};
-  transition-timing-function: #{variable(animation-timing)};
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing)};
 
-  border-radius: #{variable(handle-shape)};
-  inline-size: #{variable(current-state-layer-width)};
-  block-size: #{variable(current-state-layer-height)};
+  border-radius: #{token(handle-shape)};
+  inline-size: #{token(current-state-layer-width, custom)};
+  block-size: #{token(current-state-layer-height, custom)};
 
   &::before {
     content: '';
@@ -125,19 +125,19 @@ $_handle-on-translate: calc(#{variable(track-width)} - #{$_track-border-radius} 
     position: relative;
 
     display: block;
-    scale: #{variable(handle-off-scale)};
+    scale: #{token(handle-off-scale)};
 
     transition:
-      background-color #{variable(animation-duration)} #{variable(animation-timing)},
-      box-shadow #{variable(animation-duration)} #{variable(animation-timing)},
-      scale #{variable(animation-duration)} #{variable(active-animation-timing)};
+      background-color #{token(animation-duration)} #{token(animation-timing)},
+      box-shadow #{token(animation-duration)} #{token(animation-timing)},
+      scale #{token(animation-duration)} #{token(active-animation-timing)};
 
-    box-shadow: #{variable(handle-off-elevation)};
-    border-radius: #{variable(handle-shape)};
-    inline-size: #{variable(handle-width)};
-    block-size: #{variable(handle-height)};
+    box-shadow: #{token(handle-off-elevation)};
+    border-radius: #{token(handle-shape)};
+    inline-size: #{token(handle-width)};
+    block-size: #{token(handle-height)};
 
-    background-color: #{variable(handle-off-color)};
+    background-color: #{token(handle-off-color)};
   }
 }
 
@@ -145,31 +145,31 @@ $_handle-on-translate: calc(#{variable(track-width)} - #{$_track-border-radius} 
   translate: #{$_handle-on-translate};
 
   &::before {
-    scale: #{variable(handle-on-scale)};
+    scale: #{token(handle-on-scale)};
 
-    box-shadow: #{variable(handle-on-elevation)};
+    box-shadow: #{token(handle-on-elevation)};
 
-    background-color: #{variable(handle-on-color)};
+    background-color: #{token(handle-on-color)};
   }
 }
 
 @mixin handle-active {
   &::before {
-    scale: #{variable(handle-active-off-scale)};
+    scale: #{token(handle-active-off-scale)};
 
-    box-shadow: #{variable(handle-active-off-elevation)};
+    box-shadow: #{token(handle-active-off-elevation)};
 
-    background-color: #{variable(handle-active-off-color)};
+    background-color: #{token(handle-active-off-color)};
   }
 }
 
 @mixin handle-active-on {
   &::before {
-    scale: #{variable(handle-active-on-scale)};
+    scale: #{token(handle-active-on-scale)};
 
-    box-shadow: #{variable(handle-active-on-elevation)};
+    box-shadow: #{token(handle-active-on-elevation)};
 
-    background-color: #{variable(handle-active-on-color)};
+    background-color: #{token(handle-active-on-color)};
   }
 }
 
@@ -187,50 +187,50 @@ $_handle-on-translate: calc(#{variable(track-width)} - #{$_track-border-radius} 
   display: flex;
 
   transition-property: opacity, scale;
-  transition-duration: #{variable(animation-duration)};
-  transition-timing-function: #{variable(animation-timing)};
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing)};
 
-  inline-size: #{variable(icon-off-size)};
-  block-size: #{variable(icon-off-size)};
+  inline-size: #{token(icon-off-size)};
+  block-size: #{token(icon-off-size)};
 
-  color: #{variable(icon-off-color)};
-  fill: #{variable(icon-off-color)};
+  color: #{token(icon-off-color)};
+  fill: #{token(icon-off-color)};
 
-  font-size: #{variable(icon-off-size)};
+  font-size: #{token(icon-off-size)};
 }
 
 @mixin icon-on {
-  inline-size: #{variable(icon-on-size)};
-  block-size: #{variable(icon-on-size)};
+  inline-size: #{token(icon-on-size)};
+  block-size: #{token(icon-on-size)};
 
-  color: #{variable(icon-on-color)};
-  fill: #{variable(icon-on-color)};
+  color: #{token(icon-on-color)};
+  fill: #{token(icon-on-color)};
 
-  font-size: #{variable(icon-on-size)};
+  font-size: #{token(icon-on-size)};
 }
 
 @mixin icon-active {
-  scale: #{variable(icon-active-off-scale)};
+  scale: #{token(icon-active-off-scale)};
 
-  color: #{variable(icon-active-off-color)};
-  fill: #{variable(icon-active-off-color)};
+  color: #{token(icon-active-off-color)};
+  fill: #{token(icon-active-off-color)};
 }
 
 @mixin icon-active-on {
-  scale: #{variable(icon-active-on-scale)};
+  scale: #{token(icon-active-on-scale)};
 
-  color: #{variable(icon-active-on-color)};
-  fill: #{variable(icon-active-on-color)};
+  color: #{token(icon-active-on-color)};
+  fill: #{token(icon-active-on-color)};
 }
 
 @mixin icon-on-shown {
   opacity: 1;
-  scale: #{variable(icon-on-scale)};
+  scale: #{token(icon-on-scale)};
 }
 
 @mixin icon-off-shown {
   opacity: 1;
-  scale: #{variable(icon-off-scale)};
+  scale: #{token(icon-off-scale)};
 }
 
 @mixin icon-hidden {
