@@ -11,6 +11,8 @@ import { supportsPopover } from '../../core/utils/feature-detection';
 
 export interface IBaseButtonAdapter extends IBaseAdapter {
   initialize(): void;
+  initializeAnchor(): void;
+  removeAnchor(): void;
   setAnchorHref(href: string): void;
   setAnchorTarget(target: string): void;
   setAnchorDownload(value: string): void;
@@ -46,19 +48,22 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._applyHostSemantics();
   }
 
-  public setAnchorHref(href: string): void {
-    const hasHref = typeof href === 'string' && !!href && href.trim().length > 0;
-    if (hasHref) {
-      if (!this._anchorElement) {
-        this._anchorElement = this._createAnchorRootElement();
-        this._rootElement.insertAdjacentElement('afterend', this._anchorElement);
-      }
-      this._anchorElement.href = href;
-    } else {
-      this._anchorElement?.remove();
-      this._anchorElement = undefined;
-    }
+  public initializeAnchor(): void {
+    this._anchorElement = this._createAnchorRootElement();
+    this._rootElement.insertAdjacentElement('afterend', this._anchorElement);
     this._applyHostSemantics();
+  }
+
+  public removeAnchor(): void {
+    this._anchorElement?.remove();
+    this._anchorElement = undefined;
+    this._applyHostSemantics();
+  }
+
+  public setAnchorHref(href: string): void {
+    if (this._anchorElement) {
+      this._anchorElement.href = href;
+    }
   }
 
   public setAnchorTarget(target: string): void {
@@ -103,6 +108,8 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   }
 
   public clickHost(): void {
+    // Calling click() on the prototype ensures we don't end up in an infinite
+    // recursion since the host overrides the HTMLElement.click() method
     HTMLElement.prototype.click.call(this._component);
   }
 
@@ -112,6 +119,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     }
 
     if (type === 'submit') {
+      // We need to set the form value to the button value before submitting the form
       this._component[internals].setFormValue(this._component.value);
 
       // We don't use a real <button> since the host is the semantic button, so for
@@ -152,22 +160,29 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     return this._component.hasAttribute('popovertarget');
   }
 
+  /**
+   * We are emulating native behavior here since custom elements do not support integrating with the
+   * native popover element. This method will attempt to find the popover target element and call its
+   * `showPopover()` method, which achieves the same result.
+   */
   public tryShowPopover(): void {
     if (!this.hasPopoverTarget() || !supportsPopover()) {
       return;
     }
 
-    const doc = this._component.ownerDocument.getRootNode() as Document | ShadowRoot;
-    if (!doc) {
+    const rootNode = this._component.ownerDocument.getRootNode() as Document | ShadowRoot;
+    if (!rootNode) {
       return;
     }
+
     const targetId = this._component.getAttribute('popovertarget');
-    const popoverTargetElement = doc.querySelector(`#${targetId}`);
-    (popoverTargetElement as any)?.showPopover(); // TODO: remove `any` when TypeScript version is upgraded
+    const popoverTargetElement = rootNode.querySelector(`#${targetId}`);
+    (popoverTargetElement as any)?.showPopover(); // TODO: remove `any` when TypeScript version is upgraded for latest DOM typings
   }
 
   public toggleDefaultPopoverIcon(value: boolean): void {
     if (value) {
+      // We support a built-in "popover icon" for convenience that can be used to indicate that the button will show a popover
       const hasIcon = this._endSlotElement.querySelector('forge-icon');
       if (!hasIcon) {
         const icon = document.createElement('forge-icon');
@@ -182,19 +197,38 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
 
   private _applyHostSemantics(): void {
     const role = this._component.getAttribute('role');
+
+    // Allow user provided roles to override our default role
     if (!role || ['button', 'link'].includes(role)) {
+      // Set default role based on the existence of an anchor element
       this._component.role = this._anchorElement ? 'link' : 'button';
     }
+    
     this._component.tabIndex = !this._anchorElement && this._component.disabled ? -1 : 0;
   }
 
+  /**
+   * Our anchor element is the interactive element that will be used to trigger the click event when it is present.
+   * 
+   * We use the <a> element as an overlay on top of all content to ensure that it provides the native functionality,
+   * while removing it from the accessibility tree and tab order so that it does not interfere with the host semantics.
+   */
   private _createAnchorRootElement(): HTMLAnchorElement {
     const a = document.createElement('a');
     a.setAttribute('aria-hidden', 'true');
     a.tabIndex = -1;
-    a.target = this._component.target;
-    a.download = this._component.download;
-    a.rel = this._component.rel;
+    if (this._component.href) {
+      a.href = this._component.href;
+    }
+    if (this._component.target) {
+      a.target = this._component.target;
+    }
+    if (this._component.download) {
+      a.download = this._component.download;
+    }
+    if (this._component.rel) {
+      a.rel = this._component.rel;
+    }
     return a;
   }
 }

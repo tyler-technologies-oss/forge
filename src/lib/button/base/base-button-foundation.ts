@@ -6,6 +6,7 @@ export interface IBaseButtonFoundation extends ICustomElementFoundation {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
+  anchor: boolean;
   href: string;
   target: string;
   download: string;
@@ -15,9 +16,10 @@ export interface IBaseButtonFoundation extends ICustomElementFoundation {
 }
 
 export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> implements IBaseButtonFoundation {
-  private _type: ButtonType = 'button';
+  private _type: ButtonType = 'button'; // We default our buttons to the "button" type instead of "submit" as that is more common
   private _disabled = false;
   private _popoverIcon = false;
+  private _anchor = false;
   private _href = '';
   private _target = '';
   private _download = '';
@@ -28,35 +30,32 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   private _keydownListener: EventListener;
   private _anchorFocusListener: EventListener;
 
-  private get _hasHref(): boolean {
-    return typeof this._href === 'string' && !!this._href && this._href.trim().length > 0;
-  }
-
   constructor(protected _adapter: T) {
     this._clickListener = (evt: MouseEvent) => this._onClick(evt);
     this._keydownListener = (evt: KeyboardEvent) => this._onKeydown(evt);
-    this._anchorFocusListener = () => this._adapter.focusHost();
+    this._anchorFocusListener = () => this._adapter.focusHost(); // Always ensure our host is focused when the anchor is focused
     this._adapter.addHostListener('keydown', this._keydownListener);
   }
 
   public initialize(): void {
     this._adapter.initialize();
 
-    if (this._hasHref) {
-      // When an `href` is provided, we swap to us an `<a>` internally as the root. Since the `<a>`
+    if (this._anchor) {
+      // When we're in anchor mode, we swap to us an `<a>` internally as the root. Since the `<a>`
       // element is interactive by default, we can remove our click listener since the anchor will
       // take over the default interaction handling
       this._adapter.addAnchorEventListener('focus', this._anchorFocusListener);
     } else {
+      // When we're in button mode, we need to handle the click event on the host element
       this._adapter.addHostListener('click', this._clickListener);
     }
   }
 
   /**
-   * Handles overriding the the `.click()` event on the element
+   * Handles overriding the the `click()` method on the HTMLElement instance
    */
   public click(): void {
-    if (this._hasHref) {
+    if (this._anchor) {
       this._adapter.clickAnchor();
     } else {
       this._adapter.clickHost();
@@ -65,7 +64,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
 
   private async _onClick(evt: MouseEvent): Promise<void> {
     // Wait a cycle to allow the click event to propagate
-    await new Promise<void>(resolve => setTimeout(() => resolve()));
+    await new Promise<void>(resolve => setTimeout(resolve));
 
     // We allow for our click event to bubble first before we handle it in case the developer
     // wants to prevent the default behavior
@@ -91,18 +90,38 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
    */
   private async _onKeydown(evt: KeyboardEvent): Promise<void> {
     // Wait a cycle for the keydown event to propagate
-    await new Promise<void>(resolve => setTimeout(() => resolve()));
+    await new Promise<void>(resolve => setTimeout(resolve));
 
     if (evt.defaultPrevented) {
       return;
     }
     
-    if (evt.key === 'Enter' || (evt.key === ' ' && !this._hasHref)) {
-      if (this._hasHref) {
+    if (evt.key === 'Enter' || (evt.key === ' ' && !this._anchor)) {
+      if (this._anchor) {
         this._adapter.clickAnchor();
       } else {
         this.click();
       }
+    }
+  }
+
+  private _toggleAnchor(): void {
+    if (this._anchor) {
+      this._adapter.initializeAnchor();
+      this._manageAnchorListeners();
+      this.disabled = false; // Anchor elements are always enabled
+    } else {
+      this._adapter.removeAnchor();
+    }
+  }
+
+  private _manageAnchorListeners(): void {
+    if (this._anchor) {
+      this._adapter.removeHostListener('click', this._clickListener);
+      this._adapter.addAnchorEventListener('focus', this._anchorFocusListener);
+    } else {
+      this._adapter.addHostListener('click', this._clickListener);
+      this._adapter.removeAnchorEventListener('focus', this._anchorFocusListener);
     }
   }
 
@@ -120,13 +139,16 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     return this._disabled;
   }
   public set disabled(value: boolean) {
-    if (this._hasHref) {
+    // If we're in anchor mode, we need to ensure that the anchor is always enabled
+    if (this._anchor) {
       if (this._disabled) {
         this._adapter.ensureAnchorEnabled(false);
       }
       value = false;
     }
+
     value = Boolean(value);
+
     if (this._disabled !== value) {
       this._disabled = value;
       this._adapter.setDisabled(this._disabled);
@@ -150,6 +172,18 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
    * Anchor properties
    */
 
+  public get anchor(): boolean {
+    return this._anchor;
+  }
+  public set anchor(value: boolean) {
+    value = Boolean(value);
+    if (this._anchor !== value) {
+      this._anchor = value;
+      this._toggleAnchor();
+      this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.ANCHOR, value);
+    }
+  }
+
   public get href(): string {
     return this._href;
   }
@@ -157,16 +191,10 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     value = (value ?? '').trim();
     if (this._href !== value) {
       this._href = value;
-      this._adapter.setAnchorHref(this._href);
-
-      if (this._hasHref) {
-        this._adapter.removeHostListener('click', this._clickListener);
-        this._adapter.addAnchorEventListener('focus', this._anchorFocusListener);
-      } else {
-        this._adapter.addHostListener('click', this._clickListener);
-        this._adapter.removeAnchorEventListener('focus', this._anchorFocusListener);
+      this.anchor = this._href.length > 0;
+      if (this._anchor) {
+        this._adapter.setAnchorHref(this._href);
       }
-
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.HREF, !!this._href, this._href);
     }
   }

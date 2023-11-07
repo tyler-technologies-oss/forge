@@ -141,7 +141,7 @@ forge-focus-indicator {
 // Disabled
 //
 
-:host(:not([href])[disabled]) {
+:host(:not([anchor])[disabled]) {
   @include core.host-disabled;
 
   .forge-button {
@@ -149,19 +149,19 @@ forge-focus-indicator {
   }
 }
 
-:host(:not([href])[variant=raised][disabled]) {
+:host(:not([anchor])[variant=raised][disabled]) {
   .forge-button {
     @include core.raised-disabled;
   }
 }
 
-:host(:not([href])[variant=flat][disabled]) {
+:host(:not([anchor])[variant=flat][disabled]) {
   .forge-button {
     @include core.flat-disabled;
   }
 }
 
-:host(:not([href])[variant=outlined][disabled]) {
+:host(:not([anchor])[variant=outlined][disabled]) {
   .forge-button {
     @include core.outlined-disabled;
   }

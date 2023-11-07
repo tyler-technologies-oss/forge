@@ -48,12 +48,12 @@ showDialogBtn.addEventListener('click', () => {
   dialog.showModal();
 });
 
-const allButtons = document.querySelectorAll<IButtonComponent>('.content forge-button');
+const allButtons = Array.from(document.querySelectorAll<IButtonComponent>('.content forge-button'));
 allButtons.forEach(btn => btn.addEventListener('click', evt => console.log('click', evt)));
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;
 disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  allButtons.forEach(btn => btn.disabled = selected);
+  allButtons.forEach(btn => btn.toggleAttribute('disabled', selected));
 });
 
 const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
@@ -64,6 +64,11 @@ denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
 const pillToggle = document.querySelector('#opt-pill') as ISwitchComponent;
 pillToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   allButtons.forEach(btn => btn.pill = selected);
+});
+
+const anchorToggle = document.querySelector('#opt-anchor') as ISwitchComponent;
+anchorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  allButtons.filter(b => !b.href).forEach(btn => btn.anchor = selected);
 });
 
 const popoverIconToggle = document.querySelector('#opt-popover-icon') as ISwitchComponent;

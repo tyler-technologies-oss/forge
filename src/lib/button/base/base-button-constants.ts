@@ -2,6 +2,7 @@ const observedAttributes = {
   TYPE: 'type',
   DISABLED: 'disabled',
   POPOVER_ICON: 'popover-icon',
+  ANCHOR: 'anchor',
   HREF: 'href',
   TARGET: 'target',
   DOWNLOAD: 'download',

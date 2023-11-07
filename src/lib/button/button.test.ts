@@ -385,6 +385,34 @@ describe('Button', () => {
 
     expect(clickSpy.calledOnce).to.be.false;
   });
+  
+  it('should render <a> tag when anchor is set', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button anchor>Button</forge-button>`);
+
+    const anchorEl = getAnchorEl(el);
+    expect(anchorEl).to.be.ok;
+    expect(el.anchor).to.be.true;
+    expect(el.hasAttribute(BASE_BUTTON_CONSTANTS.attributes.ANCHOR)).to.be.true;
+    expect(el.hasAttribute('anchor')).to.be.true;
+    expect(anchorEl.tabIndex).to.be.equal(-1);
+    expect(anchorEl.getAttribute('aria-hidden')).to.equal('true');
+    await expect(el).to.be.accessible();
+  });
+
+  it('should render <a> tag when anchor is set dynamically', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button>Button</forge-button>`);
+
+    el.anchor = true;
+
+    const anchorEl = getAnchorEl(el);
+    expect(anchorEl).to.be.ok;
+    expect(el.anchor).to.be.true;
+    expect(el.hasAttribute(BASE_BUTTON_CONSTANTS.attributes.ANCHOR)).to.be.true;
+    expect(el.hasAttribute('anchor')).to.be.true;
+    expect(anchorEl.tabIndex).to.be.equal(-1);
+    expect(anchorEl.getAttribute('aria-hidden')).to.equal('true');
+    await expect(el).to.be.accessible();
+  });
 
   it('should render <a> tag when href is set', async () => {
     const href = `javascript: console.log('href button')`;
@@ -392,6 +420,8 @@ describe('Button', () => {
 
     const anchorEl = getAnchorEl(el);
     expect(anchorEl).to.be.ok;
+    expect(el.hasAttribute(BASE_BUTTON_CONSTANTS.attributes.ANCHOR)).to.be.true;
+    expect(el.anchor).to.be.true;
     expect(el.href).to.equal(href);
     expect(anchorEl.href).to.equal(href);
     expect(anchorEl.tabIndex).to.be.equal(-1);
@@ -406,6 +436,8 @@ describe('Button', () => {
     el.href = href;
 
     const anchorEl = getAnchorEl(el);
+    expect(el.anchor).to.be.true;
+    expect(el.hasAttribute(BASE_BUTTON_CONSTANTS.attributes.ANCHOR)).to.be.true;
     expect(el.href).to.equal(href);
     expect(anchorEl.href).to.equal(href);
     expect(anchorEl.tabIndex).to.be.equal(-1);
@@ -429,6 +461,44 @@ describe('Button', () => {
     expect(anchorEl.getAttribute('target')).to.equal(el.target);
     expect(anchorEl.getAttribute('download')).to.equal(el.download);
     expect(anchorEl.getAttribute('rel')).to.equal(el.rel);
+  });
+
+  it('should render <a> tag when anchor is set and href is set', async () => {
+    const href = `javascript: console.log('href button')`;
+    const el = await fixture<IButtonComponent>(html`<forge-button anchor href="${href}">Button</forge-button>`);
+
+    const anchorEl = getAnchorEl(el);
+    expect(anchorEl).to.be.ok;
+    expect(el.anchor).to.be.true;
+    expect(el.hasAttribute('anchor')).to.be.true;
+    expect(el.href).to.equal(href);
+    expect(anchorEl.href).to.equal(href);
+    expect(anchorEl.tabIndex).to.be.equal(-1);
+    expect(anchorEl.getAttribute('aria-hidden')).to.equal('true');
+    await expect(el).to.be.accessible();
+  });
+
+  it('should remove <a> tag when anchor is set to false', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button anchor>Button</forge-button>`);
+
+    el.anchor = false;
+
+    const anchorEl = getAnchorEl(el);
+    expect(anchorEl).not.to.be.ok;
+    expect(el.anchor).to.be.false;
+    expect(el.hasAttribute('anchor')).to.be.false;
+  });
+
+  it('should set anchor state when href is removed', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button href="javascript: void(0);">Button</forge-button>`);
+
+    el.removeAttribute('href');
+
+    const anchorEl = getAnchorEl(el);
+    expect(anchorEl).not.to.be.ok;
+    expect(el.anchor).to.be.false;
+    expect(el.hasAttribute('anchor')).to.be.false;
+    expect(el.hasAttribute('href')).to.be.false;
   });
 
   it('should click <a> tag when click() is called', async () => {
@@ -518,6 +588,24 @@ describe('Button', () => {
     delete window['forgeAnchorTest'];
 
     expect(clickSpy).to.have.been.called;
+  });
+
+  it('should enable button when anchor is set while disabled', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button disabled>Button</forge-button>`);
+
+    el.anchor = true;
+    await elementUpdated(el);
+
+    expect(el.disabled).to.be.false;
+  });
+
+  it('should enable button when href is set while disabled', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button disabled>Button</forge-button>`);
+
+    el.href = 'javascript: void(0);';
+    await elementUpdated(el);
+
+    expect(el.disabled).to.be.false;
   });
 
   it('should set <a> target', async () => {
@@ -720,7 +808,7 @@ describe('Button', () => {
 
   it('should not submit form when click event is canceled', async () => {
     const el = await fixture<HTMLFormElement>(html`
-      <form id="test-form" action="javascript: void(0)">
+      <form id="test-form" action="javascript: void(0);">
         <forge-button type="submit">Button</forge-button>
       </form>
     `);

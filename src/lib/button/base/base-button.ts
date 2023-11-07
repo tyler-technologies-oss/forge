@@ -12,6 +12,7 @@ export interface IBaseButton extends IBaseComponent {
   name: string;
   value: string;
   dense: boolean;
+  anchor: boolean;
   href: string;
   target: string;
   download: string;
@@ -45,6 +46,9 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
         break;
       case BASE_BUTTON_CONSTANTS.observedAttributes.POPOVER_ICON:
         this.popoverIcon = coerceBoolean(newValue);
+        break;
+      case BASE_BUTTON_CONSTANTS.observedAttributes.ANCHOR:
+        this.anchor = coerceBoolean(newValue);
         break;
       case BASE_BUTTON_CONSTANTS.observedAttributes.HREF:
         this.href = newValue;
@@ -90,6 +94,9 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
 
   @FoundationProperty()
   public declare popoverIcon: boolean;
+
+  @FoundationProperty()
+  public declare anchor: boolean;
 
   @FoundationProperty()
   public declare href: string;

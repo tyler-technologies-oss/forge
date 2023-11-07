@@ -30,7 +30,7 @@
     <h3 class="forge-typography--heading2">Form example</h3>
     <form class="test-form" id="test-btn-form" action="javascript: alert('<form> submit action');">
       <forge-text-field>
-        <input type="text" placeholder="Text input" />
+        <input type="text" placeholder="Text input" aria-label="Test form input" autocomplete="off" />
       </forge-text-field>
       <div>
         <forge-button id="submit-btn" variant="outlined" type="submit" name="submit-btn" formaction="javascript: alert('<forge-button> submit override action');">Submit</forge-button>
