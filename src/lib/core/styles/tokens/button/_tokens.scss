@@ -97,7 +97,12 @@ $tokens: (
   // Focus indicator
   focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 4px),
   text-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 0px),
-  link-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 2px)
+  link-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 2px),
+
+  // Popover icon
+  popover-icon-transition-duration: utils.module-val(button, popover-icon-transition-duration, animation.variable(duration-short3)),
+  popover-icon-transition-timing: utils.module-val(button, popover-icon-transition-timing, animation.variable(easing-standard)),
+  popover-icon-open-rotation: utils.module-val(button, popover-icon-open-rotation, 180deg)
 ) !default;
 /* stylelint-enable length-zero-no-unit */
 

@@ -186,6 +186,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       const hasIcon = this._endSlotElement.querySelector('forge-icon');
       if (!hasIcon) {
         const icon = document.createElement('forge-icon');
+        icon.classList.add(BASE_BUTTON_CONSTANTS.classes.POPOVER_ICON);
         icon.name = tylIconArrowDropDown.name;
         this._endSlotElement.append(icon);
       }

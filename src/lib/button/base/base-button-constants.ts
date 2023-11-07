@@ -15,7 +15,8 @@ const attributes = {
 };
 
 const classes = {
-  ROOT: 'forge-button'
+  ROOT: 'forge-button',
+  POPOVER_ICON: 'forge-button__popover-icon'
 };
 
 const selectors = {

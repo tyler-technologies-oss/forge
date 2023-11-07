@@ -42,6 +42,12 @@ hrefBtn.addEventListener('click', evt => {
   console.log('href button click', evt);
 });
 
+const popoverBtn = document.querySelector('#popover-button') as HTMLButtonElement;
+const popoverEl = document.querySelector('#my-popover') as HTMLElement;
+popoverEl.addEventListener('toggle', ({ newState }: any) => { // TODO: remove `any` when TypeScript version is upgraded for latest DOM typings
+  popoverBtn.setAttribute('aria-expanded', `${newState === 'open'}`);
+});
+
 const showDialogBtn = document.querySelector('#show-dialog-btn') as HTMLButtonElement;
 showDialogBtn.addEventListener('click', () => {
   const dialog = document.querySelector('#test-dialog') as HTMLDialogElement;

@@ -161,3 +161,11 @@
   @include override(shape, pill-shape);
   @include override(padding-inline, pill-padding-inline);
 }
+
+@mixin popover-icon {
+  transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
+}
+
+@mixin popover-icon-open {
+  rotate: #{token(popover-icon-open-rotation)};
+}
