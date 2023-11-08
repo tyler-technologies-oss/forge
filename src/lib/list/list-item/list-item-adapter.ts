@@ -11,8 +11,10 @@ import { ISwitchComponent } from '../../switch';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   initialize(): void;
-  setHref(href: string, target: string): void;
-  setHrefTarget(target: string): void;
+  setHref(href: string): void;
+  setAnchorTarget(target: string): void;
+  setAnchorDownload(download: string): void;
+  setAnchorRel(rel: string): void;
   setNonInteractive(value: boolean): void;
   setDisabled(value: boolean): void;
   setActive(value: boolean): void;
@@ -21,6 +23,8 @@ export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   isFocused(): boolean;
   setFocus(): void;
   animateStateLayer(): void;
+  clickAnchor(): void;
+  clickHost(): void;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
@@ -49,10 +53,10 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
   }
 
-  public setHref(href: string, target: string): void {
+  public setHref(href: string): void {
     if (href) {
       if (this._rootElement.tagName !== 'A') {
-        const anchor = this._createAnchorRootElement(target);
+        const anchor = this._createAnchorRootElement();
         this._rootElement = replaceElement(this._rootElement, anchor);
       }
       (this._rootElement as HTMLAnchorElement).href = href;
@@ -62,9 +66,21 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
   }
 
-  public setHrefTarget(target: string): void {
+  public setAnchorTarget(target: string): void {
     if (this._rootElement.tagName === 'A') {
       (this._rootElement as HTMLAnchorElement).target = target;
+    }
+  }
+
+  public setAnchorDownload(download: string): void {
+    if (this._rootElement.tagName === 'A') {
+      (this._rootElement as HTMLAnchorElement).download = download;
+    }
+  }
+
+  public setAnchorRel(rel: string): void {
+    if (this._rootElement.tagName === 'A') {
+      (this._rootElement as HTMLAnchorElement).rel = rel;
     }
   }
 
@@ -161,11 +177,34 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     this._stateLayerElement.playAnimation();
   }
 
-  private _createAnchorRootElement(target: string): HTMLAnchorElement {
+  public clickAnchor(): void {
+    if (this._rootElement.tagName === 'A') {
+      (this._rootElement as HTMLAnchorElement).click();
+    }
+  }
+
+  public clickHost(): void {
+    // Calling click() on the prototype ensures we don't end up in an infinite
+    // recursion since the host overrides the HTMLElement.click() method
+    HTMLElement.prototype.click.call(this._component);
+  }
+
+  private _createAnchorRootElement(): HTMLAnchorElement {
     const a = document.createElement('a');
     a.classList.add(LIST_ITEM_CONSTANTS.classes.ROOT);
     a.setAttribute('part', 'root');
-    a.target = target;
+    if (this._component.href) {
+      a.href = this._component.href;
+    }
+    if (this._component.target) {
+      a.target = this._component.target;
+    }
+    if (this._component.download) {
+      a.download = this._component.download;
+    }
+    if (this._component.rel) {
+      a.rel = this._component.rel;
+    }
     return a;
   }
 
