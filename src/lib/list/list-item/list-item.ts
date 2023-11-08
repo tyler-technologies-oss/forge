@@ -9,8 +9,11 @@ import template from './list-item.html';
 import styles from './list-item.scss';
 
 export interface IListItemComponent<T = unknown> extends ICustomElement {
+  anchor: boolean;
   href: string;
   target: string;
+  download: string;
+  rel: string;
   /** @deprecated Use nonInteractive instead. */
   static: boolean;
   nonInteractive: boolean;
@@ -41,8 +44,11 @@ declare global {
  * 
  * @summary List items are individual rows of content inside of a list.
  * 
- * @property {string} href - The href of the list item. This forces the list item to render as an anchor element.
- * @property {string} target - The target of the list item when an `href` is set. Defaults to `'_blank'`.
+ * @property {boolean} anchor - If true, the list item will render as an anchor element.
+ * @property {string} href - The href of the anchor. This forces the list item to render as an anchor element.
+ * @property {string} target - The target of the anchor when an `href` is set. Defaults to `'_blank'`.
+ * @property {boolean} download - The anchor download attribute.
+ * @property {boolean} rel - The anchor rel attribute.
  * @property {boolean} nonInteractive - If true, the list item will not be interactive.
  * @property {boolean} static - If true, the list item will not be interactive. Deprecated use `nonInteractive` instead.
  * @property {boolean} disabled - Disables the list item.
@@ -56,8 +62,11 @@ declare global {
  * @property {boolean} threeLine - Sets the list item height to support at least three lines of text.
  * @property {boolean} wrap - Sets the list item to wrap its text content.
  * 
- * @attribute {string} href - The href of the list item. This forces the list item to render as an anchor element.
- * @attribute {string} target - The target of the list item when an `href` is set. Defaults to `'_blank'`.
+ * @attribute {boolean} anchor - If true, the list item will render as an anchor element.
+ * @attribute {string} href - The href of the anchor This forces the list item to render as an anchor element.
+ * @attribute {string} target - The target of the anchor when an `href` is set. Defaults to `'_blank'`.
+ * @attribute {boolean} download - The anchor download attribute.
+ * @attribute {boolean} rel - The anchor rel attribute.
  * @attribute {boolean} non-interactive - If true, the list item will not be interactive.
  * @attribute {boolean} static - If true, the list item will not be interactive. Deprecated use `non-interactive` instead.
  * @attribute {boolean} disabled - Disables the list item.
@@ -86,8 +95,8 @@ declare global {
  * 
  * @csspart root - The root container element.
  * @csspart text-container - The container for the text content.
- * @csspart focus-indicator__indicator - The forwarded focus indicator's internal indicator element.
- * @csspart state-layer__surface - The forwarded state layer's internal surface element.
+ * @csspart focus-indicator - The forwarded focus indicator's internal indicator element.
+ * @csspart state-layer - The forwarded state layer's internal surface element.
  * 
  * @cssprop --forge-list-item-background-color - The background color.
  * @cssprop --forge-list-item-shape - The shape of the list item.
@@ -138,7 +147,10 @@ declare global {
 export class ListItemComponent extends HTMLElement implements IListItemComponent {
   public static get observedAttributes(): string[] {
     return [
+      LIST_ITEM_CONSTANTS.observedAttributes.ANCHOR,
       LIST_ITEM_CONSTANTS.observedAttributes.HREF,
+      LIST_ITEM_CONSTANTS.observedAttributes.DOWNLOAD,
+      LIST_ITEM_CONSTANTS.observedAttributes.REL,
       LIST_ITEM_CONSTANTS.observedAttributes.TARGET,
       LIST_ITEM_CONSTANTS.observedAttributes.STATIC,
       LIST_ITEM_CONSTANTS.observedAttributes.NON_INTERACTIVE,
@@ -173,8 +185,17 @@ export class ListItemComponent extends HTMLElement implements IListItemComponent
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
+      case LIST_ITEM_CONSTANTS.observedAttributes.ANCHOR:
+        this.anchor = coerceBoolean(newValue);
+        break;
       case LIST_ITEM_CONSTANTS.observedAttributes.HREF:
         this.href = newValue;
+        break;
+      case LIST_ITEM_CONSTANTS.observedAttributes.DOWNLOAD:
+        this.download = newValue;
+        break;
+      case LIST_ITEM_CONSTANTS.observedAttributes.REL:
+        this.rel = newValue;
         break;
       case LIST_ITEM_CONSTANTS.observedAttributes.TARGET:
         this.target = newValue;
@@ -216,15 +237,20 @@ export class ListItemComponent extends HTMLElement implements IListItemComponent
     }
   }
 
-  public override focus(): void {
-    this._foundation.setFocus();
-  }
+  @FoundationProperty()
+  public declare anchor: boolean;
 
   @FoundationProperty()
   public declare href: string;
 
   @FoundationProperty()
   public declare target: string;
+
+  @FoundationProperty()
+  public declare download: string;
+
+  @FoundationProperty()
+  public declare rel: string;
 
   /** @deprecated Use nonInteractive instead. */
   @FoundationProperty()
@@ -262,4 +288,8 @@ export class ListItemComponent extends HTMLElement implements IListItemComponent
 
   @FoundationProperty()
   public declare wrap: boolean;
+
+  public override click(): void {
+    this._foundation.click();
+  }
 }

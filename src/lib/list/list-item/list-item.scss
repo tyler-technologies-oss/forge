@@ -26,7 +26,7 @@
 }
 
 // Disabled
-:host([disabled]) {
+:host([disabled]:not([anchor])) {
   .forge-list-item {
     @include core.disabled;
   }
@@ -121,8 +121,8 @@
 }
 
 // Anchor base
-a.forge-list-item {
-  @include core.anchor-link;
+a {
+  @include core.anchor-base;
 }
 
 // Text container base

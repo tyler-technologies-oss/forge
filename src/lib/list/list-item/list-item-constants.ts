@@ -4,8 +4,11 @@ import { IListItemComponent } from './list-item';
 const elementName = `${COMPONENT_NAME_PREFIX}list-item`;
 
 const observedAttributes = {
+  ANCHOR: 'anchor',
   HREF: 'href',
   TARGET: 'target',
+  DOWNLOAD: 'download',
+  REL: 'rel',
   STATIC: 'static',
   NON_INTERACTIVE: 'non-interactive',
   DISABLED: 'disabled',
@@ -30,7 +33,7 @@ const classes = {
 
 const selectors = {
   ROOT: `.${classes.ROOT}`,
-  CHECKBOX_RADIO_SELECTOR: 'input[type=checkbox]:not(:disabled):not([forge-ignore]),input[type=radio]:not(:disabled):not([forge-ignore])',
+  CHECKBOX_RADIO_SELECTOR: ':is(input[type=checkbox], input[type=radio], forge-checkbox):not(:disabled):not([forge-ignore])',
   SWITCH_SELECTOR: 'forge-switch:not([disabled]):not([forge-ignore])',
   IGNORE: '[forge-ignore],[data-forge-ignore]'
 };

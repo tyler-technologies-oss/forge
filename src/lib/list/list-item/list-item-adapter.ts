@@ -1,5 +1,4 @@
 import { getShadowElement, isDeepEqual, toggleAttribute } from '@tylertech/forge-core';
-import { replaceElement } from '../../core/utils/utils';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
@@ -11,20 +10,27 @@ import { ISwitchComponent } from '../../switch';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   initialize(): void;
-  setHref(href: string, target: string): void;
-  setHrefTarget(target: string): void;
+  initializeAnchor(): void;
+  removeAnchor(): void;
+  setAnchorHref(href: string): void;
+  setAnchorTarget(target: string): void;
+  setAnchorDownload(download: string): void;
+  setAnchorRel(rel: string): void;
   setNonInteractive(value: boolean): void;
   setDisabled(value: boolean): void;
   setActive(value: boolean): void;
   trySelect(value: unknown): boolean | null;
   tryToggleSelectionControl(value?: boolean): void;
   isFocused(): boolean;
-  setFocus(): void;
   animateStateLayer(): void;
+  syncDisabledState(value: boolean): void;
+  clickAnchor(): void;
+  clickHost(): void;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
-  private _rootElement: HTMLElement | HTMLAnchorElement;
+  private _rootElement: HTMLElement;
+  protected _anchorElement: HTMLAnchorElement | undefined;
   private _focusIndicatorElement: IFocusIndicatorComponent;
   private _stateLayerElement: IStateLayerComponent;
 
@@ -42,34 +48,47 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
       this._inheritParentListProps(list);
     }
 
-    this._rootElement.tabIndex = this._component.nonInteractive || this._component.disabled ? -1 : 0;
+    this._applyHostSemantics(list);
+  }
 
-    if (!this._component.hasAttribute('role')) {
-      this._setRole(list);
+  public initializeAnchor(): void {
+    this._anchorElement = this._createAnchorRootElement();
+    this._rootElement.insertAdjacentElement('afterend', this._anchorElement);
+    this._applyHostSemantics();
+  }
+
+  public removeAnchor(): void {
+    this._anchorElement?.remove();
+    this._anchorElement = undefined;
+    this._applyHostSemantics();
+  }
+
+  public setAnchorHref(href: string): void {
+    if (this._anchorElement) {
+      this._anchorElement.href = href;
     }
   }
 
-  public setHref(href: string, target: string): void {
-    if (href) {
-      if (this._rootElement.tagName !== 'A') {
-        const anchor = this._createAnchorRootElement(target);
-        this._rootElement = replaceElement(this._rootElement, anchor);
-      }
-      (this._rootElement as HTMLAnchorElement).href = href;
-    } else if (this._rootElement.tagName === 'A') {
-      const defaultEl = this._createDefaultRootElement();
-      this._rootElement = replaceElement(this._rootElement, defaultEl);
+  public setAnchorTarget(target: string): void {
+    if (this._anchorElement) {
+      this._anchorElement.target = target;
     }
   }
 
-  public setHrefTarget(target: string): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).target = target;
+  public setAnchorDownload(download: string): void {
+    if (this._anchorElement) {
+      this._anchorElement.download = download;
+    }
+  }
+
+  public setAnchorRel(rel: string): void {
+    if (this._anchorElement) {
+      this._anchorElement.rel = rel;
     }
   }
 
   public setNonInteractive(value: boolean): void {
-    this._rootElement.tabIndex = value ? -1 : 0;
+    this._component.tabIndex = value ? -1 : 0;
 
     if (value) {
       this._focusIndicatorElement.remove();
@@ -80,15 +99,10 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   public setDisabled(value: boolean): void {
-    this._rootElement.tabIndex = value ? -1 : 0;
-    toggleAttribute(this._component, value, 'aria-disabled', 'true');
-
-    if (value) {
-      this._focusIndicatorElement.remove();
-      this._stateLayerElement.remove();
-    } else {
-      this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
+    if (this._anchorElement) {
+      return; // Anchor elements are always enabled
     }
+    this.syncDisabledState(value);
   }
 
   public setActive(value: boolean): void {
@@ -153,28 +167,55 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     return this._component.matches(':focus');
   }
 
-  public setFocus(): void {
-    this._rootElement.focus({ preventScroll: true });
-  }
-
   public animateStateLayer(): void {
     this._stateLayerElement.playAnimation();
   }
 
-  private _createAnchorRootElement(target: string): HTMLAnchorElement {
-    const a = document.createElement('a');
-    a.classList.add(LIST_ITEM_CONSTANTS.classes.ROOT);
-    a.setAttribute('part', 'root');
-    a.target = target;
-    return a;
+  public syncDisabledState(value: boolean): void {
+    if (value) {
+      this._focusIndicatorElement.remove();
+      this._stateLayerElement.remove();
+    } else {
+      this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
+    }
+
+    this._component.tabIndex = value || this._component.nonInteractive ? -1 : 0;
+    toggleAttribute(this._component, value, 'aria-disabled', 'true');
   }
 
-  private _createDefaultRootElement(): HTMLElement {
-    const div = document.createElement('div');
-    div.classList.add(LIST_ITEM_CONSTANTS.classes.ROOT);
-    div.setAttribute('part', 'root');
-    div.tabIndex = this._component.nonInteractive || this._component.disabled ? -1 : 0;
-    return div;
+  public clickAnchor(): void {
+    this._anchorElement?.click();
+  }
+
+  public clickHost(): void {
+    // Calling click() on the prototype ensures we don't end up in an infinite
+    // recursion since the host overrides the HTMLElement.click() method
+    HTMLElement.prototype.click.call(this._component);
+  }
+
+  /**
+   * Our anchor element is the interactive element that will be used to trigger the click event when it is present.
+   * 
+   * We use the <a> element as an overlay on top of all content to ensure that it provides the native functionality,
+   * while removing it from the accessibility tree and tab order so that it does not interfere with the host semantics.
+   */
+  private _createAnchorRootElement(): HTMLAnchorElement {
+    const a = document.createElement('a');
+    a.setAttribute('aria-hidden', 'true');
+    a.tabIndex = -1;
+    if (this._component.href) {
+      a.href = this._component.href;
+    }
+    if (this._component.target) {
+      a.target = this._component.target;
+    }
+    if (this._component.download) {
+      a.download = this._component.download;
+    }
+    if (this._component.rel) {
+      a.rel = this._component.rel;
+    }
+    return a;
   }
 
   private _getParentList(): IListComponent | null {
@@ -205,9 +246,13 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
   }
 
-  private _setRole(list: IListComponent | null): void {
-    const listRole = list?.getAttribute('role');
-    const role = ListComponentItemRole[listRole as string] ?? 'listitem';
-    this._component.setAttribute('role', role);
+  private _applyHostSemantics(list?: IListComponent | null): void {
+    if (!this._component.hasAttribute('role')) {
+      const listRole = list?.getAttribute('role');
+      const role = ListComponentItemRole[listRole as string] ?? 'listitem';
+      this._component.setAttribute('role', role);
+    }
+    
+    this._component.tabIndex = !this._anchorElement && (this._component.nonInteractive || this._component.disabled) ? -1 : 0;
   }
 }

@@ -4,8 +4,11 @@ import { IListItemAdapter } from './list-item-adapter';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
 
 export interface IListItemFoundation extends ICustomElementFoundation {
+  anchor: boolean;
   href: string;
   target: string;
+  download: string;
+  rel: string;
   static: boolean;
   nonInteractive: boolean;
   disabled: boolean;
@@ -18,12 +21,15 @@ export interface IListItemFoundation extends ICustomElementFoundation {
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
-  setFocus(): void;
+  click(): void;
 }
 
 export class ListItemFoundation implements IListItemFoundation {
+  private _anchor = false;
   private _href: string;
-  private _target = '_blank';
+  private _target = '';
+  private _download = '';
+  private _rel = '';
   private _nonInteractive = false;
   private _disabled = false;
   private _selected = false;
@@ -65,8 +71,12 @@ export class ListItemFoundation implements IListItemFoundation {
     this._adapter.removeHostListener('keydown', this._keydownListener);
   }
 
-  public setFocus(): void {
-    this._adapter.setFocus();
+  public click(): void {
+    if (this._anchor) {
+      this._adapter.clickAnchor();
+    } else {
+      this._adapter.clickHost();
+    }
   }
 
   private _onPointerDown(evt: MouseEvent): void {
@@ -77,11 +87,16 @@ export class ListItemFoundation implements IListItemFoundation {
 
   private _onKeydown(evt: KeyboardEvent): void {
     if (evt.key === 'Enter' || evt.key === ' ') {
-      if (evt.key === ' ') {
+      if (!this._anchor && evt.key === ' ') {
         evt.preventDefault();
       }
+
       this._adapter.animateStateLayer();
       this._select(evt.target as HTMLElement);
+      
+      if (this._anchor && evt.key === 'Enter') {
+        this._adapter.clickAnchor();
+      }
     }
   }
 
@@ -96,7 +111,7 @@ export class ListItemFoundation implements IListItemFoundation {
     }
 
     if (!this._adapter.isFocused() && this._propagateClick) {
-      this.setFocus();
+      this._adapter.focusHost({ preventScroll: true });
     }
 
     // If the target was not a checkbox or radio button, attempt to find one and toggle its checked state
@@ -111,27 +126,13 @@ export class ListItemFoundation implements IListItemFoundation {
     this._adapter.emitHostEvent(LIST_ITEM_CONSTANTS.events.SELECT, data);
   }
 
-  public get href(): string {
-    return this._href;
-  }
-  public set href(value: string) {
-    if (this._href !== value) {
-      this._href = value;
-      this._adapter.setHref(this._href, this._target);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.HREF, !!this._href, this._href);
-    }
-  }
 
-  public get target(): string {
-    return this._target;
-  }
-  public set target(value: string) {
-    if (this._target !== value) {
-      this._target = value;
-      if (this._href) {
-        this._adapter.setHrefTarget(this._target);
-      }
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.TARGET, !!this._target, this._target);
+  private _toggleAnchor(): void {
+    if (this._anchor) {
+      this._adapter.initializeAnchor();
+      this.disabled = false; // Anchor elements are always enabled
+    } else {
+      this._adapter.removeAnchor();
     }
   }
 
@@ -163,6 +164,16 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._disabled;
   }
   public set disabled(value: boolean) {
+    // If we're in anchor mode, we need to ensure that the anchor is always enabled
+    if (this._anchor) {
+      if (this._disabled) {
+        this._adapter.syncDisabledState(false);
+      }
+      value = false;
+    }
+
+    value = Boolean(value);
+
     if (this._disabled !== value) {
       this._disabled = value;
       if (this._disabled) {
@@ -272,6 +283,72 @@ export class ListItemFoundation implements IListItemFoundation {
     if (this._wrap !== value) {
       this._wrap = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP, this._wrap);
+    }
+  }
+  
+  /**
+   * Anchor properties
+   */
+
+  public get anchor(): boolean {
+    return this._anchor;
+  }
+  public set anchor(value: boolean) {
+    value = Boolean(value);
+    if (this._anchor !== value) {
+      this._anchor = value;
+      this._toggleAnchor();
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.ANCHOR, value);
+    }
+  }
+
+  public get href(): string {
+    return this._href;
+  }
+  public set href(value: string) {
+    value = (value ?? '').trim();
+    if (this._href !== value) {
+      this._href = value;
+      this.anchor = this._href.length > 0;
+      if (this._anchor) {
+        this._adapter.setAnchorHref(this._href);
+      }
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.HREF, !!this._href, this._href);
+    }
+  }
+
+  public get target(): string {
+    return this._target;
+  }
+  public set target(value: string) {
+    if (this._target !== value) {
+      this._target = value;
+      if (this._anchor) {
+        this._adapter.setAnchorTarget(this._target);
+      }
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.TARGET, !!this._target, this._target);
+    }
+  }
+
+  public get download(): string {
+    return this._download;
+  }
+  public set download(value: string) {
+    if (this._download !== value) {
+      this._download = value;
+      this._adapter.setAnchorDownload(this._download);
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.DOWNLOAD, !!this._download, this._download);
+    }
+  }
+
+  public get rel(): string {
+    return this._rel;
+  }
+  public set rel(value: string) {
+    if (this._rel !== value) {
+      this._rel = value;
+      this._adapter.setAnchorRel(this._rel);
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.REL, !!this._rel, this._rel);
     }
   }
 }

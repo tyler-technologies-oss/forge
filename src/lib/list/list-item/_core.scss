@@ -4,6 +4,7 @@
 @mixin container {
   display: block;
   outline: none;
+  position: relative;
 }
 
 @mixin base {
@@ -23,8 +24,10 @@
   cursor: #{token(cursor)};
 }
 
-@mixin anchor-link {
-  color: inherit;
+@mixin anchor-base {
+  position: absolute;
+  inset: 0;
+  text-decoration: none;
 }
 
 @mixin text-container {
