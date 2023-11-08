@@ -376,9 +376,7 @@ function getSelectAllTemplate(): string {
       <forge-checkbox>
         <input type="checkbox" />
       </forge-checkbox>
-      <forge-button>
-        <button type="button">Custom</button>
-      </forge-button>
+      <forge-button>Custom</forge-button>
     </div>
   `;
 }

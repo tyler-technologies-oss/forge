@@ -139,9 +139,9 @@ describe('Slider', () => {
     expect(el.readonly).to.be.false;
     expect(el.labeled).to.be.true;
     expect(el.range).to.be.false;
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0.5');
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0');
-    expect(ctx.rootElement.style.getPropertyValue('--_tick-count')).to.equal('100');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0.5');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('0');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-tick-count')).to.equal('100');
     expect(ctx.endInputElement.valueAsNumber).to.equal(50);
     expect(ctx.endInputElement.getAttribute('aria-valuetext')).to.equal('50');
     expect(ctx.endInputElement.min).to.equal('0');
@@ -158,7 +158,7 @@ describe('Slider', () => {
     const ctx = new SliderHarness(el);
 
     expect(el.value).to.equal(75);
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0.75');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0.75');
     expect(ctx.endInputElement.valueAsNumber).to.equal(75);
     expect(ctx.endInputElement.getAttribute('aria-valuetext')).to.equal('75');
     expect(ctx.endLabelContentElement.textContent).to.equal('75');
@@ -185,7 +185,7 @@ describe('Slider', () => {
     const ctx = new SliderHarness(el);
 
     expect(el.value).to.equal(-100);
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0');
     expect(ctx.endInputElement.valueAsNumber).to.equal(0);
   });
 
@@ -194,7 +194,7 @@ describe('Slider', () => {
     const ctx = new SliderHarness(el);
 
     expect(el.value).to.equal(500);
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('1');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('1');
     expect(ctx.endInputElement.valueAsNumber).to.equal(100);
   });
 
@@ -204,8 +204,8 @@ describe('Slider', () => {
 
     expect(el.valueStart).to.equal(-100);
     expect(el.valueEnd).to.equal(-100);
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0');
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('0');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0');
     expect(ctx.startInputElement.valueAsNumber).to.equal(0);
     expect(ctx.endInputElement.valueAsNumber).to.equal(0);
   });
@@ -216,8 +216,8 @@ describe('Slider', () => {
 
     expect(el.valueStart).to.equal(500);
     expect(el.valueEnd).to.equal(500);
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('1');
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('1');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('1');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('1');
     expect(ctx.startInputElement.valueAsNumber).to.equal(100);
     expect(ctx.endInputElement.valueAsNumber).to.equal(100);
   });
@@ -229,7 +229,7 @@ describe('Slider', () => {
     expect(el.step).to.equal(10);
     expect(ctx.endInputElement.step).to.equal('10');
     expect(ctx.endInputElement.step).to.equal('10');
-    expect(ctx.rootElement.style.getPropertyValue('--_tick-count')).to.equal('10');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-tick-count')).to.equal('10');
   });
 
   it('should show tickmarks', async () => {
@@ -288,8 +288,8 @@ describe('Slider', () => {
     expect(ctx.startInputElement.max).to.equal('100');
     expect(ctx.startInputElement.step).to.equal('1');
     expect(ctx.startLabelContentElement.textContent).to.equal('33');
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0.33');
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0.67');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('0.33');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0.67');
     expect(ctx.endInputElement.valueAsNumber).to.equal(67);
   });
 
@@ -309,8 +309,8 @@ describe('Slider', () => {
     expect(ctx.startInputElement.max).to.equal('100');
     expect(ctx.startInputElement.step).to.equal('1');
     expect(ctx.startLabelContentElement.textContent).to.equal('33');
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0.33');
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0.67');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('0.33');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0.67');
     expect(ctx.endInputElement.valueAsNumber).to.equal(67);
   });
 
@@ -669,8 +669,8 @@ describe('Slider', () => {
     expect(ctx.startInputElement.min).to.equal(String(ctx.element.min));
     expect(ctx.startInputElement.max).to.equal(String(ctx.element.max));
     expect(ctx.startInputElement.step).to.equal(String(ctx.element.step));
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0.33');
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0.67');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('0.33');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0.67');
     expect(ctx.endInputElement.valueAsNumber).to.equal(67);
     expect(ctx.endInputElement.getAttribute('aria-valuetext')).to.equal('67');
     expect(ctx.endLabelContentElement.textContent).to.equal('67');
@@ -690,8 +690,8 @@ describe('Slider', () => {
     expect(ctx.startHandleElement).not.to.be.ok;
     expect(ctx.startStateLayer).not.to.be.ok;
     expect(ctx.startLabelContentElement).not.to.ok;
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0');
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('0.5');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('0');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('0.5');
     expect(ctx.endInputElement.valueAsNumber).to.equal(50);
     expect(ctx.endInputElement.getAttribute('aria-valuetext')).to.equal('50');
     expect(ctx.endLabelContentElement.textContent).to.equal('50');
@@ -712,8 +712,8 @@ describe('Slider', () => {
     expect(ctx.startInputElement.min).to.equal('40');
     expect(ctx.startInputElement.max).to.equal('60');
     expect(ctx.startInputElement.step).to.equal('2');
-    expect(ctx.rootElement.style.getPropertyValue('--_start-fraction')).to.equal('0');
-    expect(ctx.rootElement.style.getPropertyValue('--_end-fraction')).to.equal('1');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-start-fraction')).to.equal('0');
+    expect(ctx.rootElement.style.getPropertyValue('--_slider-end-fraction')).to.equal('1');
     expect(ctx.endInputElement.valueAsNumber).to.equal(60);
     expect(ctx.endInputElement.getAttribute('aria-valuetext')).to.equal('60');
     expect(ctx.endLabelContentElement.textContent).to.equal('60');

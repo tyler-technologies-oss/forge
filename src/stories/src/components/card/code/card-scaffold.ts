@@ -21,12 +21,8 @@ export const CardScaffoldCodeHtml = () => {
     </p>
 
     <forge-toolbar slot="footer" inverted>
-      <forge-button type="outlined" slot="end">
-        <button type="button">Cancel</button>
-      </forge-button>
-      <forge-button type="unelevated" slot="end" style="margin-left: 8px;">
-        <button type="button">Ok</button>
-      </forge-button>
+      <forge-button variant="outlined" slot="end">Cancel</forge-button>
+      <forge-button variant="unelevated" slot="end" style="margin-left: 8px;">Ok</forge-button>
     </forge-toolbar>
   </forge-scaffold>
 </forge-card>

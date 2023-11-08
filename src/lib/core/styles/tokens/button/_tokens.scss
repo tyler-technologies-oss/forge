@@ -1,0 +1,111 @@
+@use 'sass:map';
+@use '../color-palette';
+@use '../../animation';
+@use '../../border';
+@use '../../elevation';
+@use '../../shape';
+@use '../../spacing';
+@use '../../theme';
+@use '../../typography';
+@use '../../utils';
+
+/* stylelint-disable length-zero-no-unit */
+$tokens: (
+  // Shared
+  primary-color: utils.module-val(button, primary, theme.variable(primary)),
+  text-color: utils.module-ref(button, text-color, primary-color),
+  disabled-color: utils.module-val(button, disabled, theme.variable(surface-container)),
+  padding: utils.module-val(button, padding, 8px),
+  display: utils.module-val(button, display, inline-flex),
+  justify: utils.module-val(button, justify, center),
+  shape: utils.module-val(button, shape, shape.variable(medium)),
+
+  // Base
+  height: utils.module-val(button, height, 36px),
+  min-width: utils.module-val(button, min-width, 64px),
+  spacing: utils.module-val(button, spacing, spacing.variable(xsmall)),
+  border-width: utils.module-val(button, border-width, medium),
+  border-style: utils.module-val(button, border-style, none),
+  border-color: utils.module-val(button, border-color, currentColor),
+  border-top-left-radius: utils.module-ref(button, border-top-left-radius, shape),
+  border-top-right-radius: utils.module-ref(button, border-top-right-radius, shape),
+  border-bottom-left-radius: utils.module-ref(button, border-bottom-left-radius, shape),
+  border-bottom-right-radius: utils.module-ref(button, border-bottom-right-radius, shape),
+  padding-block: utils.module-ref(button, padding-block, padding),
+  padding-inline: utils.module-ref(button, padding-inline, padding),
+  background: utils.module-val(button, background, transparent),
+  hover-background: utils.module-ref(button, hover-background, background),
+  active-background: utils.module-ref(button, active-background, background),
+  color: utils.module-ref(button, color, text-color),
+  icon-size: utils.module-val(button, icon-size, typography.font-size-relative('1125')),
+  shadow: utils.module-val(button, shadow, none),
+  hover-shadow: utils.module-val(button, hover-shadow, none),
+  active-shadow: utils.module-val(button, active-shadow, none),
+  cursor: utils.module-val(button, cursor, pointer),
+  transition-duration: utils.module-val(button, transition-duration, animation.variable(duration-short3)),
+  transition-timing: utils.module-val(button, transition-timing, animation.variable(easing-standard)),
+
+  // Raised
+  raised-background: utils.module-ref(button, raised-background, primary-color),
+  raised-disabled-background: utils.module-ref(button, raised-disabled-background, disabled-color),
+  raised-color: utils.module-val(button, raised-color, theme.variable(on-primary)),
+  raised-disabled-color: utils.module-ref(button, raised-disabled-color, disabled-text-color),
+  raised-shadow: utils.module-val(button, raised-shadow, elevation.value(2)),
+  raised-hover-shadow: utils.module-val(button, raised-hover-shadow, elevation.value(4)),
+  raised-active-shadow: utils.module-val(button, raised-active-shadow, elevation.value(8)),
+  raised-disabled-shadow: utils.module-val(button, raised-disabled-shadow, none),
+
+  // Flat
+  flat-background: utils.module-ref(button, flat-background, primary-color),
+  flat-disabled-background: utils.module-ref(button, flat-disabled-background, disabled-color),
+  flat-color: utils.module-val(button, flat-color, theme.variable(on-primary)),
+  flat-disabled-color: utils.module-ref(button, flat-disabled-color, disabled-text-color),
+
+  // Outlined
+  outlined-background: utils.module-ref(button, outlined-background, background),
+  outlined-color: utils.module-ref(button, outlined-color, primary-color),
+  outlined-border-width: utils.module-val(button, outlined-border-width, border.variable(thin)),
+  outlined-border-style: utils.module-val(button, outlined-border-style, solid),
+  outlined-border-color: utils.module-ref(button, outlined-border-color, primary-color),
+
+  // Link
+  link-color: utils.module-ref(button, link-color, primary-color),
+  link-text-decoration: utils.module-val(button, link-text-decoration, underline),
+  link-height: utils.module-val(button, link-height, auto),
+  link-padding: utils.module-val(button, link-padding, 0),
+  link-line-height: utils.module-val(button, link-line-height, normal),
+  link-width: utils.module-val(button, link-width, auto),
+  link-hover-text-decoration: utils.module-val(button, link-hover-text-decoration, none),
+  link-active-opacity: utils.module-val(button, link-active-opacity, theme.emphasis(high)),
+  link-transition-duration: utils.module-val(button, link-transition-duration, animation.variable(duration-short3)),
+  link-transition-timing: utils.module-val(button, link-transition-timing, animation.variable(easing-standard)),
+
+  // Disabled
+  disabled-cursor: utils.module-val(button, disabled-cursor, not-allowed),
+  disabled-text-color: utils.module-val(button, disabled-text-color, theme.variable(text-low)),
+  disabled-background: utils.module-val(button, disabled-background, transparent),
+  disabled-border-color: utils.module-ref(button, disabled-border-color, disabled-color),
+  disabled-shadow: utils.module-val(button, disabled-shadow, none),
+
+  // Dense
+  dense-height: utils.module-val(button, dense-height, 24px),
+
+  // Pill
+  pill-shape: utils.module-val(button, pill-shape, shape.variable(full)),
+  pill-padding-inline: utils.module-val(button, pill-padding-inline, spacing.variable(small)),
+
+  // Focus indicator
+  focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 4px),
+  text-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 0px),
+  link-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 2px),
+
+  // Popover icon
+  popover-icon-transition-duration: utils.module-val(button, popover-icon-transition-duration, animation.variable(duration-short3)),
+  popover-icon-transition-timing: utils.module-val(button, popover-icon-transition-timing, animation.variable(easing-standard)),
+  popover-icon-open-rotation: utils.module-val(button, popover-icon-open-rotation, 180deg)
+) !default;
+/* stylelint-enable length-zero-no-unit */
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

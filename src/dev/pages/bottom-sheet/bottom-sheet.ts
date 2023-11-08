@@ -2,7 +2,6 @@ import '$src/shared';
 import '@tylertech/forge/bottom-sheet';
 import { IBottomSheetComponent } from '@tylertech/forge/bottom-sheet';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/dialog/forge-dialog-utils.scss';
 import './bottom-sheet.scss';
 

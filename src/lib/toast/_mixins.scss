@@ -222,7 +222,7 @@
 }
 
 @mixin action-button() {
-  @include theme.css-custom-property(--mdc-theme-primary, --forge-toast-theme-action, variables.$action);
+  @include theme.css-custom-property(--forge-theme-primary, --forge-toast-theme-action, variables.$action);
 }
 
 @mixin close-button() {

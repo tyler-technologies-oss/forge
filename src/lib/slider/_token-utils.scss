@@ -1,0 +1,26 @@
+@use '../core/styles/utils';
+@use '../core/styles/tokens/slider/tokens';
+@use '../core/styles/tokens/token-utils';
+
+$_module: slider;
+$_tokens: tokens.$tokens;
+
+@mixin provide-theme($theme) {
+  @include token-utils.provide-theme($_module, $_tokens, $theme);
+}
+
+@function token($name, $type: token) {
+  @return token-utils.token($_module, $_tokens, $name, $type);
+}
+
+@function declare($token) {
+  @return token-utils.declare($_module, $token);
+}
+
+@mixin override($token, $token-or-value, $type: token) {
+  @include token-utils.override($_module, $_tokens, $token, $token-or-value, $type);
+}
+
+@mixin tokens($includes: null, $excludes: null) {
+  @include token-utils.tokens($_module, $_tokens, $includes, $excludes);
+}

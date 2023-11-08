@@ -1,12 +1,5 @@
-@use '../core/styles/tokens/state-layer/tokens';
+@use './token-utils' as *; 
 
 @mixin configuration {
-  --_color: #{tokens.get(color)};
-  --_hover-color: #{tokens.get(hover-color)};
-  --_hover-opacity: #{tokens.get(hover-opacity)};
-  --_pressed-color: #{tokens.get(pressed-color)};
-  --_pressed-opacity: #{tokens.get(pressed-opacity)};
-  --_hover-duration: #{tokens.get(hover-duration)};
-  --_pressed-duration: #{tokens.get(pressed-duration)};
-  --_animation-duration: #{tokens.get(animation-duration)};
+  @include tokens;
 }

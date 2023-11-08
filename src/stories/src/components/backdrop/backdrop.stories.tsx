@@ -37,9 +37,7 @@ export const Default: Story<IBackdropProps> = ({
 
   return (
     <>
-      <ForgeButton type="raised">
-        <button onClick={openBackdrop}>Show backdrop</button>
-      </ForgeButton>
+      <ForgeButton variant="raised" onClick={openBackdrop}>Show backdrop</ForgeButton>
       <p className="forge-typography--label">(When open, click backdrop to close)</p>
       <ForgeBackdrop
         ref={backdropRef}

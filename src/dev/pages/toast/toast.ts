@@ -1,7 +1,6 @@
 import '$src/shared';
 import type { ISelectComponent, ISwitchComponent, IToastComponent } from '@tylertech/forge';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/toast';
 import './toast.scss';
 

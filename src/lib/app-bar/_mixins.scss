@@ -237,8 +237,8 @@
     ));
   }
 
-  ::slotted(forge-button[type=outlined]),
-  ::slotted(forge-button:not([type])) {
-    --mdc-theme-primary: var(--forge-app-bar-theme-on-background, rgba(255, 255, 255, 0.87));
+  ::slotted(forge-button[variant=outlined]),
+  ::slotted(forge-button:not([variant])) {
+    --forge-theme-primary: var(--forge-app-bar-theme-on-background, rgba(255, 255, 255, 0.87));
   }
 }

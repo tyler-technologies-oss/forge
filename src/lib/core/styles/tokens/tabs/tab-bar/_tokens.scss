@@ -3,8 +3,8 @@
 @use '../../../utils';
 
 $tokens: (
-  container-justify: utils.module-val(tab-bar, justify, space-between),
-  tab-flex: utils.module-val(tab-bar, stretch, 1),
+  justify: utils.module-val(tab-bar, justify, space-between),
+  stretch: utils.module-val(tab-bar, stretch, 1),
   divider-color: utils.module-val(tab-bar, divider-color, theme.variable(outline)),
   divider-thickness: utils.module-val(tab-bar, divider-thickness, 1px)
 );

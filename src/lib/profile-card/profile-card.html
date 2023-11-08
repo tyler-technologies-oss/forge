@@ -11,12 +11,8 @@
     </div>
     <slot></slot>
     <forge-toolbar inverted id="action-toolbar" part="footer">
-      <forge-button type="outlined" slot="end" style="margin-right: 8px;" part="profile-button">
-        <button type="button" id="profile-button" aria-label="View profile" part="profile-button-element">Profile</button>
-      </forge-button>
-      <forge-button slot="end" part="sign-out-button">
-        <button type="button" id="sign-out-button" aria-label="Sign out" part="sign-out-button-element">Sign out</button>
-      </forge-button>
+      <forge-button variant="outlined" slot="end" style="margin-right: 8px;" part="profile-button" aria-label="View profile" id="profile-button">Profile</forge-button>
+      <forge-button slot="end" part="sign-out-button" id="sign-out-button" aria-label="Sign out">Sign out</forge-button>
     </forge-toolbar>
   </div>
 </template>

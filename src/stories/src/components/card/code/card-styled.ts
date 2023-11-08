@@ -19,12 +19,8 @@ export const CardStyledCodeHtml = () => {
 
     <div className="forge-card-footer">
       <div>
-        <forge-button>
-          <button type="button">Ok</button>
-        </forge-button>
-        <forge-button>
-          <button type="button">Cancel</button>
-        </forge-button>
+        <forge-button>Ok</forge-button>
+        <forge-button>Cancel</forge-button>
       </div>
     </div>
   </forge-card>

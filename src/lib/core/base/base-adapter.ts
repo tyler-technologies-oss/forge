@@ -19,6 +19,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   getScreenWidth(): number;
   setBodyAttribute(name: string, value: string): void;
   removeBodyAttribute(name: string): void;
+  focusHost(options?: FocusOptions): void;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
@@ -110,6 +111,10 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public removeBodyAttribute(name: string): void {
     document.body.removeAttribute(name);
+  }
+
+  public focusHost(options?: FocusOptions): void {
+    this._component.focus(options);
   }
 
   public get isConnected(): boolean {

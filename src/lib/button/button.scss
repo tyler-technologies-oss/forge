@@ -1,0 +1,184 @@
+@use './configuration';
+@use './core';
+@use '../core/styles/theme';
+@use '../state-layer' as state-layer;
+@use '../focus-indicator' as focus-indicator;
+@use './token-utils' as *;
+
+//
+// Host
+//
+
+:host {
+  @include configuration.host-configuration;
+}
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-button {
+  @include configuration.configuration;
+}
+
+.forge-button {
+  @include core.base;
+  
+  ::slotted(:is([slot=start],[slot=end])) {
+    @include core.slotted-start-end;
+  }
+}
+
+a {
+  @include core.anchor-base;
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme(( color: #{token(color)} ));
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: #{token(primary-color)},
+    outward-offset: #{token(focus-indicator-offset)}
+  ));
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]) {
+    .forge-button {
+      @include override(primary-color, theme.variable($theme));
+    }
+  }
+}
+
+@include theme(secondary);
+@include theme(tertiary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
+//
+// Variants
+//
+
+:host(:is(:not([variant], [variant=text]))) {
+  .forge-button {
+    @include core.text;
+  }
+}
+
+:host([variant=raised]) {
+  .forge-button {
+    @include core.raised;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(( color: #{token(raised-color)} ));
+  }
+}
+
+:host([variant=flat]) {
+  .forge-button {
+    @include core.flat;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(( color: #{token(flat-color)} ));
+  }
+}
+
+:host([variant=outlined]) {
+  .forge-button {
+    @include core.outlined;
+  }
+}
+
+:host([variant=link]) {
+  .forge-button {
+    @include core.link;
+  }
+}
+
+//
+// Dense
+//
+
+:host([dense]) {
+  .forge-button {
+    @include core.dense;
+  }
+}
+
+//
+// Pill
+//
+
+:host([pill]) {
+  .forge-button {
+    @include core.pill;
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme(( shape: #{token(pill-shape)} ));
+  }
+}
+
+//
+// Disabled
+//
+
+:host(:not([anchor])[disabled]) {
+  @include core.host-disabled;
+
+  .forge-button {
+    @include core.disabled;
+  }
+}
+
+:host(:not([anchor])[variant=raised][disabled]) {
+  .forge-button {
+    @include core.raised-disabled;
+  }
+}
+
+:host(:not([anchor])[variant=flat][disabled]) {
+  .forge-button {
+    @include core.flat-disabled;
+  }
+}
+
+:host(:not([anchor])[variant=outlined][disabled]) {
+  .forge-button {
+    @include core.outlined-disabled;
+  }
+}
+
+//
+// Popover icon
+//
+
+:host([popover-icon]) {
+  .forge-button__popover-icon {
+    @include core.popover-icon;
+  }
+}
+
+:host([popover-icon][aria-expanded=true]) {
+  .forge-button__popover-icon {
+    @include core.popover-icon-open;
+  }
+}

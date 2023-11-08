@@ -17,9 +17,10 @@ export default {
 } as Meta;
 
 export const Default: Story<IButtonProps> = ({
-  type = 'flat',
+  variant = '',
   text = 'Button',
   disabled = false,
+  dense = false,
   hasLeadingIcon = false,
   hasTrailingIcon = false
 }) => {
@@ -28,20 +29,19 @@ export const Default: Story<IButtonProps> = ({
   }, []);
 
   return (
-    <ForgeButton type={type}>
-      <button type="button" disabled={disabled}>
-        {hasLeadingIcon && <ForgeIcon name="face" />}
-        <span>{text}</span>
-        {hasTrailingIcon && <ForgeIcon name="open_in_new" />}
-      </button>
+    <ForgeButton variant={variant} disabled={disabled} dense={dense}>
+      {hasLeadingIcon && <ForgeIcon slot="start" name="face" />}
+      <span>{text}</span>
+      {hasTrailingIcon && <ForgeIcon slot="end" name="open_in_new" />}
     </ForgeButton>
   )
 };
 Default.argTypes = buttonArgTypes;
 Default.args = {
-  type: 'flat',
+  variant: '',
   text: 'Button',
   disabled: false,
+  dense: false,
   hasLeadingIcon: false,
   hasTrailingIcon: false
 } as IButtonProps;

@@ -1,67 +1,11 @@
-@use '../../core/styles/tokens/list/list-item/tokens';
+@use './token-utils' as *;
+
+$_host-tokens: [indent dense-indent];
 
 @mixin host {
-  --_indent: #{tokens.get(indent)};
-  --_dense-indent: #{tokens.get(dense-indent)};
+  @include tokens($includes: $_host-tokens);
 }
 
 @mixin configuration {
-  // Base
-  --_background-color: #{tokens.get(background-color)};
-  --_shape: #{tokens.get(shape)};
-  --_padding: #{tokens.get(padding)};
-  --_margin: #{tokens.get(margin)};
-  --_height: #{tokens.get(height)};
-  --_dense-height: #{tokens.get(dense-height)};
-  --_cursor: #{tokens.get(cursor)};
-
-  // Supporting text
-  --_supporting-text-color: #{tokens.get(supporting-text-color)};
-  --_supporting-text-font-size: #{tokens.get(supporting-text-font-size)};
-  --_supporting-text-font-weight: #{tokens.get(supporting-text-font-weight)};
-  --_supporting-text-line-height: #{tokens.get(supporting-text-line-height)};
-
-  // Selected
-  --_selected-color: #{tokens.get(selected-color)};
-  --_selected-opacity: #{tokens.get(selected-opacity)};
-  --_selected-leading-color: #{tokens.get(selected-leading-color)};
-  --_selected-trailing-color: #{tokens.get(selected-trailing-color)};
-  --_selected-supporting-text-color: #{tokens.get(selected-supporting-text-color)};
-
-  // Disabled
-  --_disabled-opacity: #{tokens.get(disabled-opacity)};
-  --_disabled-cursor: #{tokens.get(disabled-cursor)};
-
-  // Line variants
-  --_one-line-height: #{tokens.get(one-line-height)};
-  --_two-line-height: #{tokens.get(two-line-height)};
-  --_three-line-height: #{tokens.get(three-line-height)};
-
-  // Dense
-  --_dense-one-line-height: #{tokens.get(dense-one-line-height)};
-  --_dense-two-line-height: #{tokens.get(dense-two-line-height)};
-  --_dense-three-line-height: #{tokens.get(dense-three-line-height)};
-  --_dense-font-size: #{tokens.get(dense-font-size)};
-
-  // Dense leading/trailing
-  --_dense-leading-margin-end: #{tokens.get(dense-leading-margin-end)};
-  --_dense-trailing-margin-start: #{tokens.get(dense-trailing-margin-start)};
-
-  // Leading
-  --_leading-margin-start: #{tokens.get(leading-margin-start)};
-  --_leading-margin-end: #{tokens.get(leading-margin-end)};
-  --_leading-selected-color: #{tokens.get(leading-selected-color)};
-
-  // Trailing
-  --_trailing-margin-start: #{tokens.get(trailing-margin-start)};
-  --_trailing-margin-end: #{tokens.get(trailing-margin-end)};
-  --_trailing-selected-color: #{tokens.get(trailing-selected-color)};
-
-  // Avatar
-  --_avatar-background-color: #{tokens.get(avatar-background-color)};
-  --_avatar-color: #{tokens.get(avatar-color)};
-  --_avatar-shape: #{tokens.get(avatar-shape)};
-  --_avatar-margin-start: #{tokens.get(avatar-margin-start)};
-  --_avatar-margin-end: #{tokens.get(avatar-margin-end)};
-  --_avatar-size: #{tokens.get(avatar-size)};
+  @include tokens($excludes: $_host-tokens);
 }

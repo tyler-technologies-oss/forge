@@ -87,6 +87,30 @@
 }
 
 ///
+/// Create a selector for default anchor link styles
+///
+@mixin anchor {
+  a:not([forge-ignore]),
+  .forge-typography--link {
+    text-decoration: underline;
+    color: theme.variable(primary);
+    cursor: pointer;
+
+    &:visited {
+      color: theme.variable(primary);
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:active {
+      opacity: theme.emphasis(high);
+    }
+  }
+}
+
+///
 /// Provides override CSS custom property declarations for the given style overrides.
 /// 
 /// Example:
@@ -131,7 +155,8 @@
 /// ```
 /// 
 @function font-size-relative($scale) {
-  @return calc(#{core.get(font-size)} * #{$scale});
+  $scale-value: scale.value($scale);
+  @return calc(#{core.get(font-size)} * #{$scale-value});
 }
 
 @function _get-style-value($style, $token) {

@@ -60,9 +60,9 @@ const events = {
 };
 
 const cssCustomProperties = {
-  START_FRACTION: '--_start-fraction',
-  END_FRACTION: '--_end-fraction',
-  TICK_COUNT: '--_tick-count'
+  START_FRACTION: '--_slider-start-fraction',
+  END_FRACTION: '--_slider-end-fraction',
+  TICK_COUNT: '--_slider-tick-count'
 };
 
 const numbers = {

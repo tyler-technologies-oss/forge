@@ -70,6 +70,18 @@ export const INPUT_PROPERTIES: (keyof HTMLInputElement)[] = [
   'required',
   'value'
 ];
+/**
+ * Attributes for buttons when used within a form.
+ */
+export const BUTTON_FORM_ATTRIBUTES = [
+  'name',
+  'value',
+  'formaction',
+  'formenctype',
+  'formmethod',
+  'formnovalidate',
+  'formtarget'
+];
 
 /**
  * Gets an array of attribute names prefixed by a part name and colon.

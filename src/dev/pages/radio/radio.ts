@@ -2,7 +2,6 @@ import '$src/shared';
 import '@tylertech/forge/radio';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import './radio.scss';
 
 const radioGroup = document.getElementById('example-radio-group');
