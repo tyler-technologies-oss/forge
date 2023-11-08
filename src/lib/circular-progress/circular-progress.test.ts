@@ -86,4 +86,34 @@ describe('Circular Progress', () => {
 
     expect(rootElement.getAttribute('aria-label')).to.equal(expectedLabel);
   });
+
+  it('should set theme', async () => {
+    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress></forge-circular-progress>`);
+    el.theme = 'secondary';
+
+    expect(el.theme).to.equal('secondary');
+    expect(el.getAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME)).to.equal('secondary');
+  });
+
+  it('should set theme via attribute', async () => {
+    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress theme="secondary"></forge-circular-progress>`);
+
+    expect(el.theme).to.equal('secondary');
+    expect(el.getAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME)).to.equal('secondary');
+  });
+
+  it('should set track', async () => {
+    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress></forge-circular-progress>`);
+    el.track = false;
+
+    expect(el.track).to.equal(false);
+    expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK)).to.equal(true);
+  });
+
+  it('should set track via attribute', async () => {
+    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress no-track></forge-circular-progress>`);
+
+    expect(el.track).to.equal(false);
+    expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK)).to.equal(true);
+  });
 });

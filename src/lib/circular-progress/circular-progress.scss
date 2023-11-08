@@ -1,6 +1,8 @@
 @use './core';
 @use './animation';
 @use './configuration';
+@use '../core/styles/theme';
+@use './token-utils' as *;
 
 //
 // Host styles
@@ -97,6 +99,32 @@ svg {
 
 .spinner {
   @include core.determinate-spinner;
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]) {
+    .forge-circular-progress {
+      @include override(indicator-color, theme.variable($theme));
+      @include override(track-color, theme.variable(#{$theme}-container));
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
+:host([no-track]) {
+  .forge-circular-progress {
+    @include override(track-color, transparent);
+  }
 }
 
 @media screen and (forced-colors: active) {

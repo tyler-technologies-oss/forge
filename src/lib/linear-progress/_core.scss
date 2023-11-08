@@ -23,7 +23,7 @@
 @mixin bar {
   animation: none;
   inline-size: 100%;
-  block-size: #{token(active-indicator-height)};
+  block-size: #{token(indicator-height)};
   transform-origin: left center;
   will-change: transform;
   transition: transform #{token(determinate-duration)} #{token(determinate-easing)};
@@ -36,14 +36,16 @@
 @mixin bar-inner {
   inset: 0;
   animation: none;
-  background: #{token(active-indicator-color)};
+  transition: background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  background: #{token(indicator-color)};
 }
 
 @mixin buffer-bar {
   background: #{token(track-color)};
   inset: 0;
   will-change: transform;
-  transition: transform #{token(determinate-duration)} #{token(determinate-easing)};
+  transition: transform #{token(determinate-duration)} #{token(determinate-easing)},
+              background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
   transform-origin: left center;
 }
 
@@ -52,7 +54,8 @@
   will-change: transform;
   animation: linear infinite #{token(determinate-duration)};
   animation-name: buffering;
-  background: #{token(track-background, custom)};
+  background: #{token(track-color, custom)};
+  transition: background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
 }
 
 @mixin indeterminate-bar {

@@ -9,10 +9,9 @@
 @use '../../typography';
 @use '../../utils';
 
-/* stylelint-disable length-zero-no-unit */
 $tokens: (
   // Shared
-  primary-color: utils.module-val(button, primary, theme.variable(primary)),
+  primary-color: utils.module-val(button, primary-color, theme.variable(primary)),
   text-color: utils.module-ref(button, text-color, primary-color),
   disabled-color: utils.module-val(button, disabled, theme.variable(surface-container)),
   padding: utils.module-val(button, padding, 8px),
@@ -104,7 +103,6 @@ $tokens: (
   popover-icon-transition-timing: utils.module-val(button, popover-icon-transition-timing, animation.variable(easing-standard)),
   popover-icon-open-rotation: utils.module-val(button, popover-icon-open-rotation, 180deg)
 ) !default;
-/* stylelint-enable length-zero-no-unit */
 
 @function get($key) {
   @return map.get($tokens, $key);

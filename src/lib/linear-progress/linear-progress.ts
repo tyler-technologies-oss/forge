@@ -1,7 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { LinearProgressAdapter } from './linear-progress-adapter';
-import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
+import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 import { LinearProgressFoundation } from './linear-progress-foundation';
 
 import template from './linear-progress.html';
@@ -11,6 +11,7 @@ export interface ILinearProgressComponent extends IBaseComponent {
   determinate: boolean;
   progress: number;
   buffer: number;
+  theme: LinearProgressTheme;
 }
 
 declare global {
@@ -33,20 +34,24 @@ declare global {
  * @property {boolean} determinate - Controls the determinate state.
  * @property {boolean} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @property {boolean} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
+ * @property {string} theme - Sets the theme.
  * 
  * @attribute {boolean} determinate - Controls the determinate state.
  * @attribute {number} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {number} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
+ * @attribute {string} theme - Sets the theme.
  * @attribute {string} data-aria-label - Propagates an `aria-label` to the underlying progress bar element.
  * 
  * @cssproperty --forge-linear-progress-height - The height of the element.
  * @cssproperty --forge-linear-progress-track-color - The background color of the indicator.
- * @cssproperty --forge-linear-progress-indicator-color - The color of the indicator.
  * @cssproperty --forge-linear-progress-track-shape - The shape of the indicator.
+ * @cssproperty --forge-linear-progress-indicator-color - The color of the indicator.
  * @cssproperty --forge-linear-progress-indicator-height - The height of the indicator only.
  * @cssproperty --forge-linear-progress-determinate-duration - The duration of the determinate animation.
  * @cssproperty --forge-linear-progress-indeterminate-duration - The duration of the indeterminate animation.
  * @cssproperty --forge-linear-progress-determinate-easing - The easing function to use for the determinate animation.
+ * @cssproperty --forge-linear-progress-theme-transition-duration - The duration of the theme transition.
+ * @cssproperty --forge-linear-progress-theme-transition-timing - The easing function to use for the theme transition.
  * 
  * @csspart progressbar - Styles the progress bar container element
  */
@@ -59,6 +64,7 @@ export class LinearProgressComponent extends BaseComponent implements ILinearPro
       LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,
       LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS,
       LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER,
+      LINEAR_PROGRESS_CONSTANTS.attributes.THEME,
       LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL
     ];
   }
@@ -82,6 +88,9 @@ export class LinearProgressComponent extends BaseComponent implements ILinearPro
       case LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER:
         this.buffer = coerceNumber(newValue);
         break;
+      case LINEAR_PROGRESS_CONSTANTS.attributes.THEME:
+        this.theme = newValue as LinearProgressTheme;
+        break;
       case LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL:
         this._foundation.ariaLabel = newValue;
         break;
@@ -96,4 +105,7 @@ export class LinearProgressComponent extends BaseComponent implements ILinearPro
 
   @FoundationProperty()
   public declare buffer: number;
+
+  @FoundationProperty()
+  public declare theme: LinearProgressTheme;
 }

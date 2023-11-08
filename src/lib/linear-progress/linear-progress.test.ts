@@ -123,4 +123,20 @@ describe('Linear Progress', () => {
 
     expect(rootElement.getAttribute('aria-label')).to.equal(expectedLabel);
   });
+
+  it('should set theme', async () => {
+    const el = await fixture<ILinearProgressComponent>(html`<forge-linear-progress></forge-linear-progress>`);
+
+    el.theme = 'secondary';
+
+    expect(el.theme).to.equal('secondary');
+    expect(el.getAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.THEME)).to.equal('secondary');
+  });
+
+  it('should set theme via attribute', async () => {
+    const el = await fixture<ILinearProgressComponent>(html`<forge-linear-progress theme="secondary"></forge-linear-progress>`);
+
+    expect(el.theme).to.equal('secondary');
+    expect(el.getAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.THEME)).to.equal('secondary');
+  });
 });

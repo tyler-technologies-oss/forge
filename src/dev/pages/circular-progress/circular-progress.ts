@@ -8,11 +8,7 @@ let determinateIntervalTimer: number | undefined;
 
 const showTrackToggle = document.getElementById('opt-show-track') as ISwitchComponent;
 showTrackToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  if (selected) {
-    circularProgress.style.removeProperty('--forge-circular-progress-track-background');
-  } else {
-    circularProgress.style.setProperty('--forge-circular-progress-track-background', 'transparent');
-  }
+  circularProgress.track = selected;
 });
 
 const showPercentToggle = document.getElementById('opt-show-percent') as ISwitchComponent;
@@ -22,11 +18,7 @@ showPercentToggle.addEventListener('forge-switch-change', ({ detail: selected })
 
 const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
 themeSelect.addEventListener('change', ({ detail }) => {
-  if (detail === 'tertiary') {
-    circularProgress.style.removeProperty('--forge-theme-tertiary');
-  } else {
-    circularProgress.style.setProperty('--forge-theme-tertiary', `var(--forge-theme-${detail})`);
-  }
+  circularProgress.theme = detail;
 });
 
 const determinateToggle = document.getElementById('opt-determinate') as ISwitchComponent;

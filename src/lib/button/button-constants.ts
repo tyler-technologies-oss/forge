@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}button`;
 
@@ -19,4 +19,4 @@ export const BUTTON_CONSTANTS = {
 };
 
 export type ButtonVariant = 'text' | 'raised' | 'outlined' | 'flat' | 'link';
-export type ButtonTheme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'danger' | 'info';
+export type ButtonTheme = Theme;

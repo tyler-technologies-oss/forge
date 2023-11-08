@@ -4,7 +4,7 @@ include('./src/partials/page.ejs', {
     title: 'Circular progress',
     includePath: './pages/circular-progress/circular-progress.ejs',
     options: [
-      {
+    {
         type: 'select',
         label: 'Theme',
         id: 'opt-theme',
@@ -12,7 +12,11 @@ include('./src/partials/page.ejs', {
         options: [
           { label: 'Primary', value: 'primary' },
           { label: 'Secondary', value: 'secondary' },
-          { label: 'Tertiary', value: 'tertiary' }
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
         ]
       },
       { type: 'text-field', label: 'Size', id: 'opt-size', defaultValue: '48px' },

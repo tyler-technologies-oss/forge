@@ -103,17 +103,28 @@
 /// 
 /// Example:
 /// ```sass
-/// #{override(tokens, color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
-/// #{override(tokens, color, red)}; // => --_component-name-color: red;
+/// #{override(component-name, tokens, color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
+/// #{override(component-name, tokens, color, red)}; // => --_component-name-color: red;
 /// ```
 /// 
+/// @param {String} $module - The module name.
 /// @param {String} $module-tokens - The available tokens.
 /// @param {String} $token - The token name to override.
 /// @param {String} $token-or-value - The token name (if exists) or value to point to.
 /// @param {Boolean} $type - The type of token this is. Valid values are `token` and `value`.
 /// 
 @mixin override($module, $module-tokens, $token, $token-or-value, $type: token) {
-  $value: if($type == 'token' and map.get($module-tokens, $token-or-value), module-var($module, $token-or-value), $token-or-value);
+  // When the "token" type is specified, we output a module-level CSS custom property override
+  // that points to the provided token. This ensures that the module is taking ownership of the
+  // token value (which breaks the global cascading of internal tokens) and the module can choose
+  // to provide its own token specific to that override.
+  //
+  // When the "value" type is specified, we output a global-level CSS custom property override
+  // that points to the provided value. This keeps the global cascading of internal tokens intact
+  // instead of just overriding the token to a specific unchangeable value.
+  $value: if($type == 'token' and map.has-key($module-tokens, $token-or-value),
+              module-var($module, $token-or-value),
+              create-var($module, $token, $token-or-value));
   #{create-module-var($module, $token)}: #{$value};
 }
 
