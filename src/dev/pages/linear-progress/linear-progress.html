@@ -13,6 +13,21 @@ include('./src/partials/page.ejs', {
           { label: 'Determinate', value: 'determinate' },
           { label: 'Buffer', value: 'buffer' }
         ]
+      },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'tertiary',
+        options: [
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
       }
     ]
   }

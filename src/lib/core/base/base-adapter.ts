@@ -11,7 +11,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean;
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
-  removeHostListener(event: string, callback: (event: Event) => void): void;
+  removeHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   removeWindowListener(event: string, callback: (event: Event) => void, options?: boolean | EventListenerOptions): void;
   addDocumentListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;

@@ -210,10 +210,9 @@ input[type=range] {
 }
 
 forge-focus-indicator {
-  /* stylelint-disable length-zero-no-unit */
   @include focus-indicator.provide-theme((
     shape: 50%,
-    outward-offset: 0px
+    outward-offset: 0px // Requires unit
   ));
 }
 

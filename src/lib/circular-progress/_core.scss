@@ -50,7 +50,8 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
   box-sizing: border-box;
   border-radius: 50%;
   border: solid calc(#{token(size)} * #{token(track-width)} / 100);
-  border-color: #{token(track-color)} #{token(track-color)} transparent transparent;
+  border-color: #{token(indicator-color)} #{token(indicator-color)} transparent transparent;
+  transition: border-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
   will-change: transform;
   animation: #{animation.$indeterminate-circle-animation};
   animation-iteration-count: infinite;
@@ -81,8 +82,9 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
 }
 
 @mixin determinate-progress {
-  transition: stroke-dashoffset 500ms #{animation.$determinate-easing};
-  stroke: #{token(track-color)};
+  transition: stroke-dashoffset 500ms #{animation.$determinate-easing},
+              stroke #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  stroke: #{token(indicator-color)};
 }
 
 @mixin determinate-track {
@@ -90,7 +92,8 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
 }
 
 @mixin determinate-track-background {
-  stroke: #{token(track-background)};
+  transition: stroke #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  stroke: #{token(track-color)};
 }
 
 @mixin determinate-spinner {

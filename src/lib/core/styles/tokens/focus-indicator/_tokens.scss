@@ -6,14 +6,13 @@
 @use '../../spacing';
 @use '../../utils';
 
-/* stylelint-disable length-zero-no-unit */
 $tokens: (
   active-width: utils.module-val(focus-indicator, active-width, 6px),
   color: utils.module-val(focus-indicator, color, theme.variable(primary)),
   duration: utils.module-val(focus-indicator, duration, animation.variable(duration-long4)),
   outward-offset: utils.module-val(focus-indicator, outward-offset, spacing.variable(xxsmall)),
   inward-offset: utils.module-val(focus-indicator, inward-offset, 0px), // Requires unit
-  shape: utils.module-val(focus-indicator, shape, shape.variable(extra-small)),
+  shape: utils.module-val(focus-indicator, shape, shape.variable(extra-small)), // Requires unit
   width: utils.module-val(focus-indicator, width, border.variable(medium)),
   easing: utils.module-val(focus-indicator, easing, animation.variable(easing-emphasized)),
   shape-start-start: utils.module-ref(focus-indicator, shape-start-start, shape),

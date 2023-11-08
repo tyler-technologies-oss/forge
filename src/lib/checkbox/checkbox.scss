@@ -142,11 +142,9 @@ forge-state-layer {
   ));
 }
 
-/* stylelint-disable length-zero-no-unit */
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
-    shape: 0px,
+    shape: 0px, // Requires unit
     outward-offset: 8px
   ));
 }
-/* stylelint-enable length-zero-no-unit */

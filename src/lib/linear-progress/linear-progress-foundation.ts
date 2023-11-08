@@ -1,17 +1,19 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { ILinearProgressAdapter } from './linear-progress-adapter';
-import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
+import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 
 export interface ICircularProgressFoundation extends ICustomElementFoundation {
   determinate: boolean;
   progress: number;
   buffer: number;
+  theme: LinearProgressTheme;
 }
 
 export class LinearProgressFoundation {
   private _determinate = false;
   private _progress = 0;
   private _buffer = 1;
+  private _theme: LinearProgressTheme = 'primary';
 
   constructor(private _adapter: ILinearProgressAdapter) {}
 
@@ -28,7 +30,7 @@ export class LinearProgressFoundation {
       this._adapter.setBuffer(this._determinate ? this._buffer : 1);
       this._adapter.setProgress(this._determinate ? this._progress : 0);
       this._adapter.setDeterminate(this._determinate);
-      this._adapter.toggleHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE, value);
+      this._adapter.toggleHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE, this._determinate);
     }
   }
 
@@ -41,7 +43,7 @@ export class LinearProgressFoundation {
       if (this._determinate) {
         this._adapter.setProgress(this._progress);
       }
-      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS, value.toString());
+      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS, this._progress.toString());
     }
   }
 
@@ -54,7 +56,17 @@ export class LinearProgressFoundation {
       if (this._determinate) {
         this._adapter.setBuffer(this._buffer);
       }
-      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER, value.toString());
+      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER, this._buffer.toString());
+    }
+  }
+
+  public get theme(): LinearProgressTheme {
+    return this._theme;
+  }
+  public set theme(value: LinearProgressTheme) {
+    if (this._theme !== value) {
+      this._theme = value;
+      this._adapter.toggleHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.THEME, !!this._theme, this._theme);
     }
   }
 }

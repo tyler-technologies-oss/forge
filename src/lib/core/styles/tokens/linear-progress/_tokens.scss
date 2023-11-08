@@ -5,14 +5,25 @@
 @use '../../utils';
 
 $tokens: (
+  // Track
   track-height: utils.module-val(linear-progress, track-height, 4px),
   track-color: utils.module-val(linear-progress, track-color, theme.variable(tertiary-container)),
-  active-indicator-color: utils.module-val(linear-progress, indicator-color, theme.variable(tertiary)),
   track-shape: utils.module-val(linear-progress, track-shape, shape.variable(full)),
-  active-indicator-height: utils.module-ref(linear-progress, indicator-height, track-height),
+
+  // Indicator
+  indicator-color: utils.module-val(linear-progress, indicator-color, theme.variable(tertiary)),
+  indicator-height: utils.module-ref(linear-progress, indicator-height, track-height),
+
+  // Determinate
   determinate-duration: utils.module-val(linear-progress, determinate-duration, animation.variable(duration-medium1)),
-  indeterminate-duration: utils.module-val(linear-progress, indeterminate-duration, 2s),
   determinate-easing: utils.module-val(linear-progress, determinate-easing, cubic-bezier(0.4, 0, 0.6, 1)),
+
+  // Indeterminate
+  indeterminate-duration: utils.module-val(linear-progress, indeterminate-duration, 2s),
+
+  // Theme
+  theme-transition-duration: utils.module-val(linear-progress, theme-transition-duration, animation.variable(duration-short3)),
+  theme-transition-timing: utils.module-val(linear-progress, theme-transition-timing, animation.variable(easing-standard)),
 ) !default;
 
 @function get($key) {

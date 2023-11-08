@@ -1,3 +1,4 @@
+@use '../core/styles/theme';
 @use './animations';
 @use './configuration';
 @use './core';
@@ -117,9 +118,29 @@ $rtl-selectors: (
   }
 }
 
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]) {
+    .forge-linear-progress {
+      @include override(indicator-color, theme.variable($theme));
+      @include override(track-color, theme.variable(#{$theme}-container));
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
 @media screen and (forced-colors: active) {
   .forge-linear-progress {
-    @include override(active-indicator-color, CanvasText, value);
+    @include override(indicator-color, CanvasText, value);
     @include override(track-color, GrayText, value);
 
     border: 1px solid CanvasText;
