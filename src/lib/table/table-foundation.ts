@@ -183,14 +183,12 @@ export class TableFoundation implements ITableFoundation {
     this._renderBody();
   }
   public get data(): any[] {
-    return JSON.parse(JSON.stringify(this._data));
+    return this._data.map(o => ({ ...o })); // Shallow clone
   }
 
   /** The column configuration options. */
   public set columnConfigurations(value: IColumnConfiguration[]) {
     // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-    //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-    //   function to the core library.
     this._columnConfigurations = value.map(cc => ({ ...cc }));
 
     // Update hidden column manager
@@ -206,8 +204,6 @@ export class TableFoundation implements ITableFoundation {
   }
   public get columnConfigurations(): IColumnConfiguration[] {
     // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-    //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-    //   function to the core library.
     return this._columnConfigurations.map(cc => ({ ...cc }));
   }
 
