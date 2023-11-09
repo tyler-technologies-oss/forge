@@ -158,6 +158,67 @@ describe('PaginatorComponent', function(this: ITestContext) {
       expect(this.context.previousPageButton.matches(':focus')).toBe(true);
     });
 
+    it('should move focus to appropriate action if element contains focus but state is set programmatically in response to change event', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageSize = 50;
+      this.context.paginator.offset = 0;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, ({ detail }: CustomEvent<IPaginatorChangeEvent>) => {
+        this.context.paginator.offset = detail.offset;
+      });
+      
+      await tick();
+      this.context.nextPageButton.focus();
+      this.context.nextPageButton.click();
+      await tick();
+
+      expect(this.context.previousPageButton.matches(':focus')).toBeTrue();
+    });
+
+    it('should move focus to appropriate action if element contains focus but state is set programmatically', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageSize = 50;
+      this.context.paginator.offset = 0;
+      
+      await tick();
+      this.context.nextPageButton.focus();
+      this.context.nextPageButton.click();
+      await tick();
+
+      expect(this.context.paginator.offset).toBe(50);
+      expect(this.context.previousPageButton.matches(':focus')).toBeTrue();
+
+      this.context.paginator.offset = 0;
+      await tick();
+
+      expect(this.context.nextPageButton.matches(':focus')).toBeTrue();
+    });
+
+    it('should keep focus if state is updated programmatically', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageSize = 25;
+      this.context.paginator.offset = 0;
+
+      await tick();
+
+      this.context.paginator.focus();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
+
+      this.context.paginator.offset = 25;
+      await tick();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
+
+      this.context.paginator.pageIndex = 0;
+      await tick();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
+
+      this.context.paginator.total = 200;
+      await tick();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
+    });
+
     it('should emit change event when clicking next page button', function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.paginator.total = 100;

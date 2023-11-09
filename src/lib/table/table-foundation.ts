@@ -105,6 +105,7 @@ export class TableFoundation implements ITableFoundation {
   private _rowDoubleClickListener: (evt: Event) => void;
   private _selectRowListener: (evt: Event) => void;
   private _selectAllListener: (evt: Event) => void;
+  private _sortableHeadCellKeydownListener: EventListener;
   private _headRowMouseDownListener: (evt: MouseEvent) => void;
   private _headRowContextMenuListener: (evt: MouseEvent) => void;
   private _documentMouseMoveListener: (evt: MouseEvent) => void;
@@ -132,6 +133,7 @@ export class TableFoundation implements ITableFoundation {
     this._rowDoubleClickListener = evt => this._onRowDoubleClick(evt);
     this._selectRowListener = evt => this._onRowSelected(evt);
     this._selectAllListener = evt => this._onSelectAll(evt);
+    this._sortableHeadCellKeydownListener = (evt: KeyboardEvent) => this._onSortableHeadCellKeydown(evt);
     this._headRowMouseDownListener = evt => this._onHeadRowMouseDown(evt);
     this._headRowContextMenuListener = evt => this._onHeadRowContextMenu(evt);
     this._documentMouseMoveListener = evt => this._onMouseMove(evt);
@@ -181,14 +183,12 @@ export class TableFoundation implements ITableFoundation {
     this._renderBody();
   }
   public get data(): any[] {
-    return JSON.parse(JSON.stringify(this._data));
+    return this._data.map(o => ({ ...o })); // Shallow clone
   }
 
   /** The column configuration options. */
   public set columnConfigurations(value: IColumnConfiguration[]) {
     // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-    //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-    //   function to the core library.
     this._columnConfigurations = value.map(cc => ({ ...cc }));
 
     // Update hidden column manager
@@ -204,8 +204,6 @@ export class TableFoundation implements ITableFoundation {
   }
   public get columnConfigurations(): IColumnConfiguration[] {
     // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-    //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-    //   function to the core library.
     return this._columnConfigurations.map(cc => ({ ...cc }));
   }
 
@@ -224,6 +222,7 @@ export class TableFoundation implements ITableFoundation {
       doubleClickListener: this._allowRowClick ? this._rowDoubleClickListener : null,
       selectListener: this._select ? this._selectRowListener : null,
       selectAllListener: this._multiselect ? this._selectAllListener : null,
+      sortableHeadCellKeydownListener: this._sortableHeadCellKeydownListener,
       headRowMouseDownListener: this._headRowMouseDownListener,
       headRowContextMenuListener: this._headRowContextMenuListener,
       filterListener: this._filter ? this._filterListener : null,
@@ -905,7 +904,11 @@ export class TableFoundation implements ITableFoundation {
   }
 
   private _onHeadRowContextMenu(evt: MouseEvent): void {
-    evt.preventDefault();
+    // We only handle this event on MacOS due to the `ctrl+click` combination triggering the contextmenu event...
+    // So we only detect that scenario here to still allow for the default context menu on Mac when right-clicking
+    if (evt.ctrlKey) {
+      evt.preventDefault();
+    }
   }
 
   private _onHeadRowMouseDown(evt: MouseEvent): void {
@@ -977,6 +980,16 @@ export class TableFoundation implements ITableFoundation {
     }
 
     this._headCellMouseDownIndex = undefined;
+  }
+
+  private _onSortableHeadCellKeydown(evt: KeyboardEvent): void {
+    if (evt.key === ' ' || evt.key === 'Enter') {
+      const composedPath = getEventPath(evt);
+      const rowElement = composedPath.find(el => el.tagName === 'TR') as HTMLTableRowElement;
+      const thElement = composedPath.find(el => el.tagName === 'TH') as HTMLTableCellElement;
+      const cellIndex = Array.from(rowElement.cells).findIndex(c => c === thElement);
+      this._onSort(cellIndex);
+    }
   }
 
   /**

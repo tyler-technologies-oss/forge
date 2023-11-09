@@ -501,8 +501,6 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     } else {
       this.optionsFactory = undefined;
       // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-      //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-      //   function to the core library.
       this._options = options.map(o => ({ ...o }));
       
       if (this._open) {
@@ -523,8 +521,6 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     }
 
     // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-    //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-    //   function to the core library.
     return this._flatOptions.map(o => ({ ...o }));
   }
 
