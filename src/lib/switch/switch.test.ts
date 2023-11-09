@@ -7,6 +7,7 @@ import { TestHarness } from '../../test/utils/test-harness';
 import { IFocusIndicatorComponent } from '../focus-indicator';
 import { IStateLayerComponent } from '../state-layer';
 import { ISwitchComponent, SWITCH_CONSTANTS } from '../switch';
+import { internals } from '../constants';
 
 class SwitchHarness extends TestHarness<ISwitchComponent> {
   public rootElement: HTMLElement;
@@ -340,7 +341,7 @@ describe('Switch', () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
 
     const switchEl = document.createElement('forge-switch');
-    const setFormValueSpy = spy(switchEl.internals, 'setFormValue');
+    const setFormValueSpy = spy(switchEl[internals], 'setFormValue');
     switchEl.name = 'test-switch';
     switchEl.toggleAttribute('on', true)
     form.appendChild(switchEl);

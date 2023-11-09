@@ -7,6 +7,7 @@ import { TestHarness } from '../../test/utils/test-harness';
 import { ISliderComponent } from '../slider';
 import { SLIDER_CONSTANTS } from './slider-constants';
 import type { IStateLayerComponent } from '../state-layer/state-layer';
+import { internals } from '../constants';
 
 import './slider';
 
@@ -550,7 +551,7 @@ describe('Slider', () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
 
     const slider = document.createElement('forge-slider');
-    const setFormValueSpy = spy(slider.internals, 'setFormValue');
+    const setFormValueSpy = spy(slider[internals], 'setFormValue');
     slider.name = 'test-slider';
     slider.setAttribute('value', '75');
     form.appendChild(slider);
@@ -574,7 +575,7 @@ describe('Slider', () => {
     const form = await fixture<HTMLFormElement>(html`<form name="test-form"></form>`);
 
     const slider = document.createElement('forge-slider');
-    const setFormValueSpy = spy(slider.internals, 'setFormValue');
+    const setFormValueSpy = spy(slider[internals], 'setFormValue');
     slider.range = true;
     slider.nameStart = 'test-slider-start';
     slider.nameEnd = 'test-slider-end';
