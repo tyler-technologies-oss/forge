@@ -295,7 +295,7 @@
           <span slot="secondary-text">22 Dec 2017</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
-        <forge-divider></forge-divider>
+        <forge-divider aria-hidden="true"></forge-divider>
         <forge-list-item>
           <forge-icon external name="folder" slot="avatar"></forge-icon>
           <span slot="primary-text">Potatoes</span>
@@ -329,7 +329,7 @@
             <forge-list-item>List Item Three</forge-list-item>
           </forge-list>
         </forge-expansion-panel>
-        <forge-divider></forge-divider>
+        <forge-divider aria-hidden="true"></forge-divider>
         <forge-expansion-panel>
           <forge-list-item slot="header">
             <forge-icon slot="leading" name="face"></forge-icon>
@@ -342,7 +342,7 @@
             <forge-list-item>List Item Three</forge-list-item>
           </forge-list>
         </forge-expansion-panel>
-        <forge-divider></forge-divider>
+        <forge-divider aria-hidden="true"></forge-divider>
         <forge-list-item>List Item Three</forge-list-item>
       </forge-list>
     </div>
@@ -354,21 +354,15 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <forge-checkbox slot="leading">
-            <input type="checkbox" checked aria-label="Select list item one" />
-          </forge-checkbox>
+          <forge-checkbox slot="leading" checked aria-label="Select list item one"></forge-checkbox>
           List Item
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading">
-            <input type="checkbox" aria-label="Select list item two" />
-          </forge-checkbox>
+          <forge-checkbox slot="leading" aria-label="Select list item two"></forge-checkbox>
           List Item
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading">
-            <input type="checkbox" aria-label="Select list item three" />
-          </forge-checkbox>
+          <forge-checkbox slot="leading" aria-label="Select list item three"></forge-checkbox>
           List Item
         </forge-list-item>
       </forge-list>
@@ -382,21 +376,15 @@
       <forge-list>
         <forge-list-item>
           List Item
-          <forge-checkbox slot="trailing">
-            <input type="checkbox" checked aria-label="Select list item one" />
-          </forge-checkbox>
+          <forge-checkbox slot="trailing" checked aria-label="Select list item one"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
           List Item
-          <forge-checkbox slot="trailing">
-            <input type="checkbox" aria-label="Select list item two" />
-          </forge-checkbox>
+          <forge-checkbox slot="trailing" aria-label="Select list item two"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
           List Item
-          <forge-checkbox slot="trailing">
-            <input type="checkbox" aria-label="Select list item three" />
-          </forge-checkbox>
+          <forge-checkbox slot="trailing" aria-label="Select list item three"></forge-checkbox>
         </forge-list-item>
       </forge-list>
     </div>
@@ -405,8 +393,8 @@
   <!-- List with Leading Radio Buttons -->
   <div>
     <h3 class="forge-typography--heading2">List with Leading Radio Buttons</h3>
-    <div class="list-demo">
-      <forge-list role="radiogroup" aria-label="Choose radio option">
+    <div class="list-demo" role="radiogroup">
+      <forge-list aria-label="Choose radio option">
         <forge-list-item>
           <forge-radio slot="leading">
             <input type="radio" name="list-radio" aria-label="Select list item one" />
@@ -432,8 +420,8 @@
   <!-- List with Trailing Radio Buttons -->
   <div>
     <h3 class="forge-typography--heading2">List with Trailing Radio Buttons</h3>
-    <div class="list-demo">
-      <forge-list role="radiogroup" aria-label="Choose radio option">
+    <div class="list-demo" role="radiogroup">
+      <forge-list aria-label="Choose radio option">
         <forge-list-item>
           List Item
           <forge-radio slot="trailing">
@@ -464,15 +452,15 @@
       <forge-list>
         <forge-list-item>
           List Item
-          <forge-switch slot="trailing"></forge-switch>
+          <forge-switch slot="trailing" aria-label="Toggle list item"></forge-switch>
         </forge-list-item>
         <forge-list-item>
           List Item
-          <forge-switch slot="trailing"></forge-switch>
+          <forge-switch slot="trailing" aria-label="Toggle list item"></forge-switch>
         </forge-list-item>
         <forge-list-item>
           List Item
-          <forge-switch slot="trailing"></forge-switch>
+          <forge-switch slot="trailing" aria-label="Toggle list item"></forge-switch>
         </forge-list-item>
       </forge-list>
     </div>
@@ -484,30 +472,18 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <forge-checkbox slot="leading">
-            <input type="checkbox" checked aria-label="Select list item one" />
-          </forge-checkbox>
-          <forge-checkbox slot="trailing">
-            <input type="checkbox" forge-ignore aria-label="Select list item one" />
-          </forge-checkbox>
+          <forge-checkbox slot="leading" checked aria-label="Select list item"></forge-checkbox>
+          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
           List Item
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading">
-            <input type="checkbox" aria-label="Select list item one" />
-          </forge-checkbox>
-          <forge-checkbox slot="trailing">
-            <input type="checkbox" forge-ignore aria-label="Select list item one" />
-          </forge-checkbox>
+          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
+          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
           List Item
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading">
-            <input type="checkbox" aria-label="Select list item one" />
-          </forge-checkbox>
-          <forge-checkbox slot="trailing">
-            <input type="checkbox" forge-ignore aria-label="Select list item one" />
-          </forge-checkbox>
+          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
+          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
           List Item
         </forge-list-item>
       </forge-list>
@@ -522,9 +498,9 @@
         <aside>
           <forge-list navlist>
             <forge-list-item>List Item One</forge-list-item>
-            <forge-divider></forge-divider>
+            <forge-divider aria-hidden="true"></forge-divider>
             <forge-list-item selected>List Item Two</forge-list-item>
-            <forge-divider></forge-divider>
+            <forge-divider aria-hidden="true"></forge-divider>
             <forge-list-item>List Item Three</forge-list-item>
           </forge-list>
         </aside>
