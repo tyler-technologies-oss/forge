@@ -1,3 +1,15 @@
+# v2.20.1 (Thu Nov 09 2023)
+
+#### 🐛 Bug Fix
+
+- fix: updated immutability patterns [#425](https://github.com/tyler-technologies-oss/forge/pull/425) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.20.0 (Fri Oct 27 2023)
 
 #### 🚀 Enhancement
