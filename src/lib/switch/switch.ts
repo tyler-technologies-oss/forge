@@ -1,16 +1,17 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-import { BaseFormComponent, IBaseFormComponent } from '../core';
+import { BaseNullableFormComponent, IBaseNullableFormComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SwitchAdapter } from './switch-adapter';
 import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 import { SwitchFoundation } from './switch-foundation';
+import { ILabelAware } from '../label/label-aware';
+import { internals } from '../constants';
 
 import template from './switch.html';
 import styles from './switch.scss';
-import { ILabelAware } from '../label/label-aware';
 
-export interface ISwitchComponent extends IBaseFormComponent, ILabelAware {
+export interface ISwitchComponent extends IBaseNullableFormComponent, ILabelAware {
   on: boolean;
   /**
    * @deprecated use `on` instead
@@ -21,6 +22,7 @@ export interface ISwitchComponent extends IBaseFormComponent, ILabelAware {
   icon: SwitchIconVisibility;
   labelPosition: SwitchLabelPosition;
   toggle(force?: boolean): void;
+  setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
 }
 
 declare global {
@@ -153,7 +155,7 @@ declare global {
     StateLayerComponent
   ]
 })
-export class SwitchComponent extends BaseFormComponent implements ISwitchComponent {
+export class SwitchComponent extends BaseNullableFormComponent implements ISwitchComponent {
   public static get observedAttributes(): string[] {
     return [
       SWITCH_CONSTANTS.attributes.ON,
@@ -170,11 +172,11 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   }
 
   public get form(): HTMLFormElement | null {
-    return this.internals.form;
+    return this[internals].form;
   }
 
   public get labels(): NodeList {
-    return this.internals.labels;
+    return this[internals].labels;
   }
 
   public get name(): string {
@@ -186,25 +188,25 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
 
   public get validity(): ValidityState {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.validity;
+    return this[internals].validity;
   }
 
   public get validationMessage(): string {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.validationMessage;
+    return this[internals].validationMessage;
   }
 
   public get willValidate(): boolean {
-    return this.internals.willValidate;
+    return this[internals].willValidate;
   }
 
-  public readonly internals: ElementInternals;
+  public readonly [internals]: ElementInternals;
   private readonly _foundation: SwitchFoundation;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles, true);
-    this.internals = this.attachInternals();
+    this[internals] = this.attachInternals();
     this._foundation = new SwitchFoundation(new SwitchAdapter(this));
   }
 
@@ -246,7 +248,7 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
   }
 
   public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
-    this.internals.setFormValue(value, state);
+    this[internals].setFormValue(value, state);
 
     if (state) {
       const stateValue = isString(state) ? state : state[this.name];
@@ -265,12 +267,12 @@ export class SwitchComponent extends BaseFormComponent implements ISwitchCompone
 
   public checkValidity(): boolean {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.checkValidity();
+    return this[internals].checkValidity();
   }
 
   public reportValidity(): boolean {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.reportValidity();
+    return this[internals].reportValidity();
   }
 
   public setCustomValidity(error: string): void {

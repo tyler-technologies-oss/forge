@@ -1,4 +1,5 @@
 import { getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
+import { internals } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { elementsOverlapping, isPointerOverElement } from '../core/utils/utils';
 import { ISliderComponent } from '../slider';
@@ -133,9 +134,9 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> {
       const data = new FormData();
       data.append(this._component.nameStart, String(valueStart));
       data.append(this._component.nameEnd, String(valueEnd));
-      this._component.internals.setFormValue(data);
+      this._component[internals].setFormValue(data);
     } else {
-      this._component.internals.setFormValue(String(valueEnd));
+      this._component[internals].setFormValue(String(valueEnd));
     }
   }
 

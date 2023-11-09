@@ -1,5 +1,6 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-import { BaseFormComponent, IBaseFormComponent } from '../core';
+import { internals } from '../constants';
+import { BaseNullableFormComponent, IBaseNullableFormComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { ILabelAware } from '../label/label-aware';
 import { StateLayerComponent } from '../state-layer/state-layer';
@@ -10,13 +11,14 @@ import { CheckboxFoundation } from './checkbox-foundation';
 import template from './checkbox.html';
 import styles from './checkbox.scss';
 
-export interface ICheckboxComponent extends IBaseFormComponent, ILabelAware {
+export interface ICheckboxComponent extends IBaseNullableFormComponent, ILabelAware {
   checked: boolean;
   defaultChecked: boolean;
   indeterminate: boolean;
   dense: boolean;
   labelPosition: CheckboxLabelPosition;
   toggle(force?: boolean): void;
+  setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
 }
 
 declare global {
@@ -112,7 +114,7 @@ declare global {
     StateLayerComponent
   ]
 })
-export class CheckboxComponent extends BaseFormComponent implements ICheckboxComponent {
+export class CheckboxComponent extends BaseNullableFormComponent implements ICheckboxComponent {
   public static get observedAttributes(): string[] {
     return [
       CHECKBOX_CONSTANTS.attributes.CHECKED,
@@ -135,34 +137,34 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
   }
 
   public get form(): HTMLFormElement | null {
-    return this.internals.form;
+    return this[internals].form;
   }
 
   public get labels(): NodeList {
-    return this.internals.labels;
+    return this[internals].labels;
   }
 
   public get validity(): ValidityState {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.validity;
+    return this[internals].validity;
   }
 
   public get validationMessage(): string {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.validationMessage;
+    return this[internals].validationMessage;
   }
 
   public get willValidate(): boolean {
-    return this.internals.willValidate;
+    return this[internals].willValidate;
   }
 
-  public readonly internals: ElementInternals;
+  public readonly [internals]: ElementInternals;
   private _foundation: CheckboxFoundation;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles, true);
-    this.internals = this.attachInternals();
+    this[internals] = this.attachInternals();
     this._foundation = new CheckboxFoundation(new CheckboxAdapter(this));
   }
 
@@ -203,7 +205,7 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
   }
 
   public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
-    this.internals.setFormValue(value, state);
+    this[internals].setFormValue(value, state);
 
     if (state) {
       const stateValue = isString(state) ? state : state[this.name];
@@ -223,12 +225,12 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
 
   public checkValidity(): boolean {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.checkValidity();
+    return this[internals].checkValidity();
   }
 
   public reportValidity(): boolean {
     this._foundation.syncValidity(this._hasCustomValidityError);
-    return this.internals.reportValidity();
+    return this[internals].reportValidity();
   }
 
   public setCustomValidity(error: string): void {

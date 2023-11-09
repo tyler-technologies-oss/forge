@@ -1,4 +1,5 @@
 import { getShadowElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
+import { internals } from '../constants';
 import { BaseAdapter, IBaseAdapter, INPUT_PROPERTIES, SlottedElementAdapter, cloneAttributes, cloneProperties, cloneValidationMessage, forwardAttributes } from '../core';
 import { StateLayerComponent } from '../state-layer';
 import { ISwitchComponent } from './switch';
@@ -138,27 +139,27 @@ export class SwitchAdapter extends BaseAdapter<ISwitchComponent> implements ISwi
 
   public syncValue(value: string | null): void {
     if (value === null) {
-      this._component.internals.setFormValue(null, SWITCH_CONSTANTS.state.OFF);
+      this._component[internals].setFormValue(null, SWITCH_CONSTANTS.state.OFF);
       return;
     }
 
     const data = new FormData();
     data.append(this._component.name, value);
-    this._component.internals.setFormValue(data, SWITCH_CONSTANTS.state.ON);
+    this._component[internals].setFormValue(data, SWITCH_CONSTANTS.state.ON);
   }
 
   public syncValidity(hasCustomValidityError: boolean): void {
     if (hasCustomValidityError) {
-      this._activeInputElement.setCustomValidity(this._component.internals.validationMessage);
+      this._activeInputElement.setCustomValidity(this._component[internals].validationMessage);
     } else {
       this._activeInputElement.setCustomValidity('');
     }
 
-    this._component.internals.setValidity(this._activeInputElement.validity, this._activeInputElement.validationMessage, this._activeInputElement);
+    this._component[internals].setValidity(this._activeInputElement.validity, this._activeInputElement.validationMessage, this._activeInputElement);
   }
 
   public setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void {
-    this._component.internals.setValidity(flags, message, this._activeInputElement);
+    this._component[internals].setValidity(flags, message, this._activeInputElement);
   }
 
   private _initializeInput(): void {
