@@ -19,8 +19,8 @@
   z-index: 0;
 
   box-sizing: border-box;
-  min-block-size: #{token(min-height)};
   min-inline-size: #{token(min-width)};
+  height: #{token(height)};
   inline-size: 100%;
   border-width: #{token(border-width)};
   border-style: #{token(border-style)};
@@ -38,6 +38,7 @@
   -webkit-appearance: none;
   vertical-align: middle;
   text-decoration: none;
+  white-space: nowrap;
 
   background: #{token(background)};
   color: #{token(color)};
@@ -108,7 +109,7 @@
 
 @mixin link {
   @include override(color, link-color);
-  @include override(min-height, link-min-height);
+  @include override(height, link-height);
   @include override(padding, link-padding);
   @include override(focus-indicator-offset, link-focus-indicator-offset);
 
@@ -154,7 +155,7 @@
 }
 
 @mixin dense {
-  @include override(min-height, dense-min-height);
+  @include override(height, dense-height);
 }
 
 @mixin pill {
