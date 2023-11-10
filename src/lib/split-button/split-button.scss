@@ -1,0 +1,103 @@
+@use './configuration';
+@use './token-utils' as *;
+@use '../button';
+@use '../focus-indicator';
+
+//
+// Host
+//
+
+:host {
+  @include configuration.configuration;
+}
+
+:host {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Button overrides
+//
+
+::slotted(*) {
+  @include button.provide-theme((
+    min-width: #{token(min-width)},
+    focus-indicator-offset: #{token(focus-indicator-offset)}
+  ));
+}
+
+::slotted(:first-child) {
+  @include button.provide-theme((
+    border-top-right-radius: 0,
+    border-bottom-right-radius: 0
+  ));
+
+  @include focus-indicator.provide-theme((
+    shape-start-end: 0,
+    shape-end-end: 0,
+    offset-inline: 0 #{token(focus-indicator-offset-adjusted, custom)}
+  ));
+}
+
+::slotted(:not(:first-child):not(:last-child)) {
+  @include button.provide-theme(( shape: 0 ));
+
+  @include focus-indicator.provide-theme((
+    shape: 0,
+    offset-inline: #{token(focus-indicator-offset-adjusted, custom)}
+  ));
+}
+
+::slotted(:last-child) {
+  @include button.provide-theme((
+    border-top-left-radius: 0,
+    border-bottom-left-radius: 0
+  ));
+
+
+  @include focus-indicator.provide-theme((
+    shape-start-start: 0,
+    shape-end-start: 0,
+    offset-inline: #{token(focus-indicator-offset-adjusted, custom)} 0
+  ));
+}
+
+//
+// Flat & Raised
+//
+
+:host(:is([variant=flat], [variant=raised], :not([variant]))) {
+  ::slotted(:not(:last-child)) {
+    margin-inline-end: #{token(gap)};
+  }
+}
+
+//
+// Outlined
+//
+
+:host([variant=outlined]) {
+  ::slotted(:not(:first-child)) {
+    margin-inline-start: calc(-1 * #{token(gap)});
+  }
+
+  @include override(focus-indicator-divider-offset, 0px); // Required unit
+}
+
+//
+// Disabled
+//
+
+:host(:is([variant=flat], [variant=raised], :not([variant]))[disabled]) {
+  ::slotted(:not(:last-child)) {
+    &::after {
+      @include override(divider-color, disabled-divider-color);
+    }
+  }
+}

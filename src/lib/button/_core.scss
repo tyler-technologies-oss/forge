@@ -38,6 +38,7 @@
   -webkit-appearance: none;
   vertical-align: middle;
   text-decoration: none;
+  white-space: nowrap;
 
   background: #{token(background)};
   color: #{token(color)};

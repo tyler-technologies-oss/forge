@@ -1,0 +1,25 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Split button',
+    includePath: './pages/split-button/split-button.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Variant',
+        id: 'opt-variant',
+        defaultValue: 'text',
+        options: [
+          { value: 'text', label: 'Text (default)' },
+          { value: 'flat', label: 'Flat' },
+          { value: 'raised', label: 'Raised' },
+          { value: 'outlined', label: 'Outlined' }
+        ]
+      },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Dense', id: 'opt-dense' },
+      { type: 'switch', label: 'Pill', id: 'opt-pill' }
+    ]
+  }
+})
+%>
