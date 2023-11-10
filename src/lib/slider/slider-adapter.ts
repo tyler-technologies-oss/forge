@@ -35,7 +35,7 @@ export interface ISliderAdapter extends IBaseAdapter {
   setEndAriaLabel(value: string | null): void;
 }
 
-export class SliderAdapter extends BaseAdapter<ISliderComponent> {
+export class SliderAdapter extends BaseAdapter<ISliderComponent> implements ISliderAdapter {
   private readonly _rootElement: HTMLElement;
   private readonly _trackElement: HTMLElement;
   private readonly _handleContainerElement: HTMLElement;

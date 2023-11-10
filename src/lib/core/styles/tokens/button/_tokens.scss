@@ -20,7 +20,7 @@ $tokens: (
   shape: utils.module-val(button, shape, shape.variable(medium)),
 
   // Base
-  height: utils.module-val(button, height, 36px),
+  min-height: utils.module-val(button, min-height, 36px),
   min-width: utils.module-val(button, min-width, 64px),
   spacing: utils.module-val(button, spacing, spacing.variable(xsmall)),
   border-width: utils.module-val(button, border-width, medium),
@@ -70,7 +70,7 @@ $tokens: (
   // Link
   link-color: utils.module-ref(button, link-color, primary-color),
   link-text-decoration: utils.module-val(button, link-text-decoration, underline),
-  link-height: utils.module-val(button, link-height, auto),
+  link-min-height: utils.module-val(button, link-min-height, auto),
   link-padding: utils.module-val(button, link-padding, 0),
   link-line-height: utils.module-val(button, link-line-height, normal),
   link-width: utils.module-val(button, link-width, auto),
@@ -87,7 +87,7 @@ $tokens: (
   disabled-shadow: utils.module-val(button, disabled-shadow, none),
 
   // Dense
-  dense-height: utils.module-val(button, dense-height, 24px),
+  dense-min-height: utils.module-val(button, dense-min-height, 24px),
 
   // Pill
   pill-shape: utils.module-val(button, pill-shape, shape.variable(full)),

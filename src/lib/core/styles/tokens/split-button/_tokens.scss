@@ -1,0 +1,16 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../border';
+@use '../button/tokens' as button;
+
+$tokens: (
+  min-width: utils.module-val(split-button, min-width, 0),
+  gap: utils.module-val(split-button, gap, border.variable(thin)),
+
+  focus-indicator-offset: utils.module-val(split-button, focus-indicator-offset, button.get(focus-indicator-offset)),
+  focus-indicator-divider-offset: utils.module-ref(split-button, focus-indicator-divider-offset, gap)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
