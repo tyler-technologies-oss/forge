@@ -1,6 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/split-button';
 import { IconRegistry } from '@tylertech/forge/icon';
+import { ButtonTheme } from '@tylertech/forge/button';
 import type { ISplitButtonComponent, SplitButtonVariant } from '@tylertech/forge/split-button';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
@@ -20,6 +21,11 @@ splitMenu.options = [
 const variantSelect = document.querySelector('#opt-variant') as ISelectComponent;
 variantSelect.addEventListener('change', ({ detail: variant }: CustomEvent<SplitButtonVariant>) => {
   getSplitButtons().forEach(splitButton => splitButton.variant = variant);
+});
+
+const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;
+themeSelect.addEventListener('change', ({ detail: theme }: CustomEvent<ButtonTheme>) => {
+  getSplitButtons().forEach(splitButton => splitButton.theme = theme);
 });
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;

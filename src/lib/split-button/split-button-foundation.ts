@@ -1,16 +1,19 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { ButtonTheme } from '../button/button-constants';
 import { ISplitButtonAdapter } from './split-button-adapter';
-import { DEFAULT_VARIANT, SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
+import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
 
 export interface ISplitButtonFoundation extends ICustomElementFoundation {
   variant: SplitButtonVariant;
+  theme: ButtonTheme;
   disabled: boolean;
   dense: boolean;
   pill: boolean;
 }
 
 export class SplitButtonFoundation implements ISplitButtonFoundation {
-  private _variant: SplitButtonVariant = DEFAULT_VARIANT;
+  private _variant: SplitButtonVariant = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT;
+  public _theme: ButtonTheme = SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
   private _disabled = false;
   private _dense = false;
   private _pill = false;
@@ -21,6 +24,7 @@ export class SplitButtonFoundation implements ISplitButtonFoundation {
     this._adapter.startButtonObserver();
 
     this._adapter.setVariant(this._variant);
+    this._adapter.setTheme(this._theme);
     this._adapter.setDisabled(this._disabled);
     this._adapter.setDense(this._dense);
     this._adapter.setPill(this._pill);
@@ -35,9 +39,20 @@ export class SplitButtonFoundation implements ISplitButtonFoundation {
   }
   public set variant(value: SplitButtonVariant) {
     if (this._variant !== value) {
-      this._variant = value ?? DEFAULT_VARIANT;
+      this._variant = value ?? SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT;
       this._adapter.setVariant(value);
       this._adapter.setHostAttribute(SPLIT_BUTTON_CONSTANTS.attributes.VARIANT, this._variant);
+    }
+  }
+
+  public get theme(): ButtonTheme {
+    return this._theme;
+  }
+  public set theme(value: ButtonTheme) {
+    if (this._theme !== value) {
+      this._theme = value ?? SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+      this._adapter.setTheme(this._theme);
+      this._adapter.setHostAttribute(SPLIT_BUTTON_CONSTANTS.attributes.THEME, this._theme);
     }
   }
 

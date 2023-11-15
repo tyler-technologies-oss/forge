@@ -1,0 +1,101 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../animation';
+@use '../../shape';
+@use '../../spacing';
+@use '../../elevation';
+@use '../../typography';
+@use '../../theme';
+
+$tokens: (
+  // General
+  display: utils.module-val(icon-button, display, inline-flex),
+  size: utils.module-val(icon-button, size, 48px),
+  gap: utils.module-val(icon-button, spacing, 0),
+  icon-color: utils.module-val(icon-button, icon-color, inherit),
+  background-color: utils.module-val(icon-button, background-color, none),
+  icon-size: utils.module-val(icon-button, icon-size, typography.font-size-relative('1500')),
+  cursor: utils.module-val(icon-button, cursor, pointer),
+  padding: utils.module-val(icon-button, padding, spacing.variable(xxsmall)),
+  border: utils.module-val(icon-button, border, none),
+  shadow: utils.module-val(icon-button, shadow, none),
+
+  // Animation
+  transition-duration: utils.module-val(icon-button, transition-duration, animation.variable(duration-short3)),
+  transition-timing: utils.module-val(icon-button, transition-timing, animation.variable(easing-standard)),
+  
+  // Shape
+  shape: utils.module-val(icon-button, shape, shape.variable(full)),
+  shape-start-start: utils.module-ref(icon-button, shape-start-start, shape),
+  shape-start-end: utils.module-ref(icon-button, shape-start-end, shape),
+  shape-end-start: utils.module-ref(icon-button, shape-end-start, shape),
+  shape-end-end: utils.module-ref(icon-button, shape-end-end, shape),
+  shape-squared: utils.module-val(icon-button, shape-squared, shape.variable(medium)),
+
+  // Outlined
+  outlined-border-width: utils.module-val(icon-button, outlined-border-width, 1px),
+  outlined-border-style: utils.module-val(icon-button, outlined-border-style, solid),
+  outlined-border-color: utils.module-ref(icon-button, outlined-border-color, icon-color),
+
+  // Tonal
+  tonal-icon-color: utils.module-val(icon-button, tonal-icon-color, theme.variable(on-primary-container)),
+  tonal-background-color: utils.module-val(icon-button, tonal-background-color, theme.variable(primary-container)),
+
+  // Filled
+  filled-icon-color: utils.module-val(icon-button, filled-icon-color, theme.variable(on-primary)),
+  filled-background-color: utils.module-val(icon-button, filled-background-color, theme.variable(primary)),
+
+  // Raised
+  raised-shadow: utils.module-val(icon-button, raised-shadow, elevation.value(2)),
+  raised-hover-shadow: utils.module-val(icon-button, raised-hover-shadow, elevation.value(4)),
+  raised-active-shadow: utils.module-val(icon-button, raised-active-shadow, elevation.value(8)),
+  raised-disabled-shadow: utils.module-val(icon-button, raised-disabled-shadow, none),
+
+  // Density - small
+  density-small-size: utils.module-val(icon-button, density-small-size, 24px),
+  density-small-padding: utils.module-val(icon-button, density-small-padding, spacing.variable(xxxsmall)),
+  density-small-icon-size: utils.module-val(icon-button, density-small-icon-size, typography.font-size-relative('1125')),
+
+  // Density - medium
+  density-medium-size: utils.module-val(icon-button, density-medium-size, 36px),
+  density-medium-padding: utils.module-val(icon-button, density-medium-padding, spacing.variable(xxsmall)),
+
+  // Density - large (default)
+  density-large-size: utils.module-ref(icon-button, density-large-size, size),
+
+  // Toggle (on)
+  toggle-on-icon-color: utils.module-val(icon-button, toggle-on-icon-color, theme.variable(primary)),
+
+  // Toggle (on) outlined
+  outlined-toggle-on-background-color: utils.module-val(icon-button, outlined-toggle-on-background-color, theme.variable(primary-container-low)),
+  outlined-toggle-on-icon-color: utils.module-val(icon-button, outlined-toggle-on-icon-color, theme.variable(primary)),
+
+  // Toggle tonal
+  tonal-toggle-background-color: utils.module-val(icon-button, tonal-toggle-background-color, theme.variable(surface-container-low)),
+
+  // Toggle (on) tonal
+  tonal-toggle-on-background-color: utils.module-val(icon-button, tonal-toggle-on-background-color, theme.variable(primary-container)),
+  tonal-toggle-on-icon-color: utils.module-val(icon-button, tonal-toggle-on-icon-color, theme.variable(primary)),
+
+  // Toggle filled
+  filled-toggle-background-color: utils.module-val(icon-button, filled-toggle-background-color, theme.variable(surface-container-low)),
+  filled-toggle-icon-color: utils.module-val(icon-button, filled-toggle-background-color, theme.variable(primary)),
+
+  // Toggle (on) filled
+  filled-toggle-on-background-color: utils.module-val(icon-button, filled-toggle-on-background-color, theme.variable(primary)),
+  filled-toggle-on-icon-color: utils.module-val(icon-button, filled-toggle-on-icon-color, theme.variable(on-primary)),
+
+  // Disabled
+  disabled-cursor: utils.module-val(icon-button, disabled-cursor, not-allowed),
+  disabled-opacity: utils.module-val(icon-button, disabled-opacity, theme.emphasis(medium-low)),
+
+  // Popover icon
+  popover-icon-padding: utils.module-val(icon-button, popover-icon-padding, spacing.variable(xsmall)),
+
+  // Focus indicator
+  focus-indicator-color: utils.module-val(icon-button, focus-indicator-color, theme.variable(primary))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

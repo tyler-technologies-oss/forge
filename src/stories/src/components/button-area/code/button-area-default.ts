@@ -8,12 +8,10 @@ export const ButtonAreaDefaultCodeHtml = () => {
         <span>Heading</span>
         <span>Content</span>
       </div>
-      <forge-icon-button>
-        <button type="button" aria-label="Favorite">
-          <forge-icon name="favorite"></forge-icon>
-        </button>
-        <forge-tooltip>Favorite</forge-tooltip>
+      <forge-icon-button aria-label="Favorite">
+        <forge-icon name="favorite"></forge-icon>
       </forge-icon-button>
+      <forge-tooltip>Favorite</forge-tooltip>
       <forge-icon name="chevron_right"></forge-icon>
     </div>
   <forge-button-area>
@@ -54,12 +52,10 @@ export const ButtonAreaInExpansionPanelCodeHtml = () => {
           <span>Heading</span>
           <span>Content</span>
         </div>
-        <forge-icon-button>
-          <button type="button" aria-label="Favorite">
-            <forge-icon name="favorite"></forge-icon>
-          </button>
-          <forge-tooltip>Favorite</forge-tooltip>
+        <forge-icon-button aria-label="Favorite">
+          <forge-icon name="favorite"></forge-icon>
         </forge-icon-button>
+        <forge-tooltip>Favorite</forge-tooltip>
         <forge-open-icon></forge-open-icon>
       </div>
     <forge-button-area>

@@ -6,6 +6,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFavorite, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import '@tylertech/forge/button';
+import '@tylertech/forge/label';
 import './button.scss';
 
 IconRegistry.define([tylIconForgeLogo, tylIconFavorite, tylIconOpenInNew]);

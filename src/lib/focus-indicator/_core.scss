@@ -18,7 +18,7 @@
 }
 
 @mixin circular {
-  @include override(shape, 50%);
+  @include override(shape, 50%, value);
 }
 
 @mixin outward {

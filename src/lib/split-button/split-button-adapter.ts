@@ -1,9 +1,11 @@
-import { ButtonVariant, BUTTON_CONSTANTS, IButtonComponent } from '../button';
+import { ButtonTheme, BUTTON_CONSTANTS, IButtonComponent } from '../button';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ISplitButtonComponent } from './split-button';
+import { SplitButtonVariant } from './split-button-constants';
 
 export interface ISplitButtonAdapter extends IBaseAdapter {
-  setVariant(variant: ButtonVariant): void;
+  setVariant(variant: SplitButtonVariant): void;
+  setTheme(theme: ButtonTheme): void;
   setDisabled(value: boolean): void;
   setDense(value: boolean): void;
   setPill(value: boolean): void;
@@ -41,6 +43,7 @@ export class SplitButtonAdapter extends BaseAdapter<ISplitButtonComponent> imple
      
       addedButtons.forEach(button => {
         button.variant = this._component.variant;
+        button.theme = this._component.theme;
         button.disabled = this._component.disabled;
         button.dense = this._component.dense;
       });
@@ -55,9 +58,14 @@ export class SplitButtonAdapter extends BaseAdapter<ISplitButtonComponent> imple
     this._buttonChangeObserver = undefined;
   }
 
-  public setVariant(variant: ButtonVariant): void {
+  public setVariant(variant: SplitButtonVariant): void {
     const buttons = this._getButtons();
     buttons.forEach(button => button.variant = variant);
+  }
+
+  public setTheme(theme: ButtonTheme): void {
+    const buttons = this._getButtons();
+    buttons.forEach(button => button.theme = theme);
   }
 
   public setDisabled(value: boolean): void {

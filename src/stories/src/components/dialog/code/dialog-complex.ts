@@ -2,10 +2,8 @@ export const DialogComplexCodeHtml = () => `
 <template id="dialog-content">
   <forge-toolbar forge-dialog-move-target>
     <h2 class="forge-dialog__title">Discard draft?</h2>
-    <forge-icon-button slot="end">
-      <button id="complex-dialog-close-button" type="button" aria-label="Close complex dialog">
-        <forge-icon name="close"></forge-icon>
-      </button>
+    <forge-icon-button slot="end" id="complex-dialog-close-button" aria-label="Close complex dialog">
+      <forge-icon name="close"></forge-icon>
     </forge-icon-button>
   </forge-toolbar>
 

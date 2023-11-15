@@ -12,7 +12,8 @@ export interface IBaseButtonFoundation extends ICustomElementFoundation {
   download: string;
   rel: string;
   dense: boolean;
-  click(): void;
+  click(options: { animateStateLayer: boolean }): void;
+  proxyLabel(label: string | null): void;
 }
 
 export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> implements IBaseButtonFoundation {
@@ -54,15 +55,27 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   /**
    * Handles overriding the the `click()` method on the HTMLElement instance
    */
-  public click(): void {
+  public click({ animateStateLayer = false } = {}): void {
+    if (this._disabled) {
+      return;
+    }
+
     if (this._anchor) {
       this._adapter.clickAnchor();
     } else {
       this._adapter.clickHost();
     }
+
+    if (animateStateLayer) {
+      this._adapter.animateStateLayer();
+    }
   }
 
-  private async _onClick(evt: MouseEvent): Promise<void> {
+  public proxyLabel(label: string | null): void {
+    this._adapter.proxyLabel(label);
+  }
+
+  protected async _onClick(evt: MouseEvent): Promise<void> {
     const isFormType = this._type === 'submit' || this._type === 'reset';
 
     // Custom elements do not work with the popover* attributes by default so we need to manually
@@ -128,6 +141,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
       this.disabled = false; // Anchor elements are always enabled
     } else {
       this._adapter.removeAnchor();
+      this._manageAnchorListeners();
     }
   }
 
@@ -158,7 +172,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     // If we're in anchor mode, we need to ensure that the anchor is always enabled
     if (this._anchor) {
       if (this._disabled) {
-        this._adapter.ensureAnchorEnabled(false);
+        this._adapter.syncDisabled(false);
       }
       value = false;
     }

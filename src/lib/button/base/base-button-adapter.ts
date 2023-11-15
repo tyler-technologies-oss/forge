@@ -6,7 +6,7 @@ import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
 import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
-import { internals } from '../../constants';
+import { internals, isFocusable } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
 
 // TODO: remove this augmentation when the TypeScript version is upgraded for latest DOM typings
@@ -27,7 +27,7 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   setAnchorDownload(value: string): void;
   setAnchorRel(value: string): void;
   setDisabled(value: boolean): void;
-  ensureAnchorEnabled(value: boolean): void;
+  syncDisabled(value: boolean): void;
   clickAnchor(): void;
   clickHost(): void;
   clickFormButton(type: string): void;
@@ -36,6 +36,8 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   hasPopoverTarget(): boolean;
   managePopover(): boolean;
   toggleDefaultPopoverIcon(value: boolean): void;
+  animateStateLayer(): void;
+  proxyLabel(value: string | null): void;
 }
 
 export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> implements IBaseButtonAdapter {
@@ -44,6 +46,8 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   protected _focusIndicatorElement: IFocusIndicatorComponent;
   protected _stateLayerElement: IStateLayerComponent;
   protected _endSlotElement: HTMLSlotElement;
+
+  private _labelAwareText?: string;
 
   constructor(component: IBaseButton) {
     super(component);
@@ -97,10 +101,10 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     if (this._anchorElement) {
       return; // Cannot disable an anchor element
     }
-    this.ensureAnchorEnabled(value);
+    this.syncDisabled(value);
   }
 
-  public ensureAnchorEnabled(value: boolean): void {
+  public syncDisabled(value: boolean): void {
     if (value) {
       this._focusIndicatorElement.remove();
       this._stateLayerElement.remove();
@@ -108,7 +112,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
     }
 
-    this._component.tabIndex = value ? -1 : 0;
+    this._component[isFocusable] = !value;
     toggleAttribute(this._component, value, 'aria-disabled', 'true');
   }
 
@@ -243,6 +247,19 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     }
   }
 
+  public animateStateLayer(): void {
+    if (this._stateLayerElement.disabled) {
+      return;
+    }
+    this._stateLayerElement?.playAnimation();
+  }
+
+  public proxyLabel(value: string | null): void {
+    this._labelAwareText = value ?? undefined;
+    const hasAriaLabel = this._component.hasAttribute('aria-label') || !!this._labelAwareText;
+    toggleAttribute(this._component, hasAriaLabel, 'aria-label', this._component.getAttribute('aria-label') ?? this._labelAwareText);
+  }
+
   private _locatePopoverTargetElement(): TempHTMLElementWithPopover | null {
     let popoverElement = (this._component as TempHTMLElementWithPopover).popoverTargetElement ?? null;
 
@@ -267,8 +284,8 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       // Set default role based on the existence of an anchor element
       this._component.role = this._anchorElement ? 'link' : 'button';
     }
-    
-    this._component.tabIndex = !this._anchorElement && this._component.disabled ? -1 : 0;
+
+    this._component[isFocusable] = this._anchorElement || !this._component.disabled;
   }
 
   /**

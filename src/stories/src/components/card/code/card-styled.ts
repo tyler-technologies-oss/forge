@@ -5,9 +5,7 @@ export const CardStyledCodeHtml = () => {
     <div class="forge-card-header-container">
       <h3 class="forge-typography--heading4">This is the card title</h3>
       <forge-icon-button>
-        <button type="button">
-          <forge-icon name="more_vert"></forge-icon>
-        </button>
+        <forge-icon name="more_vert"></forge-icon>
       </forge-icon-button>
     </div>
 

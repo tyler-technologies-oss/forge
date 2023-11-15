@@ -228,25 +228,17 @@ function headerBuilderCallback(): HTMLElement {
   const textField = document.createElement('forge-text-field');
   textField.appendChild(input);
 
-  const button = document.createElement('button');
+  const button = document.createElement('forge-icon-button');
   button.style.marginLeft = '8px';
   button.type = 'button';
-  button.addEventListener('click', () => {
-    autocomplete.open = false;
-  });
+  button.addEventListener('click', () => autocomplete.open = false);
 
   const icon = document.createElement('forge-icon');
   icon.name = 'close';
   button.appendChild(icon);
-
-  const iconButton = document.createElement('forge-icon-button');
-  iconButton.appendChild(button);
-  window.requestAnimationFrame(() => {
-    iconButton.layout();
-  });
   
   div.appendChild(textField);
-  div.appendChild(iconButton);
+  div.appendChild(button);
 
   return div;
 }

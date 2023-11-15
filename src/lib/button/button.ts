@@ -80,10 +80,10 @@ declare global {
  * @cssproperty --forge-button-border-width - The border-width of the button.
  * @cssproperty --forge-button-border-style - The border style of the button.
  * @cssproperty --forge-button-border-color - The border color of the button.
- * @cssproperty --forge-button-border-top-left-radius - The border top left radius of the button.
- * @cssproperty --forge-button-border-top-right-radius - The border top right radius of the button.
- * @cssproperty --forge-button-border-bottom-left-radius - The border bottom left radius of the button.
- * @cssproperty --forge-button-border-bottom-right-radius - The border bottom right radius of the button.
+ * @cssproperty --forge-button-shape-start-start-radius - The shape start start radius of the button.
+ * @cssproperty --forge-button-shape-start-end-radius - The shape start end radius of the button.
+ * @cssproperty --forge-button-shape-end-start-radius - The shape end start radius of the button.
+ * @cssproperty --forge-button-shape-end-end-radius - The shape end end radius of the button.
  * @cssproperty --forge-button-padding-block - The padding block of the button.
  * @cssproperty --forge-button-padding-inline - The padding inline of the button.
  * @cssproperty --forge-button-background - The background color of the button.
@@ -136,6 +136,10 @@ declare global {
  * @csspart root - The root container element.
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
+ * 
+ * @slot - This is a default/unnamed slot for the label text.
+ * @slot start - Elements to logically render before the label text.
+ * @slot end - Elements to logically render after the label text.
  */
 @CustomElement({
   name: BUTTON_CONSTANTS.elementName,

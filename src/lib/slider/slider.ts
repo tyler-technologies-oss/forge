@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
 import { internals } from '../constants';
-import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-component';
+import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-form-component';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SliderAdapter } from './slider-adapter';
@@ -10,7 +10,7 @@ import { SliderFoundation } from './slider-foundation';
 import template from './slider.html';
 import styles from './slider.scss';
 
-export interface ISliderComponent extends IBaseFormComponent<number, string | Array<[string, string]> | null> {
+export interface ISliderComponent extends IBaseFormComponent<number> {
   valueStart: number;
   valueEnd: number;
   label: string;

@@ -1,6 +1,7 @@
 @use './configuration';
 @use './token-utils' as *;
 @use '../button';
+@use '../icon-button';
 @use '../focus-indicator';
 
 //
@@ -34,8 +35,8 @@
 
 ::slotted(:first-child) {
   @include button.provide-theme((
-    border-top-right-radius: 0,
-    border-bottom-right-radius: 0
+    shape-start-end-radius: 0,
+    shape-end-end-radius: 0
   ));
 
   @include focus-indicator.provide-theme((
@@ -56,10 +57,9 @@
 
 ::slotted(:last-child) {
   @include button.provide-theme((
-    border-top-left-radius: 0,
-    border-bottom-left-radius: 0
+    shape-start-start-radius: 0,
+    shape-end-start-radius: 0
   ));
-
 
   @include focus-indicator.provide-theme((
     shape-start-start: 0,
@@ -68,15 +68,6 @@
   ));
 }
 
-//
-// Flat & Raised
-//
-
-:host(:is([variant=flat], [variant=raised], :not([variant]))) {
-  ::slotted(:not(:last-child)) {
-    margin-inline-end: #{token(gap)};
-  }
-}
 
 //
 // Outlined
@@ -87,17 +78,15 @@
     margin-inline-start: calc(-1 * #{token(gap)});
   }
 
-  @include override(focus-indicator-divider-offset, 0px); // Required unit
+  @include override(focus-indicator-divider-offset, 0px, value); // Required unit
 }
 
 //
-// Disabled
+// Tonal, Filled, and Raised
 //
 
-:host(:is([variant=flat], [variant=raised], :not([variant]))[disabled]) {
+:host(:is([variant=tonal],[variant=filled],[variant=raised],:not([variant]))) {
   ::slotted(:not(:last-child)) {
-    &::after {
-      @include override(divider-color, disabled-divider-color);
-    }
+    margin-inline-end: #{token(gap)};
   }
 }

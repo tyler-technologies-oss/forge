@@ -1,9 +1,11 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { BaseFocusableComponent } from '../../core/base/base-focusable-component';
 import { internals } from '../../constants';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IBaseComponent } from '../../core/base/base-component';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BaseButtonFoundation } from './base-button-foundation';
+import { ILabelAware } from '../../label/label-aware';
 
 export interface IBaseButton extends IBaseComponent {
   type: ButtonType;
@@ -20,7 +22,7 @@ export interface IBaseButton extends IBaseComponent {
   form: HTMLFormElement | null;
 }
 
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseComponent implements IBaseButton {
+export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseFocusableComponent implements IBaseButton, ILabelAware {
   public static readonly formAssociated = true;
 
   public [internals]: ElementInternals;
@@ -32,11 +34,12 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
     this[internals] = this.attachInternals();
   }
 
-  public connectedCallback(): void {
+  public override connectedCallback(): void {
+    super.connectedCallback();
     this._foundation.initialize();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case BASE_BUTTON_CONSTANTS.observedAttributes.TYPE:
         this.type = newValue as ButtonType;
@@ -66,6 +69,15 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
         this.dense = coerceBoolean(newValue);
         break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
+  }
+
+  public labelClickedCallback(): void {
+    this._foundation.click({ animateStateLayer: true });
+  }
+
+  public labelChangedCallback(value: string | null): void {
+    this._foundation.proxyLabel(value);
   }
 
   public get form(): HTMLFormElement | null {
@@ -114,6 +126,6 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   public declare dense: boolean;
 
   public override click(): void {
-    this._foundation.click();
+    this._foundation.click({ animateStateLayer: true });
   }
 }
