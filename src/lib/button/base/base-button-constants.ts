@@ -7,7 +7,8 @@ const observedAttributes = {
   TARGET: 'target',
   DOWNLOAD: 'download',
   REL: 'rel',
-  DENSE: 'dense'
+  DENSE: 'dense',
+  TABINDEX: 'tabindex'
 };
 
 const attributes = {

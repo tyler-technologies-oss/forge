@@ -1,5 +1,4 @@
 @use 'sass:map';
-@use '../color-palette';
 @use '../../animation';
 @use '../../border';
 @use '../../elevation';
@@ -26,10 +25,10 @@ $tokens: (
   border-width: utils.module-val(button, border-width, medium),
   border-style: utils.module-val(button, border-style, none),
   border-color: utils.module-val(button, border-color, currentColor),
-  border-top-left-radius: utils.module-ref(button, border-top-left-radius, shape),
-  border-top-right-radius: utils.module-ref(button, border-top-right-radius, shape),
-  border-bottom-left-radius: utils.module-ref(button, border-bottom-left-radius, shape),
-  border-bottom-right-radius: utils.module-ref(button, border-bottom-right-radius, shape),
+  shape-start-start-radius: utils.module-ref(button, shape-start-start-radius, shape),
+  shape-start-end-radius: utils.module-ref(button, shape-start-end-radius, shape),
+  shape-end-start-radius: utils.module-ref(button, shape-end-start-radius, shape),
+  shape-end-end-radius: utils.module-ref(button, shape-end-end-radius, shape),
   padding-block: utils.module-ref(button, padding-block, padding),
   padding-inline: utils.module-ref(button, padding-inline, padding),
   background: utils.module-val(button, background, transparent),
@@ -44,28 +43,30 @@ $tokens: (
   transition-duration: utils.module-val(button, transition-duration, animation.variable(duration-short3)),
   transition-timing: utils.module-val(button, transition-timing, animation.variable(easing-standard)),
 
-  // Raised
-  raised-background: utils.module-ref(button, raised-background, primary-color),
-  raised-disabled-background: utils.module-ref(button, raised-disabled-background, disabled-color),
-  raised-color: utils.module-val(button, raised-color, theme.variable(on-primary)),
-  raised-disabled-color: utils.module-ref(button, raised-disabled-color, disabled-text-color),
-  raised-shadow: utils.module-val(button, raised-shadow, elevation.value(2)),
-  raised-hover-shadow: utils.module-val(button, raised-hover-shadow, elevation.value(4)),
-  raised-active-shadow: utils.module-val(button, raised-active-shadow, elevation.value(8)),
-  raised-disabled-shadow: utils.module-val(button, raised-disabled-shadow, none),
-
-  // Flat
-  flat-background: utils.module-ref(button, flat-background, primary-color),
-  flat-disabled-background: utils.module-ref(button, flat-disabled-background, disabled-color),
-  flat-color: utils.module-val(button, flat-color, theme.variable(on-primary)),
-  flat-disabled-color: utils.module-ref(button, flat-disabled-color, disabled-text-color),
-
   // Outlined
   outlined-background: utils.module-ref(button, outlined-background, background),
   outlined-color: utils.module-ref(button, outlined-color, primary-color),
   outlined-border-width: utils.module-val(button, outlined-border-width, border.variable(thin)),
   outlined-border-style: utils.module-val(button, outlined-border-style, solid),
   outlined-border-color: utils.module-ref(button, outlined-border-color, primary-color),
+
+  // Tonal
+  tonal-background: utils.module-val(button, tonal-background, theme.variable(primary-container)),
+  tonal-disabled-background: utils.module-ref(button, tonal-disabled-background, disabled-color),
+  tonal-color: utils.module-val(button, flat-color, theme.variable(on-primary-container)),
+  tonal-disabled-color: utils.module-ref(button, tonal-disabled-color, disabled-text-color),
+
+  // Filled
+  filled-background: utils.module-ref(button, filled-background, primary-color),
+  filled-disabled-background: utils.module-ref(button, filled-disabled-background, disabled-color),
+  filled-color: utils.module-val(button, filled-color, theme.variable(on-primary)),
+  filled-disabled-color: utils.module-ref(button, filled-disabled-color, disabled-text-color),
+
+  // Raised
+  raised-shadow: utils.module-val(button, raised-shadow, elevation.value(2)),
+  raised-hover-shadow: utils.module-val(button, raised-hover-shadow, elevation.value(4)),
+  raised-active-shadow: utils.module-val(button, raised-active-shadow, elevation.value(8)),
+  raised-disabled-shadow: utils.module-val(button, raised-disabled-shadow, none),
 
   // Link
   link-color: utils.module-ref(button, link-color, primary-color),

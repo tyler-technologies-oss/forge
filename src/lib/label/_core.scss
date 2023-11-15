@@ -7,5 +7,6 @@
 @mixin label {
   @include typography.style(label);
 
+  display: contents;
   cursor: default;
 }

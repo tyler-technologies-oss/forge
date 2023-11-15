@@ -1,5 +1,6 @@
 
 import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { IIconButtonComponent } from '../../icon-button/icon-button';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { ITabComponent } from '../tab/tab';
@@ -41,8 +42,8 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   private readonly _container: HTMLElement;
   private readonly _scrollContainer: HTMLElement;
   private _resizeObserver: ResizeObserver | undefined;
-  private _backwardScrollButton: HTMLElement | undefined;
-  private _forwardScrollButton: HTMLElement | undefined;
+  private _backwardScrollButton: IIconButtonComponent | undefined;
+  private _forwardScrollButton: IIconButtonComponent | undefined;
 
   constructor(component: ITabBarComponent) {
     super(component);
@@ -75,11 +76,11 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   }
 
   public setScrollBackwardButtonListener(listener: EventListener): void {
-    this._backwardScrollButton?.querySelector('button')?.addEventListener('click', listener);
+    this._backwardScrollButton?.addEventListener('click', listener);
   }
   
   public setScrollForwardButtonListener(listener: EventListener): void {
-    this._forwardScrollButton?.querySelector('button')?.addEventListener('click', listener);
+    this._forwardScrollButton?.addEventListener('click', listener);
   }
 
   public addSlotListener(listener: EventListener): void {
@@ -147,23 +148,20 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   }
 
   public syncScrollButtons({ backwardEnabled, forwardEnabled }: ITabBarScrollButtonState): void {
-    const backButton = this._backwardScrollButton?.querySelector('button');
-    const forwardButton = this._forwardScrollButton?.querySelector('button');
-
-    if (backButton) {
+    if (this._backwardScrollButton) {
       const disabled = !backwardEnabled;
-      if (disabled && backButton.matches(':focus')) {
-        forwardButton?.focus();
+      if (disabled && this._backwardScrollButton.matches(':focus')) {
+        this._forwardScrollButton?.focus();
       }
-      backButton.disabled = disabled;
+      this._backwardScrollButton.disabled = disabled;
     }
 
-    if (forwardButton) {
+    if (this._forwardScrollButton) {
       const disabled = !forwardEnabled;
-      if (disabled && forwardButton.matches(':focus')) {
-        backButton?.focus();
+      if (disabled && this._forwardScrollButton.matches(':focus')) {
+        this._backwardScrollButton?.focus();
       }
-      forwardButton.disabled = disabled;
+      this._forwardScrollButton.disabled = disabled;
     }
   }
 
@@ -187,19 +185,17 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     }
   }
 
-  private _createScrollButton(iconName: string): HTMLElement {
+  private _createScrollButton(iconName: string): IIconButtonComponent {
     const iconButton = document.createElement('forge-icon-button');
     iconButton.classList.add(TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON);
-
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.tabIndex = -1;
-    button.setAttribute('aria-hidden', 'true');
-    iconButton.appendChild(button);
+    iconButton.shape = 'squared';
+    iconButton.type = 'button';
+    iconButton.tabIndex = -1;
+    iconButton.setAttribute('aria-hidden', 'true');
 
     const icon = document.createElement('forge-icon');
     icon.name = iconName;
-    button.appendChild(icon);
+    iconButton.appendChild(icon);
 
     return iconButton;
   }

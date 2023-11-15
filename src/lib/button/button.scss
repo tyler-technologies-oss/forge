@@ -59,7 +59,14 @@ forge-focus-indicator {
 @mixin theme($theme) {
   :host([theme=#{$theme}]) {
     .forge-button {
-      @include override(primary-color, theme.variable($theme));
+      @include override(primary-color, theme.variable($theme), value);
+    }
+  }
+  
+  :host([theme=#{$theme}][variant=tonal]) {
+    .forge-button {
+      @include override(tonal-background, theme.variable(#{$theme}-container), value);
+      @include override(tonal-color, theme.variable(on-#{$theme}-container), value);
     }
   }
 }
@@ -81,23 +88,29 @@ forge-focus-indicator {
   }
 }
 
+:host(:is([variant=filled],[variant=raised])) {
+  .forge-button {
+    @include core.filled;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(( color: #{token(filled-color)} ));
+  }
+}
+
 :host([variant=raised]) {
   .forge-button {
     @include core.raised;
   }
-
-  forge-state-layer {
-    @include state-layer.provide-theme(( color: #{token(raised-color)} ));
-  }
 }
 
-:host([variant=flat]) {
+:host([variant=tonal]) {
   .forge-button {
-    @include core.flat;
+    @include core.tonal;
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: #{token(flat-color)} ));
+    @include state-layer.provide-theme(( color: #{token(tonal-color)} ));
   }
 }
 
@@ -149,21 +162,27 @@ forge-focus-indicator {
   }
 }
 
-:host(:not([anchor])[variant=raised][disabled]) {
-  .forge-button {
-    @include core.raised-disabled;
-  }
-}
-
-:host(:not([anchor])[variant=flat][disabled]) {
-  .forge-button {
-    @include core.flat-disabled;
-  }
-}
-
 :host(:not([anchor])[variant=outlined][disabled]) {
   .forge-button {
     @include core.outlined-disabled;
+  }
+}
+
+:host(:not([anchor])[variant=tonal][disabled]) {
+  .forge-button {
+    @include core.tonal-disabled;
+  }
+}
+
+:host(:not([anchor]):is([variant=filled],[variant=raised])[disabled]) {
+  .forge-button {
+    @include core.filled-disabled;
+  }
+}
+
+:host(:not([anchor])[variant=raised][disabled]) {
+  .forge-button {
+    @include core.raised-disabled;
   }
 }
 

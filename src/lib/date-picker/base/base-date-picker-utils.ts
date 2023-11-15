@@ -1,19 +1,15 @@
 export function createToggleElement(iconName: string): HTMLElement {
   const iconButtonElement = document.createElement('forge-icon-button');
+  iconButtonElement.type = 'button';
+  iconButtonElement.tabIndex = -1;
+  iconButtonElement.setAttribute('aria-label', 'Toggle calendar');
   iconButtonElement.slot = 'trailing';
-  iconButtonElement.dense = true;
-  iconButtonElement.densityLevel = 3;
+  iconButtonElement.density = 'medium';
   iconButtonElement.style.marginRight = '4px';
-
-  const buttonElement = document.createElement('button');
-  buttonElement.type = 'button';
-  buttonElement.tabIndex = -1;
-  buttonElement.setAttribute('aria-label', 'Toggle calendar');
-  iconButtonElement.appendChild(buttonElement);
 
   const iconElement = document.createElement('forge-icon');
   iconElement.name = iconName;
-  buttonElement.appendChild(iconElement);
+  iconButtonElement.appendChild(iconElement);
 
   return iconButtonElement;
 }

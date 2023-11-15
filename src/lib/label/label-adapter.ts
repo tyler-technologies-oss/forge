@@ -111,6 +111,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
       const rootNode = this._component.getRootNode() as Document | ShadowRoot;
       targetEl = rootNode.querySelector(`#${id}`);
     } else {
+      // Used for nested elements within the label component
       const selector = LABEL_CONSTANTS.labelableChildSelectors.join(',');
       targetEl = this._component.querySelector(selector);
     }

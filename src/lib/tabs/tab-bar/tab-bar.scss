@@ -1,6 +1,6 @@
 @use './core';
+@use '../../icon-button';
 @use './configuration';
-@use '../../icon-button/forge-icon-button';
 @use './token-utils' as *;
 
 //
@@ -37,6 +37,12 @@
 
 ::slotted([selected]) {
   @include core.slotted-selected;
+}
+
+forge-icon-button {
+  @include icon-button.provide-theme((
+    shape-squared: 0px // Requires unit
+  ));
 }
 
 //
@@ -79,25 +85,25 @@
 
 :host([clustered]) {
   .container {
-    @include override(justify, flex-start);
-    @include override(stretch, 0);
+    @include override(justify, flex-start, value);
+    @include override(stretch, 0, value);
   }
 }
 
 :host([clustered=start]) {
   .container {
-    @include override(justify, flex-start);
+    @include override(justify, flex-start, value);
   }
 }
 
 :host([clustered=center]) {
   .container {
-    @include override(justify, center);
+    @include override(justify, center, value);
   }
 }
 
 :host([clustered=end]) {
   .container {
-    @include override(justify, flex-end);
+    @include override(justify, flex-end, value);
   }
 }

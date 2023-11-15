@@ -174,36 +174,32 @@ export function getHeader(): HTMLElement {
   element.setAttribute('part', CALENDAR_CONSTANTS.parts.HEADER);
 
   const previousButton = document.createElement('forge-icon-button');
-  const previousButtonElement = document.createElement('button');
   const previousIcon = document.createElement('forge-icon');
   const previousTooltip = document.createElement('forge-tooltip');
   previousButton.setAttribute('part', CALENDAR_CONSTANTS.parts.PREVIOUS_BUTTON);
-  previousButtonElement.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON;
-  previousButtonElement.type = 'button';
-  previousButtonElement.setAttribute('aria-label', 'Previous');
+  previousButton.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON;
+  previousButton.type = 'button';
+  previousButton.setAttribute('aria-label', 'Previous');
   previousIcon.setAttribute('name', 'keyboard_arrow_left');
   previousTooltip.id = CALENDAR_CONSTANTS.ids.PREVIOUS_BUTTON_TOOLTIP;
   previousTooltip.setAttribute('aria-hidden', 'true');
   previousTooltip.innerText = 'Previous';
-  previousButton.appendChild(previousButtonElement);
   previousButton.appendChild(previousTooltip);
-  previousButtonElement.appendChild(previousIcon);
+  previousButton.appendChild(previousIcon);
 
   const nextButton = document.createElement('forge-icon-button');
-  const nextButtonElement = document.createElement('button');
   const nextIcon = document.createElement('forge-icon');
   const nextTooltip = document.createElement('forge-tooltip');
   nextButton.setAttribute('part', CALENDAR_CONSTANTS.parts.NEXT_BUTTON);
-  nextButtonElement.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON;
-  nextButtonElement.type = 'button';
-  nextButtonElement.setAttribute('aria-label', 'Next');
+  nextButton.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON;
+  nextButton.type = 'button';
+  nextButton.setAttribute('aria-label', 'Next');
   nextIcon.setAttribute('name', 'keyboard_arrow_right');
   nextTooltip.id = CALENDAR_CONSTANTS.ids.NEXT_BUTTON_TOOLTIP;
   nextTooltip.setAttribute('aria-hidden', 'true');
   nextTooltip.innerText = 'Next';
-  nextButton.appendChild(nextButtonElement);
   nextButton.appendChild(nextTooltip);
-  nextButtonElement.appendChild(nextIcon);
+  nextButton.appendChild(nextIcon);
 
   const monthButton = document.createElement('forge-button');
   monthButton.setAttribute('part', CALENDAR_CONSTANTS.parts.MONTH_BUTTON);

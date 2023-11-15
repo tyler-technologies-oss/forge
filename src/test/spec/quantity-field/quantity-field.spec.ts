@@ -351,14 +351,14 @@ describe('QuantityFieldComponent', function(this: ITestContext) {
       labelElement.slot = 'label';
       labelElement.textContent = 'Test label';
       component.appendChild(labelElement);
+
       const decrementIconButton = document.createElement(ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
       decrementIconButton.slot = 'decrement-button';
-      const decrementButton = document.createElement('button') as HTMLButtonElement;
-      decrementButton.type = 'button';
-      decrementButton.classList.add('tyler-icons');
-      decrementButton.textContent = 'remove_circle_outline';
-      decrementIconButton.appendChild(decrementButton);
+      decrementIconButton.type = 'button';
+      decrementIconButton.classList.add('tyler-icons');
+      decrementIconButton.textContent = 'remove_circle_outline';
       component.appendChild(decrementIconButton);
+
       const textField = document.createElement(TEXT_FIELD_CONSTANTS.elementName) as ITextFieldComponent;
       const inputElement = document.createElement('input') as HTMLInputElement;
       inputElement.type = 'number';
@@ -369,14 +369,14 @@ describe('QuantityFieldComponent', function(this: ITestContext) {
       inputElement.max = '10';
       textField.appendChild(inputElement);
       component.appendChild(textField);
+
       const incrementIconButton = document.createElement(ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
       incrementIconButton.slot = 'increment-button';
-      const incrementButton = document.createElement('button') as HTMLButtonElement;
-      incrementButton.type = 'button';
-      incrementButton.classList.add('tyler-icons');
-      incrementButton.textContent = 'control_point';
-      incrementIconButton.appendChild(incrementButton);
+      incrementIconButton.type = 'button';
+      incrementIconButton.classList.add('tyler-icons');
+      incrementIconButton.textContent = 'control_point';
       component.appendChild(incrementIconButton);
+      
       const helperText = document.createElement('div');
       helperText.slot = 'helper-text';
       helperText.textContent = 'This is helpful text';

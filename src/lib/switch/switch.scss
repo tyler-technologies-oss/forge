@@ -177,7 +177,7 @@
 // Reduced motion
 @media (prefers-reduced-motion) {
   .switch {
-    @include override(animation-duration, 0s);
+    @include override(animation-duration, 0s, value);
   }
 }
 

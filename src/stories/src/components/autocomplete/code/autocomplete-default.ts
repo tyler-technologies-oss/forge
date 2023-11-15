@@ -7,9 +7,7 @@ export const AutocompleteDefaultCodeHtml = () => {
     
     <!-- You can optionally provide a clear button with a data-forge-autocomplete-clear attribute that will be detected automatically. -->
     <forge-icon-button data-forge-autocomplete-clear slot="trailing" dense density="3">
-      <button type="button">
-        <forge-icon name="close"></forge-icon>
-      </button>
+      <forge-icon name="close"></forge-icon>
     </forge-icon-button>
 
     <!-- The existence of the data-forge-dropdown-icon attribute controls the open state rotation automatically. -->

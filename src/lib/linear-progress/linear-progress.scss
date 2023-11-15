@@ -125,8 +125,8 @@ $rtl-selectors: (
 @mixin theme($theme) {
   :host([theme=#{$theme}]) {
     .forge-linear-progress {
-      @include override(indicator-color, theme.variable($theme));
-      @include override(track-color, theme.variable(#{$theme}-container));
+      @include override(indicator-color, theme.variable($theme), value);
+      @include override(track-color, theme.variable(#{$theme}-container), value);
     }
   }
 }

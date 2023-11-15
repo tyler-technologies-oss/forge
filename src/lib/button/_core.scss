@@ -25,10 +25,10 @@
   border-width: #{token(border-width)};
   border-style: #{token(border-style)};
   border-color: #{token(border-color)};
-  border-top-left-radius: #{token(border-top-left-radius)};
-  border-top-right-radius: #{token(border-top-right-radius)};
-  border-bottom-left-radius: #{token(border-bottom-left-radius)};
-  border-bottom-right-radius: #{token(border-bottom-right-radius)};
+  border-start-start-radius: #{token(shape-start-start-radius)};
+  border-start-end-radius: #{token(shape-start-end-radius)};
+  border-end-start-radius: #{token(shape-end-start-radius)};
+  border-end-end-radius: #{token(shape-end-end-radius)};
   padding-block: #{token(padding-block)};
   padding-inline: #{token(padding-inline)};
   box-shadow: #{token(shadow)};
@@ -80,9 +80,12 @@
   @include override(focus-indicator-offset, text-focus-indicator-offset);
 }
 
+@mixin filled {
+  @include override(background, filled-background);
+  @include override(color, filled-color);
+}
+
 @mixin raised {
-  @include override(background, raised-background);
-  @include override(color, raised-color);
   @include override(shadow, raised-shadow);
 
   &:hover {
@@ -94,9 +97,9 @@
   }
 }
 
-@mixin flat {
-  @include override(background, flat-background);
-  @include override(color, flat-color);
+@mixin tonal {
+  @include override(background, tonal-background);
+  @include override(color, tonal-color);
 }
 
 @mixin outlined {
@@ -139,15 +142,18 @@
   pointer-events: none;
 }
 
-@mixin raised-disabled {
-  @include override(shadow, raised-disabled-shadow);
-  @include override(background, raised-disabled-background);
-  @include override(color, raised-disabled-color);
+@mixin filled-disabled {
+  @include override(background, filled-disabled-background);
+  @include override(color, filled-disabled-color);
 }
 
-@mixin flat-disabled {
-  @include override(background, flat-disabled-background);
-  @include override(color, flat-disabled-color);
+@mixin raised-disabled {
+  @include override(shadow, raised-disabled-shadow);
+}
+
+@mixin tonal-disabled {
+  @include override(background, tonal-disabled-background);
+  @include override(color, tonal-disabled-color);
 }
 
 @mixin outlined-disabled {

@@ -1,6 +1,6 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
 import { internals } from '../constants';
-import { BaseNullableFormComponent, IBaseNullableFormComponent } from '../core';
+import { BaseNullableFormComponent, IBaseNullableFormComponent } from '../core/base/base-nullable-form-component';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { ILabelAware } from '../label/label-aware';
 import { StateLayerComponent } from '../state-layer/state-layer';

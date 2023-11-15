@@ -18,8 +18,9 @@
   $surface-tone: color-utils.tone($surface);
 
   // The container colors are the provided color mixed with the surface color at lower emphasis levels
+  $container-low: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', lower, low)));
   $container: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', low, medium-low)));
-  // $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', medium-low, medium)));
+  $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', medium-low, medium)));
 
   // The on-color is the contrast color against the provided color
   $on-color: theme-utils.contrast($color);
@@ -27,15 +28,18 @@
   // The on-container colors are the contrast color for the provided color mixed with the
   // container color at a lower emphasis to let the contrast color bleed through for
   // increased contrast against the lower emphasis container color 
+  $on-container-low: theme-utils.hexify($color, theme-utils.contrast($container-low), color-emphasis.value(medium-low));
   $on-container: theme-utils.hexify($color, theme-utils.contrast($container), color-emphasis.value(low));
-  // $on-container-high: theme-utils.contrast($container-high);
+  $on-container-high: theme-utils.contrast($container-high);
 
   @return (
     #{$name}: $color,
+    #{$name}-container-low: $container-low,
     #{$name}-container: $container,
-    // #{$name}-container-high: $container-high,
+    #{$name}-container-high: $container-high,
     on-#{$name}: $on-color,
+    on-#{$name}-container-low: $on-container-low,
     on-#{$name}-container: $on-container,
-    // on-#{$name}-container-high: $on-container-high
+    on-#{$name}-container-high: $on-container-high
   );
 }

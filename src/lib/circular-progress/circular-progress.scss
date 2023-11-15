@@ -108,8 +108,8 @@ svg {
 @mixin theme($theme) {
   :host([theme=#{$theme}]) {
     .forge-circular-progress {
-      @include override(indicator-color, theme.variable($theme));
-      @include override(track-color, theme.variable(#{$theme}-container));
+      @include override(indicator-color, theme.variable($theme), value);
+      @include override(track-color, theme.variable(#{$theme}-container), value);
     }
   }
 }
@@ -123,7 +123,7 @@ svg {
 
 :host([no-track]) {
   .forge-circular-progress {
-    @include override(track-color, transparent);
+    @include override(track-color, transparent, value);
   }
 }
 

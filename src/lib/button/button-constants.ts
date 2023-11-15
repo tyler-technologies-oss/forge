@@ -18,5 +18,5 @@ export const BUTTON_CONSTANTS = {
   attributes
 };
 
-export type ButtonVariant = 'text' | 'raised' | 'outlined' | 'flat' | 'link';
+export type ButtonVariant = 'text' | 'outlined' | 'tonal' | 'filled' | 'raised' | 'link';
 export type ButtonTheme = Theme;

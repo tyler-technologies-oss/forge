@@ -114,6 +114,15 @@
 /// @param {Boolean} $type - The type of token this is. Valid values are `token` and `value`.
 /// 
 @mixin override($module, $module-tokens, $token, $token-or-value, $type: token) {
+  @if $type == 'token' {
+    @if not map.get($module-tokens, $token) {
+      @error 'Invalid token "#{$token}" for module "#{$module}"';
+    }
+    @if not map.get($module-tokens, $token-or-value) {
+      @error 'Invalid override token "#{$token-or-value}" for module "#{$module}"';
+    }
+  }
+
   // When the "token" type is specified, we output a module-level CSS custom property override
   // that points to the provided token. This ensures that the module is taking ownership of the
   // token value (which breaks the global cascading of internal tokens) and the module can choose

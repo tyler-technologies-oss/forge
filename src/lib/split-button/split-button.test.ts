@@ -3,7 +3,7 @@ import { elementUpdated, fixture, html } from '@open-wc/testing';
 
 import './split-button';
 import { ISplitButtonComponent } from './split-button';
-import { DEFAULT_VARIANT, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
+import { SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
 
 describe('SplitButton', () => {
   it('should initialize', async () => {
@@ -26,7 +26,8 @@ describe('SplitButton', () => {
     
     const buttons = el.querySelectorAll('forge-button');
     buttons.forEach(button => {
-      expect(button.variant).to.equal(DEFAULT_VARIANT);
+      expect(button.variant).to.equal(SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT);
+      expect(button.theme).to.equal(SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME);
       expect(button.disabled).to.be.false;
       expect(button.dense).to.be.false;
       expect(button.pill).to.be.false;
@@ -35,13 +36,14 @@ describe('SplitButton', () => {
 
   it('should initialize with new state on buttons', async () => {
     const el = await fixture<ISplitButtonComponent>(html`
-      <forge-split-button variant="outlined" dense disabled pill>
+      <forge-split-button variant="outlined" theme="error" dense disabled pill>
         <forge-button>First</forge-button>
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
     
     expect(el.variant).to.equal('outlined');
+    expect(el.theme).to.equal('error');
     expect(el.disabled).to.be.true;
     expect(el.dense).to.be.true;
     expect(el.pill).to.be.true;
@@ -49,6 +51,7 @@ describe('SplitButton', () => {
     const buttons = el.querySelectorAll('forge-button');
     buttons.forEach(button => {
       expect(button.variant).to.equal('outlined');
+      expect(button.theme).to.equal('error');
       expect(button.disabled).to.be.true;
       expect(button.dense).to.be.true;
       expect(button.pill).to.be.true;
@@ -69,6 +72,22 @@ describe('SplitButton', () => {
 
     const buttons = el.querySelectorAll('forge-button');
     buttons.forEach(button => expect(button.variant).to.equal('raised'));
+  });
+
+  it('should update theme on buttons', async () => {
+    const el = await fixture<ISplitButtonComponent>(html`
+      <forge-split-button>
+        <forge-button>First</forge-button>
+        <forge-button>Second</forge-button>
+      </forge-split-button>
+    `);
+    
+    el.theme = 'error';
+
+    expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.THEME)).to.be.true;
+
+    const buttons = el.querySelectorAll('forge-button');
+    buttons.forEach(button => expect(button.theme).to.equal('error'));
   });
 
   it('should update disabled on buttons', async () => {
