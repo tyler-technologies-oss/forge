@@ -82,6 +82,15 @@ describe('Floating Action Button', () => {
     await expect(el).to.be.accessible();
   });
 
+  it('should remove theme attribute when set to default', async () => {
+    const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab theme="success">FAB</forge-fab>`);
+
+    el.theme = 'secondary';
+    expect(el.theme).to.equal('secondary');
+    expect(el.hasAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME)).to.be.false;
+    await expect(el).to.be.accessible();
+  });
+
   it('should set density', async () => {
     const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab density="small">FAB</forge-fab>`);
 
@@ -90,11 +99,29 @@ describe('Floating Action Button', () => {
     await expect(el).to.be.accessible();
   });
 
+  it('should remove density attribute when set to default', async () => {
+    const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab density="small">FAB</forge-fab>`);
+
+    el.density = 'medium';
+    expect(el.density).to.equal('medium');
+    expect(el.hasAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.DENSITY)).to.be.false;
+    await expect(el).to.be.accessible();
+  });
+
   it('should set elevation', async () => {
     const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab elevation="lowered">FAB</forge-fab>`);
 
     expect(el.elevation).to.equal('lowered');
     expect(el.getAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.ELEVATION)).to.equal('lowered');
+    await expect(el).to.be.accessible();
+  });
+
+  it('should remove elevation attribute when set to default', async () => {
+    const el = await fixture<IFloatingActionButtonComponent>(html`<forge-fab elevation="lowered">FAB</forge-fab>`);
+
+    el.elevation = 'raised';
+    expect(el.elevation).to.equal('raised');
+    expect(el.hasAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.ELEVATION)).to.be.false;
     await expect(el).to.be.accessible();
   });
 

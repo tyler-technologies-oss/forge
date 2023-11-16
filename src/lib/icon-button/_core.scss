@@ -33,7 +33,7 @@
   cursor: #{token(cursor)};
   user-select: none;
 
-  transition-property: box-shadow, background, core;
+  transition-property: box-shadow, background;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-timing)};
 }

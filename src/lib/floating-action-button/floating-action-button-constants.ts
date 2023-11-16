@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX, Density } from '../constants';
+import { COMPONENT_NAME_PREFIX, Density, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}fab`;
 
@@ -20,12 +20,19 @@ const classes = {
   EXTENDED: `${elementName}--extended`
 };
 
+const defaults = {
+  DEFAULT_THEME: 'secondary' as Theme,
+  DEFAULT_DENSITY: 'medium' as FloatingActionButtonDensity,
+  DEFAULT_ELEVATION: 'raised' as FloatingActionButtonElevation
+};
+
 export const FLOATING_ACTION_BUTTON_CONSTANTS = {
   elementName,
   observedAttributes,
   attributes,
   selectors,
-  classes
+  classes,
+  defaults
 };
 
 export type FloatingActionButtonDensity = Density;

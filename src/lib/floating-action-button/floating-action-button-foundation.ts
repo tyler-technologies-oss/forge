@@ -10,9 +10,9 @@ export interface IFloatingActionButtonFoundation extends IBaseButtonFoundation {
 }
 
 export class FloatingActionButtonFoundation extends BaseButtonFoundation<IFloatingActionButtonAdapter> implements IFloatingActionButtonFoundation {
-  private _theme: ButtonTheme = 'secondary';
-  private _density: FloatingActionButtonDensity = 'medium';
-  private _elevation: FloatingActionButtonElevation = 'raised';
+  private _theme: ButtonTheme = FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+  private _density: FloatingActionButtonDensity = FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_DENSITY;
+  private _elevation: FloatingActionButtonElevation = FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_ELEVATION;
 
   constructor(adapter: IFloatingActionButtonAdapter) {
     super(adapter);
@@ -27,8 +27,9 @@ export class FloatingActionButtonFoundation extends BaseButtonFoundation<IFloati
   }
   public set theme(value: ButtonTheme) {
     if (this._theme !== value) {
-      this._theme = value;
-      this._adapter.toggleHostAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME, this._theme !== 'secondary', this._theme);
+      this._theme = value ?? FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+      const hasAttr = this._theme !== FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_THEME;
+      this._adapter.toggleHostAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME, hasAttr, this._theme);
     }
   }
 
@@ -37,8 +38,9 @@ export class FloatingActionButtonFoundation extends BaseButtonFoundation<IFloati
   }
   public set density(value: FloatingActionButtonDensity) {
     if (this._density !== value) {
-      this._density = value;
-      this._adapter.toggleHostAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.DENSITY, this._density !== 'medium', this._density);
+      this._density = value ?? FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_DENSITY;
+      const hasAttr = this._density !== FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_DENSITY;
+      this._adapter.toggleHostAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.DENSITY, hasAttr, this._density);
     }
   }
 
@@ -47,8 +49,9 @@ export class FloatingActionButtonFoundation extends BaseButtonFoundation<IFloati
   }
   public set elevation(value: FloatingActionButtonElevation) {
     if (this._elevation !== value) {
-      this._elevation = value;
-      this._adapter.toggleHostAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.ELEVATION, this._elevation !== 'raised', this._elevation);
+      this._elevation = value ?? FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_ELEVATION;
+      const hasAttr = this._elevation !== FLOATING_ACTION_BUTTON_CONSTANTS.defaults.DEFAULT_ELEVATION;
+      this._adapter.toggleHostAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.ELEVATION, hasAttr, this._elevation);
     }
   }
 }

@@ -76,7 +76,7 @@ forge-state-layer {
 }
 
 :host([density=large]) {
-  .forge-fab:not(.forge-fab--extended) {
+  .forge-fab {
     @include core.density-large;
   }
 }

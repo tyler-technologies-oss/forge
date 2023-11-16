@@ -160,8 +160,8 @@ describe('Icon Button', () => {
   it('should be accessible with a aria-labelledby', async () => {
     const el = await fixture<IIconButtonComponent>(html`
       <div>
-        <forge-icon-button aria-labelledby="test-label">${DEFAULT_ICON}</forge-icon-button>
         <label id="test-label">Test label</label>
+        <forge-icon-button aria-labelledby="test-label">${DEFAULT_ICON}</forge-icon-button>
       </div>
     `);
     const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
