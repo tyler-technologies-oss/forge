@@ -1,12 +1,21 @@
-import { coerceBoolean, CustomElement, ensureChildren, toggleClass } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { ForgeRipple } from '../ripple';
-import { FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { ButtonTheme } from '../button';
+import { BaseButton, IBaseButton } from '../button/base/base-button';
+import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants';
+import { FocusIndicatorComponent } from '../focus-indicator';
+import { IconComponent } from '../icon/icon';
+import { StateLayerComponent } from '../state-layer';
+import { FloatingActionButtonAdapter } from './floating-action-button-adapter';
+import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
+import { FloatingActionButtonFoundation } from './floating-action-button-foundation';
 
-export interface IFloatingActionButtonComponent extends IBaseComponent {
-  exited: boolean;
-  mini: boolean;
-  extended: boolean;
+import template from './floating-action-button.html';
+import styles from './floating-action-button.scss';
+
+export interface IFloatingActionButtonComponent extends IBaseButton {
+  theme: ButtonTheme;
+  density: FloatingActionButtonDensity;
+  elevation: FloatingActionButtonElevation;
 }
 
 declare global {
@@ -16,137 +25,130 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-fab>` element.
- * 
  * @tag forge-fab
+ * 
+ * @summary Floating action buttons are used to represent the most important action on a page.
+ * 
+ * @property {ButtonTheme} theme - Sets the theme of the button.
+ * @property {FloatingActionButtonDensity} density - Sets the density of the button.
+ * @property {FloatingActionButtonElevation} elevation - Sets the elevation of the button.
+ * @property {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
+ * @property {boolean} disabled - Whether or not the button is disabled.
+ * @property {boolean} popoverIcon - Whether or not the button shows a built-in popover icon.
+ * @property {string} name - The name of the button.
+ * @property {string} value - The form value of the button.
+ * @property {boolean} dense - Whether or not the button is dense.
+ * @property {boolean} anchor - Whether or not the button is an `<a>` element.
+ * @property {string} href - The href of the anchor.
+ * @property {string} target - The target of the anchor.
+ * @property {string} download - The download of the anchor.
+ * @property {string} rel - The rel of the anchor.
+ * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
+ * 
+ * @attribute {string} theme - Sets the theme of the button.
+ * @attribute {string} density - Sets the density of the button.
+ * @attribute {string} elevation - Sets the elevation of the button.
+ * @attribute {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
+ * @attribute {boolean} disabled - Whether or not the button is disabled.
+ * @attribute {boolean} popover-icon - Whether or not the button shows a built-in popover icon.
+ * @attribute {string} name - The name of the button.
+ * @attribute {string} value - The form value of the button.
+ * @attribute {boolean} dense - Whether or not the button is dense.
+ * @attribute {boolean} anchor - Whether or not the button is an `<a>` element.
+ * @attribute {string} href - The href of the anchor.
+ * @attribute {string} target - The target of the anchor.
+ * @attribute {string} download - The download of the anchor.
+ * @attribute {string} rel - The rel of the anchor.
+ * 
+ * @fires click - Fires when the button is clicked.
+ * 
+ * @cssproperty --forge-fab-background-display - The display property.
+ * @cssproperty --forge-fab-gap - The gap between the icon and the label.
+ * @cssproperty --forge-fab-background - The background color.
+ * @cssproperty --forge-fab-color - The text color.
+ * @cssproperty --forge-fab-size - The height and min-width of the button.
+ * @cssproperty --forge-fab-padding - The inline padding of the button.
+ * @cssproperty --forge-fab-shadow - The box shadow of the button.
+ * @cssproperty --forge-fab-hover-shadow - The box shadow of the button when hovered.
+ * @cssproperty --forge-fab-active-shadow - The box shadow of the button when active.
+ * @cssproperty --forge-fab-lowered-shadow - The box shadow of the button when lowered.
+ * @cssproperty --forge-fab-lowered-hover-shadow - The box shadow of the button when lowered and hovered.
+ * @cssproperty --forge-fab-lowered-active-shadow - The box shadow of the button when lowered and active.
+ * @cssproperty --forge-fab-transition-duration - The transition duration.
+ * @cssproperty --forge-fab-transition-timing - The transition timing function.
+ * @cssproperty --forge-fab-shape - The border radius of the button.
+ * @cssproperty --forge-fab-shape-start-start - The start-start border radius.
+ * @cssproperty --forge-fab-shape-start-end - The start-end border radius.
+ * @cssproperty --forge-fab-shape-end-start - The end-start border radius.
+ * @cssproperty --forge-fab-shape-end-end - The end-end border radius.
+ * @cssproperty --forge-fab-extended-padding - The inline padding of the extended button.
+ * @cssproperty --forge-fab-extended-min-width - The min-width of the extended button.
+ * @cssproperty --forge-fab-density-small-size - The height and min-width of the small density button.
+ * @cssproperty --forge-fab-density-medium-size - The height and min-width of the medium density (default) button.
+ * @cssproperty --forge-fab-density-large-size - The height and min-width of the large density button.
+ * @cssproperty --forge-fab-disabled-cursor - The cursor when disabled.
+ * @cssproperty --forge-fab-disabled-background - The background color when disabled.
+ * @cssproperty --forge-fab-disabled-color - The text color when disabled.
+ * @cssproperty --forge-fab-disabled-opacity - The opacity when disabled.
+ * 
+ * @csspart root - The root container element.
+ * @csspart focus-indicator - The focus-indicator indicator element.
+ * @csspart state-layer - The state-layer surface element.
+ * 
+ * @slot - This is a default/unnamed slot. Typically used for icon-only or label-only FABs. If the content forces the width to be large than the height, then the FAB will be in extended mode.
+ * @slot start - An element to logically render at the start of the button content.
+ * @slot label - Reserved specifically for label text. This forces the button into extended mode.
+ * @slot end - An element to logically render at the end of the button content.
  */
 @CustomElement({
-  name: FLOATING_ACTION_BUTTON_CONSTANTS.elementName
+  name: FLOATING_ACTION_BUTTON_CONSTANTS.elementName,
+  dependencies: [
+    FocusIndicatorComponent,
+    StateLayerComponent,
+    IconComponent
+  ]
 })
-export class FloatingActionButton extends BaseComponent implements IFloatingActionButtonComponent {
+export class FloatingActionButtonComponent extends BaseButton<FloatingActionButtonFoundation> implements IFloatingActionButtonComponent {
   public static get observedAttributes(): string[] {
     return [
-      FLOATING_ACTION_BUTTON_CONSTANTS.attributes.EXITED,
-      FLOATING_ACTION_BUTTON_CONSTANTS.attributes.MINI,
-      FLOATING_ACTION_BUTTON_CONSTANTS.attributes.EXTENDED
+      ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
+      ...Object.values(FLOATING_ACTION_BUTTON_CONSTANTS.observedAttributes)
     ];
   }
 
-  private _rippleInstance: ForgeRipple;
-  private _isExtended = false;
-  private _isMini = false;
-  private _isExited = false;
-  private _buttonElement: HTMLButtonElement;
+  protected readonly _foundation: FloatingActionButtonFoundation;
 
   constructor() {
     super();
-  }
-
-  public connectedCallback(): void {
-    if (this.children.length) {
-      this._initialize();
-    } else {
-      ensureChildren(this).then(() => this._initialize());
-    }
+    attachShadowTemplate(this, template, styles);
+    this._foundation = new FloatingActionButtonFoundation(new FloatingActionButtonAdapter(this));
   }
 
   public disconnectedCallback(): void {
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
-    }
+    this._foundation.destroy();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.EXITED:
-        this.exited = coerceBoolean(newValue);
-        break;
-      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.MINI:
-        this.mini = coerceBoolean(newValue);
-        break;
-      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.EXTENDED:
-        this.extended = coerceBoolean(newValue);
-        break;
+      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME:
+        this.theme = newValue as ButtonTheme;
+        return;
+      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.DENSITY:
+        this.density = newValue as FloatingActionButtonDensity;
+        return;
+      case FLOATING_ACTION_BUTTON_CONSTANTS.attributes.ELEVATION:
+        this.elevation = newValue as FloatingActionButtonElevation;
+        return;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  private _initialize(): void {
-    // Make sure we have a button element
-    this._buttonElement = this.querySelector(FLOATING_ACTION_BUTTON_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
-    if (!this._buttonElement) {
-      return;
-    }
+  @FoundationProperty()
+  public declare theme: ButtonTheme;
 
-    this._buttonElement.classList.add(FLOATING_ACTION_BUTTON_CONSTANTS.classes.BUTTON);
+  @FoundationProperty()
+  public declare density: FloatingActionButtonDensity;
 
-    const rippleElement = this._buttonElement.querySelector(`.${FLOATING_ACTION_BUTTON_CONSTANTS.classes.RIPPLE}`) || document.createElement('div');
-    rippleElement.classList.add(FLOATING_ACTION_BUTTON_CONSTANTS.classes.RIPPLE);
-    this._buttonElement.insertAdjacentElement('afterbegin', rippleElement);
-    this._sync();
-
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
-    }
-
-    this._rippleInstance = new ForgeRipple(this._buttonElement);
-  }
-
-  private _sync(): void {
-    if (!this._buttonElement) {
-      return;
-    }
-
-    toggleClass(this._buttonElement, this._isExited, FLOATING_ACTION_BUTTON_CONSTANTS.classes.EXITED);
-    toggleClass(this._buttonElement, this._isMini, FLOATING_ACTION_BUTTON_CONSTANTS.classes.BUTTON_MINI);
-    toggleClass(this._buttonElement, this._isExtended, FLOATING_ACTION_BUTTON_CONSTANTS.classes.BUTTON_EXTENDED);
-
-    // Check if we need to set the label class
-    const labelElement = this.querySelector(FLOATING_ACTION_BUTTON_CONSTANTS.selectors.LABEL);
-    if (labelElement) {
-      labelElement.classList.add(FLOATING_ACTION_BUTTON_CONSTANTS.classes.LABEL);
-    }
-
-    // Check if we need to set the icon class
-    const iconElement = this.querySelector(FLOATING_ACTION_BUTTON_CONSTANTS.selectors.ICON);
-    if (iconElement) {
-      iconElement.classList.add(FLOATING_ACTION_BUTTON_CONSTANTS.classes.ICON);
-      iconElement.setAttribute('aria-hidden', 'true');
-    }
-  }
-
-  /** Gets/sets the exited state. */
-  public set exited(value: boolean) {
-    if (this._isExited !== value) {
-      this._isExited = value;
-      this.setAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.EXITED, this._isExited.toString());
-      this._sync();
-    }
-  }
-  public get exited(): boolean {
-    return this._isExited;
-  }
-  
-  /** Gets/sets the mini state. */
-  public set mini(value: boolean) {
-    if (this._isMini !== value) {
-      this._isMini = value;
-      this.setAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.MINI, this._isMini.toString());
-      this._sync();
-    }
-  }
-  public get mini(): boolean {
-    return this._isMini;
-  }
-  
-  /** Gets/sets the extended state. */
-  public set extended(value: boolean) {
-    if (this._isExtended !== value) {
-      this._isExtended = value;
-      this.setAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.EXTENDED, this._isExtended.toString());
-      this._sync();
-    }
-  }
-  public get extended(): boolean {
-    return this._isExtended;
-  }
+  @FoundationProperty()
+  public declare elevation: FloatingActionButtonElevation;
 }

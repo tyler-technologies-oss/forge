@@ -31,7 +31,7 @@ import { DividerComponent } from './divider';
 import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
 import { ExpansionPanelComponent } from './expansion-panel';
 import { FilePickerComponent } from './file-picker';
-import { FloatingActionButton } from './floating-action-button';
+import { FloatingActionButtonComponent } from './floating-action-button';
 import { FocusIndicatorComponent } from './focus-indicator';
 import { IconButtonComponent } from './icon-button';
 import { InlineMessageComponent } from './inline-message';
@@ -179,7 +179,7 @@ const CUSTOM_ELEMENTS = [
   ModalDrawerComponent,
   ExpansionPanelComponent,
   FilePickerComponent,
-  FloatingActionButton,
+  FloatingActionButtonComponent,
   FocusIndicatorComponent,
   ProductIconComponent,
   IconComponent,

@@ -1,7 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { IconComponent } from '../icon';
 import { FocusIndicatorComponent } from '../focus-indicator';
-import { IconComponent, IconRegistry } from '../icon';
 import { StateLayerComponent } from '../state-layer';
 import { BaseButton, IBaseButton } from './base/base-button';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
@@ -161,7 +160,6 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
 
   constructor() {
     super();
-    IconRegistry.define(tylIconArrowDropDown);
     attachShadowTemplate(this, template, styles);
     this._foundation = new ButtonFoundation(new ButtonAdapter(this));
   }

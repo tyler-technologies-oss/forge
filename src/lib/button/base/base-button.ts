@@ -1,4 +1,6 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { IconRegistry } from '../../icon/icon-registry';
 import { BaseFocusableComponent } from '../../core/base/base-focusable-component';
 import { internals } from '../../constants';
 import { IBaseComponent } from '../../core/base/base-component';
@@ -31,6 +33,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
 
   constructor() {
     super();
+    IconRegistry.define(tylIconArrowDropDown);
     this[internals] = this.attachInternals();
   }
 

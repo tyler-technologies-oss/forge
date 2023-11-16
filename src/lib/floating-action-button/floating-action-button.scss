@@ -1,0 +1,124 @@
+@use './configuration';
+@use './core';
+@use '../core/styles/theme';
+@use '../state-layer' as state-layer;
+@use '../focus-indicator' as focus-indicator;
+@use './token-utils' as *;
+
+//
+// Host
+//
+
+:host {
+  @include configuration.host-configuration;
+}
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-fab {
+  @include configuration.configuration;
+}
+
+.forge-fab {
+  @include core.base;
+
+  &--extended {
+    @include core.extended;
+  }
+}
+
+a {
+  @include core.anchor-base;
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: #{token(background)},
+    shape-start-start: #{token(shape-start-start)},
+    shape-start-end: #{token(shape-start-end)},
+    shape-end-start: #{token(shape-end-start)},
+    shape-end-end: #{token(shape-end-end)}
+  ));
+}
+
+//
+// State layer 
+//
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: #{token(color)}
+  ));
+}
+
+//
+// Density (only when not "extended")
+//
+
+:host(:is([dense],[density=small])) {
+  .forge-fab {
+    @include core.density-small;
+  }
+}
+
+:host([density=large]) {
+  .forge-fab {
+    @include core.density-large;
+  }
+}
+
+//
+// Elevation
+//
+
+:host([elevation=lowered]) {
+  .forge-fab {
+    @include core.lowered;
+  }
+}
+
+//
+// Disabled
+//
+
+:host([disabled]) {
+  @include core.host-disabled;
+
+  .forge-fab {
+    @include core.disabled;
+  }
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]:not([disabled])) {
+    .forge-fab {
+      @include override(background, theme.variable($theme), value);
+      @include override(color, theme.variable(on-#{$theme}), value);
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(tertiary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);

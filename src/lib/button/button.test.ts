@@ -162,8 +162,8 @@ describe('Button', () => {
   it('should be accessible with aria-labelledby', async () => {
     const el = await fixture<IButtonComponent>(html`
       <div>
-        <forge-button aria-labelledby="test-label">Button</forge-button>
         <label id="test-label">Test label</label>
+        <forge-button aria-labelledby="test-label"></forge-button>
       </div>
     `);
     const button = el.querySelector('forge-button') as IButtonComponent;
