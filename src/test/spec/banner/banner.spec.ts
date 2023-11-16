@@ -162,11 +162,9 @@ describe('BannerComponent', function(this: ITestContext) {
     text.textContent = DEFAULT_TEXT_CONTENT;
     component.appendChild(text);
     const buttonComponent = document.createElement(BUTTON_CONSTANTS.elementName) as IButtonComponent;
-    buttonComponent.setAttribute('type', 'outlined');
-    const buttonElement = document.createElement('button') as HTMLButtonElement;
-    buttonElement.type = 'button';
-    buttonElement.textContent = 'Learn more...';
-    buttonComponent.appendChild(buttonElement);
+    buttonComponent.setAttribute('variant', 'outlined');
+    buttonComponent.type = 'button';
+    buttonComponent.textContent = 'Learn more...';
     component.appendChild(buttonComponent);
     fixture.appendChild(component);
     document.body.appendChild(fixture);

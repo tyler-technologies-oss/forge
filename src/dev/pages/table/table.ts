@@ -275,10 +275,8 @@ table.addEventListener('forge-table-filter', ({ detail }) => {
 });
 
 function getMenuColumnTemplate(rowIndex: number): HTMLElement {
-  const forgeButton = document.createElement('forge-icon-button');
-  const button = document.createElement('button');
+  const button = document.createElement('forge-icon-button');
   button.type = 'button';
-  forgeButton.appendChild(button);
 
   const icon = document.createElement('forge-icon');
   icon.name = 'more_vert';
@@ -297,17 +295,14 @@ function getMenuColumnTemplate(rowIndex: number): HTMLElement {
       table.data = data;
     }
   });
-  menu.appendChild(forgeButton);
+  menu.appendChild(button);
 
   return menu;
 }
 
 function getExpandRowColumnTemplate(rowIndex: number): ITableTemplateBuilderResult {
-  const iconButton = document.createElement('forge-icon-button');
-
-  const button = document.createElement('button');
+  const button = document.createElement('forge-icon-button');
   button.type = 'button';
-  iconButton.appendChild(button);
 
   const icon = document.createElement('forge-icon');
   icon.name = 'chevron_right';
@@ -322,7 +317,7 @@ function getExpandRowColumnTemplate(rowIndex: number): ITableTemplateBuilderResu
   });
 
   return {
-    content: iconButton,
+    content: button,
     stopClickPropagation: true
   };
 }
@@ -376,9 +371,7 @@ function getSelectAllTemplate(): string {
       <forge-checkbox>
         <input type="checkbox" />
       </forge-checkbox>
-      <forge-button>
-        <button type="button">Custom</button>
-      </forge-button>
+      <forge-button>Custom</forge-button>
     </div>
   `;
 }

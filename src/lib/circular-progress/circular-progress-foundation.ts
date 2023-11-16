@@ -1,16 +1,20 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { ICircularProgressAdapter } from './circular-progress-adapter';
-import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
+import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 
 export interface ICircularProgressFoundation extends ICustomElementFoundation {
   determinate: boolean;
   progress: number;
+  theme: CircularProgressTheme;
+  track: boolean;
 }
 
 export class CircularProgressFoundation implements ICircularProgressFoundation {
   private _determinate = false;
   private _progress = 0;
+  private _theme: CircularProgressTheme = 'primary';
+  private _track = true;
 
   constructor(private _adapter: ICircularProgressAdapter) {}
 
@@ -48,6 +52,27 @@ export class CircularProgressFoundation implements ICircularProgressFoundation {
         this._adapter.setProgress(this._progress);
       }
       this._adapter.setHostAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.PROGRESS, `${this._progress}`);
+    }
+  }
+
+  public get theme(): CircularProgressTheme {
+    return this._theme;
+  }
+  public set theme(value: CircularProgressTheme) {
+    if (this._theme !== value) {
+      this._theme = value;
+      this._adapter.toggleHostAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME, !!this._theme, this._theme);
+    }
+  }
+
+  public get track(): boolean {
+    return this._track;
+  }
+  public set track(value: boolean) {
+    value = Boolean(value);
+    if (this._track !== value) {
+      this._track = value;
+      this._adapter.toggleHostAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK, !this._track);
     }
   }
 

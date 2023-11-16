@@ -1,7 +1,5 @@
 export const ToastDefaultHtml = () => `
-<forge-button>
-  <button type="button">Show toast</button>
-</forge-button>
+<forge-button>Show toast</forge-button>
 `;
 
 export const ToastDefaultTs = () => `

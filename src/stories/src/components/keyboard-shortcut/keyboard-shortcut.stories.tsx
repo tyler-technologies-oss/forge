@@ -63,9 +63,7 @@ export const Default: Story<IKeyboardShortcutProps> = ({
           <label slot="label" htmlFor="comment">Comment</label>
           <textarea id="comment"></textarea>
         </ForgeTextField>
-        <ForgeButton type="raised" style={fullWidthStyles}>
-          <button type="button">Button</button>
-        </ForgeButton>
+        <ForgeButton variant="raised" style={fullWidthStyles}>Button</ForgeButton>
       </form>
       <ForgeKeyboardShortcut
         keyBinding={key}
@@ -97,9 +95,7 @@ export const Basic: Story<IKeyboardShortcutProps> = ({
 
   return (
     <div>
-      <ForgeButton type="raised">
-        <button type="button">Button</button>
-      </ForgeButton>
+      <ForgeButton variant="raised">Button</ForgeButton>
       <ForgeKeyboardShortcut
         keyBinding={key}
         on-forge-keyboard-shortcut-activate={handleKeyboardShortcut}

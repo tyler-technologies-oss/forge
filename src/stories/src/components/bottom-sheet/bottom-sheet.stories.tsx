@@ -28,9 +28,7 @@ export const Default: Story<IBottomSheetProps> = ({
   const show = () => setIsOpen(true);
   return (
     <>
-      <ForgeButton type="raised">
-        <button onClick={show}>Show bottom sheet</button>
-      </ForgeButton>
+      <ForgeButton variant="raised" onClick={show}>Show bottom sheet</ForgeButton>
 
       <ForgeBottomSheet open={isOpen} onDismiss={hide} options={{ showBackdrop, backdropClose, escapeClose, fullscreen }}>
         <header className="forge-dialog__header">
@@ -40,9 +38,7 @@ export const Default: Story<IBottomSheetProps> = ({
           {LOREM_IPSUM.p1.slice(0, 162)}
         </section>
         <footer className="forge-dialog__footer">
-          <ForgeButton type="raised" style={{ marginRight: 16 }}>
-            <button id="close-button" onClick={hide}>Close</button>
-          </ForgeButton>
+          <ForgeButton variant="raised" style={{ marginRight: 16 }} onClick={hide}>Close</ForgeButton>
         </footer>
       </ForgeBottomSheet>
     </>

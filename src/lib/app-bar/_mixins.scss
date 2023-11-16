@@ -4,13 +4,13 @@
 @use '@material/elevation/elevation-theme' as mdc-elevation-theme;
 @use '@material/theme/theme' as mdc-theme;
 @use '@material/theme/theme-color' as mdc-theme-color;
-@use '@material/icon-button/mixins' as mdc-icon-button-mixins;
 @use '@material/top-app-bar/mixins' as mdc-top-app-bar-mixins;
 @use '@material/top-app-bar/variables' as mdc-top-app-bar-variables;
 @use '../theme';
 @use './variables';
 @use '../tabs/tab-bar';
 @use '../tabs/tab';
+@use '../icon-button';
 
 @mixin provide-theme($theme) {
   @include theme.theme-properties(app-bar, $theme, variables.$theme-values);
@@ -237,8 +237,13 @@
     ));
   }
 
-  ::slotted(forge-button[type=outlined]),
-  ::slotted(forge-button:not([type])) {
-    --mdc-theme-primary: var(--forge-app-bar-theme-on-background, rgba(255, 255, 255, 0.87));
+  ::slotted(*) {
+    @include icon-button.provide-theme((
+      icon-color: var(--forge-app-bar-theme-on-background, #{variables.$on-background})
+    ));
+  }
+
+  ::slotted(forge-button:is(:not([variant]),[variant=outlined])) {
+    --forge-theme-primary: var(--forge-app-bar-theme-on-background, rgba(255, 255, 255, 0.87));
   }
 }

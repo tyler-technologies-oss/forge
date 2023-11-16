@@ -33,10 +33,7 @@ export const Default: Story<IBannerProps> = ({
     <ForgeBanner dismissed={dismissed} canDismiss={canDismiss} theme={theme}>
       {hasIcon && <ForgeIcon slot="icon" name="add_alert" />}
       <div>Minim sunt eu laborum labore minim.</div>
-      {hasButton &&
-        <ForgeButton type="outlined" slot="button">
-          <button type="button" style={{ backgroundColor: '#ffffff' }}>Learn more...</button>
-        </ForgeButton>}
+      {hasButton && <ForgeButton variant="outlined" slot="button" style={{ backgroundColor: '#ffffff' }}>Learn more...</ForgeButton>}
     </ForgeBanner>
   );
 };

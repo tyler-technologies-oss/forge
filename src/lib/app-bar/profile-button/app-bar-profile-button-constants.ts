@@ -17,7 +17,7 @@ const attributes = {
 };
 
 const selectors = {
-  BUTTON: 'button'
+  BUTTON: 'forge-icon-button'
 };
 
 export const APP_BAR_PROFILE_BUTTON_CONSTANTS = {

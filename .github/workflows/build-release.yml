@@ -12,10 +12,11 @@ on:
     paths:
       - 'forge.json'
       - 'package.json'
+      - 'package-lock.json'
       - 'tsconfig.json'
       - '.eslintrc.json'
       - '.stylelintrc'
-      - 'auto.config.ts'
+      - '.autorc'
       - '.github/workflows/**/*'
       - 'src/**/*'
   workflow_dispatch:
@@ -85,9 +86,10 @@ jobs:
               - 'forge.json'
               - 'tsconfig.json'
               - 'package.json'
+              - 'package-lock.json'
               - '.eslintrc.json'
               - '.stylelintrc'
-              - 'auto.config.ts'
+              - '.autorc'
               - '.github/workflows/**'
               - 'src/lib/**'
             test:
@@ -135,7 +137,7 @@ jobs:
     name: Deploy Storybook
     needs: wf-config
     uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.8.1
-    if: ${{ needs.wf-config.outputs.deploy-storybook == 'true' }}
+    if: ${{ needs.wf-config.outputs.is-release == 'true' && needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook

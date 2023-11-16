@@ -37,9 +37,7 @@ export const Default: Story<IMenuProps> = ({
       persistSelection={persistSelection}
       options={mode === 'click' ? SIMPLE_OPTIONS : CASCADING_OPTIONS}
       on-forge-menu-select={onSelect}>
-      <ForgeButton type="raised">
-        <button type="button">Show menu</button>
-      </ForgeButton>
+      <ForgeButton variant="raised">Show menu</ForgeButton>
     </ForgeMenu>
   );
 };

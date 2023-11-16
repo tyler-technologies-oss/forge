@@ -45,6 +45,7 @@
   { "label": "Select", "path": "/pages/select/select.html", "tags": ["form", "field"] },
   { "label": "Skeleton", "path": "/pages/skeleton/skeleton.html" },
   { "label": "Slider", "path": "/pages/slider/slider.html", "tags": ["form"] },
+  { "label": "Split button", "path": "/pages/split-button/split-button.html" },
   { "label": "Split view", "path": "/pages/split-view/split-view.html", "tags": ["form"] },
   { "label": "Stack", "path": "/pages/stack/stack.html" },
   { "label": "State layer", "path": "/pages/state-layer/state-layer.html", "tags": ["ripple", "hover", "focus", "active", "pressed"] },

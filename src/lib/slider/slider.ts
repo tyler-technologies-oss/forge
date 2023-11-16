@@ -1,5 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { internals } from '../constants';
+import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-form-component';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SliderAdapter } from './slider-adapter';
@@ -9,8 +10,7 @@ import { SliderFoundation } from './slider-foundation';
 import template from './slider.html';
 import styles from './slider.scss';
 
-export interface ISliderComponent extends IBaseComponent {
-  value: number;
+export interface ISliderComponent extends IBaseFormComponent<number> {
   valueStart: number;
   valueEnd: number;
   label: string;
@@ -23,14 +23,8 @@ export interface ISliderComponent extends IBaseComponent {
   range: boolean;
   tickmarks: boolean;
   labeled: boolean;
-  disabled: boolean;
-  readonly: boolean;
-  form: HTMLFormElement | null;
-  name: string;
   nameStart: string;
   nameEnd: string;
-  labels: NodeList;
-  internals: ElementInternals;
 }
 
 declare global {
@@ -143,7 +137,7 @@ declare global {
     StateLayerComponent
   ]
 })
-export class SliderComponent extends BaseComponent implements ISliderComponent {
+export class SliderComponent extends BaseFormComponent<number> implements ISliderComponent {
   public static get observedAttributes(): string[] {
     return [
       SLIDER_CONSTANTS.attributes.ARIA_LABEL,
@@ -169,11 +163,11 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
   public static formAssociated = true;
 
   public get form(): HTMLFormElement | null {
-    return this.internals.form;
+    return this[internals].form;
   }
 
   public get labels(): NodeList {
-    return this.internals.labels;
+    return this[internals].labels;
   }
 
   public get name(): string {
@@ -197,13 +191,13 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
     toggleAttribute(this, !!value, 'name-end', value ?? '');
   }
 
-  public readonly internals: ElementInternals;
+  public readonly [internals]: ElementInternals;
   private readonly _foundation: SliderFoundation;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this.internals = this.attachInternals();
+    this[internals] = this.attachInternals();
     this._foundation = new SliderFoundation(new SliderAdapter(this));
   }
 
@@ -291,6 +285,10 @@ export class SliderComponent extends BaseComponent implements ISliderComponent {
 
     this.value = Number(state);
     this.range = false;
+  }
+
+  public formDisabledCallback(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
   @FoundationProperty()

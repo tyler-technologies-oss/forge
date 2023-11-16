@@ -28,7 +28,12 @@ const events = {
   MEMBER_REMOVED: `${elementName}-member-removed`
 };
 
+const attributes = {
+  ADD_ON_BLUR: 'add-on-blur'
+};
+
 export const CHIP_FIELD_CONSTANTS = {
+  attributes,
   elementName,
   classes,
   slots,

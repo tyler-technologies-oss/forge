@@ -50,18 +50,14 @@ your own custom popups and it's highly recommended that you use to to make your 
 The following example shows how to use a popup all through Angular's template syntax using `<ng-template>`:
 
 ```html
-<forge-button type="raised">
   <!-- Use the forgePopup directive and set its value equal to the name of the template specified below -->
-  <button #popup="forgePopup" [forgePopup]="popupTemplate" (click)="popup.open()" forgePopupCloseOnBlur="true">Show popup</button>
-</forge-button>
+<forge-button variant="raised" #popup="forgePopup" [forgePopup]="popupTemplate" (click)="popup.open()" forgePopupCloseOnBlur="true">Show popup</forge-button>
 
 <!-- Use ng-template to allow for embedding this template in the dynamically generated popup -->
 <ng-template #popupTemplate>
   <div>
     <div>Popup Content</div>
-    <forge-button>
-      <button (click)="popup.close()">Close</button>
-    </forge-button>
+    <forge-button (click)="popup.close()">Close</forge-button>
   </div>
 </ng-template>
 ```

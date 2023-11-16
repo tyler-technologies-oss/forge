@@ -6,6 +6,8 @@ import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-const
 export interface IListItemFoundation extends ICustomElementFoundation {
   href: string;
   target: string;
+  download: string;
+  rel: string;
   static: boolean;
   nonInteractive: boolean;
   disabled: boolean;
@@ -23,7 +25,9 @@ export interface IListItemFoundation extends ICustomElementFoundation {
 
 export class ListItemFoundation implements IListItemFoundation {
   private _href: string;
-  private _target = '_blank';
+  private _target = '';
+  private _download = '';
+  private _rel = '';
   private _nonInteractive = false;
   private _disabled = false;
   private _selected = false;
@@ -69,6 +73,14 @@ export class ListItemFoundation implements IListItemFoundation {
     this._adapter.setFocus();
   }
 
+  public click(): void {
+    if (this._href) {
+      this._adapter.clickAnchor();
+    } else {
+      this._adapter.clickHost();
+    }
+  }
+
   private _onPointerDown(evt: MouseEvent): void {
     if (this._adapter.isFocused()) {
       evt.preventDefault();
@@ -77,7 +89,7 @@ export class ListItemFoundation implements IListItemFoundation {
 
   private _onKeydown(evt: KeyboardEvent): void {
     if (evt.key === 'Enter' || evt.key === ' ') {
-      if (evt.key === ' ') {
+      if (!this._href && evt.key === ' ') {
         evt.preventDefault();
       }
       this._adapter.animateStateLayer();
@@ -117,7 +129,7 @@ export class ListItemFoundation implements IListItemFoundation {
   public set href(value: string) {
     if (this._href !== value) {
       this._href = value;
-      this._adapter.setHref(this._href, this._target);
+      this._adapter.setHref(this._href);
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.HREF, !!this._href, this._href);
     }
   }
@@ -129,9 +141,31 @@ export class ListItemFoundation implements IListItemFoundation {
     if (this._target !== value) {
       this._target = value;
       if (this._href) {
-        this._adapter.setHrefTarget(this._target);
+        this._adapter.setAnchorTarget(this._target);
       }
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.TARGET, !!this._target, this._target);
+    }
+  }
+
+  public get download(): string {
+    return this._download;
+  }
+  public set download(value: string) {
+    if (this._download !== value) {
+      this._download = value;
+      this._adapter.setAnchorDownload(this._download);
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.DOWNLOAD, !!this._download, this._download);
+    }
+  }
+
+  public get rel(): string {
+    return this._rel;
+  }
+  public set rel(value: string) {
+    if (this._rel !== value) {
+      this._rel = value;
+      this._adapter.setAnchorRel(this._rel);
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.REL, !!this._rel, this._rel);
     }
   }
 

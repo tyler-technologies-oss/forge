@@ -2,7 +2,7 @@ import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean,
 
 import { CircularProgressAdapter } from './circular-progress-adapter';
 import { CircularProgressFoundation } from './circular-progress-foundation';
-import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
+import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './circular-progress.html';
@@ -11,6 +11,8 @@ import styles from './circular-progress.scss';
 export interface ICircularProgressComponent extends IBaseComponent {
   determinate: boolean;
   progress: number;
+  theme: CircularProgressTheme;
+  track: boolean;
 }
 
 declare global {
@@ -32,8 +34,13 @@ declare global {
  *
  * @property {boolean} determinate - Controls the determinate state.
  * @property {boolean} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
+ * @property {CircularProgressTheme} theme - Controls the theme of the progress indicator.
+ * @property {boolean} track - Controls the visibility of the track background.
  * 
  * @attribute {boolean} determinate - Controls the determinate state.
+ * @attribute {boolean} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
+ * @attribute {CircularProgressTheme} theme - Controls the theme of the progress indicator.
+ * @attribute {boolean} no-track - Controls the visibility of the track background.
  * @attribute {string} data-aria-label - Propagates an `aria-label` to the underlying progressbar element.
  * 
  * @slot - The is the default/unnamed slot. Renders content at the center of the progress indicator.
@@ -41,8 +48,11 @@ declare global {
  * @cssproperty --forge-circular-progress-size - The height and width of the indicator container.
  * @cssproperty --forge-circular-progress-padding - The padding inside the bounding box of the container.
  * @cssproperty --forge-circular-progress-track-width - The track indicator width.
- * @cssproperty --forge-circular-progress-track-color - The track indicator color.
- * @cssproperty --forge-circular-progress-track-background - The track background color.
+ * @cssproperty --forge-circular-progress-track-color - The track background color.
+ * @cssproperty --forge-circular-progress-indicator-color - The track indicator color.
+ * @cssproperty --forge-circular-progress-arc-duration - The duration of the arc animation.
+ * @cssproperty --forge-circular-progress-theme-transition-duration - The duration of the theme transition.
+ * @cssproperty --forge-circular-progress-theme-transition-timing - The easing function to use for the theme transition.
  * 
  * @csspart progressbar - Styles the progress bar container element
  */
@@ -54,6 +64,8 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
     return [
       CIRCULAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,
       CIRCULAR_PROGRESS_CONSTANTS.attributes.PROGRESS,
+      CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME,
+      CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK,
       CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL
     ];
   }
@@ -78,6 +90,12 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
       case CIRCULAR_PROGRESS_CONSTANTS.attributes.PROGRESS:
         this.progress = coerceNumber(newValue);
         break;
+      case CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME:
+        this.theme = newValue as CircularProgressTheme;
+        break;
+      case CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK:
+        this.track = !coerceBoolean(newValue);
+        break;
       case CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL:
         this._foundation.ariaLabel = newValue;
         break;
@@ -89,4 +107,10 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
 
   @FoundationProperty()
   public declare progress: number;
+
+  @FoundationProperty()
+  public declare theme: CircularProgressTheme;
+
+  @FoundationProperty()
+  public declare track: boolean;
 }

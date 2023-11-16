@@ -1,10 +1,6 @@
 @use './mixins';
 @use './variables';
 
-// Sub-component styles
-@use '../button/forge-button';
-@use '../icon-button/forge-icon-button';
-
 @include mixins.core-styles;
 
 :host {

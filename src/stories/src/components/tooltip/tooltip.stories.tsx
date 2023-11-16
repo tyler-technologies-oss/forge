@@ -21,10 +21,10 @@ export const Default: Story<ITooltipProps> = ({
   delay = TOOLTIP_CONSTANTS.numbers.DEFAULT_DELAY,
   position = TOOLTIP_CONSTANTS.strings.DEFAULT_POSITION
 }) => (
-  <ForgeButton type="raised">
-    <button>Hover me</button>
+  <>
+    <ForgeButton variant="raised">Hover me</ForgeButton>
     <ForgeTooltip text={text} delay={delay} position={position} />
-  </ForgeButton>
+  </>
 );
 Default.args = {
   text: 'Forge components are awesome!',

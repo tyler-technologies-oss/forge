@@ -13,7 +13,6 @@ $label: utils.inherit-map(core.$base, (
 $button: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(button, font-size, '0875'),
   font-weight: weight.value(medium),
-  line-height: type-utils.font-size-relative(button, line-height, '2250'),
   letter-spacing: type-utils.calc-letter-spacing(1, scale.value('0875'))
 )) !default;
 

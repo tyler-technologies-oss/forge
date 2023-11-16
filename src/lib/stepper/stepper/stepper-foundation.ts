@@ -76,7 +76,7 @@ export class StepperFoundation implements IStepperFoundation {
 
   /** The step configurations. */
   public get steps(): IStepConfiguration[] {
-    return JSON.parse(JSON.stringify(this._steps));
+    return this._steps.map(s => ({ ...s })); // Shallow clone
   }
   public set steps(value: IStepConfiguration[]) {
     if (Array.isArray(value) && value.length > 0) {

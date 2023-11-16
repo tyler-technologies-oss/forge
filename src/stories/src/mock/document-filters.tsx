@@ -101,9 +101,7 @@ const DocumentPrice: FC = () => {
     <ForgeExpansionPanel open={true}>
       <ForgeListItem slot="header">
         Document price
-        <ForgeButton>
-          <button>Clear</button>
-        </ForgeButton>
+        <ForgeButton>Clear</ForgeButton>
       </ForgeListItem>
       <div style={{
         display: 'flex', 

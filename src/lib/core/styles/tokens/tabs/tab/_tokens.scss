@@ -36,7 +36,7 @@ $tokens: (
   
   // Content
   content-height: utils.module-ref(tab, content-height, height),
-  content-padding: utils.module-val(tab, content-padding, spacing.variable('025')),
+  content-padding: utils.module-val(tab, content-padding, spacing.variable(xxsmall)),
 
   // Icon
   active-focus-icon-color: utils.module-ref(tab, active-focus-icon-color, active-color),

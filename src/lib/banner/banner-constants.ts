@@ -10,7 +10,7 @@ const classes = {
 const selectors = {
   BANNER: '.forge-banner',
   FORGE_DISMISS_BUTTON: 'forge-icon-button.forge-banner__container-dismiss',
-  DISMISS_BUTTON: '.forge-banner__container-dismiss button',
+  DISMISS_BUTTON: '.forge-banner__container-dismiss',
   ICON: 'i',
   FORGE_BUTTON: 'forge-button'
 };

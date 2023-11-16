@@ -1,15 +1,24 @@
-import { coerceBoolean, coerceNumber, CustomElement, emitEvent, ensureChild, toggleClass } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { ForgeRipple } from '../ripple';
-import { createUserInteractionListener } from '../core/utils';
-import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { IconComponent, IconRegistry } from '../icon';
+import { BaseButton, IBaseButton } from '../button/base/base-button';
+import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants';
+import { FocusIndicatorComponent } from '../focus-indicator';
+import { StateLayerComponent } from '../state-layer';
+import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants';
+import { IconButtonFoundation } from './icon-button-foundation';
+import { IconButtonAdapter } from './icon-button-adapter';
 
-export interface IIconButtonComponent extends IBaseComponent {
+import template from './icon-button.html';
+import styles from './icon-button.scss';
+
+export interface IIconButtonComponent extends IBaseButton {
   toggle: boolean;
-  isOn: boolean;
-  dense: boolean;
-  densityLevel: number;
-  layout(): void;
+  on: boolean;
+  variant: IconButtonVariant;
+  theme: IconButtonTheme;
+  shape: IconButtonShape;
+  density: IconButtonDensity;
 }
 
 declare global {
@@ -18,269 +27,128 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-icon-button-change': CustomEvent<boolean>;
+    'forge-icon-button-toggle': CustomEvent<boolean>;
   }
 }
 
 /**
- * The custom element class behind the `<forge-icon-button>` element.
- * 
  * @tag forge-icon-button
+ * 
+ * @summary Icons buttons are used to trigger an action or event.
+ * 
+ * @property {boolean} toggle - Whether or not the icon button can be toggled.
+ * @property {boolean} on - Whether or not the button is on. Only applies when `toggle` is `true`.
+ * @property {IconButtonVariant} variant - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+ * @property {IconButtonTheme} theme - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @property {string} shape - The shape of the button. Valid values are `circular` and `squared`.
+ * @property {IconButtonDensity} density - The density of the button. Valid values are `small`, `medium`, and `large`.
+ * @property {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
+ * @property {boolean} disabled - Whether or not the button is disabled.
+ * @property {boolean} popoverIcon - Whether or not the button shows a built-in popover icon.
+ * @property {string} name - The name of the button.
+ * @property {string} value - The form value of the button.
+ * @property {boolean} dense - Whether or not the button is dense.
+ * @property {boolean} anchor - Whether or not the button is an `<a>` element.
+ * @property {string} href - The href of the anchor.
+ * @property {string} target - The target of the anchor.
+ * @property {string} download - The download of the anchor.
+ * @property {string} rel - The rel of the anchor.
+ * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
+ * 
+ * @attribute {boolean} toggle - Whether or not the icon button can be toggled.
+ * @attribute {boolean} on - Whether or not the button is on. Only applies when `toggle` is `true`.
+ * @attribute {IconButtonVariant} variant - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+ * @attribute {IconButtonTheme} theme - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @attribute {string} shape - The shape of the button. Valid values are `circular` and `squared`.
+ * @attribute {IconButtonDensity} density - The density of the button. Valid values are `small`, `medium`, and `large`.
+ * @attribute {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
+ * @attribute {boolean} disabled - Whether or not the button is disabled.
+ * @attribute {boolean} popover-icon - Whether or not the button shows a built-in popover icon.
+ * @attribute {string} name - The name of the button.
+ * @attribute {string} value - The form value of the button.
+ * @attribute {boolean} dense - Whether or not the button is dense.
+ * @attribute {boolean} anchor - Whether or not the button is an `<a>` element.
+ * @attribute {string} href - The href of the anchor.
+ * @attribute {string} target - The target of the anchor.
+ * @attribute {string} download - The download of the anchor.
+ * @attribute {string} rel - The rel of the anchor.
+ * 
+ * @event {Event} click - Fires when the button is clicked.
+ * @event {Event} forge-icon-button-toggle - Fires when the icon button is toggled.
+ * 
+ * @csspart root - The root container element.
+ * @csspart focus-indicator - The focus-indicator indicator element.
+ * @csspart state-layer - The state-layer surface element.
+ * 
+ * @slot - This is a default/unnamed slot for the icon.
+ * @slot on - The icon to show when in `toggle` mode when toggled "on".
+ * @slot start - Elements to logically render before the icon.
+ * @slot end - Elements to logically render after the icon.
  */
 @CustomElement({
-  name: ICON_BUTTON_CONSTANTS.elementName
+  name: ICON_BUTTON_CONSTANTS.elementName,
+  dependencies: [
+    FocusIndicatorComponent,
+    StateLayerComponent,
+    IconComponent
+  ]
 })
-export class IconButtonComponent extends BaseComponent implements IIconButtonComponent {
+export class IconButtonComponent extends BaseButton<IconButtonFoundation> implements IIconButtonComponent {
   public static get observedAttributes(): string[] {
     return [
-      ICON_BUTTON_CONSTANTS.attributes.IS_ON,
-      ICON_BUTTON_CONSTANTS.attributes.DENSE,
-      ICON_BUTTON_CONSTANTS.attributes.DENSITY_LEVEL,
-      ICON_BUTTON_CONSTANTS.attributes.TOGGLE
+      ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
+      ...Object.values(ICON_BUTTON_CONSTANTS.observedAttributes)
     ];
   }
 
-  private _rippleInstance: ForgeRipple;
-  private _buttonElement: HTMLButtonElement;
-  private _toggle = false;
-  private _isOn = false;
-  private _dense = false;
-  private _densityLevel = 5;
-  private _toggleHandler: (event: Event) => void;
-  private _destroyUserInteractionListener: (() => void) | undefined;
+  protected readonly _foundation: IconButtonFoundation;
 
   constructor() {
     super();
+    IconRegistry.define(tylIconArrowDropDown);
+    attachShadowTemplate(this, template, styles);
+    this._foundation = new IconButtonFoundation(new IconButtonAdapter(this));
   }
 
-  public connectedCallback(): void {
-    if (this.querySelector(ICON_BUTTON_CONSTANTS.selectors.BUTTON)) {
-      this._initialize();
-    } else {
-      ensureChild(this, ICON_BUTTON_CONSTANTS.selectors.BUTTON).then(() => this._initialize());
-    }
-  }
-
-  public disconnectedCallback(): void {
-    if (typeof this._destroyUserInteractionListener === 'function') {
-      this._destroyUserInteractionListener();
-      this._destroyUserInteractionListener = undefined;
-    }
-
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
-    }
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case ICON_BUTTON_CONSTANTS.attributes.IS_ON:
-        this.isOn = coerceBoolean(newValue);
-        break;
-      case ICON_BUTTON_CONSTANTS.attributes.DENSE:
-        this.dense = coerceBoolean(newValue);
-        break;
-      case ICON_BUTTON_CONSTANTS.attributes.DENSITY_LEVEL:
-        this.densityLevel = coerceNumber(newValue);
-        break;
       case ICON_BUTTON_CONSTANTS.attributes.TOGGLE:
         this.toggle = coerceBoolean(newValue);
         break;
+      case ICON_BUTTON_CONSTANTS.attributes.ON:
+        this.on = coerceBoolean(newValue);
+        break;
+      case ICON_BUTTON_CONSTANTS.attributes.VARIANT:
+        this.variant = newValue as IconButtonVariant;
+        break;
+      case ICON_BUTTON_CONSTANTS.attributes.THEME:
+        this.theme = newValue as IconButtonTheme;
+        break;
+      case ICON_BUTTON_CONSTANTS.attributes.SHAPE:
+        this.shape = newValue as IconButtonShape;
+        break;
+      case ICON_BUTTON_CONSTANTS.attributes.DENSITY:
+        this.density = newValue as IconButtonDensity;
+        break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  /** Gets/sets whether the button is togglable. */
-  public get toggle(): boolean {
-    return this._toggle;
-  }
-  public set toggle(value: boolean) {
-    this._toggle = value;
+  @FoundationProperty()
+  public declare toggle: boolean;
 
-    if (this._toggle) {
-      this._initializeToggle();
-    } else {
-      this._destroyToggle();
-    }
-  }
+  @FoundationProperty()
+  public declare on: boolean;
 
-  /** Gets/sets the toggled state of the icon button. Only applies when `toggle = true`. */
-  public get isOn(): boolean {
-    return this._isOn;
-  }
-  public set isOn(value: boolean) {
-    if (this._isOn !== value) {
-      this._isOn = value;
-      this._applyToggle();
-    }
-  }
+  @FoundationProperty()
+  public declare theme: IconButtonTheme;
 
-  /** Gets/sets whether the icon button is dense. */
-  public get dense(): boolean {
-    return this._dense;
-  }
-  public set dense(value: boolean) {
-    if (this._dense !== value) {
-      this._dense = value;
-      this._applyDensity();
-    }
-  }
+  @FoundationProperty()
+  public declare variant: IconButtonVariant;
 
-  /** Controls the density level. 1 (least dense) to 6 (most dense). */
-  public get densityLevel(): number {
-    return this._densityLevel;
-  }
-  public set densityLevel(value: number) {
-    if (this._densityLevel !== value) {
-      this._densityLevel = value;
+  @FoundationProperty()
+  public declare shape: IconButtonShape;
 
-      if (this._densityLevel <= 0) {
-        this._densityLevel = 1;
-      } else if (this._densityLevel > 6) {
-        this._densityLevel = 6;
-      } else if (typeof this._densityLevel !== 'number') {
-        this._densityLevel = 5;
-      }
-
-      this._applyDensity();
-    }
-  }
-
-  private _initialize(): void {
-    this._buttonElement = this.querySelector(ICON_BUTTON_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
-    if (!this._buttonElement) {
-      return;
-    }
-
-    this._buttonElement.classList.add(ICON_BUTTON_CONSTANTS.classes.BUTTON);
-    this._applyToggle();
-    this._applyDensity();
-    this._toggleHandler = () => {
-      this._toggleValue();
-      emitEvent(this, ICON_BUTTON_CONSTANTS.events.CHANGE, this._isOn, true);
-    };
-
-    if (this._toggle) {
-      this._initializeToggle();
-    }
-
-    // We wait to initialize the ripple instance until the user interacts with the component to avoid unnecessary performance overhead
-    this._deferRippleInitialization();
-  }
-
-  private async _deferRippleInitialization(): Promise<void> {
-    const { userInteraction, destroy } = createUserInteractionListener(this._buttonElement);
-    this._destroyUserInteractionListener = destroy;
-    const { type } = await userInteraction;
-    this._destroyUserInteractionListener = undefined;
-    if (!this._rippleInstance) {
-      this._rippleInstance = this._createRipple();
-      if (type === 'focusin') {
-        this._rippleInstance.handleFocus();
-      }
-    }
-  }
-
-  private _createRipple(): ForgeRipple {
-    if (this._rippleInstance) {
-      this._rippleInstance.destroy();
-    }
-    const ripple = new ForgeRipple(this._buttonElement);
-    ripple.unbounded = true;
-    return ripple;
-  }
-
-  private _toggleValue(): void {
-    this._isOn = !this._isOn;
-    this._applyToggle();
-  }
-
-  private _applyToggle(): void {
-    if (!this._buttonElement) {
-      return;
-    }
-    toggleClass(this._buttonElement, this._isOn, ICON_BUTTON_CONSTANTS.classes.BUTTON_ON);
-    if (this._toggle) {
-      this._buttonElement.setAttribute('aria-pressed', `${this._isOn}`);
-    }
-  }
-
-  private _applyDensity(): void {
-    if (!this._buttonElement) {
-      return;
-    }
-
-    // Remove all other density classes first
-    ICON_BUTTON_CONSTANTS.classes.DENSITY.forEach(c => this._buttonElement.classList.remove(c));
-
-    if (this._dense) {
-      this.setAttribute(ICON_BUTTON_CONSTANTS.attributes.DENSE, '');
-      this._buttonElement.classList.add(ICON_BUTTON_CONSTANTS.classes.BUTTON_DENSE);
-
-      // 5 is the default density level (we apply 5 implicitly in the regular dense class)
-      // Exclude 5 since its already covered by dense class
-      if (this._densityLevel < 7 && this._densityLevel > 0 && this.densityLevel !== 5) {
-        const densityLevelClass = ICON_BUTTON_CONSTANTS.classes.DENSITY[this._densityLevel - 1];
-        this._buttonElement.classList.add(densityLevelClass);
-        this.setAttribute(ICON_BUTTON_CONSTANTS.attributes.DENSITY_LEVEL, this._densityLevel.toString());
-      }
-    } else {
-      this.removeAttribute(ICON_BUTTON_CONSTANTS.attributes.DENSE);
-      this._buttonElement.classList.remove(ICON_BUTTON_CONSTANTS.classes.BUTTON_DENSE);
-    }
-
-    // re-layout the ripple for cases where dense was changed after initial layout
-    if (this._rippleInstance) {
-      this._rippleInstance.layout();
-    }
-  }
-
-  private _initializeToggle(): void {
-    if (!this._buttonElement) {
-      return;
-    }
-    const icons = Array.from(this._buttonElement.querySelectorAll(ICON_BUTTON_CONSTANTS.selectors.ICON));
-
-    // We require two icon/image elements to be specified for the "on" and "off" states
-    if (icons.length !== 2) {
-      console.error('You must specify two icons, one for "on" and one for "off".');
-      return;
-    }
-
-    // Add the icon class to each icon
-    icons.forEach(icon => icon.classList.add(ICON_BUTTON_CONSTANTS.classes.ICON));
-
-    // If there are no icons that specify the "on" class, then automatically choose the first icon as the "on" icon and add the class,
-    // alternatively we check for the existence of a `forge-icon-button-on` attribute on any of the icons and use that.
-    if (!icons.some(icon => icon.classList.contains(ICON_BUTTON_CONSTANTS.classes.ICON_ON))) {
-      const requestedOnIcon = icons.find(icon => icon.hasAttribute(ICON_BUTTON_CONSTANTS.attributes.ICON_ON));
-      if (requestedOnIcon) {
-        requestedOnIcon.classList.add(ICON_BUTTON_CONSTANTS.classes.ICON_ON);
-      } else {
-        icons[0].classList.add(ICON_BUTTON_CONSTANTS.classes.ICON_ON);
-      }
-    }
-
-    this._buttonElement.addEventListener('click', this._toggleHandler);
-
-    // Wait a frame to ensure the value of the `on` property has been set
-    window.requestAnimationFrame(() => {
-      if (this._isOn) {
-        this._buttonElement.classList.add(ICON_BUTTON_CONSTANTS.classes.BUTTON_ON);
-        this._buttonElement.setAttribute('aria-pressed', `${this._isOn}`);
-      }
-    });
-  }
-
-  private _destroyToggle(): void {
-    if (!this._buttonElement) {
-      return;
-    }
-    this._buttonElement.removeEventListener('click', this._toggleHandler);
-  }
-
-  public layout(): void {
-    if (this._rippleInstance) {
-      this._rippleInstance.layout();
-    }
-  }
+  @FoundationProperty()
+  public declare density: IconButtonDensity;
 }

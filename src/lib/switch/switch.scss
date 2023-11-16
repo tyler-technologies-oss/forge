@@ -1,8 +1,8 @@
 @use './core';
 @use './configuration';
-@use '../core/styles/tokens/switch/tokens';
 @use '../focus-indicator';
 @use '../state-layer';
+@use './token-utils' as *;
 
 :host {
   @include core.host;
@@ -12,13 +12,16 @@
   display: none;
 }
 
-// Off
 .forge-switch {
   @include configuration.configuration;
+}
+
+// Off
+.forge-switch {
   @include core.switch;
 
-  --_current-state-layer-width: var(--_state-layer-width);
-  --_current-state-layer-height: var(--_state-layer-height);
+  #{declare(current-state-layer-width)}: #{token(state-layer-width)};
+  #{declare(current-state-layer-height)}: #{token(state-layer-height)};
 
   .container {
     @include core.container;
@@ -39,7 +42,19 @@
   .icon {
     @include core.icon;
 
+    // TODO: Use when icon supports tokens
+    // @include icon.provide-theme((
+    //   font-size: #{token(icon-size)}
+    // ));
+    --forge-icon-font-size: #{token(icon-off-size)};
+
     &__on {
+      // TODO: Use when icon supports tokens
+      // @include icon.provide-theme((
+      //   font-size: #{token(icon-on-size)}
+      // ));
+      --forge-icon-font-size: #{token(icon-on-size)};
+
       @include core.icon-on;
       @include core.icon-hidden;
     }
@@ -85,7 +100,7 @@
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: var(--_state-layer-on-color)
+      color: #{token(state-layer-on-color)}
     ));
   }
 }
@@ -130,8 +145,8 @@
 :host([dense]) {
   .forge-switch {
     // Set the state layer width and height for use in calculations of other properties
-    --_current-state-layer-width: var(--_state-layer-dense-width);
-    --_current-state-layer-height: var(--_state-layer-dense-height);
+    #{declare(current-state-layer-width)}: #{token(state-layer-dense-width)};
+    #{declare(current-state-layer-height)}: #{token(state-layer-dense-height)};
   }
 }
 
@@ -162,21 +177,19 @@
 // Reduced motion
 @media (prefers-reduced-motion) {
   .switch {
-    --_animation-duration: 0s;
+    @include override(animation-duration, 0s, value);
   }
 }
 
 forge-state-layer {
   @include state-layer.provide-theme((
-    color: var(--_state-layer-off-color)
+    color: #{token(state-layer-off-color)}
   ));
 }
 
-/* stylelint-disable length-zero-no-unit */
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
-    shape: var(--_track-shape),
-    outward-offset: 0px
+    shape: #{token(track-shape)},
+    outward-offset: 0px // Requires unit
   ));
 }
-/* stylelint-enable length-zero-no-unit */

@@ -1,9 +1,13 @@
-@use '@material/button/button-outlined-theme' as mdc-button-outlined-theme;
 @use '@material/chips/chip-theme' as mdc-chip-theme;
+@use '@material/ripple/ripple' as mdc-ripple;
 @use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '@material/animation/animation' as mdc-animation;
 @use '@material/theme/theme' as mdc-theme;
-@use '../../button/mixins' as button-mixins;
+@use '@material/feature-targeting/feature-targeting' as mdc-feature-targeting;
+@use '@material/button/button-base' as mdc-button-base;
+@use '@material/button/button-shared-theme' as mdc-button-shared-theme;
+@use '@material/button/button-outlined' as mdc-button-outlined;
+@use '@material/button/button-outlined-theme' as mdc-button-outlined-theme;
 @use '@material/checkbox/checkbox' as mdc-checkbox;
 @use '../../theme';
 @use './variables';
@@ -13,8 +17,6 @@
     @include base;
 
     &.forge-chip--disabled {
-      @include button-mixins.outlined-disabled;
-
       @include theme.property(border-color, border-color);
       @include mdc-theme.property(color, text-disabled-on-light);
       cursor: default;
@@ -193,15 +195,27 @@
 }
 
 @mixin base() {
-  @include button-mixins.base;
-  @include button-mixins.outlined;
+  @include mdc-ripple.surface();
+  @include mdc-ripple.radius-bounded();
+  @include mdc-ripple-theme.states(primary, false);
+  @include mdc-button-base.base(mdc-feature-targeting.all());
+  @include mdc-button-shared-theme.shape-radius(small);
+  @include mdc-button-shared-theme.container-fill-color(transparent);
+  @include mdc-button-shared-theme.ink-color(primary);
+  @include mdc-button-shared-theme.density(0);
+  @include mdc-button-outlined.outlined(mdc-feature-targeting.all());
+  @include mdc-button-outlined-theme.outline-width(mdc-button-outlined-theme.$outlined-border-width);
+  @include mdc-button-outlined-theme.outline-color(primary);
+
   @include mdc-chip-theme.shape-radius(50%);
   @include theme.css-custom-property(width, --forge-chip-width, auto);
   @include theme.css-custom-property(height, --forge-chip-height, auto);
   @include theme.css-custom-property(min-height, --forge-chip-min-height, variables.$min-height);
-
+  
   box-sizing: border-box;
   transition: mdc-animation.enter(background-color, 150ms);
+  text-transform: none;
+  overflow: hidden;
 }
 
 @mixin invalid() {

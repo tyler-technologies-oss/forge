@@ -166,4 +166,8 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
 
   @FoundationProperty()
   public declare alignment: PaginatorAlternativeAlignment;
+
+  public override focus(options?: FocusOptions): void {
+    this._foundation.focus(options);
+  }
 }

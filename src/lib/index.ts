@@ -66,6 +66,7 @@ import { OptionComponent, OptionGroupComponent, SelectComponent } from './select
 import { SelectDropdownComponent } from './select/select-dropdown';
 import { SkeletonComponent } from './skeleton';
 import { SliderComponent } from './slider';
+import { SplitButtonComponent } from './split-button';
 import { SplitViewComponent } from './split-view';
 import { StackComponent } from './stack';
 import { StateLayerComponent } from './state-layer';
@@ -132,6 +133,7 @@ export * from './scaffold';
 export * from './select';
 export * from './skeleton';
 export * from './slider';
+export * from './split-button';
 export * from './split-view';
 export * from './stack';
 export * from './state-layer';

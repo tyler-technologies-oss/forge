@@ -75,12 +75,8 @@ export const Styled: Story<ICardProps> = ({
         </div>
         <div style={footerStyle}>
           <div>
-            <ForgeButton>
-              <button type="button">Ok</button>
-            </ForgeButton>
-            <ForgeButton>
-              <button type="button">Cancel</button>
-            </ForgeButton>
+            <ForgeButton>Ok</ForgeButton>
+            <ForgeButton>Cancel</ForgeButton>
           </div>
         </div>
       </ForgeCard>
@@ -116,12 +112,8 @@ export const WithScaffold: Story<ICardProps> = ({
         </p>
 
         <ForgeToolbar slot="footer" inverted>
-          <ForgeButton type="outlined" slot="end">
-            <button type="button">Cancel</button>
-          </ForgeButton>
-          <ForgeButton type="unelevated" slot="end" style={{marginLeft: '8px'}}>
-            <button type="button">Ok</button>
-          </ForgeButton>
+          <ForgeButton variant="outlined" slot="end">Cancel</ForgeButton>
+          <ForgeButton variant="unelevated" slot="end" style={{marginLeft: '8px'}}>Ok</ForgeButton>
         </ForgeToolbar>
       </ForgeScaffold>
     </ForgeCard>

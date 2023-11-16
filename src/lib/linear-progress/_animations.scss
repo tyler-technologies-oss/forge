@@ -3,6 +3,8 @@
 /// The original source code can be found at [GitHub](https://github.com/material-components/material-web/blob/main/linearprogress/lib/_linear-progress.scss)
 ///
 
+@use './token-utils' as *;
+
 @mixin keyframes {
   @include _directional-keyframes('ltr');
   @include _directional-keyframes('rtl');
@@ -72,7 +74,7 @@
 
   @keyframes buffering#{$suffix} {
     0% {
-      transform: translateX(calc(#{$sign} * var(--_track-background-width)));
+      transform: translateX(calc(#{$sign} * #{token(track-background-width, custom)}));
     }
   }
 

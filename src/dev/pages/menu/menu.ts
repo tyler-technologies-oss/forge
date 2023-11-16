@@ -5,7 +5,6 @@ import type { IListItemComponent, IMenuComponent, IMenuOption, ISwitchComponent 
 import '@tylertech/forge/menu';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import { tylIconArrowBack, tylIconArrowForward, tylIconHelp, tylIconLoop, tylIconPerson, tylIconSettings } from '@tylertech/tyler-icons/standard';
 
 IconRegistry.define([

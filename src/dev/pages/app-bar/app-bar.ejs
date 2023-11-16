@@ -6,7 +6,7 @@
   <forge-app-bar-search id="app-bar-search" slot="center">
     <input type="text" placeholder="Search" aria-label="Search" />
     <forge-icon-button id="app-bar-search-action" slot="end">
-      <button class="tyler-icons">keyboard_voice</button>
+      <forge-icon name="keyboard_voice"></forge-icon>
     </forge-icon-button>
   </forge-app-bar-search>
 
@@ -18,12 +18,12 @@
     slot="end"
     avatar-text="First Last"
     full-name="First Last"
-    email="first.last@forge.tylerdev.io"
+    email="first.last@tylerforge.io"
     profile-button
     profile-button-text="View profile">
   </forge-app-bar-profile-button>
 
-  <forge-tab-bar slot="bottom" active-tab="0" clustered>
+  <forge-tab-bar slot="bottom" active-tab="0" clustered scroll-buttons>
     <forge-tab>Tab 1</forge-tab>
     <forge-tab>Tab 2</forge-tab>
     <forge-tab>Tab 3</forge-tab>

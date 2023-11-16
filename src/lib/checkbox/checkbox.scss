@@ -2,6 +2,7 @@
 @use './configuration';
 @use '../focus-indicator';
 @use '../state-layer';
+@use './token-utils' as *;
 
 :host {
   @include core.host;
@@ -14,6 +15,9 @@
 // Unchecked
 .forge-checkbox {
   @include configuration.configuration;
+}
+
+.forge-checkbox {
   @include core.checkbox;
 
   .container {
@@ -69,7 +73,7 @@
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: var(--_state-layer-checked-color)
+      color: #{token(state-layer-checked-color)}
     ));
   }
 }
@@ -92,7 +96,7 @@
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: var(--_state-layer-on-color)
+      color: #{token(state-layer-checked-color)}
     ));
   }
 }
@@ -128,21 +132,19 @@
 // Reduced motion
 @media (prefers-reduced-motion) {
   .forge-checkbox {
-    --_animation-duration: 0s;
+    @include override(animation-duration, 0s, value);
   }
 }
 
 forge-state-layer {
   @include state-layer.provide-theme((
-    color: var(--_state-layer-unchecked-color)
+    color: #{token(state-layer-unchecked-color)}
   ));
 }
 
-/* stylelint-disable length-zero-no-unit */
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
-    shape: 0px,
+    shape: 0px, // Requires unit
     outward-offset: 8px
   ));
 }
-/* stylelint-enable length-zero-no-unit */

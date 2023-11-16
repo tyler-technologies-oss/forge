@@ -9,6 +9,7 @@ import {
   defineDateRangePickerComponent,
   defineTextFieldComponent,
   formatDate,
+  IButtonComponent,
   ICalendarComponent,
   ICON_BUTTON_CONSTANTS,
   IDateRange,
@@ -1627,28 +1628,26 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     return popup.querySelector('[data-forge-live-announcer]') as HTMLElement;
   }
 
-  function getTodayButton(component: IDateRangePickerComponent): HTMLButtonElement {
+  function getTodayButton(component: IDateRangePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#today-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#today-button') as IButtonComponent ?? null;
   }
 
-  function getClearButton(component: IDateRangePickerComponent): HTMLButtonElement {
+  function getClearButton(component: IDateRangePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#clear-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#clear-button') as IButtonComponent ?? null;
   }
 
   function clickTodayButton(component: IDateRangePickerComponent): void {
     const todayButton = getTodayButton(component);
     todayButton.click();
-    todayButton.dispatchEvent(new MouseEvent('click'));
   }
 
   function clickClearButton(component: IDateRangePickerComponent): void {
     const clearButton = getClearButton(component);
     clearButton.click();
-    clearButton.dispatchEvent(new MouseEvent('click'));
   }
 
   async function popupCloseAnimation(): Promise<void> {

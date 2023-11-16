@@ -1,6 +1,10 @@
 @use './core';
 @use './configuration';
 
+//
+// Host
+//
+
 :host {
   @include core.host;
 }
@@ -15,6 +19,9 @@
 
 .forge-state-layer {
   @include configuration.configuration;
+}
+
+.forge-state-layer {
   @include core.surface;
 
   &--hovered::before {

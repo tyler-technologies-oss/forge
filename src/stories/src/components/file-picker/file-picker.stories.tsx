@@ -39,9 +39,7 @@ export const Default: Story<IFilePickerProps> = ({
       style={styles}>
       <span slot="primary">Drag files here or</span>
       <span slot="secondary">Secondary text here</span>
-      <ForgeButton type="outlined">
-        <button type="button">Select files</button>
-      </ForgeButton>
+      <ForgeButton variant="outlined">Select files</ForgeButton>
       {hasHelperText && <span slot="helper-text">Helper text goes here</span>}
     </ForgeFilePicker>
   );

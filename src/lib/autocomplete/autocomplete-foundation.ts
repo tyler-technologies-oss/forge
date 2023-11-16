@@ -803,11 +803,11 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     if (value == null) {
       values = [];
     } else if (Array.isArray(value)) {
-      values = JSON.parse(JSON.stringify(value));
+      values = structuredClone(value);
     } else if (isString(value)) {
       values = [value];
     } else {
-      values = [JSON.parse(JSON.stringify(value))];
+      values = [structuredClone(value)];
     }
 
     const hasNewValue = values.length !== this._values.length || values.some(v => !this._values.includes(v));

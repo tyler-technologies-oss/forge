@@ -1,7 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/keyboard-shortcut';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/text-field';
 import { IKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
 import { ISwitchComponent } from '@tylertech/forge';

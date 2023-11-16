@@ -1,7 +1,5 @@
-@use '../../core/styles/tokens/list/list/tokens';
+@use './token-utils' as *;
 
 @mixin configuration {
-  --_container-color: #{tokens.get(container-color)};
-  --_block-padding: #{tokens.get(block-padding)};
-  --_inline-padding: #{tokens.get(inline-padding)};
+  @include tokens;
 }

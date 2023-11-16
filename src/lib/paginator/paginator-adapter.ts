@@ -41,7 +41,8 @@ export interface IPaginatorAdapter extends IBaseAdapter {
   enableLastPageButton(): void;
   setAlternative(alternative: boolean): void;
   setAlignment(alignment: PaginatorAlternativeAlignment): void;
-  handleFocusMove(from: PaginatorFieldIdentifier): void;
+  hasFocus(): boolean;
+  handleFocusMove(from?: PaginatorFieldIdentifier | null, options?: FocusOptions): void;
 }
 
 /**
@@ -260,8 +261,12 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
     }
   }
 
-  public handleFocusMove(from: PaginatorFieldIdentifier): void {
-    if (!this._component.matches(':focus')) {
+  public hasFocus(): boolean {
+    return this._component.matches(':focus');
+  }
+
+  public handleFocusMove(from?: PaginatorFieldIdentifier, options?: FocusOptions): void {
+    if (from && !this.hasFocus()) {
       return; // We can only move focus elsewhere within the element if the element already contains focus
     }
 
@@ -272,7 +277,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
           this._lastPageButton,
           this._previousPageButton,
           this._pageSizeSelect
-        ]);
+        ], options);
         break;
       case 'last':
         this._tryFocus([
@@ -280,7 +285,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
           this._firstPageButton,
           this._nextPageButton,
           this._pageSizeSelect
-        ]);
+        ], options);
         break;
       case 'previous':
         this._tryFocus([
@@ -296,7 +301,7 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
           this._firstPageButton,
           this._lastPageButton,
           this._pageSizeSelect
-        ]);
+        ], options);
         break;
       case 'page-size':
         this._tryFocus([
@@ -304,15 +309,25 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
           this._lastPageButton,
           this._firstPageButton,
           this._previousPageButton
-        ]);
+        ], options);
+        break;
+      default:
+        this._tryFocus([
+          this._firstPageButton,
+          this._previousPageButton,
+          this._nextPageButton,
+          this._lastPageButton,
+          this._pageSizeSelect
+        ], options);
         break;
     }
   }
 
-  private _tryFocus(elements: Array<HTMLButtonElement | ISelectComponent>): void {
+  private _tryFocus(elements: Array<HTMLButtonElement | ISelectComponent>, options?: FocusOptions): void {
+    const preventScroll = typeof options?.preventScroll === 'boolean' ? options.preventScroll : true;
     for (const el of elements) {
       if (el && el.isConnected && !el.disabled) {
-        el.focus();
+        el.focus({ ...options, preventScroll });
         return;
       }
     }

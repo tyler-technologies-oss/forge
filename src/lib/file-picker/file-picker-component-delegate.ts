@@ -42,7 +42,7 @@ export class FilePickerComponentDelegate extends BaseComponentDelegate<IFilePick
           parent: this._element,
           text: this._config.options.buttonText
         },
-        props: { type: 'outlined' }
+        props: { variant: 'outlined' }
       });
     }
 

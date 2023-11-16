@@ -3,6 +3,7 @@ import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import sinon from 'sinon';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { TestHarness } from '../../test/utils/test-harness';
 import { IFocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { IStateLayerComponent } from '../state-layer/state-layer';
@@ -128,7 +129,7 @@ describe('List', () => {
     expect(ctx.listItems[0].href).to.equal(DEFAULT_HREF);
     expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS.attributes.HREF)).to.equal(DEFAULT_HREF);
     expect(anchor.href).to.equal(DEFAULT_HREF);
-    expect(anchor.target).to.equal('_blank');
+    expect(anchor.target).to.equal('');
     await expect(ctx.list).to.be.accessible();
   });
 
@@ -141,6 +142,26 @@ describe('List', () => {
     expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS.attributes.TARGET)).to.equal('_self');
     expect(anchor.href).to.equal(DEFAULT_HREF);
     expect(anchor.target).to.equal('_self');
+  });
+
+  it('should set anchor download', async () => {
+    const ctx = await createFixture({ anchor: true });
+    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
+
+    expect(anchor).to.be.instanceOf(HTMLAnchorElement);
+
+    ctx.listItems[0].download = 'file.txt';
+    expect(anchor.download).to.equal('file.txt');
+  });
+
+  it('should set anchor rel', async () => {
+    const ctx = await createFixture({ anchor: true });
+    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
+
+    expect(anchor).to.be.instanceOf(HTMLAnchorElement);
+
+    ctx.listItems[0].rel = 'noopener';
+    expect(anchor.rel).to.equal('noopener');
   });
 
   it('should reset root element when href is removed', async () => {
@@ -157,10 +178,60 @@ describe('List', () => {
     const ctx = await createFixture({ anchor: true });
     const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
 
-    expect(anchor.target).to.equal('_blank');
+    expect(anchor.target).to.equal('');
     
     ctx.listItems[0].target = '_self';
     expect(anchor.target).to.equal('_self');
+  });
+
+  it('should click <a> tag when click() is called', async () => {
+    const ctx = await createFixture();
+
+    const firstListItem = ctx.listItems[0];
+    window['forgeAnchorTest'] = () => {};
+    const href = 'javascript: forgeAnchorTest()';
+    firstListItem.href = href;
+    await elementUpdated(firstListItem);
+    const testSpy = sinon.spy(window as any, 'forgeAnchorTest');
+
+    firstListItem.click();
+    await elementUpdated(firstListItem);
+    delete window['forgeAnchorTest'];
+
+    expect(testSpy).to.have.been.calledOnce;
+  });
+
+  it('should click <a> tag via mouse', async () => {
+    const ctx = await createFixture();
+
+    const firstListItem = ctx.listItems[0];
+    window['forgeAnchorTest'] = () => {};
+    const href = `javascript: forgeAnchorTest()`;
+    firstListItem.href = href;
+    const testSpy = sinon.spy(window as any, 'forgeAnchorTest');
+
+    await ctx.clickElement(firstListItem);
+    await elementUpdated(firstListItem);
+    delete window['forgeAnchorTest'];
+
+    expect(testSpy).to.have.been.calledOnce;
+  });
+
+  it('should click <a> tag via keyboard when enter key is pressed', async () => {
+    const ctx = await createFixture();
+
+    const firstListItem = ctx.listItems[0];
+    window['forgeAnchorTest'] = () => {};
+    const href = `javascript: forgeAnchorTest()`;
+    firstListItem.href = href;
+    const testSpy = sinon.spy(window as any, 'forgeAnchorTest');
+
+    firstListItem.focus();
+    await sendKeys({ press: 'Enter' });
+    await elementUpdated(firstListItem);
+    delete window['forgeAnchorTest'];
+
+    expect(testSpy).to.have.been.calledOnce;
   });
 
   it('should set disabled', async () => {
@@ -465,7 +536,7 @@ async function createFixture({
   threeLine,
   wrap,
   anchor,
-  anchorTarget = '_blank',
+  anchorTarget,
   withCheckbox,
   withRadioButton
 }: ListFixtureConfig = {}): Promise<ListHarness> {
@@ -481,7 +552,7 @@ async function createFixture({
       ?wrap=${wrap}
       .propagateClick=${propagateClick}
       .selectedValue=${selectedValue}>
-      <forge-list-item .href=${anchor ? DEFAULT_HREF : ''} .target=${anchorTarget} value="1">
+      <forge-list-item .href=${anchor ? DEFAULT_HREF : ''} .target=${anchorTarget ?? ''} value="1">
         One
         ${withCheckbox ? html`<input type="checkbox" slot="trailing" />` : null}
         ${withRadioButton ? html`<input type="radio" slot="trailing" />` : null}
@@ -542,5 +613,13 @@ class ListHarness extends TestHarness<IListComponent> {
   public listItemActive(index: number): boolean {
     const focusIndicator = getShadowElement(this.listItems[index], 'forge-focus-indicator') as IFocusIndicatorComponent;
     return focusIndicator?.active;
+  }
+
+  public clickElement(el: HTMLElement): Promise<void> {
+    const { x, y, width, height } = el.getBoundingClientRect();
+    return sendMouse({ type: 'click', position: [
+      Math.floor(x + window.scrollX + width / 2),
+      Math.floor(y + window.scrollY + height / 2),
+    ]});
   }
 }

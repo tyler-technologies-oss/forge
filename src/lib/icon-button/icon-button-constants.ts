@@ -1,44 +1,41 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}icon-button`;
 
-const attributes = {
+const observedAttributes = {
   TOGGLE: 'toggle',
-  IS_ON: 'is-on',
-  ICON_ON: 'forge-icon-button-on',
-  DENSE: 'dense',
-  DENSITY_LEVEL: 'density-level'
+  ON: 'on',
+  VARIANT: 'variant',
+  THEME: 'theme',
+  SHAPE: 'shape',
+  DENSITY: 'density'
 };
 
-const selectors = {
-  BUTTON: 'button, a',
-  ICON: 'i, span, svg, img, forge-icon'
-};
-
-const classes = {
-  BUTTON: 'forge-icon-button',
-  BUTTON_ON: 'forge-icon-button--on',
-  BUTTON_DENSE: 'forge-icon-button--dense',
-  ICON: 'forge-icon-button__icon',
-  ICON_ON: 'forge-icon-button__icon--on',
-  DENSITY: [
-    'forge-icon-button--dense-1',
-    'forge-icon-button--dense-2',
-    'forge-icon-button--dense-3',
-    'forge-icon-button--dense-4',
-    'forge-icon-button--dense-5',
-    'forge-icon-button--dense-6'
-  ]
+const attributes = {
+  ...observedAttributes,
+  ARIA_PRESSED: 'aria-pressed'
 };
 
 const events = {
-  CHANGE: `${elementName}-change`
+  TOGGLE: `${elementName}-toggle`
+};
+
+const defaults = {
+  DEFAULT_VARIANT: 'icon' as IconButtonVariant,
+  DEFAULT_THEME: 'primary' as IconButtonTheme,
+  DEFAULT_SHAPE: 'circular' as IconButtonShape,
+  DEFAULT_DENSITY: 'large' as IconButtonDensity
 };
 
 export const ICON_BUTTON_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
-  selectors,
-  classes,
-  events
+  events,
+  defaults
 };
+
+export type IconButtonVariant = 'icon' | 'outlined' | 'tonal' | 'filled' | 'raised';
+export type IconButtonTheme = Theme;
+export type IconButtonShape = 'circular' | 'squared';
+export type IconButtonDensity = 'small' | 'medium' | 'large';

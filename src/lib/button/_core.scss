@@ -1,0 +1,178 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@mixin host {
+  display: #{token(display)};
+  position: relative;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin base {
+  @include typography.style(button);
+  
+  position: relative;
+  display: #{token(display)};
+  align-items: center;
+  justify-content: #{token(justify)};
+  gap: #{token(spacing)};
+  z-index: 0;
+
+  box-sizing: border-box;
+  min-inline-size: #{token(min-width)};
+  height: #{token(height)};
+  inline-size: 100%;
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+  border-start-start-radius: #{token(shape-start-start-radius)};
+  border-start-end-radius: #{token(shape-start-end-radius)};
+  border-end-start-radius: #{token(shape-end-start-radius)};
+  border-end-end-radius: #{token(shape-end-end-radius)};
+  padding-block: #{token(padding-block)};
+  padding-inline: #{token(padding-inline)};
+  box-shadow: #{token(shadow)};
+
+  outline: none;
+  user-select: none;
+  -webkit-appearance: none;
+  vertical-align: middle;
+  text-decoration: none;
+  white-space: nowrap;
+
+  background: #{token(background)};
+  color: #{token(color)};
+  cursor: #{token(cursor)};
+
+  transition-property: box-shadow, background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  &:hover {
+    @include override(shadow, hover-shadow);
+
+    background: #{token(hover-background)};
+  }
+
+  &:active {
+    @include override(shadow, active-shadow);
+
+    background: #{token(active-background)};
+  }
+}
+
+@mixin slotted-start-end {
+  font-size: #{token(icon-size)};
+}
+
+@mixin anchor-base {
+  position: absolute;
+  inset: 0;
+  text-decoration: none;
+}
+
+@mixin text {
+  @include override(focus-indicator-offset, text-focus-indicator-offset);
+}
+
+@mixin filled {
+  @include override(background, filled-background);
+  @include override(color, filled-color);
+}
+
+@mixin raised {
+  @include override(shadow, raised-shadow);
+
+  &:hover {
+    @include override(shadow, raised-hover-shadow);
+  }
+
+  &:active {
+    @include override(shadow, raised-active-shadow);
+  }
+}
+
+@mixin tonal {
+  @include override(background, tonal-background);
+  @include override(color, tonal-color);
+}
+
+@mixin outlined {
+  @include override(background, outlined-background);
+  @include override(color, outlined-color);
+  @include override(border-width, outlined-border-width);
+  @include override(border-style, outlined-border-style);
+  @include override(border-color, outlined-border-color);
+}
+
+@mixin link {
+  @include override(color, link-color);
+  @include override(height, link-height);
+  @include override(padding, link-padding);
+  @include override(focus-indicator-offset, link-focus-indicator-offset);
+
+  text-decoration: #{token(link-text-decoration)};
+  line-height: #{token(link-line-height)};
+  transition: opacity #{token(link-transition-duration)} #{token(link-transition-timing)};
+  inline-size: #{token(link-width)};
+
+  &:hover {
+    text-decoration: #{token(link-hover-text-decoration)};
+  }
+
+  &:active {
+    opacity: #{token(link-active-opacity)};
+  }
+}
+
+@mixin host-disabled {
+  cursor: #{token(disabled-cursor)};
+}
+
+@mixin disabled {
+  @include override(background, disabled-background);
+  @include override(color, disabled-text-color);
+  @include override(shadow, disabled-shadow);
+
+  pointer-events: none;
+}
+
+@mixin filled-disabled {
+  @include override(background, filled-disabled-background);
+  @include override(color, filled-disabled-color);
+}
+
+@mixin raised-disabled {
+  @include override(shadow, raised-disabled-shadow);
+}
+
+@mixin tonal-disabled {
+  @include override(background, tonal-disabled-background);
+  @include override(color, tonal-disabled-color);
+}
+
+@mixin outlined-disabled {
+  @include override(border-color, disabled-border-color);
+}
+
+@mixin dense {
+  @include override(height, dense-height);
+}
+
+@mixin pill {
+  @include override(shape, pill-shape);
+  @include override(padding-inline, pill-padding-inline);
+}
+
+@mixin popover-icon {
+  transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
+}
+
+@mixin popover-icon-open {
+  rotate: #{token(popover-icon-open-rotation)};
+}

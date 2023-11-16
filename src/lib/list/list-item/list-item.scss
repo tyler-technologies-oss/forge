@@ -3,10 +3,14 @@
 @use '../../focus-indicator';
 @use '../../state-layer';
 @use '../../core/styles/shape';
+@use './token-utils' as *;
 
-// Host styles
+// Host
 :host {
   @include configuration.host;
+}
+
+:host {
   @include core.container;
 }
 
@@ -97,7 +101,7 @@
 
   forge-state-layer {
     @include state-layer.provide-theme((
-      color: var(--_selected-color)
+      color: #{token(selected-color)}
     ));
   }
 }
@@ -110,6 +114,9 @@
 // Base
 .forge-list-item {
   @include configuration.configuration;
+}
+
+.forge-list-item {
   @include core.base;
 }
 
@@ -196,7 +203,7 @@ slot[name=tertiary-title] {
 
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
-    shape: shape.variable(medium)
+    shape: shape.variable(medium) // TODO: use list-item token?
   ));
 }
 

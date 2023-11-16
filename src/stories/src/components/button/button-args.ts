@@ -1,26 +1,27 @@
 export interface IButtonProps {
-  type: string;
+  variant: string;
   text: string;
   disabled: boolean;
+  dense: boolean;
   hasLeadingIcon: boolean;
   hasTrailingIcon: boolean;
 }
 
 export interface IButtonMobileProps {
-  type: string;
+  variant: string;
   hasLeadingIcon: boolean;
   hasTrailingIcon: boolean;
 }
 
 export interface IButtonMenuProps {
-  type: string;
+  variant: string;
   hasLeadingIcon: boolean;
   hasTrailingIcon: boolean;
   persistSelection: boolean;
 }
 
 export interface IButtonLoadingOnSubmitProps {
-  type: string;
+  variant: string;
   determinate: boolean;
   progress: number;
 }
@@ -29,25 +30,17 @@ const buttonType = {
   control: {
     type: 'select',
     labels: {
-      'default': 'Flat',
+      '': 'Default',
       'outlined': 'Outlined',
       'raised': 'Raised',
-      'unelevated': 'Unelevated',
-      'dense': 'Flat dense',
-      'outlined-dense': 'Outlined dense',
-      'raised-dense': 'Raised dense',
-      'unelevated-dense': 'Unelevated dense',
+      'flat': 'Flat'
     },
   },
   options: [ 
     'default', 
     'outlined', 
-    'raised', 
-    'unelevated',
-    'dense',
-    'outlined-dense',
-    'raised-dense',
-    'unelevated-dense',
+    'raised',
+    'flat'
   ],
   description: '',
   table: {
@@ -65,6 +58,13 @@ export const buttonArgTypes = {
     },
   },
   disabled: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
+  dense: {
     control: 'boolean',
     description: '',
     table: {

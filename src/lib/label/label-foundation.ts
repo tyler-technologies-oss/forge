@@ -30,7 +30,7 @@ export class LabelFoundation implements ILabelFoundation {
 
   public initialize(): void {
     this._adapter.addSlotChangeListener(this._slotChangeListener);
-    this._adapter.trySetTarget(null);
+    this._adapter.trySetTarget(this._for ?? null);
     if (this._adapter.hasTargetElement()) {
       this._connect();
     }

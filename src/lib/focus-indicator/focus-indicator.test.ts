@@ -103,7 +103,7 @@ describe('FocusIndicator', () => {
     const surface = getShadowElement(focusIndicator, 'div[part=indicator]') as HTMLElement;
     const style = getComputedStyle(surface);
 
-    expect(style.getPropertyValue('--_shape')).to.equal('50%');
+    expect(style.getPropertyValue('--_focus-indicator-shape')).to.equal('50%');
     expect(focusIndicator.circular).to.be.true;
   });
 

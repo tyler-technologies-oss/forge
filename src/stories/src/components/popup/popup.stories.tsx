@@ -30,9 +30,7 @@ export const Default: Story<IPopupProps> = ({
   };
   return (
     <div style={demoContainer}>
-      <ForgeButton type="raised">
-        <button type="button" ref={targetRef} onClick={() => setIsOpen(!isOpen)}>Open popup</button>
-      </ForgeButton>
+      <ForgeButton variant="raised" ref={targetRef} onClick={() => setIsOpen(!isOpen)}>Open popup</ForgeButton>
 
       <ForgePopup
         targetElementRef={targetRef}

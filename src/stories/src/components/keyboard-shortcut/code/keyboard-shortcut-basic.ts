@@ -1,7 +1,5 @@
 export const KeyboardShortcutBasicHtml = () => `
-<forge-button type="raised">
-  <button type="button">Button</button>
-</forge-button>
+<forge-button variant="raised">Button</forge-button>
 <forge-keyboard-shortcut id="shortcut" key="shift+a"></forge-keyboard-shortcut>
 `;
 

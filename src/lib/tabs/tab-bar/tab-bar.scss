@@ -1,11 +1,53 @@
 @use './core';
+@use '../../icon-button';
 @use './configuration';
-@use '../../icon-button/forge-icon-button';
+@use './token-utils' as *;
 
-/// Host styles
+//
+// Host
+//
+
 :host {
   @include core.host;
 }
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base styles
+//
+
+.container {
+  @include configuration.configuration;
+}
+
+.container {
+  @include core.container;
+}
+
+.scroll-container {
+  @include core.base;
+}
+
+::slotted(*) {
+  @include core.slotted-base;
+}
+
+::slotted([selected]) {
+  @include core.slotted-selected;
+}
+
+forge-icon-button {
+  @include icon-button.provide-theme((
+    shape-squared: 0px // Requires unit
+  ));
+}
+
+//
+// Vertical
+//
 
 :host([vertical]) {
   .container {
@@ -17,59 +59,51 @@
   }
 
   .scroll-button {
-    justify-self: center;
+    @include core.vertical-scroll-button;
   }
 }
 
+//
+// Inverted
+// 
+
 :host([inverted]:not([vertical])) {
   .container {
-    border-bottom: none;
-    border-top: var(--_divider-thickness) solid var(--_divider-color);
+    @include core.inverted;
   }
 }
 
 :host([inverted][vertical]) {
   .container {
-    border-right: none;
-    border-left: var(--_divider-thickness) solid var(--_divider-color);
+    @include core.vertical-inverted;
   }
 }
 
+//
+// Clustered
+// 
+
 :host([clustered]) {
-  --forge-tab-bar-justify: flex-start;
-  --forge-tab-bar-stretch: 0;
+  .container {
+    @include override(justify, flex-start, value);
+    @include override(stretch, 0, value);
+  }
 }
 
 :host([clustered=start]) {
-  --forge-tab-bar-justify: flex-start;
+  .container {
+    @include override(justify, flex-start, value);
+  }
 }
 
 :host([clustered=center]) {
-  --forge-tab-bar-justify: center;
+  .container {
+    @include override(justify, center, value);
+  }
 }
 
 :host([clustered=end]) {
-  --forge-tab-bar-justify: flex-end;
-}
-
-:host([hidden]) {
-  display: none;
-}
-
-/// Base styles
-.container {
-  @include configuration.configuration;
-  @include core.container;
-}
-
-.scroll-container {
-  @include core.base;
-}
-
-::slotted(*) {
-  flex: var(--_tab-flex);
-}
-
-::slotted([selected]) {
-  z-index: 1;
+  .container {
+    @include override(justify, flex-end, value);
+  }
 }

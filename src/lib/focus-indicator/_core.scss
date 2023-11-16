@@ -1,21 +1,16 @@
-@use '../core/styles/utils';
-@use '../core/styles/tokens/focus-indicator/tokens';
-
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, focus-indicator);
-}
+@use './token-utils' as *;
 
 @mixin base {
-  animation-delay: 0s, calc(var(--_duration) * 0.25);
-  animation-duration: calc(var(--_duration) * 0.25), calc(var(--_duration) * 0.75);
-  animation-timing-function: var(--_easing);
+  animation-delay: 0s, calc(#{token(duration)} * 0.25);
+  animation-duration: calc(#{token(duration)} * 0.25), calc(#{token(duration)} * 0.75);
+  animation-timing-function: #{token(easing)};
   box-sizing: border-box;
-  color: var(--_color);
+  color: #{token(color)};
   display: none;
   pointer-events: none;
   position: absolute;
-  margin-block: var(--_margin-block);
-  margin-inline: var(--_margin-inline);
+  margin-block: #{token(offset-block)};
+  margin-inline: #{token(offset-inline)};
 }
 
 @mixin active {
@@ -23,25 +18,25 @@
 }
 
 @mixin circular {
-  --_shape: 50%;
+  @include override(shape, 50%, value);
 }
 
 @mixin outward {
   animation-name: outward-grow, outward-shrink;
-  border-end-end-radius: calc(var(--_shape-end-end) + var(--_outward-offset));
-  border-end-start-radius: calc(var(--_shape-end-start) + var(--_outward-offset));
-  border-start-end-radius: calc(var(--_shape-start-end) + var(--_outward-offset));
-  border-start-start-radius: calc(var(--_shape-start-start) + var(--_outward-offset));
-  inset: calc(-1 * var(--_outward-offset));
-  outline: var(--_width) solid currentColor;
+  border-end-end-radius: calc(#{token(shape-end-end)} + #{token(outward-offset)});
+  border-end-start-radius: calc(#{token(shape-end-start)} + #{token(outward-offset)});
+  border-start-end-radius: calc(#{token(shape-start-end)} + #{token(outward-offset)});
+  border-start-start-radius: calc(#{token(shape-start-start)} + #{token(outward-offset)});
+  inset: calc(-1 * #{token(outward-offset)});
+  outline: #{token(width)} solid currentColor;
 }
 
 @mixin inward {
   animation-name: inward-grow, inward-shrink;
-  border-end-end-radius: calc(var(--_shape-end-end) - var(--_inward-offset));
-  border-end-start-radius: calc(var(--_shape-end-start) - var(--_inward-offset));
-  border-start-end-radius: calc(var(--_shape-start-end) - var(--_inward-offset));
-  border-start-start-radius: calc(var(--_shape-start-start) - var(--_inward-offset));
-  border: var(--_width) solid currentColor;
-  inset: var(--_inward-offset);
+  border-end-end-radius: calc(#{token(shape-end-end)} - #{token(inward-offset)});
+  border-end-start-radius: calc(#{token(shape-end-start)} - #{token(inward-offset)});
+  border-start-end-radius: calc(#{token(shape-start-end)} - #{token(inward-offset)});
+  border-start-start-radius: calc(#{token(shape-start-start)} - #{token(inward-offset)});
+  border: #{token(width)} solid currentColor;
+  inset: #{token(inward-offset)};
 }

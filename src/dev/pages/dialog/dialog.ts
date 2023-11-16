@@ -3,7 +3,6 @@ import '@tylertech/forge/dialog';
 import '@tylertech/forge/toolbar';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import { IconRegistry, IDialogComponent, IDialogMoveEventData, ISwitchComponent } from '@tylertech/forge';
 import './dialog.scss';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';

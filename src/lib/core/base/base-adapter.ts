@@ -12,7 +12,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
   dispatchHostEvent<U extends Event>(event: U): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
-  removeHostListener(event: string, callback: (event: Event) => void): void;
+  removeHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   removeWindowListener(event: string, callback: (event: Event) => void, options?: boolean | EventListenerOptions): void;
   addDocumentListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
@@ -20,6 +20,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   getScreenWidth(): number;
   setBodyAttribute(name: string, value: string): void;
   removeBodyAttribute(name: string): void;
+  focusHost(options?: FocusOptions): void;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
@@ -115,6 +116,10 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public removeBodyAttribute(name: string): void {
     document.body.removeAttribute(name);
+  }
+
+  public focusHost(options?: FocusOptions): void {
+    this._component.focus(options);
   }
 
   public get isConnected(): boolean {
