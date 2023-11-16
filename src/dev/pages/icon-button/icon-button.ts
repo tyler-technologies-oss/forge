@@ -18,10 +18,8 @@ IconRegistry.define([
   tylIconFileCopy
 ]);
 
-
 const allIconButtons = Array.from(document.querySelectorAll<IIconButtonComponent>('.content forge-icon-button'));
 allIconButtons.forEach(btn => btn.addEventListener('click', evt => console.log('click', evt)));
-
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;
 disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {

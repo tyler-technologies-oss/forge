@@ -10,6 +10,7 @@ export const internals = Symbol('ElementInternals');
 export const isFocusable = Symbol('isFocusable');
 
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';
+export type Density = 'small' | 'medium' | 'large';
 
 export type MixinBase<ExpectedBase = object> = abstract new (...args: any[]) => ExpectedBase;
 export type MixinReturn<TBase extends MixinBase, MixinClass = object> = (abstract new (...args: any[]) => MixinClass) & TBase;

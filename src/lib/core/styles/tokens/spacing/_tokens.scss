@@ -8,6 +8,7 @@ $values: (
   '050': $base * 0.5,    // 8px
   '075': $base * 0.75,   // 12px
   '100': $base,          // 16px
+  '125': $base * 1.25,   // 20px
   '150': $base * 1.5,    // 24px
   '200': $base * 2,      // 32px
   '300': $base * 3,      // 48px
@@ -20,6 +21,7 @@ $tokens: (
   xsmall: map.get($values, '050'),
   small: map.get($values, '075'),
   medium: map.get($values, '100'),
+  medium-large: map.get($values, '125'),
   large: map.get($values, '150'),
   xlarge: map.get($values, '200'),
   xxlarge: map.get($values, '300'),

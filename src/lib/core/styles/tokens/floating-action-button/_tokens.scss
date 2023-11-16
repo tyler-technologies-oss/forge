@@ -1,0 +1,61 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../theme';
+@use '../../animation';
+@use '../../shape';
+@use '../../spacing';
+@use '../../elevation';
+
+$tokens: (
+  // General
+  display: utils.module-val(fab, display, inline-flex),
+  gap: utils.module-val(fab, spacing, spacing.variable(xsmall)),
+  background: utils.module-val(fab, background, theme.variable(secondary)),
+  color: utils.module-val(fab, color, theme.variable(on-secondary)),
+  size: utils.module-val(fab, size, 56px),
+  padding: utils.module-val(fab, padding, spacing.variable(xsmall)),
+
+  // Elevation - raised
+  shadow: utils.module-val(fab, shadow, elevation.value(3)),
+  hover-shadow: utils.module-val(fab, hover-shadow, elevation.value(4)),
+  active-shadow: utils.module-val(fab, active-shadow, elevation.value(3)),
+
+  // Elevation - lowered
+  lowered-shadow: utils.module-val(fab, lowered-shadow, elevation.value(1)),
+  lowered-hover-shadow: utils.module-val(fab, lowered-hover-shadow, elevation.value(2)),
+  lowered-active-shadow: utils.module-val(fab, lowered-active-shadow, elevation.value(1)),
+
+  // Animation
+  transition-duration: utils.module-val(fab, transition-duration, animation.variable(duration-short3)),
+  transition-timing: utils.module-val(fab, transition-timing, animation.variable(easing-standard)),
+
+  // Shape
+  shape: utils.module-val(fab, shape, shape.variable(full)),
+  shape-start-start: utils.module-ref(fab, shape-start-start, shape),
+  shape-start-end: utils.module-ref(fab, shape-start-end, shape),
+  shape-end-start: utils.module-ref(fab, shape-end-start, shape),
+  shape-end-end: utils.module-ref(fab, shape-end-end, shape),
+
+  // Extended
+  extended-padding: utils.module-val(fab, extended-padding, spacing.variable(medium-large)),
+  extended-min-width: utils.module-val(fab, extended-min-width, 96px),
+
+  // Density - small
+  density-small-size: utils.module-val(fab, density-small-size, 40px),
+
+  // Density - medium (default)
+  density-medium-size: utils.module-ref(fab, density-medium-size, size),
+
+  // Density - large
+  density-large-size: utils.module-val(fab, density-large-size, 96px),
+
+  // Disabled
+  disabled-cursor: utils.module-val(fab, disabled-cursor, not-allowed),
+  disabled-background: utils.module-val(fab, disabled-background, theme.variable(surface-container)),
+  disabled-color: utils.module-val(fab, disabled-color, theme.variable(on-surface-container)),
+  disabled-opacity: utils.module-val(fab, disabled-opacity, theme.emphasis(medium-low)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

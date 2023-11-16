@@ -28,7 +28,8 @@ import {
   tylIconSettings,
   tylIconStars,
   tylIconWarning,
-  tylIconWorkOutline
+  tylIconWorkOutline,
+  tylIconKeyboardVoice
 } from '@tylertech/tyler-icons/standard';
 
 IconRegistry.define([
@@ -40,7 +41,8 @@ IconRegistry.define([
   tylIconAssignment,
   tylIconWorkOutline,
   tylIconWarning,
-  tylIconSettings
+  tylIconSettings,
+  tylIconKeyboardVoice
 ]);
 
 const pageAppBar = document.querySelector('forge-app-bar#page-app-bar') as IAppBarComponent;

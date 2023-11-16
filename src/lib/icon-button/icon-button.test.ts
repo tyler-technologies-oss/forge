@@ -6,19 +6,16 @@ import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../icon/icon-registry';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
 import { IconButtonComponent, IIconButtonComponent } from './icon-button';
-
-import './icon-button';
 import { IconButtonComponentDelegate } from './icon-button-component-delegate';
 import { ITooltipComponent } from '../tooltip';
 import { ICON_CLASS_NAME } from '../constants';
 
+import './icon-button';
+
 const DEFAULT_ICON = '<forge-icon name="more_vert"></forge-icon>';
+IconRegistry.define(tylIconMoreVert);
 
 describe('Icon Button', () => {
-  before(() => {
-    IconRegistry.define(tylIconMoreVert);
-  });
-
   it('should initialize', async () => {
     const el = await fixture<IIconButtonComponent>(html`<forge-icon-button>${DEFAULT_ICON}</forge-icon-button>`);
     expect(el.shadowRoot).not.to.be.null;
