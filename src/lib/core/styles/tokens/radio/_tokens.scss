@@ -1,0 +1,45 @@
+@use 'sass:map';
+@use '../../border';
+@use '../../shape';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  // Shared
+  primary-color: utils.module-val(radio, primary-color, theme.variable(tertiary)),
+  size: utils.module-val(radio, size, 20px),
+  border-width: utils.module-val(radio, border-width, border.variable(medium)),
+  state-layer-size: utils.module-val(radio, state-layer-size, 40px),
+  state-layer-dense-size: utils.module-val(radio, state-layer-size, 24px),
+
+  // Radio
+  background-color: utils.module-val(radio, background-color, theme.variable(surface)),
+  width: utils.module-ref(radio, width, size),
+  height: utils.module-ref(radio, height, size),
+  unchecked-border-width: utils.module-ref(radio, unchecked-border-width, border-width),
+  unchecked-border-color: utils.module-val(radio, unchecked-border-color, theme.variable(surface-container-high)),
+  shape: utils.module-val(radio, shape, shape.variable(round)),
+
+  // Label
+  gap: utils.module-val(radio, gap, 0),
+  justify: utils.module-val(radio, justify, space-between),
+  direction: utils.module-val(radio, direction, initial),
+
+  // State layer
+  state-layer-width: utils.module-ref(radio, state-layer-width, state-layer-size),
+  state-layer-height: utils.module-ref(radio, state-layer-height, state-layer-size),
+  state-layer-checked-color: utils.module-ref(radio, state-layer-on-color, primary-color),
+  state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-off-color, color),
+  state-layer-shape: utils.module-val(radio, state-layer-shape, shape.variable(round)),
+
+  // Dense
+  state-layer-dense-width: utils.module-ref(radio, state-layer-dense-width, state-layer-dense-size),
+  state-layer-dense-height: utils.module-ref(radio, state-layer-dense-height, state-layer-dense-size),
+
+  // Disabled
+  disabled-opacity: utils.module-val(radio, disabled-opacity, theme.emphasis(medium-low)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

@@ -131,7 +131,7 @@ export class CheckboxComponent extends BaseFormComponent implements ICheckboxCom
     return this.getAttribute('name') ?? '';
   }
   public set name(value: string) {
-    toggleAttribute(this, !!value, 'name', value ?? '');
+    toggleAttribute(this, !!value, 'name', value);
   }
 
   public get form(): HTMLFormElement | null {

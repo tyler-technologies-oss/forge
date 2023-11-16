@@ -1,0 +1,59 @@
+@use './core';
+@use './configuration';
+@use '../../focus-indicator';
+@use '../../state-layer';
+
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host(:focus) {
+  outline: none;
+}
+
+// Unchecked
+.forge-radio {
+  @include configuration.configuration;
+  @include core.radio;
+
+  .container {
+    @include core.container;
+  }
+
+  .background {
+    @include core.background;
+  }
+
+  .input {
+    @include core.input;
+  }
+
+  .label {
+    @include core.label;
+  }
+}
+
+// Checked
+:host([checked]) {
+  .forge-radio {
+    .background {
+      @include core.background-checked;
+    }
+  }
+}
+
+// Disabled
+:host([disabled]) {
+  .forge-radio {
+    @include core.radio-disabled;
+
+    .container {
+      @include core.container-disabled;
+    }
+  }
+}

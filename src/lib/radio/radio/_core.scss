@@ -1,0 +1,106 @@
+@use '../../core/styles/typography';
+@use '../../core/styles/utils';
+@use '../../core/styles/tokens/radio/tokens';
+
+@mixin provide-theme($theme) {
+  @include utils.provide(tokens.$tokens, $theme, radio);
+}
+
+@mixin host {
+  display: inline-block;
+}
+
+@mixin radio {
+  position: relative;
+  flex-direction: var(--_direction);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: var(--_justify);
+  gap: var(--_gap);
+
+  display: flex;
+}
+
+@mixin radio-disabled {
+  opacity: var(--_disabled-opacity);
+}
+
+@mixin container {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  border-radius: 50%;
+  inline-size: var(--_state-layer-width);
+  block-size: var(--_state-layer-height);
+
+  cursor: pointer;
+}
+
+@mixin container-disabled {
+  cursor: not-allowed;
+}
+
+@mixin background {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  
+  display: flex;
+  
+  box-sizing: border-box;
+  border-radius: var(--_shape);
+  border-width: var(--_border-width);
+  border-style: solid;
+  border-color: var(--_unchecked-border-color);
+  inline-size: var(--_width);
+  block-size: var(--_height);
+
+  background-color: var(--_background-color);
+
+  cursor: pointer;
+}
+
+@mixin background-checked {
+  border-color: var(--_primary-color);
+
+  &::after {
+    content: '';
+
+    position: absolute;
+
+    display: block;
+
+    border-radius: 50%;
+    inline-size: 12px;
+    block-size: 12px;
+
+    background-color: var(--_primary-color);
+  }
+}
+
+@mixin input {
+  position: absolute;
+  z-index: 1;
+
+  appearance: none;
+
+  outline: none;
+  margin: 0;
+  inline-size: 100%;
+  block-size: 100%;
+
+  cursor: unset;
+}
+
+@mixin label {
+  @include typography.style(label);
+
+  cursor: default;
+
+  &:empty {
+    display: none;
+  }
+}

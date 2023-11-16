@@ -1,5 +1,6 @@
 import { CHECKBOX_CONSTANTS } from '../checkbox';
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { RADIO_CONSTANTS } from '../radio';
 import { SWITCH_CONSTANTS } from '../switch';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label`;
@@ -16,6 +17,7 @@ const selectors = {
 
 const labelableChildSelectors = [
   CHECKBOX_CONSTANTS.elementName,
+  RADIO_CONSTANTS.elementName,
   SWITCH_CONSTANTS.elementName
 ];
 

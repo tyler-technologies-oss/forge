@@ -1,8 +1,5 @@
-.actions {
+forge-label {
   display: flex;
+  align-items: center;
   gap: 8px;
-
-  forge-button > button {
-    width: 150px;
-  }
 }

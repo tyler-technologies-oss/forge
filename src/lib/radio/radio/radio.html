@@ -1,0 +1,13 @@
+<template>
+  <div id="radio" class="forge-radio" part="radio">
+    <div id="container" class="container">
+      <div id="background" class="background" part="background"></div>
+      <input id="input" class="input" type="radio" tabindex="-1" aria-hidden="true" />
+      <forge-state-layer></forge-state-layer>
+      <forge-focus-indicator target=":host"></forge-focus-indicator>
+    </div>
+    <span id="label" class="label" for="input" part="label">
+      <slot></slot>
+    </span>
+  </div>
+</template>
