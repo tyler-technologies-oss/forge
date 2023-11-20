@@ -27,11 +27,16 @@
 
   display: flex;
 
-  border-radius: 50%;
+  border-radius: #{token(shape)};
   inline-size: #{token(state-layer-width)};
   block-size: #{token(state-layer-height)};
 
   cursor: pointer;
+}
+
+@mixin container-dense {
+  inline-size: #{token(state-layer-dense-width)};
+  block-size: #{token(state-layer-dense-height)};
 }
 
 @mixin container-disabled {
@@ -48,6 +53,13 @@
   justify-content: center;
   
   display: flex;
+
+  overflow: hidden;
+
+  transition-duration: #{token(animation-duration)};
+  transition-delay: #{token(animation-delay)};
+  transition-timing-function: #{token(animation-timing-function)};
+  transition-property: border-color;
   
   box-sizing: border-box;
   border-radius: #{token(shape)};
@@ -57,39 +69,41 @@
   inline-size: #{token(width)};
   block-size: #{token(height)};
 
-  background-color: #{token(background-color)};
-
-  overflow: hidden; // TODO: organize this
+  background: #{token(background)};
 
   &::after {
     content: '';
 
     position: absolute;
 
-    border-radius: 50%;
-    inline-size: 16px;
-    block-size: 16px;
-
-    border-width: 6px;
-    border-color: #{token(primary-color)};
-    border-style: solid;
-    background-color: transparent;
-
-    transition-duration: 200ms;
-    transition-timing-function: ease-out;
-    transition-property: inline-size, block-size;
-
     // Using containment here should mitigate the hit to performance from animating the size
-    contain: strict; // TODO: organize this
+    contain: strict;
+    
+    transition-duration: #{token(animation-duration)};
+    transition-delay: #{token(animation-delay)};
+    transition-timing-function: #{token(animation-timing-function)};
+    transition-property: inline-size, block-size, border-color;
+    
+    border-radius: #{token(shape)};
+    border-width: calc(#{token(mark-height)} / 2) calc(#{token(mark-width)} / 2);
+    border-color: #{token(mark-unchecked-color)};
+    border-style: solid;
+    inline-size: calc(#{token(width)} - 2 * #{token(border-width)});
+    block-size: calc(#{token(height)} - 2 * #{token(border-width)});
+
+    background: #{token(mark-unchecked-background)};
   }
 }
 
 @mixin background-checked {
-  border-color: #{token(primary-color)};
+  border-color: #{token(checked-border-color)};
 
   &::after {
+    border-color: #{token(mark-checked-color)};
     inline-size: 0px;
     block-size: 0px;
+
+    background: #{token(mark-checked-background)};
   }
 }
 

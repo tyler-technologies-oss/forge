@@ -2,8 +2,8 @@
   <div id="radio" class="forge-radio" part="radio">
     <div id="container" class="container" aria-hidden="true">
       <div id="background" class="background" part="background"></div>
-      <forge-state-layer></forge-state-layer>
-      <forge-focus-indicator target=":host"></forge-focus-indicator>
+      <forge-focus-indicator target=":host" exportparts="indicator:focus-indicator"></forge-focus-indicator>
+      <forge-state-layer exportparts="surface:state-layer"></forge-state-layer>
     </div>
     <span id="label" class="label" for="input" part="label">
       <slot></slot>

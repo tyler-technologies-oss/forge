@@ -52,8 +52,12 @@ export class RadioGroupManager {
   public static setRadioGroupValidity(el: IRadioComponent): void {
     const group = RadioGroupManager.getRadioGroup(el);
     const invalid = RadioGroupManager._selectionIsRequired(group);
+    
     group.forEach(radio => {
-      const validationMessage = radio[getValidationMessage]({ required: true, checked: false });
+      const validationMessage = radio[getValidationMessage]({
+        required: invalid,
+        checked: radio.checked
+      });
       radio[internals].setValidity({ valueMissing: invalid }, validationMessage);
       radio[setDefaultAria]({ 'ariaInvalid': invalid ? 'true' : 'false' }, true);
     });

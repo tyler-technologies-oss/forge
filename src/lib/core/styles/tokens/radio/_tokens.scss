@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use '../../animation';
 @use '../../border';
 @use '../../shape';
 @use '../../theme';
@@ -7,18 +8,28 @@
 $tokens: (
   // Shared
   primary-color: utils.module-val(radio, primary-color, theme.variable(tertiary)),
+  inactive-color: utils.module-val(radio, unchecked-border-color, theme.variable(surface-container-high)),
   size: utils.module-val(radio, size, 20px),
-  border-width: utils.module-val(radio, border-width, border.variable(medium)),
+  mark-size: utils.module-val(radio, mark-size, 12px),
   state-layer-size: utils.module-val(radio, state-layer-size, 40px),
   state-layer-dense-size: utils.module-val(radio, state-layer-size, 24px),
 
   // Radio
-  background-color: utils.module-val(radio, background-color, theme.variable(surface)),
   width: utils.module-ref(radio, width, size),
   height: utils.module-ref(radio, height, size),
-  unchecked-border-width: utils.module-ref(radio, unchecked-border-width, border-width),
-  unchecked-border-color: utils.module-val(radio, unchecked-border-color, theme.variable(surface-container-high)),
+  border-width: utils.module-val(radio, border-width, border.variable(medium)),
+  unchecked-border-color: utils.module-ref(radio, unchecked-border-color, inactive-color),
+  checked-border-color: utils.module-ref(radio, checked-border-color, primary-color),
+  background: utils.module-val(radio, background, transparent),
   shape: utils.module-val(radio, shape, shape.variable(round)),
+
+  // Mark
+  mark-width: utils.module-ref(radio, mark-width, mark-size),
+  mark-height: utils.module-ref(radio, mark-width, mark-size),
+  mark-unchecked-color: utils.module-ref(radio, mark-unchecked-color, inactive-color),
+  mark-checked-color: utils.module-ref(radio, mark-checked-color, primary-color),
+  mark-unchecked-background: utils.module-val(radio, mark-background, transparent),
+  mark-checked-background: utils.module-val(radio, mark-background, transparent),
 
   // Label
   gap: utils.module-val(radio, gap, 0),
@@ -28,16 +39,21 @@ $tokens: (
   // State layer
   state-layer-width: utils.module-ref(radio, state-layer-width, state-layer-size),
   state-layer-height: utils.module-ref(radio, state-layer-height, state-layer-size),
-  state-layer-checked-color: utils.module-ref(radio, state-layer-on-color, primary-color),
   state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-off-color, color),
+  state-layer-checked-color: utils.module-ref(radio, state-layer-on-color, primary-color),
   state-layer-shape: utils.module-ref(radio, state-layer-shape, shape),
 
   // Dense
   state-layer-dense-width: utils.module-ref(radio, state-layer-dense-width, state-layer-dense-size),
   state-layer-dense-height: utils.module-ref(radio, state-layer-dense-height, state-layer-dense-size),
-
+  
   // Disabled
   disabled-opacity: utils.module-val(radio, disabled-opacity, theme.emphasis(medium-low)),
+
+  // Animation
+  animation-duration: utils.module-val(radio, animation-duration, animation.variable(duration-short4)),
+  animation-timing-function: utils.module-val(radio, animation-timing-function, animation.variable(easing-decelerate)),
+  animation-delay: utils.module-val(radio, animation-delay, 0ms),
 ) !default;
 
 @function get($key) {

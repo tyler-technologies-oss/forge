@@ -45,6 +45,21 @@
       @include core.background-checked;
     }
   }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: #{token(state-layer-checked-color)}
+    ));
+  }
+}
+
+// Dense
+:host([dense]) {
+  .forge-radio {
+    .container {
+      @include core.container-dense;
+    }
+  }
 }
 
 // Disabled
@@ -69,8 +84,14 @@
 
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
-    shape: #{token(state-layer-shape)},
     color: #{token(primary-color)},
-    outward-offset: 0px
+    outward-offset: 0px,
+    shape: #{token(state-layer-shape)}
+  ));
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: #{token(state-layer-unchecked-color)}
   ));
 }

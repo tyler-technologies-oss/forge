@@ -1,16 +1,7 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { getFormState, getFormValue, inputType, internals, setDefaultAria } from '../../constants';
-import {
-  BaseComponent,
-  IBaseFocusableComponent,
-  IBaseFormAssociatedComponent,
-  IBaseLabelAwareComponent,
-  WithElementInternals,
-  WithFocusable,
-  WithFormAssociation,
-  WithLabelAwareness
-} from '../../core/base';
-import { FormValue, InputType } from '../../core/utils/form-utils';
+import { BaseComponent, IBaseFocusableComponent, IBaseFormAssociatedComponent, IBaseLabelAwareComponent, WithElementInternals, WithFocusable, WithFormAssociation, WithLabelAwareness } from '../../core/base';
+import { FormValue } from '../../core/utils/form-utils';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { StateLayerComponent } from '../../state-layer';
 import { RadioGroupManager } from '../core/radio-group-manager';
@@ -61,7 +52,46 @@ const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(With
  * @attribute {boolean} readonly - Indicates whether the radio button is read-only.
  * @attribute {RadioLabelPosition} label-position - The position of the radio button's label.
  * 
+ * @cssproperty --forge-radio-primary-color - The primary color of the radio button when checked.
+ * @cssproperty --forge-radio-inactive-color - The color of the radio button when unchecked.
+ * @cssproperty --forge-radio-size - The size of the radio button in the inline and block directions.
+ * @cssproperty --forge-radio-width - The width of the radio button.
+ * @cssproperty --forge-radio-height - The height of the radio button.
+ * @cssproperty --forge-radio-border-width - The width of the radio button's border.
+ * @cssproperty --forge-radio-unchecked-border-color - The color of the radio button's border when unchecked.
+ * @cssproperty --forge-radio-checked-border-color - The color of the radio button's border when checked.
+ * @cssproperty --forge-radio-background - The background of the radio button.
+ * @cssproperty --forge-radio-shape - The shape of the radio button.
+ * @cssproperty --forge-radio-mark-size - The size of the radio button's mark in the inline and block directions.
+ * @cssproperty --forge-radio-mark-width - The width of the radio button's mark.
+ * @cssproperty --forge-radio-mark-height - The height of the radio button's mark.
+ * @cssproperty --forge-radio-mark-unchecked-color - The color of the radio button's mark when unchecked.
+ * @cssproperty --forge-radio-mark-checked-color - The color of the radio button's mark when checked.
+ * @cssproperty --forge-radio-mark-unchecked-background - The background of the radio button's mark when unchecked.
+ * @cssproperty --forge-radio-mark-checked-background - The background of the radio button's mark when checked.
+ * @cssproperty --forge-radio-gap - The gap between the radio button and its label.
+ * @cssproperty --forge-radio-justify - The alignment of the radio button and its label in the inline direction.
+ * @cssproperty --forge-radio-direction - The direction of the radio button and its label.
+ * @cssproperty --forge-radio-state-layer-size - The size of the radio button's state layer in the inline and block directions.
+ * @cssproperty --forge-radio-state-layer-width - The width of the radio button's state layer.
+ * @cssproperty --forge-radio-state-layer-height - The height of the radio button's state layer.
+ * @cssproperty --forge-radio-state-layer-unchecked-color - The color of the radio button's state layer when unchecked.
+ * @cssproperty --forge-radio-state-layer-checked-color - The color of the radio button's state layer when checked.
+ * @cssproperty --forge-radio-state-layer-shape - The shape of the radio button's state layer.
+ * @cssproperty --forge-radio-state-layer-dense-size - The size of the radio button's state layer when dense.
+ * @cssproperty --forge-radio-state-layer-dense-width - The width of the radio button's state layer when dense.
+ * @cssproperty --forge-radio-state-layer-dense-height - The height of the radio button's state layer when dense.
+ * @cssproperty --forge-radio-disabled-opacity - The opacity of the radio button when disabled.
+ * @cssproperty --forge-radio-animation-duration - The duration of the radio button's animations.
+ * @cssproperty --forge-radio-animation-timing-function - The timing function of the radio button's animations.
+ * @cssproperty --forge-radio-animation-delay - The delay of the radio button's animations.
+ *  
  * @csspart radio - Styles the radio's root element.
+ * @csspart background - Styles the border and backgroun of the radio.
+ * @csspart focus-indicator - Styles the focus indicator of the radio.
+ * @csspart state-layer - Styles the state layer of the radio.
+ * 
+ * @slot - This is a default/unnamed slot for the label text.
  */
 @CustomElement({
   name: RADIO_CONSTANTS.elementName,
