@@ -42,7 +42,6 @@ export class RadioFoundation implements IRadioFoundation {
   }
 
   public initialize(): void {
-    this._adapter.initialize();
     this._adapter.addHostListener('focus', this._focusListener);
     this._adapter.addHostListener('blur', this._blurListener);
     this._adapter.addHostListener('click', this._clickListener);
@@ -60,37 +59,39 @@ export class RadioFoundation implements IRadioFoundation {
       return false;
     }
     
-    this._adapter.setChecked(this.checked);
-    this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.CHECKED, this.checked);
+    this._adapter.setChecked(this._checked, this._value);
+    this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.CHECKED, this._checked);
     return true;
   }
 
   // Event handlers
 
   private _handleFocus(): void {
-    if (!this.checked) {
+    if (!this._checked) {
       this._adapter.setUncheckedRadioGroupFocus('focus');
     }
   }
 
   private _handleBlur(): void {
-    if (!this.checked) {
+    if (!this._checked) {
       this._adapter.setUncheckedRadioGroupFocus('blur');
     }
   }
 
   private _handleClick(evt: MouseEvent): void {
-    this._handleCheckInteraction(evt);
+    this._activate(evt);
   }
 
   private _handleKeydown(evt: KeyboardEvent): void {
     switch (evt.key) {
       case 'ArrowRight':
       case 'ArrowDown':
+        evt.preventDefault();
         this._adapter.focusNext();
         break;
       case 'ArrowLeft':
       case 'ArrowUp':
+        evt.preventDefault();
         this._adapter.focusPrevious();
         break;
     }
@@ -98,19 +99,21 @@ export class RadioFoundation implements IRadioFoundation {
 
   private _handleKeyup(evt: KeyboardEvent): void {
     if (evt.key === ' ') {
-      this._handleCheckInteraction(evt);
+      evt.preventDefault();
+      this._activate(evt);
     }
   }
 
   /**
-   * Checks the radio button if it is not disabled or readonly.
+   * Checks the radio button if it is not disabled or readonly. Exits early if the activating
+   * event is cancelled.
    */
-  private async _handleCheckInteraction(evt: Event): Promise<void> {
-    if (this._checked || this.disabled || this.readonly) {
+  private async _activate(evt: Event): Promise<void> {
+    if (this._checked || this._disabled || this._readonly) {
       return;
     }
 
-    // Wait a microtask to allow the event to propagate to user code.
+    // Wait a task to allow the event to propagate to user code.
     await task();
     if (evt.defaultPrevented) {
       return;
@@ -123,8 +126,8 @@ export class RadioFoundation implements IRadioFoundation {
       return;
     }
 
-    this._adapter.setChecked(this.checked);
-    this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.CHECKED, this.checked);
+    this._adapter.setChecked(this._checked, this._value);
+    this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.CHECKED, this._checked);
   }
 
   /**
@@ -147,7 +150,7 @@ export class RadioFoundation implements IRadioFoundation {
   public set checked(value: boolean) {
     if (this._checked !== value) {
       this._checked = value;
-      this._adapter.setChecked(this._checked);
+      this._adapter.setChecked(this._checked, this._value);
       this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.CHECKED, this._checked);
     }
   }
@@ -158,7 +161,6 @@ export class RadioFoundation implements IRadioFoundation {
   public set defaultChecked(value: boolean) {
     if (this._defaultChecked !== value) {
       this._defaultChecked = value;
-      this._adapter.setInputProperty('defaultChecked', this._defaultChecked);
       this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.DEFAULT_CHECKED, this._defaultChecked);
     }
   }
@@ -169,7 +171,6 @@ export class RadioFoundation implements IRadioFoundation {
   public set value(value: string) {
     if (this._value !== value) {
       this._value = value;
-      this._adapter.setInputProperty('value', this._value);
       this._adapter.setHostAttribute(RADIO_CONSTANTS.attributes.VALUE,  this._value);
     }
   }
@@ -181,6 +182,7 @@ export class RadioFoundation implements IRadioFoundation {
     if (this._disabled !== value) {
       this._disabled = value;
       this._adapter.setDisabled(this._disabled);
+      this._adapter.disableStateLayer(this._disabled || this._readonly);
       this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }
@@ -203,6 +205,7 @@ export class RadioFoundation implements IRadioFoundation {
     if (this._readonly !== value) {
       this._readonly = value;
       this._adapter.setReadonly(this._readonly);
+      this._adapter.disableStateLayer(this._disabled || this._readonly);
       this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }

@@ -1,9 +1,24 @@
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ * 
+ * Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
+ * The original source code can be found at: [GitHub](https://github.com/material-components/material-web/blob/main/internal/aria/aria.ts)
+ */
+
 import { toggleAttribute } from '@tylertech/forge-core';
+import { supportsElementInternalsAria } from './feature-detection';
 
 /**
  * Reflective ARIA property name types.
  */
 export type ARIAProperty = Exclude<keyof ARIAMixin, 'role'>;
+
+/**
+ * Reflective ARIA attributes.
+ */
+export type ARIAAttribute = `${ARIAPropertyToAttribute<ARIAProperty>}` | 'role';
 
 /**
  * Reflective ARIA properties.
@@ -47,6 +62,52 @@ export const ARIA_PROPERTIES: ARIAProperty[] = [
   'ariaValueNow',
   'ariaValueText'
 ];
+
+/**
+ * An object mapping all ARIA attributes to their corresponding properties.
+ * 
+ * This is required because the proeprty name cannot be reliably inferred from the attribute name.
+ */
+const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'> = {
+  'aria-atomic': 'ariaAtomic',
+  'aria-autocomplete': 'ariaAutoComplete',
+  'aria-busy': 'ariaBusy',
+  'aria-checked': 'ariaChecked',
+  'aria-colcount': 'ariaColCount',
+  'aria-colindex': 'ariaColIndex',
+  'aria-colspan': 'ariaColSpan',
+  'aria-current': 'ariaCurrent',
+  'aria-disabled': 'ariaDisabled',
+  'aria-expanded': 'ariaExpanded',
+  'aria-haspopup': 'ariaHasPopup',
+  'aria-hidden': 'ariaHidden',
+  'aria-invalid': 'ariaInvalid',
+  'aria-keyshortcuts': 'ariaKeyShortcuts',
+  'aria-label': 'ariaLabel',
+  'aria-level': 'ariaLevel',
+  'aria-live': 'ariaLive',
+  'aria-modal': 'ariaModal',
+  'aria-multiline': 'ariaMultiLine',
+  'aria-multiselectable': 'ariaMultiSelectable',
+  'aria-orientation': 'ariaOrientation',
+  'aria-placeholder': 'ariaPlaceholder',
+  'aria-posinset': 'ariaPosInSet',
+  'aria-pressed': 'ariaPressed',
+  'aria-readonly': 'ariaReadOnly',
+  'aria-required': 'ariaRequired',
+  'aria-roledescription': 'ariaRoleDescription',
+  'aria-rowcount': 'ariaRowCount',
+  'aria-rowindex': 'ariaRowIndex',
+  'aria-rowspan': 'ariaRowSpan',
+  'aria-selected': 'ariaSelected',
+  'aria-setsize': 'ariaSetSize',
+  'aria-sort': 'ariaSort',
+  'aria-valuemax': 'ariaValueMax',
+  'aria-valuemin': 'ariaValueMin',
+  'aria-valuenow': 'ariaValueNow',
+  'aria-valuetext': 'ariaValueText',
+  'role': 'role'
+};
 
 /**
  * ARIA role values.
@@ -118,7 +179,7 @@ export interface ARIAMixinStrict extends ARIAMixin {
 /**
  * The ARIA attribute corresponding to a given ARIA property.
  */
-type ARIAPropertyToAttribute<K extends string> = K extends `aria${infer Suffix}Element${infer OptS}`
+export type ARIAPropertyToAttribute<K extends string> = K extends `aria${infer Suffix}Element${infer OptS}`
   ? `aria-${Lowercase < Suffix >}`
   : K extends `aria${infer Suffix}` ? `aria-${Lowercase < Suffix >}` : K;
 
@@ -137,13 +198,13 @@ export function ariaPropertyToAttribute<K extends ARIAProperty|'role'>(property:
 }
 
 /**
- * Checks if the given ElementInternals object supports ARIA.
+ * Gets the ARIA property corresponding to a given ARIA attribute.
  * 
- * @param internals - The ElementInternals object to check.
- * @returns True if the ElementInternals object supports ARIA, false otherwise.
+ * @param attribute An ARIA attribute name.
+ * @returns An ARIA mixin property.
  */
-export function supportsElementInternalsAria(internals: ElementInternals): boolean {
-  return 'role' in internals;
+export function ariaAttributeToProperty<K extends ARIAAttribute|'role'>(attribute: K): ARIAProperty {
+  return ARIA_ATTRIBUTES_TO_PROPERTIES[attribute] as ARIAProperty;
 }
 
 // TODO: deprecate and remove `setupDefaultAria` and related functions when ARIA in
@@ -187,7 +248,7 @@ export function setDefaultAria(
   options: Partial<ARIAMixinStrict>,
   overwrite = false
 ): void {
-  if (supportsElementInternalsAria(internals)) {
+  if (supportsElementInternalsAria()) {
     Object.entries(options).forEach(([key, value]) => {
       if (value !== null) {
         internals[key as ARIAProperty] = value;

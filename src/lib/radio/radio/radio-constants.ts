@@ -1,4 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
+import { ARIAAttribute } from '../../core/utils/a11y-utils';
+import { supportsElementInternalsAria } from '../../core/utils/feature-detection';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}radio`;
 
@@ -10,12 +12,12 @@ const attributes = {
   DISABLED: 'disabled',
   REQUIRED: 'required',
   READONLY: 'readonly',
-  LABEL_POSITION: 'label-position'
+  LABEL_POSITION: 'label-position',
+  TABINDEX: 'tabindex'
 };
 
 const selectors = {
   ROOT: '.forge-radio',
-  INPUT: 'input',
   LABEL: '#label',
   STATE_LAYER: 'forge-state-layer'
 };
@@ -25,13 +27,27 @@ const events = {
   INPUT: 'input'
 };
 
+export const observedAriaAttributes: ARIAAttribute[] = supportsElementInternalsAria()
+  ? []
+  : [
+    'role',
+    'aria-checked',
+    'aria-disabled',
+    'aria-invalid',
+    'aria-label',
+    'aria-readonly',
+    'aria-required'
+  ];
+
 export const RADIO_CONSTANTS = {
   elementName,
   attributes,
   selectors,
-  events
+  events,
+  observedAriaAttributes
 };
 
 export const tryCheck = Symbol('tryCheck');
 
+export type RadioState = 'checked' | 'unchecked';
 export type RadioLabelPosition = 'start' | 'end';

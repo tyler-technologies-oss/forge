@@ -1,8 +1,8 @@
-@use './core';
 @use './configuration';
+@use './core';
 @use '../../focus-indicator';
 @use '../../state-layer';
-
+@use './token-utils' as *;
 
 :host {
   @include core.host;
@@ -16,6 +16,10 @@
   outline: none;
 }
 
+.forge-radio {
+  @include configuration.configuration;
+}
+
 // Unchecked
 .forge-radio {
   @include configuration.configuration;
@@ -27,10 +31,6 @@
 
   .background {
     @include core.background;
-  }
-
-  .input {
-    @include core.input;
   }
 
   .label {
@@ -56,4 +56,21 @@
       @include core.container-disabled;
     }
   }
+}
+
+// Readonly
+:host([readonly]) {
+  .forge-radio {
+    .container {
+      @include core.container-readonly;
+    }
+  }
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    shape: #{token(state-layer-shape)},
+    color: #{token(primary-color)},
+    outward-offset: 0px
+  ));
 }

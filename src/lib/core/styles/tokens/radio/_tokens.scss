@@ -30,7 +30,7 @@ $tokens: (
   state-layer-height: utils.module-ref(radio, state-layer-height, state-layer-size),
   state-layer-checked-color: utils.module-ref(radio, state-layer-on-color, primary-color),
   state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-off-color, color),
-  state-layer-shape: utils.module-val(radio, state-layer-shape, shape.variable(round)),
+  state-layer-shape: utils.module-ref(radio, state-layer-shape, shape),
 
   // Dense
   state-layer-dense-width: utils.module-ref(radio, state-layer-dense-width, state-layer-dense-size),

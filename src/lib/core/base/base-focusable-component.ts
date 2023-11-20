@@ -58,12 +58,16 @@ export function WithFocusable<T extends MixinBase<BaseComponent>>(base: T): Mixi
     private [_externalTabIndex]: number | null = null; // Allows for external tabIndex to be stored when internal tabIndex is set to -1
     private [_isUpdatingTabIndex] = false; // Allows for internal tabIndex to be set without triggering attributeChangedCallback
 
-    public connectedCallback(): void {
+    public override connectedCallback(): void {
+      super.connectedCallback();
+      
       // This must be set in the connectedCallback to avoid sprouting a tabindex attribute on the host from the ctor
       this[isFocusable] = true;
     }
   
-    public attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    public override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+      super.attributeChangedCallback(name, oldValue, newValue);
+
       if (name !== 'tabindex' || this[_isUpdatingTabIndex]) {
         return;
       }

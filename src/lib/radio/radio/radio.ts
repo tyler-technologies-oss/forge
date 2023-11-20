@@ -1,20 +1,30 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
-import { BaseFormComponent, IBaseFormComponent } from '@tylertech/forge/core';
-import { setDefaultAria } from '@tylertech/forge/core/utils/a11y-utils';
-import { FocusIndicatorComponent } from '@tylertech/forge/focus-indicator';
-import { ILabelAware } from '@tylertech/forge/label';
-import { StateLayerComponent } from '@tylertech/forge/state-layer';
+import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { getFormState, getFormValue, inputType, internals, setDefaultAria } from '../../constants';
+import {
+  BaseComponent,
+  IBaseFocusableComponent,
+  IBaseFormAssociatedComponent,
+  IBaseLabelAwareComponent,
+  WithElementInternals,
+  WithFocusable,
+  WithFormAssociation,
+  WithLabelAwareness
+} from '../../core/base';
+import { FormValue, InputType } from '../../core/utils/form-utils';
+import { FocusIndicatorComponent } from '../../focus-indicator';
+import { StateLayerComponent } from '../../state-layer';
+import { RadioGroupManager } from '../core/radio-group-manager';
 import { RadioAdapter } from './radio-adapter';
-import { RADIO_CONSTANTS, RadioLabelPosition, tryCheck } from './radio-constants';
+import { RADIO_CONSTANTS, RadioLabelPosition, RadioState, tryCheck } from './radio-constants';
 import { RadioFoundation } from './radio-foundation';
 
 import template from './radio.html';
 import style from './radio.scss';
-import { RadioSelectionManager } from '../core/radio-selection-manager';
 
-export interface IRadioComponent extends IBaseFormComponent, ILabelAware {
+export interface IRadioComponent extends IBaseFormAssociatedComponent, IBaseFocusableComponent, IBaseLabelAwareComponent {
   checked: boolean;
   defaultChecked: boolean;
+  required: boolean;
   dense: boolean;
   labelPosition: RadioLabelPosition;
 }
@@ -24,6 +34,8 @@ declare global {
     'forge-radio': IRadioComponent;
   }
 }
+
+const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithElementInternals(BaseComponent, RADIO_CONSTANTS.observedAriaAttributes))));
 
 /**
  * @tag forge-radio
@@ -58,7 +70,7 @@ declare global {
     StateLayerComponent
   ]
 })
-export class RadioComponent extends BaseFormComponent implements IRadioComponent {
+export class RadioComponent extends BaseRadioClass implements IRadioComponent {
   public static get observedAttributes(): string[] {
     return [
       RADIO_CONSTANTS.attributes.CHECKED,
@@ -68,59 +80,35 @@ export class RadioComponent extends BaseFormComponent implements IRadioComponent
       RADIO_CONSTANTS.attributes.DISABLED,
       RADIO_CONSTANTS.attributes.REQUIRED,
       RADIO_CONSTANTS.attributes.READONLY,
-      RADIO_CONSTANTS.attributes.LABEL_POSITION
+      RADIO_CONSTANTS.attributes.LABEL_POSITION,
+      RADIO_CONSTANTS.attributes.TABINDEX,
+      ...RADIO_CONSTANTS.observedAriaAttributes
     ];
   }
 
-  public get name(): string {
-    return this.getAttribute('name') ?? '';
-  }
-  public set name(value: string) {
-    toggleAttribute(this, !!value, 'name', value);
-  }
-
-  public get form(): HTMLFormElement | null {
-    return this.internals.form;
-  }
-
-  public get labels(): NodeList {
-    return this.internals.labels;
-  }
-
-  public get validity(): ValidityState {
-    // TODO: sync validity with foundation
-    return this.internals.validity;
-  }
-
-  public get validationMessage(): string {
-    // TODO: sync validity with foundation
-    return this.internals.validationMessage;
-  }
-
-  public get willValidate(): boolean {
-    return this.internals.willValidate;
-  }
-
-  public readonly internals: ElementInternals;
   private _foundation: RadioFoundation;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, style);
-    this.internals = this.attachInternals();
+    this[inputType] = 'radio';
     this._foundation = new RadioFoundation(new RadioAdapter(this));
   }
 
-  public connectedCallback(): void {
-    this.tabIndex = 0;
-    setDefaultAria(this, this.internals, {
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    this[setDefaultAria]({
       role: 'radio',
-      ariaChecked: this.checked ? 'true' : 'false'
+      ariaChecked: this.checked ? 'true' : 'false',
+      ariaDisabled: this.disabled ? 'true' : 'false',
+      ariaInvalid: this[internals].validity.valid ? 'false' : 'true',
+      ariaReadOnly: this.readonly ? 'true' : 'false',
+      ariaRequired: this.required ? 'true' : 'false'
     });
     this._foundation.initialize();
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case RADIO_CONSTANTS.attributes.CHECKED:
         this._foundation.checked = coerceBoolean(newValue);
@@ -147,37 +135,23 @@ export class RadioComponent extends BaseFormComponent implements IRadioComponent
         this.labelPosition = newValue as RadioLabelPosition;
         break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
-    this.internals.setFormValue(value, state);
+  public override [getFormValue](): FormValue | null {
+    return this.checked ? this.value : null;
   }
 
-  public checkValidity(): boolean {
-    // TODO: sync validity with foundation
-    return this.internals.checkValidity();
-  }
-
-  public reportValidity(): boolean {
-    // TODO: sync validity with foundation
-    return this.internals.reportValidity();
-  }
-
-  public setCustomValidity(error: string): void {
-    this._hasCustomValidityError = !!error;
-    // TODO: set validity in foundation
+  public override [getFormState](): RadioState {
+    return this.checked ? 'checked' : 'unchecked';
   }
 
   public formResetCallback(): void {
-    if (this.defaultChecked) {
-      RadioSelectionManager.setSelectedRadioInGroup(this);
-    } else {
-      this.checked = false;
-    }
+    RadioGroupManager.requestRadioGroupReset(this);
   }
 
-  public formStateRestoreCallback(state: string, reason: 'restore' | 'autocomplete'): void {
-    // TODO: restore state
+  public formStateRestoreCallback(state: RadioState): void {
+    this.checked = state === 'checked';
   }
 
   public formDisabledCallback(isDisabled: boolean): void {
@@ -189,7 +163,7 @@ export class RadioComponent extends BaseFormComponent implements IRadioComponent
   }
 
   public labelChangedCallback(value: string | null): void {
-    setDefaultAria(this, this.internals, {
+    this[setDefaultAria]({
       ariaLabel: value ?? undefined
     });
   }

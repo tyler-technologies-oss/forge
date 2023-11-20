@@ -1,10 +1,5 @@
 @use '../../core/styles/typography';
-@use '../../core/styles/utils';
-@use '../../core/styles/tokens/radio/tokens';
-
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, radio);
-}
+@use './token-utils' as *;
 
 @mixin host {
   display: inline-block;
@@ -12,17 +7,17 @@
 
 @mixin radio {
   position: relative;
-  flex-direction: var(--_direction);
+  flex-direction: #{token(direction)};
   flex-shrink: 0;
   align-items: center;
-  justify-content: var(--_justify);
-  gap: var(--_gap);
+  justify-content: #{token(justify)};
+  gap: #{token(gap)};
 
   display: flex;
 }
 
 @mixin radio-disabled {
-  opacity: var(--_disabled-opacity);
+  opacity: #{token(disabled-opacity)};
 }
 
 @mixin container {
@@ -33,13 +28,17 @@
   display: flex;
 
   border-radius: 50%;
-  inline-size: var(--_state-layer-width);
-  block-size: var(--_state-layer-height);
+  inline-size: #{token(state-layer-width)};
+  block-size: #{token(state-layer-height)};
 
   cursor: pointer;
 }
 
 @mixin container-disabled {
+  cursor: not-allowed;
+}
+
+@mixin container-readonly {
   cursor: not-allowed;
 }
 
@@ -51,48 +50,47 @@
   display: flex;
   
   box-sizing: border-box;
-  border-radius: var(--_shape);
-  border-width: var(--_border-width);
+  border-radius: #{token(shape)};
+  border-width: #{token(border-width)};
   border-style: solid;
-  border-color: var(--_unchecked-border-color);
-  inline-size: var(--_width);
-  block-size: var(--_height);
+  border-color: #{token(unchecked-border-color)};
+  inline-size: #{token(width)};
+  block-size: #{token(height)};
 
-  background-color: var(--_background-color);
+  background-color: #{token(background-color)};
 
-  cursor: pointer;
-}
-
-@mixin background-checked {
-  border-color: var(--_primary-color);
+  overflow: hidden; // TODO: organize this
 
   &::after {
     content: '';
 
     position: absolute;
 
-    display: block;
-
     border-radius: 50%;
-    inline-size: 12px;
-    block-size: 12px;
+    inline-size: 16px;
+    block-size: 16px;
 
-    background-color: var(--_primary-color);
+    border-width: 6px;
+    border-color: #{token(primary-color)};
+    border-style: solid;
+    background-color: transparent;
+
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
+    transition-property: inline-size, block-size;
+
+    // Using containment here should mitigate the hit to performance from animating the size
+    contain: strict; // TODO: organize this
   }
 }
 
-@mixin input {
-  position: absolute;
-  z-index: 1;
+@mixin background-checked {
+  border-color: #{token(primary-color)};
 
-  appearance: none;
-
-  outline: none;
-  margin: 0;
-  inline-size: 100%;
-  block-size: 100%;
-
-  cursor: unset;
+  &::after {
+    inline-size: 0px;
+    block-size: 0px;
+  }
 }
 
 @mixin label {

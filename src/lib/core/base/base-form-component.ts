@@ -1,4 +1,4 @@
-import { internals } from '../../constants';
+import { MixinBase, MixinReturn, internals } from '../../constants';
 import { BaseComponent, IBaseComponent } from './base-component';
 import { IBaseFocusableComponent, WithFocusable } from './base-focusable-component';
 

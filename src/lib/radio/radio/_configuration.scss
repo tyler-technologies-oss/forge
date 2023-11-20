@@ -1,37 +1,5 @@
-@use '../../core/styles/tokens/radio/tokens' as radio-tokens;
+@use './token-utils' as *;
 
 @mixin configuration {
-  // Shared
-  --_primary-color: #{radio-tokens.get(primary-color)};
-  --_size: #{radio-tokens.get(size)};
-  --_border-width: #{radio-tokens.get(border-width)};
-  --_state-layer-size: #{radio-tokens.get(state-layer-size)};
-  --_state-layer-dense-size: #{radio-tokens.get(state-layer-dense-size)};
-
-  // Radio
-  --_background-color: #{radio-tokens.get(background-color)};
-  --_width: #{radio-tokens.get(width)};
-  --_height: #{radio-tokens.get(height)};
-  --_unchecked-border-width: #{radio-tokens.get(unchecked-border-width)};
-  --_unchecked-border-color: #{radio-tokens.get(unchecked-border-color)};
-  --_shape: #{radio-tokens.get(shape)};
-
-  // Label
-  --_gap: #{radio-tokens.get(gap)};
-  --_justify: #{radio-tokens.get(justify)};
-  --_direction: #{radio-tokens.get(direction)};
-
-  // State layer
-  --_state-layer-width: #{radio-tokens.get(state-layer-width)};
-  --_state-layer-height: #{radio-tokens.get(state-layer-height)};
-  --_state-layer-checked-color: #{radio-tokens.get(state-layer-checked-color)};
-  --_state-layer-unchecked-color: #{radio-tokens.get(state-layer-unchecked-color)};
-  --_state-layer-shape: #{radio-tokens.get(state-layer-shape)};
-
-  // Dense
-  --_state-layer-dense-width: #{radio-tokens.get(state-layer-dense-width)};
-  --_state-layer-dense-height: #{radio-tokens.get(state-layer-dense-height)};
-
-  // Disabled
-  --_disabled-opacity: #{radio-tokens.get(disabled-opacity)};
+  @include tokens();
 }
