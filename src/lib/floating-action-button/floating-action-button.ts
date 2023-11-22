@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { ButtonTheme } from '../button';
 import { BaseButton, IBaseButton } from '../button/base/base-button';
 import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants';

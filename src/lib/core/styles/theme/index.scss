@@ -5,6 +5,8 @@
 @use '../tokens/theme/color-emphasis';
 @use '../utils';
 
+@forward './utils';
+
 ///
 /// Emits custom property declarations for all default theme tokens.
 /// 

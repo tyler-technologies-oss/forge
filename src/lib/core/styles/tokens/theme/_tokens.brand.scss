@@ -1,0 +1,17 @@
+@use 'sass:map';
+@use '../../utils';
+@use './token-utils';
+@use './tokens.surface' as surface;
+@use '../color-palette';
+
+// Light
+$tokens: (
+  brand: #283593,
+  on-brand: #ffffff
+);
+
+// Dark
+$tokens-dark: (
+  brand: #212121,
+  on-brand: #ffffff
+);

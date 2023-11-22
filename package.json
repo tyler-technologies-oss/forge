@@ -54,7 +54,6 @@
     "@material/select": "^14.0.0",
     "@material/shape": "^14.0.0",
     "@material/theme": "^14.0.0",
-    "@material/top-app-bar": "^14.0.0",
     "@material/touch-target": "^14.0.0",
     "@material/typography": "^14.0.0",
     "@tylertech/forge-core": "^2.3.0",

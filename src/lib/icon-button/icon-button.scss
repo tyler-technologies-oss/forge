@@ -131,12 +131,6 @@ forge-state-layer {
   }
 }
 
-:host([toggle]:not([on])[variant=outlined]) {
-  .forge-icon-button {
-    @include core.toggle-outlined;
-  }
-}
-
 :host([toggle][on][variant=outlined]) {
   .forge-icon-button {
     @include core.toggle-on-outlined;
