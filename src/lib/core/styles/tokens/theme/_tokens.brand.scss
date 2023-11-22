@@ -6,12 +6,12 @@
 
 // Light
 $tokens: (
-  brand: #283593,
-  on-brand: #ffffff
+  brand: color-palette.$indigo-800,
+  on-brand: color-palette.$white
 );
 
 // Dark
 $tokens-dark: (
-  brand: #212121,
-  on-brand: #ffffff
+  brand: color-palette.$grey-900,
+  on-brand: color-palette.$white
 );
