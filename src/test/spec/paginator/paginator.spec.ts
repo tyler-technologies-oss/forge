@@ -1,4 +1,4 @@
-import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, definePaginatorComponent } from '@tylertech/forge/paginator';
+import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, definePaginatorComponent, IPaginatorRangeState } from '@tylertech/forge/paginator';
 import { BASE_SELECT_CONSTANTS, ISelectComponent } from '@tylertech/forge/select';
 import { IIconButtonComponent } from '@tylertech/forge/icon-button';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
@@ -553,6 +553,24 @@ describe('PaginatorComponent', function(this: ITestContext) {
         pageSize: 25
       };
       expect(callback).toHaveBeenCalledWith(jasmine.objectContaining({ detail }));
+    });
+
+    it('should use range label callback', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.rangeLabelCallback = (state: IPaginatorRangeState) => {
+        return `items ${state.pageStart} thru ${state.pageEnd} out of ${state.total} total`;
+      };
+
+      expect(this.context.rangeLabel.innerText).toBe('items 1 thru 25 out of 100 total');
+
+      this.context.paginator.pageIndex = 2;
+
+      expect(this.context.rangeLabel.innerText).toBe('items 51 thru 75 out of 100 total');
+
+      this.context.paginator.rangeLabelCallback = undefined;
+
+      expect(this.context.rangeLabel.innerText).toBe('51-75 of 100');
     });
 
     describe('with first button', function(this: ITestContext)  {
