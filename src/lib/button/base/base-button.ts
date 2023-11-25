@@ -2,7 +2,7 @@ import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../../icon/icon-registry';
 import { BaseFocusableComponent } from '../../core/base/base-focusable-component';
-import { internals } from '../../constants';
+import { ExperimentalFocusOptions, internals } from '../../constants';
 import { IBaseComponent } from '../../core/base/base-component';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
@@ -22,6 +22,7 @@ export interface IBaseButton extends IBaseComponent {
   download: string;
   rel: string;
   form: HTMLFormElement | null;
+  focus(options?: ExperimentalFocusOptions): void;
 }
 
 export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseFocusableComponent implements IBaseButton, ILabelAware {
@@ -130,5 +131,9 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
 
   public override click(): void {
     this._foundation.click({ animateStateLayer: true });
+  }
+
+  public override focus(options: ExperimentalFocusOptions): void {
+    this._foundation.focus(options);
   }
 }

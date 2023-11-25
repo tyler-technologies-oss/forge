@@ -1,8 +1,9 @@
-@use './configuration';
+@use './configuration' as *;
 @use './core';
 @use '../core/styles/theme';
-@use '../state-layer' as state-layer;
-@use '../focus-indicator' as focus-indicator;
+@use '../state-layer';
+@use '../focus-indicator';
+@use '../circular-progress';
 @use './token-utils' as *;
 
 //
@@ -10,7 +11,7 @@
 //
 
 :host {
-  @include configuration.host-configuration;
+  @include host-configuration;
 }
 
 :host {
@@ -26,7 +27,7 @@
 //
 
 .forge-icon-button {
-  @include configuration.configuration;
+  @include configuration;
 }
 
 .forge-icon-button {
@@ -52,12 +53,6 @@ forge-focus-indicator {
     shape-start-end: #{token(shape-start-end)},
     shape-end-start: #{token(shape-end-start)},
     shape-end-end: #{token(shape-end-end)}
-  ));
-}
-
-:host(:is([variant=icon],:not([variant]))) {
-  @include focus-indicator.provide-theme((
-    outward-offset: 0px // Requires unit
   ));
 }
 
@@ -159,6 +154,45 @@ forge-state-layer {
   .forge-icon-button {
     @include core.toggle-on-filled;
   }
+}
+
+//
+// Badge
+//
+
+::slotted([slot=badge]) {
+  position: absolute;
+  top: 0;
+  left: 60%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+::slotted(forge-badge[slot=badge][dot]) {
+  top: 8px;
+}
+
+:host(:is([dense],[density=small],[density=medium])) {
+  ::slotted(forge-badge[slot=badge]:not([dot])) {
+    top: -25%;
+  }
+
+  ::slotted(forge-badge[slot=badge][dot]) {
+    top: 0;
+  }
+}
+
+
+//
+// Circular progress
+//
+
+::slotted(forge-circular-progress) {
+  @include circular-progress.provide-theme((
+    indicator-color: #{token(icon-color)},
+    track-color: transparent,
+    size: 1em
+  ));
 }
 
 //

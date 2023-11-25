@@ -40,8 +40,7 @@ declare global {
  * @attribute {boolean} determinate - Controls the determinate state.
  * @attribute {boolean} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {CircularProgressTheme} theme - Controls the theme of the progress indicator.
- * @attribute {boolean} no-track - Controls the visibility of the track background.
- * @attribute {string} data-aria-label - Propagates an `aria-label` to the underlying progressbar element.
+ * @attribute {boolean} track - Controls the visibility of the track background.
  * 
  * @slot - The is the default/unnamed slot. Renders content at the center of the progress indicator.
  * 
@@ -65,8 +64,7 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
       CIRCULAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,
       CIRCULAR_PROGRESS_CONSTANTS.attributes.PROGRESS,
       CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME,
-      CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK,
-      CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL
+      CIRCULAR_PROGRESS_CONSTANTS.attributes.TRACK
     ];
   }
 
@@ -93,11 +91,8 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
       case CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME:
         this.theme = newValue as CircularProgressTheme;
         break;
-      case CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK:
-        this.track = !coerceBoolean(newValue);
-        break;
-      case CIRCULAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL:
-        this._foundation.ariaLabel = newValue;
+      case CIRCULAR_PROGRESS_CONSTANTS.attributes.TRACK:
+        this.track = coerceBoolean(newValue);
         break;
     }
   }

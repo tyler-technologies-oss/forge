@@ -96,7 +96,6 @@ $tokens: (
 
   // Focus indicator
   focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 4px),
-  text-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 0px),
   link-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 2px),
 
   // Popover icon

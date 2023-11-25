@@ -133,6 +133,7 @@ declare global {
  * @slot on - The icon to show when in `toggle` mode when toggled "on".
  * @slot start - Elements to logically render before the icon.
  * @slot end - Elements to logically render after the icon.
+ * @slot badge - Absolutely positions the element in the top-end corner of the button (typically reserved for badge-like content).
  */
 @CustomElement({
   name: ICON_BUTTON_CONSTANTS.elementName,

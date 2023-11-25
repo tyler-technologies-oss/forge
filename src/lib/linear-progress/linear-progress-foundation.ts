@@ -17,8 +17,8 @@ export class LinearProgressFoundation {
 
   constructor(private _adapter: ILinearProgressAdapter) {}
 
-  public set ariaLabel(value: string) {
-    this._adapter.setAriaLabel(value);
+  public initialize(): void {
+    this._adapter.initialize();
   }
 
   public get determinate(): boolean {

@@ -46,8 +46,10 @@ export class LabelFoundation implements ILabelFoundation {
   }
 
   private _handleClick(evt: PointerEvent): void {
-    // Prevent duplicate clicks from a nested target element
-    if (evt.target === this._adapter.getTargetElement()) {
+    // Prevent duplicate clicks from a nested target element or if the event originates
+    // from within the target element
+    const targetEl = this._adapter.getTargetElement();
+    if (evt.target === targetEl || targetEl?.contains(evt.target as Node)) {
       return;
     }
     this._adapter.clickTarget();
