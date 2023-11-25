@@ -56,6 +56,12 @@ forge-focus-indicator {
   ));
 }
 
+:host(:is([variant=icon],:not([variant]))) {
+  @include focus-indicator.provide-theme((
+    outward-offset: 0px // Requires unit
+  ));
+}
+
 //
 // State layer 
 //

@@ -1,7 +1,7 @@
 import { getShadowElement, removeAllChildren } from '@tylertech/forge-core';
+import { ExperimentalFocusOptions } from '../constants';
 import { IAvatarComponent } from '../avatar';
 import { IButtonComponent } from '../button';
-import { ButtonFocusOptions } from '../button/base/base-button-constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IconComponentDelegate } from '../icon';
 import { IToolbarComponent } from '../toolbar';
@@ -22,8 +22,8 @@ export interface IProfileCardAdapter extends IBaseAdapter {
   setProfileButtonText(value: string): void;
   setProfileButtonListener(listener: (evt: Event) => void): void;
   setSignOutButtonListener(listener: (evt: Event) => void): void;
-  requestProfileButtonFocus(options?: ButtonFocusOptions): void;
-  requestSignOutButtonFocus(options?: ButtonFocusOptions): void;
+  requestProfileButtonFocus(options?: ExperimentalFocusOptions): void;
+  requestSignOutButtonFocus(options?: ExperimentalFocusOptions): void;
 }
 
 export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> implements IProfileCardAdapter {
@@ -114,11 +114,11 @@ export class ProfileCardAdapter extends BaseAdapter<IProfileCardComponent> imple
     this._signOutButton.addEventListener('click', listener);
   }
 
-  public requestProfileButtonFocus(options?: ButtonFocusOptions): void {
+  public requestProfileButtonFocus(options?: ExperimentalFocusOptions): void {
     window.requestAnimationFrame(() => this._profileButton.focus(options));
   }
 
-  public requestSignOutButtonFocus(options?: ButtonFocusOptions): void {
+  public requestSignOutButtonFocus(options?: ExperimentalFocusOptions): void {
     window.requestAnimationFrame(() => this._signOutButton.focus(options));
   }
 }

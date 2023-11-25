@@ -76,6 +76,10 @@
   text-decoration: none;
 }
 
+@mixin text {
+  @include override(focus-indicator-offset, text-focus-indicator-offset);
+}
+
 @mixin filled {
   @include override(background, filled-background);
   @include override(color, filled-color);

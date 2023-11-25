@@ -83,6 +83,12 @@ forge-focus-indicator {
 // Variants
 //
 
+:host(:is(:not([variant], [variant=text]))) {
+  .forge-button {
+    @include core.text;
+  }
+}
+
 :host(:is([variant=filled],[variant=raised])) {
   .forge-button {
     @include core.filled;
