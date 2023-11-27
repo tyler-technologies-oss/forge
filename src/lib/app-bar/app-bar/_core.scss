@@ -46,6 +46,10 @@
   height: 100%;
 }
 
+@mixin section-center {
+  justify-content: center;
+}
+
 @mixin section-end {
   justify-self: end;
 }

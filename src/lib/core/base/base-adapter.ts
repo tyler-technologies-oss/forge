@@ -5,6 +5,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   readonly hostElement: T;
   readonly isConnected: boolean;
   removeHostAttribute(name: string): void;
+  hasHostAttribute(name: string): boolean;
   getHostAttribute(name: string): string | null;
   setHostAttribute(name: string, value?: string): void;
   toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void;
@@ -27,6 +28,10 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public get hostElement(): T {
     return this._component;
+  }
+
+  public hasHostAttribute(name: string): boolean {
+    return this._component.hasAttribute(name);
   }
 
   public getHostAttribute(name: string): string | null {
