@@ -22,15 +22,13 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   initialize(): void;
   initializeAnchor(): void;
   removeAnchor(): void;
-  setAnchorHref(href: string): void;
-  setAnchorTarget(target: string): void;
-  setAnchorDownload(value: string): void;
-  setAnchorRel(value: string): void;
+  setAnchorProperty<T extends keyof HTMLAnchorElement>(name: T, value: HTMLAnchorElement[T]): void;
   setDisabled(value: boolean): void;
   syncDisabled(value: boolean): void;
   clickAnchor(): void;
   clickHost(): void;
   clickFormButton(type: string): void;
+  forceFocusVisible(): void;
   addAnchorEventListener(type: string, listener: EventListener): void;
   removeAnchorEventListener(type: string, listener: EventListener): void;
   hasPopoverTarget(): boolean;
@@ -73,27 +71,9 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._applyHostSemantics();
   }
 
-  public setAnchorHref(href: string): void {
+  public setAnchorProperty<T extends keyof HTMLAnchorElement>(name: T, value: HTMLAnchorElement[T]): void {
     if (this._anchorElement) {
-      this._anchorElement.href = href;
-    }
-  }
-
-  public setAnchorTarget(target: string): void {
-    if (this._anchorElement) {
-      this._anchorElement.target = target;
-    }
-  }
-
-  public setAnchorDownload(value: string): void {
-    if (this._anchorElement) {
-      this._anchorElement.download = value;
-    }
-  }
-
-  public setAnchorRel(value: string): void {
-    if (this._anchorElement) {
-      this._anchorElement.rel = value;
+      this._anchorElement[name] = value;
     }
   }
 
@@ -124,6 +104,10 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     // Calling click() on the prototype ensures we don't end up in an infinite
     // recursion since the host overrides the HTMLElement.click() method
     HTMLElement.prototype.click.call(this._component);
+  }
+
+  public forceFocusVisible(): void {
+    this._focusIndicatorElement.active = true;
   }
 
   public clickFormButton(type: string): void {

@@ -114,7 +114,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   }
 
   public focusHost(options?: FocusOptions): void {
-    this._component.focus(options);
+    HTMLElement.prototype.focus.call(this._component, options);
   }
 
   public get isConnected(): boolean {

@@ -1,5 +1,4 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-
 import { IProfileCardAdapter } from './profile-card-adapter';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 
@@ -8,10 +7,13 @@ export interface IProfileCardFoundation extends ICustomElementFoundation {
   email: string;
   signOut: boolean;
   profile: boolean;
+  signOutText: string;
+  profileText: string;
   avatarText: string;
   avatarIcon: string;
   avatarImageUrl: string;
   avatarLetterCount: number;
+  focus(options?: FocusOptions): void;
 }
 
 export class ProfileCardFoundation implements IProfileCardFoundation {
@@ -25,6 +27,7 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   private _showProfileButton = PROFILE_CARD_CONSTANTS.defaults.SHOW_PROFILE_BUTTON;
   private _signOutButtonText = PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT;
   private _profileButtonText = PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT;
+
   private _profileListener: (evt: Event) => void;
   private _signOutListener: (evt: Event) => void;
 
@@ -36,21 +39,13 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   public initialize(): void {
     this._adapter.setProfileButtonListener(this._profileListener);
     this._adapter.setSignOutButtonListener(this._signOutListener);
-
-    if (this._showSignOutButton || this._showProfileButton) {
-      this._requestInitialFocus();
-    }
-
-    this._setActionVisibility();
-    this._adapter.setSignOutButtonText(this._signOutButtonText);
-    this._adapter.setProfileButtonText(this._profileButtonText);
   }
 
-  private _requestInitialFocus(): void {
+  public focus(options?: FocusOptions): void {
     if (this._showSignOutButton) {
-      this._adapter.requestSignOutButtonFocus();
+      this._adapter.requestSignOutButtonFocus({ ...options, focusVisible: true } );
     } else if (this._showProfileButton) {
-      this._adapter.requestProfileButtonFocus();
+      this._adapter.requestProfileButtonFocus({ ...options, focusVisible: true } );
     }
   }
 
@@ -76,8 +71,12 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   }
   public set fullName(value: string) {
     if (this._fullName !== value) {
-      this._fullName = value;
+      this._fullName = value ?? '';
       this._adapter.setFullName(this._fullName);
+      if (!this._avatarText) {
+        this._adapter.setAvatarText(this._fullName);
+      }
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.FULL_NAME, !!this._fullName, this._fullName);
     }
   }
 
@@ -86,8 +85,9 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   }
   public set email(value: string) {
     if (this._email !== value) {
-      this._email = value;
+      this._email = value ?? '';
       this._adapter.setEmail(this._email);
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.EMAIL, !!this._email, this._email);
     }
   }
 
@@ -96,8 +96,9 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   }
   public set avatarText(value: string) {
     if (this._avatarText !== value) {
-      this._avatarText = value;
+      this._avatarText = value ?? '';
       this._adapter.setAvatarText(this._avatarText);
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT, !!this._avatarText, this._avatarText);
     }
   }
 
@@ -106,8 +107,9 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
   }
   public set avatarIcon(value: string) {
     if (this._avatarIcon !== value) {
-      this._avatarIcon = value;
+      this._avatarIcon = value ?? '';
       this._adapter.setAvatarIcon(this._avatarIcon);
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON, !!this._avatarIcon, this._avatarIcon);
     }
   }
 
@@ -118,6 +120,7 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     if (this._avatarImageUrl !== value) {
       this._avatarImageUrl = value;
       this._adapter.setAvatarImageUrl(this._avatarImageUrl);
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_IMAGE_URL, !!this._avatarImageUrl, this._avatarImageUrl);
     }
   }
 
@@ -128,6 +131,7 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     if (this._avatarLetterCount !== value) {
       this._avatarLetterCount = value;
       this._adapter.setAvatarLetterCount(this._avatarLetterCount);
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_LETTER_COUNT, !!this._avatarLetterCount, `${this._avatarLetterCount}`);
     }
   }
 
@@ -135,9 +139,11 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     return this._showSignOutButton;
   }
   public set signOut(value: boolean) {
+    value = Boolean(value);
     if (this._showSignOutButton !== value) {
       this._showSignOutButton = value;
       this._setActionVisibility();
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT, this._showSignOutButton);
     }
   }
 
@@ -145,9 +151,11 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     return this._showProfileButton;
   }
   public set profile(value: boolean) {
+    value = Boolean(value);
     if (this._showProfileButton !== value) {
       this._showProfileButton = value;
       this._setActionVisibility();
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.PROFILE, this._showProfileButton);
     }
   }
 
@@ -158,6 +166,9 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     if (this._signOutButtonText !== value) {
       this._signOutButtonText = value || PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT;
       this._adapter.setSignOutButtonText(this._signOutButtonText);
+
+      const hasSignOutTextAttr = this._signOutButtonText !== PROFILE_CARD_CONSTANTS.defaults.SIGN_OUT_BUTTON_TEXT;
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT, hasSignOutTextAttr, this._signOutButtonText);
     }
   }
 
@@ -168,6 +179,9 @@ export class ProfileCardFoundation implements IProfileCardFoundation {
     if (this._profileButtonText !== value) {
       this._profileButtonText = value || PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT;
       this._adapter.setProfileButtonText(this._profileButtonText);
+
+      const hasProfileAttr = value !== PROFILE_CARD_CONSTANTS.defaults.PROFILE_BUTTON_TEXT;
+      this._adapter.toggleHostAttribute(PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT, hasProfileAttr, this._profileButtonText);
     }
   }
 }

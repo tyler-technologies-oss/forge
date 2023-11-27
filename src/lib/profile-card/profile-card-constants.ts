@@ -16,9 +16,9 @@ const attributes = {
 };
 
 const selectors = {
-  FULL_NAME: '.forge-profile-card__full-name',
-  EMAIL: '.forge-profile-card__email',
-  AVATAR: '.forge-profile-card__info-avatar > forge-avatar',
+  FULL_NAME: '.full-name',
+  EMAIL: '.email',
+  AVATAR: '.avatar > forge-avatar',
   ACTION_TOOLBAR: '#action-toolbar',
   PROFILE_BUTTON: '#profile-button',
   SIGN_OUT_BUTTON: '#sign-out-button'

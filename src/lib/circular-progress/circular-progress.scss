@@ -121,9 +121,9 @@ svg {
 @include theme(warning);
 @include theme(info);
 
-:host([no-track]) {
+:host([track]) {
   .forge-circular-progress {
-    @include override(track-color, transparent, value);
+    @include override(track-color, track-fill-color);
   }
 }
 

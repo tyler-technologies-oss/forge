@@ -14,7 +14,8 @@ forge-button {
   width: 256px;
 }
 
-form:has(forge-button) forge-button {
+form:has(forge-button) forge-button,
+forge-button.auto-width {
   width: auto;
 }
 

@@ -13,6 +13,7 @@ import { attachShadowTemplate } from '@tylertech/forge-core';
 import { BaseButton } from './base-button';
 import { BaseButtonFoundation } from './base-button-foundation';
 import { BaseButtonAdapter, IBaseButtonAdapter } from './base-button-adapter';
+import { ExperimentalFocusOptions } from '../../constants';
 
 import '../../focus-indicator/focus-indicator';
 import '../../state-layer/state-layer';
@@ -49,11 +50,17 @@ class TestBaseButton extends BaseButton<TestBaseButtonFoundation> {
   public static get observedAttributes(): string[] {
     return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes) as string[]];
   }
+
   protected readonly _foundation: TestBaseButtonFoundation;
+
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
     this._foundation = new TestBaseButtonFoundation(new TestBaseButtonAdapter(this));
+  }
+
+  public override focus(options: ExperimentalFocusOptions): void {
+    super.focus(options);
   }
 }
 
@@ -91,6 +98,30 @@ describe('BaseButton', () => {
     expect(focusIndicator.active).to.be.false;
 
     el.focus();
+
+    expect(el.matches(':focus-visible')).to.be.true;
+    expect(focusIndicator.active).to.be.true;
+  });
+
+  it('should not show focus indicator programmatically', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-test-base-button>Button</forge-test-base-button>`);
+
+    const focusIndicator = getFocusIndicator(el);
+    expect(focusIndicator.active).to.be.false;
+
+    el.focus();
+
+    expect(el.matches(':focus-visible')).to.be.true;
+    expect(focusIndicator.active).to.be.true;
+  });
+
+  it('should show focus indicator programmatically when focusVisible is true', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-test-base-button>Button</forge-test-base-button>`);
+
+    const focusIndicator = getFocusIndicator(el);
+    expect(focusIndicator.active).to.be.false;
+
+    el.focus({ focusVisible: true });
 
     expect(el.matches(':focus-visible')).to.be.true;
     expect(focusIndicator.active).to.be.true;

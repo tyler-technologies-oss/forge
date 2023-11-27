@@ -1,8 +1,9 @@
-@use './configuration';
+@use './configuration' as *;
 @use './core';
 @use '../core/styles/theme';
-@use '../state-layer' as state-layer;
-@use '../focus-indicator' as focus-indicator;
+@use '../state-layer';
+@use '../focus-indicator';
+@use '../circular-progress';
 @use './token-utils' as *;
 
 //
@@ -10,7 +11,7 @@
 //
 
 :host {
-  @include configuration.host-configuration;
+  @include host-configuration;
 }
 
 :host {
@@ -26,7 +27,7 @@
 //
 
 .forge-button {
-  @include configuration.configuration;
+  @include configuration;
 }
 
 .forge-button {
@@ -200,4 +201,16 @@ forge-focus-indicator {
   .forge-button__popover-icon {
     @include core.popover-icon-open;
   }
+}
+
+//
+// Slotted - circular progress
+//
+
+::slotted(forge-circular-progress) {
+  @include circular-progress.provide-theme((
+    indicator-color: #{token(color)},
+    track-color: transparent,
+    size: 1em
+  ));
 }

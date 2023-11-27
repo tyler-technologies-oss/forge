@@ -80,7 +80,7 @@ anchorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
 
 const popoverIconToggle = document.querySelector('#opt-popover-icon') as ISwitchComponent;
 popoverIconToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  allButtons.forEach(btn => btn.popoverIcon = selected);
+  allButtons.filter(btn => btn.id !== 'popover-button').forEach(btn => btn.popoverIcon = selected);
 });
 
 const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;

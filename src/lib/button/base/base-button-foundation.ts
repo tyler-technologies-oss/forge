@@ -1,6 +1,7 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { ExperimentalFocusOptions } from '../../constants';
 import { IBaseButtonAdapter } from './base-button-adapter';
-import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
+import { BASE_BUTTON_CONSTANTS, ButtonClickOptions, ButtonType } from './base-button-constants';
 
 export interface IBaseButtonFoundation extends ICustomElementFoundation {
   type: ButtonType;
@@ -12,7 +13,8 @@ export interface IBaseButtonFoundation extends ICustomElementFoundation {
   download: string;
   rel: string;
   dense: boolean;
-  click(options: { animateStateLayer: boolean }): void;
+  click(options: ButtonClickOptions): void;
+  focus(options?: ExperimentalFocusOptions): void;
   proxyLabel(label: string | null): void;
 }
 
@@ -55,7 +57,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   /**
    * Handles overriding the the `click()` method on the HTMLElement instance
    */
-  public click({ animateStateLayer = false } = {}): void {
+  public click({ animateStateLayer = false }: ButtonClickOptions = {}): void {
     if (this._disabled) {
       return;
     }
@@ -68,6 +70,14 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
 
     if (animateStateLayer) {
       this._adapter.animateStateLayer();
+    }
+  }
+
+  public focus(options?: ExperimentalFocusOptions): void {
+    this._adapter.focusHost(options);
+
+    if (options?.focusVisible) {
+      this._adapter.forceFocusVisible();
     }
   }
 
@@ -223,7 +233,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
       this._href = value;
       this.anchor = this._href.length > 0;
       if (this._anchor) {
-        this._adapter.setAnchorHref(this._href);
+        this._adapter.setAnchorProperty('href', this._href);
       }
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.HREF, !!this._href, this._href);
     }
@@ -235,7 +245,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   public set target(value: string) {
     if (this._target !== value) {
       this._target = value ?? '_self';
-      this._adapter.setAnchorTarget(value);
+      this._adapter.setAnchorProperty('target', value);
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.TARGET, !!this._target, this._target);
     }
   }
@@ -246,7 +256,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   public set download(value: string) {
     if (this._download !== value) {
       this._download = value;
-      this._adapter.setAnchorDownload(this._download);
+      this._adapter.setAnchorProperty('download', this._download);
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.DOWNLOAD, !!this._download, this._download);
     }
   }
@@ -257,7 +267,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   public set rel(value: string) {
     if (this._rel !== value) {
       this._rel = value;
-      this._adapter.setAnchorRel(this._rel);
+      this._adapter.setAnchorProperty('rel', this._rel);
       this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.REL, !!this._rel, this._rel);
     }
   }

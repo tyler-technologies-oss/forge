@@ -13,6 +13,8 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
   align-items: center;
   justify-content: center;
 
+  transition: background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+
   // `contain` and `content-visibility` are performance optimizations important here because progress indicators
   // are often used when a CPU=intensive task is underway so it's especially important to minimize their CPU consumption.
   contain: strict;

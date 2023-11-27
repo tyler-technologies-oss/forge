@@ -1,18 +1,18 @@
 <template>
   <div class="forge-profile-card" part="root">
-    <div class="forge-profile-card__info" part="info-container">
-      <div class="forge-profile-card__info-avatar" part="avatar-container">
+    <div class="info-container">
+      <div class="avatar">
         <forge-avatar part="avatar"></forge-avatar>
       </div>
-      <div class="forge-profile-card__info-text" part="info-text">
-        <div class="forge-profile-card__full-name" part="name"></div>
-        <div class="forge-profile-card__email" part="email"></div>
+      <div class="info-text">
+        <div class="full-name" part="name"></div>
+        <div class="email" part="email"></div>
       </div>
     </div>
     <slot></slot>
-    <forge-toolbar inverted id="action-toolbar" part="footer">
-      <forge-button variant="outlined" slot="end" style="margin-right: 8px;" part="profile-button" aria-label="View profile" id="profile-button">Profile</forge-button>
-      <forge-button slot="end" part="sign-out-button" id="sign-out-button" aria-label="Sign out">Sign out</forge-button>
+    <forge-toolbar inverted id="action-toolbar">
+      <forge-button variant="outlined" slot="end" style="display: none;" part="profile-button" id="profile-button">Profile</forge-button>
+      <forge-button slot="end" part="sign-out-button" id="sign-out-button">Sign out</forge-button>
     </forge-toolbar>
   </div>
 </template>

@@ -40,7 +40,6 @@ declare global {
  * @attribute {number} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {number} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {string} theme - Sets the theme.
- * @attribute {string} data-aria-label - Propagates an `aria-label` to the underlying progress bar element.
  * 
  * @cssproperty --forge-linear-progress-height - The height of the element.
  * @cssproperty --forge-linear-progress-track-color - The background color of the indicator.
@@ -64,8 +63,7 @@ export class LinearProgressComponent extends BaseComponent implements ILinearPro
       LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,
       LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS,
       LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER,
-      LINEAR_PROGRESS_CONSTANTS.attributes.THEME,
-      LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL
+      LINEAR_PROGRESS_CONSTANTS.attributes.THEME
     ];
   }
 
@@ -75,6 +73,10 @@ export class LinearProgressComponent extends BaseComponent implements ILinearPro
     super();
     attachShadowTemplate(this, template, styles);
     this._foundation = new LinearProgressFoundation(new LinearProgressAdapter(this));
+  }
+
+  public connectedCallback(): void {
+    this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -90,9 +92,6 @@ export class LinearProgressComponent extends BaseComponent implements ILinearPro
         break;
       case LINEAR_PROGRESS_CONSTANTS.attributes.THEME:
         this.theme = newValue as LinearProgressTheme;
-        break;
-      case LINEAR_PROGRESS_CONSTANTS.attributes.ARIA_LABEL:
-        this._foundation.ariaLabel = newValue;
         break;
     }
   }

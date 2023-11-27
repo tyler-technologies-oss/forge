@@ -1,13 +1,13 @@
-import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ILinearProgressComponent } from './linear-progress';
 import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 
 export interface ILinearProgressAdapter extends IBaseAdapter {
+  initialize(): void;
   setDeterminate(value: boolean): void;
   setProgress(value: number): void;
   setBuffer(value: number): void;
-  setAriaLabel(value: string): void;
 }
 
 export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent> implements ILinearProgressAdapter {
@@ -21,10 +21,22 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
     this._progressElement = getShadowElement(component, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
     this._bufferElement = getShadowElement(component, LINEAR_PROGRESS_CONSTANTS.selectors.BUFFER);
   }
+
+  public initialize(): void {
+    if (!this._component.hasAttribute('role')) {
+      this._component.setAttribute('role', 'progressbar');
+    }
+    if (!this._component.hasAttribute('aria-valuemin')) {
+      this._component.setAttribute('aria-valuemin', '0');
+    }
+    if (!this._component.hasAttribute('aria-valuemax')) {
+      this._component.setAttribute('aria-valuemax', '1');
+    }
+  }
   
   public setDeterminate(value: boolean): void {
     if (!value) {
-      this._rootElement.removeAttribute('aria-valuenow');
+      this._component.removeAttribute('aria-valuenow');
       this._progressElement.style.transform = '';
       this._bufferElement.style.transform = '';
     }
@@ -32,15 +44,11 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
   }
 
   public setProgress(value: number): void {
-    this._rootElement.setAttribute('aria-valuenow', `${value}`);
+    this._component.setAttribute('aria-valuenow', `${value}`);
     this._progressElement.style.transform = `scaleX(${value * 100}%)`;
   }
 
   public setBuffer(value: number): void {
     this._bufferElement.style.transform = `scaleX(${value * 100}%)`;
-  }
-
-  public setAriaLabel(value: string): void {
-    toggleAttribute(this._rootElement, !!value, 'aria-label', value);
   }
 }

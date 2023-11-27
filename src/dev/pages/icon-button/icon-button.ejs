@@ -62,6 +62,44 @@
   </section>
 
   <section>
+    <h3 class="forge-typography--heading2">w/Badge</h3>
+    <forge-icon-button aria-label="With dot badge">
+      <forge-icon name="notifications"></forge-icon>
+      <forge-badge slot="badge" dot></forge-badge>
+    </forge-icon-button>
+
+    <forge-icon-button aria-label="With badge count">
+      <forge-icon name="notifications"></forge-icon>
+      <forge-badge slot="badge">99+</forge-badge>
+    </forge-icon-button>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">w/Circular progress</h3>
+    <div class="flex">
+      <forge-icon-button>
+        <forge-circular-progress aria-label="With circular progress"></forge-circular-progress>
+      </forge-icon-button>
+
+      <forge-icon-button variant="outlined">
+        <forge-circular-progress aria-label="Outlined with circular progress"></forge-circular-progress>
+      </forge-icon-button>
+
+      <forge-icon-button variant="tonal">
+        <forge-circular-progress aria-label="Tonal with circular progress"></forge-circular-progress>
+      </forge-icon-button>
+
+      <forge-icon-button variant="Filled">
+        <forge-circular-progress aria-label="Filled with circular progress"></forge-circular-progress>
+      </forge-icon-button>
+
+      <forge-icon-button variant="raised">
+        <forge-circular-progress aria-label="Raised with circular progress"></forge-circular-progress>
+      </forge-icon-button>
+    </div>
+  </section>
+
+  <section>
     <h3 class="forge-typography--heading2">Label aware</h3>
     <div class="flex">
       <forge-label class="with-label">
@@ -82,12 +120,12 @@
   <section>
     <h3 class="forge-typography--heading2">Slots</h3>
     <div class="flex">
-      <forge-icon-button>
+      <forge-icon-button aria-label="With start slot icon">
         <forge-icon slot="start" name="arrow_drop_down"></forge-icon>
         <forge-icon name="favorite"></forge-icon>
       </forge-icon-button>
 
-      <forge-icon-button>
+      <forge-icon-button aria-label="With end slot icon">
         <forge-icon name="favorite"></forge-icon>
         <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
       </forge-icon-button>
