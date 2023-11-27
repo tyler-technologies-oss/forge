@@ -1,6 +1,6 @@
 #page-app-bar {
-  --forge-app-bar-theme-background: var(--forge-theme-secondary);
-  --forge-app-bar-theme-on-background: var(--forge-theme-on-secondary);
+  --forge-app-bar-background: var(--forge-theme-secondary);
+  --forge-app-bar-foreground: var(--forge-theme-on-secondary);
 
   a[slot=title] {
     text-decoration: none;

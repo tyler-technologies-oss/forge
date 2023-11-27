@@ -1,0 +1,82 @@
+import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { IAppBarAdapter } from './app-bar-adapter';
+import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS } from './app-bar-constants';
+
+export interface IAppBarFoundation extends ICustomElementFoundation {
+  titleText: string;
+  elevation: AppBarElevation;
+  theme: string;
+  href: string;
+  target: string;
+}
+
+export class AppBarFoundation implements IAppBarFoundation {
+  private _titleText = '';
+  private _elevation: AppBarElevation = 'raised';
+  private _theme: AppBarTheme;
+  private _href = '';
+  private _target = '';
+
+  private _centerSlotListener = (_evt: Event): void => this._adapter.setCenterSlotVisibility();
+
+  constructor(private _adapter: IAppBarAdapter) {}
+
+  public initialize(): void {
+    this._adapter.initialize();
+    this._adapter.addCenterSlotListener(this._centerSlotListener);
+    this._adapter.setCenterSlotVisibility();
+  }
+
+  public get titleText(): string {
+    return this._titleText;
+  }
+  public set titleText(value: string) {
+    if (this._titleText !== value) {
+      this._titleText = value ?? '';
+      this._adapter.setTitleText(this._titleText);
+      this._adapter.setHostAttribute(APP_BAR_CONSTANTS.attributes.TITLE_TEXT, value);
+    }
+  }
+
+  public get elevation(): AppBarElevation {
+    return this._elevation;
+  }
+  public set elevation(value: AppBarElevation) {
+    if (this._elevation !== value) {
+      this._elevation = value;
+      this._adapter.setHostAttribute(APP_BAR_CONSTANTS.attributes.ELEVATION, value);
+    }
+  }
+
+  public get theme(): AppBarTheme {
+    return this._theme;
+  }
+  public set theme(value: AppBarTheme) {
+    if (this._theme !== value) {
+      this._theme = value ?? '';
+      this._adapter.toggleHostAttribute(APP_BAR_CONSTANTS.attributes.THEME, !!this._theme, this._theme);
+    }
+  }
+
+  public get href(): string {
+    return this._href ?? '';
+  }
+  public set href(value: string) {
+    if (this._href !== value) {
+      this._href = value?.trim().length ? value.trim() : '';
+      this._adapter.setHref(this._href);
+      this._adapter.toggleHostAttribute(APP_BAR_CONSTANTS.attributes.HREF, !!this._href, this._href);
+    }
+  }
+
+  public get target(): string {
+    return this._target ?? '';
+  }
+  public set target(value: string) {
+    if (this._target !== value) {
+      this._target = value?.trim().length ? value.trim() : '';
+      this._adapter.setTarget(this._target);
+      this._adapter.toggleHostAttribute(APP_BAR_CONSTANTS.attributes.TARGET, !!this._target, this._target);
+    }
+  }
+}

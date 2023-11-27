@@ -209,7 +209,7 @@ export function locateTargetHeuristic(element: HTMLElement, id?: string | null):
  * @param preserveChildren Whether or not to preserve the children of the old element in the new element.
  * @returns The new element.
  */
-export function replaceElement(oldElement: HTMLElement, newElement: HTMLElement, preserveChildren = true): HTMLElement {
+export function replaceElement<T extends HTMLElement>(oldElement: HTMLElement, newElement: T, preserveChildren = true): T {
   if (preserveChildren) {
     newElement.append(...oldElement.childNodes);
   }

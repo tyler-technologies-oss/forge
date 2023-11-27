@@ -1,6 +1,4 @@
 @use '../core/styles/theme' as theme;
-@use '../app-bar/mixins' as app-bar-mixins;
-@use '../app-bar/variables' as app-bar-variables;
 @use '../backdrop/mixins' as backdrop-mixins;
 @use '../backdrop/variables' as backdrop-variables;
 @use '../skeleton/mixins' as skeleton-mixins;
@@ -25,7 +23,6 @@
   @include theme.properties-dark;
 
   /// Component-specific Forge theme properties
-  @include app-bar-mixins.provide-theme(app-bar-variables.$theme-values-dark);
   @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);
   @include skeleton-mixins.provide-theme(skeleton-variables.$theme-values-dark);
   @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);

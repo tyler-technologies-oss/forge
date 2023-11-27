@@ -1,5 +1,5 @@
 @use './animations';
-@use './configuration';
+@use './configuration' as *;
 @use './core';
 
 //
@@ -7,7 +7,11 @@
 //
 
 :host {
-  display: contents;
+  @include configuration;
+}
+
+:host {
+  @include core.base;
 }
 
 :host([hidden]) {
@@ -15,44 +19,23 @@
 }
 
 //
-// Base
-//
-
-.forge-focus-indicator {
-  @include configuration.configuration;
-}
-
-.forge-focus-indicator {
-  @include core.base;
-}
-
-
-//
 // States
 //
 
 :host([active]) {
-  .forge-focus-indicator {
-    @include core.active;
-  }
+  @include core.active;
 }
 
 :host(:not([inward])) {
-  .forge-focus-indicator {
-    @include core.outward;
-  }
+  @include core.outward;
 }
 
 :host([inward]) {
-  .forge-focus-indicator {
-    @include core.inward;
-  }
+  @include core.inward;
 }
 
 :host([circular]) {
-  .forge-focus-indicator {
-    @include core.circular;
-  }
+  @include core.circular;
 }
 
 //
@@ -66,7 +49,7 @@
 //
 
 @media (prefers-reduced-motion) {
-  .forge-focus-indicator {
+  :host {
     animation: none;
   }
 }
