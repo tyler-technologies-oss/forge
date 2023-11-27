@@ -84,3 +84,14 @@ export interface IPaginatorChangeEvent {
   pageIndex: number;
   offset: number;
 }
+
+export interface IPaginatorRangeState {
+  pageSize: number;
+  pageIndex: number;
+  offset: number;
+  pageStart: number;
+  pageEnd: number;
+  total: number;
+}
+
+export type PaginatorRangeLabelBuilder = ((state: IPaginatorRangeState) => string) | undefined | null;

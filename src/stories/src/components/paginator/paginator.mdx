@@ -129,6 +129,19 @@ you will respond to the `change` event that gets emitted from this component to 
 
 </PropertyDef>
 
+<PropertyDef name="rangeLabelCallback" attr={false} type="PaginatorRangeLabelBuilder" defaultValue="undefined">
+
+Sets the callback that will execute when the range label is rendered. This allows you to customize the range label text.
+
+Example usage:
+```typescript
+const rangeLabelCallback: PaginatorRangeLabelBuilder = ({ pageStart, pageEnd, total }: IPaginatorRangeState) => {
+  return `items ${pageStart} thru ${pageEnd} out of ${total} total`;
+};
+```
+
+</PropertyDef>
+
 </PageSection>
 
 <PageSection>
@@ -221,6 +234,25 @@ interface ISelectOption {
 
 ```typescript
 type PaginatorAlternativeAlignment = 'start' | 'space-between' | 'end';
+```
+
+### IPaginatorRangeState
+
+```typescript
+interface IPaginatorRangeState {
+  pageSize: number;
+  pageIndex: number;
+  offset: number;
+  pageStart: number;
+  pageEnd: number;
+  total: number;
+}
+```
+
+### PaginatorRangeLabelBuilder
+
+```typescript
+type PaginatorRangeLabelBuilder = ((state: IPaginatorRangeState) => string) | undefined | null;
 ```
 
 </PageSection>

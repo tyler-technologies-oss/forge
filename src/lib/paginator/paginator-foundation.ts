@@ -1,6 +1,6 @@
 import { coerceNumber, ICustomElementFoundation, isArray, isDefined } from '@tylertech/forge-core';
-import { IPaginatorAdapter, PaginatorFieldIdentifier } from './paginator-adapter';
-import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent } from './paginator-constants';
+import { IPaginatorAdapter } from './paginator-adapter';
+import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, PaginatorRangeLabelBuilder, IPaginatorRangeState } from './paginator-constants';
 import { ISelectOption } from '../select';
 
 export interface IPaginatorFoundation extends ICustomElementFoundation {
@@ -10,6 +10,7 @@ export interface IPaginatorFoundation extends ICustomElementFoundation {
   total: number;
   pageSizeOptions: number[] | boolean;
   pageSizeLabel: string;
+  rangeLabelCallback: PaginatorRangeLabelBuilder;
   focus(options?: FocusOptions): void;
 }
 
@@ -25,7 +26,7 @@ export class PaginatorFoundation {
   private _disabled = false;
   private _alternative: boolean;
   private _alignment: PaginatorAlternativeAlignment = 'space-between';
-  private _rangeLabel: string;
+  private _rangeLabelCallback: PaginatorRangeLabelBuilder;
 
   private _firstPageListener: (evt: Event) => void;
   private _previousPageListener: (evt: Event) => void;
@@ -155,16 +156,31 @@ export class PaginatorFoundation {
   }
 
   private _updateRangeLabel(): void {
-    if (this.pageSize > 1) {
-      const startIndex = this._pageIndex * this._pageSize;
-      const indexStart = Math.floor(startIndex / this._pageSize) || 0;
-      const pageStart = (indexStart * this._pageSize) + 1;
-      const pageEnd = startIndex < this._total ? Math.min(startIndex + this._pageSize, this._total) : startIndex + this._pageSize;
-      this._rangeLabel = `${pageStart}-${pageEnd} ${PAGINATOR_CONSTANTS.strings.RANGE_SEPARATOR_LABEL} ${this._total}`;
+    let rangeLabel: string;
+
+    if (typeof this._rangeLabelCallback === 'function') {
+      const state: IPaginatorRangeState = {
+        pageSize: this._pageSize,
+        pageIndex: this._pageIndex,
+        offset: this._offset,
+        pageStart: (this._pageIndex * this._pageSize) + 1,
+        pageEnd: Math.min((this._pageIndex + 1) * this._pageSize, this._total),
+        total: this._total
+      };
+      rangeLabel = this._rangeLabelCallback.call(null, state);
     } else {
-      this._rangeLabel = `${this._pageIndex + 1} ${PAGINATOR_CONSTANTS.strings.RANGE_SEPARATOR_LABEL} ${this._total}`;
+      if (this.pageSize > 1) {
+        const startIndex = this._pageIndex * this._pageSize;
+        const indexStart = Math.floor(startIndex / this._pageSize) || 0;
+        const pageStart = (indexStart * this._pageSize) + 1;
+        const pageEnd = startIndex < this._total ? Math.min(startIndex + this._pageSize, this._total) : startIndex + this._pageSize;
+        rangeLabel = `${pageStart}-${pageEnd} ${PAGINATOR_CONSTANTS.strings.RANGE_SEPARATOR_LABEL} ${this._total}`;
+      } else {
+        rangeLabel = `${this._pageIndex + 1} ${PAGINATOR_CONSTANTS.strings.RANGE_SEPARATOR_LABEL} ${this._total}`;
+      }
     }
-    this._adapter.setRangeLabel(this._rangeLabel);
+
+    this._adapter.setRangeLabel(rangeLabel);
   }
 
   private _syncInteractionState(): void {
@@ -439,5 +455,13 @@ export class PaginatorFoundation {
       this._alignment = value;
       this._applyAlternativeAlignment();
     }
+  }
+
+  public get rangeLabelCallback(): PaginatorRangeLabelBuilder {
+    return this._rangeLabelCallback;
+  }
+  public set rangeLabelCallback(value: PaginatorRangeLabelBuilder) {
+    this._rangeLabelCallback = value;
+    this._updateRangeLabel();
   }
 }
