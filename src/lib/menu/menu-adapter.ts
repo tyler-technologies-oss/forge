@@ -1,7 +1,7 @@
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IMenuOption } from './index';
 import { IMenuComponent } from './menu';
-import { MENU_CONSTANTS, IMenuSelectEventData } from './menu-constants';
+import { MENU_CONSTANTS, IMenuSelectEventData, IMenuOptionGroup } from './menu-constants';
 import { IListDropdownConfig, IListDropdown, ListDropdown } from '../list-dropdown';
 import { IListComponent, IListItemComponent, LIST_CONSTANTS, LIST_ITEM_CONSTANTS } from '../list';
 
@@ -14,7 +14,7 @@ export interface IMenuAdapter extends IBaseAdapter {
   removeTargetListener(event: string, callback: (event: Event) => void): void;
   attachMenu(config: IListDropdownConfig): void;
   detachMenu(): void;
-  setOptions(options: IMenuOption[]): void;
+  setOptions(options: Array<IMenuOption | IMenuOptionGroup>): void;
   getActiveOptionIndex(): number;
   setActiveOption(index: number): void;
   activateFirstOption(): void;
@@ -93,7 +93,7 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
     this._targetElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
   }
 
-  public setOptions(options: IMenuOption[]): void {
+  public setOptions(options: Array<IMenuOption | IMenuOptionGroup>): void {
     if (this._listDropdown) {
       this._listDropdown.setOptions(options);
     }

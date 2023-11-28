@@ -68,5 +68,5 @@ export interface IMenuOption<T = any> extends IListDropdownOption<T> {
 export interface IMenuOptionGroup extends IListDropdownOptionGroup {}
 
 export type MenuOptionBuilder = (option: IMenuOption, parentElement: HTMLElement) => HTMLElement | string | void;
-export type MenuOptionFactory = (() => IMenuOption[]) | (() => Promise<IMenuOption[]>);
+export type MenuOptionFactory = (() => Array<IMenuOption | IMenuOptionGroup>) | (() => Promise<Array<IMenuOption | IMenuOptionGroup>>);
 export type MenuMode = 'click' | 'cascade';

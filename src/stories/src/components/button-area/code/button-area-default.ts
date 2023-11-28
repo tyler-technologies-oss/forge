@@ -45,7 +45,7 @@ export const ButtonAreaInExpansionPanelCodeHtml = () => {
   return `
 <forge-card>
   <forge-expansion-panel id="expansion-panel">
-    <forge-button-area>
+    <forge-button-area slot="header">
       <button slot="button" type="button" id="button" aria-controls="expandable-content" aria-expanded="false">Toggle panel</button>
       <div class="header-content">
         <div>

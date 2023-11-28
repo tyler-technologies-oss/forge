@@ -1,3 +1,24 @@
+# v2.21.0 (Mon Nov 27 2023)
+
+#### 🚀 Enhancement
+
+- feat(paginator): added new `rangeLabelCallback` property to allow for controlling range label text externally [#436](https://github.com/tyler-technologies-oss/forge/pull/436) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(menu): fixed `MenuOptionFactory` typings to support `IMenuOptionGroup` [#428](https://github.com/tyler-technologies-oss/forge/pull/428) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 📝 Documentation
+
+- docs(button-area): add header slot to expansion panel example [#429](https://github.com/tyler-technologies-oss/forge/pull/429) ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.20.1 (Thu Nov 09 2023)
 
 #### 🐛 Bug Fix
