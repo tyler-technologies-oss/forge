@@ -1,12 +1,11 @@
 import { getShadowElement } from '@tylertech/forge-core';
-
 import { ICircularProgressComponent } from './circular-progress';
 import { CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { setDefaultAria } from '../constants';
 
 import indeterminateTemplate from './_indeterminate.html';
 import determinateTemplate from './_determinate.html';
-import { setDefaultAria } from '../constants';
 
 export interface ICircularProgressAdapter extends IBaseAdapter {
   initialize(): void;
@@ -15,18 +14,15 @@ export interface ICircularProgressAdapter extends IBaseAdapter {
 }
 
 export class CircularProgressAdapter extends BaseAdapter<ICircularProgressComponent> implements ICircularProgressAdapter {
-  // private readonly _rootElement: HTMLElement;
-  // private _determinateProgressCircleElement: HTMLElement | undefined;
+  private readonly _rootElement: HTMLElement;
+  private _determinateProgressCircleElement: HTMLElement | undefined;
 
   constructor(component: ICircularProgressComponent) {
     super(component);
-    // this._rootElement = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
+    this._rootElement = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
   }
 
   public initialize(): void {
-    // this._component.internals.role = 'progressbar';
-    // this._component.internals.ariaValueMin = '0';
-    // this._component.internals.ariaValueMax = '1';
     this._component[setDefaultAria]({
       role: 'progressbar',
       ariaValueMin: '0',
@@ -35,24 +31,22 @@ export class CircularProgressAdapter extends BaseAdapter<ICircularProgressCompon
   }
 
   public setDeterminate(value: boolean): void {
-    // this._tryResetTemplate();
-    // this._rootElement.classList.toggle(CIRCULAR_PROGRESS_CONSTANTS.classes.INDETERMINATE, !value);
+    this._tryResetTemplate();
+    this._rootElement.classList.toggle(CIRCULAR_PROGRESS_CONSTANTS.classes.INDETERMINATE, !value);
     
-    // if (value) {
-    //   this._rootElement.insertAdjacentHTML('beforeend', determinateTemplate);
-    //   this._determinateProgressCircleElement = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
-    // } else {
-    //   this._rootElement.insertAdjacentHTML('beforeend', indeterminateTemplate);
-    this._component[setDefaultAria]({ ariaValueNow: null });
-    // this._component.internals.ariaValueNow = null;
-    //   this._determinateProgressCircleElement = undefined;
-    // }
+    if (value) {
+      this._rootElement.insertAdjacentHTML('beforeend', determinateTemplate);
+      this._determinateProgressCircleElement = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
+    } else {
+      this._rootElement.insertAdjacentHTML('beforeend', indeterminateTemplate);
+      this._component[setDefaultAria]({ ariaValueNow: null });
+      this._determinateProgressCircleElement = undefined;
+    }
   }
 
   public setProgress(value: number): void {
     this._component[setDefaultAria]({ ariaValueNow: `${value}` }, { overwrite: true });
-    // this._component.internals.ariaValueNow = `${value}`;
-    // this._determinateProgressCircleElement?.setAttribute('stroke-dashoffset', `${(1 - value) * 100}`);
+    this._determinateProgressCircleElement?.setAttribute('stroke-dashoffset', `${(1 - value) * 100}`);
   }
 
   private _tryResetTemplate(): void {
