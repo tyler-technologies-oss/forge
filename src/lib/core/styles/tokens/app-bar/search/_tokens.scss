@@ -1,0 +1,30 @@
+@use 'sass:map';
+@use '../../../utils';
+@use '../../../theme';
+@use '../../../shape';
+@use '../../../animation';
+
+$tokens: (
+  color: utils.module-val(app-bar-search, color, currentColor),
+  height: utils.module-val(app-bar-search, height, 36px),
+  padding: utils.module-val(app-bar-search, padding, 8px),
+  shape: utils.module-val(app-bar-search, shape, shape.variable(small)),
+  gap: utils.module-val(app-bar-search, gap, 4px),
+
+  input-placeholder-color: utils.module-ref(app-bar-search, input-placeholder-color, color),
+  input-placeholder-opacity: utils.module-val(app-bar-search, input-placeholder-opacity, theme.emphasis(medium-low)),
+  
+  background-color: utils.module-ref(app-bar-search, background-color, color),
+  background-color-opacity: utils.module-val(app-bar-search, background-color-opacity, theme.emphasis(lowest)),
+
+  border-color: utils.module-ref(app-bar-search, border-color, color),
+  border-opacity: utils.module-val(app-bar-search, border-opacity, theme.emphasis(medium)),
+  border-hover-opacity: utils.module-val(app-bar-search, border-hover-opacity, theme.emphasis(highest)),
+
+  transition-duration: utils.module-val(app-bar-search, transition-duration, animation.variable(duration-short3)),
+  transition-timing-function: utils.module-val(app-bar-search, transition-timing-function, animation.variable(easing-standard)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

@@ -33,7 +33,9 @@
   @include theme.provide((
     primary: #{token(foreground)},
     on-primary: rgba(black, color-emphasis.value(highest)),
-    text-medium: rgba(white, color-emphasis.value(medium))
+    text-high: rgba(white, color-emphasis.value(highest)),
+    text-medium: rgba(white, color-emphasis.value(medium)),
+    text-low: rgba(white, color-emphasis.value(medium-low))
   ));
 }
 
@@ -60,6 +62,10 @@
 
   .section {
     @include core.section;
+
+    &:not(:last-child):not(:first-child) {
+      @include core.section-center;
+    }
 
     &:last-child {
       @include core.section-end;
@@ -117,6 +123,14 @@
 
 ::slotted([slot=logo]) {
   @include core.logo;
+}
+
+//
+// Slotted - Search
+//
+
+::slotted(forge-app-bar-search[slot=center]) {
+  width: 100%;
 }
 
 //
