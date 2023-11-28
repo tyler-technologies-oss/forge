@@ -15,7 +15,6 @@ export interface IBaseButtonFoundation extends ICustomElementFoundation {
   dense: boolean;
   click(options: ButtonClickOptions): void;
   focus(options?: ExperimentalFocusOptions): void;
-  proxyLabel(label: string | null): void;
 }
 
 export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> implements IBaseButtonFoundation {
@@ -76,13 +75,10 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   public focus(options?: ExperimentalFocusOptions): void {
     this._adapter.focusHost(options);
 
+    // Temporarily forcing our focus indicator to be visible until FocusOptions supports the `focusVisible` property
     if (options?.focusVisible) {
       this._adapter.forceFocusVisible();
     }
-  }
-
-  public proxyLabel(label: string | null): void {
-    this._adapter.proxyLabel(label);
   }
 
   protected async _onClick(evt: MouseEvent): Promise<void> {

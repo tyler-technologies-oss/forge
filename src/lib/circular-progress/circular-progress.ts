@@ -4,11 +4,12 @@ import { CircularProgressAdapter } from './circular-progress-adapter';
 import { CircularProgressFoundation } from './circular-progress-foundation';
 import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { IBaseElementInternalsComponent, WithElementInternals } from '../core/base/base-element-internals';
 
 import template from './circular-progress.html';
 import styles from './circular-progress.scss';
 
-export interface ICircularProgressComponent extends IBaseComponent {
+export interface ICircularProgressComponent extends IBaseElementInternalsComponent {
   determinate: boolean;
   progress: number;
   theme: CircularProgressTheme;
@@ -58,7 +59,7 @@ declare global {
 @CustomElement({
   name: CIRCULAR_PROGRESS_CONSTANTS.elementName
 })
-export class CircularProgressComponent extends BaseComponent implements ICircularProgressComponent {
+export class CircularProgressComponent extends WithElementInternals(BaseComponent) implements ICircularProgressComponent {
   public static get observedAttributes(): string[] {
     return [
       CIRCULAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,
@@ -77,6 +78,7 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
   }
 
   public connectedCallback(): void {
+    super.connectedCallback();
     this._foundation.initialize();
   }
 
@@ -95,6 +97,7 @@ export class CircularProgressComponent extends BaseComponent implements ICircula
         this.track = coerceBoolean(newValue);
         break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
   
   @FoundationProperty()

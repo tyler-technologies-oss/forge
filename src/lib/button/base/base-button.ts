@@ -1,15 +1,16 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../../icon/icon-registry';
-import { BaseFocusableComponent } from '../../core/base/base-focusable-component';
-import { ExperimentalFocusOptions, internals } from '../../constants';
-import { IBaseComponent } from '../../core/base/base-component';
+import { IBaseFocusableComponent, WithFocusable } from '../../core/base/base-focusable-component';
+import { IBaseElementInternalsComponent, WithElementInternals } from '../../core/base/base-element-internals';
+import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BaseButtonFoundation } from './base-button-foundation';
 import { ILabelAware } from '../../label/label-aware';
 
-export interface IBaseButton extends IBaseComponent {
+export interface IBaseButton extends IBaseFocusableComponent, IBaseElementInternalsComponent {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
@@ -25,17 +26,14 @@ export interface IBaseButton extends IBaseComponent {
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseFocusableComponent implements IBaseButton, ILabelAware {
+export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends WithFocusable(WithElementInternals(BaseComponent)) implements IBaseButton, ILabelAware {
   public static readonly formAssociated = true;
-
-  public [internals]: ElementInternals;
 
   protected abstract _foundation: T;
 
   constructor() {
     super();
     IconRegistry.define(tylIconArrowDropDown);
-    this[internals] = this.attachInternals();
   }
 
   public override connectedCallback(): void {
@@ -81,7 +79,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   }
 
   public labelChangedCallback(value: string | null): void {
-    this._foundation.proxyLabel(value);
+    this[setDefaultAria]({ ariaLabel: value ?? undefined });
   }
 
   public get form(): HTMLFormElement | null {

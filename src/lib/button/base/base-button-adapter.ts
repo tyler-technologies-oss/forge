@@ -1,4 +1,4 @@
-import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
@@ -6,7 +6,7 @@ import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
 import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
-import { internals, isFocusable } from '../../constants';
+import { internals, isFocusable, setDefaultAria } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
 
 // TODO: remove this augmentation when the TypeScript version is upgraded for latest DOM typings
@@ -35,7 +35,6 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   managePopover(): boolean;
   toggleDefaultPopoverIcon(value: boolean): void;
   animateStateLayer(): void;
-  proxyLabel(value: string | null): void;
 }
 
 export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> implements IBaseButtonAdapter {
@@ -44,8 +43,6 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   protected _focusIndicatorElement: IFocusIndicatorComponent;
   protected _stateLayerElement: IStateLayerComponent;
   protected _endSlotElement: HTMLSlotElement;
-
-  private _labelAwareText?: string;
 
   constructor(component: IBaseButton) {
     super(component);
@@ -62,13 +59,13 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   public initializeAnchor(): void {
     this._anchorElement = this._createAnchorRootElement();
     this._rootElement.insertAdjacentElement('afterend', this._anchorElement);
-    this._applyHostSemantics();
+    this._applyHostSemantics({ overwrite: !this._component.hasAttribute('role') || this._component.getAttribute('role') === 'button' });
   }
 
   public removeAnchor(): void {
     this._anchorElement?.remove();
     this._anchorElement = undefined;
-    this._applyHostSemantics();
+    this._applyHostSemantics({ overwrite: !this._component.hasAttribute('role') || this._component.getAttribute('role') === 'link' });
   }
 
   public setAnchorProperty<T extends keyof HTMLAnchorElement>(name: T, value: HTMLAnchorElement[T]): void {
@@ -93,7 +90,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     }
 
     this._component[isFocusable] = !value;
-    toggleAttribute(this._component, value, 'aria-disabled', 'true');
+    this._component[setDefaultAria]({ ariaDisabled: `${value}` || null });
   }
 
   public clickAnchor(): void {
@@ -238,12 +235,6 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._stateLayerElement?.playAnimation();
   }
 
-  public proxyLabel(value: string | null): void {
-    this._labelAwareText = value ?? undefined;
-    const hasAriaLabel = this._component.hasAttribute('aria-label') || !!this._labelAwareText;
-    toggleAttribute(this._component, hasAriaLabel, 'aria-label', this._component.getAttribute('aria-label') ?? this._labelAwareText);
-  }
-
   private _locatePopoverTargetElement(): TempHTMLElementWithPopover | null {
     let popoverElement = (this._component as TempHTMLElementWithPopover).popoverTargetElement ?? null;
 
@@ -260,16 +251,9 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     return popoverElement;
   }
 
-  private _applyHostSemantics(): void {
-    const role = this._component.getAttribute('role');
-
-    // Allow user provided roles to override our default role
-    if (!role || ['button', 'link'].includes(role)) {
-      // Set default role based on the existence of an anchor element
-      this._component.role = this._anchorElement ? 'link' : 'button';
-    }
-
-    this._component[isFocusable] = this._anchorElement || !this._component.disabled;
+  private _applyHostSemantics({ overwrite } = { overwrite: false }): void {
+    this._component[setDefaultAria]({ role: this._anchorElement ? 'link' : 'button' }, { overwrite });
+    this._component[isFocusable] = !!this._anchorElement ?? !this._component.disabled;
   }
 
   /**

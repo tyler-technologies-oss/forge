@@ -9,6 +9,12 @@ export const internals = Symbol('ElementInternals');
 /** A property symbol that indicates whether or not a `Focusable` element can be focused. */
 export const isFocusable = Symbol('isFocusable');
 
+/**
+ * A method symbol that sets default ARIA on the `ElementInternals` instance of an element if
+ * supported or sprouts attributes if not.
+ */
+export const setDefaultAria = Symbol('setDefaultAria');
+
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';
 export type Density = 'small' | 'medium' | 'large';
 
