@@ -24,7 +24,6 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   removeAnchor(): void;
   setAnchorProperty<T extends keyof HTMLAnchorElement>(name: T, value: HTMLAnchorElement[T]): void;
   setDisabled(value: boolean): void;
-  syncDisabled(value: boolean): void;
   clickAnchor(): void;
   clickHost(): void;
   clickFormButton(type: string): void;
@@ -79,12 +78,21 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
 
   public setDisabled(value: boolean): void {
     if (this._anchorElement) {
+      if (this.hasHostAttribute('aria-disabled')) {
+        this.removeHostAttribute('aria-disabled');
+      }
+      if (!this._focusIndicatorElement.isConnected) {
+        this._rootElement.append(this._focusIndicatorElement);
+      }
+      if (!this._stateLayerElement.isConnected) {
+        if (this._stateLayerElement.disabled) {
+          this._stateLayerElement.disabled = false;
+        }
+        this._rootElement.append(this._stateLayerElement);
+      }
       return; // Cannot disable an anchor element
     }
-    this.syncDisabled(value);
-  }
 
-  public syncDisabled(value: boolean): void {
     if (value) {
       this._focusIndicatorElement.remove();
       this._stateLayerElement.remove();
@@ -269,7 +277,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       this._component.role = this._anchorElement ? 'link' : 'button';
     }
 
-    this._component[isFocusable] = this._anchorElement || !this._component.disabled;
+    this._component[isFocusable] = !!this._anchorElement || !this._component.disabled;
   }
 
   /**

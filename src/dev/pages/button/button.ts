@@ -78,6 +78,11 @@ anchorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   allButtons.filter(b => !b.href).forEach(btn => btn.anchor = selected);
 });
 
+const fullWidthToggle = document.querySelector('#opt-full-width') as ISwitchComponent;
+fullWidthToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  allButtons.forEach(btn => btn.fullWidth = selected);
+});
+
 const popoverIconToggle = document.querySelector('#opt-popover-icon') as ISwitchComponent;
 popoverIconToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   allButtons.filter(btn => btn.id !== 'popover-button').forEach(btn => btn.popoverIcon = selected);

@@ -179,21 +179,20 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     return this._disabled;
   }
   public set disabled(value: boolean) {
-    // If we're in anchor mode, we need to ensure that the anchor is always enabled
+    value = Boolean(value);
+
+    if (this._disabled === value) {
+      return;
+    }
+
+    // When we're in anchor mode we need to ensure that the anchor is always enabled
     if (this._anchor) {
-      if (this._disabled) {
-        this._adapter.syncDisabled(false);
-      }
       value = false;
     }
 
-    value = Boolean(value);
-
-    if (this._disabled !== value) {
-      this._disabled = value;
-      this._adapter.setDisabled(this._disabled);
-      this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.DISABLED, value);
-    }
+    this._disabled = value;
+    this._adapter.setDisabled(this._disabled);
+    this._adapter.toggleHostAttribute(BASE_BUTTON_CONSTANTS.attributes.DISABLED, value);
   }
 
   public get popoverIcon(): boolean {

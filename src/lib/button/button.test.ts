@@ -3,6 +3,7 @@ import { spy } from 'sinon';
 import { fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
+import { BUTTON_CONSTANTS } from './button-constants';
 import { ButtonComponent, IButtonComponent } from './button';
 import type { IStateLayerComponent } from '../state-layer';
 import type { IFocusIndicatorComponent } from '../focus-indicator';
@@ -94,6 +95,18 @@ describe('Button', () => {
     expect(el.theme).to.equal('success');
     expect(el.getAttribute('theme')).to.equal('success');
     await expect(el).to.be.accessible();
+  });
+
+  it('should set full width', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button full-width>Button</forge-button>`);
+
+    expect(el.fullWidth).to.be.true;
+    expect(el.hasAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH)).to.be.true;
+
+    el.fullWidth = false;
+
+    expect(el.fullWidth).to.be.false;
+    expect(el.hasAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH)).to.be.false;
   });
 
   describe('ButtonComponentDelegate', () => {

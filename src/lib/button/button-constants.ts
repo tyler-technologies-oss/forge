@@ -5,7 +5,8 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}button
 const observedAttributes = {
   VARIANT: 'variant',
   PILL: 'pill',
-  THEME: 'theme'
+  THEME: 'theme',
+  FULL_WIDTH: 'full-width'
 };
 
 const attributes = {

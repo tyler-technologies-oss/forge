@@ -6,12 +6,14 @@ export interface IButtonFoundation extends IBaseButtonFoundation {
   variant: ButtonVariant;
   pill: boolean;
   theme: ButtonTheme;
+  fullWidth: boolean;
 }
 
 export class ButtonFoundation extends BaseButtonFoundation<IButtonAdapter> implements IButtonFoundation {
   private _variant: ButtonVariant = 'text';
   private _pill = false;
   private _theme: ButtonTheme = 'primary';
+  private _fullWidth = false;
 
   constructor(adapter: IButtonAdapter) {
     super(adapter);
@@ -52,6 +54,16 @@ export class ButtonFoundation extends BaseButtonFoundation<IButtonAdapter> imple
     if (this._theme !== value) {
       this._theme = value;
       this._adapter.setHostAttribute(BUTTON_CONSTANTS.attributes.THEME, this._theme);
+    }
+  }
+
+  public get fullWidth(): boolean {
+    return this._fullWidth;
+  }
+  public set fullWidth(value: boolean) {
+    if (this._fullWidth !== value) {
+      this._fullWidth = value;
+      this._adapter.toggleHostAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH, this._fullWidth);
     }
   }
 }

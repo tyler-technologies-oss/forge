@@ -30,7 +30,15 @@ const _isUpdatingTabIndex = Symbol('isUpdatingTabIndex');
 const _updateTabIndex = Symbol('updateTabIndex');
 
 /**
- * Mixes in focusable functionality into a base component.
+ * Provides focusable functionality for an element.
+ *
+ * Elements can enable and disable their focusability with the `isFocusable`
+ * symbol property. **Use this instead of changing `tabIndex` directly.**
+ *
+ * This will preserve externally-set tabindices. If an element sets `tabindex="-1"`,
+ * but a user sets `tabindex="0"`, it will still be focusable.
+ *
+ * To remove user overrides and restore focus control to the element, remove the `tabindex` attribute.
  * 
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
@@ -90,16 +98,3 @@ export function WithFocusable<T extends MixinBase<BaseComponent>>(base: T): Mixi
   }
   return FocusableComponent;
 }
-
-/**
- * Provides focusable functionality for an element.
- *
- * Elements can enable and disable their focusability with the `isFocusable`
- * symbol property. **Use this instead of changing `tabIndex` directly.**
- *
- * This will preserve externally-set tabindices. If an element sets `tabindex="-1"`,
- * but a user sets `tabindex="0"`, it will still be focusable.
- *
- * To remove user overrides and restore focus control to the element, remove the `tabindex` attribute.
- */
-export abstract class BaseFocusableComponent extends WithFocusable(BaseComponent) implements IBaseFocusableComponent {}
