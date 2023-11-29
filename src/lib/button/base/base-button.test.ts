@@ -244,7 +244,7 @@ describe('BaseButton', () => {
   });
 
   it('should not disable when href is specified', async () => {
-    const el = await fixture<IButtonComponent>(html`<forge-test-base-button disable href="javascript: void(0);">Button</forge-test-base-button>`);
+    const el = await fixture<IButtonComponent>(html`<forge-test-base-button disabled href="javascript: void(0);">Button</forge-test-base-button>`);
 
     const stateLayer = getStateLayer(el);
     const focusIndicator = getFocusIndicator(el);
