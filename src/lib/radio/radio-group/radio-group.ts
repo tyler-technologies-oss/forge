@@ -6,7 +6,6 @@ import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
 import { RadioGroupFoundation } from './radio-group-foundation';
 
 import template from './radio-group.html';
-import style from './radio-group.scss';
 
 export interface IRadioGroupComponent extends IBaseLabelAwareComponent, IBaseElementInternalsComponent {
   readonly form: HTMLFormElement | null;
@@ -64,7 +63,7 @@ export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGr
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, style);
+    attachShadowTemplate(this, template);
     this._foundation = new RadioGroupFoundation(new RadioGroupAdapter(this));
   }
 
