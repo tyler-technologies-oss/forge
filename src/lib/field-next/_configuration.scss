@@ -1,7 +1,0 @@
-// TODO: maybe this should move to _core.scss?
-
-@use './token-utils' as *;
-
-@mixin configuration {
-  @include tokens();
-}
