@@ -1,13 +1,13 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
 import { internals, setDefaultAria } from '../../constants';
-import { BaseComponent, IBaseElementInternalsComponent, IBaseLabelAwareComponent, WithElementInternals, WithLabelAwareness } from '../../core/base';
+import { BaseComponent, IWithElementInternals, IWithLabelAwareness, WithElementInternals, WithLabelAwareness } from '../../core/base';
 import { RadioGroupAdapter } from './radio-group-adapter';
 import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
 import { RadioGroupFoundation } from './radio-group-foundation';
 
 import template from './radio-group.html';
 
-export interface IRadioGroupComponent extends IBaseLabelAwareComponent, IBaseElementInternalsComponent {
+export interface IRadioGroupComponent extends IWithLabelAwareness, IWithElementInternals {
   readonly form: HTMLFormElement | null;
   readonly labels: NodeList;
   name: string;
@@ -67,8 +67,7 @@ export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGr
     this._foundation = new RadioGroupFoundation(new RadioGroupAdapter(this));
   }
 
-  public override connectedCallback(): void {
-    super.connectedCallback();
+  public connectedCallback(): void {
     this[setDefaultAria]({
       role: 'radiogroup',
       ariaDisabled: this.disabled ? 'true' : null

@@ -76,7 +76,7 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
 
   public setReadonly(value: boolean): void {
     this._component[setDefaultAria]({
-      ariaReadOnly: value ? 'true' : 'false'
+      ariaDisabled: value ? 'true' : 'false'
     }, { overwrite: true });
   }
 

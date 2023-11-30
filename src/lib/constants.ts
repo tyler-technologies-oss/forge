@@ -1,3 +1,5 @@
+import type { IBaseComponent } from './core/base/base-component';
+
 export const COMPONENT_NAME_PREFIX = 'forge-';
 export const KEYSTROKE_DEBOUNCE_THRESHOLD = 500;
 export const ICON_CLASS_NAME = 'tyler-icons';
@@ -15,9 +17,7 @@ export const getValidationMessage = Symbol('getValidityMessage');
 /** A property symbol that references the `ElementInternals` instance of an element. */
 export const internals = Symbol('ElementInternals');
 
-/** A property symbol that sets the type of an internal input element used to create validations
- * messages
- */
+/** A property symbol that sets the type of an internal input element used to create validations messages */
 export const inputType = Symbol('inputType');
 
 /** A property symbol that indicates whether or not a `Focusable` element can be focused. */
@@ -30,8 +30,8 @@ export const setDefaultAria = Symbol('setDefaultAria');
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';
 export type Density = 'small' | 'medium' | 'large';
 
-export type MixinBase<ExpectedBase = object> = abstract new (...args: any[]) => ExpectedBase;
-export type MixinReturn<TBase extends MixinBase, MixinClass = object> = (abstract new (...args: any[]) => MixinClass) & TBase;
+export type AbstractConstructor<T> = abstract new (...args: any[]) => T;
+export type MixinBase<TBase = IBaseComponent> = AbstractConstructor<TBase>;
 
 /**
  * The `focusVisible` property is an experimental feature that is not yet supported by all browsers.

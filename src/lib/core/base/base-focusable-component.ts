@@ -7,27 +7,32 @@
  * The original source code can be found at: [GitHub](https://github.com/material-components/material-web/blob/main/labs/behaviors/focusable.ts)
  */
 
-import { isFocusable, MixinBase, MixinReturn } from '../../constants';
-import { BaseComponent, IBaseComponent } from './base-component';
+import { AbstractConstructor, isFocusable, MixinBase } from '../../constants';
+import { IBaseComponent } from './base-component';
 
 /**
  * An element that can enable and disable `tabindex` focusability.
  */
-export interface IBaseFocusableComponent extends IBaseComponent {
+export interface IWithFocusable extends IBaseComponent {
   /**
    * Whether or not the element can be focused. Defaults to true. Set to false
    * to disable focusing (unless a user has set a `tabindex`).
    */
   [isFocusable]: boolean;
-
-  connectedCallback(): void;
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
 }
 
 const _privateIsFocusable = Symbol('privateIsFocusable');
 const _externalTabIndex = Symbol('externalTabIndex');
 const _isUpdatingTabIndex = Symbol('isUpdatingTabIndex');
 const _updateTabIndex = Symbol('updateTabIndex');
+
+export declare abstract class WithFocusableContract {
+  public get [isFocusable](): boolean;
+  public set [isFocusable](value: boolean);
+
+  public connectedCallback(): void;
+  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
+}
 
 /**
  * Provides focusable functionality for an element.
@@ -43,8 +48,9 @@ const _updateTabIndex = Symbol('updateTabIndex');
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */
-export function WithFocusable<T extends MixinBase<BaseComponent>>(base: T): MixinReturn<T, IBaseFocusableComponent> {
-  abstract class FocusableComponent extends base implements IBaseFocusableComponent {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function WithFocusable<TBase extends MixinBase>(base: TBase) {
+  abstract class FocusableComponent extends base implements IWithFocusable {
     public get [isFocusable](): boolean {
       return this[_privateIsFocusable];
     }
@@ -67,14 +73,14 @@ export function WithFocusable<T extends MixinBase<BaseComponent>>(base: T): Mixi
     private [_isUpdatingTabIndex] = false; // Allows for internal tabIndex to be set without triggering attributeChangedCallback
 
     public override connectedCallback(): void {
-      super.connectedCallback();
+      super.connectedCallback?.();
       
       // This must be set in the connectedCallback to avoid sprouting a tabindex attribute on the host from the ctor
       this[isFocusable] = true;
     }
   
     public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-      super.attributeChangedCallback(name, oldValue, newValue);
+      super.attributeChangedCallback?.(name, oldValue, newValue);
 
       if (name !== 'tabindex' || this[_isUpdatingTabIndex]) {
         return;
@@ -100,5 +106,5 @@ export function WithFocusable<T extends MixinBase<BaseComponent>>(base: T): Mixi
       this[_isUpdatingTabIndex] = false;
     }
   }
-  return FocusableComponent;
+  return FocusableComponent as AbstractConstructor<WithFocusableContract> & TBase;
 }
