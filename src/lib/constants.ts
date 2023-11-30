@@ -15,7 +15,7 @@ export const getValidationMessage = Symbol('getValidityMessage');
 /** A property symbol that references the `ElementInternals` instance of an element. */
 export const internals = Symbol('ElementInternals');
 
-/** A property symbol that sets the type of an internal input element used to create validations
+/** A property symbol that sets the type of an internal input element used to create validation
  * messages
  */
 export const inputType = Symbol('inputType');

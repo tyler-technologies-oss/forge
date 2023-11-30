@@ -1,0 +1,28 @@
+@use './configuration';
+@use './core';
+@use '../focus-indicator';
+@use '../state-layer';
+@use './token-utils' as *;
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host(:focus) {
+  outline: none;
+}
+
+.forge-field {
+  @include configuration.configuration;
+}
+
+// Disabled
+:host([disabled]) {
+  .forge-field {
+    @include core.field-disabled;
+  }
+}

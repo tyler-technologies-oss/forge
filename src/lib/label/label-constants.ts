@@ -10,7 +10,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label`
 const attributes = {
   FOR: 'for',
   DYNAMIC: 'dynamic',
-  STATIC: 'static',
+  STATIC: 'static', // TODO: possibily change this to 'non-interactive'
   LEGEND: 'legend'
 };
 

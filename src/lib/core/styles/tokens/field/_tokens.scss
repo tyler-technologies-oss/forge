@@ -1,0 +1,24 @@
+@use 'sass:map';
+@use '../border';
+@use '../elevation';
+@use '../shape';
+@use '../theme';
+@use '../utils';
+
+$tokens: (
+  shape: utils.module-val(field, shape, shape.variable(medium)),
+  elevation: utils.module-val(field, elevation, elevation.value(1)),
+  border-width: utils.module-val(field, border-width, border.variable(medium)),
+
+  // Label
+  gap: utils.module-val(field, gap, 0),
+  justify: utils.module-val(field, justify, space-between),
+  direction: utils.module-val(field, direction, initial),
+
+  // Disabled
+  disabled-opacity: utils.module-val(radio, disabled-opacity, theme.emphasis(medium-low)),
+);
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

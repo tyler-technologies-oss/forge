@@ -10,7 +10,7 @@ import { RADIO_CONSTANTS, RadioLabelPosition, RadioState, tryCheck } from './rad
 import { RadioFoundation } from './radio-foundation';
 
 import template from './radio.html';
-import style from './radio.scss';
+import styles from './radio.scss';
 
 export interface IRadioComponent extends IBaseFormAssociatedComponent, IBaseFocusableComponent, IBaseLabelAwareComponent, IBaseElementInternalsComponent {
   checked: boolean;
@@ -120,7 +120,7 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, style);
+    attachShadowTemplate(this, template, styles);
     this[inputType] = 'radio';
     this._foundation = new RadioFoundation(new RadioAdapter(this));
   }

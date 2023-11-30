@@ -1,0 +1,14 @@
+@use '../core/styles/typography/';
+@use './token-utils' as *;
+
+@mixin host {
+  display: block;
+}
+
+@mixin field {
+  position: relative;
+}
+
+@mixin field-disabled {
+  opacity: #{token(disabled-opacity)};
+}

@@ -55,6 +55,7 @@ export class LabelFoundation implements ILabelFoundation {
    */
   private async _initializeAsLegend(): Promise<void> {
     // Give ancestor elements a chance to connect to the DOM
+    // TODO: see if this works in Angular
     await task();
     this._adapter.emitHostEvent(LABEL_CONSTANTS.events.CONNECTED);
   }
