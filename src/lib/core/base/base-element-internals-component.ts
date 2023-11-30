@@ -48,7 +48,7 @@ export function WithElementInternals<T extends MixinBase<BaseComponent>>(base: T
       this[internals] = this.attachInternals();
     }
 
-    public override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
       super.attributeChangedCallback(name, oldValue, newValue);
 
       // If Element Internals is supported our default ARIA is never set as an attribute, so

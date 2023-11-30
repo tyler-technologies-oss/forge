@@ -28,6 +28,8 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   disabledDaysOfWeek: DayOfWeek[];
   yearRange: string;
   locale: string | undefined;
+  connectedCallback(): void; // TODO: remove this, it's only here to solve a build error
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void; // TODO: remove this, it's only here to solve a build error
 }
 
 export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoundation extends BaseDatePickerFoundation<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>> extends BaseComponent implements IBaseDatePickerComponent<TPublicValue> {

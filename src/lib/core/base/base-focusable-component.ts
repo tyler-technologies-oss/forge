@@ -73,7 +73,7 @@ export function WithFocusable<T extends MixinBase<BaseComponent>>(base: T): Mixi
       this[isFocusable] = true;
     }
   
-    public override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
       super.attributeChangedCallback(name, oldValue, newValue);
 
       if (name !== 'tabindex' || this[_isUpdatingTabIndex]) {
