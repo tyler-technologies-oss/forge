@@ -3,6 +3,7 @@ import {
   ARIAAttribute,
   ariaAttributeToProperty,
   ARIAMixinStrict,
+  DefaultAriaOptions,
   restoreDefaultAria as restoreDefaultAriaUtil,
   setDefaultAria as setDefaultAriaUtil
 } from '../utils/a11y-utils';
@@ -22,11 +23,11 @@ export interface IBaseElementInternalsComponent extends IBaseComponent {
    * Sets the default ARIA of the component using Element Internals if supported or sprouting
    * ARIA attributes if not.
    * 
-   * @param options The ARIA properties and values to set.
-   * @param overwrite Whether or not to overwrite existing ARIA attributes. This only takes effect
+   * @param properties The ARIA properties and values to set.
+   * @param options Whether or not to overwrite existing ARIA attributes. This only takes effect
    * if Element Internals are not supported and a new attribute will be sprouted.
    */
-  [setDefaultAria](options: Partial<ARIAMixinStrict>, overwrite?: boolean): void;
+  [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void;
 }
 
 /**
@@ -63,8 +64,8 @@ export function WithElementInternals<T extends MixinBase<BaseComponent>>(base: T
       }
     }
 
-    public [setDefaultAria](options: Partial<ARIAMixinStrict>, overwrite = false): void {
-      setDefaultAriaUtil(this, this[internals], options, overwrite);
+    public [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void {
+      setDefaultAriaUtil(this, this[internals], properties, options);
     }
 
     private _restoreDefaultAria(name: keyof ARIAMixinStrict): void {

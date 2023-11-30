@@ -210,6 +210,10 @@ export function ariaAttributeToProperty<K extends ARIAAttribute|'role'>(attribut
 // TODO: deprecate and remove `setupDefaultAria` and related functions when ARIA in
 // ElementInternals is widely supported in all major browsers.
 
+export interface DefaultAriaOptions {
+  overwrite?: boolean;
+}
+
 /**
  * Applies default ARIA to an element through ElementInternals if supported. Otherwise, ARIA
  * attributes are set directly on the element and stored in additional `data-default-*` attributes
@@ -223,8 +227,8 @@ export function ariaAttributeToProperty<K extends ARIAAttribute|'role'>(attribut
  * 
  * @param element - The element to set up ARIA attributes for.
  * @param internals - The ElementInternals object to use for setting ARIA attributes if supported.
- * @param options - An object containing ARIA properties and their values to set as defaults.
- * @param overwrite - Whether to overwrite existing ARIA attributes on the element.
+ * @param properties - An object containing ARIA properties and their values to set as defaults.
+ * @param options - A `DefaultAriaOptions` object.
  * 
  * @example
  * class ButtonComponent extends BaseComponent {
@@ -245,25 +249,26 @@ export function ariaAttributeToProperty<K extends ARIAAttribute|'role'>(attribut
 export function setDefaultAria(
   element: HTMLElement,
   internals: ElementInternals,
-  options: Partial<ARIAMixinStrict>,
-  overwrite = false
+  properties: Partial<ARIAMixinStrict>,
+  options?: DefaultAriaOptions
 ): void {
   if (supportsElementInternalsAria()) {
-    Object.entries(options).forEach(([key, value]) => {
-      if (value !== null) {
-        internals[key as ARIAProperty] = value;
-      }
+    Object.entries(properties).forEach(([key, value]) => {
+      internals[key as ARIAProperty] = value;
     });
     return;
   }
 
-  Object.entries(options).forEach(([key, value]) => {
-    if (value !== null) {
-      const ariaAttribute = ariaPropertyToAttribute(key as ARIAProperty);
-      if (overwrite || !element.hasAttribute(ariaAttribute)) {
-        toggleAttribute(element, true, ariaPropertyToAttribute(key as ARIAProperty), value.toString());
-      }
+  Object.entries(properties).forEach(([key, value]) => {
+    const ariaAttribute = ariaPropertyToAttribute(key as ARIAProperty);
+
+    if (options?.overwrite || !element.hasAttribute(ariaAttribute)) {
+      toggleAttribute(element, value != null, ariaPropertyToAttribute(key as ARIAProperty), value?.toString());
+    }
+    if (value != null) {
       storeDefaultAria(element, key as ARIAProperty, value);
+    } else {
+      removeDefaultAria(element, key as ARIAProperty);
     }
   });
 }
@@ -276,7 +281,17 @@ export function setDefaultAria(
  * @param value The default value to store.
  */
 export function storeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T, value: ARIAMixinStrict[T]): void {
-  element[`${property.toString()}Default`] = value;
+  element[`_forge_${property.toString()}Default`] = value;
+}
+
+/**
+ * Removes a `*Default` property from an element.
+ * 
+ * @param element The element to remove the default ARIA value from.
+ * @param property The ARIA mixin property.
+ */
+export function removeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T): void {
+  delete element[`_forge_${property.toString()}Default`];
 }
 
 /**
@@ -287,7 +302,7 @@ export function storeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLE
  * @returns The value of the default ARIA attribute, or null if it does not exist.
  */
 export function retrieveDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T): ARIAMixinStrict[T] | null {
-  const value = element[`${property.toString()}Default`];
+  const value = element[`_forge_${property.toString()}Default`];
   return !!value ? value as ARIAMixinStrict[T] : null;
 }
 
@@ -302,4 +317,8 @@ export function restoreDefaultAria<T extends keyof ARIAMixinStrict>(element: HTM
   if (defaultValue !== null) {
     toggleAttribute(element, true, ariaPropertyToAttribute(property), defaultValue.toString());
   }
+}
+
+function getDefaultAriaPropertyName(attribute: ARIAAttribute): ARIAProperty | null {
+  return ARIA_ATTRIBUTES_TO_PROPERTIES[attribute] as ARIAProperty | null;
 }

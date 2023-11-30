@@ -49,7 +49,7 @@ export interface IBaseFormAssociatedComponent extends IBaseComponent {
   /**
    * The internals of the component.
    */
-  [internals]: ElementInternals;
+  readonly [internals]: ElementInternals;
 
   /**
    * Sets the value type accepted by the component. This is used to set the type of the internal

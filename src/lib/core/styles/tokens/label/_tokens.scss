@@ -1,7 +1,0 @@
-@use 'sass:map';
-
-$tokens: () !default;
-
-@function get($key) {
-  @return map.get($tokens, $key);
-}

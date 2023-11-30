@@ -59,7 +59,7 @@ import { PaginatorComponent } from './paginator';
 import { PopupComponent } from './popup';
 import { ProductIconComponent } from './product-icon';
 import { QuantityFieldComponent } from './quantity-field';
-import { RadioComponent } from './radio';
+import { RadioComponent, RadioGroupComponent } from './radio';
 import { RippleComponent } from './ripple';
 import { ScaffoldComponent } from './scaffold';
 import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
@@ -208,6 +208,7 @@ const CUSTOM_ELEMENTS = [
   ProfileCardComponent,
   QuantityFieldComponent,
   RadioComponent,
+  RadioGroupComponent,
   RippleComponent,
   ScaffoldComponent,
   SelectComponent,

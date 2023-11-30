@@ -2,6 +2,15 @@ import { MixinBase, MixinReturn } from '../../constants';
 import { BaseComponent, IBaseComponent } from './base-component';
 
 /**
+ * Determines if an object is label aware.
+ * @param obj - The object to check.
+ * @returns True if the object is label aware, false otherwise.
+ */
+export const isLabelAware = (obj: any): obj is IBaseLabelAwareComponent => {
+  return typeof obj.labelChangedCallback === 'function';
+};
+
+/**
  * An element that can be associated with a Forge label component.
  */
 export interface IBaseLabelAwareComponent extends IBaseComponent {
@@ -16,7 +25,7 @@ export interface IBaseLabelAwareComponent extends IBaseComponent {
   /**
    * A callback for when the associated label is clicked.
    */
-  labelClickedCallback(): void;
+  labelClickedCallback?(): void;
 }
 
 /**
@@ -28,8 +37,6 @@ export interface IBaseLabelAwareComponent extends IBaseComponent {
 export function WithLabelAwareness<T extends MixinBase<BaseComponent>>(base: T): MixinReturn<T, IBaseLabelAwareComponent> {
   abstract class LabelAwareComponent extends base implements IBaseLabelAwareComponent {
     public abstract labelChangedCallback(value: string | null): void;
-
-    public abstract labelClickedCallback(): void;
   }
 
   return LabelAwareComponent;

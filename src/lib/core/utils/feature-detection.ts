@@ -8,8 +8,13 @@ export function supportsPopover(): boolean {
 
 /**
  * Detects if the browser supports ARIA properties in Element Internals.
+ * 
+ * This currently always returns false because tooling is not yet able able to detect properties
+ * set on Element Internals.
  * @returns {boolean}
  */
 export function supportsElementInternalsAria(): boolean {
-  return ElementInternals.prototype.hasOwnProperty('role');
+  // TODO: return whether the user agent actually supports this when tooling is able to detect it
+  // return ElementInternals.prototype.hasOwnProperty('role');
+  return false;
 }

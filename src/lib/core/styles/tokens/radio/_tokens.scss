@@ -8,11 +8,11 @@
 $tokens: (
   // Shared
   primary-color: utils.module-val(radio, primary-color, theme.variable(tertiary)),
-  inactive-color: utils.module-val(radio, unchecked-border-color, theme.variable(surface-container-high)),
+  inactive-color: utils.module-val(radio, inactive-color, theme.variable(surface-container-high)),
   size: utils.module-val(radio, size, 20px),
   mark-size: utils.module-val(radio, mark-size, 12px),
   state-layer-size: utils.module-val(radio, state-layer-size, 40px),
-  state-layer-dense-size: utils.module-val(radio, state-layer-size, 24px),
+  state-layer-dense-size: utils.module-val(radio, state-layer-dense-size, 24px),
 
   // Radio
   width: utils.module-ref(radio, width, size),
@@ -25,11 +25,11 @@ $tokens: (
 
   // Mark
   mark-width: utils.module-ref(radio, mark-width, mark-size),
-  mark-height: utils.module-ref(radio, mark-width, mark-size),
+  mark-height: utils.module-ref(radio, mark-height, mark-size),
   mark-unchecked-color: utils.module-ref(radio, mark-unchecked-color, inactive-color),
   mark-checked-color: utils.module-ref(radio, mark-checked-color, primary-color),
-  mark-unchecked-background: utils.module-val(radio, mark-background, transparent),
-  mark-checked-background: utils.module-val(radio, mark-background, transparent),
+  mark-unchecked-background: utils.module-val(radio, mark-unchecked-background, transparent),
+  mark-checked-background: utils.module-val(radio, mark-checked-background, transparent),
 
   // Label
   gap: utils.module-val(radio, gap, 0),
@@ -39,8 +39,8 @@ $tokens: (
   // State layer
   state-layer-width: utils.module-ref(radio, state-layer-width, state-layer-size),
   state-layer-height: utils.module-ref(radio, state-layer-height, state-layer-size),
-  state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-off-color, color),
-  state-layer-checked-color: utils.module-ref(radio, state-layer-on-color, primary-color),
+  state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-unchecked-color, color),
+  state-layer-checked-color: utils.module-ref(radio, state-layer-checked-color, primary-color),
   state-layer-shape: utils.module-ref(radio, state-layer-shape, shape),
 
   // Dense

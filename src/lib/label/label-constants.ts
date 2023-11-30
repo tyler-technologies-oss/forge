@@ -9,12 +9,17 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label`
 
 const attributes = {
   FOR: 'for',
-  DYNAMIC: 'dynamic'
+  DYNAMIC: 'dynamic',
+  STATIC: 'static',
+  LEGEND: 'legend'
 };
 
 const selectors = {
-  ROOT: '.forge-label',
   SLOT: 'slot'
+};
+
+const events = {
+  CONNECTED: `${elementName}-connected`
 };
 
 const labelableChildSelectors = [
@@ -29,5 +34,6 @@ export const LABEL_CONSTANTS = {
   elementName,
   selectors,
   attributes,
+  events,
   labelableChildSelectors
 };

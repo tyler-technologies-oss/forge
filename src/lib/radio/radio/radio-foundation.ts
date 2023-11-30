@@ -94,12 +94,15 @@ export class RadioFoundation implements IRadioFoundation {
         evt.preventDefault();
         this._adapter.focusPrevious();
         break;
+      case ' ':
+        // Prevent the spacebar from scrolling the page
+        evt.preventDefault();
+        break;
     }
   }
 
   private _handleKeyup(evt: KeyboardEvent): void {
     if (evt.key === ' ') {
-      evt.preventDefault();
       this._activate(evt);
     }
   }
@@ -181,9 +184,13 @@ export class RadioFoundation implements IRadioFoundation {
   public set disabled(value: boolean) {
     if (this._disabled !== value) {
       this._disabled = value;
-      this._adapter.setDisabled(this._disabled);
-      this._adapter.disableStateLayer(this._disabled || this._readonly);
-      this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.DISABLED, this._disabled);
+      // Attempt to set disabled, restore if unsuccessful
+      if (this._adapter.trySetDisabled(this._disabled)) {
+        this._adapter.disableStateLayer(this._disabled || this._readonly);
+        this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.DISABLED, this._disabled);
+      } else {
+        this._disabled = !this._disabled;
+      }
     }
   }
 

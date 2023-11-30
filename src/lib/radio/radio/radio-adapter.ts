@@ -8,7 +8,7 @@ import { RADIO_CONSTANTS, RadioLabelPosition, RadioState } from './radio-constan
 
 export interface IRadioAdapter extends IBaseAdapter {
   setChecked(checked: boolean, value: string): void;
-  setDisabled(value: boolean): void;
+  trySetDisabled(value: boolean): boolean;
   setRequired(value: boolean): void;
   setReadonly(value: boolean): void;
   setLabelPosition(value: RadioLabelPosition): void;
@@ -34,7 +34,7 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
   public setChecked(checked: boolean, value: string): void {
     this._component[setDefaultAria]({
       ariaChecked: checked ? 'true' : 'false'
-    }, true);
+    }, { overwrite: true });
     if (checked) {
       RadioGroupManager.setSelectedRadioInGroup(this._component);
     }
@@ -46,24 +46,38 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
     RadioGroupManager.setRadioGroupValidity(this._component);
   }
 
-  public setDisabled(value: boolean): void {
+  /**
+   * Attempts to set the disabled state of the radio. If the radio is in a disabled radio group, it
+   * can't be enabled.
+   * 
+   * @param value Whether the radio should be disabled.
+   * @returns Whether the disabled state was set.
+   */
+  public trySetDisabled(value: boolean): boolean {
+    const group = this._component.closest('forge-radio-group');
+
+    if (!value && group && group.disabled) {
+      return false;
+    }
+
     this._component[setDefaultAria]({
       ariaDisabled: value ? 'true' : 'false'
-    });
+    }, { overwrite: true });
     this._component[isFocusable] = !value;
+    return true;
   }
 
   public setRequired(value: boolean): void {
     this._component[setDefaultAria]({
       ariaRequired: value ? 'true' : 'false'
-    });
+    }, { overwrite: true });
     RadioGroupManager.setRadioGroupValidity(this._component);
   }
 
   public setReadonly(value: boolean): void {
     this._component[setDefaultAria]({
       ariaReadOnly: value ? 'true' : 'false'
-    });
+    }, { overwrite: true });
   }
 
   public disableStateLayer(value: boolean): void {

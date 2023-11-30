@@ -11,7 +11,6 @@ import { LABEL_CONSTANTS } from './label-constants';
 import './label';
 
 class LabelHarness extends TestHarness<ILabelComponent> {
-  public rootElement: HTMLElement;
   public labelAwareElement: HTMLElement & ILabelAware;
 
   constructor(el: ILabelComponent) {
@@ -19,8 +18,6 @@ class LabelHarness extends TestHarness<ILabelComponent> {
   }
 
   public initElementRefs(): void {
-    this.rootElement = getShadowElement(this.element, LABEL_CONSTANTS.selectors.ROOT);
-
     const element = document.createElement(LABEL_CONSTANTS.labelableChildSelectors[0]);
     element.id = 'label-aware';
     (element as any).labelClickedCallback = () => { };

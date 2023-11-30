@@ -1,6 +1,6 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { getFormState, getFormValue, inputType, internals, setDefaultAria } from '../../constants';
-import { BaseComponent, IBaseFocusableComponent, IBaseFormAssociatedComponent, IBaseLabelAwareComponent, WithElementInternals, WithFocusable, WithFormAssociation, WithLabelAwareness } from '../../core/base';
+import { BaseComponent, IBaseElementInternalsComponent, IBaseFocusableComponent, IBaseFormAssociatedComponent, IBaseLabelAwareComponent, WithElementInternals, WithFocusable, WithFormAssociation, WithLabelAwareness } from '../../core/base';
 import { FormValue } from '../../core/utils/form-utils';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { StateLayerComponent } from '../../state-layer';
@@ -12,7 +12,7 @@ import { RadioFoundation } from './radio-foundation';
 import template from './radio.html';
 import style from './radio.scss';
 
-export interface IRadioComponent extends IBaseFormAssociatedComponent, IBaseFocusableComponent, IBaseLabelAwareComponent {
+export interface IRadioComponent extends IBaseFormAssociatedComponent, IBaseFocusableComponent, IBaseLabelAwareComponent, IBaseElementInternalsComponent {
   checked: boolean;
   defaultChecked: boolean;
   required: boolean;
