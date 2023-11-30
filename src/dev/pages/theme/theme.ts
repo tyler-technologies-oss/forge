@@ -31,6 +31,12 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
     ]
   },
   {
+    header: 'Brand',
+    swatches: [
+      { text: 'Brand', background: 'brand', foreground: 'on-brand' }
+    ]
+  },
+  {
     header: 'Key colors',
     swatches: [
       { text: 'Primary', background: 'primary', foreground: 'on-primary' },

@@ -10,7 +10,10 @@ const attributes = {
   ICON: 'icon'
 };
 
+const forwardedAttributes = ['aria-label', 'aria-labelledby'];
+
 export const APP_BAR_NOTIFICATION_BUTTON_CONSTANTS = {
   elementName,
-  attributes
+  attributes,
+  forwardedAttributes
 };

@@ -12,7 +12,7 @@ $tokens: (
   display: utils.module-val(icon-button, display, inline-flex),
   size: utils.module-val(icon-button, size, 48px),
   gap: utils.module-val(icon-button, spacing, 0),
-  icon-color: utils.module-val(icon-button, icon-color, inherit),
+  icon-color: utils.module-val(icon-button, icon-color, currentColor),
   background-color: utils.module-val(icon-button, background-color, none),
   icon-size: utils.module-val(icon-button, icon-size, typography.font-size-relative('1500')),
   cursor: utils.module-val(icon-button, cursor, pointer),

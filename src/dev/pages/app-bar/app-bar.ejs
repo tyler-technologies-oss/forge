@@ -1,19 +1,18 @@
-<forge-app-bar id="forge-app-bar-example" title-text="App bar">
+<forge-app-bar id="forge-app-bar-example" title-text="App Bar" href="javascript: void(0);" aria-label="Demo app bar">
   <forge-icon slot="logo" external external-type="custom" name="forge_logo"></forge-icon>
 
   <forge-app-bar-menu-button slot="start" id="forge-app-bar-example-menu-button"></forge-app-bar-menu-button>
 
   <forge-app-bar-search id="app-bar-search" slot="center">
     <input type="text" placeholder="Search" aria-label="Search" />
-    <forge-icon-button id="app-bar-search-action" slot="end">
-      <forge-icon name="keyboard_voice"></forge-icon>
-    </forge-icon-button>
   </forge-app-bar-search>
-
+  
   <forge-app-bar-help-button slot="end"></forge-app-bar-help-button>
   <forge-app-bar-notification-button slot="end"></forge-app-bar-notification-button>
   <forge-app-bar-app-launcher-button slot="end"></forge-app-bar-app-launcher-button>
-
+  
+  <forge-button slot="end">Sign in</forge-button>
+  
   <forge-app-bar-profile-button
     slot="end"
     avatar-text="First Last"

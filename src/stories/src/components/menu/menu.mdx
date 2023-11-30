@@ -239,7 +239,7 @@ type MenuOptionBuilder = (option: IMenuOption, parentElement: HTMLElement) => HT
 ### MenuOptionFactory
 
 ```typescript
-type MenuOptionFactory = (() => IMenuOption[]) | (() => Promise<IMenuOption[]>);
+type MenuOptionFactory = (() => Array<IMenuOption | IMenuOptionGroup>) | (() => Promise<Array<IMenuOption | IMenuOptionGroup>>);
 ```
 
 ### MenuMode

@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge",
-  "version": "3.0.0-next.11",
+  "version": "3.0.0-next.14",
   "description": "Tyler Forge™ Web Components library",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
@@ -54,7 +54,6 @@
     "@material/select": "^14.0.0",
     "@material/shape": "^14.0.0",
     "@material/theme": "^14.0.0",
-    "@material/top-app-bar": "^14.0.0",
     "@material/touch-target": "^14.0.0",
     "@material/typography": "^14.0.0",
     "@tylertech/forge-core": "^2.3.0",

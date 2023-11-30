@@ -28,6 +28,14 @@ export const isFocusable = Symbol('isFocusable');
 export const setDefaultAria = Symbol('setDefaultAria');
 
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';
+export type Density = 'small' | 'medium' | 'large';
 
 export type MixinBase<ExpectedBase = object> = abstract new (...args: any[]) => ExpectedBase;
 export type MixinReturn<TBase extends MixinBase, MixinClass = object> = (abstract new (...args: any[]) => MixinClass) & TBase;
+
+/**
+ * The `focusVisible` property is an experimental feature that is not yet supported by all browsers.
+ * 
+ * We will use this to allow for setting focus to elements programmatically and showing the focus indicator.
+ */
+export type ExperimentalFocusOptions = FocusOptions & { focusVisible?: boolean };

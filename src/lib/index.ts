@@ -41,7 +41,7 @@ import { DividerComponent } from './divider';
 import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
 import { ExpansionPanelComponent } from './expansion-panel';
 import { FilePickerComponent } from './file-picker';
-import { FloatingActionButton } from './floating-action-button';
+import { FloatingActionButtonComponent } from './floating-action-button';
 import { FocusIndicatorComponent } from './focus-indicator';
 import { IconComponent } from './icon';
 import { IconButtonComponent } from './icon-button';
@@ -66,7 +66,6 @@ import { OptionComponent, OptionGroupComponent, SelectComponent } from './select
 import { SelectDropdownComponent } from './select/select-dropdown';
 import { SkeletonComponent } from './skeleton';
 import { SliderComponent } from './slider';
-import { SplitButtonComponent } from './split-button';
 import { SplitViewComponent } from './split-view';
 import { StackComponent } from './stack';
 import { StateLayerComponent } from './state-layer';
@@ -184,7 +183,7 @@ const CUSTOM_ELEMENTS = [
   DrawerComponent,
   ExpansionPanelComponent,
   FilePickerComponent,
-  FloatingActionButton,
+  FloatingActionButtonComponent,
   FocusIndicatorComponent,
   IconButtonComponent,
   IconComponent,

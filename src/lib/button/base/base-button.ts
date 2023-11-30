@@ -1,13 +1,15 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
-import { BaseFocusableComponent } from '../../core/base/base-focusable-component';
-import { internals } from '../../constants';
-import { IBaseComponent } from '../../core/base/base-component';
+import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { IconRegistry } from '../../icon/icon-registry';
+import { WithFocusable, IBaseFocusableComponent } from '../../core/base/base-focusable-component';
+import { BaseComponent } from '../../core/base/base-component';
+import { ExperimentalFocusOptions, internals } from '../../constants';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BaseButtonFoundation } from './base-button-foundation';
 import { ILabelAware } from '../../label/label-aware';
 
-export interface IBaseButton extends IBaseComponent {
+export interface IBaseButton extends IBaseFocusableComponent {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
@@ -20,9 +22,10 @@ export interface IBaseButton extends IBaseComponent {
   download: string;
   rel: string;
   form: HTMLFormElement | null;
+  focus(options?: ExperimentalFocusOptions): void;
 }
 
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseFocusableComponent implements IBaseButton, ILabelAware {
+export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends WithFocusable(BaseComponent) implements IBaseButton, ILabelAware {
   public static readonly formAssociated = true;
 
   public [internals]: ElementInternals;
@@ -31,6 +34,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
 
   constructor() {
     super();
+    IconRegistry.define(tylIconArrowDropDown);
     this[internals] = this.attachInternals();
   }
 
@@ -127,5 +131,9 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
 
   public override click(): void {
     this._foundation.click({ animateStateLayer: true });
+  }
+
+  public override focus(options: ExperimentalFocusOptions): void {
+    this._foundation.focus(options);
   }
 }

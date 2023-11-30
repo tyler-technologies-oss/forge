@@ -28,8 +28,8 @@
   // The on-container colors are the contrast color for the provided color mixed with the
   // container color at a lower emphasis to let the contrast color bleed through for
   // increased contrast against the lower emphasis container color 
-  $on-container-low: theme-utils.hexify($color, theme-utils.contrast($container-low), color-emphasis.value(medium-low));
-  $on-container: theme-utils.hexify($color, theme-utils.contrast($container), color-emphasis.value(low));
+  $on-container-low: theme-utils.hexify($color, theme-utils.contrast($container-low), color-emphasis.value(medium));
+  $on-container: theme-utils.hexify($color, theme-utils.contrast($container), color-emphasis.value(medium));
   $on-container-high: theme-utils.contrast($container-high);
 
   @return (

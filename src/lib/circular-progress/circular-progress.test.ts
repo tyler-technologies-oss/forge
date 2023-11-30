@@ -12,13 +12,13 @@ describe('Circular Progress', () => {
     expect(el.shadowRoot).not.to.be.null;
   });
 
-  it('should be accessible if data-aria-label is provided', async () => {
-    const el = await fixture(html`<forge-circular-progress data-aria-label="Test label"></forge-circular-progress>`);
+  it('should be accessible if aria-label is provided', async () => {
+    const el = await fixture(html`<forge-circular-progress aria-label="Test label"></forge-circular-progress>`);
     await expect(el).to.be.accessible();
   });
 
-  it('should be accessible if data-aria-label is provided in determinate mode', async () => {
-    const el = await fixture(html`<forge-circular-progress data-aria-label="Test label" determinate></forge-circular-progress>`);
+  it('should be accessible if aria-label is provided in determinate mode', async () => {
+    const el = await fixture(html`<forge-circular-progress aria-label="Test label" determinate></forge-circular-progress>`);
     await expect(el).to.be.accessible();
   });
 
@@ -59,32 +59,29 @@ describe('Circular Progress', () => {
     el.determinate = true;
     el.progress = 0.5;
 
-    const rootElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
     const determinateProgressElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
 
     expect(el.progress).to.equal(0.5);
     expect(el.getAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.PROGRESS)).to.equal('0.5');
-    expect(rootElement.getAttribute('aria-valuenow')).to.equal('0.5');
+    expect(el.getAttribute('aria-valuenow')).to.equal('0.5');
     expect(determinateProgressElement.getAttribute('stroke-dashoffset')).to.equal('50');
   });
 
   it('should set progress via attribute', async () => {
     const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress determinate progress="0.5"></forge-circular-progress>`);
-    const rootElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
     const determinateProgressElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
 
     expect(el.progress).to.equal(0.5);
     expect(el.getAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.PROGRESS)).to.equal('0.5');
-    expect(rootElement.getAttribute('aria-valuenow')).to.equal('0.5');
+    expect(el.getAttribute('aria-valuenow')).to.equal('0.5');
     expect(determinateProgressElement.getAttribute('stroke-dashoffset')).to.equal('50');
   });
 
   it('should set aria-label', async () => {
     const expectedLabel = 'Test label';
-    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress data-aria-label="${expectedLabel}"></forge-circular-progress>`);
-    const rootElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
+    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress aria-label="${expectedLabel}"></forge-circular-progress>`);
 
-    expect(rootElement.getAttribute('aria-label')).to.equal(expectedLabel);
+    expect(el.getAttribute('aria-label')).to.equal(expectedLabel);
   });
 
   it('should set theme', async () => {
@@ -103,17 +100,9 @@ describe('Circular Progress', () => {
   });
 
   it('should set track', async () => {
-    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress></forge-circular-progress>`);
-    el.track = false;
+    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress track></forge-circular-progress>`);
 
-    expect(el.track).to.equal(false);
-    expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK)).to.equal(true);
-  });
-
-  it('should set track via attribute', async () => {
-    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress no-track></forge-circular-progress>`);
-
-    expect(el.track).to.equal(false);
-    expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK)).to.equal(true);
+    expect(el.track).to.be.true;
+    expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.TRACK)).to.be.true;
   });
 });

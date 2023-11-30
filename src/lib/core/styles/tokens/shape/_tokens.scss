@@ -6,6 +6,7 @@ $extra-small: math.div($base, 4) !default; // 1px
 $small: math.div($base, 2) !default;       // 2px
 $medium: $base !default;                   // 4px
 $large: $base * 2 !default;                // 8px
+$extra-large: $base * 4 !default;          // 16px
 
 $tokens: (
   extra-small: $extra-small,
@@ -28,6 +29,11 @@ $tokens: (
   large-block-end: 0 0 $large $large,
   large-inline-start: $large 0 0 $large,
   large-inline-end: 0 $large $large 0,
+  extra-large: $extra-large,
+  extra-large-block-start: $extra-large $extra-large 0 0,
+  extra-large-block-end: 0 0 $extra-large $extra-large,
+  extra-large-inline-start: $extra-large 0 0 $extra-large,
+  extra-large-inline-end: 0 $extra-large $extra-large 0,
   full: 9999px, // Pill shaped
   round: 50%
 ) !default;

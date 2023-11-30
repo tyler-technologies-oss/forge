@@ -111,10 +111,6 @@
   @include override(icon-color, toggle-on-icon-color);
 }
 
-@mixin toggle-outlined {
-  // @include override(icon-color, outlined-toggle-icon-color);
-}
-
 @mixin toggle-on-outlined {
   @include override(background-color, outlined-toggle-on-background-color);
   @include override(icon-color, outlined-toggle-on-icon-color);

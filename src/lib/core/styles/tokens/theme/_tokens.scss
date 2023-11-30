@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use '../../utils';
 @use '../../theme/utils' as theme-utils;
+@use './tokens.brand' as brand;
 @use './tokens.core' as core;
 @use './tokens.surface' as surface;
 @use './tokens.text' as text;
@@ -9,6 +10,7 @@
 
 // Forge default (light) theme
 $tokens: utils.flatten(
+  brand.$tokens,
   core.$tokens,
   surface.$tokens,
   text.$tokens,
@@ -31,6 +33,7 @@ $tokens: utils.flatten(
 
 // Forge dark theme
 $tokens-dark: utils.flatten(
+  brand.$tokens-dark,
   core.$tokens-dark,
   surface.$tokens-dark,
   text.$tokens-dark,

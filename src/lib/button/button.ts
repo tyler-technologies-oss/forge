@@ -1,7 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
+import { IconComponent } from '../icon';
 import { FocusIndicatorComponent } from '../focus-indicator';
-import { IconComponent, IconRegistry } from '../icon';
 import { StateLayerComponent } from '../state-layer';
 import { BaseButton, IBaseButton } from './base/base-button';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
@@ -16,6 +15,7 @@ export interface IButtonComponent extends IBaseButton {
   variant: ButtonVariant;
   pill: boolean;
   theme: ButtonTheme;
+  fullWidth: boolean;
 }
 
 declare global {
@@ -36,6 +36,7 @@ declare global {
  * 
  * @property {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
  * @property {ButtonVariant} variant - The variant of the button. Defaults to `text`.
+ * @property {boolean} fullWidth - Whether or not the button is full-width.
  * @property {boolean} disabled - Whether or not the button is disabled.
  * @property {boolean} popoverIcon - Whether or not the button shows a built-in popover icon.
  * @property {string} name - The name of the button.
@@ -52,6 +53,7 @@ declare global {
  * 
  * @attribute {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
  * @attribute {ButtonVariant} variant - The variant of the button. Defaults to `text`.
+ * @attribute {boolean} full-width - Whether or not the button is full-width.
  * @attribute {boolean} disabled - Whether or not the button is disabled.
  * @attribute {boolean} popover-icon - Whether or not the button shows a built-in popover icon.
  * @attribute {string} name - The name of the button.
@@ -161,7 +163,6 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
 
   constructor() {
     super();
-    IconRegistry.define(tylIconArrowDropDown);
     attachShadowTemplate(this, template, styles);
     this._foundation = new ButtonFoundation(new ButtonAdapter(this));
   }
@@ -177,6 +178,9 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
       case BUTTON_CONSTANTS.observedAttributes.THEME:
         this.theme = newValue as ButtonTheme;
         return;
+      case BUTTON_CONSTANTS.observedAttributes.FULL_WIDTH:
+        this.fullWidth = coerceBoolean(newValue);
+        return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
@@ -189,4 +193,7 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
 
   @FoundationProperty()
   public declare theme: ButtonTheme;
+
+  @FoundationProperty()
+  public declare fullWidth: boolean;
 }

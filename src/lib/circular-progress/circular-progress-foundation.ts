@@ -14,11 +14,12 @@ export class CircularProgressFoundation implements ICircularProgressFoundation {
   private _determinate = false;
   private _progress = 0;
   private _theme: CircularProgressTheme = 'primary';
-  private _track = true;
+  private _track = false;
 
   constructor(private _adapter: ICircularProgressAdapter) {}
 
   public initialize(): void {
+    this._adapter.initialize();
     this._applyDeterminate();
   }
 
@@ -72,11 +73,7 @@ export class CircularProgressFoundation implements ICircularProgressFoundation {
     value = Boolean(value);
     if (this._track !== value) {
       this._track = value;
-      this._adapter.toggleHostAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.NO_TRACK, !this._track);
+      this._adapter.toggleHostAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.TRACK, this._track);
     }
-  }
-
-  public set ariaLabel(value: string) {
-    this._adapter.setAriaLabel(value);
   }
 }

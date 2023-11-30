@@ -3,7 +3,7 @@ import { IAppBarNotificationButtonAdapter } from './app-bar-notification-button-
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
 
 export interface IAppBarNotificationButtonFoundation extends ICustomElementFoundation {
-  count: number;
+  count: number | string;
   dot: boolean;
   theme: string;
   showBadge: boolean;
@@ -11,7 +11,7 @@ export interface IAppBarNotificationButtonFoundation extends ICustomElementFound
 }
 
 export class AppBarNotificationButtonFoundation implements IAppBarNotificationButtonFoundation {
-  private _count = 0;
+  private _count: number | string = '0';
   private _dot = false;
   private _theme: string;
   private _showBadge = false;
@@ -30,7 +30,8 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
+  public destroy(): void {
+    this._adapter.destroy();
     this._isInitialized = false;
   }
 
@@ -42,21 +43,21 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
       this._icon = value;
       if (this._isInitialized) {
         this._adapter.setIcon(this._icon);
-        this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON, this._icon);
       }
+      this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON, this._icon);
     }
   }
 
-  public get count(): number {
+  public get count(): number | string {
     return this._count;
   }
-  public set count(value: number) {
+  public set count(value: number | string) {
     if (this._count !== value) {
       this._count = value;
       if (this._isInitialized) {
         this._adapter.setCount(this._count);
-        this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, this._count as any);
       }
+      this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, this._count as any);
     }
   }
 
@@ -64,16 +65,13 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
     return this._dot;
   }
   public set dot(value: boolean) {
+    value = Boolean(value);
     if (this._dot !== value) {
       this._dot = value;
       if (this._isInitialized) {
         this._adapter.setBadgeType(this._dot);
-        if (this._dot) {
-          this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT);
-        } else {
-          this._adapter.removeHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT);
-        }
       }
+      this._adapter.toggleHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT, this._dot);
     }
   }
 
@@ -94,12 +92,13 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
     return this._showBadge;
   }
   public set showBadge(value: boolean) {
+    value = Boolean(value);
     if (this._showBadge !== value) {
       this._showBadge = value;
       if (this._isInitialized) {
         this._adapter.setBadgeVisible(this._showBadge);
-        this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE, this._showBadge as any);
       }
+      this._adapter.toggleHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE, this._showBadge);
     }
   }
 }

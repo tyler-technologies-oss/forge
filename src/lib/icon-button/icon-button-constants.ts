@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
+import { COMPONENT_NAME_PREFIX, Density, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}icon-button`;
 
@@ -38,4 +38,4 @@ export const ICON_BUTTON_CONSTANTS = {
 export type IconButtonVariant = 'icon' | 'outlined' | 'tonal' | 'filled' | 'raised';
 export type IconButtonTheme = Theme;
 export type IconButtonShape = 'circular' | 'squared';
-export type IconButtonDensity = 'small' | 'medium' | 'large';
+export type IconButtonDensity = Density;

@@ -16,8 +16,7 @@ const attributes = {
   DETERMINATE: 'determinate',
   PROGRESS: 'progress',
   BUFFER: 'buffer',
-  THEME: 'theme',
-  ARIA_LABEL: 'data-aria-label'
+  THEME: 'theme'
 };
 
 export const LINEAR_PROGRESS_CONSTANTS = {

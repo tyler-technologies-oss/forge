@@ -6,8 +6,7 @@ const attributes = {
   DETERMINATE: 'determinate',
   PROGRESS: 'progress',
   THEME: 'theme',
-  NO_TRACK: 'no-track',
-  ARIA_LABEL: 'data-aria-label'
+  TRACK: 'track'
 };
 
 const classes = {

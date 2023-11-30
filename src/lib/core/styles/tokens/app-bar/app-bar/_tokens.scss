@@ -1,0 +1,30 @@
+@use 'sass:map';
+@use '../../../utils';
+@use '../../../theme';
+@use '../../../elevation';
+@use '../../../animation';
+@use '../../../typography';
+@use '../../../spacing';
+
+$tokens: (
+  background: utils.module-val(app-bar, background, theme.variable(brand)),
+  foreground: utils.module-val(app-bar, foreground, theme.variable(on-brand)),
+
+  z-index: utils.module-val(app-bar, z-index, elevation.z-index-variable(header)),
+  elevation: utils.module-val(app-bar, elevation, elevation.value(4)),
+
+  height: utils.module-val(app-bar, height, 56px),
+  row-padding: utils.module-val(app-bar, row-padding, spacing.variable(xxsmall)),
+
+  logo-gap: utils.module-val(app-bar, logo-gap, spacing.variable(medium)),
+  logo-font-size: utils.module-val(app-bar, logo-font-size, typography.font-size-relative('2500')),
+
+  title-padding: utils.module-val(app-bar, title-padding, spacing.variable(xsmall)),
+
+  transition-duration: utils.module-val(app-bar, transition-duration, animation.variable(duration-short4)),
+  transition-timing: utils.module-val(app-bar, transition-timing, animation.variable(easing-standard)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

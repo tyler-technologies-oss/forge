@@ -202,6 +202,8 @@ slot[name=tertiary-title] {
 }
 
 forge-focus-indicator {
+  z-index: 1; // Fixes an animation artifact in Safari
+
   @include focus-indicator.provide-theme((
     shape: shape.variable(medium) // TODO: use list-item token?
   ));

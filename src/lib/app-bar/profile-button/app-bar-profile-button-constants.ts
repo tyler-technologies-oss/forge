@@ -16,14 +16,12 @@ const attributes = {
   OPEN: 'open'
 };
 
-const selectors = {
-  BUTTON: 'forge-icon-button'
-};
+const forwardedAttributes = ['aria-label', 'aria-labelledby'];
 
 export const APP_BAR_PROFILE_BUTTON_CONSTANTS = {
   elementName,
   attributes,
-  selectors
+  forwardedAttributes
 };
 
 export interface IAppBarProfileCardConfig {

@@ -1,32 +1,39 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Density, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}fab`;
 
-const selectors = {
-  BUTTON: 'button, a',
-  ICON: 'i,forge-icon,img,svg',
-  LABEL: 'span'
-};
-
-const classes = {
-  BUTTON: 'forge-fab',
-  BUTTON_EXTENDED: 'forge-fab--extended',
-  ICON: 'forge-fab__icon',
-  LABEL: 'forge-fab__label',
-  BUTTON_MINI: 'forge-fab--mini',
-  EXITED: 'forge-fab--exited',
-  RIPPLE: 'forge-fab__ripple'
+const observedAttributes = {
+  THEME: 'theme',
+  DENSITY: 'density',
+  ELEVATION: 'elevation'
 };
 
 const attributes = {
-  EXTENDED: 'extended',
-  MINI: 'mini',
-  EXITED: 'exited'
+  ...observedAttributes
+};
+
+const selectors = {
+  LABEL_SLOT: 'slot[name=label]'
+};
+
+const classes = {
+  EXTENDED: `${elementName}--extended`
+};
+
+const defaults = {
+  DEFAULT_THEME: 'secondary' as Theme,
+  DEFAULT_DENSITY: 'medium' as FloatingActionButtonDensity,
+  DEFAULT_ELEVATION: 'raised' as FloatingActionButtonElevation
 };
 
 export const FLOATING_ACTION_BUTTON_CONSTANTS = {
   elementName,
+  observedAttributes,
+  attributes,
   selectors,
   classes,
-  attributes
+  defaults
 };
+
+export type FloatingActionButtonDensity = Density;
+export type FloatingActionButtonElevation = 'raised' | 'lowered';

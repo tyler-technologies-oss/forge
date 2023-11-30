@@ -1,0 +1,16 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Profile Card',
+    includePath: './pages/profile-card/profile-card.ejs',
+    options: [
+      { type: 'switch', label: 'Profile button', id: 'opt-profile-button' },
+      { type: 'switch', label: 'Sign out button', id: 'opt-sign-out-button', defaultValue: true },
+      { type: 'text-field', label: 'Sign Out Text', id: 'opt-sign-out-text', defaultValue: 'Sign out' },
+      { type: 'text-field', label: 'Profile Text', id: 'opt-profile-text', defaultValue: 'Profile' },
+      { type: 'text-field', label: 'Full Name', id: 'opt-full-name', defaultValue: 'First Last' },
+      { type: 'text-field', label: 'Email', id: 'opt-email', defaultValue: 'first.last@tylerforge.io' }
+    ]
+  }
+})
+%>

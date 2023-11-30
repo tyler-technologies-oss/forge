@@ -3,6 +3,7 @@ import { spy } from 'sinon';
 import { fixture, html } from '@open-wc/testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
+import { BUTTON_CONSTANTS } from './button-constants';
 import { ButtonComponent, IButtonComponent } from './button';
 import type { IStateLayerComponent } from '../state-layer';
 import type { IFocusIndicatorComponent } from '../focus-indicator';
@@ -96,6 +97,18 @@ describe('Button', () => {
     await expect(el).to.be.accessible();
   });
 
+  it('should set full width', async () => {
+    const el = await fixture<IButtonComponent>(html`<forge-button full-width>Button</forge-button>`);
+
+    expect(el.fullWidth).to.be.true;
+    expect(el.hasAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH)).to.be.true;
+
+    el.fullWidth = false;
+
+    expect(el.fullWidth).to.be.false;
+    expect(el.hasAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH)).to.be.false;
+  });
+
   describe('ButtonComponentDelegate', () => {
     it('should create button via delegate', async () => {
       const delegate = new ButtonComponentDelegate({ options: { text: 'Button' }});
@@ -162,8 +175,8 @@ describe('Button', () => {
   it('should be accessible with aria-labelledby', async () => {
     const el = await fixture<IButtonComponent>(html`
       <div>
-        <forge-button aria-labelledby="test-label">Button</forge-button>
         <label id="test-label">Test label</label>
+        <forge-button aria-labelledby="test-label"></forge-button>
       </div>
     `);
     const button = el.querySelector('forge-button') as IButtonComponent;

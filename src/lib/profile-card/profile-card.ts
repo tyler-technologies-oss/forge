@@ -4,6 +4,7 @@ import { ProfileCardFoundation } from './profile-card-foundation';
 import { PROFILE_CARD_CONSTANTS } from './profile-card-constants';
 import { ButtonComponent } from '../button';
 import { AvatarComponent } from '../avatar';
+import { IconComponent } from '../icon/icon';
 import { ToolbarComponent } from '../toolbar';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -35,8 +36,6 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-profile-card>` custom element.
- * 
  * @tag forge-profile-card
  */
 @CustomElement({
@@ -44,6 +43,7 @@ declare global {
   dependencies: [
     ToolbarComponent,
     ButtonComponent,
+    IconComponent,
     AvatarComponent
   ]
 })
@@ -84,16 +84,16 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
         this.email = newValue;
         break;
       case PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT:
-        this.signOut = coerceBoolean(PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT);
+        this.signOut = coerceBoolean(newValue);
         break;
       case PROFILE_CARD_CONSTANTS.attributes.PROFILE:
-        this.profile = coerceBoolean(PROFILE_CARD_CONSTANTS.attributes.PROFILE);
+        this.profile = coerceBoolean(newValue);
         break;
       case PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT:
-        this.signOutText = PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT;
+        this.signOutText = newValue;
         break;
       case PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT:
-        this.profileText = PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT;
+        this.profileText = newValue;
         break;
       case PROFILE_CARD_CONSTANTS.attributes.AVATAR_TEXT:
         this.avatarText = newValue;
@@ -139,4 +139,8 @@ export class ProfileCardComponent extends BaseComponent implements IProfileCardC
 
   @FoundationProperty()
   public declare avatarLetterCount: number;
+
+  public override focus(options?: FocusOptions): void {
+    this._foundation.focus(options);
+  }
 }

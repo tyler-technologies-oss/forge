@@ -3,6 +3,7 @@
 @use 'sass:meta';
 @use '../core/config';
 @use '../tokens/elevation/tokens';
+@use '../utils';
 
 ///
 /// Generates a `box-shadow` style value for the provided elevation z-value.
@@ -53,4 +54,13 @@
 @mixin z-index($level) {
   $value: map.get(tokens.$z-index-map, $level);
   z-index: var(--#{config.$prefix}-z-index-#{$level}, #{$value});
+}
+
+///
+/// Returns a global z-index CSS custom property reference (with the fallback value) specified by the provided level.
+/// 
+/// @param {Number} $level - The z-index level to return.
+///
+@function z-index-variable($level) {
+  @return utils.variable(z-index, tokens.$z-index-map, $level);
 }

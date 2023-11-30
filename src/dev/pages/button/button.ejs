@@ -51,9 +51,39 @@
   </section>
 
   <section>
+    <h3 class="forge-typography--heading2">w/Circular progress</h3>
+    <div class="flex">
+      <forge-button class="auto-width">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant text" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="outlined">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant outlined" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="tonal">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant tonal" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="filled">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant filled" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="raised">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant raised" slot="end"></forge-circular-progress>
+      </forge-button>
+    </div>
+  </section>
+
+  <section>
     <h3 class="forge-typography--heading2">Form example</h3>
     <form class="test-form" id="test-btn-form" action="javascript: alert('<form> submit action');">
-      <forge-text-field>
+      <forge-text-field style="width: 516px;">
         <input type="text" placeholder="Text input" aria-label="Test form input" autocomplete="off" />
       </forge-text-field>
       <div>
