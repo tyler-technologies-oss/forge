@@ -1,5 +1,5 @@
-@use '../../core/styles/tokens/field/tokens';
-@use '../../core/styles/tokens/token-utils';
+@use '../core/styles/tokens/field/tokens';
+@use '../core/styles/tokens/token-utils';
 
 $_module: field;
 $_tokens: tokens.$tokens;

@@ -40,6 +40,7 @@ import { DialogComponent } from './dialog';
 import { DividerComponent } from './divider';
 import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
 import { ExpansionPanelComponent } from './expansion-panel';
+import { FieldComponent } from './field-next';
 import { FilePickerComponent } from './file-picker';
 import { FloatingActionButtonComponent } from './floating-action-button';
 import { FocusIndicatorComponent } from './focus-indicator';
@@ -107,6 +108,7 @@ export * from './dialog';
 export * from './divider';
 export * from './drawer';
 export * from './expansion-panel';
+export * from './field-next';
 export * from './file-picker';
 export * from './floating-action-button';
 export * from './floating-label';
@@ -182,6 +184,7 @@ const CUSTOM_ELEMENTS = [
   DividerComponent,
   DrawerComponent,
   ExpansionPanelComponent,
+  FieldComponent,
   FilePickerComponent,
   FloatingActionButtonComponent,
   FocusIndicatorComponent,

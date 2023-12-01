@@ -1,8 +1,19 @@
-@use './configuration';
 @use './core';
 @use '../focus-indicator';
 @use '../state-layer';
 @use './token-utils' as *;
+
+$inline-label: ':where([label-position=inline-start], [label-position=inline-end], :not([label-position]))';
+$small: ':where([density=small], [dense])';
+$large: ':not([dense])[density=large]';
+
+//
+// Host
+//
+
+:host {
+  @include core.host-configuration;
+}
 
 :host {
   @include core.host;
@@ -16,11 +27,162 @@
   outline: none;
 }
 
+//
+// Base
+//
+
 .forge-field {
-  @include configuration.configuration;
+  @include core.configuration;
 }
 
+.forge-field {
+  @include core.field;
+
+  .container {
+    @include core.container;
+  }
+
+  .label {
+    @include core.label;
+  }
+}
+
+//
+// Required
+//
+
+:host([required]) {
+  .forge-field {
+    .label {
+      @include core.label-required;
+    }
+  }
+}
+
+//
+// Optional
+//
+
+:host([optional]) {
+  .forge-field {
+    .label {
+      @include core.label-optional;
+    }
+  }
+}
+
+//
+// Hover
+//
+
+.forge-field:hover {
+  .container {
+    @include core.container-hover;
+  }
+}
+
+//
+// Active
+//
+
+.forge-field:active {
+  .container {
+    @include core.container-active;
+  }
+}
+
+//
+// Densities
+//
+
+:host(#{$small}) {
+  .forge-field {
+    .container {
+      @include core.container-small;
+    }
+  }
+}
+
+:host(#{$large}) {
+  .forge-field {
+    .container {
+      @include core.container-large;
+    }
+  }
+}
+
+:host([label-position=inset]#{$small}) {
+  .forge-field {
+    .container {
+      @include core.container-inset-small;
+    }
+
+    .label {
+      @include core.label-inset-small;
+    }
+  }
+}
+
+:host([label-position=inset]#{$large}) {
+  .forge-field {
+    .container {
+      @include core.container-inset-large;
+    }
+
+    .label {
+      @include core.label-inset-large;
+    }
+  }
+}
+
+//
+// Label positions
+//
+
+:host(#{$inline-label}) {
+  .forge-field {
+    @include core.field-inline;
+
+    .container {
+      @include core.container-inline;
+    }
+  }
+}
+
+:host([label-position=block-start]) {
+  .forge-field {
+    @include core.field-block;
+
+    .label {
+      @include core.label-block;
+    }
+  }
+}
+
+:host([label-position=inset]) {
+  .forge-field {
+    .container {
+      @include core.container-inset;
+    }
+
+    .label {
+      @include core.label-inset;
+    }
+  }
+}
+
+:host([label-position=none]) {
+  .forge-field {
+    .label {
+      display: none;
+    }
+  }
+}
+
+//
 // Disabled
+//
+
 :host([disabled]) {
   .forge-field {
     @include core.field-disabled;

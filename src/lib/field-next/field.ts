@@ -1,22 +1,21 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { Density, Theme } from '../constants';
 import { BaseComponent, IBaseComponent } from '../core';
-import { FocusIndicatorComponent } from '../focus-indicator';
-import { StateLayerComponent } from '../state-layer';
 import { FieldAdapter } from './field-adapter';
-import { FIELD_CONSTANTS, FieldLabelAlignment, FieldLabelPosition } from './field-constants';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
 import { FieldFoundation } from './field-foundation';
 
 import template from './field.html';
 import styles from './field.scss';
 
 export interface IFieldComponent extends IBaseComponent {
-  labelPosition: 'inline-start' | 'inline-end' | 'block-start' | 'inset' | 'none';
-  labelAlignment: 'centered' | 'baseline' | 'start' | 'end';
+  labelPosition: FieldLabelPosition;
+  labelAlignment: FieldLabelAlignment;
   invalid: boolean;
   required: boolean;
+  optional: boolean;
   disabled: boolean;
-  noBorder: boolean;
+  variant: FieldVariant;
   theme: Theme;
   density: Density;
   dense: boolean;
@@ -38,29 +37,27 @@ declare global {
  * @property {FieldLabelAlignment} labelAlignment - The alignment of the label relative to the input area.
  * @property {boolean} invalid - Whether the field is in an invalid state.
  * @property {boolean} required - Whether the field is required.
+ * @property {boolean} optional - Whether the field is optional.
  * @property {boolean} disabled - Whether the field is disabled.
- * @property {boolean} noBorder - Whether the field should have a border.
- * @property {Theme} theme - The theme of the field.
- * @property {Density} density - The density of the field.
+ * @property {FieldVariant} variant - The variant of the field.
+ * @property {FieldTheme} theme - The theme of the field.
+ * @property {FieldDensity} density - The density of the field.
  * @property {boolean} dense - Whether the field is at the "small" density level.
  * 
  * @attribute {FieldLabelPosition} label-position - The position of the label relative to the input area.
  * @attribute {FieldLabelAlignment} label-alignment - The alignment of the label relative to the input area.
  * @attribute {boolean} invalid - Whether the field is in an invalid state.
  * @attribute {boolean} required - Whether the field is required.
+ * @attribute {boolean} optional - Whether the field is optional.
  * @attribute {boolean} disabled - Whether the field is disabled.
- * @attribute {boolean} no-border - Whether the field should have a border.
- * @attribute {Theme} theme - The theme of the field.
+ * @attribute {FieldVariant} variant - The variant of the field.
+ * @attribute {FieldTheme} theme - The theme of the field.
  * @attribute {Density} density - The density of the field.
  * @attribute {boolean} dense - Whether the field is at the "small" density level.
  */
 
 @CustomElement({
-  name: FIELD_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  name: FIELD_CONSTANTS.elementName
 })
 export class FieldComponent extends BaseComponent implements IFieldComponent {
   public static get observedAttributes(): string[] {
@@ -69,8 +66,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT,
       FIELD_CONSTANTS.attributes.INVALID,
       FIELD_CONSTANTS.attributes.REQUIRED,
+      FIELD_CONSTANTS.attributes.OPTIONAL,
       FIELD_CONSTANTS.attributes.DISABLED,
-      FIELD_CONSTANTS.attributes.NO_BORDER,
+      FIELD_CONSTANTS.attributes.VARIANT,
       FIELD_CONSTANTS.attributes.THEME,
       FIELD_CONSTANTS.attributes.DENSITY,
       FIELD_CONSTANTS.attributes.DENSE
@@ -103,17 +101,20 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       case FIELD_CONSTANTS.attributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         break;
+      case FIELD_CONSTANTS.attributes.OPTIONAL:
+        this.optional = coerceBoolean(newValue);
+        break;
       case FIELD_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case FIELD_CONSTANTS.attributes.NO_BORDER:
-        this.noBorder = coerceBoolean(newValue);
+      case FIELD_CONSTANTS.attributes.VARIANT:
+        this.variant = newValue as FieldVariant;
         break;
       case FIELD_CONSTANTS.attributes.THEME:
-        this.theme = newValue as Theme;
+        this.theme = newValue as FieldTheme;
         break;
       case FIELD_CONSTANTS.attributes.DENSITY:
-        this.density = newValue as Density;
+        this.density = newValue as FieldDensity;
         break;
       case FIELD_CONSTANTS.attributes.DENSE:
         this.dense = coerceBoolean(newValue);
@@ -134,16 +135,19 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
   public declare required: boolean;
 
   @FoundationProperty()
+  public declare optional: boolean;
+
+  @FoundationProperty()
   public declare disabled: boolean;
 
   @FoundationProperty()
-  public declare noBorder: boolean;
+  public declare variant: FieldVariant;
 
   @FoundationProperty()
-  public declare theme: Theme;
+  public declare theme: FieldTheme;
 
   @FoundationProperty()
-  public declare density: Density;
+  public declare density: FieldDensity;
 
   @FoundationProperty()
   public declare dense: boolean;

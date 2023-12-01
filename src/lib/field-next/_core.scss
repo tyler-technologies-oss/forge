@@ -1,18 +1,160 @@
-@use '../core/styles/typography/';
+@use '../core/styles/typography';
 @use './token-utils' as *;
 
+$host-tokens: [display];
+
+@mixin host-configuration {
+  @include tokens($includes: $host-tokens);
+}
+
 @mixin configuration {
-  @include tokens();
+  @include tokens($excludes: $host-tokens);
 }
 
 @mixin host {
-  display: block;
+  display: #{token(display)};
 }
 
 @mixin field {
   position: relative;
+
+  display: flex;
 }
 
 @mixin field-disabled {
   opacity: #{token(disabled-opacity)};
+}
+
+@mixin container {
+  @include typography.style(body2);
+
+  align-items: center;
+
+  display: flex;
+
+  transition-property: outline-color;
+  transition-duration: #{token(border-animation-duration)};
+  transition-timing-function: #{token(border-animation-timing-function)};
+  transition-delay: #{token(border-animation-delay)};
+  
+  outline-style: #{token(border-style)};
+  outline-width: #{token(border-width)};
+  outline-color: #{token(border-color)};
+  outline-offset: calc(#{token(border-width)} * -1);
+  border-radius: #{token(shape)};
+  box-sizing: border-box;
+  block-size: #{token(height-medium)};
+  inline-size: 100%;
+  padding-inline: #{token(padding-inline)};
+}
+
+@mixin label {
+  @include typography.style(label);
+
+  gap: #{token(label-gap)};
+
+  display: inline-flex;
+}
+
+// Required
+
+@mixin label-required {
+  &::before {
+    content: #{token(required-content)};
+
+    color: #{token(required-color)};
+  }
+}
+
+// Optional
+
+@mixin label-optional {
+  &::after {
+    content: #{token(optional-content)};
+
+    color: #{token(optional-color)};
+  }
+}
+
+// Hover
+
+@mixin container-hover {
+  outline-style: #{token(hover-border-style)};
+  outline-width: #{token(hover-border-width)};
+  outline-color: #{token(hover-border-color)};
+  outline-offset: calc(#{token(hover-border-width)} * -1);
+}
+
+// Active
+
+@mixin container-active {
+  outline-style: #{token(active-border-style)};
+  outline-width: #{token(active-border-width)};
+  outline-color: #{token(active-border-color)};
+  outline-offset: calc(#{token(active-border-width)} * -1);
+}
+
+// Positioning
+
+@mixin field-inline {
+  flex-direction: row;
+  align-items: center;
+  gap: #{token(inline-gap)};
+}
+
+@mixin field-block {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: #{token(block-gap)};
+}
+
+@mixin container-inline {
+  flex-grow: 1;
+}
+
+@mixin container-inset {
+  align-items: flex-end;
+
+  block-size: #{token(inset-height-medium)};
+  padding-block: #{token(inset-padding-block)};
+}
+
+@mixin label-block {
+  padding-inline-start: #{token(padding-inline)};
+}
+
+@mixin label-inset {
+  position: absolute;
+  inset-block-start: #{token(inset-label-padding-block)};
+  inset-inline-start: #{token(padding-inline)};
+
+  color: gray;
+}
+
+// Density
+
+@mixin container-small {
+  block-size: #{token(height-small)};
+}
+
+@mixin container-large {
+  block-size: #{token(height-large)};
+}
+
+@mixin container-inset-small {
+  block-size: #{token(inset-height-small)};
+  padding-block: #{token(inset-padding-block-small)};
+}
+
+@mixin container-inset-large {
+  block-size: #{token(inset-height-large)};
+  padding-block: #{token(inset-padding-block-large)};
+}
+
+@mixin label-inset-small {
+  inset-block-start: #{token(inset-label-padding-block-small)};
+}
+
+@mixin label-inset-large {
+  inset-block-start: #{token(inset-label-padding-block-large)};
 }

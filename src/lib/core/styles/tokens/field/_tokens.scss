@@ -1,22 +1,72 @@
 @use 'sass:map';
-@use '../border';
-@use '../elevation';
-@use '../shape';
-@use '../theme';
-@use '../utils';
+@use '../../animation';
+@use '../../border';
+@use '../../elevation';
+@use '../../shape';
+@use '../../theme';
+@use '../../utils';
 
 $tokens: (
-  shape: utils.module-val(field, shape, shape.variable(medium)),
+  display: utils.module-val(field, display, block),
   elevation: utils.module-val(field, elevation, elevation.value(1)),
-  border-width: utils.module-val(field, border-width, border.variable(medium)),
+  label-gap: utils.module-val(field, label-gap, 4px),
 
-  // Label
-  gap: utils.module-val(field, gap, 0),
+  // Padding
+  padding-inline: utils.module-val(field, padding-inline, 12px),
+  inset-padding-block: utils.module-val(field, padding-inset-block, 4px),
+  inset-padding-block-small: utils.module-ref(field, inset-padding-block-small, inset-padding-block),
+  inset-padding-block-large: utils.module-val(field, inset-padding-block-large, 8px),
+  inset-label-padding-block: utils.module-ref(field, inset-label-padding-block, inset-padding-block),
+  inset-label-padding-block-small: utils.module-ref(field, inset-label-padding-block-small, inset-padding-block-small),
+  inset-label-padding-block-large: utils.module-ref(field, inset-label-padding-block-large, inset-padding-block-large),
+  
+  // Sizes
+  height-small: utils.module-val(field, height-small, 32px),
+  height-medium: utils.module-val(field, height-medium, 40px),
+  height-large: utils.module-val(field, height-large, 48px),
+  
+  // Inset sizes
+  inset-height-small: utils.module-ref(field, inset-height-small, height-small),
+  inset-height-medium: utils.module-val(field, inset-small, 48px),
+  inset-height-large: utils.module-val(field, inset-large, 56px),
+  
+  // Border
+  shape: utils.module-val(field, shape, shape.variable(medium)),
+  border-style: utils.module-val(field, border-style, solid),
+  border-width: utils.module-val(field, border-width, border.variable(thin)),
+  border-color: utils.module-val(field, border-color, gray),
+
+  // Border hover
+  hover-border-style: utils.module-ref(field, hover-border-style, border-style),
+  hover-border-width: utils.module-ref(field, hover-border-width, border-width),
+  hover-border-color: utils.module-val(field, hover-border-color, black),
+
+  // Border active
+  active-border-style: utils.module-ref(field, active-border-style, border-style),
+  active-border-width: utils.module-val(field, active-border-width, border.variable(medium)),
+  active-border-color: utils.module-val(field, active-border-color, blue),
+
+  // Layout
+  inline-gap: utils.module-val(field, gap, 8px),
+  block-gap: utils.module-val(field, gap, 0px),
   justify: utils.module-val(field, justify, space-between),
-  direction: utils.module-val(field, direction, initial),
+
+  // Required and optional
+  required-content: utils.module-val(field, required-content, '*'),
+  required-color: utils.module-val(field, required-color, red),
+  optional-content: utils.module-val(field, optional-content, '(optional)'),
+  optional-color: utils.module-val(field, optional-color, inherit),
 
   // Disabled
   disabled-opacity: utils.module-val(radio, disabled-opacity, theme.emphasis(medium-low)),
+
+  // Animation
+  border-animation-duration: utils.module-val(field, border-animation-duration, animation.variable(duration-long4)),
+  border-animation-timing-function: utils.module-val(field, border-animation-timing-function, animation.variable(easing-decelerate)),
+  border-animation-delay: utils.module-val(field, border-animation-delay, 0ms),
+  label-animation-duration: utils.module-val(field, label-animation-duration, animation.variable(duration-short4)),
+  label-animation-timing-function: utils.module-val(field, label-animation-timing-function, animation.variable(easing-decelerate)),
+  label-animation-delay: utils.module-val(field, label-animation-delay, 0ms),
 );
 
 @function get($key) {

@@ -1,12 +1,10 @@
 <template>
-  <div id="root" class="field" part="root">
+  <div id="root" class="forge-field" part="root">
     <div id="label" class="label" part="label">
       <slot name="label"></slot>
     </div>
     <div id="container" class="container" part="container">
       <slot></slot>
-      <forge-state-layer></forge-state-layer>
-      <forge-focus-indicator></forge-focus-indicator>
     </div>
   </div>
 </template>

@@ -1,0 +1,66 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Field',
+    includePath: './pages/field/field.ejs',
+    options: [
+      { type: 'switch', label: 'Required', id: 'opt-required' },
+      { type: 'switch', label: 'Optional', id: 'opt-optional' },
+      { type: 'switch', label: 'Invalid', id: 'opt-invalid' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Dense (small density)', id: 'opt-dense' },
+      {
+          type: 'select',
+          label: 'Density',
+          id: 'opt-density',
+          defaultValue: 'medium',
+          options: [
+            { label: 'Small (dense)', value: 'small' },
+            { label: 'Medium (default)', value: 'medium' },
+            { label: 'Large', value: 'large' }
+          ]
+      },
+      {
+        type: 'select',
+        label: 'Variant',
+        id: 'opt-variant',
+        defaultValue: 'outlined',
+        options: [
+          { label: 'Plain', value: 'plain' },
+          { label: 'Outlined (default)', value: 'outlined' },
+          { label: 'Tonal', value: 'tonal' },
+          { label: 'Filled', value: 'filled' },
+          { label: 'Raised', value: 'raised' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'primary',
+        options: [
+          { label: 'Primary (default)', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Label alignment',
+        id: 'opt-label-alignment',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Centered', value: 'centered' },
+          { label: 'Start', value: 'start' },
+          { label: 'End', value: 'end' }
+        ]
+      }
+    ]
+  }
+})
+%>
