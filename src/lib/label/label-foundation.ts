@@ -1,4 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { task } from '../core/utils/event-utils';
 import { ILabelAdapter } from './label-adapter';
 import { LABEL_CONSTANTS } from './label-constants';
 
@@ -6,6 +7,8 @@ export interface ILabelFoundation extends ICustomElementFoundation {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
   dynamic: boolean;
+  static: boolean;
+  legend: boolean;
   disconnect(): void;
   update(): void;
 }
@@ -15,6 +18,8 @@ export class LabelFoundation implements ILabelFoundation {
   private _for: string | null | undefined;
   private _forElement: HTMLElement | null | undefined;
   private _dynamic = false;
+  private _static = false;
+  private _legend = false;
   private _isConnected = false;
 
   // Listeners
@@ -29,10 +34,10 @@ export class LabelFoundation implements ILabelFoundation {
   }
 
   public initialize(): void {
-    this._adapter.addSlotChangeListener(this._slotChangeListener);
-    this._adapter.trySetTarget(this._for ?? null);
-    if (this._adapter.hasTargetElement()) {
-      this._connect();
+    if (this._legend) {
+      this._initializeAsLegend();
+    } else {
+      this._initializeAsLabel();
     }
   }
 
@@ -43,6 +48,26 @@ export class LabelFoundation implements ILabelFoundation {
 
   public update(): void {
     this._adapter.updateTargetLabel();
+  }
+
+  /**
+   * Emit an event to give ancestor elements a chance to connect
+   */
+  private async _initializeAsLegend(): Promise<void> {
+    // Give ancestor elements a chance to connect to the DOM
+    await task();
+    this._adapter.emitHostEvent(LABEL_CONSTANTS.events.CONNECTED);
+  }
+
+  /**
+   * Search for child or id-targetted elements to connect to
+   */
+  private async _initializeAsLabel(): Promise<void> {
+    this._adapter.addSlotChangeListener(this._slotChangeListener);
+    this._adapter.trySetTarget(this._for ?? null);
+    if (this._adapter.hasTargetElement()) {
+      this._connect();
+    }
   }
 
   private _handleClick(evt: PointerEvent): void {
@@ -67,7 +92,9 @@ export class LabelFoundation implements ILabelFoundation {
   }
 
   private _connect(): void {
-    this._adapter.addHostListener('click', this._clickListener);
+    if (!this._static) {
+      this._adapter.addHostListener('click', this._clickListener);
+    }
     this._adapter.updateTargetLabel();
     if (this._dynamic) {
       this._adapter.addMutationObserver(this._mutationCallback);
@@ -124,6 +151,49 @@ export class LabelFoundation implements ILabelFoundation {
         this._adapter.removeMutationObserver();
       } else if (this._adapter.hasTargetElement()) {
         this._adapter.addMutationObserver(this._mutationCallback);
+      }
+    }
+  }
+
+  public get static(): boolean {
+    return this._static;
+  }
+  public set static(value: boolean) {
+    if (this._static !== value) {
+      this._static = value;
+      this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.STATIC, this._static);
+
+      // The click listener is only added if the label is connected
+      if (!this._isConnected) {
+        return;
+      }
+
+      if (this._static) {
+        this._adapter.removeHostListener('click', this._clickListener);
+      } else {
+        this._adapter.addHostListener('click', this._clickListener);
+      }
+    }
+  }
+
+  public get legend(): boolean {
+    return this._legend;
+  }
+  public set legend(value: boolean) {
+    if (this._legend !== value) {
+      this._legend = value;
+      this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.LEGEND, this._legend);
+
+      if (this._legend) {
+        this._adapter.removerSlotChangeListener(this._slotChangeListener);
+        this._adapter.emitHostEvent(LABEL_CONSTANTS.events.CONNECTED);
+        return;
+      }
+
+      this._adapter.addSlotChangeListener(this._slotChangeListener);
+      this._adapter.trySetTarget(this._for ?? null);
+      if (this._adapter.hasTargetElement()) {
+        this._connect();
       }
     }
   }

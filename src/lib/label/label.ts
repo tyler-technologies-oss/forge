@@ -11,6 +11,8 @@ export interface ILabelComponent extends IBaseComponent {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
   dynamic: boolean;
+  static: boolean;
+  legend: boolean;
   update(): void;
 }
 
@@ -29,9 +31,13 @@ declare global {
  * @property {string | null | undefined} for - The id of the associated element.
  * @property {HTMLElement | null | undefined} forElement - The associated element.
  * @property {boolean} dynamic - Propagates changes in the label's text content to the associated element.
+ * @property {boolean} static - Removes click handling from the label.
+ * @property {boolean} legend - Whether or not the label should be associated with an ancestor element.
  * 
  * @attribute {string} for - The id of the associated form component.
  * @attribute {boolean} dynamic - Propagates changes in the label's text content to the associated element.
+ * @attribute {boolean} static - Removes click handling from the label.
+ * @attribute {boolean} legend - Whether or not the label should be associated with an ancestor element.
  * 
  * @method update - Updates the targetted element with the label's current text content.
  * 
@@ -44,7 +50,9 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
   public static get observedAttributes(): string[] {
     return [
       LABEL_CONSTANTS.attributes.FOR,
-      LABEL_CONSTANTS.attributes.DYNAMIC
+      LABEL_CONSTANTS.attributes.DYNAMIC,
+      LABEL_CONSTANTS.attributes.STATIC,
+      LABEL_CONSTANTS.attributes.LEGEND
     ];
   }
 
@@ -72,6 +80,12 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
       case LABEL_CONSTANTS.attributes.DYNAMIC:
         this.dynamic = coerceBoolean(newValue);
         break;
+      case LABEL_CONSTANTS.attributes.STATIC:
+        this.static = coerceBoolean(newValue);
+        break;
+      case LABEL_CONSTANTS.attributes.LEGEND:
+        this.legend = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -83,6 +97,12 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
 
   @FoundationProperty()
   public dynamic: boolean;
+
+  @FoundationProperty()
+  public static: boolean;
+
+  @FoundationProperty()
+  public legend: boolean;
 
   /**
    * Updates the targetted element with the label's current text content.

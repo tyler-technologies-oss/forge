@@ -1,3 +1,5 @@
+// TODO: move everything here to the base-label-aware-component file
+
 export interface ILabelAware {
   labelClickedCallback(): void;
   labelChangedCallback(value: string | null): void;
@@ -9,5 +11,5 @@ export interface ILabelAware {
  * @returns True if the object is label aware, false otherwise.
  */
 export const isLabelAware = (obj: any): obj is ILabelAware => {
-  return typeof obj.labelClickedCallback === 'function' && typeof obj.labelChangedCallback === 'function';
+  return typeof obj.labelChangedCallback === 'function';
 };

@@ -1,12 +1,9 @@
 @use '../core/styles/typography';
 
 @mixin host {
-  display: inline-block;
-}
-
-@mixin label {
+  /* Typography styles are set on the host to make it easier to override them via a class */
   @include typography.style(label);
 
-  display: contents;
+  display: inline-block;
   cursor: default;
 }

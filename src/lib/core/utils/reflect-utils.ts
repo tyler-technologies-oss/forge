@@ -101,10 +101,10 @@ export function getPartPrefixedAttributes(part: string, attributes: string[]): s
  * @param callback A function to handle forwarded attributes.
  * @returns A `MutationObserver`.
  */
-export function forwardAttributes(from: HTMLElement, attributes: string[], callback: AttributeForwardingCallback): MutationObserver {
+export function forwardAttributes(from: HTMLElement, attributes: string[], callback: AttributeForwardingCallback, genericize = true): MutationObserver {
   // Set the source element's role to presentation to prevent duplicated ARIA attributes being
   // seen by assistive technology
-  if (attributes.some(attr => attr.toLowerCase().startsWith('aria-'))) {
+  if (genericize && attributes.some(attr => attr.toLowerCase().startsWith('aria-'))) {
     from.setAttribute('role', 'presentation');
   }
 

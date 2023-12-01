@@ -13,6 +13,7 @@ export interface ILabelAdapter extends IBaseAdapter {
   clickTarget(): void;
   updateTargetLabel(): void;
   addSlotChangeListener(callback: EventListener): void;
+  removerSlotChangeListener(callback: EventListener): void;
   addMutationObserver(callback: MutationCallback): void;
   removeMutationObserver(): void;
 }
@@ -56,7 +57,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
    * Calls the target's `labelClickedCallback`.
    */
   public clickTarget(): void {
-    this._targetElement?.labelClickedCallback();
+    this._targetElement?.labelClickedCallback?.();
   }
 
   /**
@@ -69,6 +70,10 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
 
   public addSlotChangeListener(callback: EventListener): void {
     this._slotElement.addEventListener('slotchange', callback);
+  }
+
+  public removerSlotChangeListener(callback: EventListener): void {
+    this._slotElement.removeEventListener('slotchange', callback);
   }
 
   public addMutationObserver(callback: MutationCallback): void {

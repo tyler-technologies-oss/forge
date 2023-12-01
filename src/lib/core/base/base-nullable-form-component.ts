@@ -1,4 +1,4 @@
-import { IBaseFocusableComponent, WithFocusable } from './base-focusable-component';
+import { IWithFocusable, WithFocusable } from './base-focusable-component';
 import { BaseFormComponent, IBaseFormComponent } from './base-form-component';
 
 export interface IBaseNullableFormComponent<T = string> extends IBaseFormComponent<T> {
@@ -28,10 +28,3 @@ export abstract class BaseNullableFormComponent<T = string> extends BaseFormComp
   public abstract reportValidity(): boolean;
   public abstract setCustomValidity(error: string): void;
 }
-
-export interface IBaseFocusableNullableFormComponent<T = string> extends IBaseFormComponent<T>, IBaseFocusableComponent {}
-
-/**
- * Any form associated Custom HTML element that focus on the host element.
- */
-export abstract class BaseFocusableNullableFormComponent<T = string> extends WithFocusable(BaseFormComponent)<T> implements IBaseFocusableNullableFormComponent<T> {}

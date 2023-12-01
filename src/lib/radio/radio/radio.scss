@@ -1,0 +1,97 @@
+@use './configuration';
+@use './core';
+@use '../../focus-indicator';
+@use '../../state-layer';
+@use './token-utils' as *;
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host(:focus) {
+  outline: none;
+}
+
+.forge-radio {
+  @include configuration.configuration;
+}
+
+// Unchecked
+.forge-radio {
+  @include configuration.configuration;
+  @include core.radio;
+
+  .container {
+    @include core.container;
+  }
+
+  .background {
+    @include core.background;
+  }
+
+  .label {
+    @include core.label;
+  }
+}
+
+// Checked
+:host([checked]) {
+  .forge-radio {
+    .background {
+      @include core.background-checked;
+    }
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: #{token(state-layer-checked-color)}
+    ));
+  }
+}
+
+// Dense
+:host([dense]) {
+  .forge-radio {
+    .container {
+      @include core.container-dense;
+    }
+  }
+}
+
+// Disabled
+:host([disabled]) {
+  .forge-radio {
+    @include core.radio-disabled;
+
+    .container {
+      @include core.container-disabled;
+    }
+  }
+}
+
+// Readonly
+:host([readonly]) {
+  .forge-radio {
+    .container {
+      @include core.container-readonly;
+    }
+  }
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: #{token(primary-color)},
+    outward-offset: 0px,
+    shape: #{token(state-layer-shape)}
+  ));
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: #{token(state-layer-unchecked-color)}
+  ));
+}

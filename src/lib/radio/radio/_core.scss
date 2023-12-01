@@ -1,0 +1,118 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@mixin host {
+  display: inline-block;
+}
+
+@mixin radio {
+  position: relative;
+  flex-direction: #{token(direction)};
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: #{token(justify)};
+  gap: #{token(gap)};
+
+  display: flex;
+}
+
+@mixin radio-disabled {
+  opacity: #{token(disabled-opacity)};
+}
+
+@mixin container {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+
+  border-radius: #{token(shape)};
+  inline-size: #{token(state-layer-width)};
+  block-size: #{token(state-layer-height)};
+
+  cursor: pointer;
+}
+
+@mixin container-dense {
+  inline-size: #{token(state-layer-dense-width)};
+  block-size: #{token(state-layer-dense-height)};
+}
+
+@mixin container-disabled {
+  cursor: not-allowed;
+}
+
+@mixin container-readonly {
+  cursor: not-allowed;
+}
+
+@mixin background {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  
+  display: flex;
+
+  overflow: hidden;
+
+  transition-duration: #{token(animation-duration)};
+  transition-delay: #{token(animation-delay)};
+  transition-timing-function: #{token(animation-timing-function)};
+  transition-property: border-color;
+  
+  box-sizing: border-box;
+  border-radius: #{token(shape)};
+  border-width: #{token(border-width)};
+  border-style: solid;
+  border-color: #{token(unchecked-border-color)};
+  inline-size: #{token(width)};
+  block-size: #{token(height)};
+
+  background: #{token(background)};
+
+  &::after {
+    content: '';
+
+    position: absolute;
+
+    // Using containment here should mitigate the hit to performance from animating the size
+    contain: strict;
+    
+    transition-duration: #{token(animation-duration)};
+    transition-delay: #{token(animation-delay)};
+    transition-timing-function: #{token(animation-timing-function)};
+    transition-property: inline-size, block-size, border-color;
+    
+    border-radius: #{token(shape)};
+    border-width: calc(#{token(mark-height)} / 2) calc(#{token(mark-width)} / 2);
+    border-color: #{token(mark-unchecked-color)};
+    border-style: solid;
+    inline-size: calc(#{token(width)} - 2 * #{token(border-width)});
+    block-size: calc(#{token(height)} - 2 * #{token(border-width)});
+
+    background: #{token(mark-unchecked-background)};
+  }
+}
+
+@mixin background-checked {
+  border-color: #{token(checked-border-color)};
+
+  &::after {
+    border-color: #{token(mark-checked-color)};
+    inline-size: 0px;
+    block-size: 0px;
+
+    background: #{token(mark-checked-background)};
+  }
+}
+
+@mixin label {
+  @include typography.style(label);
+
+  cursor: default;
+
+  &:empty {
+    display: none;
+  }
+}

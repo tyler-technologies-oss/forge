@@ -1,3 +1,8 @@
-export interface IBaseComponent extends HTMLElement {}
+export interface IBaseComponent extends HTMLElement {
+  initializedCallback?(): void;
+  connectedCallback?(): void;
+  disconnectedCallback?(): void;
+  attributeChangedCallback?(name: string, oldValue: string, newValue: string): void;
+}
 
 export abstract class BaseComponent extends HTMLElement implements IBaseComponent {}

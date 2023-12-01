@@ -13,3 +13,7 @@ export function proxyShadowScrollEvent(shadowEl: Node, proxyEl: Node): () => voi
 export function eventIncludesArrowKey(evt: KeyboardEvent): boolean {
   return evt.key === 'ArrowLeft' || evt.key === 'ArrowRight' || evt.key === 'ArrowUp' || evt.key === 'ArrowDown';
 }
+
+export function task(): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve));
+}

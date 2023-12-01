@@ -1,17 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { getShadowElement } from '@tylertech/forge-core';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { TestHarness } from '../../test/utils/test-harness';
-import { ILabelComponent } from './label';
-import { ILabelAware } from './label-aware';
-import { LABEL_CONSTANTS } from './label-constants';
+import { ILabelAware, ILabelComponent, LABEL_CONSTANTS } from '../label';
 
 import './label';
 
 class LabelHarness extends TestHarness<ILabelComponent> {
-  public rootElement: HTMLElement;
   public labelAwareElement: HTMLElement & ILabelAware;
 
   constructor(el: ILabelComponent) {
@@ -19,8 +15,6 @@ class LabelHarness extends TestHarness<ILabelComponent> {
   }
 
   public initElementRefs(): void {
-    this.rootElement = getShadowElement(this.element, LABEL_CONSTANTS.selectors.ROOT);
-
     const element = document.createElement(LABEL_CONSTANTS.labelableChildSelectors[0]);
     element.id = 'label-aware';
     (element as any).labelClickedCallback = () => { };

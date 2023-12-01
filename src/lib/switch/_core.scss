@@ -179,6 +179,12 @@ $_handle-on-translate: calc(#{token(track-width)} - #{$_track-border-radius} * 2
   }
 }
 
+@mixin handle-disabled {
+  &::before {
+    box-shadow: none;
+  }
+}
+
 @mixin icon {
   position: absolute;
   align-items: center;

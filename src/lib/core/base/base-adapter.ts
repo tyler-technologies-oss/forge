@@ -11,6 +11,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void;
   redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean;
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
+  dispatchHostEvent<U extends Event>(event: U): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   removeHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
@@ -72,6 +73,10 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public emitHostEvent(type: string, data: any = null, bubble = true, cancelable?: boolean): boolean {
     return emitEvent(this._component, type, data, bubble, cancelable);
+  }
+
+  public dispatchHostEvent<U extends Event>(event: U): boolean {
+    return !this._component.dispatchEvent(event);
   }
 
   public toggleHostListener(event: string, listener: EventListener, value: boolean, options?: boolean | AddEventListenerOptions): void {

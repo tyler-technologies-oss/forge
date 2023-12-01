@@ -1,0 +1,5 @@
+@use './token-utils' as *;
+
+@mixin configuration {
+  @include tokens();
+}
