@@ -37,12 +37,13 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
     super();
   }
 
-  public async connectedCallback(): Promise<void> {
+  public connectedCallback(): void {
     if (this.querySelector(BASE_DATE_PICKER_CONSTANTS.selectors.INPUT)) {
       this._foundation.initialize();
     } else {
-      await ensureChild(this, BASE_DATE_PICKER_CONSTANTS.selectors.INPUT);
-      this._foundation.initialize();
+      ensureChild(this, BASE_DATE_PICKER_CONSTANTS.selectors.INPUT).then(() => {
+        this._foundation.initialize();
+      });
     }
   }
 

@@ -75,6 +75,7 @@ const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'
   'aria-checked': 'ariaChecked',
   'aria-colcount': 'ariaColCount',
   'aria-colindex': 'ariaColIndex',
+  'aria-colindextext': 'ariaColIndexText',
   'aria-colspan': 'ariaColSpan',
   'aria-current': 'ariaCurrent',
   'aria-disabled': 'ariaDisabled',
@@ -98,6 +99,7 @@ const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'
   'aria-roledescription': 'ariaRoleDescription',
   'aria-rowcount': 'ariaRowCount',
   'aria-rowindex': 'ariaRowIndex',
+  'aria-rowindextext': 'ariaRowIndexText',
   'aria-rowspan': 'ariaRowSpan',
   'aria-selected': 'ariaSelected',
   'aria-setsize': 'ariaSetSize',
@@ -281,7 +283,7 @@ export function setDefaultAria(
  * @param value The default value to store.
  */
 export function storeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T, value: ARIAMixinStrict[T]): void {
-  element[`_forge_${property.toString()}Default`] = value;
+  element[getDefaultAriaPropertyName(property)] = value;
 }
 
 /**
@@ -291,7 +293,7 @@ export function storeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLE
  * @param property The ARIA mixin property.
  */
 export function removeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T): void {
-  delete element[`_forge_${property.toString()}Default`];
+  delete element[getDefaultAriaPropertyName(property)];
 }
 
 /**
@@ -302,7 +304,7 @@ export function removeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTML
  * @returns The value of the default ARIA attribute, or null if it does not exist.
  */
 export function retrieveDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T): ARIAMixinStrict[T] | null {
-  const value = element[`_forge_${property.toString()}Default`];
+  const value = element[getDefaultAriaPropertyName(property)];
   return !!value ? value as ARIAMixinStrict[T] : null;
 }
 
@@ -319,6 +321,6 @@ export function restoreDefaultAria<T extends keyof ARIAMixinStrict>(element: HTM
   }
 }
 
-function getDefaultAriaPropertyName(attribute: ARIAAttribute): ARIAProperty | null {
-  return ARIA_ATTRIBUTES_TO_PROPERTIES[attribute] as ARIAProperty | null;
+function getDefaultAriaPropertyName<T extends keyof ARIAMixinStrict>(property: T): string {
+  return `_forge_${property}Default`;
 }

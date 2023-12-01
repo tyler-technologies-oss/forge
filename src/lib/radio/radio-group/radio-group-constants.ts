@@ -8,10 +8,6 @@ const attributes = {
   DISABLED: 'disabled'
 };
 
-const selectors = {};
-
-const events = {};
-
 const observedAriaAttributes: ARIAAttribute[] = supportsElementInternalsAria()
   ? []
   : ['role', 'aria-disabled', 'aria-label'];
@@ -19,7 +15,5 @@ const observedAriaAttributes: ARIAAttribute[] = supportsElementInternalsAria()
 export const RADIO_GROUP_CONSTANTS = {
   elementName,
   attributes,
-  selectors,
-  events,
   observedAriaAttributes
 };

@@ -35,7 +35,6 @@ const observedAriaAttributes: ARIAAttribute[] = supportsElementInternalsAria()
     'aria-disabled',
     'aria-invalid',
     'aria-label',
-    'aria-readonly',
     'aria-required'
   ];
 

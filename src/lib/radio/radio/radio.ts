@@ -1,7 +1,16 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { getFormState, getFormValue, inputType, internals, setDefaultAria } from '../../constants';
-import { BaseComponent, IBaseElementInternalsComponent, IBaseFocusableComponent, IBaseFormAssociatedComponent, IBaseLabelAwareComponent, WithElementInternals, WithFocusable, WithFormAssociation, WithLabelAwareness } from '../../core/base';
-import { FormValue } from '../../core/utils/form-utils';
+import {
+  BaseComponent,
+  IWithElementInternals,
+  IWithFocusable,
+  IWithFormAssociation,
+  IWithLabelAwareness,
+  WithElementInternals,
+  WithFocusable,
+  WithFormAssociation,
+  WithLabelAwareness
+} from '../../core/base';import { FormValue } from '../../core/utils/form-utils';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { StateLayerComponent } from '../../state-layer';
 import { RadioGroupManager } from '../core/radio-group-manager';
@@ -12,7 +21,7 @@ import { RadioFoundation } from './radio-foundation';
 import template from './radio.html';
 import styles from './radio.scss';
 
-export interface IRadioComponent extends IBaseFormAssociatedComponent, IBaseFocusableComponent, IBaseLabelAwareComponent, IBaseElementInternalsComponent {
+export interface IRadioComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals {
   checked: boolean;
   defaultChecked: boolean;
   required: boolean;
@@ -87,7 +96,7 @@ const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(With
  * @cssproperty --forge-radio-animation-delay - The delay of the radio button's animations.
  *  
  * @csspart radio - Styles the radio's root element.
- * @csspart background - Styles the border and backgroun of the radio.
+ * @csspart background - Styles the border and background of the radio.
  * @csspart focus-indicator - Styles the focus indicator of the radio.
  * @csspart state-layer - Styles the state layer of the radio.
  * 
@@ -132,7 +141,6 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
       ariaChecked: this.checked ? 'true' : 'false',
       ariaDisabled: this.disabled ? 'true' : 'false',
       ariaInvalid: this[internals].validity.valid ? 'false' : 'true',
-      ariaReadOnly: this.readonly ? 'true' : 'false',
       ariaRequired: this.required ? 'true' : 'false'
     });
     this._foundation.initialize();
@@ -182,10 +190,6 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
 
   public formStateRestoreCallback(state: RadioState): void {
     this.checked = state === 'checked';
-  }
-
-  public formDisabledCallback(isDisabled: boolean): void {
-    this.disabled = isDisabled;
   }
 
   public labelClickedCallback(): void {

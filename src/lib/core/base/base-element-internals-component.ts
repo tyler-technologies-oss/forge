@@ -1,4 +1,4 @@
-import { internals, MixinBase, MixinReturn, setDefaultAria } from '../../constants';
+import { internals, MixinBase, setDefaultAria, AbstractConstructor } from '../../constants';
 import {
   ARIAAttribute,
   ariaAttributeToProperty,
@@ -8,12 +8,12 @@ import {
   setDefaultAria as setDefaultAriaUtil
 } from '../utils/a11y-utils';
 import { supportsElementInternalsAria } from '../utils/feature-detection';
-import { BaseComponent, IBaseComponent } from './base-component';
+import { IBaseComponent } from './base-component';
 
 /**
  * A component with attached Element Internals.
  */
-export interface IBaseElementInternalsComponent extends IBaseComponent {
+export interface IWithElementInternals extends IBaseComponent {
   /**
    * The Element Internals of the component.
    */
@@ -30,6 +30,12 @@ export interface IBaseElementInternalsComponent extends IBaseComponent {
   [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void;
 }
 
+export declare abstract class WithElementInternalsContract {
+  public readonly [internals]: ElementInternals;
+  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
+  public [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void;
+}
+
 /**
  * Mixes in Element Internals functionality into a base component.
  * 
@@ -39,8 +45,9 @@ export interface IBaseElementInternalsComponent extends IBaseComponent {
  * supported.
  * @returns The mixed-in base component.
  */
-export function WithElementInternals<T extends MixinBase<BaseComponent>>(base: T, observedAria?: ARIAAttribute[]): MixinReturn<T, IBaseElementInternalsComponent> {
-  abstract class ElementInternalsComponent extends base implements IBaseElementInternalsComponent {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function WithElementInternals<TBase extends MixinBase>(base: TBase, observedAria?: ARIAAttribute[]) {
+  abstract class ElementInternalsComponent extends base implements IWithElementInternals {
     public readonly [internals]: ElementInternals;
 
     constructor(...args: any[]) {
@@ -48,8 +55,8 @@ export function WithElementInternals<T extends MixinBase<BaseComponent>>(base: T
       this[internals] = this.attachInternals();
     }
 
-    public override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-      super.attributeChangedCallback(name, oldValue, newValue);
+    public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+      super.attributeChangedCallback?.(name, oldValue, newValue);
 
       // If Element Internals is supported our default ARIA is never set as an attribute, so
       // there's nothing to do here.
@@ -71,8 +78,7 @@ export function WithElementInternals<T extends MixinBase<BaseComponent>>(base: T
     private _restoreDefaultAria(name: keyof ARIAMixinStrict): void {
       restoreDefaultAriaUtil(this, name);
     }
-
   }
 
-  return ElementInternalsComponent;
+  return ElementInternalsComponent as AbstractConstructor<WithElementInternalsContract> & TBase;
 }

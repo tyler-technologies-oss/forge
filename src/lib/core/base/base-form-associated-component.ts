@@ -8,14 +8,14 @@
  */
 
 import { toggleAttribute } from '@tylertech/forge-core';
-import { MixinBase, MixinReturn, getFormState, getFormValue, getValidationMessage, inputType, internals } from '../../constants';
+import { MixinBase, getFormState, getFormValue, getValidationMessage, inputType, internals, AbstractConstructor } from '../../constants';
 import { FormRestoreReason, FormRestoreState, FormValue, InputType, InputValidationProps } from '../utils/form-utils';
-import { BaseComponent, IBaseComponent } from './base-component';
+import { IBaseComponent } from './base-component';
 
 /**
  * A component that can be associated with a form.
  */
-export interface IBaseFormAssociatedComponent extends IBaseComponent {
+export interface IWithFormAssociation extends IBaseComponent {
   /**
    * The form element that the component is associated with.
    */
@@ -111,14 +111,54 @@ export interface IBaseFormAssociatedComponent extends IBaseComponent {
   formAssociatedCallback?(form: HTMLFormElement | null): void;
 }
 
+export declare abstract class WithFormAssociationContract {
+  public static readonly formAssociated: boolean;
+
+  public get form(): HTMLFormElement | null;
+
+  public get labels(): NodeList;
+
+  public get name(): string;
+  public set name(value: string);
+
+  public abstract get value(): FormValue | null;
+  public abstract set value(value: FormValue | null);
+
+  public abstract get disabled(): boolean;
+  public abstract set disabled(value: boolean);
+
+  public abstract get readonly(): boolean;
+  public abstract set readonly(value: boolean);
+
+  public abstract get [internals](): ElementInternals;
+
+  public abstract [getFormValue](): FormValue | null;
+
+  public [getFormState](): FormValue | null;
+
+  public formDisabledCallback(disabled: boolean): void;
+
+  public abstract formStateRestoreCallback(
+    state: FormRestoreState | null,
+    reason: FormRestoreReason
+  ): void;
+
+  public abstract formResetCallback(): void;
+
+  public set [inputType](type: InputType);
+
+  public [getValidationMessage](props: Partial<InputValidationProps>): string | undefined;
+}
+
 /**
  * Mixes in form functionality into a base component.
  * 
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */
-export function WithFormAssociation<T extends MixinBase<BaseComponent>>(base: T): MixinReturn<T, IBaseFormAssociatedComponent> {
-  abstract class FormAssociatedComponent extends base implements IBaseFormAssociatedComponent {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
+  abstract class FormAssociatedComponent extends base implements IWithFormAssociation {
     public static readonly formAssociated = true;
 
     private _inputElement?: HTMLInputElement | HTMLSelectElement;
@@ -196,5 +236,5 @@ export function WithFormAssociation<T extends MixinBase<BaseComponent>>(base: T)
     }
   }
 
-  return FormAssociatedComponent;
+  return FormAssociatedComponent as AbstractConstructor<WithFormAssociationContract> & TBase;
 }

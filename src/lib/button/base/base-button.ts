@@ -1,15 +1,15 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../../icon/icon-registry';
-import { WithFocusable, IBaseFocusableComponent } from '../../core/base/base-focusable-component';
+import { WithFocusable, IWithFocusable } from '../../core/base/base-focusable-component';
 import { BaseComponent } from '../../core/base/base-component';
 import { ExperimentalFocusOptions, internals } from '../../constants';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BaseButtonFoundation } from './base-button-foundation';
-import { ILabelAware } from '../../label/label-aware';
+import { WithLabelAwareness, IWithLabelAwareness } from '../../core/base/base-label-aware-component';
 
-export interface IBaseButton extends IBaseFocusableComponent {
+export interface IBaseButton extends IWithFocusable, IWithLabelAwareness {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
@@ -25,7 +25,9 @@ export interface IBaseButton extends IBaseFocusableComponent {
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends WithFocusable(BaseComponent) implements IBaseButton, ILabelAware {
+const BaseButtonClass = WithLabelAwareness(WithFocusable(BaseComponent));
+
+export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseButtonClass implements IBaseButton {
   public static readonly formAssociated = true;
 
   public [internals]: ElementInternals;

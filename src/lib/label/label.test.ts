@@ -1,12 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { getShadowElement } from '@tylertech/forge-core';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { TestHarness } from '../../test/utils/test-harness';
-import { ILabelComponent } from './label';
-import { ILabelAware } from './label-aware';
-import { LABEL_CONSTANTS } from './label-constants';
+import { ILabelAware, ILabelComponent, LABEL_CONSTANTS } from '../label';
 
 import './label';
 

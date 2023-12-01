@@ -1,10 +1,10 @@
-import { MixinBase, MixinReturn } from '../../constants';
-import { BaseComponent, IBaseComponent } from './base-component';
+import { AbstractConstructor, MixinBase } from '../../constants';
+import { IBaseComponent } from './base-component';
 
 /**
  * An element that can be associated with a Forge label component.
  */
-export interface IBaseLabelAwareComponent extends IBaseComponent {
+export interface IWithLabelAwareness extends IBaseComponent {
   /**
    * A callback for when the associated label's text content changes.
    * 
@@ -19,16 +19,21 @@ export interface IBaseLabelAwareComponent extends IBaseComponent {
   labelClickedCallback?(): void;
 }
 
+export declare abstract class WithLabelAwarenessContract {
+  public abstract labelChangedCallback(value: string | null): void;
+}
+
 /**
  * Mixes in Forge label awareness into a base component.
  * 
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */
-export function WithLabelAwareness<T extends MixinBase<BaseComponent>>(base: T): MixinReturn<T, IBaseLabelAwareComponent> {
-  abstract class LabelAwareComponent extends base implements IBaseLabelAwareComponent {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function WithLabelAwareness<TBase extends MixinBase>(base: TBase) {
+  abstract class LabelAwareComponent extends base implements WithLabelAwarenessContract {
     public abstract labelChangedCallback(value: string | null): void;
   }
 
-  return LabelAwareComponent;
+  return LabelAwareComponent as AbstractConstructor<WithLabelAwarenessContract> & TBase;
 }
