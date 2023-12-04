@@ -1,20 +1,20 @@
-@use './configuration' as *;
-@use './core';
+@use './core' as *;
 @use '../core/styles/theme';
 @use '../state-layer' as state-layer;
 @use '../focus-indicator' as focus-indicator;
-@use './token-utils' as *;
 
 //
 // Host
 //
 
+$host-tokens: [display disabled-cursor];
+
 :host {
-  @include host-configuration;
+  @include tokens($includes: $host-tokens);
 }
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -26,19 +26,19 @@
 //
 
 .forge-fab {
-  @include configuration;
+  @include tokens($excludes: $host-tokens);
 }
 
 .forge-fab {
-  @include core.base;
+  @include base;
 
   &--extended {
-    @include core.extended;
+    @include extended;
   }
 }
 
 a {
-  @include core.anchor-base;
+  @include anchor-base;
 }
 
 //
@@ -71,13 +71,13 @@ forge-state-layer {
 
 :host(:is([dense],[density=small])) {
   .forge-fab {
-    @include core.density-small;
+    @include density-small;
   }
 }
 
 :host([density=large]) {
   .forge-fab {
-    @include core.density-large;
+    @include density-large;
   }
 }
 
@@ -87,7 +87,7 @@ forge-state-layer {
 
 :host([elevation=lowered]) {
   .forge-fab {
-    @include core.lowered;
+    @include lowered;
   }
 }
 
@@ -96,10 +96,10 @@ forge-state-layer {
 //
 
 :host([disabled]) {
-  @include core.host-disabled;
+  @include host-disabled;
 
   .forge-fab {
-    @include core.disabled;
+    @include disabled;
   }
 }
 

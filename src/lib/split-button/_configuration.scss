@@ -1,7 +1,0 @@
-@use './token-utils' as *;
-
-@mixin configuration {
-  @include tokens;
-
-  #{declare(focus-indicator-offset-adjusted)}: calc(#{token(focus-indicator-offset)} + #{token(focus-indicator-divider-offset)} * 2);
-}

@@ -4,6 +4,8 @@
 @use '../core/styles/spacing';
 @use '../utils/mixins-media';
 
+@forward './token-utils';
+
 @mixin host {
   display: block;
 }

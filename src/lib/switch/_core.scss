@@ -1,6 +1,8 @@
 @use '../core/styles/typography';
 @use './token-utils' as *;
 
+@forward './token-utils';
+
 // The tallest element may be absolutely positioned so the container needs to
 // be manually sized to match.
 $_container-block-size: max(#{token(handle-height)}, #{token(track-height)}, #{token(current-state-layer-height, custom)});

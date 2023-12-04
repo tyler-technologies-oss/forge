@@ -1,9 +1,8 @@
-@use './configuration' as *;
-@use './core';
+@use './core' as *;
 @use '../../focus-indicator';
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -15,11 +14,11 @@
 //
 
 .forge-app-bar-search {
-  @include configuration;
+  @include tokens;
 }
 
 .forge-app-bar-search {
-  @include core.base;
+  @include base;
 }
 
 //
@@ -54,5 +53,5 @@ forge-focus-indicator {
 //
 
 ::slotted(input) {
-  @include core.input;
+  @include input;
 }
