@@ -1,15 +1,13 @@
-@use './core';
-@use './configuration';
+@use './core' as *;
 @use '../../focus-indicator';
 @use '../../state-layer';
-@use './token-utils' as *;
 
 //
 // Host
 //
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -21,22 +19,22 @@
 //
 
 .forge-tab {
-  @include configuration.configuration;
+  @include tokens;
 }
 
 .forge-tab {
-  @include core.tab;
+  @include tab;
 
   .content {
-    @include core.content;
+    @include content;
 
     .label {
-      @include core.label;
+      @include label;
     }
   }
 
   .indicator {
-    @include core.indicator;
+    @include indicator;
   }
 }
 
@@ -63,13 +61,13 @@ forge-state-layer {
 
 :host(:focus) {
   .forge-tab {
-    @include core.focus;
+    @include focus;
   }
 }
 
 :host(:active) {
   .forge-tab {
-    @include core.pressed;
+    @include pressed;
   }
 }
 
@@ -78,10 +76,10 @@ forge-state-layer {
 //
 
 :host([disabled]) {
-  @include core.host-disabled;
+  @include host-disabled;
 
   .forge-tab {
-    @include core.disabled;
+    @include disabled;
 
     pointer-events: none;
   }
@@ -133,13 +131,13 @@ forge-state-layer {
 
 :host([selected]:focus) {
   .forge-tab {
-    @include core.selected-focus;
+    @include selected-focus;
   }
 }
 
 :host([selected]:active) {
   .forge-tab {
-    @include core.selected-pressed;
+    @include selected-pressed;
   }
 }
 
@@ -152,7 +150,7 @@ forge-state-layer {
     @include override(height, stacked-height);
 
     .content {
-      @include core.content-stacked;
+      @include content-stacked;
     }
   }
 }
@@ -163,15 +161,16 @@ forge-state-layer {
 
 :host([secondary]) {
   .forge-tab {
-    @include configuration.configuration-secondary;
+    @include override(indicator-height, secondary-indicator-height);
+    @include override(indicator-shape, secondary-indicator-shape);
   }
 
   .content {
-    @include core.content-secondary;
+    @include content-secondary;
   }
 
   .indicator {
-    @include core.indicator-secondary;
+    @include indicator-secondary;
   }
 }
 
@@ -181,14 +180,14 @@ forge-state-layer {
 
 :host([vertical]) {
   .forge-tab {
-    @include core.vertical;
+    @include vertical;
   
     .content {
-      @include core.vertical-content;
+      @include vertical-content;
     }
   
     .indicator {
-      @include core.vertical-indicator;
+      @include vertical-indicator;
     }
   }
 
@@ -201,13 +200,13 @@ forge-state-layer {
 
 :host([vertical][secondary]) {
   .content {
-    @include core.vertical-secondary-content;
+    @include vertical-secondary-content;
   }
 }
 
 :host([vertical]:not([secondary])) {
   .forge-tab {
-    @include configuration.vertical-primary-configuration;
+    @include override(indicator-shape, vertical-indicator-shape);
   }
 }
 
@@ -217,20 +216,20 @@ forge-state-layer {
 
 :host([inverted]) {
   .forge-tab {
-    @include configuration.configuration-inverted;
+    @include override(indicator-shape, inverted-indicator-shape);
   }
 
   .indicator {
-    @include core.inverted-indicator;
+    @include inverted-indicator;
   }
 }
 
 :host([inverted][vertical]) {
   .forge-tab {
-    @include configuration.configuration-vertical-inverted;
+    @include override(indicator-shape, vertical-inverted-indicator-shape);
   }
 
   .indicator {
-    @include core.vertical-inverted-indicator;
+    @include vertical-inverted-indicator;
   }
 }

@@ -2,6 +2,8 @@
 @use '../core/styles/shape';
 @use './token-utils' as *;
 
+@forward './token-utils';
+
 @mixin host {
   display: #{token(display)};
   position: relative;

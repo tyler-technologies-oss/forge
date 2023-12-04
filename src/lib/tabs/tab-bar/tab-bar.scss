@@ -1,14 +1,12 @@
-@use './core';
+@use './core' as *;
 @use '../../icon-button';
-@use './configuration';
-@use './token-utils' as *;
 
 //
 // Host
 //
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -19,24 +17,24 @@
 // Base styles
 //
 
-.container {
-  @include configuration.configuration;
+.forge-tab-bar {
+  @include tokens;
 }
 
-.container {
-  @include core.container;
+.forge-tab-bar {
+  @include container;
 }
 
 .scroll-container {
-  @include core.base;
+  @include base;
 }
 
 ::slotted(*) {
-  @include core.slotted-base;
+  @include slotted-base;
 }
 
 ::slotted([selected]) {
-  @include core.slotted-selected;
+  @include slotted-selected;
 }
 
 forge-icon-button {
@@ -50,16 +48,16 @@ forge-icon-button {
 //
 
 :host([vertical]) {
-  .container {
-    @include core.container-vertical;
+  .forge-tab-bar {
+    @include container-vertical;
   }
 
   .scroll-container {
-    @include core.vertical;
+    @include vertical;
   }
 
   .scroll-button {
-    @include core.vertical-scroll-button;
+    @include vertical-scroll-button;
   }
 }
 
@@ -68,14 +66,14 @@ forge-icon-button {
 // 
 
 :host([inverted]:not([vertical])) {
-  .container {
-    @include core.inverted;
+  .forge-tab-bar {
+    @include inverted;
   }
 }
 
 :host([inverted][vertical]) {
-  .container {
-    @include core.vertical-inverted;
+  .forge-tab-bar {
+    @include vertical-inverted;
   }
 }
 
@@ -84,26 +82,26 @@ forge-icon-button {
 // 
 
 :host([clustered]) {
-  .container {
+  .forge-tab-bar {
     @include override(justify, flex-start, value);
     @include override(stretch, 0, value);
   }
 }
 
 :host([clustered=start]) {
-  .container {
+  .forge-tab-bar {
     @include override(justify, flex-start, value);
   }
 }
 
 :host([clustered=center]) {
-  .container {
+  .forge-tab-bar {
     @include override(justify, center, value);
   }
 }
 
 :host([clustered=end]) {
-  .container {
+  .forge-tab-bar {
     @include override(justify, flex-end, value);
   }
 }

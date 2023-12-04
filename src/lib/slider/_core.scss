@@ -3,6 +3,8 @@
 @use '../core/styles/animation';
 @use './token-utils' as *;
 
+@forward './token-utils';
+
 // The max clip is reduced by 1 full tick display which is 2x the container
 // size to account for always showing the active track on the outside
 // edge of the last tick.

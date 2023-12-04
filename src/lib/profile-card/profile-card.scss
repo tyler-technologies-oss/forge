@@ -1,13 +1,11 @@
-@use './token-utils' as *;
-@use './configuration' as *;
-@use './core';
+@use './core' as *;
 
 //
 // Host
 //
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -19,18 +17,18 @@
 //
 
 .forge-profile-card {
-  @include configuration;
+  @include tokens;
 }
 
 .forge-profile-card {
-  @include core.base;
+  @include base;
 
   .info-container {
-    @include core.info-container;
+    @include info-container;
   }
 
   .avatar {
-    @include core.avatar;
+    @include avatar;
 
     // TODO: Update this to use provide-theme mixin when supported in avatar
     --forge-avatar-size: #{token(avatar-size)};
@@ -40,15 +38,15 @@
   }
 
   .text {
-    @include core.text;
+    @include text;
   }
 
   .full-name {
-    @include core.full-name;
+    @include full-name;
   }
 
   .email {
-    @include core.email;
+    @include email;
   }
 }
 

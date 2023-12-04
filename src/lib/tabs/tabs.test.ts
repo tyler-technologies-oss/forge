@@ -637,7 +637,7 @@ class TabsHarness extends TestHarness<ITabBarComponent> {
   }
 
   public initElementRefs(): void {
-    this.containerElement = getShadowElement(this.element, TAB_BAR_CONSTANTS.selectors.CONTAINER);
+    this.containerElement = getShadowElement(this.element, TAB_BAR_CONSTANTS.selectors.ROOT);
     this.scrollContainer = getShadowElement(this.element, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
   }
 

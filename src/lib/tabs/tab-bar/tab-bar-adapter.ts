@@ -39,7 +39,7 @@ export interface ITabBarScrollButtonState {
 
 export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITabBarAdapter {
   private readonly _defaultSlotElement: HTMLSlotElement;
-  private readonly _container: HTMLElement;
+  private readonly _rootElement: HTMLElement;
   private readonly _scrollContainer: HTMLElement;
   private _resizeObserver: ResizeObserver | undefined;
   private _backwardScrollButton: IIconButtonComponent | undefined;
@@ -49,7 +49,7 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
     super(component);
 
     this._defaultSlotElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
-    this._container = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.CONTAINER);
+    this._rootElement = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.ROOT);
     this._scrollContainer = getShadowElement(this._component, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
   }
 
@@ -134,10 +134,10 @@ export class TabBarAdapter extends BaseAdapter<ITabBarComponent> implements ITab
   public setScrollButtons(value: boolean): void {
     if (value) {
       this._backwardScrollButton = this._createScrollButton(this._component.vertical ? tylIconKeyboardArrowUp.name : tylIconKeyboardArrowLeft.name);
-      this._container.insertAdjacentElement('afterbegin', this._backwardScrollButton);
+      this._rootElement.insertAdjacentElement('afterbegin', this._backwardScrollButton);
 
       this._forwardScrollButton = this._createScrollButton(this._component.vertical ? tylIconKeyboardArrowDown.name : tylIconKeyboardArrowRight.name);
-      this._container.insertAdjacentElement('beforeend', this._forwardScrollButton);
+      this._rootElement.insertAdjacentElement('beforeend', this._forwardScrollButton);
     } else {
       this._backwardScrollButton?.remove();
       this._backwardScrollButton = undefined;

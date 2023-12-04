@@ -1,4 +1,3 @@
-@use './configuration';
 @use './token-utils' as *;
 @use '../button';
 @use '../icon-button';
@@ -9,7 +8,9 @@
 //
 
 :host {
-  @include configuration.configuration;
+  @include tokens;
+
+  #{declare(focus-indicator-offset-adjusted)}: calc(#{token(focus-indicator-offset)} + #{token(focus-indicator-divider-offset)} * 2);
 }
 
 :host {

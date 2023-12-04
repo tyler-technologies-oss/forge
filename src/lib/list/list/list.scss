@@ -1,5 +1,4 @@
-@use './configuration';
-@use './core';
+@use './core' as *;
 @use '../list-item';
 
 //
@@ -29,9 +28,9 @@
 //
 
 .forge-list {
-  @include configuration.configuration;
+  @include tokens;
 }
 
 .forge-list {
-  @include core.base;
+  @include base;
 }

@@ -1,7 +1,5 @@
 @use 'sass:map';
-@use './configuration' as *;
-@use './token-utils' as *;
-@use './core';
+@use './core' as *;
 @use '../../focus-indicator';
 @use '../../state-layer';
 @use '../../tabs/tab-bar';
@@ -13,12 +11,14 @@
 // Host
 //
 
+$host-tokens: [background foreground];
+
 :host {
-  @include host-configuration;
+  @include tokens($includes: $host-tokens);
 }
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -44,40 +44,40 @@
 //
 
 .forge-app-bar {
-  @include configuration;
+  @include tokens($excludes: $host-tokens);
 }
 
 .forge-app-bar {
-  @include core.base;
+  @include base;
 
   .row {
-    @include core.row;
+    @include row;
   }
 
   &.no-center {
     .row {
-      @include core.row-no-center;
+      @include row-no-center;
     }
   }
 
   .section {
-    @include core.section;
+    @include section;
 
     &:not(:last-child):not(:first-child) {
-      @include core.section-center;
+      @include section-center;
     }
 
     &:last-child {
-      @include core.section-end;
+      @include section-end;
     }
   }
 
   h1 {
-    @include core.title;
+    @include title;
   }
 
   a {
-    @include core.anchor-base;
+    @include anchor-base;
 
     forge-state-layer {
       @include state-layer.provide-theme((
@@ -95,7 +95,7 @@
   }
 
   .logo-title-container {
-    @include core.logo-title-container;
+    @include logo-title-container;
   }
 }
 
@@ -105,7 +105,7 @@
 
 :host(:is(:not([elevation]),[elevation=raised])) {
   .forge-app-bar {
-    @include core.elevation-raised;
+    @include elevation-raised;
   }
 }
 
@@ -122,7 +122,7 @@
 //
 
 ::slotted([slot=logo]) {
-  @include core.logo;
+  @include logo;
 }
 
 //
