@@ -42,6 +42,10 @@ export class StateLayerFoundation implements IStateLayerFoundation {
   public initialize(): void {
     this._adapter.trySetTarget(this._target);
 
+    // Clicks could be triggered programmatically so we need to listen for them regardless
+    // of deferred initialization status
+    this._adapter.addTargetListener('click', this._clickListener);
+
     // We defer initialization until the first pointerenter event is received.
     //
     // This is a performance optimization to avoid attaching many listeners to the target element
@@ -77,7 +81,6 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     this._adapter.addTargetListener('pointerdown', this._pointerDownListener);
     this._adapter.addTargetListener('pointerup', this._pointerUpListener);
     this._adapter.addTargetListener('pointercancel', this._pointerCancelListener);
-    this._adapter.addTargetListener('click', this._clickListener);
     this._adapter.addTargetListener('contextmenu', this._contextmenuListener);
     this._attached = true;
   }

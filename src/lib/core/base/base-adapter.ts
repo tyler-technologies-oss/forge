@@ -22,6 +22,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   setBodyAttribute(name: string, value: string): void;
   removeBodyAttribute(name: string): void;
   focusHost(options?: FocusOptions): void;
+  clickHost(): void;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
@@ -125,6 +126,10 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public focusHost(options?: FocusOptions): void {
     HTMLElement.prototype.focus.call(this._component, options);
+  }
+
+  public clickHost(): void {
+    HTMLElement.prototype.click.call(this._component);
   }
 
   public get isConnected(): boolean {

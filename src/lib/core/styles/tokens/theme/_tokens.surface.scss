@@ -18,6 +18,7 @@
   $surface-inverse: theme-utils.hexify($on-surface, $surface, color-emphasis.value(inverse));
 
   $surface-container: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower));
+  $surface-container-minimum: theme-utils.hexify($on-surface, $surface, color-emphasis.value(minimum));
   $surface-container-low: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lowest));
   $surface-container-medium: theme-utils.hexify($on-surface, $surface, color-emphasis.value(if($surface-tone == 'light', low, medium-low)));
   $surface-container-high: theme-utils.hexify($on-surface, $surface, color-emphasis.value(if($surface-tone == 'light', medium-low, medium)));
@@ -26,6 +27,7 @@
     surface: $surface,
     surface-inverse: $surface-inverse,
     surface-container: $surface-container,
+    surface-container-minimum: $surface-container-minimum,
     surface-container-low: $surface-container-low,
     surface-container-medium: $surface-container-medium,
     surface-container-high: $surface-container-high,
@@ -35,6 +37,7 @@
     on-surface: $on-surface,
     on-surface-inverse: theme-utils.contrast($surface-inverse),
     on-surface-container: theme-utils.contrast($surface-container),
+    on-surface-container-minimum: theme-utils.contrast($surface-container-minimum),
     on-surface-container-low: theme-utils.contrast($surface-container-low),
     on-surface-container-medium: theme-utils.contrast($surface-container-medium),
     on-surface-container-high: theme-utils.contrast($surface-container-high)
