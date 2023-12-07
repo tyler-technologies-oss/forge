@@ -52,9 +52,7 @@ declare global {
   name: MENU_CONSTANTS.elementName,
   dependencies: [
     PopupComponent,
-    ListComponent,
-    CircularProgressComponent,
-    LinearProgressComponent
+    ListComponent
   ]
 })
 export class MenuComponent extends ListDropdownAware implements IMenuComponent {
