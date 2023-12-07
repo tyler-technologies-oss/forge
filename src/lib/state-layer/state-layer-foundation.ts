@@ -249,10 +249,10 @@ export class StateLayerFoundation implements IStateLayerFoundation {
   }
   public set targetElement(el: HTMLElement | null) {
     // Always remove the listeners from the previous target element
-    if (this._attached) {
-      this._removeListeners();
-    } else {
-      // If unattached destroy the defer listener to recreate on the new target element
+    this._removeListeners();
+
+    // If unattached destroy the defer listener to recreate on the new target element
+    if (!this._attached) {
       this._adapter.destroy();
       this._deferred = false;
     }
@@ -273,9 +273,10 @@ export class StateLayerFoundation implements IStateLayerFoundation {
       this._target = value;
 
       if (this._adapter.isConnected) {
-        if (this._attached) {
-          this._removeListeners();
-        } else {
+        // Always remove the listeners from the previous target element
+        this._removeListeners();
+
+        if (!this._attached) {
           this._adapter.destroy();
           this._deferred = false;
         }
