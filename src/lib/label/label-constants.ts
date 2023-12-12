@@ -1,4 +1,5 @@
 import { BUTTON_CONSTANTS } from '../button';
+import { BUTTON_TOGGLE_GROUP_CONSTANTS } from '../button-toggle';
 import { CHECKBOX_CONSTANTS } from '../checkbox';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { ICON_BUTTON_CONSTANTS } from '../icon-button';
@@ -22,12 +23,13 @@ const events = {
   CONNECTED: `${elementName}-connected`
 };
 
-const labelableChildSelectors = [
+const labelableChildSelectors: Array<keyof HTMLElementTagNameMap> = [
   BUTTON_CONSTANTS.elementName,
   CHECKBOX_CONSTANTS.elementName,
   ICON_BUTTON_CONSTANTS.elementName,
   RADIO_CONSTANTS.elementName,
-  SWITCH_CONSTANTS.elementName
+  SWITCH_CONSTANTS.elementName,
+  BUTTON_TOGGLE_GROUP_CONSTANTS.elementName
 ];
 
 export const LABEL_CONSTANTS = {

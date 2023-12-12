@@ -2,25 +2,16 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}button-toggle`;
 
-const attributes = {
-  VALUE: 'value',
+const observedAttributes = {
   SELECTED: 'selected',
+  VALUE: 'value',
   DISABLED: 'disabled',
-  DENSE: 'dense',
-  BUTTON_ARIA_LABEL: 'button-aria-label',
-  SELECTED_ADJACENT: 'selected-adjacent',
-  SELECTED_ADJACENT_VERTICAL: 'selected-adjacent-vertical',
-  STRETCH: 'stretch'
+  READONLY: 'readonly',
+  TABINDEX: 'tabindex' // Need this to support the focusable mixin
 };
 
-const classes = {
-  SELECTED: 'forge-button-toggle__selected',
-  DENSE: 'forge-button-toggle--dense'
-};
-
-const selectors = {
-  BUTTON: '.forge-button-toggle',
-  SELECTED: `.${classes.SELECTED}`
+const attributes = {
+  ...observedAttributes
 };
 
 const events = {
@@ -29,13 +20,12 @@ const events = {
 
 export const BUTTON_TOGGLE_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
-  classes,
-  selectors,
   events
 };
 
-export interface IButtonToggleSelectEventData {
-  value: string;
+export interface IButtonToggleSelectEventData<T = unknown> {
+  value: T;
   selected: boolean;
 }

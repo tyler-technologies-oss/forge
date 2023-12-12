@@ -15,7 +15,7 @@ import { IBaseComponent } from './base-component';
 /**
  * A component that can be associated with a form.
  */
-export interface IWithFormAssociation extends IBaseComponent {
+export interface IWithFormAssociation<TValue = FormValue | null> extends IBaseComponent {
   /**
    * The form element that the component is associated with.
    */
@@ -25,11 +25,6 @@ export interface IWithFormAssociation extends IBaseComponent {
    * The labels associated with the component.
    */
   readonly labels: NodeList;
-
-  /**
-   * The value to use in form submission.
-   */
-  value: FormValue | null;
 
   /**
    * The HTML name to use in form submission.
@@ -98,10 +93,7 @@ export interface IWithFormAssociation extends IBaseComponent {
    * @param state The state to restore or null to reset the component's value.
    * @param reason The reason the state was restored.
    */
-  formStateRestoreCallback(
-    state: FormRestoreState | null,
-    reason: FormRestoreReason,
-  ): void;
+  formStateRestoreCallback(state: FormRestoreState | null, reason: FormRestoreReason): void;
 
   /**
    * An optional callback for when the associated form changes.
@@ -121,9 +113,6 @@ export declare abstract class WithFormAssociationContract {
   public get name(): string;
   public set name(value: string);
 
-  public abstract get value(): FormValue | null;
-  public abstract set value(value: FormValue | null);
-
   public abstract get disabled(): boolean;
   public abstract set disabled(value: boolean);
 
@@ -138,10 +127,7 @@ export declare abstract class WithFormAssociationContract {
 
   public formDisabledCallback(disabled: boolean): void;
 
-  public abstract formStateRestoreCallback(
-    state: FormRestoreState | null,
-    reason: FormRestoreReason
-  ): void;
+  public abstract formStateRestoreCallback(state: FormRestoreState | null, reason: FormRestoreReason): void;
 
   public abstract formResetCallback(): void;
 
@@ -177,9 +163,6 @@ export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
     public set name(value: string) {
       toggleAttribute(this, !!value, 'name', value);
     }
-
-    public abstract get value(): FormValue | null;
-    public abstract set value(value: FormValue | null);
 
     public abstract get disabled(): boolean;
     public abstract set disabled(value: boolean);

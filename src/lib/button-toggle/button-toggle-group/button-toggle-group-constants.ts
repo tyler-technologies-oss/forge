@@ -1,15 +1,23 @@
-import { COMPONENT_NAME_PREFIX } from '../../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}button-toggle-group`;
 
-const attributes = {
+const observedAttributes = {
   VALUE: 'value',
   MULTIPLE: 'multiple',
   MANDATORY: 'mandatory',
   VERTICAL: 'vertical',
   STRETCH: 'stretch',
   DISABLED: 'disabled',
-  DENSE: 'dense'
+  REQUIRED: 'required',
+  READONLY: 'readonly',
+  DENSE: 'dense',
+  NO_OUTLINE: 'no-outline',
+  THEME: 'theme'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const classes = {
@@ -27,21 +35,12 @@ const events = {
 
 export const BUTTON_TOGGLE_GROUP_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   classes,
   selectors,
   events
 };
 
-export type IButtonToggleGroupChangeEventData<T = any> = T;
-export type ButtonToggleIconType = 'font' | 'component';
-
-export interface IButtonToggleOption {
-  label?: string;
-  icon?: string;
-  value: any;
-  leadingIcon?: string;
-  leadingIconType?: ButtonToggleIconType;
-  trailingIcon?: string;
-  trailingIconType?: ButtonToggleIconType;
-}
+export type IButtonToggleGroupChangeEventData<T = unknown> = T;
+export type ButtonToggleGroupTheme = Theme;
