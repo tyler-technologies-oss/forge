@@ -1,4 +1,3 @@
-import { IWithFocusable, WithFocusable } from './base-focusable-component';
 import { BaseFormComponent, IBaseFormComponent } from './base-form-component';
 
 export interface IBaseNullableFormComponent<T = string> extends IBaseFormComponent<T> {

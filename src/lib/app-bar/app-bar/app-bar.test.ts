@@ -144,12 +144,4 @@ describe('App Bar', () => {
   function getFocusIndicator(el: IAppBarComponent): IFocusIndicatorComponent {
     return el.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
   }
-
-  function clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
-  }
 });
