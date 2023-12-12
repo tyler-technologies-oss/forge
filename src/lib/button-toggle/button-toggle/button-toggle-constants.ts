@@ -6,6 +6,7 @@ const observedAttributes = {
   SELECTED: 'selected',
   VALUE: 'value',
   DISABLED: 'disabled',
+  READONLY: 'readonly',
   TABINDEX: 'tabindex' // Need this to support the focusable mixin
 };
 

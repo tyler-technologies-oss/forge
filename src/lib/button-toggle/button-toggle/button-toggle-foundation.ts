@@ -1,4 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { task } from '../../core/utils/event-utils';
 import { ExperimentalFocusOptions } from '../../constants';
 import { IButtonToggleAdapter } from './button-toggle-adapter';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';
@@ -7,6 +8,7 @@ export interface IButtonToggleFoundation extends ICustomElementFoundation {
   value: unknown;
   selected: boolean;
   disabled: boolean;
+  readonly: boolean;
   destroy(): void;
   focus(options?: ExperimentalFocusOptions): void;
   click(): void;
@@ -16,6 +18,7 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
   private _value: unknown;
   private _selected = false;
   private _disabled = false;
+  private _readonly = false;
 
   private _clickListener: EventListener = (evt: MouseEvent) => this._onClick(evt);
   private _keydownListener: EventListener = (evt: KeyboardEvent) => this._onKeyDown(evt);
@@ -25,7 +28,7 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
   public initialize(): void {
     this._adapter.initialize();
 
-    if (!this._disabled) {
+    if (!this._disabled && !this._readonly) {
       this._applyListeners();
     }
   }
@@ -67,8 +70,7 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
     const evt = new CustomEvent(BUTTON_TOGGLE_CONSTANTS.events.SELECT, { detail, bubbles: true, cancelable: true });
     this._adapter.dispatchHostEvent(evt);
 
-    // Wait for the event to finish bubbling before toggling the selected state
-    await new Promise(resolve => setTimeout(resolve));
+    await task();
 
     this._selected = originalSelected;
 
@@ -76,7 +78,6 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
       return;
     }
 
-    // If the event wasn't prevented, toggle the selected state
     this.selected = !originalSelected;
   }
 
@@ -101,6 +102,7 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
     return this._selected;
   }
   public set selected(value: boolean) {
+    value = !!value;
     if (this._selected !== value) {
       this._selected = value;
       this._adapter.setSelected(this._selected);
@@ -112,6 +114,7 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
     return this._disabled;
   }
   public set disabled(value: boolean) {
+    value = !!value;
     if (this._disabled !== value) {
       this._disabled = value;
       if (this._disabled) {
@@ -121,6 +124,24 @@ export class ButtonToggleFoundation implements IButtonToggleFoundation {
       }
       this._adapter.setDisabled(this._disabled);
       this._adapter.toggleHostAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.DISABLED, this._disabled);
+    }
+  }
+
+  public get readonly(): boolean {
+    return this._readonly;
+  }
+  public set readonly(value: boolean) {
+    value = !!value;
+    if (this._readonly !== value) {
+      this._readonly = value;
+      
+      if (this._readonly) {
+        this._removeListeners();
+      } else {
+        this._applyListeners();
+      }
+
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }
 }

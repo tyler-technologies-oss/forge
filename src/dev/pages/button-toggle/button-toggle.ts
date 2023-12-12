@@ -63,35 +63,40 @@ form.addEventListener('submit', (evt: Event) => {
 
 const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;
 themeSelect.addEventListener('change', ({ detail: theme }: CustomEvent<ButtonToggleGroupTheme>) => {
-  getButtonToggleGroups().forEach(splitButton => splitButton.theme = theme);
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.theme = theme);
 });
 
 const multipleToggle = document.querySelector('#button-toggle-multiple') as ISwitchComponent;
 multipleToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  getButtonToggleGroups().forEach(splitButton => splitButton.multiple = selected);
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.multiple = selected);
 });
 
 const mandatoryToggle = document.querySelector('#button-toggle-mandatory') as ISwitchComponent;
 mandatoryToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  getButtonToggleGroups().forEach(splitButton => splitButton.mandatory = selected);
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.mandatory = selected);
 });
 
 const verticalToggle = document.querySelector('#button-toggle-vertical') as ISwitchComponent;
 verticalToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  getButtonToggleGroups().forEach(splitButton => splitButton.vertical = selected);
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.vertical = selected);
 });
 
 const stretchToggle = document.querySelector('#button-toggle-stretch') as ISwitchComponent;
 stretchToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  getButtonToggleGroups().forEach(splitButton => splitButton.stretch = selected);
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.stretch = selected);
 });
 
 const denseToggle = document.querySelector('#button-toggle-dense') as ISwitchComponent;
 denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  getButtonToggleGroups().forEach(splitButton => splitButton.dense = selected);
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.dense = selected);
 });
 
 const disabledToggle = document.querySelector('#button-toggle-disabled') as ISwitchComponent;
 disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  getButtonToggleGroups().forEach(splitButton => splitButton.disabled = selected);
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.disabled = selected);
+});
+
+const readonlyToggle = document.querySelector('#button-toggle-readonly') as ISwitchComponent;
+readonlyToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  getButtonToggleGroups().forEach(buttonToggle => buttonToggle.readonly = selected);
 });

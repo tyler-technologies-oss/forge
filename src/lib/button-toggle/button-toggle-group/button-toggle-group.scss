@@ -99,7 +99,9 @@ $_host-tokens: [display];
   .forge-button-toggle-group {
     @include stretch;
   }
+}
 
+:host(:not([vertical])[stretch]) {
   ::slotted(forge-button-toggle) {
     flex: 1;
   }

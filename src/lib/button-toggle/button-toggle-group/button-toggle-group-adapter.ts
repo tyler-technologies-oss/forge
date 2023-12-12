@@ -13,6 +13,7 @@ export interface IButtonToggleGroupAdapter extends IBaseAdapter {
   removeSlotChangeListener(listener: (evt: Event) => void): void;
   deselect(selectedToggle: IButtonToggleComponent): void;
   setDisabled(value: boolean): void;
+  setReadonly(value: boolean): void;
   getSelectedValues(): any[];
   applyValues(values: any[]): void;
   setFormValue(): void;
@@ -54,6 +55,11 @@ export class ButtonToggleGroupAdapter extends BaseAdapter<IButtonToggleGroupComp
     this._component[isFocusable] = !value;
     const toggles = this._getButtonToggleElements();
     toggles.forEach(t => t.disabled = value);
+  }
+
+  public setReadonly(value: boolean): void {
+    const toggles = this._getButtonToggleElements();
+    toggles.forEach(t => t.readonly = value);
   }
 
   public getSelectedValues(): any[] {

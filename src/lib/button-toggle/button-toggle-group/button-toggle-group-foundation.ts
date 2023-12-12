@@ -52,18 +52,23 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
   }
 
   private _synchronize(): void {
-    if (!this._multiple) {
+    if (this._disabled) {
+      this._adapter.setDisabled(this._disabled);
+    }
+    if (this._readonly) {
+      this._adapter.setReadonly(this._readonly);
+    }
+
+    if (this._multiple) {
+      const selectedValues = new Set(this._adapter.getSelectedValues().concat(this._values));
+      this.value = Array.from(selectedValues);
+    } else {
       const selectedValues = this._adapter.getSelectedValues().concat(this._values);
       this.value = selectedValues.length ? selectedValues[selectedValues.length - 1] : null;
-    } else {
-      const selectedValues = new Set(this._adapter.getSelectedValues().concat(this._values));
-      this._applyValue(Array.from(selectedValues));
     }
   }
 
   private _onSelect(evt: CustomEvent<IButtonToggleSelectEventData>): void {
-    const target = evt.target as IButtonToggleComponent;
-
     // When in mandatory mode we need to ensure at least one element is selected. If the user tries to deselect the last
     // element, we prevent the select event from toggling.
     if (this._mandatory) {
@@ -74,7 +79,15 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
       }
     }
 
-    const detail: IButtonToggleGroupChangeEventData = this._getValue();
+    // Compute the new state to provide in the change event
+    let value: unknown[];
+    if (evt.detail.selected) {
+      value = this._multiple ? [...this._values, evt.detail.value] : [evt.detail.value];
+    } else {
+      value = this._multiple ? this._values.filter(v => v !== evt.detail.value) : [];
+    }
+
+    const detail: IButtonToggleGroupChangeEventData = this._multiple ? value : value.length ? value[0] : null;
     const changeEvt = new CustomEvent(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, { detail, bubbles: true, cancelable: true });
     this._adapter.dispatchHostEvent(changeEvt);
 
@@ -83,26 +96,18 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
       return;
     }
 
-    // When not in multiple mode, we deselect all toggles except for the one that triggered this event
-    if (!this._multiple) {
-      this._adapter.deselect(target);
-    }
-    
+    this._values = value;
+    this._adapter.applyValues(this._values);
     this._adapter.setFormValue();
     this._adapter.setFormValidity();
   }
 
-  private _getValue(): any {
-    const selections = this._adapter.getSelectedValues();
-    return this._multiple ? Array.from(new Set(selections)) : selections.slice(0, 1)[0] ?? null;
-  }
-
   private _applyValue(value: unknown[]): void {
-    let values = Array.isArray(value) ? value : [value];
+    let values = Array.isArray(value) ? value : value != null ? [value] : [];
     this._values = values;
 
     if (!this._multiple && values.length > 1) {
-      values = values[0];
+      values = [values[0]];
     }
 
     this._adapter.applyValues(values);
@@ -111,7 +116,10 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
   }
 
   public get value(): any {
-    return this._getValue();
+    // Combine the selected toggle values with our current state to ensure we always return the latest value
+    // even if our state doesn't match a selected toggle.
+    const values = Array.from(new Set(this._adapter.getSelectedValues().concat(this._values)));
+    return this._multiple ? Array.from(values) : values[0] ?? null;
   }
   public set value(value: any) {
     this._applyValue(value);
@@ -192,6 +200,7 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
     value = !!value;
     if (this._readonly !== value) {
       this._readonly = value;
+      this._adapter.setReadonly(this._readonly);
       this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }

@@ -16,6 +16,7 @@ export interface IButtonToggleComponent<T = unknown> extends IWithElementInterna
   value: T;
   selected: boolean;
   disabled: boolean;
+  readonly: boolean;
 }
 
 declare global {
@@ -36,10 +37,12 @@ const BaseButtonToggleClass = WithElementInternals(WithFocusable(BaseComponent))
  * @property {unknown} value - The value of the button toggle.
  * @property {boolean} selected - Whether or not the button is selected.
  * @property {boolean} disabled - Whether or not the button is disabled.
+ * @property {boolean} readonly - Whether or not the button is readonly.
  * 
  * @attribute {unknown} value - The value of the button toggle.
  * @attribute {boolean} selected - Whether or not the button is selected.
  * @attribute {boolean} disabled - Whether or not the button is disabled.
+ * @attribute {boolean} readonly - Whether or not the button is readonly.
  * 
  * @event {CustomEvent<IButtonToggleSelectEventData>} forge-button-toggle-select - Dispatches when the user toggles the button.
  * 
@@ -121,6 +124,9 @@ export class ButtonToggleComponent<T = unknown> extends BaseButtonToggleClass im
       case BUTTON_TOGGLE_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         return;
+      case BUTTON_TOGGLE_CONSTANTS.attributes.READONLY:
+        this.readonly = coerceBoolean(newValue);
+        return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
@@ -133,6 +139,9 @@ export class ButtonToggleComponent<T = unknown> extends BaseButtonToggleClass im
 
   @FoundationProperty()
   public declare disabled: boolean;
+
+  @FoundationProperty()
+  public declare readonly: boolean;
 
   public override focus(options?: ExperimentalFocusOptions): void {
     this._foundation.focus(options);

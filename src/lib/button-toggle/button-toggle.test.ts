@@ -40,6 +40,14 @@ describe('Button Toggle', () => {
     expect(harness.buttonToggles[1].getAttribute('aria-pressed')).to.equal('true');
   });
 
+  it('should set default value', async () => {
+    const harness = await createFixture({ value: 'two' });
+
+    expect(harness.element.value).to.equal('two');
+    expect(harness.buttonToggles[1].selected).to.be.true;
+    expect(harness.buttonToggles[1].getAttribute('aria-pressed')).to.equal('true');
+  });
+
   it('should set value via attribute', async () => {
     const harness = await createFixture();
 
@@ -52,6 +60,8 @@ describe('Button Toggle', () => {
 
   it('should remove value', async () => {
     const harness = await createFixture({ value: 'two' });
+
+    expect(harness.element.value).to.equal('two');
 
     harness.element.value = null;
 
@@ -102,6 +112,28 @@ describe('Button Toggle', () => {
     expect(harness.element.disabled).to.be.true;
     expect(harness.element.hasAttribute('disabled')).to.be.true;
     expect(harness.buttonToggles.every(toggle => toggle.tabIndex === -1)).to.be.true; 
+  });
+
+  it('should set readonly', async () => {
+    const harness = await createFixture({ readonly: true });
+
+    expect(harness.element.readonly).to.be.true;
+    expect(harness.element.hasAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.READONLY)).to.be.true;
+    expect(harness.buttonToggles.every(toggle => toggle.readonly)).to.be.true;
+  });
+
+  it('should not toggle when readonly', async () => {
+    const harness = await createFixture({ readonly: true });
+    const changeSpy = sinon.spy();
+    harness.element.addEventListener(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, changeSpy);
+
+    await harness.selectToggleViaMouse(0);
+    await harness.selectToggleViaMouse(1);
+    await harness.selectToggleViaMouse(2);
+
+    expect(harness.element.value).to.be.null;
+    expect(harness.buttonToggles.every(toggle => toggle.selected)).to.be.false;
+    expect(changeSpy).not.to.have.been.called;
   });
 
   it('should set outlined', async () => {
@@ -411,6 +443,50 @@ describe('Button Toggle', () => {
     expect(labelChangedCallbackSpy).to.have.been.calledOnce;
     expect(harness.element.getAttribute('aria-label')).to.equal(label.textContent);
   });
+
+  it('should store value if not matching existing button toggles', async () => {
+    const harness = await createFixture({ value: 'new-value' });
+
+    expect(harness.element.value).to.equal('new-value');
+    expect(harness.buttonToggles.every(toggle => toggle.selected)).to.be.false;
+    expect(harness.buttonToggles.every(toggle => toggle.getAttribute('aria-pressed') === 'false')).to.be.true;
+  });
+
+  it('should inherit current state when button toggle is added dynamically', async () => {
+    const harness = await createFixture({ readonly: true, disabled: true, value: 'new-value' });
+
+    const buttonToggle = document.createElement('forge-button-toggle');
+    buttonToggle.value = 'new-value';
+    harness.element.appendChild(buttonToggle);
+    await elementUpdated(harness.element);
+
+    expect(buttonToggle.disabled).to.be.true;
+    expect(buttonToggle.readonly).to.be.true;
+    expect(buttonToggle.selected).to.be.true;
+  });
+
+  it('should apply selected state to button toggles when multiple is changed', async () => {
+    const harness = await createFixture({ multiple: true, value: ['one', 'two'] });
+
+    expect(harness.element.value).to.deep.equal(['one', 'two']);
+    expect(harness.buttonToggles[0].selected).to.be.true;
+    expect(harness.buttonToggles[1].selected).to.be.true;
+    expect(harness.buttonToggles[2].selected).to.be.false;
+
+    harness.element.multiple = false;
+
+    expect(harness.element.value).to.equal('one');
+    expect(harness.buttonToggles[0].selected).to.be.true;
+    expect(harness.buttonToggles[1].selected).to.be.false;
+    expect(harness.buttonToggles[2].selected).to.be.false;
+
+    harness.element.multiple = true;
+
+    expect(harness.element.value).to.deep.equal(['one', 'two']);
+    expect(harness.buttonToggles[0].selected).to.be.true;
+    expect(harness.buttonToggles[1].selected).to.be.true;
+    expect(harness.buttonToggles[2].selected).to.be.false;
+  });
 });
 
 class ButtonToggleGroupHarness extends TestHarness<IButtonToggleGroupComponent> {
@@ -468,17 +544,17 @@ async function createFixture({
   const el = await fixture<IButtonToggleGroupComponent>(html`
     <forge-button-toggle-group
       aria-label="Choose an option"
-      .value="${value}"
-      .multiple="${multiple}"
-      .outlined="${outlined}"
-      .stretch="${stretch}"
-      .mandatory="${mandatory}"
-      .vertical="${vertical}"
-      .disabled="${disabled}"
-      .required="${required}"
-      .readonly="${readonly}"
-      .dense="${dense}"
-      .theme="${theme}">
+      .value=${value}
+      .multiple=${multiple}
+      .outlined=${outlined}
+      .stretch=${stretch}
+      .mandatory=${mandatory}
+      .vertical=${vertical}
+      .disabled=${disabled}
+      .required=${required}
+      .readonly=${readonly}
+      .dense=${dense}
+      .theme=${theme}>
       <forge-button-toggle value="one">One</forge-button-toggle>
       <forge-button-toggle value="two" aria-label="Label for Two">Two</forge-button-toggle>
       <forge-button-toggle value="three">Three</forge-button-toggle>
