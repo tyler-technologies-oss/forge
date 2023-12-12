@@ -87,7 +87,8 @@ describe('DatePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
       const calendar = getCalendar(this.context.component);
 
-      expect(calendar.month).toEqual(date.getMonth() + 1);
+      const expectedMonth = date.getMonth() >= 11 ? 0 : date.getMonth() + 1;
+      expect(calendar.month).toEqual(expectedMonth);
     });
 
     it('should open calendar in month of max date if max is before current month', function(this: ITestContext) {
