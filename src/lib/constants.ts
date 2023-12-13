@@ -27,6 +27,9 @@ export const isFocusable = Symbol('isFocusable');
  * supported or sprouts attributes if not. */
 export const setDefaultAria = Symbol('setDefaultAria');
 
+/** A property symbol that is used to define default ARIA attributes that will be observed. */
+export const observedDefaultAriaAttributes = Symbol('observedDefaultAriaAttributes');
+
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';
 export type Density = 'small' | 'medium' | 'large';
 

@@ -1,4 +1,4 @@
-import { internals, MixinBase, setDefaultAria, AbstractConstructor } from '../../constants';
+import { internals, MixinBase, setDefaultAria, AbstractConstructor, observedDefaultAriaAttributes } from '../../../constants';
 import {
   ARIAAttribute,
   ariaAttributeToProperty,
@@ -6,19 +6,14 @@ import {
   DefaultAriaOptions,
   restoreDefaultAria as restoreDefaultAriaUtil,
   setDefaultAria as setDefaultAriaUtil
-} from '../utils/a11y-utils';
-import { supportsElementInternalsAria } from '../utils/feature-detection';
-import { IBaseComponent } from './base-component';
+} from '../../utils/a11y-utils';
+import { supportsElementInternalsAria } from '../../utils/feature-detection';
+import { IBaseComponent } from '../../base/base-component';
 
 /**
- * A component with attached Element Internals.
+ * A component with support for setting default ARIA.
  */
-export interface IWithElementInternals extends IBaseComponent {
-  /**
-   * The Element Internals of the component.
-   */
-  readonly [internals]: ElementInternals;
-
+export interface IWithDefaultAria extends IBaseComponent {
   /**
    * Sets the default ARIA of the component using Element Internals if supported or sprouting
    * ARIA attributes if not.
@@ -30,8 +25,8 @@ export interface IWithElementInternals extends IBaseComponent {
   [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void;
 }
 
-export declare abstract class WithElementInternalsContract {
-  public readonly [internals]: ElementInternals;
+export declare abstract class WithDefaultAriaContract {
+  public abstract readonly [observedDefaultAriaAttributes]: ARIAAttribute[];
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
   public [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void;
 }
@@ -46,39 +41,30 @@ export declare abstract class WithElementInternalsContract {
  * @returns The mixed-in base component.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function WithElementInternals<TBase extends MixinBase>(base: TBase, observedAria?: ARIAAttribute[]) {
-  abstract class ElementInternalsComponent extends base implements IWithElementInternals {
-    public readonly [internals]: ElementInternals;
-
-    constructor(...args: any[]) {
-      super(...args);
-      this[internals] = this.attachInternals();
-    }
+export function WithDefaultAria<TBase extends MixinBase>(base: TBase) {
+  abstract class DefaultAria extends base implements IWithDefaultAria {
+    public abstract readonly [observedDefaultAriaAttributes]: ARIAAttribute[];
 
     public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
       super.attributeChangedCallback?.(name, oldValue, newValue);
 
       // If Element Internals is supported our default ARIA is never set as an attribute, so
       // there's nothing to do here.
-      if (!observedAria || supportsElementInternalsAria()) {
+      if (!this[observedDefaultAriaAttributes] || supportsElementInternalsAria()) {
         return;
       }
 
       // If the observed attribute is removed, restore the default ARIA.
-      if (observedAria.includes(name as ARIAAttribute) && !newValue) {
+      if (this[observedDefaultAriaAttributes].includes(name as ARIAAttribute) && !newValue) {
         const ariaPropertyName = ariaAttributeToProperty(name as ARIAAttribute);
-        this._restoreDefaultAria(ariaPropertyName);
+        restoreDefaultAriaUtil(this, ariaPropertyName);
       }
     }
 
     public [setDefaultAria](properties: Partial<ARIAMixinStrict>, options?: DefaultAriaOptions): void {
       setDefaultAriaUtil(this, this[internals], properties, options);
     }
-
-    private _restoreDefaultAria(name: keyof ARIAMixinStrict): void {
-      restoreDefaultAriaUtil(this, name);
-    }
   }
 
-  return ElementInternalsComponent as AbstractConstructor<WithElementInternalsContract> & TBase;
+  return DefaultAria as AbstractConstructor<WithDefaultAriaContract> & TBase;
 }

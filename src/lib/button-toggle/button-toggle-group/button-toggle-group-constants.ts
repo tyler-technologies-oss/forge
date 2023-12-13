@@ -1,4 +1,6 @@
 import { COMPONENT_NAME_PREFIX, Theme } from '../../constants';
+import { supportsElementInternalsAria } from '../../core';
+import { ARIAAttribute } from '../../core/utils/a11y-utils';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}button-toggle-group`;
 
@@ -15,6 +17,8 @@ const observedAttributes = {
   NO_OUTLINE: 'no-outline',
   THEME: 'theme'
 };
+
+const observedAriaAttributes: ARIAAttribute[] = supportsElementInternalsAria() ? [] : ['role', 'aria-label'];
 
 const attributes = {
   ...observedAttributes
@@ -36,6 +40,7 @@ const events = {
 export const BUTTON_TOGGLE_GROUP_CONSTANTS = {
   elementName,
   observedAttributes,
+  observedAriaAttributes,
   attributes,
   classes,
   selectors,
