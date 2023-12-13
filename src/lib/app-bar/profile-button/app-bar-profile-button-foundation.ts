@@ -1,4 +1,5 @@
-import { ICustomElementFoundation, isFunction, Platform, getActiveElement } from '@tylertech/forge-core';
+import { ICustomElementFoundation, isFunction } from '@tylertech/forge-core';
+import { IPopupComponent } from '../../popup';
 import { AVATAR_CONSTANTS } from '../../avatar';
 import { PROFILE_CARD_CONSTANTS } from '../../profile-card';
 import { IAppBarProfileButtonAdapter } from './app-bar-profile-button-adapter';
@@ -16,6 +17,7 @@ export interface IAppBarProfileButtonFoundation extends ICustomElementFoundation
   signOutButtonText: string;
   profileButtonText: string;
   open: boolean;
+  popupElement: IPopupComponent | undefined;
   profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }
 
@@ -33,16 +35,17 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   private _profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
   private _open = false;
   private _isInitialized = false;
+
   private _clickListener: (evt: MouseEvent) => void;
   private _dismissListener: () => void;
-  private _cancelDismissListener: () => void;
+  private _cancelDismissListener: (() => void) | undefined;
   private _keydownListener: (evt: KeyboardEvent) => void;
   private _profileButtonListener: () => void;
   private _signOutButtonListener: () => void;
 
   constructor(private _adapter: IAppBarProfileButtonAdapter) {
     this._clickListener = evt => this._onClick(evt);
-    this._dismissListener = () => this._onDimiss();
+    this._dismissListener = () => this._onDismiss();
     this._keydownListener = evt => this._onKeydown(evt);
     this._profileButtonListener = () => this._onProfileButtonClick();
     this._signOutButtonListener = () => this._onSignOutButtonClick();
@@ -58,16 +61,14 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     this._isInitialized = true;
   }
 
-  public disconnect(): void {
-    if (this._open) {
-      this._closeDropdown();
-    }
+  public destroy(): void {
     this._adapter.removeWindowListener('keydown', this._keydownListener);
     this._adapter.removeClickListener(this._clickListener);
+    this._adapter.destroy();
     this._isInitialized = false;
   }
 
-  private _onClick(evt: MouseEvent): void {
+  private _onClick(_evt: MouseEvent): void {
     if (!this._open) {
       this._openDropdown();
     } else {
@@ -76,18 +77,14 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    if (evt.key === 'Escape' || evt.keyCode === 27) {
+    if (evt.key === 'Escape') {
       this._closeDropdown();
       this._adapter.requestFocus();
     }
   }
 
-  private _onDimiss(): void {
-    if (Platform.WEBKIT) {
-      window.requestAnimationFrame(() => this._closeDropdown());
-    } else {
-      this._closeDropdown();
-    }
+  private _onDismiss(): void {
+    this._closeDropdown();
   }
 
   private _onProfileButtonClick(): void {
@@ -103,13 +100,11 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   }
 
   private _openDropdown(): void {
+    /* c8 ignore next 3 */
     if (this._open) {
       return;
     }
 
-    if (isFunction(this._cancelDismissListener)) {
-      this._cancelDismissListener();
-    }
     const profileCardConfig: IAppBarProfileCardConfig = {
       fullName: this._fullName,
       email: this._email,
@@ -126,7 +121,8 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     this._cancelDismissListener = this._adapter.openPopup(profileCardConfig, this._dismissListener, this._profileButtonListener, this._signOutButtonListener, profileCardContent);
     this._adapter.addWindowListener('keydown', this._keydownListener);
     this._open = true;
-
+    this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.OPEN, this._open);
+    
     // If we aren't showing the sign out or profile buttons then leave focus on our button
     if (!profileCardConfig.signOut && !profileCardConfig.profile) {
       this._adapter.requestFocus();
@@ -134,15 +130,18 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   }
 
   private _closeDropdown(): void {
+    /* c8 ignore next 3 */
     if (!this._open) {
       return;
     }
-    if (isFunction(this._cancelDismissListener)) {
+    if (this._cancelDismissListener && isFunction(this._cancelDismissListener)) {
       this._cancelDismissListener();
+      this._cancelDismissListener = undefined;
     }
     this._open = false;
     this._adapter.removeWindowListener('keydown', this._keydownListener);
     this._adapter.closePopup();
+    this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.OPEN, this._open);
   }
 
   public get fullName(): string {
@@ -186,7 +185,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
       this._avatarLetterCount = value;
       if (this._isInitialized) {
         this._adapter.setAvatarLetterCount(this._avatarLetterCount);
-        this._adapter.setHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_LETTER_COUNT, this._avatarLetterCount as any);
+        this._adapter.setHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.AVATAR_LETTER_COUNT, String(this._avatarLetterCount));
       }
     }
   }
@@ -223,7 +222,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   public set signOutButton(value: boolean) {
     if (this._showSignOutButton !== value) {
       this._showSignOutButton = value;
-      this._adapter.setHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON, this._showSignOutButton as any);
+      this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON, this._showSignOutButton);
     }
   }
 
@@ -233,7 +232,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   public set profileButton(value: boolean) {
     if (this._showProfileButton !== value) {
       this._showProfileButton = value;
-      this._adapter.setHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON, this._showProfileButton as any);
+      this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON, this._showProfileButton);
     }
   }
 
@@ -268,6 +267,10 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
         this._closeDropdown();
       }
     }
+  }
+
+  public get popupElement(): IPopupComponent | undefined {
+    return this._adapter.popupElement;
   }
 
   public get profileCardBuilder(): AppBarProfileButtonProfileCardBuilder {

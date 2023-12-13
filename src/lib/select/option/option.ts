@@ -1,4 +1,5 @@
 import { coerceBoolean, CustomElement, FoundationProperty, ICustomElement } from '@tylertech/forge-core';
+import { IIconComponent } from '../../icon';
 import { BaseComponent } from '../../core/base/base-component';
 import { IBaseListDropdownOption, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
 import { OptionAdapter } from './option-adapter';
@@ -26,6 +27,7 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
     return [
       OPTION_CONSTANTS.attributes.VALUE,
       OPTION_CONSTANTS.attributes.LABEL,
+      OPTION_CONSTANTS.attributes.SECONDARY_LABEL,
       OPTION_CONSTANTS.attributes.DISABLED,
       OPTION_CONSTANTS.attributes.DIVIDER,
       OPTION_CONSTANTS.attributes.OPTION_CLASS,
@@ -58,6 +60,9 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
         break;
       case OPTION_CONSTANTS.attributes.LABEL:
         this.label = newValue;
+        break;
+      case OPTION_CONSTANTS.attributes.SECONDARY_LABEL:
+        this.secondaryLabel = newValue;
         break;
       case OPTION_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
@@ -97,6 +102,10 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
   @FoundationProperty()
   public declare label: string;
 
+  /** Gets/sets the secondary label of this option. */
+  @FoundationProperty()
+  public declare secondaryLabel: string;
+
   /** Gets/sets the disabled status of this option. */
   @FoundationProperty()
   public declare disabled: boolean;
@@ -121,6 +130,10 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
   @FoundationProperty()
   public declare leadingIconType: ListDropdownIconType;
 
+  /** Gets/sets properties on leading icon component. */
+  @FoundationProperty()
+  public declare leadingIconComponentProps: Partial<IIconComponent>;
+
   /** Gets/sets the trailing icon of this option. */
   @FoundationProperty()
   public declare trailingIcon: string;
@@ -132,6 +145,10 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
   /** Gets/sets the trailing icon type of this option. */
   @FoundationProperty()
   public declare trailingIconType: ListDropdownIconType;
+
+  /** Gets/sets properties on trailing icon component. */
+  @FoundationProperty()
+  public declare trailingIconComponentProps: Partial<IIconComponent>;
 
   /** Gets/sets the leading builder of this option. */
   @FoundationProperty()

@@ -126,10 +126,17 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
   }
 
   private get _flatOptions(): IMenuOption[] {
-    if (isListDropdownOptionType(this._options, ListDropdownOptionType.Group)) {
-      return (this._options as IMenuOptionGroup[]).reduce((previousValue, currentValue) => previousValue.concat(currentValue.options), [] as IMenuOption[]) as IMenuOption[];
+    return this._flattenOptions(this._options);
+  }
+
+  private _flattenOptions(options: Array<IMenuOption | IMenuOptionGroup>): IMenuOption[] {
+    if (isListDropdownOptionType(options, ListDropdownOptionType.Group)) {
+      return (options as IMenuOptionGroup[])
+        .reduce((previousValue, currentValue) => {
+          return currentValue.options ? previousValue.concat(currentValue.options) : previousValue;
+        }, [] as IMenuOption[]);
     }
-    return this._options as IMenuOption[];
+    return options as IMenuOption[];
   }
 
   private _onTargetClick(evt: MouseEvent): void {
@@ -348,7 +355,8 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     return Promise.resolve(this._optionsFactory())
       .then(results => {
         if (!this._persistSelection) {
-          results.forEach(o => o.selected = false);
+          const flatResults = this._flattenOptions(results);
+          flatResults.filter(o => o.selected).forEach(o => o.selected = false);
         }
 
         if (this._open) {
@@ -501,8 +509,6 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     } else {
       this.optionsFactory = undefined;
       // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-      //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-      //   function to the core library.
       this._options = options.map(o => ({ ...o }));
       
       if (this._open) {
@@ -523,8 +529,6 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     }
 
     // Intentional shallow copy of member properties. These member objects have properties that are references to functions.
-    //   The typical JSON.parse(JSON.stringify(object)) will not work here. If this becomes an issue we'll add a deepClone
-    //   function to the core library.
     return this._flatOptions.map(o => ({ ...o }));
   }
 

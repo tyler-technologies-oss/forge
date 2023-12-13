@@ -1,10 +1,8 @@
-<forge-button type="raised">
-  <button type="button" id="show-popup-button">Show popup</button>
-</forge-button>
+<forge-button variant="raised" id="show-popup-button">Show popup</forge-button>
 
 <template id="forge-popup-template">
   <div class="vert" style="padding: 16px;">
-    <h2 class="forge-typography--title">Popup title</h2>
+    <h2 class="forge-typography--heading4">Popup title</h2>
 
     <forge-select label="Select" value="determinate">
       <forge-option value="one">One</forge-option>
@@ -17,9 +15,7 @@
       <input type="text" id="popup-input" />
     </forge-text-field>
     
-    <forge-button type="unelevated">
-      <button type="button">Click me</button>
-    </forge-button>
+    <forge-button variant="flat">Click me</forge-button>
   </div>
 </template>
 

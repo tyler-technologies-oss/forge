@@ -1,20 +1,46 @@
+@use '../core/styles/theme';
 @use './animations';
-@use './configuration';
-@use './core';
+@use './core' as *;
 
-/// Host styles
+//
+// Host styles
+//
+
+$_host-tokens: [track-height];
+
 :host {
-  @include core.container;
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  @include container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-/// Base styles
+//
+// Base
+//
+
 .forge-linear-progress {
-  @include configuration.configuration;
-  @include core.progress;
+  @include tokens($excludes: $_host-tokens);
+
+  // State vars
+  #{declare(track-dot-size)}: calc(#{token(track-height)} / 2);
+  #{declare(track-background-width)}: calc(#{token(track-dot-size, custom)} * 5);
+  #{declare(track-background)}: 0 / #{token(track-background-width, custom)} 100%
+    radial-gradient(
+      circle at calc(#{token(track-dot-size, custom)} * 2),
+      #{token(track-color)} 0,
+      #{token(track-color)} #{token(track-dot-size, custom)},
+      transparent #{token(track-dot-size, custom)}
+    );
+}
+
+.forge-linear-progress {
+  @include progress;
 }
 
 .forge-linear-progress,
@@ -26,49 +52,49 @@
 }
 
 .bar {
-  @include core.bar;
+  @include bar;
 }
 
 .secondary-bar {
-  @include core.secondary-bar;
+  @include secondary-bar;
 }
 
 .bar-inner {
-  @include core.bar-inner;
+  @include bar-inner;
 }
 
 .buffer-bar {
-  @include core.buffer-bar;
+  @include buffer-bar;
 }
 
 .track {
-  @include core.track;
+  @include track;
 }
 
 /// Indeterminate styles
 .forge-linear-progress--indeterminate {
   .bar {
-    @include core.indeterminate-bar;
+    @include indeterminate-bar;
   }
 
   .primary-bar {
-    @include core.indeterminate-primary-bar;
+    @include indeterminate-primary-bar;
   }
 
   .secondary-bar {
-    @include core.indeterminate-secondary-bar;
+    @include indeterminate-secondary-bar;
   }
 
   .track {
-    @include core.indeterminate-track;
+    @include indeterminate-track;
   }
 
   .primary-bar > .bar-inner {
-    @include core.indeterminate-primary-bar-inner;
+    @include indeterminate-primary-bar-inner;
   }
 
   .secondary-bar > .bar-inner {
-    @include core.indeterminate-secondary-bar-inner;
+    @include indeterminate-secondary-bar-inner;
   }
 }
 
@@ -103,14 +129,35 @@ $rtl-selectors: (
   }
 }
 
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]) {
+    .forge-linear-progress {
+      @include override(indicator-color, theme.variable($theme), value);
+      @include override(track-color, theme.variable(#{$theme}-container), value);
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
 @media screen and (forced-colors: active) {
   .forge-linear-progress {
-    --_active-indicator-color: canvastext;
-    --_track-color: graytext;
-    border: 1px solid canvastext;
+    @include override(indicator-color, CanvasText, value);
+    @include override(track-color, GrayText, value);
+
+    border: 1px solid CanvasText;
 
     &.forge-linear-progress--indeterminate {
-      --_track-color: canvas;
+      @include override(track-color, Canvas, value);
     }
   }
 }

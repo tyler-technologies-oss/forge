@@ -123,26 +123,24 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
   }
 
   private _dispatchBeforetoggleEvent({ cancelable = false } = {}): boolean {
-    return this._adapter.dispatchHostEvent({
-      type: POPOVER_CONSTANTS.events.BEFORETOGGLE,
+    return this._adapter.dispatchHostEvent(new CustomEvent<PopoverToggleEventData>(POPOVER_CONSTANTS.events.BEFORETOGGLE, {
       detail: {
         oldState: this.open ? 'open' : 'closed',
         newState: this.open ? 'closed' : 'open'
-      } as PopoverToggleEventData,
+      },
       bubbles: false,
       cancelable
-    });
+    }));
   }
 
   private _dispatchToggleEvent(): void {
-    this._adapter.dispatchHostEvent({
-      type: POPOVER_CONSTANTS.events.TOGGLE,
+    this._adapter.dispatchHostEvent(new CustomEvent<PopoverToggleEventData>(POPOVER_CONSTANTS.events.TOGGLE, {
       detail: {
         oldState: this.open ? 'closed' : 'open',
         newState: this.open ? 'open' : 'closed'
-      } as PopoverToggleEventData,
+      },
       bubbles: false
-    });
+    }));
   }
 
   private _initializeTriggerListeners(): void {

@@ -9,7 +9,7 @@ const classes = {
 };
 
 const selectors = {
-  TOGGLE: `.${elementName}__toggle,[${elementName}-toggle],button,[type=button],[role=button],a,[tabindex]:not([tabindex^="-"])`,
+  TOGGLE: `.${elementName}__toggle,[${elementName}-toggle],forge-button,forge-icon-button,forge-fab,button,[type=button],[role=button],a,[tabindex]:not([tabindex^="-"])`,
   MENU_LIST: 'forge-list'
 };
 
@@ -68,5 +68,5 @@ export interface IMenuOption<T = any> extends IListDropdownOption<T> {
 export interface IMenuOptionGroup extends IListDropdownOptionGroup {}
 
 export type MenuOptionBuilder = (option: IMenuOption, parentElement: HTMLElement) => HTMLElement | string | void;
-export type MenuOptionFactory = (() => IMenuOption[]) | (() => Promise<IMenuOption[]>);
+export type MenuOptionFactory = (() => Array<IMenuOption | IMenuOptionGroup>) | (() => Promise<Array<IMenuOption | IMenuOptionGroup>>);
 export type MenuMode = 'click' | 'cascade';

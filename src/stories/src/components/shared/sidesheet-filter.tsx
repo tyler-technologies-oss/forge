@@ -38,12 +38,10 @@ export const ListFilter: FC<IListFilterProps> = ({filters, label, open, groupId}
     <ForgeExpansionPanel open={open} openCallback={evt => console.log(evt)}>
       <ForgeListItem slot="header" static={true}>
         <div onClick={() => setIsOpen(!isOpen)}>{label}</div>
-        <ForgeButton  slot="trailing">
-          <button onClick={evt => {
+        <ForgeButton slot="trailing" onClick={evt => {
             console.log('clear');
             filters.map(f => f.checked = false);
-          }}>Clear</button>
-        </ForgeButton>
+          }}>Clear</ForgeButton>
         <ForgeOpenIcon slot="trailing"/>
       </ForgeListItem>
       { filters.map( (f, i) => (<ListItemFilter key={i} filter={f} id={`${groupId}-${i}`}/>))}

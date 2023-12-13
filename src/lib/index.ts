@@ -8,39 +8,6 @@
 
 import { defineCustomElements } from '@tylertech/forge-core';
 import { AccordionComponent } from './accordion';
-import { AutocompleteComponent } from './autocomplete';
-import { AvatarComponent } from './avatar';
-import { BackdropComponent } from './backdrop';
-import { BadgeComponent } from './badge';
-import { BannerComponent } from './banner';
-import { BottomSheetComponent } from './bottom-sheet';
-import { BusyIndicatorComponent } from './busy-indicator';
-import { ButtonComponent } from './button';
-import { ButtonToggleComponent, ButtonToggleGroupComponent } from './button-toggle';
-import { CalendarComponent } from './calendar';
-import { CardComponent } from './card';
-import { CheckboxComponent } from './checkbox';
-import { ChipComponent, ChipSetComponent } from './chips';
-import { ChipFieldComponent } from './chip-field';
-import { CircularProgressComponent } from './circular-progress';
-import { ColorPickerComponent } from './color-picker';
-import { DateRangePickerComponent } from './date-range-picker';
-import { DatePickerComponent } from './date-picker';
-import { DialogComponent } from './dialog';
-import { DividerComponent } from './divider';
-import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
-import { ExpansionPanelComponent } from './expansion-panel';
-import { FilePickerComponent } from './file-picker';
-import { FloatingActionButton } from './floating-action-button';
-import { FocusIndicatorComponent } from './focus-indicator';
-import { IconButtonComponent } from './icon-button';
-import { InlineMessageComponent } from './inline-message';
-import { KeyboardShortcutComponent } from './keyboard-shortcut';
-import { LabelValueComponent } from './label-value';
-import { LinearProgressComponent } from './linear-progress';
-import { ListComponent } from './list';
-import { ListItemComponent } from './list/list-item';
-import { MenuComponent } from './menu';
 import {
   AppBarComponent,
   AppBarHelpButtonComponent,
@@ -50,6 +17,44 @@ import {
   AppBarSearchComponent,
   ProfileCardComponent
 } from './app-bar';
+import { AutocompleteComponent } from './autocomplete';
+import { AvatarComponent } from './avatar';
+import { BackdropComponent } from './backdrop';
+import { BadgeComponent } from './badge';
+import { BannerComponent } from './banner';
+import { BottomSheetComponent } from './bottom-sheet';
+import { BusyIndicatorComponent } from './busy-indicator';
+import { ButtonComponent } from './button';
+import { ButtonAreaComponent } from './button-area';
+import { ButtonToggleComponent, ButtonToggleGroupComponent } from './button-toggle';
+import { CalendarComponent } from './calendar';
+import { CardComponent } from './card';
+import { CheckboxComponent } from './checkbox';
+import { ChipFieldComponent } from './chip-field';
+import { ChipComponent, ChipSetComponent } from './chips';
+import { CircularProgressComponent } from './circular-progress';
+import { ColorPickerComponent } from './color-picker';
+import { DatePickerComponent } from './date-picker';
+import { DateRangePickerComponent } from './date-range-picker';
+import { DialogComponent } from './dialog';
+import { DividerComponent } from './divider';
+import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
+import { ExpansionPanelComponent } from './expansion-panel';
+import { FilePickerComponent } from './file-picker';
+import { FloatingActionButtonComponent } from './floating-action-button';
+import { FocusIndicatorComponent } from './focus-indicator';
+import { IconComponent } from './icon';
+import { IconButtonComponent } from './icon-button';
+import { InlineMessageComponent } from './inline-message';
+import { KeyboardShortcutComponent } from './keyboard-shortcut';
+import { LabelComponent } from './label';
+import { LabelValueComponent } from './label-value';
+import { LinearProgressComponent } from './linear-progress';
+import { ListComponent } from './list';
+import { ListItemComponent } from './list/list-item';
+import { ListDropdownComponent } from './exp/list-dropdown';
+import { OptionComponentExp, SelectComponentExp } from './exp';
+import { MenuComponent } from './menu';
 import { OpenIconComponent } from './open-icon';
 import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
@@ -57,13 +62,15 @@ import { PaginatorComponent } from './paginator';
 import { PopupComponent } from './popup';
 import { ProductIconComponent } from './product-icon';
 import { QuantityFieldComponent } from './quantity-field';
-import { RadioComponent } from './radio';
+import { RadioComponent, RadioGroupComponent } from './radio';
 import { RippleComponent } from './ripple';
 import { ScaffoldComponent } from './scaffold';
 import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
+import { SelectDropdownComponent } from './select/select-dropdown';
 import { SkeletonComponent } from './skeleton';
 import { SliderComponent } from './slider';
 import { SplitViewComponent } from './split-view';
+import { StackComponent } from './stack';
 import { StateLayerComponent } from './state-layer';
 import { StepComponent, StepperComponent } from './stepper';
 import { SwitchComponent } from './switch';
@@ -75,11 +82,6 @@ import { ToastComponent } from './toast';
 import { ToolbarComponent } from './toolbar';
 import { TooltipComponent } from './tooltip';
 import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
-import { IconComponent } from './icon';
-import { SelectDropdownComponent } from './select/select-dropdown';
-import { StackComponent } from './stack';
-import { ListDropdownComponent } from './exp/list-dropdown';
-import { OptionComponentExp, SelectComponentExp } from './exp';
 
 export * from './accordion';
 export * from './app-bar';
@@ -91,18 +93,19 @@ export * from './banner';
 export * from './bottom-sheet';
 export * from './busy-indicator';
 export * from './button';
+export * from './button-area';
 export * from './button-toggle';
 export * from './calendar';
 export * from './card';
 export * from './checkbox';
-export * from './chips';
 export * from './chip-field';
+export * from './chips';
 export * from './circular-progress';
 export * from './color-picker';
 export * from './constants';
 export * from './core';
-export * from './date-range-picker';
 export * from './date-picker';
+export * from './date-range-picker';
 export * from './dialog';
 export * from './divider';
 export * from './drawer';
@@ -115,6 +118,7 @@ export * from './icon';
 export * from './icon-button';
 export * from './inline-message';
 export * from './keyboard-shortcut';
+export * from './label';
 export * from './label-value';
 export * from './linear-progress';
 export * from './list';
@@ -133,7 +137,9 @@ export * from './scaffold';
 export * from './select';
 export * from './skeleton';
 export * from './slider';
+export * from './split-button';
 export * from './split-view';
+export * from './stack';
 export * from './state-layer';
 export * from './stepper';
 export * from './switch';
@@ -147,17 +153,24 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
-export * from './stack';
 export * from './exp';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
+  AppBarComponent,
+  AppBarHelpButtonComponent,
+  AppBarMenuButtonComponent,
+  AppBarNotificationButtonComponent,
+  AppBarProfileButtonComponent,
+  AppBarSearchComponent,
+  AutocompleteComponent,
   AvatarComponent,
   BackdropComponent,
   BadgeComponent,
   BannerComponent,
   BottomSheetComponent,
   BusyIndicatorComponent,
+  ButtonAreaComponent,
   ButtonComponent,
   ButtonToggleComponent,
   ButtonToggleGroupComponent,
@@ -165,8 +178,8 @@ const CUSTOM_ELEMENTS = [
   CardComponent,
   CheckboxComponent,
   ChipComponent,
-  ChipSetComponent,
   ChipFieldComponent,
+  ChipSetComponent,
   CircularProgressComponent,
   ColorPickerComponent,
   DatePickerComponent,
@@ -174,29 +187,22 @@ const CUSTOM_ELEMENTS = [
   DialogComponent,
   DividerComponent,
   DrawerComponent,
-  MiniDrawerComponent,
-  ModalDrawerComponent,
   ExpansionPanelComponent,
   FilePickerComponent,
-  FloatingActionButton,
+  FloatingActionButtonComponent,
   FocusIndicatorComponent,
-  ProductIconComponent,
-  IconComponent,
   IconButtonComponent,
+  IconComponent,
   InlineMessageComponent,
   KeyboardShortcutComponent,
+  LabelComponent,
   LabelValueComponent,
   LinearProgressComponent,
   ListComponent,
   ListItemComponent,
   MenuComponent,
-  AppBarComponent,
-  AppBarSearchComponent,
-  AppBarMenuButtonComponent,
-  AppBarNotificationButtonComponent,
-  AppBarHelpButtonComponent,
-  AppBarProfileButtonComponent,
-  ProfileCardComponent,
+  MiniDrawerComponent,
+  ModalDrawerComponent,
   OpenIconComponent,
   OptionComponent,
   OptionGroupComponent,
@@ -204,8 +210,11 @@ const CUSTOM_ELEMENTS = [
   PageStateComponent,
   PaginatorComponent,
   PopupComponent,
+  ProductIconComponent,
+  ProfileCardComponent,
   QuantityFieldComponent,
   RadioComponent,
+  RadioGroupComponent,
   RippleComponent,
   ScaffoldComponent,
   SelectComponent,
@@ -215,8 +224,8 @@ const CUSTOM_ELEMENTS = [
   SplitViewComponent,
   StackComponent,
   StateLayerComponent,
-  StepperComponent,
   StepComponent,
+  StepperComponent,
   SwitchComponent,
   TabBarComponent,
   TabComponent,
@@ -226,9 +235,8 @@ const CUSTOM_ELEMENTS = [
   ToastComponent,
   ToolbarComponent,
   TooltipComponent,
-  ViewSwitcherComponent,
   ViewComponent,
-  AutocompleteComponent,
+  ViewSwitcherComponent,
   SelectComponentExp,
   ListDropdownComponent,
   OptionComponentExp

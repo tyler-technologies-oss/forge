@@ -1,87 +1,96 @@
 <div class="vert">
   <div>
-    <h3 class="forge-typography--subtitle1-secondary">Default</h3>
-    <div role="radiogroup" aria-label="Choose radio option">
-      <forge-radio>
-        <input type="radio" id="input-radio-01" name="radios" />
-        <label for="input-radio-01">Option 01</label>
-      </forge-radio>
-      <forge-radio>
-        <input type="radio" id="input-radio-02" name="radios" checked />
-        <label for="input-radio-02">Option 02</label>
-      </forge-radio>
-      <forge-radio>
-        <input type="radio" id="input-radio-03" name="radios" />
-        <label for="input-radio-03">Option 03</label>
-      </forge-radio>
+    <h3 class="forge-typography--heading2">Default</h3>
+    <div role="radiogroup" aria-label="Choose a radio option">
+      <forge-radio name="default">Option 1</forge-radio>
+      <forge-radio name="default">Option 2</forge-radio>
+      <forge-radio name="default">Option 3</forge-radio>
     </div>
   </div>
 
-  <div>
-    <h3 class="forge-typography--subtitle1-secondary">Dense</h3>
-    <div role="radiogroup" aria-label="Choose radio option">
-      <forge-radio dense>
-        <input type="radio" id="input-radio-dense-01" name="radios-dense" />
-        <label for="input-radio-dense-01">Option 01</label>
-      </forge-radio>
-      <forge-radio dense>
-        <input type="radio" id="input-radio-dense-02" name="radios-dense" checked />
-        <label for="input-radio-dense-02">Option 02</label>
-      </forge-radio>
-      <forge-radio dense>
-        <input type="radio" id="input-radio-dense-03" name="radios-dense" />
-        <label for="input-radio-dense-03">Option 03</label>
-      </forge-radio>
+  <form id="radio-form">
+    <h3 class="forge-typography--heading2">Form associated</h3>
+    <div role="radiogroup" aria-label="Choose a radio option">
+      <forge-radio name="default" value="Option 1" required>Option 1</forge-radio>
+      <forge-radio name="default" value="Option 2">Option 2</forge-radio>
+      <forge-radio name="default" value="Option 3">Option 3</forge-radio>
     </div>
-  </div>
+    <button type="reset">Reset</button>
+    <button type="submit">Submit</button>
+  </form>
 
-  <div>
-    <h3 class="forge-typography--subtitle1-secondary">Disabled</h3>
-    <div role="radiogroup" aria-label="Choose radio option">
-      <forge-radio>
-        <input type="radio" id="input-radio-disabled-01" name="radios-disabled" disabled />
-        <label for="input-radio-disabled-01">Option 01</label>
-      </forge-radio>
-      <forge-radio>
-        <input type="radio" id="input-radio-disabled-02" name="radios-disabled" checked disabled />
-        <label for="input-radio-disabled-02">Option 02</label>
-      </forge-radio>
-      <forge-radio>
-        <input type="radio" id="input-radio-disabled-03" name="radios-disabled" disabled />
-        <label for="input-radio-disabled-03">Option 03</label>
-      </forge-radio>
+  <form>
+    <h3 class="forge-typography--heading2">Label aware</h3>
+    <div role="radiogroup" aria-label="Choose a radio option">
+      <forge-label>
+        Option 1
+        <forge-radio name="default"></forge-radio>
+      </forge-label>
+      <forge-label>
+        Option 2
+        <forge-radio name="default"></forge-radio>
+      </forge-label>
+      <forge-label>
+        Option 3
+        <forge-radio name="default"></forge-radio>
+      </forge-label>
     </div>
-  </div>
+  </form>
 
-  <div>
-    <h3 class="forge-typography--subtitle1-secondary">Example</h3>
-    <div role="radiogroup" id="example-radio-group" aria-label="Choose radio option">
-      <forge-radio>
-        <input type="radio" id="input-radio-example-1" name="radios-example" />
-        <label for="input-radio-example-1">Option 1</label>
-      </forge-radio>
-      <forge-radio>
-        <input type="radio" id="input-radio-example-2" name="radios-example" checked />
-        <label for="input-radio-example-2">Option 2</label>
-      </forge-radio>
-      <forge-radio>
-        <input type="radio" id="input-radio-example-3" name="radios-example" />
-        <label for="input-radio-example-3">Option 3</label>
-      </forge-radio>
+  <form>
+    <h3 class="forge-typography--heading2">Disabled</h3>
+    <div role="radiogroup" aria-label="Choose a radio option">
+      <forge-radio name="default" disabled>Option 1</forge-radio>
+      <forge-radio name="default" disabled>Option 2</forge-radio>
+      <forge-radio name="default" disabled>Option 3</forge-radio>
     </div>
-  </div>
+  </form>
 
-  <div class="actions">
-    <forge-button type="raised">
-      <button type="button" id="next-button">Next</button>
-    </forge-button>
-    <forge-button type="raised">
-      <button type="button" id="add-button">Add radio</button>
-    </forge-button>
-    <forge-button type="raised">
-      <button type="button" id="remove-button">Remove radio</button>
-    </forge-button>
-  </div>
-</div>
+  <form>
+    <h3 class="forge-typography--heading2">Read only</h3>
+    <div role="radiogroup" aria-label="Choose a radio option">
+      <forge-radio name="default" readonly>Option 1</forge-radio>
+      <forge-radio name="default" readonly>Option 2</forge-radio>
+      <forge-radio name="default" readonly>Option 3</forge-radio>
+    </div>
+  </form>
+
+  <form>
+    <h3 class="forge-typography--heading2">Label position start</h3>
+    <div role="radiogroup" aria-label="Choose a radio option">
+      <forge-radio name="default" label-position="start">Option 1</forge-radio>
+      <forge-radio name="default" label-position="start">Option 2</forge-radio>
+      <forge-radio name="default" label-position="start">Option 3</forge-radio>
+    </div>
+  </form>
+
+  <form>
+    <h3 class="forge-typography--heading2">Dense</h3>
+    <div role="radiogroup" aria-label="Choose a radio option">
+      <forge-radio name="default" dense>Option 1</forge-radio>
+      <forge-radio name="default" dense>Option 2</forge-radio>
+      <forge-radio name="default" dense>Option 3</forge-radio>
+    </div>
+  </form>
+
+  <form>
+    <h3 class="forge-typography--heading2">Radio group</h3>
+    <forge-radio-group>
+      <forge-label legend>Choose an option</forge-label>
+      <forge-radio name="default">Option 1</forge-radio>
+      <forge-radio name="default">Option 2</forge-radio>
+      <forge-radio name="default">Option 3</forge-radio>
+    </forge-radio-group>
+  </form>
+
+  <form>
+    <h3 class="forge-typography--heading2">Disabled radio group</h3>
+    <forge-radio-group disabled>
+      <forge-label legend>Choose an option</forge-label>
+      <forge-radio name="default">Option 1</forge-radio>
+      <forge-radio name="default">Option 2</forge-radio>
+      <forge-radio name="default">Option 3</forge-radio>
+    </forge-radio-group>
+  </form>
 
 <script type="module" src="radio.ts"></script>

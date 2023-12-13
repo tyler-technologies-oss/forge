@@ -5,8 +5,10 @@ on:
     paths:
       - 'forge.json'
       - 'package.json'
+      - 'package-lock.json'
       - '.eslintrc.json'
       - '.stylelintrc'
+      - '.autorc'
       - '.github/workflows/**/*'
       - 'src/**/*'
 
@@ -24,9 +26,10 @@ jobs:
               - 'forge.json'
               - 'tsconfig.json'
               - 'package.json'
+              - 'package-lock.json'
               - '.eslintrc.json'
               - '.stylelintrc'
-              - 'auto.config.ts'
+              - '.autorc'
               - '.github/workflows/**'
               - 'src/lib/**'
             test:

@@ -1,0 +1,41 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Split button',
+    includePath: './pages/split-button/split-button.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Variant',
+        id: 'opt-variant',
+        defaultValue: 'text',
+        options: [
+          { label: 'Text (default)', value: 'text' },
+          { label: 'Outlined', value: 'outlined' },
+          { label: 'Tonal', value: 'tonal'},
+          { label: 'Filled', value: 'filled'},
+          { label: 'Raised', value: 'raised' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-theme',
+        defaultValue: 'primary',
+        options: [
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
+      { type: 'switch', label: 'Dense', id: 'opt-dense' },
+      { type: 'switch', label: 'Pill', id: 'opt-pill' }
+    ]
+  }
+})
+%>

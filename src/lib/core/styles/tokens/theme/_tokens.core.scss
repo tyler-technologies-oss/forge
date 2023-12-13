@@ -1,0 +1,40 @@
+@use 'sass:map';
+@use '../../utils';
+@use './token-utils';
+@use './tokens.surface' as surface;
+@use '../color-palette';
+
+///
+/// Computes the status theme colors.
+/// 
+/// @param {Map} $colors - The status colors map.
+/// @param {Map} $surface-theme - The base surface theme
+/// @return {Map} - The computed status theme
+/// 
+@function get-status-theme($colors, $surface-theme) {
+  $surface: map.get($surface-theme, surface);
+
+  $primary-theme: token-utils.get-color-theme('primary', map.get($colors, primary), $surface);
+  $secondary-theme: token-utils.get-color-theme('secondary', map.get($colors, secondary), $surface);
+  $tertiary-theme: token-utils.get-color-theme('tertiary', map.get($colors, tertiary), $surface);
+
+  @return utils.flatten(
+    $primary-theme,
+    $secondary-theme,
+    $tertiary-theme
+  );
+}
+
+// Light
+$tokens: get-status-theme((
+  primary: color-palette.$indigo-500,
+  secondary: color-palette.$amber-500,
+  tertiary: color-palette.$indigo-a400
+), surface.$tokens);
+
+// Dark
+$tokens-dark: get-status-theme((
+  primary: color-palette.$indigo-a100,
+  secondary: color-palette.$amber-200,
+  tertiary: color-palette.$amber-200
+), surface.$tokens-dark);

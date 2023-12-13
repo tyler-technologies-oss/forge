@@ -57,8 +57,10 @@
 }
 
 ///
-/// Gets a CSS custom property declaration for a specific elevation token, with its token value as the fallback value
+/// Returns a global z-index CSS custom property reference (with the fallback value) specified by the provided level.
 /// 
-@function z-index($key, $prefix: config.$prefix) {
-  @return utils.variable(z-index, tokens.$z-index-map, $key, $prefix);
+/// @param {Number} $level - The z-index level to return.
+///
+@function z-index-variable($level) {
+  @return utils.variable(z-index, tokens.$z-index-map, $level);
 }

@@ -1,0 +1,24 @@
+<template>
+  <div class="forge-app-bar" part="root">
+    <div class="row">
+      <div class="section">
+        <slot name="start"></slot>
+        <div class="logo-title-container">
+          <slot name="logo"></slot>
+          <slot name="title">
+            <h1 class="title" part="title"></h1>
+          </slot>
+        </div>
+      </div>
+      <div id="center-section" class="section">
+        <slot name="center"></slot>
+      </div>
+      <div class="section">
+        <slot name="end"></slot>
+      </div>
+    </div>
+    <div>
+      <slot name="bottom"></slot>
+    </div>
+  </div>
+</template>

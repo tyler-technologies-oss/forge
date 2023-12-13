@@ -35,7 +35,7 @@ declare global {
     popover: 'manual' | 'auto' | null | undefined;
     showPopover(): void;
     hidePopover(): void;
-    togglePopover(): void;
+    togglePopover(): boolean;
   }
 }
 

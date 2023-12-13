@@ -1,67 +1,56 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
 import { IListItemComponent } from './list-item';
 
-const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}list-item`;
+const elementName = `${COMPONENT_NAME_PREFIX}list-item`;
 
-const attributes = {
-  STATIC: 'static',
-  TWO_LINE: 'two-line',
-  THREE_LINE: 'three-line',
-  ACTIVE: 'active',
-  SELECTED: 'selected',
-  VALUE: 'value',
+const observedAttributes = {
   HREF: 'href',
   TARGET: 'target',
-  RIPPLE: 'ripple',
+  DOWNLOAD: 'download',
+  REL: 'rel',
+  STATIC: 'static',
+  NON_INTERACTIVE: 'non-interactive',
   DISABLED: 'disabled',
+  SELECTED: 'selected',
+  ACTIVE: 'active',
+  VALUE: 'value',
   DENSE: 'dense',
   PROPAGATE_CLICK: 'propagate-click',
   INDENTED: 'indented',
-  WRAP: 'wrap',
-  DRAWER_CONTEXT: 'forge-drawer-context',
-  IGNORE: 'forge-ignore'
+  TWO_LINE: 'two-line',
+  THREE_LINE: 'three-line',
+  WRAP: 'wrap'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const classes = {
-  LIST_ITEM: 'forge-list-item',
-  STATIC: 'forge-list-item--static',
-  TEXT: 'forge-list-item__text',
-  TWO_LINE: 'forge-list-item--two-line',
-  THREE_LINE: 'forge-list-item--three-line',
-  ACTIVE: 'forge-list-item--active',
-  ACTIVATED: 'forge-list-item--activated',
-  SELECTED: 'forge-list-item--selected',
-  DISABLED: 'forge-list-item--disabled',
-  DENSE: 'forge-list-item--dense',
-  INDENTED: 'forge-list-item--indented',
-  WRAP: 'forge-list-item--wrap'
+  ROOT: 'forge-list-item'
 };
 
 const selectors = {
-  LIST_ITEM: `.${classes.LIST_ITEM}`,
-  DEFAULT_SLOT: `.${classes.TEXT} > slot`,
-  CHECKBOX_RADIO_SELECTOR: 'input[type=checkbox]:not(:disabled):not([forge-ignore]),input[type=radio]:not(:disabled):not([forge-ignore])'
+  ROOT: `.${classes.ROOT}`,
+  CHECKBOX_RADIO_SELECTOR: ':is(input[type=checkbox], input[type=radio], forge-checkbox):not(:disabled):not([forge-ignore])',
+  SWITCH_SELECTOR: 'forge-switch:not([disabled]):not([forge-ignore])',
+  IGNORE: '[forge-ignore],[data-forge-ignore]'
 };
 
 const events = {
   SELECT: `${elementName}-select`
 };
 
-const roles = {
-  LINK: 'link',
-  LIST_ITEM: 'listitem'
-};
-
 export const LIST_ITEM_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   classes,
   selectors,
-  events,
-  roles
+  events
 };
 
-export interface IListItemSelectEventData {
-  value: any;
+export interface IListItemSelectEventData<T = unknown> {
+  value: T;
   listItem: IListItemComponent;
 }

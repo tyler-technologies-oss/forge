@@ -22,18 +22,18 @@ tabBar.addEventListener('forge-tab-bar-change', (evt) => {
 });
 
 const verticalToggle = document.getElementById('opt-vertical') as ISwitchComponent;
-verticalToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+verticalToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.vertical = selected;
   container.classList.toggle('tabs-demo-container--vertical', selected);
 });
 
 const secondaryToggle = document.getElementById('opt-secondary') as ISwitchComponent;
-secondaryToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+secondaryToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.secondary = selected;
 });
 
 const clusteredToggle = document.getElementById('opt-clustered') as ISwitchComponent;
-clusteredToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+clusteredToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     tabBar.setAttribute('clustered', clusteredAlignSelect.value);
   } else {
@@ -43,32 +43,32 @@ clusteredToggle.addEventListener('forge-switch-select', ({ detail: selected }) =
 });
 
 const stackedToggle = document.getElementById('opt-stacked') as ISwitchComponent;
-stackedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+stackedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.stacked = selected;
 });
 
 const disabledToggle = document.getElementById('opt-disabled') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.disabled = selected;
 });
 
 const invertedToggle = document.getElementById('opt-inverted') as ISwitchComponent;
-invertedToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+invertedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.inverted = selected;
 });
 
 const autoActivateToggle = document.getElementById('opt-auto-activate') as ISwitchComponent;
-autoActivateToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+autoActivateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.autoActivate = selected;
 });
 
 const scrollButtonsToggle = document.getElementById('opt-scroll-buttons') as ISwitchComponent;
-scrollButtonsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+scrollButtonsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   tabBar.scrollButtons = selected;
 });
 
 const showLeadingToggle = document.getElementById('opt-show-leading') as ISwitchComponent;
-showLeadingToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showLeadingToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const tabElements = tabBar.querySelectorAll('forge-tab');
   tabElements.forEach(tab => {
     if (selected) {
@@ -80,7 +80,7 @@ showLeadingToggle.addEventListener('forge-switch-select', ({ detail: selected })
 });
 
 const showTrailingToggle = document.getElementById('opt-show-trailing') as ISwitchComponent;
-showTrailingToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+showTrailingToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const tabElements = tabBar.querySelectorAll('forge-tab');
   tabElements.forEach(tab => {
     if (selected) {

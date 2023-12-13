@@ -78,12 +78,8 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   }
 
   private _onLightDismiss({ type }: OverlayLightDismissEventData): void {
-    const isCancelled = this._adapter.dispatchHostEvent({
-      type: OVERLAY_CONSTANTS.events.LIGHT_DISMISS,
-      bubbles: false,
-      cancelable: true,
-      detail: { type } as OverlayLightDismissEventData
-    });
+    const evt = new CustomEvent<OverlayLightDismissEventData>(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, { bubbles: false, cancelable: true, detail: { type } });
+    const isCancelled = this._adapter.dispatchHostEvent(evt);
     if (isCancelled) {
       return;
     }

@@ -1,50 +1,54 @@
 @use './animations';
-@use './configuration';
-@use './core';
+@use './core' as *;
 
-/// Host styles
+//
+// Host
+//
+
 :host {
-  display: contents;
+  @include tokens;
+}
+
+:host {
+  @include base;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+//
+// States
+//
+
 :host([active]) {
-  .forge-focus-indicator {
-    @include core.active;
-  }
+  @include active;
 }
 
 :host(:not([inward])) {
-  .forge-focus-indicator {
-    @include core.outward;
-  }
+  @include outward;
 }
 
 :host([inward]) {
-  .forge-focus-indicator {
-    @include core.inward;
-  }
+  @include inward;
 }
 
 :host([circular]) {
-  .forge-focus-indicator {
-    @include core.circular;
-  }
+  @include circular;
 }
 
-/// Base styles
-.forge-focus-indicator {
-  @include configuration.configuration;
-  @include core.base;
-}
+//
+// Animations
+//
 
 @include animations.keyframes;
 
+//
+// Media Queries
+//
+
 @media (prefers-reduced-motion) {
-  .forge-focus-indicator {
+  :host {
     animation: none;
   }
 }

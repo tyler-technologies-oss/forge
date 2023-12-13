@@ -1,6 +1,4 @@
 @use '../core/styles/theme' as theme;
-@use '../app-bar/mixins' as app-bar-mixins;
-@use '../app-bar/variables' as app-bar-variables;
 @use '../backdrop/mixins' as backdrop-mixins;
 @use '../backdrop/variables' as backdrop-variables;
 @use '../skeleton/mixins' as skeleton-mixins;
@@ -16,7 +14,6 @@
 @use '../inline-message/variables' as inline-message-variables;
 @use '../table/mixins' as table-mixins;
 @use '../table/variables' as table-variables;
-@use '../switch/switch-theme' as switch-theme;
 
 ///
 /// Provides the CSS custom property definitions for the default Forge dark theme.
@@ -26,7 +23,6 @@
   @include theme.properties-dark;
 
   /// Component-specific Forge theme properties
-  @include app-bar-mixins.provide-theme(app-bar-variables.$theme-values-dark);
   @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);
   @include skeleton-mixins.provide-theme(skeleton-variables.$theme-values-dark);
   @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);
@@ -34,5 +30,4 @@
   @include badge-mixins.provide-theme(badge-variables.$theme-values-dark);
   @include banner-mixins.provide-theme(banner-variables.$theme-values-dark);
   @include inline-message-mixins.provide-theme(inline-message-variables.$theme-values-dark);
-  @include switch-theme.dark-theme-properties;
 }

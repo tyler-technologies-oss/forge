@@ -1,0 +1,70 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  gap: #{token(gap)};
+
+  height: #{token(height)};
+  width: 100%;
+  padding-inline: #{token(padding)};
+  box-sizing: border-box;
+
+  border-radius: #{token(shape)};
+
+  &:hover {
+    &::after {
+      opacity: #{token(border-hover-opacity)};
+    }
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: #{token(background-color)};
+    opacity: #{token(background-color-opacity)};
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: #{token(border-opacity)};
+    border-radius: #{token(shape)};
+    outline: 1px solid #{token(border-color)};
+    transition-property: opacity;
+    transition-duration: #{token(transition-duration)};
+    transition-timing-function: #{token(transition-timing-function)};
+  }
+}
+
+@mixin input {
+  @include typography.style(body2);
+
+  display: block;
+  overflow: hidden;
+  background: none;
+  color: currentColor;
+  border: none;
+  width: 100%;
+  margin: 0;
+  outline: none;
+  
+  &::placeholder {
+    color: currentColor;
+    opacity: #{token(input-placeholder-opacity)};
+  }
+}

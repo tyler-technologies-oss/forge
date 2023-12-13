@@ -9,6 +9,7 @@ import {
   defineDateRangePickerComponent,
   defineTextFieldComponent,
   formatDate,
+  IButtonComponent,
   ICalendarComponent,
   ICON_BUTTON_CONSTANTS,
   IDateRange,
@@ -919,6 +920,32 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(inputElement.value).toBe('01/01/2020');
     });
 
+    it('should select mask in "from" input when shown on focus', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const fromElement = getFromElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      fromElement.focus();
+      
+      expect(fromElement.selectionStart).toEqual(0);
+      expect(fromElement.selectionEnd).toEqual('__/__/____'.length);
+    });
+
+    it('should select mask in "to" input when shown on focus', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const toElement = getToElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      toElement.focus();
+      
+      expect(toElement.selectionStart).toEqual(0);
+      expect(toElement.selectionEnd).toEqual('__/__/____'.length);
+    });
+
     it('should only show mask format in "from" input on focus', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const fromElement = getFromElement(this.context.component);
@@ -1601,28 +1628,26 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     return popup.querySelector('[data-forge-live-announcer]') as HTMLElement;
   }
 
-  function getTodayButton(component: IDateRangePickerComponent): HTMLButtonElement {
+  function getTodayButton(component: IDateRangePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#today-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#today-button') as IButtonComponent ?? null;
   }
 
-  function getClearButton(component: IDateRangePickerComponent): HTMLButtonElement {
+  function getClearButton(component: IDateRangePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#clear-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#clear-button') as IButtonComponent ?? null;
   }
 
   function clickTodayButton(component: IDateRangePickerComponent): void {
     const todayButton = getTodayButton(component);
     todayButton.click();
-    todayButton.dispatchEvent(new MouseEvent('click'));
   }
 
   function clickClearButton(component: IDateRangePickerComponent): void {
     const clearButton = getClearButton(component);
     clearButton.click();
-    clearButton.dispatchEvent(new MouseEvent('click'));
   }
 
   async function popupCloseAnimation(): Promise<void> {

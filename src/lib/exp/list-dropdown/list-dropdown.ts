@@ -3,11 +3,11 @@ import { BaseComponent, IBaseComponent } from '../../core';
 import { ListDropdownAdapter } from './list-dropdown-adapter';
 import { LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
 import { ListDropdownFoundation } from './list-dropdown-foundation';
+import { PopoverComponent } from '../../popover/popover';
+import { OptionComponentExp } from '../option';
 
-import { PopoverComponent } from '@tylertech/forge/popover';
 import template from './list-dropdown.html';
 import styles from './list-dropdown.scss';
-import { OptionComponentExp } from '../option';
 
 export interface IListDropdownComponent extends IBaseComponent {
   open: boolean;

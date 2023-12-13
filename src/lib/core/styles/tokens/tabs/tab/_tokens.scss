@@ -1,11 +1,12 @@
 @use 'sass:map';
 @use '../../../theme';
 @use '../../../utils';
+@use '../../../spacing';
 
 $tokens: (
   // Shared
   active-color: utils.module-val(tab, active-color, theme.variable(primary)),
-  inactive-color: utils.module-val(tab, inactive-color, theme.variable(text-secondary)),
+  inactive-color: utils.module-val(tab, inactive-color, theme.variable(text-medium)),
   height: utils.module-val(tab, height, 48px),
   stacked-height: utils.module-val(tab, stacked-height, 64px),
 
@@ -35,6 +36,7 @@ $tokens: (
   
   // Content
   content-height: utils.module-ref(tab, content-height, height),
+  content-padding: utils.module-val(tab, content-padding, spacing.variable(xxsmall)),
 
   // Icon
   active-focus-icon-color: utils.module-ref(tab, active-focus-icon-color, active-color),

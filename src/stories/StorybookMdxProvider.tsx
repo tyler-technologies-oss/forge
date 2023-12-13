@@ -16,9 +16,9 @@ import { LiveDemoStage } from './src/core/live-demo-stage';
 
 export const StorybookMdxComponents: Record<string, FC> = {
   wrapper: ({ children }: any) => <ForgeCard style={{ '--forge-card-padding': '16px 0' }}>{children}</ForgeCard>,
-  h1: (props: any) => <h1 {...props} className="forge-typography--headline5" style={{marginTop: '16px'}}>{props.children}</h1>,
-  h2: (props: any) => <h2 {...props} className="forge-typography--title forge-docs-core--header1">{props.children}</h2>,
-  h3: (props: any) => <h3 {...props} className="forge-typography--subtitle1-secondary forge-docs-core--header2">{props.children}</h3>,
+  h1: (props: any) => <h1 {...props} className="forge-typography--heading4" style={{marginTop: '16px'}}>{props.children}</h1>,
+  h2: (props: any) => <h2 {...props} className="forge-typography--subheading4 forge-docs-core--header1">{props.children}</h2>,
+  h3: (props: any) => <h3 {...props} className="forge-typography--heading2 forge-docs-core--header2">{props.children}</h3>,
   table: (props: any) => <table {...props} className="forge-docs-core__table" />,
   section: (props: any) => <section {...props} className="forge-docs-core__section">{props.children}</section>,
   blockquote: (props: any) => <Blockquote {...props} />,

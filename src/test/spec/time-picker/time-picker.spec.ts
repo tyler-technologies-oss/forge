@@ -622,7 +622,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
-    const matchingListItem = listItems.find(li => li.selected) as IListItemComponent;
+    const matchingListItem = listItems.find(li => li.selected) as IListItemComponent<ITimePickerOptionValue>;
 
     expect(matchingListItem.value.time).toBe(timeMillis);
   });
@@ -667,7 +667,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
-    const activeListItem = listItems.find(li => li.selected) as IListItemComponent;
+    const activeListItem = listItems.find(li => li.selected) as IListItemComponent<ITimePickerOptionValue>;
 
     expect(activeListItem.value.time).toBe(timeMillis);
   });
@@ -701,7 +701,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
-    const restrictedListItem = listItems.find(li => li.value.time === firstRestrictedTimeMillis) as IListItemComponent;
+    const restrictedListItem = listItems.find((li: IListItemComponent<ITimePickerOptionValue>) => li.value.time === firstRestrictedTimeMillis) as IListItemComponent;
 
     expect(restrictedListItem.disabled).toBeTrue();
 
@@ -872,7 +872,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'End' }));      
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
-    const selectedListItem = listItems[listItems.length - 1];
+    const selectedListItem = listItems[listItems.length - 1] as IListItemComponent<ITimePickerOptionValue>;
     const selectedTimeString = millisToTimeString(selectedListItem.value.time, true, false);
 
     expect(changeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: selectedTimeString }));
@@ -923,10 +923,11 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
+    const listItem = listItems[0] as IListItemComponent<ITimePickerOptionValue>;
 
-    expect(listItems[0].value.time).toBeNull();
-    expect(listItems[0].innerText).toBe('Now');
-    expect(listItems[0].value.metadata).toBe('now');
+    expect(listItem.value.time).toBeNull();
+    expect(listItem.innerText).toBe('Now');
+    expect(listItem.value.metadata).toBe('now');
   });
 
   it('should show "now" as the only option in the dropdown when showHourOptions is false and showNow is true and customOptions is empty', async function(this: ITestContext) {
@@ -939,11 +940,12 @@ describe('TimePickerComponent', function(this: ITestContext) {
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
     const listItems = this.context.getListItems();
+    const firstListItem = listItems[0] as IListItemComponent<ITimePickerOptionValue>;
 
     expect(listItems.length).toBe(1);
-    expect(listItems[0].value.time).toBeNull();
-    expect(listItems[0].innerText).toBe('Now');
-    expect(listItems[0].value.metadata).toBe('now');
+    expect(firstListItem.value.time).toBeNull();
+    expect(firstListItem.innerText).toBe('Now');
+    expect(firstListItem.value.metadata).toBe('now');
   });
 
   it('should should not show dropdown when showNow is false and showHourOptions is false and customOptions is empty', async function(this: ITestContext) {
@@ -973,15 +975,17 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     expect(this.context.component.customOptions).toEqual(customOptions);
 
-    expect(listItems[0].innerText).toBe(customOptions[0].label);
-    expect(listItems[0].value.time).toBeNull();
-    expect(listItems[0].value.metadata).toBe(customOptions[0].value);
-    expect(listItems[0].value.isCustom).toBeTrue();
+    const firstListItem = listItems[0] as IListItemComponent<ITimePickerOptionValue>;
+    expect(firstListItem.innerText).toBe(customOptions[0].label);
+    expect(firstListItem.value.time).toBeNull();
+    expect(firstListItem.value.metadata).toBe(customOptions[0].value);
+    expect(firstListItem.value.isCustom).toBeTrue();
 
-    expect(listItems[1].innerText).toBe(customOptions[1].label);
-    expect(listItems[1].value.time).toBeNull();
-    expect(listItems[1].value.metadata).toBe(customOptions[1].value);
-    expect(listItems[1].value.isCustom).toBeTrue();
+    const secondListItem = listItems[1] as IListItemComponent<ITimePickerOptionValue>;
+    expect(secondListItem.innerText).toBe(customOptions[1].label);
+    expect(secondListItem.value.time).toBeNull();
+    expect(secondListItem.value.metadata).toBe(customOptions[1].value);
+    expect(secondListItem.value.isCustom).toBeTrue();
   });
 
   it('should call toMilliseconds function when selecting custom options', async function(this: ITestContext) {
@@ -1014,7 +1018,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const firstListItemMillis = timeStringToMillis(min, true, false);
     const lastListItemMillis = timeStringToMillis(max, true, false);
 
-    const listItems = this.context.getListItems();
+    const listItems = this.context.getListItems() as IListItemComponent<ITimePickerOptionValue>[];
 
     expect(listItems[0].value.time).toBe(firstListItemMillis);
     expect(listItems[listItems.length - 1].value.time).toBe(lastListItemMillis);
@@ -1045,6 +1049,20 @@ describe('TimePickerComponent', function(this: ITestContext) {
     inputElement.dispatchEvent(new KeyboardEvent('input'));
 
     expect(inputElement.value).toBe('01:01');
+  });
+
+  it('should select mask when shown on focus', function(this: ITestContext) {
+    this.context = _createTimePickerContext();
+    const inputElement = this.context.inputElement;
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.MASKED, '');
+    this.context.component.setAttribute(TIME_PICKER_CONSTANTS.attributes.SHOW_MASK_FORMAT, '');
+
+    expect(this.context.component.masked).toBe(true);
+    expect(this.context.component.showMaskFormat).toBe(true);
+    inputElement.focus();
+
+    expect(inputElement.selectionStart).toEqual(0);
+    expect(inputElement.selectionEnd).toEqual('__:__ __'.length);
   });
 
   it('should only show default mask format on focus', function(this: ITestContext) {

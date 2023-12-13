@@ -9,9 +9,7 @@ export const BottomSheetDefaultHtml = () => `
     numquam odio.
   </section>
   <footer class="forge-dialog__footer">
-    <forge-button type="raised">
-      <button id="cancel-button">Close</button>
-    </forge-button>
+    <forge-button variant="raised" id="cancel-button">Close</forge-button>
   </footer>
 </template>
 `;

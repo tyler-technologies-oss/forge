@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}linear-progress`;
 
@@ -16,7 +16,7 @@ const attributes = {
   DETERMINATE: 'determinate',
   PROGRESS: 'progress',
   BUFFER: 'buffer',
-  ARIA_LABEL: 'data-aria-label'
+  THEME: 'theme'
 };
 
 export const LINEAR_PROGRESS_CONSTANTS = {
@@ -25,3 +25,5 @@ export const LINEAR_PROGRESS_CONSTANTS = {
   selectors,
   attributes
 };
+
+export type LinearProgressTheme = Theme;

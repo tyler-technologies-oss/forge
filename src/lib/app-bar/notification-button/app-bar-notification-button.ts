@@ -18,16 +18,28 @@ declare global {
 }
 
 export interface IAppBarNotificationButtonComponent extends IBaseComponent {
-  count: number;
+  count: number | string;
   dot: boolean;
   showBadge: boolean;
   theme: string;
   icon: string;
 }
 /**
- * The web component class behind the `<forge-app-bar-notification-button>` custom element.
- * 
  * @tag forge-app-bar-notification-button
+ * 
+ * @property {number | string} count - The number to display in the badge.
+ * @property {boolean} dot - Whether to display the dot variant of the badge or not.
+ * @property {boolean} showBadge - Whether to display the badge or not.
+ * @property {string} theme - The theme to apply to the badge.
+ * @property {string} icon - The name of an alternative icon to display.
+ * 
+ * @attribute {string} [count] - The number to display in the badge.
+ * @attribute {boolean} [dot] - Whether to display the dot variant of the badge or not.
+ * @attribute {boolean} [show-badge] - Whether to display the badge or not.
+ * @attribute {string} [theme] - The theme to apply to the badge.
+ * @attribute {string} [icon] - The name of an alternative icon to display.
+ * @attribute {string} [aria-label] - The aria-label to apply to the button.
+ * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */
 @CustomElement({
   name: APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.elementName,
@@ -65,10 +77,14 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
     this._foundation.initialize();
   }
 
+  public disconnectedCallback(): void {
+    this._foundation.destroy();
+  }
+
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT:
-        this.count = coerceNumber(newValue);
+        this.count = newValue;
         break;
       case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT:
         this.dot = coerceBoolean(newValue);
@@ -86,7 +102,7 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   @FoundationProperty()
-  public declare count: number;
+  public declare count: number | string;
 
   @FoundationProperty()
   public declare dot: boolean;

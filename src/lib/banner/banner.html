@@ -6,7 +6,7 @@
           <slot name="icon"></slot>
         </div>
         <div class="forge-banner__container-wrapper-subsection" part="subsection-wrapper">
-          <div class="forge-banner__container-wrapper-subsection-text forge-typography--body1" part="subsection-text">
+          <div class="forge-banner__container-wrapper-subsection-text forge-typography--body2" part="subsection-text">
             <slot></slot>
           </div>
           <div class="forge-banner__container-wrapper-subsection-action" part="action-subsection">
@@ -14,12 +14,10 @@
           </div>
         </div>
       </div>
-      <forge-icon-button class="forge-banner__container-dismiss" part="dismiss-icon-button">
-        <button type="button" aria-label="Dismiss this banner" part="dismiss-button">
-          <forge-icon name="cancel" part="dismiss-button-icon"></forge-icon>
-        </button>
-        <forge-tooltip>Dismiss</forge-tooltip>
+      <forge-icon-button class="forge-banner__container-dismiss" part="dismiss-icon-button" aria-label="Dismiss this banner" part="dismiss-button">
+        <forge-icon name="cancel" part="dismiss-button-icon"></forge-icon>
       </forge-icon-button>
+      <forge-tooltip>Dismiss</forge-tooltip>
     </div>
   </div>
 </template>

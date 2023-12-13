@@ -1,34 +1,114 @@
-<div class="vert">
-  <forge-button>
-    <button type="button">Default button</button>
-  </forge-button>
-  <forge-button type="raised">
-    <button type="button">Raised button</button>
-  </forge-button>
-  <forge-button type="unelevated">
-    <button type="button">Unelevated button</button>
-  </forge-button>
-  <forge-button type="outlined">
-    <button type="button">Outlined button</button>
-  </forge-button>
-  <forge-button type="outlined">
-    <button type="button">
-      <forge-icon name="favorite"></forge-icon>
-      <span>w/Leading Icon</span>
-    </button>
-  </forge-button>
-  <forge-button type="outlined">
-    <button type="button">
-      <span>w/Trailing icon</span>
-      <forge-icon name="favorite"></forge-icon>
-    </button>
-  </forge-button>
-  <forge-button type="outlined">
-    <a href="javascript: alert('Anchor link button works!');">
-      <span>w/anchor tag</span>
-      <forge-icon name="open_in_new"></forge-icon>
-    </a>
-  </forge-button>
+<div class="button-demo">
+  <section class="vert">
+    <h3 class="forge-typography--heading2">Variants</h3>
+    <forge-button>Text button</forge-button>
+    <forge-button variant="outlined">Outlined button</forge-button>
+    <forge-button variant="tonal">Tonal button</forge-button>
+    <forge-button variant="filled">Filled button</forge-button>
+    <forge-button variant="raised">Raised button</forge-button>
+    <forge-button variant="link">Link button</forge-button>
+  </section>
+
+  <section class="vert">
+    <h3 class="forge-typography--heading2">Slots</h3>
+
+    <forge-button variant="outlined">
+      <span>w/&lt;span&gt; text container</span>
+    </forge-button>
+    
+    <forge-button variant="outlined">
+      <forge-icon slot="start" name="favorite"></forge-icon>
+      w/Start icon
+    </forge-button>
+
+    <forge-button variant="outlined">
+      w/End icon
+      <forge-icon slot="end" name="favorite"></forge-icon>
+    </forge-button>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Anchor</h3>
+    <forge-button variant="outlined" href="javascript: alert('Anchor link button works!');">
+      w/Anchor link
+      <forge-icon slot="end" name="open_in_new"></forge-icon>
+    </forge-button>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Custom</h3>
+    <forge-button class="custom-button">Custom button</forge-button>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Label aware</h3>
+    <forge-label class="vert">
+      <forge-button variant="outlined">
+        <forge-icon name="favorite"></forge-icon>
+      </forge-button>
+      <span>Label text for the button</span>
+    </forge-label>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">w/Circular progress</h3>
+    <div class="flex">
+      <forge-button class="auto-width">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant text" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="outlined">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant outlined" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="tonal">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant tonal" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="filled">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant filled" slot="end"></forge-circular-progress>
+      </forge-button>
+
+      <forge-button class="auto-width" variant="raised">
+        <span>Saving...</span>
+        <forge-circular-progress aria-label="Saving variant raised" slot="end"></forge-circular-progress>
+      </forge-button>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Form example</h3>
+    <form class="test-form" id="test-btn-form" action="javascript: alert('<form> submit action');">
+      <forge-text-field style="width: 516px;">
+        <input type="text" placeholder="Text input" aria-label="Test form input" autocomplete="off" />
+      </forge-text-field>
+      <div>
+        <forge-button id="submit-btn" variant="outlined" type="submit" name="submit-btn" formaction="javascript: alert('<forge-button> submit override action');">Submit</forge-button>
+        <forge-button id="reset-btn" variant="outlined" type="reset">Reset</forge-button>
+      </div>
+    </form>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Popover target</h3>
+    <forge-button id="popover-button" aria-expanded="false" popovertarget="my-popover" popover-icon variant="raised">Show popover</forge-button>
+    <div popover id="my-popover">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam blanditiis cum quod, velit, architecto consequatur commodi sint odit non deleniti qui? Accusamus expedita, exercitationem laborum architecto facere quasi rem! Voluptate!</div>
+  </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Dialog</h3>
+    <forge-button variant="raised" id="show-dialog-btn">Show dialog</forge-button>
+    <dialog id="test-dialog">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus architecto sunt esse voluptatum possimus magnam omnis ipsum commodi neque maxime ab facere reiciendis, ex distinctio soluta qui maiores et aliquam.</p>
+      <form method="dialog">
+        <forge-button type="submit" variant="raised">Close</forge-button>
+      </form>
+    </dialog>
+  </section>
 </div>
 
 <script type="module" src="button.ts"></script>

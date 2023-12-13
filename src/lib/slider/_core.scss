@@ -1,27 +1,24 @@
-@use '../core/styles/utils';
-@use '../core/styles/tokens/slider/tokens';
 @use '../core/styles/elevation';
 @use '../core/styles/typography';
 @use '../core/styles/animation';
+@use './token-utils' as *;
 
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, slider);
-}
+@forward './token-utils';
 
 // The max clip is reduced by 1 full tick display which is 2x the container
 // size to account for always showing the active track on the outside
 // edge of the last tick.
-$_active-track-max-clip: calc(100% - var(--_with-tick-marks-container-size) * 2);
+$_active-track-max-clip: calc(100% - #{token(with-tick-marks-container-size)} * 2);
 
 // When the start fraction is !0, add clipping by the tick container size
-$_start-fraction-not-zero: min(var(--_start-fraction) * 1e9, 1);
-$_active-track-start-offset: calc(var(--_with-tick-marks-container-size) * $_start-fraction-not-zero);
-$_active-track-start-clip: calc($_active-track-start-offset + $_active-track-max-clip * var(--_start-fraction));
+$_start-fraction-not-zero: min(#{token(start-fraction, custom)} * 1e9, 1);
+$_active-track-start-offset: calc(#{token(with-tick-marks-container-size)} * #{$_start-fraction-not-zero});
+$_active-track-start-clip: calc(#{$_active-track-start-offset} + #{$_active-track-max-clip} * #{token(start-fraction, custom)});
 
 // When the end fraction is !1, add clipping by the tick container size
-$_end-fraction-not-one: min((1 - var(--_end-fraction)) * 1e9, 1);
-$_active-track-end-offset: calc(var(--_with-tick-marks-container-size) * $_end-fraction-not-one);
-$_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-clip * (1 - var(--_end-fraction)));
+$_end-fraction-not-one: min((1 - #{token(end-fraction, custom)}) * 1e9, 1);
+$_active-track-end-offset: calc(#{token(with-tick-marks-container-size)} * #{$_end-fraction-not-one});
+$_active-track-end-clip: calc(#{$_active-track-end-offset} + #{$_active-track-max-clip} * (1 - #{token(end-fraction, custom)}));
 
 @mixin container {
   display: inline-flex;
@@ -34,7 +31,7 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
   display: flex;
   align-items: center;
   position: relative;
-  block-size: var(--_state-layer-size);
+  block-size: #{token(state-layer-size)};
   pointer-events: none;
   touch-action: none;
 }
@@ -43,8 +40,8 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
   // Clip the inputs to the space left/right of the center point between the
   // values so the right input gets pointer events.
   $_clip-to-start: calc(
-    var(--_state-layer-size) / 2 + (100% - var(--_state-layer-size)) *
-    (var(--_start-fraction) + ((var(--_end-fraction) - var(--_start-fraction)) / 2))
+    #{token(state-layer-size)} / 2 + (100% - #{token(state-layer-size)}) *
+    (#{token(start-fraction, custom)} + ((#{token(end-fraction, custom)} - #{token(start-fraction, custom)}) / 2))
   );
 
   $_clip-to-end: calc(100% - $_clip-to-start);
@@ -80,40 +77,34 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 }
 
 @mixin track-dimensions {
-  $_track-padding: calc((var(--_state-layer-size) / 2) - var(--_with-tick-marks-container-size));
+  $_track-padding: calc((#{token(state-layer-size)} / 2) - #{token(with-tick-marks-container-size)});
 
   position: absolute;
   inset-inline-start: $_track-padding;
   inset-inline-end: $_track-padding;
-  background-size: calc((100% - var(--_with-tick-marks-container-size) * 2) / var(--_tick-count)) 100%;
+  background-size: calc((100% - #{token(with-tick-marks-container-size)} * 2) / #{token(tick-count, custom)}) 100%;
 }
 
 @mixin track-active {
-  block-size: var(--_active-track-height);
-  border-radius: var(--_active-track-shape);
+  block-size: #{token(active-track-height)};
+  border-radius: #{token(active-track-shape)};
   clip-path: inset(0 $_active-track-end-clip 0 $_active-track-start-clip);
-  background-color: var(--_active-track-color);
+  background-color: #{token(active-track-color)};
 }
 
 @mixin track-inactive {
-  block-size: var(--_inactive-track-height);
-  border-radius: var(--_inactive-track-shape);
-
-  // TODO: remove this and the @supports check below when we're confident that color-mix is more widely supported
-  background-color: var(--_inactive-track-color-fallback);
-
-  @supports (background-color: color-mix(in srgb, red 50%, transparent)) {
-    background-color: var(--_inactive-track-color);
-  }
+  block-size: #{token(inactive-track-height)};
+  border-radius: #{token(inactive-track-shape)};
+  background-color: #{token(inactive-track-color)};
 }
 
 @mixin track-active-disabled {
-  background-color: var(--_disabled-active-track-color);
+  background-color: #{token(disabled-active-track-color)};
 }
 
 @mixin track-inactive-disabled {
-  opacity: calc((1 / var(--_disabled-active-track-opacity)) * var(--_disabled-inactive-track-opacity));
-  background-color: var(--_disabled-inactive-track-color);
+  opacity: calc((1 / #{token(disabled-active-track-opacity)}) * #{token(disabled-inactive-track-opacity)});
+  background-color: #{token(disabled-inactive-track-color)};
 }
 
 @mixin rtl-track-clipping {
@@ -121,19 +112,19 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 }
 
 @mixin tickmarks-inactive {
-  background-image: get-tick-image('var(--_with-tick-marks-inactive-container-color)');
+  background-image: get-tick-image(#{token(with-tick-marks-inactive-container-color)});
 }
 
 @mixin tickmarks-active {
-  background-image: get-tick-image('var(--_with-tick-marks-active-container-color)');
+  background-image: get-tick-image(#{token(with-tick-marks-active-container-color)});
 }
 
 @mixin tickmarks-active-disabled {
-  background-image: get-tick-image('var(--_with-tick-marks-disabled-active-container-color)');
+  background-image: get-tick-image(#{token(with-tick-marks-disabled-active-container-color)});
 }
 
 @mixin tickmarks-inactive-disabled {
-  background-image: get-tick-image('var(--_with-tick-marks-disabled-inactive-container-color)');
+  background-image: get-tick-image(#{token(with-tick-marks-disabled-inactive-container-color)});
 }
 
 @mixin handle-container-dimensions {
@@ -143,85 +134,85 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 }
 
 @mixin handle-container-padded {
-  padding-inline: calc(var(--_state-layer-size) / 2);
+  padding-inline: calc(#{token(state-layer-size)} / 2);
 }
 
 @mixin handle-container {
   position: absolute;
   inset-block-start: 0;
   inset-block-end: 0;
-  inset-inline-start: calc(100% * var(--_start-fraction));
-  inline-size: calc(100% * (var(--_end-fraction) - var(--_start-fraction)));
+  inset-inline-start: calc(100% * #{token(start-fraction, custom)});
+  inline-size: calc(100% * (#{token(end-fraction, custom)} - #{token(start-fraction, custom)}));
 }
 
 @mixin handle {
   position: absolute;
-  block-size: var(--_state-layer-size);
-  inline-size: var(--_state-layer-size);
-  border-radius: var(--_handle-shape);
+  block-size: #{token(state-layer-size)};
+  inline-size: #{token(state-layer-size)};
+  border-radius: #{token(handle-shape)};
   display: grid;
   place-items: center;
 }
 
 @mixin handle-start {
-  inset-inline-start: calc(0px - var(--_state-layer-size) / 2);
+  inset-inline-start: calc(0px - #{token(state-layer-size)} / 2);
 }
 
 @mixin handle-end {
-  inset-inline-end: calc(0px - var(--_state-layer-size) / 2);
+  inset-inline-end: calc(0px - #{token(state-layer-size)} / 2);
 }
 
 @mixin handle-thumb {
   @include elevation.box-shadow(1);
 
   position: absolute;
-  height: var(--_handle-height);
-  width: var(--_handle-width);
-  border-radius: var(--_handle-shape);
-  background: var(--_handle-color);
+  height: #{token(handle-height)};
+  width: #{token(handle-width)};
+  border-radius: #{token(handle-shape)};
+  background: #{token(handle-color)};
 }
 
 @mixin handle-thumb-hover {
-  background: var(--_hover-handle-color);
+  background: #{token(hover-handle-color)};
 }
 
 @mixin handle-thumb-pressed {
-  background: var(--_pressed-handle-color);
+  background: #{token(pressed-handle-color)};
 }
 
 @mixin handle-thumb-focused {
-  background: var(--_focus-handle-color);
+  background: #{token(focus-handle-color)};
 }
 
 @mixin handle-thumb-disabled {
   @include elevation.box-shadow(0);
 
-  background: var(--_disabled-handle-color);
+  background: #{token(disabled-handle-color)};
 }
 
 @mixin handle-label {
-  @include typography.style(label, [color font-weight]);
+  @include typography.style(label, $exclude: [font-weight]);
 
   position: absolute;
   box-sizing: border-box;
   display: grid;
   padding: 4px;
   place-items: center;
-  border-radius: var(--_label-container-shape);
-  color: var(--_label-text-color);
+  border-radius: #{token(label-container-shape)};
+  color: #{token(label-text-color)};
   font-weight: 500;
   white-space: nowrap;
   inset-block-end: 100%;
-  min-inline-size: var(--_label-container-height);
-  min-block-size: var(--_label-container-height);
-  background: var(--_label-container-color);
+  min-inline-size: #{token(label-container-height)};
+  min-block-size: #{token(label-container-height)};
+  background: #{token(label-container-color)};
   transition: transform animation.variable(duration-short2) animation.variable(easing-standard);
   transform-origin: center bottom;
   transform: scale(0);
 }
 
 @mixin handle-label-disabled {
-  background: var(--_disabled-handle-color);
+  background: #{token(disabled-handle-color)};
 }
 
 @mixin handle-label-content {
@@ -240,10 +231,10 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 }
 
 @mixin handle-label-bottom {
-  $_triangle-size: calc(var(--_label-container-height) / 2);
+  $_triangle-size: calc(#{token(label-container-height)} / 2);
   inline-size: $_triangle-size;
   block-size: $_triangle-size;
-  bottom: calc(var(--_label-container-height) / -10);
+  bottom: calc(#{token(label-container-height)} / -10);
   transform: rotate(45deg);
 }
 
@@ -256,7 +247,7 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 }
 
 @mixin handles-overlapping {
-  border: var(--_with-overlap-handle-outline-color) solid var(--_with-overlap-handle-outline-width);
+  border: #{token(with-overlap-handle-outline-color)} solid #{token(with-overlap-handle-outline-width)};
 }
 
 @mixin on-top {
@@ -291,8 +282,8 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    block-size: var(--_state-layer-size);
-    inline-size: var(--_state-layer-size);
+    block-size: #{token(state-layer-size)};
+    inline-size: #{token(state-layer-size)};
     transform: scaleX(0);
     opacity: 0;
     z-index: 2;
@@ -300,8 +291,8 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 
   &::-moz-range-thumb {
     appearance: none;
-    block-size: var(--_state-layer-size);
-    inline-size: var(--_state-layer-size);
+    block-size: #{token(state-layer-size)};
+    inline-size: #{token(state-layer-size)};
     transform: scaleX(0);
     opacity: 0;
     z-index: 2;
@@ -316,10 +307,10 @@ $_active-track-end-clip: calc($_active-track-end-offset + $_active-track-max-cli
 // Returns a background-image with sized circular ticks of the given color.
 @function get-tick-image($color) {
   @return radial-gradient(
-    circle at var(--_with-tick-marks-container-size) center,
+    circle at #{token(with-tick-marks-container-size)} center,
     #{$color} 0,
-    #{$color} calc(var(--_with-tick-marks-container-size) / 2),
-    transparent calc(var(--_with-tick-marks-container-size) / 2)
+    #{$color} calc(#{token(with-tick-marks-container-size)} / 2),
+    transparent calc(#{token(with-tick-marks-container-size)} / 2)
   );
 }
 

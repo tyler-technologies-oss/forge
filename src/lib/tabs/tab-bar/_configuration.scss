@@ -1,8 +1,0 @@
-@use '../../core/styles/tokens/tabs/tab-bar/tokens';
-
-@mixin configuration {
-  --_container-justify: #{tokens.get(container-justify)};
-  --_tab-flex: #{tokens.get(tab-flex)};
-  --_divider-color: #{tokens.get(divider-color)};
-  --_divider-thickness: #{tokens.get(divider-thickness)};
-}

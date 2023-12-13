@@ -82,6 +82,18 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       expect(this.context.foundation['_isInitialized']).toBeTrue();
     });
 
+    it('should set the addOnBlur property to false when the attribute is not applied', function(this: ITestContext) {
+      this.context = setupTestContext();
+
+      expect(this.context.component.addOnBlur).toBeFalse();
+    });
+
+    it('should set the addOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, '');
+
+      expect(this.context.component.addOnBlur).toBe(true);
+    });
 
     it('should float label if value is set before adding to DOM', async function(this: ITestContext) {
       this.context = setupTestContext(false);
@@ -1121,6 +1133,37 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
     });
 
+   describe('Click events', function (this: ITestContext) {
+      it('should emit a click event from the input if the container is clicked', function(this: ITestContext) {
+        this.context = setupTestContext();
+        const clickSpy = jasmine.createSpy('inputClick');
+        const inputEl =  getNativeInput(this.context.component);
+        inputEl.addEventListener('click', clickSpy);
+        
+        const containerEl = getInputContainerElement(this.context.component);
+        containerEl.dispatchEvent(new MouseEvent('mousedown'));
+        
+        expect(clickSpy).toHaveBeenCalledTimes(1);
+        
+        inputEl.removeEventListener('click', clickSpy);
+      });
+
+      it('should not emit a click event from a disabled input if the container is clicked', function(this: ITestContext) {
+        this.context = setupTestContext();
+        const clickSpy = jasmine.createSpy('inputClick');
+        const inputEl =  getNativeInput(this.context.component);
+        inputEl.addEventListener('click', clickSpy);
+        inputEl.disabled = true;
+        
+        const containerEl = getInputContainerElement(this.context.component);
+        containerEl.dispatchEvent(new MouseEvent('mousedown'));
+        
+        expect(clickSpy).not.toHaveBeenCalled();
+        
+        inputEl.removeEventListener('click', clickSpy);
+      });
+    });
+
     describe('Member navigation', function(this: ITestContext) {
       it('should focus the last element when the left arrow key is pressed while the input is focused', function(this: ITestContext) {
         this.context = setupTestContext();
@@ -1161,8 +1204,52 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         const inputIsActive = getActiveElement() === getNativeInput(this.context.component);
         expect(inputIsActive).toBeTrue();
       });
-    });
 
+      it('should set the addOnBlur property to true when the attribute is set to true', function(this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, '');
+
+        expect(this.context.component.addOnBlur).toBe(true);
+      });
+  
+      it('should set the addOnBlur property to false when the attribute is set to false', function(this: ITestContext) {
+        this.context = setupTestContext();
+
+        this.context.component.addOnBlur = true;
+        expect(this.context.component.addOnBlur).toBeTrue();
+
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, 'false');
+        expect(this.context.component.addOnBlur).toBe(false);
+      });
+
+      it('chips should not be added when addOnBlur is set to false and the "Tab" key is pressed', function(this: ITestContext) {
+        this.context = setupTestContext();
+        
+        expect(this.context.component.addOnBlur).toBeFalse();
+
+        const listener = jasmine.createSpy('add member listener');
+        this.context.component.addEventListener(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, listener);
+
+        const inputEl = getNativeInput(this.context.component);
+        inputEl.focus();
+        inputEl.value = 'test';
+        dispatchKeydownEvent(inputEl, 'Tab');
+
+        expect(listener).toHaveBeenCalledTimes(0);
+        expect(inputEl.value).withContext('the input value should have been cleared').toBe('');
+      });
+
+      it('chips should be added when addOnBlur is set to true and the mouse is clicked outside of the input', function(this: ITestContext) {
+        this.context = setupTestContext();
+        this.context.component.setAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, 'true');
+        const listener = jasmine.createSpy('add member listener');
+        this.context.component.addEventListener(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, listener);
+        getNativeInput(this.context.component).value = 'test';
+        getNativeInput(this.context.component).focus();
+        getNativeInput(this.context.component).blur();
+        expect(listener).toHaveBeenCalledTimes(1)
+      });
+    });
   });
 
   describe('With no label', function(this: ITestContext) {
@@ -1216,6 +1303,10 @@ describe('ChipFieldComponent', function(this: ITestContext) {
 
   function getHelperTextElement(component: IChipFieldComponent) {
     return component.querySelector(CHIP_FIELD_CONSTANTS.selectors.HELPER_TEXT) as HTMLElement;
+  }
+
+  function getInputContainerElement(component: IChipFieldComponent) {
+    return getShadowElement(component, CHIP_FIELD_CONSTANTS.selectors.INPUT_CONTAINER) as HTMLDivElement;
   }
 
   function dispatchKeydownEvent(ele: HTMLElement, key: string) {

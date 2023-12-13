@@ -1,11 +1,36 @@
-@use './mixins';
+@use './core' as *;
+@use '../list-item';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  display: block;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+:host([navlist]) {
+  @include list-item.provide-theme((
+    height: 40px,
+    margin: 4px 8px,
+    shape: 4px,
+    supporting-text-font-size: 0.875rem,
+    supporting-text-font-weight: 500
+  ));
+}
+
+//
+// Base
+//
+
+.forge-list {
+  @include tokens;
+}
+
+.forge-list {
+  @include base;
 }

@@ -7,17 +7,27 @@ include('./src/partials/page.ejs', {
       {
         type: 'select',
         label: 'Theme',
-        id: 'app-bar-theme-select',
+        id: 'opt-theme',
         defaultValue: '',
         options: [
           { label: 'Default', value: '' },
           { label: 'White', value: 'white' }
         ]
       },
-      { type: 'text-field', label: 'Title text', id: 'app-bar-title-input', defaultValue: 'App bar' },
-      { type: 'switch', label: 'Raised', id: 'app-bar-raised-toggle', defaultValue: true },
-      { type: 'switch', label: 'Show tabs', id: 'app-bar-show-tabs-toggle', defaultValue: true },
-      { type: 'switch', label: 'Use profile card builder', id: 'app-bar-profile-card-builder-toggle' }
+      {
+        type: 'select',
+        label: 'Elevation',
+        id: 'opt-elevation',
+        defaultValue: 'raised',
+        options: [
+          { label: 'Raised (default)', value: 'raised' },
+          { label: 'None ', value: '' }
+        ]
+      },
+      { type: 'text-field', label: 'Title text', id: 'opt-title-text', defaultValue: 'App bar' },
+      { type: 'switch', label: 'Href', id: 'opt-href', defaultValue: true },
+      { type: 'switch', label: 'Show tabs', id: 'opt-show-tabs', defaultValue: true },
+      { type: 'switch', label: 'Use profile card builder', id: 'opt-profile-card-builder' }
     ]
   }
 })

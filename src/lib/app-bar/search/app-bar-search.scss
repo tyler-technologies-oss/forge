@@ -1,11 +1,57 @@
-@use './mixins';
-
-@include mixins.core-styles;
+@use './core' as *;
+@use '../../focus-indicator';
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.forge-app-bar-search {
+  @include tokens;
+}
+
+.forge-app-bar-search {
+  @include base;
+}
+
+//
+// Disabled
+//
+
+:host([disabled]) {
+  cursor: not-allowed;
+
+  .forge-app-bar-search {
+    pointer-events: none;
+    opacity: 38%;
+  }
+
+  ::slotted(input) {
+    pointer-events: none;
+  }
+}
+
+//
+// Focus indicator
+//
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: currentColor,
+    outward-offset: 0px // Required unit
+  ));
+}
+
+//
+// Slotted input
+//
+
+::slotted(input) {
+  @include input;
 }

@@ -20,7 +20,7 @@ $tokens: (
   arrow-height: utils.module-ref(popover, arrow-height, arrow-size),
   arrow-width: utils.module-ref(popover, arrow-width, arrow-size),
   arrow-background-color: utils.module-ref(popover, arrow-background-color, background-color),
-  arrow-clip-path: utils.module-val(popover, arrow-clip-path),
+  // arrow-clip-path: utils.module-val(popover, arrow-clip-path),
   arrow-top-rotation: utils.module-val(popover, arrow-top-rotation, 135deg),
   arrow-right-rotation: utils.module-val(popover, arrow-right-rotation, 225deg),
   arrow-bottom-rotation: utils.module-val(popover, arrow-bottom-rotation, 315deg),

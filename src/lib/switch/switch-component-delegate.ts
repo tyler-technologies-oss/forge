@@ -1,28 +1,53 @@
 import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core';
 import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
 import { ISwitchComponent } from './switch';
-import { SWITCH_CONSTANTS } from './switch-constants';
+import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
 
 export type SwitchComponentDelegateProps = Partial<ISwitchComponent>;
 export interface ISwitchComponentDelegateOptions extends IFormFieldComponentDelegateOptions {
   id?: string;
   label?: string;
-  selected?: boolean;
 }
 export interface ISwitchComponentDelegateConfig extends IBaseComponentDelegateConfig<ISwitchComponent, ISwitchComponentDelegateOptions> {}
 
 export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchComponent, ISwitchComponentDelegateOptions> {
-  private _labelElement?: HTMLLabelElement;
-
   constructor(config?: ISwitchComponentDelegateConfig) {
     super(config);
   }
 
-  public get value(): boolean {
+  public get value(): string {
+    return this._element.value;
+  }
+  public set value(value: string) {
+    this._element.value = value;
+  }
+
+  public get on(): boolean {
+    return this._element.on;
+  }
+  public set on(value: boolean) {
+    this._element.on = value;
+  }
+
+  public get selected(): boolean {
     return this._element.selected;
   }
-  public set value(value: boolean) {
+  public set selected(value: boolean) {
     this._element.selected = value;
+  }
+
+  public get defaultOn(): boolean {
+    return this._element.defaultOn;
+  }
+  public set defaultOn(value: boolean) {
+    this._element.defaultOn = value;
+  }
+
+  public get icon(): SwitchIconVisibility {
+    return this._element.icon;
+  }
+  public set icon(value: SwitchIconVisibility) {
+    this._element.icon = value;
   }
 
   public get disabled(): boolean {
@@ -32,12 +57,43 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
     this._element.disabled = value;
   }
 
-  public get labelElement(): HTMLLabelElement | undefined {
-    return this._labelElement;
+  public get dense(): boolean {
+    return this._element.dense;
+  }
+  public set dense(value: boolean) {
+    this._element.dense = value;
+  }
+
+  public get required(): boolean {
+    return this._element.required;
+  }
+  public set required(value: boolean) {
+    this._element.required = value;
+  }
+
+  public get readonly(): boolean {
+    return this._element.readonly;
+  }
+  public set readonly(value: boolean) {
+    this._element.readonly = value;
+  }
+
+  public get name(): string {
+    return this._element.name;
+  }
+  public set name(value: string) {
+    this._element.name = value;
+  }
+
+  public get labelPosition(): SwitchLabelPosition {
+    return this._element.labelPosition;
+  }
+  public set labelPosition(value: SwitchLabelPosition) {
+    this._element.labelPosition = value;
   }
 
   public onChange(listener: (value: boolean) => void): void {
-    this._element.addEventListener('forge-switch-select', ({ detail }: CustomEvent<boolean>) => listener(detail));
+    this._element.addEventListener('forge-switch-change', ({ detail }: CustomEvent<boolean>) => listener(detail));
   }
 
   public onFocus(listener: (evt: Event) => void): void {
@@ -49,16 +105,11 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
   }
 
   public setLabel(text: string | null): void {
-    if (text) {
-      if (this._labelElement) {
-        this._labelElement.textContent = text;
-      } else {
-        this._createLabel(text);
-      }
-    } else if (this._labelElement) {
-      this._element.removeChild(this._labelElement);
-      this._labelElement = undefined;
-    }
+    this._element.innerText = text ?? '';
+  }
+
+  public toggle(force?: boolean): void {
+    this._element.toggle(force);
   }
 
   protected _build(): ISwitchComponent {
@@ -66,20 +117,11 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
   }
 
   protected override _configure(): void {
-    if (typeof this._config.options?.label === 'string') {
-      this._createLabel(this._config.options.label);
-    }
-    if (this._config.options?.selected !== undefined) {
-      this._element.selected = this._config.options.selected;
-    }
     if (this._config.options?.id) {
       this._element.id = this._config.options.id;
     }
-  }
-
-  private _createLabel(text: string): void {
-    this._labelElement = document.createElement('label');
-    this._labelElement.textContent = text;
-    this._element.appendChild(this._labelElement);
+    if (this._config.options?.label) {
+      this._element.innerText = this._config.options.label;
+    }
   }
 }

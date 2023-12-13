@@ -124,19 +124,15 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
 
       const iconButtonElement = document.createElement(ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
       iconButtonElement.slot = 'trailing';
-      iconButtonElement.dense = true;
-      iconButtonElement.densityLevel = 3;
+      iconButtonElement.density = 'medium';
+      iconButtonElement.type = 'button';
+      iconButtonElement.tabIndex = -1;
       iconButtonElement.style.marginRight = '4px'; // Override default trailing slot margin in text-field
-
-      const buttonElement = document.createElement('button');
-      buttonElement.type = 'button';
-      buttonElement.tabIndex = -1;
-      buttonElement.setAttribute('aria-label', 'Toggle time dropdown');
+      iconButtonElement.setAttribute('aria-label', 'Toggle time dropdown');
 
       const iconElement = document.createElement(ICON_CONSTANTS.elementName) as IIconComponent;
       iconElement.name = 'clock_outline';
-      buttonElement.appendChild(iconElement);
-      iconButtonElement.appendChild(buttonElement);
+      iconButtonElement.appendChild(iconElement);
 
       textField.appendChild(iconButtonElement);
       this._toggleElement = iconButtonElement;

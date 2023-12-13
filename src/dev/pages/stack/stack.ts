@@ -12,7 +12,7 @@ const stretchToggle = document.querySelector('#stretch-switch') as ISwitchCompon
 const gapInput = document.querySelector('#gap-input') as HTMLInputElement;
 const stackContainer = document.querySelector('#main-demo') as IStackComponent;
 
-inlineToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+inlineToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stackContainer.inline = selected;
   wrapToggle.disabled = !selected;
 
@@ -21,11 +21,11 @@ inlineToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   }
 });
 
-wrapToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+wrapToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stackContainer.wrap = selected;
 });
 
-stretchToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+stretchToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   stackContainer.stretch = selected;
 });
 

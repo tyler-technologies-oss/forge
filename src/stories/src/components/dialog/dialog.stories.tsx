@@ -34,9 +34,7 @@ export const Simple: Story<IDialogProps> = ({
 
   return (
     <>
-      <ForgeButton type="raised">
-        <button type="button" onClick={show}>Show dialog</button>
-      </ForgeButton>
+      <ForgeButton variant="raised" onClick={show}>Show dialog</ForgeButton>
 
       <ForgeDialog
         aria-labelledby="dialog-title"
@@ -57,9 +55,7 @@ export const Simple: Story<IDialogProps> = ({
           {LOREM_IPSUM.p1.slice(0, 162)}
         </p>
         <footer className="forge-dialog__footer">
-          <ForgeButton type="raised">
-            <button type="button" onClick={hide}>Close</button>
-          </ForgeButton>
+          <ForgeButton variant="raised" onClick={hide}>Close</ForgeButton>
         </footer>
       </ForgeDialog>
     </>
@@ -96,9 +92,7 @@ export const Complex: Story<IDialogProps> = ({
 
   return (
     <>
-      <ForgeButton type="raised">
-        <button type="button" onClick={show}>Show complex dialog</button>
-      </ForgeButton>
+      <ForgeButton variant="raised" onClick={show}>Show complex dialog</ForgeButton>
 
       <ForgeDialog
         aria-labelledby="dialog-title"
@@ -125,12 +119,8 @@ export const Complex: Story<IDialogProps> = ({
         </p>
         <ForgeDivider />
         <ForgeToolbar>
-          <ForgeButton type="outlined" style={{ marginRight: 16 }} slot="end">
-            <button type="button" onClick={hide}>Cancel</button>
-          </ForgeButton>
-          <ForgeButton type="raised" slot="end">
-            <button type="button" onClick={hide} forge-dialog-focus="true">Discard</button>
-          </ForgeButton>
+          <ForgeButton variant="outlined" style={{ marginRight: 16 }} slot="end" onClick={hide}>Cancel</ForgeButton>
+          <ForgeButton variant="raised" slot="end" onClick={hide} forge-dialog-focus="true">Discard</ForgeButton>
         </ForgeToolbar>
       </ForgeDialog>
     </>

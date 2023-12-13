@@ -14,6 +14,7 @@ import { timer, tick, dispatchNativeEvent } from '@tylertech/forge-testing';
 import { tryCleanupPopups } from '../../utils';
 import { FIELD_CONSTANTS } from '@tylertech/forge/field/field-constants';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
+import type { IButtonComponent } from '@tylertech/forge/button';
 
 
 interface ITestContext {
@@ -75,6 +76,31 @@ describe('DatePickerComponent', function(this: ITestContext) {
       const calendar = getCalendar(this.context.component);
 
       expect((<Date>calendar.value).toDateString()).toEqual(date.toDateString());
+    });
+
+    it('should open calendar in month of min date if min is after current month', function(this: ITestContext) {
+      this.context = setupTestContext(false);
+      const date = new Date();
+      this.context.component.min = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+      this.context.append();
+
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      const expectedMonth = date.getMonth() >= 11 ? 0 : date.getMonth() + 1;
+      expect(calendar.month).toEqual(expectedMonth);
+    });
+
+    it('should open calendar in month of max date if max is before current month', function(this: ITestContext) {
+      this.context = setupTestContext(false);
+      const date = new Date();
+      this.context.component.max = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+      this.context.append();
+
+      openPopup(this.context.component);
+      const calendar = getCalendar(this.context.component);
+
+      expect(calendar.month).toEqual(date.getMonth() - 1);
     });
 
     it('should automatically render a toggle button with a Forge text-field component', function(this: ITestContext) {
@@ -838,6 +864,19 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(getInputElement(this.context.component).value).toBe('__/__/____');
     });
 
+    it('should select mask when shown on focus', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const inputElement = getInputElement(this.context.component);
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.MASKED, '');
+      this.context.component.setAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.SHOW_MASK_FORMAT, '');
+
+      expect(this.context.component.showMaskFormat).toBe(true);
+      inputElement.focus();
+
+      expect(inputElement.selectionStart).toEqual(0);
+      expect(inputElement.selectionEnd).toEqual('__/__/____'.length);
+    });
+
     it('should clear mask format on blur', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const inputElement = getInputElement(this.context.component);
@@ -1516,28 +1555,26 @@ describe('DatePickerComponent', function(this: ITestContext) {
     activeCell.click();
   }
 
-  function getTodayButton(component: IDatePickerComponent): HTMLButtonElement {
+  function getTodayButton(component: IDatePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#today-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#today-button') as IButtonComponent ?? null;
   }
 
-  function getClearButton(component: IDatePickerComponent): HTMLButtonElement {
+  function getClearButton(component: IDatePickerComponent): IButtonComponent {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return getShadowElement(calendar, '#clear-button')?.firstElementChild as HTMLButtonElement ?? null;
+    return getShadowElement(calendar, '#clear-button') as IButtonComponent ?? null;
   }
 
   function clickTodayButton(component: IDatePickerComponent): void {
     const todayButton = getTodayButton(component);
     todayButton.click();
-    todayButton.dispatchEvent(new MouseEvent('click'));
   }
 
   function clickClearButton(component: IDatePickerComponent): void {
     const clearButton = getClearButton(component);
     clearButton.click();
-    clearButton.dispatchEvent(new MouseEvent('click'));
   }
 
   function getAnnouncerElement(component: IDatePickerComponent): HTMLElement {

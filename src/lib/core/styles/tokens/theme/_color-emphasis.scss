@@ -1,0 +1,33 @@
+@use 'sass:map';
+
+$color-emphasis-scale: (
+  '004': 4%,
+  '008': 8%,
+  '012': 12%,
+  '024': 24%,
+  '038': 38%,
+  '054': 54%,
+  '060': 60%,
+  '065': 65%,
+  '070': 70%,
+  '080': 80%,
+  '087': 87%
+);
+
+$color-emphasis: (
+  highest: map.get($color-emphasis-scale, '087'),
+  inverse: map.get($color-emphasis-scale, '080'),
+  higher: map.get($color-emphasis-scale, '070'),
+  high: map.get($color-emphasis-scale, '065'),
+  medium-high: map.get($color-emphasis-scale, '060'),
+  medium: map.get($color-emphasis-scale, '054'),
+  medium-low: map.get($color-emphasis-scale, '038'),
+  low: map.get($color-emphasis-scale, '024'),
+  lower: map.get($color-emphasis-scale, '012'),
+  lowest: map.get($color-emphasis-scale, '008'),
+  minimum: map.get($color-emphasis-scale, '004'),
+);
+
+@function value($emphasis) {
+  @return map.get($color-emphasis, $emphasis);
+}

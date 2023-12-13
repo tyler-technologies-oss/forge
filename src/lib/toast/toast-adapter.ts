@@ -1,4 +1,5 @@
 import { getShadowElement, isString, removeAllChildren, removeClass, removeElement, toggleElementPlaceholder } from '@tylertech/forge-core';
+import { IButtonComponent } from '../button';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { PopupPlacement } from '../popup';
 import { IToastComponent } from './toast';
@@ -24,7 +25,7 @@ export interface IToastAdapter extends IBaseAdapter {
 export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToastAdapter {
   private _containerElement: HTMLElement;
   private _messageElement: HTMLElement;
-  private _actionButtonElement: HTMLButtonElement;
+  private _actionButtonElement: IButtonComponent;
   private _actionButtonPlaceholder: Comment;
   private _closeButtonElement: HTMLButtonElement;
 
@@ -32,12 +33,12 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
     super(component);
     this._containerElement = getShadowElement(component, TOAST_CONSTANTS.selectors.CONTAINER);
     this._messageElement = getShadowElement(component, TOAST_CONSTANTS.selectors.MESSAGE);
-    this._actionButtonElement = getShadowElement(component, TOAST_CONSTANTS.selectors.ACTION_BUTTON) as HTMLButtonElement;
+    this._actionButtonElement = getShadowElement(component, TOAST_CONSTANTS.selectors.ACTION_BUTTON) as IButtonComponent;
     this._closeButtonElement = getShadowElement(component, TOAST_CONSTANTS.selectors.CLOSE_BUTTON) as HTMLButtonElement;
   }
 
   /**
-   * Sets an attrinbute on the host element.
+   * Sets an attribute on the host element.
    * @param name The attribute name.
    * @param value The attribute value.
    */

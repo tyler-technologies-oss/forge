@@ -833,6 +833,21 @@ describe('SelectComponent', function(this: ITestContext) {
       _expectPopupVisibility(this.context.component.popupElement, true);
     });
 
+    it('should highlight first match when filtering while popup is open with leading whitespace', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      const firstOption = this.context.component.querySelector('forge-option:first-child') as IOptionComponent;
+      firstOption.textContent = '   With Whitespace   ';
+      await tick();
+      
+      await _triggerPopupOpen(this.context.component);
+      
+      _sendFilterKey(this.context.component, 'w', 87);
+      await timer();
+
+      _expectActiveOption(this.context.component.popupElement, 0);
+      _expectPopupVisibility(this.context.component.popupElement, true);
+    });
+
     it('should highlight first match when filtering with uppercase characters', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       await tick();
@@ -1487,8 +1502,8 @@ describe('SelectComponent', function(this: ITestContext) {
 
       _openDropdown(this.context.component);
       const listItems = Array.from(this.context.component.popupElement!.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
-      getShadowElement(listItems[0], LIST_ITEM_CONSTANTS.selectors.LIST_ITEM).click();
-      getShadowElement(listItems[1], LIST_ITEM_CONSTANTS.selectors.LIST_ITEM).click();
+      listItems[0].click();
+      listItems[1].click();
       expect(this.context.component.value).toEqual(['one', 'two']);
       expect(this.context.component.selectedIndex).toEqual([0, 1]);
       expect(listItems[0].selected).toBe(true);

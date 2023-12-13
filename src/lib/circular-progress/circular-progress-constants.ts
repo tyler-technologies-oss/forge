@@ -1,11 +1,12 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}circular-progress`;
 
 const attributes = {
   DETERMINATE: 'determinate',
   PROGRESS: 'progress',
-  ARIA_LABEL: 'data-aria-label'
+  THEME: 'theme',
+  TRACK: 'track'
 };
 
 const classes = {
@@ -24,3 +25,5 @@ export const CIRCULAR_PROGRESS_CONSTANTS = {
   classes,
   selectors
 };
+
+export type CircularProgressTheme = Theme;

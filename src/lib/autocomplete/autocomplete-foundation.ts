@@ -4,7 +4,7 @@ import { IListItemComponent } from '../list';
 import { IListDropdownConfig, IListDropdownOption, ListDropdownAsyncStyle, ListDropdownFooterBuilder, ListDropdownHeaderBuilder, ListDropdownOptionBuilder } from '../list-dropdown';
 import { IListDropdownAwareFoundation, ListDropdownAwareFoundation } from '../list-dropdown/list-dropdown-aware-foundation';
 import { IAutocompleteAdapter } from './autocomplete-adapter';
-import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
+import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteForceFilterOptions, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
 import { getSelectedOption, isOptionType, optionEqualPredicate, OptionType } from './autocomplete-utils';
 
 export interface IAutocompleteFoundation extends IListDropdownAwareFoundation {
@@ -25,6 +25,7 @@ export interface IAutocompleteFoundation extends IListDropdownAwareFoundation {
   matchKey: string | null | undefined;
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   beforeValueChange: (value: any) => boolean | Promise<boolean>;
+  forceFilter(opts: IAutocompleteForceFilterOptions): void;
 }
 
 /**
@@ -117,6 +118,23 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
   }
 
+  public async forceFilter({ preserveValue }: IAutocompleteForceFilterOptions): Promise<void> {
+    // Clear any existing options since they are expected to no longer be valid
+    this._options = [];
+
+    // Execute the filter callback to fetch new options if the consumer has provided any.
+    // This allows us to update the current value(s) with new label(s) if there are any matches
+    await this._executeFilter(true, true);
+
+    // Edge case, but if the consumer has a need to preserve the existing selection if it doesn't exist in the new options, this will support that
+    if (preserveValue) {
+      this._options.push(...this._selectedOptions as IAutocompleteOption<any>[] & IAutocompleteOptionGroup[]);
+    }
+
+    // This will update our current state, but it's expected that consumers will manage their own values so it's likely that this will be called again soon
+    this._applyValue(this._values);
+  }
+
   private _attachListeners(): void {
     this._adapter.addInputListener('click', this._clickListener);
     this._adapter.addInputListener('focus', this._focusListener);
@@ -178,6 +196,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
   }
 
   private _onClear(evt: MouseEvent): void {
+    this._filterText = '';
     this._clearValue();
     this._adapter.setSelectedText(this._getSelectedText());
   }
@@ -784,11 +803,11 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     if (value == null) {
       values = [];
     } else if (Array.isArray(value)) {
-      values = JSON.parse(JSON.stringify(value));
+      values = structuredClone(value);
     } else if (isString(value)) {
       values = [value];
     } else {
-      values = [JSON.parse(JSON.stringify(value))];
+      values = [structuredClone(value)];
     }
 
     const hasNewValue = values.length !== this._values.length || values.some(v => !this._values.includes(v));

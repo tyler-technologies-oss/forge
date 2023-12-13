@@ -9,9 +9,9 @@ import { TAB_BAR_CONSTANTS } from './tab-bar';
 import type { ITabBarComponent } from './tab-bar/tab-bar';
 import type { ITabComponent } from './tab/tab';
 import type { IIconComponent } from '../icon/icon';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
 
 import './tab-bar/tab-bar';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
 
 describe('Tabs', () => {
   it('should contain shadow root', async () => {
@@ -637,7 +637,7 @@ class TabsHarness extends TestHarness<ITabBarComponent> {
   }
 
   public initElementRefs(): void {
-    this.containerElement = getShadowElement(this.element, TAB_BAR_CONSTANTS.selectors.CONTAINER);
+    this.containerElement = getShadowElement(this.element, TAB_BAR_CONSTANTS.selectors.ROOT);
     this.scrollContainer = getShadowElement(this.element, TAB_BAR_CONSTANTS.selectors.SCROLL_CONTAINER);
   }
 
@@ -662,19 +662,19 @@ class TabsHarness extends TestHarness<ITabBarComponent> {
   }
 
   public get backwardScrollButton(): HTMLButtonElement {
-    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:first-child button`) as HTMLButtonElement;
+    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:first-child`) as HTMLButtonElement;
   }
 
   public get forwardScrollButton(): HTMLButtonElement {
-    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:last-child button`) as HTMLButtonElement;
+    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:last-child`) as HTMLButtonElement;
   }
 
   public get backwardScrollButtonIcon(): IIconComponent {
-    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:first-child button forge-icon`) as IIconComponent;
+    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:first-child forge-icon`) as IIconComponent;
   }
 
   public get forwardScrollButtonIcon(): IIconComponent {
-    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:last-child button forge-icon`) as IIconComponent;
+    return this.containerElement.querySelector(`.${TAB_BAR_CONSTANTS.classes.SCROLL_BUTTON}:last-child forge-icon`) as IIconComponent;
   }
 }
 

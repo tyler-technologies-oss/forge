@@ -1,8 +1,11 @@
-@use './core';
-@use './configuration';
+@use './core' as *;
+
+//
+// Host
+//
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -10,19 +13,22 @@
 }
 
 :host([disabled]) {
-  @include core.disabled;
+  @include disabled;
 }
 
 .forge-state-layer {
-  @include configuration.configuration;
-  @include core.surface;
+  @include tokens;
+}
+
+.forge-state-layer {
+  @include surface;
 
   &--hovered::before {
-    @include core.hovered;
+    @include hovered;
   }
 
   &--pressed::after {
-    @include core.pressed;
+    @include pressed;
   }
 }
 

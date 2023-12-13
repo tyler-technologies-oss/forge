@@ -160,7 +160,7 @@
 
 @mixin leading {
   // Core
-  ::slotted([slot='leading']) {
+  &--leading .forge-field__leading-container {
     @include base.leading-core;
   }
   // Margin
@@ -171,7 +171,7 @@
 
 @mixin trailing {
   // Core
-  ::slotted([slot='trailing']) {
+  &--trailing .forge-field__trailing-container {
     @include base.trailing-core;
   }
   // Margin

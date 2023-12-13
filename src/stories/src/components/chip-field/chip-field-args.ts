@@ -14,6 +14,7 @@ export interface IChipFieldProps {
   hasLeading: boolean;
   hasTrailing: boolean;
   hasAddonEnd: boolean;
+  addOnBlur: boolean;
 }
 
 export const argTypes = {
@@ -129,5 +130,12 @@ export const argTypes = {
     table: {
       category: 'Slots',
     },
-  }
+  },
+  addOnBlur: {
+    control: 'boolean',
+    description: '',
+    table: {
+      category: 'Properties',
+    },
+  },
 };

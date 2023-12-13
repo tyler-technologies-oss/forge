@@ -4,12 +4,19 @@
 @use '../utils';
 
 ///
+/// Gets a spacing token value.
+/// 
+@function value($key) {
+  @return tokens.get($key);
+}
+
+///
 /// Gets a CSS custom property declaration for a specific spacing token with its token value as the fallback value.
 /// 
 /// Example:
 /// ```scss
 /// .my-class {
-///   margin: spacing.variable('200'); // => margin: var(--forge-spacing-standard, 16px);
+///   margin: spacing.variable(medium); // => margin: var(--forge-spacing-medium, 16px);
 /// }
 /// ```
 /// 

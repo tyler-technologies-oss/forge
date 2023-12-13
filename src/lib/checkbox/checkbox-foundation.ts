@@ -1,209 +1,211 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 
 import { ICheckboxAdapter } from './checkbox-adapter';
-import { CHECKBOX_CONSTANTS } from './checkbox-constants';
+import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
 
 export interface ICheckboxFoundation extends ICustomElementFoundation {
+  checked: boolean;
+  defaultChecked: boolean;
+  indeterminate: boolean;
+  value: string;
   dense: boolean;
+  disabled: boolean;
+  required: boolean;
+  readonly: boolean;
+  labelPosition: CheckboxLabelPosition;
+  proxyClick(): void;
+  proxyLabel(value: string | null): void;
+  syncValidity(hasCustomValidityError: boolean): void;
+  setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
 }
 
 export class CheckboxFoundation implements ICheckboxFoundation {
+  // State
+  private _checked = false;
+  private _defaultChecked = false;
+  private _indeterminate = false;
+  private _value = 'on';
   private _dense = false;
-  private _currentCheckState = CHECKBOX_CONSTANTS.strings.TRANSITION_STATE_INIT;
-  private _currentAnimationClass = '';
-  private _animEndLatchTimer = 0;
-  private _enableAnimationEndHandler = false;
+  private _disabled = false;
+  private _required = false;
+  private _readonly = false;
+  private _labelPosition: CheckboxLabelPosition = 'end';
 
-  private _handleChange!: () => void;
-  private _inputAttributeChangedListener: (name: string, value: string) => void;
-  private _handleAnimationEnd: () => void;
-
-  constructor(private _adapter: ICheckboxAdapter) {}
-
-  public disconnect(): void {
-    this._adapter.unlisten('change', this._handleChange);
-    this._adapter.disconnect();
-    this._adapter.uninstallPropertyChangeHooks();
-    this._adapter.unlisten('animationend', this._handleAnimationEnd);
+  private get _submittedValue(): string | null {
+    return this._checked ? this._value : null;
+  }
+  private get _formState(): CheckboxState {
+    return this._checked
+      ? this._indeterminate
+        ? 'checked-indeterminate'
+        : 'checked'
+      : this._indeterminate
+        ? 'unchecked-indeterminate'
+        : 'unchecked';
   }
 
-  public connect(): void {
+  // Listeners
+  private readonly _changeListener: EventListener;
+  private readonly _inputSlotListener: EventListener;
+
+  constructor(private _adapter: ICheckboxAdapter) {
+    this._changeListener = (evt: Event) => this._handleChange(evt);
+    this._inputSlotListener = () => this._handleInputSlotChange();
+  }
+
+  public initialize(): void {
     this._adapter.initialize();
-    this._currentCheckState = this._determineCheckState();
-    this._setDense(this.dense);
-    this._updateAriaChecked();
-    this._inputAttributeChangedListener = (name, value) => this._handleInputAttributeChange();
-    this._adapter.setInputAttributeObserver((name, value) => this._inputAttributeChangedListener(name, value));
+    this._adapter.addRootListener('change', this._changeListener);
+    this._adapter.addInputSlotListener(this._inputSlotListener);
+    this._adapter.syncValue(this._submittedValue, this._formState);
+  };
 
-    this._handleChange = () => this._handleInputChange();
-    this._adapter.listen('change', this._handleChange);
-    this._adapter.installPropertyChangeHooks(() => {
-      this._handleInputChange();
-    });
-    this._handleAnimationEnd = () => this.handleAnimationEnd();
-    this._adapter.listen('animationend', this._handleAnimationEnd, true);
+  public proxyClick(): void {
+    this._adapter.proxyClick();
+  }
 
-    this._handleInputChange();
+  public proxyLabel(value: string | null): void {
+    this._adapter.proxyLabel(value);
+  }
+
+  public syncValidity(hasCustomValidityError: boolean): void {
+    this._adapter.syncValidity(hasCustomValidityError);
+  }
+
+  public setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void {
+    this._adapter.setValidity(flags, message);
+  }
+
+  private _handleChange(evt: Event): void {
+    if (this.readonly) {
+      this._adapter.setChecked(this._checked);
+      evt.stopPropagation();
+      return;
+    }
+
+    const target = evt.target as HTMLInputElement;
+    const oldValue = this._checked;
+    const newValue = target.checked;
+    this._checked = newValue;
+
+    const isCancelled = !this._adapter.redispatchEvent(evt, { cancelable: true });
+    if (isCancelled) {
+      this._checked = oldValue;
+      this._adapter.setChecked(this._checked);
+      return;
+    }
+
+    this._adapter.syncValue(this._submittedValue, this._formState);
+    this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
+
+    // Toggle inderminate off after a user action
+    this._indeterminate = false;
+    this._adapter.setIndeterminate(this._indeterminate);
+    this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.INDETERMINATE, this._indeterminate);
+  }
+
+  private _handleInputSlotChange(): void {
+    this._adapter.detectInputElement();
+  }
+
+  public get checked(): boolean {
+    return this._checked;
+  }
+  public set checked(value: boolean) {
+    if (this._checked !== value) {
+      this._checked = value;
+      this._adapter.setChecked(this._checked);
+      this._adapter.syncValue(this._submittedValue, this._formState);
+      this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.CHECKED, this._checked);
+    }
+  }
+
+  public get defaultChecked(): boolean {
+    return this._defaultChecked;
+  }
+  public set defaultChecked(value: boolean) {
+    if (this._defaultChecked !== value) {
+      this._defaultChecked = value;
+      this._adapter.setDefaultChecked(this._defaultChecked);
+      this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.DEFAULT_CHECKED, this._defaultChecked);
+    }
+  }
+
+  public get indeterminate(): boolean {
+    return this._indeterminate;
+  }
+  public set indeterminate(value: boolean) {
+    if (this._indeterminate !== value) {
+      this._indeterminate = value;
+      this._adapter.setIndeterminate(this._indeterminate);
+      this._adapter.syncValue(this._submittedValue, this._formState);
+      this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.INDETERMINATE, this._indeterminate);
+    }
+  }
+
+  public get value(): string {
+    return this._value;
+  }
+  public set value(value: string) {
+    if (this._value !== value) {
+      this._value = value;
+      this._adapter.setValue(this._value);
+      this._adapter.syncValue(this._submittedValue, this._formState);
+      this._adapter.setHostAttribute(CHECKBOX_CONSTANTS.attributes.VALUE, this._value);
+    }
   }
 
   public get dense(): boolean {
     return this._dense;
   }
-
   public set dense(value: boolean) {
     if (this._dense !== value) {
       this._dense = value;
-      this._setDense(value);
+      this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.DENSE, this._dense);
     }
   }
 
-  public handleAnimationEnd(): void {
-    if (!this._enableAnimationEndHandler) {
-      return;
-    }
-
-    const handler: TimerHandler = () => {
-      this._adapter.removeRootClass(this._currentAnimationClass);
-      this._enableAnimationEndHandler = false;
-    };
-
-    clearTimeout(this._animEndLatchTimer);
-    this._animEndLatchTimer = setTimeout(handler, CHECKBOX_CONSTANTS.numbers.ANIM_END_LATCH_MS);
+  public get disabled(): boolean {
+    return this._disabled;
   }
-
-  private _setDense(value: boolean): void {
-    this._adapter.setDense(value);
-  }
-
-  private _determineCheckState(): string {
-    const { TRANSITION_STATE_INDETERMINATE, TRANSITION_STATE_CHECKED, TRANSITION_STATE_UNCHECKED } = CHECKBOX_CONSTANTS.strings;
-
-    if (this._adapter.isIndeterminate()) {
-      return TRANSITION_STATE_INDETERMINATE;
-    }
-
-    return this._adapter.isChecked() ? TRANSITION_STATE_CHECKED : TRANSITION_STATE_UNCHECKED;
-  }
-
-  private _updateAriaChecked(): void {
-    const { ARIA_CHECKED_INDETERMINATE_VALUE, ARIA_CHECKED_ATTR } = CHECKBOX_CONSTANTS.strings;
-    // Ensure aria-checked is set to mixed if checkbox is in indeterminate state.
-    if (this._adapter.isIndeterminate()) {
-      this._adapter.setNativeAttribute(ARIA_CHECKED_ATTR, ARIA_CHECKED_INDETERMINATE_VALUE);
-      this._adapter.setRootClass(CHECKBOX_CONSTANTS.classes.INDETERMINATE);
-      if (!this._adapter.isChecked()) {
-        this._adapter.removeRootClass(CHECKBOX_CONSTANTS.classes.CHECKED);
-      }
-    } else {
-      // The on/off state does not need to keep track of aria-checked, since
-      // the screenreader uses the checked property on the checkbox element.
-      this._adapter.removeNativeAttribute(ARIA_CHECKED_ATTR);
-      this._adapter.removeRootClass(CHECKBOX_CONSTANTS.classes.INDETERMINATE);
+  public set disabled(value: boolean) {
+    if (this._disabled !== value) {
+      this._disabled = value;
+      this._adapter.setDisabled(this.disabled);
+      this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }
 
-  private _handleInputChange(): void {
-    this._handleInputAttributeChange();
-    this._updateCheckboxStateClasses();
-    this._transitionCheckState();
+  public get required(): boolean {
+    return this._required;
   }
-
-  private _transitionCheckState(): void {
-    if (!this._adapter.isAttachedToDOM()) {
-      return;
-    }
-    const oldState = this._currentCheckState;
-    const newState = this._determineCheckState();
-
-    if (oldState === newState) {
-      return;
-    }
-
-    this._updateAriaChecked();
-
-    const { TRANSITION_STATE_UNCHECKED } = CHECKBOX_CONSTANTS.strings;
-    const { SELECTED } = CHECKBOX_CONSTANTS.classes;
-    if (newState === TRANSITION_STATE_UNCHECKED) {
-      this._adapter.removeRootClass(SELECTED);
-    } else {
-      this._adapter.setRootClass(SELECTED);
-    }
-
-    // Check to ensure that there isn't a previously existing animation class, in case for example
-    // the user interacted with the checkbox before the animation was finished.
-    if (this._currentAnimationClass.length > 0) {
-      clearTimeout(this._animEndLatchTimer);
-      this._adapter.removeRootClass(this._currentAnimationClass);
-    }
-    // Check to ensure that there isn't a previously existing animation class, in case for example
-    // the user interacted with the checkbox before the animation was finished.
-    if (this._currentAnimationClass.length > 0) {
-      clearTimeout(this._animEndLatchTimer);
-      this._adapter.removeRootClass(this._currentAnimationClass);
-    }
-
-    this._currentAnimationClass = this._getTransitionAnimationClass(oldState, newState);
-    this._currentCheckState = newState;
-
-    // Check for parentNode so that animations are only run when the element is attached
-    // to the DOM.
-    if (this._adapter.isAttachedToDOM() && this._currentAnimationClass.length > 0) {
-      this._adapter.setRootClass(this._currentAnimationClass);
-      this._enableAnimationEndHandler = true;
+  public set required(value: boolean) {
+    if (this._required !== value) {
+      this._required = value;
+      this._adapter.setRequired(this._required);
+      this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.REQUIRED, this._required);
     }
   }
 
-  private _handleInputAttributeChange(): void {
-    if (this._adapter.isDisabled()) {
-      this._adapter.setRootClass(CHECKBOX_CONSTANTS.classes.DISABLED);
-      this._adapter.setWrapperClass(CHECKBOX_CONSTANTS.classes.WRAPPER_DISABLED);
-      this._adapter.removeRootClass(CHECKBOX_CONSTANTS.classes.ENABLED);
-    } else {
-      this._adapter.removeRootClass(CHECKBOX_CONSTANTS.classes.DISABLED);
-      this._adapter.removeWrapperClass(CHECKBOX_CONSTANTS.classes.WRAPPER_DISABLED);
-      this._adapter.setRootClass(CHECKBOX_CONSTANTS.classes.ENABLED);
-    }
-
-    this._updateCheckboxStateClasses();
+  public get readonly(): boolean {
+    return this._readonly;
   }
-
-  private _getTransitionAnimationClass(oldState: string, newState: string): string {
-    const { TRANSITION_STATE_CHECKED, TRANSITION_STATE_UNCHECKED } = CHECKBOX_CONSTANTS.strings;
-
-    const {
-      ANIM_UNCHECKED_CHECKED,
-      ANIM_UNCHECKED_INDETERMINATE,
-      ANIM_CHECKED_UNCHECKED,
-      ANIM_CHECKED_INDETERMINATE,
-      ANIM_INDETERMINATE_CHECKED,
-      ANIM_INDETERMINATE_UNCHECKED
-    } = CHECKBOX_CONSTANTS.classes;
-
-    switch (oldState) {
-      case TRANSITION_STATE_UNCHECKED:
-        return newState === TRANSITION_STATE_CHECKED ? ANIM_UNCHECKED_CHECKED : ANIM_UNCHECKED_INDETERMINATE;
-      case TRANSITION_STATE_CHECKED:
-        return newState === TRANSITION_STATE_UNCHECKED ? ANIM_CHECKED_UNCHECKED : ANIM_CHECKED_INDETERMINATE;
-      default:
-        // TRANSITION_STATE_INDETERMINATE
-        // Handles TRANSITION_STATE_INIT
-        return newState === TRANSITION_STATE_CHECKED ? ANIM_INDETERMINATE_CHECKED : ANIM_INDETERMINATE_UNCHECKED;
+  public set readonly(value: boolean) {
+    if (this._readonly !== value) {
+      this._readonly = value;
+      this._adapter.setReadonly(this._readonly);
+      this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }
 
-  private _updateCheckboxStateClasses(): void {
-    // Since we can't use the ::slotted():checked ~ selector, simulating the same functionality with classes
-    if (this._adapter.isChecked()) {
-      this._adapter.setRootClass(CHECKBOX_CONSTANTS.classes.CHECKED);
-    } else {
-      this._adapter.removeRootClass(CHECKBOX_CONSTANTS.classes.CHECKED);
-    }
-
-    if (this._adapter.isIndeterminate()) {
-      this._adapter.setRootClass(CHECKBOX_CONSTANTS.classes.INDETERMINATE);
-      this._adapter.removeRootClass(CHECKBOX_CONSTANTS.classes.CHECKED);
-    } else {
-      this._adapter.removeRootClass(CHECKBOX_CONSTANTS.classes.INDETERMINATE);
+  public get labelPosition(): CheckboxLabelPosition {
+    return this._labelPosition;
+  }
+  public set labelPosition(value: CheckboxLabelPosition) {
+    if (this.labelPosition !== value) {
+      this._labelPosition = value;
+      this._adapter.setLabelPosition(this._labelPosition);
+      this._adapter.setHostAttribute(CHECKBOX_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
     }
   }
 }

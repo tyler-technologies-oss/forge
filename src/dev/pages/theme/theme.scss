@@ -1,0 +1,29 @@
+.content .card {
+  max-width: 1075px;
+}
+
+.swatches {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.swatch-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.swatch {
+  border: 1px solid var(--forge-theme-outline);
+  box-sizing: border-box;
+  height: 100px;
+  width: 200px;
+  font-size: 14px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+h2 {
+  margin: 0;
+}

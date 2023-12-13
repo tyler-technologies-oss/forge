@@ -1,6 +1,6 @@
 import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
 import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons/standard';
-import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent } from './paginator-constants';
+import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, PaginatorRangeLabelBuilder } from './paginator-constants';
 import { PaginatorFoundation } from './paginator-foundation';
 import { PaginatorAdapter } from './paginator-adapter';
 import { IconButtonComponent } from '../icon-button';
@@ -24,6 +24,7 @@ export interface IPaginatorComponent extends IBaseComponent {
   disabled: boolean;
   alternative: boolean;
   alignment: PaginatorAlternativeAlignment;
+  rangeLabelCallback: PaginatorRangeLabelBuilder;
 }
 
 declare global {
@@ -37,8 +38,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-paginator>` component.
- * 
  * @tag forge-paginator
  */
 @CustomElement({
@@ -168,4 +167,11 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
 
   @FoundationProperty()
   public declare alignment: PaginatorAlternativeAlignment;
+
+  @FoundationProperty()
+  public declare rangeLabelCallback: PaginatorRangeLabelBuilder;
+
+  public override focus(options?: FocusOptions): void {
+    this._foundation.focus(options);
+  }
 }

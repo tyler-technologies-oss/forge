@@ -127,25 +127,21 @@ function buildComponentsList(groups: IComponentGroup[]): HTMLElement[] {
 
   for (const { label: groupLabel, components } of groups) {
     const groupHeader = document.createElement('h3');
-    groupHeader.classList.add('forge-typography--subtitle1-secondary');
+    groupHeader.classList.add('forge-typography--subheading3');
     groupHeader.textContent = groupLabel;
     elements.push(groupHeader);
 
     for (const { label: componentLabel, path } of components) {
-      const anchor = document.createElement('a');
-      anchor.classList.add('list-item-link');
-      anchor.href = path;
-
       const listItem = document.createElement('forge-list-item');
       listItem.textContent = componentLabel;
-      anchor.appendChild(listItem);
+      listItem.href = path;
 
       const trailingIcon = document.createElement('forge-icon');
       trailingIcon.slot = 'trailing';
       trailingIcon.name = 'chevron_right';
       listItem.appendChild(trailingIcon);
 
-      elements.push(anchor);
+      elements.push(listItem);
     }
   }
 

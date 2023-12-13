@@ -1,16 +1,19 @@
 import { emitEvent, toggleAttribute } from '@tylertech/forge-core';
 import { IBaseComponent } from './base-component';
 
-export interface IBaseAdapter {
+export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
+  readonly hostElement: T;
   readonly isConnected: boolean;
   removeHostAttribute(name: string): void;
+  hasHostAttribute(name: string): boolean;
   getHostAttribute(name: string): string | null;
   setHostAttribute(name: string, value?: string): void;
   toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void;
+  redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean;
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
-  dispatchHostEvent(config: IDispatchEventConfig): boolean;
+  dispatchHostEvent<U extends Event>(event: U): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
-  removeHostListener(event: string, callback: (event: Event) => void): void;
+  removeHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
   removeWindowListener(event: string, callback: (event: Event) => void, options?: boolean | EventListenerOptions): void;
   addDocumentListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
@@ -18,18 +21,20 @@ export interface IBaseAdapter {
   getScreenWidth(): number;
   setBodyAttribute(name: string, value: string): void;
   removeBodyAttribute(name: string): void;
-}
-
-export interface IDispatchEventConfig {
-  type: string;
-  detail?: unknown;
-  bubbles?: boolean;
-  cancelable?: boolean;
-  composed?: boolean;
+  focusHost(options?: FocusOptions): void;
+  clickHost(): void;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   constructor(protected _component: T) {}
+
+  public get hostElement(): T {
+    return this._component;
+  }
+
+  public hasHostAttribute(name: string): boolean {
+    return this._component.hasAttribute(name);
+  }
 
   public getHostAttribute(name: string): string | null {
     return this._component.getAttribute(name);
@@ -47,24 +52,48 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
     toggleAttribute(this._component, hasAttribute, name, value);
   }
 
+  public redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean {
+    const isFromLightDom = !((event.target as HTMLElement)?.getRootNode() instanceof ShadowRoot);
+    if (event.bubbles && (event.composed || isFromLightDom)) {
+      event.stopPropagation();
+    }
+    
+    const eventCopy = {
+      ...event,
+      bubbles: options?.bubbles ?? event.bubbles,
+      cancelable: options?.cancelable ?? event.cancelable,
+      composed: options?.composed ?? event.composed
+    };
+    const newEvent = Reflect.construct(event.constructor, [event.type, eventCopy]);
+    const isCancelled = !this._component.dispatchEvent(newEvent);
+    if (isCancelled) {
+      event.preventDefault();
+    }
+    return !isCancelled;
+  }
+
   public emitHostEvent(type: string, data: any = null, bubble = true, cancelable?: boolean): boolean {
     return emitEvent(this._component, type, data, bubble, cancelable);
   }
 
-  public dispatchHostEvent({ type, detail = null, bubbles = true, cancelable = false, composed = false }: IDispatchEventConfig): boolean {
-    if (!type) {
-      throw new Error('Invalid event type.');
+  public dispatchHostEvent<U extends Event>(event: U): boolean {
+    return !this._component.dispatchEvent(event);
+  }
+
+  public toggleHostListener(event: string, listener: EventListener, value: boolean, options?: boolean | AddEventListenerOptions): void {
+    if (value) {
+      this.addHostListener(event, listener, options);
+    } else {
+      this.removeHostListener(event, listener, options);
     }
-    const evt = new CustomEvent(type, { detail, bubbles, cancelable, composed });
-    return !this._component.dispatchEvent(evt);
   }
 
   public addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
     this._component.addEventListener(event, callback, options);
   }
 
-  public removeHostListener(event: string, callback: (event: Event) => void): void {
-    this._component.removeEventListener(event, callback);
+  public removeHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
+    this._component.removeEventListener(event, callback, options);
   }
 
   public addWindowListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
@@ -93,6 +122,14 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
 
   public removeBodyAttribute(name: string): void {
     this._component.ownerDocument.body.removeAttribute(name);
+  }
+
+  public focusHost(options?: FocusOptions): void {
+    HTMLElement.prototype.focus.call(this._component, options);
+  }
+
+  public clickHost(): void {
+    HTMLElement.prototype.click.call(this._component);
   }
 
   public get isConnected(): boolean {

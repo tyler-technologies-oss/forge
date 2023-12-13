@@ -1,5 +1,19 @@
-@use '../../src/shared';
+@use '../../../lib/button-toggle/button-toggle-group';
 
-button {
-  width: 256px;
+#toolbar-card {
+  display: inline-block;
+  --forge-card-padding: 0;
+
+  @include button-toggle-group.provide-theme((
+    padding: 4px
+  ));
+
+  .toolbar-card__container {
+    display: flex;
+  }
+
+  forge-divider {
+    height: auto;
+    margin-block: 4px;
+  }
 }

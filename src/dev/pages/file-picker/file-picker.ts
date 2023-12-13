@@ -1,7 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/file-picker';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import type { IFilePickerComponent, ISwitchComponent } from '@tylertech/forge';
 
 const filePicker = document.querySelector('#file-picker-default') as IFilePickerComponent;
@@ -60,12 +59,12 @@ maxSizeTextField.addEventListener('input', () => {
 });
 
 
-multipleCheckbox.addEventListener('forge-switch-select', ({ detail: selected }) => {
+multipleCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
   filePicker.multiple = selected;
   filePickerCompact.multiple = selected;
 });
 
-disabledCheckbox.addEventListener('forge-switch-select', ({ detail: selected }) => {
+disabledCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
   filePicker.disabled = selected;
   filePickerCompact.disabled = selected;
 });

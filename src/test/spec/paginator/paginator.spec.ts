@@ -1,4 +1,4 @@
-import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, definePaginatorComponent } from '@tylertech/forge/paginator';
+import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, definePaginatorComponent, IPaginatorRangeState } from '@tylertech/forge/paginator';
 import { BASE_SELECT_CONSTANTS, ISelectComponent } from '@tylertech/forge/select';
 import { IIconButtonComponent } from '@tylertech/forge/icon-button';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
@@ -112,6 +112,111 @@ describe('PaginatorComponent', function(this: ITestContext) {
       this.context.paginator.total = 100;
       this.context.paginator.pageIndex = 3;
       expect(this.context.nextPageButton.hasAttribute('disabled')).toBe(true);
+    });
+
+    it('should move focus to previous page button when next page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.nextPageButton.focus();
+      this.context.nextPageButton.click();
+
+      expect(this.context.nextPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.previousPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to next page button when previous page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.previousPageButton.focus();
+      this.context.previousPageButton.click();
+
+      expect(this.context.previousPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.nextPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to next page button when first page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext(true, true);
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 1;
+      this.context.firstPageButton.focus();
+      this.context.firstPageButton.click();
+
+      expect(this.context.firstPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.nextPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to previous page button when last page button is disabled', function(this: ITestContext) {
+      this.context = setupTestContext(true, true);
+      this.context.paginator.total = 100;
+      this.context.paginator.pageIndex = 2;
+      this.context.lastPageButton.focus();
+      this.context.lastPageButton.click();
+
+      expect(this.context.lastPageButton.hasAttribute('disabled')).toBe(true);
+      expect(this.context.previousPageButton.matches(':focus')).toBe(true);
+    });
+
+    it('should move focus to appropriate action if element contains focus but state is set programmatically in response to change event', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageSize = 50;
+      this.context.paginator.offset = 0;
+      this.context.paginator.addEventListener(PAGINATOR_CONSTANTS.events.CHANGE, ({ detail }: CustomEvent<IPaginatorChangeEvent>) => {
+        this.context.paginator.offset = detail.offset;
+      });
+      
+      await tick();
+      this.context.nextPageButton.focus();
+      this.context.nextPageButton.click();
+      await tick();
+
+      expect(this.context.previousPageButton.matches(':focus')).toBeTrue();
+    });
+
+    it('should move focus to appropriate action if element contains focus but state is set programmatically', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageSize = 50;
+      this.context.paginator.offset = 0;
+      
+      await tick();
+      this.context.nextPageButton.focus();
+      this.context.nextPageButton.click();
+      await tick();
+
+      expect(this.context.paginator.offset).toBe(50);
+      expect(this.context.previousPageButton.matches(':focus')).toBeTrue();
+
+      this.context.paginator.offset = 0;
+      await tick();
+
+      expect(this.context.nextPageButton.matches(':focus')).toBeTrue();
+    });
+
+    it('should keep focus if state is updated programmatically', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.pageSize = 25;
+      this.context.paginator.offset = 0;
+
+      await tick();
+
+      this.context.paginator.focus();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
+
+      this.context.paginator.offset = 25;
+      await tick();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
+
+      this.context.paginator.pageIndex = 0;
+      await tick();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
+
+      this.context.paginator.total = 200;
+      await tick();
+      expect(this.context.paginator.matches(':focus')).toBeTrue();
     });
 
     it('should emit change event when clicking next page button', function(this: ITestContext) {
@@ -248,8 +353,7 @@ describe('PaginatorComponent', function(this: ITestContext) {
       this.context.pageSizeSelect.open = true;
 
       const listItem = this.context.pageSizeSelect.popupElement?.querySelector(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
-      const listItemRoot = getShadowElement(listItem, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      listItemRoot.click();
+      listItem.click();
       await tick();
 
       expect(listItem.value).toBe('5');
@@ -267,8 +371,7 @@ describe('PaginatorComponent', function(this: ITestContext) {
 
       this.context.pageSizeSelect.open = true;
       const listItem = this.context.pageSizeSelect.popupElement?.querySelector(LIST_ITEM_CONSTANTS.elementName) as IListItemComponent;
-      const listItemRoot = getShadowElement(listItem, LIST_ITEM_CONSTANTS.selectors.LIST_ITEM);
-      listItemRoot.click();
+      listItem.click();
       await tick();
 
       expect(this.context.paginator.pageSize).toBe(Number(originalPageSize));
@@ -378,6 +481,45 @@ describe('PaginatorComponent', function(this: ITestContext) {
       expect(this.context.paginator.pageIndex).toBe(0);
     });
 
+    it('should set page index via offset property if total is not > 0 initially', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const pageSizeOptions = [5, 10, 25];
+      this.context.paginator.pageSizeOptions = pageSizeOptions;
+      this.context.paginator.pageSize = 25;
+
+      expect(this.context.paginator.total).toBe(0);
+
+      this.context.paginator.offset = 25;
+      expect(this.context.paginator.pageIndex).toBe(0);
+
+      this.context.paginator.total = 100;
+      expect(this.context.paginator.pageIndex).toBe(1);
+    });
+
+    it('should update offset when page index changes', function(this: ITestContext) {
+      this.context = setupTestContext();
+      const pageSizeOptions = [5, 10, 25];
+      this.context.paginator.pageSizeOptions = pageSizeOptions;
+      this.context.paginator.pageSize = 25;
+      this.context.paginator.total = 100;
+      expect(this.context.paginator.pageIndex).toBe(0);
+      expect(this.context.paginator.offset).toBe(0);
+
+      this.context.paginator.pageIndex = 1;
+
+      expect(this.context.paginator.pageIndex).toBe(1);
+      expect(this.context.paginator.offset).toBe(25);
+
+      this.context.paginator.pageIndex = 3;
+      expect(this.context.paginator.pageIndex).toBe(3);
+      expect(this.context.paginator.offset).toBe(75);
+
+      this.context.paginator.pageIndex = 0;
+
+      expect(this.context.paginator.pageIndex).toBe(0);
+      expect(this.context.paginator.offset).toBe(0);
+    });
+
     it('should get offset', function(this: ITestContext) {
       this.context = setupTestContext();
       const pageSizeOptions = [5, 10, 25];
@@ -409,6 +551,24 @@ describe('PaginatorComponent', function(this: ITestContext) {
         pageSize: 25
       };
       expect(callback).toHaveBeenCalledWith(jasmine.objectContaining({ detail }));
+    });
+
+    it('should use range label callback', function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.paginator.total = 100;
+      this.context.paginator.rangeLabelCallback = (state: IPaginatorRangeState) => {
+        return `items ${state.pageStart} thru ${state.pageEnd} out of ${state.total} total`;
+      };
+
+      expect(this.context.rangeLabel.innerText).toBe('items 1 thru 25 out of 100 total');
+
+      this.context.paginator.pageIndex = 2;
+
+      expect(this.context.rangeLabel.innerText).toBe('items 51 thru 75 out of 100 total');
+
+      this.context.paginator.rangeLabelCallback = undefined;
+
+      expect(this.context.rangeLabel.innerText).toBe('51-75 of 100');
     });
 
     describe('with first button', function(this: ITestContext)  {

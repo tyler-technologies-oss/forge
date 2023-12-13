@@ -32,8 +32,8 @@ export class FocusIndicatorFoundation implements IFocusIndicatorFoundation {
   }
 
   public destroy(): void {
+    this._removeListeners(); // Must be called before destroying adapter
     this._adapter.destroy();
-    this._removeListeners();
   }
 
   private _addListeners(): void {
@@ -49,15 +49,16 @@ export class FocusIndicatorFoundation implements IFocusIndicatorFoundation {
   }
 
   private _onInteraction(evt: Event): void {
+    const target = evt.target as HTMLElement | null;
     switch (evt.type) {
       case 'focusin':
-        this.active = this._adapter.isActive(this._allowFocus ? ':focus' : ':focus-visible');
+        this.active = this._adapter.isActive(this._allowFocus ? ':focus' : ':focus-visible', target);
         break;
       case 'focusout':
         this.active = false;
         break;
       case 'pointerdown':
-        this.active = this._allowFocus ? this._adapter.isActive(':focus') : this._adapter.isActive(':focus-visible');
+        this.active = this._allowFocus ? this._adapter.isActive(':focus', target) : this._adapter.isActive(':focus-visible', target);
         break;
     }
   }

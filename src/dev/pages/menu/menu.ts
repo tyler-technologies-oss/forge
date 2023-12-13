@@ -5,7 +5,6 @@ import type { IListItemComponent, IMenuComponent, IMenuOption, ISwitchComponent 
 import '@tylertech/forge/menu';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import { tylIconArrowBack, tylIconArrowForward, tylIconHelp, tylIconLoop, tylIconPerson, tylIconSettings } from '@tylertech/tyler-icons/standard';
 
 IconRegistry.define([
@@ -90,15 +89,15 @@ menu.addEventListener('forge-menu-select', evt => {
   console.log('[forge-menu-select]', evt.detail);
 });
 
-complexToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+complexToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   setOptions(selected);
 });
 
-denseToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   menu.dense = selected;
 });
 
-asyncToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+asyncToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     menu.options = asyncOptions;
   } else {
@@ -106,11 +105,11 @@ asyncToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
   }
 });
 
-optionBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+optionBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   menu.optionBuilder = selected ? optionBuilderCallback : undefined;
 });
 
-allowPersistentSelectionToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+allowPersistentSelectionToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   menu.persistSelection = selected;
   setSelectedButton.disabled = !selected;
 });

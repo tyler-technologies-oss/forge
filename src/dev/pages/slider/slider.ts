@@ -22,21 +22,21 @@ const stepInput = document.querySelector('#slider-step') as HTMLInputElement;
 stepInput.addEventListener('change', ({ target }) => slider.step = (target as HTMLInputElement).valueAsNumber);
 
 const rangeToggle = document.querySelector('#slider-range') as ISwitchComponent;
-rangeToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.range = selected);
+rangeToggle.addEventListener('forge-switch-change', ({ detail: selected }) => slider.range = selected);
 
 const tickmarksToggle = document.querySelector('#slider-tickmarks') as ISwitchComponent;
-tickmarksToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.tickmarks = selected);
+tickmarksToggle.addEventListener('forge-switch-change', ({ detail: selected }) => slider.tickmarks = selected);
 
 const disabledToggle = document.querySelector('#slider-disabled') as ISwitchComponent;
-disabledToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.disabled = selected);
+disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => slider.disabled = selected);
 
 const readonlyToggle = document.querySelector('#slider-readonly') as ISwitchComponent;
-readonlyToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.readonly = selected);
+readonlyToggle.addEventListener('forge-switch-change', ({ detail: selected }) => slider.readonly = selected);
 
 const labelsToggle = document.querySelector('#slider-labeled') as ISwitchComponent;
-labelsToggle.addEventListener('forge-switch-select', ({ detail: selected }) => slider.labeled = selected);
+labelsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => slider.labeled = selected);
 
 const labelBuilderToggle = document.querySelector('#slider-label-builder') as ISwitchComponent;
-labelBuilderToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+labelBuilderToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   slider.labelBuilder = selected ? (value: number) => `Value: ${value}` : undefined;
 });

@@ -1,7 +1,7 @@
-import { BaseAdapter, IBaseAdapter } from '@tylertech/forge/core';
-import { IListDropdownComponent } from './list-dropdown';
 import { getShadowElement } from '@tylertech/forge-core';
-import { IPopoverComponent } from '@tylertech/forge/popover';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
+import { IListDropdownComponent } from './list-dropdown';
+import { IPopoverComponent } from '../../popover/popover';
 
 export interface IListDropdownAdapter extends IBaseAdapter {
   setTargetElement(element: HTMLElement): void;

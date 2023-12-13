@@ -1,0 +1,138 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: #{token(display)};
+  position: relative;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin base {
+  position: relative;
+  z-index: 0;
+  
+  display: #{token(display)};
+  align-items: center;
+  justify-content: center;
+  gap: #{token(gap)};
+
+  box-sizing: border-box;
+  height: #{token(density-large-size)};
+  min-width: #{token(density-large-size)};
+  border: #{token(border)};
+  border-start-start-radius: #{token(shape-start-start)};
+  border-start-end-radius: #{token(shape-start-end)};
+  border-end-start-radius: #{token(shape-end-start)};
+  border-end-end-radius: #{token(shape-end-end)};
+  padding: #{token(padding)};
+  box-shadow: #{token(shadow)};
+
+  color: #{token(icon-color)};
+  background: #{token(background-color)};
+  font-size: #{token(icon-size)};
+  cursor: #{token(cursor)};
+  user-select: none;
+
+  transition-property: box-shadow, background;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+}
+
+@mixin slotted-start-end {
+  font-size: #{token(icon-size)};
+  height: #{token(icon-size)};
+  width: #{token(icon-size)};
+  font-weight: inherit;
+}
+
+@mixin anchor-base {
+  position: absolute;
+  inset: 0;
+  text-decoration: none;
+}
+
+@mixin host-disabled {
+  cursor: #{token(disabled-cursor)};
+}
+
+@mixin disabled {
+  pointer-events: none;
+  opacity: #{token(disabled-opacity)};
+}
+
+@mixin outlined {
+  border-width: #{token(outlined-border-width)};
+  border-style: #{token(outlined-border-style)};
+  border-color: #{token(outlined-border-color)};
+}
+
+@mixin tonal {
+  @include override(icon-color, tonal-icon-color);
+  @include override(background-color, tonal-background-color);
+}
+
+@mixin filled {
+  @include override(icon-color, filled-icon-color);
+  @include override(background-color, filled-background-color);
+}
+
+@mixin raised {
+  @include override(shadow, raised-shadow);
+
+  &:hover {
+    @include override(raised-shadow, raised-hover-shadow);
+  }
+
+  &:active {
+    @include override(raised-shadow, raised-active-shadow);
+  }
+}
+
+@mixin raised-disabled {
+  @include override(raised-shadow, raised-disabled-shadow);
+}
+
+@mixin density-small {
+  @include override(size, density-small-size);
+  @include override(icon-size, density-small-icon-size);
+  @include override(padding, density-small-padding);
+}
+
+@mixin density-small-slotted {
+  font-size: #{token(density-small-icon-size)};
+}
+
+@mixin density-medium {
+  @include override(size, density-medium-size);
+  @include override(padding, density-medium-padding);
+}
+
+@mixin toggle-on-icon {
+  @include override(icon-color, toggle-on-icon-color);
+}
+
+@mixin toggle-on-outlined {
+  @include override(background-color, outlined-toggle-on-background-color);
+  @include override(icon-color, outlined-toggle-on-icon-color);
+}
+
+@mixin toggle-tonal {
+  @include override(background-color, tonal-toggle-background-color);
+}
+
+@mixin toggle-on-tonal {
+  @include override(icon-color, tonal-toggle-on-icon-color);
+  @include override(background-color, tonal-toggle-on-background-color);
+}
+
+@mixin toggle-filled {
+  @include override(icon-color, filled-toggle-icon-color);
+  @include override(background-color, filled-toggle-background-color);
+}
+
+@mixin toggle-on-filled {
+  @include override(icon-color, filled-toggle-on-icon-color);
+  @include override(background-color, filled-toggle-on-background-color);
+}

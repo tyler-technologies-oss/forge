@@ -1,0 +1,225 @@
+@use './core' as *;
+@use '../core/styles/theme';
+@use '../state-layer';
+@use '../focus-indicator';
+@use '../circular-progress';
+
+//
+// Host
+//
+
+$host-tokens: [display disabled-cursor];
+
+:host {
+  @include tokens($includes: $host-tokens);;
+}
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-button {
+  @include tokens($excludes: $host-tokens);
+}
+
+.forge-button {
+  @include base;
+  
+  ::slotted(:is([slot=start],[slot=end])) {
+    @include slotted-start-end;
+  }
+}
+
+a {
+  @include anchor-base;
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme(( color: #{token(color)} ));
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: #{token(primary-color)},
+    outward-offset: #{token(focus-indicator-offset)}
+  ));
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]) {
+    .forge-button {
+      @include override(primary-color, theme.variable($theme), value);
+    }
+  }
+  
+  :host([theme=#{$theme}][variant=tonal]) {
+    .forge-button {
+      @include override(tonal-background, theme.variable(#{$theme}-container), value);
+      @include override(tonal-color, theme.variable(on-#{$theme}-container), value);
+    }
+  }
+}
+
+@include theme(secondary);
+@include theme(tertiary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
+//
+// Variants
+//
+
+:host(:is(:not([variant], [variant=text]))) {
+  .forge-button {
+    @include text;
+  }
+}
+
+:host(:is([variant=filled],[variant=raised])) {
+  .forge-button {
+    @include filled;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(( color: #{token(filled-color)} ));
+  }
+}
+
+:host([variant=raised]) {
+  .forge-button {
+    @include raised;
+  }
+}
+
+:host([variant=tonal]) {
+  .forge-button {
+    @include tonal;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(( color: #{token(tonal-color)} ));
+  }
+}
+
+:host([variant=outlined]) {
+  .forge-button {
+    @include outlined;
+  }
+}
+
+:host([variant=link]) {
+  .forge-button {
+    @include link;
+  }
+}
+
+//
+// Full width
+//
+
+:host([full-width]) {
+  width: 100%;
+}
+
+
+//
+// Dense
+//
+
+:host([dense]) {
+  .forge-button {
+    @include dense;
+  }
+}
+
+//
+// Pill
+//
+
+:host([pill]) {
+  .forge-button {
+    @include pill;
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme(( shape: #{token(pill-shape)} ));
+  }
+}
+
+//
+// Disabled
+//
+
+:host(:not([anchor])[disabled]) {
+  @include host-disabled;
+
+  .forge-button {
+    @include disabled;
+  }
+}
+
+:host(:not([anchor])[variant=outlined][disabled]) {
+  .forge-button {
+    @include outlined-disabled;
+  }
+}
+
+:host(:not([anchor])[variant=tonal][disabled]) {
+  .forge-button {
+    @include tonal-disabled;
+  }
+}
+
+:host(:not([anchor]):is([variant=filled],[variant=raised])[disabled]) {
+  .forge-button {
+    @include filled-disabled;
+  }
+}
+
+:host(:not([anchor])[variant=raised][disabled]) {
+  .forge-button {
+    @include raised-disabled;
+  }
+}
+
+//
+// Popover icon
+//
+
+:host([popover-icon]) {
+  .forge-button__popover-icon {
+    @include popover-icon;
+  }
+}
+
+:host([popover-icon][aria-expanded=true]) {
+  .forge-button__popover-icon {
+    @include popover-icon-open;
+  }
+}
+
+//
+// Slotted - circular progress
+//
+
+::slotted(forge-circular-progress) {
+  @include circular-progress.provide-theme((
+    indicator-color: #{token(color)},
+    track-color: transparent,
+    size: 1em
+  ));
+}

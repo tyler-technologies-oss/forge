@@ -2,7 +2,6 @@ import '$src/shared';
 import type { IPopoverComponent, ISelectComponent, ISwitchComponent, PopoverToggleEventData } from '@tylertech/forge';
 import { toggleClass } from '@tylertech/forge-core';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/popover';
 import './popover.scss';
 
@@ -39,7 +38,7 @@ const triggerTypeSelect = document.getElementById('opt-trigger-type') as ISelect
 triggerTypeSelect.addEventListener('change', ({ detail: selected }) => popover.triggerType = selected);
 
 const dialogToggle = document.getElementById('opt-dialog') as ISwitchComponent;
-dialogToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+dialogToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   preventDialogCloseToggle.disabled = !selected;
   modalToggle.disabled = !selected;
   if (!selected) {
@@ -49,27 +48,27 @@ dialogToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
 });
 
 const modalToggle = document.getElementById('opt-modal') as ISwitchComponent;
-modalToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+modalToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   dialogToggle.selected = true;
   popover.modal = selected;
 });
 
 const arrowToggle = document.getElementById('opt-arrow') as ISwitchComponent;
-arrowToggle.addEventListener('forge-switch-select', ({ detail: selected }) => popover.arrow = selected);
+arrowToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.arrow = selected);
 
 const inlineToggle = document.getElementById('opt-inline') as ISwitchComponent;
-inlineToggle.addEventListener('forge-switch-select', ({ detail: selected }) => popover.inline = selected);
+inlineToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.inline = selected);
 
 const staticToggle = document.getElementById('opt-static') as ISwitchComponent;
-staticToggle.addEventListener('forge-switch-select', ({ detail: selected }) => popover.static = selected);
+staticToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.static = selected);
 
 const useOffsetToggle = document.getElementById('opt-use-offset') as ISwitchComponent;
-useOffsetToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+useOffsetToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   popover.offset = selected ? { mainAxis: 4 } : null;
 });
 
 const forceContainmentToggle = document.getElementById('opt-force-containment') as ISwitchComponent;
-forceContainmentToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+forceContainmentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   toggleClass(clippingContainer, selected, 'force-containment');
 });
 

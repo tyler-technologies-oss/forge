@@ -9,7 +9,7 @@ const basicExpansionPanel = document.querySelector('#expansion-panel-basic') as 
 const cardExpansionPanel = document.querySelector('#expansion-panel-card') as IExpansionPanelComponent;
 const useAnimationToggle = document.getElementById('opt-use-animations') as ISwitchComponent;
 
-useAnimationToggle.addEventListener('forge-switch-select', ({ detail: selected }) => {
+useAnimationToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   basicExpansionPanel.useAnimations = selected;
   cardExpansionPanel.useAnimations = selected;
 });

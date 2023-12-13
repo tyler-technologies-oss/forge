@@ -1,25 +1,18 @@
 @use 'sass:map';
+@use 'sass:math';
 @use '../core/config';
 @use '../tokens/theme/tokens';
+@use '../tokens/theme/color-emphasis';
 @use '../utils';
+
+@forward './utils';
 
 ///
 /// Emits custom property declarations for all default theme tokens.
 /// 
 @mixin properties {
-  /// Temporary tokens to map the MDC theme to Forge theme
-  /// TODO: Remove this once MDC dependency is removed
-  :root {
-    @each $token-name, $token-value in tokens.$mdc-remap {
-      --mdc-theme-#{$token-name}: #{$token-value};
-    }
-  }
-
-  // Forge theme tokens
-  :root {
-    @each $token-name, $token-value in tokens.$tokens {
-      --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
-    }
+  @each $token-name, $token-value in tokens.$tokens {
+    --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
   }
 }
 
@@ -29,6 +22,31 @@
 @mixin properties-dark {
   @each $token-name, $token-value in tokens.$tokens-dark {
     --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
+  }
+}
+
+///
+/// Temporary tokens to map the MDC theme to Forge theme
+/// 
+/// TODO: Remove this once MDC dependency is removed
+/// 
+@mixin properties-compat {
+  @each $token-name, $token-value in tokens.$mdc-remap {
+    --mdc-theme-#{$token-name}: #{$token-value};
+  }
+}
+
+///
+/// Generates utility classes for each theme token as both `color` and `background-color` styles separately.
+/// 
+@mixin classes {
+  @each $token, $value in tokens.$tokens {
+    .#{config.$prefix}-color--#{$token} {
+      color: #{variable($token)};
+    }
+    .#{config.$prefix}-background--#{$token} {
+      background-color: #{variable($token)};
+    }
   }
 }
 
@@ -45,3 +63,13 @@
 @mixin provide($tokens, $prefix: config.$prefix) {
   @include utils.provide(tokens.$tokens, $tokens, theme, $prefix);
 }
+
+///
+/// Gets a theme emphasis value by semantic name.
+/// 
+/// Valid names are `highest`, `higher`, `high`, `medium-high`, `medium`, `medium-low`, `low`, `lower`, and `lowest`.
+/// 
+@function emphasis($emphasis) {
+  @return math.div(color-emphasis.value($emphasis), 100%);
+}
+

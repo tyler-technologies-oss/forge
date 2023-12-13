@@ -1,25 +1,220 @@
-@use '@material/typography' as mdc-typography;
-@use '../../theme';
-@use './mixins';
-@use '../../ripple/forge-ripple';
-@use '../../typography/mixins' as typography-mixins;
-@use './variables';
+@use './core' as *;
+@use '../../focus-indicator';
+@use '../../state-layer';
+@use '../../core/styles/shape';
 
-@include mixins.core-styles;
+//
+// Host
+//
+
+$_host-tokens: [indent dense-indent];
 
 :host {
-  @include mixins.host;
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  @include container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-// This is here until Firefox supports :host-context()...
-:host([forge-drawer-context=true]) {
-  @include mixins.drawer-context-styles;
+//
+// Base
+//
+
+.forge-list-item {
+  @include tokens($excludes: $_host-tokens);
 }
 
+.forge-list-item {
+  @include base;
+}
+
+// Non-interactive
+:host([non-interactive]) {
+  .forge-list-item {
+    @include non-interactive;
+  }
+}
+
+// Disabled
+:host([disabled]) {
+  .forge-list-item {
+    @include disabled;
+  }
+}
+
+// Two-line
+:host([two-line]) {
+  .forge-list-item {
+    @include two-line;
+  }
+}
+
+// Three-line
+:host([three-line]) {
+  .forge-list-item {
+    @include three-line;
+  }
+}
+
+// Dense
 :host([dense]) {
-  @include mdc-typography.typography(body2);
+  .forge-list-item {
+    @include dense;
+  }
+
+  .text-container {
+    @include dense-text;
+  }
+}
+
+// Dense indented
+:host([dense][indented]) {
+  @include dense-indented;
+}
+
+// Dense two-line
+:host([dense][two-line]) {
+  .forge-list-item {
+    @include dense-two-line;
+  }
+}
+
+// Dense three-line
+:host([dense][three-line]) {
+  .forge-list-item {
+    @include dense-three-line;
+  }
+}
+
+// Dense leading/trailing
+:host([selected]) {
+  .forge-list-item {
+    @include selected;
+
+    ::slotted([slot=leading]),
+    ::slotted([slot=trailing]) {
+      @include leading-trailing-selected;
+    }
+
+    ::slotted([slot=leading]) {
+      @include leading-selected;
+    }
+
+    ::slotted([slot=trailing]) {
+      @include trailing-selected;
+    }
+  }
+
+  .text-container {
+    @include text-container-selected;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme((
+      color: #{token(selected-color)}
+    ));
+  }
+}
+
+// Indented
+:host([indented]) {
+  @include indented;
+}
+
+// Anchor base
+a.forge-list-item {
+  @include anchor-link;
+}
+
+// Text container base
+.text-container {
+  @include text-container;
+}
+
+// Supporting text slotted elements
+slot[name=secondary-text],
+slot[name=subtitle],
+slot[name=tertiary-text],
+slot[name=tertiary-title] {
+  &::slotted(*) {
+    @include supporting-text;
+  }
+
+  :host([selected]) &::slotted(*) {
+    @include supporting-text-selected;
+  }
+}
+
+// Avatar slotted elements
+::slotted([slot=avatar]) {
+  @include avatar;
+}
+
+// Leading/trailing slotted elements
+::slotted([slot=leading]),
+::slotted([slot=trailing]) {
+  @include leading-trailing-base;
+}
+
+// Leading slotted elements
+::slotted([slot=leading]) {
+  @include leading;
+
+  :host([selected]) & {
+    @include leading-selected;
+  }
+
+  :host([dense]) & {
+    @include leading-dense;
+  }
+}
+
+// Trailing slotted elements
+::slotted([slot=trailing]) {
+  @include trailing;
+
+  :host([selected]) & {
+    @include trailing-selected;
+  }
+
+  :host([dense]) & {
+    @include trailing-dense;
+  }
+}
+
+// Wrap styles
+:host([wrap]) {
+  .forge-list-item {
+    @include wrap;
+  }
+
+  .text-container {
+    @include text-container-wrap;
+  }
+
+  slot[name=secondary-text],
+  slot[name=subtitle],
+  slot[name=tertiary-text],
+  slot[name=tertiary-title] {
+    &::slotted(*) {
+      @include supporting-text-wrap;
+    }
+  }
+}
+
+forge-focus-indicator {
+  z-index: 1; // Fixes an animation artifact in Safari
+
+  @include focus-indicator.provide-theme((
+    shape: shape.variable(medium) // TODO: use list-item token?
+  ));
+}
+
+forge-state-layer {
+  border-radius: inherit;
 }

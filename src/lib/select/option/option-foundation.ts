@@ -1,4 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { IIconComponent } from '../../icon';
 import { IBaseListDropdownOption, ListDropdownIconType } from '../../list-dropdown/list-dropdown-constants';
 import { IOptionAdapter } from './option-adapter';
 import { OPTION_CONSTANTS } from './option-constants';
@@ -9,15 +10,18 @@ export interface IOptionFoundation extends ICustomElementFoundation, Required<IB
 export class OptionFoundation implements IOptionFoundation {
   private _value: any;
   private _label: string;
+  private _secondaryLabel: string;
   private _disabled = false;
   private _divider = false;
   private _optionClass: string[] = [];
   private _leadingIcon: string;
   private _leadingIconClass: string;
   private _leadingIconType: ListDropdownIconType;
+  private _leadingIconComponentProps: Partial<IIconComponent>;
   private _trailingIcon: string;
   private _trailingIconClass: string;
   private _trailingIconType: ListDropdownIconType;
+  private _trailingIconComponentProps: Partial<IIconComponent>;
   private _leadingBuilder: () => HTMLElement;
   private _trailingBuilder: () => HTMLElement;
 
@@ -42,6 +46,17 @@ export class OptionFoundation implements IOptionFoundation {
     if (this._label !== value) {
       this._label = value;
       this._adapter.toggleHostAttribute(OPTION_CONSTANTS.attributes.LABEL, !!this._label, this._label);
+    }
+  }
+
+  /** Gets/sets the secondary label of this option. */
+  public get secondaryLabel(): string {
+    return this._secondaryLabel;
+  }
+  public set secondaryLabel(value: string) {
+    if (this._secondaryLabel !== value) {
+      this._secondaryLabel = value;
+      this._adapter.toggleHostAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL, !!this._secondaryLabel, this._secondaryLabel);
     }
   }
 
@@ -119,6 +134,16 @@ export class OptionFoundation implements IOptionFoundation {
     }
   }
 
+  /** Gets/sets the props on the leading icon component. */
+  public get leadingIconComponentProps(): Partial<IIconComponent> {
+    return this._leadingIconComponentProps;
+  }
+  public set leadingIconComponentProps(value: Partial<IIconComponent>) {
+    if (this._leadingIconComponentProps !== value) {
+      this._leadingIconComponentProps = value;
+    }
+  }
+
   /** Gets/sets the trailing icon of this option. */
   public get trailingIcon(): string {
     return this._trailingIcon;
@@ -149,6 +174,16 @@ export class OptionFoundation implements IOptionFoundation {
     if (this._trailingIconType !== value) {
       this._trailingIconType = value;
       this._adapter.toggleHostAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE, !!this._trailingIconType, this._trailingIconType);
+    }
+  }
+
+  /** Gets/sets the props on the trailing icon component. */
+  public get trailingIconComponentProps(): Partial<IIconComponent> {
+    return this._trailingIconComponentProps;
+  }
+  public set trailingIconComponentProps(value: Partial<IIconComponent>) {
+    if (this._trailingIconComponentProps !== value) {
+      this._trailingIconComponentProps = value;
     }
   }
 

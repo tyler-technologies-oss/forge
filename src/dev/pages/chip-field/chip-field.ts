@@ -20,13 +20,15 @@ const requiredToggle = document.querySelector('#opt-required') as ISwitchCompone
 const invalidToggle = document.querySelector('#opt-invalid') as ISwitchComponent;
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;
 const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
+const onBlurToggle = document.querySelector('#opt-add-on-blur') as ISwitchComponent;
 const populateButton = document.querySelector('#opt-btn-populate') as HTMLButtonElement;
 const clearButton = document.querySelector('#opt-btn-clear') as HTMLButtonElement;
 
-requiredToggle.addEventListener('forge-switch-select', updateRequiredState);
-invalidToggle.addEventListener('forge-switch-select', updateInvalidState);
-disabledToggle.addEventListener('forge-switch-select', updateDisabledState);
-denseToggle.addEventListener('forge-switch-select', updateDenseState);
+requiredToggle.addEventListener('forge-switch-change', updateRequiredState);
+invalidToggle.addEventListener('forge-switch-change', updateInvalidState);
+disabledToggle.addEventListener('forge-switch-change', updateDisabledState);
+denseToggle.addEventListener('forge-switch-change', updateDenseState);
+onBlurToggle.addEventListener('forge-switch-change', updateOnBlurProperty);
 populateButton.addEventListener('click', () => populateMembers(45));
 clearButton.addEventListener('click', removeAllMembers);
 
@@ -178,6 +180,10 @@ function updateDenseState({ detail: isDense }: CustomEvent<boolean>): void {
   
   const chips = autocompleteChipField.querySelectorAll('forge-chip') as NodeListOf<IChipComponent>;
   chips.forEach(({ dense }) => dense = isDense);
+}
+
+function updateOnBlurProperty({ detail: addOnBlur }: CustomEvent<boolean>): void {
+  simpleChipField.addOnBlur = addOnBlur;
 }
 
 function setChipsDisabledState(isDisabled: boolean): void {

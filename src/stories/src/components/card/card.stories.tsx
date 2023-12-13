@@ -63,7 +63,7 @@ export const Styled: Story<ICardProps> = ({
     <div style={containerStyle}>
       <ForgeCard raised={raised} style={{'--forge-card-padding': '16px'}}>
         <div style={headerStyle}>
-          <h3 className="forge-typography--headline6">This is the card title</h3>
+          <h3 className="forge-typography--heading4">This is the card title</h3>
           <ForgeIconButton>
             <button type="button">
               <ForgeIcon name="more_vert" />
@@ -71,16 +71,12 @@ export const Styled: Story<ICardProps> = ({
           </ForgeIconButton>
         </div>
         <div>
-          <p className="forge-typography--body2">{LOREM_IPSUM.p1}</p>
+          <p className="forge-typography--body1">{LOREM_IPSUM.p1}</p>
         </div>
         <div style={footerStyle}>
           <div>
-            <ForgeButton>
-              <button type="button">Ok</button>
-            </ForgeButton>
-            <ForgeButton>
-              <button type="button">Cancel</button>
-            </ForgeButton>
+            <ForgeButton>Ok</ForgeButton>
+            <ForgeButton>Cancel</ForgeButton>
           </div>
         </div>
       </ForgeCard>
@@ -98,10 +94,10 @@ export const WithScaffold: Story<ICardProps> = ({
     <ForgeCard raised={raised} style={{ width: '400px', '--forge-card-padding': '0', '--forge-card-height': '300px' }}>
       <ForgeScaffold>
         <ForgeToolbar slot="header">
-          <h1 slot="start" className="forge-typography--title">Lorem ipsum</h1>
+          <h1 slot="start" className="forge-typography--heading4">Lorem ipsum</h1>
         </ForgeToolbar>
 
-        <p slot="body" className="forge-typography--body2" tabIndex={0} style={{padding: '16px', margin: '0'}}>
+        <p slot="body" className="forge-typography--body1" tabIndex={0} style={{padding: '16px', margin: '0'}}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed
           aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus
           enim sint nesciunt provident excepturi dolorum pariatur illum?
@@ -116,12 +112,8 @@ export const WithScaffold: Story<ICardProps> = ({
         </p>
 
         <ForgeToolbar slot="footer" inverted>
-          <ForgeButton type="outlined" slot="end">
-            <button type="button">Cancel</button>
-          </ForgeButton>
-          <ForgeButton type="unelevated" slot="end" style={{marginLeft: '8px'}}>
-            <button type="button">Ok</button>
-          </ForgeButton>
+          <ForgeButton variant="outlined" slot="end">Cancel</ForgeButton>
+          <ForgeButton variant="unelevated" slot="end" style={{marginLeft: '8px'}}>Ok</ForgeButton>
         </ForgeToolbar>
       </ForgeScaffold>
     </ForgeCard>

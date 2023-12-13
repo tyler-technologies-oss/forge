@@ -38,7 +38,7 @@ export const Default: Story<IKeyboardShortcutProps> = ({
 
   return (
     <div>
-      <div className="forge-typography--body2" style={{ marginBottom: '16px' }}>Focus an element and press the key combination ({key})</div>
+      <div className="forge-typography--body1" style={{ marginBottom: '16px' }}>Focus an element and press the key combination ({key})</div>
       <form style={gridStyles}>
         <ForgeTextField>
           <label slot="label" htmlFor="first-name">First name</label>
@@ -63,9 +63,7 @@ export const Default: Story<IKeyboardShortcutProps> = ({
           <label slot="label" htmlFor="comment">Comment</label>
           <textarea id="comment"></textarea>
         </ForgeTextField>
-        <ForgeButton type="raised" style={fullWidthStyles}>
-          <button type="button">Button</button>
-        </ForgeButton>
+        <ForgeButton variant="raised" style={fullWidthStyles}>Button</ForgeButton>
       </form>
       <ForgeKeyboardShortcut
         keyBinding={key}
@@ -97,9 +95,7 @@ export const Basic: Story<IKeyboardShortcutProps> = ({
 
   return (
     <div>
-      <ForgeButton type="raised">
-        <button type="button">Button</button>
-      </ForgeButton>
+      <ForgeButton variant="raised">Button</ForgeButton>
       <ForgeKeyboardShortcut
         keyBinding={key}
         on-forge-keyboard-shortcut-activate={handleKeyboardShortcut}

@@ -1,17 +1,14 @@
 @use 'sass:list';
-@use '../core/styles/utils';
-@use '../core/styles/tokens/linear-progress/tokens';
 @use '../theme';
+@use './token-utils' as *;
 
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, linear-progress);
-}
+@forward './token-utils';
 
 @mixin container {
   display: block;
   position: relative;
   min-inline-size: 80px;
-  block-size: #{tokens.get(track-height)};
+  block-size: #{token(track-height)};
   content-visibility: auto;
   contain: strict;
 }
@@ -19,7 +16,7 @@
 @mixin progress {
   inset: 0;
   outline: transparent solid 1px;
-  border-radius: var(--_track-shape);
+  border-radius: #{token(track-shape)};
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -28,10 +25,10 @@
 @mixin bar {
   animation: none;
   inline-size: 100%;
-  block-size: var(--_active-indicator-height);
+  block-size: #{token(indicator-height)};
   transform-origin: left center;
   will-change: transform;
-  transition: transform var(--_determinate-duration) var(--_determinate-easing);
+  transition: transform #{token(determinate-duration)} #{token(determinate-easing)};
 }
 
 @mixin secondary-bar {
@@ -41,23 +38,26 @@
 @mixin bar-inner {
   inset: 0;
   animation: none;
-  background: var(--_active-indicator-color);
+  transition: background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  background: #{token(indicator-color)};
 }
 
 @mixin buffer-bar {
-  background: var(--_track-color);
+  background: #{token(track-color)};
   inset: 0;
   will-change: transform;
-  transition: transform var(--_determinate-duration) var(--_determinate-easing);
+  transition: transform #{token(determinate-duration)} #{token(determinate-easing)},
+              background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
   transform-origin: left center;
 }
 
 @mixin track {
   inset: 0;
   will-change: transform;
-  animation: linear infinite var(--_determinate-duration);
+  animation: linear infinite #{token(determinate-duration)};
   animation-name: buffering;
-  background: var(--_track-background);
+  background: #{token(track-color, custom)};
+  transition: background-color #{token(theme-transition-duration)} #{token(theme-transition-timing)};
 }
 
 @mixin indeterminate-bar {
@@ -67,7 +67,7 @@
 @mixin indeterminate-primary-bar {
   inset-inline-start: -145.167%;
   will-change: transform;
-  animation: linear infinite var(--_indeterminate-duration);
+  animation: linear infinite #{token(indeterminate-duration)};
   animation-name: primary-indeterminate-translate;
 }
 
@@ -75,7 +75,7 @@
   inset-inline-start: -54.8889%;
   display: block;
   will-change: transform;
-  animation: linear infinite var(--_indeterminate-duration);
+  animation: linear infinite #{token(indeterminate-duration)};
   animation-name: secondary-indeterminate-translate;
 }
 
@@ -85,10 +85,10 @@
 
 @mixin indeterminate-primary-bar-inner {
   will-change: transform;
-  animation: linear infinite var(--_indeterminate-duration) primary-indeterminate-scale;
+  animation: linear infinite #{token(indeterminate-duration)} primary-indeterminate-scale;
 }
 
 @mixin indeterminate-secondary-bar-inner {
   will-change: transform;
-  animation: linear infinite var(--_indeterminate-duration) secondary-indeterminate-scale;
+  animation: linear infinite #{token(indeterminate-duration)} secondary-indeterminate-scale;
 }

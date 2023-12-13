@@ -1,182 +1,210 @@
-@use './core';
-@use './configuration';
+@use './core' as *;
 @use '../focus-indicator';
 @use '../state-layer';
 
+//
+// Host
+//
+
 :host {
-  @include core.container;
+  @include container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+//
+// Base
+//
+
 .forge-slider {
-  @include configuration.configuration;
-  @include core.slider;
+  // Internal state variables
+  #{declare(start-fraction)}: 0;
+  #{declare(end-fraction)}: 0;
+  #{declare(tick-count)}: 100;
+
+  // External state variables
+  @include tokens;
+}
+
+.forge-slider {
+  @include slider;
 
   &.range {
-    @include core.range;
+    @include range;
   }
 }
 
+//
+// Track
+//
+
 .track {
-  @include core.track;
+  @include track;
 
   &::before,
   &::after {
     content: '';
     
-    @include core.track-dimensions;
+    @include track-dimensions;
   }
 
   &::before {
-    @include core.track-inactive;
+    @include track-inactive;
   }
 
   &::after {
-    @include core.track-active;
+    @include track-active;
   }
 
   &.tickmarks {
     &::before {
-      @include core.tickmarks-inactive;
+      @include tickmarks-inactive;
     }
 
     &::after {
-      @include core.tickmarks-active;
+      @include tickmarks-active;
     }
   }
 }
 
+//
+// Handle
+//
+
 .handle-container-padded,
 .handle-container-block {
-  @include core.handle-container-dimensions;
+  @include handle-container-dimensions;
 }
 
 .handle-container-padded {
-  @include core.handle-container-padded;
+  @include handle-container-padded;
 }
 
 .handle-container {
-  @include core.handle-container;
+  @include handle-container;
 }
 
 .handle {
-  @include core.handle;
+  @include handle;
 
   &.start {
-    @include core.handle-start;
+    @include handle-start;
   }
 
   &.end {
-    @include core.handle-end;
+    @include handle-end;
   }
 
   &-thumb {
-    @include core.handle-thumb;
+    @include handle-thumb;
   }
 
   &-label {
-    @include core.handle-label;
+    @include handle-label;
 
     &::before,
     &::after {
       content: '';
-      @include core.handle-label-base;
+      @include handle-label-base;
     }
 
     &::before {
-      @include core.handle-label-bottom;
+      @include handle-label-bottom;
     }
 
     &::after {
-      @include core.handle-label-top;
+      @include handle-label-top;
     }
 
     &-content {
-      @include core.handle-label-content;
+      @include handle-label-content;
     }
   }
 }
 
 .handle-container.hover .handle-thumb {
-  @include core.handle-thumb-hover;
+  @include handle-thumb-hover;
 }
 
 :host(:not([disabled])) {
   input.end:active ~ .handle-container-padded .handle.end > .handle-thumb,
   input.start:active ~ .handle-container-padded .handle.start > .handle-thumb {
-    @include core.handle-thumb-pressed;
+    @include handle-thumb-pressed;
   }
 }
 
+//
+// Disabled
+//
+
 :host([disabled]) {
   .handle-thumb {
-    @include core.handle-thumb-disabled;
+    @include handle-thumb-disabled;
   }
   
   .handle-label {
-    @include core.handle-label-disabled;
+    @include handle-label-disabled;
   }
 
   .track {
     &::before {
-      @include core.track-inactive-disabled;
+      @include track-inactive-disabled;
     }
 
     &::after {
-      @include core.track-active-disabled;
+      @include track-active-disabled;
     }
 
     &.tickmarks {
       &::before {
-        @include core.tickmarks-active-disabled;
+        @include tickmarks-inactive-disabled;
       }
 
       &::after {
-        @include core.tickmarks-inactive-disabled;
+        @include tickmarks-active-disabled;
       }
     }
   }
 
   input[type=range] {
-    @include core.input-disabled;
+    @include input-disabled;
   }
 }
 
 // rtl for active track clipping
-@each $_rtl-selectors in core.get-rtl-selectors('.track', '::after') {
+@each $_rtl-selectors in get-rtl-selectors('.track', '::after') {
   #{$_rtl-selectors} {
-    @include core.rtl-track-clipping;
+    @include rtl-track-clipping;
   }
 }
 
 input.end:focus ~ .handle-container-padded .handle.end > .handle-thumb,
 input.start:focus ~ .handle-container-padded .handle.start > .handle-thumb {
-  @include core.handle-thumb-focused;
+  @include handle-thumb-focused;
 }
 
 .on-top.overlapping {
   .handle-thumb,
   .handle-label,
   .handle-label::before {
-    @include core.handles-overlapping;
+    @include handles-overlapping;
   }
 }
 
 :host(:focus-within) .handle-label,
 .handle-container.hover .handle-label,
 :where(:has(input:active)) .handle-label {
-  @include core.handle-label-visible;
+  @include handle-label-visible;
 }
 
 input[type=range] {
-  @include core.input;
+  @include input;
 }
 
 .on-top {
-  @include core.on-top;
+  @include on-top;
 }
 
 @media (prefers-reduced-motion) {
@@ -186,15 +214,14 @@ input[type=range] {
 }
 
 forge-focus-indicator {
-  /* stylelint-disable length-zero-no-unit */
   @include focus-indicator.provide-theme((
     shape: 50%,
-    outward-offset: 0px
+    outward-offset: 0px // Requires unit
   ));
 }
 
 forge-state-layer {
   @include state-layer.provide-theme((
-    color: var(--_handle-color)
+    color: #{token(handle-color)}
   ));
 }

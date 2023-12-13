@@ -89,8 +89,7 @@ describe('FocusIndicator', () => {
 
     await focusKeyboard(detachedButton);
 
-    const surface = getShadowElement(focusIndicator, 'div[part=indicator]') as HTMLElement;
-    const style = getComputedStyle(surface);
+    const style = getComputedStyle(focusIndicator);
 
     expect(style.animationName).to.equal('inward-grow, inward-shrink');
     expect(button.matches(':focus-visible')).to.be.true;
@@ -100,10 +99,9 @@ describe('FocusIndicator', () => {
   it('should set circular', async () => {
     const { focusIndicator } = await createFixture({ circular: true });
 
-    const surface = getShadowElement(focusIndicator, 'div[part=indicator]') as HTMLElement;
-    const style = getComputedStyle(surface);
+    const style = getComputedStyle(focusIndicator);
 
-    expect(style.getPropertyValue('--_shape')).to.equal('50%');
+    expect(style.getPropertyValue('--_focus-indicator-shape')).to.equal('50%');
     expect(focusIndicator.circular).to.be.true;
   });
 

@@ -373,6 +373,22 @@ describe('ExpansionPanelComponent', function(this: ITestContext) {
       expect(getInternalPanelContent(this.context.component).clientHeight).toBe(0);
     });
 
+    it('should close immediately if set while active animation is running', async function(this: ITestContext) {
+      this.context = setupTestContext();
+      this.context.append();
+
+      await tick();
+
+      this.context.component.open = true;
+      this.context.component.setOpenImmediate(true);
+
+      await tick();
+      await tick();
+
+      expect(this.context.component.open).toBeTrue();
+      expect(getInternalPanelContent(this.context.component).style.height).toBe('');
+    });
+
     it('should close immediately horizontal', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.useAnimations = false;

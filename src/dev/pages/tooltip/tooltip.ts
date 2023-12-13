@@ -1,6 +1,5 @@
 import '$src/shared';
 import '@tylertech/forge/button';
-import '@tylertech/forge/button/forge-button.scss';
 import '@tylertech/forge/tooltip';
 import type { ISelectComponent, ISwitchComponent, ITooltipComponent } from '@tylertech/forge';
 
@@ -16,7 +15,7 @@ const positionSelect = document.querySelector('#tooltip-position') as ISelectCom
 positionSelect.addEventListener('change', () => tooltip.position = positionSelect.value);
 
 const useBuilderCheckbox = document.querySelector('#tooltip-builder') as ISwitchComponent;
-useBuilderCheckbox.addEventListener('forge-switch-select', ({ detail: selected }) => tooltip.builder = selected ? tooltipBuilder : undefined);
+useBuilderCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => tooltip.builder = selected ? tooltipBuilder : undefined);
 
 function tooltipBuilder(): HTMLElement {
   const div = document.createElement('div');

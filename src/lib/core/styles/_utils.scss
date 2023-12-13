@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:math';
 @use './core/config';
 
 ///
@@ -9,23 +10,77 @@
   @if not $value {
     @error 'Invalid #{$module} token: #{$key}';
   }
-  @return _create-var($module, $key, $value, $prefix);
+  @return create-var($module, $key, $value, $prefix);
 }
 
 ///
-/// Creates a CSS custom property declaration for a token in the provided module
+/// Creates a CSS custom property reference for a token in the provided module
 /// referencing an existing module token variable as the fallback.
 /// 
-@function module-ref($module, $token, $ref-token, $prefix: config.$prefix) {
-  @return _create-var($module, $token, var(--_#{$ref-token}), $prefix);
+/// To provide a module reference variable with a different fallback value, set the
+/// $type parameter to `value` and `$value` will be used verbatim.
+/// 
+/// Example:
+/// ```scss
+/// $my-token: module-ref(comp, color, primary-color); // => var(--forge-comp-color, var(--_primary-color));
+/// ```
+/// 
+@function module-ref($module, $token, $value, $type: ref, $prefix: config.$prefix) {
+  $fallback: if($type == ref, module-var($module, $value), $value);
+  @return create-var($module, $token, $fallback, $prefix);
 }
 
 ///
-/// Creates a CSS custom property declaration for a module token using the
+/// Creates an internal token reference variable for a module.
+///
+/// Example:
+/// ```sass
+/// color: #{module-var(color)}; // => color: var(--_component-name-color);
+/// ```
+/// 
+/// @param {String} $module - The module name.
+/// @param {String} $token - The token name.
+///
+@function module-var($module, $token, $prefix: config.$prefix) {
+  @return var(#{create-module-var($module, $token)});
+}
+
+///
+/// Creates a CSS custom property reference for a module token using the
 /// provided value as the variable fallback.
 /// 
-@function module-val($module, $token, $value: null, $prefix: config.$prefix) {
-  @return _create-var($module, $token, $value, $prefix);
+/// Example:
+/// ```scss
+/// $my-token: module-val(comp, color, red); // => var(--forge-comp-color, red);
+/// $my-other-token: module-val(comp, color, theme.variable(primary)); // => var(--forge-comp-color, var(--forge-theme-primary));
+/// ```
+/// 
+@function module-val($module, $token, $value, $prefix: config.$prefix) {
+  @return create-var($module, $token, $value, $prefix);
+}
+
+///
+/// Creates a CSS custom property variable reference for a token in the provided module.
+/// 
+/// Example:
+/// ```scss
+/// $my-var: variable-ref(theme, color); // => var(--forge-theme-color);
+/// ```
+///
+@function variable-ref($module, $token, $value: null, $prefix: config.$prefix) {
+  @return create-var($module, $token, $value, $prefix);
+}
+
+///
+/// Creates a CSS custom property variable reference for a token in the provided module.
+/// 
+/// Example:
+/// ```scss
+/// $my-var: variable-ref(theme, color); // => var(--forge-theme-color);
+/// ```
+///
+@function variable-ref($module, $token, $value: null, $prefix: config.$prefix) {
+  @return create-var($module, $token, $value, $prefix);
 }
 
 ///
@@ -37,25 +92,104 @@
     @if not map.get($module-tokens, $token-name) {
       @error 'Invalid token "#{$token-name}" for module "#{$module}"';
     }
-    --#{$prefix}-#{$module}-#{$token-name}: #{$token-value};
+    @include declare-var($module, $token-name, $token-value, $prefix);
   }
 }
 
 ///
-/// Creates a new map by inheriting from a base map and overriding/adding values.
+/// Creates a token CSS custom property definition to point one token to another.
 /// 
+/// If `$new-token` is not a valid token then the provided value will be used verbatim.
+/// 
+/// Example:
+/// ```sass
+/// #{override(component-name, tokens, color, new-color)}; // => --_component-name-color: var(--_component-name-new-color);
+/// #{override(component-name, tokens, color, red)}; // => --_component-name-color: red;
+/// ```
+/// 
+/// @param {String} $module - The module name.
+/// @param {String} $module-tokens - The available tokens.
+/// @param {String} $token - The token name to override.
+/// @param {String} $token-or-value - The token name (if exists) or value to point to.
+/// @param {Boolean} $type - The type of token this is. Valid values are `token` and `value`.
+/// 
+@mixin override($module, $module-tokens, $token, $token-or-value, $type: token) {
+  @if $type == 'token' {
+    @if not map.get($module-tokens, $token) {
+      @error 'Invalid token "#{$token}" for module "#{$module}"';
+    }
+    @if not map.get($module-tokens, $token-or-value) {
+      @error 'Invalid override token "#{$token-or-value}" for module "#{$module}"';
+    }
+  }
+
+  // When the "token" type is specified, we output a module-level CSS custom property override
+  // that points to the provided token. This ensures that the module is taking ownership of the
+  // token value (which breaks the global cascading of internal tokens) and the module can choose
+  // to provide its own token specific to that override.
+  //
+  // When the "value" type is specified, we output a global-level CSS custom property override
+  // that points to the provided value. This keeps the global cascading of internal tokens intact
+  // instead of just overriding the token to a specific unchangeable value.
+  $value: if($type == 'token' and map.has-key($module-tokens, $token-or-value),
+              module-var($module, $token-or-value),
+              create-var($module, $token, $token-or-value));
+  #{create-module-var($module, $token)}: #{$value};
+}
+
+///
+/// Creates a new map by inheriting from a base map and overriding/adding values.
+///
 @function inherit-map($base, $overrides) {
   @return map.merge($base, $overrides);
 }
 
-
 ///
-/// Creates a CSS custom property declaration for a module token, using the provided fallback value.
+/// Creates a CSS custom property reference for a module token, using the provided fallback value.
 /// 
-@function _create-var($module, $token, $value: null, $prefix: config.$prefix) {
-  @if not $value {
+@function create-var($module, $token, $value: null, $prefix: config.$prefix) {
+  @if $value == null {
     @return var(--#{$prefix}-#{$module}-#{$token});
   }
   @return var(--#{$prefix}-#{$module}-#{$token}, $value);
 }
 
+///
+/// Rounds a number to the specified number of decimal places.
+///
+@function round($value, $fractionDigits: 0) {
+  $power: math.pow(10, $fractionDigits);
+  @return math.div(math.round($power * $value), $power);
+}
+
+///
+/// Creates a CSS custom property declaration for a module token. 
+///
+@mixin declare-var($module, $name, $value, $prefix: config.$prefix) {
+  --#{$prefix}-#{$module}-#{$name}: #{$value};
+}
+
+///
+/// Declares an internal token reference variable for a module.
+/// 
+/// Example:
+/// ```sass
+/// #{create-module-var(color)}: red; // => --_component-name-color: red;
+/// ```
+/// 
+/// @param {String} $token - The token name.
+/// 
+@function create-module-var($module, $token) {
+  @return --_#{$module}-#{$token};
+}
+
+///
+/// Flattens multiple maps into a single map. 
+///
+@function flatten($maps...) {
+  $merged: ();
+  @each $map in $maps {
+    $merged: map.merge($merged, $map);
+  }
+  @return $merged;
+}

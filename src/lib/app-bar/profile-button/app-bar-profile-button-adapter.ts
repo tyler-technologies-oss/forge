@@ -1,14 +1,18 @@
-import { getLightElement, notChildEventListener, getActiveElement, removeAllChildren } from '@tylertech/forge-core';
+import { getLightElement, notChildEventListener, getActiveElement, removeAllChildren, toggleAttribute } from '@tylertech/forge-core';
 import { IconComponentDelegate } from '../../icon';
 import { AVATAR_CONSTANTS, IAvatarComponent } from '../../avatar';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../../popup';
 import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card';
 import { IAppBarProfileButtonComponent } from './app-bar-profile-button';
-import { IAppBarProfileCardConfig, APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
+import { APP_BAR_PROFILE_BUTTON_CONSTANTS, IAppBarProfileCardConfig } from './app-bar-profile-button-constants';
+import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
+import { forwardAttributes } from '../../core/utils/reflect-utils';
 
 export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
+  popupElement: IPopupComponent | undefined;
   initialize(): void;
+  destroy(): void;
   setClickListener(listener: (evt: MouseEvent) => void): void;
   removeClickListener(listener: (evt: MouseEvent) => void): void;
   openPopup(profileCardConfig: IAppBarProfileCardConfig, dismissListener: () => void, profileListener: () => void, signOutListener: () => void, profileCardContent?: HTMLElement): () => void;
@@ -24,17 +28,42 @@ export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
 
 export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButtonComponent> implements IAppBarProfileButtonAdapter {
   private _avatarElement: IAvatarComponent;
-  private _buttonElement: HTMLButtonElement;
+  private _iconButtonElement: IIconButtonComponent;
   private _popupElement?: IPopupComponent;
   private _profileCardElement?: IProfileCardComponent;
+  private _forwardObserver?: MutationObserver;
 
   constructor(component: IAppBarProfileButtonComponent) {
     super(component);
   }
 
+  public get popupElement(): IPopupComponent | undefined {
+    return this._popupElement;
+  }
+
   public initialize(): void {
     this._avatarElement = getLightElement(this._component, AVATAR_CONSTANTS.elementName) as IAvatarComponent;
-    this._buttonElement = getLightElement(this._component, APP_BAR_PROFILE_BUTTON_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
+    this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+
+    const originalAriaLabel = this._iconButtonElement.getAttribute('aria-label');
+
+    this._forwardObserver = forwardAttributes(this._component, APP_BAR_PROFILE_BUTTON_CONSTANTS.forwardedAttributes, (name, value) => {
+      if (name === 'aria-label' && !value) {
+        value = originalAriaLabel;
+      }
+      toggleAttribute(this._iconButtonElement, !!value, name, value ?? undefined);
+    });
+  }
+
+  public destroy(): void {
+    this._forwardObserver?.disconnect();
+    this._forwardObserver = undefined;
+
+    if (this._popupElement) {
+      this._popupElement.remove();
+      this._popupElement = undefined;
+      this._profileCardElement = undefined;
+    }
   }
 
   public setClickListener(listener: (evt: MouseEvent) => void): void {
@@ -70,6 +99,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
     this._popupElement.animationType = PopupAnimationType.Menu;
     this._popupElement.appendChild(this._profileCardElement);
     this._popupElement.open = true;
+    this._profileCardElement.focus();
 
     return notChildEventListener(this._popupElement, activeElement => {
       if (!this._popupElement) {
@@ -90,7 +120,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
   }
 
   public requestFocus(): void {
-    this._buttonElement.focus();
+    this._iconButtonElement.focus();
   }
 
   public setAvatarText(value: string): void {

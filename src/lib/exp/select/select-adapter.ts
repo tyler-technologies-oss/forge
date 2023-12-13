@@ -1,4 +1,4 @@
-import { BaseAdapter, IBaseAdapter } from '@tylertech/forge/core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { ISelectComponentExp } from './select';
 import { IListDropdownComponent } from '../list-dropdown';
 import { getShadowElement } from '@tylertech/forge-core';

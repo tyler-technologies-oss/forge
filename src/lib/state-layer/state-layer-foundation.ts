@@ -42,6 +42,10 @@ export class StateLayerFoundation implements IStateLayerFoundation {
   public initialize(): void {
     this._adapter.trySetTarget(this._target);
 
+    // Clicks could be triggered programmatically so we need to listen for them regardless
+    // of deferred initialization status
+    this._adapter.addTargetListener('click', this._clickListener);
+
     // We defer initialization until the first pointerenter event is received.
     //
     // This is a performance optimization to avoid attaching many listeners to the target element
@@ -54,8 +58,8 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     this._pointerState = PointerState.INACTIVE;
     this._adapter.setHovered(false);
     this._adapter.setPressed(false);
+    this._removeListeners(); // Must be called before destroying adapter
     this._adapter.destroy();
-    this._removeListeners();
   }
 
   public playAnimation(coords?: StateLayerCoords): void {
@@ -77,7 +81,6 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     this._adapter.addTargetListener('pointerdown', this._pointerDownListener);
     this._adapter.addTargetListener('pointerup', this._pointerUpListener);
     this._adapter.addTargetListener('pointercancel', this._pointerCancelListener);
-    this._adapter.addTargetListener('click', this._clickListener);
     this._adapter.addTargetListener('contextmenu', this._contextmenuListener);
     this._attached = true;
   }
@@ -246,8 +249,12 @@ export class StateLayerFoundation implements IStateLayerFoundation {
   }
   public set targetElement(el: HTMLElement | null) {
     // Always remove the listeners from the previous target element
-    if (this._attached) {
-      this._removeListeners();
+    this._removeListeners();
+
+    // If unattached destroy the defer listener to recreate on the new target element
+    if (!this._attached) {
+      this._adapter.destroy();
+      this._deferred = false;
     }
 
     this._adapter.setTargetElement(el);
@@ -266,8 +273,12 @@ export class StateLayerFoundation implements IStateLayerFoundation {
       this._target = value;
 
       if (this._adapter.isConnected) {
-        if (this._attached) {
-          this._removeListeners();
+        // Always remove the listeners from the previous target element
+        this._removeListeners();
+
+        if (!this._attached) {
+          this._adapter.destroy();
+          this._deferred = false;
         }
 
         this._adapter.trySetTarget(value);

@@ -1,0 +1,100 @@
+@use '../core/styles/typography';
+@use '../core/styles/shape';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: #{token(display)};
+  position: relative;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin base {
+  @include typography.style(button);
+
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: #{token(gap)};
+  z-index: 0;
+  
+  background: #{token(background)};
+  color: #{token(color)};
+  cursor: pointer;
+  box-shadow: #{token(shadow)};
+  
+  box-sizing: border-box;
+  height: #{token(density-medium-size)};
+  min-width: #{token(density-medium-size)};
+  padding-inline: #{token(padding)};
+  border-width: medium;
+  border-style: none;
+  border-color: currentColor;
+  border-top-left-radius: #{token(shape-start-start)};
+  border-top-right-radius: #{token(shape-start-end)};
+  border-bottom-left-radius: #{token(shape-end-start)};
+  border-bottom-right-radius: #{token(shape-end-end)};
+  
+  user-select: none;
+  white-space: nowrap;
+
+  transition-property: box-shadow, background, color;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-timing)};
+
+  &:hover {
+    @include override(shadow, hover-shadow);
+  }
+
+  &:active {
+    @include override(shadow, active-shadow);
+  }
+}
+
+@mixin extended {
+  padding-inline: #{token(extended-padding)};
+  min-width: #{token(extended-min-width)};
+}
+
+@mixin lowered {
+  @include override(shadow, lowered-shadow);
+
+  &:hover {
+    @include override(shadow, lowered-hover-shadow);
+  }
+
+  &:active {
+    @include override(shadow, lowered-active-shadow);
+  }
+}
+
+@mixin anchor-base {
+  position: absolute;
+  inset: 0;
+  text-decoration: none;
+}
+
+@mixin density-small {
+  @include override(size, density-small-size);
+}
+
+@mixin density-large {
+  @include override(size, density-large-size);
+  @include override(shape, shape.variable(extra-large), value);
+}
+
+@mixin host-disabled {
+  cursor: #{token(disabled-cursor)};
+}
+
+@mixin disabled {
+  @include override(background, disabled-background);
+  @include override(color, disabled-color);
+
+  pointer-events: none;
+  opacity: #{token(disabled-opacity)};
+}
+

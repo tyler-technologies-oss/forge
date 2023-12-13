@@ -1,9 +1,7 @@
 export const FilePickerCompactCodeHtml = () => {
   return `
 <forge-file-picker compact>
-  <forge-button type="outlined">
-    <button type="button">Select files</button>
-  </forge-button>
+  <forge-button variant="outlined">Select files</forge-button>
 </forge-file-picker>
   `;
 };
