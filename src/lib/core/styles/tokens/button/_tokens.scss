@@ -12,7 +12,7 @@ $tokens: (
   // Shared
   primary-color: utils.module-val(button, primary-color, theme.variable(primary)),
   text-color: utils.module-ref(button, text-color, primary-color),
-  disabled-color: utils.module-val(button, disabled, theme.variable(surface-container)),
+  disabled-color: utils.module-val(button, disabled-color, theme.variable(surface-container)),
   padding: utils.module-val(button, padding, 8px),
   display: utils.module-val(button, display, inline-flex),
   justify: utils.module-val(button, justify, center),
@@ -53,7 +53,7 @@ $tokens: (
   // Tonal
   tonal-background: utils.module-val(button, tonal-background, theme.variable(primary-container)),
   tonal-disabled-background: utils.module-ref(button, tonal-disabled-background, disabled-color),
-  tonal-color: utils.module-val(button, flat-color, theme.variable(on-primary-container)),
+  tonal-color: utils.module-val(button, tonal-color, theme.variable(on-primary-container)),
   tonal-disabled-color: utils.module-ref(button, tonal-disabled-color, disabled-text-color),
 
   // Filled
@@ -96,8 +96,8 @@ $tokens: (
 
   // Focus indicator
   focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 4px),
-  text-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 0px),
-  link-focus-indicator-offset: utils.module-val(button, focus-indicator-offset, 2px),
+  text-focus-indicator-offset: utils.module-val(button, text-focus-indicator-offset, 0px),
+  link-focus-indicator-offset: utils.module-val(button, link-focus-indicator-offset, 2px),
 
   // Popover icon
   popover-icon-transition-duration: utils.module-val(button, popover-icon-transition-duration, animation.variable(duration-short3)),

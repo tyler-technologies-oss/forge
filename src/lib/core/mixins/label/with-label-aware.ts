@@ -1,5 +1,5 @@
-import { AbstractConstructor, MixinBase } from '../../constants';
-import { IBaseComponent } from './base-component';
+import { AbstractConstructor, MixinBase } from '../../../constants';
+import { IBaseComponent } from '../../base/base-component';
 
 /**
  * An element that can be associated with a Forge label component.
