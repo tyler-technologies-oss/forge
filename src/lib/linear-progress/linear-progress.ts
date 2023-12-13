@@ -1,5 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { BaseComponent } from '../core/base/base-component';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { LinearProgressAdapter } from './linear-progress-adapter';
 import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
 import { LinearProgressFoundation } from './linear-progress-foundation';
@@ -7,7 +9,7 @@ import { LinearProgressFoundation } from './linear-progress-foundation';
 import template from './linear-progress.html';
 import styles from './linear-progress.scss';
 
-export interface ILinearProgressComponent extends IBaseComponent {
+export interface ILinearProgressComponent extends IWithElementInternals, IWithDefaultAria {
   determinate: boolean;
   progress: number;
   buffer: number;
@@ -57,7 +59,7 @@ declare global {
 @CustomElement({
   name: LINEAR_PROGRESS_CONSTANTS.elementName
 })
-export class LinearProgressComponent extends BaseComponent implements ILinearProgressComponent {
+export class LinearProgressComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements ILinearProgressComponent {
   public static get observedAttributes(): string[] {
     return [
       LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,

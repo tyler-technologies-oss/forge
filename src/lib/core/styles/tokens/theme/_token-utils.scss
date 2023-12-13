@@ -18,10 +18,10 @@
   $surface-tone: color-utils.tone($surface);
 
   // The container colors are the provided color mixed with the surface color at lower emphasis levels
-  $container-minimum: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', minimum, lowest)));
-  $container-low: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', lower, low)));
-  $container: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', low, medium-low)));
-  $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', medium-low, medium)));
+  $container-minimum: theme-utils.hexify($color, $surface, color-emphasis.value(minimum));
+  $container-low: theme-utils.hexify($color, $surface, color-emphasis.value(lower));
+  $container: theme-utils.hexify($color, $surface, color-emphasis.value(low));
+  $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(medium-low));
 
   // The on-color is the contrast color against the provided color
   $on-color: theme-utils.contrast($color);

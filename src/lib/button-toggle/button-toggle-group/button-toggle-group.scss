@@ -116,15 +116,15 @@ $_host-tokens: [display];
     ::slotted(forge-button-toggle) {
       @include button-toggle.provide-theme((
         selected-background: #{theme.variable(#{$theme}-container-low)},
-        selected-color: #{theme.variable($theme)},
+        selected-color: #{theme.variable(on-#{$theme}-container-low)},
         focus-indicator-color: #{theme.variable($theme)}
       ));
     }
   }
 }
 
+@include theme(primary);
 @include theme(secondary);
-@include theme(tertiary);
 @include theme(success);
 @include theme(error);
 @include theme(warning);

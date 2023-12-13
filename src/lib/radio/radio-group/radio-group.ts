@@ -1,5 +1,5 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
-import { internals, observedDefaultAriaAttributes, setDefaultAria } from '../../constants';
+import { internals, setDefaultAria } from '../../constants';
 import { BaseComponent } from '../../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
@@ -41,8 +41,6 @@ const BaseRadioGroupClass = WithLabelAwareness(WithDefaultAria(WithElementIntern
 export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGroupComponent {
   public static readonly formAssociated = true;
 
-  public readonly [observedDefaultAriaAttributes] = RADIO_GROUP_CONSTANTS.observedAriaAttributes;
-
   public get form(): HTMLFormElement | null {
     return this[internals].form;
   }
@@ -80,13 +78,12 @@ export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGr
     this._foundation.initialize();
   }
 
-  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case RADIO_GROUP_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
     }
-    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
   public formDisabledCallback(isDisabled: boolean): void {

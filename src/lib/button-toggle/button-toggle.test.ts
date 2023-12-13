@@ -23,12 +23,12 @@ describe('Button Toggle', () => {
     expect(harness.buttonToggles.every(toggle => toggle.getAttribute('aria-pressed') === 'false')).to.be.true;
   });
 
-  ['primary', 'secondary', 'danger', 'success', 'warning', 'info'].forEach((theme: ButtonToggleGroupTheme) => {
+  ['primary', 'secondary', 'tertiary', 'danger', 'success', 'warning', 'info'].forEach((theme: ButtonToggleGroupTheme) => {
     it(`should be accessible with selected values for theme ${theme}`, async () => {
       const harness = await createFixture({ theme, value: 'two' });
       
-      // Primary is the default
-      if (theme !== 'primary') {
+      // tertiary is the default
+      if (theme !== 'tertiary') {
         expect(harness.element.getAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.THEME)).to.equal(theme);
       }
 

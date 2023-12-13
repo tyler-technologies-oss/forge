@@ -26,7 +26,7 @@ $tokens: (
   // Border
   border-width: utils.module-val(button-toggle, border-width, medium),
   border-style: utils.module-val(button-toggle, border-style, none),
-  border-color: utils.module-val(button-toggle, border-color, theme.variable(text-medium)),
+  border-color: utils.module-val(button-toggle, border-color, theme.variable(outline-medium)),
 
   // Shape
   shape: utils.module-val(button-toggle, shape, shape.variable(small)),
@@ -36,8 +36,8 @@ $tokens: (
   shape-end-end: utils.module-ref(button-toggle, shape-end-end, shape),
 
   // Selected
-  selected-background: utils.module-val(button-toggle, selected-background, theme.variable(primary-container-low)),
-  selected-color: utils.module-val(button-toggle, selected-color, theme.variable(primary)),
+  selected-background: utils.module-val(button-toggle, selected-background, theme.variable(tertiary-container-low)),
+  selected-color: utils.module-val(button-toggle, selected-color, theme.variable(on-tertiary-container-low)),
   selected-disabled-background: utils.module-val(button-toggle, selected-disabled-background, theme.variable(surface-container)),
 
   // Dense

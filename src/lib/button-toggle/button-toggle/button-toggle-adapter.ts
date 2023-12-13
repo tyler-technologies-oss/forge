@@ -25,8 +25,8 @@ export class ButtonToggleAdapter extends BaseAdapter<IButtonToggleComponent> imp
   }
 
   public initialize(): void {
+    this._component[setDefaultAria]({ role: 'button' }, { setAttribute: !this._component.hasAttribute('role') });
     this._component[setDefaultAria]({
-      role: 'button',
       ariaPressed: `${!!this._component.selected}`,
       ariaDisabled: `${!!this._component.disabled}`
     });
@@ -34,11 +34,11 @@ export class ButtonToggleAdapter extends BaseAdapter<IButtonToggleComponent> imp
   }
 
   public setSelected(value: boolean): void {
-    this._component[setDefaultAria]({ ariaPressed: `${!!value}` }, { overwrite: true });
+    this._component[setDefaultAria]({ ariaPressed: `${!!value}` });
   }
 
   public setDisabled(value: boolean): void {
-    this._component[setDefaultAria]({ ariaDisabled: `${!!value}` }, { overwrite: true });
+    this._component[setDefaultAria]({ ariaDisabled: `${!!value}` });
     this._component[isFocusable] = !value;
     this._stateLayerElement.disabled = value;
   }

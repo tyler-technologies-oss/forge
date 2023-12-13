@@ -1,6 +1,4 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
-import { ARIAAttribute } from '../../core/utils/a11y-utils';
-import { supportsElementInternalsAria } from '../../core/utils/feature-detection';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}radio`;
 
@@ -27,24 +25,11 @@ const events = {
   INPUT: 'input'
 };
 
-const observedAriaAttributes: ARIAAttribute[] = supportsElementInternalsAria()
-  ? []
-  : [
-    'role',
-    'aria-checked',
-    'aria-disabled',
-    'aria-invalid',
-    'aria-label',
-    'aria-readonly',
-    'aria-required'
-  ];
-
 export const RADIO_CONSTANTS = {
   elementName,
   attributes,
   selectors,
-  events,
-  observedAriaAttributes
+  events
 };
 
 /**

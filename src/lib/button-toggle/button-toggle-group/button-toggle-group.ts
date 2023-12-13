@@ -8,7 +8,7 @@ import { ButtonToggleComponent } from '../button-toggle/button-toggle';
 import { ButtonToggleGroupAdapter } from './button-toggle-group-adapter';
 import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
 import { ButtonToggleGroupFoundation } from './button-toggle-group-foundation';
-import { getFormState, getFormValue, inputType, observedDefaultAriaAttributes, setDefaultAria } from '../../constants';
+import { getFormState, getFormValue, inputType, setDefaultAria } from '../../constants';
 import { FormValue, FormRestoreState, FormRestoreReason } from '../../core/utils/form-utils';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
@@ -100,13 +100,8 @@ const BaseButtonToggleGroupClass = WithLabelAwareness(WithFormAssociation(WithFo
 })
 export class ButtonToggleGroupComponent extends BaseButtonToggleGroupClass implements IButtonToggleGroupComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAttributes),
-      ...Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAriaAttributes)
-    ];
+    return Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAttributes);
   }
-
-  public readonly [observedDefaultAriaAttributes] = BUTTON_TOGGLE_GROUP_CONSTANTS.observedAriaAttributes;
 
   private _foundation: ButtonToggleGroupFoundation;
 
@@ -118,7 +113,7 @@ export class ButtonToggleGroupComponent extends BaseButtonToggleGroupClass imple
   }
 
   public connectedCallback(): void {
-    this[setDefaultAria]({ role: 'group' });
+    this[setDefaultAria]({ role: 'group' }, { setAttribute: !this.hasAttribute('role') });
     this._foundation.initialize();
   }
 

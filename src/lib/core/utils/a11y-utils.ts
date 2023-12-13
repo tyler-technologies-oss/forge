@@ -66,7 +66,7 @@ export const ARIA_PROPERTIES: ARIAProperty[] = [
 /**
  * An object mapping all ARIA attributes to their corresponding properties.
  * 
- * This is required because the proeprty name cannot be reliably inferred from the attribute name.
+ * This is required because the property name cannot be reliably inferred from the attribute name.
  */
 const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'> = {
   'aria-atomic': 'ariaAtomic',
@@ -209,12 +209,9 @@ export function ariaAttributeToProperty<K extends ARIAAttribute|'role'>(attribut
   return ARIA_ATTRIBUTES_TO_PROPERTIES[attribute] as ARIAProperty;
 }
 
-// TODO: deprecate and remove `setupDefaultAria` and related functions when ARIA in
-// ElementInternals is widely supported in all major browsers.
-
-export interface DefaultAriaOptions {
-  overwrite?: boolean;
-}
+export type DefaultAriaOptions = {
+  setAttribute?: boolean;
+};
 
 /**
  * Applies default ARIA to an element through ElementInternals if supported. Otherwise, ARIA
@@ -252,75 +249,16 @@ export function setDefaultAria(
   element: HTMLElement,
   internals: ElementInternals,
   properties: Partial<ARIAMixinStrict>,
-  options?: DefaultAriaOptions
+  { setAttribute: overwrite }: DefaultAriaOptions = { setAttribute: true }
 ): void {
-  if (supportsElementInternalsAria()) {
-    Object.entries(properties).forEach(([key, value]) => {
-      internals[key as ARIAProperty] = value;
-    });
-    return;
-  }
-
   Object.entries(properties).forEach(([key, value]) => {
-    const ariaAttribute = ariaPropertyToAttribute(key as ARIAProperty);
-
-    if (options?.overwrite || !element.hasAttribute(ariaAttribute)) {
-      toggleAttribute(element, value != null, ariaPropertyToAttribute(key as ARIAProperty), value?.toString());
+    if (supportsElementInternalsAria()) {
+      internals[key as ARIAProperty] = value;
     }
-    if (value != null) {
-      storeDefaultAria(element, key as ARIAProperty, value);
-    } else {
-      removeDefaultAria(element, key as ARIAProperty);
+
+    const attribute = ariaPropertyToAttribute(key as ARIAProperty);
+    if (overwrite || !element.hasAttribute(attribute)) {
+      toggleAttribute(element, value != null, attribute, value as string);
     }
   });
-}
-
-/**
- * Sets a `*Default` property on an element to backup the default value of an ARIA attribute.
- * 
- * @param element The element to store the default ARIA value on.
- * @param property The ARIA mixin property.
- * @param value The default value to store.
- */
-export function storeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T, value: ARIAMixinStrict[T]): void {
-  element[getDefaultAriaPropertyName(property)] = value;
-}
-
-/**
- * Removes a `*Default` property from an element.
- * 
- * @param element The element to remove the default ARIA value from.
- * @param property The ARIA mixin property.
- */
-export function removeDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T): void {
-  delete element[getDefaultAriaPropertyName(property)];
-}
-
-/**
- * Gets a default ARIA value from an element's `*Default` property.
- * 
- * @param element The element to retrieve the default ARIA value from.
- * @param property An ARIA mixin property.
- * @returns The value of the default ARIA attribute, or null if it does not exist.
- */
-export function retrieveDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T): ARIAMixinStrict[T] | null {
-  const value = element[getDefaultAriaPropertyName(property)];
-  return !!value ? value as ARIAMixinStrict[T] : null;
-}
-
-/**
- * Restores the given ARIA attribute of an element to its default value if it exists.
- * 
- * @param element The element to restore the ARIA attribute on.
- * @param property The ARIA mixin property.
- */
-export function restoreDefaultAria<T extends keyof ARIAMixinStrict>(element: HTMLElement, property: T): void {
-  const defaultValue = retrieveDefaultAria(element, property);
-  if (defaultValue !== null) {
-    toggleAttribute(element, true, ariaPropertyToAttribute(property), defaultValue.toString());
-  }
-}
-
-function getDefaultAriaPropertyName<T extends keyof ARIAMixinStrict>(property: T): string {
-  return `_forge_${property}Default`;
 }
