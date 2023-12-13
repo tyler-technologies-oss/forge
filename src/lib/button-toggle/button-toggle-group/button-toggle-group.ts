@@ -1,20 +1,21 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { IWithFormAssociation, WithFormAssociation } from '../../core/base/base-form-associated-component';
-import { IWithLabelAwareness, WithLabelAwareness } from '../../core/base/base-label-aware-component';
-import { IWithElementInternals, WithElementInternals } from '../../core/base/base-element-internals-component';
-import { IWithFormValidity, WithFormValidity } from '../../core/mixins/form/with-validity';
+import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithFormValidity, WithFormValidity } from '../../core/mixins/form/with-form-validity';
 import { BaseComponent } from '../../core/base/base-component';
 import { ButtonToggleComponent } from '../button-toggle/button-toggle';
 import { ButtonToggleGroupAdapter } from './button-toggle-group-adapter';
 import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
 import { ButtonToggleGroupFoundation } from './button-toggle-group-foundation';
-import { getFormState, getFormValue, inputType, setDefaultAria } from '../../constants';
+import { getFormState, getFormValue, inputType, observedDefaultAriaAttributes, setDefaultAria } from '../../constants';
 import { FormValue, FormRestoreState, FormRestoreReason } from '../../core/utils/form-utils';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
 import template from './button-toggle-group.html';
 import styles from './button-toggle-group.scss';
 
-export interface IButtonToggleGroupComponent extends IWithLabelAwareness, IWithFormAssociation, IWithFormValidity, IWithElementInternals {
+export interface IButtonToggleGroupComponent extends IWithLabelAwareness, IWithFormAssociation, IWithFormValidity, IWithElementInternals, IWithDefaultAria {
   value: any;
   outlined: boolean;
   multiple: boolean;
@@ -37,7 +38,7 @@ declare global {
   }
 }
 
-const BaseButtonToggleGroupClass = WithLabelAwareness(WithFormAssociation(WithFormValidity(WithElementInternals(BaseComponent))));
+const BaseButtonToggleGroupClass = WithLabelAwareness(WithFormAssociation(WithFormValidity(WithDefaultAria(WithElementInternals(BaseComponent)))));
 
 /**
  * @tag forge-button-toggle-group
@@ -99,8 +100,13 @@ const BaseButtonToggleGroupClass = WithLabelAwareness(WithFormAssociation(WithFo
 })
 export class ButtonToggleGroupComponent extends BaseButtonToggleGroupClass implements IButtonToggleGroupComponent {
   public static get observedAttributes(): string[] {
-    return Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAttributes);
+    return [
+      ...Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAttributes),
+      ...Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAriaAttributes)
+    ];
   }
+
+  public readonly [observedDefaultAriaAttributes] = BUTTON_TOGGLE_GROUP_CONSTANTS.observedAriaAttributes;
 
   private _foundation: ButtonToggleGroupFoundation;
 

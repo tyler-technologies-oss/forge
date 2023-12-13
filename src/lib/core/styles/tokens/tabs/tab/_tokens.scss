@@ -19,15 +19,15 @@ $tokens: (
   indicator-shape: utils.module-val(tab, indicator-shape, 3px 3px 0 0),
 
   // Indicator (vertical)
-  vertical-indicator-shape: utils.module-val(tab, indicator-shape, 3px 0 0 3px),
+  vertical-indicator-shape: utils.module-val(tab, vertical-indicator-shape, 3px 0 0 3px),
 
   // Indicator (secondary)
-  secondary-indicator-height: utils.module-val(tab, indicator-height, 2px),
-  secondary-indicator-shape: utils.module-val(tab, indicator-shape, 0),
+  secondary-indicator-height: utils.module-val(tab, secondary-indicator-height, 2px),
+  secondary-indicator-shape: utils.module-val(tab, secondary-indicator-shape, 0),
 
   // Indicator (inverted)
-  inverted-indicator-shape: utils.module-val(tab, indicator-shape, 0 0 3px 3px),
-  vertical-inverted-indicator-shape: utils.module-val(tab, indicator-shape, 0 3px 3px 0),
+  inverted-indicator-shape: utils.module-val(tab, inverted-indicator-shape, 0 0 3px 3px),
+  vertical-inverted-indicator-shape: utils.module-val(tab, vertical-inverted-indicator-shape, 0 3px 3px 0),
 
   // Container
   container-color: utils.module-val(tab, container-color, transparent),

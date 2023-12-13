@@ -9,7 +9,7 @@
 $tokens: (
   // General
   display: utils.module-val(fab, display, inline-flex),
-  gap: utils.module-val(fab, spacing, spacing.variable(xsmall)),
+  gap: utils.module-val(fab, gap, spacing.variable(xsmall)),
   background: utils.module-val(fab, background, theme.variable(secondary)),
   color: utils.module-val(fab, color, theme.variable(on-secondary)),
   size: utils.module-val(fab, size, 56px),

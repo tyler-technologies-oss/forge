@@ -14,10 +14,10 @@ $tokens: (
   spacing: utils.module-val(button-toggle, spacing, spacing.variable(xsmall)),
   padding-block: utils.module-val(button-toggle, padding-block, 2px),
   padding-inline: utils.module-val(button-toggle, padding-inline, 8px),
-  icon-size: utils.module-val(button-toggle-group, icon-size, button.get(icon-size)),
+  icon-size: utils.module-val(button-toggle, icon-size, button.get(icon-size)),
   
   // Theme
-  color: utils.module-val(button-toggle, text-color, theme.variable(text-medium)),
+  color: utils.module-val(button-toggle, color, theme.variable(text-medium)),
   background: utils.module-val(button-toggle, background, transparent),
   hover-background: utils.module-ref(button-toggle, hover-background, background),
   active-background: utils.module-ref(button-toggle, active-background, background),
@@ -45,9 +45,9 @@ $tokens: (
 
   // Disabled
   disabled-opacity: utils.module-val(button-toggle, disabled-opacity, theme.emphasis(medium-low)),
-  disabled-cursor: utils.module-val(button, disabled-cursor, not-allowed),
-  disabled-color: utils.module-val(button, disabled-text-color, theme.variable(text-low)),
-  disabled-background: utils.module-val(button, disabled-background, transparent),
+  disabled-cursor: utils.module-val(button-toggle, disabled-cursor, not-allowed),
+  disabled-color: utils.module-val(button-toggle, disabled-color, theme.variable(text-low)),
+  disabled-background: utils.module-val(button-toggle, disabled-background, transparent),
 
   // Animation
   transition-duration: utils.module-val(button-toggle, transition-duration, animation.variable(duration-short3)),

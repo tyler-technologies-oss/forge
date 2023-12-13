@@ -1,18 +1,19 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { ExperimentalFocusOptions } from '../../constants';
-import { IWithFocusable, WithFocusable } from '../../core/base/base-focusable-component';
-import { IWithElementInternals, WithElementInternals } from '../../core/base/base-element-internals-component';
+import { ExperimentalFocusOptions, observedDefaultAriaAttributes } from '../../constants';
+import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { StateLayerComponent } from '../../state-layer';
 import { BaseComponent } from '../../core/base/base-component';
 import { ButtonToggleAdapter } from './button-toggle-adapter';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';
 import { ButtonToggleFoundation } from './button-toggle-foundation';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
 import template from './button-toggle.html';
 import styles from './button-toggle.scss';
 
-export interface IButtonToggleComponent<T = unknown> extends IWithElementInternals, IWithFocusable {
+export interface IButtonToggleComponent<T = unknown> extends IWithElementInternals, IWithDefaultAria, IWithFocusable {
   value: T;
   selected: boolean;
   disabled: boolean;
@@ -29,7 +30,7 @@ declare global {
   }
 }
 
-const BaseButtonToggleClass = WithElementInternals(WithFocusable(BaseComponent));
+const BaseButtonToggleClass = WithDefaultAria(WithElementInternals(WithFocusable(BaseComponent)));
 
 /**
  * @tag forge-button-toggle
@@ -94,8 +95,13 @@ const BaseButtonToggleClass = WithElementInternals(WithFocusable(BaseComponent))
 })
 export class ButtonToggleComponent<T = unknown> extends BaseButtonToggleClass implements IButtonToggleComponent {
   public static get observedAttributes(): string[] {
-    return Object.values(BUTTON_TOGGLE_CONSTANTS.observedAttributes);
+    return [
+      ...Object.values(BUTTON_TOGGLE_CONSTANTS.observedAttributes),
+      ...Object.values(BUTTON_TOGGLE_CONSTANTS.observedAriaAttributes)
+    ];
   }
+
+  public readonly [observedDefaultAriaAttributes] = BUTTON_TOGGLE_CONSTANTS.observedAriaAttributes;
 
   private _foundation: ButtonToggleFoundation;
 
