@@ -25,6 +25,7 @@ export class LinearProgressFoundation {
     return this._determinate;
   }
   public set determinate(value: boolean) {
+    value = Boolean(value);
     if (this._determinate !== value) {
       this._determinate = value;
       this._adapter.setBuffer(this._determinate ? this._buffer : 1);
@@ -43,7 +44,7 @@ export class LinearProgressFoundation {
       if (this._determinate) {
         this._adapter.setProgress(this._progress);
       }
-      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS, this._progress.toString());
+      this._adapter.setHostAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS, String(this._progress));
     }
   }
 

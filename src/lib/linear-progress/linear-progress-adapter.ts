@@ -27,13 +27,16 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
     this._component[setDefaultAria]({
       role: 'progressbar',
       ariaValueMin: '0',
-      ariaValueMax: '1'
+      ariaValueMax: '1',
+      ariaValueNow: this._component.determinate ? `${this._component.progress}` : null
     });
   }
   
   public setDeterminate(value: boolean): void {
-    if (!value) {
-      this._component[setDefaultAria]({ ariaValueNow: null });
+    this._component[setDefaultAria]({ ariaValueNow: value ? `${this._component.progress}` : null });
+    if (value) {
+      this.setProgress(this._component.progress);
+    } else {
       this._progressElement.style.transform = '';
       this._bufferElement.style.transform = '';
     }

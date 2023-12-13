@@ -61,12 +61,7 @@ declare global {
 })
 export class LinearProgressComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements ILinearProgressComponent {
   public static get observedAttributes(): string[] {
-    return [
-      LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,
-      LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS,
-      LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER,
-      LINEAR_PROGRESS_CONSTANTS.attributes.THEME
-    ];
+    return Object.values(LINEAR_PROGRESS_CONSTANTS.observedAttributes);
   }
 
   private _foundation: LinearProgressFoundation;
@@ -83,16 +78,16 @@ export class LinearProgressComponent extends WithElementInternals(WithDefaultAri
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case LINEAR_PROGRESS_CONSTANTS.attributes.DETERMINATE:
+      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.DETERMINATE:
         this.determinate = coerceBoolean(newValue);
         break;
-      case LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS:
+      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.PROGRESS:
         this.progress = coerceNumber(newValue);
         break;
-      case LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER:
+      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.BUFFER:
         this.buffer = coerceNumber(newValue);
         break;
-      case LINEAR_PROGRESS_CONSTANTS.attributes.THEME:
+      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.THEME:
         this.theme = newValue as LinearProgressTheme;
         break;
     }
