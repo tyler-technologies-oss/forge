@@ -13,7 +13,7 @@ $tokens: (
   border-width: utils.module-val(checkbox, border-width, border.variable(medium)),
   icon-color: utils.module-val(checkbox, icon-color, theme.variable(on-tertiary)),
   state-layer-size: utils.module-val(checkbox, state-layer-size, 40px),
-  state-layer-dense-size: utils.module-val(checkbox, state-layer-size, 24px),
+  state-layer-dense-size: utils.module-val(checkbox, state-layer-dense-size, 24px),
 
   // Checkbox
   background-color: utils.module-val(checkbox, background-color, theme.variable(surface)),
@@ -36,14 +36,14 @@ $tokens: (
 
   // Label
   gap: utils.module-val(checkbox, gap, 0),
-  justify: utils.module-val(switch, justify, space-between),
-  direction: utils.module-val(switch, direction, initial),
+  justify: utils.module-val(checkbox, justify, space-between),
+  direction: utils.module-val(checkbox, direction, initial),
 
   // State layer
   state-layer-width: utils.module-ref(checkbox, state-layer-width, state-layer-size),
   state-layer-height: utils.module-ref(checkbox, state-layer-height, state-layer-size),
   state-layer-checked-color: utils.module-ref(checkbox, state-layer-checked-color, primary-color),
-  state-layer-unchecked-color: utils.module-ref(state-layer, state-layer-unchecked-color, color),
+  state-layer-unchecked-color: utils.module-ref(checkbox, state-layer-unchecked-color, color),
   state-layer-shape: utils.module-val(checkbox, state-layer-shape, shape.variable(full)),
 
   // Dense
@@ -55,8 +55,8 @@ $tokens: (
 
   // Animation
   animation-duration: utils.module-val(checkbox, animation-duration, animation.variable(duration-short2)),
-  background-animation-timing: utils.module-val(checkbox, animation-duration, animation.variable(easing-standard)),
-  icon-animation-timing: utils.module-val(checkbox, animation-duration, animation.variable(easing-emphasized-accelerate))
+  background-animation-timing: utils.module-val(checkbox, background-animation-timing, animation.variable(easing-standard)),
+  icon-animation-timing: utils.module-val(checkbox, icon-animation-timing, animation.variable(easing-emphasized-accelerate))
 ) !default;
 
 @function get($key) {

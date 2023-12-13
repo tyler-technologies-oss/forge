@@ -14,8 +14,10 @@
   $on-surface: map.get($surface-theme, on-surface);
 
   @return (
-    outline: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower)),
-    outline-high: theme-utils.hexify($on-surface, $surface, color-emphasis.value(medium))
+    outline-high: theme-utils.hexify($on-surface, $surface, color-emphasis.value(highest)),
+    outline-medium: theme-utils.hexify($on-surface, $surface, color-emphasis.value(medium)),
+    outline-low: theme-utils.hexify($on-surface, $surface, color-emphasis.value(medium-low)),
+    outline: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower))
   );
 }
 

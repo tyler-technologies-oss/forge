@@ -1,13 +1,16 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
-import { internals, setDefaultAria } from '../../constants';
-import { BaseComponent, IWithElementInternals, IWithLabelAwareness, WithElementInternals, WithLabelAwareness } from '../../core/base';
+import { internals, observedDefaultAriaAttributes, setDefaultAria } from '../../constants';
+import { BaseComponent } from '../../core/base/base-component';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
 import { RadioGroupAdapter } from './radio-group-adapter';
 import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
 import { RadioGroupFoundation } from './radio-group-foundation';
 
 import template from './radio-group.html';
 
-export interface IRadioGroupComponent extends IWithLabelAwareness, IWithElementInternals {
+export interface IRadioGroupComponent extends IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   readonly form: HTMLFormElement | null;
   readonly labels: NodeList;
   name: string;
@@ -21,7 +24,7 @@ declare global {
   }
 }
 
-const BaseRadioGroupClass = WithLabelAwareness(WithElementInternals(BaseComponent, RADIO_GROUP_CONSTANTS.observedAriaAttributes));
+const BaseRadioGroupClass = WithLabelAwareness(WithDefaultAria(WithElementInternals(BaseComponent)));
 
 /**
  * @tag forge-radio-group
@@ -37,6 +40,8 @@ const BaseRadioGroupClass = WithLabelAwareness(WithElementInternals(BaseComponen
 })
 export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGroupComponent {
   public static readonly formAssociated = true;
+
+  public readonly [observedDefaultAriaAttributes] = RADIO_GROUP_CONSTANTS.observedAriaAttributes;
 
   public get form(): HTMLFormElement | null {
     return this[internals].form;
