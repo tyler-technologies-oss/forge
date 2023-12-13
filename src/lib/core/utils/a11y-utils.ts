@@ -249,7 +249,7 @@ export function setDefaultAria(
   element: HTMLElement,
   internals: ElementInternals,
   properties: Partial<ARIAMixinStrict>,
-  { setAttribute: overwrite }: DefaultAriaOptions = { setAttribute: true }
+  { setAttribute }: DefaultAriaOptions = { setAttribute: true }
 ): void {
   Object.entries(properties).forEach(([key, value]) => {
     if (supportsElementInternalsAria()) {
@@ -257,7 +257,7 @@ export function setDefaultAria(
     }
 
     const attribute = ariaPropertyToAttribute(key as ARIAProperty);
-    if (overwrite || !element.hasAttribute(attribute)) {
+    if (setAttribute || !element.hasAttribute(attribute)) {
       toggleAttribute(element, value != null, attribute, value as string);
     }
   });

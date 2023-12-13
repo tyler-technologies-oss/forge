@@ -41,7 +41,6 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
   }
 
   public setProgress(value: number): void {
-    // this._component.setAttribute('theme', 'test'); // TODO: figure this out
     this._component[setDefaultAria]({ ariaValueNow: `${value}` });
     this._progressElement.style.transform = `scaleX(${value * 100}%)`;
   }
