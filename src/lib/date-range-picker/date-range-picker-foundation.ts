@@ -30,6 +30,11 @@ export class DateRangePickerFoundation extends BaseDatePickerFoundation<IDateRan
     this._toInputBlurListener = evt => this._onToInputBlur(evt);
   }
 
+  public override initialize(): void {
+    super.initialize();
+    this._setFormattedToInputValue(true);
+  }
+
   protected _initializeState(): void {
     this._applyToMask();
 
