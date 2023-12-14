@@ -263,7 +263,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     const role = this._component.getAttribute('role');
     const setAttribute = !role || ['button', 'link'].includes(role);
     this._component[setDefaultAria]({ role: this._anchorElement ? 'link' : 'button' }, { setAttribute });
-    this._component[isFocusable] = !!this._anchorElement ?? !this._component.disabled;
+    this._component[isFocusable] = !!this._anchorElement || !this._component.disabled;
   }
 
   /**
