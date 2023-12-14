@@ -51,29 +51,29 @@
 
   forge-overlay[position-placement^=top] {
     .arrow {
-      --_arrow-translate-y: calc(var(--_border-width) * -1);
-      --_arrow-rotation: var(--_arrow-top-rotation);
+      --_popover-arrow-translate-y: calc(var(--_popover-border-width) * -1);
+      --_popover-arrow-rotation: var(--_popover-arrow-top-rotation);
     }
   }
   
   forge-overlay[position-placement^=right] {
     .arrow {
-      --_arrow-translate-x: var(--_border-width);
-      --_arrow-rotation: var(--_arrow-right-rotation);
+      --_popover-arrow-translate-x: var(--_popover-border-width);
+      --_popover-arrow-rotation: var(--_popover-arrow-right-rotation);
     }
   }
   
   forge-overlay[position-placement^=bottom] {
     .arrow {
-      --_arrow-translate-y: var(--_border-width);
-      --_arrow-rotation: var(--_arrow-bottom-rotation);
+      --_popover-arrow-translate-y: var(--_popover-border-width);
+      --_popover-arrow-rotation: var(--_popover-arrow-bottom-rotation);
     }
   }
   
   forge-overlay[position-placement^=left] {
     .arrow {
-      --_arrow-translate-x: calc(var(--_border-width) * -1);
-      --_arrow-rotation: var(--_arrow-left-rotation);
+      --_popover-arrow-translate-x: calc(var(--_popover-border-width) * -1);
+      --_popover-arrow-rotation: var(--_popover-arrow-left-rotation);
     }
   }
 }
@@ -99,19 +99,19 @@
     &[position-placement^=top] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_zoomin-origin: bottom center;
+          --_popover-zoomin-origin: bottom center;
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_zoomin-origin: bottom left;
+          --_popover-zoomin-origin: bottom left;
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_zoomin-origin: bottom right;
+          --_popover-zoomin-origin: bottom right;
         }
       }
     }
@@ -119,19 +119,19 @@
     &[position-placement^=right] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_zoomin-origin: left center;
+          --_popover-zoomin-origin: left center;
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_zoomin-origin: left top;
+          --_popover-zoomin-origin: left top;
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_zoomin-origin: left bottom;
+          --_popover-zoomin-origin: left bottom;
         }
       }
     }
@@ -139,19 +139,19 @@
     &[position-placement^=bottom] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_zoomin-origin: top center;
+          --_popover-zoomin-origin: top center;
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_zoomin-origin: top left;
+          --_popover-zoomin-origin: top left;
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_zoomin-origin: top right;
+          --_popover-zoomin-origin: top right;
         }
       }
     }
@@ -159,19 +159,19 @@
     &[position-placement^=left] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_zoomin-origin: right center;
+          --_popover-zoomin-origin: right center;
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_zoomin-origin: right top;
+          --_popover-zoomin-origin: right top;
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_zoomin-origin: right bottom;
+          --_popover-zoomin-origin: right bottom;
         }
       }
     }
@@ -187,25 +187,25 @@
   forge-overlay[open] {
     &[position-placement^=top] {
       .forge-popover {
-        --_slidein-y: var(--_slide-offset);
+        --_popover-slidein-y: var(--_popover-slide-offset);
       }
     }
     
     &[position-placement^=right] {
       .forge-popover {
-        --_slidein-x: calc(var(--_slide-offset) * -1);
+        --_popover-slidein-x: calc(var(--_popover-slide-offset) * -1);
       }
     }
     
     &[position-placement^=bottom] {
       .forge-popover {
-        --_slidein-y: calc(var(--_slide-offset) * -1);
+        --_popover-slidein-y: calc(var(--_popover-slide-offset) * -1);
       }
     }
     
     &[position-placement^=left] {
       .forge-popover {
-        --_slidein-x: var(--_slide-offset);
+        --_popover-slidein-x: var(--_popover-slide-offset);
       }
     }
   }

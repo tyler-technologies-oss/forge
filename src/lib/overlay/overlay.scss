@@ -13,7 +13,7 @@
 
 :host([position-strategy=absolute]) {
   .forge-overlay {
-    --_position: #{utils.module-val(overlay, position, absolute)};
+    --_overlay-position: #{utils.module-val(overlay, position, absolute)};
   }
 }
 
@@ -31,7 +31,7 @@
 :host([dialog]) {
   .forge-overlay::backdrop {
     background-color: transparent;
-    // animation: fadein var(--_backdrop-fade-duration) ease-in-out;
+    // animation: fadein var(--_overlay-backdrop-fade-duration) ease-in-out;
   }
 }
 

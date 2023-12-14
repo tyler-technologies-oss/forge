@@ -8,12 +8,12 @@
 @mixin base() {
   display: none;
   box-sizing: border-box;
-  position: var(--_position);
+  position: var(--_overlay-position);
   top: 0;
   left: 0;
-  height: var(--_height);
-  width: var(--_width);
-  z-index: var(--_z-index);
+  height: var(--_overlay-height);
+  width: var(--_overlay-width);
+  z-index: var(--_overlay-z-index);
   border-radius: inherit;
   background: inherit;
   color: inherit;

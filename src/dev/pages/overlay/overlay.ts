@@ -7,7 +7,9 @@ import '@tylertech/forge/overlay';
 import './overlay.scss';
 
 const overlay = document.querySelector('#my-overlay') as IOverlayComponent;
+const childOverlay = overlay.querySelector('#my-child-overlay') as IOverlayComponent;
 const showOverlayButton = document.querySelector('#my-btn') as HTMLButtonElement;
+const showChildOverlayButton = document.querySelector('#child-btn') as HTMLButtonElement;
 const clippingContainer = document.querySelector('.clipping-container') as HTMLElement;
 
 overlay.addEventListener('forge-overlay-light-dismiss', ({ detail }: CustomEvent) => {
@@ -19,6 +21,7 @@ overlay.addEventListener('forge-overlay-toggle', ({ detail }: CustomEvent) => {
 });
 
 showOverlayButton.addEventListener('click', () => overlay.open = !overlay.open);
+showChildOverlayButton.addEventListener('click', () => childOverlay.open = !childOverlay.open);
 centerDemoButton();
 
 const placementSelect = document.getElementById('opt-placement') as ISelectComponent;

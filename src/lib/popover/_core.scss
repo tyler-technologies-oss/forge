@@ -7,48 +7,48 @@
 }
 
 @mixin base {
-  background-color: var(--_background-color);
-  border-radius: var(--_border-radius);
-  box-shadow: var(--_box-shadow);
-  border: var(--_border-width) var(--_border-style) var(--_border-color);
+  background-color: var(--_popover-background-color);
+  border-radius: var(--_popover-border-radius);
+  box-shadow: var(--_popover-box-shadow);
+  border: var(--_popover-border-width) var(--_popover-border-style) var(--_popover-border-color);
   position: relative;
 }
 
 @mixin arrow {
   position: absolute;
-  height: var(--_arrow-height);
-  width: var(--_arrow-width);
-  background-color: var(--_arrow-background-color);
-  box-shadow: var(--_box-shadow);
-  border: var(--_border-width) var(--_border-style) var(--_border-color);
+  height: var(--_popover-arrow-height);
+  width: var(--_popover-arrow-width);
+  background-color: var(--_popover-arrow-background-color);
+  box-shadow: var(--_popover-box-shadow);
+  border: var(--_popover-border-width) var(--_popover-border-style) var(--_popover-border-color);
   transform: 
-    translate(var(--_arrow-translate-x), var(--_arrow-translate-y))
-    rotate(var(--_arrow-rotation));
+    translate(var(--_popover-arrow-translate-x), var(--_popover-arrow-translate-y))
+    rotate(var(--_popover-arrow-rotation));
   clip-path: var(
-    --_arrow-clip-path,
+    --_popover-arrow-clip-path,
     polygon(
-      calc(var(--_border-width) * -1) calc(var(--_border-width) * -1),
-      calc(100% + var(--_border-width)) calc(var(--_border-width) * -1),
-      calc(100% + var(--_border-width)) calc(100% + var(--_border-width))
+      calc(var(--_popover-border-width) * -1) calc(var(--_popover-border-width) * -1),
+      calc(100% + var(--_popover-border-width)) calc(var(--_popover-border-width) * -1),
+      calc(100% + var(--_popover-border-width)) calc(100% + var(--_popover-border-width))
     )
   );
 }
 
 @mixin zoom-base {
-  animation-duration: var(--_zoom-duration);
-  animation-timing-function: var(--_zoom-timing);
+  animation-duration: var(--_popover-zoom-duration);
+  animation-timing-function: var(--_popover-zoom-timing);
   animation-name: zoomin;
-  transform-origin: var(--_zoomin-origin);
+  transform-origin: var(--_popover-zoomin-origin);
 }
 
 @mixin slide-base {
-  animation-duration: var(--_slide-duration);
-  animation-timing-function: var(--_slide-timing);
+  animation-duration: var(--_popover-slide-duration);
+  animation-timing-function: var(--_popover-slide-timing);
   animation-name: slidein;
 }
 
 @mixin fade-base {
-  animation-duration: var(--_fade-duration);
-  animation-timing-function: var(--_fade-timing);
+  animation-duration: var(--_popover-fade-duration);
+  animation-timing-function: var(--_popover-fade-timing);
   animation-name: fadein;
 }

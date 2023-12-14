@@ -5,6 +5,10 @@
     <forge-overlay target="my-btn" id="my-overlay">
       <div class="overlay-content">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea labore tenetur illum aliquam corporis veritatis quos accusamus. Laborum ullam autem fugiat eligendi ratione beatae consequuntur provident earum, nemo neque itaque!
+        <forge-button variant="raised" id="child-btn">Show child overlay</forge-button>
+        <forge-overlay target="child-btn" id="my-child-overlay" placement="right">
+          <p class="overlay-content">Nested overlay test</p>
+        </forge-overlay>
       </div>
     </forge-overlay>
   </div>
