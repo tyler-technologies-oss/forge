@@ -1,4 +1,6 @@
 @use '../../../lib/button-toggle/button-toggle-group';
+@use '../../../lib/button-toggle/button-toggle';
+@use '../../../lib/core/styles/theme';
 
 #toolbar-card {
   display: inline-block;
@@ -15,5 +17,40 @@
   forge-divider {
     height: auto;
     margin-block: 4px;
+  }
+}
+
+.legacy-button-toggle-group {
+  @include button-toggle-group.provide-theme((
+    gap: 1px,
+    padding: 0
+  ));
+  
+  forge-button-toggle {
+    @include button-toggle.provide-theme((
+      selected-color: theme.variable(on-primary),
+      selected-background: theme.variable(primary),
+      focus-indicator-offset: 2px
+    ));
+
+    &:first-of-type {
+      @include button-toggle.provide-theme((
+        shape-start-end: 0,
+        shape-end-end: 0
+      ));
+    }
+
+    &:not(:first-of-type):not(:last-of-type) {
+      @include button-toggle.provide-theme((
+        shape: 0
+      ));
+    }
+
+    &:last-of-type {
+      @include button-toggle.provide-theme((
+        shape-start-start: 0,
+        shape-end-start: 0
+      ));
+    }
   }
 }

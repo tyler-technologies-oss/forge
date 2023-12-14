@@ -59,7 +59,7 @@ export class RadioGroupManager {
         checked: radio.checked
       });
       radio[internals].setValidity({ valueMissing: invalid }, validationMessage);
-      radio[setDefaultAria]({ 'ariaInvalid': invalid ? 'true' : 'false' }, { overwrite: true });
+      radio[setDefaultAria]({ 'ariaInvalid': invalid ? 'true' : 'false' });
     });
   }
 

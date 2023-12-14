@@ -34,5 +34,4 @@ export const BASE_BUTTON_CONSTANTS = {
 
 export type ButtonType = 'button' | 'submit' | 'reset';
 export type ButtonTarget = '_blank' | '_self' | '_parent' | '_top';
-
 export type ButtonClickOptions = { animateStateLayer?: boolean };

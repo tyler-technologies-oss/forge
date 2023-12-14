@@ -29,7 +29,7 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
   private _disabled = false;
   private _readonly = false;
   private _required = false;
-  private _theme: ButtonToggleGroupTheme = 'primary';
+  private _theme: ButtonToggleGroupTheme = 'tertiary';
 
   private _selectListener: (evt: CustomEvent<IButtonToggleSelectEventData>) => void;
   private _slotListener: () => void;
@@ -233,7 +233,7 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
   public set theme(value: ButtonToggleGroupTheme) {
     if (this._theme !== value) {
       this._theme = value;
-      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.THEME, this._theme !== 'primary', this._theme);
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.THEME, this._theme !== 'tertiary', this._theme);
     }
   }
 }

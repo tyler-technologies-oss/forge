@@ -32,9 +32,7 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
   }
 
   public setChecked(checked: boolean, value: string): void {
-    this._component[setDefaultAria]({
-      ariaChecked: checked ? 'true' : 'false'
-    }, { overwrite: true });
+    this._component[setDefaultAria]({ ariaChecked: checked ? 'true' : 'false' });
     if (checked) {
       RadioGroupManager.setSelectedRadioInGroup(this._component);
     }
@@ -60,9 +58,7 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
       return false;
     }
 
-    this._component[setDefaultAria]({
-      ariaDisabled: value ? 'true' : 'false'
-    }, { overwrite: true });
+    this._component[setDefaultAria]({ ariaDisabled: `${!!value}` });
     this._component[isFocusable] = !value;
     return true;
   }
@@ -70,14 +66,12 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
   public setRequired(value: boolean): void {
     this._component[setDefaultAria]({
       ariaRequired: value ? 'true' : 'false'
-    }, { overwrite: true });
+    }, { setAttribute: true });
     RadioGroupManager.setRadioGroupValidity(this._component);
   }
 
   public setReadonly(value: boolean): void {
-    this._component[setDefaultAria]({
-      ariaDisabled: value ? 'true' : 'false'
-    }, { overwrite: true });
+    this._component[setDefaultAria]({ ariaDisabled: `${!!value}` });
   }
 
   public disableStateLayer(value: boolean): void {

@@ -1,5 +1,5 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
-import { getFormState, getFormValue, inputType, internals, observedDefaultAriaAttributes, setDefaultAria } from '../../constants';
+import { getFormState, getFormValue, inputType, internals, setDefaultAria } from '../../constants';
 import { BaseComponent } from '../../core/base/base-component';
 import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
@@ -116,12 +116,9 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
       RADIO_CONSTANTS.attributes.REQUIRED,
       RADIO_CONSTANTS.attributes.READONLY,
       RADIO_CONSTANTS.attributes.LABEL_POSITION,
-      RADIO_CONSTANTS.attributes.TABINDEX,
-      ...RADIO_CONSTANTS.observedAriaAttributes
+      RADIO_CONSTANTS.attributes.TABINDEX
     ];
   }
-
-  public readonly [observedDefaultAriaAttributes] = RADIO_CONSTANTS.observedAriaAttributes;
 
   private _foundation: RadioFoundation;
 
@@ -195,9 +192,7 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
   }
 
   public labelChangedCallback(value: string | null): void {
-    this[setDefaultAria]({
-      ariaLabel: value ?? undefined
-    });
+    this[setDefaultAria]({ ariaLabel: value });
   }
 
   @FoundationProperty()

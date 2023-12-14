@@ -17,12 +17,12 @@
   @return (
     text-high: theme-utils.emphasized($text, color-emphasis.value(highest)),
     text-high-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(highest)),
-    text-medium: theme-utils.emphasized($text, color-emphasis.value(medium)),
-    text-medium-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(medium)),
+    text-medium: theme-utils.emphasized($text, color-emphasis.value(medium-high)),
+    text-medium-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(medium-high)),
     text-low: theme-utils.emphasized($text, color-emphasis.value(medium-low)),
     text-low-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(medium-low)),
-    text-lowest: theme-utils.emphasized($text, color-emphasis.value(lowest)),
-    text-lowest-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(lowest)),
+    text-lowest: theme-utils.emphasized($text, color-emphasis.value(lower)),
+    text-lowest-inverse: theme-utils.emphasized($text-inverse, color-emphasis.value(lower)),
   );
 }
 

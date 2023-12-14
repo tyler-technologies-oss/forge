@@ -39,8 +39,13 @@ $_host-tokens: [display];
 
   forge-focus-indicator {
     @include focus-indicator.provide-theme((
-      outward-offset: 0px, // Requires unit
-      color: #{token(focus-indicator-color)}
+      outward-offset: #{token(focus-indicator-offset)},
+      color: #{token(focus-indicator-color)},
+      shape: #{token(shape)},
+      shape-start-start: #{token(shape-start-start)},
+      shape-start-end: #{token(shape-start-end)},
+      shape-end-start: #{token(shape-end-start)},
+      shape-end-end: #{token(shape-end-end)},
     ));
   }
 }

@@ -1,4 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
+import { setDefaultAria } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ILinearProgressComponent } from './linear-progress';
 import { LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
@@ -23,20 +24,19 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
   }
 
   public initialize(): void {
-    if (!this._component.hasAttribute('role')) {
-      this._component.setAttribute('role', 'progressbar');
-    }
-    if (!this._component.hasAttribute('aria-valuemin')) {
-      this._component.setAttribute('aria-valuemin', '0');
-    }
-    if (!this._component.hasAttribute('aria-valuemax')) {
-      this._component.setAttribute('aria-valuemax', '1');
-    }
+    this._component[setDefaultAria]({
+      role: 'progressbar',
+      ariaValueMin: '0',
+      ariaValueMax: '1',
+      ariaValueNow: this._component.determinate ? `${this._component.progress}` : null
+    });
   }
   
   public setDeterminate(value: boolean): void {
-    if (!value) {
-      this._component.removeAttribute('aria-valuenow');
+    this._component[setDefaultAria]({ ariaValueNow: value ? `${this._component.progress}` : null });
+    if (value) {
+      this.setProgress(this._component.progress);
+    } else {
       this._progressElement.style.transform = '';
       this._bufferElement.style.transform = '';
     }
@@ -44,7 +44,7 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
   }
 
   public setProgress(value: number): void {
-    this._component.setAttribute('aria-valuenow', `${value}`);
+    this._component[setDefaultAria]({ ariaValueNow: `${value}` });
     this._progressElement.style.transform = `scaleX(${value * 100}%)`;
   }
 

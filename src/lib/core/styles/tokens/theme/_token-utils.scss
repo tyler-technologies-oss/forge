@@ -18,10 +18,10 @@
   $surface-tone: color-utils.tone($surface);
 
   // The container colors are the provided color mixed with the surface color at lower emphasis levels
-  $container-minimum: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', minimum, lowest)));
-  $container-low: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', lower, low)));
-  $container: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', low, medium-low)));
-  $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(if($surface-tone == 'light', medium-low, medium)));
+  $container-high: theme-utils.hexify($color, $surface, color-emphasis.value(medium-low));
+  $container: theme-utils.hexify($color, $surface, color-emphasis.value(low));
+  $container-low: theme-utils.hexify($color, $surface, color-emphasis.value(lower));
+  $container-minimum: theme-utils.hexify($color, $surface, color-emphasis.value(minimum));
 
   // The on-color is the contrast color against the provided color
   $on-color: theme-utils.contrast($color);
@@ -29,10 +29,28 @@
   // The on-container colors are the contrast color for the provided color mixed with the
   // container color at a lower emphasis to let the contrast color bleed through for
   // increased contrast against the lower emphasis container color 
-  $on-container-minimum: theme-utils.hexify($color, theme-utils.contrast($container-minimum), color-emphasis.value(medium));
-  $on-container-low: theme-utils.hexify($color, theme-utils.contrast($container-low), color-emphasis.value(medium));
-  $on-container: theme-utils.hexify($color, theme-utils.contrast($container), color-emphasis.value(medium));
   $on-container-high: theme-utils.contrast($container-high);
+  $on-container: theme-utils.hexify($color, theme-utils.contrast($container), color-emphasis.value(medium));
+  $on-container-low: theme-utils.hexify($color, theme-utils.contrast($container-low), color-emphasis.value(medium));
+  $on-container-minimum: theme-utils.hexify($color, theme-utils.contrast($container-minimum), color-emphasis.value(medium));
+
+  // Compute contrast ratio for foreground colors against their corresponding background
+  $minimum-ratio: 4.5;
+  @if color-utils.contrast-ratio($color, $on-color) < $minimum-ratio {
+    @warn 'The contrast ratio  between "#{$name}" and "on-#{$name}" is less than 4.5:1.';
+  }
+  @if color-utils.contrast-ratio($container, $on-container) < $minimum-ratio {
+    @warn 'The contrast ratio  between "#{$name}-container" and "on-#{$name}-container" is less than 4.5:1.';
+  }
+  @if color-utils.contrast-ratio($container-high, $on-container-high) < $minimum-ratio {
+    @warn 'The contrast ratio  between "#{$name}-container-high" and "on-#{$name}-container-high" is less than 4.5:1.';
+  }
+  @if color-utils.contrast-ratio($container-low, $on-container-low) < $minimum-ratio {
+    @warn 'The contrast ratio  between "#{$name}-container-low" and "on-#{$name}-container-low" is less than 4.5:1.';
+  }
+  @if color-utils.contrast-ratio($container-minimum, $on-container-minimum) < $minimum-ratio {
+    @warn 'The contrast ratio  between "#{$name}-container-minimum" and "on-#{$name}-container-minimum" is less than 4.5:1.';
+  }
 
   @return (
     #{$name}: $color,
