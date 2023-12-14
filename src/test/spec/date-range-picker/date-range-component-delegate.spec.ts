@@ -1,5 +1,5 @@
 import { removeElement } from '@tylertech/forge-core';
-import { DateRangeComponentDelegate, defineDateRangePickerComponent } from '@tylertech/forge/date-range-picker';
+import { DateRangeComponentDelegate, defineDateRangePickerComponent, IDatePickerRange } from '@tylertech/forge/date-range-picker';
 import { defineTextFieldComponent } from '@tylertech/forge/text-field';
 
 interface ITestContext {
@@ -35,6 +35,19 @@ describe('DateRangeComponentDelegate', function(this: ITestContext) {
     expect(this.context.delegate.value).toEqual({ from: new Date(value.from), to: new Date(value.to) });
     expect(this.context.delegate.element.value?.from).toEqual(new Date(value.from));
     expect(this.context.delegate.element.value?.to).toEqual(new Date(value.to));
+    expect(this.context.delegate.fromInput.value).toEqual(value.from);
+    expect(this.context.delegate.toInput.value).toEqual(value.to);
+  });
+
+  it('should set default value', function(this: ITestContext) {
+    const value = { from: '01/01/2020', to: '02/01/2020' };
+    this.context = setupTestContext(true, value);
+
+    expect(this.context.delegate.value).toEqual({ from: new Date(value.from), to: new Date(value.to) });
+    expect(this.context.delegate.element.value?.from).toEqual(new Date(value.from));
+    expect(this.context.delegate.element.value?.to).toEqual(new Date(value.to));
+    expect(this.context.delegate.fromInput.value).toEqual(value.from);
+    expect(this.context.delegate.toInput.value).toEqual(value.to);
   });
 
   it('should execute change callback when "from" input is modified', function(this: ITestContext) {
@@ -85,10 +98,10 @@ describe('DateRangeComponentDelegate', function(this: ITestContext) {
     expect(this.context.delegate.invalid).toBeFalse();
   });
 
-  function setupTestContext(append = false): ITestDateRangeComponentDelegateContext {
+  function setupTestContext(append = false, defaultValue?: IDatePickerRange): ITestDateRangeComponentDelegateContext {
     const fixture = document.createElement('div');
     fixture.id = 'date-range-delegate-test-fixture';
-    const delegate = new DateRangeComponentDelegate();
+    const delegate = new DateRangeComponentDelegate(defaultValue ? { props: { value: defaultValue }} : undefined);
     fixture.appendChild(delegate.element);
     if (append) {
       document.body.appendChild(fixture);
