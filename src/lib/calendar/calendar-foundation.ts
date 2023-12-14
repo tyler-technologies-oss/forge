@@ -1605,7 +1605,8 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMin(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MIN, !!this._minAttribute, this._minAttribute as string);
 
-    if (this._min && this._min.getMonth() > this._month) {
+    if (this._min && (this._min.getMonth() > this._month || this._min.getFullYear() > this._year)) {
+      this._year = this._min.getFullYear();
       this._month = this._min.getMonth();
     }
 
