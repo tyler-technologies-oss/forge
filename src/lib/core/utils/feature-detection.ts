@@ -14,7 +14,5 @@ export function supportsPopover(): boolean {
  * @returns {boolean}
  */
 export function supportsElementInternalsAria(): boolean {
-  // TODO: return whether the user agent actually supports this when tooling is able to detect it
-  // return ElementInternals.prototype.hasOwnProperty('role');
-  return false;
+  return ElementInternals.prototype.hasOwnProperty('role');
 }

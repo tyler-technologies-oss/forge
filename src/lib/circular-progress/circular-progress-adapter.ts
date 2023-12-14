@@ -6,6 +6,7 @@ import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 
 import indeterminateTemplate from './_indeterminate.html';
 import determinateTemplate from './_determinate.html';
+import { setDefaultAria } from '../constants';
 
 export interface ICircularProgressAdapter extends IBaseAdapter {
   initialize(): void;
@@ -23,16 +24,11 @@ export class CircularProgressAdapter extends BaseAdapter<ICircularProgressCompon
   }
 
   public initialize(): void {
-    // TODO: Replace with ARIA mixin
-    if (!this._component.hasAttribute('role')) {
-      this._component.setAttribute('role', 'progressbar');
-    }
-    if (!this._component.hasAttribute('aria-valuemin')) {
-      this._component.setAttribute('aria-valuemin', '0');
-    }
-    if (!this._component.hasAttribute('aria-valuemax')) {
-      this._component.setAttribute('aria-valuemax', '1');
-    }
+    this._component[setDefaultAria]({
+      role: 'progressbar',
+      ariaValueMin: '0',
+      ariaValueMax: '1'
+    });
   }
 
   public setDeterminate(value: boolean): void {
@@ -44,13 +40,13 @@ export class CircularProgressAdapter extends BaseAdapter<ICircularProgressCompon
       this._determinateProgressCircleElement = getShadowElement(this._component, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
     } else {
       this._rootElement.insertAdjacentHTML('beforeend', indeterminateTemplate);
-      this._component.removeAttribute('aria-valuenow');
+      this._component[setDefaultAria]({ ariaValueNow: null });
       this._determinateProgressCircleElement = undefined;
     }
   }
 
   public setProgress(value: number): void {
-    this._component.setAttribute('aria-valuenow', `${value}`);
+    this._component[setDefaultAria]({ ariaValueNow: `${value}` });
     this._determinateProgressCircleElement?.setAttribute('stroke-dashoffset', `${(1 - value) * 100}`);
   }
 

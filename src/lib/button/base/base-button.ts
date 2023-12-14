@@ -3,14 +3,15 @@ import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../../icon/icon-registry';
 import { WithFocusable, IWithFocusable } from '../../core/mixins/focus/with-focusable';
 import { BaseComponent } from '../../core/base/base-component';
-import { ExperimentalFocusOptions, internals } from '../../constants';
+import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BaseButtonFoundation } from './base-button-foundation';
 import { WithLabelAwareness, IWithLabelAwareness } from '../../core/mixins/label/with-label-aware';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
-export interface IBaseButton extends IWithFocusable, IWithLabelAwareness, IWithElementInternals {
+export interface IBaseButton extends IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
@@ -26,7 +27,7 @@ export interface IBaseButton extends IWithFocusable, IWithLabelAwareness, IWithE
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-const BaseButtonClass = WithElementInternals(WithLabelAwareness(WithFocusable(BaseComponent)));
+const BaseButtonClass = WithDefaultAria(WithElementInternals(WithLabelAwareness(WithFocusable(BaseComponent))));
 
 export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseButtonClass implements IBaseButton {
   public static readonly formAssociated = true;
@@ -81,7 +82,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   }
 
   public labelChangedCallback(value: string | null): void {
-    this._foundation.proxyLabel(value);
+    this[setDefaultAria]({ ariaLabel: value }, { setAttribute: !this.hasAttribute('aria-label') });
   }
 
   public get form(): HTMLFormElement | null {

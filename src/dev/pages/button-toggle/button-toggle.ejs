@@ -126,6 +126,25 @@
       </div>
     </forge-card>
   </section>
+
+  <!-- Legacy -->
+  <section>
+    <h3 class="forge-typography--heading2">Legacy (custom)</h3>
+    <forge-button-toggle-group class="legacy-button-toggle-group" value="email" aria-label="Custom button toggle group">
+      <forge-button-toggle value="email">
+        <forge-icon name="email" slot="start"></forge-icon>
+        By email
+      </forge-button-toggle>
+      <forge-button-toggle value="mail">
+        <forge-icon name="mail" slot="start"></forge-icon>
+        By mail
+      </forge-button-toggle>
+      <forge-button-toggle value="phone">
+        <forge-icon name="phone" slot="start"></forge-icon>
+        By phone
+      </forge-button-toggle>
+    </forge-button-toggle-group>
+  </section>
 </div>
 
 <script type="module" src="button-toggle.ts"></script>

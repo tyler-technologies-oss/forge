@@ -20,9 +20,7 @@ export class RadioGroupAdapter extends BaseAdapter<IRadioGroupComponent> impleme
   }
 
   public setDisabled(value: boolean): void {
-    this._component[setDefaultAria]({
-      ariaDisabled: value ? 'true' : null
-    }, { overwrite: true });
+    this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : null });
     this._disableRadios(value);
   }
 

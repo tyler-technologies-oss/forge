@@ -1,5 +1,5 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { ExperimentalFocusOptions, observedDefaultAriaAttributes } from '../../constants';
+import { ExperimentalFocusOptions } from '../../constants';
 import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { FocusIndicatorComponent } from '../../focus-indicator';
@@ -95,13 +95,8 @@ const BaseButtonToggleClass = WithDefaultAria(WithElementInternals(WithFocusable
 })
 export class ButtonToggleComponent<T = unknown> extends BaseButtonToggleClass implements IButtonToggleComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BUTTON_TOGGLE_CONSTANTS.observedAttributes),
-      ...Object.values(BUTTON_TOGGLE_CONSTANTS.observedAriaAttributes)
-    ];
+    return Object.values(BUTTON_TOGGLE_CONSTANTS.observedAttributes);
   }
-
-  public readonly [observedDefaultAriaAttributes] = BUTTON_TOGGLE_CONSTANTS.observedAriaAttributes;
 
   private _foundation: ButtonToggleFoundation;
 

@@ -8,7 +8,9 @@ interface ISwatchGroup {
 
 interface ISwatch {
   text?: string;
-  background: string;
+  background?: string;
+  border?: string;
+  noBorder?: boolean;
   foreground?: string;
 }
 
@@ -105,17 +107,19 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
   {
     header: 'Text',
     swatches: [
-      { text: 'High', background: 'text-high', foreground: 'text-high-inverse' },
-      { text: 'Medium', background: 'text-medium', foreground: 'text-high-inverse' },
-      { text: 'Low', background: 'text-low', foreground: 'text-high' },
-      { text: 'Lowest', background: 'text-lowest', foreground: 'text-high' }
+      { text: 'High (87%)', foreground: 'text-high', noBorder: true },
+      { text: 'Medium (60%)', foreground: 'text-medium', noBorder: true },
+      { text: 'Low (38%)', foreground: 'text-low', noBorder: true },
+      { text: 'Lowest (12%)', foreground: 'text-lowest', noBorder: true }
     ]
   },
   {
     header: 'Utilities',
     swatches: [
-      { text: 'Outline', background: 'outline', foreground: 'text-high' },
-      { text: 'Outline (high)', background: 'outline-high', foreground: 'text-high-inverse' }
+      { text: 'Outline (high)', border: 'outline-high' },
+      { text: 'Outline (medium)', border: 'outline-medium' },
+      { text: 'Outline (low)', border: 'outline-low' },
+      { text: 'Outline', border: 'outline' }
     ]
   }
 ];
@@ -148,7 +152,16 @@ function createSwatch(config: ISwatch): HTMLElement {
   if (config.text) {
     swatch.textContent = config.text;
   }
-  swatch.style.setProperty('background-color', `var(--forge-theme-${config.background})`);
+
+  if (config.border && !config.noBorder) {
+    swatch.style.setProperty('border-color', `var(--forge-theme-${config.border})`);
+  } else if (config.noBorder) {
+    swatch.style.setProperty('border', 'none');
+  }
+
+  if (config.background) {
+    swatch.style.setProperty('background-color', `var(--forge-theme-${config.background})`);
+  }
 
   if (config.foreground) {
     swatch.style.setProperty('color', `var(--forge-theme-${config.foreground})`);

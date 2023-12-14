@@ -51,8 +51,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         openIconElement.open = true;
       }
     }
-
-    this._headerElement.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
   public setHeaderVisibility(visible: boolean): void {
@@ -125,7 +123,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
               this._contentElement.style.height = `${this._contentElement.scrollHeight}px`;
             }
             this._contentElement.style.opacity = '1';
-            this._headerElement.setAttribute('aria-expanded', 'true');
             if (openIconElement) {
               openIconElement.open = true;
             }
@@ -136,7 +133,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
               this._contentElement.style.height = '0px';
             }
             this._contentElement.style.opacity = '0';
-            this._headerElement.setAttribute('aria-expanded', 'false');
             if (openIconElement) {
               openIconElement.open = false;
             }
@@ -158,7 +154,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         }
         this._contentElement.style.removeProperty('visibility');
         this._contentElement.style.removeProperty('opacity');
-        this._headerElement.setAttribute('aria-expanded', 'true');
         if (openIconElement) {
           openIconElement.open = true;
         }
@@ -170,7 +165,6 @@ export class ExpansionPanelAdapter extends BaseAdapter<IExpansionPanelComponent>
         }
         this._contentElement.style.opacity = '0';
         this._contentElement.style.visibility = 'hidden';
-        this._headerElement.setAttribute('aria-expanded', 'false');
         if (openIconElement) {
           openIconElement.open = false;
         }

@@ -23,8 +23,8 @@ $tokens: (
   // Outline
   outline-width: utils.module-val(button-toggle-group, outline-width, border.variable(thin)),
   outline-style: utils.module-val(button-toggle-group, outline-style, solid),
-  outline-color: utils.module-val(button-toggle-group, outline-color, theme.variable(outline-medium)),
-  outline-color-active: utils.module-val(button-toggle-group, outline-color-active, theme.variable(outline-high)),
+  outline-color: utils.module-val(button-toggle-group, outline-color, theme.variable(outline-low)),
+  outline-color-active: utils.module-val(button-toggle-group, outline-color-active, theme.variable(outline-medium)),
 
   // Shape
   shape: utils.module-val(button-toggle-group, shape, shape.variable(medium)),

@@ -3,12 +3,14 @@ import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean,
 import { CircularProgressAdapter } from './circular-progress-adapter';
 import { CircularProgressFoundation } from './circular-progress-foundation';
 import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { BaseComponent } from '../core/base/base-component';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 
 import template from './circular-progress.html';
 import styles from './circular-progress.scss';
 
-export interface ICircularProgressComponent extends IBaseComponent {
+export interface ICircularProgressComponent extends IWithElementInternals, IWithDefaultAria {
   determinate: boolean;
   progress: number;
   theme: CircularProgressTheme;
@@ -58,7 +60,7 @@ declare global {
 @CustomElement({
   name: CIRCULAR_PROGRESS_CONSTANTS.elementName
 })
-export class CircularProgressComponent extends BaseComponent implements ICircularProgressComponent {
+export class CircularProgressComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements ICircularProgressComponent {
   public static get observedAttributes(): string[] {
     return [
       CIRCULAR_PROGRESS_CONSTANTS.attributes.DETERMINATE,
