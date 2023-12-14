@@ -107,7 +107,7 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
     header: 'Text',
     swatches: [
       { text: 'High (87%)', foreground: 'text-high'},
-      { text: 'Medium (54%)', foreground: 'text-medium'},
+      { text: 'Medium (60%)', foreground: 'text-medium'},
       { text: 'Low (38%)', foreground: 'text-low'},
       { text: 'Lowest (12%)', foreground: 'text-lowest' }
     ]
