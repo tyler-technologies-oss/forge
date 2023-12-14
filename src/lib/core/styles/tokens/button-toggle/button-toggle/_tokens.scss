@@ -54,7 +54,8 @@ $tokens: (
   transition-timing: utils.module-val(button-toggle, transition-timing, animation.variable(easing-standard)),
 
   // Focus indicator
-  focus-indicator-color: utils.module-val(button-toggle, focus-indicator-color, theme.variable(primary))
+  focus-indicator-color: utils.module-val(button-toggle, focus-indicator-color, theme.variable(primary)),
+  focus-indicator-offset: utils.module-val(button-toggle, focus-indicator-offset, 0px) // Requires unit
 ) !default;
 
 @function get($key) {
