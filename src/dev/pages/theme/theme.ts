@@ -10,6 +10,7 @@ interface ISwatch {
   text?: string;
   background?: string;
   border?: string;
+  noBorder?: boolean;
   foreground?: string;
 }
 
@@ -106,10 +107,10 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
   {
     header: 'Text',
     swatches: [
-      { text: 'High (87%)', foreground: 'text-high'},
-      { text: 'Medium (60%)', foreground: 'text-medium'},
-      { text: 'Low (38%)', foreground: 'text-low'},
-      { text: 'Lowest (12%)', foreground: 'text-lowest' }
+      { text: 'High (87%)', foreground: 'text-high', noBorder: true },
+      { text: 'Medium (60%)', foreground: 'text-medium', noBorder: true },
+      { text: 'Low (38%)', foreground: 'text-low', noBorder: true },
+      { text: 'Lowest (12%)', foreground: 'text-lowest', noBorder: true }
     ]
   },
   {
@@ -152,8 +153,10 @@ function createSwatch(config: ISwatch): HTMLElement {
     swatch.textContent = config.text;
   }
 
-  if (config.border) {
+  if (config.border && !config.noBorder) {
     swatch.style.setProperty('border-color', `var(--forge-theme-${config.border})`);
+  } else if (config.noBorder) {
+    swatch.style.setProperty('border', 'none');
   }
 
   if (config.background) {
