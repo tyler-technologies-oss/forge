@@ -39,7 +39,7 @@
 //
 
 :host([open]) {
-  .forge-overlay {
+  .forge-overlay:is(:popover-open,:open,:modal) {
     @include open;
   }
 }
@@ -48,16 +48,8 @@
 // <dialog>
 //
 
-// :host([dialog]) {
-//   dialog.forge-overlay::backdrop {
-//     background-color: transparent;
-//     // animation: fadein var(--_overlay-backdrop-fade-duration) ease-in-out;
-//   }
-// }
-
-// :host([open][dialog][modal]) {
-//   dialog.forge-overlay::backdrop {
-//     backdrop-filter: none;
-//     background-color: rgba(0, 0, 0, 0.24);
-//   }
-// }
+:host([dialog]) {
+  dialog.forge-overlay::backdrop {
+    @include dialog-backdrop;
+  }
+}

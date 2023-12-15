@@ -34,9 +34,9 @@ export interface IPositionElementConfig {
 
 export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IOverlayAdapter {
   private _rootElement: HTMLElement | HTMLDialogElement;
-  private _autoUpdateCleanup: undefined | (() => void);
-  private _lightDismissCleanup: undefined | (() => void);
-  private _dialogLightDismissCleanup: undefined | (() => void);
+  private _autoUpdateCleanup?: () => void;
+  private _lightDismissCleanup?: () => void;
+  private _dialogLightDismissCleanup?: () => void;
 
   constructor(component: IOverlayComponent) {
     super(component);
@@ -58,11 +58,16 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
       }
     } else {
       this.tryCleanupAutoUpdate();
+
       if (this._rootElement.tagName === 'DIALOG') {
         (this._rootElement as HTMLDialogElement).close();
       } else if (CAN_USE_POPOVER && this._rootElement.matches(':popover-open')) {
         this._rootElement.hidePopover();
       }
+
+      this._rootElement.style.removeProperty('top');
+      this._rootElement.style.removeProperty('left');
+      this._rootElement.style.removeProperty('visibility');
       this._component.removeAttribute(OVERLAY_CONSTANTS.attributes.POSITION_PLACEMENT);
     }
   }
@@ -126,10 +131,8 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   }
 
   public tryCleanupAutoUpdate(): void {
-    if (typeof this._autoUpdateCleanup === 'function') {
-      this._autoUpdateCleanup();
-      this._autoUpdateCleanup = undefined;
-    }
+    this._autoUpdateCleanup?.();
+    this._autoUpdateCleanup = undefined;
   }
 
   public addPopoverLightDismissListener(listener: EventListener): void {

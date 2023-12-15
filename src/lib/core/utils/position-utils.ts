@@ -181,7 +181,7 @@ export const topLayerMiddleware = (): Middleware => ({
         onTopLayer = onTopLayer || floating.matches(':open');
       } catch {}
       try {
-          onTopLayer = onTopLayer || floating.matches(':modal');
+        onTopLayer = onTopLayer || floating.matches(':modal');
       } catch {}
       
       topLayerIsFloating = onTopLayer;
