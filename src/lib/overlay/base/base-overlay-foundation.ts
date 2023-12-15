@@ -1,6 +1,6 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-import { IBaseAdapter } from '../core';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy } from './overlay-constants';
+import { IBaseAdapter } from '../../core';
+import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy } from '../overlay-constants';
 
 export interface IBaseOverlayFoundation extends ICustomElementFoundation {
   initialize(): void;

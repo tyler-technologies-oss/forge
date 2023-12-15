@@ -1,10 +1,9 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { IOverlayComponent } from './overlay';
-import { IOverlayAwareFoundation } from './overlay-aware-foundation';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from './overlay-constants';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IBaseOverlayFoundation } from './base-overlay-foundation';
+import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 
-export interface IOverlayAware extends IBaseComponent {
+export interface IBaseOverlay extends IBaseComponent {
   targetElement: HTMLElement;
   target: string | null;
   open: boolean;
@@ -20,10 +19,9 @@ export interface IOverlayAware extends IBaseComponent {
   dialog: boolean;
   modal: boolean;
   position(): void;
-  overlay: IOverlayComponent;
 }
 
-export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends BaseComponent implements IOverlayAware {
+export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends BaseComponent implements IBaseOverlay {
   protected _foundation: T;
 
   constructor() {
@@ -75,49 +73,45 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
     }
   }
 
-  public get overlay(): IOverlayComponent {
-    return this._foundation.overlayElement;
-  }
-
   @FoundationProperty()
-  public targetElement: HTMLElement;
+  public declare targetElement: HTMLElement;
 
   @FoundationProperty()
   public declare target: string | null;
 
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   @FoundationProperty()
-  public inline: boolean;
+  public declare inline: boolean;
 
   @FoundationProperty()
-  public placement: OverlayPlacement;
+  public declare placement: OverlayPlacement;
 
   @FoundationProperty()
-  public positionStrategy: OverlayPositionStrategy;
+  public declare positionStrategy: OverlayPositionStrategy;
 
   @FoundationProperty()
-  public offset: IOverlayOffset;
+  public declare offset: IOverlayOffset;
 
   @FoundationProperty()
-  public shift: boolean;
+  public declare shift: boolean;
 
   @FoundationProperty()
-  public hide: boolean;
+  public declare hide: boolean;
 
   @FoundationProperty()
-  public static: boolean;
+  public declare static: boolean;
 
   @FoundationProperty()
-  public flip: boolean;
+  public declare flip: boolean;
 
   @FoundationProperty()
-  public auto: boolean;
+  public declare auto: boolean;
 
   @FoundationProperty()
-  public dialog: boolean;
+  public declare dialog: boolean;
 
   @FoundationProperty()
-  public modal: boolean;
+  public declare modal: boolean;
 }

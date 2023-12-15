@@ -1,4 +1,4 @@
-import { IOverlayAwareFoundation, OverlayAwareFoundation } from '../overlay/overlay-aware-foundation';
+import { IOverlayAwareFoundation, OverlayAwareFoundation } from '../overlay/base/overlay-aware-foundation';
 import { OverlayLightDismissEventData } from '../overlay/overlay-constants';
 import { IPopoverAdapter } from './popover-adapter';
 import { PopoverAnimationType, PopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';

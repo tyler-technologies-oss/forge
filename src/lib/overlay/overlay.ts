@@ -1,8 +1,8 @@
 import { attachShadowTemplate, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { OverlayAdapter } from './overlay-adapter';
-import { IOverlayToggleEventData, OverlayLightDismissEventData, OVERLAY_CONSTANTS } from './overlay-constants';
+import { OverlayLightDismissEventData, OVERLAY_CONSTANTS } from './overlay-constants';
 import { OverlayFoundation } from './overlay-foundation';
-import { BaseOverlay, IBaseOverlay } from './base-overlay';
+import { BaseOverlay, IBaseOverlay } from './base/base-overlay';
 
 import template from './overlay.html';
 import styles from './overlay.scss';
@@ -79,9 +79,7 @@ declare global {
 })
 export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements IOverlayComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(OVERLAY_CONSTANTS.observedAttributes)
-    ];
+    return Object.values(OVERLAY_CONSTANTS.observedAttributes);
   }
 
   constructor() {

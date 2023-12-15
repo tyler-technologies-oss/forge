@@ -3,7 +3,7 @@ import { PopoverAdapter } from './popover-adapter';
 import { PopoverAnimationType, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
 import { IPopoverFoundation, PopoverFoundation } from './popover-foundation';
 import { OverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
-import { IOverlayAware, OverlayAware } from '../overlay/overlay-aware';
+import { IOverlayAware, OverlayAware } from '../overlay/base/overlay-aware';
 
 import template from './popover.html';
 import styles from './popover.scss';

@@ -1,6 +1,6 @@
 import { getShadowElement } from '@tylertech/forge-core';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
-import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/overlay-aware-adapter';
+import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
 import { IPopoverComponent } from './popover';
 import { POPOVER_CONSTANTS } from './popover-constants';
 

@@ -1,7 +1,8 @@
-@use './animations';
-@use './configuration';
-@use './core';
-@use '../core/styles/utils';
+@use './core' as *;
+
+//
+// Host
+//
 
 :host {
   display: contents;
@@ -11,38 +12,52 @@
   display: none;
 }
 
+//
+// Base
+//
+
+.forge-overlay {
+  @include tokens;
+}
+
+.forge-overlay {
+  @include base;
+}
+
+//
+// Position strategy - absolute
+//
+
 :host([position-strategy=absolute]) {
   .forge-overlay {
-    --_overlay-position: #{utils.module-val(overlay, position, absolute)};
+    @include absolute;
   }
 }
+
+//
+// Open
+//
 
 :host([open]) {
   .forge-overlay {
-    display: block;
-    inset: unset;
-    border: none;
-    padding: 0;
-    margin: 0;
-    overflow: visible;
+    @include open;
   }
 }
 
-:host([dialog]) {
-  .forge-overlay::backdrop {
-    background-color: transparent;
-    // animation: fadein var(--_overlay-backdrop-fade-duration) ease-in-out;
-  }
-}
+//
+// <dialog>
+//
+
+// :host([dialog]) {
+//   dialog.forge-overlay::backdrop {
+//     background-color: transparent;
+//     // animation: fadein var(--_overlay-backdrop-fade-duration) ease-in-out;
+//   }
+// }
 
 // :host([open][dialog][modal]) {
-//   .forge-overlay::backdrop {
+//   dialog.forge-overlay::backdrop {
 //     backdrop-filter: none;
 //     background-color: rgba(0, 0, 0, 0.24);
 //   }
 // }
-
-.forge-overlay {
-  @include configuration.configuration;
-  @include core.base;
-}

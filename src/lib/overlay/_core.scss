@@ -1,20 +1,32 @@
-@use '../core/styles/utils';
-@use '../core/styles/tokens/overlay/tokens';
+@use './token-utils' as *;
 
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, overlay);
-}
+@forward './token-utils';
 
-@mixin base() {
+@mixin base {
   display: none;
   box-sizing: border-box;
-  position: var(--_overlay-position);
+  height: #{token(height)};
+  width: #{token(width)};
+  border-radius: inherit;
+
+  position: #{token(position)};
   top: 0;
   left: 0;
-  height: var(--_overlay-height);
-  width: var(--_overlay-width);
-  z-index: var(--_overlay-z-index);
-  border-radius: inherit;
+  z-index: #{token(z-index)};
+  
   background: inherit;
   color: inherit;
+}
+
+@mixin absolute {
+  @include override(position, absolute, value);
+}
+
+@mixin open {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: none;
+  overflow: visible;
+  inset: unset;
 }

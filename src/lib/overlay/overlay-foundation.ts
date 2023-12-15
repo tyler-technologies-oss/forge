@@ -1,5 +1,5 @@
 
-import { IBaseOverlayFoundation, BaseOverlayFoundation } from './base-overlay-foundation';
+import { IBaseOverlayFoundation, BaseOverlayFoundation } from './base/base-overlay-foundation';
 import { IOverlayAdapter } from './overlay-adapter';
 import { CAN_USE_POPOVER, IOverlayOffset, IOverlayToggleEventData, OverlayLightDismissEventData, OverlayPlacement, OverlayPositionStrategy, OverlayToggleEvent, OVERLAY_CONSTANTS } from './overlay-constants';
 

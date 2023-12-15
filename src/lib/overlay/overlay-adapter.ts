@@ -1,6 +1,8 @@
 import { autoUpdate } from '@floating-ui/dom';
-import { deepQuerySelectorAll, getShadowElement, positionElementAsync } from '@tylertech/forge-core';
-import { BaseAdapter, IBaseAdapter, locateTargetHeuristic, replaceElement } from '../core';
+import { deepQuerySelectorAll, getShadowElement } from '@tylertech/forge-core';
+import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { locateTargetHeuristic, replaceElement } from '../core/utils/utils';
+import { positionElementAsync } from '../core/utils/position-utils';
 import { IOverlayComponent } from './overlay';
 import { CAN_USE_POPOVER, IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OverlayToggleEvent, OVERLAY_CONSTANTS } from './overlay-constants';
 
@@ -28,15 +30,6 @@ export interface IPositionElementConfig {
   shift: boolean;
   auto: boolean;
   flip: boolean;
-}
-
-declare global {
-  interface HTMLElement {
-    popover: 'manual' | 'auto' | null | undefined;
-    showPopover(): void;
-    hidePopover(): void;
-    togglePopover(): boolean;
-  }
 }
 
 export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IOverlayAdapter {

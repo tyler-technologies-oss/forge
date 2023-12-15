@@ -1,7 +1,7 @@
 import { IBaseOverlayFoundation } from './base-overlay-foundation';
-import { IOverlayComponent } from './overlay';
+import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareAdapter } from './overlay-aware-adapter';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from './overlay-constants';
+import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 
 export interface IOverlayAwareFoundation extends IBaseOverlayFoundation {
   readonly overlayElement: IOverlayComponent;
