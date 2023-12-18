@@ -1,7 +1,10 @@
-@use './core';
-@use './configuration';
+@use './core' as *;
 @use './animations';
 @use '../overlay';
+
+//
+// Host
+//
 
 :host {
   display: contents;
@@ -11,42 +14,54 @@
   display: none;
 }
 
-///
-/// Base styles
-/// 
+//
+// Base
+// 
 
 .forge-popover {
-  @include configuration.base;
-  @include core.base;
+  @include tokens;
+
+  #{declare(arrow-translate-x)}: 0;
+  #{declare(arrow-translate-y)}: 0;
+  #{declare(arrow-rotation)}: 0;
+
+  --_popover-slidein-x: 0;
+  --_popover-slidein-y: 0;
+
+  --_popover-zoomin-origin: 50% 50% 0;
 }
 
-///
-/// Dialog styles
-///
-
-:host([dialog]) {
-  forge-overlay {
-    @include overlay.provide-theme((
-      backdrop-fade-duration: 1000ms
-    ));
-  }
+.forge-popover {
+  @include base;
 }
 
-:host([open][dialog][modal]) {
-  forge-overlay::part(container)::backdrop {
-    backdrop-filter: blur(1px);
-    background-color: rgba(0, 0, 0, 0.24);
-  }
-}
+//
+// Dialog
+//
 
-///
-/// Arrow styles
-/// 
+// :host([dialog]) {
+//   forge-overlay {
+//     @include overlay.provide-theme((
+//       backdrop-fade-duration: 1000ms
+//     ));
+//   }
+// }
+
+// :host([open][dialog][modal]) {
+//   forge-overlay::part(container)::backdrop {
+//     backdrop-filter: blur(1px);
+//     background-color: rgba(0, 0, 0, 0.24);
+//   }
+// }
+
+//
+// Arrow
+//
 
 :host([arrow]) {
   .arrow {
-    @include configuration.arrow;
-    @include core.arrow;
+    // @include configuration.arrow;
+    @include arrow;
   }
 
   forge-overlay[position-placement^=top] {
@@ -78,21 +93,21 @@
   }
 }
 
-///
-/// Animation styles
-/// 
+//
+// Animation
+// 
 
 :host(:not([animation-type=none])) {
   .forge-popover {
-    @include configuration.animation-base;
+    // @include configuration.animation-base;
   }
 }
 
 :host(:not([animation-type])),
 :host([animation-type=zoom]) {
   .forge-popover {
-    @include configuration.zoom;
-    @include core.zoom-base;
+    // @include configuration.zoom;
+    @include zoom-base;
   }
 
   forge-overlay[open] {
@@ -180,8 +195,8 @@
 
 :host([animation-type=slide]) {
   .forge-popover {
-    @include configuration.slide;
-    @include core.slide-base;
+    // @include configuration.slide;
+    @include slide-base;
   }
 
   forge-overlay[open] {
@@ -213,7 +228,7 @@
 
 :host([animation-type=fade]) {
   .forge-popover {
-    @include configuration.fade;
-    @include core.fade-base;
+    // @include configuration.fade;
+    @include fade-base;
   }
 }

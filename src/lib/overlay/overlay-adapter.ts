@@ -4,7 +4,14 @@ import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { locateTargetHeuristic, replaceElement } from '../core/utils/utils';
 import { positionElementAsync } from '../core/utils/position-utils';
 import { IOverlayComponent } from './overlay';
-import { CAN_USE_POPOVER, IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OverlayToggleEvent, OVERLAY_CONSTANTS } from './overlay-constants';
+import {
+  CAN_USE_POPOVER,
+  IOverlayOffset,
+  OverlayPlacement,
+  OverlayPositionStrategy,
+  OverlayToggleEvent,
+  OVERLAY_CONSTANTS
+} from './overlay-constants';
 
 export interface IOverlayAdapter extends IBaseAdapter {
   setOpen(value: boolean): void;
@@ -67,7 +74,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
 
       this._rootElement.style.removeProperty('top');
       this._rootElement.style.removeProperty('left');
-      this._rootElement.style.removeProperty('visibility');
+      this._rootElement.style.removeProperty('display');
       this._component.removeAttribute(OVERLAY_CONSTANTS.attributes.POSITION_PLACEMENT);
     }
   }
@@ -117,14 +124,16 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         this._component.setAttribute(OVERLAY_CONSTANTS.attributes.POSITION_PLACEMENT, result.placement);
       }
 
-      // Position our optional arrow element
+      // Position the optional arrow element
       if (this._component.arrowElement && result.arrow) {
         const { x: arrowX, y: arrowY } = result.arrow;
         const arrowLen = this._component.arrowElement.offsetWidth;
+        const { borderWidth = '0' } = getComputedStyle(this._component.arrowElement);
+        const arrowBoxAdjust = parseFloat(borderWidth);
         Object.assign(this._component.arrowElement.style, {
           top: arrowY != null ? `${arrowY}px` : '',
           left: arrowX != null ? `${arrowX}px` : '',
-          [staticSide as string]: `${-arrowLen / 2}px`
+          [staticSide as string]: `${(-arrowLen / 2) - arrowBoxAdjust}px`
         });
       }
     });
@@ -144,10 +153,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   }
 
   public addDialogLightDismissListener(listener: EventListener | (() => void)): void {
-    if (this._dialogLightDismissCleanup) {
-      this.removeDialogLightDismissListener();
-    }
-
+    this.removeDialogLightDismissListener?.();
     this._rootElement.addEventListener('cancel', listener);
 
     const backdropClickListener = ({ clientX, clientY }: PointerEvent): void => {
@@ -169,9 +175,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   }
 
   public addCustomLightDismissListener(listener: () => void): void {
-    if (this._lightDismissCleanup) {
-      this.removeCustomLightDismissListener();
-    }
+    this.removeCustomLightDismissListener?.();
     this._initializeLightDismiss(listener);
   }
 

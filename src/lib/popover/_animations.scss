@@ -13,7 +13,7 @@
 @keyframes slidein {
   from {
     opacity: 0;
-    transform: translateX(var(--_slidein-x)) translateY(var(--_slidein-y));
+    transform: translateX(var(--_popover-slidein-x)) translateY(var(--_popover-slidein-y));
   }
 
   to {

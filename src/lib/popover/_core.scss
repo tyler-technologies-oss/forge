@@ -1,54 +1,59 @@
-@use './variables';
-@use '../core/styles/utils';
-@use '../core/styles/tokens/popover/tokens';
+@use './token-utils' as *;
 
-@mixin provide-theme($theme) {
-  @include utils.provide(tokens.$tokens, $theme, popover);
-}
+@forward './token-utils';
 
 @mixin base {
-  background-color: var(--_popover-background-color);
-  border-radius: var(--_popover-border-radius);
-  box-shadow: var(--_popover-box-shadow);
-  border: var(--_popover-border-width) var(--_popover-border-style) var(--_popover-border-color);
   position: relative;
+
+  background-color: #{token(background-color)};
+
+  border-radius: #{token(border-radius)};
+  box-shadow: #{token(box-shadow)};
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
 }
 
 @mixin arrow {
   position: absolute;
-  height: var(--_popover-arrow-height);
-  width: var(--_popover-arrow-width);
-  background-color: var(--_popover-arrow-background-color);
-  box-shadow: var(--_popover-box-shadow);
-  border: var(--_popover-border-width) var(--_popover-border-style) var(--_popover-border-color);
+
+  background-color: #{token(arrow-background-color)};
+
+  height: #{token(arrow-height)};
+  width: #{token(arrow-width)};
+  box-shadow: #{token(box-shadow)};
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+  
   transform: 
-    translate(var(--_popover-arrow-translate-x), var(--_popover-arrow-translate-y))
-    rotate(var(--_popover-arrow-rotation));
+    translate(#{token(arrow-translate-x, custom)}, #{token(arrow-translate-y, custom)})
+    rotate(#{token(arrow-rotation, custom)});
   clip-path: var(
     --_popover-arrow-clip-path,
     polygon(
-      calc(var(--_popover-border-width) * -1) calc(var(--_popover-border-width) * -1),
-      calc(100% + var(--_popover-border-width)) calc(var(--_popover-border-width) * -1),
-      calc(100% + var(--_popover-border-width)) calc(100% + var(--_popover-border-width))
+      calc(#{token(border-width)} * -1) calc(#{token(border-width)} * -1),
+      calc(100% + #{token(border-width)}) calc(#{token(border-width)} * -1),
+      calc(100% + #{token(border-width)}) calc(100% + #{token(border-width)})
     )
   );
 }
 
 @mixin zoom-base {
-  animation-duration: var(--_popover-zoom-duration);
-  animation-timing-function: var(--_popover-zoom-timing);
+  animation-duration: #{token(zoom-duration)};
+  animation-timing-function: #{token(zoom-timing)};
   animation-name: zoomin;
-  transform-origin: var(--_popover-zoomin-origin);
+  transform-origin: #{token(zoomin-origin, custom)};
 }
 
 @mixin slide-base {
-  animation-duration: var(--_popover-slide-duration);
-  animation-timing-function: var(--_popover-slide-timing);
+  animation-duration: #{token(slide-duration)};
+  animation-timing-function: #{token(slide-timing)};
   animation-name: slidein;
 }
 
 @mixin fade-base {
-  animation-duration: var(--_popover-fade-duration);
-  animation-timing-function: var(--_popover-fade-timing);
+  animation-duration: #{token(fade-duration)};
+  animation-timing-function: #{token(fade-timing)};
   animation-name: fadein;
 }

@@ -26,7 +26,7 @@ export type PositionStrategy = Strategy;
 export interface IPositionElementResult {
   x: number;
   y: number;
-  visibility: 'visible' | 'hidden';
+  hidden: boolean;
   placement: PositionPlacement;
   arrow?: MiddlewareData['arrow'];
 }
@@ -133,14 +133,12 @@ export async function positionElementAsync({
   }
 
   const { x, y, placement: finalPlacement, middlewareData } = await computePosition(targetElement, element, { strategy, placement, middleware });
-  const visibility = middlewareData.hide?.referenceHidden ? 'hidden' : 'visible';
 
   // Should we apply the position information to the element?
   if (apply) {
     const styles: Partial<CSSStyleDeclaration> = {
       left: transform ? '0' : `${x}px`,
-      top: transform ? '0' : `${y}px`,
-      visibility
+      top: transform ? '0' : `${y}px`
     };
     
     if (transform) {
@@ -152,12 +150,19 @@ export async function positionElementAsync({
     }
 
     Object.assign(element.style, styles);
+
+    // We use `display` here to ensure that any child overlays are also hidden
+    if (middlewareData.hide?.referenceHidden) {
+      element.style.display = 'none';
+    } else {
+      element.style.removeProperty('display');
+    }
   }
 
   return {
     x,
     y,
-    visibility,
+    hidden: middlewareData.hide?.referenceHidden ?? false,
     placement: finalPlacement,
     arrow: middlewareData.arrow
   };
@@ -175,7 +180,7 @@ export const topLayerMiddleware = (): Middleware => ({
       const diffCoords = { x: 0, y: 0 };
 
       try {
-          onTopLayer = onTopLayer || floating.matches(':popover-open');
+        onTopLayer = onTopLayer || floating.matches(':popover-open');
       } catch {}
       try {
         onTopLayer = onTopLayer || floating.matches(':open');
