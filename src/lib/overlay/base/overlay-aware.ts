@@ -2,23 +2,21 @@ import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareFoundation } from './overlay-aware-foundation';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 
 export interface IOverlayAware extends IBaseComponent {
-  targetElement: HTMLElement;
-  target: string | null;
+  anchorElement: HTMLElement;
+  anchor: string | null;
   open: boolean;
   inline: boolean;
   placement: OverlayPlacement;
   positionStrategy: OverlayPositionStrategy;
   offset: IOverlayOffset;
   shift: boolean;
-  hide: boolean;
+  hide: OverlayHideState;
   static: boolean;
-  flip: boolean;
+  flip: OverlayFlipState;
   auto: boolean;
-  dialog: boolean;
-  modal: boolean;
   position(): void;
   overlay: IOverlayComponent;
 }
@@ -36,8 +34,8 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
 
   public attributeChangedCallback(name: string, _oldValue: string, newValue: string): void {
     switch (name) {
-      case OVERLAY_CONSTANTS.observedAttributes.TARGET:
-        this.target = newValue;
+      case OVERLAY_CONSTANTS.observedAttributes.ANCHOR:
+        this.anchor = newValue;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
@@ -52,7 +50,7 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
         this.positionStrategy = newValue as OverlayPositionStrategy;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.HIDE:
-        this.hide = coerceBoolean(newValue);
+        this.hide = newValue as OverlayHideState;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.STATIC:
         this.static = coerceBoolean(newValue);
@@ -60,17 +58,11 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
       case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
         this.shift = coerceBoolean(newValue);
         break;
-      case OVERLAY_CONSTANTS.observedAttributes.NO_FLIP:
-        this.flip = !coerceBoolean(newValue);
+      case OVERLAY_CONSTANTS.observedAttributes.FLIP:
+        this.flip = newValue as OverlayFlipState;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.AUTO:
         this.auto = coerceBoolean(newValue);
-        break;
-      case OVERLAY_CONSTANTS.observedAttributes.DIALOG:
-        this.dialog = coerceBoolean(newValue);
-        break;
-      case OVERLAY_CONSTANTS.observedAttributes.MODAL:
-        this.modal = coerceBoolean(newValue);
         break;
     }
   }
@@ -80,10 +72,10 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
   }
 
   @FoundationProperty()
-  public targetElement: HTMLElement;
+  public anchorElement: HTMLElement;
 
   @FoundationProperty()
-  public declare target: string | null;
+  public declare anchor: string | null;
 
   @FoundationProperty()
   public open: boolean;
@@ -104,20 +96,14 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
   public shift: boolean;
 
   @FoundationProperty()
-  public hide: boolean;
+  public hide: OverlayHideState;
 
   @FoundationProperty()
   public static: boolean;
 
   @FoundationProperty()
-  public flip: boolean;
+  public flip: OverlayFlipState;
 
   @FoundationProperty()
   public auto: boolean;
-
-  @FoundationProperty()
-  public dialog: boolean;
-
-  @FoundationProperty()
-  public modal: boolean;
 }

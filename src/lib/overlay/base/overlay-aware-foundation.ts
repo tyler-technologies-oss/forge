@@ -1,7 +1,7 @@
 import { IBaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareAdapter } from './overlay-aware-adapter';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 
 export interface IOverlayAwareFoundation extends IBaseOverlayFoundation {
   readonly overlayElement: IOverlayComponent;
@@ -22,7 +22,7 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     }
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.overlayElement.removeEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
   }
 
@@ -30,18 +30,18 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     return this._adapter.overlayElement;
   }
 
-  public get targetElement(): HTMLElement {
-    return this._adapter.overlayElement.targetElement;
+  public get anchorElement(): HTMLElement {
+    return this._adapter.overlayElement.anchorElement;
   }
-  public set targetElement(value: HTMLElement) {
-    this._adapter.overlayElement.targetElement = value;
+  public set anchorElement(value: HTMLElement) {
+    this._adapter.overlayElement.anchorElement = value;
   }
 
-  public get target(): string | null {
-    return this._adapter.overlayElement.target;
+  public get anchor(): string | null {
+    return this._adapter.overlayElement.anchor;
   }
-  public set target(value: string | null) {
-    this._adapter.overlayElement.target = value;
+  public set anchor(value: string | null) {
+    this._adapter.overlayElement.anchor = value;
   }
 
   public get open(): boolean {
@@ -89,13 +89,13 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     }
   }
 
-  public get hide(): boolean {
+  public get hide(): OverlayHideState {
     return this._adapter.overlayElement.hide;
   }
-  public set hide(value: boolean) {
+  public set hide(value: OverlayHideState) {
     if (this._adapter.overlayElement.hide !== value) {
       this._adapter.overlayElement.hide = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE, this._adapter.overlayElement.hide);
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.HIDE, this._adapter.overlayElement.hide !== OVERLAY_CONSTANTS.defaults.HIDE, String(this._adapter.overlayElement.hide));
     }
   }
 
@@ -126,13 +126,13 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     }
   }
 
-  public get flip(): boolean {
+  public get flip(): OverlayFlipState {
     return this._adapter.overlayElement.flip;
   }
-  public set flip(value: boolean) {
+  public set flip(value: OverlayFlipState) {
     if (this._adapter.overlayElement.flip !== value) {
       this._adapter.overlayElement.flip = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.NO_FLIP, !this._adapter.overlayElement.flip);
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.FLIP, this._adapter.overlayElement.flip !== OVERLAY_CONSTANTS.defaults.FLIP, String(this._adapter.overlayElement.flip));
     }
   }
 
@@ -145,27 +145,35 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.AUTO, this._adapter.overlayElement.auto);
     }
   }
-
-  public get dialog(): boolean {
-    return this._adapter.overlayElement.dialog;
-  }
-  public set dialog(value: boolean) {
-    if (this._adapter.overlayElement.dialog !== value) {
-      this._adapter.overlayElement.dialog = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.DIALOG, this._adapter.overlayElement.dialog);
-    }
-  }
-
-  public get modal(): boolean {
-    return this._adapter.overlayElement.modal;
-  }
-  public set modal(value: boolean) {
-    if (this._adapter.overlayElement.modal !== value) {
-      this._adapter.overlayElement.modal = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.MODAL, this._adapter.overlayElement.modal);
-    }
-  }
   
+  public get boundary(): string | null {
+    return this._adapter.overlayElement.boundary;
+  }
+  public set boundary(value: string | null) {
+    if (this._adapter.overlayElement.boundary !== value) {
+      this._adapter.overlayElement.boundary = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.BOUNDARY, !!this._adapter.overlayElement.boundary, this._adapter.overlayElement.boundary as string);
+    }
+  }
+
+  public get boundaryElement(): HTMLElement | null {
+    return this._adapter.overlayElement.boundaryElement;
+  }
+  public set boundaryElement(value: HTMLElement | null) {
+    if (this._adapter.overlayElement.boundaryElement !== value) {
+      this._adapter.overlayElement.boundaryElement = value;
+    }
+  }
+
+  public get fallbackPlacements(): OverlayPlacement[] | null {
+    return this._adapter.overlayElement.fallbackPlacements;
+  }
+  public set fallbackPlacements(value: OverlayPlacement[] | null) {
+    if (this._adapter.overlayElement.fallbackPlacements !== value) {
+      this._adapter.overlayElement.fallbackPlacements = value;
+    }
+  }
+
   public position(): void {
     this._adapter.overlayElement.position();
   }

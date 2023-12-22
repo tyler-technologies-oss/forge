@@ -38,18 +38,15 @@
 // Open
 //
 
-:host([open]) {
-  .forge-overlay:is(:popover-open,:open,:modal) {
+:host([open][inline]) {
+  .forge-overlay {
     @include open;
   }
 }
 
-//
-// <dialog>
-//
-
-:host([dialog]) {
-  dialog.forge-overlay::backdrop {
-    @include dialog-backdrop;
+:host([open]) {
+  .forge-overlay:popover-open {
+    @include open;
   }
 }
+

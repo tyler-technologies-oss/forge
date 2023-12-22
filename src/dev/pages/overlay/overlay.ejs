@@ -1,13 +1,14 @@
-<div class="clipping-container">
+<div class="clipping-container" id="clipping-container">
   <div class="scroll-container">
-    <forge-button variant="raised" slot="trigger" id="my-btn">Show overlay</forge-button>
+    <forge-button variant="raised" aria-controls="my-overlay" id="my-btn">Show overlay</forge-button>
 
-    <forge-overlay target="my-btn" id="my-overlay">
-      <div class="overlay-content">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea labore tenetur illum aliquam corporis veritatis quos accusamus. Laborum ullam autem fugiat eligendi ratione beatae consequuntur provident earum, nemo neque itaque!
-        <forge-button variant="raised" id="child-btn">Show child overlay</forge-button>
-        <forge-overlay target="child-btn" id="my-child-overlay" placement="right">
-          <p class="overlay-content">Nested overlay test</p>
+    <forge-overlay anchor="my-btn" id="my-overlay">
+      <div class="overlay-content" role="dialog" aria-labelledby="dialog-title" id="my-dialog">
+        <div id="dialog-title">Overlay content</div>
+
+        <forge-button variant="filled" id="nested-btn" autofocus>Show nested overlay</forge-button>
+        <forge-overlay anchor="nested-btn" id="my-nested-overlay" placement="right" flip="main" hide="off" boundary="clipping-container">
+          <div class="overlay-content">Nested overlay test</div>
         </forge-overlay>
       </div>
     </forge-overlay>

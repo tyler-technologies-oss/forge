@@ -75,7 +75,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
   public focus(options?: ExperimentalFocusOptions): void {
     this._adapter.focusHost(options);
 
-    if (options?.focusVisible) {
+    if (options?.focusVisible !== false) {
       this._adapter.forceFocusVisible();
     }
   }

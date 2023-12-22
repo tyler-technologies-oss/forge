@@ -53,7 +53,7 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._foundation.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

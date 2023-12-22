@@ -5,7 +5,7 @@ import { supportsPopover } from '../core';
 const elementName = `${COMPONENT_NAME_PREFIX}overlay`;
 
 const observedAttributes = {
-  TARGET: 'target',
+  ANCHOR: 'anchor',
   OPEN: 'open',
   INLINE: 'inline',
   PLACEMENT: 'placement',
@@ -13,29 +13,33 @@ const observedAttributes = {
   HIDE: 'hide',
   STATIC: 'static',
   SHIFT: 'shift',
-  NO_FLIP: 'no-flip',
-  AUTO: 'auto',
-  DIALOG: 'dialog',
-  MODAL: 'modal'
-};
+  FLIP: 'flip',
+  BOUNDARY: 'boundary',
+  FALLBACK_PLACEMENTS: 'fallback-placements',
+  AUTO: 'auto'
+} as const;
 
 const attributes = {
   ...observedAttributes,
   POSITION_PLACEMENT: 'position-placement'
-};
+} as const;
 
 const classes = {
   OVERLAY: 'forge-overlay'
-};
+} as const;
 
 const selectors = {
-  ROOT: `.${classes.OVERLAY}`,
-  OPEN_OVERLAYS: `${elementName}[${attributes.OPEN}]`
-};
+  ROOT: `.${classes.OVERLAY}`
+} as const;
 
 const events = {
   LIGHT_DISMISS: `${elementName}-light-dismiss`
-};
+} as const;
+
+const defaults = {
+  HIDE: 'auto',
+  FLIP: 'auto'
+} as const;
 
 export const OVERLAY_CONSTANTS = {
   elementName,
@@ -43,22 +47,26 @@ export const OVERLAY_CONSTANTS = {
   attributes,
   classes,
   selectors,
-  events
+  events,
+  defaults
 };
 
-export const CAN_USE_POPOVER = supportsPopover();
+export const SUPPORTS_POPOVER = supportsPopover();
 
 export interface IOverlayOffset { mainAxis?: number; crossAxis?: number; alignmentAxis?: number }
 
 export type OverlayPositionStrategy = 'absolute' | 'fixed';
 export type OverlayPlacement = PositionPlacement;
+export type OverlayHideState = 'auto' | 'off';
+export type OverlayFlipState = 'auto' | 'main' | 'cross' | 'off';
+export type OverlayLightDismissReason = 'click' | 'escape';
 
-export interface IOverlayToggleEventData {
+export interface IOverlayToggleEvent extends Event {
   newState: 'closed' | 'open';
   oldState: 'closed' | 'open';
 }
-
-export interface OverlayToggleEvent extends Event, IOverlayToggleEventData {}
 export interface OverlayLightDismissEventData {
-  type: 'modal' | 'modeless';
+  reason: OverlayLightDismissReason;
 }
+
+export const overlayStack = Symbol('overlayStack');

@@ -273,7 +273,7 @@ forge-state-layer {
   :host([toggle][theme=#{$theme}][variant=outlined]) {
     .forge-icon-button {
       @include override(icon-color, theme.variable($theme), value);
-      @include override(outlined-toggle-on-background-color, theme.variable(#{$theme}-container-low), value);
+      @include override(outlined-toggle-on-background-color, theme.variable(#{$theme}-container), value);
       @include override(outlined-toggle-on-icon-color, theme.variable($theme), value);
     }
   }
@@ -291,7 +291,7 @@ forge-state-layer {
     // Toggle + tonal variant
     :host([toggle]:not([on])[theme=#{$theme}][variant=tonal]) {
       .forge-icon-button {
-        @include override(background-color, theme.variable(#{$theme}-container-low), value);
+        @include override(background-color, theme.variable(#{$theme}-container), value);
       }
     }
 
@@ -315,7 +315,7 @@ forge-state-layer {
     :host([toggle]:not([on])[theme=#{$theme}]:is([variant=filled],[variant=raised])) {
       .forge-icon-button {
         @include override(icon-color, theme.variable($theme), value);
-        @include override(background-color, theme.variable(#{$theme}-container-low), value);
+        @include override(background-color, theme.variable(#{$theme}-container), value);
       }
     }
 

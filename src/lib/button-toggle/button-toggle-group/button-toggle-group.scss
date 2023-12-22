@@ -115,8 +115,8 @@ $_host-tokens: [display];
   :host([theme=#{$theme}]) {
     ::slotted(forge-button-toggle) {
       @include button-toggle.provide-theme((
-        selected-background: #{theme.variable(#{$theme}-container-low)},
-        selected-color: #{theme.variable(on-#{$theme}-container-low)},
+        selected-background: #{theme.variable(#{$theme}-container)},
+        selected-color: #{theme.variable(on-#{$theme}-container)},
         focus-indicator-color: #{theme.variable($theme)}
       ));
     }

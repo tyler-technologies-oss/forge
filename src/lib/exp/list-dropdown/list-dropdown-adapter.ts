@@ -16,6 +16,6 @@ export class ListDropdownAdapter extends BaseAdapter<IListDropdownComponent> imp
   }
   
   public setTargetElement(element: HTMLElement): void {
-    this._popoverElement.targetElement = element;
+    this._popoverElement.anchorElement = element;
   }
 }

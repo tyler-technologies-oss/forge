@@ -33,22 +33,22 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public initializeTargetElement(): void {
-    if (this._component.targetElement) {
-      this._overlayElement.targetElement = this._component.targetElement;
+    if (this._component.anchorElement) {
+      this._overlayElement.anchorElement = this._component.anchorElement;
     } else {
-      const targetEl = this._getTargetElement(this._component.target);
+      const targetEl = this._getTargetElement(this._component.anchor);
       if (targetEl) {
-        this._overlayElement.targetElement = targetEl;
+        this._overlayElement.anchorElement = targetEl;
       }
     }
   }
 
   public addTargetListener(type: string, listener: EventListener): void {
-    this._overlayElement.targetElement?.addEventListener(type, listener);
+    this._overlayElement.anchorElement?.addEventListener(type, listener);
   }
 
   public removeTargetListener(type: string, listener: EventListener): void {
-    this._overlayElement.targetElement?.removeEventListener(type, listener);
+    this._overlayElement.anchorElement?.removeEventListener(type, listener);
   }
 
   public addSurfaceListener(type: string, listener: EventListener): void {

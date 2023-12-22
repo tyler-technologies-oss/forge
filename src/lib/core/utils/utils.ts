@@ -217,3 +217,13 @@ export function replaceElement<T extends HTMLElement>(oldElement: HTMLElement, n
   oldElement.remove();
   return newElement;
 }
+
+/**
+ * Coerces a string separated by `separator` into an array of strings. 
+ * @param value The string to coerce.
+ * @params [separator=','] The separator to use when splitting the string.
+ * @returns An array of strings.
+ */
+export function coerceStringToArray<T extends string>(value: string, separator = ','): T[] {
+  return value.split(separator).map(p => p.trim()) as T[];
+}

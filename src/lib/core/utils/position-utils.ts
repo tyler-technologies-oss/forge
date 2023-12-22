@@ -23,6 +23,8 @@ import { getContainingBlock, isContainingBlock, getWindow } from '@floating-ui/u
 export type PositionPlacement = Placement;
 export type PositionStrategy = Strategy;
 
+export const DEFAULT_FALLBACK_PLACEMENTS: PositionPlacement[] = ['top-start', 'top', 'top-end', 'left-start', 'left', 'left-end', 'right-start', 'right', 'right-end'];
+
 export interface IPositionElementResult {
   x: number;
   y: number;
@@ -82,14 +84,14 @@ export interface IPositionElementConfig {
 export async function positionElementAsync({
   element,
   targetElement,
-  placement = 'bottom-start',
+  placement = 'bottom',
   offset = false,
   offsetOptions,
   strategy = 'absolute',
   apply = true,
   flip = true,
   flipOptions = {
-    fallbackPlacements: ['top-start', 'top', 'top-end', 'left-start', 'left', 'left-end', 'right-start', 'right', 'right-end'],
+    fallbackPlacements: DEFAULT_FALLBACK_PLACEMENTS,
     fallbackStrategy: 'initialPlacement'
   },
   auto = false,

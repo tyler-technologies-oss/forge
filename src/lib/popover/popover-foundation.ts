@@ -1,7 +1,7 @@
 import { IOverlayAwareFoundation, OverlayAwareFoundation } from '../overlay/base/overlay-aware-foundation';
 import { OverlayLightDismissEventData } from '../overlay/overlay-constants';
 import { IPopoverAdapter } from './popover-adapter';
-import { PopoverAnimationType, PopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
+import { PopoverAnimationType, IPopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
 
 export interface IPopoverFoundation extends IOverlayAwareFoundation {
   arrow: boolean;
@@ -55,21 +55,21 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
   public override initialize(): void {
     super.initialize();
 
-    if (!this._adapter.overlayElement.targetElement) {
+    if (!this._adapter.overlayElement.anchorElement) {
       this._adapter.initializeTargetElement();
       this._initializeTriggerListeners();
     }
   }
 
-  public override disconnect(): void {
-    super.disconnect();
+  public override destroy(): void {
+    super.destroy();
     this._removeTriggerListeners();
   }
 
   protected _onOverlayLightDismiss(evt: CustomEvent<OverlayLightDismissEventData>): void {
     evt.preventDefault();
 
-    const isCancelled = this._dispatchBeforetoggleEvent({ cancelable: evt.detail.type === 'modal' });
+    const isCancelled = this._dispatchBeforetoggleEvent();
     if (isCancelled) {
       return;
     }
@@ -78,7 +78,7 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
     // this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
     this._dispatchToggleEvent();
 
-    if (this._previouslyFocusedElement && this._adapter.hasFocus()) {
+    if (evt.detail.reason === 'escape' && this._previouslyFocusedElement && this._adapter.hasFocus()) {
       this._previouslyFocusedElement.focus();
     }
   }
@@ -122,19 +122,19 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
     }
   }
 
-  private _dispatchBeforetoggleEvent({ cancelable = false } = {}): boolean {
-    return this._adapter.dispatchHostEvent(new CustomEvent<PopoverToggleEventData>(POPOVER_CONSTANTS.events.BEFORETOGGLE, {
+  private _dispatchBeforetoggleEvent(): boolean {
+    return this._adapter.dispatchHostEvent(new CustomEvent<IPopoverToggleEventData>(POPOVER_CONSTANTS.events.BEFORETOGGLE, {
       detail: {
         oldState: this.open ? 'open' : 'closed',
         newState: this.open ? 'closed' : 'open'
       },
       bubbles: false,
-      cancelable
+      cancelable: true
     }));
   }
 
   private _dispatchToggleEvent(): void {
-    this._adapter.dispatchHostEvent(new CustomEvent<PopoverToggleEventData>(POPOVER_CONSTANTS.events.TOGGLE, {
+    this._adapter.dispatchHostEvent(new CustomEvent<IPopoverToggleEventData>(POPOVER_CONSTANTS.events.TOGGLE, {
       detail: {
         oldState: this.open ? 'closed' : 'open',
         newState: this.open ? 'open' : 'closed'
@@ -239,7 +239,7 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
       }
       if (this._currentHoverCoords) {
         const mouseElement = document.elementFromPoint(this._currentHoverCoords.x, this._currentHoverCoords.y) as HTMLElement;
-        const isOwnElement = mouseElement && (this._adapter.isChildElement(mouseElement) || this._adapter.overlayElement.targetElement.contains(mouseElement));
+        const isOwnElement = mouseElement && (this._adapter.isChildElement(mouseElement) || this._adapter.overlayElement.anchorElement.contains(mouseElement));
         if (isOwnElement) {
           return;
         }
@@ -275,7 +275,7 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
 
       if (this._currentHoverCoords) {
         const mouseElement = document.elementFromPoint(this._currentHoverCoords.x, this._currentHoverCoords.y) as HTMLElement;
-        const isOwnElement = mouseElement && (this._adapter.isChildElement(mouseElement) || this._adapter.overlayElement.targetElement.contains(mouseElement));
+        const isOwnElement = mouseElement && (this._adapter.isChildElement(mouseElement) || this._adapter.overlayElement.anchorElement.contains(mouseElement));
         if (isOwnElement) {
           return;
         }
@@ -321,8 +321,8 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
 
   private _onPopoverBlur({ relatedTarget }: FocusEvent): void {
     const popoverHasFocus = this._adapter.hasFocus();
-    const targetHasFocus = this._adapter.overlayElement.targetElement.matches(':focus-within') ||
-                           this._adapter.overlayElement.targetElement.contains(relatedTarget as HTMLElement);
+    const targetHasFocus = this._adapter.overlayElement.anchorElement.matches(':focus-within') ||
+                           this._adapter.overlayElement.anchorElement.contains(relatedTarget as HTMLElement);
     if (!popoverHasFocus && !targetHasFocus) {
       this._closePopover();
     }
@@ -341,10 +341,10 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
     }
   }
 
-  public override get targetElement(): HTMLElement {
-    return this._targetElement ?? this._adapter.overlayElement.targetElement;
+  public override get anchorElement(): HTMLElement {
+    return this._targetElement ?? this._adapter.overlayElement.anchorElement;
   }
-  public override set targetElement(value: HTMLElement) {
+  public override set anchorElement(value: HTMLElement) {
     if (this._targetElement !== value) {
       this._targetElement = value;
       if (this._adapter.isConnected) {
@@ -357,10 +357,10 @@ export class PopoverFoundation extends OverlayAwareFoundation<IPopoverAdapter> i
     }
   }
 
-  public override get target(): string | null {
+  public override get anchor(): string | null {
     return this._target;
   }
-  public override set target(value: string | null) {
+  public override set anchor(value: string | null) {
     if (this._target !== value) {
       this._target = value;
       if (this._adapter.isConnected) {

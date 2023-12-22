@@ -34,14 +34,34 @@ include('./src/partials/page.ejs', {
           { label: 'Absolute', value: 'absolute' }
         ]
       },
+      {
+        type: 'select',
+        label: 'Flip',
+        id: 'opt-flip',
+        defaultValue: 'auto',
+        options: [
+          { label: 'Auto', value: 'auto' },
+          { label: 'Main', value: 'main' },
+          { label: 'Cross', value: 'cross' },
+          { label: 'Off', value: 'off' },
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Hide',
+        id: 'opt-hide',
+        defaultValue: 'auto',
+        options: [
+          { label: 'Auto', value: 'auto' },
+          { label: 'Off', value: 'off' },
+        ]
+      },
       { type: 'switch', label: 'Inline', id: 'opt-inline' },
       { type: 'switch', label: 'Static', id: 'opt-static' },
-      { type: 'switch', label: 'Dialog', id: 'opt-dialog'},
-      { type: 'switch', label: 'Modal', id: 'opt-modal'},
-      { type: 'switch', label: 'Hide', id: 'opt-hide', defaultValue: true },
       { type: 'switch', label: 'Shift', id: 'opt-shift' },
-      { type: 'switch', label: 'Flip', id: 'opt-flip', defaultValue: true },
       { type: 'switch', label: 'Auto', id: 'opt-auto' },
+      { type: 'switch', label: 'Show arrow', id: 'opt-show-arrow' },
+      { type: 'switch', label: 'Set boundary', id: 'opt-set-boundary' },
       { type: 'switch', label: 'Use small container', id: 'opt-use-small-container' },
       { type: 'switch', label: 'Force containment', id: 'opt-force-containment' },
       { type: 'switch', label: 'Use offset', id: 'opt-use-offset' },

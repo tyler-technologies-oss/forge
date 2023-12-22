@@ -17,6 +17,7 @@
   width: 300px;
   padding: 8px;
   border: 1px dashed var(--forge-theme-primary);
+  background-color: var(--forge-theme-surface);
 }
 
 .scroll-container {
@@ -25,4 +26,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.arrow {
+  position: absolute;
+  background-color: var(--forge-theme-error);
+  height: 24px;
+  width: 24px;
+  rotate: 45deg;
+  z-index: -1;
 }

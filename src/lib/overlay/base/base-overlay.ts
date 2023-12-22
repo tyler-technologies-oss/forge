@@ -1,23 +1,25 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IBaseOverlayFoundation } from './base-overlay-foundation';
-import { IOverlayOffset, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import { coerceStringToArray } from '../../core/utils';
 
 export interface IBaseOverlay extends IBaseComponent {
-  targetElement: HTMLElement;
-  target: string | null;
+  anchorElement: HTMLElement;
+  anchor: string | null;
   open: boolean;
   inline: boolean;
   placement: OverlayPlacement;
   positionStrategy: OverlayPositionStrategy;
   offset: IOverlayOffset;
   shift: boolean;
-  hide: boolean;
+  hide: OverlayHideState;
   static: boolean;
-  flip: boolean;
+  flip: OverlayFlipState;
+  boundary: string | null;
+  boundaryElement: HTMLElement | null;
+  fallbackPlacements: OverlayPlacement[] | null;
   auto: boolean;
-  dialog: boolean;
-  modal: boolean;
   position(): void;
 }
 
@@ -34,8 +36,8 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
 
   public attributeChangedCallback(name: string, _oldValue: string, newValue: string): void {
     switch (name) {
-      case OVERLAY_CONSTANTS.observedAttributes.TARGET:
-        this.target = newValue;
+      case OVERLAY_CONSTANTS.observedAttributes.ANCHOR:
+        this.anchor = newValue;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
@@ -50,7 +52,7 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
         this.positionStrategy = newValue as OverlayPositionStrategy;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.HIDE:
-        this.hide = coerceBoolean(newValue);
+        this.hide = newValue as OverlayHideState;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.STATIC:
         this.static = coerceBoolean(newValue);
@@ -58,26 +60,26 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
       case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
         this.shift = coerceBoolean(newValue);
         break;
-      case OVERLAY_CONSTANTS.observedAttributes.NO_FLIP:
-        this.flip = !coerceBoolean(newValue);
+      case OVERLAY_CONSTANTS.observedAttributes.FLIP:
+        this.flip = newValue as OverlayFlipState;
+        break;
+      case OVERLAY_CONSTANTS.observedAttributes.BOUNDARY:
+        this.boundary = newValue;
+        break;
+      case OVERLAY_CONSTANTS.observedAttributes.FALLBACK_PLACEMENTS:
+        this.fallbackPlacements = newValue?.trim() ? coerceStringToArray<OverlayPlacement>(newValue) : null;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.AUTO:
         this.auto = coerceBoolean(newValue);
-        break;
-      case OVERLAY_CONSTANTS.observedAttributes.DIALOG:
-        this.dialog = coerceBoolean(newValue);
-        break;
-      case OVERLAY_CONSTANTS.observedAttributes.MODAL:
-        this.modal = coerceBoolean(newValue);
         break;
     }
   }
 
   @FoundationProperty()
-  public declare targetElement: HTMLElement;
+  public declare anchorElement: HTMLElement;
 
   @FoundationProperty()
-  public declare target: string | null;
+  public declare anchor: string | null;
 
   @FoundationProperty()
   public declare open: boolean;
@@ -98,20 +100,23 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
   public declare shift: boolean;
 
   @FoundationProperty()
-  public declare hide: boolean;
+  public declare hide: OverlayHideState;
 
   @FoundationProperty()
   public declare static: boolean;
 
   @FoundationProperty()
-  public declare flip: boolean;
+  public declare flip: OverlayFlipState;
+
+  @FoundationProperty()
+  public declare boundary: string | null;
+
+  @FoundationProperty()
+  public declare boundaryElement: HTMLElement | null;
+
+  @FoundationProperty()
+  public declare fallbackPlacements: OverlayPlacement[] | null;
 
   @FoundationProperty()
   public declare auto: boolean;
-
-  @FoundationProperty()
-  public declare dialog: boolean;
-
-  @FoundationProperty()
-  public declare modal: boolean;
 }
