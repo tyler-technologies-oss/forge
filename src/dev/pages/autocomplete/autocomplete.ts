@@ -20,7 +20,6 @@ IconRegistry.define([
 const autocomplete = document.querySelector('#autocomplete') as IAutocompleteComponent;
 autocomplete.filter = filterOptions as AutocompleteFilterCallback<string>;
 
-
 // State
 const states = data as IOption[];
 let asyncFilter = false;
