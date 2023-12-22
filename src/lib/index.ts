@@ -52,8 +52,6 @@ import { LabelValueComponent } from './label-value';
 import { LinearProgressComponent } from './linear-progress';
 import { ListComponent } from './list';
 import { ListItemComponent } from './list/list-item';
-import { ListDropdownComponent } from './exp/list-dropdown';
-import { OptionComponentExp, SelectComponentExp } from './exp';
 import { MenuComponent } from './menu';
 import { OpenIconComponent } from './open-icon';
 import { OverlayComponent } from './overlay';
@@ -153,7 +151,6 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
-export * from './exp';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
@@ -236,10 +233,7 @@ const CUSTOM_ELEMENTS = [
   ToolbarComponent,
   TooltipComponent,
   ViewComponent,
-  ViewSwitcherComponent,
-  SelectComponentExp,
-  ListDropdownComponent,
-  OptionComponentExp
+  ViewSwitcherComponent
 ];
 
 /**
