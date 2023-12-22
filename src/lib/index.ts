@@ -57,6 +57,7 @@ import { OpenIconComponent } from './open-icon';
 import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
 import { PaginatorComponent } from './paginator';
+import { PopoverComponent } from './popover';
 import { PopupComponent } from './popup';
 import { ProductIconComponent } from './product-icon';
 import { QuantityFieldComponent } from './quantity-field';
@@ -206,6 +207,7 @@ const CUSTOM_ELEMENTS = [
   OverlayComponent,
   PageStateComponent,
   PaginatorComponent,
+  PopoverComponent,
   PopupComponent,
   ProductIconComponent,
   ProfileCardComponent,
