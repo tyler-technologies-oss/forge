@@ -27,7 +27,6 @@ let asyncFilter = false;
 let useGroupedData = false;
 let useGroupHeaderBuilder = false;
 const filterCache = new Map();
-autocomplete.value = 'ME';
 
 const valueContainer = document.querySelector('#autocomplete-value');
 autocomplete.addEventListener('forge-autocomplete-change', ({ detail }) => {

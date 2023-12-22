@@ -151,7 +151,7 @@ declare global {
   ]
 })
 export class ButtonComponent extends BaseButton<ButtonFoundation> implements IButtonComponent {
-  public static readonly observedAttributes: string[] = [
+  public static readonly observedAttributes = [
     ...super.observedAttributes,
     ...Object.values(BUTTON_CONSTANTS.observedAttributes)
   ];
