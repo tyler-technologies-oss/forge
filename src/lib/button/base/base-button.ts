@@ -30,7 +30,9 @@ export interface IBaseButton extends IWithFocusable, IWithLabelAwareness, IWithE
 const BaseButtonClass = WithDefaultAria(WithElementInternals(WithLabelAwareness(WithFocusable(BaseComponent))));
 
 export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseButtonClass implements IBaseButton {
-  public static readonly observedAttributes = Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
+  public static get observedAttributes(): string[] {
+    return Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
+  }
 
   public static readonly formAssociated = true;
 

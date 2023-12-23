@@ -79,7 +79,9 @@ declare global {
   name: OVERLAY_CONSTANTS.elementName
 })
 export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements IOverlayComponent {
-  public static readonly observedAttributes = Object.values(OVERLAY_CONSTANTS.observedAttributes);
+  public static get observedAttributes(): string[] {
+    return Object.values(OVERLAY_CONSTANTS.observedAttributes);
+  }
 
   /**
    * Contains all the overlays that are currently open.

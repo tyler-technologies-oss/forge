@@ -6,6 +6,7 @@ import { BaseButton, IBaseButton } from './base/base-button';
 import { ButtonAdapter } from './button-adapter';
 import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
 import { ButtonFoundation } from './button-foundation';
+import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
 
 import template from './button.html';
 import styles from './button.scss';
@@ -151,10 +152,12 @@ declare global {
   ]
 })
 export class ButtonComponent extends BaseButton<ButtonFoundation> implements IButtonComponent {
-  public static readonly observedAttributes = [
-    ...super.observedAttributes,
-    ...Object.values(BUTTON_CONSTANTS.observedAttributes)
-  ];
+  public static get observedAttributes(): string[] {
+    return [
+      ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
+      ...Object.values(BUTTON_CONSTANTS.observedAttributes)
+    ];
+  }
 
   protected readonly _foundation: ButtonFoundation;
 
