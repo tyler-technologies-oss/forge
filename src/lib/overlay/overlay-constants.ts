@@ -1,6 +1,6 @@
-import { PositionPlacement } from '@tylertech/forge-core';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { supportsPopover } from '../core';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 const elementName = `${COMPONENT_NAME_PREFIX}overlay`;
 

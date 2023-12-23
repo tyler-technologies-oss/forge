@@ -1,4 +1,4 @@
-import { PositionPlacement } from '@tylertech/forge-core';
+import { PositionPlacement } from '../core/utils/position-utils';
 import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}popup`;
