@@ -31,7 +31,7 @@ declare global {
 /**
  * @tag forge-popover
  * 
- * @description Popovers are used to render content in an element that is above all other content on the page.
+ * @summary Popovers are used to render content in an element that is above all other content on the page.
  * 
  * @property {boolean} arrow - Whether or not the popover should render an arrow.
  * @property {PopoverAnimationType} animationType - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
@@ -128,14 +128,14 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
   }
 
   @FoundationProperty()
-  public arrow: boolean;
+  public declare arrow: boolean;
 
   @FoundationProperty()
-  public animationType: PopoverAnimationType;
+  public declare animationType: PopoverAnimationType;
 
   @FoundationProperty()
-  public triggerType: PopoverTriggerType | PopoverTriggerType[];
+  public declare triggerType: PopoverTriggerType | PopoverTriggerType[];
 
   @FoundationProperty()
-  public longpressDelay: number;
+  public declare longpressDelay: number;
 }

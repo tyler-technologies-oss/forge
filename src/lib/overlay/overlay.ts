@@ -101,8 +101,8 @@ export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements 
   }
 
   @FoundationProperty()
-  public arrowElement: HTMLElement;
+  public declare arrowElement: HTMLElement;
 
   @FoundationProperty()
-  public arrowElementOffset: number;
+  public declare arrowElementOffset: number;
 }

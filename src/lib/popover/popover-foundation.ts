@@ -13,7 +13,9 @@ export interface IPopoverFoundation extends IOverlayAwareFoundation {
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
 
-export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundation<IPopoverAdapter>) implements IPopoverFoundation {
+const BaseClass = WithLongpressListener(OverlayAwareFoundation<IPopoverAdapter>);
+
+export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   private _targetElement: HTMLElement;
   private _target: string | null = null;
   private _arrow = false;
