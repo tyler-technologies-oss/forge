@@ -10,6 +10,7 @@ include('./src/partials/page.ejs', {
         id: 'opt-placement',
         defaultValue: 'bottom',
         options: [
+          { label: 'Auto', value: 'auto' },
           { label: 'Top start', value: 'top-start' },
           { label: 'Top', value: 'top' },
           { label: 'Top end', value: 'top-end' },
@@ -43,23 +44,22 @@ include('./src/partials/page.ejs', {
           { label: 'Auto', value: 'auto' },
           { label: 'Main', value: 'main' },
           { label: 'Cross', value: 'cross' },
-          { label: 'Off', value: 'off' },
+          { label: 'Never', value: 'never' },
         ]
       },
       {
         type: 'select',
         label: 'Hide',
         id: 'opt-hide',
-        defaultValue: 'auto',
+        defaultValue: 'anchorHidden',
         options: [
-          { label: 'Auto', value: 'auto' },
-          { label: 'Off', value: 'off' },
+          { label: 'Anchor hidden', value: 'anchorHidden' },
+          { label: 'Never', value: 'never' },
         ]
       },
       { type: 'switch', label: 'Inline', id: 'opt-inline' },
-      { type: 'switch', label: 'Static', id: 'opt-static' },
+      { type: 'switch', label: 'Persistent', id: 'opt-persistent' },
       { type: 'switch', label: 'Shift', id: 'opt-shift' },
-      { type: 'switch', label: 'Auto', id: 'opt-auto' },
       { type: 'switch', label: 'Show arrow', id: 'opt-show-arrow' },
       { type: 'switch', label: 'Set boundary', id: 'opt-set-boundary' },
       { type: 'switch', label: 'Use small container', id: 'opt-use-small-container' },

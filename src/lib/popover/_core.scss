@@ -5,7 +5,7 @@
 @mixin base {
   position: relative;
 
-  background-color: #{token(background-color)};
+  background: #{token(background)};
 
   border-radius: #{token(border-radius)};
   box-shadow: #{token(box-shadow)};
@@ -26,30 +26,22 @@
   border-style: #{token(border-style)};
   border-color: #{token(border-color)};
   
-  transform: 
-    translate(#{token(arrow-translate-x, custom)}, #{token(arrow-translate-y, custom)})
-    rotate(#{token(arrow-rotation, custom)});
-  clip-path: var(
-    --_popover-arrow-clip-path,
-    polygon(
-      calc(#{token(border-width)} * -1) calc(#{token(border-width)} * -1),
-      calc(100% + #{token(border-width)}) calc(#{token(border-width)} * -1),
-      calc(100% + #{token(border-width)}) calc(100% + #{token(border-width)})
-    )
-  );
+  transform: translate(#{token(arrow-translate-x, custom)}, #{token(arrow-translate-y, custom)})
+             rotate(#{token(arrow-rotation, custom)});
+  clip-path: #{token(arrow-clip-path, custom)};
 }
 
 @mixin zoom-base {
   animation-duration: #{token(zoom-duration)};
   animation-timing-function: #{token(zoom-timing)};
-  animation-name: zoomin;
+  animation-name: fadein, zoomin;
   transform-origin: #{token(zoomin-origin, custom)};
 }
 
 @mixin slide-base {
   animation-duration: #{token(slide-duration)};
   animation-timing-function: #{token(slide-timing)};
-  animation-name: slidein;
+  animation-name: fadein, slidein;
 }
 
 @mixin fade-base {

@@ -2,6 +2,7 @@ import { IBaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareAdapter } from './overlay-aware-adapter';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import { PositionPlacement } from '../../core/utils/position-utils';
 
 export interface IOverlayAwareFoundation extends IBaseOverlayFoundation {
   readonly overlayElement: IOverlayComponent;
@@ -17,7 +18,7 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
   protected abstract _onOverlayLightDismiss(evt: CustomEvent): void;
 
   public initialize(): void {
-    if (!this.static) {
+    if (!this.persistent) {
       this._adapter.overlayElement.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
     }
   }
@@ -99,20 +100,20 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     }
   }
 
-  public get static(): boolean {
-    return this._adapter.overlayElement.static;
+  public get persistent(): boolean {
+    return this._adapter.overlayElement.persistent;
   }
-  public set static(value: boolean) {
-    if (this._adapter.overlayElement.static !== value) {
-      this._adapter.overlayElement.static = value;
+  public set persistent(value: boolean) {
+    if (this._adapter.overlayElement.persistent !== value) {
+      this._adapter.overlayElement.persistent = value;
 
-      if (!this.static) {
+      if (!this.persistent) {
         this._adapter.overlayElement.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
       } else {
         this._adapter.overlayElement.removeEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, this._lightDismissListener);
       }
 
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.STATIC, this._adapter.overlayElement.static);
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.PERSISTENT, this._adapter.overlayElement.persistent);
     }
   }
 
@@ -135,16 +136,6 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.FLIP, this._adapter.overlayElement.flip !== OVERLAY_CONSTANTS.defaults.FLIP, String(this._adapter.overlayElement.flip));
     }
   }
-
-  public get auto(): boolean {
-    return this._adapter.overlayElement.auto;
-  }
-  public set auto(value: boolean) {
-    if (this._adapter.overlayElement.auto !== value) {
-      this._adapter.overlayElement.auto = value;
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.AUTO, this._adapter.overlayElement.auto);
-    }
-  }
   
   public get boundary(): string | null {
     return this._adapter.overlayElement.boundary;
@@ -165,10 +156,10 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     }
   }
 
-  public get fallbackPlacements(): OverlayPlacement[] | null {
+  public get fallbackPlacements(): PositionPlacement[] | null {
     return this._adapter.overlayElement.fallbackPlacements;
   }
-  public set fallbackPlacements(value: OverlayPlacement[] | null) {
+  public set fallbackPlacements(value: PositionPlacement[] | null) {
     if (this._adapter.overlayElement.fallbackPlacements !== value) {
       this._adapter.overlayElement.fallbackPlacements = value;
     }

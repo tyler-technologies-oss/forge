@@ -1,27 +1,46 @@
 import '$src/shared';
-import type { IPopoverComponent, ISelectComponent, ISwitchComponent, PopoverToggleEventData } from '@tylertech/forge';
+import type { IPopoverComponent, ISelectComponent, ISwitchComponent, IPopoverToggleEventData, ICheckboxComponent } from '@tylertech/forge';
 import { toggleClass } from '@tylertech/forge-core';
 import '@tylertech/forge/button';
 import '@tylertech/forge/popover';
+import '@tylertech/forge/checkbox';
+import '@tylertech/forge/label';
 import './popover.scss';
 
 const popover = document.querySelector('#my-popover') as IPopoverComponent;
 const showPopoverButton = document.querySelector('#popover-trigger') as HTMLButtonElement;
 const closeButton = document.querySelector('#close-button') as HTMLButtonElement;
 const clippingContainer = document.querySelector('.clipping-container') as HTMLElement;
-const preventDialogCloseToggle = document.querySelector('#opt-prevent-dialog-close') as ISwitchComponent;
+const preventCloseToggle = document.querySelector('#opt-prevent-close') as ISwitchComponent;
+const richTooltipPopover = document.querySelector('#rich-tooltip-popover') as IPopoverComponent;
 
-popover.addEventListener('forge-popover-beforetoggle', (evt: CustomEvent<PopoverToggleEventData>) => {
+popover.addEventListener('forge-popover-beforetoggle', (evt: CustomEvent<IPopoverToggleEventData>) => {
   console.log('forge-popover-beforetoggle', evt.detail);
-  if (preventDialogCloseToggle.selected && evt.cancelable) {
+  if (preventCloseToggle.on && evt.detail.newState === 'closed' && evt.cancelable) {
     console.log('PREVENTING BEFORETOGGLE');
     evt.preventDefault();
   }
 });
 
-popover.addEventListener('forge-popover-toggle', (evt: CustomEvent<PopoverToggleEventData>) => {
+popover.addEventListener('forge-popover-toggle', (evt: CustomEvent<IPopoverToggleEventData>) => {
   console.log('forge-popover-toggle', evt.detail);
 });
+
+richTooltipPopover.addEventListener('forge-popover-beforetoggle', (evt: CustomEvent<IPopoverToggleEventData>) => {
+  console.log('RICH TOOLTIP forge-popover-beforetoggle', evt.detail);
+  if (evt.detail.newState === 'closed' && preventRichTooltipCloseCheckbox.checked) {
+    console.log('PREVENTING RICH TOOLTIP BEFORETOGGLE');
+    evt.preventDefault();
+  }
+});
+
+const preventRichTooltipCloseCheckbox = document.querySelector('#prevent-rich-tooltip-close') as ICheckboxComponent;
+preventRichTooltipCloseCheckbox.addEventListener('change', ({ detail: selected }) => {
+  richTooltipClose.style.display = selected ? 'none' : 'block';
+});
+
+const richTooltipClose = document.querySelector('#rich-tooltip-close') as HTMLButtonElement;
+richTooltipClose.addEventListener('click', () => richTooltipPopover.open = false);
 
 centerDemoButton();
 
@@ -37,30 +56,11 @@ animationTypeSelect.addEventListener('change', ({ detail: selected }) => popover
 const triggerTypeSelect = document.getElementById('opt-trigger-type') as ISelectComponent;
 triggerTypeSelect.addEventListener('change', ({ detail: selected }) => popover.triggerType = selected);
 
-const dialogToggle = document.getElementById('opt-dialog') as ISwitchComponent;
-dialogToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  preventDialogCloseToggle.disabled = !selected;
-  modalToggle.disabled = !selected;
-  if (!selected) {
-    modalToggle.selected = false;
-  }
-  popover.dialog = selected;
-});
-
-const modalToggle = document.getElementById('opt-modal') as ISwitchComponent;
-modalToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  dialogToggle.selected = true;
-  popover.modal = selected;
-});
+const persistentToggle = document.getElementById('opt-persistent') as ISwitchComponent;
+persistentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.persistent = selected);
 
 const arrowToggle = document.getElementById('opt-arrow') as ISwitchComponent;
 arrowToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.arrow = selected);
-
-const inlineToggle = document.getElementById('opt-inline') as ISwitchComponent;
-inlineToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.inline = selected);
-
-const staticToggle = document.getElementById('opt-static') as ISwitchComponent;
-staticToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.static = selected);
 
 const useOffsetToggle = document.getElementById('opt-use-offset') as ISwitchComponent;
 useOffsetToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {

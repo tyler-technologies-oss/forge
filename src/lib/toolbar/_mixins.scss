@@ -3,7 +3,6 @@
 @use './variables';
 
 @mixin base() {
-  @include mdc-theme.property(background-color, surface);
   @include theme.css-custom-property(min-height, --forge-toolbar-min-height, variables.$min-height);
   @include theme.css-custom-property(height, --forge-toolbar-height, variables.$height);
   @include theme.css-custom-property(padding-inline, --forge-toolbar-padding, variables.$padding);
@@ -13,7 +12,8 @@
   @include theme.css-custom-property(border-bottom-left-radius, --forge-toolbar-border-bottom-left-radius, 0);
   @include theme.css-custom-property(border-bottom-right-radius, --forge-toolbar-border-bottom-right-radius, 0);
   @include theme.property(border-color, border-color);
-
+  
+  background-color: var(--forge-theme-surface);
   display: grid;
   grid-template-columns: auto 1fr auto;
   box-sizing: border-box;

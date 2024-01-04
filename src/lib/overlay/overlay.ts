@@ -44,9 +44,8 @@ declare global {
  * @property {IOverlayPosition} offset - The offset to apply to the overlay position relative to the anchor element.
  * @property {boolean} shift - Whether or not the anchor element should shift along the side of the overlay when scrolling.
  * @property {OverlayHideState} hide - Whether or not the overlay should hide itself when the anchor element is out of view.
- * @property {boolean} static - Whether or not the overlay handles light dismiss itself or not.
+ * @property {boolean} persistent - Whether or not the overlay handles light dismiss itself or not.
  * @property {OverlayFlipState} flip - Whether or not the overlay should flip to the opposite placement when not enough room.
- * @property {boolean} auto - Whether or not the overlay should automatically attempt to locate the best placement.
  * @property {string} boundary - The id of the element to use as the boundary for the overlay.
  * @property {HTMLElement | null} boundaryElement - The element to use as the boundary for the overlay.
  * @property {OverlayPlacement[]} fallbackPlacements - The fallback placements to use when the overlay cannot be placed in the desired placement.
@@ -56,10 +55,9 @@ declare global {
  * @attribute {string} placement - The placement of the overlay relative to the anchor element.
  * @attribute {string} position-strategy - The positioning strategy to use for the overlay. Valid values are `'fixed'` and `'absolute'`.
  * @attribute {string} hide - Whether or not the overlay should hide itself when the anchor element is out of view.
- * @attribute {string} static - Whether or not the overlay handles light dismiss itself or not.
+ * @attribute {string} persistent - Whether or not the overlay handles light dismiss itself or not.
  * @attribute {string} shift - Whether or not the anchor element should shift along the side of the overlay when scrolling.
  * @attribute {string} no-flip - Tells the overlay not to flip to the opposite placement when not enough room.
- * @attribute {string} auto - Whether or not the overlay should automatically attempt to locate the best placement.
  * @attribute {string} position-placement - The placement of the overlay around the anchor element **after** dynamic positioning. This is a read-only attribute that is only available when open.
  * @attribute {string} boundary - The id of the element to use as the boundary for the overlay.
  * @attribute {string} fallback-placements - The fallback placements to use when the overlay cannot be placed in the desired placement. Should be a comma separated list of placements.

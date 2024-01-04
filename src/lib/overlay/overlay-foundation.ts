@@ -1,7 +1,18 @@
 
+import { PositionPlacement } from '../core/utils/position-utils';
 import { IBaseOverlayFoundation, BaseOverlayFoundation } from './base/base-overlay-foundation';
 import { IOverlayAdapter } from './overlay-adapter';
-import { SUPPORTS_POPOVER, IOverlayOffset, OverlayLightDismissEventData, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS, OverlayFlipState, OverlayHideState, OverlayLightDismissReason } from './overlay-constants';
+import {
+  SUPPORTS_POPOVER,
+  IOverlayOffset,
+  OverlayLightDismissEventData,
+  OverlayPlacement,
+  OverlayPositionStrategy,
+  OVERLAY_CONSTANTS,
+  OverlayFlipState,
+  OverlayHideState,
+  OverlayLightDismissReason
+} from './overlay-constants';
 
 export interface IOverlayFoundation extends IBaseOverlayFoundation {
   arrowElement: HTMLElement;
@@ -21,9 +32,8 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   private _flip = OVERLAY_CONSTANTS.defaults.FLIP as OverlayFlipState;
   private _boundary: string | null;
   private _boundaryElement: HTMLElement | null;
-  private _fallbackPlacements: OverlayPlacement[] | null = null;
-  private _auto = false;
-  private _static = false;
+  private _fallbackPlacements: PositionPlacement[] | null = null;
+  private _persistent = false;
   private _arrowElement: HTMLElement;
   private _arrowElementOffset = 0;
   private _lightDismissListener = this._onLightDismiss.bind(this);
@@ -60,15 +70,19 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
       return;
     }
 
+    // Placement can only accept `PositionPlacement` values, so we coerce the value to a
+    // `PositionPlacement` when `'auto'` is provided
+    const positionPlacement = this._placement === 'auto' ? 'bottom' : this._placement;
+
     this._adapter.positionElement({
       anchorElement: this._anchorElement,
       strategy: this._positionStrategy,
-      placement: this._placement,
+      placement: positionPlacement,
+      auto: this._placement === 'auto',
       hide: this._hide,
       offset: this._offset,
       shift: this._shift,
       flip: this._flip,
-      auto: this._auto,
       boundary: this._boundary,
       boundaryElement: this._boundaryElement,
       fallbackPlacements: this._fallbackPlacements ?? undefined
@@ -104,7 +118,7 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   private _showOverlay(): void {
     this._adapter.show();
       
-    if (!this._static) {
+    if (!this._persistent) {
       this._applyLightDismissListener();
     }
 
@@ -114,6 +128,7 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   }
 
   private _hideOverlay(): void {
+    this._adapter.tryHideOpenOverlays();
     this._adapter.hide();
     this._adapter.removeLightDismissListener();
   }
@@ -250,21 +265,21 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
     }
   }
 
-  public get static(): boolean {
-    return this._static;
+  public get persistent(): boolean {
+    return this._persistent;
   }
-  public set static(value: boolean) {
+  public set persistent(value: boolean) {
     value = Boolean(value);
-    if (this._static !== value) {
-      this._static = value;
+    if (this._persistent !== value) {
+      this._persistent = value;
   
-      if (this._static) {
+      if (this._persistent) {
         this._adapter.removeLightDismissListener();
       } else if (this._open) {
         this._applyLightDismissListener();
       }
 
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.STATIC, this._static);
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.PERSISTENT, this._persistent);
     }
   }
 
@@ -304,27 +319,13 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
     }
   }
 
-  public get fallbackPlacements(): OverlayPlacement[] | null {
+  public get fallbackPlacements(): PositionPlacement[] | null {
     return this._fallbackPlacements;
   }
-  public set fallbackPlacements(value: OverlayPlacement[] | null) {
+  public set fallbackPlacements(value: PositionPlacement[] | null) {
     this._fallbackPlacements = value;
     if (this._open) {
       this.position();
-    }
-  }
-
-  public get auto(): boolean {
-    return this._auto;
-  }
-  public set auto(value: boolean) {
-    value = Boolean(value);
-    if (this._auto !== value) {
-      this._auto = value;
-      if (this._open) {
-        this.position();
-      }
-      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.AUTO, this._auto);
     }
   }
 }

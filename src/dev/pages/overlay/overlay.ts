@@ -46,17 +46,11 @@ hideSelect.addEventListener('change', ({ detail: selected }) => overlay.hide = s
 const inlineToggle = document.getElementById('opt-inline') as ISwitchComponent;
 inlineToggle.addEventListener('forge-switch-change', ({ detail: selected }) => overlay.inline = selected);
 
-const staticToggle = document.getElementById('opt-static') as ISwitchComponent;
-staticToggle.addEventListener('forge-switch-change', ({ detail: selected }) => overlay.static = selected);
+const persistentToggle = document.getElementById('opt-persistent') as ISwitchComponent;
+persistentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => overlay.persistent = selected);
 
 const shiftToggle = document.getElementById('opt-shift') as ISwitchComponent;
 shiftToggle.addEventListener('forge-switch-change', ({ detail: selected }) => overlay.shift = selected);
-
-const autoToggle = document.getElementById('opt-auto') as ISwitchComponent;
-autoToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  overlay.auto = selected;
-  flipSelect.disabled = selected;
-});
 
 const showArrowToggle = document.getElementById('opt-show-arrow') as ISwitchComponent;
 showArrowToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {

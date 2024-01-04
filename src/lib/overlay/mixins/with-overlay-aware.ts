@@ -4,6 +4,7 @@ import { coerceStringToArray } from '../../core/utils/utils';
 import { IBaseComponent } from '../../core/base/base-component';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import { PositionPlacement } from '../../core/utils/position-utils';
 
 /**
  * An element that exposes a common API to its underlying `<forge-overlay>`.
@@ -60,19 +61,14 @@ export interface IWithOverlayAware extends IBaseComponent {
   hide: boolean;
 
   /**
-   * Whether the overlay is static.
+   * Whether the overlay is persistent (disables light dismiss).
    */
-  static: boolean;
+  persistent: boolean;
 
   /**
    * Whether the overlay flips when it would be cut off.
    */
   flip: boolean;
-
-  /**
-   * Whether the overlay automatically positions itself.
-   */
-  auto: boolean;
 
   /**
    * The id for the position boundary element that is an ancestor of the overlay.
@@ -107,9 +103,8 @@ export declare abstract class WithOverlayAwareContract {
   public offset: IOverlayOffset;
   public shift: boolean;
   public hide: OverlayHideState;
-  public static: boolean;
+  public persistent: boolean;
   public flip: OverlayFlipState;
-  public auto: boolean;
   public boundary: string | null;
   public boundaryElement: HTMLElement | null;
   public fallbackPlacements: OverlayPlacement[] | null;
@@ -200,11 +195,11 @@ export function WithOverlayAware<TBase extends MixinBase>(base: TBase) {
       this.overlayElement.hide = value;
     }
 
-    public get static(): boolean {
-      return this.overlayElement.static;
+    public get persistent(): boolean {
+      return this.overlayElement.persistent;
     }
-    public set static(value: boolean) {
-      this.overlayElement.static = value;
+    public set persistent(value: boolean) {
+      this.overlayElement.persistent = value;
     }
 
     public get flip(): OverlayFlipState {
@@ -212,13 +207,6 @@ export function WithOverlayAware<TBase extends MixinBase>(base: TBase) {
     }
     public set flip(value: OverlayFlipState) {
       this.overlayElement.flip = value;
-    }
-
-    public get auto(): boolean {
-      return this.overlayElement.auto;
-    }
-    public set auto(value: boolean) {
-      this.overlayElement.auto = value;
     }
 
     public get boundary(): string | null {
@@ -235,10 +223,10 @@ export function WithOverlayAware<TBase extends MixinBase>(base: TBase) {
       this.overlayElement.boundaryElement = value;
     }
 
-    public get fallbackPlacements(): OverlayPlacement[] | null {
+    public get fallbackPlacements(): PositionPlacement[] | null {
       return this.overlayElement.fallbackPlacements;
     }
-    public set fallbackPlacements(value: OverlayPlacement[] | null) {
+    public set fallbackPlacements(value: PositionPlacement[] | null) {
       this.overlayElement.fallbackPlacements = value;
     }
 
@@ -272,8 +260,8 @@ export function WithOverlayAware<TBase extends MixinBase>(base: TBase) {
         case OVERLAY_CONSTANTS.observedAttributes.HIDE:
           this.hide = newValue as OverlayHideState;
           break;
-        case OVERLAY_CONSTANTS.observedAttributes.STATIC:
-          this.static = coerceBoolean(newValue);
+        case OVERLAY_CONSTANTS.observedAttributes.PERSISTENT:
+          this.persistent = coerceBoolean(newValue);
           break;
         case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
           this.shift = coerceBoolean(newValue);
@@ -281,14 +269,11 @@ export function WithOverlayAware<TBase extends MixinBase>(base: TBase) {
         case OVERLAY_CONSTANTS.observedAttributes.FLIP:
           this.flip = newValue as OverlayFlipState;
           break;
-        case OVERLAY_CONSTANTS.observedAttributes.AUTO:
-          this.auto = coerceBoolean(newValue);
-          break;
         case OVERLAY_CONSTANTS.observedAttributes.BOUNDARY:
           this.boundary = newValue;
           break;
         case OVERLAY_CONSTANTS.observedAttributes.FALLBACK_PLACEMENTS:
-          this.fallbackPlacements = newValue?.trim() ? coerceStringToArray<OverlayPlacement>(newValue) : null;
+          this.fallbackPlacements = newValue?.trim() ? coerceStringToArray<PositionPlacement>(newValue) : null;
           break;
       }
     }

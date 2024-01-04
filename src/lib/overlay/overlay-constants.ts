@@ -11,12 +11,11 @@ const observedAttributes = {
   PLACEMENT: 'placement',
   POSITION_STRATEGY: 'position-strategy',
   HIDE: 'hide',
-  STATIC: 'static',
+  PERSISTENT: 'persistent',
   SHIFT: 'shift',
   FLIP: 'flip',
   BOUNDARY: 'boundary',
-  FALLBACK_PLACEMENTS: 'fallback-placements',
-  AUTO: 'auto'
+  FALLBACK_PLACEMENTS: 'fallback-placements'
 } as const;
 
 const attributes = {
@@ -37,8 +36,8 @@ const events = {
 } as const;
 
 const defaults = {
-  HIDE: 'auto',
-  FLIP: 'auto'
+  HIDE: 'anchorHidden' satisfies OverlayHideState,
+  FLIP: 'auto' satisfies OverlayFlipState
 } as const;
 
 export const OVERLAY_CONSTANTS = {
@@ -53,12 +52,16 @@ export const OVERLAY_CONSTANTS = {
 
 export const SUPPORTS_POPOVER = supportsPopover();
 
-export interface IOverlayOffset { mainAxis?: number; crossAxis?: number; alignmentAxis?: number }
+export interface IOverlayOffset {
+  mainAxis?: number;
+  crossAxis?: number;
+  alignmentAxis?: number;
+}
 
 export type OverlayPositionStrategy = 'absolute' | 'fixed';
-export type OverlayPlacement = PositionPlacement;
-export type OverlayHideState = 'auto' | 'off';
-export type OverlayFlipState = 'auto' | 'main' | 'cross' | 'off';
+export type OverlayPlacement = PositionPlacement | 'auto';
+export type OverlayHideState = 'anchorHidden' | 'never';
+export type OverlayFlipState = 'auto' | 'main' | 'cross' | 'never';
 export type OverlayLightDismissReason = 'click' | 'escape';
 
 export interface IOverlayToggleEvent extends Event {

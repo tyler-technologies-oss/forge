@@ -14,11 +14,10 @@ export interface IOverlayAware extends IBaseComponent {
   offset: IOverlayOffset;
   shift: boolean;
   hide: OverlayHideState;
-  static: boolean;
+  persistent: boolean;
   flip: OverlayFlipState;
-  auto: boolean;
   position(): void;
-  overlay: IOverlayComponent;
+  readonly overlay: IOverlayComponent;
 }
 
 export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends BaseComponent implements IOverlayAware {
@@ -52,17 +51,14 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
       case OVERLAY_CONSTANTS.observedAttributes.HIDE:
         this.hide = newValue as OverlayHideState;
         break;
-      case OVERLAY_CONSTANTS.observedAttributes.STATIC:
-        this.static = coerceBoolean(newValue);
+      case OVERLAY_CONSTANTS.observedAttributes.PERSISTENT:
+        this.persistent = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
         this.shift = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.FLIP:
         this.flip = newValue as OverlayFlipState;
-        break;
-      case OVERLAY_CONSTANTS.observedAttributes.AUTO:
-        this.auto = coerceBoolean(newValue);
         break;
     }
   }
@@ -99,11 +95,8 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
   public hide: OverlayHideState;
 
   @FoundationProperty()
-  public static: boolean;
+  public persistent: boolean;
 
   @FoundationProperty()
   public flip: OverlayFlipState;
-
-  @FoundationProperty()
-  public auto: boolean;
 }

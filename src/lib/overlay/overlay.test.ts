@@ -33,10 +33,9 @@ describe('Overlay', () => {
       expect(harness.overlayElement.positionStrategy).to.equal('fixed');
       expect(harness.overlayElement.offset).to.deep.equal({});
       expect(harness.overlayElement.shift).to.be.false;
-      expect(harness.overlayElement.hide).to.equal('auto' as OverlayHideState);
-      expect(harness.overlayElement.static).to.be.false;
+      expect(harness.overlayElement.hide).to.equal('anchorHidden' satisfies OverlayHideState);
+      expect(harness.overlayElement.persistent).to.be.false;
       expect(harness.overlayElement.flip).to.equal('auto' as OverlayFlipState);
-      expect(harness.overlayElement.auto).to.be.false;
     });
   });
 
@@ -245,8 +244,8 @@ describe('Overlay', () => {
       expect(lightDismissSpy).to.have.been.calledOnce;
     });
 
-    it('should not light dismiss when static', async () => {
-      const harness = await createFixture({ inline: true, isStatic: true });
+    it('should not light dismiss when persistent', async () => {
+      const harness = await createFixture({ inline: true, persistent: true });
       const lightDismissSpy = spy();
       harness.overlayElement.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, lightDismissSpy);
 
@@ -393,11 +392,11 @@ describe('Overlay', () => {
       expect(harness.overlayElement.fallbackPlacements).to.be.null;
     });
 
-    it('should set auto', async () => {
-      const harness = await createFixture({ open: true, auto: true });
+    it('should set auto placement', async () => {
+      const harness = await createFixture({ open: true, placement: 'auto' });
 
-      expect(harness.overlayElement.auto).to.be.true;
-      expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.AUTO)).to.be.true;
+      expect(harness.overlayElement.placement).to.equal('auto');
+      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.PLACEMENT)).to.equal('auto');
     });
 
     it('should call position() manually', async () => {
@@ -429,7 +428,7 @@ describe('Overlay', () => {
     });
 
     it('should not flip the overlay to the opposite side when not enough room and flip is false', async () => {
-      const harness = await createFixture({ open: true, placement: 'left', flip: 'off', content: 'This is a really long string that should cause the overlay to flip to the right side.' });
+      const harness = await createFixture({ open: true, placement: 'left', flip: 'never', content: 'This is a really long string that should cause the overlay to flip to the right side.' });
 
       await harness.positionUpdated();
 
@@ -459,10 +458,10 @@ describe('Overlay', () => {
     });
 
     it('should not hide when anchor element is not visible and hide is false', async () => {
-      const harness = await createFixture({ open: true, hide: 'off' });
+      const harness = await createFixture({ open: true, hide: 'never' });
 
-      expect(harness.overlayElement.hide).to.equal('off');
-      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('off');
+      expect(harness.overlayElement.hide).to.equal('never');
+      expect(harness.overlayElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('never');
       expect(harness.isOpen).to.be.true;
 
       harness.anchorElement.style.marginRight = '9999px';
@@ -540,7 +539,7 @@ class OverlayHarness {
 interface IOverlayFixtureConfig {
   open?: boolean;
   inline?: boolean;
-  isStatic?: boolean;
+  persistent?: boolean;
   flip?: OverlayFlipState | null;
   hide?: OverlayHideState | null;
   placement?: string | null;
@@ -555,7 +554,7 @@ interface IOverlayFixtureConfig {
 async function createFixture({
   open = false,
   inline = false,
-  isStatic = false,
+  persistent = false,
   flip = null,
   hide = null,
   placement = null,
@@ -573,7 +572,7 @@ async function createFixture({
         anchor="test-anchor"
         ?open=${open}
         ?inline=${inline}
-        ?static=${isStatic}
+        ?persistent=${persistent}
         flip=${flip ?? nothing}
         hide=${hide ?? nothing}
         ?shift=${shift}

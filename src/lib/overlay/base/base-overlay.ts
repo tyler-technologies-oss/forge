@@ -3,6 +3,7 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IBaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 import { coerceStringToArray } from '../../core/utils';
+import { PositionPlacement } from '../../core/utils/position-utils';
 
 export interface IBaseOverlay extends IBaseComponent {
   anchorElement: HTMLElement;
@@ -14,12 +15,11 @@ export interface IBaseOverlay extends IBaseComponent {
   offset: IOverlayOffset;
   shift: boolean;
   hide: OverlayHideState;
-  static: boolean;
+  persistent: boolean;
   flip: OverlayFlipState;
   boundary: string | null;
   boundaryElement: HTMLElement | null;
-  fallbackPlacements: OverlayPlacement[] | null;
-  auto: boolean;
+  fallbackPlacements: PositionPlacement[] | null;
   position(): void;
 }
 
@@ -54,8 +54,8 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
       case OVERLAY_CONSTANTS.observedAttributes.HIDE:
         this.hide = newValue as OverlayHideState;
         break;
-      case OVERLAY_CONSTANTS.observedAttributes.STATIC:
-        this.static = coerceBoolean(newValue);
+      case OVERLAY_CONSTANTS.observedAttributes.PERSISTENT:
+        this.persistent = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.SHIFT:
         this.shift = coerceBoolean(newValue);
@@ -67,10 +67,7 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
         this.boundary = newValue;
         break;
       case OVERLAY_CONSTANTS.observedAttributes.FALLBACK_PLACEMENTS:
-        this.fallbackPlacements = newValue?.trim() ? coerceStringToArray<OverlayPlacement>(newValue) : null;
-        break;
-      case OVERLAY_CONSTANTS.observedAttributes.AUTO:
-        this.auto = coerceBoolean(newValue);
+        this.fallbackPlacements = newValue?.trim() ? coerceStringToArray<PositionPlacement>(newValue) : null;
         break;
     }
   }
@@ -103,7 +100,7 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
   public declare hide: OverlayHideState;
 
   @FoundationProperty()
-  public declare static: boolean;
+  public declare persistent: boolean;
 
   @FoundationProperty()
   public declare flip: OverlayFlipState;
@@ -115,7 +112,7 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
   public declare boundaryElement: HTMLElement | null;
 
   @FoundationProperty()
-  public declare fallbackPlacements: OverlayPlacement[] | null;
+  public declare fallbackPlacements: PositionPlacement[] | null;
 
   @FoundationProperty()
   public declare auto: boolean;

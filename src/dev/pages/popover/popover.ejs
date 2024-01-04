@@ -4,12 +4,16 @@
 
     <forge-popover id="my-popover">
       <forge-scaffold style="width: 300px;">
-        <div slot="body" id="my-popover" role="dialog" class="popover-content" style="padding: 16px;">
+        <div slot="body" id="my-popover" class="popover-content" style="padding: 16px;">
           <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus sit in placeat aliquam expedita quis, totam impedit atque, delectus quaerat dolorum labore, eaque cumque nobis a porro quia iste ex?</p>
 
-          <forge-button autofocus variant="raised" id="my-child-btn">Show child popover</forge-button>
-          <forge-popover placement="right" arrow>
-            <p style="padding: 50px;">Nested popover test</p>
+          <forge-button autofocus variant="raised" id="my-child-btn">Show rich tooltip</forge-button>
+          <forge-popover id="rich-tooltip-popover" placement="right" arrow animation-type="slide">
+            <p role="tooltip" style="padding: 48px;">Custom rich tooltip</p>
+            <div>
+              <forge-checkbox id="prevent-rich-tooltip-close">Prevent close?</forge-checkbox>
+            </div>
+            <forge-button style="display: none;" variant="outlined" id="rich-tooltip-close">Close</forge-button>
           </forge-popover>
         </div>
         <forge-toolbar slot="footer" no-border>

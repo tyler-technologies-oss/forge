@@ -1,7 +1,7 @@
 import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { positionElementAsync } from '../core/utils/position-utils';
+import { positionElementAsync, PositionPlacement } from '../core/utils/position-utils';
 import { locateTargetHeuristic } from '../core/utils/utils';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import {
@@ -19,6 +19,7 @@ import {
 export interface IOverlayAdapter extends IBaseAdapter {
   show(): void;
   hide(): void;
+  tryHideOpenOverlays(): void;
   locateAnchorElement(id: string | null): HTMLElement | null;
   isMostRecentOpenOverlay(): boolean;
   positionElement(config: IPositionElementConfig): void;
@@ -30,15 +31,15 @@ export interface IOverlayAdapter extends IBaseAdapter {
 export interface IPositionElementConfig {
   anchorElement: HTMLElement;
   strategy: OverlayPositionStrategy;
-  placement: OverlayPlacement;
+  placement: PositionPlacement;
+  auto: boolean;
   hide: OverlayHideState;
   offset: IOverlayOffset;
   shift: boolean;
-  auto: boolean;
   flip: OverlayFlipState;
   boundary: string | null;
   boundaryElement: HTMLElement | null;
-  fallbackPlacements: OverlayPlacement[] | undefined;
+  fallbackPlacements: PositionPlacement[] | undefined;
 }
 
 export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IOverlayAdapter {
@@ -81,25 +82,45 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     OverlayComponent[overlayStack].delete(this._component);
   }
 
+  public tryHideOpenOverlays(): void {
+    // Attempts to hide any overlays that were opened after this one in reverse order
+    const overlays = Array.from(OverlayComponent[overlayStack]);
+    const overlaysAfter = overlays.slice(overlays.indexOf(this._component) + 1).reverse();
+    overlaysAfter.forEach(o => o.open = false);
+  }
+
   public locateAnchorElement(id: string | null): HTMLElement | null {
     return locateTargetHeuristic(this._component, id);
   }
 
-  public positionElement({ anchorElement, strategy, placement, hide, offset, shift, auto, flip, boundary, boundaryElement, fallbackPlacements }: IPositionElementConfig): void {
+  public positionElement({
+    anchorElement,
+    strategy,
+    placement,
+    auto,
+    hide,
+    offset,
+    shift,
+    flip,
+    boundary,
+    boundaryElement,
+    fallbackPlacements
+  }: IPositionElementConfig): void {
     this.tryCleanupAutoUpdate();
   
     const originalOffset = { ...offset };
     const boundaryEl: Boundary = (boundaryElement ? boundaryElement : boundary ? this._component.closest(`#${boundary}`) : null) ?? 'clippingAncestors';
-    
+
     this._autoUpdateCleanup = autoUpdate(anchorElement, this._rootElement, async () => {
       const offsetOptions = { ...originalOffset };
 
-      // If we have an arrow element and an offset, we need to adjust the current offset to account for the arrow
-      if (this._component.arrowElement && typeof this._component.arrowElementOffset === 'number') {
+      // If we have an arrow element and an offset, we need to adjust the current offset to account for the arrow length
+      if (this._component.arrowElement) {
+        const arrowOffset = this._component.arrowElementOffset || Math.sqrt(2 * this._component.arrowElement.offsetWidth ** 2) / 2; // Compute the hypotenuse length of the arrow element
         if (offsetOptions.mainAxis == null) {
           offsetOptions.mainAxis = 0;
         }
-        offsetOptions.mainAxis += this._component.arrowElementOffset;
+        offsetOptions.mainAxis += arrowOffset;
       }
 
       const result = await positionElementAsync({
@@ -107,7 +128,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         targetElement: anchorElement,
         strategy,
         placement,
-        hide: hide !== 'off',
+        hide: hide !== 'never',
         shift,
         shiftOptions: {
           boundary: boundaryEl
@@ -116,7 +137,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         autoOptions: {
           boundary: boundaryEl
         },
-        flip: !auto && flip !== 'off',
+        flip: !auto && flip !== 'never',
         flipOptions: {
           boundary: boundaryEl,
           fallbackAxisSideDirection: flip === 'auto' ? 'start' : undefined,
@@ -147,6 +168,8 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         Object.assign(this._component.arrowElement.style, {
           top: arrowY != null ? `${arrowY}px` : '',
           left: arrowX != null ? `${arrowX}px` : '',
+          right: '',
+          bottom: '',
           [staticSide as string]: `${(-arrowLen / 2) - arrowBoxAdjust}px`
         });
       }
@@ -166,9 +189,11 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     this.removeLightDismissListener();
 
     // Listen for escape key globally
-    const escapeListener = ({ key }: KeyboardEvent): void => {
-      if (key === 'Escape') {
+    const escapeListener = (evt: KeyboardEvent): void => {
+      if (evt.key === 'Escape') {
         if (this.isMostRecentOpenOverlay()) {
+          evt.preventDefault();
+          evt.stopPropagation();
           listener('escape');
         }
       }

@@ -1,10 +1,11 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
+import { IOverlayComponent, OverlayComponent, overlayStack, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
 import { IPopoverComponent } from './popover';
 import { POPOVER_CONSTANTS } from './popover-constants';
 
 export interface IPopoverAdapter extends IOverlayAwareAdapter {
+  readonly hostElement: IPopoverComponent;
   initializeTargetElement(): void;
   addTargetListener(type: string, listener: EventListener): void;
   removeTargetListener(type: string, listener: EventListener): void;
@@ -60,11 +61,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public setOverlayOpen(newState: boolean): void {
-    this._overlayElement.arrowElement = this._arrowElement;
     this._overlayElement.open = newState;
-    if (this._arrowElement) {
-      this._overlayElement.arrowElementOffset = Math.sqrt(2 * this._arrowElement.offsetWidth ** 2) / 2;
-    }
   }
 
   public toggleArrow(value: boolean): void {
@@ -75,9 +72,11 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
         this._arrowElement.setAttribute('part', POPOVER_CONSTANTS.parts.ARROW);
       }
       this._surfaceElement.appendChild(this._arrowElement);
+      this._overlayElement.arrowElement = this._arrowElement;
     } else {
       this._arrowElement?.remove();
       this._arrowElement = undefined;
+      this._overlayElement.arrowElement = undefined;
     }
   }
 

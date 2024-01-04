@@ -1,6 +1,6 @@
 @use './core' as *;
 @use './animations';
-@use '../overlay';
+@use '../core/styles/theme';
 
 //
 // Host
@@ -8,6 +8,10 @@
 
 :host {
   display: contents;
+
+  @include theme.provide((
+    surface: theme.variable(surface-bright)
+  ));
 }
 
 :host([hidden]) {
@@ -16,19 +20,24 @@
 
 //
 // Base
-// 
+//
 
 .forge-popover {
   @include tokens;
 
+  // Custom private calculation tokens
   #{declare(arrow-translate-x)}: 0;
   #{declare(arrow-translate-y)}: 0;
   #{declare(arrow-rotation)}: 0;
-
-  --_popover-slidein-x: 0;
-  --_popover-slidein-y: 0;
-
-  --_popover-zoomin-origin: 50% 50% 0;
+  #{declare(slidein-x)}: 0;
+  #{declare(slidein-y)}: 0;
+  #{declare(zoomin-origin)}: 50% 50% 0;
+  #{declare(arrow-clip-path)}:
+    polygon(
+      calc(#{token(border-width)} * -1) calc(#{token(border-width)} * -1),
+      calc(100% + #{token(border-width)}) calc(#{token(border-width)} * -1),
+      calc(100% + #{token(border-width)}) calc(100% + #{token(border-width)})
+    );
 }
 
 .forge-popover {
@@ -36,59 +45,43 @@
 }
 
 //
-// Dialog
-//
-
-// :host([dialog]) {
-//   forge-overlay {
-//     @include overlay.provide-theme((
-//       backdrop-fade-duration: 1000ms
-//     ));
-//   }
-// }
-
-// :host([open][dialog][modal]) {
-//   forge-overlay::part(container)::backdrop {
-//     backdrop-filter: blur(1px);
-//     background-color: rgba(0, 0, 0, 0.24);
-//   }
-// }
-
-//
 // Arrow
 //
 
 :host([arrow]) {
+  .forge-popover {
+    @include override(border-width, arrow-border-width);
+  }
+
   .arrow {
-    // @include configuration.arrow;
     @include arrow;
   }
 
   forge-overlay[position-placement^=top] {
     .arrow {
-      --_popover-arrow-translate-y: calc(var(--_popover-border-width) * -1);
-      --_popover-arrow-rotation: var(--_popover-arrow-top-rotation);
+      @include override(arrow-translate-y, calc(#{token(border-width)} * -1), value);
+      @include override(arrow-rotation, #{token(arrow-top-rotation)}, value);
     }
   }
   
   forge-overlay[position-placement^=right] {
     .arrow {
-      --_popover-arrow-translate-x: var(--_popover-border-width);
-      --_popover-arrow-rotation: var(--_popover-arrow-right-rotation);
+      @include override(arrow-translate-x, #{token(border-width)}, value);
+      @include override(arrow-rotation, #{token(arrow-right-rotation)}, value);
     }
   }
   
   forge-overlay[position-placement^=bottom] {
     .arrow {
-      --_popover-arrow-translate-y: var(--_popover-border-width);
-      --_popover-arrow-rotation: var(--_popover-arrow-bottom-rotation);
+      @include override(arrow-translate-y, #{token(border-width)}, value);
+      @include override(arrow-rotation, #{token(arrow-bottom-rotation)}, value);
     }
   }
   
   forge-overlay[position-placement^=left] {
     .arrow {
-      --_popover-arrow-translate-x: calc(var(--_popover-border-width) * -1);
-      --_popover-arrow-rotation: var(--_popover-arrow-left-rotation);
+      @include override(arrow-translate-x, calc(#{token(border-width)} * -1), value);
+      @include override(arrow-rotation, #{token(arrow-left-rotation)}, value);
     }
   }
 }
@@ -97,16 +90,13 @@
 // Animation
 // 
 
-:host(:not([animation-type=none])) {
-  .forge-popover {
-    // @include configuration.animation-base;
-  }
-}
+//
+// Zoom (default)
+//
 
 :host(:not([animation-type])),
 :host([animation-type=zoom]) {
   .forge-popover {
-    // @include configuration.zoom;
     @include zoom-base;
   }
 
@@ -114,19 +104,19 @@
     &[position-placement^=top] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_popover-zoomin-origin: bottom center;
+          @include override(zoomin-origin, bottom center, value);
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_popover-zoomin-origin: bottom left;
+          @include override(zoomin-origin, bottom left, value);
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_popover-zoomin-origin: bottom right;
+          @include override(zoomin-origin, bottom right, value);
         }
       }
     }
@@ -134,19 +124,19 @@
     &[position-placement^=right] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_popover-zoomin-origin: left center;
+          @include override(zoomin-origin, left center, value);
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_popover-zoomin-origin: left top;
+          @include override(zoomin-origin, left top, value);
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_popover-zoomin-origin: left bottom;
+          @include override(zoomin-origin, left bottom, value);
         }
       }
     }
@@ -154,19 +144,19 @@
     &[position-placement^=bottom] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_popover-zoomin-origin: top center;
+          @include override(zoomin-origin, top center, value);
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_popover-zoomin-origin: top left;
+          @include override(zoomin-origin, top left, value);
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_popover-zoomin-origin: top right;
+          @include override(zoomin-origin, top right, value);
         }
       }
     }
@@ -174,61 +164,67 @@
     &[position-placement^=left] {
       &:not([position-placement*='-']) {
         .forge-popover {
-          --_popover-zoomin-origin: right center;
+          @include override(zoomin-origin, right center, value);
         }
       }
 
       &[position-placement$=-start] {
         .forge-popover {
-          --_popover-zoomin-origin: right top;
+          @include override(zoomin-origin, right top, value);
         }
       }
 
       &[position-placement$=-end] {
         .forge-popover {
-          --_popover-zoomin-origin: right bottom;
+          @include override(zoomin-origin, right bottom, value);
         }
       }
     }
   }
 }
 
+//
+// Slide
+//
+
 :host([animation-type=slide]) {
   .forge-popover {
-    // @include configuration.slide;
     @include slide-base;
   }
 
   forge-overlay[open] {
     &[position-placement^=top] {
       .forge-popover {
-        --_popover-slidein-y: var(--_popover-slide-offset);
+        @include override(slidein-y, #{token(slide-offset)}, value);
       }
     }
     
     &[position-placement^=right] {
       .forge-popover {
-        --_popover-slidein-x: calc(var(--_popover-slide-offset) * -1);
+        @include override(slidein-x, calc(#{token(slide-offset)} * -1), value);
       }
     }
     
     &[position-placement^=bottom] {
       .forge-popover {
-        --_popover-slidein-y: calc(var(--_popover-slide-offset) * -1);
+        @include override(slidein-y, calc(#{token(slide-offset)} * -1), value);
       }
     }
     
     &[position-placement^=left] {
       .forge-popover {
-        --_popover-slidein-x: var(--_popover-slide-offset);
+        @include override(slidein-x, #{token(slide-offset)}, value);
       }
     }
   }
 }
 
+//
+// Fade
+//
+
 :host([animation-type=fade]) {
   .forge-popover {
-    // @include configuration.fade;
     @include fade-base;
   }
 }

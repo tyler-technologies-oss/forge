@@ -10,6 +10,7 @@ include('./src/partials/page.ejs', {
         id: 'opt-placement',
         defaultValue: 'bottom',
         options: [
+          { label: 'Auto', value: 'auto' },
           { label: 'Top start', value: 'top-start' },
           { label: 'Top', value: 'top' },
           { label: 'Top end', value: 'top-end' },
@@ -39,22 +40,22 @@ include('./src/partials/page.ejs', {
       {
         type: 'select',
         label: 'Trigger type',
+        multiple: true,
         id: 'opt-trigger-type',
         defaultValue: 'click',
         options: [
           { label: 'Click', value: 'click' },
+          { label: 'Double click', value: 'doubleclick' },
           { label: 'Hover', value: 'hover' },
-          { label: 'Focus', value: 'focus' }
+          { label: 'Focus', value: 'focus' },
+          { label: 'Longpress', value: 'longpress' }
         ]
       },
-      { type: 'switch', label: 'Dialog', id: 'opt-dialog' },
-      { type: 'switch', label: 'Modal', id: 'opt-modal', disabled: true },
+      { type: 'switch', label: 'Persistent', id: 'opt-persistent' },
       { type: 'switch', label: 'Arrow', id: 'opt-arrow' },
-      { type: 'switch', label: 'Inline', id: 'opt-inline' },
-      { type: 'switch', label: 'Static', id: 'opt-static' },
       { type: 'switch', label: 'Use offset', id: 'opt-use-offset' },
       { type: 'switch', label: 'Force containment', id: 'opt-force-containment' },
-      { type: 'switch', label: 'Prevent dialog close', id: 'opt-prevent-dialog-close', disabled: true },
+      { type: 'switch', label: 'Prevent close', id: 'opt-prevent-close' },
       { type: 'button', label: 'Center demo', id: 'opt-center'}
     ]
   }

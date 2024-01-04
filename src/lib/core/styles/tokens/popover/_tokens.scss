@@ -8,23 +8,23 @@
 
 $tokens: (
   // Base
-  background-color: utils.module-val(popover, background-color, theme.variable(elevated-surface)),
+  background: utils.module-val(popover, background, theme.variable(surface-bright)),
   border-radius: utils.module-val(popover, border-radius, shape.variable(medium)),
   box-shadow: utils.module-val(popover, box-shadow, theme.variable(popup-elevation)),
-  border-width: utils.module-val(popover, border-width, border.variable(thin)),
+  border-width: utils.module-val(popover, border-width, 0),
   border-style: utils.module-val(popover, border-style, solid),
-  border-color: utils.module-val(popover, border-color, theme.variable(border-color)),
+  border-color: utils.module-val(popover, border-color, theme.variable(outline)),
 
   // Arrow
   arrow-size: utils.module-val(popover, arrow-size, 12px),
   arrow-height: utils.module-ref(popover, arrow-height, arrow-size),
   arrow-width: utils.module-ref(popover, arrow-width, arrow-size),
-  arrow-background-color: utils.module-ref(popover, arrow-background-color, background-color),
-  // arrow-clip-path: utils.module-val(popover, arrow-clip-path),
+  arrow-background-color: utils.module-ref(popover, arrow-background-color, background),
   arrow-top-rotation: utils.module-val(popover, arrow-top-rotation, 135deg),
   arrow-right-rotation: utils.module-val(popover, arrow-right-rotation, 225deg),
   arrow-bottom-rotation: utils.module-val(popover, arrow-bottom-rotation, 315deg),
   arrow-left-rotation: utils.module-val(popover, arrow-left-rotation, 45deg),
+  arrow-border-width: utils.module-val(popover, arrow-border-width, border.variable(thin)),
 
   // Animation
   animation-timing: utils.module-val(popover, animation-timing, animation.variable(easing-decelerate)),
