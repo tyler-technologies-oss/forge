@@ -1625,7 +1625,8 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMax(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MAX, !!this._maxAttribute, this._maxAttribute as string);
 
-    if (this._max && this._max.getMonth() < this._month) {
+    if (this._max && (this._max.getMonth() < this._month || this._max.getFullYear() < this._year)) {
+      this._year = this._max.getFullYear();
       this._month = this._max.getMonth();
     }
 
