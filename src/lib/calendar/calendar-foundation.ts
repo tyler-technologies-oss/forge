@@ -1276,23 +1276,19 @@ export class CalendarFoundation implements ICalendarFoundation {
    * Moves to and sets tabindex on the given date.
    * @param date The destination date
    * @param setFocus Whether focus should be set on the date
-   * */
+   */
   private _goToDate(date: Date, setFocus: boolean): void {
     const year = date.getFullYear();
     const month = date.getMonth();
     this._focusedDate = date;
-    if (this._year !== year || this._month !== month) {
-      this._month = month;
-      this._setMonth();
-      this._year = year;
-      this._setYear();
-      if (this._view !== 'date') {
-        this._closeMenu(false, setFocus);
-      } else {
-        this._resetDateGrid();
-      }
-    } else if (this._view !== 'date') {
+    this._month = month;
+    this._setMonth();
+    this._year = year;
+    this._setYear();
+    if (this._view !== 'date') {
       this._closeMenu(false, setFocus);
+    } else {
+      this._resetDateGrid();
     }
     this._adapter.setActiveDate(date, setFocus, this._preventFocus);
     this._emitFocusChangeEvent(this._focusedDate);
