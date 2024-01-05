@@ -5,6 +5,7 @@ import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import { OverlayFlipState, OverlayHideState, overlayStack, OVERLAY_CONSTANTS } from './overlay-constants';
+import { IOverlayAdapter } from './overlay-adapter';
 
 import './overlay';
 
@@ -87,7 +88,7 @@ describe('Overlay', () => {
 
       expect(Array.from(OverlayComponent[overlayStack])).to.deep.equal([parentHarness.overlayElement, nestedHarness.overlayElement]);
 
-      nestedHarness.pressEscapeKey();
+      await nestedHarness.pressEscapeKey();
       await elementUpdated(nestedHarness.overlayElement);
 
       expect(Array.from(OverlayComponent[overlayStack])).to.deep.equal([parentHarness.overlayElement]);
@@ -259,6 +260,24 @@ describe('Overlay', () => {
       expect(lightDismissSpy).to.not.have.been.called;
     });
 
+    it('should light dismiss if persistent is toggle while open', async () => {
+      const harness = await createFixture({ open: true, persistent: true });
+
+      const lightDismissSpy = spy();
+      harness.overlayElement.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, lightDismissSpy);
+
+      expect(harness.isOpen).to.be.true;
+
+      await harness.clickOutside();
+      expect(harness.isOpen).to.be.true;
+      
+      harness.overlayElement.persistent = false;
+      await harness.clickOutside();
+
+      expect(harness.isOpen).to.be.false;
+      expect(lightDismissSpy).to.have.been.calledOnce;
+    });
+
     it('should cancel light dismiss event', async () => {
       const harness = await createFixture();
       const lightDismissSpy = spy(evt => evt.preventDefault());
@@ -416,6 +435,25 @@ describe('Overlay', () => {
 
       expect(harness.actualPositionPlacement).to.equal('');
     });
+
+    it('should reposition if position state is updated while open', async () => {
+      const harness = await createFixture({ open: true });
+
+      const positionSpy = spy<IOverlayAdapter, keyof IOverlayAdapter>(harness.adapter, 'positionElement');
+
+      harness.overlayElement.placement = 'top';
+      harness.overlayElement.positionStrategy = 'absolute';
+      harness.overlayElement.offset = { mainAxis: 10, crossAxis: 10 };
+      harness.overlayElement.shift = true;
+      harness.overlayElement.hide = 'never';
+      harness.overlayElement.flip = 'main';
+      harness.overlayElement.boundary = 'test-boundary';
+      harness.overlayElement.boundaryElement = document.body;
+      harness.overlayElement.fallbackPlacements = ['top', 'bottom'];
+      positionSpy.restore();
+
+      expect(positionSpy).to.have.been.callCount(9);
+    });
   });
 
   describe('flip', () => {
@@ -441,6 +479,15 @@ describe('Overlay', () => {
       await harness.positionUpdated();
 
       expect(harness.actualPositionPlacement).to.equal('right');
+    });
+
+    it('should fall back to default flip if null value is provided', async () => {
+      const harness = await createFixture();
+
+      harness.overlayElement.flip = null as any;      
+
+      expect(harness.overlayElement.flip).to.equal(OVERLAY_CONSTANTS.defaults.FLIP);
+      expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.FLIP)).to.be.false;
     });
   });
 
@@ -470,6 +517,15 @@ describe('Overlay', () => {
 
       expect(harness.rootElement.style.display).to.not.equal('none');
     });
+
+    it('should fall back to default hide value if null value is provided', async () => {
+      const harness = await createFixture();
+
+      harness.overlayElement.hide = null as any;      
+
+      expect(harness.overlayElement.hide).to.equal(OVERLAY_CONSTANTS.defaults.HIDE);
+      expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.be.false;
+    });
   });
 
   describe('arrow', () => {
@@ -485,6 +541,27 @@ describe('Overlay', () => {
 
       expect(arrowEl.style.left).not.to.equal('');
       expect(arrowEl.style.top).to.equal('');
+    });
+  });
+
+  describe('anchor', () => {
+    it('should set anchor dynamically', async () => {
+      const harness = await createFixture();
+
+      expect(harness.overlayElement.anchorElement).to.equal(harness.anchorElement);
+
+      harness.overlayElement.anchor = 'test-boundary';
+
+      const boundaryElement = document.getElementById('test-boundary') as HTMLElement;
+      expect(harness.overlayElement.anchorElement).to.equal(boundaryElement);
+    });
+
+    it('should set anchor element to null if null anchor is provided', async () => {
+      const harness = await createFixture();
+
+      harness.overlayElement.anchor = null;
+
+      expect(harness.overlayElement.anchorElement).to.be.null;
     });
   });
 });
@@ -511,6 +588,10 @@ class OverlayHarness {
   public get isInlineOpen(): boolean {
     const { display } = getComputedStyle(this.rootElement);
     return this.overlayElement.open && !this.isPopoverOpen && display !== 'none';
+  }
+
+  public get adapter(): IOverlayAdapter {
+    return this.overlayElement['_foundation']['_adapter'];
   }
 
   public positionUpdated(): Promise<IOverlayComponent> {
@@ -548,7 +629,6 @@ interface IOverlayFixtureConfig {
   fallbackPlacements?: string | null;
   positionStrategy?: string | null;
   shift?: boolean;
-  auto?: boolean;
 }
 
 async function createFixture({
@@ -562,8 +642,7 @@ async function createFixture({
   boundary = null,
   fallbackPlacements = null,
   positionStrategy = null,
-  shift = false,
-  auto = false
+  shift = false
 }: IOverlayFixtureConfig = {}): Promise<OverlayHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;" id="test-boundary">
@@ -576,7 +655,6 @@ async function createFixture({
         flip=${flip ?? nothing}
         hide=${hide ?? nothing}
         ?shift=${shift}
-        ?auto=${auto}
         placement=${placement ?? nothing}
         boundary=${boundary ?? nothing}
         fallback-placements=${fallbackPlacements ?? nothing}

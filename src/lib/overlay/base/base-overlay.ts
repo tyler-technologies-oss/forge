@@ -6,7 +6,7 @@ import { coerceStringToArray } from '../../core/utils';
 import { PositionPlacement } from '../../core/utils/position-utils';
 
 export interface IBaseOverlay extends IBaseComponent {
-  anchorElement: HTMLElement;
+  anchorElement: HTMLElement | null;
   anchor: string | null;
   open: boolean;
   inline: boolean;
@@ -73,7 +73,7 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
   }
 
   @FoundationProperty()
-  public declare anchorElement: HTMLElement;
+  public declare anchorElement: HTMLElement | null;
 
   @FoundationProperty()
   public declare anchor: string | null;

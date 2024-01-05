@@ -76,7 +76,7 @@ export class DismissibleStack<T extends IDismissible> {
     // The first element to call this method will handle attempting to dismiss the rest of
     // elements, and will clear the queue when it is done. All other subsequent elements will
     // just return here if called within the same task.
-    if (!this._elementsRequestingDismiss.has(el)) {
+    if (!this.isRequestingLightDismiss(el)) {
       return;
     }
 
@@ -114,5 +114,19 @@ export class DismissibleStack<T extends IDismissible> {
   public remove(el: T): void {
     this._dismissibleElements.delete(el);
     this._elementsRequestingDismiss.delete(el);
+  }
+
+  /**
+   * Checks if an element is in the dismissible queue.
+   */
+  public has(el: T): boolean {
+    return this._dismissibleElements.has(el);
+  }
+
+  /**
+   * Checks if an element is requesting to be dismissed.
+   */
+  public isRequestingLightDismiss(el: T): boolean {
+    return this._elementsRequestingDismiss.has(el);
   }
 }

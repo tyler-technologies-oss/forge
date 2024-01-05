@@ -31,10 +31,10 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     return this._adapter.overlayElement;
   }
 
-  public get anchorElement(): HTMLElement {
+  public get anchorElement(): HTMLElement | null {
     return this._adapter.overlayElement.anchorElement;
   }
-  public set anchorElement(value: HTMLElement) {
+  public set anchorElement(value: HTMLElement | null) {
     this._adapter.overlayElement.anchorElement = value;
   }
 

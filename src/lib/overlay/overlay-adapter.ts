@@ -2,14 +2,13 @@ import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { positionElementAsync, PositionPlacement } from '../core/utils/position-utils';
-import { locateTargetHeuristic } from '../core/utils/utils';
+import { locateElementById } from '../core/utils/utils';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import {
   IOverlayOffset,
   OverlayFlipState,
   OverlayHideState,
   OverlayLightDismissReason,
-  OverlayPlacement,
   OverlayPositionStrategy,
   overlayStack,
   OVERLAY_CONSTANTS,
@@ -90,7 +89,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   }
 
   public locateAnchorElement(id: string | null): HTMLElement | null {
-    return locateTargetHeuristic(this._component, id);
+    return locateElementById(this._component, id);
   }
 
   public positionElement({
@@ -203,7 +202,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     // Listen for click-outside (any clicks not within our overlay surface or the anchor element)
     const pointerupListener = (evt: PointerEvent): void => {
       const composedPath = evt.composedPath();
-      const isExternal = !composedPath.includes(this._component.anchorElement) &&
+      const isExternal = (!this._component.anchorElement || !composedPath.includes(this._component.anchorElement)) &&
                          !composedPath.includes(this._rootElement);
       if (isExternal) {
         listener('click');

@@ -6,7 +6,7 @@ export interface IBaseOverlayFoundation extends ICustomElementFoundation {
   initialize(): void;
   destroy(): void;
   position(): void;
-  anchorElement: HTMLElement;
+  anchorElement: HTMLElement | null;
   anchor: string | null;
   open: boolean;
   inline: boolean;
@@ -29,7 +29,7 @@ export abstract class BaseOverlayFoundation<T extends IBaseAdapter> implements I
   public abstract destroy(): void;
   public abstract position(): void;
 
-  public abstract anchorElement: HTMLElement;
+  public abstract anchorElement: HTMLElement | null;
   public abstract anchor: string | null;
   public abstract open: boolean;
   public abstract inline: boolean;

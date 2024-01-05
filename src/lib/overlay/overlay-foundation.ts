@@ -20,7 +20,7 @@ export interface IOverlayFoundation extends IBaseOverlayFoundation {
 }
 
 export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> implements IOverlayFoundation {
-  private _anchorElement: HTMLElement;
+  private _anchorElement: HTMLElement | null;
   private _anchor: string | null;
   private _open = false;
   private _inline = false;
@@ -44,10 +44,7 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
 
   public initialize(): void {
     if (!this._anchorElement && this._anchor) {
-      const anchor = this._adapter.locateAnchorElement(this._anchor);
-      if (anchor) {
-        this._anchorElement = anchor;
-      }
+      this._anchorElement = this._adapter.locateAnchorElement(this._anchor);
     }
 
     if (!SUPPORTS_POPOVER) {
@@ -137,10 +134,10 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
     this._adapter.addLightDismissListener(this._lightDismissListener);
   }
 
-  public get anchorElement(): HTMLElement {
+  public get anchorElement(): HTMLElement | null {
     return this._anchorElement;
   }
-  public set anchorElement(value: HTMLElement) {
+  public set anchorElement(value: HTMLElement | null) {
     this._anchorElement = value;
   }
 
@@ -150,11 +147,8 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   public set anchor(value: string | null) {
     if (this._anchor !== value) {
       this._anchor = value;
-      if (this._adapter.isConnected && this._anchor) {
-        const anchor = this._adapter.locateAnchorElement(this._anchor);
-        if (anchor) {
-          this._anchorElement = anchor;
-        }
+      if (this._adapter.isConnected) {
+        this._anchorElement = this._anchor ? this._adapter.locateAnchorElement(this._anchor) : null;
       }
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.ANCHOR, !!this._anchor, this._anchor as string);
     }

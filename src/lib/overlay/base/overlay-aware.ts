@@ -5,7 +5,7 @@ import { IOverlayAwareFoundation } from './overlay-aware-foundation';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 
 export interface IOverlayAware extends IBaseComponent {
-  anchorElement: HTMLElement;
+  anchorElement: HTMLElement | null;
   anchor: string | null;
   open: boolean;
   inline: boolean;
@@ -14,8 +14,11 @@ export interface IOverlayAware extends IBaseComponent {
   offset: IOverlayOffset;
   shift: boolean;
   hide: OverlayHideState;
+  boundary: string | null;
+  boundaryElement: HTMLElement | null;
   persistent: boolean;
   flip: OverlayFlipState;
+  fallbackPlacements: OverlayPlacement[] | null;
   position(): void;
   readonly overlay: IOverlayComponent;
 }
@@ -60,6 +63,9 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
       case OVERLAY_CONSTANTS.observedAttributes.FLIP:
         this.flip = newValue as OverlayFlipState;
         break;
+      case OVERLAY_CONSTANTS.observedAttributes.BOUNDARY:
+        this.boundary = newValue;
+        break;
     }
   }
 
@@ -68,35 +74,44 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
   }
 
   @FoundationProperty()
-  public anchorElement: HTMLElement;
+  public declare anchorElement: HTMLElement | null;
 
   @FoundationProperty()
   public declare anchor: string | null;
 
   @FoundationProperty()
-  public open: boolean;
+  public declare open: boolean;
 
   @FoundationProperty()
-  public inline: boolean;
+  public declare inline: boolean;
 
   @FoundationProperty()
-  public placement: OverlayPlacement;
+  public declare placement: OverlayPlacement;
 
   @FoundationProperty()
-  public positionStrategy: OverlayPositionStrategy;
+  public declare positionStrategy: OverlayPositionStrategy;
 
   @FoundationProperty()
-  public offset: IOverlayOffset;
+  public declare offset: IOverlayOffset;
 
   @FoundationProperty()
-  public shift: boolean;
+  public declare shift: boolean;
 
   @FoundationProperty()
-  public hide: OverlayHideState;
+  public declare hide: OverlayHideState;
 
   @FoundationProperty()
-  public persistent: boolean;
+  public declare persistent: boolean;
 
   @FoundationProperty()
-  public flip: OverlayFlipState;
+  public declare flip: OverlayFlipState;
+
+  @FoundationProperty()
+  public declare boundary: string | null;
+
+  @FoundationProperty()
+  public declare boundaryElement: HTMLElement | null;
+
+  @FoundationProperty()
+  public declare fallbackPlacements: OverlayPlacement[] | null;
 }

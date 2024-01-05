@@ -6,14 +6,13 @@ import { POPOVER_CONSTANTS } from './popover-constants';
 
 export interface IPopoverAdapter extends IOverlayAwareAdapter {
   readonly hostElement: IPopoverComponent;
-  initializeTargetElement(): void;
-  addTargetListener(type: string, listener: EventListener): void;
-  removeTargetListener(type: string, listener: EventListener): void;
+  tryLocateAnchorElement(id: string | null): void;
+  addAnchorListener(type: string, listener: EventListener): void;
+  removeAnchorListener(type: string, listener: EventListener): void;
   addSurfaceListener(type: string, listener: EventListener): void;
   removeSurfaceListener(type: string, listener: EventListener): void;
   setOverlayOpen(newState: boolean): void;
   toggleArrow(value: boolean): void;
-  position(): void;
   isChildElement(element: HTMLElement): boolean;
   tryAutofocus(): void;
   hasFocus(): boolean;
@@ -33,22 +32,16 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     this._overlayElement = getShadowElement(this._component, OVERLAY_CONSTANTS.elementName) as IOverlayComponent;
   }
 
-  public initializeTargetElement(): void {
-    if (this._component.anchorElement) {
-      this._overlayElement.anchorElement = this._component.anchorElement;
-    } else {
-      const targetEl = this._getTargetElement(this._component.anchor);
-      if (targetEl) {
-        this._overlayElement.anchorElement = targetEl;
-      }
-    }
+  public tryLocateAnchorElement(id: string | null): void {
+    const targetEl = this._getTargetElement(id);
+    this._overlayElement.anchorElement = targetEl;
   }
 
-  public addTargetListener(type: string, listener: EventListener): void {
+  public addAnchorListener(type: string, listener: EventListener): void {
     this._overlayElement.anchorElement?.addEventListener(type, listener);
   }
 
-  public removeTargetListener(type: string, listener: EventListener): void {
+  public removeAnchorListener(type: string, listener: EventListener): void {
     this._overlayElement.anchorElement?.removeEventListener(type, listener);
   }
 
@@ -78,10 +71,6 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
       this._arrowElement = undefined;
       this._overlayElement.arrowElement = undefined;
     }
-  }
-
-  public position(): void {
-    this._overlayElement.position();
   }
 
   public isChildElement(element: HTMLElement): boolean {
