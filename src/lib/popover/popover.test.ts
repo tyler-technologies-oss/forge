@@ -860,11 +860,11 @@ describe('Popover', () => {
 
       expect(harness.popoverElement.triggerType).to.deep.equal(['click', 'doubleclick']);
 
-      await harness.doubleClickTrigger();
+      harness.doubleClickTrigger();
       
       expect(harness.isOpen).to.be.false;
       
-      await harness.clickTrigger();
+      harness.clickTrigger();
 
       expect(harness.isOpen).to.be.true;
     });
@@ -1165,7 +1165,7 @@ describe('Popover', () => {
       autofocusEl.setAttribute('autofocus', '');
       harness.popoverElement.appendChild(autofocusEl);
 
-      await harness.clickTrigger();
+      harness.clickTrigger();
 
       // We wait two frames internally before attempting to set focus
       await elementUpdated(harness.popoverElement);
@@ -1181,7 +1181,7 @@ describe('Popover', () => {
       autofocusEl.setAttribute('autofocus', '');
       harness.popoverElement.appendChild(autofocusEl);
 
-      await harness.clickTrigger();
+      harness.clickTrigger();
 
       // We wait two frames internally before attempting to set focus
       await elementUpdated(harness.popoverElement);
@@ -1201,7 +1201,7 @@ describe('Popover', () => {
       autofocusEl.setAttribute('autofocus', '');
       harness.popoverElement.appendChild(autofocusEl);
 
-      await harness.clickTrigger();
+      harness.clickTrigger();
 
       // We wait two frames internally before attempting to set focus
       await elementUpdated(harness.popoverElement);
