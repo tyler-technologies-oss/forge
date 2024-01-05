@@ -18,7 +18,7 @@ export interface IWithOverlayAware extends IBaseComponent {
   /**
    * The element to which the overlay is anchored.
    */
-  anchorElement: HTMLElement;
+  anchorElement: HTMLElement | null;
 
   /**
    * The CSS selector of the element to which the overlay is anchored.
@@ -94,7 +94,7 @@ export interface IWithOverlayAware extends IBaseComponent {
 export declare abstract class WithOverlayAwareContract {
   public get overlayElement(): IOverlayComponent;
 
-  public anchorElement: HTMLElement;
+  public anchorElement: HTMLElement | null;
   public anchor: string | null;
   public open: boolean;
   public inline: boolean;
@@ -132,10 +132,10 @@ export function WithOverlayAware<TBase extends MixinBase>(base: TBase) {
     // Public members
     //
 
-    public get anchorElement(): HTMLElement {
+    public get anchorElement(): HTMLElement | null {
       return this.overlayElement.anchorElement;
     }
-    public set anchorElement(value: HTMLElement) {
+    public set anchorElement(value: HTMLElement | null) {
       this.overlayElement.anchorElement = value;
     }
 
