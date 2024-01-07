@@ -47,6 +47,7 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
       this._anchorElement = this._adapter.locateAnchorElement(this._anchor);
     }
 
+    /* c8 ignore next 3 */
     if (!SUPPORTS_POPOVER) {
       this.inline = true;
     }

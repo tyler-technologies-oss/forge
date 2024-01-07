@@ -1,5 +1,8 @@
 import '$src/shared';
-import type { IPopoverComponent, ISelectComponent, ISwitchComponent, IPopoverToggleEventData, ICheckboxComponent } from '@tylertech/forge';
+import type { IPopoverComponent, IPopoverToggleEventData, PopoverTriggerType } from '@tylertech/forge/popover';
+import type { ISelectComponent } from '@tylertech/forge/select/select';
+import type { ISwitchComponent } from '@tylertech/forge/switch/switch';
+import type { ICheckboxComponent } from '@tylertech/forge/checkbox/checkbox';
 import { toggleClass } from '@tylertech/forge-core';
 import '@tylertech/forge/button';
 import '@tylertech/forge/popover';
@@ -54,7 +57,10 @@ const animationTypeSelect = document.getElementById('opt-animation-type') as ISe
 animationTypeSelect.addEventListener('change', ({ detail: selected }) => popover.animationType = selected);
 
 const triggerTypeSelect = document.getElementById('opt-trigger-type') as ISelectComponent;
-triggerTypeSelect.addEventListener('change', ({ detail: selected }) => popover.triggerType = selected);
+triggerTypeSelect.addEventListener('change', ({ detail: selected }: CustomEvent<PopoverTriggerType[]>) => {
+  popover.triggerType = selected;
+  persistentHoverToggle.disabled = !selected.includes('hover');
+});
 
 const persistentToggle = document.getElementById('opt-persistent') as ISwitchComponent;
 persistentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.persistent = selected);
@@ -65,6 +71,11 @@ arrowToggle.addEventListener('forge-switch-change', ({ detail: selected }) => po
 const useOffsetToggle = document.getElementById('opt-use-offset') as ISwitchComponent;
 useOffsetToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   popover.offset = selected ? { mainAxis: 4 } : null;
+});
+
+const persistentHoverToggle = document.getElementById('opt-persistent-hover') as ISwitchComponent;
+persistentHoverToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  popover.persistentHover = selected;
 });
 
 const forceContainmentToggle = document.getElementById('opt-force-containment') as ISwitchComponent;

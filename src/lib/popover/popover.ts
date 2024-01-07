@@ -15,6 +15,8 @@ export interface IPopoverComponent extends IOverlayAware, IDismissible {
   animationType: PopoverAnimationType;
   triggerType: PopoverTriggerType | PopoverTriggerType[];
   longpressDelay: number;
+  persistentHover: boolean;
+  hoverDismissDelay: number;
 }
 
 declare global {
@@ -37,11 +39,15 @@ declare global {
  * @property {PopoverAnimationType} animationType - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
  * @property {PopoverTriggerType | PopoverTriggerType[]} triggerType - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
  * @property {number} longpressDelay - The delay in milliseconds before a longpress event is detected.
+ * @property {boolean} persistentHover - Whether or not the popover should remain open when the user hovers outside the popover.
+ * @property {number} hoverDismissDelay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
  * 
  * @attribute {string} arrow - Whether or not the popover should render an arrow.
  * @attribute {string} animation-type - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
  * @attribute {string} trigger-type - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
  * @attribute {string} longpress-delay - The delay in milliseconds before a longpress event is detected.
+ * @attribute {string} persistent-hover - Whether or not the popover should remain open when the user hovers outside the popover.
+ * @attribute {string} hover-dismiss-delay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
  * 
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-toggle - Dispatches after the popover is toggled.
@@ -87,7 +93,9 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
       POPOVER_CONSTANTS.attributes.ARROW,
       POPOVER_CONSTANTS.attributes.ANIMATION_TYPE,
       POPOVER_CONSTANTS.attributes.TRIGGER_TYPE,
-      POPOVER_CONSTANTS.attributes.LONGPRESS_DELAY
+      POPOVER_CONSTANTS.attributes.LONGPRESS_DELAY,
+      POPOVER_CONSTANTS.attributes.PERSISTENT_HOVER,
+      POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY
     ];
   }
 
@@ -123,6 +131,12 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
       case POPOVER_CONSTANTS.attributes.LONGPRESS_DELAY:
         this.longpressDelay = coerceNumber(newValue);
         return;
+      case POPOVER_CONSTANTS.attributes.PERSISTENT_HOVER:
+        this.persistentHover = coerceBoolean(newValue);
+        return;
+      case POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY:
+        this.hoverDismissDelay = coerceNumber(newValue);
+        return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
@@ -138,4 +152,10 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
 
   @FoundationProperty()
   public declare longpressDelay: number;
+
+  @FoundationProperty()
+  public declare persistentHover: boolean;
+
+  @FoundationProperty()
+  public declare hoverDismissDelay: number;
 }

@@ -49,8 +49,10 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     return this._adapter.overlayElement.open;
   }
   public set open(value: boolean) {
-    this._adapter.overlayElement.open = value;
-    this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._adapter.overlayElement.open);
+    if (this._adapter.overlayElement.open === value) {
+      this._adapter.overlayElement.open = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.OPEN, this._adapter.overlayElement.open);
+    }
   }
 
   public get inline(): boolean {
@@ -77,8 +79,10 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     return this._adapter.overlayElement.positionStrategy;
   }
   public set positionStrategy(value: OverlayPositionStrategy) {
-    this._adapter.overlayElement.positionStrategy = value;
-    this._adapter.setHostAttribute(OVERLAY_CONSTANTS.attributes.POSITION_STRATEGY, this._adapter.overlayElement.positionStrategy);
+    if (this._adapter.overlayElement.positionStrategy !== value) {
+      this._adapter.overlayElement.positionStrategy = value;
+      this._adapter.setHostAttribute(OVERLAY_CONSTANTS.attributes.POSITION_STRATEGY, this._adapter.overlayElement.positionStrategy);
+    }
   }
 
   public get offset(): IOverlayOffset {

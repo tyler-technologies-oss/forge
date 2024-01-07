@@ -33,8 +33,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public tryLocateAnchorElement(id: string | null): void {
-    const targetEl = this._getTargetElement(id);
-    this._overlayElement.anchorElement = targetEl;
+    this._overlayElement.anchorElement = this._tryFindAnchorElement(id);
   }
 
   public addAnchorListener(type: string, listener: EventListener): void {
@@ -98,7 +97,14 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     return this._component.ownerDocument.activeElement as HTMLElement | null;
   }
 
-  private _getTargetElement(id?: string | null): HTMLElement {
+  /**
+   * Attempts to find the anchor element by first checking for an element with the provided id, and if not found,
+   * then implicitly assumes the previous element sibling is the anchor.
+   * 
+   * @param [id] - The id of the anchor element to locate.
+   * @returns The anchor element if found, otherwise null.
+   */
+  private _tryFindAnchorElement(id?: string | null): HTMLElement | null {
     if (id) {
       // First we attempt to locate the target element based on the id reference provided
       const rootNode = this._component.getRootNode() as Document | ShadowRoot;
@@ -108,12 +114,11 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
       }
     }
 
-    // If still not found, try to use the previous element sibling first
+    // If still not found, we'll implicitly assume the previous element sibling is our anchor
     if (this._component.previousElementSibling) {
       return this._component.previousElementSibling as HTMLElement;
     }
-    
-    // Finally, if nothing else, we default to the parent element
-    return this._component.parentElement as HTMLElement;
+
+    return null;
   }
 }

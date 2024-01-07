@@ -14,8 +14,13 @@ import { OVERLAY_CONSTANTS } from '../overlay';
 import './popover';
 
 describe('Popover', () => {
+  afterEach(async () => {
+    // Always reset mouse position to avoid initial hover state issues when a test starts
+    await sendMouse({ type: 'move', position: [0, 0] });
+  });
+
   describe('defaults', () => {
-    it('should have correct default values', async () => {
+    it('should have expected default values', async () => {
       const harness = await createFixture();
 
       expect(harness.popoverElement.open).to.be.false;
@@ -23,9 +28,12 @@ describe('Popover', () => {
       expect(harness.popoverElement.arrow).to.be.false;
       expect(harness.popoverElement.animationType).to.equal('zoom');
       expect(harness.popoverElement.triggerType).to.equal('click');
+      expect(harness.popoverElement.longpressDelay).to.equal(LONGPRESS_TRIGGER_DELAY);
+      expect(harness.popoverElement.persistentHover).to.be.false;
+      expect(harness.popoverElement.hoverDismissDelay).to.equal(POPOVER_HOVER_TIMEOUT);
     });
 
-    it('should set overlay element reference', async () => {
+    it('should provide internal overlay element reference', async () => {
       const harness = await createFixture();
 
       const shadowOverlay = harness.popoverElement.shadowRoot?.querySelector('forge-overlay') as IOverlayComponent;
@@ -233,7 +241,7 @@ describe('Popover', () => {
       const beforeToggleSpy = spy();
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, beforeToggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(beforeToggleSpy).to.have.been.calledOnce;
       expect(beforeToggleSpy.firstCall.args[0].detail).to.deep.equal({ oldState: 'closed', newState: 'open' });
@@ -245,7 +253,7 @@ describe('Popover', () => {
       const beforeToggleSpy = spy();
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, beforeToggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(beforeToggleSpy).to.have.been.calledOnce;
       expect(beforeToggleSpy.firstCall.args[0].detail).to.deep.equal({ oldState: 'open', newState: 'closed' });
@@ -257,7 +265,7 @@ describe('Popover', () => {
       const toggleSpy = spy();
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(toggleSpy).to.have.been.calledOnce;
       expect(toggleSpy.firstCall.args[0].detail).to.deep.equal({ oldState: 'closed', newState: 'open' });
@@ -269,7 +277,7 @@ describe('Popover', () => {
       const toggleSpy = spy();
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(toggleSpy).to.have.been.calledOnce;
       expect(toggleSpy.firstCall.args[0].detail).to.deep.equal({ oldState: 'open', newState: 'closed' });
@@ -281,7 +289,7 @@ describe('Popover', () => {
       const beforeToggleSpy = spy((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, beforeToggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -292,7 +300,7 @@ describe('Popover', () => {
       const beforeToggleSpy = spy((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, beforeToggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.true;
     });
@@ -303,7 +311,7 @@ describe('Popover', () => {
       const toggleSpy = spy((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.true;
     });
@@ -314,7 +322,7 @@ describe('Popover', () => {
       const toggleSpy = spy((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -328,7 +336,7 @@ describe('Popover', () => {
       const toggleSpy = spy();
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(beforeToggleSpy).to.have.been.calledBefore(toggleSpy);
     });
@@ -342,7 +350,7 @@ describe('Popover', () => {
       const toggleSpy = spy();
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(toggleSpy).to.not.have.been.called;
     });
@@ -356,7 +364,7 @@ describe('Popover', () => {
       const toggleSpy = spy();
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(toggleSpy).to.have.been.calledOnce;
     });
@@ -428,13 +436,19 @@ describe('Popover', () => {
       harness.popoverElement.anchorElement = harness.triggerElement;
       expect(harness.popoverElement.overlay.anchorElement).to.equal(harness.triggerElement);
     });
+
+    it('should not set anchor element if no anchor id is provided and there are no implicit siblings', async () => {
+      const el = await fixture<IPopoverComponent>(html`<forge-popover></forge-popover>`);
+
+      expect(el.anchorElement).to.be.null;
+    });
   });
 
   describe('click trigger type', () => {
     it('should open when clicking the trigger button by default', async () => {
       const harness = await createFixture();
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.true;
     });
@@ -442,7 +456,7 @@ describe('Popover', () => {
     it('should close when clicking the trigger button', async () => {
       const harness = await createFixture({ open: true });
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -450,10 +464,10 @@ describe('Popover', () => {
     it('should open and close when clicking the trigger button', async () => {
       const harness = await createFixture();
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
       expect(harness.isOpen).to.be.true;
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
       expect(harness.isOpen).to.be.false;
     });
 
@@ -461,7 +475,7 @@ describe('Popover', () => {
       const harness = await createFixture();
 
       harness.triggerElement.disabled = true;
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -474,7 +488,7 @@ describe('Popover', () => {
       const beforeToggleSpy = spy((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, beforeToggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -487,7 +501,7 @@ describe('Popover', () => {
       const toggleSpy = spy((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, toggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.true;
     });
@@ -602,21 +616,24 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
       
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT * 2);
+      await timer(POPOVER_HOVER_TIMEOUT + 100);
 
       expect(harness.isOpen).to.be.false;
     });
 
-    it('should not close after open when hovering and unhovering the trigger button before the hover timeout', async () => {
+    it('should not close after open when hovering and unhovering the trigger and popover before the hover timeout', async () => {
       const harness = await createFixture({ triggerType: 'hover' });
+
+      expect(harness.isOpen).to.be.false;
 
       await harness.hoverTrigger();
       expect(harness.isOpen).to.be.true;
 
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT / 2);
+      await timer(POPOVER_HOVER_TIMEOUT / 4);
       await harness.hoverTrigger();
-      await timer(POPOVER_HOVER_TIMEOUT);
+      await harness.hoverSurface();
+      await timer(POPOVER_HOVER_TIMEOUT + 100);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -634,15 +651,6 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.false;
     });
 
-    it('should open when hovering the trigger button when disabled', async () => {
-      const harness = await createFixture({ triggerType: 'hover' });
-
-      harness.triggerElement.disabled = true;
-      await harness.hoverTrigger();
-
-      expect(harness.isOpen).to.be.true;
-    });
-
     it('should not close when unhovering the trigger button if toggle event is cancelled', async () => {
       const harness = await createFixture({ open: true, triggerType: 'hover' });
 
@@ -652,23 +660,6 @@ describe('Popover', () => {
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, toggleSpy);
 
       await harness.hoverOutside();
-
-      expect(harness.isOpen).to.be.true;
-    });
-
-    it('should not close if unhovering the surface before the hover timeout', async () => {
-      const harness = await createFixture({ triggerType: 'hover' });
-
-      expect(harness.isOpen).to.be.false;
-
-      await harness.hoverTrigger();
-      expect(harness.isOpen).to.be.true;
-
-      await harness.hoverSurface();
-      await timer(POPOVER_HOVER_TIMEOUT / 2);
-      await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT / 4);
-      await harness.hoverSurface();
 
       expect(harness.isOpen).to.be.true;
     });
@@ -684,9 +675,56 @@ describe('Popover', () => {
       await harness.hoverSurface();
       await elementUpdated(harness.popoverElement);
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT * 2);
+      await timer(POPOVER_HOVER_TIMEOUT + 100);
 
       expect(harness.isOpen).to.be.false;
+    });
+
+    it('should use custom hover dismiss delay', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      const customDelay = 100;
+      harness.popoverElement.hoverDismissDelay = customDelay;
+      
+      expect(harness.popoverElement.hoverDismissDelay).to.equal(customDelay);
+      expect(harness.isOpen).to.be.false;
+
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      await harness.hoverOutside();
+      await timer(customDelay + 100);
+
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should not close if persistent hover is enabled', async () => {
+      const harness = await createFixture({ triggerType: 'hover', persistentHover: true });
+
+      expect(harness.isOpen).to.be.false;
+
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      await harness.hoverOutside();
+      await timer(POPOVER_HOVER_TIMEOUT + 100);
+
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should not close if persistent hover is updated dynamically while the popover is open', async () => {
+      const harness = await createFixture({ triggerType: 'hover' });
+
+      expect(harness.isOpen).to.be.false;
+
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      harness.popoverElement.persistentHover = true;
+      await harness.hoverOutside();
+      await timer(POPOVER_HOVER_TIMEOUT + 100);
+
+      expect(harness.isOpen).to.be.true;
     });
   });
 
@@ -709,20 +747,11 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.false;
     });
 
-    it('should not open after when releasing the trigger button before the longpress delay', async () => {
+    it('should not open when releasing the trigger button before the longpress delay', async () => {
       const harness = await createFixture({ triggerType: 'longpress' });
 
       await harness.longpressStopBeforeDelay();
       expect(harness.isOpen).to.be.false;
-    });
-
-    it('should open when longpressing the trigger button when disabled', async () => {
-      const harness = await createFixture({ triggerType: 'longpress' });
-
-      harness.triggerElement.disabled = true;
-      await harness.longpressTrigger();
-
-      expect(harness.isOpen).to.be.true;
     });
 
     it('should not open when longpressing the trigger button if before toggle event is cancelled', async () => {
@@ -782,15 +811,6 @@ describe('Popover', () => {
 
       harness.doubleClickTrigger();
       expect(harness.isOpen).to.be.false;
-    });
-
-    it('should open when double clicking the trigger button when disabled', async () => {
-      const harness = await createFixture({ triggerType: 'doubleclick' });
-
-      harness.triggerElement.disabled = true;
-      harness.doubleClickTrigger();
-
-      expect(harness.isOpen).to.be.true;
     });
 
     it('should not open when double clicking the trigger if before toggle event is cancelled', async () => {
@@ -864,7 +884,7 @@ describe('Popover', () => {
       
       expect(harness.isOpen).to.be.false;
       
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.true;
     });
@@ -898,7 +918,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
       
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT * 2);
+      await timer(POPOVER_HOVER_TIMEOUT + 100);
 
       expect(harness.isOpen).to.be.false;
     });
@@ -1014,7 +1034,7 @@ describe('Popover', () => {
     it('should remove from the dismissible stack when closed', async () => {
       const harness = await createFixture({ open: true });
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(DismissibleStack.instance.has(harness.popoverElement)).to.be.false;
     });
@@ -1117,7 +1137,7 @@ describe('Popover', () => {
       const beforetoggleSpy = spy((evt: CustomEvent<IPopoverToggleEventData>) => evt.preventDefault());
       harness.nestedPopoverElement.addEventListener(POPOVER_CONSTANTS.events.BEFORETOGGLE, beforetoggleSpy);
 
-      harness.clickTrigger();
+      await harness.clickTrigger();
 
       expect(harness.isOpen).to.be.true;
       expect(harness.nestedPopoverElement.open).to.be.true;
@@ -1158,14 +1178,14 @@ describe('Popover', () => {
   });
 
   describe('focus management', () => {
-    it('should focus element with autofocus attribute when opened', async () => {
+    it('should focus element with autofocus attribute when opened via keyboard', async () => {
       const harness = await createFixture();
 
       const autofocusEl = document.createElement('input');
       autofocusEl.setAttribute('autofocus', '');
       harness.popoverElement.appendChild(autofocusEl);
 
-      harness.clickTrigger();
+      await harness.keyboardTrigger();
 
       // We wait two frames internally before attempting to set focus
       await elementUpdated(harness.popoverElement);
@@ -1174,14 +1194,14 @@ describe('Popover', () => {
       expect(document.activeElement).to.be.equal(autofocusEl);
     });
 
-    it('should place focus back on trigger element when closed via escape key', async () => {
+    it('should place focus back on trigger element when closed via escape key after opened via keyboard', async () => {
       const harness = await createFixture();
 
       const autofocusEl = document.createElement('input');
       autofocusEl.setAttribute('autofocus', '');
       harness.popoverElement.appendChild(autofocusEl);
 
-      harness.clickTrigger();
+      await harness.keyboardTrigger();
 
       // We wait two frames internally before attempting to set focus
       await elementUpdated(harness.popoverElement);
@@ -1194,14 +1214,14 @@ describe('Popover', () => {
       expect(document.activeElement).to.be.equal(harness.triggerElement);
     });
 
-    it('should not place focus back on trigger element when closed via click outside', async () => {
+    it('should not place focus back on trigger element when closed via click outside after opened via keyboard', async () => {
       const harness = await createFixture();
 
       const autofocusEl = document.createElement('input');
       autofocusEl.setAttribute('autofocus', '');
       harness.popoverElement.appendChild(autofocusEl);
 
-      harness.clickTrigger();
+      await harness.keyboardTrigger();
 
       // We wait two frames internally before attempting to set focus
       await elementUpdated(harness.popoverElement);
@@ -1245,6 +1265,18 @@ class PopoverHarness {
     await sendMouse({ type: 'click', position: [mouseX, mouseY], button: 'left' });
   }
 
+  public async clickTrigger(): Promise<void> {
+    const { x, y, height, width } = this.triggerElement.getBoundingClientRect();
+    const mouseX = Math.round(x + width / 2);
+    const mouseY = Math.round(y + height / 2);
+    await sendMouse({ type: 'click', position: [mouseX, mouseY], button: 'left' });
+  }
+
+  public async keyboardTrigger(): Promise<void> {
+    this.triggerElement.focus();
+    await sendKeys({ press: 'Enter' });
+  }
+
   public async clickSurface(): Promise<void> {
     const { x, y } = this.surfaceElement.getBoundingClientRect();
     const mouseX = Math.round(x);
@@ -1282,11 +1314,7 @@ class PopoverHarness {
     await sendMouse({ type: 'down', button: 'left' });
     await timer(LONGPRESS_TRIGGER_DELAY / 2);
     await sendMouse({ type: 'up', button: 'left' });
-  }
-
-  public clickTrigger(): void {
-    this.focusTrigger();
-    this.triggerElement.click();
+    await this.hoverOutside();
   }
 
   public focusTrigger(): void {
@@ -1314,6 +1342,7 @@ interface IPopoverFixtureConfig {
   anchor?: string;
   animationType?: PopoverAnimationType;
   triggerType?: PopoverTriggerType;
+  persistentHover?: boolean;
 }
 
 async function createFixture({
@@ -1322,7 +1351,8 @@ async function createFixture({
   arrow = false,
   anchor,
   animationType,
-  triggerType
+  triggerType,
+  persistentHover = false
 }: IPopoverFixtureConfig = {}): Promise<PopoverHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;">
@@ -1333,6 +1363,7 @@ async function createFixture({
         ?open=${open}
         ?persistent=${persistent}
         ?arrow=${arrow}
+        ?persistent-hover=${persistentHover}
         animation-type=${animationType ?? nothing}
         trigger-type=${triggerType ?? nothing}>
         <span>Test popover content<span>

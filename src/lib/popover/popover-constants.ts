@@ -8,7 +8,9 @@ const attributes = {
   ARROW: 'arrow',
   ANIMATION_TYPE: 'animation-type',
   TRIGGER_TYPE: 'trigger-type',
-  LONGPRESS_DELAY: 'longpress-delay'
+  LONGPRESS_DELAY: 'longpress-delay',
+  PERSISTENT_HOVER: 'persistent-hover',
+  HOVER_DISMISS_DELAY: 'hover-dismiss-delay'
 };
 
 const classes = {
