@@ -52,30 +52,34 @@ declare global {
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-toggle - Dispatches after the popover is toggled.
  * 
- * @cssproperty background - The background color of the popover surface.
- * @cssproperty border-radius - The border radius of the popover surface.
- * @cssproperty box-shadow - The box shadow of the popover surface.
- * @cssproperty border-width - The border width of the popover surface.
- * @cssproperty border-style - The border style of the popover surface.
- * @cssproperty border-color - The border color of the popover surface.
- * @cssproperty arrow-size - The size of the arrow.
- * @cssproperty arrow-height - The height of the arrow.
- * @cssproperty arrow-width - The width of the arrow.
- * @cssproperty arrow-background-color - The background color of the arrow. Defaults to the background color of the popover surface.
- * @cssproperty arrow-top-rotation - The rotation of the arrow when the popover is placed on the top.
- * @cssproperty arrow-right-rotation - The rotation of the arrow when the popover is placed on the right.
- * @cssproperty arrow-bottom-rotation - The rotation of the arrow when the popover is placed on the bottom.
- * @cssproperty arrow-left-rotation - The rotation of the arrow when the popover is placed on the left.
- * @cssproperty arrow-border-width - The border width of the popover surface and arrow when an arrow is applied.
- * @cssproperty arrow-clip-path - The clip path to use for the arrow element.
- * @cssproperty animation-timing - The animation timing function to use for the popover animation.
- * @cssproperty zoom-duration - The duration of the zoom animation.
- * @cssproperty zoom-timing - The timing function to use for the zoom animation.
- * @cssproperty slide-duration - The duration of the slide animation.
- * @cssproperty slide-timing - The timing function to use for the slide animation.
- * @cssproperty slide-offset - The start offset to use for the slide animation.
- * @cssproperty fade-duration - The duration of the fade animation.
- * @cssproperty fade-timing - The timing function to use for the fade animation.
+ * @cssproperty --forge-popover-background - The background color of the popover surface.
+ * @cssproperty --forge-popover-border-radius - The border radius of the popover surface.
+ * @cssproperty --forge-popover-box-shadow - The box shadow of the popover surface.
+ * @cssproperty --forge-popover-border-width - The border width of the popover surface.
+ * @cssproperty --forge-popover-border-style - The border style of the popover surface.
+ * @cssproperty --forge-popover-border-color - The border color of the popover surface.
+ * @cssproperty --forge-popover-arrow-size - The size of the arrow.
+ * @cssproperty --forge-popover-arrow-height - The height of the arrow.
+ * @cssproperty --forge-popover-arrow-width - The width of the arrow.
+ * @cssproperty --forge-popover-arrow-background-color - The background color of the arrow. Defaults to the background color of the popover surface.
+ * @cssproperty --forge-popover-arrow-top-rotation - The rotation of the arrow when the popover is placed on the top.
+ * @cssproperty --forge-popover-arrow-right-rotation - The rotation of the arrow when the popover is placed on the right.
+ * @cssproperty --forge-popover-arrow-bottom-rotation - The rotation of the arrow when the popover is placed on the bottom.
+ * @cssproperty --forge-popover-arrow-left-rotation - The rotation of the arrow when the popover is placed on the left.
+ * @cssproperty --forge-popover-arrow-border-width - The border width of the popover surface and arrow when an arrow is applied.
+ * @cssproperty --forge-popover-arrow-clip-path - The clip path to use for the arrow element.
+ * @cssproperty --forge-popover-animation-timing - The animation timing function to use for the popover animation.
+ * @cssproperty --forge-popover-zoom-duration - The duration of the zoom animation.
+ * @cssproperty --forge-popover-zoom-timing - The timing function to use for the zoom animation.
+ * @cssproperty --forge-popover-slide-duration - The duration of the slide animation.
+ * @cssproperty --forge-popover-slide-timing - The timing function to use for the slide animation.
+ * @cssproperty --forge-popover-slide-offset - The start offset to use for the slide animation.
+ * @cssproperty --forge-popover-fade-duration - The duration of the fade animation.
+ * @cssproperty --forge-popover-fade-timing - The timing function to use for the fade animation.
+ * @cssproperty --forge-popover-position-block-start - The `block-start` position of the popover.
+ * @cssproperty --forge-popover-position-block-end - The `block-end` position of the popover.
+ * @cssproperty --forge-popover-position-inline-start - The `inline-start` position of the popover.
+ * @cssproperty --forge-popover-position-inline-end - The `inline-end` position of the popover.
  * 
  * @slot - The content to render inside the popover.
  * 

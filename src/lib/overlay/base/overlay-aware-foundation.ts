@@ -2,7 +2,7 @@ import { IBaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareAdapter } from './overlay-aware-adapter';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
-import { PositionPlacement } from '../../core/utils/position-utils';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 
 export interface IOverlayAwareFoundation extends IBaseOverlayFoundation {
   readonly overlayElement: IOverlayComponent;
@@ -31,10 +31,10 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
     return this._adapter.overlayElement;
   }
 
-  public get anchorElement(): HTMLElement | null {
+  public get anchorElement(): HTMLElement | VirtualElement | null {
     return this._adapter.overlayElement.anchorElement;
   }
-  public set anchorElement(value: HTMLElement | null) {
+  public set anchorElement(value: HTMLElement | VirtualElement | null) {
     this._adapter.overlayElement.anchorElement = value;
   }
 
@@ -43,6 +43,16 @@ export abstract class OverlayAwareFoundation<T extends IOverlayAwareAdapter> imp
   }
   public set anchor(value: string | null) {
     this._adapter.overlayElement.anchor = value;
+  }
+
+  public get noAnchor(): boolean {
+    return this._adapter.overlayElement.noAnchor;
+  }
+  public set noAnchor(value: boolean) {
+    if (this._adapter.overlayElement.noAnchor !== value) {
+      this._adapter.overlayElement.noAnchor = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.NO_ANCHOR, this._adapter.overlayElement.noAnchor);
+    }
   }
 
   public get open(): boolean {

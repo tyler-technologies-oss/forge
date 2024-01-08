@@ -6,6 +6,7 @@ const elementName = `${COMPONENT_NAME_PREFIX}overlay`;
 
 const observedAttributes = {
   ANCHOR: 'anchor',
+  NO_ANCHOR: 'no-anchor',
   OPEN: 'open',
   INLINE: 'inline',
   PLACEMENT: 'placement',
@@ -36,7 +37,7 @@ const events = {
 } as const;
 
 const defaults = {
-  HIDE: 'anchorHidden' satisfies OverlayHideState,
+  HIDE: 'anchor-hidden' satisfies OverlayHideState,
   FLIP: 'auto' satisfies OverlayFlipState
 } as const;
 
@@ -60,7 +61,7 @@ export interface IOverlayOffset {
 
 export type OverlayPositionStrategy = 'absolute' | 'fixed';
 export type OverlayPlacement = PositionPlacement | 'auto';
-export type OverlayHideState = 'anchorHidden' | 'never';
+export type OverlayHideState = 'anchor-hidden' | 'never';
 export type OverlayFlipState = 'auto' | 'main' | 'cross' | 'never';
 export type OverlayLightDismissReason = 'click' | 'escape';
 

@@ -34,7 +34,7 @@ describe('Overlay', () => {
       expect(harness.overlayElement.positionStrategy).to.equal('fixed');
       expect(harness.overlayElement.offset).to.deep.equal({});
       expect(harness.overlayElement.shift).to.be.false;
-      expect(harness.overlayElement.hide).to.equal('anchorHidden' satisfies OverlayHideState);
+      expect(harness.overlayElement.hide).to.equal('anchor-hidden' satisfies OverlayHideState);
       expect(harness.overlayElement.persistent).to.be.false;
       expect(harness.overlayElement.flip).to.equal('auto' as OverlayFlipState);
     });
@@ -45,6 +45,8 @@ describe('Overlay', () => {
       const harness = await createFixture();
 
       harness.overlayElement.open = true;
+
+      await elementUpdated(harness.overlayElement);
 
       expect(Array.from(OverlayComponent[overlayStack])).to.deep.equal([harness.overlayElement]);
 
@@ -58,6 +60,8 @@ describe('Overlay', () => {
 
       harness.overlayElement.open = true;
 
+      await elementUpdated(harness.overlayElement);
+
       expect(Array.from(OverlayComponent[overlayStack])).to.deep.equal([harness.overlayElement]);
 
       harness.overlayElement.remove();
@@ -69,6 +73,8 @@ describe('Overlay', () => {
       const harness = await createFixture();
 
       harness.overlayElement.open = true;
+
+      await elementUpdated(harness.overlayElement);
 
       expect(Array.from(OverlayComponent[overlayStack])).to.deep.equal([harness.overlayElement]);
 
@@ -562,6 +568,35 @@ describe('Overlay', () => {
       harness.overlayElement.anchor = null;
 
       expect(harness.overlayElement.anchorElement).to.be.null;
+    });
+  });
+
+  describe('no anchor', () => {
+    it('should open with no-anchor', async () => {
+      const harness = await createFixture();
+
+      harness.overlayElement.noAnchor = true;
+      harness.overlayElement.open = true;
+
+      await harness.positionUpdated();
+
+      expect(harness.isOpen).to.be.true;
+      expect(harness.overlayElement.noAnchor).to.be.true;
+      expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.NO_ANCHOR)).to.be.true;
+    });
+
+    it('should not call position logic with no-anchor', async () => {
+      const harness = await createFixture();
+
+      harness.overlayElement.noAnchor = true;
+      harness.overlayElement.open = true;
+
+      const positionSpy = spy<IOverlayAdapter, keyof IOverlayAdapter>(harness.adapter, 'positionElement');
+
+      await harness.positionUpdated();
+
+      expect(positionSpy).to.not.have.been.called;
+      expect(harness.overlayElement.hasAttribute(OVERLAY_CONSTANTS.attributes.POSITION_PLACEMENT)).to.be.false;
     });
   });
 });

@@ -4,6 +4,7 @@ import { WithLongpressListener } from '../core/mixins/interactions/longpress/wit
 import { IPopoverAdapter } from './popover-adapter';
 import { PopoverAnimationType, IPopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS, PopoverDismissReason, POPOVER_HOVER_TIMEOUT } from './popover-constants';
 import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack';
+import { VirtualElement } from '../core/utils/position-utils';
 
 export interface IPopoverFoundation extends IOverlayAwareFoundation {
   arrow: boolean;
@@ -48,6 +49,9 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   private _anchorFocusListener = this._onAnchorFocus.bind(this);
   private _anchorBlurListener = this._onAnchorBlur.bind(this);
   private _popoverBlurListener = this._onPopoverBlur.bind(this);
+
+  // Contextmenu listener
+  private _contextmenuListener = this._onContextmenu.bind(this);
 
   constructor(adapter: IPopoverAdapter) {
     super(adapter);
@@ -108,7 +112,11 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
 
     this._previouslyFocusedElement = this._adapter.captureFocusedElement();
     this._adapter.setOverlayOpen(true);
-    DismissibleStack.instance.add(this._adapter.hostElement);
+
+    if (!this.overlayElement.persistent) {
+      DismissibleStack.instance.add(this._adapter.hostElement);
+    }
+
     this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
 
     // We only attempt to set initial focus if the event was triggered by a keyboard interaction
@@ -152,19 +160,28 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   }
 
   private _initializeTriggerListeners(): void {
-    const types = [...this._triggerTypes];
-
-    // Hover triggers already listen to focus by default
-    if (types.includes('hover') && types.includes('focus')) {
-      types.splice(types.indexOf('focus'), 1);
+    if (this._triggerTypes.includes('manual')) {
+      return;
     }
 
-    // We don't support both click and doubleclick together; click takes precedence
-    if (types.includes('click') && types.includes('doubleclick')) {
-      types.splice(types.indexOf('doubleclick'), 1);
+    let types = [...this._triggerTypes];
+
+    // When contextmenu is used, we ignore all other trigger types
+    if (types.includes('contextmenu')) {
+      types = ['contextmenu'];
+    } else {
+      // Hover triggers already listen to focus by default
+      if (types.includes('hover') && types.includes('focus')) {
+        types.splice(types.indexOf('focus'), 1);
+      }
+
+      // We don't support both click and doubleclick together; click takes precedence
+      if (types.includes('click') && types.includes('doubleclick')) {
+        types.splice(types.indexOf('doubleclick'), 1);
+      }
     }
 
-    const triggerInitializers = {
+    const triggerInitializers: Record<Exclude<PopoverTriggerType, 'manual'>, () => void> = {
       click: () => this._adapter.addAnchorListener('click', this._anchorClickListener),
       hover: () => {
         this._adapter.addAnchorListener('mouseenter', this._anchorMouseenterListener);
@@ -172,18 +189,19 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
       },
       focus: () => this._adapter.addAnchorListener('focusin', this._anchorFocusListener),
       longpress: () => {
-        if (this._adapter.overlayElement.anchorElement) {
+        if (this._adapter.overlayElement.anchorElement && !(this._adapter.overlayElement.anchorElement instanceof VirtualElement)) {
           this._startLongpressListener(this._adapter.overlayElement.anchorElement);
         }
       },
-      doubleclick: () => this._adapter.addAnchorListener('dblclick', this._anchorDoubleClickListener)
+      doubleclick: () => this._adapter.addAnchorListener('dblclick', this._anchorDoubleClickListener),
+      contextmenu: () => this._adapter.addDocumentListener('contextmenu', this._contextmenuListener)
     };
 
     types.forEach(triggerType => triggerInitializers[triggerType]?.());
   }
 
   private _removeTriggerListeners(): void {
-    const triggerRemovers = {
+    const triggerRemovers: Record<Exclude<PopoverTriggerType, 'manual'>, () => void> = {
       click: () => this._adapter.removeAnchorListener('click', this._anchorClickListener),
       hover: () => {
         this._adapter.removeAnchorListener('mouseenter', this._anchorMouseenterListener);
@@ -199,11 +217,12 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
         this._adapter.removeHostListener('focusout', this._popoverBlurListener);
       },
       longpress: () => {
-        if (this._adapter.overlayElement.anchorElement) {
+        if (this._adapter.overlayElement.anchorElement && !(this._adapter.overlayElement.anchorElement instanceof VirtualElement)) {
           this._stopLongpressListener(this._adapter.overlayElement.anchorElement);
         }
       },
-      doubleclick: () => this._adapter.removeAnchorListener('dblclick', this._anchorDoubleClickListener)
+      doubleclick: () => this._adapter.removeAnchorListener('dblclick', this._anchorDoubleClickListener),
+      contextmenu: () => this._adapter.removeDocumentListener('contextmenu', this._contextmenuListener)
     };
     this._triggerTypes.forEach(triggerType => triggerRemovers[triggerType]?.());
   }
@@ -236,7 +255,9 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     
     if (this._currentHoverCoords) {
       const mouseElement = document.elementFromPoint(this._currentHoverCoords.x, this._currentHoverCoords.y) as HTMLElement;
-      const isOwnElement = mouseElement && (this._adapter.isChildElement(mouseElement) || this._adapter.overlayElement.anchorElement?.contains(mouseElement));
+      const isOwnElement = mouseElement &&
+                           (this._adapter.isChildElement(mouseElement) ||
+                           (!(this._adapter.overlayElement.anchorElement instanceof VirtualElement) && this._adapter.overlayElement.anchorElement?.contains(mouseElement)));
       /* c8 ignore next 3 */
       if (isOwnElement) {
         return;
@@ -363,14 +384,23 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
 
   private _onPopoverBlur({ relatedTarget }: FocusEvent): void {
     const popoverHasFocus = this._adapter.hasFocus();
-    const anchorHasFocus = this._adapter.overlayElement.anchorElement?.matches(':focus-within') ||
-                           this._adapter.overlayElement.anchorElement?.contains(relatedTarget as HTMLElement);
+    const anchorHasFocus = !(this._adapter.overlayElement.anchorElement instanceof VirtualElement) &&
+                           (this._adapter.overlayElement.anchorElement?.matches(':focus-within') ||
+                            this._adapter.overlayElement.anchorElement?.contains(relatedTarget as HTMLElement));
     if (!popoverHasFocus && !anchorHasFocus) {
       this._requestClose('focus');
     }
   }
 
   protected _onLongpress(): void {
+    if (!this.open) {
+      this._openPopover();
+    }
+  }
+
+  private _onContextmenu(evt: MouseEvent): void {
+    evt.preventDefault();
+    this.anchorElement = VirtualElement.fromEvent(evt);
     if (!this.open) {
       this._openPopover();
     }
@@ -393,10 +423,10 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
   }
 
-  public override get anchorElement(): HTMLElement | null {
+  public override get anchorElement(): HTMLElement | VirtualElement | null {
     return this._adapter.overlayElement.anchorElement;
   }
-  public override set anchorElement(value: HTMLElement | null) {
+  public override set anchorElement(value: HTMLElement | VirtualElement | null) {
     if (this._adapter.overlayElement.anchorElement !== value) {
       if (this._adapter.isConnected) {
         this._removeTriggerListeners();

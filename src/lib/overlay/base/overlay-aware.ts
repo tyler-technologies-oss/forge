@@ -3,23 +3,10 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAwareFoundation } from './overlay-aware-foundation';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
+import { IBaseOverlay } from './base-overlay';
 
-export interface IOverlayAware extends IBaseComponent {
-  anchorElement: HTMLElement | null;
-  anchor: string | null;
-  open: boolean;
-  inline: boolean;
-  placement: OverlayPlacement;
-  positionStrategy: OverlayPositionStrategy;
-  offset: IOverlayOffset;
-  shift: boolean;
-  hide: OverlayHideState;
-  boundary: string | null;
-  boundaryElement: HTMLElement | null;
-  persistent: boolean;
-  flip: OverlayFlipState;
-  fallbackPlacements: OverlayPlacement[] | null;
-  position(): void;
+export interface IOverlayAware extends IBaseComponent, IBaseOverlay {
   readonly overlay: IOverlayComponent;
 }
 
@@ -38,6 +25,9 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
     switch (name) {
       case OVERLAY_CONSTANTS.observedAttributes.ANCHOR:
         this.anchor = newValue;
+        break;
+      case OVERLAY_CONSTANTS.observedAttributes.NO_ANCHOR:
+        this.noAnchor = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
@@ -74,10 +64,13 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
   }
 
   @FoundationProperty()
-  public declare anchorElement: HTMLElement | null;
+  public declare anchorElement: HTMLElement | VirtualElement | null;
 
   @FoundationProperty()
   public declare anchor: string | null;
+
+  @FoundationProperty()
+  public declare noAnchor: boolean;
 
   @FoundationProperty()
   public declare open: boolean;
@@ -113,5 +106,5 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
   public declare boundaryElement: HTMLElement | null;
 
   @FoundationProperty()
-  public declare fallbackPlacements: OverlayPlacement[] | null;
+  public declare fallbackPlacements: PositionPlacement[] | null;
 }

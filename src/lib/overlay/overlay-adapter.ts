@@ -1,7 +1,8 @@
 import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { positionElementAsync, PositionPlacement } from '../core/utils/position-utils';
+import { DismissibleStack } from '../core/utils/dismissible-stack';
+import { positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
 import { locateElementById } from '../core/utils/utils';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import {
@@ -28,7 +29,7 @@ export interface IOverlayAdapter extends IBaseAdapter {
 }
 
 export interface IPositionElementConfig {
-  anchorElement: HTMLElement;
+  anchorElement: HTMLElement | VirtualElement;
   strategy: OverlayPositionStrategy;
   placement: PositionPlacement;
   auto: boolean;
@@ -45,13 +46,14 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   private _rootElement: HTMLElement | HTMLDialogElement;
   private _autoUpdateCleanup?: () => void;
   private _lightDismissController = new AbortController();
+  private _overlayStackAddTimeout?: number;
 
   constructor(component: IOverlayComponent) {
     super(component);
     this._rootElement = getShadowElement(component, OVERLAY_CONSTANTS.selectors.ROOT);
   }
 
-  public show(): void {
+  public async show(): Promise<void> {
     if (!this._component.inline && SUPPORTS_POPOVER) {
       this._rootElement.popover = 'manual';
       this._rootElement.showPopover();
@@ -59,10 +61,16 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
       this._rootElement.removeAttribute('popover');
     }
 
-    OverlayComponent[overlayStack].add(this._component);
+    // Wait for any other overlays to finish dismissing before adding ourselves to the stack
+    await DismissibleStack.instance.dismissing;
+    
+    if (this._component.isConnected && this._component.open) {
+      OverlayComponent[overlayStack].add(this._component);
+    }
   }
 
   public hide(): void {
+    window.clearTimeout(this._overlayStackAddTimeout);
     this.tryCleanupAutoUpdate();
 
     if (SUPPORTS_POPOVER && this._rootElement.matches(':popover-open')) {
@@ -85,7 +93,9 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     // Attempts to hide any overlays that were opened after this one in reverse order
     const overlays = Array.from(OverlayComponent[overlayStack]);
     const overlaysAfter = overlays.slice(overlays.indexOf(this._component) + 1).reverse();
-    overlaysAfter.forEach(o => o.open = false);
+    overlaysAfter
+      .filter(o => !o.persistent) // Ignore persistent overlays
+      .forEach(o => o.open = false);
   }
 
   public locateAnchorElement(id: string | null): HTMLElement | null {
@@ -124,7 +134,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
 
       const result = await positionElementAsync({
         element: this._rootElement,
-        targetElement: anchorElement,
+        anchorElement,
         strategy,
         placement,
         hide: hide !== 'never',
@@ -202,9 +212,20 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     // Listen for click-outside (any clicks not within our overlay surface or the anchor element)
     const pointerupListener = (evt: PointerEvent): void => {
       const composedPath = evt.composedPath();
-      const isExternal = (!this._component.anchorElement || !composedPath.includes(this._component.anchorElement)) &&
-                         !composedPath.includes(this._rootElement);
-      if (isExternal) {
+      const stack = Array.from(OverlayComponent[overlayStack]);
+      const stackIndex = stack.indexOf(this._component);
+      const isFromOverlayAboveUs = composedPath.some(el => el instanceof OverlayComponent && stack.indexOf(el) > stackIndex);
+      const isRightClick = evt.button === 2;
+
+      // We ignore light dismiss events if the click originated from an overlay that is higher in the
+      // stack than us, or if the click was a right-click (potential context menu)
+      if (isFromOverlayAboveUs || isRightClick) {
+        return;
+      }
+
+      const isWithinAnchor = this._component.anchorElement instanceof VirtualElement ? false : this._component.anchorElement && composedPath.includes(this._component.anchorElement);
+      const isWithinOverlay = composedPath.includes(this._rootElement);
+      if (!isWithinAnchor && !isWithinOverlay) {
         listener('click');
       }
     };

@@ -48,16 +48,19 @@ include('./src/partials/page.ejs', {
           { label: 'Double click', value: 'doubleclick' },
           { label: 'Hover', value: 'hover' },
           { label: 'Focus', value: 'focus' },
-          { label: 'Longpress', value: 'longpress' }
+          { label: 'Longpress', value: 'longpress' },
+          { label: 'Manual', value: 'manual' }
         ]
       },
       { type: 'switch', label: 'Persistent', id: 'opt-persistent' },
+      { type: 'switch', label: 'No anchor', id: 'opt-no-anchor' },
       { type: 'switch', label: 'Arrow', id: 'opt-arrow' },
       { type: 'switch', label: 'Use offset', id: 'opt-use-offset' },
       { type: 'switch', label: 'Persistent hover', id: 'opt-persistent-hover', disabled: true },
       { type: 'switch', label: 'Force containment', id: 'opt-force-containment' },
       { type: 'switch', label: 'Prevent close', id: 'opt-prevent-close' },
-      { type: 'button', label: 'Center demo', id: 'opt-center'}
+      { type: 'switch', label: 'Allow contextmenu', id: 'opt-allow-contextmenu' },
+      { type: 'button', label: 'Center demo', id: 'opt-center'},
     ]
   }
 })

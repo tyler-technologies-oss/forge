@@ -3,11 +3,12 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IBaseOverlayFoundation } from './base-overlay-foundation';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 import { coerceStringToArray } from '../../core/utils';
-import { PositionPlacement } from '../../core/utils/position-utils';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 
 export interface IBaseOverlay extends IBaseComponent {
-  anchorElement: HTMLElement | null;
+  anchorElement: HTMLElement | VirtualElement | null;
   anchor: string | null;
+  noAnchor: boolean;
   open: boolean;
   inline: boolean;
   placement: OverlayPlacement;
@@ -38,6 +39,9 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
     switch (name) {
       case OVERLAY_CONSTANTS.observedAttributes.ANCHOR:
         this.anchor = newValue;
+        break;
+      case OVERLAY_CONSTANTS.observedAttributes.NO_ANCHOR:
+        this.noAnchor = coerceBoolean(newValue);
         break;
       case OVERLAY_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
@@ -73,10 +77,13 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
   }
 
   @FoundationProperty()
-  public declare anchorElement: HTMLElement | null;
+  public declare anchorElement: HTMLElement | VirtualElement | null;
 
   @FoundationProperty()
   public declare anchor: string | null;
+
+  @FoundationProperty()
+  public declare noAnchor: boolean;
 
   @FoundationProperty()
   public declare open: boolean;

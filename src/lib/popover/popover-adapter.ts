@@ -1,5 +1,6 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { IOverlayComponent, OverlayComponent, overlayStack, OVERLAY_CONSTANTS } from '../overlay';
+import { VirtualElement } from '../core/utils/position-utils';
+import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
 import { IPopoverComponent } from './popover';
 import { POPOVER_CONSTANTS } from './popover-constants';
@@ -37,10 +38,16 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public addAnchorListener(type: string, listener: EventListener): void {
+    if (this._overlayElement.anchorElement instanceof VirtualElement) {
+      return;
+    }
     this._overlayElement.anchorElement?.addEventListener(type, listener);
   }
 
   public removeAnchorListener(type: string, listener: EventListener): void {
+    if (this._overlayElement.anchorElement instanceof VirtualElement) {
+      return;
+    }
     this._overlayElement.anchorElement?.removeEventListener(type, listener);
   }
 

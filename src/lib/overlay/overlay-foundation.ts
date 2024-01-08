@@ -22,6 +22,7 @@ export interface IOverlayFoundation extends IBaseOverlayFoundation {
 export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> implements IOverlayFoundation {
   private _anchorElement: HTMLElement | null;
   private _anchor: string | null;
+  private _noAnchor = false;
   private _open = false;
   private _inline = false;
   private _placement: OverlayPlacement = 'bottom';
@@ -43,7 +44,7 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   }
 
   public initialize(): void {
-    if (!this._anchorElement && this._anchor) {
+    if (!this._noAnchor && !this._anchorElement && this._anchor) {
       this._anchorElement = this._adapter.locateAnchorElement(this._anchor);
     }
 
@@ -64,7 +65,7 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   }
 
   public position(): void {
-    if (!this._open || !this._anchorElement) {
+    if (!this._open || this._noAnchor || !this._anchorElement) {
       return;
     }
 
@@ -115,12 +116,12 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
 
   private _showOverlay(): void {
     this._adapter.show();
-      
+  
     if (!this._persistent) {
       this._applyLightDismissListener();
     }
 
-    if (this._anchorElement) {
+    if (!this._noAnchor && this._anchorElement) {
       this.position();
     }
   }
@@ -140,6 +141,9 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   }
   public set anchorElement(value: HTMLElement | null) {
     this._anchorElement = value;
+    if (this._open) {
+      this.position();
+    }
   }
 
   public get anchor(): string | null {
@@ -152,6 +156,17 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
         this._anchorElement = this._anchor ? this._adapter.locateAnchorElement(this._anchor) : null;
       }
       this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.ANCHOR, !!this._anchor, this._anchor as string);
+    }
+  }
+
+  public get noAnchor(): boolean {
+    return this._noAnchor;
+  }
+  public set noAnchor(value: boolean) {
+    value = Boolean(value);
+    if (this._noAnchor !== value) {
+      this._noAnchor = value;
+      this._adapter.toggleHostAttribute(OVERLAY_CONSTANTS.attributes.NO_ANCHOR, this._noAnchor);
     }
   }
 

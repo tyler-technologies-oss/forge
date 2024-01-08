@@ -50,3 +50,12 @@
   }
 }
 
+//
+// No anchor
+//
+
+:host([open][no-anchor]) {
+  .forge-overlay:popover-open {
+    @include no-anchor;
+  }
+}

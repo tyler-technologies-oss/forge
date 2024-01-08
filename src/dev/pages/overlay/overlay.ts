@@ -2,6 +2,7 @@ import '$src/shared';
 import { ISelectComponent, ISwitchComponent, OverlayFlipState, OverlayHideState } from '@tylertech/forge';
 import type { IOverlayComponent } from '@tylertech/forge';
 import { toggleClass } from '@tylertech/forge-core';
+import { VirtualElement } from '../../../lib/core/utils/position-utils';
 import '@tylertech/forge/button';
 import '@tylertech/forge/overlay';
 import './overlay.scss';
@@ -31,6 +32,23 @@ showOverlayButton.addEventListener('click', () => {
 showNestedOverlayButton.addEventListener('click', () => nestedOverlay.open = !nestedOverlay.open);
 centerDemoButton();
 
+const allowContextmenu = document.getElementById('opt-allow-contextmenu') as ISwitchComponent;
+const contextOverlay = document.querySelector('#context-overlay') as IOverlayComponent;
+document.addEventListener('contextmenu', (evt: MouseEvent) => {
+  if (!allowContextmenu.on) {
+    return;
+  }
+
+  evt.preventDefault();
+  if (contextOverlay.open) {
+    contextOverlay.anchorElement = VirtualElement.fromEvent(evt);
+  } else {
+    contextOverlay.textContent = 'Context menu';
+    contextOverlay.anchorElement = VirtualElement.fromEvent(evt);
+    contextOverlay.open = true;
+  }
+});
+
 const placementSelect = document.getElementById('opt-placement') as ISelectComponent;
 placementSelect.addEventListener('change', ({ detail: selected }) => overlay.placement = selected);
 
@@ -48,6 +66,9 @@ inlineToggle.addEventListener('forge-switch-change', ({ detail: selected }) => o
 
 const persistentToggle = document.getElementById('opt-persistent') as ISwitchComponent;
 persistentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => overlay.persistent = selected);
+
+const noAnchorToggle = document.getElementById('opt-no-anchor') as ISwitchComponent;
+noAnchorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => overlay.noAnchor = selected);
 
 const shiftToggle = document.getElementById('opt-shift') as ISwitchComponent;
 shiftToggle.addEventListener('forge-switch-change', ({ detail: selected }) => overlay.shift = selected);

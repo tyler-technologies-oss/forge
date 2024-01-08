@@ -1,6 +1,7 @@
 @use './core' as *;
 @use './animations';
 @use '../core/styles/theme';
+@use '../overlay';
 
 //
 // Host
@@ -22,9 +23,11 @@
 // Base
 //
 
-.forge-popover {
+forge-overlay {
   @include tokens;
+}
 
+.forge-popover {
   // Custom private calculation tokens
   #{declare(arrow-translate-x)}: 0;
   #{declare(arrow-translate-y)}: 0;
@@ -42,6 +45,22 @@
 
 .forge-popover {
   @include base;
+}
+
+//
+// No anchor
+//
+
+:host([open][no-anchor]) {
+  forge-overlay {
+    // Alias the overlay position CSS custom properties to use popover-specific tokens
+    @include overlay.provide-theme((
+      position-inline-start: #{token(position-inline-start, custom)},
+      position-inline-end: #{token(position-inline-end, custom)},
+      position-block-start: #{token(position-block-start, custom)},
+      position-block-end: #{token(position-block-end, custom)}
+    ));
+  }
 }
 
 //

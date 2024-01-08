@@ -10,6 +10,7 @@ import type { IPopoverComponent } from './popover';
 import type { IOverlayComponent } from '../overlay/overlay';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { OVERLAY_CONSTANTS } from '../overlay';
+import { VirtualElement } from '../core/utils/position-utils';
 
 import './popover';
 
@@ -840,6 +841,72 @@ describe('Popover', () => {
     });
   });
 
+  describe('contextmenu trigger type', () => {
+    it('should open via contextmenu event (right click)', async () => {
+      const popover = await fixture<IPopoverComponent>(html`<forge-popover trigger-type="contextmenu">Context menu</forge-popover>`);
+
+      expect(popover.open).to.be.false;
+
+      await sendMouse({ type: 'click', position: [0, 0], button: 'right' });
+
+      expect(popover.open).to.be.true;
+    });
+
+    it('should not open via contextmenu event if trigger type is not set to contextmenu', async () => {
+      const popover = await fixture<IPopoverComponent>(html`<forge-popover>Context menu</forge-popover>`);
+
+      expect(popover.open).to.be.false;
+
+      await sendMouse({ type: 'click', position: [0, 0], button: 'right' });
+
+      expect(popover.open).to.be.false;
+    });
+
+    it('should update overlay position when contextmenu event is fired while open', async () => {
+      const popover = await fixture<IPopoverComponent>(html`<forge-popover trigger-type="contextmenu">Context menu</forge-popover>`);
+
+      const overlayRootElement = popover.overlay.shadowRoot?.querySelector(OVERLAY_CONSTANTS.selectors.ROOT) as HTMLElement;
+
+      expect(popover.open).to.be.false;
+
+      await sendMouse({ type: 'click', position: [100, 10], button: 'right' });      
+      expect(popover.open).to.be.true;
+
+      const originalOverlayPosition = { x: overlayRootElement.style.left, y: overlayRootElement.style.top };
+
+      await sendMouse({ type: 'click', position: [200, 10], button: 'right' });
+
+      const newOverlayPosition = { x: overlayRootElement.style.left, y: overlayRootElement.style.top };
+
+      expect(popover.open).to.be.true;
+      expect(originalOverlayPosition).not.to.deep.equal(newOverlayPosition);
+    });
+  });
+
+  describe('manual trigger type', () => {
+    it('should not open from user interaction if manual trigger type', async () => {
+      const harness = await createFixture({ triggerType: 'manual' });
+
+      await harness.clickTrigger();
+      await harness.longpressTrigger();
+      await harness.doubleClickTrigger();
+      await harness.focusTrigger();
+      await harness.hoverTrigger();
+
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should open via property if manual trigger type', async () => {
+      const harness = await createFixture({ triggerType: 'manual' });
+
+      expect(harness.isOpen).to.be.false;
+
+      harness.popoverElement.open = true;
+
+      expect(harness.isOpen).to.be.true;
+    });
+  });
+
   describe('multiple trigger types', () => {
     it('should allow for providing multiple trigger types via attribute', async () => {
       const harness = await createFixture();
@@ -1232,6 +1299,24 @@ describe('Popover', () => {
       await harness.clickOutside();
 
       expect(document.activeElement).not.to.be.equal(harness.triggerElement);
+    });
+  });
+
+  describe('with virtual anchor element', () => {
+    it('should open at virtual element position', async () => {
+      const harness = await createFixture();
+
+      harness.popoverElement.anchorElement = new VirtualElement(100, 100);
+      harness.popoverElement.placement = 'bottom-start';
+      harness.popoverElement.open = true;
+
+      await elementUpdated(harness.popoverElement);
+
+      const overlayRoot = harness.popoverElement.overlay.shadowRoot?.querySelector(OVERLAY_CONSTANTS.selectors.ROOT) as HTMLElement;
+
+      expect(harness.isOpen).to.be.true;
+      expect(overlayRoot.style.top).to.equal('100px');
+      expect(overlayRoot.style.left).to.equal('100px');
     });
   });
 });

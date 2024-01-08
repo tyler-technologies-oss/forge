@@ -4,7 +4,7 @@ import { coerceStringToArray } from '../../core/utils/utils';
 import { IBaseComponent } from '../../core/base/base-component';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
-import { PositionPlacement } from '../../core/utils/position-utils';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 
 /**
  * An element that exposes a common API to its underlying `<forge-overlay>`.
@@ -18,7 +18,7 @@ export interface IWithOverlayAware extends IBaseComponent {
   /**
    * The element to which the overlay is anchored.
    */
-  anchorElement: HTMLElement | null;
+  anchorElement: HTMLElement | VirtualElement | null;
 
   /**
    * The CSS selector of the element to which the overlay is anchored.
@@ -94,7 +94,7 @@ export interface IWithOverlayAware extends IBaseComponent {
 export declare abstract class WithOverlayAwareContract {
   public get overlayElement(): IOverlayComponent;
 
-  public anchorElement: HTMLElement | null;
+  public anchorElement: HTMLElement | VirtualElement | null;
   public anchor: string | null;
   public open: boolean;
   public inline: boolean;
@@ -132,10 +132,10 @@ export function WithOverlayAware<TBase extends MixinBase>(base: TBase) {
     // Public members
     //
 
-    public get anchorElement(): HTMLElement | null {
+    public get anchorElement(): HTMLElement | VirtualElement | null {
       return this.overlayElement.anchorElement;
     }
-    public set anchorElement(value: HTMLElement | null) {
+    public set anchorElement(value: HTMLElement | VirtualElement | null) {
       this.overlayElement.anchorElement = value;
     }
 

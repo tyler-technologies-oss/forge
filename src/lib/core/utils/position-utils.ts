@@ -33,11 +33,50 @@ export interface IPositionElementResult {
   arrow?: MiddlewareData['arrow'];
 }
 
+export class VirtualElement {
+  constructor(
+    public x: number,
+    public y: number,
+    public height = 0,
+    public width = 0) {}
+
+  public getBoundingClientRect(): DOMRect {
+    return {
+      x: this.x,
+      y: this.y,
+      top: this.y,
+      left: this.x,
+      bottom: this.y,
+      right: this.x,
+      width: this.height,
+      height: this.width,
+      toJSON() {
+        return;
+      }
+    };
+  }
+
+  public static fromElement(element: HTMLElement): VirtualElement {
+    const rect = element.getBoundingClientRect();
+    return new VirtualElement(rect.left, rect.top, rect.height, rect.width);
+  }
+
+  public static fromEvent(event: MouseEvent | TouchEvent): VirtualElement {
+    if (event instanceof MouseEvent) {
+      return new VirtualElement(event.clientX, event.clientY);
+    }
+    if (event instanceof TouchEvent) {
+      return new VirtualElement(event.touches[0].clientX, event.touches[0].clientY);
+    }
+    throw new Error('Unsupported event type');
+  }
+}
+
 export interface IPositionElementConfig {
   /** The element to apply position to. */
   element: HTMLElement;
-  /** The target element to position `element` around. */
-  targetElement: HTMLElement;
+  /** The anchor element to position `element` around. */
+  anchorElement: HTMLElement | VirtualElement;
   /** The placement position. */
   placement: PositionPlacement;
   /** Whether the position values should be applied to the `element` or not. Default is `true`. */
@@ -50,7 +89,7 @@ export interface IPositionElementConfig {
   shift?: boolean;
   /** Options to provide to the shift middleware. */
   shiftOptions?: Partial<ShiftOptions>;
-  /** Should the element hide itself when the target element is out of the view. */
+  /** Should the element hide itself when the anchor element is out of the view. */
   hide?: boolean;
   /** Options to provide to the hide middleware. */
   hideOptions?: Partial<HideOptions>;
@@ -83,7 +122,7 @@ export interface IPositionElementConfig {
  */
 export async function positionElementAsync({
   element,
-  targetElement,
+  anchorElement,
   placement = 'bottom',
   offset = false,
   offsetOptions,
@@ -134,7 +173,7 @@ export async function positionElementAsync({
     middleware.push(topLayerMiddleware());
   }
 
-  const { x, y, placement: finalPlacement, middlewareData } = await computePosition(targetElement, element, { strategy, placement, middleware });
+  const { x, y, placement: finalPlacement, middlewareData } = await computePosition(anchorElement, element, { strategy, placement, middleware });
 
   // Should we apply the position information to the element?
   if (apply) {
@@ -208,31 +247,34 @@ export const topLayerMiddleware = (): Middleware => ({
       floating.dispatchEvent(dialogAncestorQueryEvent);
 
       let overTransforms = false;
-      const root = (withinReference ? reference : floating) as Element;
-      const containingBlock = isContainingBlock(root) ? root : getContainingBlock(root);
-      let css: CSSStyleDeclaration | Record<string, string> = {};
-      if (containingBlock !== null && getWindow(containingBlock) !== (containingBlock as unknown as Window)) {
-        css = getComputedStyle(containingBlock);
-        // The overlay is "over transforms" when the containing block uses specific CSS...
-        overTransforms =
-          css.transform !== 'none' ||
-          css.translate !== 'none' ||
-          (css.backdropFilter ? css.backdropFilter !== 'none' : false) ||
-          (css.filter ? css.filter !== 'none' : false) ||
-          css.willChange.search('transform') > -1 ||
-          css.willChange.search('translate') > -1 ||
-          ['paint', 'layout', 'strict', 'content'].some((value) => (css.contain || '').includes(value));
-      }
+      if (!(reference instanceof VirtualElement)) {
+        const root = (withinReference ? reference : floating) as Element;
+        const containingBlock = isContainingBlock(root) ? root : getContainingBlock(root);
+        let css: CSSStyleDeclaration | Record<string, string> = {};
+        if (containingBlock !== null && getWindow(containingBlock) !== (containingBlock as unknown as Window)) {
+          css = getComputedStyle(containingBlock);
+          // The overlay is "over transforms" when the containing block uses specific CSS...
+          overTransforms =
+            css.transform !== 'none' ||
+            css.translate !== 'none' ||
+            (css.containerType ? css.containerType !== 'normal' : false) ||
+            (css.backdropFilter ? css.backdropFilter !== 'none' : false) ||
+            (css.filter ? css.filter !== 'none' : false) ||
+            css.willChange.search('transform') > -1 ||
+            css.willChange.search('translate') > -1 ||
+            ['paint', 'layout', 'strict', 'content'].some((value) => (css.contain || '').includes(value));
+        }
 
-      if (onTopLayer && overTransforms && containingBlock) {
-        const rect = containingBlock.getBoundingClientRect();
-        // Margins and borders are not included in the bounding client rect and need to be handled separately
-        const { marginInlineStart = '0', marginBlockStart = '0', borderInlineWidth = '0', borderBlockWidth = '0' } = css;
-        const inlineBoxAdjust = parseFloat(marginInlineStart) + parseFloat(borderInlineWidth);
-        const blockBoxAdjust = parseFloat(marginBlockStart) + parseFloat(borderBlockWidth);
+        if (onTopLayer && overTransforms && containingBlock) {
+          const rect = containingBlock.getBoundingClientRect();
+          // Margins and borders are not included in the bounding client rect and need to be handled separately
+          const { marginInlineStart = '0', marginBlockStart = '0', borderInlineWidth = '0', borderBlockWidth = '0' } = css;
+          const inlineBoxAdjust = parseFloat(marginInlineStart) + parseFloat(borderInlineWidth);
+          const blockBoxAdjust = parseFloat(marginBlockStart) + parseFloat(borderBlockWidth);
 
-        diffCoords.x = rect.x + inlineBoxAdjust - containingBlock.scrollLeft;
-        diffCoords.y = rect.y + blockBoxAdjust - containingBlock.scrollTop;
+          diffCoords.x = rect.x + inlineBoxAdjust - containingBlock.scrollLeft;
+          diffCoords.y = rect.y + blockBoxAdjust - containingBlock.scrollTop;
+        }
       }
 
       if (onTopLayer && topLayerIsFloating) {

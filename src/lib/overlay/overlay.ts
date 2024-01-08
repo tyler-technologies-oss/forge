@@ -37,6 +37,7 @@ declare global {
  * @property {boolean} inline - Whether or not the overlay should be rendered inline (not in the :top-layer).
  * @property {HTMLElement} anchorElement - The element to anchor the overlay to.
  * @property {HTMLElement} anchor - The id of the element to anchor the overlay to.
+ * @property {boolean} noAnchor - Whether or not the overlay should be rendered without an anchor (centered on page by default).
  * @property {HTMLElement} arrowElement - The element to use as the arrow for the overlay.
  * @property {number} arrowElementOffset - The offset to apply to the arrow element.
  * @property {OverlayPlacement} placement - The placement of the overlay relative to the anchor element.
@@ -50,6 +51,8 @@ declare global {
  * @property {HTMLElement | null} boundaryElement - The element to use as the boundary for the overlay.
  * @property {OverlayPlacement[]} fallbackPlacements - The fallback placements to use when the overlay cannot be placed in the desired placement.
  * 
+ * @attribute {string} anchor - The id of the element to anchor the overlay to.
+ * @attribute {string} no-anchor - Whether or not the overlay should be rendered without an anchor (centered on page by default).
  * @attribute {string} open - Whether or not the overlay is open.
  * @attribute {string} inline - Whether or not the overlay should be rendered inline (not in the :top-layer).
  * @attribute {string} placement - The placement of the overlay relative to the anchor element.
@@ -68,6 +71,10 @@ declare global {
  * @cssproperty --forge-overlay-z-index - The `z-index` of the overlay. Defaults to the `popup` range.
  * @cssproperty --forge-overlay-height - The `height` of the overlay. Defaults to `min-content`.
  * @cssproperty --forge-overlay-width - The `width` of the overlay. Defaults to `min-content`.
+ * @cssproperty --forge-overlay-position-block-start - The `block-start` position of the overlay.
+ * @cssproperty --forge-overlay-position-block-end - The `block-end` position of the overlay.
+ * @cssproperty --forge-overlay-position-inline-start - The `inline-start` position of the overlay.
+ * @cssproperty --forge-overlay-position-inline-end - The `inline-end` position of the overlay.
  * 
  * @slot - The content to render inside the positioned overlay container.
  * 

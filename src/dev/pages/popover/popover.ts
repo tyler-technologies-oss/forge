@@ -78,9 +78,25 @@ persistentHoverToggle.addEventListener('forge-switch-change', ({ detail: selecte
   popover.persistentHover = selected;
 });
 
+const noAnchorToggle = document.getElementById('opt-no-anchor') as ISwitchComponent;
+noAnchorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => popover.noAnchor = selected);
+
 const forceContainmentToggle = document.getElementById('opt-force-containment') as ISwitchComponent;
 forceContainmentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   toggleClass(clippingContainer, selected, 'force-containment');
+});
+
+const allowContextmenuToggle = document.getElementById('opt-allow-contextmenu') as ISwitchComponent;
+allowContextmenuToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  if (selected) {
+    const contextPopoverEl = document.createElement('forge-popover');
+    contextPopoverEl.id = 'contextmenu-popover';
+    contextPopoverEl.textContent = 'Context menu popover!';
+    contextPopoverEl.triggerType = 'contextmenu';
+    document.body.appendChild(contextPopoverEl);
+  } else {
+    document.getElementById('contextmenu-popover')?.remove();
+  }
 });
 
 const centerButton = document.getElementById('opt-center') as HTMLButtonElement;

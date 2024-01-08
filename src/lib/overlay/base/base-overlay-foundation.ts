@@ -1,12 +1,13 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IBaseAdapter } from '../../core';
+import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy } from '../overlay-constants';
 
 export interface IBaseOverlayFoundation extends ICustomElementFoundation {
   initialize(): void;
   destroy(): void;
   position(): void;
-  anchorElement: HTMLElement | null;
+  anchorElement: HTMLElement | VirtualElement | null;
   anchor: string | null;
   open: boolean;
   inline: boolean;
@@ -19,7 +20,7 @@ export interface IBaseOverlayFoundation extends ICustomElementFoundation {
   flip: OverlayFlipState;
   boundary: string | null;
   boundaryElement: HTMLElement | null;
-  fallbackPlacements: OverlayPlacement[] | null;
+  fallbackPlacements: PositionPlacement[] | null;
 }
 
 export abstract class BaseOverlayFoundation<T extends IBaseAdapter> implements IBaseOverlayFoundation {
@@ -29,8 +30,9 @@ export abstract class BaseOverlayFoundation<T extends IBaseAdapter> implements I
   public abstract destroy(): void;
   public abstract position(): void;
 
-  public abstract anchorElement: HTMLElement | null;
+  public abstract anchorElement: HTMLElement | VirtualElement | null;
   public abstract anchor: string | null;
+  public abstract noAnchor: boolean;
   public abstract open: boolean;
   public abstract inline: boolean;
   public abstract placement: OverlayPlacement;
@@ -42,5 +44,5 @@ export abstract class BaseOverlayFoundation<T extends IBaseAdapter> implements I
   public abstract flip: OverlayFlipState;
   public abstract boundary: string | null;
   public abstract boundaryElement: HTMLElement | null;
-  public abstract fallbackPlacements: OverlayPlacement[] | null;
+  public abstract fallbackPlacements: PositionPlacement[] | null;
 }

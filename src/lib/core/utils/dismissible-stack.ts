@@ -1,3 +1,4 @@
+import { Deferred } from './deferred';
 import { task } from './event-utils';
 
 // The symbol to use for the tryDismiss method on dismissible elements
@@ -15,6 +16,17 @@ export interface IDismissible {
 }
 
 export class DismissibleStack<T extends IDismissible> {
+  private _deferredDismiss: Deferred | undefined;
+
+  /**
+   * A promise that resolves when all elements in the stack have finished dismissing.
+   * 
+   * Resolves immediately if there are no elements in the stack.
+   */
+  public get dismissing(): Promise<void> {
+    return this._deferredDismiss?.promise ?? Promise.resolve();
+  }
+
   /**
    * A set of all elements that are currently eligible for dismissal.
    * 
@@ -68,6 +80,10 @@ export class DismissibleStack<T extends IDismissible> {
    * @returns 
    */
   public async requestDismiss(el: T, dismissState: IDismissibleStackState): Promise<void> {
+    if (!this._deferredDismiss) {
+      this._deferredDismiss = new Deferred();
+    }
+
     this._elementsRequestingDismiss.set(el, dismissState);
 
     // Wait for all other element to finish queuing their dismiss events
@@ -89,10 +105,15 @@ export class DismissibleStack<T extends IDismissible> {
 
     // Attempt to dismiss each element in the queue (most recently opened first), if any of
     // them are prevented, stop trying to dismiss the rest
-    for (const [element, state] of elements) {
-      if (!element[tryDismiss](state)) {
-        break;
+    try {
+      for (const [element, state] of elements) {
+        if (!element[tryDismiss](state)) {
+          break;
+        }
       }
+    } finally {
+      this._deferredDismiss?.resolve();
+      this._deferredDismiss = undefined;
     }
   }
 

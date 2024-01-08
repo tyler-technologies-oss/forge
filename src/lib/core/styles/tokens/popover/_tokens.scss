@@ -38,6 +38,12 @@ $tokens: (
 
   fade-duration: utils.module-val(popover, fade-duration, animation.variable(duration-medium2)),
   fade-timing: utils.module-ref(popover, fade-timing, animating-timing),
+
+  // No anchor
+  position-inline-start: utils.module-val(popover, position-inline-start, auto),
+  position-inline-end: utils.module-val(popover, position-inline-end, auto),
+  position-block-start: utils.module-val(popover, position-block-start, auto),
+  position-block-end: utils.module-val(popover, position-block-end, auto),
 ) !default;
 
 @function get($key) {

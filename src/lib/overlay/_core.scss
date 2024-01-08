@@ -30,3 +30,12 @@
   overflow: visible;
   inset: unset;
 }
+
+@mixin no-anchor {
+  inset: 0;
+  margin: auto;
+  margin-inline-start: #{token(position-inline-start)};
+  margin-inline-end: #{token(position-inline-end)};
+  margin-block-start: #{token(position-block-start)};
+  margin-block-end: #{token(position-block-end)};
+}
