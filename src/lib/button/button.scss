@@ -1,21 +1,21 @@
-@use './configuration' as *;
-@use './core';
+@use './core' as *;
 @use '../core/styles/theme';
 @use '../state-layer';
 @use '../focus-indicator';
 @use '../circular-progress';
-@use './token-utils' as *;
 
 //
 // Host
 //
 
+$host-tokens: [display disabled-cursor];
+
 :host {
-  @include host-configuration;
+  @include tokens($includes: $host-tokens);;
 }
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -27,19 +27,19 @@
 //
 
 .forge-button {
-  @include configuration;
+  @include tokens($excludes: $host-tokens);
 }
 
 .forge-button {
-  @include core.base;
+  @include base;
   
   ::slotted(:is([slot=start],[slot=end])) {
-    @include core.slotted-start-end;
+    @include slotted-start-end;
   }
 }
 
 a {
-  @include core.anchor-base;
+  @include anchor-base;
 }
 
 forge-state-layer {
@@ -61,6 +61,12 @@ forge-focus-indicator {
   :host([theme=#{$theme}]) {
     .forge-button {
       @include override(primary-color, theme.variable($theme), value);
+    }
+  }
+
+  :host([theme=#{$theme}]:is([variant=filled],[variant=raised])) {
+    .forge-button {
+      @include override(filled-color, theme.variable(on-#{$theme}), value);
     }
   }
   
@@ -85,13 +91,13 @@ forge-focus-indicator {
 
 :host(:is(:not([variant], [variant=text]))) {
   .forge-button {
-    @include core.text;
+    @include text;
   }
 }
 
 :host(:is([variant=filled],[variant=raised])) {
   .forge-button {
-    @include core.filled;
+    @include filled;
   }
 
   forge-state-layer {
@@ -101,13 +107,13 @@ forge-focus-indicator {
 
 :host([variant=raised]) {
   .forge-button {
-    @include core.raised;
+    @include raised;
   }
 }
 
 :host([variant=tonal]) {
   .forge-button {
-    @include core.tonal;
+    @include tonal;
   }
 
   forge-state-layer {
@@ -117,13 +123,13 @@ forge-focus-indicator {
 
 :host([variant=outlined]) {
   .forge-button {
-    @include core.outlined;
+    @include outlined;
   }
 }
 
 :host([variant=link]) {
   .forge-button {
-    @include core.link;
+    @include link;
   }
 }
 
@@ -142,7 +148,7 @@ forge-focus-indicator {
 
 :host([dense]) {
   .forge-button {
-    @include core.dense;
+    @include dense;
   }
 }
 
@@ -152,7 +158,7 @@ forge-focus-indicator {
 
 :host([pill]) {
   .forge-button {
-    @include core.pill;
+    @include pill;
   }
 
   forge-focus-indicator {
@@ -165,34 +171,34 @@ forge-focus-indicator {
 //
 
 :host(:not([anchor])[disabled]) {
-  @include core.host-disabled;
+  @include host-disabled;
 
   .forge-button {
-    @include core.disabled;
+    @include disabled;
   }
 }
 
 :host(:not([anchor])[variant=outlined][disabled]) {
   .forge-button {
-    @include core.outlined-disabled;
+    @include outlined-disabled;
   }
 }
 
 :host(:not([anchor])[variant=tonal][disabled]) {
   .forge-button {
-    @include core.tonal-disabled;
+    @include tonal-disabled;
   }
 }
 
 :host(:not([anchor]):is([variant=filled],[variant=raised])[disabled]) {
   .forge-button {
-    @include core.filled-disabled;
+    @include filled-disabled;
   }
 }
 
 :host(:not([anchor])[variant=raised][disabled]) {
   .forge-button {
-    @include core.raised-disabled;
+    @include raised-disabled;
   }
 }
 
@@ -202,13 +208,13 @@ forge-focus-indicator {
 
 :host([popover-icon]) {
   .forge-button__popover-icon {
-    @include core.popover-icon;
+    @include popover-icon;
   }
 }
 
 :host([popover-icon][aria-expanded=true]) {
   .forge-button__popover-icon {
-    @include core.popover-icon-open;
+    @include popover-icon-open;
   }
 }
 

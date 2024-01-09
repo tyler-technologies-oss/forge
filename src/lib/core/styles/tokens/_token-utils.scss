@@ -1,7 +1,7 @@
-@use 'sass:meta';
 @use 'sass:map';
-@use 'sass:list';
+@use 'sass:string';
 @use '../utils';
+@use '../core/config';
 
 ///
 /// Mixin for providing theme tokens to the module using external names.
@@ -86,13 +86,22 @@
 /// @param {List} $excludes - An optional list of token names to exclude from `$tokens`
 /// 
 @mixin tokens($module, $tokens, $includes: null, $excludes: null) {
+  // Validate that all tokens are generated with matching keys
+  @each $key, $var in $tokens {
+    // The token value is always expected to start with this string per our naming convention: `var(--<prefix>-<module>-<key>, <value>)`
+    $expected: 'var(--#{config.$prefix}-#{$module}-#{$key},';
+    @if string.index($var, $expected) != 1 {
+      @error 'Mismatching token key "#{$key}" found for module "#{$module}" with value "#{$var}"';
+    }
+  }
+
   @if ($includes) {
     // We are including only specific tokens
-    @each $token in $includes {
-      @if (not map.has-key($tokens, $token)) {
+    @each $token-name in $includes {
+      @if (not map.has-key($tokens, $token-name)) {
         @error 'Invalid include token "#{$token}" for module "#{$module}"';
       }
-      #{declare($module, $token)}: #{map.get($tokens, $token)};
+      #{declare($module, $token-name)}: #{map.get($tokens, $token-name)};
     }
   } @else {
     // We are including all tokens, but first we need to check if any excluded tokens were provided

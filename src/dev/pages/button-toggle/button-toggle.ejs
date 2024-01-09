@@ -1,17 +1,150 @@
-<h3 class="forge-typography--heading2">Static</h3>
-<forge-button-toggle-group id="button-toggle-group">
-  <forge-button-toggle value="email" aria-label="By email">
-    <forge-icon name="email" slot="leading"></forge-icon>
-    By email
-  </forge-button-toggle>
-  <forge-button-toggle value="mail" aria-label="By mail">By mail</forge-button-toggle>
-  <forge-button-toggle value="phone" aria-label="By phone">
-    By phone
-    <forge-icon name="phone" slot="trailing"></forge-icon>
-  </forge-button-toggle>
-</forge-button-toggle-group>
+<div class="button-toggle-demo-container">
+  <!-- Default -->
+  <section>
+    <h3 class="forge-typography--heading2">Default</h3>
+    <forge-button-toggle-group id="button-toggle-group" aria-label="Choose communication type">
+      <forge-button-toggle value="email">
+        <forge-icon name="email" slot="start"></forge-icon>
+        By email
+      </forge-button-toggle>
+      <forge-button-toggle value="mail">
+        <forge-icon name="mail" slot="start"></forge-icon>
+        By mail
+      </forge-button-toggle>
+      <forge-button-toggle value="phone">
+        <forge-icon name="phone" slot="start"></forge-icon>
+        By phone
+      </forge-button-toggle>
+    </forge-button-toggle-group>
+  </section>
 
-<h3 class="forge-typography--heading2">Dynamic</h3>
-<forge-button-toggle-group id="button-toggle-group-dynamic"></forge-button-toggle-group>
+  <!-- No outline -->
+  <section>
+    <h3 class="forge-typography--heading2">No outline</h3>
+    <forge-button-toggle-group no-outline>
+      <forge-button-toggle value="email" aria-label="By email">
+        <forge-icon name="email" slot="start"></forge-icon>
+        By email
+      </forge-button-toggle>
+      <forge-button-toggle value="mail" aria-label="By mail">
+        <forge-icon name="mail" slot="start"></forge-icon>
+        By mail
+      </forge-button-toggle>
+      <forge-button-toggle value="phone" aria-label="By phone">
+        <forge-icon name="phone" slot="start"></forge-icon>
+        By phone
+      </forge-button-toggle>
+    </forge-button-toggle-group>
+  </section>
+
+  <!-- w/Dividers -->
+  <section>
+    <h3 class="forge-typography--heading2">w/Dividers</h3>
+    <forge-button-toggle-group>
+      <forge-button-toggle value="email" aria-label="By email">
+        <forge-icon name="email" slot="start"></forge-icon>
+        By email
+      </forge-button-toggle>
+      <forge-divider vertical></forge-divider>
+      <forge-button-toggle value="mail" aria-label="By mail">
+        <forge-icon name="mail" slot="start"></forge-icon>
+        By mail
+      </forge-button-toggle>
+      <forge-divider vertical></forge-divider>
+      <forge-button-toggle value="phone" aria-label="By phone">
+        <forge-icon name="phone" slot="start"></forge-icon>
+        By phone
+      </forge-button-toggle>
+    </forge-button-toggle-group>
+  </section>
+
+  <!-- Form -->
+  <section>
+    <h3 class="forge-typography--heading2">Form associated</h3>
+    <form id="button-toggle-form">
+      <forge-stack>
+        <forge-button-toggle-group id="my-button-toggle-group" name="my-button-toggle-group" required>
+          <forge-button-toggle value="email" aria-label="By email">
+            <forge-icon name="email" slot="start"></forge-icon>
+            By email
+          </forge-button-toggle>
+          <forge-divider vertical></forge-divider>
+          <forge-button-toggle value="mail" aria-label="By mail">
+            <forge-icon name="mail" slot="start"></forge-icon>
+            By mail
+          </forge-button-toggle>
+          <forge-divider vertical></forge-divider>
+          <forge-button-toggle value="phone" aria-label="By phone">
+            <forge-icon name="phone" slot="start"></forge-icon>
+            By phone
+          </forge-button-toggle>
+        </forge-button-toggle-group>
+        <forge-stack inline>
+          <forge-button variant="outlined" type="reset">Reset</forge-button>
+          <forge-button variant="outlined" type="submit">Submit</forge-button>
+        </forge-stack>
+      </forge-stack>
+    </form>
+  </section>
+
+  <!-- Toolbar -->
+  <section>
+    <h3 class="forge-typography--heading2">Toolbar (custom)</h3>
+    <forge-card id="toolbar-card">
+      <div class="toolbar-card__container">
+        <forge-button-toggle-group no-outline multiple aria-label="Choose a format">
+          <forge-button-toggle value="bold" aria-label="Bold">
+            <forge-icon name="format_bold"></forge-icon>
+          </forge-button-toggle>
+          <forge-button-toggle value="italic" aria-label="Italic">
+            <forge-icon name="format_italic"></forge-icon>
+          </forge-button-toggle>
+          <forge-button-toggle value="underline" aria-label="Underline">
+            <forge-icon name="format_underlined"></forge-icon>
+          </forge-button-toggle>
+          <forge-button-toggle value="strikethrough" aria-label="Strikethrough">
+            <forge-icon name="format_strikethrough"></forge-icon>
+          </forge-button-toggle>
+        </forge-button-toggle-group>
+
+        <forge-divider vertical></forge-divider>
+
+        <forge-button-toggle-group no-outline>
+          <forge-button-toggle value="align-left" aria-label="Align left">
+            <forge-icon name="format_align_left"></forge-icon>
+          </forge-button-toggle>
+          <forge-button-toggle value="align-center" aria-label="Align center">
+            <forge-icon name="format_align_center"></forge-icon>
+          </forge-button-toggle>
+          <forge-button-toggle value="align-right" aria-label="Align right">
+            <forge-icon name="format_align_right"></forge-icon>
+          </forge-button-toggle>
+          <forge-button-toggle value="align-justify" aria-label="Align justify">
+            <forge-icon name="format_align_justify"></forge-icon>
+          </forge-button-toggle>
+        </forge-button-toggle-group>
+      </div>
+    </forge-card>
+  </section>
+
+  <!-- Legacy -->
+  <section>
+    <h3 class="forge-typography--heading2">Legacy (custom)</h3>
+    <forge-button-toggle-group class="legacy-button-toggle-group" value="email" aria-label="Custom button toggle group">
+      <forge-button-toggle value="email">
+        <forge-icon name="email" slot="start"></forge-icon>
+        By email
+      </forge-button-toggle>
+      <forge-button-toggle value="mail">
+        <forge-icon name="mail" slot="start"></forge-icon>
+        By mail
+      </forge-button-toggle>
+      <forge-button-toggle value="phone">
+        <forge-icon name="phone" slot="start"></forge-icon>
+        By phone
+      </forge-button-toggle>
+    </forge-button-toggle-group>
+  </section>
+</div>
 
 <script type="module" src="button-toggle.ts"></script>

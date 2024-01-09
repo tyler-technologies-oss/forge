@@ -1,3 +1,17 @@
+# v2.21.1 (Thu Dec 14 2023)
+
+#### 🐛 Bug Fix
+
+- fix(date-range-picker): fixed a bug where the "to" value was not being rendered in `<input>` when initialized with a default value [#446](https://github.com/tyler-technologies-oss/forge/pull/446) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(expansion-panel): remove invalid `aria-expanded` attribute set on header [#443](https://github.com/tyler-technologies-oss/forge/pull/443) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.21.0 (Mon Nov 27 2023)
 
 #### 🚀 Enhancement

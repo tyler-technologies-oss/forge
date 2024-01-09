@@ -2,6 +2,8 @@
 @use './animation';
 @use './token-utils' as *;
 
+@forward './token-utils';
+
 $_cycle-duration: calc(4 * #{token(arc-duration)});
 
 @mixin container {

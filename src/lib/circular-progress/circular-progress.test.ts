@@ -53,6 +53,16 @@ describe('Circular Progress', () => {
     expect(determinateProgressElement.getAttribute('stroke-dashoffset')).to.equal('100');
   });
 
+  it('should remove aria-valuenow when indeterminate after determinate', async () => {
+    const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress determinate progress="0.5"></forge-circular-progress>`);
+
+    expect(el.hasAttribute('aria-valuenow')).to.be.true;
+
+    el.determinate = false;
+
+    expect(el.hasAttribute('aria-valuenow')).to.be.false;
+  });
+
   it('should set progress', async () => {
     const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress></forge-circular-progress>`);
     

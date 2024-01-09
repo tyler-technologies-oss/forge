@@ -1,0 +1,31 @@
+@use './token-utils' as *;
+
+@keyframes zoomin {
+  from {
+    transform: scale(0.8);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes slidein {
+  from {
+    transform: translateX(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)});
+  }
+
+  to {
+    transform: translateX(0) translateY(0);
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

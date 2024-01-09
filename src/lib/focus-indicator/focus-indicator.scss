@@ -1,17 +1,16 @@
 @use './animations';
-@use './configuration' as *;
-@use './core';
+@use './core' as *;
 
 //
 // Host
 //
 
 :host {
-  @include configuration;
+  @include tokens;
 }
 
 :host {
-  @include core.base;
+  @include base;
 }
 
 :host([hidden]) {
@@ -23,19 +22,19 @@
 //
 
 :host([active]) {
-  @include core.active;
+  @include active;
 }
 
 :host(:not([inward])) {
-  @include core.outward;
+  @include outward;
 }
 
 :host([inward]) {
-  @include core.inward;
+  @include inward;
 }
 
 :host([circular]) {
-  @include core.circular;
+  @include circular;
 }
 
 //

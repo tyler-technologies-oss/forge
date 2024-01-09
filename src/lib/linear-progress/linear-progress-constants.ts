@@ -12,18 +12,23 @@ const selectors = {
   BUFFER: '.buffer-bar'
 };
 
-const attributes = {
+const observedAttributes = {
   DETERMINATE: 'determinate',
   PROGRESS: 'progress',
   BUFFER: 'buffer',
   THEME: 'theme'
 };
 
+const attributes = {
+  ...observedAttributes
+};
+
 export const LINEAR_PROGRESS_CONSTANTS = {
   elementName,
   classes,
   selectors,
-  attributes
+  attributes,
+  observedAttributes
 };
 
 export type LinearProgressTheme = Theme;

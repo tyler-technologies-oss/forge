@@ -22,6 +22,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   setBodyAttribute(name: string, value: string): void;
   removeBodyAttribute(name: string): void;
   focusHost(options?: FocusOptions): void;
+  clickHost(): void;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
@@ -104,11 +105,11 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   }
 
   public addDocumentListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void {
-    document.addEventListener(event, callback, options);
+    this._component.ownerDocument.addEventListener(event, callback, options);
   }
 
   public removeDocumentListener(event: string, callback: (event: Event) => void, options?: boolean | EventListenerOptions): void {
-    document.removeEventListener(event, callback, options);
+    this._component.ownerDocument.removeEventListener(event, callback, options);
   }
 
   public getScreenWidth(): number {
@@ -116,15 +117,19 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
   }
 
   public setBodyAttribute(name: string, value: string): void {
-    document.body.setAttribute(name, value);
+    this._component.ownerDocument.body.setAttribute(name, value);
   }
 
   public removeBodyAttribute(name: string): void {
-    document.body.removeAttribute(name);
+    this._component.ownerDocument.body.removeAttribute(name);
   }
 
   public focusHost(options?: FocusOptions): void {
     HTMLElement.prototype.focus.call(this._component, options);
+  }
+
+  public clickHost(): void {
+    HTMLElement.prototype.click.call(this._component);
   }
 
   public get isConnected(): boolean {

@@ -73,6 +73,7 @@ $z-index-backdrop: 7 !default;
 $z-index-dialog: 8 !default;
 $z-index-notification: 9 !default;
 $z-index-popup: 10 !default;
+$z-index-overlay: 10 !default;
 $z-index-tooltip: 11 !default;
 
 $z-index-values: (
@@ -82,6 +83,7 @@ $z-index-values: (
   dialog: $z-index-dialog,
   notification: $z-index-notification,
   popup: $z-index-popup,
+  overlay: $z-index-overlay,
   tooltip: $z-index-tooltip
 ) !default;
 

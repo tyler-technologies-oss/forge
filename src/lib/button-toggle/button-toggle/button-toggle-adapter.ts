@@ -1,78 +1,49 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { ForgeRipple } from '../../ripple';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { IButtonToggleGroupComponent } from '../button-toggle-group';
 import { IButtonToggleComponent } from './button-toggle';
-import { BUTTON_TOGGLE_CONSTANTS } from './button-toggle-constants';
+import { isFocusable, setDefaultAria } from '../../constants';
+import { IStateLayerComponent } from '../../state-layer/state-layer';
+import { STATE_LAYER_CONSTANTS } from '../../state-layer/state-layer-constants';
+import { IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
+import { FOCUS_INDICATOR_CONSTANTS } from '../../focus-indicator/focus-indicator-constants';
 
 export interface IButtonToggleAdapter extends IBaseAdapter {
+  initialize(): void;
   setSelected(value: boolean): void;
-  addEventListener(type: string, listener: (evt: Event) => void): void;
-  removeEventListener(type: string, listener: (evt: Event) => void): void;
-  initializeRipple(): ForgeRipple;
   setDisabled(value: boolean): void;
-  setDense(value: boolean): void;
-  requestFocus(): void;
-  detectStretchState(): void;
+  forceFocusVisible(): void;
 }
 
 export class ButtonToggleAdapter extends BaseAdapter<IButtonToggleComponent> implements IButtonToggleAdapter {
-  private _buttonElement: HTMLButtonElement;
+  private _focusIndicatorElement: IFocusIndicatorComponent;
+  private _stateLayerElement: IStateLayerComponent;
 
   constructor(component: IButtonToggleComponent) {
     super(component);
-    this._buttonElement = getShadowElement(component, BUTTON_TOGGLE_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
+    this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
+    this._stateLayerElement = getShadowElement(component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+  }
+
+  public initialize(): void {
+    this._component[setDefaultAria]({ role: 'button' }, { setAttribute: !this._component.hasAttribute('role') });
+    this._component[setDefaultAria]({
+      ariaPressed: `${!!this._component.selected}`,
+      ariaDisabled: `${!!this._component.disabled}`
+    });
+    this._component[isFocusable] = !this._component.disabled;
   }
 
   public setSelected(value: boolean): void {
-    if (value) {
-      this._buttonElement.classList.add(BUTTON_TOGGLE_CONSTANTS.classes.SELECTED);
-    } else {
-      this._buttonElement.classList.remove(BUTTON_TOGGLE_CONSTANTS.classes.SELECTED);
-    }
-    this._buttonElement.setAttribute('aria-pressed', value.toString());
-  }
-
-  public addEventListener(type: string, listener: (evt: Event) => void): void {
-    this._buttonElement.addEventListener(type, listener);
-  }
-
-  public removeEventListener(type: string, listener: (evt: Event) => void): void {
-    this._buttonElement.removeEventListener(type, listener);
-  }
-
-  public initializeRipple(): ForgeRipple {
-    return new ForgeRipple(this._buttonElement);
+    this._component[setDefaultAria]({ ariaPressed: `${!!value}` });
   }
 
   public setDisabled(value: boolean): void {
-    this._buttonElement.disabled = value;
-    if (value) {
-      this._buttonElement.setAttribute('aria-disabled', value.toString());
-    } else {
-      this._buttonElement.removeAttribute('aria-disabled');
-    }
+    this._component[setDefaultAria]({ ariaDisabled: `${!!value}` });
+    this._component[isFocusable] = !value;
+    this._stateLayerElement.disabled = value;
   }
 
-  public setDense(value: boolean): void {
-    if (value) {
-      this._buttonElement.classList.add(BUTTON_TOGGLE_CONSTANTS.classes.DENSE);
-    } else {
-      this._buttonElement.classList.remove(BUTTON_TOGGLE_CONSTANTS.classes.DENSE);
-    }
-  }
-
-  public requestFocus(): void {
-    this._buttonElement.focus();
-  }
-
-  public detectStretchState(): void {
-    if (this._component.hasAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.STRETCH)) {
-      return;
-    }
-    const buttonToggleGroup = this._component.parentElement as IButtonToggleGroupComponent;
-    if (buttonToggleGroup && buttonToggleGroup.hasAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.STRETCH) && buttonToggleGroup.stretch) {
-      this._component.setAttribute(BUTTON_TOGGLE_CONSTANTS.attributes.STRETCH, '');
-    }
+  public forceFocusVisible(): void {
+    this._focusIndicatorElement.active = true;
   }
 }

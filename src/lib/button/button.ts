@@ -3,10 +3,10 @@ import { IconComponent } from '../icon';
 import { FocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
 import { BaseButton, IBaseButton } from './base/base-button';
-import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
 import { ButtonAdapter } from './button-adapter';
 import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
 import { ButtonFoundation } from './button-foundation';
+import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
 
 import template from './button.html';
 import styles from './button.scss';

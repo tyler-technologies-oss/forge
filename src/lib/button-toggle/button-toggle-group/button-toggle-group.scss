@@ -1,11 +1,131 @@
-@use './mixins';
+@use './core' as *;
+@use '../../core/styles/theme';
+@use '../button-toggle';
 
-@include mixins.core-styles;
+//
+// Host
+//
+
+$_host-tokens: [display];
 
 :host {
-  @include mixins.host;
+  @include tokens($includes: $_host-tokens);
+}
+
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
+
+//
+// Base
+//
+
+.forge-button-toggle-group {
+  @include tokens($excludes: $_host-tokens);
+}
+
+.forge-button-toggle-group {
+  @include base;
+}
+
+:host(:not([disabled]):not([no-outline])) {
+  .forge-button-toggle-group {
+    &:hover,
+    &:focus-within {
+      @include active;
+    }
+  }
+}
+
+//
+// No outline
+//
+
+:host([no-outline]) {
+  .forge-button-toggle-group {
+    @include no-outline;
+  }
+}
+
+//
+// Density - Dense
+//
+
+:host(:is([dense],[density=dense])) {
+  .forge-button-toggle-group {
+    @include dense;
+  }
+}
+
+//
+// Vertical
+//
+
+:host([vertical]) {
+  .forge-button-toggle-group {
+    @include vertical;
+  }
+
+  ::slotted(forge-button-toggle) {
+    height: #{token(height)};
+    width: 100%;
+  }
+
+  ::slotted(forge-divider:not([vertical])) {
+    margin-inline: 4px;
+    width: 100%;
+  }
+}
+
+//
+// Slotted - Divider
+//
+
+::slotted(forge-divider[vertical]) {
+  margin-block: 4px;
+}
+
+//
+// Stretch
+//
+
+:host([stretch]) {
+  @include host-stretch;
+
+  .forge-button-toggle-group {
+    @include stretch;
+  }
+}
+
+:host(:not([vertical])[stretch]) {
+  ::slotted(forge-button-toggle) {
+    flex: 1;
+  }
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  :host([theme=#{$theme}]) {
+    ::slotted(forge-button-toggle) {
+      @include button-toggle.provide-theme((
+        selected-background: #{theme.variable(#{$theme}-container)},
+        selected-color: #{theme.variable(on-#{$theme}-container)},
+        focus-indicator-color: #{theme.variable($theme)}
+      ));
+    }
+  }
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);

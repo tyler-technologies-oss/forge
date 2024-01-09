@@ -64,7 +64,7 @@ export class LabelAdapter extends BaseAdapter<ILabelComponent> implements ILabel
    * Computes the text content of the label then passes it to the target's `labelChangedCallback`.
    */
   public updateTargetLabel(): void {
-    const value = this._component.innerText.trim();
+    const value = this._component.textContent?.trim() ?? '';
     this._targetElement?.labelChangedCallback(value);
   }
 

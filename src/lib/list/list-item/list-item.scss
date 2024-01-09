@@ -1,102 +1,117 @@
-@use './configuration';
-@use './core';
+@use './core' as *;
 @use '../../focus-indicator';
 @use '../../state-layer';
 @use '../../core/styles/shape';
-@use './token-utils' as *;
 
+//
 // Host
+//
+
+$_host-tokens: [indent dense-indent];
+
 :host {
-  @include configuration.host;
+  @include tokens($includes: $_host-tokens);
 }
 
 :host {
-  @include core.container;
+  @include container;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+//
+// Base
+//
+
+.forge-list-item {
+  @include tokens($excludes: $_host-tokens);
+}
+
+.forge-list-item {
+  @include base;
+}
+
 // Non-interactive
 :host([non-interactive]) {
   .forge-list-item {
-    @include core.non-interactive;
+    @include non-interactive;
   }
 }
 
 // Disabled
 :host([disabled]) {
   .forge-list-item {
-    @include core.disabled;
+    @include disabled;
   }
 }
 
 // Two-line
 :host([two-line]) {
   .forge-list-item {
-    @include core.two-line;
+    @include two-line;
   }
 }
 
 // Three-line
 :host([three-line]) {
   .forge-list-item {
-    @include core.three-line;
+    @include three-line;
   }
 }
 
 // Dense
 :host([dense]) {
   .forge-list-item {
-    @include core.dense;
+    @include dense;
   }
 
   .text-container {
-    @include core.dense-text;
+    @include dense-text;
   }
 }
 
 // Dense indented
 :host([dense][indented]) {
-  @include core.dense-indented;
+  @include dense-indented;
 }
 
 // Dense two-line
 :host([dense][two-line]) {
   .forge-list-item {
-    @include core.dense-two-line;
+    @include dense-two-line;
   }
 }
 
 // Dense three-line
 :host([dense][three-line]) {
   .forge-list-item {
-    @include core.dense-three-line;
+    @include dense-three-line;
   }
 }
 
 // Dense leading/trailing
 :host([selected]) {
   .forge-list-item {
-    @include core.selected;
+    @include selected;
 
     ::slotted([slot=leading]),
     ::slotted([slot=trailing]) {
-      @include core.leading-trailing-selected;
+      @include leading-trailing-selected;
     }
 
     ::slotted([slot=leading]) {
-      @include core.leading-selected;
+      @include leading-selected;
     }
 
     ::slotted([slot=trailing]) {
-      @include core.trailing-selected;
+      @include trailing-selected;
     }
   }
 
   .text-container {
-    @include core.text-container-selected;
+    @include text-container-selected;
   }
 
   forge-state-layer {
@@ -108,26 +123,17 @@
 
 // Indented
 :host([indented]) {
-  @include core.indented;
-}
-
-// Base
-.forge-list-item {
-  @include configuration.configuration;
-}
-
-.forge-list-item {
-  @include core.base;
+  @include indented;
 }
 
 // Anchor base
 a.forge-list-item {
-  @include core.anchor-link;
+  @include anchor-link;
 }
 
 // Text container base
 .text-container {
-  @include core.text-container;
+  @include text-container;
 }
 
 // Supporting text slotted elements
@@ -136,59 +142,59 @@ slot[name=subtitle],
 slot[name=tertiary-text],
 slot[name=tertiary-title] {
   &::slotted(*) {
-    @include core.supporting-text;
+    @include supporting-text;
   }
 
   :host([selected]) &::slotted(*) {
-    @include core.supporting-text-selected;
+    @include supporting-text-selected;
   }
 }
 
 // Avatar slotted elements
 ::slotted([slot=avatar]) {
-  @include core.avatar;
+  @include avatar;
 }
 
 // Leading/trailing slotted elements
 ::slotted([slot=leading]),
 ::slotted([slot=trailing]) {
-  @include core.leading-trailing-base;
+  @include leading-trailing-base;
 }
 
 // Leading slotted elements
 ::slotted([slot=leading]) {
-  @include core.leading;
+  @include leading;
 
   :host([selected]) & {
-    @include core.leading-selected;
+    @include leading-selected;
   }
 
   :host([dense]) & {
-    @include core.leading-dense;
+    @include leading-dense;
   }
 }
 
 // Trailing slotted elements
 ::slotted([slot=trailing]) {
-  @include core.trailing;
+  @include trailing;
 
   :host([selected]) & {
-    @include core.trailing-selected;
+    @include trailing-selected;
   }
 
   :host([dense]) & {
-    @include core.trailing-dense;
+    @include trailing-dense;
   }
 }
 
 // Wrap styles
 :host([wrap]) {
   .forge-list-item {
-    @include core.wrap;
+    @include wrap;
   }
 
   .text-container {
-    @include core.text-container-wrap;
+    @include text-container-wrap;
   }
 
   slot[name=secondary-text],
@@ -196,7 +202,7 @@ slot[name=tertiary-title] {
   slot[name=tertiary-text],
   slot[name=tertiary-title] {
     &::slotted(*) {
-      @include core.supporting-text-wrap;
+      @include supporting-text-wrap;
     }
   }
 }

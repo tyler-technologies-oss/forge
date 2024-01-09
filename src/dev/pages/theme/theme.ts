@@ -8,7 +8,9 @@ interface ISwatchGroup {
 
 interface ISwatch {
   text?: string;
-  background: string;
+  background?: string;
+  border?: string;
+  noBorder?: boolean;
   foreground?: string;
 }
 
@@ -25,6 +27,7 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
   {
     swatches: [
       { text: 'Surface container', background: 'surface-container', foreground: 'on-surface-container' },
+      { text: 'Surface container (minimum)', background: 'surface-container-minimum', foreground: 'on-surface' },
       { text: 'Surface container (low)', background: 'surface-container-low', foreground: 'on-surface' },
       { text: 'Surface container (medium)', background: 'surface-container-medium', foreground: 'on-surface' },
       { text: 'Surface container (high)', background: 'surface-container-high', foreground: 'on-surface-container-high' }
@@ -40,73 +43,62 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
     header: 'Key colors',
     swatches: [
       { text: 'Primary', background: 'primary', foreground: 'on-primary' },
-      { text: 'Primary container (low)', background: 'primary-container-low', foreground: 'on-primary-container-low' },
-      { text: 'Primary container', background: 'primary-container', foreground: 'on-primary-container' },
-      { text: 'Primary container (high)', background: 'primary-container-high', foreground: 'on-primary-container-high' }
+      { text: 'Primary container', background: 'primary-container', foreground: 'on-primary-container' }
     ]
   },
   {
     swatches: [
       { text: 'Secondary', background: 'secondary', foreground: 'on-secondary' },
-      { text: 'Secondary container (low)', background: 'secondary-container-low', foreground: 'on-secondary-container-low'},
-      { text: 'Secondary container', background: 'secondary-container', foreground: 'on-secondary-container' },
-      { text: 'Secondary container (high)', background: 'secondary-container-high', foreground: 'on-secondary-container-high' }
+      { text: 'Secondary container', background: 'secondary-container', foreground: 'on-secondary-container' }
     ]
   },
   {
     swatches: [
       { text: 'Tertiary', background: 'tertiary', foreground: 'on-tertiary' },
-      { text: 'Tertiary container (low)', background: 'tertiary-container-low', foreground: 'on-tertiary-container-low' },
-      { text: 'Tertiary container', background: 'tertiary-container', foreground: 'on-tertiary-container' },
-      { text: 'Tertiary container (high)', background: 'tertiary-container-high', foreground: 'on-tertiary-container-high' }
+      { text: 'Tertiary container', background: 'tertiary-container', foreground: 'on-tertiary-container' }
     ]
   },
   {
     header: 'Status',
     swatches: [
       { text: 'Success', background: 'success', foreground: 'on-success' },
-      { text: 'Success container (low)', background: 'success-container-low', foreground: 'on-success-container-low' },
-      { text: 'Success container', background: 'success-container', foreground: 'on-success-container' },
-      { text: 'Success container (high)', background: 'success-container-high', foreground: 'on-success-container-high' }
+      { text: 'Success container', background: 'success-container', foreground: 'on-success-container' }
     ]
   },
   {
     swatches: [
       { text: 'Error ', background: 'error', foreground: 'on-error' },
-      { text: 'Error container (low)', background: 'error-container-low', foreground: 'on-error-container-low' },
-      { text: 'Error container', background: 'error-container', foreground: 'on-error-container' },
-      { text: 'Error container (high)', background: 'error-container-high', foreground: 'on-error-container-high' }
+      { text: 'Error container', background: 'error-container', foreground: 'on-error-container' }
     ]
   },
   {
     swatches: [
       { text: 'Warning', background: 'warning', foreground: 'on-warning' },
-      { text: 'Warning container (low)', background: 'warning-container-low', foreground: 'on-warning-container-low' },
-      { text: 'Warning container', background: 'warning-container', foreground: 'on-warning-container' },
-      { text: 'Warning container (high)', background: 'warning-container-high', foreground: 'on-warning-container-high' }
+      { text: 'Warning container', background: 'warning-container', foreground: 'on-warning-container' }
     ]
   },
   {
     swatches: [
       { text: 'Info', background: 'info', foreground: 'on-info' },
-      { text: 'Info container (low)', background: 'info-container-low', foreground: 'on-info-container-low' },
-      { text: 'Info container', background: 'info-container', foreground: 'on-info-container' },
-      { text: 'Info container (high)', background: 'info-container-high', foreground: 'on-info-container-high' }
+      { text: 'Info container', background: 'info-container', foreground: 'on-info-container' }
     ]
   },
   {
     header: 'Text',
     swatches: [
-      { text: 'High', background: 'text-high', foreground: 'text-high-inverse' },
-      { text: 'Medium', background: 'text-medium', foreground: 'text-high-inverse' },
-      { text: 'Low', background: 'text-low', foreground: 'text-high' },
-      { text: 'Lowest', background: 'text-lowest', foreground: 'text-high' }
+      { text: 'High (87%)', foreground: 'text-high', noBorder: true },
+      { text: 'Medium (60%)', foreground: 'text-medium', noBorder: true },
+      { text: 'Low (38%)', foreground: 'text-low', noBorder: true },
+      { text: 'Lowest (12%)', foreground: 'text-lowest', noBorder: true }
     ]
   },
   {
-    header: 'Utilities',
+    header: 'Outline',
     swatches: [
-      { text: 'Outline', background: 'outline', foreground: 'text-high' }
+      { text: 'Outline (high)', border: 'outline-high' },
+      { text: 'Outline (medium)', border: 'outline-medium' },
+      { text: 'Outline (low)', border: 'outline-low' },
+      { text: 'Outline', border: 'outline' }
     ]
   }
 ];
@@ -139,7 +131,16 @@ function createSwatch(config: ISwatch): HTMLElement {
   if (config.text) {
     swatch.textContent = config.text;
   }
-  swatch.style.setProperty('background-color', `var(--forge-theme-${config.background})`);
+
+  if (config.border && !config.noBorder) {
+    swatch.style.setProperty('border-color', `var(--forge-theme-${config.border})`);
+  } else if (config.noBorder) {
+    swatch.style.setProperty('border', 'none');
+  }
+
+  if (config.background) {
+    swatch.style.setProperty('background-color', `var(--forge-theme-${config.background})`);
+  }
 
   if (config.foreground) {
     swatch.style.setProperty('color', `var(--forge-theme-${config.foreground})`);

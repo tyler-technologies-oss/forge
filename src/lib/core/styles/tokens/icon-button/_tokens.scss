@@ -11,7 +11,7 @@ $tokens: (
   // General
   display: utils.module-val(icon-button, display, inline-flex),
   size: utils.module-val(icon-button, size, 48px),
-  gap: utils.module-val(icon-button, spacing, 0),
+  gap: utils.module-val(icon-button, gap, 0),
   icon-color: utils.module-val(icon-button, icon-color, currentColor),
   background-color: utils.module-val(icon-button, background-color, none),
   icon-size: utils.module-val(icon-button, icon-size, typography.font-size-relative('1500')),
@@ -67,7 +67,7 @@ $tokens: (
   toggle-on-icon-color: utils.module-val(icon-button, toggle-on-icon-color, theme.variable(primary)),
 
   // Toggle (on) outlined
-  outlined-toggle-on-background-color: utils.module-val(icon-button, outlined-toggle-on-background-color, theme.variable(primary-container-low)),
+  outlined-toggle-on-background-color: utils.module-val(icon-button, outlined-toggle-on-background-color, theme.variable(primary-container)),
   outlined-toggle-on-icon-color: utils.module-val(icon-button, outlined-toggle-on-icon-color, theme.variable(primary)),
 
   // Toggle tonal
@@ -79,7 +79,7 @@ $tokens: (
 
   // Toggle filled
   filled-toggle-background-color: utils.module-val(icon-button, filled-toggle-background-color, theme.variable(surface-container-low)),
-  filled-toggle-icon-color: utils.module-val(icon-button, filled-toggle-background-color, theme.variable(primary)),
+  filled-toggle-icon-color: utils.module-val(icon-button, filled-toggle-icon-color, theme.variable(primary)),
 
   // Toggle (on) filled
   filled-toggle-on-background-color: utils.module-val(icon-button, filled-toggle-on-background-color, theme.variable(primary)),

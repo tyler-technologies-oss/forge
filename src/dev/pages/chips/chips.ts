@@ -1,7 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/chips';
 import '@tylertech/forge/icon-button';
-import '@tylertech/forge/icon-button/forge-icon-button.scss';
 import { IChipSetComponent, IconRegistry, ISwitchComponent } from '@tylertech/forge';
 import type { IChipComponent } from '@tylertech/forge';
 import { tylIconAlarm, tylIconBookmark, tylIconDirections, tylIconEvent, tylIconFace, tylIconPlace, tylIconRefresh } from '@tylertech/tyler-icons/standard';

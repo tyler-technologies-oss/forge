@@ -1276,23 +1276,19 @@ export class CalendarFoundation implements ICalendarFoundation {
    * Moves to and sets tabindex on the given date.
    * @param date The destination date
    * @param setFocus Whether focus should be set on the date
-   * */
+   */
   private _goToDate(date: Date, setFocus: boolean): void {
     const year = date.getFullYear();
     const month = date.getMonth();
     this._focusedDate = date;
-    if (this._year !== year || this._month !== month) {
-      this._month = month;
-      this._setMonth();
-      this._year = year;
-      this._setYear();
-      if (this._view !== 'date') {
-        this._closeMenu(false, setFocus);
-      } else {
-        this._resetDateGrid();
-      }
-    } else if (this._view !== 'date') {
+    this._month = month;
+    this._setMonth();
+    this._year = year;
+    this._setYear();
+    if (this._view !== 'date') {
       this._closeMenu(false, setFocus);
+    } else {
+      this._resetDateGrid();
     }
     this._adapter.setActiveDate(date, setFocus, this._preventFocus);
     this._emitFocusChangeEvent(this._focusedDate);
@@ -1605,7 +1601,8 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMin(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MIN, !!this._minAttribute, this._minAttribute as string);
 
-    if (this._min && this._min.getMonth() > this._month) {
+    if (this._min && (this._min.getMonth() > this._month || this._min.getFullYear() > this._year)) {
+      this._year = this._min.getFullYear();
       this._month = this._min.getMonth();
     }
 
@@ -1624,7 +1621,8 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMax(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MAX, !!this._maxAttribute, this._maxAttribute as string);
 
-    if (this._max && this._max.getMonth() < this._month) {
+    if (this._max && (this._max.getMonth() < this._month || this._max.getFullYear() < this._year)) {
+      this._year = this._max.getFullYear();
       this._month = this._max.getMonth();
     }
 

@@ -15,7 +15,7 @@ const attributes = {
 };
 
 const selectors = {
-  CONTAINER: '.container',
+  ROOT: '.forge-tab-bar',
   SCROLL_CONTAINER: '.scroll-container',
   DEFAULT_SLOT: 'slot:not([name])'
 };

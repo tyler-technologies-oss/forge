@@ -1,11 +1,9 @@
-@use './core';
-@use './configuration';
+@use './core' as *;
 @use '../focus-indicator';
 @use '../state-layer';
-@use './token-utils' as *;
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -13,34 +11,34 @@
 }
 
 .forge-switch {
-  @include configuration.configuration;
+  @include tokens;
 }
 
 // Off
 .forge-switch {
-  @include core.switch;
+  @include switch;
 
   #{declare(current-state-layer-width)}: #{token(state-layer-width)};
   #{declare(current-state-layer-height)}: #{token(state-layer-height)};
 
   .container {
-    @include core.container;
+    @include container;
   }
 
   .input {
-    @include core.input;
+    @include input;
   }
 
   .track {
-    @include core.track;
+    @include track;
   }
 
   .handle {
-    @include core.handle;
+    @include handle;
   }
 
   .icon {
-    @include core.icon;
+    @include icon;
 
     // TODO: Use when icon supports tokens
     // @include icon.provide-theme((
@@ -55,17 +53,17 @@
       // ));
       --forge-icon-font-size: #{token(icon-on-size)};
 
-      @include core.icon-on;
-      @include core.icon-hidden;
+      @include icon-on;
+      @include icon-hidden;
     }
 
     &__off {
-      @include core.icon-off-shown;
+      @include icon-off-shown;
     }
   }
 
   .label {
-    @include core.label;
+    @include label;
   }
 
   .hidden {
@@ -73,26 +71,26 @@
   }
 
   ::slotted([slot=input]) {
-    @include core.input;
+    @include input;
   }
 }
 
 // On
 :host([on]) {
   .track {
-    @include core.track-on;
+    @include track-on;
   }
 
   .handle {
-    @include core.handle-on;
+    @include handle-on;
 
     .icon {
       &__on {
-        @include core.icon-on-shown;
+        @include icon-on-shown;
       }
 
       &__off {
-        @include core.icon-hidden;
+        @include icon-hidden;
       }
 
     }
@@ -110,14 +108,14 @@
   .forge-switch {
     .container:active {
       .track {
-        @include core.track-active;
+        @include track-active;
       }
   
       .handle {
-        @include core.handle-active;
+        @include handle-active;
   
         .icon {
-          @include core.icon-active;
+          @include icon-active;
         }
       }
     }
@@ -127,14 +125,14 @@
   .forge-switch {
     .container:active {
       .track {
-        @include core.track-active-on;
+        @include track-active-on;
       }
   
       .handle {
-        @include core.handle-active-on;
+        @include handle-active-on;
   
         .icon {
-          @include core.icon-active-on;
+          @include icon-active-on;
         }
       }
     }
@@ -153,14 +151,14 @@
 // Disabled
 :host([disabled]) {
   .forge-switch {
-    @include core.switch-disabled;
+    @include switch-disabled;
 
     .container {
-      @include core.container-disabled;
+      @include container-disabled;
     }
 
     .handle {
-      @include core.handle-disabled;
+      @include handle-disabled;
     }
   }
 }
@@ -169,7 +167,7 @@
 :host([readonly]) {
   .forge-switch {
     .container {
-      @include core.container-disabled;
+      @include container-disabled;
     }
   }
 }

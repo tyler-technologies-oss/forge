@@ -1,5 +1,7 @@
 @use './token-utils' as *;
 
+@forward './token-utils';
+
 @mixin base {
   animation-delay: 0s, calc(#{token(duration)} * 0.25);
   animation-duration: calc(#{token(duration)} * 0.25), calc(#{token(duration)} * 0.75);

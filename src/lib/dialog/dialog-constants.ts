@@ -22,7 +22,8 @@ const attributes = {
   POSITION_Y: 'position-y',
   MOVEABLE: 'moveable',
   MOVE_TARGET: 'move-target',
-  OPEN: 'forge-dialog-open',
+  OPEN: 'open',
+  BODY_OPEN: 'forge-dialog-open',
   INITIAL_FOCUS: 'forge-dialog-focus',
   DFEAULT_MOVE_TARGET: 'forge-dialog-move-target'
 };

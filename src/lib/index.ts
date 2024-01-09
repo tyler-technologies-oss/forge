@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright (c) 2024 Tyler Technologies, Inc.
+ * Copyright (c) Tyler Technologies, Inc.
  * License: Apache-2.0
  */
 
@@ -55,8 +55,10 @@ import { ListComponent } from './list';
 import { ListItemComponent } from './list/list-item';
 import { MenuComponent } from './menu';
 import { OpenIconComponent } from './open-icon';
+import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
 import { PaginatorComponent } from './paginator';
+import { PopoverComponent } from './popover';
 import { PopupComponent } from './popup';
 import { ProductIconComponent } from './product-icon';
 import { QuantityFieldComponent } from './quantity-field';
@@ -123,8 +125,10 @@ export * from './linear-progress';
 export * from './list';
 export * from './menu';
 export * from './open-icon';
+export * from './overlay';
 export * from './page-state';
 export * from './paginator';
+export * from './popover';
 export * from './popup';
 export * from './product-icon';
 export * from './quantity-field';
@@ -203,8 +207,10 @@ const CUSTOM_ELEMENTS = [
   OpenIconComponent,
   OptionComponent,
   OptionGroupComponent,
+  OverlayComponent,
   PageStateComponent,
   PaginatorComponent,
+  PopoverComponent,
   PopupComponent,
   ProductIconComponent,
   ProfileCardComponent,

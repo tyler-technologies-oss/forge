@@ -1,0 +1,67 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Popover',
+    includePath: './pages/popover/popover.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Placement',
+        id: 'opt-placement',
+        defaultValue: 'bottom',
+        options: [
+          { label: 'Auto', value: 'auto' },
+          { label: 'Top start', value: 'top-start' },
+          { label: 'Top', value: 'top' },
+          { label: 'Top end', value: 'top-end' },
+          { label: 'Right start', value: 'right-start' },
+          { label: 'Right', value: 'right' },
+          { label: 'Right end', value: 'right-end' },
+          { label: 'Bottom start', value: 'bottom-start' },
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Bottom end', value: 'bottom-end' },
+          { label: 'Left start', value: 'left-start' },
+          { label: 'Left', value: 'left' },
+          { label: 'Left end', value: 'left-end' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Animation type',
+        id: 'opt-animation-type',
+        defaultValue: 'zoom',
+        options: [
+          { label: 'None', value: 'none' },
+          { label: 'Fade', value: 'fade' },
+          { label: 'Slide', value: 'slide' },
+          { label: 'Zoom', value: 'zoom' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Trigger type',
+        multiple: true,
+        id: 'opt-trigger-type',
+        defaultValue: 'click',
+        options: [
+          { label: 'Click', value: 'click' },
+          { label: 'Double click', value: 'doubleclick' },
+          { label: 'Hover', value: 'hover' },
+          { label: 'Focus', value: 'focus' },
+          { label: 'Longpress', value: 'longpress' },
+          { label: 'Manual', value: 'manual' }
+        ]
+      },
+      { type: 'switch', label: 'Persistent', id: 'opt-persistent' },
+      { type: 'switch', label: 'No anchor', id: 'opt-no-anchor' },
+      { type: 'switch', label: 'Arrow', id: 'opt-arrow' },
+      { type: 'switch', label: 'Use offset', id: 'opt-use-offset' },
+      { type: 'switch', label: 'Persistent hover', id: 'opt-persistent-hover', disabled: true },
+      { type: 'switch', label: 'Force containment', id: 'opt-force-containment' },
+      { type: 'switch', label: 'Prevent close', id: 'opt-prevent-close' },
+      { type: 'switch', label: 'Allow contextmenu', id: 'opt-allow-contextmenu' },
+      { type: 'button', label: 'Center demo', id: 'opt-center'},
+    ]
+  }
+})
+%>

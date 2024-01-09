@@ -1,15 +1,17 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../../icon/icon-registry';
-import { WithFocusable, IWithFocusable } from '../../core/base/base-focusable-component';
+import { WithFocusable, IWithFocusable } from '../../core/mixins/focus/with-focusable';
 import { BaseComponent } from '../../core/base/base-component';
-import { ExperimentalFocusOptions, internals } from '../../constants';
+import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
 import { BaseButtonFoundation } from './base-button-foundation';
-import { WithLabelAwareness, IWithLabelAwareness } from '../../core/base/base-label-aware-component';
+import { WithLabelAwareness, IWithLabelAwareness } from '../../core/mixins/label/with-label-aware';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
-export interface IBaseButton extends IWithFocusable, IWithLabelAwareness {
+export interface IBaseButton extends IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
@@ -25,19 +27,20 @@ export interface IBaseButton extends IWithFocusable, IWithLabelAwareness {
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-const BaseButtonClass = WithLabelAwareness(WithFocusable(BaseComponent));
+const BaseButtonClass = WithDefaultAria(WithElementInternals(WithLabelAwareness(WithFocusable(BaseComponent))));
 
 export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseButtonClass implements IBaseButton {
-  public static readonly formAssociated = true;
+  public static get observedAttributes(): string[] {
+    return Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
+  }
 
-  public [internals]: ElementInternals;
+  public static readonly formAssociated = true;
 
   protected abstract _foundation: T;
 
   constructor() {
     super();
     IconRegistry.define(tylIconArrowDropDown);
-    this[internals] = this.attachInternals();
   }
 
   public override connectedCallback(): void {
@@ -49,31 +52,31 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
     switch (name) {
       case BASE_BUTTON_CONSTANTS.observedAttributes.TYPE:
         this.type = newValue as ButtonType;
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.POPOVER_ICON:
         this.popoverIcon = coerceBoolean(newValue);
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.ANCHOR:
         this.anchor = coerceBoolean(newValue);
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.HREF:
         this.href = newValue;
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.TARGET:
         this.target = newValue;
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.DOWNLOAD:
         this.download = newValue;
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.REL:
         this.rel = newValue;
-        break;
+        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
-        break;
+        return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
@@ -83,7 +86,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   }
 
   public labelChangedCallback(value: string | null): void {
-    this._foundation.proxyLabel(value);
+    this[setDefaultAria]({ ariaLabel: value }, { setAttribute: !this.hasAttribute('aria-label') });
   }
 
   public get form(): HTMLFormElement | null {

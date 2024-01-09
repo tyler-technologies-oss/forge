@@ -6,17 +6,8 @@ import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
 import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
-import { internals, isFocusable } from '../../constants';
+import { internals, isFocusable, setDefaultAria } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
-
-// TODO: remove this augmentation when the TypeScript version is upgraded for latest DOM typings
-type TempHTMLElementWithPopover = IBaseButton & {
-  popoverTargetElement: TempHTMLElementWithPopover | null;
-  popover: 'manual' | 'auto';
-  showPopover(): void;
-  hidePopover(): void;
-  togglePopover(): boolean;
-};
 
 export interface IBaseButtonAdapter extends IBaseAdapter {
   initialize(): void;
@@ -34,7 +25,6 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   managePopover(): boolean;
   toggleDefaultPopoverIcon(value: boolean): void;
   animateStateLayer(): void;
-  proxyLabel(value: string | null): void;
 }
 
 export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> implements IBaseButtonAdapter {
@@ -43,8 +33,6 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   protected _focusIndicatorElement: IFocusIndicatorComponent;
   protected _stateLayerElement: IStateLayerComponent;
   protected _endSlotElement: HTMLSlotElement;
-
-  private _labelAwareText?: string;
 
   constructor(component: IBaseButton) {
     super(component);
@@ -101,7 +89,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     }
 
     this._component[isFocusable] = !value;
-    toggleAttribute(this._component, value, 'aria-disabled', 'true');
+    this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : null });
   }
 
   public clickAnchor(): void {
@@ -162,7 +150,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   }
 
   public hasPopoverTarget(): boolean {
-    return this._component.hasAttribute('popovertarget') || !!(this._component as TempHTMLElementWithPopover).popoverTargetElement;
+    return this._component.hasAttribute('popovertarget') || !!this._component.popoverTargetElement;
   }
 
   /**
@@ -246,14 +234,8 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._stateLayerElement?.playAnimation();
   }
 
-  public proxyLabel(value: string | null): void {
-    this._labelAwareText = value ?? undefined;
-    const hasAriaLabel = this._component.hasAttribute('aria-label') || !!this._labelAwareText;
-    toggleAttribute(this._component, hasAriaLabel, 'aria-label', this._component.getAttribute('aria-label') ?? this._labelAwareText);
-  }
-
-  private _locatePopoverTargetElement(): TempHTMLElementWithPopover | null {
-    let popoverElement = (this._component as TempHTMLElementWithPopover).popoverTargetElement ?? null;
+  private _locatePopoverTargetElement(): HTMLElement | null {
+    let popoverElement = this._component.popoverTargetElement ?? null;
 
     if (!popoverElement) {
       const rootNode = this._component.ownerDocument.getRootNode() as Document | ShadowRoot;
@@ -270,13 +252,8 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
 
   private _applyHostSemantics(): void {
     const role = this._component.getAttribute('role');
-
-    // Allow user provided roles to override our default role
-    if (!role || ['button', 'link'].includes(role)) {
-      // Set default role based on the existence of an anchor element
-      this._component.role = this._anchorElement ? 'link' : 'button';
-    }
-
+    const setAttribute = !role || ['button', 'link'].includes(role);
+    this._component[setDefaultAria]({ role: this._anchorElement ? 'link' : 'button' }, { setAttribute });
     this._component[isFocusable] = !!this._anchorElement || !this._component.disabled;
   }
 

@@ -1,0 +1,41 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin base {
+  display: none;
+  box-sizing: border-box;
+  height: #{token(height)};
+  width: #{token(width)};
+  border-radius: inherit;
+
+  position: #{token(position)};
+  top: 0;
+  left: 0;
+  z-index: #{token(z-index)};
+  
+  background: inherit;
+  color: inherit;
+}
+
+@mixin absolute {
+  @include override(position, absolute, value);
+}
+
+@mixin open {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: none;
+  overflow: visible;
+  inset: unset;
+}
+
+@mixin no-anchor {
+  inset: 0;
+  margin: auto;
+  margin-inline-start: #{token(position-inline-start)};
+  margin-inline-end: #{token(position-inline-end)};
+  margin-block-start: #{token(position-block-start)};
+  margin-block-end: #{token(position-block-end)};
+}

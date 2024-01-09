@@ -1,0 +1,61 @@
+@use './core' as *;
+
+//
+// Host
+//
+
+:host {
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-overlay {
+  @include tokens;
+}
+
+.forge-overlay {
+  @include base;
+}
+
+//
+// Position strategy - absolute
+//
+
+:host([position-strategy=absolute]) {
+  .forge-overlay {
+    @include absolute;
+  }
+}
+
+//
+// Open
+//
+
+:host([open][inline]) {
+  .forge-overlay {
+    @include open;
+  }
+}
+
+:host([open]) {
+  .forge-overlay:popover-open {
+    @include open;
+  }
+}
+
+//
+// No anchor
+//
+
+:host([open][no-anchor]) {
+  .forge-overlay:popover-open {
+    @include no-anchor;
+  }
+}

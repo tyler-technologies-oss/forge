@@ -2,30 +2,35 @@ import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IButtonToggleComponent } from '../button-toggle/button-toggle';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from '../button-toggle/button-toggle-constants';
 import { IButtonToggleGroupAdapter } from './button-toggle-group-adapter';
-import { BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleOption } from './button-toggle-group-constants';
+import { ButtonToggleGroupTheme, BUTTON_TOGGLE_GROUP_CONSTANTS, IButtonToggleGroupChangeEventData } from './button-toggle-group-constants';
 
 export interface IButtonToggleGroupFoundation extends ICustomElementFoundation {
-  value: any;
+  value: unknown;
   multiple: boolean;
   stretch: boolean;
   mandatory: boolean;
   vertical: boolean;
   dense: boolean;
   disabled: boolean;
-  options: IButtonToggleOption[];
+  readonly: boolean;
+  required: boolean;
+  outlined: boolean;
+  theme: ButtonToggleGroupTheme;
 }
 
 export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation {
-  private _isInitialized = false;
+  private _values: unknown[] = [];
+  private _outlined = true;
   private _multiple = false;
   private _mandatory = false;
   private _vertical = false;
   private _stretch = false;
   private _dense = false;
   private _disabled = false;
-  private _options: IButtonToggleOption[] = [];
-  private _values: any[] = [];
-  private _originalValue: any;
+  private _readonly = false;
+  private _required = false;
+  private _theme: ButtonToggleGroupTheme = 'tertiary';
+
   private _selectListener: (evt: CustomEvent<IButtonToggleSelectEventData>) => void;
   private _slotListener: () => void;
 
@@ -35,96 +40,88 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
   }
 
   public initialize(): void {
-    if (this._options && this._options.length) {
-      this._applyOptions(false);
-    }
-
+    this._adapter.setFormValue();
+    this._adapter.setFormValidity();
     this._adapter.addListener(BUTTON_TOGGLE_CONSTANTS.events.SELECT, this._selectListener);
     this._adapter.addSlotChangeListener(this._slotListener);
-    this._adapter.setVertical(this._vertical);
-    this._adapter.setStretch(this._stretch);
-    this._adapter.setDense(this._dense);
-    this._adapter.setDisabled(this._disabled);
-    this._adapter.applyAdjacentSelections(this._vertical);
-    this._isInitialized = true;
   }
 
-  public disconnect(): void {
-    this._isInitialized = false;
+  public destroy(): void {
     this._adapter.removeListener(BUTTON_TOGGLE_CONSTANTS.events.SELECT, this._selectListener);
     this._adapter.removeSlotChangeListener(this._slotListener);
   }
 
   private _synchronize(): void {
-    if (!this._multiple) {
+    if (this._disabled) {
+      this._adapter.setDisabled(this._disabled);
+    }
+    if (this._readonly) {
+      this._adapter.setReadonly(this._readonly);
+    }
+
+    if (this._multiple) {
+      const selectedValues = new Set(this._adapter.getSelectedValues().concat(this._values));
+      this.value = Array.from(selectedValues);
+    } else {
       const selectedValues = this._adapter.getSelectedValues().concat(this._values);
       this.value = selectedValues.length ? selectedValues[selectedValues.length - 1] : null;
-    } else {
-      const selectedValues = new Set(this._adapter.getSelectedValues().concat(this._values));
-      this._applyValue(Array.from(selectedValues));
     }
   }
 
   private _onSelect(evt: CustomEvent<IButtonToggleSelectEventData>): void {
-    const target = evt.target as IButtonToggleComponent;
-
-    // When in mandatory mode we need to ensure at least one element is selected. If there are no selections
-    // then we need to reselect the target toggle because it was deselected
+    // When in mandatory mode we need to ensure at least one element is selected. If the user tries to deselect the last
+    // element, we prevent the select event from toggling.
     if (this._mandatory) {
       const values = this._adapter.getSelectedValues();
       if (!values.length) {
-        target.selected = true;
+        evt.preventDefault();
         return;
       }
     }
 
-    // When not in multiple mode, we deselect all toggles, except for the one that was just changed
-    if (!this._multiple) {
-      this._adapter.deselect(target);
+    // Compute the new state to provide in the change event
+    let value: unknown[];
+    if (evt.detail.selected) {
+      value = this._multiple ? [...this._values, evt.detail.value] : [evt.detail.value];
+    } else {
+      value = this._multiple ? this._values.filter(v => v !== evt.detail.value) : [];
     }
 
-    this._adapter.applyAdjacentSelections(this._vertical);
-    this._adapter.emitHostEvent(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, this._getValue());
-  }
+    const detail: IButtonToggleGroupChangeEventData = this._multiple ? value : value.length ? value[0] : null;
+    const changeEvt = new CustomEvent(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, { detail, bubbles: true, cancelable: true });
+    this._adapter.dispatchHostEvent(changeEvt);
 
-  private _getValue(): any {
-    const selections = this._adapter.getSelectedValues();
-    return this._multiple ? Array.from(new Set(selections)) : selections.slice(0, 1)[0] ?? null;
-  }
-
-  private _applyValue(value: any): void {
-    let values = value instanceof Array ? value : [value];
-    if (!this._multiple && values.length > 1) {
-      values = values[0];
+    if (changeEvt.defaultPrevented) {
+      evt.preventDefault();
+      return;
     }
+
+    this._values = value;
+    this._adapter.applyValues(this._values);
+    this._adapter.setFormValue();
+    this._adapter.setFormValidity();
+  }
+
+  private _applyValue(value: unknown[]): void {
+    let values = Array.isArray(value) ? value : value != null ? [value] : [];
     this._values = values;
+
+    if (!this._multiple && values.length > 1) {
+      values = [values[0]];
+    }
+
     this._adapter.applyValues(values);
-    if (this._multiple) {
-      this._adapter.applyAdjacentSelections(this._vertical);
-    }
-  }
-
-  private _applyOptions(init = true): void {
-    if (this._options) {
-      this._adapter.createOptions(this._options);
-
-      if (init) {
-        this._adapter.setStretch(this._stretch);
-        this._adapter.setDense(this._dense);
-        this._adapter.setDisabled(this._disabled);
-        this._adapter.applyAdjacentSelections(this._vertical);
-      }
-    }
+    this._adapter.setFormValue();
+    this._adapter.setFormValidity();
   }
 
   public get value(): any {
-    if (!this._isInitialized) {
-      return this._originalValue;
-    }
-    return this._getValue();
+    // Combine the selected toggle values with our current state to ensure we always return the latest value
+    // even if our state doesn't match a selected toggle.
+    const values = Array.from(new Set(this._adapter.getSelectedValues().concat(this._values)));
+    return this._multiple ? Array.from(values) : values[0] ?? null;
   }
   public set value(value: any) {
-    this._originalValue = value;
     this._applyValue(value);
   }
 
@@ -132,9 +129,11 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
     return this._multiple;
   }
   public set multiple(value: boolean) {
+    value = !!value;
     if (this._multiple !== value) {
       this._multiple = value;
-      this._adapter.setHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.MULTIPLE, this._multiple as any);
+      this._applyValue(this._values);
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.MULTIPLE, this._multiple);
     }
   }
 
@@ -142,13 +141,10 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
     return this._mandatory;
   }
   public set mandatory(value: boolean) {
+    value = !!value;
     if (this._mandatory !== value) {
       this._mandatory = value;
-      if (this._mandatory) {
-        this._adapter.setHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.MANDATORY);
-      } else {
-        this._adapter.removeHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.MANDATORY);
-      }
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.MANDATORY, this._mandatory);
     }
   }
 
@@ -156,15 +152,10 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
     return this._vertical;
   }
   public set vertical(value: boolean) {
+    value = !!value;
     if (this._vertical !== value) {
       this._vertical = value;
-      this._adapter.setVertical(this._vertical);
-      this._adapter.applyAdjacentSelections(this._vertical);
-      if (this._vertical) {
-        this._adapter.setHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.VERTICAL);
-      } else {
-        this._adapter.removeHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.VERTICAL);
-      }
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.VERTICAL, this._vertical);
     }
   }
 
@@ -172,14 +163,10 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
     return this._stretch;
   }
   public set stretch(value: boolean) {
+    value = !!value;
     if (this._stretch !== value) {
       this._stretch = value;
-      this._adapter.setStretch(this._stretch);
-      if (this._stretch) {
-        this._adapter.setHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.STRETCH);
-      } else {
-        this._adapter.removeHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.STRETCH);
-      }
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.STRETCH, this._stretch);
     }
   }
 
@@ -187,14 +174,10 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
     return this._dense;
   }
   public set dense(value: boolean) {
+    value = !!value;
     if (this._dense !== value) {
       this._dense = value;
-      this._adapter.setDense(this._dense);
-      if (this._dense) {
-        this._adapter.setHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.DENSE);
-      } else {
-        this._adapter.removeHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.DENSE);
-      }
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.DENSE, this._dense);
     }
   }
 
@@ -202,24 +185,55 @@ export class ButtonToggleGroupFoundation implements IButtonToggleGroupFoundation
     return this._disabled;
   }
   public set disabled(value: boolean) {
+    value = !!value;
     if (this._disabled !== value) {
       this._disabled = value;
       this._adapter.setDisabled(this._disabled);
-      if (this._disabled) {
-        this._adapter.setHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.DISABLED);
-      } else {
-        this._adapter.removeHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.DISABLED);
-      }
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }
 
-  public get options(): IButtonToggleOption[] {
-    return this._options.map(o => ({ ...o }));
+  public get readonly(): boolean {
+    return this._readonly;
   }
-  public set options(value: IButtonToggleOption[]) {
-    this._options = value.map(o => ({ ...o }));
-    if (this._isInitialized) {
-      this._applyOptions();
+  public set readonly(value: boolean) {
+    value = !!value;
+    if (this._readonly !== value) {
+      this._readonly = value;
+      this._adapter.setReadonly(this._readonly);
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.READONLY, this._readonly);
+    }
+  }
+
+  public get required(): boolean {
+    return this._required;
+  }
+  public set required(value: boolean) {
+    value = !!value;
+    if (this._required !== value) {
+      this._required = value;
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.REQUIRED, this._required);
+    }
+  }
+
+  public get outlined(): boolean {
+    return this._outlined;
+  }
+  public set outlined(value: boolean) {
+    value = !!value;
+    if (this._outlined !== value) {
+      this._outlined = value;
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.NO_OUTLINE, !this._outlined);
+    }
+  }
+
+  public get theme(): ButtonToggleGroupTheme {
+    return this._theme;
+  }
+  public set theme(value: ButtonToggleGroupTheme) {
+    if (this._theme !== value) {
+      this._theme = value;
+      this._adapter.toggleHostAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.THEME, this._theme !== 'tertiary', this._theme);
     }
   }
 }

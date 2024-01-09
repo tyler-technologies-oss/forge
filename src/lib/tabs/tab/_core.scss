@@ -1,6 +1,8 @@
 @use '../../core/styles/typography';
 @use './token-utils' as *;
 
+@forward './token-utils';
+
 @mixin host {
   display: inline-flex;
   outline: none;

@@ -1,11 +1,9 @@
-@use './configuration';
-@use './core';
+@use './core' as *;
 @use '../../focus-indicator';
 @use '../../state-layer';
-@use './token-utils' as *;
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {
@@ -17,24 +15,23 @@
 }
 
 .forge-radio {
-  @include configuration.configuration;
+  @include tokens;
 }
 
 // Unchecked
 .forge-radio {
-  @include configuration.configuration;
-  @include core.radio;
+  @include radio;
 
   .container {
-    @include core.container;
+    @include container;
   }
 
   .background {
-    @include core.background;
+    @include background;
   }
 
   .label {
-    @include core.label;
+    @include label;
   }
 }
 
@@ -42,7 +39,7 @@
 :host([checked]) {
   .forge-radio {
     .background {
-      @include core.background-checked;
+      @include background-checked;
     }
   }
 
@@ -57,7 +54,7 @@
 :host([dense]) {
   .forge-radio {
     .container {
-      @include core.container-dense;
+      @include container-dense;
     }
   }
 }
@@ -65,10 +62,10 @@
 // Disabled
 :host([disabled]) {
   .forge-radio {
-    @include core.radio-disabled;
+    @include radio-disabled;
 
     .container {
-      @include core.container-disabled;
+      @include container-disabled;
     }
   }
 }
@@ -77,7 +74,7 @@
 :host([readonly]) {
   .forge-radio {
     .container {
-      @include core.container-readonly;
+      @include container-readonly;
     }
   }
 }

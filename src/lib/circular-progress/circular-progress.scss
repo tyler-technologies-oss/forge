@@ -1,19 +1,19 @@
-@use './core';
+@use './core' as *;
 @use './animation';
-@use './configuration';
 @use '../core/styles/theme';
-@use './token-utils' as *;
 
 //
 // Host styles
 //
 
+$_host-tokens: [size];
+
 :host {
-  @include configuration.host-configuration;
+  @include tokens($includes: $_host-tokens);
 }
 
 :host {
-  @include core.container;
+  @include container;
 }
 
 :host([hidden]) {
@@ -25,14 +25,14 @@
 //
 
 .forge-circular-progress {
-  @include configuration.configuration;
+  @include tokens($excludes: $_host-tokens);
 }
 
 .forge-circular-progress {
-  @include core.progress;
+  @include progress;
 
   &--indeterminate {
-    @include core.indeterminate;
+    @include indeterminate;
   }
 }
 
@@ -42,11 +42,11 @@
 .right,
 .circle,
 svg {
-  @include core.positioned;
+  @include positioned;
 }
 
 .center-content {
-  @include core.center-content;
+  @include center-content;
 }
 
 //
@@ -54,23 +54,23 @@ svg {
 //
 
 .left {
-  @include core.indeterminate-left;
+  @include indeterminate-left;
 
   .circle {
-    @include core.indeterminate-left-circle;
+    @include indeterminate-left-circle;
   }
 }
     
 .right {
-  @include core.indeterminate-right;
+  @include indeterminate-right;
 
   .circle {
-    @include core.indeterminate-right-circle;
+    @include indeterminate-right-circle;
   }
 }
 
 .circle {
-  @include core.indeterminate-circle;
+  @include indeterminate-circle;
 }
 
 //
@@ -78,27 +78,37 @@ svg {
 //
 
 svg {
-  @include core.determinate-svg;
+  @include determinate-svg;
 
   circle {
-    @include core.determinate-svg-circle;
+    @include determinate-svg-circle;
   }
 }
 
 .progress {
-  @include core.determinate-progress;
+  @include determinate-progress;
 }
 
 .track {
-  @include core.determinate-track;
+  @include determinate-track;
 
   &-background {
-    @include core.determinate-track-background;
+    @include determinate-track-background;
   }
 }
 
 .spinner {
-  @include core.determinate-spinner;
+  @include determinate-spinner;
+}
+
+//
+// Track
+//
+
+:host(:is([track],[determinate])) {
+  .forge-circular-progress {
+    @include override(track-color, track-fill-color);
+  }
 }
 
 //
@@ -109,6 +119,11 @@ svg {
   :host([theme=#{$theme}]) {
     .forge-circular-progress {
       @include override(indicator-color, theme.variable($theme), value);
+    }
+  }
+
+  :host([theme=#{$theme}]:is([track],[determinate])) {
+    .forge-circular-progress {
       @include override(track-color, theme.variable(#{$theme}-container), value);
     }
   }
@@ -120,12 +135,6 @@ svg {
 @include theme(error);
 @include theme(warning);
 @include theme(info);
-
-:host([track]) {
-  .forge-circular-progress {
-    @include override(track-color, track-fill-color);
-  }
-}
 
 @media screen and (forced-colors: active) {
   .progress {

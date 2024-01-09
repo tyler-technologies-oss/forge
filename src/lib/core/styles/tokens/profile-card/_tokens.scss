@@ -5,7 +5,7 @@
 
 $tokens: (
   min-width: utils.module-val(profile-card, min-width, 360px),
-  shape: utils.module-val(profile-card, border-radius, shape.variable(medium)),
+  shape: utils.module-val(profile-card, shape, shape.variable(medium)),
   avatar-size: utils.module-val(profile-card, avatar-size, 56px)
 ) !default;
 

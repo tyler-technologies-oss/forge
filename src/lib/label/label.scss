@@ -1,7 +1,7 @@
-@use './core';
+@use './core' as *;
 
 :host {
-  @include core.host;
+  @include host;
 }
 
 :host([hidden]) {

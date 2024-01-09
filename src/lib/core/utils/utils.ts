@@ -184,15 +184,7 @@ export function locateTargetHeuristic(element: HTMLElement, id?: string | null):
   let targetEl: HTMLElement | null = null;
 
   if (id) {
-    const rootNode = element.getRootNode() as Document | ShadowRoot;
-
-    // Special case handling for a `:host` selector to easily target a host element
-    // from within a shadow tree, given that this is a very common scenario
-    if (id === ':host' && rootNode instanceof ShadowRoot) {
-      return rootNode.host as HTMLElement;
-    }
-
-    targetEl = rootNode.querySelector(`#${id}`);
+    targetEl = locateElementById(element, id);
   }
 
   if (!targetEl) {
@@ -200,6 +192,24 @@ export function locateTargetHeuristic(element: HTMLElement, id?: string | null):
   }
 
   return targetEl;
+}
+
+/**
+ * Attempts to locate an element by id within its root node.
+ * @param element The element to search from.
+ * @param id The id of the element to locate.
+ * @returns The element if found, otherwise `null`.
+ */
+export function locateElementById(element: HTMLElement, id?: string | null): HTMLElement | null {
+  const rootNode = element.getRootNode() as Document | ShadowRoot;
+
+  // Special case handling for a `:host` selector to easily target a host element
+  // from within a shadow tree, given that this is a very common scenario
+  if (id === ':host' && rootNode instanceof ShadowRoot) {
+    return rootNode.host as HTMLElement;
+  }
+
+  return rootNode.querySelector(`#${id}`);
 }
 
 /**
@@ -216,4 +226,14 @@ export function replaceElement<T extends HTMLElement>(oldElement: HTMLElement, n
   oldElement.insertAdjacentElement('beforebegin', newElement);
   oldElement.remove();
   return newElement;
+}
+
+/**
+ * Coerces a string separated by `separator` into an array of strings. 
+ * @param value The string to coerce.
+ * @params [separator=','] The separator to use when splitting the string.
+ * @returns An array of strings.
+ */
+export function coerceStringToArray<T extends string>(value: string, separator = ','): T[] {
+  return value.split(separator).map(p => p.trim()) as T[];
 }

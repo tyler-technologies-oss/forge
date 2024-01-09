@@ -1,27 +1,23 @@
 import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { getFormState, getFormValue, inputType, internals, setDefaultAria } from '../../constants';
-import {
-  BaseComponent,
-  IWithElementInternals,
-  IWithFocusable,
-  IWithFormAssociation,
-  IWithLabelAwareness,
-  WithElementInternals,
-  WithFocusable,
-  WithFormAssociation,
-  WithLabelAwareness
-} from '../../core/base';import { FormValue } from '../../core/utils/form-utils';
+import { BaseComponent } from '../../core/base/base-component';
+import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithFormAssociation, WithFormAssociation } from '../../core/mixins/form/with-form-associated';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
+import { FormValue } from '../../core/utils/form-utils';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { StateLayerComponent } from '../../state-layer';
 import { RadioGroupManager } from '../core/radio-group-manager';
 import { RadioAdapter } from './radio-adapter';
 import { RADIO_CONSTANTS, RadioLabelPosition, RadioState, tryCheck } from './radio-constants';
 import { RadioFoundation } from './radio-foundation';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
 import template from './radio.html';
 import styles from './radio.scss';
 
-export interface IRadioComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals {
+export interface IRadioComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   checked: boolean;
   defaultChecked: boolean;
   required: boolean;
@@ -35,7 +31,7 @@ declare global {
   }
 }
 
-const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithElementInternals(BaseComponent, RADIO_CONSTANTS.observedAriaAttributes))));
+const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))));
 
 /**
  * @tag forge-radio
@@ -120,8 +116,7 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
       RADIO_CONSTANTS.attributes.REQUIRED,
       RADIO_CONSTANTS.attributes.READONLY,
       RADIO_CONSTANTS.attributes.LABEL_POSITION,
-      RADIO_CONSTANTS.attributes.TABINDEX,
-      ...RADIO_CONSTANTS.observedAriaAttributes
+      RADIO_CONSTANTS.attributes.TABINDEX
     ];
   }
 
@@ -197,9 +192,7 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
   }
 
   public labelChangedCallback(value: string | null): void {
-    this[setDefaultAria]({
-      ariaLabel: value ?? undefined
-    });
+    this[setDefaultAria]({ ariaLabel: value });
   }
 
   @FoundationProperty()

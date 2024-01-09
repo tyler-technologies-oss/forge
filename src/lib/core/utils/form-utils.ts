@@ -1,5 +1,5 @@
 export type FormValue = File | string | FormData;
-export type FormRestoreState = File | string | Array<[string, FormDataEntryValue]>;
+export type FormRestoreState = File | string | FormData | Array<[string, FormDataEntryValue]>;
 export type FormRestoreReason = 'restore' | 'autocomplete';
 export type InputType = 'button' | 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email'
 | 'file' | 'hidden' | 'image' | 'month' | 'number' | 'password' | 'radio' | 'range' | 'reset'
