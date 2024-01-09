@@ -793,11 +793,13 @@ describe('BaseButton', () => {
     const buttonEl = el.querySelector('forge-test-base-button') as IButtonComponent;
     const popoverEl = el.querySelector('[popover]') as HTMLElement;
 
-    await clickElement(buttonEl);
+    expect(popoverEl.matches(':popover-open')).to.be.false;
+    
+    buttonEl.click();
     await elementUpdated(popoverEl);
     expect(popoverEl.matches(':popover-open')).to.be.true;
     
-    await clickElement(buttonEl);
+    buttonEl.click();
     await elementUpdated(popoverEl);
     expect(popoverEl.matches(':popover-open')).to.be.false;
   });
@@ -1168,12 +1170,11 @@ describe('BaseButton', () => {
     return btn.shadowRoot?.querySelector('slot[name=end] > forge-icon') as IIconComponent;
   }
 
-  function clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+  async function clickElement(el: HTMLElement): Promise<void> {
+    const { x, y, height, width } = el.getBoundingClientRect();
+    const mouseX = Math.round(x + width / 2);
+    const mouseY = Math.round(y + height / 2);
+    await sendMouse({ type: 'click', position: [mouseX, mouseY], button: 'left' });
   }
 
   function pressKey(press: ' ' | 'Enter'): Promise<void> {

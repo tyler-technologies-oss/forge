@@ -43,12 +43,15 @@ describe('List', () => {
     expect(ctx.listItemsAttr('role', 'listitem')).to.true;
     
     ctx.list.role = 'listbox';
+    await elementUpdated(ctx.list);
     expect(ctx.listItemsAttr('role', 'option')).to.true;
 
     ctx.list.role = 'menu';
+    await elementUpdated(ctx.list);
     expect(ctx.listItemsAttr('role', 'menuitem')).to.true;
 
     ctx.list.role = 'list';
+    await elementUpdated(ctx.list);
     expect(ctx.listItemsAttr('role', 'listitem')).to.true;
   });
 

@@ -2,6 +2,10 @@
 @use '../../../lib/button-toggle/button-toggle';
 @use '../../../lib/core/styles/theme';
 
+section:not(:last-of-type) {
+  margin-block-end: 32px;
+}
+
 #toolbar-card {
   display: inline-block;
   --forge-card-padding: 0;
@@ -23,11 +27,14 @@
 .legacy-button-toggle-group {
   @include button-toggle-group.provide-theme((
     gap: 1px,
-    padding: 0
+    padding: 0,
+    outline-color: theme.variable(primary),
+    outline-color-active: theme.variable(primary)
   ));
   
   forge-button-toggle {
     @include button-toggle.provide-theme((
+      color: theme.variable(primary),
       selected-color: theme.variable(on-primary),
       selected-background: theme.variable(primary),
       focus-indicator-offset: 2px

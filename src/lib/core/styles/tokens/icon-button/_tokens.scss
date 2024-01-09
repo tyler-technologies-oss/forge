@@ -67,7 +67,7 @@ $tokens: (
   toggle-on-icon-color: utils.module-val(icon-button, toggle-on-icon-color, theme.variable(primary)),
 
   // Toggle (on) outlined
-  outlined-toggle-on-background-color: utils.module-val(icon-button, outlined-toggle-on-background-color, theme.variable(primary-container-low)),
+  outlined-toggle-on-background-color: utils.module-val(icon-button, outlined-toggle-on-background-color, theme.variable(primary-container)),
   outlined-toggle-on-icon-color: utils.module-val(icon-button, outlined-toggle-on-icon-color, theme.variable(primary)),
 
   // Toggle tonal

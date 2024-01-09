@@ -1,0 +1,26 @@
+.clipping-container {
+  height: 550px;
+  border: 1px solid var(--forge-theme-border-color);
+  overflow: auto;
+
+  &.force-containment {
+    transform: translate3d(0, 0, 0);
+    border: 2px dashed var(--mdc-theme-error);
+  }
+
+  &.use-small-container {
+    height: 150px;
+  }
+}
+
+.scroll-container {
+  height: 250%;
+  width: 250%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popover-content p {
+  margin: 0;
+}

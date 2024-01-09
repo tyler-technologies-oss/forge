@@ -9,15 +9,6 @@ import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflec
 import { internals, isFocusable, setDefaultAria } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
 
-// TODO: remove this augmentation when the TypeScript version is upgraded for latest DOM typings
-type TempHTMLElementWithPopover = IBaseButton & {
-  popoverTargetElement: TempHTMLElementWithPopover | null;
-  popover: 'manual' | 'auto';
-  showPopover(): void;
-  hidePopover(): void;
-  togglePopover(): boolean;
-};
-
 export interface IBaseButtonAdapter extends IBaseAdapter {
   initialize(): void;
   initializeAnchor(): void;
@@ -159,7 +150,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
   }
 
   public hasPopoverTarget(): boolean {
-    return this._component.hasAttribute('popovertarget') || !!(this._component as TempHTMLElementWithPopover).popoverTargetElement;
+    return this._component.hasAttribute('popovertarget') || !!this._component.popoverTargetElement;
   }
 
   /**
@@ -243,8 +234,8 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._stateLayerElement?.playAnimation();
   }
 
-  private _locatePopoverTargetElement(): TempHTMLElementWithPopover | null {
-    let popoverElement = (this._component as TempHTMLElementWithPopover).popoverTargetElement ?? null;
+  private _locatePopoverTargetElement(): HTMLElement | null {
+    let popoverElement = this._component.popoverTargetElement ?? null;
 
     if (!popoverElement) {
       const rootNode = this._component.ownerDocument.getRootNode() as Document | ShadowRoot;

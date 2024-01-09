@@ -1,5 +1,5 @@
 import { CustomElement, attachShadowTemplate, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
+import { tylIconKeyboardArrowRight, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 import { OpenIconFoundation } from './open-icon-foundation';
 import { OpenIconAdapter } from './open-icon-adapter';
 import { OPEN_ICON_CONSTANTS } from './open-icon-constants';
@@ -41,7 +41,7 @@ export class OpenIconComponent extends BaseComponent implements IOpenIconCompone
 
   constructor() {
     super();
-    IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowDown]);
+    IconRegistry.define([tylIconKeyboardArrowRight, tylIconKeyboardArrowDown]);
     attachShadowTemplate(this, template, styles);
     this._foundation = new OpenIconFoundation(new OpenIconAdapter(this));
   }

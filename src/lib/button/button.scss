@@ -63,6 +63,12 @@ forge-focus-indicator {
       @include override(primary-color, theme.variable($theme), value);
     }
   }
+
+  :host([theme=#{$theme}]:is([variant=filled],[variant=raised])) {
+    .forge-button {
+      @include override(filled-color, theme.variable(on-#{$theme}), value);
+    }
+  }
   
   :host([theme=#{$theme}][variant=tonal]) {
     .forge-button {

@@ -150,6 +150,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   public set fullName(value: string) {
     if (this._fullName !== value) {
       this._fullName = value;
+      this.avatarText = this._fullName;
       this._adapter.setHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.FULL_NAME, this._fullName);
     }
   }

@@ -109,13 +109,13 @@
   @include theme.css-custom-property(max-width, --forge-dialog-max-width, 100%);
   @include theme.css-custom-property(max-height, --forge-dialog-max-height, 100%);
   @include theme.css-custom-property(border-radius, --forge-dialog-border-radius, shape.resolve-radius(medium));
+  @include theme.css-custom-property(overflow, --forge-dialog-overflow, visible);
   
   display: inline-flex;
   flex-direction: column;
   box-sizing: border-box;
   transform: variables.$surface-transform;
   opacity: 0;
-  overflow: hidden;
   z-index: inherit;
 }
 

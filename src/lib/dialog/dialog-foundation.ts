@@ -164,7 +164,7 @@ export class DialogFoundation implements IDialogFoundation {
       }
     }
 
-    this._adapter.setBodyAttribute(DIALOG_CONSTANTS.attributes.OPEN, 'true');
+    this._adapter.setBodyAttribute(DIALOG_CONSTANTS.attributes.BODY_OPEN, 'true');
     this._adapter.registerTransitionEndHandler(this._transitionEndHandler);
     this._setDocumentKeydownListener(this._escapeClose);
     this._adapter.setAnimating(true);
@@ -222,7 +222,7 @@ export class DialogFoundation implements IDialogFoundation {
         this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.CLOSE);
         const openDialogs = this._adapter.getOpenDialogs(`${DIALOG_CONSTANTS.elementName}[${DIALOG_CONSTANTS.attributes.OPEN}]`);
         if (!openDialogs.length) {
-          this._adapter.removeBodyAttribute(DIALOG_CONSTANTS.attributes.OPEN);
+          this._adapter.removeBodyAttribute(DIALOG_CONSTANTS.attributes.BODY_OPEN);
         }
         this._adapter.setAnimating(false);
         resolve();
@@ -437,10 +437,7 @@ export class DialogFoundation implements IDialogFoundation {
   }
   public set open(value: boolean) {
     if (this._open !== value) {
-      value = Boolean(value);
-      if (value !== this._open) {
-        this._applyOpen(value);
-      }
+      this._applyOpen(!!value);
     }
   }
 

@@ -36,8 +36,8 @@ $tokens: (
   shape-end-end: utils.module-ref(button-toggle, shape-end-end, shape),
 
   // Selected
-  selected-background: utils.module-val(button-toggle, selected-background, theme.variable(tertiary-container-low)),
-  selected-color: utils.module-val(button-toggle, selected-color, theme.variable(on-tertiary-container-low)),
+  selected-background: utils.module-val(button-toggle, selected-background, theme.variable(tertiary-container)),
+  selected-color: utils.module-val(button-toggle, selected-color, theme.variable(on-tertiary-container)),
   selected-disabled-background: utils.module-val(button-toggle, selected-disabled-background, theme.variable(surface-container)),
 
   // Dense
