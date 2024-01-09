@@ -127,7 +127,7 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   }
 
   private _hideOverlay(): void {
-    this._adapter.tryHideOpenOverlays();
+    this._adapter.tryHideDescendantOverlays();
     this._adapter.hide();
     this._adapter.removeLightDismissListener();
   }

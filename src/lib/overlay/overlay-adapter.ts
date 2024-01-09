@@ -1,7 +1,6 @@
 import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
 import { locateElementById } from '../core/utils/utils';
 import { IOverlayComponent, OverlayComponent } from './overlay';
@@ -19,7 +18,7 @@ import {
 export interface IOverlayAdapter extends IBaseAdapter {
   show(): void;
   hide(): void;
-  tryHideOpenOverlays(): void;
+  tryHideDescendantOverlays(): void;
   locateAnchorElement(id: string | null): HTMLElement | null;
   isMostRecentOpenOverlay(): boolean;
   positionElement(config: IPositionElementConfig): void;
@@ -61,12 +60,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
       this._rootElement.removeAttribute('popover');
     }
 
-    // Wait for any other overlays to finish dismissing before adding ourselves to the stack
-    await DismissibleStack.instance.dismissing;
-    
-    if (this._component.isConnected && this._component.open) {
-      OverlayComponent[overlayStack].add(this._component);
-    }
+    OverlayComponent[overlayStack].add(this._component);
   }
 
   public hide(): void {
@@ -89,12 +83,10 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     OverlayComponent[overlayStack].delete(this._component);
   }
 
-  public tryHideOpenOverlays(): void {
-    // Attempts to hide any overlays that were opened after this one in reverse order
-    const overlays = Array.from(OverlayComponent[overlayStack]);
-    const overlaysAfter = overlays.slice(overlays.indexOf(this._component) + 1).reverse();
-    overlaysAfter
-      .filter(o => !o.persistent) // Ignore persistent overlays
+  public tryHideDescendantOverlays(): void {
+    const descendantOverlays = this._findDescendantOverlays();
+    descendantOverlays
+      .filter(o => !o.persistent) // Ignore persistent overlays since those are manually controlled
       .forEach(o => o.open = false);
   }
 
@@ -235,5 +227,25 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   public removeLightDismissListener(): void {
     this._lightDismissController.abort();
     this._lightDismissController = new AbortController();
+  }
+
+  /**
+   * Finds all descendant overlays that are not persistent.
+   * @returns An array of descendant overlays.
+   */
+  private _findDescendantOverlays(): IOverlayComponent[] {
+    const allOverlays = Array.from(OverlayComponent[overlayStack]);
+    const overlaysAboveUs = allOverlays.slice(allOverlays.indexOf(this._component) + 1).reverse();
+    const descendantOverlays: IOverlayComponent[] = [];
+    
+    if (overlaysAboveUs.length) {
+      // Dispatch an event on each overlay after us to see if it is a descendant of our overlay
+      const listener: EventListener = evt => descendantOverlays.push(evt.target as IOverlayComponent);
+      this._component.addEventListener(OVERLAY_CONSTANTS.events.DESCENDANT_TEST, listener);
+      overlaysAboveUs.forEach(o => o.dispatchEvent(new CustomEvent(OVERLAY_CONSTANTS.events.DESCENDANT_TEST, { bubbles: true, composed: true })));
+      this._component.removeEventListener(OVERLAY_CONSTANTS.events.DESCENDANT_TEST, listener);
+    }
+
+    return descendantOverlays;
   }
 }

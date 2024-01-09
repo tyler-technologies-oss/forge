@@ -33,7 +33,8 @@ const selectors = {
 } as const;
 
 const events = {
-  LIGHT_DISMISS: `${elementName}-light-dismiss`
+  LIGHT_DISMISS: `${elementName}-light-dismiss`,
+  DESCENDANT_TEST: `${elementName}-descendant-test`
 } as const;
 
 const defaults = {
