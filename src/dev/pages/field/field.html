@@ -8,16 +8,18 @@ include('./src/partials/page.ejs', {
       { type: 'switch', label: 'Optional', id: 'opt-optional' },
       { type: 'switch', label: 'Invalid', id: 'opt-invalid' },
       { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
-      { type: 'switch', label: 'Dense (small density)', id: 'opt-dense' },
+      { type: 'switch', label: 'Dense (extra small density)', id: 'opt-dense' },
       {
           type: 'select',
           label: 'Density',
           id: 'opt-density',
           defaultValue: 'medium',
           options: [
-            { label: 'Small (dense)', value: 'small' },
+            { label: 'Extra-small (dense)', value: 'extra-small' },
+            { label: 'Small', value: 'small' },
             { label: 'Medium (default)', value: 'medium' },
-            { label: 'Large', value: 'large' }
+            { label: 'Large', value: 'large' },
+            { label: 'Extra-large', value: 'extra-large' }
           ]
       },
       {

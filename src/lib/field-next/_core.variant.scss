@@ -1,0 +1,21 @@
+@use './token-utils' as *;
+
+@mixin plain {
+  @include override(border-style, none, value)
+}
+
+@mixin outlined {}
+
+@mixin tonal {
+  @include override(surface-color, tonal-surface-color);
+  @include override(on-surface-color, tonal-on-surface-color);
+  @include override(border-color, tonal-border-color);
+}
+
+@mixin filled {}
+
+@mixin raised {
+  @include override(elevation, raised-elevation);
+  @include override(surface-color, raised-surface-color);
+  @include override(border-style, none, value);
+}

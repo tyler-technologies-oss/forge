@@ -1,0 +1,17 @@
+@use './token-utils' as *;
+
+@mixin block {
+  @include override(root-flex-direction, column, value);
+  @include override(root-align-items, flex-start, value);
+  @include override(root-gap, token(block-gap), value);
+  @include override(label-padding-start, token(padding-inline), value);
+}
+
+@mixin inset {
+  @include override(container-block-size, token(inset-height-medium), value);
+  @include override(container-padding-block, token(inset-padding-block-medium), value);
+  @include override(label-position, absolute, value);
+  @include override(label-inset-block-start, token(inset-label-padding-block-medium), value);
+  @include override(label-inset-inline-start, token(padding-inline), value);
+  @include override(label-color, inset-label-color);
+}

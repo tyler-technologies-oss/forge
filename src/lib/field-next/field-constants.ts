@@ -38,6 +38,6 @@ export const FIELD_CONSTANTS = {
 
 export type FieldVariant = 'plain' | 'outlined' | 'tonal' | 'filled' | 'raised';
 export type FieldTheme = Theme;
-export type FieldDensity = Density;
+export type FieldDensity = Density | 'extra-small' | 'extra-large';
 export type FieldLabelPosition = 'inline-start' | 'inline-end' | 'block-start' | 'inset' | 'none';
 export type FieldLabelAlignment = 'default' | 'centered' | 'baseline' | 'start' | 'end';

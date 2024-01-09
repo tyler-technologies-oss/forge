@@ -10,6 +10,13 @@ $label: utils.inherit-map(core.$base, (
   letter-spacing: type-utils.calc-letter-spacing(0.5, scale.value('0875'))
 )) !default;
 
+// TODO: solidify label 2 styles
+$label2: utils.inherit-map(core.$base, (
+  font-size: type-utils.font-size-relative(label, font-size, '0813'),
+  line-height: type-utils.font-size-relative(label, line-height, '1250'),
+  letter-spacing: type-utils.calc-letter-spacing(0.125, scale.value('0813'))
+)) !default;
+
 $button: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(button, font-size, '0875'),
   font-weight: weight.value(medium),
@@ -26,6 +33,7 @@ $overline: utils.inherit-map(core.$base, (
 
 $tokens: (
   label: $label,
+  label2: $label2,
   button: $button,
   overline: $overline
 ) !default;

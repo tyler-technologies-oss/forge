@@ -1,0 +1,31 @@
+@use './token-utils' as *;
+
+@mixin required {
+  @include override(label-before-content, token(required-content), value);
+  @include override(label-before-color, token(required-color), value);
+}
+
+@mixin optional {
+  @include override(label-after-content, token(optional-content), value);
+  @include override(label-after-color, token(optional-color), value);
+}
+
+@mixin hover {
+  @include override(container-border-style, hover-border-style, value);
+  @include override(container-border-width, hover-border-width, value);
+  @include override(container-border-color, hover-border-color, value);
+}
+
+@mixin focus {
+  @include override(container-border-style, active-border-style, value);
+  @include override(container-border-width, active-border-width, value);
+  @include override(container-border-color, active-border-color, value);
+  @include override(raised-elevation, raised-active-elevation);
+}
+
+@mixin invalid {
+  @include override(container-border-style, invalid-border-style, value);
+  @include override(container-border-width, invalid-border-width, value);
+  @include override(container-border-color, invalid-border-color, value);
+  @include override(label-color, invalid-label-color);
+}

@@ -4,8 +4,12 @@
 @use './token-utils' as *;
 
 $inline-label: ':where([label-position=inline-start], [label-position=inline-end], :not([label-position]))';
-$small: ':where([density=small], [dense])';
+$extra-small: ':where([density=extra-small], [dense])';
+$small: ':not([dense])[density=small]';
 $large: ':not([dense])[density=large]';
+$extra-large: ':not([dense])[density=extra-large]';
+$hover: ':not([disabled]):hover';
+$focus: ':not([disabled]):focus-within';
 
 //
 // Host
@@ -32,11 +36,17 @@ $large: ':not([dense])[density=large]';
 //
 
 .forge-field {
+  @include core.root-variables;
+}
+
+.forge-field {
   @include core.configuration;
 }
 
 .forge-field {
   @include core.field;
+  @include core.outlined;
+  @include core.medium;
 
   .container {
     @include core.container;
@@ -44,6 +54,14 @@ $large: ':not([dense])[density=large]';
 
   .label {
     @include core.label;
+
+    &::before {
+      @include core.label-before;
+    }
+
+    &::after {
+      @include core.label-after;
+    }
   }
 }
 
@@ -53,9 +71,7 @@ $large: ':not([dense])[density=large]';
 
 :host([required]) {
   .forge-field {
-    .label {
-      @include core.label-required;
-    }
+    @include core.required;
   }
 }
 
@@ -65,9 +81,7 @@ $large: ':not([dense])[density=large]';
 
 :host([optional]) {
   .forge-field {
-    .label {
-      @include core.label-optional;
-    }
+    @include core.optional;
   }
 }
 
@@ -75,19 +89,19 @@ $large: ':not([dense])[density=large]';
 // Hover
 //
 
-.forge-field:hover {
-  .container {
-    @include core.container-hover;
+:host(#{$hover}) {
+  .forge-field {
+    @include core.hover;
   }
 }
 
 //
-// Active
+// Focus
 //
 
-.forge-field:active {
-  .container {
-    @include core.container-active;
+:host(#{$focus}) {
+  .forge-field {
+    @include core.focus;
   }
 }
 
@@ -95,43 +109,59 @@ $large: ':not([dense])[density=large]';
 // Densities
 //
 
+:host(#{$extra-small}) {
+  .forge-field {
+    @include core.extra-small;
+    outline: green;
+  }
+}
+
 :host(#{$small}) {
   .forge-field {
-    .container {
-      @include core.container-small;
-    }
+    @include core.small;
+    outline: cyan;
   }
 }
 
 :host(#{$large}) {
   .forge-field {
-    .container {
-      @include core.container-large;
-    }
+    @include core.large;
+    outline: blue;
+  }
+}
+
+:host(#{$extra-large}) {
+  .forge-field {
+    @include core.extra-large;
+    outline: purple;
+  }
+}
+
+:host([label-position=inset]#{$extra-small}) {
+  .forge-field {
+    @include core.inset-extra-small;
+    outline: green;
   }
 }
 
 :host([label-position=inset]#{$small}) {
   .forge-field {
-    .container {
-      @include core.container-inset-small;
-    }
-
-    .label {
-      @include core.label-inset-small;
-    }
+    @include core.inset-small;
+    outline: cyan;
   }
 }
 
 :host([label-position=inset]#{$large}) {
   .forge-field {
-    .container {
-      @include core.container-inset-large;
-    }
+    @include core.inset-large;
+    outline: blue;
+  }
+}
 
-    .label {
-      @include core.label-inset-large;
-    }
+:host([label-position=inset]#{$extra-large}) {
+  .forge-field {
+    @include core.inset-extra-large;
+    outline: purple;
   }
 }
 
@@ -139,35 +169,16 @@ $large: ':not([dense])[density=large]';
 // Label positions
 //
 
-:host(#{$inline-label}) {
-  .forge-field {
-    @include core.field-inline;
-
-    .container {
-      @include core.container-inline;
-    }
-  }
-}
-
 :host([label-position=block-start]) {
   .forge-field {
-    @include core.field-block;
-
-    .label {
-      @include core.label-block;
-    }
+    @include core.block;
   }
 }
 
 :host([label-position=inset]) {
   .forge-field {
-    .container {
-      @include core.container-inset;
-    }
-
-    .label {
-      @include core.label-inset;
-    }
+    @include core.inset;
+    @include core.inset-medium;
   }
 }
 
@@ -180,11 +191,83 @@ $large: ':not([dense])[density=large]';
 }
 
 //
+// Invalid
+//
+
+:host([invalid]) {
+  .forge-field {
+    @include core.invalid;
+  }
+}
+
+//
 // Disabled
 //
 
 :host([disabled]) {
   .forge-field {
     @include core.field-disabled;
+  }
+}
+
+//
+// Theme
+//
+
+@mixin theme($theme) {
+  // Primary
+
+  // Secondary
+}
+
+@include theme(primary);
+@include theme(secondary);
+@include theme(tertiary);
+@include theme(success);
+@include theme(error);
+@include theme(warning);
+@include theme(info);
+
+//
+// Variant
+//
+
+:host([variant=plain]) {
+  .forge-field {
+    @include core.plain;
+  }
+}
+
+:host([variant=tonal]) {
+  .forge-field {
+    @include core.tonal;
+  }
+}
+
+:host([variant=raised]) {
+  .forge-field {
+    @include core.raised;
+  }
+}
+
+//
+// Slotted
+//
+
+.forge-field {
+  .container {
+    ::slotted(input) {
+      @include core.slotted-input;
+    }
+  }
+}
+
+:host([label-position=inset]) {
+  .forge-field {
+    .container {
+      ::slotted(input) {
+        @include core.slotted-input-inset;
+      }
+    }
   }
 }

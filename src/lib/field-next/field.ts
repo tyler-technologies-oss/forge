@@ -16,8 +16,8 @@ export interface IFieldComponent extends IBaseComponent {
   optional: boolean;
   disabled: boolean;
   variant: FieldVariant;
-  theme: Theme;
-  density: Density;
+  theme: FieldTheme;
+  density: FieldDensity;
   dense: boolean;
 }
 

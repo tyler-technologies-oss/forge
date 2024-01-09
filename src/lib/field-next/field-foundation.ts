@@ -1,5 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-import { Density, Theme } from '../constants';
+import { Theme } from '../constants';
 import { IFieldAdapter } from './field-adapter';
 import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
 
@@ -11,8 +11,8 @@ export interface IFieldFoundation extends ICustomElementFoundation {
   optional: boolean;
   disabled: boolean;
   variant: FieldVariant;
-  theme: Theme;
-  density: Density;
+  theme: FieldTheme;
+  density: FieldDensity;
   dense: boolean;
 }
 
@@ -101,31 +101,27 @@ export class FieldFoundation implements IFieldFoundation {
     }
   }
 
-  public get theme(): Theme {
+  public get theme(): FieldTheme {
     return this._theme;
   }
-  public set theme(value: Theme) {
+  public set theme(value: FieldTheme) {
     if (this._theme !== value) {
       this._theme = value;
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.THEME, this._theme);
     }
   }
 
-  public get density(): Density {
+  public get density(): FieldDensity {
     return this._density;
   }
-  public set density(value: Density) {
+  public set density(value: FieldDensity) {
     if (this._density !== value) {
       this._density = value;
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.DENSITY, this._density);
-
-      if (this._density !== 'small') {
-        this._dense = false;
-        this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.DENSE, this._dense);
-      }
     }
   }
 
+  // `dense` takes precedence over `density`
   public get dense(): boolean {
     return this._dense;
   }
