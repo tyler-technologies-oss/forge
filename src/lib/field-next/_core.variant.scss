@@ -1,10 +1,14 @@
 @use './token-utils' as *;
 
 @mixin plain {
-  @include override(border-style, none, value)
+  @include override(border-style, none, value);
 }
 
-@mixin outlined {}
+@mixin outlined {
+  @include override(border-style, outlined-border-style);
+  @include override(border-width, outlined-border-width);
+  @include override(border-color, outlined-border-color);
+}
 
 @mixin tonal {
   @include override(surface-color, tonal-surface-color);
