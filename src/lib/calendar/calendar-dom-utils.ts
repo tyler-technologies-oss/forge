@@ -160,9 +160,8 @@ export function getEventElement(event: ICalendarEvent, overflow?: boolean): HTML
 
 /** Returns a tooltip element. */
 export function getTooltip(content: string): HTMLElement {
-  const tooltip: ITooltipComponent = document.createElement('forge-tooltip');
-  tooltip.text = content;
-  tooltip.setAttribute('aria-hidden', 'true');
+  const tooltip = document.createElement('forge-tooltip');
+  tooltip.textContent = content;
   return tooltip;
 }
 

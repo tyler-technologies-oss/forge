@@ -4,6 +4,7 @@ import '@tylertech/forge/tooltip';
 import type { ISelectComponent, ITooltipComponent } from '@tylertech/forge';
 import './tooltip.scss';
 
+const demoEl = document.querySelector('.tooltip-demo') as HTMLElement;
 const delayInput = document.querySelector('#opt-delay') as HTMLInputElement;
 delayInput.addEventListener('input', () => getAllTooltips().forEach(tt => tt.delay = +(delayInput.value ?? 0)));
 
@@ -14,5 +15,5 @@ const triggerTypeSelect = document.querySelector('#opt-trigger-type') as ISelect
 triggerTypeSelect.addEventListener('change', () => getAllTooltips().forEach(tt => tt.triggerType = triggerTypeSelect.value));
 
 function getAllTooltips(): ITooltipComponent[] {
-  return Array.from(document.querySelectorAll('forge-tooltip'));
+  return Array.from(demoEl.querySelectorAll('forge-tooltip'));
 }

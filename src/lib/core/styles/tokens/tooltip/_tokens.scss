@@ -13,8 +13,9 @@ $tokens: (
   padding: utils.module-val(tooltip, padding, spacing.variable(xsmall)),
   padding-block: utils.module-ref(tooltip, padding-block, padding),
   padding-inline: utils.module-ref(tooltip, padding-inline, padding),
-  max-width: utils.module-val(tooltip, max-width, 256px),
+  max-width: utils.module-val(tooltip, max-width, 320px),
   elevation: utils.module-val(tooltip, elevation, theme.variable(popup-elevation)),
+  content-align: utils.module-val(tooltip, content-align, center),
 
   // Border
   border-width: utils.module-val(tooltip, border-width, 0),
