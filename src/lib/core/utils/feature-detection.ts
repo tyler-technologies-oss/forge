@@ -16,3 +16,11 @@ export function supportsPopover(): boolean {
 export function supportsElementInternalsAria(): boolean {
   return ElementInternals.prototype.hasOwnProperty('role');
 }
+
+/**
+ * Detects if the browser supports the hovering elements as the users primary input mechanism.
+ * @returns {boolean}
+ */
+export function supportsHover(): boolean {
+  return window.matchMedia('(hover: hover)').matches;
+}

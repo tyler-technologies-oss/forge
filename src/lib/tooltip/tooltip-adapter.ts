@@ -1,160 +1,130 @@
-import { removeAllChildren, removeElement, matchesSelectors } from '@tylertech/forge-core';
+import { getShadowElement, randomChars } from '@tylertech/forge-core';
+import { setDefaultAria } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { PopupPlacement } from '../popup';
+import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { ITooltipComponent } from './tooltip';
-import { attachTooltip } from './tooltip-utils';
+import { TOOLTIP_CONSTANTS } from './tooltip-constants';
 
 export interface ITooltipAdapter extends IBaseAdapter {
-  hasTargetElement(): boolean;
-  hasTooltipElement(): boolean;
-  isTargetElementConnected(): boolean;
-  initializeTargetElement(selector: string): void;
-  destroy(identifier: string | null): void;
-  initializeAccessibility(identifier: string): void;
-  setTextContent(text: string): void;
-  addTargetEventListener(type: string, listener: (evt: MouseEvent) => void): void;
-  removeTargetEventListener(type: string, listener: (evt: MouseEvent) => void): void;
-  showTooltip(position: PopupPlacement, content?: HTMLElement | Text): void;
-  getInnerText(): string;
-  hideTooltip(): void;
-  getTooltipElement(): HTMLElement | null;
+  readonly anchorElement: HTMLElement | null;
+  syncAria(): void;
+  setAnchorElement(element: HTMLElement | null): void;
+  tryLocateAnchorElement(id: string): void;
+  addAnchorListener(type: string, listener: EventListener): void;
+  removeAnchorListener(type: string, listener: EventListener): void;
+  addLightDismissListener(listener: EventListener): void;
+  removeLightDismissListener(listener: EventListener): void;
+  show(): void;
+  hide(): void;
 }
 
-/**
- * The DOM adapter for the tooltip component.
- */
 export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements ITooltipAdapter {
-  private _targetElement: HTMLElement | null;
-  private _tooltipElement: HTMLElement | null = null;
+  private _contentElement: HTMLElement;
+  private _arrowElement: HTMLElement;
+  private _anchorElement: HTMLElement | null = null;
+  private _overlayElement: IOverlayComponent | null = null;
 
   constructor(component: ITooltipComponent) {
     super(component);
+    this._contentElement = getShadowElement(this._component, TOOLTIP_CONSTANTS.selectors.CONTENT);
+    this._arrowElement = getShadowElement(this._component, TOOLTIP_CONSTANTS.selectors.ARROW);
   }
 
-  public initializeTargetElement(selector: string): void {
-    this._targetElement = this._getTargetElement(selector);
+  public get anchorElement(): HTMLElement | null {
+    return this._anchorElement;
   }
 
-  public initializeAccessibility(identifier: string): void {
-    if (this._targetElement && !this._targetElement.hasAttribute('aria-describedby')) {
-      this._targetElement.setAttribute('aria-describedby', identifier);
-    }
-  }
-
-  public hasTargetElement(): boolean {
-    return !!this._targetElement;
-  }
-
-  public hasTooltipElement(): boolean {
-    return !!this._tooltipElement;
-  }
-
-  public isTargetElementConnected(): boolean {
-    return !!this._targetElement && this._targetElement.isConnected;
-  }
-
-  public destroy(identifier: string | null): void {
-    if (this._targetElement && this._targetElement.getAttribute('aria-describedby') === identifier) {
-      this._targetElement.removeAttribute('aria-describedby');
-    }
-  }
-
-  /**
-   * Sets the text content of the host element to the provided text.
-   * @param text The text content.
-   */
-  public setTextContent(text: string): void {
-    removeAllChildren(this._component);
-    if (text) {
-      this._component.appendChild(document.createTextNode(text));
-    }
-  }
-
-  /**
-   * Adds an event listener to the target element.
-   * @param targetElement The target element instance.
-   * @param type The event type.
-   * @param listener The event listener.
-   */
-  public addTargetEventListener(type: string, listener: (evt: MouseEvent) => void): void {
-    if (this._targetElement) {
-      this._targetElement.addEventListener(type, listener);
-    }
-  }
-
-  /**
-   * Removes an event listener from the target element.
-   * @param type The event type.
-   * @param listener The event listener.
-   */
-  public removeTargetEventListener(type: string, listener: (evt: MouseEvent) => void): void {
-    if (this._targetElement) {
-      this._targetElement.removeEventListener(type, listener);
-    }
-  }
-
-  /**
-   * Displays the tooltip around the target element based on the provided configuration.
-   * @param position The position.
-   * @param content The tooltip content.
-   */
-  public showTooltip(position: PopupPlacement, content?: HTMLElement | Text): void {
-    if (!this._targetElement) {
-      return;
-    }
-
-    if (!content) {
-      const child = this._getTooltipContent();
-      content = child.cloneNode(true) as HTMLElement | Text;
-    }
-
-    const isEmptyTextNode = content.nodeType === 3 && (!content.textContent || content.textContent.trim().length === 0);
-    const isEmptyNode = !content || isEmptyTextNode;
-    if (isEmptyNode) {
-      return;
-    }
-
-    this._tooltipElement = attachTooltip(this._targetElement, position, content);
-  }
-
-  public getInnerText(): string {
-    return this._component.innerText;
-  }
-
-  /**
-   * Removes the tooltip from the DOM.
-   * @param tooltipElement The target element instance.
-   */
-  public hideTooltip(): void {
-    if (this._tooltipElement) {
-      removeElement(this._tooltipElement);
-      this._tooltipElement = null;
-    }
-  }
-
-  public getTooltipElement(): HTMLElement | null {
-    return this._tooltipElement;
-  }
-
-  /**
-   * Gets the target element based on the provided CSS selector.
-   * @param {string | undefined} selector The target element selector.
-   */
-  private _getTargetElement(selector: string | undefined): HTMLElement | null {
-    if (selector) {
-      if (this._component.parentElement) {
-        if (matchesSelectors(this._component.parentElement, selector)) {
-          return this._component.parentElement;
-        }
-        return this._component.parentElement.querySelector(selector);
+  public syncAria(): void {
+    const role = this._component.type === 'description' ? 'tooltip' : null;
+    this._component[setDefaultAria]({ role });
+    this._component[setDefaultAria]({ ariaHidden: 'true' }, { setAttribute: !this._component.hasAttribute('aria-hidden') });
+    
+    if (this._anchorElement) {
+      if (!this._component.hasAttribute('id') && this._component.type !== 'presentation') {
+        this._component.id = `forge-tooltip-${randomChars()}`;
       }
-    } else {
-      return (this._component.previousElementSibling || this._component.parentElement) as HTMLElement;
+
+      this._anchorElement.removeAttribute('aria-describedby');
+      this._anchorElement.removeAttribute('aria-labelledby');
+
+      switch (this._component.type) {
+        case 'description':
+          this._anchorElement.setAttribute('aria-describedby', this._component.id);
+          break;
+        case 'label':
+          this._anchorElement.setAttribute('aria-labelledby', this._component.id);
+          break;
+      }
     }
-    return null;
   }
 
-  private _getTooltipContent(): Node {
-    return this._component.firstElementChild || this._component.firstChild || document.createTextNode('');
+  public setAnchorElement(element: HTMLElement | null): void {
+    this._anchorElement = element;
+  }
+
+  public tryLocateAnchorElement(id: string): void {
+    this._anchorElement = this._tryFindAnchorElement(id);
+  }
+
+  public addAnchorListener(type: string, listener: EventListener): void {
+    this._anchorElement?.addEventListener(type, listener);
+  }
+
+  public removeAnchorListener(type: string, listener: EventListener): void {
+    this._anchorElement?.removeEventListener(type, listener);
+  }
+
+  public addLightDismissListener(listener: EventListener): void {
+    this._overlayElement?.addEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, listener);
+  }
+
+  public removeLightDismissListener(listener: EventListener): void {
+    this._overlayElement?.removeEventListener(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, listener);
+  }
+
+  public show(): void {
+    // Tooltips are shown above all content via <forge-overlay>
+    // We do this by dynamically creating an overlay element and appending it to the shadow root
+    // then we move the tooltip content into the overlay element so that it can be presented.
+    if (!this._overlayElement) {
+      this._overlayElement = document.createElement(OVERLAY_CONSTANTS.elementName);
+      this._overlayElement.setAttribute('part', 'root:overlay');
+    }
+
+    this._overlayElement.placement = this._component.placement;
+    this._overlayElement.anchorElement = this._anchorElement;
+    this._overlayElement.arrowElement = this._arrowElement;
+    this._overlayElement.offset = { mainAxis: this._component.offset };
+
+    this._component.shadowRoot?.appendChild(this._overlayElement);
+    this._overlayElement.appendChild(this._contentElement);
+
+    this._overlayElement.open = true;
+  }
+
+  public hide(): void {
+    // Move the tooltip content back into the component, and remove the overlay element to hide the tooltip visually
+    // Tooltips are still accessible when hidden, so we don't need to do anything else.
+    if (this._overlayElement) {
+      this._overlayElement.open = false;
+    }
+    this._component.shadowRoot?.appendChild(this._contentElement);
+    this._overlayElement?.remove();
+  }
+
+  /**
+   * Attempts to find an element with the given id. If no element is found, the previous sibling or parent element is returned.
+   * 
+   * For backwards compatibility we allow for `id` to be a selector string, so that is evaluated if no element is found for the id.
+   */
+  private _tryFindAnchorElement(id: string): HTMLElement | null {
+    if (id) {
+      const rootNode = this._component.getRootNode() as Document | ShadowRoot;
+      const targetEl = rootNode.getElementById(id) ?? rootNode.querySelector<HTMLElement>(id);
+      if (targetEl) {
+        return targetEl;
+      }
+    }
+    return (this._component.previousElementSibling ?? this._component.parentElement) as HTMLElement;
   }
 }

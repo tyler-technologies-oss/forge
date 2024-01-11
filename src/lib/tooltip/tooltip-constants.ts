@@ -1,46 +1,51 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
-import { PopupPlacement } from '../popup';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tooltip`;
 
-const attributes = {
-  TEXT: 'text',
-  TARGET: 'target',
+const observedAttributes = {
+  ID: 'id',
+  OPEN: 'open',
+  TYPE: 'type',
+  ANCHOR: 'anchor',
+  TARGET: 'target', // deprecated
+  PLACEMENT: 'placement',
+  POSITION: 'position', // deprecated
   DELAY: 'delay',
-  POSITION: 'position',
-  HOST: 'forge-tooltip-host'
-};
+  OFFSET: 'offset',
+  TRIGGER_TYPE: 'trigger-type'
+} as const;
 
-const classes = {
-  TOOLTIP: 'forge-tooltip',
-  TOOLTIP_OPEN: 'forge-tooltip--open',
-  TOOLTIP_TOP: 'forge-tooltip--top',
-  TOOLTIP_RIGHT: 'forge-tooltip--right',
-  TOOLTIP_BOTTOM: 'forge-tooltip--bottom',
-  TOOLTIP_LEFT: 'forge-tooltip--left'
-};
-
-const selectors = {
-  HOST: `[${attributes.HOST}]`
-};
+const attributes = {
+  ...observedAttributes
+} as const;
 
 const numbers = {
-  DEFAULT_DELAY: 500,
-  LONGPRESS_THRESHOLD: 750,
   LONGPRESS_VISIBILITY_DURATION: 3000
 };
 
-const strings  = {
-  DEFAULT_POSITION: 'right'
+const defaults = {
+  DELAY: 500,
+  OFFSET: 4,
+  TYPE: 'presentation' as TooltipType,
+  PLACEMENT: 'right' as TooltipPlacement,
+  TRIGGER_TYPES: ['hover'] as TooltipTriggerType[]
 };
+
+const selectors = {
+  CONTENT: '.forge-tooltip',
+  ARROW: '.arrow'
+} as const;
 
 export const TOOLTIP_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
-  classes,
-  selectors,
   numbers,
-  strings
+  defaults,
+  selectors
 };
 
-export type TooltipBuilder = () => HTMLElement;
+export type TooltipType = 'presentation' | 'label' | 'description';
+export type TooltipPlacement = PositionPlacement;
+export type TooltipTriggerType = 'hover' | 'longpress' | 'focus';
