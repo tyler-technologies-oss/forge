@@ -5,6 +5,7 @@
 
 @mixin host {
   display: inline-block;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @mixin checkbox {

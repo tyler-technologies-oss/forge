@@ -81,7 +81,9 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
 
     const triggerTypes = [...this._triggerTypes];
 
+    // If the users input mechanism doesn't support hover, then we need to force longpress as their alternative
     if (!canUserHoverElements) {
+      triggerTypes.splice(triggerTypes.indexOf('hover'), 1);
       triggerTypes.push('longpress');
     }
 
@@ -107,6 +109,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     const triggerRemovers: Record<TooltipTriggerType, () => void> = {
       'hover': () => {
         this._adapter.removeAnchorListener('mouseenter', this._hoverStartListener);
+        this._adapter.removeAnchorListener('mousedown', this._hoverEndListener);
         this._adapter.removeAnchorListener('mouseleave', this._hoverEndListener);
       },
       'longpress': () => this._stopLongpressListener(this._adapter.anchorElement as HTMLElement),
@@ -150,8 +153,14 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   }
 
   private _onHoverStart(_evt: MouseEvent): void {
+    if (this._open) {
+      return;
+    }
+
+    this._adapter.addAnchorListener('mousedown', this._hoverEndListener);
+    this._adapter.addAnchorListener('mouseleave', this._hoverEndListener);
+  
     if (this._delay) {
-      this._adapter.addAnchorListener('mouseleave', this._hoverEndListener);
       this._hoverTimeout = window.setTimeout(() => {
         this._onTryShow();
       }, this._delay);
@@ -161,18 +170,16 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   }
 
   private _onHoverEnd(_evt: MouseEvent): void {
-    console.log('hover end');
+    this._adapter.removeAnchorListener('mousedown', this._hoverEndListener);
     this._adapter.removeAnchorListener('mouseleave', this._hoverEndListener);
-
-    if (!this._open) {
-      window.clearTimeout(this._hoverTimeout);
-      return;
-    }
-
+    window.clearTimeout(this._hoverTimeout);
     this._onTryHide();
   }
 
   private _onFocus(_evt: FocusEvent): void {
+    if (this._open) {
+      return;
+    }
     this._adapter.addAnchorListener('focusout', this._blurListener);
     this._onTryShow();
   }
@@ -184,7 +191,12 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
 
   protected _onLongpress(): void {
     this._onTryShow();
+  }
 
+  protected override _onLongpressEnd(evt: PointerEvent | TouchEvent): void {
+    super._onLongpressEnd(evt);
+
+    // We only start the timeout to hide the tooltip after the user lifts the pointer
     this._longpressVisibilityTimeout = window.setTimeout(() => {
       this._onTryHide();
     }, TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION);

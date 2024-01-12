@@ -10,7 +10,7 @@ export interface ITooltipAdapter extends IBaseAdapter {
   syncAria(): void;
   setAnchorElement(element: HTMLElement | null): void;
   tryLocateAnchorElement(id: string): void;
-  addAnchorListener(type: string, listener: EventListener): void;
+  addAnchorListener(type: string, listener: EventListener, opts?: AddEventListenerOptions): void;
   removeAnchorListener(type: string, listener: EventListener): void;
   addLightDismissListener(listener: EventListener): void;
   removeLightDismissListener(listener: EventListener): void;
@@ -38,14 +38,18 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
     const role = this._component.type === 'description' ? 'tooltip' : null;
     this._component[setDefaultAria]({ role });
     this._component[setDefaultAria]({ ariaHidden: 'true' }, { setAttribute: !this._component.hasAttribute('aria-hidden') });
-    
+
     if (this._anchorElement) {
+      if (this._component.type === 'label' && this._anchorElement.hasAttribute('aria-labelledby')) {
+        return;
+      }
+      if (this._component.type === 'description' && this._anchorElement.hasAttribute('aria-describedby')) {
+        return;
+      }
+
       if (!this._component.hasAttribute('id') && this._component.type !== 'presentation') {
         this._component.id = `forge-tooltip-${randomChars()}`;
       }
-
-      this._anchorElement.removeAttribute('aria-describedby');
-      this._anchorElement.removeAttribute('aria-labelledby');
 
       switch (this._component.type) {
         case 'description':
@@ -66,8 +70,8 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
     this._anchorElement = this._tryFindAnchorElement(id);
   }
 
-  public addAnchorListener(type: string, listener: EventListener): void {
-    this._anchorElement?.addEventListener(type, listener);
+  public addAnchorListener(type: string, listener: EventListener, opts?: AddEventListenerOptions): void {
+    this._anchorElement?.addEventListener(type, listener, opts);
   }
 
   public removeAnchorListener(type: string, listener: EventListener): void {

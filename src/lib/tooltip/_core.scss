@@ -6,6 +6,7 @@
 
 @mixin host {
   display: contents;
+  pointer-events: none;
 }
 
 @mixin base {
