@@ -221,7 +221,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     value = Boolean(value);
     if (this._open !== value) {
       if (this._adapter.isConnected) {
-        if (this._open) {
+        if (!this._open) {
           this._show();
         } else {
           this._hide();
