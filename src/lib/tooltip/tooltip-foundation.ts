@@ -1,7 +1,6 @@
 import { ICustomElementFoundation, isDefined } from '@tylertech/forge-core';
 import { ITooltipAdapter } from './tooltip-adapter';
 import { TOOLTIP_CONSTANTS, TooltipPlacement, TooltipTriggerType, TooltipType } from './tooltip-constants';
-import { PopupPlacement } from '../popup';
 import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import { canUserHoverElements } from '../constants';
 
@@ -293,10 +292,10 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     }
   }
 
-  public get placement(): PopupPlacement {
+  public get placement(): TooltipPlacement {
     return this._placement;
   }
-  public set placement(value: PopupPlacement) {
+  public set placement(value: TooltipPlacement) {
     if (this._placement !== value) {
       this._placement = value ?? TOOLTIP_CONSTANTS.defaults.PLACEMENT;
       this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.PLACEMENT, String(this._placement));
@@ -314,7 +313,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   }
 
   public get triggerType(): TooltipTriggerType | TooltipTriggerType[] {
-    return this._triggerTypes;
+    return this._triggerTypes.length === 1 ? this._triggerTypes[0] : this._triggerTypes;
   }
   public set triggerType(value: TooltipTriggerType | TooltipTriggerType[]) {
     if (this._triggerTypes !== value) {

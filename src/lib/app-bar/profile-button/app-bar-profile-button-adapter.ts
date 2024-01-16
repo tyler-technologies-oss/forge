@@ -45,11 +45,11 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
     this._avatarElement = getLightElement(this._component, AVATAR_CONSTANTS.elementName) as IAvatarComponent;
     this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
 
-    const originalAriaLabel = this._iconButtonElement.getAttribute('aria-label');
+    const originalAriaLabelledBy = this._iconButtonElement.getAttribute('aria-labelledby'); // Set by tooltip
 
     this._forwardObserver = forwardAttributes(this._component, APP_BAR_PROFILE_BUTTON_CONSTANTS.forwardedAttributes, (name, value) => {
-      if (name === 'aria-label' && !value) {
-        value = originalAriaLabel;
+      if (name === 'aria-labelledby' && !value) {
+        value = originalAriaLabelledBy;
       }
       toggleAttribute(this._iconButtonElement, !!value, name, value ?? undefined);
     });

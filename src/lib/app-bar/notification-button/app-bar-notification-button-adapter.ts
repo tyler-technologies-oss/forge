@@ -37,11 +37,11 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
     this._badgeElement = getLightElement(this._component, BADGE_CONSTANTS.elementName) as IBadgeComponent;
     this._iconElement = getLightElement(this._component, ICON_CONSTANTS.elementName) as IIconComponent;
 
-    const originalAriaLabel = this._iconButtonElement.getAttribute('aria-label');
+    const originalAriaLabelledby = this._iconButtonElement.getAttribute('aria-labelledby');
 
     this._forwardObserver = forwardAttributes(this._component, APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.forwardedAttributes, (name, value) => {
-      if (name === 'aria-label' && !value) {
-        value = originalAriaLabel;
+      if (name === 'aria-labelledby' && !value) {
+        value = originalAriaLabelledby;
       }
       toggleAttribute(this._iconButtonElement, !!value, name, value ?? undefined);
     });

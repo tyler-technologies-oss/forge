@@ -20,14 +20,29 @@ describe('App Bar Menu Button', () => {
     expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
   });
 
-  it('should reset internal aria-label to default', async () => {
+  it('should remove internal aria-label if aria-label removed', async () => {
     const el = await fixture<IAppBarMenuButtonComponent>(html`<forge-app-bar-menu-button aria-label="foo"></forge-app-bar-menu-button>`);
     const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+
+    expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
 
     el.removeAttribute('aria-label');
     await elementUpdated(el);
 
-    expect(iconButtonEl.getAttribute('aria-label')).to.equal('Toggle menu');
+    expect(iconButtonEl.getAttribute('aria-label')).to.be.null;
+  });
+
+  it('should reset internal aria-labelledby to tooltip id if external aria-labelledby removed', async () => {
+    const el = await fixture<IAppBarMenuButtonComponent>(html`<forge-app-bar-menu-button aria-labelledby="foo"></forge-app-bar-menu-button>`);
+    const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+    const tooltipEl = el.querySelector('forge-tooltip') as HTMLElement;
+
+    expect(iconButtonEl.getAttribute('aria-labelledby')).to.equal('foo');
+
+    el.removeAttribute('aria-labelledby');
+    await elementUpdated(el);
+
+    expect(iconButtonEl.getAttribute('aria-labelledby')).to.equal(tooltipEl.id);
   });
 
   it('should set icon', async () => {
