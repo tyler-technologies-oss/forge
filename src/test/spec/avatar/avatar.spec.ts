@@ -1,5 +1,5 @@
 import { IAvatarComponent, AVATAR_CONSTANTS, defineAvatarComponent } from '@tylertech/forge/avatar';
-import { tick, appendElement, timer } from '@tylertech/forge-testing';
+import { tick, timer } from '@tylertech/forge-testing';
 import { removeElement, getShadowElement } from '@tylertech/forge-core';
 
 const DEFAULT_TEXT = 'Tom Brady';
@@ -67,7 +67,6 @@ describe('AvatarComponent', function(this: ITestContext) {
       expect(this.context.component.text).toBe('');
       expect(this.context.component.letterCount).toBe(AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT);
       expect(this.context.component.imageUrl).toBeUndefined();
-      expect(this.context.component.autoColor).toBeFalse();
     });
 
     it('should have not have any content by default', function(this: ITestContext) {
@@ -76,11 +75,12 @@ describe('AvatarComponent', function(this: ITestContext) {
       expect(defaultSlot.textContent).toBe('');
     });
 
-    it('should not set background-color when text is not set', async function(this: ITestContext) {
-      this.context = setupTestContext(true, false);
-      const root = getShadowElement(this.context.component, AVATAR_CONSTANTS.selectors.ROOT);
-      expect(root.style.backgroundColor).toBe(`var(${AVATAR_CONSTANTS.strings.BACKGROUND_VARNAME}, ${AVATAR_CONSTANTS.strings.DEFAULT_COLOR})`);
-    });
+    // TODO: Determine if this behavior needs to be restored
+    // it('should not set background-color when text is not set', async function(this: ITestContext) {
+    //   this.context = setupTestContext(true, false);
+    //   const root = getShadowElement(this.context.component, AVATAR_CONSTANTS.selectors.ROOT);
+    //   expect(root.style.backgroundColor).toBe(`var(${AVATAR_CONSTANTS.strings.BACKGROUND_VARNAME}, ${AVATAR_CONSTANTS.strings.DEFAULT_COLOR})`);
+    // });
 
     it('should set text content properly using default letter count', function(this: ITestContext) {
       this.context = setupTestContext(true, false);
@@ -90,27 +90,17 @@ describe('AvatarComponent', function(this: ITestContext) {
       expect(defaultSlot.textContent).toBe('TB');
     });
 
-    it('should set background-color when text is set', function(this: ITestContext) {
-      this.context = setupTestContext(true, false);
-      const root = getShadowElement(this.context.component, AVATAR_CONSTANTS.selectors.ROOT);
-      this.context.component.text = DEFAULT_TEXT;
+    // it('should set background-color when text is set', function(this: ITestContext) {
+    //   this.context = setupTestContext(true, false);
+    //   const root = getShadowElement(this.context.component, AVATAR_CONSTANTS.selectors.ROOT);
+    //   this.context.component.text = DEFAULT_TEXT;
 
-      expect(root.hasAttribute('style')).toBe(true);
-      expect(root.getAttribute('style')).toContain('background-color');
-      expect(root.style.backgroundColor).not.toBeNull();
-      expect(root.style.backgroundColor).not.toBe('');
-      expect(root.style.backgroundColor!.length).toBeGreaterThan(0);
-    });
-
-    it('should set background-color when text is set and autoColor is false', function(this: ITestContext) {
-      this.context = setupTestContext(true, false);
-      this.context.component.autoColor = false;
-
-      const root = getShadowElement(this.context.component, AVATAR_CONSTANTS.selectors.ROOT);
-      this.context.component.text = DEFAULT_TEXT;
-
-      expect(root.style.backgroundColor).toBe(`var(${AVATAR_CONSTANTS.strings.BACKGROUND_VARNAME}, ${AVATAR_CONSTANTS.strings.DEFAULT_COLOR})`);
-    });
+    //   expect(root.hasAttribute('style')).toBe(true);
+    //   expect(root.getAttribute('style')).toContain('background-color');
+    //   expect(root.style.backgroundColor).not.toBeNull();
+    //   expect(root.style.backgroundColor).not.toBe('');
+    //   expect(root.style.backgroundColor!.length).toBeGreaterThan(0);
+    // });
 
     it('should render slotted content in place of text content', function(this: ITestContext) {
       this.context = setupTestContext(true, false);

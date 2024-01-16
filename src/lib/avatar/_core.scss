@@ -1,0 +1,32 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host() {
+  display: inline-block;
+  contain: content;
+}
+
+@mixin base() {
+  @include typography.style(heading4);
+
+  font-size: #{token(font-size)};
+  font-weight: #{token(font-weight)};
+  background-color: #{token(background)};
+  color: #{token(color)};
+  height: #{token(size)};
+  width: #{token(size)};
+  border-radius: #{token(border-radius)};
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  transition: height #{token(transition-duration)} #{token(transition-timing)}, 
+              width #{token(transition-duration)} #{token(transition-timing)};
+}

@@ -9,7 +9,6 @@ export interface IAvatarFoundation extends ICustomElementFoundation {
   imageUrl: string;
   text: string;
   letterCount: number;
-  autoColor: boolean;
 }
 
 /**
@@ -19,7 +18,6 @@ export class AvatarFoundation implements IAvatarFoundation {
   private _imageUrl: string;
   private _text = '';
   private _letterCount = AVATAR_CONSTANTS.numbers.DEFAULT_LETTER_COUNT;
-  private _autoColor = false;
   private _initialized = false;
 
   constructor(private _adapter: IAvatarAdapter) {}
@@ -56,9 +54,6 @@ export class AvatarFoundation implements IAvatarFoundation {
     } else {
       this._adapter.clearText();
     }
-
-    const color = this._autoColor ? getTextColor(data) : AVATAR_CONSTANTS.strings.DEFAULT_COLOR;
-    this._adapter.setBackgroundColor(color);
   }
 
   /**
@@ -120,18 +115,6 @@ export class AvatarFoundation implements IAvatarFoundation {
       if (this._initialized) {
         this._render();
       }
-    }
-  }
-
-  /** Controls whether the background color set automatically based on the text value. Does not have any effect when an image URL is specified. */
-  public get autoColor(): boolean {
-    return this._autoColor;
-  }
-  public set autoColor(value: boolean) {
-    if (this._autoColor !== value) {
-      this._autoColor = value;
-      this._setText();
-      this._adapter.setHostAttribute(AVATAR_CONSTANTS.attributes.AUTO_COLOR, isDefined(this._autoColor) ? this._autoColor.toString() : '');
     }
   }
 }

@@ -1,0 +1,24 @@
+@use 'sass:map';
+@use '../../animation';
+@use '../../border';
+@use '../../elevation';
+@use '../../shape';
+@use '../../spacing';
+@use '../../theme';
+@use '../../typography';
+@use '../../utils';
+
+$tokens: (
+  size: utils.module-val(avatar, size, 40px),
+  font-size: utils.module-val(avatar, font-size, 1rem),
+  font-weight: utils.module-val(avatar, font-weight, 400),
+  background: utils.module-val(avatar, background, theme.variable(tertiary)),
+  color: utils.module-val(avatar, color, theme.variable(on-tertiary)),
+  transition-duration: utils.module-val(avatar, transition-duration, 200ms),
+  transition-timing: utils.module-val(avatar, transition-timing, animation.variable(easing-standard)),
+  border-radius: utils.module-val(avatar, border-radius, 50%)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

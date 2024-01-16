@@ -1,11 +1,31 @@
-@use './mixins';
+@use './core' as *;
+
+//
+// Host
+//
+
+$host-tokens: [];
 
 :host {
-  @include mixins.host;
+  @include tokens($includes: $host-tokens);
+}
+
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.core-styles;
+//
+// Base
+//
+
+.forge-avatar {
+  @include tokens($excludes: $host-tokens);
+}
+
+.forge-avatar {
+  @include base;
+}
