@@ -76,6 +76,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     if (this._open) {
       this._hide();
     }
+    this._adapter.detachAria();
     this._detachAnchorListeners();
   }
 
@@ -270,15 +271,13 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
 
       if (this._adapter.isConnected) {
         this._detachAnchorListeners();
-      }
-
-      this._adapter.tryLocateAnchorElement(this._anchor);
-      this._adapter.syncAria();
-      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR, !!this._anchor, this._anchor);
-      
-      if (this._adapter.isConnected) {
+        this._adapter.detachAria();
+        this._adapter.tryLocateAnchorElement(this._anchor);
+        this._adapter.syncAria();
         this._attachAnchorListeners();
       }
+
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR, !!this._anchor, this._anchor);
     }
   }
 
@@ -289,6 +288,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     if (this._adapter.anchorElement !== element) {
       if (this._adapter.isConnected) {
         this._detachAnchorListeners();
+        this._adapter.detachAria();
       }
 
       this._adapter.setAnchorElement(element);

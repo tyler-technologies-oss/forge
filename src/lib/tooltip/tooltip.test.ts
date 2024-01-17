@@ -157,6 +157,86 @@ describe('Tooltip', () => {
       expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal('test-id');
       await expect(harness.tooltipElement).to.be.accessible();
     });
+
+    it('should detach aria-labelledby when changing anchor elements', async () => {
+      const harness = await createFixture({ type: 'label' });
+
+      expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
+      
+      harness.tooltipElement.anchorElement = harness.altAnchorElement;
+      
+      expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
+      expect(harness.altAnchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should detach aria-labelledby when changing anchor elements via id', async () => {
+      const harness = await createFixture({ type: 'label' });
+
+      expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
+      
+      harness.tooltipElement.anchor = harness.altAnchorElement.id;
+      
+      expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
+      expect(harness.altAnchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should detach aria-labelledby when removing tooltip', async () => {
+      const harness = await createFixture({ type: 'label' });
+
+      expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
+      
+      harness.tooltipElement.remove();
+      
+      expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
+    });
+
+    it('should detach aria-describedby when changing anchor elements', async () => {
+      const harness = await createFixture({ type: 'description' });
+
+      expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
+      
+      harness.tooltipElement.anchorElement = harness.altAnchorElement;
+      
+      expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
+      expect(harness.altAnchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should detach aria-describedby when changing anchor elements via id', async () => {
+      const harness = await createFixture({ type: 'description' });
+
+      expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
+      
+      harness.tooltipElement.anchor = harness.altAnchorElement.id;
+      
+      expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
+      expect(harness.altAnchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should detach aria-describedby when removing tooltip', async () => {
+      const harness = await createFixture({ type: 'description' });
+
+      expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
+      
+      harness.tooltipElement.remove();
+      
+      expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
+    });
+
+    it('should not remove user-provided aria-labelledby or aria-describedby attributes when removing tooltip if presentation type', async () => {
+      const harness = await createFixture();
+
+      harness.anchorElement.setAttribute('aria-labelledby', 'test-id');
+      harness.anchorElement.setAttribute('aria-describedby', 'test-id');
+      
+      harness.tooltipElement.remove();
+      
+      expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal('test-id');
+      expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal('test-id');
+    });
   });
 
   describe('overlay', () => {

@@ -9,6 +9,7 @@ import { TOOLTIP_CONSTANTS } from './tooltip-constants';
 export interface ITooltipAdapter extends IBaseAdapter {
   readonly anchorElement: HTMLElement | null;
   syncAria(): void;
+  detachAria(): void;
   setAnchorElement(element: HTMLElement | null): void;
   tryLocateAnchorElement(id: string): void;
   addAnchorListener(type: string, listener: EventListener, opts?: AddEventListenerOptions): void;
@@ -60,6 +61,16 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
           this._anchorElement.setAttribute('aria-labelledby', this._component.id);
           break;
       }
+    }
+  }
+
+  public detachAria(): void {
+    if (this._component.type === 'description' && this._anchorElement?.getAttribute('aria-describedby') === this._component.id) {
+      this._anchorElement?.removeAttribute('aria-describedby');
+    }
+
+    if (this._component.type === 'label' && this._anchorElement?.getAttribute('aria-labelledby') === this._component.id) {
+      this._anchorElement?.removeAttribute('aria-labelledby');
     }
   }
 
