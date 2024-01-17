@@ -1,5 +1,6 @@
 import { getShadowElement, randomChars } from '@tylertech/forge-core';
 import { setDefaultAria } from '../constants';
+import { locateElementById } from '../core/utils/utils';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { ITooltipComponent } from './tooltip';
@@ -99,6 +100,20 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
     this._overlayElement.anchorElement = this._anchorElement;
     this._overlayElement.arrowElement = this._arrowElement;
     this._overlayElement.offset = { mainAxis: this._component.offset };
+    this._overlayElement.flip = this._component.flip;
+
+    if (this._component.fallbackPlacements) {
+      this._overlayElement.fallbackPlacements = this._component.fallbackPlacements;
+    }
+
+    if (this._component.boundaryElement) {
+      this._overlayElement.boundaryElement = this._component.boundaryElement;
+    } else if (this._component.boundary) {
+      const boundaryEl = locateElementById(this._component, this._component.boundary);
+      this._overlayElement.boundaryElement = boundaryEl;
+    } else {
+      this._overlayElement.boundaryElement = null;
+    }
 
     this._component.shadowRoot?.appendChild(this._overlayElement);
     this._overlayElement.appendChild(this._contentElement);

@@ -1,5 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
 import { PositionPlacement } from '../core/utils/position-utils';
+import { OverlayFlipState } from '../overlay/overlay-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tooltip`;
 
@@ -13,6 +14,9 @@ const observedAttributes = {
   POSITION: 'position', // deprecated
   DELAY: 'delay',
   OFFSET: 'offset',
+  FLIP: 'flip',
+  BOUNDARY: 'boundary',
+  FALLBACK_PLACEMENTS: 'fallback-placements',
   TRIGGER_TYPE: 'trigger-type'
 } as const;
 
@@ -27,6 +31,7 @@ const numbers = {
 const defaults = {
   DELAY: 500,
   OFFSET: 4,
+  FLIP: 'auto' as OverlayFlipState,
   TYPE: 'presentation' as TooltipType,
   PLACEMENT: 'right' as TooltipPlacement,
   TRIGGER_TYPES: ['hover'] as TooltipTriggerType[]

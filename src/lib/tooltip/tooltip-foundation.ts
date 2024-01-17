@@ -1,8 +1,10 @@
-import { ICustomElementFoundation, isDefined } from '@tylertech/forge-core';
+import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { ITooltipAdapter } from './tooltip-adapter';
 import { TOOLTIP_CONSTANTS, TooltipPlacement, TooltipTriggerType, TooltipType } from './tooltip-constants';
 import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import { canUserHoverElements } from '../constants';
+import { OverlayFlipState } from '../overlay/overlay-constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 export interface ITooltipFoundation extends ICustomElementFoundation {
   open: boolean;
@@ -12,6 +14,10 @@ export interface ITooltipFoundation extends ICustomElementFoundation {
   anchor: string;
   anchorElement: HTMLElement | null;
   offset: number;
+  flip: OverlayFlipState;
+  boundary: string | null;
+  boundaryElement: HTMLElement | null;
+  fallbackPlacements: PositionPlacement[] | null;
   triggerType: TooltipTriggerType | TooltipTriggerType[];
   syncTooltipAria(): void;
 }
@@ -25,6 +31,10 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   private _delay = TOOLTIP_CONSTANTS.defaults.DELAY;
   private _placement: TooltipPlacement = TOOLTIP_CONSTANTS.defaults.PLACEMENT;
   private _offset = TOOLTIP_CONSTANTS.defaults.OFFSET;
+  private _flip: OverlayFlipState = TOOLTIP_CONSTANTS.defaults.FLIP;
+  private _boundary: string | null = null;
+  private _boundaryElement: HTMLElement | null = null;
+  private _fallbackPlacements: PositionPlacement[] | null = null;
   private _triggerTypes: TooltipTriggerType[] = TOOLTIP_CONSTANTS.defaults.TRIGGER_TYPES;
   
   // Hover trigger type
@@ -81,6 +91,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     const triggerTypes = [...this._triggerTypes];
 
     // If the users input mechanism doesn't support hover, then we need to force longpress as their alternative
+    /* c8 ignore next 4 */
     if (!canUserHoverElements) {
       triggerTypes.splice(triggerTypes.indexOf('hover'), 1);
       triggerTypes.push('longpress');
@@ -101,6 +112,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
 
     const triggerTypes = [...this._triggerTypes];
 
+    /* c8 ignore next 3 */
     if (!canUserHoverElements) {
       triggerTypes.push('longpress');
     }
@@ -140,18 +152,21 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   private _attachDismissListeners(): void {
     this._adapter.addAnchorListener('mousedown', this._mouseDownListener);
     this._adapter.addAnchorListener('dragstart', this._dragListener);
-    this._adapter.addWindowListener('scroll', this._scrollListener);
+    this._adapter.addDocumentListener('scroll', this._scrollListener);
+    this._adapter.addDocumentListener('wheel', this._scrollListener);
     this._adapter.addLightDismissListener(this._lightDismissListener);
   }
   
   private _detachDismissListeners(): void {
     this._adapter.removeAnchorListener('mousedown', this._mouseDownListener);
     this._adapter.removeAnchorListener('dragstart', this._dragListener);
-    this._adapter.removeWindowListener('scroll', this._scrollListener);
+    this._adapter.removeDocumentListener('scroll', this._scrollListener);
+    this._adapter.removeDocumentListener('wheel', this._scrollListener);
     this._adapter.removeLightDismissListener(this._lightDismissListener);
   }
 
   private _onHoverStart(_evt: MouseEvent): void {
+    /* c8 ignore next 3 */
     if (this._open) {
       return;
     }
@@ -176,6 +191,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   }
 
   private _onFocus(_evt: FocusEvent): void {
+    /* c8 ignore next 3 */
     if (this._open) {
       return;
     }
@@ -235,12 +251,13 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     return this._type;
   }
   public set type(value: TooltipType) {
+    value ??= TOOLTIP_CONSTANTS.defaults.TYPE;
     if (this._type !== value) {
-      this._type = value ?? TOOLTIP_CONSTANTS.defaults.TYPE;
+      this._type = value;
       if (this._adapter.isConnected) {
         this._adapter.syncAria();
       }
-      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.TYPE, this._type);
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.TYPE, this._type !== TOOLTIP_CONSTANTS.defaults.TYPE, this._type);
     }
   }
 
@@ -257,6 +274,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
 
       this._adapter.tryLocateAnchorElement(this._anchor);
       this._adapter.syncAria();
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR, !!this._anchor, this._anchor);
       
       if (this._adapter.isConnected) {
         this._attachAnchorListeners();
@@ -288,7 +306,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   public set delay(value: number) {
     if (this._delay !== value) {
       this._delay = value;
-      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.DELAY, isDefined(this._delay) ? this._delay.toString() : '');
+      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.DELAY, String(this._delay));
     }
   }
 
@@ -296,8 +314,9 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     return this._placement;
   }
   public set placement(value: TooltipPlacement) {
+    value ??= TOOLTIP_CONSTANTS.defaults.PLACEMENT;
     if (this._placement !== value) {
-      this._placement = value ?? TOOLTIP_CONSTANTS.defaults.PLACEMENT;
+      this._placement = value;
       this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.PLACEMENT, String(this._placement));
     }
   }
@@ -306,9 +325,50 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
     return this._offset;
   }
   public set offset(value: number) {
+    value ??= TOOLTIP_CONSTANTS.defaults.OFFSET;
     if (this._offset !== value) {
-      this._offset = value ?? TOOLTIP_CONSTANTS.defaults.OFFSET;
+      this._offset = value;
       this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.OFFSET, this._offset !== TOOLTIP_CONSTANTS.defaults.OFFSET, String(this._offset));
+    }
+  }
+
+  public get flip(): OverlayFlipState {
+    return this._flip;
+  }
+  public set flip(value: OverlayFlipState) {
+    value ??= TOOLTIP_CONSTANTS.defaults.FLIP;
+    if (this._flip !== value) {
+      this._flip = value;
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.FLIP, this._flip !== TOOLTIP_CONSTANTS.defaults.FLIP, String(this._flip));
+    }
+  }
+
+  public get boundary(): string | null {
+    return this._boundary;
+  }
+  public set boundary(value: string | null) {
+    if (this._boundary !== value) {
+      this._boundary = value;
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.BOUNDARY, !!this._boundary, this._boundary as string);
+    }
+  }
+
+  public get boundaryElement(): HTMLElement | null {
+    return this._boundaryElement;
+  }
+  public set boundaryElement(element: HTMLElement | null) {
+    if (this._boundaryElement !== element) {
+      this._boundaryElement = element;
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.BOUNDARY, !!this._boundaryElement, this._boundaryElement?.id);
+    }
+  }
+
+  public get fallbackPlacements(): PositionPlacement[] | null {
+    return this._fallbackPlacements;
+  }
+  public set fallbackPlacements(value: PositionPlacement[] | null) {
+    if (this._fallbackPlacements !== value) {
+      this._fallbackPlacements = value;
     }
   }
 

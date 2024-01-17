@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import { spy } from 'sinon';
 import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
@@ -62,8 +61,101 @@ describe('Tooltip', () => {
       expect(harness.tooltipElement.type).to.equal('presentation' satisfies TooltipType);
       expect(harness.tooltipElement.hasAttribute(TOOLTIP_CONSTANTS.attributes.TYPE)).to.be.false;
       expect(harness.tooltipElement.hasAttribute('role')).to.be.false;
+      expect(harness.tooltipElement.hasAttribute('aria-hidden')).to.be.true;
       expect(harness.anchorElement.hasAttribute('aria-label')).to.be.false;
+      expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
       expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
+    });
+
+    it('should be accessible when closed with presentation type', async () => {
+      const harness = await createFixture();
+
+      expect(harness.isOpen).to.be.false;
+      expect(harness.tooltipElement.type).to.equal('presentation' satisfies TooltipType);
+      expect(harness.tooltipElement.hasAttribute('role')).to.be.false;
+      expect(harness.tooltipElement.hasAttribute('aria-hidden')).to.be.true;
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should be accessible when closed with label type', async () => {
+      const harness = await createFixture({ type: 'label' });
+
+      expect(harness.isOpen).to.be.false;
+      expect(harness.tooltipElement.type).to.equal('label' satisfies TooltipType);
+      expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
+      expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
+      expect(harness.tooltipElement.hasAttribute('aria-hidden')).to.be.true;
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should be accessible when closed with description type', async () => {
+      const harness = await createFixture({ type: 'description' });
+
+      expect(harness.isOpen).to.be.false;
+      expect(harness.tooltipElement.type).to.equal('description' satisfies TooltipType);
+      expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
+      expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
+      expect(harness.tooltipElement.hasAttribute('aria-hidden')).to.be.true;
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should be accessible when open with presentation type', async () => {
+      const harness = await createFixture({ open: true });
+
+      expect(harness.isOpen).to.be.true;
+      expect(harness.tooltipElement.hasAttribute('aria-hidden')).to.be.true;
+      expect(harness.tooltipElement.hasAttribute('role')).to.be.false;
+      expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
+      expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should be accessible when open with label type', async () => {
+      const harness = await createFixture({ open: true, type: 'label' });
+
+      expect(harness.isOpen).to.be.true;
+      expect(harness.tooltipElement.hasAttribute('aria-hidden')).to.be.true;
+      expect(harness.tooltipElement.hasAttribute('role')).to.be.false;
+      expect(harness.anchorElement.hasAttribute('aria-describedby')).to.be.false;
+      expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal(harness.tooltipElement.id);
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should be accessible when open with description type', async () => {
+      const harness = await createFixture({ open: true, type: 'description' });
+
+      expect(harness.isOpen).to.be.true;
+      expect(harness.tooltipElement.hasAttribute('aria-hidden')).to.be.true;
+      expect(harness.tooltipElement.getAttribute('role')).to.equal('tooltip');
+      expect(harness.anchorElement.hasAttribute('aria-labelledby')).to.be.false;
+      expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal(harness.tooltipElement.id);
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should not override user-provided aria-labelledby', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.setAttribute('aria-labelledby', 'test-id');
+      harness.anchorElement.setAttribute('aria-labelledby', 'test-id');
+      harness.tooltipElement.type = 'label';
+
+      await elementUpdated(harness.tooltipElement);
+
+      expect(harness.anchorElement.getAttribute('aria-labelledby')).to.equal('test-id');
+      await expect(harness.tooltipElement).to.be.accessible();
+    });
+
+    it('should not override user-provided aria-describedby', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.setAttribute('aria-describedby', 'test-id');
+      harness.anchorElement.setAttribute('aria-describedby', 'test-id');
+      harness.tooltipElement.type = 'description';
+
+      await elementUpdated(harness.tooltipElement);
+
+      expect(harness.anchorElement.getAttribute('aria-describedby')).to.equal('test-id');
+      await expect(harness.tooltipElement).to.be.accessible();
     });
   });
 
@@ -95,77 +187,70 @@ describe('Tooltip', () => {
       expect(harness.overlayElement?.offset).to.deep.equal({ mainAxis: offset });
     });
 
-    // it('should proxy hide', async () => {
-    //   const harness = await createFixture();
+    it('should proxy flip', async () => {
+      const harness = await createFixture();
 
-    //   harness.tooltipElement.hide = 'never';
+      harness.tooltipElement.flip = 'main';
 
-    //   expect(harness.tooltipElement.hide).to.equal('never');
-    //   expect(harness.overlayElement?.hide).to.equal('never');
-    //   expect(harness.tooltipElement.getAttribute(OVERLAY_CONSTANTS.attributes.HIDE)).to.equal('never');
-    // });
+      expect(harness.tooltipElement.flip).to.equal('main');
+      expect(harness.tooltipElement.getAttribute(OVERLAY_CONSTANTS.attributes.FLIP)).to.equal('main');
 
-    // it('should proxy shift', async () => {
-    //   const harness = await createFixture();
+      harness.tooltipElement.open = true;
 
-    //   harness.tooltipElement.shift = true;
+      expect(harness.overlayElement?.flip).to.equal('main');
+    });
 
-    //   expect(harness.tooltipElement.shift).to.be.true;
-    //   expect(harness.overlayElement?.shift).to.be.true;
-    //   expect(harness.tooltipElement.hasAttribute(OVERLAY_CONSTANTS.attributes.SHIFT)).to.be.true;
-    // });
+    it('should proxy boundary', async () => {
+      const harness = await createFixture();
 
-    // it('should proxy flip', async () => {
-    //   const harness = await createFixture();
+      const elId = 'alt-anchor';
+      harness.tooltipElement.boundary = elId;
 
-    //   harness.tooltipElement.flip = 'main';
+      expect(harness.tooltipElement.boundary).to.equal(elId);
+      expect(harness.tooltipElement.getAttribute(OVERLAY_CONSTANTS.attributes.BOUNDARY)).to.equal(elId);
 
-    //   expect(harness.tooltipElement.flip).to.equal('main');
-    //   expect(harness.overlayElement?.flip).to.equal('main');
-    //   expect(harness.tooltipElement.getAttribute(OVERLAY_CONSTANTS.attributes.FLIP)).to.equal('main');
-    // });
+      harness.tooltipElement.open = true;
 
-    // it('should proxy boundary', async () => {
-    //   const harness = await createFixture();
+      expect(harness.overlayElement?.boundaryElement).to.equal(harness.altAnchorElement);
+    });
 
-    //   const elId = 'some-element-id';
-    //   harness.tooltipElement.boundary = elId;
+    it('should proxy boundary element', async () => {
+      const harness = await createFixture();
 
-    //   expect(harness.tooltipElement.boundary).to.equal(elId);
-    //   expect(harness.overlayElement?.boundary).to.equal(elId);
-    //   expect(harness.tooltipElement.getAttribute(OVERLAY_CONSTANTS.attributes.BOUNDARY)).to.equal(elId);
-    // });
+      const boundaryEl = document.createElement('div');
 
-    // it('should proxy boundary element', async () => {
-    //   const harness = await createFixture();
+      harness.tooltipElement.boundaryElement = boundaryEl;
 
-    //   const boundaryEl = document.createElement('div');
+      expect(harness.tooltipElement.boundaryElement).to.equal(boundaryEl);
 
-    //   harness.tooltipElement.boundaryElement = boundaryEl;
+      harness.tooltipElement.open = true;
 
-    //   expect(harness.tooltipElement.boundaryElement).to.equal(boundaryEl);
-    //   expect(harness.overlayElement?.boundaryElement).to.equal(boundaryEl);
-    // });
+      expect(harness.overlayElement?.boundaryElement).to.equal(boundaryEl);
+    });
 
-    // it('should proxy fallback placements', async () => {
-    //   const harness = await createFixture();
+    it('should proxy fallback placements', async () => {
+      const harness = await createFixture();
 
-    //   harness.tooltipElement.fallbackPlacements = ['top', 'bottom'];
+      harness.tooltipElement.fallbackPlacements = ['top', 'bottom'];
 
-    //   expect(harness.tooltipElement.fallbackPlacements).to.deep.equal(['top', 'bottom']);
-    //   expect(harness.overlayElement?.fallbackPlacements).to.deep.equal(['top', 'bottom']);
-    // });
+      expect(harness.tooltipElement.fallbackPlacements).to.deep.equal(['top', 'bottom']);
 
-    // it('should proxy position() to overlay', async () => {
-    //   const harness = await createFixture();
+      harness.tooltipElement.open = true;
 
-    //   const positionSpy = spy(harness.overlayElement, 'position');
+      expect(harness.overlayElement?.fallbackPlacements).to.deep.equal(['top', 'bottom']);
+    });
 
-    //   harness.tooltipElement.position();
-    //   positionSpy.restore();
+    it('should proxy fallback placements via attribute', async () => {
+      const harness = await createFixture();
 
-    //   expect(positionSpy).to.have.been.calledOnce;
-    // });
+      harness.tooltipElement.setAttribute(TOOLTIP_CONSTANTS.attributes.FALLBACK_PLACEMENTS, 'top,bottom');
+
+      expect(harness.tooltipElement.fallbackPlacements).to.deep.equal(['top', 'bottom']);
+
+      harness.tooltipElement.open = true;
+
+      expect(harness.overlayElement?.fallbackPlacements).to.deep.equal(['top', 'bottom']);
+    });
 
     it('should proxy anchorElement', async () => {
       const harness = await createFixture();
@@ -204,7 +289,37 @@ describe('Tooltip', () => {
   });
 
   describe('anchor', () => {
-    
+    it('should set anchor to previous element sibling implicitly', async () => {
+      const harness = await createFixture();
+
+      expect(harness.tooltipElement.anchorElement).to.equal(harness.anchorElement);
+    });
+
+    it('should set anchorElement explicitly', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.anchorElement = harness.altAnchorElement;
+
+      expect(harness.tooltipElement.anchorElement).to.equal(harness.altAnchorElement);
+    });
+
+    it('should set anchor via id reference explicitly', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.anchor = harness.altAnchorElement.id;
+
+      expect(harness.tooltipElement.anchorElement).to.equal(harness.altAnchorElement);
+      expect(harness.tooltipElement.getAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR)).to.equal(harness.altAnchorElement.id);
+    });
+
+    it('should automatically set anchor to parent element if no previous sibling element exists', async () => {
+      const harness = await createFixture();
+
+      const newTooltip = document.createElement('forge-tooltip');
+      harness.containerElement.insertAdjacentElement('afterbegin', newTooltip);
+
+      expect(newTooltip.anchorElement).to.equal(harness.containerElement);
+    });
   });
 
   describe('focus trigger type', () => {
@@ -285,6 +400,15 @@ describe('Tooltip', () => {
 
       expect(harness.isOpen).to.be.false;
     });
+
+    it('should open immediately when hover delay is set to 0', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      expect(harness.isOpen).to.be.false;
+
+      await harness.hoverTrigger();
+      expect(harness.isOpen).to.be.true;
+    });
   });
 
   describe('longpress trigger type', () => {
@@ -313,6 +437,17 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.false;
     });
 
+    (it('should automatically hide after longpress visibility threshold', async () => {
+      
+      const harness = await createFixture({ triggerType: 'longpress' });
+
+      await harness.longpressTrigger();
+      expect(harness.isOpen).to.be.true;
+
+      await timer(TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION + 100);
+      expect(harness.isOpen).to.be.false;
+    }) as unknown as Mocha.Test).timeout(5000); // Increasing to 5000 since the visibility duration is 3000
+
     // it('should use custom longpress delay', async () => {
     //   const harness = await createFixture({ triggerType: 'longpress' });
 
@@ -326,30 +461,6 @@ describe('Tooltip', () => {
     //   expect(harness.isOpen).to.be.true;
     // });
   });
-
-  // describe('manual trigger type', () => {
-  //   it('should not open from user interaction if manual trigger type', async () => {
-  //     const harness = await createFixture({ triggerType: 'manual' });
-
-  //     await harness.clickTrigger();
-  //     await harness.longpressTrigger();
-  //     await harness.doubleClickTrigger();
-  //     await harness.focusTrigger();
-  //     await harness.hoverTrigger();
-
-  //     expect(harness.isOpen).to.be.false;
-  //   });
-
-  //   it('should open via property if manual trigger type', async () => {
-  //     const harness = await createFixture({ triggerType: 'manual' });
-
-  //     expect(harness.isOpen).to.be.false;
-
-  //     harness.tooltipElement.open = true;
-
-  //     expect(harness.isOpen).to.be.true;
-  //   });
-  // });
 
   describe('multiple trigger types', () => {
     it('should allow for providing multiple trigger types via attribute', async () => {
@@ -441,13 +552,60 @@ describe('Tooltip', () => {
       expect(harness.arrowElement).to.exist;
     });
   });
+
+  describe('deprecated properties/attributes', () => {
+    it('should set placement when setting deprecated position property', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.position = 'bottom';
+
+      expect(harness.tooltipElement.position).to.equal('bottom');
+      expect(harness.tooltipElement.placement).to.equal('bottom');
+      expect(harness.tooltipElement.getAttribute(TOOLTIP_CONSTANTS.attributes.PLACEMENT)).to.equal('bottom');
+      expect(harness.tooltipElement.hasAttribute('position')).to.be.false;
+    });
+
+    it('should set position when setting deprecated position attribute', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.setAttribute('position', 'bottom');
+
+      expect(harness.tooltipElement.position).to.equal('bottom');
+      expect(harness.tooltipElement.placement).to.equal('bottom');
+      expect(harness.tooltipElement.getAttribute(TOOLTIP_CONSTANTS.attributes.PLACEMENT)).to.equal('bottom');
+      expect(harness.tooltipElement.getAttribute('position')).to.equal('bottom');
+    });
+
+    it('should set anchor when setting deprecated target property', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.target = 'alt-anchor';
+
+      expect(harness.tooltipElement.target).to.equal('alt-anchor');
+      expect(harness.tooltipElement.anchor).to.equal('alt-anchor');
+      expect(harness.tooltipElement.getAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR)).to.equal('alt-anchor');
+      expect(harness.tooltipElement.hasAttribute('target')).to.be.false;
+    });
+
+    it('should set anchor when setting deprecated target attribute', async () => {
+      const harness = await createFixture();
+
+      harness.tooltipElement.setAttribute('target', 'alt-anchor');
+
+      expect(harness.tooltipElement.target).to.equal('alt-anchor');
+      expect(harness.tooltipElement.anchor).to.equal('alt-anchor');
+      expect(harness.tooltipElement.getAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR)).to.equal('alt-anchor');
+      expect(harness.tooltipElement.getAttribute('target')).to.equal('alt-anchor');
+    });
+  });
 });
 
 class TooltipHarness {
   constructor(
     public tooltipElement: ITooltipComponent,
     public anchorElement: HTMLButtonElement,
-    public altAnchorElement: HTMLButtonElement) {}
+    public altAnchorElement: HTMLButtonElement,
+    public containerElement: HTMLElement) {}
 
   public get contentElement(): HTMLElement {
     return this.tooltipElement.shadowRoot?.querySelector(TOOLTIP_CONSTANTS.selectors.CONTENT) as HTMLElement;
@@ -522,18 +680,20 @@ class TooltipHarness {
 
 interface ITooltipFixtureConfig {
   open?: boolean;
+  type?: TooltipType;
   triggerType?: TooltipTriggerType;
   delay?: number;
   offset?: number;
 }
 
-async function createFixture({ open, triggerType, delay, offset }: ITooltipFixtureConfig = {}): Promise<TooltipHarness> {
-  const container = await fixture(html`
+async function createFixture({ open, type, triggerType, delay, offset }: ITooltipFixtureConfig = {}): Promise<TooltipHarness> {
+  const container = await fixture<HTMLElement>(html`
     <div>
       <button type="button" id="alt-anchor">Alt Tooltip Anchor</button>
       <button type="button" id="test-anchor">Tooltip Anchor</button>
       <forge-tooltip
         ?open=${open}
+        type=${type ?? nothing}
         trigger-type=${triggerType ?? nothing}
         delay=${delay ?? nothing}
         offset=${offset ?? nothing}>
@@ -546,5 +706,5 @@ async function createFixture({ open, triggerType, delay, offset }: ITooltipFixtu
   const altAnchorEl = container.querySelector('#alt-anchor') as HTMLButtonElement;
   const tooltipEl = container.querySelector('forge-tooltip') as ITooltipComponent;
 
-  return new TooltipHarness(tooltipEl, anchorEl, altAnchorEl);
+  return new TooltipHarness(tooltipEl, anchorEl, altAnchorEl, container);
 }

@@ -33,10 +33,12 @@
   animation-duration: #{token(animation-duration)};
   animation-timing-function: #{token(animation-timing)};
   animation-name: slidein;
+  animation-fill-mode: forwards;
 }
 
 @mixin arrow {
   position: absolute;
+  contain: strict;
 
   background-color: inherit;
   height: #{token(arrow-height)};

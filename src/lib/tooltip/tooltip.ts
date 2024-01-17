@@ -7,6 +7,8 @@ import { OverlayComponent } from '../overlay/overlay';
 import { coerceStringToArray } from '../core/utils/utils';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { OverlayFlipState } from '../overlay/overlay-constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 import template from './tooltip.html';
 import styles from './tooltip.scss';
@@ -23,6 +25,10 @@ export interface ITooltipComponent extends IWithDefaultAria, IWithElementInterna
   position: `${TooltipPlacement}`;
   delay: number;
   offset: number;
+  flip: OverlayFlipState;
+  boundary: string | null;
+  boundaryElement: HTMLElement | null;
+  fallbackPlacements: PositionPlacement[] | null;
   triggerType: TooltipTriggerType | TooltipTriggerType[];
 }
 
@@ -45,6 +51,10 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
  * @property {TooltipPlacement} placement - The placement of the tooltip relative to the anchor element.
  * @property {number} delay - The delay in milliseconds before the tooltip is shown.
  * @property {number} offset - The offset in pixels between the tooltip and the anchor element.
+ * @property {OverlayFlipState} - flip - How the tooltip should place itself if there is not enough space at the desired placement.
+ * @property {string | null} boundary - The id of the element that the tooltip should be constrained to.
+ * @property {HTMLElement | null} boundaryElement - The element that the tooltip should be constrained to.
+ * @property {PositionPlacement[] | null} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
  * @property {TooltipTriggerType | TooltipTriggerType[]} triggerType - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
  * 
  * @attribute {boolean} open - Whether or not the tooltip is open.
@@ -53,6 +63,9 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
  * @attribute {TooltipPlacement} placement - The placement of the tooltip relative to the anchor element.
  * @attribute {number} delay - The delay in milliseconds before the tooltip is shown.
  * @attribute {number} offset - The offset in pixels between the tooltip and the anchor element.
+ * @attribute {OverlayFlipState} flip - How the tooltip should place itself if there is not enough space at the desired placement.
+ * @attribute {string | null} boundary - The id of the element that the tooltip should be constrained to.
+ * @attribute {PositionPlacement[]} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
  * 
  * @cssproperty --forge-tooltip-background - The background color of the tooltip surface.
  * @cssproperty --forge-tooltip-color - The text color of the tooltip surface.
@@ -121,7 +134,7 @@ export class TooltipComponent extends BaseClass implements ITooltipComponent {
         this.open = coerceBoolean(newValue);
         break;
       case TOOLTIP_CONSTANTS.observedAttributes.TYPE:
-        this.type = newValue as TooltipType;
+        this.type = newValue?.trim() ? newValue as TooltipType : TOOLTIP_CONSTANTS.defaults.TYPE;
         break;
       case TOOLTIP_CONSTANTS.observedAttributes.TARGET:
       case TOOLTIP_CONSTANTS.observedAttributes.ANCHOR:
@@ -136,6 +149,15 @@ export class TooltipComponent extends BaseClass implements ITooltipComponent {
         break;
       case TOOLTIP_CONSTANTS.observedAttributes.OFFSET:
         this.offset = coerceNumber(newValue);
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.FLIP:
+        this.flip = newValue as OverlayFlipState;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.BOUNDARY:
+        this.boundary = newValue;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.FALLBACK_PLACEMENTS:
+        this.fallbackPlacements = newValue?.trim() ? coerceStringToArray<PositionPlacement>(newValue) : null;
         break;
       case TOOLTIP_CONSTANTS.observedAttributes.TRIGGER_TYPE:
         this.triggerType = newValue?.trim() ? coerceStringToArray<TooltipTriggerType>(newValue) : TOOLTIP_CONSTANTS.defaults.TRIGGER_TYPES;
@@ -171,6 +193,18 @@ export class TooltipComponent extends BaseClass implements ITooltipComponent {
 
   @FoundationProperty()
   public declare offset: number;
+
+  @FoundationProperty()
+  public declare flip: OverlayFlipState;
+
+  @FoundationProperty()
+  public declare boundary: string | null;
+
+  @FoundationProperty()
+  public declare boundaryElement: HTMLElement | null;
+
+  @FoundationProperty()
+  public declare fallbackPlacements: PositionPlacement[] | null;
 
   @FoundationProperty()
   public declare triggerType: TooltipTriggerType | TooltipTriggerType[];
