@@ -735,6 +735,11 @@ describe('Popover', () => {
 
       await harness.longpressTrigger();
 
+      console.log('should open when longpressing the trigger button');
+      console.log('harness.popoverElement.open', harness.popoverElement.open);
+      console.log('harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.OPEN)', harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.OPEN));
+      console.log('harness.popoverElement.overlay.open', harness.popoverElement.overlay.open);
+
       expect(harness.isOpen).to.be.true;
     });
 
@@ -742,6 +747,10 @@ describe('Popover', () => {
       const harness = await createFixture({ triggerType: 'longpress' });
 
       await harness.longpressTrigger();
+      console.log('should close by click outside after longpressing to open');
+      console.log('harness.popoverElement.open', harness.popoverElement.open);
+      console.log('harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.OPEN)', harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.OPEN));
+      console.log('harness.popoverElement.overlay.open', harness.popoverElement.overlay.open);
       expect(harness.isOpen).to.be.true;
 
       await harness.clickOutside();
@@ -1392,6 +1401,7 @@ class PopoverHarness {
     await sendMouse({ type: 'down', button: 'left' });
     await timer(delay);
     await sendMouse({ type: 'up', button: 'left' });
+    await this.hoverOutside();
   }
 
   public async longpressStopBeforeDelay(): Promise<void> {

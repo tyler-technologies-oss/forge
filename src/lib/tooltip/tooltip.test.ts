@@ -11,7 +11,7 @@ import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } 
 
 import './tooltip';
 
-describe.skip('Tooltip', () => {
+describe('Tooltip', () => {
   afterEach(async () => {
     // Always reset mouse position to avoid initial hover state issues when a test starts
     await sendMouse({ type: 'move', position: [0, 0] });
@@ -721,6 +721,7 @@ class TooltipHarness {
     await sendMouse({ type: 'down', button: 'left' });
     await timer(delay);
     await sendMouse({ type: 'up', button: 'left' });
+    await this.hoverOutside();
   }
 
   public async longpressStopBeforeDelay(): Promise<void> {
