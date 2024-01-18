@@ -25,6 +25,7 @@
   padding-inline: #{token(padding-inline)};
   box-shadow: #{token(elevation)};
 
+  width: #{token(width)};
   max-width: #{token(max-width)};
   pointer-events: none;
   text-align: #{token(content-align)};

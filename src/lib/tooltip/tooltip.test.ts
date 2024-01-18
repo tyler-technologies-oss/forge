@@ -12,7 +12,8 @@ import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } 
 import './tooltip';
 
 describe('Tooltip', () => {
-  after(async () => {
+  afterEach(async () => {
+    // Always reset mouse position to avoid initial hover state issues when a test starts
     await sendMouse({ type: 'move', position: [0, 0] });
   });
 
@@ -422,11 +423,6 @@ describe('Tooltip', () => {
   });
 
   describe('hover trigger type', () => {
-    beforeEach(async () => {
-      // Always reset mouse position to avoid initial hover state issues when a test starts
-      await sendMouse({ type: 'move', position: [0, 0] });
-    });
-
     it('should open when hovering the trigger button', async () => {
       const harness = await createFixture({ triggerType: 'hover' });
 
@@ -496,11 +492,6 @@ describe('Tooltip', () => {
   });
 
   describe('longpress trigger type', () => {
-    before(async () => {
-      // Always reset mouse position to avoid initial hover state issues when a test starts
-      await sendMouse({ type: 'move', position: [0, 0] });
-    });
-
     it('should open when longpressing the anchor', async () => {
       const harness = await createFixture({ triggerType: 'longpress' });
 
@@ -777,7 +768,7 @@ interface ITooltipFixtureConfig {
 
 async function createFixture({ open, type, triggerType, delay, offset }: ITooltipFixtureConfig = {}): Promise<TooltipHarness> {
   const container = await fixture<HTMLElement>(html`
-    <div style="padding: 16px;">
+    <div>
       <button type="button" id="alt-anchor">Alt Tooltip Anchor</button>
       <button type="button" id="test-anchor">Tooltip Anchor</button>
       <forge-tooltip
