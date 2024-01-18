@@ -1,3 +1,5 @@
+import { Platform } from '@tylertech/forge-core';
+
 /**
  * Detects if the browser supports the `popover` attribute.
  * @returns {boolean}
@@ -22,6 +24,8 @@ export function supportsElementInternalsAria(): boolean {
  * @returns {boolean}
  */
 export function supportsHover(): boolean {
-  const canTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  return !canTouch;
+  // TODO: hover media query is not working in CI headless chrome, so we are using the Platform.isMobile flag for now.
+  //       This should be reverted once we switch to using puppeteer or playwright for testing in CI.
+  // return window.matchMedia('(hover: hover)').matches;
+  return !Platform.isMobile;
 }
