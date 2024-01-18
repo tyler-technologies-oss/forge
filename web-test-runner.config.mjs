@@ -30,6 +30,12 @@ export default {
   concurrentBrowsers: 3,
   nodeResolve: true,
   testsFinishTimeout: 60000,
+  testFramework: {
+    config: {
+        timeout: 5000,
+        retries: 1,
+    },
+  },
   coverageConfig: {
     report: true,
     reportDir: '.coverage',
