@@ -407,6 +407,7 @@ describe('Tooltip', () => {
       const harness = await createFixture({ triggerType: 'focus' });
 
       harness.focusTrigger();
+      await elementUpdated(harness.tooltipElement);
 
       expect(harness.isOpen).to.be.true;
     });
@@ -415,6 +416,7 @@ describe('Tooltip', () => {
       const harness = await createFixture({ triggerType: 'focus' });
 
       harness.focusTrigger();
+      await elementUpdated(harness.tooltipElement);
       expect(harness.isOpen).to.be.true;
 
       await harness.blurTrigger();
@@ -517,7 +519,7 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.false;
     });
 
-    (it('should automatically hide after longpress visibility threshold', async () => {
+    it('should automatically hide after longpress visibility threshold', async () => {
       
       const harness = await createFixture({ triggerType: 'longpress' });
 
@@ -526,20 +528,7 @@ describe('Tooltip', () => {
 
       await timer(TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION + 100);
       expect(harness.isOpen).to.be.false;
-    }) as unknown as Mocha.Test).timeout(5000); // Increasing to 5000 since the visibility duration is 3000
-
-    // it('should use custom longpress delay', async () => {
-    //   const harness = await createFixture({ triggerType: 'longpress' });
-
-    //   const customDelay = 100;
-    //   harness.tooltipElement.longpressDelay = customDelay;
-      
-    //   expect(harness.tooltipElement.longpressDelay).to.equal(customDelay);
-    //   expect(harness.isOpen).to.be.false;
-
-    //   await harness.longpressTrigger(customDelay);
-    //   expect(harness.isOpen).to.be.true;
-    // });
+    });
   });
 
   describe('multiple trigger types', () => {
