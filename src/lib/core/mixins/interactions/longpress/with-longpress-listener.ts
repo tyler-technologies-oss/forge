@@ -46,13 +46,12 @@ export function WithLongpressListener<TBase extends MixinBase<object>>(base: TBa
     protected abstract _onLongpress(): void;
 
     protected _startLongpressListener(el: HTMLElement): void {
-      const type = canUserHoverElements ? 'pointerdown' : 'touchstart';
-      el.addEventListener(type, this._longpressStartListener);
+      console.log('canUserHoverElements', canUserHoverElements);
+      el.addEventListener('pointerdown', this._longpressStartListener);
     }
-
+    
     protected _stopLongpressListener(el: HTMLElement): void {
-      const type = canUserHoverElements ? 'pointerdown' : 'touchstart';
-      el.removeEventListener(type, this._longpressStartListener);
+      el.removeEventListener('pointerdown', this._longpressStartListener);
       this._unlistenLongpressEnd(el);
     }
 
@@ -61,10 +60,6 @@ export function WithLongpressListener<TBase extends MixinBase<object>>(base: TBa
       this._listenLongpressEnd(evt.target as HTMLElement);
       this._longpressTimeout = window.setTimeout(() => {
         this._onLongpress();
-
-        if (!canUserHoverElements) {
-          navigator.vibrate(1);
-        }
 
         // We need to prevent any ghost click events from firing after a longpress is detected
         (evt.target as HTMLElement).addEventListener('click', this._longpressClickPrevent, { capture: true, once: true });
@@ -83,27 +78,18 @@ export function WithLongpressListener<TBase extends MixinBase<object>>(base: TBa
     private _onLongpressContextMenu(evt: PointerEvent | TouchEvent): void {
       this._clearTimeout();
       (evt.target as HTMLElement).removeEventListener('click', this._longpressClickPrevent, { capture: true });
-      this._unlistenLongpressEnd(evt.target as HTMLElement);
     }
 
     private _listenLongpressEnd(el: HTMLElement): void {
-      if (!canUserHoverElements) {
-        el.addEventListener('touchend', this._longpressEndListener);
-      } else {
-        el.addEventListener('pointerup', this._longpressEndListener);
-        el.addEventListener('pointercancel', this._longpressEndListener);
-        el.addEventListener('contextmenu', this._longpressContextMenuListener);
-      }
+      el.addEventListener('pointerup', this._longpressEndListener);
+      el.addEventListener('pointercancel', this._longpressEndListener);
+      el.addEventListener('contextmenu', this._longpressContextMenuListener);
     }
 
     private _unlistenLongpressEnd(el: HTMLElement): void {
-      if (!canUserHoverElements) {
-        el.removeEventListener('touchend', this._longpressEndListener);
-      } else {
-        el.removeEventListener('pointerup', this._longpressEndListener);
-        el.removeEventListener('pointercancel', this._longpressEndListener);
-        el.removeEventListener('contextmenu', this._longpressContextMenuListener);
-      }
+      el.removeEventListener('pointerup', this._longpressEndListener);
+      el.removeEventListener('pointercancel', this._longpressEndListener);
+      el.removeEventListener('contextmenu', this._longpressContextMenuListener);
     }
 
     private _clearTimeout(): void {
