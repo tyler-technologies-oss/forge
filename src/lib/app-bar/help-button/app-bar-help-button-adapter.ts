@@ -30,11 +30,11 @@ export class AppBarHelpButtonAdapter extends BaseAdapter<IAppBarHelpButtonCompon
     this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
     this._iconElement = getLightElement(this._component, ICON_CONSTANTS.elementName) as IIconComponent;
 
-    const originalAriaLabel = this._iconButtonElement.getAttribute('aria-label');
+    const originalAriaLabelledBy = this._iconButtonElement.getAttribute('aria-labelledby');
 
     this._forwardObserver = forwardAttributes(this._component, APP_BAR_HELP_BUTTON_CONSTANTS.forwardedAttributes, (name, value) => {
-      if (name === 'aria-label' && !value) {
-        value = originalAriaLabel;
+      if (name === 'aria-labelledby' && !value) {
+        value = originalAriaLabelledBy;
       }
       toggleAttribute(this._iconButtonElement, !!value, name, value ?? undefined);
     });

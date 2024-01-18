@@ -1,0 +1,81 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+@use '../utils/mixins' as utils;
+
+@forward './token-utils';
+
+@mixin host {
+  display: contents;
+  pointer-events: none;
+}
+
+@mixin base {
+  @include typography.style(body1);
+
+  position: relative;
+
+  background: #{token(background)};
+  color: #{token(color)};
+
+  border-radius: #{token(shape)};
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+  padding-block: #{token(padding-block)};
+  padding-inline: #{token(padding-inline)};
+  box-shadow: #{token(elevation)};
+
+  width: #{token(width)};
+  max-width: #{token(max-width)};
+  pointer-events: none;
+  text-align: #{token(content-align)};
+  line-height: normal;
+
+  animation-duration: #{token(animation-duration)};
+  animation-timing-function: #{token(animation-timing)};
+  animation-name: slidein;
+  animation-fill-mode: forwards;
+}
+
+@mixin arrow {
+  position: absolute;
+  contain: strict;
+
+  background-color: inherit;
+  height: #{token(arrow-height)};
+  width: #{token(arrow-width)};
+  box-shadow: inherit;
+  border: inherit;
+  border-end-start-radius: #{token(arrow-shape)};
+  
+  rotate: #{token(arrow-rotation, custom)};
+  clip-path: #{token(arrow-clip-path, custom)};
+}
+
+@mixin arrow-placement-top {
+  @include override(arrow-rotation, arrow-top-rotation);
+
+  margin-block-end: #{token(border-width)};
+}
+
+@mixin arrow-placement-right {
+  @include override(arrow-rotation, arrow-right-rotation);
+
+  margin-inline-start: #{token(border-width)};
+}
+
+@mixin arrow-placement-bottom {
+  @include override(arrow-rotation, arrow-bottom-rotation);
+
+  margin-block-start: #{token(border-width)};
+}
+
+@mixin arrow-placement-left {
+  @include override(arrow-rotation, arrow-left-rotation);
+
+  margin-inline-end: #{token(border-width)};
+}
+
+@mixin visually-hidden {
+  @include utils.visually-hidden;
+}

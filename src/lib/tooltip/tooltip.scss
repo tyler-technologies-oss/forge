@@ -1,0 +1,102 @@
+@use './core' as *;
+@use './animations';
+
+//
+// Host
+//
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-tooltip {
+  @include tokens;
+}
+
+.forge-tooltip {
+  @include base;
+}
+
+//
+// Tooltips are visually hidden by default so that `aria-labelledby` and `aria-describedby` can be used, but
+// when they are open we remove the visually hidden styles and replace with the <forge-overlay> to visually
+// render the floating tooltip text above all content, while still allowing the tooltip to be accessible to
+// screen readers.
+//
+
+:host(:not([open])) {
+  .forge-tooltip {
+    @include visually-hidden;
+  }
+}
+
+//
+// Arrow
+//
+
+.arrow {
+  @include arrow;
+
+  #{declare(arrow-translate-x)}: 0;
+  #{declare(arrow-translate-y)}: 0;
+  #{declare(arrow-clip-path)}: polygon(0 0, 0 100%, 100% 100%);
+}
+
+//
+// Animation / Arrow placement
+//
+
+.forge-tooltip {
+  #{declare(slidein-x)}: 0;
+  #{declare(slidein-y)}: 0;
+}
+
+forge-overlay[open] {
+  &[position-placement^=top] {
+    .forge-tooltip {
+      @include override(slidein-y, #{token(animation-offset)}, value);
+    }
+
+    .arrow {
+      @include arrow-placement-top;
+    }
+  }
+  
+  &[position-placement^=right] {
+    .forge-tooltip {
+      @include override(slidein-x, calc(#{token(animation-offset)} * -1), value);
+    }
+
+    .arrow {
+      @include arrow-placement-right;
+    }
+  }
+  
+  &[position-placement^=bottom] {
+    .forge-tooltip {
+      @include override(slidein-y, calc(#{token(animation-offset)} * -1), value);
+    }
+
+    .arrow {
+      @include arrow-placement-bottom;
+    }
+  }
+  
+  &[position-placement^=left] {
+    .forge-tooltip {
+      @include override(slidein-x, #{token(animation-offset)}, value);
+    }
+
+    .arrow {
+      @include arrow-placement-left;
+    }
+  }
+}

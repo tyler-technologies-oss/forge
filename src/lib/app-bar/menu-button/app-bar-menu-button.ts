@@ -64,11 +64,11 @@ export class AppBarMenuButtonComponent extends BaseComponent implements IAppBarM
       this._iconElement.name = this._iconName;
     }
 
-    const originalAriaLabel = this._iconButtonElement.getAttribute('aria-label');
+    const originalAriaLabelledby = this._iconButtonElement.getAttribute('aria-labelledby');
 
     this._forwardObserver = forwardAttributes(this, APP_BAR_MENU_BUTTON_CONSTANTS.forwardedAttributes, (name, value) => {
-      if (name === 'aria-label' && !value) {
-        value = originalAriaLabel;
+      if (name === 'aria-labelledby' && !value) {
+        value = originalAriaLabelledby;
       }
       toggleAttribute(this._iconButtonElement, !!value, name, value ?? undefined);
     });

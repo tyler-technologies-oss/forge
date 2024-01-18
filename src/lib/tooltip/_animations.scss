@@ -1,0 +1,13 @@
+@use './token-utils' as *;
+
+@keyframes slidein {
+  from {
+    opacity: 0;
+    transform: translateX(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)});
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}

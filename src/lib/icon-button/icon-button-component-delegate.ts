@@ -33,7 +33,7 @@ export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButt
       tooltip.textContent = this._config.options.tooltip;
       
       if (this._config.options.tooltipPosition) {
-        tooltip.position = this._config.options.tooltipPosition;
+        tooltip.placement = this._config.options.tooltipPosition;
       }
 
       component.appendChild(tooltip);

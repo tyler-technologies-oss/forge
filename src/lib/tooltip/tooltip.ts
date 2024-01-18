@@ -1,19 +1,35 @@
-import { CustomElement, coerceNumber, hideElementVisually, FoundationProperty } from '@tylertech/forge-core';
+import { CustomElement, coerceNumber, FoundationProperty, coerceBoolean, attachShadowTemplate } from '@tylertech/forge-core';
 import { TooltipAdapter } from './tooltip-adapter';
 import { TooltipFoundation } from './tooltip-foundation';
-import { TOOLTIP_CONSTANTS, TooltipBuilder } from './tooltip-constants';
-import { PopupPlacement } from '../popup';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } from './tooltip-constants';
+import { BaseComponent } from '../core/base/base-component';
+import { OverlayComponent } from '../overlay/overlay';
+import { coerceStringToArray } from '../core/utils/utils';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { OverlayFlipState } from '../overlay/overlay-constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 
-export interface ITooltipComponent extends IBaseComponent {
-  text: string;
-  builder: TooltipBuilder | undefined;
-  target: string;
-  delay: number;
-  position: PopupPlacement;
+import template from './tooltip.html';
+import styles from './tooltip.scss';
+
+export interface ITooltipComponent extends IWithDefaultAria, IWithElementInternals {
   open: boolean;
-  hide(): void;
-  tooltipElement: HTMLElement | null;
+  type: TooltipType;
+  anchor: string;
+  anchorElement: HTMLElement | null;
+  /** @deprecated use `anchor` instead */
+  target: string;
+  placement: `${TooltipPlacement}`;
+  /** @deprecated use `placement` instead */
+  position: `${TooltipPlacement}`;
+  delay: number;
+  offset: number;
+  flip: OverlayFlipState;
+  boundary: string | null;
+  boundaryElement: HTMLElement | null;
+  fallbackPlacements: PositionPlacement[] | null;
+  triggerType: TooltipTriggerType | TooltipTriggerType[];
 }
 
 declare global {
@@ -22,86 +38,174 @@ declare global {
   }
 }
 
+const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
+
 /**
- * The custom element class behind the `<forge-tooltip>` element.
- * 
  * @tag forge-tooltip
+ * 
+ * @summary Tooltips display information related to an element when the user hovers over an element.
+ *
+ * @property {boolean} open - Whether or not the tooltip is open.
+ * @property {TooltipType} type - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
+ * @property {string} anchor - The id of the element that the tooltip is anchored to.
+ * @property {TooltipPlacement} placement - The placement of the tooltip relative to the anchor element.
+ * @property {number} delay - The delay in milliseconds before the tooltip is shown.
+ * @property {number} offset - The offset in pixels between the tooltip and the anchor element.
+ * @property {OverlayFlipState} - flip - How the tooltip should place itself if there is not enough space at the desired placement.
+ * @property {string | null} boundary - The id of the element that the tooltip should be constrained to.
+ * @property {HTMLElement | null} boundaryElement - The element that the tooltip should be constrained to.
+ * @property {PositionPlacement[] | null} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
+ * @property {TooltipTriggerType | TooltipTriggerType[]} triggerType - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
+ * 
+ * @attribute {boolean} open - Whether or not the tooltip is open.
+ * @attribute {TooltipType} type - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
+ * @attribute {string} anchor - The id of the element that the tooltip is anchored to.
+ * @attribute {TooltipPlacement} placement - The placement of the tooltip relative to the anchor element.
+ * @attribute {number} delay - The delay in milliseconds before the tooltip is shown.
+ * @attribute {number} offset - The offset in pixels between the tooltip and the anchor element.
+ * @attribute {OverlayFlipState} flip - How the tooltip should place itself if there is not enough space at the desired placement.
+ * @attribute {string | null} boundary - The id of the element that the tooltip should be constrained to.
+ * @attribute {PositionPlacement[]} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
+ * 
+ * @cssproperty --forge-tooltip-background - The background color of the tooltip surface.
+ * @cssproperty --forge-tooltip-color - The text color of the tooltip surface.
+ * @cssproperty --forge-tooltip-shape - The shape of the tooltip surface.
+ * @cssproperty --forge-tooltip-padding - The padding of the tooltip surface.
+ * @cssproperty --forge-tooltip-padding-block - The block padding of the tooltip surface.
+ * @cssproperty --forge-tooltip-padding-inline - The inline padding of the tooltip surface.
+ * @cssproperty --forge-tooltip-max-width - The maximum width of the tooltip surface.
+ * @cssproperty --forge-tooltip-elevation - The elevation of the tooltip surface.
+ * @cssproperty --forge-tooltip-border-width - The border width of the tooltip surface.
+ * @cssproperty --forge-tooltip-border-style - The border style of the tooltip surface.
+ * @cssproperty --forge-tooltip-border-color - The border color of the tooltip surface.
+ * @cssproperty --forge-tooltip-animation-timing - The animation timing function of the tooltip surface.
+ * @cssproperty --forge-tooltip-animation-duration - The animation duration of the tooltip surface.
+ * @cssproperty --forge-tooltip-animation-offset - The animation offset of the tooltip surface.
+ * @cssproperty --forge-tooltip-arrow-size - The size of the tooltip arrow.
+ * @cssproperty --forge-tooltip-arrow-height - The height of the tooltip arrow.
+ * @cssproperty --forge-tooltip-arrow-width - The width of the tooltip arrow.
+ * @cssproperty --forge-tooltip-arrow-shape - The shape of the tooltip arrow.
+ * @cssproperty --forge-tooltip-arrow-clip-path - The clip path of the tooltip arrow.
+ * @cssproperty --forge-tooltip-arrow-rotation - The rotation of the tooltip arrow.
+ * @cssproperty --forge-tooltip-arrow-top-rotation - The rotation of the tooltip arrow when the tooltip is placed on top.
+ * @cssproperty --forge-tooltip-arrow-right-rotation - The rotation of the tooltip arrow when the tooltip is placed on the right.
+ * @cssproperty --forge-tooltip-arrow-bottom-rotation - The rotation of the tooltip arrow when the tooltip is placed on the bottom.
+ * @cssproperty --forge-tooltip-arrow-left-rotation- The rotation of the tooltip arrow when the tooltip is placed on the left.
+ * 
+ * @slot - The content to display in the tooltip.
+ * 
+ * @csspart surface - The tooltip surface.
+ * @csspart arrow - The tooltip arrow.
+ * @csspart overlay - The overlay surface.
  */
 @CustomElement({
-  name: TOOLTIP_CONSTANTS.elementName
+  name: TOOLTIP_CONSTANTS.elementName,
+  dependencies: [
+    OverlayComponent
+  ]
 })
-export class TooltipComponent extends BaseComponent implements ITooltipComponent {
+export class TooltipComponent extends BaseClass implements ITooltipComponent {
   public static get observedAttributes(): string[] {
-    return [
-      TOOLTIP_CONSTANTS.attributes.TEXT,
-      TOOLTIP_CONSTANTS.attributes.TARGET,
-      TOOLTIP_CONSTANTS.attributes.DELAY,
-      TOOLTIP_CONSTANTS.attributes.POSITION
-    ];
+    return Object.values(TOOLTIP_CONSTANTS.observedAttributes);
   }
 
   private _foundation: TooltipFoundation;
 
   constructor() {
     super();
+    attachShadowTemplate(this, template, styles);
     this._foundation = new TooltipFoundation(new TooltipAdapter(this));
   }
 
   public connectedCallback(): void {
-    hideElementVisually(this);
-    requestAnimationFrame(() => this._foundation.initialize());
+    this._foundation.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._foundation.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case TOOLTIP_CONSTANTS.attributes.TEXT:
-        this.text = newValue;
+      case TOOLTIP_CONSTANTS.observedAttributes.ID:
+        this._foundation.syncTooltipAria();
         break;
-      case TOOLTIP_CONSTANTS.attributes.TARGET:
-        this.target = newValue;
+      case TOOLTIP_CONSTANTS.observedAttributes.OPEN:
+        this.open = coerceBoolean(newValue);
         break;
-      case TOOLTIP_CONSTANTS.attributes.DELAY:
+      case TOOLTIP_CONSTANTS.observedAttributes.TYPE:
+        this.type = newValue?.trim() ? newValue as TooltipType : TOOLTIP_CONSTANTS.defaults.TYPE;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.TARGET:
+      case TOOLTIP_CONSTANTS.observedAttributes.ANCHOR:
+        this.anchor = newValue;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.DELAY:
         this.delay = coerceNumber(newValue);
         break;
-      case TOOLTIP_CONSTANTS.attributes.POSITION:
-        this.position = newValue as PopupPlacement;
+      case TOOLTIP_CONSTANTS.observedAttributes.POSITION:
+      case TOOLTIP_CONSTANTS.observedAttributes.PLACEMENT:
+        this.placement = newValue as TooltipPlacement;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.OFFSET:
+        this.offset = coerceNumber(newValue);
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.FLIP:
+        this.flip = newValue as OverlayFlipState;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.BOUNDARY:
+        this.boundary = newValue;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.FALLBACK_PLACEMENTS:
+        this.fallbackPlacements = newValue?.trim() ? coerceStringToArray<PositionPlacement>(newValue) : null;
+        break;
+      case TOOLTIP_CONSTANTS.observedAttributes.TRIGGER_TYPE:
+        this.triggerType = newValue?.trim() ? coerceStringToArray<TooltipTriggerType>(newValue) : TOOLTIP_CONSTANTS.defaults.TRIGGER_TYPES;
         break;
     }
   }
 
-  /** Gets/sets the tooltip text. */
-  @FoundationProperty()
-  public declare text: string;
-
-  /** Sets the tooltip builder function for display complex tooltip content. */
-  @FoundationProperty()
-  public declare builder: TooltipBuilder | undefined;
-  
-  /** Gets/sets the target element selector. */
-  @FoundationProperty()
-  public declare target: string;
-
-  /** The tooltip display delay in milliseconds. */
-  @FoundationProperty()
-  public declare delay: number;
-
-  /** Gets/sets the position. */
-  @FoundationProperty()
-  public declare position: `${PopupPlacement}`;
-
-  /** Gets the open state of the tooltip. */
   @FoundationProperty()
   public declare open: boolean;
 
-  @FoundationProperty({ set: false })
-  public declare tooltipElement: HTMLElement | null;
+  @FoundationProperty()
+  public declare type: TooltipType;
 
-  /** Hides the tooltip if it's open. */
-  public hide(): void {
-    this._foundation.hide();
-  }
+  @FoundationProperty()
+  public declare anchor: string;
+
+  @FoundationProperty()
+  public declare anchorElement: HTMLElement | null;
+
+  /** @deprecated use `anchor` instead */
+  @FoundationProperty({ name: 'anchor' })
+  public declare target: string;
+
+  @FoundationProperty()
+  public declare placement: `${TooltipPlacement}`;
+
+  /** @deprecated use `placement` instead */
+  @FoundationProperty({ name: 'placement' })
+  public declare position: `${TooltipPlacement}`;
+
+  @FoundationProperty()
+  public declare delay: number;
+
+  @FoundationProperty()
+  public declare offset: number;
+
+  @FoundationProperty()
+  public declare flip: OverlayFlipState;
+
+  @FoundationProperty()
+  public declare boundary: string | null;
+
+  @FoundationProperty()
+  public declare boundaryElement: HTMLElement | null;
+
+  @FoundationProperty()
+  public declare fallbackPlacements: PositionPlacement[] | null;
+
+  @FoundationProperty()
+  public declare triggerType: TooltipTriggerType | TooltipTriggerType[];
 }
