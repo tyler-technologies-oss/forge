@@ -1,5 +1,3 @@
-import { Platform } from '@tylertech/forge-core';
-
 /**
  * Detects if the browser supports the `popover` attribute.
  * @returns {boolean}
@@ -24,8 +22,6 @@ export function supportsElementInternalsAria(): boolean {
  * @returns {boolean}
  */
 export function supportsHover(): boolean {
-  console.log('supportsHover touch detection', 'ontouchstart' in window || navigator.maxTouchPoints > 0);
-  console.log('supportsHover isMobile', !Platform.isMobile);
-  console.log('supportsHover can hover media', window.matchMedia('(hover: hover)').matches);
-  return !Platform.isMobile;
+  const canTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  return !canTouch;
 }
