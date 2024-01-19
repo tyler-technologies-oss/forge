@@ -29,7 +29,7 @@
   background-repeat: no-repeat;
   background-size: cover;
 
-  @include typography.style(heading4);
+  @include typography.style(subheading2);
   color: #{token(color)};
 }
 
