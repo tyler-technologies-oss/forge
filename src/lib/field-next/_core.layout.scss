@@ -1,17 +1,29 @@
+@use '../core/styles/typography';
 @use './token-utils' as *;
 
 @mixin block {
-  @include override(root-flex-direction, column, value);
-  @include override(root-align-items, flex-start, value);
-  @include override(root-gap, token(block-gap), value);
-  @include override(label-padding-start, token(padding-inline), value);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: #{token(block-gap)};
 }
 
-@mixin inset {
-  @include override(container-block-size, token(inset-height-medium), value);
-  @include override(container-padding-block, token(inset-padding-block-medium), value);
-  @include override(label-position, absolute, value);
-  @include override(label-inset-block-start, token(inset-label-padding-block-medium), value);
-  @include override(label-inset-inline-start, token(padding-inline), value);
-  @include override(label-color, inset-label-color);
+@mixin label-block {
+  padding-inline-start: #{token(padding-inline)};
+}
+
+@mixin inset-label {
+  @include typography.style(body2);
+
+  position: absolute;
+  z-index: 5;
+  inset-inline-start: #{token(padding-inline)};
+  pointer-events: none;
+
+  padding-block: 0;
+
+  color: #{token(label-color)};
+}
+
+@mixin inset-float-label {
+  @include typography.style(label2);
 }

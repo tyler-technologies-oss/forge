@@ -3,7 +3,6 @@
 @forward './core.density';
 @forward './core.layout';
 @forward './core.state';
-@forward './core.theme';
 @forward './core.variant';
 
 $host-tokens: [display];
@@ -16,57 +15,18 @@ $host-tokens: [display];
   @include tokens($excludes: $host-tokens);
 }
 
-@mixin root-variables {
-  // Root
-  #{declare(root-flex-direction)}: row;
-  #{declare(root-align-items)}: center;
-  #{declare(root-gap)}: #{token(inline-gap)};
-  #{declare(root-opacity)}: 1;
-
-  // Theme
-  #{declare(theme-highest)}: inherit;
-  #{declare(theme-high)}: inherit;
-  #{declare(theme-medium)}: inherit;
-  #{declare(theme-low)}: inherit;
-  #{declare(theme-lowest)}: inherit;
-
-  // Container
-  #{declare(container-block-size)}: #{token(height-medium)};
-  #{declare(container-padding-block)}: 0;
-  #{declare(container-border-style)}: #{token(border-style)};
-  #{declare(container-border-width)}: #{token(border-width)};
-  #{declare(container-border-color)}: #{token(border-color)};
-
-  // Label
-  #{declare(label-position)}: relative;
-  #{declare(label-padding-block-start)}: 0;
-  #{declare(label-padding-inline-start)}: 0;
-  #{declare(label-inset-block-start)}: 0;
-  #{declare(label-inset-inline-start)}: 0;
-
-  // Label::before
-  #{declare(label-before-content)}: none;
-  #{declare(label-before-color)}: inherit;
-
-  // Label::after
-  #{declare(label-after-content)}: none;
-  #{declare(label-after-color)}: inherit;
-}
-
 @mixin host {
   display: #{token(display)};
 }
 
-@mixin field {
-  flex-direction: #{token(root-flex-direction, custom)};
-  align-items: #{token(root-align-items, custom)};
-  gap: #{token(root-gap, custom)};
+@mixin base {
+  flex-direction: row;
+  align-items: center;
+  gap: #{token(inline-gap)};
 
   display: flex;
 
   position: relative;
-
-  opacity: #{token(root-opacity, custom)};
 }
 
 @mixin field-disabled {
@@ -76,25 +36,20 @@ $host-tokens: [display];
 @mixin container {
   @include typography.style(body2);
 
+  position: relative;
   flex-grow: 1;
 
   display: flex;
 
-  transition-property: outline-color;
-  transition-duration: #{token(border-animation-duration)};
-  transition-timing-function: #{token(border-animation-timing-function)};
-  transition-delay: #{token(border-animation-delay)};
+  transition-property: background, outline-color;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing-function)};
   
-  outline-style: #{token(container-border-style, custom)};
-  outline-width: #{token(container-border-width, custom)};
-  outline-color: #{token(container-border-color, custom)};
-  outline-offset: calc(#{token(container-border-width, custom)} * -1);
   box-shadow: #{token(elevation)};
   border-radius: #{token(shape)};
   box-sizing: border-box;
   block-size: #{token(container-block-size, custom)};
   inline-size: 100%;
-  padding-block: #{token(container-padding-block, custom)};
   padding-inline: #{token(padding-inline)};
 
   background: #{token(surface-color)};
@@ -105,30 +60,23 @@ $host-tokens: [display];
 @mixin label {
   @include typography.style(label2);
 
-  position: #{token(label-position, custom)};
-  inset-block-start: #{token(label-inset-block-start, custom)};
-  inset-inline-start: #{token(label-inset-inline-start, custom)};
+  position: relative;
   gap: #{token(label-gap)};
 
   display: inline-flex;
-
-  padding-block-start: #{token(label-padding-block-start, custom)};
-  padding-inline-start: #{token(label-padding-inline-start, custom)};
 
   color: #{token(label-color)};
 }
 
 @mixin label-before {
-  content: #{token(label-before-content, custom)};
-  color: #{token(label-before-color, custom)};
+  content: #{token(required-content)};
+  color: #{token(required-color)};
 }
 
 @mixin label-after {
-  content: #{token(label-after-content, custom)};
-  color: #{token(label-after-color, custom)};
+  content: #{token(optional-content)};
+  color: #{token(optional-color)};
 }
-
-// Slotted
 
 @mixin slotted-input {
   outline: none;

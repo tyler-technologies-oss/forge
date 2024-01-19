@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { Density, Theme } from '../constants';
 import { BaseComponent, IBaseComponent } from '../core';
+import { FocusIndicatorComponent } from '../focus-indicator';
 import { FieldAdapter } from './field-adapter';
 import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
 import { FieldFoundation } from './field-foundation';
@@ -11,6 +11,7 @@ import styles from './field.scss';
 export interface IFieldComponent extends IBaseComponent {
   labelPosition: FieldLabelPosition;
   labelAlignment: FieldLabelAlignment;
+  floatLabel: boolean;
   invalid: boolean;
   required: boolean;
   optional: boolean;
@@ -19,6 +20,7 @@ export interface IFieldComponent extends IBaseComponent {
   theme: FieldTheme;
   density: FieldDensity;
   dense: boolean;
+  popoverIcon: boolean;
 }
 
 declare global {
@@ -57,7 +59,8 @@ declare global {
  */
 
 @CustomElement({
-  name: FIELD_CONSTANTS.elementName
+  name: FIELD_CONSTANTS.elementName,
+  dependencies: [FocusIndicatorComponent]
 })
 export class FieldComponent extends BaseComponent implements IFieldComponent {
   public static get observedAttributes(): string[] {
@@ -95,6 +98,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       case FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT:
         this.labelAlignment = newValue as FieldLabelAlignment;
         break;
+      case FIELD_CONSTANTS.attributes.FLOAT_LABEL:
+        this.floatLabel = coerceBoolean(newValue);
+        break;
       case FIELD_CONSTANTS.attributes.INVALID:
         this.invalid = coerceBoolean(newValue);
         break;
@@ -119,6 +125,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       case FIELD_CONSTANTS.attributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
+      case FIELD_CONSTANTS.attributes.POPOVER_ICON:
+        this.popoverIcon = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -127,6 +136,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
 
   @FoundationProperty()
   public declare labelAlignment: FieldLabelAlignment;
+
+  @FoundationProperty()
+  public declare floatLabel: boolean;
 
   @FoundationProperty()
   public declare invalid: boolean;
@@ -151,4 +163,7 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
 
   @FoundationProperty()
   public declare dense: boolean;
+
+  @FoundationProperty()
+  public declare popoverIcon: boolean;
 }

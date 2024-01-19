@@ -1,51 +1,14 @@
 @use './token-utils' as *;
 
-@mixin extra-small {
-  @include override(container-block-size, token(height-extra-small), value);
+@mixin container-density($density, $inset: false) {
+  @if $inset {
+    block-size: #{token(inset-height-#{$density}, custom)};
+    padding-block: #{token(inset-padding-block-#{$density}, custom)};
+  } @else {
+    block-size: #{token(height-#{$density}, custom)};
+  }
 }
 
-@mixin small {
-  @include override(container-block-size, token(height-small), value);
-}
-
-@mixin medium {
-  @include override(container-block-size, token(height-medium), value);
-}
-
-@mixin large {
-  @include override(container-block-size, token(height-large), value);
-}
-
-@mixin extra-large {
-  @include override(container-block-size, token(height-extra-large), value);
-}
-
-@mixin inset-extra-small {
-  @include override(container-block-size, token(inset-height-extra-small), value);
-  @include override(container-padding-block, token(inset-padding-block-extra-small), value);
-  @include override(label-inset-block-start, token(inset-padding-block-extra-small), value);
-}
-
-@mixin inset-small {
-  @include override(container-block-size, token(inset-height-small), value);
-  @include override(container-padding-block, token(inset-padding-block-small), value);
-  @include override(label-inset-block-start, token(inset-padding-block-small), value);
-}
-
-@mixin inset-medium {
-  @include override(container-block-size, token(inset-height-medium), value);
-  @include override(container-padding-block, token(inset-padding-block-medium), value);
-  @include override(label-inset-block-start, token(inset-padding-block-medium), value);
-}
-
-@mixin inset-large {
-  @include override(container-block-size, token(inset-height-large), value);
-  @include override(container-padding-block, token(inset-padding-block-large), value);
-  @include override(label-inset-block-start, token(inset-padding-block-large), value);
-}
-
-@mixin inset-extra-large {
-  @include override(container-block-size, token(inset-height-extra-large), value);
-  @include override(container-padding-block, token(inset-padding-block-extra-large), value);
-  @include override(label-inset-block-start, token(inset-padding-block-extra-large), value);
+@mixin inset-label-density($density) {
+  inset-block-start: #{token(inset-padding-block-#{$density}, custom)};
 }

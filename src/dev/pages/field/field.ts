@@ -16,8 +16,7 @@ const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
 const labelAlignmentSelect = document.getElementById('opt-label-alignment') as ISelectComponent;
 
 const fields = document.querySelectorAll('forge-field') as NodeListOf<IFieldComponent>;
-
-console.log(fields);
+const insetField = document.getElementById('inset-field') as IFieldComponent;
 
 requiredSwitch.addEventListener('forge-switch-change', () => {
   fields.forEach(field => field.required = requiredSwitch.on);
@@ -54,3 +53,6 @@ themeSelect.addEventListener('change', () => {
 labelAlignmentSelect.addEventListener('change', () => {
   fields.forEach(field => field.labelAlignment = labelAlignmentSelect.value as FieldLabelAlignment);
 });
+
+insetField.addEventListener('input', (event: InputEvent) => insetField.floatLabel = !!(event.target as HTMLInputElement).value);
+insetField.floatLabel = !!insetField.querySelector('input').value;

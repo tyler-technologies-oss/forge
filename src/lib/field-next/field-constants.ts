@@ -5,6 +5,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}field`
 const attributes = {
   LABEL_POSITION: 'label-position',
   LABEL_ALIGNMENT: 'label-alignment',
+  FLOAT_LABEL: 'float-label',
   INVALID: 'invalid',
   REQUIRED: 'required',
   OPTIONAL: 'optional',
@@ -12,7 +13,8 @@ const attributes = {
   VARIANT: 'variant',
   THEME: 'theme',
   DENSITY: 'density',
-  DENSE: 'dense'
+  DENSE: 'dense',
+  POPOVER_ICON: 'popover-icon'
 };
 
 const selectors = {

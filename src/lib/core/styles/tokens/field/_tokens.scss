@@ -19,28 +19,28 @@ $tokens: (
   padding-inline: utils.module-val(field, padding-inline, 12px),
   
   // Sizes
-  height-extra-small: utils.module-val(field, height-small, 24px),
+  height-extra-small: utils.module-val(field, height-extra-small, 24px),
   height-small: utils.module-val(field, height-small, 32px),
   height-medium: utils.module-val(field, height-medium, 40px),
   height-large: utils.module-val(field, height-large, 48px),
-  height-extra-large: utils.module-val(field, height-large, 56px),
+  height-extra-large: utils.module-val(field, height-extra-large, 56px),
   
   // Inset sizes
-  inset-height-extra-small: utils.module-ref(field, inset-height-small, inset-height-medium),
+  inset-height-extra-small: utils.module-ref(field, inset-height-extra-small, inset-height-medium),
   inset-height-small: utils.module-ref(field, inset-height-small, inset-height-medium),
-  inset-height-medium: utils.module-val(field, inset-small, 48px),
-  inset-height-large: utils.module-val(field, inset-large, 56px),
-  inset-height-extra-large: utils.module-val(field, inset-large, 64px),
+  inset-height-medium: utils.module-val(field, inset-height-medium, 48px),
+  inset-height-large: utils.module-val(field, inset-height-large, 56px),
+  inset-height-extra-large: utils.module-val(field, inset-height-extra-large, 64px),
 
   // Inset padding
-  inset-padding-block-extra-small: utils.module-ref(field, inset-padding-block-small, inset-padding-block-medium),
+  inset-padding-block-extra-small: utils.module-ref(field, inset-padding-block-extra-small, inset-padding-block-medium),
   inset-padding-block-small: utils.module-ref(field, inset-padding-block-small, inset-padding-block-medium),
-  inset-padding-block-medium: utils.module-val(field, padding-inset-block, 4px),
+  inset-padding-block-medium: utils.module-val(field, inset-padding-block-medium, 4px),
   inset-padding-block-large: utils.module-val(field, inset-padding-block-large, 8px),
-  inset-padding-block-extra-large: utils.module-val(field, inset-padding-block-large, 12px),
+  inset-padding-block-extra-large: utils.module-val(field, inset-padding-block-extra-large, 12px),
   inset-label-padding-block-extra-small: utils.module-ref(field, inset-label-padding-block-extra-small, inset-padding-block-extra-small),
   inset-label-padding-block-small: utils.module-ref(field, inset-label-padding-block-small, inset-padding-block-small),
-  inset-label-padding-block-medium: utils.module-ref(field, inset-label-padding-block, inset-padding-block),
+  inset-label-padding-block-medium: utils.module-ref(field, inset-label-padding-block-medium, inset-padding-block),
   inset-label-padding-block-large: utils.module-ref(field, inset-label-padding-block-large, inset-padding-block-large),
   inset-label-padding-block-extra-large: utils.module-ref(field, inset-label-padding-block-extra-large, inset-padding-block-extra-large),
   
@@ -48,33 +48,34 @@ $tokens: (
   shape: utils.module-val(field, shape, shape.variable(medium)),
   border-style: utils.module-val(field, border-style, solid),
   border-width: utils.module-val(field, border-width, border.variable(thin)),
-  border-color: utils.module-val(field, border-color, theme.variable(surface-container-high)),
+  border-color: utils.module-val(field, border-color, theme.variable(outline-medium)),
 
   // Border hover
   hover-border-style: utils.module-ref(field, hover-border-style, border-style),
   hover-border-width: utils.module-ref(field, hover-border-width, border-width),
-  hover-border-color: utils.module-val(field, hover-border-color, theme.variable(text-high)),
-
-  // Border active
-  active-border-style: utils.module-ref(field, active-border-style, border-style),
-  active-border-width: utils.module-val(field, active-border-width, border.variable(medium)),
-  active-border-color: utils.module-ref(field, active-border-color, primary-color),
+  hover-border-color: utils.module-val(field, hover-border-color, theme.variable(outline-high)),
 
   // Label
   label-color: utils.module-val(field, label-color, theme.variable(text-high)),
   inset-label-color: utils.module-val(field, inset-label-color, theme.variable(text-medium)),
 
   // Invalid
-  invalid-color: utils.module-val(field, field-invalid-color, theme.variable(error)),
+  invalid-color: utils.module-val(field, invalid-color, theme.variable(error)),
   invalid-border-style: utils.module-ref(field, invalid-border-style, border-style),
   invalid-border-color: utils.module-ref(field, invalid-border-color, invalid-color),
   invalid-border-width: utils.module-ref(field, invalid-border-width, border-width),
+  invalid-surface: utils.module-val(field, invalid-surface, theme.variable(error-container)),
   invalid-label-color: utils.module-ref(field, invalid-label-color, invalid-color),
+  invalid-hover-border-color: utils.module-val(field, invalid-hover-border-color, theme.variable(error-container)),
 
   // Tonal
   tonal-surface-color: utils.module-val(field, tonal-surface-color, theme.variable(surface-container-low)),
   tonal-on-surface-color: utils.module-val(field, tonal-on-surface-color, theme.variable(on-surface-container-low)),
-  tonal-border-color: utils.module-val(field, tonal-border-color, transparent),
+  tonal-hover-color: utils.module-val(field, tonal-hover-color, theme.variable(surface-container-medium)),
+
+  // Filled
+  filled-surface-color: utils.module-val(field, filled-surface-color, theme.variable(surface-bright)),
+  filled-on-surface-color: utils.module-val(field, filled-on-surface-color, theme.variable(on-surface)),
 
   // Raised
   raised-elevation: utils.module-val(field, raised-elevation, elevation.value(1)),
@@ -82,8 +83,8 @@ $tokens: (
   raised-surface-color: utils.module-val(field, raised-surface-color, theme.variable(surface-bright)),
 
   // Layout
-  inline-gap: utils.module-val(field, gap, 8px),
-  block-gap: utils.module-val(field, gap, 0px),
+  inline-gap: utils.module-val(field, inline-gap, 8px),
+  block-gap: utils.module-val(field, block-gap, 0px),
   justify: utils.module-val(field, justify, space-between),
 
   // Required and optional
@@ -93,16 +94,12 @@ $tokens: (
   optional-color: utils.module-val(field, optional-color, inherit),
 
   // Disabled
-  disabled-opacity: utils.module-val(radio, disabled-opacity, theme.emphasis(medium-low)),
+  disabled-opacity: utils.module-val(field, disabled-opacity, theme.emphasis(medium-low)),
 
   // Animation
-  border-animation-duration: utils.module-val(field, border-animation-duration, animation.variable(duration-short4)),
-  border-animation-timing-function: utils.module-val(field, border-animation-timing-function, animation.variable(easing-decelerate)),
-  border-animation-delay: utils.module-val(field, border-animation-delay, 0ms),
-  label-animation-duration: utils.module-val(field, label-animation-duration, animation.variable(duration-short4)),
-  label-animation-timing-function: utils.module-val(field, label-animation-timing-function, animation.variable(easing-decelerate)),
-  label-animation-delay: utils.module-val(field, label-animation-delay, 0ms),
-);
+  animation-duration: utils.module-val(field, animation-duration, animation.variable(duration-short4)),
+  animation-timing-function: utils.module-val(field, animation-timing-function, animation.variable(easing-standard)),
+) !default;
 
 @function get($key) {
   @return map.get($tokens, $key);

@@ -1,31 +1,74 @@
 @use './token-utils' as *;
 
-@mixin required {
-  @include override(label-before-content, token(required-content), value);
-  @include override(label-before-color, token(required-color), value);
+//
+// Hover
+//
+
+@mixin container-hover($variant, $theme: primary) {
+  @if $variant == outlined {
+    @if $theme == primary {
+      outline-style: #{token(hover-border-style)};
+      outline-width: #{token(hover-border-width)};
+      outline-color: #{token(hover-border-color)};
+    }
+  } @else if $variant == tonal {
+    @if $theme == primary {
+      background: #{token(tonal-hover-color)};
+    }
+  } @else if $variant == filled {
+    @if $theme == primary {
+      outline-style: #{token(hover-border-style)};
+      outline-width: #{token(hover-border-width)};
+      outline-color: #{token(hover-border-color)};
+    }
+  } @else if $variant == raised {
+    box-shadow: #{token(raised-active-elevation)};
+  }
 }
 
-@mixin optional {
-  @include override(label-after-content, token(optional-content), value);
-  @include override(label-after-color, token(optional-color), value);
+//
+// Focus
+//
+
+@mixin container-focus($variant) {
+  @if $variant == raised {
+    box-shadow: #{token(raised-active-elevation)};
+  }
 }
 
-@mixin hover {
-  @include override(container-border-style, hover-border-style, value);
-  @include override(container-border-width, hover-border-width, value);
-  @include override(container-border-color, hover-border-color, value);
+//
+// Invalid
+//
+
+@mixin container-invalid($variant) {
+  color: #{token(on-surface-color)};
+
+  @if $variant == plain {
+    color: #{token(invalid-color)};
+  } @else if $variant == outlined {
+    outline-style: #{token(invalid-border-style)};
+    outline-width: #{token(invalid-border-width)};
+    outline-color: #{token(invalid-border-color)};
+  } @else if $variant == tonal {
+    background: #{token(invalid-surface)};
+  } @else if $variant == filled {
+    outline-style: #{token(invalid-border-style)};
+    outline-width: #{token(invalid-border-width)};
+    outline-color: #{token(invalid-border-color)};
+    background: #{token(invalid-surface)};
+  } @else if $variant == raised {
+    background: #{token(invalid-surface)};
+  }
 }
 
-@mixin focus {
-  @include override(container-border-style, active-border-style, value);
-  @include override(container-border-width, active-border-width, value);
-  @include override(container-border-color, active-border-color, value);
-  @include override(raised-elevation, raised-active-elevation);
+@mixin container-invalid-hover($variant) {
+  @if $variant == outlined {
+    outline-color: #{token(invalid-hover-border-color)};
+  } @else if $variant == filled {
+    outline-color: #{token(invalid-hover-border-color)};
+  }
 }
 
-@mixin invalid {
-  @include override(container-border-style, invalid-border-style, value);
-  @include override(container-border-width, invalid-border-width, value);
-  @include override(container-border-color, invalid-border-color, value);
-  @include override(label-color, invalid-label-color);
+@mixin label-invalid {
+  color: #{token(invalid-label-color)};
 }
