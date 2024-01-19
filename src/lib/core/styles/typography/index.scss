@@ -92,7 +92,7 @@
 @mixin anchor {
   a:not([forge-ignore]),
   .forge-typography--link {
-    text-decoration: underline;
+    text-decoration: var(--forge-typography-link-text-decoration, underline);
     color: theme.variable(primary);
     cursor: pointer;
 
