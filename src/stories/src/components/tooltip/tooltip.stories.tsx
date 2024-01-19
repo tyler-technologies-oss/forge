@@ -18,16 +18,16 @@ export default {
 
 export const Default: Story<ITooltipProps> = ({
   text = 'Forge components are awesome!',
-  delay = TOOLTIP_CONSTANTS.numbers.DEFAULT_DELAY,
-  position = TOOLTIP_CONSTANTS.strings.DEFAULT_POSITION
+  delay = TOOLTIP_CONSTANTS.defaults.DELAY,
+  placement = TOOLTIP_CONSTANTS.defaults.PLACEMENT
 }) => (
   <>
     <ForgeButton variant="raised">Hover me</ForgeButton>
-    <ForgeTooltip text={text} delay={delay} position={position} />
+    <ForgeTooltip delay={delay} placement={placement}>{text}</ForgeTooltip>
   </>
 );
 Default.args = {
   text: 'Forge components are awesome!',
-  delay: TOOLTIP_CONSTANTS.numbers.DEFAULT_DELAY,
-  position: TOOLTIP_CONSTANTS.strings.DEFAULT_POSITION
+  delay: TOOLTIP_CONSTANTS.defaults.DELAY,
+  placement: TOOLTIP_CONSTANTS.defaults.PLACEMENT
 } as ITooltipProps;
