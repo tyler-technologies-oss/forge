@@ -1,9 +1,6 @@
 import { ICustomElementFoundation, isDefined, isString } from '@tylertech/forge-core';
-import { getTextColor } from '../utils/color-utils';
 import { IAvatarAdapter } from './avatar-adapter';
 import { AVATAR_CONSTANTS } from './avatar-constants';
-
-
 
 export interface IAvatarFoundation extends ICustomElementFoundation {
   imageUrl: string;

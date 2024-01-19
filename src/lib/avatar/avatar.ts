@@ -21,9 +21,14 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-avatar>` element.
- * 
  * @tag forge-avatar
+ * 
+ * @summary Avatars represent an entity via text or image.
+ * 
+ * @description
+ * The avatar component allows you to provide text or images to display that represent an entity. By default, the
+ * avatar will display textual content as single characters (character count is configurable), or display an image or
+ * icon based on the URL provided to it.
  * 
  * @property {string} text - The text to display in the avatar.
  * @property {number} letterCount - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
@@ -34,10 +39,8 @@ declare global {
  * @attribute {string} image-url - The background image URL to use.
  * 
  * @cssproperty --forge-avatar-background - The background color of the avatar.
- * @cssproperty --forge-avatar-border-radius - The border radius of the avatar, defaults to 50%.
+ * @cssproperty --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
  * @cssproperty --forge-avatar-color - The text color of the avatar.
- * @cssproperty --forge-avatar-font-size - The font size of the avatar text.
- * @cssproperty --forge-avatar-font-weight - The font weight of the avatar text.
  * @cssproperty --forge-avatar-size - The height and width of the avatar.
  * @cssproperty --forge-avatar-transition-duration - The transition duration for animations.
  * @cssproperty --forge-avatar-transition-timing - The transition timing function for animations.

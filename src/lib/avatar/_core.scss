@@ -4,29 +4,35 @@
 @forward './token-utils';
 
 @mixin host() {
-  display: inline-block;
   contain: content;
+
+  display: inline-block;
 }
 
 @mixin base() {
-  @include typography.style(heading4);
-
-  font-size: #{token(font-size)};
-  font-weight: #{token(font-weight)};
-  background-color: #{token(background)};
-  color: #{token(color)};
-  height: #{token(size)};
-  width: #{token(size)};
-  border-radius: #{token(border-radius)};
-  
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  transition: height #{token(transition-duration)} #{token(transition-timing)}, 
+              width #{token(transition-duration)} #{token(transition-timing)};
+
+  border-radius: #{token(shape)};
   box-sizing: border-box;
+  width: #{token(size)};
+  height: #{token(size)};
+
+  background-color: #{token(background)};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  overflow: hidden;
-  transition: height #{token(transition-duration)} #{token(transition-timing)}, 
-              width #{token(transition-duration)} #{token(transition-timing)};
+
+  @include typography.style(heading4);
+  color: #{token(color)};
+}
+
+@mixin base-with-image() {
+  background-color: inherit;
 }
