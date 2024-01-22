@@ -7,6 +7,9 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import template from './deprecated-button.html';
 import styles from './deprecated-button.scss';
 
+/**
+ * @deprecated Use `IButtonComponent` component instead.
+ */
 export interface IDeprecatedButtonComponent extends IBaseComponent {
   type: string;
   disabled: boolean;
@@ -21,6 +24,8 @@ declare global {
 
 /**
  * @tag forge-deprecated-button
+ * 
+ * @deprecated Use the `<forge-button>` element instead.
  */
 @CustomElement({
   name: DEPRECATED_BUTTON_CONSTANTS.elementName,
