@@ -32,7 +32,7 @@ const classes = {
 
 const selectors = {
   ROOT: `.${classes.ROOT}`,
-  CHECKBOX_RADIO_SELECTOR: ':is(input[type=checkbox], input[type=radio], forge-checkbox):not(:disabled):not([forge-ignore])',
+  CHECKBOX_RADIO_SELECTOR: ':is(input[type=checkbox],input[type=radio],forge-checkbox,forge-radio):not(:disabled):not([forge-ignore])',
   SWITCH_SELECTOR: 'forge-switch:not([disabled]):not([forge-ignore])',
   IGNORE: '[forge-ignore],[data-forge-ignore]'
 };

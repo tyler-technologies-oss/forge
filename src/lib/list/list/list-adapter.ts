@@ -1,4 +1,4 @@
-import { isDeepEqual } from '@tylertech/forge-core';
+import { deepQuerySelectorAll, isDeepEqual } from '@tylertech/forge-core';
 import { BaseAdapter } from '../../core/base/base-adapter';
 import { IListComponent } from './list';
 import { LIST_ITEM_CONSTANTS } from '../list-item/list-item-constants';
@@ -31,7 +31,7 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
   public focusNextListItem(): void {
     const listItems = this._getFocusableListItems();
     if (listItems.length) {
-      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus'));
+      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus-within'));
       const nextIndex = focusedListItemIndex < listItems.length - 1 ? focusedListItemIndex + 1 : 0;
       if (nextIndex <= listItems.length - 1) {
         listItems[nextIndex].focus({ preventScroll: true});
@@ -43,7 +43,7 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
   public focusPreviousListItem(): void {
     const listItems = this._getFocusableListItems();
     if (listItems.length) {
-      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus'));
+      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus-within'));
       const nextIndex = focusedListItemIndex > 0 ? focusedListItemIndex - 1 : listItems.length - 1;
       if (nextIndex >= 0) {
         listItems[nextIndex].focus({ preventScroll: true});
@@ -69,7 +69,7 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
 
   /** Select all list items that match values in the provided array of values. */
   public setSelectedListItems(value: unknown | unknown[]): void {
-    const listItems = this._getListItems();
+    const listItems = this._getOwnListItems();
     if (listItems.length) {
       const values = Array.isArray(value) ? value : [value];
       for (const item of listItems) {
@@ -80,20 +80,35 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
 
   /** Calls the provided callback on all list items to apply an updated property to each list item. */
   public updateListItems(cb: (li: IListItemComponent) => void): void {
-    this._getListItems().forEach(cb);
+    this._getOwnListItems().forEach(cb);
   }
 
   public updateListItemRole(): void {
     const role = ListComponentItemRole[this._component.getAttribute('role') as string] ?? 'listitem';
     this.updateListItems(li => li.role = role);
   }
+  
+  private _getOwnListItems(): IListItemComponent[] {
+    // Find all deeply nested list items
+    const allChildListItems = deepQuerySelectorAll(this._component, LIST_ITEM_CONSTANTS.elementName) as IListItemComponent[];
 
-  private _getListItems(): IListItemComponent[] {
-    const listItems = Array.from(this._component.querySelectorAll(LIST_ITEM_CONSTANTS.elementName));
-    return listItems.filter(item => item.closest(LIST_CONSTANTS.elementName) === this._component) as IListItemComponent[];
+    // Get all list items that are scoped to this component only (not within sub-lists).
+    const scopedListItems: IListItemComponent[] = [];
+    const listener: EventListener = evt => {
+      const composedPath = evt.composedPath();
+      const composedBeforeUs = composedPath.slice(0, composedPath.indexOf(this._component));
+      if (!composedBeforeUs.some((el: HTMLElement) => el.localName === LIST_CONSTANTS.elementName.toLowerCase())) {
+        scopedListItems.push(evt.target as IListItemComponent);
+      }
+    };
+    this._component.addEventListener(LIST_CONSTANTS.events.SCOPE_TEST, listener);
+    allChildListItems.forEach(li => li.dispatchEvent(new CustomEvent(LIST_CONSTANTS.events.SCOPE_TEST, { bubbles: true, composed: true })));
+    this._component.removeEventListener(LIST_CONSTANTS.events.SCOPE_TEST, listener);
+
+    return scopedListItems;
   }
 
   private _getFocusableListItems(): IListItemComponent[] {
-    return this._getListItems().filter(li => !li.disabled && !li.nonInteractive && !li.hidden);
+    return this._getOwnListItems().filter(li => !li.disabled && !li.nonInteractive && !li.hidden);
   }
 }
