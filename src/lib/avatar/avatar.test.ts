@@ -2,11 +2,10 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { timer } from '@tylertech/forge-testing';
 import { getShadowElement } from '@tylertech/forge-core';
-import { AvatarComponent, IAvatarComponent } from './avatar';
+import { IAvatarComponent } from './avatar';
 import { AVATAR_CONSTANTS } from './avatar-constants';
 
 import './avatar'
-import { AvatarComponentDelegate } from './avatar-component-delegate';
 
 describe('Avatar', () => {
   it('should initialize', async () => {
@@ -112,14 +111,6 @@ describe('Avatar', () => {
     const defaultSlot = getDefaultSlotEl(el);
 
     expect(defaultSlot.textContent).to.equal('SLSWS');
-  });
-
-  describe('AvatarComponentDelegate', () => {
-    it('should create avatar via delegate', async () => {
-      const delegate = new AvatarComponentDelegate();
-
-      expect(delegate.element).to.be.instanceOf(AvatarComponent);
-    });
   });
 
   function getRootEl(el: IAvatarComponent): HTMLElement {
