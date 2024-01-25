@@ -1,11 +1,29 @@
-@use './mixins';
+@use './core' as *;
+
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.core-styles;
+//
+// Base
+//
+
+.forge-avatar {
+  @include tokens;
+}
+
+.forge-avatar {
+  @include base;
+
+  &--image {
+    @include base-with-image;
+  }
+}
