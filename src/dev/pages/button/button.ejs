@@ -109,6 +109,40 @@
       </form>
     </dialog>
   </section>
+
+  <section class="vert">
+    <h3 class="forge-typography--heading2">Deprecated (legacy) button</h3>
+    <forge-deprecated-button>
+      <button type="button">Default button</button>
+    </forge-deprecated-button>
+    <forge-deprecated-button type="outlined">
+      <button type="button">Outlined button</button>
+    </forge-deprecated-button>
+    <forge-deprecated-button type="unelevated">
+      <button type="button">Unelevated button</button>
+    </forge-deprecated-button>
+    <forge-deprecated-button type="raised">
+      <button type="button">Raised button</button>
+    </forge-deprecated-button>
+    <forge-deprecated-button type="outlined">
+      <button type="button">
+        <forge-icon name="favorite"></forge-icon>
+        <span>w/Leading Icon</span>
+      </button>
+    </forge-deprecated-button>
+    <forge-deprecated-button type="outlined">
+      <button type="button">
+        <span>w/Trailing icon</span>
+        <forge-icon name="favorite"></forge-icon>
+      </button>
+    </forge-deprecated-button>
+    <forge-deprecated-button type="outlined">
+      <a href="javascript: alert('Anchor link button works!');">
+        <span>w/anchor tag</span>
+        <forge-icon name="open_in_new"></forge-icon>
+      </a>
+    </forge-deprecated-button>
+  </section>
 </div>
 
 <script type="module" src="button.ts"></script>

@@ -82,6 +82,11 @@ import { ToolbarComponent } from './toolbar';
 import { TooltipComponent } from './tooltip';
 import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
 
+/**
+ * Deprecated imports
+ */
+import { DeprecatedButtonComponent } from './deprecated/button';
+
 export * from './accordion';
 export * from './app-bar';
 export * from './autocomplete';
@@ -152,6 +157,11 @@ export * from './toolbar';
 export * from './tooltip';
 export * from './utils';
 export * from './view-switcher';
+
+/**
+ * Deprecated exports
+ */
+export * from './deprecated/button';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
@@ -243,4 +253,16 @@ const CUSTOM_ELEMENTS = [
  */
 export function defineComponents(): void {
   defineCustomElements(CUSTOM_ELEMENTS);
+}
+
+/**
+ * Deprecated component registration
+ */
+
+const DEPRECATED_CUSTOM_ELEMENTS = [
+  DeprecatedButtonComponent
+];
+
+export function defineDeprecatedComponents(): void {
+  defineCustomElements(DEPRECATED_CUSTOM_ELEMENTS);
 }
