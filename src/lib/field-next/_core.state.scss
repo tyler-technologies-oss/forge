@@ -95,7 +95,7 @@
 //
 
 @mixin popover-expanded {
-  &>* {
+  & > * {
     rotate: #{token(popover-icon-open-rotation)};
   }
 }

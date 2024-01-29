@@ -52,7 +52,7 @@
     color: #{token(filled-on-surface-color)};
   } @else {
     outline-color: theme.variable($theme);
-    background: theme.variable(#{$theme}-container);    
+    background: theme.variable(#{$theme}-container);
   }
 }
 

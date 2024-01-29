@@ -8,41 +8,41 @@
 
 @mixin block-start {
   grid-template-areas:
-    "label"
-    "container"
-    "helper-text";
+    'label'
+    'container'
+    'helper-text';
   grid-template-columns: 1fr;
   grid-template-rows: auto auto auto;
 }
 
 @mixin inline-start {
   grid-template-areas:
-    "label container"
-    ". helper-text";
+    'label container'
+    '. helper-text';
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;
 }
 
 @mixin inline-end {
   grid-template-areas:
-    "container label"
-    "helper-text .";
+    'container label'
+    'helper-text .';
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
 }
 
 @mixin inset {
   grid-template-areas:
-    "container"
-    "helper-text";
+    'container'
+    'helper-text';
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
 }
 
 @mixin no-label {
   grid-template-areas:
-    "container"
-    "helper-text";
+    'container'
+    'helper-text';
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
 }
