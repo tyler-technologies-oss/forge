@@ -94,11 +94,9 @@ $host-tokens: [display];
   block-size: 100%;
   padding-inline-end: 8px;
 
-
   & > * {
     transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
   }
-  // transform-origin: calc(50% - 4px) 50%;
 }
 
 @mixin slotted-input {

@@ -44,9 +44,10 @@ include('./src/partials/page.ejs', {
         type: 'select',
         label: 'Theme',
         id: 'opt-theme',
-        defaultValue: 'primary',
+        defaultValue: 'default',
         options: [
-          { label: 'Primary (default)', value: 'primary' },
+          { label: 'Default', value: 'default' },
+          { label: 'Primary', value: 'primary' },
           { label: 'Secondary', value: 'secondary' },
           { label: 'Tertiary', value: 'tertiary' },
           { label: 'Success', value: 'success' },
@@ -75,8 +76,8 @@ include('./src/partials/page.ejs', {
         defaultValue: 'off',
         options: [
           { label: 'Off', value: 'off' },
-          { label: 'Expanded', value: 'expanded' },
-          { label: 'Collapsed', value: 'collapsed' }
+          { label: 'Collapsed', value: 'collapsed' },
+          { label: 'Expanded', value: 'expanded' }
         ]
       }
     ]
