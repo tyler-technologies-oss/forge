@@ -3,12 +3,7 @@
 @mixin container-density($density, $inset: false) {
   @if $inset {
     block-size: #{token(inset-height-#{$density}, custom)};
-    padding-block: #{token(inset-padding-block-#{$density}, custom)};
   } @else {
     block-size: #{token(height-#{$density}, custom)};
   }
-}
-
-@mixin inset-label-density($density) {
-  inset-block-start: #{token(inset-padding-block-#{$density}, custom)};
 }

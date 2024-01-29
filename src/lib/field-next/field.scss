@@ -8,7 +8,7 @@
 
 $focus: ':not([disabled]):focus-within';
 $hover: ':not([disabled]):hover';
-$inline-label: ':where([label-position=inline-start], [label-position=inline-end], :not([label-position]))';
+$inline-start-label: ':where([label-position=inline-start], :not([label-position]))';
 
 // Maps to look up the selector for a given density, theme, or variant
 $densities: (
@@ -35,26 +35,20 @@ $variants: (
   raised: '[variant=raised]'
 );
 
-// Layers
-
-@layer host, base, required, optional, label-position, floating-label, density, variant, hover, focus, invalid;
-
 //
 // Host
 //
 
-@layer host {
-  :host {
-    @include core.host-configuration;
-  }
-  
-  :host {
-    @include core.host;
-  }
-  
-  :host([hidden]) {
-    display: none;
-  }
+:host {
+  @include core.host-configuration;
+}
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
 }
 
 
@@ -62,45 +56,92 @@ $variants: (
 // Base
 //
 
-@layer base {
-  .forge-field {
-    @include core.configuration;
+.forge-field {
+  @include core.configuration;
+}
+
+.forge-field {
+  @include core.base;
+
+  .container {
+    @include core.container;
   }
-  
-  .forge-field {
-    @include core.base;
-  
-    .container {
-      @include core.container;
+
+  .input {
+    @include core.input;
+  }
+
+  .label {
+    @include core.label;
+  }
+
+  .start,
+  .end,
+  .accessory,
+  .helper-text,
+  .helper-text-start,
+  .helper-text-end,
+  .popover-icon {
+    display: none;
+  }
+}
+
+//
+// Named slots
+//
+
+.forge-field {
+  &--has-start {
+    .start {
+      @include core.start;
     }
-  
-    .label {
-      @include core.label;
+  }
+
+  &--has-end {
+    .end {
+      @include core.end;
+    }
+  }
+
+  &--has-accessory {
+    .accessory {
+      @include core.accessory;
+    }
+  }
+
+  &--has-helper-text-start,
+  &--has-helper-text-end {
+    .helper-text {
+      @include core.helper-text;
+    }
+  }
+}
+
+@each $variant, $variant-selector in $variants {
+  @each $theme, $theme-selector in $themes {
+    :host(#{$variant-selector}#{$theme-selector}) {
+      .forge-field--has-accessory {
+        .accessory {
+          @include core.accessory-variant($variant, $theme);
+        }
+      }
     }
   }
 }
 
 //
-// Required
+// Popover icon
 //
 
-@layer required {
-  :host([required]) {
-    .label::before {
-      @include core.label-before;
-    }
+:host([popover-icon]) {
+  .popover-icon {
+    @include core.popover-icon;
   }
 }
 
-//
-// Optional
-//
-
-@layer optional {
-  :host([optional]) {
-    .label::after {
-      @include core.label-after;
-    }
+:host([popover-icon][popover-expanded]) {
+  .popover-icon {
+    @include core.popover-expanded;
   }
 }
 
@@ -108,27 +149,109 @@ $variants: (
 // Label position
 //
 
-@layer label-position {
-  :host([label-position=block-start]) {
-    .forge-field {
-      @include core.block;
-  
-      .label {
-        @include core.label-block;
-      }
-    }
-  }
-  
-  :host([label-position=inset]) {
+:host([label-position=block-start]) {
+  .forge-field {
+    @include core.block-start;
+
     .label {
-      @include core.inset-label;
+      @include core.label-position(block-start);
     }
   }
-  
-  :host([label-position=none]) {
+}
+
+:host(#{$inline-start-label}) {
+  .forge-field {
+    @include core.inline-start;
+
+    .label {
+      @include core.label-position(inline-start);
+    }
+  }
+}
+
+:host([label-position=inline-end]) {
+  .forge-field {
+    @include core.inline-end;
+
+    .label {
+      @include core.label-position(inline-end);
+    }
+  }
+}
+
+:host([label-position=inset]) {
+  .forge-field {
+    @include core.inset;
+
+    .label {
+      @include core.label-position(inset);
+    }
+  }
+}
+
+:host([label-position=none]) {
+  .forge-field {
+    @include core.no-label;
+
     .label {
       @include utils.visually-hidden;
     }
+  }
+}
+
+//
+// Label alignment
+//
+
+:host(#{$inline-start-label}[label-alignment=start]),
+:host([label-position=inline-end][label-alignment=start]) {
+  .label {
+    @include core.label-alignment(start, inline);
+  }
+}
+
+:host(#{$inline-start-label}:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))),
+:host([label-position=inline-end]:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))) {
+  .label {
+    @include core.label-alignment(center, inline);
+  }
+}
+
+:host(#{$inline-start-label}[label-alignment=end]),
+:host([label-position=inline-end][label-alignment=end]) {
+  .label {
+    @include core.label-alignment(end, inline);
+  }
+}
+
+:host(#{$inline-start-label}[label-alignment=baseline]),
+:host([label-position=inline-end][label-alignment=baseline]) {
+  .label {
+    @include core.label-alignment(baseline, inline);
+  }
+}
+
+:host([label-position=block-start]:where([label-alignment=start], [label-alignment=default], :not([label-alignment]))) {
+  .label {
+    @include core.label-alignment(start, block);
+  }
+}
+
+:host([label-position=block-start][label-alignment=centered]) {
+  .label {
+    @include core.label-alignment(center, block);
+  }
+}
+
+:host([label-position=block-start][label-alignment=end]) {
+  .label {
+    @include core.label-alignment(end, block);
+  }
+}
+
+:host([label-position=block-start][label-alignment=baseline]) {
+  .label {
+    @include core.label-alignment(baseline, block);
   }
 }
 
@@ -137,17 +260,41 @@ $variants: (
 // Floating label
 //
 
-@layer floating-label {
-  :host([label-position=inset][float-label]) {
+:host([label-position=inset][float-label]) {
+  .label {
+    @include core.floating-label;
+  }
+
+  .input {
+    @include core.floating-input;
+  }
+
+  .forge-field--floating {
     .container {
       ::slotted(input) {
-        @include core.slotted-input-inset;
+        @include core.slotted-floating-input;
       }
     }
-  
-    .label {
-      @include core.inset-float-label;
-    }
+  }
+}
+
+//
+// Required
+//
+
+:host([required]) {
+  .label::before {
+    @include core.label-before;
+  }
+}
+
+//
+// Optional
+//
+
+:host([optional]) {
+  .label::after {
+    @include core.label-after;
   }
 }
 
@@ -155,22 +302,16 @@ $variants: (
 // Density
 //
 
-@layer density {
-  @each $density, $selector in $densities {
-    :host(#{$selector}) {
-      .container {
-        @include core.container-density($density);
-      }
+@each $density, $selector in $densities {
+  :host(#{$selector}) {
+    .container {
+      @include core.container-density($density);
     }
-  
-    :host([label-position=inset]#{$selector}) {
-      .container {
-        @include core.container-density($density, true);
-      }
-  
-      .label {
-        @include core.inset-label-density($density);
-      }
+  }
+
+  :host([label-position=inset]#{$selector}) {
+    .container {
+      @include core.container-density($density, true);
     }
   }
 }
@@ -179,13 +320,15 @@ $variants: (
 // Variant
 //
 
-@layer variant {
-  @each $variant, $variant-selector in $variants {
-    @each $theme, $theme-selector in $themes {
-      :host(#{$variant-selector}#{$theme-selector}) {
-        .container {
-          @include core.container-variant($variant, $theme);
-        }
+@each $variant, $variant-selector in $variants {
+  @each $theme, $theme-selector in $themes {
+    :host(#{$variant-selector}#{$theme-selector}) {
+      .container {
+        @include core.container-variant($variant, $theme);
+      }
+
+      .label {
+        @include core.inset-label-variant($variant, $theme);
       }
     }
   }
@@ -195,13 +338,11 @@ $variants: (
 // Hover
 //
 
-@layer hover {
-  @each $variant, $variant-selector in $variants {
-    @each $theme, $theme-selector in $themes {
-      :host(#{$hover}#{$variant-selector}#{$theme-selector}) {
-        .container {
-          @include core.container-hover($variant, $theme);
-        }
+@each $variant, $variant-selector in $variants {
+  @each $theme, $theme-selector in $themes {
+    :host(#{$hover}#{$variant-selector}#{$theme-selector}) {
+      .container {
+        @include core.container-hover($variant, $theme);
       }
     }
   }
@@ -211,12 +352,10 @@ $variants: (
 // Focus
 //
 
-@layer focus {
-  @each $variant, $variant-selector in $variants {
-    :host(#{$focus}#{$variant-selector}) {
-      .container {
-        @include core.container-focus($variant);
-      }
+@each $variant, $variant-selector in $variants {
+  :host(#{$focus}#{$variant-selector}) {
+    .container {
+      @include core.container-focus($variant);
     }
   }
 }
@@ -225,24 +364,28 @@ $variants: (
 // Invalid
 //
 
-@layer invalid {
-  @each $variant, $variant-selector in $variants {
-    :host([invalid]#{$variant-selector}) {
-      .container {
-        @include core.container-invalid($variant);
-      }
-    }
-  
-    :host([invalid]#{$hover}#{$variant-selector}) {
-      .container {
-        @include core.container-invalid-hover($variant);
-      }
+:host([invalid]) {
+  .label {
+    @include core.label-invalid;
+  }
+}
+
+@each $variant, $variant-selector in $variants {
+  :host([invalid]#{$variant-selector}) {
+    .container {
+      @include core.container-invalid($variant);
     }
   }
 
-  :host([invalid]) {
+  :host([invalid]#{$hover}#{$variant-selector}) {
+    .container {
+      @include core.container-invalid-hover($variant);
+    }
+  }
+
+  :host([invalid][label-position=inset]#{$variant-selector}) {
     .label {
-      @include core.label-invalid;
+      @include core.inset-label-invalid($variant);
     }
   }
 }
@@ -265,6 +408,18 @@ $variants: (
   .container {
     ::slotted(input) {
       @include core.slotted-input;
+    }
+
+    ::slotted(textarea) {
+      @include core.slotted-input;
+    }
+  }
+}
+
+:host([variant=plain]) {
+  .container {
+    ::slotted(input) {
+      @include core.slotted-input-plain;
     }
   }
 }

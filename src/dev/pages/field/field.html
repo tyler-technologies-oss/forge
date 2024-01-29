@@ -9,6 +9,11 @@ include('./src/partials/page.ejs', {
       { type: 'switch', label: 'Invalid', id: 'opt-invalid' },
       { type: 'switch', label: 'Disabled', id: 'opt-disabled' },
       { type: 'switch', label: 'Dense (extra small density)', id: 'opt-dense' },
+      { type: 'switch', label: 'Start slot', id: 'opt-start' },
+      { type: 'switch', label: 'End slot', id: 'opt-end' },
+      { type: 'switch', label: 'Accessory slot', id: 'opt-accessory' },
+      { type: 'switch', label: 'Helper text (start)', id: 'opt-helper-text-start'},
+      { type: 'switch', label: 'Helper text (end)', id: 'opt-helper-text-end'},
       {
           type: 'select',
           label: 'Density',
@@ -59,7 +64,19 @@ include('./src/partials/page.ejs', {
           { label: 'Default', value: 'default' },
           { label: 'Centered', value: 'centered' },
           { label: 'Start', value: 'start' },
-          { label: 'End', value: 'end' }
+          { label: 'End', value: 'end' },
+          { label: 'Baseline', value: 'baseline' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Popover',
+        id: 'opt-popover',
+        defaultValue: 'off',
+        options: [
+          { label: 'Off', value: 'off' },
+          { label: 'Expanded', value: 'expanded' },
+          { label: 'Collapsed', value: 'collapsed' }
         ]
       }
     ]

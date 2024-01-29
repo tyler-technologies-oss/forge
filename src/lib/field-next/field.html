@@ -4,8 +4,30 @@
       <slot name="label"></slot>
     </div>
     <div id="container" class="container" part="container">
-      <slot></slot>
-      <forge-focus-indicator target="container"></forge-focus-indicator>
+      <div id="start" class="start" part="start">
+        <slot name="start"></slot>
+      </div>
+      <div id="input" class="input" part="input">
+        <slot></slot>
+      </div>
+      <div id="end" class="end" part="end">
+        <slot name="end"></slot>
+      </div>
+      <div id="popover-icon" class="popover-icon" part="popover-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div id="accessory" class="accessory" part="accessory">
+        <slot name="accessory"></slot>
+      </div>
+      <forge-focus-indicator target="input"></forge-focus-indicator>
+    </div>
+    <div class="helper-text">
+      <div class="helper-text-start" part="helper-text-start">
+        <slot name="helper-text-start"></slot>
+      </div>
+      <div class="helper-text-end" part="helper-text-end">
+        <slot name="helper-text-end"></slot>
+      </div>
     </div>
   </div>
 </template>

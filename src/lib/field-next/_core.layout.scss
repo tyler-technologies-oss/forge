@@ -1,29 +1,147 @@
+@use 'sass:string';
 @use '../core/styles/typography';
 @use './token-utils' as *;
 
-@mixin block {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: #{token(block-gap)};
+//
+// Grid
+//
+
+@mixin block-start {
+  grid-template-areas:
+    "label"
+    "container"
+    "helper-text";
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
 }
 
-@mixin label-block {
-  padding-inline-start: #{token(padding-inline)};
+@mixin inline-start {
+  grid-template-areas:
+    "label container"
+    ". helper-text";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
 }
 
-@mixin inset-label {
-  @include typography.style(body2);
-
-  position: absolute;
-  z-index: 5;
-  inset-inline-start: #{token(padding-inline)};
-  pointer-events: none;
-
-  padding-block: 0;
-
-  color: #{token(label-color)};
+@mixin inline-end {
+  grid-template-areas:
+    "container label"
+    "helper-text .";
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
 }
 
-@mixin inset-float-label {
+@mixin inset {
+  grid-template-areas:
+    "container"
+    "helper-text";
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+}
+
+@mixin no-label {
+  grid-template-areas:
+    "container"
+    "helper-text";
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+}
+
+//
+// Label position
+//
+
+@mixin label-position($position) {
+  @if $position == inline-start {
+    margin-inline-end: #{token(label-margin-inline)};
+  } @else if $position == inline-end {
+    margin-inline-start: #{token(label-margin-inline)};
+  } @else if $position == block-start {
+    margin-block-end: #{token(label-margin-block)};
+  } @else if $position == inset {
+    @include typography.style(body2);
+
+    grid-area: center;
+
+    // padding-block: 0;
+    padding-inline: #{token(padding-inline)};
+
+    color: #{token(label-color)};
+  }
+}
+
+//
+// Label alignment
+//
+
+@mixin label-alignment($alignment, $direction) {
+  @if $direction == inline {
+    @if $alignment == baseline {
+      align-self: center;
+      padding-block-start: calc(typography.variable(body2, line-height) - typography.variable(label2, line-height));
+    } @else {
+      align-self: #{$alignment};
+    }
+  } @else {
+    @if $alignment == baseline {
+      justify-self: start;
+      padding-inline-start: #{token(padding-inline)};
+    } @else {
+      justify-self: #{$alignment};
+    }
+  }
+}
+
+//
+// Floating label
+//
+
+@mixin floating-label {
+  $keyframes-id: string.unique-id();
+  $translation: 0 -50%;
+
   @include typography.style(label2);
+  @include floating-animation($keyframes-id);
+
+  translate: $translation;
+
+  @keyframes #{$keyframes-id} {
+    from {
+      translate: 0;
+      opacity: 40%;
+    }
+
+    to {
+      translate: $translation;
+      opacity: 100%;
+    }
+  }
+}
+
+@mixin floating-input {
+  $keyframes-id: string.unique-id();
+
+  @include floating-animation($keyframes-id);
+
+  box-sizing: border-box;
+
+  @keyframes #{$keyframes-id} {
+    from {
+      translate: 0;
+    }
+
+    to {
+      translate: 0 10px;
+    }
+  }
+}
+
+@mixin slotted-floating-input {
+  padding-block-start: 20px !important; // TODO: remove !important and use a layer instead
+}
+
+@mixin floating-animation($keyframes-id) {
+  animation-name: #{$keyframes-id};
+  animation-duration: #{token(inset-animation-duration)};
+  animation-timing-function: #{token(inset-animation-timing-function)};
 }

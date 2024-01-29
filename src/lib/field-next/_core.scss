@@ -20,12 +20,7 @@ $host-tokens: [display];
 }
 
 @mixin base {
-  flex-direction: row;
-  align-items: center;
-  gap: #{token(inline-gap)};
-
-  display: flex;
-
+  display: grid;
   position: relative;
 }
 
@@ -38,32 +33,44 @@ $host-tokens: [display];
 
   position: relative;
   flex-grow: 1;
+  align-items: center;
 
-  display: flex;
+  display: grid;
+  grid-template-areas: "start center end popover-icon accessory";
+  grid-template-columns: auto 1fr auto auto auto;
+  grid-area: container;
 
   transition-property: background, outline-color;
   transition-duration: #{token(animation-duration)};
   transition-timing-function: #{token(animation-timing-function)};
   
-  box-shadow: #{token(elevation)};
   border-radius: #{token(shape)};
   box-sizing: border-box;
   block-size: #{token(container-block-size, custom)};
   inline-size: 100%;
-  padding-inline: #{token(padding-inline)};
 
-  background: #{token(surface-color)};
+  color: #{token(text-color)};
+}
 
-  color: #{token(on-surface-color)};
+@mixin input {
+  z-index: 2;
+
+  grid-area: center;
+
+  block-size: 100%;
+  inline-size: 100%;
 }
 
 @mixin label {
   @include typography.style(label2);
 
   position: relative;
-  gap: #{token(label-gap)};
+  gap: #{token(inner-label-gap)};
 
   display: inline-flex;
+  grid-area: label;
+
+  block-size: fit-content;
 
   color: #{token(label-color)};
 }
@@ -78,13 +85,31 @@ $host-tokens: [display];
   color: #{token(optional-color)};
 }
 
+@mixin popover-icon {
+  align-items: center;
+
+  display: flex;
+  grid-area: popover-icon;
+
+  block-size: 100%;
+  padding-inline-end: 8px;
+
+
+  &>* {
+    transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
+  }
+  // transform-origin: calc(50% - 4px) 50%;
+}
+
 @mixin slotted-input {
+  box-sizing: border-box;
   outline: none;
   width: 100%;
   height: 100%;
   border: none;
   margin: 0;
-  padding: 0;
+  padding-block: 0;
+  padding-inline: #{token(padding-inline)};
 
   background-color: transparent;
 
@@ -92,6 +117,36 @@ $host-tokens: [display];
   color: inherit;
 }
 
-@mixin slotted-input-inset {
-  padding-block-start: 16px;
+@mixin start {
+  display: flex;
+  grid-area: start;
+
+  padding-inline-start: 8px;
+}
+
+@mixin end {
+  display: flex;
+  grid-area: end;
+
+  padding-inline-end: 8px;
+}
+
+@mixin accessory {
+  align-items: center;
+  
+  display: flex;
+  grid-area: accessory;
+
+  height: 100%;
+  border-inline-start-style: #{token(border-style)};
+  border-inline-start-width: #{token(border-width)};
+  border-inline-start-color: #{token(border-color)};
+  padding-inline: 8px;
+}
+
+@mixin helper-text {
+  justify-content: space-between;
+
+  display: flex;
+  grid-area: helper-text;
 }

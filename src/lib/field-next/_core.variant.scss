@@ -34,11 +34,10 @@
 
 @mixin container-tonal($theme: primary) {
   @if $theme == primary {
-    background: #{token(tonal-surface-color)};
+    background: #{token(tonal-surface)};
     color: #{token(tonal-on-surface-color)};
   } @else {
     background: theme.variable(#{$theme}-container);
-    color: theme.variable(on-#{$theme}-container);
   }
 }
 
@@ -48,14 +47,12 @@
 
   @if $theme == primary {
     outline-color:  #{token(border-color)};
-    background: #{token(filled-surface-color)};
+    background: #{token(filled-surface)};
 
     color: #{token(filled-on-surface-color)};
   } @else {
     outline-color: theme.variable($theme);
-    background: theme.variable(#{$theme}-container);
-    
-    color: theme.variable(on-#{$theme}-container);
+    background: theme.variable(#{$theme}-container);    
   }
 }
 
@@ -63,10 +60,89 @@
   box-shadow: #{token(raised-elevation)};
 
   @if $theme == primary {
-    background: #{token(filled-surface-color)};
-    color: #{token(filled-on-surface-color)};
+    background: #{token(raised-surface)};
+    color: #{token(raised-on-surface-color)};
   } @else {
     background: theme.variable(#{$theme}-container);
+  }
+}
+
+@mixin inset-label-variant($variant, $theme: primary) {
+  @if $variant == plain {
+    @include inset-label-plain($theme);
+  } @else if $variant == outlined {
+    @include inset-label-outlined($theme);
+  } @else if $variant == tonal {
+    @include inset-label-tonal($theme);
+  } @else if $variant == filled {
+    @include inset-label-filled($theme);
+  } @else if $variant == raised {
+    @include inset-label-raised($theme);
+  }
+}
+
+@mixin inset-label-plain($theme: primary) {
+  color: #{token(inset-label-color)};
+}
+
+@mixin inset-label-outlined($theme: primary) {
+  color: #{token(inset-label-color)};
+}
+
+@mixin inset-label-tonal($theme: primary) {
+  @if $theme == primary {
+    color: #{token(inset-label-color)};
+  } @else {
     color: theme.variable(on-#{$theme}-container);
+  }
+}
+
+@mixin inset-label-filled($theme: primary) {
+  @if $theme == primary {
+    color: #{token(inset-label-color)};
+  } @else {
+    color: theme.variable(on-#{$theme}-container);
+  }
+}
+
+@mixin inset-label-raised($theme: primary) {
+  @if $theme == primary {
+    color: #{token(inset-label-color)};
+  } @else {
+    color: theme.variable(on-#{$theme}-container);
+  }
+}
+
+@mixin slotted-input-plain {
+  padding-inline-start: 0;
+}
+
+@mixin accessory-variant($variant, $theme: primary) {
+  $outlined-color: transparent;
+  @if $theme == primary {
+    $outlined-color: #{token(border-color)};
+  } @else {
+    $outlined-color: theme.variable($theme);
+  }
+
+  @if $variant == plain {
+    height: fit-content;
+    border-inline-start-color: #{$outlined-color};
+  } @else if $variant == outlined {
+    border-inline-start-color: #{$outlined-color};
+  } @else if $variant == tonal {
+    @if $theme == primary {
+      border-inline-start-color: theme.variable(outline-low);
+    } @else {
+      border-inline-start-color: theme.variable(on-#{$theme}-container);
+    }
+  } @else if $variant == filled {
+    border-inline-start-color: #{$outlined-color};
+  } @else if $variant == raised {
+    @if $theme == primary {
+      border-inline-start-color: theme.variable(outline-low);
+    } @else {
+      border-inline-start-color: theme.variable(on-#{$theme}-container);
+    }
   }
 }

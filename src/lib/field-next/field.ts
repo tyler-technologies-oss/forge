@@ -21,6 +21,7 @@ export interface IFieldComponent extends IBaseComponent {
   density: FieldDensity;
   dense: boolean;
   popoverIcon: boolean;
+  popoverExpanded: boolean;
 }
 
 declare global {
@@ -67,6 +68,7 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
     return [
       FIELD_CONSTANTS.attributes.LABEL_POSITION,
       FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT,
+      FIELD_CONSTANTS.attributes.FLOAT_LABEL,
       FIELD_CONSTANTS.attributes.INVALID,
       FIELD_CONSTANTS.attributes.REQUIRED,
       FIELD_CONSTANTS.attributes.OPTIONAL,
@@ -74,7 +76,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       FIELD_CONSTANTS.attributes.VARIANT,
       FIELD_CONSTANTS.attributes.THEME,
       FIELD_CONSTANTS.attributes.DENSITY,
-      FIELD_CONSTANTS.attributes.DENSE
+      FIELD_CONSTANTS.attributes.DENSE,
+      FIELD_CONSTANTS.attributes.POPOVER_ICON,
+      FIELD_CONSTANTS.attributes.POPOVER_EXPANDED
     ];
   }
 
@@ -87,7 +91,7 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
   }
 
   public connectedCallback(): void {
-    // TODO: implement something here or remove this
+    this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -128,6 +132,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       case FIELD_CONSTANTS.attributes.POPOVER_ICON:
         this.popoverIcon = coerceBoolean(newValue);
         break;
+      case FIELD_CONSTANTS.attributes.POPOVER_EXPANDED:
+        this.popoverExpanded = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -166,4 +173,7 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
 
   @FoundationProperty()
   public declare popoverIcon: boolean;
+
+  @FoundationProperty()
+  public declare popoverExpanded: boolean;
 }
