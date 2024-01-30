@@ -49,6 +49,7 @@ $tokens: (
   border-style: utils.module-val(field, border-style, solid),
   border-width: utils.module-val(field, border-width, border.variable(thin)),
   border-color: utils.module-val(field, border-color, theme.variable(outline-medium)),
+  tonal-inner-border-color: utils.module-val(field, tonal-inner-border-color, theme.variable(outline-low)),
 
   // Label
   label-color: utils.module-val(field, label-color, theme.variable(text-high)),
@@ -67,10 +68,12 @@ $tokens: (
   invalid-border-style: utils.module-ref(field, invalid-border-style, border-style),
   invalid-border-color: utils.module-ref(field, invalid-border-color, invalid-color),
   invalid-border-width: utils.module-ref(field, invalid-border-width, border-width),
-  invalid-surface: utils.module-val(field, invalid-surface, theme.variable(error-container)),
+  invalid-surface: utils.module-val(field, invalid-surface, theme.variable(error-container-low)),
+  invalid-surface-hover: utils.module-val(field, invalid-surface-hover, theme.variable(error-container-minimum)),
   invalid-label-color: utils.module-ref(field, invalid-label-color, invalid-color),
-  invalid-inset-label-on-surface-color: utils.module-val(field, invalid-inset-label-on-surface-color, theme.variable(on-error-container)),
-  invalid-hover-border-color: utils.module-val(field, invalid-hover-border-color, theme.variable(error-container)),
+  invalid-on-surface-color: utils.module-val(field, invalid-on-surface-color, theme.variable(on-error-container-low)),
+  invalid-inset-label-on-surface-color: utils.module-ref(field, invalid-inset-label-on-surface-color, invalid-on-surface-color),
+  invalid-hover-border-color: utils.module-val(field, invalid-hover-border-color, theme.variable(error-container-high)),
 
   // Tonal
   tonal-surface: utils.module-val(field, tonal-surface, theme.variable(surface-container-low)),

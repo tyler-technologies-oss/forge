@@ -19,7 +19,8 @@ $densities: (
   extra-large: ':not([dense])[density=extra-large]'
 );
 $themes: (
-  primary: ':where([theme=primary], :not([theme]))',
+  default: ':where([theme=default], :not([theme]))',
+  primary: '[theme=primary]',
   secondary: '[theme=secondary]',
   tertiary: '[theme=tertiary]',
   success: '[theme=success]',
@@ -34,6 +35,8 @@ $variants: (
   filled: '[variant=filled]',
   raised: '[variant=raised]'
 );
+
+@layer base, label, variant; 
 
 //
 // Host
@@ -56,33 +59,46 @@ $variants: (
 // Base
 //
 
-.forge-field {
-  @include core.configuration;
-}
-
-.forge-field {
-  @include core.base;
-
-  .container {
-    @include core.container;
+@layer base {
+  .forge-field {
+    @include core.configuration;
   }
+  
+  .forge-field {
+    @include core.base;
+  
+    .container {
+      @include core.container;
 
-  .input {
-    @include core.input;
-  }
-
-  .label {
-    @include core.label;
-  }
-
-  .start,
-  .end,
-  .accessory,
-  .helper-text,
-  .helper-text-start,
-  .helper-text-end,
-  .popover-icon {
-    display: none;
+      &::before {
+        @include core.container-background;
+      }
+    }
+  
+    .input {
+      @include core.input;
+    }
+  
+    .label {
+      @include core.label;
+    }
+  
+    .popover-icon {
+      display: none;
+  
+      &__arrow {
+        @include core.popover-icon-arrow;
+      }
+    }
+  
+    .start,
+    .end,
+    .accessory,
+    .helper-text,
+    .helper-text-start,
+    .helper-text-end {
+      display: none;
+    }
   }
 }
 
@@ -118,12 +134,10 @@ $variants: (
 }
 
 @each $variant, $variant-selector in $variants {
-  @each $theme, $theme-selector in $themes {
-    :host(#{$variant-selector}#{$theme-selector}) {
-      .forge-field--has-accessory {
-        .accessory {
-          @include core.accessory-variant($variant, $theme);
-        }
+  :host(#{$variant-selector}) {
+    .forge-field--has-accessory {
+      .accessory {
+        @include core.accessory-variant($variant);
       }
     }
   }
@@ -141,138 +155,150 @@ $variants: (
 
 :host([popover-icon][popover-expanded]) {
   .popover-icon {
-    @include core.popover-expanded;
+    @include core.popover-icon-expanded;
   }
 }
 
 //
-// Label position
+// Label
 //
 
-:host([label-position=block-start]) {
-  .forge-field {
-    @include core.block-start;
+@layer label {
 
-    .label {
-      @include core.label-position(block-start);
+  //
+  // Label position
+  //
+
+  :host([label-position=block-start]) {
+    .forge-field {
+      @include core.block-start;
+  
+      .label {
+        @include core.label-position(block-start);
+      }
     }
   }
-}
-
-:host(#{$inline-start-label}) {
-  .forge-field {
-    @include core.inline-start;
-
-    .label {
-      @include core.label-position(inline-start);
+  
+  :host(#{$inline-start-label}) {
+    .forge-field {
+      @include core.inline-start;
+  
+      .label {
+        @include core.label-position(inline-start);
+      }
     }
   }
-}
-
-:host([label-position=inline-end]) {
-  .forge-field {
-    @include core.inline-end;
-
-    .label {
-      @include core.label-position(inline-end);
+  
+  :host([label-position=inline-end]) {
+    .forge-field {
+      @include core.inline-end;
+  
+      .label {
+        @include core.label-position(inline-end);
+      }
     }
   }
-}
-
-:host([label-position=inset]) {
-  .forge-field {
-    @include core.inset;
-
-    .label {
-      @include core.label-position(inset);
+  
+  :host([label-position=inset]) {
+    .forge-field {
+      @include core.inset;
+  
+      .label {
+        @include core.label-position(inset);
+      }
     }
   }
-}
-
-:host([label-position=none]) {
-  .forge-field {
-    @include core.no-label;
-
-    .label {
-      @include utils.visually-hidden;
+  
+  :host([label-position=none]) {
+    .forge-field {
+      @include core.no-label;
+  
+      .label {
+        @include utils.visually-hidden;
+      }
     }
   }
-}
 
-//
-// Label alignment
-//
-
-:host(#{$inline-start-label}[label-alignment=start]),
-:host([label-position=inline-end][label-alignment=start]) {
-  .label {
-    @include core.label-alignment(start, inline);
+  //
+  // Label alignment
+  //
+  
+  :host(#{$inline-start-label}[label-alignment=start]),
+  :host([label-position=inline-end][label-alignment=start]) {
+    .label {
+      @include core.label-alignment(start, inline);
+    }
   }
-}
-
-:host(#{$inline-start-label}:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))),
-:host([label-position=inline-end]:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))) {
-  .label {
-    @include core.label-alignment(center, inline);
+  
+  :host(#{$inline-start-label}:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))),
+  :host([label-position=inline-end]:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))) {
+    .label {
+      @include core.label-alignment(center, inline);
+    }
   }
-}
-
-:host(#{$inline-start-label}[label-alignment=end]),
-:host([label-position=inline-end][label-alignment=end]) {
-  .label {
-    @include core.label-alignment(end, inline);
+  
+  :host(#{$inline-start-label}[label-alignment=end]),
+  :host([label-position=inline-end][label-alignment=end]) {
+    .label {
+      @include core.label-alignment(end, inline);
+    }
   }
-}
-
-:host(#{$inline-start-label}[label-alignment=baseline]),
-:host([label-position=inline-end][label-alignment=baseline]) {
-  .label {
-    @include core.label-alignment(baseline, inline);
+  
+  :host(#{$inline-start-label}[label-alignment=baseline]),
+  :host([label-position=inline-end][label-alignment=baseline]) {
+    .label {
+      @include core.label-alignment(baseline, inline);
+    }
   }
-}
-
-:host([label-position=block-start]:where([label-alignment=start], [label-alignment=default], :not([label-alignment]))) {
-  .label {
-    @include core.label-alignment(start, block);
+  
+  :host([label-position=block-start]:where([label-alignment=start], [label-alignment=default], :not([label-alignment]))) {
+    .label {
+      @include core.label-alignment(start, block);
+    }
   }
-}
-
-:host([label-position=block-start][label-alignment=centered]) {
-  .label {
-    @include core.label-alignment(center, block);
+  
+  :host([label-position=block-start][label-alignment=centered]) {
+    .label {
+      @include core.label-alignment(center, block);
+    }
   }
-}
-
-:host([label-position=block-start][label-alignment=end]) {
-  .label {
-    @include core.label-alignment(end, block);
+  
+  :host([label-position=block-start][label-alignment=end]) {
+    .label {
+      @include core.label-alignment(end, block);
+    }
   }
-}
-
-:host([label-position=block-start][label-alignment=baseline]) {
-  .label {
-    @include core.label-alignment(baseline, block);
+  
+  :host([label-position=block-start][label-alignment=baseline]:not([variant=plain])) {
+    .label {
+      @include core.label-alignment(baseline, block);
+    }
   }
-}
-
-
-//
-// Floating label
-//
-
-:host([label-position=inset][float-label]) {
-  .label {
-    @include core.floating-label;
+  
+  :host([label-position=block-start][label-alignment=baseline][variant=plain]) {
+    .label {
+      @include core.label-alignment(baseline, block, 0px);
+    }
   }
 
-  .input {
-    @include core.floating-input;
-  }
-
-  .forge-field--floating {
-    .container {
-      ::slotted(input) {
-        @include core.slotted-floating-input;
+  //
+  // Floating label
+  //
+  
+  :host([label-position=inset][float-label]) {
+    .label {
+      @include core.floating-label;
+    }
+  
+    .input {
+      @include core.floating-input;
+    }
+  
+    .forge-field--floating {
+      .container {
+        ::slotted(input) {
+          @include core.slotted-floating-input;
+        }
       }
     }
   }
@@ -320,15 +346,29 @@ $variants: (
 // Variant
 //
 
-@each $variant, $variant-selector in $variants {
-  @each $theme, $theme-selector in $themes {
-    :host(#{$variant-selector}#{$theme-selector}) {
-      .container {
-        @include core.container-variant($variant, $theme);
-      }
+@layer variant {
+  @layer {
+    @each $variant, $variant-selector in $variants {
+      @each $theme, $theme-selector in $themes {
+        :host(#{$variant-selector}#{$theme-selector}) {
+          .container {
+            @include core.container-variant($variant, $theme);
 
-      .label {
-        @include core.inset-label-variant($variant, $theme);
+            &::before {
+              @include core.container-background-variant($variant, $theme);
+            }
+          }
+
+          .label {
+            @include core.label-variant($variant, $theme);
+          }
+        }
+    
+        :host([label-position=inset]#{$variant-selector}#{$theme-selector}) {
+          .label {
+            @include core.inset-label-variant($variant, $theme);
+          }
+        }
       }
     }
   }
@@ -343,6 +383,10 @@ $variants: (
     :host(#{$hover}#{$variant-selector}#{$theme-selector}) {
       .container {
         @include core.container-hover($variant, $theme);
+
+        &::before {
+          @include core.container-background-hover($variant, $theme);
+        }
       }
     }
   }
@@ -354,8 +398,8 @@ $variants: (
 
 @each $variant, $variant-selector in $variants {
   :host(#{$focus}#{$variant-selector}) {
-    .container {
-      @include core.container-focus($variant);
+    .container::before {
+      @include core.container-background-focus($variant);
     }
   }
 }
@@ -374,12 +418,20 @@ $variants: (
   :host([invalid]#{$variant-selector}) {
     .container {
       @include core.container-invalid($variant);
+
+      &::before {
+        @include core.container-background-invalid($variant);
+      }
     }
   }
 
   :host([invalid]#{$hover}#{$variant-selector}) {
     .container {
       @include core.container-invalid-hover($variant);
+
+      &::before {
+        @include core.container-background-invalid-hover($variant);
+      }
     }
   }
 
@@ -395,7 +447,21 @@ $variants: (
 //
 
 :host([disabled]) {
-  .forge-field {
+  .container {
+    & > :not(.accessory) {
+      @include core.field-disabled;
+    }
+
+    &::before {
+      @include core.field-disabled;
+    }
+  }
+
+  .label {
+    @include core.field-disabled;
+  }
+
+  .accessory::before {
     @include core.field-disabled;
   }
 }
@@ -416,14 +482,6 @@ $variants: (
   }
 }
 
-:host([variant=plain]) {
-  .container {
-    ::slotted(input) {
-      @include core.slotted-input-plain;
-    }
-  }
-}
-
 //
 // Focus indicator
 //
@@ -436,7 +494,7 @@ $variants: (
     ));
   }
 
-  @if $theme != primary {
+  @if $theme != default and $theme != primary {
     :host(#{$selector}) {
       forge-focus-indicator {
         @include focus-indicator.provide-theme((

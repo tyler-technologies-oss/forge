@@ -20,6 +20,9 @@ $host-tokens: [display];
 }
 
 @mixin base {
+  @include override('input-color', #{token(text-color)}, value);
+  @include override('inner-border-color', #{token(border-color)}, value);
+
   display: grid;
   position: relative;
 }
@@ -40,16 +43,25 @@ $host-tokens: [display];
   grid-template-columns: auto 1fr auto auto auto;
   grid-area: container;
 
-  transition-property: background, outline-color;
-  transition-duration: #{token(animation-duration)};
-  transition-timing-function: #{token(animation-timing-function)};
+  // transition-property: background, outline-color;
+  // transition-duration: #{token(animation-duration)};
+  // transition-timing-function: #{token(animation-timing-function)};
   
   border-radius: #{token(shape)};
   box-sizing: border-box;
   block-size: #{token(container-block-size, custom)};
   inline-size: 100%;
+}
 
-  color: #{token(text-color)};
+@mixin container-background {
+  content: '';
+  position: absolute;
+  block-size: 100%;
+  inline-size: 100%;
+  transition-property: background, outline-color;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-timing-function)};
+  border-radius: #{token(shape)};
 }
 
 @mixin input {
@@ -59,6 +71,8 @@ $host-tokens: [display];
 
   block-size: 100%;
   inline-size: 100%;
+
+  color: #{token(input-color, value)};
 }
 
 @mixin label {
@@ -99,6 +113,10 @@ $host-tokens: [display];
   }
 }
 
+@mixin popover-icon-arrow {
+  fill: inherit;
+}
+
 @mixin slotted-input {
   box-sizing: border-box;
   outline: none;
@@ -130,16 +148,28 @@ $host-tokens: [display];
 }
 
 @mixin accessory {
+  position: relative;
   align-items: center;
   
   display: flex;
   grid-area: accessory;
 
-  height: 100%;
-  border-inline-start-style: #{token(border-style)};
-  border-inline-start-width: #{token(border-width)};
-  border-inline-start-color: #{token(border-color)};
-  padding-inline: 8px;
+  block-size: 100%;
+  padding-inline-end: 8px;
+
+  &::before {
+    content: '';
+
+    block-size: 100%;
+    border-inline-start-style: #{token(border-style)};
+    border-inline-start-width: #{token(border-width)};
+    border-inline-start-color: #{token(inner-border-color, value)};
+    padding-inline-end: 8px;
+
+    transition-property: border-color;
+    transition-duration: #{token(animation-duration)};
+    transition-timing-function: #{token(animation-timing-function)};
+  }
 }
 
 @mixin helper-text {

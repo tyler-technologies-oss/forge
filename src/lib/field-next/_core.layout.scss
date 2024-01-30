@@ -63,7 +63,6 @@
 
     grid-area: center;
 
-    // padding-block: 0;
     padding-inline: #{token(padding-inline)};
 
     color: #{token(label-color)};
@@ -74,18 +73,26 @@
 // Label alignment
 //
 
-@mixin label-alignment($alignment, $direction) {
+@mixin label-alignment($alignment, $direction, $baseline-override: false) {
   @if $direction == inline {
     @if $alignment == baseline {
       align-self: center;
-      padding-block-start: calc(typography.variable(body2, line-height) - typography.variable(label2, line-height));
+      @if $baseline-override {
+        padding-block-start: $baseline-override;
+      } @else {
+        padding-block-start: calc(typography.variable(body2, line-height) - typography.variable(label2, line-height));
+      }
     } @else {
       align-self: #{$alignment};
     }
   } @else {
     @if $alignment == baseline {
       justify-self: start;
-      padding-inline-start: #{token(padding-inline)};
+      @if $baseline-override {
+        padding-inline-start: $baseline-override;
+      } @else {
+        padding-inline-start: #{token(padding-inline)};;
+      }
     } @else {
       justify-self: #{$alignment};
     }
@@ -137,7 +144,7 @@
 }
 
 @mixin slotted-floating-input {
-  padding-block-start: 20px !important; // TODO: remove !important and use a layer instead
+  padding-block-start: 20px !important; // TODO: find a way to remove this !important
 }
 
 @mixin floating-animation($keyframes-id) {
