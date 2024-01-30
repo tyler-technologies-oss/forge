@@ -42,10 +42,6 @@ $host-tokens: [display];
   grid-template-areas: 'start center end popover-icon accessory';
   grid-template-columns: auto 1fr auto auto auto;
   grid-area: container;
-
-  // transition-property: background, outline-color;
-  // transition-duration: #{token(animation-duration)};
-  // transition-timing-function: #{token(animation-timing-function)};
   
   border-radius: #{token(shape)};
   box-sizing: border-box;
@@ -100,6 +96,7 @@ $host-tokens: [display];
 }
 
 @mixin popover-icon {
+  isolation: isolate;
   align-items: center;
 
   display: flex;

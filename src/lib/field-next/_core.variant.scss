@@ -22,13 +22,17 @@
 @mixin container-plain($theme: default) {
   @include override('padding-inline', 0px, value);
 
-  @if $theme != default {
+  @if $theme == default {
+    @include text-color(token(text-color));
+  } @else {
     @include text-color(theme.variable($theme));
   }
 }
 
 @mixin container-outlined($theme: default) {
-  @if $theme != default {
+  @if $theme == default {
+    @include text-color(token(text-color));
+  } @else {
     @include override('inner-border-color', theme.variable($theme), value);
     @include text-color(theme.variable($theme));
   }
@@ -37,7 +41,7 @@
 @mixin container-tonal($theme: default) {
   @if $theme == default {
     @include override('inner-border-color', #{token(tonal-inner-border-color)}, value);
-    color: #{token(tonal-on-surface-color)};
+    @include text-color(token(tonal-on-surface-color));
   } @else {
     @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
     @include text-color(theme.variable(on-#{$theme}-container-low));
@@ -46,7 +50,8 @@
 
 @mixin container-filled($theme: default) {
   @if $theme == default {
-    color: #{token(filled-on-surface-color)};
+    @include text-color(token(text-color));
+    @include text-color(token(filled-on-surface-color));
   } @else {
     @include override('inner-border-color', theme.variable($theme), value);
     @include text-color(theme.variable(on-#{$theme}-container-low));
@@ -56,7 +61,7 @@
 @mixin container-raised($theme: default) {
   @if $theme == default {
     @include override('inner-border-color', #{token(tonal-inner-border-color)}, value);
-    color: #{token(raised-on-surface-color)};
+    @include text-color(token(raised-on-surface-color));
   } @else {
     @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
     @include text-color(theme.variable(on-#{$theme}-container-low));
