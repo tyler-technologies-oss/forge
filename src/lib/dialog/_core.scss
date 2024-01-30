@@ -1,0 +1,62 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: none;
+}
+
+@mixin host-open {
+  display: block;
+}
+
+@mixin dialog-base {
+  position: fixed;
+
+  background-color: transparent;
+  color: inherit;
+  
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: none;
+  overflow: visible;
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+@mixin container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+@mixin surface {
+  display: inline-flex;
+
+  background: #{token(background)};
+  
+  border-radius: #{token(shape)};
+  box-shadow: #{token(elevation)};
+  padding: #{token(padding)};
+  width: #{token(width)};
+  height: #{token(height)};
+  min-width: #{token(min-width)};
+  max-width: #{token(max-width)};
+  min-height: #{token(min-height)};
+  max-height: #{token(max-height)};
+  z-index: #{token(z-index)};
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+@mixin surface-open {
+  animation-name: enter;
+  animation-duration: #{token(animation-duration)};
+  animation-timing-function: #{token(animation-easing)};
+}

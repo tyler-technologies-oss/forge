@@ -7,9 +7,9 @@ const selectors = {
 };
 
 const numbers = {
-  OPACITY: 0.54,
+  OPACITY: 0.38,
   DELAY: 0,
-  TRANSITION_DURATION: 150
+  TRANSITION_DURATION: 120
 };
 
 const attributes = {

@@ -1,11 +1,64 @@
-@use './mixins';
+@use './core' as *;
+@use './animations';
+@use '../core/styles/theme';
 
-@include mixins.core-styles;
+//
+// Host styles
+//
 
 :host {
-  display: block;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
+
+//
+// Base
+//
+
+.forge-dialog {
+  @include tokens;
+
+  @include theme.provide((
+    surface: theme.variable(surface-bright)
+  ));
+}
+
+.forge-dialog {
+  @include dialog-base;
+
+  .container {
+    @include container;
+  }
+
+  .surface {
+    @include surface;
+  }
+}
+
+//
+// Backdrop
+//
+
+dialog.forge-dialog {
+  &::backdrop {
+    display: none;
+  }
+}
+
+//
+// Open
+//
+
+:host([open]) {
+  @include host-open;
+
+  dialog.forge-dialog[open] {
+    .surface {
+      @include surface-open;
+    }
+  }
+}
+

@@ -27,9 +27,13 @@
     </div>
     <forge-toolbar slot="footer" no-border class="footer-toolbar">
       <div slot="end">
-        <forge-button variant="outlined" id="cancel-button">Close</forge-button>
+        <forge-button variant="outlined" id="cancel-button" autofocus>Close</forge-button>
         <forge-button variant="raised" id="accept-button" forge-dialog-focus>Apply</forge-button>
       </div>
+      <form slot="end" style="display: flex; gap: 8px;">
+        <button type="submit" formmethod="dialog">Form close</button>
+        <forge-button type="submit" formmethod="dialog">Form close Forge</forge-button>
+      </form>
     </forge-toolbar>
   </forge-scaffold>
 </div>

@@ -1,31 +1,25 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 
-import { DialogFoundation } from './dialog-foundation';
-import { DialogAdapter } from './dialog-adapter';
-import { DIALOG_CONSTANTS, DialogPositionType, IDialogMoveStartEventData, IDialogMoveEventData, DialogStateCallback } from './dialog-constants';
 import { BackdropComponent } from '../backdrop';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { DialogAdapter } from './dialog-adapter';
+import { DIALOG_CONSTANTS } from './dialog-constants';
+import { DialogFoundation } from './dialog-foundation';
 
 import template from './dialog.html';
 import styles from './dialog.scss';
 
-export interface IDialogComponent extends IBaseComponent {
-  backdropClose: boolean;
-  escapeClose: boolean;
+export interface IDialogComponent extends IWithDefaultAria, IWithElementInternals {
   open: boolean;
-  fullscreen: boolean;
-  openCallback: DialogStateCallback;
-  closeCallback: DialogStateCallback;
-  beforeCloseCallback: () => boolean | Promise<boolean>;
-  positionType: DialogPositionType;
-  positionX: number | string | null | undefined;
-  positionY: number | string | null | undefined;
-  moveable: boolean;
-  moveTarget: string;
-  initializeMoveTarget(): void;
-  resetPosition(): void;
-  show(parent?: HTMLElement): Promise<void>;
-  hide(remove?: boolean): Promise<void>;
+  persistent: boolean;
+  /** @depreated Use `persistent` instead. */
+  backdropClose: boolean;
+  /** @depreated Use `persistent` instead. */
+  escapeClose: boolean;
+  show(): void;
+  hide(): void;
 }
 
 declare global {
@@ -34,37 +28,32 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-dialog-before-close': CustomEvent<void>;
     'forge-dialog-open': CustomEvent<void>;
     'forge-dialog-close': CustomEvent<void>;
-    'forge-dialog-ready': CustomEvent<void>;
-    'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
-    'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
-    'forge-dialog-move-end': CustomEvent<void>;
+    'forge-dialog-before-close': CustomEvent<void>;
+    // 'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
+    // 'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
+    // 'forge-dialog-move-end': CustomEvent<void>;
   }
 }
 
+const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
+
 /**
- * The web component class behind the `<forge-dialog>` custom element.
- * 
  * @tag forge-dialog
  */
 @CustomElement({
   name: DIALOG_CONSTANTS.elementName,
-  dependencies: [BackdropComponent]
+  dependencies: [
+    BackdropComponent
+  ]
 })
-export class DialogComponent extends BaseComponent implements IDialogComponent {
+export class DialogComponent extends BaseClass implements IDialogComponent {
   public static get observedAttributes(): string[] {
     return [
-      DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE,
-      DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE,
       DIALOG_CONSTANTS.attributes.OPEN,
-      DIALOG_CONSTANTS.attributes.FULLSCREEN,
-      DIALOG_CONSTANTS.attributes.POSITION_TYPE,
-      DIALOG_CONSTANTS.attributes.POSITION_X,
-      DIALOG_CONSTANTS.attributes.POSITION_Y,
-      DIALOG_CONSTANTS.attributes.MOVEABLE,
-      DIALOG_CONSTANTS.attributes.MOVE_TARGET
+      DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE,
+      DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE
     ];
   }
 
@@ -86,96 +75,37 @@ export class DialogComponent extends BaseComponent implements IDialogComponent {
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE:
-        this.backdropClose = newValue === 'true';
-        break;
-      case DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE:
-        this.escapeClose = newValue === 'true';
-        break;
       case DIALOG_CONSTANTS.attributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
-      case DIALOG_CONSTANTS.attributes.FULLSCREEN:
-        this.fullscreen = coerceBoolean(newValue);
+      case DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE:
+        this.backdropClose = coerceBoolean(newValue);
         break;
-      case DIALOG_CONSTANTS.attributes.POSITION_TYPE:
-        this.positionType = newValue as DialogPositionType;
-        break;
-      case DIALOG_CONSTANTS.attributes.POSITION_X:
-        this.positionX = newValue;
-        break;
-      case DIALOG_CONSTANTS.attributes.POSITION_Y:
-        this.positionY = newValue;
-        break;
-      case DIALOG_CONSTANTS.attributes.MOVEABLE:
-        this.moveable = coerceBoolean(newValue);
-        break;
-      case DIALOG_CONSTANTS.attributes.MOVE_TARGET:
-        this.moveTarget = newValue;
+      case DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE:
+        this.escapeClose = coerceBoolean(newValue);
         break;
     }
   }
 
-  /** Controls whether clicking the backdrop closes the dialog or not. Default is true. */
-  @FoundationProperty()
-  public declare backdropClose: boolean;
-
-  /** Controls whether pressing the escape key closes the dialog or not. Default is true. */
-  @FoundationProperty()
-  public declare escapeClose: boolean;
-
-  /** Controls whether the dialog is open or not. Default is false. */
   @FoundationProperty()
   public declare open: boolean;
 
-  /** Controls whether the dialog is full screen or not. Default is false. */
   @FoundationProperty()
-  public declare fullscreen: boolean;
+  public declare persistent: boolean;
 
-  /** The function to call when the dialog wants to open. */
+  /** @depreated Use `persistent` instead. */
   @FoundationProperty()
-  public declare openCallback: DialogStateCallback;
+  public declare backdropClose: boolean;
 
-  /** the function to call when the dialog wants to close. */
+  /** @depreated Use `persistent` instead. */
   @FoundationProperty()
-  public declare closeCallback: DialogStateCallback;
+  public declare escapeClose: boolean;
 
-  /** the function to call when the dialog wants to close. */
-  @FoundationProperty()
-  public declare beforeCloseCallback: () => boolean | Promise<boolean>;
-
-  /** Gets/sets the position type when using custom positioning values. Default is 'absolute'. */
-  @FoundationProperty()
-  public declare positionType: DialogPositionType;
-
-  /** Controls the horizontal position of the dialog surface. */
-  @FoundationProperty()
-  public declare positionX: number | string | null | undefined;
-
-  /** Controls the vertical position of the dialog surface. */
-  @FoundationProperty()
-  public declare positionY: number | string | null | undefined;
-
-  /** Gets/sets whether the dialog surface can be moved or not. */
-  @FoundationProperty()
-  public declare moveable: boolean;
-
-  /** Gets/sets the selector used to target the element that is used as the drag target. */
-  @FoundationProperty()
-  public declare moveTarget: string;
-
-  public initializeMoveTarget(): void {
-    this._foundation.initializeMoveTarget();
+  public show(): void {
+    this.open = true;
   }
 
-  public resetPosition(): void {
-    this._foundation.resetPosition();
-  }
-
-  public show(parent?: HTMLElement): Promise<void> {
-    return this._foundation.show(parent);
-  }
-  public hide(remove?: boolean): Promise<void> {
-    return this._foundation.hide(remove);
+  public hide(): void {
+    this.open = false;
   }
 }

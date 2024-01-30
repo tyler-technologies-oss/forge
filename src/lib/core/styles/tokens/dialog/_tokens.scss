@@ -1,0 +1,32 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../animation';
+@use '../../shape';
+@use '../../elevation';
+@use '../../spacing';
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(dialog, background, theme.variable(surface-bright)),
+  shape: utils.module-val(dialog, shape, shape.variable(medium)),
+  elevation: utils.module-val(dialog, elevation, elevation.value(24)),
+  padding: utils.module-val(dialog, padding, 0),
+  width: utils.module-val(dialog, width, fit-content),
+  height: utils.module-val(dialog, height, fit-content),
+  min-width: utils.module-val(dialog, min-width, 0),
+  max-width: utils.module-val(dialog, max-width, calc(100% - #{spacing.variable(xxlarge)})),
+  min-height: utils.module-val(dialog, min-height, 0),
+  max-height: utils.module-val(dialog, max-height, calc(100% - #{spacing.variable(xxlarge)})),
+  z-index: utils.module-val(dialog, z-index, elevation.z-index-variable(dialog)),
+
+  // Animation
+  animation-duration: utils.module-val(dialog, animation-duration, animation.variable(duration-short3)),
+  animation-easing: utils.module-val(dialog, animation-easing, animation.variable(easing-decelerate)),
+
+  // Backdrop
+  backdrop-opacity: utils.module-val(dialog, backdrop-opacity, theme.emphasis(medium-low)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

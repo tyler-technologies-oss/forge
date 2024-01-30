@@ -1,7 +1,10 @@
 <template>
-  <div class="forge-dialog" part="root">
-    <div class="forge-dialog__surface" part="surface">
-      <slot></slot>
+  <dialog role="presentation" class="forge-dialog" part="root">
+    <div class="container" part="container">
+      <forge-backdrop exportparts="root:backdrop"></forge-backdrop>
+      <div class="surface" part="surface">
+        <slot></slot>
+      </div>
     </div>
-  </div>
+  </dialog>
 </template>

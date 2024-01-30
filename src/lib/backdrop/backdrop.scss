@@ -1,15 +1,12 @@
-@use 'sass:map';
-@use './mixins';
-@use '../theme';
-
-@include mixins.core-styles;
+@use './core' as *;
+@use './animations';
 
 :host {
-  display: block;
+  display: contents;
 }
 
 :host([hidden]) {
-  display: none;
+  display: flex;
 }
 
 :host([fixed]) {
@@ -18,10 +15,22 @@
   }
 }
 
-:host([appearance='light']) {
-  --forge-backdrop-theme-background: #{map.get(map.get(theme.$text-colors, light), secondary-alternative)};
+.forge-backdrop {
+  @include tokens;
 }
 
-:host([appearance='dark']) {
-  --forge-backdrop-theme-background: #{map.get(map.get(theme.$text-colors, dark), secondary)};
+.forge-backdrop {
+  @include base;
+}
+
+:host([state=exit]) {
+  .forge-backdrop {
+    @include exit;
+  }
+}
+
+:host([state=enter]) {
+  .forge-backdrop {
+    @include enter;
+  }
 }

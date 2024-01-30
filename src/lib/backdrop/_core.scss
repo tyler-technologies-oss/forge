@@ -1,0 +1,43 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  
+}
+
+@mixin base {
+  z-index: #{token(z-index)};
+  background: #{token(background)};
+  position: absolute;
+  inset: 0;
+  opacity: #{token(opacity)};
+  // transition: opacity #{token(transition-duration)} #{token(transition-easing)};
+}
+
+@mixin exit {
+  animation: exit #{token(transition-duration)} #{token(transition-easing)} forwards;
+}
+
+@mixin enter {
+  animation: visible #{token(transition-duration)} #{token(transition-easing)} forwards;
+}
+
+@keyframes exit {
+  0% {
+    opacity: #{token(opacity)};
+  }
+  100% {
+    opacity: 0;
+  }
+
+}
+
+@keyframes visible {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: #{token(opacity)};
+  }
+}
