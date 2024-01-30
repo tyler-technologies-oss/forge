@@ -14,8 +14,6 @@
 @use '../badge/variables' as badge-variables;
 @use '../banner/mixins' as banner-mixins;
 @use '../banner/variables' as banner-variables;
-@use '../inline-message/mixins' as inline-message-mixins;
-@use '../inline-message/variables' as inline-message-variables;
 @use '../table/mixins' as table-mixins;
 @use '../table/variables' as table-variables;
 
@@ -23,23 +21,25 @@
 /// Provides the CSS custom property definitions for the default Forge dark theme.
 ///
 @mixin theme-properties {
-  /// Global Forge theme properties
+  // Global theme properties
   @include theme.properties-dark;
 
-  /// Component-specific Forge theme properties
+  // Popover
   @include popover.provide-theme((
     border-width: border.variable(thin) // Popovers use thin borders in dark theme to increase contrast
   ));
+
+  // Tooltip
   @include tooltip.provide-theme((
     background: theme.variable(surface-bright),
     color: theme.variable(text-high),
     border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
   ));
+
   @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);
   @include skeleton-mixins.provide-theme(skeleton-variables.$theme-values-dark);
   @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);
   @include table-mixins.provide-theme(table-variables.$theme-values-dark);
   @include badge-mixins.provide-theme(badge-variables.$theme-values-dark);
   @include banner-mixins.provide-theme(banner-variables.$theme-values-dark);
-  @include inline-message-mixins.provide-theme(inline-message-variables.$theme-values-dark);
 }
