@@ -1,0 +1,51 @@
+@use './token-utils' as *;
+@forward './token-utils';
+
+@mixin host() {
+  display: grid;
+  height: #{token(height)};
+}
+
+@mixin base() {
+  display: flex;
+  flex-direction: column;
+  gap: #{token(gap)};
+  height: #{token(height)};
+  width: 100%;
+
+  ::slotted(*) {
+    flex: #{token(stretch)};
+  }
+}
+
+@mixin inline() {
+  flex-direction: row;
+}
+
+@mixin wrap() {
+  flex-wrap: wrap;
+}
+
+@mixin justify-start() {
+  justify-content: start;
+}
+
+@mixin justify-center() {
+  justify-content: center;
+}
+
+@mixin justify-end() {
+  justify-content: end;
+}
+
+@mixin align-start() {
+  align-items: start;
+}
+
+@mixin align-center() {
+  align-items: center;
+}
+
+@mixin align-end() {
+  align-items: end;
+}

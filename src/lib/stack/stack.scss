@@ -1,44 +1,74 @@
-@use './mixins';
-@include mixins.core-styles;
+@use './core' as *;
 
 :host {
-  display: block;
+  @include host;
+  @include tokens;
+}
+
+.forge-stack {
+  @include base;
+  @include tokens;
 }
 
 :host([inline]) {
   .forge-stack {
-    @include mixins.inline;
+    @include inline;
+    @include override(height, fit-content, value);
   }
 }
 
 :host([inline][wrap]) {
   .forge-stack {
-    @include mixins.wrap;
+    @include wrap;
   }
 }
 
-:host([stretch]:not([inline])) {
-  height: 100%;
-}
+:host(:not([inline])) {
+  @include override(height, 100%, value);
 
-:host([stretch]) {
-  --forge-stack-stretch: 1;
-}
-
-:host([alignment=start]) {
   .forge-stack {
-    @include mixins.justify-start;
+    @include override(height, 100%, value);
   }
 }
 
-:host([alignment=center]) {
-  .forge-stack {
-    @include mixins.justify-center;
+:host([stretch]) {  
+  ::slotted(*) {
+    @include override(stretch, 1, value);
   }
 }
 
-:host([alignment=end]) {
+:host([alignment=start]:not([inline])) {
   .forge-stack {
-    @include mixins.justify-end;
+    @include justify-start;
+  }
+}
+
+:host([alignment=center]:not([inline])) {
+  .forge-stack {
+    @include justify-center;
+  }
+}
+
+:host([alignment=end]:not([inline])) {
+  .forge-stack {
+    @include justify-end;
+  }
+}
+
+:host([inline][alignment=start]) {
+  .forge-stack {
+    @include align-start;
+  }
+}
+
+:host([inline][alignment=center]) {
+  .forge-stack {
+    @include align-center;
+  }
+}
+
+:host([inline][alignment=end]) {
+  .forge-stack {
+    @include align-end;
   }
 }
