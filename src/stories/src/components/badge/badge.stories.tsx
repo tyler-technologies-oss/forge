@@ -21,75 +21,67 @@ export default {
 
 export const Default: Story<IBadgeProps> = ({
   text = '',
-  open = true,
+  hide = false,
   strong = false,
   dot = false,
-  positioned = false,
   theme = 'default',
-  hasLeadingIcon = false,
-  hasTrailingIcon = false
+  hasStartIcon = false,
+  hasEndIcon = false
 }) => {
   useEffect(() => {
     IconRegistry.define([tylIconFace, tylIconStar]);
   }, []);
 
   return (
-    <ForgeBadge dot={dot} open={open} positioned={positioned} strong={strong} theme={theme}>
-      {hasLeadingIcon && <ForgeIcon slot="leading" name="face" />}
+    <ForgeBadge dot={dot} hide={hide} strong={strong} theme={theme}>
+      {hasStartIcon && <ForgeIcon slot="leading" name="face" />}
       <span>{text}</span>
-      {hasTrailingIcon && <ForgeIcon slot="trailing" name="star" />}
+      {hasEndIcon && <ForgeIcon slot="trailing" name="star" />}
     </ForgeBadge>
   )
 };
 Default.args = {
   dot: false,
-  open: true,
+  hide: false,
   theme: 'default',
-  positioned: false,
   strong: false,
-  text: 'Default',
-  hasLeadingIcon: false,
-  hasTrailingIcon: false
+  text: 'Status',
+  hasStartIcon: false,
+  hasEndIcon: false
 } as IBadgeProps;
 
 export const WithIconButton: Story<IBadgeProps> = ({
   text = '',
-  open = true,
+  hide = false,
   strong = false,
   dot = false,
-  positioned = false,
   theme = 'default',
-  hasLeadingIcon = false,
-  hasTrailingIcon = false
+  hasStartIcon = false,
+  hasEndIcon = false
 }) => {
   useEffect(() => {
     IconRegistry.define([tylIconFace, tylIconNotifications, tylIconStar]);
   }, []);
 
-  const demoIconButtonStyles = {
-    color: 'var(--mdc-theme-on-surface, #000000)',
-  };
-
   return (
-    <ForgeIconButton style={demoIconButtonStyles} className="forge-icon-button--with-badge">
+    <ForgeIconButton>
       <button type="button">
         <ForgeIcon name="notifications" />
       </button>
-      <ForgeBadge  dot={dot} open={open} positioned={positioned} strong={strong} theme={theme}>
-        {hasLeadingIcon && <ForgeIcon slot="leading" name="face" />}
+      <ForgeBadge  dot={dot} hide={hide} strong={strong} theme={theme}>
+        {hasStartIcon && <ForgeIcon slot="start" name="face" />}
         <span>{text}</span>
-        {hasTrailingIcon && <ForgeIcon slot="trailing" name="star" />}
+        {hasEndIcon && <ForgeIcon slot="end" name="star" />}
       </ForgeBadge>
     </ForgeIconButton>
   )
 };
 WithIconButton.args = {
   dot: false,
-  open: true,
+  hide: false,
   theme: 'default',
-  positioned: true,
   strong: false,
   text: '3',
-  hasLeadingIcon: false,
-  hasTrailingIcon: false
+  hasStartIcon: false,
+  hasEndIcon: false
 } as IBadgeProps;

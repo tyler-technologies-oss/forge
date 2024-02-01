@@ -47,6 +47,9 @@ export class CircularProgressFoundation implements ICircularProgressFoundation {
     return this._progress;
   }
   public set progress(value: number) {
+    if (isNaN(value)) {
+      value = 0;
+    }
     if (this._progress !== value) {
       this._progress = value;
       if (this._determinate) {
