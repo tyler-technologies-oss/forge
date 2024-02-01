@@ -1,0 +1,37 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../shape';
+@use '../../spacing';
+@use '../../border';
+@use '../../animation';
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(badge, background, theme.variable(secondary)),
+  color: utils.module-val(badge, color, theme.variable(on-secondary)),
+  shape: utils.module-val(badge, shape, shape.variable(full)),
+  height: utils.module-val(badge, height, 20px),
+  min-width: utils.module-val(badge, min-width, 0),
+  max-width: utils.module-val(badge, max-width, auto),
+  padding-inline: utils.module-val(badge, padding-inline, spacing.variable(xsmall)),
+  padding-block: utils.module-val(badge, padding-block, 0),
+  border-width: utils.module-val(badge, border-width, border.variable(thin)),
+  border-style: utils.module-val(badge, border-style, none),
+  border-color: utils.module-ref(badge, border-color, color),
+  gap: utils.module-val(badge, gap, spacing.variable(xsmall)),
+  font-weight: utils.module-val(badge, font-weight, bold),
+
+  // Dot
+  dot-size: utils.module-val(badge, dot-size, 8px),
+  dot-height: utils.module-ref(badge, dot-height, dot-size),
+  dot-width: utils.module-ref(badge, dot-width, dot-size),
+  dot-padding: utils.module-val(badge, dot-padding, 0),
+
+  // Transition
+  transition-duration: utils.module-val(badge, transition-duration, animation.variable(duration-short4)),
+  transition-easing: utils.module-val(badge, transition-easing, animation.variable(easing-decelerate)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

@@ -106,7 +106,7 @@ describe('BadgeComponent', function(this: ITestContext) {
       this.context.component.open = true;
 
       const theOpenAttributeIsDefined = this.context.component.getAttribute(
-        BADGE_CONSTANTS.attributes.OPEN
+        BADGE_CONSTANTS.attributes.HIDE
       );
 
       expect(theOpenAttributeIsDefined).not.toBeNull();
@@ -133,7 +133,7 @@ describe('BadgeComponent', function(this: ITestContext) {
       this.context.appendToFixture();
 
       const theOpenAttributeIsDefined = this.context.component.getAttribute(
-        BADGE_CONSTANTS.attributes.OPEN
+        BADGE_CONSTANTS.attributes.HIDE
       );
 
       expect(theOpenAttributeIsDefined).toBeNull();
@@ -155,10 +155,10 @@ describe('BadgeComponent', function(this: ITestContext) {
     const componentDefinedAttributes = BadgeComponent.observedAttributes;
 
     const openAttributeName = componentDefinedAttributes.find(
-      (a) => a === BADGE_CONSTANTS.attributes.OPEN
+      (a) => a === BADGE_CONSTANTS.attributes.HIDE
     );
 
-    expect(openAttributeName).toEqual(BADGE_CONSTANTS.attributes.OPEN);
+    expect(openAttributeName).toEqual(BADGE_CONSTANTS.attributes.HIDE);
   });
 
   describe('with non-observed attribute set', function(this: ITestContext) {

@@ -1,12 +1,11 @@
 export interface IBadgeProps {
   dot: boolean;
-  open: boolean;
+  hide: boolean;
   theme: string;
-  positioned: boolean;
   strong: boolean;
   text: string;
-  hasLeadingIcon: boolean;
-  hasTrailingIcon: boolean;
+  hasStartIcon: boolean;
+  hasEndIcon: boolean;
 }
 
 export const argTypes = {
@@ -17,9 +16,9 @@ export const argTypes = {
       category: 'Properties'
     },
   },
-  open: { 
+  hide: { 
     control: 'boolean',
-    description: 'Use open to show or hide the badge',
+    description: 'Use the visibility of the badge',
     table: {
       category: 'Properties'
     },
@@ -42,13 +41,6 @@ export const argTypes = {
       category: 'Attributes'
     },
   },
-  positioned: { 
-    control: 'boolean',
-    description: 'Use positioned to place the badge relative to an icon such as a notification icon',
-    table: {
-      category: 'Attributes'
-    },
-  },
   strong: { 
     control: 'boolean',
     description: 'Use muted badges by default. In cases where more visual emphasis is needed, use strong badges instead. In general, only pages where just a few badges are used should use the strong style.',
@@ -63,14 +55,14 @@ export const argTypes = {
       category: 'Slots'
     },
   },
-  hasLeadingIcon: { 
+  hasStartIcon: { 
     control: 'boolean',
     description: 'Use an icon to visually reinforce a badge\'s meaning.',
     table: {
       category: 'Slots'
     },
   },
-  hasTrailingIcon: { 
+  hasEndIcon: { 
     control: 'boolean',
     description: 'Use an icon to visually reinforce a badge\'s meaning.',
     table: {
