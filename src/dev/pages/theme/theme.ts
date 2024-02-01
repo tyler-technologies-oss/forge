@@ -43,44 +43,65 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
     header: 'Key colors',
     swatches: [
       { text: 'Primary', background: 'primary', foreground: 'on-primary' },
-      { text: 'Primary container', background: 'primary-container', foreground: 'on-primary-container' }
+      { text: 'Primary container (minimum)', background: 'primary-container-minimum', foreground: 'on-primary-container-minimum' },
+      { text: 'Primary container (low)', background: 'primary-container-low', foreground: 'on-primary-container-low' },
+      { text: 'Primary container', background: 'primary-container', foreground: 'on-primary-container' },
+      { text: 'Primary container (high)', background: 'primary-container-high', foreground: 'on-primary-container-high' }
     ]
   },
   {
     swatches: [
       { text: 'Secondary', background: 'secondary', foreground: 'on-secondary' },
-      { text: 'Secondary container', background: 'secondary-container', foreground: 'on-secondary-container' }
+      { text: 'Secondary container (minimum)', background: 'secondary-container-minimum', foreground: 'on-secondary-container-minimum' },
+      { text: 'Secondary container (low)', background: 'secondary-container-low', foreground: 'on-secondary-container-low'},
+      { text: 'Secondary container', background: 'secondary-container', foreground: 'on-secondary-container' },
+      { text: 'Secondary container (high)', background: 'secondary-container-high', foreground: 'on-secondary-container-high' }
     ]
   },
   {
     swatches: [
       { text: 'Tertiary', background: 'tertiary', foreground: 'on-tertiary' },
-      { text: 'Tertiary container', background: 'tertiary-container', foreground: 'on-tertiary-container' }
+      { text: 'Tertiary container (minimum)', background: 'tertiary-container-minimum', foreground: 'on-tertiary-container-minimum' },
+      { text: 'Tertiary container (low)', background: 'tertiary-container-low', foreground: 'on-tertiary-container-low' },
+      { text: 'Tertiary container', background: 'tertiary-container', foreground: 'on-tertiary-container' },
+      { text: 'Tertiary container (high)', background: 'tertiary-container-high', foreground: 'on-tertiary-container-high' }
     ]
   },
   {
     header: 'Status',
     swatches: [
       { text: 'Success', background: 'success', foreground: 'on-success' },
-      { text: 'Success container', background: 'success-container', foreground: 'on-success-container' }
+      { text: 'Success container (minimum)', background: 'success-container-minimum', foreground: 'on-success-container-minimum' },
+      { text: 'Success container (low)', background: 'success-container-low', foreground: 'on-success-container-low' },
+      { text: 'Success container', background: 'success-container', foreground: 'on-success-container' },
+      { text: 'Success container (high)', background: 'success-container-high', foreground: 'on-success-container-high' }
     ]
   },
   {
     swatches: [
       { text: 'Error ', background: 'error', foreground: 'on-error' },
-      { text: 'Error container', background: 'error-container', foreground: 'on-error-container' }
+      { text: 'Error container (minimum)', background: 'error-container-minimum', foreground: 'on-error-container-minimum' },
+      { text: 'Error container (low)', background: 'error-container-low', foreground: 'on-error-container-low' },
+      { text: 'Error container', background: 'error-container', foreground: 'on-error-container' },
+      { text: 'Error container (high)', background: 'error-container-high', foreground: 'on-error-container-high' }
     ]
   },
   {
     swatches: [
       { text: 'Warning', background: 'warning', foreground: 'on-warning' },
-      { text: 'Warning container', background: 'warning-container', foreground: 'on-warning-container' }
+      { text: 'Warning container (minimum)', background: 'warning-container-minimum', foreground: 'on-warning-container-minimum' },
+      { text: 'Warning container (low)', background: 'warning-container-low', foreground: 'on-warning-container-low' },
+      { text: 'Warning container', background: 'warning-container', foreground: 'on-warning-container' },
+      { text: 'Warning container (high)', background: 'warning-container-high', foreground: 'on-warning-container-high' }
     ]
   },
   {
     swatches: [
       { text: 'Info', background: 'info', foreground: 'on-info' },
-      { text: 'Info container', background: 'info-container', foreground: 'on-info-container' }
+      { text: 'Info container (minimum)', background: 'info-container-minimum', foreground: 'on-info-container-minimum' },
+      { text: 'Info container (low)', background: 'info-container-low', foreground: 'on-info-container-low' },
+      { text: 'Info container', background: 'info-container', foreground: 'on-info-container' },
+      { text: 'Info container (high)', background: 'info-container-high', foreground: 'on-info-container-high' }
     ]
   },
   {
