@@ -12,8 +12,8 @@ include('./src/partials/page.ejs', {
       { type: 'switch', label: 'Start slot', id: 'opt-start' },
       { type: 'switch', label: 'End slot', id: 'opt-end' },
       { type: 'switch', label: 'Accessory slot', id: 'opt-accessory' },
-      { type: 'switch', label: 'Helper text (start)', id: 'opt-helper-text-start'},
-      { type: 'switch', label: 'Helper text (end)', id: 'opt-helper-text-end'},
+      { type: 'switch', label: 'Support text (start)', id: 'opt-support-text-start'},
+      { type: 'switch', label: 'Support text (end)', id: 'opt-support-text-end'},
       {
           type: 'select',
           label: 'Density',
@@ -58,6 +58,17 @@ include('./src/partials/page.ejs', {
       },
       {
         type: 'select',
+        label: 'Shape',
+        id: 'opt-shape',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Squared', value: 'squared' },
+          { label: 'Rounded', value: 'rounded' }
+        ]
+      },
+      {
+        type: 'select',
         label: 'Label alignment',
         id: 'opt-label-alignment',
         defaultValue: 'default',
@@ -67,6 +78,18 @@ include('./src/partials/page.ejs', {
           { label: 'Start', value: 'start' },
           { label: 'End', value: 'end' },
           { label: 'Baseline', value: 'baseline' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Support text inset',
+        id: 'opt-support-text-inset',
+        defaultValue: 'none',
+        options: [
+          { label: 'None (default)', value: 'none' },
+          { label: 'Both', value: 'both' },
+          { label: 'Start', value: 'start' },
+          { label: 'End', value: 'end' }
         ]
       },
       {

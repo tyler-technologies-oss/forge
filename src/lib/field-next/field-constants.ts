@@ -12,10 +12,13 @@ const attributes = {
   DISABLED: 'disabled',
   VARIANT: 'variant',
   THEME: 'theme',
+  SHAPE: 'shape',
   DENSITY: 'density',
   DENSE: 'dense',
   POPOVER_ICON: 'popover-icon',
-  POPOVER_EXPANDED: 'popover-expanded'
+  POPOVER_EXPANDED: 'popover-expanded',
+  MULTILINE: 'multiline',
+  SUPPORT_TEXT_INSET: 'support-text-inset'
 };
 
 const classes = {
@@ -23,8 +26,9 @@ const classes = {
   HAS_START: 'forge-field--has-start',
   HAS_END: 'forge-field--has-end',
   HAS_ACCESSORY: 'forge-field--has-accessory',
-  HAS_HELPER_START: 'forge-field--has-helper-start',
-  HAS_HELPER_END: 'forge-field--has-helper-end'
+  HAS_SUPPORT_START: 'forge-field--has-support-text-start',
+  HAS_SUPPORT_END: 'forge-field--has-support-text-end',
+  RESIZE_CONTAINER: 'resize-container'
 };
 
 const selectors = {
@@ -34,9 +38,10 @@ const selectors = {
   START_SLOT: 'slot[name=start]',
   END_SLOT: 'slot[name=end]',
   ACCESSORY_SLOT: 'slot[name=accessory]',
-  HELPER_START_SLOT: 'slot[name=helper-text-start]',
-  HELPER_END_SLOT: 'slot[name=helper-text-end]',
-  POPOVER_ICON: '#popover-icon'
+  SUPPORT_START_SLOT: 'slot[name=support-text-start]',
+  SUPPORT_END_SLOT: 'slot[name=support-text-end]',
+  POPOVER_ICON: '#popover-icon',
+  RESIZE_CONTAINER: `.${classes.RESIZE_CONTAINER}`
 };
 
 const events = {
@@ -46,9 +51,15 @@ const events = {
 const defaults = {
   DEFAULT_VARIANT: 'outlined' as FieldVariant,
   DEFAULT_THEME: 'default' as FieldTheme,
+  DEFAUL_SHAPE: 'default' as FieldShape,
   DEFAULT_DENSITY: 'medium' as FieldDensity,
-  DEFAULT_LABEL_POSITION: 'inline-start' as FieldLabelPosition,
-  DEFAULT_LABEL_ALIGNMENT: 'default' as FieldLabelAlignment
+  DEFAULT_LABEL_POSITION: 'inset' as FieldLabelPosition,
+  DEFAULT_LABEL_ALIGNMENT: 'default' as FieldLabelAlignment,
+  DEFAULT_SUPPORT_TEXT_INSET: 'none' as FieldSupportTextInset
+};
+
+const animations = {
+  FLOATING_INPUT: 'floating-input-animation'
 };
 
 export const FIELD_CONSTANTS = {
@@ -57,12 +68,15 @@ export const FIELD_CONSTANTS = {
   classes,
   selectors,
   events,
-  defaults
+  defaults,
+  animations
 };
 
 export type FieldVariant = 'plain' | 'outlined' | 'tonal' | 'filled' | 'raised';
 export type FieldTheme = Theme | 'default';
+export type FieldShape = 'default' | 'rounded' | 'squared';
 export type FieldDensity = Density | 'extra-small' | 'extra-large';
 export type FieldLabelPosition = 'inline-start' | 'inline-end' | 'block-start' | 'inset' | 'none';
 export type FieldLabelAlignment = 'default' | 'centered' | 'baseline' | 'start' | 'end';
-export type FieldSlot = 'start' | 'end' | 'accessory' | 'helper-start' | 'helper-end';
+export type FieldSupportTextInset = 'start' | 'end' | 'both' | 'none';
+export type FieldSlot = 'start' | 'end' | 'accessory' | 'support-start' | 'support-end';

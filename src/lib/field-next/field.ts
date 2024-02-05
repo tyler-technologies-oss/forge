@@ -2,7 +2,7 @@ import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty 
 import { BaseComponent, IBaseComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator';
 import { FieldAdapter } from './field-adapter';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
 import { FieldFoundation } from './field-foundation';
 
 import template from './field.html';
@@ -18,10 +18,13 @@ export interface IFieldComponent extends IBaseComponent {
   disabled: boolean;
   variant: FieldVariant;
   theme: FieldTheme;
+  shape: FieldShape;
   density: FieldDensity;
   dense: boolean;
   popoverIcon: boolean;
   popoverExpanded: boolean;
+  multiline: boolean;
+  supportTextInset: FieldSupportTextInset;
 }
 
 declare global {
@@ -75,10 +78,13 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       FIELD_CONSTANTS.attributes.DISABLED,
       FIELD_CONSTANTS.attributes.VARIANT,
       FIELD_CONSTANTS.attributes.THEME,
+      FIELD_CONSTANTS.attributes.SHAPE,
       FIELD_CONSTANTS.attributes.DENSITY,
       FIELD_CONSTANTS.attributes.DENSE,
       FIELD_CONSTANTS.attributes.POPOVER_ICON,
-      FIELD_CONSTANTS.attributes.POPOVER_EXPANDED
+      FIELD_CONSTANTS.attributes.POPOVER_EXPANDED,
+      FIELD_CONSTANTS.attributes.MULTILINE,
+      FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET
     ];
   }
 
@@ -123,6 +129,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       case FIELD_CONSTANTS.attributes.THEME:
         this.theme = newValue as FieldTheme;
         break;
+      case FIELD_CONSTANTS.attributes.SHAPE:
+        this.shape = newValue as FieldShape;
+        break;
       case FIELD_CONSTANTS.attributes.DENSITY:
         this.density = newValue as FieldDensity;
         break;
@@ -134,6 +143,12 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
         break;
       case FIELD_CONSTANTS.attributes.POPOVER_EXPANDED:
         this.popoverExpanded = coerceBoolean(newValue);
+        break;
+      case FIELD_CONSTANTS.attributes.MULTILINE:
+        this.multiline = coerceBoolean(newValue);
+        break;
+      case FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET:
+        this.supportTextInset = newValue as FieldSupportTextInset;
         break;
     }
   }
@@ -166,6 +181,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
   public declare theme: FieldTheme;
 
   @FoundationProperty()
+  public declare shape: FieldShape;
+
+  @FoundationProperty()
   public declare density: FieldDensity;
 
   @FoundationProperty()
@@ -176,4 +194,10 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
 
   @FoundationProperty()
   public declare popoverExpanded: boolean;
+
+  @FoundationProperty()
+  public declare multiline: boolean;
+
+  @FoundationProperty()
+  public declare supportTextInset: FieldSupportTextInset;
 }

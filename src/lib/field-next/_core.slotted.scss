@@ -1,0 +1,26 @@
+@use './token-utils' as *;
+
+@mixin default-slot-content {
+  box-sizing: border-box;
+
+  margin: 0;
+
+  outline: none;
+  border: none;
+
+  background-color: transparent;
+
+  padding-block: 0;
+  padding-inline-start: #{token(main-content-padding-start, custom)};
+  padding-inline-end: #{token(main-content-padding-end, custom)};
+
+  inline-size: 100%;
+  block-size: 100%;
+
+  color: inherit;
+  font: inherit;
+}
+
+@mixin default-slot-textarea {
+  resize: none;
+}

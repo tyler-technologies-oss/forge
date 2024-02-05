@@ -1,5 +1,7 @@
 import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
+import { unwrapElements, wrapElements } from '../core';
 import { BaseAdapter, IBaseAdapter } from '../core/base';
+import { FOCUS_INDICATOR_CONSTANTS } from '../focus-indicator';
 import { IFieldComponent } from './field';
 import { FieldLabelPosition, FieldSlot, FIELD_CONSTANTS } from './field-constants';
 
@@ -7,6 +9,8 @@ export interface IFieldAdapter extends IBaseAdapter {
   addSlotChangeListener(slotName: FieldSlot, listener: () => void): void;
   addPopoverIconClickListener(listener: () => void): void;
   removePopoverIconClickListener(listener: () => void): void;
+  attachResizeContainer(): void;
+  removeResizeContainer(): void;
   setLabelPosition(value: FieldLabelPosition): void;
   setFloatingLabel(value: boolean): void;
   handleSlotChange(slotName: FieldSlot): void;
@@ -19,9 +23,13 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   private readonly _startSlotElement: HTMLSlotElement;
   private readonly _endSlotElement: HTMLSlotElement;
   private readonly _accessorySlotElement: HTMLSlotElement;
-  private readonly _helperStartSlotElement: HTMLSlotElement;
-  private readonly _helperEndSlotElement: HTMLSlotElement;
+  private readonly _supportStartSlotElement: HTMLSlotElement;
+  private readonly _supportEndSlotElement: HTMLSlotElement;
   private readonly _popoverIconElement: HTMLElement;
+
+  private get _resizeContainerElement(): HTMLElement | null {
+    return this._containerElement.querySelector(FIELD_CONSTANTS.selectors.RESIZE_CONTAINER) as HTMLElement | null;
+  }
 
   constructor(component: IFieldComponent) {
     super(component);
@@ -32,8 +40,8 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._startSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.START_SLOT) as HTMLSlotElement;
     this._endSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;
     this._accessorySlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.ACCESSORY_SLOT) as HTMLSlotElement;
-    this._helperStartSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.HELPER_START_SLOT) as HTMLSlotElement;
-    this._helperEndSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.HELPER_END_SLOT) as HTMLSlotElement;
+    this._supportStartSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.SUPPORT_START_SLOT) as HTMLSlotElement;
+    this._supportEndSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.SUPPORT_END_SLOT) as HTMLSlotElement;
     this._popoverIconElement = getShadowElement(component, FIELD_CONSTANTS.selectors.POPOVER_ICON);
   }
 
@@ -48,11 +56,11 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
       case 'accessory':
         this._accessorySlotElement.addEventListener('slotchange', listener);
         break;
-      case 'helper-start':
-        this._helperStartSlotElement.addEventListener('slotchange', listener);
+      case 'support-start':
+        this._supportStartSlotElement.addEventListener('slotchange', listener);
         break;
-      case 'helper-end':
-        this._helperEndSlotElement.addEventListener('slotchange', listener);
+      case 'support-end':
+        this._supportEndSlotElement.addEventListener('slotchange', listener);
         break;
     }
   }
@@ -66,6 +74,33 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   }
 
   /**
+   * Wraps the container's children in a resizable div.
+   */
+  public attachResizeContainer(): void {
+    // Return if a resize container is already attached
+    if (this._resizeContainerElement) {
+      return;
+    }
+
+    const resizeContainer = document.createElement('div');
+    resizeContainer.classList.add(FIELD_CONSTANTS.classes.RESIZE_CONTAINER);
+
+    const childElements = Array.from(this._containerElement.children) as HTMLElement[];
+    wrapElements(childElements, resizeContainer, [FOCUS_INDICATOR_CONSTANTS.elementName]);
+  }
+
+  /**
+   * Removes the resize container while retaining its children as direct children of the container.
+   */
+  public removeResizeContainer(): void {
+    const resizeContainerElement = this._resizeContainerElement;
+
+    if (resizeContainerElement) {
+      unwrapElements(resizeContainerElement);
+    }
+  }
+
+  /**
    * Moves the label to the start or end of the root element, ensuring that the DOM order matches
    * the visual order.
    */
@@ -75,6 +110,12 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     if (value === 'inline-end') {
       this._rootElement.append(this._labelElement);
     } else if (value === 'inset') {
+      const resizeContainerElement = this._resizeContainerElement;
+
+      if (resizeContainerElement) {
+        resizeContainerElement.prepend(this._labelElement);
+        return;
+      }
       this._containerElement.prepend(this._labelElement);
     } else {
       this._rootElement.prepend(this._labelElement);
@@ -86,9 +127,14 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
    */
   public setFloatingLabel(value: boolean): void {
     if (value) {
-      this._rootElement.addEventListener('animationend', () => {
-        addClass(FIELD_CONSTANTS.classes.FLOATING, this._rootElement);
-      }, { once: true });
+      const animationEndListener: EventListener = (evt: AnimationEvent) => {
+        if (evt.animationName === FIELD_CONSTANTS.animations.FLOATING_INPUT) {
+          addClass(FIELD_CONSTANTS.classes.FLOATING, this._rootElement);
+          this._rootElement.removeEventListener('animationend', animationEndListener);
+        }
+      };
+
+      this._rootElement.addEventListener('animationend', animationEndListener);
       return;
     }
 
@@ -110,11 +156,11 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
       case 'accessory':
         toggleClass(this._rootElement, !!this._accessorySlotElement.assignedNodes().length, FIELD_CONSTANTS.classes.HAS_ACCESSORY);
         break;
-      case 'helper-start':
-        toggleClass(this._rootElement, !!this._helperStartSlotElement.assignedNodes().length, FIELD_CONSTANTS.classes.HAS_HELPER_START);
+      case 'support-start':
+        toggleClass(this._rootElement, !!this._supportStartSlotElement.assignedNodes().length, FIELD_CONSTANTS.classes.HAS_SUPPORT_START);
         break;
-      case 'helper-end':
-        toggleClass(this._rootElement, !!this._helperEndSlotElement.assignedNodes().length, FIELD_CONSTANTS.classes.HAS_HELPER_END);
+      case 'support-end':
+        toggleClass(this._rootElement, !!this._supportEndSlotElement.assignedNodes().length, FIELD_CONSTANTS.classes.HAS_SUPPORT_END);
         break;
     }
   }

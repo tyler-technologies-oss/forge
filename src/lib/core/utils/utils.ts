@@ -237,3 +237,44 @@ export function replaceElement<T extends HTMLElement>(oldElement: HTMLElement, n
 export function coerceStringToArray<T extends string>(value: string, separator = ','): T[] {
   return value.split(separator).map(p => p.trim()) as T[];
 }
+
+/**
+ * Wraps an array of elements in a new element.
+ * @param elements The elements to wrap.
+ * @param wrapper The new wrapper element.
+ */
+export function wrapElements(elements: HTMLElement[], wrapper: HTMLElement, exclude?: string[]): void {
+  if (!elements.length) {
+    return;
+  }
+
+  const parentNode = elements[0].parentNode;
+  if (!parentNode) {
+    return;
+  }
+
+  parentNode.insertBefore(wrapper, elements[0]);
+  elements.forEach(el => {
+    if (exclude?.length && exclude.some(ex => el.matches(ex))) {
+      return;
+    }
+    wrapper.append(el);
+  });
+}
+
+/**
+ * Unwraps an element by moving its children to its parent and removing the element.
+ * @param wrapper The element to unwrap.
+ */
+export function unwrapElements(wrapper: HTMLElement): void {
+  const parentNode = wrapper.parentNode;
+  if (!parentNode) {
+    return;
+  }
+
+  while (wrapper.firstChild) {
+    parentNode.insertBefore(wrapper.firstChild, wrapper);
+  }
+
+  wrapper.remove();
+}

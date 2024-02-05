@@ -7,16 +7,39 @@
 @use '../../utils';
 
 $tokens: (
-  text-color: utils.module-val(field, text-color, theme.variable(text-high)),
   display: utils.module-val(field, display, block),
+  text-color: utils.module-val(field, text-color, theme.variable(text-high)),
 
-  // Layout
-  inline-gap: utils.module-val(field, inline-gap, 8px),
-  block-gap: utils.module-val(field, block-gap, 2px),
-  justify: utils.module-val(field, justify, space-between),
+  // Spacing (label)
+  label-margin-inline: utils.module-val(field, label-margin-inline, 8px),
+  label-margin-block: utils.module-val(field, label-margin-block, 2px),
+  label-gap: utils.module-val(field, label-gap, 0.25em),
 
-  // Padding
-  padding-inline: utils.module-val(field, padding-inline, 12px),
+  // Spacing (container)
+  container-padding: utils.module-val(field, container-padding, 12px),
+  container-padding-start: utils.module-ref(field, container-padding-start, container-padding),
+  container-padding-end: utils.module-ref(field, container-padding-end, container-padding),
+  container-gap: utils.module-val(field, container-gap, 8px),
+  start-padding-end: utils.module-ref(field, start-padding-end, container-gap),
+  end-padding-start: utils.module-ref(field, end-padding-start, container-gap),
+  end-padding-end: utils.module-ref(field, end-padding-end, container-gap),
+  popover-icon-padding-start: utils.module-ref(field, popover-icon-padding-start, container-gap),
+  popover-icon-padding-end: utils.module-ref(field, popover-icon-padding-end, container-gap),
+  accessory-padding: utils.module-ref(field, accessory-padding, container-gap),
+  accessory-padding-start: utils.module-ref(field, accessory-padding-start, accessory-padding),
+  accessory-padding-end: utils.module-ref(field, accessory-padding-end, accessory-padding),
+
+  // Spacing (support text)
+  support-text-padding-block: utils.module-val(field, support-text-padding-block, 2px),
+  support-text-gap: utils.module-val(field, support-text-gap, 8px),
+  support-text-padding-inline: utils.module-ref(field, support-text-padding-inline, container-padding),
+  support-text-padding-inline-start: utils.module-ref(field, support-text-padding-inline-start, support-text-padding-inline),
+  support-text-padding-inline-end: utils.module-ref(field, support-text-padding-inline-end, support-text-padding-inline),
+
+  // Spacing (pill)
+  pill-container-padding: utils.module-val(field, pill-container-padding, 16px),
+  pill-container-padding-start: utils.module-ref(field, pill-container-padding-start, pill-container-padding),
+  pill-container-padding-end: utils.module-ref(field, pill-container-padding-end, pill-container-padding),
   
   // Sizes
   height-extra-small: utils.module-val(field, height-extra-small, 24px),
@@ -26,23 +49,11 @@ $tokens: (
   height-extra-large: utils.module-val(field, height-extra-large, 56px),
   
   // Inset sizes
-  inset-height-extra-small: utils.module-ref(field, inset-height-extra-small, inset-height-medium),
-  inset-height-small: utils.module-ref(field, inset-height-small, inset-height-medium),
+  inset-height-extra-small: utils.module-ref(field, inset-height-extra-small, inset-height-small),
+  inset-height-small: utils.module-val(field, inset-height-small, 40px),
   inset-height-medium: utils.module-val(field, inset-height-medium, 48px),
   inset-height-large: utils.module-val(field, inset-height-large, 56px),
   inset-height-extra-large: utils.module-val(field, inset-height-extra-large, 64px),
-
-  // Inset padding
-  inset-padding-block-extra-small: utils.module-ref(field, inset-padding-block-extra-small, inset-padding-block-medium),
-  inset-padding-block-small: utils.module-ref(field, inset-padding-block-small, inset-padding-block-medium),
-  inset-padding-block-medium: utils.module-val(field, inset-padding-block-medium, 4px),
-  inset-padding-block-large: utils.module-val(field, inset-padding-block-large, 8px),
-  inset-padding-block-extra-large: utils.module-val(field, inset-padding-block-extra-large, 12px),
-  inset-label-padding-block-extra-small: utils.module-ref(field, inset-label-padding-block-extra-small, inset-padding-block-extra-small),
-  inset-label-padding-block-small: utils.module-ref(field, inset-label-padding-block-small, inset-padding-block-small),
-  inset-label-padding-block-medium: utils.module-ref(field, inset-label-padding-block-medium, inset-padding-block),
-  inset-label-padding-block-large: utils.module-ref(field, inset-label-padding-block-large, inset-padding-block-large),
-  inset-label-padding-block-extra-large: utils.module-ref(field, inset-label-padding-block-extra-large, inset-padding-block-extra-large),
   
   // Border
   shape: utils.module-val(field, shape, shape.variable(medium)),
@@ -50,13 +61,11 @@ $tokens: (
   border-width: utils.module-val(field, border-width, border.variable(thin)),
   border-color: utils.module-val(field, border-color, theme.variable(outline-medium)),
   tonal-inner-border-color: utils.module-val(field, tonal-inner-border-color, theme.variable(outline-low)),
+  inner-border-block-size: utils.module-val(field, inner-border-block-size, calc(100% - 8px)),
 
   // Label
   label-color: utils.module-val(field, label-color, theme.variable(text-high)),
   inset-label-color: utils.module-val(field, inset-label-color, theme.variable(text-medium)),
-  inner-label-gap: utils.module-val(field, inner-label-gap, 0.25em),
-  label-margin-inline: utils.module-val(field, label-margin-inline, 8px),
-  label-margin-block: utils.module-val(field, label-margin-block, 2px),
 
   // Hover
   hover-border-style: utils.module-ref(field, hover-border-style, border-style),
@@ -74,6 +83,9 @@ $tokens: (
   invalid-on-surface-color: utils.module-val(field, invalid-on-surface-color, theme.variable(on-error-container-low)),
   invalid-inset-label-on-surface-color: utils.module-ref(field, invalid-inset-label-on-surface-color, invalid-on-surface-color),
   invalid-hover-border-color: utils.module-val(field, invalid-hover-border-color, theme.variable(error-container-high)),
+
+  // Plain
+  plain-container-padding: utils.module-val(field, plain-container-padding, 0),
 
   // Tonal
   tonal-surface: utils.module-val(field, tonal-surface, theme.variable(surface-container-low)),
@@ -100,6 +112,13 @@ $tokens: (
   popover-icon-transition-duration: utils.module-val(field, popover-icon-transition-duration, animation.variable(duration-short3)),
   popover-icon-transition-timing: utils.module-val(field, popover-icon-transition-timing, animation.variable(easing-standard)),
   popover-icon-open-rotation: utils.module-val(field, popover-icon-open-rotation, 180deg),
+
+  // Multiline
+  multiline-resize: utils.module-val(field, multiline-resize, vertical),
+  multiline-min-inline-size: utils.module-val(field, multiline-min-inline-size, initial),
+  multiline-max-inline-size: utils.module-val(field, multiline-max-inline-size, initial),
+  multiline-min-block-size: utils.module-val(field, multiline-min-block-size, initial),
+  multiline-max-block-size: utils.module-val(field, multiline-max-block-size, initial),
 
   // Disabled
   disabled-opacity: utils.module-val(field, disabled-opacity, theme.emphasis(medium-low)),

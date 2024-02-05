@@ -1,7 +1,7 @@
 import '$src/shared';
 import { Density, IIconComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/field-next';
-import { FieldLabelAlignment, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field-next';
+import { FieldLabelAlignment, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field-next';
 import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/label';
 import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
@@ -19,16 +19,19 @@ const denseSwitch = document.getElementById('opt-dense') as ISwitchComponent;
 const startSwitch = document.getElementById('opt-start') as ISwitchComponent;
 const endSwitch = document.getElementById('opt-end') as ISwitchComponent;
 const accessorySwitch = document.getElementById('opt-accessory') as ISwitchComponent;
-const helperTextStartSwitch = document.getElementById('opt-helper-text-start') as ISwitchComponent;
-const helperTextEndSwitch = document.getElementById('opt-helper-text-end') as ISwitchComponent;
+const supportTextStartSwitch = document.getElementById('opt-support-text-start') as ISwitchComponent;
+const supportTextEndSwitch = document.getElementById('opt-support-text-end') as ISwitchComponent;
 const densitySelect = document.getElementById('opt-density') as ISelectComponent;
 const variantSelect = document.getElementById('opt-variant') as ISelectComponent;
 const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
+const shapeSelect = document.getElementById('opt-shape') as ISelectComponent;
 const labelAlignmentSelect = document.getElementById('opt-label-alignment') as ISelectComponent;
+const supportTextInsetSelect = document.getElementById('opt-support-text-inset') as ISelectComponent;
 const popoverSelect = document.getElementById('opt-popover') as ISelectComponent;
 
 const fields = document.querySelectorAll('forge-field') as NodeListOf<IFieldComponent>;
-const insetField = document.getElementById('inset-field') as IFieldComponent;
+const insetFields = document.querySelectorAll('forge-field:where([label-position=inset], :not([label-position]))') as NodeListOf<IFieldComponent>;
+const insetMultilineField = document.getElementById('inset-multiline-field') as IFieldComponent;
 
 requiredSwitch.addEventListener('forge-switch-change', () => {
   fields.forEach(field => field.required = requiredSwitch.on);
@@ -98,33 +101,33 @@ accessorySwitch.addEventListener('forge-switch-change', () => {
   }
 });
 
-helperTextStartSwitch.addEventListener('forge-switch-change', () => {
-  if (helperTextStartSwitch.on) {
+supportTextStartSwitch.addEventListener('forge-switch-change', () => {
+  if (supportTextStartSwitch.on) {
     fields.forEach(field => {
       const text = document.createElement('span');
-      text.slot = 'helper-text-start';
-      text.textContent = 'Helper text';
+      text.slot = 'support-text-start';
+      text.textContent = 'Support text';
       field.append(text);
     });
   } else {
     fields.forEach(field => {
-      const text = field.querySelector('span[slot=helper-text-start]');
+      const text = field.querySelector('span[slot=support-text-start]');
       text.remove();
     });
   }
 });
 
-helperTextEndSwitch.addEventListener('forge-switch-change', () => {
-  if (helperTextEndSwitch.on) {
+supportTextEndSwitch.addEventListener('forge-switch-change', () => {
+  if (supportTextEndSwitch.on) {
     fields.forEach(field => {
       const text = document.createElement('span');
-      text.slot = 'helper-text-end';
+      text.slot = 'support-text-end';
       text.textContent = '7/100';
       field.append(text);
     });
   } else {
     fields.forEach(field => {
-      const text = field.querySelector('span[slot=helper-text-end]');
+      const text = field.querySelector('span[slot=support-text-end]');
       text.remove();
     });
   }
@@ -142,8 +145,16 @@ themeSelect.addEventListener('change', () => {
   fields.forEach(field => field.theme = themeSelect.value as FieldTheme);
 });
 
+shapeSelect.addEventListener('change', () => {
+  fields.forEach(field => field.shape = shapeSelect.value as FieldShape);
+});
+
 labelAlignmentSelect.addEventListener('change', () => {
   fields.forEach(field => field.labelAlignment = labelAlignmentSelect.value as FieldLabelAlignment);
+});
+
+supportTextInsetSelect.addEventListener('change', () => {
+  fields.forEach(field => field.supportTextInset = supportTextInsetSelect.value as FieldSupportTextInset);
 });
 
 popoverSelect.addEventListener('change', () => {
@@ -153,8 +164,13 @@ popoverSelect.addEventListener('change', () => {
   });
 });
 
-insetField.addEventListener('input', (event: InputEvent) => insetField.floatLabel = !!(event.target as HTMLInputElement).value);
-insetField.floatLabel = !!insetField.querySelector('input').value;
+insetFields.forEach(field => {
+  field.addEventListener('input', (event: InputEvent) => field.floatLabel = !!(event.target as HTMLInputElement).value);
+  field.floatLabel = !!field.querySelector('input').value;
+});
+
+insetMultilineField.addEventListener('input', (event: InputEvent) => insetMultilineField.floatLabel = !!(event.target as HTMLTextAreaElement).value);
+insetMultilineField.floatLabel = !!insetMultilineField.querySelector('textarea').value;
 
 fields.forEach(field => {
   field.addEventListener('forge-field-popover-icon-click', () => console.log('popover icon clicked'));

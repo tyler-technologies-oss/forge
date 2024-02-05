@@ -2,25 +2,26 @@
 @use './token-utils' as *;
 
 //
-// Container variant
+// Root variant
 //
 
-@mixin container-variant($variant, $theme: primary) {
+@mixin variant($variant, $theme: primary) {
   @if $variant == plain {
-    @include container-plain($theme);
+    @include plain($theme);
   } @else if $variant == outlined {
-    @include container-outlined($theme);
+    @include outlined($theme);
   } @else if $variant == tonal {
-    @include container-tonal($theme);
+    @include tonal($theme);
   } @else if $variant == filled {
-    @include container-filled($theme);
+    @include filled($theme);
   } @else if $variant == raised {
-    @include container-raised($theme);
+    @include raised($theme);
   }
 }
 
-@mixin container-plain($theme: default) {
-  @include override('padding-inline', 0px, value);
+@mixin plain($theme: default) {
+  @include override('container-padding', 'plain-container-padding');
+  @include override('resize-container-inset-label-background', theme.variable(surface), value);
 
   @if $theme == default {
     @include text-color(token(text-color));
@@ -29,7 +30,9 @@
   }
 }
 
-@mixin container-outlined($theme: default) {
+@mixin outlined($theme: default) {
+  @include override('resize-container-inset-label-background', theme.variable(surface), value);
+
   @if $theme == default {
     @include text-color(token(text-color));
   } @else {
@@ -38,32 +41,38 @@
   }
 }
 
-@mixin container-tonal($theme: default) {
+@mixin tonal($theme: default) {
   @if $theme == default {
     @include override('inner-border-color', #{token(tonal-inner-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(tonal-surface)}, value);
     @include text-color(token(tonal-on-surface-color));
   } @else {
     @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-low), value);
     @include text-color(theme.variable(on-#{$theme}-container-low));
   }
 }
 
-@mixin container-filled($theme: default) {
+@mixin filled($theme: default) {
   @if $theme == default {
+    @include override('resize-container-inset-label-background', #{token(filled-surface)}, value);
     @include text-color(token(text-color));
     @include text-color(token(filled-on-surface-color));
   } @else {
     @include override('inner-border-color', theme.variable($theme), value);
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-low), value);
     @include text-color(theme.variable(on-#{$theme}-container-low));
   }
 }
 
-@mixin container-raised($theme: default) {
+@mixin raised($theme: default) {
   @if $theme == default {
     @include override('inner-border-color', #{token(tonal-inner-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(raised-surface)}, value);
     @include text-color(token(raised-on-surface-color));
   } @else {
     @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-low), value);
     @include text-color(theme.variable(on-#{$theme}-container-low));
   }
 }
@@ -205,6 +214,6 @@
       border-inline-start-style: none;
     }
   } @else if $variant == tonal or $variant == raised {
-    block-size: #{calc(100% - 8px)};
+    block-size: #{token(inner-border-block-size)};
   }
 }

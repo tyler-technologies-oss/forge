@@ -1,6 +1,6 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IFieldAdapter } from './field-adapter';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldSlot, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSlot, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
 
 export interface IFieldFoundation extends ICustomElementFoundation {
   labelPosition: FieldLabelPosition;
@@ -12,10 +12,13 @@ export interface IFieldFoundation extends ICustomElementFoundation {
   disabled: boolean;
   variant: FieldVariant;
   theme: FieldTheme;
+  shape: FieldShape;
   density: FieldDensity;
   dense: boolean;
   popoverIcon: boolean;
   popoverExpanded: boolean;
+  multiline: boolean;
+  supportTextInset: FieldSupportTextInset;
   initialize(): void;
 }
 
@@ -29,25 +32,28 @@ export class FieldFoundation implements IFieldFoundation {
   private _disabled = false;
   private _variant: FieldVariant = FIELD_CONSTANTS.defaults.DEFAULT_VARIANT;
   private _theme: FieldTheme = FIELD_CONSTANTS.defaults.DEFAULT_THEME;
+  private _shape: FieldShape = FIELD_CONSTANTS.defaults.DEFAUL_SHAPE;
   private _density: FieldDensity = FIELD_CONSTANTS.defaults.DEFAULT_DENSITY;
   private _dense = false;
   private _popoverIcon = false;
   private _popoverExpanded = false;
+  private _multiline = false;
+  private _supportTextInset: FieldSupportTextInset = FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
   private _isInitialized = false;
 
   private _startSlotListener: () => void;
   private _endSlotListener: () => void;
   private _accessorySlotListener: () => void;
-  private _helperStartSlotListener: () => void;
-  private _helperEndSlotListener: () => void;
+  private _supportStartSlotListener: () => void;
+  private _supportEndSlotListener: () => void;
   private _popoverIconClickListener: () => void;
 
   constructor(private _adapter: IFieldAdapter) {
     this._startSlotListener = () => this._onSlotChange('start');
     this._endSlotListener = () => this._onSlotChange('end');
     this._accessorySlotListener = () => this._onSlotChange('accessory');
-    this._helperStartSlotListener = () => this._onSlotChange('helper-start');
-    this._helperEndSlotListener = () => this._onSlotChange('helper-end');
+    this._supportStartSlotListener = () => this._onSlotChange('support-start');
+    this._supportEndSlotListener = () => this._onSlotChange('support-end');
     this._popoverIconClickListener = () => this._onPopoverIconClick();
   }
 
@@ -55,10 +61,14 @@ export class FieldFoundation implements IFieldFoundation {
     this._adapter.addSlotChangeListener('start', this._startSlotListener);
     this._adapter.addSlotChangeListener('end', this._endSlotListener);
     this._adapter.addSlotChangeListener('accessory', this._accessorySlotListener);
-    this._adapter.addSlotChangeListener('helper-start', this._helperStartSlotListener);
-    this._adapter.addSlotChangeListener('helper-end', this._helperEndSlotListener);
+    this._adapter.addSlotChangeListener('support-start', this._supportStartSlotListener);
+    this._adapter.addSlotChangeListener('support-end', this._supportEndSlotListener);
+    this._adapter.setLabelPosition(this._labelPosition);
     if (this._popoverIcon) {
       this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
+    }
+    if (this._multiline) {
+      this._adapter.attachResizeContainer();
     }
     this._isInitialized = true;
   }
@@ -78,7 +88,9 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._labelPosition !== value) {
       this._labelPosition = value;
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
-      this._adapter.setLabelPosition(this._labelPosition);
+      if (this._isInitialized) {
+        this._adapter.setLabelPosition(this._labelPosition);
+      }
     }
   }
 
@@ -163,6 +175,16 @@ export class FieldFoundation implements IFieldFoundation {
     }
   }
 
+  public get shape(): FieldShape {
+    return this._shape;
+  }
+  public set shape(value: FieldShape) {
+    if (this._shape !== value) {
+      this._shape = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SHAPE, this._shape);
+    }
+  }
+
   public get density(): FieldDensity {
     return this._density;
   }
@@ -211,6 +233,36 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._popoverExpanded !== value) {
       this._popoverExpanded = value;
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.POPOVER_EXPANDED, this._popoverExpanded);
+    }
+  }
+
+  public get multiline(): boolean {
+    return this._multiline;
+  }
+  public set multiline(value: boolean) {
+    if (this._multiline !== value) {
+      this._multiline = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.MULTILINE, this._multiline);
+
+      if (!this._isInitialized) {
+        return;
+      }
+
+      if (this._multiline) {
+        this._adapter.attachResizeContainer();
+      } else {
+        this._adapter.removeResizeContainer();
+      }
+    }
+  }
+
+  public get supportTextInset(): FieldSupportTextInset {
+    return this._supportTextInset;
+  }
+  public set supportTextInset(value: FieldSupportTextInset) {
+    if (this._supportTextInset !== value) {
+      this._supportTextInset = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET, this._supportTextInset);
     }
   }
 }

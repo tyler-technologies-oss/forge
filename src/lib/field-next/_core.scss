@@ -1,7 +1,8 @@
 @use '../core/styles/typography';
 @use './token-utils' as *;
-@forward './core.density';
 @forward './core.layout';
+@forward './core.shape';
+@forward './core.slotted';
 @forward './core.state';
 @forward './core.variant';
 
@@ -21,7 +22,8 @@ $host-tokens: [display];
 
 @mixin base {
   @include override('input-color', #{token(text-color)}, value);
-  @include override('inner-border-color', #{token(border-color)}, value);
+  @include override('main-content-padding-start', #{token(container-padding-start)}, value);
+  @include override('main-content-padding-end', #{token(container-padding-end)}, value);
 
   display: grid;
   position: relative;
@@ -34,36 +36,40 @@ $host-tokens: [display];
 @mixin container {
   @include typography.style(body2);
 
-  position: relative;
-  flex-grow: 1;
+  box-sizing: border-box;
+
+  grid-area: container;
   align-items: center;
 
-  display: grid;
-  grid-template-areas: 'start center end popover-icon accessory';
-  grid-template-columns: auto 1fr auto auto auto;
-  grid-area: container;
-  
+
   border-radius: #{token(shape)};
-  box-sizing: border-box;
-  block-size: #{token(container-block-size, custom)};
+
   inline-size: 100%;
+  block-size: #{token(container-block-size, custom)};
 }
 
 @mixin container-background {
-  content: '';
   position: absolute;
-  block-size: 100%;
-  inline-size: 100%;
-  transition-property: background, outline-color;
+
   transition-duration: #{token(animation-duration)};
+  transition-property: background, outline-color;
   transition-timing-function: #{token(animation-timing-function)};
-  border-radius: #{token(shape)};
+
+  border-radius: inherit;
+  
+  pointer-events: none;
+
+  inline-size: 100%;
+  block-size: 100%;
+
+  content: '';
 }
 
 @mixin input {
-  z-index: 2;
-
   grid-area: center;
+
+  // z-index is set to ensure the input is never rendered unclickable by the inset label
+  z-index: 9999;
 
   block-size: 100%;
   inline-size: 100%;
@@ -74,10 +80,10 @@ $host-tokens: [display];
 @mixin label {
   @include typography.style(label2);
 
-  position: relative;
-  gap: #{token(inner-label-gap)};
-
   display: inline-flex;
+  position: relative;
+
+  gap: #{token(label-gap)};
   grid-area: label;
 
   block-size: fit-content;
@@ -86,13 +92,13 @@ $host-tokens: [display];
 }
 
 @mixin label-before {
-  content: #{token(required-content)};
   color: #{token(required-color)};
+  content: #{token(required-content)};
 }
 
 @mixin label-after {
-  content: #{token(optional-content)};
   color: #{token(optional-color)};
+  content: #{token(optional-content)};
 }
 
 @mixin popover-icon {
@@ -103,7 +109,7 @@ $host-tokens: [display];
   grid-area: popover-icon;
 
   block-size: 100%;
-  padding-inline-end: 8px;
+  padding-inline-end: #{token(popover-icon-padding-end)};
 
   & > * {
     transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
@@ -114,34 +120,18 @@ $host-tokens: [display];
   fill: inherit;
 }
 
-@mixin slotted-input {
-  box-sizing: border-box;
-  outline: none;
-  width: 100%;
-  height: 100%;
-  border: none;
-  margin: 0;
-  padding-block: 0;
-  padding-inline: #{token(padding-inline)};
-
-  background-color: transparent;
-
-  font: inherit;
-  color: inherit;
-}
-
 @mixin start {
   display: flex;
   grid-area: start;
 
-  padding-inline-start: 8px;
+  padding-inline-start: #{token(container-padding-start)};
 }
 
 @mixin end {
   display: flex;
   grid-area: end;
 
-  padding-inline-end: 8px;
+  padding-inline-end: #{token(end-padding-end)};
 }
 
 @mixin accessory {
@@ -152,26 +142,48 @@ $host-tokens: [display];
   grid-area: accessory;
 
   block-size: 100%;
-  padding-inline-end: 8px;
+  padding-inline-end: #{token(accessory-padding-end)};
 
   &::before {
-    content: '';
-
-    block-size: 100%;
+    transition-duration: #{token(animation-duration)};
+    transition-property: border-color;
+    transition-timing-function: #{token(animation-timing-function)};
+    
     border-inline-start-style: #{token(border-style)};
     border-inline-start-width: #{token(border-width)};
     border-inline-start-color: #{token(inner-border-color, value)};
-    padding-inline-end: 8px;
 
-    transition-property: border-color;
-    transition-duration: #{token(animation-duration)};
-    transition-timing-function: #{token(animation-timing-function)};
+    padding-inline-end: #{token(accessory-padding-start)};
+    
+    block-size: 100%;
+
+    content: '';
   }
 }
 
-@mixin helper-text {
+@mixin support-text {
+  @include typography.style(label);
+
   justify-content: space-between;
 
-  display: flex;
-  grid-area: helper-text;
+  display: grid;
+  grid-template-areas: 'start end';
+  grid-template-columns: 1fr auto;
+  grid-area: support-text;
+
+  margin-block-start: #{token(support-text-padding-block)};
+}
+
+@mixin support-text-both {
+  gap: #{token(support-text-gap)};
+}
+
+@mixin support-text-start {
+  display: inline-block;
+  grid-area: start;
+}
+
+@mixin support-text-end {
+  display: inline-block;
+  grid-area: end;
 }

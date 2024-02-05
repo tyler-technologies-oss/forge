@@ -1,9 +1,0 @@
-@use './token-utils' as *;
-
-@mixin container-density($density, $inset: false) {
-  @if $inset {
-    block-size: #{token(inset-height-#{$density}, custom)};
-  } @else {
-    block-size: #{token(height-#{$density}, custom)};
-  }
-}

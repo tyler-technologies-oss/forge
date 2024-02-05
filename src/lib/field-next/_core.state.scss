@@ -9,6 +9,8 @@
 @mixin container-hover($variant, $theme: default) {
   @if $variant == outlined {
     @include container-outlined-hover($theme);
+  } @else if $variant == tonal {
+    @include container-tonal-hover($theme);
   } @else if $variant == filled {
     @include container-filled-hover($theme);
   }
@@ -19,6 +21,14 @@
     @include override('inner-border-color', #{token(hover-border-color)}, value);
   } @else {
     @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
+  }
+}
+
+@mixin container-tonal-hover($theme: default) {
+  @if $theme == default {
+    @include override('resize-container-inset-label-background', #{token(tonal-hover-color)}, value);
+  } @else {
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-minimum), value);
   }
 }
 
@@ -99,12 +109,15 @@
     @include variant.text-color(token(invalid-color));
   } @else if $variant == tonal {
     @include override('inner-border-color', #{token(invalid-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface)}, value);
     @include variant.text-color(token(invalid-on-surface-color));
   } @else if $variant == filled {
     @include override('inner-border-color', #{token(invalid-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface)}, value);
     @include variant.text-color(token(invalid-on-surface-color));
   } @else if $variant == raised {
     @include override('inner-border-color', #{token(invalid-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface)}, value);
     @include variant.text-color(token(invalid-on-surface-color));
   }
 }
@@ -131,6 +144,7 @@
     @include override('inner-border-color', #{token(invalid-hover-border-color)}, value);
   } @else if $variant == tonal {
     @include override('inner-border-color', #{token(invalid-hover-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface-hover)}, value);
   } @else if $variant == filled {
     @include override('inner-border-color', #{token(invalid-hover-border-color)}, value);
   }
@@ -162,6 +176,10 @@
   } @else if $variant == raised {
     color: #{token(invalid-inset-label-on-surface-color)};
   }
+}
+
+@mixin support-text-invalid {
+  color: #{token(invalid-color)};
 }
 
 //
