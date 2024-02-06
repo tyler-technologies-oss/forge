@@ -178,7 +178,10 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
   @FoundationProperty()
   public declare optionBuilder: MenuOptionBuilder;
 
-  /** Gets the currently active popup element when the dropdown is open. */
+  /**
+   * Gets the currently active popup element when the dropdown is open.
+   * @readonly
+   */
   @FoundationProperty({ set: false })
   public declare popupElement: HTMLElement | undefined;
 

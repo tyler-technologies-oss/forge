@@ -189,6 +189,7 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
     }
   }
 
+  /** readonly */
   @FoundationProperty({set: false})
   public declare activeDate: Date;
 
