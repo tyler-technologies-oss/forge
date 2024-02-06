@@ -1,18 +1,118 @@
-@use './mixins';
+@use './core' as *;
+@use '../button';
+@use '../icon-button';
+@use '../core/styles/theme';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  display: block;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.default-theme();
-@include mixins.theme('danger');
-@include mixins.theme('warning');
-@include mixins.theme('success');
-@include mixins.theme('info-primary');
-@include mixins.theme('info-secondary');
+//
+// Base
+//
+
+.forge-banner {
+  @include tokens;
+}
+
+.forge-banner {
+  @include base;
+
+  .inner {
+    @include inner;
+  }
+
+  .container {
+    @include container;
+  }
+
+  forge-icon-button {
+    @include icon-button.provide-theme((
+      focus-indicator-color: #{token(color)}
+    ));
+  }
+}
+
+//
+// Slotted - button
+//
+
+::slotted(forge-button[slot=button]) {
+  @include button.provide-theme((
+    primary-color: #{token(color)}
+  ));
+}
+
+//
+// Dismissed
+//
+
+:host([dismissed]) {
+  .forge-banner {
+    @include dismissed;
+  }
+}
+
+//
+// Theme
+//
+
+@each $theme in [primary secondary tertiary success error warning] {
+  :host([theme=#{$theme}]) {
+    .forge-banner {
+      @include override(background, theme.variable(#{$theme}-container), value);
+    }
+  }
+}
+
+// Backwards compatibility with the new error theme
+:host([theme=danger]) {
+  .forge-banner {
+    @include override(background, theme.variable(error-container), value);
+  }
+}
+
+// Use surface theme for info-secondary
+:host([theme=info-secondary]) {
+  .forge-banner {
+    @include override(background, theme.variable(surface-container), value);
+  }
+}
+
+//
+// Responsive
+//
+
+@container (max-width: 600px) {
+  .forge-banner {
+    .container {
+      display: grid;
+      grid-template-rows: [content] 1fr [button] auto;
+      grid-template-columns: [content] 1fr;
+      place-items: normal;
+    }
+
+    &.has-icon {
+      .container {
+        grid-template-columns: [icon] auto [content] 1fr;
+      }
+    }
+
+    .inner {
+      place-items: normal;
+    }
+
+    .button-container {
+      grid-row: button;
+      grid-column: content;
+    }
+  }
+}

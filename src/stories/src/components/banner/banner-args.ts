@@ -1,6 +1,6 @@
 export interface IBannerProps {
   dismissed: boolean;
-  canDismiss: boolean;
+  persistent: boolean;
   theme: string;
   hasIcon: boolean;
   hasButton: boolean;
@@ -13,7 +13,7 @@ export const argTypes = {
       category: 'Properties'
     },
   },
-  canDismiss: {
+  persistent: {
     control: 'boolean',
     table: {
       category: 'Properties'
@@ -23,16 +23,18 @@ export const argTypes = {
     control: {
       type: 'select',
       labels: {
-        'default': 'Default',
-        'danger': 'Danger',
-        'warning': 'Warning',
+        'primary': 'Primary',
+        'secondary': 'Secondary',
+        'tertiary': 'Tertiary',
         'success': 'Success',
-        'info-primary': 'Info primary',
+        'error': 'Error',
+        'warning': 'Warning',
+        'info': 'Info (default)',
         'info-secondary': 'Info secondary',
       },        
     },
     description: 'Use theme to change the color of the banner',
-    options: ['default', 'danger', 'warning', 'success', 'info-primary', 'info-secondary'],
+    options: ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'info-secondary'],
     table: {
       category: 'Attributes'
     },

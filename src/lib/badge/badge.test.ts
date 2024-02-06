@@ -5,7 +5,7 @@ import { BadgeTheme, BADGE_CONSTANTS } from './badge-constants';
 
 import './badge';
 
-describe('Inline Message', () => {
+describe('Badge', () => {
   it('should contain shadow root', async () => {
     const el = await fixture(html`<forge-badge>Test</forge-badge>`);
     expect(el.shadowRoot).not.to.be.null;
