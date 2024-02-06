@@ -10,10 +10,6 @@
 @use '../skeleton/variables' as skeleton-variables;
 @use '../toast/mixins' as toast-mixins;
 @use '../toast/variables' as toast-variables;
-@use '../badge/mixins' as badge-mixins;
-@use '../badge/variables' as badge-variables;
-@use '../banner/mixins' as banner-mixins;
-@use '../banner/variables' as banner-variables;
 @use '../table/mixins' as table-mixins;
 @use '../table/variables' as table-variables;
 
@@ -40,6 +36,4 @@
   @include skeleton-mixins.provide-theme(skeleton-variables.$theme-values-dark);
   @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);
   @include table-mixins.provide-theme(table-variables.$theme-values-dark);
-  @include badge-mixins.provide-theme(badge-variables.$theme-values-dark);
-  @include banner-mixins.provide-theme(banner-variables.$theme-values-dark);
 }
