@@ -97,6 +97,7 @@ export class TooltipComponent extends BaseComponent implements ITooltipComponent
   @FoundationProperty()
   public declare open: boolean;
 
+  /** @readonly */
   @FoundationProperty({ set: false })
   public declare tooltipElement: HTMLElement | null;
 
