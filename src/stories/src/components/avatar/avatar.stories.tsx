@@ -19,7 +19,6 @@ export default {
 } as Meta;
 
 export const Default: Story<IAvatarProps> = ({
-  autoColor = false,
   imageUrl = '',
   useIcon = false,
   letterCount = 2,
@@ -31,7 +30,6 @@ export const Default: Story<IAvatarProps> = ({
 
   return (
     <ForgeAvatar
-      autoColor={autoColor}
       imageUrl={imageUrl}
       letterCount={letterCount}
       text={text}>
@@ -40,7 +38,6 @@ export const Default: Story<IAvatarProps> = ({
   );
 };
 Default.args = {
-  autoColor: false,
   imageUrl: '',
   useIcon: false,
   letterCount: 2,

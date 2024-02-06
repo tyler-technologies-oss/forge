@@ -1392,6 +1392,7 @@ class PopoverHarness {
     await sendMouse({ type: 'down', button: 'left' });
     await timer(delay);
     await sendMouse({ type: 'up', button: 'left' });
+    await this.hoverOutside();
   }
 
   public async longpressStopBeforeDelay(): Promise<void> {

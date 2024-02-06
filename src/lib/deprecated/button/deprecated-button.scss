@@ -1,0 +1,128 @@
+@use '../../button/core' as *;
+@use '../../state-layer';
+@use '../../focus-indicator';
+
+//
+// Host
+//
+
+:host {
+  @include tokens;
+}
+
+:host {
+  @include host;
+
+  border-radius: #{token(shape)};
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+::slotted(:is(button,a)) {
+  @include base;
+
+  --forge-icon-font-size: 1.25em;
+}
+
+::slotted(a) {
+  text-decoration: none;
+  --forge-typography-link-text-decoration: none;
+}
+
+forge-state-layer {
+  @include state-layer.provide-theme(( color: #{token(color)} ));
+}
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: #{token(primary-color)},
+    outward-offset: #{token(focus-indicator-offset)}
+  ));
+}
+
+//
+// Types
+//
+
+:host(:is(:not([type],[type*=text]))) {
+  ::slotted(:is(button,a)) {
+    @include text;
+  }
+}
+
+:host(:is([type*=unelevated],[type*=raised])) {
+  ::slotted(:is(button,a)) {
+    @include filled;
+  }
+
+  forge-state-layer {
+    @include state-layer.provide-theme(( color: #{token(filled-color)} ));
+  }
+}
+
+:host([type*=raised]) {
+  ::slotted(:is(button,a)) {
+    @include raised;
+  }
+}
+
+:host([type*=outlined]) {
+  ::slotted(:is(button,a)) {
+    @include outlined;
+  }
+}
+
+//
+// Full width
+//
+
+:host([full-width]) {
+  width: 100%;
+}
+
+
+//
+// Dense
+//
+
+:host(:is([dense],[type*=dense])) {
+  ::slotted(:is(button,a)) {
+    @include dense;
+  }
+}
+
+//
+// Disabled
+//
+
+:host([disabled]) {
+  @include host-disabled;
+
+  ::slotted(button[disabled]) {
+    @include disabled;
+  }
+}
+
+:host([type*=outlined][disabled]) {
+  ::slotted(button[disabled]) {
+    @include outlined-disabled;
+  }
+}
+
+:host(:is([type*=unelevated],[type*=raised])[disabled]) {
+  ::slotted(button[disabled]) {
+    @include filled-disabled;
+  }
+}
+
+:host([type*=raised][disabled]) {
+  ::slotted(button[disabled]) {
+    @include raised-disabled;
+  }
+}

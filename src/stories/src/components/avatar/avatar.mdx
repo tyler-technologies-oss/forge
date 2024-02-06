@@ -49,12 +49,6 @@ When using with an image, the avatar will apply your image as that background of
 
 ## Properties/Attributes
 
-<PropertyDef name="autoColor" type="boolean" defaultValue="false">
-
-Controls whether the background color is set automatically based on the text value. Does not have any effect when an image URL is specified.
-
-</PropertyDef>
-
 <PropertyDef name="imageUrl" type="string" defaultValue="undefined">
 
 Sets the background image URL to use in place of the text representation.
@@ -103,12 +97,12 @@ Gets/set the text to display as characters. If spaces exist, the first letter of
 
 | Name                                            | Description
 | :-----------------------------------------------| :--------------------
-| `--forge-avatar-theme-background`                 | Controls the `background-color` style.
-| `--forge-avatar-font-size`                        | Controls the `font-size` style.
-| `--forge-avatar-font-weight`                      | Controls the `font-weight` style.
-| `--forge-avatar-theme-on-background`              | Controls the `color` of the font.
-| `--forge-avatar-radius`                           | Controls the `border-radius` style. Can be useful for custom avatar shapes.
-| `--forge-avatar-size`                             | Controls the `height` and `width` styles together.
+| `--forge-avatar-background`                     | Controls the `background-color` style.
+| `--forge-avatar-color`                          | Controls the `color` of the font.
+| `--forge-avatar-shape`                          | Controls the `border-radius` style. Can be useful for custom avatar shapes.
+| `--forge-avatar-size`                           | Controls the `height` and `width` styles together.
+| `--forge-avatar-transition-duration`            | The transition duration for animations.
+| `--forge-avatar-transition-timing`              | The transition timing function for animations.
 
 </PageSection>
 

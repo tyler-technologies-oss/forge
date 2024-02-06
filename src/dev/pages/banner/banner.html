@@ -7,20 +7,23 @@ include('./src/partials/page.ejs', {
       {
         type: 'select',
         label: 'Theme',
-        id: 'theme-select',
+        defaultValue: 'info',
+        id: 'opt-theme',
         options: [
-          { label: 'Default (none)', value: '' },
-          { label: 'Danger', value: 'danger' },
-          { label: 'Warning', value: 'warning' },
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
           { label: 'Success', value: 'success' },
-          { label: 'Info (Primary)', value: 'info-primary' },
-          { label: 'Info (Secondary)', value: 'info-secondary' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info (default)', value: 'info' },
+          { label: 'Info Secondary', value: 'info-secondary' },
         ]
       },
-      { type: 'switch', label: 'Dismissed', id: 'dismissed-toggle' },
-      { type: 'switch', label: 'Show leading icon', id: 'show-leading-icon-toggle', defaultValue: true },
-      { type: 'switch', label: 'Show dismiss', id: 'show-dismiss-toggle', defaultValue: true },
-      { type: 'switch', label: 'Use more text', id: 'use-more-text-toggle' },
+      { type: 'switch', label: 'Dismissed', id: 'opt-dismissed' },
+      { type: 'switch', label: 'Persistent', id: 'opt-persistent' },
+      { type: 'switch', label: 'Show icon', id: 'opt-show-icon', defaultValue: true },
+      { type: 'switch', label: 'Use more text', id: 'opt-more-text' },
     ]
   }
 })

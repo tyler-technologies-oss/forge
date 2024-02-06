@@ -9,7 +9,7 @@
   gap: 16px;
 }
 
-forge-button:not([full-width]) {
+:is(forge-button,forge-deprecated-button):not([full-width]) {
   width: 256px;
 }
 

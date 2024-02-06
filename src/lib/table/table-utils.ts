@@ -18,7 +18,7 @@ import {
 } from '@tylertech/forge-core';
 import { CHECKBOX_CONSTANTS, ICheckboxComponent } from '../checkbox';
 import { EXPANSION_PANEL_CONSTANTS, IExpansionPanelComponent } from '../expansion-panel';
-import { TooltipComponent, TOOLTIP_CONSTANTS } from '../tooltip';
+import { TooltipComponent, ITooltipComponent } from '../tooltip';
 import { TABLE_CONSTANTS } from './table-constants';
 import { TableRow } from './table-row';
 import { CellAlign, IColumnConfiguration, IColumnData, ITableConfiguration, SortDirection, TableFilterDelegateFactory, TableFilterListener, TableHeaderSelectAllTemplate, TableTemplateBuilder, TableViewTemplate, TableSelectTooltipCallback, ITableTemplateBuilderResult, TableViewTemplateBuilder } from './types';
@@ -145,10 +145,10 @@ export class TableUtils {
   /**
    * Creates a `forge-tooltip` for multi sort column headers
    */
-  private static _createMultisortTooltip(): TooltipComponent {
-    const tooltip = document.createElement(TOOLTIP_CONSTANTS.elementName) as TooltipComponent;
+  private static _createMultisortTooltip(): ITooltipComponent {
+    const tooltip = document.createElement('forge-tooltip');
     tooltip.textContent = 'Ctrl + click to sort multiple columns';
-    tooltip.position = 'bottom';
+    tooltip.placement = 'bottom';
     tooltip.delay = 0;
     return tooltip;
   }

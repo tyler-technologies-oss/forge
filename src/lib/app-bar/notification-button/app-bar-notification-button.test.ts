@@ -21,14 +21,29 @@ describe('App Bar Notification Button', () => {
     expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
   });
 
-  it('should reset internal aria-label to default', async () => {
+  it('should remove internal aria-label if aria-label removed', async () => {
     const el = await fixture<IAppBarNotificationButtonComponent>(html`<forge-app-bar-notification-button aria-label="foo"></forge-app-bar-notification-button>`);
     const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+
+    expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
 
     el.removeAttribute('aria-label');
     await elementUpdated(el);
 
-    expect(iconButtonEl.getAttribute('aria-label')).to.equal('Show notifications');
+    expect(iconButtonEl.getAttribute('aria-label')).to.be.null;
+  });
+
+  it('should reset internal aria-labelledby to tooltip id if external aria-labelledby removed', async () => {
+    const el = await fixture<IAppBarNotificationButtonComponent>(html`<forge-app-bar-notification-button aria-labelledby="foo"></forge-app-bar-notification-button>`);
+    const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+    const tooltipEl = el.querySelector('forge-tooltip') as HTMLElement;
+
+    expect(iconButtonEl.getAttribute('aria-labelledby')).to.equal('foo');
+
+    el.removeAttribute('aria-labelledby');
+    await elementUpdated(el);
+
+    expect(iconButtonEl.getAttribute('aria-labelledby')).to.equal(tooltipEl.id);
   });
 
   it('should set icon', async () => {
@@ -52,7 +67,7 @@ describe('App Bar Notification Button', () => {
     const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
 
     expect(badgeEl).to.be.ok;
-    expect(badgeEl.open).to.be.true;
+    expect(badgeEl.hide).to.be.false;
     expect(badgeEl.innerText).to.equal('0');
   });
 
@@ -63,7 +78,7 @@ describe('App Bar Notification Button', () => {
     el.showBadge = true;
 
     expect(badgeEl).to.be.ok;
-    expect(badgeEl.open).to.be.true;
+    expect(badgeEl.hide).to.be.false;
     expect(badgeEl.innerText).to.equal('0');
   });
 
@@ -74,7 +89,7 @@ describe('App Bar Notification Button', () => {
 
     const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
     expect(badgeEl).to.be.ok;
-    expect(badgeEl.open).to.be.false;
+    expect(badgeEl.hide).to.be.true;
   });
 
   it('should show badge with count', async () => {

@@ -6,7 +6,6 @@ export * from './avatar-adapter';
 export * from './avatar-constants';
 export * from './avatar-foundation';
 export * from './avatar';
-export * from './avatar-component-delegate';
 
 export function defineAvatarComponent(): void {
   defineCustomElement(AvatarComponent);

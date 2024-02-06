@@ -1,43 +1,43 @@
-import { COMPONENT_NAME_PREFIX } from '../constants';
+import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}banner`;
 
-const classes = {
-  BANNER: 'forge-banner',
-  DISMISSED: 'forge-banner--dismissed'
-};
-
-const selectors = {
-  BANNER: '.forge-banner',
-  FORGE_DISMISS_BUTTON: 'forge-icon-button.forge-banner__container-dismiss',
-  DISMISS_BUTTON: '.forge-banner__container-dismiss',
-  ICON: 'i',
-  FORGE_BUTTON: 'forge-button'
+const observedAttributes = {
+  DISMISSED: 'dismissed',
+  PERSISTENT: 'persistent',
+  CAN_DISMISS: 'can-dismiss',
+  THEME: 'theme'
 };
 
 const attributes = {
-  SLOT: 'slot',
-  DISMISSED: 'dismissed',
-  CAN_DISMISS: 'can-dismiss',
-  HIDDEN: 'hidden'
+  ...observedAttributes
 };
 
-const slots = {
-  ICON: 'icon',
-  TEXT: 'text',
-  BUTTON: 'button'
+const classes = {
+  HAS_ICON: 'has-icon'
+};
+
+const selectors = {
+  DISMISS_BUTTON: '[part=dismiss-button]',
+  ICON_SLOT: 'slot[name=icon]'
+};
+
+const defaults = {
+  THEME: 'info' as BannerTheme
 };
 
 const events = {
-  DISMISSED: `${elementName}-dismissed`,
-  UNDISMISSED: `${elementName}-undismissed`
+  DISMISSED: `${elementName}-dismissed`
 };
 
 export const BANNER_CONSTANTS = {
   elementName,
+  observedAttributes,
+  attributes,
   classes,
   selectors,
-  attributes,
-  slots,
+  defaults,
   events
 };
+
+export type BannerTheme = Theme | 'danger' | 'info-secondary';

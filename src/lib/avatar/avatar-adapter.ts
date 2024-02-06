@@ -4,7 +4,6 @@ import { IAvatarComponent } from './avatar';
 import { AVATAR_CONSTANTS } from './avatar-constants';
 
 export interface IAvatarAdapter extends IBaseAdapter {
-  setBackgroundColor(color: string): void;
   setBackgroundImageUrl(url: string): Promise<boolean>;
   removeBackgroundImage(): void;
   setText(value: string): void;
@@ -25,23 +24,13 @@ export class AvatarAdapter extends BaseAdapter<IAvatarComponent> implements IAva
   }
 
   /**
-   * Sets the `backgroundColor` style on the content element.
-   * @param {string} value The background color.
-   */
-  public setBackgroundColor(value: string): void {
-    this._root.style.backgroundColor = `var(${AVATAR_CONSTANTS.strings.BACKGROUND_VARNAME}, ${value})`;
-  }
-
-  /**
    * Sets the background image URL.
    * @param url The URL.
    */
-  public setBackgroundImageUrl(url: string): Promise<boolean> {
-    const backgroundColor = this._root.style.backgroundColor;
-    // doing his before the promise so it doesn't flash a color before loading
-    this._root.style.backgroundColor = 'inherit';
-
-    const loadResult = new Promise<boolean>(resolve => {
+  public async setBackgroundImageUrl(url: string): Promise<boolean> {
+    // Set before loading image to prevent a flash of background color
+    this._root.classList.add('forge-avatar--image');
+    return new Promise<boolean>(resolve => {
       const image = new Image();
       image.onload = () => {
         this._root.style.backgroundImage = `url(${image.src})`;
@@ -49,14 +38,12 @@ export class AvatarAdapter extends BaseAdapter<IAvatarComponent> implements IAva
       };
 
       image.onerror = () => {
-        this._root.style.backgroundColor = backgroundColor;
+        this._root.classList.remove('forge-avatar--image');
         resolve(false);
       };
 
       image.src = url;
     });
-
-    return loadResult;
   }
 
   /**
@@ -64,6 +51,7 @@ export class AvatarAdapter extends BaseAdapter<IAvatarComponent> implements IAva
    */
   public removeBackgroundImage(): void {
     this._root.style.removeProperty('background-image');
+    this._root.classList.remove('forge-avatar--image');
   }
 
   /**

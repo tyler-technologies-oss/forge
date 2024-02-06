@@ -1,0 +1,20 @@
+@use 'sass:map';
+@use '../../animation';
+@use '../../spacing';
+@use '../../theme';
+@use '../../border';
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(banner, background, theme.variable(info-container)),
+  color: utils.module-val(banner, color, theme.variable(text-high)),
+  gap: utils.module-val(banner, gap, spacing.variable(small)),
+  padding-inline: utils.module-val(banner, padding-inline, spacing.variable(large)),
+  padding-block: utils.module-val(banner, padding-block, spacing.variable(small)),
+  transition-duration: utils.module-val(banner, transition-duration, animation.variable(duration-short4)),
+  transition-easing: utils.module-val(banner, transition-easing, animation.variable(easing-standard))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

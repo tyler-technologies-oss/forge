@@ -1,0 +1,48 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../theme';
+@use '../../shape';
+@use '../../spacing';
+@use '../../animation';
+
+$tokens: (
+  // Base
+  background: utils.module-val(tooltip, background, theme.variable(surface-inverse)),
+  color: utils.module-val(tooltip, color, theme.variable(on-surface-inverse)),
+  shape: utils.module-val(tooltip, shape, shape.variable(medium)),
+  padding: utils.module-val(tooltip, padding, spacing.variable(xsmall)),
+  padding-block: utils.module-ref(tooltip, padding-block, padding),
+  padding-inline: utils.module-ref(tooltip, padding-inline, padding),
+  width: utils.module-val(tooltip, width, max-content),
+  max-width: utils.module-val(tooltip, max-width, 320px),
+  elevation: utils.module-val(tooltip, elevation, theme.variable(popup-elevation)),
+  content-align: utils.module-val(tooltip, content-align, center),
+
+  // Border
+  border-width: utils.module-val(tooltip, border-width, 0),
+  border-style: utils.module-val(tooltip, border-style, solid),
+  border-color: utils.module-val(tooltip, border-color, theme.variable(outline)),
+
+  // Animation
+  animation-timing: utils.module-val(tooltip, animation-timing, animation.variable(easing-decelerate)),
+  animation-duration: utils.module-val(tooltip, animation-duration, animation.variable(duration-short3)),
+  animation-offset: utils.module-val(tooltip, animation-offset, 24px),
+
+  // Arrow
+  arrow-size: utils.module-val(tooltip, arrow-size, 8px),
+  arrow-height: utils.module-ref(tooltip, arrow-height, arrow-size),
+  arrow-width: utils.module-ref(tooltip, arrow-width, arrow-size),
+  arrow-shape: utils.module-val(tooltip, arrow-shape, shape.variable(small)),
+  arrow-rotation: utils.module-val(tooltip, arrow-rotation, 0deg),
+  arrow-top-rotation: utils.module-val(tooltip, arrow-top-rotation, 315deg),
+  arrow-right-rotation: utils.module-val(tooltip, arrow-right-rotation, 45deg),
+  arrow-bottom-rotation: utils.module-val(tooltip, arrow-bottom-rotation, 135deg),
+  arrow-left-rotation: utils.module-val(tooltip, arrow-left-rotation, 225deg),
+) !default;
+
+///
+/// Gets a token from the token map.
+///
+@function get($name) {
+  @return map.get($tokens, $name);
+}

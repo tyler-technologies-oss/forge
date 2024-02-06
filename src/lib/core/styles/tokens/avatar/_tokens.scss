@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use '../../animation';
+@use '../../shape';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  size: utils.module-val(avatar, size, 40px),
+  background: utils.module-val(avatar, background, theme.variable(tertiary)),
+  color: utils.module-val(avatar, color, theme.variable(on-tertiary)),
+  transition-duration: utils.module-val(avatar, transition-duration, animation.variable(duration-short4)),
+  transition-timing: utils.module-val(avatar, transition-timing, animation.variable(easing-standard)),
+  shape: utils.module-val(avatar, shape, shape.variable(round))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

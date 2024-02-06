@@ -37,7 +37,7 @@
     "update-deps": "npm-check-updates --peer -u && npm install && npm run lint"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.5.3",
+    "@floating-ui/dom": "~1.5.3",
     "@material/animation": "^14.0.0",
     "@material/button": "^14.0.0",
     "@material/card": "^14.0.0",

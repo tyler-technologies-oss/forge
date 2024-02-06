@@ -43,8 +43,6 @@
   @include theme.css-custom-property(width, --forge-drawer-mini-width, variables.$width);
   @include theme.z-index(surface);
 
-  transform: translateX(0);
-  transition-property: transform, width;
   transition: width 200ms mdc-animation.$standard-curve-timing-function;
 }
 

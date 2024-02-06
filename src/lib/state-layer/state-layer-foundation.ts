@@ -97,6 +97,10 @@ export class StateLayerFoundation implements IStateLayerFoundation {
   }
 
   private _onDeferredInitialize(evt?: PointerEvent): void {
+    if (!this._adapter.isConnected) {
+      return;
+    }
+
     this._applyListeners();
 
     if (evt?.type === 'pointerenter') {

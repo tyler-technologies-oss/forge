@@ -77,6 +77,8 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     this._rootElement.style.removeProperty('left');
     this._rootElement.style.removeProperty('display');
 
+    this._component.arrowElement?.removeAttribute('style');
+
     // Remove dynamic position attribute
     this._component.removeAttribute(OVERLAY_CONSTANTS.attributes.POSITION_PLACEMENT);
 

@@ -20,7 +20,7 @@ export default {
 
 export const Default: Story<IBannerProps> = ({
   dismissed = false,
-  canDismiss = true,
+  persistent = false,
   theme = 'default',
   hasIcon = false,
   hasButton = false
@@ -30,7 +30,7 @@ export const Default: Story<IBannerProps> = ({
   }, []);
 
   return (
-    <ForgeBanner dismissed={dismissed} canDismiss={canDismiss} theme={theme}>
+    <ForgeBanner dismissed={dismissed} persistent={persistent} theme={theme}>
       {hasIcon && <ForgeIcon slot="icon" name="add_alert" />}
       <div>Minim sunt eu laborum labore minim.</div>
       {hasButton && <ForgeButton variant="outlined" slot="button" style={{ backgroundColor: '#ffffff' }}>Learn more...</ForgeButton>}
@@ -39,7 +39,7 @@ export const Default: Story<IBannerProps> = ({
 };
 Default.args = {
   dismissed: false,
-  canDismiss: true,
+  persistent: false,
   theme: 'default',
   hasIcon: true,
   hasButton: false,

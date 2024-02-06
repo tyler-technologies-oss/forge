@@ -92,7 +92,7 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Warning container (minimum)', background: 'warning-container-minimum', foreground: 'on-warning-container-minimum' },
       { text: 'Warning container (low)', background: 'warning-container-low', foreground: 'on-warning-container-low' },
       { text: 'Warning container', background: 'warning-container', foreground: 'on-warning-container' },
-      { text: 'Warning container (high)', background: 'warning-container-high', foreground: 'on-warning-container-high'}
+      { text: 'Warning container (high)', background: 'warning-container-high', foreground: 'on-warning-container-high' }
     ]
   },
   {

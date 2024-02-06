@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, coerceNumber, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, coerceNumber, FoundationProperty } from '@tylertech/forge-core';
 
 import { AvatarAdapter } from './avatar-adapter';
 import { AvatarFoundation } from './avatar-foundation';
@@ -12,7 +12,6 @@ export interface IAvatarComponent extends IBaseComponent {
   imageUrl: string;
   text: string;
   letterCount: number;
-  autoColor: boolean;
 }
 
 declare global {
@@ -22,9 +21,33 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-avatar>` element.
- * 
  * @tag forge-avatar
+ * 
+ * @summary Avatars represent an entity via text or image.
+ * 
+ * @description
+ * The avatar component allows you to provide text or images to display that represent an entity. By default, the
+ * avatar will display textual content as single characters (character count is configurable), or display an image or
+ * icon based on the URL provided to it.
+ * 
+ * @property {string} text - The text to display in the avatar.
+ * @property {number} letterCount - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+ * @property {string} imageUrl - The background image URL to use.
+ * 
+ * @attribute {string} text - The text to display in the avatar.
+ * @attribute {number} letter-count - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+ * @attribute {string} image-url - The background image URL to use.
+ * 
+ * @cssproperty --forge-avatar-background - The background color of the avatar.
+ * @cssproperty --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
+ * @cssproperty --forge-avatar-color - The text color of the avatar.
+ * @cssproperty --forge-avatar-size - The height and width of the avatar.
+ * @cssproperty --forge-avatar-transition-duration - The transition duration for animations.
+ * @cssproperty --forge-avatar-transition-timing - The transition timing function for animations.
+ * 
+ * @csspart root - The root container element.
+ * 
+ * @slot - The default/unnamed slot for avatar content if not provided via text/imageUrl.
  */
 @CustomElement({
   name: AVATAR_CONSTANTS.elementName
@@ -34,8 +57,7 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
     return [
       AVATAR_CONSTANTS.attributes.TEXT,
       AVATAR_CONSTANTS.attributes.LETTER_COUNT,
-      AVATAR_CONSTANTS.attributes.IMAGE_URL,
-      AVATAR_CONSTANTS.attributes.AUTO_COLOR
+      AVATAR_CONSTANTS.attributes.IMAGE_URL
     ];
   }
 
@@ -66,13 +88,10 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
       case AVATAR_CONSTANTS.attributes.IMAGE_URL:
         this.imageUrl = newValue;
         break;
-      case AVATAR_CONSTANTS.attributes.AUTO_COLOR:
-        this.autoColor = coerceBoolean(newValue);
-        break;
     }
   }
 
-  /** Gets/sets the text to display. */
+  /** The text to display in the avatar. */
   @FoundationProperty()
   public declare text: string;
 
@@ -80,11 +99,7 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
   @FoundationProperty()
   public declare letterCount: number;
 
-  /** Sets the background image URL to use. */
+  /** The background image URL to use. */
   @FoundationProperty()
   public declare imageUrl: string;
-
-  /** Controls whether the background color is set automatically based on the text value. Does not have any effect when an image URL is specified. */
-  @FoundationProperty()
-  public declare autoColor: boolean;
 }

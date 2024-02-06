@@ -1,4 +1,32 @@
-<forge-button variant="raised">Hover me</forge-button>
-<forge-tooltip id="tooltip">✨ Tooltips are cool ✨</forge-tooltip>
+<div class="tooltip-demo">
+  <section class="vert">
+    <h3 class="forge-typography--heading2">Common</h3>
+    <div>
+      <forge-button variant="raised">Hover me</forge-button>
+      <forge-tooltip type="description">Forge tooltips are cool!</forge-tooltip>
+    </div>
+  </section>
+
+  <section class="vert">
+    <h3 class="forge-typography--heading2">w/Long text</h3>
+    <div>
+      <forge-button variant="raised">Hover me</forge-button>
+      <forge-tooltip>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi exercitationem possimus modi, illum amet sapiente voluptas harum consequatur ex eius accusantium ut ratione nulla est a? Voluptatum eveniet earum dignissimos!</forge-tooltip>
+    </div>
+  </section>
+
+  <section class="vert">
+    <h3 class="forge-typography--heading2">w/Custom</h3>
+    <div>
+      <forge-button variant="raised">Hover me</forge-button>
+      <forge-tooltip>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <forge-avatar text="Tyler Forge"></forge-avatar>
+          Custom tooltip w/Avatar
+        </div>
+      </forge-tooltip>
+    </div>
+  </section>
+</div>
 
 <script type="module" src="tooltip.ts"></script>
