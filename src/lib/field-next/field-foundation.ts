@@ -32,7 +32,7 @@ export class FieldFoundation implements IFieldFoundation {
   private _disabled = false;
   private _variant: FieldVariant = FIELD_CONSTANTS.defaults.DEFAULT_VARIANT;
   private _theme: FieldTheme = FIELD_CONSTANTS.defaults.DEFAULT_THEME;
-  private _shape: FieldShape = FIELD_CONSTANTS.defaults.DEFAUL_SHAPE;
+  private _shape: FieldShape = FIELD_CONSTANTS.defaults.DEFAULT_SHAPE;
   private _density: FieldDensity = FIELD_CONSTANTS.defaults.DEFAULT_DENSITY;
   private _dense = false;
   private _popoverIcon = false;

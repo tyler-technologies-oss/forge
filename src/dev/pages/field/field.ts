@@ -166,7 +166,8 @@ popoverSelect.addEventListener('change', () => {
 
 insetFields.forEach(field => {
   field.addEventListener('input', (event: InputEvent) => field.floatLabel = !!(event.target as HTMLInputElement).value);
-  field.floatLabel = !!field.querySelector('input').value;
+  const input = field.querySelector('input');
+  field.floatLabel = !!input?.value || !!input?.placeholder;
 });
 
 insetMultilineField.addEventListener('input', (event: InputEvent) => insetMultilineField.floatLabel = !!(event.target as HTMLTextAreaElement).value);
