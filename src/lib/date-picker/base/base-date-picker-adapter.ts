@@ -2,7 +2,7 @@ import { getShadowElement, randomChars } from '@tylertech/forge-core';
 import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent, ICalendarDateSelectEventData } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
 import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
-import { BaseComponent } from '../../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { BASE_DATE_PICKER_CONSTANTS } from './base-date-picker-constants';
 import { createToggleElement } from './base-date-picker-utils';
@@ -56,7 +56,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   setCalendarLocale(locale: string | undefined): void;
   propagateCalendarKey(evt: KeyboardEvent): void;
 }
-export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends BaseAdapter<T> implements IBaseDatePickerAdapter {
+export abstract class BaseDatePickerAdapter<T extends IBaseComponent> extends BaseAdapter<T> implements IBaseDatePickerAdapter {
   protected _identifier: string;
   protected _calendarDropdown?: ICalendarDropdown;
   protected _toggleElement?: HTMLElement;

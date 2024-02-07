@@ -1,4 +1,4 @@
-import { MixinBase, MixinReturn, internals } from '../../constants';
+import { internals } from '../../constants';
 import { BaseComponent, IBaseComponent } from './base-component';
 
 export interface IBaseFormComponent<T = string> extends IBaseComponent {
