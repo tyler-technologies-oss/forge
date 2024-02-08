@@ -14,12 +14,14 @@ const attributes = {
 };
 
 const classes = {
-  HAS_ICON: 'has-icon'
+  HAS_ICON: 'has-icon',
+  HAS_BUTTON: 'has-button'
 };
 
 const selectors = {
   DISMISS_BUTTON: '[part=dismiss-button]',
-  ICON_SLOT: 'slot[name=icon]'
+  ICON_SLOT: 'slot[name=icon]',
+  BUTTON_SLOT: 'slot[name=button]'
 };
 
 const defaults = {
@@ -27,6 +29,7 @@ const defaults = {
 };
 
 const events = {
+  BEFORE_DISMISS: `${elementName}-before-dismiss`,
   DISMISSED: `${elementName}-dismissed`
 };
 
