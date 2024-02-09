@@ -8,13 +8,15 @@
           <slot name="button"></slot>
         </div>
       </div>
-      <div>
-        <forge-icon-button part="dismiss-button">
-          <forge-icon name="cancel"></forge-icon>
-        </forge-icon-button>
-        <forge-tooltip type="label" placement="bottom">
-          <slot name="dismiss-tooltip">Dismiss</slot>
-        </forge-tooltip>
+      <div class="dismiss-button-container">
+        <slot name="dismiss-button">
+          <forge-icon-button part="dismiss-button">
+            <forge-icon name="cancel"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip type="label" placement="bottom">
+            <slot name="dismiss-tooltip">Dismiss</slot>
+          </forge-tooltip>
+        </slot>
       </div>
     </div>
   </div>

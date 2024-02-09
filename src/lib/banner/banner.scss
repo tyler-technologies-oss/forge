@@ -34,7 +34,20 @@
     @include container;
   }
 
-  forge-icon-button {
+  .dismiss-button-container {
+    @include dismiss-button-container;
+  }
+
+  ::slotted(forge-button[slot=dismiss-button]) {
+    @include button.provide-theme((
+      primary-color: #{token(color)}
+    ));
+  }
+  
+  ::slotted(forge-icon-button[slot=dismiss-button]),
+  forge-icon-button[part=dismiss-button] {
+    color: #{token(icon-color)};
+    
     @include icon-button.provide-theme((
       focus-indicator-color: #{token(color)}
     ));
@@ -49,6 +62,14 @@
   @include button.provide-theme((
     primary-color: #{token(color)}
   ));
+}
+
+//
+// Slotted -icon
+//
+
+::slotted([slot=icon]) {
+  color: #{token(icon-color)};
 }
 
 //
@@ -69,6 +90,7 @@
   :host([theme=#{$theme}]) {
     .forge-banner {
       @include override(background, theme.variable(#{$theme}-container), value);
+      @include override(icon-color, theme.variable(on-#{$theme}-container), value);
     }
   }
 }
@@ -77,6 +99,7 @@
 :host([theme=danger]) {
   .forge-banner {
     @include override(background, theme.variable(error-container), value);
+    @include override(icon-color, theme.variable(on-error-container), value);
   }
 }
 
@@ -84,6 +107,7 @@
 :host([theme=info-secondary]) {
   .forge-banner {
     @include override(background, theme.variable(surface-container), value);
+    @include override(icon-color, theme.variable(on-surface-container), value);
   }
 }
 
@@ -92,7 +116,7 @@
 //
 
 @container (max-width: 600px) {
-  .forge-banner {
+  .forge-banner.has-button {
     .container {
       display: grid;
       grid-template-rows: [content] 1fr [button] auto;
@@ -113,6 +137,10 @@
     .button-container {
       grid-row: button;
       grid-column: content;
+    }
+
+    .dismiss-button-container {
+      align-items: flex-start;
     }
   }
 }

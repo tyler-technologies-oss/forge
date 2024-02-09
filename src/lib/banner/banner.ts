@@ -25,6 +25,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
+    'forge-banner-before-dismiss': CustomEvent<void>;
     'forge-banner-dismissed': CustomEvent<void>;
   }
 }
@@ -42,10 +43,12 @@ declare global {
  * @attribute {boolean} persistent - Controls the visibility of the built-in dismiss button.
  * @attribute {BannerTheme} theme - The theme of the banner.
  * 
+ * @event {CustomEvent} forge-banner-before-dismiss - Dispatched before the banner is dismissed. Cancelable to prevent dismissal.
  * @event {CustomEvent} forge-banner-dismissed - Dispatched when the banner is dismissed.
  * 
  * @cssproperty --forge-banner-background - The background color of the banner.
  * @cssproperty --forge-banner-color - The text color of the banner.
+ * @cssproperty --forge-banner-icon-color - The color of the icon.
  * @cssproperty --forge-banner-gap - The gap between the contents.
  * @cssproperty --forge-banner-padding-inline - The inline padding.
  * @cssproperty --forge-banner-padding-block - The block padding.
@@ -109,7 +112,7 @@ export class BannerComponent extends BaseComponent implements IBannerComponent {
 
   /** @deprecated Use `persistent` instead. */
   public get canDismiss(): boolean {
-    return this.persistent;
+    return !this.persistent;
   }
   public set canDismiss(value: boolean) {
     this.persistent = !value;
