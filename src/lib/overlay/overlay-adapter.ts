@@ -137,7 +137,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         },
         flip: flip !== 'never',
         flipOptions: {
-          boundary: document.body, // We ensure flip boundaries are always the viewport
+          boundary: SUPPORTS_POPOVER ? document.body : 'clippingAncestors',
           fallbackStrategy: 'initialPlacement',
           fallbackPlacements: fallbackPlacements ?? OVERLAY_FALLBACK_PLACEMENT_MAP[placement] ?? DEFAULT_FALLBACK_PLACEMENTS,
           crossAxis: flip === 'cross' || flip === 'auto',
