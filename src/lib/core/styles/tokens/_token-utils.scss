@@ -89,8 +89,9 @@
   // Validate that all tokens are generated with matching keys
   @each $key, $var in $tokens {
     // The token value is always expected to start with this string per our naming convention: `var(--<prefix>-<module>-<key>, <value>)`
-    $expected: 'var(--#{config.$prefix}-#{$module}-#{$key},';
-    @if string.index($var, $expected) != 1 {
+    $expected: 'var(--#{config.$prefix}-#{$module}-#{$key})';
+    $expected-variant: 'var(--#{config.$prefix}-#{$module}-#{$key},';
+    @if string.index($var, $expected) != 1 and string.index($var, $expected-variant) != 1 {
       @error 'Mismatching token key "#{$key}" found for module "#{$module}" with value "#{$var}"';
     }
   }

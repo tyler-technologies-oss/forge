@@ -24,3 +24,9 @@
 @mixin default-slot-textarea {
   resize: none;
 }
+
+@mixin slotted-inset-label {
+  inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

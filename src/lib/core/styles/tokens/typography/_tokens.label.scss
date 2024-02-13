@@ -4,13 +4,12 @@
 @use './scale';
 @use './tokens.core' as core;
 
-$label: utils.inherit-map(core.$base, (
+$label1: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(label, font-size, '0750'),
   line-height: type-utils.font-size-relative(label, line-height, '1250'),
   letter-spacing: type-utils.calc-letter-spacing(0.5, scale.value('0875'))
 )) !default;
 
-// TODO: solidify label 2 styles
 $label2: utils.inherit-map(core.$base, (
   font-size: type-utils.font-size-relative(label, font-size, '0813'),
   line-height: type-utils.font-size-relative(label, line-height, '1250'),
@@ -32,7 +31,7 @@ $overline: utils.inherit-map(core.$base, (
 )) !default;
 
 $tokens: (
-  label: $label,
+  label1: $label1,
   label2: $label2,
   button: $button,
   overline: $overline

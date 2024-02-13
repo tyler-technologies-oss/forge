@@ -3,9 +3,9 @@
 
 @mixin density($density, $inset: false) {
   @if $inset {
-    @include override('container-block-size', #{token(inset-height-#{$density}, custom)}, value);
+    @include override('height', #{token(inset-height-#{$density}, custom)}, value);
   } @else {
-    @include override('container-block-size', #{token(height-#{$density}, custom)}, value);
+    @include override('height', #{token(height-#{$density}, custom)}, value);
   }
 }
 
@@ -14,7 +14,7 @@
     @include override('shape', 0, value);
   } @else if $shape == 'rounded' {
     @include override('shape', shape.variable(full), value);
-    @include override('container-padding-start', 'pill-container-padding-start');
-    @include override('container-padding-end', 'pill-container-padding-end');
+    @include override('container-padding-inline-start', #{token(rounded-container-padding-inline-start)}, value);
+    @include override('container-padding-inline-end', #{token(rounded-container-padding-inline-end)}, value);
   }
 }

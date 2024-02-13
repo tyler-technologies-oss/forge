@@ -14,6 +14,7 @@ include('./src/partials/page.ejs', {
       { type: 'switch', label: 'Accessory slot', id: 'opt-accessory' },
       { type: 'switch', label: 'Support text (start)', id: 'opt-support-text-start'},
       { type: 'switch', label: 'Support text (end)', id: 'opt-support-text-end'},
+      { type: 'switch', label: 'Long label', id: 'opt-long-label' },
       {
           type: 'select',
           label: 'Density',
@@ -74,7 +75,7 @@ include('./src/partials/page.ejs', {
         defaultValue: 'default',
         options: [
           { label: 'Default', value: 'default' },
-          { label: 'Centered', value: 'centered' },
+          { label: 'Center', value: 'center' },
           { label: 'Start', value: 'start' },
           { label: 'End', value: 'end' },
           { label: 'Baseline', value: 'baseline' }

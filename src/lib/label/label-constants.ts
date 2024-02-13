@@ -8,11 +8,15 @@ import { SWITCH_CONSTANTS } from '../switch';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label`;
 
-const attributes = {
+const observedAttributes = {
   FOR: 'for',
   DYNAMIC: 'dynamic',
-  STATIC: 'static', // TODO: possibily change this to 'non-interactive'
+  NON_INTERACTIVE: 'non-interactive',
   LEGEND: 'legend'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
@@ -34,8 +38,9 @@ const labelableChildSelectors: Array<keyof HTMLElementTagNameMap> = [
 
 export const LABEL_CONSTANTS = {
   elementName,
-  selectors,
+  observedAttributes,
   attributes,
+  selectors,
   events,
   labelableChildSelectors
 };

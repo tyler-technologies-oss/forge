@@ -6,24 +6,18 @@
 @forward './core.state';
 @forward './core.variant';
 
-$host-tokens: [display];
-
-@mixin host-configuration {
-  @include tokens($includes: $host-tokens);
-}
-
 @mixin configuration {
-  @include tokens($excludes: $host-tokens);
+  @include tokens;
 }
 
 @mixin host {
-  display: #{token(display)};
+  display: block;
 }
 
 @mixin base {
   @include override('input-color', #{token(text-color)}, value);
-  @include override('main-content-padding-start', #{token(container-padding-start)}, value);
-  @include override('main-content-padding-end', #{token(container-padding-end)}, value);
+  @include override('main-content-padding-start', #{token(container-padding-inline-start)}, value);
+  @include override('main-content-padding-end', #{token(container-padding-inline-end)}, value);
 
   display: grid;
   position: relative;
@@ -31,6 +25,7 @@ $host-tokens: [display];
 
 @mixin field-disabled {
   opacity: #{token(disabled-opacity)};
+  cursor: not-allowed;
 }
 
 @mixin container {
@@ -45,15 +40,15 @@ $host-tokens: [display];
   border-radius: #{token(shape)};
 
   inline-size: 100%;
-  block-size: #{token(container-block-size, custom)};
+  block-size: #{token(height, custom)};
 }
 
 @mixin container-background {
   position: absolute;
 
-  transition-duration: #{token(animation-duration)};
+  transition-duration: #{token(container-animation-duration)};
   transition-property: background, outline-color;
-  transition-timing-function: #{token(animation-timing-function)};
+  transition-timing-function: #{token(container-animation-timing)};
 
   border-radius: inherit;
   
@@ -109,7 +104,7 @@ $host-tokens: [display];
   grid-area: popover-icon;
 
   block-size: 100%;
-  padding-inline-end: #{token(popover-icon-padding-end)};
+  padding-inline-end: #{token(popover-icon-padding-inline-end)};
 
   & > * {
     transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
@@ -124,14 +119,14 @@ $host-tokens: [display];
   display: flex;
   grid-area: start;
 
-  padding-inline-start: #{token(container-padding-start)};
+  padding-inline-start: #{token(container-padding-inline-start)};
 }
 
 @mixin end {
   display: flex;
   grid-area: end;
 
-  padding-inline-end: #{token(end-padding-end)};
+  padding-inline-end: #{token(end-padding-inline-end)};
 }
 
 @mixin accessory {
@@ -142,18 +137,18 @@ $host-tokens: [display];
   grid-area: accessory;
 
   block-size: 100%;
-  padding-inline-end: #{token(accessory-padding-end)};
+  padding-inline-end: #{token(accessory-padding-inline-end)};
 
   &::before {
-    transition-duration: #{token(animation-duration)};
+    transition-duration: #{token(container-animation-duration)};
     transition-property: border-color;
-    transition-timing-function: #{token(animation-timing-function)};
+    transition-timing-function: #{token(container-animation-timing)};
     
     border-inline-start-style: #{token(border-style)};
     border-inline-start-width: #{token(border-width)};
     border-inline-start-color: #{token(inner-border-color, value)};
 
-    padding-inline-end: #{token(accessory-padding-start)};
+    padding-inline-end: #{token(accessory-padding-inline-start)};
     
     block-size: 100%;
 
@@ -162,7 +157,7 @@ $host-tokens: [display];
 }
 
 @mixin support-text {
-  @include typography.style(label);
+  @include typography.style(label1);
 
   justify-content: space-between;
 
@@ -171,7 +166,9 @@ $host-tokens: [display];
   grid-template-columns: 1fr auto;
   grid-area: support-text;
 
-  margin-block-start: #{token(support-text-padding-block)};
+  margin-block-start: #{token(support-text-margin-block)};
+
+  line-height: normal;
 }
 
 @mixin support-text-both {
@@ -186,4 +183,8 @@ $host-tokens: [display];
 @mixin support-text-end {
   display: inline-block;
   grid-area: end;
+}
+
+@mixin reduced-motion {
+  @include override('floating-animation-duration', '0s', value);
 }

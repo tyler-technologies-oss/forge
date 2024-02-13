@@ -49,10 +49,6 @@ $variants: (
 //
 
 :host {
-  @include core.host-configuration;
-}
-
-:host {
   @include core.host;
 }
 
@@ -244,6 +240,7 @@ $variants: (
   
       .label {
         @include core.label-position(inset);
+        @include core.floatable-label;
       }
     }
   }
@@ -269,8 +266,8 @@ $variants: (
     }
   }
   
-  :host(#{map.get($label-positions, inline-start)}:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))),
-  :host(#{map.get($label-positions, inline-end)}:where([label-alignment=centered], [label-alignment=default], :not([label-alignment]))) {
+  :host(#{map.get($label-positions, inline-start)}:where([label-alignment=center], [label-alignment=default], :not([label-alignment]))),
+  :host(#{map.get($label-positions, inline-end)}:where([label-alignment=center], [label-alignment=default], :not([label-alignment]))) {
     .label {
       @include core.label-alignment(center, inline);
     }
@@ -296,7 +293,7 @@ $variants: (
     }
   }
   
-  :host(#{map.get($label-positions, block-start)}[label-alignment=centered]) {
+  :host(#{map.get($label-positions, block-start)}[label-alignment=center]) {
     .label {
       @include core.label-alignment(center, block);
     }
@@ -328,26 +325,48 @@ $variants: (
     .label {
       @include core.floating-label;
     }
-  
+
     .input {
       @include core.floating-input;
     }
+
+    .forge-field {
+      &--floating-in {
+        .label {
+          @include core.float-in-label;
+        }
   
-    .forge-field--floating {
-      .container {
-        ::slotted(input) {
-          @include core.slotted-floating-input;
+        .input {
+          @include core.float-in-input;
+        }
+      }
+
+      &:not(.forge-field--floating-in) {
+        .input {
+          ::slotted(input) {
+            @include core.slotted-floating-input;
+          }
         }
       }
     }
   }
 
+  :host(#{map.get($label-positions, inset)}:not([float-label])) {
+    .forge-field--floating-out {
+      .label {
+        @include core.float-out-label;
+      }
+
+      .input {
+        @include core.float-out-input;
+      }
+    }
+  }
+
   :host(#{map.get($label-positions, inset)}[float-label][multiline]) {
-    .forge-field--floating {
-      .container {
-        ::slotted(textarea) {
-          @include core.resize-container-slotted-floating-input;
-        }
+    .forge-field:not(.forge-field--floating-in) {
+      ::slotted(textarea) {
+        @include core.resize-container-slotted-floating-input;
       }
     }
   }
@@ -617,6 +636,14 @@ $variants: (
   }
 }
 
+:host(#{map.get($label-positions, inset)}) {
+  .label {
+    ::slotted(*) {
+      @include core.slotted-inset-label;
+    }
+  }
+}
+
 :host([popover-icon]) {
   .forge-field {
     &:not(.forge-field--has-end) {
@@ -679,5 +706,15 @@ $variants: (
     @include focus-indicator.provide-theme((
       color: #{token(invalid-color)}
     ));
+  }
+}
+
+//
+// Prefers reduced motion
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-field {
+    @include core.reduced-motion;
   }
 }

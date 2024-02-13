@@ -12,7 +12,7 @@ export interface IFieldAdapter extends IBaseAdapter {
   attachResizeContainer(): void;
   removeResizeContainer(): void;
   setLabelPosition(value: FieldLabelPosition): void;
-  setFloatingLabel(value: boolean): void;
+  setFloatingLabel(value: boolean, skipAnimation?: boolean): void;
   handleSlotChange(slotName: FieldSlot): void;
 }
 
@@ -123,22 +123,24 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   }
 
   /**
-   * Adds or removes the floating label class from the root element after the animation ends.
+   * Adds or removes animation classes on the root element.
    */
-  public setFloatingLabel(value: boolean): void {
-    if (value) {
-      const animationEndListener: EventListener = (evt: AnimationEvent) => {
-        if (evt.animationName === FIELD_CONSTANTS.animations.FLOATING_INPUT) {
-          addClass(FIELD_CONSTANTS.classes.FLOATING, this._rootElement);
-          this._rootElement.removeEventListener('animationend', animationEndListener);
-        }
-      };
-
-      this._rootElement.addEventListener('animationend', animationEndListener);
+  public setFloatingLabel(value: boolean, skipAnimation = false): void {
+    if (skipAnimation) {
       return;
     }
 
-    removeClass(FIELD_CONSTANTS.classes.FLOATING, this._rootElement);
+    const className = value ? FIELD_CONSTANTS.classes.FLOATING_IN : FIELD_CONSTANTS.classes.FLOATING_OUT;
+    const animationName = value ? FIELD_CONSTANTS.animations.FLOAT_IN_LABEL : FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL;
+    const animationEndListener: EventListener = (evt: AnimationEvent) => {
+      if (evt.animationName === animationName) {
+        removeClass(className, this._rootElement);
+        this._rootElement.removeEventListener('animationend', animationEndListener);
+      }
+    };
+
+    addClass(className, this._rootElement);
+    this._rootElement.addEventListener('animationend', animationEndListener);
   }
 
   /**

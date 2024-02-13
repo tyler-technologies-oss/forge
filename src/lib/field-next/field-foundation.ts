@@ -39,7 +39,6 @@ export class FieldFoundation implements IFieldFoundation {
   private _popoverExpanded = false;
   private _multiline = false;
   private _supportTextInset: FieldSupportTextInset = FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
-  private _isInitialized = false;
 
   private _startSlotListener: () => void;
   private _endSlotListener: () => void;
@@ -70,7 +69,6 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._multiline) {
       this._adapter.attachResizeContainer();
     }
-    this._isInitialized = true;
   }
 
   private _onSlotChange(slotName: FieldSlot): void {
@@ -88,7 +86,7 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._labelPosition !== value) {
       this._labelPosition = value;
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
-      if (this._isInitialized) {
+      if (this._adapter.isConnected) {
         this._adapter.setLabelPosition(this._labelPosition);
       }
     }
@@ -214,7 +212,7 @@ export class FieldFoundation implements IFieldFoundation {
       this._popoverIcon = value;
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON, this._popoverIcon);
 
-      if (!this._isInitialized) {
+      if (!this._adapter.isConnected) {
         return;
       }
 
@@ -244,7 +242,7 @@ export class FieldFoundation implements IFieldFoundation {
       this._multiline = value;
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.MULTILINE, this._multiline);
 
-      if (!this._isInitialized) {
+      if (!this._adapter.isConnected) {
         return;
       }
 

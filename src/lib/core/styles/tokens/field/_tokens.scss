@@ -7,41 +7,41 @@
 @use '../../utils';
 
 $tokens: (
-  display: utils.module-val(field, display, block),
   text-color: utils.module-val(field, text-color, theme.variable(text-high)),
 
   // Spacing (label)
   label-margin-inline: utils.module-val(field, label-margin-inline, 8px),
-  label-margin-block: utils.module-val(field, label-margin-block, 2px),
+  label-margin-block: utils.module-val(field, label-margin-block, 4px),
   label-gap: utils.module-val(field, label-gap, 0.25em),
 
   // Spacing (container)
-  container-padding: utils.module-val(field, container-padding, 12px),
-  container-padding-start: utils.module-ref(field, container-padding-start, container-padding),
-  container-padding-end: utils.module-ref(field, container-padding-end, container-padding),
+  container-padding-inline: utils.module-val(field, container-padding-inline, 12px),
+  container-padding-inline-start: utils.module-ref(field, container-padding-inline-start, container-padding-inline),
+  container-padding-inline-end: utils.module-ref(field, container-padding-inline-end, container-padding-inline),
   container-gap: utils.module-val(field, container-gap, 8px),
-  start-padding-end: utils.module-ref(field, start-padding-end, container-gap),
-  end-padding-start: utils.module-ref(field, end-padding-start, container-gap),
-  end-padding-end: utils.module-ref(field, end-padding-end, container-gap),
-  popover-icon-padding-start: utils.module-ref(field, popover-icon-padding-start, container-gap),
-  popover-icon-padding-end: utils.module-ref(field, popover-icon-padding-end, container-gap),
-  accessory-padding: utils.module-ref(field, accessory-padding, container-gap),
-  accessory-padding-start: utils.module-ref(field, accessory-padding-start, accessory-padding),
-  accessory-padding-end: utils.module-ref(field, accessory-padding-end, accessory-padding),
+  start-padding-inline-end: utils.module-ref(field, start-padding-inline-end, container-gap),
+  end-padding-inline-start: utils.module-ref(field, end-padding-inline-start, container-gap),
+  end-padding-inline-end: utils.module-ref(field, end-padding-inline-end, container-gap),
+  popover-icon-padding-inline-start: utils.module-ref(field, popover-icon-padding-inline-start, container-gap),
+  popover-icon-padding-inline-end: utils.module-ref(field, popover-icon-padding-inline-end, container-gap),
+  accessory-padding-inline: utils.module-ref(field, accessory-padding-inline, container-gap),
+  accessory-padding-inline-start: utils.module-ref(field, accessory-padding-inline-start, accessory-padding-inline),
+  accessory-padding-inline-end: utils.module-ref(field, accessory-padding-inline-end, accessory-padding-inline),
 
   // Spacing (support text)
-  support-text-padding-block: utils.module-val(field, support-text-padding-block, 2px),
+  support-text-margin-block: utils.module-val(field, support-text-margin-block, 4px),
   support-text-gap: utils.module-val(field, support-text-gap, 8px),
-  support-text-padding-inline: utils.module-ref(field, support-text-padding-inline, container-padding),
+  support-text-padding-inline: utils.module-ref(field, support-text-padding-inline, container-padding-inline),
   support-text-padding-inline-start: utils.module-ref(field, support-text-padding-inline-start, support-text-padding-inline),
   support-text-padding-inline-end: utils.module-ref(field, support-text-padding-inline-end, support-text-padding-inline),
 
-  // Spacing (pill)
-  pill-container-padding: utils.module-val(field, pill-container-padding, 16px),
-  pill-container-padding-start: utils.module-ref(field, pill-container-padding-start, pill-container-padding),
-  pill-container-padding-end: utils.module-ref(field, pill-container-padding-end, pill-container-padding),
+  // Spacing (rounded)
+  rounded-container-padding-inline: utils.module-val(field, rounded-container-padding-inline, calc(utils.module-var(field, height) / 2)),
+  rounded-container-padding-inline-start: utils.module-ref(field, rounded-container-padding-inline-start, rounded-container-padding-inline),
+  rounded-container-padding-inline-end: utils.module-ref(field, rounded-container-padding-inline-end, rounded-container-padding-inline),
   
   // Sizes
+  height: utils.module-val(field, height, null),
   height-extra-small: utils.module-val(field, height-extra-small, 24px),
   height-small: utils.module-val(field, height-small, 32px),
   height-medium: utils.module-val(field, height-medium, 40px),
@@ -77,29 +77,29 @@ $tokens: (
   invalid-border-style: utils.module-ref(field, invalid-border-style, border-style),
   invalid-border-color: utils.module-ref(field, invalid-border-color, invalid-color),
   invalid-border-width: utils.module-ref(field, invalid-border-width, border-width),
-  invalid-surface: utils.module-val(field, invalid-surface, theme.variable(error-container-low)),
-  invalid-surface-hover: utils.module-val(field, invalid-surface-hover, theme.variable(error-container-minimum)),
+  invalid-border-color-hover: utils.module-val(field, invalid-border-color-hover, theme.variable(error-container-high)),
+  invalid-surface-color: utils.module-val(field, invalid-surface-color, theme.variable(error-container-low)),
+  invalid-surface-color-hover: utils.module-val(field, invalid-surface-color-hover, theme.variable(error-container-minimum)),
   invalid-label-color: utils.module-ref(field, invalid-label-color, invalid-color),
   invalid-on-surface-color: utils.module-val(field, invalid-on-surface-color, theme.variable(on-error-container-low)),
   invalid-inset-label-on-surface-color: utils.module-ref(field, invalid-inset-label-on-surface-color, invalid-on-surface-color),
-  invalid-hover-border-color: utils.module-val(field, invalid-hover-border-color, theme.variable(error-container-high)),
 
   // Plain
-  plain-container-padding: utils.module-val(field, plain-container-padding, 0),
+  plain-container-padding-inline: utils.module-val(field, plain-container-padding-inline, 0),
 
   // Tonal
-  tonal-surface: utils.module-val(field, tonal-surface, theme.variable(surface-container-low)),
+  tonal-surface-color: utils.module-val(field, tonal-surface-color, theme.variable(surface-container-low)),
   tonal-on-surface-color: utils.module-val(field, tonal-on-surface-color, theme.variable(on-surface-container-low)),
   tonal-hover-color: utils.module-val(field, tonal-hover-color, theme.variable(surface-container-minimum)),
 
   // Filled
-  filled-surface: utils.module-val(field, filled-surface, theme.variable(surface-bright)),
+  filled-surface-color: utils.module-val(field, filled-surface-color, theme.variable(surface-bright)),
   filled-on-surface-color: utils.module-val(field, filled-on-surface-color, theme.variable(on-surface)),
 
   // Raised
   raised-elevation: utils.module-val(field, raised-elevation, elevation.value(1)),
   raised-active-elevation: utils.module-val(field, raised-active-elevation, elevation.value(3)),
-  raised-surface: utils.module-ref(field, raised-surface, filled-surface),
+  raised-surface-color: utils.module-ref(field, raised-surface-color, filled-surface-color),
   raised-on-surface-color: utils.module-ref(field, raised-on-surface-color, filled-on-surface-color),
 
   // Required and optional
@@ -124,10 +124,10 @@ $tokens: (
   disabled-opacity: utils.module-val(field, disabled-opacity, theme.emphasis(medium-low)),
 
   // Animation
-  animation-duration: utils.module-val(field, animation-duration, animation.variable(duration-short4)),
-  animation-timing-function: utils.module-val(field, animation-timing-function, animation.variable(easing-standard)),
-  inset-animation-duration: utils.module-val(field, inset-animation-duration, animation.variable(duration-short4)),
-  inset-animation-timing-function: utils.module-val(field, inset-animation-timing-function, animation.variable(easing-decelerate)),
+  container-animation-duration: utils.module-val(field, container-animation-duration, animation.variable(duration-short4)),
+  container-animation-timing: utils.module-val(field, container-animation-timing, animation.variable(easing-standard)),
+  floating-animation-duration: utils.module-val(field, floating-animation-duration, animation.variable(duration-short4)),
+  floating-animation-timing: utils.module-val(field, floating-animation-timing, animation.variable(easing-decelerate)),
 ) !default;
 
 @function get($key) {

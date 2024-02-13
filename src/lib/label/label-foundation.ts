@@ -7,7 +7,7 @@ export interface ILabelFoundation extends ICustomElementFoundation {
   for: string | null | undefined;
   forElement: HTMLElement | null | undefined;
   dynamic: boolean;
-  static: boolean;
+  nonInteractive: boolean;
   legend: boolean;
   disconnect(): void;
   update(): void;
@@ -18,7 +18,7 @@ export class LabelFoundation implements ILabelFoundation {
   private _for: string | null | undefined;
   private _forElement: HTMLElement | null | undefined;
   private _dynamic = false;
-  private _static = false;
+  private _nonInteractive = false;
   private _legend = false;
   private _isConnected = false;
 
@@ -93,7 +93,7 @@ export class LabelFoundation implements ILabelFoundation {
   }
 
   private _connect(): void {
-    if (!this._static) {
+    if (!this._nonInteractive) {
       this._adapter.addHostListener('click', this._clickListener);
     }
     this._adapter.updateTargetLabel();
@@ -156,20 +156,20 @@ export class LabelFoundation implements ILabelFoundation {
     }
   }
 
-  public get static(): boolean {
-    return this._static;
+  public get nonInteractive(): boolean {
+    return this._nonInteractive;
   }
-  public set static(value: boolean) {
-    if (this._static !== value) {
-      this._static = value;
-      this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.STATIC, this._static);
+  public set nonInteractive(value: boolean) {
+    if (this._nonInteractive !== value) {
+      this._nonInteractive = value;
+      this._adapter.toggleHostAttribute(LABEL_CONSTANTS.attributes.NON_INTERACTIVE, this._nonInteractive);
 
       // The click listener is only added if the label is connected
       if (!this._isConnected) {
         return;
       }
 
-      if (this._static) {
+      if (this._nonInteractive) {
         this._adapter.removeHostListener('click', this._clickListener);
       } else {
         this._adapter.addHostListener('click', this._clickListener);

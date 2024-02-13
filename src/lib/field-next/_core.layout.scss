@@ -54,19 +54,25 @@
 @mixin label-position($position) {
   @if $position == inline-start {
     margin-inline-end: #{token(label-margin-inline)};
+    line-height: normal;
   } @else if $position == inline-end {
     margin-inline-start: #{token(label-margin-inline)};
+    line-height: normal;
   } @else if $position == block-start {
     margin-block-end: #{token(label-margin-block)};
+    line-height: normal;
   } @else if $position == inset {
     @include typography.style(body2);
+    @include override('label-color', 'inset-label-color');
+
+    overflow: hidden;
 
     grid-area: center;
 
     padding-inline-start: #{token(main-content-padding-start, custom)};
     padding-inline-end: #{token(main-content-padding-end, custom)};
 
-    color: #{token(inset-label-color)};
+    white-space: nowrap;
   }
 }
 
@@ -92,7 +98,7 @@
       @if $baseline-override {
         padding-inline-start: $baseline-override;
       } @else {
-        padding-inline-start: #{token(container-padding-start)};;
+        padding-inline-start: #{token(container-padding-inline-start)};;
       }
     } @else {
       justify-self: #{$alignment};
@@ -106,11 +112,11 @@
 
 @mixin support-text-inset($inset-direction: none) {
   @if $inset-direction == 'both' or $inset-direction == 'start' {
-    padding-inline-start: #{token(container-padding-start)};
+    padding-inline-start: #{token(container-padding-inline-start)};
   }
 
   @if $inset-direction == 'both' or $inset-direction == 'end' {
-    padding-inline-end: #{token(container-padding-start)};
+    padding-inline-end: #{token(container-padding-inline-start)};
   }
 }
 
@@ -118,7 +124,7 @@
 // Multiline
 //
 
-$resize-container-input-offset-base: calc((token('container-block-size', custom) - typography.variable(body2, line-height)) / 2);
+$resize-container-input-offset-base: calc((token('height', custom) - typography.variable(body2, line-height)) / 2);
 $resize-container-input-padding-block-end-base: 8px;
 
 @mixin container-multiline {
@@ -161,9 +167,9 @@ $resize-container-input-padding-block-end-base: 8px;
     position: absolute;
     inset-inline-start: 0;
 
-    transition-duration: #{token(animation-duration)};
+    transition-duration: #{token(container-animation-duration)};
     transition-property: background;
-    transition-timing-function: #{token(animation-timing-function)};
+    transition-timing-function: #{token(container-animation-timing)};
     
     background: #{token(resize-container-inset-label-background, custom)};
     
@@ -187,7 +193,7 @@ $resize-container-input-padding-block-end-base: 8px;
 
 @mixin resize-container-child {
   align-items: center;
-  block-size: #{token('container-block-size', custom)};
+  block-size: #{token('height', custom)};
 }
 
 @mixin resize-container-accessory-slot {
@@ -212,19 +218,19 @@ $resize-container-input-padding-block-end-base: 8px;
 }
 
 @mixin last-container-element {
-  padding-inline-end: #{token('container-padding-end')};
+  padding-inline-end: #{token('container-padding-inline-end')};
 }
 
 @mixin main-content-padding-inline($side, $next-sibling) {
   @if $side == 'start' and $next-sibling == 'start' {
-    @include override('main-content-padding-start', token('start-padding-end'), value);
+    @include override('main-content-padding-start', token('start-padding-inline-end'), value);
   } @else if $side == 'end' {
     @if $next-sibling == 'end' {
-      @include override('main-content-padding-end', token('end-padding-start'), value);
+      @include override('main-content-padding-end', token('end-padding-inline-start'), value);
     } @else if $next-sibling == 'popover-icon' {
-      @include override('main-content-padding-end', token('popover-icon-padding-start'), value);
+      @include override('main-content-padding-end', token('popover-icon-padding-inline-start'), value);
     } @else if $next-sibling == 'accessory' {
-      @include override('main-content-padding-end', token('accessory-padding-start'), value);
+      @include override('main-content-padding-end', token('accessory-padding-inline-start'), value);
     }
   }
 }
@@ -237,21 +243,37 @@ $resize-container-input-padding-block-end-base: 8px;
 // heights. Additional space is added or subtracted to account for the block size of the container
 // -- one pixel for every 8 pixels above or below 56 pixels.
 $floating-offset-base: #{calc(max(typography.variable(body2, line-height), typography.variable(label2, line-height)) / 2)};
-$floating-offset-adjustment: #{calc((token('container-block-size', custom) - 56px) / 8)};
+$floating-offset-adjustment: #{calc((token('height', custom) - 56px) / 8)};
 $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
 
-@mixin floating-label {
+// Sets a custom property used for the floating animation and final position of the floating label
+@mixin floatable-label {
   @include override('floating-label-translation', 0 calc($floating-offset * -1), value);
-  @include typography.style(label2);
-  @include floating-animation(floating-label-animation);
+}
 
+@mixin floating-label {
+  @include typography.style(label2);
   translate: #{token(floating-label-translation, custom)};
 }
 
-@mixin floating-input {
-  @include floating-animation(floating-input-animation);
+@mixin float-in-label {
+  @include floating-animation(float-in-label-animation);
+}
 
+@mixin float-out-label {
+  @include floating-animation(float-out-label-animation);
+}
+
+@mixin floating-input {
   box-sizing: border-box;
+}
+
+@mixin float-in-input {
+  @include floating-animation(float-in-input-animation);
+}
+
+@mixin float-out-input {
+  @include floating-animation(float-out-input-animation);
 }
 
 @mixin slotted-floating-input {
@@ -260,11 +282,15 @@ $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
 
 @mixin floating-animation($animation-name) {
   animation-name: #{$animation-name};
-  animation-duration: #{token(inset-animation-duration)};
-  animation-timing-function: #{token(inset-animation-timing-function)};
+  animation-duration: #{token(floating-animation-duration)};
+  animation-timing-function: #{token(floating-animation-timing)};
 }
 
-@keyframes floating-label-animation {
+//
+// Animation keyframes
+//
+
+@keyframes float-in-label-animation {
   from {
     translate: 0;
     opacity: 40%;
@@ -276,13 +302,35 @@ $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
   }
 }
 
-@keyframes floating-input-animation {
+@keyframes float-out-label-animation {
+  from {
+    translate: #{token(floating-label-translation, custom)};
+    opacity: 40%;
+  }
+
+  to {
+    translate: 0;
+    opacity: 100%;
+  }
+}
+
+@keyframes float-in-input-animation {
   from {
     translate: 0;
   }
 
   to {
     translate: 0 $floating-offset;
+  }
+}
+
+@keyframes float-out-input-animation {
+  from {
+    translate: 0 $floating-offset;
+  }
+
+  to {
+    translate: 0;
   }
 }
 

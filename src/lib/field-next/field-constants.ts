@@ -2,7 +2,7 @@ import { COMPONENT_NAME_PREFIX, Density, Theme } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}field`;
 
-const attributes = {
+const observedAttributes = {
   LABEL_POSITION: 'label-position',
   LABEL_ALIGNMENT: 'label-alignment',
   FLOAT_LABEL: 'float-label',
@@ -21,8 +21,13 @@ const attributes = {
   SUPPORT_TEXT_INSET: 'support-text-inset'
 };
 
+const attributes = {
+  ...observedAttributes
+};
+
 const classes = {
-  FLOATING: 'forge-field--floating',
+  FLOATING_IN: 'forge-field--floating-in',
+  FLOATING_OUT: 'forge-field--floating-out',
   HAS_START: 'forge-field--has-start',
   HAS_END: 'forge-field--has-end',
   HAS_ACCESSORY: 'forge-field--has-accessory',
@@ -59,11 +64,13 @@ const defaults = {
 };
 
 const animations = {
-  FLOATING_INPUT: 'floating-input-animation'
+  FLOAT_IN_LABEL: 'float-in-label-animation',
+  FLOAT_OUT_LABEL: 'float-out-label-animation'
 };
 
 export const FIELD_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   classes,
   selectors,
@@ -77,6 +84,6 @@ export type FieldTheme = Theme | 'default';
 export type FieldShape = 'default' | 'rounded' | 'squared';
 export type FieldDensity = Density | 'extra-small' | 'extra-large';
 export type FieldLabelPosition = 'inline-start' | 'inline-end' | 'block-start' | 'inset' | 'none';
-export type FieldLabelAlignment = 'default' | 'centered' | 'baseline' | 'start' | 'end';
+export type FieldLabelAlignment = 'default' | 'center' | 'baseline' | 'start' | 'end';
 export type FieldSupportTextInset = 'start' | 'end' | 'both' | 'none';
 export type FieldSlot = 'start' | 'end' | 'accessory' | 'support-start' | 'support-end';

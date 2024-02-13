@@ -21,6 +21,7 @@ const endSwitch = document.getElementById('opt-end') as ISwitchComponent;
 const accessorySwitch = document.getElementById('opt-accessory') as ISwitchComponent;
 const supportTextStartSwitch = document.getElementById('opt-support-text-start') as ISwitchComponent;
 const supportTextEndSwitch = document.getElementById('opt-support-text-end') as ISwitchComponent;
+const longLabelSwitch = document.getElementById('opt-long-label') as ISwitchComponent;
 const densitySelect = document.getElementById('opt-density') as ISelectComponent;
 const variantSelect = document.getElementById('opt-variant') as ISelectComponent;
 const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
@@ -30,8 +31,9 @@ const supportTextInsetSelect = document.getElementById('opt-support-text-inset')
 const popoverSelect = document.getElementById('opt-popover') as ISelectComponent;
 
 const fields = document.querySelectorAll('forge-field') as NodeListOf<IFieldComponent>;
-const insetFields = document.querySelectorAll('forge-field:where([label-position=inset], :not([label-position]))') as NodeListOf<IFieldComponent>;
+const insetFields = document.querySelectorAll('forge-field:where([label-position=inset],:not([label-position])):not([float-label])') as NodeListOf<IFieldComponent>;
 const insetMultilineField = document.getElementById('inset-multiline-field') as IFieldComponent;
+const labels = document.querySelectorAll('label') as NodeListOf<HTMLLabelElement>;
 
 requiredSwitch.addEventListener('forge-switch-change', () => {
   fields.forEach(field => field.required = requiredSwitch.on);
@@ -133,6 +135,10 @@ supportTextEndSwitch.addEventListener('forge-switch-change', () => {
   }
 });
 
+longLabelSwitch.addEventListener('forge-switch-change', () => {
+  labels.forEach(label => label.textContent = longLabelSwitch.on ? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' : 'Label');
+});
+
 densitySelect.addEventListener('change', () => {
   fields.forEach(field => field.density = densitySelect.value as Density);
 });
@@ -165,8 +171,8 @@ popoverSelect.addEventListener('change', () => {
 });
 
 insetFields.forEach(field => {
-  field.addEventListener('input', (event: InputEvent) => field.floatLabel = !!(event.target as HTMLInputElement).value);
-  field.floatLabel = !!field.querySelector('input').value;
+  field.addEventListener('input', (event: InputEvent) => field.floatLabel = !!(event.target as HTMLInputElement | HTMLTextAreaElement).value);
+  field.floatLabel = !!(field.querySelector(':where(input, textarea)') as HTMLInputElement | HTMLTextAreaElement).value;
 });
 
 insetMultilineField.addEventListener('input', (event: InputEvent) => insetMultilineField.floatLabel = !!(event.target as HTMLTextAreaElement).value);
