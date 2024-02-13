@@ -30,6 +30,7 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
   }
 
   public disconnect(): void {
+    this._adapter.destroy();
     this._adapter.removeListener('click', this._clickListener);
     this._adapter.removeSlotChangeListener(this._slotListener);
     this._adapter.stopButtonObserver();

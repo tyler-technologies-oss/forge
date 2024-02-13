@@ -48,7 +48,7 @@ const attributes = {
 
 const events = {
   CHANGE: `${elementName}-change`
-};
+} as const;
 
 const numbers = {
   DEFAULT_PAGE_INDEX: 0,
