@@ -1,0 +1,53 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: flex;
+  box-sizing: border-box;
+}
+
+@mixin base {
+  @include typography.style(label);
+
+  background: #{token(background)};
+  color: #{token(color)};
+
+  height: #{token(height)};
+  min-width: #{token(min-width)};
+  max-width: #{token(max-width)};
+
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+
+  display: inline-flex;
+  align-items: center;
+  gap: #{token(gap)};
+  border-radius: #{token(shape)};
+  padding-inline: #{token(padding-inline)};
+  padding-block: #{token(padding-block)};
+  overflow: hidden;
+  box-sizing: border-box;
+  
+  pointer-events: none;
+  
+  transition: transform #{token(transition-duration)} #{token(transition-easing)};
+  
+  font-weight: #{token(font-weight)};
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin dot {
+  @include override(height, dot-height);
+  @include override(min-width, auto, value);
+
+  padding: #{token(dot-padding)};
+  width: #{token(dot-width)};
+}
+
+@mixin hide {
+  transform: scale(0);
+}

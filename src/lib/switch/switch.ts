@@ -10,7 +10,6 @@ import { internals } from '../constants';
 
 import template from './switch.html';
 import styles from './switch.scss';
-import { ILabelAware } from '../label/label-aware';
 
 export interface ISwitchComponent extends IBaseNullableFormComponent, ILabelAware {
   on: boolean;

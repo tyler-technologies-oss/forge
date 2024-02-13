@@ -1,309 +1,396 @@
-import { ICustomElementFoundation, throttle, Platform, isDefined } from '@tylertech/forge-core';
-
+import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { ITooltipAdapter } from './tooltip-adapter';
-import { TOOLTIP_CONSTANTS, TooltipBuilder } from './tooltip-constants';
-import { PopupPlacement } from '../popup';
+import { TOOLTIP_CONSTANTS, TooltipPlacement, TooltipTriggerType, TooltipType } from './tooltip-constants';
+import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
+import { canUserHoverElements } from '../constants';
+import { OverlayFlipState } from '../overlay/overlay-constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 export interface ITooltipFoundation extends ICustomElementFoundation {
-  text: string;
-  builder: TooltipBuilder | undefined;
-  target: string;
-  delay: number;
-  position: PopupPlacement;
   open: boolean;
-  hide(): void;
-  tooltipElement: HTMLElement | null;
+  type: TooltipType;
+  placement: `${TooltipPlacement}`;
+  delay: number;
+  anchor: string;
+  anchorElement: HTMLElement | null;
+  offset: number;
+  flip: OverlayFlipState;
+  boundary: string | null;
+  boundaryElement: HTMLElement | null;
+  fallbackPlacements: PositionPlacement[] | null;
+  triggerType: TooltipTriggerType | TooltipTriggerType[];
+  syncTooltipAria(): void;
 }
 
-/**
- * The foundation class behind the tooltip component.
- */
-export class TooltipFoundation implements ITooltipFoundation {
-  private static _tooltipIdentifier = 0;
-  private _identifier: string | null;
-  private _text: string;
-  private _builder: TooltipBuilder | undefined;
-  private _target: string;
-  private _delay = TOOLTIP_CONSTANTS.numbers.DEFAULT_DELAY;
-  private _position: PopupPlacement = TOOLTIP_CONSTANTS.strings.DEFAULT_POSITION as PopupPlacement;
-  private _mouseOverTimeout: number | undefined;
-  private _isOpen = false;
-  private _touchTimeout: number | undefined;
-  private _mouseOverListener: (evt: MouseEvent) => void;
-  private _mouseOutListener: (evt: MouseEvent) => void;
-  private _touchStartListener: (evt: MouseEvent) => void;
-  private _touchEndListener: (evt: MouseEvent) => void;
-  private _scrollListener: (evt: Event) => void;
-  private _clickListener: (evt: MouseEvent) => void;
-  private _mouseDownListener: (evt: MouseEvent) => void;
-  private _dragListener: (evt: DragEvent) => void;
+const BaseClass = WithLongpressListener();
+
+export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
+  private _open = false;
+  private _type: TooltipType = TOOLTIP_CONSTANTS.defaults.TYPE;
+  private _anchor: string;
+  private _delay = TOOLTIP_CONSTANTS.defaults.DELAY;
+  private _placement: TooltipPlacement = TOOLTIP_CONSTANTS.defaults.PLACEMENT;
+  private _offset = TOOLTIP_CONSTANTS.defaults.OFFSET;
+  private _flip: OverlayFlipState = TOOLTIP_CONSTANTS.defaults.FLIP;
+  private _boundary: string | null = null;
+  private _boundaryElement: HTMLElement | null = null;
+  private _fallbackPlacements: PositionPlacement[] | null = null;
+  private _triggerTypes: TooltipTriggerType[] = TOOLTIP_CONSTANTS.defaults.TRIGGER_TYPES;
+  
+  // Hover trigger type
+  private _hoverStartListener: (evt: MouseEvent) => void = this._onHoverStart.bind(this);
+  private _hoverEndListener: (evt: MouseEvent) => void = this._onHoverEnd.bind(this);
+  private _hoverTimeout: number | undefined;
+
+  // Focus trigger type
+  private _focusListener: (evt: FocusEvent) => void = this._onFocus.bind(this);
+  private _blurListener: (evt: FocusEvent) => void = this._onBlur.bind(this);
+
+  // Longpress trigger type
+  private _longpressVisibilityTimeout: number | undefined;
+
+  // Dismiss/hide triggers
+  private _scrollListener: (evt: Event) => void = this._onTryHide.bind(this);
+  private _mouseDownListener: (evt: MouseEvent) => void = this._onTryHide.bind(this);
+  private _dragListener: (evt: DragEvent) => void = this._onTryHide.bind(this);
+  private _lightDismissListener: (evt: Event) => void = this._onTryHide.bind(this);
   
   constructor(private _adapter: ITooltipAdapter) {
-    this._mouseOverListener = evt => this._onMouseOver(evt);
-    this._mouseOutListener = evt => this._onMouseOut(evt);
-    this._touchStartListener = evt => this._onTouchStart(evt);
-    this._touchEndListener = evt => this._onTouchEnd(evt);
-    this._scrollListener = throttle((evt: Event) => this._onScroll(evt), 100);
-    this._clickListener = () => this._targetInteracted();
-    this._mouseDownListener = () => this._targetInteracted();
-    this._dragListener = () => this._targetInteracted();
+    super();
   }
 
   public initialize(): void {
-    this._adapter.initializeTargetElement(this._target);
-
-    if (!this._adapter.hasTargetElement()) {
-      throw new Error('Unable to locate target element.');
+    if (!this._adapter.anchorElement) {
+      this._adapter.tryLocateAnchorElement(this._anchor);
     }
 
-    // Set a unique id for this tooltip (unless it already has one)
-    this._identifier = this._adapter.getHostAttribute('id');
-    if (!this._identifier) {
-      this._identifier = this._getNextIdentifier();
-      this._adapter.setHostAttribute('id', this._identifier);
-    }
+    this._adapter.syncAria();
+    this._attachAnchorListeners();
 
-    this._addTargetListeners();
-    this._adapter.initializeAccessibility(this._identifier);
-  }
-
-  public disconnect(): void {
-    if (this._mouseOverTimeout) {
-      window.clearTimeout(this._mouseOverTimeout);
-      this._mouseOverTimeout = undefined;
-    }
-    if (this._touchTimeout) {
-      window.clearTimeout(this._touchTimeout);
-      this._touchTimeout = undefined;
-    }
-    this._adapter.destroy(this._identifier);
-    if (this._isOpen) {
-      this.hide();
-    }
-    if (this._adapter.hasTargetElement()) {
-      this._removeTargetListeners();
-    }
-  }
-
-  /**
-   * Generates the next available tooltip identifier.
-   */
-  private _getNextIdentifier(): string {
-    return `forge-tooltip-${TooltipFoundation._tooltipIdentifier++}`;
-  }
-
-  /** Adds event listeners to the target element. */
-  private _addTargetListeners(): void {
-    if (Platform.isMobile) {
-      this._adapter.addTargetEventListener('touchstart', this._touchStartListener);
-      this._adapter.addTargetEventListener('touchend', this._touchEndListener);
-    } else {
-      this._adapter.addTargetEventListener('mouseover', this._mouseOverListener);
-      this._adapter.addTargetEventListener('mouseout', this._mouseOutListener);
-    }
-
-    this._adapter.addTargetEventListener('click', this._clickListener);
-    this._adapter.addTargetEventListener('mousedown', this._mouseDownListener);
-    this._adapter.addTargetEventListener('dragstart', this._dragListener);
-  }
-
-  /**
-   * Removes the event listeners from the target element.
-   * @param targetElement The target element instance.
-   */
-  private _removeTargetListeners(): void {
-    if (Platform.isMobile) {
-      this._adapter.removeTargetEventListener('touchstart', this._touchStartListener);
-      this._adapter.removeTargetEventListener('touchend', this._touchEndListener);
-    } else {
-      this._adapter.removeTargetEventListener('mouseover', this._mouseOverListener);
-      this._adapter.removeTargetEventListener('mouseout', this._mouseOutListener);
-    }
-
-    this._adapter.removeTargetEventListener('click', this._clickListener);
-    this._adapter.removeTargetEventListener('mousedown', this._mouseDownListener);
-    this._adapter.removeTargetEventListener('dragstart', this._dragListener);
-  }
-
-  /**
-   * Handles the touchstart event on the target element to detect long press.
-   */
-  private _onTouchStart(evt: Event): void {
-    this._touchTimeout = window.setTimeout(() => {
+    if (this._open) {
       this._show();
-      window.setTimeout(() => this.hide(), TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION);
-      this._touchTimeout = undefined;
-    }, TOOLTIP_CONSTANTS.numbers.LONGPRESS_THRESHOLD);
-  }
-  
-  /**
-   * Handles the touchend event on the target element to cancel a long press action.
-   */
-  private _onTouchEnd(evt: Event): void {
-    if (this._touchTimeout) {
-      this._clearTouchTimer();
     }
   }
 
-  private _clearTouchTimer(): void {
-    window.clearTimeout(this._touchTimeout);
-    this._touchTimeout = undefined;
+  public destroy(): void {
+    if (this._open) {
+      this._hide();
+    }
+    this._adapter.detachAria();
+    this._detachAnchorListeners();
   }
 
-  /**
-   * Handles the mouseover event on the target element.
-   */
-  private _onMouseOver(evt: MouseEvent): void {
-    if (this._isOpen || !this._adapter.hasTargetElement() || !this._adapter.isTargetElementConnected()) {
+  public syncTooltipAria(): void {
+    this._adapter.syncAria();
+  }
+
+  private _attachAnchorListeners(): void {
+    if (!this._adapter.anchorElement) {
       return;
     }
 
+    const triggerTypes = [...this._triggerTypes];
+
+    // If the users input mechanism doesn't support hover, then we need to force longpress as their alternative
+    /* c8 ignore next 4 */
+    if (!canUserHoverElements) {
+      triggerTypes.splice(triggerTypes.indexOf('hover'), 1);
+      triggerTypes.push('longpress');
+    }
+
+    const triggerInitializers: Record<TooltipTriggerType, () => void> = {
+      'hover': () => this._adapter.addAnchorListener('mouseenter', this._hoverStartListener),
+      'longpress': () => this._startLongpressListener(this._adapter.anchorElement as HTMLElement),
+      'focus': () => this._adapter.addAnchorListener('focusin', this._focusListener)
+    };
+    triggerTypes.forEach(triggerType => triggerInitializers[triggerType]());
+  }
+
+  private _detachAnchorListeners(): void {
+    if (!this._adapter.anchorElement) {
+      return;
+    }
+
+    const triggerTypes = [...this._triggerTypes];
+
+    /* c8 ignore next 3 */
+    if (!canUserHoverElements) {
+      triggerTypes.push('longpress');
+    }
+
+    const triggerRemovers: Record<TooltipTriggerType, () => void> = {
+      'hover': () => {
+        this._adapter.removeAnchorListener('mouseenter', this._hoverStartListener);
+        this._adapter.removeAnchorListener('mousedown', this._hoverEndListener);
+        this._adapter.removeAnchorListener('mouseleave', this._hoverEndListener);
+      },
+      'longpress': () => this._stopLongpressListener(this._adapter.anchorElement as HTMLElement),
+      'focus': () => {
+        this._adapter.removeAnchorListener('focusin', this._focusListener);
+        this._adapter.removeAnchorListener('focusout', this._blurListener);
+      }
+    };
+    triggerTypes.forEach(triggerType => triggerRemovers[triggerType]());
+  }
+
+  private _show(): void {
+    this._open = true;
+    this._adapter.show();
+    this._attachDismissListeners();
+    this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.OPEN, this._open);
+  }
+
+  private _hide(): void {
+    window.clearTimeout(this._hoverTimeout);
+    window.clearTimeout(this._longpressVisibilityTimeout);
+
+    this._open = false;
+    this._adapter.hide();
+    this._detachDismissListeners();
+    this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.OPEN, this._open);
+  }
+
+  private _attachDismissListeners(): void {
+    this._adapter.addAnchorListener('mousedown', this._mouseDownListener);
+    this._adapter.addAnchorListener('dragstart', this._dragListener);
+    this._adapter.addDocumentListener('scroll', this._scrollListener);
+    this._adapter.addDocumentListener('wheel', this._scrollListener);
+    this._adapter.addLightDismissListener(this._lightDismissListener);
+  }
+  
+  private _detachDismissListeners(): void {
+    this._adapter.removeAnchorListener('mousedown', this._mouseDownListener);
+    this._adapter.removeAnchorListener('dragstart', this._dragListener);
+    this._adapter.removeDocumentListener('scroll', this._scrollListener);
+    this._adapter.removeDocumentListener('wheel', this._scrollListener);
+    this._adapter.removeLightDismissListener(this._lightDismissListener);
+  }
+
+  private _onHoverStart(_evt: MouseEvent): void {
+    /* c8 ignore next 3 */
+    if (this._open) {
+      return;
+    }
+
+    this._adapter.addAnchorListener('mousedown', this._hoverEndListener);
+    this._adapter.addAnchorListener('mouseleave', this._hoverEndListener);
+  
     if (this._delay) {
-      this._mouseOverTimeout = window.setTimeout(() => {
-        this._show();
-        this._mouseOverTimeout = undefined;
+      this._hoverTimeout = window.setTimeout(() => {
+        this._onTryShow();
       }, this._delay);
     } else {
+      this._onTryShow();
+    }
+  }
+
+  private _onHoverEnd(_evt: MouseEvent): void {
+    this._adapter.removeAnchorListener('mousedown', this._hoverEndListener);
+    this._adapter.removeAnchorListener('mouseleave', this._hoverEndListener);
+    window.clearTimeout(this._hoverTimeout);
+    this._onTryHide();
+  }
+
+  private _onFocus(_evt: FocusEvent): void {
+    /* c8 ignore next 3 */
+    if (this._open) {
+      return;
+    }
+    this._adapter.addAnchorListener('focusout', this._blurListener);
+    this._onTryShow();
+  }
+
+  private _onBlur(_evt: FocusEvent): void {
+    this._adapter.removeAnchorListener('focusout', this._blurListener);
+    this._onTryHide();
+  }
+
+  protected _onLongpress(): void {
+    this._onTryShow();
+  }
+
+  protected override _onLongpressEnd(evt: PointerEvent | TouchEvent): void {
+    super._onLongpressEnd(evt);
+
+    // We only start the timeout to hide the tooltip after the user lifts the pointer
+    this._longpressVisibilityTimeout = window.setTimeout(() => {
+      this._onTryHide();
+    }, TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION);
+  }
+
+  private _onTryShow(): void {
+    if (!this._open) {
       this._show();
     }
   }
 
-  /**
-   * Handles the mouseout event on the target element.
-   */
-  private _onMouseOut(evt: MouseEvent): void {
-    if (this._mouseOverTimeout) {
-      window.clearTimeout(this._mouseOverTimeout);
-      this._mouseOverTimeout = undefined;
-      return;
+  private _onTryHide(): void {
+    if (this._open) {
+      this._hide();
     }
-    this.hide();
-  }
-
-  /**
-   * Displays the tooltip.
-   */
-  private _show(): void {
-    let content: HTMLElement | undefined;
-
-    if (this._builder && typeof this._builder === 'function') {
-      content = this._builder();
-    }
-
-    this._adapter.showTooltip(this._position, content);
-
-    if (this._adapter.hasTooltipElement()) {
-      this._isOpen = true;
-      this._adapter.addWindowListener('scroll', this._scrollListener);
-    }
-  }
-
-  /**
-   * Hides the tooltip.
-   */
-  public hide(): void {
-    if (!this._isOpen) {
-      return;
-    }
-    if (this._touchTimeout) {
-      this._clearTouchTimer();
-    }
-    this._isOpen = false;
-    this._adapter.removeWindowListener('scroll', this._scrollListener);
-    this._adapter.hideTooltip();
-  }
-
-  /**
-   * Handles scrolling events when the tooltip is open.
-   */
-  private _onScroll(evt: Event): void {
-    if (!this._isOpen) {
-      return;
-    }
-    this.hide();
-  }
-
-  private _targetInteracted(): void {
-    if (this._mouseOverTimeout) {
-      window.clearTimeout(this._mouseOverTimeout);
-    }
-    if (this._isOpen) {
-      this.hide();
-    }
-  }
-
-  /** Gets/sets the tooltip text. */
-  public get text(): string {
-    return this._text || this._adapter.getInnerText();
-  }
-  public set text(value: string) {
-    if (this._text !== value) {
-      this._text = value;
-      this._adapter.setTextContent(this._text);
-      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.TEXT, this._text);
-    }
-  }
-
-  /** Sets the tooltip builder function. */
-  public get builder(): TooltipBuilder | undefined {
-    return this._builder;
-  }
-  public set builder(value: TooltipBuilder | undefined) {
-    this._builder = value;
   }
   
-  /** Gets/sets the target element CSS selector. */
-  public get target(): string {
-    return this._target;
+  public get open(): boolean {
+    return this._open;
   }
-  public set target(value: string) {
-    if (this._target !== value) {
-      this._target = value;
-
-      if (this._adapter.hasTargetElement()) {
-        this._removeTargetListeners();
+  public set open(value: boolean) {
+    value = Boolean(value);
+    if (this._open !== value) {
+      if (this._adapter.isConnected) {
+        if (!this._open) {
+          this._show();
+        } else {
+          this._hide();
+        }
+      } else {
+        this._open = value;
       }
-
-      this._adapter.initializeTargetElement(this._target);
-      
-      if (this._adapter.hasTargetElement()) {
-        this._addTargetListeners();
-      }
-
-      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.TARGET, isDefined(this._target) ? this._target : '');
     }
   }
 
-  /** Gets/sets the interaction delay. */
+  public get type(): TooltipType {
+    return this._type;
+  }
+  public set type(value: TooltipType) {
+    value ??= TOOLTIP_CONSTANTS.defaults.TYPE;
+    if (this._type !== value) {
+      this._type = value;
+      if (this._adapter.isConnected) {
+        this._adapter.syncAria();
+      }
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.TYPE, this._type !== TOOLTIP_CONSTANTS.defaults.TYPE, this._type);
+    }
+  }
+
+  public get anchor(): string {
+    return this._anchor;
+  }
+  public set anchor(value: string) {
+    if (this._anchor !== value) {
+      this._anchor = value;
+
+      if (this._adapter.isConnected) {
+        this._detachAnchorListeners();
+        this._adapter.detachAria();
+        this._adapter.tryLocateAnchorElement(this._anchor);
+        this._adapter.syncAria();
+        this._attachAnchorListeners();
+      }
+
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR, !!this._anchor, this._anchor);
+    }
+  }
+
+  public get anchorElement(): HTMLElement | null {
+    return this._adapter.anchorElement;
+  }
+  public set anchorElement(element: HTMLElement | null) {
+    if (this._adapter.anchorElement !== element) {
+      if (this._adapter.isConnected) {
+        this._detachAnchorListeners();
+        this._adapter.detachAria();
+      }
+
+      this._adapter.setAnchorElement(element);
+      
+      if (this._adapter.isConnected) {
+        this._adapter.syncAria();
+        this._attachAnchorListeners();
+      }
+    }
+  }
+
   public get delay(): number {
     return this._delay;
   }
   public set delay(value: number) {
     if (this._delay !== value) {
       this._delay = value;
-      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.DELAY, isDefined(this._delay) ? this._delay.toString() : '');
+      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.DELAY, String(this._delay));
     }
   }
 
-  /** Gets/sets the tooltip position. */
-  public get position(): PopupPlacement {
-    return this._position;
+  public get placement(): TooltipPlacement {
+    return this._placement;
   }
-  public set position(value: PopupPlacement) {
-    if (this._position !== value) {
-      this._position = value;
-      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.POSITION, isDefined(this._position) ? this._position.toString() : '');
+  public set placement(value: TooltipPlacement) {
+    value ??= TOOLTIP_CONSTANTS.defaults.PLACEMENT;
+    if (this._placement !== value) {
+      this._placement = value;
+      this._adapter.setHostAttribute(TOOLTIP_CONSTANTS.attributes.PLACEMENT, String(this._placement));
     }
   }
 
-  public set open(value: boolean) {
-    this._show();
+  public get offset(): number {
+    return this._offset;
   }
-  public get open(): boolean {
-    return this._isOpen;
+  public set offset(value: number) {
+    value ??= TOOLTIP_CONSTANTS.defaults.OFFSET;
+    if (this._offset !== value) {
+      this._offset = value;
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.OFFSET, this._offset !== TOOLTIP_CONSTANTS.defaults.OFFSET, String(this._offset));
+    }
   }
 
-  public get tooltipElement(): HTMLElement | null {
-    return this._adapter.getTooltipElement();
+  public get flip(): OverlayFlipState {
+    return this._flip;
+  }
+  public set flip(value: OverlayFlipState) {
+    value ??= TOOLTIP_CONSTANTS.defaults.FLIP;
+    if (this._flip !== value) {
+      this._flip = value;
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.FLIP, this._flip !== TOOLTIP_CONSTANTS.defaults.FLIP, String(this._flip));
+    }
+  }
+
+  public get boundary(): string | null {
+    return this._boundary;
+  }
+  public set boundary(value: string | null) {
+    if (this._boundary !== value) {
+      this._boundary = value;
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.BOUNDARY, !!this._boundary, this._boundary as string);
+    }
+  }
+
+  public get boundaryElement(): HTMLElement | null {
+    return this._boundaryElement;
+  }
+  public set boundaryElement(element: HTMLElement | null) {
+    if (this._boundaryElement !== element) {
+      this._boundaryElement = element;
+      this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.BOUNDARY, !!this._boundaryElement, this._boundaryElement?.id);
+    }
+  }
+
+  public get fallbackPlacements(): PositionPlacement[] | null {
+    return this._fallbackPlacements;
+  }
+  public set fallbackPlacements(value: PositionPlacement[] | null) {
+    if (this._fallbackPlacements !== value) {
+      this._fallbackPlacements = value;
+    }
+  }
+
+  public get triggerType(): TooltipTriggerType | TooltipTriggerType[] {
+    return this._triggerTypes.length === 1 ? this._triggerTypes[0] : this._triggerTypes;
+  }
+  public set triggerType(value: TooltipTriggerType | TooltipTriggerType[]) {
+    if (this._triggerTypes !== value) {
+      if (this._adapter.isConnected) {
+        this._detachAnchorListeners();
+      }
+
+      this._triggerTypes = Array.isArray(value) ? value : [value];
+      this._triggerTypes = this._triggerTypes.filter(type => !!type);
+
+      if (!this._triggerTypes.length) {
+        this._triggerTypes = TOOLTIP_CONSTANTS.defaults.TRIGGER_TYPES;
+      }
+
+      if (this._adapter.isConnected) {
+        this._attachAnchorListeners();
+      }
+    }
   }
 }

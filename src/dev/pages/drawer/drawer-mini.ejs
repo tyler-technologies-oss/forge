@@ -8,22 +8,22 @@
       <div slot="start">Toolbar</div>
     </forge-toolbar>
     <forge-mini-drawer slot="body-left">
-      <forge-list>
-        <forge-list-item selected="true" id="tooltip-host-1">
+      <forge-list navlist>
+        <forge-list-item selected id="tooltip-host-1">
+          <forge-tooltip anchor="tooltip-host-1">Inbox</forge-tooltip>
           <forge-icon slot="leading" name="inbox"></forge-icon>
           Inbox
         </forge-list-item>
         <forge-list-item id="tooltip-host-2">
+          <forge-tooltip anchor="tooltip-host-2">Sent</forge-tooltip>
           <forge-icon slot="leading" name="send"></forge-icon>
           Outgoing
         </forge-list-item>
         <forge-list-item id="tooltip-host-3">
+          <forge-tooltip anchor="tooltip-host-3">Drafts</forge-tooltip>
           <forge-icon slot="leading" name="drafts"></forge-icon>
           Drafts
         </forge-list-item>
-        <forge-tooltip target="#tooltip-host-1">Inbox</forge-tooltip>
-        <forge-tooltip target="#tooltip-host-2">Sent</forge-tooltip>
-        <forge-tooltip target="#tooltip-host-3">Drafts</forge-tooltip>
       </forge-list>
     </forge-mini-drawer>
     <div slot="body" style="padding: 16px;">

@@ -37,14 +37,16 @@ describe('App Bar Help Button', () => {
     expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
   });
 
-  it('should reset internal aria-label to default', async () => {
+  it('should remove internal aria-label if arial-label removed', async () => {
     const el = await fixture<IAppBarHelpButtonComponent>(html`<forge-app-bar-help-button aria-label="foo"></forge-app-bar-help-button>`);
     const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+
+    expect(iconButtonEl.getAttribute('aria-label')).to.equal('foo');
 
     el.removeAttribute('aria-label');
     await elementUpdated(el);
 
-    expect(iconButtonEl.getAttribute('aria-label')).to.equal('Open help menu');
+    expect(iconButtonEl.getAttribute('aria-label')).to.be.null;
   });
 
   it('should set icon', async () => {

@@ -56,7 +56,7 @@ const events = {
 const defaults = {
   DEFAULT_VARIANT: 'outlined' as FieldVariant,
   DEFAULT_THEME: 'default' as FieldTheme,
-  DEFAUL_SHAPE: 'default' as FieldShape,
+  DEFAULT_SHAPE: 'default' as FieldShape,
   DEFAULT_DENSITY: 'medium' as FieldDensity,
   DEFAULT_LABEL_POSITION: 'inset' as FieldLabelPosition,
   DEFAULT_LABEL_ALIGNMENT: 'default' as FieldLabelAlignment,

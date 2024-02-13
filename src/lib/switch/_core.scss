@@ -22,6 +22,7 @@ $_handle-on-translate: calc(#{token(track-width)} - #{$_track-border-radius} * 2
 
 @mixin host {
   display: inline-block;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @mixin switch {

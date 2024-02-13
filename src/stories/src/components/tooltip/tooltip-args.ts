@@ -1,9 +1,9 @@
-import { PopupPlacement } from '@tylertech/forge';
+import { TooltipPlacement } from '@tylertech/forge';
 
 export interface ITooltipProps {
   text: string;
   delay: number;
-  position: PopupPlacement;
+  placement: TooltipPlacement;
 }
 
 export const argTypes = {
@@ -21,7 +21,7 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  position: {
+  placement: {
     control: {
       type: 'select',
       labels: {

@@ -1,11 +1,13 @@
 import '$src/shared';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
 import type { IButtonComponent } from '@tylertech/forge/button';
+import type { IDeprecatedButtonComponent } from '@tylertech/forge/deprecated/button';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFavorite, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import '@tylertech/forge/button';
+import '@tylertech/forge/deprecated/button';
 import '@tylertech/forge/label';
 import './button.scss';
 
@@ -55,17 +57,22 @@ showDialogBtn.addEventListener('click', () => {
   dialog.showModal();
 });
 
+const allDeprecatedButtons = Array.from(document.querySelectorAll<IDeprecatedButtonComponent>('.content forge-deprecated-button'));
 const allButtons = Array.from(document.querySelectorAll<IButtonComponent>('.content forge-button'));
 allButtons.forEach(btn => btn.addEventListener('click', evt => console.log('click', evt)));
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;
 disabledToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   allButtons.forEach(btn => btn.toggleAttribute('disabled', selected));
+  allDeprecatedButtons.forEach(btn => btn.toggleAttribute('disabled', selected));
 });
 
 const denseToggle = document.querySelector('#opt-dense') as ISwitchComponent;
 denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   allButtons.forEach(btn => btn.dense = selected);
+  allDeprecatedButtons.forEach(btn => {
+    btn.type = btn.type ? btn.type.replace(/(?:-?dense)?$/, selected ? '-dense' : '') : selected ? 'dense' : '';
+  });
 });
 
 const pillToggle = document.querySelector('#opt-pill') as ISwitchComponent;
@@ -81,6 +88,7 @@ anchorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
 const fullWidthToggle = document.querySelector('#opt-full-width') as ISwitchComponent;
 fullWidthToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   allButtons.forEach(btn => btn.fullWidth = selected);
+  allDeprecatedButtons.forEach(btn => btn.toggleAttribute('full-width', selected));
 });
 
 const popoverIconToggle = document.querySelector('#opt-popover-icon') as ISwitchComponent;

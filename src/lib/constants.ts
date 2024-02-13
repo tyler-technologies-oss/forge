@@ -1,9 +1,11 @@
 import type { IBaseComponent } from './core/base/base-component';
+import { supportsHover } from './core/utils/feature-detection';
 
 export const COMPONENT_NAME_PREFIX = 'forge-';
 export const KEYSTROKE_DEBOUNCE_THRESHOLD = 500;
 export const ICON_CLASS_NAME = 'tyler-icons';
 export const CDN_BASE_URL = 'https://cdn.forge.tylertech.com/';
+export const canUserHoverElements = supportsHover();
 
 /** A method symbol that gets the submitted value of a form-associated component. */
 export const getFormValue = Symbol('getFormValue');
