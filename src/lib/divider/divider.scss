@@ -1,26 +1,32 @@
-@use './mixins';
-
-@include mixins.core-styles;
+@use './core' as *;
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host-context(forge-drawer) {
-  .forge-divider {
-    margin: var(--forge-divider-drawer-margin, 4px) 0;
-  }
+.forge-divider {
+  @include tokens;
 }
 
+.forge-divider {
+  @include base;
+}
+
+// :host-context(forge-drawer) {
+//   .forge-divider {
+//     margin: var(--forge-divider-drawer-margin, 4px) 0;
+//   }
+// }
+
 :host([vertical]) {
-  @include mixins.vertical-host;
+  @include vertical-host;
 
   .forge-divider {
-    @include mixins.vertical-base;
+    @include vertical-base;
   }
 }
 
