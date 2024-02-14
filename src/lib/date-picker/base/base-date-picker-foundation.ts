@@ -214,6 +214,13 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
       activeChangeCallback: this._activeChangeListener
     };
 
+    // If the max date is in the past, set the calendar to the min date
+    const currentDate = new Date().getTime();
+    if (this._min && this._max && this._max.getTime() < currentDate) {
+      calendarConfig.year = this._min.getFullYear();
+      calendarConfig.month = this._min.getMonth();
+    }
+
     this._adapter.attachCalendar(calendarConfig, dropdownConfig);
     this._adapter.addDateSelectListener(this._dateSelectListener);
     this._open = true;
