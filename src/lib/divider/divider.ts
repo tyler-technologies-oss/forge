@@ -1,12 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement } from '@tylertech/forge-core';
 import { BaseComponent } from '../core/base/base-component';
 import { DIVIDER_CONSTANTS } from './divider-constants';
+import { setDefaultAria } from '../constants';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 
 import template from './divider.html';
 import styles from './divider.scss';
-import { setDefaultAria } from '../constants';
 
 export interface IDividerComponent extends IWithDefaultAria, IWithElementInternals {
   vertical: boolean;
@@ -25,12 +25,18 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
  * 
  * @summary Divider is used to seperate elements.
  * 
+ * @property {boolean} vertical - Controls if the divider is displayed vertically or horizontally.
+ * 
  * @attribute {boolean} vertical - Controls if the divider is displayed vertically or horizontally.
  * 
  * @cssproperty --forge-divider-color - The color of the divider.
  * @cssproperty --forge-divider-width - The width of the divider.
  * @cssproperty --forge-divider-border-style - The border-style (dashed, solid) of the divider.
  * @cssproperty --forge-divider-margin - The margin of divider.
+ * 
+ * @csspart root - The root container element.
+ * 
+ * @slot - The default/unnamed slot for divider content.
  */
 @CustomElement({
   name: DIVIDER_CONSTANTS.elementName
