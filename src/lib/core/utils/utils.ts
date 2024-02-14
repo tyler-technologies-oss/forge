@@ -278,3 +278,13 @@ export function unwrapElements(wrapper: HTMLElement): void {
 
   wrapper.remove();
 }
+
+/**
+ * Rounds a value to the nearest pixel based on the device pixel ratio.
+ * @param {number} value The value to round.
+ * @returns {number} The rounded value.
+ */
+export function roundByDPR(value: number): number {
+  const dpr = window.devicePixelRatio || 1;
+  return Math.round(value * dpr) / dpr;
+}

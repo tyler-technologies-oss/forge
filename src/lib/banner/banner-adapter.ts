@@ -8,6 +8,7 @@ export interface IBannerAdapter extends IBaseAdapter {
   setDismissButtonVisibility(visible: boolean): void;
   addDismissListener(callback: EventListener): void;
   removeDismissListener(callback: EventListener): void;
+  startDismissCompleteListener(): Promise<void>;
   setDismissed(value: boolean): void;
 }
 
@@ -15,17 +16,22 @@ export class BannerAdapter extends BaseAdapter<IBannerComponent> implements IBan
   private _rootElement: HTMLElement = this._component;
   private _dismissButtonElement: HTMLButtonElement;
   private _iconSlotElement: HTMLSlotElement;
+  private _buttonSlotElement: HTMLSlotElement;
 
   constructor(component: IBannerComponent) {
     super(component);
     this._rootElement = getShadowElement(component, '.forge-banner');
     this._dismissButtonElement = getShadowElement(component, BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
     this._iconSlotElement = getShadowElement(component, BANNER_CONSTANTS.selectors.ICON_SLOT) as HTMLSlotElement;
+    this._buttonSlotElement = getShadowElement(component, BANNER_CONSTANTS.selectors.BUTTON_SLOT) as HTMLSlotElement;
   }
   
   public initialize(): void {
     this._iconSlotElement.addEventListener('slotchange', this._onIconSlotChange.bind(this));
+    this._buttonSlotElement.addEventListener('slotchange', this._onButtonSlotChange.bind(this));
+
     this._onIconSlotChange();
+    this._onButtonSlotChange();
   }
 
   public setDismissButtonVisibility(visible: boolean): void {
@@ -44,7 +50,17 @@ export class BannerAdapter extends BaseAdapter<IBannerComponent> implements IBan
     this._rootElement.inert = value;
   }
 
+  public async startDismissCompleteListener(): Promise<void> {
+    return new Promise<void>(resolve => {
+      this._rootElement.addEventListener('transitionend', () => resolve(), { once: true });
+    });
+  }
+
   private _onIconSlotChange(): void {
     this._rootElement.classList.toggle(BANNER_CONSTANTS.classes.HAS_ICON, this._iconSlotElement.assignedNodes().length > 0);
+  }
+
+  private _onButtonSlotChange(): void {
+    this._rootElement.classList.toggle(BANNER_CONSTANTS.classes.HAS_BUTTON, this._buttonSlotElement.assignedNodes().length > 0);
   }
 }

@@ -872,14 +872,14 @@ describe('Popover', () => {
       await sendMouse({ type: 'click', position: [100, 10], button: 'right' });      
       expect(popover.open).to.be.true;
 
-      const originalOverlayPosition = { x: overlayRootElement.style.left, y: overlayRootElement.style.top };
+      const originalOverlayPosition = overlayRootElement.style.translate;
 
       await sendMouse({ type: 'click', position: [200, 10], button: 'right' });
 
-      const newOverlayPosition = { x: overlayRootElement.style.left, y: overlayRootElement.style.top };
+      const newOverlayPosition = overlayRootElement.style.translate;
 
       expect(popover.open).to.be.true;
-      expect(originalOverlayPosition).not.to.deep.equal(newOverlayPosition);
+      expect(originalOverlayPosition).not.to.equal(newOverlayPosition);
     });
   });
 
@@ -1315,8 +1315,7 @@ describe('Popover', () => {
       const overlayRoot = harness.popoverElement.overlay.shadowRoot?.querySelector(OVERLAY_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       expect(harness.isOpen).to.be.true;
-      expect(overlayRoot.style.top).to.equal('100px');
-      expect(overlayRoot.style.left).to.equal('100px');
+      expect(overlayRoot.style.translate).to.equal('100px 100px');
     });
   });
 });

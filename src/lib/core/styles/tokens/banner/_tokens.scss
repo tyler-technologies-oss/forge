@@ -8,6 +8,7 @@
 $tokens: (
   background: utils.module-val(banner, background, theme.variable(info-container)),
   color: utils.module-val(banner, color, theme.variable(text-high)),
+  icon-color: utils.module-val(banner, icon-color, theme.variable(on-info-container)),
   gap: utils.module-val(banner, gap, spacing.variable(small)),
   padding-inline: utils.module-val(banner, padding-inline, spacing.variable(large)),
   padding-block: utils.module-val(banner, padding-block, spacing.variable(small)),

@@ -7,9 +7,7 @@ import {
   arrow as arrowMiddleware,
   FlipOptions,
   ShiftOptions,
-  AutoPlacementOptions,
   HideOptions,
-  autoPlacement as autoPlacementMiddleware,
   Middleware,
   Placement,
   Strategy,
@@ -19,6 +17,7 @@ import {
   MiddlewareState
 } from '@floating-ui/dom';
 import { getContainingBlock, isContainingBlock, getWindow } from '@floating-ui/utils/dom';
+import { roundByDPR } from './utils';
 
 export type PositionPlacement = Placement;
 export type PositionStrategy = Strategy;
@@ -93,10 +92,6 @@ export interface IPositionElementConfig {
   hide?: boolean;
   /** Options to provide to the hide middleware. */
   hideOptions?: Partial<HideOptions>;
-  /** Should the element automatically attempt to locate the best placement, */
-  auto?: boolean;
-  /** Options to provide to the autoPlacement middleware. */
-  autoOptions?: Partial<AutoPlacementOptions>;
   /** Should any offset values be applied to the element. */
   offset?: boolean;
   /** The options provide to the offset middleware. */
@@ -109,10 +104,6 @@ export interface IPositionElementConfig {
   topLayer?: boolean;
   /** The positioning strategy. */
   strategy?: PositionStrategy;
-  /** Should positioning be applied using a `transform` style. */
-  transform?: boolean;
-  /** The CSS `translate` function to apply to the `transform`. Only applied when `transform` is `true`. */
-  translateFunction?: 'translate3d' | 'translate';
 }
 
 /**
@@ -126,24 +117,20 @@ export async function positionElementAsync({
   placement = 'bottom',
   offset = false,
   offsetOptions,
-  strategy = 'absolute',
+  strategy = 'fixed',
   apply = true,
   flip = true,
   flipOptions = {
     fallbackPlacements: DEFAULT_FALLBACK_PLACEMENTS,
     fallbackStrategy: 'initialPlacement'
   },
-  auto = false,
-  autoOptions,
   shift = true,
   shiftOptions,
   hide = false,
   hideOptions,
   arrowElement,
   arrowOptions = {},
-  topLayer = false,
-  transform = true,
-  translateFunction = 'translate3d'
+  topLayer = false
 }: IPositionElementConfig): Promise<IPositionElementResult> {
   const middleware: Middleware[] = [];
 
@@ -157,11 +144,8 @@ export async function positionElementAsync({
   if (shift) {
     middleware.push(shiftMiddleware(shiftOptions));
   }
-  if (flip && !auto) { // flip and auto placement middleware cannot be used together
+  if (flip) {
     middleware.push(flipMiddleware(flipOptions));
-  }
-  if (auto) {
-    middleware.push(autoPlacementMiddleware(autoOptions));
   }
   if (hide) {
     middleware.push(hideMiddleware(hideOptions));
@@ -178,17 +162,10 @@ export async function positionElementAsync({
   // Should we apply the position information to the element?
   if (apply) {
     const styles: Partial<CSSStyleDeclaration> = {
-      left: transform ? '0' : `${x}px`,
-      top: transform ? '0' : `${y}px`
+      left: '0',
+      top: '0',
+      translate: `${roundByDPR(x)}px ${roundByDPR(y)}px`
     };
-    
-    if (transform) {
-      if (translateFunction === 'translate') {
-        styles.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
-      } else {
-        styles.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-      }
-    }
 
     Object.assign(element.style, styles);
 

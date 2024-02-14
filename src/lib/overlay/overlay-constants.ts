@@ -61,7 +61,7 @@ export interface IOverlayOffset {
 }
 
 export type OverlayPositionStrategy = 'absolute' | 'fixed';
-export type OverlayPlacement = PositionPlacement | 'auto';
+export type OverlayPlacement = PositionPlacement;
 export type OverlayHideState = 'anchor-hidden' | 'never';
 export type OverlayFlipState = 'auto' | 'main' | 'cross' | 'never';
 export type OverlayLightDismissReason = 'click' | 'escape';
@@ -75,3 +75,29 @@ export interface OverlayLightDismissEventData {
 }
 
 export const overlayStack = Symbol('overlayStack');
+
+/**
+ * This is a map of fallback placements for each placement. The fallback placements are used when the
+ * original placement is not possible due to the boundary or other constraints.
+ */
+export const OVERLAY_FALLBACK_PLACEMENT_MAP: Record<OverlayPlacement, OverlayPlacement[]> = {
+  // Left
+  left: ['right', 'bottom', 'top', 'top-start', 'top-end', 'left-start', 'left-end', 'right-start', 'right-end'],
+  'left-start': ['left-end', 'right-start', 'right-end', 'bottom', 'top'],
+  'left-end': ['left-start', 'right-end', 'right-start', 'bottom', 'top', 'bottom-start', 'bottom-end'],
+
+  // Right
+  right: ['left', 'bottom', 'top', 'top-start', 'top-end', 'left-start', 'left-end', 'right-start', 'right-end'],
+  'right-start': ['right-end', 'left-start', 'left-end', 'bottom', 'top'],
+  'right-end': ['right-start', 'left-end', 'left-start', 'bottom', 'top', 'bottom-start', 'bottom-end'],
+
+  // Top
+  top: ['bottom', 'left', 'right', 'bottom-start', 'left-start', 'left-end', 'right-start', 'right-end'],
+  'top-start': ['bottom-start', 'left', 'right', 'left-start', 'left-end', 'right-start', 'right-end'],
+  'top-end': ['bottom-end', 'left', 'right', 'right-start', 'right-end', 'left-start', 'left-end'],
+
+  // Bottom
+  bottom: ['top', 'left', 'right', 'top-start', 'left-start', 'left-end', 'right-start', 'right-end'],
+  'bottom-start': ['top-start', 'left', 'right', 'left-start', 'left-end', 'right-start', 'right-end'],
+  'bottom-end': ['top-end', 'left', 'right', 'right-start', 'right-end', 'left-start', 'left-end']
+};
