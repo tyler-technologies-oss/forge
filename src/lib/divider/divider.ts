@@ -38,7 +38,7 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
 export class DividerComponent extends BaseClass implements IDividerComponent {
   public static get observedAttributes(): string[] {
     return [
-      DIVIDER_CONSTANTS.attributes.VERTICAL,
+      DIVIDER_CONSTANTS.attributes.VERTICAL
     ];
   }
 
