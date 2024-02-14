@@ -35,8 +35,6 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
  * @cssproperty --forge-divider-margin - The margin of divider.
  * 
  * @csspart root - The root container element.
- * 
- * @slot - The default/unnamed slot for divider content.
  */
 @CustomElement({
   name: DIVIDER_CONSTANTS.elementName
