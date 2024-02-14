@@ -85,19 +85,19 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
   }
 
   @FoundationProperty()
-  public for: string | null | undefined;
+  public declare for: string | null | undefined;
 
   @FoundationProperty()
-  public forElement: HTMLElement | null | undefined;
+  public declare forElement: HTMLElement | null | undefined;
 
   @FoundationProperty()
-  public dynamic: boolean;
+  public declare dynamic: boolean;
 
   @FoundationProperty()
-  public nonInteractive: boolean;
+  public declare nonInteractive: boolean;
 
   @FoundationProperty()
-  public legend: boolean;
+  public declare legend: boolean;
 
   /**
    * Updates the targetted element with the label's current text content.
