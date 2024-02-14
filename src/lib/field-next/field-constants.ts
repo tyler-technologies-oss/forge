@@ -28,6 +28,7 @@ const attributes = {
 const classes = {
   FLOATING_IN: 'forge-field--floating-in',
   FLOATING_OUT: 'forge-field--floating-out',
+  HAS_LABEL: 'forge-field--has-label',
   HAS_START: 'forge-field--has-start',
   HAS_END: 'forge-field--has-end',
   HAS_ACCESSORY: 'forge-field--has-accessory',
@@ -40,6 +41,7 @@ const selectors = {
   ROOT: '#root',
   CONTAINER: '#container',
   LABEL: '#label',
+  LABEL_SLOT: 'slot[name=label]',
   START_SLOT: 'slot[name=start]',
   END_SLOT: 'slot[name=end]',
   ACCESSORY_SLOT: 'slot[name=accessory]',
@@ -68,6 +70,10 @@ const animations = {
   FLOAT_OUT_LABEL: 'float-out-label-animation'
 };
 
+const values = {
+  ANIMATION_TIMEOUT_DURATION: 1000
+};
+
 export const FIELD_CONSTANTS = {
   elementName,
   observedAttributes,
@@ -76,7 +82,8 @@ export const FIELD_CONSTANTS = {
   selectors,
   events,
   defaults,
-  animations
+  animations,
+  values
 };
 
 export type FieldVariant = 'plain' | 'outlined' | 'tonal' | 'filled' | 'raised';
@@ -86,4 +93,4 @@ export type FieldDensity = Density | 'extra-small' | 'extra-large';
 export type FieldLabelPosition = 'inline-start' | 'inline-end' | 'block-start' | 'inset' | 'none';
 export type FieldLabelAlignment = 'default' | 'center' | 'baseline' | 'start' | 'end';
 export type FieldSupportTextInset = 'start' | 'end' | 'both' | 'none';
-export type FieldSlot = 'start' | 'end' | 'accessory' | 'support-start' | 'support-end';
+export type FieldSlot = 'label' | 'start' | 'end' | 'accessory' | 'support-start' | 'support-end';

@@ -41,6 +41,7 @@ export class FieldFoundation implements IFieldFoundation {
   private _multiline = false;
   private _supportTextInset: FieldSupportTextInset = FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
 
+  private _labelSlotListener: () => void;
   private _startSlotListener: () => void;
   private _endSlotListener: () => void;
   private _accessorySlotListener: () => void;
@@ -49,6 +50,7 @@ export class FieldFoundation implements IFieldFoundation {
   private _popoverIconClickListener: () => void;
 
   constructor(private _adapter: IFieldAdapter) {
+    this._labelSlotListener = () => this._onSlotChange('label');
     this._startSlotListener = () => this._onSlotChange('start');
     this._endSlotListener = () => this._onSlotChange('end');
     this._accessorySlotListener = () => this._onSlotChange('accessory');
@@ -64,6 +66,9 @@ export class FieldFoundation implements IFieldFoundation {
     this._adapter.addSlotChangeListener('support-start', this._supportStartSlotListener);
     this._adapter.addSlotChangeListener('support-end', this._supportEndSlotListener);
     this._adapter.setLabelPosition(this._labelPosition);
+    if (this._labelPosition === 'inset') {
+      this._adapter.addSlotChangeListener('label', this._labelSlotListener);
+    }
     if (this._popoverIcon) {
       this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
     }
@@ -95,9 +100,19 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._labelPosition !== value) {
       this._labelPosition = value;
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
-      if (this._adapter.isConnected) {
-        this._adapter.setLabelPosition(this._labelPosition);
+
+      if (!this._adapter.isConnected) {
+        return;
       }
+
+      this._adapter.setLabelPosition(this._labelPosition);
+
+      if (this._labelPosition === 'inset') {
+        this._adapter.addSlotChangeListener('label', this._labelSlotListener);
+      } else {
+        this._adapter.removeSlotChangeListener('label', this._labelSlotListener);
+      }
+      this._labelSlotListener();
     }
   }
 

@@ -320,37 +320,135 @@ describe('Field', () => {
   describe('slots', () => {
     it('should add class when start slot has content', async () => {
       const harness = await createDefaultFixture();
-      harness.slotContent('start');
+      harness.addSlottedContent('start');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.true;
     });
 
+    it('should not add class when start slot has no content', async () => {
+      const harness = await createDefaultFixture();
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.false;
+    });
+
+    it('should remove class when start slot content is removed', async () => {
+      const harness = await createDefaultFixture();
+      harness.addSlottedContent('start');
+      await tick();
+      harness.removeSlottedContent('start');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_START)).to.be.false;
+    });
+
     it('should add class when end slot has content', async () => {
       const harness = await createDefaultFixture();
-      harness.slotContent('end');
+      harness.addSlottedContent('end');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.true;
     });
 
+    it('should not add class when end slot has no content', async () => {
+      const harness = await createDefaultFixture();
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.false;
+    });
+
+    it('should remove class when end slot content is removed', async () => {
+      const harness = await createDefaultFixture();
+      harness.addSlottedContent('end');
+      await tick();
+      harness.removeSlottedContent('end');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_END)).to.be.false;
+    });
+
     it('should add class when accessory slot has content', async () => {
       const harness = await createDefaultFixture();
-      harness.slotContent('accessory');
+      harness.addSlottedContent('accessory');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.true;
     });
 
+    it('should not add class when accessory slot has no content', async () => {
+      const harness = await createDefaultFixture();
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.false;
+    });
+
+    it('should remove class when accessory slot content is removed', async () => {
+      const harness = await createDefaultFixture();
+      harness.addSlottedContent('accessory');
+      await tick();
+      harness.removeSlottedContent('accessory');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.false;
+    });
+
     it('should add class when support text start slot has content', async () => {
       const harness = await createDefaultFixture();
-      harness.slotContent('support-text-start');
+      harness.addSlottedContent('support-text-start');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.true;
     });
 
+    it('should not add class when support text start slot has no content', async () => {
+      const harness = await createDefaultFixture();
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
+    });
+
+    it('should remove class when support text start slot content is removed', async () => {
+      const harness = await createDefaultFixture();
+      harness.addSlottedContent('support-text-start');
+      await tick();
+      harness.removeSlottedContent('support-text-start');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
+    });
+
     it('should add class when support text end slot has content', async () => {
       const harness = await createDefaultFixture();
-      harness.slotContent('support-text-end');
+      harness.addSlottedContent('support-text-end');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.true;
+    });
+
+    it('should not add class when support text end slot has no content', async () => {
+      const harness = await createDefaultFixture();
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.false;
+    });
+
+    it('should remove class when support text end slot content is removed', async () => {
+      const harness = await createDefaultFixture();
+      harness.addSlottedContent('support-text-end');
+      await tick();
+      harness.removeSlottedContent('support-text-end');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_END)).to.be.false;
+    });
+
+    it('should add class when label slot has content and label position is inset', async () => {
+      const harness = await createFixture({ labelPosition: 'inset' });
+      harness.addSlottedContent('label');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.true;
+    });
+
+    it('should not add class when label slot has content and label position is not inset', async () => {
+      const harness = await createFixture({ labelPosition: 'inline-start' });
+      harness.addSlottedContent('label');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.false;
+    });
+
+    it('should remove class when label slot content is removed and label position is inset', async () => {
+      const harness = await createFixture({ labelPosition: 'inset' });
+      harness.addSlottedContent('label');
+      await tick();
+      harness.removeSlottedContent('label');
+      await tick();
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.false;
     });
   });
 
@@ -412,6 +510,7 @@ describe('Field', () => {
       const harness = await createFixture({ labelPosition: 'inset' });
       const animationSpy = spy();
       harness.rootElement.addEventListener('animationstart', animationSpy);
+      harness.addSlottedContent('label');
       harness.element.floatLabel = true;
 
       await tick();
@@ -423,6 +522,7 @@ describe('Field', () => {
       const harness = await createFixture({ labelPosition: 'inset', floatLabel: true });
       const animationSpy = spy();
       harness.rootElement.addEventListener('animationstart', animationSpy);
+      harness.addSlottedContent('label');
       harness.element.floatLabel = false;
 
       await tick();
@@ -434,6 +534,7 @@ describe('Field', () => {
       const harness = await createFixture({ labelPosition: 'inset' });
       const animationSpy = spy();
       harness.rootElement.addEventListener('animationstart', animationSpy);
+      harness.addSlottedContent('label');
       harness.element.floatLabelWithoutAnimation(true);
 
       await tick();
@@ -445,6 +546,7 @@ describe('Field', () => {
       const harness = await createFixture({ labelPosition: 'inset', floatLabel: true });
       const animationSpy = spy();
       harness.rootElement.addEventListener('animationstart', animationSpy);
+      harness.addSlottedContent('label');
       harness.element.floatLabelWithoutAnimation(false);
 
       await tick();
@@ -482,10 +584,17 @@ class FieldHarness extends TestHarness<IFieldComponent> {
     ]});
   }
 
-  public slotContent(slotName: string): void {
+  public addSlottedContent(slotName: string): void {
     const div = document.createElement('div');
     div.slot = slotName;
     this.element.appendChild(div);
+  }
+
+  public removeSlottedContent(slotName: string): void {
+    const el = this.element.querySelector(`[slot="${slotName}"]`);
+    if (el) {
+      el.remove();
+    }
   }
 }
 

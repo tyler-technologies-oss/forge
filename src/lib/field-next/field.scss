@@ -322,16 +322,16 @@ $variants: (
   //
   
   :host(#{map.get($label-positions, inset)}[float-label]) {
-    .label {
-      @include core.floating-label;
-    }
-
-    .input {
-      @include core.floating-input;
-    }
-
-    .forge-field {
-      &--floating-in {
+    .forge-field--has-label {
+      .label {
+        @include core.floating-label;
+      }
+  
+      .input {
+        @include core.floating-input;
+      }
+  
+      &.forge-field--floating-in {
         .label {
           @include core.float-in-label;
         }
@@ -352,7 +352,7 @@ $variants: (
   }
 
   :host(#{map.get($label-positions, inset)}:not([float-label])) {
-    .forge-field--floating-out {
+    .forge-field--has-label.forge-field--floating-out {
       .label {
         @include core.float-out-label;
       }
@@ -364,7 +364,7 @@ $variants: (
   }
 
   :host(#{map.get($label-positions, inset)}[float-label][multiline]) {
-    .forge-field:not(.forge-field--floating-in) {
+    .forge-field--has-label:not(.forge-field--floating-in) {
       ::slotted(textarea) {
         @include core.resize-container-slotted-floating-input;
       }

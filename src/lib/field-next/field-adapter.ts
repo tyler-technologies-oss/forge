@@ -7,6 +7,7 @@ import { FieldLabelPosition, FieldSlot, FIELD_CONSTANTS } from './field-constant
 
 export interface IFieldAdapter extends IBaseAdapter {
   addSlotChangeListener(slotName: FieldSlot, listener: () => void): void;
+  removeSlotChangeListener(slotName: FieldSlot, listener: () => void): void;
   addPopoverIconClickListener(listener: () => void): void;
   removePopoverIconClickListener(listener: () => void): void;
   attachResizeContainer(): void;
@@ -20,6 +21,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   private readonly _rootElement: HTMLElement;
   private readonly _containerElement: HTMLElement;
   private readonly _labelElement: HTMLElement;
+  private readonly _labelSlotElement: HTMLSlotElement;
   private readonly _startSlotElement: HTMLSlotElement;
   private readonly _endSlotElement: HTMLSlotElement;
   private readonly _accessorySlotElement: HTMLSlotElement;
@@ -37,6 +39,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._rootElement = getShadowElement(component, FIELD_CONSTANTS.selectors.ROOT);
     this._containerElement = getShadowElement(component, FIELD_CONSTANTS.selectors.CONTAINER);
     this._labelElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL);
+    this._labelSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL_SLOT) as HTMLSlotElement;
     this._startSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.START_SLOT) as HTMLSlotElement;
     this._endSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;
     this._accessorySlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.ACCESSORY_SLOT) as HTMLSlotElement;
@@ -47,6 +50,9 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
 
   public addSlotChangeListener(slotName: FieldSlot, listener: (evt: Event) => void): void {
     switch (slotName) {
+      case 'label':
+        this._labelSlotElement.addEventListener('slotchange', listener);
+        break;
       case 'start':
         this._startSlotElement.addEventListener('slotchange', listener);
         break;
@@ -61,6 +67,14 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
         break;
       case 'support-end':
         this._supportEndSlotElement.addEventListener('slotchange', listener);
+        break;
+    }
+  }
+
+  public removeSlotChangeListener(slotName: FieldSlot, listener: (evt: Event) => void): void {
+    switch (slotName) {
+      case 'label':
+        this._labelSlotElement.removeEventListener('slotchange', listener);
         break;
     }
   }
@@ -149,6 +163,9 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
    */
   public handleSlotChange(slotName: FieldSlot): void {
     switch (slotName) {
+      case 'label':
+        toggleClass(this._rootElement, !!this._labelSlotElement.assignedNodes().length, FIELD_CONSTANTS.classes.HAS_LABEL);
+        break;
       case 'start':
         toggleClass(this._rootElement, !!this._startSlotElement.assignedNodes().length, FIELD_CONSTANTS.classes.HAS_START);
         break;
