@@ -25,6 +25,7 @@ export interface IFieldComponent extends IBaseComponent {
   popoverExpanded: boolean;
   multiline: boolean;
   supportTextInset: FieldSupportTextInset;
+  floatLabelWithoutAnimation(value: boolean): void;
 }
 
 declare global {
@@ -72,6 +73,8 @@ declare global {
  * @attribute {boolean} popover-expanded - Whether the field's popover icon is in the expanded orientation.
  * @attribute {boolean} multiline - Whether the field contains a multiline input.
  * @attribute {FieldSupportTextInset} support-text-inset - Whether the field's support text is inset from either side.
+ * 
+ * @method {(value: boolean) => void} floatLabelWithoutAnimation - Sets the floating label without animating the transition.
  * 
  * @event {CustomEvent<null>} forge-field-popover-icon-click - Dispatches when the user clicks the popover icon.
  * 
@@ -301,4 +304,8 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
 
   @FoundationProperty()
   public declare supportTextInset: FieldSupportTextInset;
+
+  public floatLabelWithoutAnimation(value: boolean): void {
+    this._foundation.floatLabelWithoutAnimation(value);
+  }
 }

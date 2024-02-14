@@ -20,6 +20,7 @@ export interface IFieldFoundation extends ICustomElementFoundation {
   multiline: boolean;
   supportTextInset: FieldSupportTextInset;
   initialize(): void;
+  floatLabelWithoutAnimation(value: boolean): void;
 }
 
 export class FieldFoundation implements IFieldFoundation {
@@ -78,6 +79,14 @@ export class FieldFoundation implements IFieldFoundation {
   private _onPopoverIconClick(): void {
     this._adapter.emitHostEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK);
   }
+
+  public floatLabelWithoutAnimation(value: boolean): void {
+    if (this._floatLabel !== value) {
+      this._floatLabel = value;
+      this._adapter.setFloatingLabel(this._floatLabel, true);
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
+    }
+  };
 
   public get labelPosition(): FieldLabelPosition {
     return this._labelPosition;
