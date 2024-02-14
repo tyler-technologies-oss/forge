@@ -12,7 +12,14 @@ IconRegistry.define([
 const banner = document.querySelector('#banner') as IBannerComponent;
 const leadingIcon = document.querySelector('#leading-icon') as HTMLElement;
 const textEl = document.querySelector('#text') as HTMLElement;
+const preventDismissToggle = document.querySelector('#opt-prevent-dismiss') as ISwitchComponent;
 
+banner.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, evt => {
+  console.log(evt);
+  if (preventDismissToggle.on) {
+    evt.preventDefault();
+  }
+});
 banner.addEventListener(BANNER_CONSTANTS.events.DISMISSED, evt => {
   console.log(evt);
   dismissedToggle.on = true;

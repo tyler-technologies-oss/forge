@@ -25,10 +25,14 @@ export class BannerFoundation implements IBannerFoundation {
   }
 
   private async _onDismiss(): Promise<void> {
+    if (this._dismissed || this._persistent) {
+      return;
+    }
+
     const originalDismissed = this._dismissed;
     this._dismissed = !this._dismissed;
 
-    const evt = new CustomEvent(BANNER_CONSTANTS.events.DISMISSED, { bubbles: true, composed: true, cancelable: true });
+    const evt = new CustomEvent(BANNER_CONSTANTS.events.BEFORE_DISMISS, { bubbles: true, composed: true, cancelable: true });
     this._adapter.dispatchHostEvent(evt);
     this._dismissed = originalDismissed;
 
@@ -36,7 +40,10 @@ export class BannerFoundation implements IBannerFoundation {
       return;
     }
 
+    const dismissComplete = this._adapter.startDismissCompleteListener();
     this.dismissed = !this._dismissed;
+    await dismissComplete;
+    this._adapter.dispatchHostEvent(new CustomEvent(BANNER_CONSTANTS.events.DISMISSED, { bubbles: true, composed: true }));
   }
 
   private _addDismissListener(): void {

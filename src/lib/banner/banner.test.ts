@@ -3,6 +3,7 @@ import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { IBannerComponent } from './banner';
 import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
+import { timer } from '@tylertech/forge-testing';
 
 import './banner';
 
@@ -26,6 +27,22 @@ describe('Banner', () => {
     el.appendChild(iconEl);
     await elementUpdated(el);
     expect(rootEl?.classList.contains(BANNER_CONSTANTS.classes.HAS_ICON)).to.be.true;
+  });
+
+  it('should add and remove class when button slot is populated', async () => {
+    const el = await fixture<IBannerComponent>(html`<forge-banner><button slot="button">button</button>Test</forge-banner>`);
+    const buttonEl = el.querySelector('[slot=button]') as HTMLButtonElement;
+    const rootEl = el.shadowRoot?.querySelector('.forge-banner');
+
+    expect(rootEl?.classList.contains(BANNER_CONSTANTS.classes.HAS_BUTTON)).to.be.true;
+
+    buttonEl.remove();
+    await elementUpdated(el);
+    expect(rootEl?.classList.contains(BANNER_CONSTANTS.classes.HAS_BUTTON)).to.be.false;
+
+    el.appendChild(buttonEl);
+    await elementUpdated(el);
+    expect(rootEl?.classList.contains(BANNER_CONSTANTS.classes.HAS_BUTTON)).to.be.true;
   });
 
   describe('accessibility', () => {
@@ -72,7 +89,7 @@ describe('Banner', () => {
   });
 
   describe('dismissible/persistent', () => {
-    it('should be dismissible (not peristent) by default', async () => {
+    it('should be dismissible (not persistent) by default', async () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
 
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON);
@@ -88,8 +105,11 @@ describe('Banner', () => {
       expect(dismissButton.hidden).to.be.true;
     });
 
-    it('should dispatch dismissed event when toggling persistent', async () => {
+    it('should dispatch dismissed event after toggling persistent', async () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
+
+      await elementUpdated(el);
+
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
 
       const dismissSpy = spy();
@@ -97,37 +117,55 @@ describe('Banner', () => {
 
       el.persistent = true;
       dismissButton.click();
+      await timer(500);
+
       expect(dismissButton.hidden).to.be.true;
       expect(dismissSpy.calledOnce).to.be.false;
+
       
       el.persistent = false;
       dismissButton.click();
+      await timer(500);
+
       expect(dismissButton.hidden).to.be.false;
       expect(dismissSpy.calledOnce).to.be.true;
     });
 
     it('should dispatch dismissed event when dismiss button is clicked', async () => {
-      const el = await fixture<IBannerComponent>(html`<forge-banner dismissible></forge-banner>`);
+      const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      
+      const beforeDismissSpy = spy();
+      const dismissSpy = spy();
+
+      el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, beforeDismissSpy);
+      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
+
+      await elementUpdated(el);
+      dismissButton.click();
+
+      expect(beforeDismissSpy.calledOnce).to.be.true;
+      
+      await timer(500);
+      
+      expect(el.dismissed).to.be.true;
+      expect(beforeDismissSpy.calledOnce).to.be.true;
+      expect(dismissSpy.calledOnce).to.be.true;
+    });
+
+    it('should not dismiss when before dismiss event is prevented', async () => {
+      const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      
+      el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, (evt: CustomEvent) => evt.preventDefault());
 
       const dismissSpy = spy();
       el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
 
       dismissButton.click();
 
-      expect(el.dismissed).to.be.true;
-      expect(dismissSpy.calledOnce).to.be.true;
-    });
-
-    it('should not dismiss when dismissed event is prevented', async () => {
-      const el = await fixture<IBannerComponent>(html`<forge-banner dismissible></forge-banner>`);
-      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
-
-      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, (evt: CustomEvent) => evt.preventDefault());
-
-      dismissButton.click();
-
       expect(el.dismissed).to.be.false;
+      expect(dismissSpy.called).to.be.false;
     });
 
     it('should not dispatch dismissed event when persistent', async () => {
@@ -141,6 +179,80 @@ describe('Banner', () => {
 
       dismissButton.click();
 
+      expect(dismissSpy.called).to.be.false;
+    });
+
+    it('should dispatch dismissed event after animation is complete when dismiss button is clicked', async () => {
+      const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
+
+      await elementUpdated(el);
+
+      const dismissSpy = spy();
+      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
+
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      dismissButton.click();
+
+      expect(dismissSpy.called).to.be.false;
+
+      await timer(500); // Transition duration defaults to 200ms
+
+      expect(dismissSpy.calledOnce).to.be.true;
+    });
+
+    it('should not dispatch dismissed event when dismiss button is clicked and before dismiss event is prevented', async () => {
+      const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      
+      const beforeDismissSpy = spy(evt => evt.preventDefault());
+      el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, beforeDismissSpy);
+
+      const dismissSpy = spy();
+      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
+
+      await elementUpdated(el);
+      dismissButton.click();
+
+      expect(beforeDismissSpy.calledOnce).to.be.true;
+
+      await timer(500);
+
+      expect(dismissSpy.called).to.be.false;
+    });
+
+    it('should not dispatch events if dismiss button is clicked while already dismissed', async () => {
+      const el = await fixture<IBannerComponent>(html`<forge-banner dismissed></forge-banner>`);
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      const beforeDismissSpy = spy();
+      const dismissSpy = spy();      
+      
+      el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, beforeDismissSpy);
+      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
+      
+      await elementUpdated(el);
+      dismissButton.click();
+
+      await timer(500);
+
+      expect(beforeDismissSpy.called).to.be.false;
+      expect(dismissSpy.called).to.be.false;
+    });
+
+    it('should not dispatch events if dismiss button is clicked while persistent', async () => {
+      const el = await fixture<IBannerComponent>(html`<forge-banner persistent></forge-banner>`);
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      const beforeDismissSpy = spy();
+      const dismissSpy = spy();      
+      
+      el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, beforeDismissSpy);
+      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
+      
+      await elementUpdated(el);
+      dismissButton.click();
+
+      await timer(500);
+
+      expect(beforeDismissSpy.called).to.be.false;
       expect(dismissSpy.called).to.be.false;
     });
   });
@@ -181,9 +293,11 @@ describe('Banner', () => {
       const el = await fixture<IBannerComponent>(html`<forge-banner></forge-banner>`);
 
       el.canDismiss = false;
+      expect(el.canDismiss).to.be.false;
       expect(el.persistent).to.be.true;
 
       el.canDismiss = true;
+      expect(el.canDismiss).to.be.true;
       expect(el.persistent).to.be.false;
     });
   });

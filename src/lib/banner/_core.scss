@@ -42,6 +42,12 @@
   padding-block: #{token(padding-block)};
 }
 
+@mixin dismiss-button-container {
+  display: flex;
+  align-items: center;
+  gap: #{token(gap)};
+}
+
 @mixin dismissed {
   grid-template-rows: 0fr;
   opacity: 0;
