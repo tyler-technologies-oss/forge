@@ -5,6 +5,7 @@
 @mixin host() {
   display: block;
   contain: content;
+  margin: #{token(margin)};
 }
 
 @mixin base() {
@@ -13,8 +14,6 @@
   border-bottom-width: #{token(width)};
   border-bottom-style: #{token(border-style)};
   
-  margin: #{token(margin)};
-
   height: 0;
 }
 
@@ -23,8 +22,6 @@
   border-right-color: #{token(color)};
   border-right-width: #{token(width)};
   border-right-style: #{token(border-style)};
-
-  margin: #{token(margin)};
 
   height: 100%;
   width: 0;

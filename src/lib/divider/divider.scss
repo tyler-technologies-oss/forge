@@ -1,5 +1,12 @@
 @use './core' as *;
 
+$host-tokens: [margin];
+
+:host {
+  @include tokens($includes: $host-tokens);
+}
+
+
 :host {
   @include host;
 }
@@ -9,18 +16,12 @@
 }
 
 .forge-divider {
-  @include tokens;
+  @include tokens($excludes: $host-tokens);
 }
 
 .forge-divider {
   @include base;
 }
-
-// :host-context(forge-drawer) {
-//   .forge-divider {
-//     margin: var(--forge-divider-drawer-margin, 4px) 0;
-//   }
-// }
 
 :host([vertical]) {
   @include vertical-host;
