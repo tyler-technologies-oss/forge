@@ -41,6 +41,7 @@ export class ListItemFoundation implements IListItemFoundation {
   private _clickListener: (evt: MouseEvent) => void;
   private _mouseDownListener: (evt: MouseEvent) => void;
   private _keydownListener: (evt: KeyboardEvent) => void;
+  private _destroyUserInteractionListener: (() => void) | undefined;
 
   constructor(private _adapter: IListItemAdapter) {
     this._clickListener = (evt: MouseEvent) => this._onClick(evt);
@@ -79,6 +80,11 @@ export class ListItemFoundation implements IListItemFoundation {
     if (this._rippleInstance) {
       this._rippleInstance.destroy();
       this._rippleInstance = undefined as any;
+    }
+
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
     }
   }
 
@@ -344,8 +350,16 @@ export class ListItemFoundation implements IListItemFoundation {
 
   private async _setRipple(): Promise<void> {
     if (this._ripple && !this._static && !this._rippleInstance) {
-      const type = await this._adapter.userInteractionListener();
-      if (this._ripple && !this._static && !this._rippleInstance) { // need to re-check after await
+      const { userInteraction, destroy } = await this._adapter.createUserInteractionListener();
+      this._destroyUserInteractionListener = destroy;
+      const { type } = await userInteraction;
+      this._destroyUserInteractionListener = undefined;
+
+      if (!this._adapter.isConnected) {
+        return;
+      }
+      
+      if (this._ripple && !this._static && !this._rippleInstance) {
         this._rippleInstance = this._adapter.createRipple();
         if (type === 'focusin') {
           this._rippleInstance.handleFocus();

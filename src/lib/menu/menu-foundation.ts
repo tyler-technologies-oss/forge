@@ -362,6 +362,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
         if (this._open) {
           if (results && isArray(results) && results.length) {
             this._options = results;
+            this._mapIconToLeadingIcon();
             this._adapter.setOptions(results);
             const selectedValues = this._getSelectedValues();
             if (selectedValues.length) {

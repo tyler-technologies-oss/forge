@@ -1,7 +1,7 @@
 import { CustomElement, ensureChildren, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ALLOWED_CHILDREN, BUTTON_CONSTANTS } from './button-constants';
-import { userInteractionListener } from '../core/utils/utils';
+import { createUserInteractionListener } from '../core/utils/utils';
 import { ForgeRipple } from '../ripple';
 
 export interface IButtonComponent extends IBaseComponent {
@@ -32,6 +32,7 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
   private _type: string;
   private _mutationObserver: MutationObserver;
   private _buttonAttrMutationObserver: MutationObserver;
+  private _destroyUserInteractionListener: (() => void) | undefined;
 
   constructor() {
     super();
@@ -54,6 +55,11 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
   }
 
   public disconnectedCallback(): void {
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
+    }
+
     if (this._rippleInstance) {
       this._rippleInstance.destroy();
     }
@@ -128,12 +134,22 @@ export class ButtonComponent extends BaseComponent implements IButtonComponent {
   }
 
   private async _deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this._buttonElement);
-    if (!this._rippleInstance) {
-      this._rippleInstance = this._createRipple();
-      if (type === 'focusin') {
-        this._rippleInstance.handleFocus();
-      }
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+    }
+    
+    const { userInteraction, destroy } = createUserInteractionListener(this._buttonElement);
+    this._destroyUserInteractionListener = destroy;
+    const { type } = await userInteraction;
+    this._destroyUserInteractionListener = undefined;
+
+    if (!this.isConnected) {
+      return;
+    }
+
+    this._rippleInstance = this._createRipple();
+    if (type === 'focusin') {
+      this._rippleInstance.handleFocus();
     }
   }
 

@@ -1,7 +1,8 @@
 import { emitEvent, toggleAttribute } from '@tylertech/forge-core';
 import { IBaseComponent } from './base-component';
 
-export interface IBaseAdapter {
+export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
+  readonly hostElement: T;
   readonly isConnected: boolean;
   removeHostAttribute(name: string): void;
   getHostAttribute(name: string): string | null;
@@ -19,8 +20,12 @@ export interface IBaseAdapter {
   removeBodyAttribute(name: string): void;
 }
 
-export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
+export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
   constructor(protected _component: T) {}
+
+  public get hostElement(): T {
+    return this._component;
+  }
 
   public getHostAttribute(name: string): string | null {
     return this._component.getAttribute(name);

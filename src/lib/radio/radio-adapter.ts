@@ -2,7 +2,7 @@ import { addClass, getShadowElement, removeClass, getActiveElement } from '@tyle
 import { IRadioComponent } from './radio';
 import { RADIO_CONSTANTS } from './radio-constants';
 import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
-import { userInteractionListener } from '../core/utils';
+import { createUserInteractionListener } from '../core/utils';
 
 export interface IRadioAdapter {
   connect(): void;
@@ -32,6 +32,7 @@ export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
   private _nativeInputElement: HTMLInputElement | null;
   private _inputAttributeMutationObserver?: MutationObserver;
   private _rippleInstance: ForgeRipple | undefined;
+  private _destroyUserInteractionListener: (() => void) | undefined;
 
   constructor(private _component: IRadioComponent) {
     this._rootElement = getShadowElement(this._component, RADIO_CONSTANTS.selectors.RADIO);
@@ -59,16 +60,31 @@ export class RadioAdapter implements IRadioAdapter, ForgeRippleCapableSurface {
   }
 
   public async deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this._rootElement);
-    if (!this._rippleInstance) {
-      this._rippleInstance = this._createRipple();
-      if (type === 'focusin') {
-        this._rippleInstance.handleFocus();
-      }
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+    }
+    
+    const { userInteraction, destroy } = createUserInteractionListener(this._rootElement);
+    this._destroyUserInteractionListener = destroy;
+    const { type } = await userInteraction;
+    this._destroyUserInteractionListener = undefined;
+
+    if (!this._component.isConnected) {
+      return;
+    }
+
+    this._rippleInstance = this._createRipple();
+    if (type === 'focusin') {
+      this._rippleInstance.handleFocus();
     }
   }
 
   public destroyRipple(): void {
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
+    }
+
     this._rippleInstance?.destroy();
     this._rippleInstance = undefined;
   }

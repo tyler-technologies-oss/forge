@@ -6,6 +6,7 @@ import {
   IPopupComponent,
   LIST_ITEM_CONSTANTS,
   MENU_CONSTANTS,
+  MenuOptionFactory,
   POPUP_CONSTANTS
 } from '@tylertech/forge';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
@@ -427,6 +428,30 @@ describe('MenuComponent', function(this: ITestContext) {
 
       expect(leadingIconEl).toBeTruthy();
       expect(leadingIconEl?.textContent).toBe('code');
+    });
+
+    it(`should load leading icons from options factory based on 'leadingIcon' or 'icon' property`, async function(this: ITestContext){
+      this.context = setupTestContext();
+      const options: MenuOptionFactory = () => {
+        return [
+          { icon: 'code', value: '', label: '1' },
+          { leadingIcon: 'code', value: '', label: '2' }
+        ];
+      }
+
+      await tick();
+
+      this.context.component.options = options;
+      this.context.component.open = true;
+      
+      await tick();
+
+      const list = getPopupList(getPopupElement());
+      const listItems = Array.from(list.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
+      const leadingIcons = listItems.map(listItem => listItem.querySelector('i[slot=leading]'));
+
+      expect(leadingIcons[0]).toBeTruthy();
+      expect(leadingIcons[1]).toBeTruthy();
     });
   });
 
