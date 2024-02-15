@@ -1601,7 +1601,7 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMin(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MIN, !!this._minAttribute, this._minAttribute as string);
 
-    if (this._min && (this._min.getMonth() > this._month || this._min.getFullYear() > this._year)) {
+    if (this._min && (this._min.getMonth() > this._month && this._min.getFullYear() > this._year)) {
       this._year = this._min.getFullYear();
       this._month = this._min.getMonth();
     }
@@ -1621,7 +1621,7 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMax(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MAX, !!this._maxAttribute, this._maxAttribute as string);
 
-    if (this._max && (this._max.getMonth() < this._month || this._max.getFullYear() < this._year)) {
+    if (this._max && (this._max.getMonth() < this._month && this._max.getFullYear() < this._year)) {
       this._year = this._max.getFullYear();
       this._month = this._max.getMonth();
     }
