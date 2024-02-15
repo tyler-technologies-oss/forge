@@ -42,7 +42,9 @@ export interface IPaginatorAdapter extends IBaseAdapter {
   setAlternative(alternative: boolean): void;
   setAlignment(alignment: PaginatorAlternativeAlignment): void;
   hasFocus(): boolean;
-  handleFocusMove(from?: PaginatorFieldIdentifier | null, options?: FocusOptions): void;
+  setFocus(options?: FocusOptions): void;
+  getFocusedField(): PaginatorFieldIdentifier | null;
+  tryDisableFields(fieldsToDisable: PaginatorFieldIdentifier[]): void;
 }
 
 /**
@@ -265,68 +267,45 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
     return this._component.matches(':focus');
   }
 
-  public handleFocusMove(from?: PaginatorFieldIdentifier, options?: FocusOptions): void {
-    if (from && !this.hasFocus()) {
-      return; // We can only move focus elsewhere within the element if the element already contains focus
-    }
+  public setFocus(options?: FocusOptions): void {
+    this._tryFocus([
+      this._pageSizeSelect,
+      this._firstPageButton,
+      this._previousPageButton,
+      this._nextPageButton,
+      this._lastPageButton
+    ], options);
+  }
 
-    switch (from) {
-      case 'first':
-        this._tryFocus([
-          this._nextPageButton,
-          this._lastPageButton,
-          this._previousPageButton,
-          this._pageSizeSelect
-        ], options);
-        break;
-      case 'last':
-        this._tryFocus([
-          this._previousPageButton,
-          this._firstPageButton,
-          this._nextPageButton,
-          this._pageSizeSelect
-        ], options);
-        break;
-      case 'previous':
-        this._tryFocus([
-          this._nextPageButton,
-          this._lastPageButton,
-          this._firstPageButton,
-          this._pageSizeSelect
-        ]);
-        break;
-      case 'next':
-        this._tryFocus([
-          this._previousPageButton,
-          this._firstPageButton,
-          this._lastPageButton,
-          this._pageSizeSelect
-        ], options);
-        break;
-      case 'page-size':
-        this._tryFocus([
-          this._nextPageButton,
-          this._lastPageButton,
-          this._firstPageButton,
-          this._previousPageButton
-        ], options);
-        break;
-      default:
-        this._tryFocus([
-          this._firstPageButton,
-          this._previousPageButton,
-          this._nextPageButton,
-          this._lastPageButton,
-          this._pageSizeSelect
-        ], options);
-        break;
+  public getFocusedField(): PaginatorFieldIdentifier | null {
+    if (this._pageSizeSelect.matches(':focus-within')) {
+      return 'page-size';
+    } else if (this._firstPageButton.matches(':focus-within')) {
+      return 'first';
+    } else if (this._previousPageButton.matches(':focus-within')) {
+      return 'previous';
+    } else if (this._nextPageButton.matches(':focus-within')) {
+      return 'next';
+    } else if (this._lastPageButton.matches(':focus-within')) {
+      return 'last';
     }
+    return null;
+  }
+
+  public tryDisableFields(fieldsToDisable: PaginatorFieldIdentifier[]): void {
+    const fieldDisablers = {
+      'first': () => this.disableFirstPageButton(),
+      'last': () => this.disableLastPageButton(),
+      'previous': () => this.disablePreviousPageButton(),
+      'next': () => this.disableNextPageButton()
+    };
+    fieldsToDisable.forEach(field => fieldDisablers[field]?.());
   }
 
   private _tryFocus(elements: Array<HTMLButtonElement | ISelectComponent>, options?: FocusOptions): void {
     const preventScroll = typeof options?.preventScroll === 'boolean' ? options.preventScroll : true;
     for (const el of elements) {
-      if (el && el.isConnected && !el.disabled) {
+      if (el && el.isConnected && !el.disabled && el.style.display !== 'none') {
         el.focus({ ...options, preventScroll });
         return;
       }

@@ -3,10 +3,10 @@ import { MDCSwitch } from '@material/switch';
 import { MDCRipple } from '@material/ripple';
 import { SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { createUserInteractionListener } from '../core/utils';
 
 import template from './switch.html';
 import styles from './switch.scss';
-import { userInteractionListener } from '../core/utils';
 
 export interface ISwitchComponent extends IBaseComponent {
   dense: boolean;
@@ -26,6 +26,8 @@ declare global {
 }
 
 class ForgeMDCSwitch extends MDCSwitch {
+  private _destroyUserInteractionListener: (() => void) | undefined;
+
   public override initialize(): void {
     // Do not call super.initialize()
     // We defer instantiation of the ripple until first user interaction
@@ -33,6 +35,11 @@ class ForgeMDCSwitch extends MDCSwitch {
   }
 
   public override destroy(): void {
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
+    }
+
     // We are not calling super.destroy() because it expects `ripple` to be set when it might not be yet
     // We instead just replicate all existing functionality, but allow for `ripple` to be undefined
     this.foundation.destroy();
@@ -41,7 +48,19 @@ class ForgeMDCSwitch extends MDCSwitch {
   }
 
   private async _deferRippleInitialization(): Promise<void> {
-    const type = await userInteractionListener(this.root);
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+    }
+    
+    const { userInteraction, destroy } = createUserInteractionListener(this.root);
+    this._destroyUserInteractionListener = destroy;
+    const { type } = await userInteraction;
+    this._destroyUserInteractionListener = undefined;
+
+    if (!this.root.isConnected) {
+      return;
+    }
+
     this.ripple = new MDCRipple(this.root, this.createRippleFoundation());
     if (type === 'focusin') {
       // eslint-disable-next-line @typescript-eslint/dot-notation

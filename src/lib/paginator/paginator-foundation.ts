@@ -1,5 +1,5 @@
 import { coerceNumber, ICustomElementFoundation, isArray, isDefined } from '@tylertech/forge-core';
-import { IPaginatorAdapter } from './paginator-adapter';
+import { IPaginatorAdapter, PaginatorFieldIdentifier } from './paginator-adapter';
 import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, PaginatorRangeLabelBuilder, IPaginatorRangeState } from './paginator-constants';
 import { ISelectOption } from '../select';
 
@@ -57,7 +57,7 @@ export class PaginatorFoundation {
   }
 
   public focus(options?: FocusOptions): void {
-    this._adapter.handleFocusMove(null, options);
+    this._adapter.setFocus(options);
   }
 
   private _attachListeners(): void {
@@ -189,33 +189,22 @@ export class PaginatorFoundation {
     this._adapter.enableNextPageButton();
     this._adapter.enableLastPageButton();
 
+    const fieldsToDisable: PaginatorFieldIdentifier[] = [];
+
     if (!this._hasFirstPage()) {
-      if (this._adapter.hasFocus()) {
-        this._adapter.handleFocusMove('first');
-      }
-      this._adapter.disableFirstPageButton();
+      fieldsToDisable.push('first');
     }
-
     if (!this._hasPreviousPage()) {
-      if (this._adapter.hasFocus()) {
-        this._adapter.handleFocusMove('previous');
-      }
-      this._adapter.disablePreviousPageButton();
+      fieldsToDisable.push('previous');
     }
-
     if (!this._hasNextPage()) {
-      if (this._adapter.hasFocus()) {
-        this._adapter.handleFocusMove('next');
-      }
-      this._adapter.disableNextPageButton();
+      fieldsToDisable.push('next');
+    }
+    if (!this._hasLastPage()) {
+      fieldsToDisable.push('last');
     }
 
-    if (!this._hasLastPage()) {
-      if (this._adapter.hasFocus()) {
-        this._adapter.handleFocusMove('last');
-      }
-      this._adapter.disableLastPageButton();
-    }
+    this._adapter.tryDisableFields(fieldsToDisable);
   }
 
   private _toggleFirstLastButtons(): void {

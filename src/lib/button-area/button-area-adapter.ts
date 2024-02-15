@@ -1,11 +1,12 @@
 import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter, userInteractionListener } from '../core';
+import { BaseAdapter, IBaseAdapter, createUserInteractionListener } from '../core';
 import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../ripple';
 import { IButtonAreaComponent } from './button-area';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 
 export interface IButtonAreaAdapter extends IBaseAdapter {
+  destroy(): void;
   setDisabled(value: boolean): void;
   addListener(type: string, listener: (event: Event) => void): void;
   removeListener(type: string, listener: (event: Event) => void): void;
@@ -25,6 +26,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   private _buttonElement?: HTMLButtonElement;
   private _rippleInstance?: ForgeRipple;
   private _buttonObserver?: MutationObserver;
+  private _destroyUserInteractionListener: (() => void) | undefined;
 
   constructor(component: IButtonAreaComponent) {
     super(component);
@@ -42,6 +44,13 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
 
   public get disabled(): boolean | undefined {
     return this.buttonIsDisabled();
+  }
+
+  public destroy(): void {
+    if (typeof this._destroyUserInteractionListener === 'function') {
+      this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
+    }
   }
 
   public setDisabled(value: boolean): void {
@@ -97,7 +106,15 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
 
   public async createRipple(): Promise<void> {
     if (!this._rippleInstance) {
-      const type = await this._userInteractionListener();
+      const { userInteraction, destroy } = await createUserInteractionListener(this._rootElement);
+      this._destroyUserInteractionListener = destroy;
+      const { type } = await userInteraction;
+      this._destroyUserInteractionListener = undefined;
+
+      if (!this.isConnected) {
+        return;
+      }
+
       if (!this._rippleInstance) {
         const adapter: ForgeRippleAdapter = {
           ...ForgeRipple.createAdapter(this),
@@ -122,6 +139,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
           removeClass: (className) => removeClass(className, this._rootElement),
           updateCssVariable: (varName, value) => this._rootElement.style.setProperty(varName, value)
         };
+
         this._rippleInstance = new ForgeRipple(this._rootElement, new ForgeRippleFoundation(adapter));
         if (type === 'focusin') {
           this._rippleInstance.handleFocus();
@@ -131,10 +149,6 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
       this._rippleInstance.destroy();
       this._rippleInstance = undefined;
     }
-  }
-
-  private _userInteractionListener(): ReturnType<typeof userInteractionListener> {
-    return userInteractionListener(this._rootElement);
   }
 
   private _isRootEvent(evtType: string): boolean {

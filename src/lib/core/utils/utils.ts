@@ -35,22 +35,38 @@ export function highlightTextHTML(label: string, highlightText: string): HTMLEle
  * @param capture Whether to use capturing listeners or not.
  * @returns A `Promise` that will be resolved when either of the listeners has executed.
  */
-export function userInteractionListener(element: HTMLElement, { capture = true, pointerenter = true, focusin = true } = {}): Promise<'pointerenter' | 'focusin'> {
-  return new Promise<'pointerenter' | 'focusin'>(resolve => {
+export function createUserInteractionListener(element: HTMLElement, { capture = true, pointerenter = true, focusin = true } = {}): { userInteraction: Promise<Event>; destroy: () => void } {
+  let destroyFn: () => void;
+  const destroy: () => void = () => {
+    if (typeof destroyFn === 'function') {
+      destroyFn();
+    }
+  };
+
+  const userInteraction = new Promise<Event>(resolve => {
     const listenerOpts: EventListenerOptions & { once: boolean } = { once: true, capture };
   
-    const handlePointerenter = (): void => {
+    const handlePointerenter = (evt: Event): void => {
       if (focusin) {
         element.removeEventListener('focusin', handleFocusin, listenerOpts);
       }
-      resolve('pointerenter');
+      resolve(evt);
     };
   
-    const handleFocusin = (): void => {
+    const handleFocusin = (evt: Event): void => {
       if (pointerenter) {
         element.removeEventListener('pointerenter', handlePointerenter, listenerOpts);
       }
-      resolve('focusin');
+      resolve(evt);
+    };
+
+    destroyFn = (): void => {
+      if (pointerenter) {
+        element.removeEventListener('pointerenter', handlePointerenter, listenerOpts);
+      }
+      if (focusin) {
+        element.removeEventListener('focusin', handleFocusin, listenerOpts);
+      }
     };
 
     if (pointerenter) {
@@ -60,6 +76,9 @@ export function userInteractionListener(element: HTMLElement, { capture = true, 
       element.addEventListener('focusin', handleFocusin, listenerOpts);
     }
   });
+
+
+  return { userInteraction, destroy };
 }
 
 /**
