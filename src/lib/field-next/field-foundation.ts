@@ -41,23 +41,15 @@ export class FieldFoundation implements IFieldFoundation {
   private _multiline = false;
   private _supportTextInset: FieldSupportTextInset = FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
 
-  private _labelSlotListener: () => void;
-  private _startSlotListener: () => void;
-  private _endSlotListener: () => void;
-  private _accessorySlotListener: () => void;
-  private _supportStartSlotListener: () => void;
-  private _supportEndSlotListener: () => void;
-  private _popoverIconClickListener: () => void;
+  private _labelSlotListener: () => void = this._onSlotChange.bind(this, 'label');
+  private _startSlotListener: () => void = this._onSlotChange.bind(this, 'start');
+  private _endSlotListener: () => void = this._onSlotChange.bind(this, 'end');
+  private _accessorySlotListener: () => void = this._onSlotChange.bind(this, 'accessory');
+  private _supportStartSlotListener: () => void = this._onSlotChange.bind(this, 'support-start');
+  private _supportEndSlotListener: () => void = this._onSlotChange.bind(this, 'support-end');
+  private _popoverIconClickListener: () => void = this._onPopoverIconClick.bind(this);
 
-  constructor(private _adapter: IFieldAdapter) {
-    this._labelSlotListener = () => this._onSlotChange('label');
-    this._startSlotListener = () => this._onSlotChange('start');
-    this._endSlotListener = () => this._onSlotChange('end');
-    this._accessorySlotListener = () => this._onSlotChange('accessory');
-    this._supportStartSlotListener = () => this._onSlotChange('support-start');
-    this._supportEndSlotListener = () => this._onSlotChange('support-end');
-    this._popoverIconClickListener = () => this._onPopoverIconClick();
-  }
+  constructor(private _adapter: IFieldAdapter) {}
 
   public initialize(): void {
     this._adapter.addSlotChangeListener('start', this._startSlotListener);

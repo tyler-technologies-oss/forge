@@ -70,10 +70,6 @@ const animations = {
   FLOAT_OUT_LABEL: 'float-out-label-animation'
 };
 
-const values = {
-  ANIMATION_TIMEOUT_DURATION: 1000
-};
-
 export const FIELD_CONSTANTS = {
   elementName,
   observedAttributes,
@@ -82,8 +78,7 @@ export const FIELD_CONSTANTS = {
   selectors,
   events,
   defaults,
-  animations,
-  values
+  animations
 };
 
 export type FieldVariant = 'plain' | 'outlined' | 'tonal' | 'filled' | 'raised';
