@@ -97,44 +97,39 @@ declare global {
  * @csspart focus-indicator - The forwarded focus indicator's internal indicator element.
  * @csspart state-layer - The forwarded state layer's internal surface element.
  * 
- * @cssprop --forge-list-item-background-color - The background color.
- * @cssprop --forge-list-item-shape - The shape of the list item.
- * @cssprop --forge-list-item-padding - The padding inside of the container element.
- * @cssprop --forge-list-item-margin - The margin around the host element.
- * @cssprop --forge-list-item-height - The height of the container.
- * @cssprop --forge-list-item-dense-height - The height when in the dense state.
- * @cssprop --forge-list-item-indent - The margin inline state when in the indented state.
- * @cssprop --forge-list-item-supporting-text-color - The text color of the supporting text.
- * @cssprop --forge-list-item-supporting-line-height - The line height of the supporting text.
- * @cssprop --forge-list-item-selected-color - The color when in the selected state.
- * @cssprop --forge-list-item-opacity - The opacity of the background color when in the disabled state.
- * @cssprop --forge-list-item-selected-leading-color - The color of the leading content when in the selected state.
- * @cssprop --forge-list-item-selected-trailing-color - The color of the trailing content when in the selected state.
- * @cssprop --forge-list-item-selected-supporting-text-color - The color of the supporting text when in the selected state.
- * @cssprop --forge-list-item-disabled-opacity - The opacity of the element when in the disabled state.
- * @cssprop --forge-list-item-disabled-cursor - The cursor when in the disabled state.
- * @cssprop --forge-list-item-one-line-height - The line height when in the one/single line state.
- * @cssprop --forge-list-item-two-line-height - The line height when in the two line state.
- * @cssprop --forge-list-item-three-line-height - The line height when in the three line state.
- * @cssprop --forge-list-item-dense-one-line-height - The line height when in the dense one/single line state.
- * @cssprop --forge-list-item-dense-two-line-height - The line height when in the dense two line state.
- * @cssprop --forge-list-item-dense-three-line-height - The line height when in the dense three line state.
- * @cssprop --forge-list-item-dense-font-size - The font size when in the dense state.
- * @cssprop --forge-list-item-dense-indent - The margin inline state when in the dense indented state.
- * @cssprop --forge-list-item-dense-leading-margin-end - The margin end of the leading content when in the dense state.
- * @cssprop --forge-list-item-dense-trailing-margin-start - The margin start of the trailing content when in the dense state.
- * @cssprop --forge-list-item-leading-margin-start - The margin start of the leading content.
- * @cssprop --forge-list-item-leading-margin-end - The margin end of the leading content.
- * @cssprop --forge-list-item-leading-selected-color - The color of the leading content when in the selected state.
- * @cssprop --forge-list-item-trailing-margin-start - The margin start of the trailing content.
- * @cssprop --forge-list-item-trailing-margin-end - The margin end of the trailing content.
- * @cssprop --forge-list-item-trailing-selected-color - The color of the trailing content when in the selected state.
- * @cssprop --forge-list-item-avatar-background-color - The background color of the avatar container.
- * @cssprop --forge-list-item-avatar-color - The foreground color of the avatar container.
- * @cssprop --forge-list-item-avatar-shape - The shape of the avatar container.
- * @cssprop --forge-list-item-avatar-margin-start - The margin start of the avatar container.
- * @cssprop --forge-list-item-avatar-margin-end - The margin end of the avatar container.
- * @cssprop --forge-list-item-avatar-size - The height & width of the avatar container.
+ * @cssproperty --forge-list-item-background-color - The background color.
+ * @cssproperty --forge-list-item-shape - The shape of the list item.
+ * @cssproperty --forge-list-item-padding - The padding inside of the container element.
+ * @cssproperty --forge-list-item-margin - The margin around the host element.
+ * @cssproperty --forge-list-item-height - The height of the container.
+ * @cssproperty --forge-list-item-dense-height - The height when in the dense state.
+ * @cssproperty --forge-list-item-indent - The margin inline state when in the indented state.
+ * @cssproperty --forge-list-item-cursor - The cursor when interactive.
+ * @cssproperty --forge-list-item-gap - The gap between the slotted content.
+ * @cssproperty --forge-list-item-supporting-text-color - The text color of the supporting text.
+ * @cssproperty --forge-list-item-supporting-line-height - The line height of the supporting text.
+ * @cssproperty --forge-list-item-selected-color - The color when in the selected state.
+ * @cssproperty --forge-list-item-opacity - The opacity of the background color when in the disabled state.
+ * @cssproperty --forge-list-item-selected-leading-color - The color of the leading content when in the selected state.
+ * @cssproperty --forge-list-item-selected-trailing-color - The color of the trailing content when in the selected state.
+ * @cssproperty --forge-list-item-selected-supporting-text-color - The color of the supporting text when in the selected state.
+ * @cssproperty --forge-list-item-disabled-opacity - The opacity of the element when in the disabled state.
+ * @cssproperty --forge-list-item-disabled-cursor - The cursor when in the disabled state.
+ * @cssproperty --forge-list-item-one-line-height - The line height when in the one/single line state.
+ * @cssproperty --forge-list-item-two-line-height - The line height when in the two line state.
+ * @cssproperty --forge-list-item-three-line-height - The line height when in the three line state.
+ * @cssproperty --forge-list-item-dense-one-line-height - The line height when in the dense one/single line state.
+ * @cssproperty --forge-list-item-dense-two-line-height - The line height when in the dense two line state.
+ * @cssproperty --forge-list-item-dense-three-line-height - The line height when in the dense three line state.
+ * @cssproperty --forge-list-item-dense-font-size - The font size when in the dense state.
+ * @cssproperty --forge-list-item-dense-indent - The margin inline state when in the dense indented state.
+ * @cssproperty --forge-list-item-dense-gap - The gap between the slotted content when in the dense state.
+ * @cssproperty --forge-list-item-leading-selected-color - The color of the leading content when in the selected state.
+ * @cssproperty --forge-list-item-trailing-selected-color - The color of the trailing content when in the selected state.
+ * @cssproperty --forge-list-item-avatar-background-color - The background color of the avatar container.
+ * @cssproperty --forge-list-item-avatar-color - The foreground color of the avatar container.
+ * @cssproperty --forge-list-item-avatar-shape - The shape of the avatar container.
+ * @cssproperty --forge-list-item-avatar-size - The height & width of the avatar container.
  */
 @CustomElement({
   name: LIST_ITEM_CONSTANTS.elementName,

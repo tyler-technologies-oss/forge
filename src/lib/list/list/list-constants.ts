@@ -20,9 +20,14 @@ const attributes = {
   ...observedAttributes
 };
 
+const events = {
+  SCOPE_TEST: `${elementName}-item-scope-test`
+} as const;
+
 export const LIST_CONSTANTS = {
   elementName,
-  attributes
+  attributes,
+  events
 };
 
 export const ListComponentItemRole = {

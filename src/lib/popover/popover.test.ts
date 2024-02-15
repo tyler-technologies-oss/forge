@@ -1451,10 +1451,10 @@ async function createFixture({
         ?persistent-hover=${persistentHover}
         animation-type=${animationType ?? nothing}
         trigger-type=${triggerType ?? nothing}>
-        <span>Test popover content<span>
+        <span>Test popover content</span>
         <button type="button" id="content-button" style="pointer-events: none;">Button</button>
         <forge-popover id="nested-popover">Nested popover</forge-popover>
-      </forge-overlay>
+      </forge-popover>
     </div>
   `);
 

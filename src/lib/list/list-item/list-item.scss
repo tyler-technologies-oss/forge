@@ -163,27 +163,15 @@ slot[name=tertiary-title] {
 
 // Leading slotted elements
 ::slotted([slot=leading]) {
-  @include leading;
-
   :host([selected]) & {
     @include leading-selected;
-  }
-
-  :host([dense]) & {
-    @include leading-dense;
   }
 }
 
 // Trailing slotted elements
 ::slotted([slot=trailing]) {
-  @include trailing;
-
   :host([selected]) & {
     @include trailing-selected;
-  }
-
-  :host([dense]) & {
-    @include trailing-dense;
   }
 }
 

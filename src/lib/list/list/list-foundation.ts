@@ -45,6 +45,13 @@ export class ListFoundation implements IListFoundation {
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
+    const path = evt.composedPath();
+    const composedBeforeUs = path.slice(0, path.indexOf(this._adapter.hostElement));
+    const fromListDescendant = composedBeforeUs.some((el: HTMLElement) => el.localName === LIST_CONSTANTS.elementName.toLowerCase());
+    if (fromListDescendant) {
+      return; // We ignore keydown events coming from sub-lists because they are already handling it themselves
+    }
+
     const { key, altKey, ctrlKey, shiftKey, metaKey } = evt;
 
     if (altKey || ctrlKey || shiftKey || metaKey) {
