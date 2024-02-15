@@ -10,12 +10,12 @@ const attributes = {
   SELECTED_VALUE: 'selected-value'
 };
 
-const selectors = {
-  FOCUSABLE_LIST_ITEMS: '.forge-list-item:not(.forge-list-item--static):not(.forge-list-item--disabled)'
-};
+const events = {
+  SCOPE_TEST: `${elementName}-item-scope-test`
+} as const;
 
 export const LIST_CONSTANTS = {
   elementName,
   attributes,
-  selectors
+  events
 };

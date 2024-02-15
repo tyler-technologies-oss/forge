@@ -4,11 +4,10 @@ import { IListItemComponent, LIST_ITEM_CONSTANTS } from '../list-item';
 import { IListComponent } from './list';
 import { LIST_CONSTANTS } from './list-constants';
 
-export interface IListAdapter extends IBaseAdapter {
+export interface IListAdapter extends IBaseAdapter<IListComponent> {
   initializeAccessibility(): void;
   addListener(type: string, listener: (evt: Event) => void): void;
   removeListener(type: string, listener: (evt: Event) => void): void;
-  getListItems(): IListItemComponent[];
   focusNextListItem(): void;
   focusPreviousListItem(): void;
   focusFirstListItem(): void;
@@ -50,22 +49,13 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
   }
 
   /**
-   * Returns all child `<forge-list-item>` elements.
-   */
-  public getListItems(): IListItemComponent[] {
-    return Array.from(this._component.children).filter(child => child.tagName === LIST_ITEM_CONSTANTS.elementName.toUpperCase()) as IListItemComponent[];
-  }
-
-  /**
    * Sets focus to the next item in the list.
    */
   public focusNextListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-
-    if (listItems && listItems.length > 0) {
-      const focusedListItemIndex = listItems.indexOf(getActiveElement(this._component.ownerDocument) as HTMLElement);
+    const listItems = this._getOwnListItems();
+    if (listItems.length > 0) {
+      const focusedListItemIndex = listItems.findIndex(li => li.matches(':focus-within'));
       const nextIndex = focusedListItemIndex < listItems.length - 1 ? focusedListItemIndex + 1 : 0;
-
       if (nextIndex <= listItems.length - 1) {
         listItems[nextIndex].focus();
       }
@@ -76,12 +66,10 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
    * Sets focus to the previous item in the list.
    */
   public focusPreviousListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-
-    if (listItems && listItems.length > 0) {
-      const focusedListItemIndex = listItems.indexOf(getActiveElement(this._component.ownerDocument) as HTMLElement);
+    const listItems = this._getOwnListItems();
+    if (listItems.length > 0) {
+      const focusedListItemIndex = listItems.findIndex(li => li.matches(':focus-within'));
       const nextIndex = focusedListItemIndex > 0 ? focusedListItemIndex - 1 : listItems.length - 1;
-
       if (nextIndex >= 0) {
         listItems[nextIndex].focus();
       }
@@ -92,9 +80,8 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
    * Sets focus to the first item in the list.
    */
   public focusFirstListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-
-    if (listItems && listItems.length > 0) {
+    const listItems = this._getOwnListItems();
+    if (listItems.length > 0) {
       listItems[0].focus();
     }
   }
@@ -103,8 +90,8 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
    * Sets focus to the last item in the list.
    */
   public focusLastListItem(): void {
-    const listItems = deepQuerySelectorAll(this._component, LIST_CONSTANTS.selectors.FOCUSABLE_LIST_ITEMS, false) as HTMLElement[];
-    if (listItems && listItems.length > 0) {
+    const listItems = this._getOwnListItems();
+    if (listItems.length > 0) {
       listItems[listItems.length - 1].focus();
     }
   }
@@ -119,6 +106,26 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
   }
 
   public updateListItems(cb: (li: IListItemComponent) => void): void {
-    this.getListItems().forEach(li => cb(li));
+    this._getOwnListItems().forEach(li => cb(li));
+  }
+
+  private _getOwnListItems(): IListItemComponent[] {
+    // Find all deeply nested list items
+    const allChildListItems = deepQuerySelectorAll(this._component, LIST_ITEM_CONSTANTS.elementName) as IListItemComponent[];
+
+    // Get all list items that are scoped to this component only (not within sub-lists).
+    const scopedListItems: IListItemComponent[] = [];
+    const listener: EventListener = evt => {
+      const composedPath = evt.composedPath();
+      const composedBeforeUs = composedPath.slice(0, composedPath.indexOf(this._component));
+      if (!composedBeforeUs.some((el: HTMLElement) => el.localName === LIST_CONSTANTS.elementName.toLowerCase())) {
+        scopedListItems.push(evt.target as IListItemComponent);
+      }
+    };
+    this._component.addEventListener(LIST_CONSTANTS.events.SCOPE_TEST, listener);
+    allChildListItems.forEach(li => li.dispatchEvent(new CustomEvent(LIST_CONSTANTS.events.SCOPE_TEST, { bubbles: true, composed: true })));
+    this._component.removeEventListener(LIST_CONSTANTS.events.SCOPE_TEST, listener);
+
+    return scopedListItems;
   }
 }
