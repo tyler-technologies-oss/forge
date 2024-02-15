@@ -19,14 +19,19 @@ export const getValidationMessage = Symbol('getValidityMessage');
 /** A property symbol that references the `ElementInternals` instance of an element. */
 export const internals = Symbol('ElementInternals');
 
-/** A property symbol that sets the type of an internal input element used to create validations messages */
+/**
+ * A property symbol that sets the type of an internal input element used to create
+ * validation messages
+ */
 export const inputType = Symbol('inputType');
 
 /** A property symbol that indicates whether or not a `Focusable` element can be focused. */
 export const isFocusable = Symbol('isFocusable');
 
-/** A method symbol that sets default ARIA on the `ElementInternals` instance of an element if
- * supported or sprouts attributes if not. */
+/**
+ * A method symbol that sets default ARIA on the `ElementInternals` instance of an element if
+ * supported or sprouts attributes if not.
+ */
 export const setDefaultAria = Symbol('setDefaultAria');
 
 export type Theme = 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'info';

@@ -15,7 +15,7 @@ export class RadioGroupAdapter extends BaseAdapter<IRadioGroupComponent> impleme
   }
 
   public attachLabel(label: LabelComponent): void {
-    label.static = true;
+    label.nonInteractive = true;
     label.forElement = this._component;
   }
 

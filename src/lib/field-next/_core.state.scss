@@ -1,0 +1,193 @@
+@use '../core/styles/theme';
+@use './core.variant' as variant;
+@use './token-utils' as *;
+
+//
+// Hover
+//
+
+@mixin container-hover($variant, $theme: default) {
+  @if $variant == outlined {
+    @include container-outlined-hover($theme);
+  } @else if $variant == tonal {
+    @include container-tonal-hover($theme);
+  } @else if $variant == filled {
+    @include container-filled-hover($theme);
+  }
+}
+
+@mixin container-outlined-hover($theme: default) {
+  @if $theme == default {
+    @include override('inner-border-color', #{token(hover-border-color)}, value);
+  } @else {
+    @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
+  }
+}
+
+@mixin container-tonal-hover($theme: default) {
+  @if $theme == default {
+    @include override('resize-container-inset-label-background', #{token(tonal-hover-color)}, value);
+  } @else {
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-minimum), value);
+  }
+}
+
+@mixin container-filled-hover($theme: default) {
+  @if $theme == default {
+    @include override('inner-border-color', #{token(hover-border-color)}, value);
+  } @else {
+    @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
+  }
+}
+
+@mixin container-background-hover($variant, $theme: default) {
+  @if $variant == outlined {
+    @include container-background-outlined-hover($theme);
+  } @else if $variant == tonal {
+    @include container-background-tonal-hover($theme);
+  } @else if $variant == filled {
+    @include container-background-filled-hover($theme);
+  } @else if $variant == raised {
+    @include container-background-raised-hover($theme);
+  }
+}
+
+@mixin container-background-outlined-hover($theme: default) {
+  outline-style: #{token(hover-border-style)};
+  outline-width: #{token(hover-border-width)};
+
+  @if $theme == default {
+    outline-color: #{token(hover-border-color)};
+  } @else {
+    outline-color: theme.variable(#{$theme}-container-high);
+  }
+}
+
+@mixin container-background-tonal-hover($theme: default) {
+  @if $theme == default {
+    background: #{token(tonal-hover-color)};
+  } @else {
+    background: theme.variable(#{$theme}-container-minimum);
+  }
+}
+
+@mixin container-background-filled-hover($theme: default) {
+  outline-style: #{token(hover-border-style)};
+  outline-width: #{token(hover-border-width)};
+
+  @if $theme == default {
+    outline-color: #{token(hover-border-color)};
+  } @else {
+    outline-color: theme.variable(#{$theme}-container-high);
+  }
+}
+
+@mixin container-background-raised-hover($theme: default) {
+  box-shadow: #{token(raised-active-elevation)};
+}
+
+//
+// Focus
+//
+
+@mixin container-background-focus($variant) {
+  @if $variant == raised {
+    box-shadow: #{token(raised-active-elevation)};
+  }
+}
+
+//
+// Invalid
+//
+
+@mixin container-invalid($variant) {
+  @if $variant == plain {
+    @include override('input-color', #{token(invalid-color)}, value);
+    @include variant.text-color(token(invalid-color));
+  } @else if $variant == outlined {
+    @include override('inner-border-color', #{token(invalid-border-color)}, value);
+    @include variant.text-color(token(invalid-color));
+  } @else if $variant == tonal {
+    @include override('inner-border-color', #{token(invalid-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface-color)}, value);
+    @include variant.text-color(token(invalid-on-surface-color));
+  } @else if $variant == filled {
+    @include override('inner-border-color', #{token(invalid-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface-color)}, value);
+    @include variant.text-color(token(invalid-on-surface-color));
+  } @else if $variant == raised {
+    @include override('inner-border-color', #{token(invalid-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface-color)}, value);
+    @include variant.text-color(token(invalid-on-surface-color));
+  }
+}
+
+@mixin container-background-invalid($variant) {
+  @if $variant == outlined {
+    outline-style: #{token(invalid-border-style)};
+    outline-width: #{token(invalid-border-width)};
+    outline-color: #{token(invalid-border-color)};
+  } @else if $variant == tonal {
+    background: #{token(invalid-surface-color)};
+  } @else if $variant == filled {
+    outline-style: #{token(invalid-border-style)};
+    outline-width: #{token(invalid-border-width)};
+    outline-color: #{token(invalid-border-color)};
+    background: #{token(invalid-surface-color)};
+  } @else if $variant == raised {
+    background: #{token(invalid-surface-color)};
+  }
+}
+
+@mixin container-invalid-hover($variant) {
+  @if $variant == outlined {
+    @include override('inner-border-color', #{token(invalid-border-color-hover)}, value);
+  } @else if $variant == tonal {
+    @include override('inner-border-color', #{token(invalid-border-color-hover)}, value);
+    @include override('resize-container-inset-label-background', #{token(invalid-surface-color-hover)}, value);
+  } @else if $variant == filled {
+    @include override('inner-border-color', #{token(invalid-border-color-hover)}, value);
+  }
+}
+
+@mixin container-background-invalid-hover($variant) {
+  @if $variant == outlined {
+    outline-color: #{token(invalid-border-color-hover)};
+  } @else if $variant == tonal {
+    background: #{token(invalid-surface-color-hover)};
+  } @else if $variant == filled {
+    outline-color: #{token(invalid-border-color-hover)};
+  }
+}
+
+@mixin label-invalid {
+  color: #{token(invalid-label-color)};
+}
+
+@mixin inset-label-invalid($variant) {
+  @if $variant == plain {
+    color: #{token(invalid-label-color)};
+  } @else if $variant == outlined {
+    color: #{token(invalid-label-color)};
+  } @else if $variant == tonal {
+    color: #{token(invalid-inset-label-on-surface-color)};
+  } @else if $variant == filled {
+    color: #{token(invalid-inset-label-on-surface-color)};
+  } @else if $variant == raised {
+    color: #{token(invalid-inset-label-on-surface-color)};
+  }
+}
+
+@mixin support-text-invalid {
+  color: #{token(invalid-color)};
+}
+
+//
+// Popover
+//
+
+@mixin popover-icon-expanded {
+  & > * {
+    rotate: #{token(popover-icon-open-rotation)};
+  }
+}

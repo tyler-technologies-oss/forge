@@ -53,7 +53,7 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
     swatches: [
       { text: 'Secondary', background: 'secondary', foreground: 'on-secondary' },
       { text: 'Secondary container (minimum)', background: 'secondary-container-minimum', foreground: 'on-secondary-container-minimum' },
-      { text: 'Secondary container (low)', background: 'secondary-container-low', foreground: 'on-secondary-container-low'},
+      { text: 'Secondary container (low)', background: 'secondary-container-low', foreground: 'on-secondary-container-low' },
       { text: 'Secondary container', background: 'secondary-container', foreground: 'on-secondary-container' },
       { text: 'Secondary container (high)', background: 'secondary-container-high', foreground: 'on-secondary-container-high' }
     ]

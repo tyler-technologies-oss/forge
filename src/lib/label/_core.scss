@@ -2,7 +2,7 @@
 
 @mixin host {
   /* Typography styles are set on the host to make it easier to override them via a class */
-  @include typography.style(label);
+  @include typography.style(label1);
 
   display: inline-block;
   cursor: default;

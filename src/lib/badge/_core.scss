@@ -9,7 +9,7 @@
 }
 
 @mixin base {
-  @include typography.style(label);
+  @include typography.style(label1);
 
   background: #{token(background)};
   color: #{token(color)};

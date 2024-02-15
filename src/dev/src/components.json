@@ -23,6 +23,7 @@
   { "label": "Divider", "path": "/pages/divider/divider.html" },
   { "label": "Drawer", "path": "/pages/drawer/drawer.html" },
   { "label": "Expansion panel", "path": "/pages/expansion-panel/expansion-panel.html" },
+  { "label": "Field", "path": "/pages/field/field.html", "tags": ["form"] },
   { "label": "File picker", "path": "/pages/file-picker/file-picker.html", "tags": ["form"] },
   { "label": "Floating action button", "path": "/pages/fab/fab.html" },
   { "label": "Focus indicator", "path": "/pages/focus-indicator/focus-indicator.html" },
