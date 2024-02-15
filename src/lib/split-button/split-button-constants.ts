@@ -12,7 +12,7 @@ const attributes = {
 };
 
 const defaults = {
-  DEFAULT_VARIANT: 'text' as SplitButtonVariant,
+  DEFAULT_VARIANT: 'filled' as SplitButtonVariant,
   DEFAULT_THEME: 'primary' as ButtonTheme
 };
 
