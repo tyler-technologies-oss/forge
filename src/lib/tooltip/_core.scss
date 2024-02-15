@@ -30,6 +30,7 @@
   pointer-events: none;
   text-align: #{token(content-align)};
   line-height: normal;
+  white-space: normal;
 
   animation-duration: #{token(animation-duration)};
   animation-timing-function: #{token(animation-timing)};
