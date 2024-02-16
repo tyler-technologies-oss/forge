@@ -69,15 +69,10 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
       return;
     }
 
-    // Placement can only accept `PositionPlacement` values, so we coerce the value to a
-    // `PositionPlacement` when `'auto'` is provided
-    const positionPlacement = this._placement === 'auto' ? 'bottom' : this._placement;
-
     this._adapter.positionElement({
       anchorElement: this._anchorElement,
       strategy: this._positionStrategy,
-      placement: positionPlacement,
-      auto: this._placement === 'auto',
+      placement: this._placement,
       hide: this._hide,
       offset: this._offset,
       shift: this._shift,

@@ -2,18 +2,20 @@
 @use '../../../utils';
 @use '../../../theme';
 @use '../../../shape';
+@use '../../../spacing';
 @use '../../../typography';
 
 $tokens: (
   // Base
   background-color: utils.module-val(list-item, background-color, transparent),
   shape: utils.module-val(list-item, shape, 0),
-  padding: utils.module-val(list-item, padding, 8px 16px),
+  padding: utils.module-val(list-item, padding, spacing.variable(xsmall) spacing.variable(medium)),
   margin: utils.module-val(list-item, margin, 0),
   height: utils.module-val(list-item, height, 48px),
   dense-height: utils.module-val(list-item, dense-height, 32px),
   indent: utils.module-val(list-item, indent, 56px),
   cursor: utils.module-val(list-item, cursor, pointer),
+  gap: utils.module-val(list-item, gap, spacing.variable(xlarge)),
 
   // Supporting text
   supporting-text-color: utils.module-val(list-item, supporting-text-color, theme.variable(text-medium)),
@@ -42,28 +44,19 @@ $tokens: (
   dense-two-line-height: utils.module-val(list-item, dense-two-line-height, utils.module-ref(list-item, dense-height, 56px, value)),
   dense-three-line-height: utils.module-val(list-item, dense-three-line-height, utils.module-ref(list-item, dense-height, 72px, value)),
   dense-font-size: utils.module-val(list-item, dense-font-size, 0.875rem),
-  dense-indent: utils.module-val(list-item, dense-indent, 48px),
-
-  // Dense leading/trailing
-  dense-leading-margin-end: utils.module-val(list-item, dense-leading-margin-end, utils.module-ref(list-item, leading-margin-end, 24px, value)),
-  dense-trailing-margin-start: utils.module-val(list-item, dense-trailing-margin-start, utils.module-ref(list-item, trailing-margin-start, 24px, value)),
+  dense-indent: utils.module-val(list-item, dense-indent, spacing.variable(xxlarge)),
+  dense-gap: utils.module-val(list-item, dense-gap, spacing.variable(medium)),
 
   // Leading
-  leading-margin-start: utils.module-val(list-item, leading-margin-start, 0),
-  leading-margin-end: utils.module-val(list-item, leading-margin-end, 32px),
   leading-selected-color: utils.module-ref(list-item, leading-selected-color, selected-color),
 
   // Trailing
-  trailing-margin-start: utils.module-val(list-item, trailing-margin-start, 32px),
-  trailing-margin-end: utils.module-val(list-item, trailing-margin-end, 0),
   trailing-selected-color: utils.module-ref(list-item, trailing-selected-color, selected-color),
 
   // Avatar
   avatar-background-color: utils.module-val(list-item, avatar-background-color, theme.variable(text-medium)),
   avatar-color: utils.module-val(list-item, avatar-color, theme.variable(on-primary)),
   avatar-shape: utils.module-val(list-item, avatar-shape, shape.variable(round)),
-  avatar-margin-start: utils.module-val(list-item, avatar-margin-start, 0),
-  avatar-margin-end: utils.module-val(list-item, avatar-margin-end, 16px),
   avatar-size: utils.module-val(list-item, avatar-size, 40px),
 ) !default;
 

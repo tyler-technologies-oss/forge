@@ -65,6 +65,6 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
   }
 
   public setBadgeVisible(isVisible: boolean): void {
-    this._badgeElement.open = isVisible;
+    this._badgeElement.hide = !isVisible;
   }
 }

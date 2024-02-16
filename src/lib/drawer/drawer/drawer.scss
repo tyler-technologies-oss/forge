@@ -1,10 +1,12 @@
 @use './mixins';
 @use '../base/mixins' as base-mixins;
+@use '../../divider';
 
 @include mixins.core-styles;
 
 :host {
   @include base-mixins.host;
+  @include divider.provide-theme(( margin: 4px 0 ));
 }
 
 /// 

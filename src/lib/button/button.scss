@@ -11,7 +11,7 @@
 $host-tokens: [display disabled-cursor];
 
 :host {
-  @include tokens($includes: $host-tokens);;
+  @include tokens($includes: $host-tokens);
 }
 
 :host {

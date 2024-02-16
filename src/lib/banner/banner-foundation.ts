@@ -1,89 +1,99 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-
 import { IBannerAdapter } from './banner-adapter';
-import { BANNER_CONSTANTS } from './banner-constants';
+import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
 
 export interface IBannerFoundation extends ICustomElementFoundation {
   dismissed: boolean;
-  canDismiss: boolean;
+  persistent: boolean;
+  theme: BannerTheme;
 }
 
 export class BannerFoundation implements IBannerFoundation {
   private _dismissed = false;
-  private _canDismiss = true;
-  private _dismissBanner: () => void;
+  private _persistent = false;
+  private _theme: BannerTheme = BANNER_CONSTANTS.defaults.THEME;
+  private _dismissListener: EventListener = this._onDismiss.bind(this);
 
-  constructor(private _adapter: IBannerAdapter) {
-    this._dismissBanner = () => this._dismiss();
-  }
+  constructor(private _adapter: IBannerAdapter) {}
 
-  public connect(): void {
-    this._addDismissEventListener();
-  }
+  public initialize(): void {
+    this._adapter.initialize();
 
-  public disconnect(): void {
-    this._removeDismissEventListener();
-  }
-
-  private _dismiss(): void {
-    this.dismissed = true;
-  }
-
-  private _syncDismissedState(): void {
-    if (this.dismissed) {
-      this._setDismissedClass();
-      this._adapter.emitHostEvent(BANNER_CONSTANTS.events.DISMISSED);
-    } else {
-      this._setUndissmissedClass();
-      this._adapter.emitHostEvent(BANNER_CONSTANTS.events.UNDISMISSED);
+    if (!this._persistent) {
+      this._addDismissListener();
     }
   }
 
-  private _setUndissmissedClass(): void {
-    this._adapter.removeRootClass(BANNER_CONSTANTS.classes.DISMISSED);
-  }
-
-  private _setDismissedClass(): void {
-    this._adapter.addRootClass(BANNER_CONSTANTS.classes.DISMISSED);
-  }
-
-  private _syncCanDismissState(): void {
-    if (this.canDismiss) {
-      this._adapter.removeDismissButtonAttribute(BANNER_CONSTANTS.attributes.HIDDEN);
-    } else {
-      this._adapter.addDismissButtonAttribute(BANNER_CONSTANTS.attributes.HIDDEN);
+  private async _onDismiss(): Promise<void> {
+    if (this._dismissed || this._persistent) {
+      return;
     }
+
+    const originalDismissed = this._dismissed;
+    this._dismissed = !this._dismissed;
+
+    const evt = new CustomEvent(BANNER_CONSTANTS.events.BEFORE_DISMISS, { bubbles: true, composed: true, cancelable: true });
+    this._adapter.dispatchHostEvent(evt);
+    this._dismissed = originalDismissed;
+
+    if (evt.defaultPrevented) {
+      return;
+    }
+
+    const dismissComplete = this._adapter.startDismissCompleteListener();
+    this.dismissed = !this._dismissed;
+    await dismissComplete;
+    this._adapter.dispatchHostEvent(new CustomEvent(BANNER_CONSTANTS.events.DISMISSED, { bubbles: true, composed: true }));
   }
 
-  private _addDismissEventListener(): void {
-    this._adapter.addDismissEventListener('click', this._dismissBanner);
+  private _addDismissListener(): void {
+    this._adapter.addDismissListener(this._dismissListener);
   }
 
   private _removeDismissEventListener(): void {
-    this._adapter.removeDismissEventListener('click', this._dismissBanner);
+    this._adapter.removeDismissListener(this._dismissListener);
+  }
+
+  private _applyPersistent(): void {
+    this._adapter.setDismissButtonVisibility(!this._persistent);
+    if (this._persistent) {
+      this._removeDismissEventListener();
+    } else {
+      this._addDismissListener();
+    }
   }
 
   public get dismissed(): boolean {
-    return !!this._dismissed;
+    return this._dismissed;
   }
-  public set dismissed(val: boolean) {
-    if (this.dismissed === !!val) {
-      return;
+  public set dismissed(value: boolean) {
+    value = Boolean(value);
+    if (this.dismissed !== value) {
+      this._dismissed = value;
+      this._adapter.setDismissed(this._dismissed);
+      this._adapter.toggleHostAttribute(BANNER_CONSTANTS.attributes.DISMISSED, this.dismissed);
     }
-
-    this._dismissed = !!val;
-    this._syncDismissedState();
   }
 
-  public get canDismiss(): boolean {
-    return !!this._canDismiss;
+  public get persistent(): boolean {
+    return this._persistent;
   }
-  public set canDismiss(val: boolean) {
-    if (this._canDismiss === !!val) {
-      return;
+  public set persistent(value: boolean) {
+    value = Boolean(value);
+    if (this._persistent !== value) {
+      this._persistent = value;
+      this._applyPersistent();
+      this._adapter.toggleHostAttribute(BANNER_CONSTANTS.attributes.PERSISTENT, this._persistent);
     }
+  }
 
-    this._canDismiss = !!val;
-    this._syncCanDismissState();
+  public get theme(): BannerTheme {
+    return this._theme;
+  }
+  public set theme(value: BannerTheme) {
+    if (this._theme !== value) {
+      this._theme = value ?? BANNER_CONSTANTS.defaults.THEME;
+      this._adapter.setHostAttribute(BANNER_CONSTANTS.attributes.THEME, this._theme);
+    }
   }
 }

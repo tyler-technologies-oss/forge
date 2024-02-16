@@ -1,7 +1,7 @@
 import { autoUpdate, Boundary } from '@floating-ui/dom';
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
+import { DEFAULT_FALLBACK_PLACEMENTS, positionElementAsync, PositionPlacement, VirtualElement } from '../core/utils/position-utils';
 import { locateElementById } from '../core/utils/utils';
 import { IOverlayComponent, OverlayComponent } from './overlay';
 import {
@@ -12,6 +12,7 @@ import {
   OverlayPositionStrategy,
   overlayStack,
   OVERLAY_CONSTANTS,
+  OVERLAY_FALLBACK_PLACEMENT_MAP,
   SUPPORTS_POPOVER
 } from './overlay-constants';
 
@@ -31,7 +32,6 @@ export interface IPositionElementConfig {
   anchorElement: HTMLElement | VirtualElement;
   strategy: OverlayPositionStrategy;
   placement: PositionPlacement;
-  auto: boolean;
   hide: OverlayHideState;
   offset: IOverlayOffset;
   shift: boolean;
@@ -100,7 +100,6 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     anchorElement,
     strategy,
     placement,
-    auto,
     hide,
     offset,
     shift,
@@ -136,23 +135,18 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         shiftOptions: {
           boundary: boundaryEl
         },
-        auto,
-        autoOptions: {
-          boundary: boundaryEl
-        },
-        flip: !auto && flip !== 'never',
+        flip: flip !== 'never',
         flipOptions: {
-          boundary: boundaryEl,
-          fallbackAxisSideDirection: flip === 'auto' ? 'start' : undefined,
-          fallbackPlacements,
+          boundary: SUPPORTS_POPOVER ? document.body : 'clippingAncestors',
+          fallbackStrategy: 'initialPlacement',
+          fallbackPlacements: fallbackPlacements ?? OVERLAY_FALLBACK_PLACEMENT_MAP[placement] ?? DEFAULT_FALLBACK_PLACEMENTS,
           crossAxis: flip === 'cross' || flip === 'auto',
           mainAxis: flip === 'main' || flip === 'auto'
         },
         arrowElement: this._component.arrowElement,
         topLayer: !this._component.inline && SUPPORTS_POPOVER,
         offset: Boolean(offsetOptions),
-        offsetOptions,
-        transform: false
+        offsetOptions
       });
 
       const side = result.placement.split('-')[0];

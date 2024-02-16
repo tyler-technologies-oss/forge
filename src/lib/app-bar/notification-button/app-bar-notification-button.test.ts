@@ -67,7 +67,7 @@ describe('App Bar Notification Button', () => {
     const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
 
     expect(badgeEl).to.be.ok;
-    expect(badgeEl.open).to.be.true;
+    expect(badgeEl.hide).to.be.false;
     expect(badgeEl.innerText).to.equal('0');
   });
 
@@ -78,7 +78,7 @@ describe('App Bar Notification Button', () => {
     el.showBadge = true;
 
     expect(badgeEl).to.be.ok;
-    expect(badgeEl.open).to.be.true;
+    expect(badgeEl.hide).to.be.false;
     expect(badgeEl.innerText).to.equal('0');
   });
 
@@ -89,7 +89,7 @@ describe('App Bar Notification Button', () => {
 
     const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
     expect(badgeEl).to.be.ok;
-    expect(badgeEl.open).to.be.false;
+    expect(badgeEl.hide).to.be.true;
   });
 
   it('should show badge with count', async () => {
