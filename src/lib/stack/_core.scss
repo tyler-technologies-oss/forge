@@ -1,9 +1,6 @@
 @use './token-utils' as *;
 @forward './token-utils';
 
-@mixin host() {
-}
-
 @mixin base() {
   display: flex;
   flex-direction: column;

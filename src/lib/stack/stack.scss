@@ -1,9 +1,5 @@
 @use './core' as *;
 
-:host {
-  @include host;
-}
-
 .forge-stack {
   @include base;
   @include tokens;
