@@ -15,7 +15,7 @@
     <div>
       <forge-card style="--forge-card-padding: 0;">
         <forge-toolbar>
-          <p slot="start">Back arrow and title text in a secondary toolbar</p>
+          <p slot="start">Back arrow and title text in a secondary toolbar (Heading has padding:0, margin:0)</p>
         </forge-toolbar>
         <forge-toolbar style="--forge-toolbar-padding: 0" inverted no-border>
           <forge-stack slot="start" inline alignment="center">
@@ -27,6 +27,23 @@
         </forge-toolbar>
       </forge-card>
     </div>
+
+        <!-- Toolbar start slot -->
+        <div>
+          <forge-card style="--forge-card-padding: 0;">
+            <forge-toolbar>
+              <p slot="start">Back arrow and title text in a secondary toolbar (Heading has padding:0, margin:0)</p>
+            </forge-toolbar>
+            <forge-toolbar style="--forge-toolbar-padding: 0" inverted no-border>
+              <forge-stack slot="start" inline alignment="center">
+                <forge-icon-button aria-label="Default icon button">
+                  <forge-icon name="arrow_back" external></forge-icon>
+                </forge-icon-button>
+                <h2 class="forge-typography--heading3">This has default header margin and padding</h2>
+              </forge-stack>
+            </forge-toolbar>
+          </forge-card>
+        </div>
 
     <!-- Toolbar start slot -->
     <div>
