@@ -2,8 +2,6 @@
 @forward './token-utils';
 
 @mixin host() {
-  display: grid;
-  height: #{token(height)};
 }
 
 @mixin base() {

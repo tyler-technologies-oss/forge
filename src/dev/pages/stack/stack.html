@@ -18,6 +18,17 @@ include('./src/partials/page.ejs', {
           { label: 'Center', value: 'center' },
           { label: 'End', value: 'end' },
         ]
+      },
+      {
+        type: 'select',
+        label: 'Justify',
+        id: 'justify-select',
+        defaultValue: 'start',
+        options: [
+          { label: 'Start', value: 'start' },
+          { label: 'Center', value: 'center' },
+          { label: 'End', value: 'end' },
+        ]
       }
     ]
   }

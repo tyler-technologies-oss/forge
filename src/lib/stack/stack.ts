@@ -13,6 +13,7 @@ export interface IStackComponent extends ICustomElement {
   stretch: boolean;
   gap: string;
   alignment: StackAlignMode | StackAlignment;
+  justify: StackAlignment;
 }
 
 declare global {
@@ -36,7 +37,8 @@ export class StackComponent extends BaseComponent implements IStackComponent {
       STACK_CONSTANTS.attributes.WRAP,
       STACK_CONSTANTS.attributes.STRETCH,
       STACK_CONSTANTS.attributes.GAP,
-      STACK_CONSTANTS.attributes.ALIGNMENT
+      STACK_CONSTANTS.attributes.ALIGNMENT,
+      STACK_CONSTANTS.attributes.JUSTIFY
     ];
   }
 
@@ -65,6 +67,9 @@ export class StackComponent extends BaseComponent implements IStackComponent {
       case STACK_CONSTANTS.attributes.ALIGNMENT:
         this.alignment = newValue as StackAlignment;
         break;
+      case STACK_CONSTANTS.attributes.JUSTIFY:
+        this.justify = newValue as StackAlignment;
+        break;
     }
   }
 
@@ -84,7 +89,11 @@ export class StackComponent extends BaseComponent implements IStackComponent {
   @FoundationProperty()
   public declare gap: string;
 
-  /** Controls if stack items are at the end of the row or column */
+  /** Controls the align-items property of a row or column */
   @FoundationProperty()
   public declare alignment: StackAlignMode | StackAlignment;
+
+  /** Controls the justify-content property of a row or column */
+  @FoundationProperty()
+  public declare justify: StackAlignment;
 }

@@ -3,7 +3,7 @@
 
 $tokens: (
   gap: utils.module-val(stack, gap, 16px),
-  height: utils.module-val(stack, height, initial),
+  height: utils.module-val(stack, height, null),
   stretch: utils.module-val(stack, stretch, initial),
   wrap: utils.module-val(stack, wrap, wrap),
 ) !default;

@@ -11,6 +11,42 @@
 <div class="more-examples">
   <h3 class="forge-typography--heading2">More examples</h3>
   <forge-stack gap="32">
+    <!-- Info icon next to a label -->
+    <div>
+      <forge-card style="--forge-card-padding: 0;">
+        <forge-toolbar>
+          <p slot="start">Info icon + label</p>
+        </forge-toolbar>
+        <div style="padding: 16px;">
+          <forge-stack inline alignment="center" gap="4">
+            <forge-label legend>Featured</forge-label>
+            <forge-icon-button dense>
+              <forge-icon name="help_outline" external></forge-icon>
+            </forge-icon-button>
+            <forge-tooltip>Show me some useful information here!</forge-tooltip>
+          </forge-stack>
+        </div>
+      </forge-card>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div>
+      <forge-card style="--forge-card-padding: 0;">
+        <forge-toolbar>
+          <p slot="start">Breadcrumbs</p>
+        </forge-toolbar>
+        <div style="padding: 16px;">
+          <forge-stack inline alignment="center" gap="4">
+            <a href="/" aria-label="Back to the homepage">Home</a>
+            <forge-icon name="chevron_right" external style="color: var(--forge-theme-text-medium)"></forge-icon>
+            <span>Components</span>
+            <forge-icon name="chevron_right" external style="color: var(--forge-theme-text-medium)"></forge-icon>
+            <forge-badge theme="info-secondary" style="--forge-badge-shape: 2px;">Stack component</forge-badge>
+          </forge-stack>
+        </div>
+      </forge-card>
+    </div>
+
     <!-- Toolbar start slot -->
     <div>
       <forge-card style="--forge-card-padding: 0;">
@@ -18,7 +54,7 @@
           <p slot="start">Back arrow and title text in a secondary toolbar (Heading has padding:0, margin:0)</p>
         </forge-toolbar>
         <forge-toolbar style="--forge-toolbar-padding: 0" inverted no-border>
-          <forge-stack slot="start" inline alignment="center">
+          <forge-stack slot="start" inline alignment="center" gap="0">
             <forge-icon-button aria-label="Default icon button">
               <forge-icon name="arrow_back" external></forge-icon>
             </forge-icon-button>
@@ -28,22 +64,22 @@
       </forge-card>
     </div>
 
-        <!-- Toolbar start slot -->
-        <div>
-          <forge-card style="--forge-card-padding: 0;">
-            <forge-toolbar>
-              <p slot="start">Back arrow and title text in a secondary toolbar (Heading has padding:0, margin:0)</p>
-            </forge-toolbar>
-            <forge-toolbar style="--forge-toolbar-padding: 0" inverted no-border>
-              <forge-stack slot="start" inline alignment="center">
-                <forge-icon-button aria-label="Default icon button">
-                  <forge-icon name="arrow_back" external></forge-icon>
-                </forge-icon-button>
-                <h2 class="forge-typography--heading3">This has default header margin and padding</h2>
-              </forge-stack>
-            </forge-toolbar>
-          </forge-card>
-        </div>
+    <!-- Toolbar start slot -->
+    <div>
+      <forge-card style="--forge-card-padding: 0;">
+        <forge-toolbar>
+          <p slot="start">Back arrow and title text in a secondary toolbar (heading has default margin/padding)</p>
+        </forge-toolbar>
+        <forge-toolbar style="--forge-toolbar-padding: 0" inverted no-border>
+          <forge-stack slot="start" inline alignment="center" gap="0">
+            <forge-icon-button aria-label="Default icon button">
+              <forge-icon name="arrow_back" external></forge-icon>
+            </forge-icon-button>
+            <h2 class="forge-typography--heading3">This has default header margin and padding</h2>
+          </forge-stack>
+        </forge-toolbar>
+      </forge-card>
+    </div>
 
     <!-- Toolbar start slot -->
     <div>
@@ -71,7 +107,7 @@
     <div>
       <forge-card style="--forge-card-padding: 0;">
         <forge-toolbar no-border>
-          <p slot="start">Forge toolbar with perfectly spaced end slot buttons</p>
+          <p slot="start">Forge toolbar with end slot buttons</p>
         </forge-toolbar>
         <forge-toolbar inverted>
           <forge-stack inline alignment="center" slot="end">
@@ -136,23 +172,25 @@
               </forge-text-field>
             </forge-stack>
           </forge-stack>
-          <forge-stack gap="16" stretch>
-            <forge-stack inline wrap>
-              <forge-text-field style="--forge-stack-stretch: 2">
+          <forge-stack inline stretch>
+            <forge-stack inline stretch>
+              <forge-text-field>
                 <input type="text" id="input-text-01" />
                 <label for="input-text-01" slot="label">Text field</label>
               </forge-text-field>
-              <forge-text-field style="--forge-stack-stretch: 4">
+              <forge-text-field>
                 <input type="text" id="input-text-01" />
                 <label for="input-text-01" slot="label">Text field</label>
               </forge-text-field>
-              <forge-text-field style="--forge-stack-stretch: 6">
+            </forge-stack>
+            <forge-stack inline stretch>
+              <forge-text-field>
                 <input type="text" id="input-text-01" />
                 <label for="input-text-01" slot="label">Text field</label>
               </forge-text-field>
             </forge-stack>
           </forge-stack>
-      </forge-stack>
+        </forge-stack>
       </form>
     </forge-card>
   </forge-stack>
