@@ -23,8 +23,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-stack>` component.
- * 
  * @tag forge-stack
  */
 @CustomElement({

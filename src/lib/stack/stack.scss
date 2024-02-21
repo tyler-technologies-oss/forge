@@ -23,43 +23,44 @@
   }
 }
 
-:host([stretch]) {  
+:host([stretch]) {
   ::slotted(*) {
     @include override(stretch, 1, value);
   }
 }
 
-:host([alignment="start"]) {
+:host([alignment=start]) {
   .forge-stack {
+    //override stretch css prop
     @include align-start;
   }
 }
 
-:host([alignment="center"]) {
+:host([alignment=center]) {
   .forge-stack {
     @include align-center;
   }
 }
 
-:host([alignment="end"]) {
+:host([alignment=end]) {
   .forge-stack {
     @include align-end;
   }
 }
 
-:host([justify="start"]) {
+:host([justify=start]) {
   .forge-stack {
     @include justify-start;
   }
 }
 
-:host([justify="center"]) {
+:host([justify=center]) {
   .forge-stack {
     @include justify-center;
   }
 }
 
-:host([justify="end"]) {
+:host([justify=end]) {
   .forge-stack {
     @include justify-end;
   }
