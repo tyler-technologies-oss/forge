@@ -122,6 +122,10 @@ $tokens: (
 
   // Disabled
   disabled-opacity: utils.module-val(field, disabled-opacity, theme.emphasis(medium-low)),
+  disabled-surface-color: utils.module-val(field, disabled-surface-color, theme.variable(surface-container-low)),
+  disabled-border-color: utils.module-val(field, disabled-border-color, theme.variable(outline-medium)),
+  disabled-text-color: utils.module-val(field, disabled-text-color, theme.variable(text-medium)),
+  disabled-inset-label-color: utils.module-val(field, disabled-inset-label-color, theme.variable(text-low)),
 
   // Animation
   container-animation-duration: utils.module-val(field, container-animation-duration, animation.variable(duration-short4)),

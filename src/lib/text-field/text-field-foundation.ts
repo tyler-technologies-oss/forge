@@ -1,15 +1,107 @@
-import { ITextFieldAdapter } from './text-field-adapter';
-import { FieldFoundation, IFieldFoundation } from '../field/field-foundation';
+import { FieldLabelPosition } from '../field-next';
+import { BaseFieldFoundation, IBaseFieldFoundation } from '../field-next/base/base-field-foundation';
+import { ITextFieldAdapter, TextFieldAdapter } from './text-field-adapter';
+import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS } from './text-field-constants';
 
-export interface ITextFieldFoundation extends IFieldFoundation {}
+export interface ITextFieldFoundation extends IBaseFieldFoundation {
+  showClear: boolean;
+  initialize(): void;
+}
 
-export class TextFieldFoundation extends FieldFoundation implements ITextFieldFoundation {
-  constructor(protected _adapter: ITextFieldAdapter) {
+export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> implements ITextFieldFoundation {
+  private _showClear = false;
+  private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
+  private _inputAttributeListener: TextFieldInputAttributeObserver = this._onInputAttributeChange.bind(this);
+  private _valueChangeListener: TextFieldValueChangeListener = this._onValueChange.bind(this);
+  private _inputListener: EventListener = this._onValueChange.bind(this);
+  private _clearButtonClickListener: EventListener = this._onClearButtonClick.bind(this);
+  
+  constructor(protected _adapter: TextFieldAdapter) {
     super(_adapter);
   }
 
   public initialize(): void {
-    super.initialize();
-    this._adapter.detectTextarea();
+    this._adapter.addRootListener('slotchange', this._slotChangeListener);
+    this._adapter.addRootListener('input', this._inputListener);
+  }
+
+  private _onSlotChange(evt: Event): void {
+    const target = evt.target as HTMLSlotElement;
+    switch (target.name) {
+      case 'label':
+        this._adapter.tryConnectSlottedLabel(target);
+        break;
+      case '':
+        this._adapter.handleDefaultSlotChange(target, this._inputAttributeListener);
+        this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
+        this._tryFloatLabel();
+        break;
+    }
+  }
+
+  private _onInputAttributeChange(name: keyof typeof TEXT_FIELD_CONSTANTS.observedInputAttributes, value: string | null): void {
+    switch (name) {
+      case 'disabled':
+        this.disabled = value !== null;
+        break;
+      case 'placeholder':
+        this._tryFloatLabel();
+        break;
+    }
+  }
+
+  private _onClearButtonClick(): void {
+    const allowClear = this._adapter.emitHostEvent(TEXT_FIELD_CONSTANTS.events.CLEAR, undefined, true, true);
+    if (allowClear) {
+      this._adapter.clearInput();
+    }
+  };
+
+  private _onValueChange(): void {
+    this._adapter.tryFloatLabel();
+    this._toggleClearButtonVisibility();
+  }
+
+  private _toggleClearButtonVisibility(): void {
+    this._adapter.toggleClearButtonVisibility(this._showClear && this._hasValue && !this.disabled);
+  }
+
+  public get showClear(): boolean {
+    return this._showClear;
+  }
+  public set showClear(value: boolean) {
+    if (this._showClear !== value) {
+      this._showClear = value;
+
+      if (value) {
+        this._adapter.connectClearButton(this._clearButtonClickListener);
+      } else {
+        this._adapter.disconnectClearButton(this._clearButtonClickListener);
+      }
+      this._toggleClearButtonVisibility();
+    }
+  }
+
+  public override get disabled(): boolean {
+    return super.disabled;
+  }
+  public override set disabled(value: boolean) {
+    if (this._disabled !== value) {
+      this._disabled = value;
+      this._adapter.setFieldProperty('disabled', value);
+      this._adapter.disableInput(value);
+      this._toggleClearButtonVisibility();
+    }
+  }
+
+  public override get labelPosition(): FieldLabelPosition {
+    return super.labelPosition;
+  }
+  public override set labelPosition(value: FieldLabelPosition) {
+    if (this._labelPosition !== value) {
+      this._labelPosition = value;
+      this._adapter.setFieldProperty('labelPosition', value);
+      this._tryFloatLabel();
+    }
   }
 }

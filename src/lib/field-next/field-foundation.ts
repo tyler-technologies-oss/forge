@@ -1,6 +1,7 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 import { IFieldAdapter } from './field-adapter';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSlot, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
+import { FIELD_CONSTANTS } from './field-constants';
 
 export interface IFieldFoundation extends ICustomElementFoundation {
   labelPosition: FieldLabelPosition;
@@ -41,26 +42,15 @@ export class FieldFoundation implements IFieldFoundation {
   private _multiline = false;
   private _supportTextInset: FieldSupportTextInset = FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
 
-  private _labelSlotListener: () => void = this._onSlotChange.bind(this, 'label');
-  private _startSlotListener: () => void = this._onSlotChange.bind(this, 'start');
-  private _endSlotListener: () => void = this._onSlotChange.bind(this, 'end');
-  private _accessorySlotListener: () => void = this._onSlotChange.bind(this, 'accessory');
-  private _supportStartSlotListener: () => void = this._onSlotChange.bind(this, 'support-start');
-  private _supportEndSlotListener: () => void = this._onSlotChange.bind(this, 'support-end');
-  private _popoverIconClickListener: () => void = this._onPopoverIconClick.bind(this);
+  private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
+  private _popoverIconClickListener: EventListener = this._onPopoverIconClick.bind(this);
 
   constructor(private _adapter: IFieldAdapter) {}
 
   public initialize(): void {
-    this._adapter.addSlotChangeListener('start', this._startSlotListener);
-    this._adapter.addSlotChangeListener('end', this._endSlotListener);
-    this._adapter.addSlotChangeListener('accessory', this._accessorySlotListener);
-    this._adapter.addSlotChangeListener('support-start', this._supportStartSlotListener);
-    this._adapter.addSlotChangeListener('support-end', this._supportEndSlotListener);
+    this._adapter.addRootListener('slotchange', this._slotChangeListener);
     this._adapter.setLabelPosition(this._labelPosition);
-    if (this._labelPosition === 'inset') {
-      this._adapter.addSlotChangeListener('label', this._labelSlotListener);
-    }
+
     if (this._popoverIcon) {
       this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
     }
@@ -69,8 +59,8 @@ export class FieldFoundation implements IFieldFoundation {
     }
   }
 
-  private _onSlotChange(slotName: FieldSlot): void {
-    this._adapter.handleSlotChange(slotName);
+  private _onSlotChange(evt: Event): void {
+    this._adapter.handleSlotChange(evt.target as HTMLSlotElement);
   }
 
   private _onPopoverIconClick(): void {
@@ -98,13 +88,6 @@ export class FieldFoundation implements IFieldFoundation {
       }
 
       this._adapter.setLabelPosition(this._labelPosition);
-
-      if (this._labelPosition === 'inset') {
-        this._adapter.addSlotChangeListener('label', this._labelSlotListener);
-      } else {
-        this._adapter.removeSlotChangeListener('label', this._labelSlotListener);
-      }
-      this._labelSlotListener();
     }
   }
 

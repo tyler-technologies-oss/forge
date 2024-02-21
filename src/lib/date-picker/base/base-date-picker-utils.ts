@@ -3,9 +3,8 @@ export function createToggleElement(iconName: string): HTMLElement {
   iconButtonElement.type = 'button';
   iconButtonElement.tabIndex = -1;
   iconButtonElement.setAttribute('aria-label', 'Toggle calendar');
-  iconButtonElement.slot = 'trailing';
+  iconButtonElement.slot = 'end';
   iconButtonElement.density = 'medium';
-  iconButtonElement.style.marginRight = '4px';
 
   const iconElement = document.createElement('forge-icon');
   iconElement.name = iconName;

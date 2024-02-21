@@ -1,4 +1,4 @@
-import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';

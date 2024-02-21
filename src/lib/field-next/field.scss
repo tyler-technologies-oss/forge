@@ -346,6 +346,10 @@ $variants: (
           ::slotted(input) {
             @include core.slotted-floating-input;
           }
+
+          ::slotted([data-forge-multi-input-separator]) {
+            @include core.slotted-floating-input;
+          }
         }
       }
     }
@@ -460,14 +464,15 @@ $variants: (
   .resize-container {
     @include core.container-layout;
     @include core.resize-container;
+    
+    .label,
+    .start,
+    .end,
+    .popover-icon {
+      @include core.resize-container-child;
+    }
   }
 
-  .label,
-  .start,
-  .end,
-  .popover-icon {
-    @include core.resize-container-child;
-  }
 }
 
 :host([multiline]#{map.get($label-positions, inset)}[float-label]) {
@@ -552,7 +557,7 @@ $variants: (
 // Invalid
 //
 
-:host([invalid]) {
+:host([invalid]:not([disabled])) {
   .label {
     @include core.label-invalid;
   }
@@ -563,7 +568,7 @@ $variants: (
 }
 
 @each $variant, $variant-selector in $variants {
-  :host([invalid]#{$variant-selector}) {
+  :host([invalid]#{$variant-selector}:not([disabled])) {
     .container {
       @include core.container-invalid($variant);
 
@@ -573,7 +578,7 @@ $variants: (
     }
   }
 
-  :host([invalid]#{$hover}#{$variant-selector}) {
+  :host([invalid]#{$hover}#{$variant-selector}:not([disabled])) {
     .container {
       @include core.container-invalid-hover($variant);
 
@@ -583,7 +588,7 @@ $variants: (
     }
   }
 
-  :host([invalid]#{map.get($label-positions, inset)}#{$variant-selector}) {
+  :host([invalid]#{map.get($label-positions, inset)}#{$variant-selector}:not([disabled])) {
     .label {
       @include core.inset-label-invalid($variant);
     }
@@ -600,15 +605,31 @@ $variants: (
 // pseudo-elements, allowing visually nested elements to escape the disabled opacity.
 
 :host([disabled]) {
-  .label,
-  .container::before,
-  .start,
-  .input,
-  .end,
-  .popover-icon,
-  .accessory::before,
-  .support-text {
+  .forge-field {
     @include core.field-disabled;
+    
+    .label,
+    .container::before,
+    .start,
+    .input,
+    .end,
+    .popover-icon,
+    .accessory::before,
+    .support-text {
+      @include core.field-part-disabled;
+    }
+    
+    .input {
+      ::slotted(*) {
+        @include core.default-slot-disabled;
+      }
+    }
+  }
+}
+
+:host([disabled]:not(#{map.get($variants, plain)})) {
+  .container::before {
+    @include core.container-background-disabled;
   }
 }
 
@@ -624,6 +645,18 @@ $variants: (
 
     ::slotted(textarea) {
       @include core.default-slot-textarea;
+    }
+
+    ::slotted(*:first-of-type:is(input, textarea)) {
+      @include core.first-default-slot-content;
+    }
+
+    ::slotted(*:last-of-type:is(input, textarea)) {
+      @include core.last-default-slot-content;
+    }
+
+    ::slotted([data-forge-multi-input-separator]) {
+      @include core.slotted-multi-input-separator;
     }
   }
 
@@ -701,7 +734,7 @@ $variants: (
   }
 }
 
-:host([invalid]) {
+:host([invalid]:not([disabled])) {
   forge-focus-indicator {
     @include focus-indicator.provide-theme((
       color: #{token(invalid-color)}
