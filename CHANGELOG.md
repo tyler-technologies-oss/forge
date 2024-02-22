@@ -1,3 +1,16 @@
+# v2.21.3 (Thu Feb 22 2024)
+
+#### 🐛 Bug Fix
+
+- chore: upgrade auto to fix release [#479](https://github.com/tyler-technologies-oss/forge/pull/479) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat: bump `@tylertech/forge-core` to `2.3.1` to use constructable stylesheets by default [#475](https://github.com/tyler-technologies-oss/forge/pull/475) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.21.2 (Thu Feb 15 2024)
 
 :tada: This release contains work from a new contributor! :tada:
