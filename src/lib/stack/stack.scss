@@ -1,44 +1,66 @@
-@use './mixins';
-@include mixins.core-styles;
+@use './core' as *;
 
-:host {
-  display: block;
+.forge-stack {
+  @include base;
+  @include tokens;
 }
 
 :host([inline]) {
   .forge-stack {
-    @include mixins.inline;
+    @include inline;
   }
 }
 
 :host([inline][wrap]) {
   .forge-stack {
-    @include mixins.wrap;
+    @include wrap;
   }
 }
 
-:host([stretch]:not([inline])) {
-  height: 100%;
+:host(:not([inline])) {
+  .forge-stack {
+    @include override(height, 100%, value);
+  }
 }
 
 :host([stretch]) {
-  --forge-stack-stretch: 1;
+  ::slotted(*) {
+    @include override(stretch, 1, value);
+  }
 }
 
 :host([alignment=start]) {
   .forge-stack {
-    @include mixins.justify-start;
+    @include override(alignment, start, value);
   }
 }
 
 :host([alignment=center]) {
   .forge-stack {
-    @include mixins.justify-center;
+    @include override(alignment, center, value);
   }
 }
 
 :host([alignment=end]) {
   .forge-stack {
-    @include mixins.justify-end;
+    @include override(alignment, end, value);
+  }
+}
+
+:host([justify=start]) {
+  .forge-stack {
+    @include override(justify, start, value);
+  }
+}
+
+:host([justify=center]) {
+  .forge-stack {
+    @include override(justify, center, value);
+  }
+}
+
+:host([justify=end]) {
+  .forge-stack {
+    @include override(justify, end, value);
   }
 }

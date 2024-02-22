@@ -34,6 +34,11 @@ alignSelect.addEventListener('change', () => {
   stackContainer.alignment = alignSelect.value;
 });
 
+const justifySelect = document.getElementById('justify-select') as ISelectComponent;
+justifySelect.addEventListener('change', () => {
+  stackContainer.justify = justifySelect.value;
+});
+
 gapInput.addEventListener('input', () => {
   stackContainer.gap = gapInput.value;
 });
