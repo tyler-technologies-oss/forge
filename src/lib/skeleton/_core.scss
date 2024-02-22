@@ -1,0 +1,84 @@
+@use './token-utils' as *;
+@use './variables';
+@forward './token-utils';
+
+@mixin host() {
+    height: #{token(height)};
+    margin: #{token(margin)};
+    border-radius: #{token(border-radius)};
+    background-color: #{token(background-color)};
+
+    display: block;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+@mixin base() {
+    display: block;
+    width: #{token(width)};
+    height: 100%;
+}
+
+@mixin gradient() {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    background-repeat: no-repeat;
+    background-image: linear-gradient(
+        90deg,
+        transparent,
+        var(--forge-skeleton-theme-gradient, variables.$gradient),
+        transparent
+    );
+    animation: loading #{token(animation-duration)} ease-in infinite;
+}
+
+@mixin keyframes() {
+    @keyframes loading {
+        25%,
+        100% {
+            transform: translateX(100%);
+        }
+    }
+}
+
+@mixin avatar() {
+    width: #{token(avatar-size)};
+    height: #{token(avatar-size)};
+
+    border-radius: 50%;
+}
+
+@mixin button() {
+    @include override(height, button-height);
+    @include override(width, button-width);
+}
+
+@mixin form-field() {
+    @include override(height, form-field-height);
+    @include override(width, form-field-width);
+}
+
+@mixin chip() {
+    @include override(height, chip-height);
+    @include override(width, chip-width);
+
+    border-radius: 16px;
+}
+
+@mixin list-item() {
+    @include override(height, list-item-height);
+    @include override(margin, list-item-margin);
+}
+
+@mixin text() {
+    @include override(height, text-height);
+}
+
+@mixin stretch() {
+    height: 100%;
+    width: 100%;
+}

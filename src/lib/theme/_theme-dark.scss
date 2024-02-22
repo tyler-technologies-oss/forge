@@ -21,16 +21,14 @@
   @include theme.properties-dark;
 
   // Popover
-  @include popover.provide-theme((
-    border-width: border.variable(thin) // Popovers use thin borders in dark theme to increase contrast
-  ));
+  @include popover.provide-theme((border-width: border.variable(thin) // Popovers use thin borders in dark theme to increase contrast
+    ));
 
   // Tooltip
-  @include tooltip.provide-theme((
-    background: theme.variable(surface-bright),
-    color: theme.variable(text-high),
-    border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
-  ));
+  @include tooltip.provide-theme((background: theme.variable(surface-bright),
+      color: theme.variable(text-high),
+      border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
+    ));
 
   @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);
   @include skeleton-mixins.provide-theme(skeleton-variables.$theme-values-dark);

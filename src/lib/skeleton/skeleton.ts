@@ -5,7 +5,38 @@ import { SKELETON_CONSTANTS } from './skeleton-constants';
 import template from './skeleton.html';
 import styles from './skeleton.scss';
 
-export interface ISkeletonComponent extends IBaseComponent {}
+/**
+ * @summary Skeleton is used to provide a placeholder for content that is loading.
+ * 
+ * @attribute {string} form-field - Apply form field styles to the skeleton.
+ * @attribute {string} button - Apply button styles to the skeleton.
+ * @attribute {string} chip - Apply chip styles to the skeleton.
+ * @attribute {string} list-item - Apply list item styles to the skeleton.
+ * @attribute {string} text - Apply text styles to the skeleton.
+ * @attribute {string} avatar - Apply avatar styles to the skeleton.
+ * @attribute {string} stretch - Apply stretch styles to the skeleton.
+ * 
+ * @cssproperty --forge-skeleton-animation-duration - The duration of the skeleton animation.
+ * @cssproperty --forge-skeleton-width - The width of the skeleton.
+ * @cssproperty --forge-skeleton-height - The height of the skeleton.
+ * @cssproperty --forge-skeleton-background-color - The background color of the skeleton.
+ * @cssproperty --forge-skeleton-border-radius - The border radius of the skeleton.
+ * @cssproperty --forge-skeleton-margin - The margin of the skeleton.
+ * @cssproperty --forge-skeleton-button-height - The height of the button skeleton.
+ * @cssproperty --forge-skeleton-button-width - The width of the button skeleton.
+ * @cssproperty --forge-skeleton-form-field-height - The height of the form field skeleton.
+ * @cssproperty --forge-skeleton-form-field-width - The width of the form field skeleton.
+ * @cssproperty --forge-skeleton-chip-height - The height of the chip skeleton.
+ * @cssproperty --forge-skeleton-chip-width - The width of the chip skeleton.
+ * @cssproperty --forge-skeleton-list-item-height - The height of the list item skeleton.
+ * @cssproperty --forge-skeleton-list-item-margin - The margin of the list item skeleton.
+ * @cssproperty --forge-skeleton-text-height - The height of the text skeleton.
+ * @cssproperty --forge-skeleton-gradient - The gradient of the skeleton.
+ * @cssproperty --forge-skeleton-avatar-size - The size of the avatar skeleton.
+ * 
+ * @csspart root - The root element of the skeleton.
+ */
+export interface ISkeletonComponent extends IBaseComponent { }
 
 declare global {
   interface HTMLElementTagNameMap {

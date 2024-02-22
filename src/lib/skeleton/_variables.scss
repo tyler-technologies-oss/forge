@@ -1,40 +1,7 @@
-$background: rgba(0, 0, 0, 0.12) !default;
-$background-color-dark: rgba(255, 255, 255, 0.12) !default;
-$border-radius: 4px !default;
 $gradient: rgba(255, 255, 255, 0.3) !default;
-$animation-gradient-color-dark: rgba(255, 255, 255, 0.12) !default;
-$animation-duration: 1500ms !default;
-$default-height: 48px !default;
-$default-margin: 16px 0 !default;
-
-$avatar-size: 48px !default;
-
-$button-height: 36px !default;
-$button-width: 72px !default;
-
-$form-field-height: 40px !default;
-$form-field-width: 256px !default;
-
-$chip-height: 32px !default;
-$chip-width: 72px !default;
-
-$list-item-height: 32px !default;
-$list-item-margin: 12px 8px !default;
-
-$text-height: 16px !default;
-$text-short-width: 56px !default;
-$text-medium-width: 96px !default;
-
-$short-width: 25% !default;
-$medium-width: 50% !default;
-$long-width: 75% !default;
 
 $theme-values: (
-  background: $background,
-  gradient: $gradient
-) !default;
+  gradient: $gradient) !default;
 
 $theme-values-dark: (
-  gradient: rgba(255, 255, 255, 0.12),
-  background: rgba(255, 255, 255, 0.12)
-) !default;
+  gradient: rgba(255, 255, 255, 0.12)) !default;
