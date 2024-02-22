@@ -4,6 +4,8 @@
 @mixin base() {
   display: flex;
   flex-direction: column;
+  align-items: #{token(alignment)};
+  justify-content: #{token(justify)};
   gap: #{token(gap)};
   height: #{token(height)};
   width: 100%;
@@ -19,28 +21,4 @@
 
 @mixin wrap() {
   flex-wrap: wrap;
-}
-
-@mixin justify-start() {
-  justify-content: start;
-}
-
-@mixin justify-center() {
-  justify-content: center;
-}
-
-@mixin justify-end() {
-  justify-content: end;
-}
-
-@mixin align-start() {
-  align-items: start;
-}
-
-@mixin align-center() {
-  align-items: center;
-}
-
-@mixin align-end() {
-  align-items: end;
 }

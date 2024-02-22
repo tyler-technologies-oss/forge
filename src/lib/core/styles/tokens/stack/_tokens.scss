@@ -5,6 +5,8 @@ $tokens: (
   gap: utils.module-val(stack, gap, 16px),
   height: utils.module-val(stack, height, null),
   stretch: utils.module-val(stack, stretch, initial),
+  alignment: utils.module-val(stack, alignment, normal),
+  justify: utils.module-val(stack, justify, normal),
   wrap: utils.module-val(stack, wrap, wrap),
 ) !default;
 
