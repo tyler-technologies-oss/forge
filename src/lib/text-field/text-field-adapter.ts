@@ -143,14 +143,15 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     const elements = slot.assignedElements({ flatten: true });
 
     // Attempt to find and connect a `<forge-label>` element
-    const forgeLabel = elements.find(el => el.tagName === TEXT_FIELD_CONSTANTS.selectors.FORGE_LABEL) as LabelComponent | undefined;
+    const forgeLabel = elements.find(el => el.matches(TEXT_FIELD_CONSTANTS.selectors.FORGE_LABEL)) as LabelComponent | undefined;
     if (forgeLabel) {
-      forgeLabel.forElement = inputElement;
+      forgeLabel.forElement = this._component;
+      forgeLabel.clickTarget = inputElement;
       return;
     }
     
     // Attempt to find and connect a `<label>` element
-    const label = elements.find(el => el.tagName === TEXT_FIELD_CONSTANTS.selectors.LABEL) as HTMLLabelElement | undefined;
+    const label = elements.find(el => el.tagName === TEXT_FIELD_CONSTANTS.tagNames.LABEL) as HTMLLabelElement | undefined;
     if (!label || label.control) {
       return;
     }

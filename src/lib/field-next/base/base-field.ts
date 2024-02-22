@@ -1,6 +1,6 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
-import { BaseComponent } from '@tylertech/forge/core';
-import { IWithLabelAwareness, WithLabelAwareness } from '@tylertech/forge/core/mixins/label/with-label-aware';
+import { BaseComponent } from '../../core/base/base-component';
+import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
 import { IBaseFieldAdapter } from './base-field-adapter';
 import { BASE_FIELD_CONSTANTS, FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base-field-constants';
 import { BaseFieldFoundation } from './base-field-foundation';

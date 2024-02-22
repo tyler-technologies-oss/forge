@@ -38,6 +38,10 @@
   text-overflow: ellipsis;
 }
 
+@mixin slotted-forge-label {
+  font: inherit;
+}
+
 @mixin default-slot-disabled {
   cursor: not-allowed;
 }

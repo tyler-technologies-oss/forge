@@ -1,4 +1,4 @@
-import { FieldLabelPosition } from '../field-next';
+import { FieldLabelPosition, FIELD_CONSTANTS } from '../field-next';
 import { BaseFieldFoundation, IBaseFieldFoundation } from '../field-next/base/base-field-foundation';
 import { ITextFieldAdapter, TextFieldAdapter } from './text-field-adapter';
 import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS } from './text-field-constants';
@@ -72,6 +72,7 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
   public set showClear(value: boolean) {
     if (this._showClear !== value) {
       this._showClear = value;
+      this._adapter.toggleHostAttribute(TEXT_FIELD_CONSTANTS.attributes.SHOW_CLEAR, value);
 
       if (value) {
         this._adapter.connectClearButton(this._clearButtonClickListener);
@@ -88,6 +89,7 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
   public override set disabled(value: boolean) {
     if (this._disabled !== value) {
       this._disabled = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.DISABLED, value);
       this._adapter.setFieldProperty('disabled', value);
       this._adapter.disableInput(value);
       this._toggleClearButtonVisibility();
@@ -100,6 +102,7 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
   public override set labelPosition(value: FieldLabelPosition) {
     if (this._labelPosition !== value) {
       this._labelPosition = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, true, value);
       this._adapter.setFieldProperty('labelPosition', value);
       this._tryFloatLabel();
     }

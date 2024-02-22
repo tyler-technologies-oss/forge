@@ -660,6 +660,12 @@ $variants: (
     }
   }
 
+  .label {
+    ::slotted(forge-label) {
+      @include core.slotted-forge-label;
+    }
+  }
+
   &--has-start {
     @include core.main-content-padding-inline(start, start);
   }

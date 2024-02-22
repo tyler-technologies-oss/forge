@@ -1,4 +1,4 @@
-import { BaseAdapter, IBaseAdapter } from '@tylertech/forge/core';
+import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IFieldComponent } from '../field';
 import { IBaseField } from './base-field';
 

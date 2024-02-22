@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconClear } from '@tylertech/tyler-icons/standard';
-import { FieldComponent } from '../field-next';
+import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field-next';
 import { BaseField, IBaseField } from '../field-next/base/base-field';
 import { IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
@@ -65,7 +65,14 @@ declare global {
   ]
 })
 export class TextFieldComponent extends BaseField<TextFieldFoundation> implements ITextFieldComponent {
-  protected _foundation: TextFieldFoundation;
+  public static get observedAttributes(): string[] {
+    return [
+      ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
+      ...Object.values(TEXT_FIELD_CONSTANTS.observedAttributes)
+    ];
+  }
+
+  protected readonly _foundation: TextFieldFoundation;
 
   constructor() {
     super();
