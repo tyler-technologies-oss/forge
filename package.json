@@ -68,9 +68,9 @@
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@auto-it/conventional-commits": "^10.46.0",
-    "@auto-it/first-time-contributor": "^10.46.0",
-    "@auto-it/npm": "^10.46.0",
+    "@auto-it/conventional-commits": "^11.0.5",
+    "@auto-it/first-time-contributor": "^11.0.5",
+    "@auto-it/npm": "^11.0.5",
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
     "@tylertech-eslint/eslint-plugin": "^1.0.9",
@@ -82,7 +82,7 @@
     "@types/karma-fixture": "^0.2.5",
     "@types/node": "^18.8.4",
     "@types/webpack-env": "^1.18.0",
-    "auto": "^10.46.0",
+    "auto": "^11.0.5",
     "commitlint": "^17.6.3",
     "http-server": "^14.1.1",
     "husky": "^8.0.3",
