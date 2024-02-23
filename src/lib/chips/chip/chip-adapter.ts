@@ -24,6 +24,7 @@ export interface IChipAdapter extends IBaseAdapter {
   toggleFieldVariant(value: boolean): void;
   getChipSetState(): IChipState | null;
   setDisabled(value: boolean): void;
+  setSelected(value: boolean): void;
   focusTrigger(options?: FocusOptions): void;
   tryFocusRemoveButton(): void;
   clickRemoveButton(): void;
@@ -132,6 +133,13 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     }
   }
 
+  public setSelected(value: boolean): void {
+    if (this._triggerElement instanceof HTMLAnchorElement) {
+      return;
+    }
+    this._triggerElement.setAttribute('aria-pressed', String(value));
+  }
+
   public toggleFieldVariant(value: boolean): void {
     if (value) {
       if (!this._stateLayerElement.isConnected) {
@@ -198,6 +206,13 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     buttonEl.tabIndex = -1;
     buttonEl.setAttribute('aria-label', `Remove ${this._component.innerText}`);
     buttonEl.setAttribute('part', 'remove-button');
+
+    if (this._component.disabled) {
+      buttonEl.disabled = true;
+    }
+    if (this._component.selected) {
+      buttonEl.setAttribute('aria-pressed', 'true');
+    }
 
     const iconEl = document.createElement('forge-icon');
     iconEl.name = 'close';

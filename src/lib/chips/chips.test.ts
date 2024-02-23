@@ -747,6 +747,14 @@ describe('Chips', () => {
       expect(firstChip.hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).to.be.false;
     });
 
+    it('should be accessible when selected', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip selected>Test</forge-chip>`);
+      const triggerEl = getTriggerElement(el);
+
+      expect(triggerEl.getAttribute('aria-pressed')).to.equal('true');
+      await expect(el).to.be.accessible();
+    });
+
     ['filter', 'choice', 'input'].forEach(type => {
       describe(`${type} chips keyboard selection`, () => {
         it(`should select focused chip when pressing enter on ${type} chips`, async () => {

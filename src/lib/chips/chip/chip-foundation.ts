@@ -185,6 +185,8 @@ export class ChipFoundation implements IChipFoundation {
   }
 
   private _applySelected(): void {
+    this._adapter.setSelected(this._selected);
+
     // If using the filter type, we need to hide the leading slot to ensure that
     // the checkmark shows in place of any leading elements
     if (this._type === 'filter') {
