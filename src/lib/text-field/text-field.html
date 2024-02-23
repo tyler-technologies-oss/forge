@@ -5,15 +5,21 @@
     <slot></slot>
     <slot slot="end" name="end"></slot>
     <slot slot="end" name="clear-button">
-      <forge-icon-button aria-label="Clear" tabindex="-1" dense>
+      <forge-icon-button tabindex="-1" dense>
         <forge-icon name="clear"></forge-icon>
       </forge-icon-button>
-      <forge-tooltip>Clear</forge-tooltip>
+      <forge-tooltip type="label">
+        <slot name="clear-button-tooltip">Clear</slot>
+      </forge-tooltip>
     </slot>
     <slot slot="accessory" name="accessory"></slot>
     <slot slot="support-text-start" name="support-text-start"></slot>
     <slot slot="support-text-end" name="support-text-end"></slot>
     
+    <!-- Include deprecated leading alias -->
+    <slot slot="start" name="leading"></slot>
+    <!-- Include deprecated trailing alias -->
+    <slot slot="end" name="trailing"></slot>
     <!-- Include deprecated addon-end alias -->
     <slot slot="accessory" name="addon-end"></slot>
     <!-- Include deprecated helper-text alias -->

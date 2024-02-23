@@ -6,6 +6,7 @@ import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIE
 export interface ITextFieldFoundation extends IBaseFieldFoundation {
   showClear: boolean;
   initialize(): void;
+  disconnect(): void;
 }
 
 export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> implements ITextFieldFoundation {
@@ -14,7 +15,7 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
   private _inputAttributeListener: TextFieldInputAttributeObserver = this._onInputAttributeChange.bind(this);
   private _valueChangeListener: TextFieldValueChangeListener = this._onValueChange.bind(this);
   private _inputListener: EventListener = this._onValueChange.bind(this);
-  private _clearButtonClickListener: EventListener = this._onClearButtonClick.bind(this);
+  private _clearButtonClickListener: EventListener = (evt: PointerEvent) => this._onClearButtonClick(evt);
   
   constructor(protected _adapter: TextFieldAdapter) {
     super(_adapter);
@@ -23,6 +24,12 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
   public initialize(): void {
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
     this._adapter.addRootListener('input', this._inputListener);
+  }
+
+  public disconnect(): void {
+    this._adapter.removeRootListener('slotchange', this._slotChangeListener);
+    this._adapter.removeRootListener('input', this._inputListener);
+    this._adapter.removeValueChangeListener();
   }
 
   private _onSlotChange(evt: Event): void {
@@ -50,9 +57,9 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
     }
   }
 
-  private _onClearButtonClick(): void {
-    const allowClear = this._adapter.emitHostEvent(TEXT_FIELD_CONSTANTS.events.CLEAR, undefined, true, true);
-    if (allowClear) {
+  private _onClearButtonClick(evt: Event): void {
+    const cancelled = this._adapter.dispatchHostEvent(evt);
+    if (!cancelled) {
       this._adapter.clearInput();
     }
   };

@@ -72,6 +72,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
     return !isCancelled;
   }
 
+  /** @deprecated Use `dispatchHostEvent` instead. */
   public emitHostEvent(type: string, data: any = null, bubble = true, cancelable?: boolean): boolean {
     return emitEvent(this._component, type, data, bubble, cancelable);
   }

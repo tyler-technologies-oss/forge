@@ -1,5 +1,4 @@
 import { getShadowElement, randomChars } from '@tylertech/forge-core';
-import { get } from 'https';
 import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent, ICalendarDateSelectEventData } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
 import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';

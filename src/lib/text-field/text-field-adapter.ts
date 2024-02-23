@@ -7,6 +7,7 @@ import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIE
 
 export interface ITextFieldAdapter extends IBaseFieldAdapter {
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
+  removeRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   disableInput(disabled: boolean): void;
   handleDefaultSlotChange(slot: HTMLSlotElement, listener: TextFieldInputAttributeObserver): void;
   tryAddValueChangeListener(context: unknown, listener: TextFieldValueChangeListener): void;
@@ -46,12 +47,14 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     this._fieldElement.addEventListener(name, listener);
   }
 
+  public removeRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void {
+    this._fieldElement.removeEventListener(name, listener);
+  }
+
   public disableInput(disabled: boolean): void {
-    if (this._inputElements.length) {
-      this._inputElements.forEach((inputElement) => {
-        inputElement.disabled = disabled;
-      });
-    }
+    this._inputElements.forEach((inputElement) => {
+      inputElement.disabled = disabled;
+    });
   }
 
   public inputIsDisabled(): boolean {
@@ -63,9 +66,6 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
   }
 
   public applyLabel(value: string | null): void {
-    if (!this._inputElements.length) {
-      return;
-    }
     this._inputElements.forEach((inputElement) => {
       toggleAttribute(inputElement, !!value, 'aria-label', value ?? '');
     });
