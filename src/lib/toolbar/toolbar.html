@@ -1,14 +1,22 @@
 <template>
-  <div class="forge-toolbar" part="root">
-    <div class="forge-toolbar__section forge-toolbar__section--align-start" part="section-start">
+ <div class="forge-toolbar" part="container">
+  <div class="forge-toolbar-section align-start" part="before-section-start">
+   <slot name="before-start"></slot>
+  </div>
+  <div class="forge-toolbar-inner align-center" part="root">
+    <div class="forge-toolbar-section align-start" part="section-start">
       <slot name="start"></slot>
       <slot></slot>
     </div>
-    <div class="forge-toolbar__section forge-toolbar__section--align-center" part="section-center">
+    <div class="forge-toolbar-section align-center" part="section-center">
       <slot name="center"></slot>
     </div>
-    <div class="forge-toolbar__section forge-toolbar__section--align-end" part="section-end">
+    <div class="forge-toolbar-section align-end" part="section-end">
       <slot name="end"></slot>
     </div>
   </div>
+  <div class="forge-toolbar-section align-end" part="before-section-start">
+   <slot name="after-end"></slot>
+  </div>
+ </div>
 </template>

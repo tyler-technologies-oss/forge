@@ -58,9 +58,9 @@ export class ToolbarComponent extends BaseComponent implements IToolbarComponent
   
   private _setInverted(isInverted: boolean): void {
     if (isInverted) {
-      this.setAttribute(TOOLBAR_CONSTANTS.attributes.INVERTED, 'true');
+      this.toggleAttribute(TOOLBAR_CONSTANTS.attributes.INVERTED, isInverted);
     } else {
-      this.removeAttribute(TOOLBAR_CONSTANTS.attributes.INVERTED);
+      this.toggleAttribute(TOOLBAR_CONSTANTS.attributes.INVERTED, isInverted);
     }
   }
 

@@ -8,11 +8,18 @@
 $tokens: (
   height: utils.module-val(toolbar, height, 56px),
   min-height: utils.module-val(toolbar, min-height, 56px),
+  
   divider-color: utils.module-val(toolbar, divider-color, theme.variable(outline)),
   border-block-start-width: utils.module-val(toolbar, border-block-start-width, 1px),
   border-block-start-style: utils.module-val(toolbar, border-block-start-style, solid),
   border-block-end-width: utils.module-val(toolbar, border-block-end-width, 1px),
   border-block-end-style: utils.module-val(toolbar, border-block-end-style, solid),
+
+  border-top-left-radius: utils.module-val(toolbar, border-top-left-radius, 0),
+  border-top-right-radius: utils.module-val(toolbar, border-top-right-radius, 0),
+  border-bottom-left-radius: utils.module-val(toolbar, border-bottom-left-radius, 0),
+  border-bottom-right-radius: utils.module-val(toolbar, border-bottom-right-radius, 0),
+
   padding: utils.module-val(toolbar, padding, spacing.variable(medium)),
   padding-block: utils.module-val(toolbar, padding-block, 0),
   padding-inline: utils.module-ref(toolbar, padding-inline, padding),

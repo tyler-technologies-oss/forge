@@ -9,19 +9,32 @@
 }
 
 @mixin base() {
- // @include theme.css-custom-property(border-top-left-radius, --forge-toolbar-border-top-left-radius, 0);
- // @include theme.css-custom-property(border-top-right-radius, --forge-toolbar-border-top-right-radius, 0);
- // @include theme.css-custom-property(border-bottom-left-radius, --forge-toolbar-border-bottom-left-radius, 0);
- // @include theme.css-custom-property(border-bottom-right-radius, --forge-toolbar-border-bottom-right-radius, 0);
- min-height: #{token(min-height)};
  height: #{token(height)};
+ min-height: #{token(min-height)};
+
+ border-bottom: #{token(border-block-end-width)} #{token(border-block-end-style)} #{token(divider-color)};
+ border-top-left-radius: #{token(border-top-left-radius)};
+ border-top-right-radius: #{token(border-top-right-radius)};
+ border-bottom-left-radius: #{token(border-bottom-left-radius)};
+ border-bottom-right-radius: #{token(border-bottom-right-radius)};
+
+ padding-inline: 0;
+ background-color: var(--forge-theme-surface);
+ box-sizing: border-box;
+ @include grid;
+}
+
+@mixin inner() {
  padding-inline: #{token(padding-inline)};
  padding-block: #{token(padding-block)};
- border-bottom: #{token(border-block-end-width)} #{token(border-block-end-style)} #{token(divider-color)};
- background-color: var(--forge-theme-surface);
+
+ box-sizing: border-box;
+ @include grid;
+}
+
+@mixin grid() {
  display: grid;
  grid-template-columns: auto 1fr auto;
- box-sizing: border-box;
 }
 
 @mixin section() {
@@ -45,25 +58,20 @@
  grid-column: 3;
 }
 
-// TODO - remove BEM and cleanup
 @mixin core-styles() {
- .forge-toolbar {
-   @include base;
+ .forge-toolbar-section {
+  @include section;
+ }
 
-   &__section {
-     @include section;
+ .align-start {
+  @include section-start;
+ }
 
-     &--align-start {
-       @include section-start;
-     }
+ .align-center {
+  @include section-center;
+ }
 
-     &--align-center {
-       @include section-center;
-     }
-
-     &--align-end {
-       @include section-end;
-     }
-   }
+ .align-end {
+  @include section-end;
  }
 }

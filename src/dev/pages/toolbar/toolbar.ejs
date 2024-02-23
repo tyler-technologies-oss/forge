@@ -1,7 +1,48 @@
 <forge-toolbar id="toolbar">
+  <div slot="before-start" class="placeholder-container">Before start</div>
   <div slot="start" class="placeholder-container">Start</div>
   <div slot="center" class="placeholder-container">Center</div>
   <div slot="end" class="placeholder-container">End</div>
+  <div slot="after-end" class="placeholder-container">After end</div>
 </forge-toolbar>
+
+<div style="margin-block-start: 56px;">
+ <p class="forge-typography--heading2">More examples</p>
+ <forge-stack gap="56">
+   <forge-card style="--forge-card-padding: 0;">
+    <forge-toolbar no-border>
+     <forge-stack slot="end" inline>
+      <forge-button>Cancel</forge-button>
+      <forge-button variant="raised">Save</forge-button>
+     </forge-stack>
+    </forge-toolbar>
+   </forge-card>
+   <forge-card style="--forge-card-padding: 0;">
+    <forge-toolbar no-border>
+     <forge-stack slot="end" inline gap="0">
+      <forge-icon-button>
+        <forge-icon name="ac_unit" external></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button>
+        <forge-icon name="accessibility" external></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button>
+        <forge-icon name="more_vert" external></forge-icon>
+      </forge-icon-button>
+     </forge-stack>
+    </forge-toolbar>
+   </forge-card>
+   <forge-card style="--forge-card-padding: 0;">
+    <forge-toolbar no-border>
+     <forge-icon-button aria-label="Default icon button" slot="before-start">
+      <forge-icon name="arrow_back" external></forge-icon>
+     </forge-icon-button>
+     <div slot="before-start">
+      <h2 class="forge-typography--heading3" style="margin:0; padding: 0;">Go back</h2>
+     </div>
+   </forge-toolbar>
+   </forge-card>
+  </forge-stack>
+ </div>
 
 <script type="module" src="toolbar.ts"></script>

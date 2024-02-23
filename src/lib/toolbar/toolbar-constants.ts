@@ -7,18 +7,11 @@ const attributes = {
 };
 
 const classes = {
-  TOOLBAR: 'forge-toolbar',
-  SECTION: 'forge-toolbar__section',
-  ALIGN_START: 'forge-toolbar__section--align-start',
-  ALIGN_CENTER: 'forge-toolbar__section--align-center',
-  ALIGN_END: 'forge-toolbar__section--align-end'
+  TOOLBAR: 'forge-toolbar'
 };
 
 const selectors = {
-  TOOLBAR: `.${classes.TOOLBAR}`,
-  START_SLOT: `.${classes.SECTION}.${classes.ALIGN_START} > slot[name=start]`,
-  CENTER_SLOT: `.${classes.SECTION}.${classes.ALIGN_CENTER} > slot[name=center]`,
-  END_SLOT: `.${classes.SECTION}.${classes.ALIGN_END} > slot[name=end]`
+  TOOLBAR: `.${classes.TOOLBAR}`
 };
 
 export const TOOLBAR_CONSTANTS = {
