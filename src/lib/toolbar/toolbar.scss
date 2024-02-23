@@ -15,7 +15,7 @@
 }
 
 .forge-toolbar-inner {
- @include inner;
+ @include base-inner;
 }
 
 :host([hidden]) {

@@ -24,7 +24,7 @@
  @include grid;
 }
 
-@mixin inner() {
+@mixin base-inner() {
  padding-inline: #{token(padding-inline)};
  padding-block: #{token(padding-block)};
 
