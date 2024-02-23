@@ -1,17 +1,283 @@
-@use '../../theme';
-@use './mixins';
-@use '../../ripple/forge-ripple';
+@use './core' as *;
+@use '../../avatar';
+@use '../../icon-button';
+@use '../../focus-indicator';
+@use '../../state-layer';
+@use '../../core/styles/theme';
+@use '../../core/styles/typography';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host([theme=error]) {
-  --mdc-theme-primary: var(--mdc-theme-error);
+//
+// Base
+//
+
+.forge-chip {
+  @include tokens;
+}
+
+.forge-chip {
+  @include base;
+}
+
+//
+// Trigger
+//
+
+.trigger {
+  @include trigger;
+}
+
+//
+// Remove button
+//
+
+.remove {
+  @include remove-button;
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    color: #{token(color)},
+    shape: #{token(shape)}
+  ));
+}
+
+//
+// State layer
+//
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: #{token(color)}
+  ));
+}
+
+//
+// Dense
+//
+
+:host([dense]) {
+  .forge-chip {
+    @include dense;
+  }
+
+  .trigger {
+    @include typography.provide(button, (
+      font-size: #{token(dense-font-size)},
+      font-weight: #{token(dense-font-weight)}
+    ));
+  }
+
+  .remove {
+    @include override(remove-button-spacing, remove-button-spacing-dense);
+
+    @include icon-button.provide-theme((
+      density-small-size: #{token(remove-button-height-dense)},
+      density-small-icon-size: #{token(remove-button-icon-size-dense)}
+    ));
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      outward-offset: #{token(dense-focus-indicator-offset)}
+    ));
+  }
+
+  ::slotted(forge-avatar) {
+    @include override(avatar-spacing, avatar-spacing-dense);
+
+    @include typography.provide(subheading2, (
+      font-size: #{token(avatar-font-size-dense)}
+    ));
+
+    @include avatar.provide-theme((
+      size: #{token(avatar-size-dense)}
+    ));
+  }
+
+  ::slotted(:is([slot=start],[slot=leading],[slot=end],[slot=trailing])) {
+    @include override(icon-font-size, dense-icon-font-size);
+  }
+}
+
+//
+// Selected
+//
+
+$selectable: ':is([type=filter],[type=choice],[type=input])';
+$selected: '#{$selectable}[selected]';
+
+:host(#{$selected}) {
+  .forge-chip {
+    @include selected;
+  }
+  
+  .remove {
+    @include icon-button.provide-theme((
+      focus-indicator-color: #{token(color)}
+    ));
+  }
+
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      color: #{token(background)}
+    ));
+  }
+}
+
+//
+// Invalid
+//
+
+:host([invalid]) {
+  .forge-chip {
+    @include invalid;
+  }
+}
+
+:host([invalid]#{$selected}) {
+  .forge-chip {
+    @include invalid-selected;
+  }
+}
+
+//
+// Disabled
+//
+
+:host([disabled]:not([href])) {
+  .forge-chip {
+    @include disabled;
+  }
+
+  .trigger {
+    @include trigger-disabled;
+  }
+}
+
+//
+// Slotted non-avatar
+//
+
+::slotted(:not(forge-avatar):is([slot=start],[slot=leading],[slot=end],[slot=trailing])) {
+  font-size: #{token(icon-font-size)};
+}
+
+//
+// Slotted <forge-avatar>
+//
+
+::slotted(forge-avatar:is([slot=start],[slot=leading])) {
+  margin-inline-start: #{token(avatar-spacing)};
+}
+
+::slotted(forge-avatar:is([slot=end],[slot=trailing])) {
+  margin-inline-end: #{token(avatar-spacing)};
+}
+
+::slotted(forge-avatar) {
+  @include typography.provide(subheading2, (
+    font-size: #{token(avatar-font-size)}
+  ));
+
+  @include avatar.provide-theme((
+    size: #{token(avatar-size)}
+  ));
+}
+
+//
+// Filter checkmark
+//
+
+:host([type=filter]) {
+  .checkmark {
+    @include checkmark-base;
+  }
+}
+
+:host([type=filter][selected]) {
+  .checkmark {
+    @include checkmark-selected;
+  }
+}
+
+//
+// Type - Input
+//
+
+:host([type=input]) {
+  .trigger {
+    padding-inline: #{token(padding-inline) 0};
+  }
+}
+
+//
+// Type - Field
+//
+
+:host([type=field]) {
+  .forge-chip {
+    @include field;
+  }
+}
+
+//
+// Theme
+//
+
+@each $theme in [secondary tertiary success warning error info] {
+  :host([theme=#{$theme}]) {
+    @if $theme == secondary {
+      // Special case handling for secondary theme to increase contrast
+      .forge-chip {
+        @include override(color, theme.variable(text-high), value);
+        @include override(border-color, theme.variable($theme), value);
+
+        .remove {
+          @include icon-button.provide-theme((
+            focus-indicator-color: #{token(color)}
+          ));
+        }
+      }
+    } @else {
+      .forge-chip {
+        @include override(color, theme.variable($theme), value);
+      }
+
+      .remove {
+        @include icon-button.provide-theme((
+          focus-indicator-color: #{token(background)}
+        ));
+      }
+    }
+  }
+
+  :host([theme=#{$theme}]#{$selected}) {
+    .forge-chip {
+      @include override(background, theme.variable($theme), value);
+      @include override(color, theme.variable(on-#{$theme}), value);
+    }
+  }
+
+  :host([theme=#{$theme}][type=field]) {
+    .forge-chip {
+      @include override(background, theme.variable(#{$theme}-container-low), value);
+      @include override(color, theme.variable(on-#{$theme}-container-low), value);
+    }
+  }
 }

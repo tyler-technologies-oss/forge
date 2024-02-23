@@ -3,6 +3,7 @@
 
 @use '../popover';
 @use '../tooltip';
+@use '../chips/chip';
 
 @use '../backdrop/mixins' as backdrop-mixins;
 @use '../backdrop/variables' as backdrop-variables;
@@ -30,6 +31,11 @@
     background: theme.variable(surface-bright),
     color: theme.variable(text-high),
     border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
+  ));
+
+  // Chips
+  @include chip.provide-theme((
+    field-border-color: theme.variable(outline) // Field type chips use a border color in dark theme to increase contrast
   ));
 
   @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);

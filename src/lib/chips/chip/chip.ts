@@ -1,9 +1,12 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-import { tylIconCancel } from '@tylertech/tyler-icons/standard';
-import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { BaseComponent, IBaseComponent } from '../../core';
+import { FocusIndicatorComponent } from '../../focus-indicator';
 import { IconComponent, IconRegistry } from '../../icon';
+import { IconButtonComponent } from '../../icon-button';
+import { StateLayerComponent } from '../../state-layer';
 import { ChipAdapter } from './chip-adapter';
-import { ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } from './chip-constants';
+import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } from './chip-constants';
 import { ChipFoundation } from './chip-foundation';
 
 import template from './chip.html';
@@ -11,13 +14,16 @@ import styles from './chip.scss';
 
 export interface IChipComponent extends IBaseComponent {
   type: ChipType;
+  value: unknown;
   selected: boolean;
-  disabled: boolean;
   invalid: boolean;
-  value: any;
+  disabled: boolean;
   dense: boolean;
-  emulateFocus: boolean;
-  tryFocusDelete(): void;
+  theme: ChipTheme;
+  href: string;
+  target: string;
+  download: string;
+  rel: string;
 }
 
 declare global {
@@ -32,32 +38,27 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-chip>` component.
- * 
  * @tag forge-chip
  */
 @CustomElement({
   name: CHIP_CONSTANTS.elementName,
-  dependencies: [IconComponent]
+  dependencies: [
+    FocusIndicatorComponent,
+    StateLayerComponent,
+    IconButtonComponent,
+    IconComponent
+  ]
 })
 export class ChipComponent extends BaseComponent implements IChipComponent {
   public static get observedAttributes(): string[] {
-    return [
-      CHIP_CONSTANTS.attributes.TYPE,
-      CHIP_CONSTANTS.attributes.SELECTED,
-      CHIP_CONSTANTS.attributes.DISABLED,
-      CHIP_CONSTANTS.attributes.VALUE,
-      CHIP_CONSTANTS.attributes.DENSE,
-      CHIP_CONSTANTS.attributes.INVALID,
-      CHIP_CONSTANTS.attributes.EMULATE_FOCUS
-    ];
+    return Object.values(CHIP_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: ChipFoundation;
+  protected _foundation: ChipFoundation;
 
   constructor() {
     super();
-    IconRegistry.define(tylIconCancel);
+    IconRegistry.define(tylIconClose);
     attachShadowTemplate(this, template, styles);
     this._foundation = new ChipFoundation(new ChipAdapter(this));
   }
@@ -66,67 +67,82 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
     this._foundation.initialize();
   }
 
-  public disconnectedCallback(): void {
-    this._foundation.disconnect();
-  }
-
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case CHIP_CONSTANTS.attributes.TYPE:
         this.type = newValue as ChipType;
         break;
+      case CHIP_CONSTANTS.attributes.VALUE:
+        this.value = newValue;
+        break;
       case CHIP_CONSTANTS.attributes.SELECTED:
         this.selected = coerceBoolean(newValue);
-        break;
-      case CHIP_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
         break;
       case CHIP_CONSTANTS.attributes.INVALID:
         this.invalid = coerceBoolean(newValue);
         break;
-      case CHIP_CONSTANTS.attributes.VALUE:
-        this.value = newValue;
+      case CHIP_CONSTANTS.attributes.DISABLED:
+        this.disabled = coerceBoolean(newValue);
         break;
       case CHIP_CONSTANTS.attributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
-      case CHIP_CONSTANTS.attributes.EMULATE_FOCUS:
-        this.emulateFocus = coerceBoolean(newValue);
+      case CHIP_CONSTANTS.attributes.THEME:
+        this.theme = newValue as ChipTheme;
+        break;
+      case CHIP_CONSTANTS.attributes.HREF:
+        this.href = newValue;
+        break;
+      case CHIP_CONSTANTS.attributes.TARGET:
+        this.target = newValue;
+        break;
+      case CHIP_CONSTANTS.attributes.DOWNLOAD:
+        this.download = newValue;
+        break;
+      case CHIP_CONSTANTS.attributes.REL:
+        this.rel = newValue;
+        break;
     }
   }
 
-  /** Gets/sets the chip type. */
+  public override focus(options?: FocusOptions): void {
+    this._foundation.focus(options);
+  }
+
+  public override click(): void {
+    this._foundation.click();
+  }
+
   @FoundationProperty()
   public declare type: ChipType;
 
-  /** Gets/sets the selected state of the chip. */
+  @FoundationProperty()
+  public declare value: unknown;
+
   @FoundationProperty()
   public declare selected: boolean;
 
-  /** Gets/sets the disabled state of the chip. */
-  @FoundationProperty()
-  public declare disabled: boolean;
-
-  /** Gets/sets the invalid state of the chip. */
   @FoundationProperty()
   public declare invalid: boolean;
 
-  /** Gets/sets the chip value. */
   @FoundationProperty()
-  public declare value: any;
+  public declare disabled: boolean;
 
-  /** Gets/sets the dense state of the chip. */
   @FoundationProperty()
   public declare dense: boolean;
 
   @FoundationProperty()
-  public declare emulateFocus: boolean;
+  public declare theme: ChipTheme;
 
-  public override focus(): void {
-    this._foundation.setFocus();
-  }
+  @FoundationProperty()
+  public declare href: string;
 
-  public tryFocusDelete(): void {
-    this._foundation.tryFocusDelete();
-  }
+  @FoundationProperty()
+  public declare target: string;
+
+  @FoundationProperty()
+  public declare download: string;
+
+  @FoundationProperty()
+  public declare rel: string;
 }
