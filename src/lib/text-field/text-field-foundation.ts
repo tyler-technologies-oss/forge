@@ -58,14 +58,15 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
   }
 
   private _onClearButtonClick(evt: Event): void {
-    const cancelled = this._adapter.dispatchHostEvent(evt);
-    if (!cancelled) {
+    const event = new CustomEvent(TEXT_FIELD_CONSTANTS.events.CLEAR, { bubbles: true, cancelable: true, composed: true });
+    this._adapter.dispatchHostEvent(event);
+    if (!event.defaultPrevented) {
       this._adapter.clearInput();
     }
   };
 
   private _onValueChange(): void {
-    this._adapter.tryFloatLabel();
+    this._tryFloatLabel();
     this._toggleClearButtonVisibility();
   }
 

@@ -4,7 +4,7 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { tick } from '@tylertech/forge-testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
-import { ITextFieldComponent } from '.';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '.';
 import { TestHarness } from '../../test/utils/test-harness';
 import { FIELD_CONSTANTS, IFieldComponent } from '../field-next';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button';
@@ -120,6 +120,25 @@ describe('Text field', () => {
       harness.clearButtonElement!.click();
       await tick();
       expect(harness.inputElement.value).to.equal('');
+    });
+
+    it('should emit event when clear button is pressed', async () => {
+      const harness = await createFixture({ showClear: true });
+      harness.inputElement.value = 'test';
+      const eventSpy = spy();
+      harness.element.addEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, eventSpy);
+      harness.clearButtonElement!.click();
+      await tick();
+      expect(eventSpy).to.have.been.called;
+    });
+
+    it('should not clear text field when clear button is clicked and event is canceled', async () => {
+      const harness = await createFixture({ showClear: true });
+      harness.inputElement.value = 'test';
+      harness.element.addEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, (evt) => evt.preventDefault());
+      harness.clearButtonElement!.click();
+      await tick();
+      expect(harness.inputElement.value).to.equal('test');
     });
   });
 
