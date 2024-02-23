@@ -15,7 +15,8 @@ const attributes = {
   WRAP: 'wrap',
   STRETCH: 'stretch',
   GAP: 'gap',
-  ALIGNMENT: 'alignment'
+  ALIGNMENT: 'alignment',
+  JUSTIFY: 'justify'
 };
 
 const strings = {

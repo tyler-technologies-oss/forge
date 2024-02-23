@@ -13,6 +13,7 @@ export interface IStackComponent extends ICustomElement {
   stretch: boolean;
   gap: string;
   alignment: StackAlignMode | StackAlignment;
+  justify: StackAlignment;
 }
 
 declare global {
@@ -22,9 +23,40 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-stack>` component.
- * 
  * @tag forge-stack
+ * 
+ * @summary The stack is a utility component that helps manage spacing and alignment of immediate children along a vertical or horizontal axis.
+ * 
+ * @description
+ * The stack utility component uses flexbox under the hood, but it is not meant to be an abstraction or replacement for CSS flexbox. 
+ * Stack is simply a utility component for developer convenience. There are many UI patterns and situations where elements need to be 
+ * arranged horizontally or vertically with a specific gap inbetween. Instead of having to use an inline style or create a new CSS class for 
+ * these scenarios, you can reach for the stack. This keeps developers within a template and prevents having to jump around from HTML 
+ * to CSS. It also helps minimize the number of CSS classes being used for simple situations where basic flexbox is needed.
+ * 
+ * @property {boolean} inline - Sets the direction of child items to be horizontal.
+ * @property {boolean} wrap - Wrap is used to wrap child elements to a new row when there's not enough space. This only works when inline is set to true.
+ * @property {boolean} stretch - Stretch allows each child element to take up as much width as possible until the parent container is filled. You can override this on each individual child element by changing its --forge-stack-stretch CSS custom property.
+ * @property {string} gap - Controls the amount of space between child elements within a stack.
+ * @property {StackAlignment} alignment - Controls the align-items property of the stack.
+ * @property {StackAlignment} justify - Controls the justify-content property of the stack.
+ * 
+ * @attribute {boolean} inline - Sets the direction of child items to be horizontal.
+ * @attribute {boolean} wrap - Wrap is used to wrap child elements to a new row when there's not enough space. This only works when inline is set to true.
+ * @attribute {boolean} stretch - Stretch allows each child element to take up as much width as possible until the parent container is filled. You can override this on each individual child element by changing its --forge-stack-stretch CSS custom property.
+ * @attribute {string} gap - Controls the amount of space between child elements within a stack.
+ * @attribute {StackAlignment} alignment - Controls the align-items property of the stack. See [justify-content on MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content).
+ * @attribute {StackAlignment} justify - Controls the justify-content property of the stack. See [align-items on MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items).
+ * 
+ * @cssproperty --forge-stack-alignment - Controls the align-items CSS property of the root stack element.
+ * @cssproperty --forge-stack-justify - Controls the justify-content CSS property of the root stack element.
+ * @cssproperty --forge-stack-gap - Controls the gap between each child element within a stack.
+ * @cssproperty --forge-stack-height - Controls the height of the root stack element.
+ * @cssproperty --forge-stack-stretch - Controls the flex shorthand property of a child element within the stack.
+ * 
+ * @csspart root - The root container element.
+ * 
+ * @slot - The default/unnamed slot for stack content.
  */
 @CustomElement({
   name: STACK_CONSTANTS.elementName
@@ -36,7 +68,8 @@ export class StackComponent extends BaseComponent implements IStackComponent {
       STACK_CONSTANTS.attributes.WRAP,
       STACK_CONSTANTS.attributes.STRETCH,
       STACK_CONSTANTS.attributes.GAP,
-      STACK_CONSTANTS.attributes.ALIGNMENT
+      STACK_CONSTANTS.attributes.ALIGNMENT,
+      STACK_CONSTANTS.attributes.JUSTIFY
     ];
   }
 
@@ -65,6 +98,9 @@ export class StackComponent extends BaseComponent implements IStackComponent {
       case STACK_CONSTANTS.attributes.ALIGNMENT:
         this.alignment = newValue as StackAlignment;
         break;
+      case STACK_CONSTANTS.attributes.JUSTIFY:
+        this.justify = newValue as StackAlignment;
+        break;
     }
   }
 
@@ -84,7 +120,11 @@ export class StackComponent extends BaseComponent implements IStackComponent {
   @FoundationProperty()
   public declare gap: string;
 
-  /** Controls if stack items are at the end of the row or column */
+  /** Controls the align-items property of a row or column */
   @FoundationProperty()
   public declare alignment: StackAlignMode | StackAlignment;
+
+  /** Controls the justify-content property of a row or column */
+  @FoundationProperty()
+  public declare justify: StackAlignment;
 }
