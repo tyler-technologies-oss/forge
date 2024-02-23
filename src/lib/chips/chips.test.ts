@@ -34,6 +34,17 @@ describe('Chips', () => {
       await expect(el).to.be.accessible();
     });
 
+    it('should be accessible with input chips', async () => {
+      const el = await fixture<IChipSetComponent>(html`
+        <forge-chip-set type="input">
+          <forge-chip>Test</forge-chip>
+          <forge-chip>Test</forge-chip>
+          <forge-chip>Test</forge-chip>
+        </forge-chip-set>
+      `);
+      await expect(el).to.be.accessible();
+    });
+
     it('should have expected defaults', async () => {
       const el = await fixture<IChipSetComponent>(html`<forge-chip-set></forge-chip-set>`);
 
