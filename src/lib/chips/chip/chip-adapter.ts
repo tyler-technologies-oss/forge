@@ -13,6 +13,7 @@ import { replaceElement } from '../../core/utils/utils';
 
 export interface IChipAdapter extends IBaseAdapter {
   readonly removeButtonElement: IIconButtonComponent | undefined;
+  readonly isAnchor: boolean;
   clickTrigger(): void;
   addRootListener(type: string, listener: EventListener): void;
   removeRootListener(type: string, listener: EventListener): void;
@@ -28,6 +29,7 @@ export interface IChipAdapter extends IBaseAdapter {
   focusTrigger(options?: FocusOptions): void;
   tryFocusRemoveButton(): void;
   clickRemoveButton(): void;
+  animateStateLayer(): void;
 }
 
 
@@ -51,6 +53,10 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
 
   public get removeButtonElement(): IIconButtonComponent | undefined {
     return this._removeButtonElement;
+  }
+
+  public get isAnchor(): boolean {
+    return this._triggerElement.localName === 'a';
   }
 
   public clickTrigger(): void {
@@ -196,6 +202,10 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
 
   public clickRemoveButton(): void {
     this._removeButtonElement?.click();
+  }
+
+  public animateStateLayer(): void {
+    this._stateLayerElement.playAnimation();
   }
 
   private _createRemoveButton(): IIconButtonComponent {

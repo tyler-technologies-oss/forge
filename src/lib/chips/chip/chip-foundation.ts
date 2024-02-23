@@ -104,6 +104,9 @@ export class ChipFoundation implements IChipFoundation {
           }
         } else {
           this.click();
+          if (this._adapter.isAnchor) {
+            this._adapter.animateStateLayer();
+          }
         }
         break;
       case 'ArrowLeft':
