@@ -9,7 +9,7 @@ interface IStackTestContext {
   component: IStackComponent;
   rootElement: HTMLDivElement,
   append(): void;
-  destroy(): void;
+  destroy(): void; 
 }
 
 describe('StackComponent', function(this: ITestContext) {

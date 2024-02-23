@@ -3,6 +3,10 @@
 .forge-stack {
   @include base;
   @include tokens;
+
+  ::slotted(*) {
+    @include stretch;
+  }
 }
 
 :host([inline]) {

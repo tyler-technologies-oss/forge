@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
+import { fixture, html } from '@open-wc/testing';
 
 import './stack'
 import { IStackComponent } from './stack';
@@ -112,7 +112,7 @@ describe('Stack', () => {
     expect(el.alignment).to.equal('start');  
     expect(el.justify).to.equal('start');   
   });
-  
+
   function getRootEl(el: IStackComponent): HTMLElement {
     return el.shadowRoot?.firstElementChild as HTMLElement;
   }
