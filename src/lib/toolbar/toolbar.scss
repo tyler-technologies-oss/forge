@@ -18,17 +18,16 @@
   display: none;
 }
 
-:host([no-border]) {
-  .forge-toolbar {
-    border: none;
-  }
-}
-
 :host([inverted]) {
  .forge-toolbar {
-  @include override(padding-inline, 0, value);
    border-bottom: none;
-   border-top: #{token(border-block-end-width)} #{token(border-block-end-style)} #{token(divider-color)};
+   border-top: #{token(border-block-start-width)} #{token(border-block-start-style)} #{token(divider-color)};
+ }
+}
+
+:host([no-border]) {
+ .forge-toolbar {
+   border: none;
  }
 }
 

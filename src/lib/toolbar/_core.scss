@@ -9,29 +9,19 @@
 }
 
 @mixin base() {
- // @include theme.css-custom-property(min-height, --forge-toolbar-min-height, variables.$min-height);
- // @include theme.css-custom-property(height, --forge-toolbar-height, variables.$height);
- // @include theme.css-custom-property(padding-inline, --forge-toolbar-padding, variables.$padding);
- // @include theme.css-custom-property(border-bottom, --forge-toolbar-border-bottom, variables.$border-bottom);
  // @include theme.css-custom-property(border-top-left-radius, --forge-toolbar-border-top-left-radius, 0);
  // @include theme.css-custom-property(border-top-right-radius, --forge-toolbar-border-top-right-radius, 0);
  // @include theme.css-custom-property(border-bottom-left-radius, --forge-toolbar-border-bottom-left-radius, 0);
  // @include theme.css-custom-property(border-bottom-right-radius, --forge-toolbar-border-bottom-right-radius, 0);
- // @include theme.property(border-color, border-color);
-
  min-height: #{token(min-height)};
  height: #{token(height)};
+ padding-inline: #{token(padding-inline)};
+ padding-block: #{token(padding-block)};
  border-bottom: #{token(border-block-end-width)} #{token(border-block-end-style)} #{token(divider-color)};
  background-color: var(--forge-theme-surface);
  display: grid;
  grid-template-columns: auto 1fr auto;
  box-sizing: border-box;
-}
-
-@mixin inverted() {
- // @include theme.css-custom-property(border-top, --forge-toolbar-border-top, variables.$border-bottom);
-
- border-bottom: none;
 }
 
 @mixin section() {
