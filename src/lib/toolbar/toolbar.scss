@@ -1,11 +1,17 @@
-@use '../theme';
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
 
 :host {
-  display: block;
-  contain: layout;
+  @include host;
+}
+
+.forge-toolbar {
+ @include tokens;
+}
+
+.forge-toolbar {
+ @include base;
+ @include core-styles;
 }
 
 :host([hidden]) {
@@ -18,15 +24,23 @@
   }
 }
 
+:host([inverted]) {
+ .forge-toolbar {
+  @include override(padding-inline, 0, value);
+   border-bottom: none;
+   border-top: #{token(border-block-end-width)} #{token(border-block-end-style)} #{token(divider-color)};
+ }
+}
+
 :host([no-padding]) {
   .forge-toolbar {
-    @include theme.css-custom-property(padding-inline, --forge-toolbar-padding, 0);
+    @include override(padding-inline, 0, value);
   }
 }
 
 :host([auto-height]) {
   .forge-toolbar {
-    @include theme.css-custom-property(height, --forge-toolbar-height, auto);
+    @include override(height, auto, value);
   }
 }
 

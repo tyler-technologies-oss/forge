@@ -1,0 +1,79 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host() {
+ display: block;
+ contain: layout;
+}
+
+@mixin base() {
+ // @include theme.css-custom-property(min-height, --forge-toolbar-min-height, variables.$min-height);
+ // @include theme.css-custom-property(height, --forge-toolbar-height, variables.$height);
+ // @include theme.css-custom-property(padding-inline, --forge-toolbar-padding, variables.$padding);
+ // @include theme.css-custom-property(border-bottom, --forge-toolbar-border-bottom, variables.$border-bottom);
+ // @include theme.css-custom-property(border-top-left-radius, --forge-toolbar-border-top-left-radius, 0);
+ // @include theme.css-custom-property(border-top-right-radius, --forge-toolbar-border-top-right-radius, 0);
+ // @include theme.css-custom-property(border-bottom-left-radius, --forge-toolbar-border-bottom-left-radius, 0);
+ // @include theme.css-custom-property(border-bottom-right-radius, --forge-toolbar-border-bottom-right-radius, 0);
+ // @include theme.property(border-color, border-color);
+
+ min-height: #{token(min-height)};
+ height: #{token(height)};
+ border-bottom: #{token(border-block-end-width)} #{token(border-block-end-style)} #{token(divider-color)};
+ background-color: var(--forge-theme-surface);
+ display: grid;
+ grid-template-columns: auto 1fr auto;
+ box-sizing: border-box;
+}
+
+@mixin inverted() {
+ // @include theme.css-custom-property(border-top, --forge-toolbar-border-top, variables.$border-bottom);
+
+ border-bottom: none;
+}
+
+@mixin section() {
+ display: flex;
+ align-items: center;
+ width: 100%;
+ box-sizing: border-box;
+}
+
+@mixin section-start() {
+ grid-column: 1;
+}
+
+@mixin section-center() {
+ justify-content: center;
+ grid-column: 2;
+}
+
+@mixin section-end() {
+ justify-content: flex-end;
+ grid-column: 3;
+}
+
+// TODO - remove BEM and cleanup
+@mixin core-styles() {
+ .forge-toolbar {
+   @include base;
+
+   &__section {
+     @include section;
+
+     &--align-start {
+       @include section-start;
+     }
+
+     &--align-center {
+       @include section-center;
+     }
+
+     &--align-end {
+       @include section-end;
+     }
+   }
+ }
+}

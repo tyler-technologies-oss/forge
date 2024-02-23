@@ -7,7 +7,6 @@ const attributes = {
 };
 
 const classes = {
-  INVERTED: 'forge-toolbar--inverted',
   TOOLBAR: 'forge-toolbar',
   SECTION: 'forge-toolbar__section',
   ALIGN_START: 'forge-toolbar__section--align-start',
