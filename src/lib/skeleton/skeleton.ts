@@ -14,8 +14,6 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-skeleton>` custom element.
- * 
  * @tag forge-skeleton
  * 
  *  @summary Skeleton is used to provide a placeholder for content that is loading.
