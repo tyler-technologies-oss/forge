@@ -6,7 +6,7 @@ export class ForgeRipple extends MDCRipple {
     this.foundation.handleFocus();
   }
 
-  /** Manually trigger focus deactivation. */
+  /** Manually trigger blur activation */
   public handleBlur(): void {
     this.foundation.handleBlur();
   }

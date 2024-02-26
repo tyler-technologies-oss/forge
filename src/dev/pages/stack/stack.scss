@@ -3,29 +3,29 @@
 }
 
 .box {
-  border: 4px dashed var(--mdc-theme-text-secondary-on-background);
-  background-color: var(--mdc-theme-text-disabled-on-background);
+  border: 4px dashed var(--forge-theme-surface-inverse);
+  background-color: var(--forge-theme-surface-container-medium);
   border-radius: 8px;
 }
 
 .small {
-  height: 40px;
-  width: 40px;
+  height: 100px;
+  width: 100px;
 }
 
 .medium {
-  height: 80px;
-  width: 80px;
+  height: 150px;
+  width: 150px;
 }
 
 .large {
-  height: 120px;
-  width: 120px;
+  height: 200px;
+  width: 200px;
 }
 
 .xlarge {
-  height: 160px;
-  width: 160px;
+  height: 250px;
+  width: 250px;
 }
 
 .more-examples {
