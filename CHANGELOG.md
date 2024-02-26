@@ -1,3 +1,42 @@
+# v2.21.3 (Thu Feb 22 2024)
+
+#### 🐛 Bug Fix
+
+- chore: upgrade auto to fix release [#479](https://github.com/tyler-technologies-oss/forge/pull/479) ([@DRiFTy17](https://github.com/DRiFTy17))
+- feat: bump `@tylertech/forge-core` to `2.3.1` to use constructable stylesheets by default [#475](https://github.com/tyler-technologies-oss/forge/pull/475) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.21.2 (Thu Feb 15 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix(date-picker): open calendar on min enabled month when current month is after max date [#472](https://github.com/tyler-technologies-oss/forge/pull/472) ([@samrichardsontylertech](https://github.com/samrichardsontylertech) [@DRiFTy17](https://github.com/DRiFTy17))
+- fix(menu): map deprecated `icon` property to `leadingIcon` when options are loaded from factory [#461](https://github.com/tyler-technologies-oss/forge/pull/461) ([@eliganemtyler](https://github.com/eliganemtyler))
+- fix(paginator): revert naive focus management changes in favor of default browser implementation when focused elements are disabled [#468](https://github.com/tyler-technologies-oss/forge/pull/468) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(list): fixed a bug where keyboard navigation was not scoped within sub-lists [#458](https://github.com/tyler-technologies-oss/forge/pull/458) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(dialog): fixed a bug where opening dialogs with focused Forge elements that use the ripple could be misaligned [#457](https://github.com/tyler-technologies-oss/forge/pull/457) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(open-icon): auto-register correct "horizontal" icon [#449](https://github.com/tyler-technologies-oss/forge/pull/449) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: identify readonly properties in custom elements manifest [#465](https://github.com/tyler-technologies-oss/forge/pull/465) ([@MikeMatusz](https://github.com/MikeMatusz))
+- fix(calendar): fixed a bug where the calendar would not reflect the correct month if the max date is before the current the month [#448](https://github.com/tyler-technologies-oss/forge/pull/448) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 4
+
+- Eli Ganem ([@eliganemtyler](https://github.com/eliganemtyler))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+- Sam Richardson ([@samrichardsontylertech](https://github.com/samrichardsontylertech))
+
+---
+
 # v2.21.1 (Thu Dec 14 2023)
 
 #### 🐛 Bug Fix

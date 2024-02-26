@@ -1171,7 +1171,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         const chip2 = addMember(this.context.component, 'test2');
         getNativeInput(this.context.component).focus();
         dispatchKeydownEvent(getNativeInput(this.context.component), 'ArrowLeft');
-        const chip2IsActive = chip2.hasAttribute('focused');
+        const chip2IsActive = chip2.matches(':focus');
         expect(chip2IsActive).toBeTrue();
       });
 
@@ -1181,7 +1181,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         const chip2 = addMember(this.context.component, 'test2');
         chip2.focus();
         dispatchKeydownEvent(chip2, 'ArrowLeft');
-        const chip1IsActive = chip1.hasAttribute('focused');
+        const chip1IsActive = chip1.matches(':focus');
         expect(chip1IsActive).toBeTrue();
       });
 
@@ -1191,7 +1191,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         const chip2 = addMember(this.context.component, 'test2');
         chip1.focus();
         dispatchKeydownEvent(chip1, 'ArrowRight');
-        const chip2IsActive = chip2.hasAttribute('focused');
+        const chip2IsActive = chip2.matches(':focus');
         expect(chip2IsActive).toBeTrue();
       });
 

@@ -1601,9 +1601,14 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMin(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MIN, !!this._minAttribute, this._minAttribute as string);
 
-    if (this._min && (this._min.getMonth() > this._month || this._min.getFullYear() > this._year)) {
-      this._year = this._min.getFullYear();
-      this._month = this._min.getMonth();
+    if (this._min) {
+      const minFirstOfMonth = new Date(this._min.getFullYear(), this._min.getMonth(), 1);
+      const currentFirstOfMonth = new Date(this._year, this._month, 1);
+
+      if (minFirstOfMonth > currentFirstOfMonth) {
+        this._year = this._min.getFullYear();
+        this._month = this._min.getMonth();
+      }
     }
 
     if (this._isInitialized) {
@@ -1621,9 +1626,14 @@ export class CalendarFoundation implements ICalendarFoundation {
   private _applyMax(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.MAX, !!this._maxAttribute, this._maxAttribute as string);
 
-    if (this._max && (this._max.getMonth() < this._month || this._max.getFullYear() < this._year)) {
-      this._year = this._max.getFullYear();
-      this._month = this._max.getMonth();
+    if (this._max) {
+      const maxFirstOfMonth = new Date(this._max.getFullYear(), this._max.getMonth(), 1);
+      const currentFirstOfMonth = new Date(this._year, this._month, 1);
+
+      if (maxFirstOfMonth < currentFirstOfMonth) {
+        this._year = this._max.getFullYear();
+        this._month = this._max.getMonth();
+      }
     }
 
     if (this._isInitialized) {

@@ -1,6 +1,10 @@
 import { deepQuerySelectorAll, getActiveElement, getShadowElement, removeElement, toggleClass } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
+import { CHECKBOX_CONSTANTS } from '../checkbox/checkbox-constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { ICON_BUTTON_CONSTANTS } from '../icon-button/icon-button-constants';
+import { RADIO_CONSTANTS } from '../radio/radio/radio-constants';
+import { SWITCH_CONSTANTS } from '../switch/switch-constants';
 import { IDialogComponent } from './dialog';
 import { DialogPositionType, DIALOG_CONSTANTS } from './dialog-constants';
 
@@ -24,6 +28,7 @@ export interface IDialogAdapter extends IBaseAdapter {
   addRootClass(name: string): void;
   setFullscreen(value: boolean): void;
   setMoveable(value: boolean): void;
+  tryLayoutRippleChildren(): void;
   setMoveTarget(selector: string): boolean;
   setMoveTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
   removeDragTargetHandler(type: string, listener: (evt: MouseEvent) => void): void;
@@ -149,6 +154,17 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
   public setMoveable(value: boolean): void {
     toggleClass(this._containerElement, value, DIALOG_CONSTANTS.classes.MOVEABLE);
+  }
+
+  public tryLayoutRippleChildren(): void {
+    const selectors = [
+      ICON_BUTTON_CONSTANTS.elementName,
+      SWITCH_CONSTANTS.elementName,
+      CHECKBOX_CONSTANTS.elementName,
+      RADIO_CONSTANTS.elementName
+    ];
+    const rippleChildren = deepQuerySelectorAll(this._component, selectors.join(':focus-within,')) as Array<HTMLElement & { layout(): void }>;
+    rippleChildren.filter(el => typeof el.layout === 'function').forEach(el => el.layout());
   }
 
   public setMoveTarget(selector: string): boolean {

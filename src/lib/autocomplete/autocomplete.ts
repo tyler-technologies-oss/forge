@@ -207,11 +207,17 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   @FoundationProperty()
   public declare matchKey: string | null | undefined;
 
-  /** Returns whether the component has been initialized or not yet. */
+  /**
+   * Returns whether the component has been initialized or not yet.
+   * @readonly
+   */
   @FoundationProperty({ set: false })
   public declare isInitialized: boolean;
 
-  /** Gets the currently active popup element when the dropdown is open. */
+  /**
+   * Gets the currently active popup element when the dropdown is open.
+   * @readonly
+   */
   @FoundationProperty({ set: false })
   public declare popupElement: HTMLElement | null;
 

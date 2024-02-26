@@ -1,0 +1,24 @@
+@use './token-utils' as *;
+@forward './token-utils';
+
+@mixin base() {
+  display: flex;
+  flex-direction: column;
+  align-items: #{token(alignment)};
+  justify-content: #{token(justify)};
+  gap: #{token(gap)};
+  height: #{token(height)};
+  width: 100%;
+}
+
+@mixin inline {
+  flex-direction: row;
+}
+
+@mixin wrap {
+  flex-wrap: wrap;
+}
+
+@mixin stretch {
+  flex: #{token(stretch)};
+}

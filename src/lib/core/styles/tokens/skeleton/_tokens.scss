@@ -1,0 +1,50 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../theme';
+@use '../../shape';
+@use '../../spacing';
+@use '../button/tokens' as button;
+@use '../avatar/tokens' as avatar;
+
+$tokens: (
+  // Base
+  animation-duration: utils.module-val(skeleton, animation-duration, 1500ms),
+  width: utils.module-val(skeleton, width, auto),
+
+  // Host
+  height: utils.module-val(skeleton, height, 48px),
+  background: utils.module-val(skeleton, background, theme.variable(surface-container)),
+  shape: utils.module-val(skeleton, shape, shape.variable(medium)),
+  margin: utils.module-val(skeleton, margin, #{spacing.variable(medium)} 0),
+
+  // Button
+  button-height: utils.module-val(skeleton, button-height, button.get(height)),
+  button-width: utils.module-val(skeleton, button-width, 72px),
+
+  // Form field
+  form-field-height: utils.module-val(skeleton, form-field-height, 40px),
+  form-field-width: utils.module-val(skeleton, form-field-width, 256px),
+
+  // Chip
+  chip-height: utils.module-val(skeleton, chip-height, 32px),
+  chip-width: utils.module-val(skeleton, chip-width, 72px),
+  chip-shape: utils.module-val(skeleton, chip-shape, shape.variable(extra-large)),
+
+  // List item
+  list-item-height: utils.module-val(skeleton, list-item-height, 32px),
+  list-item-margin: utils.module-val(skeleton, list-item-margin, 12px 8px),
+
+  // Text
+  text-height: utils.module-val(skeleton, text-height, 1rem),
+
+  // Gradient
+  gradient-color: utils.module-val(skeleton, gradient-color, theme.variable(surface-container-low)),
+
+  // Avatar
+  avatar-size: utils.module-val(skeleton, avatar-size, avatar.get(size)),
+  avatar-shape: utils.module-val(skeleton, avatar-shape, avatar.get(shape)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
