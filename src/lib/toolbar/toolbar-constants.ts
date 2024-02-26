@@ -11,7 +11,12 @@ const classes = {
 };
 
 const selectors = {
-  TOOLBAR: `.${classes.TOOLBAR}`
+  TOOLBAR: `.${classes.TOOLBAR}`,
+  BEFORE_START: `slot[name=before-start]`,
+  START_SLOT: `slot[name=start]`,
+  CENTER_SLOT: `slot[name=center]`,
+  END_SLOT: `slot[name=end]`,
+  AFTER_END: `slot[name=after-end]`
 };
 
 export const TOOLBAR_CONSTANTS = {
