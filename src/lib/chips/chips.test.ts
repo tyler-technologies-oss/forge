@@ -620,7 +620,7 @@ describe('Chips', () => {
 
       await sendKeys({ press: 'ArrowLeft' });
 
-      expect(removeButton.matches(':focus')).to.equal(removeButton);
+      expect(removeButton.matches(':focus')).to.be.true;
     });
 
     it('should wrap focus to first chip when pressing ArrowRight on last chip', async () => {
