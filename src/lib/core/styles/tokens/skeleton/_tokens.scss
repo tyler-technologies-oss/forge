@@ -13,7 +13,7 @@ $tokens: (
   // host
   height: utils.module-val(skeleton, height, 48px),
   background-color: utils.module-val(skeleton, background-color, theme.variable(surface-container)),
-  border-radius: utils.module-val(skeleton, border-radius, solid),
+  border-radius: utils.module-val(skeleton, border-radius, shape.variable(medium)),
   margin: utils.module-val(skeleton, margin, 16px 0),
 
   // button
