@@ -13,10 +13,10 @@
  min-height: #{token(min-height)};
 
  border-bottom: #{token(border-block-end-width)} #{token(border-block-end-style)} #{token(divider-color)};
- border-top-left-radius: #{token(border-top-left-radius)};
- border-top-right-radius: #{token(border-top-right-radius)};
- border-bottom-left-radius: #{token(border-bottom-left-radius)};
- border-bottom-right-radius: #{token(border-bottom-right-radius)};
+ border-start-start-radius: #{token(border-start-start-radius)};
+ border-start-end-radius: #{token(border-start-end-radius)};
+ border-end-start-radius: #{token(border-end-start-radius)};
+ border-end-end-radius: #{token(border-end-end-radius)};
 
  padding-inline: 0;
  background-color: var(--forge-theme-surface);

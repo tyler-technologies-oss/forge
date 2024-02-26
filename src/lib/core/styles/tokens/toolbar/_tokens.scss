@@ -11,14 +11,14 @@ $tokens: (
   
   divider-color: utils.module-val(toolbar, divider-color, theme.variable(outline)),
   border-block-start-width: utils.module-val(toolbar, border-block-start-width, 1px),
-  border-block-start-style: utils.module-val(toolbar, border-block-start-style, solid),
   border-block-end-width: utils.module-val(toolbar, border-block-end-width, 1px),
+  border-block-start-style: utils.module-val(toolbar, border-block-start-style, solid),
   border-block-end-style: utils.module-val(toolbar, border-block-end-style, solid),
 
-  border-top-left-radius: utils.module-val(toolbar, border-top-left-radius, 0),
-  border-top-right-radius: utils.module-val(toolbar, border-top-right-radius, 0),
-  border-bottom-left-radius: utils.module-val(toolbar, border-bottom-left-radius, 0),
-  border-bottom-right-radius: utils.module-val(toolbar, border-bottom-right-radius, 0),
+  border-start-start-radius: utils.module-val(toolbar, border-start-start-radius, 0),
+  border-start-end-radius: utils.module-val(toolbar, border-start-end-radius, 0),
+  border-end-start-radius: utils.module-val(toolbar, border-end-start-radius, 0),
+  border-end-end-radius: utils.module-val(toolbar, border-end-end-radius, 0),
 
   padding: utils.module-val(toolbar, padding, spacing.variable(medium)),
   padding-block: utils.module-val(toolbar, padding-block, 0),
