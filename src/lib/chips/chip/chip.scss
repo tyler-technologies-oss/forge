@@ -44,6 +44,10 @@
 
 .remove {
   @include remove-button;
+  
+  @include icon-button.provide-theme((
+    focus-indicator-color: #{token(color)}
+  ));
 }
 
 //
@@ -125,12 +129,6 @@ $selected: '#{$selectable}[selected]';
 :host(#{$selected}) {
   .forge-chip {
     @include selected;
-  }
-  
-  .remove {
-    @include icon-button.provide-theme((
-      focus-indicator-color: #{token(color)}
-    ));
   }
 
   forge-focus-indicator {
@@ -247,22 +245,10 @@ $selected: '#{$selectable}[selected]';
       .forge-chip {
         @include override(color, theme.variable(text-high), value);
         @include override(border-color, theme.variable($theme), value);
-
-        .remove {
-          @include icon-button.provide-theme((
-            focus-indicator-color: #{token(color)}
-          ));
-        }
       }
     } @else {
       .forge-chip {
         @include override(color, theme.variable($theme), value);
-      }
-
-      .remove {
-        @include icon-button.provide-theme((
-          focus-indicator-color: #{token(background)}
-        ));
       }
     }
   }
