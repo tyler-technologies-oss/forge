@@ -15,6 +15,7 @@ export interface IChipFoundation extends ICustomElementFoundation {
   download: string;
   rel: string;
   focus(options?: FocusOptions): void;
+  focusRemoveButton(): void;
   click(): void;
 }
 
@@ -43,6 +44,10 @@ export class ChipFoundation implements IChipFoundation {
 
   public focus(options?: FocusOptions): void {
     this._adapter.focusTrigger(options);
+  }
+
+  public focusRemoveButton(): void {
+    this._adapter.removeButtonElement?.focus();
   }
 
   public click(): void {

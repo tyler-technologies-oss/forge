@@ -24,6 +24,7 @@ export interface IChipComponent extends IBaseComponent {
   target: string;
   download: string;
   rel: string;
+  focusRemoveButton(): void;
 }
 
 declare global {
@@ -191,6 +192,10 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
 
   public override focus(options?: FocusOptions): void {
     this._foundation.focus(options);
+  }
+
+  public focusRemoveButton(): void {
+    this._foundation.focusRemoveButton();
   }
 
   public override click(): void {

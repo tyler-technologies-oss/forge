@@ -102,7 +102,14 @@ export class ChipSetComponent extends BaseComponent implements IChipSetComponent
     if (index > focusableChips.length - 1) {
       index = 0;
     }
-    focusableChips.at(index)?.focus();
+    
+    const nextChip = focusableChips.at(index);
+
+    if (nextChip?.type === 'input' && evt.detail.direction === 'previous') {
+      nextChip.focusRemoveButton();
+    } else {
+      nextChip?.focus();
+    }
   }
 
   private _findChipDescendants(): IChipComponent[] {

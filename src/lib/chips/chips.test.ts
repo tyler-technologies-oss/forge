@@ -602,6 +602,27 @@ describe('Chips', () => {
       expect(document.activeElement).to.equal(firstChip);
     });
 
+    it('should focus remove button of previous chip when pressing ArrowLeft for input chips', async () => {
+      const el = await fixture<IChipSetComponent>(html`
+        <forge-chip-set type="input">
+          <forge-chip>Test 1</forge-chip>
+          <forge-chip>Test 2</forge-chip>
+          <forge-chip>Test 3</forge-chip>
+        </forge-chip-set>
+      `);
+      const chips = getChips(el);
+      const firstChip = chips[0];
+      const secondChip = chips[1];
+      const removeButton = getRemoveButtonElement(firstChip);
+
+      secondChip.focus();
+      expect(document.activeElement).to.equal(secondChip);
+
+      await sendKeys({ press: 'ArrowLeft' });
+
+      expect(removeButton.matches(':focus')).to.equal(removeButton);
+    });
+
     it('should wrap focus to first chip when pressing ArrowRight on last chip', async () => {
       const el = await fixture<IChipSetComponent>(html`
         <forge-chip-set>
