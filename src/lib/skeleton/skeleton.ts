@@ -5,8 +5,20 @@ import { SKELETON_CONSTANTS } from './skeleton-constants';
 import template from './skeleton.html';
 import styles from './skeleton.scss';
 
+export interface ISkeletonComponent extends IBaseComponent { }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-skeleton': ISkeletonComponent;
+  }
+}
+
 /**
- * @summary Skeleton is used to provide a placeholder for content that is loading.
+ * The web component class behind the `<forge-skeleton>` custom element.
+ * 
+ * @tag forge-skeleton
+ * 
+ *  @summary Skeleton is used to provide a placeholder for content that is loading.
  * 
  * @attribute {string} form-field - Apply form field styles to the skeleton.
  * @attribute {string} button - Apply button styles to the skeleton.
@@ -35,19 +47,6 @@ import styles from './skeleton.scss';
  * @cssproperty --forge-skeleton-avatar-size - The size of the avatar skeleton.
  * 
  * @csspart root - The root element of the skeleton.
- */
-export interface ISkeletonComponent extends IBaseComponent { }
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-skeleton': ISkeletonComponent;
-  }
-}
-
-/**
- * The web component class behind the `<forge-skeleton>` custom element.
- * 
- * @tag forge-skeleton
  */
 @CustomElement({
   name: SKELETON_CONSTANTS.elementName
