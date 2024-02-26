@@ -1,158 +1,243 @@
 <div class="vert">
-  <div id="chips-basic">
+  <!-- Basic chips -->
+  <section>
     <h3 class="forge-typography--heading2">Basic chips</h3>
-    <forge-chip-set style="width: 600px; display: flex; flex: auto; flex-direction: row; flex-wrap: wrap;">
+    <forge-chip-set>
       <forge-chip>Small</forge-chip>
       <forge-chip>Medium</forge-chip>
       <forge-chip>Large</forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
 
-  <div id="chips-choice">
+  <!-- Anchor chips -->
+  <section>
+    <h3 class="forge-typography--heading2">Chips w/anchor links</h3>
+    <forge-chip-set>
+      <forge-chip href="javascript: void(0);">Anchor chip</forge-chip>
+      <forge-chip href="javascript: alert('Alert from anchor chip');">
+        <forge-icon name="alert" slot="start"></forge-icon>
+        Alert
+      </forge-chip>
+      <forge-chip href="javascript: console.log('Log from anchor chip');">Console log</forge-chip>
+      <forge-chip href="https://www.google.com/">
+        Google
+        <forge-icon name="open_in_new" slot="end"></forge-icon>
+      </forge-chip>
+    </forge-chip-set>
+  </section>
+
+  <!-- Choice chips -->
+  <section>
     <h3 class="forge-typography--heading2">Choice chips</h3>
     <forge-chip-set type="choice">
       <forge-chip>Small</forge-chip>
       <forge-chip selected>Medium</forge-chip>
       <forge-chip>Large</forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
 
-  <div id="chips-choice-vertical">
+  <!-- Vertical choice chips-->
+  <section>
     <h3 class="forge-typography--heading2">Choice chips (vertical)</h3>
     <forge-chip-set type="choice" vertical>
       <forge-chip>Small</forge-chip>
       <forge-chip selected>Medium</forge-chip>
       <forge-chip>Large</forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
 
-  <div id="chips-filter">
-    <h3 class="forge-typography--heading2">Filter chips</h3>
-    <h4 class="forge-typography--subheading1">No leading icon</h4>
+  <!-- Filter chips -->
+  <section>
+    <h3 class="forge-typography--heading2">Filter chips w/out icons</h3>
     <forge-chip-set type="filter">
       <forge-chip value="tops" selected>Tops</forge-chip>
       <forge-chip value="bottoms" selected>Bottoms</forge-chip>
       <forge-chip value="shoes">Shoes</forge-chip>
       <forge-chip value="accessories">Accessories</forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
 
-  <div id="chips-filter-leading">
-    <h3 class="forge-typography--heading2">With leading icon</h3>
+  <!-- Start icons -->
+  <section>
+    <h3 class="forge-typography--heading2">With start icon</h3>
     <forge-chip-set type="filter">
       <forge-chip selected>
-        <forge-icon slot="leading" name="face"></forge-icon>
+        <forge-icon slot="start" name="account"></forge-icon>
         Alice
       </forge-chip>
       <forge-chip selected>
-        <forge-icon slot="leading" name="face"></forge-icon>
+        <forge-icon slot="start" name="account"></forge-icon>
         Bob
       </forge-chip>
       <forge-chip>
-        <forge-icon slot="leading" name="face"></forge-icon>
+        <forge-icon slot="start" name="account"></forge-icon>
         Charlie
       </forge-chip>
       <forge-chip>
-        <forge-icon slot="leading" name="face"></forge-icon>
+        <forge-icon slot="start" name="account"></forge-icon>
         Danielle
       </forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
 
-  <div id="chips-action">
+  <!-- End icons -->
+  <section>
+    <h3 class="forge-typography--heading2">With end icon</h3>
+    <forge-chip-set type="filter">
+      <forge-chip selected>
+        Alice
+        <forge-icon slot="end" name="account"></forge-icon>
+      </forge-chip>
+      <forge-chip selected>
+        Bob
+        <forge-icon slot="end" name="account"></forge-icon>
+      </forge-chip>
+      <forge-chip>
+        Charlie
+        <forge-icon slot="end" name="account"></forge-icon>
+      </forge-chip>
+      <forge-chip>
+        Danielle
+        <forge-icon slot="end" name="account"></forge-icon>
+      </forge-chip>
+    </forge-chip-set>
+  </section>
+
+  <!-- Start avatar -->
+  <section>
+    <h3 class="forge-typography--heading2">With start avatar</h3>
+    <forge-chip-set>
+      <forge-chip value="calendar">
+        <forge-avatar slot="start" text="Tyler Forge"></forge-avatar>
+        Add to calendar
+      </forge-chip>
+      <forge-chip value="bookmark">
+        <forge-avatar slot="start" text="Tyler Forge"></forge-avatar>
+        Bookmark
+      </forge-chip>
+      <forge-chip value="alarm">
+        <forge-avatar slot="start" text="Tyler Forge"></forge-avatar>
+        Set alarm
+      </forge-chip>
+      <forge-chip value="directions">
+        <forge-avatar slot="start" text="Tyler Forge"></forge-avatar>
+        Get directions
+      </forge-chip>
+    </forge-chip-set>
+  </section>
+
+  <!-- End avatar -->
+  <section>
+    <h3 class="forge-typography--heading2">With end avatar</h3>
+    <forge-chip-set>
+      <forge-chip value="calendar">
+        Add to calendar
+        <forge-avatar slot="end" text="Tyler Forge"></forge-avatar>
+      </forge-chip>
+      <forge-chip value="bookmark">
+        Bookmark
+        <forge-avatar slot="end" text="Tyler Forge"></forge-avatar>
+      </forge-chip>
+      <forge-chip value="alarm">
+        Set alarm
+        <forge-avatar slot="end" text="Tyler Forge"></forge-avatar>
+      </forge-chip>
+      <forge-chip value="directions">
+        Get directions
+        <forge-avatar slot="end" text="Tyler Forge"></forge-avatar>
+      </forge-chip>
+    </forge-chip-set>
+  </section>
+
+  <!-- Action chips -->
+  <section id="chips-action">
     <h3 class="forge-typography--heading2">Action chips</h3>
     <forge-chip-set>
       <forge-chip value="calendar">
-        <forge-icon slot="leading" name="event"></forge-icon>
+        <forge-icon slot="start" name="event"></forge-icon>
         Add to calendar
       </forge-chip>
       <forge-chip value="bookmark">
-        <forge-icon slot="leading" name="bookmark"></forge-icon>
+        <forge-icon slot="start" name="bookmark"></forge-icon>
         Bookmark
       </forge-chip>
       <forge-chip value="alarm">
-        <forge-icon slot="leading" name="alarm"></forge-icon>
+        <forge-icon slot="start" name="alarm"></forge-icon>
         Set alarm
       </forge-chip>
       <forge-chip value="directions">
-        <forge-icon slot="leading" name="directions"></forge-icon>
+        <forge-icon slot="start" name="directions"></forge-icon>
         Get directions
       </forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
 
-  <div id="chips-avatar">
-    <h3 class="forge-typography--heading2">With leading avatar</h3>
-    <forge-chip-set>
-      <forge-chip value="calendar">
-        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
-        Add to calendar
-      </forge-chip>
-      <forge-chip value="bookmark">
-        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
-        Bookmark
-      </forge-chip>
-      <forge-chip value="alarm">
-        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
-        Set alarm
-      </forge-chip>
-      <forge-chip value="directions">
-        <forge-avatar slot="leading" image-url="https://en.gravatar.com/userimage/27084046/aa996f464ca8f1ea69769cef1b76fbf9.jpg"></forge-avatar>
-        Get directions
-      </forge-chip>
-    </forge-chip-set>
-  </div>
-
-  <div id="chips-input">
+  <!-- Input chips -->
+  <section id="chips-input">
     <h3 class="flex forge-typography--heading2">
       Input chips
       <span>
-        <forge-icon-button id="refresh-button">
+        <forge-icon-button id="refresh-button" aria-label="Reset input chips demo">
           <forge-icon name="refresh"></forge-icon>
         </forge-icon-button>
       </span>
     </h3>
     <forge-chip-set type="input">
       <forge-chip>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Falmouth
       </forge-chip>
       <forge-chip>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Yarmouth
       </forge-chip>
       <forge-chip>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Plano
       </forge-chip>
       <forge-chip>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Renton
       </forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
 
-  <div id="chips-input">
+  <!-- Invalid chips -->
+  <section>
     <h3 class="forge-typography--heading2">Invalid chips</h3>
     <forge-chip-set type="input">
       <forge-chip invalid>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Falmouth
       </forge-chip>
       <forge-chip invalid>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Yarmouth
       </forge-chip>
       <forge-chip invalid>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Plano
       </forge-chip>
       <forge-chip invalid>
-        <forge-icon slot="leading" name="place"></forge-icon>
+        <forge-icon slot="start" name="place"></forge-icon>
         Renton
       </forge-chip>
     </forge-chip-set>
-  </div>
+  </section>
+
+  <!-- Field chips -->
+  <section>
+    <h3 class="forge-typography--heading2">Field chips</h3>
+    <label class="forge-typography--label1" for="chip-field-input">Field label</label>
+    <forge-text-field>
+      <input type="text" id="chip-field-input" />
+      <forge-chip-set type="field" dense slot="leading">
+        <forge-chip>Small</forge-chip>
+        <forge-chip>Medium</forge-chip>
+        <forge-chip>Large</forge-chip>
+      </forge-chip-set>
+    </forge-text-field>
+  </section>
 </div>
 
 <script type="module" src="chips.ts"></script>

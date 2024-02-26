@@ -119,7 +119,7 @@ export const WithAutocomplete: Story<{}> = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   function memberRemoved(evt: CustomEvent<IChipComponent>): void {
-    removeValue(evt.detail.value);
+    removeValue(evt.detail.value as string);
   }
 
   function removeValue(value: string): void {
