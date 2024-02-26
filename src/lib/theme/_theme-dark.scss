@@ -6,8 +6,6 @@
 
 @use '../backdrop/mixins' as backdrop-mixins;
 @use '../backdrop/variables' as backdrop-variables;
-@use '../skeleton/mixins' as skeleton-mixins;
-@use '../skeleton/variables' as skeleton-variables;
 @use '../toast/mixins' as toast-mixins;
 @use '../toast/variables' as toast-variables;
 @use '../table/mixins' as table-mixins;
@@ -33,7 +31,6 @@
   ));
 
   @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);
-  @include skeleton-mixins.provide-theme(skeleton-variables.$theme-values-dark);
   @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);
   @include table-mixins.provide-theme(table-variables.$theme-values-dark);
 }
