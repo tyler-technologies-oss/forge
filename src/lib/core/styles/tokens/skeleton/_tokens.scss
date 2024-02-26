@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use '../../theme';
 @use '../../utils';
+@use '../../shape';
 
 $gradient: rgba(255, 255, 255, 0.3) !default;
 
@@ -26,6 +27,7 @@ $tokens: (
   // chip
   chip-height: utils.module-val(skeleton, chip-height, 32px),
   chip-width: utils.module-val(skeleton, chip-width, 72px),
+  chip-border-radius: utils.module-val(skeleton, chip-border-radius, shape.variable(extra-large)),
 
   // list-item
   list-item-height: utils.module-val(skeleton, list-item-height, 32px),
@@ -38,7 +40,8 @@ $tokens: (
   gradient-color: utils.module-val(skeleton, gradient-color, $gradient),
 
   // avatar
-  avatar-size: utils.module-val(skeleton, avatar-size, 48px)
+  avatar-size: utils.module-val(skeleton, avatar-size, 48px),
+  avatar-border-radius: utils.module-val(skeleton, avatar-border-radius, shape.variable(round)),
 ) !default;
 
 @function get($key) {

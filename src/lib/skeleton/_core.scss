@@ -43,7 +43,7 @@
   width: #{token(avatar-size)};
   height: #{token(avatar-size)};
 
-  border-radius: 50%;
+  @include override(border-radius, avatar-border-radius);
 }
 
 @mixin button() {
@@ -59,8 +59,7 @@
 @mixin chip() {
   @include override(height, chip-height);
   @include override(width, chip-width);
-
-  border-radius: 16px;
+  @include override(border-radius, chip-border-radius);
 }
 
 @mixin list-item() {
