@@ -1,9 +1,25 @@
 @use './core' as *;
+@use './animations';
+
+//
+// Host
+//
 
 :host {
   @include tokens;
+}
+
+:host {
   @include host;
 }
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
 
 .forge-skeleton {
   @include base;
@@ -15,13 +31,9 @@
   }
 }
 
-@at-root {
-  @include keyframes;
-}
-
-:host([hidden]) {
-  display: none;
-}
+//
+// Variants
+//
 
 :host([avatar]) {
   @include avatar;

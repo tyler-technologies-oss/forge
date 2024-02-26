@@ -5,7 +5,7 @@ import { SKELETON_CONSTANTS } from './skeleton-constants';
 import template from './skeleton.html';
 import styles from './skeleton.scss';
 
-export interface ISkeletonComponent extends IBaseComponent { }
+export interface ISkeletonComponent extends IBaseComponent {}
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -16,7 +16,7 @@ declare global {
 /**
  * @tag forge-skeleton
  * 
- *  @summary Skeleton is used to provide a placeholder for content that is loading.
+ * @summary Skeleton is used to provide a placeholder for content that is loading.
  * 
  * @attribute {string} form-field - Apply form field styles to the skeleton.
  * @attribute {string} button - Apply button styles to the skeleton.

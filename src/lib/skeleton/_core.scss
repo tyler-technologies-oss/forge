@@ -1,11 +1,11 @@
 @use './token-utils' as *;
 @forward './token-utils';
 
-@mixin host() {
+@mixin host {
   height: #{token(height)};
   margin: #{token(margin)};
-  border-radius: #{token(border-radius)};
-  background-color: #{token(background-color)};
+  border-radius: #{token(shape)};
+  background-color: #{token(background)};
 
   display: block;
   position: relative;
@@ -13,53 +13,48 @@
   box-sizing: border-box;
 }
 
-@mixin base() {
+@mixin base {
   display: block;
   width: #{token(width)};
   height: 100%;
 }
 
-@mixin gradient() {
-  display: block;
+@mixin gradient {
   position: absolute;
+
+  display: block;
   width: 100%;
   height: 100%;
+
   transform: translateX(-100%);
+
   background-repeat: no-repeat;
   background-image: linear-gradient(90deg, transparent, #{token(gradient-color)}, transparent);
+
   animation: loading #{token(animation-duration)} ease-in infinite;
 }
 
-@mixin keyframes() {
-  @keyframes loading {
-    25%,
-    100% {
-      transform: translateX(100%);
-    }
-  }
-}
-
-@mixin avatar() {
+@mixin avatar {
   width: #{token(avatar-size)};
   height: #{token(avatar-size)};
 
-  @include override(border-radius, avatar-border-radius);
+  @include override(shape, avatar-shape);
 }
 
-@mixin button() {
+@mixin button {
   @include override(height, button-height);
   @include override(width, button-width);
 }
 
-@mixin form-field() {
+@mixin form-field {
   @include override(height, form-field-height);
   @include override(width, form-field-width);
 }
 
-@mixin chip() {
+@mixin chip {
   @include override(height, chip-height);
   @include override(width, chip-width);
-  @include override(border-radius, chip-border-radius);
+  @include override(shape, chip-shape);
 }
 
 @mixin list-item() {
@@ -67,11 +62,11 @@
   @include override(margin, list-item-margin);
 }
 
-@mixin text() {
+@mixin text {
   @include override(height, text-height);
 }
 
-@mixin stretch() {
+@mixin stretch {
   height: 100%;
   width: 100%;
 }
