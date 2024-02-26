@@ -12,13 +12,16 @@
  <p class="forge-typography--heading2">More examples</p>
  <forge-stack gap="24">
   <forge-card style="--forge-card-padding: 0;">
+   <p class="forge-typography--body2" style="padding-inline: 16px;">Basic usage</p>
    <forge-toolbar id="toolbar">
     <div slot="start" class="placeholder-container">Start</div>
     <div slot="center" class="placeholder-container">Center</div>
     <div slot="end" class="placeholder-container">End</div>
    </forge-toolbar>
   </forge-card>
+  
    <forge-card style="--forge-card-padding: 0;">
+    <p class="forge-typography--body2" style="padding-inline: 16px;">Primary and secondary action buttons in the end slot</p>
     <forge-toolbar no-border>
      <forge-stack slot="end" inline>
       <forge-button>Cancel</forge-button>
@@ -26,9 +29,11 @@
      </forge-stack>
     </forge-toolbar>
    </forge-card>
+
    <forge-card style="--forge-card-padding: 0;">
+    <p class="forge-typography--body2" style="padding-inline: 16px;">Icon buttons in the after end slot</p>
     <forge-toolbar no-border>
-     <forge-stack slot="end" inline gap="0">
+     <forge-stack slot="after-end" inline gap="0">
       <forge-icon-button>
         <forge-icon name="ac_unit" external></forge-icon>
       </forge-icon-button>
@@ -41,7 +46,9 @@
      </forge-stack>
     </forge-toolbar>
    </forge-card>
+
    <forge-card style="--forge-card-padding: 0;">
+    <p class="forge-typography--body2" style="padding-inline: 16px;">Icon button and page title in the before-start slot with default toolbar padding</p>
     <forge-toolbar no-border>
      <forge-icon-button aria-label="Default icon button" slot="before-start">
       <forge-icon name="arrow_back" external></forge-icon>
