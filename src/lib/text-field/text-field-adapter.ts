@@ -23,8 +23,8 @@ export interface ITextFieldAdapter extends IBaseFieldAdapter {
 
 export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdapter {
   protected readonly _fieldElement: IFieldComponent;
-  protected readonly _popoverTargetElement: HTMLElement;
   private readonly _clearButtonSlotElement: HTMLSlotElement;
+  private _popoverTargetElement: HTMLElement;
   private _inputElements: (HTMLInputElement | HTMLTextAreaElement)[] = [];
   private _inputMutationObserver?: MutationObserver;
   private _destroyValueChangerListeners: (() => void)[] = [];
@@ -38,13 +38,15 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
   }
 
   public get popoverTargetElement(): HTMLElement {
+    if (!this._popoverTargetElement) {
+      this._popoverTargetElement = getShadowElement(this._fieldElement, FIELD_CONSTANTS.selectors.POPOVER_TARGET) as HTMLElement;
+    }
     return this._popoverTargetElement;
   }
 
   constructor(component: ITextFieldComponent) {
     super(component);
     this._fieldElement = getShadowElement(component, TEXT_FIELD_CONSTANTS.selectors.FIELD) as IFieldComponent;
-    this._popoverTargetElement = getShadowElement(this._fieldElement, FIELD_CONSTANTS.selectors.POPOVER_TARGET) as HTMLElement;
     this._clearButtonSlotElement = getShadowElement(component, TEXT_FIELD_CONSTANTS.selectors.CLEAR_BUTTON_SLOT) as HTMLSlotElement;
     this._fieldElement.setAttribute('exportparts', Object.values(FIELD_CONSTANTS.parts).join(', '));
     this._clearButtonSlotElement.remove();
@@ -59,9 +61,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
   }
 
   public disableInput(disabled: boolean): void {
-    this._inputElements.forEach((inputElement) => {
-      inputElement.disabled = disabled;
-    });
+    this._inputElements.forEach(el => el.disabled = disabled);
   }
 
   public inputIsDisabled(): boolean {
