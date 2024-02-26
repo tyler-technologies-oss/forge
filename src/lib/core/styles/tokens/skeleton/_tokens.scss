@@ -2,6 +2,8 @@
 @use '../../theme';
 @use '../../utils';
 
+$gradient: rgba(255, 255, 255, 0.3) !default;
+
 $tokens: (
   // base
   animation-duration: utils.module-val(skeleton, animation-duration, 1500ms),
@@ -29,15 +31,14 @@ $tokens: (
   list-item-height: utils.module-val(skeleton, list-item-height, 32px),
   list-item-margin: utils.module-val(skeleton, list-item-margin, 12px 8px),
 
-  // text
+  // texts
   text-height: utils.module-val(skeleton, text-height, 16px),
 
   // gradient
-  // gradient: utils.module-val(skeleton, gradient, theme.variable(surface-dim)),
+  gradient-color: utils.module-val(skeleton, gradient-color, $gradient),
 
   // avatar
-  avatar-size: utils.module-val(skeleton, avatar-size, 48px),
-
+  avatar-size: utils.module-val(skeleton, avatar-size, 48px)
 ) !default;
 
 @function get($key) {

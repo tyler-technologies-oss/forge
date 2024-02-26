@@ -1,6 +1,0 @@
-@use '../theme';
-@use './variables';
-
-@mixin provide-theme($theme) {
-  @include theme.theme-properties(skeleton, $theme, variables.$theme-values);
-}
