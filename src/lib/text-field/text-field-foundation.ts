@@ -4,9 +4,8 @@ import { ITextFieldAdapter, TextFieldAdapter } from './text-field-adapter';
 import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS } from './text-field-constants';
 
 export interface ITextFieldFoundation extends IBaseFieldFoundation {
+  readonly popoverTargetElement: HTMLElement;
   showClear: boolean;
-  initialize(): void;
-  disconnect(): void;
 }
 
 export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> implements ITextFieldFoundation {
@@ -30,6 +29,10 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
     this._adapter.removeRootListener('slotchange', this._slotChangeListener);
     this._adapter.removeRootListener('input', this._inputListener);
     this._adapter.removeValueChangeListener();
+  }
+
+  public get popoverTargetElement(): HTMLElement {
+    return this._adapter.popoverTargetElement;
   }
 
   private _onSlotChange(evt: Event): void {

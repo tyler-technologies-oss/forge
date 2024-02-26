@@ -275,17 +275,14 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   private _getDefaultTargetElement(): HTMLElement {
-    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const textField = this._component.querySelector('forge-text-field');
-    if (textField && textField.shadowRoot) {
-      const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (textFieldRoot) {
-        return textFieldRoot;
-      }
+    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignment
+    const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
+    if (textField?.popoverTargetElement) {
+      return textField.popoverTargetElement;
     }
 
-    // This component is often used with the chip-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const chipField = this._component.querySelector('forge-chip-field');
+    // This component is often used with the chip-field, if so, let's target our popup around one if its internal elements for proper alignment
+    const chipField = this._component.querySelector(CHIP_FIELD_CONSTANTS.elementName);
     if (chipField && chipField.shadowRoot) {
       const chipFieldRoot = getShadowElement(chipField, CHIP_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
       if (chipFieldRoot) {

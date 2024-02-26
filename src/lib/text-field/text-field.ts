@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconClear } from '@tylertech/tyler-icons/standard';
-import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field-next';
+import { BASE_FIELD_CONSTANTS, FieldComponent, FIELD_CONSTANTS } from '../field-next';
 import { BaseField, IBaseField } from '../field-next/base/base-field';
 import { IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
@@ -14,6 +14,7 @@ import styles from './text-field.scss';
 
 export interface ITextFieldComponent extends IBaseField {
   showClear: boolean;
+  readonly popoverTargetElement: HTMLElement;
 }
 
 declare global {
@@ -28,6 +29,7 @@ declare global {
  * @summary The Forge Text Field component wraps and styles an input or textarea element.
  * 
  * @property {boolean} showClear - Whether the clear button appears when text has been entered.
+ * @property {HTMLElement} popoverTargetElement - Gets a reference to the element that the popover should target for best alignment.
  * 
  * @attribute {boolean} show-clear - Whether the clear button appears when text has been entered.
  * 
@@ -93,6 +95,10 @@ export class TextFieldComponent extends BaseField<TextFieldFoundation> implement
         this.showClear = coerceBoolean(newValue);
         break;
     }
+  }
+
+  public get popoverTargetElement(): HTMLElement {
+    return this._foundation.popoverTargetElement;
   }
 
   @FoundationProperty()

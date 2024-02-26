@@ -269,12 +269,9 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
 
   private _getDefaultTargetElement(): HTMLElement {
     // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName) as HTMLElement;
-    if (textField && textField.shadowRoot) {
-      const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (textFieldRoot) {
-        return textFieldRoot;
-      }
+    const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
+    if (textField?.popoverTargetElement) {
+      return textField.popoverTargetElement;
     }
     return this._component; // Otherwise we just use the time-picker host as the target
   }

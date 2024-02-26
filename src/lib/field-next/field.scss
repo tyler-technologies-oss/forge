@@ -86,6 +86,10 @@ $variants: (
       @include core.label;
     }
   
+    .popover-target {
+      @include core.popover-target;
+    }
+
     .popover-icon {
       display: none;
   
@@ -721,13 +725,15 @@ $variants: (
 // Focus indicator
 //
 
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    width: #{token(focus-indicator-width)},
+    outward-offset: 0px,
+    shape: #{token(shape)}
+  ));
+}
+
 @each $theme, $selector in $themes {
-  forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      outward-offset: 0px,
-      shape: #{token(shape)}
-    ));
-  }
 
   @if $theme != default and $theme != primary {
     :host(#{$selector}) {

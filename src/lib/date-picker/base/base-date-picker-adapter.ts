@@ -1,9 +1,8 @@
-import { getShadowElement, randomChars } from '@tylertech/forge-core';
+import { randomChars } from '@tylertech/forge-core';
 import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent, ICalendarDateSelectEventData } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
 import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
 import { BaseComponent } from '../../core/base/base-component';
-import { FIELD_CONSTANTS } from '../../field-next';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { TEXT_FIELD_CONSTANTS } from '../../text-field';
 import { BASE_DATE_PICKER_CONSTANTS } from './base-date-picker-constants';
@@ -238,14 +237,8 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     // This component is often used with the Forge text-field, if so, let's target our popup around
     // one if its internal elements for best alignment
     const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
-    if (textField && textField.shadowRoot) {
-      const field = getShadowElement(textField, FIELD_CONSTANTS.elementName) as HTMLElement;
-      if (field && field.shadowRoot) {
-        const fieldRoot = getShadowElement(field, FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-        if (fieldRoot) {
-          return fieldRoot;
-        }
-      }
+    if (textField?.popoverTargetElement) {
+      return textField.popoverTargetElement;
     }
 
     return this._component.querySelector('input') || this._component;

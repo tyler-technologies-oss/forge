@@ -4,6 +4,7 @@
 @use '../../elevation';
 @use '../../shape';
 @use '../../theme';
+@use '../focus-indicator/tokens' as focus-indicator;
 @use '../../utils';
 
 $tokens: (
@@ -132,6 +133,9 @@ $tokens: (
   container-animation-timing: utils.module-val(field, container-animation-timing, animation.variable(easing-standard)),
   floating-animation-duration: utils.module-val(field, floating-animation-duration, animation.variable(duration-short4)),
   floating-animation-timing: utils.module-val(field, floating-animation-timing, animation.variable(easing-decelerate)),
+
+  // Focus indicator
+  focus-indicator-width: utils.module-val(field, focus-indicator-width, focus-indicator.get(width)),
 ) !default;
 
 @function get($key) {

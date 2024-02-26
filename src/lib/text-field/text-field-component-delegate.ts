@@ -85,6 +85,10 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
     this._element.invalid = value;
   }
 
+  public get inputElement(): HTMLInputElement {
+    return this._inputElement;
+  }
+
   public get labelElement(): HTMLLabelElement | undefined {
     return this._labelElement;
   }

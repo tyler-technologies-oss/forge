@@ -123,9 +123,15 @@
   fill: inherit;
 }
 
+@mixin popover-target {
+  position: absolute;
+  bottom: calc(#{token(focus-indicator-width)} * -1);
+}
+
 @mixin start {
   display: flex;
   grid-area: start;
+  align-items: center;
 
   padding-inline-start: #{token(container-padding-inline-start)};
 }
@@ -133,6 +139,7 @@
 @mixin end {
   display: flex;
   grid-area: end;
+  align-items: center;
 
   padding-inline-end: #{token(end-padding-inline-end)};
 }

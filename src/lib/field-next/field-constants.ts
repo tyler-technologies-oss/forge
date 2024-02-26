@@ -34,7 +34,8 @@ const selectors = {
   POPOVER_ICON: '#popover-icon',
   RESIZE_CONTAINER: `.${classes.RESIZE_CONTAINER}`,
   LABEL_ELEMENTS: `:where(label, ${LABEL_CONSTANTS.elementName})`,
-  END_SLOT: 'slot[name=end]'
+  END_SLOT: 'slot[name=end]',
+  POPOVER_TARGET: '.popover-target'
 };
 
 const parts = {
