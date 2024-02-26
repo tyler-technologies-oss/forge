@@ -37,7 +37,7 @@
 
 :host([no-padding]) {
   .forge-toolbar {
-    @include override(padding-inline, 0, value);
+    @include override(padding, 0, value);
   }
 }
 
