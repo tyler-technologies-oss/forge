@@ -9,7 +9,7 @@
 $tokens: (
   // Base
   animation-duration: utils.module-val(skeleton, animation-duration, 1500ms),
-  width: utils.module-val(skeleton, width, 100%),
+  width: utils.module-val(skeleton, width, auto),
 
   // Host
   height: utils.module-val(skeleton, height, 48px),

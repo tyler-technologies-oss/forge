@@ -1,22 +1,24 @@
 @use './token-utils' as *;
+
 @forward './token-utils';
 
 @mixin host {
   height: #{token(height)};
+  width: #{token(width)};
   margin: #{token(margin)};
   border-radius: #{token(shape)};
+
   background-color: #{token(background)};
+  
+  position: relative;
 
   display: block;
-  position: relative;
   overflow: hidden;
   box-sizing: border-box;
 }
 
 @mixin base {
   display: block;
-  width: #{token(width)};
-  height: 100%;
 }
 
 @mixin gradient {
@@ -35,9 +37,8 @@
 }
 
 @mixin avatar {
-  width: #{token(avatar-size)};
-  height: #{token(avatar-size)};
-
+  @include override(height, avatar-size);
+  @include override(width, avatar-size);
   @include override(shape, avatar-shape);
 }
 
@@ -57,7 +58,7 @@
   @include override(shape, chip-shape);
 }
 
-@mixin list-item() {
+@mixin list-item {
   @include override(height, list-item-height);
   @include override(margin, list-item-margin);
 }
