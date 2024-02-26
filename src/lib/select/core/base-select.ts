@@ -67,7 +67,10 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
   @FoundationProperty()
   public declare beforeValueChange: SelectBeforeValueChangeCallback<any>;
 
-  /** Gets the popup element (when the dropdown is open). */
+  /**
+   * Gets the popup element (when the dropdown is open).
+   * @readonly
+   */
   @FoundationProperty({ set: false })
   public declare popupElement: IPopupComponent | undefined;
   

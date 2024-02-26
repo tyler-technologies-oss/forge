@@ -118,10 +118,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   }
 
   public attachCalendar(calendarConfig: Partial<ICalendarComponent>, dropdownConfig?: ICalendarDropdownPopupConfig): void {
-    if (this._calendarDropdown) {
-      this._calendarDropdown?.destroy();
-    }
-
+    this._calendarDropdown?.destroy();
     this._initializeCalendarDropdown();
 
     if (!this._calendarDropdown) {

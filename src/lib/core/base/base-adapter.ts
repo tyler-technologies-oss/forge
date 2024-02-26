@@ -25,7 +25,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   clickHost(): void;
 }
 
-export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter {
+export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
   constructor(protected _component: T) {}
 
   public get hostElement(): T {
