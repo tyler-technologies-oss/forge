@@ -516,6 +516,36 @@ describe('Chips', () => {
 
       expect(stateLayerEl).to.be.null;
     });
+
+    it('should manually animate state layer when pressing enter or space on focused anchor chip', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="choice" href="javascript: void(0);">Test</forge-chip>`);
+      const stateLayerEl = getStateLayer(el);
+      const animateSpy = spy(stateLayerEl, 'playAnimation');
+
+      el.focus();
+      await sendKeys({ press: 'Enter' });
+
+      expect(animateSpy.calledOnce).to.be.true;
+
+      await sendKeys({ press: 'Space' });
+
+      expect(animateSpy.calledTwice).to.be.true;
+    });
+
+    it('should not manually animate state layer when pressing enter or space on non-anchor focused chip', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="choice">Test</forge-chip>`);
+      const stateLayerEl = getStateLayer(el);
+      const animateSpy = spy(stateLayerEl, 'playAnimation');
+
+      el.focus();
+      await sendKeys({ press: 'Enter' });
+
+      expect(animateSpy.called).to.be.false;
+
+      await sendKeys({ press: 'Space' });
+
+      expect(animateSpy.called).to.be.false;
+    });
   });
 
   describe('Keyboard navigation', () => {
@@ -829,6 +859,64 @@ describe('Chips', () => {
           expect(firstChip.hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).to.be.false;
         });
       });
+    });
+
+    it('should not select focused chip when pressing enter or space on default "action" chips', async () => {
+      const el = await fixture<IChipSetComponent>(html`
+        <forge-chip-set>
+          <forge-chip>Test 1</forge-chip>
+          <forge-chip>Test 2</forge-chip>
+          <forge-chip>Test 3</forge-chip>
+        </forge-chip-set>
+      `);
+      const chips = getChips(el);
+      const firstChip = chips[0];
+
+      firstChip.focus();
+
+      await sendKeys({ press: 'Enter' });
+
+      expect(firstChip.selected).to.be.false;
+      expect(firstChip.hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).to.be.false;
+
+      await sendKeys({ press: 'Space' });
+
+      expect(firstChip.selected).to.be.false;
+      expect(firstChip.hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).to.be.false;
+    });
+
+    it('should not select focused chip when pressing enter or space on disabled chips', async () => {
+      const el = await fixture<IChipSetComponent>(html`
+        <forge-chip-set>
+          <forge-chip disabled>Test 1</forge-chip>
+          <forge-chip disabled>Test 2</forge-chip>
+          <forge-chip disabled>Test 3</forge-chip>
+        </forge-chip-set>
+      `);
+      const chips = getChips(el);
+      const firstChip = chips[0];
+
+      firstChip.focus();
+
+      await sendKeys({ press: 'Enter' });
+
+      expect(firstChip.selected).to.be.false;
+      expect(firstChip.hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).to.be.false;
+
+      await sendKeys({ press: 'Space' });
+
+      expect(firstChip.selected).to.be.false;
+      expect(firstChip.hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).to.be.false;
+    });
+
+    it('should not set aria-pressed on anchor chips', async () => {
+      const el = await fixture<IChipComponent>(html`<forge-chip type="choice" href="javascript: void(0);">Test</forge-chip>`);
+      const triggerEl = getTriggerElement(el);
+
+      el.focus();
+      await sendKeys({ press: 'Enter' });
+
+      expect(triggerEl.hasAttribute('aria-pressed')).to.be.false;
     });
   });
 

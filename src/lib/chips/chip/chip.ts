@@ -39,6 +39,90 @@ declare global {
 
 /**
  * @tag forge-chip
+ * 
+ * @property {ChipType} type - The type of chip.
+ * @property {unknown} value - The value of the chip.
+ * @property {boolean} selected - Whether the chip is selected.
+ * @property {boolean} invalid - Whether the chip is invalid.
+ * @property {boolean} disabled - Whether the chip is disabled.
+ * @property {boolean} dense - Whether the chip is dense.
+ * @property {ChipTheme} theme - The theme of the chip.
+ * @property {string} href - The href of the chip.
+ * @property {string} target - The target of the chip.
+ * @property {string} download - The download of the chip.
+ * @property {string} rel - The rel of the chip.
+ * 
+ * @attribute {ChipType} type - The type of chip.
+ * @attribute {unknown} value - The value of the chip.
+ * @attribute {boolean} selected - Whether the chip is selected.
+ * @attribute {boolean} invalid - Whether the chip is invalid.
+ * @attribute {boolean} disabled - Whether the chip is disabled.
+ * @attribute {boolean} dense - Whether the chip is dense.
+ * @attribute {ChipTheme} theme - The theme of the chip.
+ * @attribute {string} href - The href of the chip.
+ * @attribute {string} target - The target of the chip.
+ * @attribute {string} download - The download of the chip.
+ * @attribute {string} rel - The rel of the chip.
+ * 
+ * @fires {IChipDeleteEventData} forge-chip-delete - Event fired when the chip is deleted.
+ * @fires {IChipSelectEventData} forge-chip-select - Event fired when the chip is selected.
+ * 
+ * @cssproperty --forge-chip-background - The background color of the chip.
+ * @cssproperty --forge-chip-color - The background color of the chip.
+ * @cssproperty --forge-chip-shape - The shape of the chip.
+ * @cssproperty --forge-chip-spacing - The spacing between chips.
+ * @cssproperty --forge-chip-height - The height of the chip.
+ * @cssproperty --forge-chip-padding-inline - The inline padding of the chip.
+ * @cssproperty --forge-chip-padding-block - The block padding of the chip.
+ * @cssproperty --forge-chip-cursor - The cursor style of the chip.
+ * @cssproperty --forge-chip-icon-font-size - The font size of the chip icon.
+ * @cssproperty --forge-chip-disabled-opacity - The opacity of the disabled chip.
+ * @cssproperty --forge-chip-disabled-cursor - The cursor style of the disabled chip.
+ * @cssproperty --forge-chip-dense-height - The height of the dense chip.
+ * @cssproperty --forge-chip-dense-padding-inline - The inline padding of the dense chip.
+ * @cssproperty --forge-chip-dense-spacing - The spacing between dense chips.
+ * @cssproperty --forge-chip-dense-font-size - The font size of the dense chip.
+ * @cssproperty --forge-chip-dense-font-weight - The font weight of the dense chip.
+ * @cssproperty --forge-chip-dense-focus-indicator-offset - The offset of the focus indicator for dense chips.
+ * @cssproperty --forge-chip-dense-icon-font-size - The font size of the icon in dense chips.
+ * @cssproperty --forge-chip-remove-button-spacing - The spacing of the remove button in chips.
+ * @cssproperty --forge-chip-remove-button-height-dense - The height of the remove button in dense chips.
+ * @cssproperty --forge-chip-remove-button-icon-size-dense - The icon size of the remove button in dense chips.
+ * @cssproperty --forge-chip-remove-button-spacing-dense - The spacing of the remove button in dense chips.
+ * @cssproperty --forge-chip-selected-background - The background color of the selected chip.
+ * @cssproperty --forge-chip-selected-color - The text color of the selected chip.
+ * @cssproperty --forge-chip-invalid-color - The text color of the invalid chip.
+ * @cssproperty --forge-chip-invalid-selected-background - The background color of the invalid selected chip.
+ * @cssproperty --forge-chip-invalid-selected-color - The text color of the invalid selected chip.
+ * @cssproperty --forge-chip-border-width - The width of the chip border.
+ * @cssproperty --forge-chip-border-style - The style of the chip border.
+ * @cssproperty --forge-chip-border-color - The color of the chip border.
+ * @cssproperty --forge-chip-field-background - The background color of the chip field.
+ * @cssproperty --forge-chip-field-color - The text color of the chip field.
+ * @cssproperty --forge-chip-field-shape - The shape of the chip field.
+ * @cssproperty --forge-chip-field-border-color - The color of the chip field border.
+ * @cssproperty --forge-chip-field-cursor - The cursor style of the chip field.
+ * @cssproperty --forge-chip-checkmark-size - The size of the checkmark in chips.
+ * @cssproperty --forge-chip-checkmark-color - The color of the checkmark in chips.
+ * @cssproperty --forge-chip-checkmark-spacing - The spacing of the checkmark in chips.
+ * @cssproperty --forge-chip-avatar-size - The size of the avatar in chips.
+ * @cssproperty --forge-chip-avatar-size-dense - The size of the avatar in dense chips.
+ * @cssproperty --forge-chip-avatar-font-size - The font size of the avatar in chips.
+ * @cssproperty --forge-chip-avatar-font-size-dense - The font size of the avatar in dense chips.
+ * @cssproperty --forge-chip-avatar-spacing - The spacing of the avatar in chips.
+ * @cssproperty --forge-chip-avatar-spacing-dense - The spacing of the avatar in dense chips.
+ * @cssproperty --forge-chip-transition-duration - The duration of the chip transition.
+ * @cssproperty --forge-chip-transition-easing - The easing function of the chip transition.
+ * @cssproperty --forge-chip-checkmark-transition-delay - The delay of the checkmark transition in chips.
+ * 
+ * @csspart root - The component's root element.
+ * @csspart trigger - The trigger element of the chip.
+ * @csspart focus-indicator - The focus indicator of the chip.
+ * @csspart state-layer - The state layer surface.
+ * 
+ * @slot - The content of the chip.
+ * @slot start - The start content of the chip.
+ * @slot end - The end content of the chip.
  */
 @CustomElement({
   name: CHIP_CONSTANTS.elementName,

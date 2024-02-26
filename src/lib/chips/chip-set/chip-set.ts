@@ -24,6 +24,28 @@ declare global {
 
 /**
  * @tag forge-chip-set
+ * 
+ * @summary Chips sets are used to group multiple chips together and orchestrate their behavior.
+ * 
+ * @property {boolean} [vertical=false] - Whether the chip set is vertical.
+ * @property {ChipType} [type='action'] - The type of chip.
+ * @property {boolean} [dense=false] - Whether the chip set is dense.
+ * @property {boolean} [disabled=false] - Whether the chip set is disabled.
+ * @property {boolean} [invalid=false] - Whether the chip set is invalid.
+ * @property {ChipTheme} [theme='primary'] - The theme of the chip set.
+ * 
+ * @attribute {boolean} [vertical] - Whether the chip set is vertically oriented.
+ * @attribute {ChipType} [type] - The type of chips.
+ * @attribute {boolean} [dense] - Whether all chips in the chip set are dense.
+ * @attribute {boolean} [disabled] - Whether all chips in the chip set are disabled.
+ * @attribute {boolean} [invalid] - Whether all chips in the chip set are invalid.
+ * @attribute {ChipTheme} [theme] - The theme of the chips.
+ * 
+ * @cssproperty --forge-chip-set-spacing - The spacing between chips.
+ * 
+ * @csspart root - The component's root element.
+ * 
+ * @slot - The chips to display in the chip set.
  */
 @CustomElement({
   name: CHIP_SET_CONSTANTS.elementName,

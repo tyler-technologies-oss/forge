@@ -1,4 +1,4 @@
-import { elementFromHTML, getShadowElement, walkUpUntil } from '@tylertech/forge-core';
+import { elementFromHTML, getShadowElement, toggleAttribute, walkUpUntil } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IIconButtonComponent } from '../../icon-button';
@@ -143,7 +143,7 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     if (this._triggerElement instanceof HTMLAnchorElement) {
       return;
     }
-    this._triggerElement.setAttribute('aria-pressed', String(value));
+    toggleAttribute(this._triggerElement, value, 'aria-pressed', String(value));
   }
 
   public toggleFieldVariant(value: boolean): void {
@@ -217,13 +217,6 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
     buttonEl.setAttribute('aria-label', `Remove ${this._component.innerText}`);
     buttonEl.setAttribute('part', 'remove-button');
 
-    if (this._component.disabled) {
-      buttonEl.disabled = true;
-    }
-    if (this._component.selected) {
-      buttonEl.setAttribute('aria-pressed', 'true');
-    }
-
     const iconEl = document.createElement('forge-icon');
     iconEl.name = 'close';
     buttonEl.appendChild(iconEl);
@@ -254,11 +247,19 @@ export class ChipAdapter extends BaseAdapter<IChipComponent> implements IChipAda
   }
 
   private _createButtonElement(): HTMLButtonElement {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.id = 'trigger';
-    button.setAttribute('part', 'trigger');
-    button.classList.add('trigger');
-    return button;
+    const buttonEl = document.createElement('button');
+    buttonEl.type = 'button';
+    buttonEl.id = 'trigger';
+    buttonEl.setAttribute('part', 'trigger');
+    buttonEl.classList.add('trigger');
+
+    if (this._component.disabled) {
+      buttonEl.disabled = true;
+    }
+    if (this._component.selected) {
+      buttonEl.setAttribute('aria-pressed', 'true');
+    }
+
+    return buttonEl;
   }
 }
