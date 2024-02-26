@@ -62,8 +62,4 @@ describe('Toolbar', () => {
     const el = await fixture<IToolbarComponent>(html`<forge-toolbar></forge-toolbar>`);
     expect(el.inverted).to.be.false; 
   });
-
-  function getContainerEl(el: IToolbarComponent): HTMLElement {
-    return el.shadowRoot?.firstElementChild as HTMLElement;
-  }
 });

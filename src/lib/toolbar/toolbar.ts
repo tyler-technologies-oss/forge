@@ -45,8 +45,9 @@ declare global {
  * @cssproperty --forge-toolbar-padding-block - Controls the top and bottom padding using the padding-block style.
  * @cssproperty --forge-toolbar-padding-inline - Controls the left and right padding using the padding-block style.
  * 
- * @csspart container - The outer container element that runs edge to edge horizontally.
- * @csspart root - The root container element with default inline-padding.
+ * @csspart root - The outer container element that runs edge to edge horizontally. It contains the before-start slot, 
+ * the inner-container element, and the after-end slot.
+ * @csspart inner-container - The container element with default inline-padding. It contains the start, center, and end slots.
  * @csspart before-section-start - The container element for the before-start slot.
  * @csspart section-start - The container element for the start slot.
  * @csspart section-center - The container element for the center slot.
