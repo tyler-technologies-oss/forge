@@ -2,6 +2,9 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { setDefaultAria } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
+import { ICON_BUTTON_CONSTANTS } from '../icon-button/icon-button-constants';
+import { RADIO_CONSTANTS } from '../radio/radio/radio-constants';
+import { SWITCH_CONSTANTS } from '../switch/switch-constants';
 import { IDialogComponent } from './dialog';
 
 export interface IDialogAdapter extends IBaseAdapter {

@@ -11,6 +11,7 @@
 @mixin base {
   position: relative;
   display: flex;
+  gap: #{token(gap)};
   align-items: center;
   box-sizing: border-box;
   outline: none;
@@ -92,6 +93,8 @@
 }
 
 @mixin dense {
+  @include override(gap, dense-gap);
+
   height: #{token(dense-one-line-height)};
   min-height: #{token(dense-one-line-height)};
 }
@@ -126,8 +129,7 @@
   align-items: center;
   justify-content: center;
   fill: currentColor;
-  margin-inline-start: #{token(avatar-margin-start)};
-  margin-inline-end: #{token(avatar-margin-end)};
+  margin-inline-end: calc((#{token(gap)} / 2) * -1);
   min-width: #{token(avatar-size)};
   min-height: #{token(avatar-size)};
   border-radius: #{token(avatar-shape)};
@@ -142,30 +144,12 @@
   fill: currentColor;
 }
 
-@mixin leading {
-  margin-inline-start: #{token(leading-margin-start)};
-  margin-inline-end: #{token(leading-margin-end)};
-}
-
 @mixin leading-selected {
   color: #{token(leading-selected-color)};
 }
 
-@mixin leading-dense {
-  margin-inline-end: #{token(dense-leading-margin-end)};
-}
-
-@mixin trailing {
-  margin-inline-start: #{token(trailing-margin-start)};
-  margin-inline-end: #{token(trailing-margin-end)};
-}
-
 @mixin trailing-selected {
   color: #{token(trailing-selected-color)};
-}
-
-@mixin trailing-dense {
-  margin-inline-start: #{token(dense-trailing-margin-start)};
 }
 
 @mixin wrap {

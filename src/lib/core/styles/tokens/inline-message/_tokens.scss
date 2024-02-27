@@ -1,0 +1,26 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../shape';
+@use '../../spacing';
+@use '../../border';
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(inline-message, background, theme.variable(info-container-low)),
+  color: utils.module-val(inline-message, color, theme.variable(text-high)),
+  shape: utils.module-val(inline-message, shape, shape.variable(medium)),
+  padding: utils.module-val(inline-message, padding, spacing.variable(small)),
+  padding-inline: utils.module-ref(inline-message, padding-inline, padding),
+  padding-block: utils.module-ref(inline-message, padding-block, padding),
+  border-width: utils.module-val(inline-message, border-width, border.variable(thin)),
+  border-style: utils.module-val(inline-message, border-style, none),
+  border-color: utils.module-val(inline-message, border-color, theme.variable(info-container)),
+  gap: utils.module-val(inline-message, gap, spacing.variable(small)),
+  icon-gap: utils.module-ref(inline-message, icon-gap, gap),
+  content-gap: utils.module-ref(inline-message, content-gap, gap),
+  icon-color: utils.module-val(inline-message, icon-color, theme.variable(on-info-container-low))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

@@ -1,0 +1,15 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../utils';
+@use '../../border';
+
+$tokens: (
+  color: utils.module-val(divider, color, theme.variable(outline)),
+  width: utils.module-val(divider, width, border.variable(thin)),
+  border-style: utils.module-val(divider, border-style, solid),
+  margin: utils.module-val(divider, margin, 0),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

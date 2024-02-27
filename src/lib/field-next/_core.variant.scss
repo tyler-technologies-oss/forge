@@ -1,0 +1,220 @@
+@use '../core/styles/theme';
+@use './token-utils' as *;
+
+//
+// Root variant
+//
+
+@mixin variant($variant, $theme: primary) {
+  @if $variant == plain {
+    @include plain($theme);
+  } @else if $variant == outlined {
+    @include outlined($theme);
+  } @else if $variant == tonal {
+    @include tonal($theme);
+  } @else if $variant == filled {
+    @include filled($theme);
+  } @else if $variant == raised {
+    @include raised($theme);
+  }
+}
+
+@mixin plain($theme: default) {
+  @include override('container-padding-inline', 'plain-container-padding-inline');
+  @include override('resize-container-inset-label-background', theme.variable(surface), value);
+
+  @if $theme == default {
+    @include text-color(token(text-color));
+  } @else {
+    @include text-color(theme.variable($theme));
+  }
+}
+
+@mixin outlined($theme: default) {
+  @include override('resize-container-inset-label-background', theme.variable(surface), value);
+
+  @if $theme == default {
+    @include override('inner-border-color', #{token(border-color)}, value);
+    @include text-color(token(text-color));
+  } @else {
+    @include override('inner-border-color', theme.variable($theme), value);
+    @include text-color(theme.variable($theme));
+  }
+}
+
+@mixin tonal($theme: default) {
+  @if $theme == default {
+    @include override('inner-border-color', #{token(tonal-inner-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(tonal-surface-color)}, value);
+    @include text-color(token(tonal-on-surface-color));
+  } @else {
+    @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-low), value);
+    @include text-color(theme.variable(on-#{$theme}-container-low));
+  }
+}
+
+@mixin filled($theme: default) {
+  @if $theme == default {
+    @include override('resize-container-inset-label-background', #{token(filled-surface-color)}, value);
+    @include text-color(token(text-color));
+    @include text-color(token(filled-on-surface-color));
+  } @else {
+    @include override('inner-border-color', theme.variable($theme), value);
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-low), value);
+    @include text-color(theme.variable(on-#{$theme}-container-low));
+  }
+}
+
+@mixin raised($theme: default) {
+  @if $theme == default {
+    @include override('inner-border-color', #{token(tonal-inner-border-color)}, value);
+    @include override('resize-container-inset-label-background', #{token(raised-surface-color)}, value);
+    @include text-color(token(raised-on-surface-color));
+  } @else {
+    @include override('inner-border-color', theme.variable(#{$theme}-container-high), value);
+    @include override('resize-container-inset-label-background', theme.variable(#{$theme}-container-low), value);
+    @include text-color(theme.variable(on-#{$theme}-container-low));
+  }
+}
+
+@mixin text-color($color) {
+  color: $color;
+  fill: $color;
+}
+
+//
+// Container background variant
+//
+
+@mixin container-background-variant($variant, $theme: primary) {
+  @if $variant == outlined {
+    @include container-background-outlined($theme);
+  } @else if $variant == tonal {
+    @include container-background-tonal($theme);
+  } @else if $variant == filled {
+    @include container-background-filled($theme);
+  } @else if $variant == raised {
+    @include container-background-raised($theme);
+  }
+}
+
+@mixin container-background-outlined($theme: default) {
+  outline-style: #{token(border-style)};
+  outline-width: #{token(border-width)};
+
+  @if $theme == default {
+    outline-color: #{token(border-color)};
+  } @else {
+    outline-color: theme.variable($theme);
+  }
+}
+
+@mixin container-background-tonal($theme: default) {
+  @if $theme == default {
+    background: #{token(tonal-surface-color)};
+  } @else {
+    background: theme.variable(#{$theme}-container-low);
+  }
+}
+
+@mixin container-background-filled($theme: default) {
+  outline-style: #{token(border-style)};
+  outline-width: #{token(border-width)};
+
+  @if $theme == default {
+    outline-color:  #{token(border-color)};
+    background: #{token(filled-surface-color)};
+  } @else {
+    outline-color: theme.variable($theme);
+    background: theme.variable(#{$theme}-container-low);
+  }
+}
+
+@mixin container-background-raised($theme: default) {
+  box-shadow: #{token(raised-elevation)};
+
+  @if $theme == default {
+    background: #{token(raised-surface-color)};
+  } @else {
+    background: theme.variable(#{$theme}-container-low);
+  }
+}
+
+//
+// Label variant
+//
+
+@mixin label-variant($variant, $theme: default) {
+  @if $variant == plain and $theme != default {
+    color: theme.variable($theme);
+  }
+}
+
+@mixin inset-label-variant($variant, $theme: default) {
+  @if $variant == plain {
+    @include inset-label-plain($theme);
+  } @else if $variant == outlined {
+    @include inset-label-outlined($theme);
+  } @else if $variant == tonal {
+    @include inset-label-tonal($theme);
+  } @else if $variant == filled {
+    @include inset-label-filled($theme);
+  } @else if $variant == raised {
+    @include inset-label-raised($theme);
+  }
+}
+
+@mixin inset-label-plain($theme: default) {
+  @if $theme == default {
+    color: #{token(inset-label-color)};
+  } @else {
+    color: theme.variable($theme);
+  }
+}
+
+@mixin inset-label-outlined($theme: default) {
+  @if $theme == default {
+    color: #{token(inset-label-color)};
+  } @else {
+    color: theme.variable($theme);
+  }
+}
+
+@mixin inset-label-tonal($theme: default) {
+  @if $theme == default {
+    color: #{token(inset-label-color)};
+  } @else {
+    color: theme.variable(on-#{$theme}-container-low);
+  }
+}
+
+@mixin inset-label-filled($theme: default) {
+  @if $theme == default {
+    color: #{token(inset-label-color)};
+  } @else {
+    color: theme.variable(on-#{$theme}-container-low);
+  }
+}
+
+@mixin inset-label-raised($theme: default) {
+  @if $theme == default {
+    color: #{token(inset-label-color)};
+  } @else {
+    color: theme.variable(on-#{$theme}-container-low);
+  }
+}
+
+//
+// Accessory variant
+//
+
+@mixin accessory-variant($variant) {
+  @if $variant == plain {
+    &::before {
+      border-inline-start-style: none;
+    }
+  } @else if $variant == tonal or $variant == raised {
+    block-size: #{token(inner-border-block-size)};
+  }
+}

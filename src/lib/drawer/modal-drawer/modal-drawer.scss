@@ -1,3 +1,8 @@
 @use './mixins';
+@use '../../divider';
 
 @include mixins.core-styles;
+
+:host {
+  @include divider.provide-theme((margin: 4px 0));
+}

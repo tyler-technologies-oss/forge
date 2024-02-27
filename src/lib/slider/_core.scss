@@ -191,7 +191,7 @@ $_active-track-end-clip: calc(#{$_active-track-end-offset} + #{$_active-track-ma
 }
 
 @mixin handle-label {
-  @include typography.style(label, $exclude: [font-weight]);
+  @include typography.style(label1, $exclude: [font-weight]);
 
   position: absolute;
   box-sizing: border-box;

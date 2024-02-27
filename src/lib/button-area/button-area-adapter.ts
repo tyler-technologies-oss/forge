@@ -37,6 +37,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   public destroy(): void {
     if (typeof this._destroyUserInteractionListener === 'function') {
       this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
     }
   }
 
@@ -105,7 +106,15 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
 
   public async createRipple(): Promise<void> {
     if (!this._rippleInstance) {
-      const type = await this._userInteractionListener();
+      const { userInteraction, destroy } = await createUserInteractionListener(this._rootElement);
+      this._destroyUserInteractionListener = destroy;
+      const { type } = await userInteraction;
+      this._destroyUserInteractionListener = undefined;
+
+      if (!this.isConnected) {
+        return;
+      }
+
       if (!this._rippleInstance) {
         const adapter: ForgeRippleAdapter = {
           ...ForgeRipple.createAdapter(this),
@@ -130,6 +139,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
           removeClass: (className) => removeClass(className, this._rootElement),
           updateCssVariable: (varName, value) => this._rootElement.style.setProperty(varName, value)
         };
+
         this._rippleInstance = new ForgeRipple(this._rootElement, new ForgeRippleFoundation(adapter));
         if (type === 'focusin') {
           this._rippleInstance.handleFocus();

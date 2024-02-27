@@ -15,7 +15,7 @@ import { RadioFoundation } from './radio-foundation';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
 import template from './radio.html';
-import style from './radio.scss';
+import styles from './radio.scss';
 
 export interface IRadioComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   checked: boolean;
@@ -124,7 +124,7 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, style);
+    attachShadowTemplate(this, template, styles);
     this[inputType] = 'radio';
     this._foundation = new RadioFoundation(new RadioAdapter(this));
   }

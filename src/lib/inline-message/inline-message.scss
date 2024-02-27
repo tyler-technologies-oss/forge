@@ -1,17 +1,83 @@
-@use './mixins';
+@use './core' as *;
+@use '../core/styles/theme';
 
-@include mixins.core-styles;
-@include mixins.default-theme();
-@include mixins.theme('danger');
-@include mixins.theme('warning');
-@include mixins.theme('success');
-@include mixins.theme('info-primary');
-@include mixins.theme('info-secondary');
+//
+// Host
+//
 
 :host {
-  display: block;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.forge-inline-message {
+  @include tokens;
+}
+
+.forge-inline-message {
+  @include base;
+
+  .container {
+    @include container;
+  }
+}
+
+//
+// Title
+//
+
+::slotted([slot=title]) {
+  @include title;
+}
+
+//
+// Icon
+//
+
+::slotted([slot=icon]) {
+  @include icon;
+}
+
+//
+// Theme
+//
+
+@each $theme in [primary secondary tertiary success warning] {
+  :host([theme=#{$theme}]) {
+    .forge-inline-message {
+      @if $theme == 'secondary' {
+        @include override(background, theme.variable(secondary-container), value);
+        @include override(icon-color, theme.variable(on-secondary-container), value);
+        @include override(border-color, theme.variable(secondary), value);
+      } @else {
+        @include override(background, theme.variable(#{$theme}-container-low), value);
+        @include override(icon-color, theme.variable(on-#{$theme}-container-low), value);
+        @include override(border-color, theme.variable(#{$theme}-container), value);
+      }
+    }
+  }
+}
+
+// Map both "error" and "danger" for backwards compatibility with "danger" theme
+:host(:is([theme=error],[theme=danger])) {
+  .forge-inline-message {
+    @include override(background, theme.variable(error-container-low), value);
+    @include override(icon-color, theme.variable(on-error-container-low), value);
+    @include override(border-color, theme.variable(error-container), value);
+  }
+}
+
+:host([theme=info-secondary]) {
+  .forge-inline-message {
+    @include override(background, theme.variable(surface-container-low), value);
+    @include override(icon-color, theme.variable(on-surface-container-low), value);
+    @include override(border-color, theme.variable(surface-container), value);
+  }
 }

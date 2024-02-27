@@ -147,7 +147,7 @@
 }
 
 @mixin label {
-  @include typography.style(label);
+  @include typography.style(label1);
 
   &:empty {
     display: none;

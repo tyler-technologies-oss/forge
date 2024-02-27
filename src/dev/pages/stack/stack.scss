@@ -3,12 +3,36 @@
 }
 
 .box {
-  padding: 36px;
-  border: 4px dashed var(--mdc-theme-text-secondary-on-background);
-  background-color: var(--mdc-theme-text-disabled-on-background);
+  border: 4px dashed var(--forge-theme-surface-inverse);
+  background-color: var(--forge-theme-surface-container-medium);
   border-radius: 8px;
+}
+
+.small {
+  height: 100px;
+  width: 100px;
+}
+
+.medium {
+  height: 150px;
+  width: 150px;
+}
+
+.large {
+  height: 200px;
+  width: 200px;
+}
+
+.xlarge {
+  height: 250px;
+  width: 250px;
 }
 
 .more-examples {
   margin-block-start: 64px;
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }

@@ -3,7 +3,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/banner';
 import '@tylertech/forge/button';
 import { tylIconAddAlert } from '@tylertech/tyler-icons/standard';
-import type { IBannerComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
+import { BANNER_CONSTANTS, IBannerComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 
 IconRegistry.define([
   tylIconAddAlert
@@ -12,32 +12,38 @@ IconRegistry.define([
 const banner = document.querySelector('#banner') as IBannerComponent;
 const leadingIcon = document.querySelector('#leading-icon') as HTMLElement;
 const textEl = document.querySelector('#text') as HTMLElement;
+const preventDismissToggle = document.querySelector('#opt-prevent-dismiss') as ISwitchComponent;
 
-const themeSelect = document.querySelector('#theme-select') as ISelectComponent;
-themeSelect.addEventListener('change', ({ detail: theme }) => {
-  if (theme) {
-    banner.setAttribute('theme', theme);
+banner.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, evt => {
+  console.log(evt);
+  if (preventDismissToggle.on) {
+    evt.preventDefault();
+  }
+});
+banner.addEventListener(BANNER_CONSTANTS.events.DISMISSED, evt => {
+  console.log(evt);
+  dismissedToggle.on = true;
+});
+
+const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;
+themeSelect.addEventListener('change', ({ detail: theme }) => banner.theme = theme);
+
+const dismissedToggle = document.querySelector('#opt-dismissed') as ISwitchComponent;
+dismissedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => banner.dismissed = selected);
+
+const showIconToggle = document.querySelector('#opt-show-icon') as ISwitchComponent;
+showIconToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  if (selected) {
+    banner.appendChild(leadingIcon);
   } else {
-    banner.removeAttribute('theme');
+    leadingIcon.remove();
   }
 });
 
-const dismissToggle = document.querySelector('#dismissed-toggle') as ISwitchComponent;
-dismissToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  banner.dismissed = selected;
-});
+const persistentToggle = document.querySelector('#opt-persistent') as ISwitchComponent;
+persistentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => banner.persistent = selected);
 
-const showLeadingIconToggle = document.querySelector('#show-leading-icon-toggle') as ISwitchComponent;
-showLeadingIconToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  leadingIcon.style.display = selected ? 'block' : 'none';
-});
-
-const showDismissToggle = document.querySelector('#show-dismiss-toggle') as ISwitchComponent;
-showDismissToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  banner.canDismiss = selected;
-});
-
-const useMoreTextToggle = document.querySelector('#use-more-text-toggle') as ISwitchComponent;
+const useMoreTextToggle = document.querySelector('#opt-more-text') as ISwitchComponent;
 useMoreTextToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   textEl.textContent = selected ?
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit explicabo labore soluta ex culpa, consectetur possimus quidem ullam voluptas est facilis quasi enim error doloribus omnis recusandae! Dolore, eaque ipsa!' :

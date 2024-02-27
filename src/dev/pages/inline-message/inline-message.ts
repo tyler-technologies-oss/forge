@@ -1,13 +1,18 @@
 import '$src/shared';
-import '@tylertech/forge/inline-message';
 import '@tylertech/forge/icon';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconCancel, tylIconCheck, tylIconInfo, tylIconNotifications, tylIconWarning } from '@tylertech/tyler-icons/standard';
+import '@tylertech/forge/inline-message';
+import { INLINE_MESSAGE_CONSTANTS } from '@tylertech/forge/inline-message';
+import type { ISelectComponent } from '@tylertech/forge/select';
+import { tylIconInfo } from '@tylertech/tyler-icons/standard';
 
-IconRegistry.define([
-  tylIconNotifications,
-  tylIconInfo,
-  tylIconWarning,
-  tylIconCheck,
-  tylIconCancel
-]);
+IconRegistry.define(tylIconInfo);
+
+const themeSelect = document.getElementById('opt-theme') as ISelectComponent;
+themeSelect.addEventListener('change', ({ detail }: CustomEvent<string>) => {
+  getAllInlineMessages().forEach(el => el.setAttribute('theme', detail));
+});
+
+function getAllInlineMessages(): NodeListOf<HTMLElement> {
+  return document.querySelectorAll(INLINE_MESSAGE_CONSTANTS.elementName);
+}
