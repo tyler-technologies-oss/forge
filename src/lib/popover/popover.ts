@@ -16,6 +16,7 @@ export interface IPopoverComponent extends IOverlayAware, IDismissible {
   triggerType: PopoverTriggerType | PopoverTriggerType[];
   longpressDelay: number;
   persistentHover: boolean;
+  delay: number;
   hoverDismissDelay: number;
 }
 
@@ -99,6 +100,7 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
       POPOVER_CONSTANTS.attributes.TRIGGER_TYPE,
       POPOVER_CONSTANTS.attributes.LONGPRESS_DELAY,
       POPOVER_CONSTANTS.attributes.PERSISTENT_HOVER,
+      POPOVER_CONSTANTS.attributes.DELAY,
       POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY
     ];
   }
@@ -138,6 +140,9 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
       case POPOVER_CONSTANTS.attributes.PERSISTENT_HOVER:
         this.persistentHover = coerceBoolean(newValue);
         return;
+      case POPOVER_CONSTANTS.attributes.DELAY:
+        this.delay = coerceNumber(newValue);
+        return;
       case POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY:
         this.hoverDismissDelay = coerceNumber(newValue);
         return;
@@ -159,6 +164,9 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
 
   @FoundationProperty()
   public declare persistentHover: boolean;
+
+  @FoundationProperty()
+  public declare delay: number;
 
   @FoundationProperty()
   public declare hoverDismissDelay: number;
