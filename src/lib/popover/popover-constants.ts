@@ -33,7 +33,7 @@ const events = {
 
 const defaults = {
   TRIGGER_TYPE: 'click' as PopoverTriggerType,
-  DELAY: 500
+  DELAY: 0
 };
 
 export const POPOVER_CONSTANTS = {

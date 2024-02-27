@@ -31,6 +31,7 @@ describe('Popover', () => {
       expect(harness.popoverElement.triggerType).to.equal('click');
       expect(harness.popoverElement.longpressDelay).to.equal(LONGPRESS_TRIGGER_DELAY);
       expect(harness.popoverElement.persistentHover).to.be.false;
+      // expect(harness.popoverElement.delay).to.equal(POPOVER_CONSTANTS.defaults.DELAY);
       expect(harness.popoverElement.hoverDismissDelay).to.equal(POPOVER_HOVER_TIMEOUT);
     });
 
@@ -1428,6 +1429,7 @@ interface IPopoverFixtureConfig {
   animationType?: PopoverAnimationType;
   triggerType?: PopoverTriggerType;
   persistentHover?: boolean;
+  delay?: number;
 }
 
 async function createFixture({
@@ -1437,7 +1439,8 @@ async function createFixture({
   anchor,
   animationType,
   triggerType,
-  persistentHover = false
+  persistentHover = false,
+  delay
 }: IPopoverFixtureConfig = {}): Promise<PopoverHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;">
@@ -1449,6 +1452,7 @@ async function createFixture({
         ?persistent=${persistent}
         ?arrow=${arrow}
         ?persistent-hover=${persistentHover}
+        ?delay=${delay}
         animation-type=${animationType ?? nothing}
         trigger-type=${triggerType ?? nothing}>
         <span>Test popover content</span>

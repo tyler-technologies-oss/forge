@@ -434,6 +434,17 @@ describe('Tooltip', () => {
       expect(harness.isOpen).to.be.true;
     });
 
+    it('should open when hovering the trigger button and a delay is set', async () => {
+     const harness = await createFixture({ triggerType: 'hover', delay: 500 });
+
+     expect(harness.isOpen).to.be.false;
+
+     await harness.hoverTrigger();
+     await timer(harness.tooltipElement.delay);
+
+     expect(harness.isOpen).to.be.true;
+   });
+
     it('should open and close when hovering and unhovering the trigger button', async () => {
       const harness = await createFixture({ triggerType: 'hover' });
 
