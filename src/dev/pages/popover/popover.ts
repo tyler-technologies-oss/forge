@@ -10,12 +10,17 @@ import '@tylertech/forge/checkbox';
 import '@tylertech/forge/label';
 import './popover.scss';
 
+const delayInput = document.querySelector('#opt-delay') as HTMLInputElement;
 const popover = document.querySelector('#my-popover') as IPopoverComponent;
 const showPopoverButton = document.querySelector('#popover-trigger') as HTMLButtonElement;
 const closeButton = document.querySelector('#close-button') as HTMLButtonElement;
 const clippingContainer = document.querySelector('.clipping-container') as HTMLElement;
 const preventCloseToggle = document.querySelector('#opt-prevent-close') as ISwitchComponent;
 const richTooltipPopover = document.querySelector('#rich-tooltip-popover') as IPopoverComponent;
+
+delayInput.addEventListener('input', (e) => {
+ popover.delay = Number(delayInput.value);
+});
 
 popover.addEventListener('forge-popover-beforetoggle', (evt: CustomEvent<IPopoverToggleEventData>) => {
   console.log('forge-popover-beforetoggle', evt.detail);
