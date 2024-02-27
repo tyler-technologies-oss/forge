@@ -2,8 +2,12 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}toolbar`;
 
-const attributes = {
+const observedAttributes = {
   INVERTED: 'inverted'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const classes = {
@@ -21,6 +25,7 @@ const selectors = {
 
 export const TOOLBAR_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   classes,
   selectors

@@ -1,25 +1,30 @@
 @use 'sass:map';
+@use '../../utils';
 @use '../../animation';
 @use '../../shape';
 @use '../../theme';
-@use '../../utils';
 @use '../../spacing';
+@use '../../border';
 
 $tokens: (
+  // Base
+  background: utils.module-val(toolbar, background, theme.variable(surface)),
   height: utils.module-val(toolbar, height, 56px),
-  min-height: utils.module-val(toolbar, min-height, 56px),
+  min-height: utils.module-ref(toolbar, min-height, height),
   
+  // Divider
+  divider-width: utils.module-val(toolbar, divider-width, border.variable(thin)),
+  divider-style: utils.module-val(toolbar, divider-style, solid),
   divider-color: utils.module-val(toolbar, divider-color, theme.variable(outline)),
-  border-block-start-width: utils.module-val(toolbar, border-block-start-width, 1px),
-  border-block-end-width: utils.module-val(toolbar, border-block-end-width, 1px),
-  border-block-start-style: utils.module-val(toolbar, border-block-start-style, solid),
-  border-block-end-style: utils.module-val(toolbar, border-block-end-style, solid),
 
-  border-start-start-radius: utils.module-val(toolbar, border-start-start-radius, 0),
-  border-start-end-radius: utils.module-val(toolbar, border-start-end-radius, 0),
-  border-end-start-radius: utils.module-val(toolbar, border-end-start-radius, 0),
-  border-end-end-radius: utils.module-val(toolbar, border-end-end-radius, 0),
+  // Shape
+  shape: utils.module-val(toolbar, shape, shape.variable(medium)),
+  start-start-shape: utils.module-ref(toolbar, start-start-shape, shape),
+  start-end-shape: utils.module-ref(toolbar, start-end-shape, shape),
+  end-start-shape: utils.module-val(toolbar, end-start-shape, 0),
+  end-end-shape: utils.module-val(toolbar, end-end-shape, 0),
 
+  // Spacing
   padding: utils.module-val(toolbar, padding, spacing.variable(medium)),
   padding-block: utils.module-val(toolbar, padding-block, 0),
   padding-inline: utils.module-ref(toolbar, padding-inline, padding),

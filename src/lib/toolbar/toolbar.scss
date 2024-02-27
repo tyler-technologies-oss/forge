@@ -1,39 +1,68 @@
 @use './core' as *;
 
+//
+// Host
+//
 
 :host {
   @include host;
-}
-
-.forge-toolbar {
- @include tokens;
-}
-
-.forge-toolbar {
- @include base;
- @include core-styles;
-}
-
-.forge-toolbar-inner {
- @include base-inner;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host([inverted]) {
- .forge-toolbar {
-   border-bottom: none;
-   border-top: #{token(border-block-start-width)} #{token(border-block-start-style)} #{token(divider-color)};
- }
+//
+// Base
+//
+
+.forge-toolbar {
+  @include tokens;
 }
 
-:host([no-border]) {
- .forge-toolbar {
-   border: none;
- }
+.forge-toolbar {
+  @include base;
 }
+
+.inner {
+  @include inner;
+}
+
+.section {
+  @include section;
+
+  &.center {
+    @include center;
+  }
+
+  &.end {
+    @include end;
+  }
+}
+
+//
+// Inverted
+//
+
+:host([inverted]) {
+  .forge-toolbar {
+    @include inverted;
+  }
+}
+
+//
+// No divider
+//
+
+:host(:is([no-divider],[no-border])) {
+  .forge-toolbar {
+    border: none;
+  }
+}
+
+//
+// No padding
+//
 
 :host([no-padding]) {
   .forge-toolbar {
@@ -41,19 +70,20 @@
   }
 }
 
+//
+// Auto height
+//
+
 :host([auto-height]) {
   .forge-toolbar {
     @include override(height, auto, value);
   }
 }
 
-/// Remove margin from all commonly used native elements that have default margin
-.forge-toolbar {
-  ::slotted(h1) { margin: 0; }
-  ::slotted(h2) { margin: 0; }
-  ::slotted(h3) { margin: 0; }
-  ::slotted(h4) { margin: 0; }
-  ::slotted(h5) { margin: 0; }
-  ::slotted(h6) { margin: 0; }
-  ::slotted(p)  { margin: 0; }
+//
+// Slotted
+//
+
+::slotted(:is(h1,h2,h3,h4,h5,h6,p)) {
+  margin: 0;
 }
