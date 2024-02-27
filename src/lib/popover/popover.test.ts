@@ -31,7 +31,7 @@ describe('Popover', () => {
       expect(harness.popoverElement.triggerType).to.equal('click');
       expect(harness.popoverElement.longpressDelay).to.equal(LONGPRESS_TRIGGER_DELAY);
       expect(harness.popoverElement.persistentHover).to.be.false;
-      // expect(harness.popoverElement.delay).to.equal(POPOVER_CONSTANTS.defaults.DELAY);
+      expect(harness.popoverElement.delay).to.equal(POPOVER_CONSTANTS.defaults.DELAY);
       expect(harness.popoverElement.hoverDismissDelay).to.equal(POPOVER_HOVER_TIMEOUT);
     });
 
