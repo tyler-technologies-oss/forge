@@ -31,6 +31,7 @@ describe('Popover', () => {
       expect(harness.popoverElement.triggerType).to.equal('click');
       expect(harness.popoverElement.longpressDelay).to.equal(LONGPRESS_TRIGGER_DELAY);
       expect(harness.popoverElement.persistentHover).to.be.false;
+      expect(harness.popoverElement.hoverDelay).to.equal(POPOVER_CONSTANTS.defaults.HOVER_DELAY);
       expect(harness.popoverElement.hoverDismissDelay).to.equal(POPOVER_HOVER_TIMEOUT);
     });
 
@@ -697,6 +698,29 @@ describe('Popover', () => {
       await timer(customDelay + 100);
 
       expect(harness.isOpen).to.be.false;
+    });
+
+    it('should open with a delay when hovering over the trigger button and a delay is set', async () => {
+      const harness = await createFixture({ triggerType: 'hover', hoverDelay: 500 });
+
+      expect(harness.isOpen).to.be.false;
+
+      await harness.hoverTrigger();
+      await timer(harness.popoverElement.hoverDelay + 100);
+
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should set the default hoverDelay value if NaN', async () => {
+     const harness = await createFixture({ triggerType: 'hover', hoverDelay: 'Testing' as any });
+
+     expect(harness.popoverElement.hoverDelay).to.equal(0);
+    });
+
+    it('should set the default hoverDelay value if the hoverDelay < 0', async () => {
+     const harness = await createFixture({ triggerType: 'hover', hoverDelay: -400 });
+
+     expect(harness.popoverElement.hoverDelay).to.equal(0);
     });
 
     it('should not close if persistent hover is enabled', async () => {
@@ -1428,6 +1452,7 @@ interface IPopoverFixtureConfig {
   animationType?: PopoverAnimationType;
   triggerType?: PopoverTriggerType;
   persistentHover?: boolean;
+  hoverDelay?: number;
 }
 
 async function createFixture({
@@ -1437,7 +1462,8 @@ async function createFixture({
   anchor,
   animationType,
   triggerType,
-  persistentHover = false
+  persistentHover = false,
+  hoverDelay
 }: IPopoverFixtureConfig = {}): Promise<PopoverHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;">
@@ -1449,6 +1475,7 @@ async function createFixture({
         ?persistent=${persistent}
         ?arrow=${arrow}
         ?persistent-hover=${persistentHover}
+        ?hoverDelay=${hoverDelay}
         animation-type=${animationType ?? nothing}
         trigger-type=${triggerType ?? nothing}>
         <span>Test popover content</span>

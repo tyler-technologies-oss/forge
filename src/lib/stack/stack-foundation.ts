@@ -57,7 +57,7 @@ export class StackFoundation implements IStackFoundation {
     }
   }
 
-  /** Controls the gap amount between the children in pixels */
+  /** Controls the gap amount between the children */
   public get gap(): string {
     return this._gap;
   }

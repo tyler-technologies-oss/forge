@@ -3,6 +3,10 @@
 .forge-stack {
   @include base;
   @include tokens;
+
+  ::slotted(*) {
+    @include stretch;
+  }
 }
 
 :host([inline]) {
@@ -31,37 +35,36 @@
 
 :host([alignment=start]) {
   .forge-stack {
-    //override stretch css prop
-    @include align-start;
+    @include override(alignment, start, value);
   }
 }
 
 :host([alignment=center]) {
   .forge-stack {
-    @include align-center;
+    @include override(alignment, center, value);
   }
 }
 
 :host([alignment=end]) {
   .forge-stack {
-    @include align-end;
+    @include override(alignment, end, value);
   }
 }
 
 :host([justify=start]) {
   .forge-stack {
-    @include justify-start;
+    @include override(justify, start, value);
   }
 }
 
 :host([justify=center]) {
   .forge-stack {
-    @include justify-center;
+    @include override(justify, center, value);
   }
 }
 
 :host([justify=end]) {
   .forge-stack {
-    @include justify-end;
+    @include override(justify, end, value);
   }
 }

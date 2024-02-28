@@ -48,6 +48,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   public destroy(): void {
     if (typeof this._destroyUserInteractionListener === 'function') {
       this._destroyUserInteractionListener();
+      this._destroyUserInteractionListener = undefined;
     }
     if (typeof this._destroyDeferListener === 'function') {
       this._destroyDeferListener();
