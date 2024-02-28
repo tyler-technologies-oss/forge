@@ -9,8 +9,6 @@ export interface IButtonAreaFoundation extends ICustomElementFoundation {
 
 export class ButtonAreaFoundation implements IButtonAreaFoundation {
   private _disabled = false;
-  private _attached = false;
-  private _deferred = true;
   private _clickListener: (event: Event) => void;
   private _keydownListener: (event: KeyboardEvent) => void;
   private _pointerdownListener: (event: Event) => void;
@@ -26,42 +24,16 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
   }
 
   public initialize(): void {
-    this._adapter.addButtonSlotListener('slotchange', this._slotListener);
-
-    // Clicks could be triggered programmatically so we need to listen for them regardless
     this._adapter.addListener('click', this._clickListener);
-
-    // We defer initialization until the first pointerenter event is received.
-    //
-    // This is a performance optimization to avoid attaching many listeners to the target element
-    // until the user is first interacting with it.
-    this._deferInitialization();
-  }
-
-  public disconnect(): void {
-    this._removeListeners();
-    this._adapter.destroy();
-    this._adapter.stopButtonObserver();
-  }
-
-  private _deferInitialization(): void {
-    this._adapter.deferInitialization(this._onDeferredInitialize.bind(this));
-  }
-
-  private _applyListeners(): void {
-    if (this._disabled) {
-      return;
-    }
-
     this._adapter.addListener('keydown', this._keydownListener);
     this._adapter.addListener('pointerdown', this._pointerdownListener);
     this._adapter.addContentSlotListener('click', this._ignoreStateLayerListener.bind(this));
     this._adapter.addContentSlotListener('pointerdown', this._ignoreStateLayerListener.bind(this));
     this._adapter.addContentSlotListener('pointerup', this._ignoreStateLayerListener.bind(this));
-    this._attached = true;
+    this._adapter.addButtonSlotListener('slotchange', this._slotListener);
   }
 
-  private _removeListeners(): void {
+  public disconnect(): void {
     this._adapter.removeListener('click', this._clickListener);
     this._adapter.removeListener('keydown', this._keydownListener);
     this._adapter.removeListener('pointerdown', this._pointerdownListener);
@@ -69,16 +41,8 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     this._adapter.removeContentSlotListener('pointerdown', this._ignoreStateLayerListener.bind(this));
     this._adapter.removeContentSlotListener('pointerup', this._ignoreStateLayerListener.bind(this));
     this._adapter.removeButtonSlotListener('slotchange', this._slotListener);
-    this._attached = false;
-  }
-
-  private _onDeferredInitialize(event?: PointerEvent): void {
-    if (!this._adapter.isConnected) {
-      return;
-    }
-
-    this._applyListeners();
-    this._deferred = false;
+    this._adapter.destroy();
+    this._adapter.stopButtonObserver();
   }
 
   private _handleClick(event: Event): void {
@@ -158,24 +122,12 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     return eventPath.some(el => el.nodeType === 1 && (el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE) || el.hasAttribute(BUTTON_AREA_CONSTANTS.attributes.IGNORE_ALT)));
   }
 
-  public get isAttached(): boolean {
-    return this._attached;
-  }
-
   public get disabled(): boolean {
     return this._disabled;
   }
   public set disabled(value: boolean) {
     if (this._disabled !== value) {
       this._disabled = value;
-
-      if (this._adapter.isConnected) {
-        if (this._disabled) {
-          this._removeListeners();
-        } else if (!this._deferred) {
-          this._deferInitialization();
-        }
-      }
 
       this._adapter.setDisabled(this._disabled);
       this._adapter.toggleHostAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, this._disabled);

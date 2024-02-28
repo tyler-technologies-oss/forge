@@ -1,14 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { spy } from 'sinon';
-import { elementUpdated, fixture, html } from '@open-wc/testing';
+import { fixture, html } from '@open-wc/testing';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 import { IButtonAreaComponent } from './button-area';
 import type { IStateLayerComponent } from '../state-layer';
 import type { IFocusIndicatorComponent } from '../focus-indicator';
 
 import './button-area';
-import { ButtonAreaFoundation } from './button-area-foundation';
-import { simulateHover } from '../core/testing/pointer';
 
 const FULL_TEMPLATE = html`<forge-button-area>
 <button slot="button" type="button">Go to detail</button>
@@ -42,19 +40,6 @@ describe('Button Area', () => {
     expect(rootEl.classList.contains(BUTTON_AREA_CONSTANTS.classes.ROOT)).to.be.true;
     expect(stateLayer.disabled).to.be.false;
     expect(focusIndicator).to.be.ok;
-  });
-
-  it('should defer attaching event listeners', async () => {
-    const el = await fixture<IButtonAreaComponent>(FULL_TEMPLATE);
-    const rootEl = getRootEl(el);
-    const foundation = el['_foundation'] as ButtonAreaFoundation;
-    await elementUpdated(rootEl);
-    expect(foundation.isAttached).to.be.false;
-
-    simulateHover(rootEl);
-    await elementUpdated(rootEl);
-
-    expect(foundation.isAttached).to.be.true;
   });
 
   it('should be accessible', async () => {

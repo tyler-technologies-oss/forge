@@ -1,6 +1,6 @@
 import { getShadowElement, toggleClass } from '@tylertech/forge-core';
 
-import { BaseAdapter, IBaseAdapter, createUserInteractionListener } from '../core';
+import { BaseAdapter, IBaseAdapter } from '../core';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../focus-indicator';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../state-layer';
 import { IButtonAreaComponent } from './button-area';
@@ -8,7 +8,6 @@ import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 
 export interface IButtonAreaAdapter extends IBaseAdapter {
   destroy(): void;
-  deferInitialization(listener: (evt?: PointerEvent) => void): void;
   setDisabled(value: boolean): void;
   addListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
   removeListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
@@ -33,7 +32,6 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   private _focusIndicatorElement: IFocusIndicatorComponent;
   private _stateLayerElement: IStateLayerComponent;
   private _destroyUserInteractionListener: (() => void) | undefined;
-  private _destroyDeferListener: (() => void) | undefined;
 
 
   constructor(component: IButtonAreaComponent) {
@@ -50,20 +48,6 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
       this._destroyUserInteractionListener();
       this._destroyUserInteractionListener = undefined;
     }
-    if (typeof this._destroyDeferListener === 'function') {
-      this._destroyDeferListener();
-      this._destroyDeferListener = undefined;
-    }
-  }
-
-  public async deferInitialization(listener: (evt?: PointerEvent) => void): Promise<void> {
-    if (!this._rootElement) {
-      return;
-    }
-    const { userInteraction, destroy } = createUserInteractionListener(this._rootElement);
-    this._destroyDeferListener = destroy;
-    const evt = await userInteraction;
-    listener(evt.type === 'pointerenter' ? evt as PointerEvent : undefined);
   }
 
   public get root(): HTMLElement {
