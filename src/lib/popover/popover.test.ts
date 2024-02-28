@@ -712,7 +712,7 @@ describe('Popover', () => {
     });
 
     it('should set the default hoverDelay value if NaN', async () => {
-     const harness = await createFixture({ triggerType: 'hover', hoverDelay: 'Testing' });
+     const harness = await createFixture({ triggerType: 'hover', hoverDelay: 'Testing' as any });
      expect(harness.popoverElement.hoverDelay).to.equal(0);
     });
 
@@ -1450,7 +1450,7 @@ interface IPopoverFixtureConfig {
   animationType?: PopoverAnimationType;
   triggerType?: PopoverTriggerType;
   persistentHover?: boolean;
-  hoverDelay?: any;
+  hoverDelay?: number;
 }
 
 async function createFixture({
