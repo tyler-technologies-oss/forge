@@ -143,7 +143,7 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
         this.persistentHover = coerceBoolean(newValue);
         return;
       case POPOVER_CONSTANTS.attributes.HOVER_DELAY:
-        this.delay = coerceNumber(newValue);
+        this.hoverDelay = coerceNumber(newValue);
         return;
       case POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY:
         this.hoverDismissDelay = coerceNumber(newValue);
