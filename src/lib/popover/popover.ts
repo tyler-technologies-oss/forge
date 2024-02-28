@@ -42,6 +42,7 @@ declare global {
  * @property {number} longpressDelay - The delay in milliseconds before a longpress event is detected.
  * @property {boolean} persistentHover - Whether or not the popover should remain open when the user hovers outside the popover.
  * @property {number} hoverDismissDelay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
+ * @property {number} delay - The delay in milliseconds before the popover is shown.
  * 
  * @attribute {string} arrow - Whether or not the popover should render an arrow.
  * @attribute {string} animation-type - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
@@ -49,6 +50,7 @@ declare global {
  * @attribute {string} longpress-delay - The delay in milliseconds before a longpress event is detected.
  * @attribute {string} persistent-hover - Whether or not the popover should remain open when the user hovers outside the popover.
  * @attribute {string} hover-dismiss-delay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
+ * @attribute {number} delay - The delay in milliseconds before the popover is shown.
  * 
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-toggle - Dispatches after the popover is toggled.
