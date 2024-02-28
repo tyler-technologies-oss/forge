@@ -13,7 +13,7 @@ export interface IPopoverFoundation extends IOverlayAwareFoundation {
   longpressDelay: number;
   persistentHover: boolean;
   hoverDismissDelay: number;
-  delay: number;
+  hoverDelay: number;
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
 
@@ -26,7 +26,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   private _triggerTypes: PopoverTriggerType[] = [POPOVER_CONSTANTS.defaults.TRIGGER_TYPE];
   private _persistentHover = false;
   private _hoverDismissDelay = POPOVER_HOVER_TIMEOUT;
-  private _delay = POPOVER_CONSTANTS.defaults.DELAY;
+  private _hoverDelay = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
   private _previouslyFocusedElement: HTMLElement | null = null;
 
   // Hover trigger state
@@ -307,10 +307,10 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
       if (!this._persistentHover) {
         this._adapter.addAnchorListener('mouseleave', this._anchorMouseleaveListener);
       }
-      if (this._delay) {
+      if (this._hoverDelay) {
         this._hoverTimeout = window.setTimeout(() => {
         this._openPopover();
-       }, this._delay);
+       }, this._hoverDelay);
       } else {
         this._openPopover();
       }
@@ -536,13 +536,13 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
   }
 
-  public get delay(): number {
-    return this._delay;
+  public get hoverDelay(): number {
+    return this._hoverDelay;
   }
-  public set delay(value: number) {
-    if (this._delay !== value) {
-      this._delay = value;
-      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.DELAY, String(this._delay));
+  public set hoverDelay(value: number) {
+    if (this._hoverDelay !== value) {
+      this._hoverDelay = value;
+      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.HOVER_DELAY, String(this._hoverDelay));
     }
   }
 

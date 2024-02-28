@@ -18,9 +18,7 @@ const clippingContainer = document.querySelector('.clipping-container') as HTMLE
 const preventCloseToggle = document.querySelector('#opt-prevent-close') as ISwitchComponent;
 const richTooltipPopover = document.querySelector('#rich-tooltip-popover') as IPopoverComponent;
 
-delayInput.addEventListener('input', (e) => {
- popover.delay = Number(delayInput.value);
-});
+delayInput.addEventListener('input', (e) => popover.hoverDelay = Number(delayInput.value));
 
 popover.addEventListener('forge-popover-beforetoggle', (evt: CustomEvent<IPopoverToggleEventData>) => {
   console.log('forge-popover-beforetoggle', evt.detail);

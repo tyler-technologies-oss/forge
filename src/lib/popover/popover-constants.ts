@@ -10,7 +10,7 @@ const attributes = {
   TRIGGER_TYPE: 'trigger-type',
   LONGPRESS_DELAY: 'longpress-delay',
   PERSISTENT_HOVER: 'persistent-hover',
-  DELAY: 'delay',
+  HOVER_DELAY: 'hover-delay',
   HOVER_DISMISS_DELAY: 'hover-dismiss-delay'
 };
 
@@ -33,7 +33,7 @@ const events = {
 
 const defaults = {
   TRIGGER_TYPE: 'click' as PopoverTriggerType,
-  DELAY: 0
+  HOVER_DELAY: 0
 };
 
 export const POPOVER_CONSTANTS = {
