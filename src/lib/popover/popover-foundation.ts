@@ -309,7 +309,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
       }
       if (this._hoverDelay) {
         this._hoverTimeout = window.setTimeout(() => {
-        this._openPopover();
+         this._openPopover();
        }, this._hoverDelay);
       } else {
         this._openPopover();
