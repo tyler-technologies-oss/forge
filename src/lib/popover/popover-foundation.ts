@@ -72,6 +72,11 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
 
   public override destroy(): void {
     super.destroy();
+
+    window.clearTimeout(this._hoverTimeout);
+    window.clearTimeout(this._hoverAnchorLeaveTimeout);
+    window.clearTimeout(this._popoverMouseleaveTimeout);
+    
     this._previouslyFocusedElement = null;
 
     if (this.open) {
@@ -309,8 +314,8 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
       }
       if (this._hoverDelay) {
         this._hoverTimeout = window.setTimeout(() => {
-         this._openPopover();
-       }, this._hoverDelay);
+          this._openPopover();
+        }, this._hoverDelay);
       } else {
         this._openPopover();
       }
