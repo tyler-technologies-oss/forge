@@ -33,6 +33,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   private _hoverAnchorLeaveTimeout: undefined | number;
   private _popoverMouseleaveTimeout: undefined | number;
   private _currentHoverCoords: undefined | { x: number; y: number };
+  private _hoverTimeout: number | undefined;
 
   // Click trigger listeners
   private _anchorClickListener = this._onAnchorClick.bind(this);
@@ -265,7 +266,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
         return;
       }
     }
-
+    window.clearTimeout(this._hoverTimeout);
     this._tryRemoveHoverListeners();
     this._requestClose('hover');
   }
@@ -307,8 +308,8 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
         this._adapter.addAnchorListener('mouseleave', this._anchorMouseleaveListener);
       }
       if (this._delay) {
-        window.setTimeout(() => {
-         this._openPopover();
+        this._hoverTimeout = window.setTimeout(() => {
+        this._openPopover();
        }, this._delay);
       } else {
         this._openPopover();
@@ -325,6 +326,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
    */
   private _onAnchorMouseleave(): void {
     this._startHoverListeners();
+    window.clearTimeout(this._hoverTimeout);
 
     this._hoverAnchorLeaveTimeout = window.setTimeout(() => {
       this._hoverAnchorLeaveTimeout = undefined;
