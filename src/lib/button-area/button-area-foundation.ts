@@ -55,9 +55,9 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
 
     this._adapter.addListener('keydown', this._keydownListener);
     this._adapter.addListener('pointerdown', this._pointerdownListener);
-    this._adapter.addContentListener('click', this._ignoreStateLayerListener.bind(this));
-    this._adapter.addContentListener('pointerdown', this._ignoreStateLayerListener.bind(this));
-    this._adapter.addContentListener('pointerup', this._ignoreStateLayerListener.bind(this));
+    this._adapter.addContentSlotListener('click', this._ignoreStateLayerListener.bind(this));
+    this._adapter.addContentSlotListener('pointerdown', this._ignoreStateLayerListener.bind(this));
+    this._adapter.addContentSlotListener('pointerup', this._ignoreStateLayerListener.bind(this));
     this._attached = true;
   }
 
@@ -65,9 +65,9 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     this._adapter.removeListener('click', this._clickListener);
     this._adapter.removeListener('keydown', this._keydownListener);
     this._adapter.removeListener('pointerdown', this._pointerdownListener);
-    this._adapter.removeContentListener('click', this._ignoreStateLayerListener.bind(this));
-    this._adapter.removeContentListener('pointerdown', this._ignoreStateLayerListener.bind(this));
-    this._adapter.removeContentListener('pointerup', this._ignoreStateLayerListener.bind(this));
+    this._adapter.removeContentSlotListener('click', this._ignoreStateLayerListener.bind(this));
+    this._adapter.removeContentSlotListener('pointerdown', this._ignoreStateLayerListener.bind(this));
+    this._adapter.removeContentSlotListener('pointerup', this._ignoreStateLayerListener.bind(this));
     this._adapter.removeButtonSlotListener('slotchange', this._slotListener);
     this._attached = false;
   }

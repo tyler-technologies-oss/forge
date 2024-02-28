@@ -14,8 +14,8 @@ export interface IButtonAreaAdapter extends IBaseAdapter {
   removeListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
   addButtonSlotListener(type: string, listener: (event: Event) => void): void;
   removeButtonSlotListener(type: string, listener: (event: Event) => void): void;
-  addContentListener(type: string, listener: (event: Event) => void): void;
-  removeContentListener(type: string, listener: (event: Event) => void): void;
+  addContentSlotListener(type: string, listener: (event: Event) => void): void;
+  removeContentSlotListener(type: string, listener: (event: Event) => void): void;
   animateStateLayer(): void;
   startButtonObserver(callback: MutationCallback): void;
   stopButtonObserver(): void;
@@ -105,11 +105,11 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     this._buttonSlotElement.removeEventListener(type, listener);
   }
 
-  public addContentListener(type: string, listener: (event: Event) => void): void {
+  public addContentSlotListener(type: string, listener: (event: Event) => void): void {
     this._contentSlotElement.addEventListener(type, listener);
   }
 
-  public removeContentListener(type: string, listener: (event: Event) => void): void {
+  public removeContentSlotListener(type: string, listener: (event: Event) => void): void {
     this._contentSlotElement.removeEventListener(type, listener);
   }
 
