@@ -540,6 +540,9 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     return this._hoverDelay;
   }
   public set hoverDelay(value: number) {
+    if (isNaN(value) || value < 0) {
+      value = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
+    }
     if (this._hoverDelay !== value) {
       this._hoverDelay = value;
       this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.HOVER_DELAY, String(this._hoverDelay));

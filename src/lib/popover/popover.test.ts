@@ -701,15 +701,25 @@ describe('Popover', () => {
     });
 
     it('should open with a delay when hovering over the trigger button and a delay is set', async () => {
-     const harness = await createFixture({ triggerType: 'hover', hoverDelay: 500 });
+      const harness = await createFixture({ triggerType: 'hover', hoverDelay: 500 });
 
-     expect(harness.isOpen).to.be.false;
+      expect(harness.isOpen).to.be.false;
 
-     await harness.hoverTrigger();
-     await timer(harness.popoverElement.hoverDelay);
+      await harness.hoverTrigger();
+      await timer(harness.popoverElement.hoverDelay);
 
-     expect(harness.isOpen).to.be.true;
-   });
+      expect(harness.isOpen).to.be.true;
+    });
+
+    it('should set the default hoverDelay value if NaN', async () => {
+     const harness = await createFixture({ triggerType: 'hover', hoverDelay: 'Testing' });
+     expect(harness.popoverElement.hoverDelay).to.equal(0);
+    });
+
+    it('should set the default hoverDelay value if the hoverDelay < 0', async () => {
+     const harness = await createFixture({ triggerType: 'hover', hoverDelay: -400 });
+     expect(harness.popoverElement.hoverDelay).to.equal(0);
+    });
 
     it('should not close if persistent hover is enabled', async () => {
       const harness = await createFixture({ triggerType: 'hover', persistentHover: true });
@@ -1440,7 +1450,7 @@ interface IPopoverFixtureConfig {
   animationType?: PopoverAnimationType;
   triggerType?: PopoverTriggerType;
   persistentHover?: boolean;
-  hoverDelay?: number;
+  hoverDelay?: any;
 }
 
 async function createFixture({
