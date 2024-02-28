@@ -128,7 +128,6 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
   public set disabled(value: boolean) {
     if (this._disabled !== value) {
       this._disabled = value;
-
       this._adapter.setDisabled(this._disabled);
       this._adapter.toggleHostAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, this._disabled);
     }
