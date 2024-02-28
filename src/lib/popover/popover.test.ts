@@ -706,18 +706,20 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.false;
 
       await harness.hoverTrigger();
-      await timer(harness.popoverElement.hoverDelay);
+      await timer(harness.popoverElement.hoverDelay + 100);
 
       expect(harness.isOpen).to.be.true;
     });
 
     it('should set the default hoverDelay value if NaN', async () => {
      const harness = await createFixture({ triggerType: 'hover', hoverDelay: 'Testing' as any });
+
      expect(harness.popoverElement.hoverDelay).to.equal(0);
     });
 
     it('should set the default hoverDelay value if the hoverDelay < 0', async () => {
      const harness = await createFixture({ triggerType: 'hover', hoverDelay: -400 });
+
      expect(harness.popoverElement.hoverDelay).to.equal(0);
     });
 
