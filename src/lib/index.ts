@@ -220,7 +220,6 @@ const CUSTOM_ELEMENTS = [
   PaginatorComponent,
   PopoverComponent,
   PopupComponent,
-  ProductIconComponent,
   ProfileCardComponent,
   QuantityFieldComponent,
   RadioComponent,
