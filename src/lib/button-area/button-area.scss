@@ -51,12 +51,12 @@ forge-focus-indicator {
   z-index: 1; // Fixes an animation artifact in Safari
 
   @include focus-indicator.provide-theme((
-    color: #{token(primary-color)},
+    color: #{token(focus-indicator-color)},
     outward-offset: #{token(focus-indicator-offset)}
   ));
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme(( color: #{token(color)} ));
+  @include state-layer.provide-theme(( color: #{token(primary-color)} ));
   border-radius: inherit;
 }

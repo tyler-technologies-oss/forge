@@ -6,10 +6,8 @@
 $tokens: (
   // Shared
   primary-color: utils.module-val(button-area, primary-color, theme.variable(primary)),
-  text-color: utils.module-ref(button-area, text-color, primary-color),
 
   // Base
-  color: utils.module-ref(button-area, color, text-color),
   cursor: utils.module-val(button-area, cursor, pointer),
 
   // Disabled
