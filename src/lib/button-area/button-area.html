@@ -3,6 +3,8 @@
     <div class="forge-button-area__button" id="button" part="button">
       <slot name="button"></slot>
     </div>
-    <slot></slot>
+    <slot id="content"></slot>
+    <forge-state-layer target="root" exportparts="surface:state-layer"></forge-state-layer>
+    <forge-focus-indicator target="button" part="focus-indicator" inward></forge-focus-indicator>
   </div>
 </template>
