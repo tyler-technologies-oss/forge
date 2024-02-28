@@ -46,7 +46,7 @@ declare global {
   name: BUTTON_AREA_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
-    StateLayerComponent,
+    StateLayerComponent
   ]
 })
 export class ButtonAreaComponent extends HTMLElement implements IButtonAreaComponent {
