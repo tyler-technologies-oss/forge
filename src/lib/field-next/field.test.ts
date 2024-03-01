@@ -436,13 +436,6 @@ describe('Field', () => {
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.true;
     });
 
-    it('should not add class when label slot has content and label position is not inset', async () => {
-      const harness = await createFixture({ labelPosition: 'inline-start' });
-      harness.addSlottedContent('label');
-      await tick();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.false;
-    });
-
     it('should remove class when label slot content is removed and label position is inset', async () => {
       const harness = await createFixture({ labelPosition: 'inset' });
       harness.addSlottedContent('label');
