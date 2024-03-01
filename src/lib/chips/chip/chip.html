@@ -1,9 +1,15 @@
 <template>
-  <div class="forge-chip" part="root button">
-    <slot name="leading" class="forge-chip__leading"></slot>
-    <div role="button" tabindex="0" class="forge-chip__content" part="content">
+  <div class="forge-chip" part="root">
+    <button type="button" id="trigger" class="trigger" part="trigger">
+      <slot name="start">
+        <slot name="leading"></slot>
+      </slot>
       <slot></slot>
-    </div>
-    <slot name="trailing"></slot>
+      <slot name="end">
+        <slot name="trailing"></slot>
+      </slot>
+    </button>
+    <forge-focus-indicator target="trigger" part="focus-indicator"></forge-focus-indicator>
+    <forge-state-layer target="trigger" exportparts="surface:state-layer"></forge-state-layer>
   </div>
 </template>
