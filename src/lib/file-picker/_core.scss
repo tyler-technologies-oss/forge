@@ -13,6 +13,7 @@
  box-sizing: border-box;
  height: #{token(height)};
  width: #{token(width)};
+ max-width: #{token(max-width)};
  background-color: #{token(background)};
 
  border: #{token(border-width)} #{token(border-style)} #{token(border-color)};
