@@ -22,7 +22,6 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   private readonly _containerElement: HTMLElement;
   private readonly _labelElement: HTMLElement;
   private readonly _popoverIconElement: HTMLElement;
-  private readonly _endSlotElement: HTMLSlotElement;
 
   private get _resizeContainerElement(): HTMLElement | null {
     return this._containerElement.querySelector(FIELD_CONSTANTS.selectors.RESIZE_CONTAINER) as HTMLElement | null;
@@ -34,7 +33,6 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._containerElement = getShadowElement(component, FIELD_CONSTANTS.selectors.CONTAINER);
     this._labelElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL);
     this._popoverIconElement = getShadowElement(component, FIELD_CONSTANTS.selectors.POPOVER_ICON);
-    this._endSlotElement = getShadowElement(component, FIELD_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;
   }
 
   public addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void {
@@ -124,6 +122,17 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
    * nodes.
    */
   public handleSlotChange(slot: HTMLSlotElement): void {
+    if (slot.name === '') {
+      this._trySlotLabel(slot);
+      return;
+    }
+
+    // Ensure that the slot belongs to the field
+    const slotElement = getShadowElement(this._component, `slot[name=${slot.name}]`) as HTMLSlotElement | undefined;
+    if (!slotElement) {
+      return;
+    }
+
     const classMap = {
       label: FIELD_CONSTANTS.classes.HAS_LABEL,
       start: FIELD_CONSTANTS.classes.HAS_START,
@@ -132,16 +141,8 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
       'support-text-start': FIELD_CONSTANTS.classes.HAS_SUPPORT_START,
       'support-text-end': FIELD_CONSTANTS.classes.HAS_SUPPORT_END
     };
-    // There are cases where the passed slot can cause problems, so we use the stored end slot here
-    if (slot.name === 'end') {
-      slot = this._endSlotElement;
-    }
     if (slot.name in classMap) {
-      toggleClass(this._rootElement, !!slot.assignedNodes({ flatten: true }).length, classMap[slot.name]);
-    }
-
-    if (slot.name === '') {
-      this._trySlotLabel(slot);
+      toggleClass(this._rootElement, !!slotElement.assignedNodes({ flatten: true }).length, classMap[slot.name]);
     }
   }
 

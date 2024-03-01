@@ -39,7 +39,7 @@ const optSupportTextInset = document.getElementById('opt-support-text-inset') as
 
 optLabel.addEventListener('input', () => {
   textFields.forEach(textField => {
-    textField.querySelector('label').textContent = optLabel.value;
+    textField.querySelector(':is(label, span, forge-label)').textContent = optLabel.value;
   });
 });
 
