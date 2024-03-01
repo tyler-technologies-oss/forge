@@ -10,22 +10,21 @@
 }
 
 @mixin base() {
- box-sizing: border-box;
- height: #{token(height)};
- width: #{token(width)};
- max-width: #{token(max-width)};
- background-color: #{token(background)};
-
- border: #{token(border-width)} #{token(border-style)} #{token(border-color)};
-
  display: grid;
  justify-content: center;
  align-content: center;
  gap: #{token(gap)};
 
+ box-sizing: border-box;
  padding: #{token(padding)};
+ height: #{token(height)};
+ width: #{token(width)};
+ max-width: #{token(max-width)};
  text-align: center;
+ background-color: #{token(background)};
  cursor: pointer;
+
+ border: #{token(border-width)} #{token(border-style)} #{token(border-color)};
 }
 
 @mixin base-disabled() {
@@ -38,6 +37,7 @@
  @include override(width, fit-content, value);
  @include override(background-color, transparent, value);
  @include override(padding, 0, value);
+
  border: none;
 }
 
@@ -53,17 +53,20 @@
 
 @mixin primary() {
  @include typography.style(body2);
+
  color: #{theme.variable(text-high)};
  max-width: #{token(max-width)};
 }
 
 @mixin button-compact() {
  @include override(width, auto, value);
+
  background-color: transparent;
 }
 
 @mixin secondary() {
  @include typography.style(body1);
+ 
  color: #{theme.variable(text-high)};
  max-width: #{token(max-width)};
 }
