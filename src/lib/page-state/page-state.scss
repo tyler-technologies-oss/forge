@@ -1,12 +1,67 @@
-@use './mixins';
-
-@include mixins.core-styles;
+@use './core' as *;
 
 :host {
-  @include mixins.host;
+  @include tokens;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+.forge-page-state {
+  @include base;
+
+  .graphic {
+    @include graphic;
+
+    ::slotted([slot='graphic']) {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .title {
+    @include title;
+  }
+
+  .message {
+    @include message;
+  }
+
+  .actions {
+    ::slotted(:not(:last-child)) {
+      margin-right: 16px;
+    }
+  }
+}
+
+@container (max-width: 990px) {
+  .forge-page-state {
+    @include base-mobile;
+
+    .graphic {
+      @include graphic-mobile;
+    }
+
+    .title {
+      @include title-mobile;
+    }
+
+    .message {
+      @include message-mobile;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+
+      ::slotted(:not(:last-child)) {
+        margin-right: 0;
+        margin-bottom: 16px;
+      }
+    }
+  }
+}

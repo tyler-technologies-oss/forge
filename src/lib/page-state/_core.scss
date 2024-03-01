@@ -1,0 +1,61 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  container-type: inline-size;
+}
+
+@mixin base {
+  width: #{token(width)};
+  margin-top: #{token(margin-top)};
+  margin-bottom: #{token(margin-bottom)};
+
+  text-align: center;
+}
+
+@mixin base-mobile {
+  @include override(width, mobile-width);
+}
+
+@mixin graphic {
+  @include override(height, graphic-height);
+  @include override(margin-bottom, graphic-margin-bottom);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+@mixin graphic-mobile {
+  @include override(height, mobile-graphic-height);
+}
+
+@mixin title {
+  @include typography.style(heading7);
+
+  color: #{token(title-color)};
+  margin-top: #{token(title-margin-top)};
+  margin-bottom: #{token(title-margin-bottom)};
+}
+
+@mixin title-mobile {
+  @include typography.style(heading5);
+}
+
+@mixin message {
+  @include typography.style(body4);
+
+  color: #{token(message-color)};
+  margin-bottom: #{token(message-margin-bottom)};
+}
+
+@mixin message-mobile {
+  @include typography.style(body2);
+}
+

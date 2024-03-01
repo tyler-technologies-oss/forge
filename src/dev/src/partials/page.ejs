@@ -10,7 +10,7 @@
       
       <!-- Content -->
       <main slot="body" class="content">
-        <forge-card class="card<%= !page.options?.length ? ' card--centered' : undefined %>">
+        <forge-card class="card<%= !page.options?.length ? ' card--centered' : undefined %> <%= page.wide ? ' card--wide' : undefined %>">
           <!-- Card header-->
           <forge-toolbar>
             <h2 slot="start" id="content-title" class="forge-typography--heading4"><%= page.contentTitle ?? page.title %></h2>

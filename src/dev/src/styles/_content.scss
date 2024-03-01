@@ -1,9 +1,11 @@
 $card-width: 960px;
+$card-width-wide: 1290px;
 
 .content {
   .card {
     margin: 24px;
     max-width: $card-width;
+
     --forge-card-padding: 0;
 
     forge-card {
@@ -13,6 +15,10 @@ $card-width: 960px;
     &--centered {
       margin-left: auto;
       margin-right: auto;
+    }
+
+    &--wide {
+      max-width: $card-width-wide;
     }
   }
 
