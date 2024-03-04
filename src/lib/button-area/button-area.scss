@@ -7,15 +7,10 @@
 // Host
 //
 
-$host-tokens: [disabled-cursor focus-indicator-color];
-
-:host {
-  @include tokens($includes: $host-tokens);
-}
 
 :host {
   @include host;
-  
+
   .forge-button-area {
     @include enabled;
   }
@@ -36,13 +31,13 @@ $host-tokens: [disabled-cursor focus-indicator-color];
 //
 
 .forge-button-area {
-  @include tokens($excludes: $host-tokens);
+  @include tokens();
 }
 
 .forge-button-area {
   @include base;
 
-  &__button {
+  .button {
     @include utils.visually-hidden;
   }
 }
