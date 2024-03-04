@@ -37,32 +37,38 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
 
     this._inputElement = this._buildInputElement(textField);
 
-    if (this._config.options?.startElement) {
-      this._config.options.startElement.slot = 'start';
-      textField.append(this._config.options.startElement);
-    }
-    if (this._config.options?.leadingElement) {
-      this._config.options.leadingElement.slot = 'start';
-      textField.append(this._config.options.leadingElement);
-    }
-    if (this._config.options?.endElement) {
-      this._config.options.endElement.slot = 'end';
-      textField.append(this._config.options.endElement);
-    }
-    if (this._config.options?.trailingElement) {
-      this._config.options.trailingElement.slot = 'end';
-      textField.append(this._config.options.trailingElement);
-    }
-    if (this._config.options?.accessoryElement) {
-      this._config.options.accessoryElement.slot = 'accessory';
-      textField.append(this._config.options.accessoryElement);
-    }
-
     textField.append(this._inputElement);
     return textField;
   }
 
-  protected override _configure(): void {}
+  protected override _configure(): void {
+    if (this._config.options?.id) {
+      this._element.id = this._config.options.id;
+    }
+    if (this._config.options?.label) {
+      this._createLabel(this._config.options.label);
+    }
+    if (this._config.options?.startElement) {
+      this._config.options.startElement.slot = 'start';
+      this._element.append(this._config.options.startElement);
+    }
+    if (this._config.options?.leadingElement) {
+      this._config.options.leadingElement.slot = 'start';
+      this._element.append(this._config.options.leadingElement);
+    }
+    if (this._config.options?.endElement) {
+      this._config.options.endElement.slot = 'end';
+      this._element.append(this._config.options.endElement);
+    }
+    if (this._config.options?.trailingElement) {
+      this._config.options.trailingElement.slot = 'end';
+      this._element.append(this._config.options.trailingElement);
+    }
+    if (this._config.options?.accessoryElement) {
+      this._config.options.accessoryElement.slot = 'accessory';
+      this._element.append(this._config.options.accessoryElement);
+    }
+  }
 
   public get value(): string {
     return this._inputElement.value;
