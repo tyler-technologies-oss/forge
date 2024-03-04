@@ -9,11 +9,6 @@
 
 @mixin base {
   position: relative;
-
-  outline: none;
-  user-select: none;
-  -webkit-appearance: none;
-
   overflow: hidden;
 }
 
