@@ -42,7 +42,7 @@
 }
 
 @mixin base-borderless() {
- --forge-file-picker-width: 100%;
+ @include override(width, 100%, value);
  border: none;
 }
 
