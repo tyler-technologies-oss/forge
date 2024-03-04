@@ -19,8 +19,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-button-area>` element.
- *
  * @tag forge-button-area
  *
  * @summary Button areas are used to create a clickable area that group related information and actions about a single subject.
