@@ -15,8 +15,7 @@ const ids = {
 };
 
 const classes = {
-  ROOT: `forge-button-area`,
-  DISABLED: `forge-button-area--disabled`
+  ROOT: `forge-button-area`
 };
 
 const selectors = {

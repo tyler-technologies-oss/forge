@@ -1,4 +1,4 @@
-import { getShadowElement, toggleClass } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
 
 import { BaseAdapter, IBaseAdapter } from '../core';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../focus-indicator';
@@ -63,7 +63,6 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   }
 
   public setDisabled(value: boolean): void {
-    toggleClass(this._rootElement, value, BUTTON_AREA_CONSTANTS.classes.DISABLED);
     this._buttonElement?.toggleAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, value);
     if (value) {
       this._focusIndicatorElement.remove();
