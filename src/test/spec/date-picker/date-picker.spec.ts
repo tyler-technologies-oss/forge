@@ -12,9 +12,9 @@ import { ICON_BUTTON_CONSTANTS } from '@tylertech/forge/icon-button';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { timer, tick, dispatchNativeEvent } from '@tylertech/forge-testing';
 import { tryCleanupPopups } from '../../utils';
-import { FIELD_CONSTANTS } from '@tylertech/forge/field/field-constants';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
 import type { IButtonComponent } from '@tylertech/forge/button';
+import { FIELD_CONSTANTS, IFieldComponent } from '@tylertech/forge';
 
 
 interface ITestContext {
@@ -198,7 +198,9 @@ describe('DatePickerComponent', function(this: ITestContext) {
       this.context.component.value = '1/1/2021';
       await tick();
 
-      expect(textField.hasAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING)).toBeTrue();
+      const field = getFieldComponent(textField);
+
+      expect(field.hasAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL)).toBeTrue();
     });
 
     it('should notify date picker of input value changes when text-field is used', async function(this: ITestContext) {
@@ -1644,5 +1646,9 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
   function getAllTdElementsForSundays(component: IDatePickerComponent) {
     return Array.from(getCalendarShadow(component).querySelectorAll('tbody tr')).map(tr => tr.querySelector('td')).filter(td => td!.hasAttribute('data-date'));
+  }
+
+  function getFieldComponent(component: ITextFieldComponent): IFieldComponent {
+    return getShadowElement(component, FIELD_CONSTANTS.elementName) as IFieldComponent;
   }
 });
