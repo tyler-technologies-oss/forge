@@ -12,8 +12,7 @@
 
 @mixin base {
   width: #{token(width)};
-  margin-block-start: #{token(spacing)};
-  margin-block-end: #{token(spacing)};
+  margin-block: #{token(spacing)};
 
   text-align: center;
 }
