@@ -7,7 +7,6 @@
 // Host
 //
 
-
 :host {
   @include host;
 
@@ -31,7 +30,7 @@
 //
 
 .forge-button-area {
-  @include tokens();
+  @include tokens;
 }
 
 .forge-button-area {

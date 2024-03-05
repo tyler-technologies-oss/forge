@@ -9,19 +9,13 @@ export interface IButtonAreaFoundation extends ICustomElementFoundation {
 
 export class ButtonAreaFoundation implements IButtonAreaFoundation {
   private _disabled = false;
-  private _clickListener: (event: Event) => void;
-  private _keydownListener: (event: KeyboardEvent) => void;
-  private _pointerdownListener: (event: Event) => void;
-  private _ignoreStateLayerListener: (event: Event) => void;
-  private _slotListener: () => void;
+  private _clickListener = this._handleClick.bind(this);
+  private _keydownListener = this._handleKeydown.bind(this);
+  private _pointerdownListener = this._handlePointerdown.bind(this);
+  private _ignoreStateLayerListener = this._handleIgnoreStateLayer.bind(this);
+  private _slotListener = this._handleSlotChange.bind(this);
 
-  constructor(private _adapter: IButtonAreaAdapter) {
-    this._clickListener = event => this._handleClick(event);
-    this._keydownListener = event => this._handleKeydown(event);
-    this._pointerdownListener = event => this._handlePointerdown(event);
-    this._ignoreStateLayerListener = event => this._handleIgnoreStateLayer(event);
-    this._slotListener = () => this._handleSlotChange();
-  }
+  constructor(private _adapter: IButtonAreaAdapter) {}
 
   public initialize(): void {
     this._adapter.addListener('click', this._clickListener);
@@ -106,7 +100,7 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     this._adapter.startButtonObserver(() => this._handleButtonDisabled());
 
     // Match the component and button states if either is disabled
-    if (this._adapter.buttonIsDisabled()) {
+    if (this._adapter.isButtonDisabled()) {
       this.disabled = true;
     } else if (this._disabled) {
       this._adapter.setDisabled(true);
@@ -114,7 +108,7 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
   }
 
   private _handleButtonDisabled(): void {
-    this.disabled = this._adapter.buttonIsDisabled();
+    this.disabled = this._adapter.isButtonDisabled();
   }
 
   private _shouldIgnoreEvent(event: Event): boolean {
