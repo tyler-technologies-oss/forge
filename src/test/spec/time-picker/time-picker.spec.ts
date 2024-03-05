@@ -778,12 +778,10 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     await tick();
 
-    const expectedTargetElement = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-
     this.context.component.open = true;
     await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
 
-    expect(this.context.adapter['_targetElement']).toBe(expectedTargetElement);
+    expect(this.context.adapter['_targetElement']).toBe(textField.popoverTargetElement);
   });
 
   it('should use custom popup target', async function(this: ITestContext) {
