@@ -1,4 +1,4 @@
-import { getShadowElement, emitEvent, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
+import { emitEvent, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { ITimePickerComponent } from './time-picker';
 import { BaseAdapter } from '../core';
 import { TIME_PICKER_CONSTANTS } from './time-picker-constants';
@@ -190,7 +190,10 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   public attachDropdown(config: IListDropdownConfig): void {
-    this._listDropdown = new ListDropdown(this._inputElement, config);
+    if (!this._targetElement) {
+      this._targetElement = this._getTargetElement(this._component.popupTarget);
+    }
+    this._listDropdown = new ListDropdown(this._targetElement, config);
     this._listDropdown.open();
     this._inputElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
   }
@@ -268,11 +271,8 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
   }
 
   private _getDefaultTargetElement(): HTMLElement {
-    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignnment
+    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignment
     const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
-    if (textField?.popoverTargetElement) {
-      return textField.popoverTargetElement;
-    }
-    return this._component; // Otherwise we just use the time-picker host as the target
+    return textField?.popoverTargetElement ?? this._component;
   }
 }
