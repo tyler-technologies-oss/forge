@@ -1,42 +1,89 @@
-@use '../theme';
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  display: block;
-  contain: layout;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-:host([no-border]) {
+//
+// Base
+//
+
+.forge-toolbar {
+  @include tokens;
+}
+
+.forge-toolbar {
+  @include base;
+}
+
+.inner {
+  @include inner;
+}
+
+.section {
+  @include section;
+
+  &.center {
+    @include center;
+  }
+
+  &.end {
+    @include end;
+  }
+}
+
+//
+// Inverted
+//
+
+:host([inverted]) {
+  .forge-toolbar {
+    @include inverted;
+  }
+}
+
+//
+// No divider
+//
+
+:host(:is([no-divider],[no-border])) {
   .forge-toolbar {
     border: none;
   }
 }
 
+//
+// No padding
+//
+
 :host([no-padding]) {
   .forge-toolbar {
-    @include theme.css-custom-property(padding-inline, --forge-toolbar-padding, 0);
+    @include override(padding, 0, value);
   }
 }
+
+//
+// Auto height
+//
 
 :host([auto-height]) {
   .forge-toolbar {
-    @include theme.css-custom-property(height, --forge-toolbar-height, auto);
+    @include override(height, auto, value);
   }
 }
 
-/// Remove margin from all commonly used native elements that have default margin
-.forge-toolbar {
-  ::slotted(h1) { margin: 0; }
-  ::slotted(h2) { margin: 0; }
-  ::slotted(h3) { margin: 0; }
-  ::slotted(h4) { margin: 0; }
-  ::slotted(h5) { margin: 0; }
-  ::slotted(h6) { margin: 0; }
-  ::slotted(p)  { margin: 0; }
+//
+// Slotted
+//
+
+::slotted(:is(h1,h2,h3,h4,h5,h6,p)) {
+  margin: 0;
 }
