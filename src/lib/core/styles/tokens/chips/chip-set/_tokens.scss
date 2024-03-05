@@ -1,0 +1,11 @@
+@use 'sass:map';
+@use '../../../spacing';
+@use '../../../utils';
+
+$tokens: (
+  spacing: utils.module-val(chip-set, spacing, spacing.variable(xsmall))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

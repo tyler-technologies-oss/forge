@@ -1,0 +1,132 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline-block;
+}
+
+@mixin base {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: #{token(height)};
+
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+  border-radius: #{token(shape)};
+
+  background: #{token(background)};
+  color: #{token(color)};
+
+  transition-property: background-color, color;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-easing)};
+}
+
+@mixin trigger {
+  @include typography.style(button);
+  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: #{token(spacing)};
+
+  box-sizing: border-box;
+  height: 100%;
+  padding-inline: #{token(padding-inline)};
+  padding-block: #{token(padding-block)};
+
+  cursor: #{token(cursor)};
+  
+  z-index: 0;
+  
+  text-decoration: none;
+  border: none;
+  
+  background: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+  
+  border-radius: #{token(shape)};
+  outline: none;
+}
+
+@mixin remove-button {
+  padding-inline: #{token(remove-button-spacing)};
+}
+
+@mixin selected {
+  @include override(background, selected-background);
+  @include override(color, selected-color);
+}
+
+@mixin invalid {
+  @include override(color, invalid-color);
+}
+
+@mixin invalid-selected {
+  @include override(background, invalid-selected-background);
+  @include override(color, invalid-selected-color);
+}
+
+@mixin field {
+  @include override(background, field-background);
+  @include override(color, field-color);
+  @include override(border-color, field-border-color);
+  @include override(shape, field-shape);
+  @include override(cursor, field-cursor);
+}
+
+@mixin dense {
+  @include override(height, dense-height);
+  @include override(padding-inline, dense-padding-inline);
+  @include override(spacing, dense-spacing);
+}
+
+@mixin disabled {
+  opacity: #{token(disabled-opacity)};
+}
+
+@mixin trigger-disabled {
+  cursor: #{token(disabled-cursor)};
+}
+
+@mixin checkmark-base {
+  height: #{token(checkmark-size)};
+
+svg {
+    width: 0;
+    height: #{token(checkmark-size)};
+    transition-property: width;
+    transition-duration: #{token(transition-duration)};
+    transition-timing-function: #{token(transition-easing)};
+
+    path {
+      stroke: #{token(checkmark-color)};
+      transition-property: stroke-dashoffset;
+      transition-duration: #{token(transition-duration)};
+      transition-timing-function: #{token(transition-easing)};
+      stroke-width: 2px;
+      stroke-dashoffset: 29.7833385;
+      stroke-dasharray: 29.7833385;
+    }
+  }
+}
+
+@mixin checkmark-selected {
+  padding-inline-start: #{token(checkmark-spacing)};
+
+  svg {
+    width: #{token(checkmark-size)};
+
+    path {
+      transition-delay: #{token(checkmark-transition-delay)};
+      stroke-dashoffset: 0;
+    }
+  }
+}

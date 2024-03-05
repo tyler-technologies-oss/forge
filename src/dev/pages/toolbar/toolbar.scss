@@ -5,16 +5,8 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 8px;
-  margin-block: 8px;
-
-  &:first-child {
-    margin-inline-end: 8px;
-  }
-
-  &:last-child {
-    margin-inline-start: 8px;
-  }
+  padding-block: 8px;
+  margin-block: 4px;
 }
 
 forge-toolbar[auto-height] {
