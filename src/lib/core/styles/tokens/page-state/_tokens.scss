@@ -25,9 +25,6 @@ $tokens: (
   title-color: utils.module-val(page-state, title-color, theme.variable(text-medium)),
   title-spacing: utils.module-val(page-state, title-spacing, spacing.variable(xxxlarge)),
 
-  // Title-mobile
-  mobile-title-font-size: utils.module-val(page-state, mobile-title-font-size, 20px),
-
   // Message
   message-color: utils.module-val(page-state, message-color, theme.variable(text-high)),
   message-spacing: utils.module-val(page-state, message-spacing, spacing.variable(xxxlarge)),
