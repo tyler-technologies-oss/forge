@@ -10,10 +10,14 @@
   container-type: inline-size;
 }
 
+@mixin host-hidden {
+  display: none;
+}
+
 @mixin base {
   width: #{token(width)};
-  margin-top: #{token(margin-top)};
-  margin-bottom: #{token(margin-bottom)};
+  margin-top: #{token(spacing)};
+  margin-bottom: #{token(spacing)};
 
   text-align: center;
 }
@@ -24,11 +28,16 @@
 
 @mixin graphic {
   @include override(height, graphic-height);
-  @include override(margin-bottom, graphic-margin-bottom);
+  @include override(spacing, graphic-spacing);
 
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+@mixin graphic-slotted {
+  height: 100%;
   width: 100%;
 }
 
@@ -37,11 +46,11 @@
 }
 
 @mixin title {
-  @include typography.style(heading7);
+  @include typography.style(heading8);
 
   color: #{token(title-color)};
-  margin-top: #{token(title-margin-top)};
-  margin-bottom: #{token(title-margin-bottom)};
+  margin-top: #{token(title-spacing)};
+  margin-bottom: #{token(title-spacing)};
 }
 
 @mixin title-mobile {
@@ -52,10 +61,24 @@
   @include typography.style(body4);
 
   color: #{token(message-color)};
-  margin-bottom: #{token(message-margin-bottom)};
+  margin-bottom: #{token(message-spacing)};
 }
 
 @mixin message-mobile {
   @include typography.style(body2);
 }
 
+@mixin actions {
+  display: grid;
+  justify-content: center;
+  grid-auto-flow: column;
+  gap: #{token(actions-spacing)};
+}
+
+@mixin actions-mobile {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  grid-auto-flow: row;
+}

@@ -1,12 +1,16 @@
 @use './core' as *;
+@use '../utils/mixins-container' as *;
 
 :host {
   @include tokens;
+}
+
+:host {
   @include host;
 }
 
 :host([hidden]) {
-  display: none;
+  @include host-hidden;
 }
 
 .forge-page-state {
@@ -16,8 +20,7 @@
     @include graphic;
 
     ::slotted([slot='graphic']) {
-      height: 100%;
-      width: 100%;
+      @include graphic-slotted;
     }
   }
 
@@ -30,13 +33,11 @@
   }
 
   .actions {
-    ::slotted(:not(:last-child)) {
-      margin-right: 16px;
-    }
+    @include actions;
   }
 }
 
-@container (max-width: 990px) {
+@include phone-only {
   .forge-page-state {
     @include base-mobile;
 
@@ -53,15 +54,7 @@
     }
 
     .actions {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-
-      ::slotted(:not(:last-child)) {
-        margin-right: 0;
-        margin-bottom: 16px;
-      }
+      @include actions-mobile;
     }
   }
 }
