@@ -10,10 +10,6 @@
   container-type: inline-size;
 }
 
-@mixin host-hidden {
-  display: none;
-}
-
 @mixin base {
   width: #{token(width)};
   margin-top: #{token(spacing)};
@@ -26,7 +22,7 @@
   @include override(width, mobile-width);
 }
 
-@mixin graphic {
+@mixin graphic-container {
   @include override(height, graphic-height);
   @include override(spacing, graphic-spacing);
 
@@ -36,12 +32,12 @@
   width: 100%;
 }
 
-@mixin graphic-slotted {
+@mixin graphic {
   height: 100%;
   width: 100%;
 }
 
-@mixin graphic-mobile {
+@mixin graphic-container-mobile {
   @include override(height, mobile-graphic-height);
 }
 
@@ -49,8 +45,7 @@
   @include typography.style(heading8);
 
   color: #{token(title-color)};
-  margin-top: #{token(title-spacing)};
-  margin-bottom: #{token(title-spacing)};
+  margin-block: #{token(title-spacing)};
 }
 
 @mixin title-mobile {
@@ -61,7 +56,7 @@
   @include typography.style(body4);
 
   color: #{token(message-color)};
-  margin-bottom: #{token(message-spacing)};
+  margin-block-end: #{token(message-spacing)};
 }
 
 @mixin message-mobile {
@@ -76,9 +71,5 @@
 }
 
 @mixin actions-mobile {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
   grid-auto-flow: row;
 }

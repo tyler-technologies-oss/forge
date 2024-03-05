@@ -10,17 +10,17 @@
 }
 
 :host([hidden]) {
-  @include host-hidden;
+  display: none;
 }
 
 .forge-page-state {
   @include base;
 
   .graphic {
-    @include graphic;
+    @include graphic-container;
 
     ::slotted([slot='graphic']) {
-      @include graphic-slotted;
+      @include graphic;
     }
   }
 
@@ -42,7 +42,7 @@
     @include base-mobile;
 
     .graphic {
-      @include graphic-mobile;
+      @include graphic-container-mobile;
     }
 
     .title {
