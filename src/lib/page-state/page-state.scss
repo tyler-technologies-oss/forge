@@ -1,12 +1,60 @@
-@use './mixins';
-
-@include mixins.core-styles;
+@use './core' as *;
+@use '../utils/mixins-container' as *;
 
 :host {
-  @include mixins.host;
+  @include tokens;
+}
+
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+.forge-page-state {
+  @include base;
+
+  .graphic {
+    @include graphic-container;
+
+    ::slotted([slot='graphic']) {
+      @include graphic;
+    }
+  }
+
+  .title {
+    @include title;
+  }
+
+  .message {
+    @include message;
+  }
+
+  .actions {
+    @include actions;
+  }
+}
+
+@include phone-only {
+  .forge-page-state {
+    @include base-mobile;
+
+    .graphic {
+      @include graphic-container-mobile;
+    }
+
+    .title {
+      @include title-mobile;
+    }
+
+    .message {
+      @include message-mobile;
+    }
+
+    .actions {
+      @include actions-mobile;
+    }
+  }
+}
