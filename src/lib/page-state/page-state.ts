@@ -15,9 +15,22 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-page-state>` custom element.
  * 
  * @tag forge-page-state
+ * 
+ * @cssproperty --forge-page-state-width - The width of the page state.
+ * @cssproperty --forge-page-state-height - The height of the page state.
+ * @cssproperty --forge-page-state-spacing - The spacing of the page state.
+ * @cssproperty --forge-page-state-mobile-width - The mobile width of the page state.
+ * @cssproperty --forge-page-state-graphic-height - The graphic height of the page state.
+ * @cssproperty --forge-page-state-graphic-spacing - The graphic spacing of the page state.
+ * @cssproperty --forge-page-state-mobile-graphic-height - The mobile graphic height of the page state.
+ * @cssproperty --forge-page-state-title-color - The title color of the page state.
+ * @cssproperty --forge-page-state-title-spacing - The title spacing of the page state.
+ * @cssproperty --forge-page-state-message-color - The message color of the page state.
+ * @cssproperty --forge-page-state-message-spacing - The message spacing of the page state.
+ * @cssproperty --forge-page-state-actions-spacing - The actions spacing of the page state.
+ * 
  */
 @CustomElement({
   name: PAGE_STATE_CONSTANTS.elementName
