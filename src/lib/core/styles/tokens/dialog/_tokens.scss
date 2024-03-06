@@ -1,10 +1,11 @@
 @use 'sass:map';
+@use '../../utils';
 @use '../../theme';
 @use '../../animation';
 @use '../../shape';
 @use '../../elevation';
 @use '../../spacing';
-@use '../../utils';
+@use '../backdrop/tokens' as backdrop;
 
 $tokens: (
   background: utils.module-val(dialog, background, theme.variable(surface-bright)),
@@ -20,11 +21,13 @@ $tokens: (
   z-index: utils.module-val(dialog, z-index, elevation.z-index-variable(dialog)),
 
   // Animation
-  animation-duration: utils.module-val(dialog, animation-duration, animation.variable(duration-short3)),
-  animation-easing: utils.module-val(dialog, animation-easing, animation.variable(easing-decelerate)),
+  enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-short4)),
+  enter-animation-easing: utils.module-val(dialog, enter-animation-easing, animation.variable(easing-standard)),
+  exit-animation-duration: utils.module-val(dialog, exit-animation-duration, animation.variable(duration-short1)),
+  exit-animation-easing: utils.module-val(dialog, exit-animation-easing, animation.variable(easing-emphasized-accelerate)),
 
   // Backdrop
-  backdrop-opacity: utils.module-val(dialog, backdrop-opacity, theme.emphasis(medium-low)),
+  backdrop-opacity: utils.module-val(dialog, backdrop-opacity, backdrop.get(opacity)),
 ) !default;
 
 @function get($key) {

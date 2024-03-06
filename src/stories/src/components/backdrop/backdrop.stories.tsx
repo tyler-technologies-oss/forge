@@ -18,9 +18,7 @@ export default {
 } as Meta;
 
 export const Default: Story<IBackdropProps> = ({
-  delay = 0,
-  maxOpacity = 0.54,
-  appearance = 'auto'
+  visible = false
 }) => {
   const backdropRef = useRef<IBackdropComponent>();
   
@@ -41,16 +39,12 @@ export const Default: Story<IBackdropProps> = ({
       <p className="forge-typography--label">(When open, click backdrop to close)</p>
       <ForgeBackdrop
         ref={backdropRef}
-        delay={delay}
-        maxOpacity={maxOpacity}
-        appearance={appearance === 'auto' ? undefined : appearance}
-        on-forge-backdrop-click={() => closeBackdrop()}
+        visible={visible}
+        click={() => closeBackdrop()}
         style={{display: 'none'}}></ForgeBackdrop>
     </>
   );
 };
 Default.args = {
-  delay: 0,
-  maxOpacity: 0.54,
-  appearance: 'auto'
+  visible: false
 } as IBackdropProps;

@@ -410,7 +410,7 @@ describe('BottomSheetComponent', function(this: ITestContext) {
         simulateTransition({containerElement});
         return await tick();
       },
-      clickBackdrop: () => getShadowElement(backdrop, BACKDROP_CONSTANTS.selectors.CONTAINER).click(),
+      clickBackdrop: () => backdrop.click(),
       destroy: () => removeElement(component)
     };
   }

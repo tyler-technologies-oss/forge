@@ -45,13 +45,13 @@ describe('BackdropComponent', function(this: ITestContext) {
 
     it('should be instantiated with 0% opacity', function(this: ITestContext) {
       this.context = setupTestContext(true);
-      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.CONTAINER);
+      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.ROOT);
       expect(backdropElement.style.opacity).toBe('0');
     });
 
     it('should update opacity after delay', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.CONTAINER);
+      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.ROOT);
 
       await timer(BACKDROP_CONSTANTS.numbers.DELAY);
       expect(backdropElement.style.opacity).toBe(BACKDROP_CONSTANTS.numbers.OPACITY.toString());
@@ -59,7 +59,7 @@ describe('BackdropComponent', function(this: ITestContext) {
 
     it('should set opacity to 0 when fadeOut is called', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.CONTAINER);
+      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.ROOT);
       const timeoutDelay = cssTimeToMilliseconds(<string>getComputedStyle(backdropElement).transitionDuration);
       // need to wait for the fade in before attempting to fade out
       // TODO(BLJ): the backdrop component should probably handle this case
@@ -89,7 +89,7 @@ describe('BackdropComponent', function(this: ITestContext) {
       this.context = setupTestContext(true);
       const callback = jasmine.createSpy('callback');
       this.context.component.addEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, callback);
-      getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.CONTAINER).click();
+      getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.ROOT).click();
       expect(callback).toHaveBeenCalled();
     });
   });
@@ -102,7 +102,7 @@ describe('BackdropComponent', function(this: ITestContext) {
       this.context.append();
       await tick();
 
-      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.CONTAINER);
+      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.ROOT);
       
       await timer(BACKDROP_CONSTANTS.numbers.DELAY);
       expect(backdropElement.style.opacity).toBe('0.8');
@@ -117,7 +117,7 @@ describe('BackdropComponent', function(this: ITestContext) {
       expect(this.context.component.appearance).toBe('light');
 
       this.context.append();
-      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.CONTAINER);
+      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.ROOT);
       await timer(BACKDROP_CONSTANTS.numbers.DELAY);
 
       const backgroundColor = getComputedStyle(backdropElement).backgroundColor;
@@ -130,7 +130,7 @@ describe('BackdropComponent', function(this: ITestContext) {
       
       expect(this.context.component.appearance).toBe('dark');
       this.context.append();
-      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.CONTAINER);
+      const backdropElement = getShadowElement(this.context.component, BACKDROP_CONSTANTS.selectors.ROOT);
 
       await timer(BACKDROP_CONSTANTS.numbers.DELAY);
       const backgroundColor = getComputedStyle(backdropElement).backgroundColor;

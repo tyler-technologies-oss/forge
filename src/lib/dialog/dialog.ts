@@ -1,11 +1,10 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
-
 import { BackdropComponent } from '../backdrop';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { DialogAdapter } from './dialog-adapter';
-import { DIALOG_CONSTANTS } from './dialog-constants';
+import { DialogMode, DialogType, DIALOG_CONSTANTS } from './dialog-constants';
 import { DialogFoundation } from './dialog-foundation';
 
 import template from './dialog.html';
@@ -13,10 +12,12 @@ import styles from './dialog.scss';
 
 export interface IDialogComponent extends IWithDefaultAria, IWithElementInternals {
   open: boolean;
+  mode: DialogMode;
+  type: DialogType;
   persistent: boolean;
-  /** @depreated Use `persistent` instead. */
+  /** @deprecated Use `persistent` instead. */
   backdropClose: boolean;
-  /** @depreated Use `persistent` instead. */
+  /** @deprecated Use `persistent` instead. */
   escapeClose: boolean;
   show(): void;
   hide(): void;
@@ -50,11 +51,7 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
 })
 export class DialogComponent extends BaseClass implements IDialogComponent {
   public static get observedAttributes(): string[] {
-    return [
-      DIALOG_CONSTANTS.attributes.OPEN,
-      DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE,
-      DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE
-    ];
+    return Object.values(DIALOG_CONSTANTS.observedAttributes);
   }
 
   private _foundation: DialogFoundation;
@@ -75,13 +72,22 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case DIALOG_CONSTANTS.attributes.OPEN:
+      case DIALOG_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
-      case DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE:
+      case DIALOG_CONSTANTS.observedAttributes.MODE:
+        this.mode = newValue as DialogMode ?? DIALOG_CONSTANTS.defaults.MODE;
+        break;
+      case DIALOG_CONSTANTS.observedAttributes.TYPE:
+        this.type = newValue as DialogType ?? DIALOG_CONSTANTS.defaults.TYPE;
+        break;
+      case DIALOG_CONSTANTS.observedAttributes.PERSISTENT:
+        this.persistent = coerceBoolean(newValue);
+        break;
+      case DIALOG_CONSTANTS.observedAttributes.BACKDROP_CLOSE:
         this.backdropClose = coerceBoolean(newValue);
         break;
-      case DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE:
+      case DIALOG_CONSTANTS.observedAttributes.ESCAPE_CLOSE:
         this.escapeClose = coerceBoolean(newValue);
         break;
     }
@@ -89,6 +95,12 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
 
   @FoundationProperty()
   public declare open: boolean;
+  
+  @FoundationProperty()
+  public declare mode: DialogMode;
+
+  @FoundationProperty()
+  public declare type: DialogType;
 
   @FoundationProperty()
   public declare persistent: boolean;

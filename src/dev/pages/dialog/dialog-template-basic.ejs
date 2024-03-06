@@ -1,12 +1,12 @@
 <div class="dialog-container">
   <forge-scaffold>
     <forge-toolbar slot="header" class="header-toolbar" no-border forge-dialog-move-target>
-      <h1 slot="start" class="forge-typography--heading4">Dialog title</h1>
-      <forge-icon-button slot="end" id="close-button">
+      <h1 id="dialog-title" slot="start" class="forge-typography--heading4">Dialog title</h1>
+      <forge-icon-button slot="end" id="close-button" aria-label="Close">
         <forge-icon name="close"></forge-icon>
       </forge-icon-button>
     </forge-toolbar>
-    <div slot="body" class="dialog-body">
+    <div slot="body" id="dialog-desc" class="dialog-body" tabindex="0">
       <p class="forge-typography--body2">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia eaque illum itaque.
         Quas, libero eaque veniam et voluptatem quod natus fugit! Nihil consequatur quo

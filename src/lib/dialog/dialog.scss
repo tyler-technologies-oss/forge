@@ -1,5 +1,6 @@
 @use './core' as *;
 @use './animations';
+@use '../backdrop';
 @use '../core/styles/theme';
 
 //
@@ -8,6 +9,10 @@
 
 :host {
   @include host;
+
+  @include theme.provide((
+    surface: theme.variable(surface-bright)
+  ));
 }
 
 :host([hidden]) {
@@ -20,22 +25,18 @@
 
 .forge-dialog {
   @include tokens;
-
-  @include theme.provide((
-    surface: theme.variable(surface-bright)
-  ));
 }
 
 .forge-dialog {
   @include dialog-base;
+}
 
-  .container {
-    @include container;
-  }
+.container {
+  @include container;
+}
 
-  .surface {
-    @include surface;
-  }
+.surface {
+  @include surface;
 }
 
 //
@@ -46,6 +47,16 @@ dialog.forge-dialog {
   &::backdrop {
     display: none;
   }
+}
+
+forge-backdrop {
+  @include backdrop.provide-theme((
+    opacity: #{token(backdrop-opacity)},
+    enter-animation-duration: #{token(enter-animation-duration)},
+    enter-animation-easing: #{token(enter-animation-easing)},
+    exit-animation-duration: #{token(exit-animation-duration)},
+    exit-animation-easing: #{token(exit-animation-easing)}
+  ));
 }
 
 //
@@ -59,6 +70,11 @@ dialog.forge-dialog {
     .surface {
       @include surface-open;
     }
+
+    .surface.exiting {
+      @include surface-close;
+    }
   }
 }
+
 

@@ -3,7 +3,7 @@ import '@tylertech/forge/dialog';
 import '@tylertech/forge/toolbar';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/button';
-import { IconRegistry, IDialogComponent, ISwitchComponent } from '@tylertech/forge';
+import { IconRegistry, IDialogComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 import './dialog.scss';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
 
@@ -12,8 +12,7 @@ IconRegistry.define([
 ]);
 
 const dialogTemplate = document.getElementById('forge-dialog-template') as HTMLTemplateElement;
-const escapeCloseToggle = document.getElementById('opt-escape-close') as ISwitchComponent;
-const backdropCloseToggle = document.getElementById('opt-backdrop-close') as ISwitchComponent;
+
 const preventCloseToggle = document.getElementById('opt-prevent-close') as ISwitchComponent;
 // const fullscreenToggle = document.getElementById('opt-fullscreen') as ISwitchComponent;
 // const moveableToggle = document.getElementById('opt-moveable') as ISwitchComponent;
@@ -45,10 +44,22 @@ cancelButton.addEventListener('click', () => inlineDialog.hide());
 const closeButton = inlineDialog.querySelector('#close-button');
 closeButton.addEventListener('click', () => inlineDialog.hide());
 
+const typeSelect = document.getElementById('opt-type') as ISelectComponent;
+typeSelect.addEventListener('change', ({ detail: selected }) => {
+  inlineDialog.type = selected;
+});
+
+const modeSelect = document.getElementById('opt-mode') as ISelectComponent;
+modeSelect.addEventListener('change', ({ detail: selected }) => {
+  inlineDialog.mode = selected;
+});
+
+const escapeCloseToggle = document.getElementById('opt-escape-close') as ISwitchComponent;
 escapeCloseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   inlineDialog.escapeClose = selected;
 });
 
+const backdropCloseToggle = document.getElementById('opt-backdrop-close') as ISwitchComponent;
 backdropCloseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   inlineDialog.backdropClose = selected;
 });

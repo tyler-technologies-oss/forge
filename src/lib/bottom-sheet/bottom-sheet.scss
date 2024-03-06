@@ -4,10 +4,6 @@
 
 :host {
   @include mixins.host;
-
-  forge-backdrop {
-    @include mixins.backdrop;
-  }
 }
 
 :host([hidden]) {

@@ -11,7 +11,7 @@ include('./src/partials/page.ejs', {
         defaultValue: 'dialog',
         options: [
           { label: 'Dialog (default)', value: 'dialog' },
-          { label: 'Alert', value: 'alert' }
+          { label: 'Alert dialog', value: 'alertdialog' }
         ]
       },
       {
@@ -21,7 +21,7 @@ include('./src/partials/page.ejs', {
         defaultValue: 'modal',
         options: [
           { label: 'Modal (default)', value: 'modal' },
-          { label: 'Modeless', value: 'modeless' }
+          { label: 'Non-modal', value: 'nonmodal' }
         ]
       },
       { type: 'switch', label: 'Escape close', id: 'opt-escape-close', defaultValue: true },

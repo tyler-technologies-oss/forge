@@ -1,6 +1,10 @@
 @use './core' as *;
 @use './animations';
 
+//
+// Host
+//
+
 :host {
   display: contents;
 }
@@ -9,11 +13,9 @@
   display: flex;
 }
 
-:host([fixed]) {
-  .forge-backdrop {
-    position: fixed;
-  }
-}
+//
+// Base
+//
 
 .forge-backdrop {
   @include tokens;
@@ -23,14 +25,30 @@
   @include base;
 }
 
-:host([state=exit]) {
+//
+// Fixed
+//
+
+:host([fixed]) {
   .forge-backdrop {
-    @include exit;
+    position: fixed;
   }
 }
 
-:host([state=enter]) {
+//
+// Animation
+//
+
+:host([visible]) {
   .forge-backdrop {
-    @include enter;
+    @include visible;
+
+    &.entering {
+      @include entering;
+    }
+
+    &.exiting {
+      @include exiting;
+    }
   }
 }

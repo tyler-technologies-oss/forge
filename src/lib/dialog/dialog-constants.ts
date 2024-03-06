@@ -1,27 +1,23 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
-import { BACKDROP_CONSTANTS } from '../backdrop';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}dialog`;
 
-const classes = {
-  ANIMATING: 'forge-dialog--animating',
-  OPEN: 'forge-dialog--open',
-  ACTION_BUTTON: 'forge-dialog__action__button',
-  BUTTON_TEXT: 'forge-button__text',
-  SCROLLABLE: 'forge-dialog--scrollable',
-  FULLSCREEN: 'forge-dialog--fullscreen',
-  MOVEABLE: 'forge-dialog--moveable'
-};
-
-const attributes = {
+const observedAttributes = {
   OPEN: 'open',
+  MODE: 'mode',
+  TYPE: 'type',
   PERSISTENT: 'persistent',
   BACKDROP_CLOSE: 'backdrop-close',
   ESCAPE_CLOSE: 'escape-close'
 };
 
+const attributes = {
+  ...observedAttributes
+};
+
 const selectors = {
-  DIALOG: '.forge-dialog'
+  DIALOG: '.forge-dialog',
+  SURFACE: '.surface'
 };
 
 const events = {
@@ -33,10 +29,19 @@ const events = {
   MOVE_END: `${elementName}-move-end`
 };
 
+const defaults = {
+  MODE: 'modal' as DialogMode,
+  TYPE: 'dialog' as DialogType
+};
+
 export const DIALOG_CONSTANTS = {
   elementName,
-  classes,
-  selectors,
+  observedAttributes,
   attributes,
-  events
+  selectors,
+  events,
+  defaults
 };
+
+export type DialogMode = 'modal' | 'nonmodal';
+export type DialogType = 'dialog' | 'alertdialog';

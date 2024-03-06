@@ -1,9 +1,11 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IDialogAdapter } from './dialog-adapter';
-import { DIALOG_CONSTANTS } from './dialog-constants';
+import { DialogMode, DialogType, DIALOG_CONSTANTS } from './dialog-constants';
 
 export interface IDialogFoundation extends ICustomElementFoundation {
   open: boolean;
+  mode: DialogMode;
+  type: DialogType;
   persistent: boolean;
   backdropClose: boolean;
   escapeClose: boolean;
@@ -11,6 +13,8 @@ export interface IDialogFoundation extends ICustomElementFoundation {
 
 export class DialogFoundation implements IDialogFoundation {
   private _open = false;
+  private _mode: DialogMode = DIALOG_CONSTANTS.defaults.MODE;
+  private _type: DialogType = DIALOG_CONSTANTS.defaults.TYPE;
   private _persistent = false;
   private _backdropClose = true;
   private _escapeClose = true;
@@ -22,8 +26,6 @@ export class DialogFoundation implements IDialogFoundation {
   constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
-    this._adapter.initialize();
-
     if (this._open) {
       this._show();
     }
@@ -49,21 +51,23 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.OPEN, { bubbles: true, composed: true }));
   }
 
-  private _hide(): void {
-    this._adapter.hide();
+  private async _hide(): Promise<void> {
     this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
     this._adapter.removeEscapeDismissListener(this._escapeDismissListener);
     this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
+
+    await this._adapter.hide();
+
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.CLOSE, { bubbles: true, composed: true }));
   }
 
-  private _applyOpen(value: boolean): void {
+  private async _applyOpen(value: boolean): Promise<void> {
     this._open = value;
     
     if (value) {
       this._show();
     } else {
-      this._hide();
+      await this._hide();
     }
 
     this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.OPEN, this._open);
@@ -103,6 +107,26 @@ export class DialogFoundation implements IDialogFoundation {
     value = Boolean(value);
     if (this._open !== value) {
       this._applyOpen(value);
+    }
+  }
+
+  public get mode(): DialogMode {
+    return this._mode;
+  }
+  public set mode(value: DialogMode) {
+    if (this._mode !== value) {
+      this._mode = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.MODE, this._mode);
+    }
+  }
+
+  public get type(): DialogType {
+    return this._type;
+  }
+  public set type(value: DialogType) {
+    if (this._type !== value) {
+      this._type = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.TYPE, this._type);
     }
   }
 

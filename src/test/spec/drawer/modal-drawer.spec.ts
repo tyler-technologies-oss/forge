@@ -40,8 +40,7 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context.append();
     await timer(100);
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
-    const backdropElement = getShadowElement(backdrop, BACKDROP_CONSTANTS.selectors.CONTAINER);
-    dispatchNativeEvent(backdropElement, 'click');
+    dispatchNativeEvent(backdrop, 'click');
     await tick();
     expect(this.context.component.open).toBe(false);
   });
@@ -55,8 +54,7 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context.component.addEventListener(MODAL_DRAWER_CONSTANTS.events.CLOSE, callback);
     await timer(100);
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
-    const backdropElement = getShadowElement(backdrop, BACKDROP_CONSTANTS.selectors.CONTAINER);
-    dispatchNativeEvent(backdropElement, 'click');
+    dispatchNativeEvent(backdrop, 'click');
     await tick();
 
     expect(this.context.component.open).toBe(false);
@@ -72,8 +70,7 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     await tick();
 
     const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
-    const backdropElement = getShadowElement(backdrop, BACKDROP_CONSTANTS.selectors.CONTAINER);
-    dispatchNativeEvent(backdropElement, 'click');
+    dispatchNativeEvent(backdrop, 'click');
     await tick();
 
     expect(this.context.component.open).toBe(true);

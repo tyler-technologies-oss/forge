@@ -7,20 +7,23 @@
 }
 
 @mixin host-open {
-  display: block;
+  display: initial;
 }
 
 @mixin dialog-base {
   position: fixed;
+  inset: 0;
+  z-index: #{token(z-index)};
 
   background-color: transparent;
   color: inherit;
   
+  border: none;
+
   width: auto;
   height: auto;
   padding: 0;
   margin: 0;
-  border: none;
   overflow: visible;
   max-width: 100%;
   max-height: 100%;
@@ -40,9 +43,12 @@
   display: inline-flex;
 
   background: #{token(background)};
+  box-shadow: #{token(elevation)};
+  z-index: #{token(z-index)};
+  overflow: hidden;
   
   border-radius: #{token(shape)};
-  box-shadow: #{token(elevation)};
+
   padding: #{token(padding)};
   width: #{token(width)};
   height: #{token(height)};
@@ -50,13 +56,17 @@
   max-width: #{token(max-width)};
   min-height: #{token(min-height)};
   max-height: #{token(max-height)};
-  z-index: #{token(z-index)};
-  overflow: hidden;
   box-sizing: border-box;
 }
 
 @mixin surface-open {
   animation-name: enter;
-  animation-duration: #{token(animation-duration)};
-  animation-timing-function: #{token(animation-easing)};
+  animation-duration: #{token(enter-animation-duration)};
+  animation-timing-function: #{token(enter-animation-easing)};
+}
+
+@mixin surface-close {
+  animation-name: exit;
+  animation-duration: #{token(exit-animation-duration)};
+  animation-timing-function: #{token(exit-animation-easing)};
 }

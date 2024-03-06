@@ -84,7 +84,6 @@ export class BusyIndicatorFoundation implements IBusyIndicatorFoundation {
 
     if ((!this._message || this._message.length === 0) && this._showSpinner && (!this.titleText || this._titleText.length === 0) && !this._canCancel) {
       this._adapter.setContainerInvisible();
-      this._adapter.setBackdropAppearance('light');
     }
 
     this.fadeIn();
@@ -121,6 +120,7 @@ export class BusyIndicatorFoundation implements IBusyIndicatorFoundation {
 
   /** Sets the elements opacity to 1 which triggers the CSS transition to fade in after the current delay value. */
   public fadeIn(): void {
+    this._adapter.showBackdrop();
     this._adapter.setSurfaceOpacity(1);
     if (this._manageFocus) {
       this._captureFocus();

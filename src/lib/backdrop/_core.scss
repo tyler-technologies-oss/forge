@@ -3,41 +3,33 @@
 @forward './token-utils';
 
 @mixin host {
-  
+  display: contents;
 }
 
 @mixin base {
-  z-index: #{token(z-index)};
-  background: #{token(background)};
   position: absolute;
   inset: 0;
+
+  z-index: #{token(z-index)};
+
+  background: #{token(background)};
+  opacity: 0;
+
+  animation-fill-mode: forwards;
+}
+
+@mixin visible {
   opacity: #{token(opacity)};
-  // transition: opacity #{token(transition-duration)} #{token(transition-easing)};
 }
 
-@mixin exit {
-  animation: exit #{token(transition-duration)} #{token(transition-easing)} forwards;
+@mixin entering {
+  animation-name: enter;
+  animation-duration: #{token(enter-animation-duration)};
+  animation-timing-function: #{token(enter-animation-easing)};
 }
 
-@mixin enter {
-  animation: visible #{token(transition-duration)} #{token(transition-easing)} forwards;
-}
-
-@keyframes exit {
-  0% {
-    opacity: #{token(opacity)};
-  }
-  100% {
-    opacity: 0;
-  }
-
-}
-
-@keyframes visible {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: #{token(opacity)};
-  }
+@mixin exiting {
+  animation-name: exit;
+  animation-duration: #{token(exit-animation-duration)};
+  animation-timing-function: #{token(exit-animation-easing)};
 }
