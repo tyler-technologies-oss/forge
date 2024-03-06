@@ -9,17 +9,17 @@ import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 export interface IButtonAreaAdapter extends IBaseAdapter {
   destroy(): void;
   setDisabled(value: boolean): void;
-  addListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
-  removeListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
-  addButtonSlotListener(type: string, listener: (event: Event) => void): void;
-  removeButtonSlotListener(type: string, listener: (event: Event) => void): void;
-  addContentSlotListener(type: string, listener: (event: Event) => void): void;
-  removeContentSlotListener(type: string, listener: (event: Event) => void): void;
+  addListener(type: string, listener: EventListener, capture?: boolean): void;
+  removeListener(type: string, listener: EventListener, capture?: boolean): void;
+  addButtonSlotListener(type: string, listener: EventListener): void;
+  removeButtonSlotListener(type: string, listener: EventListener): void;
+  addContentSlotListener(type: string, listener: EventListener): void;
+  removeContentSlotListener(type: string, listener: EventListener): void;
   animateStateLayer(): void;
   startButtonObserver(callback: MutationCallback): void;
   stopButtonObserver(): void;
   detectSlottedButton(): void;
-  buttonIsDisabled(): boolean;
+  isButtonDisabled(): boolean;
   requestDisabledButtonFrame(): void;
 }
 
@@ -54,27 +54,27 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     }
   }
 
-  public addListener(type: string, listener: (event: Event) => void, capture?: boolean): void {
+  public addListener(type: string, listener: EventListener, capture?: boolean): void {
     this._rootElement.addEventListener(type, listener, { capture });
   }
 
-  public removeListener(type: string, listener: (event: Event) => void, capture?: boolean): void {
+  public removeListener(type: string, listener: EventListener, capture?: boolean): void {
     this._rootElement.removeEventListener(type, listener, { capture });
   }
 
-  public addButtonSlotListener(type: string, listener: (event: Event) => void): void {
+  public addButtonSlotListener(type: string, listener: EventListener): void {
     this._buttonSlotElement.addEventListener(type, listener);
   }
 
-  public removeButtonSlotListener(type: string, listener: (event: Event) => void): void {
+  public removeButtonSlotListener(type: string, listener: EventListener): void {
     this._buttonSlotElement.removeEventListener(type, listener);
   }
 
-  public addContentSlotListener(type: string, listener: (event: Event) => void): void {
+  public addContentSlotListener(type: string, listener: EventListener): void {
     this._contentSlotElement.addEventListener(type, listener);
   }
 
-  public removeContentSlotListener(type: string, listener: (event: Event) => void): void {
+  public removeContentSlotListener(type: string, listener: EventListener): void {
     this._contentSlotElement.removeEventListener(type, listener);
   }
 
@@ -100,7 +100,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     this._buttonElement = this._buttonSlotElement.assignedElements()[0] as HTMLButtonElement | undefined;
   }
 
-  public buttonIsDisabled(): boolean {
+  public isButtonDisabled(): boolean {
     return this._buttonElement?.disabled ?? true;
   }
 
