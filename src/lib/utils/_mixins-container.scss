@@ -1,0 +1,33 @@
+@use './variables-media';
+
+@mixin phone-small-only {
+  @container (max-width: #{variables-media.$phone-small}) { @content; }
+}
+
+@mixin phone-only {
+  @container (max-width: #{variables-media.$phone}) {@content; }
+}
+
+@mixin tablet-portrait-down {
+  @container (max-width: #{variables-media.$tablet-portrait}) { @content; }
+}
+
+@mixin tablet-portrait-up {
+  @container (min-width: #{variables-media.$tablet-portrait}) { @content; }
+}
+
+@mixin tablet-landscape-down {
+  @container (max-width: #{variables-media.$tablet-landscape}) { @content; }
+}
+
+@mixin tablet-landscape-up {
+  @container (min-width: #{variables-media.$tablet-landscape}) { @content; }
+}
+
+@mixin desktop-up {
+  @container (min-width: #{variables-media.$desktop}) { @content; }
+}
+
+@mixin large-desktop-up {
+  @container (min-width: #{variables-media.$desktop-large}) { @content; }
+}

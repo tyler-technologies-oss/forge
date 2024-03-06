@@ -1,0 +1,23 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../utils';
+@use '../../border';
+
+$tokens: (
+  // Shared
+  primary-color: utils.module-val(button-area, primary-color, theme.variable(primary)),
+
+  // Base
+  cursor: utils.module-val(button-area, cursor, pointer),
+
+  // Disabled
+  disabled-cursor: utils.module-val(button-area, disabled-cursor, not-allowed),
+
+  // Focus indicator
+  focus-indicator-color: utils.module-val(button-area, focus-indicator-color, theme.variable(primary)),
+  focus-indicator-offset: utils.module-val(button-area, focus-indicator-offset, 4px),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
