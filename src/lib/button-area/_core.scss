@@ -1,0 +1,20 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+  position: relative;
+}
+
+@mixin base {
+  position: relative;
+  overflow: hidden;
+}
+
+@mixin enabled {
+  cursor: #{token(cursor)};
+}
+@mixin disabled {
+  cursor: #{token(disabled-cursor)};
+}
