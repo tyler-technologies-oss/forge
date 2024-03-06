@@ -31,7 +31,6 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   private _buttonObserver?: MutationObserver;
   private _focusIndicatorElement: IFocusIndicatorComponent;
   private _stateLayerElement: IStateLayerComponent;
-  private _destroyUserInteractionListener: (() => void) | undefined;
 
 
   constructor(component: IButtonAreaComponent) {
@@ -43,24 +42,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     this._stateLayerElement = getShadowElement(component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
-  public destroy(): void {
-    if (typeof this._destroyUserInteractionListener === 'function') {
-      this._destroyUserInteractionListener();
-      this._destroyUserInteractionListener = undefined;
-    }
-  }
-
-  public get root(): HTMLElement {
-    return this._rootElement;
-  }
-
-  public get unbounded(): boolean | undefined {
-    return false;
-  }
-
-  public get disabled(): boolean | undefined {
-    return this.buttonIsDisabled();
-  }
+  public destroy(): void {}
 
   public setDisabled(value: boolean): void {
     this._buttonElement?.toggleAttribute(BUTTON_AREA_CONSTANTS.attributes.DISABLED, value);
