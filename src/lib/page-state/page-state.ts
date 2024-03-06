@@ -31,6 +31,16 @@ declare global {
  * @cssproperty --forge-page-state-message-spacing - The message spacing of the page state.
  * @cssproperty --forge-page-state-actions-spacing - The actions spacing of the page state.
  * 
+ * @csspart root - The root container element.
+ * @csspart graphic-container - The graphic container element.
+ * @csspart title-container - The title container element.
+ * @csspart message-container - The message container element.
+ * @csspart actions-container - The actions container element.
+ * 
+ * @slot graphic - The slot where the graphic will be rendered.
+ * @slot title - The slot where the title will be rendered.
+ * @slot message - The slot where the message will be rendered.
+ * @slot actions - The slot where the actions will be rendered.
  */
 @CustomElement({
   name: PAGE_STATE_CONSTANTS.elementName
