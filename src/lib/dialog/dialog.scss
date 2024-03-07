@@ -100,32 +100,6 @@ $can-animate: '[open]:not([animation-type=none])';
   }
 }
 
-@layer fullscreen {
-  //
-  // Full screen
-  //
-
-  :host([fullscreen]) {
-    .forge-dialog {
-      @include override(enter-animation-duration, 400ms, value);
-      @include override(exit-animation-duration, 200ms, value);
-    }
-
-    .surface {
-      height: 100%;
-      width: 100%;
-      max-width: none;
-      max-height: none;
-      border-radius: 0;
-      box-shadow: none;
-    }
-
-    forge-backdrop {
-      display: none;
-    }
-  }
-}
-
 @layer animation {
   //
   // Animation
@@ -331,6 +305,32 @@ $can-animate: '[open]:not([animation-type=none])';
       right: 0;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+    }
+  }
+}
+
+@layer fullscreen {
+  //
+  // Full screen
+  //
+
+  :host([fullscreen]) {
+    .forge-dialog {
+      @include override(enter-animation-duration, 400ms, value);
+      @include override(exit-animation-duration, 200ms, value);
+    }
+
+    .surface {
+      height: 100%;
+      width: 100%;
+      max-width: none;
+      max-height: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    forge-backdrop {
+      display: none;
     }
   }
 }
