@@ -21,14 +21,14 @@
  width: #{token(width)};
  max-width: #{token(max-width)};
  text-align: center;
- background-color: #{token(background)};
+ background: #{token(background)};
  cursor: pointer;
 
  border: #{token(border-width)} #{token(border-style)} #{token(border-color)};
 }
 
 @mixin base-disabled() {
- opacity: 0.38;
+ opacity: #{token(disabled-opacity)};
  cursor: unset;
 }
 

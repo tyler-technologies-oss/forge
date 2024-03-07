@@ -6,22 +6,25 @@
 @use '../../theme';
 
 $tokens: (
- // Base
- background: utils.module-val(file-picker, background, theme.variable(surface-dim)),
- width: utils.module-val(file-picker, width, auto),
- height: utils.module-val(file-picker, height, auto),
- max-width: utils.module-val(file-picker, max-width, auto),
+  // Base
+  background: utils.module-val(file-picker, background, theme.variable(surface-dim)),
+  width: utils.module-val(file-picker, width, auto),
+  height: utils.module-val(file-picker, height, auto),
+  max-width: utils.module-val(file-picker, max-width, auto),
 
- // Border
- border-width: utils.module-val(file-picker, border-width, border.variable(thin)),
- border-style: utils.module-val(file-picker, border-style, dashed),
- border-color: utils.module-val(file-picker, border-color, theme.variable(outline-low)),
+  // Border
+  border-width: utils.module-val(file-picker, border-width, border.variable(thin)),
+  border-style: utils.module-val(file-picker, border-style, dashed),
+  border-color: utils.module-val(file-picker, border-color, theme.variable(outline-low)),
 
- // Spacing
- gap: utils.module-val(file-picker, gap, spacing.variable(medium)),
- padding: utils.module-val(file-picker, padding, spacing.variable(medium)),
- padding-block: utils.module-val(file-picker, padding-block, 0),
- padding-inline: utils.module-ref(file-picker, padding-inline, padding),
+  // Spacing
+  gap: utils.module-val(file-picker, gap, spacing.variable(medium)),
+  padding: utils.module-val(file-picker, padding, spacing.variable(medium)),
+  padding-block: utils.module-val(file-picker, padding-block, 0),
+  padding-inline: utils.module-ref(file-picker, padding-inline, padding),
+
+  // Disabled
+  disabled-opacity: utils.module-val(file-picker, disabled-opacity, theme.emphasis(medium-low)),
 ) !default;
 
 @function get($key) {

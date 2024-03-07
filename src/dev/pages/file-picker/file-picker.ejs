@@ -1,47 +1,46 @@
 <forge-stack gap="24">
- <div>
-  <h3 class="forge-typography--heading2">Default</h3>
-  <forge-file-picker id="file-picker-default" style="--forge-file-picker-width: 320px; width: 320px;">
-    <span slot="primary">Drag files here or</span>
-    <span slot="secondary">Secondary text here</span>
-    <forge-button variant="outlined">Select files</forge-button>
-    <span slot="helper-text" id="file-picker-helper-text"></span>
-  </forge-file-picker>
-  <ul id="file-picker-list"></ul>
- </div>
+  <div>
+    <h3 class="forge-typography--heading2">Default</h3>
+    <forge-file-picker id="file-picker-default" style="--forge-file-picker-width: 320px; width: 320px;">
+      <span slot="primary">Drag files here or</span>
+      <span slot="secondary">Secondary text here</span>
+      <forge-button variant="outlined">Select files</forge-button>
+      <span slot="helper-text" id="file-picker-helper-text"></span>
+    </forge-file-picker>
+    <ul id="file-picker-list"></ul>
+  </div>
 
- <div>
-  <h3 class="forge-typography--heading2">Compact</h3>
-  <forge-file-picker id="file-picker-compact" compact>
-    <forge-button variant="outlined">Select files</forge-button>
-  </forge-file-picker>
-  <ul id="file-picker-list-compact"></ul>
- </div>
-
-
- <div>
-  <h3 class="forge-typography--heading2">Borderless</h3>
-  <forge-card style="width: 400px; --forge-card-padding: 0;" raised>
-    <div style="height: 400px;">
-      <forge-file-picker id="file-picker-borderless"
-        style="--forge-file-picker-width: 100%; --forge-file-picker-height: 100%; --forge-file-picker-max-content-width: 300px;"
-        borderless>
-        <img slot="primary" src="https://cdn.forge.tylertech.com/v1/images/spot/cloud-storage-spot.svg" alt="" height="132px" />
-        <span slot="secondary">Drag files here or click the button above to manually select files</span>
-        <forge-button variant="outlined">Select files</forge-button>
-      </forge-file-picker>
-      <forge-ripple></forge-ripple>
-    </div>
-  </forge-card>
- </div>
-
- <div>
-  <h3 class="forge-typography--heading2">Custom size - 600x600</h3>
-    <forge-file-picker id="file-picker-borderless" style="--forge-file-picker-width: 600px; --forge-file-picker-height: 600px; --forge-file-picker-max-content-width: 600px;">
-      <img slot="primary" src="https://cdn.forge.tylertech.com/v1/images/spot/cloud-storage-spot.svg" alt="" height="250px" />
-      <span slot="secondary">Drag files here or click the button above to manually select files</span>
+  <div>
+    <h3 class="forge-typography--heading2">Compact</h3>
+    <forge-file-picker id="file-picker-compact" compact>
       <forge-button variant="outlined">Select files</forge-button>
     </forge-file-picker>
+    <ul id="file-picker-list-compact"></ul>
+  </div>
+
+
+  <div>
+    <h3 class="forge-typography--heading2">Borderless</h3>
+    <forge-card style="width: 400px; --forge-card-padding: 0;" raised id="borderless-card">
+      <div style="height: 400px;">
+        <forge-file-picker id="file-picker-borderless"
+          style="--forge-file-picker-width: 100%; --forge-file-picker-height: 100%;"
+          borderless>
+          <img slot="primary" src="https://cdn.forge.tylertech.com/v1/images/spot/cloud-storage-spot.svg" alt="" height="132px" />
+          <span slot="secondary">Drag files here or click the button above to manually select files</span>
+          <forge-button variant="outlined">Select files</forge-button>
+        </forge-file-picker>
+      </div>
+    </forge-card>
+  </div>
+
+ <div>
+   <h3 class="forge-typography--heading2">Custom size - 600x600</h3>
+     <forge-file-picker id="file-picker-borderless" style="--forge-file-picker-width: 600px; --forge-file-picker-height: 600px; --forge-file-picker-max-content-width: 600px;">
+       <img slot="primary" src="https://cdn.forge.tylertech.com/v1/images/spot/cloud-storage-spot.svg" alt="" height="250px" />
+       <span slot="secondary">Drag files here or click the button above to manually select files</span>
+       <forge-button variant="outlined">Select files</forge-button>
+     </forge-file-picker>
  </div>
 
 </forge-stack>
