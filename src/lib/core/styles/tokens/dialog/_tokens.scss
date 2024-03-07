@@ -8,6 +8,7 @@
 @use '../backdrop/tokens' as backdrop;
 
 $tokens: (
+  // Base
   background: utils.module-val(dialog, background, theme.variable(surface-bright)),
   shape: utils.module-val(dialog, shape, shape.variable(medium)),
   elevation: utils.module-val(dialog, elevation, elevation.value(24)),
@@ -21,13 +22,31 @@ $tokens: (
   z-index: utils.module-val(dialog, z-index, elevation.z-index-variable(dialog)),
 
   // Animation
-  enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-short4)),
+  enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-medium1)),
   enter-animation-easing: utils.module-val(dialog, enter-animation-easing, animation.variable(easing-standard)),
-  exit-animation-duration: utils.module-val(dialog, exit-animation-duration, animation.variable(duration-short1)),
+  exit-animation-duration: utils.module-val(dialog, exit-animation-duration, animation.variable(duration-short2)),
   exit-animation-easing: utils.module-val(dialog, exit-animation-easing, animation.variable(easing-emphasized-accelerate)),
+
+  // Zoom animation
+  zoom-opacity: utils.module-val(dialog, zoom-opacity, 0),
+  zoom-scale: utils.module-val(dialog, zoom-scale, 0.8),
+
+  // Fade animation
+  fade-opacity: utils.module-val(dialog, fade-opacity, 0),
+
+  // Slide animation
+  slide-opacity: utils.module-val(dialog, slide-opacity, 0),
+  slide-translate: utils.module-val(dialog, slide-translate, 0 -30%),
 
   // Backdrop
   backdrop-opacity: utils.module-val(dialog, backdrop-opacity, backdrop.get(opacity)),
+
+  // Non modal
+  nonmodal-elevation: utils.module-val(dialog, nonmodal-elevation, elevation.value(4)),
+
+  // Fullscreen
+  fullscreen-enter-animation-duration: utils.module-val(dialog, fullscreen-enter-animation-duration, animation.variable(duration-medium4)),
+  fullscreen-exit-animation-duration: utils.module-val(dialog, fullscreen-exit-animation-duration, animation.variable(duration-short4)),
 ) !default;
 
 @function get($key) {

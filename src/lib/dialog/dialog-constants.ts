@@ -6,9 +6,18 @@ const observedAttributes = {
   OPEN: 'open',
   MODE: 'mode',
   TYPE: 'type',
+  ANIMATION_TYPE: 'animation-type',
+  PRESET: 'preset',
   PERSISTENT: 'persistent',
   BACKDROP_CLOSE: 'backdrop-close',
-  ESCAPE_CLOSE: 'escape-close'
+  ESCAPE_CLOSE: 'escape-close',
+  FULLSCREEN: 'fullscreen',
+  TRIGGER: 'trigger',
+  MOVEABLE: 'moveable',
+  MOVE_TARGET: 'move-target',
+  POSITION_STRATEGY: 'position-strategy',
+  PLACEMENT: 'placement',
+  SIZE_STRATEGY: 'size-strategy'
 };
 
 const attributes = {
@@ -31,7 +40,9 @@ const events = {
 
 const defaults = {
   MODE: 'modal' as DialogMode,
-  TYPE: 'dialog' as DialogType
+  TYPE: 'dialog' as DialogType,
+  ANIMATION_TYPE: 'zoom' as DialogAnimationType,
+  PRESET: 'dialog' as DialogPreset
 };
 
 export const DIALOG_CONSTANTS = {
@@ -43,5 +54,28 @@ export const DIALOG_CONSTANTS = {
   defaults
 };
 
+export interface IDialogMoveEventData {
+  x: number;
+  y: number;
+}
+
+export interface IDialogMoveContext {
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+}
+
+export interface IDialogMoveStartEventData extends IDialogMoveEventData {}
+
 export type DialogMode = 'modal' | 'nonmodal';
 export type DialogType = 'dialog' | 'alertdialog';
+export type DialogAnimationType = 'none' | 'zoom' | 'fade' | 'slide' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right';
+export type DialogPositionStrategy = 'viewport' | 'container';
+export type DialogPlacement = 'custom' | 'center' | 'top' | 'right' | 'bottom' | 'left' | 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+export type DialogSizeStrategy = 'content' | 'content-inline' | 'content-block' | 'container' | 'container-inline' | 'container-block';
+export type DialogPreset = 'dialog' | 'bottom-sheet' | 'top-sheet' | 'left-sheet' | 'right-sheet';
+
+export const hideBackdrop = Symbol('hideBackdrop');
+export const showBackdrop = Symbol('showBackdrop');
+export const dialogStack = Symbol('dialogStack');

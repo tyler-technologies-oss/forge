@@ -8,6 +8,8 @@ import styles from './backdrop.scss';
 export interface IBackdropComponent extends IBaseComponent {
   visible: boolean;
   fixed: boolean;
+  show(): void;
+  hide(): void;
   fadeIn(): Promise<void>;
   fadeOut(): Promise<void>;
 }
@@ -45,6 +47,8 @@ export class BackdropComponent extends BaseComponent {
       this._animationController.abort();
       this._animationController = undefined;
     }
+
+    this.classList.remove(BACKDROP_CONSTANTS.classes.ENTERING, BACKDROP_CONSTANTS.classes.EXITING);
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -58,12 +62,17 @@ export class BackdropComponent extends BaseComponent {
     }
   }
 
-  private async _applyVisibility(visible: boolean): Promise<void> {
+  private async _applyVisibility(visible: boolean, { animate } = { animate: true }): Promise<void> {
     this._visible = visible;
 
     if (!this.isConnected) {
       this.toggleAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, this._visible);
       return Promise.resolve();
+    }
+
+    if (!animate) {
+      this.toggleAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE, this._visible);
+      return;
     }
 
     const isVisible = this._visible;
@@ -93,6 +102,14 @@ export class BackdropComponent extends BaseComponent {
     this._rootElement.classList.add(className);
 
     return animationComplete;
+  }
+
+  public show(): void {
+    this._applyVisibility(true, { animate: false });
+  }
+
+  public hide(): void {
+    this._applyVisibility(false, { animate: false });
   }
 
   public fadeIn(): Promise<void> {

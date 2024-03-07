@@ -41,14 +41,17 @@
 
 @mixin surface {
   display: inline-flex;
-
+  position: absolute;
+  inset: 0;
+  
   background: #{token(background)};
   box-shadow: #{token(elevation)};
   z-index: #{token(z-index)};
   overflow: hidden;
   
   border-radius: #{token(shape)};
-
+  
+  margin: auto;
   padding: #{token(padding)};
   width: #{token(width)};
   height: #{token(height)};
@@ -59,14 +62,12 @@
   box-sizing: border-box;
 }
 
-@mixin surface-open {
-  animation-name: enter;
+@mixin enter {
   animation-duration: #{token(enter-animation-duration)};
   animation-timing-function: #{token(enter-animation-easing)};
 }
 
-@mixin surface-close {
-  animation-name: exit;
+@mixin exit {
   animation-duration: #{token(exit-animation-duration)};
   animation-timing-function: #{token(exit-animation-easing)};
 }

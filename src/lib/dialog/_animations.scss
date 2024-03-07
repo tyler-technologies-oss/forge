@@ -1,7 +1,13 @@
-@keyframes enter {
+@use './core' as * ;
+
+//
+// Zoom (default)
+//
+
+@keyframes zoom-in {
   from {
-    opacity: 0;
-    scale: 0.8;
+    opacity: #{token(zoom-opacity)};
+    scale: #{token(zoom-scale)};
   }
   to {
     opacity: 1;
@@ -9,13 +15,63 @@
   }
 }
 
-@keyframes exit {
+@keyframes zoom-out {
   from {
     opacity: 1;
     scale: 1;
   }
   to {
-    opacity: 0;
-    scale: 0.8;
+    opacity: #{token(zoom-opacity)};
+    scale: #{token(zoom-scale)};
+  }
+}
+
+//
+// Fade
+//
+
+@keyframes fade-in {
+  from {
+    opacity: #{token(fade-opacity)};
+  }
+  to {
+    opacity: 1
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1
+  }
+  to {
+    opacity: #{token(fade-opacity)};
+  }
+}
+
+//
+// Slide
+//
+
+@keyframes slide-in {
+  from {
+    opacity: #{token(slide-opacity)};
+    translate: #{token(slide-translate)};
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  to {
+    opacity: #{token(slide-opacity)};
+    translate: #{token(slide-translate)};
   }
 }

@@ -3,78 +3,334 @@
 @use '../backdrop';
 @use '../core/styles/theme';
 
-//
-// Host styles
-//
+$can-animate: '[open]:not([animation-type=none])';
 
-:host {
-  @include host;
+@layer base, nonmodal, animation, placement, preset, fullscreen;
 
-  @include theme.provide((
-    surface: theme.variable(surface-bright)
-  ));
-}
+@layer base {
+  //
+  // Host styles
+  //
 
-:host([hidden]) {
-  display: none;
-}
+  :host {
+    @include host;
 
-//
-// Base
-//
+    @include theme.provide((
+      surface: theme.variable(surface-bright)
+    ));
+  }
 
-.forge-dialog {
-  @include tokens;
-}
-
-.forge-dialog {
-  @include dialog-base;
-}
-
-.container {
-  @include container;
-}
-
-.surface {
-  @include surface;
-}
-
-//
-// Backdrop
-//
-
-dialog.forge-dialog {
-  &::backdrop {
+  :host([hidden]) {
     display: none;
   }
+
+  //
+  // Base
+  //
+
+  .forge-dialog {
+    @include tokens;
+  }
+
+  .forge-dialog {
+    @include dialog-base;
+  }
+
+  .container {
+    @include container;
+  }
+
+  .surface {
+    @include surface;
+  }
+
+  //
+  // Backdrop
+  //
+
+  dialog.forge-dialog {
+    &::backdrop {
+      display: none; // Hide the native backdrop
+    }
+  }
+
+  forge-backdrop {
+    @include backdrop.provide-theme((
+      opacity: #{token(backdrop-opacity)},
+      enter-animation-duration: #{token(enter-animation-duration)},
+      enter-animation-easing: #{token(enter-animation-easing)},
+      exit-animation-duration: #{token(exit-animation-duration)},
+      exit-animation-easing: #{token(exit-animation-easing)}
+    ));
+  }
+
+  //
+  // Open
+  //
+
+  :host([open]) {
+    @include host-open;
+  }
 }
 
-forge-backdrop {
-  @include backdrop.provide-theme((
-    opacity: #{token(backdrop-opacity)},
-    enter-animation-duration: #{token(enter-animation-duration)},
-    enter-animation-easing: #{token(enter-animation-easing)},
-    exit-animation-duration: #{token(exit-animation-duration)},
-    exit-animation-easing: #{token(exit-animation-easing)}
-  ));
-}
+@layer nonmodal {
+  //
+  // Non-modal
+  //
 
-//
-// Open
-//
-
-:host([open]) {
-  @include host-open;
-
-  dialog.forge-dialog[open] {
-    .surface {
-      @include surface-open;
+  :host([mode=nonmodal]) {
+    .forge-dialog {
+      position: absolute;
+      pointer-events: none;
     }
 
-    .surface.exiting {
-      @include surface-close;
+    .container {
+      display: contents;
+    }
+
+    .surface {
+      @include override(elevation, nonmodal-elevation);
+
+      pointer-events: all;
+    }
+
+    forge-backdrop {
+      display: none;
     }
   }
 }
 
+@layer fullscreen {
+  //
+  // Full screen
+  //
 
+  :host([fullscreen]) {
+    .forge-dialog {
+      @include override(enter-animation-duration, 400ms, value);
+      @include override(exit-animation-duration, 200ms, value);
+    }
+
+    .surface {
+      height: 100%;
+      width: 100%;
+      max-width: none;
+      max-height: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    forge-backdrop {
+      display: none;
+    }
+  }
+}
+
+@layer animation {
+  //
+  // Animation
+  //
+
+  :host(#{$can-animate}) {
+    dialog.forge-dialog[open] {
+      .surface {
+        @include enter;
+
+        &.exiting {
+          @include exit;
+        }
+      }
+    }
+  }
+
+  // Zoom (default)
+  :host(#{$can-animate}:is(:not([animation-type]),[animation-type=zoom])) {
+    dialog.forge-dialog[open] {
+      .surface {
+        animation-name: zoom-in;
+
+        &.exiting {
+          animation-name: zoom-out;
+        }
+      }
+    }
+  }
+
+  // Fade
+  :host(#{$can-animate}[animation-type=fade]) {
+    dialog.forge-dialog[open] {
+      .surface {
+        animation-name: fade-in;
+
+        &.exiting {
+          animation-name: fade-out;
+        }
+      }
+    }
+  }
+
+  // Slide
+  :host(#{$can-animate}[animation-type=slide]) {
+    dialog.forge-dialog[open] {
+      .surface {
+        animation-name: slide-in;
+
+        &.exiting {
+          animation-name: slide-out;
+        }
+      }
+    }
+  }
+}
+
+@layer placement {
+  :host([placement=custom]) {
+    .surface {
+      margin: 0;
+      top: var(--forge-dialog-position-x, 0);
+      left: var(--forge-dialog-position-y, 0);
+    }
+  }
+
+  :host([placement=top]) {
+    .surface {
+      margin: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: auto;
+    }
+  }
+
+  :host([placement=top-right]) {
+    .surface {
+      margin: 0;
+      top: 0;
+      left: auto;
+      right: 0;
+      bottom: auto;
+    }
+  }
+
+  :host([placement=bottom]) {
+    .surface {
+      margin: 0;
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  :host([placement=left]) {
+    .surface {
+      margin: 0;
+      top: 0;
+      left: 0;
+      right: auto;
+      bottom: 0;
+    }
+  }
+
+  :host([placement=right]) {
+    .surface {
+      margin: 0;
+      top: auto;
+      left: auto;
+      right: 0;
+      bottom: auto;
+    }
+  }
+}
+
+@layer preset {
+  :host(#{$can-animate}:is([preset=left-sheet],[preset=right-sheet],[preset=top-sheet],[preset=bottom-sheet])) {
+    .forge-dialog {
+      @include override(enter-animation-duration, 400ms, value);
+      @include override(exit-animation-duration, 200ms, value);
+    }
+
+    .surface {
+      animation-name: slide-in;
+
+      &.exiting {
+        animation-name: slide-out;
+      }
+    }
+  }
+
+  :host([preset=left-sheet]) {
+    .forge-dialog {
+      @include override(slide-translate, -100% 0, value);
+    }
+
+    .surface {
+      @include override(max-width, none, value);
+      @include override(max-height, none, value);
+
+      inset: auto;
+      left: 0;
+      bottom: 0;
+      top: 0;
+      height: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+  }
+
+  :host([preset=right-sheet]) {
+    .forge-dialog {
+      @include override(slide-translate, 100% 0, value);
+    }
+
+    .surface {
+      @include override(max-width, none, value);
+      @include override(max-height, none, value);
+
+      inset: auto;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      height: 100%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  :host([preset=top-sheet]) {
+    .forge-dialog {
+      @include override(slide-translate, 0 -100%, value);
+    }
+
+    .surface {
+      @include override(max-width, none, value);
+      @include override(max-height, none, value);
+
+      inset: auto;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+
+  :host([preset=bottom-sheet]) {
+    .forge-dialog {
+      @include override(slide-translate, 0 100%, value);
+    }
+
+    .surface {
+      @include override(max-width, none, value);
+      @include override(max-height, none, value);
+
+      inset: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}
