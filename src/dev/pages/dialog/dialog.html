@@ -55,16 +55,37 @@ include('./src/partials/page.ejs', {
         id: 'opt-placement',
         defaultValue: 'center',
         options: [
-          { label: 'Center (default)', value: 'center' },
           { label: 'Custom', value: 'custom' },
-          { label: 'Top', value: 'top' },
           { label: 'Top left', value: 'top-left' },
+          { label: 'Top', value: 'top' },
           { label: 'Top right', value: 'top-right' },
+          { label: 'Left', value: 'left' },
+          { label: 'Center (default)', value: 'center' },
           { label: 'Right', value: 'right' },
-          { label: 'Bottom', value: 'bottom' },
           { label: 'Bottom left', value: 'bottom-left' },
-          { label: 'Bottom right', value: 'bottom-right' },
-          { label: 'Left', value: 'left' }
+          { label: 'Bottom', value: 'bottom' },
+          { label: 'Bottom right', value: 'bottom-right' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Size strategy',
+        id: 'opt-size-strategy',
+        defaultValue: 'content',
+        options: [
+          { label: 'Content (default)', value: 'content' },
+          { label: 'Container inline', value: 'container-inline' },
+          { label: 'Container block', value: 'container-block' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Position strategy',
+        id: 'opt-position-strategy',
+        defaultValue: 'viewport',
+        options: [
+          { label: 'Viewport (default)', value: 'viewport' },
+          { label: 'Container', value: 'container' }
         ]
       },
       { type: 'switch', label: 'Persistent', id: 'opt-persistent' },

@@ -52,7 +52,7 @@
   
   border-radius: #{token(shape)};
   
-  margin: auto;
+  margin: #{token(spacing)};
   padding: #{token(padding)};
   width: #{token(width)};
   height: #{token(height)};

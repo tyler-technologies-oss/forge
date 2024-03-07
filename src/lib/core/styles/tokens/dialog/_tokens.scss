@@ -12,6 +12,7 @@ $tokens: (
   background: utils.module-val(dialog, background, theme.variable(surface-bright)),
   shape: utils.module-val(dialog, shape, shape.variable(medium)),
   elevation: utils.module-val(dialog, elevation, elevation.value(24)),
+  spacing: utils.module-val(dialog, spacing, auto),
   padding: utils.module-val(dialog, padding, 0),
   width: utils.module-val(dialog, width, fit-content),
   height: utils.module-val(dialog, height, fit-content),

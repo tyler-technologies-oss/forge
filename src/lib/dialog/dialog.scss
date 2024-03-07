@@ -5,7 +5,11 @@
 
 $can-animate: '[open]:not([animation-type=none])';
 
-@layer base, nonmodal, animation, placement, preset, fullscreen;
+@layer base, nonmodal, animation, placement, size-strategy, preset, fullscreen, position-strategy, media;
+
+//
+// Base
+//
 
 @layer base {
   //
@@ -73,11 +77,11 @@ $can-animate: '[open]:not([animation-type=none])';
   }
 }
 
-@layer nonmodal {
-  //
-  // Non-modal
-  //
+//
+// Non-modal
+//
 
+@layer nonmodal {
   :host([mode=nonmodal]) {
     .forge-dialog {
       position: absolute;
@@ -100,11 +104,11 @@ $can-animate: '[open]:not([animation-type=none])';
   }
 }
 
-@layer animation {
-  //
-  // Animation
-  //
+//
+// Animation
+//
 
+@layer animation {
   :host(#{$can-animate}) {
     dialog.forge-dialog[open] {
       .surface {
@@ -157,10 +161,15 @@ $can-animate: '[open]:not([animation-type=none])';
   }
 }
 
+//
+// Placement
+//
+
 @layer placement {
   :host([placement=custom]) {
     .surface {
-      margin: 0;
+      @include override(spacing, 0, value);
+
       top: var(--forge-dialog-position-x, 0);
       left: var(--forge-dialog-position-y, 0);
     }
@@ -168,54 +177,108 @@ $can-animate: '[open]:not([animation-type=none])';
 
   :host([placement=top]) {
     .surface {
-      margin: 0;
+      @include override(spacing, 0 auto, value);
+
       top: 0;
-      left: 0;
-      right: 0;
       bottom: auto;
     }
   }
 
   :host([placement=top-right]) {
     .surface {
-      margin: 0;
+      @include override(spacing, 0, value);
+
       top: 0;
       left: auto;
       right: 0;
+      bottom: auto;
+    }
+  }
+
+  :host([placement=top-left]) {
+    .surface {
+      @include override(spacing, 0, value);
+
+      top: 0;
+      left: 0;
+      right: auto;
       bottom: auto;
     }
   }
 
   :host([placement=bottom]) {
     .surface {
-      margin: 0;
+      @include override(spacing, 0 auto, value);
+
       top: auto;
-      left: 0;
+      bottom: 0;
+    }
+  }
+
+  :host([placement=bottom-right]) {
+    .surface {
+      @include override(spacing, 0, value);
+
+      top: auto;
+      left: auto;
       right: 0;
       bottom: 0;
     }
   }
 
-  :host([placement=left]) {
+  :host([placement=bottom-left]) {
     .surface {
-      margin: 0;
-      top: 0;
+      @include override(spacing, 0, value);
+
+      top: auto;
       left: 0;
       right: auto;
       bottom: 0;
     }
   }
 
+  :host([placement=left]) {
+    .surface {
+      @include override(spacing, auto 0, value);
+      left: 0;
+      right: auto;
+    }
+  }
+
   :host([placement=right]) {
     .surface {
-      margin: 0;
-      top: auto;
+      @include override(spacing, auto 0, value);
       left: auto;
       right: 0;
-      bottom: auto;
     }
   }
 }
+
+//
+// Size strategy
+//
+
+@layer size-strategy {
+  :host([size-strategy=container-inline]) {
+    .surface {
+      // @include override(max-width, none, value);
+
+      width: 100%;
+    }
+  }
+
+  :host([size-strategy=container-block]) {
+    .surface {
+      // @include override(max-height, none, value);
+
+      height: 100%;
+    }
+  }
+}
+
+//
+// Preset
+//
 
 @layer preset {
   :host(#{$can-animate}:is([preset=left-sheet],[preset=right-sheet],[preset=top-sheet],[preset=bottom-sheet])) {
@@ -309,11 +372,11 @@ $can-animate: '[open]:not([animation-type=none])';
   }
 }
 
-@layer fullscreen {
-  //
-  // Full screen
-  //
+//
+// Full screen
+//
 
+@layer fullscreen {
   :host([fullscreen]) {
     .forge-dialog {
       @include override(enter-animation-duration, 400ms, value);
@@ -331,6 +394,40 @@ $can-animate: '[open]:not([animation-type=none])';
 
     forge-backdrop {
       display: none;
+    }
+  }
+}
+
+//
+// Position strategy
+//
+
+@layer position-strategy {
+  :host([position-strategy=viewport]) {
+    .forge-dialog {
+      position: fixed;
+    }
+  }
+
+  :host([position-strategy=container]) {
+    .forge-dialog {
+      position: absolute;
+    }
+  }
+}
+
+//
+// Media
+//
+
+@layer media {
+  @media (prefers-reduced-motion: reduce) {
+    .surface {
+      animation-name: fade-in;
+
+      &.exiting {
+        animation-name: fade-out;
+      }
     }
   }
 }

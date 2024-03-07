@@ -69,6 +69,16 @@ placementSelect.addEventListener('change', ({ detail: selected }) => {
   }
 });
 
+const sizeStrategySelect = document.getElementById('opt-size-strategy') as ISelectComponent;
+sizeStrategySelect.addEventListener('change', ({ detail: selected }) => {
+  inlineDialog.sizeStrategy = selected;
+});
+
+const positionStrategySelect = document.getElementById('opt-position-strategy') as ISelectComponent;
+positionStrategySelect.addEventListener('change', ({ detail: selected }) => {
+  inlineDialog.positionStrategy = selected;
+});
+
 const persistentToggle = document.getElementById('opt-persistent') as ISwitchComponent;
 persistentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   inlineDialog.persistent = selected;

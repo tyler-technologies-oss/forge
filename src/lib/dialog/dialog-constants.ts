@@ -73,7 +73,7 @@ export type DialogType = 'dialog' | 'alertdialog';
 export type DialogAnimationType = 'none' | 'zoom' | 'fade' | 'slide' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right';
 export type DialogPositionStrategy = 'viewport' | 'container';
 export type DialogPlacement = 'custom' | 'center' | 'top' | 'right' | 'bottom' | 'left' | 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-export type DialogSizeStrategy = 'content' | 'content-inline' | 'content-block' | 'container' | 'container-inline' | 'container-block';
+export type DialogSizeStrategy = 'content' | 'container-inline' | 'container-block';
 export type DialogPreset = 'dialog' | 'bottom-sheet' | 'top-sheet' | 'left-sheet' | 'right-sheet';
 
 export const hideBackdrop = Symbol('hideBackdrop');
