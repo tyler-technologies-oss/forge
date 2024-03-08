@@ -4,7 +4,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}step`;
 
 const classes = {
   STEP: 'forge-step',
-  STEP_CONTAINER: 'forge-step__container',
+  STEP_CONTAINER: 'container',
   ERROR: 'forge-step--error',
   SELECTED: 'forge-step--selected',
   COMPLETED: 'forge-step--completed',
@@ -21,10 +21,10 @@ const classes = {
   VERTICAL: 'forge-step--vertical',
   EXPANDED: 'forge-step--expanded',
   EXPANDABLE: 'forge-step--expandable',
-  EXPANSION_PANEL: 'forge-step__expansion-panel',
-  EXPANSION_ICON: 'forge-step__expanded-icon',
-  EXPANSION_ICON_EXPANDED: 'forge-step__expanded-icon--expanded',
-  EXPANSION_CONTENT: 'forge-step__expansion-content'
+  EXPANSION_PANEL: 'expansion-panel',
+  EXPANSION_ICON: 'expanded-icon',
+  EXPANSION_ICON_EXPANDED: 'expanded-icon--expanded',
+  EXPANSION_CONTENT: 'expansion-content'
 };
 
 const attributes = {

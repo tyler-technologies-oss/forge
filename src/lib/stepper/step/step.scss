@@ -1,9 +1,29 @@
 @use '../../theme';
-@use './mixins';
-@use './variables';
+@use './core' as *;
 @use '@material/ripple/mdc-ripple';
 
-@include mixins.core-styles;
+@include core-styles;
+
+$spacer-margin: 8px !default;
+
+$icon-font-size: 14px !default;
+$icon-margin: 0 8px 0 0 !default;
+$vertical-icon-margin: 0 16px 0 0 !default;
+$icon-size: 24px !default;
+
+$label-font-size: 14px !default;
+$label-font-weight: 500 !default;
+
+$clusetered-border-min-width: 25px !default;
+
+$expansion-panel-margin-left: 60px !default;
+$expansion-panel-margin-top: 4px !default;
+$expansion-panel-margin-bottom: 4px !default;
+$expansion-panel-border-left-width: 1px !default;
+
+:host {
+  @include tokens;
+}
 
 :host(:first-child[alternative]) {
   &::after {
@@ -50,7 +70,7 @@
       min-width: 0;
       width: 100%;
 
-      @include mixins.line();
+      @include line();
     }
   }
 }
@@ -73,7 +93,7 @@
       flex-basis: 0.000000001px;
       position: absolute;
 
-      @include mixins.line();
+      @include line();
     }
   }
 }
@@ -81,7 +101,7 @@
 :host(:not(:first-child):not(:last-child)):host(:not([vertical])) {
   &::before,
   &::after {
-    @include mixins.step-line;
+    @include step-line;
     
     margin: 0 -10px;
   }
@@ -89,7 +109,7 @@
 
 :host(:last-child):host(:not([vertical])) {
   &::before {
-    @include mixins.step-line;
+    @include step-line;
     
     margin: 0 -10px 0 0;
   }
@@ -97,7 +117,7 @@
 
 :host(:not(:last-child)):host(:not([vertical])) {
   &::after {
-    @include mixins.step-line;
+    @include step-line;
     
     margin: 0 0 0 -10px;
   }
@@ -108,7 +128,7 @@
 }
 
 :host([vertical]) {
-  @include mixins.vertical-host;
+  @include vertical-host;
   
   &::after {
     content: none;
@@ -119,41 +139,41 @@
   }
 
   .forge-step {
-    @include mixins.vertical-base;
+    @include vertical-base;
 
-    &__text-container {
+    .text-container {
       white-space: normal;
     }
   }
 
-  .forge-step__icon-container {
+  .icon-container {
     .forge-step-icon-content {
-      margin: variables.$vertical-icon-margin;
+      margin: $vertical-icon-margin;
     }
   }
 }
 
 :host([vertical][expandable]) {
-  .forge-step__expansion-panel {
+  .expansion-panel {
     display: block;
   }
 }
 
 :host([ignore-user-expansion]) {
-  @include mixins.forge-ignore-user-expansion;
+  @include forge-ignore-user-expansion;
 }
 
 forge-expansion-panel {
   &::part(root) {
-    @include mixins.expansion-panel-styles;
+    @include expansion-panel-styles;
   }
 }
 
-@include mixins.border-psudo-styles('[clustered]') {
-  min-width: variables.$clusetered-border-min-width;
+@include border-psudo-styles('[clustered]') {
+  min-width: $clusetered-border-min-width;
 }
 
-@include mixins.border-psudo-styles('[safari][alternative]') {
+@include border-psudo-styles('[safari][alternative]') {
   top: 24px;
   margin: 0 -5px;
 }

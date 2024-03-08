@@ -1,35 +1,38 @@
-@use '@material/typography/typography' as mdc-typography;
-@use '@material/theme/theme' as mdc-theme;
+
 @use '@material/ripple/ripple' as mdc-ripple;
 @use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '../../theme';
-@use './variables';
+@use '../../core/styles/typography';
+
+@use './token-utils' as *;
+
+@forward './token-utils';
 
 @mixin core-styles() {
   .forge-step {
     @include base();
     @include forge-interactable();
 
-    &__container {
+    .container {
       display: contents;
     }
 
-    &__expansion-panel {
+    .expansion-panel {
       display: none;
     }
 
-    &__expanded-icon {
+    .expanded-icon {
       @include theme.property(color, icon-color);
 
       display: none;
       margin-left: auto;
     }
 
-    &__title {
+    .title {
       @include label();
     }
 
-    &__subtitle {
+    .subtitle {
       @include optional-label-slot-wrapper;
 
       ::slotted(*) {
@@ -37,38 +40,38 @@
       }
     }
 
-    &__icon-container {
+    .icon-container {
       .forge-step-icon-content {
         @include icon-content;
       }
     }
 
-    &:not(.forge-step--disabled) {
-      .forge-step-icon-content {
-        @include icon-content-color;
-      }
-    }
+    // &:not(.forge-step--disabled) {
+    //   .forge-step-icon-content {
+    //     @include icon-content-color;
+    //   }
+    // }
 
     &--disabled {
       cursor: not-allowed;
 
       &.forge-step {
-        .forge-step__icon-container {
+        .icon-container {
           .forge-step-icon-content {
             @include icon-content-disabled;
           }
         }
       }
 
-      @include theme.property(color, form-field-text-disabled-on-background);
-      .forge-step__text-container {
-        .forge-step__title {
-          @include theme.property(color, form-field-text-disabled-on-background);
+      color: #{token(disabled-text-color)};
+      .text-container {
+        .title {
+          color: #{token(disabled-text-color)};
         }
 
-        .forge-step__subtitle {
+        .subtitle {
           ::slotted(*) {
-            @include theme.property(color, form-field-text-disabled-on-background);
+            color: #{token(disabled-text-color)};
           }
         }
       }
@@ -77,12 +80,12 @@
     &--alternative {
       flex-direction: column;
 
-      .forge-step__icon-container {
+      .icon-container {
         .forge-step-icon-content {
           margin: 0;
         }
       }
-      .forge-step__text-container {
+      .text-container {
         @include text-container-alternative;
 
         place-items: center;
@@ -95,9 +98,9 @@
         &:not(.forge-step--error) {
           .forge-step-icon-content {
             @include icon-content-default-theme;
-            
+
             .forge-step-index {
-              @include mdc-theme.property(color, primary);
+              color: #{token(primary-color)};
             }
           }
         }
@@ -112,7 +115,7 @@
       }
 
       &:not(.forge-step--disabled) {
-        .forge-step__icon-container {
+        .icon-container {
           .forge-step-icon-content {
             @include icon-content-selected();
           }
@@ -120,11 +123,11 @@
       }
 
       &:not(.forge-step--disabled) {
-        .forge-step__title {
+        .title {
           @include label-selected();
         }
 
-        .forge-step__subtitle {
+        .subtitle {
           ::slotted(*) {
             @include optional-label-selected();
           }
@@ -134,17 +137,17 @@
 
     &--error {
       &:not(.forge-step--disabled) {
-        .forge-step__title {
+        .title {
           @include label-error();
         }
 
-        .forge-step__subtitle {
+        .subtitle {
           ::slotted(*) {
             @include optional-label-error();
           }
         }
 
-        .forge-step__icon-container {
+        .icon-container {
           .forge-step-icon-content {
             @include icon-content-error();
           }
@@ -170,25 +173,25 @@
     }
 
     &--expandable {
-      .forge-step__expanded-icon {
+      .expanded-icon {
         display: inline-block;
         transition: transform 300ms ease-in-out;
       }
 
       &.forge-step--expanded {
-        .forge-step__expanded-icon {
+        .expanded-icon {
           transform: rotate(180deg);
         }
       }
 
-      .forge-step__icon-container {
+      .icon-container {
         .forge-step-icon-content {
-          margin: variables.$vertical-icon-margin;
+          margin: 0 16px 0 0;
         }
       }
     }
 
-    &__text-container {
+    .text-container {
       @include text-container();
     }
   }
@@ -230,7 +233,8 @@
   }
 
   &--selected {
-    @include mdc-theme.property(color, primary);
+    // @include mdc-theme.property(color, primary);
+    color: #{token(primary-color)};
   }
 
   &--disabled {
@@ -241,38 +245,36 @@
   }
 }
 
-@mixin icon-content-color {
-  @include mdc-theme.property(color, text-primary-on-background);
-}
-
 @mixin icon-content-default-theme {
-  @include mdc-theme.property(border-color, primary);
+  border-color: #{token(primary-color)};
 }
 
 @mixin icon-content() {
+  color: #{token(icon-text-color)};
+  background-color: #{token(icon-fill)};
+  height: #{token(icon-content-size)};
+  width: #{token(icon-content-size)};
+
   border-style: solid;
   border-width: 2px;
   border-color: transparent;
+  border-radius: 50%;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  height: variables.$icon-size;
-  width: variables.$icon-size;
-  font-size: variables.$icon-font-size;
   transition: background-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
-  margin: variables.$icon-margin;
+  margin: 0 8px 0 0;
   flex: none;
 
   forge-icon {
-    font-size: 14px;
+    font-size: #{token(icon-size)};
   }
 }
 
 @mixin icon-content-selected() {
-  @include mdc-theme.property(background-color, primary);
-  @include mdc-theme.property(color, on-primary);
+  @include override(icon-fill, icon-fill-active);
+  @include override(icon-text-color, icon-text-color-active);
 }
 
 @mixin icon-content-completed() {
@@ -280,17 +282,17 @@
 }
 
 @mixin icon-content-error {
-  @include mdc-theme.property(background-color, error);
-  @include mdc-theme.property(color, on-error);
+  @include override(icon-fill, error-color);
+  @include override(icon-text-color, error-text-color);
 }
 
 @mixin icon-content-disabled {
-  @include mdc-theme.property(color, text-disabled-on-light);
-  @include theme.property(background-color, form-field-disabled-on-background);
+  @include override(icon-fill, disabled-color);
+  @include override(icon-text-color, disabled-text-color);
 }
 
 @mixin line() {
-  @include theme.property(border-top-color, border-color);
+  border-color: #{token(line-color)};
 
   border-top-style: solid;
   border-top-width: 1px;
@@ -298,7 +300,7 @@
 }
 
 @mixin step-line() {
-  @include theme.property(border-top-color, border-color);
+  border-color: #{token(line-color)};
 
   content: '';
   position: relative;
@@ -324,8 +326,9 @@
 }
 
 @mixin label {
-  @include mdc-theme.property(color, text-primary-on-background);
-  @include mdc-typography.typography(body2);
+  @include typography.style(body1);
+
+  color: #{token(label-color)};
 
   text-align: left;
   overflow: hidden;
@@ -333,18 +336,19 @@
 }
 
 @mixin label-selected {
-  @include mdc-theme.property(color, primary);
+  color: #{token(primary-color)};
 
   font-weight: 500;
 }
 
 @mixin label-error {
-  @include mdc-theme.property(color, error);
+  color: #{token(error-color)};
 }
 
 @mixin optional-label {
-  @include mdc-theme.property(color, text-secondary-on-background);
-  @include mdc-typography.typography(caption);
+  color: #{token(sub-label-color)};
+
+  @include typography.style(label1);
 }
 
 @mixin optional-label-slot-wrapper {
@@ -354,12 +358,13 @@
 }
 
 @mixin optional-label-selected {
-  @include mdc-theme.property(color, primary);
+  color: #{token(primary-color)};
+
   font-weight: 500;
 }
 
 @mixin optional-label-error {
-  @include mdc-theme.property(color, error);
+  color: #{token(error-color)};
 }
 
 @mixin border-psudo-styles($host-selector) {
@@ -394,17 +399,18 @@
 }
 
 @mixin expansion-panel-styles {
+  border-color: #{token(line-color)};
+  margin-left: #{token(expansion-panel-margin-left)};
+  margin-top: #{token(expansion-panel-margin-top)};
+  margin-bottom: #{token(expansion-panel-margin-bottom)};
+  border-left-width: #{token(expansion-panel-border-left-width)};
+
   border-left-style: solid;
-  @include theme.property(border-color, border-color);
-  @include theme.css-custom-property(border-left-width, --forge-step-expansion-panel-border-left-width, variables.$expansion-panel-border-left-width);
-  @include theme.css-custom-property(margin-left, --forge-step-expansion-panel-margin-left, variables.$expansion-panel-margin-left);
-  @include theme.css-custom-property(margin-top, --forge-step-expansion-panel-margin-top, variables.$expansion-panel-margin-top);
-  @include theme.css-custom-property(margin-bottom, --forge-step-expansion-panel-margin-bottom, variables.$expansion-panel-margin-bottom);
 }
 
 @mixin forge-ignore-user-expansion {
   .forge-step {
-    &__expanded-icon {
+    .expanded-icon {
       display: none;
     }
   }

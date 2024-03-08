@@ -1,0 +1,115 @@
+@use 'sass:map';
+@use '../../../border';
+@use '../../../elevation';
+@use '../../../shape';
+@use '../../../spacing';
+@use '../../../theme';
+@use '../../../typography';
+@use '../../../utils';
+
+$spacer-margin: 8px !default;
+
+$icon-font-size: 14px !default;
+$icon-margin: 0 8px 0 0 !default;
+$vertical-icon-margin: 0 16px 0 0 !default;
+$icon-size: 24px !default;
+
+$label-font-size: 14px !default;
+$label-font-weight: 500 !default;
+
+$clusetered-border-min-width: 25px !default;
+
+$expansion-panel-margin-left: 60px !default;
+$expansion-panel-margin-top: 4px !default;
+$expansion-panel-margin-bottom: 4px !default;
+$expansion-panel-border-left-width: 1px !default;
+
+$tokens: (
+  // Shared
+  primary-color: utils.module-val(step, primary-color, theme.variable(primary)),
+  text-color: utils.module-val(step, text-color, theme.variable(on-primary)),
+
+
+
+  // Base
+
+
+  // Icon
+  icon-fill: utils.module-val(step, icon-fill, unset),
+  icon-fill-active: utils.module-ref(step, icon-fill-active, primary-color),
+  icon-text-color: utils.module-val(step, icon-text-color, theme.variable(primary)),
+  icon-text-color-active: utils.module-val(step, icon-text-color-active, theme.variable(on-primary)),
+  icon-content-size: utils.module-val(step, icon-content-size, 24px),
+  icon-size: utils.module-val(step, icon-size, typography.font-size-relative('0875')),
+  // Disabled
+
+  // Line
+  line-color: utils.module-val(step, line-color, theme.variable(outline)),
+
+  // Active
+  active-color: utils.module-ref(step, active-color, primary-color),
+  active-text-color: utils.module-ref(step, active-text-color, text-color),
+
+  // Inactive
+
+  inactive-color: utils.module-val(step, inactive-color, theme.variable(text-low)),
+  inactive-background: utils.module-val(step, inactive-background, theme.variable(surface-container-minimum)),
+  label-color: utils.module-val(step, label-color, theme.variable(text-high)),
+  sub-label-color: utils.module-val(step, sub-label-color, theme.variable(text-medium)),
+
+  // Error
+  error-color: utils.module-val(step, error-color, theme.variable(error)),
+  error-text-color: utils.module-val(step, error-text-color, theme.variable(on-error)),
+
+  // Disabled
+  disabled-text-color: utils.module-val(step, disabled-text-color, theme.variable(text-low)),
+  disabled-color: utils.module-val(step, disabled-color, theme.variable(surface-container-minimum)),
+
+  // rename to block
+  expansion-panel-border-left-width: utils.module-val(step, expansion-panel-border-left-width, $expansion-panel-border-left-width),
+  expansion-panel-margin-bottom: utils.module-val(step, expansion-panel-margin-bottom, $expansion-panel-margin-bottom),
+  expansion-panel-margin-left: utils.module-val(step, expansion-panel-margin-left, $expansion-panel-margin-left),
+  expansion-panel-margin-top: utils.module-val(step, expansion-panel-margin-top, $expansion-panel-margin-top),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @include mdc-theme.property(color, error);
+// @include mdc-theme.property(color, primary);
+// @include mdc-theme.property(color, text-secondary-on-background);
+// @include mdc-typography.typography(caption);
+// @include mdc-theme.property(color, error);
+// @include mdc-theme.property(color, primary);
+// @include mdc-theme.property(color, text-primary-on-background);
+// @include mdc-typography.typography(body2);
+// @include theme.property(border-top-color, border-color);
+// @include mdc-theme.property(color, text-disabled-on-light);
+// @include theme.property(background-color, form-field-disabled-on-background);
+// @include mdc-theme.property(background-color, error);
+// @include mdc-theme.property(color, on-error);
+// @include mdc-theme.property(background-color, primary);
+// @include mdc-theme.property(color, on-primary);
+// @include mdc-theme.property(border-color, primary);
+// @include mdc-theme.property(color, text-primary-on-background);
+// @include mdc-theme.property(color, primary);
+// @include theme.property(color, form-field-text-disabled-on-background);
+// @include theme.property(color, form-field-text-disabled-on-background);
+// @include theme.property(color, icon-color);

@@ -1,19 +1,19 @@
 <template>
-  <div class="forge-step__container" part="root">
+  <div class="container" part="root">
     <button class="forge-step" type="button" part="button">
       <!-- The before and after are here for simulating the line to overlay the button since the ripple is taking over the button::after/before -->
       <div class="before" part="before"></div>
-      <div class="forge-step__icon-container" part="icon-container">
+      <div class="icon-container" part="icon-container">
         <div class="forge-step-icon-content" part="icon-content">
           <span class="forge-step-index" part="index"></span>
           <forge-icon class="forge-step-icon" part="icon"></forge-icon>
         </div>
       </div>
-      <div class="forge-step__text-container" part="text-container">
-        <div class="forge-step__title" part="title-container">
+      <div class="text-container" part="text-container">
+        <div class="title" part="title-container">
           <slot></slot>
         </div>
-        <div class="forge-step__subtitle" part="subtitle-container">
+        <div class="subtitle" part="subtitle-container">
           <slot name="optional"></slot>
         </div>
       </div>
