@@ -49,8 +49,8 @@
 }
 
 @mixin base-highlight() {
-  @include override(border-color, #{theme.variable(primary)}, value);
-  @include override(background, #{theme.variable(primary-container-minimum)}, value);
+  @include override(border-color, #{token(highlight-border-color)}, value);
+  @include override(background, #{token(highlight-background)}, value);
 }
 
 @mixin primary() {
