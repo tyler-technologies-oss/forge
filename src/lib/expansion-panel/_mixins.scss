@@ -32,6 +32,7 @@
 
 @mixin header() {
   outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @mixin header-hover() {
