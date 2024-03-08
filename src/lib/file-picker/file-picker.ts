@@ -67,6 +67,9 @@ declare global {
  * @cssproperty --forge-file-picker-padding - Controls the padding.
  * @cssproperty --forge-file-picker-padding-block - Controls the top and bottom padding.
  * @cssproperty --forge-file-picker-padding-inline - Controls the left and right padding.
+ * @cssproperty --forge-file-picker-disabled-opacity - Controls the opacity value of the file picker when it's disabled.
+ * @cssproperty --forge-file-picker-highlight-background - Controls the background color of the file picker when dragging files into the form.
+ * @cssproperty --forge-file-picker-highlight-border-color - Controls the border color of the file picker when dragging files into the form.
  * 
  * @csspart form - The <form> element at the root.
  * @csspart primary - The container element around the primary slot.
