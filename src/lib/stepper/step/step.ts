@@ -9,6 +9,8 @@ import { ExpansionPanelComponent } from '../../expansion-panel';
 
 import template from './step.html';
 import styles from './step.scss';
+import { StateLayerComponent } from '@tylertech/forge/state-layer';
+import { FocusIndicatorComponent } from '@tylertech/forge/focus-indicator';
 
 export interface IStepComponent extends IBaseComponent {
   index: number;
@@ -45,7 +47,9 @@ declare global {
   name: STEP_CONSTANTS.elementName,
   dependencies: [
     IconComponent,
-    ExpansionPanelComponent
+    ExpansionPanelComponent,
+    StateLayerComponent,
+    FocusIndicatorComponent
   ]
 })
 export class StepComponent extends BaseComponent implements IStepComponent {

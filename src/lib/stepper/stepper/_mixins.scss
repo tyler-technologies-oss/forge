@@ -1,5 +1,6 @@
 @use '@material/theme/theme' as mdc-theme;
 @use '../../theme';
+@use '../../state-layer';
 
 $spacer-margin: 8px !default;
 
@@ -85,7 +86,7 @@ $expansion-panel-border-left-width: 1px !default;
   content: '';
   position: relative;
   height: 0;
-  min-width: 10px;
+  min-width: #{token(line-width)};
   flex: 1;
   flex-basis: 0.000000001px;
   border-top-style: solid;

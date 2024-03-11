@@ -4,9 +4,9 @@
       <!-- The before and after are here for simulating the line to overlay the button since the ripple is taking over the button::after/before -->
       <div class="before" part="before"></div>
       <div class="icon-container" part="icon-container">
-        <div class="forge-step-icon-content" part="icon-content">
-          <span class="forge-step-index" part="index"></span>
-          <forge-icon class="forge-step-icon" part="icon"></forge-icon>
+        <div class="icon-content" part="icon-content">
+          <span class="index" part="index"></span>
+          <forge-icon class="icon" part="icon"></forge-icon>
         </div>
       </div>
       <div class="text-container" part="text-container">
@@ -18,6 +18,8 @@
         </div>
       </div>
       <div class="after" part="after"></div>
+      <forge-state-layer exportparts="surface:state-layer" target=":host"></forge-state-layer>
+      <forge-focus-indicator part="focus-indicator" target=":host" inward></forge-focus-indicator>
     </button>
   </div>
 </template>

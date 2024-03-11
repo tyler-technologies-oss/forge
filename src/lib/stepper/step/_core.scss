@@ -1,203 +1,204 @@
-
-@use '@material/ripple/ripple' as mdc-ripple;
-@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
+// @use '@material/ripple/ripple' as mdc-ripple;
+// @use '@material/ripple/ripple-theme' as mdc-ripple-theme;
 @use '../../theme';
 @use '../../core/styles/typography';
-
+@use '../../state-layer';
+@use '../../focus-indicator';
 @use './token-utils' as *;
 
 @forward './token-utils';
 
 @mixin core-styles() {
-  .forge-step {
-    @include base();
-    @include forge-interactable();
+  // .forge-step {
+  //   @include base();
+  //   @include forge-interactable();
 
-    .container {
-      display: contents;
-    }
+  //   .container {
+  //     display: contents;
+  //   }
 
-    .expansion-panel {
-      display: none;
-    }
+  //   .expansion-panel {
+  //     display: none;
+  //   }
 
-    .expanded-icon {
-      @include theme.property(color, icon-color);
+  //   .expanded-icon {
+  //     @include theme.property(color, icon-color);
 
-      display: none;
-      margin-left: auto;
-    }
+  //     display: none;
+  //     margin-left: auto;
+  //   }
 
-    .title {
-      @include label();
-    }
+  //   .title {
+  //     @include label();
+  //   }
 
-    .subtitle {
-      @include optional-label-slot-wrapper;
+  //   .subtitle {
+  //     @include optional-label-slot-wrapper;
 
-      ::slotted(*) {
-        @include optional-label();
-      }
-    }
+  //     ::slotted(*) {
+  //       @include optional-label();
+  //     }
+  //   }
 
-    .icon-container {
-      .forge-step-icon-content {
-        @include icon-content;
-      }
-    }
+  //   .icon-container {
+  //     .forge-step-icon-content {
+  //       @include icon-content;
+  //     }
+  //   }
 
-    // &:not(.forge-step--disabled) {
-    //   .forge-step-icon-content {
-    //     @include icon-content-color;
-    //   }
-    // }
+  //   // &:not(.forge-step--disabled) {
+  //   //   .forge-step-icon-content {
+  //   //     @include icon-content-color;
+  //   //   }
+  //   // }
 
-    &--disabled {
-      cursor: not-allowed;
+  //   &--disabled {
+  //     cursor: not-allowed;
 
-      &.forge-step {
-        .icon-container {
-          .forge-step-icon-content {
-            @include icon-content-disabled;
-          }
-        }
-      }
+  //     &.forge-step {
+  //       .icon-container {
+  //         .forge-step-icon-content {
+  //           @include icon-content-disabled;
+  //         }
+  //       }
+  //     }
 
-      color: #{token(disabled-text-color)};
-      .text-container {
-        .title {
-          color: #{token(disabled-text-color)};
-        }
+  //     color: #{token(disabled-text-color)};
+  //     .text-container {
+  //       .title {
+  //         color: #{token(disabled-text-color)};
+  //       }
 
-        .subtitle {
-          ::slotted(*) {
-            color: #{token(disabled-text-color)};
-          }
-        }
-      }
-    }
+  //       .subtitle {
+  //         ::slotted(*) {
+  //           color: #{token(disabled-text-color)};
+  //         }
+  //       }
+  //     }
+  //   }
 
-    &--alternative {
-      flex-direction: column;
+  //   &--alternative {
+  //     flex-direction: column;
 
-      .icon-container {
-        .forge-step-icon-content {
-          margin: 0;
-        }
-      }
-      .text-container {
-        @include text-container-alternative;
+  //     .icon-container {
+  //       .forge-step-icon-content {
+  //         margin: 0;
+  //       }
+  //     }
+  //     .text-container {
+  //       @include text-container-alternative;
 
-        place-items: center;
-      }
-    }
+  //       place-items: center;
+  //     }
+  //   }
 
-    &:not(.forge-step--selected):not(.forge-step--disabled) {
-      &:not(.forge-step--editable):not(.forge-step--completed),
-      &.forge-step--editable:not(.forge-step--completed) {
-        &:not(.forge-step--error) {
-          .forge-step-icon-content {
-            @include icon-content-default-theme;
+  //   &:not(.forge-step--selected):not(.forge-step--disabled) {
+  //     &:not(.forge-step--editable):not(.forge-step--completed),
+  //     &.forge-step--editable:not(.forge-step--completed) {
+  //       &:not(.forge-step--error) {
+  //         .forge-step-icon-content {
+  //           @include icon-content-default-theme;
 
-            .forge-step-index {
-              color: #{token(primary-color)};
-            }
-          }
-        }
-      }
-    }
+  //           .forge-step-index {
+  //             color: #{token(primary-color)};
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
 
-    &--selected {
-      &.forge-step--disabled {
-        .forge-step-icon-content {
-          @include icon-content-disabled();
-        }
-      }
+  //   &--selected {
+  //     &.forge-step--disabled {
+  //       .forge-step-icon-content {
+  //         @include icon-content-disabled();
+  //       }
+  //     }
 
-      &:not(.forge-step--disabled) {
-        .icon-container {
-          .forge-step-icon-content {
-            @include icon-content-selected();
-          }
-        }
-      }
+  //     &:not(.forge-step--disabled) {
+  //       .icon-container {
+  //         .forge-step-icon-content {
+  //           @include icon-content-selected();
+  //         }
+  //       }
+  //     }
 
-      &:not(.forge-step--disabled) {
-        .title {
-          @include label-selected();
-        }
+  //     &:not(.forge-step--disabled) {
+  //       .title {
+  //         @include label-selected();
+  //       }
 
-        .subtitle {
-          ::slotted(*) {
-            @include optional-label-selected();
-          }
-        }
-      }
-    }
+  //       .subtitle {
+  //         ::slotted(*) {
+  //           @include optional-label-selected();
+  //         }
+  //       }
+  //     }
+  //   }
 
-    &--error {
-      &:not(.forge-step--disabled) {
-        .title {
-          @include label-error();
-        }
+  //   &--error {
+  //     &:not(.forge-step--disabled) {
+  //       .title {
+  //         @include label-error();
+  //       }
 
-        .subtitle {
-          ::slotted(*) {
-            @include optional-label-error();
-          }
-        }
+  //       .subtitle {
+  //         ::slotted(*) {
+  //           @include optional-label-error();
+  //         }
+  //       }
 
-        .icon-container {
-          .forge-step-icon-content {
-            @include icon-content-error();
-          }
-        }
-      }
-    }
+  //       .icon-container {
+  //         .forge-step-icon-content {
+  //           @include icon-content-error();
+  //         }
+  //       }
+  //     }
+  //   }
 
-    &--completed {
-      &:not(.forge-step--disabled) {
-        &:not(.forge-step--error) {
-          &:not(.forge-step--editable) {
-            .forge-step-icon-content {
-              @include icon-content-completed();
-            }
-          }
-          &.forge-step--editable {
-            .forge-step-icon-content {
-              @include icon-content-completed();
-            }
-          }
-        }
-      }
-    }
+  //   &--completed {
+  //     &:not(.forge-step--disabled) {
+  //       &:not(.forge-step--error) {
+  //         &:not(.forge-step--editable) {
+  //           .forge-step-icon-content {
+  //             @include icon-content-completed();
+  //           }
+  //         }
+  //         &.forge-step--editable {
+  //           .forge-step-icon-content {
+  //             @include icon-content-completed();
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
 
-    &--expandable {
-      .expanded-icon {
-        display: inline-block;
-        transition: transform 300ms ease-in-out;
-      }
+  //   &--expandable {
+  //     .expanded-icon {
+  //       display: inline-block;
+  //       transition: transform 300ms ease-in-out;
+  //     }
 
-      &.forge-step--expanded {
-        .expanded-icon {
-          transform: rotate(180deg);
-        }
-      }
+  //     &.forge-step--expanded {
+  //       .expanded-icon {
+  //         transform: rotate(180deg);
+  //       }
+  //     }
 
-      .icon-container {
-        .forge-step-icon-content {
-          margin: 0 16px 0 0;
-        }
-      }
-    }
+  //     .icon-container {
+  //       .forge-step-icon-content {
+  //         margin: 0 16px 0 0;
+  //       }
+  //     }
+  //   }
 
-    .text-container {
-      @include text-container();
-    }
-  }
+  //   .text-container {
+  //     @include text-container();
+  //   }
+  // }
 }
 
 @mixin base() {
+  -webkit-tap-highlight-color: transparent;
   padding: 12px 16px;
   outline: none;
   background: none;
@@ -221,28 +222,28 @@
 }
 
 @mixin forge-interactable() {
-  @include mdc-ripple.surface;
-  @include mdc-ripple.radius-bounded;
-  @include mdc-ripple-theme.states;
-  @include mdc-ripple-theme.states-selected(primary);
+  // @include mdc-ripple.surface;
+  // @include mdc-ripple.radius-bounded;
+  // @include mdc-ripple-theme.states;
+  // @include mdc-ripple-theme.states-selected(primary);
 
   cursor: pointer;
 
   &.forge-step--error.forge-step {
-    @include mdc-ripple-theme.states-selected(error);
+    // @include mdc-ripple-theme.states-selected(error);
   }
 
-  &--selected {
-    // @include mdc-theme.property(color, primary);
-    color: #{token(primary-color)};
-  }
+  // &--selected {
+  //   // @include mdc-theme.property(color, primary);
+  //   color: #{token(primary-color)};
+  // }
 
-  &--disabled {
-    &::before,
-    &::after {
-      background-color: transparent;
-    }
-  }
+  // &--disabled {
+  //   &::before,
+  //   &::after {
+  //     background-color: transparent;
+  //   }
+  // }
 }
 
 @mixin icon-content-default-theme {
@@ -305,12 +306,13 @@
   content: '';
   position: relative;
   height: 0;
-  min-width: 10px;
+  min-width: #{token(line-min-width)};
   flex: 1;
   flex-basis: 0.000000001px;
   border-top-style: solid;
   border-top-width: 1px;
   border-radius: 1px 0 0 1px;
+  z-index: 2;
 }
 
 @mixin text-container() {
@@ -388,6 +390,15 @@
   }
 }
 
+@mixin border-psudo-clustered {
+  // min-width: 25px;
+}
+
+@mixin border-psudo-safari-alternative {
+  // top: 24px;
+  // margin: 0 -5px;
+}
+
 @mixin vertical-base {
   width: 100%;
   border-radius: 4px;
@@ -414,4 +425,37 @@
       display: none;
     }
   }
+}
+
+@mixin selected {
+  background-color: #{token(active-surface-color)};
+}
+
+@mixin selected-error {
+  background-color: #{token(error-surface-color)};
+}
+
+@mixin state-layer-active {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(primary-color)}
+    )
+  );
+}
+
+@mixin state-layer-error {
+  @include state-layer.provide-theme(
+    (
+      color: #{token(error-color)}
+    )
+  );
+}
+
+@mixin focus-indicator-base {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(primary-color)},
+      shape: 8px
+    )
+  );
 }
