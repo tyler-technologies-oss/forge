@@ -49,8 +49,8 @@
 }
 
 @mixin base-highlight() {
-  @include override(border-color, #{token(highlight-border-color)}, value);
-  @include override(background, #{token(highlight-background)}, value);
+  @include override(border-color, highlight-border-color);
+  @include override(background, highlight-background);
 }
 
 @mixin primary() {
