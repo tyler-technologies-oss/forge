@@ -29,7 +29,7 @@
   border-end-start-radius: #{token(end-start-shape)};
   border-end-end-radius: #{token(end-end-shape)};
 
-  background-color: #{token(background)};
+  background: #{token(background)};
 }
 
 @mixin inner {
