@@ -1,7 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ExpansionPanelAdapter } from './expansion-panel-adapter';
-import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 import { ExpansionPanelFoundation } from './expansion-panel-foundation';
 
 import template from './expansion-panel.html';
@@ -9,12 +9,9 @@ import styles from './expansion-panel.scss';
 
 export interface IExpansionPanelComponent extends IBaseComponent {
   open: boolean;
-  useAnimations: boolean;
-  openCallback: () => void | Promise<void>;
-  closeCallback: () => void | Promise<void>;
-  orientation: string;
+  orientation: ExpansionPanelOrientation;
+  animationType: ExpansionPanelAnimationType;
   toggle(): void;
-  setOpenImmediate(open: boolean): void;
 }
 
 declare global {
@@ -24,24 +21,40 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-expansion-panel-toggle': CustomEvent<boolean>;
+    'forge-expansion-panel-animation-complete': CustomEvent<boolean>;
   }
 }
 
 /**
- * A web component that encapsulates the functionality of expanding/collapsing content when clicked.
- * 
  * @tag forge-expansion-panel
+ * 
+ * @property {boolean} open - Whether the panel is open or closed.
+ * @property {ExpansionPanelOrientation} orientation - The orientation of the panel.
+ * @property {ExpansionPanelAnimationType} animationType - The type of animation to use when opening/closing the panel.
+ * 
+ * @attribute {boolean} open - Whether the panel is open or closed.
+ * @attribute {ExpansionPanelOrientation} orientation - The orientation of the panel.
+ * @attribute {ExpansionPanelAnimationType} animation-type - The type of animation to use when opening/closing the panel.
+ * 
+ * @fires forge-expansion-panel-toggle - Event fired when the panel is toggled open or closed.
+ * @fires forge-expansion-panel-animation-complete - Event fired when the panel has finished animating when toggling.
+ * 
+ * @cssproperty --forge-expansion-animation-duration - The duration of the open/close animation.
+ * @cssproperty --forge-expansion-animation-easing - The easing function of the open/close animation.
+ * 
+ * @csspart root - The root element of the panel.
+ * @csspart header - The header of the panel.
+ * @csspart content - The content of the panel.
+ * 
+ * @slot - The content of the panel.
+ * @slot header - The header of the panel.
  */
 @CustomElement({
   name: EXPANSION_PANEL_CONSTANTS.elementName
 })
 export class ExpansionPanelComponent extends BaseComponent implements IExpansionPanelComponent {
   public static get observedAttributes(): string[] {
-    return [
-      EXPANSION_PANEL_CONSTANTS.attributes.OPEN,
-      EXPANSION_PANEL_CONSTANTS.attributes.ORIENTATION,
-      EXPANSION_PANEL_CONSTANTS.attributes.USE_ANIMATIONS
-    ];
+    return Object.values(EXPANSION_PANEL_CONSTANTS.observedAttributes);
   }
 
   private _foundation: ExpansionPanelFoundation;
@@ -52,70 +65,34 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
     this._foundation = new ExpansionPanelFoundation(new ExpansionPanelAdapter(this));
   }
 
-  public initializedCallback(): void {
-    this._foundation.initialize();
-  }
-
   public connectedCallback(): void {
-    this._foundation.connect();
+    this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case EXPANSION_PANEL_CONSTANTS.attributes.OPEN:
+      case EXPANSION_PANEL_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
-      case EXPANSION_PANEL_CONSTANTS.attributes.ORIENTATION:
-        this.orientation = newValue;
+      case EXPANSION_PANEL_CONSTANTS.observedAttributes.ORIENTATION:
+        this.orientation = newValue as ExpansionPanelOrientation;
         break;
-      case EXPANSION_PANEL_CONSTANTS.attributes.USE_ANIMATIONS:
-        this.useAnimations = coerceBoolean(newValue);
+      case EXPANSION_PANEL_CONSTANTS.observedAttributes.ANIMATION_TYPE:
+        this.animationType = newValue as ExpansionPanelAnimationType;
         break;
     }
   }
 
-  public disconnectedCallback(): void {
-    this._foundation.disconnect();
-  }
-
-  /** Controls the open state of the panel. */
   @FoundationProperty()
   public declare open: boolean;
 
-  /**
-   * Sets the function to call when the panel wants to open.
-   * The function must return a promise which can be resolved to
-   * open the panel or rejected which cancels the panel open.
-   */
   @FoundationProperty()
-  public declare openCallback: () => void | Promise<void>;
+  public declare orientation: ExpansionPanelOrientation;
 
-  /**
-   * Sets the function to call when the panel wants to close.
-   * The function must return a promise which can be resolved to
-   * close the panel or rejected which cancels the panel close.
-   */
   @FoundationProperty()
-  public declare closeCallback: () => void | Promise<void>;
+  public declare animationType: ExpansionPanelAnimationType;
 
-  /**
-   * Sets the orientation of the panel expansion.
-   * Valid values are 'vertical' (default) or 'horizontal'.
-   */
-  @FoundationProperty()
-  public declare orientation: string;
-
-  /** Gets/sets if animations are used in the expand/collapse transition. */
-  @FoundationProperty()
-  public declare useAnimations: boolean;
-
-  /** Toggles the collapsed state. */
   public toggle(): void {
     this.open = !this.open;
-  }
-
-  /** Forces the expansion panel to expand/collapse without transition animations. */
-  public setOpenImmediate(open: boolean): void {
-    this._foundation.setOpenImmediate(open);
   }
 }

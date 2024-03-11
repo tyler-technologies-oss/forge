@@ -1,10 +1,12 @@
 <template>
   <div class="forge-expansion-panel" part="root">
-    <div class="forge-expansion-panel__header" part="header">
+    <div class="header" part="header">
       <slot name="header"></slot>
     </div>
-    <div class="forge-expansion-panel__content" style="height: 0; opacity: 0; visibility: hidden;" part="content">
-      <slot></slot>
+    <div class="content hidden" part="content">
+      <div class="inner">
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>

@@ -150,7 +150,7 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
   }
 
   public setExpansionPanelAnimations(animate: boolean): void {
-    this._expansionPanel.useAnimations = animate;
+    this._expansionPanel.immediate = !animate;
   }
 
   public addExpansionPanel(): void {
@@ -215,7 +215,7 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
 
   private _createExpansionPanel(): IExpansionPanelComponent {
     const panel = document.createElement('forge-expansion-panel');
-    panel.useAnimations = false;
+    panel.immediate = true;
     panel.setAttribute('part', 'expansion-panel');
     addClass(STEP_CONSTANTS.classes.EXPANSION_PANEL, panel);
 

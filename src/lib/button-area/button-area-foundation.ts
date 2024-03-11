@@ -46,8 +46,8 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     }
 
     // Prevent the click if a selection was made
-    const selectionType = window.getSelection()?.type;
-    if (selectionType === 'Range') {
+    const selection = window.getSelection();
+    if (selection?.type === 'Range' && selection?.toString().trim() !== '') {
       event.stopPropagation();
     }
 

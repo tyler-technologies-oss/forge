@@ -1,7 +1,13 @@
 .expandable-card {
-  --forge-card-padding: 16px;
+  --forge-card-padding: 0;
 }
 
-.expansion-panel-header {
-  justify-content: space-between;
+.scrollable-expansion-content {
+  max-height: 200px;
+  overflow: auto;
+}
+
+// Hides scrollbar while expansion panel is animating open
+forge-expansion-panel[opening] .scrollable-expansion-content {
+  overflow: hidden;
 }
