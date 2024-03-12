@@ -28,6 +28,8 @@ declare global {
 /**
  * @tag forge-expansion-panel
  * 
+ * @summary Expansion panels provide progressive disclosure of content.
+ * 
  * @property {boolean} open - Whether the panel is open or closed.
  * @property {ExpansionPanelOrientation} orientation - The orientation of the panel.
  * @property {ExpansionPanelAnimationType} animationType - The type of animation to use when opening/closing the panel.
