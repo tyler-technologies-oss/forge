@@ -107,11 +107,11 @@
 
 @mixin step-line() {
   border-color: #{token(line-color)};
+  min-width: #{token(line-min-width)};
 
   content: '';
   position: relative;
   height: 0;
-  min-width: #{token(line-min-width)};
   flex: 1;
   flex-basis: 0.000000001px;
   border-top-style: solid;
@@ -224,10 +224,11 @@
 }
 
 @mixin background-selected {
+  background-color: #{token(primary-color)};
+
   content: '';
   position: absolute;
   inset: 0;
-  background-color: #{token(primary-color)};
   opacity: 0.08;
   height: 100%;
   width: 100%;
