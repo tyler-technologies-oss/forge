@@ -30,6 +30,7 @@ declare global {
  * 
  * @property {string | null | undefined} for - The id of the associated element.
  * @property {HTMLElement | null | undefined} forElement - The associated element.
+ * @property {HTMLElement | null | undefined} clickTarget - The element that a click should be simulated on. If not defined clicks act on the associated element.
  * @property {boolean} dynamic - Propagates changes in the label's text content to the associated element.
  * @property {boolean} nonInteractive - Removes click handling from the label.
  * @property {boolean} legend - Whether or not the label should be associated with an ancestor element.
@@ -89,6 +90,9 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
 
   @FoundationProperty()
   public declare forElement: HTMLElement | null | undefined;
+
+  @FoundationProperty()
+  public declare clickTarget: HTMLElement | null | undefined;
 
   @FoundationProperty()
   public declare dynamic: boolean;
