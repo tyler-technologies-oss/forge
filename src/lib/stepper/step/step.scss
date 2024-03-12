@@ -1,14 +1,12 @@
 @use '../../theme';
 @use './core' as *;
 
-$vertical-icon-margin: 0 16px 0 0 !default;
-
 :host {
   @include tokens;
 }
 
-:host([selected]) {
-  @include state-layer-active;
+:host(:focus) {
+  outline: none;
 }
 
 :host([error]) {
@@ -17,49 +15,28 @@ $vertical-icon-margin: 0 16px 0 0 !default;
 
 :host(:first-child[alternative]) {
   &::after {
-    align-self: flex-start;
-    top: 22px;
-    margin: 0;
+    @include psudo-line-begin-alternate;
   }
 }
 :host(:last-child[alternative]) {
   &::before {
-    align-self: flex-start;
-    top: 22px;
-    margin: 0;
+    @include psudo-line-end-alternate;
   }
 }
 
 :host(:not(:first-child):not(:last-child)[alternative]) {
   &::before,
   &::after {
-    align-self: flex-start;
-    top: 22px;
-    min-width: 7px;
-    margin: 0;
+    @include psudo-line-alternate;
   }
 }
 
 :host(:not(:last-child)[alternative]) {
   .after {
-    align-self: flex-start;
-    top: 22px;
-    position: absolute;
-    width: calc(50% - 18px);
-    left: calc(50% + 18px);
-    height: 0;
-    right: 0;
+    @include after-container-alternate;
 
     &::after {
-      content: '';
-      flex: 1;
-      flex-basis: 0.000000001px;
-      position: absolute;
-      right: 0;
-      left: 0;
-      min-width: 0;
-      width: 100%;
-
+      @include after-container-alternate-psudo-base;
       @include line();
     }
   }
@@ -67,22 +44,10 @@ $vertical-icon-margin: 0 16px 0 0 !default;
 
 :host(:not(:first-child)[alternative]) {
   .before {
-    align-self: flex-start;
-    top: 22px;
-    position: absolute;
-    left: 0;
-    width: calc(50% - 18px);
-    height: 0;
+    @include before-container-alternate;
 
     &::before {
-      content: '';
-      left: 0;
-      min-width: 0;
-      width: 100%;
-      flex: 1;
-      flex-basis: 0.000000001px;
-      position: absolute;
-
+      @include before-container-alternate-psudo-base;
       @include line();
     }
   }
@@ -92,105 +57,59 @@ $vertical-icon-margin: 0 16px 0 0 !default;
   &::before,
   &::after {
     @include step-line;
-
-    margin: 0 -10px;
+    @include psudo-line-between-inset;
   }
 }
 
 :host(:last-child):host(:not([vertical])) {
   &::before {
     @include step-line;
-
-    margin: 0 -10px 0 0;
+    @include psudo-line-end-inset;
   }
 }
 
-:host(:not(:last-child)):host(:not([vertical])) {
+:host(:is(:first-child)):host(:not([vertical])) {
   &::after {
     @include step-line;
-
-    margin: 0 0 0 -10px;
+    @include psudo-line-start-inset;
   }
-}
-
-:host(:focus) {
-  outline: none;
 }
 
 :host([vertical]) {
   @include vertical-host;
 
   &::after {
-    content: none;
+    @include vertical-psudo-line;
   }
 
   &::before {
-    content: none;
+    @include vertical-psudo-line;
   }
 
   .forge-step {
     @include vertical-base;
 
     .text-container {
-      white-space: normal;
+      @include vertical-text-container;
     }
   }
 
   .icon-container {
     .icon-content {
-      margin: $vertical-icon-margin;
+      @include vertical-icon-container-content;
     }
   }
 }
 
 :host([vertical][expandable]) {
   .expansion-panel {
-    display: block;
+    @include veritcal-expansion-panel;
   }
 }
 
 :host([ignore-user-expansion]) {
   @include forge-ignore-user-expansion;
 }
-
-// :host(:not(:last-child)[clustered]) {
-//   &::after {
-//     @include border-psudo-clustered;
-//   }
-// }
-
-// :host(:last-child[clustered]) {
-//   &::before {
-//     @include border-psudo-clustered;
-//   }
-// }
-
-// :host(:not(:first-child):not(:last-child)[clustered]) {
-//   &::before,
-//   &::after {
-//     @include border-psudo-clustered;
-//   }
-// }
-
-// :host(:not(:last-child)[safari][alternative]) {
-//   &::after {
-//     @include border-psudo-safari-alternative;
-//   }
-// }
-
-// :host(:last-child[safari][alternative]) {
-//   &::before {
-//     @include border-psudo-safari-alternative;
-//   }
-// }
-
-// :host(:not(:first-child):not(:last-child)[safari][alternative]) {
-//   &::before,
-//   &::after {
-//     color: red;
-//     @include border-psudo-safari-alternative;
-//   }
-// }
 
 forge-expansion-panel {
   &::part(root) {
@@ -202,15 +121,6 @@ forge-focus-indicator {
   @include focus-indicator-base;
 }
 
-// @include border-psudo-styles('[clustered]') {
-//   min-width: $clusetered-border-min-width;
-// }
-
-// @include border-psudo-styles('[safari][alternative]') {
-//   top: 24px;
-//   margin: 0 -5px;
-// }
-
 .container {
   display: contents;
 }
@@ -219,11 +129,20 @@ forge-focus-indicator {
   @include base();
   @include forge-interactable();
 
+  &.error {
+    forge-focus-indicator {
+      @include focus-indicator-error;
+    }
+  }
+
   &.selected:not(.disabled) {
-    @include selected();
+    @include state-layer-active;
+    &::before {
+      @include background-selected;
+    }
 
     &.error {
-      @include selected-error();
+      @include background-selected-error;
     }
   }
 
@@ -255,12 +174,6 @@ forge-focus-indicator {
       @include icon-content;
     }
   }
-
-  // &:not(.disabled) {
-  //   .icon-content {
-  //     @include icon-content-color;
-  //   }
-  // }
 
   &.disabled {
     cursor: not-allowed;

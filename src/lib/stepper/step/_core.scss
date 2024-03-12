@@ -8,195 +8,6 @@
 
 @forward './token-utils';
 
-@mixin core-styles() {
-  // .forge-step {
-  //   @include base();
-  //   @include forge-interactable();
-
-  //   .container {
-  //     display: contents;
-  //   }
-
-  //   .expansion-panel {
-  //     display: none;
-  //   }
-
-  //   .expanded-icon {
-  //     @include theme.property(color, icon-color);
-
-  //     display: none;
-  //     margin-left: auto;
-  //   }
-
-  //   .title {
-  //     @include label();
-  //   }
-
-  //   .subtitle {
-  //     @include optional-label-slot-wrapper;
-
-  //     ::slotted(*) {
-  //       @include optional-label();
-  //     }
-  //   }
-
-  //   .icon-container {
-  //     .forge-step-icon-content {
-  //       @include icon-content;
-  //     }
-  //   }
-
-  //   // &:not(.forge-step--disabled) {
-  //   //   .forge-step-icon-content {
-  //   //     @include icon-content-color;
-  //   //   }
-  //   // }
-
-  //   &--disabled {
-  //     cursor: not-allowed;
-
-  //     &.forge-step {
-  //       .icon-container {
-  //         .forge-step-icon-content {
-  //           @include icon-content-disabled;
-  //         }
-  //       }
-  //     }
-
-  //     color: #{token(disabled-text-color)};
-  //     .text-container {
-  //       .title {
-  //         color: #{token(disabled-text-color)};
-  //       }
-
-  //       .subtitle {
-  //         ::slotted(*) {
-  //           color: #{token(disabled-text-color)};
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   &--alternative {
-  //     flex-direction: column;
-
-  //     .icon-container {
-  //       .forge-step-icon-content {
-  //         margin: 0;
-  //       }
-  //     }
-  //     .text-container {
-  //       @include text-container-alternative;
-
-  //       place-items: center;
-  //     }
-  //   }
-
-  //   &:not(.forge-step--selected):not(.forge-step--disabled) {
-  //     &:not(.forge-step--editable):not(.forge-step--completed),
-  //     &.forge-step--editable:not(.forge-step--completed) {
-  //       &:not(.forge-step--error) {
-  //         .forge-step-icon-content {
-  //           @include icon-content-default-theme;
-
-  //           .forge-step-index {
-  //             color: #{token(primary-color)};
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   &--selected {
-  //     &.forge-step--disabled {
-  //       .forge-step-icon-content {
-  //         @include icon-content-disabled();
-  //       }
-  //     }
-
-  //     &:not(.forge-step--disabled) {
-  //       .icon-container {
-  //         .forge-step-icon-content {
-  //           @include icon-content-selected();
-  //         }
-  //       }
-  //     }
-
-  //     &:not(.forge-step--disabled) {
-  //       .title {
-  //         @include label-selected();
-  //       }
-
-  //       .subtitle {
-  //         ::slotted(*) {
-  //           @include optional-label-selected();
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   &--error {
-  //     &:not(.forge-step--disabled) {
-  //       .title {
-  //         @include label-error();
-  //       }
-
-  //       .subtitle {
-  //         ::slotted(*) {
-  //           @include optional-label-error();
-  //         }
-  //       }
-
-  //       .icon-container {
-  //         .forge-step-icon-content {
-  //           @include icon-content-error();
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   &--completed {
-  //     &:not(.forge-step--disabled) {
-  //       &:not(.forge-step--error) {
-  //         &:not(.forge-step--editable) {
-  //           .forge-step-icon-content {
-  //             @include icon-content-completed();
-  //           }
-  //         }
-  //         &.forge-step--editable {
-  //           .forge-step-icon-content {
-  //             @include icon-content-completed();
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   &--expandable {
-  //     .expanded-icon {
-  //       display: inline-block;
-  //       transition: transform 300ms ease-in-out;
-  //     }
-
-  //     &.forge-step--expanded {
-  //       .expanded-icon {
-  //         transform: rotate(180deg);
-  //       }
-  //     }
-
-  //     .icon-container {
-  //       .forge-step-icon-content {
-  //         margin: 0 16px 0 0;
-  //       }
-  //     }
-  //   }
-
-  //   .text-container {
-  //     @include text-container();
-  //   }
-  // }
-}
-
 @mixin base() {
   -webkit-tap-highlight-color: transparent;
   padding: 12px 16px;
@@ -312,7 +123,6 @@
   border-top-style: solid;
   border-top-width: 1px;
   border-radius: 1px 0 0 1px;
-  z-index: 2;
 }
 
 @mixin text-container() {
@@ -435,6 +245,20 @@
   background-color: #{token(error-surface-color)};
 }
 
+@mixin background-selected {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #{token(primary-color)};
+  opacity: 0.08;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin background-selected-error {
+  @include override(primary-color, error-color);
+}
+
 @mixin state-layer-active {
   @include state-layer.provide-theme(
     (
@@ -455,7 +279,102 @@
   @include focus-indicator.provide-theme(
     (
       color: #{token(primary-color)},
-      shape: 8px
+      shape: 16px
     )
   );
+}
+
+@mixin focus-indicator-error {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(error-color)}
+    )
+  );
+}
+
+@mixin psudo-line-begin-alternate {
+  align-self: flex-start;
+  top: 22px;
+  margin: 0;
+}
+
+@mixin psudo-line-end-alternate {
+  align-self: flex-start;
+  top: 22px;
+  margin: 0;
+}
+
+@mixin psudo-line-alternate {
+  align-self: flex-start;
+  top: 22px;
+  min-width: 7px;
+  margin: 0;
+}
+
+@mixin after-container-alternate {
+  align-self: flex-start;
+  top: 22px;
+  position: absolute;
+  width: calc(50% - 18px);
+  left: calc(50% + 18px);
+  height: 0;
+  right: 0;
+}
+
+@mixin after-container-alternate-psudo-base {
+  content: '';
+  flex: 1;
+  flex-basis: 0.000000001px;
+  position: absolute;
+  right: 0;
+  left: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+@mixin before-container-alternate {
+  align-self: flex-start;
+  top: 22px;
+  position: absolute;
+  left: 0;
+  width: calc(50% - 18px);
+  height: 0;
+}
+
+@mixin before-container-alternate-psudo-base {
+  content: '';
+  left: 0;
+  min-width: 0;
+  width: 100%;
+  flex: 1;
+  flex-basis: 0.000000001px;
+  position: absolute;
+}
+
+@mixin psudo-line-start-inset {
+  margin: 0 -10px;
+}
+
+@mixin psudo-line-between-inset {
+  margin: 0 -10px;
+}
+
+@mixin psudo-line-end-inset {
+  margin: 0 -10px 0 0;
+}
+
+@mixin vertical-psudo-line {
+  content: none;
+}
+
+@mixin vertical-text-container {
+  white-space: normal;
+}
+
+@mixin vertical-icon-container-content {
+  margin: 0 16px 0 0;
+}
+
+@mixin veritcal-expansion-panel {
+  display: block;
 }
