@@ -17,6 +17,7 @@ export class LabelFoundation implements ILabelFoundation {
   // State
   private _for: string | null | undefined;
   private _forElement: HTMLElement | null | undefined;
+  private _clickTarget: HTMLElement | null | undefined;
   private _dynamic = false;
   private _nonInteractive = false;
   private _legend = false;
@@ -74,7 +75,7 @@ export class LabelFoundation implements ILabelFoundation {
   private _handleClick(evt: PointerEvent): void {
     // Prevent duplicate clicks from a nested target element or if the event originates
     // from within the target element
-    const targetEl = this._adapter.getTargetElement();
+    const targetEl = this._clickTarget ?? this._adapter.getTargetElement();
     if (evt.target === targetEl || targetEl?.contains(evt.target as Node)) {
       return;
     }
@@ -137,6 +138,15 @@ export class LabelFoundation implements ILabelFoundation {
       this._forElement = value;
       this._adapter.setTargetElement(this._forElement ?? null);
       this._tryConnect();
+    }
+  }
+
+  public get clickTarget(): HTMLElement | null | undefined {
+    return this._clickTarget;
+  }
+  public set clickTarget(value: HTMLElement | null | undefined) {
+    if (this._clickTarget !== value) {
+      this._clickTarget = value;
     }
   }
 

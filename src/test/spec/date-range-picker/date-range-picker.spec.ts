@@ -99,7 +99,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       const toggleButton = this.context.component.querySelector(ICON_BUTTON_CONSTANTS.elementName) as HTMLElement;
 
       expect(toggleButton).not.toBeNull();
-      expect(toggleButton.slot).toBe('trailing');
+      expect(toggleButton.slot).toBe('end');
     });
 
     it('should allow for setting all property values before being placed in DOM', function(this: ITestContext) {

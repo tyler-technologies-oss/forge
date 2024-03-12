@@ -1,0 +1,80 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+@use '../core/styles/theme';
+@forward './token-utils';
+
+@mixin host() {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin base() {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  gap: #{token(gap)};
+
+  box-sizing: border-box;
+  padding: #{token(padding)};
+  height: #{token(height)};
+  width: #{token(width)};
+  max-width: #{token(max-width)};
+  text-align: center;
+  background: #{token(background)};
+  cursor: pointer;
+
+  border-width: #{token(border-width)};
+  border-style: #{token(border-style)};
+  border-color: #{token(border-color)};
+}
+
+@mixin base-disabled() {
+  opacity: #{token(disabled-opacity)};
+  cursor: unset;
+}
+
+@mixin base-compact() {
+  @include override(height, fit-content, value);
+  @include override(width, fit-content, value);
+  @include override(background-color, transparent, value);
+  @include override(padding, 0, value);
+
+  border: none;
+}
+
+@mixin base-borderless() {
+  @include override(width, 100%, value);
+  border: none;
+}
+
+@mixin base-highlight() {
+  @include override(border-color, highlight-border-color);
+  @include override(background, highlight-background);
+}
+
+@mixin primary() {
+  @include typography.style(body2);
+
+  color: #{theme.variable(text-high)};
+  max-width: #{token(max-width)};
+}
+
+@mixin button-compact() {
+  @include override(width, auto, value);
+
+  background-color: transparent;
+}
+
+@mixin secondary() {
+  @include typography.style(body1);
+
+  color: #{theme.variable(text-high)};
+  max-width: #{token(max-width)};
+}
+
+@mixin helper-text() {
+  @include typography.style(label1);
+
+  text-align: start;
+}

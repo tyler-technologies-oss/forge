@@ -1,11 +1,76 @@
-@use './mixins';
-
-@include mixins.styles;
+@use './core' as *;
 
 :host {
-  @include mixins.host;
+  @include tokens;
+}
+
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+:host([compact]) {
+ display: inline-block;
+}
+
+.forge-file-picker {
+ @include tokens;
+}
+
+.forge-file-picker {
+ @include base;
+
+ &[disabled] {
+   @include base-disabled;
+ }
+
+ &:not(.compact).highlight {
+   @include base-highlight;
+ }
+}
+
+.primary {
+ @include primary;
+}
+
+.secondary {
+ @include secondary;
+}
+
+.input {
+ display: none;
+}
+
+.helper-text {
+ ::slotted([slot='helper-text']) {
+   @include helper-text;
+ }
+}
+
+.borderless {
+ @include base-borderless;
+
+ &:not(.compact).highlight {
+   border: none;
+ }
+
+ + .helper-text {
+   display: none;
+ }
+}
+
+.compact {
+ @include base-compact;
+
+ .primary,
+ .secondary {
+   display: none;
+ }
+
+ .button {
+   @include button-compact;
+ }
 }
