@@ -11,14 +11,21 @@
   background-color: transparent;
 
   padding-block: 0;
-  padding-inline-start: #{token(main-content-padding-start, custom)};
-  padding-inline-end: #{token(main-content-padding-end, custom)};
-
+  padding-inline: 0;
   inline-size: 100%;
   block-size: 100%;
 
   color: inherit;
   font: inherit;
+  text-overflow: ellipsis;
+}
+
+@mixin first-default-slot-content {
+  padding-inline-start: #{token(main-content-padding-start, custom)};
+}
+
+@mixin last-default-slot-content {
+  padding-inline-end: #{token(main-content-padding-end, custom)};
 }
 
 @mixin default-slot-textarea {
@@ -26,7 +33,23 @@
 }
 
 @mixin slotted-inset-label {
-  inline-size: 100%;
+  max-inline-size: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin slotted-forge-label {
+  font: inherit;
+}
+
+@mixin default-slot-disabled {
+  cursor: not-allowed;
+}
+
+@mixin slotted-multi-input-separator {
+  align-self: center;
+
+  padding-inline: 4px;
+  block-size: fit-content;
+  inline-size: fit-content;
 }

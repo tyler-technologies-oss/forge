@@ -1,9 +1,11 @@
-import { emitEvent, listenOwnProperty, getActiveElement } from '@tylertech/forge-core';
+import { emitEvent, listenOwnProperty, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
+import { sep } from 'path';
 import { CalendarDropdown, ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown';
 import { DateInputMask, IDateInputMaskOptions } from '../core';
 import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from '../date-picker/base/base-date-picker-adapter';
 import { IDatePickerCalendarDropdownConfig } from '../date-picker/base/base-date-picker-constants';
 import { createToggleElement } from '../date-picker/base/base-date-picker-utils';
+import { FIELD_CONSTANTS } from '../field-next';
 import { DateRangePickerComponent, IDateRangePickerComponent } from './date-range-picker';
 import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants';
 
@@ -42,6 +44,9 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     if (!this._fromInputElement || !this._fromInputElement) {
       throw new Error(`The ${DATE_RANGE_PICKER_CONSTANTS.elementName} requires two inputs`);
     }
+
+    const separator = this._createInputSeparator();
+    this._fromInputElement.insertAdjacentElement('afterend', separator);
   }
 
   protected _initializeCalendarDropdown(): void {
@@ -242,5 +247,13 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
 
   private _applyToInputs(action: (input: HTMLInputElement) => void): void {
     [this._fromInputElement, this._toInputElement].forEach(action);
+  }
+
+  private _createInputSeparator(): HTMLElement {
+    const separator = document.createElement('span');
+    toggleAttribute(separator, true, FIELD_CONSTANTS.attributes.MULTI_INPUT_SEPARATOR);
+    separator.setAttribute('aria-hidden', 'true');
+    separator.textContent = '-';
+    return separator;
   }
 }

@@ -1,8 +1,9 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core';
 import { FocusIndicatorComponent } from '../focus-indicator';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 import { FieldAdapter } from './field-adapter';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS } from './field-constants';
+import { FIELD_CONSTANTS } from './field-constants';
 import { FieldFoundation } from './field-foundation';
 
 import template from './field.html';
@@ -156,6 +157,8 @@ declare global {
  * @cssproperty --multiline-min-block-size - The minimum block size of a multiline field.
  * @cssproperty --multiline-max-block-size - The maximum block size of a multiline field.
  * @cssproperty --disabled-opacity - The opacity of the field when disabled.
+ * @cssproperty --disabled-background-color - The background color of the field when disabled.
+ * @cssproperty --disabled-border-color - The border color of the field when disabled.
  * @cssproperty --container-animation-duration - The duration of the border and background animations.
  * @cssproperty --container-animation-timing - The timing function of the border and background animations.
  * @cssproperty --floating-animation-duration - The duration of the floating animation.

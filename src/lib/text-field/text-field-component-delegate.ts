@@ -9,17 +9,24 @@ export interface ITextFieldComponentDelegateOptions extends IFormFieldComponentD
   label?: string;
   type?: string;
   value?: string;
-  helperText?: string;
   placeholder?: string;
+  startElement?: HTMLElement;
+  endElement?: HTMLElement;
+  accessoryElement?: HTMLElement;
+  supportTextStart?: string;
+  supportTextEndElement?: string;
+  // Deprecated properties
   leadingElement?: HTMLElement;
   trailingElement?: HTMLElement;
+  helperText?: string;
 }
 export interface ITextFieldComponentDelegateConfig extends IBaseComponentDelegateConfig<ITextFieldComponent, ITextFieldComponentDelegateOptions> {}
 
 export class TextFieldComponentDelegate extends FormFieldComponentDelegate<ITextFieldComponent, ITextFieldComponentDelegateOptions> {
   private _inputElement: HTMLInputElement;
-  private _labelElement: HTMLLabelElement | undefined;
-  private _helperTextElement: HTMLSpanElement | undefined;
+  private _labelElement?: HTMLLabelElement;
+  private _supportTextStartElement?: HTMLSpanElement;
+  private _supportTextEndElement?: HTMLSpanElement;
 
   constructor(config?: ITextFieldComponentDelegateConfig) {
     super(config);
@@ -30,25 +37,36 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
 
     this._inputElement = this._buildInputElement(textField);
 
-    if (this._config.options?.leadingElement) {
-      this._config.options.leadingElement.slot = 'leading';
-      textField.appendChild(this._config.options.leadingElement);
-    }
-    if (this._config.options?.trailingElement) {
-      this._config.options.trailingElement.slot = 'trailing';
-      textField.appendChild(this._config.options.trailingElement);
-    }
-
-    textField.appendChild(this._inputElement);
+    textField.append(this._inputElement);
     return textField;
   }
 
   protected override _configure(): void {
-    if (this._config.options?.helperText) {
-      this.setHelperText(this._config.options.helperText);
+    if (this._config.options?.id) {
+      this._element.id = this._config.options.id;
     }
-    if (typeof this._config.options?.label === 'string') {
+    if (this._config.options?.label) {
       this._createLabel(this._config.options.label);
+    }
+    if (this._config.options?.startElement) {
+      this._config.options.startElement.slot = 'start';
+      this._element.append(this._config.options.startElement);
+    }
+    if (this._config.options?.leadingElement) {
+      this._config.options.leadingElement.slot = 'start';
+      this._element.append(this._config.options.leadingElement);
+    }
+    if (this._config.options?.endElement) {
+      this._config.options.endElement.slot = 'end';
+      this._element.append(this._config.options.endElement);
+    }
+    if (this._config.options?.trailingElement) {
+      this._config.options.trailingElement.slot = 'end';
+      this._element.append(this._config.options.trailingElement);
+    }
+    if (this._config.options?.accessoryElement) {
+      this._config.options.accessoryElement.slot = 'accessory';
+      this._element.append(this._config.options.accessoryElement);
     }
   }
 
@@ -67,7 +85,7 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
   }
 
   public get invalid(): boolean {
-    return this._element.invalid || false;
+    return this._element.invalid;
   }
   public set invalid(value: boolean) {
     this._element.invalid = value;
@@ -100,42 +118,62 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
       } else {
         this._createLabel(text);
       }
-    } else if (this._labelElement) {
-      this._element.removeChild(this._labelElement);
-      this._labelElement = undefined;
+      return;
     }
+    this._labelElement?.remove();
+    this._labelElement = undefined;
   }
 
-  public setHelperText(text: string | null): void {
+  public setSupportTextStart(text: string | null): void {
     if (text) {
-      if (!this._helperTextElement) {
-        this._helperTextElement = document.createElement('span');
-        this._helperTextElement.slot = 'helper-text';
-        this._element.appendChild(this._helperTextElement);
+      if (!this._supportTextStartElement) {
+        this._supportTextStartElement = document.createElement('span');
+        this._supportTextStartElement.slot = 'support-text-start';
+        this._element.append(this._supportTextStartElement);
       }
-      this._helperTextElement.textContent = text;
-    } else if (this._helperTextElement) {
-      this._element.removeChild(this._helperTextElement);
-      this._helperTextElement = undefined;
+      this._supportTextStartElement.textContent = text;
+      return;
     }
+    this._supportTextStartElement?.remove();
+    this._supportTextStartElement = undefined;
+  }
+
+  // Deprecated alias for `setSupportTextStart`
+  public setHelperText(text: string | null): void {
+    this.setSupportTextStart(text);
+  }
+
+  public setSupportTextEnd(text: string | null): void {
+    if (text) {
+      if (!this._supportTextEndElement) {
+        this._supportTextEndElement = document.createElement('span');
+        this._supportTextEndElement.slot = 'support-text-end';
+        this._element.append(this._supportTextEndElement);
+      }
+      this._supportTextEndElement.textContent = text;
+      return;
+    }
+    this._supportTextEndElement?.remove();
+    this._supportTextEndElement = undefined;
   }
 
   public floatLabel(value: boolean): void {
-    this._element.floatLabel(value);
+    this._element.floatLabel = value;
   }
 
   private _createLabel(text: string): void {
     this._labelElement = document.createElement('label');
     this._labelElement.textContent = text;
+    this._labelElement.slot = 'label';
     if (this._config.options?.id) {
-      this._labelElement.setAttribute('for', this._config.options.id);
+      this._labelElement.htmlFor = this._config.options.id;
     }
-    this._element.appendChild(this._labelElement);
+    this._element.append(this._labelElement);
   }
 
   private _buildInputElement(textField: ITextFieldComponent): HTMLInputElement {
     const inputElement = document.createElement('input');
-    inputElement.type = this._config.options?.type || 'text';
+    inputElement.type = this._config.options?.type ?? 'text';
 
     if (this._config.options?.value !== undefined) {
       inputElement.value = this._config.options.value;
@@ -143,11 +181,11 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
     if (this._config.options?.id) {
       inputElement.id = this._config.options.id;
     }
-    if (typeof this._config.options?.placeholder === 'string') {
-      inputElement.placeholder = this._config.options?.placeholder;
+    if (this._config.options?.placeholder !== undefined) {
+      inputElement.placeholder = this._config.options.placeholder;
     }
 
-    textField.appendChild(inputElement);
+    textField.append(inputElement);
     return inputElement;
   }
 }

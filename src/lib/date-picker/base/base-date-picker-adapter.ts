@@ -1,12 +1,12 @@
-import { getShadowElement, randomChars } from '@tylertech/forge-core';
+import { randomChars } from '@tylertech/forge-core';
 import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent, ICalendarDateSelectEventData } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
 import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
 import { BaseComponent } from '../../core/base/base-component';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
+import { TEXT_FIELD_CONSTANTS } from '../../text-field';
 import { BASE_DATE_PICKER_CONSTANTS } from './base-date-picker-constants';
 import { createToggleElement } from './base-date-picker-utils';
-import { TEXT_FIELD_CONSTANTS } from '../../text-field';
 
 export interface IBaseDatePickerAdapter extends IBaseAdapter {
   initialize(): void;
@@ -215,7 +215,7 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     const textField = this._component.querySelector('forge-text-field');
     const toggleElement = this._component.querySelector(BASE_DATE_PICKER_CONSTANTS.selectors.TOGGLE);
     if (textField) {
-      const existingIconButton = textField.querySelector(`${ICON_BUTTON_CONSTANTS.elementName}[slot=trailing]`);
+      const existingIconButton = textField.querySelector(`${ICON_BUTTON_CONSTANTS.elementName}[slot=end]`);
       if (existingIconButton || toggleElement) {
         this._toggleElement = (existingIconButton || toggleElement) as IIconButtonComponent;
         return;
@@ -236,12 +236,9 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   protected _getDefaultTargetElement(): HTMLElement {
     // This component is often used with the Forge text-field, if so, let's target our popup around
     // one if its internal elements for best alignment
-    const textField = this._component.querySelector('forge-text-field');
-    if (textField && textField.shadowRoot) {
-      const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (textFieldRoot) {
-        return textFieldRoot;
-      }
+    const textField = this._component.querySelector(TEXT_FIELD_CONSTANTS.elementName);
+    if (textField?.popoverTargetElement) {
+      return textField.popoverTargetElement;
     }
 
     return this._component.querySelector('input') || this._component;

@@ -1,18 +1,28 @@
 <template>
-  <div class="forge-text-field__wrapper" part="root">
-    <div class="forge-text-field forge-field" part="container">
-      <div class="forge-text-field__leading-container" part="leading-container">
-        <slot name="leading"></slot>
-      </div>
-      <div class="forge-field__label-input-container" part="label-input-container">
-        <slot></slot>
-        <slot name="label"></slot>
-      </div>
-      <slot name="trailing"></slot>
-      <div class="forge-field__addon-end-container" part="addon-end-container">
-        <slot name="addon-end"></slot>
-      </div>
-    </div>
-    <slot name="helper-text"></slot>
-  </div>
+  <forge-field id="field">
+    <slot slot="label" name="label"></slot>
+    <slot slot="start" name="start"></slot>
+    <slot></slot>
+    <slot slot="end" name="end"></slot>
+    <slot slot="end" name="clear-button">
+      <forge-icon-button tabindex="-1" dense>
+        <forge-icon name="clear"></forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label">
+        <slot name="clear-button-tooltip">Clear</slot>
+      </forge-tooltip>
+    </slot>
+    <slot slot="accessory" name="accessory"></slot>
+    <slot slot="support-text-start" name="support-text-start"></slot>
+    <slot slot="support-text-end" name="support-text-end"></slot>
+    
+    <!-- Include deprecated leading alias -->
+    <slot slot="start" name="leading"></slot>
+    <!-- Include deprecated trailing alias -->
+    <slot slot="end" name="trailing"></slot>
+    <!-- Include deprecated addon-end alias -->
+    <slot slot="accessory" name="addon-end"></slot>
+    <!-- Include deprecated helper-text alias -->
+    <slot slot="support-text-start" name="helper-text"></slot>
+  </forge-field>
 </template>

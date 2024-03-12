@@ -4,6 +4,7 @@
 @use '../../elevation';
 @use '../../shape';
 @use '../../theme';
+@use '../focus-indicator/tokens' as focus-indicator;
 @use '../../utils';
 
 $tokens: (
@@ -122,12 +123,19 @@ $tokens: (
 
   // Disabled
   disabled-opacity: utils.module-val(field, disabled-opacity, theme.emphasis(medium-low)),
+  disabled-surface-color: utils.module-val(field, disabled-surface-color, theme.variable(surface-container-low)),
+  disabled-border-color: utils.module-val(field, disabled-border-color, theme.variable(outline-medium)),
+  disabled-text-color: utils.module-val(field, disabled-text-color, theme.variable(text-medium)),
+  disabled-inset-label-color: utils.module-val(field, disabled-inset-label-color, theme.variable(text-low)),
 
   // Animation
   container-animation-duration: utils.module-val(field, container-animation-duration, animation.variable(duration-short4)),
   container-animation-timing: utils.module-val(field, container-animation-timing, animation.variable(easing-standard)),
   floating-animation-duration: utils.module-val(field, floating-animation-duration, animation.variable(duration-short4)),
   floating-animation-timing: utils.module-val(field, floating-animation-timing, animation.variable(easing-decelerate)),
+
+  // Focus indicator
+  focus-indicator-width: utils.module-val(field, focus-indicator-width, focus-indicator.get(width)),
 ) !default;
 
 @function get($key) {

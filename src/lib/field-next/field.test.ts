@@ -4,8 +4,9 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { dispatchNativeEvent, tick } from '@tylertech/forge-testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { match, spy } from 'sinon';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS, IFieldComponent } from '.';
+import { FIELD_CONSTANTS, IFieldComponent } from '.';
 import { TestHarness } from '../../test/utils/test-harness';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 
 import './field';
 
@@ -433,13 +434,6 @@ describe('Field', () => {
       harness.addSlottedContent('label');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.true;
-    });
-
-    it('should not add class when label slot has content and label position is not inset', async () => {
-      const harness = await createFixture({ labelPosition: 'inline-start' });
-      harness.addSlottedContent('label');
-      await tick();
-      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_LABEL)).to.be.false;
     });
 
     it('should remove class when label slot content is removed and label position is inset', async () => {
