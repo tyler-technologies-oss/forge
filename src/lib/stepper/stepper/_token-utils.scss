@@ -1,6 +1,6 @@
-@use '../core/styles/utils';
-@use '../core/styles/tokens/stepper/stepper/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '../../core/styles/utils';
+@use '../../core/styles/tokens/stepper/stepper/tokens';
+@use '../../core/styles/tokens/token-utils';
 
 $_module: stepper;
 $_tokens: tokens.$tokens;

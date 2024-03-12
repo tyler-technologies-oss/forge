@@ -223,10 +223,6 @@
   background-color: #{token(active-surface-color)};
 }
 
-@mixin selected-error {
-  background-color: #{token(error-surface-color)};
-}
-
 @mixin background-selected {
   content: '';
   position: absolute;

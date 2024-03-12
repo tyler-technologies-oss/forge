@@ -1,6 +1,4 @@
-@use './mixins';
-
-@include mixins.core-styles;
+@use './core' as *;
 
 :host {
   display: block;
@@ -12,6 +10,42 @@
 
 :host([vertical]) {
   .forge-stepper {
-    @include mixins.vertical-base;
+    @include vertical-base;
+  }
+}
+
+.forge-stepper {
+  @include base;
+
+  &:not(.forge-stepper--vertical) {
+    ::slotted(*) {
+      @include base-slotted;
+    }
+  }
+
+  &.fixed {
+    ::slotted(*) {
+      @include fixed-slotted;
+    }
+  }
+
+  &.alternative {
+    @include alternative-base;
+
+    ::slotted(*) {
+      @include alternative-slotted;
+    }
+  }
+
+  &.align-left {
+    @include align-left;
+  }
+
+  &.align-center {
+    @include align-center;
+  }
+
+  &.align-right {
+    @include align-right;
   }
 }

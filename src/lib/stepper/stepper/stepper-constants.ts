@@ -4,15 +4,15 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}steppe
 
 const classes = {
   STEPPER: 'forge-stepper',
-  LINEAR: 'forge-stepper--linear',
-  ALTERNATIVE: 'forge-stepper--alternative',
-  CLUSTERED: 'forge-stepper--clustered',
-  FIXED: 'forge-stepper--fixed',
-  ALIGN_LEFT: 'forge-stepper--align-left',
-  ALIGN_CENTER: 'forge-stepper--align-center',
-  ALIGN_RIGHT: 'forge-stepper--align-right',
-  VERTICAL: 'forge-stepper--vertical',
-  FOCUSED: 'forge-stepper--focused'
+  LINEAR: 'linear',
+  ALTERNATIVE: 'alternative',
+  CLUSTERED: 'clustered',
+  FIXED: 'fixed',
+  ALIGN_LEFT: 'align-left',
+  ALIGN_CENTER: 'align-center',
+  ALIGN_RIGHT: 'align-right',
+  VERTICAL: 'vertical',
+  FOCUSED: 'focused'
 };
 
 const selectors = {

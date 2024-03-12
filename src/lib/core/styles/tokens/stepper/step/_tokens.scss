@@ -1,37 +1,17 @@
 @use 'sass:map';
-@use '../../../border';
-@use '../../../elevation';
 @use '../../../shape';
-@use '../../../spacing';
 @use '../../../theme';
 @use '../../../typography';
 @use '../../../utils';
-
-$spacer-margin: 8px !default;
-
-$icon-font-size: 14px !default;
-$icon-margin: 0 8px 0 0 !default;
-$vertical-icon-margin: 0 16px 0 0 !default;
-$icon-size: 24px !default;
-
-$label-font-size: 14px !default;
-$label-font-weight: 500 !default;
-
-$clusetered-border-min-width: 25px !default;
-
-$expansion-panel-margin-left: 60px !default;
-$expansion-panel-margin-top: 4px !default;
-$expansion-panel-margin-bottom: 4px !default;
-$expansion-panel-border-left-width: 1px !default;
 
 $tokens: (
   // Shared
   primary-color: utils.module-val(step, primary-color, theme.variable(primary)),
   text-color: utils.module-val(step, text-color, theme.variable(on-primary)),
 
-
-  // Base
-
+  // Disabled
+  disabled-text-color: utils.module-val(step, disabled-text-color, theme.variable(text-low)),
+  disabled-color: utils.module-val(step, disabled-color, theme.variable(surface-container-minimum)),
 
   // Icon
   icon-fill: utils.module-val(step, icon-fill, unset),
@@ -40,42 +20,27 @@ $tokens: (
   icon-text-color-active: utils.module-val(step, icon-text-color-active, theme.variable(on-primary)),
   icon-content-size: utils.module-val(step, icon-content-size, 24px),
   icon-size: utils.module-val(step, icon-size, typography.font-size-relative('0875')),
-  // Disabled
 
   // Line
   line-color: utils.module-val(step, line-color, theme.variable(outline)),
+  line-min-width: utils.module-val(step, line-min-width, 10px),
+  line-min-width-clustered: utils.module-val(step, line-min-width-clustered, 25px),
 
-  // Active
-  active-color: utils.module-ref(step, active-color, primary-color),
-  active-text-color: utils.module-ref(step, active-text-color, text-color),
-  active-surface-color: utils.module-val(step, active-surface-color, theme.variable(primary-container-minimum)),
-
-  // Inactive
-
-  inactive-color: utils.module-val(step, inactive-color, theme.variable(text-low)),
-  inactive-background: utils.module-val(step, inactive-background, theme.variable(surface-container-minimum)),
+  // Label
   label-color: utils.module-val(step, label-color, theme.variable(text-high)),
   sub-label-color: utils.module-val(step, sub-label-color, theme.variable(text-medium)),
 
   // Error
   error-color: utils.module-val(step, error-color, theme.variable(error)),
   error-text-color: utils.module-val(step, error-text-color, theme.variable(on-error)),
-  error-surface-color: utils.module-val(step, error-surface-color, theme.variable(error-container-minimum)),
 
-  // Disabled
-  disabled-text-color: utils.module-val(step, disabled-text-color, theme.variable(text-low)),
-  disabled-color: utils.module-val(step, disabled-color, theme.variable(surface-container-minimum)),
-
-  // rename to block
-  expansion-panel-border-left-width: utils.module-val(step, expansion-panel-border-left-width, $expansion-panel-border-left-width),
-  expansion-panel-margin-bottom: utils.module-val(step, expansion-panel-margin-bottom, $expansion-panel-margin-bottom),
-  expansion-panel-margin-left: utils.module-val(step, expansion-panel-margin-left, $expansion-panel-margin-left),
-  expansion-panel-margin-top: utils.module-val(step, expansion-panel-margin-top, $expansion-panel-margin-top),
+  // Expansion
+  expansion-panel-border-left-width: utils.module-val(step, expansion-panel-border-left-width, 1px),
+  expansion-panel-margin-bottom: utils.module-val(step, expansion-panel-margin-bottom, 4px),
+  expansion-panel-margin-left: utils.module-val(step, expansion-panel-margin-left, 60px),
+  expansion-panel-margin-top: utils.module-val(step, expansion-panel-margin-top, 4px),
   expansion-panel-icon-color: utils.module-val(step, expansion-panel-icon-color, theme.variable(text-medium)),
 
-  // line
-  line-min-width: utils.module-val(step, line-min-width, 10px),
-  line-min-width-clustered: utils.module-val(step, line-min-width-clustered, $clusetered-border-min-width),
 ) !default;
 
 @function get($key) {
