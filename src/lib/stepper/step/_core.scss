@@ -1,6 +1,3 @@
-// @use '@material/ripple/ripple' as mdc-ripple;
-// @use '@material/ripple/ripple-theme' as mdc-ripple-theme;
-@use '../../theme';
 @use '../../core/styles/typography';
 @use '../../state-layer';
 @use '../../focus-indicator';
@@ -32,33 +29,30 @@
   }
 }
 
+@mixin disabled-base {
+  color: #{token(disabled-text-color)};
+
+  cursor: not-allowed;
+}
+
+@mixin title-disabled {
+  color: #{token(disabled-text-color)};
+}
+
+@mixin subtitle-disabled {
+  color: #{token(disabled-text-color)};
+}
+
 @mixin forge-interactable() {
-  // @include mdc-ripple.surface;
-  // @include mdc-ripple.radius-bounded;
-  // @include mdc-ripple-theme.states;
-  // @include mdc-ripple-theme.states-selected(primary);
-
   cursor: pointer;
-
-  &.forge-step--error.forge-step {
-    // @include mdc-ripple-theme.states-selected(error);
-  }
-
-  // &--selected {
-  //   // @include mdc-theme.property(color, primary);
-  //   color: #{token(primary-color)};
-  // }
-
-  // &--disabled {
-  //   &::before,
-  //   &::after {
-  //     background-color: transparent;
-  //   }
-  // }
 }
 
 @mixin icon-content-default-theme {
   border-color: #{token(primary-color)};
+}
+
+@mixin icon-content-default-theme-index {
+  color: #{token(primary-color)};
 }
 
 @mixin icon-content() {
@@ -133,8 +127,9 @@
   white-space: nowrap;
 }
 
-@mixin text-container-alternative {
+@mixin text-container-alternate {
   margin-top: 8px;
+  place-items: center;
 }
 
 @mixin label {
@@ -179,34 +174,8 @@
   color: #{token(error-color)};
 }
 
-@mixin border-psudo-styles($host-selector) {
-  :host(:not(:last-child)#{$host-selector}) {
-    &::after {
-      @content;
-    }
-  }
-
-  :host(:last-child#{$host-selector}) {
-    &::before {
-      @content;
-    }
-  }
-
-  :host(:not(:first-child):not(:last-child)#{$host-selector}) {
-    &::before,
-    &::after {
-      @content;
-    }
-  }
-}
-
-@mixin border-psudo-clustered {
-  // min-width: 25px;
-}
-
-@mixin border-psudo-safari-alternative {
-  // top: 24px;
-  // margin: 0 -5px;
+@mixin line-clustered {
+  @include override(line-min-width, line-min-width-clustered);
 }
 
 @mixin vertical-base {
@@ -235,6 +204,19 @@
       display: none;
     }
   }
+}
+
+@mixin expandable-icon-base {
+  display: inline-block;
+  transition: transform 300ms ease-in-out;
+}
+
+@mixin expandable-icon-animation {
+  transform: rotate(180deg);
+}
+
+@mixin expandable-icon-content {
+  margin: 0 16px 0 0;
 }
 
 @mixin selected {
@@ -290,6 +272,14 @@
       color: #{token(error-color)}
     )
   );
+}
+
+@mixin alternate {
+  flex-direction: column;
+}
+
+@mixin icon-content-alternate {
+  margin: 0;
 }
 
 @mixin psudo-line-begin-alternate {
@@ -377,4 +367,14 @@
 
 @mixin veritcal-expansion-panel {
   display: block;
+}
+
+@mixin expansion-panel-base {
+  display: none;
+}
+
+@mixin expansion-panel-icon {
+  color: #{token(expansion-panel-icon-color)};
+  display: none;
+  margin-left: auto;
 }

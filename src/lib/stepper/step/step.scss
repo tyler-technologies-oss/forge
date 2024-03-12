@@ -1,4 +1,3 @@
-@use '../../theme';
 @use './core' as *;
 
 :host {
@@ -147,14 +146,11 @@ forge-focus-indicator {
   }
 
   .expansion-panel {
-    display: none;
+    @include expansion-panel-base;
   }
 
   .expanded-icon {
-    @include theme.property(color, icon-color);
-
-    display: none;
-    margin-left: auto;
+    @include expansion-panel-icon;
   }
 
   .title {
@@ -176,7 +172,7 @@ forge-focus-indicator {
   }
 
   &.disabled {
-    cursor: not-allowed;
+    @include disabled-base;
 
     &.forge-step {
       .icon-container {
@@ -186,32 +182,29 @@ forge-focus-indicator {
       }
     }
 
-    color: #{token(disabled-text-color)};
     .text-container {
       .title {
-        color: #{token(disabled-text-color)};
+        @include title-disabled;
       }
 
       .subtitle {
         ::slotted(*) {
-          color: #{token(disabled-text-color)};
+          @include subtitle-disabled;
         }
       }
     }
   }
 
   &.alternative {
-    flex-direction: column;
+    @include alternate;
 
     .icon-container {
       .icon-content {
-        margin: 0;
+        @include icon-content-alternate;
       }
     }
     .text-container {
-      @include text-container-alternative;
-
-      place-items: center;
+      @include text-container-alternate;
     }
   }
 
@@ -223,7 +216,7 @@ forge-focus-indicator {
           @include icon-content-default-theme;
 
           .index {
-            color: #{token(primary-color)};
+            @include icon-content-default-theme-index;
           }
         }
       }
@@ -297,19 +290,18 @@ forge-focus-indicator {
 
   &.expandable {
     .expanded-icon {
-      display: inline-block;
-      transition: transform 300ms ease-in-out;
+      @include expandable-icon-base;
     }
 
     &.expanded {
       .expanded-icon {
-        transform: rotate(180deg);
+        @include expandable-icon-animation;
       }
     }
 
     .icon-container {
       .icon-content {
-        margin: 0 16px 0 0;
+        @include expandable-icon-content;
       }
     }
   }
@@ -321,19 +313,19 @@ forge-focus-indicator {
 
 :host(:not(:last-child)[clustered]) {
   &::after {
-    @include override(line-min-width, line-min-width-clustered);
+    @include line-clustered;
   }
 }
 
 :host(:last-child[clustered]) {
   &::before {
-    @include override(line-min-width, line-min-width-clustered);
+    @include line-clustered;
   }
 }
 
 :host(:not(:first-child):not(:last-child)[clustered]) {
   &::before,
   &::after {
-    @include override(line-min-width, line-min-width-clustered);
+    @include line-clustered;
   }
 }

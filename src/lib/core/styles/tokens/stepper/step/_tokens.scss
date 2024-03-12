@@ -71,6 +71,7 @@ $tokens: (
   expansion-panel-margin-bottom: utils.module-val(step, expansion-panel-margin-bottom, $expansion-panel-margin-bottom),
   expansion-panel-margin-left: utils.module-val(step, expansion-panel-margin-left, $expansion-panel-margin-left),
   expansion-panel-margin-top: utils.module-val(step, expansion-panel-margin-top, $expansion-panel-margin-top),
+  expansion-panel-icon-color: utils.module-val(step, expansion-panel-icon-color, theme.variable(text-medium)),
 
   // line
   line-min-width: utils.module-val(step, line-min-width, 10px),

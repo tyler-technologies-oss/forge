@@ -4,7 +4,6 @@ import { IStepComponent } from './step';
 import { StepIcons, STEP_CONSTANTS } from './step-constants';
 import { IIconComponent } from '../../icon';
 import { IExpansionPanelComponent } from '../../expansion-panel';
-import { ForgeRipple, ForgeRippleAdapter, ForgeRippleCapableSurface, ForgeRippleFoundation } from '../../ripple';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '@tylertech/forge/state-layer';
 
 export interface IStepAdapter extends IBaseAdapter {
@@ -33,10 +32,9 @@ export interface IStepAdapter extends IBaseAdapter {
   isExpandedContentInFocus(checkElement?: HTMLElement): boolean;
 }
 
-export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAdapter, ForgeRippleCapableSurface {
+export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAdapter {
   private _buttonElement: HTMLButtonElement;
   private _container: HTMLElement;
-  // private _rippleInstance: ForgeRipple;
   private _expansionSlot: HTMLSlotElement;
   private _expansionPanel: IExpansionPanelComponent;
   private readonly _stateLayerElement: IStateLayerComponent;
@@ -48,7 +46,6 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
   }
 
-  // ForgeRippleCapableSurface
   public get root(): HTMLElement {
     return this._buttonElement;
   }
@@ -68,10 +65,6 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
   public initialize(): void {
     this._component.setAttribute('role', 'tab');
   }
-
-  // public initializeRipple(): ForgeRipple {
-  //   return this._createRipple();
-  // }
 
   public setIndex(value: number): void {
     (this._buttonElement.querySelector(STEP_CONSTANTS.selectors.INDEX) as HTMLElement).innerHTML = (value + 1 || '').toString();
@@ -196,15 +189,6 @@ export class StepAdapter extends BaseAdapter<IStepComponent> implements IStepAda
   public isExpandedContentInFocus(checkElement?: HTMLElement): boolean {
     return this._expansionSlot.assignedElements().some(element => element.contains(checkElement || document.activeElement));
   }
-
-  // private _createRipple(): ForgeRipple {
-  //   const adapter: ForgeRippleAdapter = {
-  //     ...ForgeRipple.createAdapter(this),
-  //     isSurfaceDisabled: () => this._buttonElement.disabled
-  //   };
-  //   const ripple = new ForgeRipple(this._buttonElement, new ForgeRippleFoundation(adapter));
-  //   return ripple;
-  // }
 
   private _createExpansionPanel(): IExpansionPanelComponent {
     const panel = document.createElement('forge-expansion-panel');

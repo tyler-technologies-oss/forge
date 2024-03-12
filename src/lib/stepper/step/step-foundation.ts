@@ -42,7 +42,6 @@ export class StepFoundation implements IStepFoundation {
 
   public initialize(): void {
     this._adapter.initialize();
-    // this._adapter.attachRipple();
     this._applySelected();
     this._toggleIcon();
     if (this._vertical) {
@@ -57,7 +56,6 @@ export class StepFoundation implements IStepFoundation {
   }
 
   public disconnect(): void {
-    // this._adapter.detatchRipple();
     this._adapter.removeClickListener(this._clickListener);
     this._adapter.removeSlotListener(this._expansionContentSlotChangeListener);
     this._adapter.removeExpansionPanelListener('focusin', this._onExpansionContentFocusIn);
