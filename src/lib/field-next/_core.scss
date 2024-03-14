@@ -21,6 +21,7 @@
 
   display: grid;
   position: relative;
+  isolation: isolate;
 }
 
 @mixin field-disabled {
@@ -72,7 +73,7 @@
   grid-area: center;
 
   // z-index is set to ensure the input is never rendered unclickable by the inset label
-  z-index: 9999;
+  z-index: 1;
 
   block-size: 100%;
   inline-size: 100%;
