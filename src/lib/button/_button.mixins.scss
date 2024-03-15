@@ -125,7 +125,8 @@
 @mixin anchor-link() {
   @include theme.property(color, primary);
 
-  text-decoration: none;
+  text-decoration: underline;
+  cursor: pointer;
   
   &:visited {
     @include theme.property(color, primary);
@@ -134,10 +135,5 @@
   &[disabled] {
     pointer-events: none;
     cursor: default;
-  }
-
-  &:focus,
-  &:hover:not([disabled]) {
-    text-decoration: underline;
   }
 }
