@@ -2,7 +2,7 @@ import { IOverlayAwareFoundation, OverlayAwareFoundation } from '../overlay/base
 import { OverlayLightDismissEventData } from '../overlay/overlay-constants';
 import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import { IPopoverAdapter } from './popover-adapter';
-import { PopoverAnimationType, IPopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS, PopoverDismissReason, POPOVER_HOVER_TIMEOUT } from './popover-constants';
+import { PopoverAnimationType, IPopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS, PopoverDismissReason, POPOVER_HOVER_TIMEOUT, PopoverPreset } from './popover-constants';
 import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack';
 import { VirtualElement } from '../core/utils/position-utils';
 
@@ -14,6 +14,7 @@ export interface IPopoverFoundation extends IOverlayAwareFoundation {
   persistentHover: boolean;
   hoverDismissDelay: number;
   hoverDelay: number;
+  preset: PopoverPreset;
   hideAsync(): Promise<void>;
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
@@ -28,6 +29,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   private _persistentHover = false;
   private _hoverDismissDelay = POPOVER_HOVER_TIMEOUT;
   private _hoverDelay = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
+  private _preset = POPOVER_CONSTANTS.defaults.PRESET;
   private _previouslyFocusedElement: HTMLElement | null = null;
 
   // Hover trigger state
@@ -575,6 +577,18 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     if (this._hoverDismissDelay !== value) {
       this._hoverDismissDelay = value;
       this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY, String(this._hoverDismissDelay));
+    }
+  }
+
+  public get preset(): PopoverPreset {
+    return this._preset ?? POPOVER_CONSTANTS.defaults.PRESET;
+  }
+  public set preset(value: PopoverPreset) {
+    value = value ?? POPOVER_CONSTANTS.defaults.PRESET;
+    if (this._preset !== value) {
+      this._preset = value;
+      const hasPreset = value !== POPOVER_CONSTANTS.defaults.PRESET;
+      this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.PRESET, hasPreset, this._preset);
     }
   }
 }

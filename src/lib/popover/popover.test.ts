@@ -4,7 +4,7 @@ import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { timer } from '@tylertech/forge-testing';
-import { IPopoverToggleEventData, PopoverAnimationType, PopoverTriggerType, POPOVER_CONSTANTS, POPOVER_HOVER_TIMEOUT } from './popover-constants';
+import { IPopoverToggleEventData, PopoverAnimationType, PopoverPreset, PopoverTriggerType, POPOVER_CONSTANTS, POPOVER_HOVER_TIMEOUT } from './popover-constants';
 import { LONGPRESS_TRIGGER_DELAY } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import type { IPopoverComponent } from './popover';
 import type { IOverlayComponent } from '../overlay/overlay';
@@ -35,6 +35,7 @@ describe('Popover', () => {
       expect(harness.popoverElement.persistentHover).to.be.false;
       expect(harness.popoverElement.hoverDelay).to.equal(POPOVER_CONSTANTS.defaults.HOVER_DELAY);
       expect(harness.popoverElement.hoverDismissDelay).to.equal(POPOVER_HOVER_TIMEOUT);
+      expect(harness.popoverElement.preset).to.equal(POPOVER_CONSTANTS.defaults.PRESET);
     });
 
     it('should provide internal overlay element reference', async () => {
@@ -84,6 +85,36 @@ describe('Popover', () => {
 
       expect(harness.popoverElement.animationType).to.equal('none');
       expect(getComputedStyle(harness.surfaceElement).animationName).to.equal('none');
+    });
+
+    it('should set preset via attribute', async () => {
+      const harness = await createFixture({ preset: 'dropdown' });
+
+      expect(harness.popoverElement.preset).to.equal('dropdown');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.PRESET)).to.equal('dropdown');
+    });
+
+    it('should set preset via property', async () => {
+      const harness = await createFixture();
+
+      expect(harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.PRESET)).to.be.false;
+
+      harness.popoverElement.preset = 'dropdown';
+
+      expect(harness.popoverElement.preset).to.equal('dropdown');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.PRESET)).to.equal('dropdown');
+    });
+
+    it('should remove preset attribute when setting preset to default value', async () => {
+      const harness = await createFixture({ preset: 'dropdown' });
+
+      expect(harness.popoverElement.preset).to.equal('dropdown');
+      expect(harness.popoverElement.getAttribute(POPOVER_CONSTANTS.attributes.PRESET)).to.equal('dropdown');
+
+      harness.popoverElement.preset = 'popover';
+
+      expect(harness.popoverElement.preset).to.equal('popover');
+      expect(harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.PRESET)).to.be.false;
     });
   });
 
@@ -1476,6 +1507,7 @@ interface IPopoverFixtureConfig {
   triggerType?: PopoverTriggerType;
   persistentHover?: boolean;
   hoverDelay?: number;
+  preset?: PopoverPreset;
 }
 
 async function createFixture({
@@ -1486,7 +1518,8 @@ async function createFixture({
   animationType,
   triggerType,
   persistentHover = false,
-  hoverDelay
+  hoverDelay,
+  preset
 }: IPopoverFixtureConfig = {}): Promise<PopoverHarness> {
   const container = await fixture(html`
     <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 300px;">
@@ -1500,7 +1533,8 @@ async function createFixture({
         ?persistent-hover=${persistentHover}
         ?hoverDelay=${hoverDelay}
         animation-type=${animationType ?? nothing}
-        trigger-type=${triggerType ?? nothing}>
+        trigger-type=${triggerType ?? nothing}
+        preset=${preset ?? nothing}>
         <span>Test popover content</span>
         <button type="button" id="content-button" style="pointer-events: none;">Button</button>
         <forge-popover id="nested-popover">Nested popover</forge-popover>
