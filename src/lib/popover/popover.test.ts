@@ -14,6 +14,8 @@ import { VirtualElement } from '../core/utils/position-utils';
 
 import './popover';
 
+const EXIT_ANIMATION_DURATION = 200;
+
 describe('Popover', () => {
   afterEach(async () => {
     // Always reset mouse position to avoid initial hover state issues when a test starts
@@ -280,6 +282,7 @@ describe('Popover', () => {
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
       await harness.clickTrigger();
+      await harness.exitAnimation();
 
       expect(toggleSpy).to.have.been.calledOnce;
       expect(toggleSpy.firstCall.args[0].detail).to.deep.equal({ oldState: 'open', newState: 'closed' });
@@ -325,6 +328,7 @@ describe('Popover', () => {
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
       await harness.clickTrigger();
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -367,6 +371,7 @@ describe('Popover', () => {
       harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
 
       await harness.clickTrigger();
+      await harness.exitAnimation();
 
       expect(toggleSpy).to.have.been.calledOnce;
     });
@@ -459,6 +464,7 @@ describe('Popover', () => {
       const harness = await createFixture({ open: true });
 
       await harness.clickTrigger();
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -470,6 +476,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.clickTrigger();
+      await harness.exitAnimation();
       expect(harness.isOpen).to.be.false;
     });
 
@@ -525,6 +532,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.blurTrigger();
+      await harness.exitAnimation();
       expect(harness.isOpen).to.be.false;
     });
 
@@ -576,6 +584,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await sendKeys({ press: 'Tab' });
+      await harness.exitAnimation();
 
       expect(document.activeElement).not.to.equal(harness.triggerElement);
       expect(document.activeElement).not.to.equal(harness.contentButton);
@@ -678,6 +687,7 @@ describe('Popover', () => {
       await elementUpdated(harness.popoverElement);
       await harness.hoverOutside();
       await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -696,6 +706,7 @@ describe('Popover', () => {
 
       await harness.hoverOutside();
       await timer(customDelay + 100);
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -769,6 +780,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       await harness.clickOutside();
+      await harness.exitAnimation();
       expect(harness.isOpen).to.be.false;
     });
 
@@ -835,6 +847,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
 
       harness.doubleClickTrigger();
+      await harness.exitAnimation();
       expect(harness.isOpen).to.be.false;
     });
 
@@ -991,6 +1004,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
       
       await harness.blurTrigger();
+      await harness.exitAnimation();
       expect(harness.isOpen).to.be.false;
     });
 
@@ -1010,6 +1024,7 @@ describe('Popover', () => {
       
       await harness.hoverOutside();
       await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -1020,6 +1035,7 @@ describe('Popover', () => {
       const harness = await createFixture({ open: true });
 
       await harness.clickOutside();
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -1036,6 +1052,7 @@ describe('Popover', () => {
       const harness = await createFixture({ open: true });
 
       await harness.pressEscapeKey();
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.false;
     });
@@ -1240,6 +1257,7 @@ describe('Popover', () => {
       harness.nestedPopoverElement.open = true;
 
       await harness.clickSurface();
+      await harness.exitAnimation();
 
       expect(harness.isOpen).to.be.true;
       expect(harness.nestedPopoverElement.open).to.be.false;
@@ -1301,6 +1319,7 @@ describe('Popover', () => {
       expect(document.activeElement).to.be.equal(autofocusEl);
 
       await harness.pressEscapeKey();
+      await harness.exitAnimation();
 
       expect(document.activeElement).to.be.equal(harness.triggerElement);
     });
@@ -1441,6 +1460,10 @@ class PopoverHarness {
 
   public async pressEscapeKey(): Promise<void> {
     await sendKeys({ press: 'Escape' });
+  }
+
+  public exitAnimation(): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, 200));
   }
 }
 

@@ -8,12 +8,19 @@
 
 $tokens: (
   // Base
+  width: utils.module-val(popover, width, auto),
+  height: utils.module-val(popover, height, auto),
+  min-width: utils.module-val(popover, min-width, none),
+  max-width: utils.module-val(popover, max-width, none),
+  min-height: utils.module-val(popover, min-height, none),
+  max-height: utils.module-val(popover, max-height, none),
   background: utils.module-val(popover, background, theme.variable(surface-bright)),
   border-radius: utils.module-val(popover, border-radius, shape.variable(medium)),
   box-shadow: utils.module-val(popover, box-shadow, theme.variable(popup-elevation)),
   border-width: utils.module-val(popover, border-width, 0),
   border-style: utils.module-val(popover, border-style, solid),
   border-color: utils.module-val(popover, border-color, theme.variable(outline)),
+  overflow: utils.module-val(popover, overflow, initial),
 
   // Arrow
   arrow-size: utils.module-val(popover, arrow-size, 12px),
@@ -28,22 +35,34 @@ $tokens: (
 
   // Animation
   animation-timing: utils.module-val(popover, animation-timing, animation.variable(easing-decelerate)),
+  animation-exit-duration: utils.module-val(popover, animation-exit-duration, animation.variable(duration-short2)),
+  animation-exit-timing: utils.module-val(popover, animation-exit-timing, animation.variable(easing-accelerate)),
 
   zoom-duration: utils.module-val(popover, zoom-duration, animation.variable(duration-short3)),
   zoom-timing: utils.module-ref(popover, zoom-timing, animating-timing),
+  zoom-exit-duration: utils.module-ref(popover, zoom-exit-duration, animation-exit-duration),
+  zoom-exit-timing: utils.module-ref(popover, zoom-exit-timing, animation-exit-timing),
 
   slide-duration: utils.module-val(popover, slide-duration, animation.variable(duration-short3)),
   slide-timing: utils.module-ref(popover, slide-timing, animating-timing),
   slide-offset: utils.module-val(popover, slide-offset, 24px),
+  slide-exit-duration: utils.module-ref(popover, slide-exit-duration, animation-exit-duration),
+  slide-exit-timing: utils.module-ref(popover, slide-exit-timing, animation-exit-timing),
 
   fade-duration: utils.module-val(popover, fade-duration, animation.variable(duration-medium2)),
   fade-timing: utils.module-ref(popover, fade-timing, animating-timing),
+  fade-exit-duration: utils.module-ref(popover, fade-exit-duration, animation-exit-duration),
+  fade-exit-timing: utils.module-ref(popover, fade-exit-timing, animation-exit-timing),
 
   // No anchor
   position-inline-start: utils.module-val(popover, position-inline-start, auto),
   position-inline-end: utils.module-val(popover, position-inline-end, auto),
   position-block-start: utils.module-val(popover, position-block-start, auto),
   position-block-end: utils.module-val(popover, position-block-end, auto),
+
+  // Preset - Dropdown
+  preset-dropdown-max-height: utils.module-val(popover, preset-dropdown-max-height, 256px),
+  preset-dropdown-overflow: utils.module-val(popover, preset-dropdown-overflow, auto visible),
 ) !default;
 
 @function get($key) {

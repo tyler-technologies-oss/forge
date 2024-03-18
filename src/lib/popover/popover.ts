@@ -18,6 +18,7 @@ export interface IPopoverComponent extends IOverlayAware, IDismissible {
   persistentHover: boolean;
   hoverDelay: number;
   hoverDismissDelay: number;
+  hideAsync(): Promise<void>;
 }
 
 declare global {
@@ -172,4 +173,8 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
 
   @FoundationProperty()
   public declare hoverDismissDelay: number;
+
+  public hideAsync(): Promise<void> {
+    return this._foundation.hideAsync();
+  }
 }

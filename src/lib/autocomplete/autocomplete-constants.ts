@@ -1,8 +1,8 @@
 import { COMPONENT_NAME_PREFIX, KEYSTROKE_DEBOUNCE_THRESHOLD } from '../constants';
 import { IListItemComponent } from '../list';
 import { IListDropdownConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownOptionGroupBuilder } from '../list-dropdown';
-import { IPopupPosition } from '../popup';
 import { FIELD_CONSTANTS } from '../field/field-constants';
+import { IOverlayOffset } from '../overlay/overlay-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}autocomplete`;
 
@@ -68,7 +68,7 @@ export interface IAutocompletePopupConfiguration {
   popupTarget: string;
   dropdownConfig: IListDropdownConfig;
   popupClasses: string[];
-  popupOffset: IPopupPosition;
+  popupOffset: IOverlayOffset;
   syncPopupWidth: boolean;
   listener: (value: string) => void;
   scrollEndListener: () => void;

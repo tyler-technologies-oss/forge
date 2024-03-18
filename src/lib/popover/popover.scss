@@ -106,6 +106,25 @@ forge-overlay {
 }
 
 //
+// Preset - Dropdown
+//
+
+:host([preset=dropdown]) {
+  .forge-popover {
+    @include preset-dropdown;
+  }
+}
+
+//
+// Constrain viewport width
+//
+:host([constrain-viewport-width]) {
+  .forge-popover {
+    @include override(max-width, 100vw, value);
+  }
+}
+
+//
 // Animation
 // 
 
@@ -199,6 +218,10 @@ forge-overlay {
         }
       }
     }
+
+    .forge-popover.exiting {
+      @include zoom-exit;
+    }
   }
 }
 
@@ -235,6 +258,10 @@ forge-overlay {
         @include override(slidein-x, #{token(slide-offset)}, value);
       }
     }
+
+    .forge-popover.exiting {
+      @include slide-exit;
+    }
   }
 }
 
@@ -245,5 +272,9 @@ forge-overlay {
 :host([animation-type=fade]) {
   .forge-popover {
     @include fade-base;
+
+    &.exiting {
+      @include fade-exit;
+    }
   }
 }

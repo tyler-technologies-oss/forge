@@ -14,6 +14,7 @@ export interface IPopoverFoundation extends IOverlayAwareFoundation {
   persistentHover: boolean;
   hoverDismissDelay: number;
   hoverDelay: number;
+  hideAsync(): Promise<void>;
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
 
@@ -73,6 +74,8 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   public override destroy(): void {
     super.destroy();
 
+    this._adapter.destroy();
+
     window.clearTimeout(this._hoverTimeout);
     window.clearTimeout(this._hoverAnchorLeaveTimeout);
     window.clearTimeout(this._popoverMouseleaveTimeout);
@@ -84,6 +87,10 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
 
     this._removeTriggerListeners();
+  }
+
+  public hideAsync(): Promise<void> {
+    return this._closePopover();
   }
 
   protected async _onOverlayLightDismiss(evt: CustomEvent<OverlayLightDismissEventData>): Promise<void> {
@@ -99,13 +106,14 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
 
     const previousFocusedEl = this._previouslyFocusedElement;
+    
+    this._closePopover().then(() => {
+      this._dispatchToggleEvent();
 
-    this._closePopover();
-    this._dispatchToggleEvent();
-
-    if (reason === 'escape' && previousFocusedEl && this._adapter.hasFocus()) {
-      previousFocusedEl.focus();
-    }
+      if (reason === 'escape' && previousFocusedEl && this._adapter.hasFocus()) {
+        previousFocusedEl.focus();
+      }
+    });
 
     return true;
   }
@@ -137,10 +145,16 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
   }
 
-  private _closePopover(): void {
+  private async _closePopover(): Promise<void> {
     this._previouslyFocusedElement = null;
-    this._adapter.setOverlayOpen(false);
     DismissibleStack.instance.remove(this._adapter.hostElement);
+
+    if (this._animationType === 'none') {
+      this._adapter.setOverlayOpen(false);
+    } else {
+      await this._adapter.hide();
+    }
+
     this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
   }
 

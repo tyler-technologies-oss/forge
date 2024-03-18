@@ -11,15 +11,19 @@ const attributes = {
   LONGPRESS_DELAY: 'longpress-delay',
   PERSISTENT_HOVER: 'persistent-hover',
   HOVER_DELAY: 'hover-delay',
-  HOVER_DISMISS_DELAY: 'hover-dismiss-delay'
+  HOVER_DISMISS_DELAY: 'hover-dismiss-delay',
+  HOST: 'forge-popover-host',
+  CONSTRAIN_VIEWPORT_WIDTH: 'constrain-viewport-width'
 };
 
 const classes = {
-  ARROW: 'arrow'
+  ARROW: 'arrow',
+  EXITING: 'exiting'
 };
 
 const selectors = {
-  SURFACE: '.forge-popover'
+  SURFACE: '.forge-popover',
+  HOST: `[${attributes.HOST}]`
 };
 
 const parts = {
