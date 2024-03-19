@@ -146,19 +146,15 @@ $resize-container-input-padding-block-end-base: 8px;
   resize: #{token(multiline-resize)};
 }
 
-@mixin resize-container-inset-input {
-  z-index: unset;
-}
-
 @mixin resize-container-inset-label {
-  z-index: 9999;
+  z-index: 2;
   pointer-events: none;
   inline-size: fit-content;
 }
 
 @mixin resize-container-inset-label-slot {
   display: block;
-  z-index: 9999;
+  z-index: 1;
 }
 
 @mixin resize-container-inset-label-background {

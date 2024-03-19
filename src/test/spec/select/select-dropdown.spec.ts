@@ -10,7 +10,7 @@ import {
 import { ISelectOption, BASE_SELECT_CONSTANTS } from '@tylertech/forge/select/core';
 import { removeElement } from '@tylertech/forge-core';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
-import { POPUP_CONSTANTS, IPopupComponent } from '@tylertech/forge/popup';
+import { POPOVER_CONSTANTS, IPopoverComponent } from '@tylertech/forge/popover';
 import { tryCleanupPopups } from '../../utils';
 
 const DEFAULT_OPTIONS: ISelectOption[] = [
@@ -18,6 +18,8 @@ const DEFAULT_OPTIONS: ISelectOption[] = [
   { value: 'two', label: 'Two' },
   { value: 'three', label: 'Three' }
 ];
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestSelectDropdownContext;
@@ -141,11 +143,11 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.component.observeScrollThreshold = 100;
     this.context.component.addEventListener(SELECT_DROPDOWN_CONSTANTS.events.SCROLLED_BOTTOM, callback);
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
     
     const popup = _getPopup();
-    const scrollElement = popup.shadowRoot!.querySelector(POPUP_CONSTANTS.selectors.CONTAINER) as HTMLElement;
+    const scrollElement = popup.shadowRoot!.querySelector(POPOVER_CONSTANTS.selectors.SURFACE) as HTMLElement;
     scrollElement.scrollTop = scrollElement.scrollHeight;
     await tick();
     
@@ -156,7 +158,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
 
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
     _clickListItem(0);
 
@@ -169,7 +171,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
 
     this.context.component.multiple = true;
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
     _clickListItem(1);
     _clickListItem(2);
@@ -193,7 +195,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
 
     this.context.component.syncSelectedText = true;
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     _clickListItem(0);
 
     expect(this.context.targetElement.innerText).toBe(DEFAULT_OPTIONS[0].label);
@@ -214,7 +216,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.component.syncSelectedText = true;
     this.context.component.selectedTextBuilder = options => `Chose: ${options[0].label}`;
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
     _clickListItem(0);
 
@@ -231,7 +233,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.component.syncSelectedText = true;
     this.context.component.selectedTextTarget = `#${someEle.id}`;
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
     _clickListItem(1);
 
@@ -242,7 +244,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
 
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     this.context.targetElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
     expect(this.context.targetElement.hasAttribute('aria-activedescendant')).toBeTrue();
@@ -253,7 +255,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context = setupTestContext();
 
     this.context.component.open = true;
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
 
     const originalValue = this.context.targetElement.getAttribute('aria-activedescendant');
     this.context.targetElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
@@ -263,17 +265,22 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     expect(this.context.targetElement.getAttribute('aria-activedescendant')).not.toBe(originalValue);
   });
 
+  it('should remove popover when removed from DOM while open', async function(this: ITestContext) {
+    this.context = setupTestContext();
+    this.context.component.open = true;
+
+    await timer(POPOVER_ANIMATION_DURATION);
+    expect(_getPopup()).toBeTruthy();
+    
+    this.context.fixture.remove();
+
+    expect(_getPopup()).toBeFalsy();
+  });
+
   function _createFixture(): HTMLElement {
     const fixture = document.createElement('div');
     fixture.id = 'select-dropdown-test-fixture';
     return fixture;
-  }
-
-  function destroyFixture(): void {
-    const fixture = document.querySelector('#select-dropdown-test-fixture') as HTMLElement;
-    if (fixture) {
-      removeElement(fixture);
-    }
   }
 
   function setupTestContext(append = true, setTarget = true): ITestSelectDropdownContext {
@@ -313,13 +320,15 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
       append: () => document.body.appendChild(fixture),
       destroy: () => {
         tryCleanupPopups();
-        document.body.removeChild(fixture);
+        if (fixture.isConnected) {
+          document.body.removeChild(fixture);
+        }
       }
     };
   }
 
-  function _getPopup(): IPopupComponent {
-    return document.querySelector(POPUP_CONSTANTS.elementName) as IPopupComponent;
+  function _getPopup(): IPopoverComponent {
+    return document.querySelector(POPOVER_CONSTANTS.elementName) as IPopoverComponent;
   }
 
   function _getListItems(): IListItemComponent[] {

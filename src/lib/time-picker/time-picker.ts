@@ -14,10 +14,10 @@ import {
 } from './time-picker-constants';
 import { IconRegistry, IconComponent } from '../icon';
 import { IconButtonComponent } from '../icon-button';
-import { PopupComponent } from '../popup';
 import { DialogComponent } from '../dialog';
 import { ListComponent, ListItemComponent } from '../list';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
+import { PopoverComponent } from '../popover/popover';
 
 import template from './time-picker.html';
 import styles from './time-picker.scss';
@@ -75,7 +75,7 @@ declare global {
     ListItemComponent,
     IconButtonComponent,
     IconComponent,
-    PopupComponent,
+    PopoverComponent,
     IconComponent,
     DialogComponent
   ]

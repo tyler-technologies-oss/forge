@@ -29,3 +29,11 @@ export function supportsHover(): boolean {
   // return window.matchMedia('(hover: hover)').matches;
   return !Platform.isMobile;
 }
+
+/**
+ * Detects if the browser is set to prefer reduced motion.
+ * @returns {boolean}
+ */
+export function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}

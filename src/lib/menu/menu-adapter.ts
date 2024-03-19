@@ -12,8 +12,9 @@ export interface IMenuAdapter extends IBaseAdapter {
   hasTargetElement(): boolean;
   addTargetListener(event: string, callback: (event: Event) => void, bubbles?: boolean): void;
   removeTargetListener(event: string, callback: (event: Event) => void): void;
+  destroyListDropdown(): void;
   attachMenu(config: IListDropdownConfig): void;
-  detachMenu(): void;
+  detachMenu(): Promise<void>;
   setOptions(options: Array<IMenuOption | IMenuOptionGroup>): void;
   getActiveOptionIndex(): number;
   setActiveOption(index: number): void;
@@ -99,7 +100,14 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
     }
   }
 
-  public detachMenu(): void {
+  public destroyListDropdown(): void {
+    if (this._listDropdown) {
+      this._listDropdown.destroy();
+      this._listDropdown = undefined;
+    }
+  }
+
+  public async detachMenu(): Promise<void> {
     if (this._targetElement) {
       this._targetElement.removeAttribute('aria-activedescendant');
       this._targetElement.removeAttribute('aria-expanded');
@@ -107,7 +115,7 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
     }
 
     if (this._listDropdown) {
-      this._listDropdown.close();
+      await this._listDropdown.close();
       this._listDropdown.destroy();
       this._listDropdown = undefined;
     }

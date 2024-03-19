@@ -1,8 +1,9 @@
 import { ICustomElementFoundation, isArray, randomChars } from '@tylertech/forge-core';
 import { ICON_CLASS_NAME } from '../constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 import { CascadingListDropdownAwareFoundation, IListDropdownCascadingElementFactoryConfig, IListDropdownConfig, ListDropdownAsyncStyle, ListDropdownType } from '../list-dropdown';
 import { isListDropdownOptionType, ListDropdownOptionType } from '../list-dropdown/list-dropdown-utils';
-import { IPopupPosition, PopupPlacement } from '../popup';
+import type { IOverlayOffset } from '../overlay/overlay-constants';
 import { IMenuOption } from './index';
 import { IMenuAdapter } from './menu-adapter';
 import { IMenuActiveChangeEventData, IMenuOptionGroup, IMenuSelectEventData, MenuMode, MenuOptionBuilder, MenuOptionFactory, MENU_CONSTANTS } from './menu-constants';
@@ -16,27 +17,27 @@ export interface IMenuFoundation extends ICustomElementFoundation {
   optionsFactory: MenuOptionFactory | undefined;
   selectedIndex: number;
   selectedValue: any;
-  placement: PopupPlacement;
-  fallbackPlacements: PopupPlacement[];
+  placement: PositionPlacement;
+  fallbackPlacements: PositionPlacement[];
   dense: boolean;
   iconClass: string;
   persistSelection: boolean;
   mode: MenuMode;
-  popupOffset: IPopupPosition;
+  popupOffset: IOverlayOffset;
   optionBuilder: MenuOptionBuilder | undefined;
   activateFirstOption(): void;
 }
 
 export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOption | IMenuOptionGroup> implements IMenuFoundation {
   private _optionsFactory: MenuOptionFactory | undefined;
-  private _placement: PopupPlacement = 'bottom-start';
-  private _fallbackPlacements: PopupPlacement[] = [];
+  private _placement: PositionPlacement = 'bottom-start';
+  private _fallbackPlacements: PositionPlacement[] = [];
   private _dense = false;
   private _selectedValue: any;
   private _iconClass = ICON_CLASS_NAME;
   private _persistSelection = false;
   private _mode: MenuMode = 'click';
-  private _popupOffset: IPopupPosition;
+  private _popupOffset: IOverlayOffset;
   private _optionBuilder: MenuOptionBuilder | undefined;
   private _identifier: string;
   private _clickListener: (evt: MouseEvent) => void;
@@ -65,9 +66,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
   }
 
   public disconnect(): void {
-    if (this._open) {
-      this._closeDropdown();
-    }
+    this._closeMenu({ destroy: true });
     this._destroyInteractionListeners();
   }
 
@@ -331,10 +330,15 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     this._adapter.emitHostEvent(MENU_CONSTANTS.events.OPEN);
   }
 
-  private _closeMenu(): void {
+  private _closeMenu({ destroy = false } = {}): void {
     this._open = false;
     this._childOpen = false;
-    this._adapter.detachMenu();
+
+    if (destroy) {
+      this._adapter.destroyListDropdown();
+    } else {
+      this._adapter.detachMenu();
+    }
 
     if (this._activeMouseLeaveTimeout !== undefined) {
       window.clearTimeout(this._activeMouseLeaveTimeout);
@@ -469,7 +473,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
       this._onCascadingOptionSelected.bind(this)
     );
     menu.mode = 'cascade';
-    menu.popupOffset = { x: 0, y: -8 };
+    menu.popupOffset = { mainAxis: 0, crossAxis: -8 };
     menu.dense = this._dense;
     menu.placement = 'right-start';
     menu.fallbackPlacements = ['left-start', 'right-start']; // Cascading menus should only fallback to left or right placement if needed
@@ -557,20 +561,20 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     return this._selectedValue;
   }
 
-  public get placement(): PopupPlacement {
+  public get placement(): PositionPlacement {
     return this._placement;
   }
-  public set placement(value: PopupPlacement) {
+  public set placement(value: PositionPlacement) {
     if (this._placement !== value) {
       this._placement = value || 'bottom-start';
       this._adapter.setHostAttribute(MENU_CONSTANTS.attributes.PLACEMENT, this._placement);
     }
   }
 
-  public get fallbackPlacements(): PopupPlacement[] {
+  public get fallbackPlacements(): PositionPlacement[] {
     return this._fallbackPlacements;
   }
-  public set fallbackPlacements(value: PopupPlacement[]) {
+  public set fallbackPlacements(value: PositionPlacement[]) {
     this._fallbackPlacements = Array.isArray(value) ? value : [];
   }
 
@@ -617,10 +621,10 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     }
   }
 
-  public get popupOffset(): IPopupPosition {
+  public get popupOffset(): IOverlayOffset {
     return this._popupOffset;
   }
-  public set popupOffset(value: IPopupPosition) {
+  public set popupOffset(value: IOverlayOffset) {
     this._popupOffset = value;
   }
 

@@ -113,9 +113,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
       this._detachListeners();
       this._isInitialized = false;
     }
-    if (this._isDropdownOpen) {
-      this._closeDropdown();
-    }
+    this._closeDropdown({ destroy: true });
   }
 
   public async forceFilter({ preserveValue }: IAutocompleteForceFilterOptions): Promise<void> {
@@ -495,12 +493,12 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
   }
 
-  private _closeDropdown(): void {
+  private _closeDropdown({ destroy = false } = {}): void {
     if (this._multiple) {
       this._filterText = '';
     }
     this._isDropdownOpen = false;
-    this._adapter.hide(this._dismissListener);
+    this._adapter.hide(this._dismissListener, { destroy });
     this._sortSelectedOptions();
     this._adapter.toggleHostAttribute(AUTOCOMPLETE_CONSTANTS.attributes.OPEN, this._isDropdownOpen);
   }

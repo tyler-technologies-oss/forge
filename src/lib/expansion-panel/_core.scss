@@ -1,0 +1,60 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin header {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+@mixin content {
+  display: grid;
+  grid-template-rows: 0fr;
+
+  transition-property: opacity, grid-template-rows;
+  transition-duration: #{token(animation-duration)};
+  transition-timing-function: #{token(animation-easing)};
+
+  min-height: 0;
+  overflow: hidden;
+
+  opacity: 0;
+}
+
+@mixin inner {
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+}
+
+@mixin orientation-horizontal-base {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+@mixin content-orientation-horizontal {
+  transition-property: opacity, grid-template-columns;
+  grid-template-rows: none;
+  grid-template-columns: 0fr;
+}
+
+@mixin open-base {
+  opacity: 1;
+}
+
+@mixin open-vertical {
+  grid-template-rows: 1fr;
+}
+
+@mixin open-horizontal {
+  grid-template-columns: 1fr;
+}
+
+@mixin hidden {
+  visibility: hidden;
+}
