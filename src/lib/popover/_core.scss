@@ -49,8 +49,8 @@
 }
 
 @mixin zoom-base {
-  animation-duration: #{token(zoom-duration)};
-  animation-timing-function: #{token(zoom-timing)};
+  animation-duration: #{token(zoom-enter-duration)};
+  animation-timing-function: #{token(zoom-enter-timing)};
   animation-name: fadein, zoomin;
   transform-origin: #{token(zoomin-origin, custom)};
 }
@@ -62,8 +62,8 @@
 }
 
 @mixin slide-base {
-  animation-duration: #{token(slide-duration)};
-  animation-timing-function: #{token(slide-timing)};
+  animation-duration: #{token(slide-enter-duration)};
+  animation-timing-function: #{token(slide-enter-timing)};
   animation-name: fadein, slidein;
 }
 
@@ -74,8 +74,8 @@
 }
 
 @mixin fade-base {
-  animation-duration: #{token(fade-duration)};
-  animation-timing-function: #{token(fade-timing)};
+  animation-duration: #{token(fade-enter-duration)};
+  animation-timing-function: #{token(fade-enter-timing)};
   animation-name: fadein;
 }
 

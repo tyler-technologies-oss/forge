@@ -658,7 +658,7 @@ describe('Popover', () => {
       expect(harness.isOpen).to.be.true;
       
       await harness.hoverOutside();
-      await timer(POPOVER_HOVER_TIMEOUT + 100);
+      await timer(POPOVER_HOVER_TIMEOUT + EXIT_ANIMATION_DURATION);
 
       expect(harness.isOpen).to.be.false;
     });

@@ -1,4 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
+import { prefersReducedMotion } from '../core/utils/feature-detection';
 import { VirtualElement } from '../core/utils/position-utils';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
@@ -66,6 +67,12 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public hide(): Promise<void> {
+    if (prefersReducedMotion()) {
+      this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+      this._overlayElement.open = false;
+      return Promise.resolve();
+    }
+
     return new Promise(resolve => {
       this._surfaceElement.addEventListener('animationend', evt => {
         this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
