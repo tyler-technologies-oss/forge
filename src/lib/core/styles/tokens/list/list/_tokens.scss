@@ -1,8 +1,9 @@
 @use '../../../utils';
 
 $tokens: (
+  spacing: utils.module-val(list, spacing, 0),
   container-color: utils.module-val(list, container-color, transparent),
-  block-padding: utils.module-val(list, block-padding, 8px),
+  block-padding: utils.module-val(list, block-padding, 0),
   inline-padding: utils.module-val(list, inline-padding, 0),
 ) !default;
 
