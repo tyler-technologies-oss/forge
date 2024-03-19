@@ -3,247 +3,304 @@
 @use '../core/styles/theme';
 @use '../overlay';
 
-//
-// Host
-//
+@layer base, animation, preset, reduced-motion;
 
-:host {
-  display: contents;
+@layer base {
 
-  @include theme.provide((
-    surface: theme.variable(surface-bright)
-  ));
-}
+  //
+  // Host
+  //
 
-:host([hidden]) {
-  display: none;
-}
+  :host {
+    display: contents;
 
-//
-// Base
-//
-
-forge-overlay {
-  @include tokens;
-}
-
-.forge-popover {
-  // Custom private calculation tokens
-  #{declare(arrow-translate-x)}: 0;
-  #{declare(arrow-translate-y)}: 0;
-  #{declare(arrow-rotation)}: 0;
-  #{declare(slidein-x)}: 0;
-  #{declare(slidein-y)}: 0;
-  #{declare(zoomin-origin)}: 50% 50% 0;
-  #{declare(arrow-clip-path)}:
-    polygon(
-      calc(#{token(border-width)} * -1) calc(#{token(border-width)} * -1),
-      calc(100% + #{token(border-width)}) calc(#{token(border-width)} * -1),
-      calc(100% + #{token(border-width)}) calc(100% + #{token(border-width)})
-    );
-}
-
-.forge-popover {
-  @include base;
-}
-
-//
-// No anchor
-//
-
-:host([open][no-anchor]) {
-  forge-overlay {
-    // Alias the overlay position CSS custom properties to use popover-specific tokens
-    @include overlay.provide-theme((
-      position-inline-start: #{token(position-inline-start, custom)},
-      position-inline-end: #{token(position-inline-end, custom)},
-      position-block-start: #{token(position-block-start, custom)},
-      position-block-end: #{token(position-block-end, custom)}
+    @include theme.provide((
+      surface: theme.variable(surface-bright)
     ));
   }
-}
 
-//
-// Arrow
-//
+  :host([hidden]) {
+    display: none;
+  }
 
-:host([arrow]) {
+  //
+  // Base
+  //
+
+  forge-overlay {
+    @include tokens;
+  }
+
   .forge-popover {
-    @include override(border-width, arrow-border-width);
+    // Custom private calculation tokens
+    #{declare(arrow-translate-x)}: 0;
+    #{declare(arrow-translate-y)}: 0;
+    #{declare(arrow-rotation)}: 0;
+    #{declare(slidein-x)}: 0;
+    #{declare(slidein-y)}: 0;
+    #{declare(zoomin-origin)}: 50% 50% 0;
+    #{declare(arrow-clip-path)}:
+      polygon(
+        calc(#{token(border-width)} * -1) calc(#{token(border-width)} * -1),
+        calc(100% + #{token(border-width)}) calc(#{token(border-width)} * -1),
+        calc(100% + #{token(border-width)}) calc(100% + #{token(border-width)})
+      );
   }
 
-  .arrow {
-    @include arrow;
-  }
-
-  forge-overlay[position-placement^=top] {
-    .arrow {
-      @include override(arrow-translate-y, calc(#{token(border-width)} * -1), value);
-      @include override(arrow-rotation, #{token(arrow-top-rotation)}, value);
-    }
-  }
-  
-  forge-overlay[position-placement^=right] {
-    .arrow {
-      @include override(arrow-translate-x, #{token(border-width)}, value);
-      @include override(arrow-rotation, #{token(arrow-right-rotation)}, value);
-    }
-  }
-  
-  forge-overlay[position-placement^=bottom] {
-    .arrow {
-      @include override(arrow-translate-y, #{token(border-width)}, value);
-      @include override(arrow-rotation, #{token(arrow-bottom-rotation)}, value);
-    }
-  }
-  
-  forge-overlay[position-placement^=left] {
-    .arrow {
-      @include override(arrow-translate-x, calc(#{token(border-width)} * -1), value);
-      @include override(arrow-rotation, #{token(arrow-left-rotation)}, value);
-    }
-  }
-}
-
-//
-// Animation
-// 
-
-//
-// Zoom (default)
-//
-
-:host(:not([animation-type])),
-:host([animation-type=zoom]) {
   .forge-popover {
-    @include zoom-base;
+    @include base;
   }
 
-  forge-overlay[open] {
-    &[position-placement^=top] {
-      &:not([position-placement*='-']) {
-        .forge-popover {
-          @include override(zoomin-origin, bottom center, value);
-        }
-      }
+  //
+  // No anchor
+  //
 
-      &[position-placement$=-start] {
-        .forge-popover {
-          @include override(zoomin-origin, bottom left, value);
-        }
-      }
-
-      &[position-placement$=-end] {
-        .forge-popover {
-          @include override(zoomin-origin, bottom right, value);
-        }
-      }
-    }
-
-    &[position-placement^=right] {
-      &:not([position-placement*='-']) {
-        .forge-popover {
-          @include override(zoomin-origin, left center, value);
-        }
-      }
-
-      &[position-placement$=-start] {
-        .forge-popover {
-          @include override(zoomin-origin, left top, value);
-        }
-      }
-
-      &[position-placement$=-end] {
-        .forge-popover {
-          @include override(zoomin-origin, left bottom, value);
-        }
-      }
-    }
-
-    &[position-placement^=bottom] {
-      &:not([position-placement*='-']) {
-        .forge-popover {
-          @include override(zoomin-origin, top center, value);
-        }
-      }
-
-      &[position-placement$=-start] {
-        .forge-popover {
-          @include override(zoomin-origin, top left, value);
-        }
-      }
-
-      &[position-placement$=-end] {
-        .forge-popover {
-          @include override(zoomin-origin, top right, value);
-        }
-      }
-    }
-
-    &[position-placement^=left] {
-      &:not([position-placement*='-']) {
-        .forge-popover {
-          @include override(zoomin-origin, right center, value);
-        }
-      }
-
-      &[position-placement$=-start] {
-        .forge-popover {
-          @include override(zoomin-origin, right top, value);
-        }
-      }
-
-      &[position-placement$=-end] {
-        .forge-popover {
-          @include override(zoomin-origin, right bottom, value);
-        }
-      }
+  :host([open][no-anchor]) {
+    forge-overlay {
+      // Alias the overlay position CSS custom properties to use popover-specific tokens
+      @include overlay.provide-theme((
+        position-inline-start: #{token(position-inline-start, custom)},
+        position-inline-end: #{token(position-inline-end, custom)},
+        position-block-start: #{token(position-block-start, custom)},
+        position-block-end: #{token(position-block-end, custom)}
+      ));
     }
   }
-}
 
-//
-// Slide
-//
+  //
+  // Arrow
+  //
 
-:host([animation-type=slide]) {
-  .forge-popover {
-    @include slide-base;
-  }
+  :host([arrow]) {
+    .forge-popover {
+      @include override(border-width, arrow-border-width);
+    }
 
-  forge-overlay[open] {
-    &[position-placement^=top] {
-      .forge-popover {
-        @include override(slidein-y, #{token(slide-offset)}, value);
+    .arrow {
+      @include arrow;
+    }
+
+    forge-overlay[position-placement^=top] {
+      .arrow {
+        @include override(arrow-translate-y, calc(#{token(border-width)} * -1), value);
+        @include override(arrow-rotation, #{token(arrow-top-rotation)}, value);
       }
     }
     
-    &[position-placement^=right] {
-      .forge-popover {
-        @include override(slidein-x, calc(#{token(slide-offset)} * -1), value);
+    forge-overlay[position-placement^=right] {
+      .arrow {
+        @include override(arrow-translate-x, #{token(border-width)}, value);
+        @include override(arrow-rotation, #{token(arrow-right-rotation)}, value);
       }
     }
     
-    &[position-placement^=bottom] {
-      .forge-popover {
-        @include override(slidein-y, calc(#{token(slide-offset)} * -1), value);
+    forge-overlay[position-placement^=bottom] {
+      .arrow {
+        @include override(arrow-translate-y, #{token(border-width)}, value);
+        @include override(arrow-rotation, #{token(arrow-bottom-rotation)}, value);
       }
     }
     
-    &[position-placement^=left] {
-      .forge-popover {
-        @include override(slidein-x, #{token(slide-offset)}, value);
+    forge-overlay[position-placement^=left] {
+      .arrow {
+        @include override(arrow-translate-x, calc(#{token(border-width)} * -1), value);
+        @include override(arrow-rotation, #{token(arrow-left-rotation)}, value);
       }
     }
   }
 }
 
-//
-// Fade
-//
+@layer preset {
+  //
+  // Preset - Dropdown
+  //
 
-:host([animation-type=fade]) {
-  .forge-popover {
-    @include fade-base;
+  :host([preset=dropdown]) {
+    .forge-popover {
+      @include preset-dropdown;
+    }
+  }
+
+  //
+  // Constrain viewport width
+  //
+  :host([constrain-viewport-width]) {
+    .forge-popover {
+      @include override(max-width, 100vw, value);
+    }
+  }
+}
+
+@layer animation {
+
+  //
+  // Animation
+  // 
+
+  //
+  // Zoom (default)
+  //
+
+  :host(:not([animation-type])),
+  :host([animation-type=zoom]) {
+    .forge-popover {
+      @include zoom-base;
+    }
+
+    forge-overlay[open] {
+      &[position-placement^=top] {
+        &:not([position-placement*='-']) {
+          .forge-popover {
+            @include override(zoomin-origin, bottom center, value);
+          }
+        }
+
+        &[position-placement$=-start] {
+          .forge-popover {
+            @include override(zoomin-origin, bottom left, value);
+          }
+        }
+
+        &[position-placement$=-end] {
+          .forge-popover {
+            @include override(zoomin-origin, bottom right, value);
+          }
+        }
+      }
+
+      &[position-placement^=right] {
+        &:not([position-placement*='-']) {
+          .forge-popover {
+            @include override(zoomin-origin, left center, value);
+          }
+        }
+
+        &[position-placement$=-start] {
+          .forge-popover {
+            @include override(zoomin-origin, left top, value);
+          }
+        }
+
+        &[position-placement$=-end] {
+          .forge-popover {
+            @include override(zoomin-origin, left bottom, value);
+          }
+        }
+      }
+
+      &[position-placement^=bottom] {
+        &:not([position-placement*='-']) {
+          .forge-popover {
+            @include override(zoomin-origin, top center, value);
+          }
+        }
+
+        &[position-placement$=-start] {
+          .forge-popover {
+            @include override(zoomin-origin, top left, value);
+          }
+        }
+
+        &[position-placement$=-end] {
+          .forge-popover {
+            @include override(zoomin-origin, top right, value);
+          }
+        }
+      }
+
+      &[position-placement^=left] {
+        &:not([position-placement*='-']) {
+          .forge-popover {
+            @include override(zoomin-origin, right center, value);
+          }
+        }
+
+        &[position-placement$=-start] {
+          .forge-popover {
+            @include override(zoomin-origin, right top, value);
+          }
+        }
+
+        &[position-placement$=-end] {
+          .forge-popover {
+            @include override(zoomin-origin, right bottom, value);
+          }
+        }
+      }
+
+      .forge-popover.exiting {
+        @include zoom-exit;
+      }
+    }
+  }
+
+  //
+  // Slide
+  //
+
+  :host([animation-type=slide]) {
+    .forge-popover {
+      @include slide-base;
+    }
+
+    forge-overlay[open] {
+      &[position-placement^=top] {
+        .forge-popover {
+          @include override(slidein-y, #{token(slide-offset)}, value);
+        }
+      }
+      
+      &[position-placement^=right] {
+        .forge-popover {
+          @include override(slidein-x, calc(#{token(slide-offset)} * -1), value);
+        }
+      }
+      
+      &[position-placement^=bottom] {
+        .forge-popover {
+          @include override(slidein-y, calc(#{token(slide-offset)} * -1), value);
+        }
+      }
+      
+      &[position-placement^=left] {
+        .forge-popover {
+          @include override(slidein-x, #{token(slide-offset)}, value);
+        }
+      }
+
+      .forge-popover.exiting {
+        @include slide-exit;
+      }
+    }
+  }
+
+  //
+  // Fade
+  //
+
+  :host([animation-type=fade]) {
+    .forge-popover {
+      @include fade-base;
+
+      &.exiting {
+        @include fade-exit;
+      }
+    }
+  }
+}
+
+@layer reduced-motion {
+  //
+  // Prefers reduced motion
+  //
+
+  @media (prefers-reduced-motion: reduce) {
+    .forge-popover {
+      animation: none;
+
+      &.exiting {
+        animation: none;
+      }
+    }
   }
 }
