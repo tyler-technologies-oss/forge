@@ -3,11 +3,18 @@
 @use '../../../theme';
 @use '../../../typography';
 @use '../../../utils';
+@use '../../../animation';
 
 $tokens: (
   // Shared
   primary-color: utils.module-val(step, primary-color, theme.variable(primary)),
   text-color: utils.module-val(step, text-color, theme.variable(on-primary)),
+
+  // Base
+  border-radius: utils.module-val(step, border-radius, shape.variable(extra-large)),
+
+  // Vertical
+  border-radius-vertical: utils.module-val(step, border-radius-vertical, shape.variable(medium)),
 
   // Disabled
   disabled-text-color: utils.module-val(step, disabled-text-color, theme.variable(text-low)),
@@ -20,7 +27,9 @@ $tokens: (
   icon-text-color-active: utils.module-val(step, icon-text-color-active, theme.variable(on-primary)),
   icon-content-size: utils.module-val(step, icon-content-size, 24px),
   icon-size: utils.module-val(step, icon-size, typography.font-size-relative('0875')),
-
+  icon-transition-duration: utils.module-val(step, icon-transition-duration, animation.variable(duration-medium4)),
+  icon-transition-easing: utils.module-val(step, icon-transition-easing, animation.variable(easing-standard)),
+  
   // Line
   line-color: utils.module-val(step, line-color, theme.variable(outline)),
   line-min-width: utils.module-val(step, line-min-width, 10px),

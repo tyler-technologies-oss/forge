@@ -1,7 +1,3 @@
-@use './token-utils' as *;
-
-@forward './token-utils';
-
 @mixin base {
   display: flex;
   align-items: center;
