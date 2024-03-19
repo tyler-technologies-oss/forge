@@ -126,9 +126,8 @@
 
 @mixin popover-target {
   position: absolute;
-  bottom: calc(#{token(focus-indicator-width)} * -1);
-  left: 0;
-  right: 0;
+  inset: calc(#{token(focus-indicator-width)} * -1);
+  pointer-events: none;
 }
 
 @mixin start {
