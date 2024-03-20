@@ -134,6 +134,12 @@ forge-focus-indicator {
     }
   }
 
+  &.vertical {
+    forge-focus-indicator {
+      @include focus-indicator-vertical;
+    }
+  }
+
   &.selected:not(.disabled) {
     @include state-layer-active;
     &::before {

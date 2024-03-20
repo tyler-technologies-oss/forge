@@ -264,6 +264,14 @@
   );
 }
 
+@mixin focus-indicator-vertical {
+  @include focus-indicator.provide-theme(
+    (
+      shape: 4px
+    )
+  );
+}
+
 @mixin focus-indicator-error {
   @include focus-indicator.provide-theme(
     (
