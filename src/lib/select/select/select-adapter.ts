@@ -129,12 +129,12 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
     toggleClass(this._selectElement, true, SELECT_CONSTANTS.classes.OPENED);
   }
 
-  public close(): void {
+  public close(): Promise<void> {
     this._component.setAttribute('aria-expanded', 'false');
     this._component.removeAttribute('aria-activedescendant');
     this._component.removeAttribute('aria-controls');
     toggleClass(this._selectElement, false, SELECT_CONSTANTS.classes.OPENED);
-    super.close();
+    return super.close();
   }
 
   public updateActiveDescendant(id: string): void {

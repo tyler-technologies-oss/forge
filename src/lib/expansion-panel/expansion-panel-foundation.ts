@@ -1,180 +1,102 @@
-import { debounce, getEventPath, ICustomElementFoundation } from '@tylertech/forge-core';
+import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IExpansionPanelAdapter } from './expansion-panel-adapter';
-import { EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
+import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
 
 export interface IExpansionPanelFoundation extends ICustomElementFoundation {
   open: boolean;
-  orientation: string;
-  useAnimations: boolean;
-  openCallback: () => void | Promise<void>;
-  closeCallback: () => void | Promise<void>;
-  setOpenImmediate(open: boolean): void;
+  orientation: ExpansionPanelOrientation;
+  animationType: ExpansionPanelAnimationType;
 }
 
 export class ExpansionPanelFoundation implements IExpansionPanelFoundation {
   private _open = false;
-  private _useAnimations = true;
-  private _openCallback: () => void | Promise<void>;
-  private _closeCallback: () => void | Promise<void>;
-  private _orientation = EXPANSION_PANEL_CONSTANTS.strings.ORIENTATION_VERTICAL;
-  private _clickListener: (evt: MouseEvent) => void;
-  private _keydownListener: (evt: KeyboardEvent) => void;
-  private _headerSlotChangeListener: (evt: Event) => void;
-  private _isInitialized = false;
+  private _orientation: ExpansionPanelOrientation = 'vertical';
+  private _animationType: ExpansionPanelAnimationType = 'default';
 
-  constructor(private _adapter: IExpansionPanelAdapter) {
-    this._clickListener = debounce((evt: MouseEvent) => this._onClick(evt), EXPANSION_PANEL_CONSTANTS.numbers.CLICK_DEBOUNCE_THRESHOLD, true);
-    this._keydownListener = (evt: KeyboardEvent) => this._onKeydown(evt);
-    this._headerSlotChangeListener = (evt: Event) => this._onHeaderSlotChanged(evt);
-  }
+  private _clickListener: EventListener = this._onClick.bind(this);
+  private _keydownListener: EventListener = this._onKeydown.bind(this);
+  private _animationCompleteListener = this._onAnimationComplete.bind(this);
+
+  constructor(private _adapter: IExpansionPanelAdapter) {}
 
   public initialize(): void {
-    this.connect();
-    this._adapter.initialize(this._open, this._orientation);
-    this._isInitialized = true;
+    this._adapter.addHeaderListener('click', this._clickListener);
+    this._adapter.addHeaderListener('keydown', this._keydownListener);
+    this._adapter.setAnimationCompleteListener(this._animationCompleteListener);
   }
 
-  public connect(): void {
-    this._adapter.registerHeaderSlotListener(this._headerSlotChangeListener);
-    this._adapter.registerClickListener(this._clickListener);
-    this._adapter.registerKeydownListener(this._keydownListener);
-  }
-
-  public disconnect(): void {
-    this._adapter.deregisterHeaderSlotListener(this._headerSlotChangeListener);
-    this._adapter.deregisterClickListener(this._clickListener);
-    this._adapter.deregisterKeydownListener(this._keydownListener);
-  }
-
-  public setOpenImmediate(open: boolean): void {
-    if (open) {
-      this._openPanel(false);
-    } else {
-      this._closePanel(false);
-    }
-  }
-
-  private _applyOpen(value: boolean): void {
-    if (!this._isInitialized) {
-      this._open = value;
-      return;
-    }
-
-    if (value) {
-      if (this._openCallback) {
-        Promise.resolve(this._openCallback())
-          .then(() => {
-            this._open = value;
-            this._openPanel(this._useAnimations);
-          })
-          .catch(() => {});
-      } else {
-        this._open = value;
-        this._openPanel(this._useAnimations);
-      }
-    } else {
-      if (this._closeCallback) {
-        Promise.resolve(this._closeCallback())
-          .then(() => {
-            this._open = value;
-            this._closePanel(this._useAnimations);
-          })
-          .catch(() => {});
-      } else {
-        this._open = value;
-        this._closePanel(this._useAnimations);
-      }
-    }
-  }
-
-  /** Controls the open state of the panel. */
-  public get open(): boolean {
-    return this._open;
-  }
-  public set open(value: boolean) {
-    value = Boolean(value);
-    if (this._open !== value) {
-      this._applyOpen(value);
-    }
-  }
-
-  public get openCallback(): () => void | Promise<void> {
-    return this._openCallback;
-  }
-  public set openCallback(callback: () => void | Promise<void>) {
-    this._openCallback = callback;
-  }
-
-  public get closeCallback(): () => void | Promise<void> {
-    return this._closeCallback;
-  }
-  public set closeCallback(callback: () => void | Promise<void>) {
-    this._closeCallback = callback;
-  }
-
-  public get orientation(): string {
-    return this._orientation;
-  }
-  public set orientation(value: string) {
-    this._orientation = value;
-  }
-
-  public get useAnimations(): boolean {
-    return this._useAnimations;
-  }
-  public set useAnimations(value: boolean) {
-    if (this._useAnimations !== !!value) {
-      this._useAnimations = !!value;
-      this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.USE_ANIMATIONS, `${this._useAnimations}`);
-    }
-  }
-
-  /**
-   * Handles click events on the header element.
-   * @param {MouseEvent} evt The click event.
-   */
   private _onClick(evt: MouseEvent): void {
-    if (getEventPath(evt).find(p => p.nodeType === 1 && (p.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.IGNORE) || p.hasAttribute(EXPANSION_PANEL_CONSTANTS.attributes.IGNORE_ALT)))) {
+    const fromIgnoredEl = evt.composedPath().find((el: HTMLElement) => el.nodeType === Node.ELEMENT_NODE && el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE));
+    if (fromIgnoredEl) {
       return;
     }
 
     evt.stopPropagation();
     this._toggle();
-    this._emitEvent();
+    this._dispatchToggleEvent();
   }
 
-  /**
-   * Handles keydown events on the header.
-   * @param {KeyboardEvent} evt The keydown event
-   */
   private _onKeydown(evt: KeyboardEvent): void {
     if (evt.key === ' ' || evt.key === 'Enter') {
       evt.stopPropagation();
       evt.preventDefault();
       this._toggle();
-      this._emitEvent();
+      this._dispatchToggleEvent();
     }
   }
 
-  private _emitEvent(): void {
-    this._adapter.emitHostEvent(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, this._open);
+  private _onAnimationComplete(): void {
+    if (!this._open) {
+      this._adapter.setContentVisibility(false);
+    }
+    this._adapter.dispatchHostEvent(new CustomEvent(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, { detail: this._open }));
+  }
+
+  private _togglePanel(): void {
+    this._adapter.toggleHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, this._open);
+    this._adapter.tryToggleOpenIcon(this._open);
+    if (this._open) {
+      this._adapter.setContentVisibility(true);
+    }
+  }
+
+  private _dispatchToggleEvent(): void {
+    const evt = new CustomEvent<boolean>(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, { detail: this._open, bubbles: true, composed: true });
+    this._adapter.dispatchHostEvent(evt);
   }
 
   private _toggle(): void {
     this.open = !this.open;
   }
 
-  private _openPanel(animate: boolean): void {
-    this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN, '');
-    this._adapter.setOpenState(true, this._orientation, animate);
+  public get open(): boolean {
+    return this._open;
+  }
+  public set open(value: boolean) {
+    value = Boolean(value);
+    if (this._open !== value) {
+      this._open = value;
+      this._togglePanel();
+    }
   }
 
-  private _closePanel(animate: boolean): void {
-    this._adapter.removeHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.OPEN);
-    this._adapter.setOpenState(false, this._orientation, animate);
+  public get orientation(): ExpansionPanelOrientation {
+    return this._orientation;
+  }
+  public set orientation(value: ExpansionPanelOrientation) {
+    if (this._orientation !== value) {
+      this._orientation = value;
+      this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.ORIENTATION, this._orientation);
+    }
   }
 
-  private _onHeaderSlotChanged(evt: Event): void {
-    this._adapter.setHeaderVisibility(!!(evt.target as HTMLSlotElement).assignedNodes().length);
+  public get animationType(): ExpansionPanelAnimationType {
+    return this._animationType;
+  }
+  public set animationType(value: ExpansionPanelAnimationType) {
+    if (this._animationType !== value) {
+      this._animationType = value;
+      this._adapter.setHostAttribute(EXPANSION_PANEL_CONSTANTS.attributes.ANIMATION_TYPE, this._animationType);
+    }
   }
 }

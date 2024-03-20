@@ -30,7 +30,7 @@ export interface ITimePickerAdapter extends BaseAdapter<ITimePickerComponent> {
   isInputFocused(): boolean;
   setDisabled(isDisabled: boolean): void;
   attachDropdown(config: IListDropdownConfig): void;
-  detachDropdown(): void;
+  detachDropdown(options: { destroy?: boolean }): Promise<void>;
   setActiveDescendant(id: string): void;
   propagateKey(key: string): void;
   getTargetElementWidth(selector: string): number;
@@ -198,10 +198,13 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     this._inputElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
   }
   
-  public detachDropdown(): void {
+  public async detachDropdown({ destroy = false } = {}): Promise<void> {
     if (this._listDropdown) {
-      this._listDropdown.close();
-      this._listDropdown.destroy();
+      if (destroy) {
+        this._listDropdown.destroy();
+      } else {
+        await this._listDropdown.close();
+      }
       this._listDropdown = undefined;
     }
     this._inputElement.removeAttribute('aria-controls');

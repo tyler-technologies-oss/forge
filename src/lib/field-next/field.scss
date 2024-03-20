@@ -491,10 +491,6 @@ $variants: (
       @include core.resize-container-inset-label-background;
     }
   }
-
-  .input {
-    @include core.resize-container-inset-input;
-  }
 }
 
 //

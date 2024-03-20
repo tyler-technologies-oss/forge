@@ -1,14 +1,15 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, ensureChild, FoundationProperty, isDefined } from '@tylertech/forge-core';
 import { tylIconArrowRight } from '@tylertech/tyler-icons/standard';
-import { CircularProgressComponent } from '../circular-progress';
+import { PositionPlacement } from '../core/utils/position-utils';
 import { IconRegistry } from '../icon';
-import { LinearProgressComponent } from '../linear-progress';
 import { ListComponent } from '../list';
 import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware';
-import { IPopupPosition, PopupComponent, PopupPlacement } from '../popup';
+import type { IOverlayOffset } from '../overlay/overlay-constants';
+import { PopoverComponent } from '../popover';
 import { MenuAdapter } from './menu-adapter';
 import { IMenuActiveChangeEventData, IMenuOption, IMenuOptionGroup, IMenuSelectEventData, MenuMode, MenuOptionBuilder, MenuOptionFactory, MENU_CONSTANTS } from './menu-constants';
 import { MenuFoundation } from './menu-foundation';
+
 import template from './menu.html';
 import styles from './menu.scss';
 
@@ -17,13 +18,13 @@ export interface IMenuComponent extends IListDropdownAware {
   options: Array<IMenuOption | IMenuOptionGroup> | MenuOptionFactory;
   selectedIndex: number;
   selectedValue: number;
-  placement: PopupPlacement;
-  fallbackPlacements: PopupPlacement[];
+  placement: PositionPlacement;
+  fallbackPlacements: PositionPlacement[];
   dense: boolean;
   iconClass: string;
   persistSelection: boolean;
   mode: MenuMode;
-  popupOffset: IPopupPosition;
+  popupOffset: IOverlayOffset;
   optionBuilder: MenuOptionBuilder | undefined;
   popupElement: HTMLElement | undefined;
   propagateKeyEvent(evt: KeyboardEvent): void;
@@ -51,7 +52,7 @@ declare global {
 @CustomElement({
   name: MENU_CONSTANTS.elementName,
   dependencies: [
-    PopupComponent,
+    PopoverComponent,
     ListComponent
   ]
 })
@@ -98,7 +99,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
         this._foundation.open = isDefined(newValue);
         break;
       case MENU_CONSTANTS.attributes.PLACEMENT:
-        this._foundation.placement = newValue as PopupPlacement;
+        this._foundation.placement = newValue as PositionPlacement;
         break;
       case MENU_CONSTANTS.attributes.SELECTED_INDEX:
         this._foundation.selectedIndex = Number(newValue);
@@ -143,11 +144,11 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   /** Gets/sets the menu placement (default is bottom-left). */
   @FoundationProperty()
-  public declare placement: `${PopupPlacement}`;
+  public declare placement: `${PositionPlacement}`;
 
   /** Gets/sets the fallback menu placement for overriding the default of any side. */
   @FoundationProperty()
-  public declare fallbackPlacements: `${PopupPlacement}`[];
+  public declare fallbackPlacements: `${PositionPlacement}`[];
 
   /** Gets/sets dense state of the list options used in the menu popup. */
   @FoundationProperty()
@@ -170,7 +171,7 @@ export class MenuComponent extends ListDropdownAware implements IMenuComponent {
 
   /** Sets the position adjustment on the internal popup element. */
   @FoundationProperty()
-  public declare popupOffset: IPopupPosition;
+  public declare popupOffset: IOverlayOffset;
 
   /** Sets the callback that will be executed for each option in the dropdown for producing custom option templates. */
   @FoundationProperty()

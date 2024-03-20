@@ -1,5 +1,6 @@
-import { IconExternalType, IIconComponent } from '../icon';
-import { IPopupPosition, PopupPlacement } from '../popup';
+import type { IIconComponent } from '../icon';
+import type { IOverlayOffset } from '../overlay/overlay-constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 const attributes = {
   POPUP_CLASSES: 'popup-classes',
@@ -88,10 +89,10 @@ export interface IListDropdownConfig<T = any> {
   dense?: boolean;
   type?: ListDropdownType;
   popupClasses?: string | string[];
-  popupOffset?: IPopupPosition;
+  popupOffset?: IOverlayOffset;
   popupStatic?: boolean;
-  popupPlacement?: PopupPlacement;
-  popupFallbackPlacements?: PopupPlacement[];
+  popupPlacement?: PositionPlacement;
+  popupFallbackPlacements?: PositionPlacement[];
   optionLimit?: number;
   optionBuilder?: ListDropdownOptionBuilder;
   observeScroll?: boolean;

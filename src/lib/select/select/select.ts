@@ -4,7 +4,6 @@ import { SelectAdapter } from './select-adapter';
 import { SelectFoundation } from './select-foundation';
 import { SELECT_CONSTANTS } from './select-constants';
 import { OptionComponent } from '../option';
-import { PopupComponent } from '../../popup';
 import { ListComponent, ListItemComponent } from '../../list';
 import { OptionGroupComponent } from '../option-group';
 import { IconComponent, IconRegistry } from '../../icon';
@@ -18,6 +17,7 @@ import { IBaseSelectComponent } from '../core/base-select';
 
 import template from './select.html';
 import styles from './select.scss';
+import { PopoverComponent } from '../../popover';
 
 export interface ISelectComponent extends IBaseSelectComponent {
   density: FieldDensityType;
@@ -42,8 +42,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-select>` component.
- * 
  * @tag forge-select
  */
 @CustomElement({
@@ -51,7 +49,7 @@ declare global {
   dependencies: [
     OptionComponent,
     OptionGroupComponent,
-    PopupComponent,
+    PopoverComponent,
     ListComponent,
     ListItemComponent,
     CircularProgressComponent,
