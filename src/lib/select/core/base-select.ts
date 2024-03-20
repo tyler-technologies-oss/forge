@@ -10,7 +10,7 @@ import {
 } from './base-select-constants';
 import { IBaseSelectFoundation } from './base-select-foundation';
 import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
-import { IPopupComponent } from '../../popup';
+import type { IPopoverComponent } from '../../popover/popover';
 
 
 export interface IBaseSelectComponent extends IListDropdownAware {
@@ -21,7 +21,7 @@ export interface IBaseSelectComponent extends IListDropdownAware {
   open: boolean;
   optionBuilder: SelectOptionBuilder;
   selectedTextBuilder: SelectSelectedTextBuilder;
-  popupElement: IPopupComponent | undefined;
+  popupElement: IPopoverComponent | undefined;
   beforeValueChange: SelectBeforeValueChangeCallback<any>;
   appendOptions(options: ISelectOption[] | ISelectOption[]): void;
   selectAll(): void;
@@ -72,7 +72,7 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
    * @readonly
    */
   @FoundationProperty({ set: false })
-  public declare popupElement: IPopupComponent | undefined;
+  public declare popupElement: IPopoverComponent | undefined;
   
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     super.attributeChangedCallback(name, oldValue, newValue);

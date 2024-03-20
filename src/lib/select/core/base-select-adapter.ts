@@ -7,7 +7,7 @@ import { IOptionComponent, OPTION_CONSTANTS } from '../option';
 import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group';
 import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants';
 import { isOptionGroupObject } from './select-utils';
-import { IPopupComponent, POPUP_CONSTANTS } from '../../popup';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
 
 export interface IBaseSelectAdapter extends IBaseAdapter {
   initializeAccessibility(): void;
@@ -19,6 +19,7 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   setOptions(options: ISelectOption[] | ISelectOptionGroup[], clear?: boolean): void;
   open(config: IListDropdownConfig): void;
   close(): void;
+  destroyListDropdown(): void;
   setDismissListener(listener: () => void): void;
   scrollSelectedOptionIntoView(): void;
   activateSelectedOption(): void;
@@ -110,21 +111,25 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     this._listDropdown.open();
   }
 
-  public close(): void {
+  public async close(): Promise<void> {
     if (this._listDropdown) {
-      this._listDropdown.close();
-      this._listDropdown.destroy();
-      this._listDropdown = undefined;
+      await this._listDropdown.close();
+      this.destroyListDropdown();
     }
+  }
+
+  public destroyListDropdown(): void {
+    this._listDropdown?.destroy();
+    this._listDropdown = undefined;
   }
 
   public setDismissListener(listener: () => void): void {
     if (!this._listDropdown || !this._listDropdown.dropdownElement) {
       return;
     }
-    const dropdownElement = this._listDropdown.dropdownElement as IPopupComponent;
-    if (dropdownElement.targetElement) {
-      dropdownElement.targetElement.addEventListener(POPUP_CONSTANTS.events.BLUR, listener);
+    const dropdownElement = this._listDropdown.dropdownElement as IPopoverComponent;
+    if (dropdownElement.anchorElement && dropdownElement.anchorElement instanceof HTMLElement) {
+      dropdownElement.anchorElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
     }
   }
 
@@ -215,7 +220,7 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     }
     // We need to wait for the next animation frame to ensure that the layout has been updated
     window.requestAnimationFrame(() => {
-      const dropdownEl = this.popupElement as IPopupComponent | undefined;
+      const dropdownEl = this.popupElement as IPopoverComponent | undefined;
       dropdownEl?.position();
     });
   }

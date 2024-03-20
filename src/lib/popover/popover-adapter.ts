@@ -1,4 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
+import { prefersReducedMotion } from '../core/utils/feature-detection';
 import { VirtualElement } from '../core/utils/position-utils';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
@@ -7,11 +8,13 @@ import { POPOVER_CONSTANTS } from './popover-constants';
 
 export interface IPopoverAdapter extends IOverlayAwareAdapter {
   readonly hostElement: IPopoverComponent;
+  destroy(): void;
   tryLocateAnchorElement(id: string | null): void;
   addAnchorListener(type: string, listener: EventListener): void;
   removeAnchorListener(type: string, listener: EventListener): void;
   addSurfaceListener(type: string, listener: EventListener): void;
   removeSurfaceListener(type: string, listener: EventListener): void;
+  hide(): Promise<void>;
   setOverlayOpen(newState: boolean): void;
   toggleArrow(value: boolean): void;
   isChildElement(element: HTMLElement): boolean;
@@ -27,6 +30,10 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   constructor(component: IPopoverComponent) {
     super(component);
     this._surfaceElement = getShadowElement(this._component, POPOVER_CONSTANTS.selectors.SURFACE);
+  }
+
+  public destroy(): void {
+    this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
   }
   
   protected _initializeOverlayElement(): void {
@@ -59,7 +66,25 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     this._surfaceElement.removeEventListener(type, listener);
   }
 
+  public hide(): Promise<void> {
+    if (prefersReducedMotion()) {
+      this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+      this._overlayElement.open = false;
+      return Promise.resolve();
+    }
+
+    return new Promise(resolve => {
+      this._surfaceElement.addEventListener('animationend', evt => {
+        this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+        this._overlayElement.open = false;
+        resolve();
+      }, { once: true });
+      this._surfaceElement.classList.add(POPOVER_CONSTANTS.classes.EXITING);
+    });
+  }
+
   public setOverlayOpen(newState: boolean): void {
+    this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
     this._overlayElement.open = newState;
   }
 

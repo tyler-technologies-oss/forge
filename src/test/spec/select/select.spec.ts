@@ -13,7 +13,6 @@ import {
   BASE_SELECT_CONSTANTS,
   OPTION_GROUP_CONSTANTS
 } from '@tylertech/forge/select';
-import { POPUP_CONSTANTS, IPopupComponent } from '@tylertech/forge/popup';
 import { LIST_ITEM_CONSTANTS, IListItemComponent } from '@tylertech/forge/list/list-item';
 import { removeElement, getShadowElement } from '@tylertech/forge-core';
 import { tick, dispatchNativeEvent, dispatchKeyEvent, timer, deepCopy } from '@tylertech/forge-testing';
@@ -22,6 +21,7 @@ import { LIST_DROPDOWN_CONSTANTS, ListDropdownHeaderBuilder, ListDropdownFooterB
 import { tryCleanupPopups } from '../../utils';
 import { FIELD_CONSTANTS } from '@tylertech/forge/field/field-constants';
 import { floatTick } from '../../utils/floating-label-utils';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
 
 const DEFAULT_OPTIONS: IOption[] = [
   { value: 'one', label: 'One' },
@@ -44,6 +44,8 @@ const DEFAULT_OPTION_GROUPS: IOptionGroup[] = [
     ]
   }
 ];
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestSelectContext;
@@ -1056,12 +1058,12 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.focus();
       _openDropdown(this.context.component);
       
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       _expectPopupVisibility(this.context.component.popupElement, true);
 
       this.context.component.blur();
       this.context.component.dispatchEvent(new Event('blur'));
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       _expectPopupVisibility(this.context.component.popupElement, false);
     });
@@ -1072,7 +1074,7 @@ describe('SelectComponent', function(this: ITestContext) {
       
       this.context.component.style.width = '50px';
       _openDropdown(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
       const popupWidth = getComputedStyle(this.context.component.popupElement!).width;
       const componentWidth = getComputedStyle(this.context.component).width;
@@ -1088,9 +1090,9 @@ describe('SelectComponent', function(this: ITestContext) {
       this.context.component.syncPopupWidth = true;
       _openDropdown(this.context.component);
       await tick();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
 
-      const popupWidth = getComputedStyle(this.context.component.popupElement!).width;
+      const popupWidth = getComputedStyle(this.context.component.popupElement?.shadowRoot?.querySelector(POPOVER_CONSTANTS.selectors.SURFACE)!).width;
       const componentWidth = getComputedStyle(this.context.component).width;
 
       expect(this.context.component.syncPopupWidth).toBeTrue();
@@ -1133,7 +1135,7 @@ describe('SelectComponent', function(this: ITestContext) {
       };
       this.context.component.popupHeaderBuilder = headerBuilder;
       _openDropdown(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       
       const headerElement = this.context.component.popupElement!.querySelector('#select-popup-header');
       expect(headerElement).toBeTruthy();
@@ -1151,7 +1153,7 @@ describe('SelectComponent', function(this: ITestContext) {
       };
       this.context.component.popupFooterBuilder = footerBuilder;
       _openDropdown(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       
       const footerElement = this.context.component.popupElement!.querySelector('#select-popup-footer');
       expect(footerElement).toBeTruthy();
@@ -1162,7 +1164,7 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       _openDropdown(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       
       const opts = [
         { label: 'New option 1', value: 'new-1' },
@@ -1182,10 +1184,10 @@ describe('SelectComponent', function(this: ITestContext) {
       await tick();
       
       _openDropdown(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       
       this.context.component.multiple = true;
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
       
       expect(this.context.component.open).toBeFalse();
@@ -1200,6 +1202,20 @@ describe('SelectComponent', function(this: ITestContext) {
       _openDropdown(this.context.component);
       
       expect(this.context.component.observeScroll).toBeTrue();
+    });
+
+    it('should remove popover when removed from DOM while open', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      await tick();
+      
+      _openDropdown(this.context.component);
+      await timer(POPOVER_ANIMATION_DURATION);
+      
+      removeElement(this.context.component);
+      await timer(POPOVER_ANIMATION_DURATION);
+      
+      expect(this.context.component.popupElement).toBeFalsy();
+      expect(document.querySelector(POPOVER_CONSTANTS.elementName)).toBeFalsy();
     });
   });
 
@@ -1247,9 +1263,9 @@ describe('SelectComponent', function(this: ITestContext) {
       expect(this.context.component.popupElement).toBeDefined();
       expect(this.context.component.popupElement!.isConnected).toBe(true);
       removeElement(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       expect(this.context.component.popupElement).toBeUndefined();
-      expect(document.querySelector(POPUP_CONSTANTS.elementName)).toBeNull();
+      expect(document.querySelector(POPOVER_CONSTANTS.elementName)).toBeNull();
     });
 
     it('should retrieve correct open state', async function(this: ITestContext) {
@@ -1276,7 +1292,7 @@ describe('SelectComponent', function(this: ITestContext) {
       element.click();
       await tick();
       element.click();
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       expect(this.context.component.open).toBe(false);
       expect(this.context.component.popupElement).toBeUndefined();
     });
@@ -1615,7 +1631,7 @@ describe('SelectComponent', function(this: ITestContext) {
   }
 
   function _popupAnimation(): Promise<void> {
-    return timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    return timer(POPOVER_ANIMATION_DURATION);
   }
 
   async function _triggerPopupOpen(component: ISelectComponent): Promise<void> {
@@ -1625,18 +1641,18 @@ describe('SelectComponent', function(this: ITestContext) {
     _expectPopupVisibility(component.popupElement, true);
   }
   
-  function _expectPopupVisibility(popupElement: IPopupComponent | undefined, isVisible: boolean): void {
-    const domPopup = document.querySelector(POPUP_CONSTANTS.elementName);
+  function _expectPopupVisibility(popupElement: IPopoverComponent | undefined, isVisible: boolean): void {
+    const domPopup = document.querySelector(POPOVER_CONSTANTS.elementName);
     if (isVisible) {
       expect(popupElement).toBeTruthy();
-      expect(domPopup).toBe(popupElement as IPopupComponent);
+      expect(domPopup).toBe(popupElement as IPopoverComponent);
     } else {
       expect(popupElement).toBeFalsy();
       expect(domPopup).toBeNull();
     }
   }
 
-  function _getOptionContext(popupElement: IPopupComponent | undefined): ITestOptionContext {
+  function _getOptionContext(popupElement: IPopoverComponent | undefined): ITestOptionContext {
     const options = Array.from(popupElement!.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];
     const activeOption = options.find(li => li.active) || null;
     const activeIndex = activeOption ? options.indexOf(activeOption) : -1;
@@ -1645,8 +1661,8 @@ describe('SelectComponent', function(this: ITestContext) {
     return { activeIndex, activeOption, options, selectedOptions, selectedIndexes };
   }
 
-  function _expectActiveOption(popupElement: IPopupComponent | undefined, index: number): void {
-    const optionContext = _getOptionContext(popupElement as IPopupComponent);
+  function _expectActiveOption(popupElement: IPopoverComponent | undefined, index: number): void {
+    const optionContext = _getOptionContext(popupElement as IPopoverComponent);
 
     expect(optionContext.activeIndex).toBe(index);
     if (optionContext.activeOption) {
@@ -1658,7 +1674,7 @@ describe('SelectComponent', function(this: ITestContext) {
     element.dispatchEvent(new KeyboardEvent('keydown', { key, keyCode } as Partial<KeyboardEventInit>));
   }
 
-  function _getPopupGroups(popupElement: IPopupComponent | undefined): ITestSelectGroup[] {
+  function _getPopupGroups(popupElement: IPopoverComponent | undefined): ITestSelectGroup[] {
     const groups = Array.from(popupElement!.querySelectorAll(`.${LIST_DROPDOWN_CONSTANTS.classes.GROUP_WRAPPER}`)) as HTMLElement[];
     return groups.map(groupElement => {
       const options = Array.from(groupElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[];

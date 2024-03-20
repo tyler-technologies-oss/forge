@@ -5,7 +5,7 @@ import { getFlattenedOptions } from './list-dropdown-utils';
 export interface IListDropdownFoundation {
   dropdownElement: HTMLElement | undefined;
   open(): void;
-  close(): void;
+  close(): Promise<void>;
   getActiveOptionIndex(): number;
   getActiveOption(): IListDropdownOption | undefined;
   toggleOptionMultiple(index: number, isSelected: boolean): void;
@@ -46,9 +46,7 @@ export class ListDropdownFoundation implements IListDropdownFoundation {
   }
 
   public destroy(): void {
-    if (this._open) {
-      this.close();
-    }
+    this._adapter.remove();
   }
 
   public open(): void {
@@ -67,13 +65,13 @@ export class ListDropdownFoundation implements IListDropdownFoundation {
     }
   }
 
-  public close(): void {
+  public async close(): Promise<void> {
     if (this._open) {
       this._open = false;
-      this._adapter.close();
       if (this._config.observeScroll && this._config.scrollEndListener) {
         this._adapter.removeScrollBottomListener(this._scrollEndListener);
       }
+      await this._adapter.close();
     }
   }
 

@@ -7,12 +7,12 @@ import { BASE_SELECT_CONSTANTS } from '../core/base-select-constants';
 import { SelectDropdownAdapter } from './select-dropdown-adapter';
 import { OptionComponent } from '../option';
 import { OptionGroupComponent } from '../option-group';
-import { PopupComponent } from '../../popup';
 import { ListComponent, ListItemComponent } from '../../list';
 import { CircularProgressComponent } from '../../circular-progress';
 import { ScaffoldComponent } from '../../scaffold';
 import { ToolbarComponent } from '../../toolbar';
 import { IconButtonComponent } from '../../icon-button';
+import { PopoverComponent } from '../../popover/popover';
 
 import template from './select-dropdown.html';
 import styles from './select-dropdown.scss';
@@ -34,8 +34,6 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-select-dropdown>` custom element.
- * 
  * @tag forge-select-dropdown
  */
 @CustomElement({
@@ -43,7 +41,7 @@ declare global {
   dependencies: [
     OptionComponent,
     OptionGroupComponent,
-    PopupComponent,
+    PopoverComponent,
     ListComponent,
     ListItemComponent,
     CircularProgressComponent,

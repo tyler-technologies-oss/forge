@@ -89,13 +89,12 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
     this._adapter.removeTargetListener('focus', this._focusListener);
     this._adapter.removeTargetListener('keydown', this._keydownListener);
 
-    if (this._open) {
-      this._closeDropdown();
-    }
-
     if (this._optionListenerDestructor) {
       this._optionListenerDestructor();
     }
+ 
+    this._open = false;
+    this._adapter.destroyListDropdown();
   }
 
   public appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void {

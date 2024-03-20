@@ -1,8 +1,8 @@
-import { POPUP_CONSTANTS } from '@tylertech/forge';
+import { POPOVER_CONSTANTS, POPUP_CONSTANTS } from '@tylertech/forge';
 import { removeElement, Platform } from '@tylertech/forge-core';
 
 export function tryCleanupPopups(): void {
-  const popups = Array.from(document.querySelectorAll(POPUP_CONSTANTS.elementName)) as HTMLElement[];
+  const popups = Array.from(document.querySelectorAll(`:is(${POPUP_CONSTANTS.elementName},${POPOVER_CONSTANTS.elementName})`)) as HTMLElement[];
   popups.forEach(p => removeElement(p));
 }
 
