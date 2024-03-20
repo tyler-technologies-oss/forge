@@ -4,7 +4,7 @@ import { IStepComponent } from './step';
 import { StepIcons, STEP_CONSTANTS } from './step-constants';
 import { IIconComponent } from '../../icon';
 import { IExpansionPanelComponent } from '../../expansion-panel';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '@tylertech/forge/state-layer';
+import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 
 export interface IStepAdapter extends IBaseAdapter {
   component: IStepComponent;
