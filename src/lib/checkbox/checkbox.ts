@@ -78,7 +78,7 @@ const BaseCheckboxClass = WithFormAssociation(WithLabelAwareness(WithFocusable(W
  * @cssproperty --forge-checkbox-border-width - The width of the checkbox border.
  * @cssproperty --forge-checkbox-state-layer-size - The inline and block size of the state layer.
  * @cssproperty --forge-checkbox-state-layer-dense-size - The inline and block size of the state layer when dense.
- * @cssproperty --forge-checkbox-background-color - The color of the checkbox background when unchecked and not indeterminate.
+ * @cssproperty --forge-checkbox-background - The color of the checkbox background when unchecked and not indeterminate.
  * @cssproperty --forge-checkbox-width - The inline size of the checkbox.
  * @cssproperty --forge-checkbox-height - The block size of the checkbox.
  * @cssproperty --forge-checkbox-unchecked-border-width - The width of the checkbox border when unchecked and not indeterminate.
@@ -88,7 +88,7 @@ const BaseCheckboxClass = WithFormAssociation(WithLabelAwareness(WithFocusable(W
  * @cssproperty --forge-checkbox-gap - The space between the checkbox and label.
  * @cssproperty --forge-checkbox-justify - How the checkbox and label are distributed along their main axis.
  * @cssproperty --forge-checkbox-direction - Whether the checkbox and label are arranged along the inline or block axis.
- * @cssproperty --forge-checkbox-checked-background-color - The color of the checkbox background when checked or indeterminate.
+ * @cssproperty --forge-checkbox-checked-background - The color of the checkbox background when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-width - The width of the checkbox border when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-color - The color of the checkbox border when checked or indeterminate.
  * @cssproperty --forge-checkbox-icon-color - The color of the checkmark and indeterminate mark.
@@ -108,7 +108,7 @@ const BaseCheckboxClass = WithFormAssociation(WithLabelAwareness(WithFocusable(W
  * @cssproperty --forge-checkbox-background-animation-timing - The timing function of the background animations.
  * @cssproperty --forge-checkbox-icon-animation-timing - The timing function of the checked and indeterminate icons animations.
  * 
- * @csspart checkbox - Styles the checkbox container element.
+ * @csspart root - Styles the root element.
  * @csspart background - Styles the checkbox background element.
  * @csspart checkmark - Styles the checkmark element.
  * @csspart mixedmark - Styles the indeterminate mark element.
