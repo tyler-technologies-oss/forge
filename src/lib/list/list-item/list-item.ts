@@ -100,6 +100,7 @@ declare global {
  * @cssproperty --forge-list-item-background-color - The background color.
  * @cssproperty --forge-list-item-shape - The shape of the list item.
  * @cssproperty --forge-list-item-padding - The padding inside of the container element.
+ * @cssproperty --forge-list-item-wrap-padding - The padding inside of the container element when `wrap` is enabled.
  * @cssproperty --forge-list-item-margin - The margin around the host element.
  * @cssproperty --forge-list-item-height - The height of the container.
  * @cssproperty --forge-list-item-dense-height - The height when in the dense state.
