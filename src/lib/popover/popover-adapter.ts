@@ -9,6 +9,8 @@ import { POPOVER_CONSTANTS } from './popover-constants';
 export interface IPopoverAdapter extends IOverlayAwareAdapter {
   readonly hostElement: IPopoverComponent;
   destroy(): void;
+  initializeAnchorElement(): void;
+  cleanupAnchorElement(): void;
   tryLocateAnchorElement(id: string | null): void;
   addAnchorListener(type: string, listener: EventListener): void;
   removeAnchorListener(type: string, listener: EventListener): void;
@@ -34,6 +36,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
 
   public destroy(): void {
     this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+    this.cleanupAnchorElement();
   }
   
   protected _initializeOverlayElement(): void {
@@ -42,6 +45,15 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
 
   public tryLocateAnchorElement(id: string | null): void {
     this._overlayElement.anchorElement = this._tryFindAnchorElement(id);
+    this._updateAnchorExpandedState(this._overlayElement.open);
+  }
+
+  public initializeAnchorElement(): void {
+    this._updateAnchorExpandedState(this._overlayElement.open);
+  }
+
+  public cleanupAnchorElement(): void {
+    this._updateAnchorExpandedState(null);
   }
 
   public addAnchorListener(type: string, listener: EventListener): void {
@@ -66,26 +78,29 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     this._surfaceElement.removeEventListener(type, listener);
   }
 
+  public setOverlayOpen(newState: boolean): void {
+    this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+    this._overlayElement.open = newState;
+    this._updateAnchorExpandedState(newState);
+  }
+
   public hide(): Promise<void> {
     if (prefersReducedMotion()) {
       this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
       this._overlayElement.open = false;
+      this._updateAnchorExpandedState(false);
       return Promise.resolve();
     }
 
     return new Promise(resolve => {
-      this._surfaceElement.addEventListener('animationend', evt => {
+      this._surfaceElement.addEventListener('animationend', () => {
         this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
         this._overlayElement.open = false;
+        this._updateAnchorExpandedState(false);
         resolve();
       }, { once: true });
       this._surfaceElement.classList.add(POPOVER_CONSTANTS.classes.EXITING);
     });
-  }
-
-  public setOverlayOpen(newState: boolean): void {
-    this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
-    this._overlayElement.open = newState;
   }
 
   public toggleArrow(value: boolean): void {
@@ -152,5 +167,19 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     }
 
     return null;
+  }
+
+  private _updateAnchorExpandedState(state: boolean | null): void {
+    if (!this._overlayElement.anchorElement) {
+      return;
+    }
+
+    if (!(this._overlayElement.anchorElement instanceof VirtualElement)) {
+      if (state === null) {
+        this._overlayElement.anchorElement.removeAttribute('aria-expanded');
+        return;
+      }
+      this._overlayElement.anchorElement.setAttribute('aria-expanded', String(!!state));
+    }
   }
 }
