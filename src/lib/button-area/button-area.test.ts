@@ -66,7 +66,7 @@ describe('Button Area', () => {
     
     button.focus();
     pressKey('z');
-    await timer(TOUCH_DELAY_MS);
+    await timer(TOUCH_DELAY_MS + 100);
     expect(animateSpy).to.not.have.been.called;
     expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
 

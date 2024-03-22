@@ -1,12 +1,13 @@
 import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
 import { unwrapElements, wrapElements } from '../core';
 import { BaseAdapter, IBaseAdapter } from '../core/base';
-import { FOCUS_INDICATOR_CONSTANTS } from '../focus-indicator';
+import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../focus-indicator';
 import { FieldLabelPosition } from './base/base-field-constants';
 import { IFieldComponent } from './field';
 import { FIELD_CONSTANTS } from './field-constants';
 
 export interface IFieldAdapter extends IBaseAdapter {
+  readonly focusIndicator: IFocusIndicatorComponent;
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   addPopoverIconClickListener(listener: EventListener): void;
   removePopoverIconClickListener(listener: EventListener): void;
@@ -22,9 +23,14 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   private readonly _containerElement: HTMLElement;
   private readonly _labelElement: HTMLElement;
   private readonly _popoverIconElement: HTMLElement;
+  private readonly _focusIndicatorElement: IFocusIndicatorComponent;
 
   private get _resizeContainerElement(): HTMLElement | null {
     return this._containerElement.querySelector(FIELD_CONSTANTS.selectors.RESIZE_CONTAINER) as HTMLElement | null;
+  }
+
+  public get focusIndicator(): IFocusIndicatorComponent {
+    return this._focusIndicatorElement;
   }
 
   constructor(component: IFieldComponent) {
@@ -33,6 +39,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     this._containerElement = getShadowElement(component, FIELD_CONSTANTS.selectors.CONTAINER);
     this._labelElement = getShadowElement(component, FIELD_CONSTANTS.selectors.LABEL);
     this._popoverIconElement = getShadowElement(component, FIELD_CONSTANTS.selectors.POPOVER_ICON);
+    this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
   }
 
   public addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void {
@@ -128,8 +135,11 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
     }
 
     // Ensure that the slot belongs to the field
-    const slotElement = getShadowElement(this._component, `slot[name=${slot.name}]`) as HTMLSlotElement | undefined;
-    if (!slotElement) {
+    while (slot.assignedSlot) {
+      slot = slot.assignedSlot;
+    }
+
+    if (!slot) {
       return;
     }
 
@@ -142,7 +152,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
       'support-text-end': FIELD_CONSTANTS.classes.HAS_SUPPORT_END
     };
     if (slot.name in classMap) {
-      toggleClass(this._rootElement, !!slotElement.assignedNodes({ flatten: true }).length, classMap[slot.name]);
+      toggleClass(this._rootElement, !!slot.assignedNodes({ flatten: true }).length, classMap[slot.name]);
     }
   }
 

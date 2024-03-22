@@ -102,6 +102,7 @@
 @mixin container-background-outlined($theme: default) {
   outline-style: #{token(border-style)};
   outline-width: #{token(border-width)};
+  outline-offset: calc(#{token(border-width)} * -1);
 
   @if $theme == default {
     outline-color: #{token(border-color)};

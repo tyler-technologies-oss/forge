@@ -19,6 +19,8 @@ $tokens: (
   container-padding-inline: utils.module-val(field, container-padding-inline, 12px),
   container-padding-inline-start: utils.module-ref(field, container-padding-inline-start, container-padding-inline),
   container-padding-inline-end: utils.module-ref(field, container-padding-inline-end, container-padding-inline),
+  container-extra-small-padding-inline-start: utils.module-val(field, container-extra-small-padding-inline-start, 8px),
+  container-extra-small-padding-inline-end: utils.module-val(field, container-extra-small-padding-inline-end, 4px),
   container-gap: utils.module-val(field, container-gap, 8px),
   start-padding-inline-end: utils.module-ref(field, start-padding-inline-end, container-gap),
   end-padding-inline-start: utils.module-ref(field, end-padding-inline-start, container-gap),

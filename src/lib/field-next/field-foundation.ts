@@ -1,4 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { FocusIndicatorFocusMode, FOCUS_INDICATOR_CONSTANTS } from '../focus-indicator';
 import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 import { IFieldAdapter } from './field-adapter';
 import { FIELD_CONSTANTS } from './field-constants';
@@ -20,6 +21,9 @@ export interface IFieldFoundation extends ICustomElementFoundation {
   popoverExpanded: boolean;
   multiline: boolean;
   supportTextInset: FieldSupportTextInset;
+  focusIndicatorTargetElement: HTMLElement;
+  focusIndicatorFocusMode: FocusIndicatorFocusMode;
+  focusIndicatorAllowFocus: boolean;
   initialize(): void;
   floatLabelWithoutAnimation(value: boolean): void;
 }
@@ -261,5 +265,26 @@ export class FieldFoundation implements IFieldFoundation {
       this._supportTextInset = value;
       this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET, this._supportTextInset);
     }
+  }
+
+  public get focusIndicatorTargetElement(): HTMLElement {
+    return this._adapter.focusIndicator.targetElement;
+  }
+  public set focusIndicatorTargetElement(value: HTMLElement) {
+    this._adapter.focusIndicator.targetElement = value;
+  }
+
+  public get focusIndicatorFocusMode(): FocusIndicatorFocusMode {
+    return this._adapter.focusIndicator.focusMode;
+  }
+  public set focusIndicatorFocusMode(value: FocusIndicatorFocusMode) {
+    this._adapter.focusIndicator.focusMode = value;
+  }
+
+  public get focusIndicatorAllowFocus(): boolean {
+    return this._adapter.focusIndicator.allowFocus;
+  }
+  public set focusIndicatorAllowFocus(value: boolean) {
+    this._adapter.focusIndicator.allowFocus = value;
   }
 }

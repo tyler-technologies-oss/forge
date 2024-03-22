@@ -69,6 +69,10 @@ $variants: (
   .forge-field {
     @include core.base;
   
+    .outline {
+      @include core.outline;
+    }
+
     .container {
       @include core.container;
       @include core.container-layout;
@@ -347,11 +351,7 @@ $variants: (
 
       &:not(.forge-field--floating-in) {
         .input {
-          ::slotted(input) {
-            @include core.slotted-floating-input;
-          }
-
-          ::slotted([data-forge-multi-input-separator]) {
+          ::slotted(:is(input, [data-forge-field-input], [data-forge-multi-input-separator])) {
             @include core.slotted-floating-input;
           }
         }
@@ -639,6 +639,16 @@ $variants: (
 
 .forge-field {
   .input {
+    ::slotted(input:-webkit-autofill) {
+      border-radius: #{token(shape)};
+
+      // TODO: remove when outline moves from pseudo-element to container
+      height: calc(100% - (#{token(border-width)} * 2));
+      width: calc(100% - (#{token(border-width)} * 2));
+      margin-block-start: #{token(border-width)};
+      margin-inline-start: #{token(border-width)};
+    }
+
     ::slotted(*) {
       @include core.default-slot-content;
     }
@@ -647,11 +657,11 @@ $variants: (
       @include core.default-slot-textarea;
     }
 
-    ::slotted(*:first-of-type:is(input, textarea)) {
+    ::slotted(*:first-of-type:is(input, textarea, [data-forge-field-input])) {
       @include core.first-default-slot-content;
     }
 
-    ::slotted(*:last-of-type:is(input, textarea)) {
+    ::slotted(*:last-of-type:is(input, textarea, [data-forge-field-input])) {
       @include core.last-default-slot-content;
     }
 

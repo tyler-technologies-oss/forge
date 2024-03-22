@@ -2,7 +2,7 @@ import '$src/shared';
 import '@tylertech/forge/button';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/select';
-import type { ISelectComponent, ISwitchComponent, SelectDensityType } from '@tylertech/forge';
+import type { FieldLabelPosition, ISelectComponent, ISwitchComponent, SelectDensityType } from '@tylertech/forge';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFood } from '@tylertech/tyler-icons/extended';
 import './select.scss';
@@ -22,6 +22,7 @@ leadingEl.remove();
 addonEndEl.remove();
 helperTextEl.remove();
 
+const optLabelPosition = document.querySelector('#opt-label-position') as ISelectComponent;
 const optDensity = document.querySelector('#opt-density') as ISelectComponent;
 const optLabel = document.querySelector('#opt-label') as HTMLInputElement;
 const optPlaceholder = document.querySelector('#opt-placeholder') as HTMLInputElement;
@@ -37,6 +38,9 @@ const optRounded = document.querySelector('#opt-rounded') as ISwitchComponent;
 const optOptionBuilder = document.querySelector('#opt-option-builder') as ISwitchComponent;
 const optSelectedTextBuilder = document.querySelector('#opt-selected-text-builder') as ISwitchComponent;
 
+optLabelPosition.addEventListener('change', ({ detail }) => {
+  select.labelPosition = detail as FieldLabelPosition;
+});
 optDensity.addEventListener('change', ({ detail }) => {
   select.density = detail as SelectDensityType;
 });
@@ -71,7 +75,7 @@ optMultiple.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.multiple = selected;
 });
 optFloatLabel.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.floatLabelType = selected ? 'always' : 'auto';
+  select.floatLabel = selected;
 });
 optRequired.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.required = selected;

@@ -208,11 +208,14 @@ function createEndElement(): HTMLElement {
 
 function createAccessoryElement(): HTMLElement {
   const button = document.createElement('forge-icon-button');
-  const icon = document.createElement('forge-icon');
   button.density = 'medium';
   button.slot = 'accessory';
+
+  const icon = document.createElement('forge-icon');
   icon.name = 'more_vert';
-  return icon;
+  button.appendChild(icon);
+
+  return button;
 }
 
 function createSupportTextStartElement(): HTMLElement {
