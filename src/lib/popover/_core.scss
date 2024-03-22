@@ -46,6 +46,8 @@
 @mixin preset-dropdown {
   @include override(max-height, preset-dropdown-max-height);
   @include override(overflow, preset-dropdown-overflow);
+
+  padding-block: #{token(preset-dropdown-padding-block)};
 }
 
 @mixin zoom-base {

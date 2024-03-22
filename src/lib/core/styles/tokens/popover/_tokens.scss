@@ -4,6 +4,7 @@
 @use '../../theme';
 @use '../../shape';
 @use '../../border';
+@use '../../spacing';
 @use '../../animation';
 
 $tokens: (
@@ -64,6 +65,7 @@ $tokens: (
   // Preset - Dropdown
   preset-dropdown-max-height: utils.module-val(popover, preset-dropdown-max-height, 256px),
   preset-dropdown-overflow: utils.module-val(popover, preset-dropdown-overflow, auto visible),
+  preset-dropdown-padding-block: utils.module-val(popover, preset-dropdown-padding-block, spacing.variable(xsmall)),
 ) !default;
 
 @function get($key) {

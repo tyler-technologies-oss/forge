@@ -37,9 +37,8 @@ declare global {
  * 
  * @slot - The default/unnamed slot for child list items.
  *
- * @cssproperty --forge-list-container-color - The background color of the list surface,
- * @cssproperty --forge-list-block-padding - The block padding of the list before and after the list items.
- * @cssproperty --forge-list-inline-padding - The inline padding of the list next to the list items.
+ * @cssproperty --forge-list-container-color - The background color of the list surface.
+ * @cssproperty --forge-list-spacing - The spacing between the list items.
  * 
  * @property {string} role - The role of the list. Default is 'list'. Valid values are 'list', 'listbox', and 'menu'.
  * @property {boolean} static - Whether the list has all static items or not.

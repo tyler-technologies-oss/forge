@@ -71,6 +71,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
 
     this._initializeTriggerListeners();
+    this._adapter.initializeAnchorElement();
   }
 
   public override destroy(): void {
@@ -461,12 +462,14 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     if (this._adapter.overlayElement.anchorElement !== value) {
       if (this._adapter.isConnected) {
         this._removeTriggerListeners();
+        this._adapter.cleanupAnchorElement();
       }
 
       this._adapter.overlayElement.anchorElement = value;
 
       if (this._adapter.isConnected) {
         this._initializeTriggerListeners();
+        this._adapter.initializeAnchorElement();
       }
     }
   }
@@ -480,8 +483,10 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
       
       if (this._adapter.isConnected) {
         this._removeTriggerListeners();
+        this._adapter.cleanupAnchorElement();
         this._adapter.tryLocateAnchorElement(this._anchor);
         this._initializeTriggerListeners();
+        this._adapter.initializeAnchorElement();
       }
     }
   }
