@@ -1,5 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-import { FocusIndicatorFocusMode, FOCUS_INDICATOR_CONSTANTS } from '../focus-indicator';
+import { FocusIndicatorFocusMode } from '../focus-indicator';
 import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 import { IFieldAdapter } from './field-adapter';
 import { FIELD_CONSTANTS } from './field-constants';

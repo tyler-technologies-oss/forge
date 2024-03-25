@@ -65,12 +65,12 @@ describe('Button Area', () => {
     const animateSpy = spy(stateLayerSurface, 'animate');
     
     button.focus();
-    pressKey('z');
-    await timer(TOUCH_DELAY_MS + 100);
+    await pressKey('z');
+    await timer(TOUCH_DELAY_MS);
     expect(animateSpy).to.not.have.been.called;
     expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).to.be.false;
 
-    pressKey('Enter');
+    await pressKey('Enter');
     await timer(TOUCH_DELAY_MS);
 
     expect(animateSpy).to.have.been.called;

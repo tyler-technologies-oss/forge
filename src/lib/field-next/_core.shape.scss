@@ -12,7 +12,6 @@
       @include override('container-padding-inline-end', #{token(container-extra-small-padding-inline-end)}, value);
     }
   }
-
 }
 
 @mixin shape($shape) {

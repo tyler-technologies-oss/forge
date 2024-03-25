@@ -18,7 +18,23 @@ describe('Select', () => {
   describe('base', () => {
     it('should contain shadow root', async () => {
       const harness = await createFixture();
+
       expect(harness.element.shadowRoot).not.to.be.null;
+    });
+
+    it('should initialize field', async () => {
+      const harness = await createFixture();
+
+      expect(harness.fieldElement).to.be.ok;
+      expect(harness.fieldElement.shadowRoot).to.be.ok;
+    });
+
+    it('should instantiate field before connected to DOM', async () => {
+      const selectEl = document.createElement('forge-select');
+      const fieldEl = selectEl.shadowRoot?.querySelector('forge-field');
+
+      expect(fieldEl).to.be.ok;
+      expect(fieldEl?.shadowRoot).to.be.ok;
     });
 
     it('should focus element when clicking field', async () => {
@@ -585,18 +601,10 @@ describe('Select', () => {
       expect(harness.element.getAttribute('aria-label')).to.equal('Test label');
     });
 
-    it('should not set aria-label when label is not set', async () => {
-      const harness = await createFixture({ label: '' });
-
-      expect(harness.labelElement).not.to.be.ok;
-      expect(harness.element.hasAttribute('aria-label')).to.be.false;
-    });
-
     it('should remove label element when label is not set', async () => {
       const harness = await createFixture({ label: '' });
 
       expect(harness.labelElement).not.to.be.ok;
-      expect(harness.element.hasAttribute('aria-label')).to.be.false;
     });
 
     it('should change label dynamically', async () => {
@@ -608,6 +616,42 @@ describe('Select', () => {
 
       expect(harness.labelElement?.textContent).to.equal('New label');
       expect(harness.element.getAttribute('aria-label')).to.equal('New label');
+    });
+
+    it('should hide label when dense', async () => {
+      const harness = await createFixture({ dense: true });
+
+      expect(harness.labelElement).not.to.be.ok;
+    });
+
+    it('should hide label when density is extra-small', async () => {
+      const harness = await createFixture({ density: 'extra-small' });
+
+      expect(harness.labelElement).not.to.be.ok;
+    });
+
+    it('should show label when dense and label position is not inset', async () => {
+      const harness = await createFixture({ dense: true, labelPosition: 'block-start' });
+
+      expect(harness.labelElement).to.be.ok;
+    });
+
+    it('should show label when density is extra-small and label position is not inset', async () => {
+      const harness = await createFixture({ density: 'extra-small', labelPosition: 'block-start' });
+
+      expect(harness.labelElement).to.be.ok;
+    });
+
+    it('should hide and show label when inset and dense', async () => {
+      const harness = await createFixture();
+
+      expect(harness.labelElement).to.be.ok;
+
+      harness.element.dense = true;
+      expect(harness.labelElement).not.to.be.ok;
+
+      harness.element.dense = false;
+      expect(harness.labelElement).to.be.ok;
     });
   });
 
@@ -664,34 +708,24 @@ describe('Select', () => {
     it('should hide label when setting density to extra-small', async () => {
       const harness = await createFixture();
 
-      expect(harness.fieldElement.labelPosition).to.equal('inset');
       expect(harness.labelElement).to.be.ok;
 
       harness.element.density = 'extra-small';
-
-      expect(harness.fieldElement.labelPosition).to.equal('none');
       expect(harness.labelElement).not.to.be.ok;
 
       harness.element.density = 'medium';
-
-      expect(harness.fieldElement.labelPosition).to.equal('inset');
       expect(harness.labelElement).to.be.ok;
     });
 
     it('should hide label when setting dense to true', async () => {
       const harness = await createFixture();
 
-      expect(harness.fieldElement.labelPosition).to.equal('inset');
       expect(harness.labelElement).to.be.ok;
 
       harness.element.dense = true;
-
-      expect(harness.fieldElement.labelPosition).to.equal('none');
       expect(harness.labelElement).not.to.be.ok;
 
       harness.element.dense = false;
-
-      expect(harness.fieldElement.labelPosition).to.equal('inset');
       expect(harness.labelElement).to.be.ok;
     });
   });

@@ -427,15 +427,26 @@ $variants: (
 //
 
 @each $density, $selector in $densities {
+  // Non-inset density selectors
   :host(#{$selector}) {
     .forge-field {
       @include core.density($density);
     }
   }
 
-  :host(#{map.get($label-positions, inset)}#{$selector}) {
-    .forge-field {
-      @include core.density($density, true);
+  // Inset density selectors
+  @if $density == 'extra-small' {
+    // We always force the inset density to be same height as non-dense
+    :host(#{map.get($label-positions, inset)}#{$selector}) {
+      .forge-field {
+        @include core.density($density);
+      }
+    }
+  } @else {
+    :host(#{map.get($label-positions, inset)}#{$selector}) {
+      .forge-field {
+        @include core.density($density, true);
+      }
     }
   }
 }

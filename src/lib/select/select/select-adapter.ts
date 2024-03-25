@@ -57,24 +57,19 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
   }
 
   public setLabel(value: string): void {
-    const hasLabel = this._fieldElement.density !== 'extra-small' && !this._fieldElement.dense && !!value?.trim();
+    const isInsetAndDense = this._fieldElement.labelPosition === 'inset' && (this._fieldElement.density === 'extra-small' || this._fieldElement.dense);
+    const hasLabel = !isInsetAndDense && !!value?.trim();
 
     if (!this._component.hasAttribute('aria-label') || this._component.getAttribute('aria-label') === this._labelElement.textContent) {
-      if (hasLabel) {
-        this._component.setAttribute('aria-label', value);
-      } else {
-        this._component.removeAttribute('aria-label');
-      }
+      this._component.setAttribute('aria-label', value);
     }
 
     if (hasLabel) {
-      this._fieldElement.labelPosition = this._component.getAttribute('label-position') as FieldLabelPosition ?? FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION;
       if (!this._labelElement.isConnected) {
         this._fieldElement.insertAdjacentElement('afterbegin', this._labelElement);
       }
       this._labelElement.textContent = value;
     } else {
-      this._fieldElement.labelPosition = 'none';
       this._labelElement.remove();
     }
   }

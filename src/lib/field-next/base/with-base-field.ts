@@ -104,6 +104,13 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
 
     public initializeFieldInstance(fieldElement: IFieldComponent): void {
       this._fieldElement = fieldElement;
+
+      // Ensure the field element is upgraded if it hasn't been already.
+      // This is necessary for imperative creation of elements before they
+      // are connected to the DOM.
+      if (!this._fieldElement.shadowRoot) {
+        window.customElements.upgrade(this._fieldElement);
+      }
     }
 
     public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

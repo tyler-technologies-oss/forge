@@ -13,7 +13,7 @@ import { ScaffoldComponent } from '../../scaffold';
 import { ToolbarComponent } from '../../toolbar';
 import { IconButtonComponent } from '../../icon-button';
 import { PopoverComponent } from '../../popover';
-import { BASE_FIELD_CONSTANTS, FieldComponent, FieldDensity } from '../../field-next';
+import { BASE_FIELD_CONSTANTS, FieldComponent, FieldDensity, FieldLabelPosition, FIELD_CONSTANTS } from '../../field-next';
 import { IWithBaseField, WithBaseField } from '../../field-next/base/with-base-field';
 
 import template from './select.html';
@@ -71,7 +71,7 @@ export class SelectComponent extends BaseClass implements ISelectComponent {
     attachShadowTemplate(this, template, styles);
 
     // Needed by WithBaseField mixin to proxy state to the field component
-    const fieldEl = this.shadowRoot?.querySelector('forge-field') as FieldComponent;
+    const fieldEl = this.shadowRoot?.querySelector(FIELD_CONSTANTS.elementName) as FieldComponent;
     this.initializeFieldInstance(fieldEl);
 
     this._foundation = new SelectFoundation(new SelectAdapter(this));
@@ -127,5 +127,13 @@ export class SelectComponent extends BaseClass implements ISelectComponent {
   public override set disabled(value: boolean) {
     super.disabled = value;
     this._foundation.setDisabled(value);
+  }
+
+  public override get labelPosition(): FieldLabelPosition {
+    return super.labelPosition;
+  }
+  public override set labelPosition(value: FieldLabelPosition) {
+    super.labelPosition = value;
+    this._foundation.syncFloatingLabelState();
   }
 }
