@@ -5,6 +5,7 @@
 
 @mixin host {
   display: inline-block;
+  outline: none;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -17,6 +18,10 @@
   gap: #{token(gap)};
 
   display: flex;
+}
+
+@mixin dense {
+  @include override(gap, dense-gap);
 }
 
 @mixin checkbox-disabled {
@@ -46,20 +51,6 @@
   cursor: not-allowed;
 }
 
-@mixin input {
-  position: absolute;
-  z-index: 1;
-
-  appearance: none;
-
-  outline: none;
-  margin: 0;
-  inline-size: 100%;
-  block-size: 100%;
-
-  cursor: unset;
-}
-
 @mixin background {
   position: relative;
   align-items: center;
@@ -67,7 +58,7 @@
 
   display: flex;
 
-  transition-property: background-color, border-width, border-color;
+  transition-property: background, border-width, border-color;
   transition-duration: #{token(animation-duration)};
   transition-timing-function: #{token(background-animation-timing)};
 
@@ -80,7 +71,7 @@
   block-size: #{token(height)};
   inline-size: #{token(width)};
 
-  background-color: #{token(background-color)};
+  background: #{token(background)};
 }
 
 @mixin background-checked {
@@ -88,7 +79,7 @@
   border-width: #{token(checked-border-width)};
   border-color: #{token(checked-border-color)};
 
-  background-color: #{token(checked-background-color)};
+  background: #{token(checked-background)};
 }
 
 @mixin icon {
@@ -149,7 +140,5 @@
 @mixin label {
   @include typography.style(label1);
 
-  &:empty {
-    display: none;
-  }
+  cursor: default;
 }

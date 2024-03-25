@@ -13,6 +13,9 @@ export const getFormValue = Symbol('getFormValue');
 /** A method symbol that gets the form state of a form-associated component. */
 export const getFormState = Symbol('getFormState');
 
+/** A method symbol that sets the validity of a form-associated component. */
+export const setValidity = Symbol('setValidity');
+
 /** A method symbol that gets the validation message of a form-associated component. */
 export const getValidationMessage = Symbol('getValidityMessage');
 
