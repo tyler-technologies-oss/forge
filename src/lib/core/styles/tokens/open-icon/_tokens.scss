@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../animation';
+
+$tokens: (
+  line-height: utils.module-val(open-icon, line-height, 0.5),
+  height: utils.module-val(open-icon, height, 24px),
+  width: utils.module-val(open-icon, width, 24px),
+  transition-duration: utils.module-val(open-icon, transition-duration, 500ms),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

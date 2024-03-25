@@ -1,0 +1,19 @@
+@use './token-utils' as *;
+@forward './token-utils';
+
+@mixin host() {
+  line-height: #{token(line-height)};
+}
+
+@mixin base() {
+  height: #{token(height)};
+  width: #{token(width)};
+}
+
+@mixin icon() {
+  transition: #{token(transition-duration)};
+}
+
+@mixin open() {
+  transform: rotate(180deg);
+}

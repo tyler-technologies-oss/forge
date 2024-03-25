@@ -15,7 +15,6 @@ export class OpenIconFoundation implements IOpenIconFoundation {
 
   public initialize(): void {
     this._adapter.setOrientation(this._orientation);
-    this._adapter.setOpenState(this._open);
   }
 
   /** Controls the open state of the icon. */
@@ -26,7 +25,7 @@ export class OpenIconFoundation implements IOpenIconFoundation {
     value = Boolean(value);
     if (this._open !== value) {
       this._open = value;
-      this._adapter.setOpenState(this._open);
+      this._adapter.toggleHostAttribute(OPEN_ICON_CONSTANTS.attributes.OPEN, this._open);
     }
   }
 

@@ -6,16 +6,13 @@ import { ICON_CONSTANTS, IIconComponent } from '../icon';
 
 export interface IOpenIconAdapter extends IBaseAdapter {
   setOrientation: (orientation: string) => void;
-  setOpenState: (open: boolean) => void;
 }
 
 export class OpenIconAdapter extends BaseAdapter<IOpenIconComponent> implements IOpenIconAdapter {
-  private _openIcon: HTMLElement;
   private _iconElement: IIconComponent;
 
   constructor(component: IOpenIconComponent) {
     super(component);
-    this._openIcon = getShadowElement(component, `.${OPEN_ICON_CONSTANTS.classes.ICON}`);
     this._iconElement = getShadowElement(component, ICON_CONSTANTS.elementName) as IIconComponent;
   }
 
@@ -25,9 +22,5 @@ export class OpenIconAdapter extends BaseAdapter<IOpenIconComponent> implements 
     } else {
       this._iconElement.name = 'keyboard_arrow_down';
     }
-  }
-
-  public setOpenState(open: boolean): void {
-    toggleClass(this._openIcon, open, OPEN_ICON_CONSTANTS.classes.ICON_OPEN);
   }
 }

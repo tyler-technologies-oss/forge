@@ -1,9 +1,25 @@
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+.forge-open-icon {
+  @include tokens;
+}
+
+.forge-open-icon {
+  @include base();
+}
+
+.icon {
+  @include icon;
+}
 
 :host {
-  @include mixins.host;
+  @include host;
+}
+
+:host([open]) {
+  .icon {
+    @include open;
+  }
 }
 
 :host([hidden]) {
