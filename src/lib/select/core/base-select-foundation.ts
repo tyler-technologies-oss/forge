@@ -416,6 +416,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
 
     if (isSpace) {
       evt.preventDefault();
+      evt.stopPropagation();
 
       if (!this._open) {
         this._openDropdown();
