@@ -1,11 +1,45 @@
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.forge-card {
+  @include tokens;
+}
+
+.forge-card {
+  @include base;
+}
+
+//
+// Raised
+//
+
+:host([raised]) {
+  .forge-card {
+    @include raised;
+  }
+}
+
+//
+// Padding
+//
+
+:host([no-padding]) {
+  .forge-card {
+    @include override(padding, 0, value);
+  }
 }

@@ -2,7 +2,7 @@ import { IOverlayAwareFoundation, OverlayAwareFoundation } from '../overlay/base
 import { OverlayLightDismissEventData } from '../overlay/overlay-constants';
 import { WithLongpressListener } from '../core/mixins/interactions/longpress/with-longpress-listener';
 import { IPopoverAdapter } from './popover-adapter';
-import { PopoverAnimationType, IPopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS, PopoverDismissReason, POPOVER_HOVER_TIMEOUT } from './popover-constants';
+import { PopoverAnimationType, IPopoverToggleEventData, PopoverTriggerType, POPOVER_CONSTANTS, PopoverDismissReason, POPOVER_HOVER_TIMEOUT, PopoverPreset } from './popover-constants';
 import { IDismissibleStackState, DismissibleStack } from '../core/utils/dismissible-stack';
 import { VirtualElement } from '../core/utils/position-utils';
 
@@ -13,6 +13,9 @@ export interface IPopoverFoundation extends IOverlayAwareFoundation {
   longpressDelay: number;
   persistentHover: boolean;
   hoverDismissDelay: number;
+  hoverDelay: number;
+  preset: PopoverPreset;
+  hideAsync(): Promise<void>;
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
 
@@ -25,12 +28,15 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
   private _triggerTypes: PopoverTriggerType[] = [POPOVER_CONSTANTS.defaults.TRIGGER_TYPE];
   private _persistentHover = false;
   private _hoverDismissDelay = POPOVER_HOVER_TIMEOUT;
+  private _hoverDelay = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
+  private _preset = POPOVER_CONSTANTS.defaults.PRESET;
   private _previouslyFocusedElement: HTMLElement | null = null;
 
   // Hover trigger state
   private _hoverAnchorLeaveTimeout: undefined | number;
   private _popoverMouseleaveTimeout: undefined | number;
   private _currentHoverCoords: undefined | { x: number; y: number };
+  private _hoverTimeout: number | undefined;
 
   // Click trigger listeners
   private _anchorClickListener = this._onAnchorClick.bind(this);
@@ -65,10 +71,18 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
 
     this._initializeTriggerListeners();
+    this._adapter.initializeAnchorElement();
   }
 
   public override destroy(): void {
     super.destroy();
+
+    this._adapter.destroy();
+
+    window.clearTimeout(this._hoverTimeout);
+    window.clearTimeout(this._hoverAnchorLeaveTimeout);
+    window.clearTimeout(this._popoverMouseleaveTimeout);
+    
     this._previouslyFocusedElement = null;
 
     if (this.open) {
@@ -76,6 +90,10 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
 
     this._removeTriggerListeners();
+  }
+
+  public hideAsync(): Promise<void> {
+    return this._closePopover();
   }
 
   protected async _onOverlayLightDismiss(evt: CustomEvent<OverlayLightDismissEventData>): Promise<void> {
@@ -91,13 +109,14 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
 
     const previousFocusedEl = this._previouslyFocusedElement;
+    
+    this._closePopover().then(() => {
+      this._dispatchToggleEvent();
 
-    this._closePopover();
-    this._dispatchToggleEvent();
-
-    if (reason === 'escape' && previousFocusedEl && this._adapter.hasFocus()) {
-      previousFocusedEl.focus();
-    }
+      if (reason === 'escape' && previousFocusedEl && this._adapter.hasFocus()) {
+        previousFocusedEl.focus();
+      }
+    });
 
     return true;
   }
@@ -129,10 +148,16 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
   }
 
-  private _closePopover(): void {
+  private async _closePopover(): Promise<void> {
     this._previouslyFocusedElement = null;
-    this._adapter.setOverlayOpen(false);
     DismissibleStack.instance.remove(this._adapter.hostElement);
+
+    if (this._animationType === 'none') {
+      this._adapter.setOverlayOpen(false);
+    } else {
+      await this._adapter.hide();
+    }
+
     this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
   }
 
@@ -263,7 +288,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
         return;
       }
     }
-
+    window.clearTimeout(this._hoverTimeout);
     this._tryRemoveHoverListeners();
     this._requestClose('hover');
   }
@@ -304,7 +329,13 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
       if (!this._persistentHover) {
         this._adapter.addAnchorListener('mouseleave', this._anchorMouseleaveListener);
       }
-      this._openPopover();
+      if (this._hoverDelay) {
+        this._hoverTimeout = window.setTimeout(() => {
+          this._openPopover();
+        }, this._hoverDelay);
+      } else {
+        this._openPopover();
+      }
     }
   }
 
@@ -317,6 +348,7 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
    */
   private _onAnchorMouseleave(): void {
     this._startHoverListeners();
+    window.clearTimeout(this._hoverTimeout);
 
     this._hoverAnchorLeaveTimeout = window.setTimeout(() => {
       this._hoverAnchorLeaveTimeout = undefined;
@@ -430,12 +462,14 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     if (this._adapter.overlayElement.anchorElement !== value) {
       if (this._adapter.isConnected) {
         this._removeTriggerListeners();
+        this._adapter.cleanupAnchorElement();
       }
 
       this._adapter.overlayElement.anchorElement = value;
 
       if (this._adapter.isConnected) {
         this._initializeTriggerListeners();
+        this._adapter.initializeAnchorElement();
       }
     }
   }
@@ -449,8 +483,10 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
       
       if (this._adapter.isConnected) {
         this._removeTriggerListeners();
+        this._adapter.cleanupAnchorElement();
         this._adapter.tryLocateAnchorElement(this._anchor);
         this._initializeTriggerListeners();
+        this._adapter.initializeAnchorElement();
       }
     }
   }
@@ -526,6 +562,19 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     }
   }
 
+  public get hoverDelay(): number {
+    return this._hoverDelay;
+  }
+  public set hoverDelay(value: number) {
+    if (isNaN(value) || value < 0) {
+      value = POPOVER_CONSTANTS.defaults.HOVER_DELAY;
+    }
+    if (this._hoverDelay !== value) {
+      this._hoverDelay = value;
+      this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.HOVER_DELAY, String(this._hoverDelay));
+    }
+  }
+
   public get hoverDismissDelay(): number {
     return this._hoverDismissDelay;
   }
@@ -533,6 +582,18 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
     if (this._hoverDismissDelay !== value) {
       this._hoverDismissDelay = value;
       this._adapter.setHostAttribute(POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY, String(this._hoverDismissDelay));
+    }
+  }
+
+  public get preset(): PopoverPreset {
+    return this._preset ?? POPOVER_CONSTANTS.defaults.PRESET;
+  }
+  public set preset(value: PopoverPreset) {
+    value = value ?? POPOVER_CONSTANTS.defaults.PRESET;
+    if (this._preset !== value) {
+      this._preset = value;
+      const hasPreset = value !== POPOVER_CONSTANTS.defaults.PRESET;
+      this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.PRESET, hasPreset, this._preset);
     }
   }
 }

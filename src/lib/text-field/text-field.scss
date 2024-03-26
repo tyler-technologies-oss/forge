@@ -1,12 +1,21 @@
-@use '../theme';
-@use './mixins';
+@use './core';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include core.host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Field
+//
+
+forge-field {
+  @include core.field;
 }

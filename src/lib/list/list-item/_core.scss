@@ -153,6 +153,8 @@
 }
 
 @mixin wrap {
+  @include override(padding, wrap-padding);
+
   height: auto;
 }
 
@@ -160,6 +162,7 @@
   white-space: normal;
   overflow: visible;
   text-overflow: clip;
+  line-height: normal;
 }
 
 @mixin supporting-text-wrap {

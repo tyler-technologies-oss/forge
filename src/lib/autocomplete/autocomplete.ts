@@ -5,7 +5,7 @@ import { IconComponent, IconRegistry } from '../icon';
 import { LinearProgressComponent } from '../linear-progress';
 import { ListComponent, ListItemComponent } from '../list';
 import { IListDropdownAware, ListDropdownAware } from '../list-dropdown/list-dropdown-aware';
-import { PopupComponent } from '../popup';
+import { PopoverComponent } from '../popover/popover';
 import { SkeletonComponent } from '../skeleton';
 import { TextFieldComponent } from '../text-field';
 import { AutocompleteAdapter } from './autocomplete-adapter';
@@ -60,7 +60,7 @@ declare global {
   name: AUTOCOMPLETE_CONSTANTS.elementName,
   dependencies: [
     TextFieldComponent,
-    PopupComponent,
+    PopoverComponent,
     ListComponent,
     ListItemComponent,
     DividerComponent,

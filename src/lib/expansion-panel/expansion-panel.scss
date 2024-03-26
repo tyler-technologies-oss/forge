@@ -1,11 +1,91 @@
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  display: block;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.forge-expansion-panel {
+  @include tokens;
+}
+
+.header {
+  @include header;
+}
+
+.content {
+  @include content;
+
+  .inner {
+    @include inner;
+  }
+  
+}
+
+.hidden {
+  @include hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    transition: none;
+  }
+}
+
+//
+// Open
+//
+
+:host([open]) {
+  .content {
+    @include open-base;
+  }
+}
+
+:host([open]:is(:not([orientation]),[orientation=vertical])) {
+  .content {
+    @include open-vertical;
+  }
+}
+
+:host([open][orientation=horizontal]) {
+  .content {
+    @include open-horizontal;
+  }
+}
+
+//
+// Orientation
+//
+
+:host([orientation=horizontal]) {
+  .forge-expansion-panel {
+    @include orientation-horizontal-base;
+  }
+
+  .content {
+    @include content-orientation-horizontal;
+  }
+
+}
+
+//
+// Animation type
+//
+
+:host([animation-type=none]) {
+  .content {
+    transition: none;
+  }
 }

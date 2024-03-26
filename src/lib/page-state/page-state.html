@@ -1,15 +1,15 @@
 <template>
   <div class="forge-page-state" part="root">
-    <div class="forge-page-state__graphic" part="graphic-container">
+    <div class="graphic" part="graphic-container">
       <slot name="graphic"></slot>
     </div>
-    <h1 class="forge-page-state__title" part="title-container">
+    <div class="title" part="title-container">
       <slot name="title"></slot>
-    </h1>
-    <h2 class="forge-page-state__message" part="message-container">
+    </div>
+    <div class="message" part="message-container">
       <slot name="message"></slot>
-    </h2>
-    <div class="forge-page-state__actions" part="actions-container">
+    </div>
+    <div class="actions" part="actions-container">
       <slot name="action"></slot>
     </div>
   </div>

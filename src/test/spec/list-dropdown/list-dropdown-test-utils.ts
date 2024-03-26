@@ -1,11 +1,10 @@
-import { removeElement } from '@tylertech/forge-core';
 import { timer } from '@tylertech/forge-testing';
 
 import { ListDropdown, IListDropdownConfig, IListDropdown, IListDropdownFoundation, LIST_DROPDOWN_CONSTANTS, IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
-import { IPopupComponent, POPUP_CONSTANTS } from '@tylertech/forge/popup';
 import { ISelectOption } from '@tylertech/forge/select';
 import { LINEAR_PROGRESS_CONSTANTS, ILinearProgressComponent } from '@tylertech/forge/linear-progress';
+import { IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
 
 export interface IListDropdownTestContext {
   targetElement: HTMLElement;
@@ -14,6 +13,8 @@ export interface IListDropdownTestContext {
   append(): void;
   remove(): void;
 }
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 export interface ITestListDropdownGroup {
   headerElement: HTMLElement;
@@ -41,12 +42,12 @@ export function createListDropdown(config: IListDropdownConfig, targetElement?: 
   };
 }
 
-export function getListDropdownPopup(): IPopupComponent {
-  return document.querySelector(POPUP_CONSTANTS.elementName) as IPopupComponent;
+export function getListDropdownPopup(): IPopoverComponent {
+  return document.querySelector(POPOVER_CONSTANTS.elementName) as IPopoverComponent;
 }
 
 export function delayPopupAnimation(): Promise<void> {
-  return timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+  return timer(POPOVER_ANIMATION_DURATION);
 }
 
 export function getPopupOptions(): ISelectOption[] {

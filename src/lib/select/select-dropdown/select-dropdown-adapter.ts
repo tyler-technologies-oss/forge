@@ -11,7 +11,7 @@ export interface ISelectDropdownAdapter extends IBaseSelectAdapter {
   getTargetText(selector: string): string;
 }
 
-export class SelectDropdownAdapter extends BaseSelectAdapter implements ISelectDropdownAdapter {
+export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComponent> implements ISelectDropdownAdapter {
   constructor(component: ISelectDropdownComponent) {
     super(component);
   }
@@ -67,11 +67,11 @@ export class SelectDropdownAdapter extends BaseSelectAdapter implements ISelectD
     this._targetElement.setAttribute('aria-expanded', 'true');
   }
 
-  public close(): void {
+  public close(): Promise<void> {
     this._targetElement.setAttribute('aria-expanded', 'false');
     this._targetElement.removeAttribute('aria-activedescendant');
     this._targetElement.removeAttribute('aria-controls');
-    super.close();
+    return super.close();
   }
 
   public attach(selector: string): void {

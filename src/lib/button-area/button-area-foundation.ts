@@ -9,30 +9,33 @@ export interface IButtonAreaFoundation extends ICustomElementFoundation {
 
 export class ButtonAreaFoundation implements IButtonAreaFoundation {
   private _disabled = false;
-  private _clickListener: (event: Event) => void;
-  private _keydownListener: (event: KeyboardEvent) => void;
-  private _pointerdownListener: (event: Event) => void;
-  private _slotListener: () => void;
+  private _clickListener = this._handleClick.bind(this);
+  private _keydownListener = this._handleKeydown.bind(this);
+  private _pointerdownListener = this._handlePointerdown.bind(this);
+  private _ignoreStateLayerListener = this._handleIgnoreStateLayer.bind(this);
+  private _slotListener = this._handleSlotChange.bind(this);
 
-  constructor(private _adapter: IButtonAreaAdapter) {
-    this._clickListener = event => this._handleClick(event);
-    this._keydownListener = event => this._handleKeydown(event);
-    this._pointerdownListener = event => this._handlePointerdown(event);
-    this._slotListener = () => this._handleSlotChange();
-  }
+  constructor(private _adapter: IButtonAreaAdapter) {}
 
   public initialize(): void {
     this._adapter.addListener('click', this._clickListener);
     this._adapter.addListener('keydown', this._keydownListener);
     this._adapter.addListener('pointerdown', this._pointerdownListener);
-    this._adapter.addSlotChangeListener(this._slotListener);
-    this._adapter.createRipple();
+    this._adapter.addContentSlotListener('click', this._ignoreStateLayerListener.bind(this));
+    this._adapter.addContentSlotListener('pointerdown', this._ignoreStateLayerListener.bind(this));
+    this._adapter.addContentSlotListener('pointerup', this._ignoreStateLayerListener.bind(this));
+    this._adapter.addButtonSlotListener('slotchange', this._slotListener);
   }
 
   public disconnect(): void {
-    this._adapter.destroy();
     this._adapter.removeListener('click', this._clickListener);
-    this._adapter.removeSlotChangeListener(this._slotListener);
+    this._adapter.removeListener('keydown', this._keydownListener);
+    this._adapter.removeListener('pointerdown', this._pointerdownListener);
+    this._adapter.removeContentSlotListener('click', this._ignoreStateLayerListener.bind(this));
+    this._adapter.removeContentSlotListener('pointerdown', this._ignoreStateLayerListener.bind(this));
+    this._adapter.removeContentSlotListener('pointerup', this._ignoreStateLayerListener.bind(this));
+    this._adapter.removeButtonSlotListener('slotchange', this._slotListener);
+    this._adapter.destroy();
     this._adapter.stopButtonObserver();
   }
 
@@ -43,8 +46,8 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     }
 
     // Prevent the click if a selection was made
-    const selectionType = window.getSelection()?.type;
-    if (selectionType === 'Range') {
+    const selection = window.getSelection();
+    if (selection?.type === 'Range' && selection?.toString().trim() !== '') {
       event.stopPropagation();
     }
 
@@ -62,6 +65,8 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     // Prevent the keydown if it originates from an ignored element
     if (this._shouldIgnoreEvent(event)) {
       event.stopPropagation();
+    } else {
+      this._adapter.animateStateLayer();
     }
   }
 
@@ -70,9 +75,20 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
       return;
     }
 
-    // Prevent the ripple animation when ignored children are clicked
+    // Prevent the pointerdown if it originates from an ignored element
     if (this._shouldIgnoreEvent(event)) {
       this._adapter.requestDisabledButtonFrame();
+    }
+  }
+
+  private _handleIgnoreStateLayer(event: Event): void {
+    if (this._disabled) {
+      return;
+    }
+
+    // Prevent the state layer animation if the event originates from an ignored element
+    if (this._shouldIgnoreEvent(event)) {
+      event.stopPropagation();
     }
   }
 
@@ -84,7 +100,7 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
     this._adapter.startButtonObserver(() => this._handleButtonDisabled());
 
     // Match the component and button states if either is disabled
-    if (this._adapter.buttonIsDisabled()) {
+    if (this._adapter.isButtonDisabled()) {
       this.disabled = true;
     } else if (this._disabled) {
       this._adapter.setDisabled(true);
@@ -92,7 +108,7 @@ export class ButtonAreaFoundation implements IButtonAreaFoundation {
   }
 
   private _handleButtonDisabled(): void {
-    this.disabled = this._adapter.buttonIsDisabled();
+    this.disabled = this._adapter.isButtonDisabled();
   }
 
   private _shouldIgnoreEvent(event: Event): boolean {

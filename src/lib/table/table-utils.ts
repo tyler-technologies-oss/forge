@@ -1532,14 +1532,15 @@ export class TableUtils {
       const expandableRow = tbody.rows[actualRowIndex + 1];
       const expansionPanel = expandableRow.querySelector(EXPANSION_PANEL_CONSTANTS.elementName) as IExpansionPanelComponent;
       if (expansionPanel && expansionPanel.open) {
-        expansionPanel.open = false;
-        return new Promise<void>(resolve => {
-          setTimeout(() => {
+        const promise = new Promise<void>(resolve => {
+          expansionPanel.addEventListener(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, () => {
             requestedRow.classList.remove(TABLE_CONSTANTS.classes.TABLE_ROW_EXPANDED);
             removeElement(expandableRow);
             resolve();
-          }, EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+          }, { once: true });
         });
+        expansionPanel.open = false;
+        return promise;
       }
     }
 

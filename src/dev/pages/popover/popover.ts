@@ -10,12 +10,15 @@ import '@tylertech/forge/checkbox';
 import '@tylertech/forge/label';
 import './popover.scss';
 
+const delayInput = document.querySelector('#opt-hover-delay') as HTMLInputElement;
 const popover = document.querySelector('#my-popover') as IPopoverComponent;
 const showPopoverButton = document.querySelector('#popover-trigger') as HTMLButtonElement;
 const closeButton = document.querySelector('#close-button') as HTMLButtonElement;
 const clippingContainer = document.querySelector('.clipping-container') as HTMLElement;
 const preventCloseToggle = document.querySelector('#opt-prevent-close') as ISwitchComponent;
 const richTooltipPopover = document.querySelector('#rich-tooltip-popover') as IPopoverComponent;
+
+delayInput.addEventListener('input', (e) => popover.hoverDelay = Number(delayInput.value));
 
 popover.addEventListener('forge-popover-beforetoggle', (evt: CustomEvent<IPopoverToggleEventData>) => {
   console.log('forge-popover-beforetoggle', evt.detail);
@@ -47,7 +50,6 @@ richTooltipClose.addEventListener('click', () => richTooltipPopover.open = false
 
 centerDemoButton();
 
-showPopoverButton.addEventListener('click', () => showPopoverButton.setAttribute('aria-expanded', 'true'));
 closeButton.addEventListener('click', () => popover.open = false);
 
 const placementSelect = document.getElementById('opt-placement') as ISelectComponent;

@@ -10,16 +10,18 @@ const attributes = {
 
 const ids = {
   ROOT: 'root',
-  BUTTON_SLOT: 'button'
+  BUTTON_SLOT: 'button',
+  CONTENT_SLOT: 'content'
 };
 
 const classes = {
-  DISABLED: `forge-button-area--disabled`
+  ROOT: `forge-button-area`
 };
 
 const selectors = {
   ROOT: `#${ids.ROOT}`,
-  BUTTON_SLOT: `slot[name=button]`
+  BUTTON_SLOT: `slot[name=button]`,
+  CONTENT_SLOT: `#${ids.CONTENT_SLOT}`
 };
 
 export const BUTTON_AREA_CONSTANTS = {

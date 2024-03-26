@@ -1,18 +1,34 @@
-@use '../../field/selector' as field-selector;
-@use './selector';
+@use './token-utils' as *;
 
-@mixin core-styles {
-  .forge-select {
-    @include selector.leading-container;
-  }
+@forward './token-utils';
 
-  .forge-field {
-    @include field-selector.label('label');
-    @include field-selector.floating-label('label.forge-floating-label--float-above');
-    @include field-selector.floating-label-float-above('label.forge-floating-label--float-above');
-    @include field-selector.floating-label-float-above-end-keyframe('label.forge-floating-label--float-above.forge-floating-label--float-above-end-keyframe');
-    @include field-selector.floating-label-unfloat-above-start-keyframe('label.forge-floating-label--unfloat-above-start-keyframe');
-    @include selector.selected-text;
-    @include selector.dropdown-icon;
-  }
+@mixin host {
+  display: block;
+  outline: none;
+}
+
+@mixin selected-text-container {
+  display: grid;
+  align-items: center;
+  cursor: pointer;
+}
+
+@mixin selected-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin placeholder {
+  content: attr(placeholder);
+  color: #{token(placeholder-color)};
+  font-size: 0.875rem;
+}
+
+@mixin field {
+  display: contents;
+}
+
+@mixin dense-selected-text {
+  font-size: #{token(dense-font-size)};
 }

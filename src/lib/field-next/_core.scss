@@ -24,8 +24,19 @@
 }
 
 @mixin field-disabled {
-  opacity: #{token(disabled-opacity)};
   cursor: not-allowed;
+}
+
+@mixin field-part-disabled {
+  opacity: #{token(disabled-opacity)};
+}
+
+@mixin container-background-disabled {
+  background: #{token(disabled-surface-color)};
+}
+
+@mixin outline {
+  position: relative;
 }
 
 @mixin container {
@@ -35,7 +46,6 @@
 
   grid-area: container;
   align-items: center;
-
 
   border-radius: #{token(shape)};
 
@@ -61,10 +71,8 @@
 }
 
 @mixin input {
+  display: flex;
   grid-area: center;
-
-  // z-index is set to ensure the input is never rendered unclickable by the inset label
-  z-index: 9999;
 
   block-size: 100%;
   inline-size: 100%;
@@ -115,9 +123,16 @@
   fill: inherit;
 }
 
+@mixin popover-target {
+  position: absolute;
+  inset: calc(#{token(focus-indicator-width)} * -1);
+  pointer-events: none;
+}
+
 @mixin start {
   display: flex;
   grid-area: start;
+  align-items: center;
 
   padding-inline-start: #{token(container-padding-inline-start)};
 }
@@ -125,6 +140,7 @@
 @mixin end {
   display: flex;
   grid-area: end;
+  align-items: center;
 
   padding-inline-end: #{token(end-padding-inline-end)};
 }

@@ -22,10 +22,6 @@
     @include container;
   }
 
-  .input {
-    @include input;
-  }
-
   .background {
     @include background;
   }
@@ -46,10 +42,6 @@
 
   .label {
     @include label;
-  }
-
-  ::slotted([slot=input]) {
-    @include input;
   }
 }
 
@@ -102,6 +94,8 @@
 // Dense
 :host([dense]) {
   .forge-checkbox {
+    @include dense;
+
     .container {
       @include container-dense;
     }

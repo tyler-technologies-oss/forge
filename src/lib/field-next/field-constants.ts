@@ -1,28 +1,20 @@
-import { COMPONENT_NAME_PREFIX, Density, Theme } from '../constants';
+import { COMPONENT_NAME_PREFIX } from '../constants';
+import { LABEL_CONSTANTS } from '../label';
+import { BASE_FIELD_CONSTANTS } from './base/base-field-constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}field`;
 
 const observedAttributes = {
-  LABEL_POSITION: 'label-position',
-  LABEL_ALIGNMENT: 'label-alignment',
-  FLOAT_LABEL: 'float-label',
-  INVALID: 'invalid',
-  REQUIRED: 'required',
-  OPTIONAL: 'optional',
-  DISABLED: 'disabled',
-  VARIANT: 'variant',
-  THEME: 'theme',
-  SHAPE: 'shape',
-  DENSITY: 'density',
-  DENSE: 'dense',
-  POPOVER_ICON: 'popover-icon',
+  ...BASE_FIELD_CONSTANTS.observedAttributes,
   POPOVER_EXPANDED: 'popover-expanded',
   MULTILINE: 'multiline',
-  SUPPORT_TEXT_INSET: 'support-text-inset'
+  FOCUS_INDICATOR_ALLOW_FOCUS: 'focus-indicator-allow-focus',
+  FOCUS_INDICATOR_FOCUS_MODE: 'focus-indicator-focus-mode'
 };
 
 const attributes = {
-  ...observedAttributes
+  ...observedAttributes,
+  MULTI_INPUT_SEPARATOR: 'data-forge-multi-input-separator'
 };
 
 const classes = {
@@ -41,14 +33,25 @@ const selectors = {
   ROOT: '#root',
   CONTAINER: '#container',
   LABEL: '#label',
-  LABEL_SLOT: 'slot[name=label]',
-  START_SLOT: 'slot[name=start]',
-  END_SLOT: 'slot[name=end]',
-  ACCESSORY_SLOT: 'slot[name=accessory]',
-  SUPPORT_START_SLOT: 'slot[name=support-text-start]',
-  SUPPORT_END_SLOT: 'slot[name=support-text-end]',
   POPOVER_ICON: '#popover-icon',
-  RESIZE_CONTAINER: `.${classes.RESIZE_CONTAINER}`
+  RESIZE_CONTAINER: `.${classes.RESIZE_CONTAINER}`,
+  LABEL_ELEMENTS: `:where(label, ${LABEL_CONSTANTS.elementName})`,
+  POPOVER_TARGET: '.popover-target'
+};
+
+const parts = {
+  ROOT: 'root',
+  LABEL: 'label',
+  CONTAINER: 'container',
+  START: 'start',
+  INPUT: 'input',
+  POPOVER_ICON: 'popover-icon',
+  END: 'end',
+  ACCESSORY: 'accessory',
+  SUPPORT_TEXT: 'support-text',
+  SUPPORT_TEXT_START: 'support-text-start',
+  SUPPORT_TEXT_END: 'support-text-end',
+  FOCUS_INDICATOR: 'focus-indicator'
 };
 
 const events = {
@@ -56,13 +59,7 @@ const events = {
 };
 
 const defaults = {
-  DEFAULT_VARIANT: 'outlined' as FieldVariant,
-  DEFAULT_THEME: 'default' as FieldTheme,
-  DEFAULT_SHAPE: 'default' as FieldShape,
-  DEFAULT_DENSITY: 'medium' as FieldDensity,
-  DEFAULT_LABEL_POSITION: 'inset' as FieldLabelPosition,
-  DEFAULT_LABEL_ALIGNMENT: 'default' as FieldLabelAlignment,
-  DEFAULT_SUPPORT_TEXT_INSET: 'none' as FieldSupportTextInset
+  ...BASE_FIELD_CONSTANTS.defaults
 };
 
 const animations = {
@@ -76,16 +73,8 @@ export const FIELD_CONSTANTS = {
   attributes,
   classes,
   selectors,
+  parts,
   events,
   defaults,
   animations
 };
-
-export type FieldVariant = 'plain' | 'outlined' | 'tonal' | 'filled' | 'raised';
-export type FieldTheme = Theme | 'default';
-export type FieldShape = 'default' | 'rounded' | 'squared';
-export type FieldDensity = Density | 'extra-small' | 'extra-large';
-export type FieldLabelPosition = 'inline-start' | 'inline-end' | 'block-start' | 'inset' | 'none';
-export type FieldLabelAlignment = 'default' | 'center' | 'baseline' | 'start' | 'end';
-export type FieldSupportTextInset = 'start' | 'end' | 'both' | 'none';
-export type FieldSlot = 'label' | 'start' | 'end' | 'accessory' | 'support-start' | 'support-end';

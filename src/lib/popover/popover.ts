@@ -1,6 +1,6 @@
 import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { PopoverAdapter } from './popover-adapter';
-import { IPopoverToggleEventData, PopoverAnimationType, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
+import { IPopoverToggleEventData, PopoverAnimationType, PopoverPreset, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
 import { IPopoverFoundation, PopoverFoundation } from './popover-foundation';
 import { OverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAware, OverlayAware } from '../overlay/base/overlay-aware';
@@ -16,7 +16,10 @@ export interface IPopoverComponent extends IOverlayAware, IDismissible {
   triggerType: PopoverTriggerType | PopoverTriggerType[];
   longpressDelay: number;
   persistentHover: boolean;
+  hoverDelay: number;
   hoverDismissDelay: number;
+  preset: PopoverPreset;
+  hideAsync(): Promise<void>;
 }
 
 declare global {
@@ -41,6 +44,8 @@ declare global {
  * @property {number} longpressDelay - The delay in milliseconds before a longpress event is detected.
  * @property {boolean} persistentHover - Whether or not the popover should remain open when the user hovers outside the popover.
  * @property {number} hoverDismissDelay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
+ * @property {number} hoverDelay - The delay in milliseconds before the popover is shown.
+ * @property {PopoverPreset} preset - The preset to use for the popover.
  * 
  * @attribute {string} arrow - Whether or not the popover should render an arrow.
  * @attribute {string} animation-type - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
@@ -48,6 +53,8 @@ declare global {
  * @attribute {string} longpress-delay - The delay in milliseconds before a longpress event is detected.
  * @attribute {string} persistent-hover - Whether or not the popover should remain open when the user hovers outside the popover.
  * @attribute {string} hover-dismiss-delay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
+ * @attribute {number} hover-delay - The delay in milliseconds before the popover is shown.
+ * @attribute {string} preset - The preset to use for the popover.
  * 
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-toggle - Dispatches after the popover is toggled.
@@ -58,6 +65,12 @@ declare global {
  * @cssproperty --forge-popover-border-width - The border width of the popover surface.
  * @cssproperty --forge-popover-border-style - The border style of the popover surface.
  * @cssproperty --forge-popover-border-color - The border color of the popover surface.
+ * @cssproperty --forge-popover-width - The width of the popover surface. Defaults to `auto`.
+ * @cssproperty --forge-popover-height - The height of the popover surface. Defaults to `auto`.
+ * @cssproperty --forge-popover-min-width - The minimum width of the popover surface. Defaults to `none`.
+ * @cssproperty --forge-popover-max-width - The maximum width of the popover surface. Defaults to `none`.
+ * @cssproperty --forge-popover-min-height - The minimum height of the popover surface. Defaults to `none`.
+ * @cssproperty --forge-popover-max-height - The maximum height of the popover surface. Defaults to `none`.
  * @cssproperty --forge-popover-arrow-size - The size of the arrow.
  * @cssproperty --forge-popover-arrow-height - The height of the arrow.
  * @cssproperty --forge-popover-arrow-width - The width of the arrow.
@@ -80,6 +93,8 @@ declare global {
  * @cssproperty --forge-popover-position-block-end - The `block-end` position of the popover.
  * @cssproperty --forge-popover-position-inline-start - The `inline-start` position of the popover.
  * @cssproperty --forge-popover-position-inline-end - The `inline-end` position of the popover.
+ * @cssproperty --forge-popover-preset-dropdown-max-height - The maximum height of the popover when using `preset="dropdown"`. Defaults to `256px`.
+ * @cssproperty --forge-popover-preset-dropdown-overflow - The overflow behavior of the popover when using `preset="dropdown"`. Defaults to `auto visible` (vertical scrolling only).
  * 
  * @slot - The content to render inside the popover.
  * 
@@ -94,12 +109,7 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(OVERLAY_CONSTANTS.observedAttributes),
-      POPOVER_CONSTANTS.attributes.ARROW,
-      POPOVER_CONSTANTS.attributes.ANIMATION_TYPE,
-      POPOVER_CONSTANTS.attributes.TRIGGER_TYPE,
-      POPOVER_CONSTANTS.attributes.LONGPRESS_DELAY,
-      POPOVER_CONSTANTS.attributes.PERSISTENT_HOVER,
-      POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY
+      ...Object.values(POPOVER_CONSTANTS.observedAttributes)
     ];
   }
 
@@ -123,23 +133,29 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case POPOVER_CONSTANTS.attributes.ARROW:
+      case POPOVER_CONSTANTS.observedAttributes.ARROW:
         this.arrow = coerceBoolean(newValue);
         return;
-      case POPOVER_CONSTANTS.attributes.ANIMATION_TYPE:
+      case POPOVER_CONSTANTS.observedAttributes.ANIMATION_TYPE:
         this.animationType = newValue as PopoverAnimationType;
         return;
-      case POPOVER_CONSTANTS.attributes.TRIGGER_TYPE:
+      case POPOVER_CONSTANTS.observedAttributes.TRIGGER_TYPE:
         this.triggerType = newValue?.trim() ? coerceStringToArray<PopoverTriggerType>(newValue) : POPOVER_CONSTANTS.defaults.TRIGGER_TYPE;
         return;
-      case POPOVER_CONSTANTS.attributes.LONGPRESS_DELAY:
+      case POPOVER_CONSTANTS.observedAttributes.LONGPRESS_DELAY:
         this.longpressDelay = coerceNumber(newValue);
         return;
-      case POPOVER_CONSTANTS.attributes.PERSISTENT_HOVER:
+      case POPOVER_CONSTANTS.observedAttributes.PERSISTENT_HOVER:
         this.persistentHover = coerceBoolean(newValue);
         return;
-      case POPOVER_CONSTANTS.attributes.HOVER_DISMISS_DELAY:
+      case POPOVER_CONSTANTS.observedAttributes.HOVER_DELAY:
+        this.hoverDelay = coerceNumber(newValue);
+        return;
+      case POPOVER_CONSTANTS.observedAttributes.HOVER_DISMISS_DELAY:
         this.hoverDismissDelay = coerceNumber(newValue);
+        return;
+      case POPOVER_CONSTANTS.observedAttributes.PRESET:
+        this.preset = newValue as PopoverPreset;
         return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
@@ -161,5 +177,15 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
   public declare persistentHover: boolean;
 
   @FoundationProperty()
+  public declare hoverDelay: number;
+
+  @FoundationProperty()
   public declare hoverDismissDelay: number;
+
+  @FoundationProperty()
+  public declare preset: PopoverPreset;
+
+  public hideAsync(): Promise<void> {
+    return this._foundation.hideAsync();
+  }
 }
