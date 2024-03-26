@@ -13,10 +13,6 @@ export interface ISwitchFoundation extends ICustomElementFoundation {
   readonly: boolean;
   icon: SwitchIconVisibility;
   labelPosition: SwitchLabelPosition;
-  proxyClick(): void;
-  proxyLabel(value: string | null): void;
-  syncValidity(hasCustomValidityError: boolean): void;
-  setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void;
 }
 
 export class SwitchFoundation implements ISwitchFoundation {
@@ -36,63 +32,50 @@ export class SwitchFoundation implements ISwitchFoundation {
   }
 
   // Listeners
-  private readonly _changeListener: EventListener;
-  private readonly _inputSlotListener: EventListener;
+  private readonly _clickListener: EventListener = () => this._handleChange();
+  private readonly _keydownListener: EventListener = (evt: KeyboardEvent) => this._handleKeydown(evt);
+  private readonly _keyupListener: EventListener = (evt: KeyboardEvent) => this._handleKeyup(evt);
 
-  constructor(private readonly _adapter: ISwitchAdapter) {
-    this._changeListener = (evt: Event) => this._handleChange(evt);
-    this._inputSlotListener = () => this._handleInputSlotChange();
-  }
+  constructor(private readonly _adapter: ISwitchAdapter) {}
 
   public initialize(): void {
-    this._adapter.initialize();
-    this._adapter.addRootListener('change', this._changeListener);
-    this._adapter.addInputSlotListener(this._inputSlotListener);
+    this._adapter.addHostListener('click', this._clickListener);
+    this._adapter.addHostListener('keydown', this._keydownListener);
+    this._adapter.addHostListener('keyup', this._keyupListener);
     this._adapter.setIconVisibility(this._icon);
     this._adapter.syncValue(this._submittedValue);
   }
 
-  public proxyClick(): void {
-    this._adapter.proxyClick();
+  private _handleKeydown(evt: KeyboardEvent): void {
+    if (evt.key === ' ') {
+      evt.preventDefault();
+    }
   }
 
-  public proxyLabel(value: string | null): void {
-    this._adapter.proxyLabel(value);
+  private _handleKeyup(evt: KeyboardEvent): void {
+    if (evt.key === ' ') {
+      this._handleChange();
+    }
   }
 
-  public syncValidity(hasCustomValidityError: boolean): void {
-    this._adapter.syncValidity(hasCustomValidityError);
-  }
-
-  public setValidity(flags?: ValidityStateFlags | undefined, message?: string | undefined): void {
-    this._adapter.setValidity(flags, message);
-  }
-
-  private _handleChange(evt: Event): void {
+  private _handleChange(): void {
     if (this._readonly) {
-      this._adapter.setOn(this._on);
       return;
     }
 
-    const target = evt.target as HTMLInputElement;
-    const newValue = target.checked;
     const oldValue = this._on;
+    const newValue = !this._on;
+    // Call the public setter to ensure all the update logic is run
+    this.on = newValue;
 
-    this._on = newValue;
-
-    const isCancelled = !this._adapter.emitHostEvent(SWITCH_CONSTANTS.events.CHANGE, newValue, true, true);
-    if (isCancelled) {
-      this._on = oldValue;
-      this._adapter.setOn(this._on);
+    const event = new Event('change', { cancelable: true });
+    const forgeEvent = new CustomEvent(SWITCH_CONSTANTS.events.CHANGE, { detail: newValue, bubbles: true, cancelable: true });
+    this._adapter.redispatchEvent(event);
+    this._adapter.redispatchEvent(forgeEvent);
+    if (event.defaultPrevented || forgeEvent.defaultPrevented) {
+      this.on = oldValue;
       return;
     }
-
-    this._adapter.syncValue(this._submittedValue);
-    this._setOnAttribute();
-  }
-
-  private _handleInputSlotChange(): void {
-    this._adapter.detectInputElement();
   }
 
   private _setOnAttribute(): void {
@@ -119,7 +102,6 @@ export class SwitchFoundation implements ISwitchFoundation {
   public set defaultOn(value: boolean) {
     if (this._defaultOn !== value) {
       this._defaultOn = value;
-      this._adapter.setDefaultOn(this._defaultOn);
       this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.DEFAULT_ON, this._defaultOn);
     }
   }
@@ -130,7 +112,6 @@ export class SwitchFoundation implements ISwitchFoundation {
   public set value(value: string) {
     if (this._value !== value) {
       this._value = value;
-      this._adapter.setValue(this._value);
       this._adapter.syncValue(this._submittedValue);
       this._adapter.toggleHostAttribute(SWITCH_CONSTANTS.attributes.VALUE, true, this._value);
     }

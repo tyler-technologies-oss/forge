@@ -41,20 +41,33 @@ export class CheckboxFoundation implements ICheckboxFoundation {
   }
 
   // Listeners
-  private readonly _clickListener: EventListener = (evt: Event) => this._handleChange(evt);
-  private readonly _keyupListener: EventListener = (evt: KeyboardEvent) => evt.key === ' ' ? this._handleChange(evt) : null;
+  private readonly _clickListener: EventListener = (evt: Event) => this._handleChange();
+  private readonly _keydownListener: EventListener = (evt: KeyboardEvent) => this._handleKeydown(evt);
+  private readonly _keyupListener: EventListener = (evt: KeyboardEvent) => this._handleKeyup(evt);
 
   constructor(private _adapter: ICheckboxAdapter) {}
 
   public initialize(): void {
     this._adapter.addHostListener('click', this._clickListener);
+    this._adapter.addHostListener('keydown', this._keydownListener);
     this._adapter.addHostListener('keyup', this._keyupListener);
     this._adapter.syncValue(this._submittedValue, this._formState);
   };
 
-  private _handleChange(evt: Event): void {
+  private _handleKeydown(evt: KeyboardEvent): void {
+    if (evt.key === ' ') {
+      evt.preventDefault();
+    }
+  }
+
+  private _handleKeyup(evt: KeyboardEvent): void {
+    if (evt.key === ' ') {
+      this._handleChange();
+    }
+  }
+
+  private _handleChange(): void {
     if (this._readonly) {
-      evt.stopPropagation();
       return;
     }
     
