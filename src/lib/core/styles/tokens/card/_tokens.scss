@@ -1,0 +1,28 @@
+@use '../../theme';
+@use '../../border';
+@use '../../spacing';
+@use '../../shape';
+@use '../../elevation';
+@use '../../utils';
+
+$tokens: (
+  // Base
+  background: utils.module-val(card, background, theme.variable(surface)),
+  height: utils.module-val(card, height, 100%),
+  width: utils.module-val(card, width, 100%),
+  outline-color: utils.module-val(card, outline-color, theme.variable(outline)),
+  outline-width: utils.module-val(card, outline-width, border.variable(thin)),
+  outline-style: utils.module-val(card, outline-style, solid),
+  elevation: utils.module-val(card, elevation, none),
+  padding: utils.module-val(card, padding, spacing.variable(medium)),
+  shape: utils.module-val(card, shape, shape.variable(medium)),
+  overflow: utils.module-val(card, overflow, hidden),
+
+  // Raised
+  raised-elevation: utils.module-val(card, raised-elevation, elevation.value(1)),
+  raised-outline-width: utils.module-val(card, raised-outline-width, 0)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
