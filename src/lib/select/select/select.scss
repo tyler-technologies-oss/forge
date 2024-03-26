@@ -1,16 +1,58 @@
-@use '../../theme';
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
-}
-
-:host(:focus) {
-  outline: none;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+forge-field {
+  @include tokens;
+}
+
+.selected-text-container {
+  @include selected-text-container;
+}
+
+::slotted([slot=value]),
+.selected-text {
+  @include selected-text;
+}
+
+.selected-text:empty::before {
+  @include placeholder;
+}
+
+//
+// Disabled
+//
+
+:host([disabled]) {
+  .selected-text-container {
+    cursor: not-allowed;
+  }
+}
+
+//
+// Field
+//
+
+forge-field {
+  @include field;
+
+  &:is([dense],[density=extra-small]) {
+    .selected-text {
+      @include dense-selected-text;
+    }
+  }
 }

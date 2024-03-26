@@ -7,7 +7,9 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}field`
 const observedAttributes = {
   ...BASE_FIELD_CONSTANTS.observedAttributes,
   POPOVER_EXPANDED: 'popover-expanded',
-  MULTILINE: 'multiline'
+  MULTILINE: 'multiline',
+  FOCUS_INDICATOR_ALLOW_FOCUS: 'focus-indicator-allow-focus',
+  FOCUS_INDICATOR_FOCUS_MODE: 'focus-indicator-focus-mode'
 };
 
 const attributes = {
