@@ -100,6 +100,16 @@
   }
 }
 
+:host([vertical]) {
+  .expansion-panel {
+    @include expansion-panel-base;
+  }
+
+  .expanded-icon {
+    @include expansion-panel-icon;
+  }
+}
+
 :host([vertical][expandable]) {
   .expansion-panel {
     @include veritcal-expansion-panel;
@@ -149,14 +159,6 @@ forge-focus-indicator {
     &.error {
       @include background-selected-error;
     }
-  }
-
-  .expansion-panel {
-    @include expansion-panel-base;
-  }
-
-  .expanded-icon {
-    @include expansion-panel-icon;
   }
 
   .title {

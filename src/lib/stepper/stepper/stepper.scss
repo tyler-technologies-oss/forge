@@ -17,7 +17,7 @@
 .forge-stepper {
   @include base;
 
-  &:not(.forge-stepper--vertical) {
+  &:not(.vertical) {
     ::slotted(*) {
       @include base-slotted;
     }
