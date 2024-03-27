@@ -545,6 +545,21 @@ describe('Popover', () => {
 
       expect(harness.isOpen).to.be.true;
     });
+
+    it('should set aria-expanded attribute', async () => {
+      const harness = await createFixture();
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('false');
+
+      await harness.clickTrigger();
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('true');
+
+      await harness.clickTrigger();
+      await harness.exitAnimation();
+
+      expect(harness.triggerElement.getAttribute('aria-expanded')).to.equal('false');
+    });
   });
 
   describe('focus trigger type', () => {

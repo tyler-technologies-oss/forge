@@ -50,7 +50,6 @@ richTooltipClose.addEventListener('click', () => richTooltipPopover.open = false
 
 centerDemoButton();
 
-showPopoverButton.addEventListener('click', () => showPopoverButton.setAttribute('aria-expanded', 'true'));
 closeButton.addEventListener('click', () => popover.open = false);
 
 const placementSelect = document.getElementById('opt-placement') as ISelectComponent;
