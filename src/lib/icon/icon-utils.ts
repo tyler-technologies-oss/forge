@@ -1,13 +1,15 @@
-import { IconRegistry } from './icon-registry';
+import { IconRegistry, IIconDescriptor } from './icon-registry';
 import { ICON_CONSTANTS } from './icon-constants';
 import { createSvgFromString } from '../core/utils/svg-utils';
 
 const _activeIconRequests = new Map<string, Promise<any>>();
 
-/** Determines if the provided SVG icon content is valid */
-export function sanitizeSvgContent(svgContent: string | undefined, customViewBox?: string, usePartAttrs = true): string {
+/**
+ * Creates an SVG element from a string of SVG content, and sanitizes it for injection into the DOM.
+ */
+export function createSanitizedSvg(svgContent: string | undefined, customViewBox?: string, usePartAttrs = true): SVGElement | null {
   if (!svgContent || !svgContent.includes('svg')) {
-    return '';
+    return null;
   }
   
   if (!customViewBox && !svgContent.includes('viewBox')) {
@@ -18,15 +20,12 @@ export function sanitizeSvgContent(svgContent: string | undefined, customViewBox
 
   if (usePartAttrs && svgElement) {
     svgElement.setAttribute('part', 'svg');
-    svgElement.querySelectorAll('path').forEach(node => {
-      node.setAttribute('part', node.tagName.toLowerCase());
-    });
   }
 
-  return svgElement ? svgElement.outerHTML : '';
+  return svgElement;
 }
 
-export function getCachedIcon(key: string): string | undefined {
+export function getCachedIcon(key: string): IIconDescriptor | undefined {
   return IconRegistry.get(key);
 }
 

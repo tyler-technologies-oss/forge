@@ -1,5 +1,5 @@
-import { ISelectComponent, ISelectComponentDelegateOptions, SelectComponentDelegate, SelectFloatLabelType, SELECT_CONSTANTS, defineSelectComponent, ISelectOption, SelectComponentDelegateProps, ISelectComponentDelegateConfig } from '@tylertech/forge';
-import { removeElement, getShadowElement } from '@tylertech/forge-core';
+import { ISelectComponent, ISelectComponentDelegateOptions, SelectComponentDelegate, defineSelectComponent, ISelectOption, SelectComponentDelegateProps, ISelectComponentDelegateConfig } from '@tylertech/forge';
+import { removeElement } from '@tylertech/forge-core';
 import { dispatchKeyEvent } from '@tylertech/forge-testing';
 
 interface ITestContext {
@@ -81,11 +81,10 @@ describe('SelectComponentDelegate', function(this: ITestContext) {
     expect(this.context.component.label).toBe(label);
   });
 
-  it('should set floatLabelType', function(this: ITestContext) {
-    const floatLabelType: SelectFloatLabelType = 'always';
-    this.context = setupTestContext({ floatLabelType });
+  it('should set floatLabel', function(this: ITestContext) {
+    this.context = setupTestContext({ floatLabel: true });
 
-    expect(this.context.component.floatLabelType).toBe(floatLabelType);
+    expect(this.context.component.floatLabel).toBeTrue();
   });
 
   it('should set helperText', function(this: ITestContext) {

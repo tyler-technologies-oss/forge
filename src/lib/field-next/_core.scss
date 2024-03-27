@@ -21,7 +21,6 @@
 
   display: grid;
   position: relative;
-  isolation: isolate;
 }
 
 @mixin field-disabled {
@@ -36,6 +35,10 @@
   background: #{token(disabled-surface-color)};
 }
 
+@mixin outline {
+  position: relative;
+}
+
 @mixin container {
   @include typography.style(body2);
 
@@ -43,7 +46,6 @@
 
   grid-area: container;
   align-items: center;
-
 
   border-radius: #{token(shape)};
 
@@ -71,9 +73,6 @@
 @mixin input {
   display: flex;
   grid-area: center;
-
-  // z-index is set to ensure the input is never rendered unclickable by the inset label
-  z-index: 1;
 
   block-size: 100%;
   inline-size: 100%;

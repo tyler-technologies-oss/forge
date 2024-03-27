@@ -65,6 +65,7 @@
     @include typography.style(body2);
     @include override('label-color', 'inset-label-color');
 
+    pointer-events: none;
     overflow: hidden;
 
     grid-area: center;
@@ -147,21 +148,20 @@ $resize-container-input-padding-block-end-base: 8px;
 }
 
 @mixin resize-container-inset-label {
-  z-index: 2;
   pointer-events: none;
   inline-size: fit-content;
 }
 
 @mixin resize-container-inset-label-slot {
   display: block;
-  z-index: 1;
 }
 
 @mixin resize-container-inset-label-background {
     @include floating-animation(resize-container-inset-label-background-animation);
     
     position: absolute;
-    inset-inline-start: 0;
+    z-index: -1;
+    inset-inline-start: #{token(border-width)};
 
     transition-duration: #{token(container-animation-duration)};
     transition-property: background;
@@ -273,6 +273,8 @@ $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
 }
 
 @mixin slotted-floating-input {
+  // Computes the block start padding for the input element to space it
+  // apart from label by the block size of the label content element
   padding-block-start: calc($floating-offset * 2) !important; // TODO: find a way to remove this !important
 }
 

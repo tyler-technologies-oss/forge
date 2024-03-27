@@ -16,7 +16,7 @@ $tokens: (
   state-layer-dense-size: utils.module-val(checkbox, state-layer-dense-size, 24px),
 
   // Checkbox
-  background-color: utils.module-val(checkbox, background-color, theme.variable(surface)),
+  background: utils.module-val(checkbox, background, theme.variable(surface)),
   width: utils.module-ref(checkbox, width, size),
   height: utils.module-ref(checkbox, height, size),
   unchecked-border-width: utils.module-ref(checkbox, unchecked-border-width, border-width),
@@ -25,9 +25,9 @@ $tokens: (
   elevation: utils.module-val(checkbox, elevation, elevation.value(0)),
   
   // Checkbox checked
-  checked-background-color: utils.module-ref(checkbox, checked-background-color, primary-color),
+  checked-background: utils.module-ref(checkbox, checked-background, primary-color),
   checked-border-width: utils.module-ref(checkbox, checked-border-width, border-width),
-  checked-border-color: utils.module-ref(checkbox, checked-border-color, checked-background-color),
+  checked-border-color: utils.module-ref(checkbox, checked-border-color, checked-background),
 
   // Icon
   icon-checked-color: utils.module-ref(checkbox, icon-checked-color, icon-color),
@@ -47,6 +47,7 @@ $tokens: (
   state-layer-shape: utils.module-val(checkbox, state-layer-shape, shape.variable(full)),
 
   // Dense
+  dense-gap: utils.module-val(checkbox, dense-gap, 8px),
   state-layer-dense-width: utils.module-ref(checkbox, state-layer-dense-width, state-layer-dense-size),
   state-layer-dense-height: utils.module-ref(checkbox, state-layer-dense-height, state-layer-dense-size),
 

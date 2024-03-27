@@ -5,13 +5,13 @@ import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { TestHarness } from '../../test/utils/test-harness';
 import { CHECKBOX_CONSTANTS, CheckboxComponentDelegate, ICheckboxComponent } from '../checkbox';
+import { internals } from '../constants';
 import { IFocusIndicatorComponent } from '../focus-indicator';
 import { IStateLayerComponent } from '../state-layer';
 
 class CheckboxHarness extends TestHarness<ICheckboxComponent> {
   public rootElement: HTMLElement;
   public containerElement: HTMLElement;
-  public inputElement: HTMLInputElement;
   public backgroundElement: HTMLElement;
   public checkmarkElement: HTMLElement;
   public checkmarkPathElement: HTMLElement;
@@ -20,7 +20,6 @@ class CheckboxHarness extends TestHarness<ICheckboxComponent> {
   public labelElement: HTMLElement;
   public stateLayer: IStateLayerComponent;
   public focusIndicator: IFocusIndicatorComponent;
-  public slottedInputElement: HTMLInputElement | null;
 
   constructor(el: ICheckboxComponent) {
     super(el);
@@ -28,8 +27,7 @@ class CheckboxHarness extends TestHarness<ICheckboxComponent> {
 
   public initElementRefs(): void {
     this.rootElement = getShadowElement(this.element, CHECKBOX_CONSTANTS.selectors.ROOT);
-    this.containerElement = getShadowElement(this.element, '[part="input-container"]');
-    this.inputElement = getShadowElement(this.element, CHECKBOX_CONSTANTS.selectors.INPUT) as HTMLInputElement;
+    this.containerElement = getShadowElement(this.element, '#container');
     this.backgroundElement = getShadowElement(this.element, '[part="background"]');
     this.checkmarkElement = getShadowElement(this.element, '[part="checkmark"]');
     this.checkmarkPathElement = getShadowElement(this.element, '[part="checkmark-path"]');
@@ -38,7 +36,6 @@ class CheckboxHarness extends TestHarness<ICheckboxComponent> {
     this.labelElement = getShadowElement(this.element, CHECKBOX_CONSTANTS.selectors.LABEL);
     this.stateLayer = getShadowElement(this.element, '[part="state-layer"]') as IStateLayerComponent;
     this.focusIndicator = getShadowElement(this.element, '[part="focus-indicator"]') as IFocusIndicatorComponent;
-    this.slottedInputElement = this.element.querySelector('input') as HTMLInputElement | null;
   }
 
   public async pressSpaceKey(): Promise<void> {
@@ -83,76 +80,53 @@ describe('Checkbox', () => {
     expect(el.required).to.be.false;
     expect(el.readonly).to.be.false;
     expect(el.labelPosition).to.equal('end');
-    expect(ctx.inputElement.checked).to.be.false;
     expect(ctx.rootElement.lastElementChild).to.equal(ctx.labelElement);
   });
 
   it('should accept checked', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox checked></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
-
     expect(el.checked).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
   });
 
   it('should accept default-checked', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox default-checked></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
-
     expect(el.defaultChecked).to.be.true;
-    expect(ctx.inputElement.hasAttribute('checked')).to.be.true;
   });
 
   it('should accept indeterminate', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox indeterminate></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
-
     expect(el.indeterminate).to.be.true;
-    expect(ctx.inputElement.indeterminate).to.be.true;
   });
 
   it('should accept value', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox value="value"></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
-
     expect(el.value).to.equal('value');
-    expect(ctx.inputElement.value).to.equal('value');
   });
 
   it('should accept dense', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox dense></forge-checkbox>`);
-
     expect(el.dense).to.be.true;
   });
 
   it('should accept disabled', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox disabled aria-label="Active"></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
 
     expect(el.disabled).to.be.true;
-    expect(ctx.inputElement.disabled).to.be.true;
     await expect(el).to.be.accessible();
   });
 
   it('should accept required', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox required></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
-
     expect(el.required).to.be.true;
-    expect(ctx.inputElement.required).to.be.true;
   });
 
   it('should accept readonly', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox readonly></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
     const changeSpy = spy();
     
     el.addEventListener('change', changeSpy);
-    await ctx.clickElement(ctx.inputElement);
 
     expect(el.readonly).to.be.true;
-    expect(ctx.inputElement.readOnly).to.be.true;
-    expect(ctx.inputElement).to.have.attribute('aria-readonly', 'true');
     expect(changeSpy).to.not.have.been.called;
   });
 
@@ -171,147 +145,66 @@ describe('Checkbox', () => {
 
   it('should toggle', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
 
     el.toggle();
 
     expect(el.checked).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
   });
 
   it('should toggle checked', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox aria-label="Active"></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
 
     el.toggle(true);
 
     expect(el.checked).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
     await expect(el).to.be.accessible();
   });
 
   it('should toggle unchecked', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox checked></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
 
     el.toggle(false);
 
     expect(el.checked).to.be.false;
-    expect(ctx.inputElement.checked).to.be.false;
   });
 
   it('should maintain checked state when indeterminate', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox indeterminate></forge-checkbox>`);
-    const ctx = new CheckboxHarness(el);
 
     // Set checked while indeterminate
     el.checked = true;
 
     expect(el.checked).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
     expect(el.indeterminate).to.be.true;
-    expect(ctx.inputElement.indeterminate).to.be.true;
     
     // Set indeterminate while checked
     el.indeterminate = false;
     el.indeterminate = true;
 
     expect(el.checked).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
     expect(el.indeterminate).to.be.true;
-    expect(ctx.inputElement.indeterminate).to.be.true;
 
     // Unset checked while indeterminate
     el.checked = false;
 
     expect(el.checked).to.be.false;
-    expect(ctx.inputElement.checked).to.be.false;
     expect(el.indeterminate).to.be.true;
-    expect(ctx.inputElement.indeterminate).to.be.true;
 
     // Set indeterminate while unchecked
     el.indeterminate = false;
     el.indeterminate = true;
 
     expect(el.checked).to.be.false;
-    expect(ctx.inputElement.checked).to.be.false;
     expect(el.indeterminate).to.be.true;
-    expect(ctx.inputElement.indeterminate).to.be.true;
   });
 
   it('should dismiss indeterminate when user toggled', async () => {
     const el = await fixture<ICheckboxComponent>(html`<forge-checkbox indeterminate></forge-checkbox>`);
     const ctx = new CheckboxHarness(el);
 
-    await ctx.clickElement(ctx.inputElement);
+    await ctx.clickElement(ctx.containerElement);
 
     expect(el.indeterminate).to.be.false;
-    expect(ctx.inputElement.indeterminate).to.be.false;
-  });
-
-  describe('slotted input', () => {
-    it('should accept slotted input', async () => {
-      const el = await fixture<ICheckboxComponent>(html`<forge-checkbox id="checkbox"><input slot="input" aria-labelledby="checkbox" />Active</forge-checkbox>`);
-      const ctx = new CheckboxHarness(el);
-      const changeSpy = spy();
-      
-      el.addEventListener('change', changeSpy);
-      await ctx.clickElement(ctx.slottedInputElement!);
-  
-      await expect(el).to.be.accessible();
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(el.checked).to.be.true;
-      expect(ctx.slottedInputElement!.type).to.equal('checkbox');
-    });
-  
-    it('should disable slotted input', async () => {
-      const el = await fixture<ICheckboxComponent>(html`<forge-checkbox id="checkbox" disabled><input slot="input" aria-labelledby="checkbox" />Active</forge-checkbox>`);
-      const ctx = new CheckboxHarness(el);
-      const changeSpy = spy();
-      
-      el.addEventListener('change', changeSpy);
-      await ctx.clickElement(ctx.slottedInputElement!);
-  
-      await expect(el).to.be.accessible();
-      expect(changeSpy).not.to.have.been.called;
-      expect(el.checked).to.be.false;
-    });
-
-    it('should accept readonly with slotted input', async () => {
-      const el = await fixture<ICheckboxComponent>(html`<forge-checkbox id="checkbox" readonly><input slot="input" aria-labelledby="checkbox" />Active</forge-checkbox>`);
-      const ctx = new CheckboxHarness(el);
-      const changeSpy = spy();
-      
-      el.addEventListener('change', changeSpy);
-      await ctx.clickElement(ctx.slottedInputElement!);
-  
-      expect(changeSpy).not.to.have.been.called;
-      expect(el.checked).to.be.false;
-      expect(ctx.slottedInputElement!.checked).to.be.false;
-      expect(ctx.slottedInputElement!.readOnly).to.be.true;
-      expect(ctx.slottedInputElement!).to.have.attribute('aria-readonly', 'true');
-    });
-
-    it('should accept required with slotted input', async () => {
-      const el = await fixture<ICheckboxComponent>(html`<forge-checkbox id="checkbox" required><input slot="input" aria-labelledby="checkbox" />Active</forge-checkbox>`);
-      const ctx = new CheckboxHarness(el);
-        
-      expect(ctx.slottedInputElement!.required).to.be.true;
-    });
-
-    it('should use shadow input when slotted input is removed', async () => {
-      const el = await fixture<ICheckboxComponent>(html`<forge-checkbox id="checkbox"><input slot="input" aria-labelledby="checkbox" />Active</forge-checkbox>`);
-      const ctx = new CheckboxHarness(el);
-      const changeSpy = spy();
-      
-      el.addEventListener('change', changeSpy);
-      ctx.slottedInputElement!.remove();
-      await ctx.clickElement(ctx.inputElement);
-
-      expect(changeSpy).to.have.been.calledOnce;
-      expect(el.checked).to.be.true;
-      expect(ctx.inputElement.checked).to.be.true;
-    });
   });
 
   describe('form association', () => {
@@ -422,27 +315,27 @@ describe('Checkbox', () => {
     it('should validate', async () => {
       const el = await fixture<ICheckboxComponent>(html`<forge-checkbox required></forge-checkbox>`);
 
-      expect(el.validity.valid).to.be.false;
-      expect(el.validationMessage).not.to.be.empty;
-      expect(el.checkValidity()).to.be.false;
-      expect(el.reportValidity()).to.be.false;
+      expect(el[internals].validity.valid).to.be.false;
+      expect(el[internals].validationMessage).not.to.be.empty;
+      expect(el[internals].checkValidity()).to.be.false;
+      expect(el[internals].reportValidity()).to.be.false;
 
       el.checked = true;
 
-      expect(el.willValidate).to.be.true;
-      expect(el.validity.valid).to.be.true;
-      expect(el.validationMessage).to.be.empty;
-      expect(el.checkValidity()).to.be.true;
-      expect(el.reportValidity()).to.be.true;
+      expect(el[internals].willValidate).to.be.true;
+      expect(el[internals].validity.valid).to.be.true;
+      expect(el[internals].validationMessage).to.be.empty;
+      expect(el[internals].checkValidity()).to.be.true;
+      expect(el[internals].reportValidity()).to.be.true;
     });
 
     it('should set custom validity', async () => {
       const el = await fixture<ICheckboxComponent>(html`<forge-checkbox required></forge-checkbox>`);
       const message = 'Custom error message';
 
-      el.setCustomValidity(message);
+      el[internals].setValidity({ customError: true }, message);
 
-      expect(el.validationMessage).to.equal(message);
+      expect(el[internals].validationMessage).to.equal(message);
     });
   });
 
