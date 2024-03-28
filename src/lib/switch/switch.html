@@ -1,9 +1,6 @@
 <template>
   <div class="forge-switch" part="switch">
     <div id="container" class="container">
-      <slot name="input">
-        <input id="input" class="input" type="checkbox" role="switch" />
-      </slot>
       <div class="track" part="track"></div>
       <div class="handle" part="handle">
         <div id="icon-off" class="icon icon__off" part="icon-off">
@@ -20,11 +17,11 @@
             </svg>
           </slot>
         </div>
-        <forge-state-layer target="container" exportparts="surface:state-layer"></forge-state-layer>
+        <forge-state-layer target=":host" exportparts="surface:state-layer"></forge-state-layer>
       </div>
-      <forge-focus-indicator target="container" part="focus-indicator"></forge-focus-indicator>
+      <forge-focus-indicator target=":host" part="focus-indicator"></forge-focus-indicator>
     </div>
-    <label id="label" for="input" class="label" part="label">
+    <label id="label" class="label" part="label">
       <slot></slot>
     </label>
   </div>
