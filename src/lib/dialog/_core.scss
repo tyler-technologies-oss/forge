@@ -60,7 +60,10 @@
   
   border-radius: #{token(shape)};
   
-  margin: #{token(spacing)};
+  margin-block-start: #{token(block-start-spacing)};
+  margin-block-end: #{token(block-end-spacing)};
+  margin-inline-start: #{token(inline-start-spacing)};
+  margin-inline-end: #{token(inline-end-spacing)};
   padding: #{token(padding)};
   width: #{token(width)};
   height: #{token(height)};
@@ -198,7 +201,7 @@
 }
 
 @mixin placement-top {
-  @include override(spacing, 0 auto, value);
+  @include override(block-start-spacing, 0, value);
 
   top: 0;
   bottom: auto;
@@ -223,7 +226,7 @@
 }
 
 @mixin placement-bottom {
-  @include override(spacing, 0 auto, value);
+  @include override(block-end-spacing, 0, value);
 
   top: auto;
   bottom: 0;
