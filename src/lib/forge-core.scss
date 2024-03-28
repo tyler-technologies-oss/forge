@@ -1,9 +1,5 @@
-@use './utils/mixins-core';
-
-body, html {
-  @include mixins-core.root-reset;
-}
+@use './utils/mixins-core' as *;
 
 body {
-  @include mixins-core.body-base;
+  @include body-base;
 }
