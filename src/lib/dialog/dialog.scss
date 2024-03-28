@@ -69,6 +69,52 @@ $can-animate: '[open]:not([animation-type=none])';
   }
 
   //
+  // Moveable
+  //
+  
+  :host(:not([moveable])) {
+    .move-handle {
+      display: none;
+    }
+  }
+
+  :host([moveable]:not([fullscreen]):not([preset])) {
+    .surface {
+      user-select: none;
+    }
+
+    .surface.moved {
+      margin: 0;
+    }
+
+    .move-handle {
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+  
+      svg {
+        fill: currentColor;
+        height: 1.5rem;
+        width: 1.5rem;
+        margin-block-start: -4px;
+        border-radius: 50%;
+        touch-action: none;
+  
+        &:hover {
+          cursor: grab;
+        }
+  
+        &:active {
+          cursor: grabbing;
+        }
+      }
+    }
+  }
+
+  //
   // Open
   //
 
@@ -84,7 +130,7 @@ $can-animate: '[open]:not([animation-type=none])';
 @layer nonmodal {
   :host([mode=nonmodal]) {
     .forge-dialog {
-      position: absolute;
+      position: fixed;
       pointer-events: none;
     }
 

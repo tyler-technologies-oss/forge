@@ -24,9 +24,14 @@ const attributes = {
   ...observedAttributes
 };
 
+const classes = {
+  MOVED: 'moved'
+};
+
 const selectors = {
   DIALOG: '.forge-dialog',
-  SURFACE: '.surface'
+  SURFACE: '.surface',
+  MOVE_HANDLE: '.move-handle > svg'
 };
 
 const events = {
@@ -48,6 +53,7 @@ const defaults = {
 export const DIALOG_CONSTANTS = {
   elementName,
   observedAttributes,
+  classes,
   attributes,
   selectors,
   events,

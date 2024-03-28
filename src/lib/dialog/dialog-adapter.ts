@@ -7,8 +7,9 @@ import { dialogStack, DIALOG_CONSTANTS, hideBackdrop, showBackdrop } from './dia
 
 export interface IDialogAdapter extends IBaseAdapter {
   readonly hostElement: IDialogComponent;
+  readonly moveHandleElement: HTMLElement;
+  readonly surfaceElement: HTMLElement;
   triggerElement: HTMLElement | null;
-  moveTargetElement: HTMLElement | null;
   show(): void;
   hide(): Promise<void>;
   addDialogFormSubmitListener(listener: EventListener): void;
@@ -23,22 +24,32 @@ export interface IDialogAdapter extends IBaseAdapter {
   removeTriggerInteractionListener(listener: EventListener): void;
   hideBackdrop(): void;
   showBackdrop(): void;
-  tryLocateMoveTargetElement(id: string | null): void;
+  addSurfaceClass(className: string): void;
+  removeSurfaceClass(className: string): void;
 }
 
 export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDialogAdapter {
   private _dialogElement: HTMLDialogElement;
   private _surfaceElement: HTMLDivElement;
   private _backdropElement: IBackdropComponent;
+  private _moveHandleElement: HTMLElement;
 
   public triggerElement: HTMLElement | null;
-  public moveTargetElement: HTMLElement | null;
+
+  public get moveHandleElement(): HTMLElement {
+    return this._moveHandleElement;
+  }
+
+  public get surfaceElement(): HTMLElement {
+    return this._surfaceElement;
+  }
 
   constructor(component: IDialogComponent) {
     super(component);
     this._dialogElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.DIALOG) as HTMLDialogElement;
     this._backdropElement = getShadowElement(component, BACKDROP_CONSTANTS.elementName) as IBackdropComponent;
     this._surfaceElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.SURFACE) as HTMLDivElement;
+    this._moveHandleElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.MOVE_HANDLE) as HTMLElement;
   }
 
   public show(): void {
@@ -170,13 +181,12 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   public showBackdrop(): void {
     this._backdropElement.show();
   }
-  
-  public tryLocateMoveTargetElement(id: string | null): void {
-    if (!id) {
-      this.moveTargetElement = null;
-      return;
-    }
-    const rootNode = this._component.getRootNode() as Document | ShadowRoot;
-    this.moveTargetElement = rootNode.querySelector<HTMLElement>(`#${id}`);
+
+  public addSurfaceClass(className: string): void {
+    this._surfaceElement.classList.add(className);
+  }
+
+  public removeSurfaceClass(className: string): void {
+    this._surfaceElement.classList.remove(className);
   }
 }

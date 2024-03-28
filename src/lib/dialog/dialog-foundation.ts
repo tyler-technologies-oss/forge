@@ -1,7 +1,8 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { MoveController } from '../core/controllers/move-controller';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
-import { DialogAnimationType, DialogMode, DialogPlacement, DialogPositionStrategy, DialogPreset, DialogSizeStrategy, DialogType, DIALOG_CONSTANTS } from './dialog-constants';
+import { DialogAnimationType, DialogMode, DialogPlacement, DialogPositionStrategy, DialogPreset, DialogSizeStrategy, DialogType, DIALOG_CONSTANTS, IDialogMoveEventData } from './dialog-constants';
 
 export interface IDialogFoundation extends ICustomElementFoundation {
   open: boolean;
@@ -19,9 +20,6 @@ export interface IDialogFoundation extends ICustomElementFoundation {
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
-  moveTarget: string;
-  moveTargetElement: HTMLElement | null;
-  initializeMoveTarget(): void;
   hideBackdrop(): void;
   showBackdrop(): void;
 }
@@ -38,10 +36,10 @@ export class DialogFoundation implements IDialogFoundation {
   private _fullscreen = false;
   private _trigger: string;
   private _moveable = false;
-  private _moveTarget: string;
   private _sizeStrategy: DialogSizeStrategy = 'content';
   private _placement: DialogPlacement = 'center';
   private _positionStrategy: DialogPositionStrategy = 'viewport';
+  private _moveController: MoveController | undefined;
 
   private _escapeDismissListener: EventListener = this._onEscapeDismiss.bind(this);
   private _backdropDismissListener: EventListener = this._onBackdropDismiss.bind(this);
@@ -63,6 +61,10 @@ export class DialogFoundation implements IDialogFoundation {
   public destroy(): void {
     if (this._adapter.triggerElement) {
       this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
+    }
+
+    if (this._moveController) {
+      this._destroyMoveController();
     }
 
     if (this._open) {
@@ -87,6 +89,10 @@ export class DialogFoundation implements IDialogFoundation {
       this._adapter.addBackdropDismissListener(this._backdropDismissListener);
     }
 
+    if (this._moveable && !this._fullscreen) {
+      this._initializeMoveController();
+    }
+
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.OPEN, { bubbles: true, composed: true }));
 
     DismissibleStack.instance.add(this._adapter.hostElement);
@@ -98,6 +104,10 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
 
     await this._adapter.hide();
+
+    if (this._moveController) {
+      this._destroyMoveController();
+    }
 
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.CLOSE, { bubbles: true, composed: true }));
     DismissibleStack.instance.remove(this._adapter.hostElement);
@@ -153,6 +163,40 @@ export class DialogFoundation implements IDialogFoundation {
     } else {
       this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
     }
+  }
+
+  private _initializeMoveController(): void {
+    if (this._moveController) {
+      return;
+    }
+
+    const onMoveStart = (): boolean => {
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_START, { bubbles: true, composed: true, cancelable: true });
+      this._adapter.dispatchHostEvent(event);
+      return event.defaultPrevented;
+    };
+    const onMove = (position: IDialogMoveEventData): boolean => {
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVED, { detail: position, bubbles: true, composed: true, cancelable: true });
+      this._adapter.dispatchHostEvent(event);
+
+      if (!event.defaultPrevented) {
+        this._adapter.addSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
+      }
+
+      return event.defaultPrevented;
+    };
+    const onMoveEnd = (): void => {
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END, { bubbles: true, composed: true });
+      this._adapter.dispatchHostEvent(event);
+    };
+    const { moveHandleElement: handleElement, surfaceElement } = this._adapter;
+    this._moveController = new MoveController({ handleElement, surfaceElement, onMoveStart, onMove, onMoveEnd });
+  }
+
+  private _destroyMoveController(): void {
+    this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
+    this._moveController?.destroy();
+    this._moveController = undefined;
   }
 
   public get open(): boolean {
@@ -285,7 +329,15 @@ export class DialogFoundation implements IDialogFoundation {
     value = Boolean(value);
     if (this._moveable !== value) {
       this._moveable = value;
-      // TODO: this._setMoveable(value);
+
+      if (this._adapter.isConnected && this._open) {
+        if (this._moveable) {
+          this._initializeMoveController();
+        } else {
+          this._destroyMoveController();
+        }
+      }
+
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.MOVEABLE, this._moveable);
     }
   }
@@ -297,29 +349,6 @@ export class DialogFoundation implements IDialogFoundation {
     if (this._positionStrategy !== value) {
       this._positionStrategy = value;
       this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.POSITION_STRATEGY, this._positionStrategy);
-    }
-  }
-
-  public get moveTarget(): string {
-    return this._moveTarget;
-  }
-  public set moveTarget(value: string) {
-    if (this._moveTarget !== value) {
-      this._moveTarget = value;
-      if (this._adapter.isConnected) {
-        this._adapter.tryLocateMoveTargetElement(this._moveTarget);
-      }
-      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.MOVE_TARGET, this._moveTarget);
-    }
-  }
-
-  public get moveTargetElement(): HTMLElement | null {
-    return this._adapter.moveTargetElement;
-  }
-  public set moveTargetElement(element: HTMLElement | null) {
-    this._adapter.moveTargetElement = element;
-    if (this._adapter.isConnected) {
-      // TODO: initialize move target listeners
     }
   }
 
@@ -341,9 +370,5 @@ export class DialogFoundation implements IDialogFoundation {
       this._placement = value;
       this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.PLACEMENT, this._placement);
     }
-  }
-
-  public initializeMoveTarget(): void {
-    // this._adapter.initializeMoveTarget();
   }
 }

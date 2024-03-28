@@ -17,6 +17,8 @@ import {
   DialogType,
   DIALOG_CONSTANTS,
   hideBackdrop,
+  IDialogMoveEventData,
+  IDialogMoveStartEventData,
   showBackdrop
 } from './dialog-constants';
 
@@ -41,9 +43,6 @@ export interface IDialogComponent extends IWithDefaultAria, IWithElementInternal
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
-  moveTarget: string;
-  moveTargetElement: HTMLElement | null;
-  initializeMoveTarget(): void;
   show(): void;
   hide(): void;
 }
@@ -57,9 +56,9 @@ declare global {
     'forge-dialog-open': CustomEvent<void>;
     'forge-dialog-close': CustomEvent<void>;
     'forge-dialog-before-close': CustomEvent<void>;
-    // 'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
-    // 'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
-    // 'forge-dialog-move-end': CustomEvent<void>;
+    'forge-dialog-move-start': CustomEvent<IDialogMoveStartEventData>;
+    'forge-dialog-move': CustomEvent<IDialogMoveEventData>;
+    'forge-dialog-move-end': CustomEvent<void>;
   }
 }
 
@@ -149,9 +148,6 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
       case DIALOG_CONSTANTS.observedAttributes.POSITION_STRATEGY:
         this.positionStrategy = newValue as DialogPositionStrategy;
         break;
-      case DIALOG_CONSTANTS.observedAttributes.MOVE_TARGET:
-        this.moveTarget = newValue;
-        break;
       case DIALOG_CONSTANTS.observedAttributes.SIZE_STRATEGY:
         this.sizeStrategy = newValue as DialogSizeStrategy;
         break;
@@ -207,16 +203,6 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
 
   @FoundationProperty()
   public declare placement: DialogPlacement;
-
-  @FoundationProperty()
-  public declare moveTarget: string;
-
-  @FoundationProperty()
-  public declare moveTargetElement: HTMLElement | null;
-
-  public initializeMoveTarget(): void {
-    this._foundation.initializeMoveTarget();
-  }
 
   public show(): void {
     this.open = true;
