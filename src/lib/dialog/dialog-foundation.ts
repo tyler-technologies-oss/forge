@@ -36,9 +36,9 @@ export class DialogFoundation implements IDialogFoundation {
   private _fullscreen = false;
   private _trigger: string;
   private _moveable = false;
-  private _sizeStrategy: DialogSizeStrategy = 'content';
-  private _placement: DialogPlacement = 'center';
-  private _positionStrategy: DialogPositionStrategy = 'viewport';
+  private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
+  private _placement: DialogPlacement = DIALOG_CONSTANTS.defaults.PLACEMENT;
+  private _positionStrategy: DialogPositionStrategy = DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
   private _moveController: MoveController | undefined;
 
   private _escapeDismissListener: EventListener = this._onEscapeDismiss.bind(this);
@@ -181,12 +181,14 @@ export class DialogFoundation implements IDialogFoundation {
 
       if (!event.defaultPrevented) {
         this._adapter.addSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
+        this._adapter.addSurfaceClass('moving');
       }
 
       return event.defaultPrevented;
     };
     const onMoveEnd = (): void => {
       const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END, { bubbles: true, composed: true });
+      this._adapter.removeSurfaceClass('moving');
       this._adapter.dispatchHostEvent(event);
     };
     const { moveHandleElement: handleElement, surfaceElement } = this._adapter;

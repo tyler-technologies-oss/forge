@@ -14,6 +14,24 @@
   }
 }
 
+forge-dialog[preset$=-sheet] {
+  .dialog-body {
+    max-height: none;
+  }
+}
+
+forge-dialog:not([fullscreen])[size-strategy=container-inline] {
+  .dialog-container {
+    max-width: none;
+  }
+}
+
+forge-dialog:not([fullscreen])[size-strategy=container-block] {
+  .dialog-body {
+    max-height: none;
+  }
+}
+
 .header-toolbar forge-icon-button:last-child {
   margin-right: -8px;
 }

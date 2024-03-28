@@ -31,7 +31,7 @@ const classes = {
 const selectors = {
   DIALOG: '.forge-dialog',
   SURFACE: '.surface',
-  MOVE_HANDLE: '.move-handle > svg'
+  MOVE_HANDLE: '.move-handle'
 };
 
 const events = {
@@ -47,7 +47,10 @@ const defaults = {
   MODE: 'modal' as DialogMode,
   TYPE: 'dialog' as DialogType,
   ANIMATION_TYPE: 'zoom' as DialogAnimationType,
-  PRESET: 'dialog' as DialogPreset
+  PRESET: 'dialog' as DialogPreset,
+  SIZE_STRATEGY: 'content' as DialogSizeStrategy,
+  POSITION_STRATEGY: 'viewport' as DialogPositionStrategy,
+  PLACEMENT: 'center' as DialogPlacement
 };
 
 export const DIALOG_CONSTANTS = {

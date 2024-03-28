@@ -22,6 +22,16 @@ $tokens: (
   max-height: utils.module-val(dialog, max-height, calc(100% - #{spacing.variable(xxlarge)})),
   z-index: utils.module-val(dialog, z-index, elevation.z-index-variable(dialog)),
 
+  // Move handle
+  move-handle-color: utils.module-val(dialog, move-handle-color, currentColor),
+  move-handle-size: utils.module-val(dialog, move-handle-size, 24px),
+  move-handle-hover-cursor: utils.module-val(dialog, move-handle-hover-cursor, grab),
+  move-handle-active-cursor: utils.module-val(dialog, move-handle-active-cursor, grabbing),
+  move-handle-spacing: utils.module-val(dialog, move-handle-spacing, calc(spacing.variable(xxsmall) * -1) 0 0),
+  move-transition-duration: utils.module-val(dialog, move-transition-duration, animation.variable(duration-short4)),
+  move-transition-easing: utils.module-val(dialog, move-transition-easing, animation.variable(easing-standard)),
+  moving-opacity: utils.module-val(dialog, moving-opacity, theme.emphasis(medium)),
+
   // Animation
   enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-medium1)),
   enter-animation-easing: utils.module-val(dialog, enter-animation-easing, animation.variable(easing-standard)),
@@ -46,8 +56,16 @@ $tokens: (
   nonmodal-elevation: utils.module-val(dialog, nonmodal-elevation, elevation.value(4)),
 
   // Fullscreen
-  fullscreen-enter-animation-duration: utils.module-val(dialog, fullscreen-enter-animation-duration, animation.variable(duration-medium4)),
-  fullscreen-exit-animation-duration: utils.module-val(dialog, fullscreen-exit-animation-duration, animation.variable(duration-short4)),
+  fullscreen-enter-animation-duration: utils.module-val(dialog, fullscreen-enter-animation-duration, animation.variable(duration-medium1)),
+  fullscreen-exit-animation-duration: utils.module-val(dialog, fullscreen-exit-animation-duration, animation.variable(duration-short2)),
+
+  // Custom position
+  position-x: utils.module-val(dialog, position-x, 0),
+  position-y: utils.module-val(dialog, position-y, 0),
+
+  // Preset
+  preset-sheet-enter-animation-duration: utils.module-val(dialog, preset-sheet-enter-animation-duration, animation.variable(duration-medium1)),
+  preset-sheet-exit-animation-duration: utils.module-val(dialog, preset-sheet-exit-animation-duration, animation.variable(duration-short3)),
 ) !default;
 
 @function get($key) {

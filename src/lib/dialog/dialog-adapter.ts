@@ -175,11 +175,11 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public hideBackdrop(): void {
-    this._backdropElement.hide();
+    this._backdropElement.fadeOut();
   }
 
   public showBackdrop(): void {
-    this._backdropElement.show();
+    this._backdropElement.fadeIn();
   }
 
   public addSurfaceClass(className: string): void {
