@@ -70,8 +70,8 @@ export class SwitchFoundation implements ISwitchFoundation {
 
     const event = new Event('change', { cancelable: true });
     const forgeEvent = new CustomEvent(SWITCH_CONSTANTS.events.CHANGE, { detail: newValue, bubbles: true, cancelable: true });
-    this._adapter.redispatchEvent(event);
-    this._adapter.redispatchEvent(forgeEvent);
+    this._adapter.dispatchHostEvent(event);
+    this._adapter.dispatchHostEvent(forgeEvent);
     if (event.defaultPrevented || forgeEvent.defaultPrevented) {
       this.on = oldValue;
       return;
