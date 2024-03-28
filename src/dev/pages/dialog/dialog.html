@@ -59,9 +59,7 @@ include('./src/partials/page.ejs', {
           { label: 'Top left', value: 'top-left' },
           { label: 'Top', value: 'top' },
           { label: 'Top right', value: 'top-right' },
-          { label: 'Left', value: 'left' },
           { label: 'Center (default)', value: 'center' },
-          { label: 'Right', value: 'right' },
           { label: 'Bottom left', value: 'bottom-left' },
           { label: 'Bottom', value: 'bottom' },
           { label: 'Bottom right', value: 'bottom-right' }
@@ -88,10 +86,8 @@ include('./src/partials/page.ejs', {
           { label: 'Container', value: 'container' }
         ]
       },
-      { type: 'switch', label: 'Persistent', id: 'opt-persistent' },
-      { type: 'switch', label: 'Escape close', id: 'opt-escape-close', defaultValue: true },
-      { type: 'switch', label: 'Backdrop close', id: 'opt-backdrop-close', defaultValue: true },
-      { type: 'switch', label: 'Prevent close', id: 'opt-prevent-close' },
+      { type: 'switch', label: 'Dismissible', id: 'opt-dismissible' },
+      { type: 'switch', label: 'Prevent close', id: 'opt-prevent-close', disabled: true },
       { type: 'switch', label: 'Fullscreen', id: 'opt-fullscreen' },
       { type: 'switch', label: 'Moveable', id: 'opt-moveable' },
       { type: 'switch', label: 'Prevent move', id: 'opt-prevent-move' }

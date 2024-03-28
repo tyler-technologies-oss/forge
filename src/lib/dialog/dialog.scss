@@ -81,6 +81,12 @@ $can-animate: '[open]:not([animation-type=none])';
   :host([moveable]:not([fullscreen]):not([preset])) {
     .surface {
       @include surface-moveable;
+
+      &:not(:hover) {
+        .move-handle-container {
+          display: none; // Only show the move handle when the dialog surface is hovered
+        }
+      }
     }
 
     .surface.moved {
@@ -200,7 +206,7 @@ $can-animate: '[open]:not([animation-type=none])';
 //
 
 @layer placement {
-  @each $placement in ('custom', 'top', 'top-right', 'top-left', 'bottom', 'bottom-right', 'bottom-left', 'left', 'right') {
+  @each $placement in ('custom', 'top', 'top-right', 'top-left', 'bottom', 'bottom-right', 'bottom-left') {
     :host([placement=#{$placement}]) {
       .surface {
         @include placement($placement);

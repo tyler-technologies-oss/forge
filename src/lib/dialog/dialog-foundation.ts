@@ -10,9 +10,7 @@ export interface IDialogFoundation extends ICustomElementFoundation {
   type: DialogType;
   animationType: DialogAnimationType;
   preset: DialogPreset;
-  persistent: boolean;
-  backdropClose: boolean;
-  escapeClose: boolean;
+  dismissible: boolean;
   fullscreen: boolean;
   trigger: string;
   triggerElement: HTMLElement | null;
@@ -30,9 +28,7 @@ export class DialogFoundation implements IDialogFoundation {
   private _type: DialogType = DIALOG_CONSTANTS.defaults.TYPE;
   private _animationType: DialogAnimationType = DIALOG_CONSTANTS.defaults.ANIMATION_TYPE;
   private _preset: DialogPreset = DIALOG_CONSTANTS.defaults.PRESET;
-  private _persistent = false;
-  private _backdropClose = true;
-  private _escapeClose = true;
+  private _dismissible = false;
   private _fullscreen = false;
   private _trigger: string;
   private _moveable = false;
@@ -85,7 +81,7 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.addDialogFormSubmitListener(this._dialogFormSubmitListener);
     this._adapter.addEscapeDismissListener(this._escapeDismissListener);
 
-    if (this._backdropClose) {
+    if (this._dismissible) {
       this._adapter.addBackdropDismissListener(this._backdropDismissListener);
     }
 
@@ -128,7 +124,7 @@ export class DialogFoundation implements IDialogFoundation {
 
   private _onEscapeDismiss(evt: Event): void {
     evt.preventDefault();
-    if (this._escapeClose) {
+    if (this._dismissible) {
       this._tryClose();
     }
   }
@@ -251,40 +247,14 @@ export class DialogFoundation implements IDialogFoundation {
     }
   }
 
-  public get persistent(): boolean {
-    return this._persistent;
+  public get dismissible(): boolean {
+    return this._dismissible;
   }
-  public set persistent(value: boolean) {
+  public set dismissible(value: boolean) {
     value = Boolean(value);
-    if (this._persistent !== value) {
-      this._persistent = value;
-      this.backdropClose = !value;
-      this.escapeClose = !value;
-      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.PERSISTENT, this._persistent);
-    }
-  }
-
-  public get backdropClose(): boolean {
-    return this._backdropClose;
-  }
-  public set backdropClose(value: boolean) {
-    value = Boolean(value);
-    if (this._backdropClose !== value) {
-      this._backdropClose = value;
-      // this._setBackdropClickListener(this._backdropClose);
-      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE, this._backdropClose);
-    }
-  }
-
-  public get escapeClose(): boolean {
-    return this._escapeClose;
-  }
-  public set escapeClose(value: boolean) {
-    value = Boolean(value);
-    if (this._escapeClose !== value) {
-      this._escapeClose = !!value;
-      // this._setDocumentKeydownListener(this._escapeClose);
-      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE, this._escapeClose);
+    if (this._dismissible !== value) {
+      this._dismissible = value;
+      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.DISMISSIBLE, this._dismissible);
     }
   }
 

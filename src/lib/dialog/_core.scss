@@ -247,20 +247,6 @@
   bottom: 0;
 }
 
-@mixin placement-left {
-  @include override(spacing, auto 0, value);
-
-  left: 0;
-  right: auto;
-}
-
-@mixin placement-right {
-  @include override(spacing, auto 0, value);
-
-  left: auto;
-  right: 0;
-}
-
 //
 // Preset
 //

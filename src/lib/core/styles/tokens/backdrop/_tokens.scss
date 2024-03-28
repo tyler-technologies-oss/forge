@@ -9,7 +9,7 @@
 $tokens: (
   // Base
   background: utils.module-val(backdrop, background, #000),
-  opacity: utils.module-val(backdrop, opacity, theme.emphasis(medium-low)),
+  opacity: utils.module-val(backdrop, opacity, theme.emphasis(medium)),
   z-index: utils.module-val(backdrop, z-index, elevation.z-index-variable(backdrop)),
 
   // Animation

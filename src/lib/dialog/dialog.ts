@@ -31,11 +31,7 @@ export interface IDialogComponent extends IWithDefaultAria, IWithElementInternal
   type: DialogType;
   animationType: DialogAnimationType;
   preset: DialogPreset;
-  persistent: boolean;
-  /** @deprecated Use `persistent` instead. */
-  backdropClose: boolean;
-  /** @deprecated Use `persistent` instead. */
-  escapeClose: boolean;
+  dismissible: boolean;
   fullscreen: boolean;
   trigger: string;
   triggerElement: HTMLElement | null;
@@ -127,14 +123,8 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
       case DIALOG_CONSTANTS.observedAttributes.PRESET:
         this.preset = newValue as DialogPreset;
         break;
-      case DIALOG_CONSTANTS.observedAttributes.PERSISTENT:
-        this.persistent = coerceBoolean(newValue);
-        break;
-      case DIALOG_CONSTANTS.observedAttributes.BACKDROP_CLOSE:
-        this.backdropClose = coerceBoolean(newValue);
-        break;
-      case DIALOG_CONSTANTS.observedAttributes.ESCAPE_CLOSE:
-        this.escapeClose = coerceBoolean(newValue);
+      case DIALOG_CONSTANTS.observedAttributes.DISMISSIBLE:
+        this.dismissible = coerceBoolean(newValue);
         break;
       case DIALOG_CONSTANTS.observedAttributes.FULLSCREEN:
         this.fullscreen = coerceBoolean(newValue);
@@ -173,15 +163,7 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
   public declare preset: DialogPreset;
 
   @FoundationProperty()
-  public declare persistent: boolean;
-
-  /** @depreated Use `persistent` instead. */
-  @FoundationProperty()
-  public declare backdropClose: boolean;
-
-  /** @depreated Use `persistent` instead. */
-  @FoundationProperty()
-  public declare escapeClose: boolean;
+  public declare dismissible: boolean;
 
   @FoundationProperty()
   public declare fullscreen: boolean;
