@@ -174,7 +174,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
       return;
     }
 
-    if (!(this._overlayElement.anchorElement instanceof VirtualElement)) {
+    if (!(this._overlayElement.anchorElement instanceof VirtualElement) && !(this.overlayElement.anchorElement as HTMLElement)?.hasAttribute('aria-hidden')) {
       if (state === null) {
         this._overlayElement.anchorElement.removeAttribute('aria-expanded');
         return;

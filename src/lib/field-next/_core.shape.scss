@@ -6,6 +6,11 @@
     @include override('height', #{token(inset-height-#{$density}, custom)}, value);
   } @else {
     @include override('height', #{token(height-#{$density}, custom)}, value);
+
+    @if $density == 'extra-small' {
+      @include override('container-padding-inline-start', #{token(container-extra-small-padding-inline-start)}, value);
+      @include override('container-padding-inline-end', #{token(container-extra-small-padding-inline-end)}, value);
+    }
   }
 }
 

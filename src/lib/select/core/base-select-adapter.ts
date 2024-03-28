@@ -38,11 +38,11 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   popupElement: HTMLElement | undefined;
 }
 
-export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent> implements IBaseSelectAdapter {
+export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends BaseAdapter<T> implements IBaseSelectAdapter {
   private _listDropdown?: IListDropdown;
   protected _targetElement: HTMLElement;
 
-  constructor(component: IBaseSelectComponent) {
+  constructor(component: T) {
     super(component);
   }
 
@@ -127,10 +127,7 @@ export abstract class BaseSelectAdapter extends BaseAdapter<IBaseSelectComponent
     if (!this._listDropdown || !this._listDropdown.dropdownElement) {
       return;
     }
-    const dropdownElement = this._listDropdown.dropdownElement as IPopoverComponent;
-    if (dropdownElement.anchorElement && dropdownElement.anchorElement instanceof HTMLElement) {
-      dropdownElement.anchorElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
-    }
+    this._listDropdown.dropdownElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
   }
 
   public toggleOptionMultiple(index: number, isSelected: boolean): void {

@@ -1,7 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FocusIndicatorAdapter } from './focus-indicator-adapter';
-import { FOCUS_INDICATOR_CONSTANTS } from './focus-indicator-constants';
+import { FocusIndicatorFocusMode, FOCUS_INDICATOR_CONSTANTS } from './focus-indicator-constants';
 import { FocusIndicatorFoundation } from './focus-indicator-foundation';
 
 import template from './focus-indicator.html';
@@ -14,6 +14,7 @@ export interface IFocusIndicatorComponent extends IBaseComponent {
   inward: boolean;
   circular: boolean;
   allowFocus: boolean;
+  focusMode: FocusIndicatorFocusMode;
 }
 
 declare global {
@@ -33,12 +34,14 @@ declare global {
  * @property {boolean} inward - Controls whether the indicator renders inward.
  * @property {boolean} circular - Controls whether the indicator renders circular.
  * @property {boolean} allowFocus - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
+ * @property {FocusIndicatorFocusMode} focusMode - The focus mode to use. Defaults to `focusin`.
  * 
  * @attribute {string} target - The id of the element to attach the focus indicator to.
  * @attribute {boolean} active - Controls whether the indicator is active.
  * @attribute {boolean} inward - Controls whether the indicator renders inward.
  * @attribute {boolean} circular - Controls whether the indicator renders circular.
  * @attribute {boolean} allow-focus - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
+ * @attribute {FocusIndicatorFocusMode} focus-mode - The focus mode to use. Defaults to `focusin`.
  * 
  * @cssproperty --forge-focus-indicator-active-width - The width of the focus indicator when active. When animating this is the max extent.
  * @cssproperty --forge-focus-indicator-color - The color of the focus indicator.
@@ -61,13 +64,7 @@ declare global {
 })
 export class FocusIndicatorComponent extends BaseComponent implements IFocusIndicatorComponent {
   public static get observedAttributes(): string[] {
-    return [
-      FOCUS_INDICATOR_CONSTANTS.attributes.TARGET,
-      FOCUS_INDICATOR_CONSTANTS.attributes.ACTIVE,
-      FOCUS_INDICATOR_CONSTANTS.attributes.INWARD,
-      FOCUS_INDICATOR_CONSTANTS.attributes.CIRCULAR,
-      FOCUS_INDICATOR_CONSTANTS.attributes.ALLOW_FOCUS
-    ];
+    return Object.values(FOCUS_INDICATOR_CONSTANTS.attributes);
   }
 
   private _foundation: FocusIndicatorFoundation;
@@ -103,6 +100,9 @@ export class FocusIndicatorComponent extends BaseComponent implements IFocusIndi
       case FOCUS_INDICATOR_CONSTANTS.attributes.ALLOW_FOCUS:
         this.allowFocus = coerceBoolean(newValue);
         break;
+      case FOCUS_INDICATOR_CONSTANTS.attributes.FOCUS_MODE:
+        this.focusMode = newValue as FocusIndicatorFocusMode;
+        break;
     }
   }
 
@@ -123,4 +123,7 @@ export class FocusIndicatorComponent extends BaseComponent implements IFocusIndi
 
   @FoundationProperty()
   public declare allowFocus: boolean;
+
+  @FoundationProperty()
+  public declare focusMode: FocusIndicatorFocusMode;
 }

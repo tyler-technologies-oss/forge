@@ -11,7 +11,7 @@ export interface ISelectDropdownAdapter extends IBaseSelectAdapter {
   getTargetText(selector: string): string;
 }
 
-export class SelectDropdownAdapter extends BaseSelectAdapter implements ISelectDropdownAdapter {
+export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComponent> implements ISelectDropdownAdapter {
   constructor(component: ISelectDropdownComponent) {
     super(component);
   }

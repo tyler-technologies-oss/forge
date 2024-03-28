@@ -7,14 +7,22 @@ const observedAttributes = {
   ACTIVE: 'active',
   INWARD: 'inward',
   CIRCULAR: 'circular',
-  ALLOW_FOCUS: 'allow-focus'
+  ALLOW_FOCUS: 'allow-focus',
+  FOCUS_MODE: 'focus-mode'
 };
 
 const attributes = {
   ...observedAttributes
 };
 
+const defaults = {
+  FOCUS_MODE: 'focusin' as FocusIndicatorFocusMode
+};
+
 export const FOCUS_INDICATOR_CONSTANTS = {
   elementName,
-  attributes
+  attributes,
+  defaults
 };
+
+export type FocusIndicatorFocusMode = 'focus' | 'focusin';

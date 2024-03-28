@@ -26,14 +26,17 @@ export const directoryGroup = source =>
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 
+/**
+ * @type {import('@web/test-runner').TestRunnerConfig}
+ */
 export default {
   concurrentBrowsers: 3,
   nodeResolve: true,
   testsFinishTimeout: 60000,
   testFramework: {
     config: {
-        timeout: 5000,
-        retries: 1,
+      timeout: 5000,
+      retries: 1,
     },
   },
   coverageConfig: {
