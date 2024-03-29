@@ -79,10 +79,10 @@ positionStrategySelect.addEventListener('change', ({ detail: selected }) => {
   inlineDialog.positionStrategy = selected;
 });
 
-const dismissibleToggle = document.getElementById('opt-dismissible') as ISwitchComponent;
-dismissibleToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  inlineDialog.dismissible = selected;
-  preventCloseToggle.disabled = !selected;
+const persistentToggle = document.getElementById('opt-persistent') as ISwitchComponent;
+persistentToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  inlineDialog.persistent = selected;
+  preventCloseToggle.disabled = selected;
 });
 
 const fullscreenToggle = document.getElementById('opt-fullscreen') as ISwitchComponent;
@@ -115,7 +115,7 @@ function openDynamicDialog(): void {
   dialogElement.classList.add('dialog');
 
   // Apply options
-  dialogElement.dismissible = dismissibleToggle.on;
+  dialogElement.persistent = persistentToggle.on;
   dialogElement.fullscreen = fullscreenToggle.on;
   dialogElement.moveable = moveableToggle.on;
   dialogElement.placement = placementSelect.value;

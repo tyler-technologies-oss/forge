@@ -3,7 +3,6 @@ import { BackdropComponent } from '../backdrop';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
-import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 import { DialogAdapter } from './dialog-adapter';
 import { DialogFoundation } from './dialog-foundation';
 import {
@@ -25,13 +24,13 @@ import {
 import template from './dialog.html';
 import styles from './dialog.scss';
 
-export interface IDialogComponent extends IWithDefaultAria, IWithElementInternals, IDismissible {
+export interface IDialogComponent extends IWithDefaultAria, IWithElementInternals {
   open: boolean;
   mode: DialogMode;
   type: DialogType;
   animationType: DialogAnimationType;
   preset: DialogPreset;
-  dismissible: boolean;
+  persistent: boolean;
   fullscreen: boolean;
   trigger: string;
   triggerElement: HTMLElement | null;
@@ -79,11 +78,6 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
 
   private _foundation: DialogFoundation;
 
-  public [tryDismiss](state: IDismissibleStackState): boolean {
-    console.log('DialogComponent tryDismiss', state);
-    return true; // TODO: Request dismiss from foundation
-  }
-
   public [hideBackdrop](): void {
     this._foundation.hideBackdrop();
   }
@@ -118,13 +112,13 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
         this.type = newValue as DialogType ?? DIALOG_CONSTANTS.defaults.TYPE;
         break;
       case DIALOG_CONSTANTS.observedAttributes.ANIMATION_TYPE:
-        this.animationType = newValue as DialogAnimationType;
+        this.animationType = newValue as DialogAnimationType ?? DIALOG_CONSTANTS.defaults.ANIMATION_TYPE;
         break;
       case DIALOG_CONSTANTS.observedAttributes.PRESET:
-        this.preset = newValue as DialogPreset;
+        this.preset = newValue as DialogPreset ?? DIALOG_CONSTANTS.defaults.PRESET;
         break;
-      case DIALOG_CONSTANTS.observedAttributes.DISMISSIBLE:
-        this.dismissible = coerceBoolean(newValue);
+      case DIALOG_CONSTANTS.observedAttributes.PERSISTENT:
+        this.persistent = coerceBoolean(newValue);
         break;
       case DIALOG_CONSTANTS.observedAttributes.FULLSCREEN:
         this.fullscreen = coerceBoolean(newValue);
@@ -136,13 +130,13 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
         this.moveable = coerceBoolean(newValue);
         break;
       case DIALOG_CONSTANTS.observedAttributes.POSITION_STRATEGY:
-        this.positionStrategy = newValue as DialogPositionStrategy;
+        this.positionStrategy = newValue as DialogPositionStrategy ?? DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
         break;
       case DIALOG_CONSTANTS.observedAttributes.SIZE_STRATEGY:
-        this.sizeStrategy = newValue as DialogSizeStrategy;
+        this.sizeStrategy = newValue as DialogSizeStrategy ?? DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
         break;
       case DIALOG_CONSTANTS.observedAttributes.PLACEMENT:
-        this.placement = newValue as DialogPlacement;
+        this.placement = newValue as DialogPlacement ?? DIALOG_CONSTANTS.defaults.PLACEMENT;
         break;
     }
   }
@@ -163,7 +157,7 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
   public declare preset: DialogPreset;
 
   @FoundationProperty()
-  public declare dismissible: boolean;
+  public declare persistent: boolean;
 
   @FoundationProperty()
   public declare fullscreen: boolean;

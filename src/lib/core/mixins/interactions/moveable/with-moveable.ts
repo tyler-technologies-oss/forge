@@ -26,9 +26,9 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
     private _lastPosition: { x: number; y: number } | undefined;
     private _activeElement: HTMLElement | undefined = undefined;
 
-    protected _movePointerDownListener = this._onMoveTargetMouseDown.bind(this);
-    private _movePointerMoveListener = this._onMoveTargetMouseMove.bind(this);
-    private _movePointerUpListener = this._onMoveTargetMouseUp.bind(this);
+    protected _movePointerDownListener = this._onMoveTargetPointerDown.bind(this);
+    private _movePointerMoveListener = this._onMoveTargetPointerMove.bind(this);
+    private _movePointerUpListener = this._onMoveTargetPointerUp.bind(this);
 
     protected abstract _getMoveableBounds(): { top: number; left: number; height: number; width: number };
     protected abstract _updatePosition(x: string | null, y: string | null): void;
@@ -38,15 +38,15 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
 
     public stopMoveListener(): void {
       this._updatePosition(null, null);
-      document.removeEventListener('mousemove', this._movePointerMoveListener);
-      document.removeEventListener('mouseup', this._movePointerUpListener);
+      document.removeEventListener('pointermove', this._movePointerMoveListener);
+      document.removeEventListener('pointerup', this._movePointerUpListener);
       this._isMoving = false;
       this._moveContext = undefined;
       this._lastPosition = undefined;
       this._activeElement = undefined;
     }
 
-    private _onMoveTargetMouseDown(evt: MouseEvent): void {
+    private _onMoveTargetPointerDown(evt: PointerEvent): void {
       evt.preventDefault();
 
       this._captureActiveElement();
@@ -63,7 +63,7 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
       document.addEventListener('pointerup', this._movePointerUpListener);
     }
   
-    private _onMoveTargetMouseMove(evt: MouseEvent): void {
+    private _onMoveTargetPointerMove(evt: PointerEvent): void {
       evt.preventDefault();
       const position = this._calculateOffsetPosition(evt.pageX, evt.pageY, this._moveContext);
   
@@ -92,7 +92,7 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
       }
     }
   
-    private _onMoveTargetMouseUp(_evt: MouseEvent): void {
+    private _onMoveTargetPointerUp(_evt: PointerEvent): void {
       if (this._isMoving) {
         this._onMoveEnd();
       }

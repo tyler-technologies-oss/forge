@@ -47,12 +47,21 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   constructor(component: IDialogComponent) {
     super(component);
     this._dialogElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.DIALOG) as HTMLDialogElement;
-    this._backdropElement = getShadowElement(component, BACKDROP_CONSTANTS.elementName) as IBackdropComponent;
     this._surfaceElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.SURFACE) as HTMLDivElement;
     this._moveHandleElement = getShadowElement(component, DIALOG_CONSTANTS.selectors.MOVE_HANDLE) as HTMLElement;
+
+    this._backdropElement = getShadowElement(component, BACKDROP_CONSTANTS.elementName) as IBackdropComponent;
+    if (!this._backdropElement.shadowRoot) {
+      window.customElements.upgrade(this._backdropElement);
+    }
   }
 
   public show(): void {
+    /* c8 ignore next 3 */
+    if (this._dialogElement.open) {
+      return;
+    }
+
     this._component[setDefaultAria]({
       role: this._component.type,
       ariaModal: this._component.mode === 'modal' ? 'true' : 'false'
@@ -91,33 +100,20 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
       ariaModal: null
     }, { setAttribute: true });
 
-    // If the dialog is not animatable, close it immediately
-    if (this._component.animationType === 'none') {
+    const close = (): void => {
+      this._surfaceElement.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);
       this._dialogElement.close();
-      this._backdropElement.hide();
       DialogComponent[dialogStack].delete(this._component);
       this._showBackdropMostRecent();
-      return Promise.resolve();
+    };
+
+    if (this._component.animationType === 'none') {
+      return Promise.resolve(close());
     }
 
     return new Promise<void>(resolve => {
-      // Listen for the end of the exit animation and cleanup after
-      this._surfaceElement.addEventListener('animationend', () => {
-        this._surfaceElement.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);
-        this._dialogElement.close();
-        DialogComponent[dialogStack].delete(this._component);
-        this._showBackdropMostRecent();
-        resolve();
-      }, { once: true });
-
-      // Hide the backdrop
-      if (this._component.animationType === 'none') {
-        this._backdropElement.hide();
-      } else {
-        this._backdropElement.fadeOut();
-      }
-
-      // Trigger the exit animation
+      this._surfaceElement.addEventListener('animationend', () => resolve(close()), { once: true });
+      this._backdropElement.fadeOut();
       this._surfaceElement.classList.add(BACKDROP_CONSTANTS.classes.EXITING);
     });
   }

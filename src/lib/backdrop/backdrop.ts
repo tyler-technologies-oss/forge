@@ -63,6 +63,10 @@ export class BackdropComponent extends BaseComponent {
   }
 
   private async _applyVisibility(visible: boolean, { animate } = { animate: true }): Promise<void> {
+    if (this._visible === visible) {
+      return;
+    }
+
     this._visible = visible;
 
     if (!this.isConnected) {

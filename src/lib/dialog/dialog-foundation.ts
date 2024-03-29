@@ -1,6 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { MoveController } from '../core/controllers/move-controller';
-import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
 import { DialogAnimationType, DialogMode, DialogPlacement, DialogPositionStrategy, DialogPreset, DialogSizeStrategy, DialogType, DIALOG_CONSTANTS, IDialogMoveEventData } from './dialog-constants';
 
@@ -10,7 +9,7 @@ export interface IDialogFoundation extends ICustomElementFoundation {
   type: DialogType;
   animationType: DialogAnimationType;
   preset: DialogPreset;
-  dismissible: boolean;
+  persistent: boolean;
   fullscreen: boolean;
   trigger: string;
   triggerElement: HTMLElement | null;
@@ -28,9 +27,9 @@ export class DialogFoundation implements IDialogFoundation {
   private _type: DialogType = DIALOG_CONSTANTS.defaults.TYPE;
   private _animationType: DialogAnimationType = DIALOG_CONSTANTS.defaults.ANIMATION_TYPE;
   private _preset: DialogPreset = DIALOG_CONSTANTS.defaults.PRESET;
-  private _dismissible = false;
+  private _persistent = false;
   private _fullscreen = false;
-  private _trigger: string;
+  private _trigger = '';
   private _moveable = false;
   private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
   private _placement: DialogPlacement = DIALOG_CONSTANTS.defaults.PLACEMENT;
@@ -45,12 +44,16 @@ export class DialogFoundation implements IDialogFoundation {
   constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
+    if (this._trigger && !this._adapter.triggerElement) {
+      this._adapter.tryLocateTriggerElement(this._trigger);
+    }
+
     if (this._adapter.triggerElement) {
       this._adapter.addTriggerInteractionListener(this._triggerClickListener);
     }
 
     if (this._open) {
-      this._show();
+      this._applyOpen();
     }
   }
 
@@ -81,7 +84,7 @@ export class DialogFoundation implements IDialogFoundation {
     this._adapter.addDialogFormSubmitListener(this._dialogFormSubmitListener);
     this._adapter.addEscapeDismissListener(this._escapeDismissListener);
 
-    if (this._dismissible) {
+    if (!this._persistent) {
       this._adapter.addBackdropDismissListener(this._backdropDismissListener);
     }
 
@@ -90,8 +93,6 @@ export class DialogFoundation implements IDialogFoundation {
     }
 
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.OPEN, { bubbles: true, composed: true }));
-
-    DismissibleStack.instance.add(this._adapter.hostElement);
   }
 
   private async _hide(): Promise<void> {
@@ -106,13 +107,10 @@ export class DialogFoundation implements IDialogFoundation {
     }
 
     this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.CLOSE, { bubbles: true, composed: true }));
-    DismissibleStack.instance.remove(this._adapter.hostElement);
   }
 
-  private async _applyOpen(value: boolean): Promise<void> {
-    this._open = value;
-    
-    if (value) {
+  private async _applyOpen(): Promise<void> {
+    if (this._open) {
       this._show();
       this._adapter.tryAutofocus();
     } else {
@@ -124,7 +122,7 @@ export class DialogFoundation implements IDialogFoundation {
 
   private _onEscapeDismiss(evt: Event): void {
     evt.preventDefault();
-    if (this._dismissible) {
+    if (!this._persistent) {
       this._tryClose();
     }
   }
@@ -145,23 +143,16 @@ export class DialogFoundation implements IDialogFoundation {
     const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, { cancelable: true, bubbles: true, composed: true });
     const canClose = !this._adapter.dispatchHostEvent(evt);
     if (canClose) {
-      this._applyOpen(false);
+      this.open = false;
     }
   }
   
   private _onTriggerClick(_evt: MouseEvent): void {
-    this._applyOpen(!this._open);
-  }
-
-  private _applyTriggerListener(): void {
-    if (this._adapter.triggerElement) {
-      this._adapter.addTriggerInteractionListener(this._triggerClickListener);
-    } else {
-      this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
-    }
+    this.open = !this._open;
   }
 
   private _initializeMoveController(): void {
+    /* c8 ignore next 3 */
     if (this._moveController) {
       return;
     }
@@ -177,14 +168,14 @@ export class DialogFoundation implements IDialogFoundation {
 
       if (!event.defaultPrevented) {
         this._adapter.addSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
-        this._adapter.addSurfaceClass('moving');
+        this._adapter.addSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
       }
 
       return event.defaultPrevented;
     };
     const onMoveEnd = (): void => {
       const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END, { bubbles: true, composed: true });
-      this._adapter.removeSurfaceClass('moving');
+      this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
       this._adapter.dispatchHostEvent(event);
     };
     const { moveHandleElement: handleElement, surfaceElement } = this._adapter;
@@ -203,7 +194,10 @@ export class DialogFoundation implements IDialogFoundation {
   public set open(value: boolean) {
     value = Boolean(value);
     if (this._open !== value) {
-      this._applyOpen(value);
+      this._open = value;
+      if (this._adapter.isConnected) {
+        this._applyOpen();
+      }
     }
   }
 
@@ -247,14 +241,14 @@ export class DialogFoundation implements IDialogFoundation {
     }
   }
 
-  public get dismissible(): boolean {
-    return this._dismissible;
+  public get persistent(): boolean {
+    return this._persistent;
   }
-  public set dismissible(value: boolean) {
+  public set persistent(value: boolean) {
     value = Boolean(value);
-    if (this._dismissible !== value) {
-      this._dismissible = value;
-      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.DISMISSIBLE, this._dismissible);
+    if (this._persistent !== value) {
+      this._persistent = value;
+      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.PERSISTENT, this._persistent);
     }
   }
 
@@ -270,14 +264,19 @@ export class DialogFoundation implements IDialogFoundation {
   }
 
   public get trigger(): string {
-    return this._trigger;
+    return this._trigger ?? '';
   }
   public set trigger(value: string) {
     if (this._trigger !== value) {
       this._trigger = value;
+
+      if (this._adapter.triggerElement) {
+        this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
+      }
+
       if (this._adapter.isConnected) {
         this._adapter.tryLocateTriggerElement(this._trigger);
-        this._applyTriggerListener();
+        this._adapter.addTriggerInteractionListener(this._triggerClickListener);
       }
       this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.TRIGGER, this._trigger);
     }
@@ -287,10 +286,18 @@ export class DialogFoundation implements IDialogFoundation {
     return this._adapter.triggerElement;
   }
   public set triggerElement(element: HTMLElement | null) {
+    if (this._adapter.triggerElement) {
+      this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
+    }
+
+    if (this._trigger) {
+      this._trigger = '';
+    }
+
     this._adapter.triggerElement = element;
 
     if (this._adapter.isConnected) {
-      this._applyTriggerListener();
+      this._adapter.addTriggerInteractionListener(this._triggerClickListener);
     }
   }
 

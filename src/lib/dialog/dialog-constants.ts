@@ -8,7 +8,7 @@ const observedAttributes = {
   TYPE: 'type',
   ANIMATION_TYPE: 'animation-type',
   PRESET: 'preset',
-  DISMISSIBLE: 'dismissible',
+  PERSISTENT: 'persistent',
   FULLSCREEN: 'fullscreen',
   TRIGGER: 'trigger',
   MOVEABLE: 'moveable',
@@ -23,7 +23,8 @@ const attributes = {
 };
 
 const classes = {
-  MOVED: 'moved'
+  MOVED: 'moved',
+  MOVING: 'moving'
 };
 
 const selectors = {
