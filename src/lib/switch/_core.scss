@@ -22,18 +22,19 @@ $_handle-on-translate: calc(#{token(track-width)} - #{$_track-border-radius} * 2
 
 @mixin host {
   display: inline-block;
+  outline: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 @mixin switch {
+  display: flex;
   position: relative;
+
   flex-direction: #{token(direction)};
   flex-shrink: 0;
   align-items: center;
   justify-content: #{token(justify)};
   gap: #{token(gap)};
-
-  display: flex;
 }
 
 @mixin switch-disabled {

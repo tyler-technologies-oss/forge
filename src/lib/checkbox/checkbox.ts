@@ -128,7 +128,7 @@ export class CheckboxComponent extends BaseCheckboxClass implements ICheckboxCom
     return Object.values(CHECKBOX_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: CheckboxFoundation;
+  private readonly _foundation: CheckboxFoundation;
 
   constructor() {
     super();
@@ -150,31 +150,31 @@ export class CheckboxComponent extends BaseCheckboxClass implements ICheckboxCom
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case CHECKBOX_CONSTANTS.attributes.CHECKED:
+      case CHECKBOX_CONSTANTS.observedAttributes.CHECKED:
         this.checked = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.DEFAULT_CHECKED:
+      case CHECKBOX_CONSTANTS.observedAttributes.DEFAULT_CHECKED:
         this.defaultChecked = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.INDETERMINATE:
+      case CHECKBOX_CONSTANTS.observedAttributes.INDETERMINATE:
         this.indeterminate = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.VALUE:
+      case CHECKBOX_CONSTANTS.observedAttributes.VALUE:
         this.value = newValue;
         break;
-      case CHECKBOX_CONSTANTS.attributes.DENSE:
+      case CHECKBOX_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.DISABLED:
+      case CHECKBOX_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.REQUIRED:
+      case CHECKBOX_CONSTANTS.observedAttributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.READONLY:
+      case CHECKBOX_CONSTANTS.observedAttributes.READONLY:
         this.readonly = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.LABEL_POSITION:
+      case CHECKBOX_CONSTANTS.observedAttributes.LABEL_POSITION:
         this.labelPosition = newValue as CheckboxLabelPosition;
         break;
     }
@@ -202,7 +202,7 @@ export class CheckboxComponent extends BaseCheckboxClass implements ICheckboxCom
     this.checked = this.defaultChecked;
   }
 
-  public formStateRestoreCallback(state: CheckboxState, reason: 'restore' | 'autocomplete'): void {
+  public formStateRestoreCallback(state: CheckboxState): void {
     this.checked = state === 'checked' || state === 'checked-indeterminate';
     this.indeterminate = state === 'unchecked-indeterminate' || state === 'checked-indeterminate';
   }
