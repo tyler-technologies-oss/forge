@@ -1,5 +1,6 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { MoveController } from '../core/controllers/move-controller';
+import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
 import { DialogAnimationType, DialogMode, DialogPlacement, DialogPositionStrategy, DialogPreset, DialogSizeStrategy, DialogType, DIALOG_CONSTANTS, IDialogMoveEventData } from './dialog-constants';
 
@@ -19,6 +20,7 @@ export interface IDialogFoundation extends ICustomElementFoundation {
   moveable: boolean;
   hideBackdrop(): void;
   showBackdrop(): void;
+  dispatchBeforeCloseEvent(): boolean;
 }
 
 export class DialogFoundation implements IDialogFoundation {
@@ -82,7 +84,13 @@ export class DialogFoundation implements IDialogFoundation {
   private _show(): void {
     this._adapter.show();
     this._adapter.addDialogFormSubmitListener(this._dialogFormSubmitListener);
-    this._adapter.addEscapeDismissListener(this._escapeDismissListener);
+    DismissibleStack.instance.add(this._adapter.hostElement);
+
+    if (this._mode === 'modal') {
+      this._adapter.addDialogCancelListener(this._escapeDismissListener);
+    } else if (this._mode === 'inline-modal') {
+      this._adapter.addDocumentListener('keydown', this._escapeDismissListener);
+    }
 
     if (!this._persistent) {
       this._adapter.addBackdropDismissListener(this._backdropDismissListener);
@@ -97,8 +105,10 @@ export class DialogFoundation implements IDialogFoundation {
 
   private async _hide(): Promise<void> {
     this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
-    this._adapter.removeEscapeDismissListener(this._escapeDismissListener);
+    this._adapter.removeDialogCancelListener(this._escapeDismissListener);
+    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener);
     this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
+    DismissibleStack.instance.remove(this._adapter.hostElement);
 
     await this._adapter.hide();
 
@@ -121,7 +131,15 @@ export class DialogFoundation implements IDialogFoundation {
   }
 
   private _onEscapeDismiss(evt: Event): void {
-    evt.preventDefault();
+    if (evt.type === 'keydown') {
+      const key = (evt as KeyboardEvent).key;
+      if (key !== 'Escape' || !DismissibleStack.instance.isMostRecent(this._adapter.hostElement)) {
+        return;
+      }
+    } else if (evt.type === 'cancel') {
+      evt.preventDefault();
+    }
+
     if (!this._persistent) {
       this._tryClose();
     }
@@ -140,13 +158,17 @@ export class DialogFoundation implements IDialogFoundation {
   }
 
   private _tryClose(): void {
-    const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, { cancelable: true, bubbles: true, composed: true });
-    const canClose = !this._adapter.dispatchHostEvent(evt);
-    if (canClose) {
+    if (this.dispatchBeforeCloseEvent()) {
       this.open = false;
     }
   }
   
+  public dispatchBeforeCloseEvent(): boolean {
+    const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, { cancelable: true, bubbles: true, composed: true });
+    this._adapter.dispatchHostEvent(evt);
+    return !evt.defaultPrevented;
+  }
+
   private _onTriggerClick(_evt: MouseEvent): void {
     this.open = !this._open;
   }

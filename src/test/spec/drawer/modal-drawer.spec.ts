@@ -1,6 +1,6 @@
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { dispatchNativeEvent, tick, timer } from '@tylertech/forge-testing';
-import { BACKDROP_CONSTANTS } from '@tylertech/forge';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '@tylertech/forge';
 import { BASE_DRAWER_CONSTANTS, defineModalDrawerComponent, IModalDrawerComponent, MODAL_DRAWER_CONSTANTS } from '@tylertech/forge/drawer';
 
 interface ITestContext {
@@ -81,11 +81,10 @@ describe('ModalDrawerComponent', function(this: ITestContext) {
     this.context.append();
 
     await tick();
-    const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName);
-    const backdropStyle = getComputedStyle(backdrop);
+    const backdrop = getShadowElement(this.context.component, BACKDROP_CONSTANTS.elementName) as IBackdropComponent;
 
     expect(backdrop.hasAttribute('hidden')).toBeTrue();
-    expect(backdropStyle.display).toBe('none');
+    expect(backdrop.visible).toBeFalse;
   });
 
   it('should transition to open when modal opens', async function(this: ITestContext) {

@@ -150,4 +150,14 @@ export class DismissibleStack<T extends IDismissible> {
   public isRequestingLightDismiss(el: T): boolean {
     return this._elementsRequestingDismiss.has(el);
   }
+
+  /**
+   * Checks if an element is the most recent element in the dismissible queue.
+   * @param el The element to check.
+   * @returns 
+   */
+  public isMostRecent(el: T): boolean {
+    const elements = Array.from(this._dismissibleElements);
+    return elements[elements.length - 1] === el;
+  }
 }

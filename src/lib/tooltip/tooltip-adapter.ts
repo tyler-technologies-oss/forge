@@ -7,6 +7,7 @@ import { ITooltipComponent } from './tooltip';
 import { TOOLTIP_CONSTANTS } from './tooltip-constants';
 
 export interface ITooltipAdapter extends IBaseAdapter {
+  readonly hostElement: ITooltipComponent;
   readonly anchorElement: HTMLElement | null;
   syncAria(): void;
   detachAria(): void;

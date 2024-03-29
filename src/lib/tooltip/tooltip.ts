@@ -9,11 +9,12 @@ import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { OverlayFlipState } from '../overlay/overlay-constants';
 import { PositionPlacement } from '../core/utils/position-utils';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 
 import template from './tooltip.html';
 import styles from './tooltip.scss';
 
-export interface ITooltipComponent extends IWithDefaultAria, IWithElementInternals {
+export interface ITooltipComponent extends IWithDefaultAria, IWithElementInternals, IDismissible {
   open: boolean;
   type: TooltipType;
   anchor: string;
@@ -115,6 +116,10 @@ export class TooltipComponent extends BaseClass implements ITooltipComponent {
     super();
     attachShadowTemplate(this, template, styles);
     this._foundation = new TooltipFoundation(new TooltipAdapter(this));
+  }
+
+  public [tryDismiss](state?: IDismissibleStackState<string> | undefined): boolean {
+    return true;
   }
 
   public connectedCallback(): void {

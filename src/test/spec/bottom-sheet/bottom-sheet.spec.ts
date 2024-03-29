@@ -246,7 +246,7 @@ describe('BottomSheetComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.open();
 
-    expect(this.context.backdrop.hidden).toBe(true);
+    expect(this.context.backdrop.visible).toBeFalse();
   });
 
   it('should set show backdrop via attribute', async function(this: ITestContext) {

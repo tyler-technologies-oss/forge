@@ -76,7 +76,7 @@ export interface IDialogMoveContext {
 
 export interface IDialogMoveStartEventData extends IDialogMoveEventData {}
 
-export type DialogMode = 'modal' | 'nonmodal';
+export type DialogMode = 'modal' | 'inline-modal' | 'nonmodal';
 export type DialogType = 'dialog' | 'alertdialog';
 export type DialogAnimationType = 'none' | 'zoom' | 'fade' | 'slide' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right';
 export type DialogPositionStrategy = 'viewport' | 'container';

@@ -506,6 +506,12 @@ describe('Dialog', () => {
       expect(harness.backdropElement.visible).to.be.true;
     });
 
+    it('should show in top layer', async () => {
+      const harness = await createFixture({ open: true });
+
+      expect(harness.nativeDialogElement.matches(':modal')).to.be.true;
+    });
+
     it('should not close when clicking outside dialog when persistent', async () => {
       const harness = await createFixture({ open: true, persistent: true });
 
@@ -544,6 +550,63 @@ describe('Dialog', () => {
       await harness.clickSurface();
 
       expect(harness.isOpen).to.be.true;
+    });
+  });
+
+  describe('inline-modal', () => {
+    it('should show with backdrop', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal' });
+
+      expect(harness.backdropElement.visible).to.be.true;
+    });
+
+    it('should not be in top layer', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal' });
+
+      expect(harness.nativeDialogElement.matches(':modal')).to.be.false;
+    });
+
+    it('should close when escape key is pressed', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal' });
+
+      await harness.pressEscapeKey();
+
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should close when clicking outside dialog', async () => {
+      const harness = await createFixture({ open: true, mode: 'inline-modal' });
+
+      await harness.clickOutside();
+
+      expect(harness.isOpen).to.be.false;
+    });
+
+    it('should not close if escape is pressed while a nested element in the dismissible stack is open', async () => {
+      const el = await fixture(html`
+        <forge-dialog mode="inline-modal">
+          <div>Parent dialog</div>
+          <forge-dialog mode="inline-modal">
+            <div>Nested dialog</div>
+          </forge-dialog>
+        </forge-dialog>
+      `);
+
+      const parentDialog = el as IDialogComponent;
+      const nestedDialog = el.querySelector('forge-dialog') as IDialogComponent;
+
+      parentDialog.show();
+      await timer(400);
+
+      nestedDialog.show();
+      await timer(400);
+
+      sendKeys({ press: 'Escape' });
+
+      await timer(400);
+
+      expect(parentDialog.open).to.be.true;
+      expect(nestedDialog.open).to.be.false;
     });
   });
 

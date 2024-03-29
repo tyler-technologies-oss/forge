@@ -222,16 +222,12 @@ $can-animate: '[open]:not([animation-type=none])';
 @layer size-strategy {
   :host([size-strategy=container-inline]) {
     .surface {
-      // @include override(max-width, none, value);
-
       width: 100%;
     }
   }
 
   :host([size-strategy=container-block]) {
     .surface {
-      // @include override(max-height, none, value);
-
       height: 100%;
     }
   }

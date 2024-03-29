@@ -14,8 +14,8 @@ export interface IDialogAdapter extends IBaseAdapter {
   hide(): Promise<void>;
   addDialogFormSubmitListener(listener: EventListener): void;
   removeDialogFormSubmitListener(listener: EventListener): void;
-  addEscapeDismissListener(listener: EventListener): void;
-  removeEscapeDismissListener(listener: EventListener): void;
+  addDialogCancelListener(listener: EventListener): void;
+  removeDialogCancelListener(listener: EventListener): void;
   addBackdropDismissListener(listener: EventListener): void;
   removeBackdropDismissListener(listener: EventListener): void;
   tryAutofocus(): void;
@@ -64,22 +64,26 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
 
     this._component[setDefaultAria]({
       role: this._component.type,
-      ariaModal: this._component.mode === 'modal' ? 'true' : 'false'
+      ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
     }, { setAttribute: true });
     
     // Show the dialog (and backdrop) based on modal vs non-modal
-    if (this._component.mode === 'modal') {
+    const isModal = this._component.mode === 'modal' || this._component.mode === 'inline-modal';
+    if (isModal) {
       if (this._component.animationType === 'none') {
         this._backdropElement.show();
       } else {
         this._backdropElement.fadeIn();
       }
+    }
+
+    if (this._component.mode === 'modal') {
       this._dialogElement.showModal();
     } else {
       this._dialogElement.show();
     }
 
-    if (this._component.mode === 'modal') {
+    if (isModal) {
       this._hideBackdrops();
     }
 
@@ -91,7 +95,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   private _showBackdropMostRecent(): void {
-    Array.from(DialogComponent[dialogStack]).filter(dialog => dialog.mode === 'modal').at(-1)?.[showBackdrop]();
+    Array.from(DialogComponent[dialogStack]).filter(dialog => dialog.mode === 'modal' || dialog.mode === 'inline-modal').at(-1)?.[showBackdrop]();
   }
 
   public hide(): Promise<void> {
@@ -126,11 +130,11 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     this._dialogElement.removeEventListener('submit', listener);
   }
 
-  public addEscapeDismissListener(listener: EventListener): void {
+  public addDialogCancelListener(listener: EventListener): void {
     this._dialogElement.addEventListener('cancel', listener);
   }
 
-  public removeEscapeDismissListener(listener: EventListener): void {
+  public removeDialogCancelListener(listener: EventListener): void {
     this._dialogElement.removeEventListener('cancel', listener);
   }
 

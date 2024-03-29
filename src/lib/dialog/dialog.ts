@@ -20,11 +20,12 @@ import {
   IDialogMoveStartEventData,
   showBackdrop
 } from './dialog-constants';
+import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack';
 
 import template from './dialog.html';
 import styles from './dialog.scss';
 
-export interface IDialogComponent extends IWithDefaultAria, IWithElementInternals {
+export interface IDialogComponent extends IWithDefaultAria, IWithElementInternals, IDismissible {
   open: boolean;
   mode: DialogMode;
   type: DialogType;
@@ -84,6 +85,10 @@ export class DialogComponent extends BaseClass implements IDialogComponent {
   
   public [showBackdrop](): void {
     this._foundation.showBackdrop();
+  }
+
+  public [tryDismiss](_state?: IDismissibleStackState<string> | undefined): boolean {
+    return this._foundation.dispatchBeforeCloseEvent();
   }
 
   constructor() {
