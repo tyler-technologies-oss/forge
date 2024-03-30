@@ -23,12 +23,26 @@ inlineDialog.addEventListener('forge-dialog-before-close', evt => {
     return;
   }
 });
+inlineDialog.addEventListener('forge-dialog-open', evt => console.log('[forge-dialog]', evt));
+inlineDialog.addEventListener('forge-dialog-close', evt => console.log('[forge-dialog]', evt));
+inlineDialog.addEventListener('forge-dialog-move-start', evt => console.log('[forge-dialog]', evt));
+inlineDialog.addEventListener('forge-dialog-move', evt => console.log('[forge-dialog]', evt));
+inlineDialog.addEventListener('forge-dialog-move-end', evt => console.log('[forge-dialog]', evt));
 
 const showDynamicDialogButton = document.getElementById('show-dynamic-dialog-button');
 showDynamicDialogButton.addEventListener('click', () => openDynamicDialog());
 
-const acceptButton = inlineDialog.querySelector('#accept-button');
-acceptButton.addEventListener('click', () => inlineDialog.hide());
+const saveButton = inlineDialog.querySelector('#save-button');
+saveButton.addEventListener('click', () => {
+  confirmSaveDialog.show();
+});
+
+const confirmSaveDialog = inlineDialog.querySelector('#confirm-save-dialog') as IDialogComponent;
+const confirmYesButton = confirmSaveDialog.querySelector('#yes-button');
+confirmYesButton.addEventListener('click', () => {
+  confirmSaveDialog.hide();
+  inlineDialog.hide();
+});
 
 const cancelButton = inlineDialog.querySelector('#cancel-button');
 cancelButton.addEventListener('click', () => inlineDialog.hide());
@@ -119,6 +133,12 @@ function openDynamicDialog(): void {
   dialogElement.fullscreen = fullscreenToggle.on;
   dialogElement.moveable = moveableToggle.on;
   dialogElement.placement = placementSelect.value;
+  dialogElement.sizeStrategy = sizeStrategySelect.value;
+  dialogElement.positionStrategy = positionStrategySelect.value;
+  dialogElement.type = typeSelect.value;
+  dialogElement.mode = modeSelect.value;
+  dialogElement.animationType = animationTypeSelect.value;
+  dialogElement.preset = presetSelect.value;
 
   if (preventMoveToggle.on) {
     dialogElement.addEventListener('forge-dialog-move', evt => {
@@ -151,8 +171,8 @@ function openDynamicDialog(): void {
   });
 
   // Handle the accept button being clicked
-  const templateAcceptButton = dialogElement.querySelector('#accept-button');
-  templateAcceptButton.addEventListener('click', () => dialogElement.hide());
+  const templateSaveButton = dialogElement.querySelector('#save-button');
+  templateSaveButton.addEventListener('click', () => dialogElement.hide());
 
   // Handle the cancel button being clicked
   const templateCancelButton = dialogElement.querySelector('#cancel-button');

@@ -150,7 +150,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         if (this._component.open && this._dialogElement.isConnected && !this._component.matches(':focus-within')) {
-          const autofocusElement = this._component.querySelector<HTMLElement>('[autofocus]');
+          const autofocusElement = this._component.querySelector<HTMLElement>(DIALOG_CONSTANTS.selectors.AUTOFOCUS);
           autofocusElement?.focus();
         }
       });

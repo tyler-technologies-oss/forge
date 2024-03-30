@@ -73,6 +73,12 @@ export class DialogFoundation implements IDialogFoundation {
     }
   }
 
+  public dispatchBeforeCloseEvent(): boolean {
+    const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, { cancelable: true, bubbles: true, composed: true });
+    this._adapter.dispatchHostEvent(evt);
+    return !evt.defaultPrevented;
+  }
+
   public hideBackdrop(): void {
     this._adapter.hideBackdrop();
   }
@@ -150,6 +156,7 @@ export class DialogFoundation implements IDialogFoundation {
   }
 
   private _onDialogFormSubmit(evt: SubmitEvent): void {
+    evt.stopPropagation();
     const isDialogSubmitter = evt.submitter?.getAttribute('formmethod') === 'dialog' ||
                               (evt.target as HTMLFormElement)?.getAttribute('method') === 'dialog';
     if (isDialogSubmitter) {
@@ -161,12 +168,6 @@ export class DialogFoundation implements IDialogFoundation {
     if (this.dispatchBeforeCloseEvent()) {
       this.open = false;
     }
-  }
-  
-  public dispatchBeforeCloseEvent(): boolean {
-    const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, { cancelable: true, bubbles: true, composed: true });
-    this._adapter.dispatchHostEvent(evt);
-    return !evt.defaultPrevented;
   }
 
   private _onTriggerClick(_evt: MouseEvent): void {
@@ -180,12 +181,12 @@ export class DialogFoundation implements IDialogFoundation {
     }
 
     const onMoveStart = (): boolean => {
-      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_START, { bubbles: true, composed: true, cancelable: true });
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_START, { cancelable: true });
       this._adapter.dispatchHostEvent(event);
       return event.defaultPrevented;
     };
     const onMove = (position: IDialogMoveEventData): boolean => {
-      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVED, { detail: position, bubbles: true, composed: true, cancelable: true });
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE, { detail: position, cancelable: true });
       this._adapter.dispatchHostEvent(event);
 
       if (!event.defaultPrevented) {
@@ -196,7 +197,7 @@ export class DialogFoundation implements IDialogFoundation {
       return event.defaultPrevented;
     };
     const onMoveEnd = (): void => {
-      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END, { bubbles: true, composed: true });
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END);
       this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
       this._adapter.dispatchHostEvent(event);
     };

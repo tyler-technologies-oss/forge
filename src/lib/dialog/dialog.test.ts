@@ -721,6 +721,14 @@ describe('Dialog', () => {
       const harness = await createFixture({ moveable: true });
       await harness.showAsync();
 
+      const moveStartSpy = spy();
+      const moveSpy = spy();
+      const moveEndSpy = spy();
+
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.MOVE_START, moveStartSpy);
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.MOVE, moveSpy);
+      harness.dialogElement.addEventListener(DIALOG_CONSTANTS.events.MOVE_END, moveEndSpy);
+
       const { x: origX, y: origY } = harness.surfaceElement.getBoundingClientRect();
       const { x, y, height, width } = harness.moveHandleElement.getBoundingClientRect();
       const [handleX, handleY]: [number, number] = [x + width / 2, y + height / 2];
@@ -730,12 +738,18 @@ describe('Dialog', () => {
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVING)).to.be.false;
   
       harness.simulateMoveHandleDown();
-      harness.simulateMoveHandleMove(handleX + amountToMove, handleY + amountToMove);
 
+      expect(moveStartSpy).to.have.been.calledOnce;
+
+      harness.simulateMoveHandleMove(handleX + amountToMove, handleY + amountToMove);
+      
+      expect(moveSpy).to.have.been.calledOnce;
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.true;
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVING)).to.be.true;
 
       harness.simulateMoveHandleUp();
+
+      expect(moveEndSpy).to.have.been.calledOnce;
 
       await elementUpdated(harness.surfaceElement);
 

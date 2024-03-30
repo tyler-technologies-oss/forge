@@ -1,22 +1,12 @@
 <div class="dialog-container">
   <forge-scaffold>
-    <forge-toolbar slot="header" class="header-toolbar" no-border forge-dialog-move-target>
+    <forge-toolbar slot="header" class="header-toolbar" no-border>
       <h1 id="dialog-title" slot="start" class="forge-typography--heading4">Dialog title</h1>
       <forge-icon-button slot="end" id="close-button" aria-label="Close">
         <forge-icon name="close"></forge-icon>
       </forge-icon-button>
     </forge-toolbar>
     <div slot="body" id="dialog-desc" class="dialog-body" tabindex="0">
-      <button id="dialog-trigger">Show sub-dialog</button>
-      <forge-dialog trigger="dialog-trigger">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rem perspiciatis, hic impedit asperiores tempora soluta dolorem expedita in consectetur consequatur? Fugit voluptatem optio rem, asperiores suscipit veritatis velit porro doloribus.
-      </forge-dialog>
-      
-      <button id="popover-trigger">Show popover</button>
-      <forge-popover trigger="popover-trigger">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rem perspiciatis, hic impedit asperiores tempora soluta dolorem expedita in consectetur consequatur? Fugit voluptatem optio rem, asperiores suscipit veritatis velit porro doloribus.
-      </forge-popover>
-
       <p class="forge-typography--body2">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia eaque illum itaque.
         Quas, libero eaque veniam et voluptatem quod natus fugit! Nihil consequatur quo
@@ -28,7 +18,6 @@
         Quas, libero eaque veniam et voluptatem quod natus fugit! Nihil consequatur quo
         corrupti beatae ad, ratione velit aut!
       </p>
-      
       <p class="forge-typography--body2">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia eaque illum itaque.
         Quas, libero eaque veniam et voluptatem quod natus fugit! Nihil consequatur quo
@@ -37,13 +26,27 @@
     </div>
     <forge-toolbar slot="footer" no-border class="footer-toolbar">
       <div slot="end">
-        <forge-button variant="outlined" id="cancel-button" autofocus>Close</forge-button>
-        <forge-button variant="raised" id="accept-button" forge-dialog-focus>Apply</forge-button>
+        <forge-button variant="outlined" id="cancel-button" autofocus>Cancel</forge-button>
+        <forge-button variant="raised" id="save-button">Save</forge-button>
       </div>
-      <form slot="end" style="display: flex; gap: 8px;">
-        <button type="submit" formmethod="dialog">Form close</button>
-        <forge-button type="submit" formmethod="dialog">Form close Forge</forge-button>
-      </form>
     </forge-toolbar>
   </forge-scaffold>
 </div>
+
+<forge-dialog type="alertdialog" persistent id="confirm-save-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-msg">
+  <div>
+    <forge-toolbar no-border>
+      <h1 id="confirm-title" slot="start" class="forge-typography--heading4">Save changes?</h1>
+    </forge-toolbar>
+    <div id="confirm-msg" class="dialog-body">
+      <p class="forge-typography--body2">Are you sure you want to save the changes?</p>
+      <p class="forge-typography--label1">(This is just a test to gracefully handle nested dialogs...)</p>
+    </div>
+    <forge-toolbar no-border class="footer-toolbar">
+      <form method="dialog" slot="end">
+        <forge-button type="submit" variant="outlined" id="no-button" autofocus>No</forge-button>
+      </form>
+      <forge-button slot="end" variant="raised" id="yes-button">Yes</forge-button>
+    </forge-toolbar>
+  </div>
+</forge-dialog>

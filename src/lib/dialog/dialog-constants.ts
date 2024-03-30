@@ -30,7 +30,8 @@ const classes = {
 const selectors = {
   DIALOG: '.forge-dialog',
   SURFACE: '.surface',
-  MOVE_HANDLE: '.move-handle'
+  MOVE_HANDLE: '.move-handle',
+  AUTOFOCUS: ':is([autofocus],[forge-dialog-focus])'
 };
 
 const events = {
@@ -38,7 +39,7 @@ const events = {
   OPEN: `${elementName}-open`,
   CLOSE: `${elementName}-close`,
   MOVE_START: `${elementName}-move-start`,
-  MOVED: `${elementName}-move`,
+  MOVE: `${elementName}-move`,
   MOVE_END: `${elementName}-move-end`
 };
 
