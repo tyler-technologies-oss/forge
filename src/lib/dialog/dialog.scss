@@ -336,6 +336,12 @@ $can-animate: '[open]:not([animation-type=none])';
       position: absolute;
     }
   }
+
+  :host([position-strategy=container][preset$=-sheet]) {
+    .forge-dialog {
+      contain: content;
+    }
+  }
 }
 
 //
