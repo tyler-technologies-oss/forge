@@ -404,7 +404,8 @@ describe('Dialog', () => {
       const harness = await createFixture({ open: true });
 
       const submitSpy = spy();
-      harness.dialogElement.addEventListener('submit', submitSpy);
+      const formEl = harness.dialogElement.querySelector('form') as HTMLFormElement;
+      formEl.addEventListener('submit', submitSpy);
 
       expect(harness.isOpen).to.be.true;
 
@@ -418,7 +419,8 @@ describe('Dialog', () => {
       const harness = await createFixture({ open: true });
 
       const submitSpy = spy();
-      harness.dialogElement.addEventListener('submit', submitSpy);
+      const formEl = harness.dialogElement.querySelector('form[method="dialog"]') as HTMLFormElement;
+      formEl.addEventListener('submit', submitSpy);
 
       expect(harness.isOpen).to.be.true;
 
@@ -738,11 +740,9 @@ describe('Dialog', () => {
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVING)).to.be.false;
   
       harness.simulateMoveHandleDown();
-
-      expect(moveStartSpy).to.have.been.calledOnce;
-
       harness.simulateMoveHandleMove(handleX + amountToMove, handleY + amountToMove);
       
+      expect(moveStartSpy).to.have.been.calledOnce;
       expect(moveSpy).to.have.been.calledOnce;
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).to.be.true;
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVING)).to.be.true;
