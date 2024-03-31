@@ -1,59 +1,40 @@
-import { getActiveElement } from '@tylertech/forge-core';
 import { IChipFieldAdapter } from './chip-field-adapter';
-import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
-import { IFieldFoundation, FieldFoundation } from '../field/field-foundation';
+import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS } from './chip-field-constants';
+import { BaseFieldFoundation, IBaseFieldFoundation } from '../field-next/base/base-field-foundation';
 
-export interface IChipFieldFoundation extends IFieldFoundation {
+export interface IChipFieldFoundation extends IBaseFieldFoundation {
   addOnBlur: boolean;
+  readonly popoverTargetElement: HTMLElement;
 }
 
-export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFoundation {
+export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> implements IChipFieldFoundation {
   private _addOnBlur = false;
-  private _memberSlotListener: () => void;
-  private _inputContainerMouseDownListener: (evt: MouseEvent) => void;
-  private _handleRootKeyDown: (event: KeyboardEvent) => void;
-  private _handleKeyDown: (event: KeyboardEvent) => void;
 
-  constructor(protected _adapter: IChipFieldAdapter) {
-    super(_adapter);
-    this._memberSlotListener = () => this._onMemberSlotChanged();
-    this._inputContainerMouseDownListener = evt => this._onInputContainerMouseDown(evt);
-    this._handleRootKeyDown = evt => this._onRootKeyDown(evt);
-    this._handleKeyDown = evt => this._onKeyDown(evt);
+  private _handleRootKeyDown: EventListener = this._onRootKeyDown.bind(this);
+  private _handleKeyDown: EventListener = this._onKeyDown.bind(this);
+  private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
+  private _inputAttributeListener: ChipFieldInputAttributeObserver = this._onInputAttributeChange.bind(this);
+  private _valueChangeListener: ChipFieldValueChangeListener = this._onValueChange.bind(this);
+  private _inputListener: EventListener = this._onValueChange.bind(this);
+
+  constructor(adapter: IChipFieldAdapter) {
+    super(adapter);
   }
 
   public initialize(): void {
-    super.initialize();
-    this._adapter.addMemberSlotListener(this._memberSlotListener);
-    this._adapter.addInputContainerListener('mousedown', this._inputContainerMouseDownListener);
     this._adapter.addRootListener('keydown', this._handleRootKeyDown);
     this._adapter.addInputListener('keydown', this._handleKeyDown);
+    this._adapter.addRootListener('slotchange', this._slotChangeListener);
+    this._adapter.addRootListener('input', this._inputListener);
+    this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
   }
 
-  public disconnect(): void {
-    super.disconnect();
-    this._adapter.removeMemberSlotListener(this._memberSlotListener);
-    this._adapter.removeInputContainerListener('mousedown', this._inputContainerMouseDownListener);
+  public destroy(): void {
     this._adapter.removeRootListener('keydown', this._handleRootKeyDown);
     this._adapter.removeInputListener('keydown', this._handleKeyDown);
-  }
-
-  /** Controls adding a member of entered text on blur. */
-  public get addOnBlur(): boolean {
-    return this._addOnBlur;
-  }
-  public set addOnBlur(value: boolean) {
-    value = Boolean(value);
-    if (this._addOnBlur !== value) {
-      this._addOnBlur = value;
-      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, this._addOnBlur);
-    }
-  }
-
-  private _onInputContainerMouseDown(evt: MouseEvent): void {
-    evt.preventDefault();
-    this._adapter.focusInput();
-    this._adapter.tryPropagateClick(evt.target);
+    this._adapter.removeRootListener('slotchange', this._slotChangeListener);
+    this._adapter.removeRootListener('input', this._inputListener);
+    this._adapter.removeValueChangeListener();
   }
 
   protected _onBlur(event: FocusEvent): void {
@@ -64,40 +45,66 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     }
 
     input.value = '';
-    super._onBlur(event);
   }
 
-  private _onRootKeyDown(event: KeyboardEvent): void {
-    if (this._adapter.inputHasValue()) {
+  private _onValueChange(): void {
+    this._tryFloatLabel();
+  }
+
+  private _onSlotChange(evt: Event): void {
+    const target = evt.target as HTMLSlotElement;
+    switch (target.name) {
+      case 'label':
+        this._adapter.tryConnectSlottedLabel(target);
+        break;
+      case 'member':
+        this._adapter.tryFloatLabel();
+        this._adapter.getSlottedMemberElements().forEach(x => x.tabIndex = -1);
+        break;
+      case '':
+        this._adapter.handleDefaultSlotChange(target, this._inputAttributeListener);
+        this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
+        this._tryFloatLabel();
+        break;
+    }
+  }
+
+  private _onInputAttributeChange(name: keyof typeof CHIP_FIELD_CONSTANTS.observedInputAttributes, value: string | null): void {
+    switch (name) {
+      case 'disabled':
+        this.disabled = value !== null;
+        break;
+      case 'placeholder':
+        this._tryFloatLabel();
+        break;
+    }
+  }
+
+  private _onRootKeyDown({ key }: KeyboardEvent): void {
+    if (this._adapter.hasInputValue) {
       return;
     }
 
-    switch (event.key) {
-      case 'Right':
+    switch (key) {
       case 'ArrowRight':
         this._focusNextMember();
         break;
-      case 'Left':
       case 'ArrowLeft':
         this._focusPreviousMember();
         break;
       case 'Backspace':
       case 'Delete':
-      case 'Del':
         this._removeMember();
-        break;
-      default:
         break;
     }
   }
 
-  private _onKeyDown(event: KeyboardEvent): void {
-    const input = event.target as HTMLInputElement;
-    switch (event.key) {
+  private _onKeyDown({ target, key }: KeyboardEvent): void {
+    const input = target as HTMLInputElement;
+    switch (key) {
       case 'Enter':
         this._addMember(input);
         break;
-      case 'Esc':
       case 'Escape':
         input.value = '';
         break;
@@ -106,14 +113,12 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
           input.value = '';
         }
         break;
-      default:
-        break;
     }
   }
 
   private _focusNextMember(): void {
     const members = this._adapter.getSlottedMemberElements();
-    if (members.length < 1 || this._adapter.inputHasFocus()) {
+    if (members.length < 1 || this._adapter.inputHasFocus) {
       return;
     }
 
@@ -138,7 +143,7 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
       return;
     }
 
-    if (this._adapter.inputHasFocus()) {
+    if (this._adapter.inputHasFocus) {
       members[members.length - 1].focus();
       return;
     }
@@ -154,8 +159,8 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     }
   }
 
-  private _memberIsActive(ele: HTMLElement): boolean {
-    return ele.matches(':focus-within') || getActiveElement(ele.ownerDocument) === ele || ele.hasAttribute('focused');
+  private _memberIsActive(el: HTMLElement): boolean {
+    return el.matches(':focus-within') || el.hasAttribute('focused');
   }
 
   private _getActiveMember(): HTMLElement | null {
@@ -194,8 +199,18 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     this._adapter.emitHostEvent(CHIP_FIELD_CONSTANTS.events.MEMBER_REMOVED, memberToRemove);
   }
 
-  private _onMemberSlotChanged(): void {
-    this.floatLabel(this._adapter.fieldHasValue() || this._adapter.inputHasFocus());
-    this._adapter.getSlottedMemberElements().forEach(x => x.tabIndex = -1);
+  public get addOnBlur(): boolean {
+    return this._addOnBlur;
+  }
+  public set addOnBlur(value: boolean) {
+    value = Boolean(value);
+    if (this._addOnBlur !== value) {
+      this._addOnBlur = value;
+      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, this._addOnBlur);
+    }
+  }
+
+  public get popoverTargetElement(): HTMLElement {
+    return this._adapter.popoverTargetElement;
   }
 }
