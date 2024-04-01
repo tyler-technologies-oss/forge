@@ -1,11 +1,76 @@
-@use './mixins';
+@use './core' as *;
+
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.core-styles;
+//
+// Base
+//
+
+forge-field {
+  display: contents;
+}
+
+.value {
+  display: grid;
+  align-items: center;
+}
+
+.icon {
+  margin-block-start: 4px;
+
+  ::slotted([slot=icon]) {
+    font-size: 1.25rem;
+  }
+}
+
+forge-field {
+  --forge-field-multiline-resize: none;
+
+  &::part(start) {
+    align-items: start;
+    height: 100%;
+  }
+
+  &::part(label) {
+    pointer-events: all;
+
+    &::before {
+      content: normal;
+    }
+  }
+}
+
+//
+// Ellipsis
+//
+
+:host([ellipsis]) {
+  ::slotted([slot=value]) {
+    @include ellipsis;
+  }
+}
+
+//
+// Empty
+//
+
+:host([empty]) {
+  .value {
+    color: var(--forge-theme-text-medium);
+    font-style: italic;
+  }
+}
+
+// .forge-label-value {
+//   @include base;
+// }

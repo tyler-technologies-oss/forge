@@ -1,0 +1,12 @@
+@use 'sass:map';
+@use '../../utils';
+
+$tokens: (
+  height: utils.module-val(label-value, height, 40px),
+  dense-height: utils.module-val(label-value, dense-height, 24px),
+  roomy-height: utils.module-val(label-value, roomy-height, 56px),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

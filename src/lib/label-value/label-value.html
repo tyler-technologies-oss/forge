@@ -1,15 +1,13 @@
 <template>
-  <div class="forge-label-value" part="root">
-    <div class="forge-label-value__icon-container" part="icon-container">
+  <forge-field variant="plain" float-label multiline>
+    <div class="icon" slot="start">
       <slot name="icon"></slot>
     </div>
-    <div class="forge-label-value__container" part="container">
-      <div class="forge-label-value__label" part="label-container">
-        <slot name="label"></slot>
-      </div>
-      <div class="forge-label-value__value" part="value-container">
-        <slot name="value"></slot>
-      </div>
+    <div class="label" slot="label">
+      <slot name="label"></slot>
     </div>
-  </div>
+    <div class="value" data-forge-field-input>
+      <slot name="value"></slot>
+    </div>
+  </forge-field>
 </template>

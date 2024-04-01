@@ -1,0 +1,41 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+  min-width: 0;
+}
+
+@mixin base {
+  display: flex;
+  min-height: #{token(height)};
+}
+
+@mixin container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+@mixin icon-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin label {
+  @include typography.style(label1);
+
+  color: #{token(label-color)};
+}
+
+@mixin value {
+  @include typography.style(body1);
+}

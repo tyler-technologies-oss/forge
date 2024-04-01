@@ -1,9 +1,7 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
-import { LabelValueAdapter } from './label-value-adapter';
-import { LabelValueFoundation } from './label-value-foundation';
-import { LABEL_VALUE_CONSTANTS, LabelValueAlignment } from './label-value-constants';
+import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { LABEL_VALUE_CONSTANTS, LabelValueAlignment, LabelValueDensityType } from './label-value-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { FieldDensityType } from '../field/field-constants';
+import { FieldComponent } from '../field-next/field';
 
 import template from './label-value.html';
 import styles from './label-value.scss';
@@ -11,7 +9,7 @@ import styles from './label-value.scss';
 export interface ILabelValueComponent extends IBaseComponent {
   empty: boolean;
   ellipsis: boolean;
-  density: FieldDensityType;
+  density: LabelValueDensityType;
   align: LabelValueAlignment;
 }
 
@@ -22,65 +20,85 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-label-value>` custom element.
- * 
  * @tag forge-label-value
  */
 @CustomElement({
-  name: LABEL_VALUE_CONSTANTS.elementName
+  name: LABEL_VALUE_CONSTANTS.elementName,
+  dependencies: [
+    FieldComponent
+  ]
 })
 export class LabelValueComponent extends BaseComponent implements ILabelValueComponent {
   public static get observedAttributes(): string[] {
-    return [
-      LABEL_VALUE_CONSTANTS.attributes.EMPTY,
-      LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS,
-      LABEL_VALUE_CONSTANTS.attributes.DENSITY,
-      LABEL_VALUE_CONSTANTS.attributes.ALIGN
-    ];
+    return Object.values(LABEL_VALUE_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: LabelValueFoundation;
+  private _empty = false;
+  private _ellipsis = false;
+  private _density: LabelValueDensityType = 'medium';
+  private _align: LabelValueAlignment = 'start';
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new LabelValueFoundation(new LabelValueAdapter(this));
-  }
-
-  public connectedCallback(): void {
-    this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case LABEL_VALUE_CONSTANTS.attributes.EMPTY:
+      case LABEL_VALUE_CONSTANTS.observedAttributes.EMPTY:
         this.empty = coerceBoolean(newValue);
         break;
-      case LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS:
+      case LABEL_VALUE_CONSTANTS.observedAttributes.ELLIPSIS:
         this.ellipsis = coerceBoolean(newValue);
         break;
-      case LABEL_VALUE_CONSTANTS.attributes.DENSITY:
-        this.density = newValue as FieldDensityType;
+      case LABEL_VALUE_CONSTANTS.observedAttributes.DENSITY:
+        this.density = newValue as LabelValueDensityType;
         break;
-      case LABEL_VALUE_CONSTANTS.attributes.ALIGN:
+      case LABEL_VALUE_CONSTANTS.observedAttributes.ALIGN:
         this.align = newValue as LabelValueAlignment;
         break;
     }
   }
+  
+  public get empty(): boolean {
+    return this._empty;
+  }
+  public set empty(value: boolean) {
+    value = Boolean(value);
+    if (this._empty !== value) {
+      this._empty = value;
+      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.EMPTY, this._empty);
+    }
+  }
 
-  /** Gets/sets the empty state. */
-  @FoundationProperty()
-  public declare empty: boolean;
+  public get ellipsis(): boolean {
+    return this._ellipsis;
+  }
+  public set ellipsis(value: boolean) {
+    value = Boolean(value);
+    if (this._ellipsis !== value) {
+      this._ellipsis = value;
+      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS, this._ellipsis);
+    }
+  }
 
-  /** Gets/sets the wrap-content attribute. */
-  @FoundationProperty()
-  public declare ellipsis: boolean;
+  public get density(): LabelValueDensityType {
+    return this._density;
+  }
+  public set density(value: LabelValueDensityType) {
+    if (this._density !== value) {
+      this._density = value;
+      this.setAttribute(LABEL_VALUE_CONSTANTS.attributes.DENSITY, String(this._density));
+    }
+  }
 
-  /** Controls the density type. */
-  @FoundationProperty()
-  public declare density: FieldDensityType;
-
-  /** Gets/sets the alignment. */
-  @FoundationProperty()
-  public declare align: LabelValueAlignment;
+  public get align(): LabelValueAlignment {
+    return this._align;
+  }
+  public set align(value: LabelValueAlignment) {
+    if (this._align !== value) {
+      this._align = value;
+      this.setAttribute(LABEL_VALUE_CONSTANTS.attributes.ALIGN, this._align);
+    }
+  }
 }
