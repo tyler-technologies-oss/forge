@@ -11,9 +11,14 @@ const attributes = {
 };
 
 const selectors = {
+  CONTAINER: '.container',
   INPUT: 'input',
   MEMBER_SLOT: 'slot[name=member]',
   MEMBER: '[slot=member]'
+};
+
+const classes = {
+  HAS_MEMBERS: 'has-members'
 };
 
 const events = {
@@ -33,6 +38,7 @@ export const CHIP_FIELD_CONSTANTS = {
   observedAttributes,
   attributes,
   selectors,
+  classes,
   events,
   observedInputAttributes,
   tagNames

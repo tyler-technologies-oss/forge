@@ -2,8 +2,10 @@
   <forge-field id="field" multiline>
     <slot slot="label" name="label"></slot>
     <slot slot="start" name="start"></slot>
-    <slot slot="before-input" name="member"></slot>
-    <slot></slot>
+    <div class="container" data-forge-field-input>
+      <slot name="member"></slot>
+      <slot></slot>
+    </div>
     <slot slot="end" name="end"></slot>
     <slot slot="accessory" name="accessory"></slot>
     <slot slot="support-text-start" name="support-text-start"></slot>

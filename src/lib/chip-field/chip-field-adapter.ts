@@ -10,22 +10,26 @@ export interface IChipFieldAdapter extends IBaseFieldAdapter {
   readonly popoverTargetElement: HTMLElement;
   readonly hasInputValue: boolean;
   readonly inputHasFocus: boolean;
+  initialize(): void;
   addRootListener(type: string, listener: EventListener): void;
   removeRootListener(type: string, listener: EventListener): void;
   addMemberSlotListener(listener: (evt: Event) => void): void;
   removeMemberSlotListener(listener: (evt: Event) => void): void;
   addInputListener(type: string, listener: EventListener): void;
   removeInputListener(type: string, listener: EventListener): void;
+  tryPropagateClick(target: EventTarget | null): void;
   tryAddValueChangeListener(context: unknown, listener: ChipFieldValueChangeListener): void;
   removeValueChangeListener(): void;
-  getSlottedMemberElements(): NodeListOf<HTMLElement>;
+  getSlottedMemberElements(): HTMLElement[];
   focusInput(): void;
   handleDefaultSlotChange(slot: HTMLSlotElement, listener: ChipFieldInputAttributeObserver): void;
   tryConnectSlottedLabel(slot: HTMLSlotElement): void;
+  toggleContainerClass(className: string, force?: boolean): void;
 }
 
 export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdapter {
   protected readonly _fieldElement: IFieldComponent;
+  private _containerElement: HTMLElement;
   private _memberSlot: HTMLSlotElement;
   private _popoverTargetElement: HTMLElement;
   private _inputElement: HTMLInputElement | undefined;
@@ -59,8 +63,14 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
   constructor(component: IChipFieldComponent) {
     super(component);
     this._fieldElement = getShadowElement(component, FIELD_CONSTANTS.elementName) as IFieldComponent;
+    this._containerElement = getShadowElement(component, CHIP_FIELD_CONSTANTS.selectors.CONTAINER) as HTMLElement;
     this._memberSlot = getShadowElement(component, CHIP_FIELD_CONSTANTS.selectors.MEMBER_SLOT) as HTMLSlotElement;
+
     this._fieldElement.setAttribute('exportparts', Object.values(FIELD_CONSTANTS.parts).join(', '));
+  }
+
+  public initialize(): void {
+    this._inputElement = this._component.querySelector('input:not([type=checkbox]):not([type=radio])') as HTMLInputElement;
   }
   
   public addRootListener(type: string, listener: (event: Event) => void): void {
@@ -86,6 +96,12 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
   public removeInputListener(type: string, listener: EventListener): void {
     this._inputElement?.removeEventListener(type, listener);
   }
+  
+  public tryPropagateClick(target: EventTarget | null): void {
+    if ((target as HTMLElement).matches(CHIP_FIELD_CONSTANTS.selectors.CONTAINER)) {
+      this._inputElement?.dispatchEvent(new MouseEvent('click'));
+    }
+  }
 
   public tryAddValueChangeListener(context: unknown, listener: ChipFieldValueChangeListener): void {
     this._destroyValueChangerListener?.();
@@ -102,8 +118,8 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
     this._inputElement?.focus();
   }
 
-  public getSlottedMemberElements(): NodeListOf<HTMLElement> {
-    return this._component.querySelectorAll<HTMLElement>(CHIP_FIELD_CONSTANTS.selectors.MEMBER);
+  public getSlottedMemberElements(): HTMLElement[] {
+    return this._memberSlot.assignedElements() as HTMLElement[];
   }
 
   public click(): void {
@@ -186,5 +202,9 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
     const id = this._inputElement.id || `forge-input-${randomChars()}`;
     this._inputElement.id = id;
     label.htmlFor = id;
+  }
+
+  public toggleContainerClass(className: string, force?: boolean): void {
+    this._containerElement.classList.toggle(className, force);
   }
 }

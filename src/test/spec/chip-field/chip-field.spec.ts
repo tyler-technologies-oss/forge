@@ -46,12 +46,11 @@ describe('ChipFieldComponent', function(this: ITestContext) {
       const catchSpy = jasmine.createSpy('caught exception');
 
       try {
-        this.context.component.density = 'dense';
-        this.context.component.floatLabelType = 'always';
+        this.context.component.density = 'extra-small';
         this.context.component.shape = 'rounded';
         this.context.component.invalid = true;
         this.context.component.required = true;
-        this.context.component.floatLabel(true);
+        this.context.component.floatLabel = true;
       } catch {
         catchSpy();
       }
@@ -572,7 +571,7 @@ describe('ChipFieldComponent', function(this: ITestContext) {
         const delegate = new ChipFieldComponentDelegate();
         expect(delegate.element.required).toBeFalse();
         expect(delegate.element.invalid).toBeFalse();
-        expect(delegate.element.floatLabelType).toBe('auto');
+        expect(delegate.element.floatLabel).toBe(false);
       });
 
       it('should create label', function(this: ITestContext) {

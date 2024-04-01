@@ -1,4 +1,5 @@
 @use './core' as *;
+@use '../field-next' as field;
 
 //
 // Host
@@ -13,9 +14,51 @@
 }
 
 //
+// Base
+//
+
+forge-field {
+  @include tokens;
+}
+
+.container {
+  @include container;
+  
+  &.has-members {
+    @include has-members;
+
+    ::slotted(input) {
+      block-size: auto;
+      inline-size: auto;
+    }
+  }
+}
+
+::slotted(input) {
+  @include input;
+  @include field.default-slot-content;
+}
+
+//
 // Field
 //
 
 forge-field {
-  @include field;
+  display: contents;
+
+  @include field.provide-theme((
+    multiline-resize: none
+  ));
+
+  &::part(label) {
+    &::before {
+      content: none;
+    }
+  }
+
+  &:is([dense],[density=extra-small]) {
+    &::part(label) {
+      display: none;
+    }
+  }
 }

@@ -10,30 +10,40 @@ export interface IChipFieldFoundation extends IBaseFieldFoundation {
 export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> implements IChipFieldFoundation {
   private _addOnBlur = false;
 
-  private _handleRootKeyDown: EventListener = this._onRootKeyDown.bind(this);
-  private _handleKeyDown: EventListener = this._onKeyDown.bind(this);
+  private _mouseDownListener: EventListener = this._onMouseDown.bind(this);
+  private _rootKeyDownListener: EventListener = this._onRootKeyDown.bind(this);
+  private _inputKeyDownListener: EventListener = this._onKeyDown.bind(this);
   private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
   private _inputAttributeListener: ChipFieldInputAttributeObserver = this._onInputAttributeChange.bind(this);
   private _valueChangeListener: ChipFieldValueChangeListener = this._onValueChange.bind(this);
   private _inputListener: EventListener = this._onValueChange.bind(this);
+  private _blurListener: EventListener = this._onBlur.bind(this);
 
   constructor(adapter: IChipFieldAdapter) {
     super(adapter);
   }
 
   public initialize(): void {
-    this._adapter.addRootListener('keydown', this._handleRootKeyDown);
-    this._adapter.addInputListener('keydown', this._handleKeyDown);
+    this._adapter.initialize();
+    this._adapter.addRootListener('mousedown', this._mouseDownListener);
+    this._adapter.addRootListener('keydown', this._rootKeyDownListener);
+    this._adapter.addInputListener('keydown', this._inputKeyDownListener);
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
     this._adapter.addRootListener('input', this._inputListener);
     this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
+
+    if (!this._addOnBlur) {
+      this._adapter.addInputListener('blur', this._blurListener);
+    }
   }
 
   public destroy(): void {
-    this._adapter.removeRootListener('keydown', this._handleRootKeyDown);
-    this._adapter.removeInputListener('keydown', this._handleKeyDown);
+    this._adapter.removeRootListener('mousedown', this._mouseDownListener);
+    this._adapter.removeRootListener('keydown', this._rootKeyDownListener);
+    this._adapter.removeInputListener('keydown', this._inputKeyDownListener);
     this._adapter.removeRootListener('slotchange', this._slotChangeListener);
     this._adapter.removeRootListener('input', this._inputListener);
+    this._adapter.removeInputListener('blur', this._blurListener);
     this._adapter.removeValueChangeListener();
   }
 
@@ -47,6 +57,15 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
     input.value = '';
   }
 
+  private _onMouseDown(evt: MouseEvent): void {
+    if (this._disabled || evt.target instanceof HTMLInputElement) {
+      return;
+    }
+    evt.preventDefault();
+    this._adapter.focusInput();
+    this._adapter.tryPropagateClick(evt.target);
+  }
+
   private _onValueChange(): void {
     this._tryFloatLabel();
   }
@@ -58,6 +77,7 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
         this._adapter.tryConnectSlottedLabel(target);
         break;
       case 'member':
+        this._adapter.toggleContainerClass(CHIP_FIELD_CONSTANTS.classes.HAS_MEMBERS, target.assignedElements().length > 0);
         this._adapter.tryFloatLabel();
         this._adapter.getSlottedMemberElements().forEach(x => x.tabIndex = -1);
         break;
@@ -123,10 +143,10 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
     }
 
     for (let i = 0; i < members.length; i++) {
-      const member = members.item(i);
-      const nextMember = members.item(i + 1);
+      const member = members.at(i);
+      const nextMember = members.at(i + 1);
 
-      if (this._memberIsActive(member)) {
+      if (member && this._isMemberActive(member)) {
         if (nextMember) {
           nextMember.focus();
           break;
@@ -149,46 +169,38 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
     }
 
     for (let i = 0; i < members.length; i++) {
-      const previousMember = members.item(i - 1);
-      const member = members.item(i);
+      const previousMember = members.at(i - 1);
+      const member = members.at(i);
 
-      if (this._memberIsActive(member) && previousMember) {
+      if (member && this._isMemberActive(member) && previousMember) {
         previousMember.focus();
         break;
       }
     }
   }
 
-  private _memberIsActive(el: HTMLElement): boolean {
-    return el.matches(':focus-within') || el.hasAttribute('focused');
+  private _isMemberActive(el: HTMLElement): boolean {
+    return el.matches(':focus-within');
   }
 
   private _getActiveMember(): HTMLElement | null {
     const members = this._adapter.getSlottedMemberElements();
-
-    for (let i = 0; i < members.length; i++) {
-      const member = members.item(i);
-      if (this._memberIsActive(member)) {
-        return member;
-      }
-    }
-
-    return null;
+    return members.find(x => this._isMemberActive(x)) ?? null;
   }
 
   private _addMember(input: HTMLInputElement): void {
     const cleanInputValue = input.value.trim();
-    if (cleanInputValue && cleanInputValue.length > 0) {
+    if (cleanInputValue.length > 0) {
       this._adapter.emitHostEvent(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, cleanInputValue);
     }
     input.value = '';
   }
 
   private _removeMember(): void {
-    let memberToRemove = this._getActiveMember();
+    let memberToRemove: HTMLElement | null | undefined = this._getActiveMember();
     if (!memberToRemove) {
       const members = this._adapter.getSlottedMemberElements();
-      memberToRemove = members.item(members.length - 1);
+      memberToRemove = members.at(-1);
     }
 
     if (!memberToRemove) {
@@ -206,6 +218,15 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
     value = Boolean(value);
     if (this._addOnBlur !== value) {
       this._addOnBlur = value;
+
+      if (this._adapter.isConnected) {
+        if (this._addOnBlur) {
+          this._adapter.addInputListener('blur', this._blurListener);
+        } else {
+          this._adapter.removeInputListener('blur', this._blurListener);
+        }
+      }
+
       this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, this._addOnBlur);
     }
   }

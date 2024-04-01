@@ -4,7 +4,7 @@
 @forward './token-utils';
 
 @mixin host {
-  display: inline-block;
+  display: inline-flex;
 }
 
 @mixin base {

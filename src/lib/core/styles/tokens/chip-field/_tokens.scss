@@ -1,0 +1,11 @@
+@use '../../spacing';
+@use '../../utils';
+
+$tokens: (
+  member-spacing: utils.module-val(chip-field, member-spacing, spacing.variable(xsmall)),
+  content-spacing: utils.module-val(chip-field, content-spacing, spacing.variable(xxsmall))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

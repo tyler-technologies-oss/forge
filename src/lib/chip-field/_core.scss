@@ -1,7 +1,24 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
 @mixin host {
   display: block;
 }
 
-@mixin field {
-  display: contents;
+@mixin container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: #{token(member-spacing)};
+  block-size: auto;
+  cursor: text;
+}
+
+@mixin has-members {
+  margin-block: #{token(content-spacing)};
+}
+
+@mixin input {
+  flex-grow: 1;
 }
