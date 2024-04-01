@@ -2,33 +2,28 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}backdrop`;
 
-const selectors = {
-  CONTAINER: '.forge-backdrop'
-};
-
-const numbers = {
-  OPACITY: 0.54,
-  DELAY: 0,
-  TRANSITION_DURATION: 150
-};
-
-const attributes = {
-  DELAY: 'delay',
-  MAX_OPACITY: 'max-opacity',
-  APPEARANCE: 'appearance',
+const observedAttributes = {
+  VISIBLE: 'visible',
   FIXED: 'fixed'
 };
 
-const events = {
-  BACKDROP_CLICK: `${elementName}-click`
+const attributes = {
+  ...observedAttributes
+};
+
+const classes = {
+  ENTERING: 'entering',
+  EXITING: 'exiting'
+};
+
+const selectors = {
+  ROOT: '.forge-backdrop'
 };
 
 export const BACKDROP_CONSTANTS = {
   elementName,
-  selectors,
-  numbers,
+  observedAttributes,
   attributes,
-  events
+  classes,
+  selectors
 };
-
-export type BackdropAppearance = 'light' | 'dark' | undefined;

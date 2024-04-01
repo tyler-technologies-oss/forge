@@ -44,16 +44,15 @@ export class ModalDrawerFoundation extends BaseDrawerFoundation implements IModa
     }
   }
 
-  private _setBackdrop(open: boolean): void {
+  private async _setBackdrop(open: boolean): Promise<void> {
     if (open) {
       this._adapter.toggleBackdropClass(false, MODAL_DRAWER_CONSTANTS.classes.SCRIM_CLOSED);
       this._adapter.setBackdropVisibility(true);
     } else if (this._isInitialized) {
-      this._adapter.setBackdropVisibility(false).then(() => {
-        if (!this._open) {
-          this._adapter.toggleBackdropClass(true, MODAL_DRAWER_CONSTANTS.classes.SCRIM_CLOSED);
-        }
-      });
+      await this._adapter.setBackdropVisibility(false);
+      if (!this._open) {
+        this._adapter.toggleBackdropClass(true, MODAL_DRAWER_CONSTANTS.classes.SCRIM_CLOSED);
+      }
     }
   }
 }

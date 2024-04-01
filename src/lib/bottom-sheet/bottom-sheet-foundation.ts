@@ -236,7 +236,7 @@ export class BottomSheetFoundation implements IBottomSheetFoundation {
   public set showBackdrop(value: boolean) {
     if (this._showBackdrop !== value) {
       this._showBackdrop = value;
-      this._adapter.setBackdropVisiblity(value);
+      this._adapter.setBackdropVisibility(value);
       this._adapter.toggleHostAttribute(BOTTOM_SHEET_CONSTANTS.attributes.SHOW_BACKDROP, this._showBackdrop);
     }
   }

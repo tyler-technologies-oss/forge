@@ -246,7 +246,7 @@ describe('BottomSheetComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.open();
 
-    expect(this.context.backdrop.hidden).toBe(true);
+    expect(this.context.backdrop.visible).toBeFalse();
   });
 
   it('should set show backdrop via attribute', async function(this: ITestContext) {
@@ -410,7 +410,7 @@ describe('BottomSheetComponent', function(this: ITestContext) {
         simulateTransition({containerElement});
         return await tick();
       },
-      clickBackdrop: () => getShadowElement(backdrop, BACKDROP_CONSTANTS.selectors.CONTAINER).click(),
+      clickBackdrop: () => backdrop.click(),
       destroy: () => removeElement(component)
     };
   }

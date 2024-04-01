@@ -28,7 +28,7 @@ const classes = {
 
 const selectors = {
   SURFACE: '.forge-popover',
-  HOST: `[${attributes.HOST}]`
+  HOST: `:is(forge-dialog,forge-popover,[${attributes.HOST}])`
 };
 
 const parts = {

@@ -45,7 +45,6 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   private _rootElement: HTMLElement | HTMLDialogElement;
   private _autoUpdateCleanup?: () => void;
   private _lightDismissController = new AbortController();
-  private _overlayStackAddTimeout?: number;
 
   constructor(component: IOverlayComponent) {
     super(component);
@@ -64,7 +63,6 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
   }
 
   public hide(): void {
-    window.clearTimeout(this._overlayStackAddTimeout);
     this.tryCleanupAutoUpdate();
 
     if (SUPPORTS_POPOVER && this._rootElement.matches(':popover-open')) {

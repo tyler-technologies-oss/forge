@@ -13,87 +13,87 @@
   .forge-dialog {
     @include base;
   
-    &--moveable:not(.forge-dialog--fullscreen) {
-      ::slotted([forge-dialog-move-target]) {
-        cursor: move;
-      }
-    }
+    // &--moveable:not(.forge-dialog--fullscreen) {
+    //   ::slotted([forge-dialog-move-target]) {
+    //     cursor: move;
+    //   }
+    // }
   
-    &--animating {
-      @include animating;
+    // &--animating {
+    //   @include animating;
   
-      .forge-dialog--open .forge-dialog__surface {
-        @include surface-open-animating;
-      }
+    //   .forge-dialog--open .forge-dialog__surface {
+    //     @include surface-open-animating;
+    //   }
   
-      .forge-dialog__surface {
-        @include surface-animating;
-      }
-    }
+    //   .forge-dialog__surface {
+    //     @include surface-animating;
+    //   }
+    // }
   
-    &--scrollable {
-      .forge-dialog__title,
-      .forge-dialog__footer {
-        border-color: rgba(0, 0, 0, 0.12);
-      }
-    }
+    // &--scrollable {
+    //   .forge-dialog__title,
+    //   .forge-dialog__footer {
+    //     border-color: rgba(0, 0, 0, 0.12);
+    //   }
+    // }
   
-    &--open {
-      @include open;
+    // &--open {
+    //   @include open;
   
-      .forge-dialog__surface {
-        @include surface-open;
-      }
-    }
+    //   .forge-dialog__surface {
+    //     @include surface-open;
+    //   }
+    // }
   
-    &__surface {
+    .surface {
       @include surface;
     }
   
-    &__header {
-      @include header;
-    }
+    // &__header {
+    //   @include header;
+    // }
   
-    &__title {
-      @include title;
-    }
+    // &__title {
+    //   @include title;
+    // }
   
-    &__body {
-      @include body;
+    // &__body {
+    //   @include body;
   
-      &--scrollable {
-        @include body-scrollable;
-      }
-    }
+    //   &--scrollable {
+    //     @include body-scrollable;
+    //   }
+    // }
   
-    &__footer {
-      @include footer;
-    }
+    // &__footer {
+    //   @include footer;
+    // }
   
-    &--fullscreen {
-      @include fullscreen;
+    // &--fullscreen {
+    //   @include fullscreen;
   
-      .forge-dialog__surface {
-        @include surface-fullscreen;
-      }
-    }
+    //   .forge-dialog__surface {
+    //     @include surface-fullscreen;
+    //   }
+    // }
   }
 }
 
 @mixin base() {
-  @include utils.position-abs-zero(fixed);
-  @include theme.z-index(dialog);
-  @include theme.css-custom-property(align-items, --forge-dialog-align-items, center);
-  @include theme.css-custom-property(top, --forge-dialog-top, 0);
-  @include theme.css-custom-property(padding, --forge-dialog-padding, variables.$padding);
+  // @include utils.position-abs-zero(fixed);
+  // @include theme.z-index(dialog);
+  // @include theme.css-custom-property(align-items, --forge-dialog-align-items, center);
+  // @include theme.css-custom-property(top, --forge-dialog-top, 0);
+  // @include theme.css-custom-property(padding, --forge-dialog-padding, variables.$padding);
 
-  display: flex;
-  justify-content: center;
-  visibility: hidden;
+  // display: flex;
+  // justify-content: center;
+  // visibility: hidden;
 
-  @include mixins-media.phone-only {
-    @include fullscreen;
-  }
+  // @include mixins-media.phone-only {
+  //   @include fullscreen;
+  // }
 }
 
 @mixin fullscreen() {
@@ -101,6 +101,7 @@
 }
 
 @mixin surface() {
+  @include theme.z-index(dialog);
   @include elevation-theme.elevation(24);
   @include mdc-theme.property(background-color, surface);
   @include theme.css-custom-property(width, --forge-dialog-width, auto);
@@ -109,14 +110,14 @@
   @include theme.css-custom-property(max-width, --forge-dialog-max-width, 100%);
   @include theme.css-custom-property(max-height, --forge-dialog-max-height, 100%);
   @include theme.css-custom-property(border-radius, --forge-dialog-border-radius, shape.resolve-radius(medium));
-  @include theme.css-custom-property(overflow, --forge-dialog-overflow, visible);
+  @include theme.css-custom-property(overflow, --forge-dialog-overflow, hidden);
   
   display: inline-flex;
   flex-direction: column;
   box-sizing: border-box;
-  transform: variables.$surface-transform;
-  opacity: 0;
-  z-index: inherit;
+  // transform: variables.$surface-transform;
+  // opacity: 0;
+  // z-index: inherit;
 }
 
 @mixin surface-fullscreen() {

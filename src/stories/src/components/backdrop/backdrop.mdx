@@ -32,21 +32,9 @@ the user to a specific modal surface area of the screen.
 
 ## Properties/Attributes
 
-<PropertyDef name="delay" type="number" defaultValue="0">
+<PropertyDef name="visible" type="boolean" defaultValue="false">
 
-Sets the delay (in milliseconds) before the fade-in animation occurs.
-
-</PropertyDef>
-
-<PropertyDef name="maxOpacity" type="number" defaultValue="0.54">
-
-Sets the maximum opacity that the element will fade-in to.
-
-</PropertyDef>
-
-<PropertyDef name="appearance" type="BackdropAppearance" defaultValue="undefined">
-
-Gets/sets the theme style to use. Valid values: "light", "dark".
+Wehther or not the backdrop is visible or not.
 
 </PropertyDef>
 
@@ -119,13 +107,5 @@ Starts the fade out animation.
 ---
 
 <PageSection>
-
-## Types
-
-### BackdropAppearance
-
-```ts
-type BackdropAppearance = 'light' | 'dark' | undefined;
-```
 
 </PageSection>
