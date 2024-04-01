@@ -57,9 +57,7 @@ export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGr
   }
 
   public static get observedAttributes(): string[] {
-    return [
-      RADIO_GROUP_CONSTANTS.attributes.DISABLED
-    ];
+    return Object.values(RADIO_GROUP_CONSTANTS.observedAttributes);
   }
 
   private _foundation: RadioGroupFoundation;
