@@ -527,6 +527,18 @@ describe('ListItemComponent', function(this: ITestContext) {
       expect(this.context.getRadioInput1().checked).toBe(true);
     });
 
+    it('should not uncheck radio when clicked after already checked', function(this: ITestContext) {
+      this.context = setupRadioTestContext();
+
+      expect(this.context.getRadioInput1().checked).toBeFalse();
+      
+      this.context.getRootElement1().click();
+      expect(this.context.getRadioInput1().checked).toBeTrue();
+
+      this.context.getRootElement1().click();
+      expect(this.context.getRadioInput1().checked).toBeTrue();
+    });
+
     it('should not check radio with the "forge-ignore" attribute applied when list-item is clicked', function(this: ITestContext) {
       this.context = setupRadioTestContext();
       const radioInput1 = this.context.getRadioInput1();

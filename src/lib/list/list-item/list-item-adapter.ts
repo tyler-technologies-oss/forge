@@ -145,22 +145,24 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   public setSelected(value: boolean): void {
     if (value) {
       addClass(LIST_ITEM_CONSTANTS.classes.SELECTED, this._listItemElement);
-      // We are treating selected and activated as the same state, and mdc-states hooks right into --activated
-      // addClass(LIST_ITEM_CONSTANTS.classes.ACTIVATED, this._listItemElement);
     } else {
       removeClass(LIST_ITEM_CONSTANTS.classes.SELECTED, this._listItemElement);
-      // removeClass(LIST_ITEM_CONSTANTS.classes.ACTIVATED, this._listItemElement);
     }
   }
 
   /**
-   * Attemps to toggle a checkbox or radio button within the list item if it can find one.
+   * Attempts to toggle a checkbox or radio button within the list item if it can find one.
    */
   public tryToggleCheckboxRadio(value?: boolean): void {
     const checkable = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR) as HTMLInputElement;
     if (checkable) {
       const force = typeof value === 'boolean';
       const currentState = checkable.checked;
+
+      // We don't uncheck radio buttons unless we are forcing a value from the selection state
+      if (!force && checkable.matches('input[type=radio]:checked')) {
+        return;
+      }
       
       // Check if we are just toggling or forcing to a specific checked state
       checkable.checked = force ? value as boolean : !checkable.checked;
