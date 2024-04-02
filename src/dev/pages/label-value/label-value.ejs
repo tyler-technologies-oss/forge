@@ -1,19 +1,9 @@
 <div class="vert">
-  <div class="flex">
-    <!-- Basic -->
-    <forge-label-value>
-      <span slot="label">Status</span>
-      <span slot="value">Active</span>
-    </forge-label-value>
-    <forge-text-field>
-      <label>Status</label>
-      <input value="Active" />
-    </forge-text-field>
-  </div>
-  <forge-text-field>
-    <label>Status</label>
-    <input value="Active" />
-  </forge-text-field>
+  <!-- Basic -->
+  <forge-label-value>
+    <span slot="label">Status</span>
+    <span slot="value">Active</span>
+  </forge-label-value>
 
   <!-- w/Long text -->
   <forge-label-value>
@@ -23,7 +13,7 @@
 
   <!-- w/Icon-->
   <forge-label-value>
-    <forge-icon slot="icon" name="person"></forge-icon>
+    <forge-icon slot="icon" name="info_outline"></forge-icon>
     <span slot="label">Status</span>
     <span slot="value">Active</span>
   </forge-label-value>
@@ -35,14 +25,14 @@
   </forge-label-value>
 
   <!-- Dense -->
-  <forge-label-value density="dense">
+  <forge-label-value dense>
     <span slot="label">Status</span>
     <span slot="value">Active</span>
   </forge-label-value>
 
   <!-- Dense w/Icon-->
-  <forge-label-value density="dense">
-    <forge-icon slot="icon" name="person"></forge-icon>
+  <forge-label-value dense>
+    <forge-icon slot="icon" name="info_outline"></forge-icon>
     <span slot="label">Status</span>
     <span slot="value">Active</span>
   </forge-label-value>
@@ -50,14 +40,14 @@
   <!-- Empty -->
   <forge-label-value empty>
     <span slot="label">Status</span>
-    <span slot="value">no data</span>
+    <span slot="value">n/a</span>
   </forge-label-value>
 
   <!-- Ellipsis (overflowing text)-->
   <div style="max-width: 150px;">
     <forge-label-value ellipsis>
-      <span slot="label">Position</span>
-      <span slot="value">Beverage Dissemination Officer</span>
+      <span slot="label">Status</span>
+      <span slot="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
     </forge-label-value>
   </div>
 </div>

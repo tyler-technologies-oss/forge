@@ -16,37 +16,41 @@
 // Base
 //
 
-forge-field {
-  display: contents;
+.forge-label-value {
+  @include tokens;
+}
+
+.forge-label-value {
+  @include base;
+}
+
+.label {
+  @include label;
 }
 
 .value {
-  display: grid;
-  align-items: center;
+  @include value;
 }
 
 .icon {
-  margin-block-start: 4px;
+  @include icon;
 
   ::slotted([slot=icon]) {
-    font-size: 1.25rem;
+    @include slotted-icon;
   }
 }
 
-forge-field {
-  --forge-field-multiline-resize: none;
+//
+// Inline/dense
+//
 
-  &::part(start) {
-    align-items: start;
-    height: 100%;
+:host(:is([inline],[dense])) {
+  .forge-label-value {
+    @include inline;
   }
 
-  &::part(label) {
-    pointer-events: all;
-
-    &::before {
-      content: normal;
-    }
+  .label {
+    @include inline-label;
   }
 }
 
@@ -66,11 +70,6 @@ forge-field {
 
 :host([empty]) {
   .value {
-    color: var(--forge-theme-text-medium);
-    font-style: italic;
+    @include value-empty;
   }
 }
-
-// .forge-label-value {
-//   @include base;
-// }

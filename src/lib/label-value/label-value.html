@@ -1,13 +1,13 @@
 <template>
-  <forge-field variant="plain" float-label multiline>
+  <div class="forge-label-value">
     <div class="icon" slot="start">
       <slot name="icon"></slot>
     </div>
     <div class="label" slot="label">
       <slot name="label"></slot>
     </div>
-    <div class="value" data-forge-field-input>
+    <div class="value">
       <slot name="value"></slot>
     </div>
-  </forge-field>
+  </div>
 </template>

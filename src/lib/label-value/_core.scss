@@ -4,24 +4,28 @@
 @forward './token-utils';
 
 @mixin host {
-  display: block;
+  display: inline-block;
   min-width: 0;
 }
 
 @mixin base {
-  display: flex;
-  min-height: #{token(height)};
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'icon label'
+    'icon value';
+  // margin-inline-start: 12px;
 }
-
+  
 @mixin container {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-@mixin icon-container {
-  display: flex;
-  align-items: flex-start;
+@mixin icon {
+  display: inline-flex;
+  grid-area: icon;
 }
 
 @mixin ellipsis {
@@ -31,11 +35,39 @@
 }
 
 @mixin label {
-  @include typography.style(label1);
-
+  @include typography.style(label2);
+  
+  grid-area: label;
   color: #{token(label-color)};
+  margin-block-start: 4px;
+  margin-block-end: 4px;
+  line-height: normal;
 }
 
 @mixin value {
-  @include typography.style(body1);
+  @include typography.style(body2);
+
+  grid-area: value;
+  display: grid;
+  align-items: center;
+  line-height: normal;
+}
+
+@mixin value-empty {
+  color: var(--forge-theme-text-medium);
+  font-style: italic;
+}
+
+@mixin slotted-icon {
+  margin-inline-end: 4px;
+}
+
+@mixin inline {
+  display: flex;
+  align-items: center;
+
+}
+
+@mixin inline-label {
+  margin-inline-end: 8px;
 }
