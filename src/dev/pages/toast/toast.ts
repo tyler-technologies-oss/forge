@@ -25,7 +25,7 @@ onPlacementChanged();
 
 function showToast(): void {
   const toast = document.createElement('forge-toast');
-  toast.message = optMessageInput.value;
+  toast.textContent = optMessageInput.value;
   toast.actionText = optActionTextInput.value;
   toast.placement = optPlacementSelect.value;
   toast.showClose = optCloseToggle.selected;

@@ -4,8 +4,9 @@ import { ButtonComponent } from '../button';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { IconComponent, IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
+import { OverlayComponent } from '../overlay';
 import { ToastAdapter } from './toast-adapter';
-import { ToastBuilder, ToastPlacement, TOAST_CONSTANTS } from './toast-constants';
+import { ToastPlacement, TOAST_CONSTANTS } from './toast-constants';
 import { ToastFoundation } from './toast-foundation';
 
 import template from './toast.html';
@@ -16,8 +17,7 @@ export interface IToastComponent extends IBaseComponent {
   actionText: string;
   duration: number;
   placement: ToastPlacement;
-  showClose: boolean;
-  builder: ToastBuilder | string;
+  dismissible: boolean;
   hide(): void;
 }
 
@@ -33,13 +33,12 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-toast>` web component.
- * 
  * @tag forge-toast
  */
 @CustomElement({
   name: TOAST_CONSTANTS.elementName,
   dependencies: [
+    OverlayComponent,
     ButtonComponent,
     IconButtonComponent,
     IconComponent
@@ -47,13 +46,7 @@ declare global {
 })
 export class ToastComponent extends BaseComponent implements IToastComponent {
   public static get observedAttributes(): string[] {
-    return [
-      TOAST_CONSTANTS.attributes.MESSAGE,
-      TOAST_CONSTANTS.attributes.ACTION_TEXT,
-      TOAST_CONSTANTS.attributes.DURATION,
-      TOAST_CONSTANTS.attributes.PLACEMENT,
-      TOAST_CONSTANTS.attributes.SHOW_CLOSE
-    ];
+    return Object.values(TOAST_CONSTANTS.observedAttributes);
   }
 
   private _foundation: ToastFoundation;
@@ -84,37 +77,27 @@ export class ToastComponent extends BaseComponent implements IToastComponent {
       case TOAST_CONSTANTS.attributes.PLACEMENT:
         this.placement = newValue as ToastPlacement || TOAST_CONSTANTS.defaults.PLACEMENT;
         break;
-      case TOAST_CONSTANTS.attributes.SHOW_CLOSE:
-        this.showClose = coerceBoolean(newValue);
+      case TOAST_CONSTANTS.attributes.DISMISSIBLE:
+        this.dismissible = coerceBoolean(newValue);
         break;
     }
   }
 
-  /** The message to display in the toast. */
   @FoundationProperty()
   public declare message: string;
 
-  /** The text to display in the action button. */
   @FoundationProperty()
   public declare actionText: string;
 
-  /** The time in milliseconds to show the toast. */
   @FoundationProperty()
   public declare duration: number;
 
-  /** The placement of the toast. */
   @FoundationProperty()
   public declare placement: ToastPlacement;
 
-  /** Sets the toast builder function for displaying custom content. */
   @FoundationProperty()
-  public declare builder: ToastBuilder | string;
+  public declare dismissible: boolean;
 
-  /** Controls the visibility of the close button. */
-  @FoundationProperty()
-  public declare showClose: boolean;
-
-  /** Hides the toast and removes it from the DOM. */
   public hide(): void {
     this._foundation.hide();
   }

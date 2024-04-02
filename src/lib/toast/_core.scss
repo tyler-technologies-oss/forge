@@ -1,0 +1,29 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: contents;
+}
+
+@mixin surface {
+  @include typography.style(body2);
+
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  padding-block: 8px;
+  padding-inline: 16px;
+  border-radius: 4px;
+  min-width: 344px;
+  max-width: 568px;
+  min-height: 48px;
+  background: var(--forge-theme-surface-inverse);
+  color: var(--forge-theme-on-surface-inverse);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+@mixin message {
+  flex-grow: 1;
+}

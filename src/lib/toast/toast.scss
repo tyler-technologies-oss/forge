@@ -1,11 +1,25 @@
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  display: inline-block;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.forge-toast {
+  @include surface;
+}
+
+.message {
+  @include message;
 }
