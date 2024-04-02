@@ -5,25 +5,17 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label-
 const observedAttributes = {
   EMPTY: 'empty',
   ELLIPSIS: 'ellipsis',
-  DENSITY: 'density',
-  ALIGN: 'align'
+  INLINE: 'inline',
+  /** @deprecated Use `inset` instead. */
+  DENSITY: 'dense'
 };
 
 const attributes = {
   ...observedAttributes
 };
 
-const selectors = {
-  ROOT: '.forge-label-value'
-};
-
 export const LABEL_VALUE_CONSTANTS = {
   elementName,
   observedAttributes,
-  attributes,
-  selectors
+  attributes
 };
-
-export type LabelValueAlignment = 'start' | 'center' | 'end';
-
-export { type FieldDensity as LabelValueDensityType } from '../field-next/base/base-field-constants';

@@ -34,10 +34,14 @@
 
 .icon {
   @include icon;
+}
 
-  ::slotted([slot=icon]) {
-    @include slotted-icon;
-  }
+//
+// Slotted icons
+//
+
+::slotted([slot=icon]) {
+  @include slotted-icon;
 }
 
 //

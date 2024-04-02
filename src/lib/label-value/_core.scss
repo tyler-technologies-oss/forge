@@ -14,7 +14,6 @@
   grid-template-areas:
     'icon label'
     'icon value';
-  // margin-inline-start: 12px;
 }
   
 @mixin container {
@@ -38,10 +37,14 @@
   @include typography.style(label2);
   
   grid-area: label;
-  color: #{token(label-color)};
-  margin-block-start: 4px;
-  margin-block-end: 4px;
+  justify-self: #{token(align)};
+  margin-block-start: #{token(label-block-start-spacing)};
+  margin-block-end: #{token(label-block-end-spacing)};
+  
   line-height: normal;
+  text-align: #{token(align)};
+
+  color: #{token(label-color)};
 }
 
 @mixin value {
@@ -50,16 +53,19 @@
   grid-area: value;
   display: grid;
   align-items: center;
+  justify-self: #{token(align)};
+  
   line-height: normal;
+  text-align: #{token(align)};
 }
 
 @mixin value-empty {
-  color: var(--forge-theme-text-medium);
-  font-style: italic;
+  color: #{token(empty-color)};
+  font-style: #{token(empty-style)};
 }
 
 @mixin slotted-icon {
-  margin-inline-end: 4px;
+  margin-inline-end: #{token(icon-spacing)};
 }
 
 @mixin inline {
@@ -69,5 +75,6 @@
 }
 
 @mixin inline-label {
-  margin-inline-end: 8px;
+  margin-block: 0;
+  margin-inline-end: #{token(inline-label-spacing)};
 }

@@ -1,10 +1,27 @@
 @use 'sass:map';
 @use '../../theme';
+@use '../../spacing';
 @use '../../utils';
 
 $tokens: (
-  
+  // Base
+  align: utils.module-val(label-value, align, start),
+
+  // Label
+  label-spacing: utils.module-val(label-value, label-spacing, spacing.variable(xxsmall)),
+  label-block-start-spacing: utils.module-ref(label-value, label-block-start-spacing, label-spacing),
+  label-block-end-spacing: utils.module-ref(label-value, label-block-end-spacing, label-spacing),
   label-color: utils.module-val(label-value, label-color, theme.variable(text-medium)),
+
+  // Icon
+  icon-spacing: utils.module-val(label-value, icon-spacing, spacing.variable(xxsmall)),
+
+  // Inline label
+  inline-label-spacing: utils.module-val(label-value, inline-label-spacing, spacing.variable(xsmall)),
+
+  // Empty
+  empty-color: utils.module-val(label-value, empty-color, theme.variable(text-medium)),
+  empty-style: utils.module-val(label-value, empty-style, italic),
 ) !default;
 
 @function get($key) {
