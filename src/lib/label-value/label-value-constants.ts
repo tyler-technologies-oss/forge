@@ -7,7 +7,7 @@ const observedAttributes = {
   ELLIPSIS: 'ellipsis',
   INLINE: 'inline',
   /** @deprecated Use `inset` instead. */
-  DENSITY: 'dense'
+  DENSE: 'dense'
 };
 
 const attributes = {

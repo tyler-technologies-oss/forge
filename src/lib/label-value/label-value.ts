@@ -77,7 +77,7 @@ export class LabelValueComponent extends BaseComponent implements ILabelValueCom
         this.ellipsis = coerceBoolean(newValue);
         break;
       case LABEL_VALUE_CONSTANTS.observedAttributes.INLINE:
-      case LABEL_VALUE_CONSTANTS.observedAttributes.DENSITY:
+      case LABEL_VALUE_CONSTANTS.observedAttributes.DENSE:
         this.inline = coerceBoolean(newValue);
         break;
     }
