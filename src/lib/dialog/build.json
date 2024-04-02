@@ -2,7 +2,6 @@
   "$schema": "../../../node_modules/@tylertech/forge-cli/config/build-schema.json",
   "extends": "../build.json",
   "stylesheets": [
-    "./forge-dialog.scss",
     "./forge-dialog-utils.scss"
   ]
 }

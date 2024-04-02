@@ -21,11 +21,11 @@
     }
 
     &--dragging {
-		@include dragging;
+		  @include dragging;
     }
 
     &--scrollable {
-		@include scrollable;
+		  @include scrollable;
     }
   }
 }
@@ -36,17 +36,12 @@
   position: fixed;
 }
 
-@mixin backdrop() {
-  @include utils-mixins.position-abs-zero;
-
-  position: fixed;
-}
-
 @mixin base() {
   @include mdc-theme.property(background-color, surface);
   @include mdc-elevation-theme.elevation(8);
   @include theme.css-custom-property(border-radius, --forge-bottom-sheet-border-radius, mdc-shape.$medium-component-radius mdc-shape.$medium-component-radius 0 0);
   @include theme.css-custom-property(max-width, --forge-bottom-sheet-desktop-max-width, 50%);
+  @include theme.z-index(dialog);
 
   box-sizing: border-box;
   position: fixed;

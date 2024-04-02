@@ -1,5 +1,5 @@
 import { addClass, getShadowElement, removeElement, replaceElement, getActiveElement, toggleAttribute, toggleClass } from '@tylertech/forge-core';
-import { BackdropAppearance, BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
+import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { ILinearProgressComponent } from '../linear-progress';
 import { IBusyIndicatorComponent } from './busy-indicator';
@@ -27,7 +27,7 @@ export interface IBusyIndicatorAdapter extends IBaseAdapter {
   captureFocus: () => void;
   remove: () => void;
   hideBackdrop: () => void;
-  setBackdropAppearance(appearance: BackdropAppearance): void;
+  showBackdrop: () => void;
   setParentAttribute(name: string, value: string): void;
   removeParentAttribute(name: string): void;
   getFocusedElement(): HTMLElement;
@@ -220,11 +220,16 @@ export class BusyIndicatorAdapter extends BaseAdapter<IBusyIndicatorComponent> i
     removeElement(this._component);
   }
 
-  /**
-   * Hides the backdrop by fading it out.
-   */
   public hideBackdrop(): void {
     this._backdropElement.fadeOut();
+  }
+
+  public showBackdrop(): void {
+    window.requestAnimationFrame(() => {
+      if (this._component.isConnected) {
+        this._backdropElement?.fadeIn();
+      }
+    });
   }
 
   private _toggleElement(isVisible: boolean, selector: string, element: Node, placeholder: Comment): Comment {
@@ -245,10 +250,6 @@ export class BusyIndicatorAdapter extends BaseAdapter<IBusyIndicatorComponent> i
 
   public setContainerInvisible(): void {
     addClass(BUSY_INDICATOR_CONSTANTS.classes.SURFACE_INVISIBLE, this._surfaceElement);
-  }
-
-  public setBackdropAppearance(appearance: BackdropAppearance): void {
-    this._backdropElement.setAttribute(BACKDROP_CONSTANTS.attributes.APPEARANCE, String(appearance));
   }
 
   public setParentAttribute(name: string, value: string): void {
