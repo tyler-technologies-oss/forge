@@ -220,6 +220,32 @@ describe('Chip Field', () => {
 
       expect(document.activeElement).to.equal(harness.inputElement);
     });
+
+    it('should float label when adding a chip', async () => {
+      const harness = await createFixture();
+
+      const chip = document.createElement('forge-chip');
+      chip.textContent = 'New Chip';
+      chip.slot = 'member';
+      harness.chipField.append(chip);
+
+      await elementUpdated(harness.chipField);
+
+      expect(harness.chipField.floatLabel).to.be.true;
+      expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.FLOAT_LABEL)).to.be.true;
+      expect(harness.fieldElement.floatLabel).to.be.true;
+    });
+
+    it('should unfloat label when all members are removed', async () => {
+      const harness = await createFixture({ hasChips: true });
+
+      harness.chips.forEach(chip => chip.remove());
+      await elementUpdated(harness.chipField);
+
+      expect(harness.chipField.floatLabel).to.be.false;
+      expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.FLOAT_LABEL)).to.be.false;
+      expect(harness.fieldElement.floatLabel).to.be.false;
+    });
   });
 
   describe('mouse interaction', () => {
@@ -507,6 +533,14 @@ describe('Chip Field', () => {
       const harness = await createFixture();
 
       expect(harness.chipField.popoverTargetElement).to.be.ok;
+    });
+
+    it('should float label when chips are present', async () => {
+      const harness = await createFixture({ hasChips: true });
+
+      expect(harness.chipField.floatLabel).to.be.true;
+      expect(harness.chipField.hasAttribute(BASE_FIELD_CONSTANTS.attributes.FLOAT_LABEL)).to.be.true;
+      expect(harness.fieldElement.floatLabel).to.be.true;
     });
   });
 

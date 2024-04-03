@@ -125,10 +125,10 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
 
   public tryFloatLabel(force?: boolean | undefined): void {
     if (force !== undefined) {
-      this._fieldElement.floatLabel = force;
+      this._component.floatLabel = force;
       return;
     }
-    this._fieldElement.floatLabel = this.hasValue || this.hasPlaceholder;
+    this._component.floatLabel = this.hasValue || this.hasPlaceholder;
   }
 
   public handleDefaultSlotChange(slot: HTMLSlotElement, listener: ChipFieldInputAttributeObserver): void {
