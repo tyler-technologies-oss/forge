@@ -74,4 +74,8 @@ export class ChipFieldComponent extends BaseField<ChipFieldFoundation> implement
   public get popoverTargetElement(): HTMLElement {
     return this._foundation.popoverTargetElement;
   }
+
+  public override click(): void {
+    this._foundation.click();
+  }
 }

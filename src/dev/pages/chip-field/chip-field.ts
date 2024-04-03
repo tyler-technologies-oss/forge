@@ -225,6 +225,9 @@ const clearButton = document.querySelector('#opt-btn-clear') as HTMLButtonElemen
 clearButton.addEventListener('click', removeAllMembers);
 
 function setChipsDisabledState(isDisabled: boolean): void {
-  const chips = autocompleteChipField.querySelectorAll('forge-chip');
-  chips.forEach(({ disabled }) => disabled = isDisabled);
+  const chips = [
+    ...simpleChipField.querySelectorAll('forge-chip'),
+    ...autocompleteChipField.querySelectorAll('forge-chip')
+  ];
+  chips.forEach(chip => chip.disabled = isDisabled);
 }

@@ -120,7 +120,7 @@ $tokens: (
   multiline-resize: utils.module-val(field, multiline-resize, vertical),
   multiline-min-inline-size: utils.module-val(field, multiline-min-inline-size, initial),
   multiline-max-inline-size: utils.module-val(field, multiline-max-inline-size, initial),
-  multiline-min-block-size: utils.module-val(field, multiline-min-block-size, initial),
+  multiline-min-block-size: utils.module-ref(field, multiline-min-block-size, height),
   multiline-max-block-size: utils.module-val(field, multiline-max-block-size, initial),
 
   // Disabled

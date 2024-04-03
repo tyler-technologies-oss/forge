@@ -11,6 +11,7 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
   private _addOnBlur = false;
 
   private _mouseDownListener: EventListener = this._onMouseDown.bind(this);
+  private _clickListener: EventListener = this._onClick.bind(this);
   private _rootKeyDownListener: EventListener = this._onRootKeyDown.bind(this);
   private _inputKeyDownListener: EventListener = this._onKeyDown.bind(this);
   private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
@@ -25,20 +26,22 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
 
   public initialize(): void {
     this._adapter.initialize();
-    this._adapter.addRootListener('mousedown', this._mouseDownListener);
+    this._adapter.addRootListener('mousedown', this._mouseDownListener, { capture: true });
+    this._adapter.addRootListener('click', this._clickListener);
     this._adapter.addRootListener('keydown', this._rootKeyDownListener);
     this._adapter.addInputListener('keydown', this._inputKeyDownListener);
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
     this._adapter.addRootListener('input', this._inputListener);
     this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
 
-    if (!this._addOnBlur) {
+    if (this._addOnBlur) {
       this._adapter.addInputListener('blur', this._blurListener);
     }
   }
 
   public destroy(): void {
-    this._adapter.removeRootListener('mousedown', this._mouseDownListener);
+    this._adapter.removeRootListener('mousedown', this._mouseDownListener, { capture: true });
+    this._adapter.removeRootListener('click', this._clickListener);
     this._adapter.removeRootListener('keydown', this._rootKeyDownListener);
     this._adapter.removeInputListener('keydown', this._inputKeyDownListener);
     this._adapter.removeRootListener('slotchange', this._slotChangeListener);
@@ -58,12 +61,19 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
   }
 
   private _onMouseDown(evt: MouseEvent): void {
-    if (this._disabled || evt.target instanceof HTMLInputElement) {
+    if (this._disabled || this._adapter.inputHasFocus) {
+      evt.preventDefault();
+      evt.stopPropagation();
       return;
     }
-    evt.preventDefault();
+  }
+
+  private _onClick(_evt: MouseEvent): void {
+    if (this._disabled) {
+      return;
+    }
     this._adapter.focusInput();
-    this._adapter.tryPropagateClick(evt.target);
+    this._adapter.clickInput();
   }
 
   private _onValueChange(): void {
@@ -138,7 +148,7 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
 
   private _focusNextMember(): void {
     const members = this._adapter.getSlottedMemberElements();
-    if (members.length < 1 || this._adapter.inputHasFocus) {
+    if (!members.length || this._adapter.inputHasFocus) {
       return;
     }
 
@@ -159,7 +169,7 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
 
   private _focusPreviousMember(): void {
     const members = this._adapter.getSlottedMemberElements();
-    if (members.length < 1) {
+    if (!members.length) {
       return;
     }
 
@@ -233,5 +243,16 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
 
   public get popoverTargetElement(): HTMLElement {
     return this._adapter.popoverTargetElement;
+  }
+
+  public override get disabled(): boolean {
+    return super.disabled;
+  }
+  public override set disabled(value: boolean) {
+    if (this.disabled === value) {
+      return;
+    }
+    super.disabled = value;
+    this._adapter.setDisabled(value);
   }
 }

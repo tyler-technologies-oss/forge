@@ -11,13 +11,11 @@ export interface IChipFieldAdapter extends IBaseFieldAdapter {
   readonly hasInputValue: boolean;
   readonly inputHasFocus: boolean;
   initialize(): void;
-  addRootListener(type: string, listener: EventListener): void;
-  removeRootListener(type: string, listener: EventListener): void;
-  addMemberSlotListener(listener: (evt: Event) => void): void;
-  removeMemberSlotListener(listener: (evt: Event) => void): void;
+  addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
+  removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
   addInputListener(type: string, listener: EventListener): void;
   removeInputListener(type: string, listener: EventListener): void;
-  tryPropagateClick(target: EventTarget | null): void;
+  clickInput(): void;
   tryAddValueChangeListener(context: unknown, listener: ChipFieldValueChangeListener): void;
   removeValueChangeListener(): void;
   getSlottedMemberElements(): HTMLElement[];
@@ -25,6 +23,7 @@ export interface IChipFieldAdapter extends IBaseFieldAdapter {
   handleDefaultSlotChange(slot: HTMLSlotElement, listener: ChipFieldInputAttributeObserver): void;
   tryConnectSlottedLabel(slot: HTMLSlotElement): void;
   toggleContainerClass(className: string, force?: boolean): void;
+  setDisabled(value: boolean): void;
 }
 
 export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdapter {
@@ -73,20 +72,12 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
     this._inputElement = this._component.querySelector('input:not([type=checkbox]):not([type=radio])') as HTMLInputElement;
   }
   
-  public addRootListener(type: string, listener: (event: Event) => void): void {
-    this._fieldElement.addEventListener(type, listener);
+  public addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
+    this._fieldElement.addEventListener(type, listener, options);
   }
 
-  public removeRootListener(type: string, listener: (event: Event) => void): void {
-    this._fieldElement.removeEventListener(type, listener);
-  }
-
-  public addMemberSlotListener(listener: (evt: Event) => void): void {
-    this._memberSlot.addEventListener('slotchange', listener);
-  }
-
-  public removeMemberSlotListener(listener: (evt: Event) => void): void {
-    this._memberSlot.removeEventListener('slotchange', listener);
+  public removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
+    this._fieldElement.removeEventListener(type, listener, options);
   }
 
   public addInputListener(type: string, listener: EventListener): void {
@@ -97,10 +88,8 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
     this._inputElement?.removeEventListener(type, listener);
   }
   
-  public tryPropagateClick(target: EventTarget | null): void {
-    if ((target as HTMLElement).matches(CHIP_FIELD_CONSTANTS.selectors.CONTAINER)) {
-      this._inputElement?.dispatchEvent(new MouseEvent('click'));
-    }
+  public clickInput(): void {
+    this._inputElement?.click();
   }
 
   public tryAddValueChangeListener(context: unknown, listener: ChipFieldValueChangeListener): void {
@@ -127,6 +116,7 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
   }
 
   public applyLabel(value: string | null): void {
+    /* c8 ignore next 3 */
     if (!this._inputElement) {
       return;
     }
@@ -142,30 +132,26 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
   }
 
   public handleDefaultSlotChange(slot: HTMLSlotElement, listener: ChipFieldInputAttributeObserver): void {
-    // Destroy the mutation observer if it exists
     this._inputMutationObserver?.disconnect();
 
-    // If there are no assigned elements, return
     const assignedElements = slot.assignedElements();
-    if (!assignedElements.length) {
-      return;
-    }
-
     this._inputElement = assignedElements.find(el => el.matches(CHIP_FIELD_CONSTANTS.selectors.INPUT)) as HTMLInputElement;
-
-    // Create a new mutation observer and observe each input
-    this._inputMutationObserver = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        if (mutation.attributeName) {
-          const element = mutation.target as HTMLElement;
-          const attribute = element.getAttribute(mutation.attributeName);
-          const attributeName = mutation.attributeName as keyof typeof CHIP_FIELD_CONSTANTS.observedInputAttributes;
-          listener(attributeName, attribute);
-        }
-      });
-    });
-
+    
     if (this._inputElement) {
+      if (this._component.disabled) {
+        this._inputElement.disabled = true;
+      }
+
+      this._inputMutationObserver = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+          if (mutation.attributeName) {
+            const element = mutation.target as HTMLElement;
+            const attribute = element.getAttribute(mutation.attributeName);
+            const attributeName = mutation.attributeName as keyof typeof CHIP_FIELD_CONSTANTS.observedInputAttributes;
+            listener(attributeName, attribute);
+          }
+        });
+      });
       this._inputMutationObserver?.observe(this._inputElement, { attributes: true, attributeFilter: CHIP_FIELD_CONSTANTS.observedInputAttributes });
 
       // Call the listener with each observed attribute to capture the initial state
@@ -179,6 +165,7 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
   }
 
   public tryConnectSlottedLabel(slot: HTMLSlotElement): void {
+    /* c8 ignore next 3 */
     if (!this._inputElement) {
       return;
     }
@@ -206,5 +193,11 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
 
   public toggleContainerClass(className: string, force?: boolean): void {
     this._containerElement.classList.toggle(className, force);
+  }
+
+  public setDisabled(value: boolean): void {
+    if (this._inputElement) {
+      this._inputElement.disabled = value;
+    }
   }
 }

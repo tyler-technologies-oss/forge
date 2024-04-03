@@ -12,7 +12,6 @@
   align-items: center;
   gap: #{token(member-spacing)};
   block-size: auto;
-  cursor: text;
 }
 
 @mixin has-members {
@@ -21,4 +20,5 @@
 
 @mixin input {
   flex-grow: 1;
+  cursor: inherit;
 }

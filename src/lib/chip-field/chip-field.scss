@@ -51,8 +51,8 @@ forge-field {
   ));
 
   &::part(label) {
-    &::before {
-      content: none;
+    &::after {
+      content: none; // Hiding the field's multiline box shadow on the label
     }
   }
 

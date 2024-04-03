@@ -1,5 +1,5 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { FIELD_CONSTANTS, IFieldComponent } from '../field-next';
+import { BASE_FIELD_CONSTANTS, FIELD_CONSTANTS, IFieldComponent } from '../field-next';
 import { BaseFieldAdapter, IBaseFieldAdapter } from '../field-next/base/base-field-adapter';
 import { LabelComponent } from '../label';
 import { ITextFieldComponent } from './text-field';
@@ -105,6 +105,10 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     });
     this._inputElements.forEach(el => {
       this._inputMutationObserver?.observe(el, { attributes: true, attributeFilter: TEXT_FIELD_CONSTANTS.observedInputAttributes });
+
+      if (this._component.disabled) {
+        el.disabled = true;
+      }
 
       // Call the listener with each observed attribute to capture the initial state
       Object.values(TEXT_FIELD_CONSTANTS.observedInputAttributes).forEach(value => {

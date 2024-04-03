@@ -498,7 +498,7 @@ $variants: (
       @include core.resize-container-inset-label-slot;
     }
 
-    &::before {
+    &::after {
       @include core.resize-container-inset-label-background;
     }
   }
