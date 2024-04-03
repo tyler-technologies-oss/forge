@@ -18,7 +18,7 @@ export class ModalDrawerAdapter extends BaseDrawerAdapter implements IModalDrawe
   }
 
   public setBackdropCloseListener(listener: (evt: Event) => void): void {
-    this._backdropElement.addEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, listener);
+    this._backdropElement.addEventListener('click', listener);
   }
 
   public setBackdropVisibility(visible: boolean): Promise<void> {

@@ -1,49 +1,71 @@
 <div class="vert">
   <!-- Basic -->
-  <forge-label-value>
-    <span slot="label">Status</span>
-    <span slot="value">ACTIVE</span>
-  </forge-label-value>
+  <section> 
+    <forge-label-value>
+      <span slot="label">Status</span>
+      <span slot="value">Active</span>
+    </forge-label-value>
+  </section>
 
   <!-- w/Icon-->
-  <forge-label-value>
-    <forge-icon slot="icon" name="person"></forge-icon>
-    <span slot="label">Status</span>
-    <span slot="value">ACTIVE</span>
-  </forge-label-value>
+  <section> 
+    <forge-label-value>
+      <forge-icon slot="icon" name="info_outline"></forge-icon>
+      <span slot="label">Status</span>
+      <span slot="value">Active</span>
+    </forge-label-value>
+  </section>
 
-  <!-- Roomy -->
-  <forge-label-value density="roomy">
-    <span slot="label">Status</span>
-    <span slot="value">ACTIVE</span>
-  </forge-label-value>
+  <!-- Inline -->
+  <section> 
+    <forge-label-value inline>
+      <span slot="label">Status</span>
+      <span slot="value">Active</span>
+    </forge-label-value>
+  </section>
 
-  <!-- Dense -->
-  <forge-label-value density="dense">
-    <span slot="label">Status</span>
-    <span slot="value">ACTIVE</span>
-  </forge-label-value>
-
-  <!-- Dense w/Icon-->
-  <forge-label-value density="dense">
-    <forge-icon slot="icon" name="person"></forge-icon>
-    <span slot="label">Status</span>
-    <span slot="value">ACTIVE</span>
-  </forge-label-value>
+  <!-- Inline w/Icon-->
+  <section> 
+    <forge-label-value inline>
+      <forge-icon slot="icon" name="info_outline"></forge-icon>
+      <span slot="label">Status</span>
+      <span slot="value">Active</span>
+    </forge-label-value>
+  </section>
 
   <!-- Empty -->
-  <forge-label-value empty>
-    <span slot="label">Status</span>
-    <span slot="value">no data</span>
-  </forge-label-value>
+  <section> 
+    <forge-label-value empty>
+      <span slot="label">Status</span>
+      <span slot="value">n/a</span>
+    </forge-label-value>
+  </section>
 
   <!-- Ellipsis (overflowing text)-->
-  <div style="max-width: 150px;">
-    <forge-label-value ellipsis>
-      <span slot="label">Position</span>
-      <span slot="value">Beverage Dissemination Officer</span>
+  <section> 
+    <div style="max-width: 150px;">
+      <forge-label-value ellipsis>
+        <span slot="label">Status</span>
+        <span slot="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
+      </forge-label-value>
+    </div>
+  </section>
+
+  <!-- w/Long value -->
+  <section> 
+    <forge-label-value>
+      <span slot="label">Status</span>
+      <span slot="value">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sapiente, ducimus ad ab dolore, quae commodi aliquam incidunt quibusdam illo amet repudiandae provident aspernatur perspiciatis quas accusantium eius doloremque, dignissimos quisquam.</span>
     </forge-label-value>
-  </div>
+  </section>
+
+  <!-- w/Long label -->
+  <section> 
+    <forge-label-value>
+      <span slot="label">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ipsum aspernatur at. Eligendi amet aperiam, molestias aliquid expedita incidunt! Debitis ex ut rerum officiis deleniti adipisci, saepe eius quia quas.</span>
+      <span slot="value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur minus dolorum molestiae hic provident beatae ex iste doloribus, neque illo eius, quidem impedit cupiditate exercitationem. Quibusdam illo aspernatur commodi aut!</span>
+    </forge-label-value>
+  </section>
 </div>
 
 <script type="module" src="label-value.ts"></script>

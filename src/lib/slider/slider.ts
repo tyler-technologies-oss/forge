@@ -85,8 +85,8 @@ declare global {
  * @event {CustomEvent} forge-slider-input - Dispatches when the slider value changes.
  * @event {CustomEvent} forge-slider-change - Dispatches when the slider value changes and the value has been committed.
  * 
- * @cssproperty --mdc-theme-primary - The primary color of the slider.
- * @cssproperty --mdc-theme-on-primary - The color of elements placed on top of the primary color (the label text for example).
+ * @cssproperty --forge-theme-primary - The primary color of the slider.
+ * @cssproperty --forge-theme-on-primary - The color of elements placed on top of the primary color (the label text for example).
  * @cssproperty --forge-slider-track-height - The height of the track.
  * @cssproperty --forge-slider-active-track-color - The color of the active track.
  * @cssproperty --forge-slider-active-track-height - The height of the active track.

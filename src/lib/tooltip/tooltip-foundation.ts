@@ -5,6 +5,7 @@ import { WithLongpressListener } from '../core/mixins/interactions/longpress/wit
 import { canUserHoverElements } from '../constants';
 import { OverlayFlipState } from '../overlay/overlay-constants';
 import { PositionPlacement } from '../core/utils/position-utils';
+import { DismissibleStack } from '../core/utils/dismissible-stack';
 
 export interface ITooltipFoundation extends ICustomElementFoundation {
   open: boolean;
@@ -136,6 +137,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   private _show(): void {
     this._open = true;
     this._adapter.show();
+    DismissibleStack.instance.add(this._adapter.hostElement);
     this._attachDismissListeners();
     this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.OPEN, this._open);
   }
@@ -146,6 +148,7 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
 
     this._open = false;
     this._adapter.hide();
+    DismissibleStack.instance.remove(this._adapter.hostElement);
     this._detachDismissListeners();
     this._adapter.toggleHostAttribute(TOOLTIP_CONSTANTS.attributes.OPEN, this._open);
   }

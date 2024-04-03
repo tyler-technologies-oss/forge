@@ -27,7 +27,7 @@ export interface IBottomSheetAdapter extends IBaseAdapter {
   isContentChild(el: HTMLElement): boolean;
   initScrollable(): void;
   setDragging(isDragging: boolean): void;
-  setBackdropVisiblity(value: boolean): void;
+  setBackdropVisibility(value: boolean): void;
   setFullscreen(value: boolean): void;
   tryLayoutChildren(): void;
   setContainerHeight(height: number | null): void;
@@ -58,6 +58,7 @@ export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> imple
   }
 
   public setVisibility(visible: boolean): void {
+    this.setBackdropVisibility(visible);
     toggleClass(this._containerElement, visible, BOTTOM_SHEET_CONSTANTS.classes.OPEN);
   }
 
@@ -95,11 +96,11 @@ export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> imple
   }
 
   public registerBackdropClickHandler(handler: (evt: CustomEvent) => void): void {
-    this._backdropElement.addEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
+    this._backdropElement.addEventListener('click', handler);
   }
 
   public deregisterBackdropClickHandler(handler: (evt: CustomEvent) => void): void {
-    this._backdropElement.removeEventListener(BACKDROP_CONSTANTS.events.BACKDROP_CLICK, handler);
+    this._backdropElement.removeEventListener('click', handler);
   }
 
   public getOpenBottomSheets(selector: string): NodeListOf<HTMLElement> {
@@ -135,8 +136,14 @@ export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> imple
     toggleClass(this._component, isDragging, BOTTOM_SHEET_CONSTANTS.classes.DRAGGING);
   }
 
-  public setBackdropVisiblity(value: boolean): void {
-    this._backdropElement.hidden = !value;
+  public setBackdropVisibility(value: boolean): void {
+    window.requestAnimationFrame(() => {
+      if (this._component.open) {
+        this._backdropElement.fadeIn();
+      } else {
+        this._backdropElement.fadeOut();
+      }
+    });
   }
 
   public setFullscreen(value: boolean): void {
