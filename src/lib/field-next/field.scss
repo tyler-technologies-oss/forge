@@ -668,10 +668,12 @@ $variants: (
       @include core.default-slot-textarea;
     }
 
+    ::slotted([data-forge-field-input]),
     ::slotted(*:first-of-type:is(input, textarea, [data-forge-field-input])) {
       @include core.first-default-slot-content;
     }
 
+    ::slotted([data-forge-field-input]),
     ::slotted(*:last-of-type:is(input, textarea, [data-forge-field-input])) {
       @include core.last-default-slot-content;
     }
