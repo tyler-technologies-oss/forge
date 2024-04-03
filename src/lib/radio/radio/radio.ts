@@ -107,17 +107,7 @@ const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(With
 })
 export class RadioComponent extends BaseRadioClass implements IRadioComponent {
   public static get observedAttributes(): string[] {
-    return [
-      RADIO_CONSTANTS.attributes.CHECKED,
-      RADIO_CONSTANTS.attributes.DEFAULT_CHECKED,
-      RADIO_CONSTANTS.attributes.VALUE,
-      RADIO_CONSTANTS.attributes.DENSE,
-      RADIO_CONSTANTS.attributes.DISABLED,
-      RADIO_CONSTANTS.attributes.REQUIRED,
-      RADIO_CONSTANTS.attributes.READONLY,
-      RADIO_CONSTANTS.attributes.LABEL_POSITION,
-      RADIO_CONSTANTS.attributes.TABINDEX
-    ];
+    return Object.values(RADIO_CONSTANTS.observedAttributes);
   }
 
   private _foundation: RadioFoundation;
@@ -135,7 +125,6 @@ export class RadioComponent extends BaseRadioClass implements IRadioComponent {
       role: 'radio',
       ariaChecked: this.checked ? 'true' : 'false',
       ariaDisabled: this.disabled ? 'true' : 'false',
-      ariaInvalid: this[internals].validity.valid ? 'false' : 'true',
       ariaRequired: this.required ? 'true' : 'false'
     });
     this._foundation.initialize();
