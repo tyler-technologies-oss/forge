@@ -1,5 +1,7 @@
 @use './core' as *;
 @use '../field-next' as field;
+@use '../chips/chip' as chip;
+@use '../core/styles/theme';
 
 //
 // Host
@@ -53,6 +55,22 @@ forge-field {
   &::part(label) {
     &::after {
       content: none; // Hiding the field's multiline box shadow on the label
+    }
+  }
+}
+
+//
+// Theme
+//
+
+$themes: (primary, secondary, tertiary, success, warning, error, info);
+@each $theme in $themes {
+  :host([theme=#{$theme}]) {
+    ::slotted([slot=member]) {
+      @include chip.provide-theme((
+        field-background: theme.variable($theme),
+        field-color: theme.variable(on-#{$theme})
+      ));
     }
   }
 }
