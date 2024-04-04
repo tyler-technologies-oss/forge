@@ -2,25 +2,23 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}chip-field`;
 
-const classes = {
-  ROOT: 'forge-chip-field'
+const observedAttributes = {
+  ADD_ON_BLUR: 'add-on-blur'
 };
 
-const slots = {
-  LABEL: 'label',
-  HELPER_TEXT: 'helper-text',
-  MEMBER: 'member'
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
-  ROOT: `.${classes.ROOT}`,
-  INPUT_CONTAINER: '.forge-field__input-container',
+  CONTAINER: '.container',
   INPUT: 'input',
-  LABEL: `[slot=${slots.LABEL}]`,
-  HELPER_TEXT: `[slot=${slots.HELPER_TEXT}]`,
-  MEMBER: `[slot=${slots.MEMBER}]`,
-  LABEL_SLOT: `slot[name=${slots.LABEL}]`,
-  MEMBER_SLOT: `slot[name=${slots.MEMBER}]`
+  MEMBER_SLOT: 'slot[name=member]',
+  MEMBER: '[slot=member]'
+};
+
+const classes = {
+  HAS_MEMBERS: 'has-members'
 };
 
 const events = {
@@ -28,21 +26,30 @@ const events = {
   MEMBER_REMOVED: `${elementName}-member-removed`
 };
 
-const attributes = {
-  ADD_ON_BLUR: 'add-on-blur'
+const observedInputAttributes = ['disabled', 'placeholder'];
+
+const tagNames = {
+  TEXTAREA: 'TEXTAREA',
+  LABEL: 'LABEL'
 };
 
 export const CHIP_FIELD_CONSTANTS = {
-  attributes,
   elementName,
-  classes,
-  slots,
+  observedAttributes,
+  attributes,
   selectors,
-  events
+  classes,
+  events,
+  observedInputAttributes,
+  tagNames
 };
 
+
 export {
-  type FieldDensityType as ChipFieldDensityType,
-  type FieldFloatLabelType as ChipFieldFloatLabelType,
-  type FieldShapeType as ChipFieldShapeType
-} from '../field/field-constants';
+  type FieldDensity as ChipFieldDensityType,
+  type FieldShape as ChipFieldShapeType
+} from '../field-next/base/base-field-constants';
+
+
+export type ChipFieldInputAttributeObserver = (name: keyof typeof observedInputAttributes, value: string | null) => void;
+export type ChipFieldValueChangeListener = (value: string | null) => void;

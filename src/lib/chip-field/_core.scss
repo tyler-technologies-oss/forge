@@ -1,20 +1,24 @@
-@use './selector';
-@use '../field/selector' as field-selector;
+@use './token-utils' as *;
 
-@mixin core-styles {
-  .forge-chip-field {
-    @include field-selector.field(forge-chip-field, $exclude: (height));
-    @include selector.field;
-  }
+@forward './token-utils';
 
-  .forge-field {
-    @include selector.label-input-container;
-    @include selector.input-container;
-    @include selector.member;
-    @include selector.input;
-    @include selector.leading;
-    @include selector.trailing;
-    @include selector.addon-end;
-    @include selector.icon-button;
-  }
+@mixin host {
+  display: block;
+}
+
+@mixin container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: #{token(member-spacing)};
+  block-size: auto;
+}
+
+@mixin has-members {
+  margin-block: #{token(content-spacing)};
+}
+
+@mixin input {
+  flex-grow: 1;
+  cursor: inherit;
 }

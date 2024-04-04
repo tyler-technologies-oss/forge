@@ -77,6 +77,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._labelPosition !== value) {
       this._labelPosition = value;
       this._adapter.setFieldProperty('labelPosition', value);
+      this._adapter.setHostAttribute(BASE_FIELD_CONSTANTS.attributes.LABEL_POSITION, value);
     }
   }
 
@@ -87,6 +88,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._labelAlignment !== value) {
       this._labelAlignment = value;
       this._adapter.setFieldProperty('labelAlignment', value);
+      this._adapter.setHostAttribute(BASE_FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT, value);
     }
   }
 
@@ -97,6 +99,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._invalid !== value) {
       this._invalid = value;
       this._adapter.setFieldProperty('invalid', value);
+      this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.INVALID, value);
     }
   }
 
@@ -107,6 +110,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._required !== value) {
       this._required = value;
       this._adapter.setFieldProperty('required', value);
+      this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.REQUIRED, value);
     }
   }
 
@@ -117,6 +121,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._optional !== value) {
       this._optional = value;
       this._adapter.setFieldProperty('optional', value);
+      this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.OPTIONAL, value);
     }
   }
 
@@ -127,6 +132,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._disabled !== value) {
       this._disabled = value;
       this._adapter.setFieldProperty('disabled', value);
+      this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.DISABLED, value);
     }
   }
 
@@ -137,6 +143,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._permanentlyFloatLabel !== value) {
       this._permanentlyFloatLabel = value;
       this._adapter.setFieldProperty('floatLabel', value || this._hasValue || this._hasPlaceholder);
+      this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.FLOAT_LABEL, value);
     }
   }
 
@@ -147,6 +154,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._variant !== value) {
       this._variant = value;
       this._adapter.setFieldProperty('variant', value);
+      this._adapter.setHostAttribute(BASE_FIELD_CONSTANTS.attributes.VARIANT, value);
     }
   }
 
@@ -157,6 +165,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._theme !== value) {
       this._theme = value;
       this._adapter.setFieldProperty('theme', value);
+      this._adapter.setHostAttribute(BASE_FIELD_CONSTANTS.attributes.THEME, value);
     }
   }
 
@@ -167,6 +176,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._shape !== value) {
       this._shape = value;
       this._adapter.setFieldProperty('shape', value);
+      this._adapter.setHostAttribute(BASE_FIELD_CONSTANTS.attributes.SHAPE, value);
     }
   }
 
@@ -177,6 +187,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._density !== value) {
       this._density = value;
       this._adapter.setFieldProperty('density', value);
+      this._adapter.setHostAttribute(BASE_FIELD_CONSTANTS.attributes.DENSITY, value);
     }
   }
 
@@ -187,6 +198,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._dense !== value) {
       this._dense = value;
       this._adapter.setFieldProperty('dense', value);
+      this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.DENSE, value);
     }
   }
 
@@ -197,6 +209,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._popoverIcon !== value) {
       this._popoverIcon = value;
       this._adapter.setFieldProperty('popoverIcon', value);
+      this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.POPOVER_ICON, value);
     }
   }
 
@@ -207,6 +220,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
     if (this._supportTextInset !== value) {
       this._supportTextInset = value;
       this._adapter.setFieldProperty('supportTextInset', value);
+      this._adapter.setHostAttribute(BASE_FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET, value);
     }
   }
 }

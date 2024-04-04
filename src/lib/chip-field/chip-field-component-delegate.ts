@@ -121,7 +121,7 @@ export class ChipFieldComponentDelegate extends FormFieldComponentDelegate<IChip
   }
 
   public floatLabel(value: boolean): void {
-    this._element.floatLabel(value);
+    this._element.floatLabel = value;
   }
 
   private _createLabel(text: string): void {
