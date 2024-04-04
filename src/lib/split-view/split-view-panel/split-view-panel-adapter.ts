@@ -7,7 +7,7 @@ import { ISplitViewUpdateConfig, SplitViewOrientation, SPLIT_VIEW_CONSTANTS } fr
 import { ISplitViewComponent } from '../split-view/split-view';
 import { getCursor, getHandleIcon, createOverlay, getSplitViewPanelSibling } from './split-view-panel-utils';
 import { IIconComponent } from '../../icon';
-import { IRippleComponent } from '../../ripple';
+import { IStateLayerComponent } from '../../state-layer';
 
 export interface ISplitViewPanelAdapter extends IBaseAdapter {
   initialize(): void;
@@ -36,8 +36,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
   getAvailableSpace(orientation: SplitViewOrientation, resizable: SplitViewPanelResizable): number;
   getSiblingContentSize(): number;
   setSiblingContentSize(value: number): void;
-  activateRipple(defaultActivated: boolean): void;
-  deactivateRipple(): void;
+  animateStateLayer(defaultActivated: boolean): void;
   getParentSize(orientation: SplitViewOrientation): number;
   updateParent(config: ISplitViewUpdateConfig): void;
 }
@@ -46,7 +45,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   private _root: HTMLElement;
   private _handle: HTMLElement;
   private _icon: IIconComponent;
-  private _ripple: IRippleComponent;
+  private _stateLayer: IStateLayerComponent;
   private _content: HTMLElement;
   private _parent?: ISplitViewComponent;
   private _overlay?: HTMLElement;
@@ -56,7 +55,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
     this._root = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT);
     this._handle = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.HANDLE);
     this._icon = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.ICON) as IIconComponent;
-    this._ripple = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.RIPPLE) as IRippleComponent;
+    this._stateLayer = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.STATE_LAYER) as IStateLayerComponent;
     this._content = getShadowElement(component, SPLIT_VIEW_PANEL_CONSTANTS.selectors.CONTENT);
   }
 
@@ -328,27 +327,18 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   /**
-   * Runs the ripple animation.
-   * @param fromActivated Whether the ripple starts from and should end in an activated state.
+   * Runs the state-layer animation.
+   * @param fromActivated Whether the state-layer starts from and should end in an activated state.
    */
-  public activateRipple(fromActivated: boolean): void {
+  public animateStateLayer(fromActivated: boolean): void {
     if (fromActivated) {
-      this._ripple.deactivate();
       // Wait a short amount of time so the animation is distinguishable
       window.setTimeout(() => {
-        this._ripple.activate();
-      }, SPLIT_VIEW_PANEL_CONSTANTS.numbers.RIPPLE_ACTIVATION_WAIT);
+        this._stateLayer.playAnimation();
+      }, SPLIT_VIEW_PANEL_CONSTANTS.numbers.STATE_LAYER_ACTIVATION_WAIT);
     } else {
-      this._ripple.activate();
-      this._ripple.deactivate();
+      this._stateLayer.playAnimation();
     }
-  }
-
-  /**
-   * Deactivates the ripple.
-   */
-  public deactivateRipple(): void {
-    this._ripple.deactivate();
   }
 
   /**

@@ -48,7 +48,7 @@ export const CHIP_FIELD_CONSTANTS = {
 export {
   type FieldDensity as ChipFieldDensityType,
   type FieldShape as ChipFieldShapeType
-} from '../field-next/base/base-field-constants';
+} from '../field/base/base-field-constants';
 
 
 export type ChipFieldInputAttributeObserver = (name: keyof typeof observedInputAttributes, value: string | null) => void;

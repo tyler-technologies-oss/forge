@@ -7,7 +7,7 @@ import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { ISelectComponent } from './select';
 import { TestHarness } from '../../../test/utils/test-harness';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS, IFieldComponent } from '../../field-next';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS, IFieldComponent } from '../../field';
 import { BASE_SELECT_CONSTANTS } from '../core';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
 import { SELECT_CONSTANTS } from './select-constants';

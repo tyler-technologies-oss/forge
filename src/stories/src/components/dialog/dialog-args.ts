@@ -1,31 +1,9 @@
-import { DialogPositionType } from '@tylertech/forge';
-
 export interface IDialogProps {
-  backdropClose: boolean;
-  escapeClose: boolean;
   fullscreen: boolean;
   moveable: boolean;
-  customPosition: boolean;
-  positionX: number | string;
-  positionY: number | string;
-  positionType: DialogPositionType;
 }
 
 export const argTypes = {
-  backdropClose: {
-    control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  escapeClose: {
-    control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
   fullscreen: {
     control: 'boolean',
     description: '',
@@ -35,41 +13,6 @@ export const argTypes = {
   },
   moveable: {
     control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  customPosition: {
-    control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  positionX: {
-    control: 'number',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  positionY: {
-    control: 'number',
-    description: '',
-    table: {
-      category: 'Properties',
-    },
-  },
-  positionType: {
-    control: {
-      type: 'select',
-      labels: {
-        'absolute': 'Absolute',
-        'relative': 'Relative',
-      },
-    },
-    options: ['absolute', 'relative'],
     description: '',
     table: {
       category: 'Properties',

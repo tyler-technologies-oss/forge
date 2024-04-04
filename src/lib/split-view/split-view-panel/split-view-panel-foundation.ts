@@ -331,7 +331,6 @@ export class SplitViewPanelFoundation implements ISplitViewPanelFoundation {
    */
   private _handlePointerup(): void {
     this._adapter.setGrabbed(false);
-    this._adapter.deactivateRipple();
     this._endResize();
   }
 

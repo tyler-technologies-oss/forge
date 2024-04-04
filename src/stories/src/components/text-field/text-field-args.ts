@@ -1,9 +1,9 @@
-import { TextFieldDensityType, TextFieldFloatLabelType, TextFieldShapeType } from '@tylertech/forge';
+import { FieldDensity, FieldShape } from '@tylertech/forge';
 
 export interface ITextFieldProps {
-  density: TextFieldDensityType;
-  floatLabelType: TextFieldFloatLabelType;
-  shape: TextFieldShapeType;
+  density: FieldDensity;
+  floatLabel: boolean;
+  shape: FieldShape;
   label: string;
   invalid: boolean;
   required: boolean;
@@ -17,7 +17,7 @@ export interface ITextFieldProps {
 }
 
 export interface ITextFieldTextareaProps {
-  floatLabelType: TextFieldFloatLabelType;
+  floatLabel: boolean;
   invalid: boolean;
   required: boolean;
   disabled: boolean;
@@ -31,9 +31,11 @@ export const textFieldArgTypes = {
     control: {
       type: 'select',
       labels: {
-        'default': 'Default',
-        'roomy': 'Roomy',
-        'dense': 'Dense',
+        'extra-small': 'Extra small',
+        'small': 'Small',
+        'medium': 'Medium (default)',
+        'large': 'Large',
+        'extra-large': 'Extra large',
       },
     },
     options: ['default', 'roomy', 'dense'],
@@ -42,15 +44,8 @@ export const textFieldArgTypes = {
       category: 'Properties',
     },
   },
-  floatLabelType: {
-    control: {
-      type: 'select',
-      labels: {
-        'auto': 'Auto',
-        'always': 'Always',
-      },
-    },
-    options: ['auto', 'always'],
+  floatLabel: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',
@@ -143,15 +138,8 @@ export const textFieldArgTypes = {
 };
 
 export const textFieldTextareaArgTypes = {
-  floatLabelType: {
-    control: {
-      type: 'select',
-      labels: {
-        'auto': 'Auto',
-        'always': 'Always',
-      },
-    },
-    options: ['auto', 'always'],
+  floatLabel: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',

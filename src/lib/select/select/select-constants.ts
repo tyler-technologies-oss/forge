@@ -39,4 +39,4 @@ export const SELECT_CONSTANTS = {
 export {
   type FieldDensity as SelectDensityType,
   type FieldShape as SelectShapeType
-} from '../../field-next/base/base-field-constants';
+} from '../../field/base/base-field-constants';

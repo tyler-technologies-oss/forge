@@ -16,7 +16,7 @@ export default {
 
 export const Default: Story<ITextFieldProps> = ({
   density = 'default',
-  floatLabelType = 'auto',
+  floatLabel = false,
   shape = 'default',
   label = 'First name',
   invalid = false,
@@ -36,7 +36,7 @@ export const Default: Story<ITextFieldProps> = ({
   return (
     <ForgeTextField
       density={density}
-      floatLabelType={floatLabelType}
+      floatLabel={floatLabel}
       shape={shape}
       invalid={invalid}
       required={required}
@@ -66,8 +66,8 @@ export const Default: Story<ITextFieldProps> = ({
 };
 Default.argTypes = textFieldArgTypes;
 Default.args = {
-  density: 'default',
-  floatLabelType: 'auto',
+  density: 'medium',
+  floatLabel: false,
   shape: 'default',
   label: 'First name',
   invalid: false,
@@ -82,7 +82,7 @@ Default.args = {
 } as ITextFieldProps;
 
 export const Textarea: Story<ITextFieldTextareaProps> = ({
-  floatLabelType = 'auto',
+  floatLabel = false,
   invalid = false,
   required = false,
   disabled = false,
@@ -90,7 +90,7 @@ export const Textarea: Story<ITextFieldTextareaProps> = ({
   hasLabel = true,
   hasHelperText = false
 }) => (
-  <ForgeTextField floatLabelType={floatLabelType} invalid={invalid} required={required} style={{width: '512px'}}>
+  <ForgeTextField floatLabel={floatLabel} invalid={invalid} required={required} style={{width: '512px'}}>
     <textarea autoComplete="off" id="input-textarea" disabled={disabled} rows={10} placeholder={hasPlaceholder ? 'Enter description...' : undefined}></textarea>
     {hasLabel && <label htmlFor="input-textarea" slot="label">Description</label>}
     {hasHelperText && <span slot="helper-text">Please enter a description</span>}
@@ -98,7 +98,7 @@ export const Textarea: Story<ITextFieldTextareaProps> = ({
 );
 Textarea.argTypes = textFieldTextareaArgTypes;
 Textarea.args = {
-  floatLabelType: 'auto',
+  floatLabel: false,
   invalid: false,
   required: false,
   disabled: false,

@@ -1,8 +1,8 @@
-import { ChipFieldDensityType, ChipFieldFloatLabelType, ChipFieldShapeType } from '@tylertech/forge';
+import { ChipFieldDensityType, ChipFieldShapeType } from '@tylertech/forge';
 
 export interface IChipFieldProps {
   density: ChipFieldDensityType;
-  floatLabelType: ChipFieldFloatLabelType;
+  floatLabel: boolean;
   shape: ChipFieldShapeType;
   label: string;
   invalid: boolean;
@@ -22,9 +22,11 @@ export const argTypes = {
     control: {
       type: 'select',
       labels: {
-        'default': 'Default',
-        'roomy': 'Roomy',
-        'dense': 'Dense',
+        'extra-small': 'Extra small',
+        'small': 'Small',
+        'medium': 'Medium (default)',
+        'large': 'Large',
+        'extra-large': 'Extra large',
       },
     },
     options: ['default', 'roomy', 'dense'],
@@ -33,15 +35,8 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  floatLabelType: {
-    control: {
-      type: 'select',
-      labels: {
-        'auto': 'Auto',
-        'always': 'Always',
-      },
-    },
-    options: ['auto', 'always'],
+  floatLabel: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',

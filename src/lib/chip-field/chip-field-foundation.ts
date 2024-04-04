@@ -1,6 +1,6 @@
 import { IChipFieldAdapter } from './chip-field-adapter';
 import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS } from './chip-field-constants';
-import { BaseFieldFoundation, IBaseFieldFoundation } from '../field-next/base/base-field-foundation';
+import { BaseFieldFoundation, IBaseFieldFoundation } from '../field/base/base-field-foundation';
 
 export interface IChipFieldFoundation extends IBaseFieldFoundation {
   addOnBlur: boolean;
