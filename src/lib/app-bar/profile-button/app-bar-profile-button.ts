@@ -5,9 +5,9 @@ import { APP_BAR_PROFILE_BUTTON_CONSTANTS, AppBarProfileButtonProfileCardBuilder
 import { ProfileCardComponent } from '../../profile-card';
 import { IconButtonComponent } from '../../icon-button';
 import { AvatarComponent } from '../../avatar';
-import { IPopupComponent, PopupComponent } from '../../popup';
 import { TooltipComponent } from '../../tooltip';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
+import { IPopoverComponent, PopoverComponent } from '../../popover/popover';
 
 import template from './app-bar-profile-button.html';
 
@@ -23,7 +23,7 @@ export interface IAppBarProfileButtonComponent extends IBaseComponent {
   signOutButtonText: string;
   profileButtonText: string;
   open: boolean;
-  popupElement: IPopupComponent | undefined;
+  popupElement: IPopoverComponent | undefined;
   profileCardBuilder: (fn: AppBarProfileButtonProfileCardBuilder) => void;
 }
 
@@ -67,7 +67,7 @@ declare global {
 @CustomElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
   dependencies: [
-    PopupComponent,
+    PopoverComponent,
     ProfileCardComponent,
     IconButtonComponent,
     AvatarComponent,
@@ -181,7 +181,7 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
   @FoundationProperty()
   public declare open: boolean;
 
-  public get popupElement(): IPopupComponent | undefined {
+  public get popupElement(): IPopoverComponent | undefined {
     return this._foundation.popupElement;
   }
 
