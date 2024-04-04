@@ -55,10 +55,4 @@ forge-field {
       content: none; // Hiding the field's multiline box shadow on the label
     }
   }
-
-  &:is([dense],[density=extra-small]) {
-    &::part(label) {
-      display: none;
-    }
-  }
 }

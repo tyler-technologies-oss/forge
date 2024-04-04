@@ -329,7 +329,7 @@ $variants: (
   // Floating label
   //
   
-  :host(#{map.get($label-positions, inset)}[float-label]) {
+  :host(#{map.get($label-positions, inset)}[float-label]:not(:is([dense], [density=extra-small]))) {
     .forge-field--has-label {
       .label {
         @include core.floating-label;
@@ -440,6 +440,10 @@ $variants: (
     :host(#{map.get($label-positions, inset)}#{$selector}) {
       .forge-field {
         @include core.density($density);
+      }
+
+      .label {
+        @include utils.visually-hidden;
       }
     }
   } @else {
