@@ -22,7 +22,6 @@ import '@tylertech/forge/switch';
 import '@tylertech/forge/text-field';
 import '@tylertech/forge/select';
 import '@tylertech/forge/tooltip';
-import '@tylertech/forge/ripple';
 import '@tylertech/forge/stack';
 
 // Icons

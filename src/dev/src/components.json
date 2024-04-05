@@ -44,7 +44,6 @@
   { "label": "Profile card", "path": "/pages/profile-card/profile-card.html" },
   { "label": "Quantity field", "path": "/pages/quantity-field/quantity-field.html", "tags": ["form", "field"] },
   { "label": "Radio", "path": "/pages/radio/radio.html", "tags": ["form"] },
-  { "label": "Ripple", "path": "/pages/ripple/ripple.html" },
   { "label": "Scaffold", "path": "/pages/scaffold/scaffold.html" },
   { "label": "Select", "path": "/pages/select/select.html", "tags": ["form", "field"] },
   { "label": "Skeleton", "path": "/pages/skeleton/skeleton.html" },

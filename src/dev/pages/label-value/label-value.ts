@@ -1,9 +1,10 @@
 import '$src/shared';
 import '@tylertech/forge/icon';
 import '@tylertech/forge/label-value';
+import './label-value.scss';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconPerson } from '@tylertech/tyler-icons/standard';
+import { tylIconInfoOutline } from '@tylertech/tyler-icons/standard';
 
 IconRegistry.define([
-  tylIconPerson
+  tylIconInfoOutline
 ]);

@@ -1,64 +1,66 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
-import { BACKDROP_CONSTANTS } from '../backdrop';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}dialog`;
 
-const classes = {
-  ANIMATING: 'forge-dialog--animating',
-  OPEN: 'forge-dialog--open',
-  ACTION_BUTTON: 'forge-dialog__action__button',
-  BUTTON_TEXT: 'forge-button__text',
-  SCROLLABLE: 'forge-dialog--scrollable',
-  FULLSCREEN: 'forge-dialog--fullscreen',
-  MOVEABLE: 'forge-dialog--moveable'
+const observedAttributes = {
+  OPEN: 'open',
+  MODE: 'mode',
+  TYPE: 'type',
+  ANIMATION_TYPE: 'animation-type',
+  PRESET: 'preset',
+  PERSISTENT: 'persistent',
+  FULLSCREEN: 'fullscreen',
+  TRIGGER: 'trigger',
+  MOVEABLE: 'moveable',
+  MOVE_TARGET: 'move-target',
+  POSITION_STRATEGY: 'position-strategy',
+  PLACEMENT: 'placement',
+  SIZE_STRATEGY: 'size-strategy'
 };
 
 const attributes = {
-  BACKDROP_CLOSE: 'backdrop-close',
-  ESCAPE_CLOSE: 'escape-close',
-  FULLSCREEN: 'fullscreen',
-  POSITION_TYPE: 'position-type',
-  POSITION_X: 'position-x',
-  POSITION_Y: 'position-y',
-  MOVEABLE: 'moveable',
-  MOVE_TARGET: 'move-target',
-  OPEN: 'open',
-  BODY_OPEN: 'forge-dialog-open',
-  INITIAL_FOCUS: 'forge-dialog-focus',
-  DFEAULT_MOVE_TARGET: 'forge-dialog-move-target'
+  ...observedAttributes
+};
+
+const classes = {
+  MOVED: 'moved',
+  MOVING: 'moving'
 };
 
 const selectors = {
-  CONTAINER: '.forge-dialog',
-  SURFACE: '.forge-dialog__surface',
-  BACKDROP: BACKDROP_CONSTANTS.elementName,
-  INITIAL_FOCUS: `[${attributes.INITIAL_FOCUS}]`,
-  DFEAULT_MOVE_TARGET: `[${attributes.DFEAULT_MOVE_TARGET}]`,
-  CONTENT: '.forge-dialog__body'
+  DIALOG: '.forge-dialog',
+  SURFACE: '.surface',
+  MOVE_HANDLE: '.move-handle',
+  AUTOFOCUS: ':is([autofocus],[forge-dialog-focus])'
 };
 
 const events = {
   BEFORE_CLOSE: `${elementName}-before-close`,
   OPEN: `${elementName}-open`,
   CLOSE: `${elementName}-close`,
-  READY: `${elementName}-ready`,
   MOVE_START: `${elementName}-move-start`,
-  MOVED: `${elementName}-move`,
+  MOVE: `${elementName}-move`,
   MOVE_END: `${elementName}-move-end`
 };
 
-const numbers = {
-  ANIMATION_DURATION: 150,
-  BACKDROP_MAX_OPACITY: 0.3
+const defaults = {
+  MODE: 'modal' as DialogMode,
+  TYPE: 'dialog' as DialogType,
+  ANIMATION_TYPE: 'zoom' as DialogAnimationType,
+  PRESET: 'dialog' as DialogPreset,
+  SIZE_STRATEGY: 'content' as DialogSizeStrategy,
+  POSITION_STRATEGY: 'viewport' as DialogPositionStrategy,
+  PLACEMENT: 'center' as DialogPlacement
 };
 
 export const DIALOG_CONSTANTS = {
   elementName,
+  observedAttributes,
   classes,
-  selectors,
   attributes,
+  selectors,
   events,
-  numbers
+  defaults
 };
 
 export interface IDialogMoveEventData {
@@ -75,5 +77,14 @@ export interface IDialogMoveContext {
 
 export interface IDialogMoveStartEventData extends IDialogMoveEventData {}
 
-export type DialogPositionType = 'absolute' | 'relative';
-export type DialogStateCallback = () => boolean | void | Promise<boolean | void>;
+export type DialogMode = 'modal' | 'inline-modal' | 'nonmodal';
+export type DialogType = 'dialog' | 'alertdialog';
+export type DialogAnimationType = 'none' | 'zoom' | 'fade' | 'slide' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right';
+export type DialogPositionStrategy = 'viewport' | 'container';
+export type DialogPlacement = 'custom' | 'center' | 'top' | 'right' | 'bottom' | 'left' | 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+export type DialogSizeStrategy = 'content' | 'container-inline' | 'container-block';
+export type DialogPreset = 'dialog' | 'bottom-sheet' | 'top-sheet' | 'left-sheet' | 'right-sheet';
+
+export const hideBackdrop = Symbol('hideBackdrop');
+export const showBackdrop = Symbol('showBackdrop');
+export const dialogStack = Symbol('dialogStack');

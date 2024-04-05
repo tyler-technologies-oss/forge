@@ -1,4 +1,6 @@
 export * from './date-utils';
+export * from './deferred';
+export * from './dismissible-stack';
 export * from './event-utils';
 export * from './feature-detection';
 export * from './form-utils';

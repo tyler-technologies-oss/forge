@@ -6,7 +6,7 @@ import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '.';
 import { TestHarness } from '../../test/utils/test-harness';
-import { FIELD_CONSTANTS, IFieldComponent } from '../field-next';
+import { FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button';
 import { LABEL_CONSTANTS } from '../label';
 

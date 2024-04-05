@@ -9,10 +9,11 @@ import { SplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
 import { IconComponent, IconRegistry } from '../../icon';
-import { RippleComponent } from '../../ripple';
 
 import template from './split-view-panel.html';
 import styles from './split-view-panel.scss';
+import { StateLayerComponent } from '../../state-layer';
+import { FocusIndicatorComponent } from '../../focus-indicator';
 
 export interface ISplitViewPanelComponent extends Partial<ISplitViewBase>, IBaseComponent {
   resizable: SplitViewPanelResizable;
@@ -45,15 +46,14 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-split-view-panel>` element.
- * 
  * @tag forge-split-view-panel
  */
 @CustomElement({
   name: SPLIT_VIEW_PANEL_CONSTANTS.elementName,
   dependencies: [
     IconComponent,
-    RippleComponent
+    StateLayerComponent,
+    FocusIndicatorComponent
   ]
 })
 export class SplitViewPanelComponent extends BaseComponent implements ISplitViewPanelComponent {

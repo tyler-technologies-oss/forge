@@ -1,7 +1,7 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconClear } from '@tylertech/tyler-icons/standard';
-import { BASE_FIELD_CONSTANTS, FieldComponent, FIELD_CONSTANTS } from '../field-next';
-import { BaseField, IBaseField } from '../field-next/base/base-field';
+import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field';
+import { BaseField, IBaseField } from '../field/base/base-field';
 import { IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
 import { TooltipComponent } from '../tooltip';

@@ -5,8 +5,6 @@
 @use '../tooltip';
 @use '../chips/chip';
 
-@use '../backdrop/mixins' as backdrop-mixins;
-@use '../backdrop/variables' as backdrop-variables;
 @use '../toast/mixins' as toast-mixins;
 @use '../toast/variables' as toast-variables;
 @use '../table/mixins' as table-mixins;
@@ -16,7 +14,7 @@
 /// Provides the CSS custom property definitions for the default Forge dark theme.
 ///
 @mixin theme-properties {
-  // Global theme properties
+  // Global Forge theme properties
   @include theme.properties-dark;
 
   // Popover
@@ -26,7 +24,7 @@
 
   // Tooltip
   @include tooltip.provide-theme((
-    background: theme.variable(surface-bright),
+    background: theme.variable(surface-bright), // Tooltips use bright surface color in dark theme to increase contrast
     color: theme.variable(text-high),
     border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
   ));
@@ -36,7 +34,6 @@
     field-border-color: theme.variable(outline) // Field type chips use a border color in dark theme to increase contrast
   ));
 
-  @include backdrop-mixins.provide-theme(backdrop-variables.$theme-values-dark);
   @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);
   @include table-mixins.provide-theme(table-variables.$theme-values-dark);
 }

@@ -6,11 +6,8 @@
 
 // Required global component styles
 @use './table/forge-table';
-@use './ripple/forge-ripple';
 @use './quantity-field/forge-quantity-field';
 
 // Supplemental global component styles
 @use './popup/forge-popup';
 @use './busy-indicator/forge-busy-indicator';
-@use './dialog/forge-dialog';
-@use './dialog/forge-dialog-utils';

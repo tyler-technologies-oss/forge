@@ -1,6 +1,6 @@
 .dialog:not([fullscreen]) {
   .dialog-container {
-    width: 500px;
+    max-width: 500px;
   }
 }
 
@@ -11,6 +11,24 @@
 
   .dialog-body {
     max-height: 100%;
+  }
+}
+
+forge-dialog[preset$=-sheet] {
+  .dialog-body {
+    max-height: none;
+  }
+}
+
+forge-dialog:not([fullscreen])[size-strategy=container-inline] {
+  .dialog-container {
+    max-width: none;
+  }
+}
+
+forge-dialog:not([fullscreen])[size-strategy=container-block] {
+  .dialog-body {
+    max-height: none;
   }
 }
 

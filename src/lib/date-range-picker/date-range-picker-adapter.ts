@@ -5,7 +5,7 @@ import { DateInputMask, IDateInputMaskOptions } from '../core';
 import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from '../date-picker/base/base-date-picker-adapter';
 import { IDatePickerCalendarDropdownConfig } from '../date-picker/base/base-date-picker-constants';
 import { createToggleElement } from '../date-picker/base/base-date-picker-utils';
-import { FIELD_CONSTANTS } from '../field-next';
+import { FIELD_CONSTANTS } from '../field';
 import { DateRangePickerComponent, IDateRangePickerComponent } from './date-range-picker';
 import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants';
 

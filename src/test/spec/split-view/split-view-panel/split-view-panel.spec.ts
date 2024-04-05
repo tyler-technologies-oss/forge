@@ -1,4 +1,4 @@
-import { IRippleComponent, RippleComponent } from '@tylertech/forge';
+import { IStateLayerComponent } from '@tylertech/forge';
 import { removeElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
 import { clearState, defineSplitViewComponent, getCursor, getHandleIcon, getPixelDimension, getSplitViewPanelSibling, handleBoundariesDuringResize, initState, ISplitViewComponent, ISplitViewPanelAdapter, ISplitViewPanelComponent, ISplitViewPanelState, keyboardResize, parseSize, pointerResize, setState, SplitViewPanelComponent, SPLIT_VIEW_PANEL_CONSTANTS } from '@tylertech/forge/split-view';
@@ -13,6 +13,7 @@ interface ITestSplitViewPanelContext {
   parent: ISplitViewComponent;
   adapter: ISplitViewPanelAdapter;
   getPart(part: string): HTMLElement | null;
+  getStateLayer(): IStateLayerComponent;
   getOverlay(): HTMLElement | null;
   keyEvent(type: string, key: string, shiftKey?: boolean): void;
   pointerEvent(type: string, clientX: number, clientY: number, onDocument?: boolean, buttons?: number): void;
@@ -903,13 +904,13 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context.component.resizable = 'end';
       this.context.component.size = 200;
       this.context.component.max = 205;
-      const spy = spyOn(this.context.getPart('ripple') as IRippleComponent, 'activate');
+      const spy = spyOn(this.context.getStateLayer(), 'playAnimation');
       this.context.keyEvent('keydown', 'ArrowRight', true);
       this.context.keyEvent('keyup', 'ArrowRight');
       this.context.component.size = 200;
       this.context.pointerEvent('pointerdown', 0, 0);
       this.context.pointerEvent('pointermove', 10, 0, true, 1);
-      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.RIPPLE_ACTIVATION_WAIT);
+      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.STATE_LAYER_ACTIVATION_WAIT);
       expect(spy).toHaveBeenCalledTimes(2);
     });
 
@@ -917,13 +918,13 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       this.context = setupTestContext(true, 1);
       this.context.component.resizable = 'end';
       this.context.component.size = 5;
-      const spy = spyOn(this.context.getPart('ripple') as IRippleComponent, 'activate');
+      const spy = spyOn(this.context.getStateLayer(), 'playAnimation');
       this.context.keyEvent('keydown', 'ArrowLeft', true);
       this.context.keyEvent('keyup', 'ArrowLeft');
       this.context.component.size = 5;
       this.context.pointerEvent('pointerdown', 10, 0);
       this.context.pointerEvent('pointermove', 0, 0, true, 1);
-      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.RIPPLE_ACTIVATION_WAIT);
+      await timer(SPLIT_VIEW_PANEL_CONSTANTS.numbers.STATE_LAYER_ACTIVATION_WAIT);
       expect(spy).toHaveBeenCalledTimes(2);
     });
   });
@@ -1247,6 +1248,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       parent: fixture,
       adapter: component['_foundation']['_adapter'],
       getPart: (part: string): HTMLElement | null => component.shadowRoot!.querySelector(`[part=${part}]`),
+      getStateLayer: () => component.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent,
       getOverlay: () => document.body.querySelector(`.${SPLIT_VIEW_PANEL_CONSTANTS.classes.OVERLAY}`),
       keyEvent: (type: string, key: string, shiftKey = false) => {
         const handle = component.shadowRoot!.querySelector('[part=handle]') as Element;

@@ -1,0 +1,788 @@
+@use 'sass:map';
+@use './core';
+@use '../core/styles/theme';
+@use '../focus-indicator';
+@use '../state-layer';
+@use '../utils/mixins' as utils;
+@use './token-utils' as *;
+
+$focus: ':not([disabled]):focus-within';
+$hover: ':not([disabled]):hover';
+
+// Maps to look up the selector for a given density, label-position, theme, or variant
+$densities: (
+  extra-small: ':where([density=extra-small], [dense])',
+  small: ':not([dense])[density=small]',
+  medium: ':not([dense]):where([density=medium], :not([density]))',
+  large: ':not([dense])[density=large]',
+  extra-large: ':not([dense])[density=extra-large]'
+);
+$label-positions: (
+  block-start: '[label-position=block-start]',
+  inline-start: '[label-position=inline-start]',
+  inline-end: '[label-position=inline-end]',
+  inset: ':where([label-position=inset], :not([label-position]))',
+  none: '[label-position=none]'
+);
+$themes: (
+  default: ':where([theme=default], :not([theme]))',
+  primary: '[theme=primary]',
+  secondary: '[theme=secondary]',
+  tertiary: '[theme=tertiary]',
+  success: '[theme=success]',
+  error: '[theme=error]',
+  warning: '[theme=warning]',
+  info: '[theme=info]'
+);
+$variants: (
+  plain: '[variant=plain]',
+  outlined: ':where([variant=outlined], :not([variant]))',
+  tonal: '[variant=tonal]',
+  filled: '[variant=filled]',
+  raised: '[variant=raised]'
+);
+
+@layer base, label, variant; 
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+
+//
+// Base
+//
+
+@layer base {
+  .forge-field {
+    @include core.configuration;
+  }
+  
+  .forge-field {
+    @include core.base;
+  
+    .outline {
+      @include core.outline;
+    }
+
+    .container {
+      @include core.container;
+      @include core.container-layout;
+
+      &::before {
+        @include core.container-background;
+      }
+    }
+  
+    .input {
+      @include core.input;
+    }
+  
+    .label {
+      @include core.label;
+    }
+  
+    .popover-target {
+      @include core.popover-target;
+    }
+
+    .popover-icon {
+      display: none;
+  
+      &__arrow {
+        @include core.popover-icon-arrow;
+      }
+    }
+  
+    .start,
+    .end,
+    .accessory,
+    .support-text,
+    .support-text-start,
+    .support-text-end {
+      display: none;
+    }
+  }
+}
+
+//
+// Popover icon
+//
+
+:host([popover-icon]) {
+  .popover-icon {
+    @include core.popover-icon;
+  }
+}
+
+:host([popover-icon][popover-expanded]) {
+  .popover-icon {
+    @include core.popover-icon-expanded;
+  }
+}
+
+//
+// Named slots
+//
+
+.forge-field {
+  &--has-start {
+    .start {
+      @include core.start;
+    }
+  }
+
+  &--has-end {
+    .end {
+      @include core.end;
+    }
+  }
+
+  &--has-accessory {
+    .accessory {
+      @include core.accessory;
+    }
+  }
+
+  &:not(.forge-field--has-accessory) {
+    .popover-icon {
+      @include core.last-container-element;
+    }
+  }
+
+  &--has-support-text-start,
+  &--has-support-text-end {
+    .support-text {
+      @include core.support-text;
+    }
+  }
+
+  &--has-support-text-start.forge-field--has-support-text-end {
+    .support-text {
+      @include core.support-text-both;
+    }
+  }
+
+  &--has-support-text-start {
+    .support-text-start {
+      @include core.support-text-start;
+    }
+  }
+
+  &--has-support-text-end {
+    .support-text-end {
+      @include core.support-text-end;
+    }
+  }
+}
+
+:host(:not([popover-icon])) {
+  .forge-field:not(.forge-field--has-accessory) {
+    .end {
+      @include core.last-container-element;
+    }
+  }
+}
+
+@each $variant, $variant-selector in $variants {
+  :host(#{$variant-selector}) {
+    .forge-field--has-accessory {
+      .accessory {
+        @include core.accessory-variant($variant);
+      }
+    }
+  }
+}
+
+//
+// Label
+//
+
+@layer label {
+
+  //
+  // Label position
+  //
+
+  :host(#{map.get($label-positions, block-start)}) {
+    .forge-field {
+      @include core.block-start;
+  
+      .label {
+        @include core.label-position(block-start);
+      }
+    }
+  }
+  
+  :host(#{map.get($label-positions, inline-start)}) {
+    .forge-field {
+      @include core.inline-start;
+  
+      .label {
+        @include core.label-position(inline-start);
+      }
+    }
+  }
+  
+  :host(#{map.get($label-positions, inline-end)}) {
+    .forge-field {
+      @include core.inline-end;
+  
+      .label {
+        @include core.label-position(inline-end);
+      }
+    }
+  }
+  
+  :host(#{map.get($label-positions, inset)}) {
+    .forge-field {
+      @include core.inset;
+  
+      .label {
+        @include core.label-position(inset);
+        @include core.floatable-label;
+      }
+    }
+  }
+  
+  :host(#{map.get($label-positions, none)}) {
+    .forge-field {
+      @include core.no-label;
+  
+      .label {
+        @include utils.visually-hidden;
+      }
+    }
+  }
+
+  //
+  // Label alignment
+  //
+  
+  :host(#{map.get($label-positions, inline-start)}[label-alignment=start]),
+  :host(#{map.get($label-positions, inline-end)}[label-alignment=start]) {
+    .label {
+      @include core.label-alignment(start, inline);
+    }
+  }
+  
+  :host(#{map.get($label-positions, inline-start)}:where([label-alignment=center], [label-alignment=default], :not([label-alignment]))),
+  :host(#{map.get($label-positions, inline-end)}:where([label-alignment=center], [label-alignment=default], :not([label-alignment]))) {
+    .label {
+      @include core.label-alignment(center, inline);
+    }
+  }
+  
+  :host(#{map.get($label-positions, inline-start)}[label-alignment=end]),
+  :host(#{map.get($label-positions, inline-end)}[label-alignment=end]) {
+    .label {
+      @include core.label-alignment(end, inline);
+    }
+  }
+  
+  :host(#{map.get($label-positions, inline-start)}[label-alignment=baseline]),
+  :host(#{map.get($label-positions, inline-end)}[label-alignment=baseline]) {
+    .label {
+      @include core.label-alignment(baseline, inline);
+    }
+  }
+  
+  :host(#{map.get($label-positions, block-start)}:where([label-alignment=start], [label-alignment=default], :not([label-alignment]))) {
+    .label {
+      @include core.label-alignment(start, block);
+    }
+  }
+  
+  :host(#{map.get($label-positions, block-start)}[label-alignment=center]) {
+    .label {
+      @include core.label-alignment(center, block);
+    }
+  }
+  
+  :host(#{map.get($label-positions, block-start)}[label-alignment=end]) {
+    .label {
+      @include core.label-alignment(end, block);
+    }
+  }
+  
+  :host(#{map.get($label-positions, block-start)}[label-alignment=baseline]:not([variant=plain])) {
+    .label {
+      @include core.label-alignment(baseline, block);
+    }
+  }
+  
+  :host(#{map.get($label-positions, block-start)}[label-alignment=baseline][variant=plain]) {
+    .label {
+      @include core.label-alignment(baseline, block, 0px);
+    }
+  }
+
+  //
+  // Floating label
+  //
+  
+  :host(#{map.get($label-positions, inset)}[float-label]:not(:is([dense], [density=extra-small]))) {
+    .forge-field--has-label {
+      .label {
+        @include core.floating-label;
+      }
+  
+      .input {
+        @include core.floating-input;
+      }
+  
+      &.forge-field--floating-in {
+        .label {
+          @include core.float-in-label;
+        }
+  
+        .input {
+          @include core.float-in-input;
+        }
+      }
+
+      &:not(.forge-field--floating-in) {
+        .input {
+          ::slotted(:is(input, [data-forge-field-input], [data-forge-multi-input-separator])) {
+            @include core.slotted-floating-input;
+          }
+        }
+      }
+    }
+  }
+
+  :host(#{map.get($label-positions, inset)}:not([float-label])) {
+    .forge-field--has-label.forge-field--floating-out {
+      .label {
+        @include core.float-out-label;
+      }
+
+      .input {
+        @include core.float-out-input;
+      }
+    }
+  }
+
+  :host(#{map.get($label-positions, inset)}[float-label][multiline]) {
+    .forge-field--has-label:not(.forge-field--floating-in) {
+      ::slotted(textarea) {
+        @include core.resize-container-slotted-floating-input;
+      }
+    }
+  }
+}
+
+//
+// Support text
+//
+
+:host([support-text-inset=both]) {
+  .support-text {
+    @include core.support-text-inset(both);
+  }
+}
+
+:host([support-text-inset=start]) {
+  .support-text {
+    @include core.support-text-inset(start);
+  }
+}
+
+:host([support-text-inset=end]) {
+  .support-text {
+    @include core.support-text-inset(end);
+  }
+}
+
+//
+// Required
+//
+
+:host([required]) {
+  .label::before {
+    @include core.label-before;
+  }
+}
+
+//
+// Optional
+//
+
+:host([optional]) {
+  .label::after {
+    @include core.label-after;
+  }
+}
+
+//
+// Density
+//
+
+@each $density, $selector in $densities {
+  // Non-inset density selectors
+  :host(#{$selector}) {
+    .forge-field {
+      @include core.density($density);
+    }
+  }
+
+  // Inset density selectors
+  @if $density == 'extra-small' {
+    // We always force the inset density to be same height as non-dense
+    :host(#{map.get($label-positions, inset)}#{$selector}) {
+      .forge-field {
+        @include core.density($density);
+      }
+
+      .label {
+        @include utils.visually-hidden;
+      }
+    }
+  } @else {
+    :host(#{map.get($label-positions, inset)}#{$selector}) {
+      .forge-field {
+        @include core.density($density, true);
+      }
+    }
+  }
+}
+
+//
+// Shape
+//
+
+:host([shape=squared]) {
+  .forge-field {
+    @include core.shape(squared);
+  }
+}
+
+:host([shape=rounded]) {
+  .forge-field {
+    @include core.shape(rounded);
+  }
+}
+
+//
+// Multiline
+//
+
+:host([multiline]) {
+  .container {
+    @include core.container-multiline;
+  }
+
+  .resize-container {
+    @include core.container-layout;
+    @include core.resize-container;
+    
+    .label,
+    .start,
+    .end,
+    .popover-icon {
+      @include core.resize-container-child;
+    }
+  }
+
+}
+
+:host([multiline]#{map.get($label-positions, inset)}[float-label]) {
+  .label {
+    @include core.resize-container-inset-label;
+
+    slot {
+      @include core.resize-container-inset-label-slot;
+    }
+
+    &::after {
+      @include core.resize-container-inset-label-background;
+    }
+  }
+}
+
+//
+// Variant
+//
+
+@layer variant {
+  @each $variant, $variant-selector in $variants {
+    @each $theme, $theme-selector in $themes {
+      :host(#{$variant-selector}#{$theme-selector}) {
+        .forge-field {
+          @include core.variant($variant, $theme);
+        }
+
+        .container::before {
+          @include core.container-background-variant($variant, $theme);
+        }
+
+        .label {
+          @include core.label-variant($variant, $theme);
+        }
+      }
+  
+      :host(#{map.get($label-positions, inset)}#{$variant-selector}#{$theme-selector}) {
+        .label {
+          @include core.inset-label-variant($variant, $theme);
+        }
+      }
+    }
+  }
+}
+
+//
+// Hover
+//
+
+@each $variant, $variant-selector in $variants {
+  @each $theme, $theme-selector in $themes {
+    :host(#{$hover}#{$variant-selector}#{$theme-selector}) {
+      .container {
+        @include core.container-hover($variant, $theme);
+
+        &::before {
+          @include core.container-background-hover($variant, $theme);
+        }
+      }
+    }
+  }
+}
+
+//
+// Focus
+//
+
+@each $variant, $variant-selector in $variants {
+  :host(#{$focus}#{$variant-selector}) {
+    .container::before {
+      @include core.container-background-focus($variant);
+    }
+  }
+}
+
+//
+// Invalid
+//
+
+:host([invalid]:not([disabled])) {
+  .label {
+    @include core.label-invalid;
+  }
+
+  .support-text {
+    @include core.support-text-invalid;
+  }
+}
+
+@each $variant, $variant-selector in $variants {
+  :host([invalid]#{$variant-selector}:not([disabled])) {
+    .container {
+      @include core.container-invalid($variant);
+
+      &::before {
+        @include core.container-background-invalid($variant);
+      }
+    }
+  }
+
+  :host([invalid]#{$hover}#{$variant-selector}:not([disabled])) {
+    .container {
+      @include core.container-invalid-hover($variant);
+
+      &::before {
+        @include core.container-background-invalid-hover($variant);
+      }
+    }
+  }
+
+  :host([invalid]#{map.get($label-positions, inset)}#{$variant-selector}:not([disabled])) {
+    .label {
+      @include core.inset-label-invalid($variant);
+    }
+  }
+}
+
+//
+// Disabled
+//
+
+// Selectively target everything except the accessory slot. The accessory's border is also targeted
+// to appear contiguous with the container's outline. To do this, styles that would otherwise be
+// applied to the container and accessory themselves are instead applied to their ::before
+// pseudo-elements, allowing visually nested elements to escape the disabled opacity.
+
+:host([disabled]) {
+  .forge-field {
+    @include core.field-disabled;
+    
+    .label,
+    .container::before,
+    .start,
+    .input,
+    .end,
+    .popover-icon,
+    .accessory::before,
+    .support-text {
+      @include core.field-part-disabled;
+    }
+    
+    .input {
+      ::slotted(*) {
+        @include core.default-slot-disabled;
+      }
+    }
+  }
+}
+
+:host([disabled]:not(#{map.get($variants, plain)})) {
+  .container::before {
+    @include core.container-background-disabled;
+  }
+}
+
+//
+// Slotted
+//
+
+.forge-field {
+  .input {
+    ::slotted(input:-webkit-autofill) {
+      border-radius: #{token(shape)};
+
+      // TODO: remove when outline moves from pseudo-element to container
+      height: calc(100% - (#{token(border-width)} * 2));
+      width: calc(100% - (#{token(border-width)} * 2));
+      margin-block-start: #{token(border-width)};
+      margin-inline-start: #{token(border-width)};
+    }
+
+    ::slotted(*) {
+      @include core.default-slot-content;
+    }
+
+    ::slotted(textarea) {
+      @include core.default-slot-textarea;
+    }
+
+    ::slotted([data-forge-field-input]),
+    ::slotted(*:first-of-type:is(input, textarea, [data-forge-field-input])) {
+      @include core.first-default-slot-content;
+    }
+
+    ::slotted([data-forge-field-input]),
+    ::slotted(*:last-of-type:is(input, textarea, [data-forge-field-input])) {
+      @include core.last-default-slot-content;
+    }
+
+    ::slotted([data-forge-multi-input-separator]) {
+      @include core.slotted-multi-input-separator;
+    }
+  }
+
+  .label {
+    ::slotted(forge-label) {
+      @include core.slotted-forge-label;
+    }
+  }
+
+  &--has-start {
+    @include core.main-content-padding-inline(start, start);
+  }
+
+  &--has-end {
+    @include core.main-content-padding-inline(end, end);
+  }
+}
+
+:host(#{map.get($label-positions, inset)}) {
+  .label {
+    ::slotted(*) {
+      @include core.slotted-inset-label;
+    }
+  }
+}
+
+:host([popover-icon]) {
+  .forge-field {
+    &:not(.forge-field--has-end) {
+      @include core.main-content-padding-inline(end, popover-icon);
+    }
+  }
+}
+
+:host(:not(popover-icon)) {
+  .forge-field {
+    &--has-accessory:not(:is(.forge-field--has-end)) {
+      @include core.main-content-padding-inline(end, accessory);
+    }
+  }
+}
+
+:host([multiline]) {
+  .input {
+    ::slotted(input) {
+      @include core.resize-container-slotted-input;
+    }
+
+    ::slotted(textarea) {
+      @include core.resize-container-slotted-input;
+    }
+  }
+
+  .accessory {
+    slot {
+      @include core.resize-container-accessory-slot;
+    }
+  }
+}
+
+//
+// Focus indicator
+//
+
+forge-focus-indicator {
+  @include focus-indicator.provide-theme((
+    width: #{token(focus-indicator-width)},
+    outward-offset: 0px,
+    shape: #{token(shape)}
+  ));
+}
+
+@each $theme, $selector in $themes {
+
+  @if $theme != default and $theme != primary {
+    :host(#{$selector}) {
+      forge-focus-indicator {
+        @include focus-indicator.provide-theme((
+          color: theme.variable(#{$theme})
+        ));
+      }
+    }
+  }
+}
+
+:host([invalid]:not([disabled])) {
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      color: #{token(invalid-color)}
+    ));
+  }
+}
+
+//
+// Prefers reduced motion
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-field {
+    @include core.reduced-motion;
+  }
+}

@@ -40,7 +40,7 @@ import { DialogComponent } from './dialog';
 import { DividerComponent } from './divider';
 import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
 import { ExpansionPanelComponent } from './expansion-panel';
-import { FieldComponent } from './field-next';
+import { FieldComponent } from './field';
 import { FilePickerComponent } from './file-picker';
 import { FloatingActionButtonComponent } from './floating-action-button';
 import { FocusIndicatorComponent } from './focus-indicator';
@@ -62,7 +62,6 @@ import { PopoverComponent } from './popover';
 import { PopupComponent } from './popup';
 import { QuantityFieldComponent } from './quantity-field';
 import { RadioComponent, RadioGroupComponent } from './radio';
-import { RippleComponent } from './ripple';
 import { ScaffoldComponent } from './scaffold';
 import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
 import { SelectDropdownComponent } from './select/select-dropdown';
@@ -114,10 +113,9 @@ export * from './dialog';
 export * from './divider';
 export * from './drawer';
 export * from './expansion-panel';
-export * from './field-next';
+export * from './field';
 export * from './file-picker';
 export * from './floating-action-button';
-export * from './floating-label';
 export * from './focus-indicator';
 export * from './icon';
 export * from './icon-button';
@@ -136,7 +134,6 @@ export * from './popover';
 export * from './popup';
 export * from './quantity-field';
 export * from './radio';
-export * from './ripple';
 export * from './scaffold';
 export * from './select';
 export * from './skeleton';
@@ -224,7 +221,6 @@ const CUSTOM_ELEMENTS = [
   QuantityFieldComponent,
   RadioComponent,
   RadioGroupComponent,
-  RippleComponent,
   ScaffoldComponent,
   SelectComponent,
   SelectDropdownComponent,

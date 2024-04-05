@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { ForgeButton, ForgeDialog, ForgeDivider, ForgeIcon, ForgeIconButton, ForgeToolbar } from '@tylertech/forge-react';
-import { DialogPositionType, IconRegistry } from '@tylertech/forge';
+import { ForgeButton, ForgeDialog, ForgeIcon, ForgeIconButton, ForgeScaffold, ForgeToolbar } from '@tylertech/forge-react';
+import { IconRegistry } from '@tylertech/forge';
 import { argTypes, IDialogProps } from './dialog-args';
 import { LOREM_IPSUM } from "../../mock/lorem-ipsum";
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
@@ -19,68 +19,47 @@ export default {
 } as Meta;
 
 export const Simple: Story<IDialogProps> = ({
-  backdropClose = true,
-  escapeClose = true,
   fullscreen = false,
-  moveable = true,
-  customPosition = false,
-  positionX = 0,
-  positionY = 0,
-  positionType = 'absolute' as DialogPositionType
+  moveable = true
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);  
-  const hide = () => setIsOpen(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const show = () => setIsOpen(true);
+  const hide = () => setIsOpen(false);
 
   return (
     <>
       <ForgeButton variant="raised" onClick={show}>Show dialog</ForgeButton>
 
       <ForgeDialog
+        open={isOpen}
         aria-labelledby="dialog-title"
         aria-describedby="dialog-message"
-        open={isOpen}
-        backdropClose={backdropClose}
-        escapeClose={escapeClose}
         fullscreen={fullscreen}
         moveable={moveable}
-        positionType={positionType}
-        positionX={customPosition ? positionX : null}
-        positionY={customPosition ? positionY : null}
         on-forge-dialog-close={hide}>
-        <header className="forge-dialog__header" forge-dialog-move-target={moveable ? 'true' : null}>
-          <h2 id="dialog-title" className="forge-dialog__title">Dialog title</h2>
-        </header>
-        <p id="dialog-message" className="forge-dialog__body" style={{ width: '500px' }}>
-          {LOREM_IPSUM.p1.slice(0, 162)}
-        </p>
-        <footer className="forge-dialog__footer">
-          <ForgeButton variant="raised" onClick={hide}>Close</ForgeButton>
-        </footer>
+          <ForgeScaffold style={{ width: '500px' }}>
+            <ForgeToolbar slot="header">
+              <h2 id="dialog-title" className="forge-typography--subheading4">Dialog title</h2>
+            </ForgeToolbar>
+            <p id="dialog-message" slot="body" style={{ padding: '16px' }}>
+              {LOREM_IPSUM.p1.slice(0, 162)}
+            </p>
+            <ForgeToolbar slot="footer">
+              <ForgeButton slot="end" variant="raised" autofocus onClick={hide}>Close</ForgeButton>
+            </ForgeToolbar>
+          </ForgeScaffold>
       </ForgeDialog>
     </>
   );
 };
 Simple.args = {
-  backdropClose: true,
-  escapeClose: true,
   fullscreen: false,
-  moveable: true,
-  customPosition: false,
-  positionX: 0,
-  positionY: 0,
-  positionType: 'absolute'
+  moveable: true
 } as IDialogProps;
 
 export const Complex: Story<IDialogProps> = ({
-  backdropClose = true,
-  escapeClose = true,
   fullscreen = false,
   moveable = true,
-  customPosition = false,
-  positionX = 0,
-  positionY = 0,
-  positionType = 'absolute'
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const hide = () => setIsOpen(false);
@@ -98,41 +77,29 @@ export const Complex: Story<IDialogProps> = ({
         aria-labelledby="dialog-title"
         aria-describedby="dialog-message"
         open={isOpen}
-        backdropClose={backdropClose}
-        escapeClose={escapeClose}
         fullscreen={fullscreen}
         moveable={moveable}
-        positionType={positionType}
-        positionX={customPosition ? positionX : null}
-        positionY={customPosition ? positionY : null}
         on-forge-dialog-close={hide}>
-        <ForgeToolbar forge-dialog-move-target={moveable ? 'true' : null}>
-          <h2 id="dialog-title" slot="start">Discard draft?</h2>
-          <ForgeIconButton slot="end">
-            <button onClick={hide} type="button" aria-label="Close dialog">
+        <ForgeScaffold style={{ width: '500px' }}>
+          <ForgeToolbar slot="header">
+            <h2 id="dialog-title" slot="start">Discard draft?</h2>
+            <ForgeIconButton slot="end" onClick={hide} type="button" aria-label="Close dialog">
               <ForgeIcon name="close" />
-            </button>
-          </ForgeIconButton>
-        </ForgeToolbar>
-        <p id="dialog-message" className="forge-dialog__body" style={{ width: '500px' }}>
-          {LOREM_IPSUM.p1}
-        </p>
-        <ForgeDivider />
-        <ForgeToolbar>
-          <ForgeButton variant="outlined" style={{ marginRight: 16 }} slot="end" onClick={hide}>Cancel</ForgeButton>
-          <ForgeButton variant="raised" slot="end" onClick={hide} forge-dialog-focus="true">Discard</ForgeButton>
-        </ForgeToolbar>
+            </ForgeIconButton>
+          </ForgeToolbar>
+          <p slot="body" id="dialog-message" style={{ padding: '16px' }}>
+            {LOREM_IPSUM.p1}
+          </p>
+          <ForgeToolbar slot="footer" inverted>
+            <ForgeButton variant="outlined" style={{ marginRight: 16 }} slot="end" onClick={hide}>Cancel</ForgeButton>
+            <ForgeButton variant="raised" theme="error" slot="end" onClick={hide} autofocus>Discard</ForgeButton>
+          </ForgeToolbar>
+        </ForgeScaffold>
       </ForgeDialog>
     </>
   );
 };
 Complex.args = {
-  backdropClose: true,
-  escapeClose: true,
   fullscreen: false,
-  moveable: false,
-  customPosition: false,
-  positionX: 0,
-  positionY: 0,
-  positionType: 'absolute'
+  moveable: false
 } as IDialogProps;

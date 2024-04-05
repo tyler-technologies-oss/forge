@@ -3,8 +3,8 @@ import { ISelectComponent } from './select';
 import { SELECT_CONSTANTS } from './select-constants';
 import { IBaseSelectAdapter, BaseSelectAdapter } from '../core';
 import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
-import type { IFieldComponent } from '../../field-next/field';
-import { FieldLabelPosition, FIELD_CONSTANTS } from '../../field-next';
+import type { IFieldComponent } from '../../field/field';
+import { FieldLabelPosition, FIELD_CONSTANTS } from '../../field';
 
 export type OptionListenerDestructor = () => void;
 

@@ -1,0 +1,36 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: contents;
+}
+
+@mixin base {
+  position: absolute;
+  inset: 0;
+  contain: content;
+
+  z-index: #{token(z-index)};
+
+  background: #{token(background)};
+  opacity: 0;
+
+  animation-fill-mode: forwards;
+}
+
+@mixin visible {
+  opacity: #{token(opacity)};
+}
+
+@mixin entering {
+  animation-name: enter;
+  animation-duration: #{token(enter-animation-duration)};
+  animation-timing-function: #{token(enter-animation-easing)};
+}
+
+@mixin exiting {
+  animation-name: exit;
+  animation-duration: #{token(exit-animation-duration)};
+  animation-timing-function: #{token(exit-animation-easing)};
+}

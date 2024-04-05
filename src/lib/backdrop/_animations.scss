@@ -1,0 +1,19 @@
+@use './core' as *;
+
+@keyframes enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: #{token(opacity)};
+  }
+}
+
+@keyframes exit {
+  from {
+    opacity: #{token(opacity)};
+  }
+  to {
+    opacity: 0;
+  }
+}
