@@ -1,48 +1,80 @@
-const selectors = {
-  INPUT: 'input,textarea'
-};
+import { COMPONENT_NAME_PREFIX } from '../constants';
+import { LABEL_CONSTANTS } from '../label';
+import { BASE_FIELD_CONSTANTS } from './base/base-field-constants';
 
-const observedInputAttributes = ['disabled', 'readonly', 'value', 'placeholder'];
-
-const classes = {
-  DISABLED: 'forge-field--disabled',
-  READONLY: 'forge-field--readonly',
-  INPUT_FOCUSED: 'forge-field__input--focused',
-  LEADING: 'forge-field--leading',
-  TRAILING: 'forge-field--trailing',
-  ADDON_END: 'forge-field--addon-end',
-  ADDON_END_CONTAINER: 'forge-field__addon-end-container',
-  FOCUSED: 'forge-field--focused',
-  LABEL_FOCUSED: 'forge-field__label--focused',
-  SHAPE_ROUNDED: 'forge-field--shape-rounded',
-  INVALID: 'forge-field--invalid',
-  REQUIRED: 'forge-field--required',
-  DENSE: 'forge-field--dense',
-  ROOMY: 'forge-field--roomy',
-  LABEL: 'forge-field--label'
-};
+const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}field`;
 
 const observedAttributes = {
-  DENSITY: 'density',
-  FLOAT_LABEL_TYPE: 'float-label-type',
-  SHAPE: 'shape',
-  INVALID: 'invalid',
-  REQUIRED: 'required',
-  HOST_LABEL_FLOATING: `forge-label-floating`
+  ...BASE_FIELD_CONSTANTS.observedAttributes,
+  POPOVER_EXPANDED: 'popover-expanded',
+  MULTILINE: 'multiline',
+  FOCUS_INDICATOR_ALLOW_FOCUS: 'focus-indicator-allow-focus',
+  FOCUS_INDICATOR_FOCUS_MODE: 'focus-indicator-focus-mode'
 };
 
 const attributes = {
-  ...observedAttributes
+  ...observedAttributes,
+  MULTI_INPUT_SEPARATOR: 'data-forge-multi-input-separator'
+};
+
+const classes = {
+  FLOATING_IN: 'forge-field--floating-in',
+  FLOATING_OUT: 'forge-field--floating-out',
+  HAS_LABEL: 'forge-field--has-label',
+  HAS_START: 'forge-field--has-start',
+  HAS_END: 'forge-field--has-end',
+  HAS_ACCESSORY: 'forge-field--has-accessory',
+  HAS_SUPPORT_START: 'forge-field--has-support-text-start',
+  HAS_SUPPORT_END: 'forge-field--has-support-text-end',
+  RESIZE_CONTAINER: 'resize-container'
+};
+
+const selectors = {
+  ROOT: '#root',
+  CONTAINER: '#container',
+  LABEL: '#label',
+  POPOVER_ICON: '#popover-icon',
+  RESIZE_CONTAINER: `.${classes.RESIZE_CONTAINER}`,
+  LABEL_ELEMENTS: `:where(label, ${LABEL_CONSTANTS.elementName})`,
+  POPOVER_TARGET: '.popover-target'
+};
+
+const parts = {
+  ROOT: 'root',
+  LABEL: 'label',
+  CONTAINER: 'container',
+  START: 'start',
+  INPUT: 'input',
+  POPOVER_ICON: 'popover-icon',
+  END: 'end',
+  ACCESSORY: 'accessory',
+  SUPPORT_TEXT: 'support-text',
+  SUPPORT_TEXT_START: 'support-text-start',
+  SUPPORT_TEXT_END: 'support-text-end',
+  FOCUS_INDICATOR: 'focus-indicator'
+};
+
+const events = {
+  POPOVER_ICON_CLICK: `${elementName}-popover-icon-click`
+};
+
+const defaults = {
+  ...BASE_FIELD_CONSTANTS.defaults
+};
+
+const animations = {
+  FLOAT_IN_LABEL: 'float-in-label-animation',
+  FLOAT_OUT_LABEL: 'float-out-label-animation'
 };
 
 export const FIELD_CONSTANTS = {
-  attributes,
+  elementName,
   observedAttributes,
-  observedInputAttributes,
+  attributes,
+  classes,
   selectors,
-  classes
+  parts,
+  events,
+  defaults,
+  animations
 };
-
-export type FieldDensityType = 'roomy' | 'default' | 'dense';
-export type FieldFloatLabelType = 'always' | 'auto';
-export type FieldShapeType = 'default' | 'rounded';

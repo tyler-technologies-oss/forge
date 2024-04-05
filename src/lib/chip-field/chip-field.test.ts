@@ -4,7 +4,7 @@ import { elementUpdated, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
 import { nothing } from 'lit';
 import { IChipFieldComponent } from './chip-field';
-import { BASE_FIELD_CONSTANTS, FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS, IFieldComponent } from '../field-next';
+import { BASE_FIELD_CONSTANTS, FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { getShadowElement } from '@tylertech/forge-core';
 
 import './chip-field';

@@ -13,8 +13,8 @@ import { ScaffoldComponent } from '../../scaffold';
 import { ToolbarComponent } from '../../toolbar';
 import { IconButtonComponent } from '../../icon-button';
 import { PopoverComponent } from '../../popover';
-import { BASE_FIELD_CONSTANTS, FieldComponent, FieldDensity, FieldLabelPosition, FIELD_CONSTANTS } from '../../field-next';
-import { IWithBaseField, WithBaseField } from '../../field-next/base/with-base-field';
+import { BASE_FIELD_CONSTANTS, FieldComponent, FieldDensity, FieldLabelPosition, FIELD_CONSTANTS } from '../../field';
+import { IWithBaseField, WithBaseField } from '../../field/base/with-base-field';
 
 import template from './select.html';
 import styles from './select.scss';

@@ -65,9 +65,11 @@ export const argTypes = {
     control: {
       type: 'select',
       labels: {
-        'default': 'Default',
-        'roomy': 'Roomy',
-        'dense': 'Dense',
+        'extra-small': 'Extra small',
+        'small': 'Small',
+        'medium': 'Medium (default)',
+        'large': 'Large',
+        'extra-large': 'Extra large',
       },
     },
     options: ['default', 'roomy', 'dense'],

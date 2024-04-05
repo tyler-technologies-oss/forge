@@ -1,7 +1,7 @@
 import '$src/shared';
 import { Density, IIconComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
-import '@tylertech/forge/field-next';
-import { FieldLabelAlignment, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field-next';
+import '@tylertech/forge/field';
+import { FieldLabelAlignment, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field';
 import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/label';
 import { tylIconFavorite } from '@tylertech/tyler-icons/standard';

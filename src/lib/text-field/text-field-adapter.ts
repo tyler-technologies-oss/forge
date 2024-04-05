@@ -1,6 +1,6 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
-import { BASE_FIELD_CONSTANTS, FIELD_CONSTANTS, IFieldComponent } from '../field-next';
-import { BaseFieldAdapter, IBaseFieldAdapter } from '../field-next/base/base-field-adapter';
+import { BASE_FIELD_CONSTANTS, FIELD_CONSTANTS, IFieldComponent } from '../field';
+import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
 import { LabelComponent } from '../label';
 import { ITextFieldComponent } from './text-field';
 import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS } from './text-field-constants';

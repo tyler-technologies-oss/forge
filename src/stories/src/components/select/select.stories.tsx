@@ -25,7 +25,7 @@ export const Default: Story<ISelectProps> = ({
   invalid = false,
   required = false,
   density = 'default',
-  floatLabelType = 'default',
+  floatLabel = false,
   shape = 'default',
   placeholder = '',
   constrainPopupWidth = true,
@@ -47,7 +47,7 @@ export const Default: Story<ISelectProps> = ({
       invalid={invalid}
       required={required}
       density={density}
-      floatLabelType={floatLabelType}
+      floatLabel={floatLabel}
       shape={shape}
       placeholder={placeholder}
       constrainPopupWidth={constrainPopupWidth}
@@ -68,8 +68,8 @@ export const Default: Story<ISelectProps> = ({
   );
 };
 Default.args = {
-  density: 'default',
-  floatLabelType: 'auto',
+  density: 'medium',
+  floatLabel: false,
   shape: 'default',
   invalid: false,
   required: false,

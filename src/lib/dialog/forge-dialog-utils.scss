@@ -1,26 +1,43 @@
-@use './mixins';
+// @deprecated - This file is deprecated and will be removed in the next major version of the library.
+
+@use '../core/styles/theme';
 
 .forge-dialog {
   &--scrollable {
     .forge-dialog__title,
     .forge-dialog__footer {
-      border-color: rgba(0, 0, 0, 0.12);
+      border-color: #{theme.variable(outline)};
     }
   }
 
   &__header {
-    @include mixins.header;
+    margin: 0;
+    padding: 0 24px 8px;
+    border-bottom: 1px solid transparent;
   }
 
   &__title {
-    @include mixins.title;
+    box-sizing: border-box;
+    margin: 0;
   }
 
   &__body {
-    @include mixins.body;
+    padding-top: 20px;
+    padding: 0 24px 24px;
+    overflow: auto;
   }
 
   &__footer {
-    @include mixins.footer;
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    min-height: 52px;
+    margin: 0;
+    padding: 8px;
+    border-top: 1px solid transparent;
   }
 }

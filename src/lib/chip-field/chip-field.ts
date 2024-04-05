@@ -3,8 +3,8 @@ import { ChipFieldAdapter } from './chip-field-adapter';
 import { ChipFieldFoundation } from './chip-field-foundation';
 import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
 import { ChipComponent } from '../chips';
-import { BaseField, IBaseField } from '../field-next/base/base-field';
-import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field-next';
+import { BaseField, IBaseField } from '../field/base/base-field';
+import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field';
 
 import template from './chip-field.html';
 import styles from './chip-field.scss';

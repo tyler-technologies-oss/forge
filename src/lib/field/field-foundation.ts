@@ -1,164 +1,118 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-import { IFloatingLabel } from '../floating-label/floating-label';
+import { FocusIndicatorFocusMode } from '../focus-indicator';
+import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 import { IFieldAdapter } from './field-adapter';
-import { FIELD_CONSTANTS, FieldFloatLabelType, FieldShapeType, FieldDensityType } from './field-constants';
+import { FIELD_CONSTANTS } from './field-constants';
 
 export interface IFieldFoundation extends ICustomElementFoundation {
-  density: FieldDensityType;
-  floatLabelType: FieldFloatLabelType;
-  shape: FieldShapeType;
+  labelPosition: FieldLabelPosition;
+  labelAlignment: FieldLabelAlignment;
+  floatLabel: boolean;
   invalid: boolean;
   required: boolean;
-  floatLabel(value: boolean, alwaysFloat?: boolean): void;
+  optional: boolean;
+  disabled: boolean;
+  variant: FieldVariant;
+  theme: FieldTheme;
+  shape: FieldShape;
+  density: FieldDensity;
+  dense: boolean;
+  popoverIcon: boolean;
+  popoverExpanded: boolean;
+  multiline: boolean;
+  supportTextInset: FieldSupportTextInset;
+  focusIndicatorTargetElement: HTMLElement;
+  focusIndicatorFocusMode: FocusIndicatorFocusMode;
+  focusIndicatorAllowFocus: boolean;
+  initialize(): void;
+  floatLabelWithoutAnimation(value: boolean): void;
 }
 
-export class FieldFoundation {
-  protected _density: FieldDensityType = 'default';
-  protected _floatingLabel: IFloatingLabel | undefined;
-  protected _shape: FieldShapeType = 'default';
-  protected _invalid = false;
-  protected _required = false;
-  protected _floatLabelType: FieldFloatLabelType = 'auto';
-  protected _isInitialized = false;
-  protected _labelSlotListener: (evt: Event) => void;
-  protected _leadingSlotListener: (evt: Event) => void;
-  protected _trailingSlotListener: (evt: Event) => void;
-  protected _addonEndSlotListener: (evt: Event) => void;
-  protected _focusListener: (evt: Event) => void;
-  protected _blurListener: (evt: Event) => void;
-  protected _valueChangedListener: (value: any) => void;
-  protected _inputAttributeChangedListener: (name: string, value: string) => void;
+export class FieldFoundation implements IFieldFoundation {
+  private _labelPosition: FieldLabelPosition = FIELD_CONSTANTS.defaults.DEFAULT_LABEL_POSITION;
+  private _labelAlignment: FieldLabelAlignment = FIELD_CONSTANTS.defaults.DEFAULT_LABEL_ALIGNMENT;
+  private _floatLabel = false;
+  private _invalid = false;
+  private _required = false;
+  private _optional = false;
+  private _disabled = false;
+  private _variant: FieldVariant = FIELD_CONSTANTS.defaults.DEFAULT_VARIANT;
+  private _theme: FieldTheme = FIELD_CONSTANTS.defaults.DEFAULT_THEME;
+  private _shape: FieldShape = FIELD_CONSTANTS.defaults.DEFAULT_SHAPE;
+  private _density: FieldDensity = FIELD_CONSTANTS.defaults.DEFAULT_DENSITY;
+  private _dense = false;
+  private _popoverIcon = false;
+  private _popoverExpanded = false;
+  private _multiline = false;
+  private _supportTextInset: FieldSupportTextInset = FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
 
-  constructor(protected _adapter: IFieldAdapter) {
-    this._labelSlotListener = evt => this._onLabelSlotChanged(evt);
-    this._leadingSlotListener = evt => this._onLeadingSlotChanged(evt);
-    this._trailingSlotListener = evt => this._onTrailingSlotChanged(evt);
-    this._addonEndSlotListener = evt => this._onAddonEndSlotChanged(evt);
-    this._focusListener = (evt: FocusEvent) => this._onFocus(evt);
-    this._blurListener = (evt: FocusEvent) => this._onBlur(evt);
-    this._valueChangedListener = (value: any) => this._onValueChanged(value);
-    this._inputAttributeChangedListener = (name, value) => this._onInputAttributeChanged(name, value);
-  }
+  private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
+  private _popoverIconClickListener: EventListener = this._onPopoverIconClick.bind(this);
 
-  //
-  // Public
-  //
+  constructor(private _adapter: IFieldAdapter) {}
 
   public initialize(): void {
-    this._adapter.initialize('');
+    this._adapter.addRootListener('slotchange', this._slotChangeListener);
+    this._adapter.setLabelPosition(this._labelPosition);
 
-    if (this._adapter.hasLabel()) {
-      this._adapter.ensureSlottedLabel();
+    if (this._popoverIcon) {
+      this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
     }
-
-    this._initializeLabel();
-
-    if (this._adapter.hasPlaceholder()) {
-      this._floatLabelType = 'always';
+    if (this._multiline) {
+      this._adapter.attachResizeContainer();
     }
-
-    this._detectSlottedContent();
-    this._adapter.addLabelSlotListener(this._labelSlotListener);
-    this._adapter.addLeadingSlotListener(this._leadingSlotListener);
-    this._adapter.addTrailingSlotListener(this._trailingSlotListener);
-    this._adapter.addAddonEndSlotListener(this._addonEndSlotListener);
-    this._adapter.setValueChangedListener(this, this._valueChangedListener);
-    this._adapter.addInputListener('focus', this._focusListener);
-    this._adapter.addInputListener('blur', this._blurListener);
-    this._adapter.setInputAttributeObserver(this._inputAttributeChangedListener);
-    this._applyDensity();
-    this._setShapeType();
-    this._setValidity();
-
-    if (this._adapter.isDisabled()) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.DISABLED);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.DISABLED);
-    }
-
-    if (this._adapter.isReadonly()) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.READONLY);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.READONLY);
-    }
-
-    if (this._floatLabelType === 'always') {
-      this.floatLabel(true);
-    }
-
-    this._isInitialized = true;
   }
 
-  public disconnect(): void {
-    this._isInitialized = false;
-    this._adapter.destroy();
+  private _onSlotChange(evt: Event): void {
+    this._adapter.handleSlotChange(evt.target as HTMLSlotElement);
+  }
 
-    this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
-    this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LABEL);
+  private _onPopoverIconClick(): void {
+    this._adapter.emitHostEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK);
+  }
 
-    if (this._floatingLabel) {
-      this._floatingLabel.destroy();
-      this._floatingLabel = undefined;
+  public floatLabelWithoutAnimation(value: boolean): void {
+    if (this._floatLabel !== value) {
+      this._floatLabel = value;
+      this._adapter.setFloatingLabel(this._floatLabel, true);
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
     }
+  };
 
-    this._adapter.removeLabelSlotListener(this._labelSlotListener);
-    this._adapter.removeLeadingSlotListener(this._leadingSlotListener);
-    this._adapter.removeTrailingSlotListener(this._trailingSlotListener);
-    this._adapter.removeAddonEndSlotListener(this._addonEndSlotListener);
-    this._adapter.removeInputListener('focus', this._focusListener);
-    this._adapter.removeInputListener('blur', this._blurListener);
-    this._adapter.destroyValueChangeListener();
+  public get labelPosition(): FieldLabelPosition {
+    return this._labelPosition;
   }
+  public set labelPosition(value: FieldLabelPosition) {
+    if (this._labelPosition !== value) {
+      this._labelPosition = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, this._labelPosition);
 
-  public get density(): FieldDensityType {
-    return this._density;
-  }
-  public set density(value: FieldDensityType) {
-    if (this._density !== value) {
-      const prevDensity = this._density;
-      this._density = value;
-
-      if (this._isInitialized) {
-        this._applyDensity();
-
-        if (this._density === 'dense') {
-          this._destroyFloatingLabel({ cancelFloat: true });
-        } else if (prevDensity === 'dense') {
-          this._initializeLabel();
-        }
+      if (!this._adapter.isConnected) {
+        return;
       }
 
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.DENSITY, this._density.toString());
+      this._adapter.setLabelPosition(this._labelPosition);
     }
   }
 
-  public get floatLabelType(): FieldFloatLabelType {
-    return this._floatLabelType;
+  public get labelAlignment(): FieldLabelAlignment {
+    return this._labelAlignment;
   }
-  public set floatLabelType(value: FieldFloatLabelType) {
-    if (this._floatLabelType !== value) {
-      this._floatLabelType = value;
-
-      if (this._isInitialized) {
-        this.floatLabel(this._floatLabelType === 'always');
-      }
-
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE, this._floatLabelType);
+  public set labelAlignment(value: FieldLabelAlignment) {
+    if (this._labelAlignment !== value) {
+      this._labelAlignment = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT, this._labelAlignment);
     }
   }
 
-  public get shape(): FieldShapeType {
-    return this._shape;
+  public get floatLabel(): boolean {
+    return this._floatLabel;
   }
-  public set shape(value: FieldShapeType) {
-    if (this._shape !== value) {
-      this._shape = value;
-
-      if (this._isInitialized) {
-        this._setShapeType();
-      }
-
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SHAPE, this._shape);
+  public set floatLabel(value: boolean) {
+    if (this._floatLabel !== value) {
+      this._floatLabel = value;
+      this._adapter.setFloatingLabel(this._floatLabel);
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, this._floatLabel);
     }
   }
 
@@ -168,10 +122,7 @@ export class FieldFoundation {
   public set invalid(value: boolean) {
     if (this._invalid !== value) {
       this._invalid = value;
-
-      if (this._isInitialized) {
-        this._setValidity();
-      }
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.INVALID, this._invalid);
     }
   }
 
@@ -181,218 +132,159 @@ export class FieldFoundation {
   public set required(value: boolean) {
     if (this._required !== value) {
       this._required = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.REQUIRED, this._required);
+    }
+  }
 
-      if (this._isInitialized) {
-        this._setValidity();
+  public get optional(): boolean {
+    return this._optional;
+  }
+  public set optional(value: boolean) {
+    if (this._optional !== value) {
+      this._optional = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.OPTIONAL, this._optional);
+    }
+  }
+
+  public get disabled(): boolean {
+    return this._disabled;
+  }
+  public set disabled(value: boolean) {
+    if (this._disabled !== value) {
+      this._disabled = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.DISABLED, this._disabled);
+    }
+  }
+
+  public get variant(): FieldVariant {
+    return this._variant;
+  }
+  public set variant(value: FieldVariant) {
+    if (this._variant !== value) {
+      this._variant = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.VARIANT, this._variant);
+    }
+  }
+
+  public get theme(): FieldTheme {
+    return this._theme;
+  }
+  public set theme(value: FieldTheme) {
+    if (this._theme !== value) {
+      this._theme = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.THEME, this._theme);
+    }
+  }
+
+  public get shape(): FieldShape {
+    return this._shape;
+  }
+  public set shape(value: FieldShape) {
+    if (this._shape !== value) {
+      this._shape = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SHAPE, this._shape);
+    }
+  }
+
+  public get density(): FieldDensity {
+    return this._density;
+  }
+  public set density(value: FieldDensity) {
+    if (this._density !== value) {
+      this._density = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.DENSITY, this._density);
+    }
+  }
+
+  // `dense` takes precedence over `density`
+  public get dense(): boolean {
+    return this._dense;
+  }
+  public set dense(value: boolean) {
+    if (this._dense !== value) {
+      this._dense = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.DENSE, this._dense);
+    }
+  }
+
+  public get popoverIcon(): boolean {
+    return this._popoverIcon;
+  }
+  public set popoverIcon(value: boolean) {
+    if (this._popoverIcon !== value) {
+      this._popoverIcon = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON, this._popoverIcon);
+
+      if (!this._adapter.isConnected) {
+        return;
       }
 
-      if (this._required) {
-        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.REQUIRED);
+      if (this._popoverIcon) {
+        this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
       } else {
-        this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.REQUIRED);
+        this._adapter.removePopoverIconClickListener(this._popoverIconClickListener);
       }
     }
   }
 
-  public floatLabel(value: boolean): void {
-    if (this._floatingLabel?.isFloating === value || this._adapter.isLabelFloating() === value) {
-      if (value) {
-        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
+  public get popoverExpanded(): boolean {
+    return this._popoverExpanded;
+  }
+  public set popoverExpanded(value: boolean) {
+    if (this._popoverExpanded !== value) {
+      this._popoverExpanded = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.POPOVER_EXPANDED, this._popoverExpanded);
+    }
+  }
+
+  public get multiline(): boolean {
+    return this._multiline;
+  }
+  public set multiline(value: boolean) {
+    if (this._multiline !== value) {
+      this._multiline = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.MULTILINE, this._multiline);
+
+      if (!this._adapter.isConnected) {
+        return;
       }
-      return;
-    }
 
-    if (!value && this._floatLabelType === 'always') {
-      this._floatingLabel?.float(true, true);
-      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
-      return;
-    }
-
-    if (this._floatingLabel) {
-      this._floatingLabel.float(value, this._floatLabelType === 'always');
-
-      if (value) {
-        this._adapter.setInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-        this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING, '');
+      if (this._multiline) {
+        this._adapter.attachResizeContainer();
       } else {
-        this._adapter.removeInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-        this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
+        this._adapter.removeResizeContainer();
       }
     }
   }
 
-  //
-  // Protected
-  //
-
-  protected _onLabelSlotChanged(evt: Event): void {
-    this._initializeLabel();
+  public get supportTextInset(): FieldSupportTextInset {
+    return this._supportTextInset;
   }
-
-  protected _onLeadingSlotChanged(evt: Event): void {
-    this._detectLeadingContent();
-  }
-
-  protected _onTrailingSlotChanged(evt: Event): void {
-    this._detectTrailingContent();
-  }
-
-  protected _onAddonEndSlotChanged(evt: Event): void {
-    this._detectAddonEndContent();
-  }
-
-  protected _initializeLabel(): void {
-    this._floatingLabel?.destroy();
-    this._adapter.detectLabel();
-    
-    if (this._adapter.hasLabel() && this._density !== 'dense') {
-      this._floatingLabel = this._adapter.initializeFloatingLabel();
-      this._adapter.ensureLabelOrder();
-      this.floatLabel(this._floatLabelType === 'always' || this._adapter.fieldHasValue() || this._adapter.hasPlaceholder());
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.LABEL);
-    } else {
-      this._destroyFloatingLabel();
+  public set supportTextInset(value: FieldSupportTextInset) {
+    if (this._supportTextInset !== value) {
+      this._supportTextInset = value;
+      this._adapter.setHostAttribute(FIELD_CONSTANTS.attributes.SUPPORT_TEXT_INSET, this._supportTextInset);
     }
   }
 
-  private _destroyFloatingLabel({ cancelFloat = false } = {}): void {
-    this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
-    this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LABEL);
-    this._floatingLabel?.destroy({ cancelFloat });
-    this._floatingLabel = undefined;
+  public get focusIndicatorTargetElement(): HTMLElement {
+    return this._adapter.focusIndicator.targetElement;
+  }
+  public set focusIndicatorTargetElement(value: HTMLElement) {
+    this._adapter.focusIndicator.targetElement = value;
   }
 
-  protected _detectLeadingContent(): void {
-    if (this._adapter.hasLeadingNodes()) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.LEADING);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.LEADING);
-    }
+  public get focusIndicatorFocusMode(): FocusIndicatorFocusMode {
+    return this._adapter.focusIndicator.focusMode;
+  }
+  public set focusIndicatorFocusMode(value: FocusIndicatorFocusMode) {
+    this._adapter.focusIndicator.focusMode = value;
   }
 
-  protected _detectTrailingContent(): void {
-    if (this._adapter.hasTrailingNodes()) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.TRAILING);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.TRAILING);
-    }
+  public get focusIndicatorAllowFocus(): boolean {
+    return this._adapter.focusIndicator.allowFocus;
   }
-
-  protected _detectAddonEndContent(): void {
-    if (this._adapter.hasAddonEndNodes()) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.ADDON_END);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.ADDON_END);
-    }
-  }
-
-  protected _detectSlottedContent(): void {
-    this._detectLeadingContent();
-    this._detectTrailingContent();
-    this._detectAddonEndContent();
-  }
-
-  protected _onFocus(evt: FocusEvent): void {
-    this._adapter.setRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-    this._adapter.setLabelClass(FIELD_CONSTANTS.classes.LABEL_FOCUSED);
-    this.floatLabel(true);
-  }
-
-  protected _onBlur(evt: FocusEvent): void {
-    if (this._adapter.inputHasFocus(evt.relatedTarget)) {
-      return;
-    }
-
-    this._adapter.removeRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-    this._adapter.removeLabelClass(FIELD_CONSTANTS.classes.LABEL_FOCUSED);
-
-    if (!this._adapter.fieldHasValue() && !this._adapter.hasPlaceholder()) {
-      this.floatLabel(false);
-      this._adapter.removeHostAttribute(FIELD_CONSTANTS.attributes.HOST_LABEL_FLOATING);
-    }
-  }
-
-  protected _onValueChanged(value: any): void {
-    if (this._adapter.fieldHasValue()) {
-      this.floatLabel(true);
-    } else if (!this._adapter.inputHasFocus() && !this._adapter.hasPlaceholder()) {
-      this.floatLabel(false);
-    }
-  }
-
-  protected _onInputAttributeChanged(name: string, value: string | null): void {
-    if (this._adapter.isDisabled()) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.DISABLED);
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-      this._adapter.removeInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-      this._adapter.removeLabelClass(FIELD_CONSTANTS.classes.LABEL_FOCUSED);
-
-      if (!this._adapter.fieldHasValue() && !this._adapter.hasPlaceholder() && this._floatingLabel) {
-        this.floatLabel(false);
-      }
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.DISABLED);
-    }
-
-    if (this._adapter.isReadonly()) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.READONLY);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.READONLY);
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-      this._adapter.removeInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-    }
-
-    switch (name) {
-      case 'readonly':
-      case 'disabled':
-        // If we are changing the readonly or disabled attribute, we want to make sure that we apply
-        // the focus state properly if the input element also now has focus
-        if (this._adapter.inputHasFocus()) {
-          this._adapter.setRootClass(FIELD_CONSTANTS.classes.FOCUSED);
-          this._adapter.setInputClass(FIELD_CONSTANTS.classes.INPUT_FOCUSED);
-          this._adapter.setLabelClass(FIELD_CONSTANTS.classes.LABEL_FOCUSED);
-        }
-        break;
-      case 'value':
-        if (this._floatingLabel) {
-          this.floatLabel(this._adapter.fieldHasValue());
-        }
-        break;
-      case 'placeholder':
-        if (this._floatingLabel) {
-          const float = (!!value && !!value.trim()) || this._adapter.fieldHasValue();
-          if (float !== this._floatingLabel.isFloating) {
-            this.floatLabel(float);
-          }
-        }
-        break;
-    }
-  }
-
-  protected _setShapeType(): void {
-    if (this._shape === 'rounded') {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.SHAPE_ROUNDED);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.SHAPE_ROUNDED);
-    }
-  }
-
-  protected _setValidity(): void {
-    if (this._invalid) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.INVALID);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.INVALID);
-    }
-
-    if (this._required) {
-      this._adapter.setRootClass(FIELD_CONSTANTS.classes.REQUIRED);
-    } else {
-      this._adapter.removeRootClass(FIELD_CONSTANTS.classes.REQUIRED);
-    }
-  }
-
-  protected _applyDensity(): void {
-    this._adapter.setRoomy(this._density === 'roomy');
-    this._adapter.setDense(this._density === 'dense');
+  public set focusIndicatorAllowFocus(value: boolean) {
+    this._adapter.focusIndicator.allowFocus = value;
   }
 }

@@ -1,9 +1,6 @@
-import { LabelValueAlignment, LabelValueDensityType } from '@tylertech/forge';
-
 export interface ILabelValueProps {
   empty: boolean;
-  density: LabelValueDensityType;
-  align: LabelValueAlignment;
+  inline: boolean;
   ellipsis: boolean;
   singleLine: boolean;
   hasIcon: boolean;
@@ -17,36 +14,6 @@ export const argTypes = {
         category: 'Properties',
       },
     },
-    density: {
-      control: {
-        type: 'select',
-        labels: {
-          'default': 'Default',
-          'roomy': 'Roomy',
-          'dense': 'Dense',
-        },
-      },
-      options: ['default', 'roomy', 'dense'],
-      description: '',
-      table: {
-        category: 'Properties',
-      },
-    },
-    align: {
-      control: {
-        type: 'select',
-        labels: {
-          'left': 'Left',
-          'center': 'Center',
-          'right': 'Right',
-        },
-      },
-      options: ['left', 'center', 'right'],
-      description: '',
-      table: {
-        category: 'Properties',
-      },
-    },
     ellipsis: {
       control: 'boolean',
       description: '',
@@ -54,7 +21,7 @@ export const argTypes = {
         category: 'Properties',
       },
     },
-    singleLine: {
+    inline: {
       control: 'boolean',
       description: '',
       table: {

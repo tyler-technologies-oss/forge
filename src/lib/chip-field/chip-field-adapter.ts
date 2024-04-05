@@ -1,9 +1,9 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
 import { IChipFieldComponent } from './chip-field';
 import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS } from './chip-field-constants';
-import { BaseFieldAdapter, IBaseFieldAdapter } from '../field-next/base/base-field-adapter';
-import { FIELD_CONSTANTS } from '../field-next/field-constants';
-import { IFieldComponent } from '../field-next';
+import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
+import { FIELD_CONSTANTS } from '../field/field-constants';
+import { IFieldComponent } from '../field';
 import { LabelComponent, LABEL_CONSTANTS } from '../label';
 
 export interface IChipFieldAdapter extends IBaseFieldAdapter {
