@@ -1,9 +1,10 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
 import { internals, setDefaultAria } from '../../constants';
 import { BaseComponent } from '../../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
+import { RadioComponent } from '../radio/radio';
 import { RadioGroupAdapter } from './radio-group-adapter';
 import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
 import { RadioGroupFoundation } from './radio-group-foundation';
@@ -36,7 +37,8 @@ const BaseRadioGroupClass = WithLabelAwareness(WithDefaultAria(WithElementIntern
  * @attribute {boolean} disabled - Whether or not the radio group is disabled.
  */
 @CustomElement({
-  name: RADIO_GROUP_CONSTANTS.elementName
+  name: RADIO_GROUP_CONSTANTS.elementName,
+  dependencies: [RadioComponent]
 })
 export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGroupComponent {
   public static readonly formAssociated = true;

@@ -9,6 +9,8 @@ import { IStateLayerComponent } from '../state-layer';
 import { ISwitchComponent, SWITCH_CONSTANTS } from '../switch';
 import { internals } from '../constants';
 
+import './switch';
+
 class SwitchHarness extends TestHarness<ISwitchComponent> {
   public rootElement: HTMLElement;
   public trackElement: HTMLElement;

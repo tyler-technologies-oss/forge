@@ -11,6 +11,8 @@ import { getFormState, getFormValue, internals } from '../../constants';
 import { task } from '../../core';
 import { RadioComponentDelegate } from './radio-component-delegate';
 
+import './radio';
+
 class RadioHarness extends TestHarness<HTMLElement> {
   public radioElements: IRadioComponent[];
 
@@ -979,6 +981,14 @@ describe('Radio', () => {
       const delegate = new RadioComponentDelegate();
       delegate.setLabel('Test label');
       expect(delegate.element.innerText).to.equal('Test label');
+
+      delegate.setLabel(null);
+      expect(delegate.element.innerText).to.be.empty;
+    });
+
+    it('should set id via constructor', () => {
+      const delegate = new RadioComponentDelegate({ options: { id: 'test' } });
+      expect(delegate.element.id).to.equal('test');
     });
   });
 });
