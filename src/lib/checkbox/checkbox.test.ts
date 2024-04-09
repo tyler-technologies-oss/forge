@@ -9,6 +9,8 @@ import { internals } from '../constants';
 import { IFocusIndicatorComponent } from '../focus-indicator';
 import { IStateLayerComponent } from '../state-layer';
 
+import './checkbox';
+
 class CheckboxHarness extends TestHarness<ICheckboxComponent> {
   public rootElement: HTMLElement;
   public containerElement: HTMLElement;

@@ -11,7 +11,8 @@ const observedAttributes = {
   DISABLED: 'disabled',
   REQUIRED: 'required',
   READONLY: 'readonly',
-  LABEL_POSITION: 'label-position'
+  LABEL_POSITION: 'label-position',
+  TABINDEX: 'tabindex'
 };
 
 const attributes = {

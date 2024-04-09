@@ -1,10 +1,10 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { internals, isFocusable, setDefaultAria } from '../../constants';
+import { internals, setDefaultAria } from '../../constants';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/';
 import { StateLayerComponent } from '../../state-layer';
 import { RadioGroupManager } from '../core/radio-group-manager';
 import { IRadioComponent } from './radio';
-import { RADIO_CONSTANTS, RadioLabelPosition, RadioState } from './radio-constants';
+import { RadioLabelPosition, RadioState, RADIO_CONSTANTS } from './radio-constants';
 
 export interface IRadioAdapter extends IBaseAdapter {
   setChecked(checked: boolean, value: string): void;
@@ -37,6 +37,9 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
       RadioGroupManager.setSelectedRadioInGroup(this._component);
     }
 
+    // Update tab indices
+    RadioGroupManager.syncRadioFocusableState(this._component);
+
     // Update the form value, state, and validity
     const formValue = checked ? value : null;
     const formState: RadioState = checked ? 'checked' : 'unchecked';
@@ -59,7 +62,7 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
     }
 
     this._component[setDefaultAria]({ ariaDisabled: `${!!value}` });
-    this._component[isFocusable] = !value;
+    RadioGroupManager.syncRadioFocusableState(this._component);
     return true;
   }
 

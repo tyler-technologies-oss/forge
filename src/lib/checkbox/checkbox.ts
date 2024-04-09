@@ -178,6 +178,7 @@ export class CheckboxComponent extends BaseCheckboxClass implements ICheckboxCom
         this.labelPosition = newValue as CheckboxLabelPosition;
         break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
   public override [getFormValue](): FormValue | null {

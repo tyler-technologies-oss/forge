@@ -220,6 +220,7 @@ export class SwitchComponent extends BaseSwitchClass implements ISwitchComponent
         this.labelPosition = newValue as SwitchLabelPosition;
         break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
   public override [getFormValue](): FormValue | null {
