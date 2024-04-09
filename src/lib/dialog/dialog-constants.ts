@@ -4,6 +4,7 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}dialog
 
 const observedAttributes = {
   OPEN: 'open',
+  VISIBLE: 'visible',
   MODE: 'mode',
   TYPE: 'type',
   ANIMATION_TYPE: 'animation-type',

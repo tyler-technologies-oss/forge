@@ -20,6 +20,12 @@ forge-dialog[preset$=-sheet] {
   }
 }
 
+forge-dialog:is([preset=left-sheet], [preset=right-sheet]) {
+  .dialog-container {
+    height: 100%;
+  }
+}
+
 forge-dialog:not([fullscreen])[size-strategy=container-inline] {
   .dialog-container {
     max-width: none;

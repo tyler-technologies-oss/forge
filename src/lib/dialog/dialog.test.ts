@@ -823,6 +823,7 @@ class DialogHarness {
   public get isOpen(): boolean {
     return this.dialogElement.open &&
            this.dialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN) &&
+           this.dialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.VISIBLE) &&
            this.nativeDialogElement.open &&
            this.nativeDialogElement.hasAttribute(DIALOG_CONSTANTS.attributes.OPEN) &&
            getComputedStyle(this.nativeDialogElement).display !== 'none';

@@ -133,6 +133,7 @@ export class DialogFoundation implements IDialogFoundation {
       await this._hide();
     }
 
+    this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.VISIBLE, this._open); // We use this for styling purposes to control animations
     this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.OPEN, this._open);
   }
 
