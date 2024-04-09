@@ -1,11 +1,79 @@
-@use './mixins';
+@use './core' as *;
+
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-@include mixins.core-styles;
+//
+// Base
+//
+
+.forge-label-value {
+  @include tokens;
+}
+
+.forge-label-value {
+  @include base;
+}
+
+.label {
+  @include label;
+}
+
+.value {
+  @include value;
+}
+
+.icon {
+  @include icon;
+}
+
+//
+// Slotted icons
+//
+
+::slotted([slot=icon]) {
+  @include slotted-icon;
+}
+
+//
+// Inline/dense
+//
+
+:host(:is([inline],[dense])) {
+  .forge-label-value {
+    @include inline;
+  }
+
+  .label {
+    @include inline-label;
+  }
+}
+
+//
+// Ellipsis
+//
+
+:host([ellipsis]) {
+  ::slotted([slot=value]) {
+    @include ellipsis;
+  }
+}
+
+//
+// Empty
+//
+
+:host([empty]) {
+  .value {
+    @include value-empty;
+  }
+}

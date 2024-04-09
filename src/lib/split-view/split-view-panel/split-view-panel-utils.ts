@@ -180,7 +180,7 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
   if (state.currentSize <= state.min) {
     // Just reached the min
     if (!state.isAtMin) {
-      adapter.activateRipple(inputDevice === 'pointer');
+      adapter.animateStateLayer(inputDevice === 'pointer');
       if (inputDevice === 'pointer') {
         adapter.setBodyCursor(state.orientation, { resizable: state.resizable, boundary: 'min' });
       }
@@ -197,7 +197,7 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
   if (state.currentSize >= max) {
     // Just reached the max
     if(!state.isAtMax) {
-      adapter.activateRipple(inputDevice === 'pointer');
+      adapter.animateStateLayer(inputDevice === 'pointer');
       if (inputDevice === 'pointer') {
         adapter.setBodyCursor(state.orientation, { resizable: state.resizable, boundary: 'max' });
       }

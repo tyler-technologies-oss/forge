@@ -1,5 +1,5 @@
 import { FormFieldComponentDelegate, IBaseComponentDelegateConfig, IFormFieldComponentDelegateOptions } from '../core/delegates';
-import { FieldDensity } from '../field-next';
+import { FieldDensity } from '../field';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IDateRangePickerComponent } from './date-range-picker';
 import { DATE_RANGE_PICKER_CONSTANTS, IDateRangePickerChangeEventData } from './date-range-picker-constants';

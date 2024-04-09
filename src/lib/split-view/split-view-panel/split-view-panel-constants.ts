@@ -34,7 +34,7 @@ const ids = {
   ROOT: 'root',
   HANDLE: 'handle',
   ICON: 'icon',
-  RIPPLE: 'ripple',
+  STATE_LAYER: 'state-layer',
   CONTENT: 'content'
 };
 
@@ -42,7 +42,7 @@ const selectors = {
   ROOT: `#${ids.ROOT}`,
   HANDLE: `#${ids.HANDLE}`,
   ICON: `#${ids.ICON}`,
-  RIPPLE: `#${ids.RIPPLE}`,
+  STATE_LAYER: `#${ids.STATE_LAYER}`,
   CONTENT: `#${ids.CONTENT}`
 };
 
@@ -58,7 +58,7 @@ const events = {
 };
 
 const numbers = {
-  RIPPLE_ACTIVATION_WAIT: 200
+  STATE_LAYER_ACTIVATION_WAIT: 200
 };
 
 const customCssProperties = {

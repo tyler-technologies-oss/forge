@@ -18,7 +18,7 @@ export default {
 
 export const Default: Story<IChipFieldProps> = ({
   density = 'default',
-  floatLabelType = 'auto',
+  floatLabel = false,
   shape = 'default',
   label = 'Fruits',
   invalid = false,
@@ -66,7 +66,7 @@ export const Default: Story<IChipFieldProps> = ({
       on-forge-chip-field-member-added={evt => addMember(evt)}
       on-forge-chip-field-member-removed={evt => removeMember(evt)}
       density={density}
-      floatLabelType={floatLabelType}
+      floatLabel={floatLabel}
       shape={shape}
       invalid={invalid}
       addOnBlur={addOnBlur}
@@ -98,8 +98,8 @@ export const Default: Story<IChipFieldProps> = ({
 };
 Default.argTypes = argTypes;
 Default.args = {
-  density: 'default',
-  floatLabelType: 'auto',
+  density: 'medium',
+  floatLabel: false,
   shape: 'default',
   label: 'Fruits',
   invalid: false,
