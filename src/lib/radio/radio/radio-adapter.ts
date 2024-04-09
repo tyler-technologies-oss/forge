@@ -62,7 +62,6 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
     }
 
     this._component[setDefaultAria]({ ariaDisabled: `${!!value}` });
-    // this._component[isFocusable] = !value;
     RadioGroupManager.syncRadioFocusableState(this._component);
     return true;
   }
