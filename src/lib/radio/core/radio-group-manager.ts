@@ -62,6 +62,10 @@ export class RadioGroupManager {
     const invalid = RadioGroupManager._selectionIsRequired(group);
     
     group.forEach(radio => {
+      if (!radio.shadowRoot) {
+        return;
+      }
+
       const validationMessage = radio[getValidationMessage]({
         required: invalid,
         checked: radio.checked
