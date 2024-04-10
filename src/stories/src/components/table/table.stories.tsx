@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { ITableProps, argTypes } from './table-args';
-import { CellAlign, IColumnConfiguration, ITableComponent, ITableFilterEventData, ITableRowClickEventData, ITableSortEventData, TextFieldComponentDelegate } from '@tylertech/forge';
+import { CellAlign, IColumnConfiguration, ITableComponent, ITableFilterEventData, ITableRowClickEventData, ITableSortEventData, TextFieldComponentDelegate, ToastComponent } from '@tylertech/forge';
 import { ForgeTable, useForgeToast } from '@tylertech/forge-react';
 import React, { CSSProperties, useRef, useState } from 'react';
 
@@ -72,7 +72,7 @@ export const Default: Story<ITableProps> = ({
   const [sortDirection, setSortDirection] = useState('DESC');
   const [sortPropertyName, setSortPropertyName] = useState('id');
   const [displayData, setData] = useState([...people]);
-  const [showToast] = useForgeToast();
+  // const [showToast] = useForgeToast();
   const filters = { name: '', description: '', age: '' };
 
   const styles: CSSProperties = {};
@@ -160,7 +160,7 @@ export const Default: Story<ITableProps> = ({
   }
 
   function onRowClick(evt: CustomEvent<ITableRowClickEventData>): void {
-    showToast({ message: `Clicked row index ${evt.detail.index}` });
+    ToastComponent.present({ message: `Clicked row index ${evt.detail.index}` });
   }
 
   return <ForgeTable

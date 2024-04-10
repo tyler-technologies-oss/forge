@@ -1,15 +1,14 @@
 <template>
   <forge-overlay exportparts="root:overlay" no-anchor persistent>
-    <div class="forge-toast" part="surface">
+    <div class="surface" part="surface">
+      <slot name="icon"></slot>
       <div class="message" part="message">
         <slot></slot>
       </div>
-      <div class="action-container">
-        <forge-button part="action-button" class="action-button"></forge-button>
-        <forge-icon-button part="close-button" class="close-button" aria-label="Close toast message">
-          <forge-icon name="close" part="close-button-icon"></forge-icon>
-        </forge-icon-button>
-      </div>
+      <forge-button hidden part="action-button" class="action-button"></forge-button>
+      <forge-icon-button part="close-button" class="close-button" aria-label="Dismiss" density="medium">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
     </div>
   </forge-overlay>
 </template>

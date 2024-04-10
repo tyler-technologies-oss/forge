@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react';
 import { Story } from '@storybook/react';
-import { IconRegistry } from '@tylertech/forge';
+import { IconRegistry, ToastComponent } from '@tylertech/forge';
 import { ForgeAppBar, ForgeAppBarMenuButton, ForgeIcon } from '@tylertech/forge-react';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import React, { useEffect } from 'react';
@@ -29,9 +29,7 @@ export const Default: Story = () => {
       <ForgeIcon slot="logo" name="forge_logo" style={{fontSize: '2.5rem'}} />
       <ForgeAppBarMenuButton 
         onClick={() => {
-          const toast = document.createElement('forge-toast');
-          toast.message = 'Menu clicked!';
-          document.body.appendChild(toast);
+          ToastComponent.present({ message: 'Menu clicked!' });
         }} 
         slot="start" />
     </ForgeAppBar>
