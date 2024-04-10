@@ -3,7 +3,7 @@
 @use '../backdrop';
 @use '../core/styles/theme';
 
-$can-animate: '[open]:not([animation-type=none])';
+$can-animate: '[visible]:not([animation-type=none])';
 
 @layer base, nonmodal, animation, placement, size-strategy, preset, fullscreen, position-strategy, media;
 
@@ -115,7 +115,7 @@ $can-animate: '[open]:not([animation-type=none])';
   // Open
   //
 
-  :host([open]) {
+  :host([visible]) {
     @include host-open;
   }
 }

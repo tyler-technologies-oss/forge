@@ -1,7 +1,7 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { task } from '../../core/utils/event-utils';
 import { IRadioAdapter } from './radio-adapter';
-import { RADIO_CONSTANTS, RadioLabelPosition } from './radio-constants';
+import { RadioLabelPosition, RADIO_CONSTANTS } from './radio-constants';
 
 export interface IRadioFoundation extends ICustomElementFoundation {
   checked: boolean;
@@ -47,6 +47,7 @@ export class RadioFoundation implements IRadioFoundation {
     this._adapter.addHostListener('click', this._clickListener);
     this._adapter.addHostListener('keydown', this._keydownListener);
     this._adapter.addHostListener('keyup', this._keyupListener);
+    this._adapter.setChecked(this._checked, this._value);
   }
 
   // Public methods
@@ -142,8 +143,8 @@ export class RadioFoundation implements IRadioFoundation {
     // Emit both change and input events per the spec.
     const changeEvent = new Event(RADIO_CONSTANTS.events.CHANGE, { bubbles: true, cancelable: true });
     const inputEvent = new Event(RADIO_CONSTANTS.events.INPUT, { bubbles: true, cancelable: true, composed: true });
-    this._adapter.dispatchHostEvent(new Event(RADIO_CONSTANTS.events.CHANGE, { bubbles: true, cancelable: true }));
-    this._adapter.dispatchHostEvent(new Event(RADIO_CONSTANTS.events.INPUT, { bubbles: true, cancelable: true, composed: true }));
+    this._adapter.dispatchHostEvent(changeEvent);
+    this._adapter.dispatchHostEvent(inputEvent);
     return !(changeEvent.defaultPrevented || inputEvent.defaultPrevented);
   }
 

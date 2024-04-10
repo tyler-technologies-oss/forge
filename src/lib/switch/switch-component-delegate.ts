@@ -93,7 +93,7 @@ export class SwitchComponentDelegate extends FormFieldComponentDelegate<ISwitchC
   }
 
   public onChange(listener: (value: boolean) => void): void {
-    this._element.addEventListener('forge-switch-change', ({ detail }: CustomEvent<boolean>) => listener(detail));
+    this._element.addEventListener(SWITCH_CONSTANTS.events.CHANGE, ({ detail }: CustomEvent<boolean>) => listener(detail));
   }
 
   public onFocus(listener: (evt: Event) => void): void {

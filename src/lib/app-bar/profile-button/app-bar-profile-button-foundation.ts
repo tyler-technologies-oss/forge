@@ -1,9 +1,9 @@
 import { ICustomElementFoundation, isFunction } from '@tylertech/forge-core';
-import { IPopupComponent } from '../../popup';
 import { AVATAR_CONSTANTS } from '../../avatar';
 import { PROFILE_CARD_CONSTANTS } from '../../profile-card';
 import { IAppBarProfileButtonAdapter } from './app-bar-profile-button-adapter';
 import { IAppBarProfileCardConfig, AppBarProfileButtonProfileCardBuilder, APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
+import { IPopoverComponent } from '../../popover/popover';
 
 export interface IAppBarProfileButtonFoundation extends ICustomElementFoundation {
   fullName: string;
@@ -17,7 +17,7 @@ export interface IAppBarProfileButtonFoundation extends ICustomElementFoundation
   signOutButtonText: string;
   profileButtonText: string;
   open: boolean;
-  popupElement: IPopupComponent | undefined;
+  popupElement: IPopoverComponent | undefined;
   profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }
 
@@ -36,20 +36,14 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   private _open = false;
   private _isInitialized = false;
 
-  private _clickListener: (evt: MouseEvent) => void;
-  private _dismissListener: () => void;
+  private _clickListener: EventListener = this._onClick.bind(this);
+  private _dismissListener: () => void = this._onDismiss.bind(this);
   private _cancelDismissListener: (() => void) | undefined;
-  private _keydownListener: (evt: KeyboardEvent) => void;
-  private _profileButtonListener: () => void;
-  private _signOutButtonListener: () => void;
+  private _keydownListener: EventListener = this._onKeydown.bind(this);
+  private _profileButtonListener: () => void = this._onProfileButtonClick.bind(this);
+  private _signOutButtonListener: () => void = this._onSignOutButtonClick.bind(this);
 
-  constructor(private _adapter: IAppBarProfileButtonAdapter) {
-    this._clickListener = evt => this._onClick(evt);
-    this._dismissListener = () => this._onDismiss();
-    this._keydownListener = evt => this._onKeydown(evt);
-    this._profileButtonListener = () => this._onProfileButtonClick();
-    this._signOutButtonListener = () => this._onSignOutButtonClick();
-  }
+  constructor(private _adapter: IAppBarProfileButtonAdapter) {}
 
   public initialize(): void {
     this._adapter.initialize();
@@ -62,7 +56,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   }
 
   public destroy(): void {
-    this._adapter.removeWindowListener('keydown', this._keydownListener);
+    this._adapter.removeDocumentListener('keydown', this._keydownListener);
     this._adapter.removeClickListener(this._clickListener);
     this._adapter.destroy();
     this._isInitialized = false;
@@ -79,7 +73,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   private _onKeydown(evt: KeyboardEvent): void {
     if (evt.key === 'Escape') {
       this._closeDropdown();
-      this._adapter.requestFocus();
+      this._adapter.focusButtonElement();
     }
   }
 
@@ -88,15 +82,13 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
   }
 
   private _onProfileButtonClick(): void {
-    this._adapter.emitHostEvent(PROFILE_CARD_CONSTANTS.events.PROFILE);
+    this._adapter.dispatchHostEvent(new CustomEvent(PROFILE_CARD_CONSTANTS.events.PROFILE, { bubbles: true, composed: true }));
     this._closeDropdown();
-    this._adapter.requestFocus();
   }
 
   private _onSignOutButtonClick(): void {
-    this._adapter.emitHostEvent(PROFILE_CARD_CONSTANTS.events.SIGN_OUT);
+    this._adapter.dispatchHostEvent(new CustomEvent(PROFILE_CARD_CONSTANTS.events.SIGN_OUT, { bubbles: true, composed: true }));
     this._closeDropdown();
-    this._adapter.requestFocus();
   }
 
   private _openDropdown(): void {
@@ -119,14 +111,9 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     };
     const profileCardContent = this._profileCardBuilder ? this._profileCardBuilder() : undefined;
     this._cancelDismissListener = this._adapter.openPopup(profileCardConfig, this._dismissListener, this._profileButtonListener, this._signOutButtonListener, profileCardContent);
-    this._adapter.addWindowListener('keydown', this._keydownListener);
+    this._adapter.addDocumentListener('keydown', this._keydownListener);
     this._open = true;
     this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.OPEN, this._open);
-    
-    // If we aren't showing the sign out or profile buttons then leave focus on our button
-    if (!profileCardConfig.signOut && !profileCardConfig.profile) {
-      this._adapter.requestFocus();
-    }
   }
 
   private _closeDropdown(): void {
@@ -139,7 +126,6 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
       this._cancelDismissListener = undefined;
     }
     this._open = false;
-    this._adapter.removeWindowListener('keydown', this._keydownListener);
     this._adapter.closePopup();
     this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.OPEN, this._open);
   }
@@ -221,6 +207,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     return this._showSignOutButton;
   }
   public set signOutButton(value: boolean) {
+    value = Boolean(value);
     if (this._showSignOutButton !== value) {
       this._showSignOutButton = value;
       this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.SIGN_OUT_BUTTON, this._showSignOutButton);
@@ -231,6 +218,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     return this._showProfileButton;
   }
   public set profileButton(value: boolean) {
+    value = Boolean(value);
     if (this._showProfileButton !== value) {
       this._showProfileButton = value;
       this._adapter.toggleHostAttribute(APP_BAR_PROFILE_BUTTON_CONSTANTS.attributes.PROFILE_BUTTON, this._showProfileButton);
@@ -261,6 +249,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     return this._open;
   }
   public set open(value: boolean) {
+    value = Boolean(value);
     if (this._open !== value) {
       if (value) {
         this._openDropdown();
@@ -270,7 +259,7 @@ export class AppBarProfileButtonFoundation implements IAppBarProfileButtonFounda
     }
   }
 
-  public get popupElement(): IPopupComponent | undefined {
+  public get popupElement(): IPopoverComponent | undefined {
     return this._adapter.popupElement;
   }
 

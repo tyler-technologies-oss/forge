@@ -2,7 +2,7 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}radio`;
 
-const attributes = {
+const observedAttributes = {
   CHECKED: 'checked',
   DEFAULT_CHECKED: 'default-checked',
   VALUE: 'value',
@@ -12,6 +12,10 @@ const attributes = {
   READONLY: 'readonly',
   LABEL_POSITION: 'label-position',
   TABINDEX: 'tabindex'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
@@ -27,6 +31,7 @@ const events = {
 
 export const RADIO_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   selectors,
   events

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { timer } from '@tylertech/forge-testing';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
+import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import type { IAppBarProfileButtonComponent } from './app-bar-profile-button';
@@ -212,7 +212,7 @@ describe('App Bar Profile Button', () => {
       expect(popup).to.be.ok;
       expect(popup.isConnected).to.be.true;
 
-      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
       await elementUpdated(el);
 

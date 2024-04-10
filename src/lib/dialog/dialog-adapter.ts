@@ -1,4 +1,4 @@
-import { getShadowElement } from '@tylertech/forge-core';
+import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop';
 import { setDefaultAria } from '../constants';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
@@ -98,7 +98,7 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
     Array.from(DialogComponent[dialogStack]).filter(dialog => dialog.mode === 'modal' || dialog.mode === 'inline-modal').at(-1)?.[showBackdrop]();
   }
 
-  public hide(): Promise<void> {
+  public async hide(): Promise<void> {
     this._component[setDefaultAria]({
       role: null,
       ariaModal: null
@@ -115,11 +115,9 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
       return Promise.resolve(close());
     }
 
-    return new Promise<void>(resolve => {
-      this._surfaceElement.addEventListener('animationend', () => resolve(close()), { once: true });
-      this._backdropElement.fadeOut();
-      this._surfaceElement.classList.add(BACKDROP_CONSTANTS.classes.EXITING);
-    });
+    this._backdropElement.fadeOut();
+    await playKeyframeAnimation(this._surfaceElement, BACKDROP_CONSTANTS.classes.EXITING);
+    close();
   }
 
   public addDialogFormSubmitListener(listener: EventListener): void {
