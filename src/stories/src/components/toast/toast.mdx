@@ -1,0 +1,207 @@
+import { Default as ToastDemo } from './toast.stories';
+import { ToastDefaultHtml, ToastDefaultTs } from './code/toast-default';
+
+<PageSection>
+
+# Toast
+
+This component will typically be created on the fly in JavaScript, and it will automatically be disposed and removed from the DOM when its duration has been reached.
+
+However, the toast element can be created using static HTML if desired.
+
+> **Note:** Avoid using this component within a dialog.  Use a [banner component](?path=/story/components-banner--default) instead.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Examples
+
+### Static HTML
+
+<LiveDemo layout="column" codeHtml={ToastDefaultHtml()} codeTs={ToastDefaultTs()}>
+  <ToastDemo />
+</LiveDemo>
+
+> **Note:** pass `0` to the `duration` property/attribute to force the toast element to stay open indefinitely.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Angular Examples
+
+Usage within Angular is slightly different, and can be made easier by installing the `@tylertech/forge-angular` adapter package.
+
+After doing so, there is an Angular provider available called `ToastService` that can be injected and used to show a toast on demand:
+
+```typescript
+import { ToastService } from '@tylertech/forge-angular';
+import { PopupPlacement } from '@tylertech/forge';
+
+@Component({
+  selector: 'app-toast-example',
+  templateUrl: './toast-example.component.html'
+})
+export class ToastExampleComponent {
+  constructor(private _toastService: ToastService) {}
+
+  public onShowToast(): void {
+    const toast = this._toastService.show({
+      message: 'Save successful',
+      actionText: 'UNDO',
+      actionHandler: () => toast.hide(),
+      placement: 'bottom',
+      duration: 2000
+    });
+  }
+}
+```
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Properties/Attributes
+
+<PropertyDef name="actionText" type="string" defaultValue="''">
+
+  The action button text.
+
+  > Controls the visibility of the action button as well.
+
+</PropertyDef>
+
+<PropertyDef name="duration" type="number" defaultValue="2750">
+
+  The length of time in milliseconds to show the toast. Pass `Infinity` to cause the toast to stay open indefinitely.
+
+</PropertyDef>
+
+<PropertyDef name="placement" type="ToastPlacement" defaultValue="bottom">
+
+  Sets the placement of the toast around the screen.
+
+  Valid values: `bottom`, `bottom-start`, `bottom-end`, `top`, `top-start`, `top-end`.
+
+</PropertyDef>
+
+<PropertyDef name="dismissible" type="boolean" defaultValue="false">
+
+  Controls the visibility of the close button.
+
+</PropertyDef>
+
+</PageSection>
+
+<PageSection>
+
+## Methods
+
+<MethodDef name="show(): void">
+
+  Shows the toast. Does **not** append it to the DOM.
+
+</MethodDef>
+
+<MethodDef name="hide(): Promise<void>">
+
+  Hides the toast and removes it from the DOM.
+
+</MethodDef>
+
+</PageSection>
+
+<PageSection>
+
+## Events
+
+| Name                            | Description
+| :-------------------------------| :----------------
+| `forge-toast-action`              | Emits when the action button is clicked.
+| `forge-toast-close`               | Emits when close button is clicked.
+
+</PageSection>
+
+<PageSection>
+
+## Slots
+
+> A default (unnamed) slot exists, and it is intended that an `<input>` or `<textarea>` element will be placed in this slot.
+
+| Name               | Values
+| :------------------| :-----------------
+| `default`          | The default (unnamed) slot is additional content.
+
+</PageSection>
+
+<PageSection>
+
+## CSS parts
+
+| Name                                     | Description
+| :----------------------------------------| :----------------------
+| `root`                                   | The root container element.
+| `message`                                | The element that contains the `message` content.
+| `action-container`                       | The container around the action button.
+| `action-button`                          | The `<forge-button>` element for the action.
+| `action-button-element`                  | The `<button>` element for the action.
+| `close-button`                           | The `<forge-button>` element for the close button.
+| `close-button-element`                   | The `<button>` element for the action.
+| `close-button-icon`                      | The close button `<forge-icon>` element.
+
+</PageSection>
+
+<PageSection>
+
+## CSS custom properties
+
+| Name                                                                    | Description
+| :-----------------------------------------------------------------------| :----------------------
+| `--forge-toast-theme-background`                                          | Controls the `background-color` style.
+| `--forge-toast-theme-on-background`                                       | Controls the font color of the message, close button, and slotted content.
+| `--forge-toast-theme-action`                                              | Controls the font color of the action button.
+| `--forge-z-index-notification`                                            | Controls the `z-index` style.
+| `--forge-toast-bottom-left-margin-bottom`                                 | Controls the `margin-bottom` when using the "bottom-start" placement.
+| `--forge-toast-bottom-left-margin-left`                                   | Controls the `margin-left` when using the "bottom-start" placement.
+| `--forge-toast-bottom-right-margin-bottom`                                | Controls the `margin-bottom` when using the "bottom-end" placement.
+| `--forge-toast-bottom-right-margin-right`                                 | Controls the `margin-right` when using the "bottom-end" placement.
+| `--forge-toast-top-left-margin-top`                                       | Controls the `margin-top` when using the "top-start" placement.
+| `--forge-toast-top-left-margin-left`                                      | Controls the `margin-left` when using the "top-start" placement.
+| `--forge-toast-top-right-margin-top`                                      | Controls the `margin-top` when using the "top-end" placement.
+| `--forge-toast-top-right-margin-right`                                    | Controls the `margin-right` when using the "top-end" placement.
+| `--forge-toast-top-margin-top`                                            | Controls the `margin-top` when using the "top" placement.
+| `--forge-toast-bottom-margin-bottom`                                      | Controls the `margin-bottom` when using the "bottom" placement.
+
+</PageSection>
+
+<PageSection>
+
+## Accessibility
+
+- Ensure that the close button is also accessible by keyboard.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.
+
+> **Note**: this control will automatically provide the `aria-live` attribute.
+
+</PageSection>
+
+---
+
+<PageSection>
+
+## Types
+
+### ToastPlacement
+
+```ts
+type ToastPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
+```
+
+</PageSection>
