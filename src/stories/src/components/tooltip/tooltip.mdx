@@ -64,11 +64,9 @@ Tooltip can also target a specific element using the `target` attribute:
 
 </PropertyDef>
 
-<PropertyDef name="position" type="PopupPlacement" defaultValue="right">
+<PropertyDef name="placement" type="TooltipPlacement" defaultValue="right">
 
-  The tooltip position around the target element.
-
-  Valid values: `top`, `right`, `bottom`, `left`.
+  The tooltip placement around the target element.
 
 </PropertyDef>
 
@@ -138,10 +136,10 @@ Tooltip can also target a specific element using the `target` attribute:
 
 Below you will find the API for all custom public type declarations that you will need when using this component.
 
-### PopupPlacement
+### TooltipPlacement
 
 ```ts
-type PopupPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
+type TooltipPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
 ```
 
 ### TooltipBuilder

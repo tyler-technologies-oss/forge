@@ -6,7 +6,7 @@ import { defineOptionComponent, defineOptionGroupComponent } from '@tylertech/fo
 import { defineListComponent, IListComponent, IListItemComponent, LIST_CONSTANTS } from '@tylertech/forge/list';
 import { defineLinearProgressComponent, SKELETON_CONSTANTS, DIVIDER_CONSTANTS, IIconComponent, CIRCULAR_PROGRESS_CONSTANTS } from '@tylertech/forge';
 import { definePopoverComponent, IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
-import { tryCleanupPopups, isVisibleInScrollContainer } from '../../utils';
+import { tryCleanupPopovers, isVisibleInScrollContainer } from '../../utils';
 
 const POPOVER_ANIMATION_DURATION = 200;
 
@@ -40,7 +40,7 @@ describe('ListDropdown', function(this: ITestContext) {
       this.context.listDropdown.destroy();
     }
     
-    tryCleanupPopups();
+    tryCleanupPopovers();
 
     if (this.context.targetElement.isConnected) {
       this.context.remove();

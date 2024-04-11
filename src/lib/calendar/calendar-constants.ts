@@ -34,7 +34,7 @@ const attributes = {
   ...observedAttributes,
   DATA_DATE: 'data-date',
   DATA_EVENT_THEME: 'data-event-theme',
-  POPUP_CONTEXT: 'forge-popup-context'
+  POPOVER_CONTEXT: 'forge-popover-context'
 };
 
 const classes = {

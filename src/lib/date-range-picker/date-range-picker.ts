@@ -5,7 +5,7 @@ import { BaseDatePickerComponent, IBaseDatePickerComponent } from '../date-picke
 import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants';
 import { IconComponent, IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
-import { PopupComponent } from '../popup';
+import { PopoverComponent } from '../popover';
 import { DateRangePickerAdapter } from './date-range-picker-adapter';
 import { DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants';
 import { DateRangePickerFoundation } from './date-range-picker-foundation';
@@ -39,7 +39,7 @@ declare global {
 @CustomElement({
   name: DATE_RANGE_PICKER_CONSTANTS.elementName,
   dependencies: [
-    PopupComponent,
+    PopoverComponent,
     CalendarComponent,
     IconButtonComponent,
     IconComponent

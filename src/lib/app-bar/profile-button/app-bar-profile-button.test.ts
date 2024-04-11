@@ -6,10 +6,12 @@ import { elementUpdated, fixture, html } from '@open-wc/testing';
 import type { IAppBarProfileButtonComponent } from './app-bar-profile-button';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants';
 import { IIconButtonComponent } from '../../icon-button';
-import { IPopupComponent, POPUP_CONSTANTS } from '../../popup';
 import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card';
 
+const POPOVER_ANIMATION_DURATION = 200;
+
 import './app-bar-profile-button';
+import { IPopoverComponent } from '../../popover';
 
 // Required by floating-ui library to prevent errors
 globalThis['process'] = { env: { NODE_ENV: 'test' }} as any;
@@ -213,7 +215,7 @@ describe('App Bar Profile Button', () => {
       expect(popup.isConnected).to.be.true;
 
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.false;
@@ -230,7 +232,7 @@ describe('App Bar Profile Button', () => {
       expect(popup.isConnected).to.be.true;
 
       await clickOutsidePopupElement(popup);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
       await elementUpdated(el);
 
@@ -249,7 +251,7 @@ describe('App Bar Profile Button', () => {
 
       const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
       await clickElement(iconButton);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.false;
@@ -261,7 +263,7 @@ describe('App Bar Profile Button', () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
 
       el.open = true;
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.true;
@@ -272,14 +274,14 @@ describe('App Bar Profile Button', () => {
       const el = await fixture<IAppBarProfileButtonComponent>(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
 
       el.open = true;
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.true;
       expect(el.popupElement).to.be.ok;
 
       el.open = false;
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(el.open).to.be.false;
@@ -297,7 +299,7 @@ describe('App Bar Profile Button', () => {
       const signOutButton = profileCard.shadowRoot?.querySelector('forge-button#sign-out-button') as HTMLElement;
       signOutButton.click();
 
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(signOutSpy).to.have.been.calledOnce;
@@ -314,7 +316,7 @@ describe('App Bar Profile Button', () => {
       const profileButton = profileCard.shadowRoot?.querySelector('forge-button#profile-button') as HTMLElement;
       profileButton.click();
 
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
 
       expect(profileSpy).to.have.been.calledOnce;
@@ -473,11 +475,11 @@ describe('App Bar Profile Button', () => {
       expect(document.activeElement).to.equal(iconButton);
     });
 
-    async function openPopup(el: IAppBarProfileButtonComponent): Promise<IPopupComponent> {
+    async function openPopup(el: IAppBarProfileButtonComponent): Promise<IPopoverComponent> {
       const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
       iconButton.focus();
       await clickElement(iconButton);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
       return el['_foundation']['_adapter']['_popupElement'];
     }

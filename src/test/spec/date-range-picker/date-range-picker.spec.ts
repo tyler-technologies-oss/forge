@@ -14,14 +14,16 @@ import {
   ICON_BUTTON_CONSTANTS,
   IDateRange,
   IDateRangePickerComponent,
-  IPopupComponent,
+  IPopoverComponent,
   ITextFieldComponent,
   parseDateString,
-  POPUP_CONSTANTS,
+  POPOVER_CONSTANTS,
   TEXT_FIELD_CONSTANTS
 } from '@tylertech/forge';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
-import { tryCleanupPopups } from '../../utils';
+import { tryCleanupPopovers } from '../../utils';
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestDateRangePickerContext;
@@ -1393,7 +1395,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickTodayButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const popup = getPopup(this.context.component);
@@ -1415,7 +1417,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickClearButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const popup = getPopup(this.context.component);
@@ -1569,7 +1571,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       append: () => document.body.appendChild(fixture),
       destroy: () => {
         removeElement(fixture);
-        tryCleanupPopups();
+        tryCleanupPopovers();
       }
     };
   }
@@ -1607,8 +1609,8 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     component.open = true;
   }
 
-  function getPopup(component: IDateRangePickerComponent): IPopupComponent {
-    return document.querySelector(`${POPUP_CONSTANTS.elementName}[id=${getIdentifier(component)}]`) as IPopupComponent;
+  function getPopup(component: IDateRangePickerComponent): IPopoverComponent {
+    return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id=${getIdentifier(component)}]`) as IPopoverComponent;
   }
 
   function getCalendar(component: IDateRangePickerComponent): ICalendarComponent {
@@ -1651,7 +1653,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
   }
 
   async function popupCloseAnimation(): Promise<void> {
-    return timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    return timer(POPOVER_ANIMATION_DURATION);
   }
 
   function expectPopupOpen(component: IDateRangePickerComponent, isOpen: boolean): void {

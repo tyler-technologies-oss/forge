@@ -1,6 +1,7 @@
-import { addClass, isArray, createVisuallyHiddenElement } from '@tylertech/forge-core';
+import { isArray, createVisuallyHiddenElement, closestElement } from '@tylertech/forge-core';
+import { POPOVER_CONSTANTS } from '../../popover/popover-constants';
+import { IPopoverComponent } from '../../popover/popover';
 
-import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../../popup';
 import { ICalendarComponent } from '../calendar';
 import { CALENDAR_CONSTANTS, ICalendarFocusChangeEventData } from '../calendar-constants';
 import { getDateId } from '../calendar-dom-utils';
@@ -8,7 +9,7 @@ import { CALENDAR_DROPDOWN_CONSTANTS } from './calendar-dropdown-constants';
 
 export interface ICalendarDropdown {
   calendar: ICalendarComponent | undefined;
-  dropdownElement: IPopupComponent | undefined;
+  dropdownElement: IPopoverComponent | undefined;
   id: string;
   targetElement: HTMLElement;
   popupClasses: string | string[] | null;
@@ -24,7 +25,7 @@ export interface ICalendarDropdown {
 
 export class CalendarDropdown implements ICalendarDropdown {
   public calendar: ICalendarComponent | undefined;
-  public dropdownElement: IPopupComponent | undefined;
+  public dropdownElement: IPopoverComponent | undefined;
   public id: string;
   public targetElement: HTMLElement;
   public activeChangeCallback: ((id: string) => void) | undefined;
@@ -58,17 +59,24 @@ export class CalendarDropdown implements ICalendarDropdown {
     this.id = id;
   }
 
-  public close(): void {
+  public async close({ force = false } = {}): Promise<void> {
     if (!this.dropdownElement) {
       return;
     }
-    this.dropdownElement.open = false;
+
+    if (force) {
+      this.dropdownElement.open = false;
+    } else {
+      await this.dropdownElement.hideAsync();
+    }
+
+    this.dropdownElement.remove();
     this.dropdownElement = undefined;
     this.calendar = undefined;
   }
 
   public destroy(): void {
-    this.close();
+    this.close({ force: true });
   }
 
   public open(config: Partial<ICalendarComponent>): void {
@@ -81,7 +89,6 @@ export class CalendarDropdown implements ICalendarDropdown {
     this.dropdownElement = this._createDropdown();
     this.dropdownElement.appendChild(this.calendar);
     this.dropdownElement.appendChild(this._announcerElement as HTMLElement);
-    this.dropdownElement.static = true;
 
     // Add a listener for when the active descendent is updated
     this.calendar.addEventListener(CALENDAR_CONSTANTS.events.FOCUS_CHANGE, (evt: CustomEvent<ICalendarFocusChangeEventData>) => {
@@ -105,18 +112,12 @@ export class CalendarDropdown implements ICalendarDropdown {
       }
     });
 
-    // Open the popup
-    this.dropdownElement.open = true;
+    // Append to root node
+    const hostDocument = this.targetElement.ownerDocument ?? document;
+    const hostElement = (closestElement(POPOVER_CONSTANTS.selectors.HOST, this.targetElement) as HTMLElement) ?? hostDocument.body;
+    hostElement.appendChild(this.dropdownElement);
 
-    // Attempt to re-layout the calendar to account for updates in rendering during scale
-    // transition within popup (fixes ripple alignment... etc.)
-    window.requestAnimationFrame(() => {
-      setTimeout(() => {
-        if (this.dropdownElement && this.dropdownElement.open && this.calendar && this.calendar.isConnected) {
-          this.calendar.layout();
-        }
-      }, POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
-    });
+    this.dropdownElement.open = true;
   }
 
   public propagateKeyboardEvent(evt: KeyboardEvent): void {
@@ -129,21 +130,15 @@ export class CalendarDropdown implements ICalendarDropdown {
     return calendarElement;
   }
 
-  private _createDropdown(): IPopupComponent {
-    const popupElement = document.createElement(POPUP_CONSTANTS.elementName) as IPopupComponent;
-    popupElement.targetElement = this.targetElement;
+  private _createDropdown(): IPopoverComponent {
+    const popupElement = document.createElement('forge-popover');
+    popupElement.anchorElement = this.targetElement;
     popupElement.placement = 'bottom-start';
-    popupElement.animationType = PopupAnimationType.Menu;
+    popupElement.persistent = true;
     popupElement.classList.add(CALENDAR_DROPDOWN_CONSTANTS.classes.POPUP);
     popupElement.id = this.id;
-    addClass(this._popupClasses, popupElement);
-
-    popupElement.addEventListener(POPUP_CONSTANTS.events.CLOSE, () => {
-      if (this.closeCallback) {
-        this.closeCallback();
-      }
-    });
-
+    popupElement.classList.add(...this._popupClasses);
+    popupElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, () => this.closeCallback?.());
     return popupElement;
   }
 }

@@ -59,7 +59,6 @@ import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
 import { PaginatorComponent } from './paginator';
 import { PopoverComponent } from './popover';
-import { PopupComponent } from './popup';
 import { QuantityFieldComponent } from './quantity-field';
 import { RadioComponent, RadioGroupComponent } from './radio';
 import { ScaffoldComponent } from './scaffold';
@@ -131,7 +130,6 @@ export * from './overlay';
 export * from './page-state';
 export * from './paginator';
 export * from './popover';
-export * from './popup';
 export * from './quantity-field';
 export * from './radio';
 export * from './scaffold';
@@ -216,7 +214,6 @@ const CUSTOM_ELEMENTS = [
   PageStateComponent,
   PaginatorComponent,
   PopoverComponent,
-  PopupComponent,
   ProfileCardComponent,
   QuantityFieldComponent,
   RadioComponent,

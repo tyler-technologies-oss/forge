@@ -47,7 +47,7 @@ declare global {
  * @property {string} signOutButtonText - The text to display in the sign out button.
  * @property {string} profileButtonText - The text to display in the profile button.
  * @property {boolean} open - Whether the profile card is open or not.
- * @property {IPopupComponent | undefined} popupElement - The popup element when open.
+ * @property {IPopoverComponent | undefined} popupElement - The popup element when open.
  * @property {AppBarProfileButtonProfileCardBuilder} profileCardBuilder - Sets the profile card builder callback that will be used to add extra content to the profile card.
  * 
  * @attribute {string} [avatar-image-url] - The url of the avatar image to display.

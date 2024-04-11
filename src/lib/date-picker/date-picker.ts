@@ -3,7 +3,7 @@ import { tylIconInsertInvitation } from '@tylertech/tyler-icons/standard';
 import { CalendarComponent } from '../calendar';
 import { IconComponent, IconRegistry } from '../icon';
 import { IconButtonComponent } from '../icon-button';
-import { PopupComponent } from '../popup';
+import { PopoverComponent } from '../popover';
 import { BaseDatePickerComponent, IBaseDatePickerComponent } from './base/base-date-picker';
 import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants';
 import { DatePickerAdapter } from './date-picker-adapter';
@@ -29,14 +29,12 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-date-picker>` element.
- * 
  * @tag forge-date-picker
  */
 @CustomElement({
   name: DATE_PICKER_CONSTANTS.elementName,
   dependencies: [
-    PopupComponent,
+    PopoverComponent,
     CalendarComponent,
     IconButtonComponent,
     IconComponent

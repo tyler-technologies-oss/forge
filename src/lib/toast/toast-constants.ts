@@ -1,5 +1,5 @@
-import { PopupPlacement } from '../popup/popup-constants';
 import { COMPONENT_NAME_PREFIX, Theme } from '../constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}toast`;
 
@@ -49,5 +49,5 @@ export const TOAST_CONSTANTS = {
   events
 };
 
-export type ToastPlacement = PopupPlacement;
+export type ToastPlacement = PositionPlacement;
 export type ToastTheme = 'default' | Theme;
