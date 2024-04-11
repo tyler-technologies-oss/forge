@@ -29,6 +29,7 @@
 @mixin header {
   grid-area: header;
   min-width: 0;
+  min-height: 0;
 }
 
 @mixin body {
@@ -44,6 +45,8 @@
   grid-template-columns: auto 1fr auto;
   
   width: #{token(width)};
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -82,4 +85,9 @@
 
 @mixin right {
   grid-area: right;
+}
+
+@mixin slotted-base {
+  min-width: 0;
+  min-height: 0;
 }

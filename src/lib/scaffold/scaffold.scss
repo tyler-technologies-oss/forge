@@ -42,6 +42,10 @@ $host-tokens: [height width];
 // Slotted
 //
 
+::slotted(*) {
+  @include slotted-base;
+}
+
 ::slotted([slot=left]) {
   @include left;
 }
