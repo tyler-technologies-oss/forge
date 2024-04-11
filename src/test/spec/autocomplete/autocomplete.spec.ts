@@ -22,8 +22,8 @@ import { TEXT_FIELD_CONSTANTS, ITextFieldComponent, ITextFieldComponentDelegateO
 import { AVATAR_CONSTANTS, IAvatarComponent } from '@tylertech/forge/avatar';
 import { ICON_CONSTANTS, IconComponent } from '@tylertech/forge/icon';
 import { LIST_DROPDOWN_CONSTANTS } from '@tylertech/forge/list-dropdown';
-import { tryCleanupPopups } from '../../utils';
-import { POPOVER_CONSTANTS } from '../../../lib';
+import { POPOVER_CONSTANTS } from '@tylertech/forge/popover';
+import { tryCleanupPopovers } from '../../utils';
 
 const DEFAULT_FILTER_OPTIONS = [
   { label: 'One', value: 1 },
@@ -1659,7 +1659,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
         document.body.appendChild(fixture);
       },
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     };
@@ -1681,7 +1681,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       input,
       optionElements,
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     }
@@ -1730,7 +1730,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       label,
       iconElement,
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     }
@@ -1751,7 +1751,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       component,
       input,
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         removeElement(fixture);
       }
     };

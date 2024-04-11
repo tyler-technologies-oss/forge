@@ -11,7 +11,7 @@ import { ISelectOption, BASE_SELECT_CONSTANTS } from '@tylertech/forge/select/co
 import { removeElement } from '@tylertech/forge-core';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
 import { POPOVER_CONSTANTS, IPopoverComponent } from '@tylertech/forge/popover';
-import { tryCleanupPopups } from '../../utils';
+import { tryCleanupPopovers } from '../../utils';
 
 const DEFAULT_OPTIONS: ISelectOption[] = [
   { value: 'one', label: 'One' },
@@ -319,7 +319,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
       isAttached: () => component['_foundation']['_adapter'].isAttached(),
       append: () => document.body.appendChild(fixture),
       destroy: () => {
-        tryCleanupPopups();
+        tryCleanupPopovers();
         if (fixture.isConnected) {
           document.body.removeChild(fixture);
         }

@@ -1,9 +1,8 @@
 import { getShadowElement, isString, removeAllChildren, removeClass, removeElement, toggleElementPlaceholder } from '@tylertech/forge-core';
 import { IButtonComponent } from '../button';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
-import { PopupPlacement } from '../popup';
 import { IToastComponent } from './toast';
-import { TOAST_CONSTANTS } from './toast-constants';
+import { ToastPlacement, TOAST_CONSTANTS } from './toast-constants';
 
 export interface IToastAdapter extends IBaseAdapter {
   setHostAttribute: (name: string, value: string) => void;
@@ -13,7 +12,7 @@ export interface IToastAdapter extends IBaseAdapter {
   setActionText: (message: string) => void;
   registerActionListener: (type: string, listener: (evt: MouseEvent) => void) => void;
   deregisterActionListener: (type: string, listener: (evt: MouseEvent) => void) => void;
-  setPlacement: (placement: PopupPlacement) => void;
+  setPlacement: (placement: ToastPlacement) => void;
   setActive: (isActive: boolean) => void;
   setCloseButtonVisibility(visible: boolean): void;
   registerCloseListener(listener: (evt: Event) => void): void;
@@ -115,7 +114,7 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
    * Adjusts the class applied to the toast container to position it properly.
    * @param placement The screen placement position.
    */
-  public setPlacement(placement: PopupPlacement): void {
+  public setPlacement(placement: ToastPlacement): void {
     removeClass(
       [
         TOAST_CONSTANTS.classes.TOP,
@@ -165,7 +164,7 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
     this._closeButtonElement.addEventListener('click', listener);
   }
 
-  private _getPlacementClass(placement: PopupPlacement): string | null {
+  private _getPlacementClass(placement: ToastPlacement): string | null {
     switch (placement) {
       case 'top':
         return TOAST_CONSTANTS.classes.TOP;

@@ -1,5 +1,5 @@
-import { PopupPlacement } from '../popup/popup-constants';
 import { COMPONENT_NAME_PREFIX } from '../constants';
+import { PositionPlacement } from '../core/utils/position-utils';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}toast`;
 
@@ -67,4 +67,4 @@ export const TOAST_CONSTANTS = {
 };
 
 export type ToastBuilder = () => HTMLElement | string;
-export type ToastPlacement = PopupPlacement;
+export type ToastPlacement = PositionPlacement;
