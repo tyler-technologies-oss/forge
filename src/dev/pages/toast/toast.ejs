@@ -1,3 +1,9 @@
-<forge-button variant="raised" id="show-toast-button">Show toast</forge-button>
+<forge-button variant="raised" id="show-toast-button">Show dynamic toast</forge-button>
+
+<forge-button variant="raised" id="show-inline-toast-button">Show inline toast</forge-button>
+<forge-toast id="inline-toast" dismissible>
+  <forge-icon slot="icon" name="forge_logo"></forge-icon>
+  <div>This is an inline toast example!</div>
+</forge-toast>
 
 <script type="module" src="toast.ts"></script>

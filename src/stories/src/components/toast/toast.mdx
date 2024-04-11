@@ -25,7 +25,7 @@ However, the toast element can be created using static HTML if desired.
   <ToastDemo />
 </LiveDemo>
 
-> **Note:** pass the JavaScript value of `Infinity` to the `duration` property/attribute to force the toast element to stay open indefinitely.
+> **Note:** pass `0` to the `duration` property/attribute to force the toast element to stay open indefinitely.
 
 </PageSection>
 
@@ -69,12 +69,6 @@ export class ToastExampleComponent {
 
 ## Properties/Attributes
 
-<PropertyDef name="message" type="string" defaultValue="''">
-
-  The message text.
-
-</PropertyDef>
-
 <PropertyDef name="actionText" type="string" defaultValue="''">
 
   The action button text.
@@ -97,15 +91,9 @@ export class ToastExampleComponent {
 
 </PropertyDef>
 
-<PropertyDef name="showClose" type="boolean" defaultValue="true">
+<PropertyDef name="dismissible" type="boolean" defaultValue="false">
 
-  Controls the visibility of the close button. Default is `true`.
-
-</PropertyDef>
-
-<PropertyDef name="builder" type="ToastBuilder" defaultValue="undefined" attr={false}>
-
-  Sets the builder function that will be called in place of the message text to allow for providing a custom HTML template.
+  Controls the visibility of the close button.
 
 </PropertyDef>
 
@@ -115,7 +103,13 @@ export class ToastExampleComponent {
 
 ## Methods
 
-<MethodDef name="hide(): void">
+<MethodDef name="show(): void">
+
+  Shows the toast. Does **not** append it to the DOM.
+
+</MethodDef>
+
+<MethodDef name="hide(): Promise<void>">
 
   Hides the toast and removes it from the DOM.
 
@@ -207,12 +201,6 @@ export class ToastExampleComponent {
 
 ```ts
 type ToastPlacement = 'top-start' | 'top' | 'top-end' | 'right-start' | 'right' | 'right-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end';
-```
-
-### ToastBuilder
-
-```ts
-type ToastBuilder = () => HTMLElement | string;
 ```
 
 </PageSection>

@@ -1,140 +1,96 @@
-import { ICustomElementFoundation, isFunction } from '@tylertech/forge-core';
+import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IToastAdapter } from './toast-adapter';
-import { ToastBuilder, TOAST_CONSTANTS, ToastPlacement } from './toast-constants';
+import { TOAST_CONSTANTS, ToastPlacement, ToastTheme } from './toast-constants';
 
 export interface IToastFoundation extends ICustomElementFoundation {
-  message: string;
-  actionText: string;
   duration: number;
   placement: ToastPlacement;
-  showClose: boolean;
-  builder: ToastBuilder | string;
+  actionText: string;
+  dismissible: boolean;
+  dismissLabel: string;
   show(): void;
-  hide(): void;
+  hide(): Promise<void>;
 }
 
-/**
- * The foundation class behind the `ToastComponent` class that manages the state of a toast component instance.
- */
 export class ToastFoundation implements IToastFoundation {
-  private _message: string;
+  private _open = false;
   private _actionText: string;
   private _duration: number = TOAST_CONSTANTS.defaults.DURATION;
   private _placement: ToastPlacement = TOAST_CONSTANTS.defaults.PLACEMENT as ToastPlacement;
-  private _showClose = true;
-  private _hasAction = false;
-  private _isActive = false;
-  private _hideTimeout: number | NodeJS.Timer | undefined;
-  private _builder: ToastBuilder | string;
-  private _actionListener: (evt: MouseEvent) => void;
-  private _closeListener: (evt: MouseEvent) => void;
+  private _dismissible = false;
+  private _dismissLabel: string;
+  private _theme: ToastTheme = TOAST_CONSTANTS.defaults.THEME;
+  private _hideTimeout: number | undefined;
+  private _actionListener: EventListener = this._onAction.bind(this);
+  private _closeListener: EventListener = this._onClose.bind(this);
 
-  constructor(private _adapter: IToastAdapter) {
-    this._actionListener = (evt: MouseEvent) => this._onAction(evt);
-    this._closeListener = (evt: MouseEvent) => this._onClose(evt);
-  }
+  constructor(private _adapter: IToastAdapter) {}
 
   public initialize(): void {
-    this._adapter.setPlacement(this._placement);
-    this._adapter.registerCloseListener(this._closeListener);
-    this._adapter.setCloseButtonVisibility(this._showClose);
-    this._adapter.setActionVisibility(!!this._actionText);
-    this.show();
+    if (this._open) {
+      this.show();
+    }
   }
 
-  /**
-   * Starts the animation of the toast and hides it after the duration.
-   */
   public show(): void {
-    // Check if we were provided a builder function and call it if so (this will override the message text)
-    if (isFunction(this._builder)) {
-      const tpl = (this._builder as ToastBuilder)();
-      this._adapter.setMessageTemplate(tpl);
-    }
-
-    this._isActive = true;
-    this._adapter.setActive(true);
-
+    this._adapter.show();
+    
     if (isFinite(this._duration) && this._duration > 0) {
-      this._hideTimeout = setTimeout(() => this.hide(true), this._duration);
+      /* c8 ignore next 3 */
+      if (this._hideTimeout) {
+        window.clearTimeout(this._hideTimeout);
+      }
+      this._hideTimeout = window.setTimeout(() => this.hide(), this._duration);
     }
+
+    this._open = true;
+    this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
   }
 
-  /**
-   * Hides the toast and removes it from the DOM.
-   */
-  public hide(emitEvent: boolean = false): void {
-    if (!this._isActive) {
-      return;
-    }
-
-    this._isActive = false;
-    this._adapter.setActive(false);
-
+  public async hide({ dispatchEvent = true } = {}): Promise<void> {
     if (this._hideTimeout) {
-      clearTimeout(this._hideTimeout as number);
+      window.clearTimeout(this._hideTimeout);
       this._hideTimeout = undefined;
     }
 
-    if (emitEvent) {
-      this._adapter.emitHostEvent(TOAST_CONSTANTS.events.CLOSE);
+    await this._adapter.hide();
+
+    this._open = false;
+    this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
+
+    if (dispatchEvent) {
+      this._adapter.dispatchHostEvent(new CustomEvent(TOAST_CONSTANTS.events.CLOSE, { bubbles: true }));
     }
   }
 
-  /**
-   * Handles click events from the optional action button.
-   * @param {MouseEvent} evt The mouse event.
-   */
   private _onAction(evt: MouseEvent): void {
     evt.stopPropagation();
-    this._adapter.emitHostEvent(TOAST_CONSTANTS.events.ACTION);
+    this._adapter.dispatchHostEvent(new CustomEvent(TOAST_CONSTANTS.events.ACTION, { bubbles: true }));
   }
 
-  private _onClose(evt: MouseEvent): void {
-    this.hide(true);
+  private _onClose(_evt: MouseEvent): void {
+    this.hide();
   }
 
-  /** The message to display in the toast. */
-  public get message(): string {
-    return this._message;
+  public get open(): boolean {
+    return this._open;
   }
-  public set message(value: string) {
-    if (this._message !== value) {
-      this._message = value;
-      this._adapter.setMessage(this._message);
-      this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.MESSAGE, this._message);
-    }
-  }
-
-  /** The text to display in the action button. */
-  public get actionText(): string {
-    return this._actionText;
-  }
-  public set actionText(value: string) {
-    if (this._actionText !== value) {
-      this._actionText = value;
-
-      if (this._actionText) {
-        if (this._hasAction) {
-          this._adapter.setActionText(this._actionText);
+  public set open(value: boolean) {
+    value = Boolean(value);
+    if (this._open !== value) {
+      if (this._adapter.isConnected) {
+        if (value) {
+          this.show();
         } else {
-          this._adapter.setActionText(this._actionText);
-          this._adapter.setActionVisibility(true);
-          this._adapter.registerActionListener('click', this._actionListener);
-          this._hasAction = true;
+          this.hide({ dispatchEvent: false });
         }
-      } else if (this._hasAction) {
-        this._adapter.setActionText('');
-        this._adapter.setActionVisibility(false);
-        this._adapter.deregisterActionListener('click', this._actionListener);
-        this._hasAction = false;
+      } else {
+        this._open = value;
+        this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
       }
-
-      this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.ACTION_TEXT, this._actionText);
     }
   }
 
-  /** The time in milliseconds to show the toast. */
   public get duration(): number {
     return this._duration;
   }
@@ -142,40 +98,80 @@ export class ToastFoundation implements IToastFoundation {
     if (this._duration !== value) {
       this._duration = value;
       if (this._hideTimeout) {
-        clearTimeout(this._hideTimeout as number);
-        this._hideTimeout = setTimeout(() => this.hide(true), this._duration);
+        window.clearTimeout(this._hideTimeout);
+        if (isFinite(this._duration) && this._duration > 0) {
+          this._hideTimeout = window.setTimeout(() => this.hide(), this._duration);
+        }
       }
     }
   }
 
-  /** The placement of the toast. */
   public get placement(): ToastPlacement {
     return this._placement;
   }
   public set placement(value: ToastPlacement) {
     if (this._placement !== value) {
       this._placement = value;
-      this._adapter.setPlacement(this._placement);
+      this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.PLACEMENT, this._placement);
     }
-
-    this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.PLACEMENT, this._placement);
   }
 
-  public get builder(): ToastBuilder | string {
-    return this._builder;
+  public get actionText(): string {
+    return this._actionText;
   }
-  public set builder(value: ToastBuilder | string) {
-    this._builder = value;
+  public set actionText(value: string) {
+    value = value?.trim() ?? '';
+    if (this._actionText !== value) {
+      this._actionText = value;
+
+      this._adapter.setActionText(this._actionText);
+
+      if (!!this._actionText) {
+        this._adapter.addActionListener(this._actionListener);
+      } else {
+        this._adapter.removeActionListener(this._actionListener);
+      }
+      
+      this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.ACTION_TEXT, this._actionText);
+    }
   }
 
-  public get showClose(): boolean {
-    return this._showClose;
+  public get dismissible(): boolean {
+    return this._dismissible;
   }
-  public set showClose(value: boolean) {
-    if (this._showClose !== value) {
-      this._showClose = value;
-      this._adapter.setCloseButtonVisibility(this._showClose);
-      this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.SHOW_CLOSE, this._showClose.toString());
+  public set dismissible(value: boolean) {
+    value = Boolean(value);
+    if (this._dismissible !== value) {
+      this._dismissible = value;
+
+      if (this._dismissible) {
+        this._adapter.addCloseListener(this._closeListener);
+      } else {
+        this._adapter.removeCloseListener(this._closeListener);
+      }
+
+      this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.DISMISSIBLE, this._dismissible);
+    }
+  }
+
+  public get dismissLabel(): string {
+    return this._dismissLabel;
+  }
+  public set dismissLabel(value: string) {
+    if (this._dismissLabel !== value) {
+      this._dismissLabel = value;
+      this._adapter.setDismissLabel(this._dismissLabel);
+    }
+  }
+
+  public get theme(): ToastTheme {
+    return this._theme;
+  }
+  public set theme(value: ToastTheme) {
+    value ??= TOAST_CONSTANTS.defaults.THEME;
+    if (this._theme !== value) {
+      this._theme = value;
+      this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.THEME, this._theme);
     }
   }
 }

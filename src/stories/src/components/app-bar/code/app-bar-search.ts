@@ -9,7 +9,7 @@ export const AppBarSearchCodeHtml = () => `
 export const AppBarSearchCodeTs = () => `
 appBarSearch.addEventListener('forge-app-bar-search-input', () => {
   const toast = document.createElement('forge-toast');
-  toast.message = \`Search value: $\{evt.detail.value}\`;
+  toast.textContent = \`Search value: $\{evt.detail.value}\`;
   document.body.appendChild(toast);
 };
 `;

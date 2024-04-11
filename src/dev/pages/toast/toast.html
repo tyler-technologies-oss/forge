@@ -7,8 +7,6 @@ include('./src/partials/page.ejs', {
       { type: 'text-field', id: 'opt-toast-message', label: 'Message', defaultValue: 'Save successful' },
       { type: 'text-field', id: 'opt-toast-action-text', label: 'Action text', defaultValue: 'Undo' },
       { type: 'text-field', inputType: 'number', id: 'opt-toast-duration', label: 'Duration', defaultValue: 2750 },
-      { type: 'text-field', inputType: 'number', id: 'opt-toast-horiz-margin', label: 'Horizontal margin (px)' },
-      { type: 'text-field', inputType: 'number', id: 'opt-toast-vert-margin', label: 'Vertical margin (px)' },
       {
         type: 'select',
         id: 'opt-toast-placement',
@@ -20,11 +18,26 @@ include('./src/partials/page.ejs', {
           { label: 'Bottom end', value: 'bottom-end' },
           { label: 'Top', value: 'top' },
           { label: 'Top start', value: 'top-start' },
-          { label: 'Top end', value: 'top-end' },
+          { label: 'Top end', value: 'top-end' }
         ]
       },
-      { type: 'switch', id: 'opt-toast-close', label: 'Show close button' },
-      { type: 'switch', id: 'opt-toast-builder', label: 'Use builder' }
+      {
+        type: 'select',
+        label: 'Theme',
+        id: 'opt-toast-theme',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Success', value: 'success' },
+          { label: 'Error', value: 'error' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      { type: 'switch', id: 'opt-toast-dismissible', label: 'Dismissible' }
     ]
   }
 })

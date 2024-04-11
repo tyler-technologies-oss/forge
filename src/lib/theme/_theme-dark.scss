@@ -4,9 +4,8 @@
 @use '../popover';
 @use '../tooltip';
 @use '../chips/chip';
+@use '../toast';
 
-@use '../toast/mixins' as toast-mixins;
-@use '../toast/variables' as toast-variables;
 @use '../table/mixins' as table-mixins;
 @use '../table/variables' as table-variables;
 
@@ -34,6 +33,10 @@
     field-border-color: theme.variable(outline) // Field type chips use a border color in dark theme to increase contrast
   ));
 
-  @include toast-mixins.provide-theme(toast-variables.$theme-values-dark);
+  // Toast
+  @include toast.provide-theme((
+    action-color: theme.variable(on-surface-inverse) // Toast action button uses tertiary color in dark theme
+  ));
+
   @include table-mixins.provide-theme(table-variables.$theme-values-dark);
 }

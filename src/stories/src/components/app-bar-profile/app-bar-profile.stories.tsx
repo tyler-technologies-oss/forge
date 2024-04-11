@@ -2,7 +2,7 @@ import { Meta } from '@storybook/react';
 import React, { useEffect } from 'react';
 import { Story } from '@storybook/react';
 import { ForgeAppBar, ForgeAppBarProfileButton, ForgeIcon } from '@tylertech/forge-react';
-import { IconRegistry } from '@tylertech/forge';
+import { IconRegistry, ToastComponent } from '@tylertech/forge';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import { IAppBarProfileProps, argTypes } from './app-bar-profile-args';
 import { tylIconPerson } from '@tylertech/tyler-icons/standard';
@@ -33,10 +33,8 @@ export const Default: Story<IAppBarProfileProps> = ({
     IconRegistry.define([tylIconForgeLogo, tylIconPerson]);
   }, []);
 
-  function showToast(msg: string): void {
-    const toast = document.createElement('forge-toast');
-    toast.message = msg;
-    document.body.appendChild(toast);
+  function showToast(message: string): void {
+    ToastComponent.present({ message });
   }
 
   return (

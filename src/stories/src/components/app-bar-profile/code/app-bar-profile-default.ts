@@ -21,7 +21,7 @@ profileButton.addEventListener('forge-profile-card-profile', () => {
 
 function showToast(msg: string): void {
   const toast = document.createElement('forge-toast');
-  toast.message = msg;
+  toast.textContent = msg;
   document.body.appendChild(toast);
 }
 `;
