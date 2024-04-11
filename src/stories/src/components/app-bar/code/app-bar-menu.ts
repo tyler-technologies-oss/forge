@@ -7,7 +7,7 @@ export const AppBarMenuCodeHtml = () => `
 export const AppBarMenuCodeTs = () => `
 menuButton.addEventListener('click', () => {
   const toast = document.createElement('forge-toast');
-  toast.message = 'Menu clicked!';
+  toast.textContent = 'Menu clicked!';
   document.body.appendChild(toast);
 });
 `;

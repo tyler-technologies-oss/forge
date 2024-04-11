@@ -1,11 +1,11 @@
-import { PopupPlacement } from '@tylertech/forge';
+import { ToastPlacement } from '@tylertech/forge';
 
 export interface IToastProps {
   message: string;
   actionText: string;
   duration: number;
-  placement: PopupPlacement;
-  showClose: boolean;
+  placement: ToastPlacement;
+  dismissible: boolean;
 }
 
 export const argTypes = {
@@ -67,7 +67,7 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  showClose: {
+  dismissible: {
     control: 'boolean',
     description: '',
     table: {

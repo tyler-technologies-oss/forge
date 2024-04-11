@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { IMenuProps, argTypes } from './menu-args';
 import { ForgeButton, ForgeMenu, useForgeToast } from '@tylertech/forge-react';
-import { IMenuOption, IMenuComponent, IMenuSelectEventData } from '@tylertech/forge';
+import { IMenuOption, IMenuComponent, IMenuSelectEventData, ToastComponent } from '@tylertech/forge';
 
 const MDX = require('./menu.mdx').default;
 
@@ -23,10 +23,10 @@ export const Default: Story<IMenuProps> = ({
   persistSelection = false,
   mode = 'click'
 }) => {
-  const [showToast] = useForgeToast();
+  // const [showToast] = useForgeToast();
 
   function onSelect({ detail }: CustomEvent<IMenuSelectEventData>): void {
-    showToast({ message: `Selected value: ${detail.value}` });
+    ToastComponent.present({ message: `Selected value: ${detail.value}` });
   }
 
   return (

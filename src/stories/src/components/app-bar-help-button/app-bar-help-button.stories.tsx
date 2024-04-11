@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react';
 import { Story } from '@storybook/react';
-import { IconRegistry, IMenuSelectEventData } from '@tylertech/forge';
+import { IconRegistry, IMenuSelectEventData, ToastComponent } from '@tylertech/forge';
 import { ForgeAppBar, ForgeAppBarHelpButton, ForgeIcon } from '@tylertech/forge-react';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import React, { useEffect } from 'react';
@@ -26,9 +26,7 @@ export const Default: Story = () => {
   }, []);
 
   function showToast(evt: CustomEvent<IMenuSelectEventData>) {
-    const toast = document.createElement('forge-toast');
-    toast.message =`Selected option: ${evt.detail.value}`;
-    document.body.appendChild(toast);
+    ToastComponent.present({ message: `Selected option: ${evt.detail.value}` });
   }
 
   return (

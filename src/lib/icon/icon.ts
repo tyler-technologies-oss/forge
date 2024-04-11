@@ -7,7 +7,7 @@ import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import template from './icon.html';
 import styles from './icon.scss';
 
-export interface IIconComponent extends IBaseComponent {
+export interface IIconProperties {
   name: string | undefined;
   src: string | undefined;
   lazy: boolean;
@@ -16,6 +16,9 @@ export interface IIconComponent extends IBaseComponent {
   externalUrlBuilder: IconUrlBuilder;
   theme: IconTheme;
   viewbox: string;
+}
+
+export interface IIconComponent extends IIconProperties, IBaseComponent {
   layout(): void;
 }
 
