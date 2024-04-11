@@ -1,10 +1,10 @@
-import { PopupPlacement } from '@tylertech/forge';
+import { OverlayPlacement } from '@tylertech/forge';
 
 export interface IToastProps {
   message: string;
   actionText: string;
   duration: number;
-  placement: PopupPlacement;
+  placement: OverlayPlacement;
   showClose: boolean;
 }
 

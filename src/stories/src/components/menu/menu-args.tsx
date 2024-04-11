@@ -1,8 +1,8 @@
-import { PopupPlacement, MenuMode } from '@tylertech/forge';
+import { OverlayPlacement, MenuMode } from '@tylertech/forge';
 
 export interface IMenuProps {
   open: boolean;
-  placement: PopupPlacement;
+  placement: OverlayPlacement;
   dense: boolean;
   persistSelection: boolean;
   mode: MenuMode;

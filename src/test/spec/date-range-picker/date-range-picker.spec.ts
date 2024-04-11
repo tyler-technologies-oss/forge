@@ -14,7 +14,7 @@ import {
   ICON_BUTTON_CONSTANTS,
   IDateRange,
   IDateRangePickerComponent,
-  IPopupComponent,
+  IPopoverComponent,
   ITextFieldComponent,
   parseDateString,
   POPOVER_CONSTANTS,
@@ -1609,8 +1609,8 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
     component.open = true;
   }
 
-  function getPopup(component: IDateRangePickerComponent): IPopupComponent {
-    return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id=${getIdentifier(component)}]`) as IPopupComponent;
+  function getPopup(component: IDateRangePickerComponent): IPopoverComponent {
+    return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id=${getIdentifier(component)}]`) as IPopoverComponent;
   }
 
   function getCalendar(component: IDateRangePickerComponent): ICalendarComponent {

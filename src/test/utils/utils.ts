@@ -2,8 +2,8 @@ import { POPOVER_CONSTANTS } from '@tylertech/forge';
 import { removeElement, Platform } from '@tylertech/forge-core';
 
 export function tryCleanupPopovers(): void {
-  const popups = Array.from(document.querySelectorAll(POPOVER_CONSTANTS.elementName)) as HTMLElement[];
-  popups.forEach(p => removeElement(p));
+  const popovers = Array.from(document.querySelectorAll(POPOVER_CONSTANTS.elementName)) as HTMLElement[];
+  popovers.forEach(p => removeElement(p));
 }
 
 export function isVisibleInScrollContainer(scrollContainer: HTMLElement, element: HTMLElement): boolean {
