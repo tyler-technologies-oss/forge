@@ -17,6 +17,31 @@ declare global {
 
 /**
  * @tag forge-scaffold
+ * 
+ * @summary A scaffold provides a generic layout structure for your content using common named areas.
+ * 
+ * @property {boolean} viewport - Whether the scaffold should be full viewport height.
+ * 
+ * @attribute {boolean} viewport - Whether the scaffold should be full viewport height.
+ * 
+ * @cssproperty --forge-scaffold-height - The `height` of the scaffold.
+ * @cssproperty --forge-scaffold-width - The `width` of the scaffold.
+ * @cssproperty --forge-scaffold-overflow - The `overflow` of the scaffold.
+ * @cssproperty --forge-scaffold-body-position - The `position` of the scaffold body.
+ * 
+ * @csspart root - The root container element.
+ * @csspart header - The header of the scaffold.
+ * @csspart body - The body of the scaffold.
+ * 
+ * @slot header - Places content in the header.
+ * @slot body - Places content in the body.
+ * @slot footer - Places content in the footer.
+ * @slot left - Places content to the left of all content.
+ * @slot right - Places content to the right of all content.
+ * @slot body-header - Places content in the header of the body.
+ * @slot body-footer - Places content in the footer of the body.
+ * @slot body-left - Places content to the left of the body content.
+ * @slot body-right - Places content to the right of the body content.
  */
 @CustomElement({
   name: SCAFFOLD_CONSTANTS.elementName
