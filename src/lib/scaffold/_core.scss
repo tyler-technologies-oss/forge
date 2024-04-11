@@ -1,0 +1,85 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+  
+  width: #{token(width)};
+  height: #{token(height)};
+}
+
+@mixin base {
+  position: relative;
+
+  display: grid;
+  grid-template-areas:
+    'left header right'
+    'left body right'
+    'left footer right';
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
+
+  height: #{token(height)};
+  width: #{token(width)};
+
+  overflow: #{token(overflow)};
+}
+
+@mixin header {
+  grid-area: header;
+  min-width: 0;
+}
+
+@mixin body {
+  position: #{token(body-position)};
+
+  display: grid;
+  grid-area: body;
+  grid-template-areas:
+    'body-left body-header body-right'
+    'body-left body-inner body-right'
+    'body-left body-footer body-right';
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
+  
+  width: #{token(width)};
+  overflow: hidden;
+}
+
+@mixin footer {
+  grid-area: footer;
+}
+
+@mixin body-header {
+  grid-area: body-header;
+}
+
+@mixin body-inner {
+  overflow: auto;
+  grid-area: body-inner;
+}
+
+@mixin body-footer {
+  grid-area: body-footer;
+}
+
+@mixin scrollable {
+  overflow: auto;
+}
+
+@mixin body-left {
+  grid-area: body-left;
+}
+
+@mixin body-right {
+  grid-area: body-right;
+}
+
+@mixin left {
+  grid-area: left;
+}
+
+@mixin right {
+  grid-area: right;
+}
