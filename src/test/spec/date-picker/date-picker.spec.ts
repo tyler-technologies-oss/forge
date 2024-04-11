@@ -6,16 +6,16 @@ import {
 } from '@tylertech/forge/date-picker';
 import { DEFAULT_DATE_MASK, parseDateString, formatDate, isSameDate } from '@tylertech/forge/core';
 import { defineTextFieldComponent, TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '@tylertech/forge/text-field';
-import { IPopupComponent, POPUP_CONSTANTS } from '@tylertech/forge/popup';
 import { ICalendarComponent, CALENDAR_CONSTANTS } from '@tylertech/forge/calendar';
 import { ICON_BUTTON_CONSTANTS } from '@tylertech/forge/icon-button';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { timer, tick, dispatchNativeEvent } from '@tylertech/forge-testing';
-import { tryCleanupPopups } from '../../utils';
+import { tryCleanupPopovers } from '../../utils';
 import { BASE_DATE_PICKER_CONSTANTS } from '@tylertech/forge/date-picker/base/base-date-picker-constants';
 import type { IButtonComponent } from '@tylertech/forge/button';
-import { FIELD_CONSTANTS, IFieldComponent } from '@tylertech/forge';
+import { FIELD_CONSTANTS, IFieldComponent, IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge';
 
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestDatePickerContext;
@@ -1164,7 +1164,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickTodayButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const popup = getPopup(this.context.component);
@@ -1186,7 +1186,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickTodayButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const popup = getPopup(this.context.component);
@@ -1202,7 +1202,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
       
       clickTodayButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
       
       expect(changeSpy).toHaveBeenCalledTimes(2);
@@ -1221,7 +1221,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       openPopup(this.context.component);
 
       clickClearButton(this.context.component);
-      await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+      await timer(POPOVER_ANIMATION_DURATION);
       await tick();
 
       const popup = getPopup(this.context.component);
@@ -1517,7 +1517,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       append: () => document.body.appendChild(fixture),
       destroy: () => {
         removeElement(fixture);
-        tryCleanupPopups();
+        tryCleanupPopovers();
       }
     };
   }
@@ -1553,8 +1553,8 @@ describe('DatePickerComponent', function(this: ITestContext) {
     component.open = true;
   }
 
-  function getPopup(component: IDatePickerComponent): IPopupComponent {
-    return document.querySelector(`${POPUP_CONSTANTS.elementName}[id=${getIdentifier(component['_foundation'])}]`) as IPopupComponent;
+  function getPopup(component: IDatePickerComponent): IPopoverComponent {
+    return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id=${getIdentifier(component['_foundation'])}]`) as IPopoverComponent;
   }
 
   function getCalendar(component: IDatePickerComponent): ICalendarComponent {
@@ -1601,7 +1601,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
   }
 
   async function popupCloseAnimation(): Promise<void> {
-    return timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    return timer(POPOVER_ANIMATION_DURATION);
   }
 
   function expectPopupOpen(component: IDatePickerComponent, isOpen: boolean): void {

@@ -7,7 +7,7 @@ const attributes = {
   ANIMATION_TYPE: 'animation-type',
   DATA_ANIMATION: 'data-animation',
   DATA_VALUE: 'data-value',
-  POPUP_CONTEXT: 'forge-popup-context',
+  POPOVER_CONTEXT: 'forge-popover-context',
   PREVENT_FOCUS: 'prevent-focus'
 };
 

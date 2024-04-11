@@ -4,7 +4,7 @@ import { ICON_CLASS_NAME } from '../constants';
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate';
 import { IIconButtonComponent } from './icon-button';
 import { ICON_BUTTON_CONSTANTS } from './icon-button-constants';
-import { PopupPlacement } from '../popup';
+import { TooltipPlacement } from '../tooltip/tooltip-constants';
 
 export type IconButtonComponentDelegateProps = Partial<IIconButtonComponent>;
 export interface IIconButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {
@@ -14,7 +14,7 @@ export interface IIconButtonComponentDelegateOptions extends IBaseComponentDeleg
   iconType?: 'font' | 'component';
   iconClass?: string | string[];
   tooltip?: string;
-  tooltipPosition?: PopupPlacement;
+  tooltipPosition?: TooltipPlacement;
 }
 export interface IIconButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<IIconButtonComponent, IIconButtonComponentDelegateOptions> {}
 

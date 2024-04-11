@@ -2,9 +2,10 @@ import { removeElement } from '@tylertech/forge-core';
 import { tick, timer } from '@tylertech/forge-testing';
 import { defineCalendarComponent } from '@tylertech/forge/calendar';
 import { CalendarDropdown, ICalendarDropdown } from '@tylertech/forge/calendar';
-import { definePopupComponent, IPopupComponent, POPUP_CONSTANTS } from '@tylertech/forge/popup';
+import { definePopoverComponent, IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
 
 const DEFAULT_ID = 'calendar-dropdown';
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: ITestCalendarDropdownContext;
@@ -18,7 +19,7 @@ interface ITestCalendarDropdownContext {
 
 describe('CalendarDropdown', function(this: ITestContext) {
   beforeAll(function(this: ITestContext) {
-    definePopupComponent();
+    definePopoverComponent();
     defineCalendarComponent();
   });
 
@@ -42,15 +43,15 @@ describe('CalendarDropdown', function(this: ITestContext) {
     this.context.calendarDropdown.destroy();
 
     await tick();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     const popup = getPopup(DEFAULT_ID);
 
     expect(this.context.calendarDropdown.isOpen).toBeFalse();
     expect(popup).toBeNull();
   });
 
-  function getPopup(id: string): IPopupComponent {
-    return document.querySelector(`${POPUP_CONSTANTS.elementName}[id="${id}"]`) as IPopupComponent;
+  function getPopup(id: string): IPopoverComponent {
+    return document.querySelector(`${POPOVER_CONSTANTS.elementName}[id="${id}"]`) as IPopoverComponent;
   }
 
   function setupTestContext(): ITestCalendarDropdownContext {
