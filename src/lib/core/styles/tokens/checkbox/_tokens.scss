@@ -36,7 +36,7 @@ $tokens: (
 
   // Label
   gap: utils.module-val(checkbox, gap, 0),
-  justify: utils.module-val(checkbox, justify, space-between),
+  justify: utils.module-val(checkbox, justify, start),
   direction: utils.module-val(checkbox, direction, initial),
 
   // State layer
