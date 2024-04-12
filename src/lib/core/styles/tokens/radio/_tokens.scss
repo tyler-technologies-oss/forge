@@ -33,7 +33,7 @@ $tokens: (
 
   // Label
   gap: utils.module-val(radio, gap, 0),
-  justify: utils.module-val(radio, justify, space-between),
+  justify: utils.module-val(radio, justify, start),
   direction: utils.module-val(radio, direction, initial),
 
   // State layer
