@@ -23,7 +23,6 @@ import { BackdropComponent } from './backdrop';
 import { BadgeComponent } from './badge';
 import { BannerComponent } from './banner';
 import { BottomSheetComponent } from './bottom-sheet';
-import { BusyIndicatorComponent } from './busy-indicator';
 import { ButtonComponent } from './button';
 import { ButtonAreaComponent } from './button-area';
 import { ButtonToggleComponent, ButtonToggleGroupComponent } from './button-toggle';
@@ -59,7 +58,6 @@ import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
 import { PaginatorComponent } from './paginator';
 import { PopoverComponent } from './popover';
-import { QuantityFieldComponent } from './quantity-field';
 import { RadioComponent, RadioGroupComponent } from './radio';
 import { ScaffoldComponent } from './scaffold';
 import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
@@ -93,7 +91,6 @@ export * from './backdrop';
 export * from './badge';
 export * from './banner';
 export * from './bottom-sheet';
-export * from './busy-indicator';
 export * from './button';
 export * from './button-area';
 export * from './button-toggle';
@@ -130,7 +127,6 @@ export * from './overlay';
 export * from './page-state';
 export * from './paginator';
 export * from './popover';
-export * from './quantity-field';
 export * from './radio';
 export * from './scaffold';
 export * from './select';
@@ -172,7 +168,6 @@ const CUSTOM_ELEMENTS = [
   BadgeComponent,
   BannerComponent,
   BottomSheetComponent,
-  BusyIndicatorComponent,
   ButtonAreaComponent,
   ButtonComponent,
   ButtonToggleComponent,
@@ -215,7 +210,6 @@ const CUSTOM_ELEMENTS = [
   PaginatorComponent,
   PopoverComponent,
   ProfileCardComponent,
-  QuantityFieldComponent,
   RadioComponent,
   RadioGroupComponent,
   ScaffoldComponent,
