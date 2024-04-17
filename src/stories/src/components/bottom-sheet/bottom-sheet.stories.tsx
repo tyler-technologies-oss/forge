@@ -2,7 +2,7 @@ import { Meta } from '@storybook/react';
 import { argTypes, IBottomSheetProps } from './bottom-sheet-args';
 import React, { useState } from 'react';
 import { Story } from '@storybook/react';
-import { ForgeBottomSheet, ForgeButton } from '@tylertech/forge-react';
+import { ForgeBottomSheet, ForgeButton, ForgeScaffold, ForgeToolbar } from '@tylertech/forge-react';
 import { LOREM_IPSUM } from '../../mock/lorem-ipsum';
 
 const MDX = require('./bottom-sheet.mdx').default;
@@ -18,9 +18,8 @@ export default {
 } as Meta;
 
 export const Default: Story<IBottomSheetProps> = ({
-  showBackdrop = false,
-  backdropClose = true,
-  escapeClose = true,
+  persistent = false,
+  mode = 'nonmodal',
   fullscreen = false
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);  
@@ -30,23 +29,24 @@ export const Default: Story<IBottomSheetProps> = ({
     <>
       <ForgeButton variant="raised" onClick={show}>Show bottom sheet</ForgeButton>
 
-      <ForgeBottomSheet open={isOpen} onDismiss={hide} options={{ showBackdrop, backdropClose, escapeClose, fullscreen }}>
-        <header className="forge-dialog__header">
-          <h2 className="forge-dialog__title">Bottom sheet header</h2>
-        </header>
-        <section className="forge-dialog__body forge-bottom-sheet__body">
+      <ForgeBottomSheet open={isOpen} onDismiss={hide} options={{ persistent, mode, fullscreen }} aria-labelledby="scrollable-bottom-sheet-title" aria-describedby="scrollable-bottom-sheet-message">
+        <ForgeScaffold>
+          <ForgeToolbar no-border slot="header">
+            <h1 slot="start" id="scrollable-bottom-sheet-title" className="forge-typography--heading4">Modal bottom sheet</h1>
+          </ForgeToolbar>
+        </ForgeScaffold>
+        <section slot="body" style={{ padding: '0 16px', overflow: 'auto' }} id="scrollable-bottom-sheet-message" forge-bottom-sheet-body="true">
           {LOREM_IPSUM.p1.slice(0, 162)}
         </section>
-        <footer className="forge-dialog__footer">
-          <ForgeButton variant="raised" style={{ marginRight: 16 }} onClick={hide}>Close</ForgeButton>
-        </footer>
+        <ForgeToolbar no-border slot="footer">
+          <ForgeButton slot="end" variant="raised" style={{ marginRight: 16 }} onClick={hide}>Close</ForgeButton>
+        </ForgeToolbar>
       </ForgeBottomSheet>
     </>
   );
 };
 Default.args = {
-  showBackdrop: false,
-  backdropClose: true,
-  escapeClose: true,
+  persistent: false,
+  mode: 'nonmodal',
   fullscreen: false,
 } as IBottomSheetProps;

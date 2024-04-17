@@ -1,31 +1,32 @@
+import { BottomSheetMode } from '@tylertech/forge';
+
 export interface IBottomSheetProps {
-  showBackdrop: boolean;
-  backdropClose: boolean;
-  escapeClose: boolean;
+  persistent: boolean;
+  mode: BottomSheetMode;
   fullscreen: boolean;
 }
 
 export const argTypes = {
-  showBackdrop: {
+  persistent: {
     control: 'boolean',
     description: '',
     table: {
       category: 'Properties',
     },
   },
-  backdropClose: {
-    control: 'boolean',
-    description: '',
-    table: {
-      category: 'Properties',
+  mode: {
+    control: {
+      type: 'select',
+      labels: {
+        'modal': 'Modal',
+        'inline-modal': 'Inline Modal',
+        'nonmodal': 'Non Modal',
+      },
     },
-  },
-  escapeClose: {
-    control: 'boolean',
-    description: '',
+    options: ['modal', 'inline-modal', 'nonmodal'],
     table: {
-      category: 'Properties',
-    },
+      category: 'Properties'
+    }
   },
   fullscreen: {
     control: 'boolean',
