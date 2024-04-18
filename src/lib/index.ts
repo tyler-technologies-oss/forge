@@ -82,6 +82,7 @@ import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
  * Deprecated imports
  */
 import { DeprecatedButtonComponent } from './deprecated/button';
+import { DeprecatedIconButtonComponent } from './deprecated/icon-button';
 
 export * from './accordion';
 export * from './app-bar';
@@ -153,6 +154,7 @@ export * from './view-switcher';
  * Deprecated exports
  */
 export * from './deprecated/button';
+export * from './deprecated/icon-button';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
@@ -247,7 +249,8 @@ export function defineComponents(): void {
  */
 
 const DEPRECATED_CUSTOM_ELEMENTS = [
-  DeprecatedButtonComponent
+  DeprecatedButtonComponent,
+  DeprecatedIconButtonComponent
 ];
 
 export function defineDeprecatedComponents(): void {

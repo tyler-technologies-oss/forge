@@ -1,12 +1,21 @@
 import '$src/shared';
 import '@tylertech/forge/icon-button';
+import '@tylertech/forge/deprecated/icon-button';
 import '@tylertech/forge/label';
 import { toggleAttribute } from '@tylertech/forge-core';
 import { IconRegistry } from '@tylertech/forge/icon';
 import type { IIconButtonComponent } from '@tylertech/forge/icon-button';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import { tylIconCheck, tylIconClose, tylIconFavorite, tylIconFileCopy, tylIconOpenInNew, tylIconSettings, tylIconNotifications } from '@tylertech/tyler-icons/standard';
+import {
+  tylIconCheck,
+  tylIconClose,
+  tylIconFavorite,
+  tylIconFileCopy,
+  tylIconOpenInNew,
+  tylIconSettings,
+  tylIconNotifications
+} from '@tylertech/tyler-icons/standard';
 import './icon-button.scss';
 
 IconRegistry.define([
