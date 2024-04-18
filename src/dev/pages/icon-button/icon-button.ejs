@@ -131,6 +131,40 @@
       </forge-icon-button>
     </div>
   </section>
+
+  <section>
+    <h3 class="forge-typography--heading2">Deprecated (legacy) icon button</h3>
+    <forge-deprecated-icon-button>
+      <button type="button" aria-label="Deprecated icon button">
+        <forge-icon name="favorite"></forge-icon>
+      </button>
+    </forge-deprecated-icon-button>
+
+    <forge-deprecated-icon-button dense density="medium">
+      <button type="button" aria-label="Deprecated icon button dense">
+        <forge-icon name="favorite"></forge-icon>
+      </button>
+    </forge-deprecated-icon-button>
+    
+    <forge-deprecated-icon-button dense>
+      <button type="button" aria-label="Deprecated icon button dense">
+        <forge-icon name="favorite"></forge-icon>
+      </button>
+    </forge-deprecated-icon-button>
+
+    <forge-deprecated-icon-button toggle>
+      <button type="button" aria-label="Deprecated icon button toggle">
+        <forge-icon name="check" forge-icon-button-on></forge-icon>
+        <forge-icon name="close"></forge-icon>
+      </button>
+    </forge-deprecated-icon-button>
+
+    <forge-deprecated-icon-button>
+      <a href="javascript: alert('Anchor link button works!');" aria-label="Deprecated icon button with anchor">
+        <forge-icon name="open_in_new"></forge-icon>
+      </a>
+    </forge-deprecated-icon-button>
+  </section>
 </div>
 
 <script type="module" src="icon-button.ts"></script>
