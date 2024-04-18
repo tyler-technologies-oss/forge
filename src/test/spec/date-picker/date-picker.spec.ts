@@ -1569,7 +1569,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
 
   function clickActiveDay(component: IDatePickerComponent): void {
     const calendarShadow = getCalendarShadow(component);
-    const activeCell = calendarShadow.querySelector('.mdc-ripple-upgraded--background-focused') as HTMLTableCellElement;
+    const activeCell = calendarShadow.querySelector('.forge-calendar__date:has(forge-focus-indicator[active])') as HTMLTableCellElement;
     activeCell.click();
   }
 
