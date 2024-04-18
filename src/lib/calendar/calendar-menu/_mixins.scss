@@ -1,10 +1,8 @@
-@use '@material/ripple/ripple' as mdc-ripple;
-@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
-@use '@material/theme/theme' as mdc-theme;
-@use '@material/typography/typography' as mdc-typography;
-@use '../../theme';
-@use '../../theme/theme-values';
+@use '../../core/styles/typography';
+@use '../../core/styles/theme';
+@use '../../core/styles/scrollbar';
 @use './variables';
+@use '../../focus-indicator';
 
 @mixin core-styles() {
   .forge-calendar-menu {
@@ -59,7 +57,7 @@
         }
       }
 
-      &--focused, &:focus, .mdc-ripple-upgraded--background-focused {
+      &--focused, &:focus {
         @include item-focused;
       }
     }
@@ -130,8 +128,7 @@
 }
 
 @mixin base() {
-  @include theme.property(background-color, surface);
-
+  background-color: #{theme.variable(surface)};
   position: relative;
   height: 100%;
   width: 100%;
@@ -139,7 +136,7 @@
 }
 
 @mixin popup-context-base() {
-  @include theme.property(background-color, elevated-surface);
+  background-color: #{theme.variable(surface-bright)};
 }
 
 @mixin view() {
@@ -152,8 +149,7 @@
 }
 
 @mixin grid() {
-  @include theme.css-custom-property(max-height, --forge-calendar-menu-max-height, variables.$max-height);
-
+  max-height: var(--forge-calendar-menu-max-height, variables.$max-height);
   display: grid;
   gap: 16px;
   justify-items: center;
@@ -171,7 +167,7 @@
 }
 
 @mixin grid-item() {
-  @include mdc-typography.typography(body2);
+  @include typography.style(body1);
 
   display: flex;
   justify-content: center;
@@ -186,28 +182,22 @@
 }
 
 @mixin grid-item-enabled {
-  @include mdc-ripple.surface($include-will-change: false);
-  @include mdc-ripple.radius-bounded();
-  @include mdc-ripple-theme.states($color: primary);
-
-  border: theme-values.$border;
+  border: 1px solid #{theme.variable(outline)};
   cursor: pointer;
 }
 
 @mixin grid-item-disabled() {
-  @include theme.property(color, text-disabled-on-background);
+  color: #{theme.variable(text-low)};
 }
 
 @mixin grid-item-selected() {
-  @include theme.property(color, on-primary);
-  @include theme.property(background-color, primary);
+  background-color: #{theme.variable(primary)};
+  color: #{theme.variable(on-primary)};
 
-  &:hover {
-    opacity: 0.87;
-  }
-
-  &:focus, &.mdc-ripple-upgraded--background-focused {
-    opacity: 0.54;
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      color: #{theme.variable(primary-container)}
+    ));
   }
 }
 
@@ -217,7 +207,7 @@
 }
 
 @mixin list-wrapper() {
-  @include theme.scrollbar;
+  @include scrollbar.base;
 
   position: relative;
   height: 100%;
@@ -225,8 +215,6 @@
 }
 
 @mixin list-item() {
-  @include _deprecated-interactable;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,18 +225,17 @@
   overflow: hidden;
   text-align: center;
   cursor: pointer;
+  position: relative;
 }
 
 @mixin list-item-selected() {
-  @include theme.property(background-color, primary);
-  @include theme.property(color, on-primary);
+  background-color: #{theme.variable(primary)};
+  color: #{theme.variable(on-primary)};
 
-  &:hover {
-    opacity: 0.87;
-  }
-
-  &:focus, &.mdc-ripple-upgraded--background-focused {
-    opacity: 0.54;
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      color: var(--forge-theme-primary-container)
+    ));
   }
 }
 
@@ -409,52 +396,6 @@
 
     to {
       transform: translateX(100%);
-    }
-  }
-}
-
-@mixin _deprecated-interactable() {
-  @include mdc-ripple.surface;
-  @include mdc-ripple.radius-bounded;
-  @include mdc-ripple-theme.states(on-surface);
-  @include mdc-ripple-theme.states-activated(primary);
-  @include mdc-ripple-theme.states-selected(primary);
-
-  &--selected:focus:hover.mdc-ripple-upgraded--background-focused:not(.mdc-ripple-upgraded--foreground-activation)::before {
-    opacity: mdc-ripple-theme.states-opacity(primary, activated) + mdc-ripple-theme.states-opacity(primary, focus) +
-      mdc-ripple-theme.states-opacity(primary, hover);
-  }
-
-  &:focus,
-  &--active {
-    &:not(.forge-list-item--selected):not(.forge-list-item--activated):not(.mdc-ripple-upgraded--foreground-activation) {
-      &::before {
-        opacity: mdc-ripple-theme.states-opacity(primary, focus);
-      }
-      &:hover {
-        &::before {
-          opacity: mdc-ripple-theme.states-opacity(primary, focus) + mdc-ripple-theme.states-opacity(primary, hover);
-        }
-      }
-
-      &::before,
-      &::after {
-        @include mdc-theme.property(background-color, on-surface);
-      }
-    }
-  }
-
-  &--active:focus {
-    &.forge-list-item--selected.forge-list-item--activated:not(.mdc-ripple-upgraded--foreground-activation) {
-      &::before {
-        opacity: mdc-ripple-theme.states-opacity(primary, focus) + mdc-ripple-theme.states-opacity(primary, activated);
-      }
-      &:hover {
-        &::before {
-          opacity: mdc-ripple-theme.states-opacity(primary, focus) + mdc-ripple-theme.states-opacity(primary, hover) +
-            mdc-ripple-theme.states-opacity(primary, activated);
-        }
-      }
     }
   }
 }

@@ -11,6 +11,8 @@ import { IconComponent, IconRegistry } from '../icon';
 import { TooltipComponent } from '../tooltip';
 import { ICalendarBase } from './core/calendar-base';
 import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu';
+import { StateLayerComponent } from '../state-layer';
+import { FocusIndicatorComponent } from '../focus-indicator';
 
 import template from './calendar.html';
 import styles from './calendar.scss';
@@ -63,7 +65,9 @@ declare global {
     CalendarMenuComponent,
     IconButtonComponent,
     IconComponent,
-    TooltipComponent
+    TooltipComponent,
+    StateLayerComponent,
+    FocusIndicatorComponent
   ]
 })
 export class CalendarComponent extends HTMLElement implements ICalendarComponent {

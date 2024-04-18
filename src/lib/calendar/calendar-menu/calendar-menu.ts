@@ -1,4 +1,6 @@
 import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean, elementParents } from '@tylertech/forge-core';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
+import { StateLayerComponent } from '../../state-layer/state-layer';
 
 import { CalendarMenuAdapter } from './calendar-menu-adapter';
 import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
@@ -39,7 +41,11 @@ declare global {
  * @tag forge-calendar-menu
  */
 @CustomElement({
-  name: CALENDAR_MENU_CONSTANTS.elementName
+  name: CALENDAR_MENU_CONSTANTS.elementName,
+  dependencies: [
+    StateLayerComponent,
+    FocusIndicatorComponent
+  ]
 })
 export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuComponent {
   public static get observedAttributes(): string[] {

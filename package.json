@@ -39,12 +39,9 @@
   "dependencies": {
     "@floating-ui/dom": "~1.5.3",
     "@material/animation": "^14.0.0",
-    "@material/button": "^14.0.0",
     "@material/drawer": "^14.0.0",
     "@material/elevation": "^14.0.0",
     "@material/feature-targeting": "^14.0.0",
-    "@material/menu-surface": "^14.0.0",
-    "@material/ripple": "^14.0.0",
     "@material/rtl": "^14.0.0",
     "@material/shape": "^14.0.0",
     "@material/theme": "^14.0.0",
