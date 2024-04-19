@@ -73,20 +73,20 @@
 
 /// The base styles for the cells within the table.
 @mixin cell-base($select-class-name) {
-  padding-right: 56px;
+  padding-right: #{spacing.variable(xxxlarge)};
   
   border-bottom-width: #{border.variable(thin)};
   border-bottom-style: solid;
   border-bottom-color: #{theme.variable(outline)};
 
   &:first-child:not(.#{$select-class-name}) {
-    padding-left: 24px;
+    padding-left: #{spacing.variable(large)};
   }
 }
 
 @mixin cell {
-  padding-right: 56px;
-  padding-left: 24px;
+  padding-right: #{spacing.variable(xxxlarge)};
+  padding-left: #{spacing.variable(large)};
 
   border-bottom-width: #{border.variable(thin)};
   border-bottom-style: solid;
@@ -152,9 +152,9 @@
 
 @mixin head-filter {
   // TODO: use element-specific variables when passthrough tokens are supported
-  // --forge-text-field-height: 2.5rem;
-  // --forge-select-height: 2.5rem;
-  --forge-field-height: 2.5rem;
+  // --forge-text-field-height: 40px;
+  // --forge-select-height: 40px;
+  --forge-field-height: 40px;
 
   .forge-table-head__cell-container {
     padding: #{spacing.variable(xsmall)} 0;
@@ -173,7 +173,7 @@
   color: #{theme.variable(text-medium)};
   font-weight: bold;
   text-align: left;
-  font-size: 12px;
+  font-size: #{typography.font-size-relative('0750')};
   box-sizing: border-box;
 }
 
@@ -190,7 +190,7 @@
   height: 18px;
   width: 18px;
   margin-left: 5px;
-  transition: transform 250ms;
+  transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-accelerate)};
   display: none !important;
   font-weight: 700;
 }
@@ -229,18 +229,18 @@
   background: transparent;
   text-align: inherit;
   margin: inherit;
-  padding-block: 4px;
+  padding-block: #{spacing.variable(xxsmall)};
   padding-inline: 0;
   font: inherit;
   color: inherit;
   width: 100%;
-  outline-offset: 4px;
+  outline-offset: #{spacing.variable(xxsmall)};
 }
 
 // The base table body row styles for row interactions.
 @mixin body-row {
   height: variables.$tbody-row-height;
-  transition: background-color 200ms;
+  transition: background-color #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
 
   &:hover {
     background-color: var(--forge-table-theme-row-hover-background, variables.$row-hover-background);
@@ -290,7 +290,7 @@
   border-right-style: solid;
   border-right-color: #{theme.variable(primary)};
   box-sizing: border-box;
-  margin-right: 4px;
+  margin-right: #{spacing.variable(xxsmall)};
   transition-property: border-right-width;
   transition-duration: #{animation.variable(duration-medium1)};
   transition-timing-function: #{animation.variable(easing-accelerate)};

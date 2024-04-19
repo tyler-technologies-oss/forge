@@ -1,4 +1,6 @@
 @use '../core/styles/theme';
+@use '../core/styles/spacing';
+@use '../core/styles/typography';
 
 // The default row height within the table body.
 $tbody-row-height: 48px !default;
@@ -16,7 +18,7 @@ $thead-roomy-row-height: 56px !default;
 $thead-filter-row-height: 32px !default;
 
 // The padding for each table row.
-$row-padding: 0 24px !default;
+$row-padding: 0 #{spacing.variable(large)} !default;
 
 // The border style for the table cells.
 $border: 1px solid #{theme.variable(outline)} !default;
@@ -25,7 +27,7 @@ $border: 1px solid #{theme.variable(outline)} !default;
 $filter-input-width: 80px !default;
 
 // The default font size for the table cell data.
-$cell-font-size: 14px !default;
+$cell-font-size: #{typography.font-size-relative('0875')} !default;
 
 // Theme values
 $row-hover-background: #{theme.variable(surface-container-low)} !default;
