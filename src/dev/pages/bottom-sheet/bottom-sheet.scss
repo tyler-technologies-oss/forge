@@ -1,5 +1,19 @@
 .demo {
   forge-button {
-    width: 256px;
+    &:not(:last-child) {
+      margin-right: 16px;
+    }
   }
+}
+
+.standard-bottom-sheet-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.scrollable-body {
+  padding: 0 16px;
+  overflow: auto;
 }

@@ -19,10 +19,8 @@ export default {
 
 export const Default: Story<ILabelValueProps> = ({
   empty = false,
-  density = 'default',
-  align = 'left',
   ellipsis = false,
-  singleLine = false,
+  inline = false,
   hasIcon = false
 }) => {
   useEffect(() => {
@@ -31,10 +29,8 @@ export const Default: Story<ILabelValueProps> = ({
 
   return (
     <ForgeLabelValue
-      single-line={singleLine}
+      inline={inline}
       empty={empty}
-      density={density}
-      align={align}
       ellipsis={ellipsis}
       style={{ maxWidth: ellipsis ? '100px' : null }}>
       {hasIcon && <ForgeIcon slot="icon" name="person" />}
@@ -46,9 +42,7 @@ export const Default: Story<ILabelValueProps> = ({
 
 Default.args = {
   empty: false,
-  density: 'default',
-  align: 'left',
   ellipsis: false,
-  singleLine: false,
+  inline: false,
   hasIcon: false
 } as ILabelValueProps;

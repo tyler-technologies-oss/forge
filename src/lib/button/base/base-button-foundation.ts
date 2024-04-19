@@ -1,5 +1,6 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { ExperimentalFocusOptions } from '../../constants';
+import { task } from '../../core/utils/event-utils';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonClickOptions, ButtonType } from './base-button-constants';
 
@@ -124,7 +125,7 @@ export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> impleme
     }
 
     // Wait a cycle for the keydown event to propagate
-    await new Promise<void>(resolve => setTimeout(resolve));
+    await task();
 
     if (evt.defaultPrevented || this._disabled) {
       return;

@@ -16,7 +16,7 @@
   box-sizing: border-box;
   outline: none;
   text-decoration: none;
-  background-color: #{token(background-color)};
+  background-color: #{token(background)};
   border-radius: #{token(shape)};
   -webkit-tap-highlight-color: transparent;
   height: #{token(height)};
@@ -35,9 +35,9 @@
   @include typography.ellipse;
 
   box-sizing: border-box;
-  font-size: #{token(supporting-text-font-size)};
-  font-weight: #{token(supporting-text-font-weight)};
-  line-height: #{token(supporting-text-line-height)};
+  font-size: #{token(text-font-size)};
+  font-weight: #{token(text-font-weight)};
+  line-height: #{token(text-line-height)};
   flex: 1;
 }
 
@@ -70,16 +70,16 @@
   color: #{token(selected-color)};
 }
 
-@mixin supporting-text {
+@mixin text {
   @include typography.style(body1);
   @include typography.ellipse;
 
-  color: #{token(supporting-text-color)};
+  color: #{token(text-color)};
   display: block;
 }
 
-@mixin supporting-text-selected {
-  color: #{token(selected-supporting-text-color)};
+@mixin text-selected {
+  color: #{token(selected-text-color)};
 }
 
 @mixin two-line {
@@ -136,7 +136,7 @@
 }
 
 @mixin leading-trailing-base {
-  color: #{token(supporting-text-color)};
+  color: #{token(text-color)};
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -153,6 +153,8 @@
 }
 
 @mixin wrap {
+  @include override(padding, wrap-padding);
+
   height: auto;
 }
 
@@ -160,9 +162,10 @@
   white-space: normal;
   overflow: visible;
   text-overflow: clip;
+  line-height: normal;
 }
 
-@mixin supporting-text-wrap {
+@mixin text-wrap {
   @include text-container-wrap;
 }
 

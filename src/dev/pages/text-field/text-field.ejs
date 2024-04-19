@@ -1,21 +1,38 @@
-<forge-text-field id="text-field">
-  <!-- Leading -->
-  <forge-icon slot="leading" name="person"></forge-icon>
+<div class="vert">
+  <div>
+    <h3 class="forge-typography--heading2">Default</h3>
+    <forge-text-field>
+      <label>First name</label>
+      <input type="text" />
+    </forge-text-field>
+  </div>
 
-  <!-- Label and input -->
-  <label for="text-field-input">First name</label>
-  <input type="text" id="text-field-input" />
+  <div>
+    <h3 class="forge-typography--heading2">Textarea</h3>
+      <forge-text-field>
+        <label>Label text</label>
+        <textarea></textarea>
+      </forge-text-field>
+    </h3>
+  </div>
 
-  <!-- Trailing-->
-  <forge-icon slot="trailing" name="info_outline"></forge-icon>
+  <div>
+    <h3 class="forge-typography--heading2">Multiple inputs</h3>
+    <forge-text-field>
+      <span slot="label">First and last name</span>
+      <input type="text" aria-label="First name" />
+      <input type="text" aria-label="Last name" />
+    </forge-text-field>
+  </div>
 
-  <!-- Addon-end-->
-  <forge-icon-button slot="addon-end" density="medium">
-    <forge-icon name="more_vert"></forge-icon>
-  </forge-icon-button>
+  <div>
+    <h3 class="forge-typography--heading2">Label aware</h3>
+    <forge-text-field>
+      <forge-label>First name</forge-label>
+      <input type="text" />
+    </forge-text-field>
+  </div>
+</div>
 
-  <!-- Helper text -->
-  <span slot="helper-text">Please enter your first name</span>
-</forge-text-field>
 
 <script type="module" src="text-field.ts"></script>

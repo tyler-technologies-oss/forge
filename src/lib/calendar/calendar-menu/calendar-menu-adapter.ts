@@ -162,8 +162,14 @@ export class CalendarMenuAdapter extends BaseAdapter<ICalendarMenuComponent> imp
 
   public setFocusAtIndex(index: number, setFocus: boolean, preventFocus: boolean): void {
     const previouslyFocusedElement = this._container.querySelector(CALENDAR_MENU_CONSTANTS.selectors.FOCUSED);
-    previouslyFocusedElement?.classList.remove(CALENDAR_MENU_CONSTANTS.classes.ITEM_FOCUSED, CALENDAR_MENU_CONSTANTS.classes.MDC_RIPPLE_UPGRADED_FOCUSED);
+    previouslyFocusedElement?.classList.remove(CALENDAR_MENU_CONSTANTS.classes.ITEM_FOCUSED);
     previouslyFocusedElement?.setAttribute('tabindex', '-1');
+
+    const previouslyFocusedFocusIndicator = previouslyFocusedElement?.querySelector('forge-focus-indicator');
+    if (previouslyFocusedFocusIndicator) {
+      previouslyFocusedFocusIndicator.active = false;
+    }
+
     const item = this._container.querySelectorAll(CALENDAR_MENU_CONSTANTS.selectors.ITEM)?.[index];
     if (item) {
       item.classList.add(CALENDAR_MENU_CONSTANTS.classes.ITEM_FOCUSED);
@@ -171,7 +177,10 @@ export class CalendarMenuAdapter extends BaseAdapter<ICalendarMenuComponent> imp
       if (setFocus && !preventFocus) {
         (item as HTMLElement).focus();
       } else if (preventFocus) {
-        item.classList.add(CALENDAR_MENU_CONSTANTS.classes.MDC_RIPPLE_UPGRADED_FOCUSED);
+        const focusIndicator = item.querySelector('forge-focus-indicator');
+        if (focusIndicator) {
+          focusIndicator.active = true;
+        }
       }
       this._scrollItemIntoView('focused');
     }

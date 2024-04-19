@@ -1,13 +1,8 @@
-@use '@material/ripple/ripple' as mdc-ripple;
-@use '@material/ripple/ripple-theme' as mdc-ripple-theme;
-@use '@material/typography/typography' as mdc-typography;
-@use '../theme';
+@use '../core/styles/typography';
+@use '../core/styles/theme';
 @use '../utils/mixins' as utils;
 @use './variables';
-
-@mixin provide-theme($theme) {
-  @include theme.theme-properties(calendar, $theme, variables.$theme-values);
-}
+@use '../focus-indicator';
 
 @mixin core-styles() {
   .forge-calendar {
@@ -43,6 +38,10 @@
 
     &__date {
       @include date;
+
+      forge-focus-indicator {
+        @include focus-indicator.provide-theme(( shape: 50% ));
+      }
 
       &__inner {
         @include date-inner;
@@ -150,25 +149,23 @@
 }
 
 @mixin popup-context-styles() {
-  @include theme.property(--forge-calendar-event-stroke-color, elevated-surface);
+  --forge-calendar-event-stroke-color: #{theme.variable(surface-bright)};
 }
 
 @mixin host() {
-  @include theme.property(--forge-calendar-event-stroke-color, surface);
+  --forge-calendar-event-stroke-color: #{theme.variable(surface)};
 
   display: inline-block;
 }
 
 @mixin base() {
-  @include theme.css-custom-property(width, --forge-calendar-width, variables.$width);
-
+  width: var(--forge-calendar-width, variables.$width);
   height: fit-content;
   position: relative;
 }
 
 @mixin header() {
-  @include theme.css-custom-property(padding, --forge-calendar-controls-padding, 0);
-
+  padding: var(--forge-calendar-controls-padding, 0);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -187,8 +184,7 @@
 }
 
 @mixin footer() {
-  @include theme.css-custom-property(padding, --forge-calendar-controls-padding, 0);
-
+  padding: var(--forge-calendar-controls-padding, 0);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -216,7 +212,7 @@
 }
 
 @mixin day() {
-  @include mdc-typography.typography(caption);
+  @include typography.style(label2);
   @include square-aspect-ratio;
 
   display: flex;
@@ -239,20 +235,10 @@
   outline: none;
   cursor: default;
   user-select: none;
-
-  .mdc-ripple-surface {
-    border-radius: inherit;
-
-    &::before, &::after {
-      @include date-inner-gap($force: true);
-
-      border-radius: inherit !important; // Override ripple value to match the parent
-    }
-  }
 }
 
 @mixin date-inner() {
-  @include mdc-typography.typography(body2);
+  @include typography.style(body1);
   @include date-inner-gap;
 
   display: flex;
@@ -264,8 +250,8 @@
 
 @mixin date-today() {
   &:not([disabled]) {
-    @include theme.property(color, primary);
-    @include theme.property(border-color, primary);
+    color: #{theme.variable(primary)};
+    border-color: #{theme.variable(primary)};
   }
 
   .forge-calendar__date__inner {
@@ -277,42 +263,34 @@
 
   // Override the color when also selected
   &.forge-calendar__date--selected {
-    @include theme.property(color, on-primary);
+    color: #{theme.variable(on-primary)};
   }
 }
 
 @mixin date-selectable() {
-  @include mdc-ripple.surface($ripple-target: '.mdc-ripple-surface', $include-will-change: false);
-  @include mdc-ripple.radius-unbounded($ripple-target: '.mdc-ripple-surface');
-  @include mdc-ripple-theme.states($color: on-surface, $ripple-target: '.mdc-ripple-surface');
-
   cursor: pointer;
 }
 
 @mixin date-selected() {
   &:not([disabled]) .forge-calendar__date__inner {
-    @include theme.property(background-color, primary);
-    @include theme.property(color, on-primary);
+    background-color: #{theme.variable(primary)};
+    color: #{theme.variable(on-primary)};
   }
 
   &[disabled] .forge-calendar__date__inner {
-    @include theme.property(background-color, form-field-disabled-on-background);
-    @include theme.property(color, text-disabled-on-background);
+    background-color: #{theme.variable(primary-container-minimum)};
+    color: #{theme.variable(text-low)};
   }
   
-  .forge-calendar:not(.forge-calendar--readonly) &:hover .forge-calendar__date__inner {
-    opacity: 0.87;
-  }
-
-  &:focus, &.mdc-ripple-upgraded--background-focused {
-    .forge-calendar__date__inner {
-      opacity: 0.54;
-    }
+  forge-focus-indicator {
+    @include focus-indicator.provide-theme((
+      color: var(--forge-theme-primary-container)
+    ));
   }
 }
 
 @mixin date-disabled() {
-  @include theme.property(color, text-disabled-on-background);
+  color: #{theme.variable(text-low)};
 }
 
 @mixin date-spacer {
@@ -328,8 +306,7 @@
 
 @mixin range() {
   .forge-calendar__range__target {
-    @include theme.property(background-color, primary);
-
+    background-color: #{theme.variable(primary)};
     position: absolute;
     width: 100%;
     height: 100%;
@@ -378,13 +355,13 @@
 
 @mixin event() {
   @include event-color;
-  @include theme.css-custom-property(font-size, --forge-calendar-event-dot-size, variables.$event-dot-size);
+  
+  font-size: var(--forge-calendar-event-dot-size, variables.$event-dot-size);
 }
 
 @mixin event-overflow() {
-  @include theme.property(color, on-surface);
-  @include theme.css-custom-property(background-color, --mdc-theme-surface);
-
+  background-color: #{theme.variable(surface)};
+  color: #{theme.variable(on-surface)};
   border-radius: 50%;
 }
 
@@ -407,7 +384,7 @@
 @mixin event-color() {
   @each $color in variables.$theme-base-strings {
     &[data-event-theme=#{"" + $color}] {
-      @include theme.css-custom-property(color, --forge-calendar-theme-event-#{$color}-accent, map-get(variables.$theme-values, event-#{$color}-accent));
+      color: var(--forge-calendar-theme-event-#{$color}-accent, map-get(variables.$theme-values, event-#{$color}-accent));
     }
   }
 }
@@ -423,7 +400,7 @@
 }
 
 @mixin date-view-row-gap() {
-  @include theme.css-custom-property(margin-top, --forge-calendar-row-gap, variables.$row-gap);
+  margin-top: var(--forge-calendar-row-gap, variables.$row-gap);
 }
 
 @mixin date-inner-gap($force: false) {

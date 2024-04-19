@@ -1,4 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
+import { prefersReducedMotion } from '../core/utils/feature-detection';
 import { VirtualElement } from '../core/utils/position-utils';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overlay-aware-adapter';
@@ -7,11 +8,15 @@ import { POPOVER_CONSTANTS } from './popover-constants';
 
 export interface IPopoverAdapter extends IOverlayAwareAdapter {
   readonly hostElement: IPopoverComponent;
+  destroy(): void;
+  initializeAnchorElement(): void;
+  cleanupAnchorElement(): void;
   tryLocateAnchorElement(id: string | null): void;
   addAnchorListener(type: string, listener: EventListener): void;
   removeAnchorListener(type: string, listener: EventListener): void;
   addSurfaceListener(type: string, listener: EventListener): void;
   removeSurfaceListener(type: string, listener: EventListener): void;
+  hide(): Promise<void>;
   setOverlayOpen(newState: boolean): void;
   toggleArrow(value: boolean): void;
   isChildElement(element: HTMLElement): boolean;
@@ -28,6 +33,11 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     super(component);
     this._surfaceElement = getShadowElement(this._component, POPOVER_CONSTANTS.selectors.SURFACE);
   }
+
+  public destroy(): void {
+    this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+    this.cleanupAnchorElement();
+  }
   
   protected _initializeOverlayElement(): void {
     this._overlayElement = getShadowElement(this._component, OVERLAY_CONSTANTS.elementName) as IOverlayComponent;
@@ -35,6 +45,15 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
 
   public tryLocateAnchorElement(id: string | null): void {
     this._overlayElement.anchorElement = this._tryFindAnchorElement(id);
+    this._updateAnchorExpandedState(this._overlayElement.open);
+  }
+
+  public initializeAnchorElement(): void {
+    this._updateAnchorExpandedState(this._overlayElement.open);
+  }
+
+  public cleanupAnchorElement(): void {
+    this._updateAnchorExpandedState(null);
   }
 
   public addAnchorListener(type: string, listener: EventListener): void {
@@ -60,7 +79,28 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public setOverlayOpen(newState: boolean): void {
+    this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
     this._overlayElement.open = newState;
+    this._updateAnchorExpandedState(newState);
+  }
+
+  public hide(): Promise<void> {
+    if (prefersReducedMotion()) {
+      this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+      this._overlayElement.open = false;
+      this._updateAnchorExpandedState(false);
+      return Promise.resolve();
+    }
+
+    return new Promise(resolve => {
+      this._surfaceElement.addEventListener('animationend', () => {
+        this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+        this._overlayElement.open = false;
+        this._updateAnchorExpandedState(false);
+        resolve();
+      }, { once: true });
+      this._surfaceElement.classList.add(POPOVER_CONSTANTS.classes.EXITING);
+    });
   }
 
   public toggleArrow(value: boolean): void {
@@ -88,9 +128,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
       window.requestAnimationFrame(() => {
         if (this._component.open && this._overlayElement.isConnected && !this._component.matches(':focus-within')) {
           const autofocusElement = this._component.querySelector<HTMLElement>('[autofocus]');
-          if (autofocusElement) {
-            autofocusElement.focus();
-          }
+          autofocusElement?.focus();
         }
       });
     });
@@ -127,5 +165,15 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     }
 
     return null;
+  }
+
+  private _updateAnchorExpandedState(state: boolean | null): void {
+    if (!this._overlayElement.anchorElement) {
+      return;
+    }
+
+    if (!(this._overlayElement.anchorElement instanceof VirtualElement) && !(this.overlayElement.anchorElement as HTMLElement)?.hasAttribute('aria-hidden')) {
+      this._overlayElement.anchorElement.setAttribute('aria-expanded', String(!!state));
+    }
   }
 }

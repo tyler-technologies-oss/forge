@@ -225,6 +225,10 @@ export class TableUtils {
       span.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_TEXT);
       span.textContent = columnConfig.header && typeof columnConfig.header === 'string' ? columnConfig.header.trim() : '';
 
+      if (span.textContent.trim().length === 0) {
+        th.setAttribute('aria-hidden', 'true');
+      }
+
       // Add the sort icon if this column is sortable
       if (columnConfig.sortable) {
         th.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORTABLE);
@@ -822,27 +826,39 @@ export class TableUtils {
     }
 
     const checkboxElement = document.createElement(CHECKBOX_CONSTANTS.elementName) as ICheckboxComponent;
-    const checkboxInputElement = document.createElement('input');
-    checkboxInputElement.type = 'checkbox';
+    checkboxElement.setAttribute(TABLE_CONSTANTS.attributes.SELECT_CHECKBOX, '');
+    checkboxContainer.appendChild(checkboxElement);
 
-    let tooltipText = tooltipSelect ? tooltipSelect : '';
-    if (rowData && typeof tooltipSelect === 'function') {
-      tooltipText = tooltipSelect.call(null, rowIndex, rowData.data);
-    }
-
-    const tooltip = document.createElement('forge-tooltip');
-    tooltip.position = 'left';
+    const tooltipFactory = (text: string): ITooltipComponent => {
+      const tooltipEl = document.createElement('forge-tooltip');
+      tooltipEl.placement = 'left';
+      tooltipEl.type = 'label';
+      tooltipEl.textContent = text;
+      return tooltipEl;
+    };
 
     if (isHeader) {
-      tooltip.textContent = tooltipSelectAll ? tooltipSelectAll : '';
+      const hasTooltipText = typeof tooltipSelectAll === 'string' && tooltipSelectAll.length;
+      if (hasTooltipText) {
+        const headerTooltipEl = tooltipFactory(tooltipSelectAll);
+        checkboxContainer.appendChild(headerTooltipEl);
+      }
+      else {
+        checkboxElement.setAttribute('aria-label', 'Select all rows');
+      }
     } else {
-      tooltip.textContent = tooltipText as string;
-    }
+      let tooltipText = tooltipSelect ? tooltipSelect : '';
+      if (rowData && typeof tooltipSelect === 'function') {
+        tooltipText = tooltipSelect.call(null, rowIndex, rowData.data);
+      }
 
-    checkboxInputElement.setAttribute('aria-label', 'Select row');
-    checkboxElement.appendChild(checkboxInputElement);
-    checkboxContainer.appendChild(tooltip);
-    checkboxContainer.appendChild(checkboxElement);
+      if (typeof tooltipText === 'string' && tooltipText.length) {
+        const rowTooltipEl = tooltipFactory(tooltipText);
+        checkboxContainer.appendChild(rowTooltipEl);
+      } else {
+        checkboxElement.setAttribute('aria-label', 'Select row');
+      }
+    }
     
     return checkboxContainer;
   }
@@ -1532,14 +1548,15 @@ export class TableUtils {
       const expandableRow = tbody.rows[actualRowIndex + 1];
       const expansionPanel = expandableRow.querySelector(EXPANSION_PANEL_CONSTANTS.elementName) as IExpansionPanelComponent;
       if (expansionPanel && expansionPanel.open) {
-        expansionPanel.open = false;
-        return new Promise<void>(resolve => {
-          setTimeout(() => {
+        const promise = new Promise<void>(resolve => {
+          expansionPanel.addEventListener(EXPANSION_PANEL_CONSTANTS.events.ANIMATION_COMPLETE, () => {
             requestedRow.classList.remove(TABLE_CONSTANTS.classes.TABLE_ROW_EXPANDED);
             removeElement(expandableRow);
             resolve();
-          }, EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+          }, { once: true });
         });
+        expansionPanel.open = false;
+        return promise;
       }
     }
 

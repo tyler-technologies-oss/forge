@@ -34,7 +34,7 @@ const attributes = {
   ...observedAttributes,
   DATA_DATE: 'data-date',
   DATA_EVENT_THEME: 'data-event-theme',
-  POPUP_CONTEXT: 'forge-popup-context'
+  POPOVER_CONTEXT: 'forge-popover-context'
 };
 
 const classes = {
@@ -56,7 +56,6 @@ const classes = {
   FIXED_HEIGHT: 'forge-calendar--fixed-height',
   FOOTER: 'forge-calendar__footer',
   HEADER: 'forge-calendar__header',
-  MDC_RIPPLE_UPGRADED_FOCUSED: 'mdc-ripple-upgraded--background-focused',
   MONTH_MENU_OPEN: 'forge-calendar--month-menu-open',
   PREVENT_FOCUS: 'forge-calendar--prevent-focus',
   RANGE: 'forge-calendar__range',

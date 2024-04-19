@@ -10,6 +10,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   setHostAttribute(name: string, value?: string): void;
   toggleHostAttribute(name: string, hasAttribute: boolean, value?: string): void;
   redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean;
+  /** @deprecated Use `dispatchHostEvent` instead. */
   emitHostEvent(type: string, data?: any, bubble?: boolean, cancelable?: boolean): boolean;
   dispatchHostEvent<U extends Event>(event: U): boolean;
   addHostListener(event: string, callback: (event: Event) => void, options?: boolean | AddEventListenerOptions): void;
@@ -72,6 +73,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
     return !isCancelled;
   }
 
+  /** @deprecated Use `dispatchHostEvent` instead. */
   public emitHostEvent(type: string, data: any = null, bubble = true, cancelable?: boolean): boolean {
     return emitEvent(this._component, type, data, bubble, cancelable);
   }

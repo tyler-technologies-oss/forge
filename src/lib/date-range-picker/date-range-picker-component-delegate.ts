@@ -1,5 +1,5 @@
-import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions, IBaseComponentDelegateConfig } from '../core/delegates';
-import { FieldDensityType } from '../field/field-constants';
+import { FormFieldComponentDelegate, IBaseComponentDelegateConfig, IFormFieldComponentDelegateOptions } from '../core/delegates';
+import { FieldDensity } from '../field';
 import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IDateRangePickerComponent } from './date-range-picker';
 import { DATE_RANGE_PICKER_CONSTANTS, IDateRangePickerChangeEventData } from './date-range-picker-constants';
@@ -11,7 +11,7 @@ export interface IDateRangePickerComponentDelegateOptions extends IFormFieldComp
   toPlaceholder?: string;
   label?: string;
   required?: boolean;
-  density?: FieldDensityType;
+  density?: FieldDensity;
 }
 export interface IDateRangePickerComponentDelegateConfig extends IBaseComponentDelegateConfig<IDateRangePickerComponent, IDateRangePickerComponentDelegateOptions> {}
 
@@ -31,11 +31,11 @@ export class DateRangeComponentDelegate extends FormFieldComponentDelegate<IDate
   }
 
   public get fromInput(): HTMLInputElement {
-    return this._textField.querySelector(`input[${TEXT_FIELD_CONSTANTS.attributes.MULTI_INPUT}-0]`) as HTMLInputElement;
+    return this._textField.querySelector('input:first-of-type') as HTMLInputElement;
   }
 
   public get toInput(): HTMLInputElement {
-    return this._textField.querySelector(`input[${TEXT_FIELD_CONSTANTS.attributes.MULTI_INPUT}-1]`) as HTMLInputElement;
+    return this._textField.querySelector('input:last-of-type') as HTMLInputElement;
   }
 
   public get textField(): ITextFieldComponent {

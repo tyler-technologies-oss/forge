@@ -23,7 +23,6 @@ import { BackdropComponent } from './backdrop';
 import { BadgeComponent } from './badge';
 import { BannerComponent } from './banner';
 import { BottomSheetComponent } from './bottom-sheet';
-import { BusyIndicatorComponent } from './busy-indicator';
 import { ButtonComponent } from './button';
 import { ButtonAreaComponent } from './button-area';
 import { ButtonToggleComponent, ButtonToggleGroupComponent } from './button-toggle';
@@ -40,7 +39,7 @@ import { DialogComponent } from './dialog';
 import { DividerComponent } from './divider';
 import { DrawerComponent, MiniDrawerComponent, ModalDrawerComponent } from './drawer';
 import { ExpansionPanelComponent } from './expansion-panel';
-import { FieldComponent } from './field-next';
+import { FieldComponent } from './field';
 import { FilePickerComponent } from './file-picker';
 import { FloatingActionButtonComponent } from './floating-action-button';
 import { FocusIndicatorComponent } from './focus-indicator';
@@ -59,10 +58,7 @@ import { OverlayComponent } from './overlay';
 import { PageStateComponent } from './page-state';
 import { PaginatorComponent } from './paginator';
 import { PopoverComponent } from './popover';
-import { PopupComponent } from './popup';
-import { QuantityFieldComponent } from './quantity-field';
 import { RadioComponent, RadioGroupComponent } from './radio';
-import { RippleComponent } from './ripple';
 import { ScaffoldComponent } from './scaffold';
 import { OptionComponent, OptionGroupComponent, SelectComponent } from './select';
 import { SelectDropdownComponent } from './select/select-dropdown';
@@ -86,6 +82,7 @@ import { ViewComponent, ViewSwitcherComponent } from './view-switcher';
  * Deprecated imports
  */
 import { DeprecatedButtonComponent } from './deprecated/button';
+import { DeprecatedIconButtonComponent } from './deprecated/icon-button';
 
 export * from './accordion';
 export * from './app-bar';
@@ -95,7 +92,6 @@ export * from './backdrop';
 export * from './badge';
 export * from './banner';
 export * from './bottom-sheet';
-export * from './busy-indicator';
 export * from './button';
 export * from './button-area';
 export * from './button-toggle';
@@ -114,10 +110,9 @@ export * from './dialog';
 export * from './divider';
 export * from './drawer';
 export * from './expansion-panel';
-export * from './field-next';
+export * from './field';
 export * from './file-picker';
 export * from './floating-action-button';
-export * from './floating-label';
 export * from './focus-indicator';
 export * from './icon';
 export * from './icon-button';
@@ -133,10 +128,7 @@ export * from './overlay';
 export * from './page-state';
 export * from './paginator';
 export * from './popover';
-export * from './popup';
-export * from './quantity-field';
 export * from './radio';
-export * from './ripple';
 export * from './scaffold';
 export * from './select';
 export * from './skeleton';
@@ -162,6 +154,7 @@ export * from './view-switcher';
  * Deprecated exports
  */
 export * from './deprecated/button';
+export * from './deprecated/icon-button';
 
 const CUSTOM_ELEMENTS = [
   AccordionComponent,
@@ -177,7 +170,6 @@ const CUSTOM_ELEMENTS = [
   BadgeComponent,
   BannerComponent,
   BottomSheetComponent,
-  BusyIndicatorComponent,
   ButtonAreaComponent,
   ButtonComponent,
   ButtonToggleComponent,
@@ -219,12 +211,9 @@ const CUSTOM_ELEMENTS = [
   PageStateComponent,
   PaginatorComponent,
   PopoverComponent,
-  PopupComponent,
   ProfileCardComponent,
-  QuantityFieldComponent,
   RadioComponent,
   RadioGroupComponent,
-  RippleComponent,
   ScaffoldComponent,
   SelectComponent,
   SelectDropdownComponent,
@@ -260,7 +249,8 @@ export function defineComponents(): void {
  */
 
 const DEPRECATED_CUSTOM_ELEMENTS = [
-  DeprecatedButtonComponent
+  DeprecatedButtonComponent,
+  DeprecatedIconButtonComponent
 ];
 
 export function defineDeprecatedComponents(): void {

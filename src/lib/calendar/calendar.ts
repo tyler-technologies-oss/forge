@@ -11,6 +11,8 @@ import { IconComponent, IconRegistry } from '../icon';
 import { TooltipComponent } from '../tooltip';
 import { ICalendarBase } from './core/calendar-base';
 import { CalendarMenuAnimationType, CalendarMenuComponent } from './calendar-menu';
+import { StateLayerComponent } from '../state-layer';
+import { FocusIndicatorComponent } from '../focus-indicator';
 
 import template from './calendar.html';
 import styles from './calendar.scss';
@@ -63,7 +65,9 @@ declare global {
     CalendarMenuComponent,
     IconButtonComponent,
     IconComponent,
-    TooltipComponent
+    TooltipComponent,
+    StateLayerComponent,
+    FocusIndicatorComponent
   ]
 })
 export class CalendarComponent extends HTMLElement implements ICalendarComponent {
@@ -107,8 +111,8 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
     // To simulate the :host-context() selector for Firefox until they implement it, we need to determine if the
     // calendar is within a popup for auto-styling the calendar when included within a popup. Check to see if
     // any of the parents of this element are a popup.
-    if (!this.hasAttribute(CALENDAR_CONSTANTS.attributes.POPUP_CONTEXT) && elementParents(this).some(el => el.tagName.toLowerCase() === 'forge-popup')) {
-      this.setAttribute(CALENDAR_CONSTANTS.attributes.POPUP_CONTEXT, 'true');
+    if (!this.hasAttribute(CALENDAR_CONSTANTS.attributes.POPOVER_CONTEXT) && elementParents(this).some(el => el.tagName.toLowerCase() === 'forge-popover')) {
+      this.setAttribute(CALENDAR_CONSTANTS.attributes.POPOVER_CONTEXT, 'true');
     }
 
     this._foundation.initialize();

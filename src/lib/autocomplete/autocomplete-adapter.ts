@@ -5,7 +5,8 @@ import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup }
 import { TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
 import { CHIP_FIELD_CONSTANTS } from '../chip-field';
-import { IPopupComponent, POPUP_CONSTANTS } from '../popup';
+import { IPopoverComponent } from '../popover/popover';
+import { POPOVER_CONSTANTS } from '../popover';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   setInputElement(): HTMLInputElement;
@@ -15,7 +16,7 @@ export interface IAutocompleteAdapter extends IBaseAdapter {
   initializeInputAccessibility(identifier: string): void;
   isWrappingChipField(): boolean;
   show(config: IListDropdownConfig, popupTarget: string): void;
-  hide(listener: () => void): void;
+  hide(listener: () => void, options: { destroy?: boolean }): Promise<void>;
   focus(): void;
   setOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
   appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void;
@@ -104,21 +105,30 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._tryToggleDropdownIconRotation(true);
   }
 
-  public hide(listener: () => void): void {
+  public async hide(listener: () => void, { destroy = false } = {}): Promise<void> {
+    this.setBusyVisibility(false);
+    this._tryToggleDropdownIconRotation(false);
+    this._inputElement?.removeAttribute('aria-activedescendant');
+    this._inputElement?.removeAttribute('aria-controls');
+    this._inputElement?.setAttribute('aria-expanded', 'false');
+
     if (!this._listDropdown) {
       return;
     }
-    const { targetElement } = this._listDropdown.dropdownElement as IPopupComponent;
-    targetElement.removeEventListener(POPUP_CONSTANTS.events.BLUR, listener);
-    this.setBusyVisibility(false);
-    this._tryToggleDropdownIconRotation(false);
-    this._inputElement.removeAttribute('aria-activedescendant');
-    this._inputElement.removeAttribute('aria-controls');
-    this._inputElement.setAttribute('aria-expanded', 'false');
-    this._listDropdown.close();
+
+    const { anchorElement } = this._listDropdown.dropdownElement as IPopoverComponent;
+    if (anchorElement && anchorElement instanceof HTMLElement) {
+      anchorElement?.removeEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
+    }
+
+    if (destroy) {
+      this._listDropdown.destroy();
+    } else {
+      await this._listDropdown.close();
+    }
+
     this._listDropdown = undefined;
   }
-
 
   public setBusyVisibility(isVisible: boolean): void {
     this._listDropdown?.setBusyVisibility(isVisible);
@@ -128,9 +138,9 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     if (!this._listDropdown || !this._listDropdown.dropdownElement) {
       return;
     }
-    const dropdownElement = this._listDropdown.dropdownElement as IPopupComponent;
-    if (dropdownElement.targetElement) {
-      dropdownElement.targetElement.addEventListener(POPUP_CONSTANTS.events.BLUR, listener);
+    const dropdownElement = this._listDropdown.dropdownElement as IPopoverComponent;
+    if (dropdownElement.anchorElement && dropdownElement.anchorElement instanceof HTMLElement) {
+      dropdownElement.anchorElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
     }
   }
 
@@ -265,7 +275,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     }
     // We need to wait for the next animation frame to ensure that the layout has been updated
     window.requestAnimationFrame(() => {
-      const dropdownEl = this.getPopupElement() as IPopupComponent | undefined;
+      const dropdownEl = this.getPopupElement() as IPopoverComponent | undefined;
       dropdownEl?.position();
     });
   }
@@ -275,24 +285,15 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   private _getDefaultTargetElement(): HTMLElement {
-    // This component is often used with the text-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const textField = this._component.querySelector('forge-text-field');
-    if (textField && textField.shadowRoot) {
-      const textFieldRoot = getShadowElement(textField, TEXT_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (textFieldRoot) {
-        return textFieldRoot;
-      }
+    const fieldElements = [
+      TEXT_FIELD_CONSTANTS.elementName,
+      CHIP_FIELD_CONSTANTS.elementName
+    ];
+    // This component is often used with the field-like Forge elements, if so, let's target our popup around one if its internal elements for proper alignment
+    const textField = this._component.querySelector(`:is(${fieldElements.join(',')})`) as HTMLElement;
+    if (textField?.popoverTargetElement) {
+      return textField.popoverTargetElement;
     }
-
-    // This component is often used with the chip-field, if so, let's target our popup around one if its internal elements for proper alignnment
-    const chipField = this._component.querySelector('forge-chip-field');
-    if (chipField && chipField.shadowRoot) {
-      const chipFieldRoot = getShadowElement(chipField, CHIP_FIELD_CONSTANTS.selectors.ROOT) as HTMLElement;
-      if (chipFieldRoot) {
-        return chipFieldRoot;
-      }
-    }
-
     return this._component.querySelector('input') || this._component;
   }
 

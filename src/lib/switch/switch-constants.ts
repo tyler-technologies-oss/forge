@@ -1,13 +1,8 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
-import { INPUT_ARIA_ATTRIBUTES } from '../core';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}switch`;
 
-const classes = {
-  HIDDEN: 'hidden'
-};
-
-const attributes = {
+const observedAttributes = {
   ON: 'on',
   SELECTED: 'selected',
   DEFAULT_ON: 'default-on',
@@ -17,18 +12,24 @@ const attributes = {
   REQUIRED: 'required',
   READONLY: 'readonly',
   ICON: 'icon',
-  LABEL_POSITION: 'label-position'
+  LABEL_POSITION: 'label-position',
+  TABINDEX: 'tabindex'
+};
+
+const attributes = {
+  ...observedAttributes
+};
+
+const classes = {
+  HIDDEN: 'hidden'
 };
 
 const selectors = {
   ROOT: '.forge-switch',
-  INPUT: '#input',
   LABEL: '#label',
   ICON_ON: '#icon-on',
   ICON_OFF: '#icon-off',
-  INPUT_SLOT: 'slot[name=input]',
-  STATE_LAYER: 'forge-state-layer',
-  SLOTTED_INPUT: 'input[type=checkbox]'
+  STATE_LAYER: 'forge-state-layer'
 };
 
 const events = {
@@ -40,16 +41,14 @@ const state = {
   OFF: 'off'
 };
 
-const forwardedAttributes = [...INPUT_ARIA_ATTRIBUTES];
-
 export const SWITCH_CONSTANTS = {
+  attributes,
+  observedAttributes,
   classes,
   selectors,
-  attributes,
   elementName,
   events,
-  state,
-  forwardedAttributes
+  state
 };
 
 export type SwitchLabelPosition = 'start' | 'end';

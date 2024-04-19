@@ -1,0 +1,77 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../theme';
+@use '../../animation';
+@use '../../shape';
+@use '../../elevation';
+@use '../../spacing';
+@use '../backdrop/tokens' as backdrop;
+
+$tokens: (
+  // Base
+  background: utils.module-val(dialog, background, theme.variable(surface-bright)),
+  shape: utils.module-val(dialog, shape, shape.variable(medium)),
+  elevation: utils.module-val(dialog, elevation, elevation.value(24)),
+  spacing: utils.module-val(dialog, spacing, auto),
+  block-start-spacing: utils.module-ref(dialog, block-start-spacing, spacing),
+  block-end-spacing: utils.module-ref(dialog, block-end-spacing, spacing),
+  inline-start-spacing: utils.module-ref(dialog, inline-start-spacing, spacing),
+  inline-end-spacing: utils.module-ref(dialog, inline-end-spacing, spacing),
+  padding: utils.module-val(dialog, padding, 0),
+  width: utils.module-val(dialog, width, fit-content),
+  height: utils.module-val(dialog, height, fit-content),
+  min-width: utils.module-val(dialog, min-width, 0),
+  max-width: utils.module-val(dialog, max-width, calc(100% - #{spacing.variable(xxlarge)})),
+  min-height: utils.module-val(dialog, min-height, 0),
+  max-height: utils.module-val(dialog, max-height, calc(100% - #{spacing.variable(xxlarge)})),
+  z-index: utils.module-val(dialog, z-index, elevation.z-index-variable(dialog)),
+
+  // Move handle
+  move-handle-color: utils.module-val(dialog, move-handle-color, currentColor),
+  move-handle-size: utils.module-val(dialog, move-handle-size, 24px),
+  move-handle-hover-cursor: utils.module-val(dialog, move-handle-hover-cursor, grab),
+  move-handle-active-cursor: utils.module-val(dialog, move-handle-active-cursor, grabbing),
+  move-handle-spacing: utils.module-val(dialog, move-handle-spacing, calc(spacing.variable(xxsmall) * -1) 0 0),
+  move-transition-duration: utils.module-val(dialog, move-transition-duration, animation.variable(duration-short4)),
+  move-transition-easing: utils.module-val(dialog, move-transition-easing, animation.variable(easing-standard)),
+  moving-opacity: utils.module-val(dialog, moving-opacity, theme.emphasis(medium)),
+
+  // Animation
+  enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-medium1)),
+  enter-animation-easing: utils.module-val(dialog, enter-animation-easing, animation.variable(easing-standard)),
+  exit-animation-duration: utils.module-val(dialog, exit-animation-duration, animation.variable(duration-short2)),
+  exit-animation-easing: utils.module-val(dialog, exit-animation-easing, animation.variable(easing-emphasized-accelerate)),
+
+  // Zoom animation
+  zoom-opacity: utils.module-val(dialog, zoom-opacity, 0),
+  zoom-scale: utils.module-val(dialog, zoom-scale, 0.8),
+
+  // Fade animation
+  fade-opacity: utils.module-val(dialog, fade-opacity, 0),
+
+  // Slide animation
+  slide-opacity: utils.module-val(dialog, slide-opacity, 0),
+  slide-translate: utils.module-val(dialog, slide-translate, 0 -30%),
+
+  // Backdrop
+  backdrop-opacity: utils.module-val(dialog, backdrop-opacity, backdrop.get(opacity)),
+
+  // Non modal
+  nonmodal-elevation: utils.module-val(dialog, nonmodal-elevation, elevation.value(4)),
+
+  // Fullscreen
+  fullscreen-enter-animation-duration: utils.module-val(dialog, fullscreen-enter-animation-duration, animation.variable(duration-medium1)),
+  fullscreen-exit-animation-duration: utils.module-val(dialog, fullscreen-exit-animation-duration, animation.variable(duration-short2)),
+
+  // Custom position
+  position-x: utils.module-val(dialog, position-x, 0),
+  position-y: utils.module-val(dialog, position-y, 0),
+
+  // Preset
+  preset-sheet-enter-animation-duration: utils.module-val(dialog, preset-sheet-enter-animation-duration, animation.variable(duration-medium1)),
+  preset-sheet-exit-animation-duration: utils.module-val(dialog, preset-sheet-exit-animation-duration, animation.variable(duration-short3)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

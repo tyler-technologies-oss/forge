@@ -1,11 +1,178 @@
-@use './mixins';
+@use './core' as *;
+@use './animations';
+@use '../button';
+@use '../icon-button';
+@use '../core/styles/theme';
+@use '../utils/mixins-media' as media;
 
-@include mixins.core-styles;
+@layer base, open, theme, placement, media;
 
-:host {
-  display: inline-block;
+@layer base {
+  //
+  // Host
+  //
+
+  :host {
+    @include host;
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  //
+  // Base
+  //
+
+  .surface {
+    @include tokens;
+  }
+
+  .surface {
+    @include surface;
+  }
+
+  .message {
+    @include message;
+  }
+
+  forge-button.action-button {
+    @include button.provide-theme((
+      primary-color: #{token(action-color)}
+    ));
+  }
+
+  forge-icon-button.close-button {
+    @include icon-button.provide-theme((
+      focus-indicator-color: #{token(color)}
+    ));
+  }
+
+  :host(:not([dismissible])) {
+    .close-button {
+      display: none;
+    }
+  }
+
+  .action-button:not([hidden]) {
+    margin-inline-end: -8px;
+  }
+
+  :host([dismissible]) {
+    .close-button {
+      margin-inline-end: -8px;
+    }
+  }
 }
 
-:host([hidden]) {
-  display: none;
+@layer theme {
+  @each $theme in (primary, secondary, tertiary, success, warning, error, info) {
+    :host([theme=#{$theme}]) {
+      .surface {
+        @include override(background, theme.variable($theme), value);
+        @include override(color, theme.variable(on-#{$theme}), value);
+        @include override(action-color, color);
+      }
+    }
+  }
+}
+
+@layer open {
+
+  //
+  // Open
+  //
+ 
+  forge-overlay[open] {
+    .surface {
+      @include open;
+
+      &.exiting {
+        @include exit;
+      }
+    }
+  }
+}
+
+@layer placement {
+  //
+  // Placement
+  //
+
+  :host([placement=bottom-start]) {
+    .surface {
+      bottom: 0;
+      left: 0;
+    }
+  }
+
+  :host(:is(:not([placement]),[placement=bottom])) {
+    .surface {
+      bottom: 0;
+      left: 50%;
+      translate: -50%;
+    }
+  }
+
+  :host([placement=bottom-end]) {
+    .surface {
+      bottom: 0;
+      right: 0;
+    }
+  }
+
+  :host([placement=top-start]) {
+    .surface {
+      @include override(slide-origin, -100%, value);
+
+      top: 0;
+      left: 0;
+    }
+  }
+
+  :host([placement=top]) {
+    .surface {
+      @include override(slide-origin, -100%, value);
+
+      top: 0;
+      left: 50%;
+      translate: -50%;
+    }
+  }
+
+  :host([placement=top-end]) {
+    .surface {
+      @include override(slide-origin, -100%, value);
+
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
+@layer media {
+  @media (prefers-reduced-motion: reduce) {
+    forge-overlay[open] {
+      .surface {
+        animation-name: fadein;
+
+        &.exiting {
+          animation-name: fadeout;
+        }
+      }
+    }
+  }
+
+  @include media.phone-only {
+    :host([placement^=top]) {
+      .surface {
+        bottom: auto;
+        top: 0;
+      }
+    }
+
+    .surface {
+      @include mobile;
+    }
+  }
 }

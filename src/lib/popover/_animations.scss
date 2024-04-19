@@ -10,6 +10,16 @@
   }
 }
 
+@keyframes zoomout {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(0.8);
+  }
+}
+
 @keyframes slidein {
   from {
     transform: translateX(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)});
@@ -20,6 +30,16 @@
   }
 }
 
+@keyframes slideout {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+
+  to {
+    transform: translateX(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)});
+  }
+}
+
 @keyframes fadein {
   from {
     opacity: 0;
@@ -27,5 +47,15 @@
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
   }
 }

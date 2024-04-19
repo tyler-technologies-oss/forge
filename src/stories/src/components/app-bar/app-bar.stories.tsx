@@ -3,7 +3,7 @@ import { IAppBarProps, argTypes } from './app-bar-args';
 import { Story } from '@storybook/react';
 import { ForgeAppBar, ForgeAppBarHelpButton, ForgeAppBarMenuButton, ForgeAppBarNotificationButton, ForgeAppBarProfileButton, ForgeAppBarSearch, ForgeIcon } from '@tylertech/forge-react';
 import React, { useEffect } from 'react';
-import { IconRegistry } from '@tylertech/forge';
+import { IconRegistry, ToastComponent } from '@tylertech/forge';
 import { APP_BAR_HELP_BUTTON_OPTS } from '../../mock/app-bar';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 
@@ -35,10 +35,8 @@ export const Default: Story<IAppBarProps> = ({
     IconRegistry.define(tylIconForgeLogo);
   }, []);
 
-  function showToast(msg: string) {
-    const toast = document.createElement('forge-toast');
-    toast.message = msg;
-    document.body.appendChild(toast);
+  function showToast(message: string) {
+    ToastComponent.present({ message });
   }
 
   return (

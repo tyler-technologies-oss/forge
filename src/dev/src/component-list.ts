@@ -118,7 +118,7 @@ function getComponentCount(groups: IComponentGroup[]): number {
 function buildComponentsList(groups: IComponentGroup[]): HTMLElement[] {
   if (!groups.length) {
     const emptyText = document.createElement('div');
-    emptyText.classList.add('forge-typography--label');
+    emptyText.classList.add('forge-typography--label1');
     emptyText.textContent = 'No components found.';
     return [emptyText];
   }

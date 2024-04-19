@@ -32,6 +32,14 @@ export function getGridItems(options: ICalendarMenuOption[]): HTMLElement[] {
     if (o.disabled) {
       element.setAttribute('disabled', 'true');
     }
+
+    const stateLayerElement = document.createElement('forge-state-layer');
+    element.appendChild(stateLayerElement);
+
+    const focusIndicatorElement = document.createElement('forge-focus-indicator');
+    focusIndicatorElement.inward = true;
+    element.appendChild(focusIndicatorElement);
+
     return element;
   });
 }
@@ -65,6 +73,14 @@ export function getListItems(options: ICalendarMenuOption[]): HTMLElement[] {
     if (o.disabled) {
       element.setAttribute('disabled', 'true');
     }
+
+    const stateLayerElement = document.createElement('forge-state-layer');
+    element.appendChild(stateLayerElement);
+
+    const focusIndicatorElement = document.createElement('forge-focus-indicator');
+    focusIndicatorElement.inward = true;
+    element.appendChild(focusIndicatorElement);
+
     return element;
   });
 }

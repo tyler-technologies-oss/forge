@@ -6,13 +6,28 @@ include('./src/partials/page.ejs', {
     options: [
       {
         type: 'select',
+        label: 'Label position',
+        id: 'opt-label-position',
+        defaultValue: 'inset',
+        options: [
+          { label: 'Inset (default)', value: 'inset' },
+          { label: 'Block start', value: 'block-start' },
+          { label: 'Inline start', value: 'inline-start' },
+          { label: 'Inline end', value: 'inline-end' },
+          { label: 'None', value: 'none' }
+        ]
+      },
+      {
+        type: 'select',
         label: 'Density',
         id: 'opt-density',
-        defaultValue: 'default',
+        defaultValue: 'medium',
         options: [
-          { label: 'Default', value: 'default' },
-          { label: 'Roomy', value: 'roomy' },
-          { label: 'Dense', value: 'dense' }
+          { label: 'Extra Small', value: 'extra-small' },
+          { label: 'Small', value: 'small' },
+          { label: 'Medium (default)', value: 'medium' },
+          { label: 'Large', value: 'large' },
+          { label: 'Extra Large', value: 'extra-large' }
         ]
       },
       { type: 'text-field', label: 'Label', id: 'opt-label', defaultValue: 'Pick a food group' },

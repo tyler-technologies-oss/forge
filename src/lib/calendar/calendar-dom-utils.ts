@@ -1,7 +1,6 @@
 import { getEventPath, appendToAttribute, toggleOnAttribute } from '@tylertech/forge-core';
 
 import { IIconComponent } from '../icon';
-import { ITooltipComponent } from '../tooltip';
 import { CALENDAR_CONSTANTS, DayOfWeek, ICalendarDateConfig, ICalendarDateOptions, ICalendarEvent } from './calendar-constants';
 import { getLocalizedDayOfMonth, getLocalizedDayOfWeek, getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
 
@@ -67,9 +66,14 @@ export function getDateElement(date: ICalendarDateConfig, locale?: string): HTML
   const element = document.createElement('div');
   const rangeElement = document.createElement('div');
   const innerElement = document.createElement('div');
-  const rippleElement = document.createElement('div');
-  const day = date.date.getDay();
 
+  const stateLayerElement = document.createElement('forge-state-layer');
+  stateLayerElement.disabled = date.disabled;
+
+  const focusIndicatorElement = document.createElement('forge-focus-indicator');
+  focusIndicatorElement.inward = true;
+
+  const day = date.date.getDay();
   element.id = getDateId(date.date);
   element.tabIndex = -1;
   element.classList.add(CALENDAR_CONSTANTS.classes.DATE);
@@ -119,8 +123,8 @@ export function getDateElement(date: ICalendarDateConfig, locale?: string): HTML
   innerElement.textContent = getLocalizedDayOfMonth(date.date.getDate(), 'numeric', locale);
   innerElement.classList.add(CALENDAR_CONSTANTS.classes.DATE_INNER);
   element.appendChild(innerElement);
-  rippleElement.classList.add('mdc-ripple-surface');
-  element.appendChild(rippleElement);
+  element.appendChild(stateLayerElement);
+  element.appendChild(focusIndicatorElement);
   return element;
 }
 
@@ -307,7 +311,12 @@ export function eventIncludesElement(evt: Event, id: string): HTMLElement | null
 /** Sets the tabindex on a date element. */
 export function setTabindexOnElement(element: HTMLElement, value: number, setFocus: boolean, preventFocus?: boolean): void {
   element.tabIndex = preventFocus ? -1 : value;
-  element.classList.toggle(CALENDAR_CONSTANTS.classes.MDC_RIPPLE_UPGRADED_FOCUSED, preventFocus && value > -1);
+
+  const focusIndicatorElement = element.querySelector('forge-focus-indicator');
+  if (focusIndicatorElement) {
+    focusIndicatorElement.active = !!preventFocus && value > -1;
+  }
+
   if (value > -1 && setFocus && !preventFocus) {
     element.focus();
   } else {

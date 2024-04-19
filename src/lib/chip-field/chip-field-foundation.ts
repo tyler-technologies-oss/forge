@@ -1,59 +1,53 @@
-import { getActiveElement } from '@tylertech/forge-core';
 import { IChipFieldAdapter } from './chip-field-adapter';
-import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
-import { IFieldFoundation, FieldFoundation } from '../field/field-foundation';
+import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS } from './chip-field-constants';
+import { BaseFieldFoundation, IBaseFieldFoundation } from '../field/base/base-field-foundation';
 
-export interface IChipFieldFoundation extends IFieldFoundation {
+export interface IChipFieldFoundation extends IBaseFieldFoundation {
   addOnBlur: boolean;
+  readonly popoverTargetElement: HTMLElement;
 }
 
-export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFoundation {
+export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> implements IChipFieldFoundation {
   private _addOnBlur = false;
-  private _memberSlotListener: () => void;
-  private _inputContainerMouseDownListener: (evt: MouseEvent) => void;
-  private _handleRootKeyDown: (event: KeyboardEvent) => void;
-  private _handleKeyDown: (event: KeyboardEvent) => void;
 
-  constructor(protected _adapter: IChipFieldAdapter) {
-    super(_adapter);
-    this._memberSlotListener = () => this._onMemberSlotChanged();
-    this._inputContainerMouseDownListener = evt => this._onInputContainerMouseDown(evt);
-    this._handleRootKeyDown = evt => this._onRootKeyDown(evt);
-    this._handleKeyDown = evt => this._onKeyDown(evt);
+  private _mouseDownListener: EventListener = this._onMouseDown.bind(this);
+  private _clickListener: EventListener = this._onClick.bind(this);
+  private _rootKeyDownListener: EventListener = this._onRootKeyDown.bind(this);
+  private _inputKeyDownListener: EventListener = this._onKeyDown.bind(this);
+  private _slotChangeListener: EventListener = this._onSlotChange.bind(this);
+  private _inputAttributeListener: ChipFieldInputAttributeObserver = this._onInputAttributeChange.bind(this);
+  private _valueChangeListener: ChipFieldValueChangeListener = this._onValueChange.bind(this);
+  private _inputListener: EventListener = this._onValueChange.bind(this);
+  private _blurListener: EventListener = this._onBlur.bind(this);
+
+  constructor(adapter: IChipFieldAdapter) {
+    super(adapter);
   }
 
   public initialize(): void {
-    super.initialize();
-    this._adapter.addMemberSlotListener(this._memberSlotListener);
-    this._adapter.addInputContainerListener('mousedown', this._inputContainerMouseDownListener);
-    this._adapter.addRootListener('keydown', this._handleRootKeyDown);
-    this._adapter.addInputListener('keydown', this._handleKeyDown);
-  }
+    this._adapter.initialize();
+    this._adapter.addRootListener('mousedown', this._mouseDownListener, { capture: true });
+    this._adapter.addRootListener('click', this._clickListener);
+    this._adapter.addRootListener('keydown', this._rootKeyDownListener);
+    this._adapter.addInputListener('keydown', this._inputKeyDownListener);
+    this._adapter.addRootListener('slotchange', this._slotChangeListener);
+    this._adapter.addRootListener('input', this._inputListener);
+    this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
 
-  public disconnect(): void {
-    super.disconnect();
-    this._adapter.removeMemberSlotListener(this._memberSlotListener);
-    this._adapter.removeInputContainerListener('mousedown', this._inputContainerMouseDownListener);
-    this._adapter.removeRootListener('keydown', this._handleRootKeyDown);
-    this._adapter.removeInputListener('keydown', this._handleKeyDown);
-  }
-
-  /** Controls adding a member of entered text on blur. */
-  public get addOnBlur(): boolean {
-    return this._addOnBlur;
-  }
-  public set addOnBlur(value: boolean) {
-    value = Boolean(value);
-    if (this._addOnBlur !== value) {
-      this._addOnBlur = value;
-      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, this._addOnBlur);
+    if (this._addOnBlur) {
+      this._adapter.addInputListener('blur', this._blurListener);
     }
   }
 
-  private _onInputContainerMouseDown(evt: MouseEvent): void {
-    evt.preventDefault();
-    this._adapter.focusInput();
-    this._adapter.tryPropagateClick(evt.target);
+  public destroy(): void {
+    this._adapter.removeRootListener('mousedown', this._mouseDownListener, { capture: true });
+    this._adapter.removeRootListener('click', this._clickListener);
+    this._adapter.removeRootListener('keydown', this._rootKeyDownListener);
+    this._adapter.removeInputListener('keydown', this._inputKeyDownListener);
+    this._adapter.removeRootListener('slotchange', this._slotChangeListener);
+    this._adapter.removeRootListener('input', this._inputListener);
+    this._adapter.removeInputListener('blur', this._blurListener);
+    this._adapter.removeValueChangeListener();
   }
 
   protected _onBlur(event: FocusEvent): void {
@@ -64,40 +58,83 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     }
 
     input.value = '';
-    super._onBlur(event);
   }
 
-  private _onRootKeyDown(event: KeyboardEvent): void {
-    if (this._adapter.inputHasValue()) {
+  private _onMouseDown(evt: MouseEvent): void {
+    if (this._disabled || this._adapter.inputHasFocus) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      return;
+    }
+  }
+
+  private _onClick(_evt: MouseEvent): void {
+    if (this._disabled) {
+      return;
+    }
+    this._adapter.focusInput();
+    this._adapter.clickInput();
+  }
+
+  private _onValueChange(): void {
+    this._tryFloatLabel();
+  }
+
+  private _onSlotChange(evt: Event): void {
+    const target = evt.target as HTMLSlotElement;
+    switch (target.name) {
+      case 'label':
+        this._adapter.tryConnectSlottedLabel(target);
+        break;
+      case 'member':
+        this._adapter.toggleContainerClass(CHIP_FIELD_CONSTANTS.classes.HAS_MEMBERS, target.assignedElements().length > 0);
+        this._adapter.tryFloatLabel();
+        this._adapter.getSlottedMemberElements().forEach(x => x.tabIndex = -1);
+        break;
+      case '':
+        this._adapter.handleDefaultSlotChange(target, this._inputAttributeListener);
+        this._adapter.tryAddValueChangeListener(this, this._valueChangeListener);
+        this._tryFloatLabel();
+        break;
+    }
+  }
+
+  private _onInputAttributeChange(name: keyof typeof CHIP_FIELD_CONSTANTS.observedInputAttributes, value: string | null): void {
+    switch (name) {
+      case 'disabled':
+        this.disabled = value !== null;
+        break;
+      case 'placeholder':
+        this._tryFloatLabel();
+        break;
+    }
+  }
+
+  private _onRootKeyDown({ key }: KeyboardEvent): void {
+    if (this._adapter.hasInputValue) {
       return;
     }
 
-    switch (event.key) {
-      case 'Right':
+    switch (key) {
       case 'ArrowRight':
         this._focusNextMember();
         break;
-      case 'Left':
       case 'ArrowLeft':
         this._focusPreviousMember();
         break;
       case 'Backspace':
       case 'Delete':
-      case 'Del':
         this._removeMember();
-        break;
-      default:
         break;
     }
   }
 
-  private _onKeyDown(event: KeyboardEvent): void {
-    const input = event.target as HTMLInputElement;
-    switch (event.key) {
+  private _onKeyDown({ target, key }: KeyboardEvent): void {
+    const input = target as HTMLInputElement;
+    switch (key) {
       case 'Enter':
         this._addMember(input);
         break;
-      case 'Esc':
       case 'Escape':
         input.value = '';
         break;
@@ -106,22 +143,20 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
           input.value = '';
         }
         break;
-      default:
-        break;
     }
   }
 
   private _focusNextMember(): void {
     const members = this._adapter.getSlottedMemberElements();
-    if (members.length < 1 || this._adapter.inputHasFocus()) {
+    if (!members.length || this._adapter.inputHasFocus) {
       return;
     }
 
     for (let i = 0; i < members.length; i++) {
-      const member = members.item(i);
-      const nextMember = members.item(i + 1);
+      const member = members.at(i);
+      const nextMember = members.at(i + 1);
 
-      if (this._memberIsActive(member)) {
+      if (member && this._isMemberActive(member)) {
         if (nextMember) {
           nextMember.focus();
           break;
@@ -134,56 +169,48 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
 
   private _focusPreviousMember(): void {
     const members = this._adapter.getSlottedMemberElements();
-    if (members.length < 1) {
+    if (!members.length) {
       return;
     }
 
-    if (this._adapter.inputHasFocus()) {
+    if (this._adapter.inputHasFocus) {
       members[members.length - 1].focus();
       return;
     }
 
     for (let i = 0; i < members.length; i++) {
-      const previousMember = members.item(i - 1);
-      const member = members.item(i);
+      const previousMember = members.at(i - 1);
+      const member = members.at(i);
 
-      if (this._memberIsActive(member) && previousMember) {
+      if (member && this._isMemberActive(member) && previousMember) {
         previousMember.focus();
         break;
       }
     }
   }
 
-  private _memberIsActive(ele: HTMLElement): boolean {
-    return ele.matches(':focus-within') || getActiveElement(ele.ownerDocument) === ele || ele.hasAttribute('focused');
+  private _isMemberActive(el: HTMLElement): boolean {
+    return el.matches(':focus-within');
   }
 
   private _getActiveMember(): HTMLElement | null {
     const members = this._adapter.getSlottedMemberElements();
-
-    for (let i = 0; i < members.length; i++) {
-      const member = members.item(i);
-      if (this._memberIsActive(member)) {
-        return member;
-      }
-    }
-
-    return null;
+    return members.find(x => this._isMemberActive(x)) ?? null;
   }
 
   private _addMember(input: HTMLInputElement): void {
     const cleanInputValue = input.value.trim();
-    if (cleanInputValue && cleanInputValue.length > 0) {
+    if (cleanInputValue.length > 0) {
       this._adapter.emitHostEvent(CHIP_FIELD_CONSTANTS.events.MEMBER_ADDED, cleanInputValue);
     }
     input.value = '';
   }
 
   private _removeMember(): void {
-    let memberToRemove = this._getActiveMember();
+    let memberToRemove: HTMLElement | null | undefined = this._getActiveMember();
     if (!memberToRemove) {
       const members = this._adapter.getSlottedMemberElements();
-      memberToRemove = members.item(members.length - 1);
+      memberToRemove = members.at(-1);
     }
 
     if (!memberToRemove) {
@@ -194,8 +221,38 @@ export class ChipFieldFoundation extends FieldFoundation implements IChipFieldFo
     this._adapter.emitHostEvent(CHIP_FIELD_CONSTANTS.events.MEMBER_REMOVED, memberToRemove);
   }
 
-  private _onMemberSlotChanged(): void {
-    this.floatLabel(this._adapter.fieldHasValue() || this._adapter.inputHasFocus());
-    this._adapter.getSlottedMemberElements().forEach(x => x.tabIndex = -1);
+  public get addOnBlur(): boolean {
+    return this._addOnBlur;
+  }
+  public set addOnBlur(value: boolean) {
+    value = Boolean(value);
+    if (this._addOnBlur !== value) {
+      this._addOnBlur = value;
+
+      if (this._adapter.isConnected) {
+        if (this._addOnBlur) {
+          this._adapter.addInputListener('blur', this._blurListener);
+        } else {
+          this._adapter.removeInputListener('blur', this._blurListener);
+        }
+      }
+
+      this._adapter.toggleHostAttribute(CHIP_FIELD_CONSTANTS.attributes.ADD_ON_BLUR, this._addOnBlur);
+    }
+  }
+
+  public get popoverTargetElement(): HTMLElement {
+    return this._adapter.popoverTargetElement;
+  }
+
+  public override get disabled(): boolean {
+    return super.disabled;
+  }
+  public override set disabled(value: boolean) {
+    if (this.disabled === value) {
+      return;
+    }
+    super.disabled = value;
+    this._adapter.setDisabled(value);
   }
 }

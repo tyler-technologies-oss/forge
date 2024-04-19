@@ -4,7 +4,8 @@ import { ICON_CLASS_NAME } from '../constants';
 import { IIconComponent } from '../icon';
 import { ILinearProgressComponent, LINEAR_PROGRESS_CONSTANTS } from '../linear-progress';
 import { IListComponent, LIST_CONSTANTS } from '../list/list';
-import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
+import { POPOVER_CONSTANTS } from '../popover';
+import { IPopoverComponent } from '../popover/popover';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
 import { IListDropdownCascadingElementFactoryConfig, IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownAsyncStyle, ListDropdownIconType, ListDropdownType, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
 
@@ -15,7 +16,7 @@ export enum ListDropdownOptionType { Option, Group }
  * @param config 
  * @param targetElement 
  */
-export function createDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopupComponent {
+export function createDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopoverComponent {
   const dropdownElement = createPopupDropdown(config, targetElement);
   const dropdownId =  `list-dropdown-popup-${config.id}`;
 
@@ -45,37 +46,30 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
   return dropdownElement;
 }
 
-export function createPopupDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopupComponent {
-  const popupElement = document.createElement('forge-popup');
-  popupElement.targetElement = targetElement;
-  popupElement.placement = config.popupPlacement || 'bottom-start';
-  popupElement.manageFocus = false;
-  popupElement.static = !!config.popupStatic;
+export function createPopupDropdown(config: IListDropdownOpenConfig, targetElement: HTMLElement): IPopoverComponent {
+  const popoverElement = document.createElement('forge-popover');
+  popoverElement.anchorElement = targetElement;
+  popoverElement.placement = config.popupPlacement || 'bottom-start';
+  popoverElement.persistent = Boolean(config.popupStatic);
 
   if (config.popupFallbackPlacements?.length) {
-    popupElement.fallbackPlacements = config.popupFallbackPlacements;
+    popoverElement.fallbackPlacements = config.popupFallbackPlacements;
   }
 
   if (config.constrainViewportWidth) {
-    popupElement.setAttribute(POPUP_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
+    popoverElement.setAttribute(POPOVER_CONSTANTS.attributes.CONSTRAIN_VIEWPORT_WIDTH, '');
   }
 
   if (config.popupOffset) {
-    popupElement.offset = config.popupOffset;
+    popoverElement.offset = config.popupOffset;
   }
 
   // Set the animations based on our type
-  switch (config.type) {
-    case ListDropdownType.Menu:
-      popupElement.animationType = PopupAnimationType.Menu;
-      break;
-    case ListDropdownType.None:
-      popupElement.animationType = PopupAnimationType.None;
-      break;
-    default:
-      popupElement.animationType = PopupAnimationType.Dropdown;
+  if (config.type === ListDropdownType.None) {
+    popoverElement.animationType = 'none';
   }
-  return popupElement;
+
+  return popoverElement;
 }
 
 export function createList(config: IListDropdownOpenConfig): IListComponent {

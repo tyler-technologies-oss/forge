@@ -97,22 +97,25 @@ declare global {
  * @csspart focus-indicator - The forwarded focus indicator's internal indicator element.
  * @csspart state-layer - The forwarded state layer's internal surface element.
  * 
- * @cssproperty --forge-list-item-background-color - The background color.
+ * @cssproperty --forge-list-item-background - The background color.
  * @cssproperty --forge-list-item-shape - The shape of the list item.
  * @cssproperty --forge-list-item-padding - The padding inside of the container element.
+ * @cssproperty --forge-list-item-wrap-padding - The padding inside of the container element when `wrap` is enabled.
  * @cssproperty --forge-list-item-margin - The margin around the host element.
  * @cssproperty --forge-list-item-height - The height of the container.
  * @cssproperty --forge-list-item-dense-height - The height when in the dense state.
  * @cssproperty --forge-list-item-indent - The margin inline state when in the indented state.
  * @cssproperty --forge-list-item-cursor - The cursor when interactive.
  * @cssproperty --forge-list-item-gap - The gap between the slotted content.
- * @cssproperty --forge-list-item-supporting-text-color - The text color of the supporting text.
- * @cssproperty --forge-list-item-supporting-line-height - The line height of the supporting text.
+ * @cssproperty --forge-list-item-text-color - The text color of the text.
+ * @cssproperty --forge-list-item-text-font-size - The font size of the text.
+ * @cssproperty --forge-list-item-text-font-weight - The font weight of the text.
+ * @cssproperty --forge-list-item-text-line-height - The line height of the text.
  * @cssproperty --forge-list-item-selected-color - The color when in the selected state.
  * @cssproperty --forge-list-item-opacity - The opacity of the background color when in the disabled state.
  * @cssproperty --forge-list-item-selected-leading-color - The color of the leading content when in the selected state.
  * @cssproperty --forge-list-item-selected-trailing-color - The color of the trailing content when in the selected state.
- * @cssproperty --forge-list-item-selected-supporting-text-color - The color of the supporting text when in the selected state.
+ * @cssproperty --forge-list-item-selected-text-color - The color of the text when in the selected state.
  * @cssproperty --forge-list-item-disabled-opacity - The opacity of the element when in the disabled state.
  * @cssproperty --forge-list-item-disabled-cursor - The cursor when in the disabled state.
  * @cssproperty --forge-list-item-one-line-height - The line height when in the one/single line state.

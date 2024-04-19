@@ -9,10 +9,10 @@ import { IStateLayerComponent } from '../state-layer';
 import { ISwitchComponent, SWITCH_CONSTANTS } from '../switch';
 import { internals } from '../constants';
 
+import './switch';
+
 class SwitchHarness extends TestHarness<ISwitchComponent> {
   public rootElement: HTMLElement;
-  public inputContainerElement: HTMLElement;
-  public inputElement: HTMLInputElement;
   public trackElement: HTMLElement;
   public handleElement: HTMLElement;
   public iconOffElement: HTMLElement;
@@ -29,8 +29,6 @@ class SwitchHarness extends TestHarness<ISwitchComponent> {
 
   public initElementRefs(): void {
     this.rootElement = getShadowElement(this.element, SWITCH_CONSTANTS.selectors.ROOT);
-    this.inputContainerElement = getShadowElement(this.element, '[part="input-container"]');
-    this.inputElement = getShadowElement(this.element, SWITCH_CONSTANTS.selectors.INPUT) as HTMLInputElement;
     this.trackElement = getShadowElement(this.element, '[part="track"]');
     this.handleElement = getShadowElement(this.element, '[part="handle"]');
     this.iconOffElement = getShadowElement(this.element, SWITCH_CONSTANTS.selectors.ICON_OFF);
@@ -85,7 +83,6 @@ describe('Switch', () => {
     expect(el.readonly).to.be.false;
     expect(el.icon).to.equal('on');
     expect(el.labelPosition).to.equal('end');
-    expect(ctx.inputElement.checked).to.be.false;
     expect(window.getComputedStyle(ctx.iconOffElement).display).to.equal('none');
     expect(window.getComputedStyle(ctx.iconOnElement).display).to.not.equal('none');
     expect(ctx.rootElement.lastElementChild).to.equal(ctx.labelElement);
@@ -97,7 +94,6 @@ describe('Switch', () => {
 
     expect(el.on).to.be.true;
     expect(el.selected).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
   });
 
   it('should accept selected', async () => {
@@ -106,7 +102,6 @@ describe('Switch', () => {
 
     expect(el.on).to.be.true;
     expect(el.selected).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
   });
 
   it('should accept default-on', async () => {
@@ -114,7 +109,6 @@ describe('Switch', () => {
     const ctx = new SwitchHarness(el);
 
     expect(el.defaultOn).to.be.true;
-    expect(ctx.inputElement.hasAttribute('checked')).to.be.true;
   });
 
   it('should accept value', async () => {
@@ -122,7 +116,6 @@ describe('Switch', () => {
     const ctx = new SwitchHarness(el);
 
     expect(el.value).to.equal('test');
-    expect(ctx.inputElement.value).to.equal('test');
   });
 
   it('should accept disabled', async () => {
@@ -130,7 +123,6 @@ describe('Switch', () => {
     const ctx = new SwitchHarness(el);
 
     expect(el.disabled).to.be.true;
-    expect(ctx.inputElement.disabled).to.be.true;
     await expect(el).to.be.accessible();
   });
 
@@ -139,7 +131,6 @@ describe('Switch', () => {
     const ctx = new SwitchHarness(el);
 
     expect(el.required).to.be.true;
-    expect(ctx.inputElement.required).to.be.true;
   });
 
   it('should accept readonly', async () => {
@@ -148,11 +139,9 @@ describe('Switch', () => {
     const changeSpy = spy();
     
     el.addEventListener('forge-switch-change', changeSpy);
-    await ctx.clickElement(ctx.inputElement);
+    await ctx.clickElement(el);
 
     expect(el.readonly).to.be.true;
-    expect(ctx.inputElement.readOnly).to.be.true;
-    expect(ctx.inputElement).to.have.attribute('aria-readonly', 'true');
     expect(changeSpy).to.not.have.been.called;
   });
 
@@ -205,7 +194,6 @@ describe('Switch', () => {
     el.toggle();
 
     expect(el.on).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
   });
 
   it('should toggle on', async () => {
@@ -215,7 +203,6 @@ describe('Switch', () => {
     el.toggle(true);
 
     expect(el.on).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
     await expect(el).to.be.accessible();
   });
 
@@ -226,7 +213,6 @@ describe('Switch', () => {
     el.toggle(false);
 
     expect(el.on).to.be.false;
-    expect(ctx.inputElement.checked).to.be.false;
   });
 
   it('should set on when clicked', async () => {
@@ -238,7 +224,6 @@ describe('Switch', () => {
     await ctx.clickElement(el);
 
     expect(el.on).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
     expect(changeSpy.calledWith(new CustomEvent('forge-switch-input', { detail: true }))).to.be.true;
   });
 
@@ -252,7 +237,6 @@ describe('Switch', () => {
     await ctx.pressSpaceKey();
 
     expect(el.on).to.be.true;
-    expect(ctx.inputElement.checked).to.be.true;
     expect(changeSpy.calledWith(new CustomEvent('forge-switch-input', { detail: true }))).to.be.true;
   });
 
@@ -266,7 +250,6 @@ describe('Switch', () => {
     await ctx.clickElement(el);
 
     expect(el.on).to.be.false;
-    expect(ctx.inputElement.checked).to.be.false;
   });
 
   it('should return form element and name', async () => {
@@ -364,26 +347,26 @@ describe('Switch', () => {
   it('should validate', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch required></forge-switch>`);
 
-    expect(el.validity.valid).to.be.false;
-    expect(el.validationMessage).to.not.be.empty;
-    expect(el.checkValidity()).to.be.false;
-    expect(el.reportValidity()).to.be.false;
+    expect(el[internals].validity.valid).to.be.false;
+    expect(el[internals].validationMessage).to.not.be.empty;
+    expect(el[internals].checkValidity()).to.be.false;
+    expect(el[internals].reportValidity()).to.be.false;
     
     el.on = true;
 
-    expect(el.willValidate).to.be.true;
-    expect(el.validity.valid).to.be.true;
-    expect(el.validationMessage).to.be.empty;
-    expect(el.checkValidity()).to.be.true;
-    expect(el.reportValidity()).to.be.true;
+    expect(el[internals].willValidate).to.be.true;
+    expect(el[internals].validity.valid).to.be.true;
+    expect(el[internals].validationMessage).to.be.empty;
+    expect(el[internals].checkValidity()).to.be.true;
+    expect(el[internals].reportValidity()).to.be.true;
   });
 
   it('should set custom validity', async () => {
     const el = await fixture<ISwitchComponent>(html`<forge-switch required></forge-switch>`);
     const message = 'Custom error message';
 
-    el.setCustomValidity(message);
+    el[internals].setValidity({ customError: true }, message);
 
-    expect(el.validationMessage).to.equal(message);
+    expect(el[internals].validationMessage).to.equal(message);
   });
 });

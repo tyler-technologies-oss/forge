@@ -1,32 +1,26 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
 import { tylIconArrowDropDown, tylIconCheckBoxOutlineBlank, tylIconCheckBox } from '@tylertech/tyler-icons/standard';
 import { SelectAdapter } from './select-adapter';
 import { SelectFoundation } from './select-foundation';
 import { SELECT_CONSTANTS } from './select-constants';
 import { OptionComponent } from '../option';
-import { PopupComponent } from '../../popup';
 import { ListComponent, ListItemComponent } from '../../list';
 import { OptionGroupComponent } from '../option-group';
 import { IconComponent, IconRegistry } from '../../icon';
-import { BaseSelectComponent, BASE_SELECT_CONSTANTS } from '../core';
+import { BaseSelectComponent, BASE_SELECT_CONSTANTS, IBaseSelectComponent } from '../core';
 import { CircularProgressComponent } from '../../circular-progress';
 import { ScaffoldComponent } from '../../scaffold';
 import { ToolbarComponent } from '../../toolbar';
 import { IconButtonComponent } from '../../icon-button';
-import { FieldDensityType, FieldFloatLabelType, FieldShapeType, FIELD_CONSTANTS } from '../../field/field-constants';
-import { IBaseSelectComponent } from '../core/base-select';
+import { PopoverComponent } from '../../popover';
+import { BASE_FIELD_CONSTANTS, FieldComponent, FieldDensity, FieldLabelPosition, FIELD_CONSTANTS } from '../../field';
+import { IWithBaseField, WithBaseField } from '../../field/base/with-base-field';
 
 import template from './select.html';
 import styles from './select.scss';
 
-export interface ISelectComponent extends IBaseSelectComponent {
-  density: FieldDensityType;
-  floatLabelType: FieldFloatLabelType;
-  shape: FieldShapeType;
-  invalid: boolean;
-  required: boolean;
+export interface ISelectComponent extends IWithBaseField, IBaseSelectComponent {
   label: string;
-  disabled: boolean;
   placeholder: string;
 }
 
@@ -41,17 +35,18 @@ declare global {
   }
 }
 
+const BaseClass = WithBaseField(BaseSelectComponent<SelectFoundation>);
+
 /**
- * The custom element class behind the `<forge-select>` component.
- * 
  * @tag forge-select
  */
 @CustomElement({
   name: SELECT_CONSTANTS.elementName,
   dependencies: [
+    FieldComponent,
     OptionComponent,
     OptionGroupComponent,
-    PopupComponent,
+    PopoverComponent,
     ListComponent,
     ListItemComponent,
     CircularProgressComponent,
@@ -61,26 +56,12 @@ declare global {
     IconButtonComponent
   ]
 })
-export class SelectComponent extends BaseSelectComponent<SelectFoundation> implements ISelectComponent {
+export class SelectComponent extends BaseClass implements ISelectComponent {
   public static get observedAttributes(): string[] {
     return [
-      FIELD_CONSTANTS.attributes.DENSITY,
-      FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE,
-      FIELD_CONSTANTS.attributes.SHAPE,
-      FIELD_CONSTANTS.attributes.INVALID,
-      FIELD_CONSTANTS.attributes.REQUIRED,
-      SELECT_CONSTANTS.attributes.LABEL,
-      SELECT_CONSTANTS.attributes.MULTIPLE,
-      SELECT_CONSTANTS.attributes.VALUE,
-      SELECT_CONSTANTS.attributes.DISABLED,
-      SELECT_CONSTANTS.attributes.PLACEHOLDER,
-      SELECT_CONSTANTS.attributes.OBSERVE_SCROLL,
-      SELECT_CONSTANTS.attributes.OBSERVE_SCROLL_THRESHOLD,
-      BASE_SELECT_CONSTANTS.attributes.POPUP_CLASSES,
-      BASE_SELECT_CONSTANTS.attributes.OPTION_LIMIT,
-      BASE_SELECT_CONSTANTS.attributes.SYNC_POPUP_WIDTH,
-      BASE_SELECT_CONSTANTS.attributes.CONSTRAIN_POPUP_WIDTH,
-      BASE_SELECT_CONSTANTS.attributes.WRAP_OPTION_TEXT
+      ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
+      ...Object.values(SELECT_CONSTANTS.observedAttributes),
+      ...Object.values(BASE_SELECT_CONSTANTS.observedAttributes)
     ];
   }
 
@@ -88,68 +69,71 @@ export class SelectComponent extends BaseSelectComponent<SelectFoundation> imple
     super();
     IconRegistry.define([tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
     attachShadowTemplate(this, template, styles);
+
+    // Needed by WithBaseField mixin to proxy state to the field component
+    const fieldEl = this.shadowRoot?.querySelector(FIELD_CONSTANTS.elementName) as FieldComponent;
+    this.initializeFieldInstance(fieldEl);
+
     this._foundation = new SelectFoundation(new SelectAdapter(this));
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case FIELD_CONSTANTS.attributes.DENSITY:
-        this.density = newValue as FieldDensityType;
+      case SELECT_CONSTANTS.observedAttributes.OPEN:
+        this.open = coerceBoolean(newValue);
         return;
-      case FIELD_CONSTANTS.attributes.FLOAT_LABEL_TYPE:
-        this.floatLabelType = newValue as FieldFloatLabelType;
-        return;
-      case FIELD_CONSTANTS.attributes.SHAPE:
-        this.shape = newValue as FieldShapeType;
-        break;
-      case FIELD_CONSTANTS.attributes.INVALID:
-        this.invalid = coerceBoolean(newValue);
-        return;
-      case FIELD_CONSTANTS.attributes.REQUIRED:
-        this.required = coerceBoolean(newValue);
-        return;
-      case SELECT_CONSTANTS.attributes.LABEL:
+      case SELECT_CONSTANTS.observedAttributes.LABEL:
         this.label = newValue;
         return;
-      case SELECT_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        return;
-      case SELECT_CONSTANTS.attributes.PLACEHOLDER:
+      case SELECT_CONSTANTS.observedAttributes.PLACEHOLDER:
         this.placeholder = newValue;
         return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  /** Gets/sets the label text. */
   @FoundationProperty()
   public declare label: string;
 
-  /** Gets/sets the disabled state. */
-  @FoundationProperty()
-  public declare disabled: boolean;
-
-  /** Gets/sets the invalid state. */
-  @FoundationProperty()
-  public declare invalid: boolean;
-
-  /** Gets/sets the required state which controls the visibility of the asterisk in the label. */
-  @FoundationProperty()
-  public declare required: boolean;
-
-  /** Controls the density type. */
-  @FoundationProperty()
-  public declare density: FieldDensityType;
-
-  /** Whether the label should always float, never float or float as the user types. */
-  @FoundationProperty()
-  public declare floatLabelType: FieldFloatLabelType;
-
-  /** The shape type to use. */
-  @FoundationProperty()
-  public declare shape: FieldShapeType;
-
-  /** Gets/sets the placeholder text. */
   @FoundationProperty()
   public declare placeholder: string;
+
+  public override get floatLabel(): boolean {
+    return super.floatLabel;
+  }
+  public override set floatLabel(value: boolean) {
+    this._foundation.syncFloatingLabelState({ force: value });
+  }
+
+  public override get density(): FieldDensity {
+    return super.density;
+  }
+  public override set density(value: FieldDensity) {
+    super.density = value;
+    this._foundation.syncFloatingLabelState();
+  }
+
+  public override get dense(): boolean {
+    return super.dense;
+  }
+  public override set dense(value: boolean) {
+    super.dense = value;
+    this._foundation.syncFloatingLabelState();
+  }
+
+  public override get disabled(): boolean {
+    return super.disabled;
+  }
+  public override set disabled(value: boolean) {
+    super.disabled = value;
+    this._foundation.setDisabled(value);
+  }
+
+  public override get labelPosition(): FieldLabelPosition {
+    return super.labelPosition;
+  }
+  public override set labelPosition(value: FieldLabelPosition) {
+    super.labelPosition = value;
+    this._foundation.syncFloatingLabelState();
+  }
 }

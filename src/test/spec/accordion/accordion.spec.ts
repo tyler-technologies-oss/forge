@@ -95,7 +95,7 @@ describe('AccordionComponent', function(this: ITestContext) {
       // Click the first child panel to expand it
       clickPanel(firstPanel);
       await tick();
-      await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+      await timer(500);
       
       // Ensure we're in the proper state to run the test from here
       expect(firstPanel.open).toBe(true, 'Expected the first panel to be open before testing inner panel');
@@ -104,7 +104,7 @@ describe('AccordionComponent', function(this: ITestContext) {
       clickPanel(nestedPanel);
 
       await tick();
-      await timer(EXPANSION_PANEL_CONSTANTS.numbers.COLLAPSE_ANIMATION_DURATION);
+      await timer(500);
 
       expect(firstPanel.open).toBe(true, 'Expected the first panel to still be open after clicking nested panel');
     });

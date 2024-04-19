@@ -2,15 +2,13 @@ import '$src/shared';
 import '@tylertech/forge/button';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/select';
-import type { ISelectComponent, ISwitchComponent, SelectDensityType } from '@tylertech/forge';
+import type { FieldLabelPosition, ISelectComponent, ISwitchComponent, SelectDensityType } from '@tylertech/forge';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFood } from '@tylertech/tyler-icons/extended';
 import './select.scss';
 import { IListDropdownOption } from '@tylertech/forge/list-dropdown';
 
-IconRegistry.define([
-  tylIconFood
-]);
+IconRegistry.define(tylIconFood);
 
 const select = document.querySelector('forge-select#select') as ISelectComponent;
 const leadingEl = select.querySelector('[slot=leading]') as HTMLElement;
@@ -22,30 +20,19 @@ leadingEl.remove();
 addonEndEl.remove();
 helperTextEl.remove();
 
-const optDensity = document.querySelector('#opt-density') as ISelectComponent;
-const optLabel = document.querySelector('#opt-label') as HTMLInputElement;
-const optPlaceholder = document.querySelector('#opt-placeholder') as HTMLInputElement;
-const optShowLeading = document.querySelector('#opt-leading') as ISwitchComponent;
-const optShowAddonEnd = document.querySelector('#opt-addon-end') as ISwitchComponent;
-const optShowHelperText = document.querySelector('#opt-helper-text') as ISwitchComponent;
-const optMultiple = document.querySelector('#opt-multiple') as ISwitchComponent;
-const optFloatLabel = document.querySelector('#opt-float') as ISwitchComponent;
-const optRequired = document.querySelector('#opt-required') as ISwitchComponent;
-const optInvalid = document.querySelector('#opt-invalid') as ISwitchComponent;
-const optDisabled = document.querySelector('#opt-disabled') as ISwitchComponent;
-const optRounded = document.querySelector('#opt-rounded') as ISwitchComponent;
-const optOptionBuilder = document.querySelector('#opt-option-builder') as ISwitchComponent;
-const optSelectedTextBuilder = document.querySelector('#opt-selected-text-builder') as ISwitchComponent;
+const optLabelPosition = document.querySelector('#opt-label-position') as ISelectComponent;
+optLabelPosition.addEventListener('change', ({ detail }) => select.labelPosition = detail as FieldLabelPosition);
 
-optDensity.addEventListener('change', ({ detail }) => {
-  select.density = detail as SelectDensityType;
-});
-optLabel.addEventListener('input', () => {
-  select.label = optLabel.value;
-});
-optPlaceholder.addEventListener('input', () => {
-  select.placeholder = optPlaceholder.value;
-});
+const optDensity = document.querySelector('#opt-density') as ISelectComponent;
+optDensity.addEventListener('change', ({ detail }) => select.density = detail as SelectDensityType);
+
+const optLabel = document.querySelector('#opt-label') as HTMLInputElement;
+optLabel.addEventListener('input', () => select.label = optLabel.value);
+
+const optPlaceholder = document.querySelector('#opt-placeholder') as HTMLInputElement;
+optPlaceholder.addEventListener('input', () => select.placeholder = optPlaceholder.value);
+
+const optShowLeading = document.querySelector('#opt-leading') as ISwitchComponent;
 optShowLeading.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     select.appendChild(leadingEl);
@@ -53,6 +40,8 @@ optShowLeading.addEventListener('forge-switch-change', ({ detail: selected }) =>
     leadingEl.remove();
   }
 });
+
+const optShowAddonEnd = document.querySelector('#opt-addon-end') as ISwitchComponent;
 optShowAddonEnd.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     select.appendChild(addonEndEl);
@@ -60,6 +49,8 @@ optShowAddonEnd.addEventListener('forge-switch-change', ({ detail: selected }) =
     addonEndEl.remove();
   }
 });
+
+const optShowHelperText = document.querySelector('#opt-helper-text') as ISwitchComponent;
 optShowHelperText.addEventListener('forge-switch-change', ({ detail: selected }) => {
   if (selected) {
     select.appendChild(helperTextEl);
@@ -67,27 +58,33 @@ optShowHelperText.addEventListener('forge-switch-change', ({ detail: selected })
     helperTextEl.remove();
   }
 });
-optMultiple.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.multiple = selected;
-});
-optFloatLabel.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.floatLabelType = selected ? 'always' : 'auto';
-});
-optRequired.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.required = selected;
-});
-optDisabled.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.disabled = selected;
-});
-optInvalid.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  select.invalid = selected;
-});
+
+const optMultiple = document.querySelector('#opt-multiple') as ISwitchComponent;
+optMultiple.addEventListener('forge-switch-change', ({ detail: selected }) => select.multiple = selected);
+
+const optFloatLabel = document.querySelector('#opt-float') as ISwitchComponent;
+optFloatLabel.addEventListener('forge-switch-change', ({ detail: selected }) => select.floatLabel = selected);
+
+const optRequired = document.querySelector('#opt-required') as ISwitchComponent;
+optRequired.addEventListener('forge-switch-change', ({ detail: selected }) => select.required = selected);
+
+const optDisabled = document.querySelector('#opt-disabled') as ISwitchComponent;
+optDisabled.addEventListener('forge-switch-change', ({ detail: selected }) => select.disabled = selected);
+
+const optInvalid = document.querySelector('#opt-invalid') as ISwitchComponent;
+optInvalid.addEventListener('forge-switch-change', ({ detail: selected }) => select.invalid = selected);
+
+const optRounded = document.querySelector('#opt-rounded') as ISwitchComponent;
 optRounded.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.shape = selected ? 'rounded' : 'default';
 });
+
+const optOptionBuilder = document.querySelector('#opt-option-builder') as ISwitchComponent;
 optOptionBuilder.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.optionBuilder = selected ? optionBuilder : undefined;
 });
+
+const optSelectedTextBuilder = document.querySelector('#opt-selected-text-builder') as ISwitchComponent;
 optSelectedTextBuilder.addEventListener('forge-switch-change', ({ detail: selected }) => {
   select.selectedTextBuilder = selected ? selectedTextBuilder : undefined;
 });

@@ -1,24 +1,31 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-import { internals } from '../constants';
-import { BaseNullableFormComponent, IBaseNullableFormComponent } from '../core/base/base-nullable-form-component';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty, isDefined, isString } from '@tylertech/forge-core';
+import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants';
+import { BaseComponent, FormValue } from '../core';
+import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable';
+import { IWithFormAssociation, WithFormAssociation } from '../core/mixins/form/with-form-associated';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IWithLabelAwareness, WithLabelAwareness } from '../core/mixins/label/with-label-aware';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
-import { ILabelAware } from '../label/label-aware';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { CheckboxAdapter } from './checkbox-adapter';
-import { CHECKBOX_CONSTANTS, CheckboxLabelPosition, CheckboxState } from './checkbox-constants';
+import { CheckboxLabelPosition, CheckboxState, CHECKBOX_CONSTANTS } from './checkbox-constants';
 import { CheckboxFoundation } from './checkbox-foundation';
 
 import template from './checkbox.html';
 import styles from './checkbox.scss';
 
-export interface ICheckboxComponent extends IBaseNullableFormComponent, ILabelAware {
+export interface ICheckboxComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
+  value: string;
   checked: boolean;
   defaultChecked: boolean;
   indeterminate: boolean;
+  required: boolean;
   dense: boolean;
   labelPosition: CheckboxLabelPosition;
   toggle(force?: boolean): void;
-  setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
+  setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
+  [setValidity](): void;
 }
 
 declare global {
@@ -26,6 +33,8 @@ declare global {
     'forge-checkbox': ICheckboxComponent;
   }
 }
+
+const BaseCheckboxClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))));
 
 /**
  * @tag forge-checkbox
@@ -69,7 +78,7 @@ declare global {
  * @cssproperty --forge-checkbox-border-width - The width of the checkbox border.
  * @cssproperty --forge-checkbox-state-layer-size - The inline and block size of the state layer.
  * @cssproperty --forge-checkbox-state-layer-dense-size - The inline and block size of the state layer when dense.
- * @cssproperty --forge-checkbox-background-color - The color of the checkbox background when unchecked and not indeterminate.
+ * @cssproperty --forge-checkbox-background - The color of the checkbox background when unchecked and not indeterminate.
  * @cssproperty --forge-checkbox-width - The inline size of the checkbox.
  * @cssproperty --forge-checkbox-height - The block size of the checkbox.
  * @cssproperty --forge-checkbox-unchecked-border-width - The width of the checkbox border when unchecked and not indeterminate.
@@ -79,7 +88,7 @@ declare global {
  * @cssproperty --forge-checkbox-gap - The space between the checkbox and label.
  * @cssproperty --forge-checkbox-justify - How the checkbox and label are distributed along their main axis.
  * @cssproperty --forge-checkbox-direction - Whether the checkbox and label are arranged along the inline or block axis.
- * @cssproperty --forge-checkbox-checked-background-color - The color of the checkbox background when checked or indeterminate.
+ * @cssproperty --forge-checkbox-checked-background - The color of the checkbox background when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-width - The width of the checkbox border when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-color - The color of the checkbox border when checked or indeterminate.
  * @cssproperty --forge-checkbox-icon-color - The color of the checkmark and indeterminate mark.
@@ -99,7 +108,7 @@ declare global {
  * @cssproperty --forge-checkbox-background-animation-timing - The timing function of the background animations.
  * @cssproperty --forge-checkbox-icon-animation-timing - The timing function of the checked and indeterminate icons animations.
  * 
- * @csspart checkbox - Styles the checkbox container element.
+ * @csspart root - Styles the root element.
  * @csspart background - Styles the checkbox background element.
  * @csspart checkmark - Styles the checkmark element.
  * @csspart mixedmark - Styles the indeterminate mark element.
@@ -114,97 +123,102 @@ declare global {
     StateLayerComponent
   ]
 })
-export class CheckboxComponent extends BaseNullableFormComponent implements ICheckboxComponent {
+export class CheckboxComponent extends BaseCheckboxClass implements ICheckboxComponent {
   public static get observedAttributes(): string[] {
-    return [
-      CHECKBOX_CONSTANTS.attributes.CHECKED,
-      CHECKBOX_CONSTANTS.attributes.DEFAULT_CHECKED,
-      CHECKBOX_CONSTANTS.attributes.INDETERMINATE,
-      CHECKBOX_CONSTANTS.attributes.VALUE,
-      CHECKBOX_CONSTANTS.attributes.DENSE,
-      CHECKBOX_CONSTANTS.attributes.DISABLED,
-      CHECKBOX_CONSTANTS.attributes.REQUIRED,
-      CHECKBOX_CONSTANTS.attributes.READONLY,
-      CHECKBOX_CONSTANTS.attributes.LABEL_POSITION
-    ];
+    return Object.values(CHECKBOX_CONSTANTS.observedAttributes);
   }
 
-  public get name(): string {
-    return this.getAttribute('name') ?? '';
-  }
-  public set name(value: string) {
-    toggleAttribute(this, !!value, 'name', value ?? '');
-  }
-
-  public get form(): HTMLFormElement | null {
-    return this[internals].form;
-  }
-
-  public get labels(): NodeList {
-    return this[internals].labels;
-  }
-
-  public get validity(): ValidityState {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].validity;
-  }
-
-  public get validationMessage(): string {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].validationMessage;
-  }
-
-  public get willValidate(): boolean {
-    return this[internals].willValidate;
-  }
-
-  public readonly [internals]: ElementInternals;
-  private _foundation: CheckboxFoundation;
+  private readonly _foundation: CheckboxFoundation;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles, true);
-    this[internals] = this.attachInternals();
+    attachShadowTemplate(this, template, styles);
+    this[inputType] = 'checkbox';
     this._foundation = new CheckboxFoundation(new CheckboxAdapter(this));
   }
 
   public connectedCallback(): void {
+    super.connectedCallback();
+    this[setDefaultAria]({
+      role: 'checkbox',
+      ariaChecked: this.checked ? 'true' : 'false',
+      ariaDisabled: this.disabled ? 'true' : 'false',
+      ariaRequired: this.required ? 'true' : 'false'
+    });
     this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case CHECKBOX_CONSTANTS.attributes.CHECKED:
+      case CHECKBOX_CONSTANTS.observedAttributes.CHECKED:
         this.checked = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.DEFAULT_CHECKED:
+      case CHECKBOX_CONSTANTS.observedAttributes.DEFAULT_CHECKED:
         this.defaultChecked = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.INDETERMINATE:
+      case CHECKBOX_CONSTANTS.observedAttributes.INDETERMINATE:
         this.indeterminate = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.VALUE:
+      case CHECKBOX_CONSTANTS.observedAttributes.VALUE:
         this.value = newValue;
         break;
-      case CHECKBOX_CONSTANTS.attributes.DENSE:
+      case CHECKBOX_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.DISABLED:
+      case CHECKBOX_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.REQUIRED:
+      case CHECKBOX_CONSTANTS.observedAttributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.READONLY:
+      case CHECKBOX_CONSTANTS.observedAttributes.READONLY:
         this.readonly = coerceBoolean(newValue);
         break;
-      case CHECKBOX_CONSTANTS.attributes.LABEL_POSITION:
+      case CHECKBOX_CONSTANTS.observedAttributes.LABEL_POSITION:
         this.labelPosition = newValue as CheckboxLabelPosition;
         break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
+  public override [getFormValue](): FormValue | null {
+    return this.checked ? this.value : null;
+  }
+
+  public override [getFormState](): CheckboxState {
+    if (this.checked) {
+      return this.indeterminate ? 'checked-indeterminate' : 'checked';
+    }
+    return this.indeterminate ? 'unchecked-indeterminate' : 'unchecked';
+  }
+
+  public [setValidity](): void {
+    this[internals].setValidity({ valueMissing: this.required && !this.checked }, this[getValidationMessage]({
+      checked: this.checked,
+      required: this.required
+    }));
+  }
+
+  public formResetCallback(): void {
+    this.checked = this.defaultChecked;
+  }
+
+  public formStateRestoreCallback(state: CheckboxState): void {
+    this.checked = state === 'checked' || state === 'checked-indeterminate';
+    this.indeterminate = state === 'unchecked-indeterminate' || state === 'checked-indeterminate';
+  }
+
+  public labelClickedCallback(): void {
+    this.click();
+    // TODO: use `{ focusVisble: false }` when supported.
+    this.focus();
+  }
+
+  public labelChangedCallback(value: string | null): void {
+    this[setDefaultAria]({ ariaLabel: value });
+  }
+
+  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
     this[internals].setFormValue(value, state);
 
     if (state) {
@@ -221,42 +235,6 @@ export class CheckboxComponent extends BaseNullableFormComponent implements IChe
     } else {
       this.checked = false;
     }
-  }
-
-  public checkValidity(): boolean {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].checkValidity();
-  }
-
-  public reportValidity(): boolean {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].reportValidity();
-  }
-
-  public setCustomValidity(error: string): void {
-    this._hasCustomValidityError = !!error;
-    this._foundation.setValidity({ customError: !!error }, error);
-  }
-
-  public formResetCallback(): void {
-    this.checked = this.defaultChecked;
-  }
-
-  public formStateRestoreCallback(state: CheckboxState, reason: 'restore' | 'autocomplete'): void {
-    this.checked = state === 'checked' || state === 'checked-indeterminate';
-    this.indeterminate = state === 'unchecked-indeterminate' || state === 'checked-indeterminate';
-  }
-
-  public formDisabledCallback(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
-  public labelClickedCallback(): void {
-    this._foundation.proxyClick();
-  }
-
-  public labelChangedCallback(value: string | null): void {
-    this._foundation.proxyLabel(value);
   }
 
   @FoundationProperty()

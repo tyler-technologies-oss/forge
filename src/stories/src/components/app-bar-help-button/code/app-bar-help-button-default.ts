@@ -7,7 +7,7 @@ export const AppBarHelpButtonDefaultCodeHtml = () => `
 export const AppBarHelpButtonDefaultCodeTs = () => `
 appBarHelpButton.addEventListener('forge-menu-select', evt => {
   const toast = document.createElement('forge-toast');
-  toast.message = \`Selected option: $\{evt.detail.value}\`;
+  toast.textContent = \`Selected option: $\{evt.detail.value}\`;
   document.body.appendChild(toast);
 });
 `;

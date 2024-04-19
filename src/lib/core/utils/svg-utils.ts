@@ -1,7 +1,7 @@
 /**
  * Creates an SVG element from a string.
  */
-export function createSvgFromString(svgContent: string, defaultViewBox?: string): SVGSVGElement | null {
+export function createSvgFromString(svgContent: string, defaultViewBox?: string): SVGElement | null {
   const div = document.createElement('div');
   div.innerHTML = svgContent;
 
@@ -12,8 +12,8 @@ export function createSvgFromString(svgContent: string, defaultViewBox?: string)
     }
   }
 
-  const svgElm = div.firstElementChild as SVGSVGElement;
-  if (svgElm && svgElm.nodeName.toLowerCase() === 'svg' && isSafeSvg(svgElm)) {
+  const svgElm = div.firstElementChild as SVGElement;
+  if (svgElm?.nodeName.toLowerCase() === 'svg' && isSafeSvg(svgElm)) {
     // Check if a custom viewbox value was provided and use that if so
     if (defaultViewBox) {
       svgElm.setAttribute('viewBox', defaultViewBox);
@@ -44,7 +44,7 @@ export function isSafeSvg(el: Element): boolean {
   }
 
   // Validate no <script> tags exist
-  if (el.nodeName.toLowerCase() === 'script') {
+  if (el.nodeName.toLowerCase() === 'script' || el.querySelector('script')) {
     return false;
   }
 

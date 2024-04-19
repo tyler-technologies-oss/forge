@@ -8,7 +8,7 @@ import { IconRegistry } from '../icon';
 export interface IListDropdown {
   dropdownElement: HTMLElement | undefined;
   open(): void;
-  close(): void;
+  close(): Promise<void>;
   destroy(): void;
   getActiveOptionIndex(): number;
   getActiveOption(): IListDropdownOption | undefined;
@@ -46,8 +46,8 @@ export class ListDropdown implements IListDropdown {
   }
 
   /** Closes the dropdown. */
-  public close(): void {
-    this._foundation.close();
+  public close(): Promise<void> {
+    return this._foundation.close();
   }
 
   /** Gets the currently highlighted option index in the dropdown. */

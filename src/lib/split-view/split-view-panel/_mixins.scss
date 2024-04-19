@@ -157,6 +157,7 @@
   @include theme.property(color, text-secondary-on-light);
   @include theme.property(background-color, border-color);
 
+  position: relative;
   display: flex;
   flex-shrink: 0;
   justify-content: center;

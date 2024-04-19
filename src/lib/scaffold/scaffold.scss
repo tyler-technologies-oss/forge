@@ -1,16 +1,96 @@
-@use '../theme';
-@use './mixins';
+@use './core' as *;
 
-@include mixins.core-styles;
+$host-tokens: [height width];
+
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include tokens($includes: $host-tokens);
+}
+
+:host {
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
 }
 
+//
+// Base
+//
+
+.forge-scaffold {
+  @include tokens($excludes: $host-tokens);
+}
+
+.forge-scaffold {
+  @include base;
+}
+
+.header {
+  @include header;
+}
+
+.body {
+  @include body;
+}
+
+//
+// Slotted
+//
+
+::slotted(*) {
+  @include slotted-base;
+}
+
+::slotted([slot=left]) {
+  @include left;
+}
+
+::slotted([slot=right]) {
+  @include right;
+}
+
+::slotted([slot=body-left]) {
+  @include body-left;
+}
+
+::slotted([slot=body-right]) {
+  @include body-right;
+}
+
+::slotted([slot=body-header]) {
+  @include body-header;
+}
+
+::slotted([slot=body]) {
+  @include body-inner;
+}
+
+::slotted([slot=body-footer]) {
+  @include body-footer;
+}
+
+::slotted([slot=footer]) {
+  @include footer;
+}
+
+::slotted([slot=left]),
+::slotted([slot=right]),
+::slotted([slot=body-left]),
+::slotted([slot=body]),
+::slotted([slot=body-right]) {
+  @include scrollable;
+}
+
+//
+// Viewport
+//
+
 :host([viewport]) {
-  @include mixins.viewport-styles;
+  @include override(height, 100dvh, value);
+  @include override(width, 100dvw, value);
 }

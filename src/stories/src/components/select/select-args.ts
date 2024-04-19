@@ -1,4 +1,4 @@
-import { SelectDensityType, SelectFloatLabelType, SelectShapeType } from '@tylertech/forge';
+import { SelectDensityType, SelectShapeType } from '@tylertech/forge';
 
 export interface ISelectProps {
   label: string;
@@ -8,7 +8,7 @@ export interface ISelectProps {
   invalid: boolean;
   required: boolean;
   density: SelectDensityType;
-  floatLabelType: SelectFloatLabelType;
+  floatLabel: boolean;
   shape: SelectShapeType;
   placeholder: string;
   constrainPopupWidth: boolean;
@@ -65,9 +65,11 @@ export const argTypes = {
     control: {
       type: 'select',
       labels: {
-        'default': 'Default',
-        'roomy': 'Roomy',
-        'dense': 'Dense',
+        'extra-small': 'Extra small',
+        'small': 'Small',
+        'medium': 'Medium (default)',
+        'large': 'Large',
+        'extra-large': 'Extra large',
       },
     },
     options: ['default', 'roomy', 'dense'],
@@ -76,15 +78,8 @@ export const argTypes = {
       category: 'Properties',
     },
   },
-  floatLabelType: {
-    control: {
-      type: 'select',
-      labels: {
-        'auto': 'Auto',
-        'always': 'Always',
-      },
-    },
-    options: ['auto', 'always'],
+  floatLabel: {
+    control: 'boolean',
     description: '',
     table: {
       category: 'Properties',

@@ -1,444 +1,278 @@
-import { ICustomElementFoundation, isDefined, isNumber, isString } from '@tylertech/forge-core';
+import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { MoveController } from '../core/controllers/move-controller';
+import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
-import { DialogPositionType, DialogStateCallback, DIALOG_CONSTANTS, IDialogMoveContext, IDialogMoveStartEventData } from './dialog-constants';
+import { DialogAnimationType, DialogMode, DialogPlacement, DialogPositionStrategy, DialogPreset, DialogSizeStrategy, DialogType, DIALOG_CONSTANTS, IDialogMoveEventData } from './dialog-constants';
 
 export interface IDialogFoundation extends ICustomElementFoundation {
-  backdropClose: boolean;
-  escapeClose: boolean;
   open: boolean;
+  mode: DialogMode;
+  type: DialogType;
+  animationType: DialogAnimationType;
+  preset: DialogPreset;
+  persistent: boolean;
   fullscreen: boolean;
-  openCallback: DialogStateCallback;
-  closeCallback: DialogStateCallback;
-  beforeCloseCallback: DialogStateCallback;
-  positionType: DialogPositionType;
-  positionX: number | string | null | undefined;
-  positionY: number | string | null | undefined;
+  trigger: string;
+  triggerElement: HTMLElement | null;
+  positionStrategy: DialogPositionStrategy;
+  sizeStrategy: DialogSizeStrategy;
+  placement: DialogPlacement;
   moveable: boolean;
-  moveTarget: string;
-  initializeMoveTarget(): void;
-  resetPosition(): void;
-  show(parent?: HTMLElement): Promise<void>;
-  hide(remove?: boolean): Promise<void>;
+  hideBackdrop(): void;
+  showBackdrop(): void;
+  dispatchBeforeCloseEvent(): boolean;
 }
 
 export class DialogFoundation implements IDialogFoundation {
-  // Private vars
   private _open = false;
-  private _backdropClose = true;
-  private _escapeClose = true;
+  private _mode: DialogMode = DIALOG_CONSTANTS.defaults.MODE;
+  private _type: DialogType = DIALOG_CONSTANTS.defaults.TYPE;
+  private _animationType: DialogAnimationType = DIALOG_CONSTANTS.defaults.ANIMATION_TYPE;
+  private _preset: DialogPreset = DIALOG_CONSTANTS.defaults.PRESET;
+  private _persistent = false;
   private _fullscreen = false;
-  private _openCallback: DialogStateCallback;
-  private _closeCallback: DialogStateCallback;
-  private _beforeCloseCallback: DialogStateCallback;
-  private _positionType: DialogPositionType = 'absolute';
-  private _positionX: string | null = null;
-  private _positionY: string | null = null;
+  private _trigger = '';
   private _moveable = false;
-  private _moveTarget = DIALOG_CONSTANTS.selectors.DFEAULT_MOVE_TARGET;
-  private _isAnimating = false;
-  private _isMoving = false;
-  private _moveContext: IDialogMoveContext | undefined;
-  private _lastPosition: { x: number; y: number } | undefined;
+  private _sizeStrategy: DialogSizeStrategy = DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
+  private _placement: DialogPlacement = DIALOG_CONSTANTS.defaults.PLACEMENT;
+  private _positionStrategy: DialogPositionStrategy = DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
+  private _moveController: MoveController | undefined;
 
-  // Event handlers
-  private _transitionEndHandler: (evt: TransitionEvent) => void;
-  private _documentKeydownHandler: (evt: KeyboardEvent) => void;
-  private _backdropClickHandler: (evt: CustomEvent) => void;
-  private _moveTargetMouseDownHandler: (evt: MouseEvent) => void;
-  private _moveTargetMouseMoveHandler: (evt: MouseEvent) => void;
-  private _moveTargetMouseUpHandler: (evt: MouseEvent) => void;
+  private _escapeDismissListener: EventListener = this._onEscapeDismiss.bind(this);
+  private _backdropDismissListener: EventListener = this._onBackdropDismiss.bind(this);
+  private _dialogFormSubmitListener: EventListener = this._onDialogFormSubmit.bind(this);
+  private _triggerClickListener: EventListener = this._onTriggerClick.bind(this);
 
-  constructor(public _adapter: IDialogAdapter) {
-    this._transitionEndHandler = (evt: TransitionEvent) => this._onTransitionEnd();
-    this._documentKeydownHandler = (evt: KeyboardEvent) => this._onDocumentKeydown(evt);
-    this._backdropClickHandler = (evt: CustomEvent) => this._onBackdropClick(evt);
-    this._moveTargetMouseDownHandler = (evt: MouseEvent) => this._onMoveTargetMouseDown(evt);
-    this._moveTargetMouseMoveHandler = (evt: MouseEvent) => this._onMoveTargetMouseMove(evt);
-    this._moveTargetMouseUpHandler = (evt: MouseEvent) => this._onMoveTargetMouseUp(evt);
-  }
+  constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
-    this._adapter.initializeAccessibility();
+    if (this._trigger && !this._adapter.triggerElement) {
+      this._adapter.tryLocateTriggerElement(this._trigger);
+    }
+
+    if (this._adapter.triggerElement) {
+      this._adapter.addTriggerInteractionListener(this._triggerClickListener);
+    }
+
     if (this._open) {
-      if (this._moveable) {
-        this._adapter.setMoveable(this._moveable);
-        this._initMoveTarget();
-      }
+      this._applyOpen();
     }
   }
 
   public destroy(): void {
+    if (this._adapter.triggerElement) {
+      this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
+    }
+
+    if (this._moveController) {
+      this._destroyMoveController();
+    }
+
     if (this._open) {
-      this._removeDragHandlers();
-      this._adapter.deregisterTransitionEndHandler(this._transitionEndHandler);
-      this._adapter.removeDocumentListener('keydown', this._documentKeydownHandler);
-      this._adapter.deregisterBackdropClickHandler(this._backdropClickHandler);
+      this._hide();
     }
   }
 
-  private async _applyOpen(value: boolean): Promise<void> {
-    if (value) {
-      if (typeof this._openCallback === 'function' && !await this._executeOpenCallback()) {
-        return;
-      }
-      this._open = value;
-      this._openDialog();
-    } else {
-      if (typeof this._closeCallback === 'function' && !await this._executeCloseCallback()) {
-        return;
-      }
-      this._open = value;
-      this._closeDialog();
+  public dispatchBeforeCloseEvent(): boolean {
+    const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, { cancelable: true, bubbles: true, composed: true });
+    this._adapter.dispatchHostEvent(evt);
+    return !evt.defaultPrevented;
+  }
+
+  public hideBackdrop(): void {
+    this._adapter.hideBackdrop();
+  }
+
+  public showBackdrop(): void {
+    this._adapter.showBackdrop();
+  }
+
+  private _show(): void {
+    this._adapter.show();
+    this._adapter.addDialogFormSubmitListener(this._dialogFormSubmitListener);
+    DismissibleStack.instance.add(this._adapter.hostElement);
+
+    if (this._mode === 'modal') {
+      this._adapter.addDialogCancelListener(this._escapeDismissListener);
+    } else if (this._mode === 'inline-modal') {
+      this._adapter.addDocumentListener('keydown', this._escapeDismissListener);
     }
 
+    if (!this._persistent) {
+      this._adapter.addBackdropDismissListener(this._backdropDismissListener);
+    }
+
+    if (this._moveable && !this._fullscreen) {
+      this._initializeMoveController();
+    }
+
+    this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.OPEN, { bubbles: true, composed: true }));
+  }
+
+  private async _hide(): Promise<void> {
+    this._adapter.removeDialogFormSubmitListener(this._dialogFormSubmitListener);
+    this._adapter.removeDialogCancelListener(this._escapeDismissListener);
+    this._adapter.removeDocumentListener('keydown', this._escapeDismissListener);
+    this._adapter.removeBackdropDismissListener(this._backdropDismissListener);
+    DismissibleStack.instance.remove(this._adapter.hostElement);
+
+    await this._adapter.hide();
+
+    if (this._moveController) {
+      this._destroyMoveController();
+    }
+
+    this._adapter.dispatchHostEvent(new CustomEvent(DIALOG_CONSTANTS.events.CLOSE, { bubbles: true, composed: true }));
+  }
+
+  private async _applyOpen(): Promise<void> {
+    if (this._open) {
+      this._show();
+      this._adapter.tryAutofocus();
+    } else {
+      await this._hide();
+    }
+
+    this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.VISIBLE, this._open); // We use this for styling purposes to control animations
     this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.OPEN, this._open);
   }
 
-  private async _executeOpenCallback(): Promise<boolean> {
-    try {
-      return await Promise.resolve(this._openCallback()) !== false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  private async _executeCloseCallback(): Promise<boolean> {
-    try {
-      return await Promise.resolve(this._closeCallback()) !== false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  public initializeMoveTarget(): void {
-    if (!this._moveTarget) {
-      this._moveTarget = DIALOG_CONSTANTS.selectors.DFEAULT_MOVE_TARGET;
-    }
-    this._initMoveTarget();
-  }
-
-  public resetPosition(): void {
-    this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
-  }
-
-  public async show(parent?: HTMLElement): Promise<void> {
-    if (this._open) {
-      return;
-    }
-    
-    this._open = true;
-    if (!this._adapter.isConnected) {
-      this._adapter.attach(parent);
-    }
-    await this._openDialog();
-  }
-
-  public async hide(remove?: boolean): Promise<void> {
-    if (!this._open) {
-      return;
-    }
-
-    this._open = false;
-    await this._closeDialog();
-    if (remove) {
-      this._adapter.detach();
-    }
-  }
-
-  private _normalizePositionValue(value: number | string | null | undefined): string | null {
-    if (isNumber(value)) {
-      return `${value}px`;
-    } else if (isString(value)) {
-      return value;
-    }
-    return null;
-  }
-
-  private _openDialog(): Promise<void> {
-    if (!this._fullscreen) {
-      if (this._moveable) {
-        this._adapter.setMoveable(this._moveable);
-      }
-      if (this._positionX !== null || this._positionY !== null) {
-        this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
-      }
-    }
-
-    this._adapter.setBodyAttribute(DIALOG_CONSTANTS.attributes.BODY_OPEN, 'true');
-    this._adapter.registerTransitionEndHandler(this._transitionEndHandler);
-    this._setDocumentKeydownListener(this._escapeClose);
-    this._adapter.setAnimating(true);
-    this._isAnimating = true;
-
-    // Ensure transitions are triggered properly
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        this._adapter.setVisibility(true);
-        this._setBackdropClickListener(this._backdropClose); // Must come after setting visibility because the backdrop may not yet exist
-        this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.OPEN);
-        this._adapter.trySetInitialFocus();
-        if (this._adapter.isScrollable()) {
-          this._adapter.addRootClass(DIALOG_CONSTANTS.classes.SCROLLABLE);
-        }
-      });
-    });
-
-    return new Promise<void>(resolve => {
-      // Wait for the dialog to finish animating open, then emit the ready event and attach any listeners
-      window.setTimeout(() => {
-        window.requestAnimationFrame(() => {
-          if (this._open && this._isAnimating) {
-            this._onTransitionEnd();
-            resolve();
-          }
-        });
-      }, DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    });
-  }
-
-  private _closeDialog(): Promise<void> {
-    if (this._moveTarget) {
-      this._removeDragHandlers();
-    }
-
-    this._adapter.deregisterTransitionEndHandler(this._transitionEndHandler);
-
-    if (this._escapeClose) {
-      this._adapter.removeDocumentListener('keydown', this._documentKeydownHandler);
-    }
-    if (this._backdropClose) {
-      this._adapter.deregisterBackdropClickHandler(this._backdropClickHandler);
-    }
-
-    this._isAnimating = false;
-    this._moveContext = undefined;
-    this._lastPosition = undefined;
-    this._adapter.setAnimating(true);
-    this._adapter.setVisibility(false);
-    this._adapter.setSurfacePosition(null, null, null);
-
-    return new Promise<void>(resolve => {
-      setTimeout(() => {
-        this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.CLOSE);
-        const openDialogs = this._adapter.getOpenDialogs(`${DIALOG_CONSTANTS.elementName}[${DIALOG_CONSTANTS.attributes.OPEN}]`);
-        if (!openDialogs.length) {
-          this._adapter.removeBodyAttribute(DIALOG_CONSTANTS.attributes.BODY_OPEN);
-        }
-        this._adapter.setAnimating(false);
-        resolve();
-      }, DIALOG_CONSTANTS.numbers.ANIMATION_DURATION);
-    });
-  }
-
-  private _onTransitionEnd(): void {
-    if (!this._isAnimating) {
-      return;
-    }
-
-    this._adapter.deregisterTransitionEndHandler(this._transitionEndHandler);
-    this._adapter.setAnimating(false);
-    this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.READY);
-    this._adapter.tryLayoutRippleChildren();
-
-    if (this._moveable) {
-      this._initMoveTarget();
-    }
-    
-    this._isAnimating = false;
-  }
-
-  private _initMoveTarget(): void {
-    if (!this._fullscreen && this._moveable && this._moveTarget && this._adapter.setMoveTarget(this._moveTarget)) {
-      this._adapter.setMoveTargetHandler('mousedown', this._moveTargetMouseDownHandler);
-    }
-  }
-
-  private _removeDragHandlers(): void {
-    this._adapter.removeDragTargetHandler('mousedown', this._moveTargetMouseDownHandler);
-    this._adapter.removeDocumentListener('mousemove', this._moveTargetMouseMoveHandler);
-    this._adapter.removeDocumentListener('mouseup', this._moveTargetMouseUpHandler);
-  }
-
-  private _onMoveTargetMouseDown(evt: MouseEvent): void {
-    evt.preventDefault();
-    this._adapter.captureActiveElement();
-    const bounds = this._adapter.getSurfaceBounds();
-    this._moveContext = {
-      top: evt.pageY - bounds.top,
-      left: evt.pageX - bounds.left,
-      height: bounds.height,
-      width: bounds.width
-    };
-    this._adapter.setDocumentListener('mousemove', this._moveTargetMouseMoveHandler);
-    this._adapter.setDocumentListener('mouseup', this._moveTargetMouseUpHandler);
-  }
-
-  private _onMoveTargetMouseMove(evt: MouseEvent): void {
-    evt.preventDefault();
-    const position = this._calculateOffsetPosition(evt.pageX, evt.pageY, this._moveContext);
-
-    // If this is the beginning of the move sequence, we emit the start event (to allow for preventing default) and
-    // then update the surface position if not prevented
-    if (!this._isMoving) {
-      this._isMoving = true;
-      const canDrag = this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.MOVE_START, position as IDialogMoveStartEventData, true, true);
-      if (!canDrag) {
+  private _onEscapeDismiss(evt: Event): void {
+    if (evt.type === 'keydown') {
+      const key = (evt as KeyboardEvent).key;
+      if (key !== 'Escape' || !DismissibleStack.instance.isMostRecent(this._adapter.hostElement)) {
         return;
       }
+    } else if (evt.type === 'cancel') {
+      evt.preventDefault();
     }
 
-    // Ensure that the surface position stays within the bounds of the screen
-    const newPosition = this._clampPosition(position, this._moveContext);
-
-    // Only update the position if it actually changed
-    if (!this._lastPosition || newPosition.x !== this._lastPosition.x || newPosition.y !== this._lastPosition.y) {
-      const canMove = this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.MOVED, newPosition as IDialogMoveStartEventData, true, true);
-      if (canMove) {
-        this._lastPosition = { ...newPosition };
-        const newX = this._normalizePositionValue(newPosition.x);
-        const newY = this._normalizePositionValue(newPosition.y);
-        this._adapter.setSurfacePosition(newX, newY, 'absolute');
-      }
-    }
-  }
-
-  private _onMoveTargetMouseUp(evt: MouseEvent): void {
-    if (this._isMoving) {
-      this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.MOVE_END);
-    }
-    this._moveComplete();
-  }
-
-  private _moveComplete(): void {
-    this._adapter.tryRestoreActiveElement();
-    this._adapter.removeDocumentListener('mousemove', this._moveTargetMouseMoveHandler);
-    this._adapter.removeDocumentListener('mouseup', this._moveTargetMouseUpHandler);
-    this._lastPosition = undefined;
-    this._moveContext = undefined;
-    this._isMoving = false;
-  }
-
-  private _onDocumentKeydown(evt: KeyboardEvent): void {
-    evt.stopPropagation();
-    if (evt.key && (evt.key === 'Escape' || evt.key === 'Esc')) {
+    if (!this._persistent) {
       this._tryClose();
     }
   }
 
-  private _onBackdropClick(evt: CustomEvent): void {
-    evt.stopPropagation();
+  private _onBackdropDismiss(): void {
     this._tryClose();
   }
 
-  private async _tryClose(): Promise<void> {
-    const isCancelled = !this._adapter.emitHostEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, undefined, undefined, true);
-    if (isCancelled) {
-      return;
+  private _onDialogFormSubmit(evt: SubmitEvent): void {
+    evt.stopPropagation();
+    const isDialogSubmitter = evt.submitter?.getAttribute('formmethod') === 'dialog' ||
+                              (evt.target as HTMLFormElement)?.getAttribute('method') === 'dialog';
+    if (isDialogSubmitter) {
+      this._tryClose();
     }
+  }
 
-    if (!this._beforeCloseCallback) {
+  private _tryClose(): void {
+    if (this.dispatchBeforeCloseEvent()) {
       this.open = false;
-      return;
-    }
-
-    try {
-      const shouldClose = await Promise.resolve(this._beforeCloseCallback()) !== false;
-      if (shouldClose) {
-        this.open = false;
-        return;
-      }
-    } catch (err) {
-      return;
     }
   }
 
-  private _setBackdropClickListener(attach: boolean): void {
-    if (!this._open) {
+  private _onTriggerClick(_evt: MouseEvent): void {
+    this.open = !this._open;
+  }
+
+  private _initializeMoveController(): void {
+    /* c8 ignore next 3 */
+    if (this._moveController) {
       return;
     }
 
-    if (attach && this._backdropClose) {
-      this._adapter.registerBackdropClickHandler(this._backdropClickHandler);
-    } else if (!attach) {
-      this._adapter.deregisterBackdropClickHandler(this._backdropClickHandler);
-    }
-  }
-
-  private _setDocumentKeydownListener(attach: boolean): void {
-    if (!this._open) {
-      return;
-    }
-
-    if (attach && this._escapeClose) {
-      this._adapter.setDocumentListener('keydown', this._documentKeydownHandler);
-    } else if (!attach) {
-      this._adapter.removeDocumentListener('keydown', this._documentKeydownHandler);
-    }
-  }
-
-  private _calculateOffsetPosition(pageX: number, pageY: number, context?: IDialogMoveContext): { x: number; y: number } {
-    return {
-      x: pageX - (context?.left || 0),
-      y: pageY - (context?.top || 0)
+    const onMoveStart = (): boolean => {
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_START, { cancelable: true });
+      this._adapter.dispatchHostEvent(event);
+      return event.defaultPrevented;
     };
+    const onMove = (position: IDialogMoveEventData): boolean => {
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE, { detail: position, cancelable: true });
+      this._adapter.dispatchHostEvent(event);
+
+      if (!event.defaultPrevented) {
+        this._adapter.addSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
+        this._adapter.addSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
+      }
+
+      return event.defaultPrevented;
+    };
+    const onMoveEnd = (): void => {
+      const event = new CustomEvent(DIALOG_CONSTANTS.events.MOVE_END);
+      this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVING);
+      this._adapter.dispatchHostEvent(event);
+    };
+    const { moveHandleElement: handleElement, surfaceElement } = this._adapter;
+    this._moveController = new MoveController({ handleElement, surfaceElement, onMoveStart, onMove, onMoveEnd });
   }
 
-  private _clampPosition({ x, y }: { x: number; y: number }, context?: IDialogMoveContext): { x: number; y: number } {
-    let width = 0;
-    let height = 0;
-
-    if (context) {
-      width = context.width;
-      height = context.height;
-    }
-
-    if (x <= 0) {
-      x = 0;
-    } else if (x + width >= window.innerWidth) {
-      x = window.innerWidth - width;
-    }
-
-    if (y <= 0) {
-      y = 0;
-    } else if (y + height >= window.innerHeight) {
-      y = window.innerHeight - height;
-    }
-
-    return { x, y };
-  }
-
-  /** Controls whether clicking the backdrop closes the dialog or not. */
-  public set backdropClose(value: boolean) {
-    value = Boolean(value);
-    if (this._backdropClose !== value) {
-      this._backdropClose = value;
-      this._setBackdropClickListener(this._backdropClose);
-      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.BACKDROP_CLOSE, this._backdropClose);
-    }
-  }
-  public get backdropClose(): boolean {
-    return this._backdropClose;
-  }
-
-  /** Controls whether pressing the escape key closes the dialog or not. */
-  public set escapeClose(value: boolean) {
-    value = Boolean(value);
-    if (this._escapeClose !== value) {
-      this._escapeClose = !!value;
-      this._setDocumentKeydownListener(this._escapeClose);
-      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.ESCAPE_CLOSE, this._escapeClose);
-    }
-  }
-  public get escapeClose(): boolean {
-    return this._escapeClose;
+  private _destroyMoveController(): void {
+    this._adapter.removeSurfaceClass(DIALOG_CONSTANTS.classes.MOVED);
+    this._moveController?.destroy();
+    this._moveController = undefined;
   }
 
   public get open(): boolean {
     return this._open;
   }
   public set open(value: boolean) {
+    value = Boolean(value);
     if (this._open !== value) {
-      this._applyOpen(!!value);
+      this._open = value;
+      if (this._adapter.isConnected) {
+        this._applyOpen();
+      }
+    }
+  }
+
+  public get mode(): DialogMode {
+    return this._mode;
+  }
+  public set mode(value: DialogMode) {
+    if (this._mode !== value) {
+      this._mode = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.MODE, this._mode);
+    }
+  }
+
+  public get type(): DialogType {
+    return this._type;
+  }
+  public set type(value: DialogType) {
+    if (this._type !== value) {
+      this._type = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.TYPE, this._type);
+    }
+  }
+
+  public get animationType(): DialogAnimationType {
+    return this._animationType;
+  }
+  public set animationType(value: DialogAnimationType) {
+    if (this._animationType !== value) {
+      this._animationType = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.ANIMATION_TYPE, this._animationType);
+    }
+  }
+
+  public get preset(): DialogPreset {
+    return this._preset;
+  }
+  public set preset(value: DialogPreset) {
+    if (this._preset !== value) {
+      this._preset = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.PRESET, this._preset);
+    }
+  }
+
+  public get persistent(): boolean {
+    return this._persistent;
+  }
+  public set persistent(value: boolean) {
+    value = Boolean(value);
+    if (this._persistent !== value) {
+      this._persistent = value;
+      this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.PERSISTENT, this._persistent);
     }
   }
 
@@ -446,67 +280,48 @@ export class DialogFoundation implements IDialogFoundation {
     return this._fullscreen;
   }
   public set fullscreen(value: boolean) {
+    value = Boolean(value);
     if (this._fullscreen !== value) {
-      this._fullscreen = !!value;
-      this._adapter.setFullscreen(this._fullscreen);
+      this._fullscreen = value;
       this._adapter.toggleHostAttribute(DIALOG_CONSTANTS.attributes.FULLSCREEN, this._fullscreen);
     }
   }
 
-  public get openCallback(): DialogStateCallback {
-    return this._openCallback;
+  public get trigger(): string {
+    return this._trigger ?? '';
   }
-  public set openCallback(callback: DialogStateCallback) {
-    this._openCallback = callback;
-  }
+  public set trigger(value: string) {
+    if (this._trigger !== value) {
+      this._trigger = value;
 
-  public get closeCallback(): DialogStateCallback {
-    return this._closeCallback;
-  }
-  public set closeCallback(callback: DialogStateCallback) {
-    this._closeCallback = callback;
-  }
-
-  public get beforeCloseCallback(): DialogStateCallback {
-    return this._beforeCloseCallback;
-  }
-  public set beforeCloseCallback(callback: DialogStateCallback) {
-    this._beforeCloseCallback = callback;
-  }
-
-  public get positionType(): DialogPositionType {
-    return this._positionType;
-  }
-  public set positionType(value: DialogPositionType) {
-    if (this._positionType !== value) {
-      this._positionType = value;
-      if (this._open) {
-        this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
+      if (this._adapter.triggerElement) {
+        this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
       }
+
+      if (this._adapter.isConnected) {
+        this._adapter.tryLocateTriggerElement(this._trigger);
+        this._adapter.addTriggerInteractionListener(this._triggerClickListener);
+      }
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.TRIGGER, this._trigger);
     }
   }
 
-  public get positionX(): number | string | null | undefined {
-    return this._positionX;
+  public get triggerElement(): HTMLElement | null {
+    return this._adapter.triggerElement;
   }
-  public set positionX(value: number | string | null | undefined) {
-    if (this._positionX !== value) {
-      this._positionX = this._normalizePositionValue(value);
-      if (this._open) {
-        this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
-      }
+  public set triggerElement(element: HTMLElement | null) {
+    if (this._adapter.triggerElement) {
+      this._adapter.removeTriggerInteractionListener(this._triggerClickListener);
     }
-  }
 
-  public get positionY(): number | string | null | undefined {
-    return this._positionY;
-  }
-  public set positionY(value: number | string | null | undefined) {
-    if (this._positionY !== value) {
-      this._positionY = this._normalizePositionValue(value);
-      if (this._open) {
-        this._adapter.setSurfacePosition(this._positionX, this._positionY, this._positionType);
-      }
+    if (this._trigger) {
+      this._trigger = '';
+    }
+
+    this._adapter.triggerElement = element;
+
+    if (this._adapter.isConnected) {
+      this._adapter.addTriggerInteractionListener(this._triggerClickListener);
     }
   }
 
@@ -514,16 +329,15 @@ export class DialogFoundation implements IDialogFoundation {
     return this._moveable;
   }
   public set moveable(value: boolean) {
+    value = Boolean(value);
     if (this._moveable !== value) {
-      this._moveable = !!value;
+      this._moveable = value;
 
-      if (this._open) {
-        this._adapter.setMoveable(this._moveable);
+      if (this._adapter.isConnected && this._open) {
         if (this._moveable) {
-          this._initMoveTarget();
+          this._initializeMoveController();
         } else {
-          this._removeDragHandlers();
-          this._isMoving = false;
+          this._destroyMoveController();
         }
       }
 
@@ -531,10 +345,33 @@ export class DialogFoundation implements IDialogFoundation {
     }
   }
 
-  public get moveTarget(): string {
-    return this._moveTarget;
+  public get positionStrategy(): DialogPositionStrategy {
+    return this._positionStrategy;
   }
-  public set moveTarget(value: string) {
-    this._moveTarget = value;
+  public set positionStrategy(value: DialogPositionStrategy) {
+    if (this._positionStrategy !== value) {
+      this._positionStrategy = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.POSITION_STRATEGY, this._positionStrategy);
+    }
+  }
+
+  public get sizeStrategy(): DialogSizeStrategy {
+    return this._sizeStrategy;
+  }
+  public set sizeStrategy(value: DialogSizeStrategy) {
+    if (this._sizeStrategy !== value) {
+      this._sizeStrategy = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.SIZE_STRATEGY, this._sizeStrategy);
+    }
+  }
+
+  public get placement(): DialogPlacement {
+    return this._placement;
+  }
+  public set placement(value: DialogPlacement) {
+    if (this._placement !== value) {
+      this._placement = value;
+      this._adapter.setHostAttribute(DIALOG_CONSTANTS.attributes.PLACEMENT, this._placement);
+    }
   }
 }

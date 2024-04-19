@@ -17,7 +17,7 @@ import {
   TableSelectTooltipCallback
 } from '@tylertech/forge/table';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { ITooltipComponent } from '@tylertech/forge';
+import { ICheckboxComponent, ITooltipComponent } from '@tylertech/forge';
 
 const columns: IColumnConfiguration[] = [
   { header: 'Name', property: 'Name' },
@@ -1782,11 +1782,11 @@ describe('TableComponent', function(this: ITestContext) {
       await timer(TABLE_CONSTANTS.numbers.RESIZE_HOVER_DURATION);
 
       const { width, left } = firstCell.getBoundingClientRect();
-      const newWidth = left + width - 14;
+      const newWidth = left + width + 20;
 
       resizeHandle.dispatchEvent(
         new MouseEvent('mousedown', {
-          clientX: left + width - 4,
+          clientX: left + width - 10,
           clientY: 0,
           bubbles: true
         } as any)
@@ -2175,7 +2175,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckbox = this.context.getTableElement().querySelector('tbody > tr > td input');
+        const rowCheckbox = this.context.getTableElement().querySelector('tbody > tr > td forge-checkbox');
         rowCheckbox!.dispatchEvent(new MouseEvent('click'));
         // this.context.component.selectRows([data[1]], true);
         await tick();
@@ -2196,7 +2196,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody input');
+        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
         rowCheckboxs.forEach(c => {
           c.dispatchEvent(new MouseEvent('click'));
         });
@@ -2219,7 +2219,7 @@ describe('TableComponent', function(this: ITestContext) {
 
         const selectAllCell = getSelectAllCell(this.context.getTableElement());
         const checkbox = selectAllCell.querySelector('input') as HTMLInputElement;
-        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody input');
+        const rowCheckboxs = this.context.getTableElement().querySelectorAll('tbody forge-checkbox');
         rowCheckboxs.forEach(c => {
           c.dispatchEvent(new MouseEvent('click'));
         });

@@ -3,10 +3,12 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { IListDropdownTestContext, createListDropdown, getListItems, getListDropdownPopup, clickListItem, delayPopupAnimation, getBusyVisibility, generateScrollableOptions } from './list-dropdown-test-utils';
 import { IListDropdownConfig, IListDropdownOption, ListDropdownAsyncStyle, ListDropdownHeaderBuilder, IListDropdownOptionGroup, LIST_DROPDOWN_CONSTANTS, ListDropdownFooterBuilder, ListDropdownType, ListDropdownOptionBuilder, ListDropdownTransformCallback } from '@tylertech/forge/list-dropdown';
 import { defineOptionComponent, defineOptionGroupComponent } from '@tylertech/forge/select';
-import { definePopupComponent, POPUP_CONSTANTS, IPopupComponent } from '@tylertech/forge/popup';
 import { defineListComponent, IListComponent, IListItemComponent, LIST_CONSTANTS } from '@tylertech/forge/list';
 import { defineLinearProgressComponent, SKELETON_CONSTANTS, DIVIDER_CONSTANTS, IIconComponent, CIRCULAR_PROGRESS_CONSTANTS } from '@tylertech/forge';
-import { tryCleanupPopups, isVisibleInScrollContainer } from '../../utils';
+import { definePopoverComponent, IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
+import { tryCleanupPopovers, isVisibleInScrollContainer } from '../../utils';
+
+const POPOVER_ANIMATION_DURATION = 200;
 
 interface ITestContext {
   context: IListDropdownTestContext;
@@ -26,7 +28,7 @@ describe('ListDropdown', function(this: ITestContext) {
   };
 
   beforeAll(function(this: ITestContext) {
-    definePopupComponent();
+    definePopoverComponent();
     defineListComponent();
     defineOptionComponent();
     defineOptionGroupComponent();
@@ -38,7 +40,7 @@ describe('ListDropdown', function(this: ITestContext) {
       this.context.listDropdown.destroy();
     }
     
-    tryCleanupPopups();
+    tryCleanupPopovers();
 
     if (this.context.targetElement.isConnected) {
       this.context.remove();
@@ -56,7 +58,7 @@ describe('ListDropdown', function(this: ITestContext) {
   it('should display options', async function(this: ITestContext) {
     this.context = createListDropdown(DEFAULT_CONFIG);
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
 
     const listItems = getListItems();
@@ -71,7 +73,7 @@ describe('ListDropdown', function(this: ITestContext) {
     const selectCallback = jasmine.createSpy('selectCallback') as any;
     this.context = createListDropdown({ ...DEFAULT_CONFIG, selectCallback });
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
 
     clickListItem(0);
 
@@ -436,7 +438,7 @@ describe('ListDropdown', function(this: ITestContext) {
 
     const listItems = getListItems();
     const selectedListItem = listItems.find(li => li.value === selectedValue) as IListItemComponent;
-    const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPUP_CONSTANTS.selectors.CONTAINER);
+    const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
 
     expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeTrue();
   });
@@ -450,7 +452,7 @@ describe('ListDropdown', function(this: ITestContext) {
     const listItems = getListItems();
     const selectedValue = options[99].value;
     const selectedListItem = listItems[99];
-    const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPUP_CONSTANTS.selectors.CONTAINER);
+    const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
 
     expect(isVisibleInScrollContainer(scrollContainer, selectedListItem)).toBeFalse();
 
@@ -470,8 +472,8 @@ describe('ListDropdown', function(this: ITestContext) {
     await delayPopupAnimation();
 
     const popup = this.context.listDropdown.dropdownElement as HTMLElement;
-    const popupRoot = getShadowElement(popup, POPUP_CONSTANTS.selectors.CONTAINER) as HTMLElement;
-    popupRoot.scrollTop = popupRoot.scrollHeight;
+    const scrollContainer = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
+    scrollContainer.scrollTop = scrollContainer.scrollHeight;
     await timer(1000); // Wait for scroll animation (flaky?)
 
     expect(scrollEndListener).toHaveBeenCalledTimes(1);
@@ -487,8 +489,8 @@ describe('ListDropdown', function(this: ITestContext) {
     this.context.listDropdown.setScrollBottomListener(scrollEndListener);
 
     const popup = this.context.listDropdown.dropdownElement as HTMLElement;
-    const popupRoot = getShadowElement(popup, POPUP_CONSTANTS.selectors.CONTAINER) as HTMLElement;
-    popupRoot.scrollTop = popupRoot.scrollHeight;
+    const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
+    scrollContainer.scrollTop = scrollContainer.scrollHeight;
     await timer(1000); // Wait for scroll animation (flaky?)
 
     expect(scrollEndListener).toHaveBeenCalledTimes(1);
@@ -505,8 +507,8 @@ describe('ListDropdown', function(this: ITestContext) {
     this.context.listDropdown.removeScrollBottomListener();
 
     const popup = this.context.listDropdown.dropdownElement as HTMLElement;
-    const popupRoot = getShadowElement(popup, POPUP_CONSTANTS.selectors.CONTAINER) as HTMLElement;
-    popupRoot.scrollTop = popupRoot.scrollHeight;
+    const scrollContainer = getShadowElement(this.context.listDropdown.dropdownElement!, POPOVER_CONSTANTS.selectors.SURFACE);
+    scrollContainer.scrollTop = scrollContainer.scrollHeight;
     await timer(1000); // Wait for scroll animation (flaky?)
 
     expect(scrollEndListener).not.toHaveBeenCalled();
@@ -631,8 +633,9 @@ describe('ListDropdown', function(this: ITestContext) {
     await delayPopupAnimation();
 
     const popup = getListDropdownPopup();
+    const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(popup.style.minWidth).toBe(`${width}px`);
+    expect(getComputedStyle(container).minWidth).toBe(`${width}px`);
     expect(targetWidthCallback).toHaveBeenCalledTimes(1);
   });
 
@@ -641,23 +644,25 @@ describe('ListDropdown', function(this: ITestContext) {
     const targetWidthCallback = jasmine.createSpy('target width callback', () => width).and.callThrough();
     this.context = createListDropdown({ ...DEFAULT_CONFIG, targetWidthCallback, syncWidth: true });
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
 
     const popup = getListDropdownPopup();
+    const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(popup.style.width).toBe(`${width}px`);
+    expect(getComputedStyle(container).width).toBe(`${width}px`);
     expect(targetWidthCallback).toHaveBeenCalledTimes(1);
   });
 
   it('should sync width with default target element width', async function(this: ITestContext) {
     this.context = createListDropdown({ ...DEFAULT_CONFIG, syncWidth: true });
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
 
     const targetElementWidth = getComputedStyle(this.context.targetElement).width;
     const popup = getListDropdownPopup();
+    const container = getShadowElement(popup, POPOVER_CONSTANTS.selectors.SURFACE);
 
-    expect(popup.style.width).toBe(targetElementWidth);
+    expect(getComputedStyle(container).width).toBe(targetElementWidth);
   });
 
   it('should show remove async element options are set', async function(this: ITestContext) {
@@ -751,7 +756,7 @@ describe('ListDropdown', function(this: ITestContext) {
     this.context.listDropdown.open();
     await delayPopupAnimation();
 
-    expect((<IPopupComponent>this.context.listDropdown.dropdownElement).animationType).toBe(ListDropdownType.None);
+    expect((<IPopoverComponent>this.context.listDropdown.dropdownElement).animationType).toBe('none');
   });
 
   it('should limit dropdown options', async function(this: ITestContext) {
@@ -841,7 +846,7 @@ describe('ListDropdown', function(this: ITestContext) {
     ];
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
 
     const listItems = getListItems();
     const leadingElement = listItems[0].querySelector('#list-dropdown-leading');
@@ -863,7 +868,7 @@ describe('ListDropdown', function(this: ITestContext) {
     ];
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options });
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
 
     const listItems = getListItems();
     const trailingElement = listItems[1].querySelector('#list-dropdown-trailing');
@@ -946,7 +951,7 @@ describe('ListDropdown', function(this: ITestContext) {
   it('should set element attributes on options', async function(this: ITestContext) {
     this.context = createListDropdown(DEFAULT_CONFIG);
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
 
     const listItems = getListItems();
@@ -961,7 +966,7 @@ describe('ListDropdown', function(this: ITestContext) {
     ];
     this.context = createListDropdown({ ...DEFAULT_CONFIG, options: opts });
     this.context.listDropdown.open();
-    await timer(POPUP_CONSTANTS.numbers.ANIMATION_DURATION);
+    await timer(POPOVER_ANIMATION_DURATION);
     await tick();
 
     const listItems = getListItems();

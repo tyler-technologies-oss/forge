@@ -1,0 +1,68 @@
+@use './token-utils' as *;
+@use '../core/styles/typography';
+
+@forward './token-utils';
+
+@mixin host {
+  display: contents;
+}
+
+@mixin surface {
+  @include typography.style(body2);
+
+  position: fixed;
+
+  display: flex;
+  align-items: center;
+  column-gap: #{token(spacing)};
+
+  border-radius: #{token(shape)};
+
+  padding-inline: #{token(inline-padding)};
+  margin: #{token(offset)};
+
+  min-width: #{token(min-width)};
+  max-width: #{token(max-width)};
+  min-height: #{token(min-height)};
+  box-sizing: border-box;
+  
+  background: #{token(background)};
+  color: #{token(color)};
+  box-shadow: #{token(elevation)};
+}
+
+@mixin message {
+  flex-grow: 1;
+
+  padding-block: #{token(message-padding)};
+  
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin open {
+  animation-name: slidein;
+  animation-duration: #{token(enter-duration)};
+  animation-timing-function: #{token(enter-timing)};
+}
+
+@mixin exit {
+  animation-name: slideout;
+  animation-duration: #{token(exit-duration)};
+  animation-timing-function: #{token(exit-timing)};
+}
+
+@mixin mobile {
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0;
+
+  translate: none;
+
+  max-width: none;
+  min-width: auto;
+
+  border-radius: 0;
+}

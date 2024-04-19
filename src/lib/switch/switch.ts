@@ -1,28 +1,35 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean, isDefined, isString, toggleAttribute } from '@tylertech/forge-core';
-import { BaseNullableFormComponent, IBaseNullableFormComponent } from '../core/base/base-nullable-form-component';
+import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty, isDefined, isString } from '@tylertech/forge-core';
+import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants';
+import { BaseComponent, FormValue } from '../core';
+import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable';
+import { IWithFormAssociation, WithFormAssociation } from '../core/mixins/form/with-form-associated';
+import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
+import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
+import { IWithLabelAwareness, WithLabelAwareness } from '../core/mixins/label/with-label-aware';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SwitchAdapter } from './switch-adapter';
-import { SWITCH_CONSTANTS, SwitchIconVisibility, SwitchLabelPosition } from './switch-constants';
+import { SwitchIconVisibility, SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
 import { SwitchFoundation } from './switch-foundation';
-import { ILabelAware } from '../label/label-aware';
-import { internals } from '../constants';
 
 import template from './switch.html';
 import styles from './switch.scss';
 
-export interface ISwitchComponent extends IBaseNullableFormComponent, ILabelAware {
+export interface ISwitchComponent extends IWithFormAssociation, IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
+  value: string;
   on: boolean;
   /**
    * @deprecated use `on` instead
    */
   selected: boolean;
   defaultOn: boolean;
+  required: boolean;
   dense: boolean;
   icon: SwitchIconVisibility;
   labelPosition: SwitchLabelPosition;
   toggle(force?: boolean): void;
-  setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void;
+  setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void;
+  [setValidity](): void;
 }
 
 declare global {
@@ -34,6 +41,8 @@ declare global {
     'forge-switch-change': CustomEvent<boolean>;
   }
 }
+
+const BaseSwitchClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))));
 
 /**
  * @tag forge-switch
@@ -155,99 +164,99 @@ declare global {
     StateLayerComponent
   ]
 })
-export class SwitchComponent extends BaseNullableFormComponent implements ISwitchComponent {
+export class SwitchComponent extends BaseSwitchClass implements ISwitchComponent {
   public static get observedAttributes(): string[] {
-    return [
-      SWITCH_CONSTANTS.attributes.ON,
-      SWITCH_CONSTANTS.attributes.SELECTED,
-      SWITCH_CONSTANTS.attributes.DEFAULT_ON,
-      SWITCH_CONSTANTS.attributes.VALUE,
-      SWITCH_CONSTANTS.attributes.DENSE,
-      SWITCH_CONSTANTS.attributes.DISABLED,
-      SWITCH_CONSTANTS.attributes.REQUIRED,
-      SWITCH_CONSTANTS.attributes.READONLY,
-      SWITCH_CONSTANTS.attributes.ICON,
-      SWITCH_CONSTANTS.attributes.LABEL_POSITION
-    ];
+    return Object.values(SWITCH_CONSTANTS.observedAttributes);
   }
 
-  public get form(): HTMLFormElement | null {
-    return this[internals].form;
-  }
-
-  public get labels(): NodeList {
-    return this[internals].labels;
-  }
-
-  public get name(): string {
-    return this.getAttribute('name') ?? '';
-  }
-  public set name(value: string) {
-    toggleAttribute(this, !!value, 'name', value ?? '');
-  }
-
-  public get validity(): ValidityState {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].validity;
-  }
-
-  public get validationMessage(): string {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].validationMessage;
-  }
-
-  public get willValidate(): boolean {
-    return this[internals].willValidate;
-  }
-
-  public readonly [internals]: ElementInternals;
   private readonly _foundation: SwitchFoundation;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles, true);
-    this[internals] = this.attachInternals();
+    attachShadowTemplate(this, template, styles);
+    this[inputType] = 'checkbox';
     this._foundation = new SwitchFoundation(new SwitchAdapter(this));
   }
 
   public connectedCallback(): void {
+    super.connectedCallback();
+    this[setDefaultAria]({
+      role: 'switch',
+      ariaChecked: this.on ? 'true' : 'false',
+      ariaDisabled: this.disabled ? 'true' : 'false',
+      ariaRequired: this.required ? 'true' : 'false'
+    });
     this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case SWITCH_CONSTANTS.attributes.ON:
-      case SWITCH_CONSTANTS.attributes.SELECTED:
+      case SWITCH_CONSTANTS.observedAttributes.ON:
+      case SWITCH_CONSTANTS.observedAttributes.SELECTED:
         this.on = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.DEFAULT_ON:
+      case SWITCH_CONSTANTS.observedAttributes.DEFAULT_ON:
         this.defaultOn = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.VALUE:
+      case SWITCH_CONSTANTS.observedAttributes.VALUE:
         this.value = newValue;
         break;
-      case SWITCH_CONSTANTS.attributes.DENSE:
+      case SWITCH_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.DISABLED:
+      case SWITCH_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.REQUIRED:
+      case SWITCH_CONSTANTS.observedAttributes.REQUIRED:
         this.required = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.READONLY:
+      case SWITCH_CONSTANTS.observedAttributes.READONLY:
         this.readonly = coerceBoolean(newValue);
         break;
-      case SWITCH_CONSTANTS.attributes.ICON:
+      case SWITCH_CONSTANTS.observedAttributes.ICON:
         this.icon = newValue as SwitchIconVisibility;
         break;
-      case SWITCH_CONSTANTS.attributes.LABEL_POSITION:
+      case SWITCH_CONSTANTS.observedAttributes.LABEL_POSITION:
         this.labelPosition = newValue as SwitchLabelPosition;
         break;
     }
+    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  public setFormValue(value: string | File | FormData | null, state?: string | File | FormData | null | undefined): void {
+  public override [getFormValue](): FormValue | null {
+    return this.on ? this.value : null;
+  }
+
+  public override [getFormState](): string {
+    return this.on ? SWITCH_CONSTANTS.state.ON : SWITCH_CONSTANTS.state.OFF;
+  }
+
+  public [setValidity](): void {
+    this[internals].setValidity({ valueMissing: this.required && !this.on }, this[getValidationMessage]({
+      checked: this.on,
+      required: this.required
+    }));
+  }
+
+  public formResetCallback(): void {
+    this.on = this.defaultOn;
+  }
+
+  public formStateRestoreCallback(state: string): void {
+    this.on = state === SWITCH_CONSTANTS.state.ON;
+  }
+
+  public labelClickedCallback(): void {
+    this.click();
+    // TODO: use `{ focusVisible: false }` when supported.
+    this.focus();
+  }
+
+  public labelChangedCallback(value: string | null): void {
+    this[setDefaultAria]({ ariaLabel: value });
+  }
+
+  public setFormValue(value: FormValue | null, state?: FormValue | null | undefined): void {
     this[internals].setFormValue(value, state);
 
     if (state) {
@@ -263,41 +272,6 @@ export class SwitchComponent extends BaseNullableFormComponent implements ISwitc
     } else {
       this.on = false;
     }
-  }
-
-  public checkValidity(): boolean {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].checkValidity();
-  }
-
-  public reportValidity(): boolean {
-    this._foundation.syncValidity(this._hasCustomValidityError);
-    return this[internals].reportValidity();
-  }
-
-  public setCustomValidity(error: string): void {
-    this._hasCustomValidityError = !!error;
-    this._foundation.setValidity({ customError: !!error }, error);
-  }
-
-  public formResetCallback(): void {
-    this.on = this.defaultOn;
-  }
-
-  public formStateRestoreCallback(state: string): void {
-    this.on = state === SWITCH_CONSTANTS.state.ON;
-  }
-
-  public formDisabledCallback(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
-  public labelClickedCallback(): void {
-    this._foundation.proxyClick();
-  }
-
-  public labelChangedCallback(value: string | null): void {
-    this._foundation.proxyLabel(value);
   }
 
   @FoundationProperty()

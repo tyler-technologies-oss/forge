@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { IToastProps, argTypes } from './toast-args';
-import { ForgeButton, ForgeToast, ForgeToastOptions } from '@tylertech/forge-react';
-import { TOAST_CONSTANTS } from '@tylertech/forge';
+import { ForgeButton } from '@tylertech/forge-react';
+import { ToastComponent, TOAST_CONSTANTS } from '@tylertech/forge';
 const MDX = require('./toast.mdx').default;
 
 export default {
@@ -20,23 +20,22 @@ export const Default: Story<IToastProps> = ({
   actionText = '',
   duration = 2750,
   placement = 'bottom',
-  showClose = true
+  dismissible = true
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const options: ForgeToastOptions = {
-    message,
-    actionText,
-    duration,
-    placement,
-    showClose,
-    actionHandler: () => {
-      console.log('Toast action clicked');
-    }
+
+  function showToast(): void {
+    ToastComponent.present({
+      message,
+      actionText,
+      duration,
+      placement,
+      dismissible
+    });
   }
+
   return (
     <>
-      <ForgeButton variant="raised" onClick={() => setIsOpen(true)}>Show toast</ForgeButton>
-      <ForgeToast options={options} open={isOpen} onDismiss={() => setIsOpen(false)} />
+      <ForgeButton variant="raised" onClick={showToast}>Show toast</ForgeButton>
     </>
   );
 };
@@ -45,5 +44,5 @@ Default.args = {
   actionText: '',
   duration: TOAST_CONSTANTS.defaults.DURATION,
   placement: TOAST_CONSTANTS.defaults.PLACEMENT,
-  showClose: true
+  dismissible: true
 } as IToastProps;

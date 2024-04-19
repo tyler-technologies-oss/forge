@@ -812,7 +812,7 @@ describe('CalendarComponent', function(this: ITestContext) {
   }
 
   function getActiveDay(component: ICalendarComponent): HTMLElement | null {
-    return getDateGrid(component).querySelector('[tabindex = "0"]') ?? getDateGrid(component).querySelector(`.${CALENDAR_CONSTANTS.classes.MDC_RIPPLE_UPGRADED_FOCUSED}`);
+    return getDateGrid(component).querySelector('[tabindex="0"]') ?? getDateGrid(component).querySelector('.forge-calendar__date:has(forge-focus-indicator[active])');
   }
 
   function getLastDayOfMonth(): string {

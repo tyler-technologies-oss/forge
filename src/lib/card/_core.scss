@@ -1,0 +1,30 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  background: #{token(background)};
+
+  border-color: #{token(outline-color)};
+  border-width: #{token(outline-width)};
+  border-style: #{token(outline-style)};
+  border-radius: #{token(shape)};
+  
+  box-shadow: #{token(elevation)};
+  box-sizing: border-box;
+  padding: #{token(padding)};
+  overflow: #{token(overflow)};
+  height: #{token(height)};
+  width: #{token(width)};
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+@mixin raised {
+  @include override(elevation, raised-elevation);
+  @include override(outline-width, raised-outline-width);
+}

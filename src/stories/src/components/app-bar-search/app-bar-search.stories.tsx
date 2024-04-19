@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Story, Meta } from '@storybook/react';
-import { IconRegistry } from '@tylertech/forge';
+import { IconRegistry, ToastComponent } from '@tylertech/forge';
 import { ForgeAppBar, ForgeAppBarSearch, ForgeIcon } from '@tylertech/forge-react';
 import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import { IAppBarSearchProps, argTypes } from './app-bar-search-args';
@@ -37,9 +37,7 @@ export const Default: Story<IAppBarSearchProps> = ({
         combined={combined}
         global={global}
         on-forge-app-bar-search={evt => {
-          const toast = document.createElement('forge-toast');
-          toast.message = `Search value: ${evt.detail.value}`;
-          document.body.appendChild(toast);
+          ToastComponent.present({ message: `Search value: ${evt.detail.value}` });
         }}>
           <input type="text" aria-label="Search for a record" placeholder="Search" />
       </ForgeAppBarSearch>

@@ -1,7 +1,8 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { IIconAdapter } from './icon-adapter';
-import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType } from './icon-constants';
-import { sanitizeSvgContent, fetchIconContent, getCachedIcon, sanitizeExternalType, awaitIconDefinition, removeIconListener } from './icon-utils';
+import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType, IconTheme } from './icon-constants';
+import { IconRegistry, IIconDescriptor } from './icon-registry';
+import { createSanitizedSvg, fetchIconContent, getCachedIcon, sanitizeExternalType, awaitIconDefinition, removeIconListener } from './icon-utils';
 
 export interface IIconFoundation extends ICustomElementFoundation {
   name: string | undefined;
@@ -11,30 +12,30 @@ export interface IIconFoundation extends ICustomElementFoundation {
   externalType: IconExternalType;
   externalUrlBuilder: IconUrlBuilder;
   viewbox: string;
+  theme: IconTheme;
   layout(): void;
 }
 
 export class IconFoundation implements IIconFoundation {
   private _name: string | undefined;
   private _src: string | undefined;
-  private _lazy: boolean;
+  private _lazy = false;
   private _external = false;
   private _externalType: IconExternalType = 'standard';
   private _externalUrlBuilder: IconUrlBuilder;
   private _viewbox: string;
+  private _theme: IconTheme;
   private _applyTimer: number | undefined;
-  private _lazyListener: () => void;
+  private _lazyListener = this._loadIcon.bind(this);
   private _registrationListener: () => void;
 
-  constructor(private _adapter: IIconAdapter) {
-    this._lazyListener = () => this._loadIcon();
-  }
+  constructor(private _adapter: IIconAdapter) {}
 
   public initialize(): void {
     this._applyIcon();
   }
 
-  public disconnect(): void {
+  public destroy(): void {
     this._adapter.destroyVisibilityObserver();
     this._clearIconQueue();
     this._tryRemoveListener();
@@ -80,48 +81,71 @@ export class IconFoundation implements IIconFoundation {
     try {
       if (this._src) {
         // We were provided direct icon source content so just set that
-        this._setIconContent(this._src);
+        const node = createSanitizedSvg(this._src, this._viewbox);
+        this._setIconContent(node);
       } else if (this._name) {
-        // Let's attempt to get our icon from the cache
-        let content = this._tryGetIcon(this._name);
+        // Let's attempt to get our icon from the registry
+        const descriptor = this._tryGetIcon(this._name);
 
-        if (!content) {
+        // Short circuit here if we already have the node from a previous usage
+        if (descriptor?.node) {
+          this._setIconContent(descriptor.node);
+          return;
+        }
+
+        let svgEl: SVGElement | null = null;
+
+        if (!descriptor) {
           if (!this._external) {
             // We attach a listener to the registry to let us know when the icon is registered
             this._registrationListener = () => this._applyIcon();
             awaitIconDefinition(this._name, this._registrationListener);
 
             // For now, we render nothing...
-            this._adapter.setContent('');
+            this._adapter.setContent(null);
             return;
           }
           
           // We don't have a registry icon, so let's try the network to fetch it
           if (!this._externalType) {
-            throw new Error(`Invalid external type provided for icon: ${this._name}`);
+            this._externalType = 'standard';
           }
+
           const url = this._getExternalUrl(this._name, this._externalType);
           if (url) {
-            content = await fetchIconContent(url, this._name);
+            const content = await fetchIconContent(url, this._name);
+            if (content) {
+              svgEl = createSanitizedSvg(content, this._viewbox);
+            }
           }
+        } else if (descriptor.raw) {
+          svgEl = createSanitizedSvg(descriptor.raw, this._viewbox);
         }
 
-        this._setIconContent(content);
+        if (svgEl) {
+          if (!descriptor?.node) {
+            // Store the node for future use to improve performance
+            IconRegistry.setNode(this._name, svgEl);
+          }
+          this._setIconContent(svgEl);
+        }
       } else {
-        this._adapter.setContent('');
+        this._adapter.setContent(null);
       }
     } catch (e) {
-      this._adapter.setContent('');
+      this._adapter.setContent(null);
       throw e;
     }
   }
 
-  private _setIconContent(svgContent: string | undefined): void {
-    const content = sanitizeSvgContent(svgContent, this._viewbox);
-    this._adapter.setContent(content);
+  private _setIconContent(svgElement: SVGElement | null): void {
+    const clone = svgElement ? svgElement.cloneNode(true) as SVGElement : null;
+    if (clone) {
+      this._adapter.setContent(clone);
+    }
   }
 
-  private _tryGetIcon(key: string): string | undefined {
+  private _tryGetIcon(key: string): IIconDescriptor | undefined {
     return getCachedIcon(key);
   }
 
@@ -178,7 +202,7 @@ export class IconFoundation implements IIconFoundation {
     if (this._external !== value) {
       this._external = value;
       this._safeApplyIcon();
-      this._adapter.setHostAttribute(ICON_CONSTANTS.attributes.EXTERNAL, `${this._external}`);
+      this._adapter.toggleHostAttribute(ICON_CONSTANTS.attributes.EXTERNAL, this._external);
     }
   }
 
@@ -209,8 +233,18 @@ export class IconFoundation implements IIconFoundation {
   public set viewbox(value: string) {
     if (this._viewbox !== value) {
       this._viewbox = value;
-      this._safeApplyIcon();
+      this._adapter.setViewBox(this._viewbox);
       this._adapter.setHostAttribute(ICON_CONSTANTS.attributes.VIEWBOX, `${this.viewbox}`);
+    }
+  }
+
+  public get theme(): IconTheme {
+    return this._theme;
+  }
+  public set theme(value: IconTheme) {
+    if (this._theme !== value) {
+      this._theme = value;
+      this._adapter.setHostAttribute(ICON_CONSTANTS.attributes.THEME, this._theme);
     }
   }
 

@@ -1,4 +1,6 @@
 import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean, elementParents } from '@tylertech/forge-core';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
+import { StateLayerComponent } from '../../state-layer/state-layer';
 
 import { CalendarMenuAdapter } from './calendar-menu-adapter';
 import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
@@ -39,7 +41,11 @@ declare global {
  * @tag forge-calendar-menu
  */
 @CustomElement({
-  name: CALENDAR_MENU_CONSTANTS.elementName
+  name: CALENDAR_MENU_CONSTANTS.elementName,
+  dependencies: [
+    StateLayerComponent,
+    FocusIndicatorComponent
+  ]
 })
 export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuComponent {
   public static get observedAttributes(): string[] {
@@ -61,8 +67,8 @@ export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuC
     // To simulate the :host-context() selector for Firefox until they implement it, we need to determine if the
     // calendar is within a popup for auto-styling the calendar when included within a popup. Check to see if
     // any of the parents of this element are a popup.
-    if (!this.hasAttribute(CALENDAR_MENU_CONSTANTS.attributes.POPUP_CONTEXT) && elementParents(this).some(el => el.tagName.toLowerCase() === 'forge-popup')) {
-      this.setAttribute(CALENDAR_MENU_CONSTANTS.attributes.POPUP_CONTEXT, 'true');
+    if (!this.hasAttribute(CALENDAR_MENU_CONSTANTS.attributes.POPOVER_CONTEXT) && elementParents(this).some(el => el.tagName.toLowerCase() === 'forge-popover')) {
+      this.setAttribute(CALENDAR_MENU_CONSTANTS.attributes.POPOVER_CONTEXT, 'true');
     }
 
     this._foundation.initialize();

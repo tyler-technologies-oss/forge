@@ -1,11 +1,76 @@
-@use './mixins';
+@use './core' as *;
+@use '../field';
+@use '../chips/chip';
+@use '../core/styles/theme';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+forge-field {
+  @include tokens;
+}
+
+.container {
+  @include container;
+  
+  &.has-members {
+    @include has-members;
+
+    ::slotted(input) {
+      block-size: auto;
+      inline-size: auto;
+    }
+  }
+}
+
+::slotted(input) {
+  @include input;
+  @include field.default-slot-content;
+}
+
+//
+// Field
+//
+
+forge-field {
+  display: contents;
+
+  @include field.provide-theme((
+    multiline-resize: none
+  ));
+
+  &::part(label) {
+    &::after {
+      content: none; // Hiding the field's multiline box shadow on the label
+    }
+  }
+}
+
+//
+// Theme
+//
+
+$themes: (primary, secondary, tertiary, success, warning, error, info);
+@each $theme in $themes {
+  :host([theme=#{$theme}]) {
+    ::slotted([slot=member]) {
+      @include chip.provide-theme((
+        field-background: theme.variable($theme),
+        field-color: theme.variable(on-#{$theme})
+      ));
+    }
+  }
 }

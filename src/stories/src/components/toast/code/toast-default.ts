@@ -3,7 +3,5 @@ export const ToastDefaultHtml = () => `
 `;
 
 export const ToastDefaultTs = () => `
-const toast = document.createElement('forge-toast');
-toast.message = 'Save successful';
-document.body.appendChild(toast);
+ToastComponent.present({ message: 'Save successful' });
 `;

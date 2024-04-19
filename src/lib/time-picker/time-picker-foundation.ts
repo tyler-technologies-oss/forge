@@ -147,7 +147,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     }
 
     // Ensure we remove our dropdown
-    this._closeDropdown();
+    this._closeDropdown({ destroy: true });
 
     // Cleanup any resources used in the adapter
     this._adapter.destroy();
@@ -183,7 +183,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
         if (this._open) {
           evt.preventDefault();
           evt.stopPropagation();
-          this._closeDropdown(true);
+          this._closeDropdown({ emitCloseEvent: true });
         }
         break;
       case 'Down':
@@ -275,7 +275,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     evt.preventDefault();
 
     if (this._open) {
-      this._closeDropdown(true);
+      this._closeDropdown({ emitCloseEvent: true });
     } else {
       if (!Platform.isMobile) {
         this._adapter.tryFocusInput();
@@ -304,7 +304,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     this._formatInputValue();
 
     if (this._open && !this._adapter.isInputFocused()) {
-      this._closeDropdown(true);
+      this._closeDropdown({ emitCloseEvent: true });
     }
   }
 
@@ -359,7 +359,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       this._adapter.tryCreateToggle();
       this._adapter.addToggleListener('mousedown', this._toggleMousedownListener);
     } else if (this._open) {
-      this._closeDropdown(true);
+      this._closeDropdown({ emitCloseEvent: true });
     }
   }
 
@@ -393,7 +393,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     }
 
     if (this._open) {
-      this._closeDropdown(true);
+      this._closeDropdown({ emitCloseEvent: true });
     }
 
     // Let's attempt to coerce our time string into a known format to help with ease of entry
@@ -488,7 +488,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
   }
 
   private _onSelect(value: ITimePickerOptionValue): void {
-    this._closeDropdown(true);
+    this._closeDropdown({ emitCloseEvent: true });
 
     // Check if the "Now" option was selected
     if (!value.isCustom && value.metadata === 'now') {
@@ -606,7 +606,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
       type: ListDropdownType.Standard,
       options,
       selectCallback: value => this._onSelect(value),
-      closeCallback: () => this._closeDropdown(true),
+      closeCallback: () => this._closeDropdown({ emitCloseEvent: true }),
       activeChangeCallback: id => this._adapter.setActiveDescendant(id),
       targetWidthCallback: () => this._adapter.getTargetElementWidth(this._popupTarget)
     };
@@ -614,11 +614,11 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     this._adapter.emitHostEvent(TIME_PICKER_CONSTANTS.events.OPEN, undefined, false);
   }
 
-  private _closeDropdown(emitCloseEvent = false): void {
+  private _closeDropdown({ destroy = false, emitCloseEvent = false } = {}): void {
     this._open = false;
     this._dropdownConfig = undefined;
     this._adapter.removeHostAttribute(TIME_PICKER_CONSTANTS.attributes.OPEN);
-    this._adapter.detachDropdown();
+    this._adapter.detachDropdown({ destroy });
     if (emitCloseEvent) {
       this._adapter.emitHostEvent(TIME_PICKER_CONSTANTS.events.CLOSE, true, false);
     }
