@@ -41,16 +41,16 @@ export class CheckboxFoundation implements ICheckboxFoundation {
   }
 
   // Listeners
-  private readonly _clickListener: EventListener = (evt: Event) => this._handleChange();
+  private readonly _clickListener: EventListener = (_evt: Event) => this._handleChange();
   private readonly _keydownListener: EventListener = (evt: KeyboardEvent) => this._handleKeydown(evt);
   private readonly _keyupListener: EventListener = (evt: KeyboardEvent) => this._handleKeyup(evt);
 
   constructor(private _adapter: ICheckboxAdapter) {}
 
   public initialize(): void {
-    this._adapter.addHostListener('click', this._clickListener);
+    this._adapter.addHostListener('click', this._clickListener, { capture: true });
     this._adapter.addHostListener('keydown', this._keydownListener);
-    this._adapter.addHostListener('keyup', this._keyupListener);
+    this._adapter.addHostListener('keyup', this._keyupListener, { capture: true });
     this._adapter.syncValue(this._submittedValue, this._formState);
   };
 
@@ -73,17 +73,19 @@ export class CheckboxFoundation implements ICheckboxFoundation {
     
     const oldValue = this._checked;
     const newValue = !this._checked;
-    // Call the public setter to ensure all the update logic is run
-    this.checked = newValue;
 
-    const event = new Event('change', { cancelable: true });
-    this._adapter.redispatchEvent(event);
+    this._checked = newValue;
+
+    const event = new Event('change', { cancelable: true, bubbles: true });
+    this._adapter.dispatchHostEvent(event);
+    this._checked = oldValue;
     if (event.defaultPrevented) {
-      this.checked = oldValue;
       return;
     }
 
-    // Toggle inderminate off after a user action
+    this.checked = newValue;
+
+    // Toggle indeterminate off after a user action
     this._indeterminate = false;
     this._adapter.toggleHostAttribute(CHECKBOX_CONSTANTS.attributes.INDETERMINATE, this._indeterminate);
   }

@@ -51,8 +51,8 @@ const classes = {
 
 const selectors = {
   TABLE: '.forge-table',
-  CHECKBOX_INPUT: 'forge-checkbox > input[type=checkbox]:not([forge-ignore])',
-  SELECT_ALL_TEMPLATE_CHECKBOX_INPUT: 'input[type=checkbox]:not([forge-ignore])',
+  CHECKBOX_INPUT: ':is(forge-checkbox,input[type=checkbox]):not([forge-ignore])',
+  SELECT_ALL_TEMPLATE_CHECKBOX_INPUT: ':is(forge-checkbox,input[type=checkbox]):not([forge-ignore])',
   ROW_SELECTED: `.${classes.TABLE_BODY_ROW_SELECTED}`
 };
 
@@ -78,7 +78,8 @@ const attributes = {
   // Internal
   CHECKBOX_TYPE: 'forge-checkbox-type',
   CUSTOM_CELL_TEMPLATE: 'data-cell-template',
-  CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION: 'data-cell-template-stop-propagation'
+  CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION: 'data-cell-template-stop-propagation',
+  SELECT_CHECKBOX: 'forge-table-row-select-checkbox'
 };
 
 const events = {
