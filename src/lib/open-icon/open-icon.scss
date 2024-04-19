@@ -1,27 +1,79 @@
 @use './core' as *;
+@use '../icon';
+
+//
+// Host
+//
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
 
 .forge-open-icon {
   @include tokens;
 }
 
 .forge-open-icon {
-  @include base();
+  @include base;
 }
 
-.icon {
-  @include icon;
+::slotted(forge-icon),
+forge-icon {
+  @include icon.provide-theme((
+    size: #{token(size)}
+  ));
 }
 
-:host {
-  @include host;
-}
+//
+// Open
+//
 
 :host([open]) {
-  .icon {
+  .forge-open-icon {
     @include open;
   }
 }
 
-:host([hidden]) {
-  display: none;
+//
+// Orientation
+//
+
+:host([orientation=horizontal]) {
+  .forge-open-icon {
+    @include override(initial-rotation, -90deg, value);
+    @include override(open-rotation, 90deg, value);
+  }
+}
+
+:host([orientation=vertical-half]) {
+  .forge-open-icon {
+    @include override(open-rotation, -90deg, value);
+    @include override(animation-duration, half-animation-duration);
+  }
+}
+
+:host([orientation=horizontal-half]) {
+  .forge-open-icon {
+    @include override(initial-rotation, -90deg, value);
+    @include override(open-rotation, 0, value);
+    @include override(animation-duration, half-animation-duration);
+  }
+}
+
+//
+// Media
+//
+
+@media prefers-reduced-motion {
+  .forge-open-icon {
+    transition: none;
+  }
 }

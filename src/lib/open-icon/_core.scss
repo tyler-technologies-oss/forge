@@ -1,19 +1,21 @@
 @use './token-utils' as *;
+
 @forward './token-utils';
 
-@mixin host() {
-  line-height: #{token(line-height)};
+@mixin host {
+  display: inline-flex;
 }
 
-@mixin base() {
+@mixin base {
   height: #{token(height)};
   width: #{token(width)};
+
+  color: #{token(color)};
+  rotate: #{token(initial-rotation)};
+
+  transition: rotate #{token(animation-duration)} #{token(animation-timing)};
 }
 
-@mixin icon() {
-  transition: #{token(transition-duration)};
-}
-
-@mixin open() {
-  transform: rotate(180deg);
+@mixin open {
+  rotate: #{token(open-rotation)};
 }

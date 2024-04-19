@@ -2,18 +2,24 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}open-icon`;
 
-const attributes = {
+const observedAttributes = {
   OPEN: 'open',
   ORIENTATION: 'orientation'
 };
 
-const strings = {
-  ORIENTATION_VERTICAL: 'vertical',
-  ORIENTATION_HORIZONTAL: 'horizontal'
+const attributes = {
+  ...observedAttributes
+};
+
+const defaults = {
+  ORIENTATION: 'vertical' as OpenIconOrientation
 };
 
 export const OPEN_ICON_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
-  strings
+  defaults
 };
+
+export type OpenIconOrientation = 'vertical' | 'horizontal' | 'vertical-half' | 'horizontal-half';

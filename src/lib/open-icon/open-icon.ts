@@ -1,9 +1,7 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowRight, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
-import { OpenIconFoundation } from './open-icon-foundation';
-import { OpenIconAdapter } from './open-icon-adapter';
-import { OPEN_ICON_CONSTANTS } from './open-icon-constants';
-import { IconRegistry, IconComponent } from '../icon';
+import { OpenIconOrientation, OPEN_ICON_CONSTANTS } from './open-icon-constants';
+import { IconRegistry, IconComponent, ICON_CONSTANTS } from '../icon';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import template from './open-icon.html';
@@ -11,7 +9,7 @@ import styles from './open-icon.scss';
 
 export interface IOpenIconComponent extends IBaseComponent {
   open: boolean;
-  orientation: string;
+  orientation: OpenIconOrientation;
 }
 
 declare global {
@@ -21,8 +19,6 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-open-icon>` custom element.
- * 
  * @tag forge-open-icon
  */
 @CustomElement({
@@ -31,23 +27,19 @@ declare global {
 })
 export class OpenIconComponent extends BaseComponent implements IOpenIconComponent {
   public static get observedAttributes(): string[] {
-    return [
-      OPEN_ICON_CONSTANTS.attributes.OPEN,
-      OPEN_ICON_CONSTANTS.attributes.ORIENTATION
-    ];
+    return Object.values(OPEN_ICON_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: OpenIconFoundation;
+  private _open = false;
+  private _orientation: OpenIconOrientation = OPEN_ICON_CONSTANTS.defaults.ORIENTATION;
 
   constructor() {
     super();
-    IconRegistry.define([tylIconKeyboardArrowRight, tylIconKeyboardArrowDown]);
+    IconRegistry.define([
+      tylIconKeyboardArrowRight,
+      tylIconKeyboardArrowDown
+    ]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new OpenIconFoundation(new OpenIconAdapter(this));
-  }
-
-  public initializedCallback(): void {
-    this._foundation.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -56,19 +48,30 @@ export class OpenIconComponent extends BaseComponent implements IOpenIconCompone
         this.open = coerceBoolean(newValue);
         break;
       case OPEN_ICON_CONSTANTS.attributes.ORIENTATION:
-        this.orientation = newValue;
+        this.orientation = newValue as OpenIconOrientation;
         break;
     }
   }
 
-  /** Controls the open state of the icon. */
-  @FoundationProperty()
-  public declare open: boolean;
+  public get open(): boolean {
+    return this._open;
+  }
+  public set open(value: boolean) {
+    value = Boolean(value);
+    if (this._open !== value) {
+      this._open = value;
+      this.toggleAttribute(OPEN_ICON_CONSTANTS.attributes.OPEN, value);
+    }
+  }
 
-  /**
-   * Gets/sets the orientation of the icon.
-   * Valid values are 'vertical' (default) or 'horizontal'.
-   */
-  @FoundationProperty()
-  public declare orientation: string;
+  public get orientation(): OpenIconOrientation {
+    return this._orientation;
+  }
+
+  public set orientation(value: OpenIconOrientation) {
+    if (this._orientation !== value) {
+      this._orientation = value;
+      this.setAttribute(OPEN_ICON_CONSTANTS.attributes.ORIENTATION, value);
+    }
+  }
 }

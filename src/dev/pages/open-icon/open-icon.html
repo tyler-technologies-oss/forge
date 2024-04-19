@@ -4,32 +4,20 @@ include('./src/partials/page.ejs', {
     title: 'Open Icon',
     includePath: './pages/open-icon/open-icon.ejs',
     options: [
-      { type: 'switch', label: 'Inline', id: 'inline-switch' },
-      { type: 'switch', label: 'Wrap (inline only)', id: 'wrap-switch', disabled: true },
-      { type: 'switch', label: 'Stretch', id: 'stretch-switch' },
-      { type: 'text-field', label: 'Gap', id: 'gap-input', defaultValue: '16' },
       {
         type: 'select',
-        label: 'Align',
-        id: 'align-select',
-        defaultValue: 'start',
+        label: 'Orientation',
+        id: 'opt-orientation',
+        defaultValue: 'vertical',
         options: [
-          { label: 'Start', value: 'start' },
-          { label: 'Center', value: 'center' },
-          { label: 'End', value: 'end' },
+          { label: 'Vertical (default)', value: 'vertical' },
+          { label: 'Horizontal', value: 'horizontal' },
+          { label: 'Vertical half', value: 'vertical-half' },
+          { label: 'Horizontal half', value: 'horizontal-half' }
         ]
       },
-      {
-        type: 'select',
-        label: 'Justify',
-        id: 'justify-select',
-        defaultValue: 'start',
-        options: [
-          { label: 'Start', value: 'start' },
-          { label: 'Center', value: 'center' },
-          { label: 'End', value: 'end' },
-        ]
-      }
+      { type: 'switch', label: 'Open', id: 'opt-open' },
+      { type: 'switch', label: 'Use custom icon', id: 'opt-use-custom-icon' }
     ]
   }
 })
