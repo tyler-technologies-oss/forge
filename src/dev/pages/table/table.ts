@@ -277,6 +277,7 @@ table.addEventListener('forge-table-filter', ({ detail }) => {
 function getMenuColumnTemplate(rowIndex: number): HTMLElement {
   const button = document.createElement('forge-icon-button');
   button.type = 'button';
+  button.setAttribute('aria-label', `Menu for row ${rowIndex}`);
 
   const icon = document.createElement('forge-icon');
   icon.name = 'more_vert';
@@ -303,6 +304,7 @@ function getMenuColumnTemplate(rowIndex: number): HTMLElement {
 function getExpandRowColumnTemplate(rowIndex: number): ITableTemplateBuilderResult {
   const button = document.createElement('forge-icon-button');
   button.type = 'button';
+  button.setAttribute('aria-label', `Expand row ${rowIndex}`);
 
   const icon = document.createElement('forge-icon');
   icon.name = 'chevron_right';

@@ -44,9 +44,9 @@ export class RadioFoundation implements IRadioFoundation {
   public initialize(): void {
     this._adapter.addHostListener('focus', this._focusListener);
     this._adapter.addHostListener('blur', this._blurListener);
-    this._adapter.addHostListener('click', this._clickListener);
+    this._adapter.addHostListener('click', this._clickListener, { capture: true });
     this._adapter.addHostListener('keydown', this._keydownListener);
-    this._adapter.addHostListener('keyup', this._keyupListener);
+    this._adapter.addHostListener('keyup', this._keyupListener, { capture: true });
     this._adapter.setChecked(this._checked, this._value);
   }
 

@@ -729,7 +729,7 @@ export class TableFoundation implements ITableFoundation {
     evt.stopImmediatePropagation();
 
     // Ignore if the element being clicked is the checkbox element
-    if ((evt.target as HTMLElement).tagName === 'INPUT' && (evt.target as HTMLInputElement).type === 'checkbox') {
+    if ((evt.target as HTMLElement).matches(`[${TABLE_CONSTANTS.attributes.SELECT_CHECKBOX}]`)) {
       return;
     }
 
@@ -751,7 +751,7 @@ export class TableFoundation implements ITableFoundation {
     evt.stopPropagation();
 
     // Ignore if the element being clicked is the checkbox element
-    if ((evt.target as HTMLElement).tagName === 'INPUT' && (evt.target as HTMLInputElement).type === 'checkbox') {
+    if ((evt.target as HTMLElement).matches(`[${TABLE_CONSTANTS.attributes.SELECT_CHECKBOX}]`)) {
       return;
     }
 

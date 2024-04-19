@@ -1,7 +1,221 @@
-@use './mixins';
+@use './core' as *;
+@use './variables';
 
 forge-table {
-  @include mixins.host;
+  @include host;
 }
 
-@include mixins.core-styles;
+.forge-table {
+  @include base;
+
+  &--dense {
+    .forge-table-row {
+      @include row-dense;
+    }
+  }
+
+  &--roomy {
+    .forge-table-row {
+      @include row-roomy;
+    }
+  }
+
+  &--resizable {
+    .forge-table-head__cell {
+      position: relative;
+
+      &:hover {
+        .forge-table__resize-handle {
+          display: block;
+        }
+      }
+    }
+
+    .forge-table__resize-handle {
+      @include resize-handle;
+    }
+
+    .forge-table__resize-handle:hover {
+      @include resize-handle-hover;
+    }
+  }
+
+  &--resizing {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  &--layout-fixed {
+    table-layout: fixed;
+  }
+
+  &--no-wrap-content {
+    &.forge-table--dense {
+      .forge-table-row,
+      .forge-table-cell__container {
+        height: variables.$thead-dense-row-height;
+      }
+    }
+
+    .forge-table-cell__container > .forge-table-cell__container-text {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &--filter-visible {
+    .forge-table-head__row {
+      height: variables.$thead-filter-row-height;
+
+      .forge-table-head__cell {
+        border: none;
+        vertical-align: bottom;
+      }
+    }
+  }
+
+  &-head {
+    &__row {
+      @include head-row;
+
+      &__filter {
+        @include head-filter;
+      }
+    }
+
+    &__cell {
+      @include head-cell;
+
+      &-container {
+        @include head-cell-container;
+      }
+
+      &--sorted-ascending,
+      &--sorted-descending {
+        .forge-table-head__cell-text {
+          @include head-cell-text-sorted;
+        }
+      }
+
+      &__sort-order {
+        &--hidden {
+          display: none;
+        }
+      }
+
+      &--sortable {
+        @include head-cell-sortable(forge-table-head__cell-sort-icon, forge-table-head__cell__sort-order);
+
+        button {
+          @include head-cell-sortable-button;
+        }
+
+        &.forge-table-head__cell--sorted-ascending {
+          .forge-table-head__cell-sort-icon {
+            @include head-cell-sort-icon-ascending;
+          }
+        }
+      }
+
+      &-sort-icon {
+        @include head-cell-sort-icon;
+
+        &--active {
+          @include head-cell-sort-icon-active;
+        }
+      }
+
+      &-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &-row {
+    @include row-base(forge-table-cell, forge-table-cell__select);
+
+    &--expanded {
+      .forge-table-body__cell {
+        border-bottom: none;
+      }
+    }
+
+    &__expandable-content {
+      height: auto !important;
+
+      &:hover {
+        background-color: inherit !important;
+      }
+    }
+  }
+
+  &-body {
+    &__row {
+      @include body-row;
+
+      &--selected {
+        @include body-row-selected;
+      }
+
+      &--clickable {
+        @include body-row-clickable;
+      }
+    }
+
+    &__cell {
+      @include body-row-cell;
+    }
+  }
+
+  &-cell {
+    @include cell-base(forge-table-cell__select);
+
+    &--resizing {
+      position: relative;
+
+      &::before {
+        content: '';
+        @include cell-resizing;
+      }
+    }
+
+    &__select {
+      @include cell-select;
+
+      &-checkbox {
+        &-container {
+          @include cell-checkbox-container;
+        }
+      }
+    }
+
+    &__container {
+      @include cell-container;
+    }
+
+    &--center {
+      @include cell-center;
+    }
+
+    &--right {
+      @include cell-right;
+    }
+  }
+
+  &--fixed {
+    @include fixed;
+
+    .forge-table-head__cell {
+      @include fixed-head-cell;
+    }
+
+    .forge-table-head__row__filter {
+      .forge-table-head__cell {
+        top: variables.$thead-filter-row-height;
+      }
+    }
+  }
+}

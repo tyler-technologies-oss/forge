@@ -6,9 +6,6 @@
 @use '../chips/chip';
 @use '../toast';
 
-@use '../table/mixins' as table-mixins;
-@use '../table/variables' as table-variables;
-
 ///
 /// Provides the CSS custom property definitions for the default Forge dark theme.
 ///
@@ -37,6 +34,4 @@
   @include toast.provide-theme((
     action-color: theme.variable(on-surface-inverse) // Toast action button uses tertiary color in dark theme
   ));
-
-  @include table-mixins.provide-theme(table-variables.$theme-values-dark);
 }

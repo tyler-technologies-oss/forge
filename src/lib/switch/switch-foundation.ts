@@ -39,9 +39,9 @@ export class SwitchFoundation implements ISwitchFoundation {
   constructor(private readonly _adapter: ISwitchAdapter) {}
 
   public initialize(): void {
-    this._adapter.addHostListener('click', this._clickListener);
+    this._adapter.addHostListener('click', this._clickListener, { capture: true });
     this._adapter.addHostListener('keydown', this._keydownListener);
-    this._adapter.addHostListener('keyup', this._keyupListener);
+    this._adapter.addHostListener('keyup', this._keyupListener, { capture: true });
     this._adapter.setIconVisibility(this._icon);
     this._adapter.syncValue(this._submittedValue);
   }
@@ -65,17 +65,19 @@ export class SwitchFoundation implements ISwitchFoundation {
 
     const oldValue = this._on;
     const newValue = !this._on;
-    // Call the public setter to ensure all the update logic is run
-    this.on = newValue;
+    
+    this._on = newValue;
 
-    const event = new Event('change', { cancelable: true });
+    const event = new Event('change', { cancelable: true, bubbles: true });
     const forgeEvent = new CustomEvent(SWITCH_CONSTANTS.events.CHANGE, { detail: newValue, bubbles: true, cancelable: true });
     this._adapter.dispatchHostEvent(event);
     this._adapter.dispatchHostEvent(forgeEvent);
+    this._on = oldValue;
     if (event.defaultPrevented || forgeEvent.defaultPrevented) {
-      this.on = oldValue;
       return;
     }
+
+    this.on = newValue;
   }
 
   private _setOnAttribute(): void {
