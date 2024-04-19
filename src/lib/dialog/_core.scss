@@ -11,7 +11,7 @@
 }
 
 @mixin host-open {
-  display: initial;
+  display: contents;
 }
 
 //
@@ -262,6 +262,8 @@
   @include override(max-height, none, value);
 
   inset: auto;
+
+  display: inline-flex;
 }
 
 @mixin preset-left-sheet-surface {

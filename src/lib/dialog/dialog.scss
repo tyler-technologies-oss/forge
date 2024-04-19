@@ -78,7 +78,7 @@ $can-animate: '[visible]:not([animation-type=none])';
     }
   }
 
-  :host([moveable]:not([fullscreen]):not([preset])) {
+  :host([moveable]:not([fullscreen])) {
     .surface {
       @include surface-moveable;
 
