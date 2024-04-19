@@ -7,7 +7,7 @@
 
 $tokens: (
   // Base
-  background-color: utils.module-val(list-item, background-color, transparent),
+  background: utils.module-val(list-item, background, transparent),
   shape: utils.module-val(list-item, shape, 0),
   padding: utils.module-val(list-item, padding, 0 spacing.variable(medium)),
   margin: utils.module-val(list-item, margin, 0),
@@ -18,17 +18,17 @@ $tokens: (
   gap: utils.module-val(list-item, gap, spacing.variable(xlarge)),
 
   // Supporting text
-  supporting-text-color: utils.module-val(list-item, supporting-text-color, theme.variable(text-medium)),
-  supporting-text-font-size: utils.module-val(list-item, supporting-text-font-size, typography.variable(body2, font-size)),
-  supporting-text-font-weight: utils.module-val(list-item, supporting-text-font-weight, typography.variable(body2, font-weight)),
-  supporting-text-line-height: utils.module-val(list-item, supporting-text-line-height, typography.scale('1500')),
+  text-color: utils.module-val(list-item, text-color, theme.variable(text-medium)),
+  text-font-size: utils.module-val(list-item, text-font-size, typography.variable(body2, font-size)),
+  text-font-weight: utils.module-val(list-item, text-font-weight, typography.variable(body2, font-weight)),
+  text-line-height: utils.module-val(list-item, text-line-height, typography.scale('1500')),
 
   // Selected
   selected-color: utils.module-val(list-item, selected-color, theme.variable(primary)),
   selected-opacity: utils.module-val(list-item, selected-opacity, theme.emphasis(lowest)),
   selected-leading-color: utils.module-ref(list-item, selected-leading-color, selected-color),
   selected-trailing-color: utils.module-ref(list-item, selected-trailing-color, selected-color),
-  selected-supporting-text-color: utils.module-val(list-item, selected-supporting-text-color, theme.variable(text-medium)),
+  selected-text-color: utils.module-val(list-item, selected-text-color, theme.variable(text-medium)),
 
   // Disabled
   disabled-opacity: utils.module-val(list-item, disabled-opacity, theme.emphasis(medium-low)),
