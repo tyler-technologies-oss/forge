@@ -5,6 +5,20 @@
 // Host
 //
 
+$_host-tokens: [
+  navlist-spacing
+  navlist-margin
+  navlist-height
+  navlist-padding
+  navlist-shape
+  navlist-font-size
+  navlist-font-weight
+];
+
+:host {
+  @include tokens($includes: $_host-tokens);
+}
+
 :host {
   display: block;
 }
@@ -14,13 +28,15 @@
 }
 
 :host([navlist]) {
+  margin-block: #{token(navlist-spacing)};
+
   @include list-item.provide-theme((
-    height: 40px,
-    margin: 4px 8px,
-    padding: 0 8px,
-    shape: 4px,
-    supporting-text-font-size: 0.875rem,
-    supporting-text-font-weight: 500
+    height: #{token(navlist-height)},
+    margin: #{token(navlist-margin)},
+    padding: #{token(navlist-padding)},
+    shape: #{token(navlist-shape)},
+    text-font-size: #{token(navlist-font-size)},
+    text-font-weight: #{token(navlist-font-weight)},
   ));
 }
 
@@ -29,7 +45,7 @@
 //
 
 .forge-list {
-  @include tokens;
+  @include tokens($excludes: $_host-tokens);
 }
 
 .forge-list {

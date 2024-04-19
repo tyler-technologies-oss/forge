@@ -136,17 +136,17 @@ a.forge-list-item {
   @include text-container;
 }
 
-// Supporting text slotted elements
+// Text slotted elements
 slot[name=secondary-text],
 slot[name=subtitle],
 slot[name=tertiary-text],
 slot[name=tertiary-title] {
   &::slotted(*) {
-    @include supporting-text;
+    @include text;
   }
 
   :host([selected]) &::slotted(*) {
-    @include supporting-text-selected;
+    @include text-selected;
   }
 }
 
@@ -190,7 +190,7 @@ slot[name=tertiary-title] {
   slot[name=tertiary-text],
   slot[name=tertiary-title] {
     &::slotted(*) {
-      @include supporting-text-wrap;
+      @include text-wrap;
     }
   }
 }
