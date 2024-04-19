@@ -4,7 +4,8 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}open-i
 
 const observedAttributes = {
   OPEN: 'open',
-  ORIENTATION: 'orientation'
+  ORIENTATION: 'orientation',
+  ROTATION: 'rotation'
 };
 
 const attributes = {
@@ -12,7 +13,8 @@ const attributes = {
 };
 
 const defaults = {
-  ORIENTATION: 'vertical' as OpenIconOrientation
+  ORIENTATION: 'vertical' as OpenIconOrientation,
+  ROTATION: 'full' as OpenIconRotation
 };
 
 export const OPEN_ICON_CONSTANTS = {
@@ -23,3 +25,4 @@ export const OPEN_ICON_CONSTANTS = {
 };
 
 export type OpenIconOrientation = 'vertical' | 'horizontal' | 'vertical-half' | 'horizontal-half';
+export type OpenIconRotation = 'full' | 'half';

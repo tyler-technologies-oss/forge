@@ -12,6 +12,9 @@ customIcon.name = 'forge_logo';
 const orientationSelect = document.getElementById('opt-orientation') as ISelectComponent;
 orientationSelect.addEventListener('change', () => openIcon.orientation = orientationSelect.value as OpenIconOrientation);
 
+const rotationSelect = document.getElementById('opt-rotation') as ISelectComponent;
+rotationSelect.addEventListener('change', () => openIcon.rotation = rotationSelect.value);
+
 const openToggle = document.getElementById('opt-open') as ISwitchComponent;
 openToggle.addEventListener('forge-switch-change', () => openIcon.open = !openIcon.open);
 

@@ -11,9 +11,17 @@ include('./src/partials/page.ejs', {
         defaultValue: 'vertical',
         options: [
           { label: 'Vertical (default)', value: 'vertical' },
-          { label: 'Horizontal', value: 'horizontal' },
-          { label: 'Vertical half', value: 'vertical-half' },
-          { label: 'Horizontal half', value: 'horizontal-half' }
+          { label: 'Horizontal', value: 'horizontal' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Rotation',
+        id: 'opt-rotation',
+        defaultValue: 'full',
+        options: [
+          { label: 'Full (default)', value: 'full' },
+          { label: 'Half', value: 'half' }
         ]
       },
       { type: 'switch', label: 'Open', id: 'opt-open' },

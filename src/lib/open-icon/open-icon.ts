@@ -1,6 +1,6 @@
 import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowRight, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
-import { OpenIconOrientation, OPEN_ICON_CONSTANTS } from './open-icon-constants';
+import { OpenIconOrientation, OpenIconRotation, OPEN_ICON_CONSTANTS } from './open-icon-constants';
 import { IconRegistry, IconComponent, ICON_CONSTANTS } from '../icon';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -10,6 +10,7 @@ import styles from './open-icon.scss';
 export interface IOpenIconComponent extends IBaseComponent {
   open: boolean;
   orientation: OpenIconOrientation;
+  rotation: OpenIconRotation;
 }
 
 declare global {
@@ -24,10 +25,12 @@ declare global {
  * @summary Open icons are used to indicate whether a section is open or closed.
  * 
  * @property {boolean} open - Whether the icon is open or closed.
- * @property {OpenIconOrientation} orientation - The orientation of the icon.
+ * @property {OpenIconOrientation} orientation - The orientation of the rotation.
+ * @property {OpenIconRotation} rotation - The rotation amount.
  * 
  * @attribute {boolean} open - Whether the icon is open or closed.
- * @attribute {OpenIconOrientation} orientation - The orientation of the icon.
+ * @attribute {OpenIconOrientation} orientation - The orientation of the rotation.
+ * @attribute {OpenIconRotation} rotation - The rotation amount.
  * 
  * @cssproperty --forge-open-icon-color - The color of the icon.
  * @cssproperty --forge-open-icon-size - The size of the icon.
@@ -55,6 +58,7 @@ export class OpenIconComponent extends BaseComponent implements IOpenIconCompone
 
   private _open = false;
   private _orientation: OpenIconOrientation = OPEN_ICON_CONSTANTS.defaults.ORIENTATION;
+  private _rotation: OpenIconRotation = OPEN_ICON_CONSTANTS.defaults.ROTATION;
 
   constructor() {
     super();
@@ -72,6 +76,9 @@ export class OpenIconComponent extends BaseComponent implements IOpenIconCompone
         break;
       case OPEN_ICON_CONSTANTS.attributes.ORIENTATION:
         this.orientation = newValue as OpenIconOrientation;
+        break;
+      case OPEN_ICON_CONSTANTS.attributes.ROTATION:
+        this.rotation = newValue as OpenIconRotation;
         break;
     }
   }
@@ -95,6 +102,16 @@ export class OpenIconComponent extends BaseComponent implements IOpenIconCompone
     if (this._orientation !== value) {
       this._orientation = value;
       this.setAttribute(OPEN_ICON_CONSTANTS.attributes.ORIENTATION, value);
+    }
+  }
+
+  public get rotation(): OpenIconRotation {
+    return this._rotation;
+  }
+  public set rotation(value: OpenIconRotation) {
+    if (this._rotation !== value) {
+      this._rotation = value;
+      this.setAttribute(OPEN_ICON_CONSTANTS.attributes.ROTATION, value);
     }
   }
 }
