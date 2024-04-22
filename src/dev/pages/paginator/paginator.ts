@@ -6,7 +6,7 @@ const paginator = document.getElementById('forge-paginator-example') as IPaginat
 
 const showPageSizeOptsToggle = document.getElementById('opt-show-page-size-opts') as ISwitchComponent;
 showPageSizeOptsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  paginator.pageSizeOptions = selected ? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS : false;
+  paginator.pageSizeOptions = selected ? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS : [];
 });
 
 const showLabelToggle = document.getElementById('opt-show-label') as ISwitchComponent;
