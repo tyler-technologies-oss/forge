@@ -1,11 +1,83 @@
-@use './mixins';
+@use './core' as *;
+@use '../icon';
 
-@include mixins.core-styles;
+//
+// Host
+//
 
 :host {
-  @include mixins.host;
+  @include host;
 }
 
 :host([hidden]) {
   display: none;
+}
+
+//
+// Base
+//
+
+.forge-open-icon {
+  @include tokens;
+}
+
+.forge-open-icon {
+  @include base;
+}
+
+::slotted(forge-icon),
+forge-icon {
+  @include icon.provide-theme((
+    size: #{token(size)}
+  ));
+}
+
+//
+// Open
+//
+
+:host([open]) {
+  .forge-open-icon {
+    @include open;
+  }
+}
+
+//
+// Orientation
+//
+
+:host([orientation=horizontal]) {
+  .forge-open-icon {
+    @include override(initial-rotation, -90deg, value);
+    @include override(open-rotation, 90deg, value);
+  }
+}
+
+//
+// Rotation
+//
+
+:host([rotation=half]) {
+  .forge-open-icon {
+    @include override(open-rotation, -90deg, value);
+    @include override(animation-duration, half-animation-duration);
+  }
+}
+
+:host([orientation=horizontal][rotation=half]) {
+  .forge-open-icon {
+    @include override(initial-rotation, -90deg, value);
+    @include override(open-rotation, 0, value);
+    @include override(animation-duration, half-animation-duration);
+  }
+}
+
+//
+// Media
+//
+
+@media prefers-reduced-motion {
+  .forge-open-icon {
+    transition: none;
+  }
 }

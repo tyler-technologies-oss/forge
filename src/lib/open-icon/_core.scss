@@ -1,0 +1,21 @@
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline-flex;
+}
+
+@mixin base {
+  height: #{token(height)};
+  width: #{token(width)};
+
+  color: #{token(color)};
+  rotate: #{token(initial-rotation)};
+
+  transition: rotate #{token(animation-duration)} #{token(animation-timing)};
+}
+
+@mixin open {
+  rotate: #{token(open-rotation)};
+}

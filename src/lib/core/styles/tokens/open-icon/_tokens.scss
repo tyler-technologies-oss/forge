@@ -1,0 +1,20 @@
+@use 'sass:map';
+@use '../../utils';
+@use '../../animation';
+@use '../../theme';
+
+$tokens: (
+  color: utils.module-val(open-icon, color, theme.variable(text-high)),
+  size: utils.module-val(open-icon, size, 24px),
+  height: utils.module-ref(open-icon, height, size),
+  width: utils.module-ref(open-icon, width, size),
+  initial-rotation: utils.module-val(open-icon, initial-rotation, 0),
+  open-rotation: utils.module-val(open-icon, open-rotation, 180deg),
+  animation-duration: utils.module-val(open-icon, animation-duration, animation.variable(duration-medium4)),
+  half-animation-duration: utils.module-val(open-icon, half-animation-duration, animation.variable(duration-short4)),
+  animation-timing: utils.module-val(open-icon, animation-timing, animation.variable(easing-standard)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}
