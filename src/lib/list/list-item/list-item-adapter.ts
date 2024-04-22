@@ -137,6 +137,11 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (checkable) {
       const force = typeof value === 'boolean';
       const currentState = checkable.checked;
+
+      // We don't uncheck radio buttons unless we are forcing a value from the selection state
+      if (!force && checkable.matches(':is(forge-radio[checked],input[type=radio]:checked)')) {
+        return;
+      }
       
       // Check if we are just toggling or forcing to a specific checked state
       checkable.checked = force ? value as boolean : !checkable.checked;

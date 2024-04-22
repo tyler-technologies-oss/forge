@@ -1,3 +1,31 @@
+# v2.22.1 (Mon Apr 01 2024)
+
+#### 🐛 Bug Fix
+
+- fix(list-item): fixed a bug where clicking list items would uncheck slotted radio buttons [#516](https://github.com/tyler-technologies-oss/forge/pull/516) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.22.0 (Fri Mar 22 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, null[@kevaltyler](https://github.com/kevaltyler), for all your work!
+
+#### 🚀 Enhancement
+
+- feat:  update `forge-hyperlink` CSS class to use `text-decoration: underline` [#499](https://github.com/tyler-technologies-oss/forge/pull/499) ([@kevaltyler](https://github.com/kevaltyler))
+
+#### Authors: 1
+
+- [@kevaltyler](https://github.com/kevaltyler)
+
+---
+
 # v2.21.3 (Thu Feb 22 2024)
 
 #### 🐛 Bug Fix
