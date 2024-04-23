@@ -3,7 +3,6 @@
   "extends": "../build.json",
   "stylesheets": [
     "./forge-flex.scss",
-    "./forge-grid.scss",
-    "./forge-utils.scss"
+    "./forge-grid.scss"
   ]
 }

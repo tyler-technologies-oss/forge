@@ -142,7 +142,6 @@ export * from './switch';
 export * from './table';
 export * from './tabs';
 export * from './text-field';
-export * from './theme';
 export * from './time-picker';
 export * from './toast';
 export * from './toolbar';

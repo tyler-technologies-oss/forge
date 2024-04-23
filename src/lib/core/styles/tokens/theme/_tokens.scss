@@ -16,18 +16,6 @@ $tokens: utils.flatten(
   text.$tokens,
   status.$tokens,
   utilities.$tokens,
-  (
-    // Temporary Forge-specific compatibility tokens (TODO: remove this when form field & popup are refactored)
-    border-color: utils.variable-ref(theme, outline),
-    elevated-surface: utils.variable-ref(theme, surface-bright),
-    on-elevated-surface: utils.variable-ref(theme, on-surface),
-    popup-elevation: utils.variable-ref(theme, surface-bright-shadow),
-    form-field-label-on-background: theme-utils.emphasized(map.get(text.$tokens, text-high), 65%),
-    form-field-icon-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens, text-high), 26%),
-    form-field-text-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens, text-high), 60%),
-    form-field-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens, text-high), 4%),
-    label-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens, text-high), 38%)
-  )
 );
 
 
@@ -38,39 +26,5 @@ $tokens-dark: utils.flatten(
   surface.$tokens-dark,
   text.$tokens-dark,
   status.$tokens-dark,
-  utilities.$tokens-dark,
-  (
-    // Temporary Forge-specific compatibility tokens (TODO: remove this when form field is refactored)
-    form-field-label-on-background: theme-utils.emphasized(map.get(text.$tokens-dark, text-high), 65%),
-    form-field-icon-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens-dark, text-high), 26%),
-    form-field-text-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens-dark, text-high), 60%),
-    form-field-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens-dark, text-high), 4%),
-    label-disabled-on-background: theme-utils.emphasized(map.get(text.$tokens-dark, text-high), 38%)
-  )
-);
-
-///
-/// Temporary tokens to map the MDC theme to the Forge theme.
-///
-/// TODO: Remove this once MDC dependency is removed
-/// 
-$mdc-remap: (
-  primary: utils.variable-ref(theme, primary),
-  on-primary: utils.variable-ref(theme, on-primary),
-  secondary: utils.variable-ref(theme, secondary),
-  on-secondary: utils.variable-ref(theme, on-secondary),
-  background: utils.variable-ref(theme, surface-dim),
-  surface: utils.variable-ref(theme, surface),
-  on-surface: utils.variable-ref(theme, on-surface),
-  error: utils.variable-ref(theme, error),
-  on-error: utils.variable-ref(theme, on-error),
-  text-primary-on-background: utils.variable-ref(theme, text-high),
-  text-secondary-on-background: utils.variable-ref(theme, text-medium),
-  text-disabled-on-background: utils.variable-ref(theme, text-lowest),
-  text-hint-on-background: utils.variable-ref(theme, text-low),
-  text-icon-on-background: utils.variable-ref(theme, text-medium),
-  text-primary-on-light: utils.variable-ref(theme, text-high),
-  text-secondary-on-light: utils.variable-ref(theme, text-medium),
-  text-disabled-on-light: utils.variable-ref(theme, text-low),
-  text-primary-on-dark: utils.variable-ref(theme, text-high-inverse),
+  utilities.$tokens-dark
 );

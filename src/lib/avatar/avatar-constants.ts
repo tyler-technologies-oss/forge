@@ -1,5 +1,4 @@
 import { COMPONENT_NAME_PREFIX } from '../constants';
-import { COLOR_CONSTANTS } from '../theme';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}avatar`;
 
@@ -19,7 +18,6 @@ const selectors = {
 };
 
 const strings = {
-  DEFAULT_COLOR: COLOR_CONSTANTS.themeColors.tertiary,
   BACKGROUND_VARNAME: '--forge-avatar-background'
 };
 

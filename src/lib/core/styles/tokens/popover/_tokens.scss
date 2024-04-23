@@ -17,7 +17,7 @@ $tokens: (
   max-height: utils.module-val(popover, max-height, none),
   background: utils.module-val(popover, background, theme.variable(surface-bright)),
   border-radius: utils.module-val(popover, border-radius, shape.variable(medium)),
-  box-shadow: utils.module-val(popover, box-shadow, theme.variable(popup-elevation)),
+  box-shadow: utils.module-val(popover, box-shadow, theme.variable(surface-bright-shadow)),
   border-width: utils.module-val(popover, border-width, 0),
   border-style: utils.module-val(popover, border-style, solid),
   border-color: utils.module-val(popover, border-color, theme.variable(outline)),
