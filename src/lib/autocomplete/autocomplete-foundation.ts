@@ -301,11 +301,6 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
 
   private _onKeydown(evt: KeyboardEvent): void {
     switch (evt.key) {
-      case 'Tab':
-        if (this._isDropdownOpen && !this._multiple) {
-          this._selectActiveOption(false);
-        }
-        break;
       case 'Esc':
       case 'Escape':
         if (this._isDropdownOpen) {

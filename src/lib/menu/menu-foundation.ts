@@ -174,7 +174,7 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
     switch (evt.code) {
       case 'Tab':
         if (this._open) {
-          this._selectActiveOption();
+          evt.preventDefault();
         }
         break;
       case 'Escape':

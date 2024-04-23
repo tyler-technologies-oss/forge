@@ -390,13 +390,6 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
     const isFilterableCharacter = evt.keyCode >= 48 && evt.keyCode <= 90;
     const isHomeKey = evt.key === 'Home' || evt.keyCode === 36;
     const isEndKey = evt.key === 'End' || evt.keyCode === 35;
-    const isTabKey = evt.key === 'Tab';
-
-    // We automatically select the active option if the dropdown is open and in single selection mode
-    if (isTabKey && this._open && !this._multiple) {
-      this._selectActiveOption();
-      return;
-    }
 
     // If an active filter was started, clear it now
     if (!isFilterableCharacter && this._filterTimeout) {

@@ -1019,7 +1019,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(keydownSpy).not.toHaveBeenCalled();
     });
 
-    it ('should select the active date when tab key is pressed when open', function(this: ITestContext) {
+    it ('should not select the active date when tab key is pressed when open', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.valueMode = 'object';
       openPopup(this.context.component);
@@ -1028,7 +1028,7 @@ describe('DatePickerComponent', function(this: ITestContext) {
       getInputElement(this.context.component).dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
 
       const value = this.context.component.value as Date;
-      expect(isSameDate(value, new Date())).toBeTrue();
+      expect(this.context.component.value).toBeNull();
     });
 
     it('should set min date when open', function(this: ITestContext) {

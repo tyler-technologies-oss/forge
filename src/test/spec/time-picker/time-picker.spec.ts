@@ -638,7 +638,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     expect(activeListItemIndex).toBe(this.context.foundation['_dropdownConfig'].visibleStartIndex);
   });
 
-  it('should select highlighted time in dropdown when tab key is pressed', async function(this: ITestContext) {
+  it('should not select highlighted time in dropdown when tab key is pressed', async function(this: ITestContext) {
     this.context = _createTimePickerContext();
     this.context.component.open = true;
 
@@ -650,7 +650,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     await timer(POPOVER_ANIMATION_DURATION);
 
-    expect(this.context.component.value).not.toBeNull();
+    expect(this.context.component.value).toBeNull();
   });
 
   it('should select matching value in dropdown when opened when startTime is set', async function(this: ITestContext) {

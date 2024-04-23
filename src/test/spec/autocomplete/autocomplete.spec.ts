@@ -642,7 +642,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       expect(this.context.input.value).toBe('');
     });
 
-    it('should select active option if input is blurred via tab key', async function(this: ITestContext) {
+    it('should not select active option if input is blurred via tab key', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       const changeSpy = jasmine.createSpy('change event');
       this.context.component.filter = () => DEFAULT_FILTER_OPTIONS;
@@ -655,10 +655,9 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       this.context.input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
 
-      expect(changeSpy).toHaveBeenCalledTimes(1);
-      expect(changeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: DEFAULT_FILTER_OPTIONS[0].value }));
-      expect(this.context.component.value).toBe(DEFAULT_FILTER_OPTIONS[0].value);
-      expect(this.context.input.value).toBe(DEFAULT_FILTER_OPTIONS[0].label);
+      expect(changeSpy).not.toHaveBeenCalled();
+      expect(this.context.component.value).toBeNull();
+      expect(this.context.input.value).toBe('');
     });
 
     it('should not select active option if input is blurred in multiple mode', async function(this: ITestContext) {

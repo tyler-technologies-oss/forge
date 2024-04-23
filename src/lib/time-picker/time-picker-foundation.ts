@@ -173,11 +173,6 @@ export class TimePickerFoundation implements ITimePickerFoundation {
     }
 
     switch (evt.code) {
-      case 'Tab':
-        if (this._open) {
-          this._selectActiveOption();
-        }
-        break;
       case 'Esc':
       case 'Escape':
         if (this._open) {
