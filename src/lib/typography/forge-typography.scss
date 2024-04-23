@@ -1,8 +1,5 @@
 @use '../core/styles/typography';
 
-// TODO: remove when Forge has been fully converted to use the 3.0 typography system
-@use './forge-typography-legacy';
-
 // Apply base typography styles to the body element by default
 body {
   @include typography.base;

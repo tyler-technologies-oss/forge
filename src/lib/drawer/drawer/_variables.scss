@@ -1,7 +1,8 @@
-@use '@material/drawer/variables' as mdc-drawer-variables;
+@use '../../core/styles/border';
+@use '../../core/styles/animation';
 
-$border-width: 1px !default;
-$width: mdc-drawer-variables.$width !default;
+$border-width: #{border.variable(thin)} !default;
+$width: 256px !default;
 $mini-width: 56px !default;
-$mini-transition-delay: 300ms !default;
-$transition-duration: 300ms !default;
+$mini-transition-delay: #{animation.variable(duration-medium2)} !default;
+$transition-duration: #{animation.variable(duration-medium2)} !default;

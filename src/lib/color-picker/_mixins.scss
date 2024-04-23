@@ -1,9 +1,6 @@
-@use '@material/animation/animation' as mdc-animation;
-@use '@material/typography/typography' as mdc-typography;
-@use '@material/theme/theme' as mdc-theme;
-@use '../theme';
-@use '../theme/theme-values';
-@use './variables';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+@use '../core/styles/animation';
 
 @mixin styles() {
   * {
@@ -90,18 +87,17 @@
       flex: 1;
 
       label {
-        @include mdc-typography.typography(caption);
-        @include mdc-theme.property(color, text-secondary-on-light);
+        @include typography.style(label2);
+        color: #{theme.variable(text-medium)};
       }
 
       input {
-        @include mdc-typography.typography(caption);
+        @include typography.style(label2);
 
         &[type=number],
         &[type=text] {
-          @include mdc-theme.property(color, on-surface);
-          @include theme.property(border-color, border-color);
-
+          border-color: #{theme.variable(outline)};
+          color: #{theme.variable(on-surface)};
           background-color: transparent;
           padding: 4px 8px;
           border-width: 1px;
@@ -109,18 +105,17 @@
           border-radius: 4px;
           box-sizing: border-box;
           outline: none;
-          transition: mdc-animation.enter(box-shadow, 200ms),
-                      mdc-animation.enter(border-color, 200ms);
+          transition-property: box-shadow, border-colo;
+          transition-duration: #{animation.variable(duration-short4)};
+          transition-timing-function: #{animation.variable(easing-standard)};
 
           &:hover {
-            @include mdc-theme.property(border-color, text-primary-on-background);
+            border-color: #{theme.variable(text-high)};
           }
 
           &:focus {
-            @include mdc-theme.property(border-color, primary);
-
-            box-shadow: 0 0 0 1px inset theme-values.$primary;
-            box-shadow: 0 0 0 1px inset var(--mdc-theme-primary, theme-values.$primary);
+            border-color: #{theme.variable(primary)};
+            box-shadow: 0 0 0 1px inset #{theme.variable(primary)};
           }
         }
 
@@ -185,8 +180,7 @@
 }
 
 @mixin base() {
-  @include theme.css-custom-property(width, --forge-color-picker-width, variables.$width);
-
+  width: var(--forge-color-picker-width, 272px);
   position: relative;
   display: inline-block;
   overflow: hidden;
