@@ -1,6 +1,6 @@
 import { coerceNumber, ICustomElementFoundation, isArray, isDefined } from '@tylertech/forge-core';
 import { IPaginatorAdapter, PaginatorFieldIdentifier } from './paginator-adapter';
-import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, PaginatorRangeLabelBuilder, IPaginatorRangeState } from './paginator-constants';
+import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder, IPaginatorRangeState } from './paginator-constants';
 import { ISelectOption } from '../select';
 
 export interface IPaginatorFoundation extends ICustomElementFoundation {
@@ -8,8 +8,12 @@ export interface IPaginatorFoundation extends ICustomElementFoundation {
   pageSize: number;
   offset: number;
   total: number;
-  pageSizeOptions: number[] | boolean;
-  pageSizeLabel: string;
+  pageSizeOptions: number[];
+  label: string;
+  firstLast: boolean;
+  first: boolean;
+  disabled: boolean;
+  alternative: boolean;
   rangeLabelCallback: PaginatorRangeLabelBuilder;
   focus(options?: FocusOptions): void;
 }
@@ -24,23 +28,16 @@ export class PaginatorFoundation {
   private _firstLast = false;
   private _first = false;
   private _disabled = false;
-  private _alternative: boolean;
-  private _alignment: PaginatorAlternativeAlignment = 'space-between';
+  private _alternative = false;
   private _rangeLabelCallback: PaginatorRangeLabelBuilder;
 
-  private _firstPageListener: (evt: Event) => void;
-  private _previousPageListener: (evt: Event) => void;
-  private _nextPageListener: (evt: Event) => void;
-  private _lastPageListener: (evt: Event) => void;
-  private _pageSizeListener: (evt: Event) => void;
+  private _firstPageListener: EventListener = this._onFirstPage.bind(this);
+  private _previousPageListener: EventListener = this._onPreviousPage.bind(this);
+  private _nextPageListener: EventListener = this._onNextPage.bind(this);
+  private _lastPageListener: EventListener = this._onLastPage.bind(this);
+  private _pageSizeListener: EventListener = this._onPageSizeChanged.bind(this);
 
-  constructor(private _adapter: IPaginatorAdapter) {
-    this._pageSizeListener = (evt: CustomEvent<number>) => this._onPageSizeChanged(evt);
-    this._firstPageListener = (evt: Event) => this._onFirstPage(evt);
-    this._previousPageListener = (evt: Event) => this._onPreviousPage(evt);
-    this._nextPageListener = (evt: Event) => this._onNextPage(evt);
-    this._lastPageListener = (evt: Event) => this._onLastPage(evt);
-  }
+  constructor(private _adapter: IPaginatorAdapter) {}
 
   public initialize(): void {
     this._updateRangeLabel();
@@ -50,10 +47,6 @@ export class PaginatorFoundation {
     this._attachListeners();
     this._toggleFirstLastButtons();
     this._syncInteractionState();
-  }
-
-  public disconnect(): void {
-    this._detachListeners();
   }
 
   public focus(options?: FocusOptions): void {
@@ -68,23 +61,16 @@ export class PaginatorFoundation {
     this._adapter.attachLastPageListener(this._lastPageListener);
   }
 
-  private _detachListeners(): void {
-    this._adapter.detachPageSizeChangeListener(this._pageSizeListener);
-    this._adapter.detachFirstPageListener(this._firstPageListener);
-    this._adapter.detachPreviousPageListener(this._previousPageListener);
-    this._adapter.detachNextPageListener(this._nextPageListener);
-    this._adapter.detachLastPageListener(this._lastPageListener);
-  }
-
   private _onFirstPage(evt: Event): void {
     evt.stopPropagation();
 
+    /* c8 ignore next 3 */
     if (!this._hasFirstPage()) {
       return;
     }
 
     const firstPage = 0;
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.FIRST_PAGE, { pageIndex: firstPage });
+    const canPage = this._dispatchChangeEvent('first-page', { pageIndex: firstPage });
     if (canPage) {
       this._applyPageIndex(firstPage);
     }
@@ -93,12 +79,13 @@ export class PaginatorFoundation {
   private _onPreviousPage(evt: Event): void {
     evt.stopPropagation();
 
+    /* c8 ignore next 3 */
     if (!this._hasPreviousPage()) {
       return;
     }
     
     const prevPage = this._pageIndex - 1;
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PREVIOUS_PAGE, { pageIndex: prevPage });
+    const canPage = this._dispatchChangeEvent('previous-page', { pageIndex: prevPage });
     if (canPage) {
       this._applyPageIndex(prevPage);
     }
@@ -107,12 +94,13 @@ export class PaginatorFoundation {
   private _onNextPage(evt: Event): void {
     evt.stopPropagation();
 
+    /* c8 ignore next 3 */
     if (!this._hasNextPage()) {
       return;
     }
 
     const nextPage = this._pageIndex + 1;
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.NEXT_PAGE, { pageIndex: nextPage });
+    const canPage = this._dispatchChangeEvent('next-page', { pageIndex: nextPage });
     if (canPage) {
       this._applyPageIndex(nextPage);
     }
@@ -121,12 +109,13 @@ export class PaginatorFoundation {
   private _onLastPage(evt: Event): void {
     evt.stopPropagation();
 
+    /* c8 ignore next 3 */
     if (!this._hasLastPage()) {
       return;
     }
 
     const lastPage = this._getMaxPages();
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.LAST_PAGE, { pageIndex: lastPage });
+    const canPage = this._dispatchChangeEvent('last-page', { pageIndex: lastPage });
     if (canPage) {
       this._applyPageIndex(lastPage);
     }
@@ -136,7 +125,7 @@ export class PaginatorFoundation {
     evt.stopPropagation();
 
     const pageSize = Number(evt.detail);
-    const canPage = this._emitChangeEvent(PAGINATOR_CONSTANTS.strings.PAGE_SIZE, { pageIndex: 0, pageSize });
+    const canPage = this._dispatchChangeEvent('page-size', { pageIndex: 0, pageSize });
     if (canPage) {
       this._applyPageIndex(0);
       this._applyPageSize(pageSize);
@@ -145,10 +134,12 @@ export class PaginatorFoundation {
     }
   }
 
-  private _emitChangeEvent(type: string, { pageSize = this._pageSize, pageIndex = this._pageIndex } = {}): boolean {
+  private _dispatchChangeEvent(type: IPaginatorChangeEventData['type'], { pageSize = this._pageSize, pageIndex = this._pageIndex } = {}): boolean {
     const offset = pageIndex * pageSize;
-    const detail: IPaginatorChangeEvent = { type, pageSize, pageIndex, offset };
-    return this._adapter.emitHostEvent(PAGINATOR_CONSTANTS.events.CHANGE, detail, true, true);
+    const detail: IPaginatorChangeEventData = { type, pageSize, pageIndex, offset };
+    const event = new CustomEvent(PAGINATOR_CONSTANTS.events.CHANGE, { detail, bubbles: true, cancelable: true });
+    this._adapter.dispatchHostEvent(event);
+    return !event.defaultPrevented;
   }
 
   private _getMaxPages(): number {
@@ -184,10 +175,10 @@ export class PaginatorFoundation {
   }
 
   private _syncInteractionState(): void {
-    this._adapter.enableFirstPageButton();
-    this._adapter.enablePreviousPageButton();
-    this._adapter.enableNextPageButton();
-    this._adapter.enableLastPageButton();
+    this._adapter.setFirstPageButtonEnabled(true);
+    this._adapter.setPreviousPageButtonEnabled(true);
+    this._adapter.setNextPageButtonEnabled(true);
+    this._adapter.setLastPageButtonEnabled(true);
 
     const fieldsToDisable: PaginatorFieldIdentifier[] = [];
 
@@ -295,21 +286,16 @@ export class PaginatorFoundation {
     this._syncInteractionState();
   }
 
-  private _applyAlternativeAlignment(): void {
-    this._adapter.setHostAttribute(PAGINATOR_CONSTANTS.attributes.ALIGNMENT, this._alignment);
-    this._adapter.setAlignment(this._alignment);
-  }
-
   private _applyDisabled(disabled: boolean): void {
     this._disabled = disabled;
     if (disabled) {
-      this._adapter.disablePageSizeSelect();
-      this._adapter.disableFirstPageButton();
-      this._adapter.disablePreviousPageButton();
-      this._adapter.disableNextPageButton();
-      this._adapter.disableLastPageButton();
+      this._adapter.setPageSizeSelectEnabled(false);
+      this._adapter.setFirstPageButtonEnabled(false);
+      this._adapter.setPreviousPageButtonEnabled(false);
+      this._adapter.setNextPageButtonEnabled(false);
+      this._adapter.setLastPageButtonEnabled(false);
     } else {
-      this._adapter.enablePageSizeSelect();
+      this._adapter.setPageSizeSelectEnabled(true);
       this._syncInteractionState();
     }
   }
@@ -357,11 +343,11 @@ export class PaginatorFoundation {
     }
   }
 
-  public get pageSizeOptions(): number[] | boolean {
+  public get pageSizeOptions(): number[] {
     return this._pageSizeOptions.map(o => Number(o.value));
   }
-  public set pageSizeOptions(options: number[] | boolean) {
-    if (isArray(options)) {
+  public set pageSizeOptions(options: number[]) {
+    if (isArray(options) && options.length) {
       this._pageSizeOptions = (options as number[])
         .map(o => ({ label: o.toString(), value: o.toString() }))
         .sort((a, b) => coerceNumber(a.value) - coerceNumber(b.value));
@@ -372,7 +358,7 @@ export class PaginatorFoundation {
         const pageSize = coerceNumber(this._pageSizeOptions[0].value);
         this._applyPageSize(pageSize);
       }
-    } else if (options.toString().toLowerCase() === 'false') {
+    } else if (!options?.length) {
       this._adapter.detachPageSizeChangeListener(this._pageSizeListener);
       this._adapter.setPageSizeVisibility(false);
     }
@@ -385,7 +371,12 @@ export class PaginatorFoundation {
     if (this._label !== value) {
       this._label = value;
       this._adapter.setLabel(this._label);
-      this._adapter.setHostAttribute(PAGINATOR_CONSTANTS.attributes.LABEL, isDefined(this._label) ? this._label.toString() : '');
+      const hasLabelAttr = isDefined(this._label) && this._label.length;
+      if (hasLabelAttr) {
+        this._adapter.setHostAttribute(PAGINATOR_CONSTANTS.attributes.LABEL, String(this._label));
+      } else {
+        this._adapter.removeHostAttribute(PAGINATOR_CONSTANTS.attributes.LABEL);
+      }
     }
   }
 
@@ -428,21 +419,10 @@ export class PaginatorFoundation {
     return this._alternative;
   }
   public set alternative(value: boolean) {
+    value = Boolean(value);
     if (value !== this._alternative) {
       this._alternative = value;
-      this._adapter.setAlternative(this._alternative);
-      this._applyAlternativeAlignment();
       this._adapter.toggleHostAttribute(PAGINATOR_CONSTANTS.attributes.ALTERNATIVE, this._alternative);
-    }
-  }
-
-  public get alignment(): PaginatorAlternativeAlignment {
-    return this._alignment;
-  }
-  public set alignment(value: PaginatorAlternativeAlignment) {
-    if (value !== this._alignment) {
-      this._alignment = value;
-      this._applyAlternativeAlignment();
     }
   }
 

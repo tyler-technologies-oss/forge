@@ -1,32 +1,49 @@
 <template>
   <div class="forge-paginator" part="root">
-    <div class="forge-paginator__container" part="container">
-      <div class="forge-paginator__label" part="label"></div>
+    <div class="container" part="container">
+      <div class="label" part="label" id="label">
+        <slot name="label"></slot>
+      </div>
       
-      <forge-select class="forge-paginator__page-size-options" aria-label="Choose page size" label-position="none" density="extra-small" part="page-size-options"></forge-select>
+      <forge-select class="page-size-options" aria-labelledby="label" label-position="none" density="extra-small" part="page-size-options"></forge-select>
 
-      <div class="forge-paginator__range-label" part="range-label"></div>
+      <div class="range-label" part="range-label">
+        <slot name="range-label"></slot>
+      </div>
+    </div>
 
-      <forge-icon-button class="forge-paginator__first-page" part="first-page-button" part="first-page-button-element">
+    <div class="actions" part="actions">
+      <forge-icon-button class="first-page" part="first-page-button" part="first-page-button-element">
         <forge-icon name="first_page" part="first-page-icon"></forge-icon>
       </forge-icon-button>
-      <forge-tooltip type="label" placement="top">Go to the first page</forge-tooltip>
+      <forge-tooltip type="label" placement="top">
+        <slot name="first-page-tooltip">Go to the first page</slot>
+      </forge-tooltip>
 
-      <forge-icon-button class="forge-paginator__previous-page" part="previous-page-button" part="previous-page-button-element">
+      <forge-icon-button class="previous-page" part="previous-page-button" part="previous-page-button-element">
         <forge-icon name="keyboard_arrow_left" part="previous-page-button-icon"></forge-icon>
       </forge-icon-button>
-      <forge-tooltip type="label" placement="top">Go to the previous page</forge-tooltip>
+      <forge-tooltip type="label" placement="top">
+        <slot name="previous-page-tooltip">Go to the previous page</slot>
+      </forge-tooltip>
 
-      <div class="forge-paginator__range-label--alternative" part="range-label-alternative"></div>
-      <forge-icon-button class="forge-paginator__next-page" part="next-page-button" part="next-page-button-element">
+      <div class="alternative-range-label" part="alternative-range-label">
+        <slot name="alternative-range-label"></slot>
+      </div>
+
+      <forge-icon-button class="next-page" part="next-page-button" part="next-page-button-element">
         <forge-icon name="keyboard_arrow_right" part="next-page-icon"></forge-icon>
       </forge-icon-button>
-      <forge-tooltip type="label" placement="top">Go to the next page</forge-tooltip>
+      <forge-tooltip type="label" placement="top">
+        <slot name="next-page-tooltip">Go to the next page</slot>
+      </forge-tooltip>
 
-      <forge-icon-button class="forge-paginator__last-page" part="last-page-button" part="last-page-button-element">
+      <forge-icon-button class="last-page" part="last-page-button" part="last-page-button-element">
         <forge-icon name="last_page" part="last-page-icon"></forge-icon>
       </forge-icon-button>
-      <forge-tooltip type="label" placement="top">Go to the last page</forge-tooltip>
+      <forge-tooltip type="label" placement="top">
+        <slot name="last-page-tooltip">Go to the last page</slot>
+      </forge-tooltip>
     </div>
   </div>
 </template>

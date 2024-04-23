@@ -2,48 +2,32 @@ import { COMPONENT_NAME_PREFIX } from '../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}paginator`;
 
-const classes = {
-  LABEL: 'forge-paginator__label',
-  PAGE_SIZE_OPTIONS: 'forge-paginator__page-size-options',
-  RANGE_LABEL: 'forge-paginator__range-label',
-  RANGE_LABEL_ALTERNATIVE: 'forge-paginator__range-label--alternative',
-  FIRST_PAGE_BUTTON: 'forge-paginator__first-page',
-  PREVIOUS_PAGE_BUTTON: 'forge-paginator__previous-page',
-  NEXT_PAGE_BUTTON: 'forge-paginator__next-page',
-  LAST_PAGE_BUTTON: 'forge-paginator__last-page',
-  ROOT: 'forge-paginator',
-  ALTERNATIVE: 'forge-paginator--alternative',
-  ALIGNMENT_START: 'forge-paginator--alignment-start',
-  ALIGNMENT_SPACE_BETWEEN: 'forge-paginator--alignment-center',
-  ALIGNMENT_END: 'forge-paginator--alignment-end'
-};
-
-const selectors = {
-  LABEL: `.${classes.LABEL}`,
-  PAGE_SIZE_SELECT: `.${classes.PAGE_SIZE_OPTIONS}`,
-  RANGE_LABEL: `.${classes.RANGE_LABEL}`,
-  FIRST_PAGE_BUTTON: `.${classes.FIRST_PAGE_BUTTON}`,
-  FIRST_PAGE_ICON_BUTTON: `.${classes.FIRST_PAGE_BUTTON}`,
-  PREVIOUS_PAGE_BUTTON: `.${classes.PREVIOUS_PAGE_BUTTON}`,
-  NEXT_PAGE_BUTTON: `.${classes.NEXT_PAGE_BUTTON}`,
-  LAST_PAGE_BUTTON: `.${classes.LAST_PAGE_BUTTON}`,
-  LAST_PAGE_ICON_BUTTON: `.${classes.LAST_PAGE_BUTTON}`,
-  ROOT: `.${classes.ROOT}`,
-  RANGE_LABEL_ALTERNATIVE: `.${classes.RANGE_LABEL_ALTERNATIVE}`
-};
-
-const attributes = {
+const observedAttributes = {
   PAGE_INDEX: 'page-index',
   PAGE_SIZE: 'page-size',
   OFFSET: 'offset',
-  PAGE_SIZE_OPTIONS: 'page-size-options',
   TOTAL: 'total',
+  PAGE_SIZE_OPTIONS: 'page-size-options',
   LABEL: 'label',
   FIRST_LAST: 'first-last',
   FIRST: 'first',
   DISABLED: 'disabled',
-  ALTERNATIVE: 'alternative',
-  ALIGNMENT: 'alignment'
+  ALTERNATIVE: 'alternative'
+};
+
+const attributes = {
+  ...observedAttributes
+};
+
+const selectors = {
+  LABEL: '.label > slot[name=label]',
+  PAGE_SIZE_SELECT: '.page-size-options',
+  RANGE_LABEL: '.range-label > slot[name=range-label]',
+  FIRST_PAGE_BUTTON: '.first-page',
+  PREVIOUS_PAGE_BUTTON: '.previous-page',
+  NEXT_PAGE_BUTTON: '.next-page',
+  LAST_PAGE_BUTTON: '.last-page',
+  RANGE_LABEL_ALTERNATIVE: '.alternative-range-label > slot[name=alternative-range-label]'
 };
 
 const events = {
@@ -59,27 +43,21 @@ const numbers = {
 
 const strings = {
   DEFAULT_LABEL: 'Rows per page:',
-  RANGE_SEPARATOR_LABEL: 'of',
-  FIRST_PAGE: 'first-page',
-  PREVIOUS_PAGE: 'previous-page',
-  NEXT_PAGE: 'next-page',
-  LAST_PAGE: 'last-page',
-  PAGE_SIZE: 'page-size'
+  RANGE_SEPARATOR_LABEL: 'of'
 };
 
 export const PAGINATOR_CONSTANTS = {
   elementName,
-  classes,
-  selectors,
+  observedAttributes,
   attributes,
+  selectors,
   events,
   numbers,
   strings
 };
 
-export type PaginatorAlternativeAlignment = 'start' | 'space-between' | 'end';
-export interface IPaginatorChangeEvent {
-  type: string;
+export interface IPaginatorChangeEventData {
+  type: 'previous-page' | 'next-page' | 'first-page' | 'last-page' | 'page-size';
   pageSize: number;
   pageIndex: number;
   offset: number;

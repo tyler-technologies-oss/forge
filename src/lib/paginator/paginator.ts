@@ -1,13 +1,13 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, coerceNumberArray, coerceNumber } from '@tylertech/forge-core';
 import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons/standard';
-import { PaginatorAlternativeAlignment, PAGINATOR_CONSTANTS, IPaginatorChangeEvent, PaginatorRangeLabelBuilder } from './paginator-constants';
+import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder } from './paginator-constants';
 import { PaginatorFoundation } from './paginator-foundation';
 import { PaginatorAdapter } from './paginator-adapter';
-import { IconButtonComponent } from '../icon-button';
-import { SelectComponent } from '../select';
-import { IconComponent, IconRegistry } from '../icon';
+import { IconButtonComponent } from '../icon-button/icon-button';
+import { SelectComponent } from '../select/select';
+import { IconRegistry } from '../icon/icon-registry';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-import { TooltipComponent } from '../tooltip';
+import { TooltipComponent } from '../tooltip/tooltip';
 
 import template from './paginator.html';
 import styles from './paginator.scss';
@@ -17,13 +17,12 @@ export interface IPaginatorComponent extends IBaseComponent {
   pageSize: number;
   offset: number;
   total: number;
-  pageSizeOptions: number[] | boolean;
+  pageSizeOptions: number[];
   label: string;
   firstLast: boolean;
   first: boolean;
   disabled: boolean;
   alternative: boolean;
-  alignment: PaginatorAlternativeAlignment;
   rangeLabelCallback: PaginatorRangeLabelBuilder;
 }
 
@@ -33,7 +32,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-paginator-change': CustomEvent<IPaginatorChangeEvent>;
+    'forge-paginator-change': CustomEvent<IPaginatorChangeEventData>;
   }
 }
 
@@ -45,25 +44,12 @@ declare global {
   dependencies: [
     IconButtonComponent,
     SelectComponent,
-    IconComponent,
     TooltipComponent
   ]
 })
 export class PaginatorComponent extends BaseComponent implements IPaginatorComponent {
   public static get observedAttributes(): string[] {
-    return [
-      PAGINATOR_CONSTANTS.attributes.PAGE_INDEX,
-      PAGINATOR_CONSTANTS.attributes.PAGE_SIZE,
-      PAGINATOR_CONSTANTS.attributes.OFFSET,
-      PAGINATOR_CONSTANTS.attributes.TOTAL,
-      PAGINATOR_CONSTANTS.attributes.PAGE_SIZE_OPTIONS,
-      PAGINATOR_CONSTANTS.attributes.LABEL,
-      PAGINATOR_CONSTANTS.attributes.FIRST_LAST,
-      PAGINATOR_CONSTANTS.attributes.FIRST,
-      PAGINATOR_CONSTANTS.attributes.DISABLED,
-      PAGINATOR_CONSTANTS.attributes.ALTERNATIVE,
-      PAGINATOR_CONSTANTS.attributes.ALIGNMENT
-    ];
+    return Object.values(PAGINATOR_CONSTANTS.observedAttributes);
   }
 
   private _foundation: PaginatorFoundation;
@@ -84,44 +70,37 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
     this._foundation.initialize();
   }
 
-  public disconnectedCallback(): void {
-    this._foundation.disconnect();
-  }
-
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case PAGINATOR_CONSTANTS.attributes.PAGE_INDEX:
-        this.pageIndex = Number(newValue) || PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_INDEX;
+      case PAGINATOR_CONSTANTS.observedAttributes.PAGE_INDEX:
+        this.pageIndex = coerceNumber(newValue) ?? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_INDEX;
         break;
-      case PAGINATOR_CONSTANTS.attributes.PAGE_SIZE:
-        this.pageSize = Number(newValue) || PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE;
+      case PAGINATOR_CONSTANTS.observedAttributes.PAGE_SIZE:
+        this.pageSize = coerceNumber(newValue) ?? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE;
         break;
-      case PAGINATOR_CONSTANTS.attributes.OFFSET:
-        this.offset = Number(newValue);
+      case PAGINATOR_CONSTANTS.observedAttributes.OFFSET:
+        this.offset = coerceNumber(newValue);
         break;
-      case PAGINATOR_CONSTANTS.attributes.TOTAL:
-        this.total = Number(newValue) || PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL;
+      case PAGINATOR_CONSTANTS.observedAttributes.TOTAL:
+        this.total = coerceNumber(newValue) ?? PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL;
         break;
-      case PAGINATOR_CONSTANTS.attributes.PAGE_SIZE_OPTIONS:
-        this.pageSizeOptions = newValue as any;
+      case PAGINATOR_CONSTANTS.observedAttributes.PAGE_SIZE_OPTIONS:
+        this.pageSizeOptions = coerceNumberArray(newValue) ?? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS;
         break;
-      case PAGINATOR_CONSTANTS.attributes.LABEL:
+      case PAGINATOR_CONSTANTS.observedAttributes.LABEL:
         this.label = newValue;
         break;
-      case PAGINATOR_CONSTANTS.attributes.FIRST_LAST:
+      case PAGINATOR_CONSTANTS.observedAttributes.FIRST_LAST:
         this.firstLast = coerceBoolean(newValue);
         break;
-      case PAGINATOR_CONSTANTS.attributes.FIRST:
+      case PAGINATOR_CONSTANTS.observedAttributes.FIRST:
         this.first = coerceBoolean(newValue);
         break;
-      case PAGINATOR_CONSTANTS.attributes.DISABLED:
+      case PAGINATOR_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case PAGINATOR_CONSTANTS.attributes.ALTERNATIVE:
+      case PAGINATOR_CONSTANTS.observedAttributes.ALTERNATIVE:
         this.alternative = coerceBoolean(newValue);
-        break;
-      case PAGINATOR_CONSTANTS.attributes.ALIGNMENT:
-        this.alignment = newValue as PaginatorAlternativeAlignment;
         break;
     }
   }
@@ -144,7 +123,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
 
   /** The set of provided page size options to display to the user. */
   @FoundationProperty()
-  public declare pageSizeOptions: number[] | boolean;
+  public declare pageSizeOptions: number[];
 
   /** A label for the paginator. Default is "Rows per page:". */
   @FoundationProperty()
@@ -164,9 +143,6 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
 
   @FoundationProperty()
   public declare alternative: boolean;
-
-  @FoundationProperty()
-  public declare alignment: PaginatorAlternativeAlignment;
 
   @FoundationProperty()
   public declare rangeLabelCallback: PaginatorRangeLabelBuilder;
