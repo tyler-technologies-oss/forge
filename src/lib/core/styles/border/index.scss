@@ -19,7 +19,7 @@
 /// Example:
 /// ```scss
 /// .my-class {
-///   @include border.style(standard); // => border: var(--forge-border-standard, 1px solid var(--forge-theme-border-color));
+///   @include border.style(standard); // => border: var(--forge-border-standard, 1px solid var(--forge-theme-outline));
 /// }
 /// ```
 /// 
