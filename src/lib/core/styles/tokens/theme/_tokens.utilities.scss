@@ -1,28 +1,18 @@
 @use 'sass:map';
-@use '../../theme/utils' as theme-utils;
-@use './color-emphasis';
-@use './tokens.surface' as surface;
-
-///
-/// Computes the utilities theme colors.
-/// 
-/// @param {Color} $surface-theme - The base surface theme
-/// @return {Map} - The computed utilities theme 
-///
-@function get-utilities-theme($surface-theme) {
-  $surface: map.get($surface-theme, surface);
-  $on-surface: map.get($surface-theme, on-surface);
-
-  @return (
-    outline-high: theme-utils.hexify($on-surface, $surface, color-emphasis.value(highest)),
-    outline-medium: theme-utils.hexify($on-surface, $surface, color-emphasis.value(medium)),
-    outline-low: theme-utils.hexify($on-surface, $surface, color-emphasis.value(medium-low)),
-    outline: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower))
-  );
-}
+@use '../color-palette';
 
 // Light
-$tokens: get-utilities-theme(surface.$tokens);
+$tokens: (
+  outline-high: color-palette.$grey-900,
+  outline-medium: color-palette.$grey-600,
+  outline-low: color-palette.$grey-500,
+  outline: color-palette.$grey-300
+);
 
 // Dark
-$tokens-dark: get-utilities-theme(surface.$tokens-dark);
+$tokens-dark: (
+  outline-high: #e4e4e4,
+  outline-medium: color-palette.$grey-500,
+  outline-low: color-palette.$grey-600,
+  outline: color-palette.$grey-800
+);

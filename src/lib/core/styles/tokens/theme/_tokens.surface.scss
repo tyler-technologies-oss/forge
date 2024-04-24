@@ -1,63 +1,45 @@
 @use 'sass:map';
-@use '../../theme/utils' as theme-utils;
-@use '../../theme/color-utils';
 @use '../../elevation';
-@use './color-emphasis';
 @use '../color-palette';
 
-///
-/// Computes the surface theme colors.
-/// 
-/// @param {Map} $theme - The surface theme map.
-/// @return {Map} - The computed surface theme map
-/// 
-@function get-surface-theme($theme) {
-  $surface: map.get($theme, surface);
-  $on-surface: theme-utils.contrast($surface);
-  $surface-tone: color-utils.tone($surface);
-  $surface-inverse: theme-utils.hexify($on-surface, $surface, color-emphasis.value(inverse));
-
-  $surface-container: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lower));
-  $surface-container-minimum: theme-utils.hexify($on-surface, $surface, color-emphasis.value(minimum));
-  $surface-container-low: theme-utils.hexify($on-surface, $surface, color-emphasis.value(lowest));
-  $surface-container-medium: theme-utils.hexify($on-surface, $surface, color-emphasis.value(if($surface-tone == 'light', low, medium-low)));
-  $surface-container-high: theme-utils.hexify($on-surface, $surface, color-emphasis.value(if($surface-tone == 'light', medium-low, medium)));
-
-  @return (
-    surface: $surface,
-    surface-inverse: $surface-inverse,
-    surface-container: $surface-container,
-    surface-container-minimum: $surface-container-minimum,
-    surface-container-low: $surface-container-low,
-    surface-container-medium: $surface-container-medium,
-    surface-container-high: $surface-container-high,
-    surface-dim: map.get($theme, surface-dim),
-    surface-bright: map.get($theme, surface-bright),
-    surface-bright-shadow: map.get($theme, surface-bright-shadow),
-    on-surface: $on-surface,
-    on-surface-inverse: theme-utils.contrast($surface-inverse),
-    on-surface-container: theme-utils.contrast($surface-container),
-    on-surface-container-minimum: theme-utils.contrast($surface-container-minimum),
-    on-surface-container-low: theme-utils.contrast($surface-container-low),
-    on-surface-container-medium: theme-utils.contrast($surface-container-medium),
-    on-surface-container-high: theme-utils.contrast($surface-container-high)
-  );
-}
-
 // Light
-$tokens: get-surface-theme((
+$tokens: (
   surface: color-palette.$neutral-50,
+  surface-inverse: #333333,
+  surface-container: color-palette.$grey-300,
+  surface-container-minimum: color-palette.$grey-100,
+  surface-container-low: #ebebeb,
+  surface-container-medium: #c2c2c2,
+  surface-container-high: color-palette.$grey-500,
+  surface-dim: color-palette.$grey-50,
   surface-bright: color-palette.$neutral-50,
   surface-bright-shadow: elevation.value(2),
-  surface-dim: color-palette.$grey-50
-));
+  on-surface: color-palette.$black,
+  on-surface-inverse: color-palette.$white,
+  on-surface-container: color-palette.$black,
+  on-surface-container-minimum: color-palette.$black,
+  on-surface-container-low: color-palette.$black,
+  on-surface-container-medium: color-palette.$black,
+  on-surface-container-high: color-palette.$black
+);
 
 // Dark
-$surface-dark: color-palette.$neutral-900;
-$on-surface-dark: theme-utils.contrast($surface-dark);
-$tokens-dark: get-surface-theme((
+$tokens-dark: (
   surface: color-palette.$neutral-900,
-  surface-bright: theme-utils.hexify($on-surface-dark, $surface-dark, color-emphasis.value(minimum)),
+  surface-inverse: #d5d5d5,
+  surface-container: #454545,
+  surface-container-minimum: #343434,
+  surface-container-low: #3d3d3d,
+  surface-container-medium: #7c7c7c,
+  surface-container-high: color-palette.$grey-500,
+  surface-dim: color-palette.$grey-900,
+  surface-bright: color-palette.$neutral-50,
   surface-bright-shadow: elevation.value(16),
-  surface-dim: color-palette.$grey-900
-));
+  on-surface: color-palette.$white,
+  on-surface-inverse: color-palette.$black,
+  on-surface-container: color-palette.$white,
+  on-surface-container-minimum: color-palette.$white,
+  on-surface-container-low: color-palette.$white,
+  on-surface-container-medium: color-palette.$white,
+  on-surface-container-high: color-palette.$black
+);

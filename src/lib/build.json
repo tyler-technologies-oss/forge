@@ -4,6 +4,7 @@
   "stylesheets": [
     "./forge.scss",
     "./forge-dark.scss",
-    "./forge-core.scss"
+    "./forge-core.scss",
+    "./forge-tokens.scss"
   ]
 }

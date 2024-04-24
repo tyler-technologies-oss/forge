@@ -1,49 +1,42 @@
 @use 'sass:map';
 @use 'sass:math';
 @use 'sass:meta';
+@use 'sass:string';
 @use '../utils';
 @use '../core/config';
 @use '../tokens/elevation/tokens';
 
 ///
-/// Generates a `box-shadow` style value for the provided elevation z-value.
+/// Emits custom property declarations for all default theme tokens.
 /// 
-@function _calc-box-shadow($z-value, $color, $opacity-boost) {
-  @if meta.type-of($z-value) != number or not math.is-unitless($z-value) {
-    @error "$z-value must be a unitless number, but received '#{$z-value}'";
+@mixin properties {
+  @each $token-name, $token-value in tokens.$tokens {
+    @include utils.declare-var(elevation, $token-name, $token-value);
   }
-
-  @if $z-value < 0 or $z-value > 24 {
-    @error "$z-value must be between 0 and 24, but received '#{$z-value}'";
-  }
-
-  $umbra-z-value: map.get(tokens.$umbra-map, $z-value);
-  $penumbra-z-value: map.get(tokens.$penumbra-map, $z-value);
-  $ambient-z-value: map.get(tokens.$ambient-map, $z-value);
-
-  $umbra-color: rgba($color, tokens.$umbra-opacity + $opacity-boost);
-  $penumbra-color: rgba($color, tokens.$penumbra-opacity + $opacity-boost);
-  $ambient-color: rgba($color, tokens.$ambient-opacity + $opacity-boost);
-
-  @return (
-    #{'#{$umbra-z-value} #{$umbra-color}'},
-    #{'#{$penumbra-z-value} #{$penumbra-color}'},
-    #{$ambient-z-value} $ambient-color
-  );
 }
+
+///
+/// Emits custom property declarations for all z-index theme tokens.
+/// 
+@mixin z-index-properties {
+  @each $token-name, $token-value in tokens.$z-index-tokens {
+    @include utils.declare-var(z-index, $token-name, $token-value);
+  }
+}
+
 
 ///
 /// Returns a an elevation value specified by the provided elevation z-value.
 /// 
-@function value($z-value, $color: tokens.$baseline-color, $opacity-boost: 0) {
-  @return _calc-box-shadow($z-value, $color, $opacity-boost);
+@function value($level) {
+  @return string.unquote(tokens.get($level));
 }
 
 ///
 /// Sets a `box-shadow` style specified by the provided elevation z-value.
 /// 
-@mixin box-shadow($z-value, $color: tokens.$baseline-color, $opacity-boost: 0) {
-  box-shadow: #{_calc-box-shadow($z-value, $color, $opacity-boost)};
+@mixin box-shadow($level) {
+  box-shadow: #{value($level)};
 }
 
 ///
@@ -52,7 +45,7 @@
 /// All z-index values are set as CSS custom properties, so they can be overridden globally.
 /// 
 @mixin z-index($level) {
-  $value: map.get(tokens.$z-index-map, $level);
+  $value: map.get(tokens.$z-index-tokens, $level);
   z-index: var(--#{config.$prefix}-z-index-#{$level}, #{$value});
 }
 
@@ -62,5 +55,5 @@
 /// @param {Number} $level - The z-index level to return.
 ///
 @function z-index-variable($level) {
-  @return utils.variable(z-index, tokens.$z-index-map, $level);
+  @return utils.variable(z-index, tokens.$z-index-tokens, $level);
 }

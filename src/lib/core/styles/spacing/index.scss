@@ -4,6 +4,15 @@
 @use '../utils';
 
 ///
+/// Emits custom property declarations for all spacing theme tokens.
+/// 
+@mixin properties {
+  @each $token-name, $token-value in tokens.$tokens {
+    @include utils.declare-var(spacing, $token-name, $token-value);
+  }
+}
+
+///
 /// Gets a spacing token value.
 /// 
 @function value($key) {

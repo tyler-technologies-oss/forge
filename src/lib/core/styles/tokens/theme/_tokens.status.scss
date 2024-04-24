@@ -1,44 +1,90 @@
 @use 'sass:map';
-@use '../../utils';
-@use './token-utils';
-@use './tokens.surface' as surface;
 @use '../color-palette';
 
-///
-/// Computes the status theme colors.
-/// 
-/// @param {Map} $colors - The status colors map.
-/// @param {Map} $surface-theme - The base surface theme
-/// @return {Map} - The computed status theme
-///
-@function get-status-theme($colors, $surface-theme) {
-  $surface: map.get($surface-theme, surface);
-
-  $success-theme: token-utils.get-color-theme('success', map.get($colors, success), $surface);
-  $error-theme: token-utils.get-color-theme('error', map.get($colors, error), $surface);
-  $warning-theme: token-utils.get-color-theme('warning', map.get($colors, warning), $surface);
-  $info-theme: token-utils.get-color-theme('info', map.get($colors, info), $surface);
-
-  @return utils.flatten(
-    $success-theme,
-    $error-theme,
-    $warning-theme,
-    $info-theme
-  );
-}
-
 // Light
-$tokens: get-status-theme((
+$tokens: (
   success: color-palette.$green-800,
+  success-container-minimum: #f7faf7,
+  success-container-low: #e6efe6,
+  success-container: #cde0ce,
+  success-container-high: #b0ceb1,
+  on-success: color-palette.$white,
+  on-success-container-minimum: #19441b,
+  on-success-container-low: #19441b,
+  on-success-container: #19441b,
+  on-success-container-high: color-palette.$black,
   error: color-palette.$crimson-900,
+  error-container-minimum: #fcf5f6,
+  error-container-low: #f6e0e4,
+  error-container: #ecc2c9,
+  error-container-high: #e19eaa,
+  on-error: color-palette.$white,
+  on-error-container-minimum: #5f0011,
+  on-error-container-low: #5f0011,
+  on-error-container: #5f0011,
+  on-error-container-high: color-palette.$black,
   warning: color-palette.$burnt-orange-800,
-  info: color-palette.$blue-800
-), surface.$tokens);
+  warning-container-minimum: #fdf8f5,
+  warning-container-low: #f9e9e0,
+  warning-container: #f4d3c2,
+  warning-container-high: #eeba9e,
+  on-warning: color-palette.$white,
+  on-warning-container-minimum: #712700,
+  on-warning-container-low: #712700,
+  on-warning-container: #712700,
+  on-warning-container-high: color-palette.$black,
+  info: color-palette.$blue-800,
+  info-container-minimum: #f6f9fc,
+  info-container-low: #e3edf7,
+  info-container: #c7daf0,
+  info-container-high: #a6c4e7,
+  on-info: color-palette.$white,
+  on-info-container-minimum: #0b3768,
+  on-info-container-low: #0b3768,
+  on-info-container: #0b3768,
+  on-info-container-high: color-palette.$black,
+);
 
 // Dark
-$tokens-dark: get-status-theme((
+$tokens-dark: (
   success: color-palette.$dollar-bill-600,
-  error: color-palette.$ruddy-pink-200,
+  success-container-minimum: #30312e,
+  success-container-low: #373c32,
+  success-container: #424c38,
+  success-container-high: #4e5f40,
+  on-success: color-palette.$black,
+  on-success-container-minimum: #bed5a9,
+  on-success-container-low: #bed5a9,
+  on-success-container: #bed5a9,
+  on-success-container-high: color-palette.$white,
+  error: color-palette.$ruddy-pink-500,
+  error-container-minimum: #342f30,
+  error-container-low: #433639,
+  error-container: #5a4145,
+  error-container-high: #754d54,
+  on-error: color-palette.$black,
+  on-error-container-minimum: #f5bcc6,
+  on-error-container-low: #f5bcc6,
+  on-error-container: #f5bcc6,
+  on-error-container-high: color-palette.$white,
   warning: color-palette.$apricot-200,
+  warning-container-minimum: #34312f,
+  warning-container-low: #443c36,
+  warning-container: #5d4c3f,
+  warning-container-high: #7a5f4a,
+  on-warning: color-palette.$black,
+  on-warning-container-minimum: #fbd5b8,
+  on-warning-container-low: #fbd5b8,
+  on-warning-container: #fbd5b8,
+  on-warning-container-high: color-palette.$white,
   info: color-palette.$blue-800,
-), surface.$tokens-dark);
+  info-container-minimum: #2b2e32,
+  info-container-low: #29333e,
+  info-container: #263a50,
+  info-container-high: #234264,
+  on-info: color-palette.$white,
+  on-info-container-minimum: #81acdd,
+  on-info-container-low: #81acdd,
+  on-info-container: #81acdd,
+  on-info-container-high: color-palette.$white,
+);
