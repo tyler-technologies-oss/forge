@@ -1,0 +1,35 @@
+@use './core/styles/animation';
+@use './core/styles/border';
+@use './core/styles/elevation';
+@use './core/styles/shape';
+@use './core/styles/spacing';
+
+// Animation
+:root {
+  @include animation.properties;
+}
+
+// Border
+:root {
+  @include border.properties;
+}
+
+// Elevation
+:root {
+  @include elevation.properties;
+}
+
+// z-index layering
+:root {
+  @include elevation.z-index-properties;
+}
+
+// Shape
+:root {
+  @include shape.properties;
+}
+
+// Spacing
+:root {
+  @include spacing.properties;
+}

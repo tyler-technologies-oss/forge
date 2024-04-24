@@ -1,11 +1,11 @@
 .clipping-container {
   height: 550px;
-  border: 1px solid var(--forge-theme-border-color);
+  border: 1px solid var(--forge-theme-outline);
   overflow: auto;
 
   &.force-containment {
     transform: translate3d(0, 0, 0);
-    border: 2px dashed var(--mdc-theme-error);
+    border: 2px dashed var(--forge-theme-error);
   }
 
   &.use-small-container {

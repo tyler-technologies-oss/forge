@@ -12,7 +12,7 @@
 /// 
 @mixin properties {
   @each $token-name, $token-value in tokens.$tokens {
-    --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
+    @include utils.declare-var(theme, $token-name, $token-value);
   }
 }
 
@@ -21,7 +21,7 @@
 /// 
 @mixin properties-dark {
   @each $token-name, $token-value in tokens.$tokens-dark {
-    --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
+    @include utils.declare-var(theme, $token-name, $token-value);
   }
 }
 

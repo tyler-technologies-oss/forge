@@ -48,7 +48,7 @@ const colors = {
   },
 
   // Forge-specific
-  '--forge-theme-border-color': {
+  '--forge-theme-outline': {
     value: '#e0e0e0'
   },
   '--forge-theme-danger': {
@@ -125,7 +125,7 @@ const ThemeColorGrid: FC = () => (
               <code className="forge-docs-core__inline-code">{value}</code>
             </td>
             <td className="forge-table-cell forge-table-body__cell">
-              <div style={{ backgroundColor: `var(${theme}, ${value})`, height: '24px', width: '24px', borderRadius: '4px', border: '1px solid var(--forge-theme-border-color)' }}></div>
+              <div style={{ backgroundColor: `var(${theme}, ${value})`, height: '24px', width: '24px', borderRadius: '4px', border: '1px solid var(--forge-theme-outline)' }}></div>
             </td>
           </tr>
         );

@@ -4,6 +4,15 @@
 @use '../utils';
 
 ///
+/// Emits custom property declarations for all shape theme tokens.
+/// 
+@mixin properties {
+  @each $token-name, $token-value in tokens.$tokens {
+    @include utils.declare-var(shape, $token-name, $token-value);
+  }
+}
+
+///
 /// Creates a `border-radius` style using the provided radius token.
 /// 
 @mixin radius($radius) {

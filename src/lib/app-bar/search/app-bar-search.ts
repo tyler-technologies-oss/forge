@@ -45,9 +45,9 @@ declare global {
  * @csspart global-icon - The global icon <forge-icon> element.
  * @csspart actions-container - The action container element around the slot.
  * 
- * @cssproperty --mdc-theme-on-primary - Controls the border-color of the container outline, the font-color, and icon color.
- * @cssproperty --mdc-theme-on-surface - Controls the font color of the buttons.
- * @cssproperty --mdc-theme-text-secondary-on-background - Controls the placeholder font color.
+ * @cssproperty --forge-theme-on-primary - Controls the border-color of the container outline, the font-color, and icon color.
+ * @cssproperty --forge-theme-on-surface - Controls the font color of the buttons.
+ * @cssproperty --forge-theme-text-medium - Controls the placeholder font color.
  * @cssproperty --forge-app-bar-search-theme-background - Controls the background-color of the container.
  * @cssproperty --forge-app-bar-search-theme-background-focused - Controls the focused background-color of the container.
  * @cssproperty --forge-app-bar-search-theme-hover-opacity - Controls the hover opacity of the outline.

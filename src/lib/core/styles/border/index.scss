@@ -5,12 +5,21 @@
 @use '../utils';
 
 ///
+/// Emits custom property declarations for all border theme tokens.
+/// 
+@mixin properties {
+  @each $token-name, $token-value in tokens.$tokens {
+    @include utils.declare-var(border, $token-name, $token-value);
+  }
+}
+
+///
 /// Gets a CSS custom property declaration for a specific border token with its token value as the fallback value.
 /// 
 /// Example:
 /// ```scss
 /// .my-class {
-///   @include border.style(standard); // => border: var(--forge-border-standard, 1px solid var(--forge-theme-border-color));
+///   @include border.style(standard); // => border: var(--forge-border-standard, 1px solid var(--forge-theme-outline));
 /// }
 /// ```
 /// 
