@@ -166,7 +166,7 @@ const events = {
   FOCUS_CHANGE: `${elementName}-focus-change`,
   MONTH_CHANGE: `${elementName}-month-change`,
   VIEW_CHANGE: `${elementName}-view-change`
-};
+} as const;
 
 const numbers = {
   DEFAULT_MAX_YEAR_OFFSET: 50,
