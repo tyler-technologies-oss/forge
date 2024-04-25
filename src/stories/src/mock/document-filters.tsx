@@ -127,9 +127,9 @@ export const DocumentPublished: FC = () => (
   <div style={{padding: '16px'}}>
     <ForgeDateRangePicker>
       <ForgeTextField>
+        <label htmlFor="input-date-range-picker-01">Document published</label>
         <input type="text" id="input-date-range-picker-01" autoComplete="off" placeholder="mm/dd/yyyy" />
         <input type="text" id="input-date-range-picker-02" autoComplete="off" placeholder="mm/dd/yyyy" />
-        <label htmlFor="input-date-range-picker-01">Document published</label>
       </ForgeTextField>
     </ForgeDateRangePicker>
   </div>

@@ -52,9 +52,9 @@ export const Default: Story<IDateRangePickerProps> = ({
       locale={locale}
       style={{ width: '320px' }}>
       <ForgeTextField>
+        <label htmlFor="input-date-range-picker-01">Date</label>
         <input type="text" id="input-date-range-picker-01" autoComplete="off" placeholder="mm/dd/yyyy" />
         <input type="text" id="input-date-range-picker-02" autoComplete="off" placeholder="mm/dd/yyyy" />
-        <label htmlFor="input-date-range-picker-01">Date</label>
       </ForgeTextField>
     </ForgeDateRangePicker>
   );

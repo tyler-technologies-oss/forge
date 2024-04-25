@@ -247,7 +247,6 @@ export class FieldFoundation {
     
     if (this._adapter.hasLabel() && this._density !== 'dense') {
       this._floatingLabel = this._adapter.initializeFloatingLabel();
-      this._adapter.ensureLabelOrder();
       this.floatLabel(this._floatLabelType === 'always' || this._adapter.fieldHasValue() || this._adapter.hasPlaceholder());
       this._adapter.setRootClass(FIELD_CONSTANTS.classes.LABEL);
     } else {
