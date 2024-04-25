@@ -1,3 +1,24 @@
+# v2.23.0 (Thu Apr 25 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Van Do ([@vando94](https://github.com/vando94)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat: added month change event for date-picker and date-range-picker [#543](https://github.com/tyler-technologies-oss/forge/pull/543) ([@vando94](https://github.com/vando94))
+
+#### 🐛 Bug Fix
+
+- fix(text-field): remove legacy `<label>` & `<input>` DOM order manipulation [#544](https://github.com/tyler-technologies-oss/forge/pull/544) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Van Do ([@vando94](https://github.com/vando94))
+
+---
+
 # v2.22.1 (Mon Apr 01 2024)
 
 #### 🐛 Bug Fix
