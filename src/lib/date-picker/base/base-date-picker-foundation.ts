@@ -1,6 +1,6 @@
 import { ICustomElementFoundation, isValidDate, Platform } from '@tylertech/forge-core';
 import { ICalendarComponent, ICalendarDropdownPopupConfig } from '../../calendar';
-import { CalendarMode, DayOfWeek, ICalendarDateSelectEventData } from '../../calendar/calendar-constants';
+import { CALENDAR_CONSTANTS, CalendarMode, DayOfWeek, ICalendarDateSelectEventData, ICalendarMonthChangeEventData } from '../../calendar/calendar-constants';
 import { DateRange } from '../../calendar/core/date-range';
 import { formatDate, parseDateString } from '../../core/utils/date-utils';
 import { DEFAULT_DATE_MASK, IDateInputMaskOptions } from '../../core/mask/date-input-mask';
@@ -69,6 +69,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   private _todayListener: () => void;
   private _clearListener: () => void;
   private _dateSelectListener: (evt: CustomEvent<ICalendarDateSelectEventData>) => void;
+  private _monthChangeListener: (evt: CustomEvent<ICalendarMonthChangeEventData>) => void;
   
   constructor(protected _adapter: TAdapter) {
     this._inputListener = evt => this._onInput(evt);
@@ -79,6 +80,7 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     this._dropdownCloseListener = () => this._onDropdownClose();
     this._toggleMousedownListener = evt => this._onToggleMousedown(evt);
     this._dateSelectListener = evt => this._onDateSelected(evt.detail);
+    this._monthChangeListener = evt => this._onMonthChanged(evt);
     this._activeChangeListener = id => this._onActiveDescendantChanged(id);
     this._todayListener = () => this._onToday();
     this._clearListener = () => this._onClear();
@@ -222,7 +224,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
     }
 
     this._adapter.attachCalendar(calendarConfig, dropdownConfig);
-    this._adapter.addDateSelectListener(this._dateSelectListener);
+    this._adapter.addCalendarListener(CALENDAR_CONSTANTS.events.DATE_SELECT, this._dateSelectListener);
+    this._adapter.addCalendarListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, this._monthChangeListener);
     this._open = true;
     this._adapter.setHostAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.OPEN);
 
@@ -234,7 +237,8 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
   protected _closeCalendar(emitCloseEvent = false): void {
     this._open = false;
     this._adapter.removeHostAttribute(BASE_DATE_PICKER_CONSTANTS.observedAttributes.OPEN);
-    this._adapter.removeDateSelectListener(this._dateSelectListener);
+    this._adapter.removeCalendarListener(CALENDAR_CONSTANTS.events.DATE_SELECT, this._dateSelectListener);
+    this._adapter.removeCalendarListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, this._monthChangeListener);
     this._adapter.detachCalendar();
     if (emitCloseEvent) {
       this._emitCloseEvent();
@@ -373,6 +377,10 @@ export abstract class BaseDatePickerFoundation<TAdapter extends IBaseDatePickerA
 
   private _onDropdownClose(): void {
     this._closeCalendar(true);
+  }
+
+  private _onMonthChanged(event: CustomEvent<ICalendarMonthChangeEventData>): void {
+    this._adapter.redispatchEvent(event);
   }
 
   private _onActiveDescendantChanged(id: string): void {

@@ -18,6 +18,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   getScreenWidth(): number;
   setBodyAttribute(name: string, value: string): void;
   removeBodyAttribute(name: string): void;
+  redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
@@ -85,5 +86,26 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
 
   public get isConnected(): boolean {
     return this._component.isConnected;
+  }
+
+  public redispatchEvent(event: CustomEvent, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean {
+    const isFromLightDom = !((event.target as HTMLElement)?.getRootNode() instanceof ShadowRoot);
+    if (event.bubbles && (event.composed || isFromLightDom)) {
+      event.stopPropagation();
+    }
+    
+    const eventCopy = {
+      ...event,
+      detail: event.detail ?? null,
+      bubbles: options?.bubbles ?? event.bubbles,
+      cancelable: options?.cancelable ?? event.cancelable,
+      composed: options?.composed ?? event.composed
+    };
+    const newEvent = Reflect.construct(event.constructor, [event.type, eventCopy]);
+    const isCancelled = !this._component.dispatchEvent(newEvent);
+    if (isCancelled) {
+      event.preventDefault();
+    }
+    return !isCancelled;
   }
 }

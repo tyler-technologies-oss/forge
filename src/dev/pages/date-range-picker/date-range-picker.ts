@@ -21,6 +21,10 @@ dateRangePicker.addEventListener('forge-date-picker-close', () => {
   console.log('forge-date-picker-close');
 });
 
+dateRangePicker.addEventListener('forge-calendar-month-change', (evt) => {
+  console.log('[forge-calendar-month-change]', evt);
+});
+
 dateRangePicker.addEventListener('forge-date-range-picker-change', evt => {
   console.log('[forge-date-range-picker-change]', evt);
   datePickerChangeStatusElement.textContent = ((evt.detail && evt.detail.from) || 'null') + ' - ' + ((evt.detail && evt.detail.to) || 'null');
