@@ -41,15 +41,6 @@ export class TextFieldAdapter extends FieldAdapter implements ITextFieldAdapter 
     });
   }
 
-  public override ensureLabelOrder(): void {
-    if (this._labelElement) {
-      const children = Array.from(this._component.children);
-      if (children.length > 1 && children.indexOf(this._labelElement) < children.indexOf(this._inputElements[0])) {
-        this._component.appendChild(this._labelElement);
-      }
-    }
-  }
-
   public override addInputListener(type: string, listener: (evt: Event) => void): void {
     this._applyToInputs(input => input.addEventListener(type, listener));
   }

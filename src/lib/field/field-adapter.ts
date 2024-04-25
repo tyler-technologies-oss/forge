@@ -51,7 +51,6 @@ export interface IFieldAdapter extends IBaseAdapter {
   // state actions
   initialize(rootSelector: string): void;
   initializeFloatingLabel(): IFloatingLabel;
-  ensureLabelOrder(): void;
   ensureSlottedLabel(): void;
   destroy(): void;
   setValueChangedListener(context: any, listener: (value: any) => void): void;
@@ -99,15 +98,6 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
 
   public ensureSlottedLabel(): void {
     this._labelElement.slot = 'label';
-  }
-
-  public ensureLabelOrder(): void {
-    if (this._labelElement) {
-      const children = Array.from(this._component.children);
-      if (children.length > 1 && children.indexOf(this._labelElement) < children.indexOf(this._inputElement)) {
-        this._component.appendChild(this._labelElement);
-      }
-    }
   }
 
   public addLabelSlotListener(listener: (evt: Event) => void): void {
