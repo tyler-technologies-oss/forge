@@ -429,46 +429,49 @@ describe('DatePickerComponent', function(this: ITestContext) {
     it('should emit change event when next month button is clicked', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
+      let theEvent: CustomEvent;
+      const monthChangeSpy = jasmine.createSpy('Calendar month change spy', evt => theEvent = evt).and.callThrough();
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, monthChangeSpy);
+
       const calendar = getCalendar(this.context.component);
       const nextButton = getNextMonthButton(calendar);
       const currentMonth = calendar.month;
-
-      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, (evt: CustomEvent<ICalendarMonthChangeEventData>) => {
-        expect(evt.detail).not.toBeNull();
-        expect(evt.detail.month).toBe((currentMonth + 1) % 12);
-      });
       nextButton.click();
+      const month = (currentMonth + 1) % 12;
+      expect(monthChangeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: theEvent!.detail })); 
+      expect(theEvent!.detail.month).toBe(month);
     });
 
     it('should emit change event when previous month button is clicked', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
+      let theEvent: CustomEvent;
+      const monthChangeSpy = jasmine.createSpy('Calendar month change spy', evt => theEvent = evt).and.callThrough();
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, monthChangeSpy);
       
       const calendar = getCalendar(this.context.component);
       const nextButton = getPreviousMonthButton(calendar);
       const currentMonth = calendar.month;
-
-      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, (evt: CustomEvent<ICalendarMonthChangeEventData>) => {
-        expect(evt.detail).not.toBeNull();
-        expect(evt.detail.month).toBe((currentMonth + 12 - 1) % 12);
-      });
       nextButton.click();
+      const month = (currentMonth + 12 - 1) % 12;
+      expect(monthChangeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: theEvent!.detail }));
+      expect(theEvent!.detail.month).toBe(month);
     });
 
     it('should emit change event when month is selected', async function(this: ITestContext) {
       this.context = setupTestContext(true);
       openPopup(this.context.component);
-      
-      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, (evt: CustomEvent<ICalendarMonthChangeEventData>) => {
-        expect(evt.detail).not.toBeNull();
-        expect(evt.detail.userSelected).toBeTrue();
-      });
+      let theEvent: CustomEvent;
+      const monthChangeSpy = jasmine.createSpy('Calendar month change spy', evt => theEvent = evt).and.callThrough();
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, monthChangeSpy);
 
       const calendar = getCalendar(this.context.component);
       const calendarShadowElement = getCalendarShadowElement(calendar);
       (getMonthButton(calendar))?.click();
       const menuShadowRoot = (calendarShadowElement.querySelector(CALENDAR_MENU_CONSTANTS.elementName) as HTMLElement)?.shadowRoot as ShadowRoot;
-      (menuShadowRoot.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();
+      (menuShadowRoot.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();   
+      expect(monthChangeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: theEvent!.detail}));
+      expect(theEvent!.detail.month).toBe(0);
     });
 
     it('should not blur input when clicking element in calendar', async function(this: ITestContext) {
