@@ -4,7 +4,7 @@ import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-form-co
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SliderAdapter } from './slider-adapter';
-import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeEventData } from './slider-constants';
+import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeChangeEventData, ISliderChangeEventData } from './slider-constants';
 import { SliderFoundation } from './slider-foundation';
 
 import template from './slider.html';
@@ -33,8 +33,10 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-slider-input': CustomEvent<number | ISliderRangeEventData>;
-    'forge-slider-change': CustomEvent<number | ISliderRangeEventData>;
+    'forge-slider-input': CustomEvent<ISliderChangeEventData>;
+    'forge-slider-change': CustomEvent<ISliderChangeEventData>;
+    'forge-slider-range-input': CustomEvent<ISliderRangeChangeEventData>;
+    'forge-slider-range-change': CustomEvent<ISliderRangeChangeEventData>;
   }
 }
 

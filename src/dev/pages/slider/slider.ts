@@ -5,11 +5,20 @@ import '@tylertech/forge/slider';
 
 const slider = document.querySelector('#slider') as ISliderComponent;
 
+// Default (single)
 slider.addEventListener('forge-slider-input', evt => {
   console.log('forge-slider-input', evt.detail);
 });
 slider.addEventListener('forge-slider-change', evt => {
   console.log('forge-slider-change', evt.detail);
+});
+
+// Range
+slider.addEventListener('forge-slider-range-input', evt => {
+  console.log('forge-slider-range-input', evt.detail);
+});
+slider.addEventListener('forge-slider-range-change', evt => {
+  console.log('forge-slider-range-change', evt.detail);
 });
 
 const minInput = document.querySelector('#slider-min') as HTMLInputElement;
