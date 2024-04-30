@@ -1,7 +1,7 @@
 import { FormFieldComponentDelegate, IFormFieldComponentDelegateOptions } from '../core';
 import { IBaseComponentDelegateConfig } from '../core/delegates/base-component-delegate';
 import { ISliderComponent } from '../slider';
-import { ISliderRangeEventData, SLIDER_CONSTANTS } from './slider-constants';
+import { ISliderChangeEventData, ISliderRangeChangeEventData, SLIDER_CONSTANTS } from './slider-constants';
 
 export type SliderComponentDelegateProps = Partial<ISliderComponent>;
 export interface ISliderComponentDelegateOptions extends IFormFieldComponentDelegateOptions {}
@@ -86,12 +86,20 @@ export class SliderComponentDelegate extends FormFieldComponentDelegate<ISliderC
     this._element.labelBuilder = value;
   }
 
-  public onInput(listener: (value: number | ISliderRangeEventData) => void): void {
-    this._element.addEventListener('forge-slider-input', ({ detail }: CustomEvent<number | ISliderRangeEventData>) => listener(detail));
+  public onInput(listener: (value: ISliderChangeEventData) => void): void {
+    this._element.addEventListener('forge-slider-input', ({ detail }: CustomEvent<ISliderChangeEventData>) => listener(detail));
   }
 
-  public onChange(listener: (value: number | ISliderRangeEventData) => void): void {
-    this._element.addEventListener('forge-slider-change', ({ detail }: CustomEvent<number | ISliderRangeEventData>) => listener(detail));
+  public onChange(listener: (value: ISliderChangeEventData) => void): void {
+    this._element.addEventListener('forge-slider-change', ({ detail }: CustomEvent<ISliderChangeEventData>) => listener(detail));
+  }
+
+  public onRangeInput(listener: (value: ISliderRangeChangeEventData) => void): void {
+    this._element.addEventListener('forge-slider-range-input', ({ detail }: CustomEvent<ISliderRangeChangeEventData>) => listener(detail));
+  }
+
+  public onRangeChange(listener: (value: ISliderRangeChangeEventData) => void): void {
+    this._element.addEventListener('forge-slider-range-change', ({ detail }: CustomEvent<ISliderRangeChangeEventData>) => listener(detail));
   }
 
   public onFocus(listener: (evt: Event) => void): void {
