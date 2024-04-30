@@ -17,7 +17,8 @@ export class AppBarFoundation implements IAppBarFoundation {
   private _href = '';
   private _target = '';
 
-  private _centerSlotListener = (_evt: Event): void => this._adapter.setCenterSlotVisibility();
+  private _centerSlotListener: EventListener = (): void => this._adapter.setCenterSlotVisibility();
+  private _anchorClickListener: EventListener = this._onHrefClick.bind(this);
 
   constructor(private _adapter: IAppBarAdapter) {}
 
@@ -25,6 +26,14 @@ export class AppBarFoundation implements IAppBarFoundation {
     this._adapter.initialize();
     this._adapter.addCenterSlotListener(this._centerSlotListener);
     this._adapter.setCenterSlotVisibility();
+  }
+
+  private _onHrefClick(evt: Event): void {
+    const event = new CustomEvent(APP_BAR_CONSTANTS.events.NAVIGATE, { bubbles: true, composed: true, cancelable: true });
+    this._adapter.dispatchHostEvent(event);
+    if (event.defaultPrevented) {
+      evt.preventDefault();
+    }
   }
 
   public get titleText(): string {
@@ -64,7 +73,7 @@ export class AppBarFoundation implements IAppBarFoundation {
   public set href(value: string) {
     if (this._href !== value) {
       this._href = value?.trim().length ? value.trim() : '';
-      this._adapter.setHref(this._href);
+      this._adapter.setHref(this._href, this._anchorClickListener);
       this._adapter.toggleHostAttribute(APP_BAR_CONSTANTS.attributes.HREF, !!this._href, this._href);
     }
   }
