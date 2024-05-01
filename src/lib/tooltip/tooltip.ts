@@ -52,7 +52,7 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
  * @property {TooltipPlacement} placement - The placement of the tooltip relative to the anchor element.
  * @property {number} delay - The delay in milliseconds before the tooltip is shown.
  * @property {number} offset - The offset in pixels between the tooltip and the anchor element.
- * @property {OverlayFlipState} - flip - How the tooltip should place itself if there is not enough space at the desired placement.
+ * @property {OverlayFlipState} flip - How the tooltip should place itself if there is not enough space at the desired placement.
  * @property {string | null} boundary - The id of the element that the tooltip should be constrained to.
  * @property {HTMLElement | null} boundaryElement - The element that the tooltip should be constrained to.
  * @property {PositionPlacement[] | null} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.

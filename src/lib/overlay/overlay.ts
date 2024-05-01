@@ -89,6 +89,7 @@ export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements 
   }
 
   /**
+   * @internal
    * Contains all the overlays that are currently open.
    */
   public static readonly [overlayStack]: Set<IOverlayComponent> = new Set();

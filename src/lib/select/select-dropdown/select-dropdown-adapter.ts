@@ -87,17 +87,6 @@ export class SelectDropdownAdapter extends BaseSelectAdapter<ISelectDropdownComp
     this._targetElement = undefined as any;
   }
 
-  public setMultiple(multiple: boolean): void {
-    if (!this._targetElement) {
-      return;
-    }
-    if (multiple) {
-      this._targetElement.setAttribute('aria-multiselectable', 'true');
-    } else {
-      this._targetElement.removeAttribute('aria-multiselectable');
-    }
-  }
-
   public setTargetDisconnectedListener(cb: () => void): () => void {
     if (!this._targetElement || !this._targetElement.parentElement) {
       return () => {};

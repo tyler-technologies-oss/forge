@@ -2,7 +2,7 @@ import '$src/shared';
 import '@tylertech/forge/color-picker';
 import '@tylertech/forge/card';
 import './color-picker.scss';
-import type { IColorPickerComponent } from '@tylertech/forge';
+import { IColorPickerComponent } from '@tylertech/forge/color-picker';
 
 const colorPicker = document.querySelector('forge-color-picker') as IColorPickerComponent;
 

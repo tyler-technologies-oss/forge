@@ -7,8 +7,11 @@ import '@tylertech/forge/autocomplete';
 import '@tylertech/forge/label-value';
 
 // Icons
-import type { AutocompleteFilterCallback, IAutocompleteComponent, IListItemComponent, ISelectComponent } from '@tylertech/forge';
-import { IOption, IOptionGroup, IconRegistry } from '@tylertech/forge';
+import type { AutocompleteFilterCallback, IAutocompleteComponent } from '@tylertech/forge/autocomplete';
+import type { IListItemComponent } from '@tylertech/forge/list/list-item';
+import type { ISelectComponent } from '@tylertech/forge/select';
+import type { IOption, IOptionGroup } from '@tylertech/forge/select';
+import { IconRegistry } from '@tylertech/forge/icon';
 import { IListDropdownOption, IListDropdownOptionGroup } from '@tylertech/forge/list-dropdown';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
 import { randomTimeout } from '../../src/utils/utils';

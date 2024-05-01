@@ -7,7 +7,6 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@tylertech/forge": ["../lib/index.ts"],
       "@tylertech/forge/*": ["../lib/*"],
       "$src/*": ["./src/*"]
     }

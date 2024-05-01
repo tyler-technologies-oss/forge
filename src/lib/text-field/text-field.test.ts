@@ -4,7 +4,7 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { tick } from '@tylertech/forge-testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { spy } from 'sinon';
-import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '.';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { TestHarness } from '../../test/utils/test-harness';
 import { FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button';

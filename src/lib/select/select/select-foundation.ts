@@ -55,7 +55,6 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   }
 
   private _initializeAccessibility(): void {
-    this._adapter.setMultiple(this._multiple);
     this._adapter.initializeAccessibility();
   }
 

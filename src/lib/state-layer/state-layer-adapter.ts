@@ -111,7 +111,7 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
 
   public async endAnimation(): Promise<void> {
     const animation = this._rippleAnimation;
-    const pressAnimationPlayState = animation?.currentTime ?? Infinity;
+    const pressAnimationPlayState = animation?.currentTime as number ?? Infinity;
 
     if (pressAnimationPlayState >= MINIMUM_PRESS_MS) {
       this.setPressed(false);

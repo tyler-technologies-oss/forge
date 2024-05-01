@@ -4,7 +4,8 @@ import '@tylertech/forge/scaffold';
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon-button';
 import './card.scss';
-import type { ICardComponent, ISwitchComponent } from '@tylertech/forge';
+import type { ICardComponent } from '@tylertech/forge/card';
+import type { ISwitchComponent } from '@tylertech/forge/switch';
 
 const card = document.querySelector('.demo-card') as ICardComponent;
 

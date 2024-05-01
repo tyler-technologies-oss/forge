@@ -84,7 +84,7 @@
 }
 
 @mixin icon-content-completed() {
-  @include icon-content-selected();
+  @include icon-content-selected;
 }
 
 @mixin icon-content-error {

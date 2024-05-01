@@ -2,8 +2,9 @@ import '$src/shared';
 import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/card';
 import '@tylertech/forge/open-icon';
-import type { IExpansionPanelComponent, ISwitchComponent } from '@tylertech/forge';
 import './expansion-panel.scss';
+import { IExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const animationTypeSelect = document.getElementById('opt-animation-type') as HTMLSelectElement;
 animationTypeSelect.addEventListener('change', () => {

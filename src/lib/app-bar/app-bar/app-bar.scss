@@ -29,7 +29,7 @@ $host-tokens: [background foreground];
 // Default theme
 //
 
-:host(:not(theme)) {
+:host(:not([theme])) {
   @include theme.provide((
     primary: #{token(foreground)},
     on-primary: rgba(black, color-emphasis.value(highest)),

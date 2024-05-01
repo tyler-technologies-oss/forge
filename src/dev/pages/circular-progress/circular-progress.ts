@@ -1,6 +1,8 @@
 import '$src/shared';
 import '@tylertech/forge/circular-progress';
-import type { ICircularProgressComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
+import { ICircularProgressComponent } from '@tylertech/forge/circular-progress';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const circularProgress = document.querySelector('forge-circular-progress#circular-progress') as ICircularProgressComponent;
 

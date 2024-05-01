@@ -279,7 +279,7 @@ forge-state-layer {
   }
 
   // Primary theme is the default for filled and tonal variants
-  @if ($theme != 'primary') {
+  @if $theme != 'primary' {
     // Non-toggle + tonal variant
     :host(:not([toggle])[theme=#{$theme}][variant=tonal]) {
       .forge-icon-button {

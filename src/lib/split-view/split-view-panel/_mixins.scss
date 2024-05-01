@@ -208,7 +208,7 @@
 @mixin closing-animation($direction: right) {
   @include animating-position($direction);
 
-  $animation-name: unique-id();
+  $animation-name: unique-id;
 
   animation-name: $animation-name;
   animation-duration: #{animation.variable(duration-medium2)};
@@ -220,11 +220,11 @@
     }
   
     to {
-      @if ($direction == right) {
+      @if $direction == right {
         transform: translateX(100%);
-      } @else if ($direction == left) {
+      } @else if $direction == left {
         transform: translateX(-100%);
-      } @else if ($direction == top) {
+      } @else if $direction == top {
         transform: translateY(-100%);
       } @else {
         transform: translateY(100%);
@@ -236,13 +236,13 @@
 @mixin animating-position($direction: right) {
   position: absolute;
 
-  @if ($direction == right) {
+  @if $direction == right {
     top: 0;
     right: 0;
-  } @else if ($direction == left) {
+  } @else if $direction == left {
     top: 0;
     left: 0;
-  } @else if ($direction == top) {
+  } @else if $direction == top {
     top: 0;
     left: 0;
   } @else {

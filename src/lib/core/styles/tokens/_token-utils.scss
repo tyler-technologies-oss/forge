@@ -36,7 +36,7 @@
 /// @param {String} $type - The type of token this is. Valid values are `token` and `custom`. Using `custom` will not check if the token exists.
 ///
 @function token($module, $tokens, $token, $type: token) {
-  @if ($type == 'token' and not map.has-key($tokens, $token)) {
+  @if $type == 'token' and not map.has-key($tokens, $token) {
     @error 'Invalid token "#{$token}" for module "#{$module}"';
   }
   @return utils.module-var($module, $token);
@@ -96,19 +96,19 @@
     }
   }
 
-  @if ($includes) {
+  @if $includes {
     // We are including only specific tokens
     @each $token-name in $includes {
-      @if (not map.has-key($tokens, $token-name)) {
+      @if not map.has-key($tokens, $token-name) {
         @error 'Invalid include token "#{$token}" for module "#{$module}"';
       }
       #{declare($module, $token-name)}: #{map.get($tokens, $token-name)};
     }
   } @else {
     // We are including all tokens, but first we need to check if any excluded tokens were provided
-    @if ($excludes) {
+    @if $excludes {
       @each $token in $excludes {
-        @if (not map.has-key($tokens, $token)) {
+        @if not map.has-key($tokens, $token) {
           @error 'Invalid exclude token "#{$token}" for module "#{$module}"';
         }
         $tokens: map.remove($tokens, $token);

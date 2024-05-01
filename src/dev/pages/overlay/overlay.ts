@@ -1,11 +1,12 @@
 import '$src/shared';
-import { ISelectComponent, ISwitchComponent, OverlayFlipState, OverlayHideState } from '@tylertech/forge';
-import type { IOverlayComponent } from '@tylertech/forge';
 import { toggleClass } from '@tylertech/forge-core';
-import { VirtualElement } from '../../../lib/core/utils/position-utils';
+import { VirtualElement } from '@tylertech/forge/core/utils/position-utils';
 import '@tylertech/forge/button';
 import '@tylertech/forge/overlay';
 import './overlay.scss';
+import { IOverlayComponent, OverlayFlipState, OverlayHideState } from '@tylertech/forge/overlay';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const overlay = document.querySelector('#my-overlay') as IOverlayComponent;
 const nestedOverlay = overlay.querySelector('#my-nested-overlay') as IOverlayComponent;

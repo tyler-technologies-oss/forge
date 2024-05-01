@@ -145,7 +145,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.firstCall.args[0].detail).to.equal(1);
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
   });
 
   it('should not select tab if disabled tab clicked', async () => {
@@ -178,7 +178,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.firstCall.args[0].detail).to.equal(1);
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
   });
 
   it('should select tab with space key', async () => {
@@ -199,7 +199,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.firstCall.args[0].detail).to.equal(1);
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
   });
 
   it('should navigate to next tab when right arrow is pressed', async () => {
@@ -274,7 +274,7 @@ describe('Tabs', () => {
     expect(ctx.tabs[1].selected).to.be.true;
     expect(ctx.selectedTabCount).to.equal(1);
     expect(changeSpy.calledOnce).to.be.true;
-    expect(changeSpy.firstCall.args[0].detail).to.equal(1);
+    expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
   });
 
   it('should navigate to last tab when end is pressed', async () => {
@@ -499,7 +499,7 @@ describe('Tabs', () => {
       expect(ctx.tabs[1].selected).to.be.true;
       expect(ctx.selectedTabCount).to.equal(1);
       expect(changeSpy.calledOnce).to.be.true;
-      expect(changeSpy.firstCall.args[0].detail).to.equal(1);
+      expect(changeSpy.calledWith(new CustomEvent('forge-tab-bar-change', { detail: { index: 1 }}))).to.be.true;
     });
 
     it('should show scroll buttons when scrollable', async () => {
