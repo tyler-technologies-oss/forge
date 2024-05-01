@@ -40,9 +40,13 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
   private _rangeLabel: HTMLSlotElement;
   private _rangeLabelAlternative: HTMLSlotElement;
   private _firstPageButton: IIconButtonComponent;
+  private _firstPageContainer: HTMLElement;
   private _previousPageButton: IIconButtonComponent;
+  private _previousPageContainer: HTMLElement;
   private _nextPageButton: IIconButtonComponent;
+  private _nextPageContainer: HTMLElement;
   private _lastPageButton: IIconButtonComponent;
+  private _lastPageContainer: HTMLElement;
   private _firstPagePlaceholder: Comment;
   private _lastPagePlaceholder: Comment;
 
@@ -53,9 +57,13 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
     this._rangeLabel = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.RANGE_LABEL) as HTMLSlotElement;
     this._rangeLabelAlternative = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.RANGE_LABEL_ALTERNATIVE) as HTMLSlotElement;
     this._firstPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON) as IIconButtonComponent;
+    this._firstPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_CONTAINER) as HTMLElement;
     this._previousPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_BUTTON) as IIconButtonComponent;
+    this._previousPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_CONTAINER) as HTMLElement;
     this._nextPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_BUTTON) as IIconButtonComponent;
+    this._nextPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_CONTAINER) as HTMLElement;
     this._lastPageButton = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON) as IIconButtonComponent;
+    this._lastPageContainer = getShadowElement(component, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_CONTAINER) as HTMLElement;
   }
 
   public setLabel(value: string): void {
@@ -85,8 +93,8 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
       this._component,
       true,
       PAGINATOR_CONSTANTS.elementName,
-      PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON,
-      this._firstPageButton,
+      PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_CONTAINER,
+      this._firstPageContainer,
       this._firstPagePlaceholder
     );
   }
@@ -96,8 +104,8 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
       this._component,
       false,
       PAGINATOR_CONSTANTS.elementName,
-      PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON,
-      this._firstPageButton,
+      PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_CONTAINER,
+      this._firstPageContainer,
       this._firstPagePlaceholder
     );
   }
@@ -111,8 +119,8 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
       this._component,
       true,
       PAGINATOR_CONSTANTS.elementName,
-      PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON,
-      this._lastPageButton,
+      PAGINATOR_CONSTANTS.selectors.LAST_PAGE_CONTAINER,
+      this._lastPageContainer,
       this._lastPagePlaceholder
     );
   }
@@ -122,8 +130,8 @@ export class PaginatorAdapter extends BaseAdapter<IPaginatorComponent> implement
       this._component,
       false,
       PAGINATOR_CONSTANTS.elementName,
-      PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON,
-      this._lastPageButton,
+      PAGINATOR_CONSTANTS.selectors.LAST_PAGE_CONTAINER,
+      this._lastPageContainer,
       this._lastPagePlaceholder
     );
   }
