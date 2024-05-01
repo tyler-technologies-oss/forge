@@ -351,8 +351,8 @@ describe('Slider', () => {
     expect(ctx.endInputElement.valueAsNumber).to.equal(51);
     expect(ctx.endInputElement.getAttribute('aria-valuetext')).to.equal('51');
     expect(ctx.endLabelContentElement.textContent).to.equal('51');
-    expect(inputSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: 51 }))).to.be.true;
-    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-change', { detail: 51 }))).to.be.true;
+    expect(inputSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: { value: 51 }}))).to.be.true;
+    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-change', { detail: { value: 51 }}))).to.be.true;
   });
 
   it('should change value when clicking on input', async () => {
@@ -367,7 +367,7 @@ describe('Slider', () => {
 
     await expect(el).to.be.accessible();
     expect(el.value).to.equal(33);
-    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: 33 }))).to.be.true;
+    expect(changeSpy.calledOnceWith(new CustomEvent('forge-slider-input', { detail: { value: 33 }}))).to.be.true;
     expect(inputSpy.called).to.be.false;
   });
 
@@ -376,8 +376,8 @@ describe('Slider', () => {
     const ctx = new SliderHarness(el);
     const changeSpy = spy();
     const inputSpy = spy();
-    el.addEventListener('forge-slider-change', changeSpy);
-    el.addEventListener('forge-slider-input', inputSpy);
+    el.addEventListener('forge-slider-range-change', changeSpy);
+    el.addEventListener('forge-slider-range-input', inputSpy);
 
     ctx.simulateStartInteraction('input', 25);
     ctx.simulateStartInteraction('input', 30);
@@ -392,12 +392,12 @@ describe('Slider', () => {
     expect(el.valueEnd).to.equal(80);
     expect(changeSpy.calledTwice).to.be.true;
     expect(inputSpy.callCount).to.be.equal(4);
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-input', { detail: { valueStart: 25, valueEnd: 67 }}))).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-input', { detail: { valueStart: 30, valueEnd: 67 }}))).to.be.true;
-    expect(inputSpy.calledWith(new CustomEvent('forge-slider-input', { detail: { valueStart: 30, valueEnd: 75 }}))).to.be.true;
-    expect(inputSpy.calledWith(new CustomEvent('forge-slider-input', { detail: { valueStart: 30, valueEnd: 80 }}))).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-change', { detail: { valueStart: 30, valueEnd: 67 }}))).to.be.true;
-    expect(changeSpy.calledWith(new CustomEvent('forge-slider-change', { detail: { valueStart: 30, valueEnd: 80 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 25, valueEnd: 67 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 67 }}))).to.be.true;
+    expect(inputSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 75 }}))).to.be.true;
+    expect(inputSpy.calledWith(new CustomEvent('forge-slider-range-input', { detail: { valueStart: 30, valueEnd: 80 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-change', { detail: { valueStart: 30, valueEnd: 67 }}))).to.be.true;
+    expect(changeSpy.calledWith(new CustomEvent('forge-slider-range-change', { detail: { valueStart: 30, valueEnd: 80 }}))).to.be.true;
   });
 
   it('should show label when hovering end input', async () => {

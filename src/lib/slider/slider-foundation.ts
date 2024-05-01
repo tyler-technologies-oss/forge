@@ -1,6 +1,6 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
 import { ISliderAdapter } from './slider-adapter';
-import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeEventData } from './slider-constants';
+import { SLIDER_CONSTANTS, SliderLabelBuilder } from './slider-constants';
 
 export interface ISliderFoundation extends ICustomElementFoundation {
   ariaLabel: string | null;
@@ -189,9 +189,20 @@ export class SliderFoundation implements ISliderFoundation {
       this._value = input.valueAsNumber;
     }
 
-    const type = evt.type === 'change' ? SLIDER_CONSTANTS.events.CHANGE : SLIDER_CONSTANTS.events.INPUT;
-    const data: number | ISliderRangeEventData = this._range ? { valueStart: this._valueStart, valueEnd: this._valueEnd } : this._value;
-    this._adapter.emitHostEvent(type, data, true);
+    const eventMap = {
+      default: {
+        change: SLIDER_CONSTANTS.events.CHANGE,
+        input: SLIDER_CONSTANTS.events.INPUT
+      },
+      range: {
+        change: SLIDER_CONSTANTS.events.RANGE_CHANGE,
+        input: SLIDER_CONSTANTS.events.RANGE_INPUT
+      }
+    };
+    const type = this._range ? eventMap.range[evt.type] : eventMap.default[evt.type];
+    const detail = this._range ? { valueStart: this._valueStart, valueEnd: this._valueEnd } : { value: this._value };
+    const event = new CustomEvent(type, { detail, bubbles: true });
+    this._adapter.dispatchHostEvent(event);
     this._update();
   }
 
