@@ -78,6 +78,7 @@ const ARIA_ATTRIBUTES_TO_PROPERTIES: Record<ARIAAttribute, ARIAProperty | 'role'
   'aria-colspan': 'ariaColSpan',
   'aria-current': 'ariaCurrent',
   'aria-disabled': 'ariaDisabled',
+  'aria-description': 'ariaDescription',
   'aria-expanded': 'ariaExpanded',
   'aria-haspopup': 'ariaHasPopup',
   'aria-hidden': 'ariaHidden',
