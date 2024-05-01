@@ -1,8 +1,9 @@
 import '$src/shared';
 import '@tylertech/forge/button';
 import '@tylertech/forge/tooltip';
-import type { ISelectComponent, ITooltipComponent } from '@tylertech/forge';
 import './tooltip.scss';
+import { ITooltipComponent } from '@tylertech/forge/tooltip';
+import { ISelectComponent } from '@tylertech/forge/select';
 
 const demoEl = document.querySelector('.tooltip-demo') as HTMLElement;
 const delayInput = document.querySelector('#opt-delay') as HTMLInputElement;

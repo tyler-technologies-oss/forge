@@ -44,7 +44,8 @@ export interface IPositionElementConfig {
 export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IOverlayAdapter {
   private _rootElement: HTMLElement | HTMLDialogElement;
   private _autoUpdateCleanup?: () => void;
-  private _lightDismissController = new AbortController();
+  private _lightDismissEscapeListener?: EventListener;
+  private _lightDismissPointerUpListener?: EventListener;
 
   constructor(component: IOverlayComponent) {
     super(component);
@@ -184,7 +185,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     this.removeLightDismissListener();
 
     // Listen for escape key globally
-    const escapeListener = (evt: KeyboardEvent): void => {
+    this._lightDismissEscapeListener = (evt: KeyboardEvent): void => {
       if (evt.key === 'Escape') {
         if (this.isMostRecentOpenOverlay()) {
           evt.preventDefault();
@@ -193,10 +194,10 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         }
       }
     };
-    this._component.ownerDocument.addEventListener('keydown', escapeListener, { signal: this._lightDismissController.signal });
+    this._component.ownerDocument.addEventListener('keydown', this._lightDismissEscapeListener);
   
     // Listen for click-outside (any clicks not within our overlay surface or the anchor element)
-    const pointerupListener = (evt: PointerEvent): void => {
+    this._lightDismissPointerUpListener = (evt: PointerEvent): void => {
       const composedPath = evt.composedPath();
       const stack = Array.from(OverlayComponent[overlayStack]);
       const stackIndex = stack.indexOf(this._component);
@@ -215,12 +216,19 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         listener('click');
       }
     };
-    this._component.ownerDocument.addEventListener('pointerup', pointerupListener, { capture: true, signal: this._lightDismissController.signal });
+    this._component.ownerDocument.addEventListener('pointerup', this._lightDismissPointerUpListener, { capture: true });
   }
 
   public removeLightDismissListener(): void {
-    this._lightDismissController.abort();
-    this._lightDismissController = new AbortController();
+    if (this._lightDismissEscapeListener) {
+      this._component.ownerDocument.removeEventListener('keydown', this._lightDismissEscapeListener);
+      this._lightDismissEscapeListener = undefined;
+    }
+
+    if (this._lightDismissPointerUpListener) {
+      this._component.ownerDocument.removeEventListener('pointerup', this._lightDismissPointerUpListener, { capture: true });
+      this._lightDismissPointerUpListener = undefined;
+    }
   }
 
   /**

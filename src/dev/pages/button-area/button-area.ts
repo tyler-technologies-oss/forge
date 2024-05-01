@@ -1,6 +1,8 @@
-import { IButtonAreaComponent, IExpansionPanelComponent, ISwitchComponent, IconRegistry } from '@tylertech/forge';
 import { tylIconChevronRight, tylIconFavorite } from '@tylertech/tyler-icons/standard';
-
+import { IButtonAreaComponent } from '@tylertech/forge/button-area';
+import { IExpansionPanelComponent } from '@tylertech/forge/expansion-panel';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 import '$src/shared';
 import '@tylertech/forge/button-area';
 import './button-area.scss';

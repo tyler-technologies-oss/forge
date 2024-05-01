@@ -3,10 +3,10 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ListAdapter } from './list-adapter';
 import { ListFoundation } from './list-foundation';
 import { LIST_CONSTANTS } from './list-constants';
+import { ListItemComponent } from '../list-item';
 
 import template from './list.html';
 import styles from './list.scss';
-import { ListItemComponent } from '../list-item';
 
 export interface IListComponent extends IBaseComponent {
   /** @deprecated Use nonInteractive instead. */

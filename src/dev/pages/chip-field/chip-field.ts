@@ -1,9 +1,15 @@
 import '$src/shared';
-import { FieldLabelAlignment, FieldLabelPosition, IAutocompleteComponent, IChipComponent, IChipFieldComponent, IconRegistry, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/chip-field';
 import '@tylertech/forge/autocomplete';
 import data from '../autocomplete/data.json';
 import { tylIconArrowDropDown, tylIconPlace } from '@tylertech/tyler-icons/standard';
+import { IAutocompleteComponent } from '@tylertech/forge/autocomplete';
+import { IChipFieldComponent } from '@tylertech/forge/chip-field';
+import { IChipComponent } from '@tylertech/forge/chips';
+import { FieldLabelPosition, FieldLabelAlignment } from '@tylertech/forge/field';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconPlace,

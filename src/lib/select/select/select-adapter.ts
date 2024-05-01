@@ -110,10 +110,6 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
     this._selectedTextElement.textContent = value;
   }
 
-  public setMultiple(multiple: boolean): void {
-    this.toggleHostAttribute('aria-multiselectable', multiple, 'true');
-  }
-
   public setDisabled(value: boolean): void {
     this._component.tabIndex = value ? -1 : 0;
     toggleAttribute(this._component, value, 'aria-disabled', 'true');

@@ -1,6 +1,7 @@
 import '$src/shared';
 import '@tylertech/forge/paginator';
-import { IPaginatorComponent, IPaginatorRangeState, ISwitchComponent, PAGINATOR_CONSTANTS } from '@tylertech/forge';
+import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorRangeState } from '@tylertech/forge/paginator';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const paginator = document.getElementById('forge-paginator-example') as IPaginatorComponent;
 

@@ -43,7 +43,7 @@ declare global {
  * 
  * @tag forge-step
  * 
- * @property {boolean} alternate - Whether the step is in the alternate style. 
+ * @property {boolean} alternative - Whether the step is in the alternative style. 
  * @property {boolean} completed - Whether the step is completed.
  * @property {boolean} editable - Whether the step is editable.
  * @property {boolean} error - Whether the step has an error.

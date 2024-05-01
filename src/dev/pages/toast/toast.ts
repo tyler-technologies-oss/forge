@@ -1,8 +1,10 @@
 import '$src/shared';
-import { ISelectComponent, ISwitchComponent, ToastComponent, ToastPlacement } from '@tylertech/forge';
 import '@tylertech/forge/button';
 import '@tylertech/forge/toast';
 import './toast.scss';
+import { ToastPlacement, ToastComponent } from '@tylertech/forge/toast';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const optMessageInput = document.querySelector('#opt-toast-message') as HTMLInputElement;
 

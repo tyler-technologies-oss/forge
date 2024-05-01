@@ -42,9 +42,9 @@
 
   $minimumContrast: 3.1;
   $lightContrast: contrast-ratio($color, white);
-  $darkContrast: contrast-ratio($color, rgba(black, 0.87));
+  $darkContrast: contrast-ratio($color, rgba(black 0.87));
 
-  @if ($lightContrast < $minimumContrast) and ($darkContrast > $lightContrast) {
+  @if $lightContrast < $minimumContrast and $darkContrast > $lightContrast {
     @return 'light';
   } @else {
     @return 'dark';

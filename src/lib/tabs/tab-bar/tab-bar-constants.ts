@@ -46,3 +46,7 @@ export const NAVIGATION_KEYS = new Map([
   ['horizontal', new Set(['ArrowLeft', 'ArrowRight'])],
   ['vertical', new Set(['ArrowUp', 'ArrowDown'])]
 ]);
+
+export interface ITabBarChangeEventData {
+  index: number;
+}

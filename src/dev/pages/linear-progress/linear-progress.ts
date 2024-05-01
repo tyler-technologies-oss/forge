@@ -1,6 +1,7 @@
 import '$src/shared';
-import type { ILinearProgressComponent, ISelectComponent } from '@tylertech/forge';
 import '@tylertech/forge/linear-progress';
+import { ILinearProgressComponent } from '@tylertech/forge/linear-progress';
+import { ISelectComponent } from '@tylertech/forge/select';
 
 const linearProgress = document.getElementById('linear-progress') as ILinearProgressComponent;
 

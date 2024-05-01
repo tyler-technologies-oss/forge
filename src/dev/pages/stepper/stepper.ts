@@ -1,7 +1,9 @@
 import '$src/shared';
-import { IStepperComponent, IStepConfiguration, ISwitchComponent, IStepComponent, ISelectComponent } from '@tylertech/forge';
 import '@tylertech/forge/stepper';
 import './stepper.scss';
+import { IStepperComponent, IStepConfiguration, IStepComponent } from '@tylertech/forge/stepper';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const stepper = document.querySelector('#demo-stepper') as IStepperComponent;
 stepper.selectedIndex = 2;

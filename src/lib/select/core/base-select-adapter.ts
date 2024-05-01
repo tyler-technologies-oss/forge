@@ -32,7 +32,6 @@ export interface IBaseSelectAdapter extends IBaseAdapter {
   setOptionsListener(listener: (options: ISelectOption[] | ISelectOptionGroup[]) => void): SelectOptionListenerDestructor;
   setDropdownOptions(options: ISelectOption[] | ISelectOptionGroup[]): void;
   appendDropdownOptions(options: ISelectOption[] | ISelectOptionGroup[]): void;
-  setMultiple(multiple: boolean): void;
   isFocusWithinPopup(target: HTMLElement): boolean;
   queueDropdownPositionUpdate(): void;
   popupElement: HTMLElement | undefined;
@@ -52,7 +51,6 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
   public abstract removeClickListener(listener: (evt: Event) => void): void;
   public abstract addTargetListener(type: string, listener: (evt: Event) => void): void;
   public abstract removeTargetListener(type: string, listener: (evt: Event) => void): void;
-  public abstract setMultiple(multiple: boolean): void;
 
   public get popupElement(): HTMLElement | undefined {
     return this._listDropdown?.dropdownElement;

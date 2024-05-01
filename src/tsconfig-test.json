@@ -5,6 +5,7 @@
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "pretty": true,
+    "ignoreDeprecations": "5.0",
     "suppressImplicitAnyIndexErrors": true,
     "useDefineForClassFields": false,
     "types": [

@@ -1,5 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-import { NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
+import { ITabBarChangeEventData, NAVIGATION_KEYS, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { ITabComponent } from '../tab/tab';
 import { TAB_CONSTANTS } from '../tab/tab-constants';
 
@@ -145,8 +145,9 @@ export class TabBarFoundation implements ITabBarFoundation {
 
     if (emitEvent) {
       const index = this._tabs.indexOf(tab);
-      const cancelled = !this._adapter.emitHostEvent(TAB_BAR_CONSTANTS.events.CHANGE, index, true, true);
-      if (cancelled) {
+      const event = new CustomEvent<ITabBarChangeEventData>(TAB_BAR_CONSTANTS.events.CHANGE, { detail: { index }, bubbles: true, cancelable: true, composed: true });
+      this._adapter.dispatchHostEvent(event);
+      if (event.defaultPrevented) {
         return;
       }
     }

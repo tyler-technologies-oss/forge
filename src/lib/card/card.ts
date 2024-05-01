@@ -1,6 +1,5 @@
 import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
-
 import { CARD_CONSTANTS } from './card-constants';
 
 import template from './card.html';

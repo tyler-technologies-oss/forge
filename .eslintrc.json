@@ -8,6 +8,7 @@
     "src/test/**/*",
     "src/stories/**/*",
     "web-test-runner.*",
+    "custom-elements-manifest.config.mjs",
     "*.spec.ts",
     "*.test.ts"
   ],

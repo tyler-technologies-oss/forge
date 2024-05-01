@@ -1,19 +1,22 @@
 {
   "$schema": "./node_modules/@tylertech/forge-cli/config/schema.json",
-  "packageOrg": "@tylertech",
-  "packageName": "forge",
-  "registry": "https://registry.npmjs.org/",
   "license": {
-    "header": "/**\n * @license\n * Copyright 2023 Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
+    "header": "/**\n * @license\n * Copyright Tyler Technologies, Inc. \n * License: Apache-2.0\n */\n"
   },
   "karma": {
     "stylesheets": [
       "src/lib/forge.scss"
+    ],
+    "exclude": [
+      "*.test.ts"
     ]
   },
   "build": {
     "static": {
       "distPath": "cdn/v1/libs/"
     }
+  },
+  "customElementsManifestConfig": {
+    "configFileName": "custom-elements-manifest.config.mjs"
   }
 }

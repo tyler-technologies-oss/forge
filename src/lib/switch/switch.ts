@@ -60,7 +60,7 @@ const BaseSwitchClass = WithFormAssociation(WithLabelAwareness(WithFocusable(Wit
  * @property {string} value - The value of the switch.
  * @property {boolean} dense - The density state.
  * @property {boolean} disabled - Controls if the switch is disabled.
- * @property {boolean} required = Controls if the switch is required.
+ * @property {boolean} required - Controls if the switch is required.
  * @property {boolean} readonly - Controls if the switch is readonly.
  * @property {SwitchIconVisibility} icon - Controls the presence of the off and on icons.
  * @property {SwitchLabelPosition} labelPosition - Whether the label appears before or after the switch.

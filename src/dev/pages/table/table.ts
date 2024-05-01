@@ -3,9 +3,13 @@ import '@tylertech/forge/table';
 import '@tylertech/forge/table/forge-table.scss';
 import './table.scss';
 import { TextFieldComponentDelegate } from '@tylertech/forge/text-field';
-import { ButtonComponentDelegate, CellAlign, IColumnConfiguration, IconRegistry, ISelectComponent, ISortedColumn, ISwitchComponent, ITableComponent, ITableSortMultipleEventData, ITableTemplateBuilderResult, SelectComponentDelegate, SortDirection } from '@tylertech/forge';
 import { PositionPlacement } from '@tylertech/forge-core';
 import { tylIconChevronRight, tylIconDelete, tylIconEdit, tylIconMoreVert } from '@tylertech/tyler-icons/standard';
+import { ITableComponent, IColumnConfiguration, SortDirection, ISortedColumn, CellAlign, ITableTemplateBuilderResult, ITableSortMultipleEventData } from '@tylertech/forge/table';
+import { ButtonComponentDelegate } from '@tylertech/forge/button';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { SelectComponentDelegate, ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconMoreVert,

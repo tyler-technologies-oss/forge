@@ -26,7 +26,7 @@ const events = {
   MEMBER_REMOVED: `${elementName}-member-removed`
 };
 
-const observedInputAttributes = ['disabled', 'placeholder'];
+const observedInputAttributes = ['disabled', 'placeholder'] as const;
 
 const tagNames = {
   TEXTAREA: 'TEXTAREA',
@@ -50,6 +50,6 @@ export {
   type FieldShape as ChipFieldShapeType
 } from '../field/base/base-field-constants';
 
-
-export type ChipFieldInputAttributeObserver = (name: keyof typeof observedInputAttributes, value: string | null) => void;
+export type ChipFieldObservedInputAttributes = typeof observedInputAttributes[number];
+export type ChipFieldInputAttributeObserver = (name: ChipFieldObservedInputAttributes, value: string | null) => void;
 export type ChipFieldValueChangeListener = (value: string | null) => void;

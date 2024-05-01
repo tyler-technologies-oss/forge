@@ -1,8 +1,9 @@
 import '$src/shared';
 import '@tylertech/forge/switch';
-import { ISwitchComponent, IconRegistry } from '@tylertech/forge';
 import { tylIconEmoticonHappy, tylIconEmoticonSad } from '@tylertech/tyler-icons/extended';
 import './switch.scss';
+import { ISwitchComponent } from '@tylertech/forge/switch';
+import { IconRegistry } from '@tylertech/forge/icon';
 
 IconRegistry.define([
   tylIconEmoticonHappy,

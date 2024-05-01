@@ -34,7 +34,7 @@ export class BackdropComponent extends BaseComponent {
   private _visible = false;
   private _fixed = false;
   private _rootElement: HTMLElement;
-  private _animationController: AbortController | undefined;
+  private _animationEndListener?: EventListener;
 
   constructor() {
     super();
@@ -43,9 +43,9 @@ export class BackdropComponent extends BaseComponent {
   }
 
   public disconnectedCallback(): void {
-    if (this._animationController) {
-      this._animationController.abort();
-      this._animationController = undefined;
+    if (this._animationEndListener) {
+      this._rootElement.removeEventListener('animationend', this._animationEndListener);
+      this._animationEndListener = undefined;
     }
 
     this.classList.remove(BACKDROP_CONSTANTS.classes.ENTERING, BACKDROP_CONSTANTS.classes.EXITING);
@@ -82,21 +82,20 @@ export class BackdropComponent extends BaseComponent {
     const isVisible = this._visible;
     const className = isVisible ? BACKDROP_CONSTANTS.classes.ENTERING : BACKDROP_CONSTANTS.classes.EXITING;
 
-    if (this._animationController) {
-      this._animationController.abort();
+    if (this._animationEndListener) {
+      this._rootElement.removeEventListener('animationend', this._animationEndListener);
       this._rootElement.classList.remove(BACKDROP_CONSTANTS.classes.ENTERING, BACKDROP_CONSTANTS.classes.EXITING);
     }
 
-    this._animationController = new AbortController();
-
     const animationComplete = new Promise<void>(resolve => {
-      this._rootElement.addEventListener('animationend', () => {
+      this._animationEndListener = () => {
         if (!isVisible) {
           this.removeAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE);
         }
         this._rootElement.classList.remove(className);
         resolve();
-      }, { once: true, signal: this._animationController?.signal });
+      };
+      this._rootElement.addEventListener('animationend', this._animationEndListener, { once: true });
     });
 
     if (isVisible) {

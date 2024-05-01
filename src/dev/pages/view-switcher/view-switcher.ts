@@ -2,7 +2,8 @@ import '$src/shared';
 import '@tylertech/forge/view-switcher';
 import '@tylertech/forge/tabs';
 import './view-switcher.scss';
-import type { ITabBarComponent, IViewSwitcherComponent, ViewSwitcherAnimationType } from '@tylertech/forge';
+import { ITabBarComponent } from '@tylertech/forge/tabs';
+import { IViewSwitcherComponent, ViewSwitcherAnimationType } from '@tylertech/forge/view-switcher';
 
 const tabBar = document.querySelector('forge-tab-bar#tab-bar') as ITabBarComponent;
 const viewSwitcher = document.querySelector('forge-view-switcher#view-switcher') as IViewSwitcherComponent;

@@ -1,5 +1,5 @@
 import { BaseAdapter, IBaseAdapter } from '../../core';
-import { IOverlayComponent } from '..';
+import { IOverlayComponent } from '../overlay';
 import { IOverlayAware } from '../base/overlay-aware';
 
 export interface IOverlayAwareAdapter extends IBaseAdapter {
