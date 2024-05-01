@@ -24,9 +24,13 @@ const selectors = {
   PAGE_SIZE_SELECT: '.page-size-options',
   RANGE_LABEL: '.range-label > slot[name=range-label]',
   FIRST_PAGE_BUTTON: '.first-page',
+  FIRST_PAGE_CONTAINER: '#first-page-container',
   PREVIOUS_PAGE_BUTTON: '.previous-page',
+  PREVIOUS_PAGE_CONTAINER: '#previous-page-container',
   NEXT_PAGE_BUTTON: '.next-page',
+  NEXT_PAGE_CONTAINER: '#next-page-container',
   LAST_PAGE_BUTTON: '.last-page',
+  LAST_PAGE_CONTAINER: '#last-page-container',
   RANGE_LABEL_ALTERNATIVE: '.alternative-range-label > slot[name=alternative-range-label]'
 };
 

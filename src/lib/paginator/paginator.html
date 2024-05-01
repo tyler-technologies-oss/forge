@@ -13,37 +13,45 @@
     </div>
 
     <div class="actions" part="actions">
-      <forge-icon-button class="first-page" part="first-page-button" part="first-page-button-element">
-        <forge-icon name="first_page" part="first-page-icon"></forge-icon>
-      </forge-icon-button>
-      <forge-tooltip type="label" placement="top">
-        <slot name="first-page-tooltip">Go to the first page</slot>
-      </forge-tooltip>
+      <div id="first-page-container">
+        <forge-icon-button class="first-page" part="first-page-button" part="first-page-button-element">
+          <forge-icon name="first_page" part="first-page-icon"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip type="label" placement="top">
+          <slot name="first-page-tooltip">Go to the first page</slot>
+        </forge-tooltip>
+      </div>
 
-      <forge-icon-button class="previous-page" part="previous-page-button" part="previous-page-button-element">
-        <forge-icon name="keyboard_arrow_left" part="previous-page-button-icon"></forge-icon>
-      </forge-icon-button>
-      <forge-tooltip type="label" placement="top">
-        <slot name="previous-page-tooltip">Go to the previous page</slot>
-      </forge-tooltip>
+      <div id="previous-page-container">
+        <forge-icon-button class="previous-page" part="previous-page-button" part="previous-page-button-element">
+          <forge-icon name="keyboard_arrow_left" part="previous-page-button-icon"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip type="label" placement="top">
+          <slot name="previous-page-tooltip">Go to the previous page</slot>
+        </forge-tooltip>
+      </div>
 
       <div class="alternative-range-label" part="alternative-range-label">
         <slot name="alternative-range-label"></slot>
       </div>
 
-      <forge-icon-button class="next-page" part="next-page-button" part="next-page-button-element">
-        <forge-icon name="keyboard_arrow_right" part="next-page-icon"></forge-icon>
-      </forge-icon-button>
-      <forge-tooltip type="label" placement="top">
-        <slot name="next-page-tooltip">Go to the next page</slot>
-      </forge-tooltip>
+      <div id="next-page-container">
+        <forge-icon-button class="next-page" part="next-page-button" part="next-page-button-element">
+          <forge-icon name="keyboard_arrow_right" part="next-page-icon"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip type="label" placement="top">
+          <slot name="next-page-tooltip">Go to the next page</slot>
+        </forge-tooltip>
+      </div>
 
-      <forge-icon-button class="last-page" part="last-page-button" part="last-page-button-element">
-        <forge-icon name="last_page" part="last-page-icon"></forge-icon>
-      </forge-icon-button>
-      <forge-tooltip type="label" placement="top">
-        <slot name="last-page-tooltip">Go to the last page</slot>
-      </forge-tooltip>
+      <div id="last-page-container">
+        <forge-icon-button class="last-page" part="last-page-button" part="last-page-button-element">
+          <forge-icon name="last_page" part="last-page-icon"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip type="label" placement="top">
+          <slot name="last-page-tooltip">Go to the last page</slot>
+        </forge-tooltip>
+      </div>
     </div>
   </div>
 </template>
