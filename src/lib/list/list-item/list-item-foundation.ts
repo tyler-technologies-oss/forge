@@ -39,13 +39,11 @@ export class ListItemFoundation implements IListItemFoundation {
   private _indented = false;
   private _wrap = false;
   private _clickListener: (evt: MouseEvent) => void;
-  private _mouseDownListener: (evt: MouseEvent) => void;
   private _keydownListener: (evt: KeyboardEvent) => void;
   private _destroyUserInteractionListener: (() => void) | undefined;
 
   constructor(private _adapter: IListItemAdapter) {
     this._clickListener = (evt: MouseEvent) => this._onClick(evt);
-    this._mouseDownListener = (evt: MouseEvent) => this._onMouseDown(evt);
     this._keydownListener = (evt: KeyboardEvent) => this._onKeydown(evt);
   }
 
@@ -60,7 +58,7 @@ export class ListItemFoundation implements IListItemFoundation {
 
     if (!this._static) {
       this._adapter.addListener('click', this._clickListener);
-      this._adapter.addListener('mousedown', this._mouseDownListener, { passive: false, capture: true });
+      // this._adapter.addListener('mousedown', this._mouseDownListener, { passive: false, capture: true });
       this._adapter.addListener('keydown', this._keydownListener);
     }
 
@@ -85,12 +83,6 @@ export class ListItemFoundation implements IListItemFoundation {
     if (typeof this._destroyUserInteractionListener === 'function') {
       this._destroyUserInteractionListener();
       this._destroyUserInteractionListener = undefined;
-    }
-  }
-
-  private _onMouseDown(evt: MouseEvent): void {
-    if (this._adapter.hasFocus() || !this._propagateClick) {
-      evt.preventDefault();
     }
   }
 
