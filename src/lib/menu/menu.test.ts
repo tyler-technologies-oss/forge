@@ -40,6 +40,12 @@ class MenuHarness {
   public async openMenu(): Promise<void> {
     this.clickElement(this.triggerEl);
     await elementUpdated(this.menuEl);
+    await this.dropdownAnimation();
+  }
+
+  public async dropdownAnimation(): Promise<void> {
+    await elementUpdated(this.menuEl);
+    return new Promise(resolve => setTimeout(resolve, 500));
   }
 
   public get popoverElement(): IPopoverComponent | undefined {

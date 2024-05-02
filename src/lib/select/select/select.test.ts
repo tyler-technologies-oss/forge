@@ -140,7 +140,7 @@ describe('Select', () => {
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
       expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
-      await expect(harness.element).to.be.accessible();
+      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
   
     it('should set aria-activedescendant when opened via keyboard', async () => {
@@ -157,7 +157,7 @@ describe('Select', () => {
       await harness.popoverToggleAnimation;
   
       expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].id);
-      await expect(harness.element).to.be.accessible();
+      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
 
     it('should update aria-activedescendant when focused', async () => {
@@ -175,7 +175,7 @@ describe('Select', () => {
   
       const listItems = harness.getListItems();
       expect(harness.element.getAttribute('aria-activedescendant')).to.equal(listItems[0].id);
-      await expect(harness.element).to.be.accessible();
+      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
 
     it('should be accessible when required', async () => {
@@ -207,7 +207,7 @@ describe('Select', () => {
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
       expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
-      await expect(harness.element).to.be.accessible();
+      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
   });
 
@@ -834,6 +834,7 @@ async function createFixture({
 }: SelectFixtureConfig = {}): Promise<SelectHarness> {
   const el = await fixture<ISelectComponent>(html`
     <forge-select
+      id="my-test-id"
       style="margin-top: 10px;"
       label=${label}
       placeholder=${placeholder}
