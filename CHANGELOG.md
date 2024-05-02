@@ -1,3 +1,16 @@
+# v2.23.1 (Thu May 02 2024)
+
+#### 🐛 Bug Fix
+
+- fix(list-item): removed legacy internal mousedown handler that was preventing pointer events if already focused [#551](https://github.com/tyler-technologies-oss/forge/pull/551) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(badge): fixed a bug where badge text would not ellipse when overflowing [#552](https://github.com/tyler-technologies-oss/forge/pull/552) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.23.0 (Thu Apr 25 2024)
 
 :tada: This release contains work from a new contributor! :tada:
