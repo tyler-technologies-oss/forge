@@ -19,6 +19,10 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-app-bar': IAppBarComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-app-bar-navigate': CustomEvent<void>;
+  }
 }
 
 /**
@@ -46,6 +50,8 @@ declare global {
  * @cssproperty --forge-app-bar-title-padding - The padding around the title element.
  * @cssproperty --forge-app-bar-transition-duration - The transition duration for animations.
  * @cssproperty --forge-app-bar-transition-timing - The transition timing function for animations.
+ * 
+ * @event {CustomEvent<void>} forge-app-bar-navigate - Fires when the app bar is clicked.
  * 
  * @csspart root - The root container element.
  * @csspart title - The title element.
