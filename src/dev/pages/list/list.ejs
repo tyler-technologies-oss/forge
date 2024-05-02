@@ -496,21 +496,61 @@
     </div>
   </div>
 
+  <!-- With nested buttons -->
+  <div>
+    <h3 class="forge-typography--heading2">With nested buttons</h3>
+    <div class="list-demo">
+      <forge-list>
+        <forge-list-item>
+          <button type="button" aria-labelledby="nested-button-item-1"></button>
+          <span id="nested-button-item-1">List Item One (ignore leading)</span>
+          <forge-checkbox slot="leading" forge-ignore aria-label="Select list item"></forge-checkbox>
+        </forge-list-item>
+        <forge-list-item>
+          <button type="button" aria-labelledby="nested-button-item-1"></button>
+          <span id="nested-button-item-1">List Item One (ignore trailing)</span>
+          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
+        </forge-list-item>
+        <forge-list-item>
+          <button type="button" aria-labelledby="nested-button-item-2"></button>
+          <span id="nested-button-item-2">List Item Two w/leading</span>
+          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
+        </forge-list-item>
+        <forge-list-item>
+          <button type="button" aria-labelledby="nested-button-item-2"></button>
+          <span id="nested-button-item-2">List Item Two w/trailing</span>
+          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
+        </forge-list-item>
+        <forge-list-item>
+          <button type="button" aria-labelledby="nested-button-item-3"></button>
+          <span id="nested-button-item-3">List Item Three</span>
+        </forge-list-item>
+        <forge-list-item disabled>
+          <button type="button" aria-labelledby="nested-button-item-3"></button>
+          <span id="nested-button-item-3">List Item Three</span>
+        </forge-list-item>
+      </forge-list>
+    </div>
+  </div>
+
   <!-- List with anchor links -->
   <div>
     <h3 class="forge-typography--heading2">List with anchor links</h3>
     <div class="list-demo">
       <forge-list>
-        <forge-list-item href="https://www.google.com/">
-          Google
+        <forge-list-item>
+          <a href="javascript: console.log('https://www.google.com/');" aria-label="Navigate to Google"></a>
+          <span>Google</span>
           <forge-icon slot="trailing" name="open_in_new"></forge-icon>
         </forge-list-item>
-        <forge-list-item href="https://www.bing.com/">
-          Bing
+        <forge-list-item>
+          <a href="javascript: console.log('https://www.bing.com/');" aria-label="Navigate to Bing"></a>
+          <span>Bing</span>
           <forge-icon slot="trailing" name="open_in_new"></forge-icon>
         </forge-list-item>
-        <forge-list-item href="https://www.yahoo.com/">
-          Yahoo
+        <forge-list-item>
+          <a href="javascript: console.log('https://www.yahoo.com/');" aria-label="Navigate to Yahoo"></a>
+          <span>Yahoo</span>
           <forge-icon slot="trailing" name="open_in_new"></forge-icon>
         </forge-list-item>
       </forge-list>

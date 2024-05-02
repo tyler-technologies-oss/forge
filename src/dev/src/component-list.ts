@@ -2,6 +2,7 @@ import componentsJson from '$src/components.json';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { ListComponent } from '@tylertech/forge/list';
 import { tylIconChevronRight } from '@tylertech/tyler-icons/standard';
+import './component-list.scss';
 
 IconRegistry.define(tylIconChevronRight);
 
@@ -119,7 +120,7 @@ function getComponentCount(groups: IComponentGroup[]): number {
 function buildComponentsList(groups: IComponentGroup[]): HTMLElement[] {
   if (!groups.length) {
     const emptyText = document.createElement('div');
-    emptyText.classList.add('forge-typography--label1');
+    emptyText.classList.add('forge-typography--label1', 'empty-text');
     emptyText.textContent = 'No components found.';
     return [emptyText];
   }
@@ -127,15 +128,19 @@ function buildComponentsList(groups: IComponentGroup[]): HTMLElement[] {
   const elements = [];
 
   for (const { label: groupLabel, components } of groups) {
-    const groupHeader = document.createElement('h3');
-    groupHeader.classList.add('forge-typography--subheading3');
+    const groupHeader = document.createElement('div');
+    groupHeader.classList.add('forge-typography--subheading3', 'component-list-header');
     groupHeader.textContent = groupLabel;
     elements.push(groupHeader);
 
     for (const { label: componentLabel, path } of components) {
       const listItem = document.createElement('forge-list-item');
       listItem.textContent = componentLabel;
-      listItem.href = path;
+
+      const anchorEl = document.createElement('a');
+      anchorEl.href = path;
+      anchorEl.setAttribute('aria-label', `Navigate to ${componentLabel} demo page`);
+      listItem.appendChild(anchorEl);
 
       const trailingIcon = document.createElement('forge-icon');
       trailingIcon.slot = 'trailing';

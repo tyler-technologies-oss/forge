@@ -8,35 +8,33 @@ import { ListComponentItemRole, LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
 import { LIST_ITEM_CONSTANTS } from './list-item-constants';
 import { ISwitchComponent } from '../../switch';
+import { isFocusable, setDefaultAria } from '../../constants';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   initialize(): void;
-  setHref(href: string): void;
-  setAnchorTarget(target: string): void;
-  setAnchorDownload(download: string): void;
-  setAnchorRel(rel: string): void;
+  updateTabIndex(): void;
   setNonInteractive(value: boolean): void;
   setDisabled(value: boolean): void;
   setActive(value: boolean): void;
   trySelect(value: unknown): boolean | null;
   tryToggleSelectionControl(value?: boolean): void;
-  isFocused(): boolean;
-  setFocus(): void;
   animateStateLayer(): void;
-  clickAnchor(): void;
   clickHost(): void;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
-  private _rootElement: HTMLElement | HTMLAnchorElement;
+  private _rootElement: HTMLElement;
   private _focusIndicatorElement: IFocusIndicatorComponent;
   private _stateLayerElement: IStateLayerComponent;
+  private _defaultSlotElement: HTMLSlotElement;
+  private _slotListener: EventListener = this._onDefaultSlotChange.bind(this);
 
   constructor(component: IListItemComponent) {
     super(component);
     this._rootElement = getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.ROOT);
     this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+    this._defaultSlotElement = getShadowElement(component, 'slot:not([name])') as HTMLSlotElement;
   }
 
   public initialize(): void {
@@ -46,47 +44,62 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
       this._inheritParentListProps(list);
     }
 
-    this._rootElement.tabIndex = this._component.nonInteractive || this._component.disabled ? -1 : 0;
+    this._defaultSlotElement.addEventListener('slotchange', this._slotListener);
 
-    if (!this._component.hasAttribute('role')) {
-      this._setRole(list);
-    }
+    this._component[setDefaultAria]({
+      role: ListComponentItemRole[list?.getAttribute('role') as string] ?? 'listitem'
+    }, { setAttribute: !this._component.hasAttribute('role') });
+
+    this.updateTabIndex();
+    this._onDefaultSlotChange();
   }
 
-  public setHref(href: string): void {
-    if (href) {
-      if (this._rootElement.tagName !== 'A') {
-        const anchor = this._createAnchorRootElement();
-        this._rootElement = replaceElement(this._rootElement, anchor);
+  private _onDefaultSlotChange(): void {
+    const slottedAnchor = this._defaultSlotElement.assignedElements().find(e => e.tagName === 'A') as HTMLAnchorElement;
+    const slottedButton = this._defaultSlotElement.assignedElements().find(e => e.tagName === 'BUTTON') as HTMLButtonElement;
+
+    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
+    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON, !!slottedButton);
+
+    const targetSlottedElement = (element: HTMLElement): void => {
+      if (this._focusIndicatorElement.targetElement !== element) {
+        this._focusIndicatorElement.targetElement = element;
       }
-      (this._rootElement as HTMLAnchorElement).href = href;
-    } else if (this._rootElement.tagName === 'A') {
-      const defaultEl = this._createDefaultRootElement();
-      this._rootElement = replaceElement(this._rootElement, defaultEl);
+      if (this._stateLayerElement.targetElement !== element) {
+        this._stateLayerElement.targetElement = element;
+      }
+    };
+
+    const removeTabIndex = (): void => {
+      this._component[isFocusable] = false;
+      this._component.removeAttribute('tabindex');
+    };
+
+    if (slottedAnchor) {
+      targetSlottedElement(slottedAnchor);
+      removeTabIndex();
+    } else if (slottedButton) {
+      targetSlottedElement(slottedButton);
+      if (this._component.disabled) {
+        slottedButton.disabled = true;
+      }
+      removeTabIndex();
+    } else {
+      targetSlottedElement(this._component);
+      this.updateTabIndex();
     }
   }
 
-  public setAnchorTarget(target: string): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).target = target;
-    }
-  }
-
-  public setAnchorDownload(download: string): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).download = download;
-    }
-  }
-
-  public setAnchorRel(rel: string): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).rel = rel;
-    }
+  public updateTabIndex(): void {
+    this._component[isFocusable] = this._component.getAttribute('role') !== 'presentation' &&
+                                   !this._rootElement.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR) &&
+                                   !this._rootElement.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON) &&
+                                   !this._component.nonInteractive &&
+                                   !this._component.disabled;
   }
 
   public setNonInteractive(value: boolean): void {
-    this._rootElement.tabIndex = value ? -1 : 0;
-
+    this.updateTabIndex();
     if (value) {
       this._focusIndicatorElement.remove();
       this._stateLayerElement.remove();
@@ -96,8 +109,13 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   public setDisabled(value: boolean): void {
-    this._rootElement.tabIndex = value ? -1 : 0;
+    this.updateTabIndex();
     toggleAttribute(this._component, value, 'aria-disabled', 'true');
+
+    const slottedButton = this._defaultSlotElement.assignedElements().find(e => e.tagName === 'BUTTON') as HTMLButtonElement;
+    if (slottedButton) {
+      slottedButton.disabled = value;
+    }
 
     if (value) {
       this._focusIndicatorElement.remove();
@@ -170,55 +188,14 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
   }
 
-  public isFocused(): boolean {
-    return this._component.matches(':focus');
-  }
-
-  public setFocus(): void {
-    this._rootElement.focus({ preventScroll: true });
-  }
-
   public animateStateLayer(): void {
     this._stateLayerElement.playAnimation();
-  }
-
-  public clickAnchor(): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).click();
-    }
   }
 
   public clickHost(): void {
     // Calling click() on the prototype ensures we don't end up in an infinite
     // recursion since the host overrides the HTMLElement.click() method
     HTMLElement.prototype.click.call(this._component);
-  }
-
-  private _createAnchorRootElement(): HTMLAnchorElement {
-    const a = document.createElement('a');
-    a.classList.add(LIST_ITEM_CONSTANTS.classes.ROOT);
-    a.setAttribute('part', 'root');
-    if (this._component.href) {
-      a.href = this._component.href;
-    }
-    if (this._component.target) {
-      a.target = this._component.target;
-    }
-    if (this._component.download) {
-      a.download = this._component.download;
-    }
-    if (this._component.rel) {
-      a.rel = this._component.rel;
-    }
-    return a;
-  }
-
-  private _createDefaultRootElement(): HTMLElement {
-    const div = document.createElement('div');
-    div.classList.add(LIST_ITEM_CONSTANTS.classes.ROOT);
-    div.setAttribute('part', 'root');
-    div.tabIndex = this._component.nonInteractive || this._component.disabled ? -1 : 0;
-    return div;
   }
 
   private _getParentList(): IListComponent | null {
@@ -235,9 +212,6 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (list.hasAttribute(LIST_CONSTANTS.attributes.DENSE)) {
       this._component.dense = true;
     }
-    if (list.getAttribute(LIST_CONSTANTS.attributes.PROPAGATE_CLICK) === 'false') {
-      this._component.propagateClick = false;
-    }
     if (list.hasAttribute(LIST_CONSTANTS.attributes.INDENTED)) {
       this._component.indented = true;
     }
@@ -247,11 +221,5 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (list.hasAttribute(LIST_CONSTANTS.attributes.THREE_LINE)) {
       this._component.threeLine = true;
     }
-  }
-
-  private _setRole(list: IListComponent | null): void {
-    const listRole = list?.getAttribute('role');
-    const role = ListComponentItemRole[listRole as string] ?? 'listitem';
-    this._component.setAttribute('role', role);
   }
 }

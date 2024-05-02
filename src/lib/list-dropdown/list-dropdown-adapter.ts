@@ -85,8 +85,9 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
     // Add the listener for when list items are selected from the dropdown
     this._listElement.addEventListener('forge-list-item-select', evt => {
-      evt.detail.listItem.setAttribute('aria-selected', 'true');
-      selectCallback(evt.detail.value, evt.detail.listItem.id);
+      const listItem = evt.target as IListItemComponent;
+      listItem.setAttribute('aria-selected', 'true');
+      selectCallback(evt.detail.value, listItem.id);
     });
 
     // Determine if we need to show the list or the async element first

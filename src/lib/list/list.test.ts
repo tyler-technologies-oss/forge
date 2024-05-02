@@ -38,23 +38,6 @@ describe('List', () => {
     expect(ctx.listItemsAttr('role', 'menuitem')).to.true;
   });
 
-  it('should update role dynamically', async () => {
-    const ctx = await createFixture();
-    expect(ctx.listItemsAttr('role', 'listitem')).to.true;
-    
-    ctx.list.role = 'listbox';
-    await elementUpdated(ctx.list);
-    expect(ctx.listItemsAttr('role', 'option')).to.true;
-
-    ctx.list.role = 'menu';
-    await elementUpdated(ctx.list);
-    expect(ctx.listItemsAttr('role', 'menuitem')).to.true;
-
-    ctx.list.role = 'list';
-    await elementUpdated(ctx.list);
-    expect(ctx.listItemsAttr('role', 'listitem')).to.true;
-  });
-
   it('should dispatch select event when clicked', async () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
@@ -122,119 +105,6 @@ describe('List', () => {
 
     ctx.list.selectedValue = null;
     expect(ctx.listItems.filter(li => li.selected).length).to.be.equal(0);
-  });
-
-  it('should render anchor element when href is set', async () => {
-    const ctx = await createFixture({ anchor: true });
-    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
-
-    expect(anchor).to.be.instanceOf(HTMLAnchorElement);
-    expect(ctx.listItems[0].href).to.equal(DEFAULT_HREF);
-    expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS.attributes.HREF)).to.equal(DEFAULT_HREF);
-    expect(anchor.href).to.equal(DEFAULT_HREF);
-    expect(anchor.target).to.equal('');
-    await expect(ctx.list).to.be.accessible();
-  });
-
-  it('should set anchor target', async () => {
-    const ctx = await createFixture({ anchor: true, anchorTarget: '_self' });
-    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
-
-    expect(anchor).to.be.instanceOf(HTMLAnchorElement);
-    expect(ctx.listItems[0].target).to.equal('_self');
-    expect(ctx.listItems[0].getAttribute(LIST_ITEM_CONSTANTS.attributes.TARGET)).to.equal('_self');
-    expect(anchor.href).to.equal(DEFAULT_HREF);
-    expect(anchor.target).to.equal('_self');
-  });
-
-  it('should set anchor download', async () => {
-    const ctx = await createFixture({ anchor: true });
-    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
-
-    expect(anchor).to.be.instanceOf(HTMLAnchorElement);
-
-    ctx.listItems[0].download = 'file.txt';
-    expect(anchor.download).to.equal('file.txt');
-  });
-
-  it('should set anchor rel', async () => {
-    const ctx = await createFixture({ anchor: true });
-    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
-
-    expect(anchor).to.be.instanceOf(HTMLAnchorElement);
-
-    ctx.listItems[0].rel = 'noopener';
-    expect(anchor.rel).to.equal('noopener');
-  });
-
-  it('should reset root element when href is removed', async () => {
-    const ctx = await createFixture({ anchor: true });
-    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
-
-    expect(anchor).to.be.instanceOf(HTMLAnchorElement);
-
-    ctx.listItems[0].href = '';
-    expect(ctx.getListItemRootElement(0)).to.be.instanceOf(HTMLDivElement);
-  });
-
-  it('should update anchor target element', async () => {
-    const ctx = await createFixture({ anchor: true });
-    const anchor = ctx.getListItemRootElement(0) as HTMLAnchorElement;
-
-    expect(anchor.target).to.equal('');
-    
-    ctx.listItems[0].target = '_self';
-    expect(anchor.target).to.equal('_self');
-  });
-
-  it('should click <a> tag when click() is called', async () => {
-    const ctx = await createFixture();
-
-    const firstListItem = ctx.listItems[0];
-    window['forgeAnchorTest'] = () => {};
-    const href = 'javascript: forgeAnchorTest()';
-    firstListItem.href = href;
-    await elementUpdated(firstListItem);
-    const testSpy = sinon.spy(window as any, 'forgeAnchorTest');
-
-    firstListItem.click();
-    await elementUpdated(firstListItem);
-    delete window['forgeAnchorTest'];
-
-    expect(testSpy).to.have.been.calledOnce;
-  });
-
-  it('should click <a> tag via mouse', async () => {
-    const ctx = await createFixture();
-
-    const firstListItem = ctx.listItems[0];
-    window['forgeAnchorTest'] = () => {};
-    const href = `javascript: forgeAnchorTest()`;
-    firstListItem.href = href;
-    const testSpy = sinon.spy(window as any, 'forgeAnchorTest');
-
-    await ctx.clickElement(firstListItem);
-    await elementUpdated(firstListItem);
-    delete window['forgeAnchorTest'];
-
-    expect(testSpy).to.have.been.calledOnce;
-  });
-
-  it('should click <a> tag via keyboard when enter key is pressed', async () => {
-    const ctx = await createFixture();
-
-    const firstListItem = ctx.listItems[0];
-    window['forgeAnchorTest'] = () => {};
-    const href = `javascript: forgeAnchorTest()`;
-    firstListItem.href = href;
-    const testSpy = sinon.spy(window as any, 'forgeAnchorTest');
-
-    firstListItem.focus();
-    await sendKeys({ press: 'Enter' });
-    await elementUpdated(firstListItem);
-    delete window['forgeAnchorTest'];
-
-    expect(testSpy).to.have.been.calledOnce;
   });
 
   it('should set disabled', async () => {
@@ -473,7 +343,6 @@ describe('List', () => {
       nonInteractive: true,
       disabled: true,
       dense: true,
-      propagateClick: false,
       twoLine: true,
       threeLine: true,
       selectedValue: '4'
@@ -486,7 +355,6 @@ describe('List', () => {
     expect(listItem.nonInteractive).to.be.true;
     expect(listItem.disabled).to.be.true;
     expect(listItem.dense).to.be.true;
-    expect(listItem.propagateClick).to.be.false;
     expect(listItem.twoLine).to.be.true;
     expect(listItem.threeLine).to.be.true;
     expect(listItem.selected).to.be.true;
@@ -508,6 +376,151 @@ describe('List', () => {
 
     expect(spy).to.not.have.been.called;
   });
+
+  describe('nested anchor', () => {
+    it('should detect nested anchor element', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <a href="javascript: void(0);" aria-label="Navigate to link"></a>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.true;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
+      await expect(el).to.be.accessible();
+    });
+
+    it('should dynamically detect nested anchor element', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>List Item</forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.false;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
+      await expect(el).to.be.accessible();
+
+      const anchor = document.createElement('a');
+      anchor.href = 'javascript: void(0);';
+      anchor.setAttribute('aria-label', 'Navigate to link');
+      listItemEl.appendChild(anchor);
+
+      await elementUpdated(el);
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.true;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
+      await expect(el).to.be.accessible();
+
+      anchor.remove();
+
+      await elementUpdated(el);
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.false;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
+      await expect(el).to.be.accessible();
+    });
+
+    it('should dispatch select event when anchor is clicked', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <a href="javascript: void(0);" aria-label="Navigate to link"></a>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const spy = sinon.spy();
+      el.addEventListener('forge-list-item-select', spy);
+
+      listItemEl.querySelector('a')?.click();
+
+      expect(spy).to.have.been.calledOnce;
+    });
+  });
+
+  describe('nested button', () => {
+    it('should detect nested button element', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <button type="button" aria-labelledby="li-text"></button>
+            <span id="li-text">Button</span>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.true;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
+      await expect(el).to.be.accessible();
+    });
+
+    it('should dynamically detect nested button element', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>List Item</forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.false;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
+      await expect(el).to.be.accessible();
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-label', 'Button');
+      listItemEl.appendChild(button);
+
+      await elementUpdated(el);
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.true;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
+      await expect(el).to.be.accessible();
+
+      button.remove();
+
+      await elementUpdated(el);
+
+      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.false;
+      expect(listItemEl.getAttribute('role')).to.equal('listitem');
+      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
+      await expect(el).to.be.accessible();
+    });
+
+    it('should dispatch select event when button is clicked', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <button type="button" aria-label="Button"></button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const spy = sinon.spy();
+      el.addEventListener('forge-list-item-select', spy);
+
+      listItemEl.querySelector('button')?.click();
+
+      expect(spy).to.have.been.calledOnce;
+    });
+  });
 });
 
 interface ListFixtureConfig {
@@ -515,7 +528,6 @@ interface ListFixtureConfig {
   nonInteractive?: boolean;
   disabled?: boolean;
   dense?: boolean;
-  propagateClick?: boolean;
   indented?: boolean;
   selectedValue?: any;
   twoLine?: boolean;
@@ -532,7 +544,6 @@ async function createFixture({
   nonInteractive,
   disabled,
   dense,
-  propagateClick,
   indented,
   selectedValue,
   twoLine,
@@ -553,7 +564,6 @@ async function createFixture({
       ?two-line=${twoLine}
       ?three-line=${threeLine}
       ?wrap=${wrap}
-      .propagateClick=${propagateClick}
       .selectedValue=${selectedValue}>
       <forge-list-item .href=${anchor ? DEFAULT_HREF : ''} .target=${anchorTarget ?? ''} value="1">
         One
@@ -585,7 +595,7 @@ class ListHarness extends TestHarness<IListComponent> {
   }
 
   public listItemsTabIndex(tabIndex: number): boolean {
-    return this.listItems.every(li => (li.shadowRoot?.firstElementChild as HTMLElement)?.tabIndex === tabIndex);
+    return this.listItems.every(li => li.tabIndex === tabIndex);
   }
 
   public getListItemRootElement(index: number): HTMLElement {

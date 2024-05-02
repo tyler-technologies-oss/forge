@@ -8,7 +8,6 @@ const observedAttributes = {
   NON_INTERACTIVE: 'non-interactive',
   DISABLED: 'disabled',
   DENSE: 'dense',
-  PROPAGATE_CLICK: 'propagate-click',
   SELECTED_VALUE: 'selected-value',
   INDENTED: 'indented',
   TWO_LINE: 'two-line',
@@ -26,6 +25,7 @@ const events = {
 
 export const LIST_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   events
 };

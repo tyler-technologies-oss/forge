@@ -4,10 +4,7 @@ import { IListItemComponent } from './list-item';
 const elementName = `${COMPONENT_NAME_PREFIX}list-item`;
 
 const observedAttributes = {
-  HREF: 'href',
-  TARGET: 'target',
-  DOWNLOAD: 'download',
-  REL: 'rel',
+  ROLE: 'role',
   STATIC: 'static',
   NON_INTERACTIVE: 'non-interactive',
   DISABLED: 'disabled',
@@ -15,7 +12,6 @@ const observedAttributes = {
   ACTIVE: 'active',
   VALUE: 'value',
   DENSE: 'dense',
-  PROPAGATE_CLICK: 'propagate-click',
   INDENTED: 'indented',
   TWO_LINE: 'two-line',
   THREE_LINE: 'three-line',
@@ -27,7 +23,9 @@ const attributes = {
 };
 
 const classes = {
-  ROOT: 'forge-list-item'
+  ROOT: 'forge-list-item',
+  WITH_ANCHOR: 'with-anchor',
+  WITH_BUTTON: 'with-button'
 };
 
 const selectors = {
@@ -52,5 +50,4 @@ export const LIST_ITEM_CONSTANTS = {
 
 export interface IListItemSelectEventData<T = unknown> {
   value: T;
-  listItem: IListItemComponent;
 }

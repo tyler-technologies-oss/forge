@@ -75,7 +75,6 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
 export function createList(config: IListDropdownOpenConfig): IListComponent {
   const listElement = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
   listElement.id = `list-dropdown-list-${config.id}`;
-  listElement.propagateClick = false;
 
   // Set roles and other attributes based on our type
   switch (config.type) {

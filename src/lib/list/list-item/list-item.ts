@@ -1,18 +1,18 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
 import { ListItemAdapter } from './list-item-adapter';
 import { ListItemFoundation } from './list-item-foundation';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
 import { StateLayerComponent } from '../../state-layer';
 import { FocusIndicatorComponent } from '../../focus-indicator';
+import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
+import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
+import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
+import { BaseComponent } from '../../core/base/base-component';
 
 import template from './list-item.html';
 import styles from './list-item.scss';
 
-export interface IListItemComponent<T = unknown> extends ICustomElement {
-  href: string;
-  target: string;
-  download: string;
-  rel: string;
+export interface IListItemComponent<T = unknown> extends IWithElementInternals, IWithDefaultAria, IWithFocusable {
   /** @deprecated Use nonInteractive instead. */
   static: boolean;
   nonInteractive: boolean;
@@ -21,7 +21,6 @@ export interface IListItemComponent<T = unknown> extends ICustomElement {
   active: boolean;
   value: T;
   dense: boolean;
-  propagateClick: boolean;
   indented: boolean;
   twoLine: boolean;
   threeLine: boolean;
@@ -38,16 +37,13 @@ declare global {
   }
 }
 
+const BaseClass = WithFocusable(WithElementInternals(WithDefaultAria(BaseComponent)));
+
 /**
  * @tag forge-list-item
  * 
  * @summary List items are individual rows of content inside of a list.
  * 
- * @property {string} href - The href of the anchor. This forces the list item to render as an anchor element.
- * @property {string} target - The target of the anchor when an `href` is set. Defaults to `'_blank'`.
- * @property {boolean} download - The anchor download attribute.
- * @property {boolean} rel - The anchor rel attribute.
- * @property {string} target - The target of the list item when an `href` is set. Defaults to `'_blank'`.
  * @property {boolean} nonInteractive - If true, the list item will not be interactive.
  * @property {boolean} static - If true, the list item will not be interactive. Deprecated use `nonInteractive` instead.
  * @property {boolean} disabled - Disables the list item.
@@ -55,17 +51,11 @@ declare global {
  * @property {boolean} active - Applies the active state to the list item by emulating its focused state.
  * @property {unknown} value - The unique value of the list item.
  * @property {boolean} dense - Applies the dense state to the list item.
- * @property {boolean} propagateClick - If true, the list item will not propagate click events to itself and therefore cannot receive focus.
  * @property {boolean} indented - Applies the indented state by adding margin to the start of the list item.
  * @property {boolean} twoLine - Sets the list item height to support at least two lines of text.
  * @property {boolean} threeLine - Sets the list item height to support at least three lines of text.
  * @property {boolean} wrap - Sets the list item to wrap its text content.
- * 
- * @attribute {string} href - The href of the anchor This forces the list item to render as an anchor element.
- * @attribute {string} target - The target of the anchor when an `href` is set. Defaults to `'_blank'`.
- * @attribute {boolean} download - The anchor download attribute.
- * @attribute {boolean} rel - The anchor rel attribute.
- * @attribute {string} target - The target of the list item when an `href` is set. Defaults to `'_blank'`.
+ *
  * @attribute {boolean} non-interactive - If true, the list item will not be interactive.
  * @attribute {boolean} static - If true, the list item will not be interactive. Deprecated use `non-interactive` instead.
  * @attribute {boolean} disabled - Disables the list item.
@@ -73,7 +63,6 @@ declare global {
  * @attribute {boolean} active - Applies the active state to the list item by emulating its focused state.
  * @attribute {unknown} value - The unique value of the list item.
  * @attribute {boolean} dense - Applies the dense state to the list item.
- * @attribute {boolean} propagate-click - If applied, the list item will not propagate click events to itself and therefore cannot receive focus.
  * @attribute {boolean} indented - Applies the indented state by adding margin to the start of the list item.
  * @attribute {boolean} two-line - Sets the list item height to support at least two lines of text.
  * @attribute {boolean} three-line - Sets the list item height to support at least three lines of text.
@@ -141,34 +130,19 @@ declare global {
     FocusIndicatorComponent
   ]
 })
-export class ListItemComponent extends HTMLElement implements IListItemComponent {
+export class ListItemComponent extends BaseClass implements IListItemComponent {
   public static get observedAttributes(): string[] {
-    return [
-      LIST_ITEM_CONSTANTS.observedAttributes.HREF,
-      LIST_ITEM_CONSTANTS.observedAttributes.TARGET,
-      LIST_ITEM_CONSTANTS.observedAttributes.DOWNLOAD,
-      LIST_ITEM_CONSTANTS.observedAttributes.REL,
-      LIST_ITEM_CONSTANTS.observedAttributes.STATIC,
-      LIST_ITEM_CONSTANTS.observedAttributes.NON_INTERACTIVE,
-      LIST_ITEM_CONSTANTS.observedAttributes.DISABLED,
-      LIST_ITEM_CONSTANTS.observedAttributes.SELECTED,
-      LIST_ITEM_CONSTANTS.observedAttributes.ACTIVE,
-      LIST_ITEM_CONSTANTS.observedAttributes.VALUE,
-      LIST_ITEM_CONSTANTS.observedAttributes.DENSE,
-      LIST_ITEM_CONSTANTS.observedAttributes.PROPAGATE_CLICK,
-      LIST_ITEM_CONSTANTS.observedAttributes.INDENTED,
-      LIST_ITEM_CONSTANTS.observedAttributes.TWO_LINE,
-      LIST_ITEM_CONSTANTS.observedAttributes.THREE_LINE,
-      LIST_ITEM_CONSTANTS.observedAttributes.WRAP
-    ];
+    return Object.values(LIST_ITEM_CONSTANTS.observedAttributes);
   }
 
   private _foundation: ListItemFoundation;
+  private _adapter: ListItemAdapter;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ListItemFoundation(new ListItemAdapter(this));
+    this._adapter = new ListItemAdapter(this);
+    this._foundation = new ListItemFoundation(this._adapter);
   }
 
   public connectedCallback(): void {
@@ -181,17 +155,8 @@ export class ListItemComponent extends HTMLElement implements IListItemComponent
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case LIST_ITEM_CONSTANTS.observedAttributes.HREF:
-        this.href = newValue;
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.TARGET:
-        this.target = newValue;
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.DOWNLOAD:
-        this.download = newValue;
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.REL:
-        this.rel = newValue;
+      case LIST_ITEM_CONSTANTS.observedAttributes.ROLE:
+        this._adapter.updateTabIndex();
         break;
       case LIST_ITEM_CONSTANTS.observedAttributes.NON_INTERACTIVE:
       case LIST_ITEM_CONSTANTS.observedAttributes.STATIC:
@@ -212,9 +177,6 @@ export class ListItemComponent extends HTMLElement implements IListItemComponent
       case LIST_ITEM_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.PROPAGATE_CLICK:
-        this.propagateClick = coerceBoolean(newValue);
-        break;
       case LIST_ITEM_CONSTANTS.observedAttributes.INDENTED:
         this.indented = coerceBoolean(newValue);
         break;
@@ -229,22 +191,6 @@ export class ListItemComponent extends HTMLElement implements IListItemComponent
         break;
     }
   }
-
-  public override focus(): void {
-    this._foundation.setFocus();
-  }
-
-  @FoundationProperty()
-  public declare href: string;
-
-  @FoundationProperty()
-  public declare target: string;
-
-  @FoundationProperty()
-  public declare download: string;
-
-  @FoundationProperty()
-  public declare rel: string;
 
   /** @deprecated Use nonInteractive instead. */
   @FoundationProperty()
@@ -267,9 +213,6 @@ export class ListItemComponent extends HTMLElement implements IListItemComponent
 
   @FoundationProperty()
   public declare dense: boolean;
-
-  @FoundationProperty()
-  public declare propagateClick: boolean;
 
   @FoundationProperty()
   public declare indented: boolean;

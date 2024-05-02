@@ -8,7 +8,6 @@ export interface IListFoundation extends ICustomElementFoundation {
   nonInteractive: boolean;
   disabled: boolean;
   dense: boolean;
-  propagateClick: boolean;
   indented: boolean;
   selectedValue: unknown | unknown[];
   twoLine: boolean;
@@ -20,7 +19,6 @@ export class ListFoundation implements IListFoundation {
   private _nonInteractive = false;
   private _disabled = false;
   private _dense = false;
-  private _propagateClick = true;
   private _indented = false;
   private _selectedValue: unknown | unknown[];
   private _twoLine = false;
@@ -33,8 +31,6 @@ export class ListFoundation implements IListFoundation {
   }
 
   public initialize(): void {
-    this._adapter.initialize();
-
     if (!this._nonInteractive) {
       this._adapter.addHostListener('keydown', this._keydownListener);
     }
@@ -71,10 +67,6 @@ export class ListFoundation implements IListFoundation {
       evt.preventDefault();
       this._adapter.focusNextListItem();
     }
-  }
-
-  public updateRole(): void {
-    this._adapter.updateListItemRole();
   }
 
   public get static(): boolean {
@@ -116,17 +108,6 @@ export class ListFoundation implements IListFoundation {
       this._dense = value;
       this._adapter.updateListItems(li => li.dense = this._dense);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.DENSE, this._dense);
-    }
-  }
-
-  public get propagateClick(): boolean {
-    return this._propagateClick;
-  }
-  public set propagateClick(value: boolean) {
-    if (this._propagateClick !== value) {
-      this._propagateClick = value;
-      this._adapter.updateListItems(li => li.propagateClick = this._propagateClick);
-      this._adapter.setHostAttribute(LIST_CONSTANTS.attributes.PROPAGATE_CLICK, this._propagateClick ? 'true' : 'false');
     }
   }
 

@@ -26,8 +26,25 @@
   cursor: #{token(cursor)};
 }
 
-@mixin anchor-link {
-  color: inherit;
+@mixin button {
+  position: absolute;
+  inset: 0;
+  outline: none;
+  appearance: none;
+  opacity: 0;
+  cursor: #{token(cursor)};
+}
+
+@mixin anchor {
+  position: absolute;
+  inset: 0;
+  outline: none;
+  pointer-events: all;
+  opacity: 0;
+}
+
+@mixin with-anchor {
+  pointer-events: none;
 }
 
 @mixin text-container {
@@ -168,4 +185,8 @@
 @mixin disabled {
   cursor: #{token(disabled-cursor)};
   opacity: #{token(disabled-opacity)};
+}
+
+@mixin slotted-disabled {
+  cursor: #{token(disabled-cursor)};
 }
