@@ -265,7 +265,6 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       if (isSelected) {
         listItemElement.selected = true;
       }
-      listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
 
       // If we have any child options, we need to render a child menu for this list item
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
