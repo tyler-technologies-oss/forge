@@ -12,6 +12,10 @@
   .forge-badge {
     @include base;
 
+    &__content {
+      @include content;
+    }
+
     &--elevated {
       @include elevated;
     }
@@ -53,13 +57,16 @@
   gap: 4px;
   transition: transform 200ms ease-in-out;
   transform: scale(0);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   pointer-events: none;
   border-radius: 16px;
   padding: 0 8px;
   font-weight: 700;
+}
+
+@mixin content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @mixin theme-property($property, $theme, $theme-mod) {

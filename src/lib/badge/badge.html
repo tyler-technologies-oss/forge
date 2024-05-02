@@ -1,7 +1,9 @@
 <template>
   <div class="forge-badge forge-badge--open" part="root">
     <slot name="leading"></slot>
-    <slot></slot>
+    <div class="forge-badge__content">
+      <slot></slot>
+    </div>
     <slot name="trailing"></slot>
   </div>
 </template>
