@@ -51,11 +51,13 @@ describe('Linear Progress', () => {
     el.determinate = false;
 
     const determinateProgressElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
-    const bufferElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.BUFFER);
+    const trackElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
+    const dotsElement = getShadowElement(el, '.dots');
 
     expect(el.hasAttribute('aria-valuenow')).to.equal(false);
     expect(determinateProgressElement.style.transform).to.equal('');
-    expect(bufferElement.style.transform).to.equal('');
+    expect(trackElement.style.transform).to.equal('scaleX(1)');
+    expect(getComputedStyle(dotsElement).display).to.equal('none');
   });
 
   it('should set determinate via attribute', async () => {
@@ -89,11 +91,13 @@ describe('Linear Progress', () => {
     el.determinate = true;
     el.buffer = 0.75;
 
-    const bufferElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.BUFFER);
+    const trackElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
+    const dotsElement = getShadowElement(el, '.dots');
 
     expect(el.buffer).to.equal(0.75);
     expect(el.getAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER)).to.equal('0.75');
-    expect(bufferElement.style.transform).to.equal('scaleX(0.75)');
+    expect(trackElement.style.transform).to.equal('scaleX(0.75)');
+    expect(getComputedStyle(dotsElement).display).not.to.equal('none');
   });
 
   it('should set progress via attribute', async () => {
@@ -108,11 +112,13 @@ describe('Linear Progress', () => {
 
   it('should set buffer via attribute', async () => {
     const el = await fixture<ILinearProgressComponent>(html`<forge-linear-progress determinate buffer="0.75"></forge-linear-progress>`);
-    const bufferElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.BUFFER);
+    const trackElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
+    const dotsElement = getShadowElement(el, '.dots');
 
     expect(el.buffer).to.equal(0.75);
     expect(el.getAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.BUFFER)).to.equal('0.75');
-    expect(bufferElement.style.transform).to.equal('scaleX(0.75)');
+    expect(trackElement.style.transform).to.equal('scaleX(0.75)');
+    expect(getComputedStyle(dotsElement).display).not.to.equal('none');
   });
 
   it('should set aria-label', async () => {

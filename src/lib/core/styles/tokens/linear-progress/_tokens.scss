@@ -21,6 +21,9 @@ $tokens: (
   // Indeterminate
   indeterminate-duration: utils.module-val(linear-progress, indeterminate-duration, 2s),
 
+  // Buffer
+  buffer-duration: utils.module-val(linear-progress, buffer-duration, animation.variable(duration-short4)),
+
   // Theme
   theme-transition-duration: utils.module-val(linear-progress, theme-transition-duration, animation.variable(duration-short3)),
   theme-transition-timing: utils.module-val(linear-progress, theme-transition-timing, animation.variable(easing-standard)),
