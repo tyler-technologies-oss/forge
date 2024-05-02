@@ -58,7 +58,6 @@ export class ListItemFoundation implements IListItemFoundation {
 
     if (!this._static) {
       this._adapter.addListener('click', this._clickListener);
-      // this._adapter.addListener('mousedown', this._mouseDownListener, { passive: false, capture: true });
       this._adapter.addListener('keydown', this._keydownListener);
     }
 
