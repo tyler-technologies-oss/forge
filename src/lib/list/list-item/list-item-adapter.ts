@@ -168,13 +168,11 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
       if (!force || currentState !== value) {
         checkable.dispatchEvent(new Event('change', { bubbles: true }));
       }
-    } else {
-      // Special case handling for the Forge switch element since it doesn't have a checked property
-      const switchEl = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.SWITCH_SELECTOR) as ISwitchComponent;
-      if (!switchEl) {
-        return;
-      }
-      
+    }
+
+    // Special case handling for the Forge switch element since it doesn't have a checked property
+    const switchEl = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.SWITCH_SELECTOR) as ISwitchComponent;
+    if (switchEl) {
       const force = typeof value === 'boolean';
       const currentState = switchEl.on;
 

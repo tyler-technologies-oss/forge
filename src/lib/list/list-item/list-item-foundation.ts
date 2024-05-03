@@ -77,7 +77,8 @@ export class ListItemFoundation implements IListItemFoundation {
     }
 
     // If the target was not a checkbox or radio button, attempt to find one and toggle its checked state
-    if (!targetElement.matches(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR)) {
+    if (!targetElement.matches(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR) &&
+        !targetElement.matches(LIST_ITEM_CONSTANTS.selectors.SWITCH_SELECTOR)) {
       this._adapter.tryToggleSelectionControl();
     }
 
