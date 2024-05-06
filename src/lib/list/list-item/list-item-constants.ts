@@ -1,13 +1,8 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
-import { IListItemComponent } from './list-item';
 
 const elementName = `${COMPONENT_NAME_PREFIX}list-item`;
 
 const observedAttributes = {
-  ROLE: 'role',
-  STATIC: 'static',
-  NON_INTERACTIVE: 'non-interactive',
-  DISABLED: 'disabled',
   SELECTED: 'selected',
   ACTIVE: 'active',
   VALUE: 'value',
@@ -24,15 +19,24 @@ const attributes = {
 
 const classes = {
   ROOT: 'forge-list-item',
+  DISABLED: 'disabled',
+  INTERACTIVE: 'interactive',
+  INTERNAL_ANCHOR: 'anchor',
   WITH_ANCHOR: 'with-anchor',
   WITH_BUTTON: 'with-button'
 };
 
+const ids = {
+  INTERNAL_ANCHOR: 'forge-list-item-anchor'
+};
+
 const selectors = {
   ROOT: `.${classes.ROOT}`,
+  BUTTON_LIKE: ':is(button,[role=button][tabindex]:not([tabindex=-1]),[forge-list-item-button])',
   CHECKBOX_RADIO_SELECTOR: ':is(input[type=checkbox],input[type=radio],forge-checkbox,forge-radio):not(:disabled):not([forge-ignore])',
   SWITCH_SELECTOR: 'forge-switch:not([disabled]):not([forge-ignore])',
-  IGNORE: '[forge-ignore],[data-forge-ignore]'
+  IGNORE: '[forge-ignore],[data-forge-ignore]',
+  INTERNAL_ANCHOR: `#${ids.INTERNAL_ANCHOR}`
 };
 
 const events = {
@@ -45,6 +49,7 @@ export const LIST_ITEM_CONSTANTS = {
   attributes,
   classes,
   selectors,
+  ids,
   events
 };
 

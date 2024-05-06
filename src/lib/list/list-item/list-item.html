@@ -1,18 +1,11 @@
 <template>
   <div class="forge-list-item" part="root">
     <slot name="leading"></slot>
-    <slot name="avatar"></slot>
     <div class="text-container" part="text-container">
       <slot></slot>
-      <slot name="title"></slot>
-      <slot name="primary-text"></slot>
-      <slot name="subtitle"></slot>
       <slot name="secondary-text"></slot>
       <slot name="tertiary-text"></slot>
-      <slot name="tertiary-title"></slot>
     </div>
     <slot name="trailing"></slot>
-    <forge-state-layer target=":host" exportparts="surface:state-layer"></forge-state-layer>
-    <forge-focus-indicator target=":host" part="focus-indicator" inward></forge-focus-indicator>
   </div>
 </template>

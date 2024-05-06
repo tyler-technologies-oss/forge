@@ -53,12 +53,6 @@ $tokens: (
   // Trailing
   trailing-selected-color: utils.module-ref(list-item, trailing-selected-color, selected-color),
 
-  // Avatar
-  avatar-background-color: utils.module-val(list-item, avatar-background-color, theme.variable(text-medium)),
-  avatar-color: utils.module-val(list-item, avatar-color, theme.variable(on-primary)),
-  avatar-shape: utils.module-val(list-item, avatar-shape, shape.variable(round)),
-  avatar-size: utils.module-val(list-item, avatar-size, 40px),
-
   // Wrap
   wrap-padding: utils.module-val(list-item, wrap-padding, spacing.variable(xsmall) spacing.variable(medium)),
 ) !default;

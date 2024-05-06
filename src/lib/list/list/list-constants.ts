@@ -3,10 +3,6 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 const elementName = `${COMPONENT_NAME_PREFIX}list`;
 
 const observedAttributes = {
-  ROLE: 'role',
-  STATIC: 'static',
-  NON_INTERACTIVE: 'non-interactive',
-  DISABLED: 'disabled',
   DENSE: 'dense',
   SELECTED_VALUE: 'selected-value',
   INDENTED: 'indented',
@@ -28,10 +24,4 @@ export const LIST_CONSTANTS = {
   observedAttributes,
   attributes,
   events
-};
-
-export const ListComponentItemRole = {
-  list: 'listitem',
-  listbox: 'option',
-  menu: 'menuitem'
 };

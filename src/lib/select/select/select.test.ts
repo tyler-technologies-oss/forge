@@ -156,7 +156,7 @@ describe('Select', () => {
       await elementUpdated(harness.element);
       await harness.popoverToggleAnimation;
   
-      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].id);
+      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].querySelector('button')?.id);
       await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
 
@@ -174,7 +174,7 @@ describe('Select', () => {
       await harness.pressKey('ArrowDown');
   
       const listItems = harness.getListItems();
-      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(listItems[0].id);
+      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(listItems[0].querySelector('button')?.id);
       await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
 
@@ -207,7 +207,7 @@ describe('Select', () => {
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
       expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
-      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
+      await expect(harness.element).to.be.accessible();
     });
   });
 

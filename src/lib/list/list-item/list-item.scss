@@ -32,27 +32,21 @@ $_host-tokens: [indent dense-indent disabled-cursor];
 .forge-list-item {
   @include base;
 
-  &.with-anchor {
-    @include with-anchor;
-  }
-}
-
-// Non-interactive
-:host([non-interactive]) {
-  .forge-list-item {
-    @include non-interactive;
-  }
-}
-
-// Disabled
-:host([disabled]) {
-  ::slotted(:is(a,button)) {
-    @include slotted-disabled;
+  &.interactive {
+    cursor: #{token(cursor)};
   }
 
-  .forge-list-item {
+  &.disabled {
     @include disabled;
+
+    ::slotted(button) {
+      cursor: #{token(disabled-cursor)};
+    }
   }
+}
+
+.anchor {
+  @include anchor-internal;
 }
 
 // Two-line
@@ -141,9 +135,7 @@ $_host-tokens: [indent dense-indent disabled-cursor];
 
 // Text slotted elements
 slot[name=secondary-text],
-slot[name=subtitle],
-slot[name=tertiary-text],
-slot[name=tertiary-title] {
+slot[name=tertiary-text] {
   &::slotted(*) {
     @include text;
   }
@@ -154,18 +146,13 @@ slot[name=tertiary-title] {
 }
 
 // Button slotted elements
-::slotted(button) {
+::slotted(:is(button, [role=button][tabindex], [forge-list-item-button])) {
   @include button;
 }
 
 // Anchor slotted elements
 ::slotted(a) {
   @include anchor;
-}
-
-// Avatar slotted elements
-::slotted([slot=avatar]) {
-  @include avatar;
 }
 
 // Leading/trailing slotted elements
@@ -199,9 +186,7 @@ slot[name=tertiary-title] {
   }
 
   slot[name=secondary-text],
-  slot[name=subtitle],
-  slot[name=tertiary-text],
-  slot[name=tertiary-title] {
+  slot[name=tertiary-text] {
     &::slotted(*) {
       @include text-wrap;
     }

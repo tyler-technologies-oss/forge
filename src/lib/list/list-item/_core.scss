@@ -23,28 +23,37 @@
   min-height: #{token(height)};
   padding: #{token(padding)};
   margin: #{token(margin)};
-  cursor: #{token(cursor)};
 }
 
 @mixin button {
-  position: absolute;
-  inset: 0;
-  outline: none;
+  font: inherit;
+  box-sizing: border-box;
   appearance: none;
-  opacity: 0;
+  border: none;
+  padding-block: 0;
+  padding-inline: 0;
+  margin: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  user-select: auto;
+  text-align: inherit;
+  display: inline;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+
   cursor: #{token(cursor)};
 }
 
 @mixin anchor {
-  position: absolute;
-  inset: 0;
   outline: none;
-  pointer-events: all;
-  opacity: 0;
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
-@mixin with-anchor {
-  pointer-events: none;
+@mixin anchor-internal {
+  position: absolute;
+  inset: 0;
 }
 
 @mixin text-container {
@@ -138,20 +147,6 @@
   margin-inline-start: #{token(dense-indent)};
 }
 
-@mixin avatar {
-  background-color: #{token(avatar-background-color)};
-  color: #{token(avatar-color)};
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  fill: currentColor;
-  margin-inline-end: calc((#{token(gap)} / 2) * -1);
-  min-width: #{token(avatar-size)};
-  min-height: #{token(avatar-size)};
-  border-radius: #{token(avatar-shape)};
-}
-
 @mixin leading-trailing-base {
   color: #{token(text-color)};
   display: inline-flex;
@@ -178,15 +173,7 @@
   @include text-container-wrap;
 }
 
-@mixin non-interactive {
-  cursor: initial;
-}
-
 @mixin disabled {
   cursor: #{token(disabled-cursor)};
   opacity: #{token(disabled-opacity)};
-}
-
-@mixin slotted-disabled {
-  cursor: #{token(disabled-cursor)};
 }

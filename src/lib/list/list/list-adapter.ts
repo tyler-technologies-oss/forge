@@ -6,57 +6,13 @@ import { IListItemComponent } from '../list-item/list-item';
 import { LIST_CONSTANTS } from './list-constants';
 
 export interface IListAdapter extends BaseAdapter<IListComponent> {
-  focusNextListItem(): void;
-  focusPreviousListItem(): void;
-  focusFirstListItem(): void;
-  focusLastListItem(): void;
   setSelectedListItems(values: unknown | unknown[]): void;
-  updateListItems(cb: (li: IListItemComponent) => void): void;
+  setListItemsProperty<T extends keyof IListItemComponent>(property: T, value: IListItemComponent[T]): void;
 }
 
 export class ListAdapter extends BaseAdapter<IListComponent> implements IListAdapter {
   constructor(component: IListComponent) {
     super(component);
-  }
-
-  /** Sets focus to the next item in the list. */
-  public focusNextListItem(): void {
-    const listItems = this._getFocusableListItems();
-    if (listItems.length) {
-      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus-within'));
-      const nextIndex = focusedListItemIndex < listItems.length - 1 ? focusedListItemIndex + 1 : 0;
-      if (nextIndex <= listItems.length - 1) {
-        this._focusListItem(listItems[nextIndex]);
-      }
-    }
-  }
-
-  /** Sets focus to the previous item in the list. */
-  public focusPreviousListItem(): void {
-    const listItems = this._getFocusableListItems();
-    if (listItems.length) {
-      const focusedListItemIndex = listItems.findIndex(item => item.matches(':focus-within'));
-      const nextIndex = focusedListItemIndex > 0 ? focusedListItemIndex - 1 : listItems.length - 1;
-      if (nextIndex >= 0) {
-        this._focusListItem(listItems[nextIndex]);
-      }
-    }
-  }
-
-  /** Sets focus to the first item in the list. */
-  public focusFirstListItem(): void {
-    const listItems = this._getFocusableListItems();
-    if (listItems.length) {
-      this._focusListItem(listItems[0]);
-    }
-  }
-
-  /** Sets focus to the last item in the list. */
-  public focusLastListItem(): void {
-    const listItems = this._getFocusableListItems();
-    if (listItems.length) {
-      this._focusListItem(listItems[listItems.length - 1]);
-    }
   }
 
   /** Select all list items that match values in the provided array of values. */
@@ -70,18 +26,8 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
     }
   }
 
-  /** Calls the provided callback on all list items to apply an updated property to each list item. */
-  public updateListItems(cb: (li: IListItemComponent) => void): void {
-    this._getOwnListItems().forEach(cb);
-  }
-  
-  private _focusListItem(listItem: IListItemComponent): void {
-    const slottedFocusableElement = listItem.querySelector(':is(button,a):not([slot])') as HTMLElement;
-    if (slottedFocusableElement) {
-      slottedFocusableElement.focus({ preventScroll: true });
-    } else {
-      listItem.focus({ preventScroll: true });
-    }
+  public setListItemsProperty<T extends keyof IListItemComponent>(property: T, value: IListItemComponent[T]): void {
+    this._getOwnListItems().forEach(listItem => listItem[property] = value);
   }
 
   private _getOwnListItems(): IListItemComponent[] {
@@ -102,9 +48,5 @@ export class ListAdapter extends BaseAdapter<IListComponent> implements IListAda
     this._component.removeEventListener(LIST_CONSTANTS.events.SCOPE_TEST, listener);
 
     return scopedListItems;
-  }
-
-  private _getFocusableListItems(): IListItemComponent[] {
-    return this._getOwnListItems().filter(li => !li.disabled && !li.nonInteractive && !li.hidden);
   }
 }

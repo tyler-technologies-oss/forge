@@ -1,12 +1,8 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-
 import { IListItemAdapter } from './list-item-adapter';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
 
 export interface IListItemFoundation extends ICustomElementFoundation {
-  static: boolean;
-  nonInteractive: boolean;
-  disabled: boolean;
   selected: boolean;
   active: boolean;
   value: unknown;
@@ -18,8 +14,6 @@ export interface IListItemFoundation extends ICustomElementFoundation {
 }
 
 export class ListItemFoundation implements IListItemFoundation {
-  private _nonInteractive = false;
-  private _disabled = false;
   private _selected = false;
   private _active = false;
   private _value: unknown;
@@ -29,50 +23,74 @@ export class ListItemFoundation implements IListItemFoundation {
   private _threeLine = false;
   private _wrap = false;
 
-  private _clickListener: EventListener;
-  private _keydownListener: EventListener;
+  private _interactiveStateChangeListener: (value: boolean) => void = this._onInteractiveStateChange.bind(this);
+  private _clickListener: EventListener = this._onClick.bind(this);
+  private _keydownListener: EventListener = this._onKeydown.bind(this);
 
-  constructor(private _adapter: IListItemAdapter) {
-    this._clickListener = this._onClick.bind(this);
-    this._keydownListener = this._onKeydown.bind(this);
-  }
+  constructor(private _adapter: IListItemAdapter) {}
 
   public initialize(): void {
     this._adapter.initialize();
-
-    if (!this._nonInteractive && !this._disabled) {
-      this._adapter.addHostListener('click', this._clickListener);
-      this._adapter.addHostListener('keydown', this._keydownListener);
-    }
+    this._adapter.setInteractiveStateChangeListener(this._interactiveStateChangeListener);
   }
 
   public disconnect(): void {
-    this._adapter.removeHostListener('click', this._clickListener);
-    this._adapter.removeHostListener('keydown', this._keydownListener);
-  }
-
-  public click(): void {
-    this._adapter.clickHost();
+    this._adapter.destroy();
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    if (evt.key === 'Enter' || evt.key === ' ') {
-      if (evt.target === this._adapter.hostElement || evt.key === 'Enter') {
-        this._adapter.animateStateLayer();
-      }
-      if (evt.target === this._adapter.hostElement) {
-        this._select(evt.target as HTMLElement);
-      }
+    if (evt.key === ' ') {
+      evt.preventDefault();
+      this._adapter.animateStateLayer();
+      this._adapter.interactiveElement?.click();
     }
   }
 
   private _onClick(event: MouseEvent): void {
+    const isElementNode = (el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE;
+    const composedPath =  event.composedPath().filter(isElementNode);
+
+    // Ignore clicks from elements that should not trigger selection
+    const fromIgnoredElement = composedPath.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
+    if (fromIgnoredElement) {
+      return;
+    }
+
+    // Check if our internal anchor was clicked and forward the click to the slotted interactive element
+    const isInternalAnchor = (el: HTMLElement): el is HTMLAnchorElement => el.tagName === 'A' && el.id === LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
+    const fromInternalAnchor = composedPath.filter(isElementNode).some(isInternalAnchor);
+    if (fromInternalAnchor) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this._adapter.interactiveElement?.focus();
+      this._adapter.interactiveElement?.click();
+      return;
+    }
+
+    // If the click did not originate from the interactive element, forward the click to it
+    const fromInteractiveElement = composedPath.some(el => el === this._adapter.interactiveElement);
+    if (!fromInteractiveElement) {
+      this._adapter.interactiveElement?.focus();
+      this._adapter.interactiveElement?.click();
+      return;
+    }
+
     this._select(event.target as HTMLElement);
+  }
+
+  private _onInteractiveStateChange(value: boolean): void {
+    if (value) {
+      this._adapter.addHostListener('click', this._clickListener, { capture: true });
+      this._adapter.addHostListener('keydown', this._keydownListener);
+    } else {
+      this._adapter.removeHostListener('click', this._clickListener, { capture: true });
+      this._adapter.removeHostListener('keydown', this._keydownListener);
+    }
   }
 
   private _select(targetElement: HTMLElement): void {
     const ignoreElement = targetElement?.matches(LIST_ITEM_CONSTANTS.selectors.IGNORE);
-    if (this._nonInteractive || this._disabled || ignoreElement) {
+    if (ignoreElement) {
       return;
     }
 
@@ -82,57 +100,16 @@ export class ListItemFoundation implements IListItemFoundation {
       this._adapter.tryToggleSelectionControl();
     }
 
-    const detail: IListItemSelectEventData = {
-      value: this._value
-    };
+    const detail: IListItemSelectEventData = { value: this._value };
     const event = new CustomEvent<IListItemSelectEventData>(LIST_ITEM_CONSTANTS.events.SELECT, { bubbles: true, detail });
     this._adapter.dispatchHostEvent(event);
-  }
-
-  public get static(): boolean {
-    return this.nonInteractive;
-  }
-  public set static(value: boolean) {
-    this.nonInteractive = value;
-  }
-
-  public get nonInteractive(): boolean {
-    return this._nonInteractive;
-  }
-  public set nonInteractive(value: boolean) {
-    if (this._nonInteractive !== value) {
-      this._nonInteractive = value;
-      if (this._nonInteractive) {
-        this._adapter.removeHostListener('click', this._clickListener);
-      } else {
-        this._adapter.addHostListener('click', this._clickListener);
-      }
-      this._adapter.setNonInteractive(this._nonInteractive);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.STATIC, this._nonInteractive);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.NON_INTERACTIVE, this._nonInteractive);
-    }
-  }
-
-  public get disabled(): boolean {
-    return this._disabled;
-  }
-  public set disabled(value: boolean) {
-    if (this._disabled !== value) {
-      this._disabled = value;
-      if (this._disabled) {
-        this._adapter.removeHostListener('click', this._clickListener);
-      } else {
-        this._adapter.addHostListener('click', this._clickListener);
-      }
-      this._adapter.setDisabled(this._disabled);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.DISABLED, this._disabled);
-    }
   }
 
   public get selected(): boolean {
     return this._selected;
   }
   public set selected(value: boolean) {
+    value = Boolean(value);
     if (this._selected !== value) {
       this._selected = value;
       this._adapter.tryToggleSelectionControl(this._selected);
@@ -144,6 +121,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._active;
   }
   public set active(value: boolean) {
+    value = Boolean(value);
     if (this._active !== value) {
       this._active = value;
       this._adapter.setActive(this._active);
@@ -166,6 +144,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._dense;
   }
   public set dense(value: boolean) {
+    value = Boolean(value);
     if (this._dense !== value) {
       this._dense = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE, this._dense);
@@ -176,6 +155,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._indented;
   }
   public set indented(value: boolean) {
+    value = Boolean(value);
     if (this._indented !== value) {
       this._indented = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED, this._indented);
@@ -186,6 +166,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._twoLine;
   }
   public set twoLine(value: boolean) {
+    value = Boolean(value);
     if (this._twoLine !== value) {
       this._twoLine = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE, this._twoLine);
@@ -196,6 +177,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._threeLine;
   }
   public set threeLine(value: boolean) {
+    value = Boolean(value);
     if (this._threeLine !== value) {
       this._threeLine = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE, this._threeLine);
@@ -206,6 +188,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._wrap;
   }
   public set wrap(value: boolean) {
+    value = Boolean(value);
     if (this._wrap !== value) {
       this._wrap = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP, this._wrap);

@@ -4,21 +4,17 @@ import { ListAdapter } from './list-adapter';
 import { ListFoundation } from './list-foundation';
 import { LIST_CONSTANTS } from './list-constants';
 import { ListItemComponent } from '../list-item';
-
-import template from './list.html';
-import styles from './list.scss';
 import { setDefaultAria } from '../../constants';
 import { WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
-export interface IListComponent extends IBaseComponent {
-  /** @deprecated Use nonInteractive instead. */
-  static: boolean;
-  nonInteractive: boolean;
-  disabled: boolean;
+import template from './list.html';
+import styles from './list.scss';
+
+export interface IListComponent<T = unknown> extends IBaseComponent {
   dense: boolean;
   indented: boolean;
-  selectedValue: any;
+  selectedValue: T;
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
@@ -42,9 +38,6 @@ declare global {
  * @cssproperty --forge-list-container-color - The background color of the list surface.
  * @cssproperty --forge-list-spacing - The spacing between the list items.
  * 
- * @property {boolean} static - Whether the list has all static items or not.
- * @property {boolean} nonInteractive - Whether the list has all non-interactive items or not.
- * @property {boolean} disabled - Whether the list items are disabled or not.
  * @property {boolean} dense - Whether the list has all dense items or not.
  * @property {boolean} indented - Whether the list items within this list are indented. Default is false.
  * @property {unknown | unknown[]} selectedValue - The selected list item value(s).
@@ -52,9 +45,6 @@ declare global {
  * @property {boolean} threeLine - Whether the list has all three-line items or not.
  * @property {boolean} wrap - Whether the list has all items that wrap their text or not.
  * 
- * @attribute {boolean} static - Whether the list has all static items or not.
- * @attribute {boolean} non-interactive - Whether the list has all non-interactive items or not.
- * @attribute {boolean} disabled - Whether the list items are disabled or not.
  * @attribute {boolean} dense - Whether the list has all dense items or not.
  * @attribute {string} selected-value - The selected list item value(s).
  * @attribute {boolean} indented - Whether the list items within this list are indented. Default is false.
@@ -89,13 +79,6 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case LIST_CONSTANTS.attributes.STATIC:
-      case LIST_CONSTANTS.attributes.NON_INTERACTIVE:
-        this.nonInteractive = coerceBoolean(newValue);
-        break;
-      case LIST_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        break;
       case LIST_CONSTANTS.attributes.DENSE:
         this.dense = coerceBoolean(newValue);
         break;
@@ -116,15 +99,6 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
         break;
     }
   }
-
-  @FoundationProperty()
-  public declare static: boolean;
-
-  @FoundationProperty()
-  public declare nonInteractive: boolean;
-
-  @FoundationProperty()
-  public declare disabled: boolean;
 
   @FoundationProperty()
   public declare dense: boolean;

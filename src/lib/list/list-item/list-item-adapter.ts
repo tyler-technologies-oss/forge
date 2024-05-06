@@ -1,40 +1,49 @@
-import { getShadowElement, isDeepEqual, toggleAttribute } from '@tylertech/forge-core';
-import { replaceElement } from '../../core/utils/utils';
+import { getShadowElement, isDeepEqual } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
+import { IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
+import { IStateLayerComponent } from '../../state-layer/state-layer';
 import { IListComponent } from '../list/list';
-import { ListComponentItemRole, LIST_CONSTANTS } from '../list/list-constants';
+import { LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
 import { LIST_ITEM_CONSTANTS } from './list-item-constants';
-import { ISwitchComponent } from '../../switch';
-import { isFocusable, setDefaultAria } from '../../constants';
+import { ISwitchComponent } from '../../switch/switch';
+import { setDefaultAria } from '../../constants';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
+  readonly isInteractive: boolean;
+  readonly interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
   initialize(): void;
-  updateTabIndex(): void;
-  setNonInteractive(value: boolean): void;
-  setDisabled(value: boolean): void;
+  destroy(): void;
+  setInteractiveStateChangeListener(listener: (value: boolean) => void): void;
   setActive(value: boolean): void;
   trySelect(value: unknown): boolean | null;
   tryToggleSelectionControl(value?: boolean): void;
   animateStateLayer(): void;
-  clickHost(): void;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
-  private _rootElement: HTMLElement;
-  private _focusIndicatorElement: IFocusIndicatorComponent;
-  private _stateLayerElement: IStateLayerComponent;
-  private _defaultSlotElement: HTMLSlotElement;
-  private _slotListener: EventListener = this._onDefaultSlotChange.bind(this);
+  private readonly _rootElement: HTMLElement;
+  private readonly _defaultSlotElement: HTMLSlotElement;
+  private _focusIndicatorElement: IFocusIndicatorComponent | undefined;
+  private _stateLayerElement: IStateLayerComponent | undefined;
+  private _buttonAttrObserver: MutationObserver | undefined;
+  private _anchorAttrObserver: MutationObserver | undefined;
+  private _slotListener: EventListener = this._syncInteractiveState.bind(this);
+  private _interactiveStateChangeListener: ((value: boolean) => void) | undefined;
+  private _interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
 
   constructor(component: IListItemComponent) {
     super(component);
     this._rootElement = getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.ROOT);
-    this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
-    this._stateLayerElement = getShadowElement(component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
     this._defaultSlotElement = getShadowElement(component, 'slot:not([name])') as HTMLSlotElement;
+  }
+  
+  public get isInteractive(): boolean {
+    return this._rootElement.classList.contains(LIST_ITEM_CONSTANTS.classes.INTERACTIVE);
+  }
+
+  public get interactiveElement(): HTMLElement | HTMLAnchorElement | undefined {
+    return this._interactiveElement;
   }
 
   public initialize(): void {
@@ -43,90 +52,122 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (list) {
       this._inheritParentListProps(list);
     }
-
+    
     this._defaultSlotElement.addEventListener('slotchange', this._slotListener);
-
-    this._component[setDefaultAria]({
-      role: ListComponentItemRole[list?.getAttribute('role') as string] ?? 'listitem'
-    }, { setAttribute: !this._component.hasAttribute('role') });
-
-    this.updateTabIndex();
-    this._onDefaultSlotChange();
+    this._component[setDefaultAria]({ role: 'listitem' }, { setAttribute: !this._component.hasAttribute('role') });
+    this._syncInteractiveState();
   }
 
-  private _onDefaultSlotChange(): void {
-    const slottedAnchor = this._defaultSlotElement.assignedElements().find(e => e.tagName === 'A') as HTMLAnchorElement;
-    const slottedButton = this._defaultSlotElement.assignedElements().find(e => e.tagName === 'BUTTON') as HTMLButtonElement;
+  public destroy(): void {
+    this._defaultSlotElement.removeEventListener('slotchange', this._slotListener);
 
+    this._buttonAttrObserver?.disconnect();
+    this._buttonAttrObserver = undefined;
+
+    this._anchorAttrObserver?.disconnect();
+    this._anchorAttrObserver = undefined;
+  }
+
+  public setInteractiveStateChangeListener(listener: (value: boolean) => void): void {
+    this._interactiveStateChangeListener = listener;
+  }
+
+  private _syncInteractiveState(): void {
+    const assignedElements = this._defaultSlotElement.assignedElements({ flatten: true });
+    const slottedAnchor = assignedElements.find(e => e.tagName === 'A') as HTMLAnchorElement | undefined;
+    const slottedButton = assignedElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement | undefined;
+    
     this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
     this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON, !!slottedButton);
-
-    const targetSlottedElement = (element: HTMLElement): void => {
-      if (this._focusIndicatorElement.targetElement !== element) {
-        this._focusIndicatorElement.targetElement = element;
+    
+    if (!slottedAnchor) {
+      const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR);
+      if (internalAnchor) {
+        internalAnchor.remove();
       }
-      if (this._stateLayerElement.targetElement !== element) {
-        this._stateLayerElement.targetElement = element;
-      }
-    };
 
-    const removeTabIndex = (): void => {
-      this._component[isFocusable] = false;
-      this._component.removeAttribute('tabindex');
-    };
+      this._anchorAttrObserver?.disconnect();
+      this._anchorAttrObserver = undefined;
+    }
+    if (!slottedButton) {
+      this._buttonAttrObserver?.disconnect();
+      this._buttonAttrObserver = undefined;
+    }
+    
+    this._interactiveElement = slottedAnchor ?? slottedButton;
+    this._setInteractive(!!this._interactiveElement);
+
 
     if (slottedAnchor) {
-      targetSlottedElement(slottedAnchor);
-      removeTabIndex();
-    } else if (slottedButton) {
-      targetSlottedElement(slottedButton);
-      if (this._component.disabled) {
-        slottedButton.disabled = true;
+      const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR) as HTMLAnchorElement | null ?? document.createElement('a');
+      internalAnchor.href = slottedAnchor.href;
+      internalAnchor.tabIndex = -1;
+      internalAnchor.id = LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
+      internalAnchor.classList.add(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR);
+      internalAnchor.setAttribute('aria-hidden', 'true');
+      this._rootElement.appendChild(internalAnchor);
+
+      if (this._focusIndicatorElement) {
+        this._focusIndicatorElement.targetElement = slottedAnchor;
       }
-      removeTabIndex();
-    } else {
-      targetSlottedElement(this._component);
-      this.updateTabIndex();
+
+      this._anchorAttrObserver = new MutationObserver(() => internalAnchor.href = slottedAnchor.href);
+      this._anchorAttrObserver.observe(slottedAnchor, { attributes: true, attributeFilter: ['href'] });
+      return;
     }
-  }
 
-  public updateTabIndex(): void {
-    this._component[isFocusable] = this._component.getAttribute('role') !== 'presentation' &&
-                                   !this._rootElement.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR) &&
-                                   !this._rootElement.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON) &&
-                                   !this._component.nonInteractive &&
-                                   !this._component.disabled;
-  }
-
-  public setNonInteractive(value: boolean): void {
-    this.updateTabIndex();
-    if (value) {
-      this._focusIndicatorElement.remove();
-      this._stateLayerElement.remove();
-    } else {
-      this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
-    }
-  }
-
-  public setDisabled(value: boolean): void {
-    this.updateTabIndex();
-    toggleAttribute(this._component, value, 'aria-disabled', 'true');
-
-    const slottedButton = this._defaultSlotElement.assignedElements().find(e => e.tagName === 'BUTTON') as HTMLButtonElement;
     if (slottedButton) {
-      slottedButton.disabled = value;
+      this._syncDisabled();
+      
+      if (this._focusIndicatorElement) {
+        this._focusIndicatorElement.targetElement = slottedButton;
+      }
+
+      this._buttonAttrObserver = new MutationObserver(() => this._syncDisabled());
+      this._buttonAttrObserver.observe(slottedButton, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
     }
+  }
+
+  private _initializeInteractiveAnchor(): void {
+    
+  }
+
+  private _setInteractive(value: boolean): void {
+    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.INTERACTIVE, value);
+    this._interactiveStateChangeListener?.(value);
 
     if (value) {
-      this._focusIndicatorElement.remove();
-      this._stateLayerElement.remove();
+      if (!this._focusIndicatorElement) {
+        this._focusIndicatorElement = document.createElement('forge-focus-indicator');
+        this._focusIndicatorElement.setAttribute('part', 'focus-indicator');
+        this._focusIndicatorElement.inward = true;
+        this._rootElement.appendChild(this._focusIndicatorElement);
+      }
+      if (!this._stateLayerElement) {
+        this._stateLayerElement = document.createElement('forge-state-layer');
+        this._stateLayerElement.targetElement = this._rootElement;
+        this._stateLayerElement.setAttribute('exportparts', 'surface:state-layer');
+        this._rootElement.appendChild(this._stateLayerElement);
+      }
     } else {
-      this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
+      this._focusIndicatorElement?.remove();
+      this._focusIndicatorElement = undefined;
+      this._stateLayerElement?.remove();
+      this._stateLayerElement = undefined;
     }
+  }
+
+  private _syncDisabled(): void {
+    const slottedButton = this._defaultSlotElement.assignedElements().find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement;
+    const isDisabled = slottedButton.hasAttribute('disabled') || slottedButton.getAttribute('aria-disabled') === 'true';
+    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.DISABLED, isDisabled);
+    this._setInteractive(!isDisabled);
   }
 
   public setActive(value: boolean): void {
-    this._focusIndicatorElement.active = value;
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.active = value;
+    }
   }
 
   /**
@@ -187,13 +228,7 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   public animateStateLayer(): void {
-    this._stateLayerElement.playAnimation();
-  }
-
-  public clickHost(): void {
-    // Calling click() on the prototype ensures we don't end up in an infinite
-    // recursion since the host overrides the HTMLElement.click() method
-    HTMLElement.prototype.click.call(this._component);
+    this._stateLayerElement?.playAnimation();
   }
 
   private _getParentList(): IListComponent | null {
@@ -201,12 +236,6 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   private _inheritParentListProps(list: IListComponent): void {
-    if (list.hasAttribute(LIST_CONSTANTS.attributes.NON_INTERACTIVE) || list.hasAttribute(LIST_CONSTANTS.attributes.STATIC)) {
-      this._component.nonInteractive = true;
-    }
-    if (list.hasAttribute(LIST_CONSTANTS.attributes.DISABLED)) {
-      this._component.disabled = true;
-    }
     if (list.hasAttribute(LIST_CONSTANTS.attributes.DENSE)) {
       this._component.dense = true;
     }

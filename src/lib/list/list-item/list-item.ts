@@ -6,17 +6,12 @@ import { StateLayerComponent } from '../../state-layer';
 import { FocusIndicatorComponent } from '../../focus-indicator';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
-import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
 import { BaseComponent } from '../../core/base/base-component';
 
 import template from './list-item.html';
 import styles from './list-item.scss';
 
-export interface IListItemComponent<T = unknown> extends IWithElementInternals, IWithDefaultAria, IWithFocusable {
-  /** @deprecated Use nonInteractive instead. */
-  static: boolean;
-  nonInteractive: boolean;
-  disabled: boolean;
+export interface IListItemComponent<T = unknown> extends IWithElementInternals, IWithDefaultAria {
   selected: boolean;
   active: boolean;
   value: T;
@@ -37,16 +32,13 @@ declare global {
   }
 }
 
-const BaseClass = WithFocusable(WithElementInternals(WithDefaultAria(BaseComponent)));
+const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
 
 /**
  * @tag forge-list-item
  * 
  * @summary List items are individual rows of content inside of a list.
  * 
- * @property {boolean} nonInteractive - If true, the list item will not be interactive.
- * @property {boolean} static - If true, the list item will not be interactive. Deprecated use `nonInteractive` instead.
- * @property {boolean} disabled - Disables the list item.
  * @property {boolean} selected - Applies the selected state to the list item.
  * @property {boolean} active - Applies the active state to the list item by emulating its focused state.
  * @property {unknown} value - The unique value of the list item.
@@ -56,9 +48,6 @@ const BaseClass = WithFocusable(WithElementInternals(WithDefaultAria(BaseCompone
  * @property {boolean} threeLine - Sets the list item height to support at least three lines of text.
  * @property {boolean} wrap - Sets the list item to wrap its text content.
  *
- * @attribute {boolean} non-interactive - If true, the list item will not be interactive.
- * @attribute {boolean} static - If true, the list item will not be interactive. Deprecated use `non-interactive` instead.
- * @attribute {boolean} disabled - Disables the list item.
  * @attribute {boolean} selected - Applies the selected state to the list item.
  * @attribute {boolean} active - Applies the active state to the list item by emulating its focused state.
  * @attribute {unknown} value - The unique value of the list item.
@@ -155,16 +144,6 @@ export class ListItemComponent extends BaseClass implements IListItemComponent {
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case LIST_ITEM_CONSTANTS.observedAttributes.ROLE:
-        this._adapter.updateTabIndex();
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.NON_INTERACTIVE:
-      case LIST_ITEM_CONSTANTS.observedAttributes.STATIC:
-        this.nonInteractive = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        break;
       case LIST_ITEM_CONSTANTS.observedAttributes.SELECTED:
         this.selected = coerceBoolean(newValue);
         break;
@@ -192,16 +171,6 @@ export class ListItemComponent extends BaseClass implements IListItemComponent {
     }
   }
 
-  /** @deprecated Use nonInteractive instead. */
-  @FoundationProperty()
-  public declare static: boolean;
-
-  @FoundationProperty()
-  public declare nonInteractive: boolean;
-
-  @FoundationProperty()
-  public declare disabled: boolean;
-
   @FoundationProperty()
   public declare selected: boolean;
 
@@ -225,8 +194,4 @@ export class ListItemComponent extends BaseClass implements IListItemComponent {
 
   @FoundationProperty()
   public declare wrap: boolean;
-
-  public override click(): void {
-    this._foundation.click();
-  }
 }

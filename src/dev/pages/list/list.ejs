@@ -1,9 +1,9 @@
-<div>
-  <!-- Non-interactive (static is deprecated) -->
+<div id="list-demo-root">
+  <!-- Default -->
   <div>
-    <h3 class="forge-typography--heading2">Non-interactive (static is deprecated)</h3>
+    <h3 class="forge-typography--heading2">Default</h3>
     <div class="list-demo">
-      <forge-list non-interactive>
+      <forge-list>
         <forge-list-item>List Item One</forge-list-item>
         <forge-list-item>List Item Two</forge-list-item>
         <forge-list-item>List Item Three</forge-list-item>
@@ -15,10 +15,16 @@
   <div>
     <h3 class="forge-typography--heading2">Disabled</h3>
     <div class="list-demo">
-      <forge-list disabled>
-        <forge-list-item>List Item One</forge-list-item>
-        <forge-list-item>List Item Two</forge-list-item>
-        <forge-list-item>List Item Three</forge-list-item>
+      <forge-list>
+        <forge-list-item>
+          <button disabled type="button">List Item One</button>
+        </forge-list-item>
+        <forge-list-item>
+          <button disabled type="button">List Item Two</button>
+        </forge-list-item>
+        <forge-list-item>
+          <button disabled type="button">List Item Three</button>
+        </forge-list-item>
       </forge-list>
     </div>
   </div>
@@ -28,9 +34,15 @@
     <h3 class="forge-typography--heading2">Single-Line</h3>
     <div class="list-demo">
       <forge-list>
-        <forge-list-item>List Item One</forge-list-item>
-        <forge-list-item>List Item Two</forge-list-item>
-        <forge-list-item>List Item Three</forge-list-item>
+        <forge-list-item>
+          <button type="button">List Item One</button>
+        </forge-list-item>
+        <forge-list-item>
+          <button type="button">List Item Two</button>
+        </forge-list-item>
+        <forge-list-item>
+          <button type="button">List Item Three</button>
+        </forge-list-item>
       </forge-list>
     </div>
   </div>
@@ -41,16 +53,16 @@
     <div class="list-demo">
       <forge-list two-line>
         <forge-list-item>
-          <span>Primary Text</span>
-          <span slot="secondary-text">Secondary Text</span>
+          <button type="button" aria-describedby="two-line-desc-1">Primary Text</button>
+          <span id="two-line-desc-1" slot="secondary-text">Secondary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
-          <span slot="secondary-text">Secondary Text</span>
+          <button type="button" aria-describedby="two-line-desc-2">Primary Text</button>
+          <span id="two-line-desc-2" slot="secondary-text">Secondary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
-          <span slot="secondary-text">Secondary Text</span>
+          <button type="button" aria-describedby="two-line-desc-3">Primary Text</button>
+          <span id="two-line-desc-3" slot="secondary-text">Secondary Text</span>
         </forge-list-item>
       </forge-list>
     </div>
@@ -62,19 +74,19 @@
     <div class="list-demo">
       <forge-list three-line>
         <forge-list-item>
-          <span>Primary Text</span>
-          <span slot="secondary-text">Secondary Text</span>
-          <span slot="tertiary-text">Tertiary Text</span>
+          <button type="button" aria-describedby="three-line-secondary-text-1 three-line-tertiary-text-1">Primary Text</button>
+          <span id="three-line-secondary-text-1" slot="secondary-text">Secondary Text</span>
+          <span id="three-line-tertiary-text-1" slot="tertiary-text">Tertiary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
-          <span slot="secondary-text">Secondary Text</span>
-          <span slot="tertiary-text">Tertiary Text</span>
+          <button type="button" aria-describedby="three-line-secondary-text-2 three-line-tertiary-text-2">Primary Text</button>
+          <span id="three-line-secondary-text-2" slot="secondary-text">Secondary Text</span>
+          <span id="three-line-tertiary-text-2" slot="tertiary-text">Tertiary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
-          <span slot="secondary-text">Secondary Text</span>
-          <span slot="tertiary-text">Tertiary Text</span>
+          <button type="button" aria-describedby="three-line-secondary-text-3 three-line-tertiary-text-3">Primary Text</button>
+          <span id="three-line-secondary-text-3" slot="secondary-text">Secondary Text</span>
+          <span id="three-line-tertiary-text-3" slot="tertiary-text">Tertiary Text</span>
         </forge-list-item>
       </forge-list>
     </div>
@@ -154,9 +166,15 @@
     <h3 class="forge-typography--heading2">Single-Line (dense)</h3>
     <div class="list-demo">
       <forge-list dense>
-        <forge-list-item>List Item One</forge-list-item>
-        <forge-list-item>List Item Two</forge-list-item>
-        <forge-list-item>List Item Three</forge-list-item>
+        <forge-list-item>
+          <button>List Item One</button>
+        </forge-list-item>
+        <forge-list-item>
+          <button>List Item Two</button>
+        </forge-list-item>
+        <forge-list-item>
+          <button>List Item Three</button>
+        </forge-list-item>
       </forge-list>
     </div>
   </div>
@@ -167,15 +185,15 @@
     <div class="list-demo">
       <forge-list dense two-line>
         <forge-list-item>
-          <span>Primary Text</span>
+          <button>Primary Text</button>
           <span slot="secondary-text">Secondary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
+          <button>Primary Text</button>
           <span slot="secondary-text">Secondary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
+          <button>Primary Text</button>
           <span slot="secondary-text">Secondary Text</span>
         </forge-list-item>
       </forge-list>
@@ -188,17 +206,17 @@
     <div class="list-demo">
       <forge-list dense three-line>
         <forge-list-item>
-          <span>Primary Text</span>
+          <button>Primary Text</button>
           <span slot="secondary-text">Secondary Text</span>
           <span slot="tertiary-text">Tertiary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
+          <button>Primary Text</button>
           <span slot="secondary-text">Secondary Text</span>
           <span slot="tertiary-text">Tertiary Text</span>
         </forge-list-item>
         <forge-list-item>
-          <span>Primary Text</span>
+          <button>Primary Text</button>
           <span slot="secondary-text">Secondary Text</span>
           <span slot="tertiary-text">Tertiary Text</span>
         </forge-list-item>
@@ -213,21 +231,21 @@
       <forge-list three-line selected-value="wifi">
         <forge-list-item value="wifi">
           <forge-icon slot="leading" name="wifi"></forge-icon>  
-          Wifi
+          <button>Wifi</button>
           <span slot="secondary-text">Secondary Text</span>
           <span slot="tertiary-text">Tertiary Text</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
         <forge-list-item value="bluetooth">
           <forge-icon slot="leading" name="bluetooth"></forge-icon>  
-          Bluetooth
+          <button>Bluetooth</button>
           <span slot="secondary-text">Secondary Text</span>
           <span slot="tertiary-text">Tertiary Text</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
         <forge-list-item value="date-usage">
           <forge-icon slot="leading" name="data_usage"></forge-icon>  
-          Data Usage
+          <button>Data Usage</button>
           <span slot="secondary-text">Secondary Text</span>
           <span slot="tertiary-text">Tertiary Text</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
@@ -243,15 +261,15 @@
       <forge-list>
         <forge-list-item>
           <forge-icon slot="leading" name="wifi"></forge-icon>
-          List Item
+          <button>List Item</button>
         </forge-list-item>
         <forge-list-item>
           <forge-icon slot="leading" name="bluetooth"></forge-icon>
-          List Item
+          <button>List Item</button>
         </forge-list-item>
         <forge-list-item>
           <forge-icon slot="leading" name="data_usage"></forge-icon>
-          List Item
+          <button>List Item</button>
         </forge-list-item>
       </forge-list>
     </div>
@@ -263,15 +281,15 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          List Item
+          <button>List Item</button>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
         <forge-list-item>
-          List Item
+          <button>List Item</button>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
         <forge-list-item>
-          List Item
+          <button>List Item</button>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
       </forge-list>
@@ -281,30 +299,38 @@
   <!-- Two-Line with Leading and Trailing Icon and Divider -->
   <div>
     <h3 class="forge-typography--heading2">Two-Line with Leading and Trailing Icon and Divider</h3>
-    <div class="list-demo">
+    <div class="list-demo" style="--forge-avatar-background: var(--forge-theme-text-medium);">
       <forge-list two-line>
         <forge-list-item>
-          <forge-icon slot="avatar" external name="folder"></forge-icon>
-          <span slot="primary-text">Dog Photos</span>
+          <forge-avatar slot="leading">
+            <forge-icon  external name="folder"></forge-icon>
+          </forge-avatar>
+          <button type="button">Dog Photos</button>
           <span slot="secondary-text">9 Jan 2018</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
         <forge-list-item>
-          <forge-icon external name="folder" slot="avatar"></forge-icon>
-          <span slot="primary-text">Cat Photos</span>
+          <forge-avatar slot="leading">
+            <forge-icon  external name="folder"></forge-icon>
+          </forge-avatar>
+          <button type="button">Cat Photos</button>
           <span slot="secondary-text">22 Dec 2017</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
         <forge-divider aria-hidden="true"></forge-divider>
         <forge-list-item>
-          <forge-icon external name="folder" slot="avatar"></forge-icon>
-          <span slot="primary-text">Potatoes</span>
+          <forge-avatar slot="leading">
+            <forge-icon  external name="folder"></forge-icon>
+          </forge-avatar>
+          <button type="button">Potatoes</button>
           <span slot="secondary-text">30 Nov 2017</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
         <forge-list-item>
-          <forge-icon external name="folder" slot="avatar"></forge-icon>
-          <span slot="primary-text">Carrots</span>
+          <forge-avatar slot="leading">
+            <forge-icon  external name="folder"></forge-icon>
+          </forge-avatar>
+          <button type="button">Carrots</button>
           <span slot="secondary-text">17 Oct 2017</span>
           <forge-icon slot="trailing" name="info"></forge-icon>
         </forge-list-item>
@@ -320,30 +346,48 @@
         <forge-expansion-panel>
           <forge-list-item slot="header">
             <forge-icon slot="leading" name="code"></forge-icon>
-            List Item One
+            <button type="button">List Item One</button>
             <forge-open-icon slot="trailing"></forge-open-icon>
           </forge-list-item>
-          <forge-list indented>
-            <forge-list-item>List Item One</forge-list-item>
-            <forge-list-item>List Item Two</forge-list-item>
-            <forge-list-item>List Item Three</forge-list-item>
-          </forge-list>
+          <div role="listitem">
+            <forge-list indented>
+              <forge-list-item>
+                <button type="button">List Item One</button>
+              </forge-list-item>
+              <forge-list-item>
+                <button type="button">List Item Two</button>
+              </forge-list-item>
+              <forge-list-item>
+                <button type="button">List Item Three</button>
+              </forge-list-item>
+            </forge-list>
+          </div>
         </forge-expansion-panel>
-        <forge-divider aria-hidden="true"></forge-divider>
+        <forge-divider role="presentation"></forge-divider>
         <forge-expansion-panel>
           <forge-list-item slot="header">
             <forge-icon slot="leading" name="face"></forge-icon>
-            List Item Two
+            <button type="button">List Item Two</button>
             <forge-open-icon slot="trailing"></forge-open-icon>
           </forge-list-item>
-          <forge-list indented>
-            <forge-list-item>List Item One</forge-list-item>
-            <forge-list-item>List Item Two</forge-list-item>
-            <forge-list-item>List Item Three</forge-list-item>
-          </forge-list>
+          <div role="listitem">
+            <forge-list indented>
+              <forge-list-item>
+                <button type="button">List Item One</button>
+              </forge-list-item>
+              <forge-list-item>
+                <button type="button">List Item Two</button>
+              </forge-list-item>
+              <forge-list-item>
+                <button type="button">List Item Three</button>
+              </forge-list-item>
+            </forge-list>
+          </div>
         </forge-expansion-panel>
-        <forge-divider aria-hidden="true"></forge-divider>
-        <forge-list-item>List Item Three</forge-list-item>
+        <forge-divider role="presentation"></forge-divider>
+        <forge-list-item>
+          <button type="button">List Item Three</button>
+        </forge-list-item>
       </forge-list>
     </div>
   </div>
@@ -354,16 +398,16 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <forge-checkbox slot="leading" checked aria-label="Select list item one"></forge-checkbox>
-          List Item
+          <forge-checkbox tabindex="-1" slot="leading" checked aria-label="Select list item one with leading"></forge-checkbox>
+          <button>List Item</button>
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading" aria-label="Select list item two"></forge-checkbox>
-          List Item
+          <forge-checkbox tabindex="-1" slot="leading" aria-label="Select list item two with leading"></forge-checkbox>
+          <button>List Item</button>
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading" aria-label="Select list item three"></forge-checkbox>
-          List Item
+          <forge-checkbox tabindex="-1" slot="leading" aria-label="Select list item three with leading"></forge-checkbox>
+          <button>List Item</button>
         </forge-list-item>
       </forge-list>
     </div>
@@ -375,16 +419,16 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          List Item
-          <forge-checkbox slot="trailing" checked aria-label="Select list item one"></forge-checkbox>
+          <button>List Item</button>
+          <forge-checkbox tabindex="-1" slot="trailing" checked aria-label="Select list item one with trailing"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          List Item
-          <forge-checkbox slot="trailing" aria-label="Select list item two"></forge-checkbox>
+          <button>List Item</button>
+          <forge-checkbox tabindex="-1" slot="trailing" aria-label="Select list item two with trailing"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          List Item
-          <forge-checkbox slot="trailing" aria-label="Select list item three"></forge-checkbox>
+          <button>List Item</button>
+          <forge-checkbox tabindex="-1" slot="trailing" aria-label="Select list item three with trailing"></forge-checkbox>
         </forge-list-item>
       </forge-list>
     </div>
@@ -393,19 +437,19 @@
   <!-- List with Leading Radio Buttons -->
   <div>
     <h3 class="forge-typography--heading2">List with Leading Radio Buttons</h3>
-    <div class="list-demo" role="radiogroup">
-      <forge-list aria-label="Choose radio option">
+    <div class="list-demo">
+      <forge-list>
         <forge-list-item>
-          <forge-radio slot="leading" name="list-radio" aria-label="Select list item one"></forge-radio>
-          List Item
+          <forge-radio tabindex="-1" slot="leading" name="list-radio" aria-label="Select list item one with leading radio"></forge-radio>
+          <button>List Item</button>
         </forge-list-item>
         <forge-list-item>
-          <forge-radio slot="leading" name="list-radio" checked aria-label="Select list item two"></forge-radio>
-          List Item
+          <forge-radio tabindex="-1" slot="leading" name="list-radio" checked aria-label="Select list item two with leading radio"></forge-radio>
+          <button>List Item</button>
         </forge-list-item>
         <forge-list-item>
-          <forge-radio slot="leading" name="list-radio" aria-label="Select list item three"></forge-radio>
-          List Item
+          <forge-radio tabindex="-1" slot="leading" name="list-radio" aria-label="Select list item three with leading radio"></forge-radio>
+          <button>List Item</button>
         </forge-list-item>
       </forge-list>
     </div>
@@ -414,19 +458,19 @@
   <!-- List with Trailing Radio Buttons -->
   <div>
     <h3 class="forge-typography--heading2">List with Trailing Radio Buttons</h3>
-    <div class="list-demo" role="radiogroup">
+    <div class="list-demo">
       <forge-list aria-label="Choose radio option">
         <forge-list-item>
-          List Item
-          <forge-radio slot="trailing" name="list-radio" aria-label="Select list item one"></forge-radio>
+          <button>List Item</button>
+          <forge-radio tabindex="-1" slot="trailing" name="list-radio" aria-label="Select list item one with trailing radio"></forge-radio>
         </forge-list-item>
         <forge-list-item>
-          List Item
-          <forge-radio slot="trailing" name="list-radio" checked aria-label="Select list item two"></forge-radio>
+          <button>List Item</button>
+          <forge-radio tabindex="-1" slot="trailing" name="list-radio" checked aria-label="Select list item two with trailing radio"></forge-radio>
         </forge-list-item>
         <forge-list-item>
-          List Item
-          <forge-radio slot="trailing" name="list-radio" aria-label="Select list item three"></forge-radio>
+          <button>List Item</button>
+          <forge-radio tabindex="-1" slot="trailing" name="list-radio" aria-label="Select list item three with trailing radio"></forge-radio>
         </forge-list-item>
       </forge-list>
     </div>
@@ -439,16 +483,16 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          List Item
-          <forge-switch slot="trailing" aria-label="Toggle list item"></forge-switch>
+          <button>List Item</button>
+          <forge-switch tabindex="-1" slot="trailing" aria-label="Toggle list item"></forge-switch>
         </forge-list-item>
         <forge-list-item>
-          List Item
-          <forge-switch slot="trailing" aria-label="Toggle list item"></forge-switch>
+          <button>List Item</button>
+          <forge-switch tabindex="-1" slot="trailing" aria-label="Toggle list item"></forge-switch>
         </forge-list-item>
         <forge-list-item>
-          List Item
-          <forge-switch slot="trailing" aria-label="Toggle list item"></forge-switch>
+          <button>List Item</button>
+          <forge-switch tabindex="-1" slot="trailing" aria-label="Toggle list item"></forge-switch>
         </forge-list-item>
       </forge-list>
     </div>
@@ -460,19 +504,19 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <forge-checkbox slot="leading" checked aria-label="Select list item"></forge-checkbox>
-          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
-          List Item
+          <forge-checkbox tabindex="-1" slot="leading" checked aria-label="Select list item one with ignored trailing checkbox"></forge-checkbox>
+          <button>List Item</button>
+          <forge-checkbox tabindex="-1" slot="trailing" forge-ignore aria-label="Select list item with trailing checkbox and ignored leading checkbox"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
-          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
-          List Item
+          <forge-checkbox tabindex="-1" slot="leading" aria-label="Select list item with leading checkbox and ignored trailing checkbox"></forge-checkbox>
+          <button>List Item</button>
+          <forge-checkbox tabindex="-1" slot="trailing" forge-ignore aria-label="Select list item two with ignored trailing checkbox"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
-          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
-          List Item
+          <forge-checkbox tabindex="-1" slot="leading" aria-label="Select list item"></forge-checkbox>
+          <button>List Item</button>
+          <forge-checkbox tabindex="-1" slot="trailing" forge-ignore aria-label="Select list item three with ignored trailing checkbox"></forge-checkbox>
         </forge-list-item>
       </forge-list>
     </div>
@@ -485,11 +529,17 @@
       <forge-drawer static open>
         <aside>
           <forge-list navlist>
-            <forge-list-item>List Item One</forge-list-item>
-            <forge-divider aria-hidden="true"></forge-divider>
-            <forge-list-item selected>List Item Two</forge-list-item>
-            <forge-divider aria-hidden="true"></forge-divider>
-            <forge-list-item>List Item Three</forge-list-item>
+            <forge-list-item>
+              <button type="button">Home</button>
+            </forge-list-item>
+            <forge-divider role="presentation"></forge-divider>
+            <forge-list-item selected>
+              <button type="button">About</button>
+            </forge-list-item>
+            <forge-divider role="presentation"></forge-divider>
+            <forge-list-item>
+              <button type="button">Contact</button>
+            </forge-list-item>
           </forge-list>
         </aside>
       </forge-drawer>
@@ -502,35 +552,78 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <button type="button" aria-labelledby="nested-button-item-1"></button>
-          <span id="nested-button-item-1">List Item One (ignore leading)</span>
-          <forge-checkbox slot="leading" forge-ignore aria-label="Select list item"></forge-checkbox>
+          <button type="button">List Item (ignore leading)</button>
+          <forge-checkbox slot="leading" tabindex="-1" forge-ignore aria-label="Select list item with ignored leading checkbox"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          <button type="button" aria-labelledby="nested-button-item-1"></button>
-          <span id="nested-button-item-1">List Item One (ignore trailing)</span>
-          <forge-checkbox slot="trailing" forge-ignore aria-label="Select list item"></forge-checkbox>
+          <button type="button">List Item w/switch</button>
+          <forge-switch slot="trailing" tabindex="-1" aria-label="Toggle list item with trailing switch"></forge-switch>
         </forge-list-item>
         <forge-list-item>
-          <button type="button" aria-labelledby="nested-button-item-2"></button>
-          <span id="nested-button-item-2">List Item Two w/leading</span>
-          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
+          <button type="button">List Item ignore switch</button>
+          <forge-switch slot="trailing" tabindex="-1" aria-label="Toggle list item with ignored trailing switch" forge-ignore></forge-switch>
         </forge-list-item>
         <forge-list-item>
-          <button type="button" aria-labelledby="nested-button-item-2"></button>
-          <span id="nested-button-item-2">List Item Two w/trailing</span>
-          <forge-checkbox slot="leading" aria-label="Select list item"></forge-checkbox>
+          <button type="button" aria-labelledby="li-3"></button>
+          <span id="li-3">List Item (ignore trailing)</span>
+          <forge-checkbox slot="trailing" tabindex="-1" forge-ignore aria-label="Select list item with ignored trailing checkbox"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          <button type="button" aria-labelledby="nested-button-item-3"></button>
-          <span id="nested-button-item-3">List Item Three</span>
+          <button type="button">List Item w/leading</button>
+          <forge-checkbox slot="leading" tabindex="-1" aria-label="Select list item with leading labeled button"></forge-checkbox>
         </forge-list-item>
-        <forge-list-item disabled>
-          <button type="button" aria-labelledby="nested-button-item-3"></button>
-          <span id="nested-button-item-3">List Item Three</span>
+        <forge-list-item>
+          <button type="button">List Item Two w/trailing</button>
+          <forge-checkbox slot="trailing" tabindex="-1" aria-label="Select list item with checkable trailing checkbox"></forge-checkbox>
+        </forge-list-item>
+        <forge-list-item>
+          <button type="button">List Item</button>
+        </forge-list-item>
+        <forge-list-item>Default (non-interactive) List Item</forge-list-item>
+        
+        <forge-list-item>
+          <button disabled>List Item Disabled</button>
+        </forge-list-item>
+
+        <forge-list-item>
+          <forge-icon-button slot="leading" aria-label="Test leading button" tabindex="0">
+            <forge-icon name="forge_logo"></forge-icon>
+          </forge-icon-button>
+          <button type="button">List Item w/icon button</button>
+          <forge-icon-button slot="trailing" aria-label="Test trailing button" tabindex="0">
+            <forge-icon name="forge_logo"></forge-icon>
+          </forge-icon-button>
         </forge-list-item>
       </forge-list>
     </div>
+  </div>
+
+  <!-- Listbox -->
+  <div>
+    <h3 class="forge-typography--heading2">Listbox role</h3>
+    <div class="list-demo">
+    <forge-list role="listbox" tabindex="0" aria-label="Listbox label">
+      <forge-list-item role="presentation">
+        <button role="option">List Item One</button>
+      </forge-list-item>
+      <forge-list-item role="presentation">
+        <button role="option">List Item Two</button>
+      </forge-list-item>
+      <forge-list-item role="presentation">
+        <button role="option">List Item Three</button>
+      </forge-list-item>
+    </forge-list>
+  </div>
+
+  <!-- Menu -->
+  <div>
+    <h3 class="forge-typography--heading2">Menu role</h3>
+    <div class="list-demo">
+    <forge-list role="menu" tabindex="0" aria-label="Menu label">
+      <forge-list-item role="menuitem" tabindex="0">List Item One</forge-list-item>
+      <forge-list-item role="menuitem" tabindex="0">List Item Two</forge-list-item>
+      <forge-list-item role="menuitem" tabindex="0">List Item Three</forge-list-item>
+    </forge-list>
   </div>
 
   <!-- List with anchor links -->
@@ -539,18 +632,15 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <a href="javascript: console.log('https://www.google.com/');" aria-label="Navigate to Google"></a>
-          <span>Google</span>
-          <forge-icon slot="trailing" name="open_in_new"></forge-icon>
+          <a href="javascript: console.log('https://www.google.com/');">Google</a>
+          <forge-icon slot="trailing"  name="open_in_new"></forge-icon>
         </forge-list-item>
         <forge-list-item>
-          <a href="javascript: console.log('https://www.bing.com/');" aria-label="Navigate to Bing"></a>
-          <span>Bing</span>
-          <forge-icon slot="trailing" name="open_in_new"></forge-icon>
+          <a href="javascript: console.log('https://www.bing.com/');">Bing</a>
+          <forge-icon slot="trailing"  name="open_in_new"></forge-icon>
         </forge-list-item>
         <forge-list-item>
-          <a href="javascript: console.log('https://www.yahoo.com/');" aria-label="Navigate to Yahoo"></a>
-          <span>Yahoo</span>
+          <a href="javascript: console.log('https://www.yahoo.com/');">Yahoo</a>
           <forge-icon slot="trailing" name="open_in_new"></forge-icon>
         </forge-list-item>
       </forge-list>

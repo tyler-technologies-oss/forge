@@ -1,18 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { nothing } from 'lit';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import sinon from 'sinon';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
-import { TestHarness } from '../../test/utils/test-harness';
+import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { IFocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { IStateLayerComponent } from '../state-layer/state-layer';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from './list-item';
-import './list/list';
 import { IListComponent } from './list/list';
 import { LIST_CONSTANTS } from './list/list-constants';
 
-const DEFAULT_HREF = 'https://www.tylertech.com/';
+import './list/list';
 
 describe('List', () => {
   it('should be accessible', async () => {
@@ -26,23 +23,11 @@ describe('List', () => {
     expect(ctx.listItemsAttr('role', 'listitem')).to.true;
   });
 
-  it('should set role to listbox', async () => {
-    const ctx = await createFixture({ role: 'listbox' });
-    expect(ctx.list.getAttribute('role')).to.equal('listbox');
-    expect(ctx.listItemsAttr('role', 'option')).to.true;
-  });
-
-  it('should set role to menu', async () => {
-    const ctx = await createFixture({ role: 'menu' });
-    expect(ctx.list.getAttribute('role')).to.equal('menu');
-    expect(ctx.listItemsAttr('role', 'menuitem')).to.true;
-  });
-
   it('should dispatch select event when clicked', async () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
     ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.listItems[1].click();
+    ctx.clickListItem(1);
     expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
   });
 
@@ -50,7 +35,10 @@ describe('List', () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
     ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    ctx.listItems[1].querySelector('button')?.focus();
+
+    await sendKeys({ press: 'Enter' });
+    
     expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
   });
 
@@ -58,7 +46,10 @@ describe('List', () => {
     const ctx = await createFixture();
     const spy = sinon.spy();
     ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+    ctx.listItems[1].querySelector('button')?.focus();
+
+    await sendKeys({ press: ' ' });
+
     expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
   });
 
@@ -66,19 +57,12 @@ describe('List', () => {
     const ctx = await createFixture({ disabled: true });
     const spy = sinon.spy();
     ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.listItems[1].click();
-    ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-    ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
-    expect(spy).to.not.have.been.called;
-  });
 
-  it('should not dispatch select event when noninteractive', async () => {
-    const ctx = await createFixture({ nonInteractive: true });
-    const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.listItems[1].click();
-    ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-    ctx.listItems[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+    ctx.listItems[0].querySelector('button')?.focus();
+    ctx.clickListItem(0);
+    await sendKeys({ press: 'Enter' });
+    await sendKeys({ press: ' ' });
+
     expect(spy).to.not.have.been.called;
   });
 
@@ -110,8 +94,7 @@ describe('List', () => {
   it('should set disabled', async () => {
     const ctx = await createFixture({ disabled: true });
 
-    expect(ctx.listItemsAttr('disabled', '')).to.true;
-    expect(ctx.listItemsTabIndex(-1)).to.true;
+    expect(ctx.getListItemRootElement(0).classList.contains(LIST_ITEM_CONSTANTS.classes.DISABLED)).to.be.true;
     expect(ctx.hasStateLayer()).to.be.false;
     expect(ctx.hasFocusIndicator()).to.be.false;
     await expect(ctx.list).to.be.accessible();
@@ -123,57 +106,12 @@ describe('List', () => {
     expect(ctx.hasStateLayer()).to.be.false;
     expect(ctx.hasFocusIndicator()).to.be.false;
 
-    ctx.list.disabled = false;
-    expect(ctx.listItemsTabIndex(0)).to.true;
+    (ctx.listItems[0].querySelector('button') as HTMLButtonElement).disabled = false;
+
+    await elementUpdated(ctx.list);
+
     expect(ctx.hasStateLayer()).to.be.true;
     expect(ctx.hasFocusIndicator()).to.be.true; 
-  });
-
-  it('should set nonInteractive', async () => {
-    const ctx = await createFixture({ nonInteractive: true });
-
-    expect(ctx.listItemsTabIndex(-1)).to.true;
-    expect(ctx.hasStateLayer()).to.be.false;
-    expect(ctx.hasFocusIndicator()).to.be.false;
-    await expect(ctx.list).to.be.accessible();
-  });
-
-  it('should set non-interactive via static attribute for backwards compatibility', async () => {
-    const ctx = await createFixture();
-
-    ctx.list.static = true;
-    expect(ctx.list.static).to.be.true;
-    expect(ctx.list.nonInteractive).to.be.true;
-    expect(ctx.listItemsTabIndex(-1)).to.true;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.STATIC, '')).to.true;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.NON_INTERACTIVE, '')).to.true;
-    expect(ctx.hasStateLayer()).to.be.false;
-    expect(ctx.hasFocusIndicator()).to.be.false;
-
-    ctx.list.static = false;
-    expect(ctx.list.static).to.be.false;
-    expect(ctx.list.nonInteractive).to.be.false;
-    expect(ctx.listItemsTabIndex(0)).to.true;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.STATIC, '')).to.false;
-    expect(ctx.listItemsAttr(LIST_ITEM_CONSTANTS.attributes.NON_INTERACTIVE, '')).to.false;
-    expect(ctx.hasStateLayer()).to.be.true;
-    expect(ctx.hasFocusIndicator()).to.be.true;
-
-    ctx.listItems[0].static = true;
-    expect(ctx.listItems[0].static).to.be.true;
-    expect(ctx.listItems[0].nonInteractive).to.be.true;
-  });
-
-  it('should re-enable interactivity after nonInteractive', async () => {
-    const ctx = await createFixture({ nonInteractive: true });
-
-    expect(ctx.hasStateLayer()).to.be.false;
-    expect(ctx.hasFocusIndicator()).to.be.false;
-
-    ctx.list.nonInteractive = false;
-    expect(ctx.listItemsTabIndex(0)).to.true;
-    expect(ctx.hasStateLayer()).to.be.true;
-    expect(ctx.hasFocusIndicator()).to.be.true;
   });
 
   it('should set dense', async () => {
@@ -236,65 +174,6 @@ describe('List', () => {
     expect(ctx.listItemsAttr('wrap', '')).to.false;
   });
 
-  it('should focus next item when down arrow key is pressed', async () => {
-    const ctx = await createFixture();
-
-    ctx.focusListItem(0);
-    ctx.listItemPressKey(0, 'ArrowDown');
-    expect(ctx.isListItemFocused(1)).to.be.true;
-  });
-
-  it('should focus previous item when down up key is pressed', async () => {
-    const ctx = await createFixture();
-
-    ctx.focusListItem(1);
-    ctx.listItemPressKey(1, 'ArrowUp');
-    expect(ctx.isListItemFocused(0)).to.be.true;
-  });
-
-  it('should focus first item when home key is pressed', async () => {
-    const ctx = await createFixture();
-
-    ctx.focusListItem(1);
-    ctx.listItemPressKey(1, 'Home');
-    expect(ctx.isListItemFocused(0)).to.be.true;
-  });
-
-  it('should focus last item when end key is pressed', async () => {
-    const ctx = await createFixture();
-
-    ctx.focusListItem(1);
-    ctx.listItemPressKey(1, 'End');
-    expect(ctx.isListItemFocused(2)).to.be.true;
-  });
-
-  it('should cycle focus to first item when down arrow pressed on last item', async () => {
-    const ctx = await createFixture();
-
-    ctx.focusListItem(2);
-    ctx.listItemPressKey(2, 'ArrowDown');
-    expect(ctx.isListItemFocused(0)).to.be.true;
-  });
-
-  it('should cycle focus to last item when up arrow pressed on first item', async () => {
-    const ctx = await createFixture();
-
-    ctx.focusListItem(0);
-    ctx.listItemPressKey(0, 'ArrowUp');
-    expect(ctx.isListItemFocused(2)).to.be.true;
-  });
-
-  it('should not move focus when modifier key is pressed', async () => {
-    const ctx = await createFixture();
-
-    ctx.focusListItem(1);
-    ctx.listItemPressKey(1, 'ArrowDown', { shiftKey: true });
-    ctx.listItemPressKey(1, 'ArrowDown', { altKey: true });
-    ctx.listItemPressKey(1, 'ArrowDown', { ctrlKey: true });
-    ctx.listItemPressKey(1, 'ArrowDown', { metaKey: true });
-    expect(ctx.isListItemFocused(1)).to.be.true;
-  });
-
   it('should activate focus indicator when active set', async () => {
     const ctx = await createFixture();
 
@@ -339,8 +218,6 @@ describe('List', () => {
 
   it('should inherit parent list state when adding new list item', async () => {
     const ctx = await createFixture({
-      role: 'listbox',
-      nonInteractive: true,
       disabled: true,
       dense: true,
       twoLine: true,
@@ -352,13 +229,10 @@ describe('List', () => {
     listItem.value = '4';
     ctx.list.appendChild(listItem);
 
-    expect(listItem.nonInteractive).to.be.true;
-    expect(listItem.disabled).to.be.true;
     expect(listItem.dense).to.be.true;
     expect(listItem.twoLine).to.be.true;
     expect(listItem.threeLine).to.be.true;
     expect(listItem.selected).to.be.true;
-    expect(listItem.role).to.equal('option');
   });
 
   it('should not dispatch select event if target element has forge-ignore attribute', async () => {
@@ -382,16 +256,19 @@ describe('List', () => {
       const el = await fixture<IListComponent>(html`
         <forge-list>
           <forge-list-item>
-            <a href="javascript: void(0);" aria-label="Navigate to link"></a>
+            <a href="javascript: void(0);" aria-label="Navigate to link">Test</a>
           </forge-list-item>
         </forge-list>
       `);
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
+      const internalAnchor = rootEl.querySelector(`#${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}`) as HTMLAnchorElement;
 
+      expect(internalAnchor).to.exist;
+      expect(internalAnchor.href).to.equal('javascript: void(0);');
+      expect(internalAnchor.getAttribute('aria-hidden')).to.equal('true');
+      expect(internalAnchor.classList.contains(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR)).to.be.true;
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.true;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
       await expect(el).to.be.accessible();
     });
 
@@ -405,8 +282,6 @@ describe('List', () => {
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.false;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
       await expect(el).to.be.accessible();
 
       const anchor = document.createElement('a');
@@ -416,18 +291,23 @@ describe('List', () => {
 
       await elementUpdated(el);
 
+      let internalAnchor = rootEl.querySelector(`#${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}`) as HTMLAnchorElement;
+
+      expect(internalAnchor).to.exist;
+      expect(internalAnchor.href).to.equal(anchor.href);
+      expect(internalAnchor.getAttribute('aria-hidden')).to.equal('true');
+      expect(internalAnchor.classList.contains(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR)).to.be.true;
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.true;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
       await expect(el).to.be.accessible();
 
       anchor.remove();
 
       await elementUpdated(el);
 
+      internalAnchor = rootEl.querySelector(`#${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}`) as HTMLAnchorElement;
+
+      expect(internalAnchor).to.not.exist;
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.false;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
       await expect(el).to.be.accessible();
     });
 
@@ -447,6 +327,42 @@ describe('List', () => {
 
       expect(spy).to.have.been.calledOnce;
     });
+
+    it('should click slotted anchor when clicking internal anchor', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <a href="javascript: void(0);" aria-label="Navigate to link"></a>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const internalAnchor = listItemEl.shadowRoot!.querySelector(`#${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}`) as HTMLAnchorElement;
+      const anchor = listItemEl.querySelector('a') as HTMLAnchorElement;
+      const spy = sinon.spy(anchor, 'click');
+
+      internalAnchor.click();
+
+      expect(spy).to.have.been.calledOnce;
+    });
+
+    it('should click slotted anchor when pressing space key', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <a href="javascript: void(0);">Test</a>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const anchor = listItemEl.querySelector('a') as HTMLAnchorElement;
+      const spy = sinon.spy(anchor, 'click');
+
+      anchor.focus();
+      anchor.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+
+      expect(spy).to.have.been.calledOnce;
+    });
   });
 
   describe('nested button', () => {
@@ -454,8 +370,7 @@ describe('List', () => {
       const el = await fixture<IListComponent>(html`
         <forge-list>
           <forge-list-item>
-            <button type="button" aria-labelledby="li-text"></button>
-            <span id="li-text">Button</span>
+            <button type="button">Button</button>
           </forge-list-item>
         </forge-list>
       `);
@@ -463,8 +378,6 @@ describe('List', () => {
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.true;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
       await expect(el).to.be.accessible();
     });
 
@@ -478,8 +391,6 @@ describe('List', () => {
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.false;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
       await expect(el).to.be.accessible();
 
       const button = document.createElement('button');
@@ -490,8 +401,6 @@ describe('List', () => {
       await elementUpdated(el);
 
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.true;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.hasAttribute('tabindex')).to.be.false;
       await expect(el).to.be.accessible();
 
       button.remove();
@@ -499,8 +408,6 @@ describe('List', () => {
       await elementUpdated(el);
 
       expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.false;
-      expect(listItemEl.getAttribute('role')).to.equal('listitem');
-      expect(listItemEl.getAttribute('tabindex')).to.equal('0');
       await expect(el).to.be.accessible();
     });
 
@@ -520,14 +427,30 @@ describe('List', () => {
 
       expect(spy).to.have.been.calledOnce;
     });
+
+    it('should click slotted button when template clicked', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <button type="button" aria-label="Button"></button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
+      const button = listItemEl.querySelector('button') as HTMLButtonElement;
+      const spy = sinon.spy(button, 'click');
+
+      rootEl.click();
+
+      expect(spy).to.have.been.calledOnce;
+    });
   });
 });
 
 interface ListFixtureConfig {
-  role?: 'list' | 'listbox' | 'menu';
-  nonInteractive?: boolean;
-  disabled?: boolean;
   dense?: boolean;
+  disabled?: boolean;
   indented?: boolean;
   selectedValue?: any;
   twoLine?: boolean;
@@ -540,62 +463,58 @@ interface ListFixtureConfig {
 }
 
 async function createFixture({
-  role,
-  nonInteractive,
-  disabled,
   dense,
+  disabled,
   indented,
   selectedValue,
   twoLine,
   threeLine,
   wrap,
-  anchor,
-  anchorTarget,
   withCheckbox,
   withRadioButton
 }: ListFixtureConfig = {}): Promise<ListHarness> {
   const el = await fixture<IListComponent>(html`
     <forge-list
-      role=${role ?? nothing}
-      ?non-interactive=${nonInteractive}
-      ?disabled=${disabled}
       ?dense=${dense}
       ?indented=${indented}
       ?two-line=${twoLine}
       ?three-line=${threeLine}
       ?wrap=${wrap}
       .selectedValue=${selectedValue}>
-      <forge-list-item .href=${anchor ? DEFAULT_HREF : ''} .target=${anchorTarget ?? ''} value="1">
-        One
+      <forge-list-item value="1">
+        <button ?disabled=${disabled}>One</button>
         ${withCheckbox ? html`<input type="checkbox" slot="trailing" />` : null}
         ${withRadioButton ? html`<input type="radio" slot="trailing" />` : null}
       </forge-list-item>
-      <forge-list-item value="2">Two</forge-list-item>
-      <forge-list-item value="3">Three</forge-list-item>
+      <forge-list-item value="2"><button>Two</button></forge-list-item>
+      <forge-list-item value="3"><button>Three</button></forge-list-item>
     </forge-list>
   `);
   return new ListHarness(el);
 }
 
-class ListHarness extends TestHarness<IListComponent> {
-  public list: IListComponent;
-  public listItems: IListItemComponent[];
-
-  constructor(el: IListComponent) {
-    super(el);
-  }
+class ListHarness {
+  constructor(public list: IListComponent) {}
   
-  public initElementRefs(): void {
-    this.list = this.element;
-    this.listItems = Array.from(this.element.querySelectorAll('forge-list-item'));
+  public get listItems(): IListItemComponent[] {
+    return Array.from(this.list.querySelectorAll('forge-list-item'));
   }
 
   public listItemsAttr(attr: string, value: string): boolean {
     return this.listItems.every(li => li.getAttribute(attr) === value);
   }
 
-  public listItemsTabIndex(tabIndex: number): boolean {
-    return this.listItems.every(li => li.tabIndex === tabIndex);
+  public clickListItem(index: number | IListItemComponent): void {
+    let listItem: IListItemComponent;
+
+    if (typeof index === 'number') {
+      listItem = this.listItems[index];
+    } else {
+      listItem = index;
+    }
+
+    const button = listItem.querySelector('button') as HTMLButtonElement;
+    button.click();
   }
 
   public getListItemRootElement(index: number): HTMLElement {
@@ -609,18 +528,6 @@ class ListHarness extends TestHarness<IListComponent> {
 
   public hasFocusIndicator(): boolean {
     return this.listItems.every(li => !!(getShadowElement(li, 'forge-focus-indicator') as IFocusIndicatorComponent));
-  }
-
-  public listItemPressKey(index: number, key: string, modifierKeys?: { shiftKey?: true, altKey?: true, ctrlKey?: true, metaKey?: true }): void {
-    this.listItems[index].dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, ...modifierKeys }));
-  }
-
-  public focusListItem(index: number): void {
-    this.listItems[index].focus();
-  }
-
-  public isListItemFocused(index: number): boolean {
-    return this.listItems[index].matches(':focus');
   }
 
   public listItemActive(index: number): boolean {
