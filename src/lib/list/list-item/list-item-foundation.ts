@@ -24,6 +24,7 @@ export class ListItemFoundation implements IListItemFoundation {
   private _wrap = false;
 
   private _interactiveStateChangeListener: (value: boolean) => void = this._onInteractiveStateChange.bind(this);
+  private _mousedownListener: EventListener = this._onMousedown.bind(this);
   private _clickListener: EventListener = this._onClick.bind(this);
   private _keydownListener: EventListener = this._onKeydown.bind(this);
 
@@ -36,6 +37,10 @@ export class ListItemFoundation implements IListItemFoundation {
 
   public disconnect(): void {
     this._adapter.destroy();
+  }
+
+  private _onMousedown(evt: MouseEvent): void {
+    evt.preventDefault();
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
@@ -82,9 +87,11 @@ export class ListItemFoundation implements IListItemFoundation {
 
   private _onInteractiveStateChange(value: boolean): void {
     if (value) {
+      this._adapter.addRootListener('mousedown', this._mousedownListener, { capture: true });
       this._adapter.addHostListener('click', this._clickListener, { capture: true });
       this._adapter.addHostListener('keydown', this._keydownListener);
     } else {
+      this._adapter.removeRootListener('mousedown', this._mousedownListener, { capture: true });
       this._adapter.removeHostListener('click', this._clickListener, { capture: true });
       this._adapter.removeHostListener('keydown', this._keydownListener);
     }

@@ -14,6 +14,8 @@ export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   readonly interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
   initialize(): void;
   destroy(): void;
+  addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
+  removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
   setInteractiveStateChangeListener(listener: (value: boolean) => void): void;
   setActive(value: boolean): void;
   trySelect(value: unknown): boolean | null;
@@ -66,6 +68,14 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
 
     this._anchorAttrObserver?.disconnect();
     this._anchorAttrObserver = undefined;
+  }
+
+  public addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
+    this._rootElement.addEventListener(type, listener, options);
+  }
+
+  public removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
+    this._rootElement.removeEventListener(type, listener, options);
   }
 
   public setInteractiveStateChangeListener(listener: (value: boolean) => void): void {

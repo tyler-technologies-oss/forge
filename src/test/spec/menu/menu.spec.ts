@@ -338,7 +338,7 @@ describe('MenuComponent', function(this: ITestContext) {
       this.context.component.open = true;
       await timer(300);
 
-      expect(getPopupListItem(5).hasAttribute(LIST_ITEM_CONSTANTS.attributes.DISABLED)).toBe(true);
+      expect(getPopupListItem(5).querySelector('button')?.hasAttribute('disabled')).toBe(true);
     });
 
     it(`should have selected class when option is set to selected and persistSelection is true`, async function(this: ITestContext) {
@@ -598,7 +598,7 @@ describe('MenuComponent', function(this: ITestContext) {
         this.context.component.open = true;
         await timer(300);
         
-        getPopupListItem(0).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+        getPopupListItem(0).querySelector('button')?.click();
 
         await timer(300);
 
