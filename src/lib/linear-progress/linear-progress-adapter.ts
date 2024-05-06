@@ -13,14 +13,14 @@ export interface ILinearProgressAdapter extends IBaseAdapter {
 
 export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent> implements ILinearProgressAdapter {
   private readonly _rootElement: HTMLElement;
+  private readonly _trackElement: HTMLElement;
   private readonly _progressElement: HTMLElement;
-  private readonly _bufferElement: HTMLElement;
 
   constructor(component: ILinearProgressComponent) {
     super(component);
     this._rootElement = getShadowElement(component, LINEAR_PROGRESS_CONSTANTS.selectors.ROOT);
+    this._trackElement = getShadowElement(component, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
     this._progressElement = getShadowElement(component, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
-    this._bufferElement = getShadowElement(component, LINEAR_PROGRESS_CONSTANTS.selectors.BUFFER);
   }
 
   public initialize(): void {
@@ -37,8 +37,8 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
     if (value) {
       this.setProgress(this._component.progress);
     } else {
+      this._trackElement.style.transform = 'scaleX(100%)';
       this._progressElement.style.transform = '';
-      this._bufferElement.style.transform = '';
     }
     this._rootElement.classList.toggle(LINEAR_PROGRESS_CONSTANTS.classes.INDETERMINATE, !value);
   }
@@ -49,6 +49,6 @@ export class LinearProgressAdapter extends BaseAdapter<ILinearProgressComponent>
   }
 
   public setBuffer(value: number): void {
-    this._bufferElement.style.transform = `scaleX(${value * 100}%)`;
+    this._trackElement.style.transform = `scaleX(${value * 100}%)`;
   }
 }
