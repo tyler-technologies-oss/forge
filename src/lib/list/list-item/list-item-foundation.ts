@@ -70,6 +70,8 @@ export class ListItemFoundation implements IListItemFoundation {
     // If the click did not originate from the interactive element, forward the click to it
     const fromInteractiveElement = composedPath.some(el => el === this._adapter.interactiveElement);
     if (!fromInteractiveElement) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
       this._adapter.interactiveElement?.focus();
       this._adapter.interactiveElement?.click();
       return;
