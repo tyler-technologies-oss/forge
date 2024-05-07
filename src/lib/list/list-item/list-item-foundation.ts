@@ -100,9 +100,23 @@ export class ListItemFoundation implements IListItemFoundation {
     const isInternalAnchor = (el: HTMLElement): el is HTMLAnchorElement => el.tagName === 'A' && el.id === LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
     const fromInternalAnchor = composedElements.some(isInternalAnchor);
     if (fromInternalAnchor) {
+      const isCtrlClick = evt.ctrlKey || evt.metaKey;
+      const hasTarget = this._adapter.interactiveElement?.hasAttribute('target');
+
       evt.preventDefault();
       evt.stopImmediatePropagation();
+      
+      // Workaround to temporarily set the target attribute to '_blank' if the user is holding the ctrl key and remove it after the click
+      const forceTempAnchorTarget = isCtrlClick && !hasTarget;
+      if (forceTempAnchorTarget) {
+        this._adapter.interactiveElement?.setAttribute('target', '_blank');
+      }
+
       this._clickInteractiveElement();
+
+      if (forceTempAnchorTarget) {
+        this._adapter.interactiveElement?.removeAttribute('target');
+      }
       return;
     }
 

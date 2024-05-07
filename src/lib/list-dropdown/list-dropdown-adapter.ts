@@ -53,6 +53,8 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
     if (config.type !== ListDropdownType.None && config.type !== ListDropdownType.Menu) {
       this._dropdownElement.preset = 'dropdown';
+    } else if (config.type === ListDropdownType.Menu) {
+      this._dropdownElement.preset = 'list';
     }
 
     this.syncWidth(!!config.syncWidth, config.targetWidthCallback);

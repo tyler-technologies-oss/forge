@@ -12,221 +12,235 @@ import { LIST_CONSTANTS } from './list/list-constants';
 import './list/list';
 
 describe('List', () => {
-  it('should be accessible', async () => {
-    const ctx = await createFixture();
-    await expect(ctx.list).to.be.accessible();
-  });
-
-  it('should have a default role of list', async () => {
-    const ctx = await createFixture();
-    expect(ctx.list.getAttribute('role')).to.equal('list');
-    expect(ctx.listItemsAttr('role', 'listitem')).to.true;
-  });
-
-  it('should dispatch select event when clicked', async () => {
-    const ctx = await createFixture();
-    const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.clickListItem(1);
-    expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
-  });
-
-  it('should dispatch select event when enter key is pressed', async () => {
-    const ctx = await createFixture();
-    const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.listItems[1].querySelector('button')?.focus();
-
-    await sendKeys({ press: 'Enter' });
-    
-    expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
-  });
-
-  it('should dispatch select event when space key is pressed', async () => {
-    const ctx = await createFixture();
-    const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-select', spy);
-    ctx.listItems[1].querySelector('button')?.focus();
-
-    await sendKeys({ press: ' ' });
-
-    expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
-  });
-
-  it('should not dispatch select event when disabled', async () => {
-    const ctx = await createFixture({ disabled: true });
-    const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-select', spy);
-
-    ctx.listItems[0].querySelector('button')?.focus();
-    ctx.clickListItem(0);
-    await sendKeys({ press: 'Enter' });
-    await sendKeys({ press: ' ' });
-
-    expect(spy).to.not.have.been.called;
-  });
-
-  it('should set selected via selectedValue on list', async () => {
-    const ctx = await createFixture({ selectedValue: '2' });
-
-    expect(ctx.listItems[1].selected).to.true;
-    expect(ctx.listItems.filter(li => li.selected).length).to.be.equal(1);
-    await expect(ctx.list).to.be.accessible();
-  });
-
-  it('should set selected value via attribute', async () => {
-    const ctx = await createFixture();
-
-    ctx.list.setAttribute(LIST_CONSTANTS.attributes.SELECTED_VALUE, '2');
-    expect(ctx.list.selectedValue).to.equal('2');
-    expect(ctx.listItems[1].selected).to.be.true;
-  });
-
-  it('should remove selected value', async () => {
-    const ctx = await createFixture({ selectedValue: '2' });
-
-    expect(ctx.listItems[1].selected).to.true;
-
-    ctx.list.selectedValue = null;
-    expect(ctx.listItems.filter(li => li.selected).length).to.be.equal(0);
-  });
-
-  it('should set disabled', async () => {
-    const ctx = await createFixture({ disabled: true });
-
-    expect(ctx.getListItemRootElement(0).classList.contains(LIST_ITEM_CONSTANTS.classes.DISABLED)).to.be.true;
-    expect(ctx.hasStateLayer()).to.be.false;
-    expect(ctx.hasFocusIndicator()).to.be.false;
-    await expect(ctx.list).to.be.accessible();
-  });
-
-  it('should re-enable interactivity after disabled', async () => {
-    const ctx = await createFixture({ disabled: true });
-
-    expect(ctx.hasStateLayer()).to.be.false;
-    expect(ctx.hasFocusIndicator()).to.be.false;
-
-    (ctx.listItems[0].querySelector('button') as HTMLButtonElement).disabled = false;
-
-    await elementUpdated(ctx.list);
-
-    expect(ctx.hasStateLayer()).to.be.true;
-    expect(ctx.hasFocusIndicator()).to.be.true; 
-  });
-
-  it('should set dense', async () => {
-    const ctx = await createFixture({ dense: true });
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE)).to.true;
-    expect(ctx.listItemsAttr('dense', '')).to.true;
-
-    ctx.list.dense = false;
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE)).to.false;
-    expect(ctx.listItemsAttr('dense', '')).to.false;
-  });
-
-  it('should set indented', async () => {
-    const ctx = await createFixture({ indented: true });
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED)).to.true;
-    expect(ctx.listItemsAttr('indented', '')).to.true;
-
-    ctx.list.indented = false;
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED)).to.false;
-    expect(ctx.listItemsAttr('indented', '')).to.false;
-  });
-
-  it('should set twoLine', async () => {
-    const ctx = await createFixture({ twoLine: true });
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE)).to.true;
-    expect(ctx.listItemsAttr('two-line', '')).to.true;
-
-    ctx.list.twoLine = false;
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE)).to.false;
-    expect(ctx.listItemsAttr('two-line', '')).to.false;
-  });
-
-  it('should set threeLine', async () => {
-    const ctx = await createFixture({ threeLine: true });
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE)).to.true;
-    expect(ctx.listItemsAttr('three-line', '')).to.true;
-
-    ctx.list.threeLine = false;
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE)).to.false;
-    expect(ctx.listItemsAttr('three-line', '')).to.false;
-  });
-
-  it('should set wrap', async () => {
-    const ctx = await createFixture({ wrap: true });
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).to.true;
-    expect(ctx.listItemsAttr('wrap', '')).to.true;
-
-    ctx.list.wrap = false;
-
-    expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).to.false;
-    expect(ctx.listItemsAttr('wrap', '')).to.false;
-  });
-
-  it('should activate focus indicator when active set', async () => {
-    const ctx = await createFixture();
-
-    ctx.listItems[1].active = true;
-    expect(ctx.listItems[1].active).to.be.true;
-    expect(ctx.listItems[1].hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).to.be.true;
-    expect(ctx.listItemActive(0)).to.be.false; 
-    expect(ctx.listItemActive(1)).to.be.true; 
-    expect(ctx.listItemActive(0)).to.be.false; 
-  });
-
-  it('should set selected when value matches list selected value', async () => {
-    const ctx = await createFixture({ selectedValue: 'some-value' });
-
-    expect(ctx.listItems[1].selected).to.be.false;
-    
-    ctx.listItems[1].value = 'some-value';
-    expect(ctx.listItems[1].selected).to.be.true;
-  });
-
-  it('should inherit parent list state when adding new list item', async () => {
-    const ctx = await createFixture({
-      disabled: true,
-      dense: true,
-      twoLine: true,
-      threeLine: true,
-      selectedValue: '4'
+  describe('accessibility', () => {
+    it('should be accessible', async () => {
+      const ctx = await createFixture();
+      await expect(ctx.list).to.be.accessible();
     });
 
-    const listItem = document.createElement('forge-list-item');
-    listItem.value = '4';
-    ctx.list.appendChild(listItem);
-
-    expect(listItem.dense).to.be.true;
-    expect(listItem.twoLine).to.be.true;
-    expect(listItem.threeLine).to.be.true;
-    expect(listItem.selected).to.be.true;
+    it('should have a default role of list', async () => {
+      const ctx = await createFixture();
+      expect(ctx.list.getAttribute('role')).to.equal('list');
+      expect(ctx.listItemsAttr('role', 'listitem')).to.true;
+    });
   });
 
-  it('should not dispatch select event if target element has forge-ignore attribute', async () => {
-    const ctx = await createFixture();
-    const spy = sinon.spy();
-    ctx.list.addEventListener('forge-list-item-select', spy);
+  describe('select event', () => {
+    it('should dispatch select event when clicked', async () => {
+      const ctx = await createFixture();
+      const spy = sinon.spy();
+      ctx.list.addEventListener('forge-list-item-select', spy);
+      ctx.clickListItem(1);
+      expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
+    });
 
-    const ignoredElement = document.createElement('button');
-    ignoredElement.type = 'button';
-    ignoredElement.setAttribute('forge-ignore', '');
-    ctx.listItems[0].appendChild(ignoredElement);
+    it('should dispatch select event when enter key is pressed', async () => {
+      const ctx = await createFixture();
+      const spy = sinon.spy();
+      ctx.list.addEventListener('forge-list-item-select', spy);
+      ctx.listItems[1].querySelector('button')?.focus();
 
-    await elementUpdated(ctx.list);
-    ignoredElement.click();
+      await sendKeys({ press: 'Enter' });
+      
+      expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
+    });
 
-    expect(spy).to.not.have.been.called;
+    it('should dispatch select event when space key is pressed', async () => {
+      const ctx = await createFixture();
+      const spy = sinon.spy();
+      ctx.list.addEventListener('forge-list-item-select', spy);
+      ctx.listItems[1].querySelector('button')?.focus();
+
+      await sendKeys({ press: ' ' });
+
+      expect(spy).to.have.been.calledOnceWith(sinon.match.has('detail', sinon.match.has('value', '2')));
+    });
+
+    it('should not dispatch select event when disabled', async () => {
+      const ctx = await createFixture({ disabled: true });
+      const spy = sinon.spy();
+      ctx.list.addEventListener('forge-list-item-select', spy);
+
+      ctx.listItems[0].querySelector('button')?.focus();
+      ctx.clickListItem(0);
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: ' ' });
+
+      expect(spy).to.not.have.been.called;
+    });
+
+    it('should not dispatch select event if target element has forge-ignore attribute', async () => {
+      const ctx = await createFixture();
+      const spy = sinon.spy();
+      ctx.list.addEventListener('forge-list-item-select', spy);
+  
+      const ignoredElement = document.createElement('button');
+      ignoredElement.type = 'button';
+      ignoredElement.setAttribute('forge-ignore', '');
+      ctx.listItems[0].appendChild(ignoredElement);
+  
+      await elementUpdated(ctx.list);
+      ignoredElement.click();
+  
+      expect(spy).to.not.have.been.called;
+    });
+  });
+
+  describe('selected', () => {
+    it('should set selected via selectedValue on list', async () => {
+      const ctx = await createFixture({ selectedValue: '2' });
+
+      expect(ctx.listItems[1].selected).to.true;
+      expect(ctx.listItems.filter(li => li.selected).length).to.be.equal(1);
+      await expect(ctx.list).to.be.accessible();
+    });
+
+    it('should set selected value via attribute', async () => {
+      const ctx = await createFixture();
+
+      ctx.list.setAttribute(LIST_CONSTANTS.attributes.SELECTED_VALUE, '2');
+      expect(ctx.list.selectedValue).to.equal('2');
+      expect(ctx.listItems[1].selected).to.be.true;
+    });
+
+    it('should remove selected value', async () => {
+      const ctx = await createFixture({ selectedValue: '2' });
+
+      expect(ctx.listItems[1].selected).to.true;
+
+      ctx.list.selectedValue = null;
+      expect(ctx.listItems.filter(li => li.selected).length).to.be.equal(0);
+    });
+
+    it('should set selected when value matches list selected value', async () => {
+      const ctx = await createFixture({ selectedValue: 'some-value' });
+  
+      expect(ctx.listItems[1].selected).to.be.false;
+      
+      ctx.listItems[1].value = 'some-value';
+      expect(ctx.listItems[1].selected).to.be.true;
+    });
+  });
+
+  describe('disabled', () => {
+    it('should set disabled', async () => {
+      const ctx = await createFixture({ disabled: true });
+
+      expect(ctx.getListItemRootElement(0).classList.contains(LIST_ITEM_CONSTANTS.classes.DISABLED)).to.be.true;
+      expect(ctx.hasStateLayer()).to.be.false;
+      expect(ctx.hasFocusIndicator()).to.be.false;
+      await expect(ctx.list).to.be.accessible();
+    });
+
+    it('should re-enable interactivity after disabled', async () => {
+      const ctx = await createFixture({ disabled: true });
+
+      expect(ctx.hasStateLayer()).to.be.false;
+      expect(ctx.hasFocusIndicator()).to.be.false;
+
+      (ctx.listItems[0].querySelector('button') as HTMLButtonElement).disabled = false;
+
+      await elementUpdated(ctx.list);
+
+      expect(ctx.hasStateLayer()).to.be.true;
+      expect(ctx.hasFocusIndicator()).to.be.true; 
+    });
+  });
+
+  describe('API', () => {
+    it('should set dense', async () => {
+      const ctx = await createFixture({ dense: true });
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE)).to.true;
+      expect(ctx.listItemsAttr('dense', '')).to.true;
+
+      ctx.list.dense = false;
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE)).to.false;
+      expect(ctx.listItemsAttr('dense', '')).to.false;
+    });
+
+    it('should set indented', async () => {
+      const ctx = await createFixture({ indented: true });
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED)).to.true;
+      expect(ctx.listItemsAttr('indented', '')).to.true;
+
+      ctx.list.indented = false;
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED)).to.false;
+      expect(ctx.listItemsAttr('indented', '')).to.false;
+    });
+
+    it('should set twoLine', async () => {
+      const ctx = await createFixture({ twoLine: true });
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE)).to.true;
+      expect(ctx.listItemsAttr('two-line', '')).to.true;
+
+      ctx.list.twoLine = false;
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE)).to.false;
+      expect(ctx.listItemsAttr('two-line', '')).to.false;
+    });
+
+    it('should set threeLine', async () => {
+      const ctx = await createFixture({ threeLine: true });
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE)).to.true;
+      expect(ctx.listItemsAttr('three-line', '')).to.true;
+
+      ctx.list.threeLine = false;
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE)).to.false;
+      expect(ctx.listItemsAttr('three-line', '')).to.false;
+    });
+
+    it('should set wrap', async () => {
+      const ctx = await createFixture({ wrap: true });
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).to.true;
+      expect(ctx.listItemsAttr('wrap', '')).to.true;
+
+      ctx.list.wrap = false;
+
+      expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).to.false;
+      expect(ctx.listItemsAttr('wrap', '')).to.false;
+    });
+  });
+
+  describe('focus indicator', () => {
+    it('should activate focus indicator when active set', async () => {
+      const ctx = await createFixture();
+
+      ctx.listItems[1].active = true;
+      expect(ctx.listItems[1].active).to.be.true;
+      expect(ctx.listItems[1].hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).to.be.true;
+      expect(ctx.listItemActive(0)).to.be.false; 
+      expect(ctx.listItemActive(1)).to.be.true; 
+      expect(ctx.listItemActive(0)).to.be.false; 
+    });
+  });
+
+  describe('list', () => {
+    it('should inherit parent list state when adding new list item', async () => {
+      const ctx = await createFixture({
+        disabled: true,
+        dense: true,
+        twoLine: true,
+        threeLine: true,
+        selectedValue: '4'
+      });
+
+      const listItem = document.createElement('forge-list-item');
+      listItem.value = '4';
+      ctx.list.appendChild(listItem);
+
+      expect(listItem.dense).to.be.true;
+      expect(listItem.twoLine).to.be.true;
+      expect(listItem.threeLine).to.be.true;
+      expect(listItem.selected).to.be.true;
+    });
   });
 
   describe('nested anchor', () => {

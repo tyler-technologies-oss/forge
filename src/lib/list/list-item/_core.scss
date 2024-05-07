@@ -10,15 +10,19 @@
 
 @mixin base {
   position: relative;
+
   display: flex;
   gap: #{token(gap)};
   align-items: center;
+
   box-sizing: border-box;
   outline: none;
   text-decoration: none;
-  background-color: #{token(background)};
   border-radius: #{token(shape)};
+  
   -webkit-tap-highlight-color: transparent;
+  background-color: #{token(background)};
+
   height: #{token(height)};
   min-height: #{token(height)};
   padding: #{token(padding)};
@@ -26,23 +30,26 @@
 }
 
 @mixin button {
-  font: inherit;
-  box-sizing: border-box;
   appearance: none;
+  cursor: #{token(cursor)};
+
   border: none;
   padding-block: 0;
   padding-inline: 0;
   margin: 0;
-  outline: none;
+  box-sizing: border-box;
+  
   background: transparent;
   color: inherit;
+  outline: none;
+  
+  font: inherit;
   user-select: auto;
   text-align: inherit;
-  display: inline;
   letter-spacing: inherit;
   word-spacing: inherit;
-
-  cursor: #{token(cursor)};
+  
+  display: inline;
 }
 
 @mixin anchor {
@@ -61,9 +68,11 @@
   @include typography.ellipse;
 
   box-sizing: border-box;
+
   font-size: #{token(text-font-size)};
   font-weight: #{token(text-font-weight)};
   line-height: #{token(text-line-height)};
+
   flex: 1;
 }
 

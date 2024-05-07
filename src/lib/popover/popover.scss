@@ -121,6 +121,12 @@
     }
   }
 
+  :host([preset=list]) {
+    .forge-popover {
+      @include preset-list;
+    }
+  }
+
   //
   // Constrain viewport width
   //
