@@ -194,28 +194,6 @@ describe('List', () => {
     expect(ctx.listItems[1].selected).to.be.true;
   });
 
-  it('should toggle slotted checkbox when list item is selected', async () => {
-    const ctx = await createFixture({ withCheckbox: true });
-
-    expect(ctx.listItems[0].selected).to.be.false;
-    expect((ctx.listItems[0].querySelector('input[type=checkbox]') as HTMLInputElement)?.checked).to.be.false;
-
-    ctx.listItems[0].selected = true;
-    expect(ctx.listItems[0].selected).to.be.true;
-    expect((ctx.listItems[0].querySelector('input[type=checkbox]') as HTMLInputElement)?.checked).to.be.true;
-  });
-
-  it('should toggle slotted radio button when list item is selected', async () => {
-    const ctx = await createFixture({ withRadioButton: true });
-
-    expect(ctx.listItems[0].selected).to.be.false;
-    expect((ctx.listItems[0].querySelector('input[type=radio]') as HTMLInputElement)?.checked).to.be.false;
-
-    ctx.listItems[0].selected = true;
-    expect(ctx.listItems[0].selected).to.be.true;
-    expect((ctx.listItems[0].querySelector('input[type=radio]') as HTMLInputElement)?.checked).to.be.true;
-  });
-
   it('should inherit parent list state when adding new list item', async () => {
     const ctx = await createFixture({
       disabled: true,

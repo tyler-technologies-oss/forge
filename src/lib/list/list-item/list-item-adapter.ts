@@ -25,6 +25,8 @@ export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
   private readonly _rootElement: HTMLElement;
   private readonly _defaultSlotElement: HTMLSlotElement;
+  private readonly _leadingSlotElement: HTMLSlotElement;
+  private readonly _trailingSlotElement: HTMLSlotElement;
   private _focusIndicatorElement: IFocusIndicatorComponent | undefined;
   private _stateLayerElement: IStateLayerComponent | undefined;
   private _disabledAttrObserver: MutationObserver | undefined;
@@ -37,6 +39,8 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     super(component);
     this._rootElement = getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.ROOT);
     this._defaultSlotElement = getShadowElement(component, 'slot:not([name])') as HTMLSlotElement;
+    this._leadingSlotElement = getShadowElement(component, 'slot[name=leading]') as HTMLSlotElement;
+    this._trailingSlotElement = getShadowElement(component, 'slot[name=trailing]') as HTMLSlotElement;
   }
   
   public get isInteractive(): boolean {
@@ -55,17 +59,12 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   
     this._rootElement.addEventListener('slotchange', this._slotListener);
     this._component[setDefaultAria]({ role: 'listitem' }, { setAttribute: !this._component.hasAttribute('role') });
-    this._syncInteractiveState();
+    this._initializeInteractiveElement();
   }
 
   public destroy(): void {
     this._rootElement.removeEventListener('slotchange', this._slotListener);
-
-    this._disabledAttrObserver?.disconnect();
-    this._disabledAttrObserver = undefined;
-
-    this._anchorAttrObserver?.disconnect();
-    this._anchorAttrObserver = undefined;
+    this._tryCleanupObservers();
   }
 
   public addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
@@ -112,89 +111,102 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   private _onSlotChange(evt: Event): void {
-    const isInteractiveSlot = ['', 'leading', 'trailing'].includes((evt.target as HTMLSlotElement).name);
+    // We only care about slot changes in the default slot, leading slot, and trailing slot to search for interactive elements
+    const interactiveSlotNames = ['', 'leading', 'trailing'];
+    const isInteractiveSlot = interactiveSlotNames.includes((evt.target as HTMLSlotElement).name);
     if (!isInteractiveSlot) {
       return;
     }
-    this._syncInteractiveState();
+    this._initializeInteractiveElement();
   }
 
-  private _syncInteractiveState(): void {
-    const slottedFormControl = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.FORM_CONTROL_LIKE) as HTMLElement | null;
+  private _initializeInteractiveElement(): void {
+    this._tryCleanupObservers();
 
+    // We always want to check for form control-like elements first as those take precedence over slotted anchor and button
+    // elements as the interactive element.
+    const assignedLeadingElements = this._leadingSlotElement.assignedElements({ flatten: true });
+    const assignedTrailingElements = this._trailingSlotElement.assignedElements({ flatten: true });
+    const assignedLeadingTrailingElements = [...assignedLeadingElements, ...assignedTrailingElements];
+    const slottedFormControl = assignedLeadingTrailingElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.FORM_CONTROL_LIKE)) as HTMLElement | undefined;
     if (slottedFormControl) {
-      this._anchorAttrObserver?.disconnect();
-      this._anchorAttrObserver = undefined;
-
-      this._disabledAttrObserver?.disconnect();
-      this._disabledAttrObserver = undefined;
-
-      this._interactiveElement = slottedFormControl as HTMLElement;
-      this._setInteractive(!!this._interactiveElement);
-      
-      if (this._focusIndicatorElement) {
-        this._focusIndicatorElement.targetElement = slottedFormControl;
-      }
-      
-      this._syncDisabled(slottedFormControl);
-      this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(slottedFormControl as HTMLElement));
-      this._disabledAttrObserver.observe(slottedFormControl, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+      this._attachInteractiveFormControl(slottedFormControl);
       return;
     }
 
+    // If no form control-like elements are found, we check for slotted anchor or button elements within the default slot next.
+    // If an anchor element is found, we create an internal anchor element to prevent the list item from being focusable.
+    // If a button element is found, we sync the disabled state and attach a mutation observer to watch for changes.
     const assignedElements = this._defaultSlotElement.assignedElements({ flatten: true });
     const slottedAnchor = assignedElements.find(e => e.tagName === 'A') as HTMLAnchorElement | undefined;
-    const slottedButton = assignedElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement | undefined;
+    const slottedButtonLike = assignedElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement | undefined;
     
-    if (!slottedAnchor) {
-      const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR);
-      if (internalAnchor) {
-        internalAnchor.remove();
-      }
-
-      this._anchorAttrObserver?.disconnect();
-      this._anchorAttrObserver = undefined;
-    }
-    if (!slottedButton) {
-      this._disabledAttrObserver?.disconnect();
-      this._disabledAttrObserver = undefined;
+    // Attempt to remove the internal anchor element if it exists before we attach to a different interactive element
+    const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR);
+    if (internalAnchor) {
+      internalAnchor.remove();
     }
     
-    this._interactiveElement = slottedAnchor ?? slottedButton;
+    // Slotted anchors take precedence over slotted button-like elements
+    this._interactiveElement = slottedAnchor ?? slottedButtonLike;
     this._setInteractive(!!this._interactiveElement);
 
     if (slottedAnchor) {
-      const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR) as HTMLAnchorElement | null ?? document.createElement('a');
-      internalAnchor.href = slottedAnchor.href;
-      internalAnchor.tabIndex = -1;
-      internalAnchor.id = LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
-      internalAnchor.classList.add(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR);
-      internalAnchor.setAttribute('aria-hidden', 'true');
-      this._rootElement.appendChild(internalAnchor);
+      this._attachInteractiveAnchor(slottedAnchor);
+    } else if (slottedButtonLike) {
+      this._attachInteractiveButtonLike(slottedButtonLike);
+    }
+  }
 
-      if (this._focusIndicatorElement) {
-        this._focusIndicatorElement.targetElement = slottedAnchor;
-      }
+  private _attachInteractiveFormControl(element: HTMLElement): void {
+    this._interactiveElement = element;
+    this._setInteractive(!!this._interactiveElement);
+    
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.targetElement = element;
+    }
+    
+    // Listen for changes to the disabled attribute and aria-disabled attribute to synchronize our disabled state
+    this._syncDisabled(element);
+    this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(element as HTMLElement));
+    this._disabledAttrObserver.observe(element, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+  }
 
-      this._anchorAttrObserver = new MutationObserver(() => internalAnchor.href = slottedAnchor.href);
-      this._anchorAttrObserver.observe(slottedAnchor, { attributes: true, attributeFilter: ['href'] });
-      return;
+  private _attachInteractiveAnchor(element: HTMLAnchorElement): void {
+    // Create an internal (facade) anchor element that covers the entire list item to show the href in the status bar
+    // but is not focusable or presented to assistive technology. All clicks on the internal anchor are forwarded to the
+    // slotted anchor element.
+    const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR) as HTMLAnchorElement | null ?? document.createElement('a');
+    internalAnchor.href = element.href;
+    internalAnchor.tabIndex = -1;
+    internalAnchor.id = LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
+    internalAnchor.classList.add(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR);
+    internalAnchor.setAttribute('aria-hidden', 'true');
+    this._rootElement.appendChild(internalAnchor);
+
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.targetElement = element;
     }
 
-    if (slottedButton) {
-      this._syncDisabled(slottedButton);
-      
-      if (this._focusIndicatorElement) {
-        this._focusIndicatorElement.targetElement = slottedButton;
-      }
+    // Listen for changes to the href attribute to synchronize our internal anchor's href
+    this._anchorAttrObserver = new MutationObserver(() => internalAnchor.href = element.href);
+    this._anchorAttrObserver.observe(element, { attributes: true, attributeFilter: ['href'] });
+  }
 
-      this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(slottedButton));
-      this._disabledAttrObserver.observe(slottedButton, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+  private _attachInteractiveButtonLike(element: HTMLElement): void {
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.targetElement = element;
     }
+    
+    this._syncDisabled(element);
+    this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(element));
+    this._disabledAttrObserver.observe(element, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
   }
 
   private _setInteractive(value: boolean): void {
     this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.INTERACTIVE, value);
+    
+    // Notify ourselves that the interactive state has changed so we can attach/remove event listeners
     this._interactiveStateChangeListener?.(value);
 
     if (value) {
@@ -241,5 +253,13 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (list.hasAttribute(LIST_CONSTANTS.attributes.THREE_LINE)) {
       this._component.threeLine = true;
     }
+  }
+
+  private _tryCleanupObservers(): void {
+    this._disabledAttrObserver?.disconnect();
+    this._disabledAttrObserver = undefined;
+
+    this._anchorAttrObserver?.disconnect();
+    this._anchorAttrObserver = undefined;
   }
 }

@@ -11,7 +11,7 @@ import { BaseComponent } from '../../core/base/base-component';
 import template from './list-item.html';
 import styles from './list-item.scss';
 
-export interface IListItemComponent<T = unknown> extends IWithElementInternals, IWithDefaultAria {
+export interface IListItemProperties<T = unknown> {
   selected: boolean;
   active: boolean;
   value: T;
@@ -21,6 +21,8 @@ export interface IListItemComponent<T = unknown> extends IWithElementInternals, 
   threeLine: boolean;
   wrap: boolean;
 }
+
+export interface IListItemComponent<T = unknown> extends IListItemProperties<T>, IWithElementInternals, IWithDefaultAria {}
 
 declare global {
   interface HTMLElementTagNameMap {

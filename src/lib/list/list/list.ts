@@ -11,7 +11,7 @@ import { WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 import template from './list.html';
 import styles from './list.scss';
 
-export interface IListComponent<T = unknown> extends IBaseComponent {
+export interface IListProperties<T = unknown> {
   dense: boolean;
   indented: boolean;
   selectedValue: T;
@@ -19,6 +19,8 @@ export interface IListComponent<T = unknown> extends IBaseComponent {
   threeLine: boolean;
   wrap: boolean;
 }
+
+export interface IListComponent<T = unknown> extends IListProperties<T>, IBaseComponent {}
 
 declare global {
   interface HTMLElementTagNameMap {

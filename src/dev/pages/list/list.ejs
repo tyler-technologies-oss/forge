@@ -398,16 +398,16 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <forge-checkbox slot="leading" checked id="leading-checkbox-1"></forge-checkbox>
-          <label for="leading-checkbox-1">List Item One</label>
+          <span id="leading-checkbox-1">List Item One</span>
+          <forge-checkbox slot="leading" checked aria-labelledby="leading-checkbox-1"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading" id="leading-checkbox-2"></forge-checkbox>
-          <label for="leading-checkbox-2">List Item Two</label>
+          <span id="leading-checkbox-2">List Item Two</span>
+          <forge-checkbox slot="leading" aria-labelledby="leading-checkbox-2"></forge-checkbox>
         </forge-list-item>
         <forge-list-item>
-          <forge-checkbox slot="leading" id="leading-checkbox-3"></forge-checkbox>
-          <label for="leading-checkbox-3">List Item Three</label>
+          <span id="leading-checkbox-3">List Item Three</span>
+          <forge-checkbox slot="leading" aria-labelledby="leading-checkbox-3"></forge-checkbox>
         </forge-list-item>
       </forge-list>
     </div>
@@ -440,16 +440,16 @@
     <div class="list-demo">
       <forge-list>
         <forge-list-item>
-          <forge-radio id="leading-radio-1" slot="leading" name="list-radio-leading" aria-label="Select list item one with leading radio"></forge-radio>
-          <label for="leading-radio-1">List Item</label>
+          <forge-radio slot="leading" name="list-with-leading-radios" aria-labelledby="leading-radio-1"></forge-radio>
+          <span id="leading-radio-1">List Item</span>
         </forge-list-item>
         <forge-list-item>
-          <forge-radio id="leading-radio-2" slot="leading" name="list-radio-leading" checked aria-label="Select list item two with leading radio"></forge-radio>
-          <label for="leading-radio-2">List Item</label>
+          <forge-radio slot="leading" name="list-with-leading-radios" aria-labelledby="leading-radio-2" checked></forge-radio>
+          <span id="leading-radio-2">List Item</span>
         </forge-list-item>
         <forge-list-item>
-          <forge-radio id="leading-radio-3" slot="leading" name="list-radio-leading" aria-label="Select list item three with leading radio"></forge-radio>
-          <label for="leading-radio-3">List Item</label>
+          <forge-radio slot="leading" name="list-with-leading-radios" aria-labelledby="leading-radio-3"></forge-radio>
+          <span id="leading-radio-3">List Item</span>
         </forge-list-item>
       </forge-list>
     </div>

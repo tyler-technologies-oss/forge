@@ -40,18 +40,20 @@ export class ListItemFoundation implements IListItemFoundation {
   }
 
   private _onMousedown(evt: MouseEvent): void {
-    const composedPath = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
-    const fromInteractiveElement = composedPath.some(el => el === this._adapter.interactiveElement);
+    const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const fromInteractiveElement = composedElements.some(el => el === this._adapter.interactiveElement);
     if (!fromInteractiveElement) {
       evt.preventDefault();
     }
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    const composedPath = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
-    const isFromLeadingTrailingSlot = composedPath.some((el: HTMLElement) => el.matches(':is([slot=leading],[slot=trailing])'));
+    const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const isFromLeadingTrailingSlot = composedElements.some((el: HTMLElement) => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_LEADING_TRAILING));
 
-    evt.stopPropagation();
+    if (evt.key === 'Enter' || evt.key === ' ') {
+      evt.stopPropagation();
+    }
 
     if (isFromLeadingTrailingSlot) {
       if (evt.key === 'Enter' || evt.key === ' ') {
@@ -71,17 +73,17 @@ export class ListItemFoundation implements IListItemFoundation {
   }
 
   private _onClick(event: MouseEvent): void {
-    const composedPath =  event.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
+    const composedElements =  event.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
 
     // Ignore clicks from elements that should not trigger selection
-    const fromIgnoredElement = composedPath.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
+    const fromIgnoredElement = composedElements.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
     if (fromIgnoredElement) {
       return;
     }
 
     // Check if our internal anchor was clicked and forward the click to the slotted interactive element
     const isInternalAnchor = (el: HTMLElement): el is HTMLAnchorElement => el.tagName === 'A' && el.id === LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
-    const fromInternalAnchor = composedPath.some(isInternalAnchor);
+    const fromInternalAnchor = composedElements.some(isInternalAnchor);
     if (fromInternalAnchor) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -90,14 +92,14 @@ export class ListItemFoundation implements IListItemFoundation {
     }
 
     // If the click did not originate from the interactive element, forward the click to it
-    const fromInteractiveElement = composedPath.some(el => el === this._adapter.interactiveElement);
+    const fromInteractiveElement = composedElements.some(el => el === this._adapter.interactiveElement);
     if (!fromInteractiveElement) {
       event.stopImmediatePropagation();
       this._clickInteractiveElement();
       return;
     }
 
-    this._select(event.target as HTMLElement);
+    this._dispatchSelectEvent();
   }
 
   private _clickInteractiveElement(): void {
@@ -118,12 +120,7 @@ export class ListItemFoundation implements IListItemFoundation {
     }
   }
 
-  private _select(targetElement: HTMLElement): void {
-    const ignoreElement = targetElement?.matches(LIST_ITEM_CONSTANTS.selectors.IGNORE);
-    if (ignoreElement) {
-      return;
-    }
-
+  private _dispatchSelectEvent(): void {
     const detail: IListItemSelectEventData = { value: this._value };
     const event = new CustomEvent<IListItemSelectEventData>(LIST_ITEM_CONSTANTS.events.SELECT, { bubbles: true, detail });
     this._adapter.dispatchHostEvent(event);
