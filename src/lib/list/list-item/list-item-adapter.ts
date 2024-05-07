@@ -9,7 +9,6 @@ import { LIST_ITEM_CONSTANTS } from './list-item-constants';
 import { setDefaultAria } from '../../constants';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
-  readonly isInteractive: boolean;
   readonly interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
   initialize(): void;
   destroy(): void;
@@ -43,10 +42,6 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     this._leadingSlotElement = getShadowElement(component, 'slot[name=leading]') as HTMLSlotElement;
     this._trailingSlotElement = getShadowElement(component, 'slot[name=trailing]') as HTMLSlotElement;
   }
-  
-  public get isInteractive(): boolean {
-    return this._rootElement.classList.contains(LIST_ITEM_CONSTANTS.classes.INTERACTIVE);
-  }
 
   public get interactiveElement(): HTMLElement | HTMLAnchorElement | undefined {
     return this._interactiveElement;
@@ -74,6 +69,7 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   public destroyInteractiveObserver(): void {
     this._rootElement.removeEventListener('slotchange', this._slotListener);
     this._tryCleanupObservers();
+    this._interactiveStateChangeListener?.(false);
     this._interactiveStateChangeListener = undefined;
   }
 

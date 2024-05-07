@@ -430,6 +430,118 @@ describe('List', () => {
       expect(spy).to.have.been.calledOnce;
     });
   });
+  
+  describe('noninteractive', () => {
+    it('should not attach to nested button if noninteractive', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item noninteractive>
+            <button type="button">Button</button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const selectSpy = sinon.spy();
+      el.addEventListener('forge-list-item-select', selectSpy);
+
+      listItemEl.querySelector('button')?.click();
+
+      expect(selectSpy).to.not.have.been.called;
+    });
+
+    it('should detach from nested button if noninteractive dynamically', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <button type="button">Button</button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const selectSpy = sinon.spy();
+      el.addEventListener('forge-list-item-select', selectSpy);
+
+      listItemEl.noninteractive = true;
+
+      listItemEl.querySelector('button')?.click();
+
+      expect(selectSpy).to.not.have.been.called;
+    });
+
+    it('should set noninteractive via parent list on all child list items', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list noninteractive>
+          <forge-list-item>
+            <button type="button">Button</button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+
+      expect(listItemEl.noninteractive).to.be.true;
+
+      el.noninteractive = false;
+
+      expect(listItemEl.noninteractive).to.be.false;
+    });
+
+    it('should not attach to nested anchor if noninteractive', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item noninteractive>
+            <a href="javascript: void(0);">Link</a>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const selectSpy = sinon.spy();
+      el.addEventListener('forge-list-item-select', selectSpy);
+
+      listItemEl.querySelector('a')?.click();
+
+      expect(selectSpy).to.not.have.been.called;
+    });
+
+    it('should detach from nested anchor if noninteractive dynamically', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <a href="javascript: void(0);">Link</a>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const selectSpy = sinon.spy();
+      el.addEventListener('forge-list-item-select', selectSpy);
+
+      listItemEl.noninteractive = true;
+
+      listItemEl.querySelector('a')?.click();
+
+      expect(selectSpy).to.not.have.been.called;
+    });
+  });
+
+  describe('with checkbox', () => {
+    it('should toggle slotted leading checkbox when clicked', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            Test Item
+            <input type="checkbox" slot="leading" />
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
+
+      expect(checkbox.checked).to.be.false;
+
+      listItemEl.click();
+
+      expect(checkbox.checked).to.be.true;
+    });
+  });
 });
 
 interface ListFixtureConfig {
