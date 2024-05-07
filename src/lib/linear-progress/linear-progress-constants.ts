@@ -8,8 +8,8 @@ const classes = {
 
 const selectors = {
   ROOT: '.forge-linear-progress',
-  PROGRESS: '.primary-bar',
-  BUFFER: '.buffer-bar'
+  TRACK: '.track',
+  PROGRESS: '.primary-bar'
 };
 
 const observedAttributes = {
