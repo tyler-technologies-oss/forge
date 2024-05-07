@@ -1,14 +1,11 @@
 import { attachShadowTemplate, coerceBoolean, CustomElement } from '@tylertech/forge-core';
-import { BaseComponent } from '../core/base/base-component';
+import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { DIVIDER_CONSTANTS } from './divider-constants';
-import { setDefaultAria } from '../constants';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 
 import template from './divider.html';
 import styles from './divider.scss';
 
-export interface IDividerComponent extends IWithDefaultAria, IWithElementInternals {
+export interface IDividerComponent extends IBaseComponent {
   vertical: boolean;
 }
 
@@ -18,12 +15,10 @@ declare global {
   }
 }
 
-const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
-
 /**
  * @tag forge-divider
  * 
- * @summary Divider is used to seperate elements.
+ * @summary Divider is used to separate elements.
  * 
  * @property {boolean} vertical - Controls if the divider is displayed vertically or horizontally.
  * 
@@ -39,7 +34,7 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
 @CustomElement({
   name: DIVIDER_CONSTANTS.elementName
 })
-export class DividerComponent extends BaseClass implements IDividerComponent {
+export class DividerComponent extends BaseComponent implements IDividerComponent {
   public static get observedAttributes(): string[] {
     return [
       DIVIDER_CONSTANTS.attributes.VERTICAL
@@ -49,10 +44,6 @@ export class DividerComponent extends BaseClass implements IDividerComponent {
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-  }
-
-  public connectedCallback(): void {
-    this[setDefaultAria]({ role: 'separator' }, { setAttribute: !this.hasAttribute('role') });
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
