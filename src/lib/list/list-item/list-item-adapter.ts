@@ -6,7 +6,6 @@ import { IListComponent } from '../list/list';
 import { LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
 import { LIST_ITEM_CONSTANTS } from './list-item-constants';
-import { ISwitchComponent } from '../../switch/switch';
 import { setDefaultAria } from '../../constants';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
@@ -19,8 +18,8 @@ export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   setInteractiveStateChangeListener(listener: (value: boolean) => void): void;
   setActive(value: boolean): void;
   trySelect(value: unknown): boolean | null;
-  tryToggleSelectionControl(value?: boolean): void;
   animateStateLayer(): void;
+  tempDeactivateFocusIndicator(): void;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
@@ -28,9 +27,9 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   private readonly _defaultSlotElement: HTMLSlotElement;
   private _focusIndicatorElement: IFocusIndicatorComponent | undefined;
   private _stateLayerElement: IStateLayerComponent | undefined;
-  private _buttonAttrObserver: MutationObserver | undefined;
+  private _disabledAttrObserver: MutationObserver | undefined;
   private _anchorAttrObserver: MutationObserver | undefined;
-  private _slotListener: EventListener = this._syncInteractiveState.bind(this);
+  private _slotListener: EventListener = this._onSlotChange.bind(this);
   private _interactiveStateChangeListener: ((value: boolean) => void) | undefined;
   private _interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
 
@@ -49,22 +48,21 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   public initialize(): void {
-    // Attempt to inherit state for corresponding properties from our parent list
     const list = this._getParentList();
     if (list) {
       this._inheritParentListProps(list);
     }
-    
-    this._defaultSlotElement.addEventListener('slotchange', this._slotListener);
+  
+    this._rootElement.addEventListener('slotchange', this._slotListener);
     this._component[setDefaultAria]({ role: 'listitem' }, { setAttribute: !this._component.hasAttribute('role') });
     this._syncInteractiveState();
   }
 
   public destroy(): void {
-    this._defaultSlotElement.removeEventListener('slotchange', this._slotListener);
+    this._rootElement.removeEventListener('slotchange', this._slotListener);
 
-    this._buttonAttrObserver?.disconnect();
-    this._buttonAttrObserver = undefined;
+    this._disabledAttrObserver?.disconnect();
+    this._disabledAttrObserver = undefined;
 
     this._anchorAttrObserver?.disconnect();
     this._anchorAttrObserver = undefined;
@@ -82,13 +80,71 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     this._interactiveStateChangeListener = listener;
   }
 
+  public setActive(value: boolean): void {
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.active = value;
+    }
+  }
+
+  /**
+   * Attempts to set the selected state of the list item element and it's visual indicators
+   * @param value The value to compare to the parent list element's selected value
+   * @returns Returns whether the list item is selected, or null otherwise.
+   */
+  public trySelect(value: unknown): boolean | null {
+    const list = this._getParentList();
+    if (list?.selectedValue === undefined) {
+      return null;
+    }
+    const listValues = Array.isArray(list.selectedValue) ? list.selectedValue : [list.selectedValue];
+    const isSelected = listValues.some(v => isDeepEqual(v, value));
+    return isSelected;
+  }
+
+  public animateStateLayer(): void {
+    this._stateLayerElement?.playAnimation();
+  }
+
+  public tempDeactivateFocusIndicator(): void {
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.active = false;
+    }
+  }
+
+  private _onSlotChange(evt: Event): void {
+    const isInteractiveSlot = ['', 'leading', 'trailing'].includes((evt.target as HTMLSlotElement).name);
+    if (!isInteractiveSlot) {
+      return;
+    }
+    this._syncInteractiveState();
+  }
+
   private _syncInteractiveState(): void {
+    const slottedFormControl = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.FORM_CONTROL_LIKE) as HTMLElement | null;
+
+    if (slottedFormControl) {
+      this._anchorAttrObserver?.disconnect();
+      this._anchorAttrObserver = undefined;
+
+      this._disabledAttrObserver?.disconnect();
+      this._disabledAttrObserver = undefined;
+
+      this._interactiveElement = slottedFormControl as HTMLElement;
+      this._setInteractive(!!this._interactiveElement);
+      
+      if (this._focusIndicatorElement) {
+        this._focusIndicatorElement.targetElement = slottedFormControl;
+      }
+      
+      this._syncDisabled(slottedFormControl);
+      this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(slottedFormControl as HTMLElement));
+      this._disabledAttrObserver.observe(slottedFormControl, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+      return;
+    }
+
     const assignedElements = this._defaultSlotElement.assignedElements({ flatten: true });
     const slottedAnchor = assignedElements.find(e => e.tagName === 'A') as HTMLAnchorElement | undefined;
     const slottedButton = assignedElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement | undefined;
-    
-    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
-    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON, !!slottedButton);
     
     if (!slottedAnchor) {
       const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR);
@@ -100,13 +156,12 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
       this._anchorAttrObserver = undefined;
     }
     if (!slottedButton) {
-      this._buttonAttrObserver?.disconnect();
-      this._buttonAttrObserver = undefined;
+      this._disabledAttrObserver?.disconnect();
+      this._disabledAttrObserver = undefined;
     }
     
     this._interactiveElement = slottedAnchor ?? slottedButton;
     this._setInteractive(!!this._interactiveElement);
-
 
     if (slottedAnchor) {
       const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR) as HTMLAnchorElement | null ?? document.createElement('a');
@@ -127,19 +182,15 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
 
     if (slottedButton) {
-      this._syncDisabled();
+      this._syncDisabled(slottedButton);
       
       if (this._focusIndicatorElement) {
         this._focusIndicatorElement.targetElement = slottedButton;
       }
 
-      this._buttonAttrObserver = new MutationObserver(() => this._syncDisabled());
-      this._buttonAttrObserver.observe(slottedButton, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+      this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(slottedButton));
+      this._disabledAttrObserver.observe(slottedButton, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
     }
-  }
-
-  private _initializeInteractiveAnchor(): void {
-    
   }
 
   private _setInteractive(value: boolean): void {
@@ -167,78 +218,10 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
   }
 
-  private _syncDisabled(): void {
-    const slottedButton = this._defaultSlotElement.assignedElements().find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement;
-    const isDisabled = slottedButton.hasAttribute('disabled') || slottedButton.getAttribute('aria-disabled') === 'true';
+  private _syncDisabled(element: HTMLElement): void {
+    const isDisabled = element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true';
     this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.DISABLED, isDisabled);
     this._setInteractive(!isDisabled);
-  }
-
-  public setActive(value: boolean): void {
-    if (this._focusIndicatorElement) {
-      this._focusIndicatorElement.active = value;
-    }
-  }
-
-  /**
-   * Attempts to set the selected state of the list item element and it's visual indicators
-   * @param value The value to compare to the parent list element's selected value
-   * @returns Returns whether the list item is selected, or null otherwise.
-   */
-  public trySelect(value: unknown): boolean | null {
-    const list = this._getParentList();
-    if (list?.selectedValue === undefined) {
-      return null;
-    }
-
-    const listValues = Array.isArray(list.selectedValue) ? list.selectedValue : [list.selectedValue];
-    const isSelected = listValues.some(v => isDeepEqual(v, value));
-
-    this.tryToggleSelectionControl(isSelected);
-    return isSelected;
-  }
-
-  /**
-   * Attempts to toggle a checkbox radio button, or switch within the list item if it can find one.
-   */
-  public tryToggleSelectionControl(value?: boolean): void {
-    const checkable = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR) as HTMLInputElement;
-    if (checkable) {
-      const force = typeof value === 'boolean';
-      const currentState = checkable.checked;
-
-      // We don't uncheck radio buttons unless we are forcing a value from the selection state
-      if (!force && checkable.matches(':is(forge-radio[checked],input[type=radio]:checked)')) {
-        return;
-      }
-      
-      // Check if we are just toggling or forcing to a specific checked state
-      checkable.checked = force ? value as boolean : !checkable.checked;
-
-      // TODO: This seems weird... Should we be dispatching events on slotted elements when changes are made programmatically?
-      if (!force || currentState !== value) {
-        checkable.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    }
-
-    // Special case handling for the Forge switch element since it doesn't have a checked property
-    const switchEl = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.SWITCH_SELECTOR) as ISwitchComponent;
-    if (switchEl) {
-      const force = typeof value === 'boolean';
-      const currentState = switchEl.on;
-
-      // Check if we are just toggling or forcing to a specific checked state
-      switchEl.on = force ? value as boolean : !switchEl.on;
-
-      // TODO: This seems weird... Should we be dispatching events on slotted elements when changes are made programmatically?
-      if (!force || currentState !== value) {
-        switchEl.dispatchEvent(new CustomEvent('forge-switch-change', { bubbles: true, detail: switchEl.on }));
-      }
-    }
-  }
-
-  public animateStateLayer(): void {
-    this._stateLayerElement?.playAnimation();
   }
 
   private _getParentList(): IListComponent | null {

@@ -161,6 +161,11 @@ slot[name=tertiary-text] {
   @include leading-trailing-base;
 }
 
+::slotted(:is(forge-checkbox,forge-radio,forge-switch):is([slot=leading],[slot=trailing])) {
+  @include focus-indicator.provide-theme(( display: none ));
+  @include state-layer.provide-theme(( display: none ));
+}
+
 // Leading slotted elements
 ::slotted([slot=leading]) {
   :host([selected]) & {

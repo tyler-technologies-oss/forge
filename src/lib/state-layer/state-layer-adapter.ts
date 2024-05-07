@@ -86,6 +86,11 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
     this._rippleAnimation?.cancel();
 
     const { rippleSize, rippleScale, initialSize } = calcRippleSize(this._component);
+    
+    if (rippleScale === 'Infinity') {
+      return;
+    }
+
     const { startPoint, endPoint } = getTranslationCoordinates(this._component, initialSize, coords);
     const translateStart = `${startPoint.x}px, ${startPoint.y}px`;
     const translateEnd = `${endPoint.x}px, ${endPoint.y}px`;

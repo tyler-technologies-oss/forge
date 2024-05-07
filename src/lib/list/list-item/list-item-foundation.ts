@@ -40,10 +40,29 @@ export class ListItemFoundation implements IListItemFoundation {
   }
 
   private _onMousedown(evt: MouseEvent): void {
-    evt.preventDefault();
+    const composedPath = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const fromInteractiveElement = composedPath.some(el => el === this._adapter.interactiveElement);
+    if (!fromInteractiveElement) {
+      evt.preventDefault();
+    }
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
+    const composedPath = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const isFromLeadingTrailingSlot = composedPath.some((el: HTMLElement) => el.matches(':is([slot=leading],[slot=trailing])'));
+
+    evt.stopPropagation();
+
+    if (isFromLeadingTrailingSlot) {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        this._adapter.animateStateLayer();
+      }
+      if (evt.key === 'Enter') {
+        this._adapter.interactiveElement?.click();
+      }
+      return;
+    }
+
     if (evt.key === ' ') {
       evt.preventDefault();
       this._adapter.animateStateLayer();
@@ -52,8 +71,7 @@ export class ListItemFoundation implements IListItemFoundation {
   }
 
   private _onClick(event: MouseEvent): void {
-    const isElementNode = (el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE;
-    const composedPath =  event.composedPath().filter(isElementNode);
+    const composedPath =  event.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
 
     // Ignore clicks from elements that should not trigger selection
     const fromIgnoredElement = composedPath.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
@@ -63,26 +81,29 @@ export class ListItemFoundation implements IListItemFoundation {
 
     // Check if our internal anchor was clicked and forward the click to the slotted interactive element
     const isInternalAnchor = (el: HTMLElement): el is HTMLAnchorElement => el.tagName === 'A' && el.id === LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
-    const fromInternalAnchor = composedPath.filter(isElementNode).some(isInternalAnchor);
+    const fromInternalAnchor = composedPath.some(isInternalAnchor);
     if (fromInternalAnchor) {
       event.preventDefault();
       event.stopImmediatePropagation();
-      this._adapter.interactiveElement?.focus();
-      this._adapter.interactiveElement?.click();
+      this._clickInteractiveElement();
       return;
     }
 
     // If the click did not originate from the interactive element, forward the click to it
     const fromInteractiveElement = composedPath.some(el => el === this._adapter.interactiveElement);
     if (!fromInteractiveElement) {
-      event.preventDefault();
       event.stopImmediatePropagation();
-      this._adapter.interactiveElement?.focus();
-      this._adapter.interactiveElement?.click();
+      this._clickInteractiveElement();
       return;
     }
 
     this._select(event.target as HTMLElement);
+  }
+
+  private _clickInteractiveElement(): void {
+    this._adapter.interactiveElement?.focus();
+    this._adapter.tempDeactivateFocusIndicator(); // Workaround until we can call `focus({ focusVisible: false })` to prevent focus ring from showing
+    this._adapter.interactiveElement?.click();
   }
 
   private _onInteractiveStateChange(value: boolean): void {
@@ -103,12 +124,6 @@ export class ListItemFoundation implements IListItemFoundation {
       return;
     }
 
-    // If the target was not a checkbox or radio button, attempt to find one and toggle its checked state
-    if (!targetElement.matches(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR) &&
-        !targetElement.matches(LIST_ITEM_CONSTANTS.selectors.SWITCH_SELECTOR)) {
-      this._adapter.tryToggleSelectionControl();
-    }
-
     const detail: IListItemSelectEventData = { value: this._value };
     const event = new CustomEvent<IListItemSelectEventData>(LIST_ITEM_CONSTANTS.events.SELECT, { bubbles: true, detail });
     this._adapter.dispatchHostEvent(event);
@@ -121,7 +136,6 @@ export class ListItemFoundation implements IListItemFoundation {
     value = Boolean(value);
     if (this._selected !== value) {
       this._selected = value;
-      this._adapter.tryToggleSelectionControl(this._selected);
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED, this._selected);
     }
   }

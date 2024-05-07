@@ -21,9 +21,7 @@ const classes = {
   ROOT: 'forge-list-item',
   DISABLED: 'disabled',
   INTERACTIVE: 'interactive',
-  INTERNAL_ANCHOR: 'anchor',
-  WITH_ANCHOR: 'with-anchor',
-  WITH_BUTTON: 'with-button'
+  INTERNAL_ANCHOR: 'anchor'
 };
 
 const ids = {
@@ -32,11 +30,11 @@ const ids = {
 
 const selectors = {
   ROOT: `.${classes.ROOT}`,
-  BUTTON_LIKE: ':is(button,[role=button][tabindex]:not([tabindex=-1]),[forge-list-item-button])',
-  CHECKBOX_RADIO_SELECTOR: ':is(input[type=checkbox],input[type=radio],forge-checkbox,forge-radio):not(:disabled):not([forge-ignore])',
-  SWITCH_SELECTOR: 'forge-switch:not([disabled]):not([forge-ignore])',
+  FORM_CONTROL_LIKE: ':is([forge-list-item-interactive],forge-radio,forge-checkbox,forge-switch,input[type=checkbox],input[type=radio]):is([slot=leading],[slot=trailing]):not([forge-ignore])',
+  BUTTON_LIKE: ':is(button,[role=button][tabindex]:not([tabindex=-1]),[forge-list-item-interactive])',
   IGNORE: '[forge-ignore],[data-forge-ignore]',
-  INTERNAL_ANCHOR: `#${ids.INTERNAL_ANCHOR}`
+  INTERNAL_ANCHOR: `#${ids.INTERNAL_ANCHOR}`,
+  INTERACTIVE_ELEMENTS: `:is(a:not([slot]),)`
 };
 
 const events = {

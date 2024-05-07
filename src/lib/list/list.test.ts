@@ -268,7 +268,6 @@ describe('List', () => {
       expect(internalAnchor.href).to.equal('javascript: void(0);');
       expect(internalAnchor.getAttribute('aria-hidden')).to.equal('true');
       expect(internalAnchor.classList.contains(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR)).to.be.true;
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.true;
       await expect(el).to.be.accessible();
     });
 
@@ -281,7 +280,6 @@ describe('List', () => {
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.false;
       await expect(el).to.be.accessible();
 
       const anchor = document.createElement('a');
@@ -297,7 +295,6 @@ describe('List', () => {
       expect(internalAnchor.href).to.equal(anchor.href);
       expect(internalAnchor.getAttribute('aria-hidden')).to.equal('true');
       expect(internalAnchor.classList.contains(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR)).to.be.true;
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.true;
       await expect(el).to.be.accessible();
 
       anchor.remove();
@@ -307,7 +304,6 @@ describe('List', () => {
       internalAnchor = rootEl.querySelector(`#${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}`) as HTMLAnchorElement;
 
       expect(internalAnchor).to.not.exist;
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_ANCHOR)).to.be.false;
       await expect(el).to.be.accessible();
     });
 
@@ -377,7 +373,6 @@ describe('List', () => {
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.true;
       await expect(el).to.be.accessible();
     });
 
@@ -390,7 +385,6 @@ describe('List', () => {
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
 
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.false;
       await expect(el).to.be.accessible();
 
       const button = document.createElement('button');
@@ -400,14 +394,12 @@ describe('List', () => {
 
       await elementUpdated(el);
 
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.true;
       await expect(el).to.be.accessible();
 
       button.remove();
 
       await elementUpdated(el);
 
-      expect(rootEl.classList.contains(LIST_ITEM_CONSTANTS.classes.WITH_BUTTON)).to.be.false;
       await expect(el).to.be.accessible();
     });
 
