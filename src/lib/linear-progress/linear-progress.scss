@@ -43,12 +43,16 @@ $_host-tokens: [track-height];
   @include progress;
 }
 
+.dots,
 .forge-linear-progress,
 .track,
-.buffer-bar,
 .bar,
 .bar-inner {
   position: absolute;
+}
+
+.dots {
+  @include dots;
 }
 
 .bar {
@@ -63,15 +67,11 @@ $_host-tokens: [track-height];
   @include bar-inner;
 }
 
-.buffer-bar {
-  @include buffer-bar;
-}
-
 .track {
   @include track;
 }
 
-/// Indeterminate styles
+// Indeterminate styles
 .forge-linear-progress--indeterminate {
   .bar {
     @include indeterminate-bar;
@@ -85,8 +85,8 @@ $_host-tokens: [track-height];
     @include indeterminate-secondary-bar;
   }
 
-  .track {
-    @include indeterminate-track;
+  .dots {
+    @include indeterminate-dots;
   }
 
   .primary-bar > .bar-inner {
@@ -98,7 +98,7 @@ $_host-tokens: [track-height];
   }
 }
 
-/// RTL styles
+// RTL styles
 $rtl-selectors: (
   ':host-context([dir="rtl"]) .forge-linear-progress',
   ':host([dir="rtl"]) .forge-linear-progress',
@@ -111,11 +111,11 @@ $rtl-selectors: (
       transform-origin: right center;
     }
 
-    .buffer-bar {
+    .track{
       transform-origin: right center;
     }
 
-    .track {
+    .dots {
       animation-name: buffering-rtl;
     }
 
