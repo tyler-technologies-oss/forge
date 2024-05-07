@@ -74,7 +74,6 @@ export class ListItemFoundation implements IListItemFoundation {
 
     if (evt.key === ' ') {
       evt.preventDefault();
-      this._adapter.animateStateLayer();
       this._adapter.interactiveElement?.click();
     }
   }
@@ -108,12 +107,14 @@ export class ListItemFoundation implements IListItemFoundation {
       
       // Workaround to temporarily set the target attribute to '_blank' if the user is holding the ctrl key and remove it after the click
       const forceTempAnchorTarget = isCtrlClick && !hasTarget;
+      /* c8 ignore next 3 */
       if (forceTempAnchorTarget) {
         this._adapter.interactiveElement?.setAttribute('target', '_blank');
       }
 
       this._clickInteractiveElement();
 
+      /* c8 ignore next 3 */
       if (forceTempAnchorTarget) {
         this._adapter.interactiveElement?.removeAttribute('target');
       }

@@ -210,6 +210,59 @@ describe('List', () => {
   });
 
   describe('focus indicator', () => {
+    it('should not have focus indicator when no interactive element is present', async () => {
+      const el = await fixture<IListComponent>(html`<forge-list-item>Test Item</forge-list-item>`);
+      const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
+
+      expect(focusIndicator).not.to.be.ok;
+    });
+
+    it('should have focus indicator when button is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <button type="button">Test Item</button>
+        </forge-list-item>
+      `);
+      const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
+
+      expect(focusIndicator).to.be.ok;
+    });
+
+    it('should have focus indicator when checkbox is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <input type="checkbox" slot="leading" />
+          Test Item
+        </forge-list-item>
+      `);
+      const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
+
+      expect(focusIndicator).to.be.ok;
+    });
+
+    it('should have focus indicator when radio button is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <input type="radio" slot="leading" />
+          Test Item
+        </forge-list-item>
+      `);
+      const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
+
+      expect(focusIndicator).to.be.ok;
+    });
+
+    it('should have focus indicator when anchor is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <a href="javascript: void(0);">Test Item</a>
+        </forge-list-item>
+      `);
+      const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
+
+      expect(focusIndicator).to.be.ok;
+    });
+
     it('should activate focus indicator when active set', async () => {
       const ctx = await createFixture();
 
@@ -219,6 +272,131 @@ describe('List', () => {
       expect(ctx.listItemActive(0)).to.be.false; 
       expect(ctx.listItemActive(1)).to.be.true; 
       expect(ctx.listItemActive(0)).to.be.false; 
+    });
+
+    it('should not activate focus indicator when clicked', async () => {
+      const el = await fixture<IListComponent>(html`<forge-list-item><button>Test Item</button></forge-list-item>`);
+      const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+      const button = el.querySelector('button') as HTMLButtonElement;
+
+      await clickElement(el);
+
+      expect(button.matches(':focus')).to.be.true;
+      expect(focusIndicator.active).to.be.false;
+    });
+  });
+
+  describe('state layer', () => {
+    it('should not have a state layer when no interactive element is present', async () => {
+      const el = await fixture<IListComponent>(html`<forge-list-item>Test Item</forge-list-item>`);
+      const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
+
+      expect(stateLayer).not.to.be.ok;
+    });
+
+    it('should have state layer when button is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <button type="button">Test Item</button>
+        </forge-list-item>
+      `);
+      const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
+
+      expect(stateLayer).to.be.ok;
+    });
+
+    it('should have state layer when checkbox is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <input type="checkbox" slot="leading" />
+          Test Item
+        </forge-list-item>
+      `);
+      const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
+
+      expect(stateLayer).to.be.ok;
+    });
+
+    it('should have state layer when radio button is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <input type="radio" slot="leading" />
+          Test Item
+        </forge-list-item>
+      `);
+      const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
+
+      expect(stateLayer).to.be.ok;
+    });
+
+    it('should have state layer when anchor is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list-item>
+          <a href="javascript: void(0);">Test Item</a>
+        </forge-list-item>
+      `);
+      const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
+
+      expect(stateLayer).to.be.ok;
+    });
+
+    it('should animate state layer when button is clicked', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <button type="button">Test Item</button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItem = el.querySelector('forge-list-item') as IListItemComponent;
+      const stateLayerEl = listItem.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
+      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._foundation._adapter, 'startAnimation');
+
+      await clickElement(listItem);
+
+      expect(stateLayerAnimationSpy).to.have.been.calledOnce;
+    });
+
+    it('should animate state layer when checkbox is clicked', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            Test Item
+            <input type="checkbox" slot="leading" />
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
+      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._foundation._adapter, 'startAnimation');
+      const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
+
+      checkbox.click();
+
+      expect(stateLayerAnimationSpy).to.have.been.calledOnce;
+    });
+
+    it('should animate state layer when pressing enter key or space key on button', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <button type="button">Test Item</button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
+      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._foundation._adapter, 'startAnimation');
+      const button = listItemEl.querySelector('button') as HTMLButtonElement;
+
+      button.focus();
+      await sendKeys({ press: 'Enter' });
+
+      expect(stateLayerAnimationSpy).to.have.been.calledOnce;
+
+      await sendKeys({ press: ' ' });
+
+      expect(stateLayerAnimationSpy).to.have.been.calledTwice;
     });
   });
 
@@ -350,6 +528,30 @@ describe('List', () => {
       anchor.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
 
       expect(spy).to.have.been.calledOnce;
+    });
+
+    it('should update internal anchor href when slotted href changes', async () => {
+      const oldHref = 'javascript: void(0);';
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <a href=${oldHref}>Test</a>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
+      const anchor = listItemEl.querySelector('a') as HTMLAnchorElement;
+      const internalAnchor = rootEl.querySelector(`#${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}`) as HTMLAnchorElement;
+
+      expect(internalAnchor.href).to.equal(oldHref);
+
+      const newHref = 'javascript: console.log("changed")';
+      anchor.href = newHref;
+      await elementUpdated(el);
+
+      expect(oldHref).not.to.equal(newHref);
+      expect(internalAnchor.href).to.equal(newHref);
     });
   });
 
@@ -520,10 +722,32 @@ describe('List', () => {
 
       expect(selectSpy).to.not.have.been.called;
     });
+
+    it('should be interactive is button is slotted into noninteractive slot', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            Text
+            <button type="button" slot="secondary-text">Button</button>
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer');
+      const focusIndicatorEl = listItemEl.shadowRoot!.querySelector('forge-focus-indicator');
+      const selectSpy = sinon.spy();
+      el.addEventListener('forge-list-item-select', selectSpy);
+
+      listItemEl.querySelector('button')?.click();
+
+      expect(stateLayerEl).not.to.be.ok;
+      expect(focusIndicatorEl).not.to.be.ok;
+      expect(selectSpy).not.to.have.been.calledOnce;
+    });
   });
 
-  describe('with checkbox', () => {
-    it('should toggle slotted leading checkbox when clicked', async () => {
+  describe('with form control', () => {
+    it('should toggle slotted leading form control when clicked', async () => {
       const el = await fixture<IListComponent>(html`
         <forge-list>
           <forge-list-item>
@@ -540,6 +764,68 @@ describe('List', () => {
       listItemEl.click();
 
       expect(checkbox.checked).to.be.true;
+    });
+
+    it('should not toggle leading checkbox if forge-ignore attribute is present', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            Test Item
+            <input type="checkbox" slot="leading" forge-ignore />
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
+
+      expect(checkbox.checked).to.be.false;
+
+      listItemEl.click();
+
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should dispatch select event when slotted label with for attribute is clicked', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            <label for="the-checkbox">Test Item</label>
+            <input type="checkbox" id="the-checkbox" slot="leading" />
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const labelEl = listItemEl.querySelector('label') as HTMLLabelElement;
+      const checkboxEl = listItemEl.querySelector('input') as HTMLInputElement;
+      const selectSpy = sinon.spy();
+      el.addEventListener('forge-list-item-select', selectSpy);
+
+      expect(listItemEl.noninteractive).to.be.false;
+      expect(checkboxEl.checked).to.be.false;
+
+      await clickElement(labelEl);
+
+      expect(selectSpy).to.have.been.calledOnce;
+      expect(checkboxEl.checked).to.be.true;
+    });
+
+    it('should click slotted form control when enter key is pressed', async () => {
+      const el = await fixture<IListComponent>(html`
+        <forge-list>
+          <forge-list-item>
+            Test Item
+            <input type="checkbox" slot="leading" />
+          </forge-list-item>
+        </forge-list>
+      `);
+      const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
+      const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
+      const spy = sinon.spy(checkbox, 'click');
+
+      checkbox.focus();
+      await sendKeys({ press: 'Enter' });
+
+      expect(spy).to.have.been.calledOnce;
     });
   });
 });
@@ -632,10 +918,14 @@ class ListHarness {
   }
 
   public clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return clickElement(el);
   }
+}
+
+function clickElement(el: HTMLElement): Promise<void> {
+  const { x, y, width, height } = el.getBoundingClientRect();
+  return sendMouse({ type: 'click', position: [
+    Math.floor(x + window.scrollX + width / 2),
+    Math.floor(y + window.scrollY + height / 2),
+  ]});
 }
