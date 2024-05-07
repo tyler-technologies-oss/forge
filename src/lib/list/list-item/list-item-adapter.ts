@@ -13,9 +13,10 @@ export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
   readonly interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
   initialize(): void;
   destroy(): void;
+  initializeInteractiveObserver(listener: (value: boolean) => void): void;
+  destroyInteractiveObserver(): void;
   addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
   removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
-  setInteractiveStateChangeListener(listener: (value: boolean) => void): void;
   setActive(value: boolean): void;
   trySelect(value: unknown): boolean | null;
   animateStateLayer(): void;
@@ -56,15 +57,24 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (list) {
       this._inheritParentListProps(list);
     }
-  
-    this._rootElement.addEventListener('slotchange', this._slotListener);
     this._component[setDefaultAria]({ role: 'listitem' }, { setAttribute: !this._component.hasAttribute('role') });
-    this._initializeInteractiveElement();
   }
 
   public destroy(): void {
     this._rootElement.removeEventListener('slotchange', this._slotListener);
     this._tryCleanupObservers();
+  }
+
+  public initializeInteractiveObserver(listener: (value: boolean) => void): void {
+    this._interactiveStateChangeListener = listener;
+    this._rootElement.addEventListener('slotchange', this._slotListener);
+    this._initializeInteractiveElement();
+  }
+
+  public destroyInteractiveObserver(): void {
+    this._rootElement.removeEventListener('slotchange', this._slotListener);
+    this._tryCleanupObservers();
+    this._interactiveStateChangeListener = undefined;
   }
 
   public addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
@@ -73,10 +83,6 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
 
   public removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
     this._rootElement.removeEventListener(type, listener, options);
-  }
-
-  public setInteractiveStateChangeListener(listener: (value: boolean) => void): void {
-    this._interactiveStateChangeListener = listener;
   }
 
   public setActive(value: boolean): void {
@@ -241,6 +247,9 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   private _inheritParentListProps(list: IListComponent): void {
+    if (list.hasAttribute(LIST_CONSTANTS.attributes.NONINTERACTIVE)) {
+      this._component.noninteractive = true;
+    }
     if (list.hasAttribute(LIST_CONSTANTS.attributes.DENSE)) {
       this._component.dense = true;
     }

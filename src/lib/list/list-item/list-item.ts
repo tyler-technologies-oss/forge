@@ -20,6 +20,7 @@ export interface IListItemProperties<T = unknown> {
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
+  noninteractive: boolean;
 }
 
 export interface IListItemComponent<T = unknown> extends IListItemProperties<T>, IWithElementInternals, IWithDefaultAria {}
@@ -49,6 +50,7 @@ const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
  * @property {boolean} twoLine - Sets the list item height to support at least two lines of text.
  * @property {boolean} threeLine - Sets the list item height to support at least three lines of text.
  * @property {boolean} wrap - Sets the list item to wrap its text content.
+ * @property {boolean} noninteractive - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
  *
  * @attribute {boolean} selected - Applies the selected state to the list item.
  * @attribute {boolean} active - Applies the active state to the list item by emulating its focused state.
@@ -58,6 +60,7 @@ const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
  * @attribute {boolean} two-line - Sets the list item height to support at least two lines of text.
  * @attribute {boolean} three-line - Sets the list item height to support at least three lines of text.
  * @attribute {boolean} wrap - Sets the list item to wrap its text content.
+ * @attribute {boolean} noninteractive - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
  * 
  * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
  * 
@@ -170,6 +173,9 @@ export class ListItemComponent extends BaseClass implements IListItemComponent {
       case LIST_ITEM_CONSTANTS.observedAttributes.WRAP:
         this.wrap = coerceBoolean(newValue);
         break;
+      case LIST_ITEM_CONSTANTS.observedAttributes.NONINTERACTIVE:
+        this.noninteractive = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -196,4 +202,7 @@ export class ListItemComponent extends BaseClass implements IListItemComponent {
 
   @FoundationProperty()
   public declare wrap: boolean;
+
+  @FoundationProperty()
+  public declare noninteractive: boolean;
 }

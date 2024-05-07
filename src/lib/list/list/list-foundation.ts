@@ -9,6 +9,7 @@ export interface IListFoundation extends ICustomElementFoundation {
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
+  noninteractive: boolean;
 }
 
 export class ListFoundation implements IListFoundation {
@@ -18,6 +19,7 @@ export class ListFoundation implements IListFoundation {
   private _twoLine = false;
   private _threeLine = false;
   private _wrap = false;
+  private _noninteractive = false;
 
   constructor(private _adapter: IListAdapter) {}
 
@@ -89,6 +91,17 @@ export class ListFoundation implements IListFoundation {
       this._wrap = value;
       this._adapter.setListItemsProperty('wrap', this._wrap);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.WRAP, this._wrap);
+    }
+  }
+
+  public get noninteractive(): boolean {
+    return this._noninteractive;
+  }
+  public set noninteractive(value: boolean) {
+    if (this._noninteractive !== value) {
+      this._noninteractive = value;
+      this._adapter.setListItemsProperty('noninteractive', this._noninteractive);
+      this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.NONINTERACTIVE, this._noninteractive);
     }
   }
 }

@@ -10,7 +10,8 @@ const observedAttributes = {
   INDENTED: 'indented',
   TWO_LINE: 'two-line',
   THREE_LINE: 'three-line',
-  WRAP: 'wrap'
+  WRAP: 'wrap',
+  NONINTERACTIVE: 'noninteractive'
 };
 
 const attributes = {

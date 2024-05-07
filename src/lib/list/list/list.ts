@@ -18,6 +18,7 @@ export interface IListProperties<T = unknown> {
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
+  noninteractive: boolean;
 }
 
 export interface IListComponent<T = unknown> extends IListProperties<T>, IBaseComponent {}
@@ -46,6 +47,7 @@ declare global {
  * @property {boolean} twoLine - Whether the list has all two-line items or not.
  * @property {boolean} threeLine - Whether the list has all three-line items or not.
  * @property {boolean} wrap - Whether the list has all items that wrap their text or not.
+ * @property {boolean} noninteractive - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
  * 
  * @attribute {boolean} dense - Whether the list has all dense items or not.
  * @attribute {string} selected-value - The selected list item value(s).
@@ -54,6 +56,7 @@ declare global {
  * @attribute {boolean} three-line - Whether the list has all three-line items or not.
  * @attribute {boolean} wrap - Whether the list has all items that wrap their text or not.
  * @attribute {boolean} navlist - Controls whether the list is styled a navigation list or not.
+ * @attribute {boolean} noninteractive - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
  */
 @CustomElement({
   name: LIST_CONSTANTS.elementName,
@@ -99,6 +102,9 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
       case LIST_CONSTANTS.attributes.WRAP:
         this.wrap = coerceBoolean(newValue);
         break;
+      case LIST_CONSTANTS.attributes.NONINTERACTIVE:
+        this.noninteractive = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -119,4 +125,7 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
 
   @FoundationProperty()
   public declare wrap: boolean;
+
+  @FoundationProperty()
+  public declare noninteractive: boolean;
 }

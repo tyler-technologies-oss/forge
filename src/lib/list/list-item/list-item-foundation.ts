@@ -11,6 +11,7 @@ export interface IListItemFoundation extends ICustomElementFoundation {
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
+  noninteractive: boolean;
 }
 
 export class ListItemFoundation implements IListItemFoundation {
@@ -22,6 +23,7 @@ export class ListItemFoundation implements IListItemFoundation {
   private _twoLine = false;
   private _threeLine = false;
   private _wrap = false;
+  private _noninteractive = false;
 
   private _interactiveStateChangeListener: (value: boolean) => void = this._onInteractiveStateChange.bind(this);
   private _mousedownListener: EventListener = this._onMousedown.bind(this);
@@ -32,7 +34,12 @@ export class ListItemFoundation implements IListItemFoundation {
 
   public initialize(): void {
     this._adapter.initialize();
-    this._adapter.setInteractiveStateChangeListener(this._interactiveStateChangeListener);
+
+    if (this._noninteractive) {
+      this._adapter.destroyInteractiveObserver();
+    } else {
+      this._adapter.initializeInteractiveObserver(this._interactiveStateChangeListener);
+    }
   }
 
   public disconnect(): void {
@@ -72,8 +79,8 @@ export class ListItemFoundation implements IListItemFoundation {
     }
   }
 
-  private _onClick(event: MouseEvent): void {
-    const composedElements =  event.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
+  private _onClick(evt: MouseEvent): void {
+    const composedElements =  evt.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
 
     // Ignore clicks from elements that should not trigger selection
     const fromIgnoredElement = composedElements.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
@@ -81,12 +88,20 @@ export class ListItemFoundation implements IListItemFoundation {
       return;
     }
 
+    // Ignore clicks from <label> elements that have a for attribute that matches our interactive elements' id
+    const labelElementWithFor = (el: HTMLElement): el is HTMLLabelElement => el.matches('label[for]');
+    const fromLabelFor = composedElements.filter(labelElementWithFor).some(el => el.htmlFor === this._adapter.interactiveElement?.id);
+    if (fromLabelFor) {
+      evt.stopPropagation();
+      return;
+    }
+
     // Check if our internal anchor was clicked and forward the click to the slotted interactive element
     const isInternalAnchor = (el: HTMLElement): el is HTMLAnchorElement => el.tagName === 'A' && el.id === LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
     const fromInternalAnchor = composedElements.some(isInternalAnchor);
     if (fromInternalAnchor) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
       this._clickInteractiveElement();
       return;
     }
@@ -94,7 +109,7 @@ export class ListItemFoundation implements IListItemFoundation {
     // If the click did not originate from the interactive element, forward the click to it
     const fromInteractiveElement = composedElements.some(el => el === this._adapter.interactiveElement);
     if (!fromInteractiveElement) {
-      event.stopImmediatePropagation();
+      evt.stopImmediatePropagation();
       this._clickInteractiveElement();
       return;
     }
@@ -109,7 +124,7 @@ export class ListItemFoundation implements IListItemFoundation {
   }
 
   private _onInteractiveStateChange(value: boolean): void {
-    if (value) {
+    if (value && !this._noninteractive) {
       this._adapter.addRootListener('mousedown', this._mousedownListener, { capture: true });
       this._adapter.addHostListener('click', this._clickListener, { capture: true });
       this._adapter.addHostListener('keydown', this._keydownListener);
@@ -212,6 +227,26 @@ export class ListItemFoundation implements IListItemFoundation {
     if (this._wrap !== value) {
       this._wrap = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP, this._wrap);
+    }
+  }
+
+  public get noninteractive(): boolean {
+    return this._noninteractive;
+  }
+  public set noninteractive(value: boolean) {
+    value = Boolean(value);
+    if (this._noninteractive !== value) {
+      this._noninteractive = value;
+
+      if (this._adapter.isConnected) {
+        if (this._noninteractive) {
+          this._adapter.destroyInteractiveObserver();
+        } else {
+          this._adapter.initializeInteractiveObserver(this._interactiveStateChangeListener);
+        }
+      }
+
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.NONINTERACTIVE, this._noninteractive);
     }
   }
 }
