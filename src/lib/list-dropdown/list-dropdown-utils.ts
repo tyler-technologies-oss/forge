@@ -75,7 +75,6 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
 export function createList(config: IListDropdownOpenConfig): IListComponent {
   const listElement = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
   listElement.id = `list-dropdown-list-${config.id}`;
-  listElement.propagateClick = false;
 
   // Set roles and other attributes based on our type
   switch (config.type) {
@@ -167,7 +166,13 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
 
       let listItemElement = document.createElement('forge-list-item');
       listItemElement.value = option.value;
-      listItemElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
+      listItemElement.setAttribute('role', 'presentation');
+      
+      const buttonElement = document.createElement('button');
+      buttonElement.type = 'button';
+      buttonElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
+      buttonElement.setAttribute('role', config.type === 'menu' ? 'menuitem' : 'option');
+      listItemElement.appendChild(buttonElement);
 
       if (config.wrapOptionText) {
         listItemElement.wrap = true;
@@ -187,20 +192,20 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         const element = config.optionBuilder(option, listItemElement);
         if (element) {
           if (typeof element === 'string') {
-            listItemElement.innerHTML = element;
+            buttonElement.innerHTML = element;
           } else {
-            listItemElement.appendChild(element);
+            buttonElement.appendChild(element);
           }
         }
       } else {
         if (typeof config.transform !== 'function') {
-          listItemElement.textContent = option.label || '';
+          buttonElement.textContent = option.label || '';
         } else {
           const result = config.transform(option.label);
           if (typeof result === 'string') {
-            listItemElement.textContent = result;
+            buttonElement.textContent = result;
           } else if (typeof result === 'object' && (result as HTMLElement).nodeType !== undefined) {
-            listItemElement.appendChild(result);
+            buttonElement.appendChild(result);
           }
         }
       }
@@ -210,16 +215,18 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
         const secondaryLabelElement = document.createElement('span');
         secondaryLabelElement.slot = 'subtitle';
         secondaryLabelElement.textContent = option.secondaryLabel;
+        secondaryLabelElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}-secondary`;
         listItemElement.twoLine = true;
         listItemElement.appendChild(secondaryLabelElement);
+        buttonElement.setAttribute('aria-describedby', secondaryLabelElement.id);
       }
 
       // If multiple selections are enabled then we need to create and append a leading checkbox element
       if (config.multiple) {
         const checkboxElement = createCheckboxElement(isSelected);
         listItemElement.appendChild(checkboxElement);
-        listItemElement.setAttribute('aria-selected', `${isSelected}`);
-        listItemElement.setAttribute('aria-checked', `${isSelected}`);
+        buttonElement.setAttribute('aria-selected', `${isSelected}`);
+        buttonElement.setAttribute('aria-checked', `${isSelected}`);
       }
 
       if (option.elementAttributes) {
@@ -256,17 +263,13 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
 
       // Update the disabled state
       if (option.disabled) {
-        listItemElement.disabled = option.disabled;
-        listItemElement.setAttribute('aria-disabled', 'true');
-      } else {
-        listItemElement.setAttribute('aria-disabled', 'false');
+        buttonElement.disabled = option.disabled;
       }
 
       // Update the selected state
       if (isSelected) {
         listItemElement.selected = true;
       }
-      listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
 
       // If we have any child options, we need to render a child menu for this list item
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {
@@ -305,9 +308,7 @@ export function createCheckboxElement(selected: boolean): HTMLElement {
 }
 
 function createDivider(): HTMLElement {
-  const divider = document.createElement('forge-divider');
-  divider.setAttribute('aria-hidden', 'true');
-  return divider;
+  return document.createElement('forge-divider');
 }
 
 function createIconElement(type: ListDropdownIconType = 'font', iconName: string, iconClass?: string, componentProps?: Partial<IIconComponent>): HTMLElement {

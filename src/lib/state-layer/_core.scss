@@ -5,7 +5,7 @@
 @mixin host {
   @include container;
   
-  display: flex;
+  display: #{token(display)};
   margin: auto;
   pointer-events: none;
   -webkit-tap-highlight-color: transparent;

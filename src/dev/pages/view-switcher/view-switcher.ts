@@ -10,7 +10,7 @@ const viewSwitcher = document.querySelector('forge-view-switcher#view-switcher')
 const typeRadioGroup = document.querySelector('#view-switcher-animation-type-radiogroup');
 
 tabBar.addEventListener('forge-tab-bar-change', ({ detail }) => {
-  viewSwitcher.index = detail;
+  viewSwitcher.index = detail.index;
 });
 
 typeRadioGroup.addEventListener('change', evt => {

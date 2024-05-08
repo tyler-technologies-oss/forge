@@ -7,7 +7,7 @@
 // Host
 //
 
-$_host-tokens: [indent dense-indent];
+$_host-tokens: [indent dense-indent disabled-cursor];
 
 :host {
   @include tokens($includes: $_host-tokens);
@@ -31,20 +31,22 @@ $_host-tokens: [indent dense-indent];
 
 .forge-list-item {
   @include base;
-}
 
-// Non-interactive
-:host([non-interactive]) {
-  .forge-list-item {
-    @include non-interactive;
+  &.interactive {
+    cursor: #{token(cursor)};
   }
-}
 
-// Disabled
-:host([disabled]) {
-  .forge-list-item {
+  &.disabled {
     @include disabled;
+
+    ::slotted(button) {
+      cursor: #{token(disabled-cursor)};
+    }
   }
+}
+
+.anchor {
+  @include anchor-internal;
 }
 
 // Two-line
@@ -126,11 +128,6 @@ $_host-tokens: [indent dense-indent];
   @include indented;
 }
 
-// Anchor base
-a.forge-list-item {
-  @include anchor-link;
-}
-
 // Text container base
 .text-container {
   @include text-container;
@@ -138,9 +135,7 @@ a.forge-list-item {
 
 // Text slotted elements
 slot[name=secondary-text],
-slot[name=subtitle],
-slot[name=tertiary-text],
-slot[name=tertiary-title] {
+slot[name=tertiary-text] {
   &::slotted(*) {
     @include text;
   }
@@ -150,15 +145,28 @@ slot[name=tertiary-title] {
   }
 }
 
-// Avatar slotted elements
-::slotted([slot=avatar]) {
-  @include avatar;
+// Button slotted elements
+::slotted(:is(button, [role=button][tabindex], [forge-list-item-button])) {
+  @include button;
+}
+
+// Anchor slotted elements
+::slotted(a) {
+  @include anchor;
 }
 
 // Leading/trailing slotted elements
 ::slotted([slot=leading]),
 ::slotted([slot=trailing]) {
   @include leading-trailing-base;
+}
+
+// Interactive slotted form controls to hide state-layer and focus-indicator
+:host(:not([noninteractive])) {
+  ::slotted(:is(forge-checkbox,forge-radio,forge-switch):is([slot=leading],[slot=trailing]):not([forge-ignore])) {
+    @include focus-indicator.provide-theme(( display: none ));
+    @include state-layer.provide-theme(( display: none ));
+  }
 }
 
 // Leading slotted elements
@@ -186,9 +194,7 @@ slot[name=tertiary-title] {
   }
 
   slot[name=secondary-text],
-  slot[name=subtitle],
-  slot[name=tertiary-text],
-  slot[name=tertiary-title] {
+  slot[name=tertiary-text] {
     &::slotted(*) {
       @include text-wrap;
     }

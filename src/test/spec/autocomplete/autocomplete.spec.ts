@@ -899,7 +899,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
       const listItems = _getListItems(this.context.component.popupElement);
       const allOptionsUseBuilder = listItems.every((li, index) => {
-        const div = li.firstElementChild;
+        const div = li.querySelector('button')?.firstElementChild;
         return div && div.id === `custom-option-${li.value}`;
       });
       expect(builderSpy).toHaveBeenCalledTimes(3);

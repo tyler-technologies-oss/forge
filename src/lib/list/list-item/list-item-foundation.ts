@@ -1,221 +1,168 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-
 import { IListItemAdapter } from './list-item-adapter';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
 
 export interface IListItemFoundation extends ICustomElementFoundation {
-  href: string;
-  target: string;
-  download: string;
-  rel: string;
-  static: boolean;
-  nonInteractive: boolean;
-  disabled: boolean;
   selected: boolean;
   active: boolean;
   value: unknown;
   dense: boolean;
-  propagateClick: boolean;
   indented: boolean;
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
-  setFocus(): void;
+  noninteractive: boolean;
 }
 
 export class ListItemFoundation implements IListItemFoundation {
-  private _href: string;
-  private _target = '';
-  private _download = '';
-  private _rel = '';
-  private _nonInteractive = false;
-  private _disabled = false;
   private _selected = false;
   private _active = false;
   private _value: unknown;
   private _dense = false;
-  private _propagateClick = true;
   private _indented = false;
   private _twoLine = false;
   private _threeLine = false;
   private _wrap = false;
+  private _noninteractive = false;
 
-  private _clickListener: EventListener;
-  private _pointerDownListener: EventListener;
-  private _keydownListener: EventListener;
+  private _interactiveStateChangeListener: (value: boolean) => void = this._onInteractiveStateChange.bind(this);
+  private _mousedownListener: EventListener = this._onMousedown.bind(this);
+  private _clickListener: EventListener = this._onClick.bind(this);
+  private _keydownListener: EventListener = this._onKeydown.bind(this);
 
-  constructor(private _adapter: IListItemAdapter) {
-    this._clickListener = this._onClick.bind(this);
-    this._pointerDownListener = this._onPointerDown.bind(this);
-    this._keydownListener = this._onKeydown.bind(this);
-  }
+  constructor(private _adapter: IListItemAdapter) {}
 
   public initialize(): void {
     this._adapter.initialize();
 
-    if (!this._nonInteractive && !this._disabled) {
-      this._adapter.addHostListener('click', this._clickListener);
-      this._adapter.addHostListener('keydown', this._keydownListener);
-
-      if (!this._propagateClick) {
-        this._adapter.addHostListener('pointerdown', this._pointerDownListener);
-      }
+    if (this._noninteractive) {
+      this._adapter.destroyInteractiveObserver();
+    } else {
+      this._adapter.initializeInteractiveObserver(this._interactiveStateChangeListener);
     }
   }
 
   public disconnect(): void {
-    this._adapter.removeHostListener('click', this._clickListener);
-    this._adapter.removeHostListener('pointerdown', this._pointerDownListener);
-    this._adapter.removeHostListener('keydown', this._keydownListener);
+    this._adapter.destroy();
   }
 
-  public setFocus(): void {
-    this._adapter.setFocus();
-  }
-
-  public click(): void {
-    if (this._href) {
-      this._adapter.clickAnchor();
-    } else {
-      this._adapter.clickHost();
-    }
-  }
-
-  private _onPointerDown(evt: MouseEvent): void {
-    if (this._adapter.isFocused()) {
+  private _onMousedown(evt: MouseEvent): void {
+    const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const fromInteractiveElement = composedElements.some(el => el === this._adapter.interactiveElement);
+    if (!fromInteractiveElement) {
       evt.preventDefault();
     }
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
+    const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
+    const isFromLeadingTrailingSlot = composedElements.some((el: HTMLElement) => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_LEADING_TRAILING));
+
     if (evt.key === 'Enter' || evt.key === ' ') {
-      if (!this._href && evt.key === ' ') {
-        evt.preventDefault();
-      }
-      this._adapter.animateStateLayer();
-      this._select(evt.target as HTMLElement);
+      evt.stopPropagation();
     }
-  }
 
-  private _onClick(event: MouseEvent): void {
-    this._select(event.target as HTMLElement);
-  }
-
-  private _select(targetElement: HTMLElement): void {
-    const ignoreElement = targetElement?.matches(LIST_ITEM_CONSTANTS.selectors.IGNORE);
-    if (this._nonInteractive || this._disabled || ignoreElement) {
+    if (isFromLeadingTrailingSlot) {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        this._adapter.animateStateLayer();
+      }
+      if (evt.key === 'Enter') {
+        this._adapter.interactiveElement?.click();
+      }
       return;
     }
 
-    if (!this._adapter.isFocused() && this._propagateClick) {
-      this.setFocus();
-    }
-
-    // If the target was not a checkbox or radio button, attempt to find one and toggle its checked state
-    if (!targetElement.matches(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR)) {
-      this._adapter.tryToggleSelectionControl();
-    }
-
-    const data: IListItemSelectEventData = {
-      value: this._value,
-      listItem: this._adapter.hostElement
-    };
-    this._adapter.emitHostEvent(LIST_ITEM_CONSTANTS.events.SELECT, data);
-  }
-
-  public get href(): string {
-    return this._href;
-  }
-  public set href(value: string) {
-    if (this._href !== value) {
-      this._href = value;
-      this._adapter.setHref(this._href);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.HREF, !!this._href, this._href);
+    if (evt.key === ' ') {
+      evt.preventDefault();
+      this._adapter.interactiveElement?.click();
     }
   }
 
-  public get target(): string {
-    return this._target;
-  }
-  public set target(value: string) {
-    if (this._target !== value) {
-      this._target = value;
-      if (this._href) {
-        this._adapter.setAnchorTarget(this._target);
+  private _onClick(evt: MouseEvent): void {
+    const composedElements =  evt.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
+
+    // Ignore clicks from elements that should not trigger selection
+    const fromIgnoredElement = composedElements.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
+    if (fromIgnoredElement) {
+      return;
+    }
+
+    // Ignore clicks from <label> elements that have a for attribute that matches our interactive elements' id
+    const labelElementWithFor = (el: HTMLElement): el is HTMLLabelElement => el.matches('label[for]');
+    const fromLabelFor = composedElements.filter(labelElementWithFor).some(el => el.htmlFor === this._adapter.interactiveElement?.id);
+    if (fromLabelFor) {
+      evt.stopPropagation();
+      return;
+    }
+
+    // Check if our internal anchor was clicked and forward the click to the slotted interactive element
+    const isInternalAnchor = (el: HTMLElement): el is HTMLAnchorElement => el.tagName === 'A' && el.id === LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
+    const fromInternalAnchor = composedElements.some(isInternalAnchor);
+    if (fromInternalAnchor) {
+      const isCtrlClick = evt.ctrlKey || evt.metaKey;
+      const hasTarget = this._adapter.interactiveElement?.hasAttribute('target');
+
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
+      
+      // Workaround to temporarily set the target attribute to '_blank' if the user is holding the ctrl key and remove it after the click
+      const forceTempAnchorTarget = isCtrlClick && !hasTarget;
+      /* c8 ignore next 3 */
+      if (forceTempAnchorTarget) {
+        this._adapter.interactiveElement?.setAttribute('target', '_blank');
       }
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.TARGET, !!this._target, this._target);
-    }
-  }
 
-  public get download(): string {
-    return this._download;
-  }
-  public set download(value: string) {
-    if (this._download !== value) {
-      this._download = value;
-      this._adapter.setAnchorDownload(this._download);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.DOWNLOAD, !!this._download, this._download);
-    }
-  }
+      this._clickInteractiveElement();
 
-  public get rel(): string {
-    return this._rel;
-  }
-  public set rel(value: string) {
-    if (this._rel !== value) {
-      this._rel = value;
-      this._adapter.setAnchorRel(this._rel);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.REL, !!this._rel, this._rel);
-    }
-  }
-
-  public get static(): boolean {
-    return this.nonInteractive;
-  }
-  public set static(value: boolean) {
-    this.nonInteractive = value;
-  }
-
-  public get nonInteractive(): boolean {
-    return this._nonInteractive;
-  }
-  public set nonInteractive(value: boolean) {
-    if (this._nonInteractive !== value) {
-      this._nonInteractive = value;
-      if (this._nonInteractive) {
-        this._adapter.removeHostListener('click', this._clickListener);
-      } else {
-        this._adapter.addHostListener('click', this._clickListener);
+      /* c8 ignore next 3 */
+      if (forceTempAnchorTarget) {
+        this._adapter.interactiveElement?.removeAttribute('target');
       }
-      this._adapter.setNonInteractive(this._nonInteractive);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.STATIC, this._nonInteractive);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.NON_INTERACTIVE, this._nonInteractive);
+      return;
+    }
+
+    // If the click did not originate from the interactive element, forward the click to it
+    const fromInteractiveElement = composedElements.some(el => el === this._adapter.interactiveElement);
+    if (!fromInteractiveElement) {
+      evt.stopImmediatePropagation();
+      this._clickInteractiveElement();
+      return;
+    }
+
+    this._dispatchSelectEvent();
+  }
+
+  private _clickInteractiveElement(): void {
+    this._adapter.interactiveElement?.focus();
+    this._adapter.tempDeactivateFocusIndicator(); // Workaround until we can call `focus({ focusVisible: false })` to prevent focus ring from showing
+    this._adapter.interactiveElement?.click();
+  }
+
+  private _onInteractiveStateChange(value: boolean): void {
+    if (value && !this._noninteractive) {
+      this._adapter.addRootListener('mousedown', this._mousedownListener, { capture: true });
+      this._adapter.addHostListener('click', this._clickListener, { capture: true });
+      this._adapter.addHostListener('keydown', this._keydownListener);
+    } else {
+      this._adapter.removeRootListener('mousedown', this._mousedownListener, { capture: true });
+      this._adapter.removeHostListener('click', this._clickListener, { capture: true });
+      this._adapter.removeHostListener('keydown', this._keydownListener);
     }
   }
 
-  public get disabled(): boolean {
-    return this._disabled;
-  }
-  public set disabled(value: boolean) {
-    if (this._disabled !== value) {
-      this._disabled = value;
-      if (this._disabled) {
-        this._adapter.removeHostListener('click', this._clickListener);
-      } else {
-        this._adapter.addHostListener('click', this._clickListener);
-      }
-      this._adapter.setDisabled(this._disabled);
-      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.DISABLED, this._disabled);
-    }
+  private _dispatchSelectEvent(): void {
+    const detail: IListItemSelectEventData = { value: this._value };
+    const event = new CustomEvent<IListItemSelectEventData>(LIST_ITEM_CONSTANTS.events.SELECT, { bubbles: true, detail });
+    this._adapter.dispatchHostEvent(event);
   }
 
   public get selected(): boolean {
     return this._selected;
   }
   public set selected(value: boolean) {
+    value = Boolean(value);
     if (this._selected !== value) {
       this._selected = value;
-      this._adapter.tryToggleSelectionControl(this._selected);
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.SELECTED, this._selected);
     }
   }
@@ -224,6 +171,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._active;
   }
   public set active(value: boolean) {
+    value = Boolean(value);
     if (this._active !== value) {
       this._active = value;
       this._adapter.setActive(this._active);
@@ -246,26 +194,10 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._dense;
   }
   public set dense(value: boolean) {
+    value = Boolean(value);
     if (this._dense !== value) {
       this._dense = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE, this._dense);
-    }
-  }
-
-  public get propagateClick(): boolean {
-    return this._propagateClick;
-  }
-  public set propagateClick(value: boolean) {
-    if (this._propagateClick !== value) {
-      this._propagateClick = value;
-
-      if (this._propagateClick) {
-        this._adapter.removeHostListener('pointerdown', this._pointerDownListener);
-      } else {
-        this._adapter.addHostListener('pointerdown', this._pointerDownListener);
-      }
-
-      this._adapter.setHostAttribute(LIST_ITEM_CONSTANTS.attributes.PROPAGATE_CLICK, this._propagateClick ? 'true' : 'false');
     }
   }
 
@@ -273,6 +205,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._indented;
   }
   public set indented(value: boolean) {
+    value = Boolean(value);
     if (this._indented !== value) {
       this._indented = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED, this._indented);
@@ -283,6 +216,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._twoLine;
   }
   public set twoLine(value: boolean) {
+    value = Boolean(value);
     if (this._twoLine !== value) {
       this._twoLine = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE, this._twoLine);
@@ -293,6 +227,7 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._threeLine;
   }
   public set threeLine(value: boolean) {
+    value = Boolean(value);
     if (this._threeLine !== value) {
       this._threeLine = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE, this._threeLine);
@@ -303,9 +238,30 @@ export class ListItemFoundation implements IListItemFoundation {
     return this._wrap;
   }
   public set wrap(value: boolean) {
+    value = Boolean(value);
     if (this._wrap !== value) {
       this._wrap = value;
       this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP, this._wrap);
+    }
+  }
+
+  public get noninteractive(): boolean {
+    return this._noninteractive;
+  }
+  public set noninteractive(value: boolean) {
+    value = Boolean(value);
+    if (this._noninteractive !== value) {
+      this._noninteractive = value;
+
+      if (this._adapter.isConnected) {
+        if (this._noninteractive) {
+          this._adapter.destroyInteractiveObserver();
+        } else {
+          this._adapter.initializeInteractiveObserver(this._interactiveStateChangeListener);
+        }
+      }
+
+      this._adapter.toggleHostAttribute(LIST_ITEM_CONSTANTS.attributes.NONINTERACTIVE, this._noninteractive);
     }
   }
 }

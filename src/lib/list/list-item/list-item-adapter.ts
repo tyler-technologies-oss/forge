@@ -1,114 +1,90 @@
-import { getShadowElement, isDeepEqual, toggleAttribute } from '@tylertech/forge-core';
-import { replaceElement } from '../../core/utils/utils';
+import { getShadowElement, isDeepEqual } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
-import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
-import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
+import { IFocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
+import { IStateLayerComponent } from '../../state-layer/state-layer';
 import { IListComponent } from '../list/list';
-import { ListComponentItemRole, LIST_CONSTANTS } from '../list/list-constants';
+import { LIST_CONSTANTS } from '../list/list-constants';
 import { IListItemComponent } from './list-item';
 import { LIST_ITEM_CONSTANTS } from './list-item-constants';
-import { ISwitchComponent } from '../../switch';
+import { setDefaultAria } from '../../constants';
 
 export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
+  readonly interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
   initialize(): void;
-  setHref(href: string): void;
-  setAnchorTarget(target: string): void;
-  setAnchorDownload(download: string): void;
-  setAnchorRel(rel: string): void;
-  setNonInteractive(value: boolean): void;
-  setDisabled(value: boolean): void;
+  destroy(): void;
+  initializeInteractiveObserver(listener: (value: boolean) => void): void;
+  destroyInteractiveObserver(): void;
+  addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
+  removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void;
   setActive(value: boolean): void;
   trySelect(value: unknown): boolean | null;
-  tryToggleSelectionControl(value?: boolean): void;
-  isFocused(): boolean;
-  setFocus(): void;
   animateStateLayer(): void;
-  clickAnchor(): void;
-  clickHost(): void;
+  tempDeactivateFocusIndicator(): void;
 }
 
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
-  private _rootElement: HTMLElement | HTMLAnchorElement;
-  private _focusIndicatorElement: IFocusIndicatorComponent;
-  private _stateLayerElement: IStateLayerComponent;
+  private readonly _rootElement: HTMLElement;
+  private readonly _defaultSlotElement: HTMLSlotElement;
+  private readonly _leadingSlotElement: HTMLSlotElement;
+  private readonly _trailingSlotElement: HTMLSlotElement;
+  private _focusIndicatorElement: IFocusIndicatorComponent | undefined;
+  private _stateLayerElement: IStateLayerComponent | undefined;
+  private _disabledAttrObserver: MutationObserver | undefined;
+  private _anchorAttrObserver: MutationObserver | undefined;
+  private _slotListener: EventListener = this._onSlotChange.bind(this);
+  private _interactiveStateChangeListener: ((value: boolean) => void) | undefined;
+  private _interactiveElement: HTMLElement | HTMLAnchorElement | undefined;
 
   constructor(component: IListItemComponent) {
     super(component);
     this._rootElement = getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.ROOT);
-    this._focusIndicatorElement = getShadowElement(component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
-    this._stateLayerElement = getShadowElement(component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+    this._defaultSlotElement = getShadowElement(component, 'slot:not([name])') as HTMLSlotElement;
+    this._leadingSlotElement = getShadowElement(component, 'slot[name=leading]') as HTMLSlotElement;
+    this._trailingSlotElement = getShadowElement(component, 'slot[name=trailing]') as HTMLSlotElement;
+  }
+
+  public get interactiveElement(): HTMLElement | HTMLAnchorElement | undefined {
+    return this._interactiveElement;
   }
 
   public initialize(): void {
-    // Attempt to inherit state for corresponding properties from our parent list
     const list = this._getParentList();
     if (list) {
       this._inheritParentListProps(list);
     }
-
-    this._rootElement.tabIndex = this._component.nonInteractive || this._component.disabled ? -1 : 0;
-
-    if (!this._component.hasAttribute('role')) {
-      this._setRole(list);
-    }
+    this._component[setDefaultAria]({ role: 'listitem' }, { setAttribute: !this._component.hasAttribute('role') });
   }
 
-  public setHref(href: string): void {
-    if (href) {
-      if (this._rootElement.tagName !== 'A') {
-        const anchor = this._createAnchorRootElement();
-        this._rootElement = replaceElement(this._rootElement, anchor);
-      }
-      (this._rootElement as HTMLAnchorElement).href = href;
-    } else if (this._rootElement.tagName === 'A') {
-      const defaultEl = this._createDefaultRootElement();
-      this._rootElement = replaceElement(this._rootElement, defaultEl);
-    }
+  public destroy(): void {
+    this._rootElement.removeEventListener('slotchange', this._slotListener);
+    this._tryCleanupObservers();
   }
 
-  public setAnchorTarget(target: string): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).target = target;
-    }
+  public initializeInteractiveObserver(listener: (value: boolean) => void): void {
+    this._interactiveStateChangeListener = listener;
+    this._rootElement.addEventListener('slotchange', this._slotListener);
+    this._initializeInteractiveElement();
   }
 
-  public setAnchorDownload(download: string): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).download = download;
-    }
+  public destroyInteractiveObserver(): void {
+    this._rootElement.removeEventListener('slotchange', this._slotListener);
+    this._tryCleanupObservers();
+    this._interactiveStateChangeListener?.(false);
+    this._interactiveStateChangeListener = undefined;
   }
 
-  public setAnchorRel(rel: string): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).rel = rel;
-    }
+  public addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
+    this._rootElement.addEventListener(type, listener, options);
   }
 
-  public setNonInteractive(value: boolean): void {
-    this._rootElement.tabIndex = value ? -1 : 0;
-
-    if (value) {
-      this._focusIndicatorElement.remove();
-      this._stateLayerElement.remove();
-    } else {
-      this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
-    }
-  }
-
-  public setDisabled(value: boolean): void {
-    this._rootElement.tabIndex = value ? -1 : 0;
-    toggleAttribute(this._component, value, 'aria-disabled', 'true');
-
-    if (value) {
-      this._focusIndicatorElement.remove();
-      this._stateLayerElement.remove();
-    } else {
-      this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
-    }
+  public removeRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
+    this._rootElement.removeEventListener(type, listener, options);
   }
 
   public setActive(value: boolean): void {
-    this._focusIndicatorElement.active = value;
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.active = value;
+    }
   }
 
   /**
@@ -121,104 +97,145 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     if (list?.selectedValue === undefined) {
       return null;
     }
-
     const listValues = Array.isArray(list.selectedValue) ? list.selectedValue : [list.selectedValue];
     const isSelected = listValues.some(v => isDeepEqual(v, value));
-
-    this.tryToggleSelectionControl(isSelected);
     return isSelected;
   }
 
-  /**
-   * Attempts to toggle a checkbox radio button, or switch within the list item if it can find one.
-   */
-  public tryToggleSelectionControl(value?: boolean): void {
-    const checkable = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.CHECKBOX_RADIO_SELECTOR) as HTMLInputElement;
-    if (checkable) {
-      const force = typeof value === 'boolean';
-      const currentState = checkable.checked;
+  public animateStateLayer(): void {
+    this._stateLayerElement?.playAnimation();
+  }
 
-      // We don't uncheck radio buttons unless we are forcing a value from the selection state
-      if (!force && checkable.matches(':is(forge-radio[checked],input[type=radio]:checked)')) {
-        return;
+  public tempDeactivateFocusIndicator(): void {
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.active = false;
+    }
+  }
+
+  private _onSlotChange(evt: Event): void {
+    // We only care about slot changes in the default slot, leading slot, and trailing slot to search for interactive elements
+    const interactiveSlotNames = ['', 'leading', 'trailing'];
+    const isInteractiveSlot = interactiveSlotNames.includes((evt.target as HTMLSlotElement).name);
+    if (!isInteractiveSlot) {
+      return;
+    }
+    this._initializeInteractiveElement();
+  }
+
+  private _initializeInteractiveElement(): void {
+    this._tryCleanupObservers();
+
+    // We always want to check for form control-like elements first as those take precedence over slotted anchor and button
+    // elements as the interactive element.
+    const assignedLeadingElements = this._leadingSlotElement.assignedElements({ flatten: true });
+    const assignedTrailingElements = this._trailingSlotElement.assignedElements({ flatten: true });
+    const assignedLeadingTrailingElements = [...assignedLeadingElements, ...assignedTrailingElements];
+    const slottedFormControl = assignedLeadingTrailingElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.FORM_CONTROL_LIKE)) as HTMLElement | undefined;
+    if (slottedFormControl) {
+      this._attachInteractiveFormControl(slottedFormControl);
+      return;
+    }
+
+    // If no form control-like elements are found, we check for slotted anchor or button elements within the default slot next.
+    // If an anchor element is found, we create an internal anchor element to prevent the list item from being focusable.
+    // If a button element is found, we sync the disabled state and attach a mutation observer to watch for changes.
+    const assignedElements = this._defaultSlotElement.assignedElements({ flatten: true });
+    const slottedAnchor = assignedElements.find(e => e.tagName === 'A') as HTMLAnchorElement | undefined;
+    const slottedButtonLike = assignedElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement | undefined;
+    
+    // Attempt to remove the internal anchor element if it exists before we attach to a different interactive element
+    const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR);
+    if (internalAnchor) {
+      internalAnchor.remove();
+    }
+    
+    // Slotted anchors take precedence over slotted button-like elements
+    this._interactiveElement = slottedAnchor ?? slottedButtonLike;
+    this._setInteractive(!!this._interactiveElement);
+
+    if (slottedAnchor) {
+      this._attachInteractiveAnchor(slottedAnchor);
+    } else if (slottedButtonLike) {
+      this._attachInteractiveButtonLike(slottedButtonLike);
+    }
+  }
+
+  private _attachInteractiveFormControl(element: HTMLElement): void {
+    this._interactiveElement = element;
+    this._setInteractive(!!this._interactiveElement);
+    
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.targetElement = element;
+    }
+    
+    // Listen for changes to the disabled attribute and aria-disabled attribute to synchronize our disabled state
+    this._syncDisabled(element);
+    this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(element as HTMLElement));
+    this._disabledAttrObserver.observe(element, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+  }
+
+  private _attachInteractiveAnchor(element: HTMLAnchorElement): void {
+    // Create an internal (facade) anchor element that covers the entire list item to show the href in the status bar
+    // but is not focusable or presented to assistive technology. All clicks on the internal anchor are forwarded to the
+    // slotted anchor element.
+    const internalAnchor = getShadowElement(this._component, LIST_ITEM_CONSTANTS.selectors.INTERNAL_ANCHOR) as HTMLAnchorElement | null ?? document.createElement('a');
+    internalAnchor.href = element.href;
+    internalAnchor.tabIndex = -1;
+    internalAnchor.id = LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
+    internalAnchor.classList.add(LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR);
+    internalAnchor.setAttribute('aria-hidden', 'true');
+    this._rootElement.appendChild(internalAnchor);
+
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.targetElement = element;
+    }
+
+    // Listen for changes to the href attribute to synchronize our internal anchor's href
+    this._anchorAttrObserver = new MutationObserver(() => internalAnchor.href = element.href);
+    this._anchorAttrObserver.observe(element, { attributes: true, attributeFilter: ['href'] });
+  }
+
+  private _attachInteractiveButtonLike(element: HTMLElement): void {
+    if (this._focusIndicatorElement) {
+      this._focusIndicatorElement.targetElement = element;
+    }
+    
+    this._syncDisabled(element);
+    this._disabledAttrObserver = new MutationObserver(() => this._syncDisabled(element));
+    this._disabledAttrObserver.observe(element, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+  }
+
+  private _setInteractive(value: boolean): void {
+    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.INTERACTIVE, value);
+    
+    // Notify ourselves that the interactive state has changed so we can attach/remove event listeners
+    this._interactiveStateChangeListener?.(value);
+
+    if (value) {
+      if (!this._focusIndicatorElement) {
+        this._focusIndicatorElement = document.createElement('forge-focus-indicator');
+        this._focusIndicatorElement.setAttribute('part', 'focus-indicator');
+        this._focusIndicatorElement.inward = true;
+        this._rootElement.appendChild(this._focusIndicatorElement);
       }
-      
-      // Check if we are just toggling or forcing to a specific checked state
-      checkable.checked = force ? value as boolean : !checkable.checked;
-
-      // TODO: This seems weird... Should we be dispatching events on slotted elements when changes are made programmatically?
-      if (!force || currentState !== value) {
-        checkable.dispatchEvent(new Event('change', { bubbles: true }));
+      if (!this._stateLayerElement) {
+        this._stateLayerElement = document.createElement('forge-state-layer');
+        this._stateLayerElement.targetElement = this._rootElement;
+        this._stateLayerElement.setAttribute('exportparts', 'surface:state-layer');
+        this._rootElement.appendChild(this._stateLayerElement);
       }
     } else {
-      // Special case handling for the Forge switch element since it doesn't have a checked property
-      const switchEl = this._component.querySelector(LIST_ITEM_CONSTANTS.selectors.SWITCH_SELECTOR) as ISwitchComponent;
-      if (!switchEl) {
-        return;
-      }
-      
-      const force = typeof value === 'boolean';
-      const currentState = switchEl.on;
-
-      // Check if we are just toggling or forcing to a specific checked state
-      switchEl.on = force ? value as boolean : !switchEl.on;
-
-      // TODO: This seems weird... Should we be dispatching events on slotted elements when changes are made programmatically?
-      if (!force || currentState !== value) {
-        switchEl.dispatchEvent(new CustomEvent('forge-switch-change', { bubbles: true, detail: switchEl.on }));
-      }
+      this._focusIndicatorElement?.remove();
+      this._focusIndicatorElement = undefined;
+      this._stateLayerElement?.remove();
+      this._stateLayerElement = undefined;
     }
   }
 
-  public isFocused(): boolean {
-    return this._component.matches(':focus');
-  }
-
-  public setFocus(): void {
-    this._rootElement.focus({ preventScroll: true });
-  }
-
-  public animateStateLayer(): void {
-    this._stateLayerElement.playAnimation();
-  }
-
-  public clickAnchor(): void {
-    if (this._rootElement.tagName === 'A') {
-      (this._rootElement as HTMLAnchorElement).click();
-    }
-  }
-
-  public clickHost(): void {
-    // Calling click() on the prototype ensures we don't end up in an infinite
-    // recursion since the host overrides the HTMLElement.click() method
-    HTMLElement.prototype.click.call(this._component);
-  }
-
-  private _createAnchorRootElement(): HTMLAnchorElement {
-    const a = document.createElement('a');
-    a.classList.add(LIST_ITEM_CONSTANTS.classes.ROOT);
-    a.setAttribute('part', 'root');
-    if (this._component.href) {
-      a.href = this._component.href;
-    }
-    if (this._component.target) {
-      a.target = this._component.target;
-    }
-    if (this._component.download) {
-      a.download = this._component.download;
-    }
-    if (this._component.rel) {
-      a.rel = this._component.rel;
-    }
-    return a;
-  }
-
-  private _createDefaultRootElement(): HTMLElement {
-    const div = document.createElement('div');
-    div.classList.add(LIST_ITEM_CONSTANTS.classes.ROOT);
-    div.setAttribute('part', 'root');
-    div.tabIndex = this._component.nonInteractive || this._component.disabled ? -1 : 0;
-    return div;
+  private _syncDisabled(element: HTMLElement): void {
+    const isDisabled = element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true';
+    this._rootElement.classList.toggle(LIST_ITEM_CONSTANTS.classes.DISABLED, isDisabled);
+    this._setInteractive(!isDisabled);
   }
 
   private _getParentList(): IListComponent | null {
@@ -226,17 +243,11 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   private _inheritParentListProps(list: IListComponent): void {
-    if (list.hasAttribute(LIST_CONSTANTS.attributes.NON_INTERACTIVE) || list.hasAttribute(LIST_CONSTANTS.attributes.STATIC)) {
-      this._component.nonInteractive = true;
-    }
-    if (list.hasAttribute(LIST_CONSTANTS.attributes.DISABLED)) {
-      this._component.disabled = true;
+    if (list.hasAttribute(LIST_CONSTANTS.attributes.NONINTERACTIVE)) {
+      this._component.noninteractive = true;
     }
     if (list.hasAttribute(LIST_CONSTANTS.attributes.DENSE)) {
       this._component.dense = true;
-    }
-    if (list.getAttribute(LIST_CONSTANTS.attributes.PROPAGATE_CLICK) === 'false') {
-      this._component.propagateClick = false;
     }
     if (list.hasAttribute(LIST_CONSTANTS.attributes.INDENTED)) {
       this._component.indented = true;
@@ -249,9 +260,11 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     }
   }
 
-  private _setRole(list: IListComponent | null): void {
-    const listRole = list?.getAttribute('role');
-    const role = ListComponentItemRole[listRole as string] ?? 'listitem';
-    this._component.setAttribute('role', role);
+  private _tryCleanupObservers(): void {
+    this._disabledAttrObserver?.disconnect();
+    this._disabledAttrObserver = undefined;
+
+    this._anchorAttrObserver?.disconnect();
+    this._anchorAttrObserver = undefined;
   }
 }

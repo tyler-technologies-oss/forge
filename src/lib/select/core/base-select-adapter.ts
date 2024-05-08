@@ -107,6 +107,11 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
   public open(config: IListDropdownConfig): void {
     this._listDropdown = new ListDropdown(this._targetElement, config);
     this._listDropdown.open();
+
+    if (this._component.id) {
+      const listElement = this._listDropdown.dropdownElement?.querySelector('forge-list');
+      listElement?.setAttribute('aria-labelledby', this._component.id);
+    }
   }
 
   public async close(): Promise<void> {

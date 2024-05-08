@@ -701,8 +701,9 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const listItems = this.context.getListItems();
     const restrictedListItem = listItems.find((li: IListItemComponent<ITimePickerOptionValue>) => li.value.time === firstRestrictedTimeMillis) as IListItemComponent;
+    const buttonEl = restrictedListItem.querySelector('button') as HTMLButtonElement;
 
-    expect(restrictedListItem.disabled).toBeTrue();
+    expect(buttonEl.disabled).toBeTrue();
 
     this.context.component.value = restrictedTimes[0];
 
