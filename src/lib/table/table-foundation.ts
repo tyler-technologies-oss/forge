@@ -1162,7 +1162,7 @@ export class TableFoundation implements ITableFoundation {
     this._sortedColumnIndex = this._visibleColumnConfigurations.findIndex(c => c.initialSort);
 
     // We only update the sort direction if it was not already set
-    if (this._sortDirection === undefined) {
+    if (this._sortedColumnIndex >= 0 && this._sortDirection === undefined) {
       const sortedColumn = this._visibleColumnConfigurations[this._sortedColumnIndex];
       if (sortedColumn.initialSort === true && sortedColumn.sortDirection) {
         this._sortDirection =  sortedColumn.sortDirection;
