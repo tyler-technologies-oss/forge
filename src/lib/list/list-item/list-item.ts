@@ -25,6 +25,7 @@ export interface IListItemComponent extends IBaseComponent {
   indented: boolean;
   wrap: boolean;
   focus(): void;
+  deactivateRipple(): void;
 }
 
 declare global {
@@ -214,5 +215,9 @@ export class ListItemComponent extends BaseComponent implements IListItemCompone
   /** Sets focus to this list item. */
   public override focus(): void {
     this._foundation.setFocus();
+  }
+
+  public deactivateRipple(): void {
+    this._foundation.deactivateRipple();
   }
 }
