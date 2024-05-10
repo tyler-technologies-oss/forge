@@ -1160,7 +1160,16 @@ export class TableFoundation implements ITableFoundation {
 
   private _refreshTableSort(): void {
     this._sortedColumnIndex = this._visibleColumnConfigurations.findIndex(c => c.initialSort);
-    this._sortDirection = this._sortedColumnIndex >= 0 ? (this._visibleColumnConfigurations[this._sortedColumnIndex].sortDirection as SortDirection) : undefined;
+
+    // We only update the sort direction if it was not already set
+    if (this._sortedColumnIndex >= 0 && this._sortDirection === undefined) {
+      const sortedColumn = this._visibleColumnConfigurations[this._sortedColumnIndex];
+      if (sortedColumn.initialSort === true && sortedColumn.sortDirection) {
+        this._sortDirection =  sortedColumn.sortDirection;
+      } else if (typeof sortedColumn.initialSort === 'object' && sortedColumn.initialSort.direction) {
+        this._sortDirection = sortedColumn.initialSort.direction;
+      }
+    }
 
     if (this._multiColumnSort) {
       const sortedColumns: ISortedItem[] = [];
