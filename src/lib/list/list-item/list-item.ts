@@ -35,8 +35,6 @@ declare global {
   }
 }
 
-const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
-
 /**
  * @tag forge-list-item
  * 
@@ -124,7 +122,7 @@ const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
     FocusIndicatorComponent
   ]
 })
-export class ListItemComponent extends BaseClass implements IListItemComponent {
+export class ListItemComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IListItemComponent {
   public static get observedAttributes(): string[] {
     return Object.values(LIST_ITEM_CONSTANTS.observedAttributes);
   }

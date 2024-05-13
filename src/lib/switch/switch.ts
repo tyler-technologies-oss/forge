@@ -42,8 +42,6 @@ declare global {
   }
 }
 
-const BaseSwitchClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))));
-
 /**
  * @tag forge-switch
  * 
@@ -164,7 +162,7 @@ const BaseSwitchClass = WithFormAssociation(WithLabelAwareness(WithFocusable(Wit
     StateLayerComponent
   ]
 })
-export class SwitchComponent extends BaseSwitchClass implements ISwitchComponent {
+export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent))))) implements ISwitchComponent {
   public static get observedAttributes(): string[] {
     return Object.values(SWITCH_CONSTANTS.observedAttributes);
   }

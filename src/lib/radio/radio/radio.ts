@@ -32,8 +32,6 @@ declare global {
   }
 }
 
-const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))));
-
 /**
  * @tag forge-radio
  * 
@@ -106,7 +104,7 @@ const BaseRadioClass = WithFormAssociation(WithLabelAwareness(WithFocusable(With
     StateLayerComponent
   ]
 })
-export class RadioComponent extends BaseRadioClass implements IRadioComponent {
+export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent))))) implements IRadioComponent {
   public static get observedAttributes(): string[] {
     return Object.values(RADIO_CONSTANTS.observedAttributes);
   }

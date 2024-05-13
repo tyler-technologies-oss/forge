@@ -27,9 +27,7 @@ export interface IBaseButton extends IWithFocusable, IWithLabelAwareness, IWithE
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-const BaseButtonClass = WithDefaultAria(WithElementInternals(WithLabelAwareness(WithFocusable(BaseComponent))));
-
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends BaseButtonClass implements IBaseButton {
+export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(WithFocusable(BaseComponent)))) implements IBaseButton {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
   }

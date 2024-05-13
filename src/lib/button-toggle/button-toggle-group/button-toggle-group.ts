@@ -38,8 +38,6 @@ declare global {
   }
 }
 
-const BaseButtonToggleGroupClass = WithLabelAwareness(WithFormAssociation(WithFormValidity(WithDefaultAria(WithElementInternals(BaseComponent)))));
-
 /**
  * @tag forge-button-toggle-group
  * 
@@ -98,7 +96,7 @@ const BaseButtonToggleGroupClass = WithLabelAwareness(WithFormAssociation(WithFo
     ButtonToggleComponent
   ]
 })
-export class ButtonToggleGroupComponent extends BaseButtonToggleGroupClass implements IButtonToggleGroupComponent {
+export class ButtonToggleGroupComponent extends WithLabelAwareness(WithFormAssociation(WithFormValidity(WithDefaultAria(WithElementInternals(BaseComponent))))) implements IButtonToggleGroupComponent {
   public static get observedAttributes(): string[] {
     return Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAttributes);
   }

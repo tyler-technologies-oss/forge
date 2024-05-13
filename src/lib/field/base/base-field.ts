@@ -23,9 +23,7 @@ export interface IBaseField extends IWithLabelAwareness {
   floatLabelWithoutAnimation(value: boolean): void;
 }
 
-const BaseFieldClass = WithLabelAwareness(BaseComponent);
-
-export abstract class BaseField<T extends BaseFieldFoundation<IBaseFieldAdapter>> extends BaseFieldClass implements IBaseField {
+export abstract class BaseField<T extends BaseFieldFoundation<IBaseFieldAdapter>> extends WithLabelAwareness(BaseComponent) implements IBaseField {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_FIELD_CONSTANTS.observedAttributes);
   }
