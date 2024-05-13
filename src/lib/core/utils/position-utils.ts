@@ -100,8 +100,6 @@ export interface IPositionElementConfig {
   arrowElement?: HTMLElement;
   /** Options to provide to the arrow middleware. */
   arrowOptions?: Partial<ArrowOptions>;
-  /** Should the top-layer middleware be applied or not. */
-  topLayer?: boolean;
   /** The positioning strategy. */
   strategy?: PositionStrategy;
 }
@@ -129,8 +127,7 @@ export async function positionElementAsync({
   hide = false,
   hideOptions,
   arrowElement,
-  arrowOptions = {},
-  topLayer = false
+  arrowOptions = {}
 }: IPositionElementConfig): Promise<IPositionElementResult> {
   const middleware: Middleware[] = [];
 
@@ -152,9 +149,6 @@ export async function positionElementAsync({
   }
   if (arrowElement) { // Must come before the topLayer middleware
     middleware.push(arrowMiddleware({ ...arrowOptions, element: arrowElement }));
-  }
-  if (topLayer) {
-    middleware.push(topLayerMiddleware());
   }
 
   const { x, y, placement: finalPlacement, middlewareData } = await computePosition(anchorElement, element, { strategy, placement, middleware });
@@ -185,95 +179,3 @@ export async function positionElementAsync({
     arrow: middlewareData.arrow
   };
 }
-
-/**
- * Custom middleware to handle positioning when the element is on the top layer AND within a containing block.
- */
-export const topLayerMiddleware = (): Middleware => ({
-  name: 'topLayer',
-  async fn({ x, y, elements: { reference, floating }}: MiddlewareState) {
-      let onTopLayer = false;
-      let topLayerIsFloating = false;
-      let withinReference = false;
-      const diffCoords = { x: 0, y: 0 };
-
-      try {
-        onTopLayer = onTopLayer || floating.matches(':popover-open');
-      } catch {}
-      try {
-        onTopLayer = onTopLayer || floating.matches(':open');
-      } catch {}
-      try {
-        onTopLayer = onTopLayer || floating.matches(':modal');
-      } catch {}
-      
-      topLayerIsFloating = onTopLayer;
-
-      const dialogAncestorQueryEvent = new Event('floating-ui-dialog-test', { composed: true, bubbles: true });
-      floating.addEventListener('floating-ui-dialog-test', (event: Event) => {
-        (event.composedPath() as Element[]).forEach((el) => {
-          withinReference = withinReference || el === reference;
-          if (el === floating || el.localName !== 'dialog') {
-            return;
-          }
-          try {
-            onTopLayer = onTopLayer || el.matches(':modal');
-          } catch {}
-        });
-      }, { once: true });
-      floating.dispatchEvent(dialogAncestorQueryEvent);
-
-      let overTransforms = false;
-      if (!(reference instanceof VirtualElement)) {
-        const root = (withinReference ? reference : floating) as Element;
-        const containingBlock = isContainingBlock(root) ? root : getContainingBlock(root);
-        let css: CSSStyleDeclaration | Record<string, string> = {};
-        if (containingBlock !== null && getWindow(containingBlock) !== (containingBlock as unknown as Window)) {
-          css = getComputedStyle(containingBlock);
-          // The overlay is "over transforms" when the containing block uses specific CSS...
-          overTransforms =
-            css.transform !== 'none' ||
-            css.translate !== 'none' ||
-            (css.containerType ? css.containerType !== 'normal' : false) ||
-            (css.backdropFilter ? css.backdropFilter !== 'none' : false) ||
-            (css.filter ? css.filter !== 'none' : false) ||
-            css.willChange.search('transform') > -1 ||
-            css.willChange.search('translate') > -1 ||
-            ['paint', 'layout', 'strict', 'content'].some((value) => (css.contain || '').includes(value));
-        }
-
-        if (onTopLayer && overTransforms && containingBlock) {
-          const rect = containingBlock.getBoundingClientRect();
-          // Margins and borders are not included in the bounding client rect and need to be handled separately
-          const { marginInlineStart = '0', marginBlockStart = '0', borderInlineWidth = '0', borderBlockWidth = '0' } = css;
-          const inlineBoxAdjust = parseFloat(marginInlineStart) + parseFloat(borderInlineWidth);
-          const blockBoxAdjust = parseFloat(marginBlockStart) + parseFloat(borderBlockWidth);
-
-          diffCoords.x = rect.x + inlineBoxAdjust - containingBlock.scrollLeft;
-          diffCoords.y = rect.y + blockBoxAdjust - containingBlock.scrollTop;
-        }
-      }
-
-      if (onTopLayer && topLayerIsFloating) {
-        return {
-          x: x + diffCoords.x,
-          y: y + diffCoords.y,
-          data: diffCoords
-        };
-      }
-
-      if (onTopLayer) {
-        return {
-          x,
-          y,
-          data: diffCoords
-        };
-      }
-
-      return {
-        x: x - diffCoords.x,
-        y: y - diffCoords.y,
-        data: diffCoords
-      };
-  }
-});
