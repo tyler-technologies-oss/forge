@@ -1,3 +1,19 @@
+# v2.24.0 (Mon May 13 2024)
+
+#### 🚀 Enhancement
+
+- feat(list-item): add `deactivateRipple()` method to allow for manually removing the "pressed" ripple state if needed [#559](https://github.com/tyler-technologies-oss/forge/pull/559) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(table): fixed a bug where the table sort icon rotation could get out sync [#558](https://github.com/tyler-technologies-oss/forge/pull/558) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.23.1 (Thu May 02 2024)
 
 #### 🐛 Bug Fix
