@@ -17,6 +17,7 @@ export interface IListItemFoundation extends ICustomElementFoundation {
   dense: boolean;
   wrap: boolean;
   setFocus(): void;
+  deactivateRipple(): void;
 }
 
 /**
@@ -83,6 +84,10 @@ export class ListItemFoundation implements IListItemFoundation {
       this._destroyUserInteractionListener();
       this._destroyUserInteractionListener = undefined;
     }
+  }
+
+  public deactivateRipple(): void {
+    this._rippleInstance?.deactivate();
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
