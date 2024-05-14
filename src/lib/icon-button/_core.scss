@@ -61,7 +61,7 @@
 
   color: #{token(icon-color)};
 
-  text-decoration: none !important; // Forge provides default styles for <a> elements so we need to override it
+  text-decoration: none;
 }
 
 @mixin host-disabled {

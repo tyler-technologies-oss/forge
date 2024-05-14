@@ -86,7 +86,7 @@
   outline: none;
   border-radius: #{token(shape)};
 
-  text-decoration: none !important; // Forge provides default styles for <a> elements so we need to override it
+  text-decoration: none;
 }
 
 @mixin filled {
