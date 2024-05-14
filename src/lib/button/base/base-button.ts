@@ -1,7 +1,6 @@
 import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../../icon/icon-registry';
-import { WithFocusable, IWithFocusable } from '../../core/mixins/focus/with-focusable';
 import { BaseComponent } from '../../core/base/base-component';
 import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';
 import { IBaseButtonAdapter } from './base-button-adapter';
@@ -11,23 +10,18 @@ import { WithLabelAwareness, IWithLabelAwareness } from '../../core/mixins/label
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
-export interface IBaseButton extends IWithFocusable, IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
+export interface IBaseButton extends IWithLabelAwareness, IWithElementInternals, IWithDefaultAria {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
   name: string;
   value: string;
   dense: boolean;
-  anchor: boolean;
-  href: string;
-  target: string;
-  download: string;
-  rel: string;
   form: HTMLFormElement | null;
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(WithFocusable(BaseComponent)))) implements IBaseButton {
+export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(BaseComponent))) implements IBaseButton {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
   }
@@ -41,12 +35,11 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
     IconRegistry.define(tylIconArrowDropDown);
   }
 
-  public override connectedCallback(): void {
-    super.connectedCallback();
+  public connectedCallback(): void {
     this._foundation.initialize();
   }
 
-  public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case BASE_BUTTON_CONSTANTS.observedAttributes.TYPE:
         this.type = newValue as ButtonType;
@@ -57,26 +50,10 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
       case BASE_BUTTON_CONSTANTS.observedAttributes.POPOVER_ICON:
         this.popoverIcon = coerceBoolean(newValue);
         return;
-      case BASE_BUTTON_CONSTANTS.observedAttributes.ANCHOR:
-        this.anchor = coerceBoolean(newValue);
-        return;
-      case BASE_BUTTON_CONSTANTS.observedAttributes.HREF:
-        this.href = newValue;
-        return;
-      case BASE_BUTTON_CONSTANTS.observedAttributes.TARGET:
-        this.target = newValue;
-        return;
-      case BASE_BUTTON_CONSTANTS.observedAttributes.DOWNLOAD:
-        this.download = newValue;
-        return;
-      case BASE_BUTTON_CONSTANTS.observedAttributes.REL:
-        this.rel = newValue;
-        return;
       case BASE_BUTTON_CONSTANTS.observedAttributes.DENSE:
         this.dense = coerceBoolean(newValue);
         return;
     }
-    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
   public labelClickedCallback(): void {
@@ -113,21 +90,6 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
 
   @FoundationProperty()
   public declare popoverIcon: boolean;
-
-  @FoundationProperty()
-  public declare anchor: boolean;
-
-  @FoundationProperty()
-  public declare href: string;
-
-  @FoundationProperty()
-  public declare target: string;
-
-  @FoundationProperty()
-  public declare download: string;
-
-  @FoundationProperty()
-  public declare rel: string;
 
   @FoundationProperty()
   public declare dense: boolean;

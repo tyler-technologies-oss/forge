@@ -50,12 +50,6 @@ forge-focus-indicator {
 // Types
 //
 
-:host(:is(:not([type],[type*=text]))) {
-  ::slotted(:is(button,a)) {
-    @include text;
-  }
-}
-
 :host(:is([type*=unelevated],[type*=raised])) {
   ::slotted(:is(button,a)) {
     @include filled;

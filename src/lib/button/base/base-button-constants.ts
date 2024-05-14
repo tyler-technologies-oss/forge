@@ -2,11 +2,6 @@ const observedAttributes = {
   TYPE: 'type',
   DISABLED: 'disabled',
   POPOVER_ICON: 'popover-icon',
-  ANCHOR: 'anchor',
-  HREF: 'href',
-  TARGET: 'target',
-  DOWNLOAD: 'download',
-  REL: 'rel',
   DENSE: 'dense',
   TABINDEX: 'tabindex'
 } as const;
@@ -17,11 +12,13 @@ const attributes = {
 
 const classes = {
   ROOT: 'forge-button',
-  POPOVER_ICON: 'forge-button__popover-icon'
+  POPOVER_ICON: 'forge-button__popover-icon',
+  WITH_ANCHOR: 'with-anchor'
 } as const;
 
 const selectors = {
   ROOT:'[part=root]',
+  DEFAULT_SLOT: 'slot:not([name])',
   END_SLOT: 'slot[name=end]'
 } as const;
 
