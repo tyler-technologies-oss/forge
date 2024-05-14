@@ -31,6 +31,7 @@
     "ci:package": "tar -czvhf dist/deployment-assets.tar.gz -C dist/cdn .",
     "serve:coverage": "http-server -c 1 -o -p 9875 dist/coverage/html",
     "release": "auto shipit",
+    "cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.mjs --outdir dist/cem",
     "postversion": "cd dist/release/@tylertech/forge && npm version $npm_package_version --no-git-tag-version --no-commit-hooks --ignore-scripts"
   },
   "dependencies": {
@@ -49,7 +50,7 @@
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@open-wc/testing": "3.1.8",
     "@tylertech-eslint/eslint-plugin": "^1.0.12",
-    "@tylertech/forge-cli": "^3.0.0-next.6",
+    "@tylertech/forge-cli": "^3.0.0-next.8",
     "@tylertech/forge-testing": "^2.0.0",
     "@tylertech/stylelint-rules": "^5.1.0",
     "@types/jasmine": "^5.1.4",

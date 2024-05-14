@@ -61,8 +61,6 @@ declare global {
   }
 }
 
-const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
-
 /**
  * @tag forge-dialog
  * 
@@ -160,7 +158,7 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
     BackdropComponent
   ]
 })
-export class DialogComponent extends BaseClass implements IDialogComponent {
+export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements IDialogComponent {
   public static get observedAttributes(): string[] {
     return Object.values(DIALOG_CONSTANTS.observedAttributes);
   }

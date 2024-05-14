@@ -35,26 +35,8 @@ declare global {
   }
 }
 
-const BaseClass = WithBaseField(BaseSelectComponent<SelectFoundation>);
-
 /**
  * @tag forge-select
- * 
- * @property {string} label - The label text.
- * @property {string} placeholder - The placeholder text.
- * @property {FieldLabelPosition} labelPosition - The position of the label relative to the input area.
- * @property {FieldLabelAlignment} labelAlignment - The alignment of the label relative to the input area.
- * @property {boolean} floatLabel - Whether an inset positioned label is floated to the top of the container.
- * @property {boolean} invalid - Whether the field is in an invalid state.
- * @property {boolean} required - Whether the field is required.
- * @property {boolean} optional - Whether the field is optional.
- * @property {boolean} disabled - Whether the field is disabled.
- * @property {FieldVariant} variant - The variant of the field.
- * @property {FieldTheme} theme - The theme of the field.
- * @property {FieldShape} shape - The border radius of the field's corners.
- * @property {FieldDensity} density - The density of the field.
- * @property {boolean} dense - Whether the field is at the "extra-small" density level.
- * @property {FieldSupportTextInset} supportTextInset - Whether the field's support text is inset from either side.
  */
 @CustomElement({
   name: SELECT_CONSTANTS.elementName,
@@ -72,7 +54,7 @@ const BaseClass = WithBaseField(BaseSelectComponent<SelectFoundation>);
     IconButtonComponent
   ]
 })
-export class SelectComponent extends BaseClass implements ISelectComponent {
+export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFoundation>) implements ISelectComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
