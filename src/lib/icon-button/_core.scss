@@ -48,9 +48,20 @@
 }
 
 @mixin anchor-base {
-  position: absolute;
-  inset: 0;
-  text-decoration: none;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border-radius: #{token(shape)};
+  padding-inline: #{token(padding)};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: #{token(gap)};
+
+  color: #{token(icon-color)};
+
+  text-decoration: none !important; // Forge provides default styles for <a> elements so we need to override it
 }
 
 @mixin host-disabled {

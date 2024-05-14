@@ -75,11 +75,18 @@
 @mixin anchor-base {
   position: absolute;
   inset: 0;
-  text-decoration: none;
-}
 
-@mixin text {
-  @include override(focus-indicator-offset, text-focus-indicator-offset);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: #{token(spacing)};
+
+  color: #{token(color)};
+
+  outline: none;
+  border-radius: #{token(shape)};
+
+  text-decoration: none !important; // Forge provides default styles for <a> elements so we need to override it
 }
 
 @mixin filled {
