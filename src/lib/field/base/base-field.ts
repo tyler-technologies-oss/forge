@@ -19,6 +19,7 @@ export interface IBaseField extends IWithLabelAwareness {
   density: FieldDensity;
   dense: boolean;
   popoverIcon: boolean;
+  popoverExpanded: boolean;
   supportTextInset: FieldSupportTextInset;
   floatLabelWithoutAnimation(value: boolean): void;
 }
@@ -75,6 +76,9 @@ export abstract class BaseField<T extends BaseFieldFoundation<IBaseFieldAdapter>
       case BASE_FIELD_CONSTANTS.observedAttributes.POPOVER_ICON:
         this.popoverIcon = coerceBoolean(newValue);
         return;
+      case BASE_FIELD_CONSTANTS.observedAttributes.POPOVER_EXPANDED:
+        this.popoverExpanded = coerceBoolean(newValue);
+        return;
       case BASE_FIELD_CONSTANTS.observedAttributes.SUPPORT_TEXT_INSET:
         this.supportTextInset = newValue as FieldSupportTextInset;
         return;
@@ -127,6 +131,9 @@ export abstract class BaseField<T extends BaseFieldFoundation<IBaseFieldAdapter>
 
   @FoundationProperty()
   public declare popoverIcon: boolean;
+
+  @FoundationProperty()
+  public declare popoverExpanded: boolean;
 
   @FoundationProperty()
   public declare supportTextInset: FieldSupportTextInset;
