@@ -1,6 +1,11 @@
 @use '../core/styles/theme';
 @use '../core/styles/scrollbar';
 
+// Color emphasis properties (opacity)
+:root {
+  @include theme.color-emphasis-properties;
+}
+
 // Root theme properties
 :root {
   @include theme.properties;

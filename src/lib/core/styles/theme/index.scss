@@ -26,6 +26,15 @@
 }
 
 ///
+/// Emits custom property declarations for all color emphasis tokens.
+///
+@mixin color-emphasis-properties {
+  @each $token-name, $token-value in color-emphasis.$color-emphasis {
+    @include utils.declare-var(color-emphasis, $token-name, $token-value);
+  }
+}
+
+///
 /// Generates utility classes for each theme token as both `color` and `background-color` styles separately.
 /// 
 @mixin classes {
