@@ -14,6 +14,7 @@ const observedAttributes = {
   DENSITY: 'density',
   DENSE: 'dense',
   POPOVER_ICON: 'popover-icon',
+  POPOVER_EXPANDED: 'popover-expanded',
   SUPPORT_TEXT_INSET: 'support-text-inset'
 };
 

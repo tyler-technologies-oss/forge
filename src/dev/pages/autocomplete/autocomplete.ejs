@@ -1,12 +1,12 @@
 <div class="vert">
   <form autocomplete="off">
     <forge-autocomplete id="autocomplete">
-      <forge-text-field>
+      <forge-text-field popover-icon>
         <label for="autocomplete-input">Choose state</label>
+        <input type="text" id="autocomplete-input" />
         <forge-icon-button slot="trailing" density="medium" data-forge-autocomplete-clear>
           <forge-icon name="close"></forge-icon>
         </forge-icon-button>
-        <forge-icon slot="trailing" name="arrow_drop_down" data-forge-dropdown-icon></forge-icon>
       </forge-text-field>
     </forge-autocomplete>
   </form>
