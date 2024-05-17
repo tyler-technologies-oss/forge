@@ -22,39 +22,39 @@ describe('AppBarNotificationButtonComponent', function(this: ITestContext) {
   describe('Badge count', function(this: ITestContext) {
     it('should sync property and attribute count when count property is set', function(this: ITestContext) {
       this.context = setupTestContext();
-      const count = 5;
+      const count = '5';
       this.context.component.count = count;
       expect(this.context.component.count).toBe(count, `Component count property should be set to: ${count}`);
       const attrValue = this.context.component.getAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT);
       expect(attrValue).not.toBeNull('Component count attribute cannot be null');
-      expect(attrValue ? +attrValue : -1).toBe(count, `Component count attribute should be : ${count}`);
+      expect(attrValue).toBe(count, `Component count attribute should be : ${count}`);
     });
 
     it('should sync property and attribute count when count attribute is set', function(this: ITestContext) {
       this.context = setupTestContext();
-      const count = 5;
+      const count = '5';
       this.context.component.setAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, String(count));
       expect(this.context.component.count).toBe(count, `Component count property should be set to: ${count}`);
       const attrValue = this.context.component.getAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT);
       expect(attrValue).not.toBeNull('Component count attribute cannot be null');
-      expect(attrValue ? +attrValue : -1).toBe(count, `Component count attribute should be : ${count}`);
+      expect(attrValue).toBe(count, `Component count attribute should be : ${count}`);
     });
 
     it('should sync property and attribute count when count property is set and then count attribute is set', function(this: ITestContext) {
       this.context = setupTestContext();
-      let count = 5;
+      let count = '5';
       this.context.component.count = count;
       expect(this.context.component.count).toBe(count, `Component count property should be set to: ${count}`);
       let attrValue = this.context.component.getAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT);
       expect(attrValue).not.toBeNull('Component count attribute cannot be null');
-      expect(attrValue ? +attrValue : -1).toBe(count, `Component count attribute should be : ${count}`);
+      expect(attrValue).toBe(count, `Component count attribute should be : ${count}`);
 
-      count = 0;
+      count = '0';
       this.context.component.setAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, String(count));
       expect(this.context.component.count).toBe(count, `Component count property should be set to: ${count}`);
       attrValue = this.context.component.getAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT);
       expect(attrValue).not.toBeNull('Component count attribute cannot be null');
-      expect(attrValue ? +attrValue : -1).toBe(count, `Component count attribute should be : ${count}`);
+      expect(attrValue).toBe(count, `Component count attribute should be : ${count}`);
     });
 
     it('should not show badge if count property is set', function(this: ITestContext) {

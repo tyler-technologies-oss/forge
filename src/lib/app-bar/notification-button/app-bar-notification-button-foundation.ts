@@ -57,7 +57,12 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
         if (!this._dot) {
           this._adapter.setCount(this._count);
         }
-        this._adapter.toggleHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, this._count != null, String(this._count));
+
+        if (typeof this._count === 'string') {
+          this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, this._count);
+        } else if (value == null) {
+          this._adapter.removeHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT);
+        }
       }
     }
   }
