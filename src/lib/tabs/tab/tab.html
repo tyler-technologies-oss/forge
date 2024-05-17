@@ -1,11 +1,15 @@
 <template>
   <div class="forge-tab" part="container">
     <span class="content" part="content">
-      <slot name="leading"></slot>
+      <slot name="start">
+        <slot name="leading"></slot>
+      </slot>
       <span class="label" part="label">
         <slot></slot>
       </span>
-      <slot name="trailing"></slot>
+      <slot name="end">
+        <slot name="trailing"></slot>
+      </slot>
       <span class="indicator" part="indicator"></span>
     </span>
     <forge-state-layer exportparts="surface:state-layer" target=":host"></forge-state-layer>

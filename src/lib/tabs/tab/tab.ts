@@ -76,6 +76,10 @@ declare global {
  * @csspart content - The tab content container.
  * @csspart label - The tab label container.
  * @csspart indicator - The tab active indicator.
+ * 
+ * @slot - The tab label.
+ * @slot start - Content before the label.
+ * @slot end - Content after the label.
  */
 @CustomElement({
   name: TAB_CONSTANTS.elementName,
