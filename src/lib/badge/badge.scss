@@ -23,6 +23,10 @@
 
 .forge-badge {
   @include base;
+
+  .content {
+    @include content;
+  }
 }
 
 //
