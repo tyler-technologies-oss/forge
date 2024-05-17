@@ -39,8 +39,6 @@ declare global {
   }
 }
 
-const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
-
 /**
  * @tag forge-tooltip
  * 
@@ -105,7 +103,7 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
     OverlayComponent
   ]
 })
-export class TooltipComponent extends BaseClass implements ITooltipComponent {
+export class TooltipComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements ITooltipComponent {
   public static get observedAttributes(): string[] {
     return Object.values(TOOLTIP_CONSTANTS.observedAttributes);
   }

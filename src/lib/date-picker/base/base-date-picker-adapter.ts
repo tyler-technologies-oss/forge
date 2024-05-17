@@ -1,5 +1,5 @@
 import { randomChars } from '@tylertech/forge-core';
-import { CALENDAR_CONSTANTS, DateRange, DayOfWeek, ICalendarComponent, ICalendarDateSelectEventData } from '../../calendar';
+import { DateRange, DayOfWeek, ICalendarComponent } from '../../calendar';
 import { ICalendarDropdown, ICalendarDropdownPopupConfig } from '../../calendar/calendar-dropdown';
 import { BaseAdapter, IBaseAdapter, IDateInputMaskOptions } from '../../core';
 import { BaseComponent } from '../../core/base/base-component';
@@ -42,8 +42,8 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   attachCalendar(calendarConfig: Partial<ICalendarComponent>, dropdownConfig?: ICalendarDropdownPopupConfig): void;
   detachCalendar(): void;
   goToCalendarDate(date: Date): void;
-  addDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void;
-  removeDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void;
+  addCalendarListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
+  removeCalendarListener(type: keyof HTMLElementEventMap, listener: EventListener): void;
   setCalendarValue(value: Date | DateRange | null | undefined): void;
   setCalendarMinDate(value: Date | null | undefined): void;
   setCalendarMaxDate(value: Date | null | undefined): void;
@@ -143,12 +143,12 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
     this._calendarDropdown?.calendar?.goToDate(date, true);
   }
 
-  public addDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void {
-    this._calendarDropdown?.calendar?.addEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, listener);
+  public addCalendarListener(type: keyof HTMLElementEventMap, listener: EventListener): void {
+    this._calendarDropdown?.calendar?.addEventListener(type, listener);
   }
 
-  public removeDateSelectListener(listener: (event: CustomEvent<ICalendarDateSelectEventData>) => void): void {
-    this._calendarDropdown?.calendar?.removeEventListener(CALENDAR_CONSTANTS.events.DATE_SELECT, listener);
+  public removeCalendarListener(type: keyof HTMLElementEventMap, listener: EventListener): void {
+    this._calendarDropdown?.calendar?.removeEventListener(type, listener);
   }
 
   public setCalendarValue(value: Date | DateRange | null | undefined): void {

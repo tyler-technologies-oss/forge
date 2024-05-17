@@ -6,81 +6,68 @@ import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { IBaseButton } from './base-button';
 import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
-import { internals, isFocusable, setDefaultAria } from '../../constants';
+import { internals, setDefaultAria } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
 
 export interface IBaseButtonAdapter extends IBaseAdapter {
+  readonly hasSlottedAnchor: boolean;
   initialize(): void;
-  initializeAnchor(): void;
-  removeAnchor(): void;
-  setAnchorProperty<T extends keyof HTMLAnchorElement>(name: T, value: HTMLAnchorElement[T]): void;
   setDisabled(value: boolean): void;
-  clickAnchor(): void;
   clickHost(): void;
   clickFormButton(type: string): void;
   forceFocusVisible(): void;
-  addAnchorEventListener(type: string, listener: EventListener): void;
-  removeAnchorEventListener(type: string, listener: EventListener): void;
   hasPopoverTarget(): boolean;
   managePopover(): boolean;
   toggleDefaultPopoverIcon(value: boolean): void;
   animateStateLayer(): void;
+  addDefaultSlotChangeListener(listener: EventListener): void;
 }
 
 export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> implements IBaseButtonAdapter {
-  protected _rootElement: HTMLElement;
-  protected _anchorElement: HTMLAnchorElement | undefined;
-  protected _focusIndicatorElement: IFocusIndicatorComponent;
-  protected _stateLayerElement: IStateLayerComponent;
-  protected _endSlotElement: HTMLSlotElement;
+  protected readonly _rootElement: HTMLElement;
+  protected readonly _focusIndicatorElement: IFocusIndicatorComponent;
+  protected readonly _stateLayerElement: IStateLayerComponent;
+  protected readonly _defaultSlotElement: HTMLSlotElement;
+  protected readonly _endSlotElement: HTMLSlotElement;
 
   constructor(component: IBaseButton) {
     super(component);
     this._rootElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
     this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;
     this._stateLayerElement = getShadowElement(this._component, STATE_LAYER_CONSTANTS.elementName) as IStateLayerComponent;
+    this._defaultSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.DEFAULT_SLOT) as HTMLSlotElement;
     this._endSlotElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.END_SLOT) as HTMLSlotElement;
   }
 
+  public get hasSlottedAnchor(): boolean {
+    return !!this.getSlottedAnchor;
+  }
+
+  public get getSlottedAnchor(): HTMLAnchorElement | undefined {
+    return this._defaultSlotElement.assignedElements({ flatten: true }).find(el => el.tagName === 'A') as HTMLAnchorElement | undefined;
+  }
+
   public initialize(): void {
-    this._applyHostSemantics();
-  }
+    const slottedAnchor = this.getSlottedAnchor;
+    this._component[setDefaultAria]({
+      role: !!slottedAnchor ? null : 'button'
+    }, {
+      setAttribute: !this._component.hasAttribute('role') || !!slottedAnchor
+    });
 
-  public initializeAnchor(): void {
-    this._anchorElement = this._createAnchorRootElement();
-    this._rootElement.insertAdjacentElement('afterend', this._anchorElement);
-    this._applyHostSemantics();
-  }
+    this._rootElement.classList.toggle(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
 
-  public removeAnchor(): void {
-    this._anchorElement?.remove();
-    this._anchorElement = undefined;
-    this._applyHostSemantics();
-  }
-
-  public setAnchorProperty<T extends keyof HTMLAnchorElement>(name: T, value: HTMLAnchorElement[T]): void {
-    if (this._anchorElement) {
-      this._anchorElement[name] = value;
+    if (!!slottedAnchor) {
+      this._component.removeAttribute('tabindex');
+    } else if (!this._component.disabled && !this._component.hasAttribute('tabindex')) {
+      this._component.setAttribute('tabindex', '0');
     }
+
+    this._focusIndicatorElement.targetElement = !!slottedAnchor ? slottedAnchor : this._component;
+    this._stateLayerElement.targetElement = !!slottedAnchor ? slottedAnchor : this._component;
   }
 
   public setDisabled(value: boolean): void {
-    if (this._anchorElement) {
-      if (this.hasHostAttribute('aria-disabled')) {
-        this.removeHostAttribute('aria-disabled');
-      }
-      if (!this._focusIndicatorElement.isConnected) {
-        this._rootElement.append(this._focusIndicatorElement);
-      }
-      if (!this._stateLayerElement.isConnected) {
-        if (this._stateLayerElement.disabled) {
-          this._stateLayerElement.disabled = false;
-        }
-        this._rootElement.append(this._stateLayerElement);
-      }
-      return; // Cannot disable an anchor element
-    }
-
     if (value) {
       this._focusIndicatorElement.remove();
       this._stateLayerElement.remove();
@@ -88,12 +75,18 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       this._rootElement.append(this._focusIndicatorElement, this._stateLayerElement);
     }
 
-    this._component[isFocusable] = !value;
-    this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : null });
-  }
-
-  public clickAnchor(): void {
-    this._anchorElement?.click();
+    const hasSlottedAnchor = this.hasSlottedAnchor;
+    if (hasSlottedAnchor) {
+      this._component.removeAttribute('tabindex');
+      this._component[setDefaultAria]({ ariaDisabled: null }, { setAttribute: true });
+    } else {
+      if (value) {
+        this._component.removeAttribute('tabindex');
+      } else {
+        this._component.setAttribute('tabindex', '0');
+      }
+      this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : null });
+    }
   }
 
   public clickHost(): void {
@@ -139,14 +132,6 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     } else if (type === 'reset') {
       this._component.form?.reset();
     }
-  }
-
-  public addAnchorEventListener(type: string, listener: EventListener): void {
-    this._rootElement.addEventListener(type, listener);
-  }
-
-  public removeAnchorEventListener(type: string, listener: EventListener): void {
-    this._rootElement.removeEventListener(type, listener);
   }
 
   public hasPopoverTarget(): boolean {
@@ -234,6 +219,10 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     this._stateLayerElement?.playAnimation();
   }
 
+  public addDefaultSlotChangeListener(listener: EventListener): void {
+    this._defaultSlotElement.addEventListener('slotchange', listener);
+  }
+
   private _locatePopoverTargetElement(): HTMLElement | null {
     let popoverElement = this._component.popoverTargetElement ?? null;
 
@@ -248,37 +237,5 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
     }
 
     return popoverElement;
-  }
-
-  private _applyHostSemantics(): void {
-    const role = this._component.getAttribute('role');
-    const setAttribute = !role || ['button', 'link'].includes(role);
-    this._component[setDefaultAria]({ role: this._anchorElement ? 'link' : 'button' }, { setAttribute });
-    this._component[isFocusable] = !!this._anchorElement || !this._component.disabled;
-  }
-
-  /**
-   * Our anchor element is the interactive element that will be used to trigger the click event when it is present.
-   * 
-   * We use the <a> element as an overlay on top of all content to ensure that it provides the native functionality,
-   * while removing it from the accessibility tree and tab order so that it does not interfere with the host semantics.
-   */
-  private _createAnchorRootElement(): HTMLAnchorElement {
-    const a = document.createElement('a');
-    a.setAttribute('aria-hidden', 'true');
-    a.tabIndex = -1;
-    if (this._component.href) {
-      a.href = this._component.href;
-    }
-    if (this._component.target) {
-      a.target = this._component.target;
-    }
-    if (this._component.download) {
-      a.download = this._component.download;
-    }
-    if (this._component.rel) {
-      a.rel = this._component.rel;
-    }
-    return a;
   }
 }

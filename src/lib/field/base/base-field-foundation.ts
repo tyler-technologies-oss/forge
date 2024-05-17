@@ -16,6 +16,7 @@ export interface IBaseFieldFoundation extends ICustomElementFoundation {
   density: string;
   dense: boolean;
   popoverIcon: boolean;
+  popoverExpanded: boolean;
   supportTextInset: string;
   click(): void;
   applyLabel(value: string | null): void;
@@ -35,6 +36,7 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
   protected _density = BASE_FIELD_CONSTANTS.defaults.DEFAULT_DENSITY;
   protected _dense = false;
   protected _popoverIcon = false;
+  protected _popoverExpanded = false;
   protected _supportTextInset = BASE_FIELD_CONSTANTS.defaults.DEFAULT_SUPPORT_TEXT_INSET;
   protected _permanentlyFloatLabel = false;
   
@@ -210,6 +212,16 @@ export abstract class BaseFieldFoundation<T extends IBaseFieldAdapter> implement
       this._popoverIcon = value;
       this._adapter.setFieldProperty('popoverIcon', value);
       this._adapter.toggleHostAttribute(BASE_FIELD_CONSTANTS.attributes.POPOVER_ICON, value);
+    }
+  }
+
+  public get popoverExpanded(): boolean {
+    return this._popoverExpanded;
+  }
+  public set popoverExpanded(value: boolean) {
+    if (this._popoverExpanded !== value) {
+      this._popoverExpanded = value;
+      this._adapter.setFieldProperty('popoverExpanded', value);
     }
   }
 

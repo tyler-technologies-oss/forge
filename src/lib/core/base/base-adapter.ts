@@ -53,7 +53,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
     toggleAttribute(this._component, hasAttribute, name, value);
   }
 
-  public redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean {
+  public redispatchEvent(event: CustomEvent, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean {
     const isFromLightDom = !((event.target as HTMLElement)?.getRootNode() instanceof ShadowRoot);
     if (event.bubbles && (event.composed || isFromLightDom)) {
       event.stopPropagation();
@@ -61,6 +61,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
     
     const eventCopy = {
       ...event,
+      detail: event.detail ?? null,
       bubbles: options?.bubbles ?? event.bubbles,
       cancelable: options?.cancelable ?? event.cancelable,
       composed: options?.composed ?? event.composed

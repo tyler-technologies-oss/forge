@@ -93,6 +93,8 @@ forge-state-layer {
   .forge-tab {
     color: #{token(active-label-text-color)};
 
+    ::slotted([slot=start]),
+    ::slotted([slot=end]),
     ::slotted([slot=leading]),
     ::slotted([slot=trailing]) {
       color: #{token(active-icon-color)};
@@ -103,6 +105,8 @@ forge-state-layer {
     }
 
     &:hover {
+      ::slotted([slot=start]),
+      ::slotted([slot=end]),
       ::slotted([slot=leading]),
       ::slotted([slot=trailing]) {
         color: #{token(active-hover-icon-color)};

@@ -34,8 +34,6 @@ declare global {
   }
 }
 
-const BaseCheckboxClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))));
-
 /**
  * @tag forge-checkbox
  * 
@@ -123,7 +121,7 @@ const BaseCheckboxClass = WithFormAssociation(WithLabelAwareness(WithFocusable(W
     StateLayerComponent
   ]
 })
-export class CheckboxComponent extends BaseCheckboxClass implements ICheckboxComponent {
+export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent))))) implements ICheckboxComponent {
   public static get observedAttributes(): string[] {
     return Object.values(CHECKBOX_CONSTANTS.observedAttributes);
   }

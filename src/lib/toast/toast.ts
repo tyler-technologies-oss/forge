@@ -50,8 +50,6 @@ declare global {
   }
 }
 
-const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
-
 /**
  * @tag forge-toast
  * 
@@ -109,7 +107,7 @@ const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
     IconComponent
   ]
 })
-export class ToastComponent extends BaseClass implements IToastComponent {
+export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IToastComponent {
   public static get observedAttributes(): string[] {
     return Object.values(TOAST_CONSTANTS.observedAttributes);
   }

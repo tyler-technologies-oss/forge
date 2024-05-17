@@ -30,8 +30,6 @@ declare global {
   }
 }
 
-const BaseButtonToggleClass = WithDefaultAria(WithElementInternals(WithFocusable(BaseComponent)));
-
 /**
  * @tag forge-button-toggle
  * 
@@ -93,7 +91,7 @@ const BaseButtonToggleClass = WithDefaultAria(WithElementInternals(WithFocusable
     StateLayerComponent
   ]
 })
-export class ButtonToggleComponent<T = unknown> extends BaseButtonToggleClass implements IButtonToggleComponent {
+export class ButtonToggleComponent<T = unknown> extends WithDefaultAria(WithElementInternals(WithFocusable(BaseComponent))) implements IButtonToggleComponent {
   public static get observedAttributes(): string[] {
     return Object.values(BUTTON_TOGGLE_CONSTANTS.observedAttributes);
   }

@@ -34,8 +34,6 @@ declare global {
   }
 }
 
-const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
-
 /**
  * @tag forge-bottom-sheet
  * 
@@ -76,7 +74,7 @@ const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
     DialogComponent
   ]
 })
-export class BottomSheetComponent extends BaseClass implements IBottomSheetComponent {
+export class BottomSheetComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IBottomSheetComponent {
   public static get observedAttributes(): string[] {
     return Object.values(BOTTOM_SHEET_CONSTANTS.observedAttributes);
   }

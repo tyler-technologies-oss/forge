@@ -31,11 +31,11 @@ const ids = {
 
 const selectors = {
   ROOT: `.${classes.ROOT}`,
-  FORM_CONTROL_LIKE: ':is([forge-list-item-interactive],forge-radio,forge-checkbox,forge-switch,input[type=checkbox],input[type=radio]):is([slot=leading],[slot=trailing]):not([forge-ignore])',
+  FORM_CONTROL_LIKE: ':is([forge-list-item-interactive],forge-radio,forge-checkbox,forge-switch,input[type=checkbox],input[type=radio]):is([slot=start],[slot=end],[slot=leading],[slot=trailing]):not([forge-ignore])',
   BUTTON_LIKE: ':is(button,[role=button][tabindex]:not([tabindex=-1]),[forge-list-item-interactive]):not([forge-ignore])',
   IGNORE: '[forge-ignore],[data-forge-ignore]',
   INTERNAL_ANCHOR: `#${ids.INTERNAL_ANCHOR}`,
-  SLOTTED_LEADING_TRAILING: ':is([slot=leading],[slot=trailing])'
+  SLOTTED_START_END: ':is([slot=start],[slot=end],[slot=leading],[slot=trailing])'
 };
 
 const events = {

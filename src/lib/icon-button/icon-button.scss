@@ -39,7 +39,11 @@ $host-tokens: [display disabled-cursor];
   }
 }
 
-a {
+//
+// Anchor
+//
+
+::slotted(a) {
   @include anchor-base;
 }
 

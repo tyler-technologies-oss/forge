@@ -25,8 +25,6 @@ declare global {
   }
 }
 
-const BaseRadioGroupClass = WithLabelAwareness(WithDefaultAria(WithElementInternals(BaseComponent)));
-
 /**
  * @tag forge-radio-group
  * 
@@ -40,7 +38,7 @@ const BaseRadioGroupClass = WithLabelAwareness(WithDefaultAria(WithElementIntern
   name: RADIO_GROUP_CONSTANTS.elementName,
   dependencies: [RadioComponent]
 })
-export class RadioGroupComponent extends BaseRadioGroupClass implements IRadioGroupComponent {
+export class RadioGroupComponent extends WithLabelAwareness(WithDefaultAria(WithElementInternals(BaseComponent))) implements IRadioGroupComponent {
   public static readonly formAssociated = true;
 
   public get form(): HTMLFormElement | null {
