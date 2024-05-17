@@ -6,7 +6,7 @@ import {
 } from '@tylertech/forge/date-picker';
 import { DEFAULT_DATE_MASK, parseDateString, formatDate, isSameDate } from '@tylertech/forge/core';
 import { defineTextFieldComponent, TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '@tylertech/forge/text-field';
-import { ICalendarComponent, CALENDAR_CONSTANTS } from '@tylertech/forge/calendar';
+import { ICalendarComponent, CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS } from '@tylertech/forge/calendar';
 import { ICON_BUTTON_CONSTANTS } from '@tylertech/forge/icon-button';
 import { getShadowElement, removeElement } from '@tylertech/forge-core';
 import { timer, tick, dispatchNativeEvent } from '@tylertech/forge-testing';
@@ -427,6 +427,54 @@ describe('DatePickerComponent', function(this: ITestContext) {
       expect(changeSpy).toHaveBeenCalledWith(jasmine.any(CustomEvent));
       expect(changeSpy).toHaveBeenCalledWith(jasmine.objectContaining({ detail: theEvent!.detail }));
       expect(this.context.component.value).toEqual(theEvent!.detail);
+    });
+
+    it('should emit change event when next month button is clicked', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      openPopup(this.context.component);
+      let theEvent: CustomEvent;
+      const monthChangeSpy = jasmine.createSpy('Calendar month change spy', evt => theEvent = evt).and.callThrough();
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, monthChangeSpy);
+
+      const calendar = getCalendar(this.context.component);
+      const nextButton = getNextMonthButton(calendar);
+      const currentMonth = calendar.month;
+      nextButton.click();
+      const month = (currentMonth + 1) % 12;
+      expect(monthChangeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: theEvent!.detail })); 
+      expect(theEvent!.detail.month).toBe(month);
+    });
+
+    it('should emit change event when previous month button is clicked', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      openPopup(this.context.component);
+      let theEvent: CustomEvent;
+      const monthChangeSpy = jasmine.createSpy('Calendar month change spy', evt => theEvent = evt).and.callThrough();
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, monthChangeSpy);
+      
+      const calendar = getCalendar(this.context.component);
+      const nextButton = getPreviousMonthButton(calendar);
+      const currentMonth = calendar.month;
+      nextButton.click();
+      const month = (currentMonth + 12 - 1) % 12;
+      expect(monthChangeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: theEvent!.detail }));
+      expect(theEvent!.detail.month).toBe(month);
+    });
+
+    it('should emit change event when month is selected', async function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      openPopup(this.context.component);
+      let theEvent: CustomEvent;
+      const monthChangeSpy = jasmine.createSpy('Calendar month change spy', evt => theEvent = evt).and.callThrough();
+      this.context.component.addEventListener(CALENDAR_CONSTANTS.events.MONTH_CHANGE, monthChangeSpy);
+
+      const calendar = getCalendar(this.context.component);
+      const calendarShadowElement = getCalendarShadowElement(calendar);
+      (getMonthButton(calendar))?.click();
+      const menuShadowRoot = (calendarShadowElement.querySelector(CALENDAR_MENU_CONSTANTS.elementName) as HTMLElement)?.shadowRoot as ShadowRoot;
+      (menuShadowRoot.querySelector(CALENDAR_MENU_CONSTANTS.selectors.ITEM) as HTMLElement)?.click();   
+      expect(monthChangeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: theEvent!.detail}));
+      expect(theEvent!.detail.month).toBe(0);
     });
 
     it('should not blur input when clicking element in calendar', async function(this: ITestContext) {
@@ -1565,6 +1613,22 @@ describe('DatePickerComponent', function(this: ITestContext) {
   function getCalendarShadow(component: IDatePickerComponent): ShadowRoot {
     const calendar = getCalendar(component);
     return calendar.shadowRoot as ShadowRoot;
+  }
+
+  function getCalendarShadowElement(component: ICalendarComponent): HTMLElement {
+    return getShadowElement(component, CALENDAR_CONSTANTS.selectors.CALENDAR);
+  }
+
+  function getNextMonthButton(component: ICalendarComponent): HTMLButtonElement {
+    return getShadowElement(component, '#next-button')?.firstElementChild as HTMLButtonElement ?? null;
+  }
+
+  function getPreviousMonthButton(component: ICalendarComponent): HTMLButtonElement {
+    return getShadowElement(component, '#previous-button')?.firstElementChild as HTMLButtonElement ?? null;
+  }
+
+  function getMonthButton(component: ICalendarComponent): HTMLButtonElement {
+    return getShadowElement(component, '#month-button')?.firstElementChild as HTMLButtonElement ?? null;
   }
 
   function clickActiveDay(component: IDatePickerComponent): void {

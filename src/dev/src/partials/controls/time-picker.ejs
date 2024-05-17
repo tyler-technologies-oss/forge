@@ -1,8 +1,8 @@
 <forge-time-picker id="<%= control.id %>" value="<%= control.defaultValue ?? undefined %>">
   <forge-text-field>
-    <input type="text" />
     <% if (control.label) { %>
-      <label for="<%= control.id %>"><%= control.label %></label>
+      <label for="time-picker-<%= control.id %>"><%= control.label %></label>
     <% } %>
+    <input type="text" id="time-picker-<%= control.id %>" />
   </forge-text-field>
 </forge-time-picker>

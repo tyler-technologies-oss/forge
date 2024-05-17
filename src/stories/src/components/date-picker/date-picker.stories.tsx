@@ -54,8 +54,8 @@ export const Default: Story<IDatePickerProps> = ({
       locale={locale}
       style={{ maxWidth: '256px' }}>
       <ForgeTextField>
-        <input type="text" id="input-date-picker" />
         <label htmlFor="input-date-picker">Choose date</label>
+        <input type="text" id="input-date-picker" />
       </ForgeTextField>
     </ForgeDatePicker>
   );

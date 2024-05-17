@@ -46,8 +46,8 @@ export const Default: Story<IAutocompleteProps> = ({
       }}
      style={{width: '600px'}}>
       <ForgeTextField>
-        <input type="text" id="state" />
         <label htmlFor="state">Choose state</label>
+        <input type="text" id="state" />
         <ForgeIconButton dense slot="trailing">
           <button type="button" data-forge-autocomplete-clear aria-label="Clear the selection">
             <forge-icon name="close"></forge-icon>
