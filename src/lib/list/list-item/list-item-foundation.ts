@@ -56,13 +56,13 @@ export class ListItemFoundation implements IListItemFoundation {
 
   private _onKeydown(evt: KeyboardEvent): void {
     const composedElements = evt.composedPath().filter((el: Element) => el.nodeType === Node.ELEMENT_NODE);
-    const isFromLeadingTrailingSlot = composedElements.some((el: HTMLElement) => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_LEADING_TRAILING));
+    const isFromStartEndSlot = composedElements.some((el: HTMLElement) => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_START_END));
 
     if (evt.key === 'Enter' || evt.key === ' ') {
       evt.stopPropagation();
     }
 
-    if (isFromLeadingTrailingSlot) {
+    if (isFromStartEndSlot) {
       if (evt.key === 'Enter' || evt.key === ' ') {
         this._adapter.animateStateLayer();
       }

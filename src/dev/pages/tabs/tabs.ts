@@ -71,26 +71,26 @@ scrollButtonsToggle.addEventListener('forge-switch-change', ({ detail: selected 
   tabBar.scrollButtons = selected;
 });
 
-const showLeadingToggle = document.getElementById('opt-show-leading') as ISwitchComponent;
-showLeadingToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+const showStartToggle = document.getElementById('opt-show-start') as ISwitchComponent;
+showStartToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const tabElements = tabBar.querySelectorAll('forge-tab');
   tabElements.forEach(tab => {
     if (selected) {
-      tab.appendChild(createIcon('favorite', 'leading'));
+      tab.appendChild(createIcon('favorite', 'start'));
     } else {
-      tab.removeChild(tab.querySelector('forge-icon[slot=leading]'));
+      tab.removeChild(tab.querySelector('forge-icon[slot=start]'));
     }
   });
 });
 
-const showTrailingToggle = document.getElementById('opt-show-trailing') as ISwitchComponent;
-showTrailingToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+const showEndToggle = document.getElementById('opt-show-end') as ISwitchComponent;
+showEndToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const tabElements = tabBar.querySelectorAll('forge-tab');
   tabElements.forEach(tab => {
     if (selected) {
-      tab.appendChild(createIcon('favorite', 'trailing'));
+      tab.appendChild(createIcon('favorite', 'end'));
     } else {
-      tab.removeChild(tab.querySelector('forge-icon[slot=trailing]'));
+      tab.removeChild(tab.querySelector('forge-icon[slot=end]'));
     }
   });
 });

@@ -93,22 +93,26 @@ $_host-tokens: [indent dense-indent disabled-cursor];
   }
 }
 
-// Dense leading/trailing
+// Dense start/end
 :host([selected]) {
   .forge-list-item {
     @include selected;
 
+    ::slotted([slot=start]),
+    ::slotted([slot=end]),
     ::slotted([slot=leading]),
     ::slotted([slot=trailing]) {
-      @include leading-trailing-selected;
+      @include start-end-selected;
     }
 
+    ::slotted([slot=start]),
     ::slotted([slot=leading]) {
-      @include leading-selected;
+      @include start-selected;
     }
 
+    ::slotted([slot=end]),
     ::slotted([slot=trailing]) {
-      @include trailing-selected;
+      @include end-selected;
     }
   }
 
@@ -155,31 +159,35 @@ slot[name=tertiary-text] {
   @include anchor;
 }
 
-// Leading/trailing slotted elements
+// Start/end slotted elements
+::slotted([slot=start]),
+::slotted([slot=end]),
 ::slotted([slot=leading]),
 ::slotted([slot=trailing]) {
-  @include leading-trailing-base;
+  @include start-end-base;
 }
 
 // Interactive slotted form controls to hide state-layer and focus-indicator
 :host(:not([noninteractive])) {
-  ::slotted(:is(forge-checkbox,forge-radio,forge-switch):is([slot=leading],[slot=trailing]):not([forge-ignore])) {
+  ::slotted(:is(forge-checkbox,forge-radio,forge-switch):is([slot=start],[slot=end],[slot=leading],[slot=trailing]):not([forge-ignore])) {
     @include focus-indicator.provide-theme(( display: none ));
     @include state-layer.provide-theme(( display: none ));
   }
 }
 
-// Leading slotted elements
+// Start slotted elements
+::slotted([slot=start]),
 ::slotted([slot=leading]) {
   :host([selected]) & {
-    @include leading-selected;
+    @include start-selected;
   }
 }
 
-// Trailing slotted elements
+// End slotted elements
+::slotted([slot=end]),
 ::slotted([slot=trailing]) {
   :host([selected]) & {
-    @include trailing-selected;
+    @include end-selected;
   }
 }
 

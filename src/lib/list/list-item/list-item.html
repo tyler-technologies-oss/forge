@@ -1,11 +1,15 @@
 <template>
   <div class="forge-list-item" part="root">
-    <slot name="leading"></slot>
+    <slot name="start">
+      <slot name="leading"></slot>
+    </slot>
     <div class="text-container" part="text-container">
       <slot></slot>
       <slot name="secondary-text"></slot>
       <slot name="tertiary-text"></slot>
     </div>
-    <slot name="trailing"></slot>
+    <slot name="end">
+      <slot name="trailing"></slot>
+    </slot>
   </div>
 </template>

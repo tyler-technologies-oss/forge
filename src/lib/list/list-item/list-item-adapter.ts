@@ -25,8 +25,8 @@ export interface IListItemAdapter extends IBaseAdapter<IListItemComponent> {
 export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements IListItemAdapter {
   private readonly _rootElement: HTMLElement;
   private readonly _defaultSlotElement: HTMLSlotElement;
-  private readonly _leadingSlotElement: HTMLSlotElement;
-  private readonly _trailingSlotElement: HTMLSlotElement;
+  private readonly _startSlotElement: HTMLSlotElement;
+  private readonly _endSlotElement: HTMLSlotElement;
   private _focusIndicatorElement: IFocusIndicatorComponent | undefined;
   private _stateLayerElement: IStateLayerComponent | undefined;
   private _disabledAttrObserver: MutationObserver | undefined;
@@ -39,8 +39,8 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
     super(component);
     this._rootElement = getShadowElement(component, LIST_ITEM_CONSTANTS.selectors.ROOT);
     this._defaultSlotElement = getShadowElement(component, 'slot:not([name])') as HTMLSlotElement;
-    this._leadingSlotElement = getShadowElement(component, 'slot[name=leading]') as HTMLSlotElement;
-    this._trailingSlotElement = getShadowElement(component, 'slot[name=trailing]') as HTMLSlotElement;
+    this._startSlotElement = getShadowElement(component, 'slot[name=start]') as HTMLSlotElement;
+    this._endSlotElement = getShadowElement(component, 'slot[name=end]') as HTMLSlotElement;
   }
 
   public get interactiveElement(): HTMLElement | HTMLAnchorElement | undefined {
@@ -113,8 +113,8 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
   }
 
   private _onSlotChange(evt: Event): void {
-    // We only care about slot changes in the default slot, leading slot, and trailing slot to search for interactive elements
-    const interactiveSlotNames = ['', 'leading', 'trailing'];
+    // We only care about slot changes in the default slot, start/leading slot, and end/trailing slot to search for interactive elements
+    const interactiveSlotNames = ['', 'start', 'end', 'leading', 'trailing'];
     const isInteractiveSlot = interactiveSlotNames.includes((evt.target as HTMLSlotElement).name);
     if (!isInteractiveSlot) {
       return;
@@ -127,10 +127,10 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
 
     // We always want to check for form control-like elements first as those take precedence over slotted anchor and button
     // elements as the interactive element.
-    const assignedLeadingElements = this._leadingSlotElement.assignedElements({ flatten: true });
-    const assignedTrailingElements = this._trailingSlotElement.assignedElements({ flatten: true });
-    const assignedLeadingTrailingElements = [...assignedLeadingElements, ...assignedTrailingElements];
-    const slottedFormControl = assignedLeadingTrailingElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.FORM_CONTROL_LIKE)) as HTMLElement | undefined;
+    const assignedStartElements = this._startSlotElement.assignedElements({ flatten: true });
+    const assignedEndElements = this._endSlotElement.assignedElements({ flatten: true });
+    const assignedStartEndElements = [...assignedStartElements, ...assignedEndElements];
+    const slottedFormControl = assignedStartEndElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.FORM_CONTROL_LIKE)) as HTMLElement | undefined;
     if (slottedFormControl) {
       this._attachInteractiveFormControl(slottedFormControl);
       return;

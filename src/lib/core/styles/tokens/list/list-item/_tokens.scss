@@ -26,8 +26,8 @@ $tokens: (
   // Selected
   selected-color: utils.module-val(list-item, selected-color, theme.variable(primary)),
   selected-opacity: utils.module-val(list-item, selected-opacity, theme.emphasis(lowest)),
-  selected-leading-color: utils.module-ref(list-item, selected-leading-color, selected-color),
-  selected-trailing-color: utils.module-ref(list-item, selected-trailing-color, selected-color),
+  selected-start-color: utils.module-ref(list-item, selected-start-color, selected-color),
+  selected-end-color: utils.module-ref(list-item, selected-end-color, selected-color),
   selected-text-color: utils.module-val(list-item, selected-text-color, theme.variable(text-medium)),
 
   // Disabled
@@ -47,11 +47,11 @@ $tokens: (
   dense-indent: utils.module-val(list-item, dense-indent, spacing.variable(xxlarge)),
   dense-gap: utils.module-val(list-item, dense-gap, spacing.variable(xsmall)),
 
-  // Leading
-  leading-selected-color: utils.module-ref(list-item, leading-selected-color, selected-color),
+  // Start
+  start-selected-color: utils.module-ref(list-item, start-selected-color, selected-color),
 
-  // Trailing
-  trailing-selected-color: utils.module-ref(list-item, trailing-selected-color, selected-color),
+  // end
+  end-selected-color: utils.module-ref(list-item, end-selected-color, selected-color),
 
   // Wrap
   wrap-padding: utils.module-val(list-item, wrap-padding, spacing.variable(xsmall) spacing.variable(medium)),
