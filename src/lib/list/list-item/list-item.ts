@@ -63,15 +63,10 @@ declare global {
  * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
  * 
  * @slot - The primary text.
- * @slot primary-text - The primary text. A named alias for the default slot.
  * @slot secondary-text - The secondary text.
  * @slot tertiary-text - The tertiary text.
- * @slot title - The title element. An alias for the primary-text slot for backwards compatibility.
- * @slot subtitle - The subtitle element. An alias for the secondary-text slot for backwards compatibility.
- * @slot tertiary-title - The tertiary title element. An alias for the tertiary-text slot for backwards compatibility.
- * @slot leading - The leading content.
- * @slot trailing - The trailing element.
- * @slot avatar - The avatar content.
+ * @slot start - The start content.
+ * @slot end - The end element.
  * 
  * @csspart root - The root container element.
  * @csspart text-container - The container for the text content.
@@ -94,8 +89,8 @@ declare global {
  * @cssproperty --forge-list-item-text-line-height - The line height of the text.
  * @cssproperty --forge-list-item-selected-color - The color when in the selected state.
  * @cssproperty --forge-list-item-opacity - The opacity of the background color when in the disabled state.
- * @cssproperty --forge-list-item-selected-leading-color - The color of the leading content when in the selected state.
- * @cssproperty --forge-list-item-selected-trailing-color - The color of the trailing content when in the selected state.
+ * @cssproperty --forge-list-item-selected-start-color - The color of the start content when in the selected state.
+ * @cssproperty --forge-list-item-selected-end-color - The color of the end content when in the selected state.
  * @cssproperty --forge-list-item-selected-text-color - The color of the text when in the selected state.
  * @cssproperty --forge-list-item-disabled-opacity - The opacity of the element when in the disabled state.
  * @cssproperty --forge-list-item-disabled-cursor - The cursor when in the disabled state.
@@ -108,8 +103,8 @@ declare global {
  * @cssproperty --forge-list-item-dense-font-size - The font size when in the dense state.
  * @cssproperty --forge-list-item-dense-indent - The margin inline state when in the dense indented state.
  * @cssproperty --forge-list-item-dense-gap - The gap between the slotted content when in the dense state.
- * @cssproperty --forge-list-item-leading-selected-color - The color of the leading content when in the selected state.
- * @cssproperty --forge-list-item-trailing-selected-color - The color of the trailing content when in the selected state.
+ * @cssproperty --forge-list-item-start-selected-color - The color of the start content when in the selected state.
+ * @cssproperty --forge-list-item-end-selected-color - The color of the end content when in the selected state.
  * @cssproperty --forge-list-item-avatar-background-color - The background color of the avatar container.
  * @cssproperty --forge-list-item-avatar-color - The foreground color of the avatar container.
  * @cssproperty --forge-list-item-avatar-shape - The shape of the avatar container.

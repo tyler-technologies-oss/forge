@@ -231,7 +231,7 @@ describe('List', () => {
     it('should have focus indicator when checkbox is present', async () => {
       const el = await fixture<IListComponent>(html`
         <forge-list-item>
-          <input type="checkbox" slot="leading" />
+          <input type="checkbox" slot="start" />
           Test Item
         </forge-list-item>
       `);
@@ -243,7 +243,7 @@ describe('List', () => {
     it('should have focus indicator when radio button is present', async () => {
       const el = await fixture<IListComponent>(html`
         <forge-list-item>
-          <input type="radio" slot="leading" />
+          <input type="radio" slot="start" />
           Test Item
         </forge-list-item>
       `);
@@ -308,7 +308,7 @@ describe('List', () => {
     it('should have state layer when checkbox is present', async () => {
       const el = await fixture<IListComponent>(html`
         <forge-list-item>
-          <input type="checkbox" slot="leading" />
+          <input type="checkbox" slot="start" />
           Test Item
         </forge-list-item>
       `);
@@ -320,7 +320,7 @@ describe('List', () => {
     it('should have state layer when radio button is present', async () => {
       const el = await fixture<IListComponent>(html`
         <forge-list-item>
-          <input type="radio" slot="leading" />
+          <input type="radio" slot="start" />
           Test Item
         </forge-list-item>
       `);
@@ -362,7 +362,7 @@ describe('List', () => {
         <forge-list>
           <forge-list-item>
             Test Item
-            <input type="checkbox" slot="leading" />
+            <input type="checkbox" slot="start" />
           </forge-list-item>
         </forge-list>
       `);
@@ -747,12 +747,12 @@ describe('List', () => {
   });
 
   describe('with form control', () => {
-    it('should toggle slotted leading form control when clicked', async () => {
+    it('should toggle slotted start form control when clicked', async () => {
       const el = await fixture<IListComponent>(html`
         <forge-list>
           <forge-list-item>
             Test Item
-            <input type="checkbox" slot="leading" />
+            <input type="checkbox" slot="start" />
           </forge-list-item>
         </forge-list>
       `);
@@ -766,12 +766,12 @@ describe('List', () => {
       expect(checkbox.checked).to.be.true;
     });
 
-    it('should not toggle leading checkbox if forge-ignore attribute is present', async () => {
+    it('should not toggle start checkbox if forge-ignore attribute is present', async () => {
       const el = await fixture<IListComponent>(html`
         <forge-list>
           <forge-list-item>
             Test Item
-            <input type="checkbox" slot="leading" forge-ignore />
+            <input type="checkbox" slot="start" forge-ignore />
           </forge-list-item>
         </forge-list>
       `);
@@ -790,7 +790,7 @@ describe('List', () => {
         <forge-list>
           <forge-list-item>
             <label for="the-checkbox">Test Item</label>
-            <input type="checkbox" id="the-checkbox" slot="leading" />
+            <input type="checkbox" id="the-checkbox" slot="start" />
           </forge-list-item>
         </forge-list>
       `);
@@ -814,7 +814,7 @@ describe('List', () => {
         <forge-list>
           <forge-list-item>
             Test Item
-            <input type="checkbox" slot="leading" />
+            <input type="checkbox" slot="start" />
           </forge-list-item>
         </forge-list>
       `);
@@ -865,8 +865,8 @@ async function createFixture({
       .selectedValue=${selectedValue}>
       <forge-list-item value="1">
         <button ?disabled=${disabled}>One</button>
-        ${withCheckbox ? html`<input type="checkbox" slot="trailing" />` : null}
-        ${withRadioButton ? html`<input type="radio" slot="trailing" />` : null}
+        ${withCheckbox ? html`<input type="checkbox" slot="end" />` : null}
+        ${withRadioButton ? html`<input type="radio" slot="end" />` : null}
       </forge-list-item>
       <forge-list-item value="2"><button>Two</button></forge-list-item>
       <forge-list-item value="3"><button>Three</button></forge-list-item>
