@@ -42,8 +42,8 @@ export const Default: Story<ITimePickerProps> = ({
     showHourOptions={showHourOptions}
     disabled={disabled}>
     <ForgeTextField>
-      <input autoComplete="off" type="text" id="time-picker" placeholder={`hh:mm${allowSeconds ? ':ss' : ''}${use24HourTime ? '' : ' AM'}`} />
       <label htmlFor="time-picker" slot="label">Time</label>
+      <input autoComplete="off" type="text" id="time-picker" placeholder={`hh:mm${allowSeconds ? ':ss' : ''}${use24HourTime ? '' : ' AM'}`} />
     </ForgeTextField>
   </ForgeTimePicker>
 );
