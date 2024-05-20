@@ -30,20 +30,12 @@ declare global {
  * avatar will display textual content as single characters (character count is configurable), or display an image or
  * icon based on the URL provided to it.
  * 
- * @property {string} text - The text to display in the avatar.
- * @property {number} letterCount - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
- * @property {string} imageUrl - The background image URL to use.
- * 
- * @attribute {string} text - The text to display in the avatar.
- * @attribute {number} letter-count - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
- * @attribute {string} image-url - The background image URL to use.
- * 
- * @cssproperty --forge-avatar-background - The background color of the avatar.
- * @cssproperty --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
- * @cssproperty --forge-avatar-color - The text color of the avatar.
- * @cssproperty --forge-avatar-size - The height and width of the avatar.
- * @cssproperty --forge-avatar-transition-duration - The transition duration for animations.
- * @cssproperty --forge-avatar-transition-timing - The transition timing function for animations.
+ * @cssproperty {string} --forge-avatar-background - The background color of the avatar.
+ * @cssproperty {number} --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
+ * @cssproperty {color} --forge-avatar-color - The text color of the avatar.
+ * @cssproperty {number} --forge-avatar-size - The height and width of the avatar.
+ * @cssproperty {number} --forge-avatar-transition-duration - The transition duration for animations.
+ * @cssproperty {string} --forge-avatar-transition-timing - The transition timing function for animations.
  * 
  * @csspart root - The root container element.
  * 
@@ -91,15 +83,24 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
     }
   }
 
-  /** The text to display in the avatar. */
+  /**
+   * The text to display in the avatar.
+   * @attribute
+   */
   @FoundationProperty()
   public declare text: string;
 
-  /** Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used. */
+  /**
+   * Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+   * @attribute {string} letter-count
+   */
   @FoundationProperty()
   public declare letterCount: number;
 
-  /** The background image URL to use. */
+  /**
+   * The background image URL to use.
+   * @attribute image-url
+   */
   @FoundationProperty()
   public declare imageUrl: string;
 }

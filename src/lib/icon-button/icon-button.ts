@@ -47,11 +47,6 @@ declare global {
  * @property {string} name - The name of the button.
  * @property {string} value - The form value of the button.
  * @property {boolean} dense - Whether or not the button is dense.
- * @property {boolean} anchor - Whether or not the button is an `<a>` element.
- * @property {string} href - The href of the anchor.
- * @property {string} target - The target of the anchor.
- * @property {string} download - The download of the anchor.
- * @property {string} rel - The rel of the anchor.
  * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
  * 
  * @attribute {boolean} toggle - Whether or not the icon button can be toggled.
@@ -66,11 +61,6 @@ declare global {
  * @attribute {string} name - The name of the button.
  * @attribute {string} value - The form value of the button.
  * @attribute {boolean} dense - Whether or not the button is dense.
- * @attribute {boolean} anchor - Whether or not the button is an `<a>` element.
- * @attribute {string} href - The href of the anchor.
- * @attribute {string} target - The target of the anchor.
- * @attribute {string} download - The download of the anchor.
- * @attribute {string} rel - The rel of the anchor.
  * 
  * @event {Event} click - Fires when the button is clicked.
  * @event {Event} forge-icon-button-toggle - Fires when the icon button is toggled.
