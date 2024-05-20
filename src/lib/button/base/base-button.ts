@@ -18,6 +18,8 @@ export interface IBaseButton extends IWithLabelAwareness, IWithElementInternals,
   value: string;
   dense: boolean;
   form: HTMLFormElement | null;
+  popoverTargetElement: HTMLElement | null;
+  popoverTargetAction: 'click' | 'hover';
   focus(options?: ExperimentalFocusOptions): void;
 }
 
