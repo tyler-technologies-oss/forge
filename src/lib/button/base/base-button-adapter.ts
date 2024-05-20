@@ -153,7 +153,7 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       return false;
     }
 
-    const action = this._component.getAttribute('popovertargetaction') || 'toggle';
+    const action = this._component.getAttribute('popovertargetaction') ?? this._component.popoverTargetAction ?? 'toggle';
     const isPopoverOpen = popoverElement.matches(':popover-open');
 
     switch (action) {
@@ -236,6 +236,6 @@ export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> impleme
       popoverElement = rootNode.querySelector(`#${targetId}`);
     }
 
-    return popoverElement;
+    return popoverElement as HTMLElement | null;
   }
 }

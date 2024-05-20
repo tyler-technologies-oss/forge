@@ -28,6 +28,10 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
 
   public static readonly formAssociated = true;
 
+  // PopoverInvokerElement
+  public popoverTargetElement: HTMLElement | null = null;
+  public popoverTargetAction: 'click' | 'hover' = 'click';
+
   protected abstract _foundation: T;
 
   constructor() {

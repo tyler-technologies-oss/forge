@@ -1,10 +1,10 @@
-import { getShadowElement, deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
+import { deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IAutocompleteComponent } from './autocomplete';
 import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
-import { TEXT_FIELD_CONSTANTS } from '../text-field';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
-import { CHIP_FIELD_CONSTANTS } from '../chip-field';
+import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
 import { IPopoverComponent } from '../popover/popover';
 import { POPOVER_CONSTANTS } from '../popover';
 import { IFieldComponent } from '../field/field';
@@ -288,7 +288,7 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   private _getDefaultTargetElement(): HTMLElement {
     // This component is often used with the field-like Forge elements, if so, let's target our popup
     // around one if its internal elements for proper alignment
-    const fieldLike = this._tryGetFieldLikeChild();
+    const fieldLike = this._tryGetFieldLikeChild() as ITextFieldComponent | IChipFieldComponent | null;
     if (fieldLike?.popoverTargetElement) {
       return fieldLike.popoverTargetElement;
     }
