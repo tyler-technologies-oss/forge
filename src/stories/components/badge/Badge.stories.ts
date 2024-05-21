@@ -19,9 +19,6 @@ const meta = {
   parameters: {
     controls: {
       exclude: /^(start|end)$/i,
-      include: {
-        positioned: { control: 'boolean' },
-      }
     },
     actions: { disable: true }
   },
