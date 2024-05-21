@@ -28,7 +28,7 @@ jobs:
     if: ${{ github.event.pull_request.head.repo.fork == false && needs.wf-config.outputs.deploy-storybook == 'true' && contains(github.event.pull_request.labels.*.name, 'storybook-preview') }}
     with:
       PRODUCTION_RELEASE: false
-      BUILD_DIRECTORY: dist/storybook
+      BUILD_DIRECTORY: storybook-static
       BUILD_TARGET_DIRECTORY: docs/pr/${{ github.event.pull_request.head.label }}
       BUILD_NPM_SCRIPT: "build-storybook"
       PR_COMMENT_HEADER: "View Storybook Deployment (@next)"
