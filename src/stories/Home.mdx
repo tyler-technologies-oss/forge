@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Home" />
+
+<img src="/forge-logo-full-color.svg" alt="Tyler Forge™ Design System Logo" className="homepage-logo" />
+
+# Tyler Forge™ Components
+
+Welcome to Tyler Forge™, a design system and component library for building modern web applications.
+
+Tyler Forge provides a set of UI components and styles that can be used to create consistent and accessible user interfaces. Forge is built using [Web Components][2],
+which are a set of web platform APIs that allow you to create new custom, reusable, encapsulated HTML tags to use in web pages just as you would with any other
+built-in HTML element. Web components are based on existing web standards, and can be used with any modern web framework or no framework at all.
+
+Forge components are an implementation of the [Tyler Forge™ design system][1], which provides the design language that can be used to create a consistent look and
+feel across your products and applications. The design system is a derivative of [Material Design][3], but has been tailored to the needs of Tyler Technologies
+and its broad customer base.
+
+View the GitHub repository [here][4].
+
+> Code licensed under Apache 2.0. Documentation licensed under CC BY 4.0. &copy; Tyler Technologies, Inc.
+
+[1]: https://forge.tylertech.com/
+[2]: https://developer.mozilla.org/en-US/docs/Web/API/Web_components
+[3]: https://m2.material.io/
+[4]: https://github.com/tyler-technologies-oss/forge
+
+<style>
+{`
+  .forge-storybook-dark .homepage-logo {
+    filter: brightness(0) invert(1);
+  }
+
+  .homepage-logo {
+    display: block;
+    margin-inline: auto;
+    margin-block: 16px 56px;
+    min-width: 320px;
+    width: 50%;
+  }
+`}
+</style>

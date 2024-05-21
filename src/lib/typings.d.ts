@@ -9,13 +9,3 @@ declare module '*.scss' {
   const css: string;
   export default css;
 }
-
-// Patch HTMLElement to add popover methods
-// TODO: Remove this when TypeScript is updated.
-interface HTMLElement {
-  popoverTargetElement: HTMLElement | null;
-  popover: 'manual' | 'auto' | null | undefined;
-  showPopover(): void;
-  hidePopover(): void;
-  togglePopover(): boolean;
-}

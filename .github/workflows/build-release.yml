@@ -13,6 +13,7 @@ on:
       - '.stylelintrc'
       - '.autorc'
       - '.github/workflows/**/*'
+      - '.storybook/**/*'
       - 'src/**/*'
   workflow_dispatch:
 
@@ -28,7 +29,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Prepare Repository
-        # Fetch full git history and tags
         run: git fetch --unshallow --tags
 
       - name: Cache Dependencies
@@ -91,6 +91,7 @@ jobs:
               - 'src/lib/**'
               - 'src/test/**'
             storybook:
+              - '.storybook/**'
               - 'src/lib/**'
               - 'src/stories/**'
     outputs:
@@ -137,7 +138,7 @@ jobs:
       PRODUCTION_RELEASE: true
       BUILD_DIRECTORY: dist/storybook
       BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
-      BUILD_NPM_SCRIPT: "ci:build-storybook"
+      BUILD_NPM_SCRIPT: "build-storybook"
       PR_COMMENT_HEADER: "View Storybook Deployment"
     secrets:
       GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}

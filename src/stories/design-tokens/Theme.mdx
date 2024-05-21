@@ -1,0 +1,66 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+
+<Meta title="Design Tokens/Theme" />
+
+# Theme Tokens
+
+The Forge theme is built on a set of tokens that define the colors used throughout the design system. These tokens are used to
+define the colors of the components and the overall look and feel of the design system.
+
+<ColorPalette>
+  <ColorItem
+    title="Surface Background"
+    subtitle="Use this color for the background behind a surface."
+    colors={{
+      'Surface Dim': 'var(--forge-theme-surface-dim)',
+    }}
+  />
+  <ColorItem
+    title="Surface"
+    subtitle='Use this color for the background of a surface.'
+    colors={{
+      'Surface': 'var(--forge-theme-surface)',
+    }}
+  />
+  <ColorItem
+    title="Surface Floating"
+    subtitle="Use these colors for the background of floating surfaces."
+    colors={{
+      'Surface Bright': 'var(--forge-theme-surface-bright)',
+      'Surface Inverse': 'var(--forge-theme-surface-inverse)',
+    }}
+  />
+  <ColorItem
+    title="Surface Container"
+    colors={{
+      'Surface Container': 'var(--forge-theme-surface-container)',
+      'Surface Container Minimum': 'var(--forge-theme-surface-container-minimum)',
+      'Surface Container Low': 'var(--forge-theme-surface-container-low)',
+      'Surface Container Medium': 'var(--forge-theme-surface-container-medium)',
+      'Surface Container High': 'var(--forge-theme-surface-container-high)',
+    }}
+  />
+  <ColorItem 
+    title="Brand" 
+    colors={{ Brand: 'var(--forge-theme-brand)' }} 
+  />
+  <ColorItem 
+    title="Primary" 
+    colors={{ Primary: 'var(--forge-theme-primary)' }} 
+  />
+  <ColorItem 
+    title="theme.color.secondary" 
+    subtitle="Ocean" 
+    colors={{ DodgerBlue: '#1EA7FD' }} 
+  />
+  <ColorItem
+    title="theme.color.positive"
+    subtitle="Green"
+    colors={{
+      Apple: 'rgba(102,191,60,1)',
+      Apple80: 'rgba(102,191,60,.8)',
+      Apple60: 'rgba(102,191,60,.6)',
+      Apple30: 'rgba(102,191,60,.3)',
+    }}
+  />
+</ColorPalette>
