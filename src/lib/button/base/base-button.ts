@@ -18,6 +18,8 @@ export interface IBaseButton extends IWithLabelAwareness, IWithElementInternals,
   value: string;
   dense: boolean;
   form: HTMLFormElement | null;
+  popoverTargetElement: HTMLElement | null;
+  popoverTargetAction: 'click' | 'hover';
   focus(options?: ExperimentalFocusOptions): void;
 }
 
@@ -27,6 +29,12 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   }
 
   public static readonly formAssociated = true;
+
+  // PopoverInvokerElement
+  /** @ignore */
+  public popoverTargetElement: HTMLElement | null = null;
+  /** @ignore */
+  public popoverTargetAction: 'click' | 'hover' = 'click';
 
   protected abstract _foundation: T;
 

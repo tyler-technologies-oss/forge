@@ -40,6 +40,12 @@
   white-space: nowrap;
 }
 
+@mixin content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 @mixin dot {
   @include override(height, dot-height);
   @include override(min-width, auto, value);
