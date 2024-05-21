@@ -3,7 +3,7 @@ import { IAppBarNotificationButtonAdapter } from './app-bar-notification-button-
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
 
 export interface IAppBarNotificationButtonFoundation extends ICustomElementFoundation {
-  count: number;
+  count: string | number | null | undefined;
   dot: boolean;
   theme: string;
   showBadge: boolean;
@@ -11,7 +11,7 @@ export interface IAppBarNotificationButtonFoundation extends ICustomElementFound
 }
 
 export class AppBarNotificationButtonFoundation implements IAppBarNotificationButtonFoundation {
-  private _count = 0;
+  private _count: string | number | null | undefined = 0;
   private _dot = false;
   private _theme: string;
   private _showBadge = false;
@@ -47,15 +47,22 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
     }
   }
 
-  public get count(): number {
+  public get count(): string | number | null | undefined {
     return this._count;
   }
-  public set count(value: number) {
+  public set count(value: string | number | null | undefined) {
     if (this._count !== value) {
       this._count = value;
       if (this._isInitialized) {
-        this._adapter.setCount(this._count);
-        this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, this._count as any);
+        if (!this._dot) {
+          this._adapter.setCount(this._count);
+        }
+
+        if (typeof this._count === 'string') {
+          this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, this._count);
+        } else if (value == null) {
+          this._adapter.removeHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT);
+        }
       }
     }
   }
@@ -69,10 +76,11 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
       if (this._isInitialized) {
         this._adapter.setBadgeType(this._dot);
         if (this._dot) {
-          this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT);
+          this._adapter.setCount(null);
         } else {
-          this._adapter.removeHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT);
+          this._adapter.setCount(this._count);
         }
+        this._adapter.toggleHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT, this._dot);
       }
     }
   }

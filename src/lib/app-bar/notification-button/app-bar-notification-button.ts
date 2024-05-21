@@ -18,7 +18,7 @@ declare global {
 }
 
 export interface IAppBarNotificationButtonComponent extends IBaseComponent {
-  count: number;
+  count: string | number | null | undefined;
   dot: boolean;
   showBadge: boolean;
   theme: string;
@@ -68,7 +68,7 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT:
-        this.count = coerceNumber(newValue);
+        this.count = newValue;
         break;
       case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT:
         this.dot = coerceBoolean(newValue);
@@ -86,7 +86,7 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   @FoundationProperty()
-  public declare count: number;
+  public declare count: string | number | null | undefined;
 
   @FoundationProperty()
   public declare dot: boolean;

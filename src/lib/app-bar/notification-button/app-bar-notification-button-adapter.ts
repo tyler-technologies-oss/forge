@@ -7,7 +7,7 @@ import { ICON_CONSTANTS, IIconComponent } from '../../icon';
 export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
   initialize(): void;
   setIcon(icon: string): void;
-  setCount(value: number): void;
+  setCount(value: string | number | null | undefined): void;
   setBadgeType(dot: boolean): void;
   setBadgeTheme(theme: string): void;
   setBadgeVisible(isVisible: boolean): void;
@@ -30,8 +30,8 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
     this._iconElement = getLightElement(this._component, ICON_CONSTANTS.elementName) as IIconComponent;
   }
 
-  public setCount(value: number): void {
-    this._badgeElement.textContent = value as any;
+  public setCount(value: string | number | undefined | null): void {
+    this._badgeElement.textContent = value != null ? String(value) : '';
   }
 
   public setBadgeType(dot: boolean): void {
