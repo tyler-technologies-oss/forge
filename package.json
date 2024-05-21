@@ -20,7 +20,7 @@
     "prestorybook": "npm run cem",
     "storybook": "storybook dev -p 6006",
     "prebuild-storybook": "npm run cem",
-    "build-storybook": "storybook build && touch storybook-static/.nojekyll",
+    "build-storybook": "storybook build",
     "lint": "forge lint",
     "test": "wtr --coverage --watch --group lib",
     "test:playwright": "wtr --watch --group lib --playwright --browsers chromium webkit firefox",
