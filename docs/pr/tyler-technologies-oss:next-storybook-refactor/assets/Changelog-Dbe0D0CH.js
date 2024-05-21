@@ -1,4 +1,4 @@
-import{j as t}from"./jsx-runtime-DuxY5c9J.js";import{u as n}from"./index-DpbGKmoB.js";import{M as s,f as h}from"./index-B5Lb-8cT.js";import"./iframe-CrAdnH_M.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";const l=`# v2.24.0 (Mon May 13 2024)
+import{j as t}from"./jsx-runtime-CifSrphu.js";import{u as n}from"./index-DT3B6BY4.js";import{M as s,f as h}from"./index-CKLvtY4V.js";import"./iframe-BG4P8lOX.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";const l=`# v2.24.0 (Mon May 13 2024)
 
 #### 🚀 Enhancement
 

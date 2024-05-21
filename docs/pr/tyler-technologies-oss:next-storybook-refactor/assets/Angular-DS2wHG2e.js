@@ -1,4 +1,4 @@
-import{j as e}from"./jsx-runtime-DuxY5c9J.js";import{u as s}from"./index-DpbGKmoB.js";import"./blocks-CLXcwzAk.js";import{M as r}from"./index-B5Lb-8cT.js";import"./iframe-CrAdnH_M.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";function t(o){const n={a:"a",blockquote:"blockquote",code:"code",em:"em",h1:"h1",h2:"h2",h3:"h3",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...s(),...o.components};return e.jsxs(e.Fragment,{children:[e.jsx(r,{title:"Frameworks/Angular"}),`
+import{j as e}from"./jsx-runtime-CifSrphu.js";import{u as s}from"./index-DT3B6BY4.js";import{M as r}from"./index-CKLvtY4V.js";import"./iframe-BG4P8lOX.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";function t(o){const n={a:"a",blockquote:"blockquote",code:"code",em:"em",h1:"h1",h2:"h2",h3:"h3",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...s(),...o.components};return e.jsxs(e.Fragment,{children:[e.jsx(r,{title:"Frameworks/Angular"}),`
 `,e.jsx(n.h1,{id:"angular",children:"Angular"}),`
 `,e.jsxs(n.p,{children:["Angular has ",e.jsx(n.a,{href:"https://custom-elements-everywhere.com/#angular",rel:"nofollow",children:"great support"})," for custom elements and can be used directly."]}),`
 `,e.jsxs(n.p,{children:["With that being said, while Angular ",e.jsx(n.em,{children:"can"})," be used with Forge, there are some caveats to be aware of:"]}),`
@@ -172,4 +172,4 @@ of the element. This is why you use square brackets `,e.jsx(n.code,{children:"[]
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}
-`})})]})}function x(o={}){const{wrapper:n}={...s(),...o.components};return n?e.jsx(n,{...o,children:e.jsx(t,{...o})}):t(o)}export{x as default};
+`})})]})}function y(o={}){const{wrapper:n}={...s(),...o.components};return n?e.jsx(n,{...o,children:e.jsx(t,{...o})}):t(o)}export{y as default};
