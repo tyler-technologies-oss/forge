@@ -11,10 +11,8 @@ import '@tylertech/forge/icon';
 const meta = {
   title: 'Components/Badge',
   render: args => {
-    const number = document.createElement('span');
-    number.textContent = args.text;
     const el = customElementStoryRenderer('forge-badge', args);
-    el.appendChild(number);
+    el.innerHTML = args.text;
     return el;
   },
   component: 'forge-badge',
@@ -66,7 +64,7 @@ export const WithIcon: Story = {
     return html`
     <forge-icon-button>
       <forge-icon name="notifications" style="position: absolute;"></forge-icon>
-      <forge-badge slot=badge>1</forge-badge>
+      <forge-badge slot="badge">1</forge-badge>
     </forge-icon-button>
     `;
   },
