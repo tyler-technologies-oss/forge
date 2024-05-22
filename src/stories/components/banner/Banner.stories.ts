@@ -63,7 +63,7 @@ export const Combined: Story = {
     <forge-banner>
       Minim sunt eu laborum labore minim iconium buttonium.
       <forge-icon slot="icon" name="notifications"></forge-icon>
-      <forge-button slot="button" variant="outlined" style="background: #ffffff">Learn more...</forge-button>
+      <forge-button slot="button" variant="outlined" style="--forge-button-outlined-background: white">Learn more...</forge-button>
     </forge-banner>
     `;
   },
