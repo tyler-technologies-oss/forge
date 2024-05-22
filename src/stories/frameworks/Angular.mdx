@@ -28,6 +28,8 @@ This adapter provides the following:
 
 While the adapter is not _required_ to use Forge with Angular, it is **highly** recommended to make the integration easier.
 
+> You can view source code for the Angular adapter on [GitHub](https://github.com/tyler-technologies-oss/forge-angular)
+
 ## Installation
 
 To use Forge in your Angular application, install the following packages from npm:
@@ -227,20 +229,28 @@ onSliderChange(event: CustomEvent<ISliderChangeEventData>) {
 
 ## Properties vs Attributes
 
-This is a topic that is often confused when working with custom elements in Angular. When you bind to a property on a custom element, you
-are binding to the property of the element itself, not the attribute.
+When viewing the API details for Forge components, you'll notice that there are both "properties" (camelCase) and "attributes" (snake-case)
+listed. This is because HTML elements can have both properties and attributes, and they are not the same thing. Properties are used to
+set values on the component instance, while attributes are typically used to initialize values on the DOM element.
 
-For example, when you bind to the `value` property of a `<forge-slider>` component, you are binding to the property of the component, not
-the attribute of the element.
+When using Angular with Forge, you'll most commonly use the square bracket syntax `[]` to bind values to an element. Angular will set values
+on the component instance using the **property** name.
+
+For example, to set a `value` property on an element, you would use the following syntax:
 
 ```html
-<forge-slider [value]="sliderValue"></forge-slider>
+<forge-element [value]="sliderValue"></forge-element>
 ```
 
-This is important to understand because when you bind to a property, you are binding to the component's internal state, not the attribute
-of the element. This is why you use square brackets `[]` to bind to properties.
+To initialize the value of the element using an **attribute**, you would use the following syntax:
 
-You can however
+```html
+<forge-element value="5"></forge-element>
+```
+
+> Forge components will observe changes to HTML attributes, but keep in mind that attribute values are always passed as strings to the component.
+> The component will coerce primitive values such as booleans and numbers, but more complex values such as objects or arrays will not be coerced
+> and you should use properties to pass these values.
 
 ## CUSTOM_ELEMENTS_SCHEMA
 

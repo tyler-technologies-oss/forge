@@ -2,37 +2,7 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Getting Started/Installation" />
 
-# Getting Started
-
-Welcome to Tyler Forge! This guide will help you get started with the Tyler Forge design system, and
-more specifically, how to use it in your projects.
-
-## What is Tyler Forge?
-
-Tyler Forge is a design system created by Tyler Technologies. It provides a set of reusable components,
-styles, and guidelines to help you build consistent, accessible, and user-friendly web applications without
-worrying about the design details. You handle the business logic, we handle the design.
-
-Tyler Forge is built on the principles of atomic design, which means it breaks down the UI into smaller,
-reusable components that can be combined to create more complex interfaces. This makes it easy to build
-consistent and scalable applications.
-
-The design system was originally built on top of the [Material Design](https://material.io/design) guidelines,
-but has since started to evolve into its own unique design language that is more tailored to the needs of
-Tyler Technologies and its customers.
-
-> The components documented in this site are _an implementation_ of the Tyler Forge design system. They
-> are built using web components which are a collection of browser APIs that allow you to create custom,
-> reusable, and encapsulated HTML elements. This doesn't have to be _the only implementation_ of the
-> design system. You can create your own components using the same guidelines and principles if you prefer.
->
-> See the [Tyler Forge™ Design System](https://forge.tylertech.com/) for more information on the design system itself.
-
-## Installation
-
-**Important** If your're using a framework like Angular or React, you should follow the instructions for
-integrating Forge with those frameworks. This guide covers the basic usage of Forge with plain HTML and JavaScript,
-and it can be adapted to work with other frameworks as needed.
+# Installation
 
 Before we get into the details, you first need to determine what kind of installation you need. Forge is available in two formats:
 
@@ -47,6 +17,37 @@ To install Forge as an NPM package, run the following command:
 npm install @tylertech/forge
 ```
 
+If you're using a framework, you should jump to the framework-specific guide:
+
+- [Angular](?path=/docs/frameworks-angular--docs)
+- [React](?path=/docs/frameworks-react--docs)
+- [Vue](?path=/docs/frameworks-vue--docs)
+- [Svelte](?path=/docs/frameworks-svelte--docs)
+- [Blazor](?path=/docs/frameworks-blazor--docs)
+
+#### Define Components
+
+You will then need to import and define the components you are using within your application in the browser's custom element registry.
+
+```javascript
+import { defineButtonComponent, defineTextFieldComponent } from '@tylertech/forge';
+
+// These functions should be called as early as possible when your application is bootstrapping
+defineButtonComponent();
+defineTextFieldComponent();
+```
+
+If you're prototyping, it can be handy to pull in all components:
+
+```javascript
+import { defineComponents } from '@tylertech/forge';
+
+defineComponents();
+```
+
+> Note: make sure to call the definition functions as early as possible in your application bootstrapping process to ensure they are
+> defined with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
+
 ### CDN
 
 To use Forge via CDN, include the following script tag in your HTML:
@@ -55,7 +56,7 @@ To use Forge via CDN, include the following script tag in your HTML:
 <script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@<version>/index.js"></script>
 ```
 
-Replace `<version>` with the version of Tyler Forge you want to use.
+>Replace `<version>` with the version of Tyler Forge you want to use.
 
 > Note: The CDN distributes Forge components as ES modules. This means you need to use the `type="module"` attribute in your script tag.
 
@@ -67,7 +68,7 @@ you need. You can do this by referencing the individual component files directly
 <script type="module" src="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@<version>/<component>/index.js"></script>
 ```
 
-Replace `<component>` with the name of the component you want to use.
+> Replace `<component>` with the name of the component you want to use.
 
 For example, to use `<forge-button>`, you would include the following script tag:
 
@@ -86,7 +87,3 @@ Additionally, you can use the JSDelivr CDN to load Forge components if you prefe
 ```html
 <script type="module" src="https://cdn.jsdelivr.net/npm/@tylertech/forge@<version>/dist/esm/index.js">
 ```
-
-## Usage
-
-Once you have Forge installed
