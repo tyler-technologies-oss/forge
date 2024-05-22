@@ -21,8 +21,7 @@ const preview: Preview = {
       source: { format: 'html' },
       toc: {
         contentsSelector: '.sbdocs-content',
-        headingSelector: 'h2,h3,h4',
-        ignoreSelector: '#primary'
+        headingSelector: 'h2,h3,h4'
       },
     },
     darkMode: { light, dark },

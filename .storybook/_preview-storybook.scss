@@ -36,10 +36,75 @@ body,
   color: var(--forge-theme-text-high);
 }
 
+//
+// Blockquote
+//
+
 blockquote {
   p {
     color: var(--forge-theme-text-medium) !important;
   }
+}
+
+//
+// ArgTypes
+//
+
+.docblock-argstable {
+  tr td {
+    background-color: var(--forge-theme-surface) !important;
+    border-color: var(--forge-theme-outline) !important;
+  }
+
+  tr[title] td {
+    background-color: var(--forge-theme-surface-container-minimum) !important;
+  }
+
+  tr[title]:hover td {
+    background-color: var(--forge-theme-surface-container-low) !important;
+  }
+  
+  tr[title] td > span {
+    color: var(--forge-theme-on-surface-container);
+
+    svg {
+      color: inherit;
+    }
+  }
+
+  tr:not([title]) td > span {
+    color: var(--forge-theme-text-medium);
+  }
+}
+
+//
+// Tables
+//
+
+.sbdocs.sbdocs-content table :is(td,th) {
+  color: var(--forge-theme-text-high);
+  border-color: var(--forge-theme-outline);
+}
+
+/* Even rows */
+.sbdocs.sbdocs-content table tr:nth-child(even) {
+  background-color: var(--forge-theme-surface);
+}
+
+//
+// Table of Contents
+//
+
+.toc-wrapper .toc-list .toc-list-item > a {
+  color: var(--forge-theme-text-medium);
+}
+
+.sbdocs-wrapper.sbdocs .toc-wrapper > .toc-list {
+  border-color: var(--forge-theme-outline);
+}
+
+.toc-wrapper .toc-list .toc-list-item.is-active-li::before {
+  border-color: var(--forge-theme-outline-high);
 }
 
 div:has(> .toc-wrapper) {

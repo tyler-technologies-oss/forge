@@ -7,60 +7,338 @@ import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
 The Forge theme is built on a set of tokens that define the colors used throughout the design system. These tokens are used to
 define the colors of the components and the overall look and feel of the design system.
 
+## Surface
+
+The surface colors are used to define the background colors for content areas.
+
 <ColorPalette>
   <ColorItem
-    title="Surface Background"
-    subtitle="Use this color for the background behind a surface."
-    colors={{
-      'Surface Dim': 'var(--forge-theme-surface-dim)',
-    }}
-  />
-  <ColorItem
     title="Surface"
-    subtitle='Use this color for the background of a surface.'
-    colors={{
-      'Surface': 'var(--forge-theme-surface)',
-    }}
-  />
+    subtitle="Used for the background color of content areas."
+    colors={['var(--forge-theme-surface)']} />
   <ColorItem
-    title="Surface Floating"
-    subtitle="Use these colors for the background of floating surfaces."
-    colors={{
-      'Surface Bright': 'var(--forge-theme-surface-bright)',
-      'Surface Inverse': 'var(--forge-theme-surface-inverse)',
-    }}
-  />
+    title="Surface Dim"
+    subtitle="The background color for content areas that are less prominent and typically used behind surfaces to draw contrast."
+    colors={['var(--forge-theme-surface-dim)']} />
+  <ColorItem
+    title="Surface Bright"
+    subtitle="An alternate surface color typically use for floating surfaces."
+    colors={['var(--forge-theme-surface-bright)']} />
+  <ColorItem
+    title="Surface Inverse"
+    subtitle="An inverse surface color typically used for floating surfaces the require more emphasis."
+    colors={['var(--forge-theme-surface-inverse)']} />
   <ColorItem
     title="Surface Container"
-    colors={{
-      'Surface Container': 'var(--forge-theme-surface-container)',
-      'Surface Container Minimum': 'var(--forge-theme-surface-container-minimum)',
-      'Surface Container Low': 'var(--forge-theme-surface-container-low)',
-      'Surface Container Medium': 'var(--forge-theme-surface-container-medium)',
-      'Surface Container High': 'var(--forge-theme-surface-container-high)',
-    }}
-  />
+    subtitle=""
+    colors={['var(--forge-theme-surface-container)']} />
+  <ColorItem
+    title="Surface Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-surface-container-minimum)']} />
+  <ColorItem
+    title="Surface Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-surface-container-low)']} />
+  <ColorItem
+    title="Surface Container Medium"
+    subtitle=""
+    colors={['var(--forge-theme-surface-container-medium)']} />
+  <ColorItem
+    title="Surface Container High"
+    subtitle=""
+    colors={['var(--forge-theme-surface-container-high)']} />
+</ColorPalette>
+
+## Brand
+
+The brand colors are used to define the primary colors of the design system.
+
+<ColorPalette>
   <ColorItem 
     title="Brand" 
-    colors={{ Brand: 'var(--forge-theme-brand)' }} 
-  />
-  <ColorItem 
-    title="Primary" 
-    colors={{ Primary: 'var(--forge-theme-primary)' }} 
-  />
-  <ColorItem 
-    title="theme.color.secondary" 
-    subtitle="Ocean" 
-    colors={{ DodgerBlue: '#1EA7FD' }} 
-  />
-  <ColorItem
-    title="theme.color.positive"
-    subtitle="Green"
-    colors={{
-      Apple: 'rgba(102,191,60,1)',
-      Apple80: 'rgba(102,191,60,.8)',
-      Apple60: 'rgba(102,191,60,.6)',
-      Apple30: 'rgba(102,191,60,.3)',
-    }}
-  />
+    subtitle="The brand identity color, typically used for app bars and other prominent elements."
+    colors={['var(--forge-theme-brand)']} />
 </ColorPalette>
+
+## Primary
+
+Primary colors are the main colors used throughout the design system.
+
+<ColorPalette>
+  <ColorItem
+    title="Primary"
+    subtitle=""
+    colors={['var(--forge-theme-primary)']} />
+  <ColorItem
+    title="Primary Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-primary-container-minimum)']} />
+  <ColorItem
+    title="Primary Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-primary-container-low)']} />
+  <ColorItem
+    title="Primary Container"
+    subtitle=""
+    colors={['var(--forge-theme-primary-container)']} />
+  <ColorItem
+    title="Primary Container High"
+    subtitle=""
+    colors={['var(--forge-theme-primary-container-high)']} />
+</ColorPalette>
+
+## Secondary
+
+Secondary colors complement the primary colors and are used to provide additional visual interest.
+
+<ColorPalette>
+  <ColorItem
+    title="Secondary"
+    subtitle=""
+    colors={['var(--forge-theme-secondary)']} />
+  <ColorItem
+    title="Secondary Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-secondary-container-minimum)']} />
+  <ColorItem
+    title="Secondary Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-secondary-container-low)']} />
+  <ColorItem
+    title="Secondary Container"
+    subtitle=""
+    colors={['var(--forge-theme-secondary-container)']} />
+  <ColorItem
+    title="Secondary Container High"
+    subtitle=""
+    colors={['var(--forge-theme-secondary-container-high)']} />
+</ColorPalette>
+
+## Tertiary
+
+Tertiary colors are used to provide additional visual interest and are typically used for less prominent elements, but still complement the primary color.
+
+<ColorPalette>
+  <ColorItem
+    title="Tertiary"
+    subtitle=""
+    colors={['var(--forge-theme-tertiary)']} />
+  <ColorItem
+    title="Tertiary Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-tertiary-container-minimum)']} />
+  <ColorItem
+    title="Tertiary Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-tertiary-container-low)']} />
+  <ColorItem
+    title="Tertiary Container"
+    subtitle=""
+    colors={['var(--forge-theme-tertiary-container)']} />
+  <ColorItem
+    title="Tertiary Container High"
+    subtitle=""
+    colors={['var(--forge-theme-tertiary-container-high)']} />
+</ColorPalette>
+
+## Success
+
+Success colors are used to indicate successful actions or states.
+
+<ColorPalette>
+  <ColorItem
+    title="Success"
+    subtitle=""
+    colors={['var(--forge-theme-success)']} />
+  <ColorItem
+    title="Success Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-success-container-minimum)']} />
+  <ColorItem
+    title="Success Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-success-container-low)']} />
+  <ColorItem
+    title="Success Container"
+    subtitle=""
+    colors={['var(--forge-theme-success-container)']} />
+  <ColorItem
+    title="Success Container High"
+    subtitle=""
+    colors={['var(--forge-theme-success-container-high)']} />
+</ColorPalette>
+
+## Error
+
+Error colors are used to indicate errors or failed actions or states.
+
+<ColorPalette>
+  <ColorItem
+    title="Error"
+    subtitle=""
+    colors={['var(--forge-theme-error)']} />
+  <ColorItem
+    title="Error Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-error-container-minimum)']} />
+  <ColorItem
+    title="Error Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-error-container-low)']} />
+  <ColorItem
+    title="Error Container"
+    subtitle=""
+    colors={['var(--forge-theme-error-container)']} />
+  <ColorItem
+    title="Error Container High"
+    subtitle=""
+    colors={['var(--forge-theme-error-container-high)']} />
+</ColorPalette>
+
+## Warning 
+
+Warning colors are used to indicate warnings or cautionary actions or states.
+
+<ColorPalette>
+  <ColorItem
+    title="Warning"
+    subtitle=""
+    colors={['var(--forge-theme-warning)']} />
+  <ColorItem
+    title="Warning Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-warning-container-minimum)']} />
+  <ColorItem
+    title="Warning Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-warning-container-low)']} />
+  <ColorItem
+    title="Warning Container"
+    subtitle=""
+    colors={['var(--forge-theme-warning-container)']} />
+  <ColorItem
+    title="Warning Container High"
+    subtitle=""
+    colors={['var(--forge-theme-warning-container-high)']} />
+</ColorPalette>
+
+## Info
+
+Info colors are used to indicate informational actions or states.
+
+<ColorPalette>
+  <ColorItem
+    title="Info"
+    subtitle=""
+    colors={['var(--forge-theme-info)']} />
+  <ColorItem
+    title="Info Container Minimum"
+    subtitle=""
+    colors={['var(--forge-theme-info-container-minimum)']} />
+  <ColorItem
+    title="Info Container Low"
+    subtitle=""
+    colors={['var(--forge-theme-info-container-low)']} />
+  <ColorItem
+    title="Info Container"
+    subtitle=""
+    colors={['var(--forge-theme-info-container)']} />
+  <ColorItem
+    title="Info Container High"
+    subtitle=""
+    colors={['var(--forge-theme-info-container-high)']} />
+</ColorPalette>
+
+## Text
+
+The text colors are used to define the colors of text elements with varying emphasis levels.
+
+<ColorPalette>
+  <ColorItem
+    title="Text High"
+    subtitle="The high emphasis text color."
+    colors={['var(--forge-theme-text-high)']} />
+  <ColorItem
+    title="Text High Inverse"
+    subtitle="The inverse high emphasis text color."
+    colors={['var(--forge-theme-text-high-inverse)']} />
+  <ColorItem
+    title="Text Medium"
+    subtitle="The medium emphasis text color."
+    colors={['var(--forge-theme-text-medium)']} />
+  <ColorItem
+    title="Text Medium Inverse"
+    subtitle="The inverse medium emphasis text color."
+    colors={['var(--forge-theme-text-medium-inverse)']} />
+  <ColorItem
+    title="Text Low"
+    subtitle="The low emphasis text color."
+    colors={['var(--forge-theme-text-low)']} />
+  <ColorItem
+    title="Text Low Inverse"
+    subtitle="The inverse low emphasis text color."
+    colors={['var(--forge-theme-text-low-inverse)']} />
+  <ColorItem
+    title="Text Lowest"
+    subtitle="The lowest emphasis text color."
+    colors={['var(--forge-theme-text-lowest)']} />
+  <ColorItem
+    title="Text Lowest Inverse"
+    subtitle="The inverse lowest emphasis text color."
+    colors={['var(--forge-theme-text-lowest-inverse)']} />
+</ColorPalette>
+
+## Outline
+
+The outline colors are used to define the colors of outline or border of elements with varying emphasis levels.
+
+<ColorPalette>
+  <ColorItem
+    title="Outline"
+    subtitle="The color of standard emphasis outline elements."
+    colors={['var(--forge-theme-outline)']} />
+  <ColorItem
+    title="Outline Low"
+    subtitle="The color of low emphasis outline elements."
+    colors={['var(--forge-theme-outline-low)']} />
+  <ColorItem
+    title="Outline Medium"
+    subtitle="The color of medium emphasis outline elements."
+    colors={['var(--forge-theme-outline-medium)']} />
+  <ColorItem
+    title="Outline High"
+    subtitle="The color of high emphasis outline elements."
+    colors={['var(--forge-theme-outline-high)']} />
+</ColorPalette>
+
+<style>
+{`
+/* Header Columns */
+.docblock-colorpalette > div > div {
+  color: var(--forge-theme-text-medium);
+}
+
+/* First column */
+.docblock-colorpalette > div > div:first-child {
+  margin-inline-end: 16px;
+  flex-basis: 50%;
+}
+
+/* Second column swatch */
+.docblock-colorpalette > div:not(:first-child) > div:last-child > div > div:first-child {
+  border-radius: 0;
+  border: 1px solid var(--forge-theme-outline);
+}
+
+/* Title */
+.docblock-colorpalette > div > div:first-child > div:first-child {
+  color: var(--forge-theme-text-high);
+}
+
+/* Subtitle */
+.docblock-colorpalette > div > div:first-child > div:nth-child(2) {
+  color: var(--forge-theme-text-medium);
+}
+`}
+</style>
