@@ -43,6 +43,10 @@ $host-tokens: [display disabled-cursor];
 // Anchor
 //
 
+.with-anchor {
+  @include with-anchor;
+}
+
 ::slotted(a) {
   @include anchor-base;
 
