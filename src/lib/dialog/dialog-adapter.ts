@@ -5,7 +5,7 @@ import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { DialogComponent, IDialogComponent } from './dialog';
 import { dialogStack, DIALOG_CONSTANTS, hideBackdrop, showBackdrop } from './dialog-constants';
 
-export interface IDialogAdapter extends IBaseAdapter {
+export interface IDialogAdapter extends IBaseAdapter<IDialogComponent> {
   readonly hostElement: IDialogComponent;
   readonly moveHandleElement: HTMLElement;
   readonly surfaceElement: HTMLElement;

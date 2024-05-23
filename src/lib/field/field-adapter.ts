@@ -6,7 +6,7 @@ import { FieldLabelPosition } from './base/base-field-constants';
 import { IFieldComponent } from './field';
 import { FIELD_CONSTANTS } from './field-constants';
 
-export interface IFieldAdapter extends IBaseAdapter {
+export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
   readonly focusIndicator: IFocusIndicatorComponent;
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   addPopoverIconClickListener(listener: EventListener): void;

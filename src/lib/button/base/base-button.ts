@@ -23,7 +23,7 @@ export interface IBaseButton extends IWithLabelAwareness, IWithElementInternals,
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(BaseComponent))) implements IBaseButton {
+export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter<IBaseButton>>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(BaseComponent))) implements IBaseButton {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
   }

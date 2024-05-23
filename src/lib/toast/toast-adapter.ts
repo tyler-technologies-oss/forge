@@ -6,7 +6,7 @@ import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IToastComponent } from './toast';
 import { TOAST_CONSTANTS } from './toast-constants';
 
-export interface IToastAdapter extends IBaseAdapter {
+export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
   show(): void;
   hide(): void;
   addCloseListener(listener: EventListener): void;

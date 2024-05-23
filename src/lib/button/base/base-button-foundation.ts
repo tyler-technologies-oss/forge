@@ -3,6 +3,7 @@ import { ExperimentalFocusOptions } from '../../constants';
 import { task } from '../../core/utils/event-utils';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonClickOptions, ButtonType } from './base-button-constants';
+import { IBaseButton } from './base-button';
 
 export interface IBaseButtonFoundation extends ICustomElementFoundation {
   type: ButtonType;
@@ -13,7 +14,7 @@ export interface IBaseButtonFoundation extends ICustomElementFoundation {
   focus(options?: ExperimentalFocusOptions): void;
 }
 
-export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter> implements IBaseButtonFoundation {
+export abstract class BaseButtonFoundation<T extends IBaseButtonAdapter<IBaseButton>> implements IBaseButtonFoundation {
   private _type: ButtonType = 'button'; // We default our buttons to the "button" type instead of "submit" as that is more common
   private _disabled = false;
   private _popoverIcon = false;

@@ -64,6 +64,19 @@ export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundat
   public override initialize(): void {
     super.initialize();
 
+    this._adapter.tryApplyGlobalConfiguration([
+      'placement',
+      'animationType',
+      'positionStrategy',
+      'shift',
+      'hide',
+      'flip',
+      'boundaryElement',
+      'fallbackPlacements',
+      'persistent',
+      'arrow'
+    ]);
+
     if (!this.anchorElement) {
       this._adapter.tryLocateAnchorElement(this._anchor);
     }

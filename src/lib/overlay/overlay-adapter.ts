@@ -16,7 +16,7 @@ import {
   SUPPORTS_POPOVER
 } from './overlay-constants';
 
-export interface IOverlayAdapter extends IBaseAdapter {
+export interface IOverlayAdapter extends IBaseAdapter<IOverlayComponent> {
   show(): void;
   hide(): void;
   tryHideDescendantOverlays(): void;
