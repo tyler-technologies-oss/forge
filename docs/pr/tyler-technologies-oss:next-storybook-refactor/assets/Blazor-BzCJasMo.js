@@ -1,0 +1,3 @@
+import{j as o}from"./jsx-runtime-JVS8tgJX.js";import{u as e}from"./index-Td0tMaUn.js";import{M as m}from"./index-7_lP9Yc2.js";import"./iframe-I1AcJgv1.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";function r(t){const n={h1:"h1",p:"p",...e(),...t.components};return o.jsxs(o.Fragment,{children:[o.jsx(m,{title:"Frameworks/Blazor"}),`
+`,o.jsx(n.h1,{id:"blazor",children:"Blazor"}),`
+`,o.jsx(n.p,{children:"Coming soon..."})]})}function h(t={}){const{wrapper:n}={...e(),...t.components};return n?o.jsx(n,{...t,children:o.jsx(r,{...t})}):r(t)}export{h as default};
