@@ -1,34 +1,38 @@
-import { Meta, Title, Primary, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as BadgeStories from './Badge.stories';
 
 <Meta of={BadgeStories} />
 
 <Title />
 
-The badge component is intended to be used as a static, non-interactive element on the page for displaying labels. If you need to make the element interactive you should consider using the chip component instead.
+Badges are used to highlight an item's status for quick recognition. They are non-interactive and are typically used to convey information such as a count, status, or category.
 
-This component supports built-in predefined themes, as well as common positioning utilities when used with other components such as the icon button component.
+> If you need an interactive badge-like element, consider using [Chips](/?path=/docs/components-badge--docs).
 
-## Default
-
-<Canvas of={BadgeStories.Default} />
+<Canvas of={BadgeStories.Demo} />
 
 ## Themed
 
 <Canvas of={BadgeStories.Themed} />
 
-## With Icon
+## Strong
 
-You can compose Badges together with icons using the `<forge-button-icon>` component. The Badge will automatically
-apply the proper dimensions to the icon.
+Badges can be styled with a `strong` variant to emphasize their importance.
 
-<Canvas of={BadgeStories.WithIcon} />
+<Canvas of={BadgeStories.Strong} />
+
+## With Icon Button
+
+Badges are commonly composed together with the [icon button](/?path=/docs/components-icon-button--docs) component via the `badge` slot.
+
+<Canvas of={BadgeStories.WithIconButton} />
 
 ## API
 
-<ArgTypes exclude={['text']} />
+<CustomArgTypes />
 
 ## Accessibility
-- If necessary, include a `role` attribute to indicate to screen readers what the badge is being used for.
-- Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.1 requirements.
+
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.2 requirements.
 - If color conveys important information, provide additional cues for users with color perception deficiencies such as an icon.

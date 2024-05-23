@@ -1,4 +1,5 @@
-import { Meta, Title, Primary, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as AvatarStories from './Avatar.stories';
 
 <Meta of={AvatarStories} />
@@ -9,7 +10,7 @@ Avatars allow you to provide text or images to display that represent an entity.
 display text content as single characters (character count is configurable), or display an icon or image
 based on the URL provided to it.
 
-<Canvas of={AvatarStories.Default} />
+<Canvas of={AvatarStories.Demo} />
 
 ## With Icon
 
@@ -35,7 +36,7 @@ Avatars can be composed within other components, such as icon buttons.
 
 ## API
 
-<ArgTypes />
+<CustomArgTypes />
 
 ## Accessibility
 
