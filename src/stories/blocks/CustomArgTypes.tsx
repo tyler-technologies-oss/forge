@@ -4,11 +4,20 @@ import { TagItem, getCustomElementsTagDeclaration } from '../utils';
 
 import styles from './CustomArgTypes.module.scss';
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function UsageLink({ text, href }: { text: string; href: string }) {
+  return (
+    <p>
+      <i>Learn more about <a href={`/${href}`}>{text}</a>.</i>
+    </p>
+  );
+}
+
+function Section({ title, hrefText, href, children }: { title: string; hrefText?: string; href?: string; children: React.ReactNode }) {
   return (
     <section className={(styles as any).section}>
       <Subheading>{title}</Subheading>
       {children}
+      {href && hrefText ? <UsageLink text={hrefText} href={href} /> : null}
     </section>
   );
 }
@@ -162,37 +171,37 @@ export default function CustomArgTypes() {
   return (
     <div>
       {!!properties?.length && 
-        <Section title="Properties">
+        <Section title="Properties" hrefText="Properties" href="?path=/docs/getting-started-usage--docs#properties--attributes">
           <PropsAttrsTable items={properties} />
         </Section>}
       
       {!!attributes?.length &&
-        <Section title="Attributes">
+        <Section title="Attributes" hrefText="Attributes" href="?path=/docs/getting-started-usage--docs#properties--attributes">
           <PropsAttrsTable items={attributes} />
         </Section>}
 
       {!!events?.length &&
-        <Section title="Events">
+        <Section title="Events" hrefText="Events" href="?path=/docs/getting-started-usage--docs#events">
           <EventsTable items={events} />
         </Section>}
       
       {!!slots?.length &&
-        <Section title="Slots">
+        <Section title="Slots" hrefText="Slots" href="?path=/docs/getting-started-usage--docs#slots">
           <NameDescriptionTable items={slots} />
         </Section>}
 
       {!!methods?.length &&
-        <Section title="Methods">
+        <Section title="Methods" hrefText="Slots" href="?path=/docs/getting-started-usage--docs#methods">
           <MethodsTable items={methods} />
         </Section>}
       
       {!!cssProperties?.length &&
-        <Section title="CSS Custom Properties">
+        <Section title="CSS Custom Properties" hrefText="CSS Custom Properties" href="?path=/docs/getting-started-usage--docs#css-custom-properties">
           <NameDescriptionTable items={cssProperties} />
         </Section>}
       
       {!!cssParts?.length &&
-        <Section title="CSS Parts">
+        <Section title="CSS Shadow Parts" hrefText="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts">
           <NameDescriptionTable items={cssParts} />
         </Section>}
     </div>

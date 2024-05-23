@@ -4,11 +4,221 @@ import { Meta } from '@storybook/blocks';
 
 # Usage
 
-Once you've installed Forge, configured your application to use the proper font, typography, theme, and icons, you can start using
-the components to create your application. Forge components are designed to be flexible and easy to use, and can be composed together
-to create complex interfaces more quickly. Let's look at some of the key components and how you can use them in your application.
+Tyler Forge components are custom HTML elements built as [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components).
+This means that you can use them in any front-end framework or library, such as React, Angular, Vue, or vanilla JavaScript and can be used
+just like any other built-in HTML element. Each component has API documentation that describes the properties, events, and methods that
+it supports, as well as examples of how to use the component in your application.
 
-## Scaffold
+## Properties & Attributes
+
+Tyler Forge components have a set of properties and attributes that you can use to customize the appearance and behavior of the component.
+
+HTML attributes use kebab-case (dash-separated) names, while JavaScript properties use camelCase (camelCased) names. Almost all attributes
+have a corresponding JavaScript property, and setting the property will update the attribute, and vice versa. The only exception to this
+is when complex data types such as objects or arrays are used, in which case you should use the property to set the value.
+
+> All HTML attributes are passed as strings to the element. For primitive data types, such as numbers and booleans, the element will
+> automatically coerce the attribute value to the correct type before setting the internal property in most cases.
+
+Properties are used to set values programmatically, while attributes are used to set values declaratively in the HTML (typically for default
+values on the element):
+
+```html
+<forge-button variant="raised">Click Me</forge-button>
+```
+
+In the example above, the `variant` property is set to `"raised"` to create a raised button. You can also set the `variant` attribute in the JavaScript like this:
+
+```javascript
+const button = document.querySelector('forge-button');
+button.variant = 'raised';
+```
+
+### Boolean attributes
+
+Some properties are boolean attributes, which means that they can be set to `true` or `false` by the **existence** of the attribute on the element:
+
+```html
+<forge-button disabled>Button</forge-button>
+```
+
+> It's important to note that boolean attributes are set to `true` when the attribute is present, regardless of the value.
+>
+> In the follwing example, the `disabled` attribute is set to `false` but the button will still be disabled:
+> 
+> ```html
+> <forge-button disabled="false">Button</forge-button>
+> ```
+>
+> You would to remove the attribute from the element to set the underlying `disabled` property to `false`.
+
+
+## Events
+
+Tyler Forge components emit events that you can listen for in your application. Events are used to notify you when something happens, such as a button being
+clicked or a dialog being closed.
+
+### Custom Events
+
+You can listen for native events like `click` on any Tyler Forge component, but some components also emit custom events that you can listen for.
+
+Custom events are prefixed with the component name, followed by a hyphen, and then the event name. For example, the `forge-dialog` component emits
+a `forge-dialog-close` event when the dialog is closed. See the API docs page for each component to see which events it supports.
+
+```javascript
+const dialog = document.querySelector('forge-dialog');
+dialog.addEventListener('forge-dialog-close', () => {
+  console.log('Dialog closed');
+});
+```
+
+## Methods
+
+Many Tyler Forge components have JavaScript methods that you can use to interact with the component programmatically. Methods are used to
+perform actions on the component, such as opening a dialog or showing a snackbar.
+
+```html
+<forge-dialog>Content</forge-dialog>
+
+<script>
+  const button = document.querySelector('forge-dialog');
+  button.show();
+</script>
+```
+
+## Slots
+
+Tyler Forge components use [slots](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot) to allow you to place content inside the
+component. Slots are used to define where the content should be placed, and can be named or unnamed.
+
+Named slots are used to place content in a specific location within the component, while unnamed slots are used to place content in the
+default location. Some components have multiple named slots that you can use to place content in different locations.
+
+```html
+<forge-scaffold>
+  <forge-app-bar slot="header" title-text="My Application"></forge-app-bar>
+  <main slot="body">
+    <forge-card>
+      <p>My Content</p>
+    </forge-card>
+  </main>
+  <forge-footer slot="footer">
+    <p>My Footer</p>
+  </forge-footer>
+</forge-scaffold>
+```
+
+In the example above, the `forge-app-bar` component is placed in the `header` slot, the `forge-card` component is placed in the `body` slot,
+and the `forge-footer` component is placed in the `footer` slot. Note that the content placed within the `<forge-card>` component is placed
+in the default (unnamed) slot.
+
+## CSS Custom Properties
+
+Many Tyler Forge components support design tokens, which are implemented as [CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+(also referred to as CSS variables) to allow you to customize the appearance of an element using CSS.
+
+CSS custom properties are defined using the `--` prefix, followed by the property name, and are set using the `var()` function in CSS. See the
+API docs page for each component to see which custom properties it supports.
+
+```html
+<style>
+  .my-custom-button {
+    --forge-button-background: red;
+    --forge-button-color: white;
+  }
+</style>
+
+<forge-button class="my-custom-button">Button</forge-button>
+```
+
+> Custom properties are a powerful feature that allows you to customize the appearance of an element using CSS, but they should be used sparingly
+> to maintain design consistency across applications.
+
+## CSS Shadow Parts
+
+Tyler Forge components use [CSS shadow parts](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_shadow_parts) to allow you to style the internal
+"parts" of an element using CSS. Shadow parts are defined using the `::part()` pseudo-element, and can be used to fully customize the appearance
+of an element.
+
+```css
+forge-button::part(root) {
+  padding: 24px;
+  background-color: red;
+  color: white;
+}
+```
+
+> While shadow parts are a powerful feature, they should be used sparingly, as they can make it difficult to maintain and update the component in the future
+> if the internals of the component change, and they can also make it difficult to maintain design consistency across applications.
+
+## Flash of Unstyled Content (FOUC)
+
+When using Tyler Forge components, you may experience  what is referred to as "flash of unstyled content: or FOUC when the page loads. This is
+caused by the browser rendering the page before the Forge elements have been what is referred to use "upgraded" by the browser. Upgrading a
+custom element is the process of defining the element with the browser's custom element registry, which allows the browser to instantiate the
+element and apply the custom element's styles, template, and behavior.
+
+There are a few ways to prevent FOUC when using Tyler Forge, or more specifically custom elements in general:
+
+1. Use the `:defined` pseudo-class to hide the content until the custom elements have been upgraded:
+
+```css
+/* Hide the content until the custom elements have been upgraded */
+:not(:defined) {
+  visbiility: hidden;
+}
+```
+
+> Note: Use `visibility: hidden` instead of `display: none` to prevent layout shifts when the elements are upgraded.
+
+2. Using the `customElements.whenDefined()` method to wait for the custom elements to be defined before rendering the content:
+
+```javascript
+// Wait for a specific custom element to be defined
+customElements.whenDefined('forge-button').then(() => {
+  // Do something after the custom element has been defined
+});
+
+// Wait for all custom elements to be defined with `Promise.allSettled()`
+Promise.allSettled([
+  customElements.whenDefined('forge-scaffold'),
+  customElements.whenDefined('forge-card'),
+]).then(() => {
+  // Do something after all custom elements have been defined
+});
+```
+
+One way to handle this situation more gracefully is to fade in the content once the custom elements have been defined. You can do this by
+adding a CSS transition to the `body` element that fades in the content once a CSS class has been added:
+
+```html
+<style>
+  body {
+    opacity: 0;
+  }
+
+  body.ready {
+    opacity: 1;
+    transition: opacity 200ms ease-in-out;
+  }
+</style>
+
+<script>
+  await Promise.allSettled([
+    customElements.whenDefined('forge-app-bar'),
+    customElements.whenDefined('forge-scaffold'),
+    customElements.whenDefined('forge-card')
+  ]);
+
+  document.body.classList.add('ready');
+</script>
+```
+
+## Key Components
+
+Now that you understand how to install and use Forge, let's take a look at some of the key components that Forge provides.
+
+### Scaffold
 
 The `<forge-scaffold>` component is a layout component that you can use for the base layout of your application. It provides a
 set of named slots that you can use to place your content, and handles the scrolling and overflow of the content for you.
@@ -32,7 +242,7 @@ set of named slots that you can use to place your content, and handles the scrol
 
 > The scaffold component is great for a top-level layout, but you can also use it within other components, such as dialogs and cards, to utilize the same layout structure.
 
-## App Bar
+### App Bar
 
 The `<forge-app-bar>` component is a header component that you can use to display the logo and title of your application, as well as any actions and/or navigation items.
 
@@ -48,7 +258,7 @@ An app bar gives your application an identity, consistent look and feel, and pro
 </forge-app-bar>
 ```
 
-## Card
+### Card
 
 The `<forge-card>` component is a container component that you can use to group related content together. It provides a consistent
 surface for your content, and can be used to display information, actions, and other components.
@@ -60,7 +270,7 @@ surface for your content, and can be used to display information, actions, and o
 </forge-card>
 ```
 
-## Toolbar
+### Toolbar
 
 The `<forge-toolbar>` component is a layout component that you can use to display a title or other content at the top of a page or section.
 

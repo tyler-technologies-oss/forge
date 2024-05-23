@@ -1,16 +1,10 @@
 import type { Preview } from '@storybook/web-components';
 import { addons } from '@storybook/preview-api';
-// import { setCustomElementsManifest } from '@storybook/web-components';
 import { light, dark } from './forge-theme';
-// import cem from '../dist/cem/custom-elements.json';
-
-// window['__FORGE_STORYBOOK_CUSTOM_ELEMENTS_MANIFEST__'] = cem;
 
 import '@tylertech/forge/theme/forge-theme.scss';
 import '@tylertech/forge/forge-tokens.scss';
 import './preview-global.scss';
-
-// setCustomElementsManifest(cem);
 
 const toggleDarkTheme = value => document.body.classList.toggle('forge-storybook-dark', value);
 const channel = addons.getChannel();
@@ -37,7 +31,9 @@ const preview: Preview = {
             'Usage',
             'Typography',
             'Theming',
+            'Accessibility',
             'Customization',
+            'Forms'
           ],
           'Frameworks',
           [
