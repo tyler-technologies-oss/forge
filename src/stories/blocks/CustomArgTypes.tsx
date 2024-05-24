@@ -191,7 +191,7 @@ export default function CustomArgTypes() {
         </Section>}
 
       {!!methods?.length &&
-        <Section title="Methods" hrefText="Slots" href="?path=/docs/getting-started-usage--docs#methods">
+        <Section title="Methods" hrefText="Methods" href="?path=/docs/getting-started-usage--docs#methods">
           <MethodsTable items={methods} />
         </Section>}
       

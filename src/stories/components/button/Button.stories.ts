@@ -6,6 +6,7 @@ import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon';
+import '@tylertech/forge/circular-progress';
 
 const component = 'forge-button';
 
@@ -60,6 +61,25 @@ export const Variants: Story = {
   }
 };
 
+export const Anchor: Story = {
+  parameters: {
+    controls: { include: ['variant'] },
+  },
+  args: {
+    variant: 'raised'
+  },
+  render: ({ variant }) => {
+    return html`
+      <forge-button .variant=${variant}>
+        <a href="javascript: void(0);">
+          Anchor button
+          <forge-icon slot="end" name="open_in_new"></forge-icon>
+        </a>
+      </forge-button>
+    `;
+  }
+};
+
 export const Themed: Story = {
   parameters: {
     controls: { include: ['variant'] },
@@ -97,9 +117,26 @@ export const WithIcon: Story = {
   render: ({ variant, iconSlot }) => {
     IconRegistry.define(tylIconForgeLogo);
     return html`
-      <forge-button variant=${variant}>
+      <forge-button .variant=${variant}>
         <forge-icon slot=${iconSlot} name="forge_logo"></forge-icon>
         Button
+      </forge-button>
+    `;
+  }
+};
+
+export const WithCircularProgress: Story = {
+  parameters: {
+    controls: { include: ['variant', 'theme', 'disabled'] },
+  },
+  args: {
+    variant: 'raised'
+  },
+  render: ({ variant, theme, disabled }) => {
+    return html`
+      <forge-button .variant=${variant} .theme=${theme} ?disabled=${disabled}>
+        Loading...
+        <forge-circular-progress slot="end" aria-label="Loading something important"></forge-circular-progress>
       </forge-button>
     `;
   }

@@ -32,18 +32,24 @@ type Story = StoryObj;
 
 export const Demo: Story = {};
 
-const imageUrl = 'https://cdn.forge.tylertech.com/v1/icons/svg/custom/forge_logo.svg';
 export const WithImage: Story = {
   parameters: {
-    controls: { disable: true }
+    controls: { include: /^--|imageUrl/ }
   },
   args: {
-    imageUrl
+    imageUrl: '/ruby.jpg'
+  },
+  render: ({ imageUrl }) => {
+    return html`
+      <forge-avatar image-url=${imageUrl}></forge-avatar>
+    `;
   }
 };
 
 export const WithIcon: Story = {
-  ...standaloneStoryParams,
+  parameters: {
+    controls: { include: /^--/ }
+  },
   render: () => {
     IconRegistry.define(tylIconPerson);
     return html`

@@ -31,6 +31,23 @@ set of classes that can be used to apply the Forge typography styles to your con
 
 > Note: When loading this stylesheet, default styles will be automatically applied to the `<body>` element to set the `body2` style.
 
+## Semantic HTML vs Typography Styles
+
+It's important to priortize using the correct semantic HTML hierarchy over visual typography classes. For example, use `<h1>` for page titles,
+`<h2>` for section headings, and so on. Typography classes should then be used for applying the correct design to your page, but it should never
+drive which semantic HTML element you use.
+
+For example, you can create an `<h1>` that uses the `heading6` style, and that is perfectly valid. You do not need to need to use a matching 
+semantic heading element for each typography class.
+
+## Scale
+
+Forge uses a typographic scale to define the sizes of text elements. The scale is based on a modular scale, which is a sequence of numbers that
+are related to each other by a consistent ratio. This ratio is used to determine the size of each text element in the scale. The scale uses an incremental
+numbering system, where the number represents the size of the text element from smallest to largest for each style.
+
+**These scale sizes should never drive which semantic HTML element you use.**
+
 ## Display
 
 Display styles are used for large, prominent text such as page titles and headings.

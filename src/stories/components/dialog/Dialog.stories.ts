@@ -10,7 +10,6 @@ import '@tylertech/forge/scaffold';
 import '@tylertech/forge/toolbar';
 
 import './Dialog.scss';
-import { size } from '@floating-ui/dom';
 
 const component = 'forge-dialog';
 

@@ -30,7 +30,6 @@ const meta = {
     })
   },
   args: {
-    theme: 'default',
     text: 'Status',
   },
 } satisfies Meta;

@@ -91,6 +91,10 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
   }
 
   @FoundationProperty()
+  /**
+   * The text to display in the avatar.
+   * @attribute
+   */
   public declare text: string;
 
   @FoundationProperty()
