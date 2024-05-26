@@ -1,0 +1,59 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as IconButtonStories from './IconButton.stories';
+
+<Meta of={IconButtonStories} />
+
+<Title />
+
+Icon buttons communicate actions that users can take.
+
+<Canvas of={IconButtonStories.Demo} />
+
+## Variants
+
+Icon buttons can be styled in different ways to indicate their purpose and emphasis level.
+
+<Canvas of={IconButtonStories.Variants} />
+
+## Themed
+
+Icon buttons can be themed to match the color scheme of the application. The following example shows a themed icon button using the `theme` attribute:
+
+<Canvas of={IconButtonStories.Themed} />
+
+## With Anchor
+
+Icon buttons can accept a slotted `<a>` element to create a link.
+
+<Canvas of={IconButtonStories.Anchor} />
+
+## With Badge
+
+Icon buttons can display a badge to indicate the number of items in a list or the number of notifications.
+
+<Canvas of={IconButtonStories.WithBadge} />
+
+## With Circular Progress
+
+It is common to place a circular progress indicator inside an icon button to indicate that an action is in progress.
+
+<Canvas of={IconButtonStories.WithCircularProgress} />
+
+## With Label
+
+Icons buttons can be composed with the `<forge-label>` element to provide an accessible label for the button, as well as the correct label typography.
+
+<Canvas of={IconButtonStories.WithLabel} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Verify that you can reach every button by keyboard navigation.
+  - Ensure that there is a visual cue that the button is currently in focus.
+  - Ensure that there is an `aria-label` or `aria-labelledby` attribute indicating the purpose of the button.
+- Verify that pressing the space bar or enter key while focused on a button will activate the button in the same manner as if it had been clicked with a mouse.
+- If color conveys important information, provide additional cues for users with color perception deficiencies.

@@ -36,7 +36,16 @@ export function transformCssPropsToControls(tagName: string) {
  */
 export function customElementStoryRenderer<T extends keyof HTMLElementTagNameMap>(tagName: T, props: Partial<HTMLElementTagNameMap[T]>): HTMLElementTagNameMap[T] {
   const element = document.createElement(tagName);
+  applyArgs(element, props);
+  return element;
+}
 
+/**
+ * Apply props to a custom element.
+ * @param element {HTMLElement} - The element to apply props to
+ * @param props {Partial<HTMLElement>} - The props to apply
+ */
+export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>) {
   Object.keys(props).forEach((key) => {
     if (key.startsWith('--')) {
       // Set CSS custom properties via inline style
@@ -49,8 +58,6 @@ export function customElementStoryRenderer<T extends keyof HTMLElementTagNameMap
       element[key] = props[key];
     }
   });
-
-  return element;
 }
 
 /**
