@@ -1,9 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { SPLIT_BUTTON_CONSTANTS } from '@tylertech/forge/split-button';
-import { tylIconBookmarkBorder, tylIconScheduleSend } from '@tylertech/tyler-icons/standard';
 import { html, nothing } from 'lit-html';
 import { styleMap } from 'lit/directives/style-map.js';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/backdrop';
 
