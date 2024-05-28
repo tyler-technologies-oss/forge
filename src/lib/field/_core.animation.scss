@@ -1,0 +1,75 @@
+@use './token-utils' as *;
+
+@mixin surface-animation($property) {
+  transition-duration: #{token(surface-animation-duration)};
+  transition-property: #{$property};
+  transition-timing-function: #{token(surface-animation-timing)};
+}
+
+@mixin floating-animation($animation-name) {
+  animation-name: #{$animation-name};
+  animation-duration: #{token(floating-animation-duration)};
+  animation-timing-function: #{token(floating-animation-timing)};
+}
+
+@mixin floating-animation-keyframes($offset) {
+  @keyframes float-in-label-animation {
+    from {
+      translate: 0;
+      opacity: 40%;
+    }
+  
+    to {
+      translate: #{token(floating-label-translation, custom)};
+      opacity: 100%;
+    }
+  }
+  
+  @keyframes float-out-label-animation {
+    from {
+      translate: #{token(floating-label-translation, custom)};
+      opacity: 40%;
+    }
+  
+    to {
+      translate: 0;
+      opacity: 100%;
+    }
+  }
+  
+  @keyframes float-in-input-animation {
+    from {
+      translate: 0;
+    }
+  
+    to {
+      translate: 0 $offset;
+    }
+  }
+  
+  @keyframes float-out-input-animation {
+    from {
+      translate: 0 $offset;
+    }
+  
+    to {
+      translate: 0;
+    }
+  }
+}
+
+@mixin multiline-inset-label-background-animation-keyframes {
+  @keyframes multiline-inset-label-background-animation {
+    from {
+      opacity: 0%;
+    }
+  
+    to {
+      opacity: 100%;
+    }
+  }
+}
+
+@mixin reduced-motion {
+  @include override(floating-animation-duration, 0s, value);
+}

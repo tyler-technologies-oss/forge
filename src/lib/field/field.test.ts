@@ -385,24 +385,24 @@ describe('Field', () => {
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_ACCESSORY)).to.be.false;
     });
 
-    it('should add class when support text start slot has content', async () => {
+    it('should add class when support text slot has content', async () => {
       const harness = await createDefaultFixture();
-      harness.addSlottedContent('support-text-start');
+      harness.addSlottedContent('support-text');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.true;
     });
 
-    it('should not add class when support text start slot has no content', async () => {
+    it('should not add class when support text slot has no content', async () => {
       const harness = await createDefaultFixture();
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
     });
 
-    it('should remove class when support text start slot content is removed', async () => {
+    it('should remove class when support text slot content is removed', async () => {
       const harness = await createDefaultFixture();
-      harness.addSlottedContent('support-text-start');
+      harness.addSlottedContent('support-text');
       await tick();
-      harness.removeSlottedContent('support-text-start');
+      harness.removeSlottedContent('support-text');
       await tick();
       expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.HAS_SUPPORT_START)).to.be.false;
     });
@@ -564,7 +564,7 @@ class FieldHarness extends TestHarness<IFieldComponent> {
   public initElementRefs(): void {
     this.rootElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.ROOT);
     this.labelElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.LABEL);
-    this.containerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.CONTAINER);
+    this.containerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.SURFACE);
     this.popoverIconElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.POPOVER_ICON);
     this.resizeContainerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.RESIZE_CONTAINER);
   }

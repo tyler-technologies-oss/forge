@@ -1,25 +1,48 @@
+@use 'sass:map';
 @use '../core/styles/shape';
 @use './token-utils' as *;
 
-@mixin density($density, $inset: false) {
-  @if $inset {
-    @include override('height', #{token(inset-height-#{$density}, custom)}, value);
-  } @else {
-    @include override('height', #{token(height-#{$density}, custom)}, value);
+$heights: (
+  default: #{token(height)},
+  extra-small: 24px,
+  small: 32px,
+  medium: 40px,
+  large: 48px,
+  extra-large: 56px
+);
+$inset-heights: (
+  default: #{token(inset-height)},
+  extra-small: 24px,
+  small: 40px,
+  medium: 48px,
+  large: 56px,
+  extra-large: 64px
+);
+$shapes: (
+  default: #{token(shape)},
+  squared: 0,
+  rounded: shape.variable(full)
+);
 
-    @if $density == 'extra-small' {
-      @include override('container-padding-inline-start', #{token(container-extra-small-padding-inline-start)}, value);
-      @include override('container-padding-inline-end', #{token(container-extra-small-padding-inline-end)}, value);
-    }
+@mixin density($density) {
+  @if $density != 'default' {
+    @include override(height, map.get($heights, $density), value);
+  }
+  @if $density == 'extra-small' {
+    @include override(padding-inline-start, 8px, value);
+    @include override(padding-inline-end, 4px, value);
   }
 }
 
+@mixin inset-density($density) {
+  @include override(height, map.get($inset-heights, $density), value);
+}
+
 @mixin shape($shape) {
-  @if $shape == 'squared' {
-    @include override('shape', 0, value);
-  } @else if $shape == 'rounded' {
-    @include override('shape', shape.variable(full), value);
-    @include override('container-padding-inline-start', #{token(rounded-container-padding-inline-start)}, value);
-    @include override('container-padding-inline-end', #{token(rounded-container-padding-inline-end)}, value);
+  @if $shape != 'default' {
+    @include override(shape, map.get($shapes, $shape), value);
+  }
+  @if $shape == 'rounded' {
+    @include override(padding-inline, #{token(rounded-container-padding-inline-start)}, value);
   }
 }

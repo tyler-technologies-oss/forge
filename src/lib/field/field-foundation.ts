@@ -58,9 +58,6 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._popoverIcon) {
       this._adapter.addPopoverIconClickListener(this._popoverIconClickListener);
     }
-    if (this._multiline) {
-      this._adapter.attachResizeContainer();
-    }
   }
 
   private _onSlotChange(evt: Event): void {
@@ -244,16 +241,6 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._multiline !== value) {
       this._multiline = value;
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.MULTILINE, this._multiline);
-
-      if (!this._adapter.isConnected) {
-        return;
-      }
-
-      if (this._multiline) {
-        this._adapter.attachResizeContainer();
-      } else {
-        this._adapter.removeResizeContainer();
-      }
     }
   }
 

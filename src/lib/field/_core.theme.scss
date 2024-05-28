@@ -1,0 +1,163 @@
+@use 'sass:map';
+@use '../core/styles/elevation';
+@use '../core/styles/theme';
+@use './token-utils' as *;
+
+$tonal-backgrounds: (
+  default: token(tonal-background),
+  primary: theme.variable(primary-container-low),
+  secondary: theme.variable(secondary-container-low),
+  tertiary: theme.variable(tertiary-container-low),
+  success: theme.variable(success-container-low),
+  error: theme.variable(error-container-low),
+  warning: theme.variable(warning-container-low),
+  info: theme.variable(info-container-low)
+);
+$tonal-backgrounds-hover: (
+  default: token(tonal-background-hover),
+  primary: theme.variable(primary-container-minimum),
+  secondary: theme.variable(secondary-container-minimum),
+  tertiary: theme.variable(tertiary-container-minimum),
+  success: theme.variable(success-container-minimum),
+  error: theme.variable(error-container-minimum),
+  warning: theme.variable(warning-container-minimum),
+  info: theme.variable(info-container-minimum)
+);
+$filled-backgrounds: (
+  default: token(filled-background),
+  primary: theme.variable(primary-container-minimum),
+  secondary: theme.variable(secondary-container-minimum),
+  tertiary: theme.variable(tertiary-container-minimum),
+  success: theme.variable(success-container-minimum),
+  error: theme.variable(error-container-minimum),
+  warning: theme.variable(warning-container-minimum),
+  info: theme.variable(info-container-minimum)
+);
+$outline-colors: (
+  default: theme.variable(outline-low),
+  primary: theme.variable(primary),
+  secondary: theme.variable(on-secondary-container),
+  tertiary: theme.variable(tertiary),
+  success: theme.variable(success),
+  error: theme.variable(error),
+  warning: theme.variable(warning),
+  info: theme.variable(info)
+);
+$outline-colors-hover: (
+  default: theme.variable(outline-high),
+  primary: theme.variable(on-primary-container),
+  secondary: theme.variable(on-secondary-container),
+  tertiary: theme.variable(on-tertiary-container),
+  success: theme.variable(on-success-container),
+  error: theme.variable(on-error-container),
+  warning: theme.variable(on-warning-container),
+  info: theme.variable(on-info-container)
+);
+$inset-label-colors: (
+  default: theme.variable(text-medium),
+  primary: theme.variable(on-primary-container-low),
+  secondary: theme.variable(on-secondary-container-low),
+  tertiary: theme.variable(on-tertiary-container-low),
+  success: theme.variable(on-success-container-low),
+  error: theme.variable(on-error-container-low),
+  warning: theme.variable(on-warning-container-low),
+  info: theme.variable(on-info-container-low)
+);
+$content-colors: (
+  default: theme.variable(text-high),
+  primary: theme.variable(on-primary-container),
+  secondary: theme.variable(on-secondary-container),
+  tertiary: theme.variable(on-tertiary-container),
+  success: theme.variable(on-success-container),
+  error: theme.variable(on-error-container),
+  warning: theme.variable(on-warning-container),
+  info: theme.variable(on-info-container)
+);
+$elevations: (
+  default: unset,
+  raised: elevation.value(1),
+  raised-active: elevation.value(3)
+);
+
+@mixin theme($theme) {
+  @if $theme == default {
+    @include override(focus-indicator-color, theme.variable(primary), value);
+  } @else {
+    @include override(filled-background, map.get($filled-backgrounds, $theme), value);
+    @include override(content-color, map.get($content-colors, $theme), value);
+    @include override(focus-indicator-color, theme.variable($theme), value);
+    @include override(inset-label-color, map.get($inset-label-colors, $theme), value);
+    @include override(outline-color, map.get($outline-colors, $theme), value);
+    @include override(outline-color-hover, map.get($outline-colors-hover, $theme), value);
+    @include override(tonal-background, map.get($tonal-backgrounds, $theme), value);
+    @include override(tonal-background-hover, map.get($tonal-backgrounds-hover, $theme), value);
+  }
+  @include override(inner-border-color, map.get($outline-colors, $theme), value);
+  @include override(inner-border-color-hover, map.get($outline-colors-hover, $theme), value);
+  @include override(multiline-inset-label-background, map.get($filled-backgrounds, $theme), value);
+  @include override(multiline-inset-label-tonal-background, map.get($tonal-backgrounds, $theme), value);
+  @include override(multiline-inset-label-tonal-background-hover, map.get($tonal-backgrounds-hover, $theme), value);
+}
+
+@mixin variant($variant) {
+  @if $variant == plain {
+    @include hidden-background;
+    @include no-outline($no-inner: true);
+    @include override(padding-inline, 0, value);
+    @include override(surface-display, none, value);
+  } @else if $variant == outlined {
+    @include hidden-background;
+  } @else if $variant == tonal {
+    @include no-outline;
+    @include unoutlined-variant-inner-border;
+    @include visible-background(tonal);
+    @include override(multiline-inset-label-background, #{token(multiline-inset-label-tonal-background, custom)}, value);
+  } @else if $variant == filled {
+    @include visible-background(filled);
+  } @else if $variant == raised {
+    @include elevated;
+    @include no-outline;
+    @include unoutlined-variant-inner-border;
+    @include visible-background(filled);
+  }
+}
+
+@mixin no-outline($no-inner: false) {
+  @include override(outline-color, transparent, value);
+  @include override(outline-color-hover, transparent, value);
+
+  @if $no-inner {
+    @include override(inner-border-display, none, value);
+  }
+}
+
+@mixin unoutlined-variant-inner-border {
+  @include override(inner-border-block-size, calc(100% - 8px), value);
+}
+
+@mixin visible-background($type) {
+  @include override(background, #{$type}-background);
+  @include override(multiline-inset-label-background, #{token(background)}, value);
+
+  @if $type == tonal {
+    @include override(hover-background, tonal-background-hover, value);
+  }
+}
+
+@mixin hidden-background {
+  @include override(multiline-inset-label-background, theme.variable(surface), value);
+  @include override(multiline-inset-label-background-hover, theme.variable(surface), value);
+}
+
+@mixin elevated {
+  @include override(elevation, map.get($elevations, raised), value);
+  @include override(elevation-active, map.get($elevations, raised-active), value);
+}
+
+@mixin inset-label-color($theme) {
+  @include override(label-color, map.get($inset-label-colors, $theme), value);
+}
+
+@mixin invalid-label-color {
+  @include override(label-color, theme.variable(error), value);
+}

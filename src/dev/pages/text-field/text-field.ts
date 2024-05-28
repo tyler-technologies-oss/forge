@@ -27,7 +27,7 @@ const optPreventClear = document.getElementById('opt-prevent-clear') as ISwitchC
 const optStart = document.getElementById('opt-start') as ISwitchComponent;
 const optEnd = document.getElementById('opt-end') as ISwitchComponent;
 const optAccessory = document.getElementById('opt-accessory') as ISwitchComponent;
-const optSupportTextStart = document.getElementById('opt-support-text-start') as ISwitchComponent;
+const optSupportText = document.getElementById('opt-support-text') as ISwitchComponent;
 const optSupportTextEnd = document.getElementById('opt-support-text-end') as ISwitchComponent;
 const optDensity = document.getElementById('opt-density') as ISelectComponent;
 const optVariant = document.getElementById('opt-variant') as ISelectComponent;
@@ -121,12 +121,12 @@ optAccessory.addEventListener('forge-switch-change', () => {
   });
 });
 
-optSupportTextStart.addEventListener('forge-switch-change', () => {
+optSupportText.addEventListener('forge-switch-change', () => {
   textFields.forEach(textField => {
-    if (optSupportTextStart.on) {
-      textField.append(createSupportTextStartElement());
+    if (optSupportText.on) {
+      textField.append(createSupportTextElement());
     } else {
-      textField.querySelector('[slot=support-text-start]').remove();
+      textField.querySelector('[slot=support-text]').remove();
     }
   });
 });
@@ -218,10 +218,10 @@ function createAccessoryElement(): HTMLElement {
   return button;
 }
 
-function createSupportTextStartElement(): HTMLElement {
+function createSupportTextElement(): HTMLElement {
   const supportText = document.createElement('span');
-  supportText.slot = 'support-text-start';
-  supportText.textContent = 'Support text start';
+  supportText.slot = 'support-text';
+  supportText.textContent = 'Support text';
   return supportText;
 }
 

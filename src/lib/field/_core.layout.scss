@@ -1,50 +1,79 @@
 @use 'sass:string';
 @use '../core/styles/typography';
 @use './token-utils' as *;
+@use './core.animation' as animation;
 
 //
 // Grid
 //
 
-@mixin block-start {
-  grid-template-areas:
-    'label'
-    'container'
-    'support-text';
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
+@mixin grid($label-position) {
+  @if $label-position == 'inline-start' {
+    grid-template-areas:
+      'label main'
+      '. support-text';
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  } @else if $label-position == 'inline-end' {
+    grid-template-areas:
+      'main label'
+      'support-text .';
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  } @else if $label-position == 'block-start' {
+    grid-template-areas:
+      'label'
+      'main'
+      'support-text';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  } @else if $label-position == 'inset' {
+    grid-template-areas:
+      'main'
+      'support-text';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  } @else if $label-position == 'none' {
+    grid-template-areas:
+      'main'
+      'support-text';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
 }
 
-@mixin inline-start {
-  grid-template-areas:
-    'label container'
-    '. support-text';
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
+//
+// Container
+//
+
+@mixin container-layout {
+  display: grid;
+  position: relative;
+
+  flex-grow: 1;
+
+  grid-template-areas: 'start center end popover-icon accessory';
+  grid-template-columns: auto 1fr auto auto auto;
 }
 
-@mixin inline-end {
-  grid-template-areas:
-    'container label'
-    'support-text .';
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto auto;
-}
+//
+// Padding
+//
 
-@mixin inset {
-  grid-template-areas:
-    'container'
-    'support-text';
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-}
-
-@mixin no-label {
-  grid-template-areas:
-    'container'
-    'support-text';
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
+@mixin item-padding($side, $placement) {
+  @if $side == 'start' {
+    @if $placement == 'inner' {
+      padding-inline-start: #{token(inner-padding-inline)};
+    } @else {
+      padding-inline-start: #{token(padding-inline-start)};
+    }
+  } @else {
+    @if $placement == 'inner' {
+      padding-inline-end: #{token(inner-padding-inline)};
+    } @else {
+      padding-inline-end: #{token(padding-inline-end)};
+    }
+  }
 }
 
 //
@@ -53,28 +82,24 @@
 
 @mixin label-position($position) {
   @if $position == inline-start {
-    margin-inline-end: #{token(label-margin-inline)};
-    line-height: normal;
+    @include override('label-margin-inline-end', #{token(label-margin-inline)}, value);
   } @else if $position == inline-end {
-    margin-inline-start: #{token(label-margin-inline)};
-    line-height: normal;
+    @include override('label-margin-inline-start', #{token(label-margin-inline)}, value);
   } @else if $position == block-start {
-    margin-block-end: #{token(label-margin-block)};
-    line-height: normal;
-  } @else if $position == inset {
-    @include typography.style(body2);
-    @include override('label-color', 'inset-label-color');
-
-    pointer-events: none;
-    overflow: hidden;
-
-    grid-area: center;
-
-    padding-inline-start: #{token(main-content-padding-start, custom)};
-    padding-inline-end: #{token(main-content-padding-end, custom)};
-
-    white-space: nowrap;
+    @include override('label-margin-block-end', #{token(label-margin-block)}, value);
   }
+}
+
+@mixin inset-label-root {
+  @include override(label-grid-area, center, value);
+  @include override(label-pointer-events, none, value);
+  @include override(label-white-space, nowrap, value);
+}
+
+@mixin inset-label {
+  @include typography.style(body2);
+  @include item-padding(start, outer);
+  @include item-padding(end, outer);
 }
 
 //
@@ -99,7 +124,7 @@
       @if $baseline-override {
         padding-inline-start: $baseline-override;
       } @else {
-        padding-inline-start: #{token(container-padding-inline-start)};;
+        @include item-padding(start, outer);
       }
     } @else {
       justify-self: #{$alignment};
@@ -113,11 +138,11 @@
 
 @mixin support-text-inset($inset-direction: none) {
   @if $inset-direction == 'both' or $inset-direction == 'start' {
-    padding-inline-start: #{token(container-padding-inline-start)};
+    @include item-padding(start, outer);
   }
-
+  
   @if $inset-direction == 'both' or $inset-direction == 'end' {
-    padding-inline-end: #{token(container-padding-inline-start)};
+    @include item-padding(end, outer);
   }
 }
 
@@ -125,110 +150,71 @@
 // Multiline
 //
 
-$resize-container-input-offset-base: calc((token('height', custom) - typography.variable(body2, line-height)) / 2);
-$resize-container-input-padding-block-end-base: 8px;
+$multiline-input-offset-base: calc((token(height, custom) - typography.variable(body2, line-height)) / 2);
+$multiline-input-padding-block-end-base: 8px;
 
-@mixin container-multiline {
-  display: block;
-  block-size: fit-content;
-}
-
-@mixin resize-container {
+@mixin multiline-container {
   align-items: start;
 
-  border-radius: inherit;
-
+  block-size: fit-content;
   min-inline-size: #{token(multiline-min-inline-size)};
   max-inline-size: #{token(multiline-max-inline-size)};
   min-block-size: #{token(multiline-min-block-size)};
   max-block-size: #{token(multiline-max-block-size)};
 
-  overflow: hidden;
   resize: #{token(multiline-resize)};
 }
 
-@mixin resize-container-inset-label {
+@mixin multiline-container-child {
+  align-items: center;
+  block-size: #{token(height)};
+}
+
+@mixin multiline-accessory-slot {
+  @include multiline-container-child;
+
+  display: flex;
+  align-self: start;
+}
+
+@mixin multiline-inset-label {
   pointer-events: none;
   inline-size: fit-content;
 }
 
-@mixin resize-container-inset-label-slot {
+@mixin multiline-inset-label-slot {
   display: block;
 }
 
-@mixin resize-container-inset-label-background {
-    @include floating-animation(resize-container-inset-label-background-animation);
+@mixin multiline-inset-label-background {
+    @include animation.floating-animation(multiline-inset-label-background-animation);
     
     position: absolute;
     z-index: -1;
-    inset-inline-start: #{token(border-width)};
+    inset-inline-start: #{token(outline-width)};
 
-    transition-duration: #{token(container-animation-duration)};
+    transition-duration: #{token(surface-animation-duration)};
     transition-property: background;
-    transition-timing-function: #{token(container-animation-timing)};
+    transition-timing-function: #{token(surface-animation-timing)};
     
-    background: #{token(resize-container-inset-label-background, custom)};
+    background: #{token(multiline-inset-label-background, custom)};
     
     inline-size: 100%;
-    block-size: typography.variable(body2, line-height);
+    block-size: 3ex;
 
     filter: blur(2px);
 
     content: '';
 }
 
-@mixin resize-container-slotted-input {
-  padding-block-start: $resize-container-input-offset-base;
-  padding-block-end: calc($floating-offset + $resize-container-input-padding-block-end-base);
+@mixin multiline-slotted-input {
+  padding-block-start: $multiline-input-offset-base;
+  padding-block-end: calc($floating-offset + $multiline-input-padding-block-end-base);
 }
 
-@mixin resize-container-slotted-floating-input {
-  padding-block-start: calc($floating-offset + ($resize-container-input-offset-base)) !important; // TODO: find a way to remove this !important
-  padding-block-end: #{$resize-container-input-padding-block-end-base} !important;
-}
-
-@mixin resize-container-child {
-  align-items: center;
-  block-size: #{token('height', custom)};
-}
-
-@mixin resize-container-accessory-slot {
-  @include resize-container-child;
-
-  display: flex;
-  align-self: start;
-}
-
-//
-// Container
-//
-
-@mixin container-layout {
-  display: grid;
-  position: relative;
-
-  flex-grow: 1;
-
-  grid-template-areas: 'start center end popover-icon accessory';
-  grid-template-columns: auto 1fr auto auto auto;
-}
-
-@mixin last-container-element {
-  padding-inline-end: #{token('container-padding-inline-end')};
-}
-
-@mixin main-content-padding-inline($side, $next-sibling) {
-  @if $side == 'start' and $next-sibling == 'start' {
-    @include override('main-content-padding-start', token('start-padding-inline-end'), value);
-  } @else if $side == 'end' {
-    @if $next-sibling == 'end' {
-      @include override('main-content-padding-end', token('end-padding-inline-start'), value);
-    } @else if $next-sibling == 'popover-icon' {
-      @include override('main-content-padding-end', token('popover-icon-padding-inline-start'), value);
-    } @else if $next-sibling == 'accessory' {
-      @include override('main-content-padding-end', token('accessory-padding-inline-start'), value);
-    }
-  }
+@mixin multiline-slotted-floating-input {
+  padding-block-start: calc($floating-offset + ($multiline-input-offset-base)) !important; // TODO: find a way to remove this !important
+  padding-block-end: #{$multiline-input-padding-block-end-base} !important;
 }
 
 //
@@ -239,12 +225,12 @@ $resize-container-input-padding-block-end-base: 8px;
 // heights. Additional space is added or subtracted to account for the block size of the container
 // -- one pixel for every 8 pixels above or below 56 pixels.
 $floating-offset-base: #{calc(max(typography.variable(body2, line-height), typography.variable(label2, line-height)) / 2)};
-$floating-offset-adjustment: #{calc((token('height', custom) - 56px) / 8)};
+$floating-offset-adjustment: #{calc((token(height) - 56px) / 8)};
 $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
 
 // Sets a custom property used for the floating animation and final position of the floating label
 @mixin floatable-label {
-  @include override('floating-label-translation', 0 calc($floating-offset * -1), value);
+  @include override(floating-label-translation, 0 calc($floating-offset * -1), value);
 }
 
 @mixin floating-label {
@@ -253,11 +239,11 @@ $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
 }
 
 @mixin float-in-label {
-  @include floating-animation(float-in-label-animation);
+  @include animation.floating-animation(float-in-label-animation);
 }
 
 @mixin float-out-label {
-  @include floating-animation(float-out-label-animation);
+  @include animation.floating-animation(float-out-label-animation);
 }
 
 @mixin floating-input {
@@ -265,11 +251,11 @@ $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
 }
 
 @mixin float-in-input {
-  @include floating-animation(float-in-input-animation);
+  @include animation.floating-animation(float-in-input-animation);
 }
 
 @mixin float-out-input {
-  @include floating-animation(float-out-input-animation);
+  @include animation.floating-animation(float-out-input-animation);
 }
 
 @mixin slotted-floating-input {
@@ -278,66 +264,19 @@ $floating-offset: #{calc($floating-offset-base + $floating-offset-adjustment)};
   padding-block-start: calc($floating-offset * 2) !important; // TODO: find a way to remove this !important
 }
 
-@mixin floating-animation($animation-name) {
-  animation-name: #{$animation-name};
-  animation-duration: #{token(floating-animation-duration)};
-  animation-timing-function: #{token(floating-animation-timing)};
-}
-
 //
-// Animation keyframes
+// Keyframes
 //
 
-@keyframes float-in-label-animation {
-  from {
-    translate: 0;
-    opacity: 40%;
-  }
+@include animation.floating-animation-keyframes($floating-offset);
+@include animation.multiline-inset-label-background-animation-keyframes;
 
-  to {
-    translate: #{token(floating-label-translation, custom)};
-    opacity: 100%;
-  }
-}
+//
+// Popover
+//
 
-@keyframes float-out-label-animation {
-  from {
-    translate: #{token(floating-label-translation, custom)};
-    opacity: 40%;
-  }
-
-  to {
-    translate: 0;
-    opacity: 100%;
-  }
-}
-
-@keyframes float-in-input-animation {
-  from {
-    translate: 0;
-  }
-
-  to {
-    translate: 0 $floating-offset;
-  }
-}
-
-@keyframes float-out-input-animation {
-  from {
-    translate: 0 $floating-offset;
-  }
-
-  to {
-    translate: 0;
-  }
-}
-
-@keyframes resize-container-inset-label-background-animation {
-  from {
-    opacity: 0%;
-  }
-
-  to {
-    opacity: 100%;
+@mixin popover-icon-expanded {
+  & > * {
+    rotate: #{token(popover-icon-open-rotation)};
   }
 }

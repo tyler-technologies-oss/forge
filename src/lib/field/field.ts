@@ -181,8 +181,7 @@ declare global {
  * @csspart end - The element containing the end slot.
  * @csspart popover-icon - The popover icon element.
  * @csspart accessory - The element containing the accessory slot.
- * @csspart support-text - The support text element.
- * @csspart support-text-start - The element containing the support text start slot.
+ * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
  * 
@@ -191,7 +190,7 @@ declare global {
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
  * @slot accessory - Used for content such as a button that is logically connected to the field but should appear distinct from the input.
- * @slot support-text-start - Used for content that provides additional information about the field. Aligns to the inline start of the field.
+ * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
  */
 
