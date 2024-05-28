@@ -144,6 +144,24 @@ function MethodsTable({ items }: { items: TagItem[] }) {
   );
 }
 
+function DependenciesList({ dependencies }: { dependencies: string[] }) {
+  return (
+    <>
+      <p>This component will automatically include the following components.</p>
+      <ul>
+        {dependencies.map(dependency => {
+          const componentId = dependency.toLowerCase().replace(/^forge-/gi, '').replace(/[^a-z0-9]/gi, '-');
+          return (
+            <li key={dependency}>
+              <a href={`/?path=/docs/components-${componentId}--docs`}>{`<${dependency}>`}</a>
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
 function methodParamsToString(params: any[]) {
   return params.map(param => `${param.name}: ${param.type.text}`).join(', ');
 }
@@ -154,6 +172,7 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   const attributes = declaration.attributes;
   const methods = declaration.members?.filter(member => member.kind === 'method' && member.privacy === 'public');
   const events = declaration.events;
+  const dependencies = declaration.dependencies;
   const slots = declaration.slots?.map(slot => {
     if (!slot.name) {
       slot.name = '(default)';
@@ -198,6 +217,11 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
       {!!cssParts?.length &&
         <Section title="CSS Shadow Parts" name={tagName} headingLevel={headingLevel} hrefText="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts">
           <NameDescriptionTable items={cssParts} />
+        </Section>}
+
+      {!!dependencies?.length &&
+        <Section title="Dependencies" name={tagName} headingLevel={headingLevel}>
+          <DependenciesList dependencies={dependencies} />
         </Section>}
     </div>
   );

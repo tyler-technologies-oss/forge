@@ -149,4 +149,5 @@ export interface Declaration {
   slots?: TagItem[];
   cssProperties?: TagItem[];
   cssParts?: TagItem[];
+  dependencies?: string[];
 }

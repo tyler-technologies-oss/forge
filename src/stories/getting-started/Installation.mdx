@@ -9,7 +9,7 @@ Before we get into the details, you first need to determine what kind of install
 - **NPM Package**: This is the recommended way to install Forge. It allows you to easily manage your dependencies and keep your project up-to-date.
 - **CDN**: If you're just experimenting with Forge, or if you're working on a project that doesn't use a package manager, you can use the CDN version.
 
-### NPM Package
+## NPM Package
 
 To install Forge as an NPM package, run the following command:
 
@@ -25,7 +25,7 @@ If you're using a framework, you should jump to the framework-specific guide:
 - [Svelte](?path=/docs/frameworks-svelte--docs)
 - [Blazor](?path=/docs/frameworks-blazor--docs)
 
-#### Define Components
+### Define Components
 
 You will then need to import and define the components you are using within your application in the browser's custom element registry.
 
@@ -48,7 +48,7 @@ defineComponents();
 > Note: make sure to call the definition functions as early as possible in your application bootstrapping process to ensure they are
 > defined with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
 
-### CDN
+## CDN
 
 To use Forge via CDN, include the following script tag in your HTML:
 

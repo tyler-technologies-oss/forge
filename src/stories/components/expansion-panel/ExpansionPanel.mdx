@@ -1,0 +1,45 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as ExpansionPanelStories from './ExpansionPanel.stories';
+
+<Meta of={ExpansionPanelStories} />
+
+<Title />
+
+Expansion panels provide progressive disclosure of content. Use them to group and hide content that is not immediately relevant to the user.
+They are useful for organizing information and reducing clutter on the screen.
+
+<Canvas of={ExpansionPanelStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- If the user is able to click the expansion panel to toggle its state, ensure that a `<button>` element is present and clearly labeled to serve as an accessible point of interaction.
+  - Set the `aria-expanded` atribute on the button to reflect the state of the component. Update it when the panel opens or closes.
+  - Enclose the expandable content in an element with `role="group"` or another non-generic role.
+  - Set `aria-controls` on the button to reference the id of the expandable content.
+  - Do not place complex or interactive elements within a button. If your design requires such content in the expanion panel header, place a button in the header alongside that content instead of enclosing it.
+  - Ensure that the user can focus on the element which activates and deactivates the expansion panel.
+- Ensure that the expansion panel can be activated by keyboard.
+  - Here is an example of a properly marked up expansion panel:
+
+```html
+<!-- aria-expanded will be toggled via script to reflect the state of the component -->
+<forge-expansion-panel>
+  <button slot="header" aria-controls="expandable-content" aria-expanded="false">Toggle panel</button>
+  <div id="expandable-content" role="group">Expandable content</div>
+</forge-expansion-panel>
+```
+
+The button can also be placed elsewhere in the document, outside the expansion panel, with the same attributes set:
+
+```html
+<button slot="header" aria-controls="expandable-content" aria-expanded="false">Toggle panel</button>
+
+<forge-expansion-panel>
+  <div id="expandable-content" role="group">Expandable content</div>
+</forge-expansion-panel>
+```
