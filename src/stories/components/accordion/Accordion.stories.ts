@@ -6,6 +6,7 @@ import '@tylertech/forge/accordion';
 import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/open-icon';
+import './Accordion.scss';
 
 const component = 'forge-accordion';
 
@@ -33,10 +34,9 @@ type Story = StoryObj;
 export const Demo: Story = {
   render: () => {
     return html`
-    <div style="width: 200px">
       <forge-accordion>
         <forge-expansion-panel>
-          <div style="display: flex; justify-content: space-between; align-items: center;" slot="header">
+          <div  slot="header">
             Panel One 
             <forge-open-icon></forge-open-icon>
           </div>
@@ -44,7 +44,7 @@ export const Demo: Story = {
         </forge-expansion-panel>
         <forge-divider></forge-divider>
         <forge-expansion-panel>
-          <div style="display: flex; justify-content: space-between; align-items: center;" slot="header">
+          <div  slot="header">
             Panel Two 
             <forge-open-icon></forge-open-icon>
           </div>
@@ -52,14 +52,13 @@ export const Demo: Story = {
         </forge-expansion-panel>
         <forge-divider></forge-divider>
         <forge-expansion-panel>
-          <div style="display: flex; justify-content: space-between; align-items: center;" slot="header">
+          <div  slot="header">
             Panel Three 
             <forge-open-icon></forge-open-icon>
           </div>
           <div>Panel Three Content</div>
         </forge-expansion-panel>
       </forge-accordion>
-  </div>
     `;
   }
 };
