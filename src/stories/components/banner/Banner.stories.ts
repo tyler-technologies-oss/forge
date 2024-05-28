@@ -7,7 +7,8 @@ import '@tylertech/forge/banner';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { BANNER_CONSTANTS } from '@tylertech/forge/banner';
 
 const component = 'forge-banner';
 
@@ -26,12 +27,12 @@ const meta = {
     ...generateCustomElementArgTypes({
       tagName: component,
       controls: {
-        theme: { control: 'select', options: ['danger', 'warning', 'success', 'info (default)', 'info-secondary'] }
+        theme: { control: 'select', options: [...GLOBAL_THEME_OPTIONS, 'info-secondary'] }
       }
     })
   },
   args: {
-    theme: 'info (default)',
+    theme: BANNER_CONSTANTS.defaults.THEME,
     text: 'Minim sunt eu laborum labore minim.',
   },
 } satisfies Meta;
@@ -66,7 +67,7 @@ export const Combined: Story = {
     <forge-banner>
       Minim sunt eu laborum labore minim iconium buttonium.
       <forge-icon slot="icon" name="notifications"></forge-icon>
-      <forge-button slot="button" variant="outlined" style="--forge-button-outlined-background: white">Learn more...</forge-button>
+      <forge-button slot="button" variant="outlined">Learn more...</forge-button>
     </forge-banner>
     `;
   },
