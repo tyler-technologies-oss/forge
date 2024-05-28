@@ -66,6 +66,8 @@ declare global {
  * 
  * @summary Dialogs are temporary UI elements that are used to display information, ask for input, or confirm actions.
  * 
+ * @dependency forge-backdrop
+ * 
  * @property {boolean} [open=false] - Indicates whether the dialog is open.
  * @property {DialogMode} [mode="modal"] - The mode of the dialog.
  * @property {DialogType} [type="dialog"] - The type of the dialog.
