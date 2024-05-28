@@ -48,7 +48,7 @@ export const Themed: Story = {
   render: () => {
     return html`
     <div style="display: flex; gap: 12px; flex-direction: column;">
-      <forge-banner theme="danger">Danger</forge-banner>
+      <forge-banner theme="error">Error</forge-banner>
       <forge-banner theme="warning">Warning</forge-banner>
       <forge-banner theme="success">Success</forge-banner>
       <forge-banner theme="info">Info (default)</forge-banner>
