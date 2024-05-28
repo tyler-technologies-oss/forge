@@ -40,25 +40,25 @@ declare global {
  * 
  * @summary List items are individual rows of content inside of a list.
  * 
- * @property {boolean} selected - Applies the selected state to the list item.
- * @property {boolean} active - Applies the active state to the list item by emulating its focused state.
+ * @property {boolean} [selected=false] - Applies the selected state to the list item.
+ * @property {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
  * @property {unknown} value - The unique value of the list item.
- * @property {boolean} dense - Applies the dense state to the list item.
- * @property {boolean} indented - Applies the indented state by adding margin to the start of the list item.
- * @property {boolean} twoLine - Sets the list item height to support at least two lines of text.
- * @property {boolean} threeLine - Sets the list item height to support at least three lines of text.
- * @property {boolean} wrap - Sets the list item to wrap its text content.
- * @property {boolean} noninteractive - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
+ * @property {boolean} [dense=false] - Applies the dense state to the list item.
+ * @property {boolean} [indented=false] - Applies the indented state by adding margin to the start of the list item.
+ * @property {boolean} [twoLine=false] - Sets the list item height to support at least two lines of text.
+ * @property {boolean} [threeLine=false] - Sets the list item height to support at least three lines of text.
+ * @property {boolean} [wrap=false] - Sets the list item to wrap its text content.
+ * @property {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
  *
- * @attribute {boolean} selected - Applies the selected state to the list item.
- * @attribute {boolean} active - Applies the active state to the list item by emulating its focused state.
+ * @attribute {boolean} [selected=false] - Applies the selected state to the list item.
+ * @attribute {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
  * @attribute {unknown} value - The unique value of the list item.
- * @attribute {boolean} dense - Applies the dense state to the list item.
- * @attribute {boolean} indented - Applies the indented state by adding margin to the start of the list item.
- * @attribute {boolean} two-line - Sets the list item height to support at least two lines of text.
- * @attribute {boolean} three-line - Sets the list item height to support at least three lines of text.
- * @attribute {boolean} wrap - Sets the list item to wrap its text content.
- * @attribute {boolean} noninteractive - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
+ * @attribute {boolean} [dense=false] - Applies the dense state to the list item.
+ * @attribute {boolean} [indented=false] - Applies the indented state by adding margin to the start of the list item.
+ * @attribute {boolean} [two-line=false] - Sets the list item height to support at least two lines of text.
+ * @attribute {boolean} [three-line=false] - Sets the list item height to support at least three lines of text.
+ * @attribute {boolean} [wrap=false] - Sets the list item to wrap its text content.
+ * @attribute {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
  * 
  * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
  * 

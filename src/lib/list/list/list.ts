@@ -41,22 +41,22 @@ declare global {
  * @cssproperty --forge-list-container-color - The background color of the list surface.
  * @cssproperty --forge-list-spacing - The spacing between the list items.
  * 
- * @property {boolean} dense - Whether the list has all dense items or not.
- * @property {boolean} indented - Whether the list items within this list are indented. Default is false.
+ * @property {boolean} [dense=false] - Whether the list has all dense items or not.
+ * @property {boolean} [indented=false] - Whether the list items within this list are indented. Default is false.
  * @property {unknown | unknown[]} selectedValue - The selected list item value(s).
- * @property {boolean} twoLine - Whether the list has all two-line items or not.
- * @property {boolean} threeLine - Whether the list has all three-line items or not.
- * @property {boolean} wrap - Whether the list has all items that wrap their text or not.
- * @property {boolean} noninteractive - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
+ * @property {boolean} [twoLine=false] - Whether the list has all two-line items or not.
+ * @property {boolean} [threeLine=false] - Whether the list has all three-line items or not.
+ * @property {boolean} [wrap=false] - Whether the list has all items that wrap their text or not.
+ * @property {boolean} [noninteractive=false] - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
  * 
- * @attribute {boolean} dense - Whether the list has all dense items or not.
+ * @attribute {boolean} [dense=false] - Whether the list has all dense items or not.
  * @attribute {string} selected-value - The selected list item value(s).
- * @attribute {boolean} indented - Whether the list items within this list are indented. Default is false.
- * @attribute {boolean} two-line - Whether the list has all two-line items or not.
- * @attribute {boolean} three-line - Whether the list has all three-line items or not.
- * @attribute {boolean} wrap - Whether the list has all items that wrap their text or not.
- * @attribute {boolean} navlist - Controls whether the list is styled a navigation list or not.
- * @attribute {boolean} noninteractive - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
+ * @attribute {boolean} [indented=false] - Whether the list items within this list are indented. Default is false.
+ * @attribute {boolean} [two-line=false] - Whether the list has all two-line items or not.
+ * @attribute {boolean} [three-line=false] - Whether the list has all three-line items or not.
+ * @attribute {boolean} [wrap=false] - Whether the list has all items that wrap their text or not.
+ * @attribute {boolean} [navlist=false] - Controls whether the list is styled a navigation list or not.
+ * @attribute {boolean} [noninteractive=false] - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
  */
 @CustomElement({
   name: LIST_CONSTANTS.elementName,
