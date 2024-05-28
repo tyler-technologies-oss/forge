@@ -57,6 +57,7 @@ function PropsAttrsTable({ items }: { items: TagItem[] }) {
   );
 }
 
+const TEXT_NAMES = ['(default)'];
 function NameDescriptionTable({ items }: { items: TagItem[] }) {
   return (
     <table className={(styles as any).table}>
@@ -67,10 +68,10 @@ function NameDescriptionTable({ items }: { items: TagItem[] }) {
         </tr>
       </thead>
       <tbody>
-        {items?.map((property: any) => (
+        {items?.map(property => (
           <tr key={property.name}>
             <td>
-              <Code>{property.name}</Code>
+              {!TEXT_NAMES.includes(property.name) ? <Code>{property.name}</Code> : <i>{property.name}</i>}
             </td>
             <td>
               <Markdown>{property.description}</Markdown>

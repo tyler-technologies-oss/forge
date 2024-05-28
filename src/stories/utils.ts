@@ -61,6 +61,19 @@ export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>) {
 }
 
 /**
+ * Get the CSS custom properties args from a full set of args (any arg that is prefixed with "--" is considered a CSS variable).
+ */
+export function getCssVariableArgs(args: Args): Args | null {
+  const cssVarArgs = Object.entries(args).reduce((acc, [key, value]) => {
+    if (key.startsWith('--')) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+  return Object.entries(cssVarArgs).length ? cssVarArgs : null;
+}
+
+/**
  * Generates Storybook `argTypes` for a custom element based on its tag name from the custom elements manifest.
  */
 export function generateCustomElementArgTypes({ tagName, exclude, controls }: { tagName: string; exclude?: string[]; controls?: Partial<ArgTypes<Args>> }): object {
