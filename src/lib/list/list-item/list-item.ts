@@ -79,7 +79,6 @@ declare global {
  * @cssproperty --forge-list-item-wrap-padding - The padding inside of the container element when `wrap` is enabled.
  * @cssproperty --forge-list-item-margin - The margin around the host element.
  * @cssproperty --forge-list-item-height - The height of the container.
- * @cssproperty --forge-list-item-dense-height - The height when in the dense state.
  * @cssproperty --forge-list-item-indent - The margin inline state when in the indented state.
  * @cssproperty --forge-list-item-cursor - The cursor when interactive.
  * @cssproperty --forge-list-item-gap - The gap between the slotted content.
@@ -88,9 +87,9 @@ declare global {
  * @cssproperty --forge-list-item-text-font-weight - The font weight of the text.
  * @cssproperty --forge-list-item-text-line-height - The line height of the text.
  * @cssproperty --forge-list-item-selected-color - The color when in the selected state.
- * @cssproperty --forge-list-item-opacity - The opacity of the background color when in the disabled state.
- * @cssproperty --forge-list-item-selected-start-color - The color of the start content when in the selected state.
- * @cssproperty --forge-list-item-selected-end-color - The color of the end content when in the selected state.
+ * @cssproperty --forge-list-item-selected-opacity - The opacity of the background color when in the selected state.
+ * @cssproperty --forge-list-item-start-selected-color - The color of the start content when in the selected state.
+ * @cssproperty --forge-list-item-end-selected-color - The color of the end content when in the selected state.
  * @cssproperty --forge-list-item-selected-text-color - The color of the text when in the selected state.
  * @cssproperty --forge-list-item-disabled-opacity - The opacity of the element when in the disabled state.
  * @cssproperty --forge-list-item-disabled-cursor - The cursor when in the disabled state.
@@ -103,12 +102,6 @@ declare global {
  * @cssproperty --forge-list-item-dense-font-size - The font size when in the dense state.
  * @cssproperty --forge-list-item-dense-indent - The margin inline state when in the dense indented state.
  * @cssproperty --forge-list-item-dense-gap - The gap between the slotted content when in the dense state.
- * @cssproperty --forge-list-item-start-selected-color - The color of the start content when in the selected state.
- * @cssproperty --forge-list-item-end-selected-color - The color of the end content when in the selected state.
- * @cssproperty --forge-list-item-avatar-background-color - The background color of the avatar container.
- * @cssproperty --forge-list-item-avatar-color - The foreground color of the avatar container.
- * @cssproperty --forge-list-item-avatar-shape - The shape of the avatar container.
- * @cssproperty --forge-list-item-avatar-size - The height & width of the avatar container.
  */
 @CustomElement({
   name: LIST_ITEM_CONSTANTS.elementName,
