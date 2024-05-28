@@ -44,7 +44,7 @@ $tokens: (
   transition-timing: utils.module-val(button, transition-timing, animation.variable(easing-standard)),
 
   // Outlined
-  outlined-background: utils.module-ref(button, outlined-background, background),
+  outlined-background: utils.module-val(button, outlined-background, transparent),
   outlined-color: utils.module-ref(button, outlined-color, primary-color),
   outlined-border-width: utils.module-val(button, outlined-border-width, border.variable(thin)),
   outlined-border-style: utils.module-val(button, outlined-border-style, solid),
