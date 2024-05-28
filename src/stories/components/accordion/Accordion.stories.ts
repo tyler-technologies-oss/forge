@@ -19,6 +19,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
+      exclude: ['panelSelector']
     })
   },
   args: {
