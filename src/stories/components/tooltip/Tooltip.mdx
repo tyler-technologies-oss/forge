@@ -1,0 +1,21 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as TooltipStories from './Tooltip.stories';
+
+<Meta of={TooltipStories} />
+
+<Title />
+
+Tooltips display informative text when users hover over an element.
+
+<Canvas of={TooltipStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.
+- The target element receives the proper ARIA attributes such as `aria-labelledby` or `aria-describedby` where necessary.
+- Should not contain interactive content.

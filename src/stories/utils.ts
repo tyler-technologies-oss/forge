@@ -5,6 +5,9 @@ import cem from '../../dist/cem/custom-elements.json';
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
 
+export const OVERLAY_FLIP_OPTIONS = ['auto', 'main', 'cross', 'never'];
+export const OVERLAY_FALLBACK_PLACEMENT_OPTIONS = ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'right-start', 'right-end', 'left-start', 'left-end', 'bottom-start', 'bottom-end'];
+
 /**
  * Common default parameters for a standalone story.
  */
