@@ -1,0 +1,30 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AccordionStories from './Accordion.stories';
+
+<Meta of={AccordionStories} />
+
+<Title />
+
+Accordions allow you to provide text or images to display that represent an entity. By default, the Accordion will
+display text content as single characters (character count is configurable), or display an icon or image
+based on the URL provided to it.
+
+<Canvas of={AccordionStories.Demo} />
+
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Verify that you can tab to each panel in the accordion.
+  - Ensure that there is a visual cue that the panel is selected.
+- Verify that pressing the space bar or enter key while focusing on a panel will toggle it open and closed.
+- If any open panel contains a link, button, or other navigation element, ensure that those tab stops are included while tabbing through the accordion.
+- If any closed panel contains a link, button, or other navigation element, ensure those tab stops are skipped while tabbing through the accordion.
+
+## Dependencies
+
+- forge-expansion-panel
