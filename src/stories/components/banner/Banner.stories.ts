@@ -20,9 +20,6 @@ const meta = {
   },
   component,
   parameters: {
-    controls: {
-      exclude: /^(icon|button|forge-banner-before-dismiss|forge-banner-dismissed)$/i,
-    },
     actions: { disable: true }
   },
   argTypes: {
