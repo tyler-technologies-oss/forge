@@ -34,6 +34,10 @@ declare global {
  * Buttons can be used to trigger an action or to navigate to a new location. Buttons can be styled with
  * a variety of themes and variants.
  * 
+ * @dependency forge-icon
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
+ * 
  * @property {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
  * @property {ButtonVariant} [variant="text"] - The variant of the button.
  * @property {boolean} [fullWidth=false] - Whether or not the button is full-width.

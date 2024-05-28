@@ -17,6 +17,8 @@ declare global {
 
 /**
  * @tag forge-accordion
+ * 
+ * @dependency forge-expansion-panel
  */
 @CustomElement({
   name: ACCORDION_CONSTANTS.elementName,

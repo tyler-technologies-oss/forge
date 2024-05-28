@@ -9,6 +9,25 @@ This means that you can use them in any front-end framework or library, such as 
 just like any other built-in HTML element. Each component has API documentation that describes the properties, events, and methods that
 it supports, as well as examples of how to use the component in your application.
 
+## VS Code Integration
+
+This is optional, but Forge provides custom data files for VS Code that you can use to get autocompletion and documentation for Forge components in your HTML and CSS files.
+
+1. If not done already, install the `@tylertech/forge` package
+2. If it doesn't already exist, create a `.vscode` directory at the root of your project
+3. If it doesn't already exist, create `settings.json` file inside the `.vscode` directory
+4. Add the following to the `settings.json` file:
+```json
+{
+  "html.customData": ["./node_modules/@tylertech/forge/dist/vscode.html-custom-data.json"],
+  "css.customData": ["./node_modules/@tylertech/forge/dist/vscode.css-custom-data.json"]
+}
+```
+
+**Important:** you will need to restart VS Code for the changes to take effect.
+
+> You may need to adjust the path to your `node_modules` directory if it's not at the root of your project.
+
 ## Properties & Attributes
 
 Tyler Forge components have a set of properties and attributes that you can use to customize the appearance and behavior of the component.
