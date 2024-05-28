@@ -13,9 +13,9 @@ $tokens: (
   margin: utils.module-val(list-item, margin, 0),
   height: utils.module-val(list-item, height, 48px),
   dense-height: utils.module-val(list-item, dense-height, 32px),
-  indent: utils.module-val(list-item, indent, 56px),
+  indent: utils.module-val(list-item, indent, spacing.variable(xxlarge)),
   cursor: utils.module-val(list-item, cursor, pointer),
-  gap: utils.module-val(list-item, gap, spacing.variable(xlarge)),
+  gap: utils.module-val(list-item, gap, spacing.variable(large)),
 
   // Supporting text
   text-color: utils.module-val(list-item, text-color, theme.variable(text-medium)),
@@ -26,8 +26,8 @@ $tokens: (
   // Selected
   selected-color: utils.module-val(list-item, selected-color, theme.variable(primary)),
   selected-opacity: utils.module-val(list-item, selected-opacity, theme.emphasis(lowest)),
-  selected-leading-color: utils.module-ref(list-item, selected-leading-color, selected-color),
-  selected-trailing-color: utils.module-ref(list-item, selected-trailing-color, selected-color),
+  selected-start-color: utils.module-ref(list-item, selected-start-color, selected-color),
+  selected-end-color: utils.module-ref(list-item, selected-end-color, selected-color),
   selected-text-color: utils.module-val(list-item, selected-text-color, theme.variable(text-medium)),
 
   // Disabled
@@ -47,17 +47,11 @@ $tokens: (
   dense-indent: utils.module-val(list-item, dense-indent, spacing.variable(xxlarge)),
   dense-gap: utils.module-val(list-item, dense-gap, spacing.variable(xsmall)),
 
-  // Leading
-  leading-selected-color: utils.module-ref(list-item, leading-selected-color, selected-color),
+  // Start
+  start-selected-color: utils.module-ref(list-item, start-selected-color, selected-color),
 
-  // Trailing
-  trailing-selected-color: utils.module-ref(list-item, trailing-selected-color, selected-color),
-
-  // Avatar
-  avatar-background-color: utils.module-val(list-item, avatar-background-color, theme.variable(text-medium)),
-  avatar-color: utils.module-val(list-item, avatar-color, theme.variable(on-primary)),
-  avatar-shape: utils.module-val(list-item, avatar-shape, shape.variable(round)),
-  avatar-size: utils.module-val(list-item, avatar-size, 40px),
+  // end
+  end-selected-color: utils.module-ref(list-item, end-selected-color, selected-color),
 
   // Wrap
   wrap-padding: utils.module-val(list-item, wrap-padding, spacing.variable(xsmall) spacing.variable(medium)),

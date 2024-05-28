@@ -3,6 +3,7 @@
 @use '../state-layer';
 @use '../focus-indicator';
 @use '../circular-progress';
+@use '../icon';
 
 //
 // Host
@@ -38,13 +39,42 @@ $host-tokens: [display disabled-cursor];
   }
 }
 
-a {
-  @include anchor-base;
+//
+// Anchor
+//
+
+.with-anchor {
+  @include with-anchor;
 }
 
-forge-state-layer {
-  @include state-layer.provide-theme(( color: #{token(color)} ));
+::slotted(a) {
+  @include anchor-base;
+
+  @include icon.provide-theme((
+    font-size: #{token(icon-size)}
+  ))
 }
+
+:host([variant=link]) {
+  ::slotted(a) {
+    position: relative;
+    inset: auto;
+  }
+}
+
+//
+// State layer
+//
+
+forge-state-layer {
+  @include state-layer.provide-theme((
+    color: #{token(color)}
+  ));
+}
+
+//
+// Focus indicator
+//
 
 forge-focus-indicator {
   @include focus-indicator.provide-theme((
@@ -89,19 +119,15 @@ forge-focus-indicator {
 // Variants
 //
 
-:host(:is(:not([variant], [variant=text]))) {
-  .forge-button {
-    @include text;
-  }
-}
-
 :host(:is([variant=filled],[variant=raised])) {
   .forge-button {
     @include filled;
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: #{token(filled-color)} ));
+    @include state-layer.provide-theme((
+      color: #{token(filled-color)}
+    ));
   }
 }
 
@@ -117,7 +143,9 @@ forge-focus-indicator {
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme(( color: #{token(tonal-color)} ));
+    @include state-layer.provide-theme((
+      color: #{token(tonal-color)}
+    ));
   }
 }
 
@@ -162,7 +190,9 @@ forge-focus-indicator {
   }
 
   forge-focus-indicator {
-    @include focus-indicator.provide-theme(( shape: #{token(pill-shape)} ));
+    @include focus-indicator.provide-theme((
+      shape: #{token(pill-shape)}
+    ));
   }
 }
 

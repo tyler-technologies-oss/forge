@@ -19,9 +19,7 @@ export interface IPopoverFoundation extends IOverlayAwareFoundation {
   dispatchBeforeToggleEvent(state: IDismissibleStackState): boolean;
 }
 
-const BaseClass = WithLongpressListener(OverlayAwareFoundation<IPopoverAdapter>);
-
-export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
+export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundation<IPopoverAdapter>) implements IPopoverFoundation {
   private _anchor: string | null = null;
   private _arrow = false;
   private _animationType: PopoverAnimationType = 'zoom';
@@ -65,6 +63,19 @@ export class PopoverFoundation extends BaseClass implements IPopoverFoundation {
 
   public override initialize(): void {
     super.initialize();
+
+    this._adapter.tryApplyGlobalConfiguration([
+      'placement',
+      'animationType',
+      'positionStrategy',
+      'shift',
+      'hide',
+      'flip',
+      'boundaryElement',
+      'fallbackPlacements',
+      'persistent',
+      'arrow'
+    ]);
 
     if (!this.anchorElement) {
       this._adapter.tryLocateAnchorElement(this._anchor);

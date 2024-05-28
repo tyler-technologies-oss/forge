@@ -18,7 +18,7 @@ const selectors = {
   INPUT: ':where(input:not([type=button], [type=checkbox], [type=color], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]), textarea)'
 };
 
-const observedInputAttributes = ['disabled', 'placeholder'];
+const observedInputAttributes = ['disabled', 'placeholder'] as const;
 
 const tagNames = {
   TEXTAREA: 'TEXTAREA',
@@ -39,5 +39,6 @@ export const TEXT_FIELD_CONSTANTS = {
   events
 };
 
-export type TextFieldInputAttributeObserver = (name: keyof typeof observedInputAttributes, value: string | null) => void;
+export type TextFieldObservedInputAttributes = typeof observedInputAttributes[number];
+export type TextFieldInputAttributeObserver = (name: TextFieldObservedInputAttributes, value: string | null) => void;
 export type TextFieldValueChangeListener = (value: string | null) => void;

@@ -9,7 +9,7 @@ import { FOCUS_INDICATOR_CONSTANTS } from '../../focus-indicator';
 export interface IAppBarAdapter extends IBaseAdapter {
   initialize(): void;
   setTitleText(value: string): void;
-  setHref(value: string): void;
+  setHref(value: string, listener: EventListener): void;
   setTarget(value: string): void;
   addCenterSlotListener(listener: (evt: Event) => void): void;
   setCenterSlotVisibility(): void;
@@ -41,17 +41,18 @@ export class AppBarAdapter extends BaseAdapter<IAppBarComponent> implements IApp
     this._titleElement.textContent = value;
   }
 
-  public setHref(value: string): void {
+  public setHref(value: string, listener: EventListener): void {
     const isAnchor = this._logoTitleContainerElement.tagName === 'A';
     if (value) {
       if (!isAnchor) {
         this._createAnchorElement();
       }
       (this._logoTitleContainerElement as HTMLAnchorElement).href = value;
+      this._logoTitleContainerElement.addEventListener('click', listener, { capture: true });
     } else if (isAnchor) {
+      this._logoTitleContainerElement.removeEventListener('click', listener, { capture: true });
       this._logoTitleContainerElement = replaceElement(this._logoTitleContainerElement, document.createElement('div'));
       this._logoTitleContainerElement.classList.add(APP_BAR_CONSTANTS.classes.LOGO_TITLE_CONTAINER);
-
       this._logoTitleContainerElement.querySelector(STATE_LAYER_CONSTANTS.elementName)?.remove();
       this._logoTitleContainerElement.querySelector(FOCUS_INDICATOR_CONSTANTS.elementName)?.remove();
     }

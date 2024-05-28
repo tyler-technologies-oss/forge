@@ -1,5 +1,5 @@
 import { IChipFieldAdapter } from './chip-field-adapter';
-import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS } from './chip-field-constants';
+import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS, ChipFieldObservedInputAttributes } from './chip-field-constants';
 import { BaseFieldFoundation, IBaseFieldFoundation } from '../field/base/base-field-foundation';
 
 export interface IChipFieldFoundation extends IBaseFieldFoundation {
@@ -99,7 +99,7 @@ export class ChipFieldFoundation extends BaseFieldFoundation<IChipFieldAdapter> 
     }
   }
 
-  private _onInputAttributeChange(name: keyof typeof CHIP_FIELD_CONSTANTS.observedInputAttributes, value: string | null): void {
+  private _onInputAttributeChange(name: ChipFieldObservedInputAttributes, value: string | null): void {
     switch (name) {
       case 'disabled':
         this.disabled = value !== null;

@@ -47,12 +47,6 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
     this._foundation = new OptionFoundation(new OptionAdapter(this));
   }
 
-  public initializedCallback(): void {
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'option');
-    }
-  }
-
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case OPTION_CONSTANTS.attributes.VALUE:

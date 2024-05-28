@@ -4,7 +4,7 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { dispatchNativeEvent, tick } from '@tylertech/forge-testing';
 import { sendMouse } from '@web/test-runner-commands';
 import { match, spy } from 'sinon';
-import { FIELD_CONSTANTS, IFieldComponent } from '.';
+import { FIELD_CONSTANTS, IFieldComponent } from '../field';
 import { TestHarness } from '../../test/utils/test-harness';
 import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 

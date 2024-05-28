@@ -1,11 +1,13 @@
 import '$src/shared';
-import { Density, IIconComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/field';
-import { FieldLabelAlignment, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field';
-import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/label';
-import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
 import './field.scss';
+import { FieldLabelAlignment, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IFieldComponent } from '@tylertech/forge/field';
+import { IIconComponent, IconRegistry } from '@tylertech/forge/icon';
+import { Density } from '@tylertech/forge/constants';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
+import { tylIconFavorite } from '@tylertech/tyler-icons/standard';
 
 IconRegistry.define([
   tylIconFavorite

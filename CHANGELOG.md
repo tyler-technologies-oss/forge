@@ -1,3 +1,66 @@
+# v2.24.1 (Tue May 21 2024)
+
+#### 🐛 Bug Fix
+
+- fix(menu): fixed a bug where pressing the tab key would select the active option [#573](https://github.com/tyler-technologies-oss/forge/pull/573) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-notification-button): fixed a bug where the badge count could not be unset and updated the logic to not render the count [#567](https://github.com/tyler-technologies-oss/forge/pull/567) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.24.0 (Mon May 13 2024)
+
+#### 🚀 Enhancement
+
+- feat(list-item): add `deactivateRipple()` method to allow for manually removing the "pressed" ripple state if needed [#559](https://github.com/tyler-technologies-oss/forge/pull/559) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### 🐛 Bug Fix
+
+- fix(table): fixed a bug where the table sort icon rotation could get out sync [#558](https://github.com/tyler-technologies-oss/forge/pull/558) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.23.1 (Thu May 02 2024)
+
+#### 🐛 Bug Fix
+
+- fix(list-item): removed legacy internal mousedown handler that was preventing pointer events if already focused [#551](https://github.com/tyler-technologies-oss/forge/pull/551) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(badge): fixed a bug where badge text would not ellipse when overflowing [#552](https://github.com/tyler-technologies-oss/forge/pull/552) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
+# v2.23.0 (Thu Apr 25 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Van Do ([@vando94](https://github.com/vando94)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat: added month change event for date-picker and date-range-picker [#543](https://github.com/tyler-technologies-oss/forge/pull/543) ([@vando94](https://github.com/vando94))
+
+#### 🐛 Bug Fix
+
+- fix(text-field): remove legacy `<label>` & `<input>` DOM order manipulation [#544](https://github.com/tyler-technologies-oss/forge/pull/544) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 2
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+- Van Do ([@vando94](https://github.com/vando94))
+
+---
+
 # v2.22.1 (Mon Apr 01 2024)
 
 #### 🐛 Bug Fix

@@ -9,17 +9,17 @@
 }
 
 @mixin overflow($overflow: auto) {
-  @if ($overflow == hidden) {
+  @if $overflow == hidden {
     overflow: hidden;
   }
-  @if ($overflow == auto) {
+  @if $overflow == auto {
     overflow: auto;
   }
-  @if ($overflow == overflow-x) {
+  @if $overflow == overflow-x {
     overflow-x: auto;
     overflow-y: hidden;
   }
-  @if ($overflow == overflow-y) {
+  @if $overflow == overflow-y {
     overflow-x: hidden;
     overflow-y: auto;
   }

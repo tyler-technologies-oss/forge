@@ -36,7 +36,7 @@
 
     &::after {
       @include after-container-alternate-psudo-base;
-      @include line();
+      @include line;
     }
   }
 }
@@ -47,7 +47,7 @@
 
     &::before {
       @include before-container-alternate-psudo-base;
-      @include line();
+      @include line;
     }
   }
 }
@@ -135,8 +135,8 @@ forge-focus-indicator {
 }
 
 .forge-step {
-  @include base();
-  @include forge-interactable();
+  @include base;
+  @include forge-interactable;
 
   &.error {
     forge-focus-indicator {
@@ -162,14 +162,14 @@ forge-focus-indicator {
   }
 
   .title {
-    @include label();
+    @include label;
   }
 
   .subtitle {
     @include optional-label-slot-wrapper;
 
     ::slotted(*) {
-      @include optional-label();
+      @include optional-label;
     }
   }
 
@@ -234,26 +234,26 @@ forge-focus-indicator {
   &.selected {
     &.disabled {
       .icon-content {
-        @include icon-content-disabled();
+        @include icon-content-disabled;
       }
     }
 
     &:not(.disabled) {
       .icon-container {
         .icon-content {
-          @include icon-content-selected();
+          @include icon-content-selected;
         }
       }
     }
 
     &:not(.disabled) {
       .title {
-        @include label-selected();
+        @include label-selected;
       }
 
       .subtitle {
         ::slotted(*) {
-          @include optional-label-selected();
+          @include optional-label-selected;
         }
       }
     }
@@ -262,18 +262,18 @@ forge-focus-indicator {
   &.error {
     &:not(.disabled) {
       .title {
-        @include label-error();
+        @include label-error;
       }
 
       .subtitle {
         ::slotted(*) {
-          @include optional-label-error();
+          @include optional-label-error;
         }
       }
 
       .icon-container {
         .icon-content {
-          @include icon-content-error();
+          @include icon-content-error;
         }
       }
     }
@@ -284,12 +284,12 @@ forge-focus-indicator {
       &:not(.error) {
         &:not(.editable) {
           .icon-content {
-            @include icon-content-completed();
+            @include icon-content-completed;
           }
         }
         &.editable {
           .icon-content {
-            @include icon-content-completed();
+            @include icon-content-completed;
           }
         }
       }
@@ -315,7 +315,7 @@ forge-focus-indicator {
   }
 
   .text-container {
-    @include text-container();
+    @include text-container;
   }
 }
 

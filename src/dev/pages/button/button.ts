@@ -14,7 +14,6 @@ import './button.scss';
 IconRegistry.define([tylIconForgeLogo, tylIconFavorite, tylIconOpenInNew]);
 
 const formPreventToggle = document.querySelector('#opt-form-prevent') as ISwitchComponent;
-const hrefPreventToggle = document.querySelector('#opt-href-prevent') as ISwitchComponent;
 
 const submitBtn = document.querySelector('#submit-btn') as HTMLButtonElement;
 submitBtn.addEventListener('click', evt => {
@@ -35,14 +34,6 @@ resetBtn.addEventListener('click', evt => {
 const testForm = document.querySelector('#test-btn-form') as HTMLFormElement;
 testForm.addEventListener('submit', evt => {
   console.log('Form submitted!', evt.submitter);
-});
-
-const hrefBtn = document.querySelector('forge-button[href]') as HTMLAnchorElement;
-hrefBtn.addEventListener('click', evt => {
-  if (hrefPreventToggle.on) {
-    evt.preventDefault();
-  }
-  console.log('href button click', evt);
 });
 
 const popoverBtn = document.querySelector('#popover-button') as HTMLButtonElement;
@@ -78,11 +69,6 @@ denseToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
 const pillToggle = document.querySelector('#opt-pill') as ISwitchComponent;
 pillToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   allButtons.forEach(btn => btn.pill = selected);
-});
-
-const anchorToggle = document.querySelector('#opt-anchor') as ISwitchComponent;
-anchorToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  allButtons.filter(b => !b.href).forEach(btn => btn.anchor = selected);
 });
 
 const fullWidthToggle = document.querySelector('#opt-full-width') as ISwitchComponent;

@@ -2,11 +2,13 @@ import '$src/shared';
 import '@tylertech/forge/button';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/select';
-import type { FieldLabelPosition, ISelectComponent, ISwitchComponent, SelectDensityType } from '@tylertech/forge';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFood } from '@tylertech/tyler-icons/extended';
 import './select.scss';
 import { IListDropdownOption } from '@tylertech/forge/list-dropdown';
+import { ISelectComponent, SelectDensityType } from '@tylertech/forge/select';
+import { FieldLabelPosition } from '@tylertech/forge/field';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define(tylIconFood);
 

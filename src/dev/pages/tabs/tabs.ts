@@ -1,9 +1,13 @@
 import '$src/shared';
 import '@tylertech/forge/tabs';
 import '@tylertech/forge/view-switcher';
-import { IconRegistry, ISelectComponent, ISwitchComponent, ITabBarComponent, IViewSwitcherComponent } from '@tylertech/forge';
 import { tylIconFavorite, tylIconVideocam, tylIconInsertPhoto, tylIconAudiotrack } from '@tylertech/tyler-icons/standard';
 import './tabs.scss';
+import { ITabBarComponent } from '@tylertech/forge/tabs';
+import { IViewSwitcherComponent } from '@tylertech/forge/view-switcher';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconFavorite,
@@ -18,7 +22,7 @@ const viewSwitcher = document.querySelector('#tab-panel') as IViewSwitcherCompon
 
 tabBar.addEventListener('forge-tab-bar-change', (evt) => {
   console.log('forge-tab-bar-change', evt.detail);
-  setTabContent(evt.detail);
+  setTabContent(evt.detail.index);
 });
 
 const verticalToggle = document.getElementById('opt-vertical') as ISwitchComponent;
@@ -67,26 +71,26 @@ scrollButtonsToggle.addEventListener('forge-switch-change', ({ detail: selected 
   tabBar.scrollButtons = selected;
 });
 
-const showLeadingToggle = document.getElementById('opt-show-leading') as ISwitchComponent;
-showLeadingToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+const showStartToggle = document.getElementById('opt-show-start') as ISwitchComponent;
+showStartToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const tabElements = tabBar.querySelectorAll('forge-tab');
   tabElements.forEach(tab => {
     if (selected) {
-      tab.appendChild(createIcon('favorite', 'leading'));
+      tab.appendChild(createIcon('favorite', 'start'));
     } else {
-      tab.removeChild(tab.querySelector('forge-icon[slot=leading]'));
+      tab.removeChild(tab.querySelector('forge-icon[slot=start]'));
     }
   });
 });
 
-const showTrailingToggle = document.getElementById('opt-show-trailing') as ISwitchComponent;
-showTrailingToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+const showEndToggle = document.getElementById('opt-show-end') as ISwitchComponent;
+showEndToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const tabElements = tabBar.querySelectorAll('forge-tab');
   tabElements.forEach(tab => {
     if (selected) {
-      tab.appendChild(createIcon('favorite', 'trailing'));
+      tab.appendChild(createIcon('favorite', 'end'));
     } else {
-      tab.removeChild(tab.querySelector('forge-icon[slot=trailing]'));
+      tab.removeChild(tab.querySelector('forge-icon[slot=end]'));
     }
   });
 });

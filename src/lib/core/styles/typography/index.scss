@@ -90,24 +90,51 @@
 /// Create a selector for default anchor link styles
 ///
 @mixin anchor {
-  a:not([forge-ignore]),
+  .forge-anchor,
+  .forge-hyperlink,
   .forge-typography--link {
-    text-decoration: var(--forge-typography-link-text-decoration, underline);
-    color: theme.variable(primary);
-    cursor: pointer;
+    @include anchor-base;
 
     &:visited {
-      color: theme.variable(primary);
+      @include anchor-visited;
     }
 
     &:hover {
-      text-decoration: none;
+      @include anchor-hover;
     }
 
     &:active {
-      opacity: theme.emphasis(high);
+      @include anchor-active;
+    }
+
+    &-plain {
+      @include anchor-plain;
     }
   }
+}
+
+@mixin anchor-base {
+  text-decoration: var(--forge-typography-link-text-decoration, underline);
+  color: theme.variable(primary);
+  cursor: pointer;
+}
+
+@mixin anchor-visited {
+  color: theme.variable(primary);
+}
+
+@mixin anchor-hover {
+  text-decoration: none;
+}
+
+@mixin anchor-active {
+  opacity: theme.emphasis(high);
+}
+
+@mixin anchor-plain {
+  text-decoration: none;
+  color: inherit;
+  outline: none;
 }
 
 ///

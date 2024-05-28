@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '../core/styles/typography';
 @use '../core/styles/theme';
 @use '../utils/mixins' as utils;
@@ -384,7 +385,7 @@
 @mixin event-color() {
   @each $color in variables.$theme-base-strings {
     &[data-event-theme=#{"" + $color}] {
-      color: var(--forge-calendar-theme-event-#{$color}-accent, map-get(variables.$theme-values, event-#{$color}-accent));
+      color: var(--forge-calendar-theme-event-#{$color}-accent, map.get(variables.$theme-values, event-#{$color}-accent));
     }
   }
 }

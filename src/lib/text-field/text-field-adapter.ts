@@ -3,7 +3,7 @@ import { BASE_FIELD_CONSTANTS, FIELD_CONSTANTS, IFieldComponent } from '../field
 import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
 import { LabelComponent } from '../label';
 import { ITextFieldComponent } from './text-field';
-import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS } from './text-field-constants';
+import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS, TextFieldObservedInputAttributes } from './text-field-constants';
 
 export interface ITextFieldAdapter extends IBaseFieldAdapter {
   readonly popoverTargetElement: HTMLElement;
@@ -98,13 +98,13 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
         if (mutation.attributeName) {
           const element = mutation.target as HTMLElement;
           const attribute = element.getAttribute(mutation.attributeName);
-          const attributeName = mutation.attributeName as keyof typeof TEXT_FIELD_CONSTANTS.observedInputAttributes;
+          const attributeName = mutation.attributeName as TextFieldObservedInputAttributes;
           listener(attributeName, attribute);
         }
       });
     });
     this._inputElements.forEach(el => {
-      this._inputMutationObserver?.observe(el, { attributes: true, attributeFilter: TEXT_FIELD_CONSTANTS.observedInputAttributes });
+      this._inputMutationObserver?.observe(el, { attributes: true, attributeFilter: [...TEXT_FIELD_CONSTANTS.observedInputAttributes] });
 
       if (this._component.disabled) {
         el.disabled = true;
@@ -112,7 +112,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
 
       // Call the listener with each observed attribute to capture the initial state
       Object.values(TEXT_FIELD_CONSTANTS.observedInputAttributes).forEach(value => {
-        const attributeName = value as keyof typeof TEXT_FIELD_CONSTANTS.observedInputAttributes;
+        const attributeName = value as TextFieldObservedInputAttributes;
         listener(attributeName, el.getAttribute(attributeName as string));
       });
     });

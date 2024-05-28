@@ -27,11 +27,16 @@ const selectors = {
   CENTER_SECTION: '#center-section'
 };
 
+const events = {
+  NAVIGATE: `${elementName}-navigate`
+};
+
 export const APP_BAR_CONSTANTS = {
   elementName,
   selectors,
   attributes,
-  classes
+  classes,
+  events
 };
 
 export type AppBarElevation = 'none' | 'raised';

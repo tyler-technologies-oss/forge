@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { elementUpdated, fixture, html } from '@open-wc/testing';
-import { sendMouse } from '@web/test-runner-commands';
 import { APP_BAR_CONSTANTS } from './app-bar-constants';
 import type { IStateLayerComponent } from '../../state-layer';
 import type { IFocusIndicatorComponent } from '../../focus-indicator';
 import type { IAppBarComponent } from './app-bar';
+import sinon from 'sinon';
 
 import './app-bar';
 
@@ -119,6 +119,41 @@ describe('App Bar', () => {
 
     expect(centerEl.style.display).to.equal('');
     expect(getRootEl(el).classList.contains(APP_BAR_CONSTANTS.classes.NO_CENTER)).to.be.false;
+  });
+
+  it('should dispatch navigate event', async () => {
+    const el = await fixture<IAppBarComponent>(html`<forge-app-bar href="javascript: void(0);"></forge-app-bar>`);
+    const anchorEl = getAnchorEl(el);
+
+    const navigateSpy = sinon.spy();
+    el.addEventListener(APP_BAR_CONSTANTS.events.NAVIGATE, navigateSpy);
+
+    anchorEl.click();
+
+    expect(navigateSpy.calledOnce).to.be.true;
+  });
+
+  it('should cancel navigate event', async () => {
+    // Create a temporary function to test the anchor element click
+    window['forgeAppBarAnchorTest'] = () => {};
+    const testSpy = sinon.spy(window as any, 'forgeAppBarAnchorTest');
+
+    const el = await fixture<IAppBarComponent>(html`<forge-app-bar href="javascript: forgeAppBarAnchorTest();"></forge-app-bar>`);
+    const anchorEl = getAnchorEl(el);
+
+    // Prevent the default behavior of the anchor element
+    const navigateSpy = sinon.spy(evt => evt.preventDefault());
+    el.addEventListener(APP_BAR_CONSTANTS.events.NAVIGATE, navigateSpy);
+
+    expect(window['forgeAppBarAnchorTest']).not.to.be.undefined;
+
+    anchorEl.click();
+    await elementUpdated(el);
+    delete window['forgeAppBarAnchorTest'];
+
+    expect(navigateSpy.calledOnce).to.be.true;
+    expect(window['forgeAppBarAnchorTest']).to.be.undefined;
+    expect(testSpy.calledOnce).to.be.false;
   });
 
   function getRootEl(el: IAppBarComponent): HTMLElement {

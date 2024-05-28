@@ -1,7 +1,7 @@
 import { FieldLabelPosition, FIELD_CONSTANTS } from '../field';
 import { BaseFieldFoundation, IBaseFieldFoundation } from '../field/base/base-field-foundation';
 import { ITextFieldAdapter, TextFieldAdapter } from './text-field-adapter';
-import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS } from './text-field-constants';
+import { TextFieldInputAttributeObserver, TextFieldValueChangeListener, TEXT_FIELD_CONSTANTS, TextFieldObservedInputAttributes } from './text-field-constants';
 
 export interface ITextFieldFoundation extends IBaseFieldFoundation {
   readonly popoverTargetElement: HTMLElement;
@@ -49,7 +49,7 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
     }
   }
 
-  private _onInputAttributeChange(name: keyof typeof TEXT_FIELD_CONSTANTS.observedInputAttributes, value: string | null): void {
+  private _onInputAttributeChange(name: TextFieldObservedInputAttributes, value: string | null): void {
     switch (name) {
       case 'disabled':
         this.disabled = value !== null;

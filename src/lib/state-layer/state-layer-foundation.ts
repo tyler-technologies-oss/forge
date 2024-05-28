@@ -262,6 +262,7 @@ export class StateLayerFoundation implements IStateLayerFoundation {
     }
 
     this._adapter.setTargetElement(el);
+    this._adapter.addTargetListener('click', this._clickListener);
 
     // If we are not already deferring attaching the listeners, then do that now
     if (!this._deferred) {
@@ -286,6 +287,7 @@ export class StateLayerFoundation implements IStateLayerFoundation {
         }
 
         this._adapter.trySetTarget(value);
+        this._adapter.addTargetListener('click', this._clickListener);
 
         if (!this._deferred) {
           this._deferInitialization();

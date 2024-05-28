@@ -25,7 +25,7 @@ import { IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/
 import template from './dialog.html';
 import styles from './dialog.scss';
 
-export interface IDialogComponent extends IWithDefaultAria, IWithElementInternals, IDismissible {
+export interface IDialogProperties {
   open: boolean;
   mode: DialogMode;
   type: DialogType;
@@ -39,6 +39,9 @@ export interface IDialogComponent extends IWithDefaultAria, IWithElementInternal
   sizeStrategy: DialogSizeStrategy;
   placement: DialogPlacement;
   moveable: boolean;
+}
+
+export interface IDialogComponent extends IDialogProperties, IWithDefaultAria, IWithElementInternals, IDismissible {
   show(): void;
   hide(): void;
 }
@@ -57,8 +60,6 @@ declare global {
     'forge-dialog-move-end': CustomEvent<void>;
   }
 }
-
-const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
 
 /**
  * @tag forge-dialog
@@ -157,20 +158,25 @@ const BaseClass = WithDefaultAria(WithElementInternals(BaseComponent));
     BackdropComponent
   ]
 })
-export class DialogComponent extends BaseClass implements IDialogComponent {
+export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements IDialogComponent {
   public static get observedAttributes(): string[] {
     return Object.values(DIALOG_CONSTANTS.observedAttributes);
   }
 
-  /** Contains all the dialogs that are currently open. */
+  /**
+   * @internal
+   * Contains all the dialogs that are currently open.
+   */
   public static readonly [dialogStack]: Set<IDialogComponent> = new Set();
 
   private _foundation: DialogFoundation;
 
+  /** @internal */
   public [hideBackdrop](): void {
     this._foundation.hideBackdrop();
   }
   
+  /** @internal */
   public [showBackdrop](): void {
     this._foundation.showBackdrop();
   }

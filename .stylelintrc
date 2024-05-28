@@ -1,6 +1,3 @@
 {
-  "extends": "@tylertech/stylelint-rules",
-  "rules": {
-    "length-zero-no-unit": null
-  }
+  "extends": "@tylertech/stylelint-rules"
 }

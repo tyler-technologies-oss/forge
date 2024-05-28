@@ -1,8 +1,10 @@
 import '$src/shared';
-import { IDatePickerComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/date-picker';
 import '@tylertech/forge/label-value';
 import './date-picker.scss';
+import { IDatePickerComponent } from '@tylertech/forge/date-picker';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const datePicker = document.querySelector('forge-date-picker#demo-date-picker') as IDatePickerComponent;
 const datePickerInput = datePicker.querySelector('input');
@@ -15,6 +17,10 @@ datePicker.addEventListener('forge-date-picker-open', () => {
 
 datePicker.addEventListener('forge-date-picker-close', () => {
   console.log('forge-date-picker-close');
+});
+
+datePicker.addEventListener('forge-calendar-month-change', (evt) => {
+  console.log('[forge-calendar-month-change]', evt);
 });
 
 datePicker.addEventListener('forge-date-picker-change', (evt) => {

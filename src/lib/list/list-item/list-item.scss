@@ -7,7 +7,7 @@
 // Host
 //
 
-$_host-tokens: [indent dense-indent];
+$_host-tokens: [indent dense-indent disabled-cursor];
 
 :host {
   @include tokens($includes: $_host-tokens);
@@ -31,20 +31,22 @@ $_host-tokens: [indent dense-indent];
 
 .forge-list-item {
   @include base;
-}
 
-// Non-interactive
-:host([non-interactive]) {
-  .forge-list-item {
-    @include non-interactive;
+  &.interactive {
+    cursor: #{token(cursor)};
   }
-}
 
-// Disabled
-:host([disabled]) {
-  .forge-list-item {
+  &.disabled {
     @include disabled;
+
+    ::slotted(button) {
+      cursor: #{token(disabled-cursor)};
+    }
   }
+}
+
+.anchor {
+  @include anchor-internal;
 }
 
 // Two-line
@@ -91,22 +93,26 @@ $_host-tokens: [indent dense-indent];
   }
 }
 
-// Dense leading/trailing
+// Dense start/end
 :host([selected]) {
   .forge-list-item {
     @include selected;
 
+    ::slotted([slot=start]),
+    ::slotted([slot=end]),
     ::slotted([slot=leading]),
     ::slotted([slot=trailing]) {
-      @include leading-trailing-selected;
+      @include start-end-selected;
     }
 
+    ::slotted([slot=start]),
     ::slotted([slot=leading]) {
-      @include leading-selected;
+      @include start-selected;
     }
 
+    ::slotted([slot=end]),
     ::slotted([slot=trailing]) {
-      @include trailing-selected;
+      @include end-selected;
     }
   }
 
@@ -126,11 +132,6 @@ $_host-tokens: [indent dense-indent];
   @include indented;
 }
 
-// Anchor base
-a.forge-list-item {
-  @include anchor-link;
-}
-
 // Text container base
 .text-container {
   @include text-container;
@@ -138,9 +139,7 @@ a.forge-list-item {
 
 // Text slotted elements
 slot[name=secondary-text],
-slot[name=subtitle],
-slot[name=tertiary-text],
-slot[name=tertiary-title] {
+slot[name=tertiary-text] {
   &::slotted(*) {
     @include text;
   }
@@ -150,28 +149,45 @@ slot[name=tertiary-title] {
   }
 }
 
-// Avatar slotted elements
-::slotted([slot=avatar]) {
-  @include avatar;
+// Button slotted elements
+::slotted(:is(button, [role=button][tabindex], [forge-list-item-button])) {
+  @include button;
 }
 
-// Leading/trailing slotted elements
+// Anchor slotted elements
+::slotted(a) {
+  @include anchor;
+}
+
+// Start/end slotted elements
+::slotted([slot=start]),
+::slotted([slot=end]),
 ::slotted([slot=leading]),
 ::slotted([slot=trailing]) {
-  @include leading-trailing-base;
+  @include start-end-base;
 }
 
-// Leading slotted elements
-::slotted([slot=leading]) {
-  :host([selected]) & {
-    @include leading-selected;
+// Interactive slotted form controls to hide state-layer and focus-indicator
+:host(:not([noninteractive])) {
+  ::slotted(:is(forge-checkbox,forge-radio,forge-switch):is([slot=start],[slot=end],[slot=leading],[slot=trailing]):not([forge-ignore])) {
+    @include focus-indicator.provide-theme(( display: none ));
+    @include state-layer.provide-theme(( display: none ));
   }
 }
 
-// Trailing slotted elements
+// Start slotted elements
+::slotted([slot=start]),
+::slotted([slot=leading]) {
+  :host([selected]) & {
+    @include start-selected;
+  }
+}
+
+// End slotted elements
+::slotted([slot=end]),
 ::slotted([slot=trailing]) {
   :host([selected]) & {
-    @include trailing-selected;
+    @include end-selected;
   }
 }
 
@@ -186,9 +202,7 @@ slot[name=tertiary-title] {
   }
 
   slot[name=secondary-text],
-  slot[name=subtitle],
-  slot[name=tertiary-text],
-  slot[name=tertiary-title] {
+  slot[name=tertiary-text] {
     &::slotted(*) {
       @include text-wrap;
     }

@@ -37,7 +37,15 @@ $host-tokens: [display disabled-cursor];
   }
 }
 
-a {
+//
+// Anchor
+//
+
+.with-anchor {
+  padding-inline: 0;
+}
+
+::slotted(a) {
   @include anchor-base;
 }
 

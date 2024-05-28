@@ -23,9 +23,7 @@ export interface ITooltipFoundation extends ICustomElementFoundation {
   syncTooltipAria(): void;
 }
 
-const BaseClass = WithLongpressListener();
-
-export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
+export class TooltipFoundation extends WithLongpressListener() implements ITooltipFoundation {
   private _open = false;
   private _type: TooltipType = TOOLTIP_CONSTANTS.defaults.TYPE;
   private _anchor: string;
@@ -61,6 +59,17 @@ export class TooltipFoundation extends BaseClass implements ITooltipFoundation {
   }
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration([
+      'type',
+      'delay',
+      'placement',
+      'offset',
+      'flip',
+      'boundaryElement',
+      'fallbackPlacements',
+      'triggerType'
+    ]);
+
     if (!this._adapter.anchorElement) {
       this._adapter.tryLocateAnchorElement(this._anchor);
     }

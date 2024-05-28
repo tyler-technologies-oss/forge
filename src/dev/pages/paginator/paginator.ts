@@ -1,12 +1,13 @@
 import '$src/shared';
 import '@tylertech/forge/paginator';
-import { IPaginatorComponent, IPaginatorRangeState, ISwitchComponent, PAGINATOR_CONSTANTS } from '@tylertech/forge';
+import { IPaginatorComponent, PAGINATOR_CONSTANTS, IPaginatorRangeState } from '@tylertech/forge/paginator';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const paginator = document.getElementById('forge-paginator-example') as IPaginatorComponent;
 
 const showPageSizeOptsToggle = document.getElementById('opt-show-page-size-opts') as ISwitchComponent;
 showPageSizeOptsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
-  paginator.pageSizeOptions = selected ? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS : false;
+  paginator.pageSizeOptions = selected ? PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS : [];
 });
 
 const showLabelToggle = document.getElementById('opt-show-label') as ISwitchComponent;

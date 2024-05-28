@@ -3,6 +3,7 @@
 @use '../../utils';
 
 $tokens: (
+  display: utils.module-val(state-layer, display, flex),
   color: utils.module-val(state-layer, color, theme.variable(on-surface)),
   hover-color: utils.module-ref(state-layer, hover-color, color),
   hover-opacity: utils.module-val(state-layer, hover-opacity, 0.08),

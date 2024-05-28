@@ -42,8 +42,6 @@ declare global {
   }
 }
 
-const BaseSwitchClass = WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))));
-
 /**
  * @tag forge-switch
  * 
@@ -60,7 +58,7 @@ const BaseSwitchClass = WithFormAssociation(WithLabelAwareness(WithFocusable(Wit
  * @property {string} value - The value of the switch.
  * @property {boolean} dense - The density state.
  * @property {boolean} disabled - Controls if the switch is disabled.
- * @property {boolean} required = Controls if the switch is required.
+ * @property {boolean} required - Controls if the switch is required.
  * @property {boolean} readonly - Controls if the switch is readonly.
  * @property {SwitchIconVisibility} icon - Controls the presence of the off and on icons.
  * @property {SwitchLabelPosition} labelPosition - Whether the label appears before or after the switch.
@@ -164,7 +162,7 @@ const BaseSwitchClass = WithFormAssociation(WithLabelAwareness(WithFocusable(Wit
     StateLayerComponent
   ]
 })
-export class SwitchComponent extends BaseSwitchClass implements ISwitchComponent {
+export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent))))) implements ISwitchComponent {
   public static get observedAttributes(): string[] {
     return Object.values(SWITCH_CONSTANTS.observedAttributes);
   }

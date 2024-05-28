@@ -3,9 +3,12 @@ import '@tylertech/forge/dialog';
 import '@tylertech/forge/toolbar';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/button';
-import { IconRegistry, IDialogComponent, IDialogMoveEventData, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
 import './dialog.scss';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
+import { IDialogComponent, IDialogMoveEventData } from '@tylertech/forge/dialog';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconClose

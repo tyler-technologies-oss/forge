@@ -56,7 +56,9 @@ const classes = {
 
 const events = {
   INPUT: 'forge-slider-input',
-  CHANGE: 'forge-slider-change'
+  CHANGE: 'forge-slider-change',
+  RANGE_INPUT: 'forge-slider-range-input',
+  RANGE_CHANGE: 'forge-slider-range-change'
 };
 
 const cssCustomProperties = {
@@ -82,7 +84,11 @@ export const SLIDER_CONSTANTS = {
   cssCustomProperties
 };
 
-export interface ISliderRangeEventData {
+export interface ISliderChangeEventData {
+  value: number;
+}
+
+export interface ISliderRangeChangeEventData {
   valueStart: number;
   valueEnd: number;
 }

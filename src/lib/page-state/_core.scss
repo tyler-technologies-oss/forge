@@ -22,13 +22,14 @@
 }
 
 @mixin graphic-container {
-  @include override(height, graphic-height);
-  @include override(spacing, graphic-spacing);
-
   display: flex;
   justify-content: center;
   align-items: center;
+  
+  height: #{token(graphic-height)};
   width: 100%;
+  
+  margin-block-end: #{token(graphic-spacing)};
 }
 
 @mixin graphic {

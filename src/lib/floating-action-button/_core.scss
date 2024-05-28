@@ -55,7 +55,8 @@
 }
 
 @mixin extended {
-  padding-inline: #{token(extended-padding)};
+  @include override(padding, extended-padding);
+  
   min-width: #{token(extended-min-width)};
 }
 
@@ -72,8 +73,19 @@
 }
 
 @mixin anchor-base {
-  position: absolute;
-  inset: 0;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border-radius: #{token(shape)};
+  padding-inline: #{token(padding)};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: #{token(gap)};
+
+  color: #{token(color)};
+
   text-decoration: none;
 }
 

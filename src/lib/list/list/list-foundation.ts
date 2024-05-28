@@ -1,110 +1,31 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
-
 import { IListAdapter } from './list-adapter';
 import { LIST_CONSTANTS } from './list-constants';
 
 export interface IListFoundation extends ICustomElementFoundation {
-  static: boolean;
-  nonInteractive: boolean;
-  disabled: boolean;
   dense: boolean;
-  propagateClick: boolean;
   indented: boolean;
   selectedValue: unknown | unknown[];
   twoLine: boolean;
   threeLine: boolean;
   wrap: boolean;
+  noninteractive: boolean;
 }
 
 export class ListFoundation implements IListFoundation {
-  private _nonInteractive = false;
-  private _disabled = false;
   private _dense = false;
-  private _propagateClick = true;
   private _indented = false;
   private _selectedValue: unknown | unknown[];
   private _twoLine = false;
   private _threeLine = false;
   private _wrap = false;
-  private _keydownListener: EventListener;
+  private _noninteractive = false;
 
-  constructor(private _adapter: IListAdapter) {
-    this._keydownListener = this._onKeydown.bind(this);
-  }
+  constructor(private _adapter: IListAdapter) {}
 
   public initialize(): void {
-    this._adapter.initialize();
-
-    if (!this._nonInteractive) {
-      this._adapter.addHostListener('keydown', this._keydownListener);
-    }
-
     if (this._selectedValue !== undefined && this._selectedValue !== null) {
       this._adapter.setSelectedListItems(this._selectedValue);
-    }
-  }
-
-  private _onKeydown(evt: KeyboardEvent): void {
-    const path = evt.composedPath();
-    const composedBeforeUs = path.slice(0, path.indexOf(this._adapter.hostElement));
-    const fromListDescendant = composedBeforeUs.some((el: HTMLElement) => el.localName === LIST_CONSTANTS.elementName.toLowerCase());
-    if (fromListDescendant) {
-      return; // We ignore keydown events coming from sub-lists because they are already handling it themselves
-    }
-
-    const { key, altKey, ctrlKey, shiftKey, metaKey } = evt;
-
-    if (altKey || ctrlKey || shiftKey || metaKey) {
-      return;
-    }
-
-    if (key === 'Home') {
-      evt.preventDefault();
-      this._adapter.focusFirstListItem();
-    } else if (key === 'End') {
-      evt.preventDefault();
-      this._adapter.focusLastListItem();
-    } else if (key === 'ArrowUp') {
-      evt.preventDefault();
-      this._adapter.focusPreviousListItem();
-    } else if (key === 'ArrowDown') {
-      evt.preventDefault();
-      this._adapter.focusNextListItem();
-    }
-  }
-
-  public updateRole(): void {
-    this._adapter.updateListItemRole();
-  }
-
-  public get static(): boolean {
-    return this.nonInteractive;
-  }
-  public set static(value: boolean) {
-    this.nonInteractive = value;
-  }
-
-  public get nonInteractive(): boolean {
-    return this._nonInteractive;
-  }
-  public set nonInteractive(value: boolean) {
-    if (this._nonInteractive !== value) {
-      this._nonInteractive = value;
-      this._adapter.toggleHostListener('keydown', this._keydownListener, !this._nonInteractive);
-      this._adapter.updateListItems(li => li.nonInteractive = this._nonInteractive);
-      this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.STATIC, this._nonInteractive);
-      this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.NON_INTERACTIVE, this._nonInteractive);
-    }
-  }
-
-  public get disabled(): boolean {
-    return this._disabled;
-  }
-  public set disabled(value: boolean) {
-    if (this._disabled !== value) {
-      this._disabled = value;
-      this._adapter.updateListItems(li => li.disabled = this._disabled);
-      this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }
 
@@ -114,19 +35,8 @@ export class ListFoundation implements IListFoundation {
   public set dense(value: boolean) {
     if (this._dense !== value) {
       this._dense = value;
-      this._adapter.updateListItems(li => li.dense = this._dense);
+      this._adapter.setListItemsProperty('dense', this._dense);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.DENSE, this._dense);
-    }
-  }
-
-  public get propagateClick(): boolean {
-    return this._propagateClick;
-  }
-  public set propagateClick(value: boolean) {
-    if (this._propagateClick !== value) {
-      this._propagateClick = value;
-      this._adapter.updateListItems(li => li.propagateClick = this._propagateClick);
-      this._adapter.setHostAttribute(LIST_CONSTANTS.attributes.PROPAGATE_CLICK, this._propagateClick ? 'true' : 'false');
     }
   }
 
@@ -136,7 +46,7 @@ export class ListFoundation implements IListFoundation {
   public set indented(value: boolean) {
     if (this._indented !== value) {
       this._indented = value;
-      this._adapter.updateListItems(li => li.indented = this._indented);
+      this._adapter.setListItemsProperty('indented', this._indented);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.INDENTED, this._indented);
     }
   }
@@ -157,7 +67,7 @@ export class ListFoundation implements IListFoundation {
   public set twoLine(value: boolean) {
     if (this._twoLine !== value) {
       this._twoLine = value;
-      this._adapter.updateListItems(li => li.twoLine = this._twoLine);
+      this._adapter.setListItemsProperty('twoLine', this._twoLine);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.TWO_LINE, this._twoLine);
     }
   }
@@ -168,7 +78,7 @@ export class ListFoundation implements IListFoundation {
   public set threeLine(value: boolean) {
     if (this._threeLine !== value) {
       this._threeLine = value;
-      this._adapter.updateListItems(li => li.threeLine = this._threeLine);
+      this._adapter.setListItemsProperty('threeLine', this._threeLine);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.THREE_LINE, this._threeLine);
     }
   }
@@ -179,8 +89,19 @@ export class ListFoundation implements IListFoundation {
   public set wrap(value: boolean) {
     if (this._wrap !== value) {
       this._wrap = value;
-      this._adapter.updateListItems(li => li.wrap = this._wrap);
+      this._adapter.setListItemsProperty('wrap', this._wrap);
       this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.WRAP, this._wrap);
+    }
+  }
+
+  public get noninteractive(): boolean {
+    return this._noninteractive;
+  }
+  public set noninteractive(value: boolean) {
+    if (this._noninteractive !== value) {
+      this._noninteractive = value;
+      this._adapter.setListItemsProperty('noninteractive', this._noninteractive);
+      this._adapter.toggleHostAttribute(LIST_CONSTANTS.attributes.NONINTERACTIVE, this._noninteractive);
     }
   }
 }

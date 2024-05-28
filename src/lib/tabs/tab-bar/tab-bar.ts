@@ -4,7 +4,7 @@ import { IconButtonComponent } from '../../icon-button';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { TabComponent } from '../tab/tab';
 import { TabBarAdapter } from './tab-bar-adapter';
-import { TAB_BAR_CONSTANTS } from './tab-bar-constants';
+import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
 import { TabBarFoundation } from './tab-bar-foundation';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 
@@ -29,7 +29,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-tab-bar-change': CustomEvent<number>;
+    'forge-tab-bar-change': CustomEvent<ITabBarChangeEventData>;
   }
 }
 
@@ -62,7 +62,7 @@ declare global {
  * @attribute auto-activate - Controls whether the tabs are automatically activated when receiving focus.
  * @attribute scroll-buttons - Controls whether scroll buttons are displayed when the tabs overflow their container.
  * 
- * @event forge-tab-bar-change {CustomEvent<number>} - Dispatches when the active tab changes.
+ * @event forge-tab-bar-change {CustomEvent<ITabBarChangeEventData>} - Dispatches when the active tab changes.
  * 
  * @cssproperty --forge-tab-bar-justify - The `justify-content` value for the tab bar flex container.
  * @cssproperty --forge-tab-bar-stretch - The `flex` value for the child `<forge-tab>` elements.

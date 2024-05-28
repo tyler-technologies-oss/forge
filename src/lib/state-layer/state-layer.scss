@@ -4,6 +4,12 @@
 // Host
 //
 
+$_host-tokens: (display);
+
+:host {
+  @include tokens($includes: $_host-tokens);
+}
+
 :host {
   @include host;
 }
@@ -17,7 +23,7 @@
 }
 
 .forge-state-layer {
-  @include tokens;
+  @include tokens($excludes: $_host-tokens);
 }
 
 .forge-state-layer {

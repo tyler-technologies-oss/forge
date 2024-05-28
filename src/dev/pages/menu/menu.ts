@@ -1,11 +1,13 @@
 import '$src/shared';
 import { randomTimeout } from '$src/utils/utils';
 import { IconRegistry } from '@tylertech/forge/icon';
-import type { IListItemComponent, IMenuComponent, IMenuOption, ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/menu';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/button';
 import { tylIconArrowBack, tylIconArrowForward, tylIconHelp, tylIconLoop, tylIconPerson, tylIconSettings } from '@tylertech/tyler-icons/standard';
+import { IMenuComponent, IMenuOption } from '@tylertech/forge/menu';
+import { IListItemComponent } from '@tylertech/forge/list';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconArrowBack,

@@ -72,14 +72,25 @@
   font-size: #{token(icon-size)};
 }
 
-@mixin anchor-base {
-  position: absolute;
-  inset: 0;
-  text-decoration: none;
+@mixin with-anchor {
+  display: block;
+  padding: 0;
 }
 
-@mixin text {
-  @include override(focus-indicator-offset, text-focus-indicator-offset);
+@mixin anchor-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: #{token(spacing)};
+
+  padding: #{token(padding)};
+
+  color: #{token(color)};
+
+  outline: none;
+  border-radius: #{token(shape)};
+
+  text-decoration: none;
 }
 
 @mixin filled {

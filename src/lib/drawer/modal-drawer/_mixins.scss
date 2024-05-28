@@ -1,8 +1,5 @@
-@use '@material/elevation/elevation-theme' as mdc-elevation-theme;
-@use '@material/drawer/mixins' as mdc-drawer-mixins;
-@use '@material/drawer/variables' as mdc-drawer-variables;
+@use '../../core/styles/elevation';
 @use '../base/mixins' as base-mixins;
-@use '../../theme';
 
 @mixin core-styles() {
   @include base-mixins.core-styles;
@@ -42,10 +39,8 @@
 }
 
 @mixin base() {
-  @include mdc-drawer-mixins.scrim-fill-color(mdc-drawer-variables.$modal-scrim-color);
-  @include mdc-elevation-theme.elevation(24);
-  @include theme.z-index(dialog);
-
+  z-index: #{elevation.z-index-variable(dialog)};
+  box-shadow: #{elevation.value(24)};
   position: absolute;
   top: 0;
   max-width: 80%;
@@ -60,5 +55,5 @@
 }
 
 @mixin scrim() {
-  @include theme.z-index(dialog);
+  z-index: #{elevation.z-index-variable(dialog)};
 }

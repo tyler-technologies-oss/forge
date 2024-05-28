@@ -1,5 +1,6 @@
 import { emitEvent, toggleAttribute } from '@tylertech/forge-core';
 import { IBaseComponent } from './base-component';
+import { GlobalConfiguration } from '../configuration/global-configuration';
 
 export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   readonly hostElement: T;
@@ -24,6 +25,7 @@ export interface IBaseAdapter<T extends HTMLElement = HTMLElement> {
   removeBodyAttribute(name: string): void;
   focusHost(options?: FocusOptions): void;
   clickHost(): void;
+  tryApplyGlobalConfiguration(properties: Array<keyof T>): void;
 }
 
 export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
@@ -53,7 +55,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
     toggleAttribute(this._component, hasAttribute, name, value);
   }
 
-  public redispatchEvent(event: Event, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean {
+  public redispatchEvent(event: CustomEvent, options?: { bubbles?: boolean; cancelable?: boolean; composed?: boolean }): boolean {
     const isFromLightDom = !((event.target as HTMLElement)?.getRootNode() instanceof ShadowRoot);
     if (event.bubbles && (event.composed || isFromLightDom)) {
       event.stopPropagation();
@@ -61,6 +63,7 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
     
     const eventCopy = {
       ...event,
+      detail: event.detail ?? null,
       bubbles: options?.bubbles ?? event.bubbles,
       cancelable: options?.cancelable ?? event.cancelable,
       composed: options?.composed ?? event.composed
@@ -136,5 +139,23 @@ export class BaseAdapter<T extends IBaseComponent> implements IBaseAdapter<T> {
 
   public get isConnected(): boolean {
     return this._component.isConnected;
+  }
+
+  public tryApplyGlobalConfiguration(properties: Array<keyof T>): void {
+    const tagName = this._component.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
+    const entry = GlobalConfiguration.get<any>(tagName);
+    
+    if (!entry) {
+      return;
+    }
+
+    for (const property of properties) {
+      if (entry.has(property)) {
+        const value = entry.valueOf(property);
+        if (value) {
+          this._component[property] = value;
+        }
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
-@use '../theme';
 @use './variables';
+@use '../core/styles/animation';
 
 @mixin core-styles() {
   .forge-view-switcher {
@@ -12,28 +12,28 @@
 }
 
 @mixin host() {
-  @include theme.css-custom-property(height, --forge-view-switcher-height, auto);
-  @include theme.css-custom-property(width, --forge-view-switcher-width, auto);
+  height: var(--forge-view-switcher-height, auto);
+  width: var(--forge-view-switcher-width, auto);
 
   display: block;
 }
 
 @mixin base() {
-  @include theme.css-custom-property(height, --forge-view-switcher-height, auto);
-  @include theme.css-custom-property(width, --forge-view-switcher-width, auto);
+  height: var(--forge-view-switcher-height, auto);
+  width: var(--forge-view-switcher-width, auto);
 
   position: relative;
   overflow: hidden;
-  transition: height variables.$animation-duration cubic-bezier(0.35, 0, 0.25, 1);
+  transition: height #{animation.variable(duration-medium2)} cubic-bezier(0.35, 0, 0.25, 1);
 }
 
 @mixin view-slidable() {
-  transition: transform variables.$animation-duration cubic-bezier(0.35, 0, 0.25, 1);
+  transition: transform #{animation.variable(duration-medium2)} cubic-bezier(0.35, 0, 0.25, 1);
   will-change: transform;
 }
 
 @mixin view-fadeable() {
-  transition: opacity variables.$animation-duration cubic-bezier(0.35, 0, 0.25, 1);
+  transition: opacity #{animation.variable(duration-medium2)} cubic-bezier(0.35, 0, 0.25, 1);
   will-change: opacity;
 }
 

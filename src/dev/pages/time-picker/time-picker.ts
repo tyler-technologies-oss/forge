@@ -1,9 +1,9 @@
 import '$src/shared';
-import { ISwitchComponent } from '@tylertech/forge';
 import '@tylertech/forge/time-picker';
 import '@tylertech/forge/label-value';
 import type { ITimePickerComponent, ITimePickerOption } from '@tylertech/forge/time-picker';
 import './time-picker.scss';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const CUSTOM_OPTIONS: ITimePickerOption[] = [
   {

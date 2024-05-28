@@ -35,7 +35,7 @@ export interface IMenuAdapter extends IBaseAdapter {
 
 export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAdapter {
   private _targetElement: HTMLElement | null;
-  private _listDropdown?: IListDropdown;
+  private _listDropdown: IListDropdown | undefined;
   private _childMenus = new Map<number, IMenuComponent>();
 
   constructor(component: IMenuComponent) {
@@ -95,30 +95,22 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public setOptions(options: Array<IMenuOption | IMenuOptionGroup>): void {
-    if (this._listDropdown) {
-      this._listDropdown.setOptions(options);
-    }
+    this._listDropdown?.setOptions(options);
   }
 
   public destroyListDropdown(): void {
-    if (this._listDropdown) {
-      this._listDropdown.destroy();
-      this._listDropdown = undefined;
-    }
+    this._listDropdown?.destroy();
+    this._listDropdown = undefined;
   }
 
   public async detachMenu(): Promise<void> {
-    if (this._targetElement) {
-      this._targetElement.removeAttribute('aria-activedescendant');
-      this._targetElement.removeAttribute('aria-expanded');
-      this._targetElement.removeAttribute('aria-controls');
-    }
+    this._targetElement?.removeAttribute('aria-activedescendant');
+    this._targetElement?.removeAttribute('aria-expanded');
+    this._targetElement?.removeAttribute('aria-controls');
 
-    if (this._listDropdown) {
-      await this._listDropdown.close();
-      this._listDropdown.destroy();
-      this._listDropdown = undefined;
-    }
+    await this._listDropdown?.close();
+    this._listDropdown?.destroy();
+    this._listDropdown = undefined;
   }
 
   public setActiveOption(index: number): void {
@@ -141,9 +133,7 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public focusTarget(): void {
-    if (this._targetElement) {
-      this._targetElement.focus();
-    }
+    this._targetElement?.focus();
   }
 
   public isTargetFocused(): boolean {

@@ -16,7 +16,7 @@ import {
   SUPPORTS_POPOVER
 } from './overlay-constants';
 
-export interface IOverlayAdapter extends IBaseAdapter {
+export interface IOverlayAdapter extends IBaseAdapter<IOverlayComponent> {
   show(): void;
   hide(): void;
   tryHideDescendantOverlays(): void;
@@ -135,14 +135,12 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         },
         flip: flip !== 'never',
         flipOptions: {
-          boundary: SUPPORTS_POPOVER ? document.body : 'clippingAncestors',
           fallbackStrategy: 'bestFit',
           fallbackPlacements: fallbackPlacements ?? OVERLAY_FALLBACK_PLACEMENT_MAP[placement] ?? DEFAULT_FALLBACK_PLACEMENTS,
           crossAxis: flip === 'cross' || flip === 'auto',
           mainAxis: flip === 'main' || flip === 'auto'
         },
         arrowElement: this._component.arrowElement,
-        topLayer: !this._component.inline && SUPPORTS_POPOVER,
         offset: Boolean(offsetOptions),
         offsetOptions
       });

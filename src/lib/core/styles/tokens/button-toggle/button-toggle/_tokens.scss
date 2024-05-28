@@ -40,9 +40,6 @@ $tokens: (
   selected-color: utils.module-val(button-toggle, selected-color, theme.variable(on-tertiary-container)),
   selected-disabled-background: utils.module-val(button-toggle, selected-disabled-background, theme.variable(surface-container)),
 
-  // Dense
-  dense-height: utils.module-val(button-toggle, dense-height, 24px),
-
   // Disabled
   disabled-opacity: utils.module-val(button-toggle, disabled-opacity, theme.emphasis(medium-low)),
   disabled-cursor: utils.module-val(button-toggle, disabled-cursor, not-allowed),

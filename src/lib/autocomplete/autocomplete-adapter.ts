@@ -1,12 +1,13 @@
-import { getShadowElement, deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
+import { deepQuerySelectorAll, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter';
 import { IAutocompleteComponent } from './autocomplete';
 import { AUTOCOMPLETE_CONSTANTS, IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-constants';
-import { TEXT_FIELD_CONSTANTS } from '../text-field';
+import { ITextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field';
 import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdown';
-import { CHIP_FIELD_CONSTANTS } from '../chip-field';
+import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
 import { IPopoverComponent } from '../popover/popover';
 import { POPOVER_CONSTANTS } from '../popover';
+import { IFieldComponent } from '../field/field';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
   setInputElement(): HTMLInputElement;
@@ -285,22 +286,35 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
   }
 
   private _getDefaultTargetElement(): HTMLElement {
-    const fieldElements = [
-      TEXT_FIELD_CONSTANTS.elementName,
-      CHIP_FIELD_CONSTANTS.elementName
-    ];
-    // This component is often used with the field-like Forge elements, if so, let's target our popup around one if its internal elements for proper alignment
-    const textField = this._component.querySelector(`:is(${fieldElements.join(',')})`) as HTMLElement;
-    if (textField?.popoverTargetElement) {
-      return textField.popoverTargetElement;
+    // This component is often used with the field-like Forge elements, if so, let's target our popup
+    // around one if its internal elements for proper alignment
+    const fieldLike = this._tryGetFieldLikeChild() as ITextFieldComponent | IChipFieldComponent | null;
+    if (fieldLike?.popoverTargetElement) {
+      return fieldLike.popoverTargetElement;
     }
     return this._component.querySelector('input') || this._component;
   }
 
   private _tryToggleDropdownIconRotation(state: boolean): void {
+    const fieldLike = this._tryGetFieldLikeChild();
+    if (fieldLike?.popoverIcon) {
+      fieldLike.popoverExpanded = state;
+    }
+
+    // Deprecated/legacy support
+    // TODO: Remove in a future release
     const dropdownIcon = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON) as HTMLElement;
     if (dropdownIcon) {
-      toggleAttribute(dropdownIcon, state, AUTOCOMPLETE_CONSTANTS.attributes.DROPDOWN_ICON_OPEN);
+      dropdownIcon.style.transition = 'transform 120ms linear';
+      dropdownIcon.style.transform = state ? 'rotateZ(180deg)' : '';
     }
+  }
+
+  private _tryGetFieldLikeChild(): IFieldComponent | null {
+    const fieldLikeElements = [
+      TEXT_FIELD_CONSTANTS.elementName,
+      CHIP_FIELD_CONSTANTS.elementName
+    ];
+    return this._component.querySelector(`:is(${fieldLikeElements.join(',')})`) as IFieldComponent;
   }
 }

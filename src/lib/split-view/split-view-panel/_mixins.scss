@@ -1,6 +1,6 @@
-@use '@material/animation/variables' as mdc-animation-variables;
+@use '../../core/styles/animation';
+@use '../../core/styles/theme';
 @use './variables';
-@use '../../theme/theme';
 
 @mixin core-styles() {
   .forge-split-view-panel {
@@ -110,9 +110,7 @@
 }
 
 @mixin host() {
-  // There is no fallback value for the animating layer
-  @include theme.css-custom-property(z-index, --forge-split-view-animating-layer, $important: true);
-
+  z-index: var(--forge-split-view-animating-layer) !important;
   display: block;
   position: relative;
   height: 100%;
@@ -133,14 +131,14 @@
 }
 
 @mixin base-horizontal() {
-  @include theme.css-custom-property(min-width, --forge-split-view-handle-width, variables.$handle-width);
+  min-width: var(--forge-split-view-handle-width, variables.$handle-width);
 
   width: calc(var(--forge-split-view-panel-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
   flex-direction: row;
 }
 
 @mixin base-vertical() {
-  @include theme.css-custom-property(min-height, --forge-split-view-handle-width, variables.$handle-width);
+  min-height: var(--forge-split-view-handle-width, variables.$handle-width);
 
   height: calc(var(--forge-split-view-panel-size, unset) + var(--forge-split-view-handle-width, variables.$handle-width));
   flex-direction: column;
@@ -154,9 +152,8 @@
 }
 
 @mixin handle() {
-  @include theme.property(color, text-secondary-on-light);
-  @include theme.property(background-color, border-color);
-
+  color: #{theme.variable(text-medium)};
+  background-color: #{theme.variable(outline)};
   position: relative;
   display: flex;
   flex-shrink: 0;
@@ -167,9 +164,9 @@
 
 @mixin handle-orientation($orientation: horizontal) {
   @if $orientation == horizontal {
-    @include theme.css-custom-property(width, --forge-split-view-handle-width, variables.$handle-width);
+    width: var(--forge-split-view-handle-width, variables.$handle-width);
   } @else {
-    @include theme.css-custom-property(height, --forge-split-view-handle-width, variables.$handle-width);
+    height: var(--forge-split-view-handle-width, variables.$handle-width);
   }
 }
 
@@ -191,8 +188,7 @@
 }
 
 @mixin cursor($orientation: horizontal) {
-  // There is no fallback value for the panel cursor
-  @include theme.css-custom-property(cursor, --forge-split-view-panel-cursor);
+  cursor: var(--forge-split-view-panel-cursor);
 }
 
 @mixin closed() {
@@ -212,11 +208,11 @@
 @mixin closing-animation($direction: right) {
   @include animating-position($direction);
 
-  $animation-name: unique-id();
+  $animation-name: unique-id;
 
   animation-name: $animation-name;
-  animation-duration: variables.$animation-duration;
-  animation-timing-function: mdc-animation-variables.$standard-curve-timing-function;
+  animation-duration: #{animation.variable(duration-medium2)};
+  animation-timing-function: #{animation.variable(easing-standard)};
 
   @keyframes #{$animation-name} {
     from {
@@ -224,11 +220,11 @@
     }
   
     to {
-      @if ($direction == right) {
+      @if $direction == right {
         transform: translateX(100%);
-      } @else if ($direction == left) {
+      } @else if $direction == left {
         transform: translateX(-100%);
-      } @else if ($direction == top) {
+      } @else if $direction == top {
         transform: translateY(-100%);
       } @else {
         transform: translateY(100%);
@@ -240,13 +236,13 @@
 @mixin animating-position($direction: right) {
   position: absolute;
 
-  @if ($direction == right) {
+  @if $direction == right {
     top: 0;
     right: 0;
-  } @else if ($direction == left) {
+  } @else if $direction == left {
     top: 0;
     left: 0;
-  } @else if ($direction == top) {
+  } @else if $direction == top {
     top: 0;
     left: 0;
   } @else {

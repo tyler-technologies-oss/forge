@@ -43,7 +43,7 @@ const ViteTransformForgeInlineStyleImports: Plugin = {
   }
 };
 
-module.exports = defineConfig({
+export default defineConfig({
   server: {
     open: true,
     strictPort: false,

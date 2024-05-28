@@ -31,6 +31,7 @@ export interface IToastPresentConfiguration extends Partial<IToastProperties> {
   element?: HTMLElement;
   className?: string | string[];
   icon?: Partial<IIconProperties>;
+  topLayer?: boolean;
 }
 
 export interface IToastComponent extends IToastProperties, IWithElementInternals, IWithDefaultAria {
@@ -48,8 +49,6 @@ declare global {
     'forge-toast-close': CustomEvent<void>;
   }
 }
-
-const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
 
 /**
  * @tag forge-toast
@@ -108,7 +107,7 @@ const BaseClass = WithElementInternals(WithDefaultAria(BaseComponent));
     IconComponent
   ]
 })
-export class ToastComponent extends BaseClass implements IToastComponent {
+export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IToastComponent {
   public static get observedAttributes(): string[] {
     return Object.values(TOAST_CONSTANTS.observedAttributes);
   }
@@ -194,8 +193,9 @@ export class ToastComponent extends BaseClass implements IToastComponent {
    * Presents a toast notification.
    * @param config The configuration for the toast.
    * @returns A promise that resolves when the toast is closed.
+   * @ignore CEM
    */
-  public static present({ message, element, icon, className, ...config }: IToastPresentConfiguration): IToastComponent {
+  public static present({ message, element, icon, className, topLayer, ...config }: IToastPresentConfiguration): IToastComponent {
     const toast = document.createElement(TOAST_CONSTANTS.elementName) as IToastComponent;
 
     if (element) {
@@ -220,7 +220,7 @@ export class ToastComponent extends BaseClass implements IToastComponent {
       Object.assign(toast, config);
     }
 
-    const hostEl = Array.from(DialogComponent[dialogStack]).at(-1) ?? document.body;
+    const hostEl = (topLayer && Array.from(DialogComponent[dialogStack]).at(-1)) || document.body;
     hostEl.appendChild(toast);
 
     toast.open = true;

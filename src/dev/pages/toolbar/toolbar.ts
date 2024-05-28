@@ -1,8 +1,9 @@
 import '$src/shared';
 import '@tylertech/forge/toolbar';
 import './toolbar.scss';
-import type { IToolbarComponent, ISwitchComponent} from '@tylertech/forge';
 import { toggleAttribute } from '@tylertech/forge-core';
+import { IToolbarComponent } from '@tylertech/forge/toolbar';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const toolbar = document.querySelector('#toolbar') as IToolbarComponent;
 

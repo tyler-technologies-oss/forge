@@ -18,7 +18,7 @@ declare global {
 }
 
 export interface IAppBarNotificationButtonComponent extends IBaseComponent {
-  count: number | string;
+  count: string | number | null | undefined;
   dot: boolean;
   showBadge: boolean;
   theme: string;
@@ -102,7 +102,7 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   @FoundationProperty()
-  public declare count: number | string;
+  public declare count: string | number | null | undefined;
 
   @FoundationProperty()
   public declare dot: boolean;

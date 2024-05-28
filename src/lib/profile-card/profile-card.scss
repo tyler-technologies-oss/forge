@@ -53,7 +53,6 @@
 
 #action-toolbar {
   @include toolbar.provide-theme((
-    background: #{theme.variable(surface-bright)}, // TODO: remove when using <forge-popover>
     padding: 8px
   ));
 

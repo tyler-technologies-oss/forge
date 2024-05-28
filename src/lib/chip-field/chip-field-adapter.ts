@@ -1,6 +1,6 @@
 import { getShadowElement, listenOwnProperty, randomChars, toggleAttribute } from '@tylertech/forge-core';
 import { IChipFieldComponent } from './chip-field';
-import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS } from './chip-field-constants';
+import { ChipFieldInputAttributeObserver, ChipFieldValueChangeListener, CHIP_FIELD_CONSTANTS, ChipFieldObservedInputAttributes } from './chip-field-constants';
 import { BaseFieldAdapter, IBaseFieldAdapter } from '../field/base/base-field-adapter';
 import { FIELD_CONSTANTS } from '../field/field-constants';
 import { IFieldComponent } from '../field';
@@ -147,16 +147,16 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
           if (mutation.attributeName) {
             const element = mutation.target as HTMLElement;
             const attribute = element.getAttribute(mutation.attributeName);
-            const attributeName = mutation.attributeName as keyof typeof CHIP_FIELD_CONSTANTS.observedInputAttributes;
+            const attributeName = mutation.attributeName as ChipFieldObservedInputAttributes;
             listener(attributeName, attribute);
           }
         });
       });
-      this._inputMutationObserver?.observe(this._inputElement, { attributes: true, attributeFilter: CHIP_FIELD_CONSTANTS.observedInputAttributes });
+      this._inputMutationObserver?.observe(this._inputElement, { attributes: true, attributeFilter: [...CHIP_FIELD_CONSTANTS.observedInputAttributes] });
 
       // Call the listener with each observed attribute to capture the initial state
       Object.values(CHIP_FIELD_CONSTANTS.observedInputAttributes).forEach(value => {
-        const attributeName = value as keyof typeof CHIP_FIELD_CONSTANTS.observedInputAttributes;
+        const attributeName = value as ChipFieldObservedInputAttributes;
         if (this._inputElement) {
           listener(attributeName, this._inputElement.getAttribute(attributeName as string));
         }

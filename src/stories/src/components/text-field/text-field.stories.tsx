@@ -43,8 +43,8 @@ export const Default: Story<ITextFieldProps> = ({
       style={{width:  '259px'}}>
       {hasLeading && <ForgeIcon slot="leading" name="event" />}
 
-      <input autoComplete="off" type="text" id="input-text" disabled={disabled} placeholder={hasPlaceholder ? 'Enter first name...' : undefined} />
       {hasLabel && <label htmlFor="input-text" slot="label">{label}</label>}
+      <input autoComplete="off" type="text" id="input-text" disabled={disabled} placeholder={hasPlaceholder ? 'Enter first name...' : undefined} />
 
       {hasTrailing &&
         <ForgeIconButton slot="trailing" dense densityLevel={density === 'dense' ? 6 : 3}>
@@ -93,6 +93,7 @@ export const Textarea: Story<ITextFieldTextareaProps> = ({
   <ForgeTextField floatLabel={floatLabel} invalid={invalid} required={required} style={{width: '512px'}}>
     <textarea autoComplete="off" id="input-textarea" disabled={disabled} rows={10} placeholder={hasPlaceholder ? 'Enter description...' : undefined}></textarea>
     {hasLabel && <label htmlFor="input-textarea" slot="label">Description</label>}
+    <textarea autoComplete="off" id="input-textarea" disabled={disabled} rows={10} placeholder={hasPlaceholder ? 'Enter description...' : undefined}></textarea>
     {hasHelperText && <span slot="helper-text">Please enter a description</span>}
   </ForgeTextField>
 );

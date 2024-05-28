@@ -1,7 +1,8 @@
 import '$src/shared';
 import '@tylertech/forge/checkbox';
 import './checkbox.scss';
-import { ICheckboxComponent, ISwitchComponent } from '@tylertech/forge';
+import { ICheckboxComponent } from '@tylertech/forge/checkbox';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const checkboxesCheckedToggle = document.getElementById('opt-checked') as ISwitchComponent;
 const checkboxesIndeterminateToggle = document.getElementById('opt-indeterminate') as ISwitchComponent;

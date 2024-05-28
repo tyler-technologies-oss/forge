@@ -1,7 +1,11 @@
 import '$src/shared';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, IconRegistry, ISelectComponent, ISwitchComponent, ITextFieldComponent } from '@tylertech/forge';
 import { tylIconEvent, tylIconInfoOutline, tylIconMoreVert, tylIconPerson } from '@tylertech/tyler-icons/standard';
 import './text-field.scss';
+import { FieldDensity, FieldVariant, FieldTheme, FieldShape, FieldLabelPosition, FieldLabelAlignment, FieldSupportTextInset } from '../../../lib/field';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
+import { ITextFieldComponent } from '@tylertech/forge/text-field';
 
 IconRegistry.define([
   tylIconEvent,

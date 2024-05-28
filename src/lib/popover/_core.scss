@@ -50,6 +50,10 @@
   padding-block: #{token(preset-dropdown-padding-block)};
 }
 
+@mixin preset-list {
+  padding-block: #{token(preset-list-padding-block)};
+}
+
 @mixin zoom-base {
   animation-duration: #{token(zoom-enter-duration)};
   animation-timing-function: #{token(zoom-enter-timing)};

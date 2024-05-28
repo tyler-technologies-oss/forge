@@ -1,25 +1,17 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants';
-import { IListItemComponent } from './list-item';
 
 const elementName = `${COMPONENT_NAME_PREFIX}list-item`;
 
 const observedAttributes = {
-  HREF: 'href',
-  TARGET: 'target',
-  DOWNLOAD: 'download',
-  REL: 'rel',
-  STATIC: 'static',
-  NON_INTERACTIVE: 'non-interactive',
-  DISABLED: 'disabled',
   SELECTED: 'selected',
   ACTIVE: 'active',
   VALUE: 'value',
   DENSE: 'dense',
-  PROPAGATE_CLICK: 'propagate-click',
   INDENTED: 'indented',
   TWO_LINE: 'two-line',
   THREE_LINE: 'three-line',
-  WRAP: 'wrap'
+  WRAP: 'wrap',
+  NONINTERACTIVE: 'noninteractive'
 };
 
 const attributes = {
@@ -27,14 +19,23 @@ const attributes = {
 };
 
 const classes = {
-  ROOT: 'forge-list-item'
+  ROOT: 'forge-list-item',
+  DISABLED: 'disabled',
+  INTERACTIVE: 'interactive',
+  INTERNAL_ANCHOR: 'anchor'
+};
+
+const ids = {
+  INTERNAL_ANCHOR: 'forge-list-item-anchor'
 };
 
 const selectors = {
   ROOT: `.${classes.ROOT}`,
-  CHECKBOX_RADIO_SELECTOR: ':is(input[type=checkbox],input[type=radio],forge-checkbox,forge-radio):not(:disabled):not([forge-ignore])',
-  SWITCH_SELECTOR: 'forge-switch:not([disabled]):not([forge-ignore])',
-  IGNORE: '[forge-ignore],[data-forge-ignore]'
+  FORM_CONTROL_LIKE: ':is([forge-list-item-interactive],forge-radio,forge-checkbox,forge-switch,input[type=checkbox],input[type=radio]):is([slot=start],[slot=end],[slot=leading],[slot=trailing]):not([forge-ignore])',
+  BUTTON_LIKE: ':is(button,[role=button][tabindex]:not([tabindex=-1]),[forge-list-item-interactive]):not([forge-ignore])',
+  IGNORE: '[forge-ignore],[data-forge-ignore]',
+  INTERNAL_ANCHOR: `#${ids.INTERNAL_ANCHOR}`,
+  SLOTTED_START_END: ':is([slot=start],[slot=end],[slot=leading],[slot=trailing])'
 };
 
 const events = {
@@ -47,10 +48,10 @@ export const LIST_ITEM_CONSTANTS = {
   attributes,
   classes,
   selectors,
+  ids,
   events
 };
 
 export interface IListItemSelectEventData<T = unknown> {
   value: T;
-  listItem: IListItemComponent;
 }

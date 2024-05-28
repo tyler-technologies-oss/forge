@@ -62,7 +62,7 @@ export const POPOVER_HOVER_TIMEOUT = 500;
 export type PopoverAnimationType = 'none' | 'zoom' | 'slide' | 'fade';
 export type PopoverTriggerType = 'click' | 'hover' | 'focus' | 'longpress' | 'doubleclick' | 'contextmenu' | 'manual';
 export type PopoverDismissReason = OverlayLightDismissReason | PopoverTriggerType | 'destroy';
-export type PopoverPreset = 'popover' | 'dropdown';
+export type PopoverPreset = 'popover' | 'dropdown' | 'list';
 
 export interface IPopoverToggleEventData {
   newState: 'closed' | 'open';

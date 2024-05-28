@@ -10,24 +10,57 @@
 
 @mixin base {
   position: relative;
+
   display: flex;
   gap: #{token(gap)};
   align-items: center;
+
   box-sizing: border-box;
   outline: none;
   text-decoration: none;
-  background-color: #{token(background)};
   border-radius: #{token(shape)};
+  
   -webkit-tap-highlight-color: transparent;
+  background-color: #{token(background)};
+
   height: #{token(height)};
   min-height: #{token(height)};
   padding: #{token(padding)};
   margin: #{token(margin)};
-  cursor: #{token(cursor)};
 }
 
-@mixin anchor-link {
+@mixin button {
+  appearance: none;
+  cursor: #{token(cursor)};
+
+  border: none;
+  padding-block: 0;
+  padding-inline: 0;
+  margin: 0;
+  box-sizing: border-box;
+  
+  background: transparent;
   color: inherit;
+  outline: none;
+  
+  font: inherit;
+  user-select: auto;
+  text-align: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  
+  display: inline;
+}
+
+@mixin anchor {
+  outline: none;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+@mixin anchor-internal {
+  position: absolute;
+  inset: 0;
 }
 
 @mixin text-container {
@@ -35,9 +68,11 @@
   @include typography.ellipse;
 
   box-sizing: border-box;
+
   font-size: #{token(text-font-size)};
   font-weight: #{token(text-font-weight)};
   line-height: #{token(text-line-height)};
+
   flex: 1;
 }
 
@@ -54,19 +89,19 @@
   }
 }
 
-@mixin leading-selected {
-  color: #{token(leading-selected-color)};
+@mixin start-selected {
+  color: #{token(start-selected-color)};
 }
 
-@mixin trailing-selected {
-  color: #{token(trailing-selected-color)};
+@mixin end-selected {
+  color: #{token(end-selected-color)};
 }
 
 @mixin text-container-selected {
   color: #{token(selected-color)};
 }
 
-@mixin leading-trailing-selected {
+@mixin start-end-selected {
   color: #{token(selected-color)};
 }
 
@@ -121,35 +156,13 @@
   margin-inline-start: #{token(dense-indent)};
 }
 
-@mixin avatar {
-  background-color: #{token(avatar-background-color)};
-  color: #{token(avatar-color)};
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  fill: currentColor;
-  margin-inline-end: calc((#{token(gap)} / 2) * -1);
-  min-width: #{token(avatar-size)};
-  min-height: #{token(avatar-size)};
-  border-radius: #{token(avatar-shape)};
-}
-
-@mixin leading-trailing-base {
+@mixin start-end-base {
   color: #{token(text-color)};
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   fill: currentColor;
-}
-
-@mixin leading-selected {
-  color: #{token(leading-selected-color)};
-}
-
-@mixin trailing-selected {
-  color: #{token(trailing-selected-color)};
 }
 
 @mixin wrap {
@@ -167,10 +180,6 @@
 
 @mixin text-wrap {
   @include text-container-wrap;
-}
-
-@mixin non-interactive {
-  cursor: initial;
 }
 
 @mixin disabled {

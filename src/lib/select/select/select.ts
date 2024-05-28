@@ -35,8 +35,6 @@ declare global {
   }
 }
 
-const BaseClass = WithBaseField(BaseSelectComponent<SelectFoundation>);
-
 /**
  * @tag forge-select
  */
@@ -56,7 +54,7 @@ const BaseClass = WithBaseField(BaseSelectComponent<SelectFoundation>);
     IconButtonComponent
   ]
 })
-export class SelectComponent extends BaseClass implements ISelectComponent {
+export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFoundation>) implements ISelectComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),

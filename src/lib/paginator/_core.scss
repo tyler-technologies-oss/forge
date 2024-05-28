@@ -1,0 +1,37 @@
+@use '../core/styles/typography';
+@use '../core/styles/spacing';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  display: flex;
+  gap: #{spacing.variable(xsmall)};
+}
+
+@mixin container {
+  display: flex;
+  gap: #{spacing.variable(medium)};
+  align-items: center;
+}
+
+@mixin actions {
+  display: flex;
+  align-items: center;
+}
+
+@mixin label-base {
+  @include typography.style(label1);
+}
+
+@mixin alternative-range-label {
+  @include typography.style(body1);
+
+  display: inline-block;
+}
+
+@mixin alternative-actions {
+  width: 100%;
+  justify-content: var(--forge-paginator-alternative-alignment, start);
+}

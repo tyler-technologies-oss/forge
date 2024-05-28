@@ -3,7 +3,9 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/banner';
 import '@tylertech/forge/button';
 import { tylIconAddAlert } from '@tylertech/tyler-icons/standard';
-import { BANNER_CONSTANTS, IBannerComponent, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
+import { BANNER_CONSTANTS, IBannerComponent } from '@tylertech/forge/banner';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconAddAlert

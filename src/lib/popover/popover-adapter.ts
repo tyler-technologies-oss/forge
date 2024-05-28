@@ -6,7 +6,7 @@ import { IOverlayAwareAdapter, OverlayAwareAdapter } from '../overlay/base/overl
 import { IPopoverComponent } from './popover';
 import { POPOVER_CONSTANTS } from './popover-constants';
 
-export interface IPopoverAdapter extends IOverlayAwareAdapter {
+export interface IPopoverAdapter extends IOverlayAwareAdapter<IPopoverComponent> {
   readonly hostElement: IPopoverComponent;
   destroy(): void;
   initializeAnchorElement(): void;

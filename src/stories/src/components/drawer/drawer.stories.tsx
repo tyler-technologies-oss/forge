@@ -24,7 +24,7 @@ export const Drawer: Story<IDrawerProps> = ({
   const scaffoldStyles = {
     '--forge-scaffold-height': '500px',
     '--forge-scaffold-width': '100%',
-    borderBottom: '1px solid var(--forge-theme-border-color)'
+    borderBottom: '1px solid var(--forge-theme-outline)'
   };
 
   return (
@@ -57,7 +57,7 @@ export const Modal: Story<IDrawerProps> = ({
   const scaffoldStyles = {
     '--forge-scaffold-height': '500px',
     '--forge-scaffold-width': '100%',
-    borderBottom: '1px solid var(--forge-theme-border-color)'
+    borderBottom: '1px solid var(--forge-theme-outline)'
   };
 
   return (
@@ -95,7 +95,7 @@ export const Mini: Story<IMiniDrawerProps> = ({
   const scaffoldStyles = {
     '--forge-scaffold-height': '500px',
     '--forge-scaffold-width': '100%',
-    borderBottom: '1px solid var(--forge-theme-border-color)',
+    borderBottom: '1px solid var(--forge-theme-outline)',
     backgroundColor: 'var(--mdc-theme-background)'
   };
 

@@ -19,6 +19,11 @@ export class ButtonFoundation extends BaseButtonFoundation<IButtonAdapter> imple
     super(adapter);
   }
 
+  public override initialize(): void {
+    super.initialize();
+    this._adapter.tryApplyGlobalConfiguration(['variant', 'dense']);
+  }
+
   public get variant(): ButtonVariant {
     return this._variant;
   }

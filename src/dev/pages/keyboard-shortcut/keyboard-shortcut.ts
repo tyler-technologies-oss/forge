@@ -3,7 +3,7 @@ import '@tylertech/forge/keyboard-shortcut';
 import '@tylertech/forge/button';
 import '@tylertech/forge/text-field';
 import { IKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
-import { ISwitchComponent } from '@tylertech/forge';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 const buttonShortcut = document.querySelector('#button-shortcut') as IKeyboardShortcutComponent;
 const textFieldShortcut = document.querySelector('#text-field-shortcut') as IKeyboardShortcutComponent;

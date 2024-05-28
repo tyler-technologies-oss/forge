@@ -53,6 +53,8 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
     if (config.type !== ListDropdownType.None && config.type !== ListDropdownType.Menu) {
       this._dropdownElement.preset = 'dropdown';
+    } else if (config.type === ListDropdownType.Menu) {
+      this._dropdownElement.preset = 'list';
     }
 
     this.syncWidth(!!config.syncWidth, config.targetWidthCallback);
@@ -85,8 +87,10 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
     // Add the listener for when list items are selected from the dropdown
     this._listElement.addEventListener('forge-list-item-select', evt => {
-      evt.detail.listItem.setAttribute('aria-selected', 'true');
-      selectCallback(evt.detail.value, evt.detail.listItem.id);
+      const listItem = evt.target as IListItemComponent;
+      const button = listItem.querySelector('button') as HTMLButtonElement;
+      button.setAttribute('aria-selected', 'true');
+      selectCallback(evt.detail.value, button.id);
     });
 
     // Determine if we need to show the list or the async element first
@@ -176,7 +180,8 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     }
     const listItems = this._getListItemElements();
     const item = listItems[index];
-    return item ? item.id : null;
+    const button = item?.querySelector('button');
+    return button ? button.id : null;
   }
 
   public toggleOptionMultiple(index: number, isSelected: boolean): void {
@@ -327,8 +332,10 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
     // Now we can toggle the selected state and sync the active state
     listItem.selected = isSelected;
-    listItem.setAttribute('aria-selected', `${isSelected}`);
-    listItem.setAttribute('aria-checked', `${isSelected}`);
+
+    const button = listItem.querySelector('button') as HTMLButtonElement;
+    button.setAttribute('aria-selected', `${isSelected}`);
+    button.setAttribute('aria-checked', `${isSelected}`);
 
     // Toggle the checkbox icon based on the selected state
     const checkboxElement = listItem.querySelector(`${ICON_CONSTANTS.elementName}[slot=leading]`) as IIconComponent;
@@ -346,10 +353,11 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   }
 
   private _activateListOption(listItem: IListItemComponent | undefined, activeChangeCallback?: (id: string) => void): void {
-    if (listItem && !listItem.disabled) {
+    const buttonEl = listItem?.querySelector('button');
+    if (listItem && buttonEl && !buttonEl.disabled) {
       listItem.active = true;
       if (activeChangeCallback && isFunction(activeChangeCallback)) {
-        activeChangeCallback(listItem.id);
+        activeChangeCallback(buttonEl.id);
       }
     }
   }

@@ -34,8 +34,8 @@ declare global {
  * - Indeterminate indicators express an unspecified amount of wait time.
  * 
  * @property {boolean} determinate - Controls the determinate state.
- * @property {boolean} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
- * @property {boolean} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
+ * @property {number} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
+ * @property {number} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
  * @property {string} theme - Sets the theme.
  * 
  * @attribute {boolean} determinate - Controls the determinate state.

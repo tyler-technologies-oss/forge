@@ -16,7 +16,7 @@
 }
 
 @mixin active {
-  display: flex;
+  display: #{token(display)};
 }
 
 @mixin circular {

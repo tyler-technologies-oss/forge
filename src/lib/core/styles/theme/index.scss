@@ -12,7 +12,7 @@
 /// 
 @mixin properties {
   @each $token-name, $token-value in tokens.$tokens {
-    --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
+    @include utils.declare-var(theme, $token-name, $token-value);
   }
 }
 
@@ -21,18 +21,7 @@
 /// 
 @mixin properties-dark {
   @each $token-name, $token-value in tokens.$tokens-dark {
-    --#{config.$prefix}-theme-#{$token-name}: #{$token-value};
-  }
-}
-
-///
-/// Temporary tokens to map the MDC theme to Forge theme
-/// 
-/// TODO: Remove this once MDC dependency is removed
-/// 
-@mixin properties-compat {
-  @each $token-name, $token-value in tokens.$mdc-remap {
-    --mdc-theme-#{$token-name}: #{$token-value};
+    @include utils.declare-var(theme, $token-name, $token-value);
   }
 }
 

@@ -102,6 +102,9 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       super(...args);
     }
 
+    /**
+     * @internal
+     */
     public initializeFieldInstance(fieldElement: IFieldComponent): void {
       this._fieldElement = fieldElement;
 

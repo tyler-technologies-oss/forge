@@ -1,6 +1,7 @@
-@use '@material/theme/theme' as mdc-theme;
-@use '@material/animation/variables' as mdc-animation-variables;
-@use '../../theme';
+@use '../../core/styles/theme';
+@use '../../core/styles/animation';
+@use '../../core/styles/scrollbar';
+@use '../../core/styles/elevation';
 @use './variables';
 
 @mixin core-styles() {
@@ -58,10 +59,10 @@
 }
 
 @mixin base() {
-  @include theme.css-custom-property(width, --forge-drawer-width, variables.$width);
-  @include theme.property(border-color, border-color);
-  @include mdc-theme.property(background-color, surface);
-
+  
+  width: var(--forge-drawer-width, variables.$width);
+  background-color: #{theme.variable(surface)};
+  border-color: #{theme.variable(outline)};
   height: 100%;
   box-sizing: border-box;
   display: grid;
@@ -70,7 +71,7 @@
   overflow: hidden;
   transition-property: transform;
   transition-duration: variables.$transition-duration;
-  transition-timing-function: mdc-animation-variables.$standard-curve-timing-function;
+  transition-timing-function: #{animation.variable(easing-standard)};
 }
 
 @mixin header() {
@@ -78,7 +79,7 @@
 }
 
 @mixin content() {
-  @include theme.scrollbar;
+  @include scrollbar.base;
 
   overflow-x: auto;
   -webkit-overflow-scrolling: 'touch';
@@ -111,8 +112,8 @@
 
 @mixin closing($direction: left) {
   @include closed-direction($direction);
-  @include theme.z-index(surface);
 
+  z-index: #{elevation.z-index-variable(surface)};
   position: absolute;
   top: 0;
   right: 0;

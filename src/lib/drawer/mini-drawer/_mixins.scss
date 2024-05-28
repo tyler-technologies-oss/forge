@@ -1,8 +1,9 @@
-@use '@material/animation/animation' as mdc-animation;
+@use '../../core/styles/animation';
+@use '../../core/styles/theme';
+@use '../../core/styles/elevation';
 @use './variables';
 @use '../base/mixins' as base-mixins;
 @use '../base/variables' as base-variables;
-@use '../../theme';
 
 @mixin core-styles() {
   @include base-mixins.core-styles;
@@ -28,32 +29,28 @@
 
 @mixin host() {
   @include base-mixins.host;
-  @include theme.css-custom-property(width, --forge-drawer-mini-width, variables.$width);
 
+  width: var(--forge-drawer-mini-width, variables.$width);
   overflow: visible !important;
 }
 
 @mixin host-right {
-  @include theme.css-custom-property(min-width, --forge-drawer-mini-width, variables.$width);
-  
+  min-width: var(--forge-drawer-mini-width, variables.$width);
   width: auto;
 }
 
 @mixin base() {
-  @include theme.css-custom-property(width, --forge-drawer-mini-width, variables.$width);
-  @include theme.z-index(surface);
-
-  transition: width 200ms mdc-animation.$standard-curve-timing-function;
+  width: var(--forge-drawer-mini-width, variables.$width);
+  z-index: #{elevation.z-index-variable(surface)};
+  transition: width #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
 }
 
 @mixin root() {
-  @include theme.z-index(surface);
-
+  z-index: #{elevation.z-index-variable(surface)};
   height: 100%;
 }
 
 @mixin hover() {
-  @include theme.css-custom-property(width, --forge-drawer-width, base-variables.$width, true);
-
-  transition: width 300ms mdc-animation.$standard-curve-timing-function variables.$transition-delay;
+  width: var(--forge-drawer-width, base-variables.$width) !important;
+  transition: width #{animation.variable(duration-medium2)} #{animation.variable(easing-standard)} variables.$transition-delay;
 }

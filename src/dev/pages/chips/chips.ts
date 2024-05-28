@@ -1,11 +1,13 @@
 import '$src/shared';
 import '@tylertech/forge/chips';
 import '@tylertech/forge/icon-button';
-import { IChipSetComponent, IconRegistry, ISelectComponent, ISwitchComponent } from '@tylertech/forge';
-import type { IChipComponent } from '@tylertech/forge';
 import { tylIconAlarm, tylIconBookmark, tylIconDirections, tylIconEvent, tylIconOpenInNew, tylIconPlace, tylIconRefresh } from '@tylertech/tyler-icons/standard';
 import { tylIconAccount, tylIconAlert } from '@tylertech/tyler-icons/extended';
 import { showToast } from '$src/utils/utils';
+import { IChipComponent, IChipSetComponent } from '@tylertech/forge/chips';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { ISelectComponent } from '@tylertech/forge/select';
+import { ISwitchComponent } from '@tylertech/forge/switch';
 
 IconRegistry.define([
   tylIconRefresh,

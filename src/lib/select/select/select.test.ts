@@ -140,7 +140,7 @@ describe('Select', () => {
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
       expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
-      await expect(harness.element).to.be.accessible();
+      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
   
     it('should set aria-activedescendant when opened via keyboard', async () => {
@@ -156,8 +156,8 @@ describe('Select', () => {
       await elementUpdated(harness.element);
       await harness.popoverToggleAnimation;
   
-      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].id);
-      await expect(harness.element).to.be.accessible();
+      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].querySelector('button')?.id);
+      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
 
     it('should update aria-activedescendant when focused', async () => {
@@ -174,8 +174,8 @@ describe('Select', () => {
       await harness.pressKey('ArrowDown');
   
       const listItems = harness.getListItems();
-      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(listItems[0].id);
-      await expect(harness.element).to.be.accessible();
+      expect(harness.element.getAttribute('aria-activedescendant')).to.equal(listItems[0].querySelector('button')?.id);
+      await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
 
     it('should be accessible when required', async () => {
@@ -189,6 +189,24 @@ describe('Select', () => {
       const harness = await createFixture({ invalid: true });
   
       expect(harness.element.getAttribute('aria-invalid')).to.equal('true');
+      await expect(harness.element).to.be.accessible();
+    });
+
+    it('should be accessible when multiple', async () => {
+      const harness = await createFixture({ multiple: true });
+  
+      await expect(harness.element).to.be.accessible();
+    });
+
+    it('should be accessible when multiple and open', async () => {
+      const harness = await createFixture({ multiple: true });
+  
+      harness.element.open = true;
+      await tick();
+  
+      expect(harness.element.hasAttribute('open')).to.be.true;
+      expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
+      expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
       await expect(harness.element).to.be.accessible();
     });
   });
@@ -816,6 +834,7 @@ async function createFixture({
 }: SelectFixtureConfig = {}): Promise<SelectHarness> {
   const el = await fixture<ISelectComponent>(html`
     <forge-select
+      id="my-test-id"
       style="margin-top: 10px;"
       label=${label}
       placeholder=${placeholder}

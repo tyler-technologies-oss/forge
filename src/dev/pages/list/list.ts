@@ -19,3 +19,6 @@ IconRegistry.define([
   tylIconFace,
   tylIconOpenInNew
 ]);
+
+const listDemoRootEl = document.getElementById('list-demo-root') as HTMLElement;
+listDemoRootEl.addEventListener('forge-list-item-select', console.log);
