@@ -6,9 +6,11 @@ import * as AccordionStories from './Accordion.stories';
 
 <Title />
 
-Accordions allow you to provide text or images to display that represent an entity. By default, the Accordion will
-display text content as single characters (character count is configurable), or display an icon or image
-based on the URL provided to it.
+This component does not provide any visual appearance. It is just an orchestrator of child `<forge-expansion-panel>` components.
+
+The `<forge-accordion>` will ensure that only one child expansion panel, at most, is open at any given time. If you need to allow for multiple panels to be opened simultaneously, you should opt for using just multiple `<forge-expansion-panel>` components together without an accordion wrapper.
+
+See the expansion panel component for information on how to use that component separately.
 
 <Canvas of={AccordionStories.Demo} />
 
