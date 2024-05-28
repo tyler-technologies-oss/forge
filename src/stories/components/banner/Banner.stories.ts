@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { standaloneStoryParams, transformCssPropsToControls, customElementStoryRenderer } from '../utils';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
@@ -8,6 +7,9 @@ import '@tylertech/forge/banner';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+
+const component = 'forge-banner';
 
 const meta = {
   title: 'Components/Banner',
@@ -16,7 +18,7 @@ const meta = {
     el.innerHTML = args.text;
     return el;
   },
-  component: 'forge-banner',
+  component,
   parameters: {
     controls: {
       exclude: /^(icon|button|forge-banner-before-dismiss|forge-banner-dismissed)$/i,
@@ -24,8 +26,12 @@ const meta = {
     actions: { disable: true }
   },
   argTypes: {
-    ...transformCssPropsToControls('forge-banner'),
-    theme: { control: 'select', options: ['danger', 'warning', 'success', 'info (default)', 'info-secondary'] }
+    ...generateCustomElementArgTypes({
+      tagName: component,
+      controls: {
+        theme: { control: 'select', options: ['danger', 'warning', 'success', 'info (default)', 'info-secondary'] }
+      }
+    })
   },
   args: {
     theme: 'info (default)',
