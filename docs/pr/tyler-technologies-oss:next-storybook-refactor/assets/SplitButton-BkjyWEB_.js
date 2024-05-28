@@ -1,6 +1,0 @@
-import{j as o}from"./jsx-runtime-Be5aErfC.js";import{u as i}from"./index-DMroa5xm.js";import{M as s,T as e,C as m}from"./index-B2gziZGt.js";import{C as a}from"./CustomArgTypes-Dr1Yh3EO.js";import{S as p,D as c}from"./SplitButton.stories-vJ5Fkh3M.js";import"./iframe-DAiJrE8c.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";import"./icon-BhOk2-wr.js";import"./button-BPwkyV29.js";import"./base-button-adapter-DuOjJ2u8.js";import"./lit-html-Cxzf5Fb2.js";import"./with-longpress-listener-cB6lDDk_.js";import"./dismissible-stack-5T5mBIcn.js";function r(t){const n={h2:"h2",p:"p",...i(),...t.components};return o.jsxs(o.Fragment,{children:[o.jsx(s,{of:p}),`
-`,o.jsx(e,{}),`
-`,o.jsx(n.p,{children:"Split buttons provide a way to combine a primary action with one or more secondary actions. The secondary actions can also be displayed in a dropdown menu."}),`
-`,o.jsx(m,{of:c}),`
-`,o.jsx(n.h2,{id:"api",children:"API"}),`
-`,o.jsx(a,{})]})}function A(t={}){const{wrapper:n}={...i(),...t.components};return n?o.jsx(n,{...t,children:o.jsx(r,{...t})}):r(t)}export{A as default};
