@@ -23,6 +23,11 @@ export class IconButtonFoundation extends BaseButtonFoundation<IIconButtonAdapte
     super(adapter);
   }
 
+  public override initialize(): void {
+    super.initialize();
+    this._adapter.tryApplyGlobalConfiguration(['variant', 'shape', 'density']);
+  }
+
   protected override async _onClick(evt: MouseEvent): Promise<void> {
     if (this._toggle) {
       this._onToggle();

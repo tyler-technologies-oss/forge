@@ -2,7 +2,7 @@ import { BaseAdapter, IBaseAdapter } from '../../core';
 import { IOverlayComponent } from '../overlay';
 import { IOverlayAware } from '../base/overlay-aware';
 
-export interface IOverlayAwareAdapter extends IBaseAdapter {
+export interface IOverlayAwareAdapter<T extends IOverlayAware = IOverlayAware> extends IBaseAdapter<T> {
   readonly overlayElement: IOverlayComponent;
 }
 

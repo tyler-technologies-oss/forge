@@ -3,11 +3,11 @@ import { BaseButtonAdapter, IBaseButtonAdapter } from '../button/base/base-butto
 import { IFloatingActionButtonComponent } from './floating-action-button';
 import { FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
 
-export interface IFloatingActionButtonAdapter extends IBaseButtonAdapter {
+export interface IFloatingActionButtonAdapter extends IBaseButtonAdapter<IFloatingActionButtonComponent> {
   destroy(): void;
 }
 
-export class FloatingActionButtonAdapter extends BaseButtonAdapter implements IFloatingActionButtonAdapter {
+export class FloatingActionButtonAdapter extends BaseButtonAdapter<IFloatingActionButtonComponent> implements IFloatingActionButtonAdapter {
   private _labelSlotElement: HTMLSlotElement;
   private _extendedObserver: MutationObserver | undefined;
 

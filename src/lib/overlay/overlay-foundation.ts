@@ -44,6 +44,17 @@ export class OverlayFoundation extends BaseOverlayFoundation<IOverlayAdapter> im
   }
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration([
+      'placement',
+      'positionStrategy',
+      'shift',
+      'hide',
+      'flip',
+      'boundaryElement',
+      'fallbackPlacements',
+      'persistent'
+    ]);
+
     if (!this._noAnchor && !this._anchorElement && this._anchor) {
       this._anchorElement = this._adapter.locateAnchorElement(this._anchor);
     }
