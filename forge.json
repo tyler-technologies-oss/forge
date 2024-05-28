@@ -11,6 +11,15 @@
       "*.test.ts"
     ]
   },
+  "packageConfig": {
+    "copyFiles": [
+      {
+        "pattern": "./dist/cem/vscode.*.json",
+        "root": "./dist/cem/",
+        "output": "dist"
+      }
+    ]
+  },
   "build": {
     "static": {
       "distPath": "cdn/v1/libs/"
