@@ -1,4 +1,4 @@
-import { Markdown, Subheading, useOf } from '@storybook/blocks';
+import { HeaderMdx, Markdown, useOf } from '@storybook/blocks';
 import { Code } from '@storybook/components';
 import { TagItem, getCustomElementsTagDeclaration } from '../utils';
 
@@ -12,10 +12,12 @@ function UsageLink({ text, href }: { text: string; href: string }) {
   );
 }
 
-function Section({ title, hrefText, href, children }: { title: string; hrefText?: string; href?: string; children: React.ReactNode }) {
+function Section({ title, name, hrefText, href, children, headingLevel = 'h3' }: { title: string; name: string; headingLevel?: 'h3' | 'h4'; hrefText?: string; href?: string; children: React.ReactNode }) {
+  const headingId = headingLevel === 'h3' ? title : `${name}-${title}`
+  const tagID = headingId.toLowerCase().replace(/[^a-z0-9]/gi, '-');
   return (
     <section className={(styles as any).section}>
-      <Subheading>{title}</Subheading>
+      <HeaderMdx as={headingLevel} id={tagID}>{title}</HeaderMdx>
       {children}
       {href && hrefText ? <UsageLink text={hrefText} href={href} /> : null}
     </section>
@@ -146,14 +148,7 @@ function methodParamsToString(params: any[]) {
   return params.map(param => `${param.name}: ${param.type.text}`).join(', ');
 }
 
-export default function CustomArgTypes() {
-  const resolvedOf = useOf('story', ['story']);
-  const tagName = resolvedOf.story.component as string;
-
-  if (!tagName || typeof tagName !== 'string') {
-    return null;
-  }
-
+function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; headingLevel: 'h3' | 'h4' }) {
   const declaration = getCustomElementsTagDeclaration(tagName);
   const properties = declaration.members?.filter(member => member.kind === 'field' && member.privacy === 'public');
   const attributes = declaration.attributes;
@@ -171,39 +166,81 @@ export default function CustomArgTypes() {
   return (
     <div>
       {!!properties?.length && 
-        <Section title="Properties" hrefText="Properties" href="?path=/docs/getting-started-usage--docs#properties--attributes">
+        <Section title="Properties" name={tagName} headingLevel={headingLevel} hrefText="Properties" href="?path=/docs/getting-started-usage--docs#properties--attributes">
           <PropsAttrsTable items={properties} />
         </Section>}
       
       {!!attributes?.length &&
-        <Section title="Attributes" hrefText="Attributes" href="?path=/docs/getting-started-usage--docs#properties--attributes">
+        <Section title="Attributes" name={tagName} headingLevel={headingLevel} hrefText="Attributes" href="?path=/docs/getting-started-usage--docs#properties--attributes">
           <PropsAttrsTable items={attributes} />
         </Section>}
 
       {!!events?.length &&
-        <Section title="Events" hrefText="Events" href="?path=/docs/getting-started-usage--docs#events">
+        <Section title="Events" name={tagName} headingLevel={headingLevel} hrefText="Events" href="?path=/docs/getting-started-usage--docs#events">
           <EventsTable items={events} />
         </Section>}
       
       {!!slots?.length &&
-        <Section title="Slots" hrefText="Slots" href="?path=/docs/getting-started-usage--docs#slots">
+        <Section title="Slots" name={tagName} headingLevel={headingLevel} hrefText="Slots" href="?path=/docs/getting-started-usage--docs#slots">
           <NameDescriptionTable items={slots} />
         </Section>}
 
       {!!methods?.length &&
-        <Section title="Methods" hrefText="Methods" href="?path=/docs/getting-started-usage--docs#methods">
+        <Section title="Methods" name={tagName} headingLevel={headingLevel} hrefText="Methods" href="?path=/docs/getting-started-usage--docs#methods">
           <MethodsTable items={methods} />
         </Section>}
       
       {!!cssProperties?.length &&
-        <Section title="CSS Custom Properties" hrefText="CSS Custom Properties" href="?path=/docs/getting-started-usage--docs#css-custom-properties">
+        <Section title="CSS Custom Properties" name={tagName} headingLevel={headingLevel} hrefText="CSS Custom Properties" href="?path=/docs/getting-started-usage--docs#css-custom-properties">
           <NameDescriptionTable items={cssProperties} />
         </Section>}
       
       {!!cssParts?.length &&
-        <Section title="CSS Shadow Parts" hrefText="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts">
+        <Section title="CSS Shadow Parts" name={tagName} headingLevel={headingLevel} hrefText="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts">
           <NameDescriptionTable items={cssParts} />
         </Section>}
+    </div>
+  );
+}
+
+const STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/;
+
+export const extractTitle = (title: string) => {
+  const groups = title.trim().split(STORY_KIND_PATH_SEPARATOR);
+  return groups?.[groups?.length - 1] || title;
+};
+
+export default function CustomArgTypes() {
+  const resolvedOf = useOf('story', ['story']);
+  const tagName = resolvedOf.story.component as string;
+
+  if (!tagName || typeof tagName !== 'string') {
+    return null;
+  }
+
+  const subcomponents = resolvedOf.story.subcomponents as Record<string, string>;
+  const hasSubcomponents = Boolean(subcomponents) && Object.keys(subcomponents).length > 0;
+
+  if (!hasSubcomponents) {
+    return <ComponentArgTypes tagName={tagName} headingLevel="h3" />;
+  }
+
+  const mainComponentName = extractTitle(resolvedOf.story.title);
+  const tabs = {
+    [mainComponentName]: tagName,
+    ...subcomponents
+  };
+  return (
+    <div>
+      {Object.entries(tabs).map(([name, tagName], index) => {
+        const tagID = mainComponentName.toLowerCase().replace(/[^a-z0-9]/gi, '-');
+        return (
+          <div key={index}>
+            <HeaderMdx as="h3" id={tagID}>{name}</HeaderMdx>
+            <ComponentArgTypes tagName={tagName} headingLevel="h4" />
+          </div>
+        );
+      })}
     </div>
   );
 }
