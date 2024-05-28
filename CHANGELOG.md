@@ -1,3 +1,16 @@
+# v2.24.1 (Tue May 21 2024)
+
+#### 🐛 Bug Fix
+
+- fix(menu): fixed a bug where pressing the tab key would select the active option [#573](https://github.com/tyler-technologies-oss/forge/pull/573) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix(app-bar-notification-button): fixed a bug where the badge count could not be unset and updated the logic to not render the count [#567](https://github.com/tyler-technologies-oss/forge/pull/567) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 1
+
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v2.24.0 (Mon May 13 2024)
 
 #### 🚀 Enhancement

@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { standaloneStoryParams, transformCssPropsToControls, customElementStoryRenderer } from '../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
 import { tylIconPerson } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
@@ -8,18 +8,17 @@ import '@tylertech/forge/avatar';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/icon';
 
+const component = 'forge-avatar';
+
 const meta = {
   title: 'Components/Avatar',
-  render: args => customElementStoryRenderer('forge-avatar', args),
-  component: 'forge-avatar',
+  render: args => customElementStoryRenderer(component, args),
+  component,
   parameters: {
-    controls: {
-      exclude: /^root/i,
-    },
     actions: { disable: true }
   },
   argTypes: {
-    ...transformCssPropsToControls('forge-avatar')
+    ...generateCustomElementArgTypes({ tagName: component }),
   },
   args: {
     text: 'Tyler Forge',
@@ -31,21 +30,26 @@ export default meta;
 
 type Story = StoryObj;
 
-export const Default: Story = {};
+export const Demo: Story = {};
 
-const imageUrl = 'https://cdn.forge.tylertech.com/v1/icons/svg/custom/forge_logo.svg';
 export const WithImage: Story = {
   parameters: {
-    controls: { disable: true },
+    controls: { include: /^--|imageUrl/ }
   },
   args: {
-    'image-url': imageUrl,
-    imageUrl
+    imageUrl: '/ruby.jpg'
+  },
+  render: ({ imageUrl }) => {
+    return html`
+      <forge-avatar image-url=${imageUrl}></forge-avatar>
+    `;
   }
 };
 
 export const WithIcon: Story = {
-  ...standaloneStoryParams,
+  parameters: {
+    controls: { include: /^--/ }
+  },
   render: () => {
     IconRegistry.define(tylIconPerson);
     return html`
@@ -59,10 +63,10 @@ export const WithIcon: Story = {
 export const WithIconButton: Story = {
   ...standaloneStoryParams,
   render: args => {
-    const iconButton = document.createElement('forge-icon-button');
-    iconButton.setAttribute('aria-label', 'Icon button with avatar');
-    const el = customElementStoryRenderer('forge-avatar', args);
-    iconButton.appendChild(el);
-    return iconButton;
+    return html`
+      <forge-icon-button aria-label="Icon button with avatar">
+        ${customElementStoryRenderer(component, args)}
+      </forge-icon-button>
+    `;
   }
 };

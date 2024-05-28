@@ -35,35 +35,35 @@ declare global {
  * 
  * @summary Icons buttons are used to trigger an action or event.
  * 
- * @property {boolean} toggle - Whether or not the icon button can be toggled.
- * @property {boolean} on - Whether or not the button is on. Only applies when `toggle` is `true`.
- * @property {IconButtonVariant} variant - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
- * @property {IconButtonTheme} theme - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
- * @property {string} shape - The shape of the button. Valid values are `circular` and `squared`.
- * @property {IconButtonDensity} density - The density of the button. Valid values are `small`, `medium`, and `large`.
- * @property {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @property {boolean} disabled - Whether or not the button is disabled.
- * @property {boolean} popoverIcon - Whether or not the button shows a built-in popover icon.
+ * @property {boolean} [toggle=false] - Whether or not the icon button can be toggled.
+ * @property {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
+ * @property {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+ * @property {IconButtonTheme} [theme="primary"] - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @property {string} [shape="circular"] - The shape of the button. Valid values are `circular` and `squared`.
+ * @property {IconButtonDensity} [density="large"] - The density of the button. Valid values are `small`, `medium`, and `large`.
+ * @property {string} [type="button"] - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
+ * @property {boolean} [disabled=false] - Whether or not the button is disabled.
+ * @property {boolean} [popoverIcon=false] - Whether or not the button shows a built-in popover icon.
+ * @property {boolean} [dense=false] - Whether or not the button is dense.
  * @property {string} name - The name of the button.
  * @property {string} value - The form value of the button.
- * @property {boolean} dense - Whether or not the button is dense.
  * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
  * 
- * @attribute {boolean} toggle - Whether or not the icon button can be toggled.
- * @attribute {boolean} on - Whether or not the button is on. Only applies when `toggle` is `true`.
- * @attribute {IconButtonVariant} variant - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
- * @attribute {IconButtonTheme} theme - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
- * @attribute {string} shape - The shape of the button. Valid values are `circular` and `squared`.
- * @attribute {IconButtonDensity} density - The density of the button. Valid values are `small`, `medium`, and `large`.
- * @attribute {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @attribute {boolean} disabled - Whether or not the button is disabled.
- * @attribute {boolean} popover-icon - Whether or not the button shows a built-in popover icon.
+ * @attribute {boolean} [toggle=false] - Whether or not the icon button can be toggled.
+ * @attribute {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
+ * @attribute {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.
+ * @attribute {IconButtonTheme} [theme="primary"] - The theme of the button. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @attribute {string} [shape="circular"] - The shape of the button. Valid values are `circular` and `squared`.
+ * @attribute {IconButtonDensity} [density="large"] - The density of the button. Valid values are `small`, `medium`, and `large`.
+ * @attribute {string} [type="button"] - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
+ * @attribute {boolean} [disabled=false] - Whether or not the button is disabled.
+ * @attribute {boolean} [popover-icon=false] - Whether or not the button shows a built-in popover icon.
+ * @attribute {boolean} [dense=false] - Whether or not the button is dense.
  * @attribute {string} name - The name of the button.
  * @attribute {string} value - The form value of the button.
- * @attribute {boolean} dense - Whether or not the button is dense.
  * 
  * @event {Event} click - Fires when the button is clicked.
- * @event {Event} forge-icon-button-toggle - Fires when the icon button is toggled.
+ * @event {CustomEvent<boolean>} forge-icon-button-toggle - Fires when the icon button is toggled. Only applies in `toggle` mode.
  * 
  * @cssproperty --forge-icon-button-display - The display property of the button.
  * @cssproperty --forge-icon-button-size - The height and min-width of the button.

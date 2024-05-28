@@ -12,7 +12,7 @@ export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
   initialize(): void;
   destroy(): void;
   setIcon(icon: string): void;
-  setCount(value: number | string): void;
+  setCount(value: string | number | null | undefined): void;
   setBadgeType(dot: boolean): void;
   setBadgeTheme(theme: string): void;
   setBadgeVisible(isVisible: boolean): void;
@@ -53,7 +53,7 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
   }
 
   public setCount(value: number | string): void {
-    this._badgeElement.textContent = String(value);
+    this._badgeElement.textContent = value != null ? String(value) : '';
   }
 
   public setBadgeType(dot: boolean): void {

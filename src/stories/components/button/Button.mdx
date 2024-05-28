@@ -1,4 +1,5 @@
-import { Meta, Title, Primary, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as ButtonStories from './Button.stories';
 
 <Meta of={ButtonStories} />
@@ -29,15 +30,29 @@ Forge buttons can be themed using the built-in `theme` attribute, which will app
 
 > Additionally, you can always provide your own theme via the CSS custom properties noted below.
 
+## Anchor
+
+Forge buttons support providing a slotted `<a>` element that allows for you to visually style an anchor tag as a button.
+
+<Canvas of={ButtonStories.Anchor} />
+
+> **Note:** you should not use slots with anchor buttons because the `<a>` element itself becomes the full content of the button.
+
 ## With Icon
 
 Forge buttons can include an icon to provide additional context or visual interest.
 
 <Canvas of={ButtonStories.WithIcon} />
 
+## With Circular Progress
+
+Forge buttons can include a circular progress indicator to provide feedback to the user when an action is in progress.
+
+<Canvas of={ButtonStories.WithCircularProgress} />
+
 ## API
 
-<ArgTypes exclude={['text']} />
+<CustomArgTypes />
 
 ## Accessibility
 

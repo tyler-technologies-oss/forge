@@ -9,9 +9,9 @@ import template from './avatar.html';
 import styles from './avatar.scss';
 
 export interface IAvatarComponent extends IBaseComponent {
-  imageUrl: string;
   text: string;
   letterCount: number;
+  imageUrl: string;
 }
 
 declare global {
@@ -25,10 +25,17 @@ declare global {
  * 
  * @summary Avatars represent an entity via text or image.
  * 
- * @description
- * The avatar component allows you to provide text or images to display that represent an entity. By default, the
+ * @description The avatar component allows you to provide text or images to display that represent an entity. By default, the
  * avatar will display textual content as single characters (character count is configurable), or display an image or
  * icon based on the URL provided to it.
+ * 
+ * @property {string} [text=""] - The text to display in the avatar.
+ * @property {number} [letterCount=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+ * @property {string} imageUrl - The background image URL to use.
+ * 
+ * @attribute {string} [text=""] - The text to display in the avatar.
+ * @attribute {string} [letter-count=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
+ * @attribute {string} image-url - The background image URL to use.
  * 
  * @cssproperty {string} --forge-avatar-background - The background color of the avatar.
  * @cssproperty {number} --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
@@ -39,7 +46,7 @@ declare global {
  * 
  * @csspart root - The root container element.
  * 
- * @slot - The default/unnamed slot for avatar content if not provided via text/imageUrl.
+ * @slot - The default slot for avatar content if not provided via text/imageUrl.
  */
 @CustomElement({
   name: AVATAR_CONSTANTS.elementName
@@ -83,24 +90,12 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
     }
   }
 
-  /**
-   * The text to display in the avatar.
-   * @attribute
-   */
   @FoundationProperty()
   public declare text: string;
 
-  /**
-   * Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
-   * @attribute {string} letter-count
-   */
   @FoundationProperty()
   public declare letterCount: number;
 
-  /**
-   * The background image URL to use.
-   * @attribute image-url
-   */
   @FoundationProperty()
   public declare imageUrl: string;
 }

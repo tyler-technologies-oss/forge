@@ -4,4 +4,51 @@ import { Meta } from '@storybook/blocks';
 
 # Svelte
 
+Svelte has [decent support](https://custom-elements-everywhere.com/#svelte) for custom elements and can mostly be used without a problem.
 
+## Installation
+
+To use Forge in your Svelte application, install the following package from npm:
+
+```bash
+npm install @tylertech/forge
+```
+
+## Loading the Tyler Font
+
+Edit your `index.html` file and add the following `<link>` tag to the `<head>` section load the Tyler font:
+
+```html
+<link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css">
+```
+
+This will configure the default font family for your application, and load the required font weights and styles.
+
+## Importing Components
+
+To use Forge components in your Svelte application, import the components you need from the `@tylertech/forge` package.
+
+```svelte
+<script>
+  import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
+  
+  defineButtonComponent();
+  defineCardComponent();
+</script>
+
+<div>
+  <forge-card>
+    <forge-button>Click me</forge-button>
+  </forge-card>
+</div>
+```
+
+## Importing Styles
+
+To use the default Forge styles in your Svelte application, import the `forge.css` file from the `@tylertech/forge` package.
+
+```svelte
+<style>
+  @import '@tylertech/forge/dist/forge.css';
+</style>
+```

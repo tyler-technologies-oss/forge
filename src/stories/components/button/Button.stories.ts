@@ -1,11 +1,12 @@
 import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { standaloneStoryParams, transformCssPropsToControls, customElementStoryRenderer } from '../utils';
-import { tylIconPerson } from '@tylertech/tyler-icons/standard';
+import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS } from '../../utils';
+import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon';
+import '@tylertech/forge/circular-progress';
 
 const component = 'forge-button';
 
@@ -13,21 +14,31 @@ const meta = {
   title: 'Components/Button',
   render: args => {
     const el = customElementStoryRenderer(component, args);
-    el.innerHTML = args.text;
+    el.textContent = args.text;
     return el;
   },
   component,
-  parameters: {
-    controls: {
-      exclude: /^(start|end|click|root|focus-indicator|state-layer)$/i
-    },
-  },
   argTypes: {
-    ...transformCssPropsToControls(component),
+    ...generateCustomElementArgTypes({
+      tagName: component,
+      exclude: ['form', 'name', 'value'],
+      controls: {
+        variant: { control: { type: 'select' }, options: ['text', 'outlined', 'filled', 'raised', 'link'] },
+        theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
+      }
+    }),
     text: { control: 'text' },
   },
   args: {
-    text: 'Button'
+    text: 'Button',
+    variant: 'text',
+    pill: false,
+    theme: 'primary',
+    type: 'button',
+    disabled: false,
+    popoverIcon: false,
+    dense: false,
+    fullWidth: false
   },
 } satisfies Meta;
 
@@ -50,15 +61,28 @@ export const Variants: Story = {
   }
 };
 
-export const Themed: Story = {
+export const Anchor: Story = {
   parameters: {
     controls: { include: ['variant'] },
   },
-  argTypes: {
-    variant: {
-      options: ['text', 'outlined', 'filled', 'raised', 'link'],
-      control: { type: 'select' }
-    },
+  args: {
+    variant: 'raised'
+  },
+  render: ({ variant }) => {
+    return html`
+      <forge-button .variant=${variant}>
+        <a href="javascript: void(0);">
+          Anchor button
+          <forge-icon slot="end" name="open_in_new"></forge-icon>
+        </a>
+      </forge-button>
+    `;
+  }
+};
+
+export const Themed: Story = {
+  parameters: {
+    controls: { include: ['variant'] },
   },
   args: {
     variant: 'raised'
@@ -81,10 +105,6 @@ export const WithIcon: Story = {
     controls: { include: ['variant', 'iconSlot'] },
   },
   argTypes: {
-    variant: {
-      options: ['text', 'outlined', 'filled', 'raised', 'link'],
-      control: { type: 'select' }
-    },
     iconSlot: {
       options: ['start', 'end'],
       control: { type: 'select' }
@@ -95,11 +115,28 @@ export const WithIcon: Story = {
     iconSlot: 'start'
   },
   render: ({ variant, iconSlot }) => {
-    IconRegistry.define(tylIconPerson);
+    IconRegistry.define(tylIconForgeLogo);
     return html`
-      <forge-button variant=${variant}>
-        <forge-icon slot=${iconSlot} name="person"></forge-icon>
-        My Account
+      <forge-button .variant=${variant}>
+        <forge-icon slot=${iconSlot} name="forge_logo"></forge-icon>
+        Button
+      </forge-button>
+    `;
+  }
+};
+
+export const WithCircularProgress: Story = {
+  parameters: {
+    controls: { include: ['variant', 'theme', 'disabled'] },
+  },
+  args: {
+    variant: 'raised'
+  },
+  render: ({ variant, theme, disabled }) => {
+    return html`
+      <forge-button .variant=${variant} .theme=${theme} ?disabled=${disabled}>
+        Loading...
+        <forge-circular-progress slot="end" aria-label="Loading something important"></forge-circular-progress>
       </forge-button>
     `;
   }

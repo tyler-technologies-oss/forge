@@ -102,10 +102,12 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   @FoundationProperty()
   public declare dense: boolean;
 
+  /** Clicks the button. */
   public override click(): void {
     this._foundation.click({ animateStateLayer: true });
   }
 
+  /** Focuses the button. */
   public override focus(options: ExperimentalFocusOptions): void {
     this._foundation.focus(options);
   }

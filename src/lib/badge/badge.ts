@@ -23,15 +23,15 @@ declare global {
  * 
  * @summary Badges are non-interactive components used to inform status, counts, or as a descriptive label.
  * 
- * @property {boolean} dot - Controls whether the badge will be a small dot without any content visible.
- * @property {BadgeTheme} theme - The theme of the badge.
- * @property {boolean} strong - Controls whether the badge will have a stronger visual appearance.
- * @property {boolean} hide - Controls whether the badge is visible.
+ * @property {boolean} [dot=false] - Controls whether the badge will be a small dot without any content visible.
+ * @property {BadgeTheme} [theme="default"] - The theme of the badge.
+ * @property {boolean} [strong=false] - Controls whether the badge will have a stronger visual appearance.
+ * @property {boolean} [hide=false] - Controls whether the badge is visible.
  * 
- * @attribute {boolean} dot - When present, the badge will be a small dot without any content visible.
- * @attribute {BadgeTheme} theme - The theme of the badge.
- * @attribute {boolean} strong - Controls whether the badge will have a stronger visual appearance.
- * @attribute {boolean} hide - Controls whether the badge is visible.
+ * @attribute {boolean} [dot=false] - When present, the badge will be a small dot without any content visible.
+ * @attribute {BadgeTheme} [theme="default"] - The theme of the badge.
+ * @attribute {boolean} [strong=false] - Controls whether the badge will have a stronger visual appearance.
+ * @attribute {boolean} [hide=false] - Controls whether the badge is visible.
  * 
  * @cssproperty --forge-badge-background - The background color.
  * @cssproperty --forge-badge-color - The text color.
