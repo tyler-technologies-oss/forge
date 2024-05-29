@@ -12,3 +12,16 @@
     justify-content: flex-end;
   }
 }
+
+
+.scaffold-card {
+  width: 400px;
+  --forge-card-padding: 0;
+  --forge-card-height: 300px
+}
+
+.card-content {
+  padding: 16px;
+  margin: 0;
+}
+  
