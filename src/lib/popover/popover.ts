@@ -10,7 +10,7 @@ import { IDismissible, tryDismiss, IDismissibleStackState } from '../core/utils/
 import template from './popover.html';
 import styles from './popover.scss';
 
-export interface IPopoverComponent extends IOverlayAware, IDismissible {
+export interface IPopoverProperties extends IOverlayAware, IDismissible {
   arrow: boolean;
   animationType: PopoverAnimationType;
   triggerType: PopoverTriggerType | PopoverTriggerType[];
@@ -19,6 +19,9 @@ export interface IPopoverComponent extends IOverlayAware, IDismissible {
   hoverDelay: number;
   hoverDismissDelay: number;
   preset: PopoverPreset;
+}
+
+export interface IPopoverComponent extends IPopoverProperties {
   hideAsync(): Promise<void>;
 }
 
@@ -38,14 +41,16 @@ declare global {
  * 
  * @summary Popovers are used to render content in an element that is above all other content on the page.
  * 
- * @property {boolean} arrow - Whether or not the popover should render an arrow.
- * @property {PopoverAnimationType} animationType - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
- * @property {PopoverTriggerType | PopoverTriggerType[]} triggerType - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
- * @property {number} longpressDelay - The delay in milliseconds before a longpress event is detected.
- * @property {boolean} persistentHover - Whether or not the popover should remain open when the user hovers outside the popover.
- * @property {number} hoverDismissDelay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
- * @property {number} hoverDelay - The delay in milliseconds before the popover is shown.
- * @property {PopoverPreset} preset - The preset to use for the popover.
+ * @dependency forge-overlay
+ * 
+ * @property {boolean} [arrow=false] - Whether or not the popover should render an arrow.
+ * @property {PopoverAnimationType} [animationType="zoom"] - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
+ * @property {PopoverTriggerType | PopoverTriggerType[]} [triggerType="click"] - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
+ * @property {number} [longpressDelay=500] - The delay in milliseconds before a longpress event is detected.
+ * @property {boolean} [persistentHover=false] - Whether or not the popover should remain open when the user hovers outside the popover.
+ * @property {number} [hoverDismissDelay=500] - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
+ * @property {number} [hoverDelay=0] - The delay in milliseconds before the popover is shown.
+ * @property {PopoverPreset} [preset="popover"] - The preset to use for the popover.
  * 
  * @globalconfig placement
  * @globalconfig animationType
@@ -58,14 +63,14 @@ declare global {
  * @globalconfig persistent
  * @globalconfig arrow
  * 
- * @attribute {string} arrow - Whether or not the popover should render an arrow.
- * @attribute {string} animation-type - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
- * @attribute {string} trigger-type - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
- * @attribute {string} longpress-delay - The delay in milliseconds before a longpress event is detected.
- * @attribute {string} persistent-hover - Whether or not the popover should remain open when the user hovers outside the popover.
- * @attribute {string} hover-dismiss-delay - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
- * @attribute {number} hover-delay - The delay in milliseconds before the popover is shown.
- * @attribute {string} preset - The preset to use for the popover.
+ * @attribute {string} [arrow=false] - Whether or not the popover should render an arrow.
+ * @attribute {string} [animation-type="zoom"] - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
+ * @attribute {string} [trigger-type="click"] - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
+ * @attribute {string} [longpress-delay=500] - The delay in milliseconds before a longpress event is detected.
+ * @attribute {string} [persistent-hover=false] - Whether or not the popover should remain open when the user hovers outside the popover.
+ * @attribute {string} [hover-dismiss-delay=500] - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
+ * @attribute {number} [hover-delay=0] - The delay in milliseconds before the popover is shown.
+ * @attribute {string} [preset="popover"] - The preset to use for the popover.
  * 
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData} forge-popover-toggle - Dispatches after the popover is toggled.
@@ -196,6 +201,9 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
   @FoundationProperty()
   public declare preset: PopoverPreset;
 
+  /**
+   * Hides the popover, and returns a `Promise` that resolves when the hide animation is complete.
+   */
   public hideAsync(): Promise<void> {
     return this._foundation.hideAsync();
   }

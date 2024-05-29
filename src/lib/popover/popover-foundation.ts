@@ -133,6 +133,10 @@ export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundat
   }
 
   private _openPopover({ dispatchEvents = true, fromKeyboard = false } = {}): void {
+    if (this.open) {
+      return;
+    }
+
     if (dispatchEvents) {
       const evt = this._dispatchBeforetoggleEvent();
       if (evt.defaultPrevented) {
@@ -160,6 +164,10 @@ export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundat
   }
 
   private async _closePopover(): Promise<void> {
+    if (!this.open) {
+      return;
+    }
+
     this._previouslyFocusedElement = null;
     DismissibleStack.instance.remove(this._adapter.hostElement);
 

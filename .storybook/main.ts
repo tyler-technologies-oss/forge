@@ -40,6 +40,7 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');
     return mergeConfig(config, {
+      base: process.env.BASE_HREF || config.base,
       plugins: [
         tsconfigPaths(),
         ViteInlineForgeHtml,
