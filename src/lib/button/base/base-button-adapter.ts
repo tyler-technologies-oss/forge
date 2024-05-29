@@ -8,8 +8,9 @@ import { BASE_BUTTON_CONSTANTS } from './base-button-constants';
 import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflect-utils';
 import { internals, setDefaultAria } from '../../constants';
 import { supportsPopover } from '../../core/utils/feature-detection';
+import { IBaseComponent } from '../../core';
 
-export interface IBaseButtonAdapter extends IBaseAdapter {
+export interface IBaseButtonAdapter<T extends IBaseComponent> extends IBaseAdapter<T> {
   readonly hasSlottedAnchor: boolean;
   initialize(): void;
   setDisabled(value: boolean): void;
@@ -23,14 +24,14 @@ export interface IBaseButtonAdapter extends IBaseAdapter {
   addDefaultSlotChangeListener(listener: EventListener): void;
 }
 
-export abstract class BaseButtonAdapter extends BaseAdapter<IBaseButton> implements IBaseButtonAdapter {
+export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapter<T> implements IBaseButtonAdapter<T> {
   protected readonly _rootElement: HTMLElement;
   protected readonly _focusIndicatorElement: IFocusIndicatorComponent;
   protected readonly _stateLayerElement: IStateLayerComponent;
   protected readonly _defaultSlotElement: HTMLSlotElement;
   protected readonly _endSlotElement: HTMLSlotElement;
 
-  constructor(component: IBaseButton) {
+  constructor(component: T) {
     super(component);
     this._rootElement = getShadowElement(this._component, BASE_BUTTON_CONSTANTS.selectors.ROOT) as HTMLButtonElement;
     this._focusIndicatorElement = getShadowElement(this._component, FOCUS_INDICATOR_CONSTANTS.elementName) as IFocusIndicatorComponent;

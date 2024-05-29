@@ -27,6 +27,12 @@ export class ToastFoundation implements IToastFoundation {
   constructor(private _adapter: IToastAdapter) {}
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration([
+      'duration',
+      'placement',
+      'dismissible'
+    ]);
+
     if (this._open) {
       this.show();
     }

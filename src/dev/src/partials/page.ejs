@@ -2,6 +2,17 @@
 <html lang="en">
   <head>
     <%- include('./src/partials/head.ejs', { title: page.title }) %>
+    
+    <!-- Used for testing global configuration -->
+    <!--
+    <script>
+      window.TylerForgeGlobalConfiguration = {
+        'forge-field': {
+          'labelPosition': 'block-start'
+        }
+      };
+    </script>
+    -->
   </head>
   <body>
     <forge-scaffold>
