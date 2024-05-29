@@ -25,8 +25,7 @@ declare global {
  * 
  * @summary State layers show the interaction status of an element.
  * 
- * @description 
- * A state layer is a semi-transparent overlay on an element that indicates its interaction
+ * @description A state layer is a semi-transparent overlay on an element that indicates its interaction
  * state. State layers provide a systematic approach to visualizing states by using opacity.
  * A layer can be applied to an entire element or in a circular shape. Only one state layer
  * can be applied at a given time.

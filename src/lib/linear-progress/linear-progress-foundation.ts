@@ -39,6 +39,9 @@ export class LinearProgressFoundation {
     return this._progress;
   }
   public set progress(value: number) {
+    if (value == null || value < 0 || value > 1 || isNaN(value)) {
+      value = 0;
+    }
     if (this._progress !== value) {
       this._progress = value;
       if (this._determinate) {
@@ -52,6 +55,9 @@ export class LinearProgressFoundation {
     return this._buffer;
   }
   public set buffer(value: number) {
+    if (value == null || value < 0 || isNaN(value)) {
+      value = 0;
+    }
     if (this._buffer !== value) {
       this._buffer = value;
       if (this._determinate) {

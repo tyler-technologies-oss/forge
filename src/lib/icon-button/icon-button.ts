@@ -49,6 +49,10 @@ declare global {
  * @property {string} value - The form value of the button.
  * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
  * 
+ * @globalconfig variant
+ * @globalconfig shape
+ * @globalconfig density
+ * 
  * @attribute {boolean} [toggle=false] - Whether or not the icon button can be toggled.
  * @attribute {boolean} [on=false] - Whether or not the button is on. Only applies when `toggle` is `true`.
  * @attribute {IconButtonVariant} [variant="icon"] - The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`.

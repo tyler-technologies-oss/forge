@@ -22,6 +22,22 @@ declare global {
 
 /**
  * @tag forge-backdrop
+ * 
+ * @property {boolean} [visible=false] - Whether the backdrop is visible.
+ * @property {boolean} [fixed=false] - Whether the backdrop uses "fixed" or "relative" positioning.
+ * 
+ * @attribute {boolean} [visible=false] - Whether the backdrop is visible.
+ * @attribute {boolean} [fixed=false] - Whether the backdrop uses "fixed" or "relative" positioning.
+ * 
+ * @cssproperty --forge-backdrop-background - The backdrop background color.
+ * @cssproperty --forge-backdrop-opacity - The backdrop opacity.
+ * @cssproperty --forge-backdrop-z-index - The backdrop z-index.
+ * @cssproperty --forge-backdrop-enter-animation-duration - The animation duration for the enter animation.
+ * @cssproperty --forge-backdrop-enter-animation-easing - The animation easing for the enter animation.
+ * @cssproperty --forge-backdrop-exit-animation-duration - The animation duration for the exit animation.
+ * @cssproperty --forge-backdrop-exit-animation-easing - The animation easing for the exit animation.
+ * 
+ * @csspart root - The root element of the backdrop.
  */
 @CustomElement({
   name: BACKDROP_CONSTANTS.elementName
@@ -108,18 +124,22 @@ export class BackdropComponent extends BaseComponent {
     return animationComplete;
   }
 
+  /** Immediately shows the backdrop by setting the `visibility` to `true` without animations. */
   public show(): void {
     this._applyVisibility(true, { animate: false });
   }
 
+  /** Immediately hides the backdrop by setting the `visibility` to `false` without animations. */
   public hide(): void {
     this._applyVisibility(false, { animate: false });
   }
 
+  /** Sets the `visibility` to `true` and animates in. */
   public fadeIn(): Promise<void> {
     return this._applyVisibility(true);
   }
 
+  /** Sets the `visibility` to `false` and animates out. */
   public fadeOut(): Promise<void> {
     return this._applyVisibility(false);
   }

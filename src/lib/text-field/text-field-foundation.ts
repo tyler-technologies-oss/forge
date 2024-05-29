@@ -21,6 +21,7 @@ export class TextFieldFoundation extends BaseFieldFoundation<ITextFieldAdapter> 
   }
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
     this._adapter.addRootListener('input', this._inputListener);
   }

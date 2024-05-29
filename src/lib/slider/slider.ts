@@ -47,45 +47,53 @@ declare global {
  * 
  * @description Use sliders to enable users to select a value from a continuous or discrete range of values.
  * 
- * @property {number} value - The current value of the slider.
- * @property {number} valueStart - The current start value of the slider.
- * @property {number} valueEnd - The current end value of the slider.
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
+ * 
+ * @property {number} [value=50] - The current value of the slider.
+ * @property {number} [valueStart=33] - The current start value of the slider.
+ * @property {number} [valueEnd=67] - The current end value of the slider.
  * @property {string} label - The label text for the slider handle.
  * @property {string} labelStart - The label text for the start slider handle.
  * @property {string} labelEnd - The label text for the end slider handle.
  * @property {SliderLabelBuilder} labelBuilder - A function that returns a label for the slider handle.
- * @property {number} min - The minimum value of the slider.
- * @property {number} max - The maximum value of the slider.
- * @property {number} step - The step value of the slider.
- * @property {boolean} range - Controls range mode.
- * @property {boolean} tickmarks - Controls if tickmarks are visible.
- * @property {boolean} labeled - Controls if labels are visible.
- * @property {boolean} disabled - Controls if the slider is disabled.
- * @property {boolean} readonly - Controls if the slider is readonly.
+ * @property {number} [min=0] - The minimum value of the slider.
+ * @property {number} [max=100] - The maximum value of the slider.
+ * @property {number} [step=1] - The step value of the slider.
+ * @property {boolean} [range=false] - Controls range mode.
+ * @property {boolean} [tickmarks=false] - Controls if tickmarks are visible.
+ * @property {boolean} [labeled=true] - Controls if labels are visible.
+ * @property {boolean} [disabled=false] - Controls if the slider is disabled.
+ * @property {boolean} [readonly=false] - Controls if the slider is readonly.
  * @property {string} name - The form control name.
  * @property {string} nameStart - The form control name for the start handle in range mode.
  * @property {string} nameEnd - The form control name for the end handle in range mode.
  * 
- * @attribute {string} value - Sets the current value of the slider.
- * @attribute {string} value-start - Sets the current start value of the slider in range mode.
- * @attribute {string} value-end - Sets the current end value of the slider in range mode.
+ * @attribute {string} data-aria-label - Sets the `aria-label` attribute on the slider handle.
+ * @attribute {string} data-aria-label-start - Sets the `aria-label` attribute on the start handle in range mode.
+ * @attribute {string} data-aria-label-end - Sets the `aria-label` attribute on the end handle in range mode.
+ * @attribute {number} [value=50] - Sets the current value of the slider.
+ * @attribute {number} [value-start=33] - Sets the current start value of the slider in range mode.
+ * @attribute {number} [value-end=67] - Sets the current end value of the slider in range mode.
  * @attribute {string} label - Sets the label text for the slider handle.
  * @attribute {string} label-start - Sets the label text for the start slider handle in range mode.
  * @attribute {string} label-end - Sets the label text for the end slider handle in range mode.
- * @attribute {string} min - Sets the minimum value of the slider.
- * @attribute {string} max - Sets the maximum value of the slider.
- * @attribute {string} step - Sets the step value of the slider.
- * @attribute {string} tickmarks - Controls if tickmarks are visible.
- * @attribute {string} labeled - Controls if labels are visible.
- * @attribute {string} range - Controls range mode.
- * @attribute {string} disabled - Controls if the slider is disabled.
- * @attribute {string} readonly - Controls if the slider is readonly.
+ * @attribute {number} [min=0] - Sets the minimum value of the slider.
+ * @attribute {number} [max=100] - Sets the maximum value of the slider.
+ * @attribute {number} [step=1] - Sets the step value of the slider.
+ * @attribute {boolean} [range=false] - Controls range mode.
+ * @attribute {boolean} [tickmarks=false] - Controls if tickmarks are visible.
+ * @attribute {boolean} [labeled=true] - Controls if labels are visible.
+ * @attribute {boolean} [disabled=false] - Controls if the slider is disabled.
+ * @attribute {boolean} [readonly=false] - Controls if the slider is readonly.
  * @attribute {string} name - Controls the form control name.
  * @attribute {string} name-start - Controls the form control name for the start handle in range mode.
  * @attribute {string} name-end - Controls the form control name for the end handle in range mode.
  * 
- * @event {CustomEvent} forge-slider-input - Dispatches when the slider value changes.
- * @event {CustomEvent} forge-slider-change - Dispatches when the slider value changes and the value has been committed.
+ * @event {CustomEvent<ISliderChangeEventData>} forge-slider-input - Dispatches when the slider value changes.
+ * @event {CustomEvent<ISliderChangeEventData>} forge-slider-change - Dispatches when the slider value changes and the value has been committed.
+ * @event {CustomEvent<ISliderRangeChangeEventData>} forge-slider-range-input - Dispatches when the slider range values change.
+ * @event {CustomEvent<ISliderRangeChangeEventData>} forge-slider-range-change - Dispatches when the slider range values change and the values have been committed.
  * 
  * @cssproperty --forge-theme-primary - The primary color of the slider.
  * @cssproperty --forge-theme-on-primary - The color of elements placed on top of the primary color (the label text for example).

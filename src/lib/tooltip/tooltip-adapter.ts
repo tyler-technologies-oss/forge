@@ -6,7 +6,7 @@ import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { ITooltipComponent } from './tooltip';
 import { TOOLTIP_CONSTANTS } from './tooltip-constants';
 
-export interface ITooltipAdapter extends IBaseAdapter {
+export interface ITooltipAdapter extends IBaseAdapter<ITooltipComponent> {
   readonly hostElement: ITooltipComponent;
   readonly anchorElement: HTMLElement | null;
   syncAria(): void;

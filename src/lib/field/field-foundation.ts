@@ -1,4 +1,5 @@
 import { ICustomElementFoundation } from '@tylertech/forge-core';
+import { GlobalConfiguration } from '../core/configuration/global-configuration';
 import { FocusIndicatorFocusMode } from '../focus-indicator';
 import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 import { IFieldAdapter } from './field-adapter';
@@ -53,6 +54,7 @@ export class FieldFoundation implements IFieldFoundation {
 
   public initialize(): void {
     this._adapter.addRootListener('slotchange', this._slotChangeListener);
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
     this._adapter.setLabelPosition(this._labelPosition);
 
     if (this._popoverIcon) {
@@ -61,6 +63,7 @@ export class FieldFoundation implements IFieldFoundation {
     if (this._multiline) {
       this._adapter.attachResizeContainer();
     }
+
   }
 
   private _onSlotChange(evt: Event): void {

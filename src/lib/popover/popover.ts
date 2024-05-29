@@ -47,6 +47,17 @@ declare global {
  * @property {number} hoverDelay - The delay in milliseconds before the popover is shown.
  * @property {PopoverPreset} preset - The preset to use for the popover.
  * 
+ * @globalconfig placement
+ * @globalconfig animationType
+ * @globalconfig positionStrategy
+ * @globalconfig shift
+ * @globalconfig hide
+ * @globalconfig flip
+ * @globalconfig boundaryElement
+ * @globalconfig fallbackPlacements
+ * @globalconfig persistent
+ * @globalconfig arrow
+ * 
  * @attribute {string} arrow - Whether or not the popover should render an arrow.
  * @attribute {string} animation-type - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
  * @attribute {string} trigger-type - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.

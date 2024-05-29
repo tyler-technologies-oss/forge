@@ -59,6 +59,17 @@ export class TooltipFoundation extends WithLongpressListener() implements IToolt
   }
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration([
+      'type',
+      'delay',
+      'placement',
+      'offset',
+      'flip',
+      'boundaryElement',
+      'fallbackPlacements',
+      'triggerType'
+    ]);
+
     if (!this._adapter.anchorElement) {
       this._adapter.tryLocateAnchorElement(this._anchor);
     }

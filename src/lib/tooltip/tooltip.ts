@@ -44,27 +44,39 @@ declare global {
  * 
  * @summary Tooltips display information related to an element when the user hovers over an element.
  *
- * @property {boolean} open - Whether or not the tooltip is open.
- * @property {TooltipType} type - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
+ * @dependency forge-overlay
+ * 
+ * @property {boolean} [open=false] - Whether or not the tooltip is open.
+ * @property {TooltipType} [type="presentation"] - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
  * @property {string} anchor - The id of the element that the tooltip is anchored to.
- * @property {TooltipPlacement} placement - The placement of the tooltip relative to the anchor element.
- * @property {number} delay - The delay in milliseconds before the tooltip is shown.
- * @property {number} offset - The offset in pixels between the tooltip and the anchor element.
- * @property {OverlayFlipState} flip - How the tooltip should place itself if there is not enough space at the desired placement.
+ * @property {TooltipPlacement} [placement="right"] - The placement of the tooltip relative to the anchor element.
+ * @property {number} [delay=500] - The delay in milliseconds before the tooltip is shown.
+ * @property {number} [offset=4] - The offset in pixels between the tooltip and the anchor element.
+ * @property {OverlayFlipState} [flip="auto"] - How the tooltip should place itself if there is not enough space at the desired placement.
  * @property {string | null} boundary - The id of the element that the tooltip should be constrained to.
  * @property {HTMLElement | null} boundaryElement - The element that the tooltip should be constrained to.
  * @property {PositionPlacement[] | null} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
- * @property {TooltipTriggerType | TooltipTriggerType[]} triggerType - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
+ * @property {TooltipTriggerType | TooltipTriggerType[]} [triggerType="hover"] - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
  * 
- * @attribute {boolean} open - Whether or not the tooltip is open.
- * @attribute {TooltipType} type - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
+ * @globalconfig type
+ * @globalconfig delay
+ * @globalconfig placement
+ * @globalconfig offset
+ * @globalconfig flip
+ * @globalconfig boundaryElement
+ * @globalconfig fallbackPlacements
+ * @globalconfig triggerType
+ * 
+ * @attribute {boolean} [open=false] - Whether or not the tooltip is open.
+ * @attribute {TooltipType} [type="presentation"] - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
  * @attribute {string} anchor - The id of the element that the tooltip is anchored to.
- * @attribute {TooltipPlacement} placement - The placement of the tooltip relative to the anchor element.
- * @attribute {number} delay - The delay in milliseconds before the tooltip is shown.
- * @attribute {number} offset - The offset in pixels between the tooltip and the anchor element.
- * @attribute {OverlayFlipState} flip - How the tooltip should place itself if there is not enough space at the desired placement.
+ * @attribute {TooltipPlacement} [placement="right"] - The placement of the tooltip relative to the anchor element.
+ * @attribute {number} [delay=500] - The delay in milliseconds before the tooltip is shown.
+ * @attribute {number} [offset=4] - The offset in pixels between the tooltip and the anchor element.
+ * @attribute {OverlayFlipState} [flip="auto"] - How the tooltip should place itself if there is not enough space at the desired placement.
  * @attribute {string | null} boundary - The id of the element that the tooltip should be constrained to.
- * @attribute {PositionPlacement[]} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
+ * @attribute {PositionPlacement[]} fallback-placements - The fallback placements of the tooltip relative to the anchor element.
+ * @attribute {TooltipTriggerType | TooltipTriggerType[]} [trigger-type="hover"] - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
  * 
  * @cssproperty --forge-tooltip-background - The background color of the tooltip surface.
  * @cssproperty --forge-tooltip-color - The text color of the tooltip surface.
@@ -89,7 +101,7 @@ declare global {
  * @cssproperty --forge-tooltip-arrow-top-rotation - The rotation of the tooltip arrow when the tooltip is placed on top.
  * @cssproperty --forge-tooltip-arrow-right-rotation - The rotation of the tooltip arrow when the tooltip is placed on the right.
  * @cssproperty --forge-tooltip-arrow-bottom-rotation - The rotation of the tooltip arrow when the tooltip is placed on the bottom.
- * @cssproperty --forge-tooltip-arrow-left-rotation- The rotation of the tooltip arrow when the tooltip is placed on the left.
+ * @cssproperty --forge-tooltip-arrow-left-rotation - The rotation of the tooltip arrow when the tooltip is placed on the left.
  * 
  * @slot - The content to display in the tooltip.
  * 

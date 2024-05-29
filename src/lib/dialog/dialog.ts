@@ -66,6 +66,8 @@ declare global {
  * 
  * @summary Dialogs are temporary UI elements that are used to display information, ask for input, or confirm actions.
  * 
+ * @dependency forge-backdrop
+ * 
  * @property {boolean} [open=false] - Indicates whether the dialog is open.
  * @property {DialogMode} [mode="modal"] - The mode of the dialog.
  * @property {DialogType} [type="dialog"] - The type of the dialog.
@@ -79,6 +81,12 @@ declare global {
  * @property {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
  * @property {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
  * @property {DialogPlacement} [placement="center"] - The placement of the dialog.
+ * 
+ * @globalconfig animationType
+ * @globalconfig positionStrategy
+ * @globalconfig sizeStrategy
+ * @globalconfig persistent
+ * @globalconfig moveable
  * 
  * @attribute {boolean} [open=false] - Indicates whether the dialog is open.
  * @attribute {DialogMode} [mode="modal"] - The mode of the dialog.

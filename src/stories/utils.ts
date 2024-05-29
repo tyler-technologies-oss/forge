@@ -5,6 +5,9 @@ import cem from '../../dist/cem/custom-elements.json';
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
 
+export const OVERLAY_FLIP_OPTIONS = ['auto', 'main', 'cross', 'never'];
+export const OVERLAY_PLACEMENT_OPTIONS = ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'right-start', 'right-end', 'left-start', 'left-end', 'bottom-start', 'bottom-end'];
+
 /**
  * Common default parameters for a standalone story.
  */
@@ -58,6 +61,19 @@ export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>) {
       element[key] = props[key];
     }
   });
+}
+
+/**
+ * Get the CSS custom properties args from a full set of args (any arg that is prefixed with "--" is considered a CSS variable).
+ */
+export function getCssVariableArgs(args: Args): Args | null {
+  const cssVarArgs = Object.entries(args).reduce((acc, [key, value]) => {
+    if (key.startsWith('--')) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+  return Object.entries(cssVarArgs).length ? cssVarArgs : null;
 }
 
 /**
@@ -150,4 +166,5 @@ export interface Declaration {
   cssProperties?: TagItem[];
   cssParts?: TagItem[];
   dependencies?: string[];
+  globalConfigProperties: string[];
 }

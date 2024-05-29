@@ -8,7 +8,7 @@ import { FieldLabelPosition, FIELD_CONSTANTS } from '../../field';
 
 export type OptionListenerDestructor = () => void;
 
-export interface ISelectAdapter extends IBaseSelectAdapter {
+export interface ISelectAdapter extends IBaseSelectAdapter<ISelectComponent> {
   readonly fieldElement: IFieldComponent;
   floatLabel(value: boolean): void;
   setLabel(value: string): void;

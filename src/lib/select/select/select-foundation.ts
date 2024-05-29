@@ -20,6 +20,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   }
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
     super.initialize();
     super.initializeTarget();
     this._initializeLabel();

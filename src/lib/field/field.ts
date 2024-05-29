@@ -64,6 +64,8 @@ declare global {
  * @property {FocusIndicatorFocusMode} focusIndicatorFocusMode - The focus mode to use on the focus indicator.
  * @property {boolean} focusIndicatorAllowFocus - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
  * 
+ * @globalconfig labelPosition
+ * 
  * @attribute {FieldLabelPosition} label-position - The position of the label relative to the input area.
  * @attribute {FieldLabelAlignment} label-alignment - The alignment of the label relative to the input area.
  * @attribute {boolean} float-label - Whether an inset positioned label is floated to the top of the container.

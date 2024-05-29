@@ -30,30 +30,32 @@ declare global {
  * 
  * @property {HTMLElement} targetElement - The element to attach the focus indicator to.
  * @property {string} target - The id of the element to attach the focus indicator to.
- * @property {boolean} active - Controls whether the indicator is active.
- * @property {boolean} inward - Controls whether the indicator renders inward.
- * @property {boolean} circular - Controls whether the indicator renders circular.
- * @property {boolean} allowFocus - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
- * @property {FocusIndicatorFocusMode} focusMode - The focus mode to use. Defaults to `focusin`.
+ * @property {boolean} [active=false] - Controls whether the indicator is active.
+ * @property {boolean} [inward=false] - Controls whether the indicator renders inward.
+ * @property {boolean} [circular=false] - Controls whether the indicator renders circular.
+ * @property {boolean} [allowFocus=false] - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
+ * @property {FocusIndicatorFocusMode} [focusMode="focusin"] - The focus mode to use.
  * 
  * @attribute {string} target - The id of the element to attach the focus indicator to.
- * @attribute {boolean} active - Controls whether the indicator is active.
- * @attribute {boolean} inward - Controls whether the indicator renders inward.
- * @attribute {boolean} circular - Controls whether the indicator renders circular.
- * @attribute {boolean} allow-focus - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
- * @attribute {FocusIndicatorFocusMode} focus-mode - The focus mode to use. Defaults to `focusin`.
+ * @attribute {boolean} [active=false] - Controls whether the indicator is active.
+ * @attribute {boolean} [inward=false] - Controls whether the indicator renders inward.
+ * @attribute {boolean} [circular=false] - Controls whether the indicator renders circular.
+ * @attribute {boolean} [allow-focus=false] - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
+ * @attribute {FocusIndicatorFocusMode} [focus-mode="focusin"] - The focus mode to use.
  * 
+ * @cssproperty --forge-focus-indicator-display - The `display` style. Defaults to `flex`.
+ * @cssproperty --forge-focus-indicator-width - The width of the focus indicator when resting.
  * @cssproperty --forge-focus-indicator-active-width - The width of the focus indicator when active. When animating this is the max extent.
  * @cssproperty --forge-focus-indicator-color - The color of the focus indicator.
- * @cssproperty --forge-focus-indicator-duration - The animation duration.
- * @cssproperty --forge-focus-indicator-outward-offset - The offset of the focus indicator when outward.
- * @cssproperty --forge-focus-indicator-inward-offset - The offset of the focus indicator when inward.
  * @cssproperty --forge-focus-indicator-shape - The shape of the focus indicator.
- * @cssproperty --forge-focus-indicator-width - The width of the focus indicator when resting.
+ * @cssproperty --forge-focus-indicator-duration - The animation duration.
+ * @cssproperty --forge-focus-indicator-easing - The animation easing function.
  * @cssproperty --forge-focus-indicator-shape-start-start - The start start shape.
  * @cssproperty --forge-focus-indicator-shape-start-end - The start end shape.
  * @cssproperty --forge-focus-indicator-shape-end-start - The end start shape.
  * @cssproperty --forge-focus-indicator-shape-end-end - The end end shape.
+ * @cssproperty --forge-focus-indicator-outward-offset - The offset of the focus indicator when outward.
+ * @cssproperty --forge-focus-indicator-inward-offset - The offset of the focus indicator when inward.
  * @cssproperty --forge-focus-indicator-offset-block - The block offset.
  * @cssproperty --forge-focus-indicator-offset-inline - The inline offset.
  * 

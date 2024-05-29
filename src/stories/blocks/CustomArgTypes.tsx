@@ -12,19 +12,18 @@ function UsageLink({ text, href }: { text: string; href: string }) {
   );
 }
 
-function Section({ title, name, hrefText, href, children, headingLevel = 'h3' }: { title: string; name: string; headingLevel?: 'h3' | 'h4'; hrefText?: string; href?: string; children: React.ReactNode }) {
+function Section({ title, name, children, headingLevel = 'h3' }: { title: string; name: string; headingLevel?: 'h3' | 'h4'; children: React.ReactNode }) {
   const headingId = headingLevel === 'h3' ? title : `${name}-${title}`
   const tagID = headingId.toLowerCase().replace(/[^a-z0-9]/gi, '-');
   return (
     <section className={(styles as any).section}>
       <HeaderMdx as={headingLevel} id={tagID}>{title}</HeaderMdx>
       {children}
-      {href && hrefText ? <UsageLink text={hrefText} href={href} /> : null}
     </section>
   );
 }
 
-function PropsAttrsTable({ items }: { items: TagItem[] }) {
+function PropsAttrsTable({ items, globalConfigProperties }: { items: TagItem[]; globalConfigProperties?: string[] }) {
   return (
     <table className={(styles as any).table}>
       <thead>
@@ -33,6 +32,7 @@ function PropsAttrsTable({ items }: { items: TagItem[] }) {
           <th>Type</th>
           <th>Default</th>
           <th>Description</th>
+          {!!globalConfigProperties?.length ? <th style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>Global Config</th> : null}
         </tr>
       </thead>
       <tbody>
@@ -50,6 +50,10 @@ function PropsAttrsTable({ items }: { items: TagItem[] }) {
             <td>
               <Markdown>{item.description}</Markdown>
             </td>
+            {!!globalConfigProperties?.length ?
+              <td style={{ textAlign: 'center' }}>
+                {globalConfigProperties.includes(item.name) ? '✅' : ''}
+              </td> : null}
           </tr>
         ))}
       </tbody>
@@ -57,6 +61,7 @@ function PropsAttrsTable({ items }: { items: TagItem[] }) {
   );
 }
 
+const TEXT_NAMES = ['(default)'];
 function NameDescriptionTable({ items }: { items: TagItem[] }) {
   return (
     <table className={(styles as any).table}>
@@ -67,10 +72,10 @@ function NameDescriptionTable({ items }: { items: TagItem[] }) {
         </tr>
       </thead>
       <tbody>
-        {items?.map((property: any) => (
+        {items?.map(property => (
           <tr key={property.name}>
             <td>
-              <Code>{property.name}</Code>
+              {!TEXT_NAMES.includes(property.name) ? <Code>{property.name}</Code> : <i>{property.name}</i>}
             </td>
             <td>
               <Markdown>{property.description}</Markdown>
@@ -147,7 +152,7 @@ function MethodsTable({ items }: { items: TagItem[] }) {
 function DependenciesList({ dependencies }: { dependencies: string[] }) {
   return (
     <>
-      <p>This component will automatically include the following components.</p>
+      <p>This component will automatically include the following components:</p>
       <ul>
         {dependencies.map(dependency => {
           const componentId = dependency.toLowerCase().replace(/^forge-/gi, '').replace(/[^a-z0-9]/gi, '-');
@@ -173,6 +178,7 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   const methods = declaration.members?.filter(member => member.kind === 'method' && member.privacy === 'public');
   const events = declaration.events;
   const dependencies = declaration.dependencies;
+  const globalConfigProperties = declaration.globalConfigProperties;
   const slots = declaration.slots?.map(slot => {
     if (!slot.name) {
       slot.name = '(default)';
@@ -185,38 +191,46 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   return (
     <div>
       {!!properties?.length && 
-        <Section title="Properties" name={tagName} headingLevel={headingLevel} hrefText="Properties" href="?path=/docs/getting-started-usage--docs#properties--attributes">
-          <PropsAttrsTable items={properties} />
+        <Section title="Properties" name={tagName} headingLevel={headingLevel}>
+          <PropsAttrsTable items={properties} globalConfigProperties={globalConfigProperties} />
+          <UsageLink text="Properties" href="?path=/docs/getting-started-usage--docs#properties--attributes" />
+          {globalConfigProperties?.length ? <UsageLink text="Global Configuration" href="?path=/docs/getting-started-global-configuration--docs" /> : null}
         </Section>}
       
       {!!attributes?.length &&
-        <Section title="Attributes" name={tagName} headingLevel={headingLevel} hrefText="Attributes" href="?path=/docs/getting-started-usage--docs#properties--attributes">
+        <Section title="Attributes" name={tagName} headingLevel={headingLevel}>
           <PropsAttrsTable items={attributes} />
+          <UsageLink text="Attributes" href="?path=/docs/getting-started-usage--docs#properties--attributes" />
         </Section>}
 
       {!!events?.length &&
-        <Section title="Events" name={tagName} headingLevel={headingLevel} hrefText="Events" href="?path=/docs/getting-started-usage--docs#events">
+        <Section title="Events" name={tagName} headingLevel={headingLevel}>
           <EventsTable items={events} />
+          <UsageLink text="Events" href="?path=/docs/getting-started-usage--docs#events" />
         </Section>}
       
       {!!slots?.length &&
-        <Section title="Slots" name={tagName} headingLevel={headingLevel} hrefText="Slots" href="?path=/docs/getting-started-usage--docs#slots">
+        <Section title="Slots" name={tagName} headingLevel={headingLevel}>
           <NameDescriptionTable items={slots} />
+          <UsageLink text="Slots" href="?path=/docs/getting-started-usage--docs#slots" />
         </Section>}
 
       {!!methods?.length &&
-        <Section title="Methods" name={tagName} headingLevel={headingLevel} hrefText="Methods" href="?path=/docs/getting-started-usage--docs#methods">
+        <Section title="Methods" name={tagName} headingLevel={headingLevel}>
           <MethodsTable items={methods} />
+          <UsageLink text="Methods" href="?path=/docs/getting-started-usage--docs#methods" />
         </Section>}
       
       {!!cssProperties?.length &&
-        <Section title="CSS Custom Properties" name={tagName} headingLevel={headingLevel} hrefText="CSS Custom Properties" href="?path=/docs/getting-started-usage--docs#css-custom-properties">
+        <Section title="CSS Custom Properties" name={tagName} headingLevel={headingLevel}>
           <NameDescriptionTable items={cssProperties} />
+          <UsageLink text="CSS Custom Properties" href="?path=/docs/getting-started-usage--docs#css-custom-properties" />
         </Section>}
       
       {!!cssParts?.length &&
-        <Section title="CSS Shadow Parts" name={tagName} headingLevel={headingLevel} hrefText="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts">
+        <Section title="CSS Shadow Parts" name={tagName} headingLevel={headingLevel}>
           <NameDescriptionTable items={cssParts} />
+          <UsageLink text="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts" />
         </Section>}
 
       {!!dependencies?.length &&

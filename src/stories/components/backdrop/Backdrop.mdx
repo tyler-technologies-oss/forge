@@ -1,0 +1,18 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as BackdropStories from './Backdrop.stories';
+
+<Meta of={BackdropStories} />
+
+<Title />
+
+Backdrops are building block components that are used to provide a visual overlay for a component or page. They are typically used to provide
+separation between some floating content and its background.
+
+The [dialog](/?path=/docs/components-dialog--docs) component is a good example of a component that uses a backdrop.
+
+<Canvas of={BackdropStories.Demo} />
+
+## API
+
+<CustomArgTypes />

@@ -50,6 +50,9 @@ declare global {
  * @property {boolean} [pill=false] - Whether or not the button is pill-shaped.
  * @property {ButtonTheme} [theme="primary"] - The theme of the button. Defaults to `primary`.
  * 
+ * @globalconfig variant
+ * @globalconfig dense
+ * 
  * @attribute {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
  * @attribute {ButtonVariant} [variant="text"] - The variant of the button.
  * @attribute {boolean} [full-width=false] - Whether or not the button is full-width.
