@@ -158,7 +158,7 @@ function DependenciesList({ dependencies }: { dependencies: string[] }) {
           const componentId = dependency.toLowerCase().replace(/^forge-/gi, '').replace(/[^a-z0-9]/gi, '-');
           return (
             <li key={dependency}>
-              <a href={`/?path=/docs/components-${componentId}--docs`}>{`<${dependency}>`}</a>
+              <a href={`./?path=/docs/components-${componentId}--docs`}>{`<${dependency}>`}</a>
             </li>
           );
         })}
