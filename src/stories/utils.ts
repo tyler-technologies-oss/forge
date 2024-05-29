@@ -166,4 +166,5 @@ export interface Declaration {
   cssProperties?: TagItem[];
   cssParts?: TagItem[];
   dependencies?: string[];
+  globalConfigProperties: string[];
 }

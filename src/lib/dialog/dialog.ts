@@ -82,6 +82,12 @@ declare global {
  * @property {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
  * @property {DialogPlacement} [placement="center"] - The placement of the dialog.
  * 
+ * @globalconfig animationType
+ * @globalconfig positionStrategy
+ * @globalconfig sizeStrategy
+ * @globalconfig persistent
+ * @globalconfig moveable
+ * 
  * @attribute {boolean} [open=false] - Indicates whether the dialog is open.
  * @attribute {DialogMode} [mode="modal"] - The mode of the dialog.
  * @attribute {DialogType} [type="dialog"] - The type of the dialog.

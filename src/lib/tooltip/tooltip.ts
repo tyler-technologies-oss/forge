@@ -58,6 +58,15 @@ declare global {
  * @property {PositionPlacement[] | null} fallbackPlacements - The fallback placements of the tooltip relative to the anchor element.
  * @property {TooltipTriggerType | TooltipTriggerType[]} [triggerType="hover"] - The trigger type(s) that will open the tooltip. Valid values are `hover` (default), `longpress`, and `focus`.
  * 
+ * @globalconfig type
+ * @globalconfig delay
+ * @globalconfig placement
+ * @globalconfig offset
+ * @globalconfig flip
+ * @globalconfig boundaryElement
+ * @globalconfig fallbackPlacements
+ * @globalconfig triggerType
+ * 
  * @attribute {boolean} [open=false] - Whether or not the tooltip is open.
  * @attribute {TooltipType} [type="presentation"] - The type of tooltip. Valid values are `presentation` (default), `label`, and `description`.
  * @attribute {string} anchor - The id of the element that the tooltip is anchored to.

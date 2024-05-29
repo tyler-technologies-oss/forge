@@ -2,8 +2,9 @@ import { ISelectDropdownComponent } from './select-dropdown';
 import { BaseSelectAdapter, IBaseSelectAdapter } from '../core/base-select-adapter';
 import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
 import { randomChars } from '@tylertech/forge-core';
+import { type IBaseComponent } from '../../core/base/base-component';
 
-export interface ISelectDropdownAdapter extends IBaseSelectAdapter {
+export interface ISelectDropdownAdapter<T extends IBaseComponent = ISelectDropdownComponent> extends IBaseSelectAdapter<T> {
   attach(selector: string): void;
   detach(): void;
   setTargetDisconnectedListener(cb: () => void): () => void;

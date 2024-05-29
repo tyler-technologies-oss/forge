@@ -37,6 +37,8 @@ declare global {
 
 /**
  * @tag forge-select
+ * 
+ * @globalconfig labelPosition
  */
 @CustomElement({
   name: SELECT_CONSTANTS.elementName,

@@ -51,6 +51,15 @@ declare global {
  * @property {HTMLElement | null} boundaryElement - The element to use as the boundary for the overlay.
  * @property {OverlayPlacement[]} fallbackPlacements - The fallback placements to use when the overlay cannot be placed in the desired placement.
  * 
+ * @globalconfig placement
+ * @globalconfig positionStrategy
+ * @globalconfig shift
+ * @globalconfig hide
+ * @globalconfig flip
+ * @globalconfig boundaryElement
+ * @globalconfig fallbackPlacements
+ * @globalconfig persistent
+ * 
  * @attribute {string} anchor - The id of the element to anchor the overlay to.
  * @attribute {string} no-anchor - Whether or not the overlay should be rendered without an anchor (centered on page by default).
  * @attribute {string} open - Whether or not the overlay is open.

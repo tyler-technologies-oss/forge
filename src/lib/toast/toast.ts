@@ -63,6 +63,10 @@ declare global {
  * @property {string} dismissLabel - The accessible label for the dismiss button.
  * @property {ToastTheme} theme - The theme of the toast.
  * 
+ * @globalconfig duration
+ * @globalconfig placement
+ * @globalconfig dismissible
+ * 
  * @attribute {boolean} open - The open state.
  * @attribute {number} duration - The duration in milliseconds that the toast is displayed.
  * @attribute {ToastPlacement} placement - The placement of the toast.
