@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { html, nothing } from 'lit-html';
 import { styleMap } from 'lit/directives/style-map.js';
-import { OVERLAY_FALLBACK_PLACEMENT_OPTIONS, OVERLAY_FLIP_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { OVERLAY_PLACEMENT_OPTIONS, OVERLAY_FLIP_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/tooltip';
@@ -41,9 +41,10 @@ const meta = {
       exclude: ['anchor', 'anchorElement', 'target', 'position', 'boundary', 'boundaryElement'],
       controls: {
         type: { control: 'select', options: ['presentation', 'label', 'description'] },
+        placement: { control: 'select', options: OVERLAY_PLACEMENT_OPTIONS },
         flip: { control: 'select', options: OVERLAY_FLIP_OPTIONS },
         triggerType: { control: 'multi-select', options: ['hover', 'longpress', 'focus'] },
-        fallbackPlacements: { control: 'multi-select', options: OVERLAY_FALLBACK_PLACEMENT_OPTIONS }
+        fallbackPlacements: { control: 'multi-select', options: OVERLAY_PLACEMENT_OPTIONS }
       }
     }),
   },

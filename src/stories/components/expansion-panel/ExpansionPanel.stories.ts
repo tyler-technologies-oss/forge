@@ -1,7 +1,9 @@
-import { html, render } from 'lit';
+import { html, nothing } from 'lit';
 import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { styleMap } from 'lit/directives/style-map.js';
+import { createRef, ref } from 'lit/directives/ref.js';
 
 import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/card';
@@ -15,34 +17,31 @@ const meta = {
   title: 'Components/Expansion Panel',
   component,
   render: args => {
-    // TODO: figure out how to only update args on existing element instance instead of re-rendering the whole thing
-    const el = customElementStoryRenderer(component, args);
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const buttonRef = createRef();
 
-    // Trigger button
-    const triggerButton = document.createElement('button');
-    triggerButton.slot = 'header';
-    triggerButton.textContent = 'Toggle';
-    triggerButton.setAttribute('type', 'button');
-    triggerButton.setAttribute('aria-expanded', 'false');
-    triggerButton.setAttribute('aria-controls', 'content');
-    el.appendChild(triggerButton);
+    function handleToggle(evt: CustomEvent<boolean>) {
+      toggleEventAction();
+      buttonRef.value?.setAttribute('aria-expanded', evt.detail.toString());
+    }
 
-    // Content
-    const content = document.createElement('div');
-    content.id = 'content';
-    content.setAttribute('role', 'group');
-    content.innerHTML = `
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet a, minima vero perferendis, neque tempora amet qui blanditiis cumque, nulla deserunt quo veniam facere aspernatur fuga fugit? Perferendis, et eligendi?</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet a, minima vero perferendis, neque tempora amet qui blanditiis cumque, nulla deserunt quo veniam facere aspernatur fuga fugit? Perferendis, et eligendi?</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet a, minima vero perferendis, neque tempora amet qui blanditiis cumque, nulla deserunt quo veniam facere aspernatur fuga fugit? Perferendis, et eligendi?</p>
+    return html`
+      <forge-expansion-panel
+        .open=${args.open}
+        .animationType=${args.animationType}
+        .orientation=${args.orientation}
+        style=${style}
+        @forge-expansion-panel-toggle=${handleToggle}
+        @forge-expansion-panel-animation-complete=${animationCompleteEventAction}>
+        <button ${ref(buttonRef)} slot="header" type="button" aria-expanded=${args.open} aria-controls="content">Toggle</button>
+        <div id="content" role="group">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla quod corporis similique consequuntur facere laborum veniam error eius.</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla quod corporis similique consequuntur facere laborum veniam error eius.</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis minus ut illum corporis incidunt quod temporibus consequatur rem! Libero rem nulla quod corporis similique consequuntur facere laborum veniam error eius.</p>
+        </div>
+      </forge-expansion-panel>
     `;
-    el.appendChild(content);
-    
-    // Actions
-    el.addEventListener('forge-expansion-panel-toggle', toggleEventAction);
-    el.addEventListener('forge-expansion-panel-animation-complete', animationCompleteEventAction);
-
-    return el;
   },
   argTypes: {
     ...generateCustomElementArgTypes({
