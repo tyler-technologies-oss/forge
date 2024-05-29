@@ -24,9 +24,9 @@ declare global {
  * 
  * @description A utility component with predefined icon and descriptions for use in an app bar `start` slot.
  * 
- * @property {string} icon - The name of an alternative icon to display.
+ * @property {string} [icon=menu] - The name of an alternative icon to display.
  * 
- * @attribute {string} [icon] - The name of an alternative icon to display.
+ * @attribute {string} [icon=menu] - The name of an alternative icon to display.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */
