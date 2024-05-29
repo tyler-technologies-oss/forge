@@ -1,0 +1,14 @@
+
+.demo-card {
+  max-width: 400px;
+
+  .forge-card-header-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .forge-card-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
