@@ -268,52 +268,52 @@ $variants: (
 //
 
 .forge-field {
-  &--has-start {
+  &.has-start {
     .start {
       @include core.start;
     }
   }
 
-  &--has-end {
+  &.has-end {
     .end {
       @include core.end;
     }
   }
 
-  &--has-accessory {
+  &.has-accessory {
     .accessory {
       @include core.accessory;
     }
   }
 
-  &--has-accessory
+  &.has-accessory
 
-  &:not(.forge-field--has-accessory) {
+  &:not(.has-accessory) {
     .popover-icon {
       @include core.item-padding(end, outer);
     }
   }
 
-  &--has-support-text-start,
-  &--has-support-text-end {
+  &.has-support-text-start,
+  &.has-support-text-end {
     .support-text {
       @include core.support-text;
     }
   }
 
-  &--has-support-text-start.forge-field--has-support-text-end {
+  &.has-support-text-start.has-support-text-end {
     .support-text {
       @include core.support-text-both;
     }
   }
 
-  &--has-support-text-start {
+  &.has-support-text-start {
     .support-text-start {
       @include core.support-text-start;
     }
   }
 
-  &--has-support-text-end {
+  &.has-support-text-end {
     .support-text-end {
       @include core.support-text-end;
     }
@@ -321,7 +321,7 @@ $variants: (
 }
 
 :host(:not([popover-icon])) {
-  .forge-field:not(.forge-field--has-accessory) {
+  .forge-field:not(.has-accessory) {
     .end {
       @include core.item-padding(end, outer);
     }
@@ -422,7 +422,7 @@ $variants: (
 //
 
 :host(#{map.get($label-positions, inset)}[float-label]:not(:is([dense], [density=extra-small]))) {
-  .forge-field--has-label {
+  .has-label {
     .label {
       @include core.floating-label;
     }
@@ -431,7 +431,7 @@ $variants: (
       @include core.floating-input;
     }
 
-    &.forge-field--floating-in {
+    &.floating-in {
       .label {
         @include core.float-in-label;
       }
@@ -441,7 +441,7 @@ $variants: (
       }
     }
 
-    &:not(.forge-field--floating-in) {
+    &:not(.floating-in) {
       .input {
         ::slotted(:is(input, [data-forge-field-input], [data-forge-multi-input-separator])) {
           @include core.slotted-floating-input;
@@ -452,7 +452,7 @@ $variants: (
 }
 
 :host(#{map.get($label-positions, inset)}:not([float-label])) {
-  .forge-field--has-label.forge-field--floating-out {
+  .has-label.floating-out {
     .label {
       @include core.float-out-label;
     }
@@ -464,7 +464,7 @@ $variants: (
 }
 
 :host(#{map.get($label-positions, inset)}[float-label][multiline]) {
-  .forge-field--has-label:not(.forge-field--floating-in) {
+  .has-label:not(.floating-in) {
     ::slotted(textarea) {
       @include core.multiline-slotted-floating-input;
     }
@@ -563,7 +563,7 @@ $variants: (
   }
 
   /* When there is a slotted start element the input uses inner start padding */
-  &--has-start {
+  &.has-start {
     .input {
       #{$first-slotted-element} {
         @include core.item-padding(start, inner);
@@ -572,7 +572,7 @@ $variants: (
   }
   
   /* When there is a slotted end element the input uses inner end padding */
-  &--has-end {
+  &.has-end {
     .input {
       #{$last-slotted-element} {
         @include core.item-padding(end, inner);
@@ -581,7 +581,7 @@ $variants: (
   }
 
   /* When there is a slotted accessory element the end element uses inner end padding */
-  &--has-accessory {
+  &.has-accessory {
     .end {
       @include core.item-padding(end, inner);
     }
@@ -591,7 +591,7 @@ $variants: (
 /* Add padding between the end and accessory elements in the plain variant */
 :host(#{map.get($variants, plain)}) {
   .forge-field {
-    &--has-accessory {
+    &.has-accessory {
       .end {
         @include core.item-padding(end, inner);
       }
@@ -602,7 +602,7 @@ $variants: (
 :host(#{map.get($label-positions, inset)}) {
   /* The label padding should match the input when there is a slotted start element */
   .forge-field {
-    &--has-start {
+    &.has-start {
       .label {
         @include core.item-padding(start, inner);
       }
@@ -632,7 +632,7 @@ $variants: (
 /* When the accessory is present the input uses inner end padding */
 :host(:not(popover-icon)) {
   .forge-field {
-    &--has-accessory:not(:is(.forge-field--has-end)) {
+    &.has-accessory:not(:is(.has-end)) {
       .input {
         #{$last-slotted-element} {
           @include core.item-padding(end, inner);

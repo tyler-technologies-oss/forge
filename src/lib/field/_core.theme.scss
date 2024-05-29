@@ -84,19 +84,19 @@ $elevations: (
     @include override(focus-indicator-color, theme.variable(primary), value);
   } @else {
     @include override(filled-background, map.get($filled-backgrounds, $theme), value);
-    @include override(content-color, map.get($content-colors, $theme), value);
     @include override(focus-indicator-color, theme.variable($theme), value);
-    @include override(inset-label-color, map.get($inset-label-colors, $theme), value);
-    @include override(outline-color, map.get($outline-colors, $theme), value);
-    @include override(outline-color-hover, map.get($outline-colors-hover, $theme), value);
     @include override(tonal-background, map.get($tonal-backgrounds, $theme), value);
     @include override(tonal-background-hover, map.get($tonal-backgrounds-hover, $theme), value);
   }
+  @include override(content-color, map.get($content-colors, $theme), value);
   @include override(inner-border-color, map.get($outline-colors, $theme), value);
   @include override(inner-border-color-hover, map.get($outline-colors-hover, $theme), value);
+  @include override(inset-label-color, map.get($inset-label-colors, $theme), value);
   @include override(multiline-inset-label-background, map.get($filled-backgrounds, $theme), value);
   @include override(multiline-inset-label-tonal-background, map.get($tonal-backgrounds, $theme), value);
   @include override(multiline-inset-label-tonal-background-hover, map.get($tonal-backgrounds-hover, $theme), value);
+  @include override(outline-color, map.get($outline-colors, $theme), value);
+  @include override(outline-color-hover, map.get($outline-colors-hover, $theme), value);
 }
 
 @mixin variant($variant) {

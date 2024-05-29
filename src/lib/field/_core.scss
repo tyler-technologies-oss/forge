@@ -173,10 +173,9 @@
 
   block-size: 100%;
 
-  fill: #{token(content-color, custom)};
-
   & > * {
     transition: rotate #{token(popover-icon-transition-duration)} #{token(popover-icon-transition-timing)};
+    fill: #{token(content-color, custom)};
   }
 }
 
@@ -198,8 +197,10 @@
   grid-area: start;
   align-items: center;
 
+  max-block-size: 100%;
+  overflow: hidden;
+
   color: #{token(content-color, custom)};
-  // fill: #{token(content-color, custom)};
 }
 
 @mixin end {
@@ -209,6 +210,9 @@
   display: flex;
   grid-area: end;
   align-items: center;
+
+  max-block-size: 100%;
+  overflow: hidden;
 
   color: #{token(content-color, custom)};
 }
@@ -223,6 +227,8 @@
   align-items: center;
 
   block-size: 100%;
+  max-block-size: 100%;
+  overflow: hidden;
 
   color: #{token(content-color, custom)};
 
