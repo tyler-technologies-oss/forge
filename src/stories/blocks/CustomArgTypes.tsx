@@ -7,7 +7,7 @@ import styles from './CustomArgTypes.module.scss';
 function UsageLink({ text, href }: { text: string; href: string }) {
   return (
     <p>
-      <i>Learn more about <a href={`/${href}`}>{text}</a>.</i>
+      <i>Learn more about <a href={`./${href}`}>{text}</a>.</i>
     </p>
   );
 }
