@@ -254,9 +254,9 @@ describe('Field', () => {
       expect(harness.element.shape).to.equal('default');
     });
 
-    it('should default density to "medium"', async () => {
+    it('should default density to "default"', async () => {
       const harness = await createDefaultFixture();
-      expect(harness.element.density).to.equal('medium');
+      expect(harness.element.density).to.equal('default');
     });
 
     it('should default dense to false', async () => {
@@ -452,9 +452,9 @@ describe('Field', () => {
       expect(harness.labelElement).to.equal(harness.rootElement.firstElementChild);
     });
 
-    it('should render label after container when label position is inline end', async () => {
+    it('should render label before container when label position is inline end', async () => {
       const harness = await createFixture({ labelPosition: 'inline-end' });
-      expect(harness.labelElement).to.equal(harness.rootElement.lastElementChild);
+      expect(harness.labelElement).to.equal(harness.rootElement.firstElementChild);
     });
 
     it('should render label before container when label position is block start', async () => {
@@ -472,30 +472,9 @@ describe('Field', () => {
       expect(harness.labelElement).to.equal(harness.rootElement.firstElementChild);
     });
 
-    it('should render label as first child of resize container when multiline and label position is inset', async () => {
+    it('should render label as first child of container container when multiline and label position is inset', async () => {
       const harness = await createFixture({ labelPosition: 'inset', multiline: true });
-      expect(harness.labelElement).to.equal(harness.resizeContainerElement.firstElementChild);
-    });
-  });
-
-  describe('resize container', () => {
-    it('should not render resize container by default', async () => {
-      const harness = await createDefaultFixture();
-      const resizeContainer = getShadowElement(harness.element, FIELD_CONSTANTS.selectors.RESIZE_CONTAINER);
-      expect(resizeContainer).to.be.null;
-    });
-
-    it('should add resize container when multiline', async () => {
-      const harness = await createFixture({ multiline: true });
-      const resizeContainer = getShadowElement(harness.element, FIELD_CONSTANTS.selectors.RESIZE_CONTAINER);
-      expect(resizeContainer).not.to.be.null;
-    });
-
-    it('should remove resize container when not multiline', async () => {
-      const harness = await createFixture({ multiline: true });
-      harness.element.multiline = false;
-      const resizeContainer = getShadowElement(harness.element, FIELD_CONSTANTS.selectors.RESIZE_CONTAINER);
-      expect(resizeContainer).to.be.null;
+      expect(harness.labelElement).to.equal(harness.containerElement.firstElementChild);
     });
   });
 
@@ -555,7 +534,6 @@ class FieldHarness extends TestHarness<IFieldComponent> {
   public labelElement: HTMLElement;
   public containerElement: HTMLElement;
   public popoverIconElement: HTMLElement;
-  public resizeContainerElement: HTMLElement;
 
   constructor(el: IFieldComponent) {
     super(el);
@@ -564,9 +542,8 @@ class FieldHarness extends TestHarness<IFieldComponent> {
   public initElementRefs(): void {
     this.rootElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.ROOT);
     this.labelElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.LABEL);
-    this.containerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.SURFACE);
+    this.containerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.CONTAINER);
     this.popoverIconElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.POPOVER_ICON);
-    this.resizeContainerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.RESIZE_CONTAINER);
   }
 
   public async clickElement(el: HTMLElement): Promise<void> {
