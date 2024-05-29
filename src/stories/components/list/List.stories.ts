@@ -3,8 +3,6 @@ import { action } from '@storybook/addon-actions';
 import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
 
 import '@tylertech/forge/list';
-import '@tylertech/forge/focus-indicator';
-import '@tylertech/forge/state-layer';
 
 const listComponent = 'forge-list';
 const listItemComponent = 'forge-list-item';
