@@ -33,7 +33,7 @@ jobs:
       PRODUCTION_RELEASE: false
       BUILD_DIRECTORY: storybook-static
       BUILD_TARGET_DIRECTORY: docs/pr/${{ github.event.pull_request.head.label }}
-      BUILD_NPM_SCRIPT: "STORYBOOK_BASE_HREF=pr/${{ github.event.pull_request.head.label }}/ && build-storybook"
+      BUILD_NPM_SCRIPT: "build-storybook"
       PR_COMMENT_HEADER: "View Storybook Deployment (@next)"
       PR_PATH: pr/${{ github.event.pull_request.head.label }}
       BASE_HREF: /pr/${{ github.event.pull_request.head.label }}/
