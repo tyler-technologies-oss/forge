@@ -3,6 +3,8 @@ import { action } from '@storybook/addon-actions';
 import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
 
 import '@tylertech/forge/list';
+import '@tylertech/forge/focus-indicator';
+import { html, nothing } from 'lit';
 
 const listComponent = 'forge-list';
 const listItemComponent = 'forge-list-item';
@@ -13,46 +15,40 @@ const selectAction = action('forge-list-item-select');
 const meta = {
   title: 'Components/List',
   render: args => {
-    const list = customElementStoryRenderer(listComponent, args);
+    const items = [];
     for (let i = 0; i < 4; i++) {
-      const item = document.createElement(listItemComponent);
-      const primaryText = document.createElement('span');
-      const primaryTextLabel = `List item ${i + 1} `;
-      item.value = primaryTextLabel;
-      if (args.wrap) {
-        primaryText.innerHTML = `${primaryTextLabel} ${wrapText}`;
-        item.wrap = true;
-      } else {
-        primaryText.innerHTML = primaryTextLabel;
-      }
-      if (args.variant === 'button') {
-        const button = document.createElement('button');
-        button.appendChild(primaryText);
-        item.addEventListener('forge-list-item-select', selectAction);
-        item.appendChild(button);
-      } else if (args.variant === 'anchor') {
-        const anchor = document.createElement('a');
-        anchor.href = '#';
-        anchor.target = '_blank';
-        item.appendChild(anchor);
-      } else {
-        item.appendChild(primaryText);
-      }
-      if (args.twoLine || args.threeLine) {
-        const secondaryText = document.createElement('span');
-        secondaryText.slot = 'secondary-text';
-        secondaryText.innerHTML = 'Secondary text';
-        item.appendChild(secondaryText);
-      } 
-      if (args.threeLine) {
-        const tertiaryText = document.createElement('span');
-        tertiaryText.slot = 'tertiary-text';
-        tertiaryText.innerHTML = 'Tertiary text';
-        item.appendChild(tertiaryText);
-      }
-      list.appendChild(item);
+      const label = args.wrap ? `List item ${i + 1} ${wrapText}` : `List item ${i + 1}`;
+
+      const variant = args.variant === 'button' ? 
+        html`<button>${label}</button>` : 
+        args.variant === 'anchor' ?
+          html`<a href="#" target="_blank">${label}</a>` :
+          html`<span>${label}</span>`;
+
+      items.push(
+        html`
+        <forge-list-item
+          value="List item ${i + 1}"
+          ?selected=${i === 0 && args.selected}
+          @forge-list-item-select=${selectAction}>
+          ${variant}
+          ${args.twoLine || args.threeLine ? html`<span slot="secondary-text">Secondary text</span>` : nothing}
+          ${args.threeLine ? html`<span slot="tertiary-text">Tertiary text</span>` : nothing}
+        </forge-list-item>`
+      );
     }
-    return list;
+
+    return html`
+      <forge-list
+        .dense=${args.dense}
+        .indented=${args.indented}
+        .selectedValue=${args.selectedValue}
+        .twoLine=${args.twoLine}
+        .threeLine=${args.threeLine}
+        .wrap=${args.wrap}>
+        ${items}
+      </forge-list>
+    `;
   },
   component: listComponent,
   subcomponents: {
@@ -61,14 +57,12 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({ 
       tagName: listComponent,
-      exclude: ['noninteractive'],
-      controls: {
-        variant: { control: { type: 'select' }, options: ['anchor', 'button', 'static'] },
-      }
+      exclude: ['active', 'noninteractive'],
     }),
+    variant: { control: { type: 'select' }, options: ['anchor', 'button', 'static'] },
     ...generateCustomElementArgTypes({
       tagName: listItemComponent,
-      exclude: ['value', 'noninteractive'],
+      exclude: ['active', 'value', 'noninteractive'],
     })
   },
   args: {
