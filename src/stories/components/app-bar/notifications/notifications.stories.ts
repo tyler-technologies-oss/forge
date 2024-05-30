@@ -32,7 +32,7 @@ export const Demo: Story = {
   render: () => {
     return html`
     <forge-app-bar title-text="Menu Button">
-      <forge-app-bar-notification-button slot="end" show-badge="true" dot="true">
+      <forge-app-bar-notification-button slot="end" show-badge dot>
       </forge-app-bar-notification-button>
     </forge-app-bar>
     `;
