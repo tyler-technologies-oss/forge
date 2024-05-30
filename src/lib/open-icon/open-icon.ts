@@ -24,13 +24,13 @@ declare global {
  * 
  * @summary Open icons are used to indicate whether a section is open or closed.
  * 
- * @property {boolean} open - Whether the icon is open or closed.
- * @property {OpenIconOrientation} orientation - The orientation of the rotation.
- * @property {OpenIconRotation} rotation - The rotation amount.
+ * @property {boolean} [open=false] - Whether the icon is open or closed.
+ * @property {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.
+ * @property {OpenIconRotation} [rotation=full] - The rotation amount.
  * 
- * @attribute {boolean} open - Whether the icon is open or closed.
- * @attribute {OpenIconOrientation} orientation - The orientation of the rotation.
- * @attribute {OpenIconRotation} rotation - The rotation amount.
+ * @attribute {boolean} [open=false] - Whether the icon is open or closed.
+ * @attribute {OpenIconOrientation} [orientation=vertical] - The orientation of the rotation.
+ * @attribute {OpenIconRotation} [rotation=full] - The rotation amount.
  * 
  * @cssproperty --forge-open-icon-color - The color of the icon.
  * @cssproperty --forge-open-icon-size - The size of the icon.
