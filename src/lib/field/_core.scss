@@ -85,6 +85,7 @@
 
   position: relative;
   display: grid;
+  isolation: isolate;
 
   grid-area: main;
   grid-template-areas: 'start center end popover-icon accessory';
