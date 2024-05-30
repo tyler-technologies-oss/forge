@@ -37,32 +37,35 @@ declare global {
  * @tag forge-app-bar-profile-button
  * 
  * @property {string} avatarImageUrl - The url of the avatar image to display.
- * @property {number} avatarLetterCount - The number of letters to display in the avatar.
+ * @property {number} [avatarLetterCount=2] - The number of letters to display in the avatar.
  * @property {string} avatarText - The text to display in the avatar.
  * @property {string} avatarIcon - The name of an alternative icon to display in the avatar.
  * @property {string} fullName - The full name.
  * @property {string} email - The email address.
- * @property {boolean} signOutButton - Whether to display the sign out button or not. Defaults to `true`.
- * @property {boolean} profileButton - Whether to display the profile button or not.
- * @property {string} signOutButtonText - The text to display in the sign out button.
- * @property {string} profileButtonText - The text to display in the profile button.
- * @property {boolean} open - Whether the profile card is open or not.
+ * @property {boolean} [signOutButton=true] - Whether to display the sign out button or not. Defaults to `true`.
+ * @property {boolean} [profileButton=false] - Whether to display the profile button or not.
+ * @property {string} [signOutButtonText="Sign out"] - The text to display in the sign out button.
+ * @property {string} [profileButtonText="Profile"] - The text to display in the profile button.
+ * @property {boolean} [open=false] - Whether the profile card is open or not.
  * @property {IPopoverComponent | undefined} popupElement - The popup element when open.
  * @property {AppBarProfileButtonProfileCardBuilder} profileCardBuilder - Sets the profile card builder callback that will be used to add extra content to the profile card.
  * 
  * @attribute {string} [avatar-image-url] - The url of the avatar image to display.
- * @attribute {number} [avatar-letter-count] - The number of letters to display in the avatar.
+ * @attribute {number} [avatar-letter-count=2] - The number of letters to display in the avatar.
  * @attribute {string} [avatar-text] - The text to display in the avatar.
  * @attribute {string} [avatar-icon] - The name of an alternative icon to display in the avatar.
  * @attribute {string} [full-name] - The full name.
  * @attribute {string} [email] - The email address.
- * @attribute {boolean} [sign-out-button] - Whether to display the sign out button or not. Defaults to `true`.
- * @attribute {boolean} [profile-button] - Whether to display the profile button or not.
- * @attribute {string} [sign-out-button-text] - The text to display in the sign out button.
- * @attribute {string} [profile-button-text] - The text to display in the profile button.
- * @attribute {boolean} [open] - Whether the profile card is open or not.
+ * @attribute {boolean} [sign-out-button=true] - Whether to display the sign out button or not. Defaults to `true`.
+ * @attribute {boolean} [profile-button=false] - Whether to display the profile button or not.
+ * @attribute {string} [sign-out-button-text="Sign Out"] - The text to display in the sign out button.
+ * @attribute {string} [profile-button-text="Profile"] - The text to display in the profile button.
+ * @attribute {boolean} [open=false] - Whether the profile card is open or not.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
+ * 
+ * @event {CustomEvent} forge-profile-card-sign-out - Fires when the sign out button is clicked.
+ * @event {CustomEvent} forge-profile-card-profile - Fires when the profile button is clicked.
  */
 @CustomElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
