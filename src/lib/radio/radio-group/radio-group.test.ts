@@ -173,5 +173,41 @@ describe('Radio group', () => {
         expect(radio.disabled).to.be.true;
       });
     });
+
+    it('should set required when a descendant radio is required', async () => {
+      const el = await fixture<IRadioGroupComponent>(html`
+        <forge-radio-group>
+          <forge-radio required></forge-radio>
+          <forge-radio></forge-radio>
+        </forge-radio-group>
+      `);
+
+      expect(el.ariaRequired).to.equal('true');
+    });
+
+    it('should not set required when no descendant radios are required', async () => {
+      const el = await fixture<IRadioGroupComponent>(html`
+        <forge-radio-group>
+          <forge-radio></forge-radio>
+          <forge-radio></forge-radio>
+        </forge-radio-group>
+      `);
+
+      expect(el.ariaRequired).to.be.null;
+    });
+
+    it('should set required to false when a change to descendant radios results in none being required', async () => {
+      const el = await fixture<IRadioGroupComponent>(html`
+        <forge-radio-group>
+          <forge-radio required></forge-radio>
+          <forge-radio></forge-radio>
+        </forge-radio-group>
+      `);
+
+      const radio = el.querySelector(RADIO_CONSTANTS.elementName) as IRadioComponent;
+      radio.required = false;
+
+      expect(el.ariaRequired).to.equal('false');
+    });
   });
 });

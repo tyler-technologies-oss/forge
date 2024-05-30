@@ -127,8 +127,7 @@ export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithF
     this[setDefaultAria]({
       role: 'radio',
       ariaChecked: this.checked ? 'true' : 'false',
-      ariaDisabled: this.disabled ? 'true' : 'false',
-      ariaRequired: this.required ? 'true' : 'false'
+      ariaDisabled: this.disabled ? 'true' : 'false'
     });
     RadioGroupManager.syncRadioFocusableState(this);
     this._foundation.initialize();
