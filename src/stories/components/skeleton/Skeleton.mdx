@@ -6,10 +6,37 @@ import * as SkeletonStories from './Skeleton.stories';
 
 <Title />
 
+The skeleton component is a generic, low-level component that can be used to build loading placeholder pages/elements called "skeleton screens". These screens represent the block-level visual elements of a page, or section of a page, where content is intended to be loaded sometime in the future. Using skeleton screens gives the illusion of speed to the user, and can often reduce frustration for users during long running processes.
+
+There are a few built-in variants that can be used by adding an attribute to the element. These built-in variants are specifically designed to mimic other components in the Forge library for ease of use.
+
+## Default
+
 <Canvas of={SkeletonStories.Demo} />
+
+## Profile
+
+<Canvas of={SkeletonStories.Profile} />
+
+## list
+
+<Canvas of={SkeletonStories.List} />
+
+## Chips
+
+<Canvas of={SkeletonStories.Chips} />
+
+## Buttons
+
+<Canvas of={SkeletonStories.Buttons} />
+
+## Form Field
+
+<Canvas of={SkeletonStories.FormField} />
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+Ensure that the skeleton component does not interfere with screen readers by including the `aria-hidden="true"` attribute.
