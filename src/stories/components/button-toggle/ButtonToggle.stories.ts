@@ -13,7 +13,7 @@ const changeAction = action('forge-button-toggle-group-change');
 const selectAction = action('forge-button-toggle-select');
 
 const meta = {
-  title: 'Components/Button Toggle',
+  title: 'Components/Button Toggle Group',
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
