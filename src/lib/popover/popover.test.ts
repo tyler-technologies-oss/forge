@@ -1349,6 +1349,22 @@ describe('Popover', () => {
       expect(document.activeElement).to.be.equal(autofocusEl);
     });
 
+    it('should focus element with autofocus attribute when opened via click', async () => {
+      const harness = await createFixture();
+
+      const autofocusEl = document.createElement('input');
+      autofocusEl.setAttribute('autofocus', '');
+      harness.popoverElement.appendChild(autofocusEl);
+
+      await harness.clickTrigger();
+
+      // We wait two frames internally before attempting to set focus
+      await elementUpdated(harness.popoverElement);
+      await elementUpdated(harness.popoverElement);
+
+      expect(document.activeElement).to.be.equal(autofocusEl);
+    });
+
     it('should place focus back on trigger element when closed via escape key after opened via keyboard', async () => {
       const harness = await createFixture();
 
