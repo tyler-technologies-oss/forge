@@ -26,9 +26,9 @@ declare global {
  * @description
  * The button area component wraps any arbitrary content with a <button> element to enable accessible clickable interfaces including nested controls and other complex content.
  *
- * @property {boolean} disabled - Sets whether the button area and slotted button are disabled. Setting this on one will also set it on the other.
+ * @property {boolean} [disabled=false] - Sets whether the button area and slotted button are disabled. Setting this on one will also set it on the other.
  *
- * @attribute {boolean} disabled - Sets whether the button area and slotted button are disabled. Setting this on one will also set it on the other.
+ * @attribute {boolean} [disabled=false] - Sets whether the button area and slotted button are disabled. Setting this on one will also set it on the other.
  *
  * @event {Event} click - The button area emits a native HTML click event whenever it or the slotted button is clicked. Add the listener to the <forge-button-area> element to receive all events. Note: Set data-forge-ignore on any nested buttons or other interactive elements to prevent them from activating the button area.
  *
@@ -36,6 +36,9 @@ declare global {
  * @csspart button - The visually hidden slot for the <button> element.
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
+ * 
+ * @cssproperty --forge-button-area-cursor - The cursor.
+ * @cssproperty --forge-button-area-disabled-cursor - The cursor when in the disabled state.
  *
  * @slot - Places content within the default (unnamed) slot (main body of the component).
  * @slot button - Places content within a visually hidden slot. Always place a <button> element in this slot.
