@@ -32,9 +32,6 @@ const meta = {
     `;
   },
   component,
-  parameters: {
-    actions: { disable: true }
-  },
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
