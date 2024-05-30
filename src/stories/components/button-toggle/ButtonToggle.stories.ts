@@ -1,11 +1,15 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
+import { action } from '@storybook/addon-actions';
 import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from 'src/stories/utils';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/button-toggle';
 
 const component = 'forge-button-toggle';
+
+const changeAction = action('forge-button-toggle-group-change');
+const selectAction = action('forge-button-toggle-select');
 
 const meta = {
   title: 'Components/Button Toggle',
@@ -15,21 +19,26 @@ const meta = {
 
     return html`
       <forge-button-toggle-group 
-      .outlined=${args.outlined}
-      .multiple=${args.multiple}
-      .stretch=${args.stretch}
-      .mandatory=${args.mandatory}
-      .vertical=${args.vertical}
-      .disabled=${args.disabled}
-      .dense=${args.dense}
-      .theme=${args.theme}
-      ?readonly=${args.readonly}
-      ?required=${args.required}
-      aria-label="Choose communication type"
+        .outlined=${args.outlined}
+        .multiple=${args.multiple}
+        .stretch=${args.stretch}
+        .mandatory=${args.mandatory}
+        .vertical=${args.vertical}
+        .disabled=${args.disabled}
+        .dense=${args.dense}
+        .theme=${args.theme}
+        ?readonly=${args.readonly}
+        ?required=${args.required}
+        aria-label="Choose communication type"
+        @forge-button-toggle-group-change=${changeAction}
       style=${style}>
-        <forge-button-toggle .required=${args.selected} .selected=${args.selected} value="email">By email</forge-button-toggle>
-        <forge-button-toggle value="mail">By mail</forge-button-toggle>
-        <forge-button-toggle value="phone">By phone</forge-button-toggle>
+        <forge-button-toggle
+          .required=${args.selected}
+          .selected=${args.selected}
+          value="email"
+          @forge-button-toggle-select=${selectAction}>By email</forge-button-toggle>
+        <forge-button-toggle value="mail" @forge-button-toggle-select=${selectAction}>By mail</forge-button-toggle>
+        <forge-button-toggle value="phone" @forge-button-toggle-select=${selectAction}>By phone</forge-button-toggle>
       </forge-button-toggle-group>
     `;
   },
