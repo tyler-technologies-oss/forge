@@ -2,7 +2,7 @@ import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { action } from '@storybook/addon-actions';
-import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
 
 import '@tylertech/forge/checkbox';
 
