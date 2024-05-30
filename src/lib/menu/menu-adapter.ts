@@ -133,7 +133,9 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
   }
 
   public focusTarget(): void {
-    this._targetElement?.focus();
+    if (!this._targetElement?.matches(':focus-within')) {
+      this._targetElement?.focus();
+    }
   }
 
   public isTargetFocused(): boolean {
