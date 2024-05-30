@@ -1,5 +1,4 @@
 import { addClass, getShadowElement, removeClass, toggleClass } from '@tylertech/forge-core';
-import { unwrapElements, wrapElements } from '../core';
 import { BaseAdapter, IBaseAdapter } from '../core/base';
 import { FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../focus-indicator';
 import { FieldLabelPosition } from './base/base-field-constants';
@@ -11,8 +10,6 @@ export interface IFieldAdapter extends IBaseAdapter<IFieldComponent> {
   addRootListener(name: keyof HTMLElementEventMap, listener: EventListener): void;
   addPopoverIconClickListener(listener: EventListener): void;
   removePopoverIconClickListener(listener: EventListener): void;
-  attachResizeContainer(): void;
-  removeResizeContainer(): void;
   setLabelPosition(value: FieldLabelPosition): void;
   setFloatingLabel(value: boolean, skipAnimation?: boolean): void;
   handleSlotChange(slot: HTMLSlotElement): void;
@@ -24,10 +21,6 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   private readonly _labelElement: HTMLElement;
   private readonly _popoverIconElement: HTMLElement;
   private readonly _focusIndicatorElement: IFocusIndicatorComponent;
-
-  private get _resizeContainerElement(): HTMLElement | null {
-    return this._containerElement.querySelector(FIELD_CONSTANTS.selectors.RESIZE_CONTAINER) as HTMLElement | null;
-  }
 
   public get focusIndicator(): IFocusIndicatorComponent {
     return this._focusIndicatorElement;
@@ -55,48 +48,13 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   }
 
   /**
-   * Wraps the container's children in a resizable div.
-   */
-  public attachResizeContainer(): void {
-    // Return if a resize container is already attached
-    if (this._resizeContainerElement) {
-      return;
-    }
-
-    const resizeContainer = document.createElement('div');
-    resizeContainer.classList.add(FIELD_CONSTANTS.classes.RESIZE_CONTAINER);
-
-    const childElements = Array.from(this._containerElement.children) as HTMLElement[];
-    wrapElements(childElements, resizeContainer, [FOCUS_INDICATOR_CONSTANTS.elementName]);
-  }
-
-  /**
-   * Removes the resize container while retaining its children as direct children of the container.
-   */
-  public removeResizeContainer(): void {
-    const resizeContainerElement = this._resizeContainerElement;
-
-    if (resizeContainerElement) {
-      unwrapElements(resizeContainerElement);
-    }
-  }
-
-  /**
-   * Moves the label to the start or end of the root element, ensuring that the DOM order matches
-   * the visual order.
+   * Moves the label into the container element if the position is inset, or out to the root
+   * element otherwise.
    */
   public setLabelPosition(value: FieldLabelPosition): void {
     this._labelElement.remove();
 
-    if (value === 'inline-end') {
-      this._rootElement.append(this._labelElement);
-    } else if (value === 'inset') {
-      const resizeContainerElement = this._resizeContainerElement;
-
-      if (resizeContainerElement) {
-        resizeContainerElement.prepend(this._labelElement);
-        return;
-      }
+    if (value === 'inset') {
       this._containerElement.prepend(this._labelElement);
     } else {
       this._rootElement.prepend(this._labelElement);
@@ -148,7 +106,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
       start: FIELD_CONSTANTS.classes.HAS_START,
       end: FIELD_CONSTANTS.classes.HAS_END,
       accessory: FIELD_CONSTANTS.classes.HAS_ACCESSORY,
-      'support-text-start': FIELD_CONSTANTS.classes.HAS_SUPPORT_START,
+      'support-text': FIELD_CONSTANTS.classes.HAS_SUPPORT_START,
       'support-text-end': FIELD_CONSTANTS.classes.HAS_SUPPORT_END
     };
     if (slot.name in classMap) {

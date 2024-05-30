@@ -88,101 +88,54 @@ declare global {
  * 
  * @event {CustomEvent<null>} forge-field-popover-icon-click - Dispatches when the user clicks the popover icon.
  * 
- * @cssproperty --forge-field-text-color - The color of content slotted into the default slot.
- * @cssproperty --forge-field-label-margin-inline - The margin on the inline axis of an inline positioned label.
- * @cssproperty --forge-field-label-margin-block - The margin on the block axis of a block positioned label.
- * @cssproperty --forge-field-container-padding-inline - The padding at the start and end of the inline axis of the container.
- * @cssproperty --forge-field-container-padding-inline-start - The padding at the start of the inline axis of the container.
- * @cssproperty --forge-field-container-padding-inline-end - The padding at the end of the inline axis of the container.
- * @cssproperty --forge-field-container-gap - The spacing between elements within the container.
- * @cssproperty --forge-field-start-padding-inline-end - The padding after the start slot.
- * @cssproperty --forge-field-end-padding-inline-start - The padding before the end slot.
- * @cssproperty --forge-field-end-padding-inline-end - The padding after the end slot.
- * @cssproperty --forge-field-popover-icon-padding-inline-start - The padding before the popover icon.
- * @cssproperty --forge-field-popover-icon-padding-inline-end - The padding after the popover icon.
- * @cssproperty --forge-field-accessory-padding-inline - The padding before and after the accessory slot.
- * @cssproperty --forge-field-accessory-padding-inline-start - The padding before the accessory slot.
- * @cssproperty --forge-field-accessory-padding-inline-end - The padding after the accessory slot.
- * @cssproperty --forge-field-support-text-margin-block - The margin of the support text on the block axis.
- * @cssproperty --forge-field-support-text-gap - The spacing between the start and end support text.
- * @cssproperty --forge-field-support-text-padding-inline - The padding before and after the support text.
- * @cssproperty --forge-field-support-text-padding-inline-start - The padding before the support text.
- * @cssproperty --forge-field-support-text-padding-inline-end - The padding after the support text.
- * @cssproperty --forge-field-rounded-container-padding-inline - The padding at the start and end of the inline axis of a rounded container.
- * @cssproperty --forge-field-rounded-container-padding-inline-start - The padding at the start of the inline axis of a rounded container.
- * @cssproperty --forge-field-rounded-container-padding-inline-end - The padding at the end of the inline axis of a rounded container.
- * @cssproperty --forge-field-height - The height of the container.
- * @cssproperty --forge-field-height-extra-small - The height of the container at the "extra-small" density level.
- * @cssproperty --forge-field-height-small - The height of the container at the "small" density level.
- * @cssproperty --forge-field-height-medium - The height of the container at the "medium" density level.
- * @cssproperty --forge-field-height-large - The height of the container at the "large" density level.
- * @cssproperty --forge-field-height-extra-large - The height of the container at the "extra-large" density level.
- * @cssproperty --forge-field-inset-height-extra-small - The height of the container at the "extra-small" density level with an inset label.
- * @cssproperty --forge-field-inset-height-small - The height of the container at the "small" density level with an inset label.
- * @cssproperty --forge-field-inset-height-medium - The height of the container at the "medium" density level with an inset label.
- * @cssproperty --forge-field-inset-height-large - The height of the container at the "large" density level with an inset label.
- * @cssproperty --forge-field-inset-height-extra-large - The height of the container at the "extra-large" density level with an inset label.
- * @cssproperty --forge-field-shape - The border radius of the container.
- * @cssproperty --forge-field-border-style - The border style used in variants that include borders in variants that include borders.
- * @cssproperty --forge-field-border-width - The border width used in variants that include borders in variants that include borders.
- * @cssproperty --forge-field-border-color - The border color used with the default theme in variants that include borders.
- * @cssproperty --forge-field-tonal-inner-border-color - The border color used for the accessory border with the default theme in the tonal and raised variants.
- * @cssproperty --forge-field-inner-border-block-size - The block size of the inner border in the tonal and raised variants.
- * @cssproperty --forge-field-label-color - The color of the non-inset label with the default theme.
- * @cssproperty --forge-field-inset-label-color - The color of the inset label with the default theme.
- * @cssproperty --forge-field-hover-border-style - The border style used in the hover state in variants that include borders.
- * @cssproperty --forge-field-hover-border-width - The border width used in the hover state in variants that include borders.
- * @cssproperty --forge-field-hover-border-color - The border color used with the default theme in the hover state in variants that include borders.
- * @cssproperty --forge-field-invalid-color - The color used for the invalid state.
- * @cssproperty --forge-field-invalid-border-style - The border style used for the invalid state in variants that include borders.
- * @cssproperty --forge-field-invalid-border-width - The border width used for the invalid state in variants that include borders.
- * @cssproperty --forge-field-invalid-border-color - The border color used for the invalid state in variants that include borders.
- * @cssproperty --forge-field-invalid-border-color-hover - The border color used for the invalid state when hovering in variants that include borders.
- * @cssproperty --forge-field-invalid-surface-color - The background color used for the invalid state in the tonal, filled, and raised variants.
- * @cssproperty --forge-field-invalid-surface-color-hover - The background color used for the invalid state when hovering in the tonal, filled, and raised variants.
- * @cssproperty --forge-field-invalid-label-color - The color of the label in the invalid state.
- * @cssproperty --forge-field-invalid-on-surface-color - The color of elements on top of the invalid surface.
- * @cssproperty --forge-field-invalid-inset-label-on-surface-color - The color of the inset label on the invalid surface.
- * @cssproperty --forge-field-plain-container-padding-inline - The padding at the start and end of the inline axis of the container in the plain variant.
- * @cssproperty --forge-field-tonal-surface-color - The background color used with the default theme in the tonal variant.
- * @cssproperty --forge-field-tonal-on-surface-color - The text color color used with the default theme in the tonal variant.
- * @cssproperty --forge-field-tonal-hover-color - The background color used for the hover state with the default theme in the tonal variant.
- * @cssproperty --forge-field-filled-surface-color - The background color used with the default theme in the filled variant.
- * @cssproperty --forge-field-filled-on-surface-color - The text color used with the default theme in the filled variant.
- * @cssproperty --forge-field-raised-elevation - The box shadow of the container in the raised variant.
- * @cssproperty --forge-field-raised-active-elevation - The box shadow of the container in the raised variant when hovered or active.
- * @cssproperty --forge-field-raised-surface-color - The background color used with the default theme in the raised variant.
- * @cssproperty --forge-field-raised-on-surface-color - The text color used with the default theme in the raised variant.
- * @cssproperty --forge-field-required-content - The text content rendered before the label when required.
- * @cssproperty --forge-field-required-color - The color of the required content.
- * @cssproperty --forge-field-optional-content - The text content rendered after the label when optional.
- * @cssproperty --forge-field-optional-color - The color of the optional content.
- * @cssproperty --forge-field-popover-icon-transition-duration - The duration of the popover icon's animation.
- * @cssproperty --forge-field-popover-icon-transition-timing - The timing function of the popover icon's animation.
+ * @cssproperty --forge-field-background - The background of the field surface.
+ * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
+ * @cssproperty --forge-field-tonal-background-hover - The background of the field surface in the tonal variant on hover.
+ * @cssproperty --forge-field-filled-background - The background of the field surface in the filled and raised variants.
+ * @cssproperty --forge-field-outline-style - The style of the field outline.
+ * @cssproperty --forge-field-outline-width - The width of the field outline.
+ * @cssproperty --forge-field-shape - The border radius of the field's corners.
+ * @cssproperty --forge-field-height - The height of the field in its default density.
+ * @cssproperty --forge-field-inset-height - The height of the field in its default density when the label is inset.
+ * @cssproperty --forge-field-padding-inline - The inline padding of the field.
+ * @cssproperty --forge-field-padding-inline-start - The inline start padding of the field.
+ * @cssproperty --forge-field-padding-inline-end - The inline end padding of the field.
+ * @cssproperty --forge-field-inner-padding-inline - The padding between elements slotted into the field.
+ * @cssproperty --forge-field-support-text-margin-block - The margin between the support text and the field.
+ * @cssproperty --forge-field-support-text-gap - The minimum gap between the support text and the support text end.
+ * @cssproperty --forge-field-support-text-padding-inline - The inline padding of the support text.
+ * @cssproperty --forge-field-support-text-padding-inline-start - The inline start padding of the support text.
+ * @cssproperty --forge-field-support-text-padding-inline-end - The inline end padding of the support text.
+ * @cssproperty --forge-field-label-margin-inline - The margin between the label and the field when the label is in an inline position.
+ * @cssproperty --forge-field-label-margin-block - The margin between the label and the field when the label is in the block start position.
+ * @cssproperty --forge-field-required-padding - The padding between the required indicator and the label.
+ * @cssproperty --forge-field-required-content - The content of the required indicator.
+ * @cssproperty --forge-field-optional-padding - The padding between the optional indicator and the label.
+ * @cssproperty --forge-field-optional-content - The content of the optional indicator.
+ * @cssproperty --forge-field-multiline-resize - The direction the field can be resized when multiline.
+ * @cssproperty --forge-field-multiline-min-inline-size - The minimum inline size the field can be resized to when multiline.
+ * @cssproperty --forge-field-multiline-max-inline-size - The maximum inline size the field can be resized to when multiline.
+ * @cssproperty --forge-field-multiline-min-block-size - The minimum block size the field can be resized to when multiline.
+ * @cssproperty --forge-field-multiline-max-block-size - The maximum block size the field can be resized to when multiline.
+ * @cssproperty --forge-field-popover-icon-transition-duration - The duration of the popover icon animation.
+ * @cssproperty --forge-field-popover-icon-transition-timing - The timing function of the popover icon animation.
  * @cssproperty --forge-field-popover-icon-open-rotation - The rotation of the popover icon when open.
- * @cssproperty --forge-field-multiline-resize - Whether a multiline field can be resized and in which direction.
- * @cssproperty --forge-field-multiline-min-inline-size - The minimum inline size of a multiline field.
- * @cssproperty --forge-field-multiline-max-inline-size - The maximum inline size of a multiline field.
- * @cssproperty --forge-field-multiline-min-block-size - The minimum block size of a multiline field.
- * @cssproperty --forge-field-multiline-max-block-size - The maximum block size of a multiline field.
+ * @cssproperty --forge-field-surface-animation-duration - The duration of background and outline animations.
+ * @cssproperty --forge-field-surface-animation-timing - The timing function of background and outline animations.
+ * @cssproperty --forge-field-surface-floating-animation-duration - The duration of the floating label animation.
+ * @cssproperty --forge-field-surface-floating-animation-timing - The timing function of the floating label animation.
+ * @cssproperty --forge-field-focus-indicator-width - The width of the focus indicator.
  * @cssproperty --forge-field-disabled-opacity - The opacity of the field when disabled.
- * @cssproperty --forge-field-disabled-background-color - The background color of the field when disabled.
- * @cssproperty --forge-field-disabled-border-color - The border color of the field when disabled.
- * @cssproperty --forge-field-container-animation-duration - The duration of the border and background animations.
- * @cssproperty --forge-field-container-animation-timing - The timing function of the border and background animations.
- * @cssproperty --forge-field-floating-animation-duration - The duration of the floating animation.
- * @cssproperty --forge-field-floating-animation-timing - The timing function of the floating animation.
+ * @cssproperty --forge-field-disabled-background - The background of the field when disabled.
  * 
  * @csspart root - The root container element.
  * @csspart label - The label element.
- * @csspart container - The container element surrounding the input.
- * @csspart input - The element containing te input slot.
+ * @csspart input - The element containing the input slot.
  * @csspart start - The element containing the start slot.
  * @csspart end - The element containing the end slot.
  * @csspart popover-icon - The popover icon element.
  * @csspart accessory - The element containing the accessory slot.
- * @csspart support-text - The support text element.
- * @csspart support-text-start - The element containing the support text start slot.
+ * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
  * 
@@ -191,7 +144,7 @@ declare global {
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
  * @slot accessory - Used for content such as a button that is logically connected to the field but should appear distinct from the input.
- * @slot support-text-start - Used for content that provides additional information about the field. Aligns to the inline start of the field.
+ * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
  */
 

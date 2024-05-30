@@ -21,7 +21,7 @@ const denseSwitch = document.getElementById('opt-dense') as ISwitchComponent;
 const startSwitch = document.getElementById('opt-start') as ISwitchComponent;
 const endSwitch = document.getElementById('opt-end') as ISwitchComponent;
 const accessorySwitch = document.getElementById('opt-accessory') as ISwitchComponent;
-const supportTextStartSwitch = document.getElementById('opt-support-text-start') as ISwitchComponent;
+const supportTextSwitch = document.getElementById('opt-support-text') as ISwitchComponent;
 const supportTextEndSwitch = document.getElementById('opt-support-text-end') as ISwitchComponent;
 const longLabelSwitch = document.getElementById('opt-long-label') as ISwitchComponent;
 const densitySelect = document.getElementById('opt-density') as ISelectComponent;
@@ -105,17 +105,17 @@ accessorySwitch.addEventListener('forge-switch-change', () => {
   }
 });
 
-supportTextStartSwitch.addEventListener('forge-switch-change', () => {
-  if (supportTextStartSwitch.on) {
+supportTextSwitch.addEventListener('forge-switch-change', () => {
+  if (supportTextSwitch.on) {
     fields.forEach(field => {
       const text = document.createElement('span');
-      text.slot = 'support-text-start';
+      text.slot = 'support-text';
       text.textContent = 'Support text';
       field.append(text);
     });
   } else {
     fields.forEach(field => {
-      const text = field.querySelector('span[slot=support-text-start]');
+      const text = field.querySelector('span[slot=support-text]');
       text.remove();
     });
   }

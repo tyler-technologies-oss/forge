@@ -17,15 +17,14 @@ const attributes = {
 };
 
 const classes = {
-  FLOATING_IN: 'forge-field--floating-in',
-  FLOATING_OUT: 'forge-field--floating-out',
-  HAS_LABEL: 'forge-field--has-label',
-  HAS_START: 'forge-field--has-start',
-  HAS_END: 'forge-field--has-end',
-  HAS_ACCESSORY: 'forge-field--has-accessory',
-  HAS_SUPPORT_START: 'forge-field--has-support-text-start',
-  HAS_SUPPORT_END: 'forge-field--has-support-text-end',
-  RESIZE_CONTAINER: 'resize-container'
+  FLOATING_IN: 'floating-in',
+  FLOATING_OUT: 'floating-out',
+  HAS_LABEL: 'has-label',
+  HAS_START: 'has-start',
+  HAS_END: 'has-end',
+  HAS_ACCESSORY: 'has-accessory',
+  HAS_SUPPORT_START: 'has-support-text-start',
+  HAS_SUPPORT_END: 'has-support-text-end'
 };
 
 const selectors = {
@@ -33,7 +32,6 @@ const selectors = {
   CONTAINER: '#container',
   LABEL: '#label',
   POPOVER_ICON: '#popover-icon',
-  RESIZE_CONTAINER: `.${classes.RESIZE_CONTAINER}`,
   LABEL_ELEMENTS: `:where(label, ${LABEL_CONSTANTS.elementName})`,
   POPOVER_TARGET: '.popover-target'
 };
@@ -41,14 +39,13 @@ const selectors = {
 const parts = {
   ROOT: 'root',
   LABEL: 'label',
-  CONTAINER: 'container',
+  SURFACE: 'surface',
   START: 'start',
   INPUT: 'input',
-  POPOVER_ICON: 'popover-icon',
   END: 'end',
+  POPOVER_ICON: 'popover-icon',
   ACCESSORY: 'accessory',
   SUPPORT_TEXT: 'support-text',
-  SUPPORT_TEXT_START: 'support-text-start',
   SUPPORT_TEXT_END: 'support-text-end',
   FOCUS_INDICATOR: 'focus-indicator'
 };
