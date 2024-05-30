@@ -6,10 +6,18 @@ import * as CircularProgressStories from './CircularProgress.stories';
 
 <Title />
 
+Circular progress indicators display progress by animating an indicator along a circular track in a clockwise direction.
+
+They can be used to indicate loading, progress, or waiting, and support both determinate and indeterminate states.
+
 <Canvas of={CircularProgressStories.Demo} />
+
+> Always include an accessible label for the circular progress indicator.
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+
+- Ensure that the circular progress bar is accessible to screen readers by providing a meaningful label to the `aria-label` attribute.
