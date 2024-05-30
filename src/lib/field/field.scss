@@ -421,7 +421,7 @@ $variants: (
 // Floating label
 //
 
-:host(#{map.get($label-positions, inset)}[float-label]:not(:is([dense], [density=extra-small]))) {
+:host(#{map.get($label-positions, inset)}[float-label]:not(#{map.get($densities, extra-small)})) {
   .has-label {
     .label {
       @include core.floating-label;
@@ -438,6 +438,10 @@ $variants: (
 
       .input {
         @include core.float-in-input;
+
+        ::slotted(:is(input, [data-forge-field-input], [data-forge-multi-input-separator])) {
+          @include core.default-slot-floating-in;
+        }
       }
     }
 
