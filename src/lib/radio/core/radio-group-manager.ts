@@ -1,7 +1,6 @@
 import { getValidationMessage, internals, isFocusable, setDefaultAria } from '../../constants';
 import { task } from '../../core/utils/event-utils';
 import { IRadioComponent, RADIO_CONSTANTS, tryCheck } from '../radio';
-import { RADIO_GROUP_CONSTANTS } from '../radio-group';
 
 /**
  * A class for coordinating the states of radio components within a radio group.
