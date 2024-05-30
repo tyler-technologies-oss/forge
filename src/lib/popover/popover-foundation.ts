@@ -132,7 +132,7 @@ export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundat
     return true;
   }
 
-  private _openPopover({ dispatchEvents = true, fromKeyboard = false } = {}): void {
+  private _openPopover({ dispatchEvents = true } = {}): void {
     if (this.open) {
       return;
     }
@@ -152,11 +152,7 @@ export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundat
     }
 
     this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
-
-    // We only attempt to set initial focus if the event was triggered by a keyboard interaction
-    if (fromKeyboard) {
-      this._adapter.tryAutofocus();
-    }
+    this._adapter.tryAutofocus();
 
     if (dispatchEvents) {
       this._dispatchToggleEvent();
@@ -319,8 +315,7 @@ export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundat
    */
   private _onAnchorClick(evt: PointerEvent): void {
     if (!this.open) {
-      const fromKeyboard = evt.detail === 0 && !evt.pointerType;
-      this._openPopover({ fromKeyboard });
+      this._openPopover();
     } else {
       this._requestClose('click');
     }
@@ -416,7 +411,7 @@ export class PopoverFoundation extends WithLongpressListener(OverlayAwareFoundat
   private _onAnchorFocus(_evt: FocusEvent): void {
     if (!this._adapter.overlayElement.open) {
       this._adapter.addAnchorListener('focusout', this._anchorBlurListener);
-      this._openPopover({ fromKeyboard: true });
+      this._openPopover();
     }
   }
 

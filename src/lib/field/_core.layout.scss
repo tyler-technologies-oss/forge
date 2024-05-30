@@ -100,6 +100,8 @@
   @include typography.style(body2);
   @include item-padding(start, outer);
   @include item-padding(end, outer);
+
+  z-index: 999;
 }
 
 //
