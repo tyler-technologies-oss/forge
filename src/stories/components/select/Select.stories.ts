@@ -1,24 +1,29 @@
 import { html, nothing } from 'lit';
+import { action } from '@storybook/addon-actions';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, removeInlineStyleTag, standaloneStoryParams } from '../../utils';
+import { GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
 import { storyStyles } from '../../decorators';
 
-import '@tylertech/forge/text-field';
+import '@tylertech/forge/select';
 
-import styles from './TextField.scss?inline';
+import styles from './Select.scss?inline';
+import { ISelectComponent } from '@tylertech/forge/select';
 
-const component = 'forge-text-field';
+const component = 'forge-select';
+
+const changeAction = action('change');
 
 const meta = {
-  title: 'Components/Text Field',
+  title: 'Components/Select',
   component,
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
 
     return html`
-      <forge-text-field
+      <forge-select
+        .label=${args.label}
         .labelPosition=${args.labelPosition}
         .labelAlignment=${args.labelAlignment}
         .variant=${args.variant}
@@ -26,33 +31,30 @@ const meta = {
         .shape=${args.shape}
         .density=${args.density}
         .dense=${args.dense}
-        .popoverIcon=${args.popoverIcon}
-        .popoverExpanded=${args.popoverExpanded}
         .supportTextInset=${args.supportTextInset}
-        .showClear=${args.showClear}
         .floatLabel=${args.floatLabel}
+        .placeholder=${args.placeholder}
+        .multiple=${args.multiple}
+        .open=${args.open}
         ?optional=${args.optional}
         ?disabled=${args.disabled}
         ?required=${args.required}
         ?invalid=${args.invalid}
-        style=${style}>
-        ${args.label.length ? html`<label slot="label">${args.label}</label>` : nothing}
-        ${args.textarea ? 
-          html`<textarea placeholder=${args.placeholder ?? nothing} .value=${args.value}></textarea>` :
-          html`<input .type=${args.type || 'text'} placeholder=${args.placeholder ?? nothing} .value=${args.value}>`}
+        style=${style}
+        @change=${changeAction}>
+        <forge-option value="1">Option 1</forge-option>
+        <forge-option value="2">Option 2</forge-option>
+        <forge-option value="3">Option 3</forge-option>
         ${args.supportText.length ? html`<span slot="support-text">${args.supportText}</span>` : nothing}
         ${args.supportTextEnd.length ? html`<span slot="support-text-end">${args.supportTextEnd}</span>` : nothing}
       </forge-text-field>
     `;
   },
   decorators: [storyStyles(styles)],
-  parameters: {
-    actions: { disable: true },
-  },
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['popoverTargetElement'],
+      exclude: ['popoverTargetElement', 'popoverIcon', 'popoverExpanded', 'value', 'selectedIndex', 'options', 'optionBuilder', 'selectedTextBuilder', 'popupElement', 'beforeValueChange'],
       controls: {
         labelPosition: { control: 'select', options: ['inline-start', 'inline-end', 'block-start', 'inset', 'none'] },
         labelAlignment: { control: 'select', options: ['default', 'center', 'baseline', 'start', 'end'] },
@@ -63,52 +65,37 @@ const meta = {
         supportTextInset: { control: 'select', options: ['start', 'end', 'both', 'none'] },
       },
     }),
-    label: { control: { type: 'text' }},
-    value: { control: { type: 'text' }},
-    placeholder: { control: { type: 'text' }},
-    type: { control: 'select', options: ['text', 'password', 'email', 'number', 'tel', 'url'] },
     supportText: { control: { type: 'text' }},
     supportTextEnd: { control: { type: 'text' }},
-    textarea: { control: { type: 'boolean' }},
   },
   args: {
     label: 'Label',
-    value: '',
-    type: 'text',
-    supportText: '',
-    supportTextEnd: '',
-    textarea: false,
-    showClear: false,
+    placeholder: '',
+    multiple: false,
     labelPosition: 'inset',
     labelAlignment: 'default',
-    invalid: false,
-    required: false,
-    optional: false,
-    disabled: false,
-    floatLabel: false,
     variant: 'outlined',
     theme: 'default',
     shape: 'default',
     density: 'medium',
     dense: false,
-    popoverIcon: false,
-    popoverExpanded: false,
+    supportText: '',
+    supportTextEnd: '',
+    invalid: false,
+    required: false,
+    optional: false,
+    disabled: false,
+    floatLabel: false,
     supportTextInset: 'none',
+    open: false
   },
-} satisfies Meta;
+} satisfies Meta<Partial<ISelectComponent> & { supportText: string; supportTextEnd: string; }>;
 
 export default meta;
 
 type Story = StoryObj;
 
 export const Demo: Story = {};
-
-export const Textarea: Story = {
-  ...standaloneStoryParams,
-  args: {
-    textarea: true,
-  },
-};
 
 export const LabelAbove: Story = {
   ...standaloneStoryParams,
@@ -121,5 +108,12 @@ export const LabelInline: Story = {
   ...standaloneStoryParams,
   args: {
     labelPosition: 'inline-start',
+  },
+};
+
+export const Multiple: Story = {
+  ...standaloneStoryParams,
+  args: {
+    multiple: true
   },
 };

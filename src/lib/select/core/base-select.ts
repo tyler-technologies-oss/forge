@@ -86,14 +86,17 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
     }
   }
 
+  /** Dynamically appends options to the dropdown while it's open. */
   public appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void {
     this._foundation.appendOptions(options);
   }
 
+  /** Selects all options. */
   public selectAll(): void {
     this._foundation.selectAll();
   }
   
+  /** Deselects all options. */
   public deselectAll(): void {
     this._foundation.deselectAll();
   }
