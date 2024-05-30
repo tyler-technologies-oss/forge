@@ -6,7 +6,8 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import '@tylertech/forge/button-toggle';
 
-const component = 'forge-button-toggle';
+const groupComponent = 'forge-button-toggle-group';
+const itemComponent = 'forge-button-toggle';
 
 const changeAction = action('forge-button-toggle-group-change');
 const selectAction = action('forge-button-toggle-select');
@@ -42,19 +43,19 @@ const meta = {
       </forge-button-toggle-group>
     `;
   },
-  component,
-  parameters: {
-    actions: { disable: true }
+  component: groupComponent,
+  subcomponents: {
+    ['Button Toggle']: itemComponent
   },
   argTypes: {
     ...generateCustomElementArgTypes({
-      tagName: `${component}-group`,
+      tagName: `${groupComponent}`,
       exclude: ['value', 'required'],
       controls: {
         theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS] }
       }
     }),
-    ...generateCustomElementArgTypes({ tagName: component, exclude: ['value', 'required']}),
+    ...generateCustomElementArgTypes({ tagName: `${itemComponent}`, exclude: ['value', 'required']}),
   },
   args: {
     outlined: true,
