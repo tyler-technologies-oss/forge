@@ -12,18 +12,19 @@ include('./src/partials/page.ejs', {
       { type: 'switch', label: 'Start slot', id: 'opt-start' },
       { type: 'switch', label: 'End slot', id: 'opt-end' },
       { type: 'switch', label: 'Accessory slot', id: 'opt-accessory' },
-      { type: 'switch', label: 'Support text (start)', id: 'opt-support-text-start'},
+      { type: 'switch', label: 'Support text', id: 'opt-support-text'},
       { type: 'switch', label: 'Support text (end)', id: 'opt-support-text-end'},
       { type: 'switch', label: 'Long label', id: 'opt-long-label' },
       {
           type: 'select',
           label: 'Density',
           id: 'opt-density',
-          defaultValue: 'medium',
+          defaultValue: 'default',
           options: [
+            { label: 'Default', value: 'default' },
             { label: 'Extra-small (dense)', value: 'extra-small' },
             { label: 'Small', value: 'small' },
-            { label: 'Medium (default)', value: 'medium' },
+            { label: 'Medium', value: 'medium' },
             { label: 'Large', value: 'large' },
             { label: 'Extra-large', value: 'extra-large' }
           ]

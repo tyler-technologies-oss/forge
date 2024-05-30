@@ -13,7 +13,7 @@ export interface ITextFieldComponentDelegateOptions extends IFormFieldComponentD
   startElement?: HTMLElement;
   endElement?: HTMLElement;
   accessoryElement?: HTMLElement;
-  supportTextStart?: string;
+  supportText?: string;
   supportTextEndElement?: string;
   // Deprecated properties
   leadingElement?: HTMLElement;
@@ -25,7 +25,7 @@ export interface ITextFieldComponentDelegateConfig extends IBaseComponentDelegat
 export class TextFieldComponentDelegate extends FormFieldComponentDelegate<ITextFieldComponent, ITextFieldComponentDelegateOptions> {
   private _inputElement: HTMLInputElement;
   private _labelElement?: HTMLLabelElement;
-  private _supportTextStartElement?: HTMLSpanElement;
+  private _supportTextElement?: HTMLSpanElement;
   private _supportTextEndElement?: HTMLSpanElement;
 
   constructor(config?: ITextFieldComponentDelegateConfig) {
@@ -124,23 +124,23 @@ export class TextFieldComponentDelegate extends FormFieldComponentDelegate<IText
     this._labelElement = undefined;
   }
 
-  public setSupportTextStart(text: string | null): void {
+  public setSupportText(text: string | null): void {
     if (text) {
-      if (!this._supportTextStartElement) {
-        this._supportTextStartElement = document.createElement('span');
-        this._supportTextStartElement.slot = 'support-text-start';
-        this._element.append(this._supportTextStartElement);
+      if (!this._supportTextElement) {
+        this._supportTextElement = document.createElement('span');
+        this._supportTextElement.slot = 'support-text';
+        this._element.append(this._supportTextElement);
       }
-      this._supportTextStartElement.textContent = text;
+      this._supportTextElement.textContent = text;
       return;
     }
-    this._supportTextStartElement?.remove();
-    this._supportTextStartElement = undefined;
+    this._supportTextElement?.remove();
+    this._supportTextElement = undefined;
   }
 
-  // Deprecated alias for `setSupportTextStart`
+  // Deprecated alias for `setSupportText`
   public setHelperText(text: string | null): void {
-    this.setSupportTextStart(text);
+    this.setSupportText(text);
   }
 
   public setSupportTextEnd(text: string | null): void {
