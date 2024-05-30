@@ -124,12 +124,24 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public tryAutofocus(): void {
+    const tryFocus = (): boolean => {
+      if (this._component.open && this._overlayElement.isConnected && !this._component.matches(':focus-within')) {
+        const autofocusElement = this._component.querySelector<HTMLElement>('[autofocus]');
+        if (autofocusElement) {
+          autofocusElement.focus();
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (tryFocus()) {
+      return;
+    }
+
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        if (this._component.open && this._overlayElement.isConnected && !this._component.matches(':focus-within')) {
-          const autofocusElement = this._component.querySelector<HTMLElement>('[autofocus]');
-          autofocusElement?.focus();
-        }
+        tryFocus();
       });
     });
   }
