@@ -8,7 +8,7 @@ import { text } from 'stream/consumers';
 const component = 'forge-inline-message';
 
 const meta = {
-  title: 'Components/InlineMessage',
+  title: 'Components/Inline Message',
   render: args => {
     const el = customElementStoryRenderer(component, args);
     el.textContent = args.text;
