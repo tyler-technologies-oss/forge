@@ -6,7 +6,6 @@ import '@tylertech/forge/app-bar';
 import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/divider';
 import '@tylertech/forge/open-icon';
-import './AppBar.scss';
 
 const component = 'forge-app-bar';
 

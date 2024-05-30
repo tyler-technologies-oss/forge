@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { Dialog } from './Dialog';
 import { generateCustomElementArgTypes } from '../../utils';
 import { DIALOG_CONSTANTS, type IDialogProperties } from '@tylertech/forge/dialog';
+import { storyStyles } from '../../decorators';
 
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/button';
@@ -9,7 +10,7 @@ import '@tylertech/forge/dialog';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/toolbar';
 
-import './Dialog.scss';
+import styles from './Dialog.scss?inline';
 
 const component = 'forge-dialog';
 
@@ -17,6 +18,7 @@ const meta = {
   title: 'Components/Dialog',
   render: Dialog,
   component: 'forge-dialog',
+  decorators: [storyStyles(styles)],
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,

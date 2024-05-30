@@ -6,7 +6,7 @@ import '@tylertech/forge/circular-progress';
 const component = 'forge-circular-progress';
 
 const meta = {
-  title: 'Components/CircularProgress',
+  title: 'Components/Circular Progress',
   render: args => {
     const el = customElementStoryRenderer(component, args);
     el.setAttribute('aria-label', 'Circular Progress');

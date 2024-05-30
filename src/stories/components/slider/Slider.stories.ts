@@ -1,9 +1,10 @@
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { action } from '@storybook/addon-actions';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { customElementStoryRenderer, generateCustomElementArgTypes, removeInlineStyleTag, standaloneStoryParams } from '../../utils';
+import { storyStyles } from '../../decorators';
 
 import '@tylertech/forge/slider';
-import './Slider.scss';
+import styles from './Slider.scss?inline';
 
 const component = 'forge-slider';
 
@@ -32,6 +33,10 @@ const meta = {
     return el;
   },
   component,
+  decorators: [storyStyles(styles)],
+  parameters: {
+    docs: { source: { transform: removeInlineStyleTag }}
+  },
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,

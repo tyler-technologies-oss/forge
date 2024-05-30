@@ -171,6 +171,10 @@ function methodParamsToString(params: any[]) {
   return params.map(param => `${param.name}: ${param.type.text}`).join(', ');
 }
 
+function sortByName(items: TagItem[]): TagItem[] {
+  return items.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; headingLevel: 'h3' | 'h4' }) {
   const declaration = getCustomElementsTagDeclaration(tagName);
   const properties = declaration.members?.filter(member => member.kind === 'field' && member.privacy === 'public');
@@ -192,50 +196,50 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
     <div>
       {!!properties?.length && 
         <Section title="Properties" name={tagName} headingLevel={headingLevel}>
-          <PropsAttrsTable items={properties} globalConfigProperties={globalConfigProperties} />
+          <PropsAttrsTable items={sortByName(properties)} globalConfigProperties={globalConfigProperties} />
           <UsageLink text="Properties" href="?path=/docs/getting-started-usage--docs#properties--attributes" />
           {globalConfigProperties?.length ? <UsageLink text="Global Configuration" href="?path=/docs/getting-started-global-configuration--docs" /> : null}
         </Section>}
       
       {!!attributes?.length &&
         <Section title="Attributes" name={tagName} headingLevel={headingLevel}>
-          <PropsAttrsTable items={attributes} />
+          <PropsAttrsTable items={sortByName(attributes)} />
           <UsageLink text="Attributes" href="?path=/docs/getting-started-usage--docs#properties--attributes" />
         </Section>}
 
       {!!events?.length &&
         <Section title="Events" name={tagName} headingLevel={headingLevel}>
-          <EventsTable items={events} />
+          <EventsTable items={sortByName(events)} />
           <UsageLink text="Events" href="?path=/docs/getting-started-usage--docs#events" />
         </Section>}
       
       {!!slots?.length &&
         <Section title="Slots" name={tagName} headingLevel={headingLevel}>
-          <NameDescriptionTable items={slots} />
+          <NameDescriptionTable items={sortByName(slots)} />
           <UsageLink text="Slots" href="?path=/docs/getting-started-usage--docs#slots" />
         </Section>}
 
       {!!methods?.length &&
         <Section title="Methods" name={tagName} headingLevel={headingLevel}>
-          <MethodsTable items={methods} />
+          <MethodsTable items={sortByName(methods)} />
           <UsageLink text="Methods" href="?path=/docs/getting-started-usage--docs#methods" />
         </Section>}
       
       {!!cssProperties?.length &&
         <Section title="CSS Custom Properties" name={tagName} headingLevel={headingLevel}>
-          <NameDescriptionTable items={cssProperties} />
+          <NameDescriptionTable items={sortByName(cssProperties)} />
           <UsageLink text="CSS Custom Properties" href="?path=/docs/getting-started-usage--docs#css-custom-properties" />
         </Section>}
       
       {!!cssParts?.length &&
         <Section title="CSS Shadow Parts" name={tagName} headingLevel={headingLevel}>
-          <NameDescriptionTable items={cssParts} />
+          <NameDescriptionTable items={sortByName(cssParts)} />
           <UsageLink text="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts" />
         </Section>}
 
       {!!dependencies?.length &&
         <Section title="Dependencies" name={tagName} headingLevel={headingLevel}>
-          <DependenciesList dependencies={dependencies} />
+          <DependenciesList dependencies={dependencies.sort()} />
         </Section>}
     </div>
   );

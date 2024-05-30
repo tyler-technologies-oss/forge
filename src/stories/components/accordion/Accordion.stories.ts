@@ -1,12 +1,13 @@
-import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { html } from 'lit';
+import { storyStyles } from '../../decorators';
+import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
 
 import '@tylertech/forge/accordion';
-import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/divider';
+import '@tylertech/forge/expansion-panel';
 import '@tylertech/forge/open-icon';
-import './Accordion.scss';
+import styles from './Accordion.scss?inline';
 
 const component = 'forge-accordion';
 
@@ -14,6 +15,7 @@ const meta = {
   title: 'Components/Accordion',
   render: args => customElementStoryRenderer(component, args),
   component,
+  decorators: [storyStyles(styles)],
   parameters: {
     actions: { disable: true }
   },

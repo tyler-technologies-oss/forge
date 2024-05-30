@@ -6,10 +6,41 @@ import * as TextFieldStories from './TextField.stories';
 
 <Title />
 
+Text fields allow users to input and edit text values. They can be single-line or multi-line, and can include support text.
+
 <Canvas of={TextFieldStories.Demo} />
+
+## Textarea
+
+Text fields allow for providing a `<textarea>` element in place of an `<input>` element for multi-line text input.
+
+<Canvas of={TextFieldStories.Textarea} />
+
+## Label Position
+
+The text field supports a `labelPosition` property/attribute to control the position of the label. The default value is `"inset"`
+where the label is positioned inside the text field, but it can also be set to `"block-start"` or "inline-start" to position the
+label above or to the left of the text field respectively.
+
+### Block Start
+
+This variant positions the label above the text field.
+
+<Canvas of={TextFieldStories.LabelAbove} />
+
+### Inline Start
+
+This variant positions the label to the left of the text field.
+
+<Canvas of={TextFieldStories.LabelInline} />
+
+> **Note:** The `labelPosition` property is available via [global configuration](?path=/docs/getting-started-global-configuration--docs) if
+> you want to set adjust the default value for all text fields in your application.
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+
+- Ensure that if you are not using a `<label>` element, you provide an `aria-label` or `aria-labelledby` attribute to the `<input>` element.

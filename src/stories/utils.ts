@@ -133,6 +133,10 @@ function getControlFromType(type: string): ControlType {
   return CONTROL_TYPE_MAP[type] ?? 'text';
 }
 
+export function removeInlineStyleTag(source: string): string {
+  return source.replace(/<style>[\s\S]*?<\/style>/g, '');
+}
+
 const CONTROL_TYPE_MAP: Record<string, ControlType> = {
   'boolean': 'boolean',
   'string': 'text',

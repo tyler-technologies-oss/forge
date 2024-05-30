@@ -12,10 +12,6 @@ import '@tylertech/forge/dialog';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/toolbar';
 
-import '../../../lib/typography/forge-typography.scss';
-import './Dialog.scss';
-
-
 export interface DialogProps {
   preset?: DialogPreset;
 }
@@ -50,9 +46,9 @@ export const Dialog = (args: ArgTypes) => {
   container.appendChild(dialog);
 
   const content = html`
-    <forge-scaffold class="dialog">
+    <forge-scaffold>
       <forge-toolbar slot="header" no-divider>
-        <h1 id="dialog-title" slot="start">Title text</h1>
+        <h1 class="forge-typography--heading4" id="dialog-title" slot="start">Title text</h1>
         <forge-icon-button slot="end" aria-label="Close dialog" @click=${() => dialog.open = false}>
           <forge-icon name="close"></forge-icon>
         </forge-icon-button>

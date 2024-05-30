@@ -1,6 +1,8 @@
 import { html, render } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
 import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils';
+import { IconRegistry } from '@tylertech/forge/icon';
+import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
 
 import '@tylertech/forge/card';
 import '@tylertech/forge/icon-button';
@@ -9,9 +11,8 @@ import '@tylertech/forge/button';
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/toolbar';
 
-import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconMoreVert } from '@tylertech/tyler-icons/standard';
-import './Card.scss';
+import styles from './Card.scss?inline';
+import { storyStyles } from '../../decorators';
 
 const component = 'forge-card';
 
@@ -23,6 +24,7 @@ const meta = {
     return el;
   },
   component,
+  decorators: [storyStyles(styles)],
   parameters: {
     actions: { disable: true }
   },
