@@ -20,9 +20,9 @@ declare global {
  * 
  * @summary Cards are used to group related information and actions about a single subject.
  * 
- * @property {boolean} raised - Whether the card has elevation or not.
+ * @property {boolean} [raised=false] - Whether the card has elevation or not.
  * 
- * @attribute {boolean} raised - Whether the card has an raised or not.
+ * @attribute {boolean} [raised=false] - Whether the card has an raised or not.
  * @attribute {boolean} no-padding - Removes the default padding from the card.
  * 
  * @cssproperty --forge-card-background - The background color of the card.
@@ -36,7 +36,7 @@ declare global {
  * @cssproperty --forge-card-shape - The shape (border-radius) of the card.
  * @cssproperty --forge-card-overflow - The overflow of the card.
  * @cssproperty --forge-card-raised-elevation - The elevation/shadow of the card when raised.
- * @cssproperty --forge-card-raised-outline-width
+ * @cssproperty --forge-card-raised-outline-width - The outline width of the card when raised.
  * 
  * @csspart root - The root container element.
  */
