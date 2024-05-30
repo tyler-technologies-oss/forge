@@ -79,7 +79,7 @@ export function getCssVariableArgs(args: Args): Args | null {
 /**
  * Generates Storybook `argTypes` for a custom element based on its tag name from the custom elements manifest.
  */
-export function generateCustomElementArgTypes({ tagName, exclude, controls }: { tagName: string; exclude?: string[]; controls?: Partial<ArgTypes<Args>> }): object {
+export function generateCustomElementArgTypes({ tagName, exclude, include, controls }: { tagName: string; exclude?: string[]; include?: string[], controls?: Partial<ArgTypes<Args>> }): object {
   const declaration = getCustomElementsTagDeclaration(tagName);
   const argTypes: ArgTypes = {};
 
@@ -91,6 +91,11 @@ export function generateCustomElementArgTypes({ tagName, exclude, controls }: { 
       properties = properties.filter(property => property.name !== prop);
       cssProperties = cssProperties.filter(property => property.name !== prop);
     });
+  }
+
+  if (include) {
+    properties = properties.filter(property => include.includes(property.name));
+    cssProperties = cssProperties.filter(property => include.includes(property.name));
   }
 
   if (properties.length) {
