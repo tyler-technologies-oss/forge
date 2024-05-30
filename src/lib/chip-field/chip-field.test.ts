@@ -11,6 +11,7 @@ import './chip-field';
 import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
 import { IChipComponent } from '../chips';
 import { LABEL_CONSTANTS } from '../label/label-constants';
+import { timer } from '@tylertech/forge-testing';
 
 describe('Chip Field', () => {
   it('should use shadow DOM', async () => {
@@ -27,7 +28,7 @@ describe('Chip Field', () => {
 
   it('should be accessible with chips', async () => {
     const harness = await createFixture({ hasChips: true });
-
+    await timer(200); // Wait for the field animation to complete
     await expect(harness.chipField).to.be.accessible();
   });
 
