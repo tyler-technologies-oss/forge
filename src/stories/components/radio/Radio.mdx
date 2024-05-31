@@ -1,0 +1,24 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as RadioStories from './Radio.stories';
+
+<Meta of={RadioStories} />
+
+<Title />
+
+The radio component acts like the native `<input type="radio">` element. It provides some minor functionality, but its primary purpose is to handle the styling of the element.
+
+While this component can be used on its own, it's typically part of a radio group, and care should be taken to account for accessibility concerns when creating a radio group. See the Accessibility tab for more information.
+
+<Canvas of={RadioStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- Radio buttons should be part of a radio group and interpreted as such by assistive technologies such as screen readers.
+  - Ensure that your radio group also has an `aria-label` attribute describing its purpose.
