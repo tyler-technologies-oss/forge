@@ -1,0 +1,19 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../../blocks/CustomArgTypes';
+import * as StepStories from './Step.stories';
+
+<Meta of={StepStories} />
+
+<Title />
+
+<Canvas of={StepStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+- The step element will receive the proper ARIA attribute aria-selected as necessary.
