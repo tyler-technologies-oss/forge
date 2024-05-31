@@ -35,7 +35,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['defaultChecked'],
+      exclude: ['defaultChecked', 'value'],
       controls: {
         labelPosition: { control: 'select', options: ['start', 'end'] }
       }
