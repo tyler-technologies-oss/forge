@@ -252,6 +252,10 @@ export const extractTitle = (title: string) => {
   return groups?.[groups?.length - 1] || title;
 };
 
+export const titleFromTagName = (tagName: string) => {
+  return tagName.replace(/^forge-/gi, '').replace(/-/g, ' ').replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+}
+
 export default function CustomArgTypes() {
   const resolvedOf = useOf('story', ['story']);
   const tagName = resolvedOf.story.component as string;
@@ -267,18 +271,15 @@ export default function CustomArgTypes() {
     return <ComponentArgTypes tagName={tagName} headingLevel="h3" />;
   }
 
-  const mainComponentName = extractTitle(resolvedOf.story.title);
-  const tabs = {
-    [mainComponentName]: tagName,
-    ...subcomponents
-  };
+  const tagNames = [tagName, ...Object.values(subcomponents)];
+
   return (
     <div>
-      {Object.entries(tabs).map(([name, tagName], index) => {
-        const tagID = mainComponentName.toLowerCase().replace(/[^a-z0-9]/gi, '-');
+      {tagNames.map(tagName => {
+        const headerId = `${tagName.toLowerCase().replace(/[^a-z0-9]/gi, '-')}-api`;
         return (
-          <div key={index}>
-            <HeaderMdx as="h3" id={tagID}>{name}</HeaderMdx>
+          <div key={tagName} style={{marginBlockStart: '24px'}}>
+            <HeaderMdx as="h3" id={headerId}>{titleFromTagName(tagName)}</HeaderMdx>
             <ComponentArgTypes tagName={tagName} headingLevel="h4" />
           </div>
         );

@@ -1,0 +1,48 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Getting Started/Sass Library" />
+
+# Sass Library
+
+As you already know, Forge provides a vast library of Web Components. These components have built-in styles, templates, functionality, and often times
+it's useful to also reference those same styles in your libraries and applications. This helps ensure that there is cohesion and code reuse where possible,
+and to reduce the need for you to reinvent something that has already been built.
+
+Forge exposes all of the internal Sass files it uses itself as a library that you can also build from. These files are separated out into Sass various files,
+mixins, and variables that you can import and use.
+
+Along with component-specific styles, we also provide globally used Sass mixins/variables for things like typography, theme, tokens... etc. and these can be
+useful to consume in your libraries and applications as well.
+
+## Usage
+
+You can access the library by installing the Forge package and importing the Sass files you need. The Sass library is available under the following path:
+`@tylertech/forge/styles/*`
+
+Foe example, to create a custom avatar, you could use the following Sass mixin:
+
+```sass
+@use '@tylertech/forge/styles/avatar';
+
+.my-custom-avatar {
+  @include avatar.base;
+}
+```
+
+## Tokens
+
+While it can be tempting to pull in things like colors, spacing, and typography directly from the Forge library, we recommend using the design tokens that are
+provided. This helps ensure that your library or application is using the same tokens as the Forge components without you needing to reference them directly
+through the Sass files. This also helps avoid static values from living in your CSS so that they can be dynamically changed via CSS variables.
+
+View the design token documentation [here](?path=/docs/getting-started-design-tokens--docs).
+
+## CSS Library
+
+Forge also provides a library of CSS-only components that you can use in your applications. These are set of CSS classes that you can use to create components
+that provide the same look and feel, but do not have any JavaScript functionality. This can be useful for creating static pages or for use in applications
+where you do not want to use Web Components.
+
+> This feature is still in development and will be available in a future release. See the [roadmap](?path=/docs/about-roadmap--docs) for more information.
+>
+> We will update this page when the CSS library is available.

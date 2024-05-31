@@ -36,9 +36,13 @@ const preview: Preview = {
             'Usage',
             'Typography',
             'Theming',
+            'Icons',
+            'Illustrations',
             'Accessibility',
             'Customization',
-            'Forms'
+            'Global Configuration',
+            'Forms',
+            'Sass Library'
           ],
           'Frameworks',
           [
@@ -50,6 +54,10 @@ const preview: Preview = {
           ],
           'Components',
           'Design Tokens',
+          [
+            'Introduction',
+            'Theme'
+          ],
           'About'
         ],
         method: 'alphabetical'
