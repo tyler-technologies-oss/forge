@@ -18,6 +18,7 @@ export class RadioGroupFoundation implements IRadioGroupFoundation {
 
   public initialize(): void {
     this._adapter.addHostListener(LABEL_CONSTANTS.events.CONNECTED, this._labelConnectedListener);
+    this._adapter.trySetRequired();
   }
 
   private _handleLabelConnected(evt: Event): void {

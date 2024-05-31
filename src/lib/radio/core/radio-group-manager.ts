@@ -1,4 +1,4 @@
-import { getValidationMessage, internals, isFocusable } from '../../constants';
+import { getValidationMessage, internals, isFocusable, setDefaultAria } from '../../constants';
 import { task } from '../../core/utils/event-utils';
 import { IRadioComponent, RADIO_CONSTANTS, tryCheck } from '../radio';
 
@@ -73,6 +73,38 @@ export class RadioGroupManager {
       radio[internals].setValidity({ valueMissing: invalid }, validationMessage);
     });
   }
+
+  /**
+   * Sets the required state of a radio group element.
+   * 
+   * @param el A radio component within the group.
+   */
+  public static setRadioGroupRequired(el: IRadioComponent): void {
+    const groupElement = RadioGroupManager.getRadioGroupElement(el);
+
+    if (!groupElement) {
+      return;
+    }
+
+    const group = RadioGroupManager.getRadioGroup(el);
+    const required = Array.from(group).some(radio => radio.required);
+
+    if (groupElement?.tagName === 'forge-radio-group') {
+      groupElement[setDefaultAria]({ ariaRequired: required ? 'true' : 'false' });
+    } else {
+      groupElement.setAttribute('aria-required', required ? 'true' : 'false');
+    }
+  }
+
+  /**
+   * Gets the radio group element containing the given radio component or null if there is none.
+   * 
+   * @param el A radio component within the group.
+   * @returns The radio group element containing the given radio component or null if there is none.
+   */
+  public static getRadioGroupElement(el: IRadioComponent): HTMLElement | null {
+    return el.closest(`:is(fieldset, [role=radiogroup], forge-radio-group)`);
+  };
 
   /**
    * Sets the selected radio in a radio group.

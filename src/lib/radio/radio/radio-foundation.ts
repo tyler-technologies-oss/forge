@@ -201,8 +201,8 @@ export class RadioFoundation implements IRadioFoundation {
   public set required(value: boolean) {
     if (this._required !== value) {
       this._required = value;
-      this._adapter.setRequired(this._required);
       this._adapter.toggleHostAttribute(RADIO_CONSTANTS.attributes.REQUIRED, this._required);
+      this._adapter.setRequired(this._required);
     }
   }
 
