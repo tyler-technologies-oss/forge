@@ -76,12 +76,12 @@ describe('Icon', () => {
       expect(el.src).to.equal(tylIconFace.data);
     });
 
-    it('should set src via property', async () => {
+    it('should set src via property and reflect to attribute', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
       el.src = tylIconFace.data;
 
       expect(el.src).to.equal(tylIconFace.data);
-      expect(el.hasAttribute(ICON_CONSTANTS.attributes.SRC)).to.be.false
+      expect(el.hasAttribute(ICON_CONSTANTS.attributes.SRC)).to.equal(tylIconFace.data);
     });
 
     it('should set lazy via attribute', async () => {
