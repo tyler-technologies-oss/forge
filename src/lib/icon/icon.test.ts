@@ -81,7 +81,7 @@ describe('Icon', () => {
       el.src = tylIconFace.data;
 
       expect(el.src).to.equal(tylIconFace.data);
-      expect(el.hasAttribute(ICON_CONSTANTS.attributes.SRC)).to.equal(tylIconFace.data);
+      expect(el.getAttribute(ICON_CONSTANTS.attributes.SRC)).to.equal(tylIconFace.data);
     });
 
     it('should set lazy via attribute', async () => {
