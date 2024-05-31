@@ -7,7 +7,7 @@ import '@tylertech/forge/color-picker';
 const component = 'forge-color-picker';
 
 const meta = {
-  title: 'Components/ColorPicker',
+  title: 'Components/Color Picker',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

@@ -7,7 +7,7 @@ import '@tylertech/forge/profile-card';
 const component = 'forge-profile-card';
 
 const meta = {
-  title: 'Components/ProfileCard',
+  title: 'Components/Profile Card',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {
@@ -16,11 +16,14 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      
     }),
   },
   args: {
-
+    fullName: 'First Last',
+    email: 'first.last@tylertech.com',
+    signOut: true,
+    profile: true,
+    avatarText: 'First Last'
   },
 } satisfies Meta;
 

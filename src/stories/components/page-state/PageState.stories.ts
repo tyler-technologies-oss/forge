@@ -7,7 +7,7 @@ import '@tylertech/forge/page-state';
 const component = 'forge-page-state';
 
 const meta = {
-  title: 'Components/PageState',
+  title: 'Components/Page State',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

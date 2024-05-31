@@ -44,25 +44,25 @@ declare global {
  * @description Button toggle groups allow users to select one or more options from a set of related options.
  * 
  * @property {any} value - The value of the selected button toggle(s).
- * @property {boolean} outlined - Whether or not the group should be outlined.
- * @property {boolean} multiple - Whether or not the group should allow multiple selections.
- * @property {boolean} stretch - Whether or not the group should stretch to fill the available width.
- * @property {boolean} mandatory - Whether or not the group should require a selection once a button has been toggled on.
- * @property {boolean} vertical - Whether or not the group should be displayed vertically.
- * @property {boolean} disabled - Whether or not the group should be disabled.
- * @property {boolean} readonly - Whether or not the group should be readonly.
- * @property {boolean} dense - Whether or not the group should be dense.
+ * @property {boolean} [outlined=true] - Whether or not the group should be outlined.
+ * @property {boolean} [multiple=false] - Whether or not the group should allow multiple selections.
+ * @property {boolean} [stretch=false] - Whether or not the group should stretch to fill the available width.
+ * @property {boolean} [mandatory=false] - Whether or not the group should require a selection once a button has been toggled on.
+ * @property {boolean} [vertical=false] - Whether or not the group should be displayed vertically.
+ * @property {boolean} [disabled=false] - Whether or not the group should be disabled.
+ * @property {boolean} [readonly=false] - Whether or not the group should be readonly.
+ * @property {boolean} [dense=false] - Whether or not the group should be dense.
  * @property {ButtonToggleGroupTheme} theme - The theme to use for the group.
  * 
  * @attribute {any} value - The value of the selected button toggle(s).
- * @attribute {boolean} outlined - Whether or not the group should be outlined.
- * @attribute {boolean} multiple - Whether or not the group should allow multiple selections.
- * @attribute {boolean} stretch - Whether or not the group should stretch to fill the available width.
- * @attribute {boolean} mandatory - Whether or not the group should require a selection once a button has been toggled on.
- * @attribute {boolean} vertical - Whether or not the group should be displayed vertically.
- * @attribute {boolean} disabled - Whether or not the group should be disabled.
- * @attribute {boolean} readonly - Whether or not the group should be readonly.
- * @attribute {boolean} dense - Whether or not the group should be dense.
+ * @attribute {boolean} [outlined=false] - Whether or not the group should be outlined.
+ * @attribute {boolean} [multiple=false] - Whether or not the group should allow multiple selections.
+ * @attribute {boolean} [stretch=false] - Whether or not the group should stretch to fill the available width.
+ * @attribute {boolean} [mandatory=false] - Whether or not the group should require a selection once a button has been toggled on.
+ * @attribute {boolean} [vertical=false] - Whether or not the group should be displayed vertically.
+ * @attribute {boolean} [disabled=false] - Whether or not the group should be disabled.
+ * @attribute {boolean} [readonly=false] - Whether or not the group should be readonly.
+ * @attribute {boolean} [dense=false] - Whether or not the group should be dense.
  * @attribute {ButtonToggleGroupTheme} theme - The theme to use for the group.
  * 
  * @event {CustomEvent<IButtonToggleGroupChangeEventData>} forge-button-toggle-group-change - Dispatches when the value of the group changes.

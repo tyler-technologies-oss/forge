@@ -34,14 +34,14 @@ declare global {
  * @tag forge-button-toggle
  * 
  * @property {unknown} value - The value of the button toggle.
- * @property {boolean} selected - Whether or not the button is selected.
- * @property {boolean} disabled - Whether or not the button is disabled.
- * @property {boolean} readonly - Whether or not the button is readonly.
+ * @property {boolean} [selected=false] - Whether or not the button is selected.
+ * @property {boolean} [disabled=false] - Whether or not the button is disabled.
+ * @property {boolean} [readonly=false] - Whether or not the button is readonly.
  * 
  * @attribute {unknown} value - The value of the button toggle.
- * @attribute {boolean} selected - Whether or not the button is selected.
- * @attribute {boolean} disabled - Whether or not the button is disabled.
- * @attribute {boolean} readonly - Whether or not the button is readonly.
+ * @attribute {boolean} [selected=false] - Whether or not the button is selected.
+ * @attribute {boolean} [disabled=false] - Whether or not the button is disabled.
+ * @attribute {boolean} [readonly=false] - Whether or not the button is readonly.
  * 
  * @event {CustomEvent<IButtonToggleSelectEventData>} forge-button-toggle-select - Dispatches when the user toggles the button.
  * 
@@ -50,11 +50,8 @@ declare global {
  * @cssproperty --forge-button-toggle-spacing - The spacing between the button toggle and its content.
  * @cssproperty --forge-button-toggle-padding-block - The padding on the block axis.
  * @cssproperty --forge-button-toggle-padding-inline - The padding on the inline axis.
- * @cssproperty --forge-button-toggle-icon-size - The font-size of start/end slotted content.
  * @cssproperty --forge-button-toggle-color - The color of the button toggle content.
  * @cssproperty --forge-button-toggle-background - The background of the button toggle.
- * @cssproperty --forge-button-toggle-hover-background - The background of the button toggle when hovered.
- * @cssproperty --forge-button-toggle-active-background - The background of the button toggle when active.
  * @cssproperty --forge-button-toggle-cursor - The cursor of the button toggle.
  * @cssproperty --forge-button-toggle-border-width - The border-width of the button toggle.
  * @cssproperty --forge-button-toggle-border-style - The border-style of the button toggle.
@@ -67,14 +64,12 @@ declare global {
  * @cssproperty --forge-button-toggle-selected-background - The background of the button toggle when selected.
  * @cssproperty --forge-button-toggle-selected-color - The color of the button toggle content when selected.
  * @cssproperty --forge-button-toggle-selected-disabled-background - The background of the button toggle when selected and disabled.
- * @cssproperty --forge-button-toggle-dense-height - The height of the button toggle when dense.
  * @cssproperty --forge-button-toggle-disabled-opacity - The opacity of the button toggle when disabled.
  * @cssproperty --forge-button-toggle-disabled-cursor - The cursor of the button toggle when disabled.
  * @cssproperty --forge-button-toggle-disabled-color - The color of the button toggle content when disabled.
  * @cssproperty --forge-button-toggle-disabled-background - The background of the button toggle when disabled.
  * @cssproperty --forge-button-toggle-transition-duration - The transition-duration of various properties.
  * @cssproperty --forge-button-toggle-transition-timing - The transition-timing of various properties.
- * @cssproperty --forge-button-toggle-focus-indicator-color - The color of the focus indicator.
  * 
  * @csspart root - The root container element.
  * @csspart focus-indicator - The focus indicator element.

@@ -67,7 +67,7 @@ export class FieldFoundation implements IFieldFoundation {
   }
 
   private _onPopoverIconClick(): void {
-    this._adapter.emitHostEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK);
+    this._adapter.dispatchHostEvent(new CustomEvent(FIELD_CONSTANTS.events.POPOVER_ICON_CLICK, { bubbles: true }));
   }
 
   public floatLabelWithoutAnimation(value: boolean): void {

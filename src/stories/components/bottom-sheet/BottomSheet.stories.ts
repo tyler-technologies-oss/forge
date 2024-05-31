@@ -7,7 +7,7 @@ import '@tylertech/forge/bottom-sheet';
 const component = 'forge-bottom-sheet';
 
 const meta = {
-  title: 'Components/BottomSheet',
+  title: 'Components/Bottom Sheet',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

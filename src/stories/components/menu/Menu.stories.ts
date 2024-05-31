@@ -4,7 +4,7 @@ import { OVERLAY_PLACEMENT_OPTIONS, customElementStoryRenderer, generateCustomEl
 
 import '@tylertech/forge/menu';
 import '@tylertech/forge/button';
-import { IMenuComponent, IMenuOption, IOption, IPopoverComponent } from '@tylertech/forge';
+import { IMenuComponent, IMenuOption, IOption } from '@tylertech/forge';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const component = 'forge-menu';

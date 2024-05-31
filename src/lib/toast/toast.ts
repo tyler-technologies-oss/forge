@@ -55,25 +55,30 @@ declare global {
  * 
  * @summary Toasts are non-modal notifications that appear in response to user interactions.
  * 
- * @property {boolean} open - The open state.
- * @property {number} duration - The duration in milliseconds that the toast is displayed.
- * @property {ToastPlacement} placement - The placement of the toast.
+ * @dependency forge-overlay
+ * @dependency forge-button
+ * @dependency forge-icon-button
+ * @dependency forge-icon
+ * 
+ * @property {boolean} [open=false] - The open state.
+ * @property {number} [duration=2750] - The duration in milliseconds that the toast is displayed.
+ * @property {ToastPlacement} [placement="bottom"] - The placement of the toast.
  * @property {string} actionText - The text for the action button. This controls the visibility of the action button.
- * @property {boolean} dismissible - Whether the toast is dismissible (displays a close button).
+ * @property {boolean} [dismissible=false] - Whether the toast is dismissible (displays a close button).
  * @property {string} dismissLabel - The accessible label for the dismiss button.
- * @property {ToastTheme} theme - The theme of the toast.
+ * @property {ToastTheme} [theme="default"] - The theme of the toast.
  * 
  * @globalconfig duration
  * @globalconfig placement
  * @globalconfig dismissible
  * 
- * @attribute {boolean} open - The open state.
- * @attribute {number} duration - The duration in milliseconds that the toast is displayed.
+ * @attribute {boolean} [open=false] - The open state.
+ * @attribute {number} [duration=2750] - The duration in milliseconds that the toast is displayed.
  * @attribute {ToastPlacement} placement - The placement of the toast.
  * @attribute {string} action-text - The text for the action button. This controls the visibility of the action button.
- * @attribute {boolean} dismissible - Whether the toast is dismissible (displays a close button).
+ * @attribute {boolean} [dismissible=false] - Whether the toast is dismissible (displays a close button).
  * @attribute {string} dismiss-label - The accessible label for the dismiss button.
- * @attribute {ToastTheme} theme - The theme of the toast.
+ * @attribute {ToastTheme} [theme="default"] - The theme of the toast.
  * 
  * @event {CustomEvent<void>} forge-toast-action - Dispatched when the action button is clicked.
  * @event {CustomEvent<void>} forge-toast-close - Dispatched when the toast is closed.
@@ -185,10 +190,17 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
   @FoundationProperty()
   public declare theme: ToastTheme;
 
+  /**
+   * Shows the toast.
+   */
   public show(): void {
     this._foundation.show();
   }
 
+  /**
+   * Hides the toast.
+   * @returns A promise that resolves when the toast animation completes.
+   */
   public hide(): Promise<void> {
     return this._foundation.hide();
   }

@@ -74,7 +74,7 @@ import { ForgeButtonComponent } from '@tylertech/forge-angular';
   standalone: true,
   selector: 'app-my-component',
   template: '<forge-button>Click me</forge-button>',
-  imports: [ForgeButtonComponent]
+  imports: [ForgeButtonModule]
 })
 export class MyComponent {}
 ```
@@ -114,7 +114,7 @@ The tokens are all defined at the `:root` selector on your `<html>` element, so 
 
 If you plan on allow for theme switching in your application, such as loading the Forge dark theme, it's important that you do not
 use any hard-coded colors in your stylesheets. Instead, use the Forge theme tokens to ensure that your application's colors are consistent
-and are automaticaly themed properly when the theme changes.
+and are automatically themed properly when the theme changes.
 
 See the [Theming](?path=/docs/guides-theming--docs) guide for more information on theming with Forge and loading the built-in dark theme.
 
@@ -254,7 +254,8 @@ To initialize the value of the element using an **attribute**, you would use the
 
 ## CUSTOM_ELEMENTS_SCHEMA
 
-While not recommended, if you prefer not to use the adapter, you can easily disable the Angular compiler from throwing errors by adding the `CUSTOM_ELEMENTS_SCHEMA` to your component or module's `schemas` array:
+While not recommended, if you prefer not to use the adapter, you can easily disable the Angular compiler from throwing errors by adding the
+`CUSTOM_ELEMENTS_SCHEMA` to your component or module's `schemas` array:
 
 ```typescript
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -264,3 +265,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 })
 export class AppModule {}
 ```
+
+This is a quicker and easier way to get started with Forge components in your Angular application, but keep in mind that you will lose some of the
+type safety and integration benefits that the adapter provides. 
+
+> If you're interested in pushing the Angular team along to help improve the support for custom elements, please consider upvoting or chiming in on
+> the [Angular issue](https://github.com/angular/angular/issues/12045) that is tracking this feature request.

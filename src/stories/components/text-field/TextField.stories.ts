@@ -40,7 +40,7 @@ const meta = {
         ${args.textarea ? 
           html`<textarea placeholder=${args.placeholder ?? nothing} .value=${args.value}></textarea>` :
           html`<input .type=${args.type || 'text'} placeholder=${args.placeholder ?? nothing} .value=${args.value}>`}
-        ${args.supportText.length ? html`<span slot="support-text-start">${args.supportText}</span>` : nothing}
+        ${args.supportText.length ? html`<span slot="support-text">${args.supportText}</span>` : nothing}
         ${args.supportTextEnd.length ? html`<span slot="support-text-end">${args.supportTextEnd}</span>` : nothing}
       </forge-text-field>
     `;
@@ -59,7 +59,7 @@ const meta = {
         variant: { control: 'select', options: ['plain', 'outlined', 'tonal', 'filled', 'raised'] },
         theme: { control: 'select', options: [...GLOBAL_THEME_OPTIONS, 'default'] },
         shape: { control: 'select', options: ['default', 'rounded', 'squared'] },
-        density: { control: 'select', options: ['extra-small', 'small', 'medium', 'large', 'extra-large'] },
+        density: { control: 'select', options: ['default', 'extra-small', 'small', 'medium', 'large', 'extra-large'] },
         supportTextInset: { control: 'select', options: ['start', 'end', 'both', 'none'] },
       },
     }),
@@ -89,7 +89,7 @@ const meta = {
     variant: 'outlined',
     theme: 'default',
     shape: 'default',
-    density: 'medium',
+    density: 'default',
     dense: false,
     popoverIcon: false,
     popoverExpanded: false,

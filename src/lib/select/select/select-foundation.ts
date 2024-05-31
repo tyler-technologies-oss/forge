@@ -174,4 +174,12 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
       this._initializeLabel();
     }
   }
+
+  public override get multiple(): boolean {
+    return super.multiple;
+  }
+  public override set multiple(value: boolean) {
+    super.multiple = value;
+    this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.MULTIPLE, value);
+  }
 }
