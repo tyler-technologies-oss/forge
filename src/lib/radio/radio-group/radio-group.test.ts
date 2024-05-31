@@ -177,30 +177,32 @@ describe('Radio group', () => {
     it('should set required when a descendant radio is required', async () => {
       const el = await fixture<IRadioGroupComponent>(html`
         <forge-radio-group>
-          <forge-radio required></forge-radio>
-          <forge-radio></forge-radio>
+          <forge-radio required>One</forge-radio>
+          <forge-radio>Two</forge-radio>
         </forge-radio-group>
       `);
 
       expect(el.ariaRequired).to.equal('true');
+      await expect(el).to.be.accessible();
     });
 
     it('should not set required when no descendant radios are required', async () => {
       const el = await fixture<IRadioGroupComponent>(html`
         <forge-radio-group>
-          <forge-radio></forge-radio>
-          <forge-radio></forge-radio>
+          <forge-radio>One</forge-radio>
+          <forge-radio>Two</forge-radio>
         </forge-radio-group>
       `);
 
       expect(el.ariaRequired).to.be.null;
+      await expect(el).to.be.accessible();
     });
 
     it('should set required to false when a change to descendant radios results in none being required', async () => {
       const el = await fixture<IRadioGroupComponent>(html`
         <forge-radio-group>
-          <forge-radio required></forge-radio>
-          <forge-radio></forge-radio>
+          <forge-radio required>One</forge-radio>
+          <forge-radio>Two</forge-radio>
         </forge-radio-group>
       `);
 
@@ -208,6 +210,7 @@ describe('Radio group', () => {
       radio.required = false;
 
       expect(el.ariaRequired).to.equal('false');
+      await expect(el).to.be.accessible();
     });
   });
 });
