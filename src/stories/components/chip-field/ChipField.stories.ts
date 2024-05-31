@@ -7,7 +7,7 @@ import '@tylertech/forge/chip-field';
 const component = 'forge-chip-field';
 
 const meta = {
-  title: 'Components/ChipField',
+  title: 'Components/Chip Field',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

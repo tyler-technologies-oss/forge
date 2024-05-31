@@ -7,7 +7,7 @@ import '@tylertech/forge/label-value';
 const component = 'forge-label-value';
 
 const meta = {
-  title: 'Components/LabelValue',
+  title: 'Components/Label Value',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

@@ -7,7 +7,7 @@ import '@tylertech/forge/time-picker';
 const component = 'forge-time-picker';
 
 const meta = {
-  title: 'Components/TimePicker',
+  title: 'Components/Time Picker',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

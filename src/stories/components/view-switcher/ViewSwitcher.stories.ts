@@ -7,9 +7,12 @@ import '@tylertech/forge/view-switcher';
 const component = 'forge-view-switcher';
 
 const meta = {
-  title: 'Components/ViewSwitcher',
+  title: 'Components/View Switcher',
   render: args => customElementStoryRenderer(component, args),
   component,
+  subcomponents: {
+    'View': 'forge-view',
+  },
   parameters: {
     actions: { disable: true }
   },
