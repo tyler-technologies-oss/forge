@@ -7,7 +7,7 @@ import '@tylertech/forge/keyboard-shortcut';
 const component = 'forge-keyboard-shortcut';
 
 const meta = {
-  title: 'Components/KeyboardShortcut',
+  title: 'Components/Keyboard Shortcut',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

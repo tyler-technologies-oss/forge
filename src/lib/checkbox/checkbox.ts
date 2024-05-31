@@ -45,37 +45,30 @@ declare global {
  * - Present a list containing sub-selections.
  * - Turn an option on or off in desktop environment.
  * 
- * @property {boolean} checked - Whether the checkbox is checked.
- * @property {boolean} defaultChecked - Whether the checkbox is checked by default.
- * @property {boolean} indeterminate - Toggles the indeterminate state. This does not affect whether the checkbox is checked or its form submission.
+ * @property {boolean} [checked=false] - Whether the checkbox is checked.
+ * @property {boolean} [defaultChecked=false] - Whether the checkbox is checked by default.
+ * @property {boolean} [indeterminate=false] - Toggles the indeterminate state. This does not affect whether the checkbox is checked or its form submission.
  * @property {string} value - The value of the checkbox when checked.
- * @property {boolean} disabled - Controls if the checkbix is disabled.
- * @property {boolean} required = Controls if the checkbox is required.
- * @property {boolean} readonly = Controls if the checkbox is readonly.
- * @property {boolean} dense - The density state.
- * @property {SwitchLabelPosition} labelPosition - Whether the label appears before or after the checkbox.
+ * @property {boolean} [disabled=false] - Controls if the checkbix is disabled.
+ * @property {boolean} [required=false] = Controls if the checkbox is required.
+ * @property {boolean} [readonly=false] = Controls if the checkbox is readonly.
+ * @property {boolean} [dense=false] - The density state.
+ * @property {SwitchLabelPosition} [labelPosition='end'] - Whether the label appears before or after the checkbox.
  * 
- * @attribute {string} checked - Controls whether the checkbox is checked.
- * @attribute {string} defaultChecked - Controls whether the checkbox is checked by default.
- * @attribute {string} indeterminate - Controls the indeterminate state.
+ * @attribute {string} [checked=false] - Controls whether the checkbox is checked.
+ * @attribute {string} [defaultChecked=false] - Controls whether the checkbox is checked by default.
+ * @attribute {string} [indeterminate=false] - Controls the indeterminate state.
  * @attribute {string} value - The value of the checkbox when checked.
- * @attribute {string} disabled - Controls if the switch is disabled.
- * @attribute {string} required - Controls if the switch is required.
- * @attribute {string} readonly - Controls if the switch is readonly.
- * @attribute {string} dense - Sets the density state.
- * @attribute {string} label-position - Sets whether the label appears before or after the switch.
+ * @attribute {string} [disabled=false] - Controls if the switch is disabled.
+ * @attribute {string} [required=false] - Controls if the switch is required.
+ * @attribute {string} [readonly=false] - Controls if the switch is readonly.
+ * @attribute {string} [dense=false] - Sets the density state.
+ * @attribute {string} [label-position='end'] - Sets whether the label appears before or after the switch.
  * 
  * @method {(force?: boolean) => void} toggle - Toggles whether the checkbox is is checked or forces a checked state.
  *  
  * @event {Event} change - Dispatches when the checkbox is checked or unchecked.
  * 
- * @cssproperty --forge-theme-tertiary - The primary color of the checkbox.
- * @cssproperty --forge-theme-on-tertiary - The color of the checkmark and indeterminate mark.
- * @cssproperty --forge-checkbox-primary-color - The primary color of the checkbox.
- * @cssproperty --forge-checkbox-size - The inline and block size of the checkbox.
- * @cssproperty --forge-checkbox-border-width - The width of the checkbox border.
- * @cssproperty --forge-checkbox-state-layer-size - The inline and block size of the state layer.
- * @cssproperty --forge-checkbox-state-layer-dense-size - The inline and block size of the state layer when dense.
  * @cssproperty --forge-checkbox-background - The color of the checkbox background when unchecked and not indeterminate.
  * @cssproperty --forge-checkbox-width - The inline size of the checkbox.
  * @cssproperty --forge-checkbox-height - The block size of the checkbox.
@@ -89,11 +82,9 @@ declare global {
  * @cssproperty --forge-checkbox-checked-background - The color of the checkbox background when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-width - The width of the checkbox border when checked or indeterminate.
  * @cssproperty --forge-checkbox-checked-border-color - The color of the checkbox border when checked or indeterminate.
- * @cssproperty --forge-checkbox-icon-color - The color of the checkmark and indeterminate mark.
  * @cssproperty --forge-checkbox-icon-checked-color - The color of the checkmark mark.
  * @cssproperty --forge-checkbox-icon-indeterminate-color - The color of the indeterminate mark.
  * @cssproperty --forge-checkbox-icon-stroke-width - The stroke width of the checkmark and indeterminate marks.
- * @cssproperty --forge-checkbox-state-layer-width - The inline size of the state layer.
  * @cssproperty --forge-checkbox-state-layer-width - The inline size of the state layer.
  * @cssproperty --forge-checkbox-state-layer-height - The block size of the state layer.
  * @cssproperty --forge-checkbox-state-layer-checked-color - The color of the state layer when checked.

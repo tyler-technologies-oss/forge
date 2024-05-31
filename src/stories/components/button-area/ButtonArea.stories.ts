@@ -25,7 +25,7 @@ IconRegistry.define([
 const clickAction = action('click');
 
 const meta = {
-  title: 'Components/ButtonArea',
+  title: 'Components/Button Area',
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;

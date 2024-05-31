@@ -18,10 +18,10 @@ They are useful for organizing information and reducing clutter on the screen.
 ## Accessibility
 
 - If the user is able to click the expansion panel to toggle its state, ensure that a `<button>` element is present and clearly labeled to serve as an accessible point of interaction.
-  - Set the `aria-expanded` atribute on the button to reflect the state of the component. Update it when the panel opens or closes.
+  - Set the `aria-expanded` attribute on the button to reflect the state of the component. Update it when the panel opens or closes.
   - Enclose the expandable content in an element with `role="group"` or another non-generic role.
   - Set `aria-controls` on the button to reference the id of the expandable content.
-  - Do not place complex or interactive elements within a button. If your design requires such content in the expanion panel header, place a button in the header alongside that content instead of enclosing it.
+  - Do not place complex or interactive elements within a button. If your design requires such content in the expansion panel header, place a button in the header alongside that content instead of enclosing it.
   - Ensure that the user can focus on the element which activates and deactivates the expansion panel.
 - Ensure that the expansion panel can be activated by keyboard.
   - Here is an example of a properly marked up expansion panel:

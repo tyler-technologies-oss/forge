@@ -15,7 +15,11 @@ channel.off('DARK_MODE', isDark => toggleDarkTheme(isDark));
 const preview: Preview = {
   parameters: {
     docs: {
-      source: { format: 'html', dark: true },
+      source: {
+        format: 'html',
+        dark: true,
+        transform: (source: string) => source.replace(/=""/g, ''), // Remove empty attributes
+      },
       toc: {
         contentsSelector: '.sbdocs-content',
         headingSelector: 'h2,h3,h4'
@@ -32,9 +36,13 @@ const preview: Preview = {
             'Usage',
             'Typography',
             'Theming',
+            'Icons',
+            'Illustrations',
             'Accessibility',
             'Customization',
-            'Forms'
+            'Global Configuration',
+            'Forms',
+            'Sass Library'
           ],
           'Frameworks',
           [
@@ -46,6 +54,10 @@ const preview: Preview = {
           ],
           'Components',
           'Design Tokens',
+          [
+            'Introduction',
+            'Theme'
+          ],
           'About'
         ],
         method: 'alphabetical'

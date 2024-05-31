@@ -7,7 +7,7 @@ import '@tylertech/forge/date-picker';
 const component = 'forge-date-picker';
 
 const meta = {
-  title: 'Components/DatePicker',
+  title: 'Components/Date Picker',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

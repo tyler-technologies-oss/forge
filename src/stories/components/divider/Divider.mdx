@@ -6,6 +6,12 @@ import * as DividerStories from './Divider.stories';
 
 <Title />
 
+Use the divider component when you need to separate groups of content within a section.
+
+## Example
+
+Using this component is very simple, use in place of the `<hr>` element like the following:
+
 <Canvas of={DividerStories.Demo} />
 
 ## API
@@ -13,3 +19,6 @@ import * as DividerStories from './Divider.stories';
 <CustomArgTypes />
 
 ## Accessibility
+
+- The `<forge-divider>` component automatically provides a role="separator" attribute.
+  - If you would like to remove the divider from the accessibility tree, add `aria-hidden="true"` to the element.

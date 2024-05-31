@@ -7,7 +7,7 @@ import '@tylertech/forge/date-range-picker';
 const component = 'forge-date-range-picker';
 
 const meta = {
-  title: 'Components/DateRangePicker',
+  title: 'Components/Date Range Picker',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

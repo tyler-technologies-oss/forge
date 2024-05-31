@@ -8,7 +8,18 @@ const component = 'forge-divider';
 
 const meta = {
   title: 'Components/Divider',
-  render: args => customElementStoryRenderer(component, args),
+  render: args => {
+    const el = customElementStoryRenderer(component, args);
+    let style = "height: 200px;"
+    if (!args.vertical) {
+      style = "";
+    }
+    return html`
+      <div style=${style}>
+        ${el}
+      </div>
+    `;
+  },
   component,
   parameters: {
     actions: { disable: true }

@@ -7,7 +7,7 @@ import '@tylertech/forge/file-picker';
 const component = 'forge-file-picker';
 
 const meta = {
-  title: 'Components/FilePicker',
+  title: 'Components/File Picker',
   render: args => customElementStoryRenderer(component, args),
   component,
   parameters: {

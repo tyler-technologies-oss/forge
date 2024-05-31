@@ -34,9 +34,6 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true
   },
-  docs: {
-    autodocs: 'tag',
-  },
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');
     return mergeConfig(config, {
