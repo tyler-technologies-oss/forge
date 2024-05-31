@@ -1,0 +1,58 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../../blocks/CustomArgTypes';
+import * as StepStories from './Step.stories';
+
+<Meta of={StepStories} />
+
+<Title />
+
+<Canvas of={StepStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+= The step element will receive the proper ARIA attribute aria-selected as necessary.
+
+## Types
+
+```typescript
+interface IStepConfiguration {
+  label: string;
+  optionalLabel?: string;
+  editable?: boolean;
+  completed?: boolean;
+  error?: boolean;
+  disabled?: boolean;
+  vertical?: boolean;
+  expanded?: boolean;
+  ignoreUserExpansion?: boolean;
+}
+```
+```typescript
+interface IStepperConfiguration {
+  steps: IStepConfiguration[];
+  selectedIndex: number;
+  linear: boolean;
+  alternative: boolean;
+  layoutMode: StepperLayoutMode;
+  layoutAlign: StepperLayoutAlign;
+  vertical?: boolean;
+}
+```
+
+```typescript
+type StepperLayoutMode = 'fixed' | 'clustered';
+```
+
+```typescript
+type StepperLayoutAlign = 'left' | 'center' | 'right';
+```
+
+```typescript
+export type StepIcons = 'check' | 'block' | 'mode_edit' | 'warning' | '';
+```

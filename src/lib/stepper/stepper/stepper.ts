@@ -30,6 +30,11 @@ declare global {
  * The web component class behind the `<forge-stepper>` custom element.
  * 
  * @tag forge-stepper
+ * 
+ * @event {CustomEvent<number>} forge-step-select - Emits the index when a step is selected.
+ * @event {CustomerEvent<IStepComponent>} forge-step-expanded-content-focusin - Emits the step component when the expanded content is focused.
+ * @event {CustomerEvent<IStepComponent>} forge-step-expanded-content-focusout - Emits the step component when the expanded content is blurred.
+ * 
  */
 @CustomElement({
   name: STEPPER_CONSTANTS.elementName,
