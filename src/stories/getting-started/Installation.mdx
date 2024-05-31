@@ -17,6 +17,30 @@ To install Forge as an NPM package, run the following command:
 npm install @tylertech/forge
 ```
 
+### Package Format
+
+The `@tylertech/forge` package follows the following format:
+
+- `dist/`: Contains all pre-built static distribution sources.
+  - `<component-name>/`: pre-built CSS stylesheets for specific components.
+    - Ex. `table/forge-table.css`: Contains the pre-built CSS classes to support the `<forge-table>` component.
+  - `esm/`: Contains the bundled and code-split ESM JavaScript sources (includes dependencies). This is for distribution on the Forge CDN, or for self-hosting Forge.
+  - `forge-core.css`: The optional Forge core stylesheet. Typically useful when using the `<forge-scaffold>` for your outer page layout.
+  - `forge-tokens.css`: The optional Forge tokens stylesheet. Contains all design tokens used in the Forge components so your application has access to them as well.
+  - `forge-dark.css`: The default Forge dark theme (must be loaded after `forge.css`).
+  - `forge.css`: The pre-built Forge global stylesheet. Contains all global stylesheets. You should prefer to load individual stylesheets instead of this global stylesheet in production.
+  - `lib.js`: The pre-built Forge JavaScript library. Contains all Forge components and utilities in a single bundle (including dependencies).
+- `esm/`: Contains the unbundled ESM JavaScript sources as the main entry to the package (uses bare module specifiers).
+- `styles/`: Contains all Sass stylesheets as a copy directly from the library. This allows you to utilize the same Sass utilities that Forge does within your own application and/or library.
+- `custom-elements.json`: This is the custom elements manifest that describes the custom elements in the package. We use this to generate the docs and Angular adapters.
+- `LICENSE`: The Apache 2.0 license.
+- `package.json`: The package specification.
+- `README.md`: This README.md file.
+
+> You can inspect the package contents by navigating to the `node_modules/@tylertech/forge` directory in your project.
+
+### Framework Installation
+
 If you're using a framework, you should jump to the framework-specific guide:
 
 - [Angular](?path=/docs/frameworks-angular--docs)

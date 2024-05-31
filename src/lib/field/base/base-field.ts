@@ -35,7 +35,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @property {FieldVariant} [variant="outlined"] - The variant of the field.
  * @property {FieldTheme} [theme="default"] - The theme of the field.
  * @property {FieldShape} [shape="default"] - The shape of the field.
- * @property {FieldDensity} [density="medium"] - The density of the field.
+ * @property {FieldDensity} [density="default"] - The density of the field.
  * @property {boolean} [dense=false] - Whether the field is dense.
  * @property {boolean} [popoverIcon=false] - Whether the field has a popover icon.
  * @property {boolean} [popoverExpanded=false] - Whether the field's popover is expanded.
@@ -51,7 +51,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @attribute {FieldVariant} [variant="outlined"] - The variant of the field.
  * @attribute {FieldTheme} [theme="default"] - The theme of the field.
  * @attribute {FieldShape} [shape="default"] - The shape of the field.
- * @attribute {FieldDensity} [density="medium"] - The density of the field.
+ * @attribute {FieldDensity} [density="default"] - The density of the field.
  * @attribute {boolean} [dense=false] - Whether the field is dense.
  * @attribute {boolean} [popover-icon=false] - Whether the field has a popover icon.
  * @attribute {boolean} [popover-expanded=false] - Whether the field's popover is expanded.

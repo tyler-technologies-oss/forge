@@ -315,7 +315,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
   
     /**
      * The density of the field.
-     * @default "medium"
+     * @default "default"
      * @attribute
      */
     public get density(): FieldDensity {
