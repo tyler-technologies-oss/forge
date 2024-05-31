@@ -10,9 +10,12 @@ const meta = {
   title: 'Components/Divider',
   render: args => {
     const el = customElementStoryRenderer(component, args);
-
+    let style = "height: 200px;"
+    if (!args.vertical) {
+      style = "";
+    }
     return html`
-      <div style="height: 400px;">
+      <div style=${style}>
         ${el}
       </div>
     `;
