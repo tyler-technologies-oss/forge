@@ -79,7 +79,7 @@ export function getCssVariableArgs(args: Args): Args | null {
 /**
  * Generates Storybook `argTypes` for a custom element based on its tag name from the custom elements manifest.
  */
-export function generateCustomElementArgTypes({ tagName, exclude, include, controls }: { tagName: string; exclude?: string[]; include?: string[], controls?: Partial<ArgTypes<Args>> }): object {
+export function generateCustomElementArgTypes({ tagName, exclude, include, controls }: { tagName: string; exclude?: string[] | RegExp; include?: string[] | RegExp, controls?: Partial<ArgTypes<Args>> }): object {
   const declaration = getCustomElementsTagDeclaration(tagName);
   const argTypes: ArgTypes = {};
 
@@ -87,15 +87,25 @@ export function generateCustomElementArgTypes({ tagName, exclude, include, contr
   let cssProperties = declaration.cssProperties ?? [];
 
   if (exclude) {
-    exclude.forEach(prop => {
-      properties = properties.filter(property => property.name !== prop);
-      cssProperties = cssProperties.filter(property => property.name !== prop);
-    });
+    if (exclude instanceof RegExp) {
+      properties = properties.filter(property => !exclude.test(property.name));
+      cssProperties = cssProperties.filter(property => !exclude.test(property.name));
+    } else {
+      exclude.forEach(prop => {
+        properties = properties.filter(property => property.name !== prop);
+        cssProperties = cssProperties.filter(property => property.name !== prop);
+      });
+    }
   }
 
   if (include) {
-    properties = properties.filter(property => include.includes(property.name));
-    cssProperties = cssProperties.filter(property => include.includes(property.name));
+    if (include instanceof RegExp) {
+      properties = properties.filter(property => include.test(property.name));
+      cssProperties = cssProperties.filter(property => include.test(property.name));
+    } else {
+      properties = properties.filter(property => include.includes(property.name));
+      cssProperties = cssProperties.filter(property => include.includes(property.name));
+    }
   }
 
   if (properties.length) {

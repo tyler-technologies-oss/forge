@@ -35,22 +35,20 @@ declare global {
  * 
  * @property {string} name - The name of the icon to render.
  * @property {string} src - Provides the ability to set the SVG string content directly.
- * @property {boolean} lazy - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
- * @property {boolean} external - Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't already defined in the registry.
- * @property {IconExternalType} externalType - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
+ * @property {boolean} [lazy=false] - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
+ * @property {boolean} [external=false] - Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't already defined in the registry.
+ * @property {IconExternalType} [externalType="standard"] - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
  * @property {IconUrlBuilder} externalUrlBuilder - A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
  * @property {string} viewbox - A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
  * @property {IconTheme} theme - The theme to apply to the icon.
  * 
  * @attribute {string} name - The name of the icon to render.
  * @attribute {string} src - Provides the ability to set the SVG string content directly.
- * @attribute {boolean} lazy - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
- * @attribute {boolean} external - Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't already defined in the registry.
- * @attribute {IconExternalType} externalType - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
+ * @attribute {boolean} [lazy=false] - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
+ * @attribute {boolean} [external=false] - Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't already defined in the registry.
+ * @attribute {IconExternalType} [externalType="standard"] - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
  * @attribute {string} viewbox - A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
  * @attribute {IconTheme} theme - The theme to apply to the icon.
- * 
- * @method layout - Forces a reload of the icon content.
  * 
  * @cssproperty --forge-icon-color - The color of the icon.
  * @cssproperty --forge-icon-size - The size of the icon. Defaults to the font-size of the context it is placed in.

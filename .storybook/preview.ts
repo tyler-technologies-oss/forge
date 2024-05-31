@@ -36,6 +36,8 @@ const preview: Preview = {
             'Usage',
             'Typography',
             'Theming',
+            'Icons',
+            'Illustrations',
             'Accessibility',
             'Customization',
             'Forms'
