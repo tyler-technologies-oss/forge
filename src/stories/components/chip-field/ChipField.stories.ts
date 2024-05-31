@@ -12,7 +12,7 @@ const addedAction = action('forge-chip-field-member-added');
 const removedAction = action('forge-chip-field-member-removed');
 
 const meta = {
-  title: 'Components/ChipField',
+  title: 'Components/Chip Field',
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
