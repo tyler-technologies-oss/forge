@@ -67,6 +67,7 @@ const meta = {
     readonly: false,
     dense: false,
     selected: false,
+    theme: 'tertiary',
   },
 } satisfies Meta;
 
