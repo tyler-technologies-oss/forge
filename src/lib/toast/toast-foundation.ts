@@ -92,8 +92,8 @@ export class ToastFoundation implements IToastFoundation {
         }
       } else {
         this._open = value;
-        this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
       }
+      this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
     }
   }
 
@@ -138,7 +138,7 @@ export class ToastFoundation implements IToastFoundation {
         this._adapter.removeActionListener(this._actionListener);
       }
       
-      this._adapter.setHostAttribute(TOAST_CONSTANTS.attributes.ACTION_TEXT, this._actionText);
+      this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.ACTION_TEXT, !!this._actionText, this._actionText);
     }
   }
 
