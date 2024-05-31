@@ -1,6 +1,0 @@
-import{j as t}from"./jsx-runtime-Bsbl6lUm.js";import{u as m}from"./index-CaXnQEVp.js";import{M as s,T as n,C as p}from"./index-CNPmWEm0.js";import{C as e}from"./CustomArgTypes-D8RTZC0L.js";import{C as a,D as c}from"./Checkbox.stories-DtLdLkF1.js";import"./iframe-D_pd-JWv.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";import"./constants-CofjQwze.js";import"./lit-element-BOOoordI.js";import"./lit-html-BWgXkSvR.js";import"./style-map-CkvVWuL1.js";import"./chunk-MZXVCX43-CM0pFb8Z.js";import"./v4-CQkTLCs1.js";import"./checkbox-BU2XWX9S.js";import"./index-Dh0vMUMR.js";import"./with-form-associated-BVZhzsfv.js";import"./with-default-aria-rMa4UTrh.js";import"./with-label-aware-DCBgJY4W.js";import"./focus-indicator-Dj5oppX6.js";import"./base-adapter-Cp8os5zW.js";import"./utils-_KxxXSob.js";import"./state-layer-DBx-v2uA.js";function r(o){const i={h2:"h2",...m(),...o.components};return t.jsxs(t.Fragment,{children:[t.jsx(s,{of:a}),`
-`,t.jsx(n,{}),`
-`,t.jsx(p,{of:c}),`
-`,t.jsx(i.h2,{id:"api",children:"API"}),`
-`,t.jsx(e,{}),`
-`,t.jsx(i.h2,{id:"accessibility",children:"Accessibility"})]})}function q(o={}){const{wrapper:i}={...m(),...o.components};return i?t.jsx(i,{...o,children:t.jsx(r,{...o})}):r(o)}export{q as default};
