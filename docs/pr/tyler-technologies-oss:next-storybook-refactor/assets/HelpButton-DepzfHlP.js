@@ -1,0 +1,16 @@
+import{j as t}from"./jsx-runtime-CcdFEm0R.js";import{u as r}from"./index-D1bN4Xh0.js";import{M as n,T as p,C as s}from"./index-C0bOut9P.js";import{C as m}from"./CustomArgTypes-JSLaXnvh.js";import{H as c,D as a}from"./HelpButton.stories-BiaSAfvq.js";import"./iframe-CnSGGOah.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";import"./constants-DsWthFd3.js";import"./lit-element-BOOoordI.js";import"./lit-html-BWgXkSvR.js";import"./app-bar-profile-button-BbuBoe8P.js";import"./utils-_KxxXSob.js";import"./base-adapter-YWy7qp0g.js";import"./state-layer-BzdpjRD7.js";import"./focus-indicator-C7V5BzP9.js";import"./index-Dh0vMUMR.js";import"./index-Co64lOVc.js";import"./icon-Brql383G.js";import"./icon-button-DOlRhrDy.js";import"./base-button-adapter-qZgO_aOb.js";import"./with-label-aware-DCBgJY4W.js";import"./with-default-aria-DfeLxENy.js";import"./event-utils-CtHj37Lc.js";import"./tooltip-C5N8xwWC.js";import"./overlay-CZzjdGX3.js";import"./with-longpress-listener-BDdqaPHl.js";import"./dismissible-stack-CQalC8SW.js";import"./badge-B3k7K5WN.js";import"./menu-B7cegtZJ.js";import"./list-CkcMJupn.js";import"./list-dropdown-aware-foundation-IMrS__uR.js";import"./list-dropdown-BntsQ43H.js";import"./linear-progress-ttpsCMLd.js";import"./popover-vH5Ho-It.js";import"./skeleton-HZTuLQlg.js";import"./event-utils-C1SDeUaq.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-BVzUrKqS.js";import"./avatar-CXUHKZfi.js";import"./button-D6SN4bGQ.js";import"./toolbar-DjQFlDcQ.js";import"./expansion-panel-DG0GmUbA.js";import"./divider-BpBtzbLf.js";function i(e){const o={blockquote:"blockquote",code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...r(),...e.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:c}),`
+`,t.jsx(p,{}),`
+`,t.jsxs(o.p,{children:["For convenience Forge provides the ",t.jsx(o.code,{children:"<forge-app-bar-help-button>"})," component. This component uses an icon-button (with a predefined icon), and is wrapped in a Forge menu component. The power of this component is that it will ensure a consistent experience for users across all applications that consume it."]}),`
+`,t.jsxs(o.blockquote,{children:[`
+`,t.jsxs(o.p,{children:["It is expected that you place this component in the ",t.jsx(o.code,{children:"end"})," slot of the app-bar."]}),`
+`]}),`
+`,t.jsx(o.h2,{id:"default",children:"Default"}),`
+`,t.jsx(o.p,{children:"The following example shows the help button being used in the Forge app-bar."}),`
+`,t.jsx(s,{of:a}),`
+`,t.jsx(o.h2,{id:"api",children:"API"}),`
+`,t.jsx(m,{}),`
+`,t.jsx(o.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsxs(o.li,{children:["The ",t.jsx(o.code,{children:"<forge-app-bar-help-button>"})," component handles all accessibility attributes for you, but if you implement this yourself be sure to add the proper aria-label."]}),`
+`,t.jsx(o.li,{children:"Ensure that the proper color contrast ratio is met, especially if using a custom theme."}),`
+`]})]})}function nt(e={}){const{wrapper:o}={...r(),...e.components};return o?t.jsx(o,{...e,children:t.jsx(i,{...e})}):i(e)}export{nt as default};
