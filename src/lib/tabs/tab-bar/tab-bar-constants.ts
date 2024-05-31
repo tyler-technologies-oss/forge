@@ -2,7 +2,7 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab-bar`;
 
-const attributes = {
+const observedAttributes = {
   DISABLED: 'disabled',
   ACTIVE_TAB: 'active-tab',
   VERTICAL: 'vertical',
@@ -12,6 +12,10 @@ const attributes = {
   INVERTED: 'inverted',
   AUTO_ACTIVATE: 'auto-activate',
   SCROLL_BUTTONS: 'scroll-buttons'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
@@ -33,8 +37,9 @@ const numbers = {
 };
 
 export const TAB_BAR_CONSTANTS = {
-  attributes,
   elementName,
+  observedAttributes,
+  attributes,
   events,
   selectors,
   classes,

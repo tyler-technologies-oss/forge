@@ -32,20 +32,24 @@ declare global {
 /**
  * @tag forge-tab
  * 
- * @property {boolean} disabled - The disabled state of the tab.
- * @property {boolean} selected - The selected state of the tab.
- * @property {boolean} vertical - Controls whether the tab is vertical or horizontal.
- * @property {boolean} stacked - Controls whether the tab is taller to allow for slotted leading/trailing elements.
- * @property {boolean} secondary - Controls whether the tab is styled as secondary tab navigation.
- * @property {boolean} inverted - Controls whether the tab indicator is rendered on the opposite side of the tab.
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
  * 
- * @attribute disabled - The disabled state of the tab.
- * @attribute selected - The selected state of the tab.
- * @attribute vertical - Controls whether the tab is vertical or horizontal.
- * @attribute stacked - Controls whether the tab is taller to allow for slotted leading/trailing elements.
- * @attribute secondary - Controls whether the tab is styled as secondary tab navigation.
+ * @property {boolean} [disabled=false] - The disabled state of the tab.
+ * @property {boolean} [selected=false] - The selected state of the tab.
+ * @property {boolean} [vertical=false] - Controls whether the tab is vertical or horizontal.
+ * @property {boolean} [stacked=false] - Controls whether the tab is taller to allow for slotted leading/trailing elements.
+ * @property {boolean} [secondary=false] - Controls whether the tab is styled as secondary tab navigation.
+ * @property {boolean} [inverted=false] - Controls whether the tab indicator is rendered on the opposite side of the tab.
  * 
- * @event forge-tab-select - Dispatched when the tab is selected.
+ * @attribute [disabled=false] - The disabled state of the tab.
+ * @attribute [selected=false] - The selected state of the tab.
+ * @attribute [vertical=false] - Controls whether the tab is vertical or horizontal.
+ * @attribute [stacked=false] - Controls whether the tab is taller to allow for slotted leading/trailing elements.
+ * @attribute [secondary=false] - Controls whether the tab is styled as secondary tab navigation.
+ * @attribute [inverted=false] - Controls whether the tab indicator is rendered on the opposite side of the tab.
+ * 
+ * @event {CustomEvent<void>} forge-tab-select - Dispatched when the tab is selected. This event bubbles and it can be useful to capture it on the `<forge-tab-bar>` element.
  * 
  * @cssproperty --forge-tab-indicator-color - The color of the tab indicator. Defaults to the primary theme.
  * @cssproperty --forge-tab-indicator-height - The height of the tab indicator.
@@ -90,14 +94,7 @@ declare global {
 })
 export class TabComponent extends BaseComponent implements ITabComponent {
   public static get observedAttributes(): string[] {
-    return [
-      TAB_CONSTANTS.attributes.DISABLED,
-      TAB_CONSTANTS.attributes.SELECTED,
-      TAB_CONSTANTS.attributes.VERTICAL,
-      TAB_CONSTANTS.attributes.STACKED,
-      TAB_CONSTANTS.attributes.SECONDARY,
-      TAB_CONSTANTS.attributes.INVERTED
-    ];
+    return Object.values(TAB_CONSTANTS.observedAttributes);
   }
 
   private _foundation: TabFoundation;
@@ -114,22 +111,22 @@ export class TabComponent extends BaseComponent implements ITabComponent {
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case TAB_CONSTANTS.attributes.DISABLED:
+      case TAB_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case TAB_CONSTANTS.attributes.SELECTED:
+      case TAB_CONSTANTS.observedAttributes.SELECTED:
         this.selected = coerceBoolean(newValue);
         break;
-      case TAB_CONSTANTS.attributes.VERTICAL:
+      case TAB_CONSTANTS.observedAttributes.VERTICAL:
         this.vertical = coerceBoolean(newValue);
         break;
-      case TAB_CONSTANTS.attributes.STACKED:
+      case TAB_CONSTANTS.observedAttributes.STACKED:
         this.stacked = coerceBoolean(newValue);
         break;
-      case TAB_CONSTANTS.attributes.SECONDARY:
+      case TAB_CONSTANTS.observedAttributes.SECONDARY:
         this.secondary = coerceBoolean(newValue);
         break;
-      case TAB_CONSTANTS.attributes.INVERTED:
+      case TAB_CONSTANTS.observedAttributes.INVERTED:
         this.inverted = coerceBoolean(newValue);
         break;
     }

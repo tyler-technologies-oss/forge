@@ -43,26 +43,30 @@ declare global {
  * above the content they relate to. Tabs can be used to navigate between screens,
  * or to group related content within a screen.
  * 
- * @property {boolean} disabled - The disabled state of the tab bar.
- * @property {number} activeTab - The index of the active tab.
- * @property {boolean} vertical - Controls whether the tab bar is vertical or horizontal.
- * @property {boolean} clustered - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
- * @property {boolean} stacked - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
- * @property {boolean} secondary - Controls whether the tabs are styled as secondary tab navigation.
- * @property {boolean} inverted - Controls whether the tabs are rendered inverted (tab indicator at top instead of bottom).
- * @property {boolean} autoActivate - Controls whether the tabs are automatically activated when receiving focus.
- * @property {boolean} scrollButtons - Controls whether scroll buttons are displayed when the tabs overflow their container.
+ * @dependency forge-tab
+ * @dependency forge-icon-button
+ * @dependency forge-icon
  * 
- * @attribute disabled - The disabled state of the tab bar.
- * @attribute active-tab - The index of the active tab.
- * @attribute vertical - Controls whether the tab bar is vertical or horizontal.
- * @attribute clustered - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
- * @attribute stacked - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
- * @attribute secondary - Controls whether the tabs are styled as secondary tab navigation.
- * @attribute auto-activate - Controls whether the tabs are automatically activated when receiving focus.
- * @attribute scroll-buttons - Controls whether scroll buttons are displayed when the tabs overflow their container.
+ * @property {boolean} [disabled=false] - The disabled state of the tab bar.
+ * @property {number} [activeTab=null] - The index of the active tab.
+ * @property {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
+ * @property {boolean} [clustered=false] - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
+ * @property {boolean} [stacked=false] - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
+ * @property {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
+ * @property {boolean} [inverted=false] - Controls whether the tabs are rendered inverted (tab indicator at top instead of bottom).
+ * @property {boolean} [autoActivate=false] - Controls whether the tabs are automatically activated when receiving focus.
+ * @property {boolean} [scrollButtons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
  * 
- * @event forge-tab-bar-change {CustomEvent<ITabBarChangeEventData>} - Dispatches when the active tab changes.
+ * @attribute {boolean} [disabled=false] - The disabled state of the tab bar.
+ * @attribute {number} [active-tab=null] - The index of the active tab.
+ * @attribute {boolean} [vertical=false] - Controls whether the tab bar is vertical or horizontal.
+ * @attribute {boolean} [clustered=false] - Controls whether the tabs stretch the full width of their container or cluster together at their minimum width.
+ * @attribute {boolean} [stacked=false] - Controls whether the tabs are taller to allow for slotted leading/trailing elements.
+ * @attribute {boolean} [secondary=false] - Controls whether the tabs are styled as secondary tab navigation.
+ * @attribute {boolean} [auto-activate=false] - Controls whether the tabs are automatically activated when receiving focus.
+ * @attribute {boolean} [scroll-buttons=false] - Controls whether scroll buttons are displayed when the tabs overflow their container.
+ * 
+ * @event {CustomEvent<ITabBarChangeEventData>} forge-tab-bar-change - Dispatches when the active tab changes.
  * 
  * @cssproperty --forge-tab-bar-justify - The `justify-content` value for the tab bar flex container.
  * @cssproperty --forge-tab-bar-stretch - The `flex` value for the child `<forge-tab>` elements.
@@ -82,17 +86,7 @@ declare global {
 })
 export class TabBarComponent extends BaseComponent implements ITabBarComponent {
   public static get observedAttributes(): string[] {
-    return [
-      TAB_BAR_CONSTANTS.attributes.DISABLED,
-      TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB,
-      TAB_BAR_CONSTANTS.attributes.VERTICAL,
-      TAB_BAR_CONSTANTS.attributes.CLUSTERED,
-      TAB_BAR_CONSTANTS.attributes.STACKED,
-      TAB_BAR_CONSTANTS.attributes.SECONDARY,
-      TAB_BAR_CONSTANTS.attributes.INVERTED,
-      TAB_BAR_CONSTANTS.attributes.AUTO_ACTIVATE,
-      TAB_BAR_CONSTANTS.attributes.SCROLL_BUTTONS
-    ];
+    return Object.values(TAB_BAR_CONSTANTS.observedAttributes);
   }
 
   private _foundation: TabBarFoundation;
@@ -119,31 +113,31 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case TAB_BAR_CONSTANTS.attributes.DISABLED:
+      case TAB_BAR_CONSTANTS.observedAttributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB:
+      case TAB_BAR_CONSTANTS.observedAttributes.ACTIVE_TAB:
         this.activeTab = newValue ? coerceNumber(newValue) : undefined;
         break;
-      case TAB_BAR_CONSTANTS.attributes.VERTICAL:
+      case TAB_BAR_CONSTANTS.observedAttributes.VERTICAL:
         this.vertical = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.CLUSTERED:
+      case TAB_BAR_CONSTANTS.observedAttributes.CLUSTERED:
         this.clustered = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.STACKED:
+      case TAB_BAR_CONSTANTS.observedAttributes.STACKED:
         this.stacked = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.SECONDARY:
+      case TAB_BAR_CONSTANTS.observedAttributes.SECONDARY:
         this.secondary = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.INVERTED:
+      case TAB_BAR_CONSTANTS.observedAttributes.INVERTED:
         this.inverted = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.AUTO_ACTIVATE:
+      case TAB_BAR_CONSTANTS.observedAttributes.AUTO_ACTIVATE:
         this.autoActivate = coerceBoolean(newValue);
         break;
-      case TAB_BAR_CONSTANTS.attributes.SCROLL_BUTTONS:
+      case TAB_BAR_CONSTANTS.observedAttributes.SCROLL_BUTTONS:
         this.scrollButtons = coerceBoolean(newValue);
         break;
     }

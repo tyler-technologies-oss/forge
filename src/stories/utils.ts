@@ -68,7 +68,7 @@ export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>) {
  */
 export function getCssVariableArgs(args: Args): Args | null {
   const cssVarArgs = Object.entries(args).reduce((acc, [key, value]) => {
-    if (key.startsWith('--')) {
+    if (key.startsWith('--') && value !== '') {
       acc[key] = value;
     }
     return acc;
@@ -139,7 +139,12 @@ function getControlFromType(type: string): ControlType {
 }
 
 export function removeInlineStyleTag(source: string): string {
+  source = removeEmptyAttributes(source);
   return source.replace(/<style>[\s\S]*?<\/style>/g, '');
+}
+
+export function removeEmptyAttributes(source: string): string {
+  return source.replace(/=""/g, '');
 }
 
 const CONTROL_TYPE_MAP: Record<string, ControlType> = {
