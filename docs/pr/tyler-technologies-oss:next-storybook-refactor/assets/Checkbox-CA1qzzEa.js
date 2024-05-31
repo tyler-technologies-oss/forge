@@ -1,0 +1,6 @@
+import{j as t}from"./jsx-runtime-jvB1j0ZL.js";import{u as m}from"./index-BLKwz1vA.js";import{M as s,T as n,C as e}from"./index-D6NJhVEo.js";import{C as p}from"./CustomArgTypes-D__eK1I1.js";import{C as a,D as c}from"./Checkbox.stories-upFmpinT.js";import"./iframe-CfL1Guzs.js";import"../sb-preview/runtime.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./chunk-QN4WKJDJ-Bf_F3oir.js";import"./index-DXimoRZY.js";import"./index-DvzDrELh.js";import"./index-DrFu-skq.js";import"./constants-D6ArSZps.js";import"./checkbox-BGmXrco3.js";import"./index-Dh0vMUMR.js";import"./with-form-associated-bzP-m7X6.js";import"./with-default-aria-JWahhWby.js";import"./with-label-aware-DCBgJY4W.js";import"./focus-indicator-0bKGvpck.js";import"./base-adapter-CrK78UHx.js";import"./utils-_KxxXSob.js";import"./state-layer-G0-rIom8.js";function r(o){const i={h2:"h2",...m(),...o.components};return t.jsxs(t.Fragment,{children:[t.jsx(s,{of:a}),`
+`,t.jsx(n,{}),`
+`,t.jsx(e,{of:c}),`
+`,t.jsx(i.h2,{id:"api",children:"API"}),`
+`,t.jsx(p,{}),`
+`,t.jsx(i.h2,{id:"accessibility",children:"Accessibility"})]})}function I(o={}){const{wrapper:i}={...m(),...o.components};return i?t.jsx(i,{...o,children:t.jsx(r,{...o})}):r(o)}export{I as default};
