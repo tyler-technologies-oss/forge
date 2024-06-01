@@ -175,7 +175,8 @@ The `forge.css` stylesheet includes everything listed below for convenience.
 
 ## Using Icons
 
-Using icons within your Angular application is as simple as using the `<forge-icon>` component. You can import the `ForgeIconModule` from the `@tylertech/forge-angular` package to use the icon component.
+Using icons within your Angular application is as simple as using the `<forge-icon>` component. You can import the `ForgeIconModule` from
+the `@tylertech/forge-angular` package to use the icon component.
 
 ```typescript
 import { ForgeIconModule } from '@tylertech/forge-angular';
@@ -203,9 +204,11 @@ export class MyComponent {
 }
 ```
 
+To learn more about icons see the [Icons](?path=/docs/getting-started-icons--docs) documentation.
+
 **Important:** You must define your icons either within the `constructor` of your component/module, or within
 a [static initialization block](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Static_initialization_blocks)
-to ensure that when a production build of your application is created, the icons are not tree-shaken away.
+to ensure that when a production build of your application is created the icons are not tree-shaken away.
 
 ## Events
 
@@ -239,7 +242,7 @@ on the component instance using the **property** name.
 For example, to set a `value` property on an element, you would use the following syntax:
 
 ```html
-<forge-element [value]="sliderValue"></forge-element>
+<forge-element [value]="myValue"></forge-element>
 ```
 
 To initialize the value of the element using an **attribute**, you would use the following syntax:
@@ -248,9 +251,15 @@ To initialize the value of the element using an **attribute**, you would use the
 <forge-element value="5"></forge-element>
 ```
 
+You can also force the binding to always use the attribute if you need to:
+
+```html
+<forge-element [attr.value]="myValue"></forge-element>
+```
+
 > Forge components will observe changes to HTML attributes, but keep in mind that attribute values are always passed as strings to the component.
-> The component will coerce primitive values such as booleans and numbers, but more complex values such as objects or arrays will not be coerced
-> and you should use properties to pass these values.
+> The component will try to coerce primitive values such as booleans and numbers, but more complex values such as objects or arrays will not be
+> coerced and you should only use properties to pass these values.
 
 ## CUSTOM_ELEMENTS_SCHEMA
 

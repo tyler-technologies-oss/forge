@@ -15,19 +15,16 @@ declare global {
   }
 }
 
+/**
+ * @event {CustomEvent<void>} forge-drawer-after-open - Dispatched after the drawer has opened.
+ * @event {CustomEvent<void>} forge-drawer-after-close - Dispatched after the drawer has closed.
+ */
 export abstract class BaseDrawerComponent<T extends BaseDrawerFoundation> extends BaseComponent implements IBaseDrawerComponent {
   public static get observedAttributes(): string[] {
-    return [
-      BASE_DRAWER_CONSTANTS.attributes.OPEN,
-      BASE_DRAWER_CONSTANTS.attributes.DIRECTION
-    ];
+    return Object.values(BASE_DRAWER_CONSTANTS.observedAttributes);
   }
 
   protected abstract _foundation: T;
-
-  constructor() {
-    super();
-  }
 
   public connectedCallback(): void {
     this._foundation.connect();
@@ -39,20 +36,28 @@ export abstract class BaseDrawerComponent<T extends BaseDrawerFoundation> extend
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case BASE_DRAWER_CONSTANTS.attributes.OPEN:
+      case BASE_DRAWER_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
         break;
-      case BASE_DRAWER_CONSTANTS.attributes.DIRECTION:
+      case BASE_DRAWER_CONSTANTS.observedAttributes.DIRECTION:
         this.direction = newValue as DrawerDirection;
         break;
     }
   }
 
-  /** Toggles whether a `dismissible` or `modal` drawer is open or not. Has no effect on `permanent` drawers. */
+  /**
+   * Toggles whether the drawer is visible or not.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare open: boolean;
 
-  /** Controls the laytout direction of the drawer for positioning on the left vs. right side of the screen. */
+  /**
+   * Controls the layout and animation direction of the drawer for positioning on the left vs. right side of the screen when toggling the `open` attribute.
+   * @default "left"
+   * @attribute
+   */
   @FoundationProperty()
   public declare direction: DrawerDirection;
 }

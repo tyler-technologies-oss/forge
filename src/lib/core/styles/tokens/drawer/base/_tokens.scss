@@ -1,0 +1,19 @@
+@use 'sass:map';
+@use '../../../theme';
+@use '../../../border';
+@use '../../../animation';
+@use '../../../utils';
+
+$tokens: (
+  background: utils.module-val(drawer, background, theme.variable(surface)),
+  border-color: utils.module-val(drawer, border-color, theme.variable(outline)),
+  width: utils.module-val(drawer, width, 256px),
+  border-width: utils.module-val(drawer, border-width, border.variable(thin)),
+  transition-duration: utils.module-val(drawer, transition-duration, animation.variable(duration-medium1)),
+  transition-easing: utils.module-val(drawer, transition-easing, animation.variable(easing-standard)),
+  transition-duration-close: utils.module-val(drawer, transition-duration-close, animation.variable(duration-short4)),
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

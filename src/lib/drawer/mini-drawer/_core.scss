@@ -1,0 +1,31 @@
+
+@use '../../core/styles/elevation';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host() {
+  width: #{token(width)};
+  overflow: visible !important;
+}
+
+@mixin host-right {
+  min-width: #{token(width)};
+  width: auto;
+}
+
+@mixin base() {
+  width: #{token(width)};
+  z-index: #{elevation.z-index-variable(surface)};
+  transition: width #{token(transition-duration)} #{token(transition-easing)};
+}
+
+@mixin root() {
+  z-index: #{elevation.z-index-variable(surface)};
+  height: 100%;
+}
+
+@mixin hover() {
+  width: #{token(hover-width)} !important;
+  transition: width #{token(hover-transition-duration)} #{token(hover-transition-easing)} #{token(hover-transition-delay)};
+}

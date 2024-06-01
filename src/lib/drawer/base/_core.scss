@@ -1,50 +1,54 @@
-@use '../../core/styles/theme';
-@use '../../core/styles/animation';
 @use '../../core/styles/scrollbar';
 @use '../../core/styles/elevation';
-@use './variables';
+@use './token-utils' as *;
+
+@forward './token-utils';
 
 @mixin core-styles() {
   .forge-drawer {
+    @include tokens;
+  }
+
+  .forge-drawer {
     @include base;
   
-    ::slotted([slot='header']) {
+    ::slotted([slot=header]) {
       @include header;
     }
   
-    ::slotted([slot='footer']) {
+    ::slotted([slot=footer]) {
       @include footer;
     }
   
-    &__content {
+    .content {
       @include content;
     }
   
-    &--left {
+    &.left {
       @include left;
     }
   
-    &--right {
+    &.right {
       @include right;
 
-      &.forge-drawer--closing {
+      &.closing {
         @include closing(right);
       }
 
-      &.forge-drawer--closed {
+      &.closed {
         @include closed(right);
       }
     }
 
-    &--closing {
+    &.closing {
       @include closing(left);
     }
 
-    &--closed {
+    &.closed {
       @include closed(left);
     }
   
-    &--no-transition {
+    &.no-transition {
       transition: none !important;
     }
   }
@@ -59,19 +63,21 @@
 }
 
 @mixin base() {
-  
-  width: var(--forge-drawer-width, variables.$width);
-  background-color: #{theme.variable(surface)};
-  border-color: #{theme.variable(outline)};
+  width: #{token(width)};
   height: 100%;
   box-sizing: border-box;
+  overflow: hidden;
+  
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
-  overflow: hidden;
+  
+  background-color: #{token(background)};
+  border-color: #{token(border-color)};
+
   transition-property: transform;
-  transition-duration: variables.$transition-duration;
-  transition-timing-function: #{animation.variable(easing-standard)};
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-easing)};
 }
 
 @mixin header() {
@@ -83,6 +89,7 @@
 
   overflow-x: auto;
   -webkit-overflow-scrolling: 'touch';
+  
   display: flex;
   flex-direction: column;
   grid-row: 2;
@@ -92,14 +99,13 @@
   grid-row: 3;
 }
 
-
 @mixin left() {
-  border-right-width: variables.$border-width;
+  border-right-width: #{token(border-width)};
   border-right-style: solid;
 }
 
 @mixin right() {
-  border-left-width: variables.$border-width;
+  border-left-width: #{token(border-width)};
   border-left-style: solid;
 }
 
@@ -117,8 +123,8 @@
   position: absolute;
   top: 0;
   right: 0;
-  transition-duration: variables.$transition-duration-close;
-
+  
+  transition-duration: #{token(transition-duration-close)};
 }
 
 @mixin closed-direction($direction: left) {
