@@ -66,11 +66,9 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
     return true;
   }
 
-  public setRequired(value: boolean): void {
-    this._component[setDefaultAria]({
-      ariaRequired: value ? 'true' : 'false'
-    }, { setAttribute: true });
+  public setRequired(): void {
     RadioGroupManager.setRadioGroupValidity(this._component);
+    RadioGroupManager.setRadioGroupRequired(this._component);
   }
 
   public setReadonly(value: boolean): void {
