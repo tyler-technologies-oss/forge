@@ -22,9 +22,7 @@ export class ModalDrawerAdapter extends BaseDrawerAdapter implements IModalDrawe
   }
 
   public setBackdropVisibility(visible: boolean, { immediate }: { immediate?: boolean }): Promise<void> {
-    if (this._backdropElement.hasAttribute('hidden')) {
-      this._backdropElement.removeAttribute('hidden');
-    }
+    this._backdropElement.toggleAttribute('hidden', !visible);
 
     if (!this._backdropElement.fadeIn || !this._backdropElement.fadeOut) {
       if (immediate) {
