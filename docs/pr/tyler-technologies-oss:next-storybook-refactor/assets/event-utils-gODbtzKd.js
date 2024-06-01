@@ -1,0 +1,1 @@
+function r(e,n){const t=()=>n.dispatchEvent(new Event("scroll"));return e.addEventListener("scroll",t,!0),()=>e.removeEventListener("scroll",t,!0)}function o(){return new Promise(e=>setTimeout(e))}export{r as p,o as t};
