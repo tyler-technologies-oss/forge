@@ -26,7 +26,7 @@ const meta = {
       tagName: component,
       exclude: ['rgba', 'hsva'],
       controls: {
-        opacity: { control: 'range', min: 0, max: 1, step: 0.01 }
+        opacity: { control: 'number', min: 0, max: 1, step: 0.01 }
       }
     }),
   },
