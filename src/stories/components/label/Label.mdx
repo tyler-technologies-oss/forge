@@ -1,15 +1,53 @@
 import { Meta, Title, Canvas } from '@storybook/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as LabelStories from './Label.stories';
+import { LABEL_CONSTANTS } from '../../../lib/label/label-constants';
 
 <Meta of={LabelStories} />
 
 <Title />
 
-<Canvas of={LabelStories.Demo} />
+The Forge Label component is used to associate a text label with a compatible Forge component. This component can be used in place of the
+standard HTML `<label>` element to provide an accessible label, as well as the correct typography.
+
+The `<forge-label>` element can **only** be associated with specific Forge elements. The following elements are considered label aware:
+
+<ul style={{marginBottom: '48px'}}>
+{LABEL_CONSTANTS.labelableChildSelectors.map(name => <li key={name}><code>&lt;{name}&gt;</code></li>)}
+</ul>
+
+## Examples
+
+### ID Associated
+
+You can explicitly associate the label with an element by providing the `for` attribute with the `id` of the associated element.
+
+<Canvas of={LabelStories.IDAssociated} />
+
+### Nested
+
+You can nest the associated element within the label component for implicit association.
+
+<Canvas of={LabelStories.Nested} />
+
+### Legend
+
+You can also use the label component as a legend for a radio group.
+
+<Canvas of={LabelStories.Legend} />
+
+### Aligned List
+
+Aligning labels with their associated element in a list format is a common UI pattern.
+
+<Canvas of={LabelStories.AlignedList} />
+
+### With Icon Button
+
+You can also label icon buttons, and provide some custom styling to create a common design pattern.
+
+<Canvas of={LabelStories.WithIconButton} />
 
 ## API
 
 <CustomArgTypes />
-
-## Accessibility

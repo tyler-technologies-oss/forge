@@ -25,24 +25,19 @@ declare global {
 /**
  * @tag forge-label
  * 
- * @summary The Forge Label component is used to associate a text label with a compatible Forge
- * component.
+ * @summary The Forge Label component is used to associate a text label with a compatible Forge component.
  * 
  * @property {string | null | undefined} for - The id of the associated element.
  * @property {HTMLElement | null | undefined} forElement - The associated element.
  * @property {HTMLElement | null | undefined} clickTarget - The element that a click should be simulated on. If not defined clicks act on the associated element.
- * @property {boolean} dynamic - Propagates changes in the label's text content to the associated element.
- * @property {boolean} nonInteractive - Removes click handling from the label.
- * @property {boolean} legend - Whether or not the label should be associated with an ancestor element.
+ * @property {boolean} [dynamic=false] - Propagates changes in the label's text content to the associated element.
+ * @property {boolean} [nonInteractive=false] - Removes click handling from the label.
+ * @property {boolean} [legend=false] - Whether or not the label should be associated with an ancestor element.
  * 
  * @attribute {string} for - The id of the associated form component.
- * @attribute {boolean} dynamic - Propagates changes in the label's text content to the associated element.
- * @attribute {boolean} non-interactive - Removes click handling from the label.
- * @attribute {boolean} legend - Whether or not the label should be associated with an ancestor element.
- * 
- * @method update - Updates the targetted element with the label's current text content.
- * 
- * @csspart label - Styles the label's root element.
+ * @attribute {boolean} [dynamic=false] - Propagates changes in the label's text content to the associated element.
+ * @attribute {boolean} [non-interactive=false] - Removes click handling from the label.
+ * @attribute {boolean} [legend=false] - Whether or not the label should be associated with an ancestor element.
  */
 @CustomElement({
   name: LABEL_CONSTANTS.elementName
@@ -104,7 +99,7 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
   public declare legend: boolean;
 
   /**
-   * Updates the targetted element with the label's current text content.
+   * Updates the targeted element with the label's current text content.
    */
   public update(): void {
     this._foundation.update();
