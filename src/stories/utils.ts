@@ -140,19 +140,45 @@ function generateArgTypesFrom(items: TagItem[], category: string, controlType?: 
   }, {});
 }
 
+/** Gets the custom elements manifest module for the declaration matching the provided tag name. */
+export function getCustomElementsTagModule(tagName: string): any {
+  return cem.modules.find((module: any) => module.declarations.some((declaration: any) => declaration.tagName === tagName));
+}
+
+/** Gets the custom elements manifest declaration for the provided tag name. */
 export function getCustomElementsTagDeclaration(tagName: string): Declaration {
   return cem.modules.flatMap((module: any) => module.declarations).find(declaration => declaration.tagName === tagName);
+}
+
+/** Attempts to retrieve the Forge type information for the provided type string. */
+export function getCustomElementType(type: string) {
+  return cem.forgeTypes[type];
+}
+
+/** Gets the branch name that the custom elements manifest was generated with. */
+export function getBranchName() {
+  return cem.branchName;
+}
+
+export function htmlEncode(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 function getControlFromType(type: string): ControlType {
   return CONTROL_TYPE_MAP[type] ?? 'text';
 }
 
+/** Removes inline style tags from a string of HTML. */
 export function removeInlineStyleTag(source: string): string {
   source = removeEmptyAttributes(source);
   return source.replace(/<style>[\s\S]*?<\/style>/g, '');
 }
 
+/** Removes empty attributes from a string of HTML. */
 export function removeEmptyAttributes(source: string): string {
   return source.replace(/=""/g, '');
 }
@@ -169,12 +195,20 @@ const CONTROL_TYPE_MAP: Record<string, ControlType> = {
 
 export interface TagItem {
   name: string;
-  type: { [key: string]: any };
+  type: {
+    text?: string;
+  };
   description: string;
   default?: any;
   kind?: string;
   privacy?: string;
   defaultValue?: any;
+}
+
+export interface Module {
+  kind: string;
+  path: string;
+  declarations: Declaration[];
 }
 
 export interface Declaration {
@@ -189,6 +223,16 @@ export interface Declaration {
   slots?: TagItem[];
   cssProperties?: TagItem[];
   cssParts?: TagItem[];
-  dependencies?: string[];
-  globalConfigProperties: string[];
+  dependencies?: DependencyItem[];
+  globalConfigProperties?: GlobalConfigPropertyItem[];
+}
+
+export interface DependencyItem {
+  name: string;
+  description: string;
+}
+
+export interface GlobalConfigPropertyItem {
+  name: string;
+  description: string;
 }

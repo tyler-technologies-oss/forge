@@ -35,7 +35,7 @@ declare global {
  * @property {boolean} [disabled=false] - Controls whether the state layer is disabled.
  * 
  * @attribute {string} target - The id of the element to attach the state layer to.
- * @attribute {boolean} [disabled=false - Controls whether the state layer is disabled.
+ * @attribute {boolean} [disabled=false] - Controls whether the state layer is disabled.
  * 
  * @cssproperty --forge-state-layer-color - The color of the state layer. Defaults to the on-surface theme.
  * @cssproperty --forge-state-layer-hover-color - The color of the state layer when hovered.

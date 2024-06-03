@@ -3,17 +3,12 @@
  */
 export default function forgeMemberDenyListPlugin() {
   const MEMBER_DENY_LIST = [
-    '[getFormState]',
-    '[getFormValue]',
-    '[setValidity]',
-    '[tryDismiss]',
-    '[tryCheck]',
-    '[setDefaultAria]',
-    '[internals]',
+    /^\[.*\]$/, // All Symbol members
     'initializedCallback',
     'formStateRestoreCallback',
     'formResetCallback',
     'formAssociatedCallback',
+    'formDisabledCallback',
     'labelClickedCallback',
     'labelChangedCallback',
     'formAssociated',
@@ -25,7 +20,17 @@ export default function forgeMemberDenyListPlugin() {
     moduleLinkPhase({ moduleDoc }) {
       const classes = moduleDoc?.declarations?.filter(declaration => declaration.kind === 'class' || declaration.kind === 'mixin');
       classes?.forEach(klass => {
-        klass.members = klass?.members?.filter(member => member.name && !MEMBER_DENY_LIST.includes(member.name));
+        klass.members = klass?.members?.filter(member => {
+          return member.name && !MEMBER_DENY_LIST.some(pattern => {
+            if (typeof pattern === 'string') {
+              return member.name === pattern;
+            } else if (pattern instanceof RegExp) {
+              return pattern.test(member.name);
+            } else {
+              return false;
+            }
+          });
+        });
       });
     }
   };

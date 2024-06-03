@@ -31,7 +31,7 @@ The `@tylertech/forge` package follows the following format:
   - `forge.css`: The pre-built Forge global stylesheet. Contains all global stylesheets. You should prefer to load individual stylesheets instead of this global stylesheet in production.
   - `lib.js`: The pre-built Forge JavaScript library. Contains all Forge components and utilities in a single bundle (including dependencies).
 - `esm/`: Contains the unbundled ESM JavaScript sources as the main entry to the package (uses bare module specifiers).
-- `styles/`: Contains all Sass stylesheets as a copy directly from the library. This allows you to utilize the same Sass utilities that Forge does within your own application and/or library.
+- `sass/`: Contains all Sass stylesheets as a copy directly from the library. This allows you to utilize the same Sass utilities that Forge does within your own application and/or library.
 - `custom-elements.json`: This is the custom elements manifest that describes the custom elements in the package. We use this to generate the docs and Angular adapters.
 - `LICENSE`: The Apache 2.0 license.
 - `package.json`: The package specification.

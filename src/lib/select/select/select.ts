@@ -55,20 +55,23 @@ declare global {
  * @event {CustomEvent<void>} forge-select-scrolled-bottom - Dispatched when the dropdown list has scrolled to the bottom.
  * @event {CustomEvent<any>} change - Dispatched when the user selects a value.
  * 
+ * @property {string} label - Controls the label text.
+ * @property {string} placeholder - Controls the placeholder text.
  * @property {any} value - Gets/sets the value.
  * @property {number | number[]} selectedIndex - Gets/sets the selected index.
  * @property {ISelectOption[] | ISelectOptionGroup[]} options - Gets/sets the available options.
- * @property {boolean} [multiple=false] - Gets/sets the multiple select state.
- * @property {boolean} [open=false] - Gets the open state of the dropdown.
- * @property {SelectOptionBuilder} optionBuilder - Sets the option builder callback that will be executed when building the option list in the dropdown.
- * @property {SelectSelectedTextBuilder} selectedTextBuilder - Sets the selected text builder callback that will be executed when getting the selected text to display in the field.
- * @property {SelectBeforeValueChangeCallback<any>} beforeValueChange - Sets the callback to be executed when the user selects a value.
- * @property {IPopoverComponent | undefined} popupElement - Gets the popup element (when the dropdown is open).
+ * @property {boolean} multiple - Gets/sets the multiple select state.
+ * @property {boolean} open - Gets/sets the open state.
+ * @property {SelectOptionBuilder} optionBuilder - Gets/sets the option builder function.
+ * @property {SelectSelectedTextBuilder} selectedTextBuilder - Gets/sets the selected text builder function.
+ * @property {SelectBeforeValueChangeCallback<any>} beforeValueChange - Gets/sets the before value change callback.
  * 
+ * @attribute {string} label - Controls the label text.
+ * @attribute {string} placeholder - Controls the placeholder text.
  * @attribute {any} value - Gets/sets the value.
- * @attribute {string} selected-index - Gets/sets the selected index.
- * @attribute {string} options - Gets/sets the available options.
- * @attribute {boolean} [multiple=false] - Gets/sets the multiple select state.
+ * @attribute {number | number[]} selected-index - Gets/sets the selected index.
+ * @attribute {boolean} multiple - Gets/sets the multiple select state.
+ * @attribute {boolean} open - Gets/sets the open state.
  *
  * @cssproperty --forge-field-background - The background of the field surface.
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
