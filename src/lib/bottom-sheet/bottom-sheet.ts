@@ -39,15 +39,15 @@ declare global {
  * 
  * @summary Bottom sheets slide up from the bottom of the screen to reveal more content and/or actions that the user can take.
  * 
- * @property {boolean} open - Whether the bottom sheet is open.
- * @property {BottomSheetMode} mode - The mode of the bottom sheet. Defaults to non-modal.
- * @property {boolean} persistent - Whether the bottom sheet is persistent.
- * @property {boolean} fullscreen - Whether the bottom sheet is fullscreen.
+ * @property {boolean} [open=false] - Whether the bottom sheet is open.
+ * @property {BottomSheetMode} [mode="nonmodal"] - The mode of the bottom sheet.
+ * @property {boolean} [persistent=false] - Whether the bottom sheet is persistent.
+ * @property {boolean} [fullscreen=false] - Whether the bottom sheet is fullscreen.
  * 
- * @attribute {boolean} open - Whether the bottom sheet is open.
- * @attribute {BottomSheetMode} mode - The mode of the bottom sheet. Defaults to non-modal.
- * @attribute {boolean} persistent - Whether the bottom sheet is persistent.
- * @attribute {boolean} fullscreen - Whether the bottom sheet is fullscreen.
+ * @attribute {boolean} [open=false] - Whether the bottom sheet is open.
+ * @attribute {BottomSheetMode} [mode="nonmodal"] - The mode of the bottom sheet.
+ * @attribute {boolean} [persistent=false] - Whether the bottom sheet is persistent.
+ * @attribute {boolean} [fullscreen=false] - Whether the bottom sheet is fullscreen.
  * 
  * @event {CustomEvent<void>} forge-bottom-sheet-before-close - Fires before the bottom sheet closes.
  * @event {CustomEvent<void>} forge-bottom-sheet-close - Fires after the bottom sheet closes.

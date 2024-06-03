@@ -13,7 +13,7 @@ const meta = {
   title: 'Components/Tooltip',
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
-    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     return html`
       <forge-button variant="raised">Hover me</forge-button>
       <forge-tooltip
