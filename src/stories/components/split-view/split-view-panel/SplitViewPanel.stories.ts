@@ -71,6 +71,7 @@ const meta = {
     min: '100',
     max: '200',
     open: 'true',
+    resizable: 'end'
   },
 } satisfies Meta;
 
