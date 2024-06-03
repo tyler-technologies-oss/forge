@@ -29,28 +29,19 @@ declare global {
  * 
  * @summary Floating action buttons are used to represent the most important action on a page.
  * 
- * @property {ButtonTheme} theme - Sets the theme of the button.
- * @property {FloatingActionButtonDensity} density - Sets the density of the button.
- * @property {FloatingActionButtonElevation} elevation - Sets the elevation of the button.
- * @property {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @property {boolean} disabled - Whether or not the button is disabled.
- * @property {boolean} popoverIcon - Whether or not the button shows a built-in popover icon.
- * @property {string} name - The name of the button.
- * @property {string} value - The form value of the button.
- * @property {boolean} dense - Whether or not the button is dense.
- * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
+ * @dependency forge-icon
  * 
- * @attribute {string} theme - Sets the theme of the button.
- * @attribute {string} density - Sets the density of the button.
- * @attribute {string} elevation - Sets the elevation of the button.
- * @attribute {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @attribute {boolean} disabled - Whether or not the button is disabled.
- * @attribute {boolean} popover-icon - Whether or not the button shows a built-in popover icon.
- * @attribute {string} name - The name of the button.
- * @attribute {string} value - The form value of the button.
- * @attribute {boolean} dense - Whether or not the button is dense.
+ * @property {ButtonTheme} [theme="secondary"] - Sets the theme of the button.
+ * @property {FloatingActionButtonDensity} [density="medium"] - Sets the density of the button.
+ * @property {FloatingActionButtonElevation} [elevation="raised"] - Sets the elevation of the button.
  * 
- * @fires click - Fires when the button is clicked.
+ * @attribute {string} [theme="secondary"] - Sets the theme of the button.
+ * @attribute {string} [density="medium"] - Sets the density of the button.
+ * @attribute {string} [elevation="raised"] - Sets the elevation of the button.
+ * 
+ * @fires {PointerEvent} click - Fires when the button is clicked.
  * 
  * @cssproperty --forge-fab-background-display - The display property.
  * @cssproperty --forge-fab-gap - The gap between the icon and the label.

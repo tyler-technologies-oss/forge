@@ -5,6 +5,8 @@ import cem from '../../dist/cem/custom-elements.json';
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
 
+export const DENSITY_OPTIONS = ['small', 'medium', 'large'];
+
 export const OVERLAY_FLIP_OPTIONS = ['auto', 'main', 'cross', 'never'];
 export const OVERLAY_PLACEMENT_OPTIONS = ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'right-start', 'right-end', 'left-start', 'left-end', 'bottom-start', 'bottom-end'];
 

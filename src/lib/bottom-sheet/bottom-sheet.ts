@@ -39,6 +39,8 @@ declare global {
  * 
  * @summary Bottom sheets slide up from the bottom of the screen to reveal more content and/or actions that the user can take.
  * 
+ * @dependency forge-dialog
+ * 
  * @property {boolean} [open=false] - Whether the bottom sheet is open.
  * @property {BottomSheetMode} [mode="nonmodal"] - The mode of the bottom sheet.
  * @property {boolean} [persistent=false] - Whether the bottom sheet is persistent.
