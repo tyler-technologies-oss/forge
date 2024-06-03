@@ -27,6 +27,7 @@ declare global {
  * @property {boolean} [empty=false] - If true, the value will be displayed in an alternative emphasized style.
  * @property {boolean} [ellipsis=false] - If true, the value will be truncated with an ellipsis if it overflows its container.
  * @property {boolean} [inline=false] - If true, the label and value will be displayed on the same line.
+ * @property {boolean} [dense=false] - Deprecated. Use `inline` instead.
  * 
  * @attribute {boolean} empty - If present, the value will be displayed in an alternative emphasized style.
  * @attribute {boolean} ellipsis - If present, the value will be truncated with an ellipsis if it overflows its container.
@@ -112,7 +113,7 @@ export class LabelValueComponent extends BaseComponent implements ILabelValueCom
     value = Boolean(value);
     if (this._inline !== value) {
       this._inline = value;
-      this.setAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE, String(this._inline));
+      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE, this._inline);
     }
   }
 
