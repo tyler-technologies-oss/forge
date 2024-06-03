@@ -6,6 +6,13 @@ import * as SwitchStories from './Switch.stories';
 
 <Title />
 
+Switches toggle the state of a single setting on or off.
+
+Use switches to:
+
+- Toggle a single item on or off, on mobile and tablet
+- Immediately activate or deactivate something
+
 <Canvas of={SwitchStories.Demo} />
 
 ## API
@@ -13,3 +20,9 @@ import * as SwitchStories from './Switch.stories';
 <CustomArgTypes />
 
 ## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+- The input element will receive the proper ARIA attribute aria-checked.
+- The input element will receive the proper role attribute role="switch".

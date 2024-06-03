@@ -8,7 +8,11 @@ const component = 'forge-switch';
 
 const meta = {
   title: 'Components/Switch',
-  render: args => customElementStoryRenderer(component, args),
+  render: args => {
+    var el = customElementStoryRenderer(component, args);
+    el.textContent = 'off/on';
+    return el
+  },
   component,
   parameters: {
     actions: { disable: true }
@@ -16,7 +20,13 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      
+      exclude: ['icon', 'form', 'labels', 'name'],
+      controls: {
+        labelPosition: {
+          control: 'select',
+          options: ['start', 'end'],
+        }
+      }
     }),
   },
   args: {
