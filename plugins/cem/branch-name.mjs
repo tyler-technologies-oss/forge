@@ -8,7 +8,7 @@ export default function forgeBranchNamePlugin() {
   return {
     name: 'FORGE - BRANCH-NAME',
     packageLinkPhase({ customElementsManifest }) {
-      customElementsManifest.branchName = process.env.CEM_GIT_BRANCH || getCurrentBranchName();
+      customElementsManifest.branchName = getCurrentBranchName();
     }
   };
 }
