@@ -72,8 +72,8 @@ declare global {
  * @attribute {number} [hover-delay=0] - The delay in milliseconds before the popover is shown.
  * @attribute {string} [preset="popover"] - The preset to use for the popover.
  * 
- * @event {CustomEvent<IPopoverToggleEventData} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
- * @event {CustomEvent<IPopoverToggleEventData} forge-popover-toggle - Dispatches after the popover is toggled.
+ * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
+ * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-toggle - Dispatches after the popover is toggled.
  * 
  * @cssproperty --forge-popover-background - The background color of the popover surface.
  * @cssproperty --forge-popover-border-radius - The border radius of the popover surface.

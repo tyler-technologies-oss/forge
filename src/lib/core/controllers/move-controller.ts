@@ -8,7 +8,7 @@ export interface IMoveControllerConfig {
   onMoveEnd(): void;
 }
 
-export class MoveController extends WithMoveable() {
+export class MoveController extends WithMoveable(Object) {
   constructor(private _config: IMoveControllerConfig) {
     super();
     this._startMoveListener();

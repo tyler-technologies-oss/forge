@@ -179,7 +179,9 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
     return super.multiple;
   }
   public override set multiple(value: boolean) {
-    super.multiple = value;
-    this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.MULTIPLE, value);
+    if (this._multiple !== value) {
+      super.multiple = value;
+      this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.MULTIPLE, value);
+    }
   }
 }

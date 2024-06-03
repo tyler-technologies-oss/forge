@@ -32,8 +32,8 @@ declare global {
  * @tag forge-stepper
  * 
  * @event {CustomEvent<number>} forge-step-select - Emits the index when a step is selected.
- * @event {CustomerEvent<IStepComponent>} forge-step-expanded-content-focusin - Emits the step component when the expanded content is focused.
- * @event {CustomerEvent<IStepComponent>} forge-step-expanded-content-focusout - Emits the step component when the expanded content is blurred.
+ * @event {CustomEvent<IStepComponent>} forge-step-expanded-content-focusin - Emits the step component when the expanded content is focused.
+ * @event {CustomEvent<IStepComponent>} forge-step-expanded-content-focusout - Emits the step component when the expanded content is blurred.
  * 
  */
 @CustomElement({

@@ -1,8 +1,10 @@
 import { HeaderMdx, Markdown, useOf } from '@storybook/blocks';
 import { Code } from '@storybook/components';
-import { TagItem, getCustomElementsTagDeclaration } from '../utils';
+import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
 
 import styles from './CustomArgTypes.module.scss';
+
+const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/tree/`;
 
 function UsageLink({ text, href }: { text: string; href: string }) {
   return (
@@ -23,6 +25,27 @@ function Section({ title, name, children, headingLevel = 'h3' }: { title: string
   );
 }
 
+function ForgeTypeLinks({ typeText }: { typeText: string }) {
+  // Encode the type text to preserve special characters such as generic type parameters
+  typeText = htmlEncode(typeText);
+
+  // Tokenize the type text, remove duplicates, and sort by length in descending order
+  const tokenizedType = [...new Set(typeText.match(/\w+/g) ?? [])].sort((a, b) => b.length - a.length);
+  
+  // Loop through each token in reverse order to avoid replacing tokens that are substrings of other tokens that contain the same text
+  const branchName = getBranchName();
+  tokenizedType.forEach(token => {
+    const matchingType = getCustomElementType(token);
+    if (matchingType) {
+      const href = `${BASE_GITHUB_URL}${branchName}/${matchingType.path}#L${matchingType.lineNumber}`
+      const tokenRegExp = new RegExp(`(?<!>)${token}`, 'g'); // Negative lookbehind to avoid replacing inside existing links
+      typeText = typeText.replace(tokenRegExp, `<a href=${href} target="_blank" rel="noreferrer noopener">${token}</a>`);
+    }
+  });
+
+  return <Code><span dangerouslySetInnerHTML={{ __html: typeText }}></span></Code>;
+}
+
 function PropsAttrsTable({ items, globalConfigProperties }: { items: TagItem[]; globalConfigProperties?: string[] }) {
   return (
     <table className={(styles as any).table}>
@@ -36,13 +59,13 @@ function PropsAttrsTable({ items, globalConfigProperties }: { items: TagItem[]; 
         </tr>
       </thead>
       <tbody>
-        {items?.map((item: TagItem) => (
-          <tr key={item.name}>
+        {items?.map((item: TagItem, index) => (
+          <tr key={`${item.name}-${index}`}>
             <td>
               <Code>{item.name}</Code>
             </td>
             <td>
-              {item.type?.text ? <Code>{item.type.text}</Code> : '-'}
+              {item.type?.text ? <ForgeTypeLinks typeText={item.type.text} /> : '-'}
             </td>
             <td>
               {item.default ? <Code>{item.default}</Code> : '-'}
@@ -72,8 +95,8 @@ function NameDescriptionTable({ items }: { items: TagItem[] }) {
         </tr>
       </thead>
       <tbody>
-        {items?.map(property => (
-          <tr key={property.name}>
+        {items?.map((property, index) => (
+          <tr key={`${property.name}-${index}`}>
             <td>
               {!TEXT_NAMES.includes(property.name) ? <Code>{property.name}</Code> : <i>{property.name}</i>}
             </td>
@@ -107,7 +130,7 @@ function EventsTable({ items }: { items: TagItem[] }) {
               <Markdown>{event.description}</Markdown>
             </td>
             <td>
-              {event.type?.text ? <Code>{event.type.text}</Code> : '-'}
+              {event.type?.text ? <ForgeTypeLinks typeText={event.type.text} /> : '-'}
             </td>
           </tr>
         ))}
@@ -137,10 +160,10 @@ function MethodsTable({ items }: { items: TagItem[] }) {
               <Markdown>{method.description}</Markdown>
             </td>
             <td>
-              {method.parameters?.length ? <Code>{methodParamsToString(method.parameters)}</Code> : '-'}
+              {method.parameters?.length ? <ForgeTypeLinks typeText={methodParamsToString(method.parameters)} /> : '-'}
             </td>
             <td>
-              {method.return?.type?.text ? <Code>{method.return.type.text}</Code> : '-'}
+              {method.return?.type?.text ? <ForgeTypeLinks typeText={method.return.type.text} /> : '-'}
             </td>
           </tr>
         ))}
@@ -176,13 +199,14 @@ function sortByName(items: TagItem[]): TagItem[] {
 }
 
 function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; headingLevel: 'h3' | 'h4' }) {
+  const module = getCustomElementsTagModule(tagName);
   const declaration = getCustomElementsTagDeclaration(tagName);
   const properties = declaration.members?.filter(member => member.kind === 'field' && member.privacy === 'public');
   const attributes = declaration.attributes;
   const methods = declaration.members?.filter(member => member.kind === 'method' && member.privacy === 'public');
   const events = declaration.events;
-  const dependencies = declaration.dependencies;
-  const globalConfigProperties = declaration.globalConfigProperties;
+  const dependencies = declaration.dependencies?.map(({ name }) => name);
+  const globalConfigProperties = declaration.globalConfigProperties?.map(({ name }) => name);
   const slots = declaration.slots?.map(slot => {
     if (!slot.name) {
       slot.name = '(default)';
@@ -191,9 +215,16 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   }) ?? [];
   const cssProperties = declaration.cssProperties;
   const cssParts = declaration.cssParts;
+  const branch = 'main';
+  const modulePath = module.path;
+  const codeLink = `https://github.com/tyler-technologies-oss/forge/tree/${branch}/${modulePath}`;
 
   return (
     <div>
+      <p>
+        View the code on GitHub for this component <a href={codeLink}>here</a>.
+      </p>
+
       {!!properties?.length && 
         <Section title="Properties" name={tagName} headingLevel={headingLevel}>
           <PropsAttrsTable items={sortByName(properties)} globalConfigProperties={globalConfigProperties} />

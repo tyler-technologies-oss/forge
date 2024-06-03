@@ -72,6 +72,16 @@ blockquote {
   color: var(--forge-theme-on-surface-container-minimum);
 }
 
+.sbdocs code > span {
+  font: inherit;
+  
+  > a {
+    font: inherit;
+    color: var(--forge-theme-primary);
+    text-decoration: underline;
+  }
+}
+
 //
 // Table of Contents
 //
