@@ -30,6 +30,46 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
   locale: string | undefined;
 }
 
+/**
+ * @property {boolean} [allowInvalidDate=false] - Whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed).
+ * @property {boolean} [disabled=false] - Whether the date picker is disabled or not.
+ * @property {(date: Date) => boolean} disableDayCallback - The callback to use for testing whether a specific date should be disabled or not.
+ * @property {Date | Date[] | null | undefined} disabledDates - The dates that are restricted from being selected.
+ * @property {DayOfWeek[]} disabledDaysOfWeek - The days of the week to disable from selection.
+ * @property {DatePickerFormatCallback} formatCallback - The callback to use for formatting `Date` value to a custom string format.
+ * @property {string | undefined} locale - The locale to use.
+ * @property {boolean} [masked=false] - Whether the input mask is applied or not.
+ * @property {string} maskFormat - The mask format that displayed in the input. Default is `MM/DD/YYYY`.
+ * @property {Date | string | null | undefined} max - The maximum date the calendar will allow.
+ * @property {Date | string | null | undefined} min - The minimum date the calendar will allow.
+ * @property {boolean} [notifyInputValueChanges=false] - Whether the native input will be notified of value changes via the `input` and `change` events.
+ * @property {boolean} [open=false] - Whether the calendar dropdown is open.
+ * @property {DatePickerParseCallback} parseCallback - The callback to use for parsing a date value string to a `Date` object.
+ * @property {string | string[]} popupClasses - The CSS classes that are applied to the popup element.
+ * @property {DatePickerPrepareMaskCallback} prepareMaskCallback - The callback to use when altering default mask entry.
+ * @property {boolean} [showClear=false] - Whether the clear button is visible in the popup.
+ * @property {boolean} [showMaskFormat=false] - Whether the mask format is displayed in the input or not. Only applies if `masked` is `true`.
+ * @property {boolean} [showToday=false] - Whether the today button is visible in the popup.
+ * @property {TValue} value - The value of the date picker.
+ * @property {DatePickerValueMode} valueMode - The type for the `value` property and `forge-date-picker-change` event.
+ * @property {string} yearRange - The year range.
+ * 
+ * @attribute {boolean} [allow-invalid-date=false] - Whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed).
+ * @attribute {boolean} [disabled=false] - Whether the date picker is disabled or not.
+ * @attribute {string} [disabled-days-of-week] - The days of the week to disable from selection.
+ * @attribute {string} [locale] - The locale to use.
+ * @attribute {boolean} [masked=false] - Whether the input mask is applied or not.
+ * @attribute {string} [mask-format=MM/DD/YYYY] - The mask format that displayed in the input.
+ * @attribute {string} [max] - The maximum date the calendar will allow.
+ * @attribute {string} [min] - The minimum date the calendar will allow.
+ * @attribute {boolean} [open=false] - Whether the calendar dropdown is open.
+ * @attribute {string} [popup-classes] - The CSS classes that are applied to the popup element.
+ * @attribute {boolean} [show-clear=false] - Whether the clear button is visible in the popup.
+ * @attribute {boolean} [show-mask-format=false] - Whether the mask format is displayed in the input or not. Only applies if `masked` is `true`.
+ * @attribute {boolean} [show-today=false] - Whether the today button is visible in the popup.
+ * @attribute {DatePickerValueMode} [value-mode=string] - The type for the `value` property and `forge-date-picker-change` event.
+ * @attribute {string} [year-range] - The year range.
+ */
 export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoundation extends BaseDatePickerFoundation<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>> extends BaseComponent implements IBaseDatePickerComponent<TPublicValue> {
   protected _foundation: TFoundation;
 
@@ -101,91 +141,69 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
     }
   }
 
-  /** Gets/sets the value of the component. */
   @FoundationProperty()
   public declare value: TPublicValue | null | undefined;
 
-  /** Gets/sets the minimum date the calendar will allow. */
   @FoundationProperty()
   public declare min: Date | string | null | undefined;
 
-  /** Gets/sets the maximum date the calendar will allow. */
   @FoundationProperty()
   public declare max: Date | string | null | undefined;
 
-  /** Gets/sets the dates that are restricted from being selected. */
   @FoundationProperty()
   public declare disabledDates: Date | Date[] | null | undefined;
 
-  /** Gets/sets whether the calendar dropdown is open. */
   @FoundationProperty()
   public declare open: boolean;
 
-  /** Gets/sets the CSS classes that are applied to the popup element. */
   @FoundationProperty()
   public declare popupClasses: string | string[];
 
-  /** Gets/sets whether the date picker is disabled or not. */
   @FoundationProperty()
   public declare disabled: boolean;
 
-  /** Gets/sets whether the input mask is applied or not. */
   @FoundationProperty()
   public declare masked: boolean;
 
-  /** Gets/sets the mask format that displayed in the input. Default is `MM/DD/YYYY` */
   @FoundationProperty()
   public declare maskFormat: string;
 
-  /** Gets/sets whether the mask format is displayed in the input or not. Only applies if `masked` is `true`. */
   @FoundationProperty()
   public declare showMaskFormat: boolean;
 
-  /** Gets/sets the type for the `value` property and `forge-date-picker-change` event. */
   @FoundationProperty()
   public declare valueMode: DatePickerValueMode;
 
-  /** Gets/sets whether the native input will be notified of value changes via the `input` and `change` events. */
   @FoundationProperty()
   public declare notifyInputValueChanges: boolean;
 
-  /** Gets/sets whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed). */
   @FoundationProperty()
   public declare allowInvalidDate: boolean;
 
-  /** Gets/sets whether the today button is visible in the popup. */
   @FoundationProperty()
   public declare showToday: boolean;
 
-  /** Gets/sets whether the clear button is visible in the popup. */
   @FoundationProperty()
   public declare showClear: boolean;
 
-  /** Sets the callback to use for parsing a date value string to a `Date` object. */
   @FoundationProperty()
   public declare parseCallback: DatePickerParseCallback;
 
-  /** Sets the callback to use for formatting `Date` value to a custom string format. */
   @FoundationProperty()
   public declare formatCallback: DatePickerFormatCallback;
 
-  /** Sets the callback to use when altering default mask entry. */
   @FoundationProperty()
   public declare prepareMaskCallback: DatePickerPrepareMaskCallback;
 
-  /** Sets the days of the week to disable from selection. */
   @FoundationProperty()
   public declare disabledDaysOfWeek: DayOfWeek[];
 
-  /** Sets the callback to use for testing whether a specific date should be disabled or not. */
   @FoundationProperty()
   public declare disableDayCallback: (date: Date) => boolean;
 
-  /** Sets the year range. */
   @FoundationProperty()
   public declare yearRange: string;
 
-  /** Sets the locale to use. */
   @FoundationProperty()
   public declare locale: string | undefined;
 }
