@@ -120,7 +120,4 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
 
   @FoundationProperty()
   public declare fallbackPlacements: PositionPlacement[] | null;
-
-  @FoundationProperty()
-  public declare auto: boolean;
 }
