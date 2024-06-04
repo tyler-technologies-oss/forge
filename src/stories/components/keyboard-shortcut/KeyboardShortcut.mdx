@@ -6,10 +6,49 @@ import * as KeyboardShortcutStories from './KeyboardShortcut.stories';
 
 <Title />
 
+The keyboard shortcut component provides a simple way to attach keyboard driven functionality to an
+element via the DOM. By default placing `<forge-keyboard-shortcut>` as a sibling after an element
+enables the shortcut when focus is within the element.
+
+The shortcut can also be enabled on the entire document body with the `global` attribute or other
+elements with the `target` attribute which accepts a CSS selector.
+
 <Canvas of={KeyboardShortcutStories.Demo} />
+
+### Targeting a different host element
+
+Keyboard shortcut can also target a specific element using the `target` attribute:
+
+```html
+<forge-button type="raised" id="shortcut-target">
+  <button type="button">Button</button>
+</forge-button>
+<p>Some other element</p>
+<forge-keyboard-shortcut id="shortcut" key="shift+a" target="#shortcut-target"></forge-keyboard-shortcut>
+```
+
+> **Note:** the `target` attribute must be a valid CSS selector.
+
+### Targeting the document body
+
+Additionally, keyboard shortcut can be set to work across the whole page using the `global` attribute:
+
+```html
+<forge-keyboard-shortcut id="shortcut" key="shift+a" global></forge-keyboard-shortcut>
+```
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+
+- Ensure that the shortcut is described in a logical, visible spot on the page. Include its function and the key combination that activates it.
+- Don't override browser, operating system, or assistive technology shortcuts.
+- Set `aria-keyshortcuts` on any element that is focused or activated by a global shortcut. See the
+[MDN docs](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-keyshortcuts) for more information.
+- Avoid using the `accesskey` attribute. See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey) for more information.
+- Don't duplicate behavior provided by the browser. A form will automatically submit when enter is pressed if it includes a submit button.
+
+> Even though the keyboard shortcut component exists in the DOM, the element itself doesn't affect
+> accessibility or layout due to having its `display` style property set to `none`.
