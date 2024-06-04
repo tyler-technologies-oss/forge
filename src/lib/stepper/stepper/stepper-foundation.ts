@@ -211,10 +211,11 @@ export class StepperFoundation implements IStepperFoundation {
       return;
     }
     const eventPath = getEventPath(event);
-    const stepRoot = eventPath.find(el => el.classList && el.classList.contains(STEP_CONSTANTS.classes.STEP));
-    const step = eventPath.find(el => el.localName === STEP_CONSTANTS.elementName) as IStepComponent | undefined;
+    const step = eventPath
+      .filter(el => el.nodeType === Node.ELEMENT_NODE)
+      .find(el => el.matches(STEP_CONSTANTS.elementName)) as IStepComponent | undefined;
 
-    if (stepRoot && step && !step.selected && !step.disabled && this._adapter.emitHostEvent(STEP_CONSTANTS.events.SELECT, step.index, true, true)) {
+    if (step && !step.selected && !step.disabled && this._adapter.emitHostEvent(STEP_CONSTANTS.events.SELECT, step.index, true, true)) {
       this._adapter.setSelected(step);
       this.selectedIndex = step.index;
     }
@@ -253,10 +254,21 @@ export class StepperFoundation implements IStepperFoundation {
       return;
     }
 
-    if ([STEP_CONSTANTS.strings.HOME_KEY, STEP_CONSTANTS.strings.END_KEY, STEP_CONSTANTS.strings.ARROW_DOWN_KEY, STEPPER_CONSTANTS.strings.ARROW_UP_KEY].includes(key)) {
+    if ([
+      STEP_CONSTANTS.strings.HOME_KEY,
+      STEP_CONSTANTS.strings.END_KEY,
+      STEP_CONSTANTS.strings.ARROW_DOWN_KEY,
+      STEPPER_CONSTANTS.strings.ARROW_UP_KEY,
+      STEPPER_CONSTANTS.strings.ENTER_KEY,
+      STEPPER_CONSTANTS.strings.SPACE_KEY
+    ].includes(key)) {
       event.preventDefault();
     }
 
+    if ([STEPPER_CONSTANTS.strings.ENTER_KEY, STEPPER_CONSTANTS.strings.SPACE_KEY].includes(key)) {
+      this._adapter.getFocusedOrSelectedStep()?.click();
+      return;
+    }
 
     const step = this._vertical ? this._determineVerticalMoveTarget(key) : this._determineMoveTarget(key);
 
@@ -266,7 +278,7 @@ export class StepperFoundation implements IStepperFoundation {
   }
 
   private _moveFocusTo(step: IStepComponent): void {
-    getShadowElement(step, STEP_CONSTANTS.selectors.STEP).focus();
+    step.focus();
   }
 
   private _getKeyFromEvent(evt: KeyboardEvent): string {
@@ -322,9 +334,9 @@ export class StepperFoundation implements IStepperFoundation {
   private _onStepExpandedContentFocusIn(event: CustomEvent<IStepComponent>): void {
     const step = this._adapter.getStep(event.detail.index + 1);
     if (step) {
-      step.setStepTabIndex(0);
+      step.tabIndex = 0;
     }
-    event.detail.setStepTabIndex(0);
+    event.detail.tabIndex = 0;
   }
 
   private _onStepExpandedContentFocusOut(event: CustomEvent<IStepComponent>): void {
@@ -332,10 +344,10 @@ export class StepperFoundation implements IStepperFoundation {
     const step = this._adapter.getStep(focusOutStep.index + 1);
 
     if (step) {
-      step.setStepTabIndex(-1);
+      step.tabIndex = -1;
     }
 
-    focusOutStep.setStepTabIndex(-1);
+    focusOutStep.tabIndex = -1;
   }
 
   private _onStepFocus(): void {

@@ -1,11 +1,14 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../../utils';
-
-import '@tylertech/forge/stepper';
+import { action } from '@storybook/addon-actions';
+import { generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
 
+import '@tylertech/forge/stepper';
+
 const component = 'forge-stepper';
+
+const selectAction = action('forge-step-select');
 
 const meta = {
   title: 'Components/Stepper',
@@ -21,17 +24,24 @@ const meta = {
          .disabled=${args.disabled}
          .vertical=${args.vertical}
          .linear=${args.linear}
-         style=${style}>
+         style=${style}
+         @forge-step-select=${selectAction}>
         <forge-step>Step 1</forge-step>
-        <forge-step>Step 2 <span slot="optional">Optional</span></forge-step>
-        <forge-step><div slot="expansion-content">Expansion Content</div>${args.vertical ? 'Expand me' : 'Step 3'}</forge-step>
+        <forge-step>
+          Step 2
+          <span slot="optional">Optional</span>
+        </forge-step>
+        <forge-step>
+          <div slot="expansion-content">Expansion Content</div>
+          ${args.vertical ? 'Expand me' : 'Step 3'}
+        </forge-step>
         <forge-step>Step 4</forge-step>
       </forge-stepper>
     `;
   },
   component,
-  parameters: {
-    actions: { disable: true }
+  subcomponents: {
+    'Step': 'forge-step'
   },
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -63,12 +73,17 @@ export const Demo: Story = {};
 export const Vertical: Story = {
   ...standaloneStoryParams,
   render: (args) => html`
-        <forge-stepper
-         vertical="true">
-        <forge-step>Step 1</forge-step>
-        <forge-step>Step 2 <span slot="optional">Optional</span></forge-step>
-        <forge-step><div slot="expansion-content">Expansion Content</div>${args.vertical ? 'Expand me' : 'Step 3'}</forge-step>
-        <forge-step>Step 4</forge-step>
-      </forge-stepper>
+    <forge-stepper vertical="true">
+      <forge-step>Step 1</forge-step>
+      <forge-step>
+        Step 2 
+        <span slot="optional">Optional</span>
+      </forge-step>
+      <forge-step>
+        <div slot="expansion-content">Expansion Content</div>
+        ${args.vertical ? 'Expand me' : 'Step 3'}
+      </forge-step>
+      <forge-step>Step 4</forge-step>
+    </forge-stepper>
   `
 }

@@ -140,25 +140,21 @@ export class StepperAdapter extends BaseAdapter<IStepperComponent> implements IS
   }
 
   public tryGetFocusedStep(): IStepComponent | undefined {
-    let focusedStep: IStepComponent = undefined as any;
-    const activeElement = getActiveElement(this._component.ownerDocument);
+    let focusedStep: IStepComponent | undefined;
     this._applyToSteps(step => {
-      if (activeElement === getShadowElement(step, STEP_CONSTANTS.selectors.STEP)) {
+      if (step.matches(':focus-within')) {
         focusedStep = step;
       }
     });
-
     return focusedStep;
   }
 
   public getFocusedOrSelectedStep(): IStepComponent {
     let focusedStep = this.tryGetFocusedStep();
-
     if (!focusedStep) {
       focusedStep = this._getSteps()[0];
       focusedStep.focus();
     }
-
     return focusedStep;
   }
 
