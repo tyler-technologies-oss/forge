@@ -35,6 +35,31 @@ declare global {
  * The custom element class behind the `<forge-date-range-picker>` element.
  * 
  * @tag forge-date-range-picker
+ * 
+ * @property {Date | string | null | undefined} [from=null] - Gets/sets the "from" date range value.
+ * @property {Date | string | null | undefined} [to=null] - Gets/sets the "to" date range value.
+ * @property {string | null | undefined} [value=null] - Gets/sets the date range value.
+ * @property {Date | string | null | undefined} [min=null] - Gets/sets the minimum date range value.
+ * @property {Date | string | null | undefined} [max=null] - Gets/sets the maximum date range value.
+ * @property {Date | Date[] | null | undefined} [disabledDates=null] - Gets/sets the disabled date range values.
+ * @property {boolean} [open=false] - Gets/sets the open state of the date range picker.
+ * @property {DatePickerParseCallback} [parseCallback=parseDate] - Gets/sets the callback used to parse date strings.
+ * @property {DatePickerFormatCallback} [formatCallback=formatDate] - Gets/sets the callback used to format date strings.
+ * @property {DatePickerPrepareMaskCallback} [prepareMaskCallback=prepareDateMask] - Gets/sets the callback used to prepare the mask for the date input.
+ * @property {(date: Date) => boolean} [disableDayCallback=undefined] - Gets/sets the callback used to disable days in the calendar.
+ * @property {string | string[]} [popupClasses=''] - Gets/sets the classes to apply to the date range picker popup.
+ * @property {boolean} [disabled=false] - Gets/sets the disabled state of the date range picker.
+ * @property {boolean} [masked=false] - Gets/sets the masked state of the date range picker.
+ * @property {string} [maskFormat='MM/DD/YYYY'] - Gets/sets the mask format for the date input.
+ * @property {boolean} [showMaskFormat=false] - Gets/sets the state of whether to show the mask format in the date input.
+ * @property {DatePickerValueMode} [valueMode='range'] - Gets/sets the value mode of the date range picker.
+ * @property {boolean} [notifyInputValueChanges=false] - Gets/sets the state of whether to notify input value changes.
+ * @property {boolean} [allowInvalidDate=false] - Gets/sets the state of whether to allow invalid dates.
+ * @property {boolean} [showToday=true] - Gets/sets the state of whether to show the "Today" button.
+ * @property {boolean} [showClear=true] - Gets/sets the state of whether to show the "Clear" button.
+ * @property {DayOfWeek[]} [disabledDaysOfWeek=[]] - Gets/sets the disabled days of the week.
+ * @property {string} [yearRange=''] - Gets/sets the year range for the date range picker.
+ * @property {string | undefined} [locale=undefined] - Gets/sets the locale for the date range picker.
  */
 @CustomElement({
   name: DATE_RANGE_PICKER_CONSTANTS.elementName,
