@@ -5,11 +5,17 @@
   .forge-card-header-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+    }
   }
 
   .forge-card-footer {
     display: flex;
     justify-content: flex-end;
+    gap: var(--forge-spacing-medium);
   }
 }
 

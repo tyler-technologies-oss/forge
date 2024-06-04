@@ -6,6 +6,10 @@ import * as PaginatorStories from './Paginator.stories';
 
 <Title />
 
+The paginator component is used to navigate through a collection of items. It provides a set of controls to navigate through the items, such as previous and next buttons.
+
+This component is typically composed with a [list](?path=/docs/components-list--docs) or [table](?path=/docs/components-table--docs) component to allow users to navigate large or expensive set of data.
+
 <Canvas of={PaginatorStories.Demo} />
 
 ## API
@@ -13,3 +17,8 @@ import * as PaginatorStories from './Paginator.stories';
 <CustomArgTypes />
 
 ## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+  - Ensure the controls are reachable by the tab key.
+  - Ensure each control can be updated or activated by the keyboard.
+- The paginator component will handle adding the proper ARIA attributes to its internal elements.
