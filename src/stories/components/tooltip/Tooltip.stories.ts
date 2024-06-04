@@ -2,10 +2,10 @@ import { type Meta, type StoryObj } from '@storybook/web-components';
 import { html, nothing } from 'lit-html';
 import { styleMap } from 'lit/directives/style-map.js';
 import { OVERLAY_PLACEMENT_OPTIONS, OVERLAY_FLIP_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { TOOLTIP_CONSTANTS } from '@tylertech/forge/tooltip';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/tooltip';
-import { TOOLTIP_CONSTANTS } from '@tylertech/forge/tooltip';
 
 const component = 'forge-tooltip';
 
