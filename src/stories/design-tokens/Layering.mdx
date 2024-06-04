@@ -1,0 +1,23 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Design Tokens/Layering" />
+
+# Layering Tokens
+
+Layering tokens define the order in which elements are stacked on top of each other.
+
+This is implemented using the `z-index` CSS property.
+
+It's important to note that these values are not fixed and can be adjusted as needed. If you need to integrate Forge with a
+another library that uses different z-index values, you can override these tokens to match the other library's values, and
+Forge will automatically adjust to use the new values across all components.
+
+| Token                            | Value
+| ---------------------------------| -----
+| `--forge-z-index-surface`        | `1`
+| `--forge-z-index-header`         | `4`
+| `--forge-z-index-backdrop`       | `7`
+| `--forge-z-index-dialog`         | `8`
+| `--forge-z-index-notification`   | `9`
+| `--forge-z-index-popup`          | `10`
+| `--forge-z-index-tooltip`        | `11`

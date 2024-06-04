@@ -55,8 +55,7 @@ const preview: Preview = {
           'Components',
           'Design Tokens',
           [
-            'Introduction',
-            'Theme'
+            'Introduction'
           ],
           'About'
         ],
