@@ -1,8 +1,8 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
-import { DENSITY_OPTIONS, GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils';
+import { DENSITY_OPTIONS, GLOBAL_THEME_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils';
 import { styleMap } from 'lit/directives/style-map.js';
-import { tylIconFavorite, tylIconAdd } from '@tylertech/tyler-icons/standard';
+import { tylIconFavorite, tylIconAdd, tylIconOpenInNew } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '@tylertech/forge/icon/icon-registry';
 
 import '@tylertech/forge/floating-action-button';
@@ -11,7 +11,7 @@ import '@tylertech/forge/button';
 
 const component = 'forge-fab';
 
-IconRegistry.define([tylIconFavorite, tylIconAdd]);
+IconRegistry.define([tylIconFavorite, tylIconAdd, tylIconOpenInNew]);
 
 const meta = {
   title: 'Components/Floating Action Button',
@@ -80,6 +80,19 @@ export const Extended: Story = {
         style=${style}>
         <forge-icon name="add"></forge-icon>
         <span slot="label">Create</span>
+      </forge-fab>
+    `;
+  },
+};
+
+export const WithAnchor: Story = {
+  ...standaloneStoryParams,
+  render: args => {
+    return html`
+      <forge-fab>
+        <a href="javascript: void(0);" aria-label="FAB with anchor">
+          <forge-icon name="open_in_new"></forge-icon>
+        </a>
       </forge-fab>
     `;
   },

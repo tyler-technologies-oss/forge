@@ -222,7 +222,7 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   return (
     <div>
       <p>
-        View the code on GitHub for this component <a href={codeLink}>here</a>.
+        View the code on GitHub for this component <a href={codeLink} target="_blank" rel="noreferrer noopener">here</a>.
       </p>
 
       {!!properties?.length && 

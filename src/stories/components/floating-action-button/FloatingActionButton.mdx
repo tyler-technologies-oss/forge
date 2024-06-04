@@ -17,8 +17,8 @@ Typically you will position floating action buttons manually on the screen, for 
 ```css
 .bottom-right {
   position: fixed;
-  bottom: 16px;
-  right: 16px;
+  bottom: var(--forge-spacing-medium);
+  right: var(--forge-spacing-medium);
 }
 ```
 
@@ -27,6 +27,12 @@ Typically you will position floating action buttons manually on the screen, for 
 Extended floating action buttons are larger and have a text label.
 
 <Canvas of={FloatingActionButtonStories.Extended} />
+
+## With Anchor
+
+You can nest an `<a>` element inside the floating action button to create a link.
+
+<Canvas of={FloatingActionButtonStories.WithAnchor} />
 
 ## API
 
