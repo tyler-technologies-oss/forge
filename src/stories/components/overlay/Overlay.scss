@@ -1,0 +1,29 @@
+.clipping-container {
+  height: 500px;
+  border: 1px solid var(--forge-theme-outline);
+  overflow: auto;
+
+  &.force-containment {
+    transform: translate3d(0, 0, 0);
+    border: 2px dashed var(--forge-theme-error);
+  }
+
+  &.use-small-container {
+    height: 150px;
+  }
+}
+
+.overlay-content {
+  width: 300px;
+  padding: 8px;
+  border: 1px dashed var(--forge-theme-primary);
+  background-color: var(--forge-theme-surface);
+}
+
+.scroll-container {
+  height: 250%;
+  width: 250%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

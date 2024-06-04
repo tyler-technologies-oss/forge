@@ -6,10 +6,31 @@ import * as OverlayStories from './Overlay.stories';
 
 <Title />
 
+Overlays are used to render content in above all other content on the page and positioned around a specified anchor element.
+
+An overlay is a low-level building block component that does not provide any visual styles. Its only purpose is to render slotted
+content above all other content on the page. The element is positioned around an anchor element with various positioning options.
+
+The following components are examples of components that use a `<forge-overlay>` internally:
+
+- [Tooltip](?path=/docs/components-tooltip--docs)
+- [Popover](?path=/docs/components-popover--docs)
+- [Toast](?path=/docs/components-toast--docs)
+
+These components expose similar APIs that are passed down to the `<forge-overlay>` component.
+
 <Canvas of={OverlayStories.Demo} />
+
+## Context Menu
+
+You can use an overlay to create a context menu that appears when the user right-clicks on the page.
+
+<Canvas of={OverlayStories.ContextMenu} />
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+
+Overlays do not provide any semantics by default. It is up to the developer to provide the necessary semantics for the content.
