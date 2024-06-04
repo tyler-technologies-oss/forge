@@ -25,8 +25,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-split-view>` element.
- * 
  * @tag forge-split-view
  */
 @CustomElement({

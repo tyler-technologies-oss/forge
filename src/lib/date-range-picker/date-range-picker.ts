@@ -32,8 +32,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-date-range-picker>` element.
- * 
  * @tag forge-date-range-picker
  */
 @CustomElement({

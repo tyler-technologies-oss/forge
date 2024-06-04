@@ -15,8 +15,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-option>` element.
- * 
  * @tag forge-option
  */
 @CustomElement({
@@ -88,67 +86,115 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
     }
   }
 
-  /** Gets/sets the value of this option. */
+  /**
+   * Gets/sets the value of this option.
+   * @attribute
+   */
   @FoundationProperty()
   public declare value: any;
 
-  /** Gets/sets the label of this option. */
+  /**
+   * Gets/sets the label of this option.
+   * @attribute
+   */
   @FoundationProperty()
   public declare label: string;
 
-  /** Gets/sets the secondary label of this option. */
+  /**
+   * Gets/sets the secondary label of this option.
+   * @attribute secondary-label
+   */
   @FoundationProperty()
   public declare secondaryLabel: string;
 
-  /** Gets/sets the disabled status of this option. */
+  /**
+   * Gets/sets the disabled status of this option.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare disabled: boolean;
 
-  /** Gets/sets the whether this option is a divider. */
+  /**
+   * Gets/sets the whether this option is a divider.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare divider: boolean;
 
-  /** Gets/sets the classes of this option. */
+  /**
+   * Gets/sets the classes of this option.
+   * @attribute option-class
+   */
   @FoundationProperty()
   public declare optionClass: string | string[];
 
-  /** Gets/sets the leading icon of this option. */
+  /**
+   * Gets/sets the leading icon of this option.
+   * @attribute leading-icon
+   */
   @FoundationProperty()
   public declare leadingIcon: string;
 
-  /** Gets/sets the leading icon class of this option. */
+  /**
+   * Gets/sets the leading icon class of this option.
+   * @attribute leading-icon-class
+   */
   @FoundationProperty()
   public declare leadingIconClass: string;
 
-  /** Gets/sets the leading icon type of this option. */
+  /**
+   * Gets/sets the leading icon type of this option.
+   * @default "font"
+   * @attribute leading-icon-type
+   */
   @FoundationProperty()
   public declare leadingIconType: ListDropdownIconType;
 
-  /** Gets/sets properties on leading icon component. */
+  /**
+   * Gets/sets properties on leading icon component.
+   */
   @FoundationProperty()
   public declare leadingIconComponentProps: Partial<IIconComponent>;
 
-  /** Gets/sets the trailing icon of this option. */
+  /**
+   * Gets/sets the trailing icon of this option.
+   * @attribute trailing-icon
+   */
   @FoundationProperty()
   public declare trailingIcon: string;
 
-  /** Gets/sets the trailing icon class of this option. */
+  /**
+   * Gets/sets the trailing icon class of this option.
+   * @attribute trailing-icon-class
+   */
   @FoundationProperty()
   public declare trailingIconClass: string;
 
-  /** Gets/sets the trailing icon type of this option. */
+  /**
+   * Gets/sets the trailing icon type of this option.
+   * @default "font" 
+   * @attribute trailing-icon-type
+   */
   @FoundationProperty()
   public declare trailingIconType: ListDropdownIconType;
 
-  /** Gets/sets properties on trailing icon component. */
+  /**
+   * Gets/sets properties on trailing icon component.
+   */
   @FoundationProperty()
   public declare trailingIconComponentProps: Partial<IIconComponent>;
 
-  /** Gets/sets the leading builder of this option. */
+  /**
+   * Gets/sets the leading builder of this option.
+   */
   @FoundationProperty()
   public declare leadingBuilder: () => HTMLElement;
 
-  /** Gets/sets the trailing builder of this option. */
+  /**
+   * Gets/sets the trailing builder of this option.
+   */
   @FoundationProperty()
   public declare trailingBuilder: () => HTMLElement;
 }

@@ -17,6 +17,10 @@ const changeAction = action('change');
 const meta = {
   title: 'Components/Select',
   component,
+  subcomponents: {
+    'Forge Option': 'forge-option',
+    'Forge Option Group': 'forge-option-group'
+  },
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;

@@ -15,8 +15,6 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-option-group>` element.
- * 
  * @tag forge-option-group
  */
 @CustomElement({
@@ -60,10 +58,16 @@ export class OptionGroupComponent extends BaseComponent implements IOptionGroupC
   /** The builder function for the group content. */
   public declare builder: ListDropdownOptionGroupBuilder;
 
-  /** Gets/sets the optional group value. */
+  /**
+   * Gets/sets the optional group value.
+   * @attribute
+   */
   public declare value: any;
 
-  /** The text content for the group. */
+  /**
+   * The text content for the group.
+   * @attribute
+   */
   public get text(): string {
     return this._label;
   }

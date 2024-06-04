@@ -2,9 +2,7 @@ import type { Preview } from '@storybook/web-components';
 import { addons } from '@storybook/preview-api';
 import { light, dark } from './forge-theme';
 
-import '@tylertech/forge/theme/forge-theme.scss';
-import '@tylertech/forge/typography/forge-typography.scss';
-import '@tylertech/forge/forge-tokens.scss';
+import '@tylertech/forge/forge.scss';
 import './preview-global.scss';
 
 const toggleDarkTheme = value => document.body.classList.toggle('forge-storybook-dark', value);

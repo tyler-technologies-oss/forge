@@ -25,6 +25,7 @@ import {
   ITableFilterEventData,
   TableSelectTooltipCallback
 } from './types';
+import { TooltipComponent } from '../tooltip';
 
 export interface ITableComponent extends IBaseComponent {
   data: any[];
@@ -84,16 +85,29 @@ declare global {
 }
 
 /**
- * The custom element class behind the `<forge-table>` component.
- * 
  * @tag forge-table
+ * 
+ * @dependency forge-expansion-panel
+ * @dependency forge-icon
+ * @dependency forge-checkbox
+ * @dependency forge-tooltip
+ * 
+ * @event {CustomEvent<ITableRowClickEventData>} forge-table-row-click - Dispatched when a row is clicked. Only applies when `allow-row-click` is specified.
+ * @event {CustomEvent<ITableSelectEventData>} forge-table-select - Dispatched when a row is selected. Only applies when `select` is specified.
+ * @event {CustomEvent<ITableSelectDoubleEventData>} forge-table-select-double - Dispatched when a row is double-clicked. Only applies when `select` is specified.
+ * @event {CustomEvent<ITableSelectAllEventData>} forge-table-select-all - Dispatched when the select all checkbox is toggled. Only applies when `select` and `multiselect` is specified.
+ * @event {CustomEvent<ITableSortEventData | ITableSortMultipleEventData>} forge-table-sort - Dispatched when a column is sorted.
+ * @event {CustomEvent<ITableFilterEventData>} forge-table-filter - Dispatched when a column is filtered. Only applies when `filter` is specified.
+ * @event {CustomEvent<void>} forge-table-initialized - Dispatched when the table is initialized in the DOM for the first time.
+ * @event {CustomEvent<ITableColumnResizeEventData>} forge-table-column-resize - Dispatched when a column is resized.
  */
 @CustomElement({
   name: TABLE_CONSTANTS.elementName,
   dependencies: [
     ExpansionPanelComponent,
     IconComponent,
-    CheckboxComponent
+    CheckboxComponent,
+    TooltipComponent
   ]
 })
 export class TableComponent extends BaseComponent implements ITableComponent {
@@ -324,80 +338,160 @@ export class TableComponent extends BaseComponent implements ITableComponent {
     return this._foundation.isRowSelected(rowData);
   }
 
-  /** The data to be display in the table body. */
+  /**
+   * The data to be display in the table body.
+   * @default []
+   */
   @FoundationProperty()
   public declare data: any[];
 
-  /** The column configuration options. */
+  /**
+   * The column configuration options.
+   * @default []
+   */
   @FoundationProperty()
   public declare columnConfigurations: IColumnConfiguration[];
 
-  /** Controls the visibility of the select column. */
+  /**
+   * Controls the visibility of the select column.
+   * @default true
+   * @attribute
+   */
   @FoundationProperty()
   public declare select: boolean;
 
-  /** Controls the visibility of the select all checkbox (only applied when `select` is `true`). */
+  /**
+   * Controls the visibility of the select all checkbox (only applied when `select` is `true`).
+   * @default true
+   * @attribute
+   */
   @FoundationProperty()
   public declare multiselect: boolean;
 
-  /** The row key for matching data to selections. */
+  /**
+   * The row key for matching data to selections.
+   * @attribute select-key
+   */
   @FoundationProperty()
   public declare selectKey: string | string[];
 
+  /**
+   * The tooltip to display when hovering over the select column.
+   * @attribute tooltip-select
+   */
   @FoundationProperty()
   public declare tooltipSelect: string | TableSelectTooltipCallback;
 
+  /**
+   * The tooltip to display when hovering over the select all checkbox.
+   * @attribute tooltip-select-all
+   */
   @FoundationProperty()
   public declare tooltipSelectAll: string;
 
-  /** Controls whether the table is dense or not. False by default. */
+  /**
+   * Controls whether the table is dense or not.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare dense: boolean;
 
-  /** Controls whether the table is roomy or not. False by default. */
+  /**
+   * Controls whether the table is roomy or not.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare roomy: boolean;
 
-  /** Controls whether the table filters are visible or not. */
+  /**
+   * Controls whether the table shows its column filter row.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare filter: boolean;
 
-  /** Controls whether the table applies fixed headers when in scroll containers. */
+  /**
+   * Controls whether the table applies fixed headers when in scroll containers.
+   * @default false
+   * @attribute fixed-headers
+   */
   @FoundationProperty()
   public declare fixedHeaders: boolean;
 
-  /** Controls the table layout algorithm. */
+  /**
+   * Controls the table layout algorithm.
+   * @default 'auto'
+   * @attribute layout-type
+   */
   @FoundationProperty()
   public declare layoutType: TableLayoutType;
 
-  /** Controls whether the content in each cell wraps or not (true by default). */
+  /**
+   * Controls whether the content in each cell wraps or not (true by default).
+   * @default true
+   * @attribute wrap-content
+   */
   @FoundationProperty()
   public declare wrapContent: boolean;
 
-  /** Controls whether the columns are resizable or not. */
+  /**
+   * Controls whether the columns are resizable or not.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare resizable: boolean;
 
-  /** Gets/sets the minimum width that a column can be resized to by the user dragging the resize handle. */
+  /**
+   * Gets/sets the minimum width that a column can be resized to by the user dragging the resize handle.
+   * @default 100
+   * @attribute min-resize-width
+   */
   @FoundationProperty()
   public declare minResizeWidth: number;
 
-  /** Gets/sets whether the rows respond to (and emit) row click events. */
+  /**
+   * Gets/sets whether the rows respond to (and emit) row click events.
+   * @default false
+   * @attribute allow-row-click
+   */
   @FoundationProperty()
   public declare allowRowClick: boolean;
 
+  /**
+   * Gets/sets whether the table supports multi-column sorting.
+   * @default false
+   * @attribute multi-column-sort
+   */
   @FoundationProperty()
   public declare multiColumnSort: boolean;
 
+  /**
+   * Callback for when a row is clicked. This allows for custom logic to run after each `<tr>` is created.
+   */
   @FoundationProperty()
   public declare rowCreated: TableRowCreatedCallback;
 
+  /**
+   * Callback for when a cell is clicked. This allows for custom logic to run after each `<td>` is created.
+   */
   @FoundationProperty()
   public declare cellCreated: TableCellCreatedCallback;
 
+  /**
+   * The template to use for the select all checkbox in the header.
+   */
   @FoundationProperty()
   public declare selectAllTemplate: TableHeaderSelectAllTemplate;
 
+  /**
+   * Controls the alignment of the select checkbox.
+   * @default "center"
+   * @attribute select-checkbox-alignment
+   */
   @FoundationProperty()
   public declare selectCheckboxAlignment: `${CellAlign}`;
 }
