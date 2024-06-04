@@ -16,7 +16,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      
+      exclude: ['rangeLabelCallback', 'pageSizeOptions']
     }),
   },
   args: {
