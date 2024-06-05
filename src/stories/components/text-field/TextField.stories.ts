@@ -36,7 +36,7 @@ const meta = {
         ?required=${args.required}
         ?invalid=${args.invalid}
         style=${style}>
-        ${args.label.length ? html`<label slot="label">${args.label}</label>` : nothing}
+        ${args.label.length ? html`<label>${args.label}</label>` : nothing}
         ${args.textarea ? 
           html`<textarea placeholder=${args.placeholder ?? nothing} .value=${args.value}></textarea>` :
           html`<input .type=${args.type || 'text'} placeholder=${args.placeholder ?? nothing} .value=${args.value}>`}

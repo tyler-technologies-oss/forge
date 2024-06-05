@@ -30,6 +30,13 @@ declare global {
 
 /**
  * @tag forge-date-picker
+ * 
+ * @attribute {string} [value] - The value of the date picker.
+ * 
+ * @event {CustomEvent<Date | string | null>} forge-date-picker-change - Emits when the value of the date picker changes.
+ * @event {CustomEvent<void>} forge-date-picker-open - Emits when the date picker opens.
+ * @event {CustomEvent<void>} forge-date-picker-close - Emits when the date picker closes.
+ * @event {CustomEvent<string>} forge-date-picker-input - Emits when the user inputs a value into the date picker.
  */
 @CustomElement({
   name: DATE_PICKER_CONSTANTS.elementName,

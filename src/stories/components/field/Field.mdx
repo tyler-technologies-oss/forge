@@ -6,10 +6,37 @@ import * as FieldStories from './Field.stories';
 
 <Title />
 
+The field component is a low-level building block component that provides a consistent way to render form fields. It handles the visual design of the field, but makes
+no assumptions about the type of field being rendered. This allows the field component to be used for a wide variety of form fields that need to inherit from the same
+base-level styles and functionality.
+
+The field component does not require that there be a focusable element inside of it. This allows the field component to be used for fields that do not require user input,
+or for fields that are part of a larger component that handles user input. This makes the field component a flexible building block that can be used in a wide variety of
+situations.
+
+The following components use the `<forge-field>` internally:
+
+- [Text Field](?path=/docs/components-text-field--docs)
+- [Select](?path=/docs/components-select--docs)
+
+These components expose similar APIs that are passed down to the `<forge-field>` component.
+
 <Canvas of={FieldStories.Demo} />
+
+## Static
+
+While fields are typically building blocks as part of larger components, the following example shows that fields do not require a focusable element to operate properly.
+This example is just some static HTML that is not focusable, but still uses the field component to provide consistent styling.
+
+<Canvas of={FieldStories.StaticField} />
+
+> When not using an `<input>` or `<textarea>` element, you will need to provide an `data-forge-field-input` attribute on the element that is intended to be the "input" element.
 
 ## API
 
 <CustomArgTypes />
 
 ## Accessibility
+
+The field does not provide any semantics for assistive technologies. If you are using the field component for a form field that requires user input, you should ensure
+that the field has the appropriate ARIA attributes to provide context to screen readers and other assistive technologies.

@@ -1,28 +1,44 @@
-import { html } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components';
+import { action } from '@storybook/addon-actions';
 import { customElementStoryRenderer, generateCustomElementArgTypes } from '../../utils';
+import type { IPaginatorComponent } from '@tylertech/forge/paginator';
 
 import '@tylertech/forge/paginator';
 
 const component = 'forge-paginator';
 
+const changeAction = action('forge-paginator-change');
+
 const meta = {
   title: 'Components/Paginator',
-  render: args => customElementStoryRenderer(component, args),
-  component,
-  parameters: {
-    actions: { disable: true }
+  render: args => {
+    const el = customElementStoryRenderer(component, args);
+    el.addEventListener('forge-paginator-change', changeAction);
+    return el;
   },
+  component,
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['rangeLabelCallback', 'pageSizeOptions']
+      exclude: ['rangeLabelCallback'],
+      controls: {
+        pageSizeOptions: { control: 'object' },
+      }
     }),
   },
   args: {
-
+    pageIndex: 0,
+    pageSize: 25,
+    pageSizeOptions: [5, 15, 25, 50, 100],
+    offset: 0,
+    total: 100,
+    label: 'Rows per page:',
+    firstLast: false,
+    first: false,
+    disabled: false,
+    alternative: false,
   },
-} satisfies Meta;
+} satisfies Meta<Partial<IPaginatorComponent>>;
 
 export default meta;
 

@@ -82,30 +82,40 @@ export class SplitViewComponent extends BaseComponent implements ISplitViewCompo
 
   /**
    * Whether child split view panels are laid out and resize horizontally or vertically.
+   * @attribute
+   * @default "horizontal"
    */
   @FoundationProperty()
   public orientation: SplitViewOrientation;
 
   /**
    * Whether child split view panels have resize interactions disabled or enabled.
+   * @attribute
+   * @default false
    */
   @FoundationProperty()
   public disabled: boolean;
 
   /**
    * Whether child split view panels can be closed via keyboard interaction.
+   * @attribute allow-close
+   * @default false
    */
   @FoundationProperty()
   public allowClose: boolean;
 
   /**
    * Whether child split view panels automatically close when they reach a size of 0.
+   * @attribute auto-close
+   * @default false
    */
   @FoundationProperty()
   public autoClose: boolean;
 
   /**
    * The size at which panels auto close.
+   * @attribute auto-close-threshold
+   * @default 0
    */
   @FoundationProperty()
   public autoCloseThreshold: number;

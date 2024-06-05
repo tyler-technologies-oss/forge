@@ -30,9 +30,9 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-keyboard-shortcut>` custom element.
- * 
  * @tag forge-keyboard-shortcut
+ * 
+ * @event {CustomEvent<KeyboardEvent>} forge-keyboard-shortcut-activate - Event fired when the keyboard shortcut is activated.
  */
 @CustomElement({
   name: KEYBOARD_SHORTCUT_CONSTANTS.elementName
@@ -95,11 +95,18 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
     }
   }
 
-  /** Gets/sets the key binding. */
+  /**
+   * Gets/sets the key binding.
+   * @attribute
+   */
   @FoundationProperty()
   public declare key: string | null | undefined;
 
-  /** Alias for key. */
+  /**
+   * Alias for key.
+   * @attribute key-binding
+   * 
+   */
   public get keyBinding(): string | null | undefined {
     return this.key;
   }
@@ -107,35 +114,63 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
     this.key = value;
   }
 
-  /** Gets/sets the target element selector. */
+  /**
+   * Gets/sets the target element selector.
+   * @attribute
+   */
   @FoundationProperty()
   public declare target: string;
 
-  /** Gets/sets the global listener state. */
+  /**
+   * Gets/sets the global listener state.
+   * @attribute
+   */
   @FoundationProperty()
   public declare global: boolean;
 
-  /** Gets/sets whether the callback will be called while in a text entry field. */
+  /**
+   * Gets/sets whether the callback will be called while in a text entry field.
+   * @attribute allow-while-typing
+   * @default false
+   */
   @FoundationProperty()
   public declare allowWhileTyping: boolean;
   
-  /** Gets/sets whether to prevent default on keyboard events */
+  /**
+   * Gets/sets whether to prevent default on keyboard events
+   * @attribute prevent-default
+   * @default true
+   */
   @FoundationProperty()
   public declare preventDefault: boolean;
   
-  /** Gets/sets whether to use capturing on keyboard events */
+  /**
+   * Gets/sets whether to use capturing on keyboard events
+   * @attribute
+   * @default false
+   */
   @FoundationProperty()
   public declare capture: boolean;
   
-  /** Gets/sets whether to match codes instead of keys on keyboard events */
+  /**
+   * Gets/sets whether to match codes instead of keys on keyboard events.
+   * @attribute use-code
+   * @default false
+   */
   @FoundationProperty()
   public declare useCode: boolean;
 
-  /** Gets/sets whether the callback will be called. */
+  /**
+   * Gets/sets whether the callback will be called.
+   * @attribute
+   * @default false
+   */
   @FoundationProperty()
   public declare disabled: boolean;
 
-  /** Gets/sets whether the activation callback. */
+  /**
+   * Gets/sets whether the activation callback.
+   */
   @FoundationProperty()
   public declare activateCallback: KeyboardShortcutActivateCallback | null | undefined;
 }

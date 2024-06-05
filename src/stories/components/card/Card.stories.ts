@@ -54,9 +54,9 @@ export const Styled: Story = {
     <div class="demo-card">
       <forge-card>
         <div class="forge-card-header-container">
-          <h3 >This is the card title</h3>
-          <forge-icon-button>
-              <forge-icon name="more_vert"></forge-icon>
+          <h3 class="forge-typography--heading4">This is the card title</h3>
+          <forge-icon-button aria-label="View more actions">
+            <forge-icon name="more_vert"></forge-icon>
           </forge-icon-button>
         </div>
 
@@ -67,14 +67,8 @@ export const Styled: Story = {
         </div>
 
         <div class="forge-card-footer">
-          <div>
-            <forge-button>
-              Ok
-            </forge-button>
-            <forge-button>
-              Cancel
-            </forge-button>
-          </div>
+          <forge-button variant="outlined">Cancel</forge-button>
+          <forge-button variant="raised">OK</forge-button>
         </div>
       </forge-card>
     </div>
