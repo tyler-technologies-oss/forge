@@ -14,6 +14,8 @@
     "noImplicitThis": true,
     "useDefineForClassFields": false,
     "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "@tylertech/forge": ["src/lib"],

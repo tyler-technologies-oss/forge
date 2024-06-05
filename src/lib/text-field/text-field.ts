@@ -21,6 +21,10 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-text-field': ITextFieldComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-text-field-clear': CustomEvent<void>;
+  }
 }
 
 /**
@@ -28,12 +32,18 @@ declare global {
  * 
  * @summary The Forge Text Field component wraps and styles an input or textarea element.
  * 
- * @property {boolean} showClear - Whether the clear button appears when text has been entered.
+ * @dependency forge-field
+ * @dependency forge-icon-button
+ * @dependency forge-tooltip
+ * 
+ * @property {boolean} [showClear=false] - Whether the clear button appears when text has been entered.
  * @property {HTMLElement} popoverTargetElement - Gets a reference to the element that the popover should target for best alignment.
  * 
- * @attribute {boolean} show-clear - Whether the clear button appears when text has been entered.
+ * @attribute {boolean} [show-clear=false] - Whether the clear button appears when text has been entered.
  * 
- * @event {CustomEvent<null>} forge-text-field-clear - Dispatches when the clear button is clicked.
+ * @globalconfig labelPosition
+ * 
+ * @event {CustomEvent<void>} forge-text-field-clear - Dispatched when the clear button is clicked.
  * 
  * @csspart root - The root container element.
  * @csspart label - The label element.

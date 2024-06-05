@@ -76,7 +76,7 @@ declare global {
  * 
  * @method {(force?: boolean) => void} toggle - Toggles whether the switch is selected or forces a selected state.
  *  
- * @event {CustomEvent} forge-switch-change - Dispatches when the switch's value changes.
+ * @event {CustomEvent<boolean>} forge-switch-change - Dispatches when the switch's value changes.
  * 
  * @cssproperty --forge-theme-primary - The primary color of the switch.
  * @cssproperty --forge-theme-on-primary - The color of elements placed on top of the primary color (the handle icons for example).

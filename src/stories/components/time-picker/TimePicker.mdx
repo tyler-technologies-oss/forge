@@ -1,0 +1,40 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as TimePickerStories from './TimePicker.stories';
+
+<Meta of={TimePickerStories} />
+
+<Title />
+
+The time picker component can be used to allow the user to enter a time manually, or to choose a time from the configurable dropdown list of suggestions. The built-in input mask is enabled by default, and will force users to enter a time in either 12 hour (default) or 24 hour formats.
+
+This component is composable and only requires that an `<input>` element be provided as one of its children. It's common that the component wraps a text-field component to provide the Forge look-and-feel, but it can technically attach itself to any instance of a child `<input>` element.
+
+>**Important**: all communication with this component through its APIs, such as getting/setting value or listen for change events **must** be in 24 hour time format. Ex. "15:30".
+>
+>This is to ensure that a compatible format is used in all locales, as well as to provide a uniform way to interact with the component.
+
+## Example
+
+Values should **always** be set through the `<forge-time-picker>` element, **not** the `<input>` element.
+
+You can still use attributes such as `placeholder` on the `<input>` but things like `value`, `disabled`, `min`, and `max` should be set on the `<forge-time-picker>` element itself.
+
+**Note**: When used in a form where you want the date to be required, you must set the `required` property on the embedded `<forge-text-field>` element, rather than the `<forge-time-picker>` element. This also applies to the invalid property.
+
+<Canvas of={TimePickerStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+- When using a screen reader, ensure keyboard navigation in the dropdown list is announced.
+- Be sure that you add the proper `aria-label` to the `<input>` element if not using a `<label>` element with a `for` attribute.
+- The time-picker component will add the following ARIA attributes to the `<input>` element for you:
+  - `aria-live`
+  - `aria-atomic`
+  - `aria-haspopup`
+  - `aria-expanded`
+  - `aria-owns`
+  - `aria-disabled`

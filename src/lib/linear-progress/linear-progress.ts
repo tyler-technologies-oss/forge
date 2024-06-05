@@ -33,15 +33,15 @@ declare global {
  * - Determinate indicators display how long a process will take.
  * - Indeterminate indicators express an unspecified amount of wait time.
  * 
- * @property {boolean} determinate - Controls the determinate state.
- * @property {number} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
- * @property {number} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
- * @property {string} theme - Sets the theme.
+ * @property {boolean} [determinate=false] - Controls the determinate state.
+ * @property {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
+ * @property {number} [buffer=1] - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
+ * @property {string} [theme=primary] - Sets the theme.
  * 
- * @attribute {boolean} determinate - Controls the determinate state.
- * @attribute {number} progress - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
- * @attribute {number} buffer - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
- * @attribute {string} theme - Sets the theme.
+ * @attribute {boolean} [determinate=false] - Controls the determinate state.
+ * @attribute {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
+ * @attribute {number} [buffer=1] - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
+ * @attribute {string} [theme=primary] - Sets the theme.
  * 
  * @cssproperty --forge-linear-progress-height - The height of the element.
  * @cssproperty --forge-linear-progress-track-color - The background color of the indicator.

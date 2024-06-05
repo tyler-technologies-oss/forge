@@ -10,7 +10,7 @@ import type { IFocusIndicatorComponent } from '../../focus-indicator';
 import type { IIconComponent } from '../../icon';
 import type { ILabelComponent } from '../../label/label';
 import { attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseButton } from './base-button';
+import { BaseButton, IBaseButton } from './base-button';
 import { BaseButtonFoundation } from './base-button-foundation';
 import { BaseButtonAdapter, IBaseButtonAdapter } from './base-button-adapter';
 import { ExperimentalFocusOptions } from '../../constants';
@@ -19,8 +19,8 @@ import '../../focus-indicator/focus-indicator';
 import '../../state-layer/state-layer';
 import '../../label/label';
 
-class TestBaseButtonFoundation extends BaseButtonFoundation<IBaseButtonAdapter> {}
-class TestBaseButtonAdapter extends BaseButtonAdapter implements IBaseButtonAdapter {}
+class TestBaseButtonFoundation extends BaseButtonFoundation<IBaseButtonAdapter<IBaseButton>> {}
+class TestBaseButtonAdapter extends BaseButtonAdapter<IBaseButton> implements IBaseButtonAdapter<IBaseButton> {}
 
 const template = `
 <template>

@@ -1,0 +1,26 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../../blocks/CustomArgTypes';
+import * as ModalDrawerStories from './ModalDrawer.stories';
+
+<Meta of={ModalDrawerStories} />
+
+<Title />
+
+Modal drawers are used to display secondary content, such as navigation menus, and are typically used for mobile devices or smaller screens.
+
+Modal drawers also have a backdrop that covers the entire screen when open, and can be dismissed by the user by clicking outside the drawer
+on the backdrop.
+
+**Important:** modal drawers are a being phased out in favor of dialogs with a `preset`. See the [dialog](?path=/docs/components-dialog--docs)
+component for more information.
+
+<Canvas of={ModalDrawerStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+The drawer component does **not** provide any semantics by default. Developers should provide their own `<aside>` for navigation,
+or various ARIA roles in other scenarios.

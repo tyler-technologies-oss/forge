@@ -1,0 +1,32 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as StateLayerStories from './StateLayer.stories';
+
+<Meta of={StateLayerStories} />
+
+<Title />
+
+State layers are used to indicate interaction states for an element, such as hover and pressed. These states provide visual feedback to the user when
+they interact with an element, and are especially useful for interactive elements like buttons. They are typically used in conjunction with focus
+indicators to provide a complete set of visual feedback for interactive elements. These are building block components that are typically used internally
+within other components such as buttons.
+
+Additionally, state layers provide a "ripple" effect that animates from the point of interaction to the bounds of the element. This effect is used to
+indicate that the user's interaction has been received and is being processed.
+
+When using a state layer, it's important to note that they are absolutely positioned and should be used with a parent element that has `position: relative`
+set to ensure that the bounds of interaction state are contained within the parent element.
+
+<Canvas of={StateLayerStories.Demo} />
+
+## With Cards
+
+A common design pattern is an interactive card with a state layer and focus indicator that describes to the user that the card is interactive.
+
+<Canvas of={StateLayerStories.WithCard} />
+
+> Remember to always provide a focus indicator for interactive elements to ensure that users can navigate your site using a keyboard.
+
+## API
+
+<CustomArgTypes />

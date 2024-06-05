@@ -57,7 +57,7 @@ export class TabFoundation implements ITabFoundation {
   }
 
   private _dispatchSelectEvent(): void {
-    this._adapter.emitHostEvent(TAB_CONSTANTS.events.SELECT, { bubbles: true, composed: true });
+    this._adapter.dispatchHostEvent(new CustomEvent(TAB_CONSTANTS.events.SELECT, { bubbles: true, composed: true }));
   }
 
   public get disabled(): boolean {

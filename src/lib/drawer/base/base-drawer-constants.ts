@@ -1,15 +1,19 @@
-const attributes = {
+const observedAttributes = {
   OPEN: 'open',
   DIRECTION: 'direction'
 };
 
+const attributes = {
+  ...observedAttributes
+};
+
 const classes = {
   DRAWER: 'forge-drawer',
-  LEFT: 'forge-drawer--left',
-  RIGHT: 'forge-drawer--right',
-  CLOSING: 'forge-drawer--closing',
-  CLOSED: 'forge-drawer--closed',
-  NO_TRANSITION: 'forge-drawer--no-transition'
+  LEFT: 'left',
+  RIGHT: 'right',
+  CLOSING: 'closing',
+  CLOSED: 'closed',
+  NO_TRANSITION: 'no-transition'
 };
 
 const selectors = {
@@ -22,6 +26,7 @@ const events = {
 };
 
 export const BASE_DRAWER_CONSTANTS = {
+  observedAttributes,
   attributes,
   classes,
   selectors,

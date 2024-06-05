@@ -18,12 +18,14 @@ export class AppBarNotificationButtonFoundation implements IAppBarNotificationBu
   private _isInitialized = false;
   private _icon = 'notifications';
 
-  constructor(private _adapter: IAppBarNotificationButtonAdapter) {}
+  constructor(private _adapter: IAppBarNotificationButtonAdapter) { }
 
   public initialize(): void {
     this._adapter.initialize();
-    this._adapter.setCount(this._count);
     this._adapter.setBadgeType(this._dot);
+    if (!this._dot) {
+      this._adapter.setCount(this._count);
+    }
     this._adapter.setBadgeTheme(this._theme);
     this._adapter.setBadgeVisible(this._showBadge);
     this._adapter.setIcon(this._icon);

@@ -36,6 +36,10 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-field': IFieldComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-field-popover-icon-click': CustomEvent<void>;
+  }
 }
 
 /**
@@ -44,49 +48,49 @@ declare global {
  * @summary The Forge Field component is a basic component that handles the layout and theming of
  * form elements that can include a label, various states, and a border around an input area.
  * 
- * @property {FieldLabelPosition} labelPosition - The position of the label relative to the input area.
- * @property {FieldLabelAlignment} labelAlignment - The alignment of the label relative to the input area.
- * @property {boolean} floatLabel - Whether an inset positioned label is floated to the top of the container.
- * @property {boolean} invalid - Whether the field is in an invalid state.
- * @property {boolean} required - Whether the field is required.
- * @property {boolean} optional - Whether the field is optional.
- * @property {boolean} disabled - Whether the field is disabled.
- * @property {FieldVariant} variant - The variant of the field.
- * @property {FieldTheme} theme - The theme of the field.
- * @property {FieldShape} shape - The border radius of the field's corners.
- * @property {FieldDensity} density - The density of the field.
- * @property {boolean} dense - Whether the field is at the "extra-small" density level.
- * @property {boolean} popoverIcon - Whether the field has a popover icon.
- * @property {boolean} popoverExpanded - Whether the field's popover icon is in the expanded orientation.
- * @property {boolean} multiline - Whether the field contains a multiline input.
- * @property {FieldSupportTextInset} supportTextInset - Whether the field's support text is inset from either side.
+ * @property {FieldLabelPosition} [labelPosition="inset"] - The position of the label relative to the input area.
+ * @property {FieldLabelAlignment} [labelAlignment="start"] - The alignment of the label relative to the input area.
+ * @property {boolean} [floatLabel=false] - Whether an inset positioned label is floated to the top of the container.
+ * @property {boolean} [invalid=false] - Whether the field is in an invalid state.
+ * @property {boolean} [required=false] - Whether the field is required.
+ * @property {boolean} [optional=false] - Whether the field is optional.
+ * @property {boolean} [disabled=false] - Whether the field is disabled.
+ * @property {FieldVariant} [variant="outlined"] - The variant of the field.
+ * @property {FieldTheme} [theme="default"] - The theme of the field.
+ * @property {FieldShape} [shape="default"] - The border radius of the field's corners.
+ * @property {FieldDensity} [density="default"] - The density of the field.
+ * @property {boolean} [dense=false] - Whether the field is at the "extra-small" density level.
+ * @property {boolean} [popoverIcon=false] - Whether the field has a popover icon.
+ * @property {boolean} [popoverExpanded=false] - Whether the field's popover icon is in the expanded orientation.
+ * @property {boolean} [multiline=false] - Whether the field contains a multiline input.
+ * @property {FieldSupportTextInset} [supportTextInset="none"] - Whether the field's support text is inset from either side.
  * @property {HTMLElement | null} focusIndicatorTargetElement - The element to attach the focus indicator to.
- * @property {FocusIndicatorFocusMode} focusIndicatorFocusMode - The focus mode to use on the focus indicator.
- * @property {boolean} focusIndicatorAllowFocus - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
+ * @property {FocusIndicatorFocusMode} [focusIndicatorFocusMode="focusin"] - The focus mode to use on the focus indicator.
+ * @property {boolean} [focusIndicatorAllowFocus=false] - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
  * 
- * @attribute {FieldLabelPosition} label-position - The position of the label relative to the input area.
- * @attribute {FieldLabelAlignment} label-alignment - The alignment of the label relative to the input area.
- * @attribute {boolean} float-label - Whether an inset positioned label is floated to the top of the container.
- * @attribute {boolean} invalid - Whether the field is in an invalid state.
- * @attribute {boolean} required - Whether the field is required.
- * @attribute {boolean} optional - Whether the field is optional.
- * @attribute {boolean} disabled - Whether the field is disabled.
- * @attribute {FieldVariant} variant - The variant of the field.
- * @attribute {FieldTheme} theme - The theme of the field.
- * @attribute {FieldShape} shape - The border radius of the field's corners.
- * @attribute {Density} density - The density of the field.
- * @attribute {boolean} dense - Whether the field is at the "extra-small" density level.
- * @attribute {boolean} popover-icon - Whether the field has a popover icon.
- * @attribute {boolean} popover-expanded - Whether the field's popover icon is in the expanded orientation.
- * @attribute {boolean} multiline - Whether the field contains a multiline input.
- * @attribute {FieldSupportTextInset} support-text-inset - Whether the field's support text is inset from either side.
+ * @globalconfig labelPosition
+ * 
+ * @attribute {FieldLabelPosition} [label-position="inset"] - The position of the label relative to the input area.
+ * @attribute {FieldLabelAlignment} [label-alignment="start"] - The alignment of the label relative to the input area.
+ * @attribute {boolean} [float-label=false] - Whether an inset positioned label is floated to the top of the container.
+ * @attribute {boolean} [invalid=false] - Whether the field is in an invalid state.
+ * @attribute {boolean} [required=false] - Whether the field is required.
+ * @attribute {boolean} [optional=false] - Whether the field is optional.
+ * @attribute {boolean} [disabled=false] - Whether the field is disabled.
+ * @attribute {FieldVariant} [variant="outlined"] - The variant of the field.
+ * @attribute {FieldTheme} [theme="default"] - The theme of the field.
+ * @attribute {FieldShape} [shape="default"] - The border radius of the field's corners.
+ * @attribute {Density} [density="default"] - The density of the field.
+ * @attribute {boolean} [dense=false] - Whether the field is at the "extra-small" density level.
+ * @attribute {boolean} [popover-icon=false] - Whether the field has a popover icon.
+ * @attribute {boolean} [popover-expanded=false] - Whether the field's popover icon is in the expanded orientation.
+ * @attribute {boolean} [multiline=false] - Whether the field contains a multiline input.
+ * @attribute {FieldSupportTextInset} [support-text-inset="none"] - Whether the field's support text is inset from either side.
  * @attribute {string} focus-indicator-target - The id of the element to attach the focus indicator to.
- * @attribute {FocusIndicatorFocusMode} focus-indicator-focus-mode - The focus mode to use on the focus indicator.
- * @attribute {boolean} focus-indicator-allow-focus - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
+ * @attribute {FocusIndicatorFocusMode} [focus-indicator-focus-mode="focusin"] - The focus mode to use on the focus indicator.
+ * @attribute {boolean} [focus-indicator-allow-focus=false] - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
  * 
- * @method {(value: boolean) => void} floatLabelWithoutAnimation - Sets the floating label without animating the transition.
- * 
- * @event {CustomEvent<null>} forge-field-popover-icon-click - Dispatches when the user clicks the popover icon.
+ * @event {CustomEvent<void>} forge-field-popover-icon-click - Dispatches when the user clicks the popover icon.
  * 
  * @cssproperty --forge-field-background - The background of the field surface.
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
@@ -147,7 +151,6 @@ declare global {
  * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
  */
-
 @CustomElement({
   name: FIELD_CONSTANTS.elementName,
   dependencies: [FocusIndicatorComponent]
@@ -285,6 +288,7 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
   @FoundationProperty()
   public declare focusIndicatorAllowFocus: boolean;
 
+  /** Sets the floating label without animating the transition. */
   public floatLabelWithoutAnimation(value: boolean): void {
     this._foundation.floatLabelWithoutAnimation(value);
   }

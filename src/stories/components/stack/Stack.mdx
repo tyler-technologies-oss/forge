@@ -1,0 +1,36 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as StackStories from './Stack.stories';
+
+<Meta of={StackStories} />
+
+<Title />
+
+The stack is a utility component that helps manage spacing and alignment of immediate children along a vertical or horizontal axis.
+
+<Canvas of={StackStories.Demo} />
+
+## Disclaimer
+
+The stack component is a layout utility component that essentially abstracts the `flex` property of CSS. It is not a replacement for CSS Flexbox or Grid.
+It is a simple utility component that helps manage spacing and alignment of immediate children along a vertical or horizontal axis.
+
+It is very easy to overuse the stack component and end up with a lot of nested stacks. This can lead to performance issues and can make the codebase harder to maintain.
+
+Make sure to use the stack component judiciously and only when necessary, and instead rely on CSS Flexbox and Grid for more complex layouts.
+
+## Simple Vertical Form
+
+You can use the stack to create a simple vertical form layout with even spacing between fields.
+
+<Canvas of={StackStories.SimpleVerticalForm} />
+
+## Complex Form
+
+You can also use the stack to create a more complex form layout with different spacing between fields, or multiple columns by nesting stacks.
+
+<Canvas of={StackStories.ComplexForm} />
+
+## API
+
+<CustomArgTypes />

@@ -1,0 +1,38 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as BadgeStories from './Badge.stories';
+
+<Meta of={BadgeStories} />
+
+<Title />
+
+Badges are used to highlight an item's status for quick recognition. They are non-interactive and are typically used to convey information such as a count, status, or category.
+
+> If you need an interactive badge-like element, consider using [Chips](/?path=/docs/components-badge--docs).
+
+<Canvas of={BadgeStories.Demo} />
+
+## Themed
+
+<Canvas of={BadgeStories.Themed} />
+
+## Strong
+
+Badges can be styled with a `strong` variant to emphasize their importance.
+
+<Canvas of={BadgeStories.Strong} />
+
+## With Icon Button
+
+Badges are commonly composed together with the [icon button](/?path=/docs/components-icon-button--docs) component via the `badge` slot.
+
+<Canvas of={BadgeStories.WithIconButton} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG 2.2 requirements.
+- If color conveys important information, provide additional cues for users with color perception deficiencies such as an icon.

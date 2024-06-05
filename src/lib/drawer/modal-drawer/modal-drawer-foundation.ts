@@ -8,23 +8,16 @@ export interface IModalDrawerFoundation extends IBaseDrawerFoundation {}
 
 export class ModalDrawerFoundation extends BaseDrawerFoundation implements IModalDrawerFoundation {
   protected _open = false;
-  private _backdropClickListener: (evt: Event) => void;
-  private _isInitialized = false;
+  private _backdropClickListener: EventListener = this._onBackdropClick.bind(this);
 
   constructor(protected _adapter: IModalDrawerAdapter) {
     super(_adapter);
-    this._backdropClickListener = evt => this._onBackdropClick(evt);
   }
 
-  public connect(): void {
+  public override connect(): void {
     super.connect();
     this._adapter.setBackdropCloseListener(this._backdropClickListener);
-    this._setBackdrop(this._open);
-    this._isInitialized = true;
-  }
-
-  public disconnect(): void {
-    this._isInitialized = false;
+    this._setBackdrop(this._open, { immediate: true });
   }
 
   protected _triggerDrawerOpen(): void {
@@ -44,12 +37,12 @@ export class ModalDrawerFoundation extends BaseDrawerFoundation implements IModa
     }
   }
 
-  private async _setBackdrop(open: boolean): Promise<void> {
+  private async _setBackdrop(open: boolean, { immediate = false } = {}): Promise<void> {
     if (open) {
       this._adapter.toggleBackdropClass(false, MODAL_DRAWER_CONSTANTS.classes.SCRIM_CLOSED);
-      this._adapter.setBackdropVisibility(true);
-    } else if (this._isInitialized) {
-      await this._adapter.setBackdropVisibility(false);
+      this._adapter.setBackdropVisibility(true, { immediate });
+    } else if (this._adapter.isConnected) {
+      await this._adapter.setBackdropVisibility(false, { immediate});
       if (!this._open) {
         this._adapter.toggleBackdropClass(true, MODAL_DRAWER_CONSTANTS.classes.SCRIM_CLOSED);
       }

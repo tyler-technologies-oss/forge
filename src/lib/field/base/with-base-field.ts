@@ -38,7 +38,6 @@ export interface IWithBaseField extends IBaseComponent {
   floatLabelWithoutAnimation(value: boolean): void;
 }
 
-
 export declare abstract class WithBaseFieldContract {
   public get labelPosition(): FieldLabelPosition;
   public set labelPosition(value: FieldLabelPosition);
@@ -164,6 +163,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       super.attributeChangedCallback?.(name, oldValue, newValue);
     }
 
+    /**
+     * The position of the label.
+     * @default "inset"
+     * @attribute label-position
+     */
     public get labelPosition(): FieldLabelPosition {
       return this._fieldElement.labelPosition;
     }
@@ -174,6 +178,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * The alignment of the label.
+     * @default "default"
+     * @attribute label-alignment
+     */
     public get labelAlignment(): FieldLabelAlignment {
       return this._fieldElement.labelAlignment;
     }
@@ -184,6 +193,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * Whether the field is invalid.
+     * @default false
+     * @attribute
+     */
     public get invalid(): boolean {
       return this._fieldElement.invalid;
     }
@@ -194,6 +208,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * Whether the field is required.
+     * @default false
+     * @attribute
+     */
     public get required(): boolean {
       return this._fieldElement.required;
     }
@@ -204,6 +223,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * Whether the field is optional.
+     * @default false
+     * @attribute
+     */
     public get optional(): boolean {
       return this._fieldElement.optional;
     }
@@ -214,6 +238,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * Whether the field is disabled.
+     * @default false
+     * @attribute
+     */
     public get disabled(): boolean {
       return this._fieldElement.disabled;
     }
@@ -224,6 +253,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * Whether the label floats above the field.
+     * @default false
+     * @attribute
+     */
     public get floatLabel(): boolean {
       return this._fieldElement.floatLabel;
     }
@@ -234,6 +268,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * The variant of the field.
+     * @default "outlined"
+     * @attribute
+     */
     public get variant(): FieldVariant {
       return this._fieldElement.variant;
     }
@@ -244,6 +283,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * The theme of the field.
+     * @default "default"
+     * @attribute
+     */
     public get theme(): FieldTheme {
       return this._fieldElement.theme;
     }
@@ -254,6 +298,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * The shape of the field.
+     * @default "default"
+     * @attribute
+     */
     public get shape(): FieldShape {
       return this._fieldElement.shape;
     }
@@ -264,6 +313,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * The density of the field.
+     * @default "default"
+     * @attribute
+     */
     public get density(): FieldDensity {
       return this._fieldElement.density;
     }
@@ -274,6 +328,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * Whether the field is dense.
+     * @default false
+     * @attribute
+     */
     public get dense(): boolean {
       return this._fieldElement.dense;
     }
@@ -284,6 +343,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * Whether the popover icon is displayed.
+     * @default false
+     * @attribute
+     */
     public get popoverIcon(): boolean {
       return this._fieldElement.popoverIcon;
     }
@@ -294,6 +358,11 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
   
+    /**
+     * The inset of the support text.
+     * @default "none"
+     * @attribute support-text-inset
+     */
     public get supportTextInset(): FieldSupportTextInset {
       return this._fieldElement.supportTextInset;
     }
@@ -304,6 +373,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
       }
     }
 
+    /** Floats the label without an animation. Only applies when the label is inset. */
     public floatLabelWithoutAnimation(value: boolean): void {
       this._fieldElement.floatLabelWithoutAnimation(value);
     }

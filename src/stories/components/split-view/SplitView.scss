@@ -1,0 +1,20 @@
+forge-split-view {
+  height: 300px;
+
+  forge-split-view-panel {
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    &:first-child {
+      background-color: #e6e6fa;
+    }
+
+    &:last-child {
+      background-color: #fa8070;
+    }
+  }
+}

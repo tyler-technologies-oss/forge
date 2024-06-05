@@ -1,0 +1,22 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as InlineMessageStories from './InlineMessage.stories';
+
+<Meta of={InlineMessageStories} />
+
+<Title />
+
+<Canvas of={InlineMessageStories.Demo} />
+
+## Themed
+
+<Canvas of={InlineMessageStories.Themed} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+- If the inline-message is used to display an important notification to a user, use the role="alert" attribute on the `<forge-inline-message>`element.
+  - This is equivalent to using aria-live="assertive".
+  - If the message is less urgent, you can use aria-live="polite" to wait until the user is finished with their current task.

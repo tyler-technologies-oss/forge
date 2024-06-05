@@ -1,0 +1,25 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as DrawerStories from './Drawer.stories';
+
+<Meta of={DrawerStories} />
+
+<Title />
+
+Drawers are used to display content that is not a primary focus of the page. They can be used for navigation, settings, or other secondary content.
+
+There are two types of drawers:
+
+- **dismissible:** can be hidden by the user via a button provided by the developer
+- **permanent:** always visible
+
+<Canvas of={DrawerStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+The drawer component does **not** provide any semantics by default. Developers should provide their own `<aside>` for navigation,
+or various ARIA roles in other scenarios.

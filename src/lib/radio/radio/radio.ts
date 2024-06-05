@@ -79,7 +79,7 @@ declare global {
  * @cssproperty --forge-radio-state-layer-size - The size of the radio button's state layer in the inline and block directions.
  * @cssproperty --forge-radio-state-layer-width - The width of the radio button's state layer.
  * @cssproperty --forge-radio-state-layer-height - The height of the radio button's state layer.
- * @cssproperty --forge-radio-state-layer-unchecked-color - The color of the radio button's state layer when unchecked.
+ * @cssproperty --forge-radio-state-layer-unchecked - color - The color of the radio button's state layer when unchecked.
  * @cssproperty --forge-radio-state-layer-checked-color - The color of the radio button's state layer when checked.
  * @cssproperty --forge-radio-state-layer-shape - The shape of the radio button's state layer.
  * @cssproperty --forge-radio-state-layer-dense-size - The size of the radio button's state layer when dense.

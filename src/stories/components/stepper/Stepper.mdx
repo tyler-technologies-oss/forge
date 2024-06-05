@@ -1,0 +1,26 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as StepperStories from './Stepper.stories';
+
+<Meta of={StepperStories} />
+
+<Title />
+
+Steppers display progress through a sequence by breaking it up into multiple logical and numbered steps. They may also be used for navigation.
+
+<Canvas of={StepperStories.Demo} />
+
+## Vertical
+
+<Canvas of={StepperStories.Vertical} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.
+- Ensure the controls are reachable by the tab key.
+- Ensure each control can be updated or activated by the keyboard.
+- The step element will receive the proper ARIA attribute aria-selected as necessary.

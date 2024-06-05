@@ -1,0 +1,32 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as OpenIconStories from './OpenIcon.stories';
+
+<Meta of={OpenIconStories} />
+
+<Title />
+
+This is a very simple component, and its only responsibility is to provide automatic rotation of the built-in chevron icon.
+
+It works very well with other components (such as the expansion-panel) that need to display a rotating icon to denote the "open" or "closed" state of the component. The open-icon will listen for specific events to be dispatched and update its state automatically.
+
+## Vertical
+
+<Canvas of={OpenIconStories.Demo} />
+
+## Horizontal
+
+<Canvas of={OpenIconStories.Horizontal} />
+
+## With expansion-panel
+
+<Canvas of={OpenIconStories.ExpansionPanel} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+- Ensure that the user can focus on the trigger element which activates and deactivates the open icon.
+  - Ensure that the trigger element can be activated by keyboard.
+- Ensure that the aria-expanded attribute is updated to reflect the state of the open icon, especially when toggling its state programmatically.

@@ -27,17 +27,17 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
 /**
  * @tag forge-app-bar-notification-button
  * 
- * @property {number | string} count - The number to display in the badge.
- * @property {boolean} dot - Whether to display the dot variant of the badge or not.
- * @property {boolean} showBadge - Whether to display the badge or not.
- * @property {string} theme - The theme to apply to the badge.
- * @property {string} icon - The name of an alternative icon to display.
+ * @property {number | string} [count = 0] - The number to display in the badge.
+ * @property {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
+ * @property {boolean} [showBadge = false] - Whether to display the badge or not.
+ * @property {string} [theme = ""] - The theme to apply to the badge.
+ * @property {string} [icon = notifications] - The name of an alternative icon to display.
  * 
- * @attribute {string} [count] - The number to display in the badge.
- * @attribute {boolean} [dot] - Whether to display the dot variant of the badge or not.
- * @attribute {boolean} [show-badge] - Whether to display the badge or not.
- * @attribute {string} [theme] - The theme to apply to the badge.
- * @attribute {string} [icon] - The name of an alternative icon to display.
+ * @attribute {string} [count = 0] - The number to display in the badge.
+ * @attribute {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
+ * @attribute {boolean} [show-badge = false] - Whether to display the badge or not.
+ * @attribute {string} [theme = ""] - The theme to apply to the badge.
+ * @attribute {string} [icon = notifications] - The name of an alternative icon to display.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */

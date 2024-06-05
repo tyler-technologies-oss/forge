@@ -1,7 +1,7 @@
 import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
 import { StackFoundation } from './stack-foundation';
-import { STACK_CONSTANTS, StackAlignMode, StackAlignment } from './stack-constants';
+import { STACK_CONSTANTS, StackAlignment } from './stack-constants';
 import { BaseComponent } from '../core/base/base-component';
 
 import template from './stack.html';
@@ -12,7 +12,7 @@ export interface IStackComponent extends ICustomElement {
   wrap: boolean;
   stretch: boolean;
   gap: string;
-  alignment: StackAlignMode | StackAlignment;
+  alignment: StackAlignment;
   justify: StackAlignment;
 }
 
@@ -34,20 +34,6 @@ declare global {
  * these scenarios, you can reach for the stack. This keeps developers within a template and prevents having to jump around from HTML 
  * to CSS. It also helps minimize the number of CSS classes being used for simple situations where basic flexbox is needed.
  * 
- * @property {boolean} inline - Sets the direction of child items to be horizontal.
- * @property {boolean} wrap - Wrap is used to wrap child elements to a new row when there's not enough space. This only works when inline is set to true.
- * @property {boolean} stretch - Stretch allows each child element to take up as much width as possible until the parent container is filled. You can override this on each individual child element by changing its --forge-stack-stretch CSS custom property.
- * @property {string} gap - Controls the amount of space between child elements within a stack.
- * @property {StackAlignment} alignment - Controls the align-items property of the stack.
- * @property {StackAlignment} justify - Controls the justify-content property of the stack.
- * 
- * @attribute {boolean} inline - Sets the direction of child items to be horizontal.
- * @attribute {boolean} wrap - Wrap is used to wrap child elements to a new row when there's not enough space. This only works when inline is set to true.
- * @attribute {boolean} stretch - Stretch allows each child element to take up as much width as possible until the parent container is filled. You can override this on each individual child element by changing its --forge-stack-stretch CSS custom property.
- * @attribute {string} gap - Controls the amount of space between child elements within a stack.
- * @attribute {StackAlignment} alignment - Controls the align-items property of the stack. See [justify-content on MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content).
- * @attribute {StackAlignment} justify - Controls the justify-content property of the stack. See [align-items on MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items).
- * 
  * @cssproperty --forge-stack-alignment - Controls the align-items CSS property of the root stack element.
  * @cssproperty --forge-stack-justify - Controls the justify-content CSS property of the root stack element.
  * @cssproperty --forge-stack-gap - Controls the gap between each child element within a stack.
@@ -63,17 +49,10 @@ declare global {
 })
 export class StackComponent extends BaseComponent implements IStackComponent {
   public static get observedAttributes(): string[] {
-    return [
-      STACK_CONSTANTS.attributes.INLINE,
-      STACK_CONSTANTS.attributes.WRAP,
-      STACK_CONSTANTS.attributes.STRETCH,
-      STACK_CONSTANTS.attributes.GAP,
-      STACK_CONSTANTS.attributes.ALIGNMENT,
-      STACK_CONSTANTS.attributes.JUSTIFY
-    ];
+    return Object.values(STACK_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: StackFoundation;
+  private readonly _foundation: StackFoundation;
 
   constructor() {
     super();
@@ -83,48 +62,72 @@ export class StackComponent extends BaseComponent implements IStackComponent {
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
-      case STACK_CONSTANTS.attributes.INLINE:
+      case STACK_CONSTANTS.observedAttributes.INLINE:
         this.inline = coerceBoolean(newValue);
         break;
-      case STACK_CONSTANTS.attributes.WRAP:
+      case STACK_CONSTANTS.observedAttributes.WRAP:
         this.wrap = coerceBoolean(newValue);
         break;
-      case STACK_CONSTANTS.attributes.STRETCH:
+      case STACK_CONSTANTS.observedAttributes.STRETCH:
         this.stretch = coerceBoolean(newValue);
         break;
-      case STACK_CONSTANTS.attributes.GAP:
+      case STACK_CONSTANTS.observedAttributes.GAP:
         this.gap = newValue;
         break;
-      case STACK_CONSTANTS.attributes.ALIGNMENT:
+      case STACK_CONSTANTS.observedAttributes.ALIGNMENT:
         this.alignment = newValue as StackAlignment;
         break;
-      case STACK_CONSTANTS.attributes.JUSTIFY:
+      case STACK_CONSTANTS.observedAttributes.JUSTIFY:
         this.justify = newValue as StackAlignment;
         break;
     }
   }
 
-  /** Controls the direction of the stack. */
+  /**
+   * Controls the direction of the stack.
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare inline: boolean;
 
-  /** Controls if items wrap to a new line in inline mode */
+  /**
+   * Controls if items wrap to a new line in inline mode
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare wrap: boolean;
 
-  /** Controls if items stretch and take up the maximum amount of space */
+  /**
+   * Controls if items stretch and take up the maximum amount of space
+   * @default false
+   * @attribute
+   */
   @FoundationProperty()
   public declare stretch: boolean;
 
-  /** Controls the gap between the children within the stack */
+  /**
+   * Controls the gap between the children within the stack
+   * @default 16
+   * @attribute
+   */
   @FoundationProperty()
   public declare gap: string;
 
-  /** Controls the align-items property of a row or column */
+  /**
+   * Controls the align-items property of a row or column
+   * @default "start"
+   * @attribute
+   */
   @FoundationProperty()
-  public declare alignment: StackAlignMode | StackAlignment;
+  public declare alignment: StackAlignment;
 
-  /** Controls the justify-content property of a row or column */
+  /**
+   * Controls the justify-content property of a row or column
+   * @default "start"
+   * @attribute
+   */
   @FoundationProperty()
   public declare justify: StackAlignment;
 }

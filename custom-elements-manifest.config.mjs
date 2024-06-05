@@ -1,71 +1,38 @@
-/**
- * This plugin removes the specified members from the manifest.
- */
-function forgeMemberDenyListPlugin() {
-  const MEMBER_DENY_LIST = [
-    '[getFormState]',
-    '[getFormValue]',
-    '[setValidity]',
-    '[tryDismiss]',
-    '[tryCheck]',
-    '[setDefaultAria]',
-    '[internals]',
-    'initializedCallback',
-    'formStateRestoreCallback',
-    'formResetCallback',
-    'formAssociatedCallback',
-    'labelClickedCallback',
-    'labelChangedCallback',
-    'formAssociated',
-    '_foundation'
-  ];
+import * as path from 'path';
+import { customElementVsCodePlugin } from 'custom-element-vs-code-integration';
+import { customJSDocTagsPlugin } from 'cem-plugin-custom-jsdoc-tags';
 
-  return {
-    name: 'FORGE - MEMBER-DENYLIST',
-    moduleLinkPhase({ moduleDoc }) {
-      const classes = moduleDoc?.declarations?.filter(declaration => declaration.kind === 'class' || declaration.kind === 'mixin');
-      classes?.forEach(klass => {
-        klass.members = klass?.members?.filter(member => member.name && !MEMBER_DENY_LIST.includes(member.name));
-      });
-    }
-  };
-}
-
-/**
- * This plugin sets the privacy of all members to public if the privacy is not set.
- */
-function forgePublicMemberPrivacyPlugin() {
-  return {
-    name: 'FORGE - PUBLIC-MEMBER-PRIVACY',
-    moduleLinkPhase({ moduleDoc }) {
-      const classes = moduleDoc?.declarations?.filter(declaration => declaration.kind === 'class' || declaration.kind === 'mixin');
-      classes?.forEach(klass => {
-        klass?.members?.forEach(member => {
-          if (!member.privacy) {
-            member.privacy = 'public';
-          }
-        });
-      });
-    }
-  };
-}
+import forgeMemberDenyListPlugin from './plugins/cem/member-deny-list.mjs';
+import forgePublicMemberPrivacyPlugin from './plugins/cem/public-member-privacy.mjs';
+import forgeTypePathsPlugin from './plugins/cem/type-paths.mjs';
+import forgeBranchNamePlugin from './plugins/cem/branch-name.mjs';
+import forgeFilterIgnored from './plugins/cem/filter-ignored.mjs';
 
 export default {
-  // Relative to src/lib directory
-  globs: ['**/*.ts'],
-  exclude: [
-    '**/index.ts',
-    '**/*.test.ts',
-    '**/*-foundation.ts',
-    '**/*-adapter.ts',
-    '**/*-constants.ts',
-    '**/*-component-delegate.ts',
-    '**/core/**/*.ts',
-    '**/*-utils.ts',
-    'constants.ts'
-  ],
+  globs: ['src/lib/**/*.ts'],
+  exclude: ['**/*.test.ts'],
   plugins: [
+    forgeBranchNamePlugin(),
+    forgeFilterIgnored(),
     forgeMemberDenyListPlugin(),
-    forgePublicMemberPrivacyPlugin()
+    forgePublicMemberPrivacyPlugin(),
+    forgeTypePathsPlugin(),
+    customElementVsCodePlugin({
+      hideLogs: true,
+      outdir: path.resolve('dist/cem')
+    }),
+    customJSDocTagsPlugin({
+      hideLogs: true,
+      tags: {
+        dependency: {
+          mappedName: 'dependencies',
+          isArray: true,
+        },
+        globalconfig: {
+          mappedName: 'globalConfigProperties',
+          isArray: true,
+        },
+      }
+    }),
   ]
 };

@@ -1,0 +1,26 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as SplitViewStories from './SplitView.stories';
+
+<Meta of={SplitViewStories} />
+
+<Title />
+
+The split view component presents `<forge-split-view-panel>` elements side-by-side as resizable panels. This is useful in situations where a user may want to adjust how much screen space is devoted to part of the interface. For example, you could consider displaying a map or image viewer within a split view.
+
+A split view configuration typically consists of one or more `resizable` panels as well as at least one non-resizable panel. Resizable panels are defined by the resizable attribute, which can be set to `'start'` or `'end'` to reflect which direction they expand into. Non-resizable panels are not interactive on their own, but automatically expand to fill in the space left by their sibling panels.
+
+The split view panel component consists of two basic parts: its content, and a handle to resize it. Each handle is linked to its content by accessibility attributes, providing an accessible label and size information for assistive technology. The handle's position in relation to the content is determined by the `resizable` value. When it's '`start'` the handle appears before the content, or after the content when it's `'end'`.
+
+<Canvas of={SplitViewStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+- Verify that all content slotted into a panel is responsive and can resize fluidly.
+  - If a panel's content is inaccessible under or over a certain size, be sure to set the `min` and `max` properties accordingly.
+- Be sure to include a unique `accessibleLabel` property value for each panel that describes its content.
+- If the user can close a panel, provide an easy way for them to reopen it.
+  - Set `aria-controls` and `aria-expanded` on the element that controls the open state.

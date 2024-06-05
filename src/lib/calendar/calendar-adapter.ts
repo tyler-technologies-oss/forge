@@ -534,6 +534,9 @@ export class CalendarAdapter extends BaseAdapter<ICalendarComponent> implements 
   }
 
   public openMenuAsGrid(options: ICalendarMenuOption[], setFocus: boolean): void {
+    if (!this._menu.isConnected) {
+      return;
+    }
     this._menu.openAsGrid(options, setFocus);
   }
 

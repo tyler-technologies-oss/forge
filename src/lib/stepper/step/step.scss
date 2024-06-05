@@ -33,22 +33,12 @@
 :host(:not(:last-child)[alternative]) {
   .after {
     @include after-container-alternate;
-
-    &::after {
-      @include after-container-alternate-psudo-base;
-      @include line;
-    }
   }
 }
 
 :host(:not(:first-child)[alternative]) {
   .before {
     @include before-container-alternate;
-
-    &::before {
-      @include before-container-alternate-psudo-base;
-      @include line;
-    }
   }
 }
 

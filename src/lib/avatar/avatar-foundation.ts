@@ -8,9 +8,6 @@ export interface IAvatarFoundation extends ICustomElementFoundation {
   letterCount: number;
 }
 
-/**
- * The custom element class behind the `<forge-avatar>` class.
- */
 export class AvatarFoundation implements IAvatarFoundation {
   private _imageUrl: string;
   private _text = '';

@@ -1,0 +1,17 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../../blocks/CustomArgTypes';
+import * as NotFoundStories from './NotFound.stories';
+
+<Meta of={NotFoundStories} />
+
+# Recipe: Not found (404)
+
+Examples where this could apply:
+
+- Any time a page is missing
+- Any time a specific resource could not be found which prevents the page from functioning
+
+> **Note:** Most web servers allow you to set a 404 page by providing a URL in the web server configuration. If you create a specific page to host this
+> component, you can configure server to use that page to cover any requests which result in a 404 error.
+
+<Canvas of={NotFoundStories.Demo} />

@@ -34,30 +34,37 @@ declare global {
  * Buttons can be used to trigger an action or to navigate to a new location. Buttons can be styled with
  * a variety of themes and variants.
  * 
- * @property {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @property {ButtonVariant} variant - The variant of the button. Defaults to `text`.
- * @property {boolean} fullWidth - Whether or not the button is full-width.
- * @property {boolean} disabled - Whether or not the button is disabled.
- * @property {boolean} popoverIcon - Whether or not the button shows a built-in popover icon.
+ * @dependency forge-icon
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
+ * 
+ * @property {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
+ * @property {ButtonVariant} [variant="text"] - The variant of the button.
+ * @property {boolean} [fullWidth=false] - Whether or not the button is full-width.
+ * @property {boolean} [disabled=false] - Whether or not the button is disabled.
+ * @property {boolean} [popoverIcon=false] - Whether or not the button shows a built-in popover icon.
  * @property {string} name - The name of the button.
  * @property {string} value - The form value of the button.
- * @property {boolean} dense - Whether or not the button is dense.
+ * @property {boolean} [dense=false] - Whether or not the button is dense.
  * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
- * @property {boolean} pill - Whether or not the button is pill-shaped.
- * @property {ButtonTheme} theme - The theme of the button. Defaults to `primary`.
+ * @property {boolean} [pill=false] - Whether or not the button is pill-shaped.
+ * @property {ButtonTheme} [theme="primary"] - The theme of the button. Defaults to `primary`.
  * 
- * @attribute {string} type - The type of button. Defaults to `button`. Valid values are `button`, `submit`, and `reset`.
- * @attribute {ButtonVariant} variant - The variant of the button. Defaults to `text`.
- * @attribute {boolean} full-width - Whether or not the button is full-width.
- * @attribute {boolean} disabled - Whether or not the button is disabled.
- * @attribute {boolean} popover-icon - Whether or not the button shows a built-in popover icon.
+ * @globalconfig variant
+ * @globalconfig dense
+ * 
+ * @attribute {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
+ * @attribute {ButtonVariant} [variant="text"] - The variant of the button.
+ * @attribute {boolean} [full-width=false] - Whether or not the button is full-width.
+ * @attribute {boolean} [disabled=false] - Whether or not the button is disabled.
+ * @attribute {boolean} [popover-icon=false] - Whether or not the button shows a built-in popover icon.
  * @attribute {string} name - The name of the button.
  * @attribute {string} value - The form value of the button.
- * @attribute {boolean} dense - Whether or not the button is dense.
- * @attribute {boolean} pill - Whether or not the button is pill-shaped.
- * @attribute {ButtonTheme} theme - The theme of the button. Defaults to `primary`.
+ * @attribute {boolean} [dense=false] - Whether or not the button is dense.
+ * @attribute {boolean} [pill=false] - Whether or not the button is pill-shaped.
+ * @attribute {ButtonTheme} [theme="primary"] - The theme of the button. Defaults to `primary`.
  * 
- * @event {Event} click - Fires when the button is clicked. 
+ * @event {PointerEvent} click - Fires when the button is clicked. 
  * 
  * @cssproperty --forge-button-primary-color - The primary color of the button.
  * @cssproperty --forge-button-text-color - The text color of the button. Inherits from primary color.

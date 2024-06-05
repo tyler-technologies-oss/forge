@@ -20,6 +20,7 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   }
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration(['labelPosition']);
     super.initialize();
     super.initializeTarget();
     this._initializeLabel();
@@ -171,6 +172,16 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
       this._placeholder = value;
       this._adapter.setPlaceholderText(this._placeholder);
       this._initializeLabel();
+    }
+  }
+
+  public override get multiple(): boolean {
+    return super.multiple;
+  }
+  public override set multiple(value: boolean) {
+    if (this._multiple !== value) {
+      super.multiple = value;
+      this._adapter.toggleHostAttribute(SELECT_CONSTANTS.attributes.MULTIPLE, value);
     }
   }
 }

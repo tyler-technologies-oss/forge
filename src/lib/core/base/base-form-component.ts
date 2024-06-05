@@ -22,16 +22,26 @@ export interface IBaseFormComponent<T = string> extends IBaseComponent {
 export abstract class BaseFormComponent<T = string> extends BaseComponent implements IBaseFormComponent<T> {
   public static formAssociated = true;
 
+  /** @ignore */
   public abstract value: T;
+  /** @ignore */
   public abstract disabled: boolean;
+  /** @ignore */
   public abstract readonly: boolean;
+  /** @ignore */
   public abstract name: string;
-
+  
+  /** @ignore */
   public abstract get form(): HTMLFormElement | null;
+  /** @ignore */
   public abstract get labels(): NodeList;
+  /** @ignore */
   public abstract get [internals](): ElementInternals;
-
+  
+  /** @ignore */
   public abstract formResetCallback(): void;
+  /** @ignore */
   public abstract formStateRestoreCallback(state: unknown, reason: 'restore' | 'autocomplete'): void;
+  /** @ignore */
   public abstract formDisabledCallback(isDisabled: boolean): void;
 }

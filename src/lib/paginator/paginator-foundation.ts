@@ -175,6 +175,10 @@ export class PaginatorFoundation {
   }
 
   private _syncInteractionState(): void {
+    if (this._disabled) {
+      return;
+    }
+
     this._adapter.setFirstPageButtonEnabled(true);
     this._adapter.setPreviousPageButtonEnabled(true);
     this._adapter.setNextPageButtonEnabled(true);

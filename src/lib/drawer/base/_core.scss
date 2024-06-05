@@ -1,0 +1,139 @@
+@use '../../core/styles/scrollbar';
+@use '../../core/styles/elevation';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin core-styles() {
+  .forge-drawer {
+    @include tokens;
+  }
+
+  .forge-drawer {
+    @include base;
+  
+    ::slotted([slot=header]) {
+      @include header;
+    }
+  
+    ::slotted([slot=footer]) {
+      @include footer;
+    }
+  
+    .content {
+      @include content;
+    }
+  
+    &.left {
+      @include left;
+    }
+  
+    &.right {
+      @include right;
+
+      &.closing {
+        @include closing(right);
+      }
+
+      &.closed {
+        @include closed(right);
+      }
+    }
+
+    &.closing {
+      @include closing(left);
+    }
+
+    &.closed {
+      @include closed(left);
+    }
+  
+    &.no-transition {
+      transition: none !important;
+    }
+  }
+}
+
+@mixin host() {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden !important; // Using important to ensure that it overrides the scaffold overflow style
+}
+
+@mixin base() {
+  width: #{token(width)};
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  
+  background-color: #{token(background)};
+  border-color: #{token(border-color)};
+
+  transition-property: transform;
+  transition-duration: #{token(transition-duration)};
+  transition-timing-function: #{token(transition-easing)};
+}
+
+@mixin header() {
+  grid-row: 1;
+}
+
+@mixin content() {
+  @include scrollbar.base;
+
+  overflow-x: auto;
+  -webkit-overflow-scrolling: 'touch';
+  
+  display: flex;
+  flex-direction: column;
+  grid-row: 2;
+}
+
+@mixin footer() {
+  grid-row: 3;
+}
+
+@mixin left() {
+  border-right-width: #{token(border-width)};
+  border-right-style: solid;
+}
+
+@mixin right() {
+  border-left-width: #{token(border-width)};
+  border-left-style: solid;
+}
+
+@mixin closed($direction: left) {
+  @include closed-direction($direction);
+
+  width: 0;
+  border: none;
+}
+
+@mixin closing($direction: left) {
+  @include closed-direction($direction);
+
+  z-index: #{elevation.z-index-variable(surface)};
+  position: absolute;
+  top: 0;
+  right: 0;
+  
+  transition-duration: #{token(transition-duration-close)};
+}
+
+@mixin closed-direction($direction: left) {
+  @if $direction == right {
+    transform: translateX(100%);
+    right: 0;
+    left: auto;
+  } @else {
+    transform: translateX(-100%);
+    left: 0;
+  }
+}

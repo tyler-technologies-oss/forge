@@ -23,7 +23,6 @@ export interface IStepComponent extends IBaseComponent {
   vertical: boolean;
   expanded: boolean;
   ignoreUserExpansion: boolean;
-  setStepTabIndex(index: number): void;
 }
 
 declare global {
@@ -32,7 +31,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-step-selected': CustomEvent<number>;
+    'forge-step-select': CustomEvent<number>;
     'forge-step-expanded-content-focusin': CustomEvent<IStepComponent>;
     'forge-step-expanded-content-focusout': CustomEvent<IStepComponent>;
   }
@@ -208,12 +207,4 @@ export class StepComponent extends BaseComponent implements IStepComponent {
 
   @FoundationProperty()
   public declare ignoreUserExpansion: boolean;
-
-  public override focus(): void {
-    this._foundation.focus();
-  }
-
-  public setStepTabIndex(index: number): void {
-    this._foundation.setStepTabIndex(index);
-  }
 }

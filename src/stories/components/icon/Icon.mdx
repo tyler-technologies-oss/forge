@@ -1,0 +1,102 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as IconStories from './Icon.stories';
+
+<Meta of={IconStories} />
+
+<Title />
+
+Icons are used to visually communicate the intention of content or actions. They can enhance the user experience and make the interface more intuitive.
+
+The icon component in Forge is used to render SVG icons. It supports direct integration with the Tyler icons library.
+
+Before you get started with this component you may want to learn more about installing and using icons in Forge [here](?path=/docs/getting-started-icons--docs).
+
+<Canvas of={IconStories.Demo} />
+
+## Registry
+
+The Forge icon component uses the Forge `IconRegistry` to define icons that are available in your application/library.
+
+```javascript
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconForgeLogo } from '@tylertech/tyler-icons/custom';
+
+IconRegistry.define([
+  tylIconForgeLogo,
+  // Add more icons here
+]);
+```
+
+**Important:** The `IconRegistry` is side-effectful (stores the icons on `window`), but cannot be statically analyzed by bundlers. This means that
+calls to the `IconRegistry.define()` method _might_ be removed from optimized production bundles because the bundles may identify them as dead (unused)
+code. To prevent this, you can move these calls to either a `constructor` of a JavaScript class,
+[static initialization block](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Static_initialization_blocks), or to a module
+that is imported in your application's entry point.
+
+## External
+
+You can also use the icon component to render icons dynamically from the Forge CDN (or any other external source). This is useful when you don't know
+the icon name at build time.
+
+**Note**: since external icons are not known at runtime, you do not need to register them with the `IconRegistry`. The icon component will automatically cache
+the icons it fetches from the external source in the registry for you for any additional usages of the icon to avoid fetching the same icon multiple times.
+
+<Canvas of={IconStories.External} />
+
+> If you view your network requests you will see that the icon is fetched from the Forge CDN when this page loads.
+
+### URL Builder
+
+If you want to adjust where the icon is fetched from, you can implement the `externalUrlBuilder` callback, which is called with the icon name and should
+return the URL of the `.svg` icon you want to render.
+
+```javascript
+const externalUrlBuilder = (name: string, type: IconExternalType): string {
+  return `https://example.com/${iconName}.svg`;
+};
+```
+
+## Lazy
+
+Icons can also be rendered lazily using the `lazy` attribute. This is useful when you have a large number of icons on a page and you want to defer rendering
+them until they are visible within the viewport.
+
+<Canvas of={IconStories.Lazy} />
+
+If you were to inspect this page before scrolling this section into view, you would see that the icon is not rendered in the DOM until it is visible.
+
+## Custom SVG
+
+You can also use the icon component to render custom SVG content via the `src` property/attribute. This is useful when you need to render custom SVGs or
+SVGs from a third-party library.
+
+For example, here is how we can use the icon component to render an SVG from the Forge illustration library and treat it like text:
+
+<Canvas of={IconStories.CustomSVG} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+There are two types of icons used in applications, decorative and semantic. Typically we use icons for decorative purposes only, but there
+may be cases where you need to make an icon semantic and accessible.
+
+### Decorative icons
+
+Decorative icons are typically hidden from assistive technology, but there are some important things to note about these icons:
+
+- Add an `aria-hidden="true"` attribute to the icon element to avoid its content being interpreted incorrectly.
+- Treat icons as any other text on the page and use proper color contrast ratios.
+
+### Semantic icons
+
+- Use an `role="img"` attribute to give it semantic meaning.
+- Use an `aria-label` or `aria-describedby` attribute.
+- Use a `title` attribute or a Forge tooltip component to provide a visual description.
+- Treat icons as any other text on the page and use proper color contrast ratios.
+- If using an SVG icon, hook up the `<title>` element (if applicable) to an `aria-labelledby` attribute on the `<svg>` element.
+  - If no `<title>` element exists, use an alternative approach such as `aria-label` or `title` attribute.
+

@@ -53,6 +53,12 @@ declare global {
  * @csspart section-center - The container element for the center slot.
  * @csspart section-end - The container element for the end slot.
  * @csspart after-section-end - The container element for the after-end slot.
+ * 
+ * @slot before-start - The content to place before the start slot.
+ * @slot start - The content to place at the start of the toolbar.
+ * @slot center - The content to place in the center of the toolbar.
+ * @slot end - The content to place at the end of the toolbar.
+ * @slot after-end - The content to place after the end slot.
  */
 @CustomElement({
   name: TOOLBAR_CONSTANTS.elementName

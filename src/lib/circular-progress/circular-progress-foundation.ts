@@ -19,6 +19,7 @@ export class CircularProgressFoundation implements ICircularProgressFoundation {
   constructor(private _adapter: ICircularProgressAdapter) {}
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration(['track']);
     this._adapter.initialize();
     this._applyDeterminate();
   }

@@ -23,6 +23,23 @@ export interface IBaseButton extends IWithLabelAwareness, IWithElementInternals,
   focus(options?: ExperimentalFocusOptions): void;
 }
 
+/**
+ * @property {ButtonType} [type="button"] - Sets the type of the button. Possible values are `button`, `submit`, and `reset`.
+ * @property {boolean} [disabled=false] - Disables the button.
+ * @property {boolean} [popoverIcon=false] - Shows a popover icon on the button.
+ * @property {boolean} [dense=false] - Sets the density of the button.
+ * @property {string} [name=""] - The name of the button.
+ * @property {string} [value=""] - The value of the button.
+ * 
+ * @attribute {ButtonType} [type="button"] - Sets the type of the button. Possible values are `button`, `submit`, and `reset`.
+ * @attribute {boolean} [disabled=false] - Disables the button.
+ * @attribute {boolean} [popover-icon=false] - Shows a popover icon on the button.
+ * @attribute {boolean} [dense=false] - Sets the density of the button.
+ * @attribute {string} [name=""] - The name of the button.
+ * @attribute {string} [value=""] - The value of the button.
+ * 
+ * @fires {PointerEvent} click - Fires when the button is clicked.
+ */
 export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter<IBaseButton>>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(BaseComponent))) implements IBaseButton {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
@@ -102,10 +119,12 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   @FoundationProperty()
   public declare dense: boolean;
 
+  /** Clicks the button. */
   public override click(): void {
     this._foundation.click({ animateStateLayer: true });
   }
 
+  /** Focuses the button. */
   public override focus(options: ExperimentalFocusOptions): void {
     this._foundation.focus(options);
   }

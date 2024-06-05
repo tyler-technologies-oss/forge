@@ -1,0 +1,23 @@
+@use '../../core/styles/elevation';
+
+@mixin base {
+  position: absolute;
+  top: 0;
+  z-index: #{elevation.z-index-variable(dialog)};
+
+  box-shadow: #{elevation.value(24)};
+
+  max-width: 80%;
+}
+
+@mixin right {
+  right: 0;
+}
+
+@mixin closed {
+  box-shadow: none;
+}
+
+@mixin scrim {
+  z-index: #{elevation.z-index-variable(dialog)};
+}

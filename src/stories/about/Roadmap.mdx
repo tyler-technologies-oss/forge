@@ -1,0 +1,59 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="About/Roadmap" />
+
+# Roadmap
+
+Tyler Forge is constantly evolving to keep up with the latest trends in web development, as well as the needs of our users. Below is a
+list of features that we are currently working on, or have planned for the future. We'll update this list as we make progress on each
+feature, so be sure to check back often!
+
+> If you have any feature requests, or would like to see a feature moved up in priority, please let us know by [opening an issue][1]
+> or by adding an item to our [Canny board][2].
+
+## Features
+
+- **Complete:** This feature is complete and available in the latest release.
+- **In Preview:** This feature is complete and available in the latest release, but it is experimental and we're looking for feedback.
+- **In Progress:** We are actively working on this feature.
+- **In Review:** This feature is currently being reviewed by the team.
+- **Started:** We have started working on this feature, but it is not yet complete.
+- **Planning:** This feature is in the planning stages and has not yet been started.
+- **Not Started:** This feature is planned for the future, but has not yet been started.
+
+| Feature                                              | Status            | Description
+| -----------------------------------------------------| ----------------- | -----------
+| Accessibility Improvements                           | In Progress       | Improvements to the accessibility of Forge components, including keyboard navigation, screen reader support, and more.
+| CSS-only Components                                  | In Progress       | A set of CSS classes distributed via pre-built stylesheets and Sass mixins for creating components without JavaScript.
+| Global Configuration                                 | In Preview        | A new mechanism for configuring global default values for various Forge components.
+| Blazor Adapter                                       | In Progress       | A new Blazor adapter for Forge that will allow for seamlessly using Forge components in Blazor applications.
+| Forge Extended Library                               | Started           | A new library of Forge-based composite UI components that implement larger patterns/recipes.
+| Inline Select Dropdown                               | Planning          | A new select component that allows for directly rendering HTML in the `<forge-option>` elements.
+| Inline Menu Dropdown                                 | Planning          | A new menu component that can be rendered inline with other content.
+| Inline Autocomplete Dropdown                         | Planning          | A new autocomplete component that can be rendered inline with other content.
+| Improve Localization Support                         | Not Started       | Allow for localization across various Forge components that may require it.
+| Data Table Enhancements                              | Planning          | Enhancements to the data table component to improve performance, usability, and add new features.
+| Consolidated Tyler Icons Library                     | Planning          | Consolidate all 3 icons sets (standard, extended, custom) into a single set.
+| Convert unit test suite to Web Test Runner           | In Progress       | Convert the legacy Forge unit test suite from Karma + Jasmine to Web Test Runner for improved performance and reliability.
+| Stepper Refactor/Redesign                            | Not Started       | The Forge stepper component is due for a redesign and refactor to improve usability, accessibility, and add new features for improved flexibility.
+
+[1]: https://github.com/tyler-technologies-oss/forge/issues
+[2]: https://tylerforge.canny.io/feature-requests
+
+<style>
+{`
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td:first-child {
+  width: 250px;
+}
+
+td:first-child,
+td:nth-child(2) {
+  white-space: nowrap;
+}
+`}
+</style>

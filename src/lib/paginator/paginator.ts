@@ -38,6 +38,8 @@ declare global {
 
 /**
  * @tag forge-paginator
+ * 
+ * @event {CustomEvent<IPaginatorChangeEventData>} forge-paginator-change - Dispatched when the paginator state changes.
  */
 @CustomElement({
   name: PAGINATOR_CONSTANTS.elementName,
@@ -105,48 +107,93 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
     }
   }
 
-  /** The zero-based page index. Default is 0. */
+  /**
+   * The zero-based page index.
+   * @attribute page-index
+   * @default 0
+   */
   @FoundationProperty()
   public declare pageIndex: number;
 
-  /** Number of items to display on a page. By default set to 25. */
+  /**
+   * Number of items to display on a page.
+   * @attribute page-size
+   * @default 25
+   */
   @FoundationProperty()
   public declare pageSize: number;
 
-  /** Sets page index by providing the number of items to skip. The getter for this property returns the number of items to skip. */
+  /**
+   * Sets page index by providing the number of items to skip. The getter for this property returns the number of items to skip.
+   * @attribute offset
+   * @default 0
+   */
   @FoundationProperty()
   public declare offset: number;
 
-  /** The total number of items to be paginated. Default is 0. */
+  /**
+   * The total number of items to be paginated.
+   * @attribute
+   * @default 0;
+   */
   @FoundationProperty()
   public declare total: number;
 
-  /** The set of provided page size options to display to the user. */
+  /**
+   * The set of provided page size options to display to the user.
+   * @attribute page-size-options
+   * @default [5, 15, 25, 50, 100]
+   */
   @FoundationProperty()
   public declare pageSizeOptions: number[];
 
-  /** A label for the paginator. Default is "Rows per page:". */
+  /**
+   * A label for the paginator.
+   * @attribute
+   * @default "Rows per page:"
+   */
   @FoundationProperty()
   public declare label: string;
 
-  /** Whether to show the first page and last page buttons. Default is false. */
+  /**
+   * Whether to show the first page and last page buttons.
+   * @attribute first-last
+   * @default false
+   */
   @FoundationProperty()
   public declare firstLast: boolean;
 
-  /** Whether to show the first page button. Default is false. */
+  /**
+   * Whether to show the first page button. Default is false.
+   * @attribute
+   * @default false
+   */
   @FoundationProperty()
   public declare first: boolean;
 
-  /** Whether the paginator is disabled. Default is false. */
+  /**
+   * Whether the paginator is disabled.
+   * @attribute
+   * @default false
+   */
   @FoundationProperty()
   public declare disabled: boolean;
 
+  /**
+   * Whether to use the alternative range label slot.
+   * @attribute
+   * @default false
+   */
   @FoundationProperty()
   public declare alternative: boolean;
 
+  /**
+   * A callback function to build the range label dynamically.
+   */
   @FoundationProperty()
   public declare rangeLabelCallback: PaginatorRangeLabelBuilder;
 
+  /** Sets focus to the first focusable element within the paginator. */
   public override focus(options?: FocusOptions): void {
     this._foundation.focus(options);
   }

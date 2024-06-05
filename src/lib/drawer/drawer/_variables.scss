@@ -1,8 +1,0 @@
-@use '../../core/styles/border';
-@use '../../core/styles/animation';
-
-$border-width: #{border.variable(thin)} !default;
-$width: 256px !default;
-$mini-width: 56px !default;
-$mini-transition-delay: #{animation.variable(duration-medium2)} !default;
-$transition-duration: #{animation.variable(duration-medium2)} !default;

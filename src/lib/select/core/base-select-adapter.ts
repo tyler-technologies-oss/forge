@@ -1,4 +1,4 @@
-import { isDefined, isFunction, removeElement } from '@tylertech/forge-core';
+import { isDefined, removeElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter';
 import { IBaseSelectComponent } from './base-select';
 import { ListDropdown, IListDropdown } from '../../list-dropdown';
@@ -8,8 +8,9 @@ import { IOptionGroupComponent, OPTION_GROUP_CONSTANTS } from '../option-group';
 import { ISelectOption, ISelectOptionGroup, SelectOptionListenerDestructor } from './base-select-constants';
 import { isOptionGroupObject } from './select-utils';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
+import { type IBaseComponent } from '../../core/base/base-component';
 
-export interface IBaseSelectAdapter extends IBaseAdapter {
+export interface IBaseSelectAdapter<T extends IBaseComponent = IBaseSelectComponent> extends IBaseAdapter<T> {
   initializeAccessibility(): void;
   addClickListener(listener: (evt: Event) => void): void;
   removeClickListener(listener: (evt: Event) => void): void;

@@ -1,0 +1,105 @@
+body,
+.sbdocs .sb-bar,
+.sbdocs .sbdocs-preview,
+.sbdocs.sbdocs-wrapper {
+  background-color: var(--forge-theme-surface);
+  color: var(--forge-theme-text-high);
+}
+
+.sbdocs .sbdocs-preview {
+  border-color: var(--forge-theme-outline);
+
+  .sb-bar {
+    box-shadow: none;
+    border-bottom: 1px solid var(--forge-theme-outline);
+  }
+}
+
+.sbdocs.sbdocs-wrapper {
+  justify-content: flex-start;
+  padding: var(--forge-spacing-medium);
+}
+
+.sbdocs.sbdocs-content {
+  max-width: 1000px;
+  width: 100%;
+  background: var(--forge-theme-surface);
+  padding: var(--forge-spacing-medium);
+  min-height: fit-content;
+}
+
+:is(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p, blockquote p), h1, h2, h3, h4, h5, h6) {
+  color: var(--forge-theme-text-high);
+  border-bottom-color: var(--forge-theme-outline);
+}
+
+:is(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)) {
+  color: var(--forge-theme-text-high);
+}
+
+//
+// Blockquote
+//
+
+blockquote {
+  p {
+    color: var(--forge-theme-text-medium) !important;
+  }
+}
+
+//
+// Tables
+//
+
+.sbdocs.sbdocs-content table :is(td,th) {
+  color: var(--forge-theme-text-high);
+  border-color: var(--forge-theme-outline);
+}
+
+/* Even rows */
+.sbdocs.sbdocs-content table tr:nth-child(even) {
+  background-color: var(--forge-theme-surface);
+}
+
+//
+// Code
+//
+
+.sbdocs :is(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)) code,
+.sbdocs :is(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)) code,
+.sbdocs code {
+  border: none;
+  background-color: var(--forge-theme-surface-container-minimum);
+  color: var(--forge-theme-on-surface-container-minimum);
+}
+
+.sbdocs code > span {
+  font: inherit;
+  
+  > a {
+    font: inherit;
+    color: var(--forge-theme-primary);
+    text-decoration: underline;
+  }
+}
+
+//
+// Table of Contents
+//
+
+.toc-wrapper .toc-list .toc-list-item > a {
+  color: var(--forge-theme-text-medium);
+}
+
+.sbdocs-wrapper.sbdocs .toc-wrapper > .toc-list,
+.sbdocs-wrapper.sbdocs .toc-wrapper > .toc-list .toc-list {
+  border-color: var(--forge-theme-outline);
+}
+
+.toc-wrapper .toc-list .toc-list-item.is-active-li::before {
+  border-color: var(--forge-theme-outline-high);
+}
+
+div:has(> .toc-wrapper) {
+  width: auto;
+}

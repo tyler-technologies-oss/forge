@@ -2,13 +2,17 @@ import { COMPONENT_NAME_PREFIX } from '../../constants';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}tab`;
 
-const attributes = {
+const observedAttributes = {
   DISABLED: 'disabled',
   SELECTED: 'selected',
   VERTICAL: 'vertical',
   STACKED: 'stacked',
   SECONDARY: 'secondary',
   INVERTED: 'inverted'
+};
+
+const attributes = {
+  ...observedAttributes
 };
 
 const selectors = {
@@ -33,6 +37,7 @@ const numbers = {
 
 export const TAB_CONSTANTS = {
   elementName,
+  observedAttributes,
   attributes,
   selectors,
   classes,

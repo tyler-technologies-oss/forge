@@ -333,6 +333,22 @@ describe('Dialog', () => {
 
       await expect(harness.dialogElement).to.be.accessible();
     });
+
+    it('should not set role when role="presentation" is set', async () => {
+      const el = await fixture(html`<forge-dialog role="presentation"></forge-dialog>`);
+
+      expect(el.getAttribute('role')).to.equal('presentation');
+      expect(el.hasAttribute('aria-modal')).to.be.false;
+      await expect(el).to.be.accessible();
+    });
+
+    it('should not set role when role="none" is set', async () => {
+      const el = await fixture(html`<forge-dialog role="none"></forge-dialog>`);
+
+      expect(el.getAttribute('role')).to.equal('none');
+      expect(el.hasAttribute('aria-modal')).to.be.false;
+      await expect(el).to.be.accessible();
+    });
   });
 
   describe('open state', () => {

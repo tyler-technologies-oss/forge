@@ -181,6 +181,7 @@ export class IconFoundation implements IIconFoundation {
       if (this._adapter.isConnected) {
         this._applyIcon();
       }
+      this._adapter.toggleHostAttribute(ICON_CONSTANTS.attributes.SRC, !!this._src, this._src);
     }
   }
 
@@ -191,7 +192,7 @@ export class IconFoundation implements IIconFoundation {
     if (this._lazy !== value) {
       this._lazy = value;
       this._safeApplyIcon();
-      this._adapter.setHostAttribute(ICON_CONSTANTS.attributes.LAZY, `${this._lazy}`);
+      this._adapter.toggleHostAttribute(ICON_CONSTANTS.attributes.LAZY, this._lazy);
     }
   }
 

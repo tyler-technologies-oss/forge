@@ -58,7 +58,7 @@ export class LabelFoundation implements ILabelFoundation {
     // Give ancestor elements a chance to connect to the DOM
     // TODO: see if this works in Angular
     await task();
-    this._adapter.emitHostEvent(LABEL_CONSTANTS.events.CONNECTED);
+    this._adapter.dispatchHostEvent(new CustomEvent(LABEL_CONSTANTS.events.CONNECTED, { bubbles: true }));
   }
 
   /**
@@ -197,7 +197,7 @@ export class LabelFoundation implements ILabelFoundation {
 
       if (this._legend) {
         this._adapter.removerSlotChangeListener(this._slotChangeListener);
-        this._adapter.emitHostEvent(LABEL_CONSTANTS.events.CONNECTED);
+        this._adapter.dispatchHostEvent(new CustomEvent(LABEL_CONSTANTS.events.CONNECTED, { bubbles: true }));
         return;
       }
 

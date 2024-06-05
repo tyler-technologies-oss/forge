@@ -47,6 +47,44 @@ declare global {
 
 /**
  * @tag forge-split-view-panel
+ *
+ * @dependency forge-icon
+ * @dependency forge-state-layer
+ * @dependency forge-focus-indicator
+ * 
+ * @property {SplitViewPanelResizable} [resizable="off"] - Controls which side of the panel the resize handle appears on.
+ * @property {number | string} [size=200] - The initial size along the axis of orientation.
+ * @property {number | string} [min=0] - The smallest size the panel can take along its axis of orientation.
+ * @property {number | string | undefined} max - The largest size the panel can take along its axis of orientation.
+ * @property {string} accessibleLabel - The ARIA label given to the resize handle.
+ * @property {boolean} [open=true] - Controls the open state of the panel.
+ * @property {boolean} [disabled=false] - Whether resize interactions are disabled or enabled.
+ * @property {boolean} [allowClose=false] - Whether the panel can be closed via keyboard interaction.
+ * @property {boolean} [autoClose=false] - Whether the panel automatically closes when it reaches a size of 0.
+ * @property {number} [autoCloseThreshold=0] - The size at which the panel auto closes.
+ * 
+ * @attribute {SplitViewPanelResizable} [resizable="off"] - Controls which side of the panel the resize handle appears on.
+ * @attribute {number | string} [size=200] - The initial size along the axis of orientation.
+ * @attribute {number | string} [min=0] - The smallest size the panel can take along its axis of orientation.
+ * @attribute {number | string | undefined} max - The largest size the panel can take along its axis of orientation.
+ * @attribute {string} accessible-label - The ARIA label given to the resize handle.
+ * @attribute {boolean} [open=true] - Controls the open state of the panel.
+ * @attribute {boolean} [disabled=false] - Whether resize interactions are disabled or enabled.
+ * @attribute {boolean} [allow-close=false] - Whether the panel can be closed via keyboard interaction.
+ * @attribute {boolean} [auto-close=false] - Whether the panel automatically closes when it reaches a size of 0.
+ * @attribute {number} [auto-close-threshold=0] - The size at which the panel auto closes.
+ * 
+ * @event {CustomEvent<ISplitViewPanelWillResizeEvent>} forge-split-view-panel-will-resize - Emitted before the panel resizes.
+ * @event {CustomEvent<null>} forge-split-view-panel-resize-start - Emitted when the panel starts resizing.
+ * @event {CustomEvent<null>} forge-split-view-panel-resize-end - Emitted when the panel stops resizing.
+ * @event {CustomEvent<number>} forge-split-view-panel-resize - Emitted when the panel resizes.
+ * @event {CustomEvent<ISplitViewPanelOpenEvent>} forge-split-view-panel-will-open - Emitted before the panel opens.
+ * @event {CustomEvent<ISplitViewPanelOpenEvent>} forge-split-view-panel-will-close - Emitted before the panel closes.
+ * @event {CustomEvent<ISplitViewPanelOpenEvent>} forge-split-view-panel-did-open - Emitted after the panel opens.
+ * @event {CustomEvent<ISplitViewPanelOpenEvent>} forge-split-view-panel-did-close - Emitted after the panel closes.
+ * 
+ * @cssproperty --forge-split-view-panel-size - The size of the panel along the axis of orientation.
+ * @cssproperty --forge-split-view-panel-cursor - The cursor to display when hovering over the panel.
  */
 @CustomElement({
   name: SPLIT_VIEW_PANEL_CONSTANTS.elementName,

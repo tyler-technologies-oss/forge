@@ -8,7 +8,7 @@ import indeterminateTemplate from './_indeterminate.html';
 import determinateTemplate from './_determinate.html';
 import { setDefaultAria } from '../constants';
 
-export interface ICircularProgressAdapter extends IBaseAdapter {
+export interface ICircularProgressAdapter extends IBaseAdapter<ICircularProgressComponent> {
   initialize(): void;
   setDeterminate(value: boolean): void;
   setProgress(value: number): void;

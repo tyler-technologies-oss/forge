@@ -23,7 +23,7 @@ export interface ITooltipFoundation extends ICustomElementFoundation {
   syncTooltipAria(): void;
 }
 
-export class TooltipFoundation extends WithLongpressListener() implements ITooltipFoundation {
+export class TooltipFoundation extends WithLongpressListener(Object) implements ITooltipFoundation {
   private _open = false;
   private _type: TooltipType = TOOLTIP_CONSTANTS.defaults.TYPE;
   private _anchor: string;

@@ -1,0 +1,26 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as ButtonAreaStories from './ButtonArea.stories';
+
+<Meta of={ButtonAreaStories} />
+
+<Title />
+
+<Canvas of={ButtonAreaStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Always include a slotted `<button>` element.
+- Add a concise, descriptive description of the button area's action as the text content of the slotted button.
+    - The button's text content should preferably be the same as the visible text within the button area to reduce confusion. This can a portion of the content if long.
+- Set any accessible attributes on the slotted button.
+    - Set `aria-controls` if the button controls another element on the page.
+    - Set `aria-expanded` to reflect the state of the controlled element if appropriate.
+- Verify that you can reach every nested button by keyboard navigation.
+    - Ensure that there is a visual cue that the nested button is currently in focus.
+- Verify that pressing the space bar or enter key while focused on a button will activate the button area in the same manner as if it had been clicked with a mouse.
+- Verify that there is sufficient contrast between the foreground text and background to meet WCAG requirements.

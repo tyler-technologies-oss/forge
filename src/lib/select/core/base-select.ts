@@ -35,35 +35,55 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
     super();
   }
 
-  /** Gets/sets the value. */
+  /**
+   * Gets/sets the value.
+   * @attribute
+   */
   @FoundationProperty()
   public declare value: any;
   
-  /** Gets/sets the selected index. */
+  /**
+   * Gets/sets the selected index.
+   * @attribute selected-index
+   */
   @FoundationProperty()
   public declare selectedIndex: number | number[];
   
-  /** Gets/sets the available options. */
+  /**
+   * Gets/sets the available options.
+   */
   @FoundationProperty()
   public declare options: ISelectOption[] | ISelectOptionGroup[];
 
-  /** Gets/sets the multiple select state. */
+  /**
+   * Gets/sets the multiple select state.
+   * @attribute
+   */
   @FoundationProperty()
   public declare multiple: boolean;
   
-  /** Gets the open state of the dropdown. */
+  /**
+   * Gets the open state of the dropdown.
+   * @attribute
+   */
   @FoundationProperty()
   public declare open: boolean;
   
-  /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
+  /**
+   * Sets the option builder callback that will be executed when building the option list in the dropdown.
+   */
   @FoundationProperty()
   public declare optionBuilder: SelectOptionBuilder;
   
-  /** Sets the selected text builder callback that will be executed when getting the selected text to display in the field. */
+  /**
+   * Sets the selected text builder callback that will be executed when getting the selected text to display in the field.
+   */
   @FoundationProperty()
   public declare selectedTextBuilder: SelectSelectedTextBuilder;
 
-  /** Sets the callback to be executed when the user selects a value. */
+  /**
+   * Sets the callback to be executed when the user selects a value.
+   */
   @FoundationProperty()
   public declare beforeValueChange: SelectBeforeValueChangeCallback<any>;
 
@@ -86,14 +106,17 @@ export abstract class BaseSelectComponent<T extends IBaseSelectFoundation> exten
     }
   }
 
+  /** Dynamically appends options to the dropdown while it's open. */
   public appendOptions(options: ISelectOption[] | ISelectOptionGroup[]): void {
     this._foundation.appendOptions(options);
   }
 
+  /** Selects all options. */
   public selectAll(): void {
     this._foundation.selectAll();
   }
   
+  /** Deselects all options. */
   public deselectAll(): void {
     this._foundation.deselectAll();
   }

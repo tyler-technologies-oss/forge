@@ -1,0 +1,28 @@
+import { Meta, Title, Canvas } from '@storybook/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as LabelValueStories from './LabelValue.stories';
+
+<Meta of={LabelValueStories} />
+
+<Title />
+
+Use the label-value component when you have data that needs to be displayed, but cannot be edited. This is generally ideal for a read-only screen, or toggling between viewing and editing data values on a form.
+
+This component is simple, but it provides consistency and ease of use through slotted content to remove the need for developers to worry about CSS styles. It also matches the dimensions of other field field elements such as text-field and select to enable them to live next to each other on a page without adjustments.
+
+## Basic
+
+<Canvas of={LabelValueStories.Demo} />
+
+## Icon
+
+<Canvas of={LabelValueStories.Icon} />
+
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+> **Note**: This component does not currently automatically add any ARIA attributes for you.
+- It is up to a developer to ensure that the content within this component is accessible as we cannot make any assumptions on your behalf.

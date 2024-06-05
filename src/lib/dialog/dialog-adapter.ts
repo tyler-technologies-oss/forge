@@ -62,10 +62,13 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
       return;
     }
 
-    this._component[setDefaultAria]({
-      role: this._component.type,
-      ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
-    }, { setAttribute: true });
+    const role = this._component.getAttribute('role');
+    if (!role || !['presentation', 'none'].includes(role)) {
+      this._component[setDefaultAria]({
+        role: this._component.type,
+        ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
+      }, { setAttribute: true });
+    }
     
     // Show the dialog (and backdrop) based on modal vs non-modal
     const isModal = this._component.mode === 'modal' || this._component.mode === 'inline-modal';
@@ -99,10 +102,13 @@ export class DialogAdapter extends BaseAdapter<IDialogComponent> implements IDia
   }
 
   public async hide(): Promise<void> {
-    this._component[setDefaultAria]({
-      role: null,
-      ariaModal: null
-    }, { setAttribute: true });
+    const role = this._component.getAttribute('role');
+    if (!role || !['presentation', 'none'].includes(role)) {
+      this._component[setDefaultAria]({
+        role: null,
+        ariaModal: null
+      }, { setAttribute: true });
+    }
 
     const close = (): void => {
       this._surfaceElement.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);

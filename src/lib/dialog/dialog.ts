@@ -66,32 +66,40 @@ declare global {
  * 
  * @summary Dialogs are temporary UI elements that are used to display information, ask for input, or confirm actions.
  * 
- * @property {boolean} open - Indicates whether the dialog is open.
- * @property {DialogMode} mode - The mode of the dialog. Default is 'modal'.
- * @property {DialogType} type - The type of the dialog. Default is 'dialog'.
- * @property {DialogAnimationType} animationType - The animation type of the dialog.
- * @property {DialogPreset} preset - The preset design that the dialog will apply.
- * @property {boolean} persistent - Indicates whether the dialog is dismissible via escape and backdrop click or not.
- * @property {boolean} fullscreen - Indicates whether the dialog is fullscreen or not.
- * @property {string} trigger - The selector of the element that triggers the dialog.
- * @property {HTMLElement | null} triggerElement - The element that triggers the dialog.
- * @property {boolean} moveable - Indicates whether the dialog is moveable or not.
- * @property {DialogPositionStrategy} positionStrategy - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
- * @property {DialogSizeStrategy} sizeStrategy - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
- * @property {DialogPlacement} placement - The placement of the dialog. Defaults to center.
+ * @dependency forge-backdrop
  * 
- * @attribute {boolean} open - Indicates whether the dialog is open.
- * @attribute {DialogMode} mode - The mode of the dialog. Default is 'modal'.
- * @attribute {DialogType} type - The type of the dialog. Default is 'dialog'.
- * @attribute {DialogAnimationType} animationType - The animation type of the dialog.
- * @attribute {DialogPreset} preset - The preset design that the dialog will apply.
- * @attribute {boolean} persistent - Indicates whether the dialog is dismissible via escape and backdrop click or not.
- * @attribute {boolean} fullscreen - Indicates whether the dialog is fullscreen or not.
+ * @property {boolean} [open=false] - Indicates whether the dialog is open.
+ * @property {DialogMode} [mode="modal"] - The mode of the dialog.
+ * @property {DialogType} [type="dialog"] - The type of the dialog.
+ * @property {DialogAnimationType} [animationType="zoom"] - The animation type of the dialog.
+ * @property {DialogPreset} [preset="dialog"] - The preset design that the dialog will apply.
+ * @property {boolean} [persistent=false] - Indicates whether the dialog is dismissible via escape and backdrop click or not.
+ * @property {boolean} [fullscreen=false] - Indicates whether the dialog is fullscreen or not.
+ * @property {string} trigger - The selector of the element that triggers the dialog.
+ * @property {HTMLElement | null} [triggerElement=null] - The element that triggers the dialog.
+ * @property {boolean} [moveable=false] - Indicates whether the dialog is moveable or not.
+ * @property {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
+ * @property {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
+ * @property {DialogPlacement} [placement="center"] - The placement of the dialog.
+ * 
+ * @globalconfig animationType
+ * @globalconfig positionStrategy
+ * @globalconfig sizeStrategy
+ * @globalconfig persistent
+ * @globalconfig moveable
+ * 
+ * @attribute {boolean} [open=false] - Indicates whether the dialog is open.
+ * @attribute {DialogMode} [mode="modal"] - The mode of the dialog.
+ * @attribute {DialogType} [type="dialog"] - The type of the dialog.
+ * @attribute {DialogAnimationType} [animationType="zoom"] - The animation type of the dialog.
+ * @attribute {DialogPreset} [preset="dialog"] - The preset design that the dialog will apply.
+ * @attribute {boolean} [persistent=false] - Indicates whether the dialog is dismissible via escape and backdrop click or not.
+ * @attribute {boolean} [fullscreen=false] - Indicates whether the dialog is fullscreen or not.
  * @attribute {string} trigger - The selector of the element that triggers the dialog.
- * @attribute {boolean} moveable - Indicates whether the dialog is moveable or not.
- * @attribute {DialogPositionStrategy} positionStrategy - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
- * @attribute {DialogSizeStrategy} sizeStrategy - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
- * @attribute {DialogPlacement} placement - The placement of the dialog. Defaults to center.
+ * @attribute {boolean} [moveable=false] - Indicates whether the dialog is moveable or not.
+ * @attribute {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
+ * @attribute {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
+ * @attribute {DialogPlacement} [placement="center"] - The placement of the dialog.
  * 
  * @event {CustomEvent<void>} forge-dialog-open - Dispatched when the dialog is opened.
  * @event {CustomEvent<void>} forge-dialog-close - Dispatched when the dialog is closed.
@@ -279,10 +287,12 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   @FoundationProperty()
   public declare placement: DialogPlacement;
 
+  /** Shows the dialog. */
   public show(): void {
     this.open = true;
   }
 
+  /** Hides the dialog. */
   public hide(): void {
     this.open = false;
   }

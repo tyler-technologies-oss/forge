@@ -27,17 +27,19 @@ declare global {
  * 
  * @summary Split buttons are used for splitting an action into two parts.
  * 
- * @property {SplitButtonVariant} variant - The variant of the buttons. Valid values are `text`, `outlined`, `tonal`, `filled`, and `raised`.
- * @property {ButtonTheme} theme - The theme of the buttons. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
- * @property {boolean} disabled - Whether or not the buttons are disabled.
- * @property {boolean} dense - Whether or not the buttons are dense.
- * @property {boolean} pill - Whether or not the buttons are pill-shaped.
+ * @dependency forge-button
  * 
- * @attribute {SplitButtonVariant} variant - The variant of the buttons. Valid values are `text`, `outlined`, `tonal`, `filled`, and `raised`.
- * @attribute {ButtonTheme} theme - The theme of the buttons. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
- * @attribute {boolean} disabled - Whether or not the buttons are disabled.
- * @attribute {boolean} dense - Whether or not the buttons are dense.
- * @attribute {boolean} pill - Whether or not the buttons are pill-shaped.
+ * @property {SplitButtonVariant} [variant="text"] - The variant of the buttons. Valid values are `text`, `outlined`, `tonal`, `filled`, and `raised`.
+ * @property {ButtonTheme} [theme="primary"] - The theme of the buttons. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @property {boolean} [disabled=false] - Whether or not the buttons are disabled.
+ * @property {boolean} [dense=false] - Whether or not the buttons are dense.
+ * @property {boolean} [pill=false] - Whether or not the buttons are pill-shaped.
+ * 
+ * @attribute {SplitButtonVariant} [variant="text"] - The variant of the buttons. Valid values are `text`, `outlined`, `tonal`, `filled`, and `raised`.
+ * @attribute {ButtonTheme} [theme="primary"] - The theme of the buttons. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
+ * @attribute {boolean} [disabled=false] - Whether or not the buttons are disabled.
+ * @attribute {boolean} [dense=false] - Whether or not the buttons are dense.
+ * @attribute {boolean} [pill=false] - Whether or not the buttons are pill-shaped.
  * 
  * @cssproperty --forge-split-button-min-width - The minimum width of the slotted buttons.
  * @cssproperty --forge-split-button-gap - The gap between the slotted buttons.

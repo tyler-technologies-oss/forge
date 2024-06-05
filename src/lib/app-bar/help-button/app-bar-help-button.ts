@@ -27,12 +27,14 @@ declare global {
  * 
  * @description A utility component with predefined icon and descriptions for use in an app bar `end` slot.
  * 
- * @property {IMenuOption[]} options - The menu options to display when the button is clicked
- * @property {string} icon - The name of an alternative icon to display.
+ * @property {IMenuOption[]} [options=[]] - The menu options to display when the button is clicked
+ * @property {string} [icon=help] - The name of an alternative icon to display.
  * 
- * @attribute {string} [icon] - The name of an alternative icon to display.
+ * @attribute {string} [icon=help] - The name of an alternative icon to display.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
+ * 
+ * @event {CustomEvent<IMenuSelectEventData>} forge-menu-select - Bubbles up the menu select from the internal menu component.
  */
 @CustomElement({
   name: APP_BAR_HELP_BUTTON_CONSTANTS.elementName,
