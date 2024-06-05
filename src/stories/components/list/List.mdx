@@ -27,11 +27,19 @@ it is recommended to use an `<a>` element to provide the correct semantics and e
 
 <Canvas of={ListStories.WithAnchor} />
 
-## Navigation Menus
+## Navigation Menu
 
 It is common to provide a list of navigation items in a [drawer](?path=/docs/components-drawer--docs) or other container component. This gives your application
-a consistent location for the central navigation of your site. When doing so, you should provide the `navlist` attribute to your `<forge-list>` element so that
-the list items are styled appropriately.
+a consistent location for the central navigation of your site.
+
+### Navlist
+
+When lists are placed within a `<forge-drawer>` or are used for navigation menus, you should add the `navlist` attribute to your `<forge-list>` element so that the
+list items are styled appropriately.
+
+```html
+<forge-list navlist></forge-list>
+```
 
 <Canvas of={ListStories.NavigationMenu} />
 
