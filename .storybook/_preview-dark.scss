@@ -2,4 +2,8 @@
 
 .forge-storybook-dark {
   @include theme-dark.theme-properties;
+
+  .github-logo {
+    filter: invert(1);
+  }
 }

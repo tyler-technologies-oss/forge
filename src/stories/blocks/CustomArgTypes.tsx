@@ -3,8 +3,9 @@ import { Code } from '@storybook/components';
 import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils';
 
 import styles from './CustomArgTypes.module.scss';
+import GitHubLogo from './GitHubLogo';
 
-const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/tree/`;
+const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/tree`;
 
 function UsageLink({ text, href }: { text: string; href: string }) {
   return (
@@ -37,7 +38,8 @@ function ForgeTypeLinks({ typeText }: { typeText: string }) {
   tokenizedType.forEach(token => {
     const matchingType = getCustomElementType(token);
     if (matchingType) {
-      const href = `${BASE_GITHUB_URL}${branchName}/${matchingType.path}#L${matchingType.lineNumber}`
+      const { path, lineNumber } = matchingType;
+      const href = `${BASE_GITHUB_URL}/${branchName}/${path}#L${lineNumber}`;
       const tokenRegExp = new RegExp(`(?<!>)${token}`, 'g'); // Negative lookbehind to avoid replacing inside existing links
       typeText = typeText.replace(tokenRegExp, `<a href=${href} target="_blank" rel="noreferrer noopener">${token}</a>`);
     }
@@ -215,15 +217,12 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   }) ?? [];
   const cssProperties = declaration.cssProperties;
   const cssParts = declaration.cssParts;
-  const branch = 'main';
+  const branch = getBranchName();
   const modulePath = module.path;
-  const codeLink = `https://github.com/tyler-technologies-oss/forge/tree/${branch}/${modulePath}`;
 
   return (
-    <div>
-      <p>
-        View the code on GitHub for this component <a href={codeLink} target="_blank" rel="noreferrer noopener">here</a>.
-      </p>
+    <div className={(styles as any).container}>
+      {modulePath ? <a href={`${BASE_GITHUB_URL}/${branch}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={(styles as any).codeLink}><GitHubLogo /></a> : null}
 
       {!!properties?.length && 
         <Section title="Properties" name={tagName} headingLevel={headingLevel}>

@@ -8,7 +8,11 @@ const component = 'forge-linear-progress';
 
 const meta = {
   title: 'Components/Linear Progress',
-  render: args => customElementStoryRenderer(component, args),
+  render: args => {
+    const el = customElementStoryRenderer(component, args);
+    el.setAttribute('aria-label', 'Linear progress demo');
+    return el;
+  },
   component,
   parameters: {
     actions: { disable: true }
@@ -33,7 +37,7 @@ export const Determinate: Story = {
   ...standaloneStoryParams,
   render: () => {
     return html`
-    <forge-linear-progress determinate progress="0.5"></forge-linear-progress>
+    <forge-linear-progress determinate progress="0.5" aria-label="Linear progress demo"></forge-linear-progress>
     `;
   },
 };
@@ -42,7 +46,7 @@ export const Buffer: Story = {
   ...standaloneStoryParams,
   render: () => {
     return html`
-    <forge-linear-progress determinate progress="0.33" buffer="0.66"></forge-linear-progress>
+    <forge-linear-progress determinate progress="0.33" buffer="0.66" aria-label="Linear progress buffer demo"></forge-linear-progress>
     `;
   },
 };

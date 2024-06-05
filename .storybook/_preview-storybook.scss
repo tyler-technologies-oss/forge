@@ -30,6 +30,7 @@ body,
 
 :is(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p, blockquote p), h1, h2, h3, h4, h5, h6) {
   color: var(--forge-theme-text-high);
+  border-bottom-color: var(--forge-theme-outline);
 }
 
 :is(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)) {

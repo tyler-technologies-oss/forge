@@ -1,5 +1,15 @@
 @use '../../lib/table/core' as table-core;
 
+.container {
+  position: relative;
+}
+
+.codeLink {
+  position: absolute;
+  top: -54px;
+  left: 54px;
+}
+
 .section {
   margin-block: 24px 32px;
 }

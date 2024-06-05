@@ -37,9 +37,9 @@ export const IDAssociated: Story = {
 export const Nested: Story = {
   render: () => {
     return html`
-      <forge-label for="my-checkbox">
+      <forge-label>
         <span>Label</span>
-        <forge-checkbox id="my-checkbox"></forge-checkbox>
+        <forge-checkbox></forge-checkbox>
       </forge-label>
     `;
   }
