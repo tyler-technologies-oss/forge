@@ -51,6 +51,7 @@ const preview: Preview = {
             'Blazor'
           ],
           'Components',
+          'Recipes',
           'Design Tokens',
           [
             'Introduction'
