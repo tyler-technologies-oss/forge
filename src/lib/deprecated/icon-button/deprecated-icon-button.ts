@@ -112,7 +112,7 @@ export class DeprecatedIconButtonComponent extends BaseComponent implements IDep
 
   private _onToggle(): void {
     this.isOn = !this._isOn;
-    this.dispatchEvent(new CustomEvent(DEPRECATED_ICON_BUTTON_CONSTANTS.events.TOGGLE, { bubbles: true, composed: true, detail: this._isOn }));
+    this.dispatchEvent(new CustomEvent('forge-icon-button-toggle', { bubbles: true, composed: true, detail: this._isOn }));
   }
 
   private _initialize(): void {
