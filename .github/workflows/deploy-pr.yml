@@ -6,6 +6,7 @@ on:
     paths:
       - '.storybook/**/*'
       - 'src/stories/**/*'
+      - 'src/lib/**/*'
 
 jobs:
   wf-config:
@@ -18,9 +19,9 @@ jobs:
         with:
           filters: |
             storybook:
-              - 'src/lib/**'
               - '.storybook/**'
               - 'src/stories/**'
+              - 'src/lib/**'
     outputs:
       deploy-storybook: ${{ steps.file-filter.outputs.storybook == 'true' }}
 

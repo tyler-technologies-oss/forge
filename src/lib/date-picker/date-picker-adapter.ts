@@ -6,6 +6,7 @@ import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from './base/base-date-
 import { IDatePickerCalendarDropdownConfig } from './base/base-date-picker-constants';
 import { IDatePickerComponent } from './date-picker';
 import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 
 export interface IDatePickerAdapter extends IBaseDatePickerAdapter {}
 
@@ -49,6 +50,8 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
     this._inputElement.setAttribute('aria-haspopup', 'true');
     this._inputElement.setAttribute('aria-expanded', 'false');
     this._inputElement.setAttribute('aria-owns', this._dropdownIdentifier);
+    tryCreateAriaControlsPlaceholder();
+    setAriaControls(this._inputElement);
   }
 
   public addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void {

@@ -195,6 +195,12 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
       expect(toElement.hasAttribute('aria-ariactivedescendant')).toBe(false);
     });
 
+    it('should provide an aria-label on the To input if none is provided', function(this: ITestContext) {
+      this.context = setupTestContext(true);
+      this.context.component.open = true;
+      expect(getToElement(this.context.component).hasAttribute('aria-label')).toBeTrue();
+    });
+
     it('should open popup programmatically', function(this: ITestContext) {
       this.context = setupTestContext(true);
       this.context.component.open = true;

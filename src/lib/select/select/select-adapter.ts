@@ -4,7 +4,8 @@ import { SELECT_CONSTANTS } from './select-constants';
 import { IBaseSelectAdapter, BaseSelectAdapter } from '../core';
 import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
 import type { IFieldComponent } from '../../field/field';
-import { FieldLabelPosition, FIELD_CONSTANTS } from '../../field';
+import { FIELD_CONSTANTS } from '../../field/field-constants';
+import { tryCreateAriaControlsPlaceholder, setAriaControls } from '../../core/utils/utils';
 
 export type OptionListenerDestructor = () => void;
 
@@ -40,7 +41,8 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
     this._component.setAttribute('role', 'combobox');
     this._component.setAttribute('aria-haspopup', 'true');
     this._component.setAttribute('aria-expanded', 'false');
-    this.setAriaControls();
+    tryCreateAriaControlsPlaceholder();
+    setAriaControls(this._component);
 
     if (this.fieldElement.required) {
       this.setHostAttribute('aria-required', 'true');
@@ -94,7 +96,7 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
   public close(): Promise<void> {
     this._component.setAttribute('aria-expanded', 'false');
     this._component.removeAttribute('aria-activedescendant');
-    this.setAriaControls();
+    setAriaControls(this._component);
     this._fieldElement.popoverExpanded = false;
     return super.close();
   }
@@ -130,18 +132,5 @@ export class SelectAdapter extends BaseSelectAdapter<ISelectComponent> implement
 
   public removeTargetListener(type: string, listener: (evt: Event) => void): void {
     this._component.removeEventListener(type, listener);
-  }
-
-  public setAriaControls(): void {
-    let placeholderDiv = this._component.querySelector('[data-forge-aria-controls-placeholder]');
-    if (placeholderDiv) {
-      this._component.setAttribute('aria-controls', placeholderDiv.id);
-      return;
-    }
-    placeholderDiv = document.createElement('div');
-    placeholderDiv.id = `forge-select-dropdown-temp-${randomChars(10)}`;
-    placeholderDiv.setAttribute('data-forge-aria-controls-placeholder', '');
-    this._component.setAttribute('aria-controls', placeholderDiv.id);
-    this._component.appendChild(placeholderDiv);
   }
 }

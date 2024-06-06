@@ -1,7 +1,7 @@
 import { emitEvent, listenOwnProperty, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
-import { sep } from 'path';
 import { CalendarDropdown, ICalendarDropdownPopupConfig } from '../calendar/calendar-dropdown';
-import { DateInputMask, IDateInputMaskOptions } from '../core';
+import { DateInputMask, IDateInputMaskOptions } from '../core/mask/date-input-mask';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 import { BaseDatePickerAdapter, IBaseDatePickerAdapter } from '../date-picker/base/base-date-picker-adapter';
 import { IDatePickerCalendarDropdownConfig } from '../date-picker/base/base-date-picker-constants';
 import { createToggleElement } from '../date-picker/base/base-date-picker-utils';
@@ -96,6 +96,11 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     this._applyToInputs(input => input.setAttribute('aria-haspopup', 'true'));
     this._applyToInputs(input => input.setAttribute('aria-expanded', 'false'));
     this._applyToInputs(input => input.setAttribute('aria-owns', this._dropdownIdentifier));
+    if (!this._toInputElement.hasAttribute('aria-label')) {
+      this._toInputElement.setAttribute('aria-label', 'To date');
+    }
+    tryCreateAriaControlsPlaceholder();
+    this._applyToInputs(input => setAriaControls(input));
   }
 
   public addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void {

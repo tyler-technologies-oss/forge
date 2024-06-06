@@ -166,6 +166,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
     this._open = true;
     const config: IListDropdownConfig = {
       options: this._options,
+      referenceElement: this._adapter.hostElement,
       multiple: this._multiple,
       selectedValues: [...this._selectedValues],
       id: this._identifier,

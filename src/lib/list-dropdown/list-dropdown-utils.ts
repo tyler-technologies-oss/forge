@@ -8,6 +8,7 @@ import { POPOVER_CONSTANTS } from '../popover';
 import { IPopoverComponent } from '../popover/popover';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
 import { IListDropdownCascadingElementFactoryConfig, IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownAsyncStyle, ListDropdownIconType, ListDropdownType, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
+import { LIST_ITEM_CONSTANTS } from '../list/list-item';
 
 export enum ListDropdownOptionType { Option, Group }
 
@@ -84,6 +85,14 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
       break;
     default:
       listElement.setAttribute('role', 'listbox');
+  }
+  
+  if (config.type !== ListDropdownType.Menu && config.multiple) {
+    listElement.setAttribute('aria-multiselectable', 'true');
+  }
+
+  if (config?.referenceElement?.id) {
+    listElement.setAttribute('aria-labelledby', config.referenceElement.id);
   }
 
   return listElement;
@@ -225,7 +234,9 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       if (config.multiple) {
         const checkboxElement = createCheckboxElement(isSelected);
         listItemElement.appendChild(checkboxElement);
-        buttonElement.setAttribute('aria-selected', `${isSelected}`);
+        if (!option.disabled) {
+          buttonElement.setAttribute('aria-selected', `${isSelected}`);
+        }
         buttonElement.setAttribute('aria-checked', `${isSelected}`);
       }
 
@@ -269,6 +280,9 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       // Update the selected state
       if (isSelected) {
         listItemElement.selected = true;
+      }
+      if (config.type !== ListDropdownType.Menu) {
+        buttonElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
       }
 
       // If we have any child options, we need to render a child menu for this list item

@@ -7,9 +7,11 @@ import { IListDropdown, IListDropdownConfig, ListDropdown } from '../list-dropdo
 import { CHIP_FIELD_CONSTANTS, IChipFieldComponent } from '../chip-field';
 import { IPopoverComponent } from '../popover/popover';
 import { POPOVER_CONSTANTS } from '../popover';
-import { IFieldComponent } from '../field/field';
+import type { IFieldComponent } from '../field/field';
+import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils/utils';
 
 export interface IAutocompleteAdapter extends IBaseAdapter {
+  readonly inputElement: HTMLInputElement;
   setInputElement(): HTMLInputElement;
   setInputAttribute(name: string, value: string): void;
   addInputListener(type: string, listener: (evt: Event) => void): void;
@@ -60,6 +62,10 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this.setInputElement();
   }
 
+  public get inputElement(): HTMLInputElement {
+    return this._inputElement;
+  }
+
   public setInputElement(): HTMLInputElement {
     const inputElements = deepQuerySelectorAll(this._component, AUTOCOMPLETE_CONSTANTS.selectors.INPUT, false);
     if (inputElements.length) {
@@ -88,6 +94,8 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     this._inputElement.setAttribute('aria-haspopup', 'true');
     this._inputElement.setAttribute('aria-expanded', 'false');
     this._inputElement.setAttribute('aria-autocomplete', 'list');
+    tryCreateAriaControlsPlaceholder();
+    setAriaControls(this._inputElement);
   }
 
   public isWrappingChipField(): boolean {
