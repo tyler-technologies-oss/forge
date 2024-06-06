@@ -136,7 +136,7 @@ jobs:
     if: ${{ needs.wf-config.outputs.is-release == 'true' && needs.wf-config.outputs.deploy-storybook == 'true' }}
     with:
       PRODUCTION_RELEASE: true
-      BUILD_DIRECTORY: dist/storybook
+      BUILD_DIRECTORY: storybook-static
       BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
       BUILD_NPM_SCRIPT: "build-storybook"
       PR_COMMENT_HEADER: "View Storybook Deployment"

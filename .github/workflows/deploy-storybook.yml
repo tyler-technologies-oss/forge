@@ -1,0 +1,17 @@
+name: Storybook
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-storybook:
+    name: Deploy
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-publish-gh-pages.yml@v2.10.3
+    with:
+      PRODUCTION_RELEASE: true
+      BUILD_DIRECTORY: storybook-static
+      BUILD_TARGET_DIRECTORY: docs/${{ github.head_ref || github.ref_name }}
+      BUILD_NPM_SCRIPT: "build-storybook"
+    secrets:
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
