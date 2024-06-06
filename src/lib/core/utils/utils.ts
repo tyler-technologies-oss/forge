@@ -158,7 +158,7 @@ export function tryCreateAriaControlsPlaceholder(): void {
 }
 
 /**
- * Creates a div as a temporary aria-controls placeholder for various components that use a dynamic popup.
+ * Sets the aria-controls attribute of an element to the placeholder div
  */
 export function setAriaControls(component: HTMLElement): void {
   const placeholderDiv = document.getElementById(ARIA_CONTROLS_PLACEHOLDER_ID);
