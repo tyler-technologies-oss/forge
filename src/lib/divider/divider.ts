@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { DIVIDER_CONSTANTS } from './divider-constants';
 
@@ -31,7 +31,7 @@ declare global {
  * 
  * @csspart root - The root container element.
  */
-@CustomElement({
+@customElement({
   name: DIVIDER_CONSTANTS.elementName
 })
 export class DividerComponent extends BaseComponent implements IDividerComponent {

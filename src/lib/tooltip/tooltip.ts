@@ -1,6 +1,6 @@
-import { CustomElement, coerceNumber, FoundationProperty, coerceBoolean, attachShadowTemplate } from '@tylertech/forge-core';
+import { customElement, coerceNumber, coreProperty, coerceBoolean, attachShadowTemplate } from '@tylertech/forge-core';
 import { TooltipAdapter } from './tooltip-adapter';
-import { TooltipFoundation } from './tooltip-foundation';
+import { TooltipCore } from './tooltip-core';
 import { TooltipPlacement, TooltipTriggerType, TooltipType, TOOLTIP_CONSTANTS } from './tooltip-constants';
 import { BaseComponent } from '../core/base/base-component';
 import { OverlayComponent } from '../overlay/overlay';
@@ -109,7 +109,7 @@ declare global {
  * @csspart arrow - The tooltip arrow.
  * @csspart overlay - The overlay surface.
  */
-@CustomElement({
+@customElement({
   name: TOOLTIP_CONSTANTS.elementName,
   dependencies: [
     OverlayComponent
@@ -120,12 +120,12 @@ export class TooltipComponent extends WithDefaultAria(WithElementInternals(BaseC
     return Object.values(TOOLTIP_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: TooltipFoundation;
+  private _core: TooltipCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new TooltipFoundation(new TooltipAdapter(this));
+    this._core = new TooltipCore(new TooltipAdapter(this));
   }
 
   public [tryDismiss](state?: IDismissibleStackState<string> | undefined): boolean {
@@ -133,17 +133,17 @@ export class TooltipComponent extends WithDefaultAria(WithElementInternals(BaseC
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case TOOLTIP_CONSTANTS.observedAttributes.ID:
-        this._foundation.syncTooltipAria();
+        this._core.syncTooltipAria();
         break;
       case TOOLTIP_CONSTANTS.observedAttributes.OPEN:
         this.open = coerceBoolean(newValue);
@@ -180,47 +180,47 @@ export class TooltipComponent extends WithDefaultAria(WithElementInternals(BaseC
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare type: TooltipType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare anchor: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare anchorElement: HTMLElement | null;
 
   /** @deprecated use `anchor` instead */
-  @FoundationProperty({ name: 'anchor' })
+  @coreProperty({ name: 'anchor' })
   public declare target: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare placement: `${TooltipPlacement}`;
 
   /** @deprecated use `placement` instead */
-  @FoundationProperty({ name: 'placement' })
+  @coreProperty({ name: 'placement' })
   public declare position: `${TooltipPlacement}`;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare delay: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare offset: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare flip: OverlayFlipState;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare boundary: string | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare boundaryElement: HTMLElement | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fallbackPlacements: PositionPlacement[] | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare triggerType: TooltipTriggerType | TooltipTriggerType[];
 }

@@ -1,9 +1,9 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { ButtonComponent } from '../button';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FilePickerAdapter } from './file-picker-adapter';
 import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants';
-import { FilePickerFoundation } from './file-picker-foundation';
+import { FilePickerCore } from './file-picker-core';
 
 import template from './file-picker.html';
 import styles from './file-picker.scss';
@@ -77,7 +77,7 @@ declare global {
  * @csspart input - The <input type="file"> element.
  * @csspart helper-text-container - The container around the helper-text slot.
  */
-@CustomElement({
+@customElement({
   name: FILE_PICKER_CONSTANTS.elementName,
   dependencies: [ButtonComponent]
 })
@@ -94,20 +94,20 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
     ];
   }
 
-  private _foundation: FilePickerFoundation;
+  private _core: FilePickerCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new FilePickerFoundation(new FilePickerAdapter(this));
+    this._core = new FilePickerCore(new FilePickerAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -137,30 +137,30 @@ export class FilePickerComponent extends BaseComponent implements IFilePickerCom
   }
 
   /** Gets and sets the allowed file types */
-  @FoundationProperty()
+  @coreProperty()
   public declare accept: string | null | undefined;
 
   /** Gets and sets the maximum allowed file size */
-  @FoundationProperty()
+  @coreProperty()
   public declare maxSize: number | null | undefined;
 
   /** Gets and sets the camera to use when capturing video or images */
-  @FoundationProperty()
+  @coreProperty()
   public declare capture: string | null | undefined;
 
   /** Gets and sets whether multiple files are allowed */
-  @FoundationProperty()
+  @coreProperty()
   public declare multiple: boolean;
 
   /** Gets and sets whether the file picker is disabled */
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
   /** Gets and sets whether the file picker is compact */
-  @FoundationProperty()
+  @coreProperty()
   public declare compact: boolean;
 
   /** Gets and sets whether the file picker is borderless */
-  @FoundationProperty()
+  @coreProperty()
   public declare borderless: boolean;
 }

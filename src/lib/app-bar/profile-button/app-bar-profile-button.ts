@@ -1,6 +1,6 @@
-import { CustomElement, attachLightTemplate, coerceNumber, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachLightTemplate, coerceNumber, coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { AppBarProfileButtonAdapter } from './app-bar-profile-button-adapter';
-import { AppBarProfileButtonFoundation } from './app-bar-profile-button-foundation';
+import { AppBarProfileButtonCore } from './app-bar-profile-button-core';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS, AppBarProfileButtonProfileCardBuilder } from './app-bar-profile-button-constants';
 import { ProfileCardComponent } from '../../profile-card';
 import { IconButtonComponent } from '../../icon-button';
@@ -67,7 +67,7 @@ declare global {
  * @event {CustomEvent} forge-profile-card-sign-out - Fires when the sign out button is clicked.
  * @event {CustomEvent} forge-profile-card-profile - Fires when the profile button is clicked.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
   dependencies: [
     PopoverComponent,
@@ -94,11 +94,11 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
     ];
   }
 
-  private _foundation: AppBarProfileButtonFoundation;
+  private _core: AppBarProfileButtonCore;
 
   constructor() {
     super();
-    this._foundation = new AppBarProfileButtonFoundation(new AppBarProfileButtonAdapter(this));
+    this._core = new AppBarProfileButtonCore(new AppBarProfileButtonAdapter(this));
   }
 
   public initializedCallback(): void {
@@ -106,11 +106,11 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -151,44 +151,44 @@ export class AppBarProfileButtonComponent extends BaseComponent implements IAppB
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fullName: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare email: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarImageUrl: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarLetterCount: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare avatarIcon: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare signOutButton: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare profileButton: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare signOutButtonText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare profileButtonText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
   public get popupElement(): IPopoverComponent | undefined {
-    return this._foundation.popupElement;
+    return this._core.popupElement;
   }
 
   /** Sets the profile card builder callback that will be used to add extra content to the profile card. */
-  @FoundationProperty()
+  @coreProperty()
   public declare profileCardBuilder: AppBarProfileButtonProfileCardBuilder;
 }

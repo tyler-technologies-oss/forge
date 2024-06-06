@@ -1,7 +1,7 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean, coreProperty } from '@tylertech/forge-core';
 
 import { TabAdapter } from './tab-adapter';
-import { TabFoundation } from './tab-foundation';
+import { TabCore } from './tab-core';
 import { TAB_CONSTANTS } from './tab-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
@@ -85,7 +85,7 @@ declare global {
  * @slot start - Content before the label.
  * @slot end - Content after the label.
  */
-@CustomElement({
+@customElement({
   name: TAB_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -97,16 +97,16 @@ export class TabComponent extends BaseComponent implements ITabComponent {
     return Object.values(TAB_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: TabFoundation;
+  private _core: TabCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new TabFoundation(new TabAdapter(this));
+    this._core = new TabCore(new TabAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -132,21 +132,21 @@ export class TabComponent extends BaseComponent implements ITabComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
   
-  @FoundationProperty()
+  @coreProperty()
   public declare selected: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare vertical: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare stacked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare secondary: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare inverted: boolean;
 }

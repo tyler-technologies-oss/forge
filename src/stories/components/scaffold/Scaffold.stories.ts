@@ -36,11 +36,10 @@ const meta = {
   },
   decorators: [storyStyles(styles)],
   argTypes: {
-    ...generateCustomElementArgTypes({
-      tagName: component,
-    }),
+    ...generateCustomElementArgTypes({ tagName: component }),
   },
   args: {
+    viewport: false
   },
 } satisfies Meta;
 

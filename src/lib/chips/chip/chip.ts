@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
 import { BaseComponent, IBaseComponent } from '../../core';
 import { FocusIndicatorComponent } from '../../focus-indicator';
@@ -7,7 +7,7 @@ import { IconButtonComponent } from '../../icon-button';
 import { StateLayerComponent } from '../../state-layer';
 import { ChipAdapter } from './chip-adapter';
 import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } from './chip-constants';
-import { ChipFoundation } from './chip-foundation';
+import { ChipCore } from './chip-core';
 
 import template from './chip.html';
 import styles from './chip.scss';
@@ -125,7 +125,7 @@ declare global {
  * @slot start - The start content of the chip.
  * @slot end - The end content of the chip.
  */
-@CustomElement({
+@customElement({
   name: CHIP_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -139,17 +139,17 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
     return Object.values(CHIP_CONSTANTS.observedAttributes);
   }
 
-  protected _foundation: ChipFoundation;
+  protected _core: ChipCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconClose);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ChipFoundation(new ChipAdapter(this));
+    this._core = new ChipCore(new ChipAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -191,47 +191,47 @@ export class ChipComponent extends BaseComponent implements IChipComponent {
   }
 
   public override focus(options?: FocusOptions): void {
-    this._foundation.focus(options);
+    this._core.focus(options);
   }
 
   public focusRemoveButton(): void {
-    this._foundation.focusRemoveButton();
+    this._core.focusRemoveButton();
   }
 
   public override click(): void {
-    this._foundation.click();
+    this._core.click();
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare type: ChipType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: unknown;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare selected: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare invalid: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: ChipTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare href: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare target: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare download: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare rel: string;
 }

@@ -1,7 +1,7 @@
-import { attachShadowTemplate, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
 import { OverlayAdapter } from './overlay-adapter';
 import { OverlayLightDismissEventData, overlayStack, OVERLAY_CONSTANTS } from './overlay-constants';
-import { OverlayFoundation } from './overlay-foundation';
+import { OverlayCore } from './overlay-core';
 import { BaseOverlay, IBaseOverlay } from './base/base-overlay';
 
 import template from './overlay.html';
@@ -89,10 +89,10 @@ declare global {
  * 
  * @csspart root - The component's root element.
  */
-@CustomElement({
+@customElement({
   name: OVERLAY_CONSTANTS.elementName
 })
-export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements IOverlayComponent {
+export class OverlayComponent extends BaseOverlay<OverlayCore> implements IOverlayComponent {
   public static get observedAttributes(): string[] {
     return Object.values(OVERLAY_CONSTANTS.observedAttributes);
   }
@@ -106,20 +106,20 @@ export class OverlayComponent extends BaseOverlay<OverlayFoundation> implements 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new OverlayFoundation(new OverlayAdapter(this));
+    this._core = new OverlayCore(new OverlayAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare arrowElement: HTMLElement;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare arrowElementOffset: number;
 }

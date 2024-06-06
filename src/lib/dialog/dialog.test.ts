@@ -780,7 +780,7 @@ describe('Dialog', () => {
 
       await harness.hideAsync();
 
-      expect(harness.dialogElement['_foundation']['_moveController']).to.be.undefined;
+      expect(harness.dialogElement['_core']['_moveController']).to.be.undefined;
     });
 
     it('should not move dialog if setting moveable=false while open', async () => {

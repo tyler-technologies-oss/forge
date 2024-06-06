@@ -4,7 +4,7 @@ import { SplitViewComponent } from './split-view';
 
 export * from './split-view-adapter';
 export * from './split-view-constants';
-export * from './split-view-foundation';
+export * from './split-view-core';
 export * from './split-view';
 
 export function defineSplitViewComponent(): void {

@@ -1,4 +1,4 @@
-import { attachShadowTemplate, CustomElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
 import { tylIconInsertInvitation } from '@tylertech/tyler-icons/standard';
 import { CalendarComponent } from '../calendar';
 import { IconComponent, IconRegistry } from '../icon';
@@ -8,7 +8,7 @@ import { BaseDatePickerComponent, IBaseDatePickerComponent } from './base/base-d
 import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants';
 import { DatePickerAdapter } from './date-picker-adapter';
 import { DATE_PICKER_CONSTANTS } from './date-picker-constants';
-import { DatePickerFoundation } from './date-picker-foundation';
+import { DatePickerCore } from './date-picker-core';
 
 import template from './date-picker.html';
 import styles from './date-picker.scss';
@@ -38,7 +38,7 @@ declare global {
  * @event {CustomEvent<void>} forge-date-picker-close - Emits when the date picker closes.
  * @event {CustomEvent<string>} forge-date-picker-input - Emits when the user inputs a value into the date picker.
  */
-@CustomElement({
+@customElement({
   name: DATE_PICKER_CONSTANTS.elementName,
   dependencies: [
     PopoverComponent,
@@ -47,7 +47,7 @@ declare global {
     IconComponent
   ]
 })
-export class DatePickerComponent extends BaseDatePickerComponent<Date | string | undefined, Date, DatePickerFoundation> implements IDatePickerComponent {
+export class DatePickerComponent extends BaseDatePickerComponent<Date | string | undefined, Date, DatePickerCore> implements IDatePickerComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_DATE_PICKER_CONSTANTS.observedAttributes),
@@ -59,7 +59,7 @@ export class DatePickerComponent extends BaseDatePickerComponent<Date | string |
     super();
     IconRegistry.define(tylIconInsertInvitation);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new DatePickerFoundation(new DatePickerAdapter(this));
+    this._core = new DatePickerCore(new DatePickerAdapter(this));
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

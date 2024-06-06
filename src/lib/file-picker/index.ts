@@ -4,7 +4,7 @@ import { FilePickerComponent } from './file-picker';
 
 export * from './file-picker-adapter';
 export * from './file-picker-constants';
-export * from './file-picker-foundation';
+export * from './file-picker-core';
 export * from './file-picker';
 export * from './file-picker-component-delegate';
 

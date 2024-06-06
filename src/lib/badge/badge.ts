@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { BadgeTheme, BADGE_CONSTANTS } from './badge-constants';
 
@@ -47,7 +47,7 @@ declare global {
  * @slot start - Content placed before the default content.
  * @slot end - Content placed after the default content.
  */
-@CustomElement({
+@customElement({
   name: BADGE_CONSTANTS.elementName
 })
 export class BadgeComponent extends BaseComponent implements IBadgeComponent {

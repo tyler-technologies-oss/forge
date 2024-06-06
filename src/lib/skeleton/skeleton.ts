@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { SKELETON_CONSTANTS } from './skeleton-constants';
 
@@ -48,7 +48,7 @@ declare global {
  * 
  * @csspart root - The root element of the skeleton.
  */
-@CustomElement({
+@customElement({
   name: SKELETON_CONSTANTS.elementName
 })
 export class SkeletonComponent extends BaseComponent implements ISkeletonComponent {

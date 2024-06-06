@@ -11,7 +11,7 @@ import type { IIconComponent } from '../../icon';
 import type { ILabelComponent } from '../../label/label';
 import { attachShadowTemplate } from '@tylertech/forge-core';
 import { BaseButton, IBaseButton } from './base-button';
-import { BaseButtonFoundation } from './base-button-foundation';
+import { BaseButtonCore } from './base-button-core';
 import { BaseButtonAdapter, IBaseButtonAdapter } from './base-button-adapter';
 import { ExperimentalFocusOptions } from '../../constants';
 
@@ -19,7 +19,7 @@ import '../../focus-indicator/focus-indicator';
 import '../../state-layer/state-layer';
 import '../../label/label';
 
-class TestBaseButtonFoundation extends BaseButtonFoundation<IBaseButtonAdapter<IBaseButton>> {}
+class TestBaseButtonCore extends BaseButtonCore<IBaseButtonAdapter<IBaseButton>> {}
 class TestBaseButtonAdapter extends BaseButtonAdapter<IBaseButton> implements IBaseButtonAdapter<IBaseButton> {}
 
 const template = `
@@ -46,17 +46,17 @@ const styles = `
   }
 `;
 
-class TestBaseButton extends BaseButton<TestBaseButtonFoundation> {
+class TestBaseButton extends BaseButton<TestBaseButtonCore> {
   public static get observedAttributes(): string[] {
     return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes) as string[]];
   }
 
-  protected readonly _foundation: TestBaseButtonFoundation;
+  protected readonly _core: TestBaseButtonCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new TestBaseButtonFoundation(new TestBaseButtonAdapter(this));
+    this._core = new TestBaseButtonCore(new TestBaseButtonAdapter(this));
   }
 
   public override focus(options: ExperimentalFocusOptions): void {

@@ -178,13 +178,13 @@ describe('DatePickerComponentDelegate', function(this: ITestContext) {
   it('should set parse callback via config', function(this: ITestContext) {
     this.context = setupTestContext({ parseCallback: dateStr => new Date() });
     
-    expect(this.context.delegate.element['_foundation']['_parseCallback']).not.toBeFalsy();
+    expect(this.context.delegate.element['_core']['_parseCallback']).not.toBeFalsy();
   });
 
   it('should set format callback via config', function(this: ITestContext) {
     this.context = setupTestContext({ formatCallback: date => '' });
 
-    expect(this.context.delegate.element['_foundation']['_formatCallback']).not.toBeFalsy();
+    expect(this.context.delegate.element['_core']['_formatCallback']).not.toBeFalsy();
   });
 
   it('should set popup classes via config', function(this: ITestContext) {

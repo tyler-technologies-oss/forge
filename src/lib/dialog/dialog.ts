@@ -1,10 +1,10 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { BackdropComponent } from '../backdrop';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { DialogAdapter } from './dialog-adapter';
-import { DialogFoundation } from './dialog-foundation';
+import { DialogCore } from './dialog-core';
 import {
   DialogAnimationType,
   DialogMode,
@@ -160,7 +160,7 @@ declare global {
  * @slot - The content of the dialog.
  * @slot move-handle - The move handle content.
  */
-@CustomElement({
+@customElement({
   name: DIALOG_CONSTANTS.elementName,
   dependencies: [
     BackdropComponent
@@ -177,34 +177,34 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
    */
   public static readonly [dialogStack]: Set<IDialogComponent> = new Set();
 
-  private _foundation: DialogFoundation;
+  private _core: DialogCore;
 
   /** @internal */
   public [hideBackdrop](): void {
-    this._foundation.hideBackdrop();
+    this._core.hideBackdrop();
   }
   
   /** @internal */
   public [showBackdrop](): void {
-    this._foundation.showBackdrop();
+    this._core.showBackdrop();
   }
 
   public [tryDismiss](_state?: IDismissibleStackState<string> | undefined): boolean {
-    return this._foundation.dispatchBeforeCloseEvent();
+    return this._core.dispatchBeforeCloseEvent();
   }
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new DialogFoundation(new DialogAdapter(this));
+    this._core = new DialogCore(new DialogAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -248,43 +248,43 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
   
-  @FoundationProperty()
+  @coreProperty()
   public declare mode: DialogMode;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare type: DialogType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare animationType: DialogAnimationType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare preset: DialogPreset;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare persistent: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fullscreen: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare trigger: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare triggerElement: HTMLElement | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare moveable: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare positionStrategy: DialogPositionStrategy;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare sizeStrategy: DialogSizeStrategy;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare placement: DialogPlacement;
 
   /** Shows the dialog. */

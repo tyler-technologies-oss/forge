@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, toggleAttribute } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, toggleAttribute } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { InlineMessageTheme, INLINE_MESSAGE_CONSTANTS } from './inline-message-constants';
 
@@ -45,7 +45,7 @@ declare global {
  * @slot title - The title of the inline message.
  * @slot icon - The icon to display.
  */
-@CustomElement({
+@customElement({
   name: INLINE_MESSAGE_CONSTANTS.elementName
 })
 export class InlineMessageComponent extends BaseComponent implements IInlineMessageComponent {

@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, ICustomElement, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { ButtonAreaAdapter } from './button-area-adapter';
-import { ButtonAreaFoundation } from './button-area-foundation';
+import { ButtonAreaCore } from './button-area-core';
 import { BUTTON_AREA_CONSTANTS } from './button-area-constants';
 import { FocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
@@ -43,7 +43,7 @@ declare global {
  * @slot - Places content within the default (unnamed) slot (main body of the component).
  * @slot button - Places content within a visually hidden slot. Always place a `<button>` element in this slot.
  */
-@CustomElement({
+@customElement({
   name: BUTTON_AREA_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -57,20 +57,20 @@ export class ButtonAreaComponent extends HTMLElement implements IButtonAreaCompo
     ];
   }
 
-  private _foundation: ButtonAreaFoundation;
+  private _core: ButtonAreaCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ButtonAreaFoundation(new ButtonAreaAdapter(this));
+    this._core = new ButtonAreaCore(new ButtonAreaAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -82,6 +82,6 @@ export class ButtonAreaComponent extends HTMLElement implements IButtonAreaCompo
   }
 
   /** Controls whether the component and associated button element are disabled. */
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 }

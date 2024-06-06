@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, ICustomElement, coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { StackAdapter } from './stack-adapter';
-import { StackFoundation } from './stack-foundation';
+import { StackCore } from './stack-core';
 import { STACK_CONSTANTS, StackAlignment } from './stack-constants';
 import { BaseComponent } from '../core/base/base-component';
 
@@ -44,7 +44,7 @@ declare global {
  * 
  * @slot - The default/unnamed slot for stack content.
  */
-@CustomElement({
+@customElement({
   name: STACK_CONSTANTS.elementName
 })
 export class StackComponent extends BaseComponent implements IStackComponent {
@@ -52,12 +52,12 @@ export class StackComponent extends BaseComponent implements IStackComponent {
     return Object.values(STACK_CONSTANTS.observedAttributes);
   }
 
-  private readonly _foundation: StackFoundation;
+  private readonly _core: StackCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new StackFoundation(new StackAdapter(this));
+    this._core = new StackCore(new StackAdapter(this));
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -88,7 +88,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @default false
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare inline: boolean;
 
   /**
@@ -96,7 +96,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @default false
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare wrap: boolean;
 
   /**
@@ -104,7 +104,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @default false
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare stretch: boolean;
 
   /**
@@ -112,7 +112,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @default 16
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare gap: string;
 
   /**
@@ -120,7 +120,7 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @default "start"
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare alignment: StackAlignment;
 
   /**
@@ -128,6 +128,6 @@ export class StackComponent extends BaseComponent implements IStackComponent {
    * @default "start"
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare justify: StackAlignment;
 }

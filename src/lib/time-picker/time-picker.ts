@@ -1,8 +1,8 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, coerceNumber, ensureChild } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber, ensureChild } from '@tylertech/forge-core';
 import { tylIconClockOutline } from '@tylertech/tyler-icons/extended';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
 import { TimePickerAdapter } from './time-picker-adapter';
-import { TimePickerFoundation } from './time-picker-foundation';
+import { TimePickerCore } from './time-picker-core';
 import {
   TIME_PICKER_CONSTANTS,
   ITimePickerOption,
@@ -64,8 +64,6 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-time-picker>` custom element.
- * 
  * @tag forge-time-picker
  * 
  * @property {string | null | undefined} [value=undefined] - The current value of the time picker.
@@ -95,7 +93,7 @@ declare global {
  * @property {string} [popupTarget=undefined] - The target element to attach the popup to.
  * 
  */
-@CustomElement({
+@customElement({
   name: TIME_PICKER_CONSTANTS.elementName,
   dependencies: [
     ListComponent,
@@ -130,25 +128,25 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
     ];
   }
 
-  private _foundation: TimePickerFoundation;
+  private _core: TimePickerCore;
 
   constructor() {
     super();
     IconRegistry.define([tylIconClockOutline, tylIconClose]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new TimePickerFoundation(new TimePickerAdapter(this));
+    this._core = new TimePickerCore(new TimePickerAdapter(this));
   }
 
   public connectedCallback(): void {
     if (this.querySelector(TIME_PICKER_CONSTANTS.selectors.INPUT)) {
-      this._foundation.initialize();
+      this._core.initialize();
     } else {
-      ensureChild(this, TIME_PICKER_CONSTANTS.selectors.INPUT).then(() => this._foundation.initialize());
+      ensureChild(this, TIME_PICKER_CONSTANTS.selectors.INPUT).then(() => this._core.initialize());
     }
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -207,79 +205,79 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare allowSeconds: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare masked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showMaskFormat: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare use24HourTime: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare allowInvalidTime: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare min: string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare max: string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare restrictedTimes: string[];
 
-  @FoundationProperty()
+  @coreProperty()
   public declare startTime: string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare step: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare allowInput: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showNow: boolean;
 
   /** Whether or not to display hour options in dropdown */
-  @FoundationProperty()
+  @coreProperty()
   public declare showHourOptions: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare customOptions: ITimePickerOption[];
 
-  @FoundationProperty()
+  @coreProperty()
   public declare validationCallback: TimePickerValidationCallback;
   
-  @FoundationProperty()
+  @coreProperty()
   public declare parseCallback: TimePickerParseCallback;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare formatCallback: TimePickerFormatCallback;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare coercionCallback: TimePickerCoercionCallback;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare prepareMaskCallback: TimePickerPrepareMaskCallback;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popupClasses: string | string[];
 
-  @FoundationProperty()
+  @coreProperty()
   public declare allowDropdown: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popupTarget: string;
 }

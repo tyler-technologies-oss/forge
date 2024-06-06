@@ -4,7 +4,7 @@ import { SplitButtonComponent } from './split-button';
 
 export * from './split-button-adapter';
 export * from './split-button-constants';
-export * from './split-button-foundation';
+export * from './split-button-core';
 export * from './split-button';
 
 export function defineSplitButtonComponent(): void {

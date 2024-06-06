@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { getFormState, getFormValue, inputType, setDefaultAria } from '../../constants';
 import { BaseComponent } from '../../core/base/base-component';
 import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
@@ -12,7 +12,7 @@ import { StateLayerComponent } from '../../state-layer';
 import { RadioGroupManager } from '../core/radio-group-manager';
 import { RadioAdapter } from './radio-adapter';
 import { RadioLabelPosition, RadioState, RADIO_CONSTANTS, tryCheck } from './radio-constants';
-import { RadioFoundation } from './radio-foundation';
+import { RadioCore } from './radio-core';
 
 import template from './radio.html';
 import styles from './radio.scss';
@@ -97,7 +97,7 @@ declare global {
  * 
  * @slot - This is a default/unnamed slot for the label text.
  */
-@CustomElement({
+@customElement({
   name: RADIO_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -109,7 +109,7 @@ export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithF
     return Object.values(RADIO_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: RadioFoundation;
+  private _core: RadioCore;
 
   // Used to communicate with the form group after this radio instance has been disconnected
   private _rootNode?: ShadowRoot | Document;
@@ -119,7 +119,7 @@ export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithF
     super();
     attachShadowTemplate(this, template, styles);
     this[inputType] = 'radio';
-    this._foundation = new RadioFoundation(new RadioAdapter(this));
+    this._core = new RadioCore(new RadioAdapter(this));
   }
 
   public override connectedCallback(): void {
@@ -130,7 +130,7 @@ export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithF
       ariaDisabled: this.disabled ? 'true' : 'false'
     });
     RadioGroupManager.syncRadioFocusableState(this);
-    this._foundation.initialize();
+    this._core.initialize();
     this._rootNode = this.getRootNode() as ShadowRoot | Document;
   }
 
@@ -141,10 +141,10 @@ export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithF
   public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case RADIO_CONSTANTS.attributes.CHECKED:
-        this._foundation.checked = coerceBoolean(newValue);
+        this._core.checked = coerceBoolean(newValue);
         break;
       case RADIO_CONSTANTS.attributes.DEFAULT_CHECKED:
-        this._foundation.defaultChecked = coerceBoolean(newValue);
+        this._core.defaultChecked = coerceBoolean(newValue);
         break;
       case RADIO_CONSTANTS.attributes.VALUE:
         this.value = newValue;
@@ -198,31 +198,31 @@ export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithF
     this[setDefaultAria]({ ariaLabel: value });
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare checked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare defaultChecked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare required: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare readonly: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelPosition: RadioLabelPosition;
 
   public [tryCheck](): boolean {
-    return this._foundation.tryCheck();
+    return this._core.tryCheck();
   }
 }

@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { ListItemAdapter } from './list-item-adapter';
-import { ListItemFoundation } from './list-item-foundation';
+import { ListItemCore } from './list-item-core';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS } from './list-item-constants';
 import { StateLayerComponent } from '../../state-layer';
 import { FocusIndicatorComponent } from '../../focus-indicator';
@@ -103,7 +103,7 @@ declare global {
  * @cssproperty --forge-list-item-dense-indent - The margin inline state when in the dense indented state.
  * @cssproperty --forge-list-item-dense-gap - The gap between the slotted content when in the dense state.
  */
-@CustomElement({
+@customElement({
   name: LIST_ITEM_CONSTANTS.elementName,
   dependencies: [
     StateLayerComponent,
@@ -115,22 +115,22 @@ export class ListItemComponent extends WithElementInternals(WithDefaultAria(Base
     return Object.values(LIST_ITEM_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: ListItemFoundation;
+  private _core: ListItemCore;
   private _adapter: ListItemAdapter;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
     this._adapter = new ListItemAdapter(this);
-    this._foundation = new ListItemFoundation(this._adapter);
+    this._core = new ListItemCore(this._adapter);
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -165,30 +165,30 @@ export class ListItemComponent extends WithElementInternals(WithDefaultAria(Base
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare selected: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare active: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: unknown;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare indented: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare twoLine: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare threeLine: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare wrap: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare noninteractive: boolean;
 }

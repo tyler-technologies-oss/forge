@@ -426,7 +426,7 @@ describe('Overlay', () => {
 
     it('should call position() manually', async () => {
       const harness = await createFixture({ open: true });
-      const adapterPositionSpy = spy(harness.overlayElement['_foundation']['_adapter'], 'positionElement');
+      const adapterPositionSpy = spy(harness.overlayElement['_core']['_adapter'], 'positionElement');
 
       harness.overlayElement.position();
 
@@ -626,7 +626,7 @@ class OverlayHarness {
   }
 
   public get adapter(): IOverlayAdapter {
-    return this.overlayElement['_foundation']['_adapter'];
+    return this.overlayElement['_core']['_adapter'];
   }
 
   public positionUpdated(): Promise<IOverlayComponent> {

@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty } from '@tylertech/forge-core';
 import { AppBarAdapter } from './app-bar-adapter';
-import { AppBarFoundation } from './app-bar-foundation';
+import { AppBarCore } from './app-bar-core';
 import { AppBarElevation, AppBarTheme, APP_BAR_CONSTANTS } from './app-bar-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
@@ -62,7 +62,7 @@ declare global {
  * @slot center - Places content in the center of the app bar.
  * @slot end - Places content at the end of the app bar.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_CONSTANTS.elementName
 })
 export class AppBarComponent extends BaseComponent implements IAppBarComponent {
@@ -76,16 +76,16 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
     ];
   }
 
-  private _foundation: AppBarFoundation;
+  private _core: AppBarCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new AppBarFoundation(new AppBarAdapter(this));
+    this._core = new AppBarCore(new AppBarAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -108,18 +108,18 @@ export class AppBarComponent extends BaseComponent implements IAppBarComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare titleText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare elevation: AppBarElevation;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: AppBarTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare href: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare target: string;
 }

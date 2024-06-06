@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconCancel } from '@tylertech/tyler-icons/standard';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { IconRegistry } from '../icon';
@@ -6,7 +6,7 @@ import { IconButtonComponent } from '../icon-button';
 import { TooltipComponent } from '../tooltip';
 import { BannerAdapter } from './banner-adapter';
 import { BannerTheme, BANNER_CONSTANTS } from './banner-constants';
-import { BannerFoundation } from './banner-foundation';
+import { BannerCore } from './banner-core';
 
 import template from './banner.html';
 import styles from './banner.scss';
@@ -59,7 +59,7 @@ declare global {
  * @slot icon - The icon to display.
  * @slot button - The optional button to display.
  */
-@CustomElement({
+@customElement({
   name: BANNER_CONSTANTS.elementName,
   dependencies: [
     IconButtonComponent,
@@ -71,17 +71,17 @@ export class BannerComponent extends BaseComponent implements IBannerComponent {
     return Object.values(BANNER_CONSTANTS.observedAttributes);
   }
 
-  protected _foundation: BannerFoundation;
+  protected _core: BannerCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconCancel);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new BannerFoundation(new BannerAdapter(this));
+    this._core = new BannerCore(new BannerAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -101,13 +101,13 @@ export class BannerComponent extends BaseComponent implements IBannerComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dismissed: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare persistent: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: BannerTheme;
 
   /** @deprecated Use `persistent` instead. */

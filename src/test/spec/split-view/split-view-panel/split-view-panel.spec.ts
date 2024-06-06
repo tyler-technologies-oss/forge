@@ -1246,7 +1246,7 @@ describe('SplitViewPanelComponent', function(this: ITestContext) {
       component,
       panels,
       parent: fixture,
-      adapter: component['_foundation']['_adapter'],
+      adapter: component['_core']['_adapter'],
       getPart: (part: string): HTMLElement | null => component.shadowRoot!.querySelector(`[part=${part}]`),
       getStateLayer: () => component.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent,
       getOverlay: () => document.body.querySelector(`.${SPLIT_VIEW_PANEL_CONSTANTS.classes.OVERLAY}`),

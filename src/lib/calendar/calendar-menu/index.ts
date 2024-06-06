@@ -4,7 +4,7 @@ import { CalendarMenuComponent } from './calendar-menu';
 
 export * from './calendar-menu-adapter';
 export * from './calendar-menu-constants';
-export * from './calendar-menu-foundation';
+export * from './calendar-menu-core';
 export * from './calendar-menu-utils';
 export * from './calendar-menu';
 

@@ -1,4 +1,4 @@
-import { attachShadowTemplate, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconDateRange } from '@tylertech/tyler-icons/standard';
 import { CalendarComponent } from '../calendar';
 import { BaseDatePickerComponent, IBaseDatePickerComponent } from '../date-picker/base/base-date-picker';
@@ -8,7 +8,7 @@ import { IconButtonComponent } from '../icon-button';
 import { PopoverComponent } from '../popover';
 import { DateRangePickerAdapter } from './date-range-picker-adapter';
 import { DATE_RANGE_PICKER_CONSTANTS, IDatePickerRange, IDateRangePickerChangeEventData } from './date-range-picker-constants';
-import { DateRangePickerFoundation } from './date-range-picker-foundation';
+import { DateRangePickerCore } from './date-range-picker-core';
 
 import template from './date-range-picker.html';
 import styles from './date-range-picker.scss';
@@ -59,7 +59,7 @@ declare global {
  * @property {string} [yearRange=''] - Gets/sets the year range for the date range picker.
  * @property {string | undefined} [locale=undefined] - Gets/sets the locale for the date range picker.
  */
-@CustomElement({
+@customElement({
   name: DATE_RANGE_PICKER_CONSTANTS.elementName,
   dependencies: [
     PopoverComponent,
@@ -68,7 +68,7 @@ declare global {
     IconComponent
   ]
 })
-export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePickerRange, IDatePickerRange, DateRangePickerFoundation> implements IDateRangePickerComponent {
+export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePickerRange, IDatePickerRange, DateRangePickerCore> implements IDateRangePickerComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_DATE_PICKER_CONSTANTS.observedAttributes),
@@ -81,7 +81,7 @@ export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePicke
     super();
     IconRegistry.define(tylIconDateRange);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new DateRangePickerFoundation(new DateRangePickerAdapter(this));
+    this._core = new DateRangePickerCore(new DateRangePickerAdapter(this));
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -97,10 +97,10 @@ export class DateRangePickerComponent extends BaseDatePickerComponent<IDatePicke
   }
 
   /** Gets/sets the "from" date range value. */
-  @FoundationProperty()
+  @coreProperty()
   public declare from: Date | string | null | undefined;
 
   /** Gets/sets the "to" date range value. */
-  @FoundationProperty()
+  @coreProperty()
   public declare to: Date | string | null | undefined;
 }

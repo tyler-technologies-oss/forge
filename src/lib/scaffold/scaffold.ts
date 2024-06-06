@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { SCAFFOLD_CONSTANTS } from './scaffold-constants';
 
@@ -20,9 +20,9 @@ declare global {
  * 
  * @summary A scaffold provides a generic layout structure for your content using common named areas.
  * 
- * @property {boolean} viewport - Whether the scaffold should be full viewport height.
+ * @property {boolean} [viewport=false] - Whether the scaffold should be full viewport height.
  * 
- * @attribute {boolean} viewport - Whether the scaffold should be full viewport height.
+ * @attribute {boolean} [viewport=false] - Whether the scaffold should be full viewport height.
  * 
  * @cssproperty --forge-scaffold-height - The `height` of the scaffold.
  * @cssproperty --forge-scaffold-width - The `width` of the scaffold.
@@ -43,7 +43,7 @@ declare global {
  * @slot body-left - Places content to the left of the body content.
  * @slot body-right - Places content to the right of the body content.
  */
-@CustomElement({
+@customElement({
   name: SCAFFOLD_CONSTANTS.elementName
 })
 export class ScaffoldComponent extends BaseComponent implements IScaffoldComponent {

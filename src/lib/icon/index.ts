@@ -3,7 +3,7 @@ import { IconComponent } from './icon';
 
 export * from './icon-adapter';
 export * from './icon-constants';
-export * from './icon-foundation';
+export * from './icon-core';
 export * from './icon-registry';
 export * from './icon-utils';
 export * from './icon';

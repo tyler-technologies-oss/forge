@@ -1,4 +1,4 @@
-import { attachLightTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachLightTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconNotifications } from '@tylertech/tyler-icons/standard';
 import { BadgeComponent } from '../../badge';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
@@ -7,7 +7,7 @@ import { IconButtonComponent } from '../../icon-button';
 import { TooltipComponent } from '../../tooltip';
 import { AppBarNotificationButtonAdapter } from './app-bar-notification-button-adapter';
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants';
-import { AppBarNotificationButtonFoundation } from './app-bar-notification-button-foundation';
+import { AppBarNotificationButtonCore } from './app-bar-notification-button-core';
 
 import template from './app-bar-notification-button.html';
 
@@ -41,7 +41,7 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.elementName,
   dependencies: [
     IconButtonComponent,
@@ -61,12 +61,12 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
     ];
   }
 
-  private _foundation: AppBarNotificationButtonFoundation;
+  private _core: AppBarNotificationButtonCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconNotifications);
-    this._foundation = new AppBarNotificationButtonFoundation(new AppBarNotificationButtonAdapter(this));
+    this._core = new AppBarNotificationButtonCore(new AppBarNotificationButtonAdapter(this));
   }
 
   public initializedCallback(): void {
@@ -74,11 +74,11 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -101,18 +101,18 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare count: string | number | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dot: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare icon: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showBadge: boolean;
 }

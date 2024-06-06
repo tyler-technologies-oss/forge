@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty, isDefined, isString } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, isDefined, isString } from '@tylertech/forge-core';
 import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants';
 import { BaseComponent, FormValue } from '../core';
 import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable';
@@ -10,7 +10,7 @@ import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { CheckboxAdapter } from './checkbox-adapter';
 import { CheckboxLabelPosition, CheckboxState, CHECKBOX_CONSTANTS } from './checkbox-constants';
-import { CheckboxFoundation } from './checkbox-foundation';
+import { CheckboxCore } from './checkbox-core';
 
 import template from './checkbox.html';
 import styles from './checkbox.scss';
@@ -105,7 +105,7 @@ declare global {
  * @csspart state-layer - Styles the state layer element.
  * @csspart focus-indicator - Styles the focus indicator element.
  */
-@CustomElement({
+@customElement({
   name: CHECKBOX_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -117,13 +117,13 @@ export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(Wi
     return Object.values(CHECKBOX_CONSTANTS.observedAttributes);
   }
 
-  private readonly _foundation: CheckboxFoundation;
+  private readonly _core: CheckboxCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
     this[inputType] = 'checkbox';
-    this._foundation = new CheckboxFoundation(new CheckboxAdapter(this));
+    this._core = new CheckboxCore(new CheckboxAdapter(this));
   }
 
   public connectedCallback(): void {
@@ -134,7 +134,7 @@ export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(Wi
       ariaDisabled: this.disabled ? 'true' : 'false',
       ariaRequired: this.required ? 'true' : 'false'
     });
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -226,31 +226,31 @@ export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(Wi
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare checked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare defaultChecked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare indeterminate: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare required: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare readonly: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelPosition: CheckboxLabelPosition;
   
   /**
@@ -259,9 +259,9 @@ export class CheckboxComponent extends WithFormAssociation(WithLabelAwareness(Wi
    */
   public toggle(force?: boolean): void {
     if (isDefined(force)) {
-      this._foundation.checked = force as boolean;
+      this._core.checked = force as boolean;
     } else {
-      this._foundation.checked = !this._foundation.checked;
+      this._core.checked = !this._core.checked;
     }
   }
 }

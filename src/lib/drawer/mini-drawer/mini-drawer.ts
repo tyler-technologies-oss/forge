@@ -1,5 +1,5 @@
-import { attachShadowTemplate, CustomElement } from '@tylertech/forge-core';
-import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerFoundation, IBaseDrawerComponent } from '../base';
+import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
+import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerCore, IBaseDrawerComponent } from '../base';
 import { MINI_DRAWER_CONSTANTS } from './mini-drawer-constants';
 
 import template from './mini-drawer.html';
@@ -45,16 +45,16 @@ declare global {
  * @csspart root - The component's root element.
  * @csspart content - The content container element.
  */
-@CustomElement({
+@customElement({
   name: MINI_DRAWER_CONSTANTS.elementName
 })
-export class MiniDrawerComponent extends BaseDrawerComponent<BaseDrawerFoundation> implements IMiniDrawerComponent {
-  protected _foundation: BaseDrawerFoundation;
+export class MiniDrawerComponent extends BaseDrawerComponent<BaseDrawerCore> implements IMiniDrawerComponent {
+  protected _core: BaseDrawerCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new BaseDrawerFoundation(new BaseDrawerAdapter(this));
+    this._core = new BaseDrawerCore(new BaseDrawerAdapter(this));
   }
 
   public get hover(): boolean {

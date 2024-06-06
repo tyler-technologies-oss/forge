@@ -6,7 +6,7 @@ import { timer } from '@tylertech/forge-testing';
 import type { IStateLayerComponent } from './state-layer';
 import { MINIMUM_PRESS_MS, PRESS_GROW_MS, STATE_LAYER_CONSTANTS, TOUCH_DELAY_MS } from './state-layer-constants';
 import { createMouseEventInit, simulateHover, simulateLeave, simulatePressAndHold, simulatePressed } from '../core/testing/pointer';
-import { StateLayerFoundation } from './state-layer-foundation';
+import { StateLayerCore } from './state-layer-core';
 
 import './state-layer';
 
@@ -24,14 +24,14 @@ describe('StateLayer', () => {
   it('should defer attaching event listeners', async () => {
     const { container, stateLayer } = await createFixture();
 
-    const foundation = stateLayer['_foundation'] as StateLayerFoundation;
+    const core = stateLayer['_core'] as StateLayerCore;
     await elementUpdated(stateLayer);
-    expect(foundation.isAttached).to.be.false;
+    expect(core.isAttached).to.be.false;
 
     simulateHover(container);
     await elementUpdated(stateLayer);
 
-    expect(foundation.isAttached).to.be.true;
+    expect(core.isAttached).to.be.true;
   });
 
   it('should show hover state', async () => {

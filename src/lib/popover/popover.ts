@@ -1,7 +1,7 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { PopoverAdapter } from './popover-adapter';
 import { IPopoverToggleEventData, PopoverAnimationType, PopoverPreset, PopoverTriggerType, POPOVER_CONSTANTS } from './popover-constants';
-import { IPopoverFoundation, PopoverFoundation } from './popover-foundation';
+import { IPopoverCore, PopoverCore } from './popover-core';
 import { OverlayComponent, OVERLAY_CONSTANTS } from '../overlay';
 import { IOverlayAware, OverlayAware } from '../overlay/base/overlay-aware';
 import { coerceStringToArray } from '../core/utils/utils';
@@ -117,11 +117,11 @@ declare global {
  * @csspart overlay - The overlay root element.
  * @csspart surface - The surface container element for the slotted content.
  */
-@CustomElement({
+@customElement({
   name: POPOVER_CONSTANTS.elementName,
   dependencies: [OverlayComponent]
 })
-export class PopoverComponent extends OverlayAware<IPopoverFoundation> implements IPopoverComponent {
+export class PopoverComponent extends OverlayAware<IPopoverCore> implements IPopoverComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(OVERLAY_CONSTANTS.observedAttributes),
@@ -130,21 +130,21 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
   }
 
   public [tryDismiss](state: IDismissibleStackState): boolean {
-    return this._foundation.dispatchBeforeToggleEvent(state);
+    return this._core.dispatchBeforeToggleEvent(state);
   }
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new PopoverFoundation(new PopoverAdapter(this));
+    this._core = new PopoverCore(new PopoverAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -177,34 +177,34 @@ export class PopoverComponent extends OverlayAware<IPopoverFoundation> implement
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare arrow: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare animationType: PopoverAnimationType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare triggerType: PopoverTriggerType | PopoverTriggerType[];
 
-  @FoundationProperty()
+  @coreProperty()
   public declare longpressDelay: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare persistentHover: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare hoverDelay: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare hoverDismissDelay: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare preset: PopoverPreset;
 
   /**
    * Hides the popover, and returns a `Promise` that resolves when the hide animation is complete.
    */
   public hideAsync(): Promise<void> {
-    return this._foundation.hideAsync();
+    return this._core.hideAsync();
   }
 }

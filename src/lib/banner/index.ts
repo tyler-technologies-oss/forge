@@ -4,7 +4,7 @@ import { BannerComponent } from './banner';
 
 export * from './banner-adapter';
 export * from './banner-constants';
-export * from './banner-foundation';
+export * from './banner-core';
 export * from './banner';
 
 export function defineBannerComponent(): void {

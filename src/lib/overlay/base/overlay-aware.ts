@@ -1,7 +1,7 @@
-import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { IOverlayComponent } from '../overlay';
-import { IOverlayAwareFoundation } from './overlay-aware-foundation';
+import { IOverlayAwareCore } from './overlay-aware-core';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
 import { IBaseOverlay } from './base-overlay';
@@ -41,8 +41,8 @@ export interface IOverlayAware extends IBaseComponent, IBaseOverlay {
  * @attribute {OverlayFlipState} [flip="auto"] - Whether the overlay should flip placements to another side fit within the viewport.
  * @attribute {string | null} boundary - An IDREF to boundary element to constrain the overlay within.
  */
-export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends BaseComponent implements IOverlayAware {
-  protected _foundation: T;
+export abstract class OverlayAware<T extends IOverlayAwareCore> extends BaseComponent implements IOverlayAware {
+  protected _core: T;
 
   constructor() {
     super();
@@ -52,7 +52,7 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
    * Forces the overlay to reposition itself.
    */
   public position(): void {
-    this._foundation.position();
+    this._core.position();
   }
 
   public attributeChangedCallback(name: string, _oldValue: string, newValue: string): void {
@@ -94,51 +94,51 @@ export abstract class OverlayAware<T extends IOverlayAwareFoundation> extends Ba
   }
 
   public get overlay(): IOverlayComponent {
-    return this._foundation.overlayElement;
+    return this._core.overlayElement;
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare anchorElement: HTMLElement | VirtualElement | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare anchor: string | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare noAnchor: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare inline: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare placement: OverlayPlacement;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare positionStrategy: OverlayPositionStrategy;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare offset: IOverlayOffset;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare shift: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare hide: OverlayHideState;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare persistent: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare flip: OverlayFlipState;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare boundary: string | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare boundaryElement: HTMLElement | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fallbackPlacements: PositionPlacement[] | null;
 }

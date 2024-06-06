@@ -1,6 +1,6 @@
 import { timer } from '@tylertech/forge-testing';
 
-import { ListDropdown, IListDropdownConfig, IListDropdown, IListDropdownFoundation, LIST_DROPDOWN_CONSTANTS, IListDropdownOption } from '@tylertech/forge/list-dropdown';
+import { ListDropdown, IListDropdownConfig, IListDropdown, IListDropdownCore, LIST_DROPDOWN_CONSTANTS, IListDropdownOption } from '@tylertech/forge/list-dropdown';
 import { IListItemComponent, LIST_ITEM_CONSTANTS } from '@tylertech/forge/list';
 import { ISelectOption } from '@tylertech/forge/select';
 import { LINEAR_PROGRESS_CONSTANTS, ILinearProgressComponent } from '@tylertech/forge/linear-progress';
@@ -9,7 +9,7 @@ import { IPopoverComponent, POPOVER_CONSTANTS } from '@tylertech/forge/popover';
 export interface IListDropdownTestContext {
   targetElement: HTMLElement;
   listDropdown: IListDropdown;
-  foundation: IListDropdownFoundation;
+  core: IListDropdownCore;
   append(): void;
   remove(): void;
 }
@@ -36,7 +36,7 @@ export function createListDropdown(config: IListDropdownConfig, targetElement?: 
   return {
     targetElement,
     listDropdown,
-    foundation: listDropdown['_foundation'],
+    core: listDropdown['_core'],
     append: () => document.body.appendChild(targetElement!),
     remove: () => document.body.removeChild(targetElement!)
   };

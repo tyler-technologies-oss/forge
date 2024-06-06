@@ -12,7 +12,7 @@ export default function forgeMemberDenyListPlugin() {
     'labelClickedCallback',
     'labelChangedCallback',
     'formAssociated',
-    '_foundation'
+    '_core'
   ];
 
   return {

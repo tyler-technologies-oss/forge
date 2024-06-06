@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconClose } from '@tylertech/tyler-icons/standard';
 import { ButtonComponent } from '../button';
 import { setDefaultAria } from '../constants';
@@ -11,7 +11,7 @@ import { IconButtonComponent } from '../icon-button';
 import { OverlayComponent } from '../overlay';
 import { ToastAdapter } from './toast-adapter';
 import { ToastPlacement, ToastTheme, TOAST_CONSTANTS } from './toast-constants';
-import { ToastFoundation } from './toast-foundation';
+import { ToastCore } from './toast-core';
 
 import template from './toast.html';
 import styles from './toast.scss';
@@ -107,7 +107,7 @@ declare global {
  * @csspart close-button - The close button.
  * @csspart overlay - The `<forge-overlay>` element.
  */
-@CustomElement({
+@customElement({
   name: TOAST_CONSTANTS.elementName,
   dependencies: [
     OverlayComponent,
@@ -121,13 +121,13 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
     return Object.values(TOAST_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: ToastFoundation;
+  private _core: ToastCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconClose);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ToastFoundation(new ToastAdapter(this));
+    this._core = new ToastCore(new ToastAdapter(this));
   }
 
   public connectedCallback(): void {
@@ -139,7 +139,7 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
         ariaAtomic: 'true'
       });
     }
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -169,32 +169,32 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare duration: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare placement: ToastPlacement;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare actionText: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dismissible: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dismissLabel: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: ToastTheme;
 
   /**
    * Shows the toast.
    */
   public show(): void {
-    this._foundation.show();
+    this._core.show();
   }
 
   /**
@@ -202,7 +202,7 @@ export class ToastComponent extends WithElementInternals(WithDefaultAria(BaseCom
    * @returns A promise that resolves when the toast animation completes.
    */
   public hide(): Promise<void> {
-    return this._foundation.hide();
+    return this._core.hide();
   }
 
   /**

@@ -350,7 +350,7 @@ describe('List', () => {
       `);
       const listItem = el.querySelector('forge-list-item') as IListItemComponent;
       const stateLayerEl = listItem.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
-      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._foundation._adapter, 'startAnimation');
+      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._core._adapter, 'startAnimation');
 
       await clickElement(listItem);
 
@@ -368,7 +368,7 @@ describe('List', () => {
       `);
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
-      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._foundation._adapter, 'startAnimation');
+      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._core._adapter, 'startAnimation');
       const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
 
       checkbox.click();
@@ -386,7 +386,7 @@ describe('List', () => {
       `);
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
-      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._foundation._adapter, 'startAnimation');
+      const stateLayerAnimationSpy = sinon.spy((stateLayerEl as any)._core._adapter, 'startAnimation');
       const button = listItemEl.querySelector('button') as HTMLButtonElement;
 
       button.focus();

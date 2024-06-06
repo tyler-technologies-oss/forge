@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, getShadowElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, getShadowElement } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { BACKDROP_CONSTANTS } from './backdrop-constants';
 
@@ -39,7 +39,7 @@ declare global {
  * 
  * @csspart root - The root element of the backdrop.
  */
-@CustomElement({
+@customElement({
   name: BACKDROP_CONSTANTS.elementName
 })
 export class BackdropComponent extends BaseComponent {

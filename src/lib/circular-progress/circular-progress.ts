@@ -1,7 +1,7 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumber } from '@tylertech/forge-core';
 
 import { CircularProgressAdapter } from './circular-progress-adapter';
-import { CircularProgressFoundation } from './circular-progress-foundation';
+import { CircularProgressCore } from './circular-progress-core';
 import { CircularProgressTheme, CIRCULAR_PROGRESS_CONSTANTS } from './circular-progress-constants';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
@@ -60,7 +60,7 @@ declare global {
  * 
  * @csspart progressbar - Styles the progress bar container element
  */
-@CustomElement({
+@customElement({
   name: CIRCULAR_PROGRESS_CONSTANTS.elementName
 })
 export class CircularProgressComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements ICircularProgressComponent {
@@ -73,16 +73,16 @@ export class CircularProgressComponent extends WithDefaultAria(WithElementIntern
     ];
   }
 
-  private _foundation: CircularProgressFoundation;
+  private _core: CircularProgressCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new CircularProgressFoundation(new CircularProgressAdapter(this));
+    this._core = new CircularProgressCore(new CircularProgressAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -102,15 +102,15 @@ export class CircularProgressComponent extends WithDefaultAria(WithElementIntern
     }
   }
   
-  @FoundationProperty()
+  @coreProperty()
   public declare determinate: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare progress: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: CircularProgressTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare track: boolean;
 }

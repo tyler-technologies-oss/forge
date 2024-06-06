@@ -1,7 +1,7 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ListAdapter } from './list-adapter';
-import { ListFoundation } from './list-foundation';
+import { ListCore } from './list-core';
 import { LIST_CONSTANTS } from './list-constants';
 import { ListItemComponent } from '../list-item';
 import { setDefaultAria } from '../../constants';
@@ -58,7 +58,7 @@ declare global {
  * @attribute {boolean} [navlist=false] - Controls whether the list is styled a navigation list or not.
  * @attribute {boolean} [noninteractive=false] - Controls whether the list items will automatically attach themselves to interactive slotted elements or not.
  */
-@CustomElement({
+@customElement({
   name: LIST_CONSTANTS.elementName,
   dependencies: [
     ListItemComponent
@@ -69,17 +69,17 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
     return Object.values(LIST_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: ListFoundation;
+  private _core: ListCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ListFoundation(new ListAdapter(this));
+    this._core = new ListCore(new ListAdapter(this));
   }
 
   public connectedCallback(): void {
     this[setDefaultAria]({ role: 'list' }, { setAttribute: !this.hasAttribute('role') });
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -108,24 +108,24 @@ export class ListComponent extends WithElementInternals(WithDefaultAria(BaseComp
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare indented: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare selectedValue: any;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare twoLine: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare threeLine: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare wrap: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare noninteractive: boolean;
 }

@@ -1,6 +1,10 @@
 forge-dialog {
+  &:not([fullscreen]) forge-scaffold {
+    --forge-scaffold-width: 500px;
+  }
+
   forge-scaffold {
-    --forge-scaffold-width: 320px;
+    height: auto;
 
     h1 {
       margin: 0;

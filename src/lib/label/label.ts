@@ -1,8 +1,8 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, coreProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core';
 import { LabelAdapter } from './label-adapter';
 import { LABEL_CONSTANTS } from './label-constants';
-import { LabelFoundation } from './label-foundation';
+import { LabelCore } from './label-core';
 
 import template from './label.html';
 import style from './label.scss';
@@ -39,7 +39,7 @@ declare global {
  * @attribute {boolean} [non-interactive=false] - Removes click handling from the label.
  * @attribute {boolean} [legend=false] - Whether or not the label should be associated with an ancestor element.
  */
-@CustomElement({
+@customElement({
   name: LABEL_CONSTANTS.elementName
 })
 export class LabelComponent extends BaseComponent implements ILabelComponent {
@@ -47,20 +47,20 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
     return Object.values(LABEL_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: LabelFoundation;
+  private _core: LabelCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, style);
-    this._foundation = new LabelFoundation(new LabelAdapter(this));
+    this._core = new LabelCore(new LabelAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -80,28 +80,28 @@ export class LabelComponent extends BaseComponent implements ILabelComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare for: string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare forElement: HTMLElement | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare clickTarget: HTMLElement | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dynamic: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare nonInteractive: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare legend: boolean;
 
   /**
    * Updates the targeted element with the label's current text content.
    */
   public update(): void {
-    this._foundation.update();
+    this._core.update();
   }
 }

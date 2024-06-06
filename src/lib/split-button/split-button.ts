@@ -1,9 +1,9 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { ButtonComponent, ButtonTheme } from '../button';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { SplitButtonAdapter } from './split-button-adapter';
 import { SplitButtonVariant, SPLIT_BUTTON_CONSTANTS } from './split-button-constants';
-import { SplitButtonFoundation } from './split-button-foundation';
+import { SplitButtonCore } from './split-button-core';
 
 import template from './split-button.html';
 import styles from './split-button.scss';
@@ -48,7 +48,7 @@ declare global {
  * 
  * @slot - This is a default/unnamed slot.
  */
-@CustomElement({
+@customElement({
   name: SPLIT_BUTTON_CONSTANTS.elementName,
   dependencies: [
     ButtonComponent
@@ -65,20 +65,20 @@ export class SplitButtonComponent extends BaseComponent implements ISplitButtonC
     ];
   }
 
-  private readonly _foundation: SplitButtonFoundation;
+  private readonly _core: SplitButtonCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new SplitButtonFoundation(new SplitButtonAdapter(this));
+    this._core = new SplitButtonCore(new SplitButtonAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -101,18 +101,18 @@ export class SplitButtonComponent extends BaseComponent implements ISplitButtonC
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare variant: SplitButtonVariant;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: ButtonTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare pill: boolean;
 }

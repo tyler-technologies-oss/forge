@@ -22,7 +22,7 @@ describe('App Bar Search', () => {
 
   it('should not initialize until input is available', async () => {
     const el = await fixture<IAppBarSearchComponent>(html`<forge-app-bar-search></forge-app-bar-search>`);
-    const initializeSpy = spy(el['_foundation'], 'initialize');
+    const initializeSpy = spy(el['_core'], 'initialize');
 
     expect(initializeSpy.called).to.be.false;
 

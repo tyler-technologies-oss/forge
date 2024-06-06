@@ -1,10 +1,10 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent } from '../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { LinearProgressAdapter } from './linear-progress-adapter';
 import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants';
-import { LinearProgressFoundation } from './linear-progress-foundation';
+import { LinearProgressCore } from './linear-progress-core';
 
 import template from './linear-progress.html';
 import styles from './linear-progress.scss';
@@ -56,7 +56,7 @@ declare global {
  * 
  * @csspart progressbar - Styles the progress bar container element
  */
-@CustomElement({
+@customElement({
   name: LINEAR_PROGRESS_CONSTANTS.elementName
 })
 export class LinearProgressComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements ILinearProgressComponent {
@@ -64,16 +64,16 @@ export class LinearProgressComponent extends WithElementInternals(WithDefaultAri
     return Object.values(LINEAR_PROGRESS_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: LinearProgressFoundation;
+  private _core: LinearProgressCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new LinearProgressFoundation(new LinearProgressAdapter(this));
+    this._core = new LinearProgressCore(new LinearProgressAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -93,15 +93,15 @@ export class LinearProgressComponent extends WithElementInternals(WithDefaultAri
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare determinate: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare progress: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare buffer: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: LinearProgressTheme;
 }

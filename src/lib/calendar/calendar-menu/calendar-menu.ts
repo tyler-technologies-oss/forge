@@ -1,10 +1,10 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceBoolean, elementParents } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, ICustomElement, coreProperty, coerceBoolean, elementParents } from '@tylertech/forge-core';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../../state-layer/state-layer';
 
 import { CalendarMenuAdapter } from './calendar-menu-adapter';
 import { CalendarDirection, CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants';
-import { CalendarMenuFoundation } from './calendar-menu-foundation';
+import { CalendarMenuCore } from './calendar-menu-core';
 
 import template from './calendar-menu.html';
 import styles from './calendar-menu.scss';
@@ -35,12 +35,10 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-calendar-menu>` custom element.
- * 
  * @internal
  * @tag forge-calendar-menu
  */
-@CustomElement({
+@customElement({
   name: CALENDAR_MENU_CONSTANTS.elementName,
   dependencies: [
     StateLayerComponent,
@@ -55,12 +53,12 @@ export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuC
     ];
   }
 
-  private _foundation: CalendarMenuFoundation;
+  private _core: CalendarMenuCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new CalendarMenuFoundation(new CalendarMenuAdapter(this));
+    this._core = new CalendarMenuCore(new CalendarMenuAdapter(this));
   }
 
   public connectedCallback(): void {
@@ -71,11 +69,11 @@ export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuC
       this.setAttribute(CALENDAR_MENU_CONSTANTS.attributes.POPOVER_CONTEXT, 'true');
     }
 
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -89,45 +87,45 @@ export class CalendarMenuComponent extends HTMLElement implements ICalendarMenuC
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare animationType: CalendarMenuAnimationType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare preventFocus: boolean;
 
   public animateIn(options: ICalendarMenuOption[], direction: CalendarDirection, setFocus = false): void {
-    this._foundation.animateIn(options, direction, setFocus);
+    this._core.animateIn(options, direction, setFocus);
   }
 
   public close(): void {
-    this._foundation.close();
+    this._core.close();
   }
 
   public moveFocusDown(): void {
-    this._foundation.moveFocusDown();
+    this._core.moveFocusDown();
   }
 
   public moveFocusBackward(): boolean {
-    return this._foundation.moveFocusBackward();
+    return this._core.moveFocusBackward();
   }
 
   public moveFocusForward(): boolean {
-    return this._foundation.moveFocusForward();
+    return this._core.moveFocusForward();
   }
 
   public moveFocusUp(): void {
-    this._foundation.moveFocusUp();
+    this._core.moveFocusUp();
   }
 
   public openAsGrid(options: ICalendarMenuOption[], setFocus = false): void {
-    this._foundation.openAsGrid(options, setFocus);
+    this._core.openAsGrid(options, setFocus);
   }
 
   public openAsList(options: ICalendarMenuOption[], setFocus = false): void {
-    this._foundation.openAsList(options, setFocus);
+    this._core.openAsList(options, setFocus);
   }
 
   public selectFocusedItem(): void {
-    this._foundation.selectFocusedItem();
+    this._core.selectFocusedItem();
   }
 }

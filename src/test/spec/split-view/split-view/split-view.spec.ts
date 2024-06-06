@@ -119,7 +119,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
     it('should set orientation', function(this: ITestContext) {
       this.context = setupTestContext(false, 1);
       this.context.component.orientation = 'vertical';
-      expect(this.context.panels![0]['_foundation']._orientation).toBe('vertical');
+      expect(this.context.panels![0]['_core']._orientation).toBe('vertical');
     });
 
     it('should layout when all have resizable set to off', async function(this: ITestContext) {
@@ -187,7 +187,7 @@ describe('SplitViewComponent', function(this: ITestContext) {
       const panel = document.createElement('forge-split-view-panel');
       div.appendChild(panel);
       this.context.component.appendChild(div);
-      const queriedComponents = (this.context.component['_foundation']['_adapter'] as ISplitViewAdapter).getSlottedPanels();
+      const queriedComponents = (this.context.component['_core']['_adapter'] as ISplitViewAdapter).getSlottedPanels();
       expect(queriedComponents.length).toBe(2);
     });
   });

@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 
 import { VIEW_CONSTANTS } from './view-constants';
@@ -15,11 +15,9 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-view>` custom element.
- * 
  * @tag forge-view
  */
-@CustomElement({
+@customElement({
   name: VIEW_CONSTANTS.elementName
 })
 export class ViewComponent extends BaseComponent implements IViewComponent {

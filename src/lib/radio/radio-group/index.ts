@@ -4,7 +4,7 @@ import { RadioGroupComponent } from './radio-group';
 
 export * from './radio-group-adapter';
 export * from './radio-group-constants';
-export * from './radio-group-foundation';
+export * from './radio-group-core';
 export * from './radio-group';
 
 export function defineRadioGroupComponent(): void {

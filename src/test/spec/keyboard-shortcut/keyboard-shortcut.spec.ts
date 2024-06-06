@@ -503,8 +503,8 @@ describe('KeyboardShortcutComponent', function(this: ITestContext) {
       this.context = setupTestContext(false);
       this.context.component.target = '#test-target';
       const action = () => {
-        // Accessing the foundation to get to this exception
-        this.context.component['_foundation'].initializeTargetElement();
+        // Accessing the core to get to this exception
+        this.context.component['_core'].initializeTargetElement();
         this.context.attach();
       };
       expect(action).toThrow();

@@ -1,4 +1,4 @@
-import { attachShadowTemplate, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, customElement, coreProperty } from '@tylertech/forge-core';
 import { ButtonTheme } from '../button';
 import { BaseButton, IBaseButton } from '../button/base/base-button';
 import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants';
@@ -7,7 +7,7 @@ import { IconComponent } from '../icon/icon';
 import { StateLayerComponent } from '../state-layer';
 import { FloatingActionButtonAdapter } from './floating-action-button-adapter';
 import { FloatingActionButtonDensity, FloatingActionButtonElevation, FLOATING_ACTION_BUTTON_CONSTANTS } from './floating-action-button-constants';
-import { FloatingActionButtonFoundation } from './floating-action-button-foundation';
+import { FloatingActionButtonCore } from './floating-action-button-core';
 
 import template from './floating-action-button.html';
 import styles from './floating-action-button.scss';
@@ -81,7 +81,7 @@ declare global {
  * @slot label - Reserved specifically for label text. This forces the button into extended mode.
  * @slot end - An element to logically render at the end of the button content.
  */
-@CustomElement({
+@customElement({
   name: FLOATING_ACTION_BUTTON_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -89,7 +89,7 @@ declare global {
     IconComponent
   ]
 })
-export class FloatingActionButtonComponent extends BaseButton<FloatingActionButtonFoundation> implements IFloatingActionButtonComponent {
+export class FloatingActionButtonComponent extends BaseButton<FloatingActionButtonCore> implements IFloatingActionButtonComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
@@ -97,16 +97,16 @@ export class FloatingActionButtonComponent extends BaseButton<FloatingActionButt
     ];
   }
 
-  protected readonly _foundation: FloatingActionButtonFoundation;
+  protected readonly _core: FloatingActionButtonCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new FloatingActionButtonFoundation(new FloatingActionButtonAdapter(this));
+    this._core = new FloatingActionButtonCore(new FloatingActionButtonAdapter(this));
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -124,12 +124,12 @@ export class FloatingActionButtonComponent extends BaseButton<FloatingActionButt
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: ButtonTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare density: FloatingActionButtonDensity;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare elevation: FloatingActionButtonElevation;
 }

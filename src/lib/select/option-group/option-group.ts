@@ -1,4 +1,4 @@
-import { CustomElement } from '@tylertech/forge-core';
+import { customElement } from '@tylertech/forge-core';
 import { ListDropdownOptionGroupBuilder } from '../../list-dropdown/list-dropdown-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ISelectOption, ISelectOptionGroup } from '../core';
@@ -17,7 +17,7 @@ declare global {
 /**
  * @tag forge-option-group
  */
-@CustomElement({
+@customElement({
   name: OPTION_GROUP_CONSTANTS.elementName
 })
 export class OptionGroupComponent extends BaseComponent implements IOptionGroupComponent {

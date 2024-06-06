@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { CARD_CONSTANTS } from './card-constants';
 
@@ -40,7 +40,7 @@ declare global {
  * 
  * @csspart root - The root container element.
  */
-@CustomElement({
+@customElement({
   name: CARD_CONSTANTS.elementName
 })
 export class CardComponent extends BaseComponent implements ICardComponent {

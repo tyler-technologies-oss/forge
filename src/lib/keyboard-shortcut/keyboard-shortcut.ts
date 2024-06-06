@@ -1,7 +1,7 @@
-import { coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 
 import { KeyboardShortcutAdapter } from './keyboard-shortcut-adapter';
-import { KeyboardShortcutFoundation } from './keyboard-shortcut-foundation';
+import { KeyboardShortcutCore } from './keyboard-shortcut-core';
 import { KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -34,7 +34,7 @@ declare global {
  * 
  * @event {CustomEvent<KeyboardEvent>} forge-keyboard-shortcut-activate - Event fired when the keyboard shortcut is activated.
  */
-@CustomElement({
+@customElement({
   name: KEYBOARD_SHORTCUT_CONSTANTS.elementName
 })
 export class KeyboardShortcutComponent extends BaseComponent implements IKeyboardShortcutComponent {
@@ -51,19 +51,19 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
     ];
   }
 
-  private _foundation: KeyboardShortcutFoundation;
+  private _core: KeyboardShortcutCore;
 
   constructor() {
     super();
-    this._foundation = new KeyboardShortcutFoundation(new KeyboardShortcutAdapter(this));
+    this._core = new KeyboardShortcutCore(new KeyboardShortcutAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -99,7 +99,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * Gets/sets the key binding.
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare key: string | null | undefined;
 
   /**
@@ -118,14 +118,14 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * Gets/sets the target element selector.
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare target: string;
 
   /**
    * Gets/sets the global listener state.
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare global: boolean;
 
   /**
@@ -133,7 +133,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute allow-while-typing
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare allowWhileTyping: boolean;
   
   /**
@@ -141,7 +141,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute prevent-default
    * @default true
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare preventDefault: boolean;
   
   /**
@@ -149,7 +149,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare capture: boolean;
   
   /**
@@ -157,7 +157,7 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute use-code
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare useCode: boolean;
 
   /**
@@ -165,12 +165,12 @@ export class KeyboardShortcutComponent extends BaseComponent implements IKeyboar
    * @attribute
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
   /**
    * Gets/sets whether the activation callback.
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare activateCallback: KeyboardShortcutActivateCallback | null | undefined;
 }

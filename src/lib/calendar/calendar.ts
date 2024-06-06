@@ -1,8 +1,8 @@
-import { CustomElement, attachShadowTemplate, ICustomElement, FoundationProperty, coerceNumber, coerceBoolean, elementParents } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, ICustomElement, coreProperty, coerceNumber, coerceBoolean, elementParents } from '@tylertech/forge-core';
 import { tylIconAdd, tylIconArrowDropDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLens } from '@tylertech/tyler-icons/standard';
 
 import { CalendarAdapter } from './calendar-adapter';
-import { CalendarFoundation } from './calendar-foundation';
+import { CalendarCore } from './calendar-core';
 import { CALENDAR_CONSTANTS, CalendarMode, DayOfWeek, ICalendarDateSelectEventData, CalendarDateBuilder, CalendarDayBuilder, CalendarDateSelectCallback, CalendarEventBuilder, ICalendarEvent, ICalendarFocusChangeEventData, ICalendarMonthChangeEventData, CalendarTooltipBuilder, CalendarView } from './calendar-constants';
 import { DateRange } from './core/date-range';
 import { ButtonComponent } from '../button';
@@ -54,8 +54,6 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-calendar>` custom element.
- * 
  * @tag forge-calendar
  * 
  * @property {Date} activeDate - The currently active date in the calendar.
@@ -133,7 +131,7 @@ declare global {
  * @method today - Sets the calendar to today.
  * @method toggleDate - Toggles a date.
  */
-@CustomElement({
+@customElement({
   name: CALENDAR_CONSTANTS.elementName,
   dependencies: [
     ButtonComponent,
@@ -173,13 +171,13 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
     ];
   }
 
-  private _foundation: CalendarFoundation;
+  private _core: CalendarCore;
 
   constructor() {
     super();
     IconRegistry.define([tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconArrowDropDown, tylIconLens, tylIconAdd]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new CalendarFoundation(new CalendarAdapter(this));
+    this._core = new CalendarCore(new CalendarAdapter(this));
   }
 
   public connectedCallback(): void {
@@ -190,11 +188,11 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
       this.setAttribute(CALENDAR_CONSTANTS.attributes.POPOVER_CONTEXT, 'true');
     }
 
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -269,147 +267,147 @@ export class CalendarComponent extends HTMLElement implements ICalendarComponent
   }
 
   /** @readonly */
-  @FoundationProperty({set: false})
+  @coreProperty({set: false})
   public declare activeDate: Date;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare allowSingleDateRange: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare clearButton: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare clearCallback: (() => void) | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare constrainToEnabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dateBuilder: CalendarDateBuilder | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dateSelectCallback: CalendarDateSelectCallback | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dayBuilder: CalendarDayBuilder | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabledDateBuilder: ((date: Date) => boolean) | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabledDates: Date | Date[] | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabledDaysOfWeek: DayOfWeek | DayOfWeek[] | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare eventBuilder: CalendarEventBuilder | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare events: ICalendarEvent[] | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare firstDayOfWeek: DayOfWeek | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fixedHeight: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare listYears: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare locale: string | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare max: Date | string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare menuAnimation: CalendarMenuAnimationType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare min: Date | string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare mode: CalendarMode;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare month: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare preventFocus: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare readonly: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare selectionFollowsMonth: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showHeader: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showOtherMonths: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showToday: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare todayButton: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare todayCallback: (() => void) | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare tooltipBuilder: CalendarTooltipBuilder | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: Date | Date[] | DateRange | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare view: CalendarView;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare weekendDays: DayOfWeek[] | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare year: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare yearRange: string;
 
   public clear(): void {
-    this._foundation.clear();
+    this._core.clear();
   }
 
   public deselectDate(date: Date): void {
-    this._foundation.deselectDate(new Date(date));
+    this._core.deselectDate(new Date(date));
   }
 
   public goToDate(date: Date, setFocus?: boolean): void {
-    this._foundation.goToDate(new Date(date), setFocus);
+    this._core.goToDate(new Date(date), setFocus);
   }
 
   public handleKey(evt: KeyboardEvent): void {
-    this._foundation.handleExternalKeyEvent(evt);
+    this._core.handleExternalKeyEvent(evt);
   }
 
   public layout(): void {
-    this._foundation.layout();
+    this._core.layout();
   }
 
   public selectDate(date: Date): void {
-    this._foundation.selectDate(new Date(date));
+    this._core.selectDate(new Date(date));
   }
 
   public setActiveDate(date: Date, setFocus?: boolean): boolean {
-    return this._foundation.setActiveDate(new Date(date), setFocus);
+    return this._core.setActiveDate(new Date(date), setFocus);
   }
 
   public today(): void {
-    this._foundation.today();
+    this._core.today();
   }
 
   public toggleDate(date: Date, force?: boolean): void {
-    this._foundation.toggleDate(new Date(date), force);
+    this._core.toggleDate(new Date(date), force);
   }
 }

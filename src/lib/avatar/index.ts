@@ -4,7 +4,7 @@ import { AvatarComponent } from './avatar';
 
 export * from './avatar-adapter';
 export * from './avatar-constants';
-export * from './avatar-foundation';
+export * from './avatar-core';
 export * from './avatar';
 
 export function defineAvatarComponent(): void {

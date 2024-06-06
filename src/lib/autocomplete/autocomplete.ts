@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, ensureChild, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, ensureChild, coreProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank } from '@tylertech/tyler-icons/standard';
 import { DividerComponent } from '../divider';
 import { IconComponent, IconRegistry } from '../icon';
@@ -10,7 +10,7 @@ import { SkeletonComponent } from '../skeleton';
 import { TextFieldComponent } from '../text-field';
 import { AutocompleteAdapter } from './autocomplete-adapter';
 import { AutocompleteFilterCallback, AutocompleteMode, AutocompleteOptionBuilder, AutocompleteSelectedTextBuilder, AUTOCOMPLETE_CONSTANTS, IAutocompleteForceFilterOptions, IAutocompleteOption, IAutocompleteOptionGroup, IAutocompleteSelectEventData } from './autocomplete-constants';
-import { AutocompleteFoundation } from './autocomplete-foundation';
+import { AutocompleteCore } from './autocomplete-core';
 
 import template from './autocomplete.html';
 import styles from './autocomplete.scss';
@@ -54,7 +54,7 @@ declare global {
 /**
  * @tag forge-autocomplete
  */
-@CustomElement({
+@customElement({
   name: AUTOCOMPLETE_CONSTANTS.elementName,
   dependencies: [
     TextFieldComponent,
@@ -88,25 +88,25 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
     ];
   }
 
-  private _foundation: AutocompleteFoundation;
+  private _core: AutocompleteCore;
 
   constructor() {
     super();
     IconRegistry.define([tylIconArrowDropDown, tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new AutocompleteFoundation(new AutocompleteAdapter(this));
+    this._core = new AutocompleteCore(new AutocompleteAdapter(this));
   }
 
   public connectedCallback(): void {
     if (this.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.INPUT)) {
-      this._foundation.initialize();
+      this._core.initialize();
     } else {
-      ensureChild(this, AUTOCOMPLETE_CONSTANTS.selectors.INPUT).then(() => this._foundation.initialize());
+      ensureChild(this, AUTOCOMPLETE_CONSTANTS.selectors.INPUT).then(() => this._core.initialize());
     }
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -146,35 +146,35 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   }
 
   /** Gets/sets the interaction mode. */
-  @FoundationProperty()
+  @coreProperty()
   public declare mode: `${AutocompleteMode}`;
 
   /** Gets/sets the multi-select state. */
-  @FoundationProperty()
+  @coreProperty()
   public declare multiple: boolean;
 
   /** Gets/sets the value. */
-  @FoundationProperty()
+  @coreProperty()
   public declare value: any;
 
   /** Gets/sets the debounce delay (milliseconds) for keyboard events. */
-  @FoundationProperty()
+  @coreProperty()
   public declare debounce: number;
 
   /** Gets/sets filter on focus settings which controls whether the dropdown displays automatically when focused. */
-  @FoundationProperty()
+  @coreProperty()
   public declare filterOnFocus: boolean;
 
   /** Gets/sets whether the first option in the dropdown will be focused automatically when opened or not. */
-  @FoundationProperty()
+  @coreProperty()
   public declare filterFocusFirst: boolean;
 
   /** Controls whether unmatched text entered by the user will stay visible an option in the dropdown is not found. */
-  @FoundationProperty()
+  @coreProperty()
   public declare allowUnmatched: boolean;
 
   /** Gets/sets the selector that will be used to find an element to attach the popup to. Defaults to the input element. */
-  @FoundationProperty()
+  @coreProperty()
   public declare popupTarget: string;
 
   /**
@@ -182,50 +182,50 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * 
    * Setting the filter text only applies when allowUnmatched is enabled.
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare filterText: string;
 
   /** Sets the option builder callback that will be executed when building the option list in the dropdown. */
-  @FoundationProperty()
+  @coreProperty()
   public declare optionBuilder: AutocompleteOptionBuilder | null | undefined;
 
   /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
-  @FoundationProperty()
+  @coreProperty()
   public declare filter: AutocompleteFilterCallback | null | undefined;
 
   /** Sets the selected text builder callback that will be executed when getting the selected text. */
-  @FoundationProperty()
+  @coreProperty()
   public declare selectedTextBuilder: AutocompleteSelectedTextBuilder;
 
   /** Controls the open state of the dropdown. */
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
   /** Gets/sets the property key to match the value to an option. */
-  @FoundationProperty()
+  @coreProperty()
   public declare matchKey: string | null | undefined;
 
   /**
    * Returns whether the component has been initialized or not yet.
    * @readonly
    */
-  @FoundationProperty({ set: false })
+  @coreProperty({ set: false })
   public declare isInitialized: boolean;
 
   /**
    * Gets the currently active popup element when the dropdown is open.
    * @readonly
    */
-  @FoundationProperty({ set: false })
+  @coreProperty({ set: false })
   public declare popupElement: HTMLElement | null;
 
   /** Sets the callback to be executed when the user selects an option, before the UI is updated to allow for validation. */
-  @FoundationProperty()
+  @coreProperty()
   public declare beforeValueChange: (value: any) => boolean | Promise<boolean>;
 
   /** Adds options to the dropdown while it is open. Has no effect if the dropdown is closed.  */
   public appendOptions(options: IAutocompleteOption[] | IAutocompleteOptionGroup[]): void {
-    this._foundation.appendOptions(options);
+    this._core.appendOptions(options);
   }
 
   /** Opens the dropdown. */
@@ -243,6 +243,6 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
    * @param opts
    */
   public forceFilter(opts: IAutocompleteForceFilterOptions = { preserveValue: false }): void {
-    this._foundation.forceFilter(opts);
+    this._core.forceFilter(opts);
   }
 }

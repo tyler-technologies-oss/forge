@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import { TOOLBAR_CONSTANTS } from './toolbar-constants';
@@ -60,7 +60,7 @@ declare global {
  * @slot end - The content to place at the end of the toolbar.
  * @slot after-end - The content to place after the end slot.
  */
-@CustomElement({
+@customElement({
   name: TOOLBAR_CONSTANTS.elementName
 })
 export class ToolbarComponent extends BaseComponent implements IToolbarComponent {

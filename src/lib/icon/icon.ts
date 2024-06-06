@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { IconAdapter } from './icon-adapter';
-import { IconFoundation } from './icon-foundation';
+import { IconCore } from './icon-core';
 import { ICON_CONSTANTS, IconUrlBuilder, IconExternalType, IconTheme } from './icon-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -58,7 +58,7 @@ declare global {
  * 
  * @csspart svg - The internal SVG element.
  */
-@CustomElement({
+@customElement({
   name: ICON_CONSTANTS.elementName
 })
 export class IconComponent extends BaseComponent implements IIconComponent {
@@ -66,20 +66,20 @@ export class IconComponent extends BaseComponent implements IIconComponent {
     return Object.values(ICON_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: IconFoundation;
+  private _core: IconCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new IconFoundation(new IconAdapter(this));
+    this._core = new IconCore(new IconAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -109,38 +109,38 @@ export class IconComponent extends BaseComponent implements IIconComponent {
   }
 
   /** The name of the icon within the icon registry to be used. */
-  @FoundationProperty()
+  @coreProperty()
   public declare name: string | undefined;
 
   /** Provides the ability to set the SVG string content directly. */
-  @FoundationProperty()
+  @coreProperty()
   public declare src: string | undefined;
 
   /** Controls whether the icon will be loaded dynamically when it comes into view. False by default. */
-  @FoundationProperty()
+  @coreProperty()
   public declare lazy: boolean;
 
   /** Controls whether external network requests are allowed for this icon. Only pertains for icons that aren't defined in the registry. */
-  @FoundationProperty()
+  @coreProperty()
   public declare external: boolean;
 
   /** The type of icon to load externally. Possible values: "standard", "extended", "custom". */
-  @FoundationProperty()
+  @coreProperty()
   public declare externalType: IconExternalType;
 
   /** A callback that can be provided to generate a URL that will be used to fetch an SVG icon. */
-  @FoundationProperty()
+  @coreProperty()
   public declare externalUrlBuilder: IconUrlBuilder;
 
   /** A custom value to apply to the `viewBox` attribute on the internal `<svg>` element. */
-  @FoundationProperty()
+  @coreProperty()
   public declare viewbox: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: IconTheme;
 
   /** Forces a reload of the icon. */
   public layout(): void {
-    this._foundation.layout();
+    this._core.layout();
   }
 }

@@ -1,6 +1,6 @@
-import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { IBaseOverlayFoundation } from './base-overlay-foundation';
+import { IBaseOverlayCore } from './base-overlay-core';
 import { IOverlayOffset, OverlayFlipState, OverlayHideState, OverlayPlacement, OverlayPositionStrategy, OVERLAY_CONSTANTS } from '../overlay-constants';
 import { coerceStringToArray } from '../../core/utils';
 import { PositionPlacement, VirtualElement } from '../../core/utils/position-utils';
@@ -24,15 +24,15 @@ export interface IBaseOverlay extends IBaseComponent {
   position(): void;
 }
 
-export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends BaseComponent implements IBaseOverlay {
-  protected _foundation: T;
+export abstract class BaseOverlay<T extends IBaseOverlayCore> extends BaseComponent implements IBaseOverlay {
+  protected _core: T;
 
   constructor() {
     super();
   }
 
   public position(): void {
-    this._foundation.position();
+    this._core.position();
   }
 
   public attributeChangedCallback(name: string, _oldValue: string, newValue: string): void {
@@ -76,48 +76,48 @@ export abstract class BaseOverlay<T extends IBaseOverlayFoundation> extends Base
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare anchorElement: HTMLElement | VirtualElement | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare anchor: string | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare noAnchor: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare inline: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare placement: OverlayPlacement;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare positionStrategy: OverlayPositionStrategy;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare offset: IOverlayOffset;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare shift: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare hide: OverlayHideState;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare persistent: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare flip: OverlayFlipState;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare boundary: string | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare boundaryElement: HTMLElement | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fallbackPlacements: PositionPlacement[] | null;
 }

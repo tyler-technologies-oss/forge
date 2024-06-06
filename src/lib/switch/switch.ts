@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty, isDefined, isString } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, isDefined, isString } from '@tylertech/forge-core';
 import { getFormState, getFormValue, getValidationMessage, inputType, internals, setDefaultAria, setValidity } from '../constants';
 import { BaseComponent, FormValue } from '../core';
 import { IWithFocusable, WithFocusable } from '../core/mixins/focus/with-focusable';
@@ -10,7 +10,7 @@ import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SwitchAdapter } from './switch-adapter';
 import { SwitchIconVisibility, SwitchLabelPosition, SWITCH_CONSTANTS } from './switch-constants';
-import { SwitchFoundation } from './switch-foundation';
+import { SwitchCore } from './switch-core';
 
 import template from './switch.html';
 import styles from './switch.scss';
@@ -155,7 +155,7 @@ declare global {
  * @csspart state-layer - Styles the state layer root element.
  * @csspart focus-indicator - Styles the focus indicator root element.
  */
-@CustomElement({
+@customElement({
   name: SWITCH_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -167,13 +167,13 @@ export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(With
     return Object.values(SWITCH_CONSTANTS.observedAttributes);
   }
 
-  private readonly _foundation: SwitchFoundation;
+  private readonly _core: SwitchCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
     this[inputType] = 'checkbox';
-    this._foundation = new SwitchFoundation(new SwitchAdapter(this));
+    this._core = new SwitchCore(new SwitchAdapter(this));
   }
 
   public connectedCallback(): void {
@@ -184,7 +184,7 @@ export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(With
       ariaDisabled: this.disabled ? 'true' : 'false',
       ariaRequired: this.required ? 'true' : 'false'
     });
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -272,37 +272,37 @@ export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(With
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare on: boolean;
 
   /**
    * @deprecated use `on` instead
    */
-  @FoundationProperty({ name: 'on' })
+  @coreProperty({ name: 'on' })
   public declare selected: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare defaultOn: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare required: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare readonly: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare icon: SwitchIconVisibility;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelPosition: SwitchLabelPosition;
 
   /**
@@ -311,9 +311,9 @@ export class SwitchComponent extends WithFormAssociation(WithLabelAwareness(With
    */
   public toggle(force?: boolean): void {
     if (isDefined(force)) {
-      this._foundation.on = force as boolean;
+      this._core.on = force as boolean;
     } else {
-      this._foundation.on = !this._foundation.on;
+      this._core.on = !this._core.on;
     }
   }
 }

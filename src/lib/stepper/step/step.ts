@@ -1,8 +1,8 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconModeEdit, tylIconWarning, tylIconCheck, tylIconBlock, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 import { StepAdapter } from './step-adapter';
 import { STEP_CONSTANTS } from './step-constants';
-import { StepFoundation } from './step-foundation';
+import { StepCore } from './step-core';
 import { IconRegistry, IconComponent } from '../../icon';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ExpansionPanelComponent } from '../../expansion-panel';
@@ -38,8 +38,6 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-step>` custom element.
- * 
  * @tag forge-step
  * 
  * @property {boolean} alternative - Whether the step is in the alternative style. 
@@ -95,7 +93,7 @@ declare global {
  * @slot optional - The optional content of the step.
  * @slot expansion-content - The content of the step expansion.
  */
-@CustomElement({
+@customElement({
   name: STEP_CONSTANTS.elementName,
   dependencies: [
     IconComponent,
@@ -120,7 +118,7 @@ export class StepComponent extends BaseComponent implements IStepComponent {
     ];
   }
 
-  private _foundation: StepFoundation;
+  private _core: StepCore;
 
   constructor() {
     super();
@@ -132,15 +130,15 @@ export class StepComponent extends BaseComponent implements IStepComponent {
       tylIconKeyboardArrowDown
     ]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new StepFoundation(new StepAdapter(this));
+    this._core = new StepCore(new StepAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -178,33 +176,33 @@ export class StepComponent extends BaseComponent implements IStepComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare alternative: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare index: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare editable: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare completed: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare error: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare selected: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare vertical: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare expanded: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare ignoreUserExpansion: boolean;
 }

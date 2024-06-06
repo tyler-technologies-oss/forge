@@ -1,8 +1,8 @@
-import { coerceBoolean, ensureChild, FoundationProperty, coerceNumberArray } from '@tylertech/forge-core';
+import { coerceBoolean, ensureChild, coreProperty, coerceNumberArray } from '@tylertech/forge-core';
 import { DayOfWeek } from '../../calendar/calendar-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { BASE_DATE_PICKER_CONSTANTS, DatePickerFormatCallback, DatePickerParseCallback, DatePickerPrepareMaskCallback, DatePickerValueMode } from './base-date-picker-constants';
-import { BaseDatePickerFoundation } from './base-date-picker-foundation';
+import { BaseDatePickerCore } from './base-date-picker-core';
 import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 
 export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
@@ -70,8 +70,8 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @attribute {DatePickerValueMode} [value-mode=string] - The type for the `value` property and `forge-date-picker-change` event.
  * @attribute {string} [year-range] - The year range.
  */
-export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoundation extends BaseDatePickerFoundation<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>> extends BaseComponent implements IBaseDatePickerComponent<TPublicValue> {
-  protected _foundation: TFoundation;
+export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TCore extends BaseDatePickerCore<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>> extends BaseComponent implements IBaseDatePickerComponent<TPublicValue> {
+  protected _core: TCore;
 
   constructor() {
     super();
@@ -79,16 +79,16 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
 
   public connectedCallback(): void {
     if (this.querySelector(BASE_DATE_PICKER_CONSTANTS.selectors.INPUT)) {
-      this._foundation.initialize();
+      this._core.initialize();
     } else {
       ensureChild(this, BASE_DATE_PICKER_CONSTANTS.selectors.INPUT).then(() => {
-        this._foundation.initialize();
+        this._core.initialize();
       });
     }
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -141,69 +141,69 @@ export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TFoun
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: TPublicValue | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare min: Date | string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare max: Date | string | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabledDates: Date | Date[] | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popupClasses: string | string[];
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare masked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare maskFormat: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showMaskFormat: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare valueMode: DatePickerValueMode;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare notifyInputValueChanges: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare allowInvalidDate: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showToday: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showClear: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare parseCallback: DatePickerParseCallback;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare formatCallback: DatePickerFormatCallback;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare prepareMaskCallback: DatePickerPrepareMaskCallback;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabledDaysOfWeek: DayOfWeek[];
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disableDayCallback: (date: Date) => boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare yearRange: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare locale: string | undefined;
 }
