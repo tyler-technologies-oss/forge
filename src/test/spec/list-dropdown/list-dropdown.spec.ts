@@ -14,6 +14,12 @@ interface ITestContext {
   context: IListDropdownTestContext;
 }
 
+function createDummyInputElement(): HTMLInputElement {
+  let input = document.createElement('input');
+  input.id = 'dummy-input';
+  return input;
+}
+
 describe('ListDropdown', function(this: ITestContext) {
   const BASIC_OPTIONS: IListDropdownOption[] = [
     { label: 'One', value: 1 },
@@ -23,6 +29,7 @@ describe('ListDropdown', function(this: ITestContext) {
   const DEFAULT_CONFIG: IListDropdownConfig = {
     options: BASIC_OPTIONS,
     id: 'list-dropdown',
+    referenceElement: createDummyInputElement(),
     activeChangeCallback: (id: string) => {},
     selectCallback: (value: any) => {}
   };

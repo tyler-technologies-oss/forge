@@ -6,6 +6,7 @@ import { IListDropdownConfig, IListDropdown, ListDropdown } from '../list-dropdo
 import { IListComponent, IListItemComponent, LIST_CONSTANTS, LIST_ITEM_CONSTANTS } from '../list';
 
 export interface IMenuAdapter extends IBaseAdapter {
+  readonly targetElement: HTMLElement | null;
   getDropdownElement(): HTMLElement | null;
   initializeTarget(): void;
   initializeAccessibility(id: string): void;
@@ -40,6 +41,10 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
 
   constructor(component: IMenuComponent) {
     super(component);
+  }
+
+  public get targetElement(): HTMLElement | null {
+    return this._targetElement;
   }
 
   public getDropdownElement(): HTMLElement | null {

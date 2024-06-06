@@ -69,6 +69,7 @@ export interface IListDropdownSelectEventData {
 
 export interface IListDropdownConfig<T = any> {
   id: string;
+  referenceElement: HTMLElement;
   options: Array<IListDropdownOption | IListDropdownOptionGroup>;
   selectCallback: (value: T) => void;
   

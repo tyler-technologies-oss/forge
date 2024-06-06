@@ -407,6 +407,10 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
   }
 
   private async _showDropdown({ filter = true, userTriggered = true, activateFirst = false, activateSelected = false } = {}): Promise<void> {
+    if (!this._isInitialized || !this._adapter.hasInputElement()) {
+      return;
+    }
+
     const sendFilterText = this._allowUnmatched && !this._selectedOptions.length;
     this._isDropdownOpen = true;
     let listOptionBuilder: ListDropdownOptionBuilder<HTMLElement> | undefined;
@@ -418,6 +422,7 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
     }
     const config: IListDropdownConfig = {
       options: this._options,
+      referenceElement: this._adapter.inputElement,
       multiple: this._multiple,
       selectedValues: [...this._values],
       id: `forge-autocomplete-${this._identifier}`,

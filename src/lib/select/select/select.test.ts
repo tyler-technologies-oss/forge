@@ -207,6 +207,7 @@ describe('Select', () => {
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
       expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
+      expect(harness.popoverElement?.querySelector('forge-list')?.getAttribute('aria-multiselectable')).to.equal('true');
       await expect(harness.element).to.be.accessible();
     });
   });
