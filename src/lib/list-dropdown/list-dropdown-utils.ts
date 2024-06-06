@@ -7,6 +7,7 @@ import { IListComponent, LIST_CONSTANTS } from '../list/list';
 import { IPopupComponent, PopupAnimationType, POPUP_CONSTANTS } from '../popup';
 import { ISkeletonComponent, SKELETON_CONSTANTS } from '../skeleton';
 import { IListDropdownCascadingElementFactoryConfig, IListDropdownOpenConfig, IListDropdownOption, IListDropdownOptionGroup, ListDropdownAsyncStyle, ListDropdownIconType, ListDropdownType, LIST_DROPDOWN_CONSTANTS } from './list-dropdown-constants';
+import { LIST_ITEM_CONSTANTS } from '../list/list-item';
 
 export enum ListDropdownOptionType { Option, Group }
 
@@ -43,6 +44,9 @@ export function createDropdown(config: IListDropdownOpenConfig, targetElement: H
       break;
     default:
       dropdownElement.setAttribute('role', 'listbox');
+      if (config.multiple) {
+        dropdownElement.setAttribute('aria-multiselectable', 'true');
+      }
   }
 
   if (config.id) {
@@ -61,6 +65,10 @@ export function createPopupDropdown(config: IListDropdownOpenConfig, targetEleme
   popupElement.placement = config.popupPlacement || 'bottom-start';
   popupElement.manageFocus = false;
   popupElement.static = !!config.popupStatic;
+
+  if (config?.referenceElement?.id) {
+    popupElement.setAttribute('aria-labelledby', config.referenceElement.id);
+  }
 
   if (config.popupFallbackPlacements?.length) {
     popupElement.fallbackPlacements = config.popupFallbackPlacements;
@@ -92,6 +100,7 @@ export function createList(config: IListDropdownOpenConfig): IListComponent {
   const listElement = document.createElement(LIST_CONSTANTS.elementName) as IListComponent;
   listElement.id = `list-dropdown-list-${config.id}`;
   listElement.propagateClick = false;
+  listElement.setAttribute('role', 'presentation');
   return listElement;
 }
 
@@ -174,6 +183,8 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       listItemElement.value = option.value;
       listItemElement.id = `list-dropdown-option-${config.id}-${optionIdIndex++}`;
       listItemElement.style.cursor = 'pointer';
+      listItemElement.shadowRoot?.querySelector(LIST_ITEM_CONSTANTS.selectors.LIST_ITEM)?.removeAttribute('tabindex');
+      listItemElement.tabIndex = 0;
 
       if (config.wrapOptionText) {
         listItemElement.wrap = true;
@@ -284,7 +295,9 @@ export function createListItems(config: IListDropdownOpenConfig, listElement: IL
       if (isSelected) {
         listItemElement.selected = true;
       }
-      listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      if (config.type === ListDropdownType.Standard) {
+        listItemElement.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      }
 
       // If we have any child options, we need to render a child menu for this list item
       if (!option.disabled && typeof config.cascadingElementFactory === 'function' && Array.isArray(option.options) && option.options.length) {

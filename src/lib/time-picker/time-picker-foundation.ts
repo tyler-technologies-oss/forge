@@ -598,6 +598,7 @@ export class TimePickerFoundation implements ITimePickerFoundation {
 
     this._dropdownConfig = {
       id: `forge-time-picker-${this._identifier}`,
+      referenceElement: this._adapter.inputElement,
       selectedValues,
       syncWidth: true,
       visibleStartIndex,

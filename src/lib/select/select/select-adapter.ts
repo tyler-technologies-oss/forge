@@ -5,6 +5,7 @@ import { SELECT_CONSTANTS } from './select-constants';
 import { IBaseSelectAdapter, BaseSelectAdapter } from '../core';
 import { IListDropdownConfig } from '../../list-dropdown/list-dropdown-constants';
 import { FIELD_CONSTANTS } from '../../field/field-constants';
+import { tryCreateAriaControlsPlaceholder, setAriaControls } from '../../core/utils';
 
 export type OptionListenerDestructor = () => void;
 
@@ -68,6 +69,8 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
     this._component.setAttribute('role', 'combobox');
     this._component.setAttribute('aria-haspopup', 'true');
     this._component.setAttribute('aria-expanded', 'false');
+    tryCreateAriaControlsPlaceholder();
+    setAriaControls(this._component);
 
     // We need to ensure the host element receives a non-negative tabindex for our interactions to work properly
     if (!this._component.hasAttribute('tabindex') || this._component.tabIndex === -1) {
@@ -132,7 +135,7 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
   public close(): void {
     this._component.setAttribute('aria-expanded', 'false');
     this._component.removeAttribute('aria-activedescendant');
-    this._component.removeAttribute('aria-controls');
+    setAriaControls(this._component);
     toggleClass(this._selectElement, false, SELECT_CONSTANTS.classes.OPENED);
     super.close();
   }
@@ -187,14 +190,6 @@ export class SelectAdapter extends BaseSelectAdapter implements ISelectAdapter {
 
   public setDense(isDense: boolean): void {
     toggleClass(this._selectElement, isDense, FIELD_CONSTANTS.classes.DENSE);
-  }
-
-  public setMultiple(multiple: boolean): void {
-    if (multiple) {
-      this.setHostAttribute('aria-multiselectable', 'true');
-    } else {
-      this.removeHostAttribute('aria-multiselectable');
-    }
   }
 
   public getLabelWidth(fontSize: number, fontFamily: string): number {

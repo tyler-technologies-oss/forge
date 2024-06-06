@@ -423,6 +423,7 @@ export class AutocompleteFoundation extends ListDropdownAwareFoundation implemen
     }
     const config: IListDropdownConfig = {
       options: this._options,
+      referenceElement: this._adapter.inputElement,
       multiple: this._multiple,
       selectedValues: [...this._values],
       id: `forge-autocomplete-${this._identifier}`,

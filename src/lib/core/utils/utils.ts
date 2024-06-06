@@ -1,3 +1,4 @@
+export const ARIA_CONTROLS_PLACEHOLDER_ID = 'forge-aria-controls-placeholder';
 /**
  * Highlights text in the given label by converting it to HTML and using a `<span>` tag to show the highlighted text within the original label.
  * @param label The full text.
@@ -141,4 +142,27 @@ export function safeMin(...args: (number | undefined)[]): number {
  */
 export function safeMax(...args: (number | undefined)[]): number {
   return Math.max(...args.map(arg => arg ?? Number.NEGATIVE_INFINITY));
+}
+
+/**
+ * Creates a div as a temporary aria-controls placeholder for various components that use a dynamic popup.
+ */
+export function tryCreateAriaControlsPlaceholder(): void {
+  const hasDiv = document.getElementById(ARIA_CONTROLS_PLACEHOLDER_ID);
+  if (hasDiv) {
+    return;
+  }
+  const placeholderDiv = document.createElement('div');
+  placeholderDiv.id = ARIA_CONTROLS_PLACEHOLDER_ID;
+  document.body.appendChild(placeholderDiv);
+}
+
+/**
+ * Creates a div as a temporary aria-controls placeholder for various components that use a dynamic popup.
+ */
+export function setAriaControls(component: HTMLElement): void {
+  const placeholderDiv = document.getElementById(ARIA_CONTROLS_PLACEHOLDER_ID);
+  if (placeholderDiv) {
+    component.setAttribute('aria-controls', placeholderDiv.id);
+  }
 }
