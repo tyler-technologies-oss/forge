@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
 import { StateLayerAdapter } from './state-layer-adapter';
-import { StateLayerFoundation } from './state-layer-foundation';
+import { StateLayerCore } from './state-layer-core';
 import { StateLayerCoords, STATE_LAYER_CONSTANTS } from './state-layer-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -48,7 +48,7 @@ declare global {
  * 
  * @csspart surface - The surface element.
  */
-@CustomElement({
+@customElement({
   name: STATE_LAYER_CONSTANTS.elementName
 })
 export class StateLayerComponent extends BaseComponent implements IStateLayerComponent {
@@ -59,20 +59,20 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
     ];
   }
 
-  private _foundation: StateLayerFoundation;
+  private _core: StateLayerCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new StateLayerFoundation(new StateLayerAdapter(this));
+    this._core = new StateLayerCore(new StateLayerAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -86,13 +86,13 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare targetElement: HTMLElement | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare target: string | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
   /**
@@ -103,6 +103,6 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
    * @param {StateLayerCoords} [coords] - The coordinates to play the animation from.
    */
   public playAnimation(coords?: StateLayerCoords): void {
-    this._foundation.playAnimation(coords);
+    this._core.playAnimation(coords);
   }
 }

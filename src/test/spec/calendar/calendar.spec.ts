@@ -541,7 +541,7 @@ describe('CalendarComponent', function(this: ITestContext) {
     });
 
     it('should prevent focus when clicking on internal elements', async function(this: ITestContext) {
-      const mousedownSpy = spyOn(this.context.component['_foundation'], '_preventFocusListener' as any).and.callThrough();
+      const mousedownSpy = spyOn(this.context.component['_core'], '_preventFocusListener' as any).and.callThrough();
       this.context.component.preventFocus = true;
       await tick();
       getRootElement(this.context.component).dispatchEvent(new Event('mousedown', { bubbles: true }));
@@ -551,7 +551,7 @@ describe('CalendarComponent', function(this: ITestContext) {
     });
 
     it('should toggle prevent focus', async function(this: ITestContext) {
-      const mousedownSpy = spyOn(this.context.component['_foundation'], '_preventFocusListener' as any).and.callThrough();
+      const mousedownSpy = spyOn(this.context.component['_core'], '_preventFocusListener' as any).and.callThrough();
       this.context.component.preventFocus = true;
       await tick();
 
@@ -564,7 +564,7 @@ describe('CalendarComponent', function(this: ITestContext) {
     });
 
     it('should re-render necessary components when layout is called', function(this: ITestContext) {
-      const headerSpy = spyOn(this.context.component['_foundation'], '_applyShowHeader' as any).and.callThrough();
+      const headerSpy = spyOn(this.context.component['_core'], '_applyShowHeader' as any).and.callThrough();
       this.context.component.layout();
 
       expect(headerSpy).toHaveBeenCalledTimes(1);

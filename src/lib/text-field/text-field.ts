@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { tylIconClear } from '@tylertech/tyler-icons/standard';
 import { BASE_FIELD_CONSTANTS, FieldComponent } from '../field';
 import { BaseField, IBaseField } from '../field/base/base-field';
@@ -7,7 +7,7 @@ import { IconButtonComponent } from '../icon-button';
 import { TooltipComponent } from '../tooltip';
 import { TextFieldAdapter } from './text-field-adapter';
 import { TEXT_FIELD_CONSTANTS } from './text-field-constants';
-import { TextFieldFoundation } from './text-field-foundation';
+import { TextFieldCore } from './text-field-core';
 
 import template from './text-field.html';
 import styles from './text-field.scss';
@@ -69,7 +69,7 @@ declare global {
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
  */
 
-@CustomElement({
+@customElement({
   name: TEXT_FIELD_CONSTANTS.elementName,
   dependencies: [
     FieldComponent,
@@ -77,7 +77,7 @@ declare global {
     TooltipComponent
   ]
 })
-export class TextFieldComponent extends BaseField<TextFieldFoundation> implements ITextFieldComponent {
+export class TextFieldComponent extends BaseField<TextFieldCore> implements ITextFieldComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
@@ -85,17 +85,17 @@ export class TextFieldComponent extends BaseField<TextFieldFoundation> implement
     ];
   }
 
-  protected readonly _foundation: TextFieldFoundation;
+  protected readonly _core: TextFieldCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new TextFieldFoundation(new TextFieldAdapter(this));
+    this._core = new TextFieldCore(new TextFieldAdapter(this));
     IconRegistry.define(tylIconClear);
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -108,9 +108,9 @@ export class TextFieldComponent extends BaseField<TextFieldFoundation> implement
   }
 
   public get popoverTargetElement(): HTMLElement {
-    return this._foundation.popoverTargetElement;
+    return this._core.popoverTargetElement;
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare showClear: boolean;
 }

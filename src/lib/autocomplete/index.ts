@@ -5,7 +5,7 @@ import { AutocompleteComponent } from './autocomplete';
 export * from './autocomplete-adapter';
 export * from './autocomplete-component-delegate';
 export * from './autocomplete-constants';
-export * from './autocomplete-foundation';
+export * from './autocomplete-core';
 export * from './autocomplete-utils';
 export * from './autocomplete';
 

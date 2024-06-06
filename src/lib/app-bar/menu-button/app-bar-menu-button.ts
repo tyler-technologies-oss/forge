@@ -1,4 +1,4 @@
-import { CustomElement, attachLightTemplate, toggleAttribute, getLightElement } from '@tylertech/forge-core';
+import { customElement, attachLightTemplate, toggleAttribute, getLightElement } from '@tylertech/forge-core';
 import { APP_BAR_MENU_BUTTON_CONSTANTS } from './app-bar-menu-button-constants';
 import { IconButtonComponent, ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button';
 import { TooltipComponent } from '../../tooltip';
@@ -30,7 +30,7 @@ declare global {
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_MENU_BUTTON_CONSTANTS.elementName,
   dependencies: [
     IconButtonComponent,

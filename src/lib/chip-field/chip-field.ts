@@ -1,6 +1,6 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, coreProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { ChipFieldAdapter } from './chip-field-adapter';
-import { ChipFieldFoundation } from './chip-field-foundation';
+import { ChipFieldCore } from './chip-field-core';
 import { CHIP_FIELD_CONSTANTS } from './chip-field-constants';
 import { ChipComponent } from '../chips';
 import { BaseField, IBaseField } from '../field/base/base-field';
@@ -38,14 +38,14 @@ declare global {
  * @cssproperty --forge-chip-field-member-spacing - The spacing between chip members.
  * @cssproperty --forge-chip-field-content-spacing - The spacing around chips group.
  */
-@CustomElement({
+@customElement({
   name: CHIP_FIELD_CONSTANTS.elementName,
   dependencies: [
     FieldComponent,
     ChipComponent
   ]
 })
-export class ChipFieldComponent extends BaseField<ChipFieldFoundation> implements IChipFieldComponent {
+export class ChipFieldComponent extends BaseField<ChipFieldCore> implements IChipFieldComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
@@ -53,20 +53,20 @@ export class ChipFieldComponent extends BaseField<ChipFieldFoundation> implement
     ];
   }
 
-  protected _foundation: ChipFieldFoundation;
+  protected _core: ChipFieldCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ChipFieldFoundation(new ChipFieldAdapter(this));
+    this._core = new ChipFieldCore(new ChipFieldAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -78,14 +78,14 @@ export class ChipFieldComponent extends BaseField<ChipFieldFoundation> implement
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare addOnBlur: boolean;
 
   public get popoverTargetElement(): HTMLElement {
-    return this._foundation.popoverTargetElement;
+    return this._core.popoverTargetElement;
   }
 
   public override click(): void {
-    this._foundation.click();
+    this._core.click();
   }
 }

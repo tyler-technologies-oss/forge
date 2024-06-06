@@ -1,11 +1,11 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
 import { IconComponent, IconRegistry } from '../../icon';
 import { IconButtonComponent } from '../../icon-button';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { TabComponent } from '../tab/tab';
 import { TabBarAdapter } from './tab-bar-adapter';
 import { ITabBarChangeEventData, TAB_BAR_CONSTANTS } from './tab-bar-constants';
-import { TabBarFoundation } from './tab-bar-foundation';
+import { TabBarCore } from './tab-bar-core';
 import { tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 
 import template from './tab-bar.html';
@@ -76,7 +76,7 @@ declare global {
  * @csspart container - The container element.
  * @csspart scroll-container - The scroll container element.
  */
-@CustomElement({
+@customElement({
   name: TAB_BAR_CONSTANTS.elementName,
   dependencies: [
     TabComponent,
@@ -89,7 +89,7 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
     return Object.values(TAB_BAR_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: TabBarFoundation;
+  private _core: TabBarCore;
 
   constructor() {
     super();
@@ -100,15 +100,15 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
       tylIconKeyboardArrowDown
     ]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new TabBarFoundation(new TabBarAdapter(this));
+    this._core = new TabBarCore(new TabBarAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -143,30 +143,30 @@ export class TabBarComponent extends BaseComponent implements ITabBarComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare activeTab: number | null | undefined;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare vertical: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare clustered: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare stacked: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare secondary: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare inverted: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare autoActivate: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare scrollButtons: boolean;
 }

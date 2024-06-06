@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { ChipComponent, IChipComponent } from '../chip/chip';
 import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipNavigateEventData } from '../chip/chip-constants';
@@ -47,7 +47,7 @@ declare global {
  * 
  * @slot - The chips to display in the chip set.
  */
-@CustomElement({
+@customElement({
   name: CHIP_SET_CONSTANTS.elementName,
   dependencies: [ChipComponent]
 })

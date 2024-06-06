@@ -6,7 +6,7 @@ export * from './floating-action-button';
 export * from './floating-action-button-adapter';
 export * from './floating-action-button-component-delegate';
 export * from './floating-action-button-constants';
-export * from './floating-action-button-foundation';
+export * from './floating-action-button-core';
 
 export function defineFloatingActionButtonComponent(): void {
   defineCustomElement(FloatingActionButtonComponent);

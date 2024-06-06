@@ -1,10 +1,10 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core';
 import { FocusIndicatorComponent, FocusIndicatorFocusMode } from '../focus-indicator';
 import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
 import { FieldAdapter } from './field-adapter';
 import { FIELD_CONSTANTS } from './field-constants';
-import { FieldFoundation } from './field-foundation';
+import { FieldCore } from './field-core';
 
 import template from './field.html';
 import styles from './field.scss';
@@ -151,7 +151,7 @@ declare global {
  * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
  */
-@CustomElement({
+@customElement({
   name: FIELD_CONSTANTS.elementName,
   dependencies: [FocusIndicatorComponent]
 })
@@ -160,16 +160,16 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
     return Object.values(FIELD_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: FieldFoundation;
+  private _core: FieldCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new FieldFoundation(new FieldAdapter(this));
+    this._core = new FieldCore(new FieldAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -231,65 +231,65 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelPosition: FieldLabelPosition;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelAlignment: FieldLabelAlignment;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare floatLabel: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare invalid: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare required: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare optional: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare variant: FieldVariant;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: FieldTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare shape: FieldShape;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare density: FieldDensity;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popoverIcon: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popoverExpanded: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare multiline: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare supportTextInset: FieldSupportTextInset;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare focusIndicatorTargetElement: HTMLElement;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare focusIndicatorFocusMode: FocusIndicatorFocusMode;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare focusIndicatorAllowFocus: boolean;
 
   /** Sets the floating label without animating the transition. */
   public floatLabelWithoutAnimation(value: boolean): void {
-    this._foundation.floatLabelWithoutAnimation(value);
+    this._core.floatLabelWithoutAnimation(value);
   }
 }

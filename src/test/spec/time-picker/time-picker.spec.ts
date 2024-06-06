@@ -1,4 +1,4 @@
-import { defineTimePickerComponent, ITimePickerComponent, ITimePickerFoundation, TIME_PICKER_CONSTANTS, ITimePickerOptionValue, ITimePickerAdapter, ITimePickerOption } from '@tylertech/forge/time-picker';
+import { defineTimePickerComponent, ITimePickerComponent, ITimePickerCore, TIME_PICKER_CONSTANTS, ITimePickerOptionValue, ITimePickerAdapter, ITimePickerOption } from '@tylertech/forge/time-picker';
 import { IPopoverComponent, IListItemComponent, LIST_ITEM_CONSTANTS, ICON_BUTTON_CONSTANTS, IIconButtonComponent, TEXT_FIELD_CONSTANTS, defineTextFieldComponent } from '@tylertech/forge';
 import { timer, tick } from '@tylertech/forge-testing';
 import { getCurrentTimeOfDayMillis, millisToTimeString, hoursToMillis, timeStringToMillis, mergeDateWithTime } from '@tylertech/forge/time-picker/time-picker-utils';
@@ -11,7 +11,7 @@ interface ITestContext {
 
 interface ITimePickerTestContext {
   component: ITimePickerComponent;
-  foundation: ITimePickerFoundation;
+  core: ITimePickerCore;
   adapter: ITimePickerAdapter;
   inputElement: HTMLInputElement;
   toggleElement: HTMLButtonElement;
@@ -345,7 +345,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.addEventListener(TIME_PICKER_CONSTANTS.events.CHANGE, changeEventSpy);
 
     const expectedTimeValue = '08:00';
-    this.context.foundation['_handleInput'](expectedTimeValue);
+    this.context.core['_handleInput'](expectedTimeValue);
 
     expect(changeEventSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: expectedTimeValue }));
   });
@@ -357,7 +357,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.component.addEventListener(TIME_PICKER_CONSTANTS.events.CHANGE, changeEventSpy);
 
     const expectedTimeValue = 'asdf';
-    this.context.foundation['_handleInput'](expectedTimeValue);
+    this.context.core['_handleInput'](expectedTimeValue);
 
     expect(changeEventSpy).not.toHaveBeenCalled();
   });
@@ -520,7 +520,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
       time: 1 * 60 * 60 * 1000
     };
     const expectedTimeString = millisToTimeString(value.time, true, false);
-    this.context.foundation['_onSelect'](value);
+    this.context.core['_onSelect'](value);
 
     expect(this.context.component.value).toBe(expectedTimeString);
   });
@@ -533,7 +533,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
       metadata: 'now'
     };
     const expectedTimeString = millisToTimeString(value.time, true, false);
-    this.context.foundation['_onSelect'](value);
+    this.context.core['_onSelect'](value);
 
     expect(this.context.component.value).toBe(expectedTimeString);
   });
@@ -548,7 +548,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
       customCallback: metadata => 100000
     };
     const expectedTimeString = millisToTimeString(value.time, true, false);
-    this.context.foundation['_onSelect'](value);
+    this.context.core['_onSelect'](value);
 
     expect(this.context.component.value).toBe(expectedTimeString);
   });
@@ -561,7 +561,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
       metadata: 'custom',
       isCustom: true
     };
-    const action = () => this.context.foundation['_onSelect'](value);
+    const action = () => this.context.core['_onSelect'](value);
 
     expect(action).toThrowError();
   });
@@ -575,7 +575,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
       isCustom: true,
       customCallback: () => 'test' as any
     };
-    const action = () => this.context.foundation['_onSelect'](value);
+    const action = () => this.context.core['_onSelect'](value);
 
     expect(action).toThrowError();
   });
@@ -589,7 +589,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const value: ITimePickerOptionValue = { time: hoursToMillis(5) };
     const timeString = millisToTimeString(value.time, true, false);
     this.context.component.value = timeString;
-    this.context.foundation['_onSelect'](value);
+    this.context.core['_onSelect'](value);
     
     expect(this.context.component.value).toBe(timeString);
     expect(changeSpy).not.toHaveBeenCalled();
@@ -603,7 +603,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
 
     const value: ITimePickerOptionValue = { time: hoursToMillis(5) };
     const timeString = millisToTimeString(value.time, true, false);
-    this.context.foundation['_onSelect'](value);
+    this.context.core['_onSelect'](value);
     
     expect(changeSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({ detail: timeString }));
     expect(this.context.inputElement.value).toBe('');
@@ -635,7 +635,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     const listItems = this.context.getListItems();
     const activeListItemIndex = listItems.findIndex(li => li.active);
 
-    expect(activeListItemIndex).toBe(this.context.foundation['_dropdownConfig'].visibleStartIndex);
+    expect(activeListItemIndex).toBe(this.context.core['_dropdownConfig'].visibleStartIndex);
   });
 
   it('should select highlighted time in dropdown when tab key is pressed', async function(this: ITestContext) {
@@ -818,7 +818,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
 
     activeListItemIndex = listItems.findIndex(li => li.active);
-    expect(activeListItemIndex).toBe(this.context.foundation['_dropdownConfig'].visibleStartIndex);
+    expect(activeListItemIndex).toBe(this.context.core['_dropdownConfig'].visibleStartIndex);
   });
 
   it('should propagate up arrow key to dropdown', async function(this: ITestContext) {
@@ -835,7 +835,7 @@ describe('TimePickerComponent', function(this: ITestContext) {
     this.context.inputElement.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
 
     const activeListItemIndex = listItems.findIndex(li => li.active);
-    expect(activeListItemIndex).toBe(this.context.foundation['_dropdownConfig'].visibleStartIndex);
+    expect(activeListItemIndex).toBe(this.context.core['_dropdownConfig'].visibleStartIndex);
   });
 
   it('should propagate home and end key to dropdown', async function(this: ITestContext) {
@@ -904,13 +904,13 @@ describe('TimePickerComponent', function(this: ITestContext) {
   it('should wait for input element to initialize', async function(this: ITestContext) {
     this.context = _createTimePickerContext(true, false);
 
-    expect(this.context.component['_foundation']['_isInitialized']).toBe(false);
+    expect(this.context.component['_core']['_isInitialized']).toBe(false);
 
     await timer(100);
     this.context.component.appendChild(this.context.inputElement);
     await tick();
 
-    expect(this.context.component['_foundation']['_isInitialized']).toBe(true);
+    expect(this.context.component['_core']['_isInitialized']).toBe(true);
   });
 
   it('should show "now" as the first option in the dropdown', async function(this: ITestContext) {
@@ -1485,14 +1485,14 @@ describe('TimePickerComponent', function(this: ITestContext) {
     if (append) {
       document.body.appendChild(component);
     }
-    const foundation = component['_foundation'];
-    const identifier = `forge-time-picker-${foundation['_identifier']}`;
+    const core = component['_core'];
+    const identifier = `forge-time-picker-${core['_identifier']}`;
     const getPopup = () => document.querySelector(`[id=list-dropdown-popup-${identifier}]`) as IPopoverComponent;
 
     return {
       component,
-      foundation,
-      adapter: component['_foundation']['_adapter'],
+      core,
+      adapter: component['_core']['_adapter'],
       inputElement,
       toggleElement,
       identifier,

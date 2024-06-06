@@ -1,11 +1,11 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { IconComponent } from '../icon';
 import { BaseButton, IBaseButton } from '../button/base/base-button';
 import { BASE_BUTTON_CONSTANTS } from '../button/base/base-button-constants';
 import { FocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
 import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants';
-import { IconButtonFoundation } from './icon-button-foundation';
+import { IconButtonCore } from './icon-button-core';
 import { IconButtonAdapter } from './icon-button-adapter';
 
 import template from './icon-button.html';
@@ -129,7 +129,7 @@ declare global {
  * @slot end - Elements to logically render after the icon.
  * @slot badge - Absolutely positions the element in the top-end corner of the button (typically reserved for badge-like content).
  */
-@CustomElement({
+@customElement({
   name: ICON_BUTTON_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -137,7 +137,7 @@ declare global {
     IconComponent
   ]
 })
-export class IconButtonComponent extends BaseButton<IconButtonFoundation> implements IIconButtonComponent {
+export class IconButtonComponent extends BaseButton<IconButtonCore> implements IIconButtonComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
@@ -145,12 +145,12 @@ export class IconButtonComponent extends BaseButton<IconButtonFoundation> implem
     ];
   }
 
-  protected readonly _foundation: IconButtonFoundation;
+  protected readonly _core: IconButtonCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new IconButtonFoundation(new IconButtonAdapter(this));
+    this._core = new IconButtonCore(new IconButtonAdapter(this));
   }
 
   public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -177,21 +177,21 @@ export class IconButtonComponent extends BaseButton<IconButtonFoundation> implem
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare toggle: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare on: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: IconButtonTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare variant: IconButtonVariant;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare shape: IconButtonShape;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare density: IconButtonDensity;
 }

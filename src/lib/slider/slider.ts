@@ -1,11 +1,11 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty, toggleAttribute } from '@tylertech/forge-core';
 import { internals } from '../constants';
 import { BaseFormComponent, IBaseFormComponent } from '../core/base/base-form-component';
 import { FocusIndicatorComponent } from '../focus-indicator/focus-indicator';
 import { StateLayerComponent } from '../state-layer/state-layer';
 import { SliderAdapter } from './slider-adapter';
 import { SLIDER_CONSTANTS, SliderLabelBuilder, ISliderRangeChangeEventData, ISliderChangeEventData } from './slider-constants';
-import { SliderFoundation } from './slider-foundation';
+import { SliderCore } from './slider-core';
 
 import template from './slider.html';
 import styles from './slider.scss';
@@ -140,7 +140,7 @@ declare global {
  * @csspart handle-start-label - Styles the start handle label element.
  * @csspart handle-start-label-content - Styles the start handle label content element.
  */
-@CustomElement({
+@customElement({
   name: SLIDER_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -202,29 +202,29 @@ export class SliderComponent extends BaseFormComponent<number> implements ISlide
   }
 
   public readonly [internals]: ElementInternals;
-  private readonly _foundation: SliderFoundation;
+  private readonly _core: SliderCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
     this[internals] = this.attachInternals();
-    this._foundation = new SliderFoundation(new SliderAdapter(this));
+    this._core = new SliderCore(new SliderAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     switch (name) {
       case SLIDER_CONSTANTS.attributes.ARIA_LABEL:
-        this._foundation.ariaLabel = newValue;
+        this._core.ariaLabel = newValue;
         break;
       case SLIDER_CONSTANTS.attributes.ARIA_LABEL_START:
-        this._foundation.ariaLabelStart = newValue;
+        this._core.ariaLabelStart = newValue;
         break;
       case SLIDER_CONSTANTS.attributes.ARIA_LABEL_END:
-        this._foundation.ariaLabelEnd = newValue;
+        this._core.ariaLabelEnd = newValue;
         break;
       case SLIDER_CONSTANTS.attributes.VALUE:
         this.value = coerceNumber(newValue);
@@ -272,7 +272,7 @@ export class SliderComponent extends BaseFormComponent<number> implements ISlide
   }
 
   public formResetCallback(): void {
-    if (this._foundation.range) {
+    if (this._core.range) {
       const valueStart = this.getAttribute('value-start');
       this.valueStart = valueStart !== null ? Number(valueStart) : SLIDER_CONSTANTS.numbers.DEFAULT_START_VALUE;
       const valueEnd = this.getAttribute('value-end');
@@ -301,48 +301,48 @@ export class SliderComponent extends BaseFormComponent<number> implements ISlide
     this.disabled = isDisabled;
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare valueStart: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare valueEnd: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare label: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelStart: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelEnd: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelBuilder: SliderLabelBuilder;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare min: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare max: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare step: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare tickmarks: boolean;
   
-  @FoundationProperty()
+  @coreProperty()
   public declare labeled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare range: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare readonly: boolean;
 }

@@ -1,8 +1,8 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { FocusIndicatorAdapter } from './focus-indicator-adapter';
 import { FocusIndicatorFocusMode, FOCUS_INDICATOR_CONSTANTS } from './focus-indicator-constants';
-import { FocusIndicatorFoundation } from './focus-indicator-foundation';
+import { FocusIndicatorCore } from './focus-indicator-core';
 
 import template from './focus-indicator.html';
 import styles from './focus-indicator.scss';
@@ -61,7 +61,7 @@ declare global {
  * 
  * @csspart indicator - The focus indicator element.
  */
-@CustomElement({
+@customElement({
   name: FOCUS_INDICATOR_CONSTANTS.elementName
 })
 export class FocusIndicatorComponent extends BaseComponent implements IFocusIndicatorComponent {
@@ -69,20 +69,20 @@ export class FocusIndicatorComponent extends BaseComponent implements IFocusIndi
     return Object.values(FOCUS_INDICATOR_CONSTANTS.attributes);
   }
 
-  private _foundation: FocusIndicatorFoundation;
+  private _core: FocusIndicatorCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new FocusIndicatorFoundation(new FocusIndicatorAdapter(this));
+    this._core = new FocusIndicatorCore(new FocusIndicatorAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -108,24 +108,24 @@ export class FocusIndicatorComponent extends BaseComponent implements IFocusIndi
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare targetElement: HTMLElement;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare target: string | null;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare active: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare inward: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare circular: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare allowFocus: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare focusMode: FocusIndicatorFocusMode;
 }

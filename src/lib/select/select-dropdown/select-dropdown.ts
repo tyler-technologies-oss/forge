@@ -1,6 +1,6 @@
-import { CustomElement, FoundationProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, coreProperty, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 
-import { SelectDropdownFoundation } from './select-dropdown-foundation';
+import { SelectDropdownCore } from './select-dropdown-core';
 import { SELECT_DROPDOWN_CONSTANTS } from './select-dropdown-constants';
 import { IBaseSelectComponent, BaseSelectComponent } from '../core/base-select';
 import { BASE_SELECT_CONSTANTS } from '../core/base-select-constants';
@@ -36,7 +36,7 @@ declare global {
 /**
  * @tag forge-select-dropdown
  */
-@CustomElement({
+@customElement({
   name: SELECT_DROPDOWN_CONSTANTS.elementName,
   dependencies: [
     OptionComponent,
@@ -50,7 +50,7 @@ declare global {
     IconButtonComponent
   ]
 })
-export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownFoundation> implements ISelectDropdownComponent {
+export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownCore> implements ISelectDropdownComponent {
   public static get observedAttributes(): string[] {
     return [
       SELECT_DROPDOWN_CONSTANTS.attributes.TARGET,
@@ -69,7 +69,7 @@ export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownF
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new SelectDropdownFoundation(new SelectDropdownAdapter(this));
+    this._core = new SelectDropdownCore(new SelectDropdownAdapter(this));
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -88,14 +88,14 @@ export class SelectDropdownComponent extends BaseSelectComponent<SelectDropdownF
   }
 
   /** Sets the target element CSS selector */
-  @FoundationProperty()
+  @coreProperty()
   public declare target: string;
 
   /** Sets the selected text element CSS selector */
-  @FoundationProperty()
+  @coreProperty()
   public declare selectedTextTarget: string;
 
   /** Controls whether the selected text is synchronized to the target elements' text content. Default is false. */
-  @FoundationProperty()
+  @coreProperty()
   public declare syncSelectedText: boolean;
 }

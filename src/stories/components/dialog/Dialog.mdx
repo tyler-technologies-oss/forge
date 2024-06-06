@@ -38,14 +38,37 @@ common to compose the `<forge-dialog>` together with the `<forge-scaffold>` to p
 </forge-dialog>
 ```
 
-> Set a width or minimum width on the dialog content to ensure that the dialog is not too narrow and/or wide in various screens sizes.
+To ensure that your scaffold can flex with the dialog surface on smaller screens, make sure to apply the `height: auto` style to the `<forge-scaffold>` element. This
+is because the scaffold uses a `height: 100%` by default which can cause the dialog to overflow on smaller screens.
+
+Additionally, you can set a `width` or `min-width` on the `<forge-scaffold>` element to ensure that the dialog is not too narrow and/or wide in various screens sizes.
+
+```css
+forge-scaffold {
+  height: auto;
+  width: 100%;
+  min-width: 500px;
+}
+
+```
+
+### Focus Trap
+
+The `<forge-dialog>` uses the native [&lt;dialog&gt;](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) element under the hood, which
+automatically traps focus within the dialog when it is open by making the rest of the page [inert](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert).
+This means that users cannot interact with elements outside of the dialog content while it is open.
+
+Previous implementations of Forge did not use the native `<dialog>` element, and adding focus traps required additional JavaScript to implement. This is no longer the case,
+and you should be able to safely remove any focus trap logic or libraries now!
+
+> **Note**: the focus is not "cycled" within the dialog content. The user can tab out of it to the browser itself. This is expected and it's an important accessibility feature.
 
 ### Modes
 
 Dialogs modes are used to determine how the dialog is displayed on the page. The following modes are available:
 
-- `modal`: Renders the modal in the top-layer above all other content with a backdrop, and the rest of the page is inert.
-- `nonmodal`: Renders the dialog in the normal flow of the page, but still above other content within its containing block.
+- `modal`: Renders the modal in the [top layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer) above all other content with a backdrop, and the rest of the page is [inert](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert).
+- `nonmodal`: Renders the dialog in the normal flow of the page, but still above other content within its [containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block).
 - `inline-modal`: Renders the dialog in the normal flow of the page, but still above other content within its containing block, and with a backdrop. The rest of the page is **not** inert with this mode.
 
 ### Presets

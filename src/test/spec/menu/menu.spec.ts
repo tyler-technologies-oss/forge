@@ -1,10 +1,11 @@
+/// <reference types="jasmine" />
 import {
   defineMenuComponent,
   IListComponent,
   IListItemComponent,
   IMenuAdapter,
   IMenuComponent,
-  IMenuFoundation,
+  IMenuCore,
   IMenuOption,
   IPopoverComponent,
   POPOVER_CONSTANTS,
@@ -23,7 +24,7 @@ interface ITestContext {
 
 interface ITestMenuContext {
   component: IMenuComponent;
-  foundation: IMenuFoundation;
+  core: IMenuCore;
   adapter: IMenuAdapter;
   fixture: HTMLElement;
   getToggleElement(): HTMLElement;
@@ -203,8 +204,8 @@ describe('MenuComponent', function(this: ITestContext) {
       it('should update the options property with factory', async function(this: ITestContext) {
         this.context = setupTestContext();
         this.context.component.options = asyncMenuOptionsFactory(5);
-        expect(this.context.component['_foundation']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the foundation`);
-        expect(this.context.component.options).toEqual([], `The options factory should be set in the foundation`);
+        expect(this.context.component['_core']['_optionsFactory']).not.toBe(undefined, `The options factory should be set in the core`);
+        expect(this.context.component.options).toEqual([], `The options factory should be set in the core`);
       });
     });
   });
@@ -796,8 +797,8 @@ describe('MenuComponent', function(this: ITestContext) {
     const fixture = document.createElement('div');
     fixture.id = 'menu-test-fixture';
     const component = document.createElement(MENU_CONSTANTS.elementName);
-    const foundation = component['_foundation'] as IMenuFoundation;
-    const adapter = foundation['_adapter'] as IMenuAdapter;
+    const core = component['_core'] as IMenuCore;
+    const adapter = core['_adapter'] as IMenuAdapter;
     if (appendToggle) {
       component.appendChild(createToggleElement());
     }
@@ -805,7 +806,7 @@ describe('MenuComponent', function(this: ITestContext) {
     document.body.appendChild(fixture);
     return {
       component,
-      foundation,
+      core,
       adapter,
       fixture,
       getToggleElement: () => component.querySelector('button') as HTMLButtonElement,

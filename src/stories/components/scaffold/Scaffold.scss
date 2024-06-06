@@ -4,19 +4,13 @@
   --forge-scaffold-width: 100%;
 
   div[slot] {
-      border: 1px dashed #e0e0e0;
-      display: -webkit-box;
-      display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-      flex-direction: column;
-      -webkit-box-pack: center;
-      justify-content: center;
-      -webkit-box-align: center;
-      align-items: center;
-      padding: 8px;
-      margin: 8px;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
+    border: 2px dashed var(--forge-theme-outline-low);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--forge-spacing-xsmall);
+    margin: var(--forge-spacing-xsmall);
+    box-sizing: border-box;
   }
 }

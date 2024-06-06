@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, CustomElement, ensureChildren, getShadowElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, ensureChildren, getShadowElement } from '@tylertech/forge-core';
 import { FocusIndicatorComponent, FOCUS_INDICATOR_CONSTANTS, IFocusIndicatorComponent } from '../../focus-indicator';
 import { IStateLayerComponent, StateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer';
 import { DEPRECATED_ICON_BUTTON_CONSTANTS } from './deprecated-icon-button-constants';
@@ -29,7 +29,7 @@ declare global {
  * 
  * @deprecated Use the `<forge-icon-button>` element instead.
  */
-@CustomElement({
+@customElement({
   name: DEPRECATED_ICON_BUTTON_CONSTANTS.elementName,
   dependencies: [
     IconComponent,

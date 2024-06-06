@@ -158,7 +158,7 @@ describe('Icon', () => {
 
     it('should force icon to load when calling layout method', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-      const loadStub = stub(el['_foundation'], '_loadIcon');
+      const loadStub = stub(el['_core'], '_loadIcon');
 
       el.layout();
 
@@ -266,7 +266,7 @@ describe('Icon', () => {
 
     it('should update icon if external type is changed', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
-      const loadStub = stub(el['_foundation'], '_loadIcon');
+      const loadStub = stub(el['_core'], '_loadIcon');
   
       el.external = true;
       el.name = tylIconCode.name;
@@ -297,7 +297,7 @@ describe('Icon', () => {
 
     it('should batch icon updates if multiple properties change in same frame', async () => {
       const el = await fixture<IIconComponent>(html`<forge-icon></forge-icon>`);
-      const loadStub = stub(el['_foundation'], '_loadIcon');
+      const loadStub = stub(el['_core'], '_loadIcon');
 
       el.name = ICON_NAME;
       el.external = true;
@@ -310,7 +310,7 @@ describe('Icon', () => {
 
     it('should not apply icon if not initialized', async () => {
       const tempIcon = document.createElement(ICON_CONSTANTS.elementName) as IIconComponent;
-      const loadStub = stub(tempIcon['_foundation'], '_loadIcon');
+      const loadStub = stub(tempIcon['_core'], '_loadIcon');
 
       tempIcon.name = tylIconCode.name;
       tempIcon.externalType = 'custom';

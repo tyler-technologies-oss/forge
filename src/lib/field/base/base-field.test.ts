@@ -6,11 +6,11 @@ import { IFieldComponent } from '../field';
 import { FIELD_CONSTANTS } from '../field-constants';
 import { BaseField, IBaseField } from './base-field';
 import { BaseFieldAdapter, IBaseFieldAdapter } from './base-field-adapter';
-import { BaseFieldFoundation } from './base-field-foundation';
+import { BaseFieldCore } from './base-field-core';
 
 import '../field';
 
-class TestBaseFieldFoundation extends BaseFieldFoundation<IBaseFieldAdapter> {}
+class TestBaseFieldCore extends BaseFieldCore<IBaseFieldAdapter> {}
 class TestBaseFieldAdapter extends BaseFieldAdapter implements IBaseFieldAdapter {
   protected _fieldElement: IFieldComponent;
 
@@ -42,13 +42,13 @@ const template = `
 </template>
 `;
 
-class TestBaseField extends BaseField<TestBaseFieldFoundation> {
-  protected readonly _foundation: TestBaseFieldFoundation;
+class TestBaseField extends BaseField<TestBaseFieldCore> {
+  protected readonly _core: TestBaseFieldCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template);
-    this._foundation = new TestBaseFieldFoundation(new TestBaseFieldAdapter(this));
+    this._core = new TestBaseFieldCore(new TestBaseFieldAdapter(this));
   }
 }
 
@@ -59,7 +59,7 @@ function getShadowField(el: IBaseField): IFieldComponent {
 }
 
 function getAdapter(el: IBaseField): TestBaseFieldAdapter {
-  return (el as TestBaseField)['_foundation']['_adapter'] as TestBaseFieldAdapter;
+  return (el as TestBaseField)['_core']['_adapter'] as TestBaseFieldAdapter;
 }
 
 describe('BaseField', () => {

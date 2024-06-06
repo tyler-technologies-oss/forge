@@ -20,7 +20,8 @@
     "paths": {
       "@tylertech/forge": ["src/lib"],
       "@tylertech/forge/*": ["src/lib/*"]
-    }
+    },
+    "types": ["node", "mocha", "sinon", "chai"]
   },
   "exclude": [
     "node_modules",

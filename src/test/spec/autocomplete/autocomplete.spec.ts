@@ -879,7 +879,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       this.context.component.openDropdown();
       await tick();
       await timer(POPOVER_ANIMATION_DURATION);
-      const targetElement = this.context.component['_foundation']['_adapter']['_targetElement'];
+      const targetElement = this.context.component['_core']['_adapter']['_targetElement'];
 
       expect(targetElement).toBe(expectedTargetElement);
     });
@@ -1144,7 +1144,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
 
       expect(this.context.component.popupElement).toBeNull();
-      expect(this.context.component['_foundation']._pendingFilterPromises).toEqual([]);
+      expect(this.context.component['_core']._pendingFilterPromises).toEqual([]);
     });
 
     it('should cancel all pending filters if an exception is thrown in filter callback', async function(this: ITestContext) {
@@ -1161,7 +1161,7 @@ describe('AutocompleteComponent', function(this: ITestContext) {
       await tick();
 
       expect(this.context.component.popupElement).toBeNull();
-      expect(this.context.component['_foundation']._pendingFilterPromises).toEqual([]);
+      expect(this.context.component['_core']._pendingFilterPromises).toEqual([]);
     });
 
     it('should handle subsequent out of order filters', async function(this: ITestContext) {

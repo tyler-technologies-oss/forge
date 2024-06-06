@@ -1,8 +1,8 @@
-import { CustomElement, attachLightTemplate, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachLightTemplate, coreProperty } from '@tylertech/forge-core';
 import { tylIconHelp } from '@tylertech/tyler-icons/standard';
 import { IMenuOption, MenuComponent } from '../../menu';
 import { AppBarHelpButtonAdapter } from './app-bar-help-button-adapter';
-import { AppBarHelpButtonFoundation } from './app-bar-help-button-foundation';
+import { AppBarHelpButtonCore } from './app-bar-help-button-core';
 import { APP_BAR_HELP_BUTTON_CONSTANTS } from './app-bar-help-button-constants';
 import { IconButtonComponent } from '../../icon-button';
 import { TooltipComponent } from '../../tooltip';
@@ -36,7 +36,7 @@ declare global {
  * 
  * @event {CustomEvent<IMenuSelectEventData>} forge-menu-select - Bubbles up the menu select from the internal menu component.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_HELP_BUTTON_CONSTANTS.elementName,
   dependencies: [
     MenuComponent,
@@ -51,12 +51,12 @@ export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarH
     ];
   }
 
-  private _foundation: AppBarHelpButtonFoundation;
+  private _core: AppBarHelpButtonCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconHelp);
-    this._foundation = new AppBarHelpButtonFoundation(new AppBarHelpButtonAdapter(this));
+    this._core = new AppBarHelpButtonCore(new AppBarHelpButtonAdapter(this));
   }
 
   public initializedCallback(): void {
@@ -64,11 +64,11 @@ export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarH
   }
   
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -79,9 +79,9 @@ export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarH
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare options: IMenuOption[];
 
-  @FoundationProperty()
+  @coreProperty()
   public declare icon: string;
 }

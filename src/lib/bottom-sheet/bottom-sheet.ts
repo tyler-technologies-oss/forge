@@ -1,11 +1,11 @@
-import { attachShadowTemplate, CustomElement, FoundationProperty, ICustomElement, coerceBoolean } from '@tylertech/forge-core';
+import { attachShadowTemplate, customElement, coreProperty, ICustomElement, coerceBoolean } from '@tylertech/forge-core';
 import { BaseComponent } from '../core/base/base-component';
 import { WithDefaultAria } from '../core/mixins/internals/with-default-aria';
 import { WithElementInternals } from '../core/mixins/internals/with-element-internals';
 import { DialogComponent } from '../dialog/dialog';
 import { BottomSheetAdapter } from './bottom-sheet-adapter';
 import { BottomSheetMode, BOTTOM_SHEET_CONSTANTS, IBottomSheetDragEventData, IBottomSheetDragStartEventData } from './bottom-sheet-constants';
-import { BottomSheetFoundation } from './bottom-sheet-foundation';
+import { BottomSheetCore } from './bottom-sheet-core';
 
 import template from './bottom-sheet.html';
 import styles from './bottom-sheet.scss';
@@ -70,7 +70,7 @@ declare global {
  * 
  * @slot - The content of the bottom sheet. This is a passthrough slot to the dialog surface.
  */
-@CustomElement({
+@customElement({
   name: BOTTOM_SHEET_CONSTANTS.elementName,
   dependencies: [
     DialogComponent
@@ -81,16 +81,16 @@ export class BottomSheetComponent extends WithElementInternals(WithDefaultAria(B
     return Object.values(BOTTOM_SHEET_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: BottomSheetFoundation;
+  private _core: BottomSheetCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new BottomSheetFoundation(new BottomSheetAdapter(this));
+    this._core = new BottomSheetCore(new BottomSheetAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, _oldValue: string, newValue: string): void {
@@ -110,15 +110,15 @@ export class BottomSheetComponent extends WithElementInternals(WithDefaultAria(B
     }
   }
  
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare mode: BottomSheetMode;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare persistent: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fullscreen: boolean;
 }

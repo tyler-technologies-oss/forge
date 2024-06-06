@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { LABEL_VALUE_CONSTANTS } from './label-value-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -52,7 +52,7 @@ declare global {
  * @slot value - The value to display.
  * @slot icon - An icon to display next to the label.
  */
-@CustomElement({
+@customElement({
   name: LABEL_VALUE_CONSTANTS.elementName
 })
 export class LabelValueComponent extends BaseComponent implements ILabelValueComponent {

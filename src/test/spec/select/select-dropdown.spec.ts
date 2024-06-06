@@ -3,7 +3,7 @@ import {
   SELECT_DROPDOWN_CONSTANTS,
   defineSelectDropdownComponent,
   ISelectDropdownComponent,
-  ISelectDropdownFoundation,
+  ISelectDropdownCore,
   IOptionComponent,
   OPTION_CONSTANTS
 } from '@tylertech/forge/select';
@@ -28,7 +28,7 @@ interface ITestSelectDropdownContext {
   fixture: HTMLElement;
   component: ISelectDropdownComponent;
   targetElement: HTMLElement;
-  foundation: ISelectDropdownFoundation;
+  core: ISelectDropdownCore;
   optionElements: IOptionComponent[];
   isAttached(): boolean;
   append(): void;
@@ -237,7 +237,7 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     this.context.targetElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
 
     expect(this.context.targetElement.hasAttribute('aria-activedescendant')).toBeTrue();
-    expect(this.context.targetElement.getAttribute('aria-activedescendant')).toBe(`list-dropdown-option-${this.context.foundation['_identifier']}-0`);
+    expect(this.context.targetElement.getAttribute('aria-activedescendant')).toBe(`list-dropdown-option-${this.context.core['_identifier']}-0`);
   });
 
   it('should update active descendant when using keyboard navigation',  async function(this: ITestContext) {
@@ -303,9 +303,9 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
       fixture,
       component,
       targetElement,
-      foundation: component['_foundation'] as ISelectDropdownFoundation,
+      core: component['_core'] as ISelectDropdownCore,
       optionElements,
-      isAttached: () => component['_foundation']['_adapter'].isAttached(),
+      isAttached: () => component['_core']['_adapter'].isAttached(),
       append: () => document.body.appendChild(fixture),
       destroy: () => {
         tryCleanupPopovers();

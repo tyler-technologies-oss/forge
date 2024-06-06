@@ -1,8 +1,8 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 import { ExpansionPanelAdapter } from './expansion-panel-adapter';
 import { ExpansionPanelAnimationType, ExpansionPanelOrientation, EXPANSION_PANEL_CONSTANTS } from './expansion-panel-constants';
-import { ExpansionPanelFoundation } from './expansion-panel-foundation';
+import { ExpansionPanelCore } from './expansion-panel-core';
 
 import template from './expansion-panel.html';
 import styles from './expansion-panel.scss';
@@ -51,7 +51,7 @@ declare global {
  * @slot - The content of the panel.
  * @slot header - The header of the panel.
  */
-@CustomElement({
+@customElement({
   name: EXPANSION_PANEL_CONSTANTS.elementName
 })
 export class ExpansionPanelComponent extends BaseComponent implements IExpansionPanelComponent {
@@ -59,16 +59,16 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
     return Object.values(EXPANSION_PANEL_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: ExpansionPanelFoundation;
+  private _core: ExpansionPanelCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ExpansionPanelFoundation(new ExpansionPanelAdapter(this));
+    this._core = new ExpansionPanelCore(new ExpansionPanelAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -85,13 +85,13 @@ export class ExpansionPanelComponent extends BaseComponent implements IExpansion
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare orientation: ExpansionPanelOrientation;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare animationType: ExpansionPanelAnimationType;
 
   /**

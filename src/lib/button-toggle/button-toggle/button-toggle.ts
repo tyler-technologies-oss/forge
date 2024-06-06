@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { ExperimentalFocusOptions } from '../../constants';
 import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
@@ -7,7 +7,7 @@ import { StateLayerComponent } from '../../state-layer';
 import { BaseComponent } from '../../core/base/base-component';
 import { ButtonToggleAdapter } from './button-toggle-adapter';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants';
-import { ButtonToggleFoundation } from './button-toggle-foundation';
+import { ButtonToggleCore } from './button-toggle-core';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
 
 import template from './button-toggle.html';
@@ -79,7 +79,7 @@ declare global {
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
  */
-@CustomElement({
+@customElement({
   name: BUTTON_TOGGLE_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -91,20 +91,20 @@ export class ButtonToggleComponent<T = unknown> extends WithDefaultAria(WithElem
     return Object.values(BUTTON_TOGGLE_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: ButtonToggleFoundation;
+  private _core: ButtonToggleCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ButtonToggleFoundation(new ButtonToggleAdapter(this));
+    this._core = new ButtonToggleCore(new ButtonToggleAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.destroy();
+    this._core.destroy();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -125,23 +125,23 @@ export class ButtonToggleComponent<T = unknown> extends WithDefaultAria(WithElem
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: T;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare selected: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare readonly: boolean;
 
   public override focus(options?: ExperimentalFocusOptions): void {
-    this._foundation.focus(options);
+    this._core.focus(options);
   }
 
   public override click(): void {
-    this._foundation.click();
+    this._core.click();
   }
 }

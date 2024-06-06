@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
 import { PAGE_STATE_CONSTANTS } from './page-state-constants';
@@ -42,7 +42,7 @@ declare global {
  * @slot message - The slot where the message will be rendered.
  * @slot actions - The slot where the actions will be rendered.
  */
-@CustomElement({
+@customElement({
   name: PAGE_STATE_CONSTANTS.elementName
 })
 export class PageStateComponent extends BaseComponent implements IPageStateComponent {

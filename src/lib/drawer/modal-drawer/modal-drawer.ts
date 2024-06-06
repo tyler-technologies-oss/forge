@@ -1,9 +1,9 @@
-import { attachShadowTemplate, CustomElement } from '@tylertech/forge-core';
+import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
 import { BackdropComponent } from '../../backdrop';
 import { BaseDrawerComponent, IBaseDrawerComponent } from '../base';
 import { ModalDrawerAdapter } from './modal-drawer-adapter';
 import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants';
-import { ModalDrawerFoundation } from './modal-drawer-foundation';
+import { ModalDrawerCore } from './modal-drawer-core';
 
 import template from './modal-drawer.html';
 import styles from './modal-drawer.scss';
@@ -43,16 +43,16 @@ declare global {
  * @csspart content - The content container element.
  * @csspart backdrop - The backdrop root element.
  */
-@CustomElement({
+@customElement({
   name: MODAL_DRAWER_CONSTANTS.elementName,
   dependencies: [BackdropComponent]
 })
-export class ModalDrawerComponent extends BaseDrawerComponent<ModalDrawerFoundation> implements IModalDrawerComponent {
-  protected _foundation: ModalDrawerFoundation;
+export class ModalDrawerComponent extends BaseDrawerComponent<ModalDrawerCore> implements IModalDrawerComponent {
+  protected _core: ModalDrawerCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ModalDrawerFoundation(new ModalDrawerAdapter(this));
+    this._core = new ModalDrawerCore(new ModalDrawerAdapter(this));
   }
 }

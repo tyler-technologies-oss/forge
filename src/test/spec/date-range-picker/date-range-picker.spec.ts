@@ -63,14 +63,14 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
       await tick();
 
-      expect(this.context.component['_foundation']['_isInitialized']).toBe(false);
+      expect(this.context.component['_core']['_isInitialized']).toBe(false);
 
       await timer(100);
       this.context.component.appendChild(createFromElement());
       this.context.component.appendChild(createToElement());
       await tick();
 
-      expect(this.context.component['_foundation']['_isInitialized']).toBe(true);
+      expect(this.context.component['_core']['_isInitialized']).toBe(true);
     });
 
     it('should render with initial date', function(this: ITestContext) {
@@ -1473,7 +1473,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
 
     it('should set disabled days to an open calendar', async function(this: ITestContext) {
       this.context = setupTestContext(true);
-      const adapterSpy = spyOn(this.context.component['_foundation']['_adapter'], 'setCalendarDisabledDaysOfWeek').and.callThrough();
+      const adapterSpy = spyOn(this.context.component['_core']['_adapter'], 'setCalendarDisabledDaysOfWeek').and.callThrough();
 
       openPopup(this.context.component);
       await tick();
@@ -1601,7 +1601,7 @@ describe('DateRangePickerComponent', function(this: ITestContext) {
   }
 
   function getIdentifier(component: IDateRangePickerComponent): string {
-    return 'forge-date-range-picker-' + component['_foundation']['_adapter']['_identifier'];
+    return 'forge-date-range-picker-' + component['_core']['_adapter']['_identifier'];
   }
 
   function openPopup(component: IDateRangePickerComponent): void {

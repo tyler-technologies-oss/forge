@@ -1,4 +1,4 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowRight, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons/standard';
 import { OpenIconOrientation, OpenIconRotation, OPEN_ICON_CONSTANTS } from './open-icon-constants';
 import { IconRegistry, IconComponent, ICON_CONSTANTS } from '../icon';
@@ -47,7 +47,7 @@ declare global {
  * 
  * @slot - The icon to display when open.
  */
-@CustomElement({
+@customElement({
   name: OPEN_ICON_CONSTANTS.elementName,
   dependencies: [IconComponent]
 })

@@ -1,7 +1,7 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, coerceNumberArray, coerceNumber } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, coerceNumberArray, coerceNumber } from '@tylertech/forge-core';
 import { tylIconFirstPage, tylIconLastPage, tylIconKeyboardArrowRight, tylIconKeyboardArrowLeft } from '@tylertech/tyler-icons/standard';
 import { PAGINATOR_CONSTANTS, IPaginatorChangeEventData, PaginatorRangeLabelBuilder } from './paginator-constants';
-import { PaginatorFoundation } from './paginator-foundation';
+import { PaginatorCore } from './paginator-core';
 import { PaginatorAdapter } from './paginator-adapter';
 import { IconButtonComponent } from '../icon-button/icon-button';
 import { SelectComponent } from '../select/select';
@@ -41,7 +41,7 @@ declare global {
  * 
  * @event {CustomEvent<IPaginatorChangeEventData>} forge-paginator-change - Dispatched when the paginator state changes.
  */
-@CustomElement({
+@customElement({
   name: PAGINATOR_CONSTANTS.elementName,
   dependencies: [
     IconButtonComponent,
@@ -54,7 +54,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
     return Object.values(PAGINATOR_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: PaginatorFoundation;
+  private _core: PaginatorCore;
 
   constructor() {
     super();
@@ -65,11 +65,11 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
       tylIconLastPage
     ]);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new PaginatorFoundation(new PaginatorAdapter(this));
+    this._core = new PaginatorCore(new PaginatorAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -112,7 +112,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute page-index
    * @default 0
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare pageIndex: number;
 
   /**
@@ -120,7 +120,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute page-size
    * @default 25
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare pageSize: number;
 
   /**
@@ -128,7 +128,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute offset
    * @default 0
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare offset: number;
 
   /**
@@ -136,7 +136,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute
    * @default 0;
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare total: number;
 
   /**
@@ -144,7 +144,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute page-size-options
    * @default [5, 15, 25, 50, 100]
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare pageSizeOptions: number[];
 
   /**
@@ -152,7 +152,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute
    * @default "Rows per page:"
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare label: string;
 
   /**
@@ -160,7 +160,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute first-last
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare firstLast: boolean;
 
   /**
@@ -168,7 +168,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare first: boolean;
 
   /**
@@ -176,7 +176,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
   /**
@@ -184,17 +184,17 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
    * @attribute
    * @default false
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare alternative: boolean;
 
   /**
    * A callback function to build the range label dynamically.
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare rangeLabelCallback: PaginatorRangeLabelBuilder;
 
   /** Sets focus to the first focusable element within the paginator. */
   public override focus(options?: FocusOptions): void {
-    this._foundation.focus(options);
+    this._core.focus(options);
   }
 }

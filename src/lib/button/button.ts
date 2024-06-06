@@ -1,11 +1,11 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { IconComponent } from '../icon';
 import { FocusIndicatorComponent } from '../focus-indicator';
 import { StateLayerComponent } from '../state-layer';
 import { BaseButton, IBaseButton } from './base/base-button';
 import { ButtonAdapter } from './button-adapter';
 import { ButtonTheme, ButtonVariant, BUTTON_CONSTANTS } from './button-constants';
-import { ButtonFoundation } from './button-foundation';
+import { ButtonCore } from './button-core';
 import { BASE_BUTTON_CONSTANTS } from './base/base-button-constants';
 
 import template from './button.html';
@@ -140,7 +140,7 @@ declare global {
  * @slot start - Elements to logically render before the label text.
  * @slot end - Elements to logically render after the label text.
  */
-@CustomElement({
+@customElement({
   name: BUTTON_CONSTANTS.elementName,
   dependencies: [
     FocusIndicatorComponent,
@@ -148,7 +148,7 @@ declare global {
     IconComponent
   ]
 })
-export class ButtonComponent extends BaseButton<ButtonFoundation> implements IButtonComponent {
+export class ButtonComponent extends BaseButton<ButtonCore> implements IButtonComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
@@ -156,12 +156,12 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
     ];
   }
 
-  protected readonly _foundation: ButtonFoundation;
+  protected readonly _core: ButtonCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ButtonFoundation(new ButtonAdapter(this));
+    this._core = new ButtonCore(new ButtonAdapter(this));
   }
 
   public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -182,15 +182,15 @@ export class ButtonComponent extends BaseButton<ButtonFoundation> implements IBu
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare variant: ButtonVariant;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare pill: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: ButtonTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare fullWidth: boolean;
 }

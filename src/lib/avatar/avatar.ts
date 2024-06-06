@@ -1,7 +1,7 @@
-import { CustomElement, attachShadowTemplate, coerceNumber, FoundationProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceNumber, coreProperty } from '@tylertech/forge-core';
 
 import { AvatarAdapter } from './avatar-adapter';
-import { AvatarFoundation } from './avatar-foundation';
+import { AvatarCore } from './avatar-core';
 import { AVATAR_CONSTANTS } from './avatar-constants';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
 
@@ -48,7 +48,7 @@ declare global {
  * 
  * @slot - The default slot for avatar content if not provided via text/imageUrl.
  */
-@CustomElement({
+@customElement({
   name: AVATAR_CONSTANTS.elementName
 })
 export class AvatarComponent extends BaseComponent implements IAvatarComponent {
@@ -60,20 +60,20 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
     ];
   }
 
-  private _foundation: AvatarFoundation;
+  private _core: AvatarCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new AvatarFoundation(new AvatarAdapter(this));
+    this._core = new AvatarCore(new AvatarAdapter(this));
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -90,12 +90,12 @@ export class AvatarComponent extends BaseComponent implements IAvatarComponent {
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare text: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare letterCount: number;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare imageUrl: string;
 }

@@ -1,11 +1,11 @@
-import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons/standard';
 import { IconRegistry } from '../../icon/icon-registry';
 import { BaseComponent } from '../../core/base/base-component';
 import { ExperimentalFocusOptions, internals, setDefaultAria } from '../../constants';
 import { IBaseButtonAdapter } from './base-button-adapter';
 import { BASE_BUTTON_CONSTANTS, ButtonType } from './base-button-constants';
-import { BaseButtonFoundation } from './base-button-foundation';
+import { BaseButtonCore } from './base-button-core';
 import { WithLabelAwareness, IWithLabelAwareness } from '../../core/mixins/label/with-label-aware';
 import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
@@ -40,7 +40,7 @@ export interface IBaseButton extends IWithLabelAwareness, IWithElementInternals,
  * 
  * @fires {PointerEvent} click - Fires when the button is clicked.
  */
-export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapter<IBaseButton>>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(BaseComponent))) implements IBaseButton {
+export abstract class BaseButton<T extends BaseButtonCore<IBaseButtonAdapter<IBaseButton>>> extends WithDefaultAria(WithElementInternals(WithLabelAwareness(BaseComponent))) implements IBaseButton {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_BUTTON_CONSTANTS.observedAttributes);
   }
@@ -53,7 +53,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   /** @ignore */
   public popoverTargetAction: 'click' | 'hover' = 'click';
 
-  protected abstract _foundation: T;
+  protected abstract _core: T;
 
   constructor() {
     super();
@@ -61,7 +61,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   }
 
   public connectedCallback(): void {
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -82,7 +82,7 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
   }
 
   public labelClickedCallback(): void {
-    this._foundation.click({ animateStateLayer: true });
+    this._core.click({ animateStateLayer: true });
   }
 
   public labelChangedCallback(value: string | null): void {
@@ -107,25 +107,25 @@ export abstract class BaseButton<T extends BaseButtonFoundation<IBaseButtonAdapt
     this.setAttribute('value', value);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare type: ButtonType;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popoverIcon: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
   /** Clicks the button. */
   public override click(): void {
-    this._foundation.click({ animateStateLayer: true });
+    this._core.click({ animateStateLayer: true });
   }
 
   /** Focuses the button. */
   public override focus(options: ExperimentalFocusOptions): void {
-    this._foundation.focus(options);
+    this._core.focus(options);
   }
 }

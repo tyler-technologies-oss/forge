@@ -481,7 +481,7 @@ describe('App Bar Profile Button', () => {
       await clickElement(iconButton);
       await timer(POPOVER_ANIMATION_DURATION);
       await elementUpdated(el);
-      return el['_foundation']['_adapter']['_popupElement'];
+      return el['_core']['_adapter']['_popupElement'];
     }
   });
 

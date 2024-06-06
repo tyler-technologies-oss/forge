@@ -4,7 +4,7 @@ import { TableComponent } from './table';
 
 export * from './table-adapter';
 export * from './table-constants';
-export * from './table-foundation';
+export * from './table-core';
 export * from './table-row';
 export * from './table';
 export * from './types';

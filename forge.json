@@ -6,9 +6,6 @@
   "karma": {
     "stylesheets": [
       "src/lib/forge.scss"
-    ],
-    "exclude": [
-      "*.test.ts"
     ]
   },
   "packageConfig": {

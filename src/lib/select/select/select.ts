@@ -1,7 +1,7 @@
-import { CustomElement, attachShadowTemplate, FoundationProperty, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coreProperty, coerceBoolean, toggleAttribute } from '@tylertech/forge-core';
 import { tylIconArrowDropDown, tylIconCheckBoxOutlineBlank, tylIconCheckBox } from '@tylertech/tyler-icons/standard';
 import { SelectAdapter } from './select-adapter';
-import { SelectFoundation } from './select-foundation';
+import { SelectCore } from './select-core';
 import { SELECT_CONSTANTS } from './select-constants';
 import { OptionComponent } from '../option';
 import { ListComponent, ListItemComponent } from '../../list';
@@ -138,7 +138,7 @@ declare global {
  * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
  */
-@CustomElement({
+@customElement({
   name: SELECT_CONSTANTS.elementName,
   dependencies: [
     FieldComponent,
@@ -154,7 +154,7 @@ declare global {
     IconButtonComponent
   ]
 })
-export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFoundation>) implements ISelectComponent {
+export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectCore>) implements ISelectComponent {
   public static get observedAttributes(): string[] {
     return [
       ...Object.values(BASE_FIELD_CONSTANTS.observedAttributes),
@@ -172,7 +172,7 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFou
     const fieldEl = this.shadowRoot?.querySelector(FIELD_CONSTANTS.elementName) as FieldComponent;
     this.initializeFieldInstance(fieldEl);
 
-    this._foundation = new SelectFoundation(new SelectAdapter(this));
+    this._core = new SelectCore(new SelectAdapter(this));
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -190,17 +190,17 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFou
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare label: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare placeholder: string;
 
   public override get floatLabel(): boolean {
     return super.floatLabel;
   }
   public override set floatLabel(value: boolean) {
-    this._foundation.syncFloatingLabelState({ force: value });
+    this._core.syncFloatingLabelState({ force: value });
   }
 
   public override get density(): FieldDensity {
@@ -208,7 +208,7 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFou
   }
   public override set density(value: FieldDensity) {
     super.density = value;
-    this._foundation.syncFloatingLabelState();
+    this._core.syncFloatingLabelState();
   }
 
   public override get dense(): boolean {
@@ -216,7 +216,7 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFou
   }
   public override set dense(value: boolean) {
     super.dense = value;
-    this._foundation.syncFloatingLabelState();
+    this._core.syncFloatingLabelState();
   }
 
   public override get disabled(): boolean {
@@ -224,7 +224,7 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFou
   }
   public override set disabled(value: boolean) {
     super.disabled = value;
-    this._foundation.setDisabled(value);
+    this._core.setDisabled(value);
   }
 
   public override get labelPosition(): FieldLabelPosition {
@@ -232,6 +232,6 @@ export class SelectComponent extends WithBaseField(BaseSelectComponent<SelectFou
   }
   public override set labelPosition(value: FieldLabelPosition) {
     super.labelPosition = value;
-    this._foundation.syncFloatingLabelState();
+    this._core.syncFloatingLabelState();
   }
 }

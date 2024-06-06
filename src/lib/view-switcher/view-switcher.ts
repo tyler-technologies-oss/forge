@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, coerceNumber, FoundationProperty, upgradeProperty } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceNumber, coreProperty, upgradeProperty } from '@tylertech/forge-core';
 import { ViewSwitcherAdapter } from './view-switcher-adapter';
-import { ViewSwitcherFoundation } from './view-switcher-foundation';
+import { ViewSwitcherCore } from './view-switcher-core';
 import { VIEW_SWITCHER_CONSTANTS, ViewSwitcherAnimationType } from './view-switcher-constants';
 import { ViewComponent } from './view/view';
 import { BaseComponent, IBaseComponent } from '../core/base/base-component';
@@ -24,11 +24,9 @@ declare global {
 }
 
 /**
- * The web component class behind the `<forge-view-switcher>` custom element.
- * 
  * @tag forge-view-switcher
  */
-@CustomElement({
+@customElement({
   name: VIEW_SWITCHER_CONSTANTS.elementName,
   dependencies: [ViewComponent]
 })
@@ -40,21 +38,21 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
     ];
   }
 
-  private _foundation: ViewSwitcherFoundation;
+  private _core: ViewSwitcherCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);
-    this._foundation = new ViewSwitcherFoundation(new ViewSwitcherAdapter(this));
+    this._core = new ViewSwitcherCore(new ViewSwitcherAdapter(this));
   }
 
   public connectedCallback(): void {
     // upgradeProperty(this, 'index');
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -69,30 +67,30 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
   }
 
   /** Gets/sets the currently visible view index. */
-  @FoundationProperty()
+  @coreProperty()
   public declare index: number;
   
   /** Gets/sets the animation type. */
-  @FoundationProperty()
+  @coreProperty()
   public declare animationType: `${ViewSwitcherAnimationType}`;
 
   /** Transitions to the next view. */
   public next(): void {
-    this._foundation.next();
+    this._core.next();
   }
 
   /** Transitions to the previous view. */
   public previous(): void {
-    this._foundation.previous();
+    this._core.previous();
   }
 
   /** Transitions to the first view. */
   public goToStart(): void {
-    this._foundation.goToStart();
+    this._core.goToStart();
   }
 
   /** Transitions to the last view. */
   public goToEnd(): void {
-    this._foundation.goToEnd();
+    this._core.goToEnd();
   }
 }

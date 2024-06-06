@@ -9,7 +9,7 @@
 
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
-import { CustomElement } from '@tylertech/forge-core';
+import { customElement } from '@tylertech/forge-core';
 
 import { isFocusable } from '../../../constants';
 import { WithFocusable } from './with-focusable';
@@ -17,7 +17,7 @@ import { BaseComponent } from '../../base/base-component';
 
 
 describe('WithFocusable', () => {
-  @CustomElement({ name: 'test-focusable' })
+  @customElement({ name: 'test-focusable' })
   class TestFocusable extends WithFocusable(BaseComponent) {
     public static get observedAttributes(): string[] {
       return ['tabindex'];

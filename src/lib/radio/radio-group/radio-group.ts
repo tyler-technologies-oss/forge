@@ -1,4 +1,4 @@
-import { attachShadowTemplate, coerceBoolean, CustomElement, FoundationProperty, toggleAttribute } from '@tylertech/forge-core';
+import { attachShadowTemplate, coerceBoolean, customElement, coreProperty, toggleAttribute } from '@tylertech/forge-core';
 import { internals, setDefaultAria } from '../../constants';
 import { BaseComponent } from '../../core/base/base-component';
 import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria';
@@ -7,7 +7,7 @@ import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label
 import { RadioComponent } from '../radio/radio';
 import { RadioGroupAdapter } from './radio-group-adapter';
 import { RADIO_GROUP_CONSTANTS } from './radio-group-constants';
-import { RadioGroupFoundation } from './radio-group-foundation';
+import { RadioGroupCore } from './radio-group-core';
 
 import template from './radio-group.html';
 
@@ -34,7 +34,7 @@ declare global {
  * 
  * @attribute {boolean} disabled - Whether or not the radio group is disabled.
  */
-@CustomElement({
+@customElement({
   name: RADIO_GROUP_CONSTANTS.elementName,
   dependencies: [RadioComponent]
 })
@@ -60,12 +60,12 @@ export class RadioGroupComponent extends WithLabelAwareness(WithDefaultAria(With
     return Object.values(RADIO_GROUP_CONSTANTS.observedAttributes);
   }
 
-  private _foundation: RadioGroupFoundation;
+  private _core: RadioGroupCore;
 
   constructor() {
     super();
     attachShadowTemplate(this, template);
-    this._foundation = new RadioGroupFoundation(new RadioGroupAdapter(this));
+    this._core = new RadioGroupCore(new RadioGroupAdapter(this));
   }
 
   public connectedCallback(): void {
@@ -73,7 +73,7 @@ export class RadioGroupComponent extends WithLabelAwareness(WithDefaultAria(With
       role: 'radiogroup',
       ariaDisabled: this.disabled ? 'true' : null
     });
-    this._foundation.initialize();
+    this._core.initialize();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -94,6 +94,6 @@ export class RadioGroupComponent extends WithLabelAwareness(WithDefaultAria(With
     });
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 }

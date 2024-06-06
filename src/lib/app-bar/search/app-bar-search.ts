@@ -1,6 +1,6 @@
-import { CustomElement, attachShadowTemplate, coerceBoolean, FoundationProperty, ensureInputElement } from '@tylertech/forge-core';
+import { customElement, attachShadowTemplate, coerceBoolean, coreProperty, ensureInputElement } from '@tylertech/forge-core';
 import { tylIconSearch } from '@tylertech/tyler-icons/standard';
-import { AppBarSearchFoundation } from './app-bar-search-foundation';
+import { AppBarSearchCore } from './app-bar-search-core';
 import { AppBarSearchAdapter } from './app-bar-search-adapter';
 import { IAppBarSearchInputEventData, APP_BAR_SEARCH_CONSTANTS } from './app-bar-search-constants';
 import { FocusIndicatorComponent } from '../../focus-indicator';
@@ -63,7 +63,7 @@ declare global {
  * 
  * @event {CustomEvent<IAppBarSearchInputEventData>} forge-app-bar-search-input - Emits when the users executes the search via pressing the Enter key while the `<input>` has focus.
  */
-@CustomElement({
+@customElement({
   name: APP_BAR_SEARCH_CONSTANTS.elementName,
   dependencies: [
     IconComponent,
@@ -79,25 +79,25 @@ export class AppBarSearchComponent extends BaseComponent implements IAppBarSearc
     ];
   }
 
-  private _foundation: AppBarSearchFoundation;
+  private _core: AppBarSearchCore;
 
   constructor() {
     super();
     IconRegistry.define(tylIconSearch);
     attachShadowTemplate(this, template, styles);
-    this._foundation = new AppBarSearchFoundation(new AppBarSearchAdapter(this));
+    this._core = new AppBarSearchCore(new AppBarSearchAdapter(this));
   }
 
   public connectedCallback(): void {
     if (this.querySelector(APP_BAR_SEARCH_CONSTANTS.selectors.INPUT)) {
-      this._foundation.initialize();
+      this._core.initialize();
     } else {
-      ensureInputElement(this).then(() => this._foundation.initialize());
+      ensureInputElement(this).then(() => this._core.initialize());
     }
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -114,12 +114,12 @@ export class AppBarSearchComponent extends BaseComponent implements IAppBarSearc
     }
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare value: string;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
   
-  @FoundationProperty()
+  @coreProperty()
   public declare placeholder: string;
 }

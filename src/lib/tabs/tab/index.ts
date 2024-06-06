@@ -4,7 +4,7 @@ import { TabComponent } from './tab';
 
 export * from './tab-adapter';
 export * from './tab-constants';
-export * from './tab-foundation';
+export * from './tab-core';
 export * from './tab';
 
 export function defineTabComponent(): void {

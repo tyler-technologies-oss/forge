@@ -50,6 +50,8 @@
 @mixin surface {
   position: absolute;
   inset: 0;
+
+  display: flex;
   
   background: #{token(background)};
   box-shadow: #{token(elevation)};

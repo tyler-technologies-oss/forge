@@ -1,9 +1,9 @@
-import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent } from '../../core/base/base-component';
 import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
 import { IBaseFieldAdapter } from './base-field-adapter';
 import { BASE_FIELD_CONSTANTS, FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base-field-constants';
-import { BaseFieldFoundation } from './base-field-foundation';
+import { BaseFieldCore } from './base-field-core';
 
 export interface IBaseField extends IWithLabelAwareness {
   labelPosition: FieldLabelPosition;
@@ -118,12 +118,12 @@ export interface IBaseField extends IWithLabelAwareness {
  * @slot support-text - Used for content that provides additional information about the field. Aligns to the inline start of the field.
  * @slot support-text-end - Used for content that provides additional information about the field. Aligns to the inline end of the field.
  */
-export abstract class BaseField<T extends BaseFieldFoundation<IBaseFieldAdapter>> extends WithLabelAwareness(BaseComponent) implements IBaseField {
+export abstract class BaseField<T extends BaseFieldCore<IBaseFieldAdapter>> extends WithLabelAwareness(BaseComponent) implements IBaseField {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_FIELD_CONSTANTS.observedAttributes);
   }
 
-  protected abstract _foundation: T;
+  protected abstract _core: T;
 
   constructor() {
     super();
@@ -180,60 +180,60 @@ export abstract class BaseField<T extends BaseFieldFoundation<IBaseFieldAdapter>
   }
 
   public labelClickedCallback(): void {
-    this._foundation.click();
+    this._core.click();
   }
 
   public labelChangedCallback(value: string | null): void {
-    this._foundation.applyLabel(value);
+    this._core.applyLabel(value);
   }
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelPosition: FieldLabelPosition;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare labelAlignment: FieldLabelAlignment;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare invalid: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare required: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare optional: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare disabled: boolean;
 
-  @FoundationProperty({ name: 'permanentlyFloatLabel' })
+  @coreProperty({ name: 'permanentlyFloatLabel' })
   public declare floatLabel: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare variant: FieldVariant;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare theme: FieldTheme;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare shape: FieldShape;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare density: FieldDensity;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare dense: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popoverIcon: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare popoverExpanded: boolean;
 
-  @FoundationProperty()
+  @coreProperty()
   public declare supportTextInset: FieldSupportTextInset;
 
   /** Floats the label immediately. Only applies when the label is inset. */
   public floatLabelWithoutAnimation(value: boolean): void {
-    this._foundation.floatLabelWithoutAnimation(value);
+    this._core.floatLabelWithoutAnimation(value);
   }
 }

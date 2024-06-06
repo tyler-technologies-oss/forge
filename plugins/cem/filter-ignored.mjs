@@ -9,7 +9,7 @@ const IGNORED = [
   '**/index.ts',
   '**/*.test.ts',
   '**/*.spec.ts',
-  '**/*-foundation.ts',
+  '**/*-core.ts',
   '**/*-adapter.ts',
   '**/*-constants.ts',
   '**/*-component-delegate.ts',

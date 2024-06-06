@@ -1,7 +1,7 @@
-import { coerceBoolean, FoundationProperty } from '@tylertech/forge-core';
+import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
 import { BASE_DRAWER_CONSTANTS, DrawerDirection } from './base-drawer-constants';
-import { BaseDrawerFoundation } from './base-drawer-foundation';
+import { BaseDrawerCore } from './base-drawer-core';
 
 export interface IBaseDrawerComponent extends IBaseComponent {
   open: boolean;
@@ -19,19 +19,19 @@ declare global {
  * @event {CustomEvent<void>} forge-drawer-after-open - Dispatched after the drawer has opened.
  * @event {CustomEvent<void>} forge-drawer-after-close - Dispatched after the drawer has closed.
  */
-export abstract class BaseDrawerComponent<T extends BaseDrawerFoundation> extends BaseComponent implements IBaseDrawerComponent {
+export abstract class BaseDrawerComponent<T extends BaseDrawerCore> extends BaseComponent implements IBaseDrawerComponent {
   public static get observedAttributes(): string[] {
     return Object.values(BASE_DRAWER_CONSTANTS.observedAttributes);
   }
 
-  protected abstract _foundation: T;
+  protected abstract _core: T;
 
   public connectedCallback(): void {
-    this._foundation.connect();
+    this._core.connect();
   }
 
   public disconnectedCallback(): void {
-    this._foundation.disconnect();
+    this._core.disconnect();
   }
 
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
@@ -50,7 +50,7 @@ export abstract class BaseDrawerComponent<T extends BaseDrawerFoundation> extend
    * @default false
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare open: boolean;
 
   /**
@@ -58,6 +58,6 @@ export abstract class BaseDrawerComponent<T extends BaseDrawerFoundation> extend
    * @default "left"
    * @attribute
    */
-  @FoundationProperty()
+  @coreProperty()
   public declare direction: DrawerDirection;
 }
