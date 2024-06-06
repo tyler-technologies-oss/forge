@@ -49,7 +49,6 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
     this._inputElement.setAttribute('aria-atomic', 'true');
     this._inputElement.setAttribute('aria-haspopup', 'true');
     this._inputElement.setAttribute('aria-expanded', 'false');
-    this._inputElement.setAttribute('aria-labelledby', DATE_PICKER_CONSTANTS.selectors.LABEL);
     this._inputElement.setAttribute('aria-owns', this._dropdownIdentifier);
     tryCreateAriaControlsPlaceholder();
     setAriaControls(this._inputElement);
