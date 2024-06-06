@@ -1,0 +1,5 @@
+import{x as n}from"./lit-element-BOOoordI.js";import"./lit-html-BWgXkSvR.js";import{c,g as p}from"./utils-CpphmWLJ.js";import"./constants-BMnwgo1j.js";import"./divider-DsAzcUke.js";const r="forge-divider",d={title:"Components/Divider",render:t=>{const m=c(r,t);let o="height: 200px;";return t.vertical||(o=""),n`
+      <div style=${o}>
+        ${m}
+      </div>
+    `},component:r,parameters:{actions:{disable:!0}},argTypes:{...p({tagName:r})},args:{}},e={};var s,a,i;e.parameters={...e.parameters,docs:{...(s=e.parameters)==null?void 0:s.docs,source:{originalSource:"{}",...(i=(a=e.parameters)==null?void 0:a.docs)==null?void 0:i.source}}};const l=["Demo"],_=Object.freeze(Object.defineProperty({__proto__:null,Demo:e,__namedExportsOrder:l,default:d},Symbol.toStringTag,{value:"Module"}));export{_ as D,e as a};
