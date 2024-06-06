@@ -76,7 +76,6 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
 
   public initializeTarget(): void {
     this._adapter.initializeAccessibility();
-    this._adapter.setMultiple(this._multiple);
     this._adapter.addClickListener(this._clickListener);
     this._adapter.addTargetListener('blur', this._blurListener);
     this._adapter.addTargetListener('focus', this._focusListener);
@@ -168,6 +167,7 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
     this._open = true;
     const config: IListDropdownConfig = {
       options: this._options,
+      referenceElement: this._adapter.hostElement,
       multiple: this._multiple,
       selectedValues: [...this._selectedValues],
       id: this._identifier,
@@ -624,7 +624,6 @@ export abstract class BaseSelectFoundation<T extends IBaseSelectAdapter> extends
       if (this._open) {
         this._closeDropdown();
       }
-      this._adapter.setMultiple(this._multiple);
     }
   }
 

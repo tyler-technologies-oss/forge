@@ -126,12 +126,14 @@ describe('SelectComponent', function(this: ITestContext) {
       _expectLabelFloatState(this.context.component, true);
     });
 
-    it('should set proper aria attribute if multiple by default', function(this: ITestContext) {
+    it('should set proper aria attribute if multiple by default', async function(this: ITestContext) {
       this.context = setupTestContext();
       this.context.component.multiple = true;
       document.body.appendChild(this.context.component);
+      _openDropdown(this.context.component);
+      await tick();
 
-      expect(this.context.component.getAttribute('aria-multiselectable')).toBe('true');
+      expect(this.context.component.popupElement!.getAttribute('aria-multiselectable')).toBe('true');
     });
 
     it('should set proper aria attribute if required by default', function(this: ITestContext) {

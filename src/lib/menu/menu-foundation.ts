@@ -281,6 +281,8 @@ export class MenuFoundation extends CascadingListDropdownAwareFoundation<IMenuOp
 
     const config: IListDropdownConfig = {
       id: this._identifier,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      referenceElement: this._adapter.targetElement!,
       type: ListDropdownType.Menu,
       options: this._options,
       selectedValues,

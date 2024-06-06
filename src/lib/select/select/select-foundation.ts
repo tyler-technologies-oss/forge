@@ -108,7 +108,6 @@ export class SelectFoundation extends BaseSelectFoundation<ISelectAdapter> imple
   }
 
   private _initializeAccessibility(): void {
-    this._adapter.setMultiple(this._multiple);
     if (this._required) {
       this._adapter.setHostAttribute('aria-required', 'true');
     }

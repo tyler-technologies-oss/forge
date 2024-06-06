@@ -1,6 +1,6 @@
 import { getShadowElement, emitEvent, getActiveElement, toggleAttribute } from '@tylertech/forge-core';
 import { ITimePickerComponent } from './time-picker';
-import { BaseAdapter } from '../core';
+import { BaseAdapter, setAriaControls, tryCreateAriaControlsPlaceholder } from '../core';
 import { TIME_PICKER_CONSTANTS } from './time-picker-constants';
 import { ITimeInputMaskOptions, TimeInputMask } from '../core/mask/time-input-mask';
 import { TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field';
@@ -10,6 +10,7 @@ import { IListDropdownConfig, IListDropdownOption } from '../list-dropdown/list-
 import { IListDropdown, ListDropdown } from '../list-dropdown';
 
 export interface ITimePickerAdapter extends BaseAdapter<ITimePickerComponent> {
+  readonly inputElement: HTMLInputElement;
   initialize(): void;
   initializeMask(options: ITimeInputMaskOptions): void;
   destroy(): void;
@@ -54,6 +55,10 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     super(component);
   }
 
+  public get inputElement(): HTMLInputElement {
+    return this._inputElement;
+  }
+
   public initialize(): void {
     this._inputElement = this._component.querySelector(TIME_PICKER_CONSTANTS.selectors.INPUT) as HTMLInputElement;
   }
@@ -84,6 +89,8 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     this._inputElement.setAttribute('aria-atomic', 'true');
     this._inputElement.setAttribute('aria-haspopup', 'true');
     this._inputElement.setAttribute('aria-expanded', 'false');
+    tryCreateAriaControlsPlaceholder();
+    setAriaControls(this._inputElement);
   }
 
   public addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void {
@@ -205,7 +212,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
       this._listDropdown.destroy();
       this._listDropdown = undefined;
     }
-    this._inputElement.removeAttribute('aria-controls');
+    setAriaControls(this._inputElement);
   }
 
   public propagateKey(key: string): void {

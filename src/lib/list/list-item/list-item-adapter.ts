@@ -90,7 +90,9 @@ export class ListItemAdapter extends BaseAdapter<IListItemComponent> implements 
       this._listItemElement.tabIndex = -1;
       addClass(LIST_ITEM_CONSTANTS.classes.STATIC, this._listItemElement);
     } else {
-      this._listItemElement.tabIndex = 0;
+      if (this._listItemElement.hasAttribute('tabindex')) {
+        this._listItemElement.tabIndex = 0;
+      }
       removeClass(LIST_ITEM_CONSTANTS.classes.STATIC, this._listItemElement);
     }
   }

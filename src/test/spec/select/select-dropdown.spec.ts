@@ -175,17 +175,6 @@ describe('SelectDropdownComponent', function(this: ITestContext) {
     _clickListItem(2);
 
     expect(this.context.component.value).toEqual([DEFAULT_OPTIONS[1].value, DEFAULT_OPTIONS[2].value]);
-    expect(this.context.targetElement.getAttribute('aria-multiselectable')).toBe('true');
-  });
-
-  it('should toggle multiple', async function(this: ITestContext) {
-    this.context = setupTestContext();
-
-    this.context.component.multiple = true;
-    this.context.component.multiple = false;
-    await tick();
-
-    expect(this.context.targetElement.hasAttribute('aria-multiselectable')).toBeFalse();
   });
   
   it('should sync selected text when option is selected', async function(this: ITestContext) {
