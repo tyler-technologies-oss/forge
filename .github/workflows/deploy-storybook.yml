@@ -1,6 +1,7 @@
 name: Storybook
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
