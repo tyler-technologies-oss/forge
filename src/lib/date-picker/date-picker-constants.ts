@@ -7,7 +7,6 @@ const observedAttributes = {
 };
 
 const selectors = {
-  LABEL: 'label',
   INPUT: 'input,input[forge-date-picker-input]'
 };
 
