@@ -62,9 +62,11 @@
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme((
-      color: #{token(state-layer-checked-color)}
-    ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(state-layer-checked-color)}
+      )
+    );
   }
 }
 
@@ -85,9 +87,11 @@
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme((
-      color: #{token(state-layer-checked-color)}
-    ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(state-layer-checked-color)}
+      )
+    );
   }
 }
 
@@ -129,14 +133,19 @@
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme((
-    color: #{token(state-layer-unchecked-color)}
-  ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(state-layer-unchecked-color)}
+    )
+  );
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    shape: 0px, // Requires unit
-    outward-offset: 8px
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      shape: 0px,
+      // Requires unit
+      outward-offset: 8px
+    )
+  );
 }

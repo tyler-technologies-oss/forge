@@ -28,18 +28,18 @@ declare global {
 
 /**
  * @tag forge-app-bar-search
- * 
+ *
  * @slot - The default (unnamed) slot is where child `<input>` elements will be placed.
  * @slot action - Places actions at the end of the input.
- * 
+ *
  * @attribute {boolean} [disabled=false] - A boolean attribute that, if present, indicates that the input should be disabled.
  * @attribute {string} value - The value of the input.
  * @attribute {string} placeholder - The placeholder text of the input.
- * 
+ *
  * @property {boolean} [disabled=false] - A boolean property that, if true, indicates that the input should be disabled.
  * @property {string} value - The value of the input.
  * @property {string} placeholder - The placeholder text of the input.
- * 
+ *
  * @csspart root - The root element
  * @csspart container - The input container element.
  * @csspart icon-container - The icon container element.
@@ -52,7 +52,7 @@ declare global {
  * @csspart global-icon-container - The global icon container element.
  * @csspart global-icon - The global icon <forge-icon> element.
  * @csspart actions-container - The action container element around the slot.
- * 
+ *
  * @cssproperty --forge-theme-on-primary - Controls the border-color of the container outline, the font-color, and icon color.
  * @cssproperty --forge-theme-on-surface - Controls the font color of the buttons.
  * @cssproperty --forge-theme-text-medium - Controls the placeholder font color.
@@ -60,23 +60,16 @@ declare global {
  * @cssproperty --forge-app-bar-search-theme-background-focused - Controls the focused background-color of the container.
  * @cssproperty --forge-app-bar-search-theme-hover-opacity - Controls the hover opacity of the outline.
  * @cssproperty --forge-app-bar-search-theme-disabled-opacity - Controls the disabled opacity of the component.
- * 
+ *
  * @event {CustomEvent<IAppBarSearchInputEventData>} forge-app-bar-search-input - Emits when the users executes the search via pressing the Enter key while the `<input>` has focus.
  */
 @customElement({
   name: APP_BAR_SEARCH_CONSTANTS.elementName,
-  dependencies: [
-    IconComponent,
-    FocusIndicatorComponent
-  ]
+  dependencies: [IconComponent, FocusIndicatorComponent]
 })
 export class AppBarSearchComponent extends BaseComponent implements IAppBarSearchComponent {
   public static get observedAttributes(): string[] {
-    return [
-      APP_BAR_SEARCH_CONSTANTS.attributes.DISABLED,
-      APP_BAR_SEARCH_CONSTANTS.attributes.VALUE,
-      APP_BAR_SEARCH_CONSTANTS.attributes.PLACEHOLDER
-    ];
+    return [APP_BAR_SEARCH_CONSTANTS.attributes.DISABLED, APP_BAR_SEARCH_CONSTANTS.attributes.VALUE, APP_BAR_SEARCH_CONSTANTS.attributes.PLACEHOLDER];
   }
 
   private _core: AppBarSearchCore;
@@ -119,7 +112,7 @@ export class AppBarSearchComponent extends BaseComponent implements IAppBarSearc
 
   @coreProperty()
   public declare disabled: boolean;
-  
+
   @coreProperty()
   public declare placeholder: string;
 }

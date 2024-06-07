@@ -29,7 +29,13 @@ export interface IMenuAdapter extends IBaseAdapter {
   updateActiveDescendant(id: string): void;
   isOwnElement(element: Element): boolean;
   addDropdownListener(type: string, listener: (evt: any) => void): void;
-  createChildMenu(index: number, parentValue: any, openCb: (index: number) => void, closeCb: (index: number) => void, selectCb: (data: IMenuSelectEventData) => void): IMenuComponent;
+  createChildMenu(
+    index: number,
+    parentValue: any,
+    openCb: (index: number) => void,
+    closeCb: (index: number) => void,
+    selectCb: (data: IMenuSelectEventData) => void
+  ): IMenuComponent;
   closeOtherChildMenus(excludeIndex?: number): void;
   setSelectedValues(values: any[]): void;
 }
@@ -200,7 +206,13 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
     }
   }
 
-  public createChildMenu(index: number, parentValue: any, openCb: (index: number) => void, closeCb: (index: number) => void, selectCb: (data: IMenuSelectEventData) => void): IMenuComponent {
+  public createChildMenu(
+    index: number,
+    parentValue: any,
+    openCb: (index: number) => void,
+    closeCb: (index: number) => void,
+    selectCb: (data: IMenuSelectEventData) => void
+  ): IMenuComponent {
     const menu = document.createElement('forge-menu');
     menu.style.display = 'block';
 

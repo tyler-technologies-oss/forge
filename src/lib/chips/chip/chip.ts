@@ -40,7 +40,7 @@ declare global {
 
 /**
  * @tag forge-chip
- * 
+ *
  * @property {ChipType} type - The type of chip.
  * @property {unknown} value - The value of the chip.
  * @property {boolean} selected - Whether the chip is selected.
@@ -52,7 +52,7 @@ declare global {
  * @property {string} target - The target of the chip.
  * @property {string} download - The download of the chip.
  * @property {string} rel - The rel of the chip.
- * 
+ *
  * @attribute {ChipType} type - The type of chip.
  * @attribute {unknown} value - The value of the chip.
  * @attribute {boolean} selected - Whether the chip is selected.
@@ -64,10 +64,10 @@ declare global {
  * @attribute {string} target - The target of the chip.
  * @attribute {string} download - The download of the chip.
  * @attribute {string} rel - The rel of the chip.
- * 
+ *
  * @fires {IChipDeleteEventData} forge-chip-delete - Event fired when the chip is deleted.
  * @fires {IChipSelectEventData} forge-chip-select - Event fired when the chip is selected.
- * 
+ *
  * @cssproperty --forge-chip-background - The background color of the chip.
  * @cssproperty --forge-chip-color - The background color of the chip.
  * @cssproperty --forge-chip-shape - The shape of the chip.
@@ -115,24 +115,19 @@ declare global {
  * @cssproperty --forge-chip-transition-duration - The duration of the chip transition.
  * @cssproperty --forge-chip-transition-easing - The easing function of the chip transition.
  * @cssproperty --forge-chip-checkmark-transition-delay - The delay of the checkmark transition in chips.
- * 
+ *
  * @csspart root - The component's root element.
  * @csspart trigger - The trigger element of the chip.
  * @csspart focus-indicator - The focus indicator of the chip.
  * @csspart state-layer - The state layer surface.
- * 
+ *
  * @slot - The content of the chip.
  * @slot start - The start content of the chip.
  * @slot end - The end content of the chip.
  */
 @customElement({
   name: CHIP_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent,
-    IconButtonComponent,
-    IconComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconButtonComponent, IconComponent]
 })
 export class ChipComponent extends BaseComponent implements IChipComponent {
   public static get observedAttributes(): string[] {

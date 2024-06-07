@@ -21,16 +21,16 @@ const meta = {
       tagName: component,
       controls: {
         theme: { control: 'select', options: GLOBAL_THEME_OPTIONS },
-        track: { if: { arg: 'determinate', eq: false } },
+        track: { if: { arg: 'determinate', eq: false } }
       }
-    }),
+    })
   },
   args: {
     determinate: false,
     progress: 0,
     theme: 'primary',
-    track: false,
-  },
+    track: false
+  }
 } satisfies Meta;
 
 export default meta;

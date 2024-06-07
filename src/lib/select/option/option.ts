@@ -174,7 +174,7 @@ export class OptionComponent extends BaseComponent implements IOptionComponent {
 
   /**
    * Gets/sets the trailing icon type of this option.
-   * @default "font" 
+   * @default "font"
    * @attribute trailing-icon-type
    */
   @coreProperty()

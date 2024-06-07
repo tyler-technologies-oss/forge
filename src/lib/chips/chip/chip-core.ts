@@ -143,7 +143,9 @@ export class ChipCore implements IChipCore {
       }
     }
 
-    const detail: IChipNavigateEventData = { direction: evt.key === 'ArrowRight' || evt.key === 'Tab' ? 'next' : 'previous' };
+    const detail: IChipNavigateEventData = {
+      direction: evt.key === 'ArrowRight' || evt.key === 'Tab' ? 'next' : 'previous'
+    };
     this._adapter.dispatchHostEvent(new CustomEvent(CHIP_CONSTANTS.events.NAVIGATE, { bubbles: true, detail }));
   }
 
@@ -215,7 +217,7 @@ export class ChipCore implements IChipCore {
       if (!isValidType) {
         this._type = 'action';
       }
-      
+
       this._applyType();
     }
   }

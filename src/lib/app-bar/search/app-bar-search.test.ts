@@ -10,7 +10,7 @@ import './app-bar-search';
 describe('App Bar Search', () => {
   it('should initialize', async () => {
     const el = await fixture<IAppBarSearchComponent>(html`<forge-app-bar-search><input type="text" /></forge-app-bar-search>`);
-    
+
     expect(el.shadowRoot).not.to.be.null;
   });
 
@@ -53,7 +53,7 @@ describe('App Bar Search', () => {
     const el = await fixture<IAppBarSearchComponent>(html`<forge-app-bar-search value="${value}"><input type="text" /></forge-app-bar-search>`);
 
     await tick();
-    
+
     const inputEl = el.querySelector('input') as HTMLInputElement;
 
     expect(el.value).to.equal(value);
@@ -65,13 +65,13 @@ describe('App Bar Search', () => {
     expect(el.value).to.equal(value);
     expect(inputEl.value).to.equal(value);
   });
-  
+
   it('should set placeholder', async () => {
     let placeholder = 'Search';
     const el = await fixture<IAppBarSearchComponent>(html`<forge-app-bar-search placeholder="${placeholder}"><input type="text" /></forge-app-bar-search>`);
 
     await tick();
-    
+
     const inputEl = el.querySelector('input') as HTMLInputElement;
 
     expect(el.placeholder).to.equal(placeholder);

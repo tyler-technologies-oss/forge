@@ -36,19 +36,13 @@ export default {
   testFramework: {
     config: {
       timeout: 5000,
-      retries: 1,
-    },
+      retries: 1
+    }
   },
   coverageConfig: {
     report: true,
     reportDir: '.coverage',
-    exclude: [
-      'src/lib/*',
-      'src/lib/core/**',
-      'src/lib/**/index.ts',
-      'src/lib/**/*.{html,scss,json}',
-      '**/node_modules/**',
-    ],
+    exclude: ['src/lib/*', 'src/lib/core/**', 'src/lib/**/index.ts', 'src/lib/**/*.{html,scss,json}', '**/node_modules/**'],
     threshold: {
       statements: 98.5,
       branches: 95.5,
@@ -78,6 +72,6 @@ export default {
         '.html': 'text',
         '.scss': 'text'
       }
-    }),
+    })
   ]
 };

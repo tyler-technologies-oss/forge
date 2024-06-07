@@ -31,8 +31,7 @@ export class IconRegistry {
    */
   public static define(icon: IIcon | IIcon[] | string, svgData?: string): void {
     if (Array.isArray(icon)) {
-      return icon.filter(i => IconRegistry._isIconObject(i))
-                 .forEach(i => IconRegistry._register(i.name, i.data));
+      return icon.filter(i => IconRegistry._isIconObject(i)).forEach(i => IconRegistry._register(i.name, i.data));
     }
     const { name, data } = IconRegistry._parseIcon(icon, svgData);
     IconRegistry._register(name, data);

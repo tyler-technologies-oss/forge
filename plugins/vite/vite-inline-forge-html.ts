@@ -2,7 +2,7 @@ import type { Plugin } from 'vite';
 
 /**
  * A custom plugin that converts imports for HTML files to stringified JavaScript modules.
- * 
+ *
  * This allows us to use the HTML file contents in the JavaScript via an import by creating a module
  * on the fly with the file contents getting stringified.
  */

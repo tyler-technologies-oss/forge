@@ -42,7 +42,7 @@ $tokens: (
   on-info-container-minimum: #0b3768,
   on-info-container-low: #0b3768,
   on-info-container: #0b3768,
-  on-info-container-high: color-palette.$black,
+  on-info-container-high: color-palette.$black
 );
 
 // Dark
@@ -86,5 +86,5 @@ $tokens-dark: (
   on-info-container-minimum: #81acdd,
   on-info-container-low: #81acdd,
   on-info-container: #81acdd,
-  on-info-container-high: color-palette.$white,
+  on-info-container-high: color-palette.$white
 );

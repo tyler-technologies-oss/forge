@@ -11,7 +11,7 @@ export function createStartInputElement(component: ISliderComponent): HTMLInputE
   startInput.valueAsNumber = component.valueStart;
   startInput.disabled = component.disabled;
   startInput.classList.add('start');
-  
+
   if (component.hasAttribute(SLIDER_CONSTANTS.attributes.ARIA_LABEL_START)) {
     startInput.setAttribute('aria-label', component.getAttribute(SLIDER_CONSTANTS.attributes.ARIA_LABEL_START) as string);
   }
@@ -32,12 +32,12 @@ export function createStartHandleElement(thumbLabel: string): HTMLElement {
   const startHandleFocusIndicator = document.createElement('forge-focus-indicator');
   startHandleFocusIndicator.target = 'start';
   startHandle.appendChild(startHandleFocusIndicator);
-  
+
   const startHandleThumb = document.createElement('div');
   startHandleThumb.classList.add(SLIDER_CONSTANTS.classes.HANDLE_THUMB);
   startHandleThumb.setAttribute('part', 'handle-start-thumb');
   startHandle.appendChild(startHandleThumb);
-  
+
   const startHandleLabel = document.createElement('div');
   startHandleLabel.classList.add(SLIDER_CONSTANTS.classes.HANDLE_LABEL);
   startHandleLabel.setAttribute('part', 'handle-start-label');
@@ -48,7 +48,7 @@ export function createStartHandleElement(thumbLabel: string): HTMLElement {
   startHandleLabelContent.classList.add(SLIDER_CONSTANTS.classes.LABEL_CONTENT);
   startHandleLabelContent.setAttribute('part', 'handle-start-label-content');
   startHandleLabel.appendChild(startHandleLabelContent);
-  
+
   return startHandle;
 }
 

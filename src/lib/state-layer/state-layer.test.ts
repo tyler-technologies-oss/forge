@@ -52,7 +52,7 @@ describe('StateLayer', () => {
     await elementUpdated(surface);
 
     expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.HOVERED)).to.be.true;
-    
+
     simulateLeave(container);
     await elementUpdated(surface);
 
@@ -306,7 +306,12 @@ describe('StateLayer', () => {
   });
 });
 
-async function createFixture({ target, disabled }: Partial<IStateLayerComponent> = {}): Promise<{ container: HTMLDivElement; sibling: HTMLElement; stateLayer: IStateLayerComponent, surface: HTMLDivElement }> {
+async function createFixture({ target, disabled }: Partial<IStateLayerComponent> = {}): Promise<{
+  container: HTMLDivElement;
+  sibling: HTMLElement;
+  stateLayer: IStateLayerComponent;
+  surface: HTMLDivElement;
+}> {
   const el = await fixture<HTMLElement>(html`
     <div style="position: relative; overflow: hidden; height: 100px; width: 100px;">
       <div id="sibling"></div>

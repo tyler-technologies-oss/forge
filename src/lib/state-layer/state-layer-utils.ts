@@ -12,7 +12,11 @@ export function calcRippleSize(hostEl: HTMLElement): { rippleScale: string; ripp
   return { rippleScale, rippleSize, initialSize };
 }
 
-export function  getTranslationCoordinates(hostEl: HTMLElement, initialSize: number, coords?: StateLayerCoords): { startPoint: { x: number; y: number }; endPoint: { x: number; y: number } } {
+export function getTranslationCoordinates(
+  hostEl: HTMLElement,
+  initialSize: number,
+  coords?: StateLayerCoords
+): { startPoint: { x: number; y: number }; endPoint: { x: number; y: number } } {
   const { height, width } = hostEl.getBoundingClientRect();
   const endPoint = {
     x: (width - initialSize) / 2,
@@ -30,8 +34,8 @@ export function  getTranslationCoordinates(hostEl: HTMLElement, initialSize: num
   }
 
   startPoint = {
-    x: startPoint.x - (initialSize / 2),
-    y: startPoint.y - (initialSize / 2)
+    x: startPoint.x - initialSize / 2,
+    y: startPoint.y - initialSize / 2
   };
 
   return { startPoint, endPoint };

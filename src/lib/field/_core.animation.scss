@@ -18,40 +18,40 @@
       translate: 0;
       opacity: 40%;
     }
-  
+
     to {
       translate: #{token(floating-label-translation, custom)};
       opacity: 100%;
     }
   }
-  
+
   @keyframes float-out-label-animation {
     from {
       translate: #{token(floating-label-translation, custom)};
       opacity: 40%;
     }
-  
+
     to {
       translate: 0;
       opacity: 100%;
     }
   }
-  
+
   @keyframes float-in-input-animation {
     from {
       translate: 0;
     }
-  
+
     to {
       translate: 0 $offset;
     }
   }
-  
+
   @keyframes float-out-input-animation {
     from {
       translate: 0 $offset;
     }
-  
+
     to {
       translate: 0;
     }
@@ -63,7 +63,7 @@
     from {
       opacity: 0%;
     }
-  
+
     to {
       opacity: 100%;
     }

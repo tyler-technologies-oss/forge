@@ -1,6 +1,13 @@
 import { isDefined, isDeepEqual, randomChars } from '@tylertech/forge-core';
 import { OptionListenerDestructor } from '../select/select-adapter';
-import { ISelectOption, ISelectOptionGroup, SelectSelectedTextBuilder, SelectOptionBuilder, BASE_SELECT_CONSTANTS, SelectBeforeValueChangeCallback } from './base-select-constants';
+import {
+  ISelectOption,
+  ISelectOptionGroup,
+  SelectSelectedTextBuilder,
+  SelectOptionBuilder,
+  BASE_SELECT_CONSTANTS,
+  SelectBeforeValueChangeCallback
+} from './base-select-constants';
 import { isSelectOptionType, SelectOptionType } from './select-utils';
 import { IListDropdownConfig, ListDropdownHeaderBuilder, ListDropdownFooterBuilder } from '../../list-dropdown/list-dropdown-constants';
 import { IBaseSelectAdapter } from './base-select-adapter';
@@ -91,7 +98,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
     if (this._optionListenerDestructor) {
       this._optionListenerDestructor();
     }
- 
+
     this._open = false;
     this._adapter.destroyListDropdown();
   }
@@ -117,7 +124,10 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
   protected get _flatOptions(): ISelectOption[] {
     if (isSelectOptionType(this._options, SelectOptionType.Group)) {
-      return [].concat.apply([], (this._options as ISelectOptionGroup[]).map(g => g.options)) as ISelectOption[];
+      return [].concat.apply(
+        [],
+        (this._options as ISelectOptionGroup[]).map(g => g.options)
+      ) as ISelectOption[];
     }
     return this._options as ISelectOption[];
   }
@@ -154,7 +164,6 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
       this._closeDropdown();
     }
   }
-
 
   protected _openDropdown(): void {
     this._options = this._adapter.getOptions();
@@ -348,7 +357,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
     // Update the selected options in the dropdown
     this._adapter.patchSelectedValues(this._selectedValues);
   }
-  
+
   /**
    * Handles the user dismissing the dropdown.
    */
@@ -374,7 +383,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
         return '';
       }
     }
-    
+
     return this._selectedLabels
       .filter(v => v && v.length)
       .join(' ')
@@ -552,9 +561,9 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
   }
   public set value(value: any) {
     let _value: string | string[];
-  
+
     if (Array.isArray(value)) {
-      _value = [ ...value ];
+      _value = [...value];
     } else {
       _value = value;
     }
@@ -564,14 +573,14 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
   /** Gets/sets the selected index(s). */
   public get selectedIndex(): number | number[] {
-    return this._multiple ? [ ...this._selectedIndexes ] : this._selectedIndexes[0];
+    return this._multiple ? [...this._selectedIndexes] : this._selectedIndexes[0];
   }
   public set selectedIndex(indexes: number | number[]) {
     this._options = this._adapter.getOptions();
 
-    let indicies: number [];
+    let indicies: number[];
     if (Array.isArray(indexes)) {
-      indicies = [ ...indexes ];
+      indicies = [...indexes];
     } else {
       indicies = [indexes];
     }
@@ -580,9 +589,9 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
 
     if (this.multiple) {
       this.value = indicies
-                    .map(index => this._flatOptions[index])
-                    .filter(o => o)
-                    .map(o => o.value);
+        .map(index => this._flatOptions[index])
+        .filter(o => o)
+        .map(o => o.value);
     } else {
       const option = this._flatOptions[indicies[indicies.length - 1]];
       if (!option) {
@@ -663,7 +672,7 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
   public set optionLimit(value: number) {
     this._optionLimit = value;
   }
-  
+
   public get popupClasses(): string | string[] {
     return this._popupClasses;
   }

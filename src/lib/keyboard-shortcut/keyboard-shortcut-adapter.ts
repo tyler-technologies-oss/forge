@@ -63,7 +63,7 @@ export class KeyboardShortcutAdapter extends BaseAdapter<IKeyboardShortcutCompon
       this._targetElement = doc.documentElement;
       return;
     }
-    
+
     if (selector) {
       if (this._component.parentElement) {
         if (matchesSelectors(this._component.parentElement, selector)) {

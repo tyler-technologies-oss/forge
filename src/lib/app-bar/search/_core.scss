@@ -62,7 +62,7 @@
   width: 100%;
   margin: 0;
   outline: none;
-  
+
   &::placeholder {
     color: currentColor;
     opacity: #{token(input-placeholder-opacity)};

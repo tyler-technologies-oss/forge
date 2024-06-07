@@ -46,8 +46,8 @@
     border: 0;
   }
 
-  ::slotted([slot=leading]),
-  ::slotted([slot=trailing]) {
+  ::slotted([slot='leading']),
+  ::slotted([slot='trailing']) {
     display: inline-flex;
     position: relative;
     writing-mode: horizontal-tb;
@@ -64,8 +64,8 @@
   }
 
   &:hover {
-    ::slotted([slot=leading]),
-    ::slotted([slot=trailing]) {
+    ::slotted([slot='leading']),
+    ::slotted([slot='trailing']) {
       color: #{token(hover-icon-color)};
     }
   }
@@ -74,17 +74,17 @@
 @mixin focus {
   color: #{token(focus-label-text-color)};
 
-  ::slotted([slot=leading]),
-  ::slotted([slot=trailing]) {
-    color:#{token(focus-icon-color)};
+  ::slotted([slot='leading']),
+  ::slotted([slot='trailing']) {
+    color: #{token(focus-icon-color)};
   }
 }
 
 @mixin selected-focus {
   color: #{token(active-focus-label-text-color)};
 
-  ::slotted([slot=leading]),
-  ::slotted([slot=trailing]) {
+  ::slotted([slot='leading']),
+  ::slotted([slot='trailing']) {
     color: #{token(active-focus-icon-color)};
   }
 }
@@ -93,8 +93,8 @@
   color: #{token(pressed-label-text-color)};
   outline: none;
 
-  ::slotted([slot=leading]),
-  ::slotted([slot=trailing]) {
+  ::slotted([slot='leading']),
+  ::slotted([slot='trailing']) {
     color: #{token(pressed-icon-color)};
   }
 }
@@ -102,8 +102,8 @@
 @mixin selected-pressed {
   color: #{token(active-pressed-label-text-color)};
 
-  ::slotted([slot=leading]),
-  ::slotted([slot=trailing]) {
+  ::slotted([slot='leading']),
+  ::slotted([slot='trailing']) {
     color: #{token(active-pressed-icon-color)};
   }
 }

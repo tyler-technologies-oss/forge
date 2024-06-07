@@ -1,7 +1,53 @@
 import { ICustomElementCore, isArray, isDefined, isValidDate } from '@tylertech/forge-core';
 
-import { ICalendarDate, ICalendarDisabledDateParams, ICalendarFocusChangeEventData, ICalendarMenuMonthConfig, ICalendarMenuYearConfig, ICalendarNumberRange, CALENDAR_CONSTANTS, CalendarDisabledDateBuilder, CalendarEventBuilder, CalendarMode, CalendarMonthFocus, CalendarView, DayOfWeek, ICalendarDateSelectEventData, RangeSelectionState, CalendarDateBuilder, CalendarDayBuilder, CalendarDateSelectCallback, ICalendarEvent, CalendarTooltipBuilder, ICalendarDateConfig } from './calendar-constants';
-import { isDisabled, isSelected, getAllYearOptions, getDateRangeFromDates, getDatesFromDateRange, getDatesInRange, getEventDescriptions, getEventsOnDate, getFirstDateOfWeek, getIndexOfDate, getLastDateOfWeek, getMinAndMaxDates, getMonthDates, getMonthOptions, getMultipleFromRange, getSortedDaysOfWeek, getYearOptions, isInMonth, isToday, parseYearRange, sortDates, coerceDateFromValue, shouldHandleEvent } from './calendar-utils';
+import {
+  ICalendarDate,
+  ICalendarDisabledDateParams,
+  ICalendarFocusChangeEventData,
+  ICalendarMenuMonthConfig,
+  ICalendarMenuYearConfig,
+  ICalendarNumberRange,
+  CALENDAR_CONSTANTS,
+  CalendarDisabledDateBuilder,
+  CalendarEventBuilder,
+  CalendarMode,
+  CalendarMonthFocus,
+  CalendarView,
+  DayOfWeek,
+  ICalendarDateSelectEventData,
+  RangeSelectionState,
+  CalendarDateBuilder,
+  CalendarDayBuilder,
+  CalendarDateSelectCallback,
+  ICalendarEvent,
+  CalendarTooltipBuilder,
+  ICalendarDateConfig
+} from './calendar-constants';
+import {
+  isDisabled,
+  isSelected,
+  getAllYearOptions,
+  getDateRangeFromDates,
+  getDatesFromDateRange,
+  getDatesInRange,
+  getEventDescriptions,
+  getEventsOnDate,
+  getFirstDateOfWeek,
+  getIndexOfDate,
+  getLastDateOfWeek,
+  getMinAndMaxDates,
+  getMonthDates,
+  getMonthOptions,
+  getMultipleFromRange,
+  getSortedDaysOfWeek,
+  getYearOptions,
+  isInMonth,
+  isToday,
+  parseYearRange,
+  sortDates,
+  coerceDateFromValue,
+  shouldHandleEvent
+} from './calendar-utils';
 import { getFirstDayOfWeekForLocale, getLocalizedMonth, getLocalizedYear, getWeekendDaysForLocale, isRtlLocale } from './calendar-locale-utils';
 import { eventIncludesDate } from './calendar-dom-utils';
 import { ICalendarAdapter } from './calendar-adapter';
@@ -47,7 +93,7 @@ export class CalendarCore implements ICalendarCore {
   private _dayBuilder: CalendarDayBuilder | undefined;
   private _tooltipBuilder: CalendarTooltipBuilder | undefined;
   private _eventBuilder: CalendarEventBuilder | undefined;
-  
+
   // Selection
   private _value: Date[] = [];
   private _mode: CalendarMode = 'single';
@@ -76,7 +122,7 @@ export class CalendarCore implements ICalendarCore {
   private _todayButton = false;
   private _clearCallback: (() => void) | undefined;
   private _todayCallback: (() => void) | undefined;
-  
+
   // Menu
   private _view: CalendarView = 'date';
   private _menuAnimation: CalendarMenuAnimationType = 'scale';
@@ -99,7 +145,7 @@ export class CalendarCore implements ICalendarCore {
   // Core
   private _preventFocus = false;
   private _isInitialized = false;
-  
+
   // Listeners
   private _clearButtonListener: (evt: Event) => void;
   private _dateClickListener: (evt: Event) => void;
@@ -256,7 +302,7 @@ export class CalendarCore implements ICalendarCore {
   }
 
   private _onKeydown(evt: KeyboardEvent): void {
-    switch(evt.key) {
+    switch (evt.key) {
       case 'ArrowLeft':
       case 'ArrowRight':
       case 'ArrowUp':
@@ -316,7 +362,7 @@ export class CalendarCore implements ICalendarCore {
 
     evt.preventDefault();
     let direction: 'next' | 'previous' | 'up' | 'down' | undefined;
-    switch(evt.key) {
+    switch (evt.key) {
       case 'ArrowLeft':
         direction = this._rtl ? 'next' : 'previous';
         break;
@@ -331,7 +377,7 @@ export class CalendarCore implements ICalendarCore {
         break;
     }
 
-    switch(direction) {
+    switch (direction) {
       case 'previous':
         if (this._view === 'date') {
           this._moveFocusToPreviousDate(true);
@@ -380,7 +426,7 @@ export class CalendarCore implements ICalendarCore {
    */
   private _handleNavigationKey(evt: KeyboardEvent): void {
     evt.preventDefault();
-    switch(evt.key) {
+    switch (evt.key) {
       case 'Home':
         if (this._view !== 'date') {
           break;
@@ -404,7 +450,6 @@ export class CalendarCore implements ICalendarCore {
       case 'PageUp':
         if (this._view === 'date') {
           if (evt.shiftKey) {
-
             this._moveFocusToPreviousYear(true);
           } else {
             this._moveFocusToPreviousMonth(true);
@@ -441,7 +486,7 @@ export class CalendarCore implements ICalendarCore {
     }
 
     evt.preventDefault();
-    switch(this._view) {
+    switch (this._view) {
       case 'date':
         if (this._readonly) {
           break;
@@ -623,7 +668,11 @@ export class CalendarCore implements ICalendarCore {
     switch (this._view) {
       case 'date':
         eventData.selected = isSelected(value as Date, this._value);
-        eventData.text = (value as Date).toLocaleDateString(this.locale, {month: 'long', day: '2-digit', year: 'numeric'});
+        eventData.text = (value as Date).toLocaleDateString(this.locale, {
+          month: 'long',
+          day: '2-digit',
+          year: 'numeric'
+        });
         break;
       case 'month':
         eventData.selected = this._month === value;
@@ -750,7 +799,9 @@ export class CalendarCore implements ICalendarCore {
    */
   private _getFirstEnabledDayOfWeek(date: Date, inMonth = true): Date | null {
     const current = getFirstDateOfWeek(date);
-    const disabledParams = this._getDisabledDateParams(inMonth ? current.getMonth() !== date.getMonth() || current.getFullYear() !== date.getFullYear() : undefined);
+    const disabledParams = this._getDisabledDateParams(
+      inMonth ? current.getMonth() !== date.getMonth() || current.getFullYear() !== date.getFullYear() : undefined
+    );
     let index = 0;
     while (index < 7 && isDisabled(current, disabledParams)) {
       current.setDate(current.getDate() + 1);
@@ -767,7 +818,9 @@ export class CalendarCore implements ICalendarCore {
    */
   private _getLastEnabledDayOfWeek(date: Date, inMonth = true): Date | null {
     const current = getLastDateOfWeek(date);
-    const disabledParams = this._getDisabledDateParams(inMonth ? current.getMonth() !== date.getMonth() || current.getFullYear() !== date.getFullYear() : undefined);
+    const disabledParams = this._getDisabledDateParams(
+      inMonth ? current.getMonth() !== date.getMonth() || current.getFullYear() !== date.getFullYear() : undefined
+    );
     let index = 0;
     while (index < 7 && isDisabled(current, disabledParams)) {
       current.setDate(current.getDate() - 1);
@@ -980,7 +1033,7 @@ export class CalendarCore implements ICalendarCore {
    * Sets the labels on the previous and next buttons appropriate for the view.
    */
   private _setNavButtonLabels(): void {
-    switch(this._view) {
+    switch (this._view) {
       case 'date':
         this._adapter.setPreviousButtonLabel('Previous month');
         this._adapter.setNextButtonLabel('Next month');
@@ -1003,7 +1056,11 @@ export class CalendarCore implements ICalendarCore {
     this._dates = getMonthDates(this._month, this._year, this._firstDayOfWeek ?? this._localeFirstDayOfWeek);
 
     const dateConfigs: ICalendarDateConfig[] = this._dates.map(d => this._getDateConfig(d));
-    this._adapter.setDates(dateConfigs, { builder: this._dateBuilder, locale: this._locale, showOtherMonths: this._showOtherMonths});
+    this._adapter.setDates(dateConfigs, {
+      builder: this._dateBuilder,
+      locale: this._locale,
+      showOtherMonths: this._showOtherMonths
+    });
 
     this._setNavigationButtonStates();
     this._applyWeekendDays();
@@ -1357,7 +1414,7 @@ export class CalendarCore implements ICalendarCore {
       this._resetDateGrid();
     }
   }
-  
+
   /**
    * Moves to the next set of selectable years in grid view.
    * */
@@ -1447,7 +1504,11 @@ export class CalendarCore implements ICalendarCore {
     this._adapter.setHostAttribute(CALENDAR_CONSTANTS.attributes.MONTH, this._month.toString());
     if (this._isInitialized) {
       this._setNavigationButtonStates();
-      this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {month: this._month, userSelected: userSelected ?? false, year: this._year});
+      this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
+        month: this._month,
+        userSelected: userSelected ?? false,
+        year: this._year
+      });
     }
   }
 
@@ -1460,7 +1521,11 @@ export class CalendarCore implements ICalendarCore {
     this._adapter.setHostAttribute(CALENDAR_CONSTANTS.attributes.YEAR, this._year.toString());
     if (this._isInitialized) {
       this._setNavigationButtonStates();
-      this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {month: this._month, userSelected: userSelected ?? false, year: this._year});
+      this._adapter.emitHostEvent(CALENDAR_CONSTANTS.events.MONTH_CHANGE, {
+        month: this._month,
+        userSelected: userSelected ?? false,
+        year: this._year
+      });
     }
   }
 
@@ -1512,7 +1577,10 @@ export class CalendarCore implements ICalendarCore {
   }
 
   private _applyDayBuilder(): void {
-    this._adapter.setDays(getSortedDaysOfWeek(this._firstDayOfWeek ?? this._localeFirstDayOfWeek), { builder: this._dayBuilder, locale: this._locale });
+    this._adapter.setDays(getSortedDaysOfWeek(this._firstDayOfWeek ?? this._localeFirstDayOfWeek), {
+      builder: this._dayBuilder,
+      locale: this._locale
+    });
   }
 
   private _applyDisabledDates(): void {
@@ -1545,7 +1613,10 @@ export class CalendarCore implements ICalendarCore {
 
   private _applyFirstDayOfWeek(): void {
     this._adapter.toggleHostAttribute(CALENDAR_CONSTANTS.attributes.FIRST_DAY_OF_WEEK, isDefined(this._firstDayOfWeek), (this._firstDayOfWeek ?? 0).toString());
-    this._adapter.setDays(getSortedDaysOfWeek(this._firstDayOfWeek ?? this._localeFirstDayOfWeek), { builder: this._dayBuilder, locale: this._locale });
+    this._adapter.setDays(getSortedDaysOfWeek(this._firstDayOfWeek ?? this._localeFirstDayOfWeek), {
+      builder: this._dayBuilder,
+      locale: this._locale
+    });
 
     if (this._isInitialized && this._view === 'date') {
       this._resetDateGrid();
@@ -1579,7 +1650,10 @@ export class CalendarCore implements ICalendarCore {
 
       switch (this._view) {
         case 'date':
-          this._adapter.setDays(getSortedDaysOfWeek(this._firstDayOfWeek ?? this._localeFirstDayOfWeek), { builder: this._dayBuilder, locale: this._locale });
+          this._adapter.setDays(getSortedDaysOfWeek(this._firstDayOfWeek ?? this._localeFirstDayOfWeek), {
+            builder: this._dayBuilder,
+            locale: this._locale
+          });
           this._resetDateGrid();
           this._resumeTabindexOnDate(false);
           break;
@@ -1703,7 +1777,7 @@ export class CalendarCore implements ICalendarCore {
       this._selectDate(d);
     });
 
-    this._rangeSelectionState = this._value[0] ? this._value[1] ? 'to' : 'from' : 'none';
+    this._rangeSelectionState = this._value[0] ? (this._value[1] ? 'to' : 'from') : 'none';
     this._adapter.registerHoverListener(this._hoverListener);
     this._adapter.setRange(getDatesInRange(this._dates, this._value[0], this._value[1]));
     this._adapter.setRangeStart(this._value[0] ?? null);
@@ -2005,7 +2079,7 @@ export class CalendarCore implements ICalendarCore {
     return dates.length ? dates : null;
   }
   public set disabledDates(value: Date | Date[] | null | undefined) {
-    const dates = value ? isArray(value) ? value : [value] : [];
+    const dates = value ? (isArray(value) ? value : [value]) : [];
     this._disabledDates = (dates as Date[]).map(d => {
       const date = new Date(d);
       date.setHours(0, 0, 0, 0);
@@ -2019,10 +2093,10 @@ export class CalendarCore implements ICalendarCore {
 
   /** Get/set disabled days of week */
   public get disabledDaysOfWeek(): DayOfWeek | DayOfWeek[] | null | undefined {
-    return this._disabledDaysOfWeek.length ? [...this._disabledDaysOfWeek] : null ;
+    return this._disabledDaysOfWeek.length ? [...this._disabledDaysOfWeek] : null;
   }
   public set disabledDaysOfWeek(value: DayOfWeek | DayOfWeek[] | null | undefined) {
-    this._disabledDaysOfWeek = (isDefined(value) ? isArray(value) ? value : [value] : []) as DayOfWeek[];
+    this._disabledDaysOfWeek = (isDefined(value) ? (isArray(value) ? value : [value]) : []) as DayOfWeek[];
 
     if (this._isInitialized) {
       this._applyDisabledDates();
@@ -2097,7 +2171,7 @@ export class CalendarCore implements ICalendarCore {
     return this._locale;
   }
   public set locale(value: string | undefined) {
-    if (typeof value ==='string' && !value.length) {
+    if (typeof value === 'string' && !value.length) {
       value = undefined;
     }
 
@@ -2156,7 +2230,7 @@ export class CalendarCore implements ICalendarCore {
     if (this._mode !== value) {
       const oldMode = this._mode;
       this._mode = value;
-      
+
       if (this._isInitialized) {
         this._applyMode(oldMode);
       }
@@ -2377,7 +2451,7 @@ export class CalendarCore implements ICalendarCore {
       }
 
       this._year = newValue;
-      
+
       if (this._isInitialized) {
         this._applyYear();
       }

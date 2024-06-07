@@ -38,9 +38,11 @@
 }
 
 forge-icon-button {
-  @include icon-button.provide-theme((
-    shape-squared: 0px // Requires unit
-  ));
+  @include icon-button.provide-theme(
+    (
+      shape-squared: 0px // Requires unit
+    )
+  );
 }
 
 //
@@ -63,7 +65,7 @@ forge-icon-button {
 
 //
 // Inverted
-// 
+//
 
 :host([inverted]:not([vertical])) {
   .forge-tab-bar {
@@ -79,7 +81,7 @@ forge-icon-button {
 
 //
 // Clustered
-// 
+//
 
 :host([clustered]) {
   .forge-tab-bar {
@@ -88,19 +90,19 @@ forge-icon-button {
   }
 }
 
-:host([clustered=start]) {
+:host([clustered='start']) {
   .forge-tab-bar {
     @include override(justify, flex-start, value);
   }
 }
 
-:host([clustered=center]) {
+:host([clustered='center']) {
   .forge-tab-bar {
     @include override(justify, center, value);
   }
 }
 
-:host([clustered=end]) {
+:host([clustered='end']) {
   .forge-tab-bar {
     @include override(justify, flex-end, value);
   }

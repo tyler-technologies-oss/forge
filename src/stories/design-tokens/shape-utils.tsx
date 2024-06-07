@@ -7,7 +7,7 @@ export function ShapeTokenExample({ borderRadius, shape = 'square' }: { borderRa
         width: shape === 'square' ? '48px' : '72px',
         height: '48px',
         backgroundColor: 'var(--forge-theme-primary)',
-        borderRadius: `var(--forge-shape-${borderRadius})`,
+        borderRadius: `var(--forge-shape-${borderRadius})`
       }}
     />
   );

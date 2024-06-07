@@ -88,8 +88,7 @@ export class TabBarCore implements ITabBarCore {
 
   private async _onKeydown(evt: KeyboardEvent): Promise<void> {
     const orientation = this._vertical ? 'vertical' : 'horizontal';
-    const isNavigationKey = NAVIGATION_KEYS.get('default')?.has(evt.key) ||
-                            NAVIGATION_KEYS.get(orientation)?.has(evt.key);
+    const isNavigationKey = NAVIGATION_KEYS.get('default')?.has(evt.key) || NAVIGATION_KEYS.get(orientation)?.has(evt.key);
 
     if (!isNavigationKey) {
       return;
@@ -103,7 +102,7 @@ export class TabBarCore implements ITabBarCore {
       index = this._tabs.findIndex(tab => !tab.disabled);
     } else if (evt.key === 'End') {
       // Locate the last non-disabled tab
-      index = this._tabs.reduceRight((acc, tab, i) => !tab.disabled && acc === -1 ? i : acc, -1);
+      index = this._tabs.reduceRight((acc, tab, i) => (!tab.disabled && acc === -1 ? i : acc), -1);
     } else {
       // Locate the next or previous tab based on the key that was pressed
       const currentIndex = this._tabs.findIndex(tab => tab.matches(':focus'));
@@ -145,7 +144,12 @@ export class TabBarCore implements ITabBarCore {
 
     if (emitEvent) {
       const index = this._tabs.indexOf(tab);
-      const event = new CustomEvent<ITabBarChangeEventData>(TAB_BAR_CONSTANTS.events.CHANGE, { detail: { index }, bubbles: true, cancelable: true, composed: true });
+      const event = new CustomEvent<ITabBarChangeEventData>(TAB_BAR_CONSTANTS.events.CHANGE, {
+        detail: { index },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      });
       this._adapter.dispatchHostEvent(event);
       if (event.defaultPrevented) {
         return;
@@ -169,7 +173,7 @@ export class TabBarCore implements ITabBarCore {
 
   /**
    * Ensures that all tabs have the correct state based on the tab bar state.
-   * 
+   *
    * This is called whenever a child tab is added to the DOM.
    */
   private _syncTabState(): void {
@@ -210,7 +214,7 @@ export class TabBarCore implements ITabBarCore {
     if (this._scrollButtonsVisible === scrollable) {
       return;
     }
-    
+
     this._adapter.setScrollButtons(scrollable);
 
     if (scrollable) {
@@ -258,7 +262,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._disabled !== value) {
       this._disabled = value;
-      this._tabs.forEach(tab => tab.disabled = this._disabled);
+      this._tabs.forEach(tab => (tab.disabled = this._disabled));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.DISABLED, this._disabled);
     }
   }
@@ -275,7 +279,7 @@ export class TabBarCore implements ITabBarCore {
         this._selectTab(newSelectedTab, false);
         this._adapter.setHostAttribute(TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB, String(this._activeTab));
       } else {
-        this._tabs.forEach(tab => tab.selected = false);
+        this._tabs.forEach(tab => (tab.selected = false));
         this._adapter.removeHostAttribute(TAB_BAR_CONSTANTS.attributes.ACTIVE_TAB);
       }
     }
@@ -293,7 +297,7 @@ export class TabBarCore implements ITabBarCore {
         this._adapter.setVertical(this._vertical);
       }
 
-      this._tabs.forEach(tab => tab.vertical = this._vertical);
+      this._tabs.forEach(tab => (tab.vertical = this._vertical));
       if (this._scrollButtonsVisible) {
         this._adapter.updateScrollButtonIcons(this._vertical);
       }
@@ -319,7 +323,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._stacked !== value) {
       this._stacked = value;
-      this._tabs.forEach(tab => tab.stacked = this._stacked);
+      this._tabs.forEach(tab => (tab.stacked = this._stacked));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.STACKED, this._stacked);
     }
   }
@@ -331,7 +335,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._secondary !== value) {
       this._secondary = value;
-      this._tabs.forEach(tab => tab.secondary = this._secondary);
+      this._tabs.forEach(tab => (tab.secondary = this._secondary));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.SECONDARY, this._secondary);
     }
   }
@@ -343,7 +347,7 @@ export class TabBarCore implements ITabBarCore {
     value = Boolean(value);
     if (this._inverted !== value) {
       this._inverted = value;
-      this._tabs.forEach(tab => tab.inverted = this._inverted);
+      this._tabs.forEach(tab => (tab.inverted = this._inverted));
       this._adapter.toggleHostAttribute(TAB_BAR_CONSTANTS.attributes.INVERTED, this._inverted);
     }
   }

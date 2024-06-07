@@ -79,7 +79,7 @@ export class ListItemCore implements IListItemCore {
   }
 
   private _onClick(evt: MouseEvent): void {
-    const composedElements =  evt.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
+    const composedElements = evt.composedPath().filter((el: Element): el is HTMLElement => el.nodeType === Node.ELEMENT_NODE);
 
     // Ignore clicks from elements that should not trigger selection
     const fromIgnoredElement = composedElements.some(el => (el as HTMLElement).matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
@@ -104,7 +104,7 @@ export class ListItemCore implements IListItemCore {
 
       evt.preventDefault();
       evt.stopImmediatePropagation();
-      
+
       // Workaround to temporarily set the target attribute to '_blank' if the user is holding the ctrl key and remove it after the click
       const forceTempAnchorTarget = isCtrlClick && !hasTarget;
       /* c8 ignore next 3 */
@@ -152,7 +152,10 @@ export class ListItemCore implements IListItemCore {
 
   private _dispatchSelectEvent(): void {
     const detail: IListItemSelectEventData = { value: this._value };
-    const event = new CustomEvent<IListItemSelectEventData>(LIST_ITEM_CONSTANTS.events.SELECT, { bubbles: true, detail });
+    const event = new CustomEvent<IListItemSelectEventData>(LIST_ITEM_CONSTANTS.events.SELECT, {
+      bubbles: true,
+      detail
+    });
     this._adapter.dispatchHostEvent(event);
   }
 

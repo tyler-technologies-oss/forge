@@ -2,7 +2,7 @@
  * @license
  * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
- * 
+ *
  * Adapted and influenced from [Material Web](https://github.com/material-components/material-web).
  * The original source code can be found at: [GitHub](https://github.com/material-components/material-web/blob/main/labs/behaviors/form-associated.ts)
  */
@@ -54,7 +54,7 @@ export interface IWithFormAssociation<TValue = FormValue | null> extends IBaseCo
 
   /**
    * Gets the validation message for the component.
-   * 
+   *
    * @param props Validation-affecting properties set on the component as well as the value of the
    * component.
    */
@@ -67,7 +67,7 @@ export interface IWithFormAssociation<TValue = FormValue | null> extends IBaseCo
 
   /**
    * Gets the current form state of the component, defaulting to the component's `[formValue]`.
-   * 
+   *
    * Used when the component's state is different from its value, such as a checkboxes that have
    * both a boolean `checked` state and a string value.
    */
@@ -76,7 +76,7 @@ export interface IWithFormAssociation<TValue = FormValue | null> extends IBaseCo
   /**
    * A callback for when the component should be enabled or disabled. This can be called when, for
    * example, the component is within a disabled fieldset.
-   * 
+   *
    * @param disabled Whether or not the component should be disabled.
    */
   formDisabledCallback(disabled: boolean): void;
@@ -89,7 +89,7 @@ export interface IWithFormAssociation<TValue = FormValue | null> extends IBaseCo
   /**
    * A callback for when a form restores the state of the component. For example, when a page is
    * reloaded or a form is autofilled.
-   * 
+   *
    * @param state The state to restore or null to reset the component's value.
    * @param reason The reason the state was restored.
    */
@@ -97,7 +97,7 @@ export interface IWithFormAssociation<TValue = FormValue | null> extends IBaseCo
 
   /**
    * An optional callback for when the associated form changes.
-   * 
+   *
    * @param form The new associated form or null if there is none.
    */
   formAssociatedCallback?(form: HTMLFormElement | null): void;
@@ -138,7 +138,7 @@ export declare abstract class WithFormAssociationContract {
 
 /**
  * Mixes in form functionality into a base component.
- * 
+ *
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */
@@ -182,18 +182,13 @@ export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
       this.disabled = disabled;
     }
 
-    public abstract formStateRestoreCallback(
-      state: FormRestoreState | null,
-      reason: FormRestoreReason
-    ): void;
+    public abstract formStateRestoreCallback(state: FormRestoreState | null, reason: FormRestoreReason): void;
 
     public abstract formResetCallback(): void;
 
     public set [inputType](type: InputType) {
       // Create a detached input to retrieve localized validation messages from
-      const inputElement = type === 'select'
-        ? document.createElement('select')
-        : document.createElement('input');
+      const inputElement = type === 'select' ? document.createElement('select') : document.createElement('input');
       inputElement.setAttribute('type', type);
       inputElement.name = 'internal';
       this._inputElement = inputElement;
@@ -213,7 +208,7 @@ export function WithFormAssociation<TBase extends MixinBase>(base: TBase) {
       // Apply validation-affecting props to the input element to get the correct validation
       // message
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      Object.entries(props).forEach(([key, value]) => this._inputElement![key] = value);
+      Object.entries(props).forEach(([key, value]) => (this._inputElement![key] = value));
 
       return this._inputElement.validationMessage;
     }

@@ -1,7 +1,15 @@
 import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent, IBaseComponent } from '../core';
 import { FocusIndicatorComponent, FocusIndicatorFocusMode } from '../focus-indicator';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base/base-field-constants';
+import {
+  FieldDensity,
+  FieldLabelAlignment,
+  FieldLabelPosition,
+  FieldShape,
+  FieldSupportTextInset,
+  FieldTheme,
+  FieldVariant
+} from './base/base-field-constants';
 import { FieldAdapter } from './field-adapter';
 import { FIELD_CONSTANTS } from './field-constants';
 import { FieldCore } from './field-core';
@@ -44,10 +52,10 @@ declare global {
 
 /**
  * @tag forge-field
- * 
+ *
  * @summary The Forge Field component is a basic component that handles the layout and theming of
  * form elements that can include a label, various states, and a border around an input area.
- * 
+ *
  * @property {FieldLabelPosition} [labelPosition="inset"] - The position of the label relative to the input area.
  * @property {FieldLabelAlignment} [labelAlignment="start"] - The alignment of the label relative to the input area.
  * @property {boolean} [floatLabel=false] - Whether an inset positioned label is floated to the top of the container.
@@ -67,9 +75,9 @@ declare global {
  * @property {HTMLElement | null} focusIndicatorTargetElement - The element to attach the focus indicator to.
  * @property {FocusIndicatorFocusMode} [focusIndicatorFocusMode="focusin"] - The focus mode to use on the focus indicator.
  * @property {boolean} [focusIndicatorAllowFocus=false] - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
- * 
+ *
  * @globalconfig labelPosition
- * 
+ *
  * @attribute {FieldLabelPosition} [label-position="inset"] - The position of the label relative to the input area.
  * @attribute {FieldLabelAlignment} [label-alignment="start"] - The alignment of the label relative to the input area.
  * @attribute {boolean} [float-label=false] - Whether an inset positioned label is floated to the top of the container.
@@ -89,9 +97,9 @@ declare global {
  * @attribute {string} focus-indicator-target - The id of the element to attach the focus indicator to.
  * @attribute {FocusIndicatorFocusMode} [focus-indicator-focus-mode="focusin"] - The focus mode to use on the focus indicator.
  * @attribute {boolean} [focus-indicator-allow-focus=false] - Whether the focus indicator should render when the target element matches `:focus` instead of `:focus-visible`.
- * 
+ *
  * @event {CustomEvent<void>} forge-field-popover-icon-click - Dispatches when the user clicks the popover icon.
- * 
+ *
  * @cssproperty --forge-field-background - The background of the field surface.
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
  * @cssproperty --forge-field-tonal-background-hover - The background of the field surface in the tonal variant on hover.
@@ -131,7 +139,7 @@ declare global {
  * @cssproperty --forge-field-focus-indicator-width - The width of the focus indicator.
  * @cssproperty --forge-field-disabled-opacity - The opacity of the field when disabled.
  * @cssproperty --forge-field-disabled-background - The background of the field when disabled.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart label - The label element.
  * @csspart input - The element containing the input slot.
@@ -142,7 +150,7 @@ declare global {
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
- * 
+ *
  * @slot - The default/unnamed slot for the field's input.
  * @slot label - Renders its content as a positioned label.
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.

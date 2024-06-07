@@ -31,7 +31,10 @@ export interface IListDropdown {
 export class ListDropdown implements IListDropdown {
   private _core: ListDropdownCore;
 
-  constructor(private _targetElement: HTMLElement, config: IListDropdownConfig) {
+  constructor(
+    private _targetElement: HTMLElement,
+    config: IListDropdownConfig
+  ) {
     IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank]);
     this._core = new ListDropdownCore(new ListDropdownAdapter(this._targetElement), config);
   }
@@ -58,12 +61,12 @@ export class ListDropdown implements IListDropdown {
   public getActiveOption(): IListDropdownOption | undefined {
     return this._core.getActiveOption();
   }
-  
+
   /** Toggles the selected option by index. Only applies when in multiselect mode. */
   public toggleOptionMultiple(index: number, isSelected: boolean): void {
     return this._core.toggleOptionMultiple(index, isSelected);
   }
-  
+
   /** Activates the first selected option. */
   public activateSelectedOption(): void {
     this._core.activateSelectedOption();

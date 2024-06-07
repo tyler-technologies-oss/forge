@@ -35,7 +35,7 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
   private _boundaryElement: HTMLElement | null = null;
   private _fallbackPlacements: PositionPlacement[] | null = null;
   private _triggerTypes: TooltipTriggerType[] = TOOLTIP_CONSTANTS.defaults.TRIGGER_TYPES;
-  
+
   // Hover trigger type
   private _hoverStartListener: (evt: MouseEvent) => void = this._onHoverStart.bind(this);
   private _hoverEndListener: (evt: MouseEvent) => void = this._onHoverEnd.bind(this);
@@ -53,22 +53,13 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
   private _mouseDownListener: (evt: MouseEvent) => void = this._onTryHide.bind(this);
   private _dragListener: (evt: DragEvent) => void = this._onTryHide.bind(this);
   private _lightDismissListener: (evt: Event) => void = this._onTryHide.bind(this);
-  
+
   constructor(private _adapter: ITooltipAdapter) {
     super();
   }
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration([
-      'type',
-      'delay',
-      'placement',
-      'offset',
-      'flip',
-      'boundaryElement',
-      'fallbackPlacements',
-      'triggerType'
-    ]);
+    this._adapter.tryApplyGlobalConfiguration(['type', 'delay', 'placement', 'offset', 'flip', 'boundaryElement', 'fallbackPlacements', 'triggerType']);
 
     if (!this._adapter.anchorElement) {
       this._adapter.tryLocateAnchorElement(this._anchor);
@@ -109,9 +100,9 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     }
 
     const triggerInitializers: Record<TooltipTriggerType, () => void> = {
-      'hover': () => this._adapter.addAnchorListener('mouseenter', this._hoverStartListener),
-      'longpress': () => this._startLongpressListener(this._adapter.anchorElement as HTMLElement),
-      'focus': () => this._adapter.addAnchorListener('focusin', this._focusListener)
+      hover: () => this._adapter.addAnchorListener('mouseenter', this._hoverStartListener),
+      longpress: () => this._startLongpressListener(this._adapter.anchorElement as HTMLElement),
+      focus: () => this._adapter.addAnchorListener('focusin', this._focusListener)
     };
     triggerTypes.forEach(triggerType => triggerInitializers[triggerType]());
   }
@@ -129,13 +120,13 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     }
 
     const triggerRemovers: Record<TooltipTriggerType, () => void> = {
-      'hover': () => {
+      hover: () => {
         this._adapter.removeAnchorListener('mouseenter', this._hoverStartListener);
         this._adapter.removeAnchorListener('mousedown', this._hoverEndListener);
         this._adapter.removeAnchorListener('mouseleave', this._hoverEndListener);
       },
-      'longpress': () => this._stopLongpressListener(this._adapter.anchorElement as HTMLElement),
-      'focus': () => {
+      longpress: () => this._stopLongpressListener(this._adapter.anchorElement as HTMLElement),
+      focus: () => {
         this._adapter.removeAnchorListener('focusin', this._focusListener);
         this._adapter.removeAnchorListener('focusout', this._blurListener);
       }
@@ -169,7 +160,7 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     this._adapter.addDocumentListener('wheel', this._scrollListener);
     this._adapter.addLightDismissListener(this._lightDismissListener);
   }
-  
+
   private _detachDismissListeners(): void {
     this._adapter.removeAnchorListener('mousedown', this._mouseDownListener);
     this._adapter.removeAnchorListener('dragstart', this._dragListener);
@@ -186,7 +177,7 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
 
     this._adapter.addAnchorListener('mousedown', this._hoverEndListener);
     this._adapter.addAnchorListener('mouseleave', this._hoverEndListener);
-  
+
     if (this._delay) {
       this._hoverTimeout = window.setTimeout(() => {
         this._onTryShow();
@@ -241,7 +232,7 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
       this._hide();
     }
   }
-  
+
   public get open(): boolean {
     return this._open;
   }
@@ -304,7 +295,7 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
       }
 
       this._adapter.setAnchorElement(element);
-      
+
       if (this._adapter.isConnected) {
         this._adapter.syncAria();
         this._attachAnchorListeners();

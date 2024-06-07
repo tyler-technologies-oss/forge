@@ -65,11 +65,15 @@ export class SwitchCore implements ISwitchCore {
 
     const oldValue = this._on;
     const newValue = !this._on;
-    
+
     this._on = newValue;
 
     const event = new Event('change', { cancelable: true, bubbles: true });
-    const forgeEvent = new CustomEvent(SWITCH_CONSTANTS.events.CHANGE, { detail: newValue, bubbles: true, cancelable: true });
+    const forgeEvent = new CustomEvent(SWITCH_CONSTANTS.events.CHANGE, {
+      detail: newValue,
+      bubbles: true,
+      cancelable: true
+    });
     this._adapter.dispatchHostEvent(event);
     this._adapter.dispatchHostEvent(forgeEvent);
     this._on = oldValue;

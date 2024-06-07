@@ -65,7 +65,10 @@ export class CalendarMenuCore implements ICalendarMenuCore {
     this._list = true;
     this._options = options;
     const currentSlice = this._getOptionSliceIncludingSelected();
-    this._focusedIndex = Math.max(options.findIndex(o => o.selected), this._sliceStart);
+    this._focusedIndex = Math.max(
+      options.findIndex(o => o.selected),
+      this._sliceStart
+    );
     this._adapter.setOpenAsList(currentSlice, this._focusedIndex - this._sliceStart, setFocus, this._preventFocus, this._open);
     this._setListListeners();
     this._open = true;
@@ -107,7 +110,7 @@ export class CalendarMenuCore implements ICalendarMenuCore {
 
   public moveFocusDown(): void {
     if (this._list) {
-      const index = Math.min(this._focusedIndex += 1, this._options.length - 1);
+      const index = Math.min((this._focusedIndex += 1), this._options.length - 1);
       this._tryMoveFocus(index, true);
     } else {
       const index = this._focusedIndex + this._columnCount;
@@ -129,7 +132,7 @@ export class CalendarMenuCore implements ICalendarMenuCore {
 
   public moveFocusUp(): void {
     if (this._list) {
-      const index = Math.max(this._focusedIndex -= 1, 0);
+      const index = Math.max((this._focusedIndex -= 1), 0);
       this._tryMoveFocus(index, true);
     } else {
       const index = this._focusedIndex - this._columnCount;
@@ -157,7 +160,13 @@ export class CalendarMenuCore implements ICalendarMenuCore {
     } else if (this._options[0]?.disabled) {
       this._focusedIndex = this._options.findIndex(o => !o.disabled);
     } else {
-      this._focusedIndex = this._options.length - this._options.slice().reverse().findIndex(o => !o.disabled) - 1;
+      this._focusedIndex =
+        this._options.length -
+        this._options
+          .slice()
+          .reverse()
+          .findIndex(o => !o.disabled) -
+        1;
     }
     this._focusedIndexAfterAnimation = undefined;
     this._adapter.setFocusAtIndex(this._focusedIndex, setFocus, this._preventFocus);
@@ -182,7 +191,10 @@ export class CalendarMenuCore implements ICalendarMenuCore {
   }
 
   private _setColumnCount(): void {
-    this._columnCount = this._options.length >= CALENDAR_MENU_CONSTANTS.numbers.LARGE_ITEM_SET ? CALENDAR_MENU_CONSTANTS.numbers.FOUR_COL : CALENDAR_MENU_CONSTANTS.numbers.THREE_COL;
+    this._columnCount =
+      this._options.length >= CALENDAR_MENU_CONSTANTS.numbers.LARGE_ITEM_SET
+        ? CALENDAR_MENU_CONSTANTS.numbers.FOUR_COL
+        : CALENDAR_MENU_CONSTANTS.numbers.THREE_COL;
   }
 
   private _emitFocusChangeEvent(): void {
@@ -205,7 +217,10 @@ export class CalendarMenuCore implements ICalendarMenuCore {
       return this._options.slice();
     }
 
-    const selectedIndex = Math.max(this._options.findIndex(o => o.selected), 0);
+    const selectedIndex = Math.max(
+      this._options.findIndex(o => o.selected),
+      0
+    );
     let start = Math.max(Math.floor(selectedIndex - CALENDAR_MENU_CONSTANTS.numbers.LIST_SLICE_SIZE / 2), 0);
     let end = start + CALENDAR_MENU_CONSTANTS.numbers.LIST_SLICE_SIZE;
     if (end > this._options.length) {

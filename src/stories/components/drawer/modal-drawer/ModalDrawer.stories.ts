@@ -22,34 +22,33 @@ const closeAction = action('forge-modal-drawer-close');
 const afterOpenAction = action('forge-drawer-after-open');
 const afterCloseAction = action('forge-drawer-after-close');
 
-IconRegistry.define([
-  tylIconInbox,
-  tylIconSend,
-  tylIconDrafts,
-  tylIconEmail
-]);
+IconRegistry.define([tylIconInbox, tylIconSend, tylIconDrafts, tylIconEmail]);
 
 const meta = {
   title: 'Components/Drawer/Modal Drawer',
   render: args => {
     const drawerRef = createRef<IModalDrawerComponent>();
-    
+
     function toggleDrawer() {
       const drawer = drawerRef.value as IModalDrawerComponent;
       drawer.open = !drawer.open;
     }
 
-    const header = args.showHeader ? html`
-      <forge-toolbar slot="header">
-        <div>Header</div>
-      </forge-toolbar>
-    ` : nothing;
+    const header = args.showHeader
+      ? html`
+          <forge-toolbar slot="header">
+            <div>Header</div>
+          </forge-toolbar>
+        `
+      : nothing;
 
-    const footer = args.showFooter ? html`
-      <forge-toolbar inverted slot="footer">
-        <div>Footer</div>
-      </forge-toolbar>
-    ` : nothing;
+    const footer = args.showFooter
+      ? html`
+          <forge-toolbar inverted slot="footer">
+            <div>Footer</div>
+          </forge-toolbar>
+        `
+      : nothing;
 
     return html`
       <forge-scaffold style="--forge-scaffold-height: 300px;">
@@ -63,8 +62,7 @@ const meta = {
           .direction=${args.direction}
           @forge-modal-drawer-close=${closeAction}
           @forge-drawer-after-open=${afterOpenAction}
-          @forge-drawer-after-close=${afterCloseAction}
-          >
+          @forge-drawer-after-close=${afterCloseAction}>
           ${header}
           <aside>
             <forge-list navlist>
@@ -94,9 +92,7 @@ const meta = {
 
         <main slot="body">
           <forge-card>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
           </forge-card>
         </main>
       </forge-scaffold>
@@ -110,15 +106,15 @@ const meta = {
         direction: { control: 'select', options: ['left', 'right'] }
       }
     }),
-    'showHeader': { control: { type: 'boolean' } },
-    'showFooter': { control: { type: 'boolean' } },
+    showHeader: { control: { type: 'boolean' } },
+    showFooter: { control: { type: 'boolean' } }
   },
   args: {
     showHeader: false,
     showFooter: false,
     open: true,
     direction: 'left'
-  },
+  }
 } satisfies Meta;
 
 export default meta;

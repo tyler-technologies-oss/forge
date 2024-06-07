@@ -42,7 +42,7 @@ export class ModalDrawerCore extends BaseDrawerCore implements IModalDrawerCore 
       this._adapter.toggleBackdropClass(false, MODAL_DRAWER_CONSTANTS.classes.SCRIM_CLOSED);
       this._adapter.setBackdropVisibility(true, { immediate });
     } else if (this._adapter.isConnected) {
-      await this._adapter.setBackdropVisibility(false, { immediate});
+      await this._adapter.setBackdropVisibility(false, { immediate });
       if (!this._open) {
         this._adapter.toggleBackdropClass(true, MODAL_DRAWER_CONSTANTS.classes.SCRIM_CLOSED);
       }

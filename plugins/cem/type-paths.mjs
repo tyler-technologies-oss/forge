@@ -16,26 +16,24 @@ export default function forgeTypePathsPlugin() {
       if (node?.fileName?.includes('node_modules')) {
         return;
       }
-    
+
       if (node.kind === ts.SyntaxKind.SourceFile) {
         currentFilename = node.fileName;
       } else if (
         node.name?.escapedText &&
-        (
-          node.kind === ts.SyntaxKind.EnumDeclaration ||
+        (node.kind === ts.SyntaxKind.EnumDeclaration ||
           node.kind === ts.SyntaxKind.TypeAliasDeclaration ||
           node.kind === ts.SyntaxKind.UnionType ||
           node.kind === ts.SyntaxKind.InterfaceDeclaration ||
           node.kind === ts.SyntaxKind.ClassDeclaration ||
           node.kind === ts.SyntaxKind.TypeOperator ||
-          node.kind === ts.SyntaxKind.IndexedAccessType
-        )
+          node.kind === ts.SyntaxKind.IndexedAccessType)
       ) {
         const lineNumber = ts.getLineAndCharacterOfPosition(node.getSourceFile(), node.getStart()).line + 1;
         ALL_TYPES[node.name.escapedText] = {
           path: currentFilename,
-          lineNumber,
-        }
+          lineNumber
+        };
       }
     },
 

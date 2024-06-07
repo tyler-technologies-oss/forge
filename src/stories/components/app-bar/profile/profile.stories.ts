@@ -19,8 +19,7 @@ const meta = {
       tagName: component
     })
   },
-  args: {
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;
@@ -31,15 +30,10 @@ export const Demo: Story = {
   ...standaloneStoryParams,
   render: () => {
     return html`
-    <forge-app-bar title-text="Profile">
-      <forge-app-bar-profile-button
-        slot="end"
-        profile-button="true"
-        avatar-text="First Last"
-        full-name="First Last"
-        email="first.last@tylertech.com">
-      </forge-app-bar-profile-button>
-    </forge-app-bar>
+      <forge-app-bar title-text="Profile">
+        <forge-app-bar-profile-button slot="end" profile-button="true" avatar-text="First Last" full-name="First Last" email="first.last@tylertech.com">
+        </forge-app-bar-profile-button>
+      </forge-app-bar>
     `;
-  },
+  }
 };

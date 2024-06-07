@@ -21,18 +21,18 @@ declare global {
 
 /**
  * @tag forge-label-value
- * 
+ *
  * @summary Label-value pairs are used to display a label and a value in a compact format.
- * 
+ *
  * @property {boolean} [empty=false] - If true, the value will be displayed in an alternative emphasized style.
  * @property {boolean} [ellipsis=false] - If true, the value will be truncated with an ellipsis if it overflows its container.
  * @property {boolean} [inline=false] - If true, the label and value will be displayed on the same line.
  * @property {boolean} [dense=false] - Deprecated. Use `inline` instead.
- * 
+ *
  * @attribute {boolean} empty - If present, the value will be displayed in an alternative emphasized style.
  * @attribute {boolean} ellipsis - If present, the value will be truncated with an ellipsis if it overflows its container.
  * @attribute {boolean} inline - If present, the label and value will be displayed on the same line.
- * 
+ *
  * @cssproperty --forge-label-value-align - Aligns the label and value. Possible values: `start` (default), `center`, `end`.
  * @cssproperty --forge-label-value-label-spacing - The spacing between the label and value.
  * @cssproperty --forge-label-value-label-block-start-spacing - The block start spacing for the label.
@@ -42,12 +42,12 @@ declare global {
  * @cssproperty --forge-label-value-inline-label-spacing - The spacing between the label and value when displayed inline.
  * @cssproperty --forge-label-value-empty-color - The color to apply to the value when empty.
  * @cssproperty --forge-label-value-empty-style - The font-style to apply to the value when empty.
- * 
+ *
  * @csspart root - The root layout container element.
  * @csspart label - The label container element.
  * @csspart value - The value container element.
  * @csspart icon - The icon container element.
- * 
+ *
  * @slot label - The label to display.
  * @slot value - The value to display.
  * @slot icon - An icon to display next to the label.
@@ -83,7 +83,7 @@ export class LabelValueComponent extends BaseComponent implements ILabelValueCom
         break;
     }
   }
-  
+
   public get empty(): boolean {
     return this._empty;
   }

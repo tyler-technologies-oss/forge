@@ -12,9 +12,9 @@ const meta = {
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
-    
+
     return html`
-      <forge-radio 
+      <forge-radio
         name="radios"
         value="1"
         .labelPosition=${args.labelPosition}
@@ -22,8 +22,10 @@ const meta = {
         .disabled=${args.disabled}
         .defaultChecked=${args.defaultChecked}
         .readonly=${args.readonly}
-        style=${style}>Option 1</forge-radio>
-        <forge-radio 
+        style=${style}
+        >Option 1</forge-radio
+      >
+      <forge-radio
         name="radios"
         value="1"
         .labelPosition=${args.labelPosition}
@@ -31,8 +33,10 @@ const meta = {
         .disabled=${args.disabled}
         .defaultChecked=${args.defaultChecked}
         .readonly=${args.readonly}
-        style=${style}>Option 2</forge-radio>
-      `;
+        style=${style}
+        >Option 2</forge-radio
+      >
+    `;
   },
   component,
   parameters: {
@@ -45,14 +49,12 @@ const meta = {
       controls: {
         labelPosition: {
           control: 'select',
-          options: ['start', 'end'],
-        },
-      },
-    }),
+          options: ['start', 'end']
+        }
+      }
+    })
   },
-  args: {
-
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;

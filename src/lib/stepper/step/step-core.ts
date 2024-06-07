@@ -2,7 +2,6 @@ import { ICustomElementCore } from '@tylertech/forge-core';
 import { IStepAdapter } from './step-adapter';
 import { StepIcons, STEP_CONSTANTS } from './step-constants';
 
-
 export interface IStepCore extends ICustomElementCore {
   index: number;
   editable: boolean;

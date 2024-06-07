@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { IDividerComponent } from './divider';
 
-import './divider'
+import './divider';
 import { DIVIDER_CONSTANTS } from './divider-constants';
 
 describe('Divider', () => {

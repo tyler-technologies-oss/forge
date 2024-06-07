@@ -38,16 +38,12 @@ declare global {
 
 /**
  * @tag forge-paginator
- * 
+ *
  * @event {CustomEvent<IPaginatorChangeEventData>} forge-paginator-change - Dispatched when the paginator state changes.
  */
 @customElement({
   name: PAGINATOR_CONSTANTS.elementName,
-  dependencies: [
-    IconButtonComponent,
-    SelectComponent,
-    TooltipComponent
-  ]
+  dependencies: [IconButtonComponent, SelectComponent, TooltipComponent]
 })
 export class PaginatorComponent extends BaseComponent implements IPaginatorComponent {
   public static get observedAttributes(): string[] {
@@ -58,12 +54,7 @@ export class PaginatorComponent extends BaseComponent implements IPaginatorCompo
 
   constructor() {
     super();
-    IconRegistry.define([
-      tylIconFirstPage,
-      tylIconKeyboardArrowLeft,
-      tylIconKeyboardArrowRight,
-      tylIconLastPage
-    ]);
+    IconRegistry.define([tylIconFirstPage, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLastPage]);
     attachShadowTemplate(this, template, styles);
     this._core = new PaginatorCore(new PaginatorAdapter(this));
   }

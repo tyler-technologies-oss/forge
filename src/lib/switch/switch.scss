@@ -70,7 +70,7 @@
     display: none;
   }
 
-  ::slotted([slot=input]) {
+  ::slotted([slot='input']) {
     @include input;
   }
 }
@@ -92,14 +92,15 @@
       &__off {
         @include icon-hidden;
       }
-
     }
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme((
-      color: #{token(state-layer-on-color)}
-    ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(state-layer-on-color)}
+      )
+    );
   }
 }
 
@@ -110,10 +111,10 @@
       .track {
         @include track-active;
       }
-  
+
       .handle {
         @include handle-active;
-  
+
         .icon {
           @include icon-active;
         }
@@ -127,10 +128,10 @@
       .track {
         @include track-active-on;
       }
-  
+
       .handle {
         @include handle-active-on;
-  
+
         .icon {
           @include icon-active-on;
         }
@@ -180,14 +181,18 @@
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme((
-    color: #{token(state-layer-off-color)}
-  ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(state-layer-off-color)}
+    )
+  );
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    shape: #{token(track-shape)},
-    outward-offset: 0px // Requires unit
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      shape: #{token(track-shape)},
+      outward-offset: 0px // Requires unit
+    )
+  );
 }

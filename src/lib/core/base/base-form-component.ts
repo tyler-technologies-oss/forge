@@ -30,14 +30,14 @@ export abstract class BaseFormComponent<T = string> extends BaseComponent implem
   public abstract readonly: boolean;
   /** @ignore */
   public abstract name: string;
-  
+
   /** @ignore */
   public abstract get form(): HTMLFormElement | null;
   /** @ignore */
   public abstract get labels(): NodeList;
   /** @ignore */
   public abstract get [internals](): ElementInternals;
-  
+
   /** @ignore */
   public abstract formResetCallback(): void;
   /** @ignore */

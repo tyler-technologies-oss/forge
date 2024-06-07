@@ -63,11 +63,11 @@ declare global {
 
 /**
  * @tag forge-dialog
- * 
+ *
  * @summary Dialogs are temporary UI elements that are used to display information, ask for input, or confirm actions.
- * 
+ *
  * @dependency forge-backdrop
- * 
+ *
  * @property {boolean} [open=false] - Indicates whether the dialog is open.
  * @property {DialogMode} [mode="modal"] - The mode of the dialog.
  * @property {DialogType} [type="dialog"] - The type of the dialog.
@@ -81,13 +81,13 @@ declare global {
  * @property {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
  * @property {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
  * @property {DialogPlacement} [placement="center"] - The placement of the dialog.
- * 
+ *
  * @globalconfig animationType
  * @globalconfig positionStrategy
  * @globalconfig sizeStrategy
  * @globalconfig persistent
  * @globalconfig moveable
- * 
+ *
  * @attribute {boolean} [open=false] - Indicates whether the dialog is open.
  * @attribute {DialogMode} [mode="modal"] - The mode of the dialog.
  * @attribute {DialogType} [type="dialog"] - The type of the dialog.
@@ -100,14 +100,14 @@ declare global {
  * @attribute {DialogPositionStrategy} [positionStrategy="viewport"] - Controls whether the dialog is rendered relative to the viewport its nearest containing block.
  * @attribute {DialogSizeStrategy} [sizeStrategy="content"] - Controls the block and/or inline size of the dialog. Defaults to the size of the content it contains.
  * @attribute {DialogPlacement} [placement="center"] - The placement of the dialog.
- * 
+ *
  * @event {CustomEvent<void>} forge-dialog-open - Dispatched when the dialog is opened.
  * @event {CustomEvent<void>} forge-dialog-close - Dispatched when the dialog is closed.
  * @event {CustomEvent<void>} forge-dialog-before-close - Dispatched before the dialog is closed. This event is cancelable.
  * @event {CustomEvent<IDialogMoveStartEventData>} forge-dialog-move-start - Dispatched when the dialog is first moved.
  * @event {CustomEvent<IDialogMoveEventData>} forge-dialog-move - Dispatched when the dialog is being moved.
  * @event {CustomEvent<void>} forge-dialog-move-end - Dispatched when the dialog is done being moved.
- * 
+ *
  * @cssproperty --forge-dialog-background - The background color of the dialog.
  * @cssproperty --forge-dialog-shape - The shape of the dialog.
  * @cssproperty --forge-dialog-elevation - The elevation of the dialog.
@@ -149,22 +149,20 @@ declare global {
  * @cssproperty --forge-dialog-position-y - The y-axis position of the dialog.
  * @cssproperty --forge-dialog-preset-sheet-enter-animation-duration - The duration of the enter animation for preset sheet dialogs.
  * @cssproperty --forge-dialog-preset-sheet-exit-animation-duration - The duration of the exit animation for preset sheet dialogs.
- * 
+ *
  * @csspart root - The dialog container element.
  * @csspart backdrop - The backdrop element.
  * @csspart surface - The dialog surface element.
  * @csspart move-handle-container - The alignment container for the move handle.
  * @csspart move-handle - The move handle element.
  * @csspart move-handle-icon - The move handle icon element.
- * 
+ *
  * @slot - The content of the dialog.
  * @slot move-handle - The move handle content.
  */
 @customElement({
   name: DIALOG_CONSTANTS.elementName,
-  dependencies: [
-    BackdropComponent
-  ]
+  dependencies: [BackdropComponent]
 })
 export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseComponent)) implements IDialogComponent {
   public static get observedAttributes(): string[] {
@@ -183,7 +181,7 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
   public [hideBackdrop](): void {
     this._core.hideBackdrop();
   }
-  
+
   /** @internal */
   public [showBackdrop](): void {
     this._core.showBackdrop();
@@ -213,16 +211,16 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
         this.open = coerceBoolean(newValue);
         break;
       case DIALOG_CONSTANTS.observedAttributes.MODE:
-        this.mode = newValue as DialogMode ?? DIALOG_CONSTANTS.defaults.MODE;
+        this.mode = (newValue as DialogMode) ?? DIALOG_CONSTANTS.defaults.MODE;
         break;
       case DIALOG_CONSTANTS.observedAttributes.TYPE:
-        this.type = newValue as DialogType ?? DIALOG_CONSTANTS.defaults.TYPE;
+        this.type = (newValue as DialogType) ?? DIALOG_CONSTANTS.defaults.TYPE;
         break;
       case DIALOG_CONSTANTS.observedAttributes.ANIMATION_TYPE:
-        this.animationType = newValue as DialogAnimationType ?? DIALOG_CONSTANTS.defaults.ANIMATION_TYPE;
+        this.animationType = (newValue as DialogAnimationType) ?? DIALOG_CONSTANTS.defaults.ANIMATION_TYPE;
         break;
       case DIALOG_CONSTANTS.observedAttributes.PRESET:
-        this.preset = newValue as DialogPreset ?? DIALOG_CONSTANTS.defaults.PRESET;
+        this.preset = (newValue as DialogPreset) ?? DIALOG_CONSTANTS.defaults.PRESET;
         break;
       case DIALOG_CONSTANTS.observedAttributes.PERSISTENT:
         this.persistent = coerceBoolean(newValue);
@@ -237,20 +235,20 @@ export class DialogComponent extends WithDefaultAria(WithElementInternals(BaseCo
         this.moveable = coerceBoolean(newValue);
         break;
       case DIALOG_CONSTANTS.observedAttributes.POSITION_STRATEGY:
-        this.positionStrategy = newValue as DialogPositionStrategy ?? DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
+        this.positionStrategy = (newValue as DialogPositionStrategy) ?? DIALOG_CONSTANTS.defaults.POSITION_STRATEGY;
         break;
       case DIALOG_CONSTANTS.observedAttributes.SIZE_STRATEGY:
-        this.sizeStrategy = newValue as DialogSizeStrategy ?? DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
+        this.sizeStrategy = (newValue as DialogSizeStrategy) ?? DIALOG_CONSTANTS.defaults.SIZE_STRATEGY;
         break;
       case DIALOG_CONSTANTS.observedAttributes.PLACEMENT:
-        this.placement = newValue as DialogPlacement ?? DIALOG_CONSTANTS.defaults.PLACEMENT;
+        this.placement = (newValue as DialogPlacement) ?? DIALOG_CONSTANTS.defaults.PLACEMENT;
         break;
     }
   }
 
   @coreProperty()
   public declare open: boolean;
-  
+
   @coreProperty()
   public declare mode: DialogMode;
 

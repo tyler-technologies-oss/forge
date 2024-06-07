@@ -8,7 +8,20 @@ export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'succes
 export const DENSITY_OPTIONS = ['small', 'medium', 'large'];
 
 export const OVERLAY_FLIP_OPTIONS = ['auto', 'main', 'cross', 'never'];
-export const OVERLAY_PLACEMENT_OPTIONS = ['top', 'right', 'bottom', 'left', 'top-start', 'top-end', 'right-start', 'right-end', 'left-start', 'left-end', 'bottom-start', 'bottom-end'];
+export const OVERLAY_PLACEMENT_OPTIONS = [
+  'top',
+  'right',
+  'bottom',
+  'left',
+  'top-start',
+  'top-end',
+  'right-start',
+  'right-end',
+  'left-start',
+  'left-end',
+  'bottom-start',
+  'bottom-end'
+];
 
 /**
  * Common default parameters for a standalone story.
@@ -17,7 +30,7 @@ export const standaloneStoryParams: StoryObj = {
   parameters: {
     controls: { disable: true },
     actions: { disable: true }
-  },
+  }
 };
 
 /**
@@ -39,7 +52,10 @@ export function transformCssPropsToControls(tagName: string) {
  * @param props {Partial<HTMLElementTagNameMap[T]>} - The props to pass to the component
  * @returns {HTMLElement} - The rendered element.
  */
-export function customElementStoryRenderer<T extends keyof HTMLElementTagNameMap>(tagName: T, props: Partial<HTMLElementTagNameMap[T]>): HTMLElementTagNameMap[T] {
+export function customElementStoryRenderer<T extends keyof HTMLElementTagNameMap>(
+  tagName: T,
+  props: Partial<HTMLElementTagNameMap[T]>
+): HTMLElementTagNameMap[T] {
   const element = document.createElement(tagName);
   applyArgs(element, props);
   return element;
@@ -51,7 +67,7 @@ export function customElementStoryRenderer<T extends keyof HTMLElementTagNameMap
  * @param props {Partial<HTMLElement>} - The props to apply
  */
 export function applyArgs(element: HTMLElement, props: Partial<HTMLElement>) {
-  Object.keys(props).forEach((key) => {
+  Object.keys(props).forEach(key => {
     if (key.startsWith('--')) {
       // Set CSS custom properties via inline style
       element.style.setProperty(key, props[key]);
@@ -81,7 +97,19 @@ export function getCssVariableArgs(args: Args): Args | null {
 /**
  * Generates Storybook `argTypes` for a custom element based on its tag name from the custom elements manifest.
  */
-export function generateCustomElementArgTypes({ tagName, exclude, include, controls, category }: { tagName: string; exclude?: string[] | RegExp; include?: string[] | RegExp; controls?: Partial<ArgTypes<Args>>; category?: string }): object {
+export function generateCustomElementArgTypes({
+  tagName,
+  exclude,
+  include,
+  controls,
+  category
+}: {
+  tagName: string;
+  exclude?: string[] | RegExp;
+  include?: string[] | RegExp;
+  controls?: Partial<ArgTypes<Args>>;
+  category?: string;
+}): object {
   const declaration = getCustomElementsTagDeclaration(tagName);
   const argTypes: ArgTypes = {};
 
@@ -163,11 +191,7 @@ export function getBranchName() {
 }
 
 export function htmlEncode(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function getControlFromType(type: string): ControlType {
@@ -186,13 +210,13 @@ export function removeEmptyAttributes(source: string): string {
 }
 
 const CONTROL_TYPE_MAP: Record<string, ControlType> = {
-  'boolean': 'boolean',
-  'string': 'text',
-  'number': 'number',
-  'object': 'object',
-  'function': 'object',
-  'array': 'object',
-  'bigint': 'number',
+  boolean: 'boolean',
+  string: 'text',
+  number: 'number',
+  object: 'object',
+  function: 'object',
+  array: 'object',
+  bigint: 'number'
 };
 
 export interface TagItem {

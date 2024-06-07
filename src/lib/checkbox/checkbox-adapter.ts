@@ -21,7 +21,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
 
   constructor(component: ICheckboxComponent) {
     super(component);
-    
+
     this._rootElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.ROOT);
     this._labelElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.LABEL);
     this._stateLayerElement = getShadowElement(component, CHECKBOX_CONSTANTS.selectors.STATE_LAYER) as StateLayerComponent;
@@ -29,12 +29,12 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
 
   public setChecked(value: boolean): void {
     this._component[setValidity]();
-    this._component[setDefaultAria]({ ariaChecked: value ? 'true' : 'false'});
+    this._component[setDefaultAria]({ ariaChecked: value ? 'true' : 'false' });
   }
 
   public setDisabled(value: boolean): void {
     this._component[isFocusable] = !value;
-    this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : 'false'});
+    this._component[setDefaultAria]({ ariaDisabled: value ? 'true' : 'false' });
     this._stateLayerElement.disabled = value;
   }
 
@@ -44,7 +44,7 @@ export class CheckboxAdapter extends BaseAdapter<ICheckboxComponent> implements 
   }
 
   public setReadonly(value: boolean): void {
-    this._component[setDefaultAria]({ ariaReadOnly: value ? 'true' : 'false'});
+    this._component[setDefaultAria]({ ariaReadOnly: value ? 'true' : 'false' });
     this._stateLayerElement.disabled = value;
   }
 

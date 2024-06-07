@@ -13,14 +13,14 @@
 
   position: relative;
   z-index: #{token(z-index)};
-  
+
   display: grid;
   grid-template-rows: 1fr auto;
-  
+
   transition-property: box-shadow, background-color;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-timing)};
-  
+
   box-sizing: border-box;
   width: 100%;
 }

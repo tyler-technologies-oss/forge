@@ -22,30 +22,30 @@ declare global {
 
 /**
  * @tag forge-avatar
- * 
+ *
  * @summary Avatars represent an entity via text or image.
- * 
+ *
  * @description The avatar component allows you to provide text or images to display that represent an entity. By default, the
  * avatar will display textual content as single characters (character count is configurable), or display an image or
  * icon based on the URL provided to it.
- * 
+ *
  * @property {string} [text=""] - The text to display in the avatar.
  * @property {number} [letterCount=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
  * @property {string} imageUrl - The background image URL to use.
- * 
+ *
  * @attribute {string} [text=""] - The text to display in the avatar.
  * @attribute {string} [letter-count=2] - Controls the number of letters to display from the text. By default the text is split on spaces and the first character of each word is used.
  * @attribute {string} image-url - The background image URL to use.
- * 
+ *
  * @cssproperty {string} --forge-avatar-background - The background color of the avatar.
  * @cssproperty {number} --forge-avatar-shape - The border radius of the avatar, defaults to 50%.
  * @cssproperty {color} --forge-avatar-color - The text color of the avatar.
  * @cssproperty {number} --forge-avatar-size - The height and width of the avatar.
  * @cssproperty {number} --forge-avatar-transition-duration - The transition duration for animations.
  * @cssproperty {string} --forge-avatar-transition-timing - The transition timing function for animations.
- * 
+ *
  * @csspart root - The root container element.
- * 
+ *
  * @slot - The default slot for avatar content if not provided via text/imageUrl.
  */
 @customElement({
@@ -53,11 +53,7 @@ declare global {
 })
 export class AvatarComponent extends BaseComponent implements IAvatarComponent {
   public static get observedAttributes(): string[] {
-    return [
-      AVATAR_CONSTANTS.attributes.TEXT,
-      AVATAR_CONSTANTS.attributes.LETTER_COUNT,
-      AVATAR_CONSTANTS.attributes.IMAGE_URL
-    ];
+    return [AVATAR_CONSTANTS.attributes.TEXT, AVATAR_CONSTANTS.attributes.LETTER_COUNT, AVATAR_CONSTANTS.attributes.IMAGE_URL];
   }
 
   private _core: AvatarCore;

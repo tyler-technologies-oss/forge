@@ -135,7 +135,7 @@ describe('Text field', () => {
     it('should not clear text field when clear button is clicked and event is canceled', async () => {
       const harness = await createFixture({ showClear: true });
       harness.inputElement.value = 'test';
-      harness.element.addEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, (evt) => evt.preventDefault());
+      harness.element.addEventListener(TEXT_FIELD_CONSTANTS.events.CLEAR, evt => evt.preventDefault());
       harness.clearButtonElement!.click();
       await tick();
       expect(harness.inputElement.value).to.equal('test');
@@ -278,12 +278,12 @@ class TextFieldHarness extends TestHarness<ITextFieldComponent> {
   }
 
   public async clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height} = el.getBoundingClientRect();
+    const { x, y, width, height } = el.getBoundingClientRect();
 
-    await sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2)
-    ]});
+    await sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 }
 
@@ -293,9 +293,7 @@ interface TextFieldFixtureConfig {
 
 async function createFixture({ showClear }: TextFieldFixtureConfig = {}): Promise<TextFieldHarness> {
   const el = await fixture<ITextFieldComponent>(html`
-    <forge-text-field
-      .showClear=${showClear}
-    >
+    <forge-text-field .showClear=${showClear}>
       <label slot="label" for="input">Label</label>
       <input id="input" type="text" />
     </forge-text-field>

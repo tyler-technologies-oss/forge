@@ -27,9 +27,11 @@
 
 ::slotted(forge-icon),
 forge-icon {
-  @include icon.provide-theme((
-    size: #{token(size)}
-  ));
+  @include icon.provide-theme(
+    (
+      size: #{token(size)}
+    )
+  );
 }
 
 //
@@ -46,7 +48,7 @@ forge-icon {
 // Orientation
 //
 
-:host([orientation=horizontal]) {
+:host([orientation='horizontal']) {
   .forge-open-icon {
     @include override(initial-rotation, -90deg, value);
     @include override(open-rotation, 90deg, value);
@@ -57,14 +59,14 @@ forge-icon {
 // Rotation
 //
 
-:host([rotation=half]) {
+:host([rotation='half']) {
   .forge-open-icon {
     @include override(open-rotation, -90deg, value);
     @include override(animation-duration, half-animation-duration);
   }
 }
 
-:host([orientation=horizontal][rotation=half]) {
+:host([orientation='horizontal'][rotation='half']) {
   .forge-open-icon {
     @include override(initial-rotation, -90deg, value);
     @include override(open-rotation, 0, value);

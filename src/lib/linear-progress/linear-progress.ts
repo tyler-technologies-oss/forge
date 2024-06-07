@@ -24,25 +24,25 @@ declare global {
 
 /**
  * @tag forge-linear-progress
- * 
+ *
  * @summary
  * Linear progress indicators display progress by animating along a linear track in a horizontal direction.
- * 
+ *
  * @description
  * Progress indicators inform users about the status of ongoing processes.
  * - Determinate indicators display how long a process will take.
  * - Indeterminate indicators express an unspecified amount of wait time.
- * 
+ *
  * @property {boolean} [determinate=false] - Controls the determinate state.
  * @property {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @property {number} [buffer=1] - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
  * @property {string} [theme=primary] - Sets the theme.
- * 
+ *
  * @attribute {boolean} [determinate=false] - Controls the determinate state.
  * @attribute {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {number} [buffer=1] - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
  * @attribute {string} [theme=primary] - Sets the theme.
- * 
+ *
  * @cssproperty --forge-linear-progress-height - The height of the element.
  * @cssproperty --forge-linear-progress-track-color - The background color of the indicator.
  * @cssproperty --forge-linear-progress-track-shape - The shape of the indicator.
@@ -53,7 +53,7 @@ declare global {
  * @cssproperty --forge-linear-progress-determinate-easing - The easing function to use for the determinate animation.
  * @cssproperty --forge-linear-progress-theme-transition-duration - The duration of the theme transition.
  * @cssproperty --forge-linear-progress-theme-transition-timing - The easing function to use for the theme transition.
- * 
+ *
  * @csspart progressbar - Styles the progress bar container element
  */
 @customElement({

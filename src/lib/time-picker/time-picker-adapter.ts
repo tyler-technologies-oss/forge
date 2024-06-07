@@ -205,7 +205,7 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     this._listDropdown.open();
     this._inputElement.setAttribute('aria-controls', `list-dropdown-popup-${config.id}`);
   }
-  
+
   public async detachDropdown({ destroy = false } = {}): Promise<void> {
     if (this._listDropdown) {
       if (destroy) {
@@ -277,7 +277,9 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     if (this._targetElement) {
       return this._targetElement;
     }
-    this._targetElement = selector ? this._component.querySelector(selector) as HTMLElement || this._getDefaultTargetElement() : this._getDefaultTargetElement();
+    this._targetElement = selector
+      ? (this._component.querySelector(selector) as HTMLElement) || this._getDefaultTargetElement()
+      : this._getDefaultTargetElement();
     return this._targetElement;
   }
 

@@ -27,7 +27,7 @@
 @mixin default-slot-floating-in {
   position: absolute;
   inset-block-start: calc(#{token(height)} * -0.5);
-  
+
   block-size: 100%;
   padding-block: #{token(height)};
 }

@@ -24,15 +24,12 @@ declare global {
 
 /**
  * @tag forge-deprecated-button
- * 
+ *
  * @deprecated Use the `<forge-button>` element instead.
  */
 @customElement({
   name: DEPRECATED_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
 export class DeprecatedButtonComponent extends BaseComponent implements IDeprecatedButtonComponent {
   public static get observedAttributes(): string[] {
@@ -107,7 +104,7 @@ export class DeprecatedButtonComponent extends BaseComponent implements IDepreca
     this._focusIndicator.targetElement = this._buttonOrAnchorElement;
 
     this._buttonOrAnchorElement.addEventListener('keydown', this._keydownListener);
-    
+
     // Sync disabled state
     if (this._buttonOrAnchorElement instanceof HTMLButtonElement && this._disabled && !this._buttonOrAnchorElement.disabled) {
       this._buttonOrAnchorElement.disabled = true;
@@ -122,7 +119,10 @@ export class DeprecatedButtonComponent extends BaseComponent implements IDepreca
           this._syncDisabledState();
         }
       });
-      this._buttonAttrMutationObserver.observe(this._buttonOrAnchorElement, { attributes: true, attributeFilter: ['disabled'] });
+      this._buttonAttrMutationObserver.observe(this._buttonOrAnchorElement, {
+        attributes: true,
+        attributeFilter: ['disabled']
+      });
     }
   }
 

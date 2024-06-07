@@ -30,7 +30,7 @@ svg {
 //
 
 @each $theme in [primary secondary tertiary success error warning text-medium text-low] {
-  :host([theme=#{$theme}]) {
+  :host([theme='#{$theme}']) {
     @include override(color, theme.variable($theme), value);
   }
 }

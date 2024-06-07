@@ -32,7 +32,7 @@
 }
 
 @mixin horizontal-styles() {
-  .forge-split-view-panel[orientation=horizontal] {
+  .forge-split-view-panel[orientation='horizontal'] {
     @include base-horizontal;
 
     .forge-split-view-panel {
@@ -43,21 +43,21 @@
     }
 
     &.forge-split-view-panel--closing {
-      &[resizable=end] {
+      &[resizable='end'] {
         @include closing($direction: left);
       }
 
-      &[resizable=start] {
+      &[resizable='start'] {
         @include closing($direction: right);
       }
     }
 
     &.forge-split-view-panel--opening {
-      &[resizable=end] {
+      &[resizable='end'] {
         @include opening($direction: left);
       }
 
-      &[resizable=start] {
+      &[resizable='start'] {
         @include opening($direction: right);
       }
     }
@@ -65,7 +65,7 @@
 }
 
 @mixin vertical-styles() {
-  .forge-split-view-panel[orientation=vertical] {
+  .forge-split-view-panel[orientation='vertical'] {
     @include base-vertical;
 
     .forge-split-view-panel {
@@ -76,21 +76,21 @@
     }
 
     &.forge-split-view-panel--closing {
-      &[resizable=end] {
+      &[resizable='end'] {
         @include closing($direction: top);
       }
 
-      &[resizable=start] {
+      &[resizable='start'] {
         @include closing($direction: bottom);
       }
     }
 
     &.forge-split-view-panel--opening {
-      &[resizable=end] {
+      &[resizable='end'] {
         @include opening($direction: top);
       }
 
-      &[resizable=start] {
+      &[resizable='start'] {
         @include opening($direction: bottom);
       }
     }
@@ -218,7 +218,7 @@
     from {
       transform: none;
     }
-  
+
     to {
       @if $direction == right {
         transform: translateX(100%);

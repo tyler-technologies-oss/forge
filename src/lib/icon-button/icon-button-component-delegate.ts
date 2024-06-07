@@ -31,7 +31,7 @@ export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButt
     if (this._config.options?.tooltip) {
       const tooltip = document.createElement('forge-tooltip');
       tooltip.textContent = this._config.options.tooltip;
-      
+
       if (this._config.options.tooltipPosition) {
         tooltip.placement = this._config.options.tooltipPosition;
       }

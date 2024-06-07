@@ -18,12 +18,12 @@ const meta = {
     actions: { disable: true }
   },
   argTypes: {
-    ...generateCustomElementArgTypes({ tagName: component }),
+    ...generateCustomElementArgTypes({ tagName: component })
   },
   args: {
     text: 'Tyler Forge',
     letterCount: 2
-  },
+  }
 } satisfies Meta;
 
 export default meta;
@@ -40,9 +40,7 @@ export const WithImage: Story = {
     imageUrl: '/ruby.jpg'
   },
   render: ({ imageUrl }) => {
-    return html`
-      <forge-avatar image-url=${imageUrl}></forge-avatar>
-    `;
+    return html` <forge-avatar image-url=${imageUrl}></forge-avatar> `;
   }
 };
 
@@ -63,10 +61,6 @@ export const WithIcon: Story = {
 export const WithIconButton: Story = {
   ...standaloneStoryParams,
   render: args => {
-    return html`
-      <forge-icon-button aria-label="Icon button with avatar">
-        ${customElementStoryRenderer(component, args)}
-      </forge-icon-button>
-    `;
+    return html` <forge-icon-button aria-label="Icon button with avatar"> ${customElementStoryRenderer(component, args)} </forge-icon-button> `;
   }
 };

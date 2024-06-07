@@ -13,12 +13,14 @@
   display: none;
 }
 
-:host(:not([resizable=start], [resizable=end])) {
+:host(:not([resizable='start'], [resizable='end'])) {
   @include mixins.static-styles;
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    active-width: 2px
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      active-width: 2px
+    )
+  );
 }

@@ -19,7 +19,7 @@ export declare abstract class WithMoveableContract {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (class {} as unknown) as TBase) {
+export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = class {} as unknown as TBase) {
   abstract class Moveable extends base {
     private _isMoving = false;
     private _moveContext: IWithMoveableMoveContext | undefined;
@@ -62,11 +62,11 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
       document.addEventListener('pointermove', this._movePointerMoveListener);
       document.addEventListener('pointerup', this._movePointerUpListener);
     }
-  
+
     private _onMoveTargetPointerMove(evt: PointerEvent): void {
       evt.preventDefault();
       const position = this._calculateOffsetPosition(evt.pageX, evt.pageY, this._moveContext);
-  
+
       // If this is the beginning of the move sequence, we emit the start event (to allow for preventing default) and
       // then update the surface position if not prevented
       if (!this._isMoving) {
@@ -76,10 +76,10 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
           return;
         }
       }
-  
+
       // Ensure that the surface position stays within the bounds of the screen
       const newPosition = this._clampPosition(position, this._moveContext);
-  
+
       // Only update the position if it actually changed
       if (!this._lastPosition || newPosition.x !== this._lastPosition.x || newPosition.y !== this._lastPosition.y) {
         const defaultPrevented = this._onMove(newPosition);
@@ -91,14 +91,14 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
         }
       }
     }
-  
+
     private _onMoveTargetPointerUp(_evt: PointerEvent): void {
       if (this._isMoving) {
         this._onMoveEnd();
       }
       this._moveComplete();
     }
-  
+
     private _moveComplete(): void {
       this._tryRestoreActiveElement();
 
@@ -141,24 +141,24 @@ export function WithMoveable<TBase extends MixinBase<object>>(base: TBase = (cla
     private _clampPosition({ x, y }: { x: number; y: number }, context?: IWithMoveableMoveContext): { x: number; y: number } {
       let width = 0;
       let height = 0;
-  
+
       if (context) {
         width = context.width;
         height = context.height;
       }
-  
+
       if (x <= 0) {
         x = 0;
       } else if (x + width >= window.innerWidth) {
         x = window.innerWidth - width;
       }
-  
+
       if (y <= 0) {
         y = 0;
       } else if (y + height >= window.innerHeight) {
         y = window.innerHeight - height;
       }
-  
+
       return { x, y };
     }
   }

@@ -35,7 +35,7 @@ declare global {
 
 /**
  * @tag forge-app-bar-profile-button
- * 
+ *
  * @property {string} avatarImageUrl - The url of the avatar image to display.
  * @property {number} [avatarLetterCount=2] - The number of letters to display in the avatar.
  * @property {string} avatarText - The text to display in the avatar.
@@ -49,7 +49,7 @@ declare global {
  * @property {boolean} [open=false] - Whether the profile card is open or not.
  * @property {IPopoverComponent | undefined} popupElement - The popup element when open.
  * @property {AppBarProfileButtonProfileCardBuilder} profileCardBuilder - Sets the profile card builder callback that will be used to add extra content to the profile card.
- * 
+ *
  * @attribute {string} [avatar-image-url] - The url of the avatar image to display.
  * @attribute {number} [avatar-letter-count=2] - The number of letters to display in the avatar.
  * @attribute {string} [avatar-text] - The text to display in the avatar.
@@ -63,19 +63,13 @@ declare global {
  * @attribute {boolean} [open=false] - Whether the profile card is open or not.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
- * 
+ *
  * @event {CustomEvent} forge-profile-card-sign-out - Fires when the sign out button is clicked.
  * @event {CustomEvent} forge-profile-card-profile - Fires when the profile button is clicked.
  */
 @customElement({
   name: APP_BAR_PROFILE_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    PopoverComponent,
-    ProfileCardComponent,
-    IconButtonComponent,
-    AvatarComponent,
-    TooltipComponent
-  ]
+  dependencies: [PopoverComponent, ProfileCardComponent, IconButtonComponent, AvatarComponent, TooltipComponent]
 })
 export class AppBarProfileButtonComponent extends BaseComponent implements IAppBarProfileButtonComponent {
   public static get observedAttributes(): string[] {

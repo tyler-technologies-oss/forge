@@ -24,10 +24,10 @@ const meta = {
       exclude: ['form', 'name', 'value'],
       controls: {
         variant: { control: { type: 'select' }, options: ['text', 'outlined', 'filled', 'raised', 'link'] },
-        theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS },
+        theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS }
       }
     }),
-    text: { control: 'text' },
+    text: { control: 'text' }
   },
   args: {
     text: 'Button',
@@ -39,7 +39,7 @@ const meta = {
     popoverIcon: false,
     dense: false,
     fullWidth: false
-  },
+  }
 } satisfies Meta;
 
 export default meta;
@@ -63,7 +63,7 @@ export const Variants: Story = {
 
 export const Anchor: Story = {
   parameters: {
-    controls: { include: ['variant'] },
+    controls: { include: ['variant'] }
   },
   args: {
     variant: 'raised'
@@ -82,7 +82,7 @@ export const Anchor: Story = {
 
 export const Themed: Story = {
   parameters: {
-    controls: { include: ['variant'] },
+    controls: { include: ['variant'] }
   },
   args: {
     variant: 'raised'
@@ -102,7 +102,7 @@ export const Themed: Story = {
 
 export const WithIcon: Story = {
   parameters: {
-    controls: { include: ['variant', 'iconSlot'] },
+    controls: { include: ['variant', 'iconSlot'] }
   },
   argTypes: {
     iconSlot: {
@@ -127,7 +127,7 @@ export const WithIcon: Story = {
 
 export const WithCircularProgress: Story = {
   parameters: {
-    controls: { include: ['variant', 'theme', 'disabled'] },
+    controls: { include: ['variant', 'theme', 'disabled'] }
   },
   args: {
     variant: 'raised'

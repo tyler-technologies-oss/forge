@@ -8,7 +8,7 @@
 
 ///
 /// Emits custom property declarations for all default theme tokens.
-/// 
+///
 @mixin properties {
   @each $token-name, $token-value in tokens.$tokens {
     @include utils.declare-var(elevation, $token-name, $token-value);
@@ -17,33 +17,32 @@
 
 ///
 /// Emits custom property declarations for all z-index theme tokens.
-/// 
+///
 @mixin z-index-properties {
   @each $token-name, $token-value in tokens.$z-index-tokens {
     @include utils.declare-var(z-index, $token-name, $token-value);
   }
 }
 
-
 ///
 /// Returns a an elevation value specified by the provided elevation z-value.
-/// 
+///
 @function value($level) {
   @return string.unquote(tokens.get($level));
 }
 
 ///
 /// Sets a `box-shadow` style specified by the provided elevation z-value.
-/// 
+///
 @mixin box-shadow($level) {
   box-shadow: #{value($level)};
 }
 
 ///
 /// Sets the z-index of an element based on the level provided.
-/// 
+///
 /// All z-index values are set as CSS custom properties, so they can be overridden globally.
-/// 
+///
 @mixin z-index($level) {
   $value: map.get(tokens.$z-index-tokens, $level);
   z-index: var(--#{config.$prefix}-z-index-#{$level}, #{$value});
@@ -51,7 +50,7 @@
 
 ///
 /// Returns a global z-index CSS custom property reference (with the fallback value) specified by the provided level.
-/// 
+///
 /// @param {Number} $level - The z-index level to return.
 ///
 @function z-index-variable($level) {

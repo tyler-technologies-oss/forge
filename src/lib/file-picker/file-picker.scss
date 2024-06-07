@@ -13,64 +13,64 @@
 }
 
 :host([compact]) {
- display: inline-block;
+  display: inline-block;
 }
 
 .forge-file-picker {
- @include tokens;
+  @include tokens;
 }
 
 .forge-file-picker {
- @include base;
+  @include base;
 
- &[disabled] {
-   @include base-disabled;
- }
+  &[disabled] {
+    @include base-disabled;
+  }
 
- &:not(.compact).highlight {
-   @include base-highlight;
- }
+  &:not(.compact).highlight {
+    @include base-highlight;
+  }
 }
 
 .primary {
- @include primary;
+  @include primary;
 }
 
 .secondary {
- @include secondary;
+  @include secondary;
 }
 
 .input {
- display: none;
+  display: none;
 }
 
 .helper-text {
- ::slotted([slot='helper-text']) {
-   @include helper-text;
- }
+  ::slotted([slot='helper-text']) {
+    @include helper-text;
+  }
 }
 
 .borderless {
- @include base-borderless;
+  @include base-borderless;
 
- &:not(.compact).highlight {
-   border: none;
- }
+  &:not(.compact).highlight {
+    border: none;
+  }
 
- + .helper-text {
-   display: none;
- }
+  + .helper-text {
+    display: none;
+  }
 }
 
 .compact {
- @include base-compact;
+  @include base-compact;
 
- .primary,
- .secondary {
-   display: none;
- }
+  .primary,
+  .secondary {
+    display: none;
+  }
 
- .button {
-   @include button-compact;
- }
+  .button {
+    @include button-compact;
+  }
 }

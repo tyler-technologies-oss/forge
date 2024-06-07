@@ -12,8 +12,12 @@ standard HTML `<label>` element to provide an accessible label, as well as the c
 
 The `<forge-label>` element can **only** be associated with specific Forge elements. The following elements are considered label aware:
 
-<ul style={{marginBottom: '48px'}}>
-{LABEL_CONSTANTS.labelableChildSelectors.map(name => <li key={name}><code>&lt;{name}&gt;</code></li>)}
+<ul style={{ marginBottom: '48px' }}>
+  {LABEL_CONSTANTS.labelableChildSelectors.map(name => (
+    <li key={name}>
+      <code>&lt;{name}&gt;</code>
+    </li>
+  ))}
 </ul>
 
 ## Examples

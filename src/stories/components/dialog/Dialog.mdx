@@ -49,7 +49,6 @@ forge-scaffold {
   width: 100%;
   min-width: 500px;
 }
-
 ```
 
 ### Focus Trap
@@ -108,9 +107,7 @@ import { DIALOG_DATA, DialogConfig, DialogRef } from '@tylertech/forge-angular';
 
 @Component({
   selector: 'app-my-component',
-  template: `
-    <button (click)="openDialog()">Open Dialog</button>
-  `
+  template: ` <button (click)="openDialog()">Open Dialog</button> `
 })
 export class MyComponent {
   constructor(private dialogService: DialogService) {}
@@ -161,7 +158,10 @@ export interface IConfirmDialogData {
   `
 })
 export class MyDialogComponent {
-  constructor(@Inject(DIALOG_DATA) public data: IConfirmDialogData, private _dialogRef: DialogRef) {}
+  constructor(
+    @Inject(DIALOG_DATA) public data: IConfirmDialogData,
+    private _dialogRef: DialogRef
+  ) {}
 
   public onClose(): void {
     this._dialogRef.close();

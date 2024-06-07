@@ -2,7 +2,16 @@ import { coerceBoolean, coreProperty } from '@tylertech/forge-core';
 import { BaseComponent } from '../../core/base/base-component';
 import { IWithLabelAwareness, WithLabelAwareness } from '../../core/mixins/label/with-label-aware';
 import { IBaseFieldAdapter } from './base-field-adapter';
-import { BASE_FIELD_CONSTANTS, FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant } from './base-field-constants';
+import {
+  BASE_FIELD_CONSTANTS,
+  FieldDensity,
+  FieldLabelAlignment,
+  FieldLabelPosition,
+  FieldShape,
+  FieldSupportTextInset,
+  FieldTheme,
+  FieldVariant
+} from './base-field-constants';
 import { BaseFieldCore } from './base-field-core';
 
 export interface IBaseField extends IWithLabelAwareness {
@@ -40,7 +49,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @property {boolean} [popoverIcon=false] - Whether the field has a popover icon.
  * @property {boolean} [popoverExpanded=false] - Whether the field's popover is expanded.
  * @property {FieldSupportTextInset} [supportTextInset="none"] - The inset of the support text.
- * 
+ *
  * @attribute {FieldLabelPosition} [label-position="inset"] - The position of the label relative to the field.
  * @attribute {FieldLabelAlignment} [label-alignment="start"] - The alignment of the label relative to the field.
  * @attribute {boolean} [invalid=false] - Whether the field is in an invalid state.
@@ -56,9 +65,9 @@ export interface IBaseField extends IWithLabelAwareness {
  * @attribute {boolean} [popover-icon=false] - Whether the field has a popover icon.
  * @attribute {boolean} [popover-expanded=false] - Whether the field's popover is expanded.
  * @attribute {FieldSupportTextInset} [support-text-inset="none"] - The inset of the support text.
- * 
+ *
  * @event {CustomEvent<void>} forge-field-popover-icon-click - Dispatches when the user clicks the popover icon.
- * 
+ *
  * @cssproperty --forge-field-background - The background of the field surface.
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
  * @cssproperty --forge-field-tonal-background-hover - The background of the field surface in the tonal variant on hover.
@@ -98,7 +107,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @cssproperty --forge-field-focus-indicator-width - The width of the focus indicator.
  * @cssproperty --forge-field-disabled-opacity - The opacity of the field when disabled.
  * @cssproperty --forge-field-disabled-background - The background of the field when disabled.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart label - The label element.
  * @csspart input - The element containing the input slot.
@@ -109,7 +118,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @csspart support-text - The support text element.
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
- * 
+ *
  * @slot - The default/unnamed slot for the field's input.
  * @slot label - Renders its content as a positioned label.
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.

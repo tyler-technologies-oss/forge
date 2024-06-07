@@ -37,9 +37,8 @@
   border-width: #{token(border-width)};
   border-style: #{token(border-style)};
   border-color: #{token(border-color)};
-  
-  transform: translate(#{token(arrow-translate-x, custom)}, #{token(arrow-translate-y, custom)})
-             rotate(#{token(arrow-rotation, custom)});
+
+  transform: translate(#{token(arrow-translate-x, custom)}, #{token(arrow-translate-y, custom)}) rotate(#{token(arrow-rotation, custom)});
   clip-path: #{token(arrow-clip-path, custom)};
 }
 

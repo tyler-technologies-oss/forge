@@ -34,7 +34,7 @@ export class BottomSheetCore implements IBottomSheetCore {
       this._openBottomSheet();
     }
   }
-  
+
   private _openBottomSheet(): void {
     if (this._fullscreen) {
       this._adapter.setFullscreen(true);
@@ -68,7 +68,10 @@ export class BottomSheetCore implements IBottomSheetCore {
   }
 
   private _onDialogBeforeClose(evt: CustomEvent): void {
-    const beforeCloseEvent = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.BEFORE_CLOSE, { bubbles: true, cancelable: true });
+    const beforeCloseEvent = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.BEFORE_CLOSE, {
+      bubbles: true,
+      cancelable: true
+    });
     this._adapter.dispatchHostEvent(beforeCloseEvent);
     if (beforeCloseEvent.defaultPrevented) {
       evt.preventDefault();
@@ -129,7 +132,11 @@ export class BottomSheetCore implements IBottomSheetCore {
     // then update the surface position if not prevented
     if (!this._isDragging) {
       this._isDragging = true;
-      const dragStartEvt = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.DRAG_START, { bubbles: true, detail: height, cancelable: true });
+      const dragStartEvt = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.DRAG_START, {
+        bubbles: true,
+        detail: height,
+        cancelable: true
+      });
       this._adapter.dispatchHostEvent(dragStartEvt);
       if (dragStartEvt.defaultPrevented) {
         return;
@@ -142,7 +149,11 @@ export class BottomSheetCore implements IBottomSheetCore {
 
     // Only update the position if it actually changed
     if (!this._lastPosition || newPosition.y !== this._lastPosition.y) {
-      const dragMoveEvt = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.DRAGGED, { bubbles: true, detail: newPosition, cancelable: true });
+      const dragMoveEvt = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.DRAGGED, {
+        bubbles: true,
+        detail: newPosition,
+        cancelable: true
+      });
       this._adapter.dispatchHostEvent(dragMoveEvt);
       if (dragMoveEvt.defaultPrevented) {
         return;
@@ -163,7 +174,10 @@ export class BottomSheetCore implements IBottomSheetCore {
         } else if (!isFullscreen && clientY < dragContext.height + dragContext.top) {
           this._adapter.setFullscreen(true);
         }
-        const fullscreenEvt = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.FULLSCREEN, { bubbles: true, detail: isFullscreen });
+        const fullscreenEvt = new CustomEvent(BOTTOM_SHEET_CONSTANTS.events.FULLSCREEN, {
+          bubbles: true,
+          detail: isFullscreen
+        });
         this._adapter.dispatchHostEvent(fullscreenEvt);
       }
     }

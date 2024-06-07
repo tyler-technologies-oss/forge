@@ -73,7 +73,7 @@ describe('Linear Progress', () => {
 
   it('should set progress', async () => {
     const el = await fixture<ILinearProgressComponent>(html`<forge-linear-progress></forge-linear-progress>`);
-    
+
     el.determinate = true;
     el.progress = 0.5;
 
@@ -87,7 +87,7 @@ describe('Linear Progress', () => {
 
   it('should set buffer', async () => {
     const el = await fixture<ILinearProgressComponent>(html`<forge-linear-progress></forge-linear-progress>`);
-    
+
     el.determinate = true;
     el.buffer = 0.75;
 

@@ -39,7 +39,10 @@ export class ConfirmBottomSheetComponent {
   public title: string;
   public message: string;
 
-  constructor(public bottomSheetConfig: BottomSheetConfig, private _bottomSheetRef: BottomSheetRef) {
+  constructor(
+    public bottomSheetConfig: BottomSheetConfig,
+    private _bottomSheetRef: BottomSheetRef
+  ) {
     this.title = bottomSheetConfig.data.title;
     this.message = bottomSheetConfig.data.message;
   }
@@ -71,17 +74,17 @@ export class BottomSheetExampleComponent {
 
   public showConfirmBottomSheet(): void {
     // Set any options to be applied to the <forge-bottom-sheet> component
-    const bottomSheetOptions = { 
-      backdropClose: true, 
-      escapeClose: false 
+    const bottomSheetOptions = {
+      backdropClose: true,
+      escapeClose: false
     };
 
     // Set up any data that can be injected into the dynamic component
-    const bottomSheetConfig = { 
-      data: { 
-        title: 'Confirm', 
-        message: 'Are you sure you want to close the bottom sheet?' 
-      } 
+    const bottomSheetConfig = {
+      data: {
+        title: 'Confirm',
+        message: 'Are you sure you want to close the bottom sheet?'
+      }
     };
 
     // Show the bottom sheet
@@ -167,7 +170,7 @@ And an example with a hidden title and description:
 > const bottomSheetOptions: IBottomSheetOptions = {
 >   attributes: new Map([
 >     ['aria-labelledby', 'bottom-sheet-title'],
->     ['aria-describedby', 'bottom-sheet-desc'],
->   ]),
+>     ['aria-describedby', 'bottom-sheet-desc']
+>   ])
 > };
 > ```

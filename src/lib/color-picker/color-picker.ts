@@ -31,35 +31,27 @@ declare global {
 
 /**
  * @tag forge-color-picker
- * 
+ *
  * @property {boolean} [allowOpacity=false] Gets/sets whether opacity is displayed and allowed be to changed.
  * @property {boolean} [debounceChangeEvent=false] Gets/sets whether change event has a debounce applied to avoid successive updates.
  * @property {string | null | undefined} value Gets/sets the value using hex format only.
  * @property {IRGBA | null | undefined} rgba Gets/sets the value using rgba format.
  * @property {IHSVA | null | undefined} hsva Gets/sets the value using hsva format.
  * @property {number | null | undefined} [opacity=1] Gets/sets the opacity value, if `allowOpacity` is true.
- * 
+ *
  * @attribute {boolean} [allow-opacity=false] Gets/sets whether opacity is displayed and allowed be to changed.
  * @attribute {boolean} [debounce-change-event=false] Gets/sets whether change event has a debounce applied to avoid successive updates.
  * @attribute {string | null | undefined} value Gets/sets the value using hex format only.
- * 
+ *
  * @event {CustomEvent<IColorPickerChangeEventData>} forge-color-picker-change - Emits when the color value changed.
  */
 @customElement({
   name: COLOR_PICKER_CONSTANTS.elementName,
-  dependencies: [
-    IconButtonComponent,
-    TooltipComponent,
-    IconComponent
-  ]
+  dependencies: [IconButtonComponent, TooltipComponent, IconComponent]
 })
 export class ColorPickerComponent extends BaseComponent implements IColorPickerComponent {
   public static get observedAttributes(): string[] {
-    return [
-      COLOR_PICKER_CONSTANTS.attributes.VALUE,
-      COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY,
-      COLOR_PICKER_CONSTANTS.attributes.DEBOUNCE_CHANGE_EVENT
-    ];
+    return [COLOR_PICKER_CONSTANTS.attributes.VALUE, COLOR_PICKER_CONSTANTS.attributes.ALLOW_OPACITY, COLOR_PICKER_CONSTANTS.attributes.DEBOUNCE_CHANGE_EVENT];
   }
 
   private _core: ColorPickerCore;

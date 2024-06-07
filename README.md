@@ -105,7 +105,7 @@ The `forge.css` file contains other stylesheets that you may or may not need. We
 Additionally, apply the `forge-typography` class to a root element (typically the `<body>`):
 
 ```html
-<body class="forge-typography">
+<body class="forge-typography"></body>
 ```
 
 ### Using via CDN
@@ -116,14 +116,16 @@ As an example, the text-field and button components can be loaded directly like 
 
 ```html
 <!-- Optionally include a minimal base set of styles commonly used with Forge-based applications -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/forge-core.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/forge-core.css" />
 
 <!-- Always include the theme and typography styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/theme/forge-theme.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/typography/forge-typography.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/theme/forge-theme.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/typography/forge-typography.css" />
 
 <!-- Some components (such as button) require the use of a global stylesheet (for now) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/button/forge-button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/button/forge-button.css" />
 
 <!-- Load the ES modules JavaScript for each component you need -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/@tylertech/forge@2.0.0/dist/esm/text-field/index.js"></script>
@@ -146,7 +148,7 @@ Now the text-field and button components can be used anywhere in the DOM:
 Don't forget to also add the `forge-typography` class to the `<body>` element to ensure your application inherits the default typography styles:
 
 ```html
-<body class="forge-typography">
+<body class="forge-typography"></body>
 ```
 
 ## Need help?

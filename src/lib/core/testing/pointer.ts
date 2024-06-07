@@ -20,7 +20,6 @@ export async function simulatePressed(targetEl: HTMLElement, { pointerType = 'mo
   targetEl.dispatchEvent(new MouseEvent('click', evtInit));
 }
 
-
 export async function simulatePressAndHold(container: HTMLElement, { pointerType = 'mouse' }: PointerEventInit = {}): Promise<void> {
   const evtInit = {
     ...createMouseEventInit(container),

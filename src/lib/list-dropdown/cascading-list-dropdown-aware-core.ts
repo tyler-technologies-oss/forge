@@ -19,7 +19,7 @@ export abstract class CascadingListDropdownAwareCore<T> extends ListDropdownAwar
   protected _childPopupMouseEnterListener: (evt: MouseEvent) => void;
   protected _childPopupMouseLeaveListener: (evt: MouseEvent) => void;
   protected _documentMouseMoveListener: (evt: MouseEvent) => void;
-  
+
   protected abstract _attachCascadingListeners(): void;
   protected abstract _detachCascadingListeners(): void;
   protected abstract _onCascadingOptionSelected(data: any): void;
@@ -36,7 +36,7 @@ export abstract class CascadingListDropdownAwareCore<T> extends ListDropdownAwar
     this._targetMouseLeaveListener = evt => this._onTargetMouseLeave(evt);
     this._childPopupMouseEnterListener = () => this._onChildPopupMouseEnter();
     this._childPopupMouseLeaveListener = () => this._onChildPopupMouseLeave();
-    this._documentMouseMoveListener = evt => this._mouseCoords = { x: evt.pageX, y: evt.pageY };
+    this._documentMouseMoveListener = evt => (this._mouseCoords = { x: evt.pageX, y: evt.pageY });
   }
 
   private _onChildPopupMouseEnter(): void {

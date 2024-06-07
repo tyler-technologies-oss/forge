@@ -145,7 +145,7 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
 
   /**
    * Attempts to find an element with the given id. If no element is found, the previous sibling or parent element is returned.
-   * 
+   *
    * For backwards compatibility we allow for `id` to be a selector string, so that is evaluated if no element is found for the id.
    */
   private _tryFindAnchorElement(id: string): HTMLElement | null {

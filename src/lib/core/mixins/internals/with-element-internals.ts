@@ -17,7 +17,7 @@ export declare abstract class WithElementInternalsContract {
 
 /**
  * Mixes in Element Internals functionality into a base component.
- * 
+ *
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */

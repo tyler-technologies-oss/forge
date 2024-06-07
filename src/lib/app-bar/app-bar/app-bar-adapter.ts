@@ -67,7 +67,7 @@ export class AppBarAdapter extends BaseAdapter<IAppBarComponent> implements IApp
   public addCenterSlotListener(listener: (evt: Event) => void): void {
     this._centerSlotElement.addEventListener('slotchange', listener);
   }
-  
+
   public setCenterSlotVisibility(): void {
     if (this._centerSlotElement.assignedNodes().length) {
       this._centerSectionElement.style.removeProperty('display');

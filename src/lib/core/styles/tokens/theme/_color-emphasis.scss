@@ -25,7 +25,7 @@ $color-emphasis: (
   low: map.get($color-emphasis-scale, '024'),
   lower: map.get($color-emphasis-scale, '012'),
   lowest: map.get($color-emphasis-scale, '008'),
-  minimum: map.get($color-emphasis-scale, '004'),
+  minimum: map.get($color-emphasis-scale, '004')
 );
 
 @function value($emphasis) {

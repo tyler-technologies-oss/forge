@@ -33,14 +33,16 @@
     "serve:coverage": "http-server -c 1 -o -p 9875 dist/coverage/html",
     "release": "auto shipit",
     "cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.mjs --outdir dist/cem",
-    "postversion": "cd dist/release/@tylertech/forge && npm version $npm_package_version --no-git-tag-version --no-commit-hooks --ignore-scripts"
+    "postversion": "cd dist/release/@tylertech/forge && npm version $npm_package_version --no-git-tag-version --no-commit-hooks --ignore-scripts",
+    "prettier": "prettier --write \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\"",
+    "prettier:check": "prettier --check \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\""
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.5",
     "@tylertech/forge-core": "^3.0.0-next.0",
     "@tylertech/tyler-icons": "^1.12.0",
     "imask": "^6.6.1",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.3"
   },
   "devDependencies": {
     "@auto-it/conventional-commits": "^11.1.6",
@@ -70,7 +72,7 @@
     "@types/jasmine": "^5.1.4",
     "@types/karma": "^6.3.8",
     "@types/karma-fixture": "^0.2.8",
-    "@types/node": "^20.12.13",
+    "@types/node": "^20.14.2",
     "@types/webpack-env": "^1.18.5",
     "@web/dev-server-esbuild": "^1.0.2",
     "@web/dev-server-rollup": "^0.6.1",
@@ -81,17 +83,22 @@
     "cem-plugin-custom-jsdoc-tags": "^1.1.1",
     "commitlint": "^19.3.0",
     "custom-element-vs-code-integration": "^1.3.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-formatter-codeframe": "^7.32.1",
+    "eslint-plugin-prettier": "^5.1.3",
     "http-server": "^14.1.1",
     "husky": "^9.0.11",
     "karma-fixture": "^0.2.6",
-    "lit": "^3.1.3",
+    "lint-staged": "^15.2.5",
+    "lit": "^3.1.4",
+    "prettier": "3.3.1",
     "remark-gfm": "^4.0.0",
     "rollup-plugin-scss": "^4.0.0",
     "sinon": "^15.2.0",
     "storybook": "^8.1.6",
     "storybook-dark-mode": "^4.0.1",
     "stylelint": "^16.6.1",
+    "stylelint-config-prettier": "^9.0.5",
     "typescript": "~5.4.5",
     "vite": "^5.2.12",
     "vite-plugin-ejs": "^1.7.0",
@@ -100,5 +107,8 @@
   },
   "overrides": {
     "@typescript-eslint/typescript-estree": "^7.12.0"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }

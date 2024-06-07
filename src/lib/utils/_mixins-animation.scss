@@ -5,11 +5,11 @@
   $animations: '';
 
   @for $i from 1 through $max {
-      $animations: #{$animations + list.nth($animate, $i)};
+    $animations: #{$animations + list.nth($animate, $i)};
 
-      @if $i < $max {
-          $animations: #{$animations + ', '};
-      }
+    @if $i < $max {
+      $animations: #{$animations + ', '};
+    }
   }
 
   animation: #{$animations};

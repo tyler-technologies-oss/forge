@@ -20,11 +20,11 @@ declare global {
 
 /**
  * @tag forge-drawer
- * 
+ *
  * @slot - The content to display in the scrollable content container.
  * @slot header - The header content above the main content.
  * @slot footer - The footer content below the main content.
- * 
+ *
  * @cssproperty --forge-drawer-width - The width of the drawer.
  * @cssproperty --forge-drawer-background - The background color of the drawer.
  * @cssproperty --forge-drawer-border-color - The border of the drawer.
@@ -32,8 +32,8 @@ declare global {
  * @cssproperty --forge-drawer-transition-duration - The transition duration of the drawer.
  * @cssproperty --forge-drawer-transition-easing - The transition timing function of the drawer.
  * @cssproperty --forge-drawer-duration-close - The duration of the drawer closing animation.
- * 
- * 
+ *
+ *
  * @csspart root - The component's root element.
  * @csspart content - The content container element.
  */
@@ -42,7 +42,7 @@ declare global {
 })
 export class DrawerComponent extends BaseDrawerComponent<BaseDrawerCore> implements IDrawerComponent {
   protected _core: BaseDrawerCore;
-  
+
   constructor() {
     super();
     attachShadowTemplate(this, template, styles);

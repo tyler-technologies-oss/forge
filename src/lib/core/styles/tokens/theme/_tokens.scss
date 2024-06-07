@@ -8,22 +8,7 @@
 @use './tokens.utilities' as utilities;
 
 // Forge default (light) theme
-$tokens: utils.flatten(
-  brand.$tokens,
-  core.$tokens,
-  surface.$tokens,
-  text.$tokens,
-  status.$tokens,
-  utilities.$tokens,
-);
-
+$tokens: utils.flatten(brand.$tokens, core.$tokens, surface.$tokens, text.$tokens, status.$tokens, utilities.$tokens);
 
 // Forge dark theme
-$tokens-dark: utils.flatten(
-  brand.$tokens-dark,
-  core.$tokens-dark,
-  surface.$tokens-dark,
-  text.$tokens-dark,
-  status.$tokens-dark,
-  utilities.$tokens-dark
-);
+$tokens-dark: utils.flatten(brand.$tokens-dark, core.$tokens-dark, surface.$tokens-dark, text.$tokens-dark, status.$tokens-dark, utilities.$tokens-dark);

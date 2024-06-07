@@ -28,14 +28,14 @@ const meta = {
       controls: {
         opacity: { control: 'number', min: 0, max: 1, step: 0.01 }
       }
-    }),
+    })
   },
   args: {
     value: '#000000',
     opacity: 1,
     allowOpacity: false,
-    debounceChangeEvent: false,
-  },
+    debounceChangeEvent: false
+  }
 } satisfies Meta;
 
 export default meta;

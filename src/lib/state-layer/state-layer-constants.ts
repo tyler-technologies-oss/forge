@@ -28,7 +28,10 @@ export const STATE_LAYER_CONSTANTS = {
 };
 
 export class StateLayerCoords {
-  constructor(public x: number, public y: number) {}
+  constructor(
+    public x: number,
+    public y: number
+  ) {}
 
   public static fromPointerEvent(event: PointerEvent): StateLayerCoords {
     return new StateLayerCoords(event.pageX, event.pageY);

@@ -10,7 +10,7 @@ import { storyStyles } from '../../decorators';
 
 const component = 'forge-label';
 
-IconRegistry.define(tylIconSettings)
+IconRegistry.define(tylIconSettings);
 
 const meta = {
   title: 'Components/Label',
@@ -56,11 +56,11 @@ export const Legend: Story = {
       </forge-radio-group>
     `;
   }
-
 };
 
 export const AlignedList: Story = {
-  decorators: [storyStyles(`
+  decorators: [
+    storyStyles(`
     .grid {
       display: grid;
       grid-template-columns: auto auto;
@@ -71,7 +71,8 @@ export const AlignedList: Story = {
         width: 100%;
       }
     }
-  `)],
+  `)
+  ],
   render: () => {
     return html`
       <div class="grid">
@@ -91,13 +92,15 @@ export const AlignedList: Story = {
 };
 
 export const WithIconButton: Story = {
-  decorators: [storyStyles(`
+  decorators: [
+    storyStyles(`
     .with-label {
       display: inline-flex;
       align-items: center;
       flex-direction: column;
     }
-  `)],
+  `)
+  ],
   render: () => {
     return html`
       <forge-label class="with-label">

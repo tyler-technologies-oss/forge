@@ -13,7 +13,7 @@
 
 @mixin base {
   @include typography.style(button);
-  
+
   position: relative;
   display: #{token(display)};
   align-items: center;

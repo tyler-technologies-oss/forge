@@ -26,7 +26,9 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   }
 
   private _onClick(evt: MouseEvent): void {
-    const fromIgnoredEl = evt.composedPath().find((el: HTMLElement) => el.nodeType === Node.ELEMENT_NODE && el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE));
+    const fromIgnoredEl = evt
+      .composedPath()
+      .find((el: HTMLElement) => el.nodeType === Node.ELEMENT_NODE && el.matches(EXPANSION_PANEL_CONSTANTS.selectors.IGNORE));
     if (fromIgnoredEl) {
       return;
     }
@@ -61,7 +63,11 @@ export class ExpansionPanelCore implements IExpansionPanelCore {
   }
 
   private _dispatchToggleEvent(): void {
-    const evt = new CustomEvent<boolean>(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, { detail: this._open, bubbles: true, composed: true });
+    const evt = new CustomEvent<boolean>(EXPANSION_PANEL_CONSTANTS.events.TOGGLE, {
+      detail: this._open,
+      bubbles: true,
+      composed: true
+    });
     this._adapter.dispatchHostEvent(evt);
   }
 

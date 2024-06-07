@@ -95,7 +95,7 @@ export class DatePickerAdapter extends BaseDatePickerAdapter<IDatePickerComponen
     }
 
     this._inputElement.value = value;
-    
+
     if (this._inputMask) {
       this._inputMask.updateMask();
     }

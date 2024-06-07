@@ -15,13 +15,10 @@ const meta = {
   },
   argTypes: {
     ...generateCustomElementArgTypes({
-      tagName: component,
-      
-    }),
+      tagName: component
+    })
   },
-  args: {
-
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;
@@ -33,55 +30,55 @@ export const Demo: Story = {};
 export const Profile = {
   ...standaloneStoryParams,
   render: () => html`
-  <div style="width: 200px">
-    <forge-skeleton avatar></forge-skeleton>
-    <forge-skeleton text></forge-skeleton>
-    <forge-skeleton text></forge-skeleton>
-    <forge-skeleton text style="width: 75%;"></forge-skeleton>
-  </div>
+    <div style="width: 200px">
+      <forge-skeleton avatar></forge-skeleton>
+      <forge-skeleton text></forge-skeleton>
+      <forge-skeleton text></forge-skeleton>
+      <forge-skeleton text style="width: 75%;"></forge-skeleton>
+    </div>
   `
-}
+};
 
 export const List = {
   ...standaloneStoryParams,
   render: () => html`
-  <div style="width: 200px">
-    <forge-skeleton list-item></forge-skeleton>
-    <forge-skeleton list-item></forge-skeleton>
-    <forge-skeleton list-item></forge-skeleton>
-  </div>
+    <div style="width: 200px">
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+      <forge-skeleton list-item></forge-skeleton>
+    </div>
   `
-}
+};
 
 export const Chips = {
   ...standaloneStoryParams,
   render: () => html`
-  <div style="width: 200px">
-    <forge-skeleton chip></forge-skeleton>
-    <forge-skeleton chip></forge-skeleton>
-    <forge-skeleton chip></forge-skeleton>
-  </div>
+    <div style="width: 200px">
+      <forge-skeleton chip></forge-skeleton>
+      <forge-skeleton chip></forge-skeleton>
+      <forge-skeleton chip></forge-skeleton>
+    </div>
   `
-}
+};
 
 export const Buttons = {
   ...standaloneStoryParams,
   render: () => html`
-  <div style="width: 200px">
-    <forge-skeleton button></forge-skeleton>
-    <forge-skeleton button></forge-skeleton>
-    <forge-skeleton button></forge-skeleton>
-  </div>
+    <div style="width: 200px">
+      <forge-skeleton button></forge-skeleton>
+      <forge-skeleton button></forge-skeleton>
+      <forge-skeleton button></forge-skeleton>
+    </div>
   `
-}
+};
 
 export const FormField = {
   ...standaloneStoryParams,
   render: () => html`
-  <div style="width: 200px">
-    <forge-skeleton form-field></forge-skeleton>
-    <forge-skeleton form-field></forge-skeleton>
-    <forge-skeleton form-field></forge-skeleton>
-  </div>
+    <div style="width: 200px">
+      <forge-skeleton form-field></forge-skeleton>
+      <forge-skeleton form-field></forge-skeleton>
+      <forge-skeleton form-field></forge-skeleton>
+    </div>
   `
-}
+};

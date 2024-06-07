@@ -32,21 +32,21 @@ const COLUMNS: IColumnConfiguration[] = [
     sortable: true,
     initialSort: true,
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter first name...' }, props: { showClear: true }})
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter first name...' }, props: { showClear: true } })
   },
   {
     header: 'Last Name',
     property: 'lastName',
     sortable: true,
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter last name...' }, props: { showClear: true }})
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter last name...' }, props: { showClear: true } })
   },
   {
     header: 'Age',
     property: 'age',
     sortable: true,
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' }, props: { showClear: true }})
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' }, props: { showClear: true } })
   }
 ];
 
@@ -56,7 +56,7 @@ const meta = {
   title: 'Components/Table',
   render: args => {
     const tableEl = customElementStoryRenderer(component, args);
-    
+
     tableEl.addEventListener('forge-table-row-click', rowClickAction);
     tableEl.addEventListener('forge-table-select', selectAction);
     tableEl.addEventListener('forge-table-select-double', selectDoubleAction);
@@ -109,9 +109,9 @@ const meta = {
       controls: {
         columnConfigurations: { control: { type: 'object' } },
         data: { control: { type: 'object' } },
-        multiselect: { if: { arg: 'select', eq: true } },
+        multiselect: { if: { arg: 'select', eq: true } }
       }
-    }),
+    })
   },
   args: {
     data: DATA,
@@ -130,8 +130,8 @@ const meta = {
     minResizeWidth: 100,
     allowRowClick: false,
     multiColumnSort: false,
-    selectCheckboxAlignment: 'center',
-  },
+    selectCheckboxAlignment: 'center'
+  }
 } satisfies Meta<ITableComponent>;
 
 export default meta;

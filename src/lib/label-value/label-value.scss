@@ -40,7 +40,7 @@
 // Slotted icons
 //
 
-::slotted([slot=icon]) {
+::slotted([slot='icon']) {
   @include slotted-icon;
 }
 
@@ -48,7 +48,7 @@
 // Inline/dense
 //
 
-:host(:is([inline],[dense])) {
+:host(:is([inline], [dense])) {
   .forge-label-value {
     @include inline;
   }
@@ -63,7 +63,7 @@
 //
 
 :host([ellipsis]) {
-  ::slotted([slot=value]) {
+  ::slotted([slot='value']) {
     @include ellipsis;
   }
 }

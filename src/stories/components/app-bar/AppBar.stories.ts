@@ -26,7 +26,7 @@ const meta = {
       exclude: ['target'],
       controls: {
         elevation: { type: 'string', control: 'select', options: ['none', 'raised'] },
-        theme: { type: 'string', control: 'select', options: ['white', ''] },
+        theme: { type: 'string', control: 'select', options: ['white', ''] }
       }
     })
   },
@@ -34,8 +34,8 @@ const meta = {
     titleText: 'Tyler Forge',
     elevation: 'raised',
     theme: '',
-    href: '',
-  },
+    href: ''
+  }
 } satisfies Meta;
 
 export default meta;
@@ -51,7 +51,7 @@ export const Full: Story = {
       <forge-app-bar-menu-button slot="start"></forge-app-bar-menu-button>
       <forge-icon slot="logo" name="forge_logo"></forge-icon>
       <forge-app-bar-search slot="center">
-          <input type="text" placeholder="Search" />
+        <input type="text" placeholder="Search" />
       </forge-app-bar-search>
       <forge-app-bar-help-button slot="end"></forge-app-bar-help-button>
       <forge-app-bar-notification-button slot="end"></forge-app-bar-notification-button>
@@ -59,4 +59,4 @@ export const Full: Story = {
       <forge-app-bar-profile-button slot="end" avatar-text="First Last" full-name="First Last" email="first.last@tylertech.com"></forge-app-bar-profile-button>
     </forge-app-bar>
   `
-}
+};

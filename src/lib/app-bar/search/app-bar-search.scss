@@ -42,10 +42,12 @@
 // Focus indicator
 //
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    color: currentColor,
-    outward-offset: 0px // Required unit
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      color: currentColor,
+      outward-offset: 0px // Required unit
+    )
+  );
 }
 
 //

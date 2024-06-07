@@ -30,9 +30,9 @@ declare global {
 
 /**
  * @tag forge-icon
- * 
+ *
  * @summary Icons are used to represent information visually
- * 
+ *
  * @property {string} name - The name of the icon to render.
  * @property {string} src - Provides the ability to set the SVG string content directly.
  * @property {boolean} [lazy=false] - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
@@ -41,7 +41,7 @@ declare global {
  * @property {IconUrlBuilder} externalUrlBuilder - A callback that can be provided to generate a URL that will be used to fetch an SVG icon.
  * @property {string} viewbox - A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
  * @property {IconTheme} theme - The theme to apply to the icon.
- * 
+ *
  * @attribute {string} name - The name of the icon to render.
  * @attribute {string} src - Provides the ability to set the SVG string content directly.
  * @attribute {boolean} [lazy=false] - Controls whether the icon will be loaded dynamically when it comes into view. False by default.
@@ -49,13 +49,13 @@ declare global {
  * @attribute {IconExternalType} [externalType="standard"] - The type of icon to load externally. Possible values: "standard" (default), "extended", "custom".
  * @attribute {string} viewbox - A custom value to apply to the `viewBox` attribute on the internal `<svg>` element.
  * @attribute {IconTheme} theme - The theme to apply to the icon.
- * 
+ *
  * @cssproperty --forge-icon-color - The color of the icon.
  * @cssproperty --forge-icon-size - The size of the icon. Defaults to the font-size of the context it is placed in.
  * @cssproperty --forge-icon-width - The width of the icon.
  * @cssproperty --forge-icon-height - The height of the icon.
  * @cssproperty --forge-icon-font-size - The font size of the icon.
- * 
+ *
  * @csspart svg - The internal SVG element.
  */
 @customElement({

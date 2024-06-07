@@ -35,7 +35,8 @@ describe('Menu', () => {
 class MenuHarness {
   constructor(
     public menuEl: IMenuComponent,
-    public triggerEl: HTMLButtonElement) {}
+    public triggerEl: HTMLButtonElement
+  ) {}
 
   public async openMenu(): Promise<void> {
     this.clickElement(this.triggerEl);
@@ -66,10 +67,10 @@ class MenuHarness {
 
   public clickElement(element: HTMLElement): Promise<void> {
     const { x, y, width, height } = element.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 }
 
@@ -77,9 +78,7 @@ interface MenuFixtureConfig {
   options?: IMenuOption[];
 }
 
-async function createFixture({
-  options = OPTIONS
-}: MenuFixtureConfig = {}): Promise<MenuHarness> {
+async function createFixture({ options = OPTIONS }: MenuFixtureConfig = {}): Promise<MenuHarness> {
   const el = await fixture<IMenuComponent>(html`
     <forge-menu .options=${options}>
       <button type="button">Menu</button>

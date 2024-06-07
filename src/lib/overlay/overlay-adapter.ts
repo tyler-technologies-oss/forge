@@ -87,7 +87,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     const descendantOverlays = this._findDescendantOverlays();
     descendantOverlays
       .filter(o => !o.persistent) // Ignore persistent overlays since those are manually controlled
-      .forEach(o => o.open = false);
+      .forEach(o => (o.open = false));
   }
 
   public locateAnchorElement(id: string | null): HTMLElement | null {
@@ -107,7 +107,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     fallbackPlacements
   }: IPositionElementConfig): void {
     this.tryCleanupAutoUpdate();
-  
+
     const originalOffset = { ...offset };
     const boundaryEl: Boundary = (boundaryElement ? boundaryElement : boundary ? this._component.closest(`#${boundary}`) : null) ?? 'clippingAncestors';
 
@@ -163,7 +163,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
           left: arrowX != null ? `${arrowX}px` : '',
           right: '',
           bottom: '',
-          [staticSide as string]: `${(-arrowLen / 2) - arrowBoxAdjust}px`
+          [staticSide as string]: `${-arrowLen / 2 - arrowBoxAdjust}px`
         });
       }
     });
@@ -191,8 +191,10 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         }
       }
     };
-    this._component.ownerDocument.addEventListener('keydown', escapeListener, { signal: this._lightDismissController.signal });
-  
+    this._component.ownerDocument.addEventListener('keydown', escapeListener, {
+      signal: this._lightDismissController.signal
+    });
+
     // Listen for click-outside (any clicks not within our overlay surface or the anchor element)
     const pointerupListener = (evt: PointerEvent): void => {
       const composedPath = evt.composedPath();
@@ -207,13 +209,17 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
         return;
       }
 
-      const isWithinAnchor = this._component.anchorElement instanceof VirtualElement ? false : this._component.anchorElement && composedPath.includes(this._component.anchorElement);
+      const isWithinAnchor =
+        this._component.anchorElement instanceof VirtualElement ? false : this._component.anchorElement && composedPath.includes(this._component.anchorElement);
       const isWithinOverlay = composedPath.includes(this._rootElement);
       if (!isWithinAnchor && !isWithinOverlay) {
         listener('click');
       }
     };
-    this._component.ownerDocument.addEventListener('pointerup', pointerupListener, { capture: true, signal: this._lightDismissController.signal });
+    this._component.ownerDocument.addEventListener('pointerup', pointerupListener, {
+      capture: true,
+      signal: this._lightDismissController.signal
+    });
   }
 
   public removeLightDismissListener(): void {
@@ -229,7 +235,7 @@ export class OverlayAdapter extends BaseAdapter<IOverlayComponent> implements IO
     const allOverlays = Array.from(OverlayComponent[overlayStack]);
     const overlaysAboveUs = allOverlays.slice(allOverlays.indexOf(this._component) + 1).reverse();
     const descendantOverlays: IOverlayComponent[] = [];
-    
+
     if (overlaysAboveUs.length) {
       // Dispatch an event on each overlay after us to see if it is a descendant of our overlay
       const listener: EventListener = evt => descendantOverlays.push(evt.target as IOverlayComponent);

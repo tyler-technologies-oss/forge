@@ -38,21 +38,26 @@
   }
 }
 
-:host, ::slotted(*) {
+:host,
+::slotted(*) {
   white-space: nowrap;
 }
 
 forge-focus-indicator {
-  @include focus-indicator.provide-theme((
-    color: #{token(active-color)},
-    shape: 8px
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(active-color)},
+      shape: 8px
+    )
+  );
 }
 
 forge-state-layer {
-  @include state-layer.provide-theme((
-    color: #{token(inactive-color)}
-  ));
+  @include state-layer.provide-theme(
+    (
+      color: #{token(inactive-color)}
+    )
+  );
 }
 
 //
@@ -93,10 +98,10 @@ forge-state-layer {
   .forge-tab {
     color: #{token(active-label-text-color)};
 
-    ::slotted([slot=start]),
-    ::slotted([slot=end]),
-    ::slotted([slot=leading]),
-    ::slotted([slot=trailing]) {
+    ::slotted([slot='start']),
+    ::slotted([slot='end']),
+    ::slotted([slot='leading']),
+    ::slotted([slot='trailing']) {
       color: #{token(active-icon-color)};
     }
 
@@ -105,31 +110,35 @@ forge-state-layer {
     }
 
     &:hover {
-      ::slotted([slot=start]),
-      ::slotted([slot=end]),
-      ::slotted([slot=leading]),
-      ::slotted([slot=trailing]) {
+      ::slotted([slot='start']),
+      ::slotted([slot='end']),
+      ::slotted([slot='leading']),
+      ::slotted([slot='trailing']) {
         color: #{token(active-hover-icon-color)};
       }
     }
-  
+
     .indicator {
       opacity: 1;
     }
   }
 
   forge-state-layer {
-    @include state-layer.provide-theme((
-      color: #{token(active-color)}
-    ));
+    @include state-layer.provide-theme(
+      (
+        color: #{token(active-color)}
+      )
+    );
   }
 }
 
 :host([selected]:not([vertical])) {
   forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      offset-block: 0 calc(#{token(indicator-height)} + 1px)
-    ));
+    @include focus-indicator.provide-theme(
+      (
+        offset-block: 0 calc(#{token(indicator-height)} + 1px)
+      )
+    );
   }
 }
 
@@ -185,20 +194,22 @@ forge-state-layer {
 :host([vertical]) {
   .forge-tab {
     @include vertical;
-  
+
     .content {
       @include vertical-content;
     }
-  
+
     .indicator {
       @include vertical-indicator;
     }
   }
 
   forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      offset-inline: 0 calc(#{token(indicator-height)} + 1px)
-    ));
+    @include focus-indicator.provide-theme(
+      (
+        offset-inline: 0 calc(#{token(indicator-height)} + 1px)
+      )
+    );
   }
 }
 

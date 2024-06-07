@@ -32,10 +32,7 @@ declare global {
 })
 export class ViewSwitcherComponent extends BaseComponent implements IViewSwitcherComponent {
   public static get observedAttributes(): string[] {
-    return [
-      VIEW_SWITCHER_CONSTANTS.attributes.INDEX,
-      VIEW_SWITCHER_CONSTANTS.attributes.ANIMATION_TYPE
-    ];
+    return [VIEW_SWITCHER_CONSTANTS.attributes.INDEX, VIEW_SWITCHER_CONSTANTS.attributes.ANIMATION_TYPE];
   }
 
   private _core: ViewSwitcherCore;
@@ -69,7 +66,7 @@ export class ViewSwitcherComponent extends BaseComponent implements IViewSwitche
   /** Gets/sets the currently visible view index. */
   @coreProperty()
   public declare index: number;
-  
+
   /** Gets/sets the animation type. */
   @coreProperty()
   public declare animationType: `${ViewSwitcherAnimationType}`;

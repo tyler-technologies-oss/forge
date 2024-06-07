@@ -40,9 +40,9 @@ declare global {
 
 /**
  * @tag forge-button-toggle-group
- * 
+ *
  * @description Button toggle groups allow users to select one or more options from a set of related options.
- * 
+ *
  * @property {any} value - The value of the selected button toggle(s).
  * @property {boolean} [outlined=true] - Whether or not the group should be outlined.
  * @property {boolean} [multiple=false] - Whether or not the group should allow multiple selections.
@@ -53,7 +53,7 @@ declare global {
  * @property {boolean} [readonly=false] - Whether or not the group should be readonly.
  * @property {boolean} [dense=false] - Whether or not the group should be dense.
  * @property {ButtonToggleGroupTheme} theme - The theme to use for the group.
- * 
+ *
  * @attribute {any} value - The value of the selected button toggle(s).
  * @attribute {boolean} [outlined=false] - Whether or not the group should be outlined.
  * @attribute {boolean} [multiple=false] - Whether or not the group should allow multiple selections.
@@ -64,9 +64,9 @@ declare global {
  * @attribute {boolean} [readonly=false] - Whether or not the group should be readonly.
  * @attribute {boolean} [dense=false] - Whether or not the group should be dense.
  * @attribute {ButtonToggleGroupTheme} theme - The theme to use for the group.
- * 
+ *
  * @event {CustomEvent<IButtonToggleGroupChangeEventData>} forge-button-toggle-group-change - Dispatches when the value of the group changes.
- * 
+ *
  * @cssproperty --forge-button-toggle-group-display - The `display` of the group container elements.
  * @cssproperty --forge-button-toggle-group-gap - The space between button toggle elements.
  * @cssproperty --forge-button-toggle-group-padding - The padding around the button toggle elements when outlined.
@@ -85,18 +85,19 @@ declare global {
  * @cssproperty --forge-button-toggle-group-shape-end-end - The end-end shape radius.
  * @cssproperty --forge-button-toggle-group-transition-duration - The transition duration for all animations on the group.
  * @cssproperty --forge-button-toggle-group-transition-timing - The transition timing for all animations on the group.
- * 
+ *
  * @csspart root - The root container element for the group.
- * 
+ *
  * @slot - The is a default/unnamed slot for child button toggle elements.
  */
 @customElement({
   name: BUTTON_TOGGLE_GROUP_CONSTANTS.elementName,
-  dependencies: [
-    ButtonToggleComponent
-  ]
+  dependencies: [ButtonToggleComponent]
 })
-export class ButtonToggleGroupComponent extends WithLabelAwareness(WithFormAssociation(WithFormValidity(WithDefaultAria(WithElementInternals(BaseComponent))))) implements IButtonToggleGroupComponent {
+export class ButtonToggleGroupComponent
+  extends WithLabelAwareness(WithFormAssociation(WithFormValidity(WithDefaultAria(WithElementInternals(BaseComponent)))))
+  implements IButtonToggleGroupComponent
+{
   public static get observedAttributes(): string[] {
     return Object.values(BUTTON_TOGGLE_GROUP_CONSTANTS.observedAttributes);
   }

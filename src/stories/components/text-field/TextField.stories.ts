@@ -37,9 +37,9 @@ const meta = {
         ?invalid=${args.invalid}
         style=${style}>
         ${args.label.length ? html`<label>${args.label}</label>` : nothing}
-        ${args.textarea ? 
-          html`<textarea placeholder=${args.placeholder ?? nothing} .value=${args.value}></textarea>` :
-          html`<input .type=${args.type || 'text'} placeholder=${args.placeholder ?? nothing} .value=${args.value}>`}
+        ${args.textarea
+          ? html`<textarea placeholder=${args.placeholder ?? nothing} .value=${args.value}></textarea>`
+          : html`<input .type=${args.type || 'text'} placeholder=${args.placeholder ?? nothing} .value=${args.value} />`}
         ${args.supportText.length ? html`<span slot="support-text">${args.supportText}</span>` : nothing}
         ${args.supportTextEnd.length ? html`<span slot="support-text-end">${args.supportTextEnd}</span>` : nothing}
       </forge-text-field>
@@ -47,7 +47,7 @@ const meta = {
   },
   decorators: [storyStyles(styles)],
   parameters: {
-    actions: { disable: true },
+    actions: { disable: true }
   },
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -60,16 +60,16 @@ const meta = {
         theme: { control: 'select', options: [...GLOBAL_THEME_OPTIONS, 'default'] },
         shape: { control: 'select', options: ['default', 'rounded', 'squared'] },
         density: { control: 'select', options: ['default', 'extra-small', 'small', 'medium', 'large', 'extra-large'] },
-        supportTextInset: { control: 'select', options: ['start', 'end', 'both', 'none'] },
-      },
+        supportTextInset: { control: 'select', options: ['start', 'end', 'both', 'none'] }
+      }
     }),
-    label: { control: { type: 'text' }},
-    value: { control: { type: 'text' }},
-    placeholder: { control: { type: 'text' }},
+    label: { control: { type: 'text' } },
+    value: { control: { type: 'text' } },
+    placeholder: { control: { type: 'text' } },
     type: { control: 'select', options: ['text', 'password', 'email', 'number', 'tel', 'url'] },
-    supportText: { control: { type: 'text' }},
-    supportTextEnd: { control: { type: 'text' }},
-    textarea: { control: { type: 'boolean' }},
+    supportText: { control: { type: 'text' } },
+    supportTextEnd: { control: { type: 'text' } },
+    textarea: { control: { type: 'boolean' } }
   },
   args: {
     label: 'Label',
@@ -93,8 +93,8 @@ const meta = {
     dense: false,
     popoverIcon: false,
     popoverExpanded: false,
-    supportTextInset: 'none',
-  },
+    supportTextInset: 'none'
+  }
 } satisfies Meta;
 
 export default meta;
@@ -106,20 +106,20 @@ export const Demo: Story = {};
 export const Textarea: Story = {
   ...standaloneStoryParams,
   args: {
-    textarea: true,
-  },
+    textarea: true
+  }
 };
 
 export const LabelAbove: Story = {
   ...standaloneStoryParams,
   args: {
-    labelPosition: 'block-start',
-  },
+    labelPosition: 'block-start'
+  }
 };
 
 export const LabelInline: Story = {
   ...standaloneStoryParams,
   args: {
-    labelPosition: 'inline-start',
-  },
+    labelPosition: 'inline-start'
+  }
 };

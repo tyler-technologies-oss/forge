@@ -15,7 +15,13 @@ export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
   destroy(): void;
   setClickListener(listener: (evt: MouseEvent) => void): void;
   removeClickListener(listener: (evt: MouseEvent) => void): void;
-  openPopup(profileCardConfig: IAppBarProfileCardConfig, dismissListener: () => void, profileListener: () => void, signOutListener: () => void, profileCardContent?: HTMLElement): () => void;
+  openPopup(
+    profileCardConfig: IAppBarProfileCardConfig,
+    dismissListener: () => void,
+    profileListener: () => void,
+    signOutListener: () => void,
+    profileCardContent?: HTMLElement
+  ): () => void;
   closePopup(): void;
   focusButtonElement(): void;
   setAvatarText(value: string): void;
@@ -74,7 +80,13 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
     this._component.removeEventListener('click', listener);
   }
 
-  public openPopup(profileCardConfig: IAppBarProfileCardConfig, dismissListener: () => void, profileListener: () => void, signOutListener: () => void, profileCardContent?: HTMLElement): () => void {
+  public openPopup(
+    profileCardConfig: IAppBarProfileCardConfig,
+    dismissListener: () => void,
+    profileListener: () => void,
+    signOutListener: () => void,
+    profileCardContent?: HTMLElement
+  ): () => void {
     if (this._popupElement?.isConnected) {
       this._popupElement.remove();
     }
@@ -108,15 +120,19 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
     this._profileCardElement.tabIndex = -1;
     this._profileCardElement.focus();
 
-    return notChildEventListener(this._popupElement, () => {
-      if (!this._popupElement) {
-        dismissListener();
-        return;
-      }
-      if (!this._popupElement.matches(':focus-within') && !this._component.matches(':focus-within') ) {
-        dismissListener();
-      }
-    }, true);
+    return notChildEventListener(
+      this._popupElement,
+      () => {
+        if (!this._popupElement) {
+          dismissListener();
+          return;
+        }
+        if (!this._popupElement.matches(':focus-within') && !this._component.matches(':focus-within')) {
+          dismissListener();
+        }
+      },
+      true
+    );
   }
 
   public async closePopup(): Promise<void> {
@@ -139,7 +155,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
 
   public setAvatarIcon(value: string): void {
     if (value) {
-      const iconDelegate = new IconComponentDelegate({ props: { name: value }});
+      const iconDelegate = new IconComponentDelegate({ props: { name: value } });
       this._avatarElement.replaceChildren(iconDelegate.element);
     } else {
       removeAllChildren(this._avatarElement);

@@ -38,11 +38,11 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
   public observeResize(callback: (entry: ResizeObserverEntry) => void): void {
     ForgeResizeObserver.observe(this._root, callback);
   }
-  
+
   public unobserveResize(): void {
     ForgeResizeObserver.unobserve(this._root);
   }
-  
+
   /**
    * Gets all child panels.
    * @returns All child panels.
@@ -58,11 +58,13 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
     // Check if the combined panel size is greater than the split view size along the relevant axis
     const size = orientation === 'horizontal' ? this._root.clientWidth : this._root.clientHeight;
     const panels = this.getSlottedPanels();
-    const combinedPanelSize = panels.map(panel => {
-      const panelRoot = panel.shadowRoot?.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT);
-      const panelSize = orientation === 'horizontal' ? panelRoot?.clientWidth : panelRoot?.clientHeight;
-      return panelSize ?? 0;
-    }).reduce((cur, acc) => cur + acc, 0);
+    const combinedPanelSize = panels
+      .map(panel => {
+        const panelRoot = panel.shadowRoot?.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT);
+        const panelSize = orientation === 'horizontal' ? panelRoot?.clientWidth : panelRoot?.clientHeight;
+        return panelSize ?? 0;
+      })
+      .reduce((cur, acc) => cur + acc, 0);
 
     // Do nothing if all the panels fit
     if (combinedPanelSize <= size) {
@@ -73,20 +75,23 @@ export class SplitViewAdapter extends BaseAdapter<ISplitViewComponent> implement
     let diff = combinedPanelSize - size;
 
     // Size down the panels as needed in reverse order, adjusting diff accordingly
-    panels.slice().reverse().forEach(panel => {
-      if (diff <= 0) {
-        return;
-      }
+    panels
+      .slice()
+      .reverse()
+      .forEach(panel => {
+        if (diff <= 0) {
+          return;
+        }
 
-      const panelSize = panel.getContentSize();
-      const collapsibleSize = panel.getCollapsibleSize();
-      const reduceBy = Math.min(diff, collapsibleSize);
-      const newSize = panelSize - reduceBy;
+        const panelSize = panel.getContentSize();
+        const collapsibleSize = panel.getCollapsibleSize();
+        const reduceBy = Math.min(diff, collapsibleSize);
+        const newSize = panelSize - reduceBy;
 
-      panel.setContentSize(newSize);
+        panel.setContentSize(newSize);
 
-      diff -= reduceBy;
-    });
+        diff -= reduceBy;
+      });
 
     // If there's still overflow nothing else can be done
   }

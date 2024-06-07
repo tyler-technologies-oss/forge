@@ -26,23 +26,23 @@ declare global {
 
 /**
  * @tag forge-fab
- * 
+ *
  * @summary Floating action buttons are used to represent the most important action on a page.
- * 
+ *
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  * @dependency forge-icon
- * 
+ *
  * @property {ButtonTheme} [theme="secondary"] - Sets the theme of the button.
  * @property {FloatingActionButtonDensity} [density="medium"] - Sets the density of the button.
  * @property {FloatingActionButtonElevation} [elevation="raised"] - Sets the elevation of the button.
- * 
+ *
  * @attribute {string} [theme="secondary"] - Sets the theme of the button.
  * @attribute {string} [density="medium"] - Sets the density of the button.
  * @attribute {string} [elevation="raised"] - Sets the elevation of the button.
- * 
+ *
  * @fires {PointerEvent} click - Fires when the button is clicked.
- * 
+ *
  * @cssproperty --forge-fab-background-display - The display property.
  * @cssproperty --forge-fab-gap - The gap between the icon and the label.
  * @cssproperty --forge-fab-background - The background color.
@@ -71,11 +71,11 @@ declare global {
  * @cssproperty --forge-fab-disabled-background - The background color when disabled.
  * @cssproperty --forge-fab-disabled-color - The text color when disabled.
  * @cssproperty --forge-fab-disabled-opacity - The opacity when disabled.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
- * 
+ *
  * @slot - This is a default/unnamed slot. Typically used for icon-only or label-only FABs. If the content forces the width to be large than the height, then the FAB will be in extended mode.
  * @slot start - An element to logically render at the start of the button content.
  * @slot label - Reserved specifically for label text. This forces the button into extended mode.
@@ -83,18 +83,11 @@ declare global {
  */
 @customElement({
   name: FLOATING_ACTION_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent,
-    IconComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconComponent]
 })
 export class FloatingActionButtonComponent extends BaseButton<FloatingActionButtonCore> implements IFloatingActionButtonComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
-      ...Object.values(FLOATING_ACTION_BUTTON_CONSTANTS.observedAttributes)
-    ];
+    return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes), ...Object.values(FLOATING_ACTION_BUTTON_CONSTANTS.observedAttributes)];
   }
 
   protected readonly _core: FloatingActionButtonCore;

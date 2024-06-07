@@ -17,7 +17,7 @@ const classes = {
 } as const;
 
 const selectors = {
-  ROOT:'[part=root]',
+  ROOT: '[part=root]',
   DEFAULT_SLOT: 'slot:not([name])',
   END_SLOT: 'slot[name=end]'
 } as const;

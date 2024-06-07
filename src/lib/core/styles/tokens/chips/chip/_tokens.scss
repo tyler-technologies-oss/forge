@@ -17,11 +17,9 @@ $tokens: (
   padding-block: utils.module-val(chip, padding-block, 0),
   cursor: utils.module-val(chip, cursor, pointer),
   icon-font-size: utils.module-val(chip, icon-font-size, 1.5rem),
-
   // Disabled
   disabled-opacity: utils.module-val(chip, disabled-opacity, theme.emphasis(medium-low)),
   disabled-cursor: utils.module-val(chip, disabled-cursor, not-allowed),
-
   // Dense
   dense-height: utils.module-val(chip, dense-height, 24px),
   dense-padding-inline: utils.module-val(chip, dense-padding-inline, spacing.variable(xsmall)),
@@ -30,39 +28,32 @@ $tokens: (
   dense-font-weight: utils.module-val(chip, dense-font-weight, normal),
   dense-focus-indicator-offset: utils.module-val(chip, dense-focus-indicator-offset, spacing.variable(xxxsmall)),
   dense-icon-font-size: utils.module-val(chip, dense-icon-font-size, 1.25rem),
-  
   // Remove button
   remove-button-spacing: utils.module-val(chip, remove-button-spacing, #{spacing.variable(xsmall) spacing.variable(xxsmall)}),
   remove-button-height-dense: utils.module-val(chip, remove-button-height-dense, 18px),
   remove-button-icon-size-dense: utils.module-val(chip, remove-button-icon-size-dense, 16px),
   remove-button-spacing-dense: utils.module-val(chip, remove-button-spacing-dense, #{0 spacing.variable(xxxsmall)}),
-
   // Selected
   selected-background: utils.module-val(chip, selected-background, theme.variable(primary)),
   selected-color: utils.module-val(chip, selected-color, theme.variable(on-primary)),
-
   // Invalid
   invalid-color: utils.module-val(chip, invalid-color, theme.variable(error)),
   invalid-selected-background: utils.module-val(chip, invalid-selected-background, theme.variable(error)),
   invalid-selected-color: utils.module-val(chip, invalid-selected-color, theme.variable(on-error)),
-
   // Border
   border-width: utils.module-val(chip, border-width, border.variable(thin)),
   border-style: utils.module-val(chip, border-style, solid),
   border-color: utils.module-ref(chip, border-color, color),
-
   // Field type
   field-background: utils.module-val(chip, field-background, theme.variable(surface-container-low)),
   field-color: utils.module-val(chip, field-color, theme.variable(on-surface-container-low)),
   field-shape: utils.module-val(chip, field-shape, shape.variable(medium)),
   field-border-color: utils.module-val(chip, field-border-color, transparent),
   field-cursor: utils.module-val(chip, field-cursor, default),
-
   // Checkmark
   checkmark-size: utils.module-val(chip, checkmark-size, 1.25em),
   checkmark-color: utils.module-ref(chip, checkmark-color, color),
   checkmark-spacing: utils.module-val(chip, checkmark-spacing, spacing.variable(xsmall)),
-
   // Avatar
   avatar-size: utils.module-val(chip, avatar-size, 24px),
   avatar-size-dense: utils.module-val(chip, avatar-size-dense, 18px),
@@ -70,11 +61,10 @@ $tokens: (
   avatar-font-size-dense: utils.module-val(chip, avatar-font-size-dense, 0.5rem),
   avatar-spacing: utils.module-val(chip, avatar-spacing, calc(#{spacing.variable(xsmall)} * -1)),
   avatar-spacing-dense: utils.module-val(chip, avatar-spacing-dense, calc(#{spacing.variable(xxsmall)} * -1)),
-
   // Animation
   transition-duration: utils.module-val(chip, transition-duration, animation.variable(duration-short3)),
   transition-easing: utils.module-val(chip, transition-easing, animation.variable(easing-standard)),
-  checkmark-transition-delay: utils.module-val(chip, checkmark-transition-delay, 50ms),
+  checkmark-transition-delay: utils.module-val(chip, checkmark-transition-delay, 50ms)
 ) !default;
 
 @function get($key) {

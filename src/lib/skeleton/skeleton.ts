@@ -15,9 +15,9 @@ declare global {
 
 /**
  * @tag forge-skeleton
- * 
+ *
  * @summary Skeleton is used to provide a placeholder for content that is loading.
- * 
+ *
  * @attribute {string} form-field - Apply form field styles to the skeleton.
  * @attribute {string} button - Apply button styles to the skeleton.
  * @attribute {string} chip - Apply chip styles to the skeleton.
@@ -25,7 +25,7 @@ declare global {
  * @attribute {string} text - Apply text styles to the skeleton.
  * @attribute {string} avatar - Apply avatar styles to the skeleton.
  * @attribute {string} stretch - Apply stretch styles to the skeleton.
- * 
+ *
  * @cssproperty --forge-skeleton-animation-duration - The duration of the skeleton animation.
  * @cssproperty --forge-skeleton-width - The width of the skeleton.
  * @cssproperty --forge-skeleton-height - The height of the skeleton.
@@ -45,7 +45,7 @@ declare global {
  * @cssproperty --forge-skeleton-gradient-color - The color of the gradient skeleton.
  * @cssproperty --forge-skeleton-avatar-size - The size of the avatar skeleton.
  * @cssproperty --forge-skeleton-avatar-shape - The shape of the avatar skeleton.
- * 
+ *
  * @csspart root - The root element of the skeleton.
  */
 @customElement({

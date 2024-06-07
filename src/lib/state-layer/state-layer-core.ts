@@ -107,7 +107,7 @@ export class StateLayerCore implements IStateLayerCore {
       // Manually trigger the pointerenter listener since this is in response to a pointerenter event already
       this._pointerEnterListener(evt);
     }
-    
+
     this._deferred = false;
   }
 
@@ -136,7 +136,7 @@ export class StateLayerCore implements IStateLayerCore {
     if (!this._canHandleEvent(evt)) {
       return;
     }
-    
+
     if (!this._isTouch(evt.pointerType)) {
       this._pointerState = PointerState.WAITING_FOR_CLICK;
       this._startAnimation(evt);

@@ -197,7 +197,6 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
         finish();
       });
     } else if (!value && !this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
-
       if (!withAnimation) {
         finish();
         return;
@@ -230,7 +229,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
   }
 
   /**
-   * Applies a cursor style to the resize handle. 
+   * Applies a cursor style to the resize handle.
    * @param orientation The component's orientation. If absent the cursor will be removed.
    * @param config The component's resizable value and whether it's at the min or max value.
    */

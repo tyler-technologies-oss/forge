@@ -12,7 +12,6 @@ import { IBaseSelectCore } from './base-select-core';
 import { IListDropdownAware, ListDropdownAware } from '../../list-dropdown/list-dropdown-aware';
 import type { IPopoverComponent } from '../../popover/popover';
 
-
 export interface IBaseSelectComponent extends IListDropdownAware {
   value: any;
   selectedIndex: number | number[];
@@ -41,14 +40,14 @@ export abstract class BaseSelectComponent<T extends IBaseSelectCore> extends Lis
    */
   @coreProperty()
   public declare value: any;
-  
+
   /**
    * Gets/sets the selected index.
    * @attribute selected-index
    */
   @coreProperty()
   public declare selectedIndex: number | number[];
-  
+
   /**
    * Gets/sets the available options.
    */
@@ -61,20 +60,20 @@ export abstract class BaseSelectComponent<T extends IBaseSelectCore> extends Lis
    */
   @coreProperty()
   public declare multiple: boolean;
-  
+
   /**
    * Gets the open state of the dropdown.
    * @attribute
    */
   @coreProperty()
   public declare open: boolean;
-  
+
   /**
    * Sets the option builder callback that will be executed when building the option list in the dropdown.
    */
   @coreProperty()
   public declare optionBuilder: SelectOptionBuilder;
-  
+
   /**
    * Sets the selected text builder callback that will be executed when getting the selected text to display in the field.
    */
@@ -93,7 +92,7 @@ export abstract class BaseSelectComponent<T extends IBaseSelectCore> extends Lis
    */
   @coreProperty({ set: false })
   public declare popupElement: IPopoverComponent | undefined;
-  
+
   public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     super.attributeChangedCallback(name, oldValue, newValue);
     switch (name) {
@@ -115,7 +114,7 @@ export abstract class BaseSelectComponent<T extends IBaseSelectCore> extends Lis
   public selectAll(): void {
     this._core.selectAll();
   }
-  
+
   /** Deselects all options. */
   public deselectAll(): void {
     this._core.deselectAll();

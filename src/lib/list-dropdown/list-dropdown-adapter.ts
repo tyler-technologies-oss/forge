@@ -2,7 +2,20 @@ import { IListDropdownOption, IListDropdownOpenConfig, IListDropdownOptionGroup,
 import { createDropdown, createList, createListItems, createAsyncElement, createBusyElement, createCheckboxElement } from './list-dropdown-utils';
 import { IListComponent } from '../list/list';
 import { LIST_ITEM_CONSTANTS, IListItemComponent } from '../list/list-item';
-import { ScrollEvents, getShadowElement, IScrollObserverConfiguration, ScrollAxisObserver, removeAllChildren, isFunction, removeElement, replaceElement, createVisuallyHiddenElement, isDeepEqual, tryScrollIntoView, closestElement } from '@tylertech/forge-core';
+import {
+  ScrollEvents,
+  getShadowElement,
+  IScrollObserverConfiguration,
+  ScrollAxisObserver,
+  removeAllChildren,
+  isFunction,
+  removeElement,
+  replaceElement,
+  createVisuallyHiddenElement,
+  isDeepEqual,
+  tryScrollIntoView,
+  closestElement
+} from '@tylertech/forge-core';
 import { ILinearProgressComponent } from '../linear-progress';
 import { ICON_CONSTANTS, IIconComponent } from '../icon';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../popover';
@@ -73,7 +86,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
         this._headerElement.setAttribute(LIST_DROPDOWN_CONSTANTS.attributes.DATA_ALLOW_FOCUS, '');
       }
     }
-    
+
     // Create the footer element if a builder exists
     if (config.footerBuilder) {
       this._footerElement = config.footerBuilder();
@@ -211,9 +224,9 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length) {
       const activeListItems = listItems.filter(li => li.active);
-      activeListItems.forEach(li => li.active = false);
+      activeListItems.forEach(li => (li.active = false));
     }
-    
+
     const listItem = this._getSelectedListItem();
     if (listItem) {
       this._activateListOption(listItem, config.activeChangeCallback);
@@ -227,7 +240,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length) {
       const activeListItems = listItems.filter(li => li.active);
-      activeListItems.forEach(li => li.active = false);
+      activeListItems.forEach(li => (li.active = false));
       this._activateListOption(listItems[index], activeChangeCallback);
       this._scrollListItemIntoView(listItems[index], animate ? 'smooth' : 'auto');
     }
@@ -254,7 +267,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
 
   public clearActiveOption(): void {
     const listItems = this._getListItemElements();
-    listItems.forEach(li => li.active = false);
+    listItems.forEach(li => (li.active = false));
   }
 
   public syncWidth(sync: boolean, targetWidthCallback?: () => number): void {
@@ -277,7 +290,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     if (!this._listElement.isConnected) {
       this._dropdownElement.appendChild(this._listElement);
     }
-    
+
     removeAllChildren(this._listElement);
     createListItems(config, this._listElement);
 
@@ -315,7 +328,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
   }
 
   private _getListItemElements(): IListItemComponent[] {
-    return this._dropdownElement ? Array.from(this._dropdownElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[] : [];
+    return this._dropdownElement ? (Array.from(this._dropdownElement.querySelectorAll(LIST_ITEM_CONSTANTS.elementName)) as IListItemComponent[]) : [];
   }
 
   private _toggleSelectedOption(listItem: IListItemComponent, isSelected: boolean): void {
@@ -327,7 +340,7 @@ export class ListDropdownAdapter implements IListDropdownAdapter {
     const listItems = this._getListItemElements();
     if (listItems.length) {
       const activeItems = listItems.filter(li => li !== listItem && li.active);
-      activeItems.forEach(ai => ai.active = false);
+      activeItems.forEach(ai => (ai.active = false));
     }
 
     // Now we can toggle the selected state and sync the active state

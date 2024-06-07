@@ -105,7 +105,7 @@ export class IconCore implements IIconCore {
             this._adapter.setContent(null);
             return;
           }
-          
+
           // We don't have a registry icon, so let's try the network to fetch it
           if (!this._externalType) {
             this._externalType = 'standard';
@@ -139,7 +139,7 @@ export class IconCore implements IIconCore {
   }
 
   private _setIconContent(svgElement: SVGElement | null): void {
-    const clone = svgElement ? svgElement.cloneNode(true) as SVGElement : null;
+    const clone = svgElement ? (svgElement.cloneNode(true) as SVGElement) : null;
     if (clone) {
       this._adapter.setContent(clone);
     }
@@ -227,7 +227,7 @@ export class IconCore implements IIconCore {
       this._safeApplyIcon();
     }
   }
-  
+
   public get viewbox(): string {
     return this._viewbox;
   }

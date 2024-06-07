@@ -10,9 +10,9 @@ The time picker component can be used to allow the user to enter a time manually
 
 This component is composable and only requires that an `<input>` element be provided as one of its children. It's common that the component wraps a text-field component to provide the Forge look-and-feel, but it can technically attach itself to any instance of a child `<input>` element.
 
->**Important**: all communication with this component through its APIs, such as getting/setting value or listen for change events **must** be in 24 hour time format. Ex. "15:30".
+> **Important**: all communication with this component through its APIs, such as getting/setting value or listen for change events **must** be in 24 hour time format. Ex. "15:30".
 >
->This is to ensure that a compatible format is used in all locales, as well as to provide a uniform way to interact with the component.
+> This is to ensure that a compatible format is used in all locales, as well as to provide a uniform way to interact with the component.
 
 ## Example
 
@@ -29,6 +29,7 @@ You can still use attributes such as `placeholder` on the `<input>` but things l
 <CustomArgTypes />
 
 ## Accessibility
+
 - When using a screen reader, ensure keyboard navigation in the dropdown list is announced.
 - Be sure that you add the proper `aria-label` to the `<input>` element if not using a `<label>` element with a `for` attribute.
 - The time-picker component will add the following ARIA attributes to the `<input>` element for you:

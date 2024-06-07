@@ -65,22 +65,22 @@ describe('Open icon', () => {
 
     it('should toggle open attribute when open property is toggled', async () => {
       const el = await fixture<IOpenIconComponent>(html`<forge-open-icon></forge-open-icon>`);
-  
+
       expect(el.open).to.be.false;
       expect(el.hasAttribute(OPEN_ICON_CONSTANTS.attributes.OPEN)).to.be.false;
-  
+
       el.open = true;
-      
+
       expect(el.open).to.be.true;
       expect(el.hasAttribute(OPEN_ICON_CONSTANTS.attributes.OPEN)).to.be.true;
-  
+
       el.open = false;
-  
+
       expect(el.open).to.be.false;
       expect(el.hasAttribute(OPEN_ICON_CONSTANTS.attributes.OPEN)).to.be.false;
     });
   });
-  
+
   describe('orientation', () => {
     it('should set orientation attribute when property is set', async () => {
       const el = await fixture<IOpenIconComponent>(html`<forge-open-icon></forge-open-icon>`);

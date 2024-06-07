@@ -1,0 +1,14 @@
+.github/
+.husky/
+.storybook/
+.storybook-static/
+.coverage/
+dist/
+docs/
+node_modules/
+src/dev/
+src/test/
+package-lock.json
+CONTRIBUTING.md
+CHANGELOG.md
+README.md

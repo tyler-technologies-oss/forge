@@ -114,7 +114,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
   public removeInputListener(type: string, listener: (event: Event) => void): void {
     this._fromInputElement?.removeEventListener(type, listener);
   }
-  
+
   public removeToInputListener(type: string, listener: (event: Event) => void): void {
     this._toInputElement?.removeEventListener(type, listener);
   }
@@ -159,14 +159,14 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     }
 
     this._fromInputElement.value = value;
-    
+
     if (this._fromInputMask) {
       this._fromInputMask.updateMask();
     }
 
     if (emitEvents) {
       this._fromInputElement.dispatchEvent(new Event('change'));
-      this._fromInputElement.dispatchEvent(new Event('input'));;
+      this._fromInputElement.dispatchEvent(new Event('input'));
     }
   }
 
@@ -176,11 +176,11 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     }
 
     this._toInputElement.value = value;
-    
+
     if (this._toInputMask) {
       this._toInputMask.updateMask();
     }
-    
+
     if (emitEvents) {
       this._toInputElement.dispatchEvent(new Event('change'));
       this._toInputElement.dispatchEvent(new Event('input'));
@@ -192,7 +192,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
   }
 
   public isInputFocused(target?: EventTarget | null): boolean {
-    if (target && this._toInputElement === target || this._fromInputElement === target) {
+    if ((target && this._toInputElement === target) || this._fromInputElement === target) {
       return true;
     }
     const activeEl = getActiveElement(this._component.ownerDocument);

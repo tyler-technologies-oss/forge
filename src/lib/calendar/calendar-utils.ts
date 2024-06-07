@@ -2,7 +2,17 @@ import { getEventPath, isArray, isValidDate } from '@tylertech/forge-core';
 
 import { isSameDate } from '../core/utils/date-utils';
 import { ICalendarMenuOption } from './calendar-menu/calendar-menu-constants';
-import { CALENDAR_CONSTANTS, CalendarEventBuilder, DayOfWeek, ICalendarEvent, ICalendarNumberRange, ICalendarMenuMonthConfig, ICalendarMenuYearConfig, ICalendarDisabledDateParams, CalendarView } from './calendar-constants';
+import {
+  CALENDAR_CONSTANTS,
+  CalendarEventBuilder,
+  DayOfWeek,
+  ICalendarEvent,
+  ICalendarNumberRange,
+  ICalendarMenuMonthConfig,
+  ICalendarMenuYearConfig,
+  ICalendarDisabledDateParams,
+  CalendarView
+} from './calendar-constants';
 import { getLocalizedMonth, getLocalizedYear } from './calendar-locale-utils';
 import { DateRange } from './core/date-range';
 import { eventIncludesDate, eventIncludesElement } from './calendar-dom-utils';
@@ -104,10 +114,10 @@ export function getDateRangeFromDates(dates: Date[]): DateRange {
     return new DateRange();
   }
   if (dates.length === 1) {
-    return new DateRange({from: new Date(dates[0])});
+    return new DateRange({ from: new Date(dates[0]) });
   }
   const minAndMax = getMinAndMaxDates(dates);
-  return new DateRange({from: minAndMax[0], to: minAndMax[minAndMax.length - 1]});
+  return new DateRange({ from: minAndMax[0], to: minAndMax[minAndMax.length - 1] });
 }
 
 /** Returns an array of dates from a date range. */
@@ -184,7 +194,7 @@ export function parseDateOffset(offset: string): Date {
 export function parseYearRange(range: string): ICalendarNumberRange {
   const parts = range.split(':');
   if (parts?.length < 2) {
-    return {min: 1970, max: 1970};
+    return { min: 1970, max: 1970 };
   }
   const thisYear = new Date().getFullYear();
   const parsedParts = parts.slice(0, 2).map(p => {
@@ -195,7 +205,7 @@ export function parseYearRange(range: string): ICalendarNumberRange {
     }
     return +p;
   });
-  return {min: parsedParts[0], max: parsedParts[1]};
+  return { min: parsedParts[0], max: parsedParts[1] };
 }
 
 /** Gets an array of month ICalendarMenuOptions. */
@@ -205,8 +215,8 @@ export function getMonthOptions(config: ICalendarMenuMonthConfig): ICalendarMenu
   const minMonth = config.min?.getMonth() ?? -1;
   const maxMonth = config.max?.getMonth() ?? 12;
   return [...Array(12).keys()].map(k => {
-    const lessThanMin = config.min ? config.selectedYear < minYear || config.selectedYear === minYear && k < minMonth : false;
-    const greaterThanMax = config.max ? config.selectedYear > maxYear || config.selectedYear === maxYear && k > maxMonth : false;
+    const lessThanMin = config.min ? config.selectedYear < minYear || (config.selectedYear === minYear && k < minMonth) : false;
+    const greaterThanMax = config.max ? config.selectedYear > maxYear || (config.selectedYear === maxYear && k > maxMonth) : false;
     return {
       value: k,
       label: getLocalizedMonth(k, 'long', config.locale),
@@ -282,7 +292,7 @@ export function getEventsOnDate(date: Date, events: ICalendarEvent[], builder: C
     const builtEvents = builder(date);
     if (builtEvents) {
       if (isArray(builtEvents)) {
-        eventsOnDate.push(...builtEvents as ICalendarEvent[]);
+        eventsOnDate.push(...(builtEvents as ICalendarEvent[]));
       } else {
         eventsOnDate.push(builtEvents as ICalendarEvent);
       }
@@ -330,5 +340,10 @@ export function coerceDateFromValue(value?: Date | string | null): Date | null {
 
 /** Returns whether an event should be handled or ignored. */
 export function shouldHandleEvent(evt: Event, view: CalendarView, preventFocus: boolean): boolean {
-  return preventFocus || !getEventPath(evt).length || !!(view === 'date' && eventIncludesDate(evt)) || !!(view !== 'date' && eventIncludesElement(evt, CALENDAR_CONSTANTS.ids.MENU));
+  return (
+    preventFocus ||
+    !getEventPath(evt).length ||
+    !!(view === 'date' && eventIncludesDate(evt)) ||
+    !!(view !== 'date' && eventIncludesElement(evt, CALENDAR_CONSTANTS.ids.MENU))
+  );
 }

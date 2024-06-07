@@ -54,7 +54,7 @@
   position: relative;
   align-items: center;
   justify-content: center;
-  
+
   display: flex;
 
   overflow: hidden;
@@ -63,7 +63,7 @@
   transition-delay: #{token(animation-delay)};
   transition-timing-function: #{token(animation-timing-function)};
   transition-property: border-color;
-  
+
   box-sizing: border-box;
   border-radius: #{token(shape)};
   border-width: #{token(border-width)};
@@ -81,12 +81,12 @@
 
     // Using containment here should mitigate the hit to performance from animating the size
     contain: strict;
-    
+
     transition-duration: #{token(animation-duration)};
     transition-delay: #{token(animation-delay)};
     transition-timing-function: #{token(animation-timing-function)};
     transition-property: inline-size, block-size, border-color;
-    
+
     border-radius: #{token(shape)};
     border-width: calc(#{token(mark-height)} / 2) calc(#{token(mark-width)} / 2);
     border-color: #{token(mark-unchecked-color)};

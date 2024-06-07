@@ -33,14 +33,14 @@ export declare abstract class WithLongpressListenerContract {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function WithLongpressListener<TBase extends MixinBase<object>>(base: TBase = (class {} as unknown) as TBase) {
+export function WithLongpressListener<TBase extends MixinBase<object>>(base: TBase = class {} as unknown as TBase) {
   abstract class LongpressListener extends base {
     private _longpressTimeout: number | undefined;
     private _longpressStartListener = this._onLongpressStart.bind(this);
     private _longpressEndListener = this._onLongpressEnd.bind(this);
     private _longpressContextMenuListener = this._onLongpressContextMenu.bind(this);
     private _longpressClickPrevent = this._onLongpressClickPrevent.bind(this);
-    
+
     protected _longpressDelay = LONGPRESS_TRIGGER_DELAY;
 
     protected abstract _onLongpress(): void;
@@ -67,7 +67,10 @@ export function WithLongpressListener<TBase extends MixinBase<object>>(base: TBa
         }
 
         // We need to prevent any ghost click events from firing after a longpress is detected
-        (evt.target as HTMLElement).addEventListener('click', this._longpressClickPrevent, { capture: true, once: true });
+        (evt.target as HTMLElement).addEventListener('click', this._longpressClickPrevent, {
+          capture: true,
+          once: true
+        });
       }, this._longpressDelay);
     }
 

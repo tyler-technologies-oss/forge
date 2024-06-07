@@ -2,7 +2,17 @@ import { ICustomElementCore } from '@tylertech/forge-core';
 import { MoveController } from '../core/controllers/move-controller';
 import { DismissibleStack } from '../core/utils/dismissible-stack';
 import { IDialogAdapter } from './dialog-adapter';
-import { DialogAnimationType, DialogMode, DialogPlacement, DialogPositionStrategy, DialogPreset, DialogSizeStrategy, DialogType, DIALOG_CONSTANTS, IDialogMoveEventData } from './dialog-constants';
+import {
+  DialogAnimationType,
+  DialogMode,
+  DialogPlacement,
+  DialogPositionStrategy,
+  DialogPreset,
+  DialogSizeStrategy,
+  DialogType,
+  DIALOG_CONSTANTS,
+  IDialogMoveEventData
+} from './dialog-constants';
 
 export interface IDialogCore extends ICustomElementCore {
   open: boolean;
@@ -46,13 +56,7 @@ export class DialogCore implements IDialogCore {
   constructor(public _adapter: IDialogAdapter) {}
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration([
-      'animationType',
-      'positionStrategy',
-      'sizeStrategy',
-      'persistent',
-      'moveable'
-    ]);
+    this._adapter.tryApplyGlobalConfiguration(['animationType', 'positionStrategy', 'sizeStrategy', 'persistent', 'moveable']);
 
     if (this._trigger && !this._adapter.triggerElement) {
       this._adapter.tryLocateTriggerElement(this._trigger);
@@ -82,7 +86,11 @@ export class DialogCore implements IDialogCore {
   }
 
   public dispatchBeforeCloseEvent(): boolean {
-    const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, { cancelable: true, bubbles: true, composed: true });
+    const evt = new CustomEvent(DIALOG_CONSTANTS.events.BEFORE_CLOSE, {
+      cancelable: true,
+      bubbles: true,
+      composed: true
+    });
     this._adapter.dispatchHostEvent(evt);
     return !evt.defaultPrevented;
   }
@@ -166,8 +174,7 @@ export class DialogCore implements IDialogCore {
 
   private _onDialogFormSubmit(evt: SubmitEvent): void {
     evt.stopPropagation();
-    const isDialogSubmitter = evt.submitter?.getAttribute('formmethod') === 'dialog' ||
-                              (evt.target as HTMLFormElement)?.getAttribute('method') === 'dialog';
+    const isDialogSubmitter = evt.submitter?.getAttribute('formmethod') === 'dialog' || (evt.target as HTMLFormElement)?.getAttribute('method') === 'dialog';
     if (isDialogSubmitter) {
       this._tryClose();
     }

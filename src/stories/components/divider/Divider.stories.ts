@@ -10,15 +10,11 @@ const meta = {
   title: 'Components/Divider',
   render: args => {
     const el = customElementStoryRenderer(component, args);
-    let style = "height: 200px;"
+    let style = 'height: 200px;';
     if (!args.vertical) {
-      style = "";
+      style = '';
     }
-    return html`
-      <div style=${style}>
-        ${el}
-      </div>
-    `;
+    return html` <div style=${style}>${el}</div> `;
   },
   component,
   parameters: {
@@ -26,13 +22,10 @@ const meta = {
   },
   argTypes: {
     ...generateCustomElementArgTypes({
-      tagName: component,
-      
-    }),
+      tagName: component
+    })
   },
-  args: {
-
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;

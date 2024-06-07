@@ -33,37 +33,37 @@
   }
 }
 
-:host([alignment=start]) {
+:host([alignment='start']) {
   .forge-stack {
     @include override(alignment, start, value);
   }
 }
 
-:host([alignment=center]) {
+:host([alignment='center']) {
   .forge-stack {
     @include override(alignment, center, value);
   }
 }
 
-:host([alignment=end]) {
+:host([alignment='end']) {
   .forge-stack {
     @include override(alignment, end, value);
   }
 }
 
-:host([justify=start]) {
+:host([justify='start']) {
   .forge-stack {
     @include override(justify, start, value);
   }
 }
 
-:host([justify=center]) {
+:host([justify='center']) {
   .forge-stack {
     @include override(justify, center, value);
   }
 }
 
-:host([justify=end]) {
+:host([justify='end']) {
   .forge-stack {
     @include override(justify, end, value);
   }

@@ -4,7 +4,7 @@
 
 @mixin host {
   display: block;
-  
+
   width: #{token(width)};
   height: #{token(height)};
 }
@@ -43,7 +43,7 @@
     'body-left body-footer body-right';
   grid-template-rows: auto 1fr auto;
   grid-template-columns: auto 1fr auto;
-  
+
   width: #{token(width)};
   min-width: 0;
   min-height: 0;

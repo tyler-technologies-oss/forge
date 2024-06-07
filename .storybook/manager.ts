@@ -7,5 +7,5 @@ addons.setConfig({
     filters: {
       hidden: item => !item.tags?.includes('hidden')
     }
-  },
+  }
 });

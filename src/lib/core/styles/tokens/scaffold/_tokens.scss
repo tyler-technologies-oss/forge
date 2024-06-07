@@ -5,7 +5,7 @@ $tokens: (
   height: utils.module-val(scaffold, height, 100%),
   width: utils.module-val(scaffold, width, 100%),
   overflow: utils.module-val(scaffold, overflow, hidden),
-  body-position: utils.module-val(scaffold, body-position, relative),
+  body-position: utils.module-val(scaffold, body-position, relative)
 ) !default;
 
 @function get($key) {

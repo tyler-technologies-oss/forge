@@ -44,7 +44,7 @@ export class ListDropdownAware extends BaseComponent {
         break;
     }
   }
-  
+
   /** Gets/sets the list of classes to apply to the popup element. */
   @coreProperty()
   public declare popupClasses: string | string[];

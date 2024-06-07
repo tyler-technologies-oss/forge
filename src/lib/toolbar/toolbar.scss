@@ -54,7 +54,7 @@
 // No divider
 //
 
-:host(:is([no-divider],[no-border])) {
+:host(:is([no-divider], [no-border])) {
   .forge-toolbar {
     border: none;
   }
@@ -84,6 +84,6 @@
 // Slotted
 //
 
-::slotted(:is(h1,h2,h3,h4,h5,h6,p)) {
+::slotted(:is(h1, h2, h3, h4, h5, h6, p)) {
   margin: 0;
 }

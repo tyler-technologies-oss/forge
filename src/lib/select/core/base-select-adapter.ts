@@ -78,26 +78,48 @@ export abstract class BaseSelectAdapter<T extends IBaseSelectComponent> extends 
 
   private _createOptionsFromElements(optionElements: IOptionComponent[]): ISelectOption[] {
     return optionElements.map(o => {
-      let optionClass = o.hasAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS) as string : o.optionClass;
+      let optionClass = o.hasAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS)
+        ? (o.getAttribute(OPTION_CONSTANTS.attributes.OPTION_CLASS) as string)
+        : o.optionClass;
       if (typeof optionClass === 'string') {
         optionClass = optionClass.split(' ');
       }
 
       return {
         // eslint-disable-next-line @typescript-eslint/no-extra-parens
-        label: o.hasAttribute(OPTION_CONSTANTS.attributes.LABEL) ? o.getAttribute(OPTION_CONSTANTS.attributes.LABEL) as string : (isDefined(o.label) ? o.label : o.innerText),
-        secondaryLabel: o.hasAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) ? o.getAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) as string : isDefined(o.secondaryLabel) ? o.secondaryLabel : undefined,
+        label: o.hasAttribute(OPTION_CONSTANTS.attributes.LABEL)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LABEL) as string)
+          : isDefined(o.label)
+            ? o.label
+            : o.innerText,
+        secondaryLabel: o.hasAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.SECONDARY_LABEL) as string)
+          : isDefined(o.secondaryLabel)
+            ? o.secondaryLabel
+            : undefined,
         value: o.hasAttribute(OPTION_CONSTANTS.attributes.VALUE) ? o.getAttribute(OPTION_CONSTANTS.attributes.VALUE) : o.value,
         disabled: o.hasAttribute(OPTION_CONSTANTS.attributes.DISABLED),
         divider: o.hasAttribute(OPTION_CONSTANTS.attributes.DIVIDER),
         optionClass,
-        leadingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) as string : o.leadingIcon,
-        leadingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) as string : o.leadingIconClass,
-        leadingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) ? o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) as ListDropdownIconType : o.leadingIconType,
+        leadingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON) as string)
+          : o.leadingIcon,
+        leadingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_CLASS) as string)
+          : o.leadingIconClass,
+        leadingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.LEADING_ICON_TYPE) as ListDropdownIconType)
+          : o.leadingIconType,
         leadingIconComponentProps: o.leadingIconComponentProps,
-        trailingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) as string : o.trailingIcon,
-        trailingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) as string : o.trailingIconClass,
-        trailingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) ? o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) as ListDropdownIconType : o.trailingIconType,
+        trailingIcon: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON) as string)
+          : o.trailingIcon,
+        trailingIconClass: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_CLASS) as string)
+          : o.trailingIconClass,
+        trailingIconType: o.hasAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE)
+          ? (o.getAttribute(OPTION_CONSTANTS.attributes.TRAILING_ICON_TYPE) as ListDropdownIconType)
+          : o.trailingIconType,
         trailingIconComponentProps: o.trailingIconComponentProps,
         leadingBuilder: o.leadingBuilder,
         trailingBuilder: o.trailingBuilder

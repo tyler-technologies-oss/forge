@@ -3,16 +3,26 @@
 $base: 16px !default; // The Forge spacing system scales in multiples of 8
 
 $values: (
-  '0125': $base * 0.125, // 2px
-  '025': $base * 0.25,   // 4px
-  '050': $base * 0.5,    // 8px
-  '075': $base * 0.75,   // 12px
-  '100': $base,          // 16px
-  '125': $base * 1.25,   // 20px
-  '150': $base * 1.5,    // 24px
-  '200': $base * 2,      // 32px
-  '300': $base * 3,      // 48px
-  '350': $base * 3.5,    // 56px
+  '0125': $base * 0.125,
+  // 2px
+  '025': $base * 0.25,
+  // 4px
+  '050': $base * 0.5,
+  // 8px
+  '075': $base * 0.75,
+  // 12px
+  '100': $base,
+  // 16px
+  '125': $base * 1.25,
+  // 20px
+  '150': $base * 1.5,
+  // 24px
+  '200': $base * 2,
+  // 32px
+  '300': $base * 3,
+  // 48px
+  '350': $base * 3.5,
+  // 56px
 ) !default;
 
 $tokens: (
@@ -25,10 +35,9 @@ $tokens: (
   large: map.get($values, '150'),
   xlarge: map.get($values, '200'),
   xxlarge: map.get($values, '300'),
-  xxxlarge: map.get($values, '350'),
+  xxxlarge: map.get($values, '350')
 );
 
 @function get($key) {
   @return map.get($tokens, $key);
 }
-

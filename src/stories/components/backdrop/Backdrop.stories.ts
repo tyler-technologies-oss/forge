@@ -10,15 +10,11 @@ const component = 'forge-backdrop';
 const meta = {
   title: 'Components/Backdrop',
   render: args => {
-    const cssVarArgs = getCssVariableArgs(args)
+    const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     return html`
       <div style="height: 256px; width: 320px; position: relative;">
-        <forge-backdrop
-          .visible=${args.visible}
-          .fixed=${args.fixed}
-          style=${style}>
-        </forge-backdrop>
+        <forge-backdrop .visible=${args.visible} .fixed=${args.fixed} style=${style}> </forge-backdrop>
       </div>
     `;
   },
@@ -30,7 +26,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component
-    }),
+    })
   },
   args: {
     visible: true,

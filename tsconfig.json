@@ -23,10 +23,5 @@
     },
     "types": ["node", "mocha", "sinon", "chai"]
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "auto.config.ts",
-    "docs"
-  ]
+  "exclude": ["node_modules", "dist", "auto.config.ts", "docs"]
 }

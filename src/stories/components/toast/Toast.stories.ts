@@ -20,7 +20,7 @@ const meta = {
     const cssVarArgs = getCssVariableArgs(args);
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
     const toastRef = createRef();
-    const showToast = () => (toastRef.value as IToastComponent).open = !(toastRef.value as IToastComponent).open;
+    const showToast = () => ((toastRef.value as IToastComponent).open = !(toastRef.value as IToastComponent).open);
 
     return html`
       <forge-button variant="raised" @click=${showToast}>Show Toast</forge-button>
@@ -46,10 +46,10 @@ const meta = {
       tagName: component,
       controls: {
         placement: { control: 'select', options: OVERLAY_PLACEMENT_OPTIONS },
-        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS]}
+        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS] }
       }
     }),
-    text: { control: 'text' },
+    text: { control: 'text' }
   },
   args: {
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -59,8 +59,8 @@ const meta = {
     actionText: '',
     dismissible: false,
     dismissLabel: 'Dismiss toast',
-    theme: 'default',
-  },
+    theme: 'default'
+  }
 } satisfies Meta<IToastProperties & { text: string }>;
 
 export default meta;

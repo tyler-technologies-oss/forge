@@ -30,11 +30,11 @@
   padding-block: #{token(padding-block)};
   overflow: hidden;
   box-sizing: border-box;
-  
+
   pointer-events: none;
-  
+
   transition: transform #{token(transition-duration)} #{token(transition-easing)};
-  
+
   font-weight: #{token(font-weight)};
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -39,7 +39,7 @@ const meta = {
       controls: {
         focusMode: { control: { type: 'select' }, options: ['focusin', 'focus'] }
       }
-    }),
+    })
   },
   args: {
     active: false,
@@ -78,6 +78,6 @@ export const WithCard: Story = {
           style=${style}>
         </forge-focus-indicator>
       </forge-card>
-    `
+    `;
   }
-}
+};

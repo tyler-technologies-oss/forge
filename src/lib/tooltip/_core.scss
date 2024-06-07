@@ -48,7 +48,7 @@
   box-shadow: inherit;
   border: inherit;
   border-end-start-radius: #{token(arrow-shape)};
-  
+
   rotate: #{token(arrow-rotation, custom)};
   clip-path: #{token(arrow-clip-path, custom)};
 }

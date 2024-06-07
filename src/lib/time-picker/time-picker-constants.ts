@@ -56,7 +56,12 @@ export type TimePickerParseCallback = (time: string) => number | null;
 export type TimePickerFormatCallback = (value: number | null) => string;
 export type TimePickerCustomOptionCallback<T> = (value: T, use24HourTime: boolean, allowSeconds: boolean) => number;
 export type TimePickerCoercionCallback = (rawValue: string, coercedValue: string, allowSeconds: boolean) => string;
-export type TimePickerPrepareMaskCallback = (value: string, masked: Masked<string>, flags: IMask.AppendFlags, maskInstance: InputMask<IMask.AnyMaskedOptions>) => string;
+export type TimePickerPrepareMaskCallback = (
+  value: string,
+  masked: Masked<string>,
+  flags: IMask.AppendFlags,
+  maskInstance: InputMask<IMask.AnyMaskedOptions>
+) => string;
 
 export interface ITimePickerOption<T = any> extends IListDropdownOption<T> {
   toMilliseconds: TimePickerCustomOptionCallback<T>;

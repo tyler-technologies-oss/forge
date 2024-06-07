@@ -17,6 +17,7 @@ This is optional, but Forge provides custom data files for VS Code that you can 
 2. If it doesn't already exist, create a `.vscode` directory at the root of your project
 3. If it doesn't already exist, create `settings.json` file inside the `.vscode` directory
 4. Add the following to the `settings.json` file:
+
 ```json
 {
   "html.customData": ["./node_modules/@tylertech/forge/dist/vscode.html-custom-data.json"],
@@ -64,13 +65,12 @@ Some properties are boolean attributes, which means that they can be set to `tru
 > It's important to note that boolean attributes are set to `true` when the attribute is present, regardless of the value.
 >
 > In the following example, the `disabled` attribute is set to `false` but the button will still be disabled:
-> 
+>
 > ```html
 > <forge-button disabled="false">Button</forge-button>
 > ```
 >
 > You would to remove the attribute from the element to set the underlying `disabled` property to `false`.
-
 
 ## Events
 
@@ -172,7 +172,7 @@ forge-button::part(root) {
 
 ## Flash of Unstyled Content (FOUC)
 
-When using Tyler Forge components, you may experience  what is referred to as "flash of unstyled content: or FOUC when the page loads. This is
+When using Tyler Forge components, you may experience what is referred to as "flash of unstyled content: or FOUC when the page loads. This is
 caused by the browser rendering the page before the Forge elements have been what is referred to use "upgraded" by the browser. Upgrading a
 custom element is the process of defining the element with the browser's custom element registry, which allows the browser to instantiate the
 element and apply the custom element's styles, template, and behavior.
@@ -199,10 +199,7 @@ customElements.whenDefined('forge-button').then(() => {
 });
 
 // Wait for all custom elements to be defined with `Promise.allSettled()`
-Promise.allSettled([
-  customElements.whenDefined('forge-scaffold'),
-  customElements.whenDefined('forge-card'),
-]).then(() => {
+Promise.allSettled([customElements.whenDefined('forge-scaffold'), customElements.whenDefined('forge-card')]).then(() => {
   // Do something after all custom elements have been defined
 });
 ```

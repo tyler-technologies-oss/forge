@@ -27,11 +27,7 @@ export class ToastCore implements IToastCore {
   constructor(private _adapter: IToastAdapter) {}
 
   public initialize(): void {
-    this._adapter.tryApplyGlobalConfiguration([
-      'duration',
-      'placement',
-      'dismissible'
-    ]);
+    this._adapter.tryApplyGlobalConfiguration(['duration', 'placement', 'dismissible']);
 
     if (this._open) {
       this.show();
@@ -40,7 +36,7 @@ export class ToastCore implements IToastCore {
 
   public show(): void {
     this._adapter.show();
-    
+
     if (isFinite(this._duration) && this._duration > 0) {
       /* c8 ignore next 3 */
       if (this._hideTimeout) {
@@ -137,7 +133,7 @@ export class ToastCore implements IToastCore {
       } else {
         this._adapter.removeActionListener(this._actionListener);
       }
-      
+
       this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.ACTION_TEXT, !!this._actionText, this._actionText);
     }
   }

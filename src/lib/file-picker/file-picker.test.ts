@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import {  fixture, html } from '@open-wc/testing';
+import { fixture, html } from '@open-wc/testing';
 import { getShadowElement } from '@tylertech/forge-core';
 import { IFilePickerComponent } from './file-picker';
-import './file-picker'
+import './file-picker';
 import { FILE_PICKER_CONSTANTS } from './file-picker-constants';
 import { spy } from 'sinon';
 
@@ -27,7 +27,6 @@ describe('File Picker', () => {
     const el = await fixture<IFilePickerComponent>(html`<forge-file-picker></forge-file-picker>`);
     await expect(el.accept).to.be.null;
   });
-
 
   it('should initialize with no capture value', async () => {
     const el = await fixture<IFilePickerComponent>(html`<forge-file-picker></forge-file-picker>`);
@@ -87,13 +86,13 @@ describe('File Picker', () => {
   it('should update the accept value when the accept attribute is set', async () => {
     const el = await fixture<IFilePickerComponent>(html`<forge-file-picker></forge-file-picker>`);
     el.setAttribute(FILE_PICKER_CONSTANTS.attributes.ACCEPT, '.png');
-    await expect(el.accept).to.equal('.png')
+    await expect(el.accept).to.equal('.png');
   });
 
   it('should update the capture value when the accept attribute is set', async () => {
     const el = await fixture<IFilePickerComponent>(html`<forge-file-picker></forge-file-picker>`);
     el.setAttribute(FILE_PICKER_CONSTANTS.attributes.CAPTURE, 'user');
-    await expect(el.capture).to.equal('user')
+    await expect(el.capture).to.equal('user');
   });
 
   it('should update the multiple value when the accept attribute is set', async () => {
@@ -118,7 +117,7 @@ describe('File Picker', () => {
     const el = await fixture<IFilePickerComponent>(html`<forge-file-picker></forge-file-picker>`);
     el.accept = '.png';
     const input = getShadowElement(el, FILE_PICKER_CONSTANTS.selectors.INPUT) as HTMLInputElement;
-    await expect(input.getAttribute(FILE_PICKER_CONSTANTS.attributes.ACCEPT)).to.equal('.png')
+    await expect(input.getAttribute(FILE_PICKER_CONSTANTS.attributes.ACCEPT)).to.equal('.png');
   });
 
   it('should activate a click on the file input when the select button is clicked', async () => {
@@ -134,7 +133,7 @@ describe('File Picker', () => {
   it('should trigger a change event when the file input is triggered', async () => {
     const el = await fixture<IFilePickerComponent>(html`<forge-file-picker></forge-file-picker>`);
     const changeSpy = spy();
-    el.addEventListener(FILE_PICKER_CONSTANTS.events.FILES_CHANGED, changeSpy())
+    el.addEventListener(FILE_PICKER_CONSTANTS.events.FILES_CHANGED, changeSpy());
     const input = getShadowElement(el, FILE_PICKER_CONSTANTS.selectors.INPUT) as HTMLInputElement;
     input.dispatchEvent(new Event('change', { bubbles: true }));
     await expect(changeSpy.calledOnce).to.be.true;

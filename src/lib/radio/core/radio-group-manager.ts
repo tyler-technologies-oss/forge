@@ -15,20 +15,23 @@ export class RadioGroupManager {
    * node for all IRadioComponents with the same name.
    * If the given IRadioComponent has an associated form element, it gets all RadioComponents with
    * the same name from the form element.
-   * 
+   *
    * @param el - The IRadioComponent to get the radio group for.
    * @param rootNode - The node to search for radios.
    * @param form - The form element to get radios from.
    * @returns An array of IRadioComponents that belong to the same radio group as the given
    * IRadioComponent.
    */
-  public static getRadioGroup(el: IRadioComponent, {
-    rootNode,
-    form
-  }: {
-    rootNode?: ShadowRoot | Document;
-    form?: HTMLFormElement;
-  } = {}): IRadioComponent[] {
+  public static getRadioGroup(
+    el: IRadioComponent,
+    {
+      rootNode,
+      form
+    }: {
+      rootNode?: ShadowRoot | Document;
+      form?: HTMLFormElement;
+    } = {}
+  ): IRadioComponent[] {
     // If there's no name, it's not part of a radio group
     if (!el.name) {
       return [el];
@@ -36,7 +39,7 @@ export class RadioGroupManager {
 
     // If there's no associated form element search the root node
     if (!el.form && !form) {
-      const root = rootNode ?? el.getRootNode() as ShadowRoot | Document;
+      const root = rootNode ?? (el.getRootNode() as ShadowRoot | Document);
       const namedRadios = root.querySelectorAll<IRadioComponent>(`${RADIO_CONSTANTS.elementName}[name=${el.name}]`);
       return Array.from(namedRadios).filter(radio => !radio.form);
     }
@@ -44,8 +47,7 @@ export class RadioGroupManager {
     // When there is a form element, get all RadioComponents with the same name
     const formRadios = ((el.form ?? form) as HTMLFormElement).elements.namedItem(el.name);
     if (formRadios && Object.prototype.isPrototypeOf.call(RadioNodeList.prototype, formRadios)) {
-      return Array.from(formRadios as RadioNodeList)
-        .filter((radio: HTMLElement) => radio.matches(RADIO_CONSTANTS.elementName)) as IRadioComponent[];
+      return Array.from(formRadios as RadioNodeList).filter((radio: HTMLElement) => radio.matches(RADIO_CONSTANTS.elementName)) as IRadioComponent[];
     }
     return [el];
   }
@@ -54,13 +56,13 @@ export class RadioGroupManager {
    * Sets the validity of a radio group.
    * If no radio is selected in the group and selection is required, it sets the validity to
    * `valueMissing`.
-   * 
+   *
    * @param el A radio component within the group to set the validity for.
    */
   public static setRadioGroupValidity(el: IRadioComponent): void {
     const group = RadioGroupManager.getRadioGroup(el);
     const invalid = RadioGroupManager._selectionIsRequired(group);
-    
+
     group.forEach(radio => {
       if (!radio.shadowRoot) {
         return;
@@ -76,7 +78,7 @@ export class RadioGroupManager {
 
   /**
    * Sets the required state of a radio group element.
-   * 
+   *
    * @param el A radio component within the group.
    */
   public static setRadioGroupRequired(el: IRadioComponent): void {
@@ -98,22 +100,22 @@ export class RadioGroupManager {
 
   /**
    * Gets the radio group element containing the given radio component or null if there is none.
-   * 
+   *
    * @param el A radio component within the group.
    * @returns The radio group element containing the given radio component or null if there is none.
    */
   public static getRadioGroupElement(el: IRadioComponent): HTMLElement | null {
     return el.closest(`:is(fieldset, [role=radiogroup], forge-radio-group)`);
-  };
+  }
 
   /**
    * Sets the selected radio in a radio group.
-   * 
+   *
    * @param el - The radio component to set as selected.
    */
   public static setSelectedRadioInGroup(el: IRadioComponent): void {
     const group = RadioGroupManager.getRadioGroup(el);
-    group.forEach(radio => radio.checked = radio === el);
+    group.forEach(radio => (radio.checked = radio === el));
   }
 
   /**
@@ -123,28 +125,31 @@ export class RadioGroupManager {
    * @param rootNode - The node to search for radios.
    * @param form - The form element to get radios from.
    */
-  public static syncRadioFocusableState(el: IRadioComponent, {
-    ignoreSelf,
-    rootNode,
-    form
-  }: {
-    ignoreSelf: boolean;
-    rootNode?: ShadowRoot | Document;
-    form?: HTMLFormElement;
-  } = { ignoreSelf: false }): void {
+  public static syncRadioFocusableState(
+    el: IRadioComponent,
+    {
+      ignoreSelf,
+      rootNode,
+      form
+    }: {
+      ignoreSelf: boolean;
+      rootNode?: ShadowRoot | Document;
+      form?: HTMLFormElement;
+    } = { ignoreSelf: false }
+  ): void {
     let group = RadioGroupManager.getRadioGroup(el, { rootNode, form });
     group = group.filter(radio => (ignoreSelf && radio !== el) || radio.shadowRoot);
 
     if (!group.some(radio => radio.checked)) {
-      group.forEach(radio => radio[isFocusable] = !radio.disabled);
+      group.forEach(radio => (radio[isFocusable] = !radio.disabled));
       return;
     }
-    group.forEach(radio => radio[isFocusable] = radio.checked && !radio.disabled);
+    group.forEach(radio => (radio[isFocusable] = radio.checked && !radio.disabled));
   }
 
   /**
    * Focuses the next radio in the radio group.
-   * 
+   *
    * @param el - The currently focused radio component.
    */
   public static focusNextRadioInGroup(el: IRadioComponent): void {
@@ -153,7 +158,7 @@ export class RadioGroupManager {
 
   /**
    * Focuses the previous radio in the radio group.
-   * 
+   *
    * @param el - The currently focused radio component.
    */
   public static focusPreviousRadioInGroup(el: IRadioComponent): void {
@@ -164,27 +169,27 @@ export class RadioGroupManager {
    * Adds or removes each radio in a radio group from the tab order. When no radio is selected and
    * focus is not in the group, all radios are added to the tab order. Otherwise only the selected
    * radio is added to the tab order.
-   * 
+   *
    * @param el - The focused or blurred radio component.
    * @param event - The event type (`'focus'` or `'blur'`).
    */
   public static setUncheckedRadioGroupFocus(el: IRadioComponent, event: 'focus' | 'blur'): void {
     const group = RadioGroupManager.getRadioGroup(el);
-    
+
     if (event === 'focus') {
-      group.forEach(radio => radio[isFocusable] = radio === el);
+      group.forEach(radio => (radio[isFocusable] = radio === el));
       return;
     }
 
     if (!el.checked || group[0] === el || group[group.length - 1] === el) {
-      group.forEach(radio => radio[isFocusable] = true);
+      group.forEach(radio => (radio[isFocusable] = true));
     }
   }
 
   /**
    * Resets a radio group to . This will run once each radio has a chance to
    * update.
-   * 
+   *
    * @param el - The radio component requesting the reset.
    * @returns A promise that resolves when the reset logic is complete.
    */
@@ -200,7 +205,7 @@ export class RadioGroupManager {
     if (!this._radiosRequestingReset.has(el)) {
       return;
     }
-    
+
     const group = RadioGroupManager.getRadioGroup(el);
     let checkedRadio: IRadioComponent | null = null;
 
@@ -208,7 +213,7 @@ export class RadioGroupManager {
     // be checked, if any
     group.forEach(radio => {
       this._radiosRequestingReset.delete(radio);
-      
+
       if (radio.defaultChecked) {
         checkedRadio = radio;
       }
@@ -225,7 +230,7 @@ export class RadioGroupManager {
   /**
    * Updates the focus and selection of a radio group based on the currently focused radio and the
    * direction of the focus change.
-   * 
+   *
    * @param el - The currently focused radio element.
    * @param increment - The direction of the focus change. 1 for forward, -1 for backward.
    */
@@ -270,7 +275,7 @@ export class RadioGroupManager {
 
   /**
    * Determines if a radio selection is required within a group.
-   * 
+   *
    * @param group - The radio components within a group.
    * @returns True if the radio selection is required, false otherwise.
    */

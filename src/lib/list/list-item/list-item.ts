@@ -37,9 +37,9 @@ declare global {
 
 /**
  * @tag forge-list-item
- * 
+ *
  * @summary List items are individual rows of content inside of a list.
- * 
+ *
  * @property {boolean} [selected=false] - Applies the selected state to the list item.
  * @property {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
  * @property {unknown} value - The unique value of the list item.
@@ -59,20 +59,20 @@ declare global {
  * @attribute {boolean} [three-line=false] - Sets the list item height to support at least three lines of text.
  * @attribute {boolean} [wrap=false] - Sets the list item to wrap its text content.
  * @attribute {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
- * 
+ *
  * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
- * 
+ *
  * @slot - The primary text.
  * @slot secondary-text - The secondary text.
  * @slot tertiary-text - The tertiary text.
  * @slot start - The start content.
  * @slot end - The end element.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart text-container - The container for the text content.
  * @csspart focus-indicator - The forwarded focus indicator's internal indicator element.
  * @csspart state-layer - The forwarded state layer's internal surface element.
- * 
+ *
  * @cssproperty --forge-list-item-background - The background color.
  * @cssproperty --forge-list-item-shape - The shape of the list item.
  * @cssproperty --forge-list-item-padding - The padding inside of the container element.
@@ -105,10 +105,7 @@ declare global {
  */
 @customElement({
   name: LIST_ITEM_CONSTANTS.elementName,
-  dependencies: [
-    StateLayerComponent,
-    FocusIndicatorComponent
-  ]
+  dependencies: [StateLayerComponent, FocusIndicatorComponent]
 })
 export class ListItemComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IListItemComponent {
   public static get observedAttributes(): string[] {

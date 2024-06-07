@@ -32,7 +32,6 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   private _focusIndicatorElement: IFocusIndicatorComponent;
   private _stateLayerElement: IStateLayerComponent;
 
-
   constructor(component: IButtonAreaComponent) {
     super(component);
     this._rootElement = getShadowElement(component, BUTTON_AREA_CONSTANTS.selectors.ROOT);
@@ -85,7 +84,9 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
   public startButtonObserver(callback: MutationCallback): void {
     if (this._buttonElement) {
       this._buttonObserver = new MutationObserver(callback);
-      this._buttonObserver.observe(this._buttonElement, { attributeFilter: [BUTTON_AREA_CONSTANTS.attributes.DISABLED] });
+      this._buttonObserver.observe(this._buttonElement, {
+        attributeFilter: [BUTTON_AREA_CONSTANTS.attributes.DISABLED]
+      });
     }
   }
 
@@ -108,7 +109,7 @@ export class ButtonAreaAdapter extends BaseAdapter<IButtonAreaComponent> impleme
     if (this._buttonElement) {
       this._buttonElement.disabled = true;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      requestAnimationFrame(() => this._buttonElement!.disabled = false);
+      requestAnimationFrame(() => (this._buttonElement!.disabled = false));
     }
   }
 }

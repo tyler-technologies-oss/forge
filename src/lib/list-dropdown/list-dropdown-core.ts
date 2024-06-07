@@ -30,7 +30,10 @@ export class ListDropdownCore implements IListDropdownCore {
   private _closeListener: () => void;
   private _scrollEndListener: () => void;
 
-  constructor(private _adapter: IListDropdownAdapter, config: IListDropdownConfig) {
+  constructor(
+    private _adapter: IListDropdownAdapter,
+    config: IListDropdownConfig
+  ) {
     this._config = Object.assign({ ...DEFAULT_LIST_DROPDOWN_CONFIG }, { ...config });
     this._selectListener = (value, id) => this._onSelect(value, id);
     this._closeListener = () => {
@@ -99,7 +102,7 @@ export class ListDropdownCore implements IListDropdownCore {
     const index = this.getActiveOptionIndex();
     return index >= 0 ? this._nonDividerOptions[index] : undefined;
   }
-  
+
   public toggleOptionMultiple(index: number, isSelected: boolean): void {
     return this._adapter.toggleOptionMultiple(index, isSelected);
   }
@@ -118,7 +121,7 @@ export class ListDropdownCore implements IListDropdownCore {
 
   public activateLastOption(): number {
     const options = this._nonDividerOptions;
-    const index = (options.length - 1) - options.findIndex(o => !o.disabled);
+    const index = options.length - 1 - options.findIndex(o => !o.disabled);
     if (index !== -1) {
       this.activateOption(index);
     }

@@ -6,7 +6,7 @@ const DIST_PATH = path.join(ROOT, 'dist');
 
 /**
  * This plugin is used to hook into the `auto` pipeline after the `shipit` command has completed.
- * 
+ *
  * This hook will allow us to access the new version that was calculated from `Auto` and use that
  * to update any necessary references in the project to complete deployment process, such as
  * ensuring that the exact version is used when publishing any subsequent assets for example.
@@ -37,7 +37,7 @@ module.exports = class ForgePreparePublishPlugin {
       auto.logger.log.error(`[${this.name}] Deployment path doesn't exist: ${deploymentPath}`);
       return process.exit(1);
     }
-  
+
     // Concatenate the new version number to the existing deployment path
     // For example, this will update a path like "dist/path/to/package" to this "dist/path/to/package@1.0.0"
     const versionNumber = newVersion.replace(/^v?/, ''); // Remove leading "v" if exists

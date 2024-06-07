@@ -20,7 +20,6 @@ $tokens: (
   inline-padding: utils.module-val(toast, inline-padding, spacing.variable(medium)),
   spacing: utils.module-val(toast, spacing, spacing.variable(xsmall)),
   message-padding: utils.module-val(toast, message-padding, spacing.variable(xsmall)),
-
   // Animation
   enter-duration: utils.module-val(toast, enter-duration, animation.variable(duration-medium1)),
   enter-timing: utils.module-val(toast, enter-timing, animation.variable(easing-decelerate)),

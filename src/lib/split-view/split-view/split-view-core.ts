@@ -37,7 +37,7 @@ export class SplitViewCore implements ISplitViewCore {
     this._adapter.registerDidOpenListener(this._didOpenListener);
     this._adapter.registerDidCloseListener(this._didCloseListener);
     this._adapter.observeResize(this._resizeObserverCallback);
-    
+
     this._applyOrientation();
     this._isInitialized = true;
   }
@@ -53,12 +53,12 @@ export class SplitViewCore implements ISplitViewCore {
 
   private _onDidOpen(): void {
     this._adapter.refitSlottedPanels(this._orientation);
-    this.update({ accessibility: true, cursor: true, size: true});
+    this.update({ accessibility: true, cursor: true, size: true });
   }
 
   private _onDidClose(): void {
     this._adapter.refitSlottedPanels(this._orientation);
-    this.update({ accessibility: true, cursor: true, size: true});
+    this.update({ accessibility: true, cursor: true, size: true });
   }
 
   private _onResize(entry: ResizeObserverEntry): void {
@@ -82,7 +82,7 @@ export class SplitViewCore implements ISplitViewCore {
     }
 
     // All panels after the first have resizable set to start.
-    panels.slice(1).forEach(panel => panel.resizable = 'start');
+    panels.slice(1).forEach(panel => (panel.resizable = 'start'));
   }
 
   /**

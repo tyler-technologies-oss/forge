@@ -26,18 +26,18 @@ declare global {
 
 /**
  * @tag forge-button
- * 
+ *
  * @summary Buttons represent actions that a user can take.
- * 
+ *
  * @description
  * Buttons are used when a user needs to take an action, such as submitting a form or opening a dialog.
  * Buttons can be used to trigger an action or to navigate to a new location. Buttons can be styled with
  * a variety of themes and variants.
- * 
+ *
  * @dependency forge-icon
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
- * 
+ *
  * @property {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
  * @property {ButtonVariant} [variant="text"] - The variant of the button.
  * @property {boolean} [fullWidth=false] - Whether or not the button is full-width.
@@ -49,10 +49,10 @@ declare global {
  * @property {HTMLFormElement | null} form - The form reference of the button if within a `<form>` element.
  * @property {boolean} [pill=false] - Whether or not the button is pill-shaped.
  * @property {ButtonTheme} [theme="primary"] - The theme of the button. Defaults to `primary`.
- * 
+ *
  * @globalconfig variant
  * @globalconfig dense
- * 
+ *
  * @attribute {string} [type="button"] - The type of button. Valid values are `button`, `submit`, and `reset`.
  * @attribute {ButtonVariant} [variant="text"] - The variant of the button.
  * @attribute {boolean} [full-width=false] - Whether or not the button is full-width.
@@ -63,9 +63,9 @@ declare global {
  * @attribute {boolean} [dense=false] - Whether or not the button is dense.
  * @attribute {boolean} [pill=false] - Whether or not the button is pill-shaped.
  * @attribute {ButtonTheme} [theme="primary"] - The theme of the button. Defaults to `primary`.
- * 
- * @event {PointerEvent} click - Fires when the button is clicked. 
- * 
+ *
+ * @event {PointerEvent} click - Fires when the button is clicked.
+ *
  * @cssproperty --forge-button-primary-color - The primary color of the button.
  * @cssproperty --forge-button-text-color - The text color of the button. Inherits from primary color.
  * @cssproperty --forge-button-disabled-color - The disabled color of the button.
@@ -131,29 +131,22 @@ declare global {
  * @cssproperty --forge-button-dense-height - The height of the dense button.
  * @cssproperty --forge-button-pill-shape - The shape of the pill button.
  * @cssproperty --forge-button-pill-padding-inline - The inline padding of the pill button.
- * 
+ *
  * @csspart root - The root container element.
  * @csspart focus-indicator - The focus-indicator indicator element.
  * @csspart state-layer - The state-layer surface element.
- * 
+ *
  * @slot - This is a default/unnamed slot for the label text.
  * @slot start - Elements to logically render before the label text.
  * @slot end - Elements to logically render after the label text.
  */
 @customElement({
   name: BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent,
-    IconComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconComponent]
 })
 export class ButtonComponent extends BaseButton<ButtonCore> implements IButtonComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes),
-      ...Object.values(BUTTON_CONSTANTS.observedAttributes)
-    ];
+    return [...Object.values(BASE_BUTTON_CONSTANTS.observedAttributes), ...Object.values(BUTTON_CONSTANTS.observedAttributes)];
   }
 
   protected readonly _core: ButtonCore;

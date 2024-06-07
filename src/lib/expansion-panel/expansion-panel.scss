@@ -30,7 +30,6 @@
   .inner {
     @include inner;
   }
-  
 }
 
 .hidden {
@@ -53,13 +52,13 @@
   }
 }
 
-:host([open]:is(:not([orientation]),[orientation=vertical])) {
+:host([open]:is(:not([orientation]), [orientation='vertical'])) {
   .content {
     @include open-vertical;
   }
 }
 
-:host([open][orientation=horizontal]) {
+:host([open][orientation='horizontal']) {
   .content {
     @include open-horizontal;
   }
@@ -69,7 +68,7 @@
 // Orientation
 //
 
-:host([orientation=horizontal]) {
+:host([orientation='horizontal']) {
   .forge-expansion-panel {
     @include orientation-horizontal-base;
   }
@@ -77,14 +76,13 @@
   .content {
     @include content-orientation-horizontal;
   }
-
 }
 
 //
 // Animation type
 //
 
-:host([animation-type=none]) {
+:host([animation-type='none']) {
   .content {
     transition: none;
   }

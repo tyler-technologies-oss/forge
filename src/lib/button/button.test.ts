@@ -18,7 +18,7 @@ describe('Button', () => {
     const rootEl = getRootEl(el);
     const stateLayer = getStateLayer(el);
     const focusIndicator = getFocusIndicator(el);
-    
+
     expect(el.shadowRoot).not.to.be.null;
     expect(el.type).to.equal('button');
     expect(rootEl.getAttribute('part')).to.equal('root');
@@ -111,20 +111,20 @@ describe('Button', () => {
 
   describe('ButtonComponentDelegate', () => {
     it('should create button via delegate', async () => {
-      const delegate = new ButtonComponentDelegate({ options: { text: 'Button' }});
+      const delegate = new ButtonComponentDelegate({ options: { text: 'Button' } });
 
       expect(delegate.element).to.be.instanceOf(ButtonComponent);
       expect(delegate.element.innerText).to.equal('Button');
     });
 
     it('should set variant via delegate', async () => {
-      const delegate = new ButtonComponentDelegate({ options: { variant: 'raised' }});
+      const delegate = new ButtonComponentDelegate({ options: { variant: 'raised' } });
 
       expect(delegate.element.variant).to.equal('raised');
     });
 
     it('should set type via delegate', async () => {
-      const delegate = new ButtonComponentDelegate({ options: { type: 'submit' }});
+      const delegate = new ButtonComponentDelegate({ options: { type: 'submit' } });
 
       expect(delegate.element.type).to.equal('submit');
     });
@@ -188,7 +188,7 @@ describe('Button', () => {
   }
 
   function getStateLayer(btn: IButtonComponent): IStateLayerComponent {
-    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent
+    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
   function getFocusIndicator(btn: IButtonComponent): IFocusIndicatorComponent {
@@ -197,9 +197,9 @@ describe('Button', () => {
 
   function clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 });

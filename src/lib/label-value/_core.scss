@@ -15,7 +15,7 @@
     'icon label'
     'icon value';
 }
-  
+
 @mixin container {
   display: flex;
   flex-direction: column;
@@ -35,12 +35,12 @@
 
 @mixin label {
   @include typography.style(label2);
-  
+
   grid-area: label;
   justify-self: #{token(align)};
   margin-block-start: #{token(label-block-start-spacing)};
   margin-block-end: #{token(label-block-end-spacing)};
-  
+
   line-height: normal;
   text-align: #{token(align)};
 
@@ -54,7 +54,7 @@
   display: grid;
   align-items: center;
   justify-self: #{token(align)};
-  
+
   line-height: normal;
   text-align: #{token(align)};
 }
@@ -71,7 +71,6 @@
 @mixin inline {
   display: flex;
   align-items: center;
-
 }
 
 @mixin inline-label {

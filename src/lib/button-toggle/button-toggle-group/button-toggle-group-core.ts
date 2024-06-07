@@ -88,7 +88,11 @@ export class ButtonToggleGroupCore implements IButtonToggleGroupCore {
     }
 
     const detail: IButtonToggleGroupChangeEventData = this._multiple ? value : value.length ? value[0] : null;
-    const changeEvt = new CustomEvent(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, { detail, bubbles: true, cancelable: true });
+    const changeEvt = new CustomEvent(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, {
+      detail,
+      bubbles: true,
+      cancelable: true
+    });
     this._adapter.dispatchHostEvent(changeEvt);
 
     if (changeEvt.defaultPrevented) {

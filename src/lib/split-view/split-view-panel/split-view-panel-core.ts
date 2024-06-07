@@ -2,11 +2,30 @@ import { ICustomElementCore, isDefined } from '@tylertech/forge-core';
 
 import { safeMin, scaleValue } from '../../core/utils/utils';
 import { eventIncludesArrowKey } from '../../core/utils/event-utils';
-import { ISplitViewPanelOpenEvent, ISplitViewPanelState, SplitViewInputDeviceType, SplitViewPanelResizable, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants';
+import {
+  ISplitViewPanelOpenEvent,
+  ISplitViewPanelState,
+  SplitViewInputDeviceType,
+  SplitViewPanelResizable,
+  SPLIT_VIEW_PANEL_CONSTANTS
+} from './split-view-panel-constants';
 import { ISplitViewPanelAdapter } from './split-view-panel-adapter';
 import { ISplitViewUpdateConfig, SplitViewOrientation } from '../split-view/split-view-constants';
 import { ISplitViewBase } from '../core/split-view-base';
-import { clampSize, clearState, getPixelDimension, getValuenow, handleBoundariesAfterResize, handleBoundariesDuringResize, initState, keyboardResize, maxResize, minResize, pointerResize, setState } from './split-view-panel-utils';
+import {
+  clampSize,
+  clearState,
+  getPixelDimension,
+  getValuenow,
+  handleBoundariesAfterResize,
+  handleBoundariesDuringResize,
+  initState,
+  keyboardResize,
+  maxResize,
+  minResize,
+  pointerResize,
+  setState
+} from './split-view-panel-utils';
 
 export interface ISplitViewPanelCore extends Partial<ISplitViewBase>, ICustomElementCore {
   resizable: SplitViewPanelResizable;
@@ -32,7 +51,7 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
   private _allowClose?: boolean;
   private _autoClose?: boolean;
   private _autoCloseThreshold?: number;
-  
+
   // State
   private _state: ISplitViewPanelState = initState();
   private _isInitialized = false;
@@ -209,7 +228,7 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
 
   /**
    * Toggles the open state.
-   * @param evt 
+   * @param evt
    */
   private _handleEnterKey(evt: KeyboardEvent): void {
     if (!this._appliedAllowClose) {
@@ -245,7 +264,7 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
 
   /**
    * Runs resize logic if an arrow key is included in the event.
-   * @param evt 
+   * @param evt
    */
   private _handleArrowKey(evt: KeyboardEvent): void {
     let increment = 0;
@@ -315,12 +334,12 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
 
   /**
    * Handles the beginning of a pointer driven resize.
-   * @param evt 
+   * @param evt
    */
   private _handlePointerdown(evt: MouseEvent): void {
     this._adapter.setGrabbed(true);
     this._adapter.focusHandle();
-    
+
     this._startResize();
     this._state.startPoint = this._orientation === 'horizontal' ? evt.clientX : evt.clientY;
     handleBoundariesDuringResize(this._adapter, this._state, 'pointer');
@@ -336,10 +355,10 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
 
   /**
    * Resizes the panel from a pointer event.
-   * @param evt 
+   * @param evt
    */
   private _handlePointermove(evt: PointerEvent): void {
-    if(pointerResize(this._adapter, evt, this._state)) {
+    if (pointerResize(this._adapter, evt, this._state)) {
       this._adapter.emitHostEvent(SPLIT_VIEW_PANEL_CONSTANTS.events.RESIZE, this._state.currentSize);
     }
   }
@@ -527,7 +546,7 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
     if (this._resizable === 'off') {
       return;
     }
-    
+
     const size = this._adapter.getContentSize(this._orientation);
     if (size > this._pixelMax) {
       this.setContentSize(size);
@@ -566,10 +585,12 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
       }
 
       this._open = value;
-      const event: ISplitViewPanelOpenEvent | undefined = this._isInitialized ? {
-        auto: false,
-        userInitiated: false
-      } : undefined;
+      const event: ISplitViewPanelOpenEvent | undefined = this._isInitialized
+        ? {
+            auto: false,
+            userInitiated: false
+          }
+        : undefined;
       this._applyOpen(event);
     }
   }
@@ -658,7 +679,11 @@ export class SplitViewPanelCore implements ISplitViewPanelCore {
   }
 
   private _applyAutoCloseThreshold(): void {
-    this._adapter.toggleHostAttribute(SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD, isDefined(this._autoCloseThreshold), this.autoCloseThreshold?.toString());
+    this._adapter.toggleHostAttribute(
+      SPLIT_VIEW_PANEL_CONSTANTS.attributes.AUTO_CLOSE_THRESHOLD,
+      isDefined(this._autoCloseThreshold),
+      this.autoCloseThreshold?.toString()
+    );
     if (this._isInitialized) {
       this._tryAutoClose();
     }

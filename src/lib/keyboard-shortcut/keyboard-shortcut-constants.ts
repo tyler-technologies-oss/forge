@@ -28,21 +28,7 @@ export const KEYBOARD_SHORTCUT_CONSTANTS = {
   events
 };
 
-export const textInputTypes = [
-  'date',
-  'datetime',
-  'datetime-local',
-  'email',
-  'month',
-  'number',
-  'password',
-  'search',
-  'tel',
-  'text',
-  'time',
-  'url',
-  'week'
-];
+export const textInputTypes = ['date', 'datetime', 'datetime-local', 'email', 'month', 'number', 'password', 'search', 'tel', 'text', 'time', 'url', 'week'];
 
 export type KeyboardShortcutActivateCallback = (event: KeyboardEvent) => void;
 

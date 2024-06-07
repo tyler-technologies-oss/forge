@@ -60,7 +60,7 @@
 }
 
 forge-overlay[open] {
-  &[position-placement^=top] {
+  &[position-placement^='top'] {
     .forge-tooltip {
       @include override(slidein-y, #{token(animation-offset)}, value);
     }
@@ -69,8 +69,8 @@ forge-overlay[open] {
       @include arrow-placement-top;
     }
   }
-  
-  &[position-placement^=right] {
+
+  &[position-placement^='right'] {
     .forge-tooltip {
       @include override(slidein-x, calc(#{token(animation-offset)} * -1), value);
     }
@@ -79,8 +79,8 @@ forge-overlay[open] {
       @include arrow-placement-right;
     }
   }
-  
-  &[position-placement^=bottom] {
+
+  &[position-placement^='bottom'] {
     .forge-tooltip {
       @include override(slidein-y, calc(#{token(animation-offset)} * -1), value);
     }
@@ -89,8 +89,8 @@ forge-overlay[open] {
       @include arrow-placement-bottom;
     }
   }
-  
-  &[position-placement^=left] {
+
+  &[position-placement^='left'] {
     .forge-tooltip {
       @include override(slidein-x, #{token(animation-offset)}, value);
     }

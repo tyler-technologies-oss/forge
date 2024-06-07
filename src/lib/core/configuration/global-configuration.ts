@@ -22,7 +22,7 @@ export class GlobalConfiguration {
     if (!entry) {
       return null;
     }
-  
+
     return {
       has(key: keyof HTMLElementTagNameMap[T]): key is keyof HTMLElementTagNameMap[T] {
         return key in entry;

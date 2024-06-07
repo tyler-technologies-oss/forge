@@ -28,7 +28,7 @@ const meta = {
         newChip.addEventListener('forge-chip-delete', onChipRemoveButtonClicked);
         newChip.value = name;
         newChip.textContent = name;
-        
+
         chipField.appendChild(newChip);
       }
       addedAction(evt);
@@ -47,7 +47,7 @@ const meta = {
     };
 
     return html`
-      <forge-chip-field 
+      <forge-chip-field
         .addOnBlur=${args.addOnBlur}
         .floatLabel=${args.floatLabel}
         .labelPosition=${args.labelPosition}
@@ -86,9 +86,9 @@ const meta = {
         variant: { control: 'select', options: ['plain', 'outlined', 'tonal', 'filled', 'raised'] },
         shape: { control: 'select', options: ['default', 'rounded', 'square'] },
         density: { control: 'select', options: ['default', 'extra-small', 'small', 'medium', 'large', 'extra-large'] },
-        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS] },
+        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS] }
       }
-    }),
+    })
   },
   args: {
     addOnBlur: false,
@@ -101,8 +101,8 @@ const meta = {
     disabled: false,
     dense: false,
     popoverIcon: false,
-    popoverExpanded: false,
-  },
+    popoverExpanded: false
+  }
 } satisfies Meta;
 
 export default meta;

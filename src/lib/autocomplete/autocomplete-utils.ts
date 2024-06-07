@@ -2,7 +2,10 @@ import { IAutocompleteOption, IAutocompleteOptionGroup } from './autocomplete-co
 import { isDefined, isObject, isDeepEqual } from '@tylertech/forge-core';
 
 /** The available option types. */
-export enum OptionType { Option, Group }
+export enum OptionType {
+  Option,
+  Group
+}
 
 /**
  * Determines if the provided options are of the specified type.
@@ -10,8 +13,13 @@ export enum OptionType { Option, Group }
  * @param type The type of option to detect.
  */
 export function isOptionType(options: IAutocompleteOption[] | IAutocompleteOptionGroup[], type: OptionType): boolean {
-  const isOptionGroups = options.some((o: IAutocompleteOption | IAutocompleteOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder')));
-  const isOptionTypes = options.some((o: IAutocompleteOption | IAutocompleteOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value'));
+  const isOptionGroups = options.some(
+    (o: IAutocompleteOption | IAutocompleteOptionGroup) =>
+      isDefined(o) && isObject(o) && o.hasOwnProperty('options') && (o.hasOwnProperty('text') || o.hasOwnProperty('builder'))
+  );
+  const isOptionTypes = options.some(
+    (o: IAutocompleteOption | IAutocompleteOptionGroup) => isDefined(o) && isObject(o) && o.hasOwnProperty('label') && o.hasOwnProperty('value')
+  );
   return (isOptionGroups && type === OptionType.Group) || (isOptionTypes && type === OptionType.Option);
 }
 

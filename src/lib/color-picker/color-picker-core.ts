@@ -1,6 +1,15 @@
 import { ICustomElementCore, debounce } from '@tylertech/forge-core';
 import { IColorPickerAdapter } from './color-picker-adapter';
-import { ColorPickerValueType, COLOR_PICKER_CONSTANTS, DEFAULT_COLOR, IColorPickerChangeEventData, IHSVA, IRGBA, ColorPickerChangeEventType, ColorPickerChangeEventSource } from './color-picker-constants';
+import {
+  ColorPickerValueType,
+  COLOR_PICKER_CONSTANTS,
+  DEFAULT_COLOR,
+  IColorPickerChangeEventData,
+  IHSVA,
+  IRGBA,
+  ColorPickerChangeEventType,
+  ColorPickerChangeEventSource
+} from './color-picker-constants';
 import { ColorPickerGradientSlider } from './color-picker-gradient-slider';
 import { ColorPickerSlider } from './color-picker-slider';
 import { formatHex, formatRgba, hexToRgba, hsvaToRgba, isValidHex, isValidHSVA, isValidRGBA, rgbaToHex, rgbaToHsva } from './color-picker-utils';
@@ -44,7 +53,7 @@ export class ColorPickerCore implements IColorPickerCore {
     this._rgbaInputChangedListener = evt => this._onRgbaInputChanged();
     this._hsvaInputChangedListener = evt => this._onHsvaInputChanged();
   }
-  
+
   public initialize(): void {
     this._initialized = true;
     this._applyChangeEventTrigger();
@@ -75,9 +84,13 @@ export class ColorPickerCore implements IColorPickerCore {
 
   private _applyChangeEventTrigger(): void {
     if (this._debounceChangeEvent) {
-      this._triggerChangeEvent = debounce((type: ColorPickerChangeEventType, source: ColorPickerChangeEventSource) => {
-        this._emitChangeEvent(type, source);
-      }, COLOR_PICKER_CONSTANTS.numbers.CHANGE_EVENT_DEBOUNCE_THRESHOLD, false);
+      this._triggerChangeEvent = debounce(
+        (type: ColorPickerChangeEventType, source: ColorPickerChangeEventSource) => {
+          this._emitChangeEvent(type, source);
+        },
+        COLOR_PICKER_CONSTANTS.numbers.CHANGE_EVENT_DEBOUNCE_THRESHOLD,
+        false
+      );
     } else {
       this._triggerChangeEvent = (type, source) => this._emitChangeEvent(type, source);
     }

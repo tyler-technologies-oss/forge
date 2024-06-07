@@ -25,9 +25,9 @@ declare global {
 
 /**
  * @tag forge-focus-indicator
- * 
+ *
  * @summary Renders a focus indicator when an attached element matches `:focus-visible`.
- * 
+ *
  * @property {HTMLElement} targetElement - The element to attach the focus indicator to.
  * @property {string} target - The id of the element to attach the focus indicator to.
  * @property {boolean} [active=false] - Controls whether the indicator is active.
@@ -35,14 +35,14 @@ declare global {
  * @property {boolean} [circular=false] - Controls whether the indicator renders circular.
  * @property {boolean} [allowFocus=false] - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
  * @property {FocusIndicatorFocusMode} [focusMode="focusin"] - The focus mode to use.
- * 
+ *
  * @attribute {string} target - The id of the element to attach the focus indicator to.
  * @attribute {boolean} [active=false] - Controls whether the indicator is active.
  * @attribute {boolean} [inward=false] - Controls whether the indicator renders inward.
  * @attribute {boolean} [circular=false] - Controls whether the indicator renders circular.
  * @attribute {boolean} [allow-focus=false] - Controls whether the indicator renders when the target element matches `:focus` instead of `:focus-visible`.
  * @attribute {FocusIndicatorFocusMode} [focus-mode="focusin"] - The focus mode to use.
- * 
+ *
  * @cssproperty --forge-focus-indicator-display - The `display` style. Defaults to `flex`.
  * @cssproperty --forge-focus-indicator-width - The width of the focus indicator when resting.
  * @cssproperty --forge-focus-indicator-active-width - The width of the focus indicator when active. When animating this is the max extent.
@@ -58,7 +58,7 @@ declare global {
  * @cssproperty --forge-focus-indicator-inward-offset - The offset of the focus indicator when inward.
  * @cssproperty --forge-focus-indicator-offset-block - The block offset.
  * @cssproperty --forge-focus-indicator-offset-inline - The inline offset.
- * 
+ *
  * @csspart indicator - The focus indicator element.
  */
 @customElement({

@@ -5,7 +5,13 @@ import { DateRange } from '../../calendar/core/date-range';
 import { formatDate, parseDateString } from '../../core/utils/date-utils';
 import { DEFAULT_DATE_MASK, IDateInputMaskOptions } from '../../core/mask/date-input-mask';
 import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
-import { BASE_DATE_PICKER_CONSTANTS, DatePickerFormatCallback, DatePickerParseCallback, DatePickerPrepareMaskCallback, DatePickerValueMode } from './base-date-picker-constants';
+import {
+  BASE_DATE_PICKER_CONSTANTS,
+  DatePickerFormatCallback,
+  DatePickerParseCallback,
+  DatePickerPrepareMaskCallback,
+  DatePickerValueMode
+} from './base-date-picker-constants';
 
 export interface IBaseDatePickerCore<TValue> extends ICustomElementCore {
   value: TValue | null | undefined;
@@ -30,7 +36,9 @@ export interface IBaseDatePickerCore<TValue> extends ICustomElementCore {
   locale: string | undefined;
 }
 
-export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter, TPublicValue, TPrivateValue = TPublicValue> implements IBaseDatePickerCore<TPublicValue> {
+export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter, TPublicValue, TPrivateValue = TPublicValue>
+  implements IBaseDatePickerCore<TPublicValue>
+{
   // State
   protected abstract _mode: CalendarMode;
   protected _value?: TPrivateValue | null = null;
@@ -70,7 +78,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
   private _clearListener: () => void;
   private _dateSelectListener: (evt: CustomEvent<ICalendarDateSelectEventData>) => void;
   private _monthChangeListener: (evt: CustomEvent<ICalendarMonthChangeEventData>) => void;
-  
+
   constructor(protected _adapter: TAdapter) {
     this._inputListener = evt => this._onInput(evt);
     this._inputKeydownListener = evt => this._onInputKeydown(evt);
@@ -175,7 +183,7 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
 
     this._adapter.selectInputText();
   }
-  
+
   protected _onInputBlur(evt: FocusEvent): void {
     if (this.masked && this.showMaskFormat) {
       this._applyMask();
@@ -449,9 +457,9 @@ export abstract class BaseDatePickerCore<TAdapter extends IBaseDatePickerAdapter
       return true;
     }
 
-    const passesMinDate = (): boolean => this._min && !this._allowInvalidDate ? this._min.getTime() <= value.getTime() : true;
-    const passesMaxDate = (): boolean => this._max && !this._allowInvalidDate ? this._max.getTime() >= value.getTime() : true;
-    const disabledDates = (): Date[] => Array.isArray(this._disabledDates) ? this._disabledDates : this._disabledDates ? [this._disabledDates] : [];
+    const passesMinDate = (): boolean => (this._min && !this._allowInvalidDate ? this._min.getTime() <= value.getTime() : true);
+    const passesMaxDate = (): boolean => (this._max && !this._allowInvalidDate ? this._max.getTime() >= value.getTime() : true);
+    const disabledDates = (): Date[] => (Array.isArray(this._disabledDates) ? this._disabledDates : this._disabledDates ? [this._disabledDates] : []);
     const isNotDisabled = (): boolean => !disabledDates().some(bd => bd.getTime() === value.getTime());
     const dayNotDisabled = (): boolean => !(this._disabledDaysOfWeek && this._disabledDaysOfWeek.includes(value.getDay()));
     const dateNotDisabledThroughCallback = (): boolean => typeof this._disableDayCallback !== 'function' || !this._disableDayCallback(value);

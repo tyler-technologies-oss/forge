@@ -8,7 +8,7 @@ $tokens: (
   stretch: utils.module-val(stack, stretch, initial),
   alignment: utils.module-val(stack, alignment, normal),
   justify: utils.module-val(stack, justify, normal),
-  wrap: utils.module-val(stack, wrap, wrap),
+  wrap: utils.module-val(stack, wrap, wrap)
 ) !default;
 
 @function get($key) {

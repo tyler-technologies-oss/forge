@@ -75,7 +75,7 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> implements ISli
     if (this._startLabelContentElement) {
       this._startLabelContentElement.textContent = labelStart;
     }
-    
+
     if (this._endLabelContentElement) {
       this._endLabelContentElement.textContent = labelEnd;
     }
@@ -174,30 +174,30 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> implements ISli
 
   public setStep(step: number): void {
     const inputs = this._getInputs();
-    inputs.forEach(input => input.step = String(step));
+    inputs.forEach(input => (input.step = String(step)));
   }
 
   public setMin(value: number): void {
     const inputs = this._getInputs();
-    inputs.forEach(input => input.min = String(value));
+    inputs.forEach(input => (input.min = String(value)));
   }
 
   public setMax(value: number): void {
     const inputs = this._getInputs();
-    inputs.forEach(input => input.max = String(value));
+    inputs.forEach(input => (input.max = String(value)));
   }
 
   public setDisabled(value: boolean): void {
     const inputs = this._getInputs();
-    inputs.forEach(input => input.disabled = value);
+    inputs.forEach(input => (input.disabled = value));
 
     const stateLayers = this._rootElement.querySelectorAll(STATE_LAYER_CONSTANTS.elementName) as NodeListOf<IStateLayerComponent>;
-    stateLayers.forEach(sl => sl.disabled = value);
+    stateLayers.forEach(sl => (sl.disabled = value));
   }
 
   public setReadonly(value: boolean): void {
     const inputs = this._getInputs();
-    inputs.forEach(input => input.readOnly = value);
+    inputs.forEach(input => (input.readOnly = value));
   }
 
   public toggleLabels(value: boolean): void {
@@ -211,7 +211,7 @@ export class SliderAdapter extends BaseAdapter<ISliderComponent> implements ISli
       const endLabelEl = createLabel(this._endInputElement.value);
       this._endHandleElement.insertAdjacentElement('beforeend', endLabelEl);
       this._endLabelContentElement = getShadowElement(this._component, SLIDER_CONSTANTS.selectors.END_LABEL_CONTENT);
-      
+
       if (this._startInputElement) {
         const startLabelEl = createLabel(this._startInputElement.value);
         this._startHandleElement?.insertAdjacentElement('beforeend', startLabelEl);

@@ -27,27 +27,27 @@ declare global {
 
 /**
  * @tag forge-expansion-panel
- * 
+ *
  * @summary Expansion panels provide progressive disclosure of content.
- * 
+ *
  * @property {boolean} [open=false] - Whether the panel is open or closed.
  * @property {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
  * @property {ExpansionPanelAnimationType} [animationType="default"] - The type of animation to use when opening/closing the panel.
- * 
+ *
  * @attribute {boolean} [open=false] - Whether the panel is open or closed.
  * @attribute {ExpansionPanelOrientation} [orientation="vertical"] - The orientation of the panel.
  * @attribute {ExpansionPanelAnimationType} [animation-type="default"] - The type of animation to use when opening/closing the panel.
- * 
+ *
  * @fires {CustomEvent<boolean>} forge-expansion-panel-toggle - Event fired when the panel is toggled open or closed.
  * @fires {CustomEvent<boolean>} forge-expansion-panel-animation-complete - Event fired when the panel has finished animating when toggling.
- * 
+ *
  * @cssproperty --forge-expansion-panel-animation-duration - The duration of the open/close animation.
  * @cssproperty --forge-expansion-panel-animation-easing - The easing function of the open/close animation.
- * 
+ *
  * @csspart root - The root element of the panel.
  * @csspart header - The header of the panel.
  * @csspart content - The content of the panel.
- * 
+ *
  * @slot - The content of the panel.
  * @slot header - The header of the panel.
  */

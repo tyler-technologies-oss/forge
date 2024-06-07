@@ -5,7 +5,7 @@ import { IToastComponent, ToastComponent } from './toast';
 import { TOAST_CONSTANTS } from './toast-constants';
 import { timer } from '@tylertech/forge-testing';
 
-import './toast'
+import './toast';
 import { IOverlayComponent } from '../overlay';
 import { IIconComponent } from '../icon';
 
@@ -205,7 +205,7 @@ describe('Toast', () => {
 
     it('should show close button when dismissible', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open dismissible>Test</forge-toast>`);
-  
+
       expect(el.open).to.be.true;
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.DISMISSIBLE)).to.be.true;
       expect(getComputedStyle(getCloseButton(el)).display).to.not.equal('none');
@@ -213,7 +213,7 @@ describe('Toast', () => {
 
     it('should close when close button is clicked', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open dismissible>Test</forge-toast>`);
-  
+
       expect(el.open).to.be.true;
 
       getCloseButton(el).click();
@@ -227,7 +227,7 @@ describe('Toast', () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open dismissible>Test</forge-toast>`);
       const closeSpy = sinon.spy();
       el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
-  
+
       getCloseButton(el).click();
       await timer(TOAST_ANIMATION_DURATION);
 
@@ -236,20 +236,20 @@ describe('Toast', () => {
 
     it('should have default dismiss label', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open dismissible>Test</forge-toast>`);
-  
+
       expect(getCloseButton(el).getAttribute('aria-label')).to.equal('Dismiss');
     });
 
     it('should have custom dismiss label', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open dismissible dismiss-label="Close">Test</forge-toast>`);
-  
+
       expect(el.dismissLabel).to.equal('Close');
       expect(getCloseButton(el).getAttribute('aria-label')).to.equal('Close');
     });
 
     it('should set dismiss label dynamically while open', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open dismissible>Test</forge-toast>`);
-  
+
       expect(getCloseButton(el).getAttribute('aria-label')).to.equal('Dismiss');
 
       el.dismissLabel = 'Close';
@@ -263,12 +263,12 @@ describe('Toast', () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open dismissible>Test</forge-toast>`);
       const closeSpy = sinon.spy();
       el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
-  
+
       expect(getCloseButton(el).hidden).to.be.false;
 
       el.dismissible = false;
       await elementUpdated(el);
-      
+
       getCloseButton(el).click();
       await timer(TOAST_ANIMATION_DURATION);
 
@@ -288,7 +288,7 @@ describe('Toast', () => {
 
     it('should show action button when action text is set', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open action-text="Action">Test</forge-toast>`);
-  
+
       expect(el.open).to.be.true;
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.ACTION_TEXT)).to.be.true;
       expect(getActionButton(el).hidden).to.be.false;
@@ -298,7 +298,7 @@ describe('Toast', () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open action-text="Action">Test</forge-toast>`);
       const actionSpy = sinon.spy();
       el.addEventListener(TOAST_CONSTANTS.events.ACTION, actionSpy);
-  
+
       getActionButton(el).click();
 
       expect(actionSpy.calledOnce).to.be.true;
@@ -306,7 +306,7 @@ describe('Toast', () => {
 
     it('should not hide when action button is clicked', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open action-text="Action">Test</forge-toast>`);
-  
+
       expect(el.open).to.be.true;
 
       getActionButton(el).click();
@@ -317,7 +317,7 @@ describe('Toast', () => {
 
     it('should hide action button dynamically while open if action text is removed', async () => {
       const el = await fixture<IToastComponent>(html`<forge-toast open action-text="Action">Test</forge-toast>`);
-  
+
       expect(el.open).to.be.true;
       expect(getActionButton(el).hidden).to.be.false;
 
@@ -421,7 +421,7 @@ describe('Toast', () => {
     });
 
     it('should set icon', async () => {
-      const toast = ToastComponent.present({ message: 'Test', icon: { name: 'info' }});
+      const toast = ToastComponent.present({ message: 'Test', icon: { name: 'info' } });
 
       const iconEl = toast.querySelector('forge-icon') as IIconComponent;
       expect(iconEl).to.be.ok;

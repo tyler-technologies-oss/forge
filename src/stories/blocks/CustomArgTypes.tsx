@@ -10,17 +10,21 @@ const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/tree`;
 function UsageLink({ text, href }: { text: string; href: string }) {
   return (
     <p>
-      <i>Learn more about <a href={`./${href}`}>{text}</a>.</i>
+      <i>
+        Learn more about <a href={`./${href}`}>{text}</a>.
+      </i>
     </p>
   );
 }
 
 function Section({ title, name, children, headingLevel = 'h3' }: { title: string; name: string; headingLevel?: 'h3' | 'h4'; children: React.ReactNode }) {
-  const headingId = headingLevel === 'h3' ? title : `${name}-${title}`
+  const headingId = headingLevel === 'h3' ? title : `${name}-${title}`;
   const tagID = headingId.toLowerCase().replace(/[^a-z0-9]/gi, '-');
   return (
     <section className={(styles as any).section}>
-      <HeaderMdx as={headingLevel} id={tagID}>{title}</HeaderMdx>
+      <HeaderMdx as={headingLevel} id={tagID}>
+        {title}
+      </HeaderMdx>
       {children}
     </section>
   );
@@ -32,7 +36,7 @@ function ForgeTypeLinks({ typeText }: { typeText: string }) {
 
   // Tokenize the type text, remove duplicates, and sort by length in descending order
   const tokenizedType = [...new Set(typeText.match(/\w+/g) ?? [])].sort((a, b) => b.length - a.length);
-  
+
   // Loop through each token in reverse order to avoid replacing tokens that are substrings of other tokens that contain the same text
   const branchName = getBranchName();
   tokenizedType.forEach(token => {
@@ -45,7 +49,11 @@ function ForgeTypeLinks({ typeText }: { typeText: string }) {
     }
   });
 
-  return <Code><span dangerouslySetInnerHTML={{ __html: typeText }}></span></Code>;
+  return (
+    <Code>
+      <span dangerouslySetInnerHTML={{ __html: typeText }}></span>
+    </Code>
+  );
 }
 
 function PropsAttrsTable({ items, globalConfigProperties }: { items: TagItem[]; globalConfigProperties?: string[] }) {
@@ -66,19 +74,12 @@ function PropsAttrsTable({ items, globalConfigProperties }: { items: TagItem[]; 
             <td>
               <Code>{item.name}</Code>
             </td>
-            <td>
-              {item.type?.text ? <ForgeTypeLinks typeText={item.type.text} /> : '-'}
-            </td>
-            <td>
-              {item.default ? <Code>{item.default}</Code> : '-'}
-            </td>
+            <td>{item.type?.text ? <ForgeTypeLinks typeText={item.type.text} /> : '-'}</td>
+            <td>{item.default ? <Code>{item.default}</Code> : '-'}</td>
             <td>
               <Markdown>{item.description}</Markdown>
             </td>
-            {!!globalConfigProperties?.length ?
-              <td style={{ textAlign: 'center' }}>
-                {globalConfigProperties.includes(item.name) ? '✅' : ''}
-              </td> : null}
+            {!!globalConfigProperties?.length ? <td style={{ textAlign: 'center' }}>{globalConfigProperties.includes(item.name) ? '✅' : ''}</td> : null}
           </tr>
         ))}
       </tbody>
@@ -99,9 +100,7 @@ function NameDescriptionTable({ items }: { items: TagItem[] }) {
       <tbody>
         {items?.map((property, index) => (
           <tr key={`${property.name}-${index}`}>
-            <td>
-              {!TEXT_NAMES.includes(property.name) ? <Code>{property.name}</Code> : <i>{property.name}</i>}
-            </td>
+            <td>{!TEXT_NAMES.includes(property.name) ? <Code>{property.name}</Code> : <i>{property.name}</i>}</td>
             <td>
               <Markdown>{property.description}</Markdown>
             </td>
@@ -131,9 +130,7 @@ function EventsTable({ items }: { items: TagItem[] }) {
             <td>
               <Markdown>{event.description}</Markdown>
             </td>
-            <td>
-              {event.type?.text ? <ForgeTypeLinks typeText={event.type.text} /> : '-'}
-            </td>
+            <td>{event.type?.text ? <ForgeTypeLinks typeText={event.type.text} /> : '-'}</td>
           </tr>
         ))}
       </tbody>
@@ -161,12 +158,8 @@ function MethodsTable({ items }: { items: TagItem[] }) {
             <td>
               <Markdown>{method.description}</Markdown>
             </td>
-            <td>
-              {method.parameters?.length ? <ForgeTypeLinks typeText={methodParamsToString(method.parameters)} /> : '-'}
-            </td>
-            <td>
-              {method.return?.type?.text ? <ForgeTypeLinks typeText={method.return.type.text} /> : '-'}
-            </td>
+            <td>{method.parameters?.length ? <ForgeTypeLinks typeText={methodParamsToString(method.parameters)} /> : '-'}</td>
+            <td>{method.return?.type?.text ? <ForgeTypeLinks typeText={method.return.type.text} /> : '-'}</td>
           </tr>
         ))}
       </tbody>
@@ -180,7 +173,10 @@ function DependenciesList({ dependencies }: { dependencies: string[] }) {
       <p>This component will automatically include the following components:</p>
       <ul>
         {dependencies.map(dependency => {
-          const componentId = dependency.toLowerCase().replace(/^forge-/gi, '').replace(/[^a-z0-9]/gi, '-');
+          const componentId = dependency
+            .toLowerCase()
+            .replace(/^forge-/gi, '')
+            .replace(/[^a-z0-9]/gi, '-');
           return (
             <li key={dependency}>
               <a href={`./?path=/docs/components-${componentId}--docs`}>{`<${dependency}>`}</a>
@@ -209,12 +205,13 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   const events = declaration.events;
   const dependencies = declaration.dependencies?.map(({ name }) => name);
   const globalConfigProperties = declaration.globalConfigProperties?.map(({ name }) => name);
-  const slots = declaration.slots?.map(slot => {
-    if (!slot.name) {
-      slot.name = '(default)';
-    }
-    return slot;
-  }) ?? [];
+  const slots =
+    declaration.slots?.map(slot => {
+      if (!slot.name) {
+        slot.name = '(default)';
+      }
+      return slot;
+    }) ?? [];
   const cssProperties = declaration.cssProperties;
   const cssParts = declaration.cssParts;
   const branch = getBranchName();
@@ -222,55 +219,67 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
 
   return (
     <div className={(styles as any).container}>
-      {modulePath ? <a href={`${BASE_GITHUB_URL}/${branch}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={(styles as any).codeLink}><GitHubLogo /></a> : null}
+      {modulePath ? (
+        <a href={`${BASE_GITHUB_URL}/${branch}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={(styles as any).codeLink}>
+          <GitHubLogo />
+        </a>
+      ) : null}
 
-      {!!properties?.length && 
+      {!!properties?.length && (
         <Section title="Properties" name={tagName} headingLevel={headingLevel}>
           <PropsAttrsTable items={sortByName(properties)} globalConfigProperties={globalConfigProperties} />
           <UsageLink text="Properties" href="?path=/docs/getting-started-usage--docs#properties--attributes" />
           {globalConfigProperties?.length ? <UsageLink text="Global Configuration" href="?path=/docs/getting-started-global-configuration--docs" /> : null}
-        </Section>}
-      
-      {!!attributes?.length &&
+        </Section>
+      )}
+
+      {!!attributes?.length && (
         <Section title="Attributes" name={tagName} headingLevel={headingLevel}>
           <PropsAttrsTable items={sortByName(attributes)} />
           <UsageLink text="Attributes" href="?path=/docs/getting-started-usage--docs#properties--attributes" />
-        </Section>}
+        </Section>
+      )}
 
-      {!!events?.length &&
+      {!!events?.length && (
         <Section title="Events" name={tagName} headingLevel={headingLevel}>
           <EventsTable items={sortByName(events)} />
           <UsageLink text="Events" href="?path=/docs/getting-started-usage--docs#events" />
-        </Section>}
-      
-      {!!slots?.length &&
+        </Section>
+      )}
+
+      {!!slots?.length && (
         <Section title="Slots" name={tagName} headingLevel={headingLevel}>
           <NameDescriptionTable items={sortByName(slots)} />
           <UsageLink text="Slots" href="?path=/docs/getting-started-usage--docs#slots" />
-        </Section>}
+        </Section>
+      )}
 
-      {!!methods?.length &&
+      {!!methods?.length && (
         <Section title="Methods" name={tagName} headingLevel={headingLevel}>
           <MethodsTable items={sortByName(methods)} />
           <UsageLink text="Methods" href="?path=/docs/getting-started-usage--docs#methods" />
-        </Section>}
-      
-      {!!cssProperties?.length &&
+        </Section>
+      )}
+
+      {!!cssProperties?.length && (
         <Section title="CSS Custom Properties" name={tagName} headingLevel={headingLevel}>
           <NameDescriptionTable items={sortByName(cssProperties)} />
           <UsageLink text="CSS Custom Properties" href="?path=/docs/getting-started-usage--docs#css-custom-properties" />
-        </Section>}
-      
-      {!!cssParts?.length &&
+        </Section>
+      )}
+
+      {!!cssParts?.length && (
         <Section title="CSS Shadow Parts" name={tagName} headingLevel={headingLevel}>
           <NameDescriptionTable items={sortByName(cssParts)} />
           <UsageLink text="CSS Shadow Parts" href="?path=/docs/getting-started-usage--docs#css-shadow-parts" />
-        </Section>}
+        </Section>
+      )}
 
-      {!!dependencies?.length &&
+      {!!dependencies?.length && (
         <Section title="Dependencies" name={tagName} headingLevel={headingLevel}>
           <DependenciesList dependencies={dependencies.sort()} />
-        </Section>}
+        </Section>
+      )}
     </div>
   );
 }
@@ -283,8 +292,11 @@ export const extractTitle = (title: string) => {
 };
 
 export const titleFromTagName = (tagName: string) => {
-  return tagName.replace(/^forge-/gi, '').replace(/-/g, ' ').replace(/(?:^|\s)\S/g, a => a.toUpperCase());
-}
+  return tagName
+    .replace(/^forge-/gi, '')
+    .replace(/-/g, ' ')
+    .replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+};
 
 export default function CustomArgTypes() {
   const resolvedOf = useOf('story', ['story']);
@@ -308,8 +320,10 @@ export default function CustomArgTypes() {
       {tagNames.map(tagName => {
         const headerId = `${tagName.toLowerCase().replace(/[^a-z0-9]/gi, '-')}-api`;
         return (
-          <div key={tagName} style={{marginBlockStart: '24px'}}>
-            <HeaderMdx as="h3" id={headerId}>{titleFromTagName(tagName)}</HeaderMdx>
+          <div key={tagName} style={{ marginBlockStart: '24px' }}>
+            <HeaderMdx as="h3" id={headerId}>
+              {titleFromTagName(tagName)}
+            </HeaderMdx>
             <ComponentArgTypes tagName={tagName} headingLevel="h4" />
           </div>
         );

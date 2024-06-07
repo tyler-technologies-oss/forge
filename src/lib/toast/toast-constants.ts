@@ -13,7 +13,6 @@ const observedAttributes = {
   THEME: 'theme'
 };
 
-
 const attributes = {
   ...observedAttributes
 };

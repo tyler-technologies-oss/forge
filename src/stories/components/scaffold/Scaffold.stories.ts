@@ -17,17 +17,17 @@ const meta = {
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
 
     return html`
-    <forge-scaffold class="scaffold-example" style=${style} .viewport=${args.viewport}>
-      <div slot="left">left</div>
-      <div slot="header">header</div>
-      <div slot="body-header">body-header</div>
-      <div slot="body-left">body-left</div>
-      <div slot="body">body</div>
-      <div slot="body-right">body-right</div>
-      <div slot="body-footer">body-footer</div>
-      <div slot="footer">footer</div>
-      <div slot="right">right</div>
-    </forge-scaffold>
+      <forge-scaffold class="scaffold-example" style=${style} .viewport=${args.viewport}>
+        <div slot="left">left</div>
+        <div slot="header">header</div>
+        <div slot="body-header">body-header</div>
+        <div slot="body-left">body-left</div>
+        <div slot="body">body</div>
+        <div slot="body-right">body-right</div>
+        <div slot="body-footer">body-footer</div>
+        <div slot="footer">footer</div>
+        <div slot="right">right</div>
+      </forge-scaffold>
     `;
   },
   component,
@@ -36,11 +36,11 @@ const meta = {
   },
   decorators: [storyStyles(styles)],
   argTypes: {
-    ...generateCustomElementArgTypes({ tagName: component }),
+    ...generateCustomElementArgTypes({ tagName: component })
   },
   args: {
     viewport: false
-  },
+  }
 } satisfies Meta;
 
 export default meta;

@@ -18,7 +18,7 @@ describe('Badge', () => {
 
   it('should be accessible in all theme colors', async () => {
     const el = await fixture<IBadgeComponent>(html`<forge-badge>Test</forge-badge>`);
-    
+
     const themes: BadgeTheme[] = ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'info-secondary'];
     for (const theme of themes) {
       el.theme = theme;

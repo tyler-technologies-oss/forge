@@ -24,35 +24,33 @@ declare global {
 
 /**
  * @tag forge-split-button
- * 
+ *
  * @summary Split buttons are used for splitting an action into two parts.
- * 
+ *
  * @dependency forge-button
- * 
+ *
  * @property {SplitButtonVariant} [variant="text"] - The variant of the buttons. Valid values are `text`, `outlined`, `tonal`, `filled`, and `raised`.
  * @property {ButtonTheme} [theme="primary"] - The theme of the buttons. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
  * @property {boolean} [disabled=false] - Whether or not the buttons are disabled.
  * @property {boolean} [dense=false] - Whether or not the buttons are dense.
  * @property {boolean} [pill=false] - Whether or not the buttons are pill-shaped.
- * 
+ *
  * @attribute {SplitButtonVariant} [variant="text"] - The variant of the buttons. Valid values are `text`, `outlined`, `tonal`, `filled`, and `raised`.
  * @attribute {ButtonTheme} [theme="primary"] - The theme of the buttons. Valid values are `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`.
  * @attribute {boolean} [disabled=false] - Whether or not the buttons are disabled.
  * @attribute {boolean} [dense=false] - Whether or not the buttons are dense.
  * @attribute {boolean} [pill=false] - Whether or not the buttons are pill-shaped.
- * 
+ *
  * @cssproperty --forge-split-button-min-width - The minimum width of the slotted buttons.
  * @cssproperty --forge-split-button-gap - The gap between the slotted buttons.
  * @cssproperty --forge-split-button-focus-indicator-offset - The offset of the focus indicator around the buttons.
  * @cssproperty --forge-split-button-focus-indicator-divider-offset - The offset of the focus indicator divider when using outlined buttons.
- * 
+ *
  * @slot - This is a default/unnamed slot.
  */
 @customElement({
   name: SPLIT_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    ButtonComponent
-  ]
+  dependencies: [ButtonComponent]
 })
 export class SplitButtonComponent extends BaseComponent implements ISplitButtonComponent {
   public static get observedAttributes(): string[] {

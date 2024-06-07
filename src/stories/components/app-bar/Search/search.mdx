@@ -17,15 +17,17 @@ The app-bar search component is essentially just a strictly-styled `<input>` ele
 <CustomArgTypes />
 
 ## Accessibility
+
 - Ensure that you provide a placeholder attribute for the `<input>` element to help give users an idea of what to enter.
 - Ensure that you add an aria-label or aria-labelledby attribute to the `<input>`.
 - If using a custom theme, make sure proper color contrast ratios are met and adjust using CSS custom properties if not.
 
 ## Types
-  ```typescript
-  interface IAppBarSearchEventData {
-    value: string;
-    combined: boolean;
-    context: string;
+
+```typescript
+interface IAppBarSearchEventData {
+  value: string;
+  combined: boolean;
+  context: string;
 }
-  ```
+```

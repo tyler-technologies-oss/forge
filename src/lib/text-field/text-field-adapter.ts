@@ -61,7 +61,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
   }
 
   public disableInput(disabled: boolean): void {
-    this._inputElements.forEach(el => el.disabled = disabled);
+    this._inputElements.forEach(el => (el.disabled = disabled));
   }
 
   public inputIsDisabled(): boolean {
@@ -73,7 +73,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
   }
 
   public applyLabel(value: string | null): void {
-    this._inputElements.forEach((inputElement) => {
+    this._inputElements.forEach(inputElement => {
       toggleAttribute(inputElement, !!value, 'aria-label', value ?? '');
     });
   }
@@ -104,7 +104,10 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
       });
     });
     this._inputElements.forEach(el => {
-      this._inputMutationObserver?.observe(el, { attributes: true, attributeFilter: [...TEXT_FIELD_CONSTANTS.observedInputAttributes] });
+      this._inputMutationObserver?.observe(el, {
+        attributes: true,
+        attributeFilter: [...TEXT_FIELD_CONSTANTS.observedInputAttributes]
+      });
 
       if (this._component.disabled) {
         el.disabled = true;
@@ -160,7 +163,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
       forgeLabel.clickTarget = inputElement;
       return;
     }
-    
+
     // Attempt to find and connect a `<label>` element
     const label = elements.find(el => el.tagName === TEXT_FIELD_CONSTANTS.tagNames.LABEL) as HTMLLabelElement | undefined;
     if (!label || label.control) {
@@ -192,7 +195,7 @@ export class TextFieldAdapter extends BaseFieldAdapter implements ITextFieldAdap
     if (!this._inputElements.length) {
       return;
     }
-    this._inputElements.forEach(el => el.value = '');
+    this._inputElements.forEach(el => (el.value = ''));
     this._inputElements[0].focus();
   }
 }

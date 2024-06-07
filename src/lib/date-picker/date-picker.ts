@@ -30,9 +30,9 @@ declare global {
 
 /**
  * @tag forge-date-picker
- * 
+ *
  * @attribute {string} [value] - The value of the date picker.
- * 
+ *
  * @event {CustomEvent<Date | string | null>} forge-date-picker-change - Emits when the value of the date picker changes.
  * @event {CustomEvent<void>} forge-date-picker-open - Emits when the date picker opens.
  * @event {CustomEvent<void>} forge-date-picker-close - Emits when the date picker closes.
@@ -40,19 +40,11 @@ declare global {
  */
 @customElement({
   name: DATE_PICKER_CONSTANTS.elementName,
-  dependencies: [
-    PopoverComponent,
-    CalendarComponent,
-    IconButtonComponent,
-    IconComponent
-  ]
+  dependencies: [PopoverComponent, CalendarComponent, IconButtonComponent, IconComponent]
 })
 export class DatePickerComponent extends BaseDatePickerComponent<Date | string | undefined, Date, DatePickerCore> implements IDatePickerComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(BASE_DATE_PICKER_CONSTANTS.observedAttributes),
-      DATE_PICKER_CONSTANTS.observedAttributes.VALUE
-    ];
+    return [...Object.values(BASE_DATE_PICKER_CONSTANTS.observedAttributes), DATE_PICKER_CONSTANTS.observedAttributes.VALUE];
   }
 
   constructor() {

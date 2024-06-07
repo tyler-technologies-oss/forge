@@ -47,7 +47,7 @@ export class BaseDrawerCore implements IBaseDrawerCore {
     this._setOpened();
     this._adapter.emitHostEvent(BASE_DRAWER_CONSTANTS.events.AFTER_OPEN);
   }
-  
+
   private _onCloseComplete(): void {
     if (this._open) {
       return;

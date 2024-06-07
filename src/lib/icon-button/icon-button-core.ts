@@ -69,7 +69,7 @@ export class IconButtonCore extends BaseButtonCore<IIconButtonAdapter> implement
     value = !!value;
     if (this._on !== value) {
       this._on = value;
-      
+
       if (this._toggle) {
         this._adapter.setHostAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED, `${this._on}`);
       } else {

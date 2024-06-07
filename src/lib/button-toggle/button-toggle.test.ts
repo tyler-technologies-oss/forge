@@ -16,7 +16,7 @@ import '../label/label';
 describe('Button Toggle', () => {
   it('should be accessible', async () => {
     const harness = await createFixture();
-    
+
     await expect(harness.element).to.be.accessible();
     expect(harness.element.getAttribute('role')).to.equal('group');
     expect(harness.buttonToggles.every(toggle => toggle.getAttribute('role') === 'button')).to.be.true;
@@ -26,7 +26,7 @@ describe('Button Toggle', () => {
   ['primary', 'secondary', 'tertiary', 'danger', 'success', 'warning', 'info'].forEach((theme: ButtonToggleGroupTheme) => {
     it(`should be accessible with selected values for theme ${theme}`, async () => {
       const harness = await createFixture({ theme, value: 'two' });
-      
+
       // tertiary is the default
       if (theme !== 'tertiary') {
         expect(harness.element.getAttribute(BUTTON_TOGGLE_GROUP_CONSTANTS.attributes.THEME)).to.equal(theme);
@@ -126,7 +126,7 @@ describe('Button Toggle', () => {
 
     expect(harness.element.disabled).to.be.true;
     expect(harness.element.hasAttribute('disabled')).to.be.true;
-    expect(harness.buttonToggles.every(toggle => toggle.tabIndex === -1)).to.be.true; 
+    expect(harness.buttonToggles.every(toggle => toggle.tabIndex === -1)).to.be.true;
   });
 
   it('should set readonly', async () => {
@@ -348,7 +348,7 @@ describe('Button Toggle', () => {
     harness.element.value = null;
 
     expect(harness.element.value).to.be.null;
-    
+
     harness.element.formStateRestoreCallback(state, 'restore');
 
     expect(harness.element.value).to.deep.equal('two');
@@ -360,7 +360,7 @@ describe('Button Toggle', () => {
     const state = harness.element[getFormState]();
 
     expect(harness.element.value).to.be.null;
-    
+
     harness.element.formStateRestoreCallback(state, 'restore');
 
     expect(harness.element.value).to.be.null;
@@ -376,7 +376,7 @@ describe('Button Toggle', () => {
     harness.element.value = null;
 
     expect(harness.element.value).to.deep.equal([]);
-    
+
     harness.element.formStateRestoreCallback(state, 'restore');
 
     expect(harness.element.value).to.deep.equal(['one', 'three']);
@@ -390,9 +390,9 @@ describe('Button Toggle', () => {
     expect(harness.element.willValidate).to.be.true;
     expect(harness.element.validity.valueMissing).to.be.true;
     expect(harness.element.validationMessage).not.to.be.empty;
-    
+
     harness.element.value = 'one';
-    
+
     expect(harness.element.validity.valueMissing).to.be.false;
     expect(harness.element.validationMessage).to.be.empty;
   });
@@ -405,9 +405,9 @@ describe('Button Toggle', () => {
     expect(harness.element.willValidate).to.be.true;
     expect(harness.element.validity.valueMissing).to.be.true;
     expect(harness.element.validationMessage).not.to.be.empty;
-    
+
     harness.element.value = ['one', 'two'];
-    
+
     expect(harness.element.validity.valueMissing).to.be.false;
     expect(harness.element.validationMessage).to.be.empty;
   });
@@ -517,10 +517,10 @@ class ButtonToggleGroupHarness extends TestHarness<IButtonToggleGroupComponent> 
 
   public selectToggleViaMouse(index: number): Promise<void> {
     const { x, y, width, height } = this.buttonToggles[index]?.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 
   public selectToggleViaKeyboard(index: number): Promise<void> {
@@ -578,11 +578,7 @@ async function createFixture({
   return new ButtonToggleGroupHarness(el);
 }
 
-async function createFixtureWithForm({
-  value = '',
-  multiple = false,
-  required = false
-} = {}): Promise<ButtonToggleGroupHarness> {
+async function createFixtureWithForm({ value = '', multiple = false, required = false } = {}): Promise<ButtonToggleGroupHarness> {
   const formEl = await fixture<HTMLFormElement>(html`
     <form>
       <label for="button-toggle-group">Test label</label>

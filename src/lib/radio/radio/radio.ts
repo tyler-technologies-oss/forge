@@ -34,10 +34,10 @@ declare global {
 
 /**
  * @tag forge-radio
- * 
+ *
  * @summary The Forge Radio component is used to create a form input where only one out of a set of
  * values should be selected.
- * 
+ *
  * @property {boolean} checked - Indicates whether the radio button is checked.
  * @property {boolean} defaultChecked - Indicates whether the radio button is checked by default.
  * @property {string} value - The value of the radio button when submitted.
@@ -46,7 +46,7 @@ declare global {
  * @property {boolean} required - Indicates whether the radio button is required.
  * @property {boolean} readonly - Indicates whether the radio button is read-only.
  * @property {RadioLabelPosition} labelPosition - The position of the radio button's label.
- * 
+ *
  * @attribute {boolean} checked - Indicates whether the radio button is checked.
  * @attribute {boolean} default-checked - Indicates whether the radio button is checked by default.
  * @attribute {string} value - The value of the radio button when submitted.
@@ -55,7 +55,7 @@ declare global {
  * @attribute {boolean} required - Indicates whether the radio button is required.
  * @attribute {boolean} readonly - Indicates whether the radio button is read-only.
  * @attribute {RadioLabelPosition} label-position - The position of the radio button's label.
- * 
+ *
  * @cssproperty --forge-radio-primary-color - The primary color of the radio button when checked.
  * @cssproperty --forge-radio-inactive-color - The color of the radio button when unchecked.
  * @cssproperty --forge-radio-size - The size of the radio button in the inline and block directions.
@@ -89,22 +89,22 @@ declare global {
  * @cssproperty --forge-radio-animation-duration - The duration of the radio button's animations.
  * @cssproperty --forge-radio-animation-timing-function - The timing function of the radio button's animations.
  * @cssproperty --forge-radio-animation-delay - The delay of the radio button's animations.
- *  
+ *
  * @csspart root - Styles the radio's root element.
  * @csspart background - Styles the border and background of the radio.
  * @csspart focus-indicator - Styles the focus indicator of the radio.
  * @csspart state-layer - Styles the state layer of the radio.
- * 
+ *
  * @slot - This is a default/unnamed slot for the label text.
  */
 @customElement({
   name: RADIO_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
-export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent))))) implements IRadioComponent {
+export class RadioComponent
+  extends WithFormAssociation(WithLabelAwareness(WithFocusable(WithDefaultAria(WithElementInternals(BaseComponent)))))
+  implements IRadioComponent
+{
   public static get observedAttributes(): string[] {
     return Object.values(RADIO_CONSTANTS.observedAttributes);
   }
@@ -135,7 +135,11 @@ export class RadioComponent extends WithFormAssociation(WithLabelAwareness(WithF
   }
 
   public disconnectedCallback(): void {
-    RadioGroupManager.syncRadioFocusableState(this, { ignoreSelf: true, rootNode: this._rootNode, form: this._latestAssociatedForm });
+    RadioGroupManager.syncRadioFocusableState(this, {
+      ignoreSelf: true,
+      rootNode: this._rootNode,
+      form: this._latestAssociatedForm
+    });
   }
 
   public override attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

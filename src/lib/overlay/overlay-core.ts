@@ -1,4 +1,3 @@
-
 import { PositionPlacement } from '../core/utils/position-utils';
 import { IBaseOverlayCore, BaseOverlayCore } from './base/base-overlay-core';
 import { IOverlayAdapter } from './overlay-adapter';
@@ -96,7 +95,11 @@ export class OverlayCore extends BaseOverlayCore<IOverlayAdapter> implements IOv
 
   private _onLightDismiss(reason: OverlayLightDismissReason): void {
     const detail: OverlayLightDismissEventData = { reason };
-    const evt = new CustomEvent<OverlayLightDismissEventData>(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, { bubbles: false, cancelable: true, detail });
+    const evt = new CustomEvent<OverlayLightDismissEventData>(OVERLAY_CONSTANTS.events.LIGHT_DISMISS, {
+      bubbles: false,
+      cancelable: true,
+      detail
+    });
     this._adapter.dispatchHostEvent(evt);
     if (evt.defaultPrevented) {
       return;
@@ -122,7 +125,7 @@ export class OverlayCore extends BaseOverlayCore<IOverlayAdapter> implements IOv
 
   private _showOverlay(): void {
     this._adapter.show();
-  
+
     if (!this._persistent) {
       this._applyLightDismissListener();
     }
@@ -288,7 +291,7 @@ export class OverlayCore extends BaseOverlayCore<IOverlayAdapter> implements IOv
     value = Boolean(value);
     if (this._persistent !== value) {
       this._persistent = value;
-  
+
       if (this._persistent) {
         this._adapter.removeLightDismissListener();
       } else if (this._open) {

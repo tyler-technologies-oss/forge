@@ -9,7 +9,7 @@ export interface IWithDefaultAria extends IBaseComponent {
   /**
    * Sets the default ARIA of the component using Element Internals if supported or sprouting
    * ARIA attributes if not.
-   * 
+   *
    * @param properties The ARIA properties and values to set.
    * @param options Whether or not to overwrite existing ARIA attributes. This only takes effect
    * if Element Internals are not supported and a new attribute will be sprouted.
@@ -23,7 +23,7 @@ export declare abstract class WithDefaultAriaContract {
 
 /**
  * Mixes in Element Internals functionality into a base component.
- * 
+ *
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */

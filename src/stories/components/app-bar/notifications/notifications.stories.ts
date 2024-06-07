@@ -19,8 +19,7 @@ const meta = {
       tagName: component
     })
   },
-  args: {
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;
@@ -31,10 +30,9 @@ export const Demo: Story = {
   ...standaloneStoryParams,
   render: () => {
     return html`
-    <forge-app-bar title-text="Menu Button">
-      <forge-app-bar-notification-button slot="end" show-badge dot>
-      </forge-app-bar-notification-button>
-    </forge-app-bar>
+      <forge-app-bar title-text="Menu Button">
+        <forge-app-bar-notification-button slot="end" show-badge dot> </forge-app-bar-notification-button>
+      </forge-app-bar>
     `;
-  },
+  }
 };

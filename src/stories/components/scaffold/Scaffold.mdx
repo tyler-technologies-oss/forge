@@ -8,17 +8,18 @@ import * as ScaffoldStories from './Scaffold.stories';
 
 The scaffold component is intended to be used as a layout tool. You can use it for your full application layout, or even nest scaffolds within other scaffolds. Think of this component as a structural tool (it uses CSS grid under the hood) with named locations that allow you render any element you want in those named locations.
 
->Note: The scaffold handles common page layouts, but it's simply a wrapper around native CSS `grid` styles to aid in common application layouts. We recommend that you become familiar with `flexbox` and `grid` for scenarios where you cannot use the scaffold. Suggested learning resources:
->- [CSS Tricks: A complete guide to CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
->- [Layout Land: CSS grid basics](https://www.youtube.com/watch?v=FEnRpy9Xfes&t=6s)
->- [CSS Tricks: Flexbox basics](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
->- [MDN: Basics of Flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)
+> Note: The scaffold handles common page layouts, but it's simply a wrapper around native CSS `grid` styles to aid in common application layouts. We recommend that you become familiar with `flexbox` and `grid` for scenarios where you cannot use the scaffold. Suggested learning resources:
+>
+> - [CSS Tricks: A complete guide to CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+> - [Layout Land: CSS grid basics](https://www.youtube.com/watch?v=FEnRpy9Xfes&t=6s)
+> - [CSS Tricks: Flexbox basics](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+> - [MDN: Basics of Flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)
 
 Using a scaffold will help you place elements in pre-defined locations within a layout. This makes it very easy to spin up common layouts without having to write any CSS at all. For instance, by placing content within the built-in slots the component will handle overflowing content for you.
 
->Note: It is recommended that you use a single container element for each slot within the scaffold. This is because the scaffold applies specific CSS grid styles to the slotted elements, and this can cause unwanted side-effects to your elements if you place things like multiple buttons directly into the root of the slots themselves.
+> Note: It is recommended that you use a single container element for each slot within the scaffold. This is because the scaffold applies specific CSS grid styles to the slotted elements, and this can cause unwanted side-effects to your elements if you place things like multiple buttons directly into the root of the slots themselves.
 >
->If you encounter rendering issues where content is stacked on the z-index, ensure that each named slot is used only once.
+> If you encounter rendering issues where content is stacked on the z-index, ensure that each named slot is used only once.
 
 <Canvas of={ScaffoldStories.Demo} />
 
@@ -27,6 +28,7 @@ Using a scaffold will help you place elements in pre-defined locations within a 
 <CustomArgTypes />
 
 ## Accessibility
+
 - Ensure that all of the content in each of the slots is accessible by tabbing with the keyboard.
 - Use the proper semantic elements for content (if applicable) such as `<header>`, `<main>`, `<aside>`... etc..
   - The scaffold component itself has no semantic meaning.

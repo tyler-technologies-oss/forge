@@ -50,10 +50,13 @@ export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> imple
   }
 
   public initialize(): void {
-    this._component[setDefaultAria]({
-      role: 'dialog',
-      ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
-    }, { setAttribute: true });
+    this._component[setDefaultAria](
+      {
+        role: 'dialog',
+        ariaModal: this._component.mode === 'modal' || this._component.mode === 'inline-modal' ? 'true' : 'false'
+      },
+      { setAttribute: true }
+    );
   }
 
   public open(): void {
@@ -98,7 +101,7 @@ export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> imple
 
   public setContainerHeight(height: number | null): void {
     if (height != null) {
-      const percent = Math.min(100, 100 * height / window.innerHeight);
+      const percent = Math.min(100, (100 * height) / window.innerHeight);
       this._dialogElement.style.setProperty('--forge-dialog-max-height', `${percent}%`);
     } else {
       this._dialogElement.style.removeProperty('--forge-dialog-max-height');

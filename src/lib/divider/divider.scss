@@ -6,7 +6,6 @@ $host-tokens: [margin];
   @include tokens($includes: $host-tokens);
 }
 
-
 :host {
   @include host;
 }
@@ -30,4 +29,3 @@ $host-tokens: [margin];
     @include vertical-base;
   }
 }
-

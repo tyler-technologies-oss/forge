@@ -16,9 +16,13 @@ export interface IDeprecatedIconButtonComponentDelegateOptions extends IBaseComp
   tooltip?: string;
   tooltipPosition?: TooltipPlacement;
 }
-export interface IDeprecatedIconButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<IDeprecatedIconButtonComponent, IDeprecatedIconButtonComponentDelegateOptions> {}
+export interface IDeprecatedIconButtonComponentDelegateConfig
+  extends IBaseComponentDelegateConfig<IDeprecatedIconButtonComponent, IDeprecatedIconButtonComponentDelegateOptions> {}
 
-export class DeprecatedIconButtonComponentDelegate extends BaseComponentDelegate<IDeprecatedIconButtonComponent, IDeprecatedIconButtonComponentDelegateOptions> {
+export class DeprecatedIconButtonComponentDelegate extends BaseComponentDelegate<
+  IDeprecatedIconButtonComponent,
+  IDeprecatedIconButtonComponentDelegateOptions
+> {
   private _buttonElement?: HTMLButtonElement;
   private _iconElement?: IIconComponent;
 
@@ -40,12 +44,10 @@ export class DeprecatedIconButtonComponentDelegate extends BaseComponentDelegate
     this._buttonElement.type = 'button';
     component.appendChild(this._buttonElement);
 
-
-
     if (this._config.options?.tooltip) {
       const tooltip = document.createElement('forge-tooltip');
       tooltip.textContent = this._config.options.tooltip;
-      
+
       if (this._config.options.tooltipPosition) {
         tooltip.position = this._config.options.tooltipPosition;
       }
@@ -67,7 +69,6 @@ export class DeprecatedIconButtonComponentDelegate extends BaseComponentDelegate
     this._buttonElement?.addEventListener('blur', listener);
   }
 
-
   public get iconElement(): IIconComponent | undefined {
     return this._iconElement;
   }
@@ -80,7 +81,6 @@ export class DeprecatedIconButtonComponentDelegate extends BaseComponentDelegate
       this._buttonElement.disabled = value;
     }
   }
-
 
   protected _configure(): void {
     this._configureIcon();

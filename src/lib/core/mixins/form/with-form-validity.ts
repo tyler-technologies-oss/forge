@@ -30,7 +30,7 @@ export declare abstract class WithFormValidityContract {
 
 /**
  * Provides form validity functionality for an element.
- * 
+ *
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */

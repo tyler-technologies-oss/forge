@@ -29,7 +29,11 @@ export class AppBarCore implements IAppBarCore {
   }
 
   private _onHrefClick(evt: Event): void {
-    const event = new CustomEvent(APP_BAR_CONSTANTS.events.NAVIGATE, { bubbles: true, composed: true, cancelable: true });
+    const event = new CustomEvent(APP_BAR_CONSTANTS.events.NAVIGATE, {
+      bubbles: true,
+      composed: true,
+      cancelable: true
+    });
     this._adapter.dispatchHostEvent(event);
     if (event.defaultPrevented) {
       evt.preventDefault();

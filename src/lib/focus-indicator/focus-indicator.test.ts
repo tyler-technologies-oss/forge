@@ -49,7 +49,7 @@ describe('FocusIndicator', () => {
 
   it('should attach to specific target via id', async () => {
     const { button, detachedButton, focusIndicator } = await createFixture({ target: 'detached' });
-    
+
     expect(focusIndicator.targetElement).to.equal(detachedButton);
 
     button.focus();
@@ -63,7 +63,7 @@ describe('FocusIndicator', () => {
 
   it('should set target element manually', async () => {
     const { button, detachedButton, focusIndicator } = await createFixture();
-    
+
     expect(focusIndicator.targetElement).to.equal(button);
 
     focusIndicator.targetElement = detachedButton;
@@ -138,7 +138,7 @@ describe('FocusIndicator', () => {
     class TestFocusIndicator extends HTMLElement {
       constructor() {
         super();
-        this.attachShadow({ mode: 'open'});
+        this.attachShadow({ mode: 'open' });
         this.shadowRoot!.innerHTML = '<forge-focus-indicator target=":host"></forge-focus-indicator>';
       }
     }
@@ -161,7 +161,7 @@ interface FocusIndicatorFixtureConfig {
 interface FocusIndicatorFixtureResult {
   detachedButton: HTMLButtonElement;
   button: HTMLButtonElement;
-  focusIndicator: IFocusIndicatorComponent
+  focusIndicator: IFocusIndicatorComponent;
 }
 
 async function createFixture({ target, inward, circular, allowFocus }: FocusIndicatorFixtureConfig = {}): Promise<FocusIndicatorFixtureResult> {
@@ -170,12 +170,7 @@ async function createFixture({ target, inward, circular, allowFocus }: FocusIndi
       <button id="detached" type="button">Simple button</button>
       <button id="attached" type="button">
         Button
-        <forge-focus-indicator
-          target=${target}
-          ?inward=${inward}
-          ?circular=${circular}
-          ?allow-focus=${allowFocus}>
-        </forge-focus-indicator>
+        <forge-focus-indicator target=${target} ?inward=${inward} ?circular=${circular} ?allow-focus=${allowFocus}> </forge-focus-indicator>
       </button>
     </div>
   `);

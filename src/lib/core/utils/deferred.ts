@@ -1,6 +1,6 @@
 /**
  * Represents a deferred promise.
- * 
+ *
  * Use deferred promises when you need to return a promise but you don't have the result yet.
  */
 export class Deferred<T = void> {

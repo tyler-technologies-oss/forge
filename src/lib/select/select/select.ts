@@ -31,13 +31,13 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-select-scrolled-bottom': CustomEvent<void>;
-    'change': CustomEvent<any>;
+    change: CustomEvent<any>;
   }
 }
 
 /**
  * @tag forge-select
- * 
+ *
  * @dependency forge-field
  * @dependency forge-option
  * @dependency forge-option-group
@@ -49,12 +49,12 @@ declare global {
  * @dependency forge-scaffold
  * @dependency forge-toolbar
  * @dependency forge-icon-button
- * 
+ *
  * @globalconfig labelPosition
- * 
+ *
  * @event {CustomEvent<void>} forge-select-scrolled-bottom - Dispatched when the dropdown list has scrolled to the bottom.
  * @event {CustomEvent<any>} change - Dispatched when the user selects a value.
- * 
+ *
  * @property {string} label - Controls the label text.
  * @property {string} placeholder - Controls the placeholder text.
  * @property {any} value - Gets/sets the value.
@@ -65,7 +65,7 @@ declare global {
  * @property {SelectOptionBuilder} optionBuilder - Gets/sets the option builder function.
  * @property {SelectSelectedTextBuilder} selectedTextBuilder - Gets/sets the selected text builder function.
  * @property {SelectBeforeValueChangeCallback<any>} beforeValueChange - Gets/sets the before value change callback.
- * 
+ *
  * @attribute {string} label - Controls the label text.
  * @attribute {string} placeholder - Controls the placeholder text.
  * @attribute {any} value - Gets/sets the value.
@@ -127,7 +127,7 @@ declare global {
  * @csspart support-text - The element containing the support text slot.
  * @csspart support-text-end - The element containing the support text end slot.
  * @csspart focus-indicator - The focus indicator element.
- * 
+ *
  * @slot - The default/unnamed slot for the field's input.
  * @slot label - Renders its content as a positioned label.
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.

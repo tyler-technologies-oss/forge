@@ -47,21 +47,21 @@ const columnConfigurations: IColumnConfiguration[] = [
     sortable: true,
     initialSort: true,
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter first name...' }, props: { showClear: true }})
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter first name...' }, props: { showClear: true } })
   },
   {
     header: 'Last Name',
     property: 'lastName',
     sortable: true,
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter last name...' }, props: { showClear: true }})
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter last name...' }, props: { showClear: true } })
   },
   {
     header: 'Age',
     property: 'age',
     sortable: true,
     filter: true,
-    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' }, props: { showClear: true }})
+    filterDelegate: () => new TextFieldComponentDelegate({ options: { placeholder: 'Filter age...' }, props: { showClear: true } })
   }
 ];
 
@@ -100,8 +100,18 @@ import { TextFieldComponentDelegate, SelectComponentDelegate } from '@tylertech/
 import { SomeCustomComponentDelegate } from './my-custom-component-delegates';
 
 table.columnConfigurations = [
-  { property: 'name', header: 'Person name', filter: true, filterDelegate: new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } }) },
-  { property: 'color', header: 'Favorite color', filter: true, filterDelegate: new SelectComponentDelegate({ props: { placeholder: 'Filter color...' } }) },
+  {
+    property: 'name',
+    header: 'Person name',
+    filter: true,
+    filterDelegate: new TextFieldComponentDelegate({ options: { placeholder: 'Filter name...' } })
+  },
+  {
+    property: 'color',
+    header: 'Favorite color',
+    filter: true,
+    filterDelegate: new SelectComponentDelegate({ props: { placeholder: 'Filter color...' } })
+  },
   { property: 'age', header: 'Person age', filter: true, filterDelegate: new SomeCustomComponentDelegate() }
 ];
 ```

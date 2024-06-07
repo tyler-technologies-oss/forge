@@ -30,13 +30,15 @@ $host-tokens: [background foreground];
 //
 
 :host(:not([theme])) {
-  @include theme.provide((
-    primary: #{token(foreground)},
-    on-primary: rgba(black, color-emphasis.value(highest)),
-    text-high: rgba(white, color-emphasis.value(highest)),
-    text-medium: rgba(white, color-emphasis.value(medium)),
-    text-low: rgba(white, color-emphasis.value(medium-low))
-  ));
+  @include theme.provide(
+    (
+      primary: #{token(foreground)},
+      on-primary: rgba(black, color-emphasis.value(highest)),
+      text-high: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(white, color-emphasis.value(medium)),
+      text-low: rgba(white, color-emphasis.value(medium-low))
+    )
+  );
 }
 
 //
@@ -80,17 +82,21 @@ $host-tokens: [background foreground];
     @include anchor-base;
 
     forge-state-layer {
-      @include state-layer.provide-theme((
-        color: #{token(foreground)}
-      ));
+      @include state-layer.provide-theme(
+        (
+          color: #{token(foreground)}
+        )
+      );
     }
 
     forge-focus-indicator {
-      @include focus-indicator.provide-theme((
-        color: #{token(foreground)},
-        shape: 4px,
-        offset-block: 4px
-      ));
+      @include focus-indicator.provide-theme(
+        (
+          color: #{token(foreground)},
+          shape: 4px,
+          offset-block: 4px
+        )
+      );
     }
   }
 
@@ -103,7 +109,7 @@ $host-tokens: [background foreground];
 // Elevation
 //
 
-:host(:is(:not([elevation]),[elevation=raised])) {
+:host(:is(:not([elevation]), [elevation='raised'])) {
   .forge-app-bar {
     @include elevation-raised;
   }
@@ -114,14 +120,18 @@ $host-tokens: [background foreground];
 //
 
 ::slotted(forge-tab-bar) {
-  @include tab-bar.provide-theme(( divider-thickness: 0 ));
+  @include tab-bar.provide-theme(
+    (
+      divider-thickness: 0
+    )
+  );
 }
 
 //
 // Slotted - Logo
 //
 
-::slotted([slot=logo]) {
+::slotted([slot='logo']) {
   @include logo;
 }
 
@@ -129,7 +139,7 @@ $host-tokens: [background foreground];
 // Slotted - Search
 //
 
-::slotted(forge-app-bar-search[slot=center]) {
+::slotted(forge-app-bar-search[slot='center']) {
   width: 100%;
 }
 
@@ -137,12 +147,14 @@ $host-tokens: [background foreground];
 // White theme
 //
 
-:host([theme=white]) {
-  @include theme.provide((
-    primary: black,
-    on-primary: rgba(white, color-emphasis.value(highest)),
-    text-medium: rgba(black, color-emphasis.value(medium))
-  ));
+:host([theme='white']) {
+  @include theme.provide(
+    (
+      primary: black,
+      on-primary: rgba(white, color-emphasis.value(highest)),
+      text-medium: rgba(black, color-emphasis.value(medium))
+    )
+  );
 
   .forge-app-bar {
     @include override(background, white, value);

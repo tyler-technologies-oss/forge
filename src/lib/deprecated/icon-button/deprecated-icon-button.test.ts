@@ -28,7 +28,7 @@ describe('Deprecated Icon Button', () => {
 
     const stateLayer = getStateLayer(el);
     const focusIndicator = getFocusIndicator(el);
-    
+
     expect(el.shadowRoot).not.to.be.null;
     expect(stateLayer.disabled).to.be.false;
     expect(focusIndicator).to.be.ok;
@@ -305,7 +305,7 @@ describe('Deprecated Icon Button', () => {
 
   describe('DeprecatedIconButtonComponentDelegate', () => {
     it('should create button with icon via delegate', async () => {
-      const delegate = new DeprecatedIconButtonComponentDelegate({ options: { iconName: 'forge_logo' }});
+      const delegate = new DeprecatedIconButtonComponentDelegate({ options: { iconName: 'forge_logo' } });
 
       expect(delegate.element).to.be.instanceOf(DeprecatedIconButtonComponent);
       expect(delegate.buttonElement).to.be.ok;
@@ -378,7 +378,7 @@ describe('Deprecated Icon Button', () => {
   });
 
   function getStateLayer(btn: IDeprecatedIconButtonComponent): IStateLayerComponent {
-    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent
+    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
   function getFocusIndicator(btn: IDeprecatedIconButtonComponent): IFocusIndicatorComponent {
@@ -390,9 +390,9 @@ describe('Deprecated Icon Button', () => {
       return Promise.resolve();
     }
     const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 });

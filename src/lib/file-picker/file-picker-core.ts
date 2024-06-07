@@ -132,9 +132,12 @@ export class FilePickerCore implements IFilePickerCore {
 
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < files.length; i++) {
-      if (!formats.some(f => {
-        return files[i].type.toLowerCase().match(f) || files[i].name.toLowerCase().match('\\' + f);
-      }) || (this._maxSize && files[i].size > this._maxSize)) {
+      if (
+        !formats.some(f => {
+          return files[i].type.toLowerCase().match(f) || files[i].name.toLowerCase().match('\\' + f);
+        }) ||
+        (this._maxSize && files[i].size > this._maxSize)
+      ) {
         illegalFiles.push(files[i]);
       } else {
         legalFiles.push(files[i]);

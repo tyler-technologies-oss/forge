@@ -11,12 +11,11 @@ $tokens: (
   background: utils.module-val(backdrop, background, #000),
   opacity: utils.module-val(backdrop, opacity, theme.emphasis(medium)),
   z-index: utils.module-val(backdrop, z-index, elevation.z-index-variable(backdrop)),
-
   // Animation
   enter-animation-duration: utils.module-val(backdrop, enter-animation-duration, animation.variable(duration-short4)),
   enter-animation-easing: utils.module-val(backdrop, enter-animation-easing, animation.variable(easing-standard)),
   exit-animation-duration: utils.module-val(backdrop, exit-animation-duration, animation.variable(duration-short1)),
-  exit-animation-easing: utils.module-val(backdrop, exit-animation-easing, animation.variable(easing-emphasized-accelerate)),
+  exit-animation-easing: utils.module-val(backdrop, exit-animation-easing, animation.variable(easing-emphasized-accelerate))
 ) !default;
 
 @function get($key) {

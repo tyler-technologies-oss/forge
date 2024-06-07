@@ -65,7 +65,7 @@ declare global {
 
 /**
  * @tag forge-time-picker
- * 
+ *
  * @property {string | null | undefined} [value=undefined] - The current value of the time picker.
  * @property {boolean} [open=false] - Whether or not the time picker is open.
  * @property {boolean} [allowSeconds=false] - Whether or not to allow seconds in the time picker.
@@ -91,19 +91,11 @@ declare global {
  * @property {string | string[]} [popupClasses=undefined] - The classes to apply to the time picker popup.
  * @property {boolean} [allowDropdown=false] - Whether or not to allow the time picker to be a dropdown.
  * @property {string} [popupTarget=undefined] - The target element to attach the popup to.
- * 
+ *
  */
 @customElement({
   name: TIME_PICKER_CONSTANTS.elementName,
-  dependencies: [
-    ListComponent,
-    ListItemComponent,
-    IconButtonComponent,
-    IconComponent,
-    PopoverComponent,
-    IconComponent,
-    DialogComponent
-  ]
+  dependencies: [ListComponent, ListItemComponent, IconButtonComponent, IconComponent, PopoverComponent, IconComponent, DialogComponent]
 })
 export class TimePickerComponent extends BaseComponent implements ITimePickerComponent {
   public static get observedAttributes(): string[] {
@@ -256,7 +248,7 @@ export class TimePickerComponent extends BaseComponent implements ITimePickerCom
 
   @coreProperty()
   public declare validationCallback: TimePickerValidationCallback;
-  
+
   @coreProperty()
   public declare parseCallback: TimePickerParseCallback;
 

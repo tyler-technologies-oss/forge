@@ -71,7 +71,7 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
   public initialize(): void {
     this._inputElement = this._component.querySelector('input:not([type=checkbox]):not([type=radio])') as HTMLInputElement;
   }
-  
+
   public addRootListener(type: string, listener: EventListener, options?: EventListenerOptions): void {
     this._fieldElement.addEventListener(type, listener, options);
   }
@@ -87,7 +87,7 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
   public removeInputListener(type: string, listener: EventListener): void {
     this._inputElement?.removeEventListener(type, listener);
   }
-  
+
   public clickInput(): void {
     this._inputElement?.click();
   }
@@ -136,7 +136,7 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
 
     const assignedElements = slot.assignedElements();
     this._inputElement = assignedElements.find(el => el.matches(CHIP_FIELD_CONSTANTS.selectors.INPUT)) as HTMLInputElement;
-    
+
     if (this._inputElement) {
       if (this._component.disabled) {
         this._inputElement.disabled = true;
@@ -152,7 +152,10 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
           }
         });
       });
-      this._inputMutationObserver?.observe(this._inputElement, { attributes: true, attributeFilter: [...CHIP_FIELD_CONSTANTS.observedInputAttributes] });
+      this._inputMutationObserver?.observe(this._inputElement, {
+        attributes: true,
+        attributeFilter: [...CHIP_FIELD_CONSTANTS.observedInputAttributes]
+      });
 
       // Call the listener with each observed attribute to capture the initial state
       Object.values(CHIP_FIELD_CONSTANTS.observedInputAttributes).forEach(value => {
@@ -179,7 +182,7 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
       forgeLabel.clickTarget = this._inputElement;
       return;
     }
-    
+
     // Attempt to find and connect a `<label>` element
     const label = elements.find(el => el.tagName === CHIP_FIELD_CONSTANTS.tagNames.LABEL) as HTMLLabelElement | undefined;
     if (!label || label.control) {

@@ -38,11 +38,11 @@ declare global {
 
 /**
  * @tag forge-popover
- * 
+ *
  * @summary Popovers are used to render content in an element that is above all other content on the page.
- * 
+ *
  * @dependency forge-overlay
- * 
+ *
  * @property {boolean} [arrow=false] - Whether or not the popover should render an arrow.
  * @property {PopoverAnimationType} [animationType="zoom"] - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
  * @property {PopoverTriggerType | PopoverTriggerType[]} [triggerType="click"] - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
@@ -51,7 +51,7 @@ declare global {
  * @property {number} [hoverDismissDelay=500] - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
  * @property {number} [hoverDelay=0] - The delay in milliseconds before the popover is shown.
  * @property {PopoverPreset} [preset="popover"] - The preset to use for the popover.
- * 
+ *
  * @globalconfig placement
  * @globalconfig animationType
  * @globalconfig positionStrategy
@@ -62,7 +62,7 @@ declare global {
  * @globalconfig fallbackPlacements
  * @globalconfig persistent
  * @globalconfig arrow
- * 
+ *
  * @attribute {string} [arrow=false] - Whether or not the popover should render an arrow.
  * @attribute {string} [animation-type="zoom"] - The animation type to use for the popover. Valid values are `'none'`, `'fade'`, `'slide'`, and `'zoom'` (default).
  * @attribute {string} [trigger-type="click"] - The trigger type(s) to use for the popover. Valid values are `'click'` (default), `'hover'`, `'focus'`, and `'longpress'`. Multiple can be specified.
@@ -71,10 +71,10 @@ declare global {
  * @attribute {string} [hover-dismiss-delay=500] - The delay in milliseconds before the popover is dismissed when the user hovers outside of the popover.
  * @attribute {number} [hover-delay=0] - The delay in milliseconds before the popover is shown.
  * @attribute {string} [preset="popover"] - The preset to use for the popover.
- * 
+ *
  * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-beforetoggle - Dispatches before the popover is toggled, and is cancelable.
  * @event {CustomEvent<IPopoverToggleEventData>} forge-popover-toggle - Dispatches after the popover is toggled.
- * 
+ *
  * @cssproperty --forge-popover-background - The background color of the popover surface.
  * @cssproperty --forge-popover-border-radius - The border radius of the popover surface.
  * @cssproperty --forge-popover-box-shadow - The box shadow of the popover surface.
@@ -111,9 +111,9 @@ declare global {
  * @cssproperty --forge-popover-position-inline-end - The `inline-end` position of the popover.
  * @cssproperty --forge-popover-preset-dropdown-max-height - The maximum height of the popover when using `preset="dropdown"`. Defaults to `256px`.
  * @cssproperty --forge-popover-preset-dropdown-overflow - The overflow behavior of the popover when using `preset="dropdown"`. Defaults to `auto visible` (vertical scrolling only).
- * 
+ *
  * @slot - The content to render inside the popover.
- * 
+ *
  * @csspart overlay - The overlay root element.
  * @csspart surface - The surface container element for the slotted content.
  */
@@ -123,10 +123,7 @@ declare global {
 })
 export class PopoverComponent extends OverlayAware<IPopoverCore> implements IPopoverComponent {
   public static get observedAttributes(): string[] {
-    return [
-      ...Object.values(OVERLAY_CONSTANTS.observedAttributes),
-      ...Object.values(POPOVER_CONSTANTS.observedAttributes)
-    ];
+    return [...Object.values(OVERLAY_CONSTANTS.observedAttributes), ...Object.values(POPOVER_CONSTANTS.observedAttributes)];
   }
 
   public [tryDismiss](state: IDismissibleStackState): boolean {

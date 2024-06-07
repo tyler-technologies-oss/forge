@@ -18,7 +18,7 @@ const meta = {
   parameters: {
     controls: { disable: true },
     actions: { disable: true }
-  },
+  }
 } satisfies Meta;
 
 export default meta;

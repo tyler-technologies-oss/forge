@@ -24,31 +24,25 @@ declare global {
 
 /**
  * @tag forge-app-bar-help-button
- * 
+ *
  * @description A utility component with predefined icon and descriptions for use in an app bar `end` slot.
- * 
+ *
  * @property {IMenuOption[]} [options=[]] - The menu options to display when the button is clicked
  * @property {string} [icon=help] - The name of an alternative icon to display.
- * 
+ *
  * @attribute {string} [icon=help] - The name of an alternative icon to display.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
- * 
+ *
  * @event {CustomEvent<IMenuSelectEventData>} forge-menu-select - Bubbles up the menu select from the internal menu component.
  */
 @customElement({
   name: APP_BAR_HELP_BUTTON_CONSTANTS.elementName,
-  dependencies: [
-    MenuComponent,
-    IconButtonComponent,
-    TooltipComponent
-  ]
+  dependencies: [MenuComponent, IconButtonComponent, TooltipComponent]
 })
 export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarHelpButtonComponent {
   public static get observedAttributes(): string[] {
-    return [
-      APP_BAR_HELP_BUTTON_CONSTANTS.attributes.ICON
-    ];
+    return [APP_BAR_HELP_BUTTON_CONSTANTS.attributes.ICON];
   }
 
   private _core: AppBarHelpButtonCore;
@@ -62,7 +56,7 @@ export class AppBarHelpButtonComponent extends BaseComponent implements IAppBarH
   public initializedCallback(): void {
     attachLightTemplate(this, template);
   }
-  
+
   public connectedCallback(): void {
     this._core.initialize();
   }

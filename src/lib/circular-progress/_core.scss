@@ -60,7 +60,9 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
   animation: #{animation.$indeterminate-circle-animation};
   animation-iteration-count: infinite;
   animation-fill-mode: both;
-  animation-duration: #{token(arc-duration)}, #{$_cycle-duration};
+  animation-duration:
+    #{token(arc-duration)},
+    #{$_cycle-duration};
   animation-timing-function: #{animation.$indeterminate-easing};
 }
 
@@ -86,8 +88,9 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
 }
 
 @mixin determinate-progress {
-  transition: stroke-dashoffset 500ms #{animation.$determinate-easing},
-              stroke #{token(theme-transition-duration)} #{token(theme-transition-timing)};
+  transition:
+    stroke-dashoffset 500ms #{animation.$determinate-easing},
+    stroke #{token(theme-transition-duration)} #{token(theme-transition-timing)};
   stroke: #{token(indicator-color)};
 }
 

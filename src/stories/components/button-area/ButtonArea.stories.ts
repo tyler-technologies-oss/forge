@@ -17,10 +17,7 @@ import { storyStyles } from 'src/stories/decorators';
 
 const component = 'forge-button-area';
 
-IconRegistry.define([
-  tylIconFavorite,
-  tylIconChevronRight,
-]);
+IconRegistry.define([tylIconFavorite, tylIconChevronRight]);
 
 const clickAction = action('click');
 
@@ -39,8 +36,8 @@ const meta = {
             </div>
             <forge-icon-button>
               <forge-icon role="img" name="favorite" aria-label="A heart graphic"></forge-icon>
-              </forge-icon-button>
-              <forge-tooltip>Favorite</forge-tooltip>
+            </forge-icon-button>
+            <forge-tooltip>Favorite</forge-tooltip>
             <forge-icon name="chevron_right"></forge-icon>
           </div>
         </forge-button-area>
@@ -54,13 +51,10 @@ const meta = {
   },
   argTypes: {
     ...generateCustomElementArgTypes({
-      tagName: component,
-      
-    }),
+      tagName: component
+    })
   },
-  args: {
-
-  },
+  args: {}
 } satisfies Meta;
 
 export default meta;

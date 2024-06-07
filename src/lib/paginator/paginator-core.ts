@@ -23,7 +23,10 @@ export class PaginatorCore {
   private _pageSize = PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE;
   private _offset = 0;
   private _total = PAGINATOR_CONSTANTS.numbers.DEFAULT_TOTAL;
-  private _pageSizeOptions: ISelectOption[] = PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS.map(o => ({ label: `${o}`, value: `${o}` }));
+  private _pageSizeOptions: ISelectOption[] = PAGINATOR_CONSTANTS.numbers.DEFAULT_PAGE_SIZE_OPTIONS.map(o => ({
+    label: `${o}`,
+    value: `${o}`
+  }));
   private _label = PAGINATOR_CONSTANTS.strings.DEFAULT_LABEL;
   private _firstLast = false;
   private _first = false;
@@ -83,7 +86,7 @@ export class PaginatorCore {
     if (!this._hasPreviousPage()) {
       return;
     }
-    
+
     const prevPage = this._pageIndex - 1;
     const canPage = this._dispatchChangeEvent('previous-page', { pageIndex: prevPage });
     if (canPage) {
@@ -154,7 +157,7 @@ export class PaginatorCore {
         pageSize: this._pageSize,
         pageIndex: this._pageIndex,
         offset: this._offset,
-        pageStart: (this._pageIndex * this._pageSize) + 1,
+        pageStart: this._pageIndex * this._pageSize + 1,
         pageEnd: Math.min((this._pageIndex + 1) * this._pageSize, this._total),
         total: this._total
       };
@@ -163,7 +166,7 @@ export class PaginatorCore {
       if (this.pageSize > 1) {
         const startIndex = this._pageIndex * this._pageSize;
         const indexStart = Math.floor(startIndex / this._pageSize) || 0;
-        const pageStart = (indexStart * this._pageSize) + 1;
+        const pageStart = indexStart * this._pageSize + 1;
         const pageEnd = startIndex < this._total ? Math.min(startIndex + this._pageSize, this._total) : startIndex + this._pageSize;
         rangeLabel = `${pageStart}-${pageEnd} ${PAGINATOR_CONSTANTS.strings.RANGE_SEPARATOR_LABEL} ${this._total}`;
       } else {

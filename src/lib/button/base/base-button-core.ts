@@ -25,7 +25,7 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
   private _slotChangeListener: EventListener = () => this._detectSlottedAnchor();
 
   constructor(protected _adapter: T) {}
-  
+
   public initialize(): void {
     this._detectSlottedAnchor();
     this._adapter.addDefaultSlotChangeListener(this._slotChangeListener);
@@ -102,7 +102,7 @@ export abstract class BaseButtonCore<T extends IBaseButtonAdapter<IBaseButton>> 
     if (evt.defaultPrevented || this._disabled) {
       return;
     }
-    
+
     if (evt.key === 'Enter') {
       this.click();
     }

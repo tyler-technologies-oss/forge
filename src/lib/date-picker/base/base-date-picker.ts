@@ -1,7 +1,13 @@
 import { coerceBoolean, ensureChild, coreProperty, coerceNumberArray } from '@tylertech/forge-core';
 import { DayOfWeek } from '../../calendar/calendar-constants';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component';
-import { BASE_DATE_PICKER_CONSTANTS, DatePickerFormatCallback, DatePickerParseCallback, DatePickerPrepareMaskCallback, DatePickerValueMode } from './base-date-picker-constants';
+import {
+  BASE_DATE_PICKER_CONSTANTS,
+  DatePickerFormatCallback,
+  DatePickerParseCallback,
+  DatePickerPrepareMaskCallback,
+  DatePickerValueMode
+} from './base-date-picker-constants';
 import { BaseDatePickerCore } from './base-date-picker-core';
 import { IBaseDatePickerAdapter } from './base-date-picker-adapter';
 
@@ -53,7 +59,7 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @property {TValue} value - The value of the date picker.
  * @property {DatePickerValueMode} valueMode - The type for the `value` property and `forge-date-picker-change` event.
  * @property {string} yearRange - The year range.
- * 
+ *
  * @attribute {boolean} [allow-invalid-date=false] - Whether to allow an invalid date to be input. When true, the date picker will not clear out the value of the input if the date was invalid (i.e. could not be parsed).
  * @attribute {boolean} [disabled=false] - Whether the date picker is disabled or not.
  * @attribute {string} [disabled-days-of-week] - The days of the week to disable from selection.
@@ -70,7 +76,14 @@ export interface IBaseDatePickerComponent<TValue> extends IBaseComponent {
  * @attribute {DatePickerValueMode} [value-mode=string] - The type for the `value` property and `forge-date-picker-change` event.
  * @attribute {string} [year-range] - The year range.
  */
-export abstract class BaseDatePickerComponent<TPublicValue, TPrivateValue, TCore extends BaseDatePickerCore<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>> extends BaseComponent implements IBaseDatePickerComponent<TPublicValue> {
+export abstract class BaseDatePickerComponent<
+    TPublicValue,
+    TPrivateValue,
+    TCore extends BaseDatePickerCore<IBaseDatePickerAdapter, TPublicValue, TPrivateValue>
+  >
+  extends BaseComponent
+  implements IBaseDatePickerComponent<TPublicValue>
+{
   protected _core: TCore;
 
   constructor() {

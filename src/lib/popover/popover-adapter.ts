@@ -38,7 +38,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
     this.cleanupAnchorElement();
   }
-  
+
   protected _initializeOverlayElement(): void {
     this._overlayElement = getShadowElement(this._component, OVERLAY_CONSTANTS.elementName) as IOverlayComponent;
   }
@@ -93,12 +93,16 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
     }
 
     return new Promise(resolve => {
-      this._surfaceElement.addEventListener('animationend', () => {
-        this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
-        this._overlayElement.open = false;
-        this._updateAnchorExpandedState(false);
-        resolve();
-      }, { once: true });
+      this._surfaceElement.addEventListener(
+        'animationend',
+        () => {
+          this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+          this._overlayElement.open = false;
+          this._updateAnchorExpandedState(false);
+          resolve();
+        },
+        { once: true }
+      );
       this._surfaceElement.classList.add(POPOVER_CONSTANTS.classes.EXITING);
     });
   }
@@ -157,7 +161,7 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   /**
    * Attempts to find the anchor element by first checking for an element with the provided id, and if not found,
    * then implicitly assumes the previous element sibling is the anchor.
-   * 
+   *
    * @param [id] - The id of the anchor element to locate.
    * @returns The anchor element if found, otherwise null.
    */

@@ -22,7 +22,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   tryCreateToggle(): void;
   addToggleListener(type: string, listener: (event: Event) => void): void;
   removeToggleListener(type: string, listener: (event: Event) => void): void;
-  
+
   // Input
   addInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
   removeInputListener(type: string, listener: (event: Event) => void, capture?: boolean): void;
@@ -37,7 +37,7 @@ export interface IBaseDatePickerAdapter extends IBaseAdapter {
   setInputValue(value: string, emitEvents: boolean): void;
   selectInputText(): void;
   emitInputEvent(type: string, data?: any): void;
-  
+
   // Calendar
   attachCalendar(calendarConfig: Partial<ICalendarComponent>, dropdownConfig?: ICalendarDropdownPopupConfig): void;
   detachCalendar(): void;
@@ -71,14 +71,14 @@ export abstract class BaseDatePickerAdapter<T extends BaseComponent> extends Bas
   public abstract initializeAccessibility(): void;
   protected abstract _initializeInput(): void;
   protected abstract _initializeCalendarDropdown(): void;
-  
+
   // Mask
   public abstract initializeMask(options: IDateInputMaskOptions): void;
   public abstract destroyMask(): void;
 
   // Calendar
   public abstract setActiveDescendant(id: string): void;
-  
+
   // Input
   public abstract hasInputElement(): boolean;
   public abstract hasInputElement(): boolean;

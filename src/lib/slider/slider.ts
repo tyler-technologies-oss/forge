@@ -42,14 +42,14 @@ declare global {
 
 /**
  * @tag forge-slider
- * 
+ *
  * @summary Sliders allow users to make selections from a range of values.
- * 
+ *
  * @description Use sliders to enable users to select a value from a continuous or discrete range of values.
- * 
+ *
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
- * 
+ *
  * @property {number} [value=50] - The current value of the slider.
  * @property {number} [valueStart=33] - The current start value of the slider.
  * @property {number} [valueEnd=67] - The current end value of the slider.
@@ -68,7 +68,7 @@ declare global {
  * @property {string} name - The form control name.
  * @property {string} nameStart - The form control name for the start handle in range mode.
  * @property {string} nameEnd - The form control name for the end handle in range mode.
- * 
+ *
  * @attribute {string} data-aria-label - Sets the `aria-label` attribute on the slider handle.
  * @attribute {string} data-aria-label-start - Sets the `aria-label` attribute on the start handle in range mode.
  * @attribute {string} data-aria-label-end - Sets the `aria-label` attribute on the end handle in range mode.
@@ -89,12 +89,12 @@ declare global {
  * @attribute {string} name - Controls the form control name.
  * @attribute {string} name-start - Controls the form control name for the start handle in range mode.
  * @attribute {string} name-end - Controls the form control name for the end handle in range mode.
- * 
+ *
  * @event {CustomEvent<ISliderChangeEventData>} forge-slider-input - Dispatches when the slider value changes.
  * @event {CustomEvent<ISliderChangeEventData>} forge-slider-change - Dispatches when the slider value changes and the value has been committed.
  * @event {CustomEvent<ISliderRangeChangeEventData>} forge-slider-range-input - Dispatches when the slider range values change.
  * @event {CustomEvent<ISliderRangeChangeEventData>} forge-slider-range-change - Dispatches when the slider range values change and the values have been committed.
- * 
+ *
  * @cssproperty --forge-theme-primary - The primary color of the slider.
  * @cssproperty --forge-theme-on-primary - The color of elements placed on top of the primary color (the label text for example).
  * @cssproperty --forge-slider-track-height - The height of the track.
@@ -128,7 +128,7 @@ declare global {
  * @cssproperty --forge-slider-with-tick-marks-disabled-active-container-color - The color of the active tick mark container when tick marks are visible and disabled.
  * @cssproperty --forge-slider-with-tick-marks-disabled-inactive-container-color - The color of the inactive tick mark container when tick marks are visible and disabled.
  * @cssproperty --forge-slider-with-tick-marks-inactive-container-color - The color of the inactive tick mark container when tick marks are visible.
- * 
+ *
  * @csspart slider - Styles the slider container element.
  * @csspart track - Styles the track element.
  * @csspart handle-end - Styles the end handle element.
@@ -142,10 +142,7 @@ declare global {
  */
 @customElement({
   name: SLIDER_CONSTANTS.elementName,
-  dependencies: [
-    FocusIndicatorComponent,
-    StateLayerComponent
-  ]
+  dependencies: [FocusIndicatorComponent, StateLayerComponent]
 })
 export class SliderComponent extends BaseFormComponent<number> implements ISliderComponent {
   public static get observedAttributes(): string[] {
@@ -333,7 +330,7 @@ export class SliderComponent extends BaseFormComponent<number> implements ISlide
 
   @coreProperty()
   public declare tickmarks: boolean;
-  
+
   @coreProperty()
   public declare labeled: boolean;
 

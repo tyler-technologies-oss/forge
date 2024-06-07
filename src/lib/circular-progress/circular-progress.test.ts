@@ -65,7 +65,7 @@ describe('Circular Progress', () => {
 
   it('should set progress', async () => {
     const el = await fixture<ICircularProgressComponent>(html`<forge-circular-progress></forge-circular-progress>`);
-    
+
     el.determinate = true;
     el.progress = 0.5;
 

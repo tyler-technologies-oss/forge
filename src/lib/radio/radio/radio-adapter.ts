@@ -50,7 +50,7 @@ export class RadioAdapter extends BaseAdapter<IRadioComponent> implements IRadio
   /**
    * Attempts to set the disabled state of the radio. If the radio is in a disabled radio group, it
    * can't be enabled.
-   * 
+   *
    * @param value Whether the radio should be disabled.
    * @returns Whether the disabled state was set.
    */

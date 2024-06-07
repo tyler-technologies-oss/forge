@@ -121,7 +121,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   private _trySlotLabel(slot: HTMLSlotElement): void {
     const elements = slot.assignedElements({ flatten: true });
     const labels = elements.filter(el => el.matches(FIELD_CONSTANTS.selectors.LABEL_ELEMENTS));
-    
+
     labels.forEach(label => {
       if (label.slot) {
         return;

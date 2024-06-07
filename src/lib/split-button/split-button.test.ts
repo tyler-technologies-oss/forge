@@ -10,7 +10,7 @@ describe('SplitButton', () => {
     const el = await fixture(html`<forge-split-button></forge-split-button>`);
     expect(el.shadowRoot).not.to.be.null;
   });
-  
+
   it('should be accessible', async () => {
     const el = await fixture<ISplitButtonComponent>(html`<forge-split-button></forge-split-button>`);
     await expect(el).to.be.accessible();
@@ -23,7 +23,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     const buttons = el.querySelectorAll('forge-button');
     buttons.forEach(button => {
       expect(button.variant).to.equal(SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT);
@@ -41,7 +41,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     expect(el.variant).to.equal('outlined');
     expect(el.theme).to.equal('error');
     expect(el.disabled).to.be.true;
@@ -65,7 +65,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     el.variant = 'raised';
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.VARIANT)).to.be.true;
@@ -81,7 +81,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     el.theme = 'error';
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.THEME)).to.be.true;
@@ -97,7 +97,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     el.disabled = true;
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.DISABLED)).to.be.true;
@@ -113,7 +113,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     el.dense = true;
 
     const buttons = el.querySelectorAll('forge-button');
@@ -127,7 +127,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     el.pill = true;
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.PILL)).to.be.true;
@@ -144,7 +144,7 @@ describe('SplitButton', () => {
         <forge-button>Second</forge-button>
       </forge-split-button>
     `);
-    
+
     el.pill = true;
 
     const buttons = el.querySelectorAll('forge-button');
@@ -159,11 +159,11 @@ describe('SplitButton', () => {
         <forge-button>First</forge-button>
       </forge-split-button>
     `);
-    
+
     const button1 = document.createElement('forge-button');
     button1.textContent = 'Second';
     el.appendChild(button1);
-    
+
     const button2 = document.createElement('forge-button');
     button2.textContent = 'Second';
     el.appendChild(button2);
@@ -186,13 +186,13 @@ describe('SplitButton', () => {
         <forge-button>First</forge-button>
       </forge-split-button>
     `);
-    
+
     const menu = document.createElement('forge-menu');
     const button = document.createElement('forge-button');
     button.textContent = 'Second';
     menu.appendChild(button);
     el.appendChild(menu);
-    
+
     await elementUpdated(el);
 
     expect(button.variant).to.equal('outlined');
@@ -207,11 +207,11 @@ describe('SplitButton', () => {
         <forge-button>First</forge-button>
       </forge-split-button>
     `);
-    
+
     const button = document.createElement('button');
     button.textContent = 'Second';
     el.appendChild(button);
-    
+
     await elementUpdated(el);
 
     expect('variant' in button).to.be.false;

@@ -21,7 +21,7 @@ describe('Floating Action Button', () => {
     const rootEl = getRootEl(el);
     const stateLayer = getStateLayer(el);
     const focusIndicator = getFocusIndicator(el);
-    
+
     expect(el.shadowRoot).not.to.be.null;
     expect(el.type).to.equal('button');
     expect(rootEl.getAttribute('part')).to.equal('root');
@@ -173,35 +173,42 @@ describe('Floating Action Button', () => {
 
   describe('ButtonComponentDelegate', () => {
     it('should create button via delegate', async () => {
-      const delegate = new FloatingActionButtonComponentDelegate({ options: { label: 'FAB' }});
+      const delegate = new FloatingActionButtonComponentDelegate({ options: { label: 'FAB' } });
 
       expect(delegate.element).to.be.instanceOf(FloatingActionButtonComponent);
       expect(delegate.element.innerText).to.equal('FAB');
     });
 
     it('should set theme via delegate', async () => {
-      const delegate = new FloatingActionButtonComponentDelegate({ options: { theme: 'success' }});
+      const delegate = new FloatingActionButtonComponentDelegate({ options: { theme: 'success' } });
 
       expect(delegate.element.theme).to.equal('success');
       expect(delegate.element.getAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.THEME)).to.equal('success');
     });
 
     it('should set density via delegate', async () => {
-      const delegate = new FloatingActionButtonComponentDelegate({ options: { density: 'small' }});
+      const delegate = new FloatingActionButtonComponentDelegate({ options: { density: 'small' } });
 
       expect(delegate.element.density).to.equal('small');
       expect(delegate.element.getAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.DENSITY)).to.equal('small');
     });
 
     it('should set elevation via delegate', async () => {
-      const delegate = new FloatingActionButtonComponentDelegate({ options: { elevation: 'lowered' }});
+      const delegate = new FloatingActionButtonComponentDelegate({ options: { elevation: 'lowered' } });
 
       expect(delegate.element.elevation).to.equal('lowered');
       expect(delegate.element.getAttribute(FLOATING_ACTION_BUTTON_CONSTANTS.attributes.ELEVATION)).to.equal('lowered');
     });
 
     it('should create icon button via delegate', async () => {
-      const delegate = new FloatingActionButtonComponentDelegate({ options: { iconName: 'more_vert', iconExternal: false, iconExternalType: 'standard', iconClass: 'my-custom-class' }});
+      const delegate = new FloatingActionButtonComponentDelegate({
+        options: {
+          iconName: 'more_vert',
+          iconExternal: false,
+          iconExternalType: 'standard',
+          iconClass: 'my-custom-class'
+        }
+      });
 
       expect(delegate.element).to.be.instanceOf(FloatingActionButtonComponent);
       expect(delegate.iconElement?.name).to.equal('more_vert');
@@ -211,7 +218,9 @@ describe('Floating Action Button', () => {
     });
 
     it('should set font-based icon', async () => {
-      const delegate = new FloatingActionButtonComponentDelegate({ options: { iconName: 'more_vert', iconType: 'font' }});
+      const delegate = new FloatingActionButtonComponentDelegate({
+        options: { iconName: 'more_vert', iconType: 'font' }
+      });
 
       expect(delegate.element.innerText).to.equal('more_vert');
       expect(delegate.element.classList.contains(ICON_CLASS_NAME)).to.be.true;
@@ -269,7 +278,7 @@ describe('Floating Action Button', () => {
   }
 
   function getStateLayer(btn: IFloatingActionButtonComponent): IStateLayerComponent {
-    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent
+    return btn.shadowRoot?.querySelector('forge-state-layer') as IStateLayerComponent;
   }
 
   function getFocusIndicator(btn: IFloatingActionButtonComponent): IFocusIndicatorComponent {
@@ -278,9 +287,9 @@ describe('Floating Action Button', () => {
 
   function clickElement(el: HTMLElement): Promise<void> {
     const { x, y, width, height } = el.getBoundingClientRect();
-    return sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2),
-    ]});
+    return sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 });

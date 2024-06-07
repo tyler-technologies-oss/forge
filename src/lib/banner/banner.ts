@@ -32,20 +32,20 @@ declare global {
 
 /**
  * @tag forge-banner
- * 
+ *
  * @summary Banners are used to inform users of important information, such as errors, warnings, or success messages.
- * 
+ *
  * @property {boolean} dismissed - Controls the visibility of the banner.
  * @property {boolean} persistent - Controls the visibility of the built-in dismiss button.
  * @property {BannerTheme} theme - The theme of the banner.
- * 
+ *
  * @attribute {boolean} dismissed - Controls the visibility of the banner.
  * @attribute {boolean} persistent - Controls the visibility of the built-in dismiss button.
  * @attribute {BannerTheme} theme - The theme of the banner.
- * 
+ *
  * @event {CustomEvent} forge-banner-before-dismiss - Dispatched before the banner is dismissed. Cancelable to prevent dismissal.
  * @event {CustomEvent} forge-banner-dismissed - Dispatched when the banner is dismissed.
- * 
+ *
  * @cssproperty --forge-banner-background - The background color of the banner.
  * @cssproperty --forge-banner-color - The text color of the banner.
  * @cssproperty --forge-banner-icon-color - The color of the icon.
@@ -54,17 +54,14 @@ declare global {
  * @cssproperty --forge-banner-padding-block - The block padding.
  * @cssproperty --forge-banner-transition-duration - The transition duration.
  * @cssproperty --forge-banner-transition-easing - The transition easing function.
- * 
+ *
  * @slot - The content of the banner.
  * @slot icon - The icon to display.
  * @slot button - The optional button to display.
  */
 @customElement({
   name: BANNER_CONSTANTS.elementName,
-  dependencies: [
-    IconButtonComponent,
-    TooltipComponent
-  ]
+  dependencies: [IconButtonComponent, TooltipComponent]
 })
 export class BannerComponent extends BaseComponent implements IBannerComponent {
   public static get observedAttributes(): string[] {

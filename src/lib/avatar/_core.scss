@@ -16,8 +16,9 @@
 
   overflow: hidden;
 
-  transition: height #{token(transition-duration)} #{token(transition-timing)}, 
-              width #{token(transition-duration)} #{token(transition-timing)};
+  transition:
+    height #{token(transition-duration)} #{token(transition-timing)},
+    width #{token(transition-duration)} #{token(transition-timing)};
 
   border-radius: #{token(shape)};
   box-sizing: border-box;

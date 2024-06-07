@@ -51,7 +51,10 @@ export const AUTOCOMPLETE_CONSTANTS = {
 
 export type AutocompleteOptionBuilder<T = any> = (option: IAutocompleteOption<T>, filterText: string, parentElement: IListItemComponent) => HTMLElement;
 export type AutocompleteOptionGroupBuilder<T = any> = ListDropdownOptionGroupBuilder<T>;
-export type AutocompleteFilterCallback<T = any> = (filterText: string, value: T | null) => IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[] | Promise<IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[]>;
+export type AutocompleteFilterCallback<T = any> = (
+  filterText: string,
+  value: T | null
+) => IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[] | Promise<IAutocompleteOption<T>[] | IAutocompleteOptionGroup<T>[]>;
 export type AutocompleteSelectedTextBuilder<T = any> = (selectedOptions: Array<IAutocompleteOption<T>>) => string;
 
 export enum AutocompleteMode {

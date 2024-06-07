@@ -24,7 +24,7 @@ forge-field {
   @include selected-text-container;
 }
 
-::slotted([slot=value]),
+::slotted([slot='value']),
 .selected-text {
   @include selected-text;
 }
@@ -50,7 +50,7 @@ forge-field {
 forge-field {
   @include field;
 
-  &:is([dense],[density=extra-small]) {
+  &:is([dense], [density='extra-small']) {
     .selected-text {
       @include dense-selected-text;
     }

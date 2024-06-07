@@ -71,7 +71,7 @@ const meta = {
   },
   component,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
   argTypes: {
     ...generateCustomElementArgTypes({
@@ -79,14 +79,17 @@ const meta = {
       exclude: ['overlay', 'anchorElement', 'anchor', 'noAnchor', 'boundary', 'boundaryElement'],
       controls: {
         animationType: { control: 'select', options: ['none', 'zoom', 'fade', 'slide'] },
-        triggerType: { control: 'multi-select', options: ['click', 'hover', 'focus', 'longpress', 'doubleclick', 'contextmenu', 'manual'] },
+        triggerType: {
+          control: 'multi-select',
+          options: ['click', 'hover', 'focus', 'longpress', 'doubleclick', 'contextmenu', 'manual']
+        },
         preset: { control: 'select', options: ['popover', 'dropdown', 'list'] },
         positionStrategy: { control: 'select', options: ['absolute', 'fixed'] },
         placement: { control: 'select', options: OVERLAY_PLACEMENT_OPTIONS },
         offset: { control: 'object' },
         hide: { control: 'select', options: ['anchor-hidden', 'never'] },
         flip: { control: 'select', options: ['auto', 'main', 'cross', 'never'] },
-        fallbackPlacements: { control: 'multi-select', options: OVERLAY_PLACEMENT_OPTIONS },
+        fallbackPlacements: { control: 'multi-select', options: OVERLAY_PLACEMENT_OPTIONS }
       }
     })
   },
@@ -153,7 +156,7 @@ export const NonModal: Story = {
       if (evt.detail.newState === 'closed') {
         if (inputRef.value?.value) {
           evt.preventDefault();
-          ToastComponent.present({ message: 'You have unsaved changes. '})
+          ToastComponent.present({ message: 'You have unsaved changes. ' });
         }
       }
     }
@@ -176,7 +179,7 @@ export const NonModal: Story = {
           <div slot="body" id="nonmodal-description" style="width: 300px; padding: var(--forge-spacing-medium);">
             <form autocomplete="off">
               <forge-text-field>
-                <input ${ref(inputRef)} autofocus @input=${handleInput} type="text" name="your-name" value="" required aria-label="Enter your name">
+                <input ${ref(inputRef)} autofocus @input=${handleInput} type="text" name="your-name" value="" required aria-label="Enter your name" />
               </forge-text-field>
             </form>
           </div>

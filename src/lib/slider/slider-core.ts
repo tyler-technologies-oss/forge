@@ -61,11 +61,7 @@ export class SliderCore implements ISliderCore {
   }
 
   private _update(): void {
-    const {
-      value: renderValue,
-      valueStart: renderValueStart,
-      valueEnd: renderValueEnd
-    } = this._clampMinMax();
+    const { value: renderValue, valueStart: renderValueStart, valueEnd: renderValueEnd } = this._clampMinMax();
     const step = this._step <= 0 ? 1 : this._step;
     const range = Math.max(this._max - this._min, step);
     const startFraction = this._range ? ((renderValueStart ?? this._min) - this._min) / range : 0;
@@ -163,7 +159,7 @@ export class SliderCore implements ISliderCore {
     }
 
     const input = evt.target as HTMLInputElement;
-    
+
     if (this._range) {
       const isStart = input.id === 'start';
       if (isStart) {

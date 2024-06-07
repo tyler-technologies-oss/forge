@@ -60,7 +60,7 @@ svg {
     @include indeterminate-left-circle;
   }
 }
-    
+
 .right {
   @include indeterminate-right;
 
@@ -105,7 +105,7 @@ svg {
 // Track
 //
 
-:host(:is([track],[determinate])) {
+:host(:is([track], [determinate])) {
   .forge-circular-progress {
     @include override(track-color, track-fill-color);
   }
@@ -116,13 +116,13 @@ svg {
 //
 
 @mixin theme($theme) {
-  :host([theme=#{$theme}]) {
+  :host([theme='#{$theme}']) {
     .forge-circular-progress {
       @include override(indicator-color, theme.variable($theme), value);
     }
   }
 
-  :host([theme=#{$theme}]:is([track],[determinate])) {
+  :host([theme='#{$theme}']:is([track], [determinate])) {
     .forge-circular-progress {
       @include override(track-color, theme.variable(#{$theme}-container), value);
     }

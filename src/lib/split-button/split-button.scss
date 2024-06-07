@@ -28,53 +28,68 @@
 //
 
 ::slotted(*) {
-  @include button.provide-theme((
-    min-width: #{token(min-width)},
-    focus-indicator-offset: #{token(focus-indicator-offset)}
-  ));
+  @include button.provide-theme(
+    (
+      min-width: #{token(min-width)},
+      focus-indicator-offset: #{token(focus-indicator-offset)}
+    )
+  );
 }
 
 ::slotted(:first-child) {
-  @include button.provide-theme((
-    shape-start-end-radius: 0,
-    shape-end-end-radius: 0
-  ));
+  @include button.provide-theme(
+    (
+      shape-start-end-radius: 0,
+      shape-end-end-radius: 0
+    )
+  );
 
-  @include focus-indicator.provide-theme((
-    shape-start-end: 0,
-    shape-end-end: 0,
-    offset-inline: 0 #{token(focus-indicator-offset-adjusted, custom)}
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      shape-start-end: 0,
+      shape-end-end: 0,
+      offset-inline: 0 #{token(focus-indicator-offset-adjusted, custom)}
+    )
+  );
 }
 
 ::slotted(:not(:first-child):not(:last-child)) {
-  @include button.provide-theme(( shape: 0 ));
+  @include button.provide-theme(
+    (
+      shape: 0
+    )
+  );
 
-  @include focus-indicator.provide-theme((
-    shape: 0,
-    offset-inline: #{token(focus-indicator-offset-adjusted, custom)}
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      shape: 0,
+      offset-inline: #{token(focus-indicator-offset-adjusted, custom)}
+    )
+  );
 }
 
 ::slotted(:last-child) {
-  @include button.provide-theme((
-    shape-start-start-radius: 0,
-    shape-end-start-radius: 0
-  ));
+  @include button.provide-theme(
+    (
+      shape-start-start-radius: 0,
+      shape-end-start-radius: 0
+    )
+  );
 
-  @include focus-indicator.provide-theme((
-    shape-start-start: 0,
-    shape-end-start: 0,
-    offset-inline: #{token(focus-indicator-offset-adjusted, custom)} 0
-  ));
+  @include focus-indicator.provide-theme(
+    (
+      shape-start-start: 0,
+      shape-end-start: 0,
+      offset-inline: #{token(focus-indicator-offset-adjusted, custom)} 0
+    )
+  );
 }
-
 
 //
 // Outlined
 //
 
-:host([variant=outlined]) {
+:host([variant='outlined']) {
   ::slotted(:not(:first-child)) {
     margin-inline-start: calc(-1 * #{token(gap)});
   }
@@ -86,7 +101,7 @@
 // Tonal, Filled, and Raised
 //
 
-:host(:is([variant=tonal],[variant=filled],[variant=raised],:not([variant]))) {
+:host(:is([variant='tonal'], [variant='filled'], [variant='raised'], :not([variant]))) {
   ::slotted(:not(:last-child)) {
     margin-inline-end: #{token(gap)};
   }

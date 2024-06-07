@@ -20,7 +20,7 @@ export abstract class BaseFieldAdapter extends BaseAdapter<IBaseField> implement
   public abstract tryFloatLabel(force?: boolean): void;
   public abstract get hasValue(): boolean;
   public abstract get hasPlaceholder(): boolean;
-  
+
   public setFieldProperty<K extends keyof IFieldComponent>(name: K, value: IFieldComponent[K]): void {
     this._fieldElement[name] = value;
   }

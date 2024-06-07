@@ -7,7 +7,17 @@ import { sendMouse, sendKeys } from '@web/test-runner-commands';
 import { spy } from 'sinon';
 import { ISelectComponent } from './select';
 import { TestHarness } from '../../../test/utils/test-harness';
-import { FieldDensity, FieldLabelAlignment, FieldLabelPosition, FieldShape, FieldSupportTextInset, FieldTheme, FieldVariant, FIELD_CONSTANTS, IFieldComponent } from '../../field';
+import {
+  FieldDensity,
+  FieldLabelAlignment,
+  FieldLabelPosition,
+  FieldShape,
+  FieldSupportTextInset,
+  FieldTheme,
+  FieldVariant,
+  FIELD_CONSTANTS,
+  IFieldComponent
+} from '../../field';
 import { BASE_SELECT_CONSTANTS } from '../core';
 import { IPopoverComponent, POPOVER_CONSTANTS } from '../../popover';
 import { SELECT_CONSTANTS } from './select-constants';
@@ -102,7 +112,7 @@ describe('Select', () => {
 
       harness.element.observeScroll = true;
       harness.element.options = Array.from({ length: 10 }, (_, i) => ({ value: `option-${i}`, label: `Option ${i}` }));
-      
+
       const spyScrolledBottom = spy();
       harness.element.addEventListener(SELECT_CONSTANTS.events.SCROLLED_BOTTOM, spyScrolledBottom);
 
@@ -122,7 +132,7 @@ describe('Select', () => {
   describe('accessibility', () => {
     it('should be accessible', async () => {
       const harness = await createFixture();
-  
+
       expect(harness.element.getAttribute('role')).to.equal('combobox');
       expect(harness.element.getAttribute('aria-haspopup')).to.equal('true');
       expect(harness.element.getAttribute('aria-expanded')).to.equal('false');
@@ -130,49 +140,49 @@ describe('Select', () => {
       expect(harness.element.getAttribute('aria-label')).to.equal(harness.labelElement?.textContent);
       await expect(harness.element).to.be.accessible();
     });
-  
+
     it('should be accessible when open', async () => {
       const harness = await createFixture();
-  
+
       harness.element.open = true;
       await tick();
-  
+
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
       expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
       await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
-  
+
     it('should set aria-activedescendant when opened via keyboard', async () => {
       const harness = await createFixture();
-  
+
       harness.element.open = true;
       await tick();
-  
+
       expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
-  
+
       harness.element.focus();
       harness.pressKey('ArrowDown');
       await elementUpdated(harness.element);
       await harness.popoverToggleAnimation;
-  
+
       expect(harness.element.getAttribute('aria-activedescendant')).to.equal(harness.getListItems()[0].querySelector('button')?.id);
       await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
     });
 
     it('should update aria-activedescendant when focused', async () => {
       const harness = await createFixture();
-  
+
       harness.element.open = true;
       await tick();
-  
+
       expect(harness.element.hasAttribute('aria-activedescendant')).to.be.false;
-  
+
       harness.element.focus();
       await tick();
-  
+
       await harness.pressKey('ArrowDown');
-  
+
       const listItems = harness.getListItems();
       expect(harness.element.getAttribute('aria-activedescendant')).to.equal(listItems[0].querySelector('button')?.id);
       await expect(document.body).to.be.accessible({ ignoredRules: ['region'] });
@@ -180,30 +190,30 @@ describe('Select', () => {
 
     it('should be accessible when required', async () => {
       const harness = await createFixture({ required: true });
-  
+
       expect(harness.element.getAttribute('aria-required')).to.equal('true');
       await expect(harness.element).to.be.accessible();
     });
 
     it('should be accessible when invalid', async () => {
       const harness = await createFixture({ invalid: true });
-  
+
       expect(harness.element.getAttribute('aria-invalid')).to.equal('true');
       await expect(harness.element).to.be.accessible();
     });
 
     it('should be accessible when multiple', async () => {
       const harness = await createFixture({ multiple: true });
-  
+
       await expect(harness.element).to.be.accessible();
     });
 
     it('should be accessible when multiple and open', async () => {
       const harness = await createFixture({ multiple: true });
-  
+
       harness.element.open = true;
       await tick();
-  
+
       expect(harness.element.hasAttribute('open')).to.be.true;
       expect(harness.element.getAttribute('aria-expanded')).to.equal('true');
       expect(harness.element.getAttribute('aria-controls')).to.equal(harness.popoverElement?.id);
@@ -215,49 +225,49 @@ describe('Select', () => {
   describe('open', () => {
     it('should open when clicking select', async () => {
       const harness = await createFixture();
-  
+
       await harness.clickElement(harness.element);
-  
+
       expect(harness.element.matches(':focus')).to.be.true;
       expect(harness.element.open).to.be.true;
       expect(harness.popoverElement).to.exist;
       expect(harness.popoverElement?.open).to.be.true;
       expect(harness.fieldElement.popoverExpanded).to.be.true;
     });
-  
+
     it('should close when clicking select', async () => {
       const harness = await createFixture();
-  
+
       harness.element.open = true;
       await tick();
-  
+
       await harness.clickElement(harness.element);
       await harness.popoverToggleAnimation;
-  
+
       expect(harness.element.open).to.be.false;
       expect(harness.popoverElement).not.to.exist;
       expect(harness.fieldElement.popoverExpanded).to.be.false;
     });
-  
+
     it('should close when clicking outside', async () => {
       const harness = await createFixture();
-  
+
       harness.element.open = true;
       await tick();
-  
+
       await harness.clickOutside();
       await harness.popoverToggleAnimation;
-  
+
       expect(harness.element.open).to.be.false;
       expect(harness.popoverElement).not.to.exist;
       expect(harness.fieldElement.popoverExpanded).to.be.false;
     });
-  
+
     it('should not open when clicking select while disabled', async () => {
       const harness = await createFixture({ disabled: true });
-  
+
       await harness.clickElement(harness.element);
-  
+
       expect(harness.element.open).to.be.false;
       expect(harness.popoverElement).not.to.exist;
       expect(harness.fieldElement.popoverExpanded).to.be.false;
@@ -277,48 +287,48 @@ describe('Select', () => {
   describe('selection state', () => {
     it('should select an option', async () => {
       const harness = await createFixture();
-  
+
       await harness.clickElement(harness.element);
 
       expect(harness.element.value).not.to.be.ok;
 
       await harness.clickElement(harness.getListItems()[0]);
-  
+
       expect(harness.element.value).to.equal('one');
     });
 
     it('should select multiple options when multiple is true', async () => {
       const harness = await createFixture({ multiple: true });
-  
+
       await harness.clickElement(harness.element);
       await harness.clickElement(harness.getListItems()[0]);
       await harness.clickElement(harness.getListItems()[1]);
-  
-      expect(harness.element.value).to.deep.equal(['one', 'two']);  
+
+      expect(harness.element.value).to.deep.equal(['one', 'two']);
     });
 
     it('should deselect an option when multiple is true', async () => {
       const harness = await createFixture({ multiple: true });
-  
+
       await harness.clickElement(harness.element);
       await harness.clickElement(harness.getListItems()[0]);
 
       expect(harness.element.value).to.deep.equal(['one']);
 
       await harness.clickElement(harness.getListItems()[0]);
-  
+
       expect(harness.element.value).to.deep.equal([]);
     });
 
     it('should dispatch change event when selecting an option', async () => {
       const harness = await createFixture();
       const spyChange = spy();
-  
+
       harness.element.addEventListener(BASE_SELECT_CONSTANTS.events.CHANGE, spyChange);
-  
+
       await harness.clickElement(harness.element);
       await harness.clickElement(harness.getListItems()[0]);
-  
+
       expect(spyChange.calledOnce).to.be.true;
       expect(spyChange.firstCall.args[0].detail).to.equal('one');
     });
@@ -628,7 +638,7 @@ describe('Select', () => {
 
     it('should change label dynamically', async () => {
       const harness = await createFixture({ label: 'Test label' });
-      
+
       expect(harness.labelElement?.textContent).to.equal('Test label');
 
       harness.element.label = 'New label';
@@ -780,15 +790,15 @@ class SelectHarness extends TestHarness<ISelectComponent> {
   }
 
   public async clickElement(el: HTMLElement): Promise<void> {
-    const { x, y, width, height} = el.getBoundingClientRect();
-    await sendMouse({ type: 'click', position: [
-      Math.floor(x + window.scrollX + width / 2),
-      Math.floor(y + window.scrollY + height / 2)
-    ]});
+    const { x, y, width, height } = el.getBoundingClientRect();
+    await sendMouse({
+      type: 'click',
+      position: [Math.floor(x + window.scrollX + width / 2), Math.floor(y + window.scrollY + height / 2)]
+    });
   }
 
   public async clickOutside(): Promise<void> {
-    await sendMouse({ type: 'click', position: [0, 0]});
+    await sendMouse({ type: 'click', position: [0, 0] });
   }
 
   public async pressKey(key: string): Promise<void> {

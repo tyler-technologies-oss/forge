@@ -54,8 +54,8 @@ const meta = {
     elevation: 'raised',
     disabled: false,
     popoverIcon: false,
-    dense: false,
-  },
+    dense: false
+  }
 } satisfies Meta;
 
 export default meta;
@@ -82,7 +82,7 @@ export const Extended: Story = {
         <span slot="label">Create</span>
       </forge-fab>
     `;
-  },
+  }
 };
 
 export const WithAnchor: Story = {
@@ -95,5 +95,5 @@ export const WithAnchor: Story = {
         </a>
       </forge-fab>
     `;
-  },
+  }
 };

@@ -11,17 +11,17 @@
 
 ///
 /// Emits the typography styles for the given style.
-/// 
+///
 /// Example:
 /// ```scss
 /// @include style(title);
 /// ```
-/// 
+///
 /// Allows for providing an optional list of tokens to exclude from the output:
 /// ```scss
 /// @include style(title, $exclude: [font-family font-size]);
 /// ```
-/// 
+///
 @mixin style($style, $exclude: null) {
   $styles: (
     font-family: _get-style-value($style, font-family),
@@ -45,14 +45,14 @@
 
 ///
 /// Gets a CSS custom property declaration for a specific typography style token, with its token value as the fallback value.
-/// 
+///
 @function variable($style, $token, $prefix: config.$prefix) {
   @return _get-style-value($style, $token);
 }
 
 ///
 /// Gets the value of a typography scale token.
-/// 
+///
 @function scale($scale) {
   @return #{scale.value($scale)}rem;
 }
@@ -65,7 +65,7 @@
 
 ///
 /// Sets base typography styles.
-/// 
+///
 @mixin base {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -77,7 +77,7 @@
 
 ///
 /// Generates helper classes for each typography style/role.
-/// 
+///
 @mixin classes {
   @each $style, $tokens in tokens.$tokens {
     .#{config.$prefix}-typography--#{$style} {
@@ -139,14 +139,14 @@
 
 ///
 /// Provides override CSS custom property declarations for the given style overrides.
-/// 
+///
 /// Example:
 /// ```
 /// .my-class {
 ///   @include provide(title, (font-family: Arial, font-size: 20px));
 /// }
 /// ```
-/// 
+///
 /// This will output:
 /// ```
 /// .my-class {
@@ -154,7 +154,7 @@
 ///   --forge-typography-title-font-size: 20px;
 /// }
 /// ```
-/// 
+///
 @mixin provide($style, $overrides) {
   $style-tokens: map.get(tokens.$tokens, $style);
   @each $key, $value in $overrides {
@@ -167,20 +167,20 @@
 
 ///
 /// Creates a calculated style value that will scale relative to the root font size.
-/// 
+///
 /// Example:
 /// ```scss
 /// .my-class {
 ///   padding: typography.font-size-relative(2);
 /// }
-/// 
+///
 /// // Outputs
 /// .my-class {
 ///   padding: calc(var(--forge-typography-font-size, 1rem) * 2);
 /// }
-/// 
+///
 /// ```
-/// 
+///
 @function font-size-relative($scale) {
   $scale-value: scale.value($scale);
   @return calc(#{core.get(font-size)} * #{$scale-value});

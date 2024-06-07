@@ -24,18 +24,12 @@ const meta = {
     }
 
     return html`
-    <forge-tab-bar 
-      active-tab="0" 
-      @forge-tab-bar-change=${handleTabChange} 
-     >
-      <forge-tab>Tab 1</forge-tab>
-      <forge-tab>Tab 2</forge-tab>
-      <forge-tab>Tab 3</forge-tab>
-    </forge-tab-bar>
-      <forge-view-switcher 
-        ${ref(popoverRef)}  
-        .animationType=${args.animationType}
-        style=${style}>
+      <forge-tab-bar active-tab="0" @forge-tab-bar-change=${handleTabChange}>
+        <forge-tab>Tab 1</forge-tab>
+        <forge-tab>Tab 2</forge-tab>
+        <forge-tab>Tab 3</forge-tab>
+      </forge-tab-bar>
+      <forge-view-switcher ${ref(popoverRef)} .animationType=${args.animationType} style=${style}>
         <forge-view name="view1" .selected=${true}>View 1</forge-view>
         <forge-view name="view2">View 2</forge-view>
         <forge-view name="view3">View 3</forge-view>
@@ -44,7 +38,7 @@ const meta = {
   },
   component,
   subcomponents: {
-    'View': 'forge-view',
+    View: 'forge-view'
   },
   parameters: {
     actions: { disable: true }
@@ -60,11 +54,11 @@ const meta = {
           options: ['none', 'slide', 'fade']
         }
       }
-    }),
+    })
   },
   args: {
-    animationType: 'none',
-  },
+    animationType: 'none'
+  }
 } satisfies Meta;
 
 export default meta;

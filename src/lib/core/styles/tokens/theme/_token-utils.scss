@@ -4,12 +4,12 @@
 
 ///
 /// Computes the dependent theme colors from the provided theme color value.
-/// 
+///
 /// @param {String} $name - The name of the theme color
 /// @param {Color} $color - The theme color
 /// @param {Color} $surface - The base surface color
 /// @return {Map} - The computed theme map
-/// 
+///
 @function get-color-theme($name, $color, $surface) {
   @if not theme-utils.is-color($color) {
     @error 'The value for "#{$name}" must be a color type.';

@@ -50,11 +50,14 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
 
   public initialize(): void {
     const slottedAnchor = this.getSlottedAnchor;
-    this._component[setDefaultAria]({
-      role: !!slottedAnchor ? null : 'button'
-    }, {
-      setAttribute: !this._component.hasAttribute('role') || !!slottedAnchor
-    });
+    this._component[setDefaultAria](
+      {
+        role: !!slottedAnchor ? null : 'button'
+      },
+      {
+        setAttribute: !this._component.hasAttribute('role') || !!slottedAnchor
+      }
+    );
 
     this._rootElement.classList.toggle(BASE_BUTTON_CONSTANTS.classes.WITH_ANCHOR, !!slottedAnchor);
 
@@ -119,13 +122,17 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
       // form.requestSubmit(submitter) does not work with form associated custom
       // elements. This patches the dispatched submit event to add the correct `submitter`.
       // See https://github.com/WICG/webcomponents/issues/814
-      this._component.form.addEventListener('submit', evt => {
-        Object.defineProperty(evt, 'submitter', {
-          configurable: true,
-          enumerable: true,
-          get: () => this._component
-        });
-      }, { capture: true, once: true });
+      this._component.form.addEventListener(
+        'submit',
+        evt => {
+          Object.defineProperty(evt, 'submitter', {
+            configurable: true,
+            enumerable: true,
+            get: () => this._component
+          });
+        },
+        { capture: true, once: true }
+      );
 
       this._component.insertAdjacentElement('afterend', tempBtn);
       tempBtn.click();
@@ -148,7 +155,7 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
     if (this._component.form || !this.hasPopoverTarget() || !supportsPopover()) {
       return false;
     }
-    
+
     const popoverElement = this._locatePopoverTargetElement();
     if (!popoverElement) {
       return false;
@@ -187,10 +194,14 @@ export abstract class BaseButtonAdapter<T extends IBaseButton> extends BaseAdapt
             }
           };
           this._component.addEventListener('click', listener, { capture: true, once: true });
-          popoverElement.addEventListener('beforetoggle', async () => {
-            await new Promise<void>(resolve => setTimeout(resolve)); // Wait a cycle to allow the click event to propagate first
-            this._component.removeEventListener('click', listener, { capture: true });
-          }, { once: true });
+          popoverElement.addEventListener(
+            'beforetoggle',
+            async () => {
+              await new Promise<void>(resolve => setTimeout(resolve)); // Wait a cycle to allow the click event to propagate first
+              this._component.removeEventListener('click', listener, { capture: true });
+            },
+            { once: true }
+          );
         }
 
         return result;

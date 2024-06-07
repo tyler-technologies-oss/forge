@@ -125,9 +125,11 @@ class BackdropHarness {
   }
 
   public get isVisible(): boolean {
-    return this.backdropElement.visible &&
-           this.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE) &&
-           getComputedStyle(this.rootElement).opacity === '0.54';
+    return (
+      this.backdropElement.visible &&
+      this.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.VISIBLE) &&
+      getComputedStyle(this.rootElement).opacity === '0.54'
+    );
   }
 
   public fadeIn(): Promise<void> {
@@ -165,4 +167,3 @@ async function createFixture({ visible, fixed }: IBackdropFixtureConfig = {}): P
   const el = await fixture<IBackdropComponent>(html`<forge-backdrop ?visible=${visible} ?fixed=${fixed}></forge-backdrop>`);
   return new BackdropHarness(el);
 }
-

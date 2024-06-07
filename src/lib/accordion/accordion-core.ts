@@ -41,11 +41,11 @@ export class AccordionCore implements IAccordionCore {
         if (evt.detail) {
           evt.stopPropagation();
           const evtTarget = evt.target as IExpansionPanelComponent;
-  
+
           if (this._adapter.isNestedPanel(evtTarget)) {
             return;
           }
-  
+
           this._adapter.getChildPanels(this._panelSelector).forEach(panel => {
             if (evtTarget !== panel && !this._adapter.isNestedPanel(panel)) {
               panel.open = false;

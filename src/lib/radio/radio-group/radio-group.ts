@@ -27,11 +27,11 @@ declare global {
 
 /**
  * @tag forge-radio-group
- * 
+ *
  * @summary The Forge Radio Group component groups a set of radio buttons together.
- * 
+ *
  * @property {boolean} disabled - Whether or not the radio group is disabled.
- * 
+ *
  * @attribute {boolean} disabled - Whether or not the radio group is disabled.
  */
 @customElement({

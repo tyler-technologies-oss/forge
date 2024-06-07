@@ -12,7 +12,7 @@ $tokens: (
   open-rotation: utils.module-val(open-icon, open-rotation, 180deg),
   animation-duration: utils.module-val(open-icon, animation-duration, animation.variable(duration-medium4)),
   half-animation-duration: utils.module-val(open-icon, half-animation-duration, animation.variable(duration-short4)),
-  animation-timing: utils.module-val(open-icon, animation-timing, animation.variable(easing-standard)),
+  animation-timing: utils.module-val(open-icon, animation-timing, animation.variable(easing-standard))
 ) !default;
 
 @function get($key) {

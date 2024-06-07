@@ -285,7 +285,8 @@ export class TableCore implements ITableCore {
           this._multiselect ? this._selectAllListener : null,
           this._multiselect ? this.selectAllTemplate : null,
           this._selectCheckboxAlignment,
-          this._tooltipSelectAll);
+          this._tooltipSelectAll
+        );
         this._updateSelections(true);
       }
 
@@ -550,7 +551,7 @@ export class TableCore implements ITableCore {
     const tableElement = this._adapter.getTableElement();
 
     this._selectionManager.clear();
-    this._tableRows.forEach(tableRow => tableRow.selected = false);
+    this._tableRows.forEach(tableRow => (tableRow.selected = false));
     this._isAllSelected = false;
 
     this._adapter.clearSelectedRows(tableElement);
@@ -705,7 +706,7 @@ export class TableCore implements ITableCore {
    * @param {boolean} preserveExisting Should existing selections be preserved when updating selection state.
    */
   private _updateSelections(preserveExisting: boolean): void {
-    this._tableRows.forEach(tableRow => tableRow.selected = this._selectionManager.exists(tableRow.data));
+    this._tableRows.forEach(tableRow => (tableRow.selected = this._selectionManager.exists(tableRow.data)));
     const isAllSelected = this._getSelectAllState();
 
     this._adapter.setSelectedRows(this._adapter.getTableElement(), this._selectKey, this._data, this._selectionManager.getItems(), preserveExisting);
@@ -733,7 +734,8 @@ export class TableCore implements ITableCore {
     const composedPath = getEventPath(evt);
     const composedElements = composedPath.filter(node => node.nodeType === 1);
     const customCellTemplateElement = composedElements.find(el => el.hasAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE));
-    const stopClickPropagation = customCellTemplateElement && customCellTemplateElement.hasAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION);
+    const stopClickPropagation =
+      customCellTemplateElement && customCellTemplateElement.hasAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION);
     if (stopClickPropagation) {
       return; // We ignore click events that bubble from custom templates if they were configured to stop propagation
     }
@@ -853,8 +855,7 @@ export class TableCore implements ITableCore {
   }
 
   private _getNonExpandedRows(tbodyElement: HTMLTableSectionElement): HTMLTableRowElement[] {
-    return Array.from(tbodyElement.rows)
-            .filter(row => !row.classList.contains(TABLE_CONSTANTS.classes.TABLE_ROW_EXPANDABLE_CONTENT));
+    return Array.from(tbodyElement.rows).filter(row => !row.classList.contains(TABLE_CONSTANTS.classes.TABLE_ROW_EXPANDABLE_CONTENT));
   }
 
   /**
@@ -1074,10 +1075,18 @@ export class TableCore implements ITableCore {
     if (sortColumn) {
       this._multiSortManager.updateSortColumn(sortColumn);
     } else if (ctrlKey) {
-      this._multiSortManager.addSortColumn({ direction: SortDirection.Descending, columnIndex, propertyName: columnConfig.property as string });
+      this._multiSortManager.addSortColumn({
+        direction: SortDirection.Descending,
+        columnIndex,
+        propertyName: columnConfig.property as string
+      });
     } else {
       this._multiSortManager.clearMultiSort();
-      this._multiSortManager.addSortColumn({ direction: SortDirection.Descending, columnIndex, propertyName: columnConfig.property as string });
+      this._multiSortManager.addSortColumn({
+        direction: SortDirection.Descending,
+        columnIndex,
+        propertyName: columnConfig.property as string
+      });
     }
 
     const data: ITableSortMultipleEventData = this._multiSortManager.sortedColumns.map(col => ({ ...col }));
@@ -1118,7 +1127,7 @@ export class TableCore implements ITableCore {
 
   private _shiftSelectRows(selectedRow: IRowSelectedDescriptor): number[] {
     const indexes: number[] = [];
-    
+
     if (this._previouslyClickedRow) {
       const prevIndex = this._previouslyClickedRow.index;
       const currIndex = selectedRow.index;
@@ -1126,11 +1135,11 @@ export class TableCore implements ITableCore {
       let endIndex = currIndex >= prevIndex ? currIndex : prevIndex;
       endIndex += endIndex > startIndex ? 1 : 0;
       startIndex += startIndex > endIndex ? 1 : 0;
-      
+
       let action = (data: any[]): void => this.selectRows(data, false);
       const existingSelection = this._tableRows.find(item => item.selected && item.data === selectedRow.data);
       const shouldDeselect = this._tableRows.find(item => item.data === this._previouslyClickedRow?.data && !item.selected);
-      
+
       // If you are clicking a checkbox that is already selected, deselect all the rows
       if (!existingSelection || shouldDeselect) {
         action = (data: any[]) => this.deselectRows(data);
@@ -1162,7 +1171,7 @@ export class TableCore implements ITableCore {
     if (this._sortedColumnIndex >= 0 && this._sortDirection === undefined) {
       const sortedColumn = this._visibleColumnConfigurations[this._sortedColumnIndex];
       if (sortedColumn.initialSort === true && sortedColumn.sortDirection) {
-        this._sortDirection =  sortedColumn.sortDirection;
+        this._sortDirection = sortedColumn.sortDirection;
       } else if (typeof sortedColumn.initialSort === 'object' && sortedColumn.initialSort.direction) {
         this._sortDirection = sortedColumn.initialSort.direction;
       }

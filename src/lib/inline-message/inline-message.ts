@@ -15,15 +15,15 @@ declare global {
   }
 }
 
-/** 
+/**
  * @tag forge-inline-message
- * 
+ *
  * @summary Inline messages are used to provide feedback to the user about a specific action or state.
- * 
+ *
  * @property {InlineMessageTheme} theme - The theme to apply. Defaults to `"info"`.
- * 
+ *
  * @attribute {InlineMessageTheme} theme - The theme to apply. Defaults to `"info"`.
- * 
+ *
  * @cssproperty --forge-inline-message-background - The background color.
  * @cssproperty --forge-inline-message-color - The text color.
  * @cssproperty --forge-inline-message-shape - The shape (border) radius.
@@ -37,10 +37,10 @@ declare global {
  * @cssproperty --forge-inline-message-icon-gap - The gap/space between the icon and the content.
  * @cssproperty --forge-inline-message-content-gap - The gap/space between the title and the message.
  * @cssproperty --forge-inline-message-icon-color - The icon color.
- * 
+ *
  * @csspart root - The root layout element.
  * @csspart container - The container element for the title and message content.
- * 
+ *
  * @slot - The message text.
  * @slot title - The title of the inline message.
  * @slot icon - The icon to display.
@@ -55,7 +55,7 @@ export class InlineMessageComponent extends BaseComponent implements IInlineMess
   }
 
   public get theme(): InlineMessageTheme {
-    return this.getAttribute(INLINE_MESSAGE_CONSTANTS.attributes.THEME) as InlineMessageTheme ?? INLINE_MESSAGE_CONSTANTS.defaults.THEME;
+    return (this.getAttribute(INLINE_MESSAGE_CONSTANTS.attributes.THEME) as InlineMessageTheme) ?? INLINE_MESSAGE_CONSTANTS.defaults.THEME;
   }
   public set theme(value: InlineMessageTheme) {
     toggleAttribute(this, value !== INLINE_MESSAGE_CONSTANTS.defaults.THEME, INLINE_MESSAGE_CONSTANTS.attributes.THEME, value);

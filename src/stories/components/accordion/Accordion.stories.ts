@@ -24,9 +24,7 @@ const meta = {
       tagName: component,
       exclude: ['panelSelector']
     })
-  },
-  args: {
-  },
+  }
 } satisfies Meta;
 
 export default meta;
@@ -38,24 +36,24 @@ export const Demo: Story = {
     return html`
       <forge-accordion>
         <forge-expansion-panel>
-          <div  slot="header">
-            Panel One 
+          <div slot="header">
+            Panel One
             <forge-open-icon></forge-open-icon>
           </div>
           <div>Panel One Content</div>
         </forge-expansion-panel>
         <forge-divider></forge-divider>
         <forge-expansion-panel>
-          <div  slot="header">
-            Panel Two 
+          <div slot="header">
+            Panel Two
             <forge-open-icon></forge-open-icon>
           </div>
           <div>Panel Two Content</div>
         </forge-expansion-panel>
         <forge-divider></forge-divider>
         <forge-expansion-panel>
-          <div  slot="header">
-            Panel Three 
+          <div slot="header">
+            Panel Three
             <forge-open-icon></forge-open-icon>
           </div>
           <div>Panel Three Content</div>
@@ -64,5 +62,3 @@ export const Demo: Story = {
     `;
   }
 };
-
-

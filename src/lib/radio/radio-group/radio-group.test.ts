@@ -99,7 +99,7 @@ describe('Radio group', () => {
       radioGroupEl.appendChild(label);
 
       await tick();
-      
+
       expect(connectedSpy).not.to.have.been.called;
     });
 

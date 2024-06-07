@@ -15,8 +15,8 @@ const meta = {
   },
   argTypes: {
     ...generateCustomElementArgTypes({
-      tagName: component,
-    }),
+      tagName: component
+    })
   },
   args: {
     fullName: 'First Last',
@@ -24,7 +24,7 @@ const meta = {
     signOut: true,
     profile: true,
     avatarText: 'First Last'
-  },
+  }
 } satisfies Meta;
 
 export default meta;

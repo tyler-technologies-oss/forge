@@ -48,18 +48,18 @@ export class ButtonToggleGroupAdapter extends BaseAdapter<IButtonToggleGroupComp
 
   public deselect(selectedToggle: IButtonToggleComponent): void {
     const toggles = this._getButtonToggleElements();
-    toggles.filter(t => t !== selectedToggle).forEach(t => t.selected = false);
+    toggles.filter(t => t !== selectedToggle).forEach(t => (t.selected = false));
   }
 
   public setDisabled(value: boolean): void {
     this._component[isFocusable] = !value;
     const toggles = this._getButtonToggleElements();
-    toggles.forEach(t => t.disabled = value);
+    toggles.forEach(t => (t.disabled = value));
   }
 
   public setReadonly(value: boolean): void {
     const toggles = this._getButtonToggleElements();
-    toggles.forEach(t => t.readonly = value);
+    toggles.forEach(t => (t.readonly = value));
   }
 
   public getSelectedValues(): any[] {
@@ -69,7 +69,7 @@ export class ButtonToggleGroupAdapter extends BaseAdapter<IButtonToggleGroupComp
 
   public applyValues(values: any[]): void {
     const toggles = this._getButtonToggleElements();
-    toggles.forEach(t => t.selected = values.indexOf(t.value) >= 0);
+    toggles.forEach(t => (t.selected = values.indexOf(t.value) >= 0));
   }
 
   public setFormValue(): void {

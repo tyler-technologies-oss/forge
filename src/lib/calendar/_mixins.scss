@@ -41,7 +41,11 @@
       @include date;
 
       forge-focus-indicator {
-        @include focus-indicator.provide-theme(( shape: 50% ));
+        @include focus-indicator.provide-theme(
+          (
+            shape: 50%
+          )
+        );
       }
 
       &__inner {
@@ -49,7 +53,7 @@
       }
 
       .forge-calendar--show-today &--today {
-          @include date-today;
+        @include date-today;
       }
 
       .forge-calendar:not(.forge-calendar--readonly) &:not([disabled]) {
@@ -80,7 +84,7 @@
         &.forge-calendar__range--start {
           @include range-start;
         }
-  
+
         &.forge-calendar__range--end {
           @include range-end;
         }
@@ -103,7 +107,7 @@
 
     &__event {
       @include event;
-      
+
       .forge-calendar__date[disabled] & {
         @include event-disabled;
       }
@@ -111,10 +115,10 @@
       &--overflow {
         @include event-overflow;
       }
-      
+
       &__wrapper {
         @include event-wrapper;
-  
+
         .forge-calendar__date-spacer & {
           display: none;
         }
@@ -142,7 +146,7 @@
 
   #year-button forge-icon {
     @include menu-button-icon;
-    
+
     .forge-calendar--year-menu-open & {
       @include menu-button-icon-open;
     }
@@ -282,11 +286,13 @@
     background-color: #{theme.variable(primary-container-minimum)};
     color: #{theme.variable(text-low)};
   }
-  
+
   forge-focus-indicator {
-    @include focus-indicator.provide-theme((
-      color: var(--forge-theme-primary-container)
-    ));
+    @include focus-indicator.provide-theme(
+      (
+        color: var(--forge-theme-primary-container)
+      )
+    );
   }
 }
 
@@ -356,7 +362,7 @@
 
 @mixin event() {
   @include event-color;
-  
+
   font-size: var(--forge-calendar-event-dot-size, variables.$event-dot-size);
 }
 
@@ -384,7 +390,7 @@
 
 @mixin event-color() {
   @each $color in variables.$theme-base-strings {
-    &[data-event-theme=#{"" + $color}] {
+    &[data-event-theme=#{'' + $color}] {
       color: var(--forge-calendar-theme-event-#{$color}-accent, map.get(variables.$theme-values, event-#{$color}-accent));
     }
   }

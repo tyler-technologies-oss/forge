@@ -19,7 +19,7 @@ const meta = {
     const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
 
     return html`
-      <forge-button-toggle-group 
+      <forge-button-toggle-group
         .outlined=${args.outlined}
         .multiple=${args.multiple}
         .stretch=${args.stretch}
@@ -32,12 +32,10 @@ const meta = {
         ?required=${args.required}
         aria-label="Choose communication type"
         @forge-button-toggle-group-change=${changeAction}
-      style=${style}>
-        <forge-button-toggle
-          .required=${args.selected}
-          .selected=${args.selected}
-          value="email"
-          @forge-button-toggle-select=${selectAction}>By email</forge-button-toggle>
+        style=${style}>
+        <forge-button-toggle .required=${args.selected} .selected=${args.selected} value="email" @forge-button-toggle-select=${selectAction}
+          >By email</forge-button-toggle
+        >
         <forge-button-toggle value="mail" @forge-button-toggle-select=${selectAction}>By mail</forge-button-toggle>
         <forge-button-toggle value="phone" @forge-button-toggle-select=${selectAction}>By phone</forge-button-toggle>
       </forge-button-toggle-group>
@@ -55,7 +53,7 @@ const meta = {
         theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS] }
       }
     }),
-    ...generateCustomElementArgTypes({ tagName: `${itemComponent}`, exclude: ['value', 'required']}),
+    ...generateCustomElementArgTypes({ tagName: `${itemComponent}`, exclude: ['value', 'required'] })
   },
   args: {
     outlined: true,
@@ -67,8 +65,8 @@ const meta = {
     readonly: false,
     dense: false,
     selected: false,
-    theme: 'tertiary',
-  },
+    theme: 'tertiary'
+  }
 } satisfies Meta;
 
 export default meta;

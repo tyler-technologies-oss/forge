@@ -18,7 +18,7 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
   private _isInitialized = false;
   private _icon = 'notifications';
 
-  constructor(private _adapter: IAppBarNotificationButtonAdapter) { }
+  constructor(private _adapter: IAppBarNotificationButtonAdapter) {}
 
   public initialize(): void {
     this._adapter.initialize();

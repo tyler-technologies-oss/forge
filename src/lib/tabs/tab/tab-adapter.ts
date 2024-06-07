@@ -50,7 +50,10 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
     this._tabIndicatorElement.getAnimations().forEach(a => a.cancel());
     const frames = this._getKeyframes();
     if (frames) {
-      this._tabIndicatorElement.animate(frames, { duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION, easing: TAB_CONSTANTS.strings.EASING });
+      this._tabIndicatorElement.animate(frames, {
+        duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION,
+        easing: TAB_CONSTANTS.strings.EASING
+      });
     }
   }
 
@@ -68,7 +71,7 @@ export class TabAdapter extends BaseAdapter<ITabComponent> implements ITabAdapte
     const from: Keyframe = {};
     const isVertical = this._component.vertical;
     const selectedTabIndicator = this._getSelectedTabIndicator();
-    const fromRect = selectedTabIndicator?.getBoundingClientRect() ?? {} as DOMRect;
+    const fromRect = selectedTabIndicator?.getBoundingClientRect() ?? ({} as DOMRect);
     const fromPos = isVertical ? fromRect.top : fromRect.left;
     const fromExtent = isVertical ? fromRect.height : fromRect.width;
     const toRect = this._tabIndicatorElement.getBoundingClientRect();

@@ -44,28 +44,28 @@ export declare abstract class WithBaseFieldContract {
 
   public get labelAlignment(): FieldLabelAlignment;
   public set labelAlignment(value: FieldLabelAlignment);
-  
+
   public get invalid(): boolean;
   public set invalid(value: boolean);
-  
+
   public get required(): boolean;
   public set required(value: boolean);
-  
+
   public get optional(): boolean;
   public set optional(value: boolean);
-  
+
   public get disabled(): boolean;
   public set disabled(value: boolean);
-  
+
   public get floatLabel(): boolean;
   public set floatLabel(value: boolean);
-  
+
   public get variant(): FieldVariant;
   public set variant(value: FieldVariant);
-  
+
   public get theme(): FieldTheme;
   public set theme(value: FieldTheme);
-  
+
   public get shape(): FieldShape;
   public set shape(value: FieldShape);
 
@@ -74,13 +74,13 @@ export declare abstract class WithBaseFieldContract {
 
   public get dense(): boolean;
   public set dense(value: boolean);
-  
+
   public get popoverIcon(): boolean;
   public set popoverIcon(value: boolean);
-  
+
   public get supportTextInset(): FieldSupportTextInset;
   public set supportTextInset(value: FieldSupportTextInset);
-  
+
   public initializeFieldInstance(fieldElement: IFieldComponent): void;
   public floatLabelWithoutAnimation(value: boolean): void;
 }
@@ -88,7 +88,7 @@ export declare abstract class WithBaseFieldContract {
 /**
  * Provides a consistent passthrough API to the underlying field component, for
  * field-like wrapper components.
- * 
+ *
  * @param base The base component to mix into.
  * @returns The mixed-in base component.
  */
@@ -177,7 +177,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.setAttribute(FIELD_CONSTANTS.attributes.LABEL_POSITION, value);
       }
     }
-  
+
     /**
      * The alignment of the label.
      * @default "default"
@@ -192,7 +192,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.setAttribute(FIELD_CONSTANTS.attributes.LABEL_ALIGNMENT, value);
       }
     }
-  
+
     /**
      * Whether the field is invalid.
      * @default false
@@ -207,7 +207,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.toggleAttribute(FIELD_CONSTANTS.attributes.INVALID, value);
       }
     }
-  
+
     /**
      * Whether the field is required.
      * @default false
@@ -222,7 +222,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.toggleAttribute(FIELD_CONSTANTS.attributes.REQUIRED, value);
       }
     }
-  
+
     /**
      * Whether the field is optional.
      * @default false
@@ -237,7 +237,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.toggleAttribute(FIELD_CONSTANTS.attributes.OPTIONAL, value);
       }
     }
-  
+
     /**
      * Whether the field is disabled.
      * @default false
@@ -252,7 +252,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.toggleAttribute(FIELD_CONSTANTS.attributes.DISABLED, value);
       }
     }
-  
+
     /**
      * Whether the label floats above the field.
      * @default false
@@ -267,7 +267,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.toggleAttribute(FIELD_CONSTANTS.attributes.FLOAT_LABEL, value);
       }
     }
-  
+
     /**
      * The variant of the field.
      * @default "outlined"
@@ -282,7 +282,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.setAttribute(FIELD_CONSTANTS.attributes.VARIANT, value);
       }
     }
-  
+
     /**
      * The theme of the field.
      * @default "default"
@@ -297,7 +297,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.setAttribute(FIELD_CONSTANTS.attributes.THEME, value);
       }
     }
-  
+
     /**
      * The shape of the field.
      * @default "default"
@@ -312,7 +312,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.setAttribute(FIELD_CONSTANTS.attributes.SHAPE, value);
       }
     }
-  
+
     /**
      * The density of the field.
      * @default "default"
@@ -327,7 +327,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.setAttribute(FIELD_CONSTANTS.attributes.DENSITY, value);
       }
     }
-  
+
     /**
      * Whether the field is dense.
      * @default false
@@ -342,7 +342,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.toggleAttribute(FIELD_CONSTANTS.attributes.DENSE, value);
       }
     }
-  
+
     /**
      * Whether the popover icon is displayed.
      * @default false
@@ -357,7 +357,7 @@ export function WithBaseField<TBase extends MixinBase>(base: TBase) {
         this.toggleAttribute(FIELD_CONSTANTS.attributes.POPOVER_ICON, value);
       }
     }
-  
+
     /**
      * The inset of the support text.
      * @default "none"
