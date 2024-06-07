@@ -306,22 +306,20 @@ See the [View Switcher](?path=/story/components-view-switcher--default)
 - Ensure each control can be updated or activated by the keyboard.
 - Ensure that only the selected tab content is reachable by keyboard.
 
-It's expected that you will need to provide the `tablist` and `tabpanel` roles to your elements to indicate to assistive technologies
-which elements are responsible for the tabs and tab content respectively. Each tab should contain an `aria-controls` property identifying
-its corresponding tab content. In addition, each tab content element should be labelled by a tab. These elements need to be wrapped in an
-element containing a `tablist` role:
+It's expected that you will need to provide the `tabpanel` roles to your elements to indicate to assistive technologies
+which elements are responsible for  tab content respectively. Each tab should contain an `aria-controls` property identifying
+its corresponding tab content. In addition, each tab content element should be labelled by a tab.
 
 ```html
-<div role="tablist">
-  <forge-tab-bar>
-    <forge-tab aria-controls="panel-1" id="tab-1"></forge-tab>
-    <forge-tab aria-controls="panel-2" id="tab-2"></forge-tab>
-  </forge-tab-bar>
-  <div role="tabpanel" aria-labelledby="tab-1" id="panel-1"></div>
-  <div role="tabpanel" aria-labelledby="tab-2" id="panel-2"></div>
-</div>
+<forge-tab-bar>
+  <forge-tab aria-controls="panel-1" id="tab-1"></forge-tab>
+  <forge-tab aria-controls="panel-2" id="tab-2"></forge-tab>
+</forge-tab-bar>
+<div role="tabpanel" aria-labelledby="tab-1" id="panel-1"></div>
+<div role="tabpanel" aria-labelledby="tab-2" id="panel-2"></div>
 ```
 
+> **Note:** the `<forge-tab-bar>` element receive the `role="tablist"` automatically.
 > **Note:** the `<forge-tab>` elements receive the `role="tab"` automatically.
 
 </PageSection>
