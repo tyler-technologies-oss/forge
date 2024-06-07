@@ -87,7 +87,14 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context.attach();
 
     expect(this.context.component.activeTab).toBe(-1, 'Expect default active tab to be null');
-    this.context.tabs.every(tab => _expectActiveTab(tab, false));
+    this.context.tabs.every(tab => {
+      expect(tab.active).toBe(false);
+      expect(tab.getAttribute('aria-selected')).toBe('false');
+    });
+    const otherTabs = this.context.tabs.slice(1);
+    
+    expect(this.context.tabs[0].tabIndex).toBe(0);
+    otherTabs.every(t => expect(t.tabIndex).toBe(-1));
   });
 
   it('should set active tab via property', async function(this: ITestContext) {
@@ -142,9 +149,7 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.attach();
 
-    const button = _getTabButton(this.context.tabs[1]);
-    button.click();
-
+    this.context.tabs[1].click();
     _expectActiveTab(this.context.tabs[1], true);
   });
 
@@ -152,13 +157,11 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.attach();
 
-    const tab2Button = _getTabButton(this.context.tabs[2]);
-    tab2Button.click();
+    this.context.tabs[2].click();
 
     await tick();
 
-    const tab1Button = _getTabButton(this.context.tabs[0]);
-    tab1Button.click();
+    this.context.tabs[0].click();
 
     _expectActiveTab(this.context.tabs[0], true);
     _expectActiveTab(this.context.tabs[2], false);
@@ -168,9 +171,7 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.attach();
 
-    const button = _getTabButton(this.context.tabs[0]);
-
-    expect(button.tabIndex).not.toBe(-1);
+    expect(this.context.tabs[0].tabIndex).not.toBe(-1);
   });
 
   it('should initialize all tabs with proper role', function(this: ITestContext) {
@@ -183,14 +184,6 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context = setupTestContext();
     this.context.attach();
     expect(this.context.tabs.every(t => t.hasAttribute('role') && t.getAttribute('role') === 'tab')).toBe(true);
-  });
-
-  it('should set type on all tabs', function(this: ITestContext) {
-    this.context = setupTestContext();
-    this.context.attach();
-
-    const buttons = this.context.tabs.map(_getTabButton);
-    expect(buttons.every(t => t.getAttribute('type') === 'button')).toBe(true);
   });
 
   it('should detect new tabs', async function(this: ITestContext) {
@@ -501,11 +494,9 @@ describe('TabBarComponent', function(this: ITestContext) {
 
     this.context.tabs[1].disabled = true;
 
-    const button = _getTabButton(this.context.tabs[1]);
     expect(this.context.tabs[1].disabled).toBeTrue();
     expect(this.context.tabs[1].hasAttribute(TAB_CONSTANTS.attributes.DISABLED)).toBeTrue();
     expect(this.context.tabs[1].getAttribute('aria-disabled')).toBe('true');
-    expect(button.disabled).toBeTrue();
   });
 
   it('should toggle tab disabled', async function(this: ITestContext) {
@@ -518,11 +509,10 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context.tabs[1].disabled = false;
     await tick();
 
-    const button = _getTabButton(this.context.tabs[1]);
-    expect(this.context.tabs[1].disabled).toBeFalse();
-    expect(this.context.tabs[1].hasAttribute(TAB_CONSTANTS.attributes.DISABLED)).toBeFalse();
-    expect(this.context.tabs[1].getAttribute('aria-disabled')).toBe('false');
-    expect(button.disabled).toBeFalse();
+    const tab = this.context.tabs[1];
+    expect(tab.disabled).toBeFalse();
+    expect(tab.hasAttribute(TAB_CONSTANTS.attributes.DISABLED)).toBeFalse();
+    expect(tab.getAttribute('aria-disabled')).toBe('false');
   });
 
   it('should not set focus when activated programmatically', async function(this: ITestContext) {
@@ -542,12 +532,12 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context.attach();
 
     await tick();
-    const button = _getTabButton(this.context.tabs[1]);
-    button.click();
+    const tab = this.context.tabs[1];
+    tab.click();
     await tick();
 
-    _expectActiveTab(this.context.tabs[1], true);
-    _expectFocusedTab(this.context.tabs[1], true);
+    _expectActiveTab(tab, true);
+    _expectFocusedTab(tab, true);
   });
 
   it('should not set activate or focus when clicked if activate event is cancelled', async function(this: ITestContext) {
@@ -558,12 +548,12 @@ describe('TabBarComponent', function(this: ITestContext) {
     this.context.component.addEventListener(TAB_BAR_CONSTANTS.events.ACTIVATE, interactedEventSpy);
 
     await tick();
-    const button = _getTabButton(this.context.tabs[1]);
-    button.click();
+    const tab = this.context.tabs[1];
+    tab.click();
     await tick();
 
-    _expectActiveTab(this.context.tabs[1], false);
-    _expectFocusedTab(this.context.tabs[1], false);
+    _expectActiveTab(tab, false);
+    _expectFocusedTab(tab, false);
   });
 
   it('should set default clustered layout mode', async function(this: ITestContext) {
@@ -824,13 +814,13 @@ describe('TabBarComponent', function(this: ITestContext) {
     const activateEventSpy = jasmine.createSpy('activate listener');
     this.context.component.addEventListener(TAB_BAR_CONSTANTS.events.ACTIVATE, activateEventSpy);
 
-    const button = _getTabButton(this.context.tabs[1]);
-    button.click();
+    const tab = this.context.tabs[1];
+    tab.click();
 
     await tick();
 
     expect(activateEventSpy).toHaveBeenCalledTimes(1);
-    _expectActiveTab(this.context.tabs[1], true);
+    _expectActiveTab(tab, true);
   });
 
   it('should not activate tab if event is cancelled', async function(this: ITestContext) {
@@ -841,12 +831,12 @@ describe('TabBarComponent', function(this: ITestContext) {
     const activateEventSpy = jasmine.createSpy('activate listener', evt => evt.preventDefault()).and.callThrough();
     this.context.component.addEventListener(TAB_BAR_CONSTANTS.events.ACTIVATE, activateEventSpy);
 
-    const button = _getTabButton(this.context.tabs[1]);
-    button.click();
+    const tab = this.context.tabs[1];
+    tab.click();
 
     await tick();
     
-    _expectActiveTab(this.context.tabs[1], false);
+    _expectActiveTab(tab, false);
   });
   
   it('should not set focus to tab if index changed', async function(this: ITestContext) {
@@ -867,17 +857,14 @@ describe('TabBarComponent', function(this: ITestContext) {
 
   it('should not activate disabled tab when clicked', async function(this: ITestContext) {
     this.context = setupTestContext();
-    this.context = setupTestContext();
     this.context.attach();
     await tick();
 
     this.context.tabs[1].disabled = true;
-
-    const button = _getTabButton(this.context.tabs[1]);
-    button.click();
+    this.context.tabs[1].click();
 
     await tick();
-
+    
     _expectActiveTab(this.context.tabs[1], false);
   });
 
@@ -926,8 +913,7 @@ describe('TabBarComponent', function(this: ITestContext) {
   }
 
   function _expectFocusedTab(tab: ITabComponent, isFocused: boolean, expectFailureResult = ''): void {
-    const button = _getTabButton(tab);
-    expect(getActiveElement() === button).withContext(expectFailureResult).toBe(isFocused);
+    expect(getActiveElement() === tab).withContext(expectFailureResult).toBe(isFocused);
   }
 
   function _expectHighlightedTab(tab: ITabComponent, isHighlighted: boolean, expectFailureResult = ''): void {
@@ -937,10 +923,6 @@ describe('TabBarComponent', function(this: ITestContext) {
 
   function _getTabs(component: ITabBarComponent): ITabComponent[] {
     return Array.from(component.querySelectorAll(TAB_CONSTANTS.elementName));
-  }
-
-  function _getTabButton(tab: ITabComponent): HTMLButtonElement {
-    return tab.shadowRoot!.querySelector(TAB_CONSTANTS.selectors.BUTTON) as HTMLButtonElement;
   }
 
   function _getTabRipple(tab: ITabComponent): HTMLElement {

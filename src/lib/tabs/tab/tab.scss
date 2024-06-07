@@ -17,6 +17,10 @@
   @include mixins.host-stretch;
 }
 
+:host([disabled]) {
+  @include mixins.disabled;
+}
+
 @include mixins.host-theme(primary, theme-values.$mdc-property-values);
 @include mixins.host-theme(secondary, theme-values.$mdc-property-values);
 @include mixins.host-theme(warning, theme-values.$property-values);

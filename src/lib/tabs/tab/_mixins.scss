@@ -9,10 +9,6 @@
   .forge-tab {
     @include base;
 
-    &:disabled {
-      @include disabled;
-    }
-
     // Firefox still draws a dotted border around focused buttons unless specifically overridden
     &::-moz-focus-inner {
       padding: 0;
@@ -42,7 +38,7 @@
       @include text;
     }
   
-    &--active {
+    &--active:not(.forge-tab--disabled) {
       @include active;
 
       ::slotted([slot=top]),
@@ -69,6 +65,7 @@
 
 @mixin host() {
   display: inline-block;
+  outline: none;
 }
 
 @mixin host-stretch() {
@@ -104,10 +101,13 @@
 }
 
 @mixin disabled() {
-  @include mdc-theme.property(color, text-disabled-on-background);
+  opacity: .38;
 
-  cursor: not-allowed;
   pointer-events: none;
+}
+
+@mixin root-disabled() {
+  
 }
 
 @mixin top() {

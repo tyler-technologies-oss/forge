@@ -100,10 +100,6 @@ export class TabComponent extends BaseComponent implements ITabComponent {
     return this._foundation.computeDimensions();
   }
 
-  public override focus(): void {
-    this._foundation.focus();
-  }
-
   public setTabIndex(value: number): void {
     this._foundation.setTabIndex(value);
   }
