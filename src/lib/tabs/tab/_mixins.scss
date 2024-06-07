@@ -106,10 +106,6 @@
   pointer-events: none;
 }
 
-@mixin root-disabled() {
-  
-}
-
 @mixin top() {
   padding-top: variables.$stacked-padding;
 }
