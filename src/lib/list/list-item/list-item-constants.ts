@@ -53,6 +53,6 @@ export const LIST_ITEM_CONSTANTS = {
   events
 };
 
-export interface IListItemSelectEventData<T = unknown> {
+export interface IListItemSelectEventData<T = any> {
   value: T;
 }
