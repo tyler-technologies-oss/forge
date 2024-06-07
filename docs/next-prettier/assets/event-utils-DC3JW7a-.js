@@ -1,0 +1,1 @@
+function t(e,n){const r=()=>n.dispatchEvent(new Event("scroll"));return e.addEventListener("scroll",r,!0),()=>e.removeEventListener("scroll",r,!0)}function o(e){return e.key==="ArrowLeft"||e.key==="ArrowRight"||e.key==="ArrowUp"||e.key==="ArrowDown"}function s(){return new Promise(e=>setTimeout(e))}export{o as e,t as p,s as t};
